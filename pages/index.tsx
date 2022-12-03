@@ -1,9 +1,10 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import Footer from '../components/Layout/Footer';
+
+import type { NextPageContext } from 'next/types';
+
 import Layout from '../components/Layout/Index';
 
-export default function Home() {
+const Home = () => {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <Head>
@@ -16,4 +17,17 @@ export default function Home() {
       </Layout>
     </div>
   );
-}
+};
+
+const getStaticProps = async (context: NextPageContext) => {
+  const locale = context.locale;
+  const messages = await import(`../translations/${locale}/common.json`);
+  return {
+    props: {
+      messages: messages.default,
+    },
+  };
+};
+
+export { getStaticProps };
+export default Home;

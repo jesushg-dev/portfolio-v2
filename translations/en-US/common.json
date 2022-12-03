@@ -1,0 +1,17 @@
+{
+  "header": {
+    "menu": {
+      "home": "Home",
+      "about": "About",
+      "skills": "Skills",
+      "services": "Services",
+      "portfolio": "Portfolio",
+      "contact": "Contact"
+    }
+  },
+  "footer": {
+    "title": "All rights reserved © ",
+    "madeWith": "Made with ",
+    "by": " by "
+  }
+}
