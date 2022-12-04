@@ -4,7 +4,7 @@
 
 @layer components {
   .main-hero::before {
-    @apply bg-cover bg-center bg-no-repeat left-0 right-0 z-0 w-full h-full absolute block bg-fixed bg-hero-main;
+    @apply bg-cover bg-bottom md:bg-center bg-hero-main bg-no-repeat left-0 right-0 z-0 w-full h-screen absolute block bg-fixed;
   }
 }
 
@@ -14,7 +14,7 @@
   &::before {
     content: '';
     animation: scroll 1.5s infinite;
-    @apply absolute left-1/2 w-[0.28rem] h-[0.28rem] bg-white -ml-[0.1rem] top-2 rounded;
+    @apply absolute left-1/2 w-[0.28rem] h-[0.28rem] bg-white -ml-[0.15rem] top-2 rounded;
   }
 }
 

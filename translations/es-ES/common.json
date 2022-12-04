@@ -7,7 +7,9 @@
       "services": "Servicios",
       "portfolio": "Portafolio",
       "contact": "Contacto"
-    }
+    },
+    "closeMenu": "Cerrar Menú",
+    "openMenu": "Abrir Menú"
   },
   "footer": {
     "title": "Todos los Derechos Reservados © ",

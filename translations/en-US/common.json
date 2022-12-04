@@ -7,7 +7,9 @@
       "services": "Services",
       "portfolio": "Portfolio",
       "contact": "Contact"
-    }
+    },
+    "closeMenu": "Close Menu",
+    "openMenu": "Open Menu"
   },
   "footer": {
     "title": "All rights reserved © ",
