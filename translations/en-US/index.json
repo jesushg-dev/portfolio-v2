@@ -1,1 +1,13 @@
-{}
+{
+  "heroMain": {
+    "titles": {
+      "degree": "Computer Engineer.",
+      "web": "Web Developer.",
+      "mobile": "Mobile Developer.",
+      "fullstack": "Full Stack Developer.",
+      "backend": "Backend Developer.",
+      "frontend": "Frontend Developer."
+    },
+    "scrollDown": "Scroll Down"
+  }
+}

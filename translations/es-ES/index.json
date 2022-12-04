@@ -1,1 +1,13 @@
-{}
+{
+  "heroMain": {
+    "titles": {
+      "degree": "Ingeniero en Computación.",
+      "web": "Desarrollador Web.",
+      "mobile": "Desarrollador Móvil.",
+      "fullstack": "Desarrollador Full Stack.",
+      "backend": "Desarrollador Backend.",
+      "frontend": "Desarrollador Frontend."
+    },
+    "scrollDown": "Desplazarse hacia abajo"
+  }
+}

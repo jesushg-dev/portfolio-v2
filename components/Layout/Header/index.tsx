@@ -2,19 +2,26 @@ import React, { FC } from 'react';
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import useIsOnTop from '../../../hooks/useIsOnTop';
 
 interface IHeaderProps {}
 
 const Header: FC<IHeaderProps> = ({}) => {
   const t = useTranslations('header.menu');
+  const isOnTop = useIsOnTop();
 
   return (
-    <div className="w-full border-b">
-      <div className="flex flex-col max-w-screen-xl p-5 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+    <div
+      className={`w-full fixed right-0 left-0 z-50 transition-all duration-700 ${
+        isOnTop ? 'bg-transparent text-white top-5' : 'bg-white text-gray-700 top-0 shadow-md'
+      }`}>
+      <div className="flex flex-col max-w-screen-xl p-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
         <div className="flex flex-row items-center justify-between lg:justify-start">
           <Link
             href="/"
-            className="text-lg font-bold tracking-tighter text-blue-600 transition duration-500 ease-in-out transform tracking-relaxed lg:pr-8">
+            className={`text-2xl font-bold tracking-tighter ${
+              isOnTop ? 'text-white' : 'text-blue-600'
+            } transition duration-500 ease-in-out transform tracking-relaxed`}>
             Jehg
           </Link>
           <button className="rounded-lg md:hidden focus:outline-none focus:shadow-outline">
@@ -40,35 +47,35 @@ const Header: FC<IHeaderProps> = ({}) => {
             <li>
               <Link
                 href="/"
-                className="px-2 lg:px-6 py-6 text-sm border-b-2 border-transparent hover:border-blue-600 leading-[22px] md:px-3 text-gray-500 hover:text-blue-500">
+                className="px-2 lg:px-6 py-4 text-sm border-b-2 border-transparent leading-[22px] md:px-3 hover:border-blue-600 hover:text-blue-500">
                 {t('home')}
               </Link>
             </li>
             <li>
               <Link
                 href="/"
-                className="px-2 lg:px-6 py-6 text-sm border-b-2 border-transparent leading-[22px] md:px-3 text-gray-500 hover:text-blue-500 hover:border-blue-600">
+                className="px-2 lg:px-6 py-4 text-sm border-b-2 border-transparent leading-[22px] md:px-3 hover:border-blue-600 hover:text-blue-500">
                 {t('about')}
               </Link>
             </li>
             <li>
               <Link
                 href="/"
-                className="px-2 lg:px-6 py-6 text-sm border-b-2 border-transparent hover:border-blue-600 leading-[22px] md:px-3 text-gray-500 hover:text-blue-500">
+                className="px-2 lg:px-6 py-4 text-sm border-b-2 border-transparent leading-[22px] md:px-3 hover:border-blue-600 hover:text-blue-500">
                 {t('skills')}
               </Link>
             </li>
             <li>
               <Link
                 href="/"
-                className="px-2 lg:px-6 py-6 text-sm border-b-2 border-transparent hover:border-blue-600 leading-[22px] md:px-3 text-gray-500 hover:text-blue-500">
+                className="px-2 lg:px-6 py-4 text-sm border-b-2 border-transparent leading-[22px] md:px-3 hover:border-blue-600 hover:text-blue-500">
                 {t('portfolio')}
               </Link>
             </li>
             <li>
               <Link
                 href="/"
-                className="px-2 lg:px-6 py-6 text-sm border-b-2 border-transparent hover:border-blue-600 leading-[22px] md:px-3 text-gray-500 hover:text-blue-500">
+                className="px-2 lg:px-6 py-4 text-sm border-b-2 border-transparent leading-[22px] md:px-3 hover:border-blue-600 hover:text-blue-500">
                 {t('contact')}
               </Link>
             </li>

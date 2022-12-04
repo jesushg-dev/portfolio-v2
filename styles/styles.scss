@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .main-hero::before {
+    @apply bg-cover bg-center bg-no-repeat left-0 right-0 z-0 w-full h-full absolute block bg-fixed bg-hero-main;
+  }
+}
+
+.icon-scroll {
+  @apply w-5 h-8 rounded-3xl;
+  box-shadow: inset 0 0 0 2px #737373;
+  &::before {
+    content: '';
+    animation: scroll 1.5s infinite;
+    @apply absolute left-1/2 w-[0.28rem] h-[0.28rem] bg-white -ml-[0.1rem] top-2 rounded;
+  }
+}
+
+@keyframes scroll {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
