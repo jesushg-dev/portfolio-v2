@@ -6,6 +6,8 @@ module.exports = {
       backgroundImage: {
         'hero-main':
           "url('https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp')",
+        'profile-photo':
+          "url('https://res.cloudinary.com/js-media/image/upload/v1670269379/portfolio/carnet/jesus-hernandez.webp')",
       },
       keyframes: {
         scroll: {
@@ -15,5 +17,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp')],
 };

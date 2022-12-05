@@ -9,5 +9,57 @@
       "frontend": "Desarrollador Frontend."
     },
     "scrollDown": "Desplazarse hacia abajo"
+  },
+  "about": {
+    "info": {
+      "title": "Sobre mí",
+      "description": "Soy un apasionado de la programación y el desarrollo web me gusta día a día aprender y mejorar mis habilidades, me especializo en tecnologías frontend, sin embargo siempre estoy dispuesto a adaptarme a nuevos lenguajes, bibliotecas y frameworks.",
+      "description2": "Me considero una persona responsable, con iniciativa y compromiso además me gusta trabajar en equipo, siempre estoy dispuesto a ayudar a mis compañeros de trabajo y a aprender de ellos."
+    },
+    "timeline": {
+      "title": "Línea de tiempo",
+      "subtitle": "En constante aprendizaje...",
+      "steps": {
+        "0": {
+          "date": "Marzo, 2017",
+          "title": "Inicio de estudios",
+          "description": "Comencé mi carrera como ingeniero en computación, donde desarrollé habilidades para el análisis, diseño, implementación y el desarrollo de software."
+        },
+        "1": {
+          "date": "Mayo, 2021",
+          "title": "Técnico de TI",
+          "description": "Conseguí mi primer trabajo como técnico de TI, aquí fui el encargado del diagnóstico y mantenimiento de equipos de cómputo y redes."
+        },
+        "2": {
+          "date": "Febrero, 2022",
+          "title": "Desarrollador Móvil",
+          "description": "Empecé a trabajar como freelance, desarrollé mis primeras aplicaciones móviles profesionales y aprendí sobre tecnologías backend como C#, ASP.NET Core, etc."
+        },
+        "3": {
+          "date": "Junio, 2022",
+          "title": "Desarrollador Web",
+          "description": "Empecé a trabajar como desarrollador web en Musa, profundicé en tecnologías frontend como TypeScript, React.js, Next.js, Apollo Client, etc."
+        }
+      }
+    },
+    "function": {
+      "name": "sobreMi",
+      "json": {
+        "name": "nombre",
+        "languages": "idiomas",
+        "profession": "profession"
+      },
+      "language": {
+        "spanish": "español",
+        "english": "inglés"
+      },
+      "languageLevel": {
+        "native": "Nativo",
+        "advanced": "Avanzado",
+        "intermediate": "Intermedio",
+        "basic": "Básico"
+      },
+      "profession": "Desarrollador Fullstack"
+    }
   }
 }

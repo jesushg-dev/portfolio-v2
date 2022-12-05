@@ -1,5 +1,6 @@
-import { useTranslations } from 'next-intl';
 import React, { FC } from 'react';
+import { useTranslations } from 'next-intl';
+
 import { FcLike } from 'react-icons/fc';
 
 interface IFooterProps {}
