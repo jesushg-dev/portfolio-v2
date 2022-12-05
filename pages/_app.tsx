@@ -1,7 +1,9 @@
-import '../styles/styles.scss';
+import React from 'react';
+
 import type { AppProps } from 'next/app';
 import { Inter } from '@next/font/google';
 import { NextIntlProvider } from 'next-intl';
+import '../styles/styles.scss';
 
 const inter = Inter({ subsets: ['latin'] });
 

@@ -13,16 +13,16 @@ const About: FC<IAboutProps> = ({}) => {
   const t = useTranslations('about');
 
   return (
-    <section className="lg:container mx-auto px-4 lg:px-20 py-4 lg:py-20">
-      <div className="flex justify-center lg:justify-between items-center text-blue-600 font-bold py-6 border-b border-gray-200">
+    <main className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
+      <div className="flex items-center justify-center border-b border-gray-200 py-6 font-bold text-blue-600 lg:justify-between">
         <h2>{t('info.title')}</h2>
         <h2 className="hidden lg:block">{t('timeline.title')}</h2>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-16 py-2 lg:py-8">
+      <div className="grid grid-cols-1 gap-4 py-2 lg:grid-cols-2 lg:gap-16 lg:py-8">
         <section>
           <div className="circle-img"></div>
-          <p className="text-black text-sm text-justify mb-4">{t('info.description')}</p>
-          <p className="text-black text-sm text-justify">{t('info.description2')}</p>
+          <p className="mb-4 text-justify text-sm text-black">{t('info.description')}</p>
+          <p className="text-justify text-sm text-black">{t('info.description2')}</p>
           <hr className="my-6" />
 
           <Terminal>
@@ -50,7 +50,7 @@ const About: FC<IAboutProps> = ({}) => {
         </section>
 
         <section className="flex flex-col items-center">
-          <div className="flex justify-between items-center text-blue-600 font-bold py-6 border-b border-gray-200 lg:hidden">
+          <div className="flex items-center justify-between border-b border-gray-200 py-6 font-bold text-blue-600 lg:hidden">
             <h2 className="lg:hidden">{t('timeline.title')}</h2>
           </div>
           <div>
@@ -64,14 +64,14 @@ const About: FC<IAboutProps> = ({}) => {
                 />
               ))}
             </ol>
-            <div className="flex items-center gap-4 text-sm text-gray-800 -ml-1">
-              <AiOutlineLoading className="animate-spin text-md text-blue-600" />
+            <div className="-ml-1 flex items-center gap-4 text-sm text-gray-800">
+              <AiOutlineLoading className="text-md animate-spin text-blue-600" />
               {t('timeline.subtitle')}
             </div>
           </div>
         </section>
       </div>
-    </section>
+    </main>
   );
 };
 

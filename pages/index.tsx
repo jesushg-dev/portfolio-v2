@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Head from 'next/head';
 
 import type { NextPageContext } from 'next/types';
@@ -8,7 +10,7 @@ import Layout from '../components/Layout/Index';
 
 const Home = () => {
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-100">
+    <div className="flex min-h-screen flex-col justify-between bg-slate-100">
       <Head>
         <title>Portfolio - JHG</title>
       </Head>

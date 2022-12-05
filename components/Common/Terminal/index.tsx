@@ -6,13 +6,13 @@ interface ITerminalProps {
 
 const Terminal: FC<ITerminalProps> = ({ children }) => {
   return (
-    <div className="rounded-lg shadow-xl bg-gray-900 text-white w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto rounded-lg bg-gray-900 text-white shadow-xl">
       <div className="border-b border-gray-800 py-2 px-4">
-        <div className="inline-block w-3 h-3 mr-2 rounded-full bg-red-500" />
-        <div className="inline-block w-3 h-3 mr-2 rounded-full bg-yellow-300" />
-        <div className="inline-block w-3 h-3 mr-2 rounded-full bg-green-400" />
+        <div className="mr-2 inline-block h-3 w-3 rounded-full bg-red-500" />
+        <div className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-300" />
+        <div className="mr-2 inline-block h-3 w-3 rounded-full bg-green-400" />
       </div>
-      <div className="px-8 py-2 whitespace-pre text-md">{children}</div>
+      <div className="text-md whitespace-pre px-8 py-2">{children}</div>
     </div>
   );
 };

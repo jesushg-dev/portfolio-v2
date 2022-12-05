@@ -26,14 +26,14 @@ const Hero: FC<IHeroProps> = ({}) => {
   }, [t]);
 
   return (
-    <div className="main-hero h-screen w-full before:brightness-75 container mx-auto px-4 flex flex-col justify-center items-center gap-10 text-white">
-      <h1 className="text-5xl font-extrabold z-10 antialiased text-center">Jesús Hernández</h1>
-      <div className="text-white z-10">
+    <div className="main-hero container mx-auto flex h-screen w-full flex-col items-center justify-center gap-10 px-4 text-white before:brightness-75">
+      <h1 className="z-10 text-center text-5xl font-extrabold antialiased">Jesús Hernández</h1>
+      <div className="z-10 text-white">
         <Typewriter options={options} />
       </div>
-      <div className="absolute bottom-4 gap-2 flex flex-col items-center justify-center ">
+      <div className="absolute bottom-4 flex flex-col items-center justify-center gap-2 ">
         <span className="icon-scroll"></span>
-        <p className="text-neutral-500 text-xs">{t('scrollDown')}</p>
+        <p className="text-xs text-neutral-500">{t('scrollDown')}</p>
       </div>
     </div>
   );
