@@ -61,5 +61,8 @@
       },
       "profession": "Desarrollador Fullstack"
     }
+  },
+  "skills": {
+    "title": "Habilidades"
   }
 }

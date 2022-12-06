@@ -3,8 +3,10 @@ import React from 'react';
 import Head from 'next/head';
 
 import type { NextPageContext } from 'next/types';
-import About from '../components/Home/About';
+
 import Hero from '../components/Home/Hero';
+import About from '../components/Home/About';
+import Skills from '../components/Home/Skills';
 
 import Layout from '../components/Layout/Index';
 
@@ -17,6 +19,9 @@ const Home = () => {
       <Layout>
         <Hero />
         <About />
+        <div className="bg-white">
+          <Skills />
+        </div>
       </Layout>
     </div>
   );
