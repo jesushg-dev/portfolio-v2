@@ -18,6 +18,9 @@ const nextConfig = {
     locales: ['en-US', 'es-ES'],
     defaultLocale: 'es-ES',
   },
+  images: {
+    domains: ['cdn.simpleicons.org'],
+  },
 };
 
 module.exports = withBundleAnalyzer(withPWA(nextConfig));

@@ -3,10 +3,13 @@ import React, { FC } from 'react';
 import { useTranslations } from 'next-intl';
 
 import SkillItem from '../SkillItem';
+import { ISkill } from '../../../utils/interfaces/portfolio';
 
-interface ISkillsProps {}
+interface ISkillsProps {
+  skills: ISkill[];
+}
 
-const Skills: FC<ISkillsProps> = ({}) => {
+const Skills: FC<ISkillsProps> = ({ skills }) => {
   const t = useTranslations('skills');
 
   return (
@@ -16,13 +19,9 @@ const Skills: FC<ISkillsProps> = ({}) => {
       </h2>
       <section className="mt-8">
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {Array.from({ length: 17 }).map((_, i) => (
-            <li key={i}>
-              <SkillItem
-                icon="logo-html"
-                title="HTML"
-                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod."
-              />
+          {skills.map((skill) => (
+            <li key={skill.id}>
+              <SkillItem {...skill} />
             </li>
           ))}
         </ul>
