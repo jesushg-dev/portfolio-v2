@@ -64,5 +64,58 @@
   },
   "skills": {
     "title": "Skills"
+  },
+  "soft-skills": {
+    "title": "Soft Skills",
+    "skills": {
+      "teamwork": {
+        "title": "Teamwork",
+        "description": "I like to work in a team, I am always willing to learn from others and share my knowledge."
+      },
+      "communication": {
+        "title": "Communication",
+        "description": "I am a good communicator, I like to share my ideas and listen to others."
+      },
+      "problem-solving": {
+        "title": "Problem Solving",
+        "description": "I like to solve problems, I am always looking for the best solution."
+      },
+      "goal-oriented": {
+        "title": "Goal Oriented",
+        "description": "I am a person who likes to set goals and achieve them."
+      },
+      "adaptability": {
+        "title": "Adaptability",
+        "description": "I am always willing to adapt to new technologies, languages, libraries and frameworks."
+      },
+      "time-management": {
+        "title": "Time Management",
+        "description": "I am a person who likes to organize my time, I am always looking for the best way to do things."
+      },
+      "creativity": {
+        "title": "Creativity",
+        "description": "I am a creative person, I like to think outside the box and come up with new ideas."
+      },
+      "leadership": {
+        "title": "Leadership",
+        "description": "I am a person who likes to lead, I like to take the initiative and be responsible for the tasks I am assigned."
+      },
+      "organization": {
+        "title": "Organization",
+        "description": "I am a person who likes to organize, I like to have everything in order."
+      },
+      "responsibility": {
+        "title": "Responsibility",
+        "description": "I am a responsible person, I like to take care of the tasks I am assigned."
+      },
+      "initiative": {
+        "title": "Initiative",
+        "description": "I am a person who likes to take the initiative, I like to be proactive and always be looking for new challenges."
+      },
+      "commitment": {
+        "title": "Commitment",
+        "description": "I am a committed person, I like to finish the tasks I am assigned."
+      }
+    }
   }
 }

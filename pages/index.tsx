@@ -9,6 +9,7 @@ import Layout from '../components/Layout/Index';
 
 import { getValues } from '../utils/db';
 import { ISkill } from '../utils/interfaces/portfolio';
+import SoftSkills from '../components/Home/SoftSkills';
 
 interface IHomeProps {
   skills: ISkill[];
@@ -16,7 +17,7 @@ interface IHomeProps {
 
 const Home: FC<IHomeProps> = ({ skills }) => {
   return (
-    <div className="flex min-h-screen flex-col justify-between bg-slate-100">
+    <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-slate-100">
       <Head>
         <title>Portfolio - JHG</title>
       </Head>
@@ -26,6 +27,7 @@ const Home: FC<IHomeProps> = ({ skills }) => {
         <div className="bg-white">
           <Skills skills={skills} />
         </div>
+        <SoftSkills />
       </Layout>
     </div>
   );

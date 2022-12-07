@@ -6,6 +6,8 @@ module.exports = {
       backgroundImage: {
         'hero-main':
           "url('https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp')",
+        'hero-skills':
+          "url('https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/1947484_ehwya0.webp')",
         'profile-photo':
           "url('https://res.cloudinary.com/js-media/image/upload/v1670269379/portfolio/carnet/jesus-hernandez.webp')",
       },
