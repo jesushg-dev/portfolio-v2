@@ -16,7 +16,6 @@ const Tooltip: FC<TooltipProps> = ({ text, children, className = '' }) => {
         }>
         {text}
       </span>
-
       {children}
     </div>
   );
