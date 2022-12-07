@@ -1,32 +1,38 @@
 {
-    "theme_color": "#05f",
-    "background_color": "#05f",
-    "display": "browser",
-    "scope": "/",
-    "start_url": "/",
-    "short_name": "Portfolio JHG",
-    "name": "Portfolio Jes\u00fas Hern\u00e1ndez",
-    "description": "Hola, soy Jes\u00fas Hern\u00e1ndez un apasionado de la programaci\u00f3n y el desarrollo web, me gusta d\u00eda a d\u00eda aprender y mejorar mis habilidades, me especializo en tecnolog\u00edas frontend, sin embargo siempre estoy dispuesto a adaptarme a nuevos lenguajes, bibliotecas y frameworks.",
-    "icons": [
-        {
-            "src": "/icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-256x256.png",
-            "sizes": "256x256",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-384x384.png",
-            "sizes": "384x384",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ]
+  "display": "standalone",
+  "theme_color": "#05f",
+  "background_color": "#05f",
+  "scope": "/",
+  "start_url": "/",
+  "short_name": "Portfolio JHG",
+  "name": "Portfolio Jes\u00fas Hern\u00e1ndez",
+  "description": "Hola, soy Jes\u00fas Hern\u00e1ndez un apasionado de la programaci\u00f3n y el desarrollo web, me gusta d\u00eda a d\u00eda aprender y mejorar mis habilidades, me especializo en tecnolog\u00edas frontend, sin embargo siempre estoy dispuesto a adaptarme a nuevos lenguajes, bibliotecas y frameworks.",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
 }
