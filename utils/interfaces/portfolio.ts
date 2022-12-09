@@ -6,7 +6,7 @@ export interface ISkill {
   wiki: string;
 }
 
-export interface IPortfolio {
+export interface IProject {
   description: string;
   id: number;
   image: string;
@@ -27,6 +27,6 @@ export interface IService {
 export interface RootObject {
   backend: ISkill[];
   frontend: ISkill[];
-  portfolio: IPortfolio[];
+  portfolio: IProject[];
   services: IService[];
 }

@@ -19,7 +19,7 @@ const nextConfig = {
     defaultLocale: 'es-ES',
   },
   images: {
-    domains: ['cdn.simpleicons.org'],
+    domains: ['cdn.simpleicons.org', 'res.cloudinary.com'],
   },
 };
 

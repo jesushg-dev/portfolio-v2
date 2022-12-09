@@ -5,17 +5,19 @@ import type { NextPageContext } from 'next/types';
 import Hero from '../components/Home/Hero';
 import About from '../components/Home/About';
 import Skills from '../components/Home/Skills';
+import SoftSkills from '../components/Home/SoftSkills';
+import Portfolio from '../components/Home/Portfolio';
 import Layout from '../components/Layout/Index';
 
 import { getValues } from '../utils/db';
-import { ISkill } from '../utils/interfaces/portfolio';
-import SoftSkills from '../components/Home/SoftSkills';
+import { IProject, ISkill } from '../utils/interfaces/portfolio';
 
 interface IHomeProps {
   skills: ISkill[];
+  portfolio: IProject[];
 }
 
-const Home: FC<IHomeProps> = ({ skills }) => {
+const Home: FC<IHomeProps> = ({ skills, portfolio }) => {
   return (
     <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-slate-100">
       <Head>
@@ -28,6 +30,7 @@ const Home: FC<IHomeProps> = ({ skills }) => {
           <Skills skills={skills} />
         </div>
         <SoftSkills />
+        <Portfolio portfolio={portfolio} />
       </Layout>
     </div>
   );
@@ -42,6 +45,9 @@ const getStaticProps = async (context: NextPageContext) => {
   const frontendAsync = getValues<ISkill[]>(`${locale}/skills/frontend`);
   const [devops, backend, frontend] = await Promise.all([devopsAsync, backendAsync, frontendAsync]);
 
+  // Get Portfolio
+  const portfolio = await getValues<IProject[]>(`${locale}/portfolio`);
+
   // Get translations
   const indexAsync = import(`../translations/${locale}/index.json`);
   const commonAsync = import(`../translations/${locale}/common.json`);
@@ -49,6 +55,7 @@ const getStaticProps = async (context: NextPageContext) => {
 
   return {
     props: {
+      portfolio,
       skills: [...frontend, ...backend, ...devops],
       messages: {
         ...common.default,

@@ -27,6 +27,10 @@
 }
 
 @layer utilities {
+  .pressable {
+    @apply transform transition-transform focus:ring-4 active:scale-x-75;
+  }
+
   * {
     &::-webkit-scrollbar {
       width: 5px;

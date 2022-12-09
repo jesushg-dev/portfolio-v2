@@ -117,5 +117,17 @@
         "description": "I am a committed person, I like to finish the tasks I am assigned."
       }
     }
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "subtitle": "Showing some of my best works",
+    "actions": {
+      "view": "View project",
+      "source": "View source"
+    },
+    "private": {
+      "title": "Private",
+      "description": "This project is private, i can't show you the source code but you can see the live demo."
+    }
   }
 }
