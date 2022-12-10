@@ -18,7 +18,7 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
       <h1 className="z-10 p-10 text-center text-3xl font-extrabold text-white">{t('title')}</h1>
       <div className="absolute inset-0 z-20 flex h-full w-full scroll-pl-16 items-center gap-6 overflow-x-auto pt-10 text-white lg:snap-x lg:snap-mandatory">
         <div className="shrink-0 snap-center">
-          <div className="w-24 shrink-0"></div>
+          <div className="w-4 sm:w-24 shrink-0"></div>
         </div>
         <SoftSkillItem
           icon={RiTeamLine}

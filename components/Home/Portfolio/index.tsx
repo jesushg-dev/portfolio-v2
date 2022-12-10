@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
-import PortfolioItem from '../PortfolioItem';
+import PortfolioItem from '../ProjectItem';
 import { IProject } from '../../../utils/interfaces/portfolio';
 
 interface IPortfolioProps {
@@ -58,9 +58,10 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
           initial="hidden"
           variants={container}
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {portfolio.map((project) => (
             <motion.li
+              layout
               key={project.id}
               className="flex"
               variants={item}

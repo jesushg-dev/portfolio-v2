@@ -34,7 +34,7 @@ const Skills: FC<ISkillsProps> = ({ skills }) => {
   const isInView = useInView(ref, { once: true });
 
   return (
-    <main className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
+    <main className="mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20">
       <h2 className="flex items-center justify-center border-b border-gray-200 py-6 font-bold text-blue-600 lg:justify-between">
         {t('title')}
       </h2>
