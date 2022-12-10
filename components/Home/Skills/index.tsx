@@ -8,23 +8,19 @@ import SkillItem from '../SkillItem';
 import { ISkill } from '../../../utils/interfaces/portfolio';
 
 const container = {
-  hidden: { opacity: 1, scale: 0 },
+  hidden: { opacity: 1 },
   visible: {
     opacity: 1,
-    scale: 1,
     transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
+      delayChildren: 0.15,
+      staggerChildren: 0.1,
     },
   },
 };
 
 const item = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
+  hidden: { x: 50, y: -30, opacity: 0 },
+  visible: { x: 0, y: 0, opacity: 1 },
 };
 
 interface ISkillsProps {
@@ -49,7 +45,7 @@ const Skills: FC<ISkillsProps> = ({ skills }) => {
           animate={isInView ? 'visible' : 'hidden'}
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {skills.map((skill) => (
-            <motion.li variants={item} key={skill.id} className="flex">
+            <motion.li layout variants={item} key={skill.id} className="flex">
               <SkillItem {...skill} />
             </motion.li>
           ))}
