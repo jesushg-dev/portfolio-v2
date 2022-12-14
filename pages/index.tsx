@@ -5,8 +5,9 @@ import type { NextPageContext } from 'next/types';
 import Hero from '../components/Home/Hero';
 import About from '../components/Home/About';
 import Skills from '../components/Home/Skills';
-import SoftSkills from '../components/Home/SoftSkills';
+import Contact from '../components/Home/Contact';
 import Portfolio from '../components/Home/Portfolio';
+import SoftSkills from '../components/Home/SoftSkills';
 import Layout from '../components/Layout/Index';
 
 import { getValues } from '../utils/db';
@@ -31,6 +32,7 @@ const Home: FC<IHomeProps> = ({ skills, portfolio }) => {
         </div>
         <SoftSkills />
         <Portfolio portfolio={portfolio} />
+        <Contact />
       </Layout>
     </div>
   );

@@ -17,8 +17,8 @@ const About: FC<IAboutProps> = ({}) => {
         <h2>{t('info.title')}</h2>
         <h2 className="hidden lg:block">{t('timeline.title')}</h2>
       </div>
-      <div className="grid grid-cols-1 gap-4 py-2 lg:grid-cols-2 lg:gap-16 lg:py-8">
-        <section>
+      <section className="grid grid-cols-1 gap-4 py-2 lg:grid-cols-2 lg:gap-16 lg:py-8">
+        <div>
           <div className="circle-img"></div>
           <p className="mb-4 text-justify text-sm text-black">{t('info.description')}</p>
           <p className="text-justify text-sm text-black">{t('info.description2')}</p>
@@ -46,9 +46,9 @@ const About: FC<IAboutProps> = ({}) => {
             <p>&nbsp;&nbsp;{'}'}</p>
             <p>{'}'}</p>
           </Terminal>
-        </section>
+        </div>
 
-        <section className="flex flex-col items-center">
+        <aside className="flex flex-col items-center">
           <div className="flex items-center justify-between border-b border-gray-200 py-6 font-bold text-blue-600 lg:hidden">
             <h2 className="lg:hidden">{t('timeline.title')}</h2>
           </div>
@@ -68,8 +68,8 @@ const About: FC<IAboutProps> = ({}) => {
               {t('timeline.subtitle')}
             </div>
           </div>
-        </section>
-      </div>
+        </aside>
+      </section>
     </main>
   );
 };

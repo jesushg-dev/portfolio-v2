@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 
-import Image, { ImageLoaderProps } from 'next/image';
+import Image from 'next/image';
 
 import { AiFillGithub, AiFillEye } from 'react-icons/ai';
+import { cloudinaryLoader, siLoader } from '../../../utils/tools/medialoader';
 
 interface IPortfolioItemProps {
   image: string;
@@ -18,15 +19,6 @@ interface IPortfolioItemProps {
   privateName: string;
   privateDescription: string;
 }
-
-const cloudinaryLoader = ({ width, src, quality }: ImageLoaderProps) => {
-  const qualityString = quality ? ',q_' + quality : '';
-  return `https://res.cloudinary.com/js-media/image/upload/w_${width}${qualityString},c_limit/v1642524352/portfolio/${src}`;
-};
-
-const siLoader = ({ src }: ImageLoaderProps) => {
-  return `https://cdn.simpleicons.org/${src}`;
-};
 
 const PortfolioItem: FC<IPortfolioItemProps> = ({
   image,

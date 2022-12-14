@@ -23,22 +23,22 @@
         "0": {
           "date": "March, 2017",
           "title": "Started studying Computer Engineer",
-          "description": "I started my career as a computer engineer, where I developed skills in analysis, design, implementation and maintenance of software systems."
+          "description": "Here  I developed skills in analysis, design, implementation and maintenance of software systems."
         },
         "1": {
           "date": "May, 2021",
-          "title": "IT Technician",
-          "description": "I got my first job as an IT technician, here I took care of the maintenance of the company's computers and networks."
+          "title": "My first job as an IT technician",
+          "description": "I took care of the maintenance of the company's computers and networks."
         },
         "2": {
           "date": "February, 2022",
-          "title": "Mobile Developer",
-          "description": "I started to work as a freelancer, I developed my first professional mobile applications and I learned about backend technologies such as C#, ASP.NET Core, etc."
+          "title": "Mobile Developer at Telo",
+          "description": "I developed professional mobile applications and I learned about backend technologies such as C#, ASP.NET Core, etc."
         },
         "3": {
           "date": "June, 2022",
-          "title": "Web Developer",
-          "description": "I started to work as a web developer in Musa, I got deeper into frontend technologies such as TypeScript, React.js, Next.js, Apollo Client, etc."
+          "title": "Web Developer at Musa",
+          "description": "I developed professional web applications, I got deeper into frontend technologies such as TypeScript, React.js, Next.js, Apollo Client, etc."
         }
       }
     },
@@ -128,6 +128,27 @@
     "private": {
       "title": "Private",
       "description": "This project is private, i can't show you the source code but you can see the live demo."
+    }
+  },
+  "contact": {
+    "title": "Get in touch 👋",
+    "title2": "Fill in the form to start a conversation",
+    "subtitle": "I am always open to new opportunities, if you have a project in mind or just want to say hi, feel free to contact me.",
+    "divider": "or",
+    "form": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Enter your name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Leave your message here, I will answer you as soon as possible"
+      },
+      "submit": "Submit"
     }
   }
 }

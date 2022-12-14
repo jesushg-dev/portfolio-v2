@@ -2,9 +2,9 @@ import React, { FC, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import Typewriter from 'typewriter-effect';
 
-interface IHeroProps {}
+interface IContactProps {}
 
-const Hero: FC<IHeroProps> = ({}) => {
+const Contact: FC<IContactProps> = ({}) => {
   const t = useTranslations('heroMain');
   const options = useMemo(() => {
     const strings = [
@@ -39,4 +39,4 @@ const Hero: FC<IHeroProps> = ({}) => {
   );
 };
 
-export default Hero;
+export default Contact;

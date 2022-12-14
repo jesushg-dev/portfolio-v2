@@ -18,27 +18,28 @@
     },
     "timeline": {
       "title": "Línea de tiempo",
+      "title2": "Llena el formulario para contactarme",
       "subtitle": "En constante aprendizaje...",
       "steps": {
         "0": {
           "date": "Marzo, 2017",
-          "title": "Inicio de estudios",
-          "description": "Comencé mi carrera como ingeniero en computación, donde desarrollé habilidades para el análisis, diseño, implementación y el desarrollo de software."
+          "title": "Comence mi carrera como ingeniero en computación",
+          "description": "Aquí desarrollé mis habilidades para el análisis, diseño e implementación de software."
         },
         "1": {
           "date": "Mayo, 2021",
-          "title": "Técnico de TI",
-          "description": "Conseguí mi primer trabajo como técnico de TI, aquí fui el encargado del diagnóstico y mantenimiento de equipos de cómputo y redes."
+          "title": "Mi primer trabajo como técnico de TI",
+          "description": "Aquí fui el encargado del diagnóstico y mantenimiento de equipos de cómputo y redes."
         },
         "2": {
           "date": "Febrero, 2022",
           "title": "Desarrollador Móvil",
-          "description": "Empecé a trabajar como freelance, desarrollé mis primeras aplicaciones móviles profesionales y aprendí sobre tecnologías backend como C#, ASP.NET Core, etc."
+          "description": "Desarrollé aplicaciones móviles profesionales y aprendí sobre tecnologías backend como C#, ASP.NET Core, etc."
         },
         "3": {
           "date": "Junio, 2022",
           "title": "Desarrollador Web",
-          "description": "Empecé a trabajar como desarrollador web en Musa, profundicé en tecnologías frontend como TypeScript, React.js, Next.js, Apollo Client, etc."
+          "description": "Desarrollé aplicaciones móviles profesionales y profundicé en tecnologías frontend como TypeScript, React.js, Next.js, Apollo Client, etc."
         }
       }
     },
@@ -128,6 +129,31 @@
     "private": {
       "title": "Privado",
       "description": "Este proyecto es privado, no puedo mostrarte el código fuente pero puedes verlo en vivo."
+    }
+  },
+  "contact": {
+    "title": "Contáctame 👋",
+    "title2": "Llena el formulario para iniciar una conversación",
+    "subtitle": "Siempre estoy abierto a nuevas oportunidades, no dudes en contactarme si tienes alguna pregunta o proyecto en mente.",
+    "divider": "o",
+    "form": {
+      "name": {
+        "label": "Nombre",
+        "placeholder": "Ingresa tu nombre"
+      },
+      "email": {
+        "label": "Correo electrónico",
+        "placeholder": "Ingresa tu correo electrónico"
+      },
+      "message": {
+        "label": "Mensaje",
+        "placeholder": "Ingresa tu mensaje aquí, te responderé lo más pronto posible"
+      },
+      "submit": "Enviar"
+    },
+    "social": {
+      "title": "Redes sociales",
+      "subtitle": "Sígueme en mis redes sociales"
     }
   }
 }
