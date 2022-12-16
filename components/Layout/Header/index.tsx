@@ -14,7 +14,9 @@ const Header: FC<IHeaderProps> = ({}) => {
   return (
     <div
       className={`fixed right-0 left-0 z-50 w-full transition-all duration-700 ${
-        isOnTop ? 'top-5 bg-transparent text-white' : 'top-0 bg-white text-gray-700 shadow-md'
+        isOnTop
+          ? 'top-5 bg-transparent text-white'
+          : 'top-0 bg-white bg-opacity-60 text-gray-700 shadow backdrop-blur-lg backdrop-filter hover:bg-opacity-100'
       }`}>
       <div className="mx-auto flex max-w-screen-xl flex-col p-4 md:flex-row md:items-center md:justify-between md:px-6 lg:px-8">
         <div className="flex flex-row items-center justify-between lg:justify-start">
@@ -27,7 +29,7 @@ const Header: FC<IHeaderProps> = ({}) => {
           </Link>
           <button
             type="button"
-            className="focus:shadow-outline rounded-lg focus:outline-none md:hidden"
+            className="pressable focus:shadow-outline rounded-lg focus:outline-none md:hidden"
             title={open ? t('closeMenu') : t('openMenu')}>
             <svg fill="currentColor" viewBox="0 0 20 20" className="h-8 w-8">
               {open ? (

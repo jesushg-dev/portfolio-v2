@@ -139,15 +139,42 @@
     "form": {
       "name": {
         "label": "Nombre",
-        "placeholder": "Ingresa tu nombre"
+        "placeholder": "Ingresa tu nombre",
+        "success": "Nombre ingresado correctamente",
+        "errors": {
+          "required": "El nombre es requerido",
+          "minLength": "El nombre debe tener al menos 2 caracteres",
+          "maxLength": "El nombre debe tener como máximo 50 caracteres"
+        }
       },
       "email": {
         "label": "Correo electrónico",
-        "placeholder": "Ingresa tu correo electrónico"
+        "placeholder": "Ingresa tu correo electrónico",
+        "success": "Correo electrónico ingresado correctamente",
+        "errors": {
+          "required": "El correo electrónico es requerido",
+          "minLength": "El correo electrónico debe tener al menos 5 caracteres",
+          "maxLength": "El correo electrónico debe tener como máximo 50 caracteres",
+          "pattern": "El correo electrónico no es válido"
+        }
       },
       "message": {
         "label": "Mensaje",
-        "placeholder": "Ingresa tu mensaje aquí, te responderé lo más pronto posible"
+        "placeholder": "Ingresa tu mensaje aquí, te responderé lo más pronto posible",
+        "success": "Mensaje ingresado correctamente",
+        "errors": {
+          "required": "El mensaje es requerido",
+          "minLength": "El mensaje debe tener al menos 10 caracteres",
+          "maxLength": "El mensaje debe tener como máximo 500 caracteres"
+        }
+      },
+      "errors": {
+        "title": "Error",
+        "description": "Ha ocurrido un error al enviar el formulario, por favor inténtalo de nuevo."
+      },
+      "success": {
+        "title": "Mensaje enviado",
+        "description": "Tu mensaje ha sido enviado correctamente, te responderé lo más pronto posible."
       },
       "submit": "Enviar"
     },

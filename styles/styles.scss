@@ -28,7 +28,7 @@
 
 @layer utilities {
   .pressable {
-    @apply transform transition-transform focus:ring-4 active:scale-x-75;
+    @apply transform tracking-wide transition duration-300 ease-in-out active:scale-95;
   }
 
   * {

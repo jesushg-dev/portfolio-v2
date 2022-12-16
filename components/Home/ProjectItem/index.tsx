@@ -43,14 +43,22 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
       </div>
       <div className="absolute inset-0 isolate z-20 flex flex-col bg-black bg-opacity-80 opacity-0 transition-opacity group-hover:opacity-100">
         <div className="flex grow flex-col items-center justify-center gap-4 px-4 ">
-          <a href={url_web} target="_blank" rel="noreferrer" className="rounded-md bg-red-500 px-4 py-2  shadow-lg">
+          <a
+            href={url_web}
+            target="_blank"
+            rel="noreferrer"
+            className="pressable rounded-md bg-red-500 px-4 py-2  shadow-lg">
             <span className="flex items-center justify-center gap-2 text-xs text-white">
               <AiFillEye className="h-4 w-4" />
               {urlName}
             </span>
           </a>
           {!is_private && (
-            <a href={url_github} target="_blank" rel="noreferrer" className="rounded-md bg-white px-4 py-2 shadow-lg">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href={url_github}
+              className="pressable rounded-md bg-white px-4 py-2 shadow-lg">
               <span className="flex items-center justify-center gap-2 text-xs text-black">
                 <AiFillGithub className="h-4 w-4" />
                 {sourceName}

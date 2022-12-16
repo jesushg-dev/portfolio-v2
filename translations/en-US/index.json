@@ -138,15 +138,42 @@
     "form": {
       "name": {
         "label": "Name",
-        "placeholder": "Enter your name"
+        "placeholder": "Enter your name",
+        "success": "Name entered correctly",
+        "errors": {
+          "required": "Please enter your name",
+          "minLength": "The name must be at least 3 characters long",
+          "maxLength": "The name must be at most 20 characters long"
+        }
       },
       "email": {
         "label": "Email",
-        "placeholder": "Enter your email"
+        "placeholder": "Enter your email",
+        "success": "Email entered correctly",
+        "errors": {
+          "required": "Please enter your email",
+          "minLength": "The email must be at least 3 characters long",
+          "maxLength": "The email must be at most 30 characters long",
+          "pattern": "Please enter a valid email"
+        }
       },
       "message": {
         "label": "Message",
-        "placeholder": "Leave your message here, I will answer you as soon as possible"
+        "placeholder": "Leave your message here, I will answer you as soon as possible",
+        "success": "Message entered correctly",
+        "errors": {
+          "required": "Please enter your message",
+          "minLength": "The message must be at least 10 characters long",
+          "maxLength": "The message must be at most 500 characters long"
+        }
+      },
+      "errors": {
+        "title": "Error",
+        "description": "An error has occurred while sending the message, please try again later."
+      },
+      "success": {
+        "title": "Success",
+        "description": "Your message has been sent successfully, I will answer you as soon as possible."
       },
       "submit": "Submit"
     }

@@ -6,6 +6,7 @@ const useIsOnTop = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
+
       const isOnTop = scrollPosition === 0;
       setIsOnTop(isOnTop);
     };

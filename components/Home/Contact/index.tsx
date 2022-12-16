@@ -3,9 +3,10 @@ import React, { FC, useRef } from 'react';
 import Image from 'next/image';
 import type { ImageLoaderProps } from 'next/dist/client/image';
 
-import ContactItem from '../ContactItem';
+import Input from '../../UI/Input';
 import TextArea from '../../UI/TextArea';
-import Input, { IInputRef } from '../../UI/Input';
+import ContactItem from '../ContactItem';
+import type { IInputRef } from '../../../hooks/useRefInput';
 
 import { FaLinkedin, FaGithub, FaWhatsapp, FaRegEnvelope, FaPhoneAlt } from 'react-icons/fa';
 
@@ -20,62 +21,79 @@ const cloudinaryLoader = ({ src, width, quality }: ImageLoaderProps) => {
 
 const Contact: FC<IContactProps> = ({}) => {
   const t = useTranslations('contact');
+
   const nameRef = useRef<IInputRef>(null);
   const emailRef = useRef<IInputRef>(null);
   const messageRef = useRef<IInputRef>(null);
 
-  const validateForm = () => {
-    if (!nameRef.current?.value) {
-      nameRef.current?.setErrorMessage('Name is required');
+  const validateContactForm = (name: string, email: string, message: string) => {
+    if (!name) {
+      nameRef.current?.setErrorMessage(t('form.name.errors.required'));
       nameRef.current?.focus();
       return false;
     }
+    nameRef.current?.setSuccessMessage(t('form.name.success'));
 
-    if (!emailRef.current?.value) {
-      emailRef.current?.setErrorMessage('Email is required');
+    if (!email) {
+      emailRef.current?.setErrorMessage(t('form.email.errors.required'));
       emailRef.current?.focus();
       return false;
     }
 
-    //validate email format
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(emailRef.current?.value)) {
-      emailRef.current?.setErrorMessage('Invalid email address');
+    if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+      emailRef.current?.setErrorMessage(t('form.email.errors.pattern'));
       emailRef.current?.focus();
       return false;
     }
+    emailRef.current?.setSuccessMessage(t('form.email.success'));
 
-    if (!messageRef.current?.value) {
-      messageRef.current?.setErrorMessage('Message is required');
+    if (!message) {
+      messageRef.current?.setErrorMessage(t('form.message.errors.required'));
       messageRef.current?.focus();
       return false;
     }
+    messageRef.current?.setSuccessMessage(t('form.message.success'));
 
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const sendEmail = async (name: string, email: string, message: string) => {
+    const body = new FormData();
+    body.append('name', name);
+    body.append('email', email);
+    body.append('message', message);
+
+    const res = await fetch('https://formspree.io/f/xnqwqkrl', {
+      method: 'POST',
+      body,
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    console.log('🚀 ~ file: index.tsx:73 ~ sendEmail ~ res', res);
+
+    if (res.ok) {
+      nameRef.current?.clear();
+      emailRef.current?.clear();
+      messageRef.current?.clear();
+      alert(t('form.success.description'));
+    } else {
+      alert(t('form.errors.description'));
+    }
+  };
+
+  const handleSubmit = async () => {
     try {
-      e.preventDefault();
-      if (validateForm()) {
-        const nameValue = nameRef.current?.value || '';
-        const messageValue = messageRef.current?.value || '';
+      const name = (nameRef.current?.value() || '').trim();
+      const email = (emailRef.current?.value() || '').trim();
+      const message = (messageRef.current?.value() || '').trim();
+      const isValid = validateContactForm(name, email, message);
 
-        const body = new FormData();
-        body.append('name', nameValue);
-        body.append('message', messageValue);
-        body.append('email', '123@gmail.com');
-
-        const res = await fetch('https://formspree.io/f/xnqwqkrl', {
-          method: 'POST',
-          body,
-          headers: {
-            Accept: 'application/json',
-          },
-        });
-        console.log(res);
+      if (isValid) {
+        sendEmail(name, email, message);
       }
     } catch (error) {
-      console.log('🚀 ~ file: index.tsx:27 ~ handleSubmit ~ error', error);
+      alert(t('form.errors.description'));
     }
   };
 
@@ -83,17 +101,27 @@ const Contact: FC<IContactProps> = ({}) => {
     <section className="hero w-full bg-black before:bg-hero-contact before:lg:bg-local">
       <div className="mx-auto flex items-center p-4 lg:container lg:p-20">
         <div className="z-20 flex w-full flex-col rounded bg-white lg:flex-row lg:items-center">
-          <aside className="flex w-full flex-col justify-between  py-8 px-10">
+          <aside className="flex w-full flex-col justify-between space-y-10 py-8 px-10">
             <div className="space-y-3">
-              <h1 className="text-2xl font-bold lg:text-4xl">{t('title')}</h1>
-              <p className="flex items-center text-justify">{t('subtitle')}</p>
-              <div className="-ml-3 flex flex-wrap justify-center gap-2">
-                <ContactItem label="linkedin" href="https://linkedin.com/in/jesus-hernandez23" icon={FaLinkedin} />
-                <ContactItem label="github" href="https://github.com/jess232017" icon={FaGithub} />
-                <ContactItem label="whatsapp" href="https://wa.me/+50586793204" icon={FaWhatsapp} />
-                <ContactItem label="phone" href="tel:86793204" icon={FaPhoneAlt} />
-                <ContactItem label="email" href="mailto:jess232016@gmail.com" icon={FaRegEnvelope} />
-              </div>
+              <h1 className="text-center text-2xl font-bold lg:text-4xl">{t('title')}</h1>
+              <p className="mb-3 flex items-center text-center">{t('subtitle')}</p>
+              <ul className="-ml-3 flex flex-wrap justify-center gap-2">
+                <li>
+                  <ContactItem label="linkedin" href="https://linkedin.com/in/jesus-hernandez23" icon={FaLinkedin} />
+                </li>
+                <li>
+                  <ContactItem label="github" href="https://github.com/jess232017" icon={FaGithub} />
+                </li>
+                <li>
+                  <ContactItem label="whatsapp" href="https://wa.me/+50586793204" icon={FaWhatsapp} />
+                </li>
+                <li>
+                  <ContactItem label="phone" href="tel:86793204" icon={FaPhoneAlt} />
+                </li>
+                <li>
+                  <ContactItem label="email" href="mailto:jess232016@gmail.com" icon={FaRegEnvelope} />
+                </li>
+              </ul>
             </div>
             <Image
               width={600}
@@ -101,7 +129,7 @@ const Contact: FC<IContactProps> = ({}) => {
               src="contactme.gif"
               alt="hero-contact"
               loader={cloudinaryLoader}
-              className="mx-auto hidden w-2/3 lg:block"
+              className="mx-auto hidden w-1/2 lg:block"
             />
           </aside>
 
@@ -110,7 +138,7 @@ const Contact: FC<IContactProps> = ({}) => {
             <span className="absolute bg-white px-3 font-medium text-gray-900">{t('divider')}</span>
           </div>
 
-          <form id="contact" className="w-full space-y-5 py-8 px-10" onSubmit={handleSubmit}>
+          <form id="contact" className="w-full space-y-2 py-8 px-10" onSubmit={handleSubmit}>
             <p className="text-center text-lg font-bold text-gray-800 lg:text-start">{t('title2')}</p>
 
             <Input
@@ -149,7 +177,10 @@ const Contact: FC<IContactProps> = ({}) => {
               label={t('form.message.label')}
             />
 
-            <button className="mt-6 w-full rounded bg-indigo-700 py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-indigo-900 hover:shadow-none focus:outline-none">
+            <button
+              onClick={handleSubmit}
+              type="button"
+              className="pressable mt-6 w-full rounded bg-indigo-700 py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-indigo-900 hover:shadow-none focus:outline-none">
               {t('form.submit')}
             </button>
           </form>
