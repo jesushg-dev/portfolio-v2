@@ -1,24 +1,43 @@
-import React, { FC } from 'react';
+import React, { FC, Suspense, lazy } from 'react';
 import Head from 'next/head';
-import type { NextPageContext } from 'next/types';
+import type { NextPageContext, NextPage } from 'next/types';
 
 import Hero from '../components/Home/Hero';
-import About from '../components/Home/About';
-import Skills from '../components/Home/Skills';
-import Contact from '../components/Home/Contact';
-import Portfolio from '../components/Home/Portfolio';
-import SoftSkills from '../components/Home/SoftSkills';
 import Layout from '../components/Layout/Index';
 
 import { getValues } from '../utils/db';
 import { IProject, ISkill } from '../utils/interfaces/portfolio';
 
+/*import About from '../components/Home/About';
+import Skills from '../components/Home/Skills';
+import Contact from '../components/Home/Contact';
+import Portfolio from '../components/Home/Portfolio';
+import SoftSkills from '../components/Home/SoftSkills';*/
+
+const About = lazy(() => import('../components/Home/About'));
+const Skills = lazy(() => import('../components/Home/Skills'));
+const Contact = lazy(() => import('../components/Home/Contact'));
+const Portfolio = lazy(() => import('../components/Home/Portfolio'));
+const SoftSkills = lazy(() => import('../components/Home/SoftSkills'));
+
 interface IHomeProps {
-  skills: ISkill[];
   portfolio: IProject[];
+  skills: {
+    devops: ISkill[];
+    backend: ISkill[];
+    frontend: ISkill[];
+  };
 }
 
-const Home: FC<IHomeProps> = ({ skills, portfolio }) => {
+const Loading = () => {
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900"></div>
+    </div>
+  );
+};
+
+const Home: NextPage<IHomeProps> = ({ skills, portfolio }: IHomeProps) => {
   return (
     <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-slate-100">
       <Head>
@@ -26,13 +45,13 @@ const Home: FC<IHomeProps> = ({ skills, portfolio }) => {
       </Head>
       <Layout>
         <Hero />
-        <About />
-        <div className="bg-white">
-          <Skills skills={skills} />
-        </div>
-        <SoftSkills />
-        <Portfolio portfolio={portfolio} />
-        <Contact />
+        <Suspense fallback={<Loading />}>
+          <About />
+          <Skills {...skills} others={[]} />
+          <SoftSkills />
+          <Portfolio portfolio={portfolio} />
+          <Contact />
+        </Suspense>
       </Layout>
     </div>
   );
@@ -58,11 +77,8 @@ const getStaticProps = async (context: NextPageContext) => {
   return {
     props: {
       portfolio,
-      skills: [...frontend, ...backend, ...devops],
-      messages: {
-        ...common.default,
-        ...index.default,
-      },
+      skills: { devops, backend, frontend },
+      messages: { ...common.default, ...index.default },
     },
   };
 };

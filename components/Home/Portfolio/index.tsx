@@ -46,7 +46,6 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
     [t]
   );
 
-  //  <motion.li key={project.id} transition={{ duration: 0.5 }} whileHover={{ scale: isInView ? 1.05 : 1 }}>
   return (
     <main className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
       <div className="flex flex-col items-center justify-between border-b border-gray-200 py-6 lg:flex-row lg:justify-between">
