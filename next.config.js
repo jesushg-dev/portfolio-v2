@@ -15,8 +15,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   i18n: {
-    locales: ['en-US', 'es-ES'],
-    defaultLocale: 'es-ES',
+    locales: ['en', 'es'],
+    defaultLocale: 'es',
   },
   images: {
     domains: ['cdn.simpleicons.org', 'res.cloudinary.com'],

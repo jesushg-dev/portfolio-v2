@@ -13,8 +13,8 @@
   "about": {
     "info": {
       "title": "Sobre mí",
-      "description": "Soy un apasionado de la programación y el desarrollo web me gusta día a día aprender y mejorar mis habilidades, me especializo en tecnologías frontend, sin embargo siempre estoy dispuesto a adaptarme a nuevos lenguajes, bibliotecas y frameworks.",
-      "description2": "Me considero una persona responsable, con iniciativa y compromiso además me gusta trabajar en equipo, siempre estoy dispuesto a ayudar a mis compañeros de trabajo y a aprender de ellos."
+      "description": "Hola, mi nombre es Jesús Hernández, actualmente soy egresado de la carrera de ingeniería en computación en la Universitaria Nacional de Ingeniería. Mi pasión es el desarrollo de software, me gusta aprender nuevas tecnologías y aplicarlas en proyectos personales y profesionales.",
+      "description2": "Soy una persona responsable, con iniciativa y compromiso además me gusta trabajar en equipo, siempre estoy dispuesto a aprender nuevas cosas y superar nuevos retos."
     },
     "timeline": {
       "title": "Línea de tiempo",
@@ -23,21 +23,25 @@
       "steps": {
         "0": {
           "date": "Marzo, 2017",
+          "dateTime": "2017-03-01",
           "title": "Comence mi carrera como ingeniero en computación",
           "description": "Aquí desarrollé mis habilidades para el análisis, diseño e implementación de software."
         },
         "1": {
           "date": "Mayo, 2021",
+          "dateTime": "2021-05-01",
           "title": "Mi primer trabajo como técnico de TI",
           "description": "Aquí fui el encargado del diagnóstico y mantenimiento de equipos de cómputo y redes."
         },
         "2": {
           "date": "Febrero, 2022",
+          "dateTime": "2022-02-01",
           "title": "Desarrollador Móvil",
           "description": "Desarrollé aplicaciones móviles profesionales y aprendí sobre tecnologías backend como C#, ASP.NET Core, etc."
         },
         "3": {
           "date": "Junio, 2022",
+          "dateTime": "2022-06-01",
           "title": "Desarrollador Web",
           "description": "Desarrollé aplicaciones móviles profesionales y profundicé en tecnologías frontend como TypeScript, React.js, Next.js, Apollo Client, etc."
         }

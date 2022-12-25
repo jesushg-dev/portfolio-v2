@@ -146,7 +146,7 @@ const Contact: FC<IContactProps> = ({}) => {
               inputProps={{
                 id: 'name',
                 name: 'name',
-                type: 'name',
+                type: 'text',
                 required: true,
                 placeholder: t('form.name.placeholder'),
               }}

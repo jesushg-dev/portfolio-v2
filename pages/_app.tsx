@@ -14,9 +14,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <NextIntlProvider messages={pageProps.messages}>
-        <main className={inter.className}>
+        <div className={inter.className}>
           <Component {...pageProps} />
-        </main>
+        </div>
       </NextIntlProvider>
       <Analytics />
     </>

@@ -47,7 +47,7 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
   );
 
   return (
-    <main className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
+    <section className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
       <div className="flex flex-col items-center justify-between border-b border-gray-200 py-6 lg:flex-row lg:justify-between">
         <h2 className="font-bold text-blue-600">{t('title')}</h2>
         <span className="text-sm text-gray-800">{t('subtitle')}</span>
@@ -71,7 +71,7 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
           ))}
         </motion.ul>
       </section>
-    </main>
+    </section>
   );
 };
 

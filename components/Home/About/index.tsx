@@ -12,12 +12,12 @@ interface IAboutProps {}
 const About: FC<IAboutProps> = ({}) => {
   const t = useTranslations('about');
   return (
-    <main className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
+    <section className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
       <div className="flex items-center justify-center border-b border-gray-200 py-6 font-bold text-blue-600 lg:justify-between">
         <h2>{t('info.title')}</h2>
         <h2 className="hidden lg:block">{t('timeline.title')}</h2>
       </div>
-      <section className="grid grid-cols-1 gap-4 py-2 lg:grid-cols-2 lg:gap-16 lg:py-8">
+      <article className="grid grid-cols-1 gap-4 py-2 lg:grid-cols-2 lg:gap-16 lg:py-8">
         <div>
           <div className="circle-img"></div>
           <p className="mb-4 text-justify text-sm text-black">{t('info.description')}</p>
@@ -60,6 +60,7 @@ const About: FC<IAboutProps> = ({}) => {
                   date={t(`timeline.steps.${index}.date` as any)}
                   title={t(`timeline.steps.${index}.title` as any)}
                   text={t(`timeline.steps.${index}.description` as any)}
+                  dateTime={t(`timeline.steps.${index}.dateTime` as any)}
                 />
               ))}
             </ol>
@@ -69,8 +70,8 @@ const About: FC<IAboutProps> = ({}) => {
             </div>
           </div>
         </aside>
-      </section>
-    </main>
+      </article>
+    </section>
   );
 };
 

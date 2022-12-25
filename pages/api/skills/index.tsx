@@ -15,7 +15,7 @@ const getSkills = async (req: NextApiRequest, res: NextApiResponse) => {
   const { type } = req.body as { type?: string | null };
   console.log('🚀 ~ file: index.tsx:16 ~ getSkills ~ type', type);
 
-  // Use the `/en-US/portfolio` value as the reference to the database location
+  // Use the `/en/portfolio` value as the reference to the database location
   const db = getDatabase(app);
   const databaseRef = ref(db, `es-ES/skills`);
   // Use the `equalTo` method to filter the results by type (if specified)

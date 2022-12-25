@@ -26,7 +26,7 @@ const Contact: FC<IContactProps> = ({}) => {
   }, [t]);
 
   return (
-    <div className="hero relative flex h-screen w-full  gap-10 bg-black px-4 text-white before:h-screen before:bg-hero-main ">
+    <section className="hero relative flex h-screen w-full  gap-10 bg-black px-4 text-white before:h-screen before:bg-hero-main ">
       <div className="z-10 flex w-full flex-col items-center justify-center gap-2 pt-10">
         <h1 className="text-center text-5xl font-extrabold antialiased">Jesús Hernández</h1>
         <div className="text-white">
@@ -37,7 +37,7 @@ const Contact: FC<IContactProps> = ({}) => {
           <p className="text-xs text-neutral-500">{t('scrollDown')}</p>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

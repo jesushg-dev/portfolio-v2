@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, lazy } from 'react';
+import React, { FC, useRef, useState, lazy, Suspense } from 'react';
 
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
@@ -56,7 +56,7 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
   return (
     <>
       <div className="bg-white">
-        <main className="mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20">
+        <article className="mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20">
           <h2 className="flex items-center justify-center border-b border-gray-200 py-6 font-bold text-blue-600 lg:justify-between">
             {t('title')}
           </h2>
@@ -105,11 +105,13 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
               </motion.ul>
             </div>
           </section>
-        </main>
+        </article>
       </div>
-      {isModalOpen && selectedSkill && (
-        <SkillModal skill={selectedSkill} onClose={handleCloseModal} type={selectedSkillType} />
-      )}
+      <Suspense fallback={<div>Loading...</div>}>
+        {isModalOpen && selectedSkill && (
+          <SkillModal skill={selectedSkill} onClose={handleCloseModal} type={selectedSkillType} />
+        )}
+      </Suspense>
     </>
   );
 };

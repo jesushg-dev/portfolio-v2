@@ -41,7 +41,7 @@ const Home: NextPage<IHomeProps> = ({ skills, portfolio }: IHomeProps) => {
   return (
     <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-slate-100">
       <Head>
-        <title>Portfolio - JHG</title>
+        <title>Jesús Hernández | Desarrollador Web Front-End</title>
       </Head>
       <Layout>
         <Hero />

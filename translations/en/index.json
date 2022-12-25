@@ -13,8 +13,8 @@
   "about": {
     "info": {
       "title": "About Me",
-      "description": "I am passionate about programming and web development, I like to learn and improve my skills every day, I specialize in frontend technologies, however I am always willing to adapt to new languages, libraries and frameworks.",
-      "description2": "I consider myself a responsible person, with initiative and commitment, I also like to work in a team, always willing to learn from others and share my knowledge."
+      "description": "Hello, my name is Jesús Hernández, I am currently a graduate of the computer engineering career at the National University of Engineering. My passion is software development, I like to learn new technologies and apply them in personal and professional projects.",
+      "description2": "I am a responsible person, with initiative and commitment. I also like to work as a team, I am always willing to learn new things and overcome new challenges."
     },
     "timeline": {
       "title": "My timeline",
@@ -22,21 +22,25 @@
       "steps": {
         "0": {
           "date": "March, 2017",
+          "dateTime": "2017-03-01",
           "title": "Started studying Computer Engineer",
           "description": "Here  I developed skills in analysis, design, implementation and maintenance of software systems."
         },
         "1": {
           "date": "May, 2021",
+          "dateTime": "2021-05-01",
           "title": "My first job as an IT technician",
           "description": "I took care of the maintenance of the company's computers and networks."
         },
         "2": {
           "date": "February, 2022",
+          "dateTime": "2022-02-01",
           "title": "Mobile Developer at Telo",
           "description": "I developed professional mobile applications and I learned about backend technologies such as C#, ASP.NET Core, etc."
         },
         "3": {
           "date": "June, 2022",
+          "dateTime": "2022-06-01",
           "title": "Web Developer at Musa",
           "description": "I developed professional web applications, I got deeper into frontend technologies such as TypeScript, React.js, Next.js, Apollo Client, etc."
         }

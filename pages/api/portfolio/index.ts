@@ -28,7 +28,7 @@ const pagination = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!lang) {
     res.status(400).send({
-      message: 'Please specify a "lang" parameter. (en-US, es-ES)',
+      message: 'Please specify a "lang" parameter. (en, es)',
     });
     return;
   }

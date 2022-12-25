@@ -14,11 +14,11 @@ const MyDocument = () => {
 
         <meta
           name="keywords"
-          content="portfolio, portafolio, jesus, hernadez, desarrollador, programador, ingeniero, informatica, paginas web, android"
+          content="portfolio, portafolio, jesus, hernadez, jesús hernández., desarrollador, programador, ingeniero, informatica, paginas web, android"
         />
         <meta
           name="description"
-          content="Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
+          content="Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
         />
 
         <meta property="og:title" content="Portfolio - Jesús Hernández " />
@@ -29,7 +29,7 @@ const MyDocument = () => {
         />
         <meta
           property="og:description"
-          content="Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
+          content="Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
         />
         <meta property="og:type" content="website" />
 
@@ -41,7 +41,7 @@ const MyDocument = () => {
         />
         <meta
           property="twitter:description"
-          content="Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
+          content="Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
         />
       </Head>
       <body>
