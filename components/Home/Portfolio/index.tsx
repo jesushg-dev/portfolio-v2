@@ -47,10 +47,17 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
   );
 
   return (
-    <section className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
-      <div className="flex flex-col items-center justify-between border-b border-gray-200 py-6 lg:flex-row lg:justify-between">
-        <h2 className="font-bold text-blue-600">{t('title')}</h2>
-        <span className="text-sm text-gray-800">{t('subtitle')}</span>
+    <section id="portfolio" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
+      <div className="container mx-auto">
+        <div className="-mx-4 flex flex-wrap">
+          <div className="w-full px-4">
+            <div className="mx-auto mb-[60px] max-w-[510px] text-center">
+              <span className="text-primary mb-2 block text-lg font-semibold text-blue-700">{t('subtitle')}</span>
+              <h2 className="text-dark mb-4 text-3xl font-bold sm:text-4xl md:text-[40px]">{t('title')}</h2>
+              <p className="text-body-color text-base">{t('description')}</p>
+            </div>
+          </div>
+        </div>
       </div>
       <section className="mt-8" ref={ref}>
         <motion.ul

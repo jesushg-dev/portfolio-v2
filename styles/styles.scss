@@ -17,12 +17,16 @@
 
   .circle-img {
     shape-outside: circle(50%);
-    @apply float-left mr-4 mb-1 h-44 w-44 rounded-full bg-blue-500 bg-profile-photo bg-cover bg-center;
+    @apply float-right h-44 w-44 rounded-full bg-blue-500 bg-profile-photo bg-cover bg-center p-2 lg:mr-4 lg:mb-1 lg:h-72 lg:w-72;
+  }
+
+  ol#timeline::before {
+    @apply absolute inset-x-0 top-3 w-full border border-dashed border-[#8bb2ec6c] content-[''];
   }
 
   .time-dot::before {
     box-shadow: 3px 3px 0px #8bb2ecbd;
-    @apply absolute top-1 -left-6 h-3 w-3 rounded-full border border-blue-500 bg-white content-[''];
+    @apply absolute top-1.5 -left-1 z-10 h-3 w-3 rounded-full border border-blue-500 bg-white content-[''];
   }
 }
 

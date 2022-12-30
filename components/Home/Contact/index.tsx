@@ -98,13 +98,21 @@ const Contact: FC<IContactProps> = ({}) => {
   };
 
   return (
-    <section className="hero w-full bg-black before:bg-hero-contact before:lg:bg-local">
+    <section id="contact" className="hero w-full bg-black before:bg-hero-contact before:lg:bg-local">
       <div className="mx-auto flex items-center p-4 lg:container lg:p-20">
-        <div className="z-20 flex w-full flex-col rounded bg-white lg:flex-row lg:items-center">
+        <div className="z-20 flex w-full flex-col rounded bg-white md:flex-row md:items-center">
           <aside className="flex w-full flex-col justify-between space-y-10 py-8 px-10">
             <div className="space-y-3">
-              <h1 className="text-center text-2xl font-bold lg:text-4xl">{t('title')}</h1>
-              <p className="mb-3 flex items-center text-center">{t('subtitle')}</p>
+              <div className="container mx-auto">
+                <div className="-mx-4 flex flex-wrap">
+                  <div className="w-full px-4">
+                    <div className="mx-auto mb-4 text-center">
+                      <h2 className="text-dark mb-4 text-3xl font-bold sm:text-4xl md:text-[40px]">{t('title')}</h2>
+                      <p className="text-body-color text-base">{t('subtitle')}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <ul className="-ml-3 flex flex-wrap justify-center gap-2">
                 <li>
                   <ContactItem label="linkedin" href="https://linkedin.com/in/jesus-hernandez23" icon={FaLinkedin} />
@@ -133,12 +141,12 @@ const Contact: FC<IContactProps> = ({}) => {
             />
           </aside>
 
-          <div className="inline-flex w-full items-center justify-center lg:flex lg:h-full lg:w-2">
+          <div className="inline-flex w-full items-center justify-center md:flex md:h-full md:w-2">
             <hr className="my-8 h-px w-64 border-0 bg-gray-200 lg:h-64 lg:w-px" />
             <span className="absolute bg-white px-3 font-medium text-gray-900">{t('divider')}</span>
           </div>
 
-          <form id="contact" className="w-full space-y-2 py-8 px-10" onSubmit={handleSubmit}>
+          <form id="contact-form" className="w-full space-y-2 py-8 px-10" onSubmit={handleSubmit}>
             <p className="text-center text-lg font-bold text-gray-800 lg:text-start">{t('title2')}</p>
 
             <Input

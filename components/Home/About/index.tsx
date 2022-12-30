@@ -12,48 +12,55 @@ interface IAboutProps {}
 const About: FC<IAboutProps> = ({}) => {
   const t = useTranslations('about');
   return (
-    <section className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
-      <div className="flex items-center justify-center border-b border-gray-200 py-6 font-bold text-blue-600 lg:justify-between">
-        <h2>{t('info.title')}</h2>
-        <h2 className="hidden lg:block">{t('timeline.title')}</h2>
+    <section id="about" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
+      <div className="container mx-auto">
+        <div className="-mx-4 flex flex-wrap">
+          <div className="w-full px-4">
+            <div className="mx-auto mb-[60px] max-w-[510px] text-center">
+              <span className="text-primary mb-2 block text-lg font-semibold text-blue-700">{t('subtitle')}</span>
+              <h2 className="text-dark mb-4 text-3xl font-bold sm:text-4xl md:text-[40px]">{t('title')}</h2>
+            </div>
+          </div>
+        </div>
       </div>
-      <article className="grid grid-cols-1 gap-4 py-2 lg:grid-cols-2 lg:gap-16 lg:py-8">
-        <div>
-          <div className="circle-img"></div>
-          <p className="mb-4 text-justify text-sm text-black">{t('info.description')}</p>
-          <p className="text-justify text-sm text-black">{t('info.description2')}</p>
-          <hr className="my-6" />
-
-          <Terminal>
-            <p>
-              <span className="text-blue-400">const</span> <span className="text-green-400">{t('function.name')}</span>{' '}
-              <span className="text-pink-500">=</span> () <span className="text-pink-500">{'=>'}</span> {'{'}
-            </p>
-            <p>
-              &nbsp;&nbsp;<span className="text-pink-500">return</span> {'{'}
-            </p>
-
-            <CodeText value={t('function.json.name')} label="Jesús Enmanuel Hernández González" indent={4} />
-
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;{t('function.json.languages')}:{' {'}
-            </p>
-            <CodeText value={t('function.language.spanish')} label={t('function.languageLevel.native')} indent={6} />
-            <CodeText value={t('function.language.english')} label="A2" indent={6} />
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;{'}'},</p>
-
-            <CodeText value={t('function.json.profession')} label={t('function.profession')} indent={4} />
-            <p>&nbsp;&nbsp;{'}'}</p>
-            <p>{'}'}</p>
-          </Terminal>
+      <article className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:py-8">
+        <div className="space-y-4">
+          <p className="text-justify text-base text-black">{t('info.description1')}</p>
+          <p className="text-justify text-base text-black">{t('info.description2')}</p>
+          <p className="text-justify text-base text-black">{t('info.description3')}</p>
         </div>
 
-        <aside className="flex flex-col items-center">
-          <div className="flex items-center justify-between border-b border-gray-200 py-6 font-bold text-blue-600 lg:hidden">
-            <h2 className="lg:hidden">{t('timeline.title')}</h2>
-          </div>
-          <div>
-            <ol className="relative border-l border-gray-200">
+        <Terminal>
+          <p>
+            <span className="text-blue-400">const</span> <span className="text-green-400">{t('function.name')}</span>{' '}
+            <span className="text-pink-500">=</span> () <span className="text-pink-500">{'=>'}</span> {'{'}
+          </p>
+          <p>
+            &nbsp;&nbsp;<span className="text-pink-500">return</span> {'{'}
+          </p>
+
+          <CodeText value={t('function.json.name')} label="Jesús Enmanuel Hernández González" indent={4} />
+
+          <p>
+            &nbsp;&nbsp;&nbsp;&nbsp;{t('function.json.languages')}:{' {'}
+          </p>
+          <CodeText value={t('function.language.spanish')} label={t('function.languageLevel.native')} indent={6} />
+          <CodeText value={t('function.language.english')} label="A2" indent={6} />
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;{'}'},</p>
+
+          <CodeText value={t('function.json.profession')} label={t('function.profession')} indent={4} />
+          <p>&nbsp;&nbsp;{'}'}</p>
+          <p>{'}'}</p>
+        </Terminal>
+      </article>
+
+      <aside className="flex flex-col items-center gap-2">
+        <div className="w-full border-b border-gray-200 py-6 font-bold text-blue-600 lg:hidden">
+          <h2 className="text-center">{t('timeline.title')}</h2>
+        </div>
+        <div className="w-full overflow-x-auto lg:pt-4">
+          <div className="flex flex-col items-center gap-2">
+            <ol id="timeline" className="relative flex w-full gap-4 ">
               {Array.from({ length: 4 }).map((_, index) => (
                 <TimeLine
                   key={index}
@@ -63,14 +70,14 @@ const About: FC<IAboutProps> = ({}) => {
                   dateTime={t(`timeline.steps.${index}.dateTime` as any)}
                 />
               ))}
+              <li className="-ml-1 flex items-center gap-4 text-sm text-gray-800">
+                <AiOutlineLoading className="text-md animate-spin text-blue-600" />
+                {t('timeline.subtitle')}
+              </li>
             </ol>
-            <div className="-ml-1 flex items-center gap-4 text-sm text-gray-800">
-              <AiOutlineLoading className="text-md animate-spin text-blue-600" />
-              {t('timeline.subtitle')}
-            </div>
           </div>
-        </aside>
-      </article>
+        </div>
+      </aside>
     </section>
   );
 };

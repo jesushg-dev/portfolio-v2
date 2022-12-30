@@ -56,19 +56,28 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
   return (
     <>
       <div className="bg-white">
-        <article className="mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20">
-          <h2 className="flex items-center justify-center border-b border-gray-200 py-6 font-bold text-blue-600 lg:justify-between">
-            {t('title')}
-          </h2>
-
-          <section ref={ref} className="grid grid-cols-1 divide-x md:grid-cols-2 lg:grid-cols-3">
-            <div className="flex h-full w-full flex-col justify-start md:pr-8">
-              <h3 className="my-6 w-full text-center text-2xl font-bold text-gray-900">Backend</h3>
+        <article id="skills" className="mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20">
+          <div className="container mx-auto">
+            <div className="-mx-4 flex flex-wrap">
+              <div className="w-full px-4">
+                <div className="mx-auto mb-[60px] max-w-[510px] text-center">
+                  <span className="text-primary mb-2 block text-lg font-semibold text-blue-700">{t('subtitle')}</span>
+                  <h2 className="text-dark mb-4 text-3xl font-bold sm:text-4xl md:text-[40px]">{t('title')}</h2>
+                  <p className="text-body-color text-base">{t('description')}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <section
+            ref={ref}
+            className="grid grid-cols-1 divide-dashed divide-blue-100 md:grid-cols-2 md:divide-x lg:grid-cols-3">
+            <div className="flex h-full w-full flex-col justify-start gap-6 md:pr-8">
+              <h3 className="w-full text-center text-xl font-bold text-gray-900">Backend</h3>
               <motion.ul
                 initial="hidden"
                 variants={container}
                 animate={isInView ? 'visible' : 'hidden'}
-                className="grid grid-cols-3 gap-4">
+                className="grid grid-cols-skills gap-4">
                 {backend.map((skill) => (
                   <motion.li layout variants={item} key={skill.id} className="flex">
                     <SkillItem {...skill} onClick={handleOpenModal.bind(null, skill, 'backend')} />
@@ -76,13 +85,13 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
                 ))}
               </motion.ul>
             </div>
-            <div className="flex h-full w-full flex-col justify-start md:px-8">
-              <h3 className="my-6 w-full text-center text-2xl font-bold text-gray-900">Frontend</h3>
+            <div className="flex h-full w-full flex-col justify-start gap-6 md:px-8">
+              <h3 className="w-full text-center text-xl font-bold text-gray-900">Frontend</h3>
               <motion.ul
                 initial="hidden"
                 variants={container}
                 animate={isInView ? 'visible' : 'hidden'}
-                className="grid grid-cols-3 gap-4">
+                className="grid grid-cols-skills gap-4">
                 {frontend.map((skill) => (
                   <motion.li layout variants={item} key={skill.id} className="flex">
                     <SkillItem {...skill} onClick={handleOpenModal.bind(null, skill, 'frontend')} />
@@ -90,13 +99,13 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
                 ))}
               </motion.ul>
             </div>
-            <div className="flex h-full w-full flex-col justify-start lg:pl-8">
-              <h3 className="my-6 w-full text-center text-2xl font-bold text-gray-900">DevOps</h3>
+            <div className="flex h-full w-full flex-col justify-start gap-6 md:col-span-2 lg:col-span-1 lg:pl-8">
+              <h3 className="w-full text-center text-xl font-bold text-gray-900">DevOps</h3>
               <motion.ul
                 initial="hidden"
                 variants={container}
                 animate={isInView ? 'visible' : 'hidden'}
-                className="grid grid-cols-3 gap-4">
+                className="grid grid-cols-skills gap-4">
                 {devops.map((skill) => (
                   <motion.li layout variants={item} key={skill.id} className="flex">
                     <SkillItem {...skill} onClick={handleOpenModal.bind(null, skill, 'devops')} />

@@ -6,7 +6,7 @@ interface ITerminalProps {
 
 const Terminal: FC<ITerminalProps> = ({ children }) => {
   return (
-    <div className="w-full overflow-hidden rounded-lg bg-gray-900 text-white shadow-xl">
+    <div className="w-full overflow-hidden rounded-lg bg-gray-900 text-white shadow-2xl">
       <div className="border-b border-gray-800 py-2 px-4">
         <div className="mr-2 inline-block h-3 w-3 rounded-full bg-red-500" />
         <div className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-300" />

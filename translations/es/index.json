@@ -8,13 +8,18 @@
       "backend": "Desarrollador Backend.",
       "frontend": "Desarrollador Frontend."
     },
-    "scrollDown": "Desplazarse hacia abajo"
+    "greeting": "Hola! Soy",
+    "scrollDown": "Desplazarse hacia abajo",
+    "description": "Como ingeniero de software, utilizo mi experiencia técnica y mis habilidades para construir y mantener sistemas de software de alta calidad. Mi pasión por la tecnología me impulsa a aprender y a crear soluciones que tengan un impacto positivo en el mundo."
   },
   "about": {
+    "title": "Breve resumen",
+    "subtitle": "Acerca de mí",
     "info": {
       "title": "Sobre mí",
-      "description": "Hola, mi nombre es Jesús Hernández, actualmente soy egresado de la carrera de ingeniería en computación en la Universitaria Nacional de Ingeniería. Mi pasión es el desarrollo de software, me gusta aprender nuevas tecnologías y aplicarlas en proyectos personales y profesionales.",
-      "description2": "Soy una persona responsable, con iniciativa y compromiso además me gusta trabajar en equipo, siempre estoy dispuesto a aprender nuevas cosas y superar nuevos retos."
+      "description1": "Hola, Soy Jesús Hernández, actualmente soy egresado de la carrera de ingeniería en computación en la Universitaria Nacional de Ingeniería. Mi pasión es el desarrollo de software, me gusta aprender nuevas tecnologías y aplicarlas en proyectos personales y profesionales.",
+      "description2": "Soy una persona responsable, con iniciativa y compromiso además me gusta trabajar en equipo, siempre estoy dispuesto a aprender nuevas cosas y superar nuevos retos.",
+      "description3": "A lo largo de mi carrera, siempre he sido impulsado por el deseo de aprender y crecer como desarrollador. Siempre estoy buscando nuevas tecnologías y técnicas para mejorar mi oficio. Estoy emocionado de ver adónde me llevará mi pasión por la tecnología en el futuro."
     },
     "timeline": {
       "title": "Línea de tiempo",
@@ -24,26 +29,26 @@
         "0": {
           "date": "Marzo, 2017",
           "dateTime": "2017-03-01",
-          "title": "Comence mi carrera como ingeniero en computación",
-          "description": "Aquí desarrollé mis habilidades para el análisis, diseño e implementación de software."
+          "title": "Ingeniería en computación",
+          "description": "Actualmente finalizando mi carrera a la vez que equilibro mis responsabilidades laborales y extracurriculares"
         },
         "1": {
           "date": "Mayo, 2021",
           "dateTime": "2021-05-01",
-          "title": "Mi primer trabajo como técnico de TI",
-          "description": "Aquí fui el encargado del diagnóstico y mantenimiento de equipos de cómputo y redes."
+          "title": "Técnico de TI",
+          "description": "Experiencia en el mantenimiento y resolución de problemas en sistemas y redes informáticas."
         },
         "2": {
           "date": "Febrero, 2022",
           "dateTime": "2022-02-01",
           "title": "Desarrollador Móvil",
-          "description": "Desarrollé aplicaciones móviles profesionales y aprendí sobre tecnologías backend como C#, ASP.NET Core, etc."
+          "description": "Experiencia en la creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente."
         },
         "3": {
           "date": "Junio, 2022",
           "dateTime": "2022-06-01",
           "title": "Desarrollador Web",
-          "description": "Desarrollé aplicaciones móviles profesionales y profundicé en tecnologías frontend como TypeScript, React.js, Next.js, Apollo Client, etc."
+          "description": "Experiencia en el diseño, desarrollo y mantenimiento de sitios web y aplicaciones web."
         }
       }
     },
@@ -68,10 +73,16 @@
     }
   },
   "skills": {
-    "title": "Habilidades"
+    "title": "Áreas de especialización",
+    "subtitle": "Habilidades",
+    "description": "Tengo un conjunto de diversas habilidades, desarrolladas a través de mi educación y experiencias profesionales.",
+    "aux": "I have experience in the following technologies"
   },
   "soft-skills": {
-    "title": "Soft Skills",
+    "subtitle": "Habilidades",
+    "title": "Habilidades blandas",
+    "description": "Además de mis habilidades técnicas, también poseo una serie de habilidades blandas que me han ayudado a tener éxito en mi carrera",
+    "aux": "Creo que estas habilidades son tan importantes como la experticia técnica, y trabajo duro para desarrollarlas y mejorarlas constantemente. Tengo confianza en que mi sólida comunicación, resolución de problemas y habilidades de trabajo en equipo me hacen un activo valioso para cualquier equipo o proyecto.",
     "skills": {
       "teamwork": {
         "title": "Trabajo en Equipo",
@@ -124,8 +135,9 @@
     }
   },
   "portfolio": {
-    "title": "Portfolio",
-    "subtitle": "Mostrando algunos de mis mejores trabajos",
+    "subtitle": "Portafolio",
+    "title": "Mejores proyectos",
+    "description": "Estoy orgulloso del trabajo que he realizado a lo largo de mi carrera.",
     "actions": {
       "view": "Ver proyecto",
       "source": "Ver código"

@@ -29,6 +29,9 @@ module.exports = {
         linkedin: '#0a66c2',
         whatsapp: '#128c7e',
       },
+      gridTemplateColumns: {
+        skills: 'repeat(auto-fit, minmax(4.75rem, 1fr))',
+      },
     },
   },
   plugins: [require('@tailwindcss/line-clamp')],

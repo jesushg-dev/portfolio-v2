@@ -8,12 +8,6 @@ import Layout from '../components/Layout/Index';
 import { getValues } from '../utils/db';
 import { IProject, ISkill } from '../utils/interfaces/portfolio';
 
-/*import About from '../components/Home/About';
-import Skills from '../components/Home/Skills';
-import Contact from '../components/Home/Contact';
-import Portfolio from '../components/Home/Portfolio';
-import SoftSkills from '../components/Home/SoftSkills';*/
-
 const About = lazy(() => import('../components/Home/About'));
 const Skills = lazy(() => import('../components/Home/Skills'));
 const Contact = lazy(() => import('../components/Home/Contact'));

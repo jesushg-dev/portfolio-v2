@@ -8,13 +8,18 @@
       "backend": "Backend Developer.",
       "frontend": "Frontend Developer."
     },
-    "scrollDown": "Scroll Down"
+    "greeting": "Hello, I'm",
+    "scrollDown": "Scroll Down",
+    "description": "As a software engineer, I use my technical expertise and skills to build and maintain high-quality software systems. My passion for technology drives me to constantly learn and grow, and I strive to create solutions that have a positive impact on the world."
   },
   "about": {
+    "title": "A Brief Overview",
+    "subtitle": "About Me",
     "info": {
       "title": "About Me",
-      "description": "Hello, my name is Jesús Hernández, I am currently a graduate of the computer engineering career at the National University of Engineering. My passion is software development, I like to learn new technologies and apply them in personal and professional projects.",
-      "description2": "I am a responsible person, with initiative and commitment. I also like to work as a team, I am always willing to learn new things and overcome new challenges."
+      "description1": "I have always been passionate about technology and its ability to change the world. After completing my degree in computer science, I began my career as a web developer. I quickly learned the ins and outs of front-end development and was able to create beautiful, functional websites for a variety of clients.",
+      "description2": "As I gained more experience, I began to explore other areas of development, including mobile and backend development. This allowed me to expand my skillset and work on even more exciting projects.",
+      "description3": "Throughout my career, I have always been driven by a desire to learn and grow as a developer. I am constantly seeking out new technologies and techniques to improve my craft. I am excited to see where my passion for technology takes me next."
     },
     "timeline": {
       "title": "My timeline",
@@ -23,26 +28,26 @@
         "0": {
           "date": "March, 2017",
           "dateTime": "2017-03-01",
-          "title": "Started studying Computer Engineer",
-          "description": "Here  I developed skills in analysis, design, implementation and maintenance of software systems."
+          "title": "Computer Engineer",
+          "description": "Currently completing a degree while balancing academic and extracurricular responsibilities"
         },
         "1": {
           "date": "May, 2021",
           "dateTime": "2021-05-01",
-          "title": "My first job as an IT technician",
-          "description": "I took care of the maintenance of the company's computers and networks."
+          "title": "IT technician",
+          "description": "Skilled in maintaining and troubleshooting computer systems and networks"
         },
         "2": {
           "date": "February, 2022",
           "dateTime": "2022-02-01",
           "title": "Mobile Developer at Telo",
-          "description": "I developed professional mobile applications and I learned about backend technologies such as C#, ASP.NET Core, etc."
+          "description": "Proficient in creating software applications for mobile devices, consistently delivering high-quality products."
         },
         "3": {
           "date": "June, 2022",
           "dateTime": "2022-06-01",
           "title": "Web Developer at Musa",
-          "description": "I developed professional web applications, I got deeper into frontend technologies such as TypeScript, React.js, Next.js, Apollo Client, etc."
+          "description": "Experienced in designing, developing, and maintaining websites and web applications."
         }
       }
     },
@@ -67,10 +72,16 @@
     }
   },
   "skills": {
-    "title": "Skills"
+    "title": "Areas of Expertise",
+    "subtitle": "Skills",
+    "description": "I have a diverse skill set, developed through my education and professional experiences.",
+    "aux": "I am constantly seeking to learn and improve my skills, and I am always open to new opportunities to challenge myself and grow professionally."
   },
   "soft-skills": {
+    "subtitle": "Skills",
     "title": "Soft Skills",
+    "description": "In addition to my technical skills, I also possess a range of soft skills that have helped me succeed in my career",
+    "aux": "I believe that these skills are just as important as technical expertise, and I work hard to continually develop and improve them. I am confident that my strong communication, problem-solving, and teamwork skills make me a valuable asset to any team or project.",
     "skills": {
       "teamwork": {
         "title": "Teamwork",
@@ -123,8 +134,9 @@
     }
   },
   "portfolio": {
-    "title": "Portfolio",
-    "subtitle": "Showing some of my best works",
+    "subtitle": "Portfolio",
+    "title": "Best Projects",
+    "description": "I am proud of the work I have completed throughout my career.",
     "actions": {
       "view": "View project",
       "source": "View source"

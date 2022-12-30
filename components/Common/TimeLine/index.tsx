@@ -9,12 +9,14 @@ interface ITimeLineProps {
 
 const TimeLine: FC<ITimeLineProps> = ({ title, text, date, dateTime }) => {
   return (
-    <li className="time-dot relative mb-6 ml-4">
-      <time className="mb-1 text-sm font-normal leading-none text-gray-600" dateTime={dateTime}>
+    <li className="time-dot relative w-full space-y-2 pl-4 pb-6">
+      <time
+        className=" border border-blue-500 bg-slate-100 px-2 py-1 pb-1 text-xs font-normal leading-none text-blue-500"
+        dateTime={dateTime}>
         {date}
       </time>
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-      <p className="text-justify text-sm text-gray-800 line-clamp-3">{text}</p>
+      <h3 className="text-base font-semibold text-gray-900">{title}</h3>
+      <p className="text-sm text-gray-800">{text}</p>
     </li>
   );
 };
