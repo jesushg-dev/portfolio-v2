@@ -70,7 +70,7 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
           </div>
           <section
             ref={ref}
-            className="grid grid-cols-1 divide-dashed divide-blue-100 md:grid-cols-2 md:divide-x lg:grid-cols-3">
+            className="grid grid-cols-1 gap-6 divide-dashed divide-blue-100 md:grid-cols-2 md:divide-x lg:grid-cols-3">
             <div className="flex h-full w-full flex-col justify-start gap-6 md:pr-8">
               <h3 className="w-full text-center text-xl font-bold text-gray-900">Backend</h3>
               <motion.ul
@@ -100,7 +100,7 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
               </motion.ul>
             </div>
             <div className="flex h-full w-full flex-col justify-start gap-6 md:col-span-2 lg:col-span-1 lg:pl-8">
-              <h3 className="w-full text-center text-xl font-bold text-gray-900">DevOps</h3>
+              <h3 className="w-full text-center text-xl font-bold text-gray-900">Tools</h3>
               <motion.ul
                 initial="hidden"
                 variants={container}
