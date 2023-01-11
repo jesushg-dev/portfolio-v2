@@ -1,13 +1,18 @@
-import React, { FC, useRef, useState, lazy, Suspense } from 'react';
+import React, { FC, useRef, useState, lazy, Suspense, useCallback } from 'react';
 
 import SkillItem from '../SkillItem';
 
 import { motion } from 'framer-motion';
+import Particles from 'react-particles';
+import { loadFull } from 'tsparticles';
 
 import { useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
+import type { Container, Engine } from 'tsparticles-engine';
 import type { ISkill } from '../../../utils/interfaces/portfolio';
+
+import { skillParticles } from '../../../utils/config/particles';
 
 const SkillModal = lazy(() => import('../SkillModal'));
 
@@ -55,9 +60,29 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
     setIsModalOpen(false);
   };
 
+  const particlesInit = useCallback(async (engine: Engine) => {
+    console.log(engine);
+
+    // you can initialize the tsParticles instance (engine) here, adding custom shapes or presets
+    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+    // starting from v2 you can add only the features you need reducing the bundle size
+    await loadFull(engine);
+  }, []);
+
+  const particlesLoaded = useCallback(async (container: Container | undefined) => {
+    console.log(container);
+  }, []);
+
   return (
     <>
-      <div className="bg-white">
+      <div className="relative bg-white ">
+        <Particles
+          id="tsparticles"
+          className="absolute inset-0"
+          init={particlesInit}
+          loaded={particlesLoaded}
+          options={skillParticles}
+        />
         <article id="skills" className="mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20">
           <div className="container mx-auto">
             <div className="-mx-4 flex flex-wrap">
@@ -72,7 +97,7 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
           </div>
           <section
             ref={ref}
-            className="grid grid-cols-1 gap-6 divide-dashed divide-blue-100 md:grid-cols-2 md:divide-x lg:grid-cols-3">
+            className="grid grid-cols-1 gap-6 divide-dashed divide-blue-100 md:grid-cols-2 md:gap-6 md:divide-x lg:grid-cols-3">
             <div className="flex h-full w-full flex-col justify-start gap-6 md:pr-8">
               <h3 className="w-full text-center text-xl font-bold text-gray-900">Backend</h3>
               <motion.ul

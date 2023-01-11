@@ -35,7 +35,7 @@ const Header: FC<IHeaderProps> = ({}) => {
       <header
         className={`fixed right-0 left-0 z-40 w-full transition-all duration-700 ${
           isOnTop
-            ? 'top-5 bg-transparent text-white hover:text-blue-700'
+            ? 'top-5 bg-transparent text-white'
             : 'top-0 bg-white bg-opacity-90 text-gray-900 shadow backdrop-blur-lg backdrop-filter hover:bg-opacity-100'
         }`}>
         <nav className="rounded border-gray-200 px-2 py-3">

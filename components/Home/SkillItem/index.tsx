@@ -18,7 +18,7 @@ const SkillItem: FC<ISkillItemProps> = ({ image, title, description, onClick }) 
       type="button"
       title={title}
       onClick={onClick}
-      className="group flex w-full flex-col items-center gap-4 rounded-lg border border-blue-50 bg-white p-4 shadow-sm transition-transform hover:scale-110 hover:transform hover:shadow-lg">
+      className="group flex w-full flex-col items-center gap-4 rounded-lg border border-blue-50 bg-white/50 p-4 shadow backdrop-blur-xl transition-transform hover:scale-110 hover:transform hover:shadow-lg">
       <span className="relative block h-8 w-8 rounded-full bg-gray-100">
         <Image width={32} height={32} src={image} alt={title} loader={siLoader} />
       </span>
