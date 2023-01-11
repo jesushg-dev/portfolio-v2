@@ -6,7 +6,7 @@ import Hero from '../components/Home/Hero';
 import Layout from '../components/Layout/Index';
 
 import { getValues } from '../utils/db';
-import { IProject, ISkill } from '../utils/interfaces/portfolio';
+import type { IProject, ISkill } from '../utils/interfaces/portfolio';
 
 const About = lazy(() => import('../components/Home/About'));
 const Skills = lazy(() => import('../components/Home/Skills'));

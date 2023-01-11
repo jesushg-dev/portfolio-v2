@@ -5,7 +5,7 @@ import { useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
 import PortfolioItem from '../ProjectItem';
-import { IProject } from '../../../utils/interfaces/portfolio';
+import type { IProject } from '../../../utils/interfaces/portfolio';
 
 interface IPortfolioProps {
   portfolio: IProject[];

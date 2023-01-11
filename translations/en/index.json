@@ -75,7 +75,12 @@
     "title": "Areas of Expertise",
     "subtitle": "Skills",
     "description": "I have a diverse skill set, developed through my education and professional experiences.",
-    "aux": "I am constantly seeking to learn and improve my skills, and I am always open to new opportunities to challenge myself and grow professionally."
+    "aux": "I am constantly seeking to learn and improve my skills, and I am always open to new opportunities to challenge myself and grow professionally.",
+    "modal": {
+      "close": "Close",
+      "readMore": "Read more",
+      "seeCertificates": "See certificates"
+    }
   },
   "soft-skills": {
     "subtitle": "Skills",

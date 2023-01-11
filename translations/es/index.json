@@ -76,7 +76,12 @@
     "title": "Áreas de especialización",
     "subtitle": "Habilidades",
     "description": "Tengo un conjunto de diversas habilidades, desarrolladas a través de mi educación y experiencias profesionales.",
-    "aux": "I have experience in the following technologies"
+    "aux": "I have experience in the following technologies",
+    "modal": {
+      "close": "Cerrar",
+      "readMore": "Leer más",
+      "seeCertificates": "Ver certificados"
+    }
   },
   "soft-skills": {
     "subtitle": "Habilidades",

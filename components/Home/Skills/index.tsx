@@ -1,11 +1,13 @@
 import React, { FC, useRef, useState, lazy, Suspense } from 'react';
 
+import SkillItem from '../SkillItem';
+
 import { motion } from 'framer-motion';
+
 import { useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
-import SkillItem from '../SkillItem';
-import { ISkill } from '../../../utils/interfaces/portfolio';
+import type { ISkill } from '../../../utils/interfaces/portfolio';
 
 const SkillModal = lazy(() => import('../SkillModal'));
 
