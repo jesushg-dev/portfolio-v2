@@ -13,11 +13,11 @@ const inter = Inter({ subsets: ['latin'] });
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <NextIntlProvider messages={pageProps.messages}>
-        <div className={inter.className}>
+      <div className={inter.className}>
+        <NextIntlProvider messages={pageProps.messages}>
           <Component {...pageProps} />
-        </div>
-      </NextIntlProvider>
+        </NextIntlProvider>
+      </div>
       <Analytics />
     </>
   );

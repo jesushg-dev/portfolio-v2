@@ -36,7 +36,7 @@ export const skillParticles: RecursivePartial<IOptions> = {
     },
     links: {
       color: '#004ecb',
-      distance: 100,
+      distance: 120,
       enable: true,
       opacity: 0.2,
       width: 1,
@@ -59,7 +59,7 @@ export const skillParticles: RecursivePartial<IOptions> = {
         enable: true,
         area: 800,
       },
-      value: 80,
+      value: 25,
     },
     opacity: {
       value: 0.4,

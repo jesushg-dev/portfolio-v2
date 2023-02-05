@@ -83,7 +83,7 @@ const Skills: FC<ISkillsProps> = ({ backend, frontend, devops }) => {
           loaded={particlesLoaded}
           options={skillParticles}
         />
-        <article id="skills" className="mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20">
+        <article id="skills" className="z-10 mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20 lg:pb-36">
           <div className="container mx-auto">
             <div className="-mx-4 flex flex-wrap">
               <div className="w-full px-4">
