@@ -75,6 +75,7 @@ export const appRouter = router({
       const hasMore = await ctx.prisma.project.count({
         take: limit,
         skip: lastCursor ? 1 : 0,
+        where: type ? { type } : undefined,
         cursor: lastCursor ? { id: lastCursor } : undefined,
       });
 
