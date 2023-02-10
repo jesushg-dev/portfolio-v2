@@ -1038,6 +1038,34 @@ async function main() {
     },
   });
 
+  const skillWebSockets = await prisma.skill.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      title: 'WebSockets',
+      type: 'FRONTEND',
+      image: 'socketdotio',
+      SkillTranslation: {
+        createMany: {
+          data: [
+            {
+              description:
+                'Protocolo de comunicación bidireccional que permite la comunicación entre un cliente y un servidor a través de una única conexión TCP.',
+              urlWiki: 'https://es.wikipedia.org/wiki/WebSocket',
+              appLanguageId: langEs.id,
+            },
+            {
+              description:
+                'Bidirectional communication protocol that allows communication between a client and a server through a single TCP connection.',
+              urlWiki: 'https://en.wikipedia.org/wiki/WebSocket',
+              appLanguageId: langEn.id,
+            },
+          ],
+        },
+      },
+    },
+  });
+
   // mobile
   const skillReactNative = await prisma.skill.upsert({
     where: { id: new ObjectId().toString() },
@@ -1124,8 +1152,8 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
+      type: 'TOOLS',
       title: 'DevExpress',
-      type: 'DESKTOP',
       image: 'devexpress',
       SkillTranslation: {
         createMany: {

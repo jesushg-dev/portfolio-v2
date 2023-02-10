@@ -28,10 +28,19 @@ interface ISkillGroupedProps {
   isInView: boolean;
   ctxClass?: string;
   skills: SkillType[];
+  loading?: boolean;
   onClick: (skill: SkillType, type: SkillDef) => void;
 }
 
-const SkillGrouped: FC<ISkillGroupedProps> = ({ title, type, skills, isInView, onClick, ctxClass }) => {
+const SkillGrouped: FC<ISkillGroupedProps> = ({
+  title,
+  type,
+  skills,
+  isInView,
+  onClick,
+  ctxClass,
+  loading = false,
+}) => {
   return (
     <div className={ctxClass + ' flex h-full w-full flex-col justify-start gap-6'}>
       <h3 className="w-full text-center text-xl font-bold text-gray-900">{title}</h3>
@@ -46,6 +55,7 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({ title, type, skills, isInView, o
           </motion.li>
         ))}
       </motion.ul>
+      {loading ? <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-blue-700"></div> : null}
     </div>
   );
 };

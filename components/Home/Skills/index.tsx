@@ -73,6 +73,7 @@ const Skills: FC<ISkillsProps> = ({ locale }) => {
               onClick={handleOpenModal}
               ctxClass="md:pr-8"
               skills={frontend?.data?.data || []}
+              loading={frontend?.isLoading || frontend.isFetching}
             />
 
             <SkillGrouped
@@ -82,6 +83,7 @@ const Skills: FC<ISkillsProps> = ({ locale }) => {
               onClick={handleOpenModal}
               ctxClass="md:px-8"
               skills={backend?.data?.data || []}
+              loading={backend?.isLoading || backend.isFetching}
             />
 
             <SkillGrouped
@@ -91,6 +93,7 @@ const Skills: FC<ISkillsProps> = ({ locale }) => {
               onClick={handleOpenModal}
               ctxClass="md:col-span-2 lg:col-span-1 lg:pl-8"
               skills={tools?.data?.data || []}
+              loading={tools?.isLoading || tools.isFetching}
             />
           </section>
           <div className="container mx-auto flex w-full justify-center py-5">
@@ -98,8 +101,11 @@ const Skills: FC<ISkillsProps> = ({ locale }) => {
               target="_blank"
               rel="noreferrer"
               href="https://platzi.com/p/jess232022/"
-              className="text-body-color z-30 text-base text-gray-900 hover:text-blue-700">
+              className="group z-30 mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600">
               {t('modal.seeCertificates')}
+              <span aria-hidden="true" className="block transition group-hover:translate-x-0.5">
+                →
+              </span>
             </a>
           </div>
         </article>
