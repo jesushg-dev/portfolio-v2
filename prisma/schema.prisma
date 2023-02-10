@@ -94,12 +94,7 @@ model SkillTranslation {
 enum StackType {
   FRONTEND
   BACKEND
-  DATABASE
   MOBILE
   DESKTOP
-  TESTING
   TOOLS
-  DEVOPS
-  DESIGN
-  OTHER
 }

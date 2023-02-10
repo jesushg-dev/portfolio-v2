@@ -8,17 +8,12 @@ export const appRouter = router({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
-        locale: z
-          .string()
-          .optional()
-          .default('es')
-          .refine((value) => {
-            return ['es', 'en', 'fr'].includes(value);
-          }),
+        type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP']).optional(),
+        locale: z.enum(['es', 'en']).optional().default('es'),
       })
     )
     .query(async ({ input, ctx }) => {
-      const { limit, keyword, locale, cursor } = input;
+      const { limit, keyword, locale, cursor, type } = input;
 
       // get language selected
       const appLanguage = await ctx.prisma.appLanguage.findUnique({
@@ -51,6 +46,7 @@ export const appRouter = router({
         },
         take: limit,
         skip: cursor ? 1 : 0,
+        where: type ? { type } : undefined,
         cursor: cursor ? { id: cursor } : undefined,
       });
 
@@ -94,13 +90,7 @@ export const appRouter = router({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
-        locale: z
-          .string()
-          .optional()
-          .default('es')
-          .refine((value) => {
-            return ['es', 'en', 'fr'].includes(value);
-          }),
+        locale: z.enum(['es', 'en']).optional().default('es'),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -152,49 +142,6 @@ export const appRouter = router({
         data: dataWithTranslation,
       };
     }),
-
-  /*insertOne: procedure
-    .input(
-      z.object({
-        title: z.string(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      return await ctx.prisma.groceryList.create({
-        data: { title: input.title },
-      });
-    }),
-  updateOne: procedure
-    .input(
-      z.object({
-        id: z.number(),
-        title: z.string(),
-        checked: z.boolean(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const { id, ...rest } = input;
-
-      return await ctx.prisma.groceryList.update({
-        where: { id },
-        data: { ...rest },
-      });
-    }),
-  deleteAll: procedure
-    .input(
-      z.object({
-        ids: z.number().array(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const { ids } = input;
-
-      return await ctx.prisma.groceryList.deleteMany({
-        where: {
-          id: { in: ids },
-        },
-      });
-    }),**/
 });
 
 export type AppRouter = typeof appRouter;

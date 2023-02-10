@@ -6,7 +6,10 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { trpc } from '../../../utils/trpc';
 
+import FilterType from './FilterType';
 import PortfolioItem from '../ProjectItem';
+
+import type { ProjectType } from './FilterType';
 import type { IProject } from '../../../utils/interfaces/portfolio';
 
 interface IPortfolioProps {
@@ -35,6 +38,8 @@ const item = {
 
 const limit = 10;
 
+type localeType = 'en' | 'es';
+
 const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
   const ref = useRef(null);
 
@@ -50,9 +55,10 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
     [t]
   );
 
-  const locale = useLocale();
-  const { data, isFetching, fetchNextPage } = trpc.getProjects.useInfiniteQuery(
-    { limit, locale },
+  const locale = useLocale() as localeType;
+  const [type, setType] = useState<ProjectType | undefined>(undefined);
+  const { data, isFetching, isLoading, fetchNextPage } = trpc.getProjects.useInfiniteQuery(
+    { limit, locale, type },
     {
       getNextPageParam: (data) => data.cursor,
     }
@@ -75,7 +81,8 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
           </div>
         </div>
       </div>
-      <section className="mt-8" ref={ref}>
+      <FilterType value={type} onChange={setType} />
+      <section ref={ref}>
         <motion.ul
           initial="hidden"
           variants={container}
@@ -108,17 +115,19 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
         </motion.ul>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4">
-          {!data?.pages[data.pages.length - 1].hasMore ? (
-            <span className="text-sm text-gray-500">{t('pagination.noMore')}</span>
-          ) : (
+          {isLoading || isFetching ? (
+            <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-gray-900"></div>
+          ) : null}
+
+          {data?.pages[data.pages.length - 1].hasMore ? (
             <button
               type="button"
-              disabled={isFetching}
+              disabled={isFetching || isLoading}
               className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
               onClick={handleFetchMore}>
               {isFetching ? t('pagination.loading') : t('pagination.loadMore')}
             </button>
-          )}
+          ) : null}
         </div>
       </section>
     </section>

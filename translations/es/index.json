@@ -157,6 +157,13 @@
       "noMore": "Ya has visto todos los proyectos",
       "error": "Ha ocurrido un error, inténtalo de nuevo",
       "loadMore": "Cargar más"
+    },
+    "filters": {
+      "all": "Todos",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "mobile": "Móvil",
+      "desktop": "Escritorio"
     }
   },
   "contact": {

@@ -4,6 +4,7 @@ import type { NextPageContext, NextPage } from 'next/types';
 
 import Hero from '../components/Home/Hero';
 import Layout from '../components/Layout/Index';
+import Loading from '../components/Common/Loading';
 
 import { getValues } from '../utils/db';
 import type { IProject, ISkill } from '../utils/interfaces/portfolio';
@@ -22,14 +23,6 @@ interface IHomeProps {
     frontend: ISkill[];
   };
 }
-
-const Loading = () => {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900"></div>
-    </div>
-  );
-};
 
 const Home: NextPage<IHomeProps> = ({ skills, portfolio }: IHomeProps) => {
   return (

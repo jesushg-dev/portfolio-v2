@@ -156,6 +156,13 @@
       "noMore": "You have seen all the projects",
       "error": "An error has occurred, please try again later",
       "loadMore": "Load more"
+    },
+    "filters": {
+      "all": "All",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "mobile": "Mobile",
+      "desktop": "Desktop"
     }
   },
   "contact": {

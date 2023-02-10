@@ -217,7 +217,7 @@ async function main() {
     update: {},
     create: {
       title: 'MySQL',
-      type: 'DATABASE',
+      type: 'BACKEND',
       image: 'mysql',
       SkillTranslation: {
         createMany: {
@@ -245,7 +245,7 @@ async function main() {
     update: {},
     create: {
       title: 'SQL Server',
-      type: 'DATABASE',
+      type: 'BACKEND',
       image: 'microsoftsqlserver',
       SkillTranslation: {
         createMany: {
@@ -273,7 +273,7 @@ async function main() {
     update: {},
     create: {
       title: 'MongoDB',
-      type: 'DATABASE',
+      type: 'BACKEND',
       image: 'mongodb',
       SkillTranslation: {
         createMany: {
@@ -300,7 +300,7 @@ async function main() {
     update: {},
     create: {
       title: 'Firebase',
-      type: 'DATABASE',
+      type: 'BACKEND',
       image: 'firebase',
       SkillTranslation: {
         createMany: {
@@ -1119,7 +1119,7 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
-      type: 'OTHER',
+      type: 'TOOLS',
       image: 'sysadmin',
       ServiceTranslation: {
         createMany: {
@@ -1144,7 +1144,7 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
-      type: 'OTHER',
+      type: 'TOOLS',
       image: 'cybersecurity',
       ServiceTranslation: {
         createMany: {
@@ -1400,13 +1400,13 @@ async function main() {
         createMany: {
           data: [
             {
-              title: 'Tienda Admin',
-              description: 'Administrador de una tienda online.',
+              title: 'Tienda Cliente',
+              description: 'Aplicación web para la compra de productos en línea.',
               appLanguageId: langEs.id,
             },
             {
-              title: 'Store Admin',
-              description: 'Administrator of an online store.',
+              title: 'Store Client',
+              description: 'Web application for online product purchase.',
               appLanguageId: langEn.id,
             },
           ],
