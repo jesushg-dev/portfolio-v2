@@ -11,7 +11,6 @@ import FilterType from './FilterType';
 import PortfolioItem from '../ProjectItem';
 
 import type { ProjectType } from './FilterType';
-import type { IProject } from '../../../utils/interfaces/portfolio';
 
 interface IPortfolioProps {}
 
@@ -100,10 +99,10 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
                   <PortfolioItem
                     {...{
                       ...project,
-                      url_github: project.githubUrl || '',
-                      url_web: project.websiteUrl || '',
                       image: project.image,
                       made_with: project.skills,
+                      url_web: project.websiteUrl || '',
+                      url_github: project.githubUrl || '',
                     }}
                     {...labels}
                   />

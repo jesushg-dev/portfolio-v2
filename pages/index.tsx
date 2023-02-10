@@ -12,7 +12,7 @@ import { getValues } from '../utils/db';
 import { createContext } from '../server/context';
 import { appRouter } from '../server/routers/_app';
 
-import { localeType } from '../utils/types';
+import { localeType } from '../utils/interfaces/types';
 import { LIMIT_PER_PAGE } from '../utils/constants';
 
 import type { NextPageContext, NextPage } from 'next/types';
@@ -42,7 +42,7 @@ const Home: NextPage<IHomeProps> = ({ skills }: IHomeProps) => {
         <Hero />
         <Suspense fallback={<Loading />}>
           <About />
-          <Skills {...skills} others={[]} />
+          <Skills />
           <SoftSkills />
           <Portfolio />
           <Contact />

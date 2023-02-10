@@ -6,11 +6,11 @@ import Modal, { CloseModal } from '../../UI/Modal';
 import { siLoader } from '../../../utils/tools/medialoader';
 import { useTranslations } from 'next-intl';
 
-import type { ISkill } from '../../../utils/interfaces/portfolio';
+import { SkillType } from '../../../utils/interfaces/types';
 
 interface ISkillModalProps {
   type: string;
-  skill: ISkill;
+  skill: SkillType;
   onClose: () => void;
 }
 
@@ -52,14 +52,14 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
                   href="https://platzi.com/p/jess232022/"
                   target="_blank"
                   rel="noreferrer"
-                  aria-disabled={skill.wiki === ''}
+                  aria-disabled={skill.urlWiki === ''}
                   className="pressable block transform items-center rounded-xl bg-blue-600 px-3.5 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                   {t('modal.seeCertificates')}
                 </a>
               </div>
               <div className="mt-3 rounded-lg sm:mt-0 sm:ml-3">
                 <a
-                  href={skill.wiki}
+                  href={skill.urlWiki}
                   target="_blank"
                   rel="noreferrer"
                   className="pressable block transform items-center rounded-xl border-2 border-white px-3.5 py-3.5 text-center text-base font-medium text-blue-600 shadow-md transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">

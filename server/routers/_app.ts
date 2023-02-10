@@ -91,11 +91,12 @@ export const appRouter = router({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
+        type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP', 'TOOLS']).optional(),
         locale: z.enum(['es', 'en']).optional().default('es'),
       })
     )
     .query(async ({ input, ctx }) => {
-      const { limit, keyword, locale, cursor } = input;
+      const { limit, keyword, type, locale, cursor } = input;
 
       // get language selected
       const appLanguage = await ctx.prisma.appLanguage.findUnique({
@@ -115,6 +116,7 @@ export const appRouter = router({
         },
         take: limit,
         skip: cursor ? 1 : 0,
+        where: type ? { type } : undefined,
         cursor: cursor ? { id: cursor } : undefined,
       });
 
@@ -134,6 +136,7 @@ export const appRouter = router({
       const hasMore = await ctx.prisma.project.count({
         take: limit,
         skip: lastCursor ? 1 : 0,
+        where: type ? { type } : undefined,
         cursor: lastCursor ? { id: lastCursor } : undefined,
       });
 

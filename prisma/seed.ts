@@ -211,6 +211,34 @@ async function main() {
     },
   });
 
+  const skillExpress = await prisma.skill.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      title: 'Express',
+      type: 'BACKEND',
+      image: 'express',
+      SkillTranslation: {
+        createMany: {
+          data: [
+            {
+              description:
+                'Framework de Node.js para aplicaciones web y API REST. Es minimalista y flexible, proporcionando un conjunto sólido de características para aplicaciones web y móviles.',
+              urlWiki: 'https://es.wikipedia.org/wiki/Express.js',
+              appLanguageId: langEs.id,
+            },
+            {
+              description:
+                'Node.js framework for web applications and REST API. It is minimalist and flexible, providing a solid set of features for web and mobile applications.',
+              urlWiki: 'https://en.wikipedia.org/wiki/Express.js',
+              appLanguageId: langEn.id,
+            },
+          ],
+        },
+      },
+    },
+  });
+
   // Database
   const skillMysql = await prisma.skill.upsert({
     where: { id: new ObjectId().toString() },
@@ -380,6 +408,33 @@ async function main() {
     },
   });
 
+  const skillVite = await prisma.skill.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      title: 'Vite',
+      type: 'TOOLS',
+      image: 'vite',
+      SkillTranslation: {
+        createMany: {
+          data: [
+            {
+              description:
+                'Paquete de herramientas de desarrollo web moderno que proporciona una experiencia de desarrollo rápida y fluida.',
+              urlWiki: 'https://es.wikipedia.org/wiki/Vite',
+              appLanguageId: langEs.id,
+            },
+            {
+              description: 'Modern web development tooling that provides a fast and fluid development experience.',
+              urlWiki: 'https://en.wikipedia.org/wiki/Vite',
+              appLanguageId: langEn.id,
+            },
+          ],
+        },
+      },
+    },
+  });
+
   const skillGit = await prisma.skill.upsert({
     where: { id: new ObjectId().toString() },
     update: {},
@@ -435,13 +490,40 @@ async function main() {
     },
   });
 
+  const skillBitbucket = await prisma.skill.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      title: 'Bitbucket',
+      type: 'TOOLS',
+      image: 'bitbucket',
+      SkillTranslation: {
+        createMany: {
+          data: [
+            {
+              description:
+                'Plataforma de desarrollo colaborativo para alojar proyectos utilizando el sistema de control de versiones Git.',
+              urlWiki: 'https://es.wikipedia.org/wiki/Bitbucket',
+              appLanguageId: langEs.id,
+            },
+            {
+              description: 'Collaborative development platform to host projects using the Git version control system.',
+              urlWiki: 'https://en.wikipedia.org/wiki/Bitbucket',
+              appLanguageId: langEn.id,
+            },
+          ],
+        },
+      },
+    },
+  });
+
   const skillVscode = await prisma.skill.upsert({
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
       title: 'VS Code',
       type: 'TOOLS',
-      image: 'vscode',
+      image: 'visualstudiocode',
       SkillTranslation: {
         createMany: {
           data: [
@@ -545,26 +627,54 @@ async function main() {
     },
   });
 
-  const skillExpress = await prisma.skill.upsert({
+  const skillAzure = await prisma.skill.upsert({
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
-      title: 'Express',
-      type: 'BACKEND',
-      image: 'express',
+      title: 'Azure',
+      type: 'TOOLS',
+      image: 'microsoftazure',
       SkillTranslation: {
         createMany: {
           data: [
             {
               description:
-                'Framework de Node.js para aplicaciones web y API REST. Es minimalista y flexible, proporcionando un conjunto sólido de características para aplicaciones web y móviles.',
-              urlWiki: 'https://es.wikipedia.org/wiki/Express.js',
+                'Plataforma de computación en la nube de Microsoft. Ofrece una amplia variedad de servicios de computación en la nube, incluidos análisis, almacenamiento en la nube, bases de datos, redes, inteligencia artificial y desarrollo de aplicaciones.',
+              urlWiki: 'https://es.wikipedia.org/wiki/Microsoft_Azure',
               appLanguageId: langEs.id,
             },
             {
               description:
-                'Node.js framework for web applications and REST API. It is minimalist and flexible, providing a solid set of features for web and mobile applications.',
-              urlWiki: 'https://en.wikipedia.org/wiki/Express.js',
+                'Microsoft cloud computing platform. It offers a wide variety of cloud computing services including analysis, cloud storage, databases, networks, artificial intelligence and application development.',
+              urlWiki: 'https://en.wikipedia.org/wiki/Microsoft_Azure',
+              appLanguageId: langEn.id,
+            },
+          ],
+        },
+      },
+    },
+  });
+
+  const skillNotion = await prisma.skill.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      title: 'Notion',
+      type: 'TOOLS',
+      image: 'notion',
+      SkillTranslation: {
+        createMany: {
+          data: [
+            {
+              description:
+                'Plataforma de productividad y colaboración que combina las herramientas de un wiki con las de un bloc de notas. Permite crear páginas web y tableros de trabajo, así como organizar y compartir información.',
+              urlWiki: 'https://es.wikipedia.org/wiki/Notion_(software)',
+              appLanguageId: langEs.id,
+            },
+            {
+              description:
+                'Productivity and collaboration platform that combines the tools of a wiki with those of a notebook. It allows you to create web pages and workboards, as well as organize and share information.',
+              urlWiki: 'https://en.wikipedia.org/wiki/Notion_(software)',
               appLanguageId: langEn.id,
             },
           ],
@@ -826,7 +936,7 @@ async function main() {
     create: {
       title: 'Styled Components',
       type: 'FRONTEND',
-      image: 'styled',
+      image: 'styledcomponents',
       SkillTranslation: {
         createMany: {
           data: [
@@ -906,14 +1016,14 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
-      title: 'Apollo',
+      title: 'Apollo GraphQL',
       type: 'FRONTEND',
-      image: 'apollo',
+      image: 'apollographql',
       SkillTranslation: {
         createMany: {
           data: [
             {
-              description: 'Plataforma de código abierto para crear, gestionar y conectar aplicaciones de datos.',
+              description: 'Plataforma de código abierto para crear, administrar y conectar aplicaciones de datos.',
               urlWiki: 'https://es.wikipedia.org/wiki/Apollo_(plataforma)',
               appLanguageId: langEs.id,
             },
