@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model AppLanguage {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  code               String               @unique
+  name               String
+  SkillTranslation   SkillTranslation[]
+  ProjectTranslation ProjectTranslation[]
+  ServiceTranslation ServiceTranslation[]
+}
+
+model Project {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime             @default(now())
+  image              String
+  type               StackType
+  githubUrl          String?             
+  websiteUrl         String?             
+  isPrivate          Boolean             @default(false)
+  ProjectSkill       ProjectSkill[]
+  ProjectTranslation ProjectTranslation[]
+}
+
+model ProjectSkill {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  Skill     Skill    @relation(fields: [skillId], references: [id])
+  Project   Project  @relation(fields: [projectId], references: [id])
+  skillId   String   @db.ObjectId
+  projectId String   @db.ObjectId
+}
+
+model ProjectTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  title         String
+  description   String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  Project       Project?    @relation(fields: [projectId], references: [id])
+  appLanguageId String      @db.ObjectId
+  projectId     String?     @db.ObjectId
+}
+
+model Service {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime             @default(now())
+  image              String
+  type               StackType
+  ServiceTranslation ServiceTranslation[]
+}
+
+model ServiceTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  title         String
+  description   String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  Service       Service?    @relation(fields: [serviceId], references: [id])
+  serviceId     String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+}
+
+model Skill {
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt        DateTime           @default(now())
+  image            String
+  title            String
+  type             StackType
+  ProjectSkill     ProjectSkill[]
+  SkillTranslation SkillTranslation[]
+}
+
+model SkillTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  description   String
+  urlWiki       String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  Skill         Skill?      @relation(fields: [skillId], references: [id])
+  skillId       String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+}
+
+enum StackType {
+  FRONTEND
+  BACKEND
+  DATABASE
+  MOBILE
+  DESKTOP
+  TESTING
+  TOOLS
+  DEVOPS
+  DESIGN
+  OTHER
+}

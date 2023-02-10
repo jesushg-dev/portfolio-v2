@@ -1,8 +1,10 @@
-import React, { FC, useRef, useMemo } from 'react';
+import React, { FC, useRef, useMemo, useState } from 'react';
 
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+
+import { trpc } from '../../../utils/trpc';
 
 import PortfolioItem from '../ProjectItem';
 import type { IProject } from '../../../utils/interfaces/portfolio';
@@ -31,6 +33,8 @@ const item = {
   },
 };
 
+const limit = 10;
+
 const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
   const ref = useRef(null);
 
@@ -45,6 +49,18 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
     }),
     [t]
   );
+
+  const locale = useLocale();
+  const { data, isFetching, fetchNextPage } = trpc.getProjects.useInfiniteQuery(
+    { limit, locale },
+    {
+      getNextPageParam: (data) => data.cursor,
+    }
+  );
+
+  const handleFetchMore = () => {
+    fetchNextPage();
+  };
 
   return (
     <section id="portfolio" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
@@ -65,18 +81,45 @@ const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
           variants={container}
           animate={isInView ? 'visible' : 'hidden'}
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {portfolio.map((project) => (
-            <motion.li
-              layout
-              key={project.id}
-              className="flex"
-              variants={item}
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.5 }}>
-              <PortfolioItem {...project} {...labels} />
-            </motion.li>
+          {data?.pages.map((page) => (
+            <>
+              {page.data.map((project) => (
+                <motion.li
+                  layout
+                  key={project.id}
+                  className="flex"
+                  variants={item}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.5 }}>
+                  <PortfolioItem
+                    {...{
+                      ...project,
+                      url_github: project.githubUrl || '',
+                      url_web: project.websiteUrl || '',
+                      image: project.image,
+                      made_with: project.skills,
+                    }}
+                    {...labels}
+                  />
+                </motion.li>
+              ))}
+            </>
           ))}
         </motion.ul>
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-4">
+          {!data?.pages[data.pages.length - 1].hasMore ? (
+            <span className="text-sm text-gray-500">{t('pagination.noMore')}</span>
+          ) : (
+            <button
+              type="button"
+              disabled={isFetching}
+              className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+              onClick={handleFetchMore}>
+              {isFetching ? t('pagination.loading') : t('pagination.loadMore')}
+            </button>
+          )}
+        </div>
       </section>
     </section>
   );

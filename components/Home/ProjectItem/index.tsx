@@ -9,7 +9,10 @@ interface IPortfolioItemProps {
   image: string;
   title: string;
   description: string;
-  made_with: string[];
+  made_with: {
+    title: string;
+    image: string;
+  }[];
   type: string;
   url_web: string;
   url_github: string;
@@ -66,11 +69,11 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
             </a>
           )}
         </div>
-        <div className="flex w-full items-center gap-4 overflow-x-auto bg-gray-100 py-5 px-4 text-gray-700">
+        <div className="flex w-full gap-4 overflow-x-auto bg-gray-100 py-5 px-4 text-gray-700">
           {made_with?.map((tech) => (
-            <div key={tech} className="flex flex-col items-center gap-2">
-              <Image src={tech} loader={siLoader} alt={tech} width={20} height={20} />
-              <span className="text-xs capitalize">{tech}</span>
+            <div key={tech.title} className="flex flex-col items-center gap-2">
+              <Image src={tech.image} loader={siLoader} alt={tech.title} width={20} height={20} />
+              <span className="text-center text-sm capitalize">{tech.title}</span>
             </div>
           ))}
         </div>

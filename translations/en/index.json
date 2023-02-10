@@ -149,6 +149,13 @@
     "private": {
       "title": "Private",
       "description": "This project is private, i can't show you the source code but you can see the live demo."
+    },
+    "pagination": {
+      "retry": "Retry",
+      "loading": "Loading...",
+      "noMore": "You have seen all the projects",
+      "error": "An error has occurred, please try again later",
+      "loadMore": "Load more"
     }
   },
   "contact": {

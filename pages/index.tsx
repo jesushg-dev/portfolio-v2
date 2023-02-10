@@ -52,7 +52,7 @@ const Home: NextPage<IHomeProps> = ({ skills, portfolio }: IHomeProps) => {
 };
 
 const getStaticProps = async (context: NextPageContext) => {
-  const locale = context.locale;
+  const locale = context.locale || context.defaultLocale || 'en';
 
   // Get skills
   const devopsAsync = getValues<ISkill[]>(`${locale}/skills/devops`);

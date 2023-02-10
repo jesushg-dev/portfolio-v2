@@ -13,16 +13,6 @@ const About: FC<IAboutProps> = ({}) => {
   const t = useTranslations('about');
   return (
     <section id="about" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
-      <div className="container mx-auto">
-        <div className="-mx-4 flex flex-wrap">
-          <div className="w-full px-4">
-            <div className="mx-auto mb-[60px] max-w-[510px] text-center">
-              <span className="text-primary mb-2 block text-lg font-semibold text-blue-700">{t('subtitle')}</span>
-              <h2 className="text-dark mb-4 text-3xl font-bold sm:text-4xl md:text-[40px]">{t('title')}</h2>
-            </div>
-          </div>
-        </div>
-      </div>
       <article className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:py-8">
         <div className="space-y-4">
           <p className="text-justify text-base text-black">{t('info.description1')}</p>

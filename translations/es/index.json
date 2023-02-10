@@ -150,6 +150,13 @@
     "private": {
       "title": "Privado",
       "description": "Este proyecto es privado, no puedo mostrarte el código fuente pero puedes verlo en vivo."
+    },
+    "pagination": {
+      "retry": "Reintentar",
+      "loading": "Cargando...",
+      "noMore": "Ya has visto todos los proyectos",
+      "error": "Ha ocurrido un error, inténtalo de nuevo",
+      "loadMore": "Cargar más"
     }
   },
   "contact": {
