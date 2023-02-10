@@ -1,13 +1,22 @@
-import React, { FC, Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
+
 import Head from 'next/head';
-import type { NextPageContext, NextPage } from 'next/types';
+import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 
 import Hero from '../components/Home/Hero';
 import Layout from '../components/Layout/Index';
 import Loading from '../components/Common/Loading';
 
+import transformer from 'superjson';
 import { getValues } from '../utils/db';
-import type { IProject, ISkill } from '../utils/interfaces/portfolio';
+import { createContext } from '../server/context';
+import { appRouter } from '../server/routers/_app';
+
+import { localeType } from '../utils/types';
+import { LIMIT_PER_PAGE } from '../utils/constants';
+
+import type { NextPageContext, NextPage } from 'next/types';
+import type { ISkill } from '../utils/interfaces/portfolio';
 
 const About = lazy(() => import('../components/Home/About'));
 const Skills = lazy(() => import('../components/Home/Skills'));
@@ -16,7 +25,6 @@ const Portfolio = lazy(() => import('../components/Home/Portfolio'));
 const SoftSkills = lazy(() => import('../components/Home/SoftSkills'));
 
 interface IHomeProps {
-  portfolio: IProject[];
   skills: {
     devops: ISkill[];
     backend: ISkill[];
@@ -24,7 +32,7 @@ interface IHomeProps {
   };
 }
 
-const Home: NextPage<IHomeProps> = ({ skills, portfolio }: IHomeProps) => {
+const Home: NextPage<IHomeProps> = ({ skills }: IHomeProps) => {
   return (
     <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-slate-100">
       <Head>
@@ -36,7 +44,7 @@ const Home: NextPage<IHomeProps> = ({ skills, portfolio }: IHomeProps) => {
           <About />
           <Skills {...skills} others={[]} />
           <SoftSkills />
-          <Portfolio portfolio={portfolio} />
+          <Portfolio />
           <Contact />
         </Suspense>
       </Layout>
@@ -45,16 +53,19 @@ const Home: NextPage<IHomeProps> = ({ skills, portfolio }: IHomeProps) => {
 };
 
 const getStaticProps = async (context: NextPageContext) => {
-  const locale = context.locale || context.defaultLocale || 'en';
+  const locale = (context.locale || context.defaultLocale || 'en') as localeType;
+
+  const ctx = await createContext();
+  const ssg = createProxySSGHelpers({ router: appRouter, ctx, transformer });
+
+  // prefetch `getProjects` query
+  await ssg.getProjects.prefetchInfinite({ limit: LIMIT_PER_PAGE, locale });
 
   // Get skills
   const devopsAsync = getValues<ISkill[]>(`${locale}/skills/devops`);
   const backendAsync = getValues<ISkill[]>(`${locale}/skills/backend`);
   const frontendAsync = getValues<ISkill[]>(`${locale}/skills/frontend`);
   const [devops, backend, frontend] = await Promise.all([devopsAsync, backendAsync, frontendAsync]);
-
-  // Get Portfolio
-  const portfolio = await getValues<IProject[]>(`${locale}/portfolio`);
 
   // Get translations
   const indexAsync = import(`../translations/${locale}/index.json`);
@@ -63,10 +74,11 @@ const getStaticProps = async (context: NextPageContext) => {
 
   return {
     props: {
-      portfolio,
+      trpcState: ssg.dehydrate(),
       skills: { devops, backend, frontend },
       messages: { ...common.default, ...index.default },
     },
+    revalidate: 60 * 60 * 24,
   };
 };
 

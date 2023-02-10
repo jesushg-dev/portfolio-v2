@@ -5,6 +5,7 @@ import { useInView } from 'framer-motion';
 import { useLocale, useTranslations } from 'next-intl';
 
 import { trpc } from '../../../utils/trpc';
+import { LIMIT_PER_PAGE } from '../../../utils/constants';
 
 import FilterType from './FilterType';
 import PortfolioItem from '../ProjectItem';
@@ -12,9 +13,7 @@ import PortfolioItem from '../ProjectItem';
 import type { ProjectType } from './FilterType';
 import type { IProject } from '../../../utils/interfaces/portfolio';
 
-interface IPortfolioProps {
-  portfolio: IProject[];
-}
+interface IPortfolioProps {}
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -36,11 +35,11 @@ const item = {
   },
 };
 
-const limit = 10;
+const limit = LIMIT_PER_PAGE;
 
 type localeType = 'en' | 'es';
 
-const Portfolio: FC<IPortfolioProps> = ({ portfolio }) => {
+const Portfolio: FC<IPortfolioProps> = ({}) => {
   const ref = useRef(null);
 
   const t = useTranslations('portfolio');
