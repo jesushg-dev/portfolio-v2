@@ -2,7 +2,7 @@ import React, { FC, useRef, useMemo, useState } from 'react';
 
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 import { trpc } from '../../../utils/trpc';
 import { LIMIT_PER_PAGE } from '../../../utils/constants';
@@ -11,8 +11,6 @@ import FilterType from './FilterType';
 import PortfolioItem from '../ProjectItem';
 
 import type { ProjectType } from './FilterType';
-
-interface IPortfolioProps {}
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -35,10 +33,13 @@ const item = {
 };
 
 const limit = LIMIT_PER_PAGE;
-
 type localeType = 'en' | 'es';
 
-const Portfolio: FC<IPortfolioProps> = ({}) => {
+interface IPortfolioProps {
+  locale: localeType;
+}
+
+const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
   const ref = useRef(null);
 
   const t = useTranslations('portfolio');
@@ -53,7 +54,6 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
     [t]
   );
 
-  const locale = useLocale() as localeType;
   const [type, setType] = useState<ProjectType | undefined>(undefined);
   const { data, isFetching, isLoading, fetchNextPage } = trpc.getProjects.useInfiniteQuery(
     { limit, locale, type },

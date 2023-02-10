@@ -33,7 +33,6 @@
     "cookie": "^0.5.0",
     "eslint": "^8.33.0",
     "eslint-config-next": "13.1.6",
-    "firebase": "^9.17.1",
     "framer-motion": "^9.0.2",
     "next": "13.1.6",
     "next-intl": "^2.10.2",

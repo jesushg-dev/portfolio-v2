@@ -7,6 +7,7 @@ import { useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 
 import { trpc } from '../../../utils/trpc';
+import { LIMIT_PER_PAGE_BIG } from '../../../utils/constants';
 
 import type { SkillType } from '../../../utils/interfaces/types';
 
@@ -14,12 +15,13 @@ const SkillModal = lazy(() => import('./SkillModal'));
 
 export type SkillDef = 'backend' | 'frontend' | 'devops' | 'others';
 
-interface ISkillsProps {}
+interface ISkillsProps {
+  locale: 'en' | 'es';
+}
 
-const limit = 100;
-const locale = 'en';
+const limit = LIMIT_PER_PAGE_BIG;
 
-const Skills: FC<ISkillsProps> = ({}) => {
+const Skills: FC<ISkillsProps> = ({ locale }) => {
   const ref = useRef(null);
 
   const t = useTranslations('skills');
