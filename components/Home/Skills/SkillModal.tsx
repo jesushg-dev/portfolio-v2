@@ -41,11 +41,11 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
             </div>
           </div>
           <div className="mt-12 mb-16 flex flex-col items-start text-left md:mb-0 lg:w-1/2 lg:flex-grow lg:pl-6 xl:mt-0 xl:pl-12">
-            <span className="mb-8 text-xs font-bold uppercase tracking-widest text-blue-600">{type}</span>
+            <span className="mb-8 text-xs font-bold uppercase tracking-widest text-primary-600">{type}</span>
             <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-600 md:text-7xl lg:text-5xl">
               {skill.title}
             </h1>
-            <p className="mb-8 text-left text-base leading-relaxed text-gray-500">{skill.description}</p>
+            <p className="mb-8 text-left text-base leading-relaxed text-secondaryText-500">{skill.description}</p>
             <div className="mt-0 w-full sm:flex lg:mt-6">
               <div className="mt-3 rounded-lg sm:mt-0">
                 <a
@@ -53,7 +53,7 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
                   target="_blank"
                   rel="noreferrer"
                   aria-disabled={skill.urlWiki === ''}
-                  className="pressable block transform items-center rounded-xl bg-blue-600 px-3.5 py-4 text-center text-base font-medium text-white transition duration-500 ease-in-out hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  className="pressable block transform items-center rounded-xl bg-primary-600 px-3.5 py-4 text-center text-base font-medium text-neutralText-50 transition duration-500 ease-in-out hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                   {t('modal.seeCertificates')}
                 </a>
               </div>
@@ -62,7 +62,7 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
                   href={skill.urlWiki}
                   target="_blank"
                   rel="noreferrer"
-                  className="pressable block transform items-center rounded-xl border-2 border-white px-3.5 py-3.5 text-center text-base font-medium text-blue-600 shadow-md transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                  className="pressable block transform items-center rounded-xl border-2 border-white px-3.5 py-3.5 text-center text-base font-medium text-primary-600 shadow-md transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-background-500 focus:ring-offset-2">
                   {t('modal.readMore')}
                 </a>
               </div>

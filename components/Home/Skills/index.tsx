@@ -49,15 +49,17 @@ const Skills: FC<ISkillsProps> = ({ locale }) => {
 
   return (
     <>
-      <div className="relative bg-white ">
+      <div className="relative bg-background-50 ">
         <BgParticles />
         <article id="skills" className="z-10 mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20 ">
           <div className="container mx-auto">
             <div className="-mx-4 flex flex-wrap">
               <div className="w-full px-4">
                 <div className="mx-auto mb-[60px] max-w-[510px] text-center">
-                  <span className="text-primary mb-2 block text-lg font-semibold text-blue-700">{t('subtitle')}</span>
-                  <h2 className="text-dark mb-4 text-3xl font-bold sm:text-4xl md:text-[40px]">{t('title')}</h2>
+                  <span className="mb-2 block text-lg font-semibold text-primary-700">{t('subtitle')}</span>
+                  <h2 className="mb-4 text-3xl font-bold text-primaryText-500 sm:text-4xl md:text-[40px]">
+                    {t('title')}
+                  </h2>
                   <p className="text-body-color text-base">{t('description')}</p>
                 </div>
               </div>
@@ -65,7 +67,7 @@ const Skills: FC<ISkillsProps> = ({ locale }) => {
           </div>
           <section
             ref={ref}
-            className="grid grid-cols-1 gap-6 divide-dashed divide-blue-100 md:grid-cols-2 md:gap-6 md:divide-x lg:grid-cols-3">
+            className="grid grid-cols-1 gap-6 divide-dashed divide-primary-50 md:grid-cols-2 md:gap-6 md:divide-x lg:grid-cols-3">
             <SkillGrouped
               type="frontend"
               title="Frontend"
@@ -101,7 +103,7 @@ const Skills: FC<ISkillsProps> = ({ locale }) => {
               target="_blank"
               rel="noreferrer"
               href="https://platzi.com/p/jess232022/"
-              className="group z-30 mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600">
+              className="group z-30 mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600">
               {t('modal.seeCertificates')}
               <span aria-hidden="true" className="block transition group-hover:translate-x-0.5">
                 →

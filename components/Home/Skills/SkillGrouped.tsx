@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 
-import SkillItem from '../SkillItem';
+import SkillItem from './SkillItem';
 import { motion } from 'framer-motion';
 
 import type { SkillDef } from '.';
@@ -43,7 +43,7 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({
 }) => {
   return (
     <div className={ctxClass + ' flex h-full w-full flex-col justify-start gap-6'}>
-      <h3 className="w-full text-center text-xl font-bold text-gray-900">{title}</h3>
+      <h3 className="w-full text-center text-xl font-bold text-secondaryText-900">{title}</h3>
       <motion.ul
         initial="hidden"
         variants={container}
@@ -55,7 +55,7 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({
           </motion.li>
         ))}
       </motion.ul>
-      {loading ? <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-blue-700"></div> : null}
+      {loading ? <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary-700"></div> : null}
     </div>
   );
 };

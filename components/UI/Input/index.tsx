@@ -19,19 +19,19 @@ const Input = forwardRef<IInputRef, IInputProps>(({ inputProps, labelProps, labe
         <label
           {...labelProps}
           htmlFor={inputProps?.id}
-          className={'mb-2 text-sm font-bold text-gray-800 ' + labelProps?.className}>
+          className={'mb-2 text-sm font-bold text-secondaryText-800 ' + labelProps?.className}>
           {label}
           {inputProps?.required && <span className="font-normal text-red-500">*</span>}
         </label>
       )}
       <div className="space-y-1">
-        <div className="relative border-gray-300">
+        <div className="relative border-background-300">
           {Icon && (
             <button
               title={label}
               onClick={() => inputRef.current?.focus()}
-              className="absolute inset-y-0 left-0 flex items-center border-r border-gray-100 px-4 py-3 ">
-              <Icon className="h-5 w-5 text-gray-500 peer-valid:text-green-400" />
+              className="absolute inset-y-0 left-0 flex items-center border-r border-background-100 px-4 py-3 ">
+              <Icon className="h-5 w-5 text-secondaryText-500 peer-valid:text-green-400" />
             </button>
           )}
 
@@ -39,8 +39,8 @@ const Input = forwardRef<IInputRef, IInputProps>(({ inputProps, labelProps, labe
             {...inputProps}
             ref={inputRef as any}
             className={`w-full rounded border ${
-              error === 'error' ? 'border-red-500' : error === 'idle' ? 'border-gray-400' : 'border-green-300'
-            } bg-transparent py-3 px-3 text-sm text-gray-500 placeholder-gray-500 shadow-sm focus:border-blue-700 focus:outline-none  ${
+              error === 'error' ? 'border-red-500' : error === 'idle' ? 'border-background-400' : 'border-green-300'
+            } bg-transparent py-3 px-3 text-sm text-secondaryText-500 placeholder-background-500 shadow-sm focus:border-primary-700 focus:outline-none  ${
               inputProps?.className
             }`}
           />

@@ -28,7 +28,7 @@ interface IHomeProps {
 
 const Home: NextPage<IHomeProps> = ({ locale }: IHomeProps) => {
   return (
-    <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-slate-100">
+    <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-background-200">
       <Head>
         <title>Jesús Hernández | Desarrollador Web Front-End</title>
       </Head>

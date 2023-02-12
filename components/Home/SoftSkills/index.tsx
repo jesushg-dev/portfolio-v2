@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import SoftSkillItem from '../SoftSkillItem';
+import SoftSkillItem from './SoftSkillItem';
 
 import { RiHandHeartLine, RiGpsLine, RiDashboard3Line } from 'react-icons/ri';
 import { RiSettingsLine, RiTimerFlashLine, RiMapPinTimeLine, RiQuillPenLine } from 'react-icons/ri';
@@ -15,8 +15,8 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
 
   return (
     <section className="hero relative flex h-[50vh] w-full flex-col items-center  overflow-hidden bg-black before:bg-hero-skills md:h-[65vh]">
-      <h2 className="text-dark z-10  mb-4 p-10 text-4xl font-bold text-white">{t('title')}</h2>
-      <div className="absolute inset-0 z-20 flex h-full w-full scroll-pl-16 items-center gap-6 overflow-x-auto overflow-y-hidden pt-10 text-white lg:snap-x lg:snap-mandatory">
+      <h2 className="z-10 mb-4  p-10 text-4xl font-bold text-slate-200">{t('title')}</h2>
+      <div className="absolute inset-0 z-20 flex h-full w-full scroll-pl-16 items-center gap-6 overflow-x-auto overflow-y-hidden pt-10 text-neutralText-50 lg:snap-x lg:snap-mandatory">
         <div className="shrink-0 snap-center">
           <div className="w-4 shrink-0 sm:w-24"></div>
         </div>

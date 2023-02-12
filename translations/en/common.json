@@ -8,6 +8,11 @@
       "portfolio": "Portfolio",
       "contact": "Contact"
     },
+    "tools": {
+      "theme": "Theme Mode",
+      "language": "Language",
+      "newThemeSoon": "New theme will be add soon"
+    },
     "closeMenu": "Close Menu",
     "openMenu": "Open Menu"
   },

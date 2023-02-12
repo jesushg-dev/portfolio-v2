@@ -72,8 +72,8 @@ const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center">
-              <span className="text-primary mb-2 block text-lg font-semibold text-blue-700">{t('subtitle')}</span>
-              <h2 className="text-dark mb-4 text-3xl font-bold sm:text-4xl md:text-[40px]">{t('title')}</h2>
+              <span className="mb-2 block text-lg font-semibold text-primary-700">{t('subtitle')}</span>
+              <h2 className="mb-4 text-3xl font-bold text-primaryText-500 sm:text-4xl md:text-[40px]">{t('title')}</h2>
               <p className="text-body-color text-base">{t('description')}</p>
             </div>
           </div>
@@ -114,14 +114,14 @@ const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4">
           {isLoading || isFetching ? (
-            <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-gray-900"></div>
+            <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-background-900"></div>
           ) : null}
 
           {data?.pages[data.pages.length - 1].hasMore ? (
             <button
               type="button"
               disabled={isFetching || isLoading}
-              className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+              className="rounded bg-primary-500 py-2 px-4 font-bold text-neutralText-50 hover:bg-primary-700"
               onClick={handleFetchMore}>
               {isFetching ? t('pagination.loading') : t('pagination.loadMore')}
             </button>

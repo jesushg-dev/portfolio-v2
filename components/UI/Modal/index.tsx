@@ -26,13 +26,13 @@ const Modal: React.FC<IModalProps> = ({ children, onClickBackdrop, className }) 
       <div
         role="button"
         tabIndex={-1}
-        className="absolute inset-0 bg-gray-900 opacity-60"
+        className="absolute inset-0 bg-background-900 opacity-60"
         onClick={onClickBackdrop}
         onKeyUp={onClickBackdrop}
       />
       <div
         className={
-          'selection: z-50 h-full max-h-screen w-full overflow-y-auto border border-gray-100 bg-white shadow-lg md:h-auto md:w-3/5 md:rounded-lg lg:w-2/5' +
+          'selection: z-50 h-full max-h-screen w-full overflow-y-auto border border-background-100 bg-background-50 shadow-lg md:h-auto md:w-3/5 md:rounded-lg lg:w-2/5' +
           className
         }>
         {children}
@@ -55,7 +55,7 @@ const CloseModal: React.FC<ICloseModalProps> = ({ onClick, className, classIcon,
       aria-label={title}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
-      className={'pressable absolute top-3 right-3 p-2 text-gray-500 ' + className}>
+      className={'pressable absolute top-3 right-3 p-2 text-secondaryText-500 ' + className}>
       <RiCloseCircleFill className={'h-7 w-7 ' + classIcon} />
     </motion.button>
   );

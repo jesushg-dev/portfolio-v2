@@ -11,13 +11,13 @@
     box-shadow: inset 0 0 0 2px #737373;
     &::before {
       animation: scroll 1.5s infinite;
-      @apply absolute left-1/2 top-2 -ml-[0.15rem] h-[0.28rem] w-[0.28rem] rounded bg-white content-[''];
+      @apply absolute left-1/2 top-2 -ml-[0.15rem] h-[0.28rem] w-[0.28rem] rounded bg-background-50 content-[''];
     }
   }
 
   .circle-img {
     shape-outside: circle(50%);
-    @apply float-right h-44 w-44 rounded-full bg-blue-500 bg-profile-photo bg-cover bg-center p-2 lg:mr-4 lg:mb-1 lg:h-72 lg:w-72;
+    @apply float-right h-44 w-44 rounded-full bg-primary-500 bg-profile-photo bg-cover bg-center p-2 lg:mr-4 lg:mb-1 lg:h-72 lg:w-72;
   }
 
   ol#timeline::before {
@@ -26,7 +26,7 @@
 
   .time-dot::before {
     box-shadow: 3px 3px 0px #8bb2ecbd;
-    @apply absolute top-1.5 -left-1 z-10 h-3 w-3 rounded-full border border-blue-500 bg-white content-[''];
+    @apply absolute top-1.5 -left-1 z-10 h-3 w-3 rounded-full border border-primary-500 bg-background-50 content-[''];
   }
 }
 

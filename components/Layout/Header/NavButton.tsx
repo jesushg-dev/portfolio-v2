@@ -12,7 +12,7 @@ const NavButton: FC<INavButtonProps> = ({ title, onClick }) => {
         type="button"
         title={title}
         onClick={onClick}
-        className="block w-full rounded py-2 pl-3 pr-4 text-start text-gray-900 transition-all hover:bg-gray-100 hover:text-blue-700 md:w-auto md:bg-transparent md:text-inherit">
+        className="block w-full rounded py-2 pl-3 pr-4 text-start text-secondaryText-900 transition-all hover:bg-background-100 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-background-200 md:w-auto md:bg-transparent md:text-inherit">
         {title}
       </button>
     </li>
