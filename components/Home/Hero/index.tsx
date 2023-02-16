@@ -36,7 +36,7 @@ const Contact: FC<IContactProps> = ({}) => {
   return (
     <section
       id="home"
-      className="hero relative flex min-h-screen w-full overflow-hidden bg-black text-neutralText-50 before:bg-hero-main">
+      className="hero relative flex min-h-screen w-full overflow-hidden bg-black text-secondaryText-50 before:bg-hero-main">
       <div className="z-10 mx-auto flex w-full flex-col items-start justify-center gap-2 px-4 py-8 pt-28 lg:container lg:px-10 lg:py-20">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="order-1 flex w-full justify-center lg:order-2 lg:w-2/5 lg:justify-end">

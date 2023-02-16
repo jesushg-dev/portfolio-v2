@@ -45,7 +45,7 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
             <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-600 md:text-7xl lg:text-5xl">
               {skill.title}
             </h1>
-            <p className="mb-8 text-left text-base leading-relaxed text-secondaryText-500">{skill.description}</p>
+            <p className="mb-8 text-left text-base leading-relaxed text-primaryText-500">{skill.description}</p>
             <div className="mt-0 w-full sm:flex lg:mt-6">
               <div className="mt-3 rounded-lg sm:mt-0">
                 <a
@@ -53,7 +53,7 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
                   target="_blank"
                   rel="noreferrer"
                   aria-disabled={skill.urlWiki === ''}
-                  className="pressable block transform items-center rounded-xl bg-primary-600 px-3.5 py-4 text-center text-base font-medium text-neutralText-50 transition duration-500 ease-in-out hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                  className="pressable block transform items-center rounded-xl bg-primary-600 px-3.5 py-4 text-center text-base font-medium text-secondaryText-50 transition duration-500 ease-in-out hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                   {t('modal.seeCertificates')}
                 </a>
               </div>

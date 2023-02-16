@@ -60,7 +60,7 @@ const About: FC<IAboutProps> = ({}) => {
                   dateTime={t(`timeline.steps.${index}.dateTime` as any)}
                 />
               ))}
-              <li className="-ml-1 flex items-center gap-4 text-sm text-secondaryText-800">
+              <li className="-ml-1 flex items-center gap-4 text-sm text-primaryText-800">
                 <AiOutlineLoading className="text-md animate-spin text-primary-600" />
                 {t('timeline.subtitle')}
               </li>

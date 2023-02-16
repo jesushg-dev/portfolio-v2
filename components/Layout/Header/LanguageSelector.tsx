@@ -50,7 +50,7 @@ const LanguageSelector: FC<ILanguageSelectorProps> = ({}) => {
                     type="button"
                     role="menuitem"
                     onClick={onSubmit.bind(null, value)}
-                    className="w-full px-4 py-2 text-sm text-secondaryText-700 hover:bg-background-100 hover:text-primary-700 md:text-sm md:font-medium">
+                    className="w-full px-4 py-2 text-sm text-primaryText-700 hover:bg-background-100 hover:text-primary-700 md:text-sm md:font-medium">
                     <div className="inline-flex items-center">
                       <Image width={24} className="mr-2" height={24} loader={cdFlagloader} src={img} alt={label} />
                       {label}

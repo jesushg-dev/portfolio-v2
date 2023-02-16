@@ -42,7 +42,7 @@ const Header: FC<IHeaderProps> = ({}) => {
         className={`fixed right-0 left-0 z-40 w-full transition-all duration-700 ${
           isOnTop
             ? 'top-5 bg-transparent text-white'
-            : 'top-0 bg-background-50 bg-opacity-90 text-secondaryText-900 shadow backdrop-blur-lg backdrop-filter hover:bg-opacity-100'
+            : 'top-0 bg-background-50 bg-opacity-90 text-primaryText-900 shadow backdrop-blur-lg backdrop-filter hover:bg-opacity-100'
         }`}>
         <ThemeSelector visible={isThemeMenuOpen} newLabel={t('tools.newThemeSoon')} />
         <nav className="rounded border-background-200 px-2 py-3">

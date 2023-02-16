@@ -50,7 +50,7 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange }) => {
 
   return (
     <div className="mb-12 flex flex-col items-center justify-center gap-4">
-      <ul className="flex w-full flex-wrap justify-center text-center text-sm font-medium text-secondaryText-500">
+      <ul className="flex w-full flex-wrap justify-center text-center text-sm font-medium">
         {TypeArrays.map((type) => (
           <li className="mr-2" key={type.name}>
             <button
@@ -58,8 +58,8 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange }) => {
               onClick={() => onChange(type.value)}
               className={`${
                 value === type.value
-                  ? 'active bg-primary-600 text-neutralText-50'
-                  : 'hover:text-secondaryText-90 hover:bg-background-100'
+                  ? 'active bg-primary-600 text-secondaryText-50'
+                  : 'hover:text-primaryText-90 text-secondaryText-600 hover:bg-background-100'
               } inline-flex items-center gap-2 rounded-lg px-4 py-3 font-bold`}>
               {type.icon} {t(`filters.${type.name}` as any)}
             </button>

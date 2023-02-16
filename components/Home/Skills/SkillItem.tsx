@@ -13,7 +13,7 @@ const siLoader = ({ src }: ImageLoaderProps) => {
 };
 
 const SkillItem: FC<ISkillItemProps> = ({ image, title, description, onClick }) => {
-  /* border border-primary-50 bg-background-50/50 shadow backdrop-blur-xl hover:shadow-lg */
+  /* border border-primary-50 bg-background-50/50 shadow backdrop-blur-xl*/
   return (
     <button
       type="button"
@@ -23,10 +23,10 @@ const SkillItem: FC<ISkillItemProps> = ({ image, title, description, onClick }) 
       <span className="relative block h-8 w-8 rounded-full bg-background-100">
         <Image width={32} height={32} src={image} alt={title} loader={siLoader} />
       </span>
-      <span className="text-center text-xs font-bold leading-none text-secondaryText-700 group-hover:text-primary-700">
+      <span className="text-center text-xs font-bold leading-none text-primaryText-700 group-hover:text-primary-700">
         {title}
       </span>
-      <span className="hidden text-justify text-sm text-secondaryText-800">{description}</span>
+      <span className="hidden text-justify text-sm text-primaryText-800">{description}</span>
     </button>
   );
 };

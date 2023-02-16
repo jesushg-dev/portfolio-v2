@@ -19,7 +19,7 @@ const TextArea = forwardRef<IInputRef, ITextAreaProps>(({ textareaProps, labelPr
         <label
           {...labelProps}
           htmlFor={textareaProps?.id}
-          className={'text-sm font-bold  text-secondaryText-800 ' + labelProps?.className}>
+          className={'text-sm font-bold  text-primaryText-800 ' + labelProps?.className}>
           {label}
           {textareaProps?.required && <span className="font-normal text-red-500">*</span>}
         </label>
@@ -31,7 +31,7 @@ const TextArea = forwardRef<IInputRef, ITextAreaProps>(({ textareaProps, labelPr
               title={label}
               onClick={() => inputRef.current?.focus()}
               className="absolute inset-y-0 left-0 flex items-center border-r border-background-100 px-4 py-3 ">
-              <Icon className="h-5 w-5 text-secondaryText-500 peer-valid:text-green-400" />
+              <Icon className="h-5 w-5 text-primaryText-500 peer-valid:text-green-400" />
             </button>
           )}
 
@@ -39,8 +39,8 @@ const TextArea = forwardRef<IInputRef, ITextAreaProps>(({ textareaProps, labelPr
             {...textareaProps}
             ref={inputRef as any}
             className={`w-full resize-none rounded border ${
-              error === 'error' ? 'border-red-500' : error === 'idle' ? 'border-background-400' : 'border-green-300'
-            } bg-transparent py-3 px-3 text-sm text-secondaryText-500 placeholder-background-500 shadow-sm focus:border-secondary-700 focus:outline-none`}
+              error === 'error' ? 'border-red-500' : error === 'idle' ? 'border-divider-200' : 'border-green-300'
+            } bg-transparent py-3 px-3 text-sm text-primaryText-500 placeholder-divider-200 shadow-sm focus:border-primary-700 focus:outline-none`}
           />
         </div>
         <div

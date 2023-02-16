@@ -12,7 +12,7 @@ import { createContext } from '../server/context';
 import { appRouter } from '../server/routers/_app';
 
 import { localeType } from '../utils/interfaces/types';
-import { LIMIT_PER_PAGE, LIMIT_PER_PAGE_BIG } from '../utils/constants';
+import { LIMIT_PER_PAGE, LIMIT_PER_PAGE_BIG, REVALIDATE_TIME } from '../utils/constants';
 
 import type { NextPageContext, NextPage } from 'next/types';
 
@@ -72,7 +72,7 @@ const getStaticProps = async (context: NextPageContext) => {
       trpcState: ssg.dehydrate(),
       messages: { ...common.default, ...index.default },
     },
-    revalidate: 60 * 60 * 24,
+    revalidate: REVALIDATE_TIME,
   };
 };
 

@@ -55,7 +55,7 @@ const CloseModal: React.FC<ICloseModalProps> = ({ onClick, className, classIcon,
       aria-label={title}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
-      className={'pressable absolute top-3 right-3 p-2 text-secondaryText-500 ' + className}>
+      className={'pressable absolute top-3 right-3 p-2 text-primaryText-500 ' + className}>
       <RiCloseCircleFill className={'h-7 w-7 ' + classIcon} />
     </motion.button>
   );

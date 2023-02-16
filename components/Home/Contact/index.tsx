@@ -145,11 +145,11 @@ const Contact: FC<IContactProps> = ({}) => {
 
           <div className="inline-flex w-full items-center justify-center md:flex md:h-full md:w-2">
             <hr className="my-8 h-px w-64 border-0 bg-background-200 lg:h-64 lg:w-px" />
-            <span className="absolute bg-background-50 px-3 font-medium text-secondaryText-900">{t('divider')}</span>
+            <span className="absolute bg-background-50 px-3 font-medium text-primaryText-900">{t('divider')}</span>
           </div>
 
           <form id="contact-form" className="w-full space-y-2 py-8 px-10" onSubmit={handleSubmit}>
-            <p className="text-center text-lg font-bold text-secondaryText-900 lg:text-start">{t('title2')}</p>
+            <p className="text-center text-lg font-bold text-primaryText-900 lg:text-start">{t('title2')}</p>
 
             <Input
               ref={nameRef}
@@ -190,7 +190,7 @@ const Contact: FC<IContactProps> = ({}) => {
             <button
               onClick={handleSubmit}
               type="button"
-              className="pressable mt-6 w-full rounded bg-secondary-700 py-3 font-medium uppercase tracking-widest text-neutralText-50 shadow-lg hover:bg-secondary-900 hover:shadow-none focus:outline-none">
+              className="pressable mt-6 w-full rounded bg-primary-700 py-3 font-medium uppercase tracking-widest text-secondaryText-50 shadow-lg hover:bg-primary-900 hover:shadow-none focus:outline-none">
               {t('form.submit')}
             </button>
           </form>

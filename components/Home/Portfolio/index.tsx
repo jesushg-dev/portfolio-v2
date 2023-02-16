@@ -121,7 +121,7 @@ const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
             <button
               type="button"
               disabled={isFetching || isLoading}
-              className="rounded bg-primary-500 py-2 px-4 font-bold text-neutralText-50 hover:bg-primary-700"
+              className="rounded bg-primary-500 py-2 px-4 font-bold text-secondaryText-50 hover:bg-primary-700"
               onClick={handleFetchMore}>
               {isFetching ? t('pagination.loading') : t('pagination.loadMore')}
             </button>

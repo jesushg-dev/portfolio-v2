@@ -43,7 +43,7 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({
 }) => {
   return (
     <div className={ctxClass + ' flex h-full w-full flex-col justify-start gap-6'}>
-      <h3 className="w-full text-center text-xl font-bold text-secondaryText-900">{title}</h3>
+      <h3 className="w-full text-center text-xl font-bold text-primaryText-900">{title}</h3>
       <motion.ul
         initial="hidden"
         variants={container}

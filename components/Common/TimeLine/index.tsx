@@ -15,8 +15,8 @@ const TimeLine: FC<ITimeLineProps> = ({ title, text, date, dateTime }) => {
         dateTime={dateTime}>
         {date}
       </time>
-      <h3 className="text-base font-semibold text-secondaryText-900">{title}</h3>
-      <p className="text-sm text-secondaryText-800">{text}</p>
+      <h3 className="text-base font-semibold text-primaryText-200">{title}</h3>
+      <p className="text-sm text-primaryText-800">{text}</p>
     </li>
   );
 };

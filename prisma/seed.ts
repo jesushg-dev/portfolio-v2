@@ -1877,6 +1877,106 @@ async function main() {
       },
     },
   });
+
+  const projectSoftSkillsQuiz = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'FRONTEND',
+      image: 'soft-skill-quiz_rqnzmm',
+      githubUrl: 'https://github.com/jess232017/SoftSkill-Quiz',
+      websiteUrl: 'https://soft-skill-quiz.vercel.app/',
+      isPrivate: false,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Soft Skills Quiz',
+              description: 'Aplicación web que permite realizar un test de habilidades blandas para desarrolladores.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Soft Skills Quiz',
+              description: 'Web application that allows you to take a test of soft skills for developers.',
+
+              appLanguageId: langEn.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillReact.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
+        },
+      },
+    },
+  });
+
+  const projectMusaEcommerce = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'FRONTEND',
+      image: 'musa-client_blxhyy',
+      githubUrl: 'musa-client_blxhyy',
+      websiteUrl: 'musa-client_blxhyy',
+      isPrivate: true,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Musa Ecommerce',
+              description: 'Aplicación web para la venta de productos perecederos.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Musa Ecommerce',
+              description: 'Web application for the sale of perishable products.',
+              appLanguageId: langEn.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillNextjs.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
+        },
+      },
+    },
+  });
+
+  const projectMusaAdmin = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'FRONTEND',
+      image: 'musa-admin_oufeum',
+      githubUrl: 'musa-admin_oufeum',
+      websiteUrl: '',
+      isPrivate: true,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Musa Admin',
+              description: 'Aplicación web para la administración de la tienda online Musa Ecommerce.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Musa Admin',
+              description: 'Web application for the administration of the online store Musa Ecommerce.',
+              appLanguageId: langEn.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillReact.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
+        },
+      },
+    },
+  });
 }
 
 main()
