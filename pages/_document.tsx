@@ -44,7 +44,7 @@ const MyDocument = () => {
           content="Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
         />
       </Head>
-      <body>
+      <body id="body">
         <Main />
         <NextScript />
       </body>

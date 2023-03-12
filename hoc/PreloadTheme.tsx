@@ -1,11 +1,11 @@
 import React from 'react';
-import Head from 'next/head';
+import Script from 'next/script';
 
 const PreloadTheme = () => {
   return (
-    <Head>
-      <script>{`!function(){let e=function e(){let t=window.localStorage.getItem("theme"),a=window.localStorage.getItem("color-mode");if("string"==typeof a&&"string"==typeof t)return{theme:t,isDark:"dark"===a};let r=window.matchMedia("(prefers-color-scheme: dark)"),m="boolean"==typeof r.matches;return m&&r.matches?{theme:"main-dark",isDark:!0}:{theme:"main-light",isDark:!1}}(),t=document.documentElement;t.removeAttribute("class"),t.classList.add("theme-"+e.theme),t.setAttribute("data-theme",e.theme),t.setAttribute("data-color-mode",e.isDark?"dark":"light"),localStorage.setItem("theme",e.theme),localStorage.setItem("color-mode",e.isDark?"dark":"light")}();`}</script>
-    </Head>
+    <Script id="body" strategy="afterInteractive">
+      {`!function(){let e=function e(){let t=window.localStorage.getItem("theme"),a=window.localStorage.getItem("color-mode");if("string"==typeof a&&"string"==typeof t)return{theme:t,isDark:"dark"===a};let r=window.matchMedia("(prefers-color-scheme: dark)"),m="boolean"==typeof r.matches;return m&&r.matches?{theme:"main-dark",isDark:!0}:{theme:"main-light",isDark:!1}}(),t=document.documentElement;t.removeAttribute("class"),t.classList.add("theme-"+e.theme),t.setAttribute("data-theme",e.theme),t.setAttribute("data-color-mode",e.isDark?"dark":"light"),localStorage.setItem("theme",e.theme),localStorage.setItem("color-mode",e.isDark?"dark":"light")}();`}
+    </Script>
   );
 };
 

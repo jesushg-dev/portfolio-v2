@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { trpc } from '../utils/trpc';
-import { Inter } from '@next/font/google';
+import { Inter } from "next/font/google";
 import { NextIntlProvider } from 'next-intl';
 import { Analytics } from '@vercel/analytics/react';
 

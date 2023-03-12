@@ -106,7 +106,7 @@ const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4">
           {isLoading || isFetching ? (
-            <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-background-900"></div>
+            <div className="h-10 w-10 animate-spin rounded-full border border-b-2 border-primary-900 "></div>
           ) : null}
 
           {data?.pages[data.pages.length - 1].hasMore ? (

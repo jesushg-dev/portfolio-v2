@@ -61,7 +61,7 @@ const About: FC<IAboutProps> = ({}) => {
                 />
               ))}
               <li className="-ml-1 flex items-center gap-4 text-sm text-primaryText-800">
-                <AiOutlineLoading className="text-md animate-spin text-primary-600" />
+                <AiOutlineLoading className="text-md animate-spin border border-primary-900 text-primary-200" />
                 {t('timeline.subtitle')}
               </li>
             </ol>
