@@ -148,7 +148,8 @@
     },
     "private": {
       "title": "Private",
-      "description": "This project is private, i can't show you the source code but you can see the live demo."
+      "description": "This project is private, i can't show you the source code.",
+      "canSeeDemo": "This project is private, i can't show you the source code, but you can see the demo."
     },
     "pagination": {
       "retry": "Retry",

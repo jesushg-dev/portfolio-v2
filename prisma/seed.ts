@@ -1919,7 +1919,7 @@ async function main() {
       type: 'FRONTEND',
       image: 'musa-client_blxhyy',
       githubUrl: 'musa-client_blxhyy',
-      websiteUrl: 'musa-client_blxhyy',
+      websiteUrl: 'https://www.musafruit.com/',
       isPrivate: true,
       ProjectTranslation: {
         createMany: {

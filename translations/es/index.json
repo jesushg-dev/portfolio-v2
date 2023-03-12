@@ -149,7 +149,8 @@
     },
     "private": {
       "title": "Privado",
-      "description": "Este proyecto es privado, no puedo mostrarte el código fuente pero puedes verlo en vivo."
+      "description": "Este proyecto es privado, no puedo mostrarte el código fuente.",
+      "canSeeDemo": "Este proyecto es privado, no puedo mostrarte el código fuente, pero puedes ver la demostración."
     },
     "pagination": {
       "retry": "Reintentar",

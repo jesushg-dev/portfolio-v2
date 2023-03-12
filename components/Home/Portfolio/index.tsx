@@ -8,7 +8,7 @@ import { trpc } from '../../../utils/trpc';
 import { LIMIT_PER_PAGE } from '../../../utils/constants';
 
 import FilterType from './FilterType';
-import PortfolioItem from '../ProjectItem';
+import PortfolioItem from './ProjectItem';
 
 import type { ProjectType } from './FilterType';
 
@@ -50,6 +50,7 @@ const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
       sourceName: t('actions.source'),
       privateName: t('private.title'),
       privateDescription: t('private.description'),
+      canSeeDemo: t('private.canSeeDemo'),
     }),
     [t]
   );
@@ -96,16 +97,7 @@ const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
                   variants={item}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.5 }}>
-                  <PortfolioItem
-                    {...{
-                      ...project,
-                      image: project.image,
-                      made_with: project.skills,
-                      url_web: project.websiteUrl || '',
-                      url_github: project.githubUrl || '',
-                    }}
-                    {...labels}
-                  />
+                  <PortfolioItem {...project} {...labels} />
                 </motion.li>
               ))}
             </>

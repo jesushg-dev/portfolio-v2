@@ -1,12 +1,9 @@
 import React, { FC, useMemo } from 'react';
 
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import Typewriter from 'typewriter-effect';
 
 import { FaDownload } from 'react-icons/fa';
-import { FaLinkedin, FaGithub, FaWhatsapp, FaRegEnvelope, FaPhoneAlt } from 'react-icons/fa';
-import { cloudinaryLoader } from '../../../utils/tools/medialoader';
 
 interface IContactProps {}
 
