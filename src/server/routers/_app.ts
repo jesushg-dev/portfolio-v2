@@ -9,7 +9,7 @@ export const appRouter = router({
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
         type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP']).optional(),
-        locale: z.enum(['es', 'en']).optional().default('es'),
+        locale: z.enum(['es', 'en', 'de']).optional().default('en'),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -92,7 +92,7 @@ export const appRouter = router({
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
         type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP', 'TOOLS']).optional(),
-        locale: z.enum(['es', 'en']).optional().default('es'),
+        locale: z.enum(['es', 'en', 'de']).optional().default('en'),
       })
     )
     .query(async ({ input, ctx }) => {

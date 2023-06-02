@@ -1,8 +1,11 @@
-import React, { FC, useRef, useMemo, useState } from 'react';
+'use client';
+
+import React, { FC, useRef, useMemo, useState, Fragment } from 'react';
 
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 
 import { trpcReact as trpc } from '@/utils/trpc';
 import { LIMIT_PER_PAGE } from '@/utils/constants';
@@ -35,11 +38,10 @@ const item = {
 const limit = LIMIT_PER_PAGE;
 type localeType = 'en' | 'es';
 
-interface IPortfolioProps {
-  locale: localeType;
-}
+interface IPortfolioProps {}
 
-const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
+const Portfolio: FC<IPortfolioProps> = ({}) => {
+  const locale = useLocale() as 'en' | 'es' | 'de';
   const ref = useRef(null);
 
   const t = useTranslations('portfolio');
@@ -87,8 +89,8 @@ const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
           variants={container}
           animate={isInView ? 'visible' : 'hidden'}
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {data?.pages.map((page) => (
-            <>
+          {data?.pages.map((page, idx) => (
+            <Fragment key={page.cursor ?? idx}>
               {page.data.map((project) => (
                 <motion.li
                   layout
@@ -100,7 +102,7 @@ const Portfolio: FC<IPortfolioProps> = ({ locale }) => {
                   <PortfolioItem {...project} {...labels} />
                 </motion.li>
               ))}
-            </>
+            </Fragment>
           ))}
         </motion.ul>
 

@@ -2,6 +2,9 @@
   "name": "example-next-13",
   "version": "2.14.3",
   "private": true,
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,12 +17,13 @@
     "db:seed": "npx prisma db seed"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.15",
     "@prisma/client": "^4.15.0",
     "@tanstack/react-query": "^4.29.12",
-    "@trpc/client": "^10.28.2",
-    "@trpc/next": "^10.28.2",
-    "@trpc/react-query": "^10.28.2",
-    "@trpc/server": "^10.28.2",
+    "@trpc/client": "^10.29.0",
+    "@trpc/next": "^10.29.0",
+    "@trpc/react-query": "^10.29.0",
+    "@trpc/server": "^10.29.0",
     "bson": "^5.3.0",
     "clsx": "^1.2.1",
     "framer-motion": "^10.12.16",
@@ -28,7 +32,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-particles": "^2.9.3",
-    "react-tiny-popover": "^7.2.4",
     "superjson": "^1.12.3",
     "tailwindcss": "^3.3.2",
     "tsparticles": "^2.9.3",
@@ -46,12 +49,14 @@
     "eslint": "^8.41.0",
     "eslint-config-molindo": "^6.0.0",
     "eslint-config-next": "^13.4.4",
+    "eslint-config-prettier": "^8.8.0",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "prisma": "^4.15.0",
     "react-icons": "^4.9.0",
     "sass": "^1.62.1",
+    "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   }
 }

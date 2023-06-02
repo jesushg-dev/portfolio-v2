@@ -12,8 +12,7 @@ interface IThemeContext extends ITheme {
 }
 
 // Create context with default theme
-
-export const ThemeContext = createContext<IThemeContext>({
+const ThemeContext = createContext<IThemeContext>({
   isDark: false,
   theme: 'main-light',
   setTheme: () => {},
@@ -50,6 +49,7 @@ const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
     const initialTheme = window.localStorage.getItem('theme');
     const initialColorMode = window.localStorage.getItem('color-mode');
     startTransition(() => {
+      setTheme(initialTheme || 'main-light', initialColorMode === 'dark');
       setRawTheme({ theme: initialTheme || 'main-light', isDark: initialColorMode === 'dark' });
     });
   }, []);

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { FC, useRef, useState, lazy, Suspense } from 'react';
 
 import BgParticles from './BgParticles';
@@ -5,6 +7,7 @@ import SkillGrouped from './SkillGrouped';
 
 import { useInView } from 'framer-motion';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 
 import { trpcReact as trpc } from '@/utils/trpc';
 import { LIMIT_PER_PAGE_BIG } from '@/utils/constants';
@@ -15,13 +18,12 @@ const SkillModal = lazy(() => import('./SkillModal'));
 
 export type SkillDef = 'backend' | 'frontend' | 'devops' | 'others';
 
-interface ISkillsProps {
-  locale: 'en' | 'es';
-}
+interface ISkillsProps {}
 
 const limit = LIMIT_PER_PAGE_BIG;
 
-const Skills: FC<ISkillsProps> = ({ locale }) => {
+const Skills: FC<ISkillsProps> = ({}) => {
+  const locale = useLocale() as 'en' | 'es' | 'de';
   const ref = useRef(null);
 
   const t = useTranslations('skills');

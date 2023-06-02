@@ -21,6 +21,15 @@ async function main() {
     },
   });
 
+  const langDe = await prisma.appLanguage.upsert({
+    where: { code: 'de' },
+    update: {},
+    create: {
+      code: 'de',
+      name: 'Dutch',
+    },
+  });
+
   const skillJava = await prisma.skill.upsert({
     where: { id: new ObjectId().toString() },
     update: {},
@@ -40,6 +49,11 @@ async function main() {
               description: 'Object-oriented programming language, independent of the hardware platform.',
               urlWiki: 'https://en.wikipedia.org/wiki/Java_(programming_language)',
               appLanguageId: langEn.id,
+            },
+            {
+              description: 'Objektorientierte Programmiersprache, unabhängig von der Hardwareplattform.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Java_(Programmiersprache)',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -69,6 +83,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/PHP',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Allgemeine serverseitige Skriptsprache, die ursprünglich für die Webentwicklung zur Erstellung dynamischer Webseiten entwickelt wurde.',
+              urlWiki: 'https://de.wikipedia.org/wiki/PHP',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -96,6 +116,12 @@ async function main() {
                 'Object-oriented programming language developed by Microsoft as part of its .NET initiative.',
               urlWiki: 'https://en.wikipedia.org/wiki/C_Sharp_(programming_language)',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Objektorientierte Programmiersprache, die von Microsoft als Teil seiner .NET-Initiative entwickelt wurde.',
+              urlWiki: 'https://de.wikipedia.org/wiki/C_Sharp',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -125,6 +151,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Entity_Framework',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Open-Source-Framework für die Entwicklung von Anwendungen auf der Grundlage des Repository-Musters und der objektorientierten Abbildung (ORM).',
+              urlWiki: 'https://de.wikipedia.org/wiki/Entity_Framework',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -151,6 +183,12 @@ async function main() {
               description: 'Open-source software development platform to create web, mobile, and desktop apps.',
               urlWiki: 'https://en.wikipedia.org/wiki/.NET',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Open-Source-Software-Entwicklungsplattform zur Erstellung von Web-, Mobil- und Desktopanwendungen.',
+              urlWiki: 'https://de.wikipedia.org/wiki/.NET',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -179,6 +217,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Swagger_(software)',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Open-Source-Tool zum Entwerfen, Erstellen, Dokumentieren und Verwenden von RESTful-Webdiensten.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Swagger_(Software)',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -204,6 +248,11 @@ async function main() {
               description: "JavaScript runtime built on Chrome's V8 JavaScript engine.",
               urlWiki: 'https://en.wikipedia.org/wiki/Node.js',
               appLanguageId: langEn.id,
+            },
+            {
+              description: 'JavaScript-Laufzeitumgebung, die auf der JavaScript-Engine V8 von Chrome basiert.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Node.js',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -232,6 +281,12 @@ async function main() {
                 'Node.js framework for web applications and REST API. It is minimalist and flexible, providing a solid set of features for web and mobile applications.',
               urlWiki: 'https://en.wikipedia.org/wiki/Express.js',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Node.js-Framework für Webanwendungen und REST-API. Es ist minimalistisch und flexibel und bietet einen soliden Satz von Funktionen für Web- und Mobile-Anwendungen.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Express.js',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -262,6 +317,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/MySQL',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Relationales Datenbankmanagementsystem, Open-Source und plattformübergreifend, das hauptsächlich für die Webentwicklung verwendet wird.',
+              urlWiki: 'https://de.wikipedia.org/wiki/MySQL',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -290,6 +351,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Microsoft_SQL_Server',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Relationales Datenbankmanagementsystem, das von Microsoft als Teil seiner Microsoft SQL Server-Familie entwickelt wurde.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Microsoft_SQL_Server',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -316,6 +383,11 @@ async function main() {
               description: 'Document-oriented, NoSQL, and open-source database.',
               urlWiki: 'https://en.wikipedia.org/wiki/MongoDB',
               appLanguageId: langEn.id,
+            },
+            {
+              description: 'Dokumentenorientierte, NoSQL- und Open-Source-Datenbank.',
+              urlWiki: 'https://de.wikipedia.org/wiki/MongoDB',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -344,6 +416,12 @@ async function main() {
                 'Mobile and web application development platform created by Firebase, Inc. in 2011, acquired by Google in 2014.',
               urlWiki: 'https://en.wikipedia.org/wiki/Firebase',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Mobile und Web Application Development Platform, die 2011 von Firebase, Inc. entwickelt und 2014 von Google übernommen wurde.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Firebase',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -374,6 +452,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Npm_(software)',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Package Manager für die Programmiersprache JavaScript, das größte Ökosystem von Open-Source-Bibliotheken der Welt.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Npm_(Software)',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -402,6 +486,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Yarn_(package_manager)',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Package Manager für die Programmiersprache JavaScript, das größte Ökosystem von Open-Source-Bibliotheken der Welt.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Yarn_(Software)',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -428,6 +518,12 @@ async function main() {
               description: 'Modern web development tooling that provides a fast and fluid development experience.',
               urlWiki: 'https://en.wikipedia.org/wiki/Vite',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Modernes Webentwicklungstooling, das ein schnelles und flüssiges Entwicklungserlebnis bietet.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Vite',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -457,6 +553,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Git',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Verteiltes Versionskontrollsystem, das entwickelt wurde, um alles von kleinen bis sehr großen Projekten mit Geschwindigkeit und Effizienz zu handhaben.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Git',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -484,6 +586,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/GitHub',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Kollaborative Entwicklungsplattform zum Hosten von Projekten mit dem Git-Versionierungssystem.',
+              urlWiki: 'https://de.wikipedia.org/wiki/GitHub',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -510,6 +618,12 @@ async function main() {
               description: 'Collaborative development platform to host projects using the Git version control system.',
               urlWiki: 'https://en.wikipedia.org/wiki/Bitbucket',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Kollaborative Entwicklungsplattform zum Hosten von Projekten mit dem Git-Versionierungssystem.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Bitbucket',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -539,6 +653,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Visual_Studio_Code',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Source-Code-Editor, der von Microsoft für Windows, Linux und macOS entwickelt wurde. Er unterstützt Debugging, integrierte Versionskontrolle, Syntaxhervorhebung, intelligentes Code-Completion, Snippets und Code-Refactoring.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Visual_Studio_Code',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -566,6 +686,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/GitHub',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Kollaborative Entwicklungsplattform zum Hosten von Projekten mit dem Git-Versionierungssystem.',
+              urlWiki: 'https://de.wikipedia.org/wiki/GitHub',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -592,6 +718,12 @@ async function main() {
               description: 'Query language for APIs and a runtime for fulfilling queries with existing data.',
               urlWiki: 'https://en.wikipedia.org/wiki/GraphQL',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Abfragesprache für APIs und eine Laufzeitumgebung zur Erfüllung von Abfragen mit vorhandenen Daten.',
+              urlWiki: 'https://de.wikipedia.org/wiki/GraphQL',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -621,6 +753,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Prisma_(software)',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Prisma ist ein ORM (Object Relational Mapper), mit dem Sie mit relationalen Datenbanken wie MySQL oder PostgreSQL arbeiten können. Prisma ermöglicht es Ihnen, Ihr Datenbankschema zu definieren und Modelle und Resolver für GraphQL- oder REST-APIs zu generieren.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Prisma_(software)',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -648,6 +786,12 @@ async function main() {
                 'Microsoft cloud computing platform. It offers a wide variety of cloud computing services including analysis, cloud storage, databases, networks, artificial intelligence and application development.',
               urlWiki: 'https://en.wikipedia.org/wiki/Microsoft_Azure',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Microsoft Cloud-Computing-Plattform. Es bietet eine Vielzahl von Cloud-Computing-Diensten, darunter Analyse, Cloud-Speicher, Datenbanken, Netzwerke, künstliche Intelligenz und Anwendungsentwicklung.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Microsoft_Azure',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -677,6 +821,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Notion_(software)',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Produktivitäts- und Kollaborationsplattform, die die Tools eines Wikis mit denen eines Notizbuchs kombiniert. Es ermöglicht das Erstellen von Webseiten und Arbeitsplatten sowie das Organisieren und Teilen von Informationen.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Notion_(software)',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -704,6 +854,11 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/HTML',
               appLanguageId: langEn.id,
             },
+            {
+              description: 'Auszeichnungssprache zur Erstellung von Webseiten in einem Webbrowser.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Hypertext_Markup_Language',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -730,6 +885,12 @@ async function main() {
               description: 'Style sheet language used for describing the presentation of a document written in HTML.',
               urlWiki: 'https://en.wikipedia.org/wiki/Cascading_Style_Sheets',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Stylesheet-Sprache, die zum Beschreiben der Präsentation eines in HTML geschriebenen Dokuments verwendet wird.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Cascading_Style_Sheets',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -759,6 +920,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/JavaScript',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Interpretierte Programmiersprache, Dialekt des ECMAScript-Standards. Es wird als objektorientierte, prototypbasierte, imperative, schwach typisierte und dynamische Sprache definiert.',
+              urlWiki: 'https://de.wikipedia.org/wiki/JavaScript',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -786,6 +953,12 @@ async function main() {
                 'Superset of JavaScript developed by Microsoft that adds static typing and objects based on classes.',
               urlWiki: 'https://en.wikipedia.org/wiki/TypeScript',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Superset von JavaScript, das von Microsoft entwickelt wurde und statische Typisierung und objektorientierte Klassen hinzufügt.',
+              urlWiki: 'https://de.wikipedia.org/wiki/TypeScript',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -815,6 +988,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/React_(JavaScript_library)',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Open-Source-JavaScript-Bibliothek, die entwickelt wurde, um Benutzeroberflächen zu erstellen, mit dem Ziel, die Entwicklung von Single-Page-Anwendungen zu erleichtern.',
+              urlWiki: 'https://de.wikipedia.org/wiki/React_(JavaScript-Bibliothek)',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -842,6 +1021,12 @@ async function main() {
                 'Open-source JavaScript framework designed to create single-page web applications with React that allows features such as server-side rendering and static site generation for web applications based on React.',
               urlWiki: 'https://en.wikipedia.org/wiki/Next.js',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Open-Source-JavaScript-Framework, das entwickelt wurde, um Single-Page-Webanwendungen mit React zu erstellen, die Funktionen wie serverseitiges Rendern und statische Site-Generierung für Webanwendungen auf React ermöglichen.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Next.js',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -871,6 +1056,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Redux_(JavaScript_library)',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Open-Source-JavaScript-Bibliothek für die Entwicklung von Webanwendungen, die sich auf das Management von Anwendungsstatus konzentriert.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Redux_(JavaScript-Bibliothek)',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -898,6 +1089,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Tailwind_CSS',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Open-Source-CSS-Framework, mit dem Sie schnell benutzerdefinierte Benutzeroberflächen erstellen können.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Tailwind_CSS',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -923,6 +1120,11 @@ async function main() {
               description: 'React component framework that implements Material Design.',
               urlWiki: 'https://en.wikipedia.org/wiki/Material_UI',
               appLanguageId: langEn.id,
+            },
+            {
+              description: 'React-Komponentenframework, das Material Design implementiert.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Material_UI',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -952,6 +1154,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Styled_Components',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'JavaScript-Bibliothek für React und React Native, mit der Sie CSS-Stile in React-Komponenten verwenden können.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Styled_Components',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -977,6 +1185,11 @@ async function main() {
               description: 'Cascading style sheet language that is interpreted or compiled into CSS.',
               urlWiki: 'https://en.wikipedia.org/wiki/Sass_(stylesheet_language)',
               appLanguageId: langEn.id,
+            },
+            {
+              description: 'Kaskadierende Stylesheet-Sprache, die in CSS interpretiert oder kompiliert wird.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Sass_(Stylesheet-Sprache)',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1006,6 +1219,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Open-Source-Framework zum Entwickeln von Websites und Webanwendungen mit HTML, CSS und JavaScript.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Bootstrap_(Framework)',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1031,6 +1250,11 @@ async function main() {
               description: 'Open-source platform to create, manage, and connect data applications.',
               urlWiki: 'https://en.wikipedia.org/wiki/Apollo_(platform)',
               appLanguageId: langEn.id,
+            },
+            {
+              description: 'Open-Source-Plattform zum Erstellen, Verwalten und Verbinden von Datenanwendungen.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Apollo_(Plattform)',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1060,6 +1284,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/WebSocket',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Bidirektionales Kommunikationsprotokoll, das die Kommunikation zwischen einem Client und einem Server über eine einzelne TCP-Verbindung ermöglicht.',
+              urlWiki: 'https://de.wikipedia.org/wiki/WebSocket',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1088,6 +1318,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/React_Native',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Open-Source-Framework zum Entwickeln von mobilen Anwendungen für Android und iOS mit React.',
+              urlWiki: 'https://de.wikipedia.org/wiki/React_Native',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1113,6 +1349,12 @@ async function main() {
               description: 'Mobile operating system based on Linux kernel, developed by Google and launched in 2008.',
               urlWiki: 'https://en.wikipedia.org/wiki/Android_(operating_system)',
               appLanguageId: langEn.id,
+            },
+            {
+              description:
+                'Mobiles Betriebssystem auf Linux-Kernelbasis, das von Google entwickelt und 2008 veröffentlicht wurde.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Android_(Betriebssystem)',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1142,6 +1384,11 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/Windows_Forms',
               appLanguageId: langEn.id,
             },
+            {
+              description: 'Microsoft Framework zum Entwickeln von Desktopanwendungen mit der Programmiersprache C#.',
+              urlWiki: 'https://de.wikipedia.org/wiki/Windows_Forms',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1170,6 +1417,12 @@ async function main() {
               urlWiki: 'https://en.wikipedia.org/wiki/DevExpress',
               appLanguageId: langEn.id,
             },
+            {
+              description:
+                'Softwarekomponenten-Suite zum Entwickeln von Desktop- und Webanwendungen mit der Programmiersprache C#.',
+              urlWiki: 'https://de.wikipedia.org/wiki/DevExpress',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1197,6 +1450,11 @@ async function main() {
               description: 'User interface development.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Frontend-Entwicklung',
+              description: 'Entwicklung der Benutzeroberfläche.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1221,6 +1479,11 @@ async function main() {
               title: 'Backend development',
               description: 'Services and APIs development.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Backend-Entwicklung',
+              description: 'Entwicklung von Diensten und APIs.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1247,6 +1510,11 @@ async function main() {
               description: 'Mobile applications development.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Mobile Entwicklung',
+              description: 'Entwicklung von mobilen Anwendungen.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1272,6 +1540,11 @@ async function main() {
               description: 'Servers and systems administration Web, FTP, SSH, VoIP, etc. in Linux',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Systemadministration',
+              description: 'Server- und Systemadministration Web, FTP, SSH, VoIP, etc. in Linux',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1296,6 +1569,11 @@ async function main() {
               title: 'Cybersecurity',
               description: 'Security audits, vulnerability analysis, pentesting, etc.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Cybersicherheit',
+              description: 'Sicherheitsaudits, Schwachstellenanalyse, Pentesting, etc.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1326,6 +1604,12 @@ async function main() {
               title: 'Portfolio',
               description: 'My personal portfolio website where I expose my skills and knowledge in a dynamic way.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Portfolio',
+              description:
+                'Meine persönliche Portfolio-Website, auf der ich meine Fähigkeiten und Kenntnisse dynamisch darstelle.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1367,6 +1651,12 @@ async function main() {
               title: 'Temperature Control System',
               description: 'Web project that allows to register the entry of the students and their temperature.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Temperaturkontrollsystem',
+              description:
+                'Webprojekt, das die Registrierung des Eintritts der Schüler und ihrer Temperatur ermöglicht.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1410,6 +1700,11 @@ async function main() {
                 'Android mobile application for the control of repair services provided to technological devices.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Tech Service',
+              description: 'Android-Mobilanwendung zur Steuerung von Reparaturdiensten für technologische Geräte.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1443,6 +1738,11 @@ async function main() {
               description: 'REST API for the control of repair services provided to technological devices.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Tech Service API',
+              description: 'REST-API zur Steuerung von Reparaturdiensten für technologische Geräte.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1475,6 +1775,11 @@ async function main() {
               title: 'Inventory and Sales Control',
               description: 'Inventory and sales control system for a clothing store.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Inventar- und Verkaufskontrolle',
+              description: 'Inventar- und Verkaufskontrollsystem für ein Bekleidungsgeschäft.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1514,6 +1819,11 @@ async function main() {
               description: 'Android mobile application for the control of food orders.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Food Service',
+              description: 'Android-Mobilanwendung zur Steuerung von Lebensmittelbestellungen.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1546,6 +1856,11 @@ async function main() {
               title: 'Store Client',
               description: 'Web application for online product purchase.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Store Client',
+              description: 'Webanwendung für den Online-Kauf von Produkten.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1585,6 +1900,11 @@ async function main() {
               description: 'Administrator of an online store.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Store Admin',
+              description: 'Administrator eines Online-Shops.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1622,6 +1942,11 @@ async function main() {
               title: 'Store Api',
               description: 'Rest Api for the administrator of an online store.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Store Api',
+              description: 'Rest Api für den Administrator eines Online-Shops.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1662,6 +1987,11 @@ async function main() {
               description: 'Android mobile application for the control of electricity consumption.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Kwh Monitor',
+              description: 'Android-Mobilanwendung zur Steuerung des Stromverbrauchs.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1701,6 +2031,11 @@ async function main() {
               description: 'Rest Api for the mobile application Kwh Monitor.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Kwh Monitor Api',
+              description: 'Rest Api für die mobile Anwendung Kwh Monitor.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1733,6 +2068,11 @@ async function main() {
               title: 'Lucky App',
               description: 'Android mobile application for the control of food orders.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Lucky App',
+              description: 'Android-Mobilanwendung zur Steuerung von Lebensmittelbestellungen.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1768,6 +2108,11 @@ async function main() {
               description: 'Android mobile application for the control of food orders.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Your farm',
+              description: 'Android-Mobilanwendung zur Steuerung von Lebensmittelbestellungen.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1800,6 +2145,11 @@ async function main() {
               title: 'Lotty',
               description: 'Web application to consult the results of the Nicaraguan lottery.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Lotty',
+              description: 'Webanwendung zur Abfrage der Ergebnisse der nicaraguanischen Lotterie.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1834,6 +2184,11 @@ async function main() {
               description: 'Rest Api for the mobile application Lucky App.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Lotty Api',
+              description: 'Rest Api für die mobile Anwendung Lucky App.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1867,6 +2222,11 @@ async function main() {
               description: 'Web application to consult the characters of the Rick and Morty series.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Rick und Morty | Wiki',
+              description: 'Webanwendung zur Abfrage der Charaktere der Serie Rick und Morty.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1898,8 +2258,12 @@ async function main() {
             {
               title: 'Soft Skills Quiz',
               description: 'Web application that allows you to take a test of soft skills for developers.',
-
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Soft Skills Quiz',
+              description: 'Webanwendung, mit der Sie einen Test zu Soft Skills für Entwickler ablegen können.',
+              appLanguageId: langDe.id,
             },
           ],
         },
@@ -1934,6 +2298,11 @@ async function main() {
               description: 'Web application for the sale of perishable products.',
               appLanguageId: langEn.id,
             },
+            {
+              title: 'Musa Ecommerce',
+              description: 'Webanwendung für den Verkauf von verderblichen Produkten.',
+              appLanguageId: langDe.id,
+            },
           ],
         },
       },
@@ -1966,6 +2335,11 @@ async function main() {
               title: 'Musa Admin',
               description: 'Web application for the administration of the online store Musa Ecommerce.',
               appLanguageId: langEn.id,
+            },
+            {
+              title: 'Musa Admin',
+              description: 'Webanwendung für die Verwaltung des Online-Shops Musa Ecommerce.',
+              appLanguageId: langDe.id,
             },
           ],
         },

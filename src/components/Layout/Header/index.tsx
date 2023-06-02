@@ -6,10 +6,10 @@ import Link from 'next/link';
 
 import NavButton from './NavButton';
 import ToolbarHeader from './ToolbarHeader';
+import ThemeSelector from './ThemeSelector';
 
 import { useTranslations } from 'next-intl';
 import useIsOnTop from '../../../hooks/useIsOnTop';
-import ThemeSelector from './ThemeSelector';
 
 interface IHeaderProps {}
 

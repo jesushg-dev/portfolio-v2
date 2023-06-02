@@ -15,9 +15,9 @@ const About: FC<IAboutProps> = ({}) => {
     <section id="about" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
       <article className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:py-8">
         <div className="space-y-4">
-          <p className="text-primaryText text-justify text-base">{t('info.description1')}</p>
-          <p className="text-primaryText text-justify text-base">{t('info.description2')}</p>
-          <p className="text-primaryText text-justify text-base">{t('info.description3')}</p>
+          <p className="text-primaryText text-center text-base">{t('info.description1')}</p>
+          <p className="text-primaryText text-center text-base">{t('info.description2')}</p>
+          <p className="text-primaryText text-center text-base">{t('info.description3')}</p>
         </div>
 
         <Terminal>

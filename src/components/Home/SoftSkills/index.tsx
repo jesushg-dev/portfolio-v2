@@ -32,13 +32,13 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
         />*/}
         <SoftSkillItem
           icon={RiShieldStarLine}
-          title={t('skills.problem-solving.title')}
-          description={t('skills.problem-solving.description')}
+          title={t('skills.problemSolving.title')}
+          description={t('skills.problemSolving.description')}
         />
         <SoftSkillItem
           icon={RiMedal2Line}
-          title={t('skills.goal-oriented.title')}
-          description={t('skills.goal-oriented.description')}
+          title={t('skills.goalOriented.title')}
+          description={t('skills.goalOriented.description')}
         />
         <SoftSkillItem
           icon={RiSettingsLine}
@@ -47,8 +47,8 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
         />
         <SoftSkillItem
           icon={RiTimerFlashLine}
-          title={t('skills.time-management.title')}
-          description={t('skills.time-management.description')}
+          title={t('skills.timeManagement.title')}
+          description={t('skills.timeManagement.description')}
         />
         {/*<SoftSkillItem
           icon={RiQuillPenLine}

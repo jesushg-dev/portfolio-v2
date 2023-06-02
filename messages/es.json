@@ -7,7 +7,14 @@
       "skills": "Habilidades",
       "services": "Servicios",
       "portfolio": "Portafolio",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "language": "Idioma",
+      "theme": "Tema",
+      "locale-options": {
+        "es": "Español",
+        "en": "Inglés",
+        "de": "Holandés"
+      }
     },
     "tools": {
       "theme": "Tema",
@@ -40,7 +47,7 @@
     "subtitle": "Acerca de mí",
     "info": {
       "title": "Sobre mí",
-      "description1": "Hola, Soy Jesús Hernández, actualmente soy egresado de la carrera de ingeniería en computación en la Universitaria Nacional de Ingeniería. Mi pasión es el desarrollo de software, me gusta aprender nuevas tecnologías y aplicarlas en proyectos personales y profesionales.",
+      "description1": "Hola, Soy Jesús Hernández, actualmente soy egresado de la carrera de ingeniería en computación en la Universidad Nacional de Ingeniería. Mi pasión es el desarrollo de software, me gusta aprender nuevas tecnologías y aplicarlas en proyectos personales y profesionales.",
       "description2": "Soy una persona responsable, con iniciativa y compromiso además me gusta trabajar en equipo, siempre estoy dispuesto a aprender nuevas cosas y superar nuevos retos.",
       "description3": "A lo largo de mi carrera, siempre he sido impulsado por el deseo de aprender y crecer como desarrollador. Siempre estoy buscando nuevas tecnologías y técnicas para mejorar mi oficio. Estoy emocionado de ver adónde me llevará mi pasión por la tecnología en el futuro."
     },
@@ -113,52 +120,52 @@
     "aux": "Creo que estas habilidades son tan importantes como la experticia técnica, y trabajo duro para desarrollarlas y mejorarlas constantemente. Tengo confianza en que mi sólida comunicación, resolución de problemas y habilidades de trabajo en equipo me hacen un activo valioso para cualquier equipo o proyecto.",
     "skills": {
       "teamwork": {
-        "title": "Trabajo en Equipo",
-        "description": "Me gusta trabajar en equipo, siempre estoy dispuesto a aprender de los demás y compartir mis conocimientos."
+        "title": "Trabajo en equipo",
+        "description": "Disfruto colaborar y aprender de los demás."
       },
       "communication": {
         "title": "Comunicación",
-        "description": "Soy un buen comunicador, me gusta compartir mis ideas y escuchar a los demás."
+        "description": "Destaco en expresar ideas y escuchar activamente."
       },
-      "problem-solving": {
+      "problemSolving": {
         "title": "Resolución de problemas",
-        "description": "Me gusta resolver problemas, siempre estoy buscando la mejor solución."
+        "description": "Me desenvuelvo encontrando soluciones efectivas."
       },
-      "goal-oriented": {
-        "title": "Orientado a objetivos",
-        "description": "Soy una persona orientada a objetivos, me gusta tener metas y cumplirlas."
+      "goalOriented": {
+        "title": "Orientado a metas",
+        "description": "Establezco objetivos y trabajo arduamente para alcanzarlos."
       },
       "adaptability": {
         "title": "Adaptabilidad",
-        "description": "Siempre estoy dispuesto a adaptarme a las nuevas tecnologías, lenguajes, bibliotecas y frameworks."
+        "description": "Acepto fácilmente nuevas tecnologías y marcos de trabajo."
       },
-      "time-management": {
+      "timeManagement": {
         "title": "Gestión del tiempo",
-        "description": "Soy una persona a la que le gusta organizar mi tiempo, siempre estoy buscando la mejor manera de hacer las cosas."
+        "description": "Priorizo tareas y optimizo la eficiencia."
       },
       "creativity": {
         "title": "Creatividad",
-        "description": "Soy una persona creativa, me gusta pensar fuera de la caja y proponer nuevas ideas."
+        "description": "Pienso de forma innovadora y genero ideas frescas."
       },
       "leadership": {
         "title": "Liderazgo",
-        "description": "Soy una persona a la que le gusta liderar, me gusta tomar la iniciativa y ser responsable de las tareas que me asignan."
+        "description": "Tomo el mando, asumo responsabilidades y dirijo tareas."
       },
       "organization": {
         "title": "Organización",
-        "description": "Soy una persona a la que le gusta organizar, me gusta tener todo en orden."
+        "description": "Valoro el orden y mantengo las cosas bien estructuradas."
       },
       "responsibility": {
         "title": "Responsabilidad",
-        "description": "Soy una persona responsable, me gusta ocuparme de las tareas que me asignan."
+        "description": "Soy confiable y me aseguro de completar las tareas."
       },
       "initiative": {
         "title": "Iniciativa",
-        "description": "Soy una persona a la que le gusta tomar la iniciativa, me gusta ser proactiva y estar siempre buscando nuevos retos."
+        "description": "Busco activamente nuevas oportunidades y disfruto asumiendo el liderazgo."
       },
       "commitment": {
         "title": "Compromiso",
-        "description": "Soy una persona comprometida, me gusta terminar las tareas que me asignan."
+        "description": "Estoy dedicado a completar tareas y cumplir responsabilidades."
       }
     }
   },

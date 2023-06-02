@@ -15,9 +15,9 @@ export default function IndexPage() {
     <Layout>
       <Hero />
       <About />
-      <Skills locale="es" />
+      <Skills />
       <SoftSkills />
-      <Portfolio locale="es" />
+      <Portfolio />
       <Contact />
     </Layout>
   );

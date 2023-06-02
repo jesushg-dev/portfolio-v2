@@ -43,7 +43,8 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   return (
     <html className="h-full" lang={locale}>
       <PreloadTheme />
-      <body className={clsx(inter.className, 'flex h-full flex-col')}>
+      <body
+        className={clsx(inter.className, 'flex min-h-screen flex-col justify-between scroll-smooth bg-background-200')}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <TrpcProvider>
             <ThemeContextProvider>{children}</ThemeContextProvider>

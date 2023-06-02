@@ -13,6 +13,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 - Fixed a bug where locale was not set by default
+- Fixed popover doen't show correctly
+- Fixed a bug where the user was not able to change the language
 
 ### Other Changes
 

@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 
+import LocaleSelector from './LocaleSelector';
+
 import { RiMenu3Line, RiCloseLine, RiPaintBrushLine } from 'react-icons/ri';
-import LanguageSelector from './LanguageSelector';
 
 interface IToolbarHeaderProps {
   isMenuOpen: boolean;
@@ -12,7 +13,7 @@ interface IToolbarHeaderProps {
 
 const ToolbarHeader: FC<IToolbarHeaderProps> = ({ isMenuOpen, isThemeMenuOpen, toogleMainOpen, toogleThemeOpen }) => {
   return (
-    <div className="flex flex-row-reverse items-center md:order-2 md:flex-row">
+    <div className="flex flex-row-reverse items-center gap-2 md:order-2 md:flex-row">
       <button
         type="button"
         onClick={toogleMainOpen}
@@ -25,7 +26,7 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({ isMenuOpen, isThemeMenuOpen, t
           <RiMenu3Line aria-hidden="true" className="h-5 w-5" />
         )}
       </button>
-      <LanguageSelector />
+      <LocaleSelector />
       <button
         type="button"
         onClick={toogleThemeOpen}

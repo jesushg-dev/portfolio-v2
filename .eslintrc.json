@@ -10,7 +10,9 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "rules": {},
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  },
   "plugins": ["react"],
   "extends": ["next/core-web-vitals", "plugin:react/recommended", "prettier", "plugin:jsx-a11y/recommended"]
 }

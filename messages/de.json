@@ -7,7 +7,14 @@
       "skills": "Vaardigheden",
       "services": "Diensten",
       "portfolio": "Portfolio",
-      "contact": "Contact"
+      "contact": "Contact",
+      "language": "Taal",
+      "theme": "Themamodus",
+      "locale-options": {
+        "es": "Spaans",
+        "en": "Engels",
+        "de": "Nederlands"
+      }
     },
     "tools": {
       "theme": "Themamodus",
@@ -112,52 +119,52 @@
     "aux": "Ik geloof dat deze vaardigheden net zo belangrijk zijn als technische expertise, en ik werk hard om ze voortdurend te ontwikkelen en te verbeteren. Ik ben ervan overtuigd dat mijn sterke communicatie, probleemoplossing en teamwork vaardigheden mij een waardevolle aanwinst maken voor elk team of project.",
     "skills": {
       "teamwork": {
-        "title": "Samenwerking",
-        "description": "Ik werk graag in een team, ik ben altijd bereid om te leren van anderen en mijn kennis te delen."
+        "title": "Samenwerken",
+        "description": "Ik geniet ervan om samen te werken en te leren van anderen."
       },
       "communication": {
         "title": "Communicatie",
-        "description": "Ik ben een goede communicator, ik deel graag mijn ideeën en luister naar anderen."
+        "description": "Ik ben goed in het uiten van ideeën en actief luisteren."
       },
-      "problem-solving": {
+      "problemSolving": {
         "title": "Probleemoplossend vermogen",
-        "description": "Ik vind het leuk om problemen op te lossen, ik ben altijd op zoek naar de beste oplossing."
+        "description": "Ik gedij bij het vinden van effectieve oplossingen."
       },
-      "goal-oriented": {
+      "goalOriented": {
         "title": "Doelgericht",
-        "description": "Ik ben iemand die graag doelen stelt en ze bereikt."
+        "description": "Ik stel doelstellingen en werk hard om ze te bereiken."
       },
       "adaptability": {
         "title": "Aanpassingsvermogen",
-        "description": "Ik ben altijd bereid om me aan te passen aan nieuwe technologieën, talen, bibliotheken en frameworks."
+        "description": "Ik omarm gemakkelijk nieuwe technologieën en frameworks."
       },
-      "time-management": {
-        "title": "Tijdbeheer",
-        "description": "Ik ben iemand die graag mijn tijd organiseert, ik ben altijd op zoek naar de beste manier om dingen te doen."
+      "timeManagement": {
+        "title": "Tijdmanagement",
+        "description": "Ik geef prioriteit aan taken en optimaliseer efficiëntie."
       },
       "creativity": {
         "title": "Creativiteit",
-        "description": "Ik ben een creatief persoon, ik denk graag buiten de kaders en kom met nieuwe ideeën."
+        "description": "Ik denk innovatief en genereer nieuwe ideeën."
       },
       "leadership": {
         "title": "Leiderschap",
-        "description": "Ik ben iemand die graag leidt, ik neem graag het initiatief en ben verantwoordelijk voor de taken die aan mij zijn toegewezen."
+        "description": "Ik neem de leiding, neem verantwoordelijkheid en stuur taken aan."
       },
       "organization": {
         "title": "Organisatie",
-        "description": "Ik ben iemand die graag organiseert, ik hou ervan om alles op orde te hebben."
+        "description": "Ik hecht waarde aan ordelijkheid en houd dingen goed gestructureerd."
       },
       "responsibility": {
         "title": "Verantwoordelijkheid",
-        "description": "Ik ben een verantwoordelijk persoon, ik zorg graag voor de taken die aan mij zijn toegewezen."
+        "description": "Ik ben betrouwbaar en zorg voor het voltooien van taken."
       },
       "initiative": {
         "title": "Initiatief",
-        "description": "Ik ben iemand die graag het initiatief neemt, ik ben proactief en altijd op zoek naar nieuwe uitdagingen."
+        "description": "Ik zoek actief naar nieuwe kansen en neem graag het voortouw."
       },
       "commitment": {
         "title": "Toewijding",
-        "description": "Ik ben een toegewijd persoon, ik hou ervan om de taken die aan mij zijn toegewezen af te maken."
+        "description": "Ik ben toegewijd aan het voltooien van taken en het nakomen van verantwoordelijkheden."
       }
     }
   },

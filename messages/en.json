@@ -1,5 +1,5 @@
 {
-  "title": "Jesús Hernández - Full-Stack Ontwikkelaar",
+  "title": "Jesús Hernández - Full Stack Developer",
   "header": {
     "menu": {
       "home": "Home",
@@ -7,7 +7,14 @@
       "skills": "Skills",
       "services": "Services",
       "portfolio": "Portfolio",
-      "contact": "Contact"
+      "contact": "Contact",
+      "language": "Language",
+      "theme": "Theme Mode",
+      "locale-options": {
+        "es": "Spanish",
+        "en": "English",
+        "de": "Dutch"
+      }
     },
     "tools": {
       "theme": "Theme Mode",
@@ -113,51 +120,51 @@
     "skills": {
       "teamwork": {
         "title": "Teamwork",
-        "description": "I like to work in a team, I am always willing to learn from others and share my knowledge."
+        "description": "I enjoy collaborating and learning from others."
       },
       "communication": {
         "title": "Communication",
-        "description": "I am a good communicator, I like to share my ideas and listen to others."
+        "description": "I excel at expressing ideas and actively listening."
       },
-      "problem-solving": {
+      "problemSolving": {
         "title": "Problem Solving",
-        "description": "I like to solve problems, I am always looking for the best solution."
+        "description": "I am adept at finding effective solutions."
       },
-      "goal-oriented": {
-        "title": "Goal Oriented",
-        "description": "I am a person who likes to set goals and achieve them."
+      "goalOriented": {
+        "title": "Goal-Oriented",
+        "description": "I set objectives and work hard to achieve them."
       },
       "adaptability": {
         "title": "Adaptability",
-        "description": "I am always willing to adapt to new technologies, languages, libraries and frameworks."
+        "description": "I easily embrace new technologies and frameworks."
       },
-      "time-management": {
+      "timeManagement": {
         "title": "Time Management",
-        "description": "I am a person who likes to organize my time, I am always looking for the best way to do things."
+        "description": "I prioritize tasks and optimize efficiency."
       },
       "creativity": {
         "title": "Creativity",
-        "description": "I am a creative person, I like to think outside the box and come up with new ideas."
+        "description": "I think innovatively and generate fresh ideas."
       },
       "leadership": {
         "title": "Leadership",
-        "description": "I am a person who likes to lead, I like to take the initiative and be responsible for the tasks I am assigned."
+        "description": "I take charge, assume responsibilities, and direct tasks."
       },
       "organization": {
         "title": "Organization",
-        "description": "I am a person who likes to organize, I like to have everything in order."
+        "description": "I value order and maintain well-structured things."
       },
       "responsibility": {
         "title": "Responsibility",
-        "description": "I am a responsible person, I like to take care of the tasks I am assigned."
+        "description": "I am reliable and ensure tasks are completed."
       },
       "initiative": {
         "title": "Initiative",
-        "description": "I am a person who likes to take the initiative, I like to be proactive and always be looking for new challenges."
+        "description": "I actively seek new opportunities and enjoy taking the lead."
       },
       "commitment": {
         "title": "Commitment",
-        "description": "I am a committed person, I like to finish the tasks I am assigned."
+        "description": "I am dedicated to completing tasks and fulfilling responsibilities."
       }
     }
   },

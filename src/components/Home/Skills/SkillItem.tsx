@@ -26,7 +26,7 @@ const SkillItem: FC<ISkillItemProps> = ({ image, title, description, onClick }) 
       <span className="text-center text-xs font-bold leading-none text-primaryText-700 group-hover:text-primary-700">
         {title}
       </span>
-      <span className="hidden text-justify text-sm text-primaryText-800">{description}</span>
+      <span className="hidden text-center text-sm text-primaryText-800">{description}</span>
     </button>
   );
 };
