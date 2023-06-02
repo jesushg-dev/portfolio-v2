@@ -1,34 +1,64 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# My Portfolio
 
-## Getting Started
+This project is a portfolio of my experiences, skills, and projects. It is built with Next.js 13 and next-intl.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- [Features](#features)
+- [How to Use](#how-to-use)
+- [Installation](#installation)
+- [Skills Used](#skills-used)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- Showcase my skills and experience in React, Next.js, and TypeScript by highlighting specific projects and technologies.
+- Utilize next-intl for internationalization support.
+- Ensure responsiveness and compatibility with all devices.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## How to Use
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+To use this project, clone the repository and follow these steps:
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. Install project dependencies:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Running the Project
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. Start the development server:
+3. The project will be available at [http://localhost:3000](http://localhost:3000).
 
-## Deploy on Vercel
+## Skills Used
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The following skills and libraries were utilized in creating this project:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- React: A JavaScript library for building user interfaces.
+- Next.js: A framework for server-rendered React applications.
+- TypeScript: A statically typed superset of JavaScript that compiles to plain JavaScript.
+- next-intl: A localization and internationalization library for Next.js.
+
+Additional libraries used for specific functionality include:
+
+- MongoDB with Mongoose: A NoSQL database and object modeling tool for Node.js.
+- Prisma: A modern database toolkit for TypeScript and Node.js.
+- trpc: A TypeScript-first framework for building scalable and type-safe APIs.
+- framer-motion: A library for creating fluid and interactive animations in React applications.
+
+## Contributing
+
+Contributions are welcome! If you want to contribute to this project, please follow these guidelines:
+
+- Open an issue to discuss proposed changes or new features.
+- Fork the repository and create a new branch for your contribution.
+- Make your changes and submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact
+
+If you have any questions or comments, please feel free to contact me at [email protected]

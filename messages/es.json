@@ -1,0 +1,249 @@
+{
+  "title": "Jesús Hernández - Desarrollador Fullstack",
+  "header": {
+    "menu": {
+      "home": "Inicio",
+      "about": "Acerca de mí",
+      "skills": "Habilidades",
+      "services": "Servicios",
+      "portfolio": "Portafolio",
+      "contact": "Contacto"
+    },
+    "tools": {
+      "theme": "Tema",
+      "language": "Idioma",
+      "newThemeSoon": "Nuevo tema pronto"
+    },
+    "closeMenu": "Cerrar Menú",
+    "openMenu": "Abrir Menú"
+  },
+  "footer": {
+    "title": "Todos los Derechos Reservados © ",
+    "madeWith": "Hecho con ",
+    "by": " por "
+  },
+  "heroMain": {
+    "titles": {
+      "degree": "Ingeniero en Computación.",
+      "web": "Desarrollador Web.",
+      "mobile": "Desarrollador Móvil.",
+      "fullstack": "Desarrollador Full Stack.",
+      "backend": "Desarrollador Backend.",
+      "frontend": "Desarrollador Frontend."
+    },
+    "greeting": "Hola! Soy",
+    "scrollDown": "Desplazarse hacia abajo",
+    "description": "Como ingeniero de software, utilizo mi experiencia técnica y mis habilidades para construir y mantener sistemas de software de alta calidad. Mi pasión por la tecnología me impulsa a aprender y a crear soluciones que tengan un impacto positivo en el mundo."
+  },
+  "about": {
+    "title": "Breve resumen",
+    "subtitle": "Acerca de mí",
+    "info": {
+      "title": "Sobre mí",
+      "description1": "Hola, Soy Jesús Hernández, actualmente soy egresado de la carrera de ingeniería en computación en la Universitaria Nacional de Ingeniería. Mi pasión es el desarrollo de software, me gusta aprender nuevas tecnologías y aplicarlas en proyectos personales y profesionales.",
+      "description2": "Soy una persona responsable, con iniciativa y compromiso además me gusta trabajar en equipo, siempre estoy dispuesto a aprender nuevas cosas y superar nuevos retos.",
+      "description3": "A lo largo de mi carrera, siempre he sido impulsado por el deseo de aprender y crecer como desarrollador. Siempre estoy buscando nuevas tecnologías y técnicas para mejorar mi oficio. Estoy emocionado de ver adónde me llevará mi pasión por la tecnología en el futuro."
+    },
+    "timeline": {
+      "title": "Línea de tiempo",
+      "title2": "Llena el formulario para contactarme",
+      "subtitle": "En constante aprendizaje...",
+      "steps": {
+        "0": {
+          "date": "Marzo, 2017",
+          "dateTime": "2017-03-01",
+          "title": "Ingeniería en computación",
+          "description": "Actualmente finalizando mi carrera a la vez que equilibro mis responsabilidades laborales y extracurriculares"
+        },
+        "1": {
+          "date": "Mayo, 2021",
+          "dateTime": "2021-05-01",
+          "title": "Técnico de TI",
+          "description": "Experiencia en el mantenimiento y resolución de problemas en sistemas y redes informáticas."
+        },
+        "2": {
+          "date": "Febrero, 2022",
+          "dateTime": "2022-02-01",
+          "title": "Desarrollador Móvil",
+          "description": "Experiencia en la creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente."
+        },
+        "3": {
+          "date": "Junio, 2022",
+          "dateTime": "2022-06-01",
+          "title": "Desarrollador Web",
+          "description": "Experiencia en el diseño, desarrollo y mantenimiento de sitios web y aplicaciones web."
+        }
+      }
+    },
+    "function": {
+      "name": "sobreMi",
+      "json": {
+        "name": "nombre",
+        "languages": "idiomas",
+        "profession": "profession"
+      },
+      "language": {
+        "spanish": "español",
+        "english": "inglés"
+      },
+      "languageLevel": {
+        "native": "Nativo",
+        "advanced": "Avanzado",
+        "intermediate": "Intermedio",
+        "basic": "Básico"
+      },
+      "profession": "Desarrollador Fullstack"
+    }
+  },
+  "skills": {
+    "title": "Áreas de especialización",
+    "subtitle": "Habilidades",
+    "description": "Tengo un conjunto de diversas habilidades, desarrolladas a través de mi educación y experiencias profesionales.",
+    "aux": "I have experience in the following technologies",
+    "modal": {
+      "close": "Cerrar",
+      "readMore": "Leer más",
+      "seeCertificates": "Ver certificados"
+    }
+  },
+  "soft-skills": {
+    "subtitle": "Habilidades",
+    "title": "Habilidades blandas",
+    "description": "Además de mis habilidades técnicas, también poseo una serie de habilidades blandas que me han ayudado a tener éxito en mi carrera",
+    "aux": "Creo que estas habilidades son tan importantes como la experticia técnica, y trabajo duro para desarrollarlas y mejorarlas constantemente. Tengo confianza en que mi sólida comunicación, resolución de problemas y habilidades de trabajo en equipo me hacen un activo valioso para cualquier equipo o proyecto.",
+    "skills": {
+      "teamwork": {
+        "title": "Trabajo en Equipo",
+        "description": "Me gusta trabajar en equipo, siempre estoy dispuesto a aprender de los demás y compartir mis conocimientos."
+      },
+      "communication": {
+        "title": "Comunicación",
+        "description": "Soy un buen comunicador, me gusta compartir mis ideas y escuchar a los demás."
+      },
+      "problem-solving": {
+        "title": "Resolución de problemas",
+        "description": "Me gusta resolver problemas, siempre estoy buscando la mejor solución."
+      },
+      "goal-oriented": {
+        "title": "Orientado a objetivos",
+        "description": "Soy una persona orientada a objetivos, me gusta tener metas y cumplirlas."
+      },
+      "adaptability": {
+        "title": "Adaptabilidad",
+        "description": "Siempre estoy dispuesto a adaptarme a las nuevas tecnologías, lenguajes, bibliotecas y frameworks."
+      },
+      "time-management": {
+        "title": "Gestión del tiempo",
+        "description": "Soy una persona a la que le gusta organizar mi tiempo, siempre estoy buscando la mejor manera de hacer las cosas."
+      },
+      "creativity": {
+        "title": "Creatividad",
+        "description": "Soy una persona creativa, me gusta pensar fuera de la caja y proponer nuevas ideas."
+      },
+      "leadership": {
+        "title": "Liderazgo",
+        "description": "Soy una persona a la que le gusta liderar, me gusta tomar la iniciativa y ser responsable de las tareas que me asignan."
+      },
+      "organization": {
+        "title": "Organización",
+        "description": "Soy una persona a la que le gusta organizar, me gusta tener todo en orden."
+      },
+      "responsibility": {
+        "title": "Responsabilidad",
+        "description": "Soy una persona responsable, me gusta ocuparme de las tareas que me asignan."
+      },
+      "initiative": {
+        "title": "Iniciativa",
+        "description": "Soy una persona a la que le gusta tomar la iniciativa, me gusta ser proactiva y estar siempre buscando nuevos retos."
+      },
+      "commitment": {
+        "title": "Compromiso",
+        "description": "Soy una persona comprometida, me gusta terminar las tareas que me asignan."
+      }
+    }
+  },
+  "portfolio": {
+    "subtitle": "Portafolio",
+    "title": "Mejores proyectos",
+    "description": "Estoy orgulloso del trabajo que he realizado a lo largo de mi carrera.",
+    "actions": {
+      "view": "Ver proyecto",
+      "source": "Ver código"
+    },
+    "private": {
+      "title": "Privado",
+      "description": "Este proyecto es privado, no puedo mostrarte el código fuente.",
+      "canSeeDemo": "Este proyecto es privado, no puedo mostrarte el código fuente, pero puedes ver la demostración."
+    },
+    "pagination": {
+      "retry": "Reintentar",
+      "loading": "Cargando...",
+      "noMore": "Ya has visto todos los proyectos",
+      "error": "Ha ocurrido un error, inténtalo de nuevo",
+      "loadMore": "Cargar más"
+    },
+    "filters": {
+      "all": "Todos",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "mobile": "Móvil",
+      "desktop": "Escritorio"
+    }
+  },
+  "contact": {
+    "title": "Contáctame 👋",
+    "title2": "Llena el formulario para iniciar una conversación",
+    "subtitle": "Siempre estoy abierto a nuevas oportunidades, no dudes en contactarme si tienes alguna pregunta o proyecto en mente.",
+    "divider": "o",
+    "form": {
+      "name": {
+        "label": "Nombre",
+        "placeholder": "Ingresa tu nombre",
+        "success": "Nombre ingresado correctamente",
+        "errors": {
+          "required": "El nombre es requerido",
+          "minLength": "El nombre debe tener al menos 2 caracteres",
+          "maxLength": "El nombre debe tener como máximo 50 caracteres"
+        }
+      },
+      "email": {
+        "label": "Correo electrónico",
+        "placeholder": "Ingresa tu correo electrónico",
+        "success": "Correo electrónico ingresado correctamente",
+        "errors": {
+          "required": "El correo electrónico es requerido",
+          "minLength": "El correo electrónico debe tener al menos 5 caracteres",
+          "maxLength": "El correo electrónico debe tener como máximo 50 caracteres",
+          "pattern": "El correo electrónico no es válido"
+        }
+      },
+      "message": {
+        "label": "Mensaje",
+        "placeholder": "Ingresa tu mensaje aquí, te responderé lo más pronto posible",
+        "success": "Mensaje ingresado correctamente",
+        "errors": {
+          "required": "El mensaje es requerido",
+          "minLength": "El mensaje debe tener al menos 10 caracteres",
+          "maxLength": "El mensaje debe tener como máximo 500 caracteres"
+        }
+      },
+      "errors": {
+        "title": "Error",
+        "description": "Ha ocurrido un error al enviar el formulario, por favor inténtalo de nuevo."
+      },
+      "success": {
+        "title": "Mensaje enviado",
+        "description": "Tu mensaje ha sido enviado correctamente, te responderé lo más pronto posible."
+      },
+      "submit": "Enviar"
+    },
+    "social": {
+      "title": "Redes sociales",
+      "subtitle": "Sígueme en mis redes sociales"
+    }
+  },
+  "localeSwitcher": {
+    "label": "Sprache ändern",
+    "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+  }
+}

@@ -1,4 +1,3 @@
-type Index = typeof import('./translations/en/index.json');
-type Common = typeof import('./translations/en/common.json');
-
-declare interface IntlMessages extends Index, Common {}
+// Use type safe message keys with `next-intl`
+type Messages = typeof import('./messages/en.json');
+declare interface IntlMessages extends Messages {}

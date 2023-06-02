@@ -1,26 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV !== 'production',
-});
-
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
-
-const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  i18n: {
-    locales: ['en', 'es'],
-    defaultLocale: 'es',
-  },
+module.exports  = {
+  experimental: {appDir: true}, 
   images: {
-    domains: ['cdn.simpleicons.org', 'res.cloudinary.com'],
-  },
+    domains: ['cdn.simpleicons.org', 'res.cloudinary.com']
+  }
 };
-
-module.exports = withBundleAnalyzer(withPWA(nextConfig));
