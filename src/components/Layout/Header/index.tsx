@@ -46,15 +46,23 @@ const Header: FC<IHeaderProps> = ({}) => {
             ? 'top-5 bg-transparent text-white'
             : 'top-0 bg-background-50 bg-opacity-90 text-primaryText-900 shadow backdrop-blur-lg backdrop-filter hover:bg-opacity-100'
         }`}>
-        <ThemeSelector visible={isThemeMenuOpen} newLabel={t('tools.newThemeSoon')} />
+        <ThemeSelector onChange={toogleThemeOpen} visible={isThemeMenuOpen} newLabel={t('tools.newThemeSoon')} />
         <nav className="rounded border-background-200 px-2 py-3">
           <div className="container mx-auto flex max-w-screen-xl flex-wrap items-center justify-between md:px-6 lg:px-8">
             <Link
               href="/"
-              className={`text-2xl font-bold tracking-tighter ${
+              className={`group text-2xl font-bold tracking-tighter ${
                 isOnTop ? 'text-white' : 'text-primary-700'
               }  duration-600 transform transition ease-in-out`}>
-              <span className="tracking-relaxed">Jehg</span>
+              <span className="tracking-relaxed">
+                Jehg{' '}
+                <span
+                  className={`tracking-relaxed ${
+                    isOnTop ? 'text-primary-500' : 'text-background-500 group-hover:text-white'
+                  } `}>
+                  .
+                </span>
+              </span>
             </Link>
             <ToolbarHeader {...{ isMenuOpen, isThemeMenuOpen, toogleMainOpen, toogleThemeOpen }} />
             <div

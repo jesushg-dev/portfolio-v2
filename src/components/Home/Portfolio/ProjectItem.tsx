@@ -38,13 +38,13 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
         <p className="text-xs text-primaryText-500">{description}</p>
       </div>
       <div className="absolute inset-0 isolate z-20 flex flex-col bg-black bg-opacity-80 opacity-0 transition-opacity group-hover:opacity-100">
-        <div className="flex grow flex-col items-center justify-center gap-4 px-4 ">
+        <div className="flex grow flex-col items-center justify-center gap-4 px-4">
           {websiteUrl && (
             <a
               href={websiteUrl}
               target="_blank"
               rel="noreferrer"
-              className="pressable rounded-md bg-red-500 px-4 py-2  shadow-lg">
+              className="pressable rounded-md bg-primary-800 px-4 py-2 shadow-lg">
               <span className="flex items-center justify-center gap-2 text-xs text-secondaryText-50">
                 <AiFillEye className="h-4 w-4" />
                 {urlName}
@@ -64,7 +64,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
             </a>
           )}
         </div>
-        <div className="flex w-full gap-4 overflow-x-auto bg-background-100 py-5 px-4 text-primaryText-700">
+        <div className="flex w-full gap-4 overflow-x-auto bg-background-100 px-4 py-5 text-primaryText-700">
           {skills?.map((skill) => (
             <div key={skill.title} className="flex flex-col items-center gap-2">
               <Image src={skill.image} loader={siLoader} alt={skill.title} width={20} height={20} />
@@ -76,7 +76,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
       {isPrivate && (
         <span
           title={websiteUrl ? canSeeDemo : privateDescription}
-          className="whitespace-no-wrap absolute top-0 right-0 z-30 origin-bottom-left -translate-y-full translate-x-1/3 rotate-45 transform bg-primary-600 px-5 py-1 text-center text-xs uppercase tracking-wider text-secondaryText-50 shadow-lg">
+          className="whitespace-no-wrap absolute right-0 top-0 z-30 origin-bottom-left -translate-y-full translate-x-1/3 rotate-45 transform bg-primary-600 px-5 py-1 text-center text-xs uppercase tracking-wider text-secondaryText-50 shadow-lg">
           {privateName}
         </span>
       )}

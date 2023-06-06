@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.3.1 (2023-06-06)
+
+### Features
+
+- Added orange theme (Light / Dark) to the project
+- Added carousel for SoftSkill
+- Improved Tooltip in SoftSkill and Select Component
+
 ## 2.3 (2023-06-02)
 
 ### Features
