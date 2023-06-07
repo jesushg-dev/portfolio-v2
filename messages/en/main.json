@@ -1,0 +1,221 @@
+{
+  "main": {
+    "title": "Jesús Hernández - Full Stack Developer",
+
+    "heroMain": {
+      "titles": {
+        "degree": "Computer Engineer.",
+        "web": "Web Developer.",
+        "mobile": "Mobile Developer.",
+        "fullstack": "Full Stack Developer.",
+        "backend": "Backend Developer.",
+        "frontend": "Frontend Developer."
+      },
+      "greeting": "Hello, I'm",
+      "scrollDown": "Scroll Down",
+      "description": "As a software engineer, I use my technical expertise and skills to build and maintain high-quality software systems. My passion for technology drives me to constantly learn and grow, and I strive to create solutions that have a positive impact on the world."
+    },
+    "about": {
+      "title": "A Brief Overview",
+      "subtitle": "About Me",
+      "info": {
+        "title": "About Me",
+        "description1": "I have always been passionate about technology and its ability to change the world. After completing my degree in computer science, I began my career as a web developer. I quickly learned the ins and outs of front-end development and was able to create beautiful, functional websites for a variety of clients.",
+        "description2": "As I gained more experience, I began to explore other areas of development, including mobile and backend development. This allowed me to expand my skillset and work on even more exciting projects.",
+        "description3": "Throughout my career, I have always been driven by a desire to learn and grow as a developer. I am constantly seeking out new technologies and techniques to improve my craft. I am excited to see where my passion for technology takes me next."
+      },
+      "timeline": {
+        "title": "My timeline",
+        "subtitle": "Continuous learning...",
+        "steps": {
+          "0": {
+            "date": "March, 2017",
+            "dateTime": "2017-03-01",
+            "title": "Computer Engineer",
+            "description": "Currently completing a degree while balancing academic and extracurricular responsibilities"
+          },
+          "1": {
+            "date": "May, 2021",
+            "dateTime": "2021-05-01",
+            "title": "IT technician",
+            "description": "Skilled in maintaining and troubleshooting computer systems and networks"
+          },
+          "2": {
+            "date": "February, 2022",
+            "dateTime": "2022-02-01",
+            "title": "Mobile Developer at Telo",
+            "description": "Proficient in creating software applications for mobile devices, consistently delivering high-quality products."
+          },
+          "3": {
+            "date": "June, 2022",
+            "dateTime": "2022-06-01",
+            "title": "Web Developer at Musa",
+            "description": "Experienced in designing, developing, and maintaining websites and web applications."
+          }
+        }
+      },
+      "function": {
+        "name": "aboutMe",
+        "json": {
+          "name": "name",
+          "languages": "languages",
+          "profession": "profession"
+        },
+        "language": {
+          "spanish": "spanish",
+          "english": "english"
+        },
+        "languageLevel": {
+          "native": "Native",
+          "advanced": "Advanced",
+          "intermediate": "Intermediate",
+          "basic": "Basic"
+        },
+        "profession": "Fullstack Developer"
+      }
+    },
+    "skills": {
+      "title": "Areas of Expertise",
+      "subtitle": "Skills",
+      "description": "I have a diverse skill set, developed through my education and professional experiences.",
+      "aux": "I am constantly seeking to learn and improve my skills, and I am always open to new opportunities to challenge myself and grow professionally.",
+      "modal": {
+        "close": "Close",
+        "readMore": "Read more",
+        "seeCertificates": "See certificates"
+      }
+    },
+    "soft-skills": {
+      "subtitle": "Skills",
+      "title": "Soft Skills",
+      "description": "In addition to my technical skills, I also possess a range of soft skills that have helped me succeed in my career",
+      "aux": "I believe that these skills are just as important as technical expertise, and I work hard to continually develop and improve them. I am confident that my strong communication, problem-solving, and teamwork skills make me a valuable asset to any team or project.",
+      "skills": {
+        "teamwork": {
+          "title": "Teamwork",
+          "description": "I enjoy collaborating and learning from others."
+        },
+        "communication": {
+          "title": "Communication",
+          "description": "I excel at expressing ideas and actively listening."
+        },
+        "problemSolving": {
+          "title": "Problem Solving",
+          "description": "I am adept at finding effective solutions."
+        },
+        "goalOriented": {
+          "title": "Goal-Oriented",
+          "description": "I set objectives and work hard to achieve them."
+        },
+        "adaptability": {
+          "title": "Adaptability",
+          "description": "I easily embrace new technologies and frameworks."
+        },
+        "timeManagement": {
+          "title": "Time Management",
+          "description": "I prioritize tasks and optimize efficiency."
+        },
+        "creativity": {
+          "title": "Creativity",
+          "description": "I think innovatively and generate fresh ideas."
+        },
+        "leadership": {
+          "title": "Leadership",
+          "description": "I take charge, assume responsibilities, and direct tasks."
+        },
+        "organization": {
+          "title": "Organization",
+          "description": "I value order and maintain well-structured things."
+        },
+        "responsibility": {
+          "title": "Responsibility",
+          "description": "I am reliable and ensure tasks are completed."
+        },
+        "initiative": {
+          "title": "Initiative",
+          "description": "I actively seek new opportunities and enjoy taking the lead."
+        },
+        "commitment": {
+          "title": "Commitment",
+          "description": "I am dedicated to completing tasks and fulfilling responsibilities."
+        }
+      }
+    },
+    "portfolio": {
+      "subtitle": "Portfolio",
+      "title": "Best Projects",
+      "description": "I am proud of the work I have completed throughout my career.",
+      "actions": {
+        "view": "View project",
+        "source": "View source"
+      },
+      "private": {
+        "title": "Private",
+        "description": "This project is private, i can't show you the source code.",
+        "canSeeDemo": "This project is private, i can't show you the source code, but you can see the demo."
+      },
+      "pagination": {
+        "retry": "Retry",
+        "loading": "Loading...",
+        "noMore": "You have seen all the projects",
+        "error": "An error has occurred, please try again later",
+        "loadMore": "Load more"
+      },
+      "filters": {
+        "all": "All",
+        "frontend": "Frontend",
+        "backend": "Backend",
+        "mobile": "Mobile",
+        "desktop": "Desktop"
+      }
+    },
+    "contact": {
+      "title": "Get in touch 👋",
+      "title2": "Fill in the form to start a conversation",
+      "subtitle": "I am always open to new opportunities, if you have a project in mind or just want to say hi, feel free to contact me.",
+      "divider": "or",
+      "form": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter your name",
+          "success": "Name entered correctly",
+          "errors": {
+            "required": "Please enter your name",
+            "minLength": "The name must be at least 3 characters long",
+            "maxLength": "The name must be at most 20 characters long"
+          }
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email",
+          "success": "Email entered correctly",
+          "errors": {
+            "required": "Please enter your email",
+            "minLength": "The email must be at least 3 characters long",
+            "maxLength": "The email must be at most 30 characters long",
+            "pattern": "Please enter a valid email"
+          }
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Leave your message here, I will answer you as soon as possible",
+          "success": "Message entered correctly",
+          "errors": {
+            "required": "Please enter your message",
+            "minLength": "The message must be at least 10 characters long",
+            "maxLength": "The message must be at most 500 characters long"
+          }
+        },
+        "errors": {
+          "title": "Error",
+          "description": "An error has occurred while sending the message, please try again later."
+        },
+        "success": {
+          "title": "Success",
+          "description": "Your message has been sent successfully, I will answer you as soon as possible."
+        },
+        "submit": "Submit"
+      }
+    }
+  }
+}

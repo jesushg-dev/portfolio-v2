@@ -123,8 +123,8 @@ export const Select: FC<ISelectProps> = ({ children, header, value, onChange }) 
 
   return (
     <>
-      <div ref={refs.setReference} {...getReferenceProps()} className="text-sm text-primaryText-700">
-        {header ?? selectedLabel ?? 'Select...'}
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        {header || <span className="text-sm text-primaryText-700">{selectedLabel ?? 'Select...'}</span>}
       </div>
       <SelectContext.Provider value={selectContext}>
         {isOpen && (

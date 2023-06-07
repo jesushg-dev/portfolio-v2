@@ -1,0 +1,102 @@
+{
+  "curriculum": {
+    "title": "Jesús Hernández - Curriculum Vitae",
+    "aboutMe": "Desarrollador de aplicaciones móviles y web con conocimientos en soporte técnico y seguridad informática.",
+    "header": {
+      "experience": "Experiencia",
+      "education": "Educación",
+      "languages": "Idiomas",
+      "interests": "Intereses",
+      "contact": "Contacto",
+      "references": "Referencias",
+      "technicalSkills": "Habilidades Técnicas",
+      "personalSkills": "Habilidades Personales",
+      "projects": "Proyectos",
+      "certifications": "Certificaciones",
+      "awards": "Premios",
+      "designExpertise": "Experiencia en Diseño",
+      "additionalInformation": "Información Adicional",
+      "personalReferences": "Referencias Personales"
+    },
+    "education": {
+      "computerEngineering": {
+        "degree": "Ingeniería en Computación",
+        "institution": "Universidad Nacional de Ingeniería",
+        "location": "Managua",
+        "dates": "2017 - Presente"
+      },
+      "conversationalEnglish": {
+        "degree": "Inglés Conversacional",
+        "institution": "Masinfa",
+        "location": "Masaya",
+        "dates": "2013 - 2016"
+      },
+      "webDeveloper": {
+        "degree": "Desarrollador Web",
+        "institution": "Platzi",
+        "location": "En línea",
+        "dates": "2022 - Presente"
+      },
+      "digitalSecurity": {
+        "degree": "Junior en Seguridad Digital y Protección de Datos",
+        "institution": "Numu & BID",
+        "location": "Managua",
+        "dates": "2022"
+      }
+    },
+    "experiences": {
+      "experience1": {
+        "position": "Desarrollador Web Freelance",
+        "company": "Musa",
+        "dates": "Julio 2022 - Mayo 2023",
+        "responsibilities": "<item>Desarrollé interfaces de aplicaciones web y móviles en colaboración con los interesados del negocio y los desarrolladores backend. Integré datos y procesos de proveedores externos.</item><item>Refactoricé proyectos existentes para asegurar un código limpio, mantenible y eficiente.</item><item>Presenté los resultados del trabajo realizado al propietario del producto y a los interesados.</item>",
+        "skills": "Next.js, Diseño de Interfaz de Usuario, UIX, React.js, Apollo GraphQL, Redux.js, Tailwind CSS, JavaScript, Desarrollo web"
+      },
+      "experience2": {
+        "position": "Desarrollador Móvil Freelance",
+        "company": "Telo",
+        "dates": "Marzo 2022 - Mayo 2022",
+        "responsibilities": "<item>Creé interfaces de usuario basadas en especificaciones de diseño del equipo de experiencia de usuario (UX). Participé en un equipo Scrum implementando funcionalidades según lo especificado en las historias de usuario.</item><item>Apoyé a los equipos de control de calidad y desarrollo backend con pruebas, revisiones de código y solución de problemas.</item>",
+        "skills": "React Native, Java, Desarrollo de Android"
+      },
+      "experience3": {
+        "position": "Técnico de TI en Prácticas",
+        "company": "Asociación de Iglesias Reformadas",
+        "dates": "Mayo 2021 - Noviembre 2021",
+        "responsibilities": "<item>Realicé mantenimiento y configuración de equipos y software.</item><item>Enseñé informática a estudiantes de primaria.</item><item>Brindé soporte al personal administrativo.</item>",
+        "skills": "Windows, Linux, Soporte de Hardware, Diagnóstico de Hardware, Soporte Técnico, Soporte de Hardware de TI"
+      }
+    },
+    "skills": {
+      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>React</item><item>React Native</item><item>GraphQL</item><item>API REST</item>",
+      "backEnd": "<item>C#</item><item>.NET Core</item><item>Node.js</item><item>PHP</item>",
+      "database": "<item>SQL Server</item><item>MySQL</item><item>SQLite</item><item>Firebase</item>",
+      "tools": "<item>Git</item><item>Azure</item><item>VS Code</item>"
+    },
+    "softSkills": "<item>Habilidades analíticas</item><item>Observación y concentración</item><item>Adaptabilidad</item><item>Aprendizaje autodidacta</item><item>Capacidad para trabajar de forma individual y en equipo</item><item>Proactividad</item>",
+    "additionalInformation": "<item>Disponibilidad inmediata</item>",
+    "personalReferences": {
+      "reference1": {
+        "name": "Danilo Acevedo",
+        "role": "DESARROLLADOR",
+        "phoneNumber": "(+505) 8679-3204"
+      },
+      "reference2": {
+        "name": "Alfredo Antonio Eva Vargas",
+        "role": "DESARROLLADOR",
+        "phoneNumber": "(+505) 8251-9391"
+      },
+      "reference3": {
+        "name": "Juan Carlos López",
+        "role": "DESARROLLADOR",
+        "phoneNumber": "(+505) 8751-8355"
+      }
+    },
+    "telephone": "tel.",
+    "actions": {
+      "download": "Descargar CV",
+      "print": "Imprimir CV"
+    },
+    "codedWith": "Este CV fue codificado en ReactJS."
+  }
+}

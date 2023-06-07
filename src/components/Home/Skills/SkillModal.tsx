@@ -15,11 +15,11 @@ interface ISkillModalProps {
 }
 
 const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
-  const t = useTranslations('skills');
+  const t = useTranslations('main.skills');
 
   return (
     <Modal onClickBackdrop={onClose}>
-      <section className="relative mx-auto max-w-7xl py-12 px-12">
+      <section className="relative mx-auto max-w-7xl px-12 py-12">
         <CloseModal onClick={onClose} title={t('modal.close')} />
         <div className="mx-auto flex max-w-7xl flex-wrap items-center">
           <div className="w-full rounded-xl lg:w-1/2 lg:max-w-lg">
@@ -40,7 +40,7 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
               </div>
             </div>
           </div>
-          <div className="mt-12 mb-16 flex flex-col items-start text-left md:mb-0 lg:w-1/2 lg:flex-grow lg:pl-6 xl:mt-0 xl:pl-12">
+          <div className="mb-16 mt-12 flex flex-col items-start text-left md:mb-0 lg:w-1/2 lg:flex-grow lg:pl-6 xl:mt-0 xl:pl-12">
             <span className="mb-8 text-xs font-bold uppercase tracking-widest text-primary-600">{type}</span>
             <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-600 md:text-7xl lg:text-5xl">
               {skill.title}
@@ -57,7 +57,7 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
                   {t('modal.seeCertificates')}
                 </a>
               </div>
-              <div className="mt-3 rounded-lg sm:mt-0 sm:ml-3">
+              <div className="mt-3 rounded-lg sm:ml-3 sm:mt-0">
                 <a
                   href={skill.urlWiki}
                   target="_blank"

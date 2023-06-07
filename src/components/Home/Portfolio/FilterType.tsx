@@ -46,7 +46,7 @@ interface IFilterTypeProps {
 }
 
 const FilterType: FC<IFilterTypeProps> = ({ value, onChange }) => {
-  const t = useTranslations('portfolio');
+  const t = useTranslations('main.portfolio');
 
   return (
     <div className="mb-12 flex flex-col items-center justify-center gap-4">

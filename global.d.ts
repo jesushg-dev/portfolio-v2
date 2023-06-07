@@ -1,3 +1,6 @@
 // Use type safe message keys with `next-intl`
-type Messages = typeof import('./messages/en.json');
-declare interface IntlMessages extends Messages {}
+type MainType = typeof import('./messages/en/main.json');
+type CvType = typeof import('./messages/en/cv.json');
+type GlobalType = typeof import('./messages/en/global.json');
+
+declare interface IntlMessages extends GlobalType, MainType, CvType {}

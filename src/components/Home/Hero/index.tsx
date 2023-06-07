@@ -1,5 +1,6 @@
 import React, { FC, useMemo } from 'react';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import Typewriter from 'typewriter-effect';
 
@@ -7,18 +8,12 @@ import { FaDownload } from 'react-icons/fa';
 
 interface IContactProps {}
 
-const Contact: FC<IContactProps> = ({}) => {
-  const t = useTranslations('heroMain');
-  const options = useMemo(() => {
-    const strings = [
-      t('titles.degree'),
-      t('titles.web'),
-      t('titles.mobile'),
-      t('titles.fullstack'),
-      t('titles.frontend'),
-      t('titles.backend'),
-    ];
+const titles = ['degree', 'web', 'mobile', 'fullstack', 'frontend', 'backend'];
 
+const Contact: FC<IContactProps> = ({}) => {
+  const t = useTranslations('main.heroMain');
+  const options = useMemo(() => {
+    const strings = titles.map((title) => t(`titles.${title}` as any));
     return {
       strings,
       loop: true,
@@ -50,13 +45,18 @@ const Contact: FC<IContactProps> = ({}) => {
               <p className="text-center text-base font-normal text-gray-300 lg:text-start">{t('description')}</p>
             </div>
             <span className="relative inline-flex">
-              <a
+              {/**<a
                 download
                 href="https://drive.google.com/u/0/uc?id=1yNTZ1JZMYgllrbJPxg668Q4RxeuRlMED&export=download"
                 className="pressable flex items-center gap-2 rounded-lg bg-primary-700 px-4 py-3 text-sm shadow-lg hover:bg-primary-800">
                 Download CV <FaDownload className="text-xs" />
-              </a>
-              <span className="absolute top-0 right-0 -mt-0 -mr-1 flex h-3 w-3">
+              </a> */}
+              <Link
+                href={'/cv'}
+                className="pressable flex items-center gap-2 rounded-lg bg-primary-700 px-4 py-3 text-sm shadow-lg hover:bg-primary-800">
+                Download CV <FaDownload className="text-xs" />
+              </Link>
+              <span className="absolute right-0 top-0 -mr-1 -mt-0 flex h-3 w-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
                 <span className="relative inline-flex h-3 w-3 rounded-full bg-primary-500"></span>
               </span>

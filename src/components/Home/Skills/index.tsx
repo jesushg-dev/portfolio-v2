@@ -26,7 +26,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
   const locale = useLocale() as 'en' | 'es' | 'de';
   const ref = useRef(null);
 
-  const t = useTranslations('skills');
+  const t = useTranslations('main.skills');
   const isInView = useInView(ref, { once: true });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<SkillType | null>(null);

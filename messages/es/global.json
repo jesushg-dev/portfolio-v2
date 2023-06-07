@@ -1,0 +1,37 @@
+{
+  "global": {
+    "header": {
+      "menu": {
+        "home": "Inicio",
+        "about": "Acerca de mí",
+        "skills": "Habilidades",
+        "services": "Servicios",
+        "portfolio": "Portafolio",
+        "contact": "Contacto",
+        "language": "Idioma",
+        "theme": "Tema",
+        "locale-options": {
+          "es": "Español",
+          "en": "Inglés",
+          "de": "Holandés"
+        }
+      },
+      "tools": {
+        "theme": "Tema",
+        "language": "Idioma",
+        "newThemeSoon": "Nuevo tema pronto"
+      },
+      "closeMenu": "Cerrar Menú",
+      "openMenu": "Abrir Menú"
+    },
+    "footer": {
+      "title": "Todos los Derechos Reservados © ",
+      "madeWith": "Hecho con ",
+      "by": " por "
+    },
+    "localeSwitcher": {
+      "label": "Sprache ändern",
+      "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+    }
+  }
+}

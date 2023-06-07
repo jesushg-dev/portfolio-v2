@@ -19,7 +19,7 @@ import 'swiper/css/navigation';
 interface ISoftSkillsProps {}
 
 const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
-  const t = useTranslations('soft-skills');
+  const t = useTranslations('main.soft-skills');
 
   const progressCircle = useRef(null);
   const progressContent = useRef(null);

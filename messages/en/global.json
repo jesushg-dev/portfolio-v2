@@ -1,0 +1,37 @@
+{
+  "global": {
+    "header": {
+      "menu": {
+        "home": "Home",
+        "about": "About",
+        "skills": "Skills",
+        "services": "Services",
+        "portfolio": "Portfolio",
+        "contact": "Contact",
+        "language": "Language",
+        "theme": "Theme Mode",
+        "locale-options": {
+          "es": "Spanish",
+          "en": "English",
+          "de": "Dutch"
+        }
+      },
+      "tools": {
+        "theme": "Theme Mode",
+        "language": "Language",
+        "newThemeSoon": "New theme will be add soon"
+      },
+      "closeMenu": "Close Menu",
+      "openMenu": "Open Menu"
+    },
+    "footer": {
+      "title": "All rights reserved © ",
+      "madeWith": "Made with ",
+      "by": " by "
+    },
+    "localeSwitcher": {
+      "label": "Sprache ändern",
+      "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+    }
+  }
+}

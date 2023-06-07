@@ -1,0 +1,102 @@
+{
+  "curriculum": {
+    "title": "Jesús Hernández - Curriculum Vitae",
+    "aboutMe": "Developer of mobile and web applications with knowledge in technical support and computer security.",
+    "header": {
+      "experience": "Experience",
+      "education": "Education",
+      "languages": "Languages",
+      "interests": "Interests",
+      "contact": "Contact",
+      "references": "References",
+      "technicalSkills": "Technical Skills",
+      "personalSkills": "Personal Skills",
+      "projects": "Projects",
+      "certifications": "Certifications",
+      "awards": "Awards",
+      "designExpertise": "Design Expertise",
+      "additionalInformation": "Additional Information",
+      "personalReferences": "Personal References"
+    },
+    "education": {
+      "computerEngineering": {
+        "degree": "Computer Engineering",
+        "institution": "National University of Engineering",
+        "location": "Managua",
+        "dates": "2017 - Present"
+      },
+      "conversationalEnglish": {
+        "degree": "Conversational English",
+        "institution": "Masinfa",
+        "location": "Masaya",
+        "dates": "2013 - 2016"
+      },
+      "webDeveloper": {
+        "degree": "Web Developer",
+        "institution": "Platzi",
+        "location": "Online",
+        "dates": "2022 - Present"
+      },
+      "digitalSecurity": {
+        "degree": "Junior in Digital Security and Data Protection",
+        "institution": "Numu & BID",
+        "location": "Managua",
+        "dates": "2022"
+      }
+    },
+    "experiences": {
+      "experience1": {
+        "position": "Freelance Web Developer",
+        "company": "Musa",
+        "dates": "July 2022 - May 2023",
+        "responsibilities": "<item>Developed web and mobile application interfaces, collaborating with business stakeholders and backend developers. Integrated data and processes from external providers.</item><item>Refactored existing projects to ensure clean, maintainable, and efficient code.</item><item>Demonstrated the results of the work performed to the product owner and stakeholders.</item>",
+        "skills": "Next.js, User Interface Design, UIX, React.js, Apollo GraphQL, Redux.js, Tailwind CSS, JavaScript, Desarrollo web"
+      },
+      "experience2": {
+        "position": "Freelance Mobile Developer",
+        "company": "Telo",
+        "dates": "March 2022 - May 2022",
+        "responsibilities": "<item>Created user interfaces based on design specifications from the UX team. Participated in a Scrum team implementing functionality as specified in user stories.</item><item>Supported quality control and backend development teams with testing, code reviews, and troubleshooting.</item>",
+        "skills": "React Native, Java, Desarrollo de Android"
+      },
+      "experience3": {
+        "position": "Intern IT Technician",
+        "company": "Reformed Churches Association",
+        "dates": "May 2021 - Nov 2021",
+        "responsibilities": "<item>Performed maintenance and configuration of equipment and software.</item> <item>Taught computer science to elementary school students.</item> <item>Provided support to administrative staff.</item>",
+        "skills": "Windows, Linux, Hardware Support, Hardware Diagnostics, Technical Support, IT Hardware Support"
+      }
+    },
+    "skills": {
+      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>React</item><item>React Native</item><item>GraphQL</item><item>API REST</item>",
+      "backEnd": "<item>C#</item><item>.NET Core</item><item>Node.js</item><item>PHP</item>",
+      "database": "<item>SQL Server</item><item>MySQL</item><item>SQLite</item><item>Firebase</item>",
+      "tools": "<item>Git</item><item>Azure</item><item>VS Code</item>"
+    },
+    "softSkills": "<item>Analytical skills</item><item>Ability to work individually and in a team</item><item>Observation and concentration</item><item>Adaptability</item><item>Self-learning</item><item>Proactive</item>",
+    "additionalInformation": "<item>Immediate availability</item>",
+    "personalReferences": {
+      "reference1": {
+        "name": "Danilo Acevedo",
+        "role": "DEVELOPER",
+        "phoneNumber": "(+505) 8679-3204"
+      },
+      "reference2": {
+        "name": "Alfredo Antonio Eva Vargas",
+        "role": "DEVELOPER",
+        "phoneNumber": "(+505) 8251-9391"
+      },
+      "reference3": {
+        "name": "Juan Carlos López",
+        "role": "DEVELOPER",
+        "phoneNumber": "(+505) 8751-8355"
+      }
+    },
+    "telephone": "tel.",
+    "actions": {
+      "download": "Download CV",
+      "print": "Print CV"
+    },
+    "codedWith": "This CV was coded in ReactJS."
+  }
+}

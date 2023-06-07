@@ -1,0 +1,37 @@
+{
+  "global": {
+    "header": {
+      "menu": {
+        "home": "Home",
+        "about": "Over",
+        "skills": "Vaardigheden",
+        "services": "Diensten",
+        "portfolio": "Portfolio",
+        "contact": "Contact",
+        "language": "Taal",
+        "theme": "Themamodus",
+        "locale-options": {
+          "es": "Spaans",
+          "en": "Engels",
+          "de": "Nederlands"
+        }
+      },
+      "tools": {
+        "theme": "Themamodus",
+        "language": "Taal",
+        "newThemeSoon": "Nieuw thema wordt binnenkort toegevoegd"
+      },
+      "closeMenu": "Sluit Menu",
+      "openMenu": "Open Menu"
+    },
+    "footer": {
+      "title": "Alle rechten voorbehouden © ",
+      "madeWith": "Gemaakt met ",
+      "by": " door "
+    },
+    "localeSwitcher": {
+      "label": "Sprache ändern",
+      "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+    }
+  }
+}

@@ -7,7 +7,7 @@ import Layout from '@/components/Layout';
 // is necessary for this page to render.
 
 export default function NotFoundPage() {
-  //const t = useTranslations('NotFoundPage');
+  //const t = useTranslations('main.NotFoundPage');
 
   return (
     <Layout>

@@ -10,7 +10,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 interface IAboutProps {}
 
 const About: FC<IAboutProps> = ({}) => {
-  const t = useTranslations('about');
+  const t = useTranslations('main.about');
   return (
     <section id="about" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
       <article className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:py-8">

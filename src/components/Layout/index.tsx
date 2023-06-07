@@ -4,13 +4,14 @@ import Header from './Header';
 
 interface ILayoutProps {
   children: React.ReactNode;
+  headerAlwaysVisible?: boolean;
 }
 
-const Layout: FC<ILayoutProps> = ({ children }) => {
+const Layout: FC<ILayoutProps> = ({ children, headerAlwaysVisible }) => {
   return (
     <>
-      <Header />
-      <main>{children}</main>
+      <Header alwaysVisible={headerAlwaysVisible} />
+      <div className="flex min-h-screen flex-col justify-between">{children}</div>
       <Footer />
     </>
   );

@@ -6,10 +6,10 @@ import { FcLike } from 'react-icons/fc';
 interface IFooterProps {}
 
 const Footer: FC<IFooterProps> = ({}) => {
-  const t = useTranslations('footer');
+  const t = useTranslations('global.footer');
 
   return (
-    <footer className="bg-black py-4 text-white">
+    <footer className="bg-black py-4 text-white print:hidden">
       <div className="container mx-auto px-4">
         <div className="-mx-4 flex flex-wrap justify-between">
           <div className="w-full px-4 text-center text-sm sm:w-auto sm:text-left">

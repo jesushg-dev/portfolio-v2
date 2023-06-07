@@ -11,11 +11,13 @@ import ThemeSelector from './ThemeSelector';
 import { useTranslations } from 'next-intl';
 import useIsOnTop from '../../../hooks/useIsOnTop';
 
-interface IHeaderProps {}
+interface IHeaderProps {
+  alwaysVisible?: boolean;
+}
 
-const Header: FC<IHeaderProps> = ({}) => {
+const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   const isOnTop = useIsOnTop();
-  const t = useTranslations('header');
+  const t = useTranslations('global.header');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
 
@@ -41,8 +43,8 @@ const Header: FC<IHeaderProps> = ({}) => {
   return (
     <>
       <header
-        className={`fixed left-0 right-0 z-40 w-full transition-all duration-700 ${
-          isOnTop
+        className={`fixed left-0 right-0 z-40 w-full transition-all duration-700 print:hidden ${
+          isOnTop && !alwaysVisible
             ? 'top-5 bg-transparent text-white'
             : 'top-0 bg-background-50 bg-opacity-90 text-primaryText-900 shadow backdrop-blur-lg backdrop-filter hover:bg-opacity-100'
         }`}>
@@ -52,13 +54,13 @@ const Header: FC<IHeaderProps> = ({}) => {
             <Link
               href="/"
               className={`group text-2xl font-bold tracking-tighter ${
-                isOnTop ? 'text-white' : 'text-primary-700'
+                isOnTop && !alwaysVisible ? 'text-white' : 'text-primary-700'
               }  duration-600 transform transition ease-in-out`}>
               <span className="tracking-relaxed">
                 Jehg{' '}
                 <span
                   className={`tracking-relaxed ${
-                    isOnTop ? 'text-primary-500' : 'text-background-500 group-hover:text-white'
+                    isOnTop && !alwaysVisible ? 'text-primary-500' : 'text-secondaryText-500 group-hover:text-white'
                   } `}>
                   .
                 </span>

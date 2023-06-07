@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import PageLayout from '@/components/Layout';
 
 export default function AboutPage() {
-  const t = useTranslations('about');
+  const t = useTranslations('main.about');
 
   return (
     <PageLayout>

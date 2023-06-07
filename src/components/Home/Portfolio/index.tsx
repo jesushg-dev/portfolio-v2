@@ -44,7 +44,8 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
   const locale = useLocale() as 'en' | 'es' | 'de';
   const ref = useRef(null);
 
-  const t = useTranslations('portfolio');
+  const t = useTranslations('main.portfolio');
+
   const isInView = useInView(ref, { once: true });
   const labels = useMemo(
     () => ({

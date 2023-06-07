@@ -20,7 +20,7 @@ const cloudinaryLoader = ({ src, width, quality }: ImageLoaderProps) => {
 };
 
 const Contact: FC<IContactProps> = ({}) => {
-  const t = useTranslations('contact');
+  const t = useTranslations('main.contact');
 
   const nameRef = useRef<IInputRef>(null);
   const emailRef = useRef<IInputRef>(null);
@@ -101,7 +101,7 @@ const Contact: FC<IContactProps> = ({}) => {
     <section id="contact" className="hero w-full bg-black before:bg-hero-contact before:lg:bg-local">
       <div className="mx-auto flex items-center p-4 lg:container lg:p-20">
         <div className="z-20 flex w-full flex-col rounded bg-background-50 md:flex-row md:items-center">
-          <aside className="flex w-full flex-col justify-between space-y-10 py-8 px-10">
+          <aside className="flex w-full flex-col justify-between space-y-10 px-10 py-8">
             <div className="space-y-3">
               <div className="container mx-auto">
                 <div className="-mx-4 flex flex-wrap">
@@ -148,7 +148,7 @@ const Contact: FC<IContactProps> = ({}) => {
             <span className="absolute bg-background-50 px-3 font-medium text-primaryText-900">{t('divider')}</span>
           </div>
 
-          <form id="contact-form" className="w-full space-y-2 py-8 px-10" onSubmit={handleSubmit}>
+          <form id="contact-form" className="w-full space-y-2 px-10 py-8" onSubmit={handleSubmit}>
             <p className="text-center text-lg font-bold text-primaryText-900 lg:text-start">{t('title2')}</p>
 
             <Input

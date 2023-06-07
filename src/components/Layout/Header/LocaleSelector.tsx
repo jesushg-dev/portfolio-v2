@@ -20,7 +20,7 @@ const LocaleSelector: FC<ILocaleSelectorProps> = () => {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const t = useTranslations('header');
+  const t = useTranslations('global.header');
   const [isPending, startTransition] = useTransition();
   const crtLocale = useMemo(() => locales.findIndex((l) => l.value === locale), [locale]);
 
@@ -43,12 +43,12 @@ const LocaleSelector: FC<ILocaleSelectorProps> = () => {
               src={locales[crtLocale]?.img ?? ''}
               alt={locales[crtLocale]?.label ?? ''}
             />
-            <p className="text-sm text-primaryText-700">{t('menu.language')}</p>
+            <span className="text-sm ">{t('menu.language')}</span>
           </div>
         }>
         {locales.map(({ value, label, img }) => (
           <Option key={value} label={label}>
-            <div className="flex w-full items-center gap-2 px-4 py-2 hover:bg-gray-800">
+            <div className="flex w-full items-center gap-2 px-4 py-2 hover:bg-background-400">
               <Image width={24} height={24} loader={cdFlagloader} src={img} alt={label} />
               <p className="text-sm text-primaryText-700">{label}</p>
             </div>
