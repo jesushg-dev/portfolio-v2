@@ -9,7 +9,7 @@ interface ITimeLineProps {
 
 const TimeLine: FC<ITimeLineProps> = ({ title, text, date, dateTime }) => {
   return (
-    <li className="time-dot relative w-full space-y-2 pl-4 pb-6">
+    <li className="time-dot relative w-full space-y-2 pb-6 pl-4">
       <time
         className=" border border-primary-500 bg-background-200 px-2 py-1 pb-1 text-xs font-normal leading-none text-primary-500"
         dateTime={dateTime}>

@@ -96,7 +96,7 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
                 <motion.li
                   layout
                   key={project.id}
-                  className="flex"
+                  className="flex justify-center"
                   variants={item}
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.5 }}>

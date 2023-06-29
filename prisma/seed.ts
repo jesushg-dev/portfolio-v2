@@ -1629,6 +1629,158 @@ async function main() {
     },
   });
 
+  const projectRickAndMorty = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'FRONTEND',
+      image: 'Rick_and_morty_dn7xnz',
+      githubUrl: 'https://github.com/jess232017/rick-and-morty',
+      websiteUrl: 'https://rick-and-morty-virid.vercel.app/',
+      isPrivate: false,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Rick y Morty | Wiki',
+              description: 'Aplicación web para consultar los personajes de la serie Rick y Morty.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Rick and Morty | Wiki',
+              description: 'Web application to consult the characters of the Rick and Morty series.',
+              appLanguageId: langEn.id,
+            },
+            {
+              title: 'Rick und Morty | Wiki',
+              description: 'Webanwendung zur Abfrage der Charaktere der Serie Rick und Morty.',
+              appLanguageId: langDe.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillReact.id }, { skillId: skillBootstrap.id }],
+        },
+      },
+    },
+  });
+
+  const projectSoftSkillsQuiz = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'FRONTEND',
+      image: 'soft-skill-quiz_rqnzmm',
+      githubUrl: 'https://github.com/jess232017/SoftSkill-Quiz',
+      websiteUrl: 'https://soft-skill-quiz.vercel.app/',
+      isPrivate: false,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Soft Skills Quiz',
+              description: 'Aplicación web que permite realizar un test de habilidades blandas para desarrolladores.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Soft Skills Quiz',
+              description: 'Web application that allows you to take a test of soft skills for developers.',
+              appLanguageId: langEn.id,
+            },
+            {
+              title: 'Soft Skills Quiz',
+              description: 'Webanwendung, mit der Sie einen Test zu Soft Skills für Entwickler ablegen können.',
+              appLanguageId: langDe.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillReact.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
+        },
+      },
+    },
+  });
+
+  const projectMusaEcommerce = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'FRONTEND',
+      image: 'musa-client_blxhyy',
+      githubUrl: 'musa-client_blxhyy',
+      websiteUrl: 'https://www.musafruit.com/',
+      isPrivate: true,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Musa Ecommerce',
+              description: 'Aplicación web para la venta de productos perecederos.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Musa Ecommerce',
+              description: 'Web application for the sale of perishable products.',
+              appLanguageId: langEn.id,
+            },
+            {
+              title: 'Musa Ecommerce',
+              description: 'Webanwendung für den Verkauf von verderblichen Produkten.',
+              appLanguageId: langDe.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillNextjs.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
+        },
+      },
+    },
+  });
+
+  const projectMusaAdmin = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'FRONTEND',
+      image: 'musa-admin_oufeum',
+      githubUrl: 'musa-admin_oufeum',
+      websiteUrl: '',
+      isPrivate: true,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Musa Admin',
+              description: 'Aplicación web para la administración de la tienda online Musa Ecommerce.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Musa Admin',
+              description: 'Web application for the administration of the online store Musa Ecommerce.',
+              appLanguageId: langEn.id,
+            },
+            {
+              title: 'Musa Admin',
+              description: 'Webanwendung für die Verwaltung des Online-Shops Musa Ecommerce.',
+              appLanguageId: langDe.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillReact.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
+        },
+      },
+    },
+  });
+
   const projectCovid19 = await prisma.project.upsert({
     where: { id: new ObjectId().toString() },
     update: {},
@@ -1671,6 +1823,82 @@ async function main() {
             { skillId: skillBootstrap.id },
             { skillId: skillFirebase.id },
           ],
+        },
+      },
+    },
+  });
+
+  const projectLotty = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'FRONTEND',
+      image: 'loto-nic_mtnoh7',
+      githubUrl: '-',
+      websiteUrl: 'https://loto-nicaragua.vercel.app/',
+      isPrivate: false,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Lotty',
+              description: 'Aplicación web para consultar los resultados de la loto de Nicaragua.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Lotty',
+              description: 'Web application to consult the results of the Nicaraguan lottery.',
+              appLanguageId: langEn.id,
+            },
+            {
+              title: 'Lotty',
+              description: 'Webanwendung zur Abfrage der Ergebnisse der nicaraguanischen Lotterie.',
+              appLanguageId: langDe.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillReact.id }, { skillId: skillBootstrap.id }],
+        },
+      },
+    },
+  });
+
+  const projectLottyApi = await prisma.project.upsert({
+    where: { id: new ObjectId().toString() },
+    update: {},
+    create: {
+      type: 'BACKEND',
+      image: 'api-rest_u56jdu',
+      githubUrl: '-',
+      websiteUrl: '-',
+      isPrivate: false,
+      ProjectTranslation: {
+        createMany: {
+          data: [
+            {
+              title: 'Lotty Api',
+              description: 'Api Rest para la aplicación móvil Lucky App.',
+              appLanguageId: langEs.id,
+            },
+            {
+              title: 'Lotty Api',
+              description: 'Rest Api for the mobile application Lucky App.',
+              appLanguageId: langEn.id,
+            },
+            {
+              title: 'Lotty Api',
+              description: 'Rest Api für die mobile Anwendung Lucky App.',
+              appLanguageId: langDe.id,
+            },
+          ],
+        },
+      },
+      ProjectSkill: {
+        createMany: {
+          data: [{ skillId: skillNodejs.id }, { skillId: skillMysql.id }],
         },
       },
     },
@@ -2119,234 +2347,6 @@ async function main() {
       ProjectSkill: {
         createMany: {
           data: [{ skillId: skillJava.id }, { skillId: skillAndroid.id }],
-        },
-      },
-    },
-  });
-
-  const projectLotty = await prisma.project.upsert({
-    where: { id: new ObjectId().toString() },
-    update: {},
-    create: {
-      type: 'FRONTEND',
-      image: 'loto-nic_mtnoh7',
-      githubUrl: '-',
-      websiteUrl: '-',
-      isPrivate: false,
-      ProjectTranslation: {
-        createMany: {
-          data: [
-            {
-              title: 'Lotty',
-              description: 'Aplicación web para consultar los resultados de la loto de Nicaragua.',
-              appLanguageId: langEs.id,
-            },
-            {
-              title: 'Lotty',
-              description: 'Web application to consult the results of the Nicaraguan lottery.',
-              appLanguageId: langEn.id,
-            },
-            {
-              title: 'Lotty',
-              description: 'Webanwendung zur Abfrage der Ergebnisse der nicaraguanischen Lotterie.',
-              appLanguageId: langDe.id,
-            },
-          ],
-        },
-      },
-      ProjectSkill: {
-        createMany: {
-          data: [{ skillId: skillReact.id }, { skillId: skillBootstrap.id }],
-        },
-      },
-    },
-  });
-
-  const projectLottyApi = await prisma.project.upsert({
-    where: { id: new ObjectId().toString() },
-    update: {},
-    create: {
-      type: 'BACKEND',
-      image: 'api-rest_u56jdu',
-      githubUrl: '-',
-      websiteUrl: '-',
-      isPrivate: false,
-      ProjectTranslation: {
-        createMany: {
-          data: [
-            {
-              title: 'Lotty Api',
-              description: 'Api Rest para la aplicación móvil Lucky App.',
-              appLanguageId: langEs.id,
-            },
-            {
-              title: 'Lotty Api',
-              description: 'Rest Api for the mobile application Lucky App.',
-              appLanguageId: langEn.id,
-            },
-            {
-              title: 'Lotty Api',
-              description: 'Rest Api für die mobile Anwendung Lucky App.',
-              appLanguageId: langDe.id,
-            },
-          ],
-        },
-      },
-      ProjectSkill: {
-        createMany: {
-          data: [{ skillId: skillNodejs.id }, { skillId: skillMysql.id }],
-        },
-      },
-    },
-  });
-
-  const projectRickAndMorty = await prisma.project.upsert({
-    where: { id: new ObjectId().toString() },
-    update: {},
-    create: {
-      type: 'FRONTEND',
-      image: 'Rick_and_morty_dn7xnz',
-      githubUrl: 'https://github.com/jess232017/rick-and-morty',
-      websiteUrl: 'https://rick-and-morty-virid.vercel.app/',
-      isPrivate: false,
-      ProjectTranslation: {
-        createMany: {
-          data: [
-            {
-              title: 'Rick y Morty | Wiki',
-              description: 'Aplicación web para consultar los personajes de la serie Rick y Morty.',
-              appLanguageId: langEs.id,
-            },
-            {
-              title: 'Rick and Morty | Wiki',
-              description: 'Web application to consult the characters of the Rick and Morty series.',
-              appLanguageId: langEn.id,
-            },
-            {
-              title: 'Rick und Morty | Wiki',
-              description: 'Webanwendung zur Abfrage der Charaktere der Serie Rick und Morty.',
-              appLanguageId: langDe.id,
-            },
-          ],
-        },
-      },
-      ProjectSkill: {
-        createMany: {
-          data: [{ skillId: skillReact.id }, { skillId: skillBootstrap.id }],
-        },
-      },
-    },
-  });
-
-  const projectSoftSkillsQuiz = await prisma.project.upsert({
-    where: { id: new ObjectId().toString() },
-    update: {},
-    create: {
-      type: 'FRONTEND',
-      image: 'soft-skill-quiz_rqnzmm',
-      githubUrl: 'https://github.com/jess232017/SoftSkill-Quiz',
-      websiteUrl: 'https://soft-skill-quiz.vercel.app/',
-      isPrivate: false,
-      ProjectTranslation: {
-        createMany: {
-          data: [
-            {
-              title: 'Soft Skills Quiz',
-              description: 'Aplicación web que permite realizar un test de habilidades blandas para desarrolladores.',
-              appLanguageId: langEs.id,
-            },
-            {
-              title: 'Soft Skills Quiz',
-              description: 'Web application that allows you to take a test of soft skills for developers.',
-              appLanguageId: langEn.id,
-            },
-            {
-              title: 'Soft Skills Quiz',
-              description: 'Webanwendung, mit der Sie einen Test zu Soft Skills für Entwickler ablegen können.',
-              appLanguageId: langDe.id,
-            },
-          ],
-        },
-      },
-      ProjectSkill: {
-        createMany: {
-          data: [{ skillId: skillReact.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
-        },
-      },
-    },
-  });
-
-  const projectMusaEcommerce = await prisma.project.upsert({
-    where: { id: new ObjectId().toString() },
-    update: {},
-    create: {
-      type: 'FRONTEND',
-      image: 'musa-client_blxhyy',
-      githubUrl: 'musa-client_blxhyy',
-      websiteUrl: 'https://www.musafruit.com/',
-      isPrivate: true,
-      ProjectTranslation: {
-        createMany: {
-          data: [
-            {
-              title: 'Musa Ecommerce',
-              description: 'Aplicación web para la venta de productos perecederos.',
-              appLanguageId: langEs.id,
-            },
-            {
-              title: 'Musa Ecommerce',
-              description: 'Web application for the sale of perishable products.',
-              appLanguageId: langEn.id,
-            },
-            {
-              title: 'Musa Ecommerce',
-              description: 'Webanwendung für den Verkauf von verderblichen Produkten.',
-              appLanguageId: langDe.id,
-            },
-          ],
-        },
-      },
-      ProjectSkill: {
-        createMany: {
-          data: [{ skillId: skillNextjs.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
-        },
-      },
-    },
-  });
-
-  const projectMusaAdmin = await prisma.project.upsert({
-    where: { id: new ObjectId().toString() },
-    update: {},
-    create: {
-      type: 'FRONTEND',
-      image: 'musa-admin_oufeum',
-      githubUrl: 'musa-admin_oufeum',
-      websiteUrl: '',
-      isPrivate: true,
-      ProjectTranslation: {
-        createMany: {
-          data: [
-            {
-              title: 'Musa Admin',
-              description: 'Aplicación web para la administración de la tienda online Musa Ecommerce.',
-              appLanguageId: langEs.id,
-            },
-            {
-              title: 'Musa Admin',
-              description: 'Web application for the administration of the online store Musa Ecommerce.',
-              appLanguageId: langEn.id,
-            },
-            {
-              title: 'Musa Admin',
-              description: 'Webanwendung für die Verwaltung des Online-Shops Musa Ecommerce.',
-              appLanguageId: langDe.id,
-            },
-          ],
-        },
-      },
-      ProjectSkill: {
-        createMany: {
-          data: [{ skillId: skillReact.id }, { skillId: skillTailwind.id }, { skillId: skillTypescript.id }],
         },
       },
     },

@@ -1,6 +1,7 @@
 {
   "curriculum": {
     "title": "Jesús Hernández - Curriculum Vitae",
+    "degree": "Software-engineering.",
     "aboutMe": "Ontwikkelaar van mobiele en webapplicaties met kennis van technische ondersteuning en computerbeveiliging.",
     "header": {
       "experience": "Ervaring",
@@ -97,6 +98,7 @@
     "actions": {
       "download": "CV downloaden",
       "print": "CV afdrukken"
-    }
+    },
+    "downloadLink": "https://drive.google.com/u/0/uc?id=1Wd7SMD68ONcPNWUzHsGS_l4kN_KI06t9&export=download"
   }
 }

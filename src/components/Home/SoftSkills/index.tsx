@@ -26,7 +26,7 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
 
   return (
     <>
-      <section className="hero relative flex h-[50vh] w-full flex-col items-center  overflow-hidden bg-black before:bg-hero-skills md:h-[65vh]">
+      <section className="hero relative flex h-[55vh] w-full flex-col items-center  overflow-hidden bg-black before:bg-hero-skills md:h-[65vh]">
         <h2 className="z-10  p-10 text-4xl font-bold text-slate-200">{t('title')}</h2>
         <div className=" mx-auto flex h-full w-full items-center justify-center gap-6 px-4 py-4 pt-0 text-secondaryText-50 lg:container lg:px-20 lg:py-20 lg:pt-5">
           <Swiper

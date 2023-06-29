@@ -1,6 +1,7 @@
 {
   "curriculum": {
     "title": "Jesús Hernández - Curriculum Vitae",
+    "degree": "Ingeniería en Computación",
     "aboutMe": "Desarrollador de aplicaciones móviles y web con conocimientos en soporte técnico y seguridad informática.",
     "header": {
       "experience": "Experiencia",
@@ -97,6 +98,7 @@
       "download": "Descargar CV",
       "print": "Imprimir CV"
     },
-    "codedWith": "Este CV fue codificado en ReactJS."
+    "codedWith": "Este CV fue codificado en ReactJS.",
+    "downloadLink": "https://drive.google.com/u/0/uc?id=1IPEq0DI7bu7yWotS5BUIUxpGbT-IbOji&export=download"
   }
 }
