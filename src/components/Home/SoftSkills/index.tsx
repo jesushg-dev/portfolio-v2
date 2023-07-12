@@ -2,7 +2,7 @@ import React, { FC, useRef } from 'react';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import required modules
-import { Autoplay, Pagination, Navigation } from 'swiper';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 import { useTranslations } from 'next-intl';
 import SoftSkillItem from './SoftSkillItem';
@@ -12,9 +12,12 @@ import { RiSettingsLine, RiTimerFlashLine, RiMapPinTimeLine, RiQuillPenLine } fr
 import { RiMedal2Line, RiTeamLine, RiCalendarTodoLine, RiShieldStarLine, RiEmotion2Line } from 'react-icons/ri';
 
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import 'swiper/scss';
+import 'swiper/scss/autoplay';
+import 'swiper/scss/controller';
+import 'swiper/scss/pagination';
+import 'swiper/scss/navigation';
+import 'swiper/scss/keyboard';
 
 interface ISoftSkillsProps {}
 
@@ -43,9 +46,7 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
               768: { slidesPerView: 4 },
               1024: { slidesPerView: 5 },
             }}
-            modules={[Autoplay]}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}>
+            modules={[Autoplay, Navigation]}>
             <SwiperSlide className="text-center">
               <SoftSkillItem
                 icon={RiTeamLine}

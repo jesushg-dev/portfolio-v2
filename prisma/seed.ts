@@ -1588,8 +1588,9 @@ async function main() {
     create: {
       image: 'portf-1_bkhwxr',
       type: 'FRONTEND',
-      githubUrl: 'https://github.com/jess232017/Portfolio',
-      websiteUrl: 'https://portfolio-jhg.netlify.app/',
+      githubUrl: 'https://github.com/jess232017/portfolio-v2',
+      websiteUrl: '',
+      //websiteUrl: 'https://www.jesushg.com/',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -1712,7 +1713,8 @@ async function main() {
       type: 'FRONTEND',
       image: 'musa-client_blxhyy',
       githubUrl: 'musa-client_blxhyy',
-      websiteUrl: 'https://www.musafruit.com/',
+      //websiteUrl: 'https://www.musafruit.com/',
+      websiteUrl: '',
       isPrivate: true,
       ProjectTranslation: {
         createMany: {
@@ -1834,7 +1836,7 @@ async function main() {
     create: {
       type: 'FRONTEND',
       image: 'loto-nic_mtnoh7',
-      githubUrl: '-',
+      githubUrl: 'https://github.com/jess232017/Loto-Nicaragua',
       websiteUrl: 'https://loto-nicaragua.vercel.app/',
       isPrivate: false,
       ProjectTranslation: {
@@ -1872,8 +1874,8 @@ async function main() {
     create: {
       type: 'BACKEND',
       image: 'api-rest_u56jdu',
-      githubUrl: '-',
-      websiteUrl: '-',
+      githubUrl: 'https://github.com/jess232017/Loto-Api',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -1911,7 +1913,7 @@ async function main() {
       type: 'MOBILE',
       image: 'Tech_Service_xjuilx',
       githubUrl: 'https://github.com/jess232017/TechService',
-      websiteUrl: 'https://github.com/jess232017/TechService',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -1951,7 +1953,6 @@ async function main() {
       type: 'BACKEND',
       image: 'api-rest_szxffg',
       githubUrl: 'https://github.com/jess232017/Api_TechService',
-      websiteUrl: 'https://github.com/jess232017/Api_TechService',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -1988,8 +1989,8 @@ async function main() {
     create: {
       type: 'DESKTOP',
       image: 'portf-5_f1z3la',
-      githubUrl: 'https://github.com/jess232017/Control-de-Inventario-y-Ventas',
-      websiteUrl: 'https://github.com/jess232017/Control-de-Inventario-y-Ventas',
+      githubUrl: 'https://github.com/jess232017/Control-Inventario-y-Ventas',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -2032,7 +2033,7 @@ async function main() {
       type: 'MOBILE',
       image: 'port-6_avknde',
       githubUrl: 'https://github.com/jess232017/Food-Service',
-      websiteUrl: 'https://github.com/jess232017/Food-Service',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -2070,7 +2071,7 @@ async function main() {
       type: 'FRONTEND',
       image: 'port-7png_jclbvc',
       githubUrl: 'https://github.com/jess232017/Tienda-AdminMUI',
-      websiteUrl: 'https://tiendajs-admin.netlify.app/',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -2112,7 +2113,7 @@ async function main() {
     create: {
       type: 'FRONTEND',
       image: 'port-8_njbkie',
-      githubUrl: 'https://github.com/jess232017/Tienda-Cliente',
+      githubUrl: 'https://github.com/jess232017/Tienda-Admin',
       websiteUrl: 'https://tiendajs-admin.netlify.app/',
       isPrivate: false,
       ProjectTranslation: {
@@ -2156,7 +2157,7 @@ async function main() {
       type: 'BACKEND',
       image: 'api-rest_yaux6m',
       githubUrl: '-',
-      websiteUrl: '-',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -2199,8 +2200,8 @@ async function main() {
     create: {
       type: 'MOBILE',
       image: 'port-9_lw4apk',
-      githubUrl: '-',
-      websiteUrl: '-',
+      githubUrl: 'https://github.com/jess232017/Gestor-de-Consumo-Eletrico',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -2242,9 +2243,8 @@ async function main() {
     create: {
       type: 'BACKEND',
       image: 'api-rest_u56jdu',
-
       githubUrl: 'https://github.com/jess232017/Consultar-Consumo-API',
-      websiteUrl: 'https://github.com/jess232017/Consultar-Consumo-API',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -2281,8 +2281,8 @@ async function main() {
     create: {
       type: 'MOBILE',
       image: 'port-10_f80urb',
-      githubUrl: '-',
-      websiteUrl: '-',
+      githubUrl: 'https://github.com/jess232017/Rifa-App',
+      websiteUrl: '',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -2319,8 +2319,8 @@ async function main() {
     create: {
       type: 'MOBILE',
       image: 'port-11_cng5re',
-      githubUrl: '-',
-      websiteUrl: '-',
+      githubUrl: 'https://github.com/jess232017/Tu-Finca',
+      websiteUrl: '',
       isPrivate: false,
 
       ProjectTranslation: {

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import { notFound } from 'next/navigation';
 import { createTranslator, NextIntlClientProvider } from 'next-intl';
+import type { Metadata } from 'next';
 
 type Props = {
   children: ReactNode;
@@ -19,7 +20,7 @@ async function getMessages(locale: string) {
   }
 }
 
-export async function generateMetadata({ params: { locale } }: Props) {
+export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
   const messages = await getMessages(locale);
 
   // You can use the core (non-React) APIs when you have to use next-intl

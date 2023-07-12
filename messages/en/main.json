@@ -1,7 +1,10 @@
 {
   "main": {
-    "title": "Jesús Hernández - Full Stack Developer",
-
+    "meta": {
+      "title": "Jesús Hernández - Full Stack Developer",
+      "description": "Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology",
+      "keywords": "Jesus Hernandez, Jesus, Hernandez, Full Stack Developer, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Agile Methodology, Agile, Methodology"
+    },
     "heroMain": {
       "titles": {
         "degree": "Computer Engineer.",

@@ -1,16 +1,17 @@
 import React, { FC, useRef } from 'react';
 
 import Image from 'next/image';
-import type { ImageLoaderProps } from 'next/dist/client/image';
 
 import Input from '../../UI/Input';
 import ContactItem from './ContactItem';
 import TextArea from '../../UI/TextArea';
-import type { IInputRef } from '../../../hooks/useRefInput';
 
 import { FaLinkedin, FaGithub, FaWhatsapp, FaRegEnvelope, FaPhoneAlt } from 'react-icons/fa';
 
 import { useTranslations } from 'next-intl';
+
+import type { ImageLoaderProps } from 'next/image';
+import type { IInputRef } from '../../../hooks/useRefInput';
 
 interface IContactProps {}
 

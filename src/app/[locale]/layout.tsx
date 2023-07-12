@@ -9,6 +9,8 @@ import TrpcProvider from '@/hoc/TrpcProvider';
 import PreloadTheme from '@/hoc/PreloadTheme';
 import ThemeContextProvider from '@/hoc/ThemeContextProvider';
 
+import type { Metadata } from 'next';
+
 const inter = Inter({ subsets: ['latin'] });
 
 type Props = {
@@ -27,7 +29,7 @@ async function getMessages(locale: string) {
   }
 }
 
-export async function generateMetadata({ params: { locale } }: Props) {
+export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
   const messages = await getMessages(locale);
 
   // You can use the core (non-React) APIs when you have to use next-intl
@@ -36,9 +38,99 @@ export async function generateMetadata({ params: { locale } }: Props) {
   const t = createTranslator({ locale, messages });
 
   return {
-    title: t('main.title'),
+    title: t('main.meta.title'),
+    description: t('main.meta.description'),
+    themeColor: '#05f',
+    keywords: t('main.meta.keywords'),
+    manifest: '/manifest.json',
+    icons: [
+      {
+        url: '/icon-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
+      },
+      {
+        url: '/icon-256x256.png',
+        sizes: '256x256',
+        type: 'image/png',
+      },
+      {
+        url: '/icon-384x384.png',
+        sizes: '384x384',
+        type: 'image/png',
+      },
+      {
+        url: '/icon-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+      },
+      {
+        url: '/icon-512x512-maskable.png',
+        sizes: '512x512',
+        type: 'image/png',
+        // purpose: 'maskable',
+      },
+    ],
+    openGraph: {
+      title: t('main.meta.title'),
+      description: t('main.meta.description'),
+      url: 'https://www.jesushg.com',
+      type: 'website',
+      images: [
+        {
+          url: 'https://res.cloudinary.com/js-media/image/upload/v1640647057/portfolio/portf-1_bkhwxr.png',
+          width: 800,
+          height: 600,
+          alt: 'Og Image Alt',
+        },
+      ],
+    },
+    twitter: {
+      site: '@jesus_hg',
+      title: t('main.meta.title'),
+      description: t('main.meta.description'),
+      images: [
+        {
+          url: 'https://res.cloudinary.com/js-media/image/upload/v1640647057/portfolio/portf-1_bkhwxr.png',
+          width: 800,
+          height: 600,
+          alt: 'Og Image Alt',
+        },
+      ],
+    },
   };
 }
+
+/**<Head>
+
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon.png"></link>
+
+
+        <meta property="og:title" content="Portfolio - Jesús Hernández " />
+        <meta property="og:url" content="https://www.jesushg.com" />
+        <meta
+          property="og:image"
+          content="https://res.cloudinary.com/js-media/image/upload/v1640647057/portfolio/portf-1_bkhwxr.png"
+        />
+        <meta
+          property="og:description"
+          content="Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
+        />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary" />
+        <meta property="twitter:title" content="Portfolio - Jesús Hernández " />
+        <meta
+          name="twitter:image"
+          content="https://res.cloudinary.com/js-media/image/upload/v1640647057/portfolio/portf-1_bkhwxr.png"
+        />
+        <meta
+          property="twitter:description"
+          content="Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
+        />
+      </Head> */
 
 export default async function LocaleLayout({ children, params: { locale } }: Props) {
   const messages = await getMessages(locale);
