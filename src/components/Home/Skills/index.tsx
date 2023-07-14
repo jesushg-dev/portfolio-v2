@@ -5,9 +5,9 @@ import React, { FC, useRef, useState, lazy, Suspense } from 'react';
 import BgParticles from './BgParticles';
 import SkillGrouped from './SkillGrouped';
 
-import { useInView } from 'framer-motion';
-import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
+import { AnimatePresence, useInView } from 'framer-motion';
 
 import { trpcReact as trpc } from '@/utils/trpc';
 import { LIMIT_PER_PAGE_BIG } from '@/utils/constants';
@@ -69,7 +69,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
           </div>
           <section
             ref={ref}
-            className="grid grid-cols-1 gap-6 divide-dashed divide-primary-50 md:grid-cols-2 md:gap-6 md:divide-x lg:grid-cols-3">
+            className="grid grid-cols-1 gap-6 divide-dashed divide-divider-300 md:grid-cols-2 md:gap-6 md:divide-x lg:grid-cols-3">
             <SkillGrouped
               type="frontend"
               title="Frontend"
@@ -114,11 +114,13 @@ const Skills: FC<ISkillsProps> = ({}) => {
           </div>
         </article>
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        {isModalOpen && selectedSkill && (
-          <SkillModal skill={selectedSkill} onClose={handleCloseModal} type={selectedSkillType} />
-        )}
-      </Suspense>
+      <AnimatePresence>
+        <Suspense fallback={<div>Loading...</div>}>
+          {isModalOpen && selectedSkill && (
+            <SkillModal skill={selectedSkill} onClose={handleCloseModal} type={selectedSkillType} />
+          )}
+        </Suspense>
+      </AnimatePresence>
     </>
   );
 };

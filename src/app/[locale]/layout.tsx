@@ -43,6 +43,17 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
     themeColor: '#05f',
     keywords: t('main.meta.keywords'),
     manifest: '/manifest.json',
+    metadataBase: new URL('https://www.jesushg.com'),
+    alternates: {
+      canonical: '/',
+      languages: {
+        es: 'https://www.jesushg.com/es',
+        en: 'https://www.jesushg.com/en',
+        de: 'https://www.jesushg.com/de',
+        'en-US': 'https://www.jesushg.com/en',
+        'es-ES': 'https://www.jesushg.com/es',
+      },
+    },
     icons: [
       {
         url: '/icon-192x192.png',

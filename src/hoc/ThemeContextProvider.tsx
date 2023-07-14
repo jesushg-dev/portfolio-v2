@@ -1,20 +1,23 @@
 'use client';
 
 import React, { FC, useState, useEffect, createContext, startTransition } from 'react';
+import { ETheme } from '@/utils/constants/theme';
+
+export type ThemeType = ETheme;
 
 export interface ITheme {
-  theme: string;
+  theme: ThemeType;
   isDark: boolean;
 }
 
 interface IThemeContext extends ITheme {
-  setTheme: (theme: string, isDark: boolean) => void;
+  setTheme: (theme: ThemeType, isDark: boolean) => void;
 }
 
 // Create context with default theme
 const ThemeContext = createContext<IThemeContext>({
   isDark: false,
-  theme: 'main-light',
+  theme: ETheme.MAIN_LIGHT,
   setTheme: () => {},
 });
 
@@ -26,11 +29,11 @@ interface IThemeContextProviderProps {
 
 const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
   const [theme, setRawTheme] = useState<ITheme>({
-    theme: 'main-light',
+    theme: ETheme.MAIN_LIGHT,
     isDark: false,
   });
 
-  const setTheme = (theme: string, isDark: boolean) => {
+  const setTheme = (theme: ThemeType, isDark: boolean) => {
     const root = document.documentElement;
     const colorMode = isDark ? 'dark' : 'light';
 
@@ -46,7 +49,7 @@ const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
 
   // this get the initial theme from local storage and set it to the state
   useEffect(() => {
-    const initialTheme = window.localStorage.getItem('theme');
+    const initialTheme = window.localStorage.getItem('theme') as ThemeType;
     const initialColorMode = window.localStorage.getItem('color-mode');
     startTransition(() => {
       setTheme(initialTheme || 'main-light', initialColorMode === 'dark');

@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import Modal, { CloseModal } from '../../UI/Modal';
 
 import { siLoader } from '../../../utils/tools/medialoader';
@@ -19,7 +20,7 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
 
   return (
     <Modal onClickBackdrop={onClose}>
-      <section className="relative mx-auto max-w-7xl px-12 py-12">
+      <motion.section layoutId={skill.id} className="relative mx-auto max-w-7xl px-12 py-12">
         <CloseModal onClick={onClose} title={t('modal.close')} />
         <div className="mx-auto flex max-w-7xl flex-wrap items-center">
           <div className="w-full rounded-xl lg:w-1/2 lg:max-w-lg">
@@ -42,9 +43,9 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
           </div>
           <div className="mb-16 mt-12 flex flex-col items-start text-left md:mb-0 lg:w-1/2 lg:flex-grow lg:pl-6 xl:mt-0 xl:pl-12">
             <span className="mb-8 text-xs font-bold uppercase tracking-widest text-primary-600">{type}</span>
-            <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-600 md:text-7xl lg:text-5xl">
+            <motion.h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-primaryText-50 md:text-7xl lg:text-5xl">
               {skill.title}
-            </h1>
+            </motion.h1>
             <p className="mb-8 text-left text-base leading-relaxed text-primaryText-500">{skill.description}</p>
             <div className="mt-0 w-full sm:flex lg:mt-6">
               <div className="mt-3 rounded-lg sm:mt-0">
@@ -62,14 +63,14 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
                   href={skill.urlWiki}
                   target="_blank"
                   rel="noreferrer"
-                  className="pressable block transform items-center rounded-xl border-2 border-white px-3.5 py-3.5 text-center text-base font-medium text-primary-600 shadow-md transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-background-500 focus:ring-offset-2">
+                  className="pressable block transform items-center rounded-xl border-2 border-secondaryText-500 px-3.5 py-3.5 text-center text-base font-medium text-primary-600 shadow-md transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-background-500 focus:ring-offset-2">
                   {t('modal.readMore')}
                 </a>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
     </Modal>
   );
 };

@@ -8,8 +8,6 @@ import { FaDownload } from 'react-icons/fa';
 
 import Layout from '@/components/Layout';
 
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { CvContextProvider } from '@/hoc/CvContextProvider';
 
 const Education = lazy(() => import('@/components/Curriculum/Education'));
@@ -24,26 +22,6 @@ interface ICvPageProps {}
 const CvPage: FC<ICvPageProps> = ({}) => {
   const t = useTranslations('curriculum');
   const elementRef = useRef<HTMLDivElement>(null);
-
-  const handleDownloadPDF = () => {
-    const element = elementRef.current;
-    if (!element) return;
-
-    html2canvas(element).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF();
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save('document.pdf');
-    });
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   return (
     <CvContextProvider>

@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
+
 import Image, { ImageLoaderProps } from 'next/image';
 
 interface ISkillItemProps {
+  id: string;
   image: string;
   title: string;
   description: string;
@@ -12,7 +14,7 @@ const siLoader = ({ src }: ImageLoaderProps) => {
   return `https://cdn.simpleicons.org/${src}`;
 };
 
-const SkillItem: FC<ISkillItemProps> = ({ image, title, description, onClick }) => {
+const SkillItem: FC<ISkillItemProps> = ({ id, image, title, description, onClick }) => {
   /* border border-primary-50 bg-background-50/50 shadow backdrop-blur-xl*/
   return (
     <button

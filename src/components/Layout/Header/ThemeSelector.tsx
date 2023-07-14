@@ -3,6 +3,9 @@ import React, { FC } from 'react';
 import { useThemeContext } from '../../../hoc/ThemeContextProvider';
 import { RiSunLine, RiMoonLine, RiPaintBrushLine, RiCheckDoubleLine } from 'react-icons/ri';
 
+import { ETheme } from '@/utils/constants/theme';
+import type { ThemeType } from '@/hoc/ThemeContextProvider';
+
 interface IThemeSelectorProps {
   visible: boolean;
   newLabel?: string;
@@ -13,7 +16,7 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ visible, newLabel, onChange })
   const { theme, setTheme } = useThemeContext();
   if (!visible) return null;
 
-  const onChangeTheme = (isDark: boolean, theme: string) => {
+  const onChangeTheme = (isDark: boolean, theme: ThemeType) => {
     setTheme(theme, isDark);
     onChange?.(isDark, theme);
   };
@@ -25,10 +28,10 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ visible, newLabel, onChange })
           {newLabel} <RiPaintBrushLine className="ml-1 inline-block" />
         </span>*/}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <ThemeOption isDark={true} theme="main-dark" onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark={true} theme="orange-dark" onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark={false} theme="main-light" onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark={false} theme="orange-light" onClick={onChangeTheme} currentTheme={theme} />
+          <ThemeOption isDark={true} theme={ETheme.MAIN_DARK} onClick={onChangeTheme} currentTheme={theme} />
+          <ThemeOption isDark={true} theme={ETheme.ORANGE_DARK} onClick={onChangeTheme} currentTheme={theme} />
+          <ThemeOption isDark={false} theme={ETheme.MAIN_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
+          <ThemeOption isDark={false} theme={ETheme.MAIN_DARK} onClick={onChangeTheme} currentTheme={theme} />
         </div>
       </div>
     </div>
@@ -36,10 +39,10 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ visible, newLabel, onChange })
 };
 
 interface IThemeOptionProps {
-  theme: string;
+  theme: ThemeType;
   isDark: boolean;
   currentTheme?: string;
-  onClick?: (isDark: boolean, theme: string) => void;
+  onClick?: (isDark: boolean, theme: ThemeType) => void;
 }
 
 const ThemeOption: FC<IThemeOptionProps> = ({ isDark, theme, onClick, currentTheme }) => {
