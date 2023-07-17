@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.4.2 (2023-07-16)
+
+- Improved Curriculum Vitae section with new design and new data structure
+
 ## 2.4.1 (2023-07-12)
 
 ### Features

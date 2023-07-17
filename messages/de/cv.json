@@ -1,104 +1,141 @@
 {
   "curriculum": {
     "title": "Jesús Hernández - Curriculum Vitae",
-    "degree": "Software-engineering.",
-    "aboutMe": "Ontwikkelaar van mobiele en webapplicaties met kennis van technische ondersteuning en computerbeveiliging.",
+    "degree": "Software Engineer",
+    "aboutMe": "Mobiele en webapplicatieontwikkelaar met kennis van technische ondersteuning en computerveiligheid.",
     "header": {
-      "experience": "Ervaring",
+      "aboutMe": "Over Mij",
+      "experience": "Werkervaring",
       "education": "Opleiding",
       "languages": "Talen",
       "interests": "Interesses",
       "contact": "Contact",
       "references": "Referenties",
       "technicalSkills": "Technische Vaardigheden",
-      "personalSkills": "Persoonlijke Vaardigheden",
+      "personalSkills": "Soft Skills",
       "projects": "Projecten",
-      "certifications": "Certificaten",
-      "awards": "Onderscheidingen",
+      "certifications": "Certificeringen",
+      "awards": "Prijzen",
       "designExpertise": "Design Expertise",
       "additionalInformation": "Aanvullende Informatie",
-      "personalReferences": "Persoonlijke Referenties"
+      "personalReferences": "Persoonlijke Referenties",
+      "skills": {
+        "frontEnd": "Frontend",
+        "backEnd": "Backend",
+        "database": "Databases",
+        "tools": "Tools"
+      }
     },
     "education": {
       "computerEngineering": {
         "degree": "Computer Engineering",
-        "institution": "Nationale Universiteit van Engineering",
+        "institution": "Nationaal Ingenieursinstituut",
         "location": "Managua",
         "dates": "2017 - Heden"
       },
-      "conversationalEnglish": {
-        "degree": "Gespreksvaardigheid in het Engels",
-        "institution": "Masinfa",
-        "location": "Masaya",
-        "dates": "2013 - 2016"
-      },
       "webDeveloper": {
-        "degree": "Webontwikkelaar",
+        "degree": "Web Developer",
         "institution": "Platzi",
         "location": "Online",
         "dates": "2022 - Heden"
       },
       "digitalSecurity": {
-        "degree": "Junior in Digitale Beveiliging en Gegevensbescherming",
+        "degree": "Junior in Digitale Veiligheid en Gegevensbescherming",
         "institution": "Numu & BID",
         "location": "Managua",
         "dates": "2022"
       }
     },
+    "contacts": {
+      "contact1": {
+        "name": "+505 8679 3204",
+        "value": "tel:505,86793204"
+      },
+      "contact2": {
+        "name": "jess232016@gmail.com",
+        "value": "mailto:jess232016@gmail.com"
+      },
+      "contact3": {
+        "name": "https://www.jesushg.com",
+        "value": "https://www.jesushg.com"
+      },
+      "contact4": {
+        "name": "linkedIn/jesus-hernandez23",
+        "value": "https://www.linkedin.com/in/jesus-hernandez23"
+      }
+    },
     "experiences": {
       "experience1": {
-        "position": "Freelance Webontwikkelaar",
+        "position": "Freelance | Full Stack Developer met React, Next.js, en Node.js",
         "company": "Musa",
-        "dates": "Juli 2022 - Mei 2023",
-        "responsibilities": "<item>Ontwikkelde web- en mobiele applicatie-interfaces in samenwerking met belanghebbenden en backend-ontwikkelaars. Integreerde gegevens en processen van externe providers.</item><item>Herstructureerde bestaande projecten om ervoor te zorgen dat de code schoon, onderhoudbaar en efficiënt is.</item><item>Demonstreerde de resultaten van het uitgevoerde werk aan de producteigenaar en belanghebbenden.</item>",
-        "skills": "Next.js, User Interface Design, UIX, React.js, Apollo GraphQL, Redux.js, Tailwind CSS, JavaScript, Webontwikkeling"
+        "dates": "Juni 2022 - Heden",
+        "responsibilities": "<item>Ontwikkelen van kwalitatief hoogwaardige webinterfaces en mobiele applicaties</item><item>Met succes integreren van gegevens en processen van externe leveranciers, waarbij naadloze integratie en efficiënt informatiebeheer wordt gegarandeerd</item><item>Aantonen van voortgang en prestaties op het gebied van functionaliteit, gebruiksvriendelijkheid en prestaties aan belanghebbenden</item>",
+        "skills": "Next.js, User Interface Design, UIX, React.js, Apollo GraphQL, Redux.js, Tailwind CSS, JavaScript, Web Development"
       },
       "experience2": {
-        "position": "Freelance Mobiele Ontwikkelaar",
+        "position": "Freelance | Mobiele Ontwikkelaar met React Native",
         "company": "Telo",
-        "dates": "Maart 2022 - Mei 2022",
-        "responsibilities": "<item>Creëerde gebruikersinterfaces op basis van ontwerpspecificaties van het UX-team. Nam deel aan een Scrum-team dat functionaliteit implementeert zoals gespecificeerd in gebruikersverhalen.</item><item>Ondersteunde kwaliteitscontrole- en backend-ontwikkelingsteams met testen, code reviews en probleemoplossing.</item>",
-        "skills": "React Native, Java, Android-ontwikkeling"
+        "dates": "Januari 2022 - Mei 2022",
+        "responsibilities": "<item>Creëren van gebruikersinterfaces op basis van ontwerpspecificaties van het UX-team, waarbij een visueel aantrekkelijke en functionele ervaring wordt gegarandeerd</item><item>Deelnemen aan een Scrum-team, waarbij functionaliteiten worden geïmplementeerd volgens vastgestelde gebruikersverhalen, met respect voor projectdeadlines en -doelstellingen</item><item>Ondersteunen van kwaliteitscontrole- en backend-ontwikkelingsteams door middel van effectieve tests, code-reviews en het oplossen van problemen</item>",
+        "skills": "React Native, Java, Android Development"
       },
       "experience3": {
-        "position": "Stagiair IT-technicus",
+        "position": "Freelance | IT-technicus en webontwikkelaar met ReactJs en Next.js",
         "company": "Vereniging van Hervormde Kerken",
-        "dates": "Mei 2021 - Nov 2021",
-        "responsibilities": "<item>Voerde onderhoud en configuratie uit van apparatuur en software.</item><item>Gaf informaticalessen aan basisschoolleerlingen.</item><item>Verleende ondersteuning aan administratief personeel.</item>",
-        "skills": "Windows, Linux, Ondersteuning van hardware, Hardware-diagnostiek, Technische ondersteuning, IT-ondersteuning voor hardware"
+        "dates": "Oktober 2020 - December 2021",
+        "responsibilities": "<item>Ontwikkelen van een moderne en aantrekkelijke website om de organisatie en haar activiteiten te promoten en bekend te maken</item><item>Onderwijzen van informatica aan basisschoolleerlingen, waarbij fundamentele kennis van technologie en computerhulpmiddelen wordt gegeven</item><item>Bieden van uitgebreide technische ondersteuning, inclusief onderhoud en configuratie van apparatuur en software</item>",
+        "skills": "Windows, Linux, Ondersteuning van hardware, Hardware-diagnostiek, Technische ondersteuning, IT-hardwareondersteuning, Next.js, User Interface Design, UIX, React.js"
+      },
+      "experience4": {
+        "position": "Freelance | Frontend Developer met ReactJs en Next.js",
+        "company": "Barter Capital",
+        "dates": "Mei 2023 - Juni 2023",
+        "responsibilities": "<item>Ontwikkelen van aantrekkelijke en functionele webinterfaces die een intuïtieve gebruikerservaring bieden</item><item>Bijdragen aan de ontwikkeling van het bestaande dashboard door nieuwe functies toe te voegen die de bruikbaarheid en efficiëntie van het platform verbeteren</item><item>Zorgen voor de juiste configuratie en werking van webapplicaties in productieomgevingen, waarbij een naadloze ervaring voor eindgebruikers wordt gegarandeerd</item>",
+        "skills": "Next.js, User Interface Design, UIX, React.js, REST API, Redux.js, Tailwind CSS, JavaScript, Web Development"
       }
     },
     "skills": {
-      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>React</item><item>React Native</item><item>GraphQL</item><item>API REST</item>",
+      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>React</item><item>React Native</item><item>GraphQL</item><item>REST API</item>",
       "backEnd": "<item>C#</item><item>.NET Core</item><item>Node.js</item><item>PHP</item>",
       "database": "<item>SQL Server</item><item>MySQL</item><item>SQLite</item><item>Firebase</item>",
       "tools": "<item>Git</item><item>Azure</item><item>VS Code</item>"
     },
-    "softSkills": "<item>Analytische vaardigheden</item><item>Observatie- en concentratievermogen</item><item>Aanpassingsvermogen</item><item>Zelflerend</item><item>Vermogen om zelfstandig en in een team te werken</item><item>Proactief</item>",
-    "additionalInformation": "<item>Direct beschikbaar</item>",
+    "languages": {
+      "spanish": {
+        "name": "Spaans",
+        "level": "Tweetalig of Moedertaal"
+      },
+      "english": {
+        "name": "Engels",
+        "level": "Basiskennis"
+      }
+    },
+    "softSkills": "<item>Analytische Vaardigheden</item><item>Vermogen om Individueel en in een Team te Werken</item><item>Aanpassingsvermogen</item>",
+    "additionalInformation": "<item>Onmiddellijke Beschikbaarheid</item>",
     "personalReferences": {
       "reference1": {
         "name": "Danilo Acevedo",
-        "role": "ONTWIKKELAAR",
+        "role": "Ontwikkelaar",
         "phoneNumber": "(+505) 8679-3204"
       },
       "reference2": {
         "name": "Alfredo Antonio Eva Vargas",
-        "role": "ONTWIKKELAAR",
+        "role": "Ontwikkelaar",
         "phoneNumber": "(+505) 8251-9391"
       },
       "reference3": {
         "name": "Juan Carlos López",
-        "role": "ONTWIKKELAAR",
+        "role": "Ontwikkelaar",
         "phoneNumber": "(+505) 8751-8355"
       }
     },
     "telephone": "tel.",
-    "codedWith": "Dit CV is gecodeerd in ReactJS.",
     "actions": {
-      "download": "CV downloaden",
-      "print": "CV afdrukken"
+      "download": "CV Downloaden",
+      "print": "CV Afdrukken",
+      "goBack": "Terug naar de Homepage"
     },
-    "downloadLink": "https://drive.google.com/u/0/uc?id=1Wd7SMD68ONcPNWUzHsGS_l4kN_KI06t9&export=download"
+    "codedWith": "Dit CV is gemaakt met ReactJS.",
+    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download"
   }
 }

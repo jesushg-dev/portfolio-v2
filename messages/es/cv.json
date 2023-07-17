@@ -1,23 +1,30 @@
 {
   "curriculum": {
     "title": "Jesús Hernández - Curriculum Vitae",
-    "degree": "Ingeniería en Computación",
+    "degree": "Ingeniero en Computación",
     "aboutMe": "Desarrollador de aplicaciones móviles y web con conocimientos en soporte técnico y seguridad informática.",
     "header": {
-      "experience": "Experiencia",
+      "aboutMe": "Sobre mí",
+      "experience": "Experiencia profesional",
       "education": "Educación",
       "languages": "Idiomas",
       "interests": "Intereses",
       "contact": "Contacto",
       "references": "Referencias",
-      "technicalSkills": "Habilidades Técnicas",
-      "personalSkills": "Habilidades Personales",
+      "technicalSkills": "Habilidades",
+      "personalSkills": "Habilidades blandas",
       "projects": "Proyectos",
       "certifications": "Certificaciones",
       "awards": "Premios",
       "designExpertise": "Experiencia en Diseño",
       "additionalInformation": "Información Adicional",
-      "personalReferences": "Referencias Personales"
+      "personalReferences": "Referencias Personales",
+      "skills": {
+        "frontEnd": "Frontend",
+        "backEnd": "Backend",
+        "database": "Bases de datos",
+        "tools": "Herramientas"
+      }
     },
     "education": {
       "computerEngineering": {
@@ -25,12 +32,6 @@
         "institution": "Universidad Nacional de Ingeniería",
         "location": "Managua",
         "dates": "2017 - Presente"
-      },
-      "conversationalEnglish": {
-        "degree": "Inglés Conversacional",
-        "institution": "Masinfa",
-        "location": "Masaya",
-        "dates": "2013 - 2016"
       },
       "webDeveloper": {
         "degree": "Desarrollador Web",
@@ -45,27 +46,52 @@
         "dates": "2022"
       }
     },
+    "contacts": {
+      "contact1": {
+        "name": "+505 8679 3204",
+        "value": "tel:505,86793204"
+      },
+      "contact2": {
+        "name": "jess232016@gmail.com",
+        "value": "mailto:jess232016@gmail.com"
+      },
+      "contact3": {
+        "name": "https://www.jesushg.com",
+        "value": "https://www.jesushg.com"
+      },
+      "contact4": {
+        "name": "linkedIn/jesus-hernandez23",
+        "value": "https://www.linkedin.com/in/jesus-hernandez23"
+      }
+    },
     "experiences": {
       "experience1": {
-        "position": "Desarrollador Web Freelance",
+        "position": "Freelance | Desarrollador Full Stack con React, Next.js y Node.js",
         "company": "Musa",
-        "dates": "Julio 2022 - Mayo 2023",
-        "responsibilities": "<item>Desarrollé interfaces de aplicaciones web y móviles en colaboración con los interesados del negocio y los desarrolladores backend. Integré datos y procesos de proveedores externos.</item><item>Refactoricé proyectos existentes para asegurar un código limpio, mantenible y eficiente.</item><item>Presenté los resultados del trabajo realizado al propietario del producto y a los interesados.</item>",
+        "dates": "junio. 2022 – presente",
+        "responsibilities": "<item>Diseñe y desarrolle interfaces web y aplicaciones móviles de alta calidad</item><item>Integre con éxito datos y procesos provenientes de proveedores externos, garantizando una integración sin problemas y una gestión eficiente de la información</item><item>Demostré el progreso y los logros alcanzados en términos de funcionalidad, usabilidad y rendimiento a las partes interesadas</item>",
         "skills": "Next.js, Diseño de Interfaz de Usuario, UIX, React.js, Apollo GraphQL, Redux.js, Tailwind CSS, JavaScript, Desarrollo web"
       },
       "experience2": {
-        "position": "Desarrollador Móvil Freelance",
+        "position": "Freelance | Desarrollador móvil con React Native",
         "company": "Telo",
-        "dates": "Marzo 2022 - Mayo 2022",
-        "responsibilities": "<item>Creé interfaces de usuario basadas en especificaciones de diseño del equipo de experiencia de usuario (UX). Participé en un equipo Scrum implementando funcionalidades según lo especificado en las historias de usuario.</item><item>Apoyé a los equipos de control de calidad y desarrollo backend con pruebas, revisiones de código y solución de problemas.</item>",
+        "dates": "enero. 2022 – mayo. 2022",
+        "responsibilities": "<item>Creé interfaces de usuario basadas en especificaciones de diseño proporcionadas por el equipo de UX, asegurando una experiencia visualmente atractiva y funcional</item><item>Participé en un equipo Scrum, implementando funcionalidades según las historias de usuario establecidas, cumpliendo con los plazos y objetivos del proyecto</item><item>Apoyé a los equipos de control de calidad y desarrollo backend mediante pruebas, revisiones de código y resolución de problemas de manera efectiva</item>",
         "skills": "React Native, Java, Desarrollo de Android"
       },
       "experience3": {
-        "position": "Técnico de TI en Prácticas",
+        "position": "Freelance | Técnico TI y Desarrollador Web con ReactJs y Next.js",
         "company": "Asociación de Iglesias Reformadas",
-        "dates": "Mayo 2021 - Noviembre 2021",
-        "responsibilities": "<item>Realicé mantenimiento y configuración de equipos y software.</item><item>Enseñé informática a estudiantes de primaria.</item><item>Brindé soporte al personal administrativo.</item>",
-        "skills": "Windows, Linux, Soporte de Hardware, Diagnóstico de Hardware, Soporte Técnico, Soporte de Hardware de TI"
+        "dates": "octubre. 2020 - diciembre. 2021",
+        "responsibilities": "<item>Desarrollé una web moderna y atractiva para promover y dar a conocer la organización y sus actividades</item><item>Enseñé informática a estudiantes de primaria, brindándoles conocimientos fundamentales en tecnología y herramientas informáticas</item><item>Brindé soporte técnico integral, incluyendo el mantenimiento y la configuración de equipos y software</item>",
+        "skills": "Windows, Linux, Soporte de Hardware, Diagnóstico de Hardware, Soporte Técnico, Soporte de Hardware de TI, Next.js, Diseño de Interfaz de Usuario, UIX, React.js"
+      },
+      "experience4": {
+        "position": "Freelance | Desarrollador Frontend con ReactJs y Next.js",
+        "company": "Barter Capital",
+        "dates": "mayo. 2023 – junio. 2023",
+        "responsibilities": "<item>Desarrolle interfaces web atractivas y funcionales que ofrecen una experiencia de usuario intuitiva</item><item>Contribuí al desarrollo del dashboard existente mediante la adición de nuevas funcionalidades que mejoraron la usabilidad y eficiencia de la plataforma</item><item>Asegurar una correcta configuración y funcionamiento de las aplicaciones web en entornos de producción, garantizando una experiencia fluida para los usuarios finales</item>",
+        "skills": "Next.js, Diseño de Interfaz de Usuario, UIX, React.js, API REST, Redux.js, Tailwind CSS, JavaScript, Desarrollo web"
       }
     },
     "skills": {
@@ -74,7 +100,17 @@
       "database": "<item>SQL Server</item><item>MySQL</item><item>SQLite</item><item>Firebase</item>",
       "tools": "<item>Git</item><item>Azure</item><item>VS Code</item>"
     },
-    "softSkills": "<item>Habilidades analíticas</item><item>Observación y concentración</item><item>Adaptabilidad</item><item>Aprendizaje autodidacta</item><item>Capacidad para trabajar de forma individual y en equipo</item><item>Proactividad</item>",
+    "languages": {
+      "spanish": {
+        "name": "Español",
+        "level": "Competencia bilingüe o nativa"
+      },
+      "english": {
+        "name": "Inglés",
+        "level": "Competencia Basica"
+      }
+    },
+    "softSkills": "<item>Capacidad de Análisis</item><item>Trabajo de forma individual y en equipo</item><item>Capacidad de adaptación</item>",
     "additionalInformation": "<item>Disponibilidad inmediata</item>",
     "personalReferences": {
       "reference1": {
@@ -96,9 +132,10 @@
     "telephone": "tel.",
     "actions": {
       "download": "Descargar CV",
-      "print": "Imprimir CV"
+      "print": "Imprimir CV",
+      "goBack": "Volver"
     },
-    "codedWith": "Este CV fue codificado en ReactJS.",
-    "downloadLink": "https://drive.google.com/u/0/uc?id=1IPEq0DI7bu7yWotS5BUIUxpGbT-IbOji&export=download"
+    "codedWith": "Este CV fue creado usando ReactJS.",
+    "downloadLink": "https://drive.google.com/uc?id=1-Of7aAgSHsaEPblYTP0DPjCsy-D7Bd1n&export=download"
   }
 }

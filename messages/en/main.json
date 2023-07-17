@@ -19,13 +19,13 @@
       "description": "As a software engineer, I use my technical expertise and skills to build and maintain high-quality software systems. My passion for technology drives me to constantly learn and grow, and I strive to create solutions that have a positive impact on the world."
     },
     "about": {
-      "title": "A Brief Overview",
-      "subtitle": "About Me",
+      "subtitle": "A Brief Overview",
+      "title": "About Me",
       "info": {
         "title": "About Me",
-        "description1": "I have always been passionate about technology and its ability to change the world. After completing my degree in computer science, I began my career as a web developer. I quickly learned the ins and outs of front-end development and was able to create beautiful, functional websites for a variety of clients.",
-        "description2": "As I gained more experience, I began to explore other areas of development, including mobile and backend development. This allowed me to expand my skillset and work on even more exciting projects.",
-        "description3": "Throughout my career, I have always been driven by a desire to learn and grow as a developer. I am constantly seeking out new technologies and techniques to improve my craft. I am excited to see where my passion for technology takes me next."
+        "description1": "I am a technology enthusiast with 3 years of experience as a web developer. I studied computer engineering and also pursued self-learning, crafting beautiful and functional websites for diverse clients.",
+        "description2": "As my experience expanded, I ventured into other areas of development, exploring the realms of mobile and backend development. This diversified skill set allowed me to embark on even more exciting and challenging projects.",
+        "description3": "hroughout my career, my drive to learn and grow as a developer has been my guiding force. Constantly seeking new technologies and techniques to refine my craft is at the core of my philosophy. I am thrilled to uncover where my passion for technology will lead me in the future."
       },
       "timeline": {
         "title": "My timeline",
@@ -34,26 +34,26 @@
           "0": {
             "date": "March, 2017",
             "dateTime": "2017-03-01",
-            "title": "Computer Engineer",
-            "description": "Currently completing a degree while balancing academic and extracurricular responsibilities"
+            "title": "Computer Engineering (Present)",
+            "description": "Completing my degree while managing work and extracurricular responsibilities."
           },
           "1": {
-            "date": "May, 2021",
-            "dateTime": "2021-05-01",
-            "title": "IT technician",
-            "description": "Skilled in maintaining and troubleshooting computer systems and networks"
+            "date": "October, 2020",
+            "dateTime": "2020-10-01",
+            "title": "Web Developer and IT Technician",
+            "description": "Maintenance and troubleshooting of computer systems and networks."
           },
           "2": {
             "date": "February, 2022",
             "dateTime": "2022-02-01",
-            "title": "Mobile Developer at Telo",
-            "description": "Proficient in creating software applications for mobile devices, consistently delivering high-quality products."
+            "title": "Mobile Developer",
+            "description": "Creation of software applications for mobile devices, consistently delivering high-quality products."
           },
           "3": {
             "date": "June, 2022",
             "dateTime": "2022-06-01",
-            "title": "Web Developer at Musa",
-            "description": "Experienced in designing, developing, and maintaining websites and web applications."
+            "title": "Web Developer",
+            "description": "Design, development, and maintenance of websites and web applications."
           }
         }
       },

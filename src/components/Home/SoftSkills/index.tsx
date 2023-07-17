@@ -29,7 +29,19 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
 
   return (
     <>
-      <section className="hero relative flex h-[55vh] w-full flex-col items-center  overflow-hidden bg-black before:bg-hero-skills md:h-[65vh]">
+      <section className="hero relative flex h-[55vh] w-full flex-col items-center  overflow-hidden md:h-[65vh]">
+        <video
+          loop={true}
+          muted={true}
+          autoPlay={true}
+          poster="https://res.cloudinary.com/js-media/image/upload/v1642524508/portfolio/hero/1947484_ehwya0.webp"
+          className="absolute inset-0 z-[-1] h-screen w-[100vw] object-cover">
+          <source
+            src="https://drive.google.com/u/0/uc?id=17vds-qN4amZfiZaguwz-AqBTFZWdIOLf&export=download"
+            type="video/webm"
+          />
+        </video>
+        <div className="absolute top-0 left-0 h-screen w-full bg-black bg-opacity-50" />
         <h2 className="z-10  p-10 text-4xl font-bold text-slate-200">{t('title')}</h2>
         <div className=" mx-auto flex h-full w-full items-center justify-center gap-6 px-4 py-4 pt-0 text-secondaryText-50 lg:container lg:px-20 lg:py-20 lg:pt-5">
           <Swiper

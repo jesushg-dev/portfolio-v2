@@ -1,11 +1,13 @@
 import React, { FC } from 'react';
+
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 import CodeText from '../../Common/CodeText';
 import TimeLine from '../../Common/TimeLine';
 import Terminal from '../../Common/Terminal';
 
-import { AiOutlineLoading } from 'react-icons/ai';
+import { VscLoading } from 'react-icons/vsc';
 
 interface IAboutProps {}
 
@@ -14,6 +16,17 @@ const About: FC<IAboutProps> = ({}) => {
   return (
     <div className="overflow-hidden">
       <section id="about" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
+        <div className="container mx-auto">
+          <div className="-mx-4 flex flex-wrap">
+            <div className="w-full px-4">
+              <div className="mx-auto mb-4 text-center">
+                <h2 className="mb-4 text-3xl font-bold text-primaryText-900 sm:text-4xl md:text-[40px]">
+                  {t('title')}
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
         <article className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:py-8">
           <div className="space-y-4">
             <p className="text-primaryText text-center text-base">{t('info.description1')}</p>
@@ -63,8 +76,10 @@ const About: FC<IAboutProps> = ({}) => {
                   />
                 ))}
                 <li className="-ml-1 flex items-center gap-4 text-sm text-primaryText-800">
-                  <AiOutlineLoading className="text-md animate-spin border border-primary-900 text-primary-200" />
-                  {t('timeline.subtitle')}
+                  <Link href="/cv" className="flex items-center gap-3 hover:text-primary-900">
+                    <VscLoading className="text-md animate-spin border border-primary-900 text-primary-200" />
+                    {t('timeline.subtitle')}
+                  </Link>
                 </li>
               </ol>
             </div>
