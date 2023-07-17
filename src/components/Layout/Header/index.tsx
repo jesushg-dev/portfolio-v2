@@ -67,19 +67,21 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
               </span>
             </Link>
             <ToolbarHeader {...{ isMenuOpen, isThemeMenuOpen, toogleMainOpen, toogleThemeOpen }} />
-            <div
-              id="mobile-menu-language-select"
-              className={`${
-                isMenuOpen ? 'my-2 rounded bg-background-50 pb-4 ' : 'hidden'
-              } w-full items-center justify-between md:order-1 md:my-0 md:flex md:w-auto md:rounded-none md:bg-transparent md:pb-0`}>
-              <ul className="mt-4 flex flex-col rounded-lg px-4 md:mt-0 md:flex-row md:space-x-4 md:border-0 md:text-sm md:font-medium ">
-                <NavButton title={t('menu.home')} onClick={handleScroll.bind(null, 'home')} />
-                <NavButton title={t('menu.about')} onClick={handleScroll.bind(null, 'about')} />
-                <NavButton title={t('menu.skills')} onClick={handleScroll.bind(null, 'skills')} />
-                <NavButton title={t('menu.portfolio')} onClick={handleScroll.bind(null, 'portfolio')} />
-                <NavButton title={t('menu.contact')} onClick={handleScroll.bind(null, 'contact')} />
-              </ul>
-            </div>
+            {!alwaysVisible && (
+              <div
+                id="mobile-menu-language-select"
+                className={`${
+                  isMenuOpen ? 'my-2 rounded bg-background-50 pb-4 ' : 'hidden'
+                } w-full items-center justify-between md:order-1 md:my-0 md:flex md:w-auto md:rounded-none md:bg-transparent md:pb-0`}>
+                <ul className="mt-4 flex flex-col rounded-lg px-4 md:mt-0 md:flex-row md:space-x-4 md:border-0 md:text-sm md:font-medium ">
+                  <NavButton title={t('menu.home')} onClick={handleScroll.bind(null, 'home')} />
+                  <NavButton title={t('menu.about')} onClick={handleScroll.bind(null, 'about')} />
+                  <NavButton title={t('menu.skills')} onClick={handleScroll.bind(null, 'skills')} />
+                  <NavButton title={t('menu.portfolio')} onClick={handleScroll.bind(null, 'portfolio')} />
+                  <NavButton title={t('menu.contact')} onClick={handleScroll.bind(null, 'contact')} />
+                </ul>
+              </div>
+            )}
           </div>
         </nav>
       </header>

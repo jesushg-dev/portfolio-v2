@@ -35,6 +35,7 @@ module.exports = {
         github: '#333333',
         linkedin: '#0a66c2',
         whatsapp: '#128c7e',
+        cv: '#164E98',
       },
       gridTemplateColumns: {
         skills: 'repeat(auto-fit, minmax(4.75rem, 1fr))',

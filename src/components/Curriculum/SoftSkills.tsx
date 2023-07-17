@@ -2,27 +2,27 @@ import React, { FC } from 'react';
 
 import { MdInsights } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
+import { useCvContext } from '@/hoc/CvContextProvider';
 
 interface IExperienceProps {}
 
 const Experience: FC<IExperienceProps> = ({}) => {
   const t = useTranslations('curriculum');
+  const { showSectionIcons } = useCvContext();
+
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-xs font-semibold">
-        <MdInsights className="text-black" />
+      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg uppercase font-semibold text-cv tracking-tight">
+        {showSectionIcons && <MdInsights className="text-xs" />}
         {t('header.personalSkills')}
       </h5>
 
-      <div className="grid grid-cols-2 gap-x-2">
-        {t.rich('softSkills', {
-          item: (chunks) => (
-            <div className="flex text-xs">
-              <p className="mr-1">-</p>
-              <p className="m-0">{chunks}</p>
-            </div>
-          ),
-        })}
+      <div className="mb-4">
+        <ul className="pl-8 text-xs list-disc">
+          {t.rich('softSkills', {
+            item: (chunks) => <li className="">{chunks}.</li>,
+          })}
+        </ul>
       </div>
     </>
   );

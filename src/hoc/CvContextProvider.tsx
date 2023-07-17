@@ -1,4 +1,6 @@
-import React, { FC, ReactNode, createContext, useState, useContext } from 'react';
+import React, { FC, ReactNode, createContext, useState, useContext, useEffect } from 'react';
+
+import { useLocale } from 'next-intl';
 
 // Define the type for the context value
 interface ICvContextValue {
@@ -22,9 +24,11 @@ interface ICvContextProviderProps {
 // Create a provider component
 export const CvContextProvider: FC<ICvContextProviderProps> = ({ children }) => {
   // State variables
+  const locale = useLocale();
+
+  const [showHeadshot, setShowHeadshot] = useState(false);
   const [showSectionIcons, setShowSectionIcons] = useState(false);
   const [addSplashOfColor, setAddSplashOfColor] = useState(false);
-  const [showHeadshot, setShowHeadshot] = useState(false);
   const [showVisualizations, setShowVisualizations] = useState(false);
 
   // Toggle functions
@@ -43,6 +47,11 @@ export const CvContextProvider: FC<ICvContextProviderProps> = ({ children }) => 
   const toggleVisualizations = () => {
     setShowVisualizations(!showVisualizations);
   };
+
+  useEffect(() => {
+    const showHeadshot = locale === 'es';
+    setShowHeadshot(showHeadshot);
+  }, [locale]);
 
   // Context provider value
   const contextValue: ICvContextValue = {

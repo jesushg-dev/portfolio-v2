@@ -19,41 +19,41 @@
       "description": "Als software-engineer gebruik ik mijn technische expertise en vaardigheden om hoogwaardige softwaresystemen te bouwen en te onderhouden. Mijn passie voor technologie stimuleert me om voortdurend te leren en te groeien, en ik streef ernaar oplossingen te creëren die een positieve impact hebben op de wereld."
     },
     "about": {
-      "title": "Een beknopt overzicht",
-      "subtitle": "Over mij",
+      "title": "Over mij",
+      "subtitle": "Een beknopt overzicht",
       "info": {
         "title": "Over mij",
-        "description1": "Ik ben altijd gepassioneerd geweest over technologie en de mogelijkheid ervan om de wereld te veranderen. Na het behalen van mijn diploma in computerwetenschappen ben ik mijn carrière begonnen als webontwikkelaar. Ik leerde al snel de ins en outs van front-end ontwikkeling en was in staat om prachtige, functionele websites te maken voor verschillende klanten.",
-        "description2": "Naarmate ik meer ervaring opdeed, begon ik andere gebieden van ontwikkeling te verkennen, waaronder mobiele en backend-ontwikkeling. Dit stelde me in staat om mijn vaardigheden uit te breiden en aan nog spannendere projecten te werken.",
-        "description3": "Gedurende mijn carrière ben ik altijd gedreven door de wens om te leren en te groeien als ontwikkelaar. Ik zoek voortdurend nieuwe technologieën en technieken om mijn vakmanschap te verbeteren. Ik ben benieuwd waar mijn passie voor technologie me hierna naartoe brengt."
+        "description1": "Ik ben gepassioneerd door technologie met 3 jaar ervaring als webontwikkelaar. Ik heb een opleiding gevolgd in computer engineering en mezelf autodidactisch bijgeschoold, waardoor ik prachtige en functionele websites heb gecreëerd voor diverse klanten.",
+        "description2": "Naarmate mijn ervaring groeide, heb ik mijn horizon verbreed en ben ik andere gebieden van ontwikkeling gaan verkennen, zoals mobiele en backend ontwikkeling. Deze diversificatie van vaardigheden stelde me in staat om me te storten op nog spannendere en uitdagendere projecten.",
+        "description3": "Gedurende mijn carrière is mijn drijfveer altijd geweest om te blijven leren en groeien als ontwikkelaar. De voortdurende zoektocht naar nieuwe technologieën en technieken om mijn ambacht te verfijnen, vormt de kern van mijn filosofie. Ik ben opgewonden om te ontdekken waar mijn passie voor technologie me in de toekomst naartoe zal leiden."
       },
       "timeline": {
         "title": "Mijn tijdslijn",
         "subtitle": "Continu leren...",
         "steps": {
           "0": {
-            "date": "Maart, 2017",
+            "date": "maart 2017",
             "dateTime": "2017-03-01",
-            "title": "Computer Engineer",
-            "description": "Momenteel een diploma behalen terwijl ik academische en buitenschoolse verantwoordelijkheden balanceer."
+            "title": "Informatica-ingenieur (Huidig)",
+            "description": "Afronding van mijn studie terwijl ik werk en buitenschoolse verantwoordelijkheden beheer."
           },
           "1": {
-            "date": "Mei, 2021",
-            "dateTime": "2021-05-01",
-            "title": "IT-technicus",
-            "description": "Bedreven in het onderhouden en oplossen van problemen met computersystemen en netwerken."
+            "date": "oktober 2020",
+            "dateTime": "2020-10-01",
+            "title": "Webontwikkelaar en IT-technicus",
+            "description": "Onderhoud en oplossen van problemen in computersystemen en netwerken."
           },
           "2": {
-            "date": "Februari, 2022",
+            "date": "februari 2022",
             "dateTime": "2022-02-01",
-            "title": "Mobiele ontwikkelaar bij Telo",
-            "description": "Bedreven in het creëren van softwaretoepassingen voor mobiele apparaten, waarbij voortdurend hoogwaardige producten worden geleverd."
+            "title": "Mobiele ontwikkelaar",
+            "description": "Creatie van softwaretoepassingen voor mobiele apparaten, consistent leveren van hoogwaardige producten."
           },
           "3": {
-            "date": "Juni, 2022",
+            "date": "juni 2022",
             "dateTime": "2022-06-01",
-            "title": "Webontwikkelaar bij Musa",
-            "description": "Ervaring in het ontwerpen, ontwikkelen en onderhouden van websites en webapplicaties."
+            "title": "Webontwikkelaar",
+            "description": "Ontwerp, ontwikkeling en onderhoud van websites en webtoepassingen."
           }
         }
       },

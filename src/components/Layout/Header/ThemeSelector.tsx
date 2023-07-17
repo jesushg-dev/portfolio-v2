@@ -31,7 +31,7 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ visible, newLabel, onChange })
           <ThemeOption isDark={true} theme={ETheme.MAIN_DARK} onClick={onChangeTheme} currentTheme={theme} />
           <ThemeOption isDark={true} theme={ETheme.ORANGE_DARK} onClick={onChangeTheme} currentTheme={theme} />
           <ThemeOption isDark={false} theme={ETheme.MAIN_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark={false} theme={ETheme.MAIN_DARK} onClick={onChangeTheme} currentTheme={theme} />
+          <ThemeOption isDark={false} theme={ETheme.ORANGE_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
         </div>
       </div>
     </div>

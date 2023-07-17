@@ -19,13 +19,13 @@
       "description": "Como ingeniero de software, utilizo mi experiencia técnica y mis habilidades para construir y mantener sistemas de software de alta calidad. Mi pasión por la tecnología me impulsa a aprender y a crear soluciones que tengan un impacto positivo en el mundo."
     },
     "about": {
-      "title": "Breve resumen",
-      "subtitle": "Acerca de mí",
+      "title": "Acerca de mí",
+      "subtitle": "Breve resumen",
       "info": {
         "title": "Sobre mí",
-        "description1": "Hola, Soy Jesús Hernández, actualmente soy egresado de la carrera de ingeniería en computación en la Universidad Nacional de Ingeniería. Mi pasión es el desarrollo de software, me gusta aprender nuevas tecnologías y aplicarlas en proyectos personales y profesionales.",
-        "description2": "Soy una persona responsable, con iniciativa y compromiso además me gusta trabajar en equipo, siempre estoy dispuesto a aprender nuevas cosas y superar nuevos retos.",
-        "description3": "A lo largo de mi carrera, siempre he sido impulsado por el deseo de aprender y crecer como desarrollador. Siempre estoy buscando nuevas tecnologías y técnicas para mejorar mi oficio. Estoy emocionado de ver adónde me llevará mi pasión por la tecnología en el futuro."
+        "description1": "Soy un apasionado de la tecnología con 3 años de experiencia como desarrollador web. Estudié ingeniería en computación y también me formé de manera autodidacta, creando sitios web hermosos y funcionales para diversos clientes.",
+        "description2": "A medida que mi experiencia crecía, también amplié mi horizonte en otras áreas del desarrollo, explorando el mundo del desarrollo móvil y de backend. Esta diversificación de habilidades me permitió embarcarme en proyectos aún más emocionantes y desafiantes.",
+        "description3": "A lo largo de mi carrera, el impulso de aprender y crecer como desarrollador siempre ha sido mi motor. La búsqueda constante de nuevas tecnologías y técnicas para perfeccionar mi oficio es mi filosofía. Estoy emocionado por descubrir a dónde me llevará mi pasión por la tecnología en el futuro."
       },
       "timeline": {
         "title": "Línea de tiempo",
@@ -35,26 +35,26 @@
           "0": {
             "date": "Marzo, 2017",
             "dateTime": "2017-03-01",
-            "title": "Ingeniería en computación",
-            "description": "Actualmente finalizando mi carrera a la vez que equilibro mis responsabilidades laborales y extracurriculares"
+            "title": "Ingeniería en computación (Actualidad)",
+            "description": "Completando mi carrera mientras gestiono responsabilidades laborales y extracurriculares."
           },
           "1": {
-            "date": "Mayo, 2021",
-            "dateTime": "2021-05-01",
-            "title": "Técnico de TI",
-            "description": "Experiencia en el mantenimiento y resolución de problemas en sistemas y redes informáticas."
+            "date": "Octubre, 2020",
+            "dateTime": "2020-10-01",
+            "title": "Desarrollador Web y Técnico TI",
+            "description": "Mantenimiento y resolución de problemas en sistemas y redes informáticas."
           },
           "2": {
             "date": "Febrero, 2022",
             "dateTime": "2022-02-01",
             "title": "Desarrollador Móvil",
-            "description": "Experiencia en la creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente."
+            "description": "Creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente."
           },
           "3": {
             "date": "Junio, 2022",
             "dateTime": "2022-06-01",
             "title": "Desarrollador Web",
-            "description": "Experiencia en el diseño, desarrollo y mantenimiento de sitios web y aplicaciones web."
+            "description": "Diseño, desarrollo y mantenimiento de sitios web y aplicaciones web."
           }
         }
       },

@@ -1,36 +1,37 @@
 {
   "curriculum": {
     "title": "Jesús Hernández - Curriculum Vitae",
-    "degree": "Software Engineering",
-    "aboutMe": "Developer of mobile and web applications with knowledge in technical support and computer security.",
+    "degree": "Software Engineer",
+    "aboutMe": "Mobile and web application developer with knowledge in technical support and computer security.",
     "header": {
-      "experience": "Experience",
+      "aboutMe": "About Me",
+      "experience": "Professional Experience",
       "education": "Education",
       "languages": "Languages",
       "interests": "Interests",
-      "contact": "Contact",
+      "contact": "Contact Me",
       "references": "References",
       "technicalSkills": "Technical Skills",
-      "personalSkills": "Personal Skills",
+      "personalSkills": "Soft Skills",
       "projects": "Projects",
       "certifications": "Certifications",
       "awards": "Awards",
       "designExpertise": "Design Expertise",
       "additionalInformation": "Additional Information",
-      "personalReferences": "Personal References"
+      "personalReferences": "Personal References",
+      "skills": {
+        "frontEnd": "Frontend",
+        "backEnd": "Backend",
+        "database": "Databases",
+        "tools": "Tools"
+      }
     },
     "education": {
       "computerEngineering": {
         "degree": "Computer Engineering",
-        "institution": "National University of Engineering",
+        "institution": "National Engineering University",
         "location": "Managua",
         "dates": "2017 - Present"
-      },
-      "conversationalEnglish": {
-        "degree": "Conversational English",
-        "institution": "Masinfa",
-        "location": "Masaya",
-        "dates": "2013 - 2016"
       },
       "webDeveloper": {
         "degree": "Web Developer",
@@ -45,60 +46,96 @@
         "dates": "2022"
       }
     },
+    "contacts": {
+      "contact1": {
+        "name": "+505 8679 3204",
+        "value": "tel:505,86793204"
+      },
+      "contact2": {
+        "name": "jess232016@gmail.com",
+        "value": "mailto:jess232016@gmail.com"
+      },
+      "contact3": {
+        "name": "https://www.jesushg.com",
+        "value": "https://www.jesushg.com"
+      },
+      "contact4": {
+        "name": "linkedIn/jesus-hernandez23",
+        "value": "https://www.linkedin.com/in/jesus-hernandez23"
+      }
+    },
     "experiences": {
       "experience1": {
-        "position": "Freelance Web Developer",
+        "position": "Freelance | Full Stack Developer with React, Next.js, and Node.js",
         "company": "Musa",
-        "dates": "July 2022 - May 2023",
-        "responsibilities": "<item>Developed web and mobile application interfaces, collaborating with business stakeholders and backend developers. Integrated data and processes from external providers.</item><item>Refactored existing projects to ensure clean, maintainable, and efficient code.</item><item>Demonstrated the results of the work performed to the product owner and stakeholders.</item>",
-        "skills": "Next.js, User Interface Design, UIX, React.js, Apollo GraphQL, Redux.js, Tailwind CSS, JavaScript, Desarrollo web"
+        "dates": "June 2022 - Present",
+        "responsibilities": "<item>Designed and developed high-quality web interfaces and mobile applications</item><item>Successfully integrated data and processes from external providers, ensuring seamless integration and efficient information management</item><item>Demonstrated progress and achievements in terms of functionality, usability, and performance to stakeholders</item>",
+        "skills": "Next.js, User Interface Design, UIX, React.js, Apollo GraphQL, Redux.js, Tailwind CSS, JavaScript, Web Development"
       },
       "experience2": {
-        "position": "Freelance Mobile Developer",
+        "position": "Freelance | Mobile Developer with React Native",
         "company": "Telo",
-        "dates": "March 2022 - May 2022",
-        "responsibilities": "<item>Created user interfaces based on design specifications from the UX team. Participated in a Scrum team implementing functionality as specified in user stories.</item><item>Supported quality control and backend development teams with testing, code reviews, and troubleshooting.</item>",
-        "skills": "React Native, Java, Desarrollo de Android"
+        "dates": "January 2022 - May 2022",
+        "responsibilities": "<item>Created user interfaces based on design specifications provided by the UX team, ensuring a visually appealing and functional experience</item><item>Participated in a Scrum team, implementing functionalities according to established user stories, meeting project deadlines and objectives</item><item>Supported quality control and backend development teams through effective testing, code reviews, and issue resolution</item>",
+        "skills": "React Native, Java, Android Development"
       },
       "experience3": {
-        "position": "Intern IT Technician",
-        "company": "Reformed Churches Association",
-        "dates": "May 2021 - Nov 2021",
-        "responsibilities": "<item>Performed maintenance and configuration of equipment and software.</item> <item>Taught computer science to elementary school students.</item> <item>Provided support to administrative staff.</item>",
-        "skills": "Windows, Linux, Hardware Support, Hardware Diagnostics, Technical Support, IT Hardware Support"
+        "position": "Freelance | IT Technician and Web Developer with ReactJs and Next.js",
+        "company": "Association of Reformed Churches",
+        "dates": "October 2020 - December 2021",
+        "responsibilities": "<item>Developed a modern and attractive website to promote and publicize the organization and its activities</item><item>Taught computer science to elementary school students, providing them with fundamental knowledge of technology and computer tools</item><item>Provided comprehensive technical support, including maintenance and configuration of equipment and software</item>",
+        "skills": "Windows, Linux, Hardware Support, Hardware Diagnostics, Technical Support, IT Hardware Support, Next.js, User Interface Design, UIX, React.js"
+      },
+      "experience4": {
+        "position": "Freelance | Frontend Developer with ReactJs and Next.js",
+        "company": "Barter Capital",
+        "dates": "May 2023 - June 2023",
+        "responsibilities": "<item>Developed attractive and functional web interfaces that offer an intuitive user experience</item><item>Contributed to the development of the existing dashboard by adding new features that improved the usability and efficiency of the platform</item><item>Ensured proper configuration and functioning of web applications in production environments, ensuring a seamless experience for end users</item>",
+        "skills": "Next.js, User Interface Design, UIX, React.js, REST API, Redux.js, Tailwind CSS, JavaScript, Web Development"
       }
     },
     "skills": {
-      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>React</item><item>React Native</item><item>GraphQL</item><item>API REST</item>",
+      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>React</item><item>React Native</item><item>GraphQL</item><item>REST API</item>",
       "backEnd": "<item>C#</item><item>.NET Core</item><item>Node.js</item><item>PHP</item>",
       "database": "<item>SQL Server</item><item>MySQL</item><item>SQLite</item><item>Firebase</item>",
       "tools": "<item>Git</item><item>Azure</item><item>VS Code</item>"
     },
-    "softSkills": "<item>Analytical skills</item><item>Ability to work individually and in a team</item><item>Observation and concentration</item><item>Adaptability</item><item>Self-learning</item><item>Proactive</item>",
-    "additionalInformation": "<item>Immediate availability</item>",
+    "languages": {
+      "spanish": {
+        "name": "Spanish",
+        "level": "Bilingual or Native Proficiency"
+      },
+      "english": {
+        "name": "English",
+        "level": "Basic Proficiency"
+      }
+    },
+    "softSkills": "<item>Analytical Skills</item><item>Ability to Work Individually and in a Team</item><item>Adaptability</item>",
+    "additionalInformation": "<item>Immediate Availability</item>",
     "personalReferences": {
       "reference1": {
         "name": "Danilo Acevedo",
-        "role": "DEVELOPER",
+        "role": "Developer",
         "phoneNumber": "(+505) 8679-3204"
       },
       "reference2": {
         "name": "Alfredo Antonio Eva Vargas",
-        "role": "DEVELOPER",
+        "role": "Developer",
         "phoneNumber": "(+505) 8251-9391"
       },
       "reference3": {
         "name": "Juan Carlos López",
-        "role": "DEVELOPER",
+        "role": "Developer",
         "phoneNumber": "(+505) 8751-8355"
       }
     },
     "telephone": "tel.",
     "actions": {
       "download": "Download CV",
-      "print": "Print CV"
+      "print": "Print CV",
+      "goBack": "Go Back"
     },
-    "codedWith": "This CV was coded in ReactJS.",
-    "downloadLink": "https://drive.google.com/u/0/uc?id=1Wd7SMD68ONcPNWUzHsGS_l4kN_KI06t9&export=download"
+    "codedWith": "This CV was created using ReactJS.",
+    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download"
   }
 }

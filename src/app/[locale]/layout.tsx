@@ -89,7 +89,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       type: 'website',
       images: [
         {
-          url: 'https://res.cloudinary.com/js-media/image/upload/v1640647057/portfolio/portf-1_bkhwxr.png',
+          url: 'https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp',
           width: 800,
           height: 600,
           alt: 'Og Image Alt',
@@ -102,7 +102,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       description: t('main.meta.description'),
       images: [
         {
-          url: 'https://res.cloudinary.com/js-media/image/upload/v1640647057/portfolio/portf-1_bkhwxr.png',
+          url: 'https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp',
           width: 800,
           height: 600,
           alt: 'Og Image Alt',
@@ -123,7 +123,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
         <meta property="og:url" content="https://www.jesushg.com" />
         <meta
           property="og:image"
-          content="https://res.cloudinary.com/js-media/image/upload/v1640647057/portfolio/portf-1_bkhwxr.png"
+          content="https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp"
         />
         <meta
           property="og:description"
@@ -135,7 +135,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
         <meta property="twitter:title" content="Portfolio - Jesús Hernández " />
         <meta
           name="twitter:image"
-          content="https://res.cloudinary.com/js-media/image/upload/v1640647057/portfolio/portf-1_bkhwxr.png"
+          content="https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp"
         />
         <meta
           property="twitter:description"
