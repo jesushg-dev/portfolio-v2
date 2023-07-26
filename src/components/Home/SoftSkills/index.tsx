@@ -34,7 +34,7 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
           loop={true}
           muted={true}
           autoPlay={true}
-          poster="/img/hero.webp"
+          poster="https://res.cloudinary.com/js-media/image/upload/v1642524508/portfolio/hero/1947484_ehwya0.webp"
           className="absolute inset-0 z-[-1] h-screen w-[100vw] object-cover">
           <source
             src="https://drive.google.com/u/0/uc?id=17vds-qN4amZfiZaguwz-AqBTFZWdIOLf&export=download"
