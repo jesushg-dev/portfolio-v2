@@ -7,7 +7,7 @@
     },
     "heroMain": {
       "titles": {
-        "degree": "Computer Engineer.",
+        "degree": "Software Engineer.",
         "web": "Webontwikkelaar.",
         "mobile": "Mobiele ontwikkelaar.",
         "fullstack": "Full Stack-ontwikkelaar.",
@@ -16,7 +16,7 @@
       },
       "greeting": "Hallo, ik ben",
       "scrollDown": "Scroll naar beneden",
-      "description": "Als software-engineer gebruik ik mijn technische expertise en vaardigheden om hoogwaardige softwaresystemen te bouwen en te onderhouden. Mijn passie voor technologie stimuleert me om voortdurend te leren en te groeien, en ik streef ernaar oplossingen te creëren die een positieve impact hebben op de wereld."
+      "description": "Als engineer gebruik ik mijn technische expertise en vaardigheden om hoogwaardige softwaresystemen te bouwen en te onderhouden. Mijn passie voor technologie stimuleert me om voortdurend te leren en te groeien, en ik streef ernaar oplossingen te creëren die een positieve impact hebben op de wereld."
     },
     "about": {
       "title": "Over mij",

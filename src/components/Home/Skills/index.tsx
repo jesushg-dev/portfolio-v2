@@ -5,6 +5,7 @@ import React, { FC, useRef, useState, lazy, Suspense } from 'react';
 import BgParticles from './BgParticles';
 import SkillGrouped from './SkillGrouped';
 
+import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
 import { AnimatePresence, useInView } from 'framer-motion';
@@ -101,16 +102,14 @@ const Skills: FC<ISkillsProps> = ({}) => {
             />
           </section>
           <div className="container mx-auto flex w-full justify-center py-5">
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href="https://platzi.com/p/jess232022/"
+            <Link
+              href="/certificates"
               className="group z-30 mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600">
               {t('modal.seeCertificates')}
               <span aria-hidden="true" className="block transition group-hover:translate-x-0.5">
                 →
               </span>
-            </a>
+            </Link>
           </div>
         </article>
       </div>

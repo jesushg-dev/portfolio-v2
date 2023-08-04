@@ -1,0 +1,17 @@
+{
+  "certification": {
+    "title": "Certificaciones",
+    "subtitle": "Dominio en Diversas Habilidades",
+    "description": "Experto en Desarrollo Backend, Frontend, Móvil, Habilidades Sociales y Metodologías Ágiles: ¡Potenciando proyectos y listo(a) para el siguiente desafío!",
+    "pagination": {
+      "loading": "Cargando...",
+      "loadMore": "Cargar Más"
+    },
+    "seeCertificate": "Ver Certificado",
+    "titles": {
+      "date": "Fecha de Emisión",
+      "institution": "Institución",
+      "idCredential": "ID de Credencial"
+    }
+  }
+}

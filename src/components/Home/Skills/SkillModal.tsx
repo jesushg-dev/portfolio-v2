@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Modal, { CloseModal } from '../../UI/Modal';
@@ -49,14 +50,11 @@ const SkillModal: FC<ISkillModalProps> = ({ skill, type, onClose }) => {
             <p className="mb-8 text-left text-base leading-relaxed text-primaryText-500">{skill.description}</p>
             <div className="mt-0 w-full sm:flex lg:mt-6">
               <div className="mt-3 rounded-lg sm:mt-0">
-                <a
-                  href="https://platzi.com/p/jess232022/"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-disabled={skill.urlWiki === ''}
+                <Link
+                  href="/certificates"
                   className="pressable block transform items-center rounded-xl bg-primary-600 px-3.5 py-4 text-center text-base font-medium text-secondaryText-50 transition duration-500 ease-in-out hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                   {t('modal.seeCertificates')}
-                </a>
+                </Link>
               </div>
               <div className="mt-3 rounded-lg sm:ml-3 sm:mt-0">
                 <a

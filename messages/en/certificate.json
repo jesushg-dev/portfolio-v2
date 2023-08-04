@@ -1,0 +1,17 @@
+{
+  "certification": {
+    "title": "Certifications",
+    "subtitle": "Mastery in Diverse Skills",
+    "description": "Expertise in Backend, Frontend, Mobile, Soft Skills, and Agile Methodologies – Empowering projects and ready to take on new challenges!",
+    "pagination": {
+      "loading": "Loading...",
+      "loadMore": "Load More"
+    },
+    "seeCertificate": "See Certificate",
+    "titles": {
+      "date": "Issued Date",
+      "institution": "Institution",
+      "idCredential": "Credential ID"
+    }
+  }
+}

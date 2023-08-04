@@ -80,6 +80,17 @@ model Skill {
   SkillTranslation SkillTranslation[]
 }
 
+model Certification {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime             @default(now())
+  title              String
+  company            String
+  issuedDate         Int?
+  url                String?
+  idCredential       String?
+  image              String?
+}
+
 model SkillTranslation {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
   createdAt     DateTime    @default(now())

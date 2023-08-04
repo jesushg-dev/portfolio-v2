@@ -1,7 +1,9 @@
 import { ObjectId } from 'bson';
 import { PrismaClient } from '@prisma/client';
+import certifications from './data/certifications.json';
 
 const prisma = new PrismaClient();
+
 async function main() {
   const langEs = await prisma.appLanguage.upsert({
     where: { code: 'es' },
@@ -2351,6 +2353,31 @@ async function main() {
       },
     },
   });
+
+  await seedCertificates();
+}
+
+// seed certificates data
+async function seedCertificates() {
+  const certPromises = certifications.map(async (certificate) => {
+    const newCertificate = await prisma.certification.upsert({
+      where: { id: new ObjectId().toString() },
+      update: {},
+      create: {
+        title: certificate.title,
+        company: certificate.company,
+        issuedDate: certificate.issuedDate,
+        url: certificate.url,
+        idCredential: certificate.idCredential,
+        image: certificate.image,
+      },
+    });
+
+    return newCertificate;
+  });
+
+  const result = await Promise.all(certPromises);
+  return result;
 }
 
 main()

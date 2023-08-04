@@ -2,6 +2,41 @@ import { router, procedure } from '../trpc';
 import { z } from 'zod';
 
 export const appRouter = router({
+  getCertificates: procedure
+    .input(
+      z.object({
+        limit: z.number(),
+        cursor: z.string().nullish(),
+        keyword: z.string().optional(),
+        locale: z.enum(['es', 'en', 'de']).optional().default('en'),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const { limit, keyword, locale, cursor } = input;
+
+      // get certificates with translations
+      const data = await ctx.prisma.certification.findMany({
+        take: limit,
+        skip: cursor ? 1 : 0,
+        cursor: cursor ? { id: cursor } : undefined,
+      });
+
+      const lastCursor = data[data.length - 1]?.id || null;
+
+      // check if there are more projects to fetch
+      const hasMore = await ctx.prisma.certification.count({
+        take: limit,
+        skip: lastCursor ? 1 : 0,
+        cursor: lastCursor ? { id: lastCursor } : undefined,
+      });
+
+      return {
+        hasMore: hasMore >= 1,
+        cursor: lastCursor,
+        data,
+      };
+    }),
+
   getProjects: procedure
     .input(
       z.object({

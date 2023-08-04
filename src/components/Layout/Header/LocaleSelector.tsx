@@ -9,9 +9,9 @@ import { Select, Option } from '@/components/UI/Select';
 import { cdFlagloader } from '@/utils/tools/medialoader';
 
 const locales = [
-  { value: 'es', label: 'Español', img: 'spanish_kitwbr.webp' },
-  { value: 'en', label: 'English', img: 'english_sdpecu.webp' },
-  { value: 'de', label: 'Nederlands', img: 'dutch_khyopk.webp' },
+  { value: 'es', label: 'Español', img: 'spanish_kitwbr-Thumbnail_xnyll7.webp' },
+  { value: 'en', label: 'English', img: 'english_sdpecu-Thumbnail_btswuv.webp' },
+  { value: 'de', label: 'Nederlands', img: 'dutch_khyopk-Thumbnail_htec1d.webp' },
 ];
 
 interface ILocaleSelectorProps {}

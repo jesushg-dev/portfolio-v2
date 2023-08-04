@@ -11,3 +11,7 @@ export type SkillType = SkillsOutputTypes[0];
 export type ProjectsOutputTypes = RouterOutputType['getProjects']['data'];
 export type ProjectsInputTypes = inferRouterInputs<AppRouter>['getProjects'];
 export type ProjectType = ProjectsOutputTypes[0];
+
+export type CertificatesOutputTypes = RouterOutputType['getCertificates']['data'];
+export type CertificatesInputTypes = inferRouterInputs<AppRouter>['getCertificates'];
+export type CertificateType = CertificatesOutputTypes[0];
