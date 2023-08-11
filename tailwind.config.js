@@ -11,6 +11,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
+        'windows-11':
+          "url('https://res.cloudinary.com/js-media/image/upload/v1690086146/portfolio/win11/screensaver_spul4s.webp')",
         'hero-main':
           "url('https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp')",
         'hero-skills':
@@ -39,6 +41,9 @@ module.exports = {
       },
       gridTemplateColumns: {
         skills: 'repeat(auto-fit, minmax(4.75rem, 1fr))',
+      },
+      animation: {
+        'spin-slow': 'spin 5s linear infinite',
       },
     },
   },
@@ -138,7 +143,7 @@ module.exports = {
           500: '#748BA7',
           600: '#6E80A0',
           700: '#676C96',
-          800: '#5C5C89',
+          800: '#F8FAFC',
           900: '#111827',
         },
       }),
@@ -326,16 +331,16 @@ module.exports = {
           900: '#000000',
         },
         background: {
-          50: '#F8F8F8',
-          100: '#F2F2F2',
-          200: '#E6E6E6',
-          300: '#D9D9D9',
-          400: '#CCCCCC',
-          500: '#BFBFBF',
-          600: '#A6A6A6',
-          700: '#8C8C8C',
-          800: '#737373',
-          900: '#595959',
+          50: '#FFFFFF',
+          100: '#F8FAFC',
+          200: '#F1F5F9',
+          300: '#EBEBEB',
+          400: '#E2E2E2',
+          500: '#748BA7',
+          600: '#6E80A0',
+          700: '#676C96',
+          800: '#F8FAFC',
+          900: '#111827',
         },
       }),
       'orange-dark': dark({

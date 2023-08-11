@@ -103,6 +103,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
           </section>
           <div className="container mx-auto flex w-full justify-center py-5">
             <Link
+              scroll={true}
               href="/certificates"
               className="group z-30 mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600">
               {t('modal.seeCertificates')}

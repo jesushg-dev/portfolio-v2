@@ -55,54 +55,69 @@ const CvPage: FC<ICvPageProps> = ({}) => {
 
   return (
     <Layout headerAlwaysVisible={true}>
-      <section id="certifications" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
-        <Suspense fallback={<div />}>
-          <div className="container mx-auto">
-            <div className="container mx-auto">
-              <div className="-mx-4 flex flex-wrap">
-                <div className="w-full px-4">
-                  <div className="mx-auto mb-[60px] max-w-[510px] text-center">
-                    <span className="mb-2 block text-lg font-semibold text-primary-700">{t('subtitle')}</span>
-                    <h2 className="mb-4 text-3xl font-bold text-primaryText-500 sm:text-4xl md:text-[40px]">
-                      {t('title')}
-                    </h2>
-                    <p className="text-body-color text-base">{t('description')}</p>
-                  </div>
+      <section id="certifications" className="relative mx-auto px-4 py-6 lg:container lg:px-20 lg:pt-40 lg:pb-20">
+        <div className="absolute [mask-image:linear-gradient(to_bottom,transparent,white)] h-96 inset-x-0 opacity-60 rotate-180 text-gray-500/20 top-0">
+          <svg xmlns="http://www.w3.org/2000/svg" className="absolute h-full inset-0 w-full">
+            <defs>
+              <pattern
+                height={32}
+                id="grid-pattern"
+                patternTransform="translate(0 -1)"
+                patternUnits="userSpaceOnUse"
+                width={32}
+                x="50%"
+                y="100%">
+                <path d="M0 32V.5H32" fill="none" stroke="currentColor" />
+              </pattern>
+            </defs>
+            <rect fill="url(#grid-pattern)" height="100%" width="100%" />
+          </svg>
+        </div>
+        <div className="container mx-auto">
+          <div className="container mx-auto mb-8">
+            <div className="-mx-4 flex flex-wrap">
+              <div className="w-full px-4">
+                <div className="mx-auto mb-[60px] max-w-[510px] text-center">
+                  <span className="mb-2 block text-lg font-semibold text-primary-700">{t('subtitle')}</span>
+                  <h2 className="mb-4 text-3xl font-bold text-primaryText-500 sm:text-4xl md:text-[40px]">
+                    {t('title')}
+                  </h2>
+                  <p className="text-body-color text-base">{t('description')}</p>
                 </div>
               </div>
             </div>
-            <motion.ul
-              initial="hidden"
-              variants={container}
-              animate="visible"
-              className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
-              {data?.pages.map((page, idx) => (
-                <Fragment key={page.cursor ?? idx}>
-                  {page.data.map((certificate) => (
-                    <motion.li layout key={certificate.id} className="flex justify-center" variants={item}>
-                      <CertificateItem key={certificate.id} {...certificate} />
-                    </motion.li>
-                  ))}
-                </Fragment>
-              ))}
-            </motion.ul>
-            <div className="mt-8 flex flex-col items-center justify-center gap-4">
-              {isLoading || isFetching ? (
-                <div className="h-10 w-10 animate-spin rounded-full border border-b-2 border-primary-900 "></div>
-              ) : null}
-
-              {data?.pages[data.pages.length - 1].hasMore ? (
-                <button
-                  type="button"
-                  disabled={isFetching || isLoading}
-                  className="rounded bg-primary-500 px-4 py-2 font-bold text-secondaryText-50 hover:bg-primary-700"
-                  onClick={handleFetchMore}>
-                  {isFetching ? t('pagination.loading') : t('pagination.loadMore')}
-                </button>
-              ) : null}
-            </div>
           </div>
-        </Suspense>
+          <motion.ul
+            initial="hidden"
+            variants={container}
+            animate="visible"
+            className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
+            {data?.pages.map((page, idx) => (
+              <Fragment key={page.cursor ?? idx}>
+                {page.data.map((certificate) => (
+                  <motion.li layout key={certificate.id} className="flex justify-center" variants={item}>
+                    <CertificateItem key={certificate.id} {...certificate} />
+                  </motion.li>
+                ))}
+              </Fragment>
+            ))}
+          </motion.ul>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4">
+            {isLoading || isFetching ? (
+              <div className="h-10 w-10 animate-spin rounded-full border border-b-2 border-primary-900 "></div>
+            ) : null}
+
+            {data?.pages[data.pages.length - 1].hasMore ? (
+              <button
+                type="button"
+                disabled={isFetching || isLoading}
+                className="rounded bg-primary-500 px-4 py-2 font-bold text-secondaryText-50 hover:bg-primary-700"
+                onClick={handleFetchMore}>
+                {isFetching ? t('pagination.loading') : t('pagination.loadMore')}
+              </button>
+            ) : null}
+          </div>
+        </div>
       </section>
     </Layout>
   );
