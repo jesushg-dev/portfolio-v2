@@ -27,7 +27,44 @@
     "footer": {
       "title": "Todos los Derechos Reservados © ",
       "madeWith": "Hecho con ",
-      "by": " por "
+      "by": " por ",
+      "sections": {
+        "portfolio": {
+          "curriculum": "Curriculum Vitae",
+          "certificates": "Certificados"
+        },
+        "miscellaneous": {
+          "opSysCv": "Windows 11 Simulator"
+        }
+      },
+      "titles": {
+        "portfolio": "Portafolio",
+        "miscellaneous": "Misceláneos",
+        "NowPlaying": "Reproduciendo",
+        "poweredBy": "Powered by "
+      },
+      "new": "Nuevo",
+      "soon": "Pronto",
+      "spotify": {
+        "errors": {
+          "noFetch": "Error: Algo salió mal al obtener la información",
+          "noPlaying": "Por el momento no hay nada reproduciendo"
+        },
+        "buttons": {
+          "play": "Reproducir",
+          "pause": "Pausar",
+          "volume": "Volumen",
+          "next": "Siguiente",
+          "previous": "Anterior"
+        },
+        "hints": {
+          "currentProgress": "Progreso actual",
+          "totalDuration": "Duración total",
+          "localRange": "Cambiar progreso actual",
+          "disabledExteralRange": "Desactivado por motivos de privacidad"
+        },
+        "poweredBy": "Desarrollado usando la API de "
+      }
     },
     "localeSwitcher": {
       "label": "Sprache ändern",

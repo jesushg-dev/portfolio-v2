@@ -78,7 +78,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
               onClick={handleOpenModal}
               ctxClass="md:pr-8"
               skills={frontend?.data?.data || []}
-              loading={frontend?.isLoading || frontend.isFetching}
+              loading={frontend?.isLoading}
             />
 
             <SkillGrouped
@@ -88,7 +88,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
               onClick={handleOpenModal}
               ctxClass="md:px-8"
               skills={backend?.data?.data || []}
-              loading={backend?.isLoading || backend.isFetching}
+              loading={backend?.isLoading}
             />
 
             <SkillGrouped
@@ -98,7 +98,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
               onClick={handleOpenModal}
               ctxClass="md:col-span-2 lg:col-span-1 lg:pl-8"
               skills={tools?.data?.data || []}
-              loading={tools?.isLoading || tools.isFetching}
+              loading={tools?.isLoading}
             />
           </section>
           <div className="container mx-auto flex w-full justify-center py-5">

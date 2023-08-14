@@ -108,7 +108,7 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
         </motion.ul>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4">
-          {isLoading || isFetching ? (
+          {isLoading ? (
             <div className="h-10 w-10 animate-spin rounded-full border border-b-2 border-primary-900 "></div>
           ) : null}
 

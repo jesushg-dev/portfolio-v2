@@ -71,7 +71,6 @@ const Contact: FC<IContactProps> = ({}) => {
         Accept: 'application/json',
       },
     });
-    console.log('🚀 ~ file: index.tsx:73 ~ sendEmail ~ res', res);
 
     if (res.ok) {
       nameRef.current?.clear();

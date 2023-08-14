@@ -1,9 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import CodeText from '../../Common/CodeText';
 import TimeLine from '../../Common/TimeLine';
 import Terminal from '../../Common/Terminal';
 
@@ -13,6 +12,22 @@ interface IAboutProps {}
 
 const About: FC<IAboutProps> = ({}) => {
   const t = useTranslations('main.about');
+
+  const code = useMemo(() => {
+    return `
+      const ${t('function.name')} = () => {
+        return {
+          ${t('function.json.name')}: 'Jesús Enmanuel Hernández González',
+          ${t('function.json.languages')}: {
+            ${t('function.language.spanish')}: 'Native',
+            ${t('function.language.english')}: 'B1'
+          },
+          ${t('function.json.profession')}: 'Software Developer'
+        }
+      }
+    `;
+  }, [t]);
+
   return (
     <div className="overflow-hidden">
       <section id="about" className="mx-auto px-4 py-4 lg:container lg:px-20 lg:py-20">
@@ -34,29 +49,7 @@ const About: FC<IAboutProps> = ({}) => {
             <p className="text-primaryText text-center text-base">{t('info.description3')}</p>
           </div>
 
-          <Terminal>
-            <p>
-              <span className="text-primary-400">const</span>{' '}
-              <span className="text-green-400">{t('function.name')}</span> <span className="text-pink-500">=</span> (){' '}
-              <span className="text-pink-500">{'=>'}</span> {'{'}
-            </p>
-            <p>
-              &nbsp;&nbsp;<span className="text-pink-500">return</span> {'{'}
-            </p>
-
-            <CodeText value={t('function.json.name')} label="Jesús Enmanuel Hernández González" indent={4} />
-
-            <p>
-              &nbsp;&nbsp;&nbsp;&nbsp;{t('function.json.languages')}:{' {'}
-            </p>
-            <CodeText value={t('function.language.spanish')} label={t('function.languageLevel.native')} indent={6} />
-            <CodeText value={t('function.language.english')} label="B1" indent={6} />
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;{'}'},</p>
-
-            <CodeText value={t('function.json.profession')} label={t('function.profession')} indent={4} />
-            <p>&nbsp;&nbsp;{'}'}</p>
-            <p>{'}'}</p>
-          </Terminal>
+          <Terminal language="typescript" code={code} />
         </article>
 
         <aside className="flex flex-col items-center gap-2">
@@ -76,7 +69,7 @@ const About: FC<IAboutProps> = ({}) => {
                   />
                 ))}
                 <li className="-ml-1 flex items-center gap-4 text-sm text-primaryText-800">
-                  <Link href="/cv" className="flex items-center gap-3 hover:text-primary-900">
+                  <Link href="/curriculum" className="flex items-center gap-3 hover:text-primary-900">
                     <VscLoading className="text-md animate-spin border border-primary-900 text-primary-200" />
                     {t('timeline.subtitle')}
                   </Link>

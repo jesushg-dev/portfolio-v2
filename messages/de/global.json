@@ -25,9 +25,46 @@
       "openMenu": "Open Menu"
     },
     "footer": {
-      "title": "Alle rechten voorbehouden © ",
+      "title": "Alle Rechten Voorbehouden © ",
       "madeWith": "Gemaakt met ",
-      "by": " door "
+      "by": " door ",
+      "sections": {
+        "portfolio": {
+          "curriculum": "Curriculum Vitae",
+          "certificates": "Certificaten"
+        },
+        "miscellaneous": {
+          "opSysCv": "Windows 11 Simulator"
+        }
+      },
+      "titles": {
+        "portfolio": "Portfolio",
+        "miscellaneous": "Diversen",
+        "NowPlaying": "Nu aan het spelen",
+        "poweredBy": "Aangedreven door "
+      },
+      "new": "Nieuw",
+      "soon": "Binnenkort",
+      "spotify": {
+        "errors": {
+          "noFetch": "Fout: Er is iets misgegaan bij het ophalen van gegevens",
+          "noPlaying": "Er wordt niets afgespeeld"
+        },
+        "buttons": {
+          "play": "Afspelen",
+          "pause": "Pauzeren",
+          "volume": "Volume",
+          "next": "Volgende",
+          "previous": "Vorige"
+        },
+        "hints": {
+          "currentProgress": "Huidige voortgang",
+          "totalDuration": "Totale duur",
+          "localRange": "Verander huidige voortgang",
+          "disabledExteralRange": "Uitgeschakeld vanwege privacyredenen"
+        },
+        "poweredBy": "Aangedreven doorOntwikkeld met behulp van de API van"
+      }
     },
     "localeSwitcher": {
       "label": "Sprache ändern",

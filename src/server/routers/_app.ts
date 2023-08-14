@@ -1,18 +1,25 @@
 import { router, procedure } from '../trpc';
 import { z } from 'zod';
 
+import { getNowPlaying } from '@/utils/services/spotify';
+
 export const appRouter = router({
+  getNowPlaying: procedure.input(z.undefined()).query(async ({}) => {
+    const data = await getNowPlaying();
+    return data;
+  }),
   getCertificates: procedure
     .input(
       z.object({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
+        type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP']).optional(),
         locale: z.enum(['es', 'en', 'de']).optional().default('en'),
       })
     )
     .query(async ({ input, ctx }) => {
-      const { limit, keyword, locale, cursor } = input;
+      const { limit, keyword, locale, cursor, type } = input;
 
       // get certificates with translations
       const data = await ctx.prisma.certification.findMany({
@@ -36,7 +43,6 @@ export const appRouter = router({
         data,
       };
     }),
-
   getProjects: procedure
     .input(
       z.object({
