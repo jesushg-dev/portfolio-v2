@@ -52,7 +52,7 @@ const Contact: FC<IContactProps> = ({}) => {
                 Download CV <FaDownload className="text-xs" />
               </a> */}
               <Link
-                href={'/cv'}
+                href={'/curriculum'}
                 className="pressable flex items-center gap-2 rounded-lg bg-primary-700 px-4 py-3 text-sm shadow-lg hover:bg-primary-800">
                 Download CV <FaDownload className="text-xs" />
               </Link>
