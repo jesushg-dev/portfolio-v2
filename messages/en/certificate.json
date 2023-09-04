@@ -1,6 +1,6 @@
 {
   "certification": {
-    "title": "Certifications",
+    "title": "Certificates",
     "subtitle": "Mastery in Diverse Skills",
     "description": "Empowering projects and ready to take on new challenges!",
     "pagination": {
@@ -12,6 +12,36 @@
       "date": "Issued Date",
       "institution": "Institution",
       "idCredential": "Credential ID"
+    },
+    "types": {
+      "all": {
+        "title": "All",
+        "subtitle": "All Certificates"
+      },
+      "frontend": {
+        "title": "Frontend",
+        "subtitle": "Frontend Development"
+      },
+      "backend": {
+        "title": "Backend",
+        "subtitle": "Backend Development"
+      },
+      "devops": {
+        "title": "DevOps",
+        "subtitle": "DevOps Development"
+      },
+      "mobile": {
+        "title": "Mobile",
+        "subtitle": "Mobile Development"
+      },
+      "cybersecurity": {
+        "title": "Cybersecurity",
+        "subtitle": "Cybersecurity"
+      },
+      "softskills": {
+        "title": "Soft Skills",
+        "subtitle": "Soft Skills"
+      }
     }
   }
 }

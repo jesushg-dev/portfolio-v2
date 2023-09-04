@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+
+import 'react-loading-skeleton/dist/skeleton.css';
 import './styles.scss';
 
 type Props = {

@@ -12,6 +12,36 @@
       "date": "Uitgiftedatum",
       "institution": "Instelling",
       "idCredential": "Credential ID"
+    },
+    "types": {
+      "all": {
+        "title": "Alle",
+        "subtitle": "Alle Certificeringen"
+      },
+      "frontend": {
+        "title": "Frontend",
+        "subtitle": "Frontend Ontwikkeling"
+      },
+      "backend": {
+        "title": "Backend",
+        "subtitle": "Backend Ontwikkeling"
+      },
+      "devops": {
+        "title": "DevOps",
+        "subtitle": "DevOps Ontwikkeling"
+      },
+      "mobile": {
+        "title": "Mobiel",
+        "subtitle": "Mobiele Ontwikkeling"
+      },
+      "cybersecurity": {
+        "title": "Cyberbeveiliging",
+        "subtitle": "Cyberbeveiliging"
+      },
+      "softskills": {
+        "title": "Zachte Vaardigheden",
+        "subtitle": "Zachte Vaardigheden"
+      }
     }
   }
 }

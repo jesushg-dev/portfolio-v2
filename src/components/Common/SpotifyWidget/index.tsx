@@ -70,7 +70,7 @@ const SpotifyWidget: FC<ISpotifyWidgetProps> = ({}) => {
 
   return (
     <article className="bg-gray-900 text-white flex-grow flex rounded flex-col overflow-hidden items-center sm:flex-row">
-      <div className="w-2/6 aspect-square mt-5 sm:mt-0 group bg-black rounded-md object-cover bg-cover relative">
+      <div className="w-3/6 sm:w-2/6 aspect-square mt-5 sm:mt-0 group bg-black rounded-md object-cover bg-cover relative">
         <Image
           src={data.item.album.images.length > 0 ? data.item.album.images[0].url : '/images/spotify.png'}
           alt={data.item.album.name}
@@ -112,7 +112,7 @@ const SpotifyWidget: FC<ISpotifyWidgetProps> = ({}) => {
         )}
       </div>
 
-      <div className="w-4/6 flex flex-grow h-full relative">
+      <div className="w-full sm:w-4/6 flex flex-grow h-full relative">
         <div className="flex flex-col w-full p-5">
           <ArtistText
             artists={data.item.artists.map((artist) => artist.name)}

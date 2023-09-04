@@ -112,37 +112,6 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
   };
 }
 
-/**<Head>
-
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icon.png"></link>
-
-
-        <meta property="og:title" content="Portfolio - Jesús Hernández " />
-        <meta property="og:url" content="https://www.jesushg.com" />
-        <meta
-          property="og:image"
-          content="https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp"
-        />
-        <meta
-          property="og:description"
-          content="Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
-        />
-        <meta property="og:type" content="website" />
-
-        <meta name="twitter:card" content="summary" />
-        <meta property="twitter:title" content="Portfolio - Jesús Hernández " />
-        <meta
-          name="twitter:image"
-          content="https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp"
-        />
-        <meta
-          property="twitter:description"
-          content="Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology"
-        />
-      </Head> */
-
 export default async function LocaleLayout({ children, params: { locale } }: Props) {
   const messages = await getMessages(locale);
 
@@ -150,7 +119,10 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
     <html className="h-full" lang={locale}>
       <PreloadTheme />
       <body
-        className={clsx(inter.className, 'flex min-h-screen flex-col justify-between scroll-smooth bg-background-200')}>
+        className={clsx(
+          inter.className,
+          'flex min-h-screen flex-col justify-between overflow-x-hidden scroll-smooth bg-background-200'
+        )}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <TrpcProvider>
             <ThemeContextProvider>{children}</ThemeContextProvider>

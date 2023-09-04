@@ -10,7 +10,7 @@
   .icon-scroll {
     box-shadow: inset 0 0 0 2px #737373;
     &::before {
-      animation: scroll 1.5s infinite;
+      animation: mousescroll 1.5s infinite;
       @apply absolute left-1/2 top-2 -ml-[0.15rem] h-[0.28rem] w-[0.28rem] rounded bg-background-50 content-[''];
     }
   }
@@ -63,4 +63,10 @@
       transform: translateY(0.5rem);
     }
   }
+}
+
+//  force styles
+
+.react-grid-item.react-grid-placeholder {
+  background: #2c2d3349 !important;
 }

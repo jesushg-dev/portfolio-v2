@@ -2363,14 +2363,7 @@ async function seedCertificates() {
     const newCertificate = await prisma.certification.upsert({
       where: { id: new ObjectId().toString() },
       update: {},
-      create: {
-        title: certificate.title,
-        company: certificate.company,
-        issuedDate: certificate.issuedDate,
-        url: certificate.url,
-        idCredential: certificate.idCredential,
-        image: certificate.image,
-      },
+      create: { ...certificate, type: certificate.type as any },
     });
 
     return newCertificate;

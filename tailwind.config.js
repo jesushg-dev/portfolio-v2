@@ -23,7 +23,7 @@ module.exports = {
           "url('https://res.cloudinary.com/js-media/image/upload/v1670269379/portfolio/carnet/jesus-hernandez.webp')",
       },
       keyframes: {
-        'mouse-scroll': {
+        mousescroll: {
           '0%': { opacity: 1 },
           '100%': { opacity: 0, transform: 'translateY(0.5rem)' },
         },

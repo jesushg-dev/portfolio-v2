@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 
 import Link from 'next/link';
 
@@ -8,7 +8,7 @@ import NavButton from './NavButton';
 import ToolbarHeader from './ToolbarHeader';
 import ThemeSelector from './ThemeSelector';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import useIsOnTop from '../../../hooks/useIsOnTop';
 
 interface IHeaderProps {
@@ -16,10 +16,11 @@ interface IHeaderProps {
 }
 
 const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
-  const isOnTop = useIsOnTop();
   const t = useTranslations('global.header');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const locale = useLocale();
+  const isOnTop = useIsOnTop();
 
   const handleScroll = (id: string) => {
     const element = document.getElementById(id);

@@ -1,6 +1,6 @@
 {
   "certification": {
-    "title": "Certificaciones",
+    "title": "Certificados",
     "subtitle": "Dominio en Diversas Habilidades",
     "description": "¡Potenciando proyectos y preparandome para el siguiente desafío!",
     "pagination": {
@@ -12,6 +12,36 @@
       "date": "Fecha de Emisión",
       "institution": "Institución",
       "idCredential": "ID de Credencial"
+    },
+    "types": {
+      "all": {
+        "title": "Todos",
+        "subtitle": "Todos los Certificados"
+      },
+      "frontend": {
+        "title": "Frontend",
+        "subtitle": "Desarrollo Frontend"
+      },
+      "backend": {
+        "title": "Backend",
+        "subtitle": "Desarrollo Backend"
+      },
+      "devops": {
+        "title": "DevOps",
+        "subtitle": "Desarrollo DevOps"
+      },
+      "mobile": {
+        "title": "Móvil",
+        "subtitle": "Desarrollo Móvil"
+      },
+      "cybersecurity": {
+        "title": "Ciberseguridad",
+        "subtitle": "Ciberseguridad"
+      },
+      "softskills": {
+        "title": "Habilidades Blandas",
+        "subtitle": "Habilidades Blandas"
+      }
     }
   }
 }

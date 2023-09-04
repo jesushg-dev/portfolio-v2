@@ -1,20 +1,35 @@
 import { router, procedure } from '../trpc';
 import { z } from 'zod';
 
-import { getNowPlaying } from '@/utils/services/spotify';
+import { getNowPlaying, getTopTracks } from '@/utils/services/spotify';
 
 export const appRouter = router({
   getNowPlaying: procedure.input(z.undefined()).query(async ({}) => {
     const data = await getNowPlaying();
     return data;
   }),
+  getTopTracks: procedure
+    .input(
+      z.object({
+        timeRange: z.enum(['short_term', 'medium_term', 'long_term']),
+        limit: z.number(),
+        offset: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { timeRange, limit, offset } = input;
+      const data = await getTopTracks(timeRange, limit, offset);
+      return data;
+    }),
   getCertificates: procedure
     .input(
       z.object({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
-        type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP']).optional(),
+        type: z
+          .enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP', 'CYBERSECURITY', 'DEVOPS', 'SOFTSKILLS', 'TOOLS'])
+          .optional(),
         locale: z.enum(['es', 'en', 'de']).optional().default('en'),
       })
     )
@@ -26,6 +41,7 @@ export const appRouter = router({
         take: limit,
         skip: cursor ? 1 : 0,
         cursor: cursor ? { id: cursor } : undefined,
+        where: type ? { type } : undefined,
       });
 
       const lastCursor = data[data.length - 1]?.id || null;
@@ -35,6 +51,7 @@ export const appRouter = router({
         take: limit,
         skip: lastCursor ? 1 : 0,
         cursor: lastCursor ? { id: lastCursor } : undefined,
+        where: type ? { type } : undefined,
       });
 
       return {

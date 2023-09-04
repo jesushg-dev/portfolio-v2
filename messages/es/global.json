@@ -69,6 +69,12 @@
     "localeSwitcher": {
       "label": "Sprache ändern",
       "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+    },
+    "fallback": {
+      "noResults": {
+        "title": "No hay resultados",
+        "description": "No se encontraron resultados para la búsqueda"
+      }
     }
   }
 }

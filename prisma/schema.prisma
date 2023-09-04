@@ -89,6 +89,7 @@ model Certification {
   url                String?
   idCredential       String?
   image              String?
+  type               StackType
 }
 
 model SkillTranslation {
@@ -107,5 +108,8 @@ enum StackType {
   BACKEND
   MOBILE
   DESKTOP
+  CYBERSECURITY
+  DEVOPS
+  SOFTSKILLS
   TOOLS
 }
