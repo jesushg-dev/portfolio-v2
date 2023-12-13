@@ -1,3 +1,4 @@
+"use client";
 import React, { FC, useEffect } from 'react';
 
 import { useThemeContext } from '@/hoc/ThemeContextProvider';

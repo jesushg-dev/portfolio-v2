@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import Footer from './Footer';
 import Header from './Header';
 import ScrollToTop from '../UI/ScrollToTop';

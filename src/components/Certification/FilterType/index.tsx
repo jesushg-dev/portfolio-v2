@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { unstable_setRequestLocale } from 'next-intl/server';
 
 import Tab, { TabItem } from '@/components/UI/Tab';
 import { MdOutlineSecurity } from 'react-icons/md';
@@ -16,6 +17,9 @@ interface IFilterTypeProps {
 }
 
 const FilterType: FC<IFilterTypeProps> = ({ value }) => {
+ // Enable static rendering
+  unstable_setRequestLocale(params.locale);
+
   const t = useTranslations('certification');
 
   const { push } = useRouter();

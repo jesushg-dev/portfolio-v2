@@ -4,6 +4,7 @@ import React, { FC, lazy, Suspense, useRef } from 'react';
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { unstable_setRequestLocale } from 'next-intl/server';
 import { FaDownload, FaHome } from 'react-icons/fa';
 
 import Layout from '@/components/Layout';
@@ -19,9 +20,15 @@ const SoftSkills = lazy(() => import('@/components/Curriculum/SoftSkills'));
 const AdditionalInformation = lazy(() => import('@/components/Curriculum/AdditionalInformation'));
 //const PersonalReferences = lazy(() => import('@/components/Curriculum/PersonalReferences'));
 
-interface ICvPageProps {}
+interface ICvPageProps {
+  params: {locale: string};
+}
 
-const CvPage: FC<ICvPageProps> = ({}) => {
+const CvPage: FC<ICvPageProps> = ({params}) => {
+
+  // Enable static rendering
+  unstable_setRequestLocale(params.locale);
+
   const t = useTranslations('curriculum');
   const elementRef = useRef<HTMLDivElement>(null);
 

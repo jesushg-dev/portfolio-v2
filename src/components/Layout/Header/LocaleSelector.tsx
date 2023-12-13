@@ -2,7 +2,7 @@ import React, { FC, useTransition, useMemo } from 'react';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { usePathname } from 'next-intl/client';
+import { usePathname } from '@/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { Select, Option } from '@/components/UI/Select';
 
