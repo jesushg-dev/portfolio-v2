@@ -52,7 +52,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
 
   return (
     <>
-      <div className="relative bg-background-50 ">
+      <div className="relative bg-background-50">
         <BgParticles />
         <article id="skills" className="z-10 mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20 ">
           <div className="container mx-auto">

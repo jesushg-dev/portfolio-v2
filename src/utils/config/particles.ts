@@ -1,4 +1,4 @@
-import { IOptions, RecursivePartial } from 'tsparticles-engine';
+import { IOptions, RecursivePartial } from "@tsparticles/engine";
 
 const generateParticlesConfig = (color: string[]) => {
   const skillParticles: RecursivePartial<IOptions> = {
@@ -19,7 +19,6 @@ const generateParticlesConfig = (color: string[]) => {
           enable: true,
           mode: 'repulse',
         },
-        resize: true,
       },
       modes: {
         push: {
@@ -58,7 +57,6 @@ const generateParticlesConfig = (color: string[]) => {
       number: {
         density: {
           enable: true,
-          area: 800,
         },
         value: 25,
       },
@@ -73,6 +71,9 @@ const generateParticlesConfig = (color: string[]) => {
       },
     },
     detectRetina: true,
+    style: {
+      position: 'absolute',
+    },
   };
 
   return skillParticles;

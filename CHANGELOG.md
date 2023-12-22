@@ -6,6 +6,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## 2.5.5 (2023-12-22)
 - Update Dependencies to latest version to fix security issues and improve performance
 - Remove TypeWriter component from the project
+- Improve i18n configuration
+- Update Particles.js to latest version
 
 ## 2.5.2 (2023-08-14)
 
