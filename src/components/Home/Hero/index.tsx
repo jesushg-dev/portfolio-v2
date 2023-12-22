@@ -2,17 +2,20 @@ import React, { FC, useMemo } from 'react';
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import Typewriter from 'typewriter-effect';
 
 import { FaDownload } from 'react-icons/fa';
 
+import TypeWriter from '@/components/Common/TypeWriter';
+
 interface IContactProps {}
 
-const titles = ['degree', 'web', 'mobile', 'fullstack', 'frontend', 'backend'];
+const titles = ['degree', 'web', 'mobile', 'fullstack', 'frontend', 'backend'] as const;
 
 const Contact: FC<IContactProps> = ({}) => {
   const t = useTranslations('main.heroMain');
-  const options = useMemo(() => {
+  const strings = useMemo(() => titles.map((title) => t(`titles.${title}`)), [t]);
+  
+  /*const options = useMemo(() => {
     const strings = titles.map((title) => t(`titles.${title}` as any));
     return {
       strings,
@@ -20,10 +23,10 @@ const Contact: FC<IContactProps> = ({}) => {
       autoStart: true,
       TimeRanges: 400,
       deleteSpeed: 50,
-      wrapperClassName: 'text-2xl Typewriter__wrapper',
-      cursorClassName: 'text-2xl Typewriter__cursor text-primary-500',
+      wrapperClassName: 'text-2xl',
+      cursorClassName: 'text-2xl  text-primary-500',
     };
-  }, [t]);
+  }, [t]);*/
 
   return (
     <section
@@ -39,22 +42,16 @@ const Contact: FC<IContactProps> = ({}) => {
               {t('greeting')} <br className="md:hidden" /> <strong className="text-primary-500">Jesús Hernández</strong>
             </h1>
             <div className="flex justify-center text-2xl text-white lg:justify-start">
-              <Typewriter options={options} />
+              <TypeWriter delay={1} texts={strings} wrapperClassName="text-2xl" cursorClassName="text-2xl text-primary-500" />
             </div>
             <div className="rounded-md p-4 backdrop-blur-2xl lg:p-0 lg:backdrop-blur-none">
               <p className="text-center text-base font-normal text-gray-300 lg:text-start">{t('description')}</p>
             </div>
             <span className="relative inline-flex">
-              {/**<a
-                download
-                href="https://drive.google.com/u/0/uc?id=1yNTZ1JZMYgllrbJPxg668Q4RxeuRlMED&export=download"
-                className="pressable flex items-center gap-2 rounded-lg bg-primary-700 px-4 py-3 text-sm shadow-lg hover:bg-primary-800">
-                Download CV <FaDownload className="text-xs" />
-              </a> */}
               <Link
                 href={'/curriculum'}
                 className="pressable flex items-center gap-2 rounded-lg bg-primary-700 px-4 py-3 text-sm shadow-lg hover:bg-primary-800">
-                Download CV <FaDownload className="text-xs" />
+                View CV <FaDownload className="text-xs" />
               </Link>
               <span className="absolute right-0 top-0 -mr-1 -mt-0 flex h-3 w-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
