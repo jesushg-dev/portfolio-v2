@@ -29,7 +29,7 @@ const Contact: FC<IContactProps> = ({}) => {
               {t('greeting')} <br className="md:hidden" /> <strong className="text-primary-500">Jesús Hernández</strong>
             </h1>
             <div className="flex justify-center text-2xl text-white lg:justify-start">
-              <TypeWriter delay={25} texts={strings} wrapperClassName="text-2xl" cursorClassName="text-2xl text-primary-500" />
+              <TypeWriter delay={1} texts={strings} wrapperClassName="text-2xl" cursorClassName="text-2xl text-primary-500" />
             </div>
             <div className="rounded-md p-4 backdrop-blur-2xl lg:p-0 lg:backdrop-blur-none">
               <p className="text-center text-base font-normal text-gray-300 lg:text-start">{t('description')}</p>
