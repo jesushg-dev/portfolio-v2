@@ -1,10 +1,10 @@
-import clsx from 'clsx';
 import { ReactNode } from 'react';
 
+import clsx from 'clsx';
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
-import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 
 import TrpcProvider from '@/hoc/TrpcProvider';
 import PreloadTheme from '@/hoc/PreloadTheme';
@@ -27,7 +27,6 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
   return {
     title: t('meta.title'),
     description: t('meta.description'),
-    themeColor: '#05f',
     keywords: t('meta.keywords'),
     manifest: '/manifest.json',
     metadataBase: new URL('https://www.jesushg.com'),
@@ -36,7 +35,7 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
       languages: {
         es: 'https://www.jesushg.com/es',
         en: 'https://www.jesushg.com/en',
-        de: 'https://www.jesushg.com/de',
+        nl: 'https://www.jesushg.com/nl',
         'en-US': 'https://www.jesushg.com/en',
         'es-ES': 'https://www.jesushg.com/es',
       },
@@ -79,7 +78,7 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
           url: 'https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp',
           width: 800,
           height: 600,
-          alt: 'Og Image Alt',
+          alt: 'A picture of my personal website',
         },
       ],
     },
@@ -92,7 +91,7 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
           url: 'https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp',
           width: 800,
           height: 600,
-          alt: 'Og Image Alt',
+          alt: 'A picture of my personal website',
         },
       ],
     },
@@ -110,8 +109,6 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale as any)) notFound();
 
-  // Enable static rendering
-  unstable_setRequestLocale(locale);
 
   return (
     <html className="h-full" lang={locale}>

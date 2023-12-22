@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-import Link from 'next/link';
 import Image from 'next/image';
+import { Link } from '@/navigation';
 import { useTranslations } from 'next-intl';
 
 import { FcLike } from 'react-icons/fc';
@@ -32,7 +32,7 @@ const Footer: FC<IFooterProps> = ({}) => {
               <Link className="inline-flex gap-x-2 text-gray-400 hover:text-gray-200" href="/certificates">
                 {t('sections.portfolio.certificates')}
               </Link>
-              <Link className="inline-flex gap-x-2 text-gray-400 hover:text-gray-200" href="/curriculum">
+              <Link className="inline-flex gap-x-2 text-gray-400 hover:text-gray-200" href="/curriculum-vitae">
                 {t('sections.portfolio.curriculum')}
               </Link>
             </div>

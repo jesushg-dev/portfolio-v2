@@ -635,6 +635,11 @@
   dependencies:
     "@tsparticles/engine" "^3.0.2"
 
+"@tsparticles/react@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@tsparticles/react/-/react-3.0.0.tgz#d0a794ba53164eb39ce88a3961be723a636b37c0"
+  integrity sha512-hjGEtTT1cwv6BcjL+GcVgH++KYs52bIuQGW3PWv7z3tMa8g0bd6RI/vWSLj7p//NZ3uTjEIeilYIUPBh7Jfq/Q==
+
 "@tsparticles/shape-circle@^3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@tsparticles/shape-circle/-/shape-circle-3.0.2.tgz#5a7c4a1d3f12927c963199c2b64d99f0e761f147"
@@ -3413,13 +3418,6 @@ react-loading-skeleton@^3.3.1:
   resolved "https://registry.yarnpkg.com/react-loading-skeleton/-/react-loading-skeleton-3.3.1.tgz#cd6e3a626ee86c76a46c14e2379243f2f8834e1b"
   integrity sha512-NilqqwMh2v9omN7LteiDloEVpFyMIa0VGqF+ukqp0ncVlYu1sKYbYGX9JEl+GtOT9TKsh04zCHAbavnQ2USldA==
 
-react-particles@^2.12.2:
-  version "2.12.2"
-  resolved "https://registry.yarnpkg.com/react-particles/-/react-particles-2.12.2.tgz#0ab12b72428d3b89537d3422fa8bf725175cfd4d"
-  integrity sha512-Bo9DdrBRPFy8uiT7BA8P36Rdmz6GhB/RG9kkWUyZGIsS8AxWyuUjpVxw9Lr23K0LVE2aenAJ0vnqEbbLDpBgQw==
-  dependencies:
-    tsparticles-engine "^2.12.0"
-
 react-resizable@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/react-resizable/-/react-resizable-3.0.5.tgz#362721f2efbd094976f1780ae13f1ad7739786c1"
@@ -3974,11 +3972,6 @@ tslib@^2.0.0, tslib@^2.1.0, tslib@^2.4.0, tslib@^2.6.0, tslib@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
-
-tsparticles-engine@^2.12.0:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/tsparticles-engine/-/tsparticles-engine-2.12.0.tgz#4a52a8de4ab6085180abf27f4720f47caa1455fc"
-  integrity sha512-ZjDIYex6jBJ4iMc9+z0uPe7SgBnmb6l+EJm83MPIsOny9lPpetMsnw/8YJ3xdxn8hV+S3myTpTN1CkOVmFv0QQ==
 
 tsparticles@^3.0.2:
   version "3.0.2"

@@ -5,7 +5,7 @@ import React, { FC, useRef, useState, lazy, Suspense } from 'react';
 import BgParticles from './BgParticles';
 import SkillGrouped from './SkillGrouped';
 
-import Link from 'next/link';
+import { Link } from '@/navigation';
 import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
 import { AnimatePresence, useInView } from 'framer-motion';
@@ -24,7 +24,7 @@ interface ISkillsProps {}
 const limit = LIMIT_PER_PAGE_BIG;
 
 const Skills: FC<ISkillsProps> = ({}) => {
-  const locale = useLocale() as 'en' | 'es' | 'de';
+  const locale = useLocale() as 'en' | 'es' | 'nl';
   const ref = useRef(null);
 
   const t = useTranslations('main.skills');

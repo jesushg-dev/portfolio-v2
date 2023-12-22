@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from 'react';
 
-import Link from 'next/link';
+import { Link } from '@/navigation';
 import { useTranslations } from 'next-intl';
 
 import TimeLine from '../../Common/TimeLine';
@@ -69,7 +69,7 @@ const About: FC<IAboutProps> = ({}) => {
                   />
                 ))}
                 <li className="-ml-1 flex items-center gap-4 text-sm text-primaryText-800">
-                  <Link href="/curriculum" className="flex items-center gap-3 hover:text-primary-900">
+                  <Link href="/curriculum-vitae" className="flex items-center gap-3 hover:text-primary-900">
                     <VscLoading className="text-md animate-spin border border-primary-900 text-primary-200" />
                     {t('timeline.subtitle')}
                   </Link>

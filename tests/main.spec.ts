@@ -5,9 +5,9 @@ it('handles i18n routing', async ({page}) => {
   await expect(page).toHaveURL('/en');
 
   // A cookie remembers the last locale
-  await page.goto('/de');
+  await page.goto('/nl');
   await page.goto('/');
-  await expect(page).toHaveURL('/de');
+  await expect(page).toHaveURL('/nl');
   await page
     .getByRole('combobox', {name: 'Sprache ändern'})
     .selectOption({label: 'Englisch'});
@@ -20,7 +20,7 @@ it('handles not found pages', async ({page}) => {
   await page.goto('/unknown');
   page.getByRole('heading', {name: 'Page not found'});
 
-  await page.goto('/de/unknown');
+  await page.goto('/nl/unknown');
   page.getByRole('heading', {name: 'Seite nicht gefunden'});
 });
 
@@ -34,7 +34,7 @@ it("handles not found pages for routes that don't match the middleware", async (
 });
 
 it('sets caching headers', async ({request}) => {
-  for (const pathname of ['/en', '/en/pathnames', '/de', '/de/pfadnamen']) {
+  for (const pathname of ['/en', '/en/pathnames', '/nl', '/nl/pfadnamen']) {
     expect((await request.get(pathname)).headers()['cache-control']).toBe(
       's-maxage=31536000, stale-while-revalidate'
     );
@@ -45,7 +45,7 @@ it('can be used to configure metadata', async ({page}) => {
   await page.goto('/en');
   await expect(page).toHaveTitle('next-intl example');
 
-  await page.goto('/de');
+  await page.goto('/nl');
   await expect(page).toHaveTitle('next-intl Beispiel');
 });
 
@@ -53,7 +53,7 @@ it('can be used to localize the page', async ({page}) => {
   await page.goto('/en');
   page.getByRole('heading', {name: 'next-intl example'});
 
-  await page.goto('/de');
+  await page.goto('/nl');
   page.getByRole('heading', {name: 'next-intl Beispiel'});
 });
 

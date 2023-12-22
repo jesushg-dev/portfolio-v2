@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic';
 import Layout from '@/components/Layout';
 
 import { notFound } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
 import { locales } from '../../config';

@@ -27,6 +27,21 @@ const config = {
           destination: '/certificates/all',
           permanent: true,
         },
+        {
+          source: '/nl/certificaten',
+          destination: '/nl/certificaten/alle',
+          permanent: true,
+        },
+        {
+          source: '/en/certificates',
+          destination: '/en/certificates/all',
+          permanent: true,
+        },
+        {
+          source: '/es/certificados',
+          destination: '/es/certificados/todos',
+          permanent: true,
+        }
       ];
     }
 };

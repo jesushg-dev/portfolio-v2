@@ -30,7 +30,7 @@ export const appRouter = router({
         type: z
           .enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP', 'CYBERSECURITY', 'DEVOPS', 'SOFTSKILLS', 'TOOLS'])
           .optional(),
-        locale: z.enum(['es', 'en', 'de']).optional().default('en'),
+        locale: z.enum(['es', 'en', 'nl']).optional().default('en'),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -67,7 +67,7 @@ export const appRouter = router({
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
         type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP']).optional(),
-        locale: z.enum(['es', 'en', 'de']).optional().default('en'),
+        locale: z.enum(['es', 'en', 'nl']).optional().default('en'),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -150,7 +150,7 @@ export const appRouter = router({
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
         type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP', 'TOOLS']).optional(),
-        locale: z.enum(['es', 'en', 'de']).optional().default('en'),
+        locale: z.enum(['es', 'en', 'nl']).optional().default('en'),
       })
     )
     .query(async ({ input, ctx }) => {
