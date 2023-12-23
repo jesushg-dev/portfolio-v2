@@ -16,7 +16,7 @@ const Footer: FC<IFooterProps> = ({}) => {
   const t = useTranslations('global.footer');
 
   return (
-    <footer className="bg-gray-900">
+    <footer className="bg-gray-900 z-10">
       <div className="container mx-auto flex max-w-screen-xl flex-wrap items-center justify-between px-4 sm:px-6 py-10 lg:px-8 lg:pt-20">
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full">

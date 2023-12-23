@@ -15,7 +15,7 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange }) => {
 
   return (
     <div className="flex justify-center items-center w-full mb-12">
-      <Tab minimal currentTab={value} setCurrentTab={onChange} className="flex gap-4 items-center overflow-x-auto">
+      <Tab tabId='portfolio-tab' minimal currentTab={value} setCurrentTab={onChange} className="flex gap-4 items-center overflow-x-auto">
         <TabItem icon={FaEye} title={t('filters.all')} description="" />
         <TabItem icon={FaDesktop} title={t('filters.frontend')} description="" />
         <TabItem icon={FaDatabase} title={t('filters.backend')} description="" />

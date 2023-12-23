@@ -34,7 +34,7 @@ const variants = {
 };
 
 const TabItem: FC<TabItemProps> = ({ index = -1, icon: Icon, title, description }) => {
-  const { currentTab, setCurrentTab, minimal, variant } = useTabContext();
+  const { currentTab, setCurrentTab, minimal, variant, tabId } = useTabContext();
 
   const isActive = currentTab === index;
   //determine text based if it is active and which variant is used
@@ -44,7 +44,7 @@ const TabItem: FC<TabItemProps> = ({ index = -1, icon: Icon, title, description 
     <div className="relative" role="tab">
       {isActive && (
         <motion.div 
-          layoutId="background-tab" 
+          layoutId={"background-tab" + tabId}
           className={`rounded-xl absolute shadow-md inset-0 -z-10 ${variant === 'primary' ? 'bg-primary-600' : 'bg-background-100'}`}
         />
       )}
@@ -67,7 +67,7 @@ const TabItem: FC<TabItemProps> = ({ index = -1, icon: Icon, title, description 
           />
           <span className="grow ml-6">
             <span className={`block whitespace-nowrap font-semibold ${minimal ? '' : 'text-lg'}  `}>{title}</span>
-            {minimal ? null : <span className="block mt-1 text-primaryText-800">{description}</span>}
+            {minimal ? null : <span className="hidden lg:block mt-1 text-primaryText-800">{description}</span>}
           </span>
         </span>
       </motion.button>

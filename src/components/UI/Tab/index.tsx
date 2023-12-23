@@ -5,6 +5,7 @@ import TabItem from './TabItem';
 
 //create a context for the tab
 interface ITabContext {
+  tabId: string;
   minimal?: boolean;
   currentTab: number;
   variant?: 'primary' | 'secondary';
@@ -21,9 +22,10 @@ interface ITabProps {
   children?: React.ReactNode;
   className?: string;
   variant?: 'primary' | 'secondary';
+  tabId?: string;
 }
 
-const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurrentTab = () => {}, className, variant = 'primary' }) => {
+const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurrentTab = () => {}, className, variant = 'primary', tabId = '' }) => {
   const [crtTab, setCrtTab] = useState(currentTab);
 
   // Check that every child element is a TabItem
@@ -47,9 +49,9 @@ const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurr
   }, [currentTab]);
 
   return (
-    <TabContext.Provider value={{ currentTab: crtTab, setCurrentTab: handleTabChange, minimal, variant }}>
+    <TabContext.Provider value={{ currentTab: crtTab, setCurrentTab: handleTabChange, minimal, variant, tabId }}>
       <nav className={className}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {tabItems.map((child, index) => {
             return React.cloneElement(child, { index });
           })}
