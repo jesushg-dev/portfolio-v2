@@ -8,6 +8,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Remove TypeWriter component from the project
 - Improve i18n configuration
 - Update Particles.js to latest version
+- Fix theme preview in the theme selector component and add Christmas theme
 
 ## 2.5.2 (2023-08-14)
 

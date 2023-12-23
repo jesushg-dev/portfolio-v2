@@ -49,7 +49,7 @@ const Contact: FC<IContactProps> = ({}) => {
         </div>
       </div>
       <div className="absolute inset-x-0 bottom-4 mx-auto hidden flex-col items-center justify-center gap-2 lg:flex">
-        <span className="icon-scroll h-8 w-5 rounded-3xl"></span>
+        <div className="scroll-indicator"></div>
         <p className="text-xs text-neutral-500">{t('scrollDown')}</p>
       </div>
     </section>

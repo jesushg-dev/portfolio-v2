@@ -15,6 +15,8 @@ const themeMap = {
   'orange-light': ['#FFA948'],
   'main-dark': ['#004ecb'],
   'orange-dark': ['#FF8C00'],
+  'christmas-light': ['#12B686', '#E53E3E'],
+  'christmas-dark': ['#E53E3E', '#12B686'],
 };
 
 const BgParticles = () => {

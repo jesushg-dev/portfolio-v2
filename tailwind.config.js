@@ -22,12 +22,6 @@ module.exports = {
         'profile-photo':
           "url('https://res.cloudinary.com/js-media/image/upload/v1670269379/portfolio/carnet/jesus-hernandez.webp')",
       },
-      keyframes: {
-        mousescroll: {
-          '0%': { opacity: 1 },
-          '100%': { opacity: 0, transform: 'translateY(0.5rem)' },
-        },
-      },
       boxShadow: {
         icon: '0px 10px 10px rgba(0,0,0,0.1)',
       },
@@ -438,6 +432,209 @@ module.exports = {
           600: '#000000',
           700: '#000000',
           800: '#000000',
+          900: '#000000',
+        },
+      }),
+      'christmas-light': light({
+        primary: {
+          50: '#FFEEEE',  // Light red
+          100: '#FED7D7',
+          200: '#FEB2B2',
+          300: '#FC8181',
+          400: '#F56565',
+          500: '#E53E3E', // Traditional Christmas red
+          600: '#C53030',
+          700: '#9B2C2C',
+          800: '#822727',
+          900: '#63171B',
+        },
+        primaryDark: {
+          50: '#E4F9F5',  // Light green
+          100: '#B6F7D4',
+          200: '#87EFC7',
+          300: '#54D8A0',
+          400: '#28C76F',
+          500: '#12B686', // Christmas tree green
+          600: '#0A8F62',
+          700: '#0A6C49',
+          800: '#065A37',
+          900: '#064523',
+        },
+        primaryLight: {
+          50: '#FFFBEA',  // Light gold
+          100: '#FFF3C4',
+          200: '#FCE588',
+          300: '#FADB5F',
+          400: '#F7C948',
+          500: '#F0B429', // Rich gold
+          600: '#DE911D',
+          700: '#CB6E17',
+          800: '#B44D12',
+          900: '#8D2B0B',
+        },
+        primaryText: {
+          50: '#3E3E3E',
+          100: '#363636',
+          200: '#2E2E2E',
+          300: '#262626',
+          400: '#1E1E1E',
+          500: '#212121',
+          600: '#191919',
+          700: '#131313',
+          800: '#0B0B0B',
+          900: '#050505',
+        },
+        secondary: {
+          // Additional shades of red and green
+          50: '#FFEBEE',  // Lighter red
+          100: '#FFCDD2',
+          200: '#EF9A9A',
+          300: '#E57373',
+          400: '#EF5350',
+          500: '#F44336', // Bright red
+          600: '#E53935',
+          700: '#D32F2F',
+          800: '#C62828',
+          900: '#B71C1C',
+        },
+        secondaryText: {
+          // More green shades
+          50: '#E8F5E9',  // Light green
+          100: '#C8E6C9',
+          200: '#A5D6A7',
+          300: '#81C784',
+          400: '#66BB6A',
+          500: '#4CAF50', // Rich green
+          600: '#43A047',
+          700: '#388E3C',
+          800: '#2E7D32',
+          900: '#1B5E20',
+        },
+        divider: {
+          50: '#BDBDBD',
+          100: '#9E9E9E',
+          200: '#757575',
+          300: '#616161',
+          400: '#424242',
+          500: '#212121',
+          600: '#1E1E1E',
+          700: '#171717',
+          800: '#0F0F0F',
+          900: '#000000',
+        },
+        background: {
+          50: '#FFFFFF',
+          100: '#F8FAFC',
+          200: '#F1F5F9',
+          300: '#EBEBEB',
+          400: '#E2E2E2',
+          500: '#748BA7',
+          600: '#6E80A0',
+          700: '#676C96',
+          800: '#F8FAFC',
+          900: '#111827',
+        },
+      }),
+      'christmas-dark': dark({
+        primary: {
+          50: '#FFEEEE',  // Light red
+          100: '#FED7D7',
+          200: '#FEB2B2',
+          300: '#FC8181',
+          400: '#F56565',
+          500: '#E53E3E', // Traditional Christmas red
+          600: '#C53030',
+          700: '#9B2C2C',
+          800: '#822727',
+          900: '#63171B',
+        },
+        primaryDark: {
+          // Dark, lush greens
+          50: '#204D40',  
+          100: '#1A4439',
+          200: '#143B32',
+          300: '#0F322B',
+          400: '#092924',
+          500: '#03201D', // Deep Christmas tree green
+          600: '#001716',
+          700: '#000E0F',
+          800: '#000508',
+          900: '#000000',
+        },
+        primaryLight: {
+          // Soft, muted golds
+          50: '#8C6B44',  
+          100: '#7E613C',
+          200: '#705733',
+          300: '#624D2B',
+          400: '#544322',
+          500: '#463919', // Warm, dark gold
+          600: '#382F10',
+          700: '#2A2507',
+          800: '#1C1B00',
+          900: '#0E1100',
+        },
+        primaryText: {
+          50: '#FFFFFF',
+          100: '#F9F9F9',
+          200: '#F2F2F2',
+          300: '#EBEBEB',
+          400: '#E2E2E2',
+          500: '#D9D9D9',
+          600: '#CCCCCC',
+          700: '#BFBFBF',
+          800: '#B3B3B3',
+          900: '#A6A6A6',
+        },
+        secondary: {
+          // Rich blues to complement the reds
+          50: '#4A5568',  
+          100: '#404A5E',
+          200: '#364054',
+          300: '#2C364A',
+          400: '#222C40',
+          500: '#182235', // Deep night blue
+          600: '#0E182B',
+          700: '#040E21',
+          800: '#000417',
+          900: '#00000D',
+        },
+        secondaryText: {
+          50: '#FFFFFF',
+          100: '#F4F4F4',
+          200: '#EAEAEA',
+          300: '#D9D9D9',
+          400: '#C2C2C2',
+          500: '#A8A8A8',
+          600: '#8E8E8E',
+          700: '#747474',
+          800: '#5A5A5A',
+          900: '#404040',
+        },
+        divider: {
+          // Dark dividers for subtle separation
+          50: '#424242',
+          100: '#383838',
+          200: '#2E2E2E',
+          300: '#242424',
+          400: '#1A1A1A',
+          500: '#101010',
+          600: '#060606',
+          700: '#000000',
+          800: '#000000',
+          900: '#000000',
+        },
+        background: {
+          // Dark and muted background colors
+          50: '#1A202C',
+          100: '#171B26',
+          200: '#141620',
+          300: '#11111A',
+          400: '#0E0C14',
+          500: '#0B070E',
+          600: '#080208',
+          700: '#050000',
+          800: '#020000',
           900: '#000000',
         },
       }),
