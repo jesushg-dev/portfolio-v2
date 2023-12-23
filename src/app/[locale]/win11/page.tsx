@@ -3,12 +3,14 @@
 import React, { FC, lazy, Suspense, useState, useRef, useMemo } from 'react';
 
 import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 import { CSS } from '@dnd-kit/utilities';
 import { DndContext, DragOverlay } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { WidthProvider, Responsive } from 'react-grid-layout';
 
+import { locales } from '@/config';
 import Window from '@/components/WinDesktop/Window';
 import Taskbar from '@/components/WinDesktop/Taskbar';
 import StartMenu from '@/components/WinDesktop/StartMenu';
@@ -16,9 +18,13 @@ import DesktopIcon, { IDesktopIcon } from '@/components/WinDesktop/DesktopIcon';
 
 import '../../../../node_modules/react-grid-layout/css/styles.css';
 
+import type { Metadata } from 'next';
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-interface IWinElevenPageProps {}
+interface IWinElevenPageProps {
+  params: {locale: string};
+}
 
 const icons: IDesktopIcon[] = [
   {
@@ -44,11 +50,9 @@ const icons: IDesktopIcon[] = [
 ];
 
 const WinElevenPage: FC<IWinElevenPageProps> = ({}) => {
-  const t = useTranslations('curriculum');
-  const elementRef = useRef<HTMLDivElement>(null);
+  //const t = useTranslations('curriculum');
 
   const [layouts, setLayouts] = useState(getFromLS('layouts') || {});
-  const [showStartMenu, setShowStartMenu] = useState(false);
 
   const onLayoutChange = (layout: any, layouts: any) => {
     saveToLS('layouts', layouts);
@@ -86,10 +90,25 @@ const WinElevenPage: FC<IWinElevenPageProps> = ({}) => {
         </DndContext>
       </div>
       <Taskbar />
-      {showStartMenu && <StartMenu />}
+      <StartMenu />
     </div>
   );
 };
+
+/*export async function generateMetadata({ params: { locale } }: Omit<IWinElevenPageProps, 'children'>): Promise<Metadata> {
+  const t = await getTranslations({locale, namespace: "curriculum"});
+  
+  return {
+    title: t('title'),
+    description: t("aboutMe"),
+    manifest: '/manifest.json',
+    metadataBase: new URL('https://www.jesushg.com'),
+  };
+}
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({locale}));
+}*/
 
 function getFromLS(key: string) {
   let ls = {} as any;
