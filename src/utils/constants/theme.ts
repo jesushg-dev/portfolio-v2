@@ -3,4 +3,6 @@ export enum ETheme {
   ORANGE_DARK = 'orange-dark',
   MAIN_LIGHT = 'main-light',
   ORANGE_LIGHT = 'orange-light',
+  CHRISTMAS_LIGHT = 'christmas-light',
+  CHRISTMAS_DARK = 'christmas-dark',
 }

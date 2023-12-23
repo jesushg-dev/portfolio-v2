@@ -1,14 +1,17 @@
-import clsx from 'clsx';
 import { ReactNode } from 'react';
 
+import clsx from 'clsx';
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
-import { createTranslator, NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 import TrpcProvider from '@/hoc/TrpcProvider';
 import PreloadTheme from '@/hoc/PreloadTheme';
 import ThemeContextProvider from '@/hoc/ThemeContextProvider';
 
+import { locales } from '@/config';
+import { getMessages } from '@/i18n';
 import type { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -18,30 +21,13 @@ type Props = {
   params: { locale: string };
 };
 
-async function getMessages(locale: string) {
-  try {
-    return {
-      ...(await import(`../../../messages/${locale}/main.json`)).default,
-      ...(await import(`../../../messages/${locale}/global.json`)).default,
-    };
-  } catch (error) {
-    notFound();
-  }
-}
-
-export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
-  const messages = await getMessages(locale);
-
-  // You can use the core (non-React) APIs when you have to use next-intl
-  // outside of components. Potentially this will be simplified in the future
-  // (see https://next-intl-docs.vercel.app/docs/next-13/server-components).
-  const t = createTranslator({ locale, messages });
-
+export async function generateMetadata({ params: { locale } }: Omit<Props, 'children'>): Promise<Metadata> {
+  const t = await getTranslations({locale, namespace: "main"});
+  
   return {
-    title: t('main.meta.title'),
-    description: t('main.meta.description'),
-    themeColor: '#05f',
-    keywords: t('main.meta.keywords'),
+    title: t('meta.title'),
+    description: t('meta.description'),
+    keywords: t('meta.keywords'),
     manifest: '/manifest.json',
     metadataBase: new URL('https://www.jesushg.com'),
     alternates: {
@@ -49,7 +35,7 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       languages: {
         es: 'https://www.jesushg.com/es',
         en: 'https://www.jesushg.com/en',
-        de: 'https://www.jesushg.com/de',
+        nl: 'https://www.jesushg.com/nl',
         'en-US': 'https://www.jesushg.com/en',
         'es-ES': 'https://www.jesushg.com/es',
       },
@@ -83,8 +69,8 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
       },
     ],
     openGraph: {
-      title: t('main.meta.title'),
-      description: t('main.meta.description'),
+      title: t('meta.title'),
+      description: t('meta.description'),
       url: 'https://www.jesushg.com',
       type: 'website',
       images: [
@@ -92,28 +78,37 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
           url: 'https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp',
           width: 800,
           height: 600,
-          alt: 'Og Image Alt',
+          alt: 'A picture of my personal website',
         },
       ],
     },
     twitter: {
       site: '@jesus_hg',
-      title: t('main.meta.title'),
-      description: t('main.meta.description'),
+      title: t('meta.title'),
+      description: t('meta.description'),
       images: [
         {
           url: 'https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp',
           width: 800,
           height: 600,
-          alt: 'Og Image Alt',
+          alt: 'A picture of my personal website',
         },
       ],
     },
   };
 }
 
+export function generateStaticParams() {
+  return locales.map((locale) => ({locale}));
+}
+
 export default async function LocaleLayout({ children, params: { locale } }: Props) {
+  // Get the messages for the locale
   const messages = await getMessages(locale);
+
+  // Validate that the incoming `locale` parameter is valid
+  if (!locales.includes(locale as any)) notFound();
+
 
   return (
     <html className="h-full" lang={locale}>

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { useThemeContext } from '../../../hoc/ThemeContextProvider';
 import { RiSunLine, RiMoonLine, RiPaintBrushLine, RiCheckDoubleLine } from 'react-icons/ri';
@@ -30,8 +30,10 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ visible, newLabel, onChange })
         <div className="flex flex-wrap items-center justify-center gap-3">
           <ThemeOption isDark={true} theme={ETheme.MAIN_DARK} onClick={onChangeTheme} currentTheme={theme} />
           <ThemeOption isDark={true} theme={ETheme.ORANGE_DARK} onClick={onChangeTheme} currentTheme={theme} />
+          <ThemeOption isDark={true} theme={ETheme.CHRISTMAS_DARK} onClick={onChangeTheme} currentTheme={theme} />
           <ThemeOption isDark={false} theme={ETheme.MAIN_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
           <ThemeOption isDark={false} theme={ETheme.ORANGE_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
+          <ThemeOption isDark={false} theme={ETheme.CHRISTMAS_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
         </div>
       </div>
     </div>
@@ -46,8 +48,12 @@ interface IThemeOptionProps {
 }
 
 const ThemeOption: FC<IThemeOptionProps> = ({ isDark, theme, onClick, currentTheme }) => {
+  const themeName = useMemo(() => {
+    return theme?.replace(/-/g, ' ').replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()));
+  }, [theme]);
+
   return (
-    <button type="button" onClick={onClick?.bind(null, isDark, theme)} className={'theme-' + theme + ` relative`}>
+    <button type="button" title={themeName} onClick={onClick?.bind(null, isDark, theme)} data-theme={theme} className="relative">
       <div className="h-8 w-8 rounded-full border-2 border-primary-500 bg-background-200 p-1 text-primary-500 hover:bg-background-400 hover:text-primary-600">
         {isDark ? (
           <RiMoonLine aria-hidden="true" className="h-5 w-5" />

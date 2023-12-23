@@ -1,21 +1,24 @@
-'use client';
+import React, { FC } from 'react';
 
-import { useTranslations } from 'next-intl';
+import { unstable_setRequestLocale } from 'next-intl/server';
+
 import PageLayout from '@/components/Layout';
 
-export default function AboutPage() {
-  const t = useTranslations('main.about');
+interface IAboutPageProps {
+  params: {locale: string};
+}
+
+const AboutPage: FC<IAboutPageProps> = ({params: {locale}}) => {
+
+  // Enable static rendering
+  unstable_setRequestLocale(locale);
 
   return (
     <PageLayout>
       <div className="max-w-[460px]">
-        {/*t.rich('description', {
-          p: (chunks) => <p className="mt-4">{chunks}</p>,
-          code: (chunks) => (
-            <code className="font-mono text-white">{chunks}</code>
-          )
-        })*/}
       </div>
     </PageLayout>
   );
 }
+
+export default AboutPage;

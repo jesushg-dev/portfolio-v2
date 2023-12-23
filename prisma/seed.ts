@@ -24,10 +24,10 @@ async function main() {
   });
 
   const langDe = await prisma.appLanguage.upsert({
-    where: { code: 'de' },
+    where: { code: 'nl' },
     update: {},
     create: {
-      code: 'de',
+      code: 'nl',
       name: 'Dutch',
     },
   });
@@ -1611,7 +1611,7 @@ async function main() {
             {
               title: 'Portfolio',
               description:
-                'Meine persönliche Portfolio-Website, auf der ich meine Fähigkeiten und Kenntnisse dynamisch darstelle.',
+                "Mijn persoonlijke portfoliowebsite waar ik mijn vaardigheden en kennis op een dynamische manier blootleg.",
               appLanguageId: langDe.id,
             },
           ],
@@ -1656,7 +1656,7 @@ async function main() {
             },
             {
               title: 'Rick und Morty | Wiki',
-              description: 'Webanwendung zur Abfrage der Charaktere der Serie Rick und Morty.',
+              description: 'Webtoepassing om de personages van de Rick and Morty-serie te raadplegen.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1694,7 +1694,7 @@ async function main() {
             },
             {
               title: 'Soft Skills Quiz',
-              description: 'Webanwendung, mit der Sie einen Test zu Soft Skills für Entwickler ablegen können.',
+              description: 'Webapplicatie waarmee je een softwaretest voor ontwikkelaars kunt doen.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1733,7 +1733,7 @@ async function main() {
             },
             {
               title: 'Musa Ecommerce',
-              description: 'Webanwendung für den Verkauf von verderblichen Produkten.',
+              description: 'Webapplicatie voor de verkoop van bederfelijke producten.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1771,7 +1771,7 @@ async function main() {
             },
             {
               title: 'Musa Admin',
-              description: 'Webanwendung für die Verwaltung des Online-Shops Musa Ecommerce.',
+              description: 'WWebapplicatie voor de administratie van de online winkel Musa Ecommerce.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1811,7 +1811,7 @@ async function main() {
             {
               title: 'Temperaturkontrollsystem',
               description:
-                'Webprojekt, das die Registrierung des Eintritts der Schüler und ihrer Temperatur ermöglicht.',
+                'Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1856,7 +1856,7 @@ async function main() {
             },
             {
               title: 'Lotty',
-              description: 'Webanwendung zur Abfrage der Ergebnisse der nicaraguanischen Lotterie.',
+              description: 'Webapplicatie om de resultaten van de Nicaraguaanse loterij te raadplegen.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1894,7 +1894,7 @@ async function main() {
             },
             {
               title: 'Lotty Api',
-              description: 'Rest Api für die mobile Anwendung Lucky App.',
+              description: 'Rest Api voor de mobiele applicatie Lucky App.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1934,7 +1934,7 @@ async function main() {
             },
             {
               title: 'Tech Service',
-              description: 'Android-Mobilanwendung zur Steuerung von Reparaturdiensten für technologische Geräte.',
+              description: 'Mobiele Android-toepassing voor de controle van reparatiediensten voor technologische apparaten.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1971,7 +1971,7 @@ async function main() {
             },
             {
               title: 'Tech Service API',
-              description: 'REST-API zur Steuerung von Reparaturdiensten für technologische Geräte.',
+              description: 'REST API voor het beheer van reparatieservices voor technologische apparaten.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2009,7 +2009,7 @@ async function main() {
             },
             {
               title: 'Inventar- und Verkaufskontrolle',
-              description: 'Inventar- und Verkaufskontrollsystem für ein Bekleidungsgeschäft.',
+              description: 'Inventaris- en verkoopcontrolesysteem voor een kledingwinkel.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2052,7 +2052,7 @@ async function main() {
             },
             {
               title: 'Food Service',
-              description: 'Android-Mobilanwendung zur Steuerung von Lebensmittelbestellungen.',
+              description: 'Mobiele Android-applicatie voor de controle van voedselbestellingen.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2090,7 +2090,7 @@ async function main() {
             },
             {
               title: 'Store Client',
-              description: 'Webanwendung für den Online-Kauf von Produkten.',
+              description: 'Webtoepassing voor online aankoop van producten.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2133,7 +2133,7 @@ async function main() {
             },
             {
               title: 'Store Admin',
-              description: 'Administrator eines Online-Shops.',
+              description: 'Beheerder van een online winkel.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2176,7 +2176,7 @@ async function main() {
             },
             {
               title: 'Store Api',
-              description: 'Rest Api für den Administrator eines Online-Shops.',
+              description: 'Rest Api voor de beheerder van een online winkel.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2220,7 +2220,7 @@ async function main() {
             },
             {
               title: 'Kwh Monitor',
-              description: 'Android-Mobilanwendung zur Steuerung des Stromverbrauchs.',
+              description: 'Mobiele Android-toepassing voor de controle van het elektriciteitsverbruik.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2263,7 +2263,7 @@ async function main() {
             },
             {
               title: 'Kwh Monitor Api',
-              description: 'Rest Api für die mobile Anwendung Kwh Monitor.',
+              description: 'Rest Api voor de mobiele toepassing Kwh Monitor.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2301,7 +2301,7 @@ async function main() {
             },
             {
               title: 'Lucky App',
-              description: 'Android-Mobilanwendung zur Steuerung von Lebensmittelbestellungen.',
+              description: 'Mobiele Android-applicatie voor de controle van voedselbestellingen.',
               appLanguageId: langDe.id,
             },
           ],
@@ -2340,7 +2340,7 @@ async function main() {
             },
             {
               title: 'Your farm',
-              description: 'Android-Mobilanwendung zur Steuerung von Lebensmittelbestellungen.',
+              description: 'Mobiele Android-applicatie voor de controle van voedselbestellingen.',
               appLanguageId: langDe.id,
             },
           ],

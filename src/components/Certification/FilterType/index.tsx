@@ -1,19 +1,21 @@
 import React, { FC } from 'react';
 
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
-import Tab, { TabItem } from '@/components/UI/Tab';
 import { MdOutlineSecurity } from 'react-icons/md';
 import { HiOutlineUserGroup, HiOutlineEye } from 'react-icons/hi';
 import { HiOutlineDesktopComputer, HiOutlineDatabase } from 'react-icons/hi';
 
-import { stackTypes } from '@/utils/constants/certificatesType';
+import { typeSKills } from '@/config';
+import { useRouter } from '@/navigation';
+
+import Tab, { TabItem } from '@/components/UI/Tab';
 
 interface IFilterTypeProps {
   value: number;
   onChange: (value: number) => void;
 }
+
 
 const FilterType: FC<IFilterTypeProps> = ({ value }) => {
   const t = useTranslations('certification');
@@ -22,8 +24,7 @@ const FilterType: FC<IFilterTypeProps> = ({ value }) => {
 
   //change current page when change tab
   const onChangeTab = (value: number) => {
-    const type = stackTypes[value].toLowerCase();
-    push(`/certificates/${type}`);
+    push(`/certificates/${typeSKills[value]}`);
   };
 
   return (

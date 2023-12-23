@@ -7,11 +7,30 @@
     @apply absolute left-0 right-0 z-0 block h-full w-full bg-cover bg-bottom bg-no-repeat brightness-75 md:bg-center lg:bg-fixed;
   }
 
-  .icon-scroll {
-    box-shadow: inset 0 0 0 2px #737373;
+  .scroll-indicator {
+    @apply w-5 h-8 rounded-full z-10;
+    box-shadow: inset 0 0 0 2px rgb(146, 146, 146);
+    transform: rotate(0.001deg) translate(0%, 0);
+
     &::before {
-      animation: mousescroll 1.5s infinite;
-      @apply absolute left-1/2 top-2 -ml-[0.15rem] h-[0.28rem] w-[0.28rem] rounded bg-background-50 content-[''];
+      content: "Scroll down";
+      @apply absolute text-white whitespace-nowrap;
+      left: 50%;
+      top: -1.1em;
+      transform: translate(-50%, -100%);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      opacity: 0; // Initially set to 0
+      font-size: .9em; // Tailwind doesn't have exact match for this font size
+    }
+
+    &::after {
+      content: "";
+      @apply absolute w-1 h-1 rounded-full bg-gray-600;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(0.001deg);
+      animation: scrollDot 2s linear infinite;
     }
   }
 
@@ -69,4 +88,12 @@
 
 .react-grid-item.react-grid-placeholder {
   background: #2c2d3349 !important;
+}
+
+@keyframes scrollDot {
+   0% {opacity: 1; transform: translate(-50%, -200%) rotate(0.001deg); height: .25em;}
+   20% {opacity: 1; transform: translate(-50%, -25%) rotate(0.001deg); height: .4em;}
+   40% {opacity: 0; transform: translate(-50%, 50%) rotate(0.001deg); height: .25em;}
+   60% {opacity: 0; transform: translate(-50%, -200%) rotate(0.001deg); height: .25em;}
+   100% {opacity: 1; transform: translate(-50%, -200%) rotate(0.001deg); height: .25em;}
 }

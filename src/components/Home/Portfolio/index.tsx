@@ -41,7 +41,7 @@ const limit = LIMIT_PER_PAGE;
 interface IPortfolioProps {}
 
 const Portfolio: FC<IPortfolioProps> = ({}) => {
-  const locale = useLocale() as 'en' | 'es' | 'de';
+  const locale = useLocale() as 'en' | 'es' | 'nl';
   const ref = useRef(null);
 
   const t = useTranslations('main.portfolio');

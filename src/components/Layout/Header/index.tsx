@@ -1,8 +1,8 @@
 'use client';
 
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 
-import Link from 'next/link';
+import { Link } from '@/navigation';
 
 import NavButton from './NavButton';
 import ToolbarHeader from './ToolbarHeader';

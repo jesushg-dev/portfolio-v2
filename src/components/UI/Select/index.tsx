@@ -38,10 +38,11 @@ interface ISelectProps {
   header?: ReactNode;
   children: ReactNode;
   value?: number | null;
+  disabled?: boolean;
   onChange?: (index: number) => void;
 }
 
-export const Select: FC<ISelectProps> = ({ children, header, value, onChange }) => {
+export const Select: FC<ISelectProps> = ({ children, header, value, onChange, disabled }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -128,7 +129,7 @@ export const Select: FC<ISelectProps> = ({ children, header, value, onChange }) 
       </div>
       <SelectContext.Provider value={selectContext}>
         {isOpen && (
-          <FloatingFocusManager context={context} modal={false}>
+          <FloatingFocusManager context={context} modal={false} disabled={disabled}>
             <div
               ref={refs.setFloating}
               className="rounded-lg bg-background-50 shadow-none outline-none ring-0"
@@ -149,9 +150,10 @@ interface IOptionProps {
   label: string;
   className?: string;
   children?: ReactNode;
+  isPending?: boolean;
 }
 
-export const Option: FC<IOptionProps> = ({ label, className, children }) => {
+export const Option: FC<IOptionProps> = ({ label, className, children, isPending }) => {
   const { activeIndex, selectedIndex, getItemProps, handleSelect } = useContext(SelectContext);
 
   const { ref, index } = useListItem({ label });
@@ -164,6 +166,7 @@ export const Option: FC<IOptionProps> = ({ label, className, children }) => {
       <button
         ref={ref}
         role="option"
+        disabled={isPending}
         aria-selected={isActive && isSelected}
         tabIndex={isActive ? 0 : -1}
         style={{
