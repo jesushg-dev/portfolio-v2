@@ -87,6 +87,32 @@
         "close": "Close",
         "readMore": "Read more",
         "seeCertificates": "See certificates"
+      },
+      "tabs": {
+        "frontend": {
+          "title": "Frontend",
+          "description": "Responsive web design with user experience focus."
+        },
+        "backend": {
+          "title": "Backend",
+          "description": "API and web service development, emphasizing security."
+        },
+        "mobile": {
+          "title": "Mobile",
+          "description": "Android and iOS app development, user experience oriented."
+        },
+        "database": {
+          "title": "Database",
+          "description": "Development of efficient and secure databases."
+        },
+        "devops": {
+          "title": "DevOps",
+          "description": "Building performance-centric CI/CD pipelines."
+        },
+        "tools": {
+          "title": "Tools",
+          "description": "Utilizing diverse software tools for quality solutions."
+        }
       }
     },
     "soft-skills": {

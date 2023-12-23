@@ -8,7 +8,13 @@ import SkillGrouped from './SkillGrouped';
 import { Link } from '@/navigation';
 import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
-import { AnimatePresence, useInView } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+
+import { HiOutlineUserGroup } from 'react-icons/hi';
+import { HiOutlineDesktopComputer, HiOutlineDatabase } from 'react-icons/hi';
+
+import Tab, { TabItem } from '@/components/UI/Tab';
+import HeaderArticle from '@/components/Common/HeaderArticle';
 
 import { trpcReact as trpc } from '@/utils/trpc';
 import { LIMIT_PER_PAGE_BIG } from '@/utils/constants';
@@ -25,10 +31,9 @@ const limit = LIMIT_PER_PAGE_BIG;
 
 const Skills: FC<ISkillsProps> = ({}) => {
   const locale = useLocale() as 'en' | 'es' | 'nl';
-  const ref = useRef(null);
 
   const t = useTranslations('main.skills');
-  const isInView = useInView(ref, { once: true });
+  const [value, setValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<SkillType | null>(null);
   const [selectedSkillType, setSelectedSkillType] = useState<SkillDef>('backend');
@@ -54,53 +59,44 @@ const Skills: FC<ISkillsProps> = ({}) => {
     <>
       <div className="relative bg-background-50">
         <BgParticles />
-        <article id="skills" className="z-10 mx-auto overflow-hidden px-4 py-4 lg:container lg:px-20 lg:py-20 ">
-          <div className="container mx-auto">
-            <div className="-mx-4 flex flex-wrap">
-              <div className="w-full px-4">
-                <div className="mx-auto mb-[60px] max-w-[510px] text-center">
-                  <span className="mb-2 block text-lg font-semibold text-primary-700">{t('subtitle')}</span>
-                  <h2 className="mb-4 text-3xl font-bold text-primaryText-500 sm:text-4xl md:text-[40px]">
-                    {t('title')}
-                  </h2>
-                  <p className="text-body-color text-base">{t('description')}</p>
-                </div>
+        <HeaderArticle showIcon title={t('title')} subtitle={t('subtitle')} description={t('description')} />
+        <article id="skills" className="z-10 mx-auto overflow-hidden px-4 lg:container lg:px-20 pb-4 lg:pb-20">
+          <div className="py-10 relative z-10 lg:grid lg:grid-cols-12 lg:gap-16 lg:items-center">
+            <div className="lg:col-span-5">
+              <div className="relative">
+                <Tab
+                  variant="secondary"
+                  currentTab={value}
+                  setCurrentTab={setValue}
+                  className="flex flex-col gap-4 z-20">
+                  <TabItem
+                    icon={HiOutlineDesktopComputer}
+                    title={t('tabs.frontend.title')}
+                    description={t('tabs.frontend.description')}
+                  />
+                  <TabItem 
+                    icon={HiOutlineDatabase} 
+                    title={t('tabs.backend.title')} 
+                    description={t('tabs.backend.description')}
+                  />
+                  <TabItem
+                    icon={HiOutlineUserGroup}
+                    title={t('tabs.tools.title')}
+                    description={t('tabs.tools.description')}
+                  />
+                </Tab>
               </div>
             </div>
+            <div className="lg:col-span-7">
+              <SkillGrouped
+                onClick={handleOpenModal}
+                type={value === 0 ? 'frontend' : value === 1 ? 'backend' : 'devops' }
+                loading={value === 0 ? frontend?.isLoading : value === 1 ? backend?.isLoading : tools?.isLoading}
+                skills={value === 0 ? frontend?.data?.data || [] : value === 1 ? backend?.data?.data || [] : tools?.data?.data || []}
+              />
+            </div>
           </div>
-          <section
-            ref={ref}
-            className="grid grid-cols-1 gap-6 divide-dashed divide-divider-300 md:grid-cols-2 md:gap-6 md:divide-x lg:grid-cols-3">
-            <SkillGrouped
-              type="frontend"
-              title="Frontend"
-              isInView={isInView}
-              onClick={handleOpenModal}
-              ctxClass="md:pr-8"
-              skills={frontend?.data?.data || []}
-              loading={frontend?.isLoading}
-            />
 
-            <SkillGrouped
-              type="backend"
-              title="Backend"
-              isInView={isInView}
-              onClick={handleOpenModal}
-              ctxClass="md:px-8"
-              skills={backend?.data?.data || []}
-              loading={backend?.isLoading}
-            />
-
-            <SkillGrouped
-              type="devops"
-              title="Tools"
-              isInView={isInView}
-              onClick={handleOpenModal}
-              ctxClass="md:col-span-2 lg:col-span-1 lg:pl-8"
-              skills={tools?.data?.data || []}
-              loading={tools?.isLoading}
-            />
-          </section>
           <div className="container mx-auto flex w-full justify-center py-5">
             <Link
               scroll={true}
@@ -114,6 +110,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
           </div>
         </article>
       </div>
+
       <AnimatePresence>
         <Suspense fallback={<div>Loading...</div>}>
           {isModalOpen && selectedSkill && (

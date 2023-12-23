@@ -34,14 +34,19 @@ const variants = {
 };
 
 const TabItem: FC<TabItemProps> = ({ index = -1, icon: Icon, title, description }) => {
-  const { currentTab, setCurrentTab, minimal } = useTabContext();
+  const { currentTab, setCurrentTab, minimal, variant } = useTabContext();
 
   const isActive = currentTab === index;
+  //determine text based if it is active and which variant is used
+  const textClassName = isActive ? variant === 'primary' ? 'text-secondaryText-50' : 'text-primary-500' : variant === 'primary' ? 'text-primaryText-400' : 'text-primaryText-800';
 
   return (
     <div className="relative" role="tab">
       {isActive && (
-        <motion.div layoutId="background-tab" className="rounded-xl absolute shadow-md inset-0 bg-primary-600  -z-10" />
+        <motion.div 
+          layoutId="background-tab" 
+          className={`rounded-xl absolute shadow-md inset-0 -z-10 ${variant === 'primary' ? 'bg-primary-600' : 'bg-background-100'}`}
+        />
       )}
       <motion.button
         type="button"
@@ -54,7 +59,7 @@ const TabItem: FC<TabItemProps> = ({ index = -1, icon: Icon, title, description 
         onClick={() => setCurrentTab(index)}
         className={`text-left p-4 md:p-5 rounded-xl w-full ${isActive ? '' : 'hover:bg-background-800/30'}`}>
         <span
-          className={`flex items-center transition-all ${isActive ? 'text-secondaryText-50' : 'text-primaryText-400'}`}>
+          className={`flex items-center transition-all ${textClassName}`}>
           <Icon
             className={` ${minimal ? 'mt-0' : 'mt-2 flex-shrink-0  h-6 w-6 md:w-7 md:h-7'}`}
             width={16}

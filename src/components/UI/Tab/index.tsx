@@ -5,8 +5,9 @@ import TabItem from './TabItem';
 
 //create a context for the tab
 interface ITabContext {
-  currentTab: number;
   minimal?: boolean;
+  currentTab: number;
+  variant?: 'primary' | 'secondary';
   setCurrentTab: (value: number) => void;
 }
 
@@ -19,9 +20,10 @@ interface ITabProps {
   setCurrentTab?: (value: number) => void;
   children?: React.ReactNode;
   className?: string;
+  variant?: 'primary' | 'secondary';
 }
 
-const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurrentTab = () => {}, className }) => {
+const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurrentTab = () => {}, className, variant = 'primary' }) => {
   const [crtTab, setCrtTab] = useState(currentTab);
 
   // Check that every child element is a TabItem
@@ -45,7 +47,7 @@ const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurr
   }, [currentTab]);
 
   return (
-    <TabContext.Provider value={{ currentTab: crtTab, setCurrentTab: handleTabChange, minimal }}>
+    <TabContext.Provider value={{ currentTab: crtTab, setCurrentTab: handleTabChange, minimal, variant }}>
       <nav className={className}>
         <AnimatePresence mode="wait">
           {tabItems.map((child, index) => {
