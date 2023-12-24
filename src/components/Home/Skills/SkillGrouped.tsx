@@ -23,9 +23,7 @@ const item = {
 };
 
 interface ISkillGroupedProps {
-  title: string;
   type: SkillDef;
-  isInView: boolean;
   ctxClass?: string;
   skills: SkillType[];
   loading?: boolean;
@@ -33,21 +31,18 @@ interface ISkillGroupedProps {
 }
 
 const SkillGrouped: FC<ISkillGroupedProps> = ({
-  title,
   type,
   skills,
-  isInView,
   onClick,
   ctxClass,
   loading = false,
 }) => {
   return (
     <div className={ctxClass + ' flex h-full w-full flex-col justify-start gap-6'}>
-      <h3 className="w-full text-center text-xl font-bold text-primaryText-900">{title}</h3>
       <motion.ul
         initial="hidden"
         variants={container}
-        animate={isInView ? 'visible' : 'hidden'}
+        animate={'visible'}
         className="grid grid-cols-skills gap-4">
         {skills.map((skill) => (
           <motion.li layout variants={item} key={skill.id} className="flex">
@@ -56,16 +51,12 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({
         ))}
       </motion.ul>
       {loading ? (
-        <div className="w-full text-center">
-          <div className="h-10 w-10 animate-spin  rounded-full border  border-b-2 border-primary-900 " />
+        <div className="w-full flex justify-center items-center">
+          <div className="h-10 w-10 animate-spin rounded-full border  border-b-2 border-primary-900 " />
         </div>
       ) : null}
     </div>
   );
 };
 
-const areEqual = (prevProps: ISkillGroupedProps, nextProps: ISkillGroupedProps) => {
-  return prevProps.skills.length === nextProps.skills.length && prevProps.isInView === nextProps.isInView;
-};
-
-export default memo(SkillGrouped, areEqual);
+export default memo(SkillGrouped);

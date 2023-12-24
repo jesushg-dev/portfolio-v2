@@ -88,6 +88,32 @@
         "close": "Cerrar",
         "readMore": "Leer más",
         "seeCertificates": "Ver certificados"
+      },
+      "tabs": {
+        "frontend": {
+          "title": "Frontend",
+          "description": "Diseño web adaptable enfocado en la experiencia del usuario."
+        },
+        "backend": {
+          "title": "Backend",
+          "description": "Desarrollo de API y servicios web, con énfasis en seguridad."
+        },
+        "mobile": {
+          "title": "Móvil",
+          "description": "Desarrollo de apps para Android e iOS, orientado a la experiencia del usuario."
+        },
+        "database": {
+          "title": "Base de Datos",
+          "description": "Desarrollo de bases de datos eficientes y seguras."
+        },
+        "devops": {
+          "title": "DevOps",
+          "description": "Construcción de pipelines CI/CD centrados en el rendimiento."
+        },
+        "tools": {
+          "title": "Herramientas",
+          "description": "Uso de diversas herramientas de software para soluciones de calidad."
+        }
       }
     },
     "soft-skills": {

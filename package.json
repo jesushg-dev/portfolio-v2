@@ -29,6 +29,7 @@
     "@trpc/server": "^10.44.1",
     "@tsparticles/engine": "^3.0.2",
     "@tsparticles/react": "^3.0.0",
+    "@vercel/speed-insights": "^1.0.2",
     "bson": "^6.2.0",
     "clsx": "^2.0.0",
     "framer-motion": "^10.16.16",

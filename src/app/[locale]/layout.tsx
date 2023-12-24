@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import TrpcProvider from '@/hoc/TrpcProvider';
 import PreloadTheme from '@/hoc/PreloadTheme';
@@ -123,6 +124,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
             <ThemeContextProvider>{children}</ThemeContextProvider>
           </TrpcProvider>
         </NextIntlClientProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

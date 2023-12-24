@@ -8,7 +8,7 @@ import NavButton from './NavButton';
 import ToolbarHeader from './ToolbarHeader';
 import ThemeSelector from './ThemeSelector';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import useIsOnTop from '../../../hooks/useIsOnTop';
 
 interface IHeaderProps {
@@ -19,7 +19,6 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   const t = useTranslations('global.header');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
-  const locale = useLocale();
   const isOnTop = useIsOnTop();
 
   const handleScroll = (id: string) => {

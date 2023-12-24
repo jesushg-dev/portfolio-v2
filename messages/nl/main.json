@@ -87,6 +87,32 @@
         "close": "Sluiten",
         "readMore": "Lees meer",
         "seeCertificates": "Bekijk certificaten"
+      },
+      "tabs": {
+        "frontend": {
+          "title": "Frontend",
+          "description": "Responsief webontwerp met focus op gebruikerservaring."
+        },
+        "backend": {
+          "title": "Backend",
+          "description": "Ontwikkeling van API's en webservices, met nadruk op beveiliging."
+        },
+        "mobile": {
+          "title": "Mobiel",
+          "description": "Ontwikkeling van Android- en iOS-apps, gericht op gebruikerservaring."
+        },
+        "database": {
+          "title": "Database",
+          "description": "Ontwikkeling van efficiënte en beveiligde databases."
+        },
+        "devops": {
+          "title": "DevOps",
+          "description": "Bouwen van op prestaties gerichte CI/CD-pijplijnen."
+        },
+        "tools": {
+          "title": "Gereedschappen",
+          "description": "Gebruik van diverse softwaretools voor kwaliteitsoplossingen."
+        }
       }
     },
     "soft-skills": {
