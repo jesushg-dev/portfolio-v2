@@ -11,7 +11,7 @@ interface IHeaderArticleProps {
 
 const HeaderArticle: FC<IHeaderArticleProps> = ({ title, subtitle, description, className = "", subClassName = "", showIcon = false }) => {
   return (
-    <div className={'mx-auto my-14 max-w-[31.875] flex flex-col items-center justify-center gap-2 relative ' + className + ' ' + subClassName}>
+    <div className={'mx-auto my-14 max-w-[31.875] flex flex-col items-center justify-center gap-2 text-center relative ' + className + ' ' + subClassName}>
       <span className="block text-lg font-semibold text-primary-700">{subtitle}</span>
       <div className='relative'>
         <h2 className="mb-2 text-3xl font-bold text-primaryText-500 sm:text-4xl md:text-[40px]">{title}</h2>

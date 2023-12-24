@@ -51,8 +51,8 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({
         ))}
       </motion.ul>
       {loading ? (
-        <div className="w-full text-center">
-          <div className="h-10 w-10 animate-spin  rounded-full border  border-b-2 border-primary-900 " />
+        <div className="w-full flex justify-center items-center">
+          <div className="h-10 w-10 animate-spin rounded-full border  border-b-2 border-primary-900 " />
         </div>
       ) : null}
     </div>
