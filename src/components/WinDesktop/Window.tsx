@@ -55,9 +55,9 @@ const Window: React.FC<WindowProps> = ({ title, children }) => {
       drag={true}
       dragConstraints={{
         left: 0,
-        right: window.innerWidth - 300, // Window width
+        right: window ? window.innerWidth - 300 : 0, // Window width (considering the taskbar width)
         top: 0,
-        bottom: window.innerHeight - 30, // Window height (considering the taskbar height)
+        bottom: window ? window.innerHeight - 30 : 0, // Window height (considering the taskbar height)
       }}
       dragElastic={0.1}
       onMouseDown={handleMouseDown}

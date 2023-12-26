@@ -12,12 +12,10 @@ const TaskbarIcon: React.FC<ITaskbarIcon> = ({ icon, label, onClick }) => {
   return (
     <button
       type="button"
+      title={label}
       onClick={onClick}
-      className="w-10 group aspect-square rounded hover:bg-white/10 select-none hover:ring-1 ring-white/5 p-2">
-      <Image src={icon} alt={label} width={80} height={80} />
-      <div className="hidden absolute group-hover:flex -mt-[4.6rem] bg-black/80 px-3 p-1.5 select-none hover:ring-1 ring-white/5 rounded text-sm fadein">
-        <p className="w-max text-white">{label}</p>
-      </div>
+      className="p-1.5 rounded hover:bg-white-transparent hover:bg-opacity-80 dark:hover:bg-black dark:hover:bg-opacity-20 duration-200 cursor-auto">
+      <img width={32} src={icon} className="transform active:scale-75 duration-150 " />
     </button>
   );
 };

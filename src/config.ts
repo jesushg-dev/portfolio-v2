@@ -10,10 +10,11 @@ export const pathnames = {
     es: '/acerca',
     nl: '/over',
   },
-  '/curriculum-vitae': {
-    en: '/curriculum-vitae',
-    es: '/curriculum-vitae',
-    nl: '/curriculum-vitae',
+  '/curriculum-vitae' : '/curriculum-vitae',
+  '/eleven-portfolio': {
+    en: '/eleven-portfolio',
+    es: '/eleven-portafolio',
+    nl: '/eleven-portefeuille',
   },
   "/certificates": {
     en: "/certificates",

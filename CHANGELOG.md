@@ -3,7 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.6.1 (2023-12-25)
+
+- Remove dependency: `react-grid-layout` and using `@dnd-kit` as a replacement
+
 ## 2.5.5 (2023-12-22)
+
 - Update Dependencies to latest version to fix security issues and improve performance
 - Remove TypeWriter component from the project
 - Improve i18n configuration

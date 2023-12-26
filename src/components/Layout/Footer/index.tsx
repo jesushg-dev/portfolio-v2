@@ -42,10 +42,10 @@ const Footer: FC<IFooterProps> = ({}) => {
             <h4 className="font-semibold text-gray-100">{t('titles.miscellaneous')}</h4>
             <div className="mt-3 grid space-y-3">
               <div className="flex items-center gap-2">
-                <p className="inline-flex gap-x-2 text-gray-400 hover:text-gray-200">
+                <Link className="inline-flex gap-x-2 text-gray-400 hover:text-gray-200" href="/eleven-portfolio">
                   {t('sections.miscellaneous.opSysCv')}
-                </p>
-                <span className="inline ml-1 text-xs bg-primary-700 text-white py-1 px-2 rounded-md">{t('soon')}</span>
+                </Link>
+                {/** <span className="inline ml-1 text-xs bg-primary-700 text-white py-1 px-2 rounded-md">{t('soon')}</span> */}
               </div>
             </div>
           </div>
