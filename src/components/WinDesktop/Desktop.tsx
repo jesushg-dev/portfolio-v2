@@ -1,13 +1,12 @@
 'use client';
 
-import React, { FC, ReactElement, useState, useRef, useCallback } from 'react';
+import React, { FC, ReactElement, useState, useCallback } from 'react';
 
-import { SortableContext } from '@dnd-kit/sortable';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { DndContext, DragEndEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
 
-import useSize from '@/hooks/useSize';
 import DesktopIcon, { IDesktopIcon } from './DesktopIcon';
+import { useDesktopContext } from '@/hoc/DesktopContextProvider';
 
 const IconSize = { height: 100, width: 100 };
 
@@ -73,7 +72,7 @@ export const Draggable: FC<ICommonProps> = (props) => {
   return (
     <div
       ref={setNodeRef}
-      className="border-2 border-red-500 h-24 w-24 flex items-center justify-center"
+      className="h-24 w-24 flex items-center justify-center"
       style={style}
       {...listeners}
       {...attributes}>
@@ -91,11 +90,9 @@ const initialState: Record<UniqueIdentifier, UniqueIdentifier> = icons.reduce(
   },
   {} as Record<UniqueIdentifier, UniqueIdentifier>
 );
-console.log('🚀 ~ file: Desktop.tsx:94 ~ initialState:', initialState);
 
 const Desktop: FC<IDesktopProps> = ({}) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { width, height } = useSize(ref);
+  const { width, height } = useDesktopContext().sizeScreen;
   const [parents, setParents] = useState<Record<UniqueIdentifier, UniqueIdentifier | null>>(initialState);
 
   //get total number of icons that can fit on the div and also add some extra icons due not being able to fit perfectly
@@ -106,7 +103,7 @@ const Desktop: FC<IDesktopProps> = ({}) => {
       const icon = parents[id] !== null ? icons.find((icon) => icon.id === parents[id]) : undefined;
 
       if (icon === undefined) {
-        return <div className="border-red-500 border-2 h-24 w-24" />;
+        return <div className="h-24 w-24" />;
       }
 
       return (
@@ -121,6 +118,7 @@ const Desktop: FC<IDesktopProps> = ({}) => {
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     // Check if the drag ended outside of a droppable area
     if (!over) return;
+    if (active.id === over.id) return;
 
     setParents((prev) => {
       // Extract the dragged icon ID
@@ -148,15 +146,13 @@ const Desktop: FC<IDesktopProps> = ({}) => {
   };
 
   return (
-    <div ref={ref} className="absolute top-0 left-0 w-full h-full flex flex-wrap">
-      <DndContext onDragEnd={handleDragEnd}>
-        {[...Array(totalIcons)].map((_, id) => (
-          <Droppable key={id} id={id}>
-            <DraggableMarkup id={id} />
-          </Droppable>
-        ))}
-      </DndContext>
-    </div>
+    <DndContext onDragEnd={handleDragEnd}>
+      {[...Array(totalIcons)].map((_, id) => (
+        <Droppable key={id} id={id}>
+          <DraggableMarkup id={id} />
+        </Droppable>
+      ))}
+    </DndContext>
   );
 };
 

@@ -1,50 +1,107 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useState, useRef, useCallback } from 'react';
 
 import { motion } from 'framer-motion';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { useDesktopContext } from '@/hoc/DesktopContextProvider';
+
+const windowVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.2,
+    },
+  },
+};
 
 interface WindowProps {
   title: string;
   children: React.ReactNode;
+  size?: { width: number; height: number };
+  onClosed?: () => void;
+  onMinimized?: () => void;
 }
 
-const Window: React.FC<WindowProps> = ({ title, children }) => {
+const defaultSize = { width: 400, height: 300 };
+
+const Window: React.FC<WindowProps> = ({ title, children, size = defaultSize, onClosed, onMinimized }) => {
+  const { sizeScreen } = useDesktopContext();
+
+  const isResizing = useRef(false);
+  const [sizeState, setSizeState] = useState(size);
   const [isFocused, setIsFocused] = useState(false);
-  const [isResizing, setIsResizing] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: 'window',
     // modifiers: [restrictToWindowEdges],
   });
 
+  const handleMaximize = () => {
+    if (isMaximized) {
+      setIsMaximized(false);
+      setSizeState({ ...size });
+      return;
+    }
+    setIsMaximized(true);
+    setSizeState({ ...sizeScreen });
+  };
+
+  //handle resize
+  const handleResize = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    //if (!isResizing) return;
+    setSizeState((prev) => ({
+      width: prev.width + e.movementX,
+      height: prev.height + e.movementY,
+    }));
+  };
+
+  // Mouse down handler to start resizing
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setIsFocused(true);
-    setIsResizing(true);
+    e.stopPropagation();
+    isResizing.current = true;
   };
 
-  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setIsResizing(false);
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isResizing.current) return;
+    // Update the size based on mouse movement
+    setSizeState((prev) => ({
+      width: prev.width + e.movementX,
+      height: prev.height + e.movementY,
+    }));
+  }, []);
+
+  // Mouse up handler to stop resizing
+  const handleMouseUp = (e: MouseEvent) => {
+    isResizing.current = false;
   };
 
-  const windowVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.5,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
+  // UseEffect to add global event listeners
+  React.useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [handleMouseMove]);
 
   return (
     <motion.div
-      className={`absolute bg-white p-4 border border-gray-500 shadow-lg ${isFocused ? 'z-10' : 'z-0'}`}
+      className={`absolute flex flex-col bg-gray-800 p-0.5 border border-gray-500 shadow-lg ${
+        isFocused ? 'z-10' : 'z-0'
+      }`}
       style={{
         ...transform,
+        width: sizeState.width,
+        height: sizeState.height,
       }}
       ref={setNodeRef}
       {...attributes}
@@ -59,25 +116,28 @@ const Window: React.FC<WindowProps> = ({ title, children }) => {
         top: 0,
         bottom: window ? window.innerHeight - 30 : 0, // Window height (considering the taskbar height)
       }}
-      dragElastic={0.1}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}>
+      dragElastic={0.1}>
       {/* Window content */}
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex justify-between items-center">
         <div>{title}</div>
         <div className="flex space-x-2">
-          <button onClick={() => setIsFocused((prevState) => !prevState)}>_</button>
-          <button onClick={() => console.log('Close')}>x</button>
+          <button className="px-4 py-1 hover:bg-gray-900" onClick={onMinimized}>
+            _
+          </button>
+          <button className="px-4 py-1 hover:bg-yellow-600" onClick={handleMaximize}>
+            []
+          </button>
+          <button className="px-4 py-1 hover:bg-red-600" onClick={onClosed}>
+            x
+          </button>
         </div>
       </div>
-      <div>{children}</div>
+      <div className="flex-1">{children}</div>
       {isResizing && (
         <div
           role="separator"
           className="absolute right-0 bottom-0 w-4 h-4 bg-gray-500 cursor-se-resize"
-          onMouseDown={(e) => {
-            e.stopPropagation();
-          }}
+          onMouseDown={handleMouseDown}
         />
       )}
     </motion.div>
