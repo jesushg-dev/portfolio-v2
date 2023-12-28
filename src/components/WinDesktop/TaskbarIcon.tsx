@@ -4,16 +4,16 @@ import Image from 'next/image';
 
 export interface ITaskbarIcon {
   icon: string;
-  label: string;
+  title: string;
   onClick?: (active: boolean) => void;
   isActive: boolean;
 }
 
-const TaskbarIcon: React.FC<ITaskbarIcon> = ({ icon, label, onClick, isActive }) => {
+const TaskbarIcon: React.FC<ITaskbarIcon> = ({ icon, title, onClick, isActive }) => {
   return (
     <button
       type="button"
-      title={label}
+      title={title}
       onClick={onClick?.bind(null, isActive)}
       className={
         'p-1.5 rounded relative hover:bg-white-transparent hover:bg-black hover:bg-opacity-20 duration-200 cursor-auto' +

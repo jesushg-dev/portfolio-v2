@@ -89,7 +89,7 @@ const Desktop: FC<IDesktopProps> = ({}) => {
 
       return (
         <Draggable id={id}>
-          <DesktopIcon id={icon.id} icon={icon.icon} label={icon.label} onClick={openAboutMe.bind(null, icon)} />
+          <DesktopIcon id={icon.id} icon={icon.icon} title={icon.title} onClick={openAboutMe.bind(null, icon)} />
         </Draggable>
       );
     },

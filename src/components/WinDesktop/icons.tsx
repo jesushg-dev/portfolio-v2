@@ -5,18 +5,18 @@ import ContactForm from '../Home/Contact/ContactForm';
 
 import { ITaskbarIcon } from './TaskbarIcon';
 
-interface ITaskbarIconComponentProps extends ITaskbarIcon {
+interface ITaskbarIconComponentProps extends Omit<ITaskbarIcon, 'onClick' | 'isActive'> {
   id: string;
   title: string;
   component: React.ComponentType<any>;
   size?: { width: number; height: number };
+  skipTaskbar?: boolean;
 }
 
 const icons: ITaskbarIconComponentProps[] = [
   {
     id: 'about',
     icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-about-me-96_x6fa0e.webp',
-    label: 'About Me',
     component: About,
     size: { width: 1150, height: 570 },
     title: 'About Me',
@@ -24,7 +24,6 @@ const icons: ITaskbarIconComponentProps[] = [
   {
     id: 'contact',
     icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-mail-96_upmhx3.webp',
-    label: 'Mail',
     component: ContactForm,
     size: { width: 550, height: 570 },
     title: 'Contact Me',
@@ -32,7 +31,6 @@ const icons: ITaskbarIconComponentProps[] = [
   {
     id: 'portfolio',
     icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-portfolio-96_opfju0.webp',
-    label: 'Portfolio',
     component: Portfolio,
     size: { width: 950, height: 570 },
     title: 'Portfolio',
@@ -40,7 +38,6 @@ const icons: ITaskbarIconComponentProps[] = [
   {
     id: 'resume',
     icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-resume-96-alt_wcl4bp.webp',
-    label: 'Resume',
     component: CurriculumVitae,
     size: { width: 720, height: 570 },
     title: 'Resume',

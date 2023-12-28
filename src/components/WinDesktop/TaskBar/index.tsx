@@ -54,7 +54,7 @@ const TaskBar: FC<ITaskBarProps> = ({}) => {
         {icons.map((icon, index) => (
           <TaskbarIcon
             icon={icon.icon}
-            label={icon.label}
+            title={icon.title}
             key={String(index)}
             isActive={isWindowOpen(icon.id)}
             onClick={(active) => openAboutMe(active, icon)}
