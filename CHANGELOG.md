@@ -6,6 +6,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## 2.6.1 (2023-12-25)
 
 - Remove dependency: `react-grid-layout` and using `@dnd-kit` as a replacement
+- Add stable window managment for win emulation
 
 ## 2.5.5 (2023-12-22)
 
@@ -15,6 +16,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 - Update Particles.js to latest version
 - Fix theme preview in the theme selector component and add Christmas theme
 - Improve skills section with new design and new data structure
+- Add new theme: `Christmas`
 
 ## 2.5.2 (2023-08-14)
 

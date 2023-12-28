@@ -3,40 +3,16 @@
 import React, { FC, ReactElement, useState, useCallback } from 'react';
 
 import { useDroppable, useDraggable } from '@dnd-kit/core';
-import { DndContext, DragEndEvent, DragOverlay, UniqueIdentifier } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, UniqueIdentifier } from '@dnd-kit/core';
 
-import DesktopIcon, { IDesktopIcon } from './DesktopIcon';
+import icons from '../icons';
+import DesktopIcon from './DesktopIcon';
+import { useWindowContext } from '@/hoc/WindowContext';
 import { useDesktopContext } from '@/hoc/DesktopContextProvider';
 
-const IconSize = { height: 100, width: 100 };
+import type { ICreateWindowProps } from '@/hoc/WindowContext';
 
-const icons: IDesktopIcon[] = [
-  {
-    id: 'icon-0',
-    icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-about-me-96_x6fa0e.webp',
-    label: 'About Me',
-  },
-  {
-    id: 'icon-1',
-    icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-mail-96_upmhx3.webp',
-    label: 'Mail',
-  },
-  {
-    id: 'icon-2',
-    icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-portfolio-96_opfju0.webp',
-    label: 'Portfolio',
-  },
-  {
-    id: 'icon-3',
-    icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-resume-96-alt_wcl4bp.webp',
-    label: 'Resume',
-  },
-  {
-    id: 'icon-4',
-    icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-rss-96_wxhdyp.webp',
-    label: 'Blog',
-  },
-];
+const IconSize = { height: 100, width: 100 };
 
 interface ICommonProps {
   id: string | number;
@@ -92,6 +68,7 @@ const initialState: Record<UniqueIdentifier, UniqueIdentifier> = icons.reduce(
 );
 
 const Desktop: FC<IDesktopProps> = ({}) => {
+  const { createWindow } = useWindowContext();
   const { width, height } = useDesktopContext().sizeScreen;
   const [parents, setParents] = useState<Record<UniqueIdentifier, UniqueIdentifier | null>>(initialState);
 
@@ -106,9 +83,13 @@ const Desktop: FC<IDesktopProps> = ({}) => {
         return <div className="h-24 w-24" />;
       }
 
+      const openAboutMe = (data: ICreateWindowProps) => {
+        createWindow(data);
+      };
+
       return (
         <Draggable id={id}>
-          <DesktopIcon id={icon.id} icon={icon.icon} label={icon.label} />
+          <DesktopIcon id={icon.id} icon={icon.icon} label={icon.label} onClick={openAboutMe.bind(null, icon)} />
         </Draggable>
       );
     },

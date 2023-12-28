@@ -5,17 +5,23 @@ import Image from 'next/image';
 export interface ITaskbarIcon {
   icon: string;
   label: string;
-  onClick?: () => void;
+  onClick?: (active: boolean) => void;
+  isActive: boolean;
 }
 
-const TaskbarIcon: React.FC<ITaskbarIcon> = ({ icon, label, onClick }) => {
+const TaskbarIcon: React.FC<ITaskbarIcon> = ({ icon, label, onClick, isActive }) => {
   return (
     <button
       type="button"
       title={label}
-      onClick={onClick}
-      className="p-1.5 rounded hover:bg-white-transparent hover:bg-opacity-80 dark:hover:bg-black dark:hover:bg-opacity-20 duration-200 cursor-auto">
+      onClick={onClick?.bind(null, isActive)}
+      className={
+        'p-1.5 rounded relative hover:bg-white-transparent hover:bg-black hover:bg-opacity-20 duration-200 cursor-auto' +
+        (isActive ? ' bg-white-transparent bg-black bg-opacity-20' : '')
+      }>
       <img width={32} src={icon} className="transform active:scale-75 duration-150 " />
+
+      {isActive && <div className="absolute bottom-0.5 left-3 right-3 h-[0.2rem] bg-primary-500 rounded-sm"></div>}
     </button>
   );
 };

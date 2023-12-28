@@ -2,53 +2,50 @@
 
 import React, { FC, useState, useEffect, startTransition } from 'react';
 
+import Image from 'next/image';
 import { Rnd } from 'react-rnd';
 import { useDesktopContext } from '@/hoc/DesktopContextProvider';
-
-interface Size {
-  width: string | number;
-  height: string | number;
-}
-
-interface Position {
-  x: number;
-  y: number;
-}
+import { IPosition, ISize, useWindowContext } from '@/hoc/WindowContext';
 
 interface IWindowDndProps {
+  id: string;
+  size: ISize;
+  icon: string;
   title: string;
+  position: IPosition;
   children: React.ReactNode;
-  size?: { width: number; height: number };
-  onClosed?: () => void;
-  onMinimized?: () => void;
+  isMinimized: boolean;
+  isMaximized: boolean;
 }
 
-const defaultSize = { width: 400, height: 300 };
+export const Windows = () => {
+  const windowsContext = useWindowContext();
 
-const WindowDnd: FC<IWindowDndProps> = ({ title, children, size = defaultSize, onClosed, onMinimized }) => {
+  return (
+    <>
+      {windowsContext.windows.map((window) => (
+        <WindowDnd key={window.id} {...window}>
+          <window.component />
+        </WindowDnd>
+      ))}
+    </>
+  );
+};
+
+const WindowDnd: FC<IWindowDndProps> = ({ id, title, children, size, position, isMinimized, icon, isMaximized }) => {
   const { sizeScreen } = useDesktopContext();
-  const [crtSize, setCrtSize] = useState<Size>(size);
-  const [isMaximized, setIsMaximized] = useState(false);
-  const [position, setPosition] = useState<Position>({ x: 10, y: 10 });
+  const { toggleMaximizeWindow, toggleMinimizeWindow, destroyWindow } = useWindowContext();
 
-  const handleMaximize = () => {
-    /*if (isMaximized) {
-      setIsMaximized(false);
-      setCrtSize({ ...size });
-      return;
-    }
-    setIsMaximized(true);
-    setPosition({ x: 10, y: 10 });
-    setCrtSize({ ...sizeScreen });*/
-  };
+  const [crtSize, setCrtSize] = useState<ISize>(size);
+  const [crtPosition, setCrtPosition] = useState<IPosition>(position);
 
   const onDragStop = (e: any, d: any) => {
-    setPosition({ x: d.x, y: d.y });
+    setCrtPosition({ x: d.x, y: d.y });
   };
 
-  const onResizeStop = (e: any, direction: any, ref: any, delta: any, newPosition: Position) => {
+  const onResizeStop = (e: any, direction: any, ref: any, delta: any, newPosition: IPosition) => {
     setCrtSize({ width: ref.style.width, height: ref.style.height });
-    setPosition(newPosition);
+    setCrtPosition(newPosition);
   };
 
   useEffect(() => {
@@ -57,41 +54,84 @@ const WindowDnd: FC<IWindowDndProps> = ({ title, children, size = defaultSize, o
 
     startTransition(() => {
       setCrtSize(newSize);
-      setPosition(newPosition);
+      setCrtPosition(newPosition);
     });
   }, [isMaximized]);
 
+  if (isMinimized) {
+    return <></>;
+  }
+
   return (
     <Rnd
-      className="bg-gray-800 p-0.5 border border-gray-500 shadow-lg"
       size={crtSize}
-      position={position}
+      position={crtPosition}
       onDragStop={onDragStop}
-      onResizeStop={onResizeStop}>
+      onResizeStop={onResizeStop}
+      className="bg-gray-800 p-0.5 border border-gray-500 shadow-lg">
       {/* Window content */}
-      <div className="h-full w-full flex flex-col">
+      <div className="h-full w-full flex flex-col bg-background-200">
         <header className="flex justify-between items-center">
-          <h1>
-            <span className="text-gray-400">{'<'}</span>
-            <span className="text-gray-300">{'>'}</span>
-            {title}
-          </h1>
+          <div className="flex p-2">
+            <Image src={icon} alt="icon" width={16} height={16} />
+          </div>
+          <h1 className="text-primaryText-500 text-xs flex-grow">{title}</h1>
           <div className="flex space-x-2">
-            <button className="px-4 py-1 hover:bg-gray-900" onClick={onMinimized} aria-label="Minimize window">
-              _
+            <button
+              aria-label="Minimize window"
+              onClick={() => toggleMinimizeWindow(id)}
+              className="px-5 py-3 hover:bg-background-500 hover:bg-opacity-10 duration-100">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 10 1"
+                className="fill-current text-primaryText-500 w-2 h-2">
+                <path d="M10 -0.000976562V1H0V-0.000976562H10Z" />
+              </svg>
             </button>
             <button
-              className="px-4 py-1 hover:bg-yellow-800"
-              onClick={() => setIsMaximized((e) => !e)}
-              aria-label="Maximize window">
-              []
+              aria-label="Maximize window"
+              onClick={() => toggleMaximizeWindow(id)}
+              className="px-5 py-3 hover:bg-background-500 hover:bg-opacity-10 duration-100">
+              {isMaximized ? (
+                <svg
+                  data-v-7a68f144=""
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 10 10"
+                  className="fill-current text-primaryText-500 w-2 h-2">
+                  <path
+                    data-v-7a68f144=""
+                    d="M10 7.99805H7.99805V10H0V2.00195H2.00195V0H10V7.99805ZM7.00195
+              2.99805H1.00098V8.99902H7.00195V2.99805ZM8.99902
+              1.00098H2.99805V2.00195H7.99805V7.00195H8.99902V1.00098Z"></path>
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 10 10"
+                  className="fill-current text-primaryText-500 w-2 h-2">
+                  <path d="M0,0v10h10V0H0z M9,9H1V1h8V9z" />
+                </svg>
+              )}
             </button>
-            <button className="px-4 py-1 hover:bg-red-600" onClick={onClosed} aria-label="Close window">
-              x
+            <button
+              aria-label="Close window"
+              onClick={() => destroyWindow(id)}
+              className="px-5 py-3 hover:bg-red-500 duration-100">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 10.2 10.2"
+                className="fill-current text-primaryText-500 w-2 h-2">
+                <path
+                  d="M10.2,0.7 9.5,0 5.1,4.4 0.7,0 0,0.7 4.4,5.1 0,9.5 0.7,10.2
+                          5.1,5.8 9.5,10.2 10.2,9.5 5.8,5.1"
+                />
+              </svg>
             </button>
           </div>
         </header>
-        <main className="flex-1 flex flex-col overflow-hidden">{children}</main>
+        <main className="flex-1 flex flex-col overflow-hidden relative select-none">
+          <div className="flex-1 overflow-auto absolute inset-0">{children}</div>
+        </main>
       </div>
     </Rnd>
   );
