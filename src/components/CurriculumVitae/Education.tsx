@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
-import { MdImportContacts } from 'react-icons/md';
+import { ClientLocalImportContactsIcon } from './ClientIcon';
+
 import { useTranslations } from 'next-intl';
-import { useCvContext } from '@/hoc/CvContextProvider';
 
 interface IEducationProps {}
 
@@ -10,12 +10,11 @@ const educations = ['computerEngineering', 'webDeveloper', 'digitalSecurity'] as
 
 const Education: FC<IEducationProps> = ({}) => {
   const t = useTranslations('curriculum');
-  const { showSectionIcons } = useCvContext();
 
   return (
     <>
       <h5 className="text-blue mb-1 flex items-center gap-1 text-lg uppercase font-semibold text-cv tracking-tight">
-        {showSectionIcons && <MdImportContacts className="text-xs" />}
+        <ClientLocalImportContactsIcon />
         {t('header.education')}
       </h5>
 

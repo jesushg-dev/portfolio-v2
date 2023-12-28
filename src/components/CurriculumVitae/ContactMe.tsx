@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 
+import { ClientLocalImportContactsIcon } from './ClientIcon';
+
 import { FaLinkedin } from 'react-icons/fa';
-import { MdImportContacts, MdPhone, MdEmail, MdWeb } from 'react-icons/md';
+import { MdPhone, MdEmail, MdWeb } from 'react-icons/md';
 
 import { useTranslations } from 'next-intl';
-import { useCvContext } from '@/hoc/CvContextProvider';
 
 interface IContactMeProps {}
 
@@ -21,12 +22,11 @@ const contactIcons: Record<ContactMeType, JSX.Element> = {
 
 const ContactMe: FC<IContactMeProps> = ({}) => {
   const t = useTranslations('curriculum');
-  const { showSectionIcons } = useCvContext();
 
   return (
     <>
       <h5 className="text-blue mb-1 flex items-center gap-1 text-lg uppercase font-semibold text-cv tracking-tight">
-        {showSectionIcons && <MdImportContacts className="text-xs" />}
+        <ClientLocalImportContactsIcon />
         {t('header.contact')}
       </h5>
 

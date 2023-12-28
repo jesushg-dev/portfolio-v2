@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
-import { MdOutlineGroups3 } from 'react-icons/md';
+import { ClientLocalGroupsIcon } from './ClientIcon';
+
 import { useTranslations } from 'next-intl';
-import { useCvContext } from '@/hoc/CvContextProvider';
 
 interface IpersonalReferencesProps {}
 
@@ -10,12 +10,11 @@ const personalReferences = ['reference1', 'reference2', 'reference3'] as const;
 
 const PersonalReferences: FC<IpersonalReferencesProps> = ({}) => {
   const t = useTranslations('curriculum');
-  const { showSectionIcons } = useCvContext();
 
   return (
     <>
       <h5 className="text-blue mb-1 flex items-center gap-1 text-lg uppercase font-semibold text-cv tracking-tight">
-        {showSectionIcons && <MdOutlineGroups3 className="text-xs" />}
+        <ClientLocalGroupsIcon />
         {t('header.personalReferences')}
       </h5>
 

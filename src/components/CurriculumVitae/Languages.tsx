@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 
-import { MdImportContacts } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
-import { useCvContext } from '@/hoc/CvContextProvider';
+
+import { ClientLocalImportContactsIcon } from './ClientIcon';
 
 interface ILanguagesProps {}
 
@@ -10,12 +10,11 @@ const languages = ['english', 'spanish'] as const;
 
 const Languages: FC<ILanguagesProps> = ({}) => {
   const t = useTranslations('curriculum');
-  const { showSectionIcons } = useCvContext();
 
   return (
     <>
       <h5 className="text-blue mb-1 flex items-center gap-1 text-lg uppercase font-semibold text-cv tracking-tight">
-        {showSectionIcons && <MdImportContacts className="text-xs" />}
+        <ClientLocalImportContactsIcon />
         {t('header.languages')}
       </h5>
 

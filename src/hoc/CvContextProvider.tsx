@@ -1,3 +1,4 @@
+'use client';
 import React, { FC, ReactNode, createContext, useState, useContext, useEffect } from 'react';
 
 import { useLocale } from 'next-intl';

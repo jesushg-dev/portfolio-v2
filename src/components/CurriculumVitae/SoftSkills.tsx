@@ -1,19 +1,18 @@
 import React, { FC } from 'react';
 
-import { MdInsights } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
-import { useCvContext } from '@/hoc/CvContextProvider';
+
+import { ClientLocalInsightsIcon } from './ClientIcon';
 
 interface IExperienceProps {}
 
 const Experience: FC<IExperienceProps> = ({}) => {
   const t = useTranslations('curriculum');
-  const { showSectionIcons } = useCvContext();
 
   return (
     <>
       <h5 className="text-blue mb-1 flex items-center gap-1 text-lg uppercase font-semibold text-cv tracking-tight">
-        {showSectionIcons && <MdInsights className="text-xs" />}
+        <ClientLocalInsightsIcon />
         {t('header.personalSkills')}
       </h5>
 
