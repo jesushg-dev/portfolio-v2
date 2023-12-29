@@ -4,8 +4,8 @@ const useBoolean = (initial = false) => {
   const [value, setValue] = useState(initial);
 
   const actions = {
-    set: (value: boolean) => setValue(value),
-    toggle: () => setValue((value) => !value),
+    set: (val: boolean) => setValue(val),
+    toggle: () => setValue((val) => !val),
     on: () => setValue(true),
     off: () => setValue(false),
   };

@@ -1,8 +1,8 @@
 import dynamic from 'next/dynamic';
-import Layout from '@/components/Layout';
-
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import { unstable_setRequestLocale as UnstableSetRequestLocale } from 'next-intl/server';
+
+import Layout from '@/components/Layout';
 
 import { locales } from '../../config';
 
@@ -14,16 +14,16 @@ const Portfolio = dynamic(() => import('@/components/Home/Portfolio'));
 const SoftSkills = dynamic(() => import('@/components/Home/SoftSkills'));
 
 type Props = {
-  params: {locale: string};
+  params: { locale: string };
 };
 
-export default function IndexPage({params: {locale}}: Props) {
+export default function IndexPage({ params: { locale } }: Props) {
   // Validate that the incoming `locale` parameter is valid
   const isValidLocale = locales.some((cur) => cur === locale);
   if (!isValidLocale) notFound();
 
   // Enable static rendering
-  unstable_setRequestLocale(locale);
+  UnstableSetRequestLocale(locale);
 
   return (
     <Layout>

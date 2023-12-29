@@ -1,5 +1,6 @@
 import { ObjectId } from 'bson';
 import { PrismaClient } from '@prisma/client';
+
 import certifications from './data/certifications.json';
 
 const prisma = new PrismaClient();
@@ -431,7 +432,7 @@ async function main() {
     },
   });
 
-  /******************Tools */
+  /** ****************Tools */
   const skillNpm = await prisma.skill.upsert({
     where: { id: new ObjectId().toString() },
     update: {},
@@ -1592,7 +1593,7 @@ async function main() {
       type: 'FRONTEND',
       githubUrl: 'https://github.com/jess232017/portfolio-v2',
       websiteUrl: '',
-      //websiteUrl: 'https://www.jesushg.com/',
+      // websiteUrl: 'https://www.jesushg.com/',
       isPrivate: false,
       ProjectTranslation: {
         createMany: {
@@ -1611,7 +1612,7 @@ async function main() {
             {
               title: 'Portfolio',
               description:
-                "Mijn persoonlijke portfoliowebsite waar ik mijn vaardigheden en kennis op een dynamische manier blootleg.",
+                'Mijn persoonlijke portfoliowebsite waar ik mijn vaardigheden en kennis op een dynamische manier blootleg.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1715,7 +1716,7 @@ async function main() {
       type: 'FRONTEND',
       image: 'musa-client_blxhyy',
       githubUrl: 'musa-client_blxhyy',
-      //websiteUrl: 'https://www.musafruit.com/',
+      // websiteUrl: 'https://www.musafruit.com/',
       websiteUrl: '',
       isPrivate: true,
       ProjectTranslation: {
@@ -1810,8 +1811,7 @@ async function main() {
             },
             {
               title: 'Temperaturkontrollsystem',
-              description:
-                'Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur.',
+              description: 'Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur.',
               appLanguageId: langDe.id,
             },
           ],
@@ -1934,7 +1934,8 @@ async function main() {
             },
             {
               title: 'Tech Service',
-              description: 'Mobiele Android-toepassing voor de controle van reparatiediensten voor technologische apparaten.',
+              description:
+                'Mobiele Android-toepassing voor de controle van reparatiediensten voor technologische apparaten.',
               appLanguageId: langDe.id,
             },
           ],

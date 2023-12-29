@@ -1,10 +1,11 @@
-import { router, procedure } from '../trpc';
 import { z } from 'zod';
 
 import { getNowPlaying, getTopTracks } from '@/utils/services/spotify';
 
+import { router, procedure } from '../trpc';
+
 export const appRouter = router({
-  getNowPlaying: procedure.input(z.undefined()).query(async ({}) => {
+  getNowPlaying: procedure.input(z.undefined()).query(async () => {
     const data = await getNowPlaying();
     return data;
   }),
@@ -34,7 +35,7 @@ export const appRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const { limit, keyword, locale, cursor, type } = input;
+      const { limit, cursor, type } = input;
 
       // get certificates with translations
       const data = await ctx.prisma.certification.findMany({
@@ -71,7 +72,7 @@ export const appRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const { limit, keyword, locale, cursor, type } = input;
+      const { limit, locale, cursor, type } = input;
 
       // get language selected
       const appLanguage = await ctx.prisma.appLanguage.findUnique({
@@ -113,9 +114,9 @@ export const appRouter = router({
         const { ProjectTranslation, ProjectSkill, ...rest } = project;
 
         const skills = ProjectSkill.map(({ Skill }) => {
-          const { SkillTranslation, ...rest } = Skill;
+          const { SkillTranslation, ...val } = Skill;
           return {
-            ...rest,
+            ...val,
             ...SkillTranslation[0],
           };
         });
@@ -154,7 +155,7 @@ export const appRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const { limit, keyword, type, locale, cursor } = input;
+      const { limit, type, locale, cursor } = input;
 
       // get language selected
       const appLanguage = await ctx.prisma.appLanguage.findUnique({

@@ -1,10 +1,12 @@
-import React, { FC } from 'react';
-
+import React from 'react';
 import { FaLinkedin } from 'react-icons/fa';
 import { MdImportContacts, MdPhone, MdEmail, MdWeb } from 'react-icons/md';
-
 import { useTranslations } from 'next-intl';
+import type { FC } from 'react';
+
 import { useCvContext } from '@/hoc/CvContextProvider';
+
+// types
 
 interface IContactMeProps {}
 

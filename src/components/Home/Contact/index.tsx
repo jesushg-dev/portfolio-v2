@@ -1,23 +1,22 @@
-"use client";
-import React, { FC, useRef } from 'react';
+'use client';
 
+import type { FC } from 'react';
+import React, { useRef } from 'react';
 import Image from 'next/image';
-
-import Input from '../../UI/Input';
-import ContactItem from './ContactItem';
-import TextArea from '../../UI/TextArea';
-
 import { FaLinkedin, FaGithub, FaWhatsapp, FaRegEnvelope, FaPhoneAlt } from 'react-icons/fa';
-
 import { useTranslations } from 'next-intl';
-
 import type { ImageLoaderProps } from 'next/image';
+
+import TextArea from '../../UI/TextArea';
+import Input from '../../UI/Input';
 import type { IInputRef } from '../../../hooks/useRefInput';
+
+import ContactItem from './ContactItem';
 
 interface IContactProps {}
 
 const cloudinaryLoader = ({ src, width, quality }: ImageLoaderProps) => {
-  const qualityString = quality ? ',q_' + quality : '';
+  const qualityString = quality ? `,q_${quality}` : '';
   return `https://res.cloudinary.com/js-media/image/upload/w_${width}${qualityString},c_limit/v1670990294/portfolio/hero/${src}`;
 };
 

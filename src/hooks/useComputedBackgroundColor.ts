@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, RefObject, DependencyList } from 'react';
+import type { RefObject, DependencyList } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const useComputedBackgroundColor = (dependencies: DependencyList = []): [RefObject<HTMLDivElement>, string] => {
   const ref = useRef<HTMLDivElement>(null);

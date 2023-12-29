@@ -1,35 +1,35 @@
-import React, { FC, useState, useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import useInterval from '@/hooks/useInterval';
+import type { FC } from 'react';
 
+import useInterval from '@/hooks/useInterval';
 import { ETime } from '@/utils/constants/times';
 import { convertMsToMmSs } from '@/utils/tools/time';
 
 interface IProgressTimer {
-  progress_ms: number;
-  duration_ms: number;
+  progressMs: number;
+  durationMs: number;
   isPlaying?: boolean;
   onFinish?: () => void;
   isHidden?: boolean;
 }
 
-const ProgressTimer: FC<IProgressTimer> = ({ progress_ms, duration_ms, onFinish, isPlaying, isHidden = false }) => {
+const ProgressTimer: FC<IProgressTimer> = ({ progressMs, durationMs, onFinish, isPlaying, isHidden = false }) => {
   const t = useTranslations('global.footer');
 
-  const [crtProgress, setCrtProgress] = useState<number>(progress_ms);
+  const [crtProgress, setCrtProgress] = useState<number>(progressMs);
   const [crtProgressPercentage, setCrtProgressPercentage] = useState<number>(0);
 
   useEffect(() => {
-    setCrtProgress(progress_ms);
-  }, [progress_ms]);
+    setCrtProgress(progressMs);
+  }, [progressMs]);
 
   useEffect(() => {
-    setCrtProgressPercentage((crtProgress / duration_ms) * 100);
-    if (crtProgress >= duration_ms) {
+    setCrtProgressPercentage((crtProgress / durationMs) * 100);
+    if (crtProgress >= durationMs) {
       onFinish?.();
     }
-  }, [crtProgress, duration_ms]);
+  }, [crtProgress, durationMs]);
 
   useInterval(() => {
     if (!isPlaying) return;
@@ -43,7 +43,7 @@ const ProgressTimer: FC<IProgressTimer> = ({ progress_ms, duration_ms, onFinish,
           {convertMsToMmSs(crtProgress)}
         </p>
         <p title={t('spotify.hints.totalDuration')} className="text-gray-400/90 text-sm select-none pr-1">
-          {convertMsToMmSs(duration_ms)}
+          {convertMsToMmSs(durationMs)}
         </p>
       </div>
       <div className="flex relative my-3 w-full">
@@ -56,7 +56,7 @@ const ProgressTimer: FC<IProgressTimer> = ({ progress_ms, duration_ms, onFinish,
           max="100"
           value={crtProgressPercentage}
           onChange={() => {
-            //disabled
+            // disabled
           }}
         />
       </div>

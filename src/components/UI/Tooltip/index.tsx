@@ -48,7 +48,7 @@ export function useTooltip({
     ],
   });
 
-  const context = data.context;
+  const { context } = data;
 
   const hover = useHover(context, {
     move: false,
@@ -116,27 +116,36 @@ export const TooltipTrigger = React.forwardRef<HTMLElement, React.HTMLProps<HTML
     return (
       <button
         ref={ref}
+        type="button"
         // The user can style the trigger based on the state
         data-state={context.open ? 'open' : 'closed'}
-        {...context.getReferenceProps(props)}>
+        /* eslint-disable react/jsx-props-no-spreading */
+        {...context.getReferenceProps(props)}
+        /* eslint-enable react/jsx-props-no-spreading */
+      >
         {children}
       </button>
     );
   }
 );
 
-export const TooltipContent = React.forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>(function TooltipContent(
-  props,
-  propRef
-) {
-  const context = useTooltipContext();
-  const ref = useMergeRefs([context.refs.setFloating, propRef]);
+export const TooltipContent = React.forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>(
+  function TooltipContent(props, propRef) {
+    const context = useTooltipContext();
+    const ref = useMergeRefs([context.refs.setFloating, propRef]);
 
-  if (!context.open) return null;
+    if (!context.open) return null;
 
-  return (
-    <FloatingPortal>
-      <div ref={ref} style={context.floatingStyles} {...context.getFloatingProps(props)} />
-    </FloatingPortal>
-  );
-});
+    return (
+      <FloatingPortal>
+        <div
+          ref={ref}
+          style={context.floatingStyles}
+          /* eslint-disable react/jsx-props-no-spreading */
+          {...context.getFloatingProps(props)}
+          /* eslint-enable react/jsx-props-no-spreading */
+        />
+      </FloatingPortal>
+    );
+  }
+);

@@ -1,21 +1,18 @@
 'use client';
 
-import React, { FC,  useState, lazy, Suspense } from 'react';
-
-import BgParticles from './BgParticles';
-import SkillGrouped from './SkillGrouped';
-
-import { Link } from '@/navigation';
-import { useLocale } from 'next-intl';
-import { useTranslations } from 'next-intl';
+import type { FC } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 import { AnimatePresence } from 'framer-motion';
 
+import { Link } from '@/navigation';
 import HeaderArticle from '@/components/Common/HeaderArticle';
-
 import { trpcReact as trpc } from '@/utils/trpc';
 import { LIMIT_PER_PAGE_BIG } from '@/utils/constants';
-
 import type { SkillType } from '@/utils/interfaces/types';
+
+import SkillGrouped from './SkillGrouped';
+import BgParticles from './BgParticles';
 import FilterType from './FilterType';
 
 const SkillModal = lazy(() => import('./SkillModal'));
@@ -35,11 +32,11 @@ const Skills: FC<ISkillsProps> = ({}) => {
   const [selectedSkill, setSelectedSkill] = useState<SkillType | null>(null);
   const [selectedSkillType, setSelectedSkillType] = useState<SkillDef>('backend');
 
-  const [frontend, backend, mobile, tools] = trpc.useQueries((t) => [
-    t.getSkills({ limit, locale, type: 'FRONTEND' }),
-    t.getSkills({ limit, locale, type: 'BACKEND' }),
-    t.getSkills({ limit, locale, type: 'MOBILE' }),
-    t.getSkills({ limit, locale, type: 'TOOLS' }),
+  const [frontend, backend, mobile, tools] = trpc.useQueries((tls) => [
+    tls.getSkills({ limit, locale, type: 'FRONTEND' }),
+    tls.getSkills({ limit, locale, type: 'BACKEND' }),
+    tls.getSkills({ limit, locale, type: 'MOBILE' }),
+    tls.getSkills({ limit, locale, type: 'TOOLS' }),
   ]);
 
   const handleOpenModal = (skill: SkillType, type: SkillDef) => {
@@ -50,6 +47,42 @@ const Skills: FC<ISkillsProps> = ({}) => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const determineType = (val: number): SkillDef => {
+    switch (val) {
+      case 0:
+        return 'frontend';
+      case 1:
+        return 'backend';
+      default:
+        return 'devops';
+    }
+  };
+
+  const determineLoading = (val: number): boolean => {
+    switch (val) {
+      case 0:
+        return frontend?.isLoading;
+      case 1:
+        return backend?.isLoading;
+      default:
+        return tools?.isLoading;
+    }
+  };
+
+  const determineSkills = (val: number): SkillType[] => {
+    switch (val) {
+      case 0: {
+        const data = frontend?.data?.data || [];
+        const dataMobile = mobile?.data?.data || [];
+        return [...data, ...dataMobile];
+      }
+      case 1:
+        return backend?.data?.data || [];
+      default:
+        return tools?.data?.data || [];
+    }
   };
 
   return (
@@ -66,16 +99,16 @@ const Skills: FC<ISkillsProps> = ({}) => {
               <div className="lg:col-span-7">
                 <SkillGrouped
                   onClick={handleOpenModal}
-                  type={value === 0 ? 'frontend' : value === 1 ? 'backend' : 'devops' }
-                  loading={value === 0 ? frontend?.isLoading : value === 1 ? backend?.isLoading : tools?.isLoading}
-                  skills={value === 0 ? frontend?.data?.data || [] : value === 1 ? backend?.data?.data || [] : tools?.data?.data || []}
+                  type={determineType(value)}
+                  loading={determineLoading(value)}
+                  skills={determineSkills(value)}
                 />
               </div>
             </div>
 
             <div className="container mx-auto flex w-full justify-center py-5">
               <Link
-                scroll={true}
+                scroll
                 href="/certificates"
                 className="group z-30 mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600">
                 {t('modal.seeCertificates')}

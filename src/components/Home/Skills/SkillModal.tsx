@@ -1,14 +1,14 @@
-import React, { FC } from 'react';
-
+import type { FC } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { Link } from '@/navigation';
 import { motion } from 'framer-motion';
-import Modal, { CloseModal } from '../../UI/Modal';
-
-import { siLoader } from '../../../utils/tools/medialoader';
 import { useTranslations } from 'next-intl';
 
-import { SkillType } from '../../../utils/interfaces/types';
+import { Link } from '@/navigation';
+
+import Modal, { CloseModal } from '../../UI/Modal';
+import { siLoader } from '../../../utils/tools/medialoader';
+import type { SkillType } from '../../../utils/interfaces/types';
 
 interface ISkillModalProps {
   type: string;

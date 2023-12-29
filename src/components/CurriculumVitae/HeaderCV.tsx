@@ -1,9 +1,12 @@
-import React, { FC } from 'react';
-
+import React from 'react';
 import Image from 'next/image';
-
 import { useTranslations } from 'next-intl';
+import type { FC } from 'react';
+
 import { useCvContext } from '@/hoc/CvContextProvider';
+
+// types
+
 interface IHeaderCVProps {}
 
 const HeaderCV: FC<IHeaderCVProps> = ({}) => {

@@ -1,14 +1,17 @@
-import React, { FC } from 'react';
-
+import React, { useCallback } from 'react';
+import type { FC, ReactNode } from 'react';
 import { MdLocalLibrary } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
+
 import { useCvContext } from '@/hoc/CvContextProvider';
 
 interface IadditionalInformationProps {}
 
-const AdditionalInformation: FC<IadditionalInformationProps> = ({}) => {
+const AdditionalInformation: FC<IadditionalInformationProps> = () => {
   const t = useTranslations('curriculum');
   const { showSectionIcons } = useCvContext();
+
+  const renderItems = useCallback((chunks: ReactNode) => <li className="">{chunks}.</li>, [t]);
 
   return (
     <>
@@ -19,7 +22,7 @@ const AdditionalInformation: FC<IadditionalInformationProps> = ({}) => {
       <div className="mb-4">
         <ul className="pl-8 text-xs list-disc">
           {t.rich('additionalInformation', {
-            item: (chunks) => <li className="">{chunks}.</li>,
+            item: renderItems,
           })}
         </ul>
       </div>

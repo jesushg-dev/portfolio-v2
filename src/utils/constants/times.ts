@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable-next-line no-shadow */
 export enum ETime {
   SECOND = 1000,
   HALF_SECOND = 500,
@@ -14,3 +16,5 @@ export enum ETime {
   YEAR = 365 * 24 * 60 * 60 * 1000,
   HALF_YEAR = 182 * 24 * 60 * 60 * 1000,
 }
+
+/* eslint-enable no-unused-vars */

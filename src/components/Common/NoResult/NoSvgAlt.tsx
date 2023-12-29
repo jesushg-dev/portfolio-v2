@@ -1,14 +1,14 @@
 import { useThemeContext } from '@/hoc/ThemeContextProvider';
 import useComputedBackgroundColor from '@/hooks/useComputedBackgroundColor';
 
-const NoSvgAlt = (props: any) => {
+const NoSvgAlt = () => {
   const { theme } = useThemeContext();
   const [ref, fillColor] = useComputedBackgroundColor([theme]);
 
   return (
     <div>
       <div className="bg-primary-500" ref={ref} />
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 500" {...props}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 500">
         <path
           d="M118.38 437c0 3-10.59 5.41-23.65 5.41S71.09 440 71.09 437s10.59-5.42 23.64-5.42 23.65 2.42 23.65 5.42Z"
           style={{

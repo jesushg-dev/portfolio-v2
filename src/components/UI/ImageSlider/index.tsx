@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-import Image, { ImageLoader } from 'next/image';
+import type { ImageLoader } from 'next/image';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 interface ImageSliderProps {

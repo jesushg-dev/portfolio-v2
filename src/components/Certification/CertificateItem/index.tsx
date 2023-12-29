@@ -1,13 +1,10 @@
-import React, { FC } from 'react';
-
+import React from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { unstable_setRequestLocale } from 'next-intl/server';
-
 import { MdCalendarMonth, MdSchool, MdOutlinePin, MdRemoveRedEye } from 'react-icons/md';
+import type { FC } from 'react';
 
 import type { CertificateType } from '@/utils/interfaces/types';
-
 
 const formatIssuedDate = (issuedDate: number | null) => {
   if (!issuedDate) return '';

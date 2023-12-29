@@ -437,7 +437,7 @@ module.exports = {
       }),
       'christmas-light': light({
         primary: {
-          50: '#FFEEEE',  // Light red
+          50: '#FFEEEE', // Light red
           100: '#FED7D7',
           200: '#FEB2B2',
           300: '#FC8181',
@@ -449,7 +449,7 @@ module.exports = {
           900: '#63171B',
         },
         primaryDark: {
-          50: '#E4F9F5',  // Light green
+          50: '#E4F9F5', // Light green
           100: '#B6F7D4',
           200: '#87EFC7',
           300: '#54D8A0',
@@ -461,7 +461,7 @@ module.exports = {
           900: '#064523',
         },
         primaryLight: {
-          50: '#FFFBEA',  // Light gold
+          50: '#FFFBEA', // Light gold
           100: '#FFF3C4',
           200: '#FCE588',
           300: '#FADB5F',
@@ -486,7 +486,7 @@ module.exports = {
         },
         secondary: {
           // Additional shades of red and green
-          50: '#FFEBEE',  // Lighter red
+          50: '#FFEBEE', // Lighter red
           100: '#FFCDD2',
           200: '#EF9A9A',
           300: '#E57373',
@@ -499,7 +499,7 @@ module.exports = {
         },
         secondaryText: {
           // More green shades
-          50: '#E8F5E9',  // Light green
+          50: '#E8F5E9', // Light green
           100: '#C8E6C9',
           200: '#A5D6A7',
           300: '#81C784',
@@ -537,7 +537,7 @@ module.exports = {
       }),
       'christmas-dark': dark({
         primary: {
-          50: '#FFEEEE',  // Light red
+          50: '#FFEEEE', // Light red
           100: '#FED7D7',
           200: '#FEB2B2',
           300: '#FC8181',
@@ -550,7 +550,7 @@ module.exports = {
         },
         primaryDark: {
           // Dark, lush greens
-          50: '#204D40',  
+          50: '#204D40',
           100: '#1A4439',
           200: '#143B32',
           300: '#0F322B',
@@ -563,7 +563,7 @@ module.exports = {
         },
         primaryLight: {
           // Soft, muted golds
-          50: '#8C6B44',  
+          50: '#8C6B44',
           100: '#7E613C',
           200: '#705733',
           300: '#624D2B',
@@ -588,7 +588,7 @@ module.exports = {
         },
         secondary: {
           // Rich blues to complement the reds
-          50: '#4A5568',  
+          50: '#4A5568',
           100: '#404A5E',
           200: '#364054',
           300: '#2C364A',

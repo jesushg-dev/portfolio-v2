@@ -1,4 +1,5 @@
-import React, { useImperativeHandle, useState, useRef } from 'react';
+import type React from 'react';
+import { useImperativeHandle, useState, useRef, useCallback } from 'react';
 
 export type ValidityType = 'idle' | 'success' | 'error';
 
@@ -17,37 +18,52 @@ const useRefInput = (ref: React.ForwardedRef<IInputRef>) => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState<ValidityType>('idle');
 
+  const setSuccessMessage = useCallback((newMessage: string) => {
+    setError('success');
+    setMessage(newMessage);
+  }, []);
+
+  const setErrorMessage = useCallback((newMessage: string) => {
+    setError('error');
+    setMessage(newMessage);
+    inputRef.current?.setCustomValidity(newMessage);
+  }, []);
+
+  const clear = useCallback(() => {
+    setMessage('');
+    setError('idle');
+
+    inputRef.current?.setCustomValidity('');
+    if (inputRef.current?.value) {
+      inputRef.current.value = '';
+    }
+  }, []);
+
+  const value = useCallback(() => {
+    return inputRef.current?.value || '';
+  }, []);
+
+  const scrollIntoView = useCallback(() => {
+    inputRef.current?.scrollIntoView();
+  }, []);
+
+  const focus = useCallback(() => {
+    inputRef.current?.focus();
+  }, []);
+
   useImperativeHandle(
     ref,
     () => {
       return {
-        focus: () => {
-          inputRef.current?.focus();
-        },
-        scrollIntoView: () => {
-          inputRef.current?.scrollIntoView();
-        },
-        setSuccessMessage: (message: string) => {
-          setError('success');
-          setMessage(message);
-        },
-        setErrorMessage: (message: string) => {
-          setError('error');
-          setMessage(message);
-          inputRef.current?.setCustomValidity(message);
-        },
-        value: () => {
-          return inputRef.current?.value || '';
-        },
-        clear: () => {
-          setMessage('');
-          setError('idle');
-          inputRef.current?.setCustomValidity('');
-          inputRef.current?.value && (inputRef.current.value = '');
-        },
+        focus,
+        clear,
+        value,
+        scrollIntoView,
+        setErrorMessage,
+        setSuccessMessage,
       };
     },
-    [inputRef]
+    [inputRef, focus, clear, value, scrollIntoView, setErrorMessage, setSuccessMessage]
   );
 
   return { inputRef, error, message };

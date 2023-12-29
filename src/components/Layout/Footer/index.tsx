@@ -1,13 +1,13 @@
-import React, { FC } from 'react';
-
+import type { FC } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { Link } from '@/navigation';
 import { useTranslations } from 'next-intl';
-
 import { FcLike } from 'react-icons/fc';
 import { IoMail } from 'react-icons/io5';
 import { FaLinkedinIn, FaGithub } from 'react-icons/fa';
 import { RiPhoneFill, RiWhatsappFill } from 'react-icons/ri';
+
+import { Link } from '@/navigation';
 import SpotifyWidget from '@/components/Common/SpotifyWidget';
 
 interface IFooterProps {}

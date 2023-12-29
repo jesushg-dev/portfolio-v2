@@ -1,6 +1,8 @@
 'use client';
 
-import React, { FC, useState, useEffect, createContext, startTransition } from 'react';
+import type { FC } from 'react';
+import React, { useState, useMemo, useEffect, createContext, startTransition } from 'react';
+
 import { ETheme } from '@/utils/constants/theme';
 
 export type ThemeType = ETheme;
@@ -33,17 +35,17 @@ const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
     isDark: false,
   });
 
-  const setTheme = (theme: ThemeType, isDark: boolean) => {
+  const setTheme = (newTheme: ThemeType, isDark: boolean) => {
     const root = document.documentElement;
     const colorMode = isDark ? 'dark' : 'light';
 
     root.removeAttribute('class');
-    setRawTheme({ theme, isDark });
-    root.classList.add('theme-' + theme);
-    window.localStorage.setItem('theme', theme);
+    setRawTheme({ theme: newTheme, isDark });
+    root.classList.add(`theme-${newTheme}`);
+    window.localStorage.setItem('theme', newTheme);
     window.localStorage.setItem('color-mode', colorMode);
 
-    root.setAttribute('data-theme', theme);
+    root.setAttribute('data-theme', newTheme);
     root.setAttribute('data-color-mode', isDark ? 'dark' : 'light');
   };
 
@@ -57,7 +59,10 @@ const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
     });
   }, []);
 
-  return <ThemeContext.Provider value={{ ...theme, setTheme }}>{children}</ThemeContext.Provider>;
+  // useMemo to memoize the context value
+  const contextValue = useMemo(() => ({ ...theme, setTheme }), [theme]);
+
+  return <ThemeContext.Provider value={contextValue}>{children}</ThemeContext.Provider>;
 };
 
 // Custom hook that shorthands the context!

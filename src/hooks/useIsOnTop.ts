@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const debounce = (func: () => void, delay: number): (() => void) => {
   let timer: NodeJS.Timeout;
-  return function () {
+  return () => {
     clearTimeout(timer);
     timer = setTimeout(func, delay);
   };
@@ -14,8 +14,8 @@ const useIsOnTop = (): boolean => {
   useEffect(() => {
     const handleScroll = (): void => {
       const scrollPosition: number = window.scrollY;
-      const isOnTop: boolean = scrollPosition === 0;
-      setIsOnTop(isOnTop);
+      const newValue: boolean = scrollPosition === 0;
+      setIsOnTop(newValue);
     };
 
     const debouncedScrollHandler = debounce(handleScroll, 10); // Adjust the debounce delay as needed

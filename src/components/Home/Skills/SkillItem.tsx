@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
-
-import Image, { ImageLoaderProps } from 'next/image';
+import type { FC } from 'react';
+import React from 'react';
+import type { ImageLoaderProps } from 'next/image';
+import Image from 'next/image';
 
 interface ISkillItemProps {
   id: string;
@@ -15,9 +16,9 @@ const siLoader = ({ src }: ImageLoaderProps) => {
 };
 
 const SkillItem: FC<ISkillItemProps> = ({ id, image, title, description, onClick }) => {
-  /* border border-primary-50 bg-background-50/50 shadow backdrop-blur-xl*/
+  /* border border-primary-50 bg-background-50/50 shadow backdrop-blur-xl */
   return (
-    <div className="w-full h-full flex group">
+    <div id={id} className="w-full h-full flex group">
       <button
         type="button"
         title={title}

@@ -13,7 +13,7 @@
     transform: rotate(0.001deg) translate(0%, 0);
 
     &::before {
-      content: "Scroll down";
+      content: 'Scroll down';
       @apply absolute text-white whitespace-nowrap;
       left: 50%;
       top: -1.1em;
@@ -21,11 +21,11 @@
       writing-mode: vertical-rl;
       text-orientation: mixed;
       opacity: 0; // Initially set to 0
-      font-size: .9em; // Tailwind doesn't have exact match for this font size
+      font-size: 0.9em; // Tailwind doesn't have exact match for this font size
     }
 
     &::after {
-      content: "";
+      content: '';
       @apply absolute w-1 h-1 rounded-full bg-gray-600;
       top: 50%;
       left: 50%;
@@ -91,9 +91,29 @@
 }
 
 @keyframes scrollDot {
-   0% {opacity: 1; transform: translate(-50%, -200%) rotate(0.001deg); height: .25em;}
-   20% {opacity: 1; transform: translate(-50%, -25%) rotate(0.001deg); height: .4em;}
-   40% {opacity: 0; transform: translate(-50%, 50%) rotate(0.001deg); height: .25em;}
-   60% {opacity: 0; transform: translate(-50%, -200%) rotate(0.001deg); height: .25em;}
-   100% {opacity: 1; transform: translate(-50%, -200%) rotate(0.001deg); height: .25em;}
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -200%) rotate(0.001deg);
+    height: 0.25em;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -25%) rotate(0.001deg);
+    height: 0.4em;
+  }
+  40% {
+    opacity: 0;
+    transform: translate(-50%, 50%) rotate(0.001deg);
+    height: 0.25em;
+  }
+  60% {
+    opacity: 0;
+    transform: translate(-50%, -200%) rotate(0.001deg);
+    height: 0.25em;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -200%) rotate(0.001deg);
+    height: 0.25em;
+  }
 }

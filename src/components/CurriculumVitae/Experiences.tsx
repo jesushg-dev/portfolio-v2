@@ -1,8 +1,11 @@
-import React, { FC } from 'react';
-
+import React, { useCallback } from 'react';
 import { MdAssignment } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
+import type { FC, ReactNode } from 'react';
+
 import { useCvContext } from '@/hoc/CvContextProvider';
+
+// types
 
 interface IExperienceProps {}
 
@@ -11,6 +14,8 @@ const experiences = ['experience1', 'experience2', 'experience3', 'experience4']
 const Experience: FC<IExperienceProps> = ({}) => {
   const t = useTranslations('curriculum');
   const { showSectionIcons } = useCvContext();
+
+  const renderItems = useCallback((chunks: ReactNode) => <li className="">{chunks}.</li>, [t]);
 
   return (
     <>
@@ -27,7 +32,7 @@ const Experience: FC<IExperienceProps> = ({}) => {
           </h4>
           <ul className="pl-8 text-xs list-disc">
             {t.rich(`experiences.${experience}.responsibilities`, {
-              item: (chunks) => <li className="">{chunks}.</li>,
+              item: renderItems,
             })}
           </ul>
         </div>

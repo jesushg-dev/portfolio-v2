@@ -1,7 +1,7 @@
 'use client';
 
-import React, { FC, lazy, Suspense } from 'react';
-
+import type { FC } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useTranslations } from 'next-intl';
 
 import Loading from '@/components/Common/Loading';
@@ -15,11 +15,9 @@ const SoftSkills = lazy(() => import('./SoftSkills'));
 const Experience = lazy(() => import('./Experiences'));
 const TechnicalSkills = lazy(() => import('./TechnicalSkills'));
 const AdditionalInformation = lazy(() => import('./AdditionalInformation'));
-//const PersonalReferences = lazy(() => import('./m/PersonalReferences'));
+// const PersonalReferences = lazy(() => import('./m/PersonalReferences'));
 
-interface ICurriculumVitaeProps {
-    
-}
+interface ICurriculumVitaeProps {}
 
 const CurriculumVitae: FC<ICurriculumVitaeProps> = ({}) => {
   const t = useTranslations('curriculum');
@@ -50,7 +48,7 @@ const CurriculumVitae: FC<ICurriculumVitaeProps> = ({}) => {
             <Experience />
             <SoftSkills />
             <AdditionalInformation />
-            {/**<PersonalReferences /> */}
+            {/** <PersonalReferences /> */}
           </div>
         </div>
       </CvContextProvider>

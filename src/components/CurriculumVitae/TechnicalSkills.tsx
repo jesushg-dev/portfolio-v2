@@ -1,8 +1,11 @@
-import React, { FC } from 'react';
-
+import React, { useCallback } from 'react';
 import { MdSettings } from 'react-icons/md';
 import { useTranslations } from 'next-intl';
+import type { FC, ReactNode } from 'react';
+
 import { useCvContext } from '@/hoc/CvContextProvider';
+
+// types
 
 interface ITechnicalSkillsProps {}
 
@@ -11,6 +14,15 @@ const skillsSection = ['frontEnd', 'backEnd', 'database', 'tools'] as const;
 const TechnicalSkills: FC<ITechnicalSkillsProps> = ({}) => {
   const t = useTranslations('curriculum');
   const { showSectionIcons } = useCvContext();
+
+  const renderItems = useCallback(
+    (chunks: ReactNode) => (
+      <li>
+        <p>{chunks}</p>
+      </li>
+    ),
+    [t]
+  );
 
   return (
     <>
@@ -24,18 +36,14 @@ const TechnicalSkills: FC<ITechnicalSkillsProps> = ({}) => {
 
           <ul className="pl-6 text-xs list-disc grid grid-cols-2 gap-1 ">
             {t.rich(`skills.${section}`, {
-              item: (chunks) => (
-                <li>
-                  <p>{chunks}</p>
-                </li>
-              ),
+              item: renderItems,
             })}
           </ul>
         </div>
       ))}
       <div className="mb-4">
         {skillsSection.map((section) => (
-          <div key={section}></div>
+          <div key={section} />
         ))}
       </div>
     </>

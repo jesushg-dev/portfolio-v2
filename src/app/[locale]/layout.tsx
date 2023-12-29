@@ -1,19 +1,17 @@
-import { ReactNode } from 'react';
-
+import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import { Inter } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata } from 'next';
 
 import TrpcProvider from '@/hoc/TrpcProvider';
 import PreloadTheme from '@/hoc/PreloadTheme';
 import ThemeContextProvider from '@/hoc/ThemeContextProvider';
-
 import { locales } from '@/config';
 import { getMessages } from '@/i18n';
-import type { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,8 +21,8 @@ type Props = {
 };
 
 export async function generateMetadata({ params: { locale } }: Omit<Props, 'children'>): Promise<Metadata> {
-  const t = await getTranslations({locale, namespace: "main"});
-  
+  const t = await getTranslations({ locale, namespace: 'main' });
+
   return {
     title: t('meta.title'),
     description: t('meta.description'),
@@ -100,7 +98,7 @@ export async function generateMetadata({ params: { locale } }: Omit<Props, 'chil
 }
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({locale}));
+  return locales.map((locale) => ({ locale }));
 }
 
 export default async function LocaleLayout({ children, params: { locale } }: Props) {
@@ -109,7 +107,6 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
 
   // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale as any)) notFound();
-
 
   return (
     <html className="h-full" lang={locale}>

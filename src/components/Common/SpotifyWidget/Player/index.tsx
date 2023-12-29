@@ -1,9 +1,9 @@
-import React, { FC, useState, useEffect } from 'react';
-
+import type { FC } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import useInterval from '@/hooks/useInterval';
 import { useAudioPlayer } from 'react-use-audio-player';
 
+import useInterval from '@/hooks/useInterval';
 import { ETime } from '@/utils/constants/times';
 import { convertMsToMmSs } from '@/utils/tools/time';
 
@@ -15,7 +15,7 @@ interface IPlayer {
   volume?: number;
 }
 
-//Player is same as ProgressTimer but user can control time, volume, slide volume bar and etc.
+// Player is same as ProgressTimer but user can control time, volume, slide volume bar and etc.
 const Player: FC<IPlayer> = ({ audioSrc, isPlaying, onChange, isHidden = false, volume = 0.2 }) => {
   const t = useTranslations('global.footer');
 

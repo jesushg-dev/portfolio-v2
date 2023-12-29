@@ -2,7 +2,7 @@ export const stackTypes = [
   'ALL',
   'FRONTEND',
   'BACKEND',
-  //'MOBILE',
+  // 'MOBILE',
   'CYBERSECURITY',
   'SOFTSKILLS',
   'DESKTOP',

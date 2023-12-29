@@ -11,7 +11,7 @@ async function loadMessages(locale: string): Promise<Record<string, MessageStruc
     import(`../messages/${locale}/certificate.json`),
     import(`../messages/${locale}/cv.json`),
     import(`../messages/${locale}/global.json`),
-    import(`../messages/${locale}/main.json`)
+    import(`../messages/${locale}/main.json`),
   ]);
   const messages = modules.reduce((acc, module) => ({ ...acc, ...module.default }), {});
   return messages;
@@ -19,10 +19,10 @@ async function loadMessages(locale: string): Promise<Record<string, MessageStruc
 
 // Exported function
 export async function getMessages(locale: string) {
-  return await loadMessages(locale === 'en' ? 'en' : locale);
+  return loadMessages(locale === 'en' ? 'en' : locale);
 }
 
 // Default export using getRequestConfig
-export default getRequestConfig(async ({locale}) => ({
-  messages: await getMessages(locale)
+export default getRequestConfig(async ({ locale }) => ({
+  messages: await getMessages(locale),
 }));

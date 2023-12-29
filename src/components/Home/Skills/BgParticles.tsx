@@ -1,15 +1,13 @@
 import React, { memo, useEffect, useMemo, useState } from 'react';
-
-import { loadFull } from "tsparticles";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import generateParticlesConfig from '../../../utils/config/particles';
+import { loadFull } from 'tsparticles';
+import Particles, { initParticlesEngine } from '@tsparticles/react';
+import type { Engine } from '@tsparticles/engine';
 
 import { useThemeContext } from '@/hoc/ThemeContextProvider';
 
-import type { Engine } from "@tsparticles/engine";
+import generateParticlesConfig from '../../../utils/config/particles';
 
-
-//create a map to change color of particles based on theme (light/dark)
+// create a map to change color of particles based on theme (light/dark)
 const themeMap = {
   'main-light': ['#004ecb'],
   'orange-light': ['#FFA948'],
@@ -21,7 +19,7 @@ const themeMap = {
 
 const BgParticles = () => {
   const { theme } = useThemeContext();
-  const [ init, setInit ] = useState(false);
+  const [init, setInit] = useState(false);
 
   useEffect(() => {
     initParticlesEngine(async (engine: Engine) => {
@@ -35,16 +33,9 @@ const BgParticles = () => {
     return generateParticlesConfig(themeMap[theme]);
   }, [theme]);
 
-  return (
-    <>
-      {init && 
-        <Particles
-          id="tsparticles"
-          options={skillParticles}
-        />
-      }
-    </>
-  )
+  if (!init) return null;
+
+  return <Particles id="tsparticles" options={skillParticles} />;
 };
 
 const areEqual = () => true;

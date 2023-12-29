@@ -1,4 +1,4 @@
-import { IOptions, RecursivePartial } from "@tsparticles/engine";
+import type { IOptions, RecursivePartial } from '@tsparticles/engine';
 
 const generateParticlesConfig = (color: string[]) => {
   const skillParticles: RecursivePartial<IOptions> = {
@@ -35,7 +35,7 @@ const generateParticlesConfig = (color: string[]) => {
         value: color,
       },
       links: {
-        color: color,
+        color,
         distance: 120,
         enable: true,
         opacity: 0.2,
