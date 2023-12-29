@@ -1,5 +1,11 @@
-import { Track } from './entities';
+import type { Track } from './entities';
 import type { SpotifyEntity } from './entity.d';
+
+export interface PlayHistoryObject {
+  track: Track;
+  played_at?: string;
+  context?: unknown | null;
+}
 
 export interface SpotifyResponse<T extends SpotifyEntity | PlayHistoryObject> {
   href: string;
@@ -24,10 +30,4 @@ export interface NowPlayingResponse {
   progress_ms: number;
   timestamp: number;
   currently_playing_type: 'track' | 'episode' | 'ad' | 'unknown';
-}
-
-export interface PlayHistoryObject {
-  track: Track;
-  played_at?: string;
-  context?: unknown | null;
 }

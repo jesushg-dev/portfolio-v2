@@ -1,7 +1,16 @@
 import React, { forwardRef } from 'react';
-
-import useRefInput, { IInputRef } from '../../../hooks/useRefInput';
 import { IoCloseCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+
+import useRefInput from '../../../hooks/useRefInput';
+import type { IInputRef } from '../../../hooks/useRefInput';
+
+type ErrorState = 'error' | 'idle' | 'success';
+
+const borderColorClasses: Record<ErrorState, string> = {
+  error: 'border-red-500',
+  idle: 'border-divider-200',
+  success: 'border-green-300',
+};
 
 interface IInputProps {
   label?: string;
@@ -17,9 +26,10 @@ const Input = forwardRef<IInputRef, IInputProps>(({ inputProps, labelProps, labe
     <div className="space-y-2">
       {label && (
         <label
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...labelProps}
           htmlFor={inputProps?.id}
-          className={'mb-2 text-sm font-bold text-primaryText-700 ' + labelProps?.className}>
+          className={`mb-2 text-sm font-bold text-primaryText-700 ${labelProps?.className}`}>
           {label}
           {inputProps?.required && <span className="font-normal text-red-500">*</span>}
         </label>
@@ -28,6 +38,7 @@ const Input = forwardRef<IInputRef, IInputProps>(({ inputProps, labelProps, labe
         <div className="relative border-background-300">
           {Icon && (
             <button
+              type="button"
               title={label}
               onClick={() => inputRef.current?.focus()}
               className="absolute inset-y-0 left-0 flex items-center border-r border-background-100 px-4 py-3 ">
@@ -36,13 +47,10 @@ const Input = forwardRef<IInputRef, IInputProps>(({ inputProps, labelProps, labe
           )}
 
           <input
+            // eslint-disable-next-line react/jsx-props-no-spreading
             {...inputProps}
             ref={inputRef as any}
-            className={`w-full rounded border ${
-              error === 'error' ? 'border-red-500' : error === 'idle' ? 'border-divider-200' : 'border-green-300'
-            } bg-transparent py-3 px-3 text-sm text-primaryText-500 placeholder-divider-200 shadow-sm focus:border-primary-700 focus:outline-none  ${
-              inputProps?.className
-            }`}
+            className={`w-full rounded border ${borderColorClasses[error]} bg-transparent py-3 px-3 text-sm text-primaryText-500 placeholder-divider-200 shadow-sm focus:border-primary-700 focus:outline-none  ${inputProps?.className}`}
           />
         </div>
         <div

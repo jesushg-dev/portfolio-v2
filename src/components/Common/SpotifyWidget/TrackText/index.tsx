@@ -1,5 +1,5 @@
-import React, { FC, memo } from 'react';
-
+import type { FC } from 'react';
+import React, { memo } from 'react';
 import Marquee from 'react-fast-marquee';
 
 interface ITrackTextProps {
@@ -9,7 +9,7 @@ interface ITrackTextProps {
 
 const TrackText: FC<ITrackTextProps> = ({ track, url }) => {
   return (
-    <Marquee speed={40} autoFill={true} pauseOnHover={true} pauseOnClick={true} delay={0} direction="left">
+    <Marquee speed={40} autoFill pauseOnHover pauseOnClick delay={0} direction="left">
       <a
         target="_blank"
         rel="noopener noreferrer"

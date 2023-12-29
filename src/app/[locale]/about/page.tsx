@@ -1,24 +1,24 @@
-import React, { FC } from 'react';
-
-import { unstable_setRequestLocale } from 'next-intl/server';
+import React from 'react';
+import type { FC } from 'react';
+import { unstable_setRequestLocale as UnstableSetRequestLocale } from 'next-intl/server';
 
 import PageLayout from '@/components/Layout';
 
+// types
+
 interface IAboutPageProps {
-  params: {locale: string};
+  params: { locale: string };
 }
 
-const AboutPage: FC<IAboutPageProps> = ({params: {locale}}) => {
-
+const AboutPage: FC<IAboutPageProps> = ({ params: { locale } }) => {
   // Enable static rendering
-  unstable_setRequestLocale(locale);
+  UnstableSetRequestLocale(locale);
 
   return (
     <PageLayout>
-      <div className="max-w-[460px]">
-      </div>
+      <div className="max-w-[460px]" />
     </PageLayout>
   );
-}
+};
 
 export default AboutPage;

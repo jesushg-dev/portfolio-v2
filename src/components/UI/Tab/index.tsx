@@ -1,18 +1,10 @@
-import React, { FC, createContext, useMemo, memo, useState, useEffect } from 'react';
-
+import React, { useMemo, memo, useState, useEffect } from 'react';
+import type { FC } from 'react';
 import { AnimatePresence } from 'framer-motion';
+
+import TabContextProvider from '@/hoc/TabContextProvider';
+
 import TabItem from './TabItem';
-
-//create a context for the tab
-interface ITabContext {
-  tabId: string;
-  minimal?: boolean;
-  currentTab: number;
-  variant?: 'primary' | 'secondary';
-  setCurrentTab: (value: number) => void;
-}
-
-const TabContext = createContext<ITabContext | undefined>(undefined);
 
 interface ITabProps {
   minimal?: boolean;
@@ -25,19 +17,23 @@ interface ITabProps {
   tabId?: string;
 }
 
-const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurrentTab = () => {}, className, variant = 'primary', tabId = '' }) => {
+const Tab: FC<ITabProps> = ({
+  children,
+  setCurrentTab = () => {},
+  className,
+  tabId = '',
+  minimal = false,
+  currentTab = 0,
+  vertical = false,
+  variant = 'primary',
+}) => {
   const [crtTab, setCrtTab] = useState(currentTab);
-
   // Check that every child element is a TabItem
   const tabItems = useMemo(() => {
     return React.Children.toArray(children).filter(
       (child) => React.isValidElement(child) && child.type === TabItem
     ) as React.ReactElement[];
   }, [children]);
-
-  if (tabItems.length !== React.Children.count(children)) {
-    throw new Error('Tab component only accepts TabItem components as children');
-  }
 
   const handleTabChange = (value: number) => {
     setCrtTab(value);
@@ -48,8 +44,18 @@ const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurr
     setCrtTab(currentTab);
   }, [currentTab]);
 
+  if (tabItems.length !== React.Children.count(children)) {
+    throw new Error('Tab component only accepts TabItem components as children');
+  }
+
   return (
-    <TabContext.Provider value={{ currentTab: crtTab, setCurrentTab: handleTabChange, minimal, variant, tabId }}>
+    <TabContextProvider
+      tabId={tabId}
+      minimal={minimal}
+      variant={variant}
+      vertical={vertical}
+      currentTab={crtTab}
+      setCurrentTab={handleTabChange}>
       <nav className={className}>
         <AnimatePresence>
           {tabItems.map((child, index) => {
@@ -57,18 +63,8 @@ const Tab: FC<ITabProps> = ({ children, minimal = false, currentTab = 0, setCurr
           })}
         </AnimatePresence>
       </nav>
-    </TabContext.Provider>
+    </TabContextProvider>
   );
 };
 
-//create a usContext but validate if it is used inside a Tab
-const useTabContext = () => {
-  const context = React.useContext(TabContext);
-  if (context === undefined) {
-    throw new Error('useTabContext must be used within a TabProvider');
-  }
-  return context;
-};
-
-export { TabItem, useTabContext };
 export default memo(Tab);

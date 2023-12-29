@@ -1,10 +1,9 @@
-import React, { FC } from 'react';
-
+import type { FC } from 'react';
+import React from 'react';
 import Image from 'next/image';
-
 import { AiFillGithub, AiFillEye } from 'react-icons/ai';
-import { cloudinaryLoader, siLoader } from '../../../utils/tools/medialoader';
 
+import { cloudinaryLoader, siLoader } from '../../../utils/tools/medialoader';
 import type { ProjectType } from '../../../utils/interfaces/types';
 
 interface IPortfolioItemProps extends ProjectType {
@@ -28,7 +27,6 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   privateName,
   privateDescription,
   canSeeDemo,
-  type,
 }) => {
   return (
     <div className="group relative h-60 max-w-sm overflow-hidden rounded bg-background-50 shadow-lg">

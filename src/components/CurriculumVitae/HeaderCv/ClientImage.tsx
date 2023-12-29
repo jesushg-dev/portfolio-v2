@@ -1,7 +1,5 @@
-'use client';
-
-import React, { FC } from 'react';
-
+import React from 'react';
+import type { FC } from 'react';
 import Image from 'next/image';
 
 import { useCvContext } from '@/hoc/CvContextProvider';

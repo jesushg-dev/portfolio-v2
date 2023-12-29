@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import type { FC } from 'react';
+import React from 'react';
+import { RiMenu3Line, RiCloseLine, RiPaintBrushLine } from 'react-icons/ri';
 
 import LocaleSelector from './LocaleSelector';
-
-import { RiMenu3Line, RiCloseLine, RiPaintBrushLine } from 'react-icons/ri';
 
 interface IToolbarHeaderProps {
   isMenuOpen: boolean;

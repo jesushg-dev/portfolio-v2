@@ -1,16 +1,13 @@
-import React, { FC } from 'react';
-
+import React from 'react';
+import type { FC } from 'react';
+import type { Metadata } from 'next';
 import { useTranslations } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import { unstable_setRequestLocale as UnstableSetRequestLocale, getTranslations } from 'next-intl/server';
 
 import Layout from '@/components/Layout';
 import Certification from '@/components/Certification';
 import HeaderArticle from '@/components/Common/HeaderArticle';
-
 import { stackTypes } from '@/utils/constants/certificatesType';
-
-import type { Metadata } from 'next';
 
 interface ICvPageProps {
   params: {
@@ -21,11 +18,11 @@ interface ICvPageProps {
 
 const CvPage: FC<ICvPageProps> = ({ params }) => {
   // Enable static rendering
-  unstable_setRequestLocale(params.locale);
+  UnstableSetRequestLocale(params.locale);
   const t = useTranslations('certification');
 
   return (
-    <Layout headerAlwaysVisible={true}>
+    <Layout headerAlwaysVisible>
       <div className="overflow-hidden">
         <section id="certifications" className="relative mx-auto px-4 pb-6 lg:container lg:px-20 pt-20 lg:pb-20">
           <div className="absolute [mask-image:linear-gradient(to_bottom,transparent,white)] h-96 -inset-x-10 opacity-60 rotate-180 text-gray-500/20 top-0">
@@ -56,11 +53,11 @@ const CvPage: FC<ICvPageProps> = ({ params }) => {
 };
 
 export async function generateMetadata({ params: { locale } }: Omit<ICvPageProps, 'children'>): Promise<Metadata> {
-  const t = await getTranslations({locale, namespace: "certification"});
-  
+  const t = await getTranslations({ locale, namespace: 'certification' });
+
   return {
     title: t('title'),
-    description: t("description"),
+    description: t('description'),
     manifest: '/manifest.json',
     metadataBase: new URL('https://www.jesushg.com'),
   };

@@ -1,11 +1,12 @@
-"use client";
-import React, { FC, useEffect } from 'react';
+'use client';
 
-import { useThemeContext } from '@/hoc/ThemeContextProvider';
-
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
 import typescript from 'highlight.js/lib/languages/typescript';
+
+import { useThemeContext } from '@/hoc/ThemeContextProvider';
 
 import 'highlight.js/styles/github-dark.css';
 
@@ -13,11 +14,10 @@ hljs.registerLanguage('javascript', javascript);
 hljs.registerLanguage('typescript', typescript);
 
 interface ITerminalProps {
-  language: 'javascript' | 'typescript';
   code: string;
 }
 
-const Terminal: FC<ITerminalProps> = ({ language, code }) => {
+const Terminal: FC<ITerminalProps> = ({ code }) => {
   const { isDark } = useThemeContext();
 
   useEffect(() => {

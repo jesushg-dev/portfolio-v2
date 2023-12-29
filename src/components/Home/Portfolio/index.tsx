@@ -1,18 +1,16 @@
 'use client';
 
-import React, { FC, useRef, useMemo, useState, Fragment } from 'react';
-
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
+import type { FC } from 'react';
+import React, { useRef, useMemo, useState, Fragment } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { useTranslations, useLocale } from 'next-intl';
 
 import { trpcReact as trpc } from '@/utils/trpc';
 import { LIMIT_PER_PAGE } from '@/utils/constants';
+import HeaderArticle from '@/components/Common/HeaderArticle';
 
 import FilterType from './FilterType';
 import PortfolioItem from './ProjectItem';
-import HeaderArticle from '@/components/Common/HeaderArticle';
 
 const type = [undefined, 'FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP'] as const;
 
@@ -62,7 +60,7 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
   const { data, isFetching, isLoading, fetchNextPage } = trpc.getProjects.useInfiniteQuery(
     { limit, locale, type: type[crtValue] },
     {
-      getNextPageParam: (data) => data.cursor,
+      getNextPageParam: (info) => info.cursor,
     }
   );
 
@@ -100,7 +98,7 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
 
           <div className="mt-8 flex flex-col items-center justify-center gap-4">
             {isLoading ? (
-              <div className="h-10 w-10 animate-spin rounded-full border border-b-2 border-primary-900 "></div>
+              <div className="h-10 w-10 animate-spin rounded-full border border-b-2 border-primary-900 " />
             ) : null}
 
             {data?.pages[data.pages.length - 1].hasMore ? (

@@ -1,13 +1,13 @@
-import React, { FC } from 'react';
-
-import { unstable_setRequestLocale } from 'next-intl/server';
+import React from 'react';
+import type { FC } from 'react';
+import { unstable_setRequestLocale as UnstableSetRequestLocale } from 'next-intl/server';
 
 interface ICallbackProps {
-  params: {locale: string};
+  params: { locale: string };
 }
-const Callback: FC<ICallbackProps> = ({params: {locale}}) => {
+const Callback: FC<ICallbackProps> = ({ params: { locale } }) => {
   // Enable static rendering
-  unstable_setRequestLocale(locale);
+  UnstableSetRequestLocale(locale);
 
   return (
     <div>

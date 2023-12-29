@@ -1,10 +1,12 @@
-import React, { FC, memo } from 'react';
-
-import SkillItem from './SkillItem';
+import type { FC } from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 
-import type { SkillDef } from '.';
 import type { SkillType } from '../../../utils/interfaces/types';
+
+import SkillItem from './SkillItem';
+
+import type { SkillDef } from '.';
 
 const container = {
   hidden: { opacity: 1 },
@@ -30,23 +32,13 @@ interface ISkillGroupedProps {
   onClick: (skill: SkillType, type: SkillDef) => void;
 }
 
-const SkillGrouped: FC<ISkillGroupedProps> = ({
-  type,
-  skills,
-  onClick,
-  ctxClass,
-  loading = false,
-}) => {
+const SkillGrouped: FC<ISkillGroupedProps> = ({ type, skills, onClick, ctxClass, loading = false }) => {
   return (
-    <div className={ctxClass + ' flex h-full w-full flex-col justify-start gap-6'}>
-      <motion.ul
-        initial="hidden"
-        variants={container}
-        animate={'visible'}
-        className="grid grid-cols-skills gap-4">
+    <div className={`${ctxClass} flex h-full w-full flex-col justify-start gap-6`}>
+      <motion.ul initial="hidden" variants={container} animate="visible" className="grid grid-cols-skills gap-4">
         {skills.map((skill) => (
           <motion.li layout variants={item} key={skill.id} className="flex">
-            <SkillItem {...skill} onClick={onClick.bind(null, skill, type)} />
+            <SkillItem {...skill} onClick={() => onClick(skill, type)} />
           </motion.li>
         ))}
       </motion.ul>

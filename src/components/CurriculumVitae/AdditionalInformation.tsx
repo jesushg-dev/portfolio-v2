@@ -1,13 +1,14 @@
-import React, { FC } from 'react';
-
-import { ClientLocalLibraryIcon } from './ClientIcon';
-
+import React, { useCallback } from 'react';
+import type { FC, ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
+import { ClientLocalLibraryIcon } from './ClientIcon';
 
 interface IadditionalInformationProps {}
 
-const AdditionalInformation: FC<IadditionalInformationProps> = ({}) => {
+const AdditionalInformation: FC<IadditionalInformationProps> = () => {
   const t = useTranslations('curriculum');
+
+  const renderItems = useCallback((chunks: ReactNode) => <li className="">{chunks}.</li>, [t]);
 
   return (
     <>
@@ -18,7 +19,7 @@ const AdditionalInformation: FC<IadditionalInformationProps> = ({}) => {
       <div className="mb-4">
         <ul className="pl-8 text-xs list-disc">
           {t.rich('additionalInformation', {
-            item: (chunks) => <li className="">{chunks}.</li>,
+            item: renderItems,
           })}
         </ul>
       </div>

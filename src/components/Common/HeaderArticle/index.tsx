@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React from 'react';
+import type { FC } from 'react';
 
 interface IHeaderArticleProps {
   title: string;
@@ -9,11 +10,19 @@ interface IHeaderArticleProps {
   showIcon?: boolean;
 }
 
-const HeaderArticle: FC<IHeaderArticleProps> = ({ title, subtitle, description, className = "", subClassName = "", showIcon = false }) => {
+const HeaderArticle: FC<IHeaderArticleProps> = ({
+  title,
+  subtitle,
+  description,
+  className = '',
+  subClassName = '',
+  showIcon = false,
+}) => {
   return (
-    <div className={'mx-auto my-14 max-w-[31.875] flex flex-col items-center justify-center gap-2 text-center relative ' + className + ' ' + subClassName}>
+    <div
+      className={`mx-auto my-14 max-w-[31.875] flex flex-col items-center justify-center gap-2 text-center relative ${className} ${subClassName}`}>
       <span className="block text-lg font-semibold text-primary-700">{subtitle}</span>
-      <div className='relative'>
+      <div className="relative">
         <h2 className="mb-2 text-3xl font-bold text-primaryText-500 sm:text-4xl md:text-[40px]">{title}</h2>
         {showIcon ? (
           <div className="hidden absolute top-0 end-0 translate-x-20 -translate-y-14 md:block ">
@@ -23,8 +32,7 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({ title, subtitle, description, 
               height={135}
               viewBox="0 0 121 135"
               fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+              xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M5 16.4754C11.7688 27.4499 21.2452 57.3224 5 89.0164"
                 stroke="currentColor"
@@ -45,10 +53,7 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({ title, subtitle, description, 
               />
             </svg>
           </div>
-        ) 
-        : 
-          null  
-        }
+        ) : null}
       </div>
       <p className="text-body-color text-base">{description}</p>
     </div>

@@ -1,12 +1,9 @@
-import React, { FC, useMemo } from 'react';
-
-import { Link } from '@/navigation';
+import React, { useMemo } from 'react';
+import type { FC } from 'react';
 import { useTranslations } from 'next-intl';
 
-import TimeLine from '../../Common/TimeLine';
 import Terminal from '../../Common/Terminal';
-
-import { VscLoading } from 'react-icons/vsc';
+import TimeLines from '../../Common/TimeLines';
 
 interface IAboutProps {}
 
@@ -49,7 +46,7 @@ const About: FC<IAboutProps> = ({}) => {
             <p className="text-primaryText text-center text-base">{t('info.description3')}</p>
           </div>
 
-          <Terminal language="typescript" code={code} />
+          <Terminal code={code} />
         </article>
 
         <aside className="flex flex-col items-center gap-2">
@@ -58,23 +55,7 @@ const About: FC<IAboutProps> = ({}) => {
           </div>
           <div className="w-full overflow-x-auto lg:pt-4">
             <div className="flex flex-col items-center gap-2">
-              <ol id="timeline" className="relative flex w-full gap-4 ">
-                {Array.from({ length: 4 }).map((_, index) => (
-                  <TimeLine
-                    key={index}
-                    date={t(`timeline.steps.${index}.date` as any)}
-                    title={t(`timeline.steps.${index}.title` as any)}
-                    text={t(`timeline.steps.${index}.description` as any)}
-                    dateTime={t(`timeline.steps.${index}.dateTime` as any)}
-                  />
-                ))}
-                <li className="-ml-1 flex items-center gap-4 text-sm text-primaryText-800">
-                  <Link href="/curriculum-vitae" className="flex items-center gap-3 hover:text-primary-900">
-                    <VscLoading className="text-md animate-spin border border-primary-900 text-primary-200" />
-                    {t('timeline.subtitle')}
-                  </Link>
-                </li>
-              </ol>
+              <TimeLines />
             </div>
           </div>
         </aside>

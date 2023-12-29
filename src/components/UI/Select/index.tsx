@@ -1,15 +1,5 @@
-import React, {
-  FC,
-  ReactNode,
-  createContext,
-  useState,
-  useRef,
-  useCallback,
-  useMemo,
-  useContext,
-  useEffect,
-} from 'react';
-
+import type { FC, ReactNode } from 'react';
+import React, { createContext, useState, useRef, useCallback, useMemo, useContext, useEffect } from 'react';
 import {
   autoUpdate,
   flip,
@@ -124,7 +114,12 @@ export const Select: FC<ISelectProps> = ({ children, header, value, onChange, di
 
   return (
     <>
-      <div ref={refs.setReference} {...getReferenceProps()}>
+      <div
+        ref={refs.setReference}
+        /* eslint-disable react/jsx-props-no-spreading */
+        {...getReferenceProps()}
+        /* eslint-enable react/jsx-props-no-spreading */
+      >
         {header || <span className="text-sm text-primaryText-700">{selectedLabel ?? 'Select...'}</span>}
       </div>
       <SelectContext.Provider value={selectContext}>
@@ -134,7 +129,10 @@ export const Select: FC<ISelectProps> = ({ children, header, value, onChange, di
               ref={refs.setFloating}
               className="rounded-lg bg-background-50 shadow-none outline-none ring-0"
               style={floatingStyles}
-              {...getFloatingProps()}>
+              /* eslint-disable react/jsx-props-no-spreading */
+              {...getFloatingProps()}
+              /* eslint-enable react/jsx-props-no-spreading */
+            >
               <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
                 <ul className="py-2">{children}</ul>
               </FloatingList>
@@ -165,6 +163,7 @@ export const Option: FC<IOptionProps> = ({ label, className, children, isPending
     <li className="w-full">
       <button
         ref={ref}
+        type="button"
         role="option"
         disabled={isPending}
         aria-selected={isActive && isSelected}
@@ -172,10 +171,13 @@ export const Option: FC<IOptionProps> = ({ label, className, children, isPending
         style={{
           fontWeight: isSelected ? 'bold' : '',
         }}
-        className={'w-full shadow-none outline-none ring-0 ' + className}
+        className={`w-full shadow-none outline-none ring-0 ${className}`}
+        /* eslint-disable react/jsx-props-no-spreading */
         {...getItemProps({
           onClick: () => handleSelect(index),
-        })}>
+        })}
+        /* eslint-enable react/jsx-props-no-spreading */
+      >
         {children ?? label}
       </button>
     </li>

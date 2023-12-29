@@ -1,8 +1,8 @@
-"use client";
-import { useEffect, useState, FC } from 'react';
+'use client';
 
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-
 import { BiArrowFromBottom } from 'react-icons/bi';
 
 const ScrollToTop: FC = () => {

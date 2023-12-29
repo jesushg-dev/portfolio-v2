@@ -1,21 +1,18 @@
 'use client';
-import React, { FC } from 'react';
-
+import React from 'react';
+import type { FC } from 'react';
 import Image from 'next/image';
-
-import ContactForm from './ContactForm';
-import ContactItem from './ContactItem';
-
 import { FaLinkedin, FaGithub, FaWhatsapp, FaRegEnvelope, FaPhoneAlt } from 'react-icons/fa';
-
 import { useTranslations } from 'next-intl';
-
 import type { ImageLoaderProps } from 'next/image';
+
+import ContactItem from './ContactItem';
+import ContactForm from './ContactForm';
 
 interface IContactProps {}
 
 const cloudinaryLoader = ({ src, width, quality }: ImageLoaderProps) => {
-  const qualityString = quality ? ',q_' + quality : '';
+  const qualityString = quality ? `,q_${quality}` : '';
   return `https://res.cloudinary.com/js-media/image/upload/w_${width}${qualityString},c_limit/v1670990294/portfolio/hero/${src}`;
 };
 

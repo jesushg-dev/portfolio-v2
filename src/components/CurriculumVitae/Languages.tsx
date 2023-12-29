@@ -1,8 +1,7 @@
-import React, { FC } from 'react';
-
-import { useTranslations } from 'next-intl';
-
+import React from 'react';
+import type { FC } from 'react';
 import { ClientLocalImportContactsIcon } from './ClientIcon';
+import { useTranslations } from 'next-intl';
 
 interface ILanguagesProps {}
 

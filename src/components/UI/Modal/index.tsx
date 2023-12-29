@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import { motion, AnimatePresence } from 'framer-motion';
 import { RiCloseCircleFill } from 'react-icons/ri';
 
@@ -32,10 +31,7 @@ const Modal: React.FC<IModalProps> = ({ children, onClickBackdrop, className }) 
           onKeyUp={onClickBackdrop}
         />
         <div
-          className={
-            'selection: z-50 h-full max-h-screen w-full overflow-y-auto border border-background-100 bg-background-50 shadow-lg md:h-auto md:w-3/5 md:rounded-lg lg:w-2/5' +
-            className
-          }>
+          className={`selection: z-50 h-full max-h-screen w-full overflow-y-auto border border-background-100 bg-background-50 shadow-lg md:h-auto md:w-3/5 md:rounded-lg lg:w-2/5${className}`}>
           {children}
         </div>
       </motion.div>
@@ -57,8 +53,8 @@ const CloseModal: React.FC<ICloseModalProps> = ({ onClick, className, classIcon,
       aria-label={title}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
-      className={'pressable absolute top-3 right-3 p-2 text-primaryText-500 ' + className}>
-      <RiCloseCircleFill className={'h-7 w-7 ' + classIcon} />
+      className={`pressable absolute top-3 right-3 p-2 text-primaryText-500 ${className}`}>
+      <RiCloseCircleFill className={`h-7 w-7 ${classIcon}`} />
     </motion.button>
   );
 };

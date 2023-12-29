@@ -18,6 +18,7 @@ const useInterval = (callback: Callback, delay: number | null): void => {
         clearInterval(intervalId); // Clear interval on cleanup
       };
     }
+    return undefined;
   }, [delay]);
 };
 

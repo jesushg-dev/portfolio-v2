@@ -1,5 +1,7 @@
-import React, { FC } from 'react';
+'use client';
 
+import type { FC } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
 
 import HeaderCv from './HeaderCv';

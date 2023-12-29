@@ -1,29 +1,28 @@
-"use client";
+'use client';
 
-import React, { FC, useState, memo } from 'react';
-
+import type { FC } from 'react';
+import React, { useState, memo } from 'react';
 import Image from 'next/image';
-
-import Player from './Player';
-import ProgressTimer from './ProgressTimer';
-
 import { useTranslations } from 'next-intl';
 import { IoPause, IoPlay, IoVolumeMediumOutline } from 'react-icons/io5';
 
 import { trpcReact as trpc } from '@/utils/trpc';
-import ArtistText from './ArtistText';
-import TrackText from './TrackText';
 import useInterval from '@/hooks/useInterval';
 import { ETime } from '@/utils/constants/times';
 
+import ArtistText from './ArtistText';
+import TrackText from './TrackText';
+import ProgressTimer from './ProgressTimer';
+import Player from './Player';
+
 interface ISpotifyWidgetProps {}
 
-const SpotifyWidget: FC<ISpotifyWidgetProps> = ({}) => {
+const SpotifyWidget: FC<ISpotifyWidgetProps> = () => {
   const t = useTranslations('global.footer');
 
   const { data, isLoading, refetch } = trpc.getNowPlaying.useQuery();
 
-  const [localVolume, setLocalVolume] = useState<number>(0.4);
+  const [localVolume, setLocalVolume] = useState<number>(10);
   const [isLocalPlaying, setIsLocalPlaying] = useState<boolean>(false);
 
   const togglePlayPause = () => {
@@ -132,13 +131,13 @@ const SpotifyWidget: FC<ISpotifyWidgetProps> = ({}) => {
 
           <ProgressTimer
             isHidden={isLocalPlaying}
-            progress_ms={data.progress_ms}
-            duration_ms={data.item.duration_ms}
+            progressMs={data.progress_ms}
+            durationMs={data.item.duration_ms}
             onFinish={refetch}
             isPlaying={data.is_playing}
           />
 
-          {/**<a
+          {/** <a
             target="_blank"
             rel="noopener noreferrer"
             href={data.item.external_urls.spotify}
