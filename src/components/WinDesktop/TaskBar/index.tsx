@@ -1,16 +1,16 @@
 'use client';
 
-import React, { FC, useCallback } from 'react';
-
+import React, { useCallback } from 'react';
+import type { FC } from 'react';
 import Image from 'next/image';
 
+import { useWindowContext } from '@/hoc/WindowContext';
+import type { ICreateWindowProps } from '@/hoc/WindowContext';
+
 import icons from '../icons';
+
 import Watch from './Watch';
 import TaskbarIcon from '../TaskbarIcon';
-
-import { useWindowContext } from '@/hoc/WindowContext';
-
-import type { ICreateWindowProps } from '@/hoc/WindowContext';
 
 interface ITaskBarProps {}
 
@@ -25,7 +25,7 @@ const TaskBar: FC<ITaskBarProps> = ({}) => {
     createWindow(data);
   };
 
-  //check if window is open
+  //  check if window is open
   const isWindowOpen = useCallback((id: string) => windows.some((window) => window.id === id), [windows]);
 
   return (
@@ -51,11 +51,11 @@ const TaskBar: FC<ITaskBarProps> = ({}) => {
             src="https://res.cloudinary.com/js-media/image/upload/v1703735860/portfolio/win11/icons/dzzpw39dqqu7htmkdm76.webp"
           />
         </div>
-        {icons.map((icon, index) => (
+        {icons.map((icon) => (
           <TaskbarIcon
+            key={icon.id}
             icon={icon.icon}
             title={icon.title}
-            key={String(index)}
             isActive={isWindowOpen(icon.id)}
             onClick={(active) => openAboutMe(active, icon)}
           />

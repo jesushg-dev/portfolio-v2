@@ -1,8 +1,10 @@
 'use client';
 
-import type { FC } from 'react';
 import React from 'react';
+import type { FC } from 'react';
 import { useTranslations } from 'next-intl';
+
+import { CvContextProvider } from '@/hoc/CvContextProvider';
 
 import HeaderCv from './HeaderCv';
 import ContactMe from './ContactMe';
@@ -12,9 +14,7 @@ import SoftSkills from './SoftSkills';
 import Experience from './Experiences';
 import TechnicalSkills from './TechnicalSkills';
 import AdditionalInformation from './AdditionalInformation';
-//import PersonalReferences from './m/PersonalReferences';
-
-import { CvContextProvider } from '@/hoc/CvContextProvider';
+//  import PersonalReferences from './PersonalReferences';
 
 interface ICurriculumVitaeProps {}
 
@@ -46,7 +46,6 @@ const CurriculumVitae: FC<ICurriculumVitaeProps> = ({}) => {
           <Experience />
           <SoftSkills />
           <AdditionalInformation />
-          {/**<PersonalReferences /> */}
         </div>
       </div>
     </CvContextProvider>

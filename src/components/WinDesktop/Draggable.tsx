@@ -1,7 +1,8 @@
-import React, { FC, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+import type { FC } from 'react';
 
 export type DirectionType = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
-//export type DirectionType = 'up' | 'down' | 'left' | 'right' | 'up-right' | 'up-left' | 'down-right' | 'down-left';
+//  export type DirectionType = 'up' | 'down' | 'left' | 'right' | 'up-right' | 'up-left' | 'down-right' | 'down-left';
 
 export type MovementDirectionType = {
   horizontal: DirectionType;
@@ -19,13 +20,13 @@ const DraggableDiv: FC<IDraggableDivSizeProps> = ({ className, onDrag, onStopDra
   const [direction, setDirection] = useState<DirectionType>();
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseDown = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMouseDown = useCallback((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setIsDragging(true);
     setLastPosition({ x: event.clientX, y: event.clientY });
   }, []);
 
   const handleMouseMove = useCallback(
-    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (isDragging) {
         const currentX = event.clientX;
         const currentY = event.clientY;
@@ -36,7 +37,6 @@ const DraggableDiv: FC<IDraggableDivSizeProps> = ({ className, onDrag, onStopDra
 
         // Check for diagonal movements
         if (deltaX > 0 && deltaY < 0) {
-          //migrate to new types
           newDirection = 'ne';
         } else if (deltaX < 0 && deltaY < 0) {
           newDirection = 'nw';
@@ -56,7 +56,9 @@ const DraggableDiv: FC<IDraggableDivSizeProps> = ({ className, onDrag, onStopDra
           newDirection = 'n';
         }
 
-        onDrag && onDrag(newDirection, deltaX, deltaY);
+        if (onDrag) {
+          onDrag(newDirection, deltaX, deltaY);
+        }
         setDirection(newDirection);
         setLastPosition({ x: currentX, y: currentY });
       }
@@ -65,19 +67,21 @@ const DraggableDiv: FC<IDraggableDivSizeProps> = ({ className, onDrag, onStopDra
   );
 
   const handleMouseUp = useCallback(() => {
-    onStopDrag && onStopDrag();
+    if (onStopDrag) {
+      onStopDrag();
+    }
     setIsDragging(false);
   }, []);
 
   return (
-    <div
-      role="separator"
-      className={'z-50 absolute cursor-se-resize ' + className}
+    <button
+      type="button"
+      className={`z-50 absolute cursor-se-resize ${className}`}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}>
       <p>Movement: {direction} </p>
-    </div>
+    </button>
   );
 };
 

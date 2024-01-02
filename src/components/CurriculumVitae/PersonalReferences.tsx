@@ -1,7 +1,8 @@
 import React from 'react';
 import type { FC } from 'react';
-import { ClientLocalGroupsIcon } from './ClientIcon';
 import { useTranslations } from 'next-intl';
+
+import { ClientLocalGroupsIcon } from './ClientIcon';
 
 interface IpersonalReferencesProps {}
 

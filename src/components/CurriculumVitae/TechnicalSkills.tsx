@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import type { FC, ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
+
 import { ClientLocalSettingsIcon } from './ClientIcon';
 
 interface ITechnicalSkillsProps {}

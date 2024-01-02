@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React from 'react';
+import type { FC } from 'react';
+import { useTranslations } from 'next-intl';
 
 import ClientImage from './ClientImage';
-
-import { useTranslations } from 'next-intl';
 
 interface IHeaderCVProps {}
 

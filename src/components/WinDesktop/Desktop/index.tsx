@@ -1,16 +1,17 @@
 'use client';
 
-import React, { FC, ReactElement, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+import type { FC, ReactElement } from 'react';
+import { useDroppable, useDraggable, DndContext } from '@dnd-kit/core';
+import type { DragEndEvent, UniqueIdentifier } from '@dnd-kit/core';
 
-import { useDroppable, useDraggable } from '@dnd-kit/core';
-import { DndContext, DragEndEvent, UniqueIdentifier } from '@dnd-kit/core';
-
-import icons from '../icons';
-import DesktopIcon from './DesktopIcon';
 import { useWindowContext } from '@/hoc/WindowContext';
+import type { ICreateWindowProps } from '@/hoc/WindowContext';
 import { useDesktopContext } from '@/hoc/DesktopContextProvider';
 
-import type { ICreateWindowProps } from '@/hoc/WindowContext';
+import icons from '../icons';
+
+import DesktopIcon from './DesktopIcon';
 
 const IconSize = { height: 100, width: 100 };
 
@@ -19,10 +20,8 @@ interface ICommonProps {
   children: ReactElement;
 }
 
-export const Droppable: FC<ICommonProps> = (props) => {
-  const { isOver, setNodeRef } = useDroppable({
-    id: props.id,
-  });
+export const Droppable: FC<ICommonProps> = ({ id, children }) => {
+  const { isOver, setNodeRef } = useDroppable({ id });
 
   const style = {
     color: isOver ? 'green' : undefined,
@@ -30,15 +29,13 @@ export const Droppable: FC<ICommonProps> = (props) => {
 
   return (
     <div ref={setNodeRef} style={style}>
-      {props.children}
+      {children}
     </div>
   );
 };
 
-export const Draggable: FC<ICommonProps> = (props) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: props.id,
-  });
+export const Draggable: FC<ICommonProps> = ({ id, children }) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({ id });
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
@@ -52,7 +49,7 @@ export const Draggable: FC<ICommonProps> = (props) => {
       style={style}
       {...listeners}
       {...attributes}>
-      {props.children}
+      {children}
     </div>
   );
 };
@@ -72,14 +69,15 @@ const Desktop: FC<IDesktopProps> = ({}) => {
   const { width, height } = useDesktopContext().sizeScreen;
   const [parents, setParents] = useState<Record<UniqueIdentifier, UniqueIdentifier | null>>(initialState);
 
-  //get total number of icons that can fit on the div and also add some extra icons due not being able to fit perfectly
+  // get total number of icons that can fit on the div and also add some extra icons due not being able to fit perfectly
   const totalIcons = Math.floor((width / IconSize.width) * (height / IconSize.height)) + 3;
+  const iconsArray = [...Array(totalIcons)].map((_, id) => id);
 
-  const DraggableMarkup = useCallback(
-    ({ id }: { id: number }) => {
-      const icon = parents[id] !== null ? icons.find((icon) => icon.id === parents[id]) : undefined;
+  const DraggableMarkup: FC<{ id: number }> = useCallback(
+    ({ id }) => {
+      const parentIcon = parents[id] !== null ? icons.find((icon) => icon.id === parents[id]) : undefined;
 
-      if (icon === undefined) {
+      if (parentIcon === undefined) {
         return <div className="h-24 w-24" />;
       }
 
@@ -89,7 +87,12 @@ const Desktop: FC<IDesktopProps> = ({}) => {
 
       return (
         <Draggable id={id}>
-          <DesktopIcon id={icon.id} icon={icon.icon} title={icon.title} onClick={openAboutMe.bind(null, icon)} />
+          <DesktopIcon
+            id={parentIcon.id}
+            icon={parentIcon.icon}
+            title={parentIcon.title}
+            onClick={() => openAboutMe(parentIcon)}
+          />
         </Draggable>
       );
     },
@@ -128,7 +131,7 @@ const Desktop: FC<IDesktopProps> = ({}) => {
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      {[...Array(totalIcons)].map((_, id) => (
+      {iconsArray.map((id) => (
         <Droppable key={id} id={id}>
           <DraggableMarkup id={id} />
         </Droppable>

@@ -1,16 +1,24 @@
-import React, { FC } from 'react';
-
-import { MdOutlineGroups3, MdInsights, MdSettings } from 'react-icons/md';
-import { MdAssignment, MdImportContacts, MdLocalLibrary } from 'react-icons/md';
+import React from 'react';
+import {
+  MdOutlineGroups3,
+  MdInsights,
+  MdSettings,
+  MdAssignment,
+  MdImportContacts,
+  MdLocalLibrary,
+} from 'react-icons/md';
+import type { FC } from 'react';
+import type { IconType } from 'react-icons/lib';
 
 import { useCvContext } from '@/hoc/CvContextProvider';
-
-import type { IconType } from 'react-icons/lib';
 
 // Generic Icon Component
 const IconComponent: FC<{ Icon: IconType }> = ({ Icon }) => {
   const { showSectionIcons } = useCvContext();
-  return <>{showSectionIcons && <Icon className="text-xs" />}</>;
+
+  if (!showSectionIcons) return null;
+
+  return <Icon className="text-xs" />;
 };
 
 // Specific Icon Exports

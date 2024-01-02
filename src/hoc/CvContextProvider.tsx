@@ -1,6 +1,7 @@
 'use client';
-import React, { FC, ReactNode, createContext, useState, useContext, useEffect, useMemo } from 'react';
 
+import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
+import type { FC, ReactNode } from 'react';
 import { useLocale } from 'next-intl';
 
 // Define the type for the context value

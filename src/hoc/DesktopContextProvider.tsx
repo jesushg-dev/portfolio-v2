@@ -1,7 +1,9 @@
 'use client';
 
+import React, { useRef, createContext, useMemo } from 'react';
+import type { FC } from 'react';
+
 import useSize from '@/hooks/useSize';
-import React, { FC, useRef, createContext } from 'react';
 
 export interface IDesktopContext {
   sizeScreen: { width: number; height: number };
@@ -21,8 +23,10 @@ const DesktopContextProvider: FC<IDesktopContextProviderProps> = ({ children }) 
   const ref = useRef<HTMLDivElement>(null);
   const size = useSize(ref);
 
+  const value = useMemo(() => ({ sizeScreen: size }), [size]);
+
   return (
-    <DesktopContext.Provider value={{ sizeScreen: size }}>
+    <DesktopContext.Provider value={value}>
       <div ref={ref} className="absolute top-0 left-0 w-full h-full flex flex-wrap">
         {children}
       </div>

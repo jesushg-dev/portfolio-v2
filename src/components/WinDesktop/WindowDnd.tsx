@@ -1,11 +1,13 @@
 'use client';
 
-import React, { FC, useState, useEffect, startTransition } from 'react';
-
+import React, { useState, useEffect, startTransition } from 'react';
+import type { FC } from 'react';
 import Image from 'next/image';
 import { Rnd } from 'react-rnd';
+
 import { useDesktopContext } from '@/hoc/DesktopContextProvider';
-import { IPosition, ISize, useWindowContext } from '@/hoc/WindowContext';
+import { useWindowContext } from '@/hoc/WindowContext';
+import type { IPosition, ISize } from '@/hoc/WindowContext';
 
 interface IWindowDndProps {
   id: string;
@@ -17,20 +19,6 @@ interface IWindowDndProps {
   isMinimized: boolean;
   isMaximized: boolean;
 }
-
-export const Windows = () => {
-  const windowsContext = useWindowContext();
-
-  return (
-    <>
-      {windowsContext.windows.map((window) => (
-        <WindowDnd key={window.id} {...window}>
-          <window.component />
-        </WindowDnd>
-      ))}
-    </>
-  );
-};
 
 const WindowDnd: FC<IWindowDndProps> = ({ id, title, children, size, position, isMinimized, icon, isMaximized }) => {
   const { sizeScreen } = useDesktopContext();
@@ -59,7 +47,7 @@ const WindowDnd: FC<IWindowDndProps> = ({ id, title, children, size, position, i
   }, [isMaximized]);
 
   if (isMinimized) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -78,6 +66,7 @@ const WindowDnd: FC<IWindowDndProps> = ({ id, title, children, size, position, i
           <h1 className="text-primaryText-500 text-xs flex-grow">{title}</h1>
           <div className="flex space-x-2">
             <button
+              type="button"
               aria-label="Minimize window"
               onClick={() => toggleMinimizeWindow(id)}
               className="px-5 py-3 hover:bg-background-500 hover:bg-opacity-10 duration-100">
@@ -89,6 +78,7 @@ const WindowDnd: FC<IWindowDndProps> = ({ id, title, children, size, position, i
               </svg>
             </button>
             <button
+              type="button"
               aria-label="Maximize window"
               onClick={() => toggleMaximizeWindow(id)}
               className="px-5 py-3 hover:bg-background-500 hover:bg-opacity-10 duration-100">
@@ -102,7 +92,8 @@ const WindowDnd: FC<IWindowDndProps> = ({ id, title, children, size, position, i
                     data-v-7a68f144=""
                     d="M10 7.99805H7.99805V10H0V2.00195H2.00195V0H10V7.99805ZM7.00195
               2.99805H1.00098V8.99902H7.00195V2.99805ZM8.99902
-              1.00098H2.99805V2.00195H7.99805V7.00195H8.99902V1.00098Z"></path>
+              1.00098H2.99805V2.00195H7.99805V7.00195H8.99902V1.00098Z"
+                  />
                 </svg>
               ) : (
                 <svg
@@ -114,6 +105,7 @@ const WindowDnd: FC<IWindowDndProps> = ({ id, title, children, size, position, i
               )}
             </button>
             <button
+              type="button"
               aria-label="Close window"
               onClick={() => destroyWindow(id)}
               className="px-5 py-3 hover:bg-red-500 duration-100">
@@ -134,6 +126,20 @@ const WindowDnd: FC<IWindowDndProps> = ({ id, title, children, size, position, i
         </main>
       </div>
     </Rnd>
+  );
+};
+
+export const Windows = () => {
+  const windowsContext = useWindowContext();
+
+  return (
+    <>
+      {windowsContext.windows.map((window) => (
+        <WindowDnd key={window.id} {...window}>
+          <window.component />
+        </WindowDnd>
+      ))}
+    </>
   );
 };
 

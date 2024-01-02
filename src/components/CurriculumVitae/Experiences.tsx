@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
 import type { FC, ReactNode } from 'react';
-import { ClientLocalAssignmentIcon } from './ClientIcon';
 import { useTranslations } from 'next-intl';
+
+import { ClientLocalAssignmentIcon } from './ClientIcon';
 
 interface IExperienceProps {}
 

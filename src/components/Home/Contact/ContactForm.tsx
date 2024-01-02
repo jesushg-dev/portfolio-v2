@@ -1,10 +1,10 @@
-import React, { FC, useRef } from 'react';
+import React, { useRef } from 'react';
+import type { FC } from 'react';
+import { useTranslations } from 'next-intl';
 
 import Input from '../../UI/Input';
-import TextArea from '../../UI/TextArea';
-
-import { useTranslations } from 'next-intl';
 import type { IInputRef } from '../../../hooks/useRefInput';
+import TextArea from '../../UI/TextArea';
 
 interface IContactFormProps {}
 

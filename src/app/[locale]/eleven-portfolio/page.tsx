@@ -1,17 +1,14 @@
-import React, { FC } from 'react';
-
+import React from 'react';
 import dynamic from 'next/dynamic';
-import { getTranslations } from 'next-intl/server';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import { getTranslations, unstable_setRequestLocale as unStableSetRequestLocale } from 'next-intl/server';
+import type { FC } from 'react';
+import type { Metadata } from 'next';
 
 import TaskBar from '@/components/WinDesktop/TaskBar';
 import { Windows } from '@/components/WinDesktop/WindowDnd';
-
 import WindowProvider from '@/hoc/WindowContext';
 import DesktopContextProvider from '@/hoc/DesktopContextProvider';
-
 import { locales } from '@/config';
-import type { Metadata } from 'next';
 
 const Desktop = dynamic(() => import('@/components/WinDesktop/Desktop'), {
   ssr: false,
@@ -27,7 +24,7 @@ interface IWinElevenPageProps {
 
 const WinElevenPage: FC<IWinElevenPageProps> = ({ params }) => {
   // Enable static rendering
-  unstable_setRequestLocale(params.locale);
+  unStableSetRequestLocale(params.locale);
 
   return (
     <div className="w-screen h-screen bg-windows-11 bg-center bg-cover relative overflow-hidden">

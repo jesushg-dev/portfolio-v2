@@ -1,6 +1,7 @@
 'use client';
 
-import React, { createContext, useState, FC, useContext } from 'react';
+import React, { createContext, useState, useContext, useMemo } from 'react';
+import type { FC } from 'react';
 
 export interface ISize {
   width: number;
@@ -74,7 +75,7 @@ const WindowProvider: FC<WindowProviderProps> = ({ children }) => {
   };
 
   const setMinimizedWindow = (id: string, isMinimized: boolean) => {
-    setWindows((val) => val.map((window) => (window.id === id ? { ...window, isMinimized: isMinimized } : window)));
+    setWindows((val) => val.map((window) => (window.id === id ? { ...window, isMinimized } : window)));
   };
 
   const toggleMinimizeWindow = (id: string) => {
@@ -89,12 +90,12 @@ const WindowProvider: FC<WindowProviderProps> = ({ children }) => {
     );
   };
 
-  return (
-    <WindowContext.Provider
-      value={{ windows, createWindow, destroyWindow, toggleMinimizeWindow, toggleMaximizeWindow, setMinimizedWindow }}>
-      {children}
-    </WindowContext.Provider>
+  const contextValue = useMemo(
+    () => ({ windows, createWindow, destroyWindow, toggleMinimizeWindow, toggleMaximizeWindow, setMinimizedWindow }),
+    [windows]
   );
+
+  return <WindowContext.Provider value={contextValue}>{children}</WindowContext.Provider>;
 };
 
 export const useWindowContext = () => {

@@ -2,8 +2,9 @@ import React from 'react';
 import type { FC } from 'react';
 import { FaLinkedin } from 'react-icons/fa';
 import { MdPhone, MdEmail, MdWeb } from 'react-icons/md';
-import { ClientLocalImportContactsIcon } from './ClientIcon';
 import { useTranslations } from 'next-intl';
+
+import { ClientLocalImportContactsIcon } from './ClientIcon';
 
 interface IContactMeProps {}
 

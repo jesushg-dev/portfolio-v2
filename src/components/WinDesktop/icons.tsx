@@ -3,7 +3,7 @@ import Portfolio from '../Home/Portfolio';
 import CurriculumVitae from '../CurriculumVitae';
 import ContactForm from '../Home/Contact/ContactForm';
 
-import { ITaskbarIcon } from './TaskbarIcon';
+import type { ITaskbarIcon } from './TaskbarIcon';
 
 interface ITaskbarIconComponentProps extends Omit<ITaskbarIcon, 'onClick' | 'isActive'> {
   id: string;
@@ -42,7 +42,8 @@ const icons: ITaskbarIconComponentProps[] = [
     size: { width: 720, height: 570 },
     title: 'Resume',
   },
-  /*{
+  /*  
+  {
     id: 'blog',
     icon: 'https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-rss-96_wxhdyp.webp',
     label: 'Blog',
@@ -55,7 +56,8 @@ const icons: ITaskbarIconComponentProps[] = [
       );
     },
     size: { width: 800, height: 570 },
-  },*/
+  },  
+  */
 ];
 
 export default icons;
