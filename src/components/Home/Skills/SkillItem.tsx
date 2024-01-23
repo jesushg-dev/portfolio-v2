@@ -1,7 +1,7 @@
-import type { FC } from 'react';
-import React from 'react';
-import type { ImageLoaderProps } from 'next/image';
-import Image from 'next/image';
+import type { FC } from "react";
+import React from "react";
+import type { ImageLoaderProps } from "next/image";
+import Image from "next/image";
 
 interface ISkillItemProps {
   id: string;
@@ -15,22 +15,37 @@ const siLoader = ({ src }: ImageLoaderProps) => {
   return `https://cdn.simpleicons.org/${src}`;
 };
 
-const SkillItem: FC<ISkillItemProps> = ({ id, image, title, description, onClick }) => {
+const SkillItem: FC<ISkillItemProps> = ({
+  id,
+  image,
+  title,
+  description,
+  onClick,
+}) => {
   /* border border-primary-50 bg-background-50/50 shadow backdrop-blur-xl */
   return (
-    <div id={id} className="w-full h-full flex group">
+    <div id={id} className="group flex h-full w-full">
       <button
         type="button"
         title={title}
         onClick={onClick}
-        className=" flex flex-grow flex-col items-center gap-4 rounded-lg p-4 shadow-sm transition-transform hover:scale-110 hover:transform hover:shadow-lg">
+        className=" flex flex-grow flex-col items-center gap-4 rounded-lg p-4 shadow-sm transition-transform hover:scale-110 hover:transform hover:shadow-lg"
+      >
         <span className="relative block h-8 w-8 rounded-full bg-background-100">
-          <Image width={32} height={32} src={image} alt={title} loader={siLoader} />
+          <Image
+            width={32}
+            height={32}
+            src={image}
+            alt={title}
+            loader={siLoader}
+          />
         </span>
         <span className="text-center text-xs font-bold leading-none text-primaryText-700 group-hover:text-primary-700">
           {title}
         </span>
-        <span className="hidden text-center text-sm text-primaryText-800">{description}</span>
+        <span className="hidden text-center text-sm text-primaryText-800">
+          {description}
+        </span>
       </button>
     </div>
   );

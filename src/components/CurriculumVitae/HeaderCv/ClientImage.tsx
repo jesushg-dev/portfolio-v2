@@ -1,8 +1,8 @@
-import React from 'react';
-import type { FC } from 'react';
-import Image from 'next/image';
+import React from "react";
+import type { FC } from "react";
+import Image from "next/image";
 
-import { useCvContext } from '@/hoc/CvContextProvider';
+import { useCvContext } from "@/hoc/CvContextProvider";
 
 interface IClientImageProps {}
 
@@ -21,7 +21,7 @@ const ClientImage: FC<IClientImageProps> = ({}) => {
           height={150}
           decoding="async"
           src="https://res.cloudinary.com/js-media/image/upload/v1687726418/portfolio/carnet/jesus-hernandez.crop_xqewhg.webp"
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: "cover" }}
         />
       </div>
     </div>

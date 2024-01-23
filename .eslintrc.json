@@ -24,7 +24,13 @@
     "ecmaVersion": 2021,
     "sourceType": "module"
   },
-  "plugins": ["import", "@typescript-eslint", "react", "simple-import-sort", "prettier"],
+  "plugins": [
+    "import",
+    "@typescript-eslint",
+    "react",
+    "simple-import-sort",
+    "prettier"
+  ],
   "root": true,
   "rules": {
     "no-empty-pattern": "off",

@@ -45,6 +45,7 @@
       },
       "new": "Nuevo",
       "soon": "Pronto",
+      "beta": "Beta",
       "spotify": {
         "errors": {
           "noFetch": "Error: Algo salió mal al obtener la información",

@@ -1,30 +1,37 @@
-import React from 'react';
-import type { FC } from 'react';
-import { useTranslations } from 'next-intl';
+import React from "react";
+import type { FC } from "react";
+import { useTranslations } from "next-intl";
 
-import { ClientLocalImportContactsIcon } from './ClientIcon';
+import { ClientLocalImportContactsIcon } from "./ClientIcon";
 
 interface IEducationProps {}
 
-const educations = ['computerEngineering', 'webDeveloper', 'digitalSecurity'] as const;
+const educations = [
+  "computerEngineering",
+  "webDeveloper",
+  "digitalSecurity",
+] as const;
 
 const Education: FC<IEducationProps> = ({}) => {
-  const t = useTranslations('curriculum');
+  const t = useTranslations("curriculum");
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg uppercase font-semibold text-cv tracking-tight">
+      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
         <ClientLocalImportContactsIcon />
-        {t('header.education')}
+        {t("header.education")}
       </h5>
 
       <div className="mb-4">
         {educations.map((education) => (
           <section className="mb-4" key={education}>
             <header>
-              <h5 className="text-sm font-bold">{t(`education.${education}.degree`)}</h5>
+              <h5 className="text-sm font-bold">
+                {t(`education.${education}.degree`)}
+              </h5>
               <h6 className="text-xs">
-                {t(`education.${education}.institution`)} | {t(`education.${education}.location`)}
+                {t(`education.${education}.institution`)} |{" "}
+                {t(`education.${education}.location`)}
               </h6>
             </header>
             <p className="my-1 text-xs">{t(`education.${education}.dates`)}</p>

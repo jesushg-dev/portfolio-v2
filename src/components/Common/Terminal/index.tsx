@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import type { FC } from 'react';
-import React, { useEffect } from 'react';
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-import typescript from 'highlight.js/lib/languages/typescript';
+import type { FC } from "react";
+import React, { useEffect } from "react";
+import hljs from "highlight.js/lib/core";
+import javascript from "highlight.js/lib/languages/javascript";
+import typescript from "highlight.js/lib/languages/typescript";
 
-import { useThemeContext } from '@/hoc/ThemeContextProvider';
+import { useThemeContext } from "@/hoc/ThemeContextProvider";
 
-import 'highlight.js/styles/github-dark.css';
+import "highlight.js/styles/github-dark.css";
 
-hljs.registerLanguage('javascript', javascript);
-hljs.registerLanguage('typescript', typescript);
+hljs.registerLanguage("javascript", javascript);
+hljs.registerLanguage("typescript", typescript);
 
 interface ITerminalProps {
   code: string;
@@ -26,9 +26,10 @@ const Terminal: FC<ITerminalProps> = ({ code }) => {
 
   return (
     <div
-      className={`text-neutralText-50 w-full flex flex-col overflow-hidden rounded-lg bg-background-900 shadow-2xl theme-main-${
-        isDark ? 'dark' : 'light'
-      }`}>
+      className={`text-neutralText-50 flex w-full flex-col overflow-hidden rounded-lg bg-background-900 shadow-2xl theme-main-${
+        isDark ? "dark" : "light"
+      }`}
+    >
       <div className="border-b border-gray-800 px-4 py-2">
         <div className="mr-2 inline-block h-3 w-3 rounded-full bg-red-500" />
         <div className="mr-2 inline-block h-3 w-3 rounded-full bg-yellow-300" />

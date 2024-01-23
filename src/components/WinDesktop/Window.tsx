@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { useDraggable } from '@dnd-kit/core';
+import React, { useState, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+import { useDraggable } from "@dnd-kit/core";
 
-import { useDesktopContext } from '@/hoc/DesktopContextProvider';
+import { useDesktopContext } from "@/hoc/DesktopContextProvider";
 
 const windowVariants = {
   hidden: {
@@ -31,7 +31,14 @@ interface WindowProps {
 
 const defaultSize = { width: 400, height: 300 };
 
-const Window: React.FC<WindowProps> = ({ title, children, size = defaultSize, onClosed, onMinimized, isFocused }) => {
+const Window: React.FC<WindowProps> = ({
+  title,
+  children,
+  size = defaultSize,
+  onClosed,
+  onMinimized,
+  isFocused,
+}) => {
   const { sizeScreen } = useDesktopContext();
 
   const isResizing = useRef(false);
@@ -39,7 +46,7 @@ const Window: React.FC<WindowProps> = ({ title, children, size = defaultSize, on
   const [isMaximized, setIsMaximized] = useState(false);
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: 'window',
+    id: "window",
     // modifiers: [restrictToWindowEdges],
   });
 
@@ -63,7 +70,9 @@ const Window: React.FC<WindowProps> = ({ title, children, size = defaultSize, on
   */
 
   // Mouse down handler to start resizing
-  const handleMouseDown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleMouseDown = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.stopPropagation();
     isResizing.current = true;
   };
@@ -84,19 +93,19 @@ const Window: React.FC<WindowProps> = ({ title, children, size = defaultSize, on
 
   // UseEffect to add global event listeners
   React.useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [handleMouseMove]);
 
   return (
     <motion.div
-      className={`absolute flex flex-col bg-gray-800 p-0.5 border border-gray-500 shadow-lg ${
-        isFocused ? 'z-10' : 'z-0'
+      className={`absolute flex flex-col border border-gray-500 bg-gray-800 p-0.5 shadow-lg ${
+        isFocused ? "z-10" : "z-0"
       }`}
       style={{
         ...transform,
@@ -116,18 +125,31 @@ const Window: React.FC<WindowProps> = ({ title, children, size = defaultSize, on
         top: 0,
         bottom: window ? window.innerHeight - 30 : 0, // Window height (considering the taskbar height)
       }}
-      dragElastic={0.1}>
+      dragElastic={0.1}
+    >
       {/* Window content */}
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div>{title}</div>
         <div className="flex space-x-2">
-          <button type="button" className="px-4 py-1 hover:bg-gray-900" onClick={onMinimized}>
+          <button
+            type="button"
+            className="px-4 py-1 hover:bg-gray-900"
+            onClick={onMinimized}
+          >
             _
           </button>
-          <button type="button" className="px-4 py-1 hover:bg-yellow-600" onClick={handleMaximize}>
+          <button
+            type="button"
+            className="px-4 py-1 hover:bg-yellow-600"
+            onClick={handleMaximize}
+          >
             []
           </button>
-          <button type="button" className="px-4 py-1 hover:bg-red-600" onClick={onClosed}>
+          <button
+            type="button"
+            className="px-4 py-1 hover:bg-red-600"
+            onClick={onClosed}
+          >
             x
           </button>
         </div>
@@ -136,7 +158,7 @@ const Window: React.FC<WindowProps> = ({ title, children, size = defaultSize, on
       {isResizing && (
         <button
           type="button"
-          className="absolute right-0 bottom-0 w-4 h-4 bg-gray-500 cursor-se-resize"
+          className="absolute bottom-0 right-0 h-4 w-4 cursor-se-resize bg-gray-500"
           onMouseDown={handleMouseDown}
         />
       )}

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { httpBatchLink } from '@trpc/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React, { useState } from "react";
+import { httpBatchLink } from "@trpc/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { trpcReact, getBaseUrl } from '@/utils/trpc';
+import { trpcReact, getBaseUrl } from "@/utils/trpc";
 
 type Props = {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ const TrpcProvider = ({ children }: Props) => {
           },
         }),
       ],
-    })
+    }),
   );
 
   return (

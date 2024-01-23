@@ -1,8 +1,8 @@
-import React from 'react';
-import type { FC } from 'react';
-import { unstable_setRequestLocale as UnstableSetRequestLocale } from 'next-intl/server';
+import React from "react";
+import type { FC } from "react";
+import { unstable_setRequestLocale as UnstableSetRequestLocale } from "next-intl/server";
 
-import PageLayout from '@/components/Layout';
+import PageLayout from "@/components/Layout";
 
 // types
 

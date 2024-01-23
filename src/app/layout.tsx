@@ -1,7 +1,7 @@
-import 'react-loading-skeleton/dist/skeleton.css';
-import './styles.scss';
+import "react-loading-skeleton/dist/skeleton.css";
+import "./styles.scss";
 
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;

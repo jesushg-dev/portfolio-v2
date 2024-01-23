@@ -1,11 +1,11 @@
-import type { FC } from 'react';
-import React, { useMemo } from 'react';
-import { RiSunLine, RiMoonLine, RiCheckDoubleLine } from 'react-icons/ri';
+import type { FC } from "react";
+import React, { useMemo } from "react";
+import { RiSunLine, RiMoonLine, RiCheckDoubleLine } from "react-icons/ri";
 
-import { ETheme } from '@/utils/constants/theme';
-import type { ThemeType } from '@/hoc/ThemeContextProvider';
+import { ETheme } from "@/utils/constants/theme";
+import type { ThemeType } from "@/hoc/ThemeContextProvider";
 
-import { useThemeContext } from '../../../hoc/ThemeContextProvider';
+import { useThemeContext } from "../../../hoc/ThemeContextProvider";
 
 interface IThemeSelectorProps {
   visible: boolean;
@@ -19,9 +19,16 @@ interface IThemeOptionProps {
   onClick?: (isDark: boolean, theme: ThemeType) => void;
 }
 
-const ThemeOption: FC<IThemeOptionProps> = ({ isDark, theme, onClick, currentTheme }) => {
+const ThemeOption: FC<IThemeOptionProps> = ({
+  isDark,
+  theme,
+  onClick,
+  currentTheme,
+}) => {
   const themeName = useMemo(() => {
-    return theme?.replace(/-/g, ' ').replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()));
+    return theme
+      ?.replace(/-/g, " ")
+      .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()));
   }, [theme]);
 
   return (
@@ -30,7 +37,8 @@ const ThemeOption: FC<IThemeOptionProps> = ({ isDark, theme, onClick, currentThe
       title={themeName}
       onClick={onClick?.bind(null, isDark, theme)}
       data-theme={theme}
-      className="relative">
+      className="relative"
+    >
       <div className="h-8 w-8 rounded-full border-2 border-primary-500 bg-background-200 p-1 text-primary-500 hover:bg-background-400 hover:text-primary-600">
         {isDark ? (
           <RiMoonLine aria-hidden="true" className="h-5 w-5" />
@@ -64,12 +72,42 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ visible, onChange }) => {
           {newLabel} <RiPaintBrushLine className="ml-1 inline-block" />
         </span> */}
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <ThemeOption isDark theme={ETheme.MAIN_DARK} onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark theme={ETheme.ORANGE_DARK} onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark theme={ETheme.CHRISTMAS_DARK} onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark={false} theme={ETheme.MAIN_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark={false} theme={ETheme.ORANGE_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
-          <ThemeOption isDark={false} theme={ETheme.CHRISTMAS_LIGHT} onClick={onChangeTheme} currentTheme={theme} />
+          <ThemeOption
+            isDark
+            theme={ETheme.MAIN_DARK}
+            onClick={onChangeTheme}
+            currentTheme={theme}
+          />
+          <ThemeOption
+            isDark
+            theme={ETheme.ORANGE_DARK}
+            onClick={onChangeTheme}
+            currentTheme={theme}
+          />
+          <ThemeOption
+            isDark
+            theme={ETheme.CHRISTMAS_DARK}
+            onClick={onChangeTheme}
+            currentTheme={theme}
+          />
+          <ThemeOption
+            isDark={false}
+            theme={ETheme.MAIN_LIGHT}
+            onClick={onChangeTheme}
+            currentTheme={theme}
+          />
+          <ThemeOption
+            isDark={false}
+            theme={ETheme.ORANGE_LIGHT}
+            onClick={onChangeTheme}
+            currentTheme={theme}
+          />
+          <ThemeOption
+            isDark={false}
+            theme={ETheme.CHRISTMAS_LIGHT}
+            onClick={onChangeTheme}
+            currentTheme={theme}
+          />
         </div>
       </div>
     </div>

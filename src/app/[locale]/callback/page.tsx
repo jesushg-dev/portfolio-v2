@@ -1,6 +1,6 @@
-import React from 'react';
-import type { FC } from 'react';
-import { unstable_setRequestLocale as UnstableSetRequestLocale } from 'next-intl/server';
+import React from "react";
+import type { FC } from "react";
+import { unstable_setRequestLocale as UnstableSetRequestLocale } from "next-intl/server";
 
 interface ICallbackProps {
   params: { locale: string };

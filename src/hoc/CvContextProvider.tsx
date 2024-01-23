@@ -1,8 +1,14 @@
-'use client';
+"use client";
 
-import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
-import type { FC, ReactNode } from 'react';
-import { useLocale } from 'next-intl';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
+import type { FC, ReactNode } from "react";
+import { useLocale } from "next-intl";
 
 // Define the type for the context value
 interface ICvContextValue {
@@ -24,7 +30,9 @@ interface ICvContextProviderProps {
 }
 
 // Create a provider component
-export const CvContextProvider: FC<ICvContextProviderProps> = ({ children }) => {
+export const CvContextProvider: FC<ICvContextProviderProps> = ({
+  children,
+}) => {
   // State variables
   const locale = useLocale();
 
@@ -51,7 +59,7 @@ export const CvContextProvider: FC<ICvContextProviderProps> = ({ children }) => 
   };
 
   useEffect(() => {
-    const newShowHeadshot = locale === 'es';
+    const newShowHeadshot = locale === "es";
     setShowHeadshot(newShowHeadshot);
   }, [locale]);
 
@@ -67,17 +75,19 @@ export const CvContextProvider: FC<ICvContextProviderProps> = ({ children }) => 
       toggleHeadshot,
       toggleVisualizations,
     }),
-    [showSectionIcons, addSplashOfColor, showHeadshot, showVisualizations]
+    [showSectionIcons, addSplashOfColor, showHeadshot, showVisualizations],
   );
 
   // Render the provider with the context value and children components
-  return <CvContext.Provider value={contextValue}>{children}</CvContext.Provider>;
+  return (
+    <CvContext.Provider value={contextValue}>{children}</CvContext.Provider>
+  );
 };
 
 export const useCvContext = () => {
   const context = useContext(CvContext);
   if (context === undefined) {
-    throw new Error('useCvContext must be used within a CvProvider');
+    throw new Error("useCvContext must be used within a CvProvider");
   }
   return context;
 };

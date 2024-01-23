@@ -1,17 +1,17 @@
-import type { SpotifyEntity, Image } from './entity';
+import type { SpotifyEntity, Image } from "./entity";
 
 interface Album extends SpotifyEntity {
-  type: 'album';
+  type: "album";
   popularity: number;
 }
 
 interface Artist extends SpotifyEntity {
-  type: 'artist';
+  type: "artist";
   popularity: number;
 }
 
 export interface Track extends SpotifyEntity {
-  type: 'track';
+  type: "track";
   popularity: number;
   duration_ms: number;
   album: Album;

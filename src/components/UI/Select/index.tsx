@@ -1,5 +1,13 @@
-import type { FC, ReactNode } from 'react';
-import React, { createContext, useState, useRef, useCallback, useMemo, useContext, useEffect } from 'react';
+import type { FC, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  useContext,
+  useEffect,
+} from "react";
 import {
   autoUpdate,
   flip,
@@ -13,16 +21,18 @@ import {
   useRole,
   FloatingFocusManager,
   FloatingList,
-} from '@floating-ui/react';
+} from "@floating-ui/react";
 
 interface SelectContextValue {
   activeIndex: number | null;
   selectedIndex: number | null;
-  getItemProps: ReturnType<typeof useInteractions>['getItemProps'];
+  getItemProps: ReturnType<typeof useInteractions>["getItemProps"];
   handleSelect: (index: number | null) => void;
 }
 
-const SelectContext = createContext<SelectContextValue>({} as SelectContextValue);
+const SelectContext = createContext<SelectContextValue>(
+  {} as SelectContextValue,
+);
 
 interface ISelectProps {
   header?: ReactNode;
@@ -32,14 +42,20 @@ interface ISelectProps {
   onChange?: (index: number) => void;
 }
 
-export const Select: FC<ISelectProps> = ({ children, header, value, onChange, disabled }) => {
+export const Select: FC<ISelectProps> = ({
+  children,
+  header,
+  value,
+  onChange,
+  disabled,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
 
   const { refs, floatingStyles, context } = useFloating({
-    placement: 'bottom-start',
+    placement: "bottom-start",
     open: isOpen,
     onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
@@ -58,7 +74,7 @@ export const Select: FC<ISelectProps> = ({ children, header, value, onChange, di
         setSelectedLabel(labelsRef.current[index]);
       }
     },
-    [onChange]
+    [onChange],
   );
 
   const handleTypeaheadMatch = (index: number | null) => {
@@ -85,15 +101,11 @@ export const Select: FC<ISelectProps> = ({ children, header, value, onChange, di
 
   const click = useClick(context);
   const dismiss = useDismiss(context);
-  const role = useRole(context, { role: 'listbox' });
+  const role = useRole(context, { role: "listbox" });
 
-  const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
-    listNav,
-    typeahead,
-    click,
-    dismiss,
-    role,
-  ]);
+  const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions(
+    [listNav, typeahead, click, dismiss, role],
+  );
 
   const selectContext = useMemo(
     () => ({
@@ -102,7 +114,7 @@ export const Select: FC<ISelectProps> = ({ children, header, value, onChange, di
       getItemProps,
       handleSelect,
     }),
-    [activeIndex, selectedIndex, getItemProps, handleSelect]
+    [activeIndex, selectedIndex, getItemProps, handleSelect],
   );
 
   useEffect(() => {
@@ -120,11 +132,19 @@ export const Select: FC<ISelectProps> = ({ children, header, value, onChange, di
         {...getReferenceProps()}
         /* eslint-enable react/jsx-props-no-spreading */
       >
-        {header || <span className="text-sm text-primaryText-700">{selectedLabel ?? 'Select...'}</span>}
+        {header || (
+          <span className="text-sm text-primaryText-700">
+            {selectedLabel ?? "Select..."}
+          </span>
+        )}
       </div>
       <SelectContext.Provider value={selectContext}>
         {isOpen && (
-          <FloatingFocusManager context={context} modal={false} disabled={disabled}>
+          <FloatingFocusManager
+            context={context}
+            modal={false}
+            disabled={disabled}
+          >
             <div
               ref={refs.setFloating}
               className="rounded-lg bg-background-50 shadow-none outline-none ring-0"
@@ -151,8 +171,14 @@ interface IOptionProps {
   isPending?: boolean;
 }
 
-export const Option: FC<IOptionProps> = ({ label, className, children, isPending }) => {
-  const { activeIndex, selectedIndex, getItemProps, handleSelect } = useContext(SelectContext);
+export const Option: FC<IOptionProps> = ({
+  label,
+  className,
+  children,
+  isPending,
+}) => {
+  const { activeIndex, selectedIndex, getItemProps, handleSelect } =
+    useContext(SelectContext);
 
   const { ref, index } = useListItem({ label });
 
@@ -169,7 +195,7 @@ export const Option: FC<IOptionProps> = ({ label, className, children, isPending
         aria-selected={isActive && isSelected}
         tabIndex={isActive ? 0 : -1}
         style={{
-          fontWeight: isSelected ? 'bold' : '',
+          fontWeight: isSelected ? "bold" : "",
         }}
         className={`w-full shadow-none outline-none ring-0 ${className}`}
         /* eslint-disable react/jsx-props-no-spreading */

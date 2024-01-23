@@ -1,9 +1,11 @@
-import type { RefObject, DependencyList } from 'react';
-import { useState, useEffect, useRef } from 'react';
+import type { RefObject, DependencyList } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const useComputedBackgroundColor = (dependencies: DependencyList = []): [RefObject<HTMLDivElement>, string] => {
+const useComputedBackgroundColor = (
+  dependencies: DependencyList = [],
+): [RefObject<HTMLDivElement>, string] => {
   const ref = useRef<HTMLDivElement>(null);
-  const [fillColor, setFillColor] = useState<string>('');
+  const [fillColor, setFillColor] = useState<string>("");
 
   useEffect(() => {
     if (ref.current) {

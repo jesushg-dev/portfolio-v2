@@ -45,6 +45,7 @@
       },
       "new": "Nieuw",
       "soon": "Binnenkort",
+      "beta": "Beta",
       "spotify": {
         "errors": {
           "noFetch": "Fout: Er is iets misgegaan bij het ophalen van gegevens",

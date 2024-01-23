@@ -1,11 +1,11 @@
-import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { useAudioPlayer } from 'react-use-audio-player';
+import type { FC } from "react";
+import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
+import { useAudioPlayer } from "react-use-audio-player";
 
-import useInterval from '@/hooks/useInterval';
-import { ETime } from '@/utils/constants/times';
-import { convertMsToMmSs } from '@/utils/tools/time';
+import useInterval from "@/hooks/useInterval";
+import { ETime } from "@/utils/constants/times";
+import { convertMsToMmSs } from "@/utils/tools/time";
 
 interface IPlayer {
   isPlaying: boolean;
@@ -16,11 +16,18 @@ interface IPlayer {
 }
 
 // Player is same as ProgressTimer but user can control time, volume, slide volume bar and etc.
-const Player: FC<IPlayer> = ({ audioSrc, isPlaying, onChange, isHidden = false, volume = 0.2 }) => {
-  const t = useTranslations('global.footer');
+const Player: FC<IPlayer> = ({
+  audioSrc,
+  isPlaying,
+  onChange,
+  isHidden = false,
+  volume = 0.2,
+}) => {
+  const t = useTranslations("global.footer");
 
   const player = useAudioPlayer();
-  const { duration, load, getPosition, play, pause, playing, seek, setVolume } = player;
+  const { duration, load, getPosition, play, pause, playing, seek, setVolume } =
+    player;
 
   const [crtProgress, setCrtProgress] = useState<number>(0);
   const [crtProgressPercentage, setCrtProgressPercentage] = useState<number>(0);
@@ -63,20 +70,26 @@ const Player: FC<IPlayer> = ({ audioSrc, isPlaying, onChange, isHidden = false, 
   }, 1000);
 
   return (
-    <div className={`w-full transition-all ${isHidden ? 'hidden' : ''}`}>
-      <div className="w-full flex justify-between mt-4">
-        <p title={t('spotify.hints.currentProgress')} className="text-gray-500/90 text-sm select-none">
+    <div className={`w-full transition-all ${isHidden ? "hidden" : ""}`}>
+      <div className="mt-4 flex w-full justify-between">
+        <p
+          title={t("spotify.hints.currentProgress")}
+          className="select-none text-sm text-gray-500/90"
+        >
           {convertMsToMmSs(crtProgress)}
         </p>
-        <p title={t('spotify.hints.totalDuration')} className="text-gray-400/90 text-sm select-none pr-1">
+        <p
+          title={t("spotify.hints.totalDuration")}
+          className="select-none pr-1 text-sm text-gray-400/90"
+        >
           {convertMsToMmSs(duration * ETime.SECOND)}
         </p>
       </div>
 
-      <div className="flex relative my-3 w-full">
+      <div className="relative my-3 flex w-full">
         <input
-          title={t('spotify.hints.localRange')}
-          className="w-full h-1.5 bg-green-600 bg-gradient-to-r from-emerald-700 to-green-500 rounded-lg appearance-none cursor-pointer range-sm"
+          title={t("spotify.hints.localRange")}
+          className="range-sm h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-green-600 bg-gradient-to-r from-emerald-700 to-green-500"
           type="range"
           step="1"
           min="0"

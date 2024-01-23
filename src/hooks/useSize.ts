@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import type { RefObject } from 'react';
+import { useState, useEffect } from "react";
+import type { RefObject } from "react";
 
 interface Size {
   width: number;
@@ -29,10 +29,10 @@ const useSize = (elementRef?: RefObject<HTMLElement>): Size => {
       }
     }
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize(); // Call it immediately to get initial size
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [elementRef]); // Dependency array includes the ref
 
   return size;

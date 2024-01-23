@@ -1,20 +1,20 @@
-import React, { memo, useEffect, useMemo, useState } from 'react';
-import { loadFull } from 'tsparticles';
-import Particles, { initParticlesEngine } from '@tsparticles/react';
-import type { Engine } from '@tsparticles/engine';
+import React, { memo, useEffect, useMemo, useState } from "react";
+import { loadFull } from "tsparticles";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import type { Engine } from "@tsparticles/engine";
 
-import { useThemeContext } from '@/hoc/ThemeContextProvider';
+import { useThemeContext } from "@/hoc/ThemeContextProvider";
 
-import generateParticlesConfig from '../../../utils/config/particles';
+import generateParticlesConfig from "../../../utils/config/particles";
 
 // create a map to change color of particles based on theme (light/dark)
 const themeMap = {
-  'main-light': ['#004ecb'],
-  'orange-light': ['#FFA948'],
-  'main-dark': ['#004ecb'],
-  'orange-dark': ['#FF8C00'],
-  'christmas-light': ['#12B686', '#E53E3E'],
-  'christmas-dark': ['#E53E3E', '#12B686'],
+  "main-light": ["#004ecb"],
+  "orange-light": ["#FFA948"],
+  "main-dark": ["#004ecb"],
+  "orange-dark": ["#FF8C00"],
+  "christmas-light": ["#12B686", "#E53E3E"],
+  "christmas-dark": ["#E53E3E", "#12B686"],
 };
 
 const BgParticles = () => {

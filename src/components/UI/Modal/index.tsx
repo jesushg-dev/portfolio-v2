@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { RiCloseCircleFill } from 'react-icons/ri';
+import React, { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { RiCloseCircleFill } from "react-icons/ri";
 
 interface IModalProps {
   className?: string;
@@ -8,11 +8,15 @@ interface IModalProps {
   onClickBackdrop?: () => void;
 }
 
-const Modal: React.FC<IModalProps> = ({ children, onClickBackdrop, className }) => {
+const Modal: React.FC<IModalProps> = ({
+  children,
+  onClickBackdrop,
+  className,
+}) => {
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, []);
 
@@ -22,7 +26,8 @@ const Modal: React.FC<IModalProps> = ({ children, onClickBackdrop, className }) 
         className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}>
+        exit={{ opacity: 0 }}
+      >
         <div
           role="button"
           tabIndex={-1}
@@ -31,7 +36,8 @@ const Modal: React.FC<IModalProps> = ({ children, onClickBackdrop, className }) 
           onKeyUp={onClickBackdrop}
         />
         <div
-          className={`selection: z-50 h-full max-h-screen w-full overflow-y-auto border border-background-100 bg-background-50 shadow-lg md:h-auto md:w-3/5 md:rounded-lg lg:w-2/5${className}`}>
+          className={`selection: z-50 h-full max-h-screen w-full overflow-y-auto border border-background-100 bg-background-50 shadow-lg md:h-auto md:w-3/5 md:rounded-lg lg:w-2/5${className}`}
+        >
           {children}
         </div>
       </motion.div>
@@ -46,14 +52,20 @@ interface ICloseModalProps {
   title: string;
 }
 
-const CloseModal: React.FC<ICloseModalProps> = ({ onClick, className, classIcon, title }) => {
+const CloseModal: React.FC<ICloseModalProps> = ({
+  onClick,
+  className,
+  classIcon,
+  title,
+}) => {
   return (
     <motion.button
       title={title}
       aria-label={title}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
-      className={`pressable absolute top-3 right-3 p-2 text-primaryText-500 ${className}`}>
+      className={`pressable absolute right-3 top-3 p-2 text-primaryText-500 ${className}`}
+    >
       <RiCloseCircleFill className={`h-7 w-7 ${classIcon}`} />
     </motion.button>
   );

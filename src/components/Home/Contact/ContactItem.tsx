@@ -1,7 +1,7 @@
-import type { FC } from 'react';
-import React from 'react';
+import type { FC } from "react";
+import React from "react";
 
-type ContactType = 'email' | 'phone' | 'github' | 'linkedin' | 'whatsapp';
+type ContactType = "email" | "phone" | "github" | "linkedin" | "whatsapp";
 
 interface IContactItemProps {
   href: string;
@@ -15,9 +15,12 @@ const ContactItem: FC<IContactItemProps> = ({ label, href, icon: Icon }) => {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`pressable group inline-block space-y-0.5 rounded-lg bg-background-50 p-3 transition-all hover:scale-105 hover:shadow-md hover:bg-${label}`}>
+      className={`pressable group inline-block space-y-0.5 rounded-lg bg-background-50 p-3 transition-all hover:scale-105 hover:shadow-md hover:bg-${label}`}
+    >
       <Icon className="mx-auto h-5 w-5 text-primary-500 group-hover:text-secondaryText-50" />
-      <p className="text-xs capitalize text-primaryText-500 group-hover:text-secondaryText-50">{label}</p>
+      <p className="text-xs capitalize text-primaryText-500 group-hover:text-secondaryText-50">
+        {label}
+      </p>
     </a>
   );
 };

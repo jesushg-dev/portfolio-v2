@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { FC } from 'react';
+import type { FC } from "react";
 
-import RedoAnimText from './RedoAnimText';
-import CursorBlinker from './CursorBlinker';
+import RedoAnimText from "./RedoAnimText";
+import CursorBlinker from "./CursorBlinker";
 
 // types
 
@@ -18,13 +18,17 @@ export interface IAnimTextProps {
 const TypeWriter: FC<IAnimTextProps> = ({
   delay,
   texts,
-  wrapperClassName = '',
-  textClassName = '',
-  cursorClassName = '',
+  wrapperClassName = "",
+  textClassName = "",
+  cursorClassName = "",
 }) => {
   return (
     <span className={wrapperClassName}>
-      <RedoAnimText delay={delay + 1} texts={texts} textClassName={textClassName} />
+      <RedoAnimText
+        delay={delay + 1}
+        texts={texts}
+        textClassName={textClassName}
+      />
       <CursorBlinker cursorClassName={cursorClassName} />
     </span>
   );

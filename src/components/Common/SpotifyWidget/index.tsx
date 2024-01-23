@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import type { FC } from 'react';
-import React, { useState, memo } from 'react';
-import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { IoPause, IoPlay, IoVolumeMediumOutline } from 'react-icons/io5';
+import type { FC } from "react";
+import React, { useState, memo } from "react";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { IoPause, IoPlay, IoVolumeMediumOutline } from "react-icons/io5";
 
-import { trpcReact as trpc } from '@/utils/trpc';
-import useInterval from '@/hooks/useInterval';
-import { ETime } from '@/utils/constants/times';
+import { trpcReact as trpc } from "@/utils/trpc";
+import useInterval from "@/hooks/useInterval";
+import { ETime } from "@/utils/constants/times";
 
-import ArtistText from './ArtistText';
-import TrackText from './TrackText';
-import ProgressTimer from './ProgressTimer';
-import Player from './Player';
+import ArtistText from "./ArtistText";
+import TrackText from "./TrackText";
+import ProgressTimer from "./ProgressTimer";
+import Player from "./Player";
 
 interface ISpotifyWidgetProps {}
 
 const SpotifyWidget: FC<ISpotifyWidgetProps> = () => {
-  const t = useTranslations('global.footer');
+  const t = useTranslations("global.footer");
 
   const { data, isLoading, refetch } = trpc.getNowPlaying.useQuery();
 
@@ -31,8 +31,8 @@ const SpotifyWidget: FC<ISpotifyWidgetProps> = () => {
 
   const checkIfPlaying = () => {
     if (data === undefined) return false;
-    if ('error' in data) return false;
-    if (data.currently_playing_type !== 'track') return false;
+    if ("error" in data) return false;
+    if (data.currently_playing_type !== "track") return false;
     if (data.item.explicit === true) return false;
     return true;
   };
@@ -52,60 +52,82 @@ const SpotifyWidget: FC<ISpotifyWidgetProps> = () => {
   }
 
   if (data === undefined) {
-    return <p className="text-red-500 text-center font-bold text-lg my-5 ml-3">{t('spotify.errors.noFetch')}</p>;
+    return (
+      <p className="my-5 ml-3 text-center text-lg font-bold text-red-500">
+        {t("spotify.errors.noFetch")}
+      </p>
+    );
   }
 
-  if ('error' in data) {
-    const errorMessage = data.error.status === 204 ? t('spotify.errors.noPlaying') : `Error: ${data.error.message}`;
+  if ("error" in data) {
+    const errorMessage =
+      data.error.status === 204
+        ? t("spotify.errors.noPlaying")
+        : `Error: ${data.error.message}`;
 
     return (
-      <p className={`text-${data.error.status === 204 ? 'white' : 'red-500'} text-center font-bold text-lg my-5 ml-3`}>
+      <p
+        className={`text-${data.error.status === 204 ? "white" : "red-500"} my-5 ml-3 text-center text-lg font-bold`}
+      >
         {errorMessage}
       </p>
     );
   }
 
-  if (data.currently_playing_type !== 'track' || data.item.explicit === true) {
-    return <p className="text-white text-center font-bold text-lg my-5 ml-3">{t('spotify.errors.noPlaying')}</p>;
+  if (data.currently_playing_type !== "track" || data.item.explicit === true) {
+    return (
+      <p className="my-5 ml-3 text-center text-lg font-bold text-white">
+        {t("spotify.errors.noPlaying")}
+      </p>
+    );
   }
 
   return (
-    <article className="bg-gray-900 text-white flex-grow flex rounded flex-col overflow-hidden items-center sm:flex-row">
-      <div className="w-3/6 sm:w-2/6 aspect-square mt-5 sm:mt-0 group bg-black rounded-md object-cover bg-cover relative">
+    <article className="flex flex-grow flex-col items-center overflow-hidden rounded bg-gray-900 text-white sm:flex-row">
+      <div className="group relative mt-5 aspect-square w-3/6 rounded-md bg-black bg-cover object-cover sm:mt-0 sm:w-2/6">
         <Image
-          src={data.item.album.images.length > 0 ? data.item.album.images[0].url : '/images/spotify.png'}
+          src={
+            data.item.album.images.length > 0
+              ? data.item.album.images[0].url
+              : "/images/spotify.png"
+          }
           alt={data.item.album.name}
           width={300}
           height={300}
         />
         {data.item.preview_url && (
-          <div className="group-hover:opacity-100  absolute inset-0 flex flex-col bg-black/50 items-center justify-center opacity-0 transition-opacity">
+          <div className="absolute  inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
             <button
               type="button"
               onClick={togglePlayPause}
-              className="w-full h-full flex gap-1 justify-center items-center">
+              className="flex h-full w-full items-center justify-center gap-1"
+            >
               {}
               {isLocalPlaying ? (
                 <>
                   <IoPause size={30} />
-                  <span className="text-xs text-white">{t('spotify.buttons.pause')}</span>
+                  <span className="text-xs text-white">
+                    {t("spotify.buttons.pause")}
+                  </span>
                 </>
               ) : (
                 <>
                   <IoPlay size={30} />
-                  <span className="text-xs text-white">{t('spotify.buttons.play')}</span>
+                  <span className="text-xs text-white">
+                    {t("spotify.buttons.play")}
+                  </span>
                 </>
               )}
             </button>
-            <div className="px-10 absolute bottom-0 inset-x-0 text-white">
+            <div className="absolute inset-x-0 bottom-0 px-10 text-white">
               <div className="flex items-center justify-between gap-1 py-3">
                 <IoVolumeMediumOutline size={25} />
                 <input
                   type="range"
                   value={localVolume}
-                  title={t('spotify.buttons.volume')}
+                  title={t("spotify.buttons.volume")}
                   onChange={(e) => setLocalVolume(Number(e.target.value))}
-                  className="w-full h-1 hover:bg-green-600 hover:bg-gradient-to-r hover:from-emerald-700 hover:to-green-500 rounded-lg appearance-none cursor-pointer range-sm"
+                  className="range-sm h-1 w-full cursor-pointer appearance-none rounded-lg hover:bg-green-600 hover:bg-gradient-to-r hover:from-emerald-700 hover:to-green-500"
                 />
               </div>
             </div>
@@ -113,13 +135,16 @@ const SpotifyWidget: FC<ISpotifyWidgetProps> = () => {
         )}
       </div>
 
-      <div className="w-full sm:w-4/6 flex flex-grow h-full relative">
-        <div className="flex flex-col w-full p-5">
+      <div className="relative flex h-full w-full flex-grow sm:w-4/6">
+        <div className="flex w-full flex-col p-5">
           <ArtistText
             artists={data.item.artists.map((artist) => artist.name)}
             url={data.item.artists[0].external_urls.spotify}
           />
-          <TrackText track={data.item.name} url={data.item.external_urls.spotify} />
+          <TrackText
+            track={data.item.name}
+            url={data.item.external_urls.spotify}
+          />
 
           <Player
             isHidden={!isLocalPlaying}

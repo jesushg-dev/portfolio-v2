@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import type { ImageLoader } from 'next/image';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import type { ImageLoader } from "next/image";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface ImageSliderProps {
   images: string[];
@@ -13,7 +13,15 @@ interface ImageSliderProps {
   alt?: string;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ images, interval, loader, className, width, height, alt }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({
+  images,
+  interval,
+  loader,
+  className,
+  width,
+  height,
+  alt,
+}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -34,7 +42,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, interval, loader, cla
       key={currentImageIndex}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}>
+      transition={{ duration: 0.5 }}
+    >
       <Image
         src={images[currentImageIndex]}
         alt={alt || "ImageSlider's image"}

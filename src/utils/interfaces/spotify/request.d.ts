@@ -1,5 +1,5 @@
-import type { Track } from './entities';
-import type { SpotifyEntity } from './entity.d';
+import type { Track } from "./entities";
+import type { SpotifyEntity } from "./entity.d";
 
 export interface PlayHistoryObject {
   track: Track;
@@ -29,5 +29,5 @@ export interface NowPlayingResponse {
   is_playing: boolean;
   progress_ms: number;
   timestamp: number;
-  currently_playing_type: 'track' | 'episode' | 'ad' | 'unknown';
+  currently_playing_type: "track" | "episode" | "ad" | "unknown";
 }

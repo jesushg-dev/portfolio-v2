@@ -1,23 +1,25 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, Fragment, lazy } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
-import { motion } from 'framer-motion';
-import Skeleton from 'react-loading-skeleton';
-import type { FC } from 'react';
+import React, { useState, useEffect, Fragment, lazy } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { motion } from "framer-motion";
+import Skeleton from "react-loading-skeleton";
+import type { FC } from "react";
 
-import { useRouter } from '@/navigation';
-import { typeSKills } from '@/config';
-import { trpcReact as trpc } from '@/utils/trpc';
-import { LIMIT_PER_PAGE_XL } from '@/utils/constants';
-import FilterType from '@/components/Certification/FilterType';
-import { stackTypes } from '@/utils/constants/certificatesType';
-import CertificateItem from '@/components/Certification/CertificateItem';
+import { useRouter } from "@/navigation";
+import { typeSKills } from "@/config";
+import { trpcReact as trpc } from "@/utils/trpc";
+import { LIMIT_PER_PAGE_XL } from "@/utils/constants";
+import FilterType from "@/components/Certification/FilterType";
+import { stackTypes } from "@/utils/constants/certificatesType";
+import CertificateItem from "@/components/Certification/CertificateItem";
 // types
 
-const NoResult = lazy(() => import('@/components/Common/NoResult'));
+const NoResult = lazy(() => import("@/components/Common/NoResult"));
 
-type UndefinedOrStackTypes = Exclude<(typeof stackTypes)[number], 'ALL'> | undefined;
+type UndefinedOrStackTypes =
+  | Exclude<(typeof stackTypes)[number], "ALL">
+  | undefined;
 
 const limit = LIMIT_PER_PAGE_XL;
 
@@ -47,20 +49,24 @@ interface ICertificationProps {
 
 const Certification: FC<ICertificationProps> = ({ slug }) => {
   const { push } = useRouter();
-  const t = useTranslations('certification');
-  const locale = useLocale() as 'en' | 'es' | 'nl';
+  const t = useTranslations("certification");
+  const locale = useLocale() as "en" | "es" | "nl";
   const [crtValue, setCrtValue] = useState<number>(0);
 
-  const { data, isFetching, isLoading, fetchNextPage } = trpc.getCertificates.useInfiniteQuery(
-    {
-      limit,
-      locale,
-      type: stackTypes[crtValue] === 'ALL' ? undefined : (stackTypes[crtValue] as UndefinedOrStackTypes),
-    },
-    {
-      getNextPageParam: (val) => val.cursor,
-    }
-  );
+  const { data, isFetching, isLoading, fetchNextPage } =
+    trpc.getCertificates.useInfiniteQuery(
+      {
+        limit,
+        locale,
+        type:
+          stackTypes[crtValue] === "ALL"
+            ? undefined
+            : (stackTypes[crtValue] as UndefinedOrStackTypes),
+      },
+      {
+        getNextPageParam: (val) => val.cursor,
+      },
+    );
 
   const handleFetchMore = () => {
     fetchNextPage();
@@ -85,11 +91,17 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
         initial="hidden"
         variants={container}
         animate="visible"
-        className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
+        className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3"
+      >
         {data?.pages.map((page, idx) => (
           <Fragment key={page.cursor ?? idx}>
             {page.data.map((certificate) => (
-              <motion.li layout key={certificate.id} className="flex justify-center" variants={item}>
+              <motion.li
+                layout
+                key={certificate.id}
+                className="flex justify-center"
+                variants={item}
+              >
                 <CertificateItem key={certificate.id} {...certificate} />
               </motion.li>
             ))}
@@ -109,7 +121,9 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
       )}
 
       {/** if there's not data show no result */}
-      {data?.pages[0].data.length === 0 && !isLoading && !isFetching && <NoResult />}
+      {data?.pages[0].data.length === 0 && !isLoading && !isFetching && (
+        <NoResult />
+      )}
 
       <div className="mt-8 flex flex-col items-center justify-center gap-4">
         {data?.pages[data.pages.length - 1].hasMore ? (
@@ -117,8 +131,9 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
             type="button"
             disabled={isFetching || isLoading}
             className="rounded bg-primary-500 px-4 py-2 font-bold text-secondaryText-50 hover:bg-primary-700"
-            onClick={handleFetchMore}>
-            {isFetching ? t('pagination.loading') : t('pagination.loadMore')}
+            onClick={handleFetchMore}
+          >
+            {isFetching ? t("pagination.loading") : t("pagination.loadMore")}
           </button>
         ) : null}
       </div>

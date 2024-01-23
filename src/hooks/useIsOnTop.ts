@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const debounce = (func: () => void, delay: number): (() => void) => {
   let timer: NodeJS.Timeout;
@@ -20,9 +20,9 @@ const useIsOnTop = (): boolean => {
 
     const debouncedScrollHandler = debounce(handleScroll, 10); // Adjust the debounce delay as needed
 
-    window.addEventListener('scroll', debouncedScrollHandler);
+    window.addEventListener("scroll", debouncedScrollHandler);
     return () => {
-      window.removeEventListener('scroll', debouncedScrollHandler);
+      window.removeEventListener("scroll", debouncedScrollHandler);
     };
   }, []);
 

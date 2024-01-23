@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
-import type { FC } from 'react';
+import React, { useState, useCallback } from "react";
+import type { FC } from "react";
 
-export type DirectionType = 'n' | 's' | 'e' | 'w' | 'ne' | 'nw' | 'se' | 'sw';
+export type DirectionType = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
 //  export type DirectionType = 'up' | 'down' | 'left' | 'right' | 'up-right' | 'up-left' | 'down-right' | 'down-left';
 
 export type MovementDirectionType = {
@@ -15,15 +15,22 @@ export interface IDraggableDivSizeProps {
   onDrag?: (direction: DirectionType, deltaX: number, deltaY: number) => void;
 }
 
-const DraggableDiv: FC<IDraggableDivSizeProps> = ({ className, onDrag, onStopDrag }) => {
+const DraggableDiv: FC<IDraggableDivSizeProps> = ({
+  className,
+  onDrag,
+  onStopDrag,
+}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [direction, setDirection] = useState<DirectionType>();
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseDown = useCallback((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setIsDragging(true);
-    setLastPosition({ x: event.clientX, y: event.clientY });
-  }, []);
+  const handleMouseDown = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      setIsDragging(true);
+      setLastPosition({ x: event.clientX, y: event.clientY });
+    },
+    [],
+  );
 
   const handleMouseMove = useCallback(
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -33,27 +40,27 @@ const DraggableDiv: FC<IDraggableDivSizeProps> = ({ className, onDrag, onStopDra
         const deltaX = currentX - lastPosition.x;
         const deltaY = currentY - lastPosition.y;
 
-        let newDirection: DirectionType = 'n';
+        let newDirection: DirectionType = "n";
 
         // Check for diagonal movements
         if (deltaX > 0 && deltaY < 0) {
-          newDirection = 'ne';
+          newDirection = "ne";
         } else if (deltaX < 0 && deltaY < 0) {
-          newDirection = 'nw';
+          newDirection = "nw";
         } else if (deltaX > 0 && deltaY > 0) {
-          newDirection = 'se';
+          newDirection = "se";
         } else if (deltaX < 0 && deltaY > 0) {
-          newDirection = 'sw';
+          newDirection = "sw";
         }
         // Check for straight movements
         else if (deltaX > 0) {
-          newDirection = 'e';
+          newDirection = "e";
         } else if (deltaX < 0) {
-          newDirection = 'w';
+          newDirection = "w";
         } else if (deltaY > 0) {
-          newDirection = 's';
+          newDirection = "s";
         } else if (deltaY < 0) {
-          newDirection = 'n';
+          newDirection = "n";
         }
 
         if (onDrag) {
@@ -63,7 +70,7 @@ const DraggableDiv: FC<IDraggableDivSizeProps> = ({ className, onDrag, onStopDra
         setLastPosition({ x: currentX, y: currentY });
       }
     },
-    [isDragging, lastPosition, direction]
+    [isDragging, lastPosition, direction],
   );
 
   const handleMouseUp = useCallback(() => {
@@ -76,10 +83,11 @@ const DraggableDiv: FC<IDraggableDivSizeProps> = ({ className, onDrag, onStopDra
   return (
     <button
       type="button"
-      className={`z-50 absolute cursor-se-resize ${className}`}
+      className={`absolute z-50 cursor-se-resize ${className}`}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}>
+      onMouseUp={handleMouseUp}
+    >
       <p>Movement: {direction} </p>
     </button>
   );

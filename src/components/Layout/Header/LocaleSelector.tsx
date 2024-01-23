@@ -1,16 +1,28 @@
-import type { FC } from 'react';
-import React, { useTransition, useMemo } from 'react';
-import Image from 'next/image';
-import { useLocale, useTranslations } from 'next-intl';
+import type { FC } from "react";
+import React, { useTransition, useMemo } from "react";
+import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 
-import { useRouter, usePathname } from '@/navigation';
-import { Select, Option } from '@/components/UI/Select';
-import { cdFlagloader } from '@/utils/tools/medialoader';
+import { useRouter, usePathname } from "@/navigation";
+import { Select, Option } from "@/components/UI/Select";
+import { cdFlagloader } from "@/utils/tools/medialoader";
 
 const locales = [
-  { value: 'es', label: 'Español', img: 'spanish_kitwbr-Thumbnail_xnyll7.webp' },
-  { value: 'en', label: 'English', img: 'english_sdpecu-Thumbnail_btswuv.webp' },
-  { value: 'nl', label: 'Nederlands', img: 'dutch_khyopk-Thumbnail_htec1d.webp' },
+  {
+    value: "es",
+    label: "Español",
+    img: "spanish_kitwbr-Thumbnail_xnyll7.webp",
+  },
+  {
+    value: "en",
+    label: "English",
+    img: "english_sdpecu-Thumbnail_btswuv.webp",
+  },
+  {
+    value: "nl",
+    label: "Nederlands",
+    img: "dutch_khyopk-Thumbnail_htec1d.webp",
+  },
 ];
 
 interface ILocaleSelectorProps {}
@@ -19,10 +31,13 @@ const LocaleSelector: FC<ILocaleSelectorProps> = () => {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const t = useTranslations('global.header');
+  const t = useTranslations("global.header");
 
   const [isPending, startTransition] = useTransition();
-  const crtLocale = useMemo(() => locales.findIndex((l) => l.value === locale), [locale]);
+  const crtLocale = useMemo(
+    () => locales.findIndex((l) => l.value === locale),
+    [locale],
+  );
 
   const onChangeHandler = (index: number) => {
     const nextLocale = locales[index].value;
@@ -42,16 +57,23 @@ const LocaleSelector: FC<ILocaleSelectorProps> = () => {
             width={24}
             height={24}
             loader={cdFlagloader}
-            src={locales[crtLocale]?.img ?? ''}
-            alt={locales[crtLocale]?.label ?? ''}
+            src={locales[crtLocale]?.img ?? ""}
+            alt={locales[crtLocale]?.label ?? ""}
           />
-          <span className="text-sm ">{t('menu.language')}</span>
+          <span className="text-sm ">{t("menu.language")}</span>
         </div>
-      }>
+      }
+    >
       {locales.map(({ value, label, img }) => (
         <Option key={value} label={label}>
           <div className="flex w-full items-center gap-2 px-4 py-2 hover:bg-background-400">
-            <Image width={24} height={24} loader={cdFlagloader} src={img} alt={label} />
+            <Image
+              width={24}
+              height={24}
+              loader={cdFlagloader}
+              src={img}
+              alt={label}
+            />
             <p className="text-sm text-primaryText-700">{label}</p>
           </div>
         </Option>

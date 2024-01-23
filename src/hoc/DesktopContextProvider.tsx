@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useRef, createContext, useMemo } from 'react';
-import type { FC } from 'react';
+import React, { useRef, createContext, useMemo } from "react";
+import type { FC } from "react";
 
-import useSize from '@/hooks/useSize';
+import useSize from "@/hooks/useSize";
 
 export interface IDesktopContext {
   sizeScreen: { width: number; height: number };
@@ -19,7 +19,9 @@ interface IDesktopContextProviderProps {
   children: React.ReactNode;
 }
 
-const DesktopContextProvider: FC<IDesktopContextProviderProps> = ({ children }) => {
+const DesktopContextProvider: FC<IDesktopContextProviderProps> = ({
+  children,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const size = useSize(ref);
 
@@ -27,7 +29,11 @@ const DesktopContextProvider: FC<IDesktopContextProviderProps> = ({ children }) 
 
   return (
     <DesktopContext.Provider value={value}>
-      <div ref={ref} className="absolute top-0 left-0 w-full h-full flex flex-wrap">
+      <div
+        ref={ref}
+        id="desktop-system"
+        className="absolute left-0 top-0 flex h-full w-full flex-wrap"
+      >
         {children}
       </div>
     </DesktopContext.Provider>
@@ -37,7 +43,9 @@ const DesktopContextProvider: FC<IDesktopContextProviderProps> = ({ children }) 
 export const useDesktopContext = () => {
   const context = React.useContext(DesktopContext);
   if (context === undefined) {
-    throw new Error('useThemeContext must be used within a ThemeContextProvider');
+    throw new Error(
+      "useThemeContext must be used within a ThemeContextProvider",
+    );
   }
   return context;
 };

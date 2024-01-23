@@ -1,7 +1,7 @@
-import * as trpcNext from '@trpc/server/adapters/next';
+import * as trpcNext from "@trpc/server/adapters/next";
 
-import { createContext } from '../../../server/context';
-import { appRouter } from '../../../server/routers/_app';
+import { createContext } from "../../../server/context";
+import { appRouter } from "../../../server/routers/_app";
 
 // export API handler
 // @see https://trpc.io/docs/api-handler
@@ -15,9 +15,9 @@ export default trpcNext.createNextApiHandler({
    * @link https://trpc.io/docs/error-handling
    */
   onError({ error }) {
-    if (error.code === 'INTERNAL_SERVER_ERROR') {
+    if (error.code === "INTERNAL_SERVER_ERROR") {
       // send to bug reporting
-      console.error('Something went wrong', error);
+      console.error("Something went wrong", error);
     }
   },
   /**

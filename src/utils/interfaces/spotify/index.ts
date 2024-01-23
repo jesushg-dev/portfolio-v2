@@ -1,2 +1,2 @@
-export * from './entities.d';
-export * from './request.d';
+export * from "./entities.d";
+export * from "./request.d";

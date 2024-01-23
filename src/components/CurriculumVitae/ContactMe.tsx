@@ -1,14 +1,14 @@
-import React from 'react';
-import type { FC } from 'react';
-import { FaLinkedin } from 'react-icons/fa';
-import { MdPhone, MdEmail, MdWeb } from 'react-icons/md';
-import { useTranslations } from 'next-intl';
+import React from "react";
+import type { FC } from "react";
+import { FaLinkedin } from "react-icons/fa";
+import { MdPhone, MdEmail, MdWeb } from "react-icons/md";
+import { useTranslations } from "next-intl";
 
-import { ClientLocalImportContactsIcon } from './ClientIcon';
+import { ClientLocalImportContactsIcon } from "./ClientIcon";
 
 interface IContactMeProps {}
 
-const contactmes = ['contact1', 'contact2', 'contact3', 'contact4'] as const;
+const contactmes = ["contact1", "contact2", "contact3", "contact4"] as const;
 
 type ContactMeType = (typeof contactmes)[number];
 
@@ -20,24 +20,25 @@ const contactIcons: Record<ContactMeType, JSX.Element> = {
 };
 
 const ContactMe: FC<IContactMeProps> = ({}) => {
-  const t = useTranslations('curriculum');
+  const t = useTranslations("curriculum");
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg uppercase font-semibold text-cv tracking-tight">
+      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
         <ClientLocalImportContactsIcon />
-        {t('header.contact')}
+        {t("header.contact")}
       </h5>
 
       <div className="mb-4">
-        <ul className="text-xs list-none">
+        <ul className="list-none text-xs">
           {contactmes.map((contactme) => (
             <li key={contactme}>
               <a
                 target="_blank"
-                className="flex gap-2 items-center"
+                className="flex items-center gap-2"
                 rel="noopener noreferrer"
-                href={t(`contacts.${contactme}.value`)}>
+                href={t(`contacts.${contactme}.value`)}
+              >
                 {contactIcons[contactme]}
                 {t(`contacts.${contactme}.name`)}
               </a>

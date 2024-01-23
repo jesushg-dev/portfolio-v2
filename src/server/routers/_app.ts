@@ -1,8 +1,8 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { getNowPlaying, getTopTracks } from '@/utils/services/spotify';
+import { getNowPlaying, getTopTracks } from "@/utils/services/spotify";
 
-import { router, procedure } from '../trpc';
+import { router, procedure } from "../trpc";
 
 export const appRouter = router({
   getNowPlaying: procedure.input(z.undefined()).query(async () => {
@@ -12,10 +12,10 @@ export const appRouter = router({
   getTopTracks: procedure
     .input(
       z.object({
-        timeRange: z.enum(['short_term', 'medium_term', 'long_term']),
+        timeRange: z.enum(["short_term", "medium_term", "long_term"]),
         limit: z.number(),
         offset: z.number(),
-      })
+      }),
     )
     .query(async ({ input }) => {
       const { timeRange, limit, offset } = input;
@@ -29,10 +29,19 @@ export const appRouter = router({
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
         type: z
-          .enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP', 'CYBERSECURITY', 'DEVOPS', 'SOFTSKILLS', 'TOOLS'])
+          .enum([
+            "FRONTEND",
+            "BACKEND",
+            "MOBILE",
+            "DESKTOP",
+            "CYBERSECURITY",
+            "DEVOPS",
+            "SOFTSKILLS",
+            "TOOLS",
+          ])
           .optional(),
-        locale: z.enum(['es', 'en', 'nl']).optional().default('en'),
-      })
+        locale: z.enum(["es", "en", "nl"]).optional().default("en"),
+      }),
     )
     .query(async ({ input, ctx }) => {
       const { limit, cursor, type } = input;
@@ -67,9 +76,9 @@ export const appRouter = router({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
-        type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP']).optional(),
-        locale: z.enum(['es', 'en', 'nl']).optional().default('en'),
-      })
+        type: z.enum(["FRONTEND", "BACKEND", "MOBILE", "DESKTOP"]).optional(),
+        locale: z.enum(["es", "en", "nl"]).optional().default("en"),
+      }),
     )
     .query(async ({ input, ctx }) => {
       const { limit, locale, cursor, type } = input;
@@ -150,9 +159,11 @@ export const appRouter = router({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
-        type: z.enum(['FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP', 'TOOLS']).optional(),
-        locale: z.enum(['es', 'en', 'nl']).optional().default('en'),
-      })
+        type: z
+          .enum(["FRONTEND", "BACKEND", "MOBILE", "DESKTOP", "TOOLS"])
+          .optional(),
+        locale: z.enum(["es", "en", "nl"]).optional().default("en"),
+      }),
     )
     .query(async ({ input, ctx }) => {
       const { limit, type, locale, cursor } = input;

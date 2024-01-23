@@ -1,12 +1,12 @@
-import type { FC } from 'react';
-import React, { memo } from 'react';
-import { motion } from 'framer-motion';
+import type { FC } from "react";
+import React, { memo } from "react";
+import { motion } from "framer-motion";
 
-import type { SkillType } from '../../../utils/interfaces/types';
+import type { SkillType } from "../../../utils/interfaces/types";
 
-import SkillItem from './SkillItem';
+import SkillItem from "./SkillItem";
 
-import type { SkillDef } from '.';
+import type { SkillDef } from ".";
 
 const container = {
   hidden: { opacity: 1 },
@@ -32,10 +32,23 @@ interface ISkillGroupedProps {
   onClick: (skill: SkillType, type: SkillDef) => void;
 }
 
-const SkillGrouped: FC<ISkillGroupedProps> = ({ type, skills, onClick, ctxClass, loading = false }) => {
+const SkillGrouped: FC<ISkillGroupedProps> = ({
+  type,
+  skills,
+  onClick,
+  ctxClass,
+  loading = false,
+}) => {
   return (
-    <div className={`${ctxClass} flex h-full w-full flex-col justify-start gap-6`}>
-      <motion.ul initial="hidden" variants={container} animate="visible" className="grid grid-cols-skills gap-4">
+    <div
+      className={`${ctxClass} flex h-full w-full flex-col justify-start gap-6`}
+    >
+      <motion.ul
+        initial="hidden"
+        variants={container}
+        animate="visible"
+        className="grid grid-cols-skills gap-4"
+      >
         {skills.map((skill) => (
           <motion.li layout variants={item} key={skill.id} className="flex">
             <SkillItem {...skill} onClick={() => onClick(skill, type)} />
@@ -43,7 +56,7 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({ type, skills, onClick, ctxClass,
         ))}
       </motion.ul>
       {loading ? (
-        <div className="w-full flex justify-center items-center">
+        <div className="flex w-full items-center justify-center">
           <div className="h-10 w-10 animate-spin rounded-full border  border-b-2 border-primary-900 " />
         </div>
       ) : null}

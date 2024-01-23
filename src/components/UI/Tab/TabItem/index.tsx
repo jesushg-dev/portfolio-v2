@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-import type { FC } from 'react';
-import type { IconType } from 'react-icons/lib';
-import { motion } from 'framer-motion';
+import { useMemo } from "react";
+import type { FC } from "react";
+import type { IconType } from "react-icons/lib";
+import { motion } from "framer-motion";
 
-import { useTabContext } from '@/hoc/TabContextProvider';
+import { useTabContext } from "@/hoc/TabContextProvider";
 
 export interface TabItemProps {
   index?: number;
@@ -33,16 +33,26 @@ const variants = {
   },
 };
 
-const TabItem: FC<TabItemProps> = ({ index = -1, icon: Icon, title, description }) => {
-  const { currentTab, setCurrentTab, minimal, variant, tabId } = useTabContext();
+const TabItem: FC<TabItemProps> = ({
+  index = -1,
+  icon: Icon,
+  title,
+  description,
+}) => {
+  const { currentTab, setCurrentTab, minimal, variant, tabId } =
+    useTabContext();
 
   const isActive = currentTab === index;
   // determine text based if it is active and which variant is used
   const textClassName = useMemo(() => {
     if (isActive) {
-      return variant === 'primary' ? 'text-secondaryText-50' : 'text-primary-500';
+      return variant === "primary"
+        ? "text-secondaryText-50"
+        : "text-primary-500";
     }
-    return variant === 'primary' ? 'text-primaryText-400' : 'text-primaryText-800';
+    return variant === "primary"
+      ? "text-primaryText-400"
+      : "text-primaryText-800";
   }, [isActive, variant]);
 
   return (
@@ -50,8 +60,8 @@ const TabItem: FC<TabItemProps> = ({ index = -1, icon: Icon, title, description 
       {isActive && (
         <motion.div
           layoutId={`background-tab${tabId}`}
-          className={`rounded-xl absolute shadow-md inset-0 -z-10 ${
-            variant === 'primary' ? 'bg-primary-600' : 'bg-background-100'
+          className={`absolute inset-0 -z-10 rounded-xl shadow-md ${
+            variant === "primary" ? "bg-primary-600" : "bg-background-100"
           }`}
         />
       )}
@@ -59,21 +69,30 @@ const TabItem: FC<TabItemProps> = ({ index = -1, icon: Icon, title, description 
         type="button"
         title={title}
         id={`tab-${index}`}
-        animate={isActive ? 'active' : 'inactive'}
+        animate={isActive ? "active" : "inactive"}
         variants={variants}
         initial="inactive"
         whileHover="hover"
         onClick={() => setCurrentTab(index)}
-        className={`text-left p-4 md:p-5 rounded-xl w-full ${isActive ? '' : 'hover:bg-background-800/30'}`}>
+        className={`w-full rounded-xl p-4 text-left md:p-5 ${isActive ? "" : "hover:bg-background-800/30"}`}
+      >
         <span className={`flex items-center transition-all ${textClassName}`}>
           <Icon
-            className={` ${minimal ? 'mt-0' : 'mt-2 flex-shrink-0  h-6 w-6 md:w-7 md:h-7'}`}
+            className={` ${minimal ? "mt-0" : "mt-2 h-6  w-6 flex-shrink-0 md:h-7 md:w-7"}`}
             width={16}
             height={16}
           />
-          <span className="grow ml-6">
-            <span className={`block whitespace-nowrap font-semibold ${minimal ? '' : 'text-lg'}  `}>{title}</span>
-            {minimal ? null : <span className="hidden lg:block mt-1 text-primaryText-800">{description}</span>}
+          <span className="ml-6 grow">
+            <span
+              className={`block whitespace-nowrap font-semibold ${minimal ? "" : "text-lg"}  `}
+            >
+              {title}
+            </span>
+            {minimal ? null : (
+              <span className="mt-1 hidden text-primaryText-800 lg:block">
+                {description}
+              </span>
+            )}
           </span>
         </span>
       </motion.button>

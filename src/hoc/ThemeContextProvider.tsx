@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import type { FC } from 'react';
-import React, { useState, useMemo, useEffect, createContext, startTransition } from 'react';
+import type { FC } from "react";
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  createContext,
+  startTransition,
+} from "react";
 
-import { ETheme } from '@/utils/constants/theme';
+import { ETheme } from "@/utils/constants/theme";
 
 export type ThemeType = ETheme;
 
@@ -37,32 +43,39 @@ const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
 
   const setTheme = (newTheme: ThemeType, isDark: boolean) => {
     const root = document.documentElement;
-    const colorMode = isDark ? 'dark' : 'light';
+    const colorMode = isDark ? "dark" : "light";
 
-    root.removeAttribute('class');
+    root.removeAttribute("class");
     setRawTheme({ theme: newTheme, isDark });
     root.classList.add(`theme-${newTheme}`);
-    window.localStorage.setItem('theme', newTheme);
-    window.localStorage.setItem('color-mode', colorMode);
+    window.localStorage.setItem("theme", newTheme);
+    window.localStorage.setItem("color-mode", colorMode);
 
-    root.setAttribute('data-theme', newTheme);
-    root.setAttribute('data-color-mode', isDark ? 'dark' : 'light');
+    root.setAttribute("data-theme", newTheme);
+    root.setAttribute("data-color-mode", isDark ? "dark" : "light");
   };
 
   // this get the initial theme from local storage and set it to the state
   useEffect(() => {
-    const initialTheme = window.localStorage.getItem('theme') as ThemeType;
-    const initialColorMode = window.localStorage.getItem('color-mode');
+    const initialTheme = window.localStorage.getItem("theme") as ThemeType;
+    const initialColorMode = window.localStorage.getItem("color-mode");
     startTransition(() => {
-      setTheme(initialTheme || 'main-light', initialColorMode === 'dark');
-      setRawTheme({ theme: initialTheme || 'main-light', isDark: initialColorMode === 'dark' });
+      setTheme(initialTheme || "main-light", initialColorMode === "dark");
+      setRawTheme({
+        theme: initialTheme || "main-light",
+        isDark: initialColorMode === "dark",
+      });
     });
   }, []);
 
   // useMemo to memoize the context value
   const contextValue = useMemo(() => ({ ...theme, setTheme }), [theme]);
 
-  return <ThemeContext.Provider value={contextValue}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={contextValue}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
 // Custom hook that shorthands the context!
@@ -70,7 +83,9 @@ const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
 const useThemeContext = () => {
   const context = React.useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error('useThemeContext must be used within a ThemeContextProvider');
+    throw new Error(
+      "useThemeContext must be used within a ThemeContextProvider",
+    );
   }
   return context;
 };

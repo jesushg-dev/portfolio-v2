@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   useFloating,
   autoUpdate,
@@ -12,8 +12,8 @@ import {
   useInteractions,
   useMergeRefs,
   FloatingPortal,
-} from '@floating-ui/react';
-import type { Placement } from '@floating-ui/react';
+} from "@floating-ui/react";
+import type { Placement } from "@floating-ui/react";
 
 interface TooltipOptions {
   initialOpen?: boolean;
@@ -24,7 +24,7 @@ interface TooltipOptions {
 
 export function useTooltip({
   initialOpen = false,
-  placement = 'top',
+  placement = "top",
   open: controlledOpen,
   onOpenChange: setControlledOpen,
 }: TooltipOptions = {}) {
@@ -41,7 +41,7 @@ export function useTooltip({
     middleware: [
       offset(5),
       flip({
-        fallbackAxisSideDirection: 'start',
+        fallbackAxisSideDirection: "start",
         padding: 5,
       }),
       shift({ padding: 5 }),
@@ -58,7 +58,7 @@ export function useTooltip({
     enabled: controlledOpen == null,
   });
   const dismiss = useDismiss(context);
-  const role = useRole(context, { role: 'tooltip' });
+  const role = useRole(context, { role: "tooltip" });
 
   const interactions = useInteractions([hover, focus, dismiss, role]);
 
@@ -69,7 +69,7 @@ export function useTooltip({
       ...interactions,
       ...data,
     }),
-    [open, setOpen, interactions, data]
+    [open, setOpen, interactions, data],
   );
 }
 
@@ -81,71 +81,80 @@ export const useTooltipContext = () => {
   const context = React.useContext(TooltipContext);
 
   if (context == null) {
-    throw new Error('Tooltip components must be wrapped in <Tooltip />');
+    throw new Error("Tooltip components must be wrapped in <Tooltip />");
   }
 
   return context;
 };
 
-export function Tooltip({ children, ...options }: { children: React.ReactNode } & TooltipOptions) {
+export function Tooltip({
+  children,
+  ...options
+}: { children: React.ReactNode } & TooltipOptions) {
   // This can accept any props as options, e.g. `placement`,
   // or other positioning options.
   const tooltip = useTooltip(options);
-  return <TooltipContext.Provider value={tooltip}>{children}</TooltipContext.Provider>;
+  return (
+    <TooltipContext.Provider value={tooltip}>
+      {children}
+    </TooltipContext.Provider>
+  );
 }
 
-export const TooltipTrigger = React.forwardRef<HTMLElement, React.HTMLProps<HTMLElement> & { asChild?: boolean }>(
-  function TooltipTrigger({ children, asChild = false, ...props }, propRef) {
-    const context = useTooltipContext();
-    const childrenRef = (children as any).ref;
-    const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
+export const TooltipTrigger = React.forwardRef<
+  HTMLElement,
+  React.HTMLProps<HTMLElement> & { asChild?: boolean }
+>(function TooltipTrigger({ children, asChild = false, ...props }, propRef) {
+  const context = useTooltipContext();
+  const childrenRef = (children as any).ref;
+  const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
 
-    // `asChild` allows the user to pass any element as the anchor
-    if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(
-        children,
-        context.getReferenceProps({
-          ref,
-          ...props,
-          ...children.props,
-          'data-state': context.open ? 'open' : 'closed',
-        })
-      );
-    }
+  // `asChild` allows the user to pass any element as the anchor
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(
+      children,
+      context.getReferenceProps({
+        ref,
+        ...props,
+        ...children.props,
+        "data-state": context.open ? "open" : "closed",
+      }),
+    );
+  }
 
-    return (
-      <button
+  return (
+    <button
+      ref={ref}
+      type="button"
+      // The user can style the trigger based on the state
+      data-state={context.open ? "open" : "closed"}
+      /* eslint-disable react/jsx-props-no-spreading */
+      {...context.getReferenceProps(props)}
+      /* eslint-enable react/jsx-props-no-spreading */
+    >
+      {children}
+    </button>
+  );
+});
+
+export const TooltipContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLProps<HTMLDivElement>
+>(function TooltipContent(props, propRef) {
+  const context = useTooltipContext();
+  const ref = useMergeRefs([context.refs.setFloating, propRef]);
+
+  if (!context.open) return null;
+
+  return (
+    <FloatingPortal>
+      <div
         ref={ref}
-        type="button"
-        // The user can style the trigger based on the state
-        data-state={context.open ? 'open' : 'closed'}
+        style={context.floatingStyles}
         /* eslint-disable react/jsx-props-no-spreading */
-        {...context.getReferenceProps(props)}
+        {...context.getFloatingProps(props)}
         /* eslint-enable react/jsx-props-no-spreading */
-      >
-        {children}
-      </button>
-    );
-  }
-);
-
-export const TooltipContent = React.forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>(
-  function TooltipContent(props, propRef) {
-    const context = useTooltipContext();
-    const ref = useMergeRefs([context.refs.setFloating, propRef]);
-
-    if (!context.open) return null;
-
-    return (
-      <FloatingPortal>
-        <div
-          ref={ref}
-          style={context.floatingStyles}
-          /* eslint-disable react/jsx-props-no-spreading */
-          {...context.getFloatingProps(props)}
-          /* eslint-enable react/jsx-props-no-spreading */
-        />
-      </FloatingPortal>
-    );
-  }
-);
+      />
+    </FloatingPortal>
+  );
+});

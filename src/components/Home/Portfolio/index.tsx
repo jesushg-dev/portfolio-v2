@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import type { FC } from 'react';
-import React, { useRef, useMemo, useState, Fragment } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { useTranslations, useLocale } from 'next-intl';
+import type { FC } from "react";
+import React, { useRef, useMemo, useState, Fragment } from "react";
+import { motion, useInView } from "framer-motion";
+import { useTranslations, useLocale } from "next-intl";
 
-import { trpcReact as trpc } from '@/utils/trpc';
-import { LIMIT_PER_PAGE } from '@/utils/constants';
-import HeaderArticle from '@/components/Common/HeaderArticle';
+import { trpcReact as trpc } from "@/utils/trpc";
+import { LIMIT_PER_PAGE } from "@/utils/constants";
+import HeaderArticle from "@/components/Common/HeaderArticle";
 
-import FilterType from './FilterType';
-import PortfolioItem from './ProjectItem';
+import FilterType from "./FilterType";
+import PortfolioItem from "./ProjectItem";
 
-const type = [undefined, 'FRONTEND', 'BACKEND', 'MOBILE', 'DESKTOP'] as const;
+const type = [undefined, "FRONTEND", "BACKEND", "MOBILE", "DESKTOP"] as const;
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -39,30 +39,31 @@ const limit = LIMIT_PER_PAGE;
 interface IPortfolioProps {}
 
 const Portfolio: FC<IPortfolioProps> = ({}) => {
-  const locale = useLocale() as 'en' | 'es' | 'nl';
+  const locale = useLocale() as "en" | "es" | "nl";
   const ref = useRef(null);
 
-  const t = useTranslations('main.portfolio');
+  const t = useTranslations("main.portfolio");
 
   const isInView = useInView(ref, { once: true });
   const labels = useMemo(
     () => ({
-      urlName: t('actions.view'),
-      sourceName: t('actions.source'),
-      privateName: t('private.title'),
-      privateDescription: t('private.description'),
-      canSeeDemo: t('private.canSeeDemo'),
+      urlName: t("actions.view"),
+      sourceName: t("actions.source"),
+      privateName: t("private.title"),
+      privateDescription: t("private.description"),
+      canSeeDemo: t("private.canSeeDemo"),
     }),
-    [t]
+    [t],
   );
 
   const [crtValue, setCrtValue] = useState<number>(0);
-  const { data, isFetching, isLoading, fetchNextPage } = trpc.getProjects.useInfiniteQuery(
-    { limit, locale, type: type[crtValue] },
-    {
-      getNextPageParam: (info) => info.cursor,
-    }
-  );
+  const { data, isFetching, isLoading, fetchNextPage } =
+    trpc.getProjects.useInfiniteQuery(
+      { limit, locale, type: type[crtValue] },
+      {
+        getNextPageParam: (info) => info.cursor,
+      },
+    );
 
   const handleFetchMore = () => {
     fetchNextPage();
@@ -70,15 +71,23 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
 
   return (
     <div className="overflow-hidden">
-      <section id="portfolio" className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20">
-        <HeaderArticle title={t('title')} description={t('description')} subtitle={t('subtitle')} />
+      <section
+        id="portfolio"
+        className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20"
+      >
+        <HeaderArticle
+          title={t("title")}
+          description={t("description")}
+          subtitle={t("subtitle")}
+        />
         <FilterType value={crtValue} onChange={setCrtValue} />
         <section ref={ref}>
           <motion.ul
             initial="hidden"
             variants={container}
-            animate={isInView ? 'visible' : 'hidden'}
-            className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+            animate={isInView ? "visible" : "hidden"}
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
+          >
             {data?.pages.map((page, idx) => (
               <Fragment key={page.cursor ?? idx}>
                 {page.data.map((project) => (
@@ -88,7 +97,8 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
                     className="flex justify-center"
                     variants={item}
                     whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.5 }}>
+                    transition={{ duration: 0.5 }}
+                  >
                     <PortfolioItem {...project} {...labels} />
                   </motion.li>
                 ))}
@@ -106,8 +116,11 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
                 type="button"
                 disabled={isFetching || isLoading}
                 className="rounded bg-primary-500 px-4 py-2 font-bold text-secondaryText-50 hover:bg-primary-700"
-                onClick={handleFetchMore}>
-                {isFetching ? t('pagination.loading') : t('pagination.loadMore')}
+                onClick={handleFetchMore}
+              >
+                {isFetching
+                  ? t("pagination.loading")
+                  : t("pagination.loadMore")}
               </button>
             ) : null}
           </div>

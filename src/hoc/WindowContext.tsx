@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { createContext, useState, useContext, useMemo } from 'react';
-import type { FC } from 'react';
+import React, { createContext, useState, useContext, useMemo } from "react";
+import type { FC } from "react";
 
 export interface ISize {
   width: number;
@@ -21,10 +21,12 @@ export interface WindowState {
   isMinimized: boolean;
   isMaximized: boolean;
   position: IPosition;
+  isFocused: boolean;
   component: React.ComponentType<any>;
 }
 
-export interface ICreateWindowProps extends Pick<WindowState, 'component' | 'id' | 'icon' | 'title'> {
+export interface IHandleWindowProps
+  extends Pick<WindowState, "component" | "id" | "icon" | "title"> {
   size?: ISize;
 }
 
@@ -34,10 +36,11 @@ interface WindowProviderProps {
 
 interface WindowContextType {
   windows: WindowState[];
+  bringToFront: (id: string) => void;
   destroyWindow: (id: string) => void;
-  toggleMinimizeWindow: (id: string) => void;
   toggleMaximizeWindow: (id: string) => void;
-  createWindow: (data: ICreateWindowProps) => void;
+  toggleMinimizeWindow: (id: string) => void;
+  handleWindow: (data: IHandleWindowProps) => void;
   setMinimizedWindow: (id: string, isMinimized: boolean) => void;
 }
 
@@ -49,25 +52,65 @@ const WindowContext = createContext<WindowContextType | undefined>(undefined);
 const WindowProvider: FC<WindowProviderProps> = ({ children }) => {
   const [windows, setWindows] = useState<WindowState[]>([]);
 
-  const createWindow = (props: ICreateWindowProps) => {
-    // check if window is open already
-    const windowOpen = windows.find((window) => window.id === props.id);
+  const toggleWindowFocusAndMinimize = (targetWindow: WindowState) => {
+    setWindows((prev) =>
+      prev.map((window) => {
+        if (window === targetWindow) {
+          return {
+            ...window,
+            isFocused: true,
+            isMinimized: window.isFocused
+              ? !window.isMinimized
+              : window.isMinimized,
+          };
+        }
+        return {
+          ...window,
+          // Only remove focus from other windows if the target window wasn't already focused
+          isFocused:
+            window.isFocused && !targetWindow.isFocused
+              ? false
+              : window.isFocused,
+        };
+      }),
+    );
+  };
 
-    // if window is open, bring it to front and unminimize it
-    if (windowOpen) {
-      windowOpen.isMinimized = false;
-      setWindows((prev) => [windowOpen, ...prev.filter((window) => window.id !== props.id)]);
-      return;
-    }
+  const bringToFront = (id: string) => {
+    // remove focus from all windows and set focus to the one clicked
+    setWindows((prev) =>
+      prev.map((window) =>
+        window.id === id
+          ? { ...window, isFocused: true }
+          : { ...window, isFocused: false },
+      ),
+    );
+  };
 
+  const createWindow = (props: IHandleWindowProps) => {
     const newWindow: WindowState = {
       ...props,
       size: props.size || defaultSize,
       isMinimized: false,
       isMaximized: false,
       position: defaultPosition,
+      isFocused: true,
     };
-    setWindows((currentWindows) => [...currentWindows, newWindow]);
+
+    setWindows((prev) => [
+      ...prev.map((window) => ({ ...window, isFocused: false })),
+      newWindow,
+    ]);
+  };
+
+  const handleWindow = (props: IHandleWindowProps) => {
+    // check if window is open already
+    const windowOpen = windows.find((window) => window.id === props.id);
+    if (windowOpen) {
+      toggleWindowFocusAndMinimize(windowOpen);
+    } else {
+      createWindow(props);
+    }
   };
 
   const destroyWindow = (id: string) => {
@@ -75,33 +118,57 @@ const WindowProvider: FC<WindowProviderProps> = ({ children }) => {
   };
 
   const setMinimizedWindow = (id: string, isMinimized: boolean) => {
-    setWindows((val) => val.map((window) => (window.id === id ? { ...window, isMinimized } : window)));
+    setWindows((val) =>
+      val.map((window) =>
+        window.id === id ? { ...window, isMinimized } : window,
+      ),
+    );
   };
 
   const toggleMinimizeWindow = (id: string) => {
     setWindows((val) =>
-      val.map((window) => (window.id === id ? { ...window, isMinimized: !window.isMinimized } : window))
+      val.map((window) =>
+        window.id === id
+          ? { ...window, isMinimized: !window.isMinimized }
+          : window,
+      ),
     );
   };
 
   const toggleMaximizeWindow = (id: string) => {
     setWindows((val) =>
-      val.map((window) => (window.id === id ? { ...window, isMaximized: !window.isMaximized } : window))
+      val.map((window) =>
+        window.id === id
+          ? { ...window, isMaximized: !window.isMaximized }
+          : window,
+      ),
     );
   };
 
   const contextValue = useMemo(
-    () => ({ windows, createWindow, destroyWindow, toggleMinimizeWindow, toggleMaximizeWindow, setMinimizedWindow }),
-    [windows]
+    () => ({
+      windows,
+      bringToFront,
+      handleWindow,
+      destroyWindow,
+      toggleMinimizeWindow,
+      toggleMaximizeWindow,
+      setMinimizedWindow,
+    }),
+    [windows],
   );
 
-  return <WindowContext.Provider value={contextValue}>{children}</WindowContext.Provider>;
+  return (
+    <WindowContext.Provider value={contextValue}>
+      {children}
+    </WindowContext.Provider>
+  );
 };
 
 export const useWindowContext = () => {
   const context = useContext(WindowContext);
   if (!context) {
-    throw new Error('useWindowContext must be used within a WindowProvider');
+    throw new Error("useWindowContext must be used within a WindowProvider");
   }
   return context;
 };

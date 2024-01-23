@@ -1,17 +1,17 @@
-import dynamic from 'next/dynamic';
-import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale as UnstableSetRequestLocale } from 'next-intl/server';
+import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
+import { unstable_setRequestLocale as UnstableSetRequestLocale } from "next-intl/server";
 
-import Layout from '@/components/Layout';
+import Layout from "@/components/Layout";
 
-import { locales } from '../../config';
+import { locales } from "../../config";
 
-const Hero = dynamic(() => import('@/components/Home/Hero'));
-const About = dynamic(() => import('@/components/Home/About'));
-const Skills = dynamic(() => import('@/components/Home/Skills'));
-const Contact = dynamic(() => import('@/components/Home/Contact'));
-const Portfolio = dynamic(() => import('@/components/Home/Portfolio'));
-const SoftSkills = dynamic(() => import('@/components/Home/SoftSkills'));
+const Hero = dynamic(() => import("@/components/Home/Hero"));
+const About = dynamic(() => import("@/components/Home/About"));
+const Skills = dynamic(() => import("@/components/Home/Skills"));
+const Contact = dynamic(() => import("@/components/Home/Contact"));
+const Portfolio = dynamic(() => import("@/components/Home/Portfolio"));
+const SoftSkills = dynamic(() => import("@/components/Home/SoftSkills"));
 
 type Props = {
   params: { locale: string };

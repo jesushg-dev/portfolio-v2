@@ -1,6 +1,6 @@
-module.exports = {
+export default {
   singleQuote: true,
-  trailingComma: 'none',
+  trailingComma: "none",
   bracketSpacing: false,
-  plugins: [require('prettier-plugin-tailwindcss')],
+  plugins: ["prettier-plugin-tailwindcss"],
 };

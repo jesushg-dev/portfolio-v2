@@ -1,4 +1,4 @@
-export type SpotifyEntityType = 'album' | 'artist' | 'playlist' | 'track';
+export type SpotifyEntityType = "album" | "artist" | "playlist" | "track";
 export type SpotifyEntityUri = `spotify:${SpotifyEntityType}:${string}`;
 
 export interface Image {

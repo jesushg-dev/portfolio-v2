@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2.7.1 (2023-12-25)
+
+- Add beta window simulation for showing the website in windows 11 style
+
 ## 2.6.1 (2023-12-25)
 
 - Remove dependency: `react-grid-layout` and using `@dnd-kit` as a replacement

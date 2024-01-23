@@ -1,10 +1,10 @@
-import type { FC } from 'react';
-import React from 'react';
+import type { FC } from "react";
+import React from "react";
 
-import ScrollToTop from '../UI/ScrollToTop';
+import ScrollToTop from "../UI/ScrollToTop";
 
-import Footer from './Footer';
-import Header from './Header';
+import Footer from "./Footer";
+import Header from "./Header";
 
 interface ILayoutProps {
   children: React.ReactNode;

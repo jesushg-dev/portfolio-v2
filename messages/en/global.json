@@ -44,6 +44,7 @@
       },
       "new": "New",
       "soon": "Soon",
+      "beta": "Beta",
       "spotify": {
         "errors": {
           "noFetch": "Error: Something went wrong while fetching data",
