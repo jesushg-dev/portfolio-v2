@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, startTransition } from "react";
+import React, { useState, useEffect, useMemo, startTransition } from "react";
 import type { FC } from "react";
 import Image from "next/image";
 import { Rnd } from "react-rnd";
 
 import { useDesktopContext } from "@/hoc/DesktopContextProvider";
 import { useWindowContext } from "@/hoc/WindowContext";
-import type { IPosition, ISize } from "@/hoc/WindowContext";
+import type { IPosition, ISize, WindowState } from "@/hoc/WindowContext";
 
 interface IWindowDndProps {
   id: string;
@@ -167,15 +167,23 @@ const WindowDnd: FC<IWindowDndProps> = ({
   );
 };
 
+const WindowWrapper = React.memo(({ window }: { window: WindowState }) => {
+  const MemoizedComponent = useMemo(() => window.component, [window.component]);
+
+  return (
+    <WindowDnd key={window.id} {...window}>
+      <MemoizedComponent />
+    </WindowDnd>
+  );
+});
+
 export const Windows = () => {
   const windowsContext = useWindowContext();
 
   return (
     <>
       {windowsContext.windows.map((window) => (
-        <WindowDnd key={window.id} {...window}>
-          <window.component />
-        </WindowDnd>
+        <WindowWrapper key={window.id} window={window} />
       ))}
     </>
   );

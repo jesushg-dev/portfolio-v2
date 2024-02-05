@@ -1,12 +1,12 @@
 import React from "react";
 import type { FC } from "react";
 
-//  import Watch from "../Watch";
-//  import NotificationCenter from "../NotificationCenter";
-//  import StartMenu from "../StartMenu";
+import Watch from "../Watch";
+import NotificationCenter from "../NotificationCenter";
+import StartMenu from "../StartMenu";
 
 import TaskBarIcons, { TaskbarIcon, TaskbarSvgIcon } from "./TaskBarIcons";
-//  import LanguageDisplay from "./LanguageDisplay";
+import LanguageDisplay from "./LanguageDisplay";
 
 interface ITaskBarProps {}
 
@@ -21,7 +21,7 @@ const TaskBar: FC<ITaskBarProps> = ({}) => {
         />
       </div>
       <div id="taskbar-icons" className="flex w-full justify-center gap-2">
-        {/* <StartMenu /> */}
+        <StartMenu />
         <TaskBarIcons />
       </div>
       <div className="flex w-full justify-end gap-2">
@@ -43,7 +43,7 @@ const TaskBar: FC<ITaskBarProps> = ({}) => {
             </svg>
           </TaskbarSvgIcon>
         </div>
-        {/* <LanguageDisplay /> */}
+        <LanguageDisplay />
         <TaskbarIcon
           size={16}
           isActive={false}
@@ -62,8 +62,8 @@ const TaskBar: FC<ITaskBarProps> = ({}) => {
           icon="https://res.cloudinary.com/js-media/image/upload/v1703736560/portfolio/win11/icons/sruoyqiy6vhvhighdros.webp"
           title="Battery Information"
         />
-        {/* <Watch /> */}
-        {/* <NotificationCenter /> */}
+        <Watch />
+        <NotificationCenter />
         <TaskbarSvgIcon isActive={false} title="Show Desktop">
           <div />
         </TaskbarSvgIcon>
