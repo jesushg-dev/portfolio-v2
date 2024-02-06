@@ -1,442 +1,1079 @@
 [
   {
-    "title": "Angular Essential Training",
     "company": "LinkedIn",
     "issuedDate": 1688191200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fwww%2Elinkedin%2Ecom%2Flearning%2Fcertificates%2F9b2140313096f21631e949fdd679aa2aace4e07c949158aa69518271fe353b0c&urlhash=w97a&trk=public_profile_see-credential",
     "idCredential": "",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168910/Angular_Essential_Training_11zon_qzy3jj.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "id": "es",
+        "title": "Curso esencial de Angular"
+      },
+      {
+        "id": "en",
+        "title": "Angular Essential Training"
+      },
+      {
+        "id": "dutch",
+        "title": "Essentiële training voor Angular"
+      }
+    ]
   },
   {
-    "title": "Curso de Hacking Ético",
     "company": "Platzi",
     "issuedDate": 1672552800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1583-ethical-hacking%2Fdiploma%2Fdetalle%2F&urlhash=kl3z&trk=public_profile_see-credential",
     "idCredential": "65d06ef3-f3cb-4505-8095-12442b279437",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Hacking_%C3%89tico_34_xeejqe.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de Hacking Ético",
+        "id": "es"
+      },
+      {
+        "title": "Ethical Hacking Course",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Ethical Hacking",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "How to Get People to Like You",
     "company": "LinkedIn",
     "issuedDate": 1688191200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fwww%2Elinkedin%2Ecom%2Flearning%2Fcertificates%2F154a61d44a666338320253a7fea306d0dfec7bdbfb523dbd85c800c2685475e3&urlhash=H9er&trk=public_profile_see-credential",
     "idCredential": "",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/How_to_Get_People_to_Like_You_45_11zon_pbxcuw.webp",
-    "type": "SOFTSKILLS"
+    "type": "SOFTSKILLS",
+    "translations": [
+      {
+        "title": "Cómo hacer que a la gente le agrades",
+        "id": "es"
+      },
+      {
+        "title": "How to Get People to Like You",
+        "id": "en"
+      },
+      {
+        "title": "Hoe mensen zover krijgen dat ze je leuk vinden",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Scrum Fundamentals Certified",
     "company": "CertiProf",
     "issuedDate": 1685599200000,
     "idCredential": "86540902",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691172726/portfolio/certificates/Scrum_Foundation_Professional_Certificate_11zon_okjxyh.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "Certificado Profesional de Fundamentos de Scrum",
+        "id": "es"
+      },
+      {
+        "title": "Scrum Fundamentals Certified",
+        "id": "en"
+      },
+      {
+        "title": "Gecertificeerde scrumfundamenten",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Audiocurso de Accesibilidad Web: Casos de Estudio",
     "company": "Platzi",
     "issuedDate": 1669874400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F3240-accesibilidad-casos-estudio%2Fdiploma%2Fdetalle%2F&urlhash=BInI&trk=public_profile_see-credential",
     "idCredential": "de8f4a97-ce7e-4006-acd7-14769e4b11d5",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/Diploma-de-Audiocurso-de-Accesibilidad-Web-Casos-de-Estudio_51_11zon_vxanlq.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Audiocurso de Accesibilidad Web: Casos de Estudio",
+        "id": "es"
+      },
+      {
+        "title": "Audiocourse of Web Accessibility: Case Studies",
+        "id": "en"
+      },
+      {
+        "title": "Audiocursus van Webtoegankelijkheid: Casestudies",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Análisis de Malware para Dispositivos Móviles",
     "company": "Platzi",
     "issuedDate": 1672552800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1864-malware-moviles%2Fdiploma%2Fdetalle%2F&urlhash=3K7P&trk=public_profile_see-credential",
     "idCredential": "a52d0419-c9f2-422b-9aad-e0cbc4c751d3",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_del_Curso_de_An%C3%A1lisis_de_Malware_para_Dispositivos_M%C3%B3viles_37_zwlttm.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de Análisis de Malware para Dispositivos Móviles",
+        "id": "es"
+      },
+      {
+        "title": "Course of Malware Analysis for Mobile Devices",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Malware-analyse voor mobiele apparaten",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Seguridad Informática",
     "company": "Platzi",
     "issuedDate": 1672552800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjesn232022%2Fruta%2F38-seguridad-informatica%2Fdiploma%2Fdetalle%2F&urlhash=qdUO&trk=public_profile_see-credential",
     "idCredential": "8c475722-7261-41bd-94f9-8e76bac302f6",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_de_la_Ruta_de_Aprendizaje_de_Seguridad_Inform%C3%A1tica_42_mplzqg.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de Seguridad Informática",
+        "id": "es"
+      },
+      {
+        "title": "Course of Cybersecurity",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Cybersecurity",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Hacking: Pentesting con Metasploit",
     "company": "Platzi",
     "issuedDate": 1669874400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F3579-metasploit%2Fdiploma%2Fdetalle%2F&urlhash=AO8P&trk=public_profile_see-credential",
     "idCredential": "10709cb9-54bb-401a-bd86-d971b1992eb5",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Hacking_-_Pentesting_con_Metasploit_31_11zon_i5qnpk.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de Hacking: Pentesting con Metasploit",
+        "id": "es"
+      },
+      {
+        "title": "Course of Hacking: Pentesting with Metasploit",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Hacking: Pentesting met Metasploit",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Nail Your C# Interview",
     "company": "LinkedIn",
     "issuedDate": 1688191200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fwww%2Elinkedin%2Ecom%2Flearning%2Fcertificates%2F1a0f46bc0acd95704cce1cdab6c6078fcb61295512a4e10f409465c056a6015d&urlhash=IRNR&trk=public_profile_see-credential",
     "idCredential": "",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168636/portfolio/certificates/Nail_Your_C_Interview_8_11zon_jn83rf.webp",
-    "type": "BACKEND"
+    "type": "BACKEND",
+    "translations": [
+      {
+        "title": "Domina tu entrevista de C#",
+        "id": "es"
+      },
+      {
+        "title": "Nail Your C# Interview",
+        "id": "en"
+      },
+      {
+        "title": "Nagel uw C# Interview",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Improvisación para la Motivación y el Crecimiento Personal",
     "company": "Platzi",
     "issuedDate": 1669874400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2408-motivacion%2Fdiploma%2Fdetalle%2F&urlhash=vn8r&trk=public_profile_see-credential",
     "idCredential": "d7544813-0f6b-4de2-aa68-ecafd0bbe6b7",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Improvisaci%C3%B3n_para_la_Motivaci%C3%B3n_y_el_Crecimiento_Personal_36_i0qrhz.webp",
-    "type": "SOFTSKILLS"
+    "type": "SOFTSKILLS",
+    "translations": [
+      {
+        "title": "Curso de Improvisación para la Motivación y el Crecimiento Personal",
+        "id": "es"
+      },
+      {
+        "title": "Course of Improvisation for Motivation and Personal Growth",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Improvisatie voor motivatie en persoonlijke groei",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Informática Forense",
     "company": "Platzi",
     "issuedDate": 1669874400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1611-forense%2Fdiploma%2Fdetalle%2F&urlhash=30g6&trk=public_profile_see-credential",
     "idCredential": "44175145-f906-4054-b03e-e41fb83b9354",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Inform%C3%A1tica_Forense_41_wgbokc.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de Informática Forense",
+        "id": "es"
+      },
+      {
+        "title": "Course of Forensic Computing",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Forensische informatica",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Administración de Servidores",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fruta%2F8350-cloud-servidores%2Fdiploma%2Fdetalle%2F&urlhash=EpQ8&trk=public_profile_see-credential",
     "idCredential": "aac9d7d9-9ecb-4e04-9ae3-e3ee31f8d97b",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_de_la_Ruta_de_Aprendizaje_de_Administraci%C3%B3n_de_Servidores_32_hhnvka.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "Administración de Servidores",
+        "id": "es"
+      },
+      {
+        "title": "Server Administration",
+        "id": "en"
+      },
+      {
+        "title": "Serverbeheer",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "DevOps con un café",
     "company": "LinkedIn",
     "issuedDate": 1688191200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fwww%2Elinkedin%2Ecom%2Flearning%2Fcertificates%2F12e704478538c5ec87496d10dbf0d1097761bde93ab74d0f6687351f57abe4a8&urlhash=2aEe&trk=public_profile_see-credential",
     "idCredential": "",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168631/portfolio/certificates/DevOps_con_un_caf%C3%A9_49_mb2nc8.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "DevOps con un café",
+        "id": "es"
+      },
+      {
+        "title": "DevOps with a coffee",
+        "id": "en"
+      },
+      {
+        "title": "DevOps met een kopje koffie",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Escaneo Activo y Análisis de Vulnerabilidades",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2984-inteligencia-activa%2Fdiploma%2Fdetalle%2F&urlhash=Vb6C&trk=public_profile_see-credential",
     "idCredential": "8a4ca436-3991-4218-bb2b-9b13c1d96034",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_del_Curso_de_Escaneo_Activo_y_An%C3%A1lisis_de_Vulnerabilidades_35_mxoxqs.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de Escaneo Activo y Análisis de Vulnerabilidades",
+        "id": "es"
+      },
+      {
+        "title": "Course of Active Scanning and Vulnerability Analysis",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Actief scannen en kwetsbaarheidsanalyse",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Microsoft Certified: Azure Fundamentals",
     "company": "Microsoft",
     "issuedDate": 1675231200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fwww%2Ecredly%2Ecom%2Fbadges%2Fb675ebab-2168-4373-9b44-dec27afc0c5a%2Flinked_in_profile&urlhash=YJzB&trk=public_profile_see-credential",
     "idCredential": "",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168636/portfolio/certificates/Microsoft_Certified_-Azure_Fundamentals_1_11zon_szrylo.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "Certificado de Azure Fundamentals",
+        "id": "es"
+      },
+      {
+        "title": "Microsoft Certified: Azure Fundamentals",
+        "id": "en"
+      },
+      {
+        "title": "Microsoft Gecertificeerd: Azure Fundamentals",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Introducción a la Nube con Azure",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2200-introduccion-azure%2Fdiploma%2Fdetalle%2F&urlhash=rhGW&trk=public_profile_see-credential",
     "idCredential": "00a33b17-a280-4ed6-a1c6-eb0d24dd86ed",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Introducci%C3%B3n_a_la_Nube_con_Azure_33_cx2cr0.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "Curso de Introducción a la Nube con Azure",
+        "id": "es"
+      },
+      {
+        "title": "Course of Introduction to the Cloud with Azure",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Introductie tot de cloud met Azure",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso Avanzado de Redes de Internet",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1770-avanzado-redes%2Fdiploma%2Fdetalle%2F&urlhash=vEGt&trk=public_profile_see-credential",
     "idCredential": "8a55597f-4096-4601-b8ba-5a280d092abd",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/Diploma_del_Curso_Avanzado_de_Redes_de_Internet_47_11zon_z0ljum.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "Curso Avanzado de Redes de Internet",
+        "id": "es"
+      },
+      {
+        "title": "Advanced Internet Network Course",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Geavanceerde internetnetwerk",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Next.js: Internacionalización de Aplicaciones Web con i18n",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2364-nextjs-internacionalizacion%2Fdiploma%2Fdetalle%2F&urlhash=JZ-h&trk=public_profile_see-credential",
     "idCredential": "cf7c41fa-c5f4-434a-856f-a59dffae9571",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Curso_de_Next.js_-_Internalizaci%C3%B3n_de_Aplicaci%C3%B3nes_Web_con_i18n_5_xqlix9.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Next.js: Internacionalización de Aplicaciones Web con i18n",
+        "id": "es"
+      },
+      {
+        "title": "Course of Next.js: Internationalization of Web Applications with i18n",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Next.js: Internationalisering van webapplicaties met i18n",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Certificación Azure AZ-900",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fruta%2F8402-azure-az900%2Fdiploma%2Fdetalle%2F&urlhash=CVJJ&trk=public_profile_see-credential",
     "idCredential": "27d0a1f6-3296-4789-900f-657a23eb8fd2",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_de_la_Ruta_de_Aprendizaje_de_Certificaci%C3%B3n_Azure_AZ-900_27_ila9yl.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "Certificación Azure AZ-900",
+        "id": "es"
+      },
+      {
+        "title": "Azure AZ-900 Certification",
+        "id": "en"
+      },
+      {
+        "title": "Azure AZ-900-certificering",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Next.js: Optimización y Manejo de Grandes Datasets",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2427-nextjs-grandes-datasets%2Fdiploma%2Fdetalle%2F&urlhash=9x8d&trk=public_profile_see-credential",
     "idCredential": "13cc0d8d-2ae9-40ef-8ef2-fcf85edf8b42",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Curso_de_Next.js_Grandes_DataSets_18_11zon_ulx9rm.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Next.js: Optimización y Manejo de Grandes Datasets",
+        "id": "es"
+      },
+      {
+        "title": "Course of Next.js: Optimization and Management of Large Datasets",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Next.js: Optimalisatie en beheer van grote datasets",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Pensamiento Lógico: Lenguajes de Programación",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F3223-pensamiento-logico-lenguajes%2Fdiploma%2Fdetalle%2F&urlhash=rjt0&trk=public_profile_see-credential",
     "idCredential": "72679d2d-d875-498e-9fb6-6845b084c7cd",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Pensamiento_L%C3%B3gico_-_Lenguajes_de_Programaci%C3%B3n_23_vkmcuw.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Pensamiento Lógico: Lenguajes de Programación",
+        "id": "es"
+      },
+      {
+        "title": "Course of Logical Thinking: Programming Languages",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Logisch denken: Programmeertalen",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Next.js con GraphQL",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2680-nextjs-graphql%2Fdiploma%2Fdetalle%2F&urlhash=YK-P&trk=public_profile_see-credential",
     "idCredential": "6d3e3196-0865-43cf-9066-fec822937a5c",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Next.js_con_GraphQL_38_11zon_t2h2g1.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Next.js con GraphQL",
+        "id": "es"
+      },
+      {
+        "title": "Course of Next.js with GraphQL",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Next.js met GraphQL",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Next.js: Sitios Estáticos y Jamstack",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2362-nextjs-jamstack%2Fdiploma%2Fdetalle%2F&urlhash=7bRu&trk=public_profile_see-credential",
     "idCredential": "6a4ca2c7-96a3-4adc-9540-89429a81c55f",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/Diploma_del_Curso_de_Next.js_-_Sitios_Est%C3%A1ticos_y_Jamstack_46_wtx59l.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Next.js: Sitios Estáticos y Jamstack",
+        "id": "es"
+      },
+      {
+        "title": "Course of Next.js: Static Sites and Jamstack",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Next.js: Statische sites en Jamstack",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Full Stack con Next.js",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Flearning-path%2F7049-web-next%2Fdiploma%2Fdetalle%2F&urlhash=J8-1&trk=public_profile_see-credential",
     "idCredential": "4b8d83b4-904c-42ed-b36b-ffea11dd27dd",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168631/portfolio/certificates/Diploma_de_la_Ruta_de_Aprendizaje_de_Full_Stack_con_Next.js_44_11zon_n1yeae.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Full Stack con Next.js",
+        "id": "es"
+      },
+      {
+        "title": "Full Stack with Next.js",
+        "id": "en"
+      },
+      {
+        "title": "Full Stack met Next.js",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Introducción a la Seguridad Informática",
     "company": "Platzi",
     "issuedDate": 1664604000000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1496-seguridad-informatica%2Fdiploma%2Fdetalle%2F&urlhash=BKrO&trk=public_profile_see-credential",
     "idCredential": "fd3d586c-0d30-47ea-b5b7-2e9b4ec5771c",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Introducci%C3%B3n_a_la_Seguridad_Inform%C3%A1tica_22_gkoxtc.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de Introducción a la Seguridad Informática",
+        "id": "es"
+      },
+      {
+        "title": "Course of Introduction to Cybersecurity",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Introductie tot cybersecurity",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Next.js",
     "company": "Platzi",
     "issuedDate": 1664604000000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1991-next%2Fdiploma%2Fdetalle%2F&urlhash=MBud&trk=public_profile_see-credential",
     "idCredential": "5ac692ac-0f51-458f-ab21-14d83ea22f1c",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Curso_de_NEXT.JS_17_11zon_ggqlja.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Next.js",
+        "id": "es"
+      },
+      {
+        "title": "Course of Next.js",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Next.js",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de React.js: Navegación con React Router",
     "company": "Platzi",
     "issuedDate": 1664604000000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F3468-react-router%2Fdiploma%2Fdetalle%2F&urlhash=AePY&trk=public_profile_see-credential",
     "idCredential": "ed006a70-2b18-44c0-bfae-bbe40fbbdd50",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168636/portfolio/certificates/React.js_Navegaci%C3%B3n_con_React_Router_21_e3ypyb.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de React.js: Navegación con React Router",
+        "id": "es"
+      },
+      {
+        "title": "Course of React.js: Navigation with React Router",
+        "id": "en"
+      },
+      {
+        "title": "Cursus React.js: Navigatie met React Router",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Next.js: Autenticación",
     "company": "Platzi",
     "issuedDate": 1664604000000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2428-nextjs-auth%2Fdiploma%2Fdetalle%2F&urlhash=UqUm&trk=public_profile_see-credential",
     "idCredential": "6edf4e40-03eb-4bdb-a38f-be3f0219fca9",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168635/portfolio/certificates/Diploma_del_Curso_de_Next.js_-_Autenticaci%C3%B3n_25_bf8zpf.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Next.js: Autenticación",
+        "id": "es"
+      },
+      {
+        "title": "Course of Next.js: Authentication",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Next.js: Authenticatie",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Desarrollo de Apps con React Native",
     "company": "Platzi",
     "issuedDate": 1664604000000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fruta%2F12-react-native%2Fdiploma%2Fdetalle%2F&urlhash=TfKQ&trk=public_profile_see-credential",
     "idCredential": "620936dc-9b53-4df2-8ce3-18c3f46fcdc6",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Desarrollo_de_Apps_con_React_Native_20_11zon_j0yhwh.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Desarrollo de Apps con React Native",
+        "id": "es"
+      },
+      {
+        "title": "Development of Apps with React Native",
+        "id": "en"
+      },
+      {
+        "title": "Ontwikkeling van apps met React Native",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de DLP: Prevención de Pérdida de Datos",
     "company": "Platzi",
     "issuedDate": 1662012000000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1627-dlp%2Fdiploma%2Fdetalle%2F&urlhash=zmNT&trk=public_profile_see-credential",
     "idCredential": "e00a9c9c-0785-4495-89b9-a2fce7aa57da",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_del_Curso_de_DLP_-_Prevenci%C3%B3n_de_P%C3%A9rdida_de_Datos_28_gee9op.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de DLP: Prevención de Pérdida de Datos",
+        "id": "es"
+      },
+      {
+        "title": "Course of DLP: Data Loss Prevention",
+        "id": "en"
+      },
+      {
+        "title": "Cursus DLP: Data Loss Prevention",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de ASP.NET Core",
     "company": "Platzi",
     "issuedDate": 1654063200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1395-aspnet-core%2Fdiploma%2Fdetalle%2F&urlhash=oxpm&trk=public_profile_see-credential",
     "idCredential": "7ce70d6e-7bf5-4f3a-8acb-e3e285a5c66d",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Curso_de_ASP.NET_Core_10_11zon_lgcsif.webp",
-    "type": "BACKEND"
+    "type": "BACKEND",
+    "translations": [
+      {
+        "title": "Curso de ASP.NET Core",
+        "id": "es"
+      },
+      {
+        "title": "Course of ASP.NET Core",
+        "id": "en"
+      },
+      {
+        "title": "Cursus ASP.NET Core",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Redes Informáticas de Internet",
     "company": "Platzi",
     "issuedDate": 1662012000000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2225-redes%2Fdiploma%2Fdetalle%2F&urlhash=bRbx&trk=public_profile_see-credential",
     "idCredential": "b54a1acc-3785-4baf-8dc5-a9a494664e4e",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Curso_de_Redes_Informaticas_de_Internet_3_11zon_flnop6.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "Curso de Redes Informáticas de Internet",
+        "id": "es"
+      },
+      {
+        "title": "Course of Internet Computer Networks",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Internet computernetwerken",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Introducción a la Ingeniería Social: Técnicas, Ataques y Pretexting",
     "company": "Platzi",
     "issuedDate": 1662012000000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2238-ingenieria-social%2Fdiploma%2Fdetalle%2F&urlhash=LP6u&trk=public_profile_see-credential",
     "idCredential": "77eecd37-29be-4867-8bee-5e4a6dacf897",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/Curso_de_Introducci%C3%B3n_a_la_Ingenieria_Social_15_eriolw.webp",
-    "type": "CYBERSECURITY"
+    "type": "CYBERSECURITY",
+    "translations": [
+      {
+        "title": "Curso de Introducción a la Ingeniería Social: Técnicas, Ataques y Pretexting",
+        "id": "es"
+      },
+      {
+        "title": "Course of Introduction to Social Engineering: Techniques, Attacks and Pretexting",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Introductie tot sociale techniek: technieken, aanvallen en voorwendsels",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Desarrollo de Aplicaciones con .Net",
     "company": "Platzi",
     "issuedDate": 1659333600000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fruta%2F28-asp-net%2Fdiploma%2Fdetalle%2F&urlhash=-D1r&trk=public_profile_see-credential",
     "idCredential": "f53860cc-cc9d-4b90-9eb2-de11a2658b31",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691179485/portfolio/certificates/Desarrollo_de_Aplicaciones_con_ASP.NET_11zon_x0ut2i.webp",
-    "type": "BACKEND"
+    "type": "BACKEND",
+    "translations": [
+      {
+        "title": "Desarrollo de Aplicaciones con .Net",
+        "id": "es"
+      },
+      {
+        "title": "Development of Applications with .Net",
+        "id": "en"
+      },
+      {
+        "title": "Ontwikkeling van applicaties met .Net",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Flujo de Desarrollo Moderno CodeStream",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2157-desarrollo-moderno-codestream%2Fdiploma%2Fdetalle%2F&urlhash=qZuv&trk=public_profile_see-credential",
     "idCredential": "196bb22d-103c-4440-8e5f-ebf66268a013",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_del_Curso_de_Flujo_de_Desarrollo_Moderno_CodeStream_29_11zon_lvsvp0.webp",
-    "type": "DEVOPS"
+    "type": "DEVOPS",
+    "translations": [
+      {
+        "title": "Curso de Flujo de Desarrollo Moderno CodeStream",
+        "id": "es"
+      },
+      {
+        "title": "Course of Modern Development Flow CodeStream",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Moderne ontwikkelingsstroom CodeStream",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Audiocurso de Frameworks y Arquitecturas Frontend: Casos de Estudio",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F4623-arquitectura-frontend%2Fdiploma%2Fdetalle%2F&urlhash=k23r&trk=public_profile_see-credential",
     "idCredential": "83fb9a2c-5379-4a67-a934-85435cf36055",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Diploma_de_Audiocurso_de_Frameworks_y_Arquitecturas_Frontend_-_Casos_de_Estudio_19_11zon_qvuayq.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Audiocurso de Frameworks y Arquitecturas Frontend: Casos de Estudio",
+        "id": "es"
+      },
+      {
+        "title": "Audiocourse of Frontend Frameworks and Architectures: Case Studies",
+        "id": "en"
+      },
+      {
+        "title": "Audiocursus Frontend-frameworks en architecturen: casestudies",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Fundamentos de Ecommerce",
     "company": "Platzi",
     "issuedDate": 1654063200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1986-fundamentos-ecommerce%2Fdiploma%2Fdetalle%2F&urlhash=YrKh&trk=public_profile_see-credential",
     "idCredential": "01d93894-0626-4fc9-89fb-fb9f7fbcbf11",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_del_Curso_de_Fundamentos_de_Ecommerce_39_11zon_kd6ego.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Fundamentos de Ecommerce",
+        "id": "es"
+      },
+      {
+        "title": "Course of Ecommerce Fundamentals",
+        "id": "en"
+      },
+      {
+        "title": "Cursus E-commerce Fundamentals",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso Práctico de React Native: Manejo de Listas y Consumo de APIs",
     "company": "Platzi",
     "issuedDate": 1651384800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2557-react-native-listas-apis%2Fdiploma%2Fdetalle%2F&urlhash=bJng&trk=public_profile_see-credential",
     "idCredential": "518833df-3d42-43bf-9632-42c6ce006f0d",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Desarrollo_de_Apps_con_React_Native_20_11zon_j0yhwh.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso Práctico de React Native: Manejo de Listas y Consumo de APIs",
+        "id": "es"
+      },
+      {
+        "title": "Practical Course of React Native: Handling Lists and Consuming APIs",
+        "id": "en"
+      },
+      {
+        "title": "Praktische cursus React Native: Lijsten beheren en API's consumeren",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Frontend Developer",
     "company": "Platzi",
     "issuedDate": 1651384800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2467-frontend-developer%2Fdiploma%2Fdetalle%2F&urlhash=0CF3&trk=public_profile_see-credential",
     "idCredential": "2753a9e3-2c40-4d03-afad-62b0ec167b72",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/Curso_de_Frontend_Developer_4_11zon_chjoto.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Frontend Developer",
+        "id": "es"
+      },
+      {
+        "title": "Course of Frontend Developer",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Frontend Developer",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de API REST con Javascript: Ejemplos con APIs reales",
     "company": "Platzi",
     "issuedDate": 1651384800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2986-api-practico%2Fdiploma%2Fdetalle%2F&urlhash=njU3&trk=public_profile_see-credential",
     "idCredential": "944e6710-05b3-4853-bfdc-37b059716d28",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Curso_Practico_de_Consumo_de_API_REST_Con_Javascript_11_11zon_lpr8ha.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de API REST con Javascript: Ejemplos con APIs reales",
+        "id": "es"
+      },
+      {
+        "title": "Course of API REST with Javascript: Examples with real APIs",
+        "id": "en"
+      },
+      {
+        "title": "Cursus API REST met Javascript: Voorbeelden met echte API's",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de API REST con Javascript: Fundamentos",
     "company": "Platzi",
     "issuedDate": 1651384800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2985-api%2Fdiploma%2Fdetalle%2F&urlhash=GtK3&trk=public_profile_see-credential",
     "idCredential": "a299d87f-f8de-436c-b066-3642dbeb9dd5",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_del_Curso_de_API_REST_con_Javascript_-_Performance_y_Usabilidad_13_11zon_w5ofd3.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de API REST con Javascript: Fundamentos",
+        "id": "es"
+      },
+      {
+        "title": "Course of API REST with Javascript: Fundamentals",
+        "id": "en"
+      },
+      {
+        "title": "Cursus API REST met Javascript: Fundamenten",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de API REST con Javascript: Performance y Usabilidad",
     "company": "Platzi",
     "issuedDate": 1651384800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2942-api-profesional%2Fdiploma%2Fdetalle%2F&urlhash=Upsd&trk=public_profile_see-credential",
     "idCredential": "ac2f780a-218a-4cc7-958e-bb15077f6146",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168634/portfolio/certificates/Diploma_del_Curso_de_API_REST_con_Javascript_-_Performance_y_Usabilidad_13_11zon_w5ofd3.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de API REST con Javascript: Performance y Usabilidad",
+        "id": "es"
+      },
+      {
+        "title": "Course of API REST with Javascript: Performance and Usability",
+        "id": "en"
+      },
+      {
+        "title": "Cursus API REST met Javascript: Prestaties en bruikbaarheid",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Fundamentos de Ingeniería de Software",
     "company": "Platzi",
     "issuedDate": 1651384800000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1098-ingenieria%2Fdiploma%2Fdetalle%2F&urlhash=zHby&trk=public_profile_see-credential",
     "idCredential": "71720902-04b9-4dd3-bedc-3641d10396a5",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168633/portfolio/certificates/Diploma_de_Fundamentos_de_Ingenieria_de_Software_6_11zon_znawsu.webp",
-    "type": "BACKEND"
+    "type": "BACKEND",
+    "translations": [
+      {
+        "title": "Fundamentos de Ingeniería de Software",
+        "id": "es"
+      },
+      {
+        "title": "Course of Software Engineering Fundamentals",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Fundamenten van software-engineering",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso Básico de JavaScript",
     "company": "Platzi",
     "issuedDate": 1646114400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1814-basico-javascript%2Fdiploma%2Fdetalle%2F&urlhash=6MgP&trk=public_profile_see-credential",
     "idCredential": "4e60b366-800c-4e33-93d4-389cb240050f",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/Curso_B%C3%A1sico_de_Javascript_7_qrwrfy.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso Básico de JavaScript",
+        "id": "es"
+      },
+      {
+        "title": "Course of Basic JavaScript",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Basis JavaScript",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Next.js: Optimización y Deploy a Producción",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2363-nextjs-deploy%2Fdiploma%2Fdetalle%2F&urlhash=y2hn&trk=public_profile_see-credential",
     "idCredential": "0e042e4d-46fd-4a48-962d-e2817caf26eb",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168631/portfolio/certificates/Curso-de-Next.js-Optimizaci%C3%B3n-y-Deploy-a-Producci%C3%B3n_50_mkdj4e.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Next.js: Optimización y Deploy a Producción",
+        "id": "es"
+      },
+      {
+        "title": "Course of Next.js: Optimization and Production Deployment",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Next.js: Optimalisatie en productiedeploy",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Pensamiento Lógico: Manejo de Datos, Estructuras y Funciones",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F3222-pensamiento-logico-estructuras%2Fdiploma%2Fdetalle%2F&urlhash=FFij&trk=public_profile_see-credential",
     "idCredential": "60ac61a3-e181-42c2-9843-aa763add05c2",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168636/portfolio/certificates/Diploma_del_Curso_de_Pensamiento_L%C3%B3gico_-_Manejo_de_Datos_Estructuras_y_Funciones_30_urtxnf.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Pensamiento Lógico: Manejo de Datos, Estructuras y Funciones",
+        "id": "es"
+      },
+      {
+        "title": "Course of Logical Thinking: Data, Structures and Functions Management",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Logisch denken: Gegevens, structuren en functies beheren",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de APIs con .NET",
     "company": "Platzi",
     "issuedDate": 1654063200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F2983-apis-net%2Fdiploma%2Fdetalle%2F&urlhash=Jv3n&trk=public_profile_see-credential",
     "idCredential": "46beb7ee-9a9b-44da-a59e-fa66357c366d",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/Curso_de_API_Con_.Net_14_11zon_eppin9.webp",
-    "type": "BACKEND"
+    "type": "BACKEND",
+    "translations": [
+      {
+        "title": "Curso de APIs con .NET",
+        "id": "es"
+      },
+      {
+        "title": "Course of APIs with .NET",
+        "id": "en"
+      },
+      {
+        "title": "Cursus API's met .NET",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Progressive Web Apps con React.js",
     "company": "Platzi",
     "issuedDate": 1667282400000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F1313-pwa-react-js%2Fdiploma%2Fdetalle%2F&urlhash=6oEJ&trk=public_profile_see-credential",
     "idCredential": "422bbbda-9928-471c-9b4b-ec642ad3f29c",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168636/portfolio/certificates/Diploma_del_Curso_de_Progressive_Web_Apps_con_React.js_40_11zon_kndzuv.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Progressive Web Apps con React.js",
+        "id": "es"
+      },
+      {
+        "title": "Course of Progressive Web Apps with React.js",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Progressive Web Apps met React.js",
+        "id": "dutch"
+      }
+    ]
   },
   {
-    "title": "Curso de Asincronismo con JavaScript",
     "company": "Platzi",
     "issuedDate": 1654063200000,
     "url": "https://www.linkedin.com/redir/redirect?url=https%3A%2F%2Fplatzi%2Ecom%2Fp%2Fjess232022%2Fcurso%2F3175-asincronismo-js%2Fdiploma%2Fdetalle%2F&urlhash=lO7L&trk=public_profile_see-credential",
     "idCredential": "cd63d936-eacd-4918-851f-d89a1b4113bb",
     "image": "https://res.cloudinary.com/js-media/image/upload/v1691168632/portfolio/certificates/Curso_de_Asincronismo_con_Javascript_2_11zon_nnykaa.webp",
-    "type": "FRONTEND"
+    "type": "FRONTEND",
+    "translations": [
+      {
+        "title": "Curso de Asincronismo con JavaScript",
+        "id": "es"
+      },
+      {
+        "title": "Course of Asynchrony with JavaScript",
+        "id": "en"
+      },
+      {
+        "title": "Cursus Asynchronie met JavaScript",
+        "id": "dutch"
+      }
+    ]
   }
 ]

@@ -1,46 +1,39 @@
 "use client";
 
 import type { FC } from "react";
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
+
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence } from "framer-motion";
 
 import { Link } from "@/navigation";
 import HeaderArticle from "@/components/Common/HeaderArticle";
-import { trpcReact as trpc } from "@/utils/trpc";
-import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
-import type { SkillType } from "@/utils/interfaces/types";
+import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
 
-import SkillGrouped from "./SkillGrouped";
-import BgParticles from "./BgParticles";
-import FilterType from "./FilterType";
+import { LoadingFixed } from "@/components/Common/Loading";
+import SkillsFilterAndGroup from "./SkillsFilterAndGroup";
 
-const SkillModal = lazy(() => import("./SkillModal"));
+const SkillModal = dynamic(() => import("./SkillModal"), {
+  loading: () => <LoadingFixed />,
+});
 
-export type SkillDef = "backend" | "frontend" | "devops" | "others";
+const BgParticles = dynamic(() => import("./BgParticles"), {
+  loading: () => <LoadingFixed />,
+});
 
 interface ISkillsProps {}
-
-const limit = LIMIT_PER_PAGE_BIG;
 
 const Skills: FC<ISkillsProps> = ({}) => {
   const locale = useLocale() as "en" | "es" | "nl";
 
   const t = useTranslations("main.skills");
-  const [value, setValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<SkillType | null>(null);
   const [selectedSkillType, setSelectedSkillType] =
-    useState<SkillDef>("backend");
+    useState<SkillTypeType>("FRONTEND");
 
-  const [frontend, backend, mobile, tools] = trpc.useQueries((tls) => [
-    tls.getSkills({ limit, locale, type: "FRONTEND" }),
-    tls.getSkills({ limit, locale, type: "BACKEND" }),
-    tls.getSkills({ limit, locale, type: "MOBILE" }),
-    tls.getSkills({ limit, locale, type: "TOOLS" }),
-  ]);
-
-  const handleOpenModal = (skill: SkillType, type: SkillDef) => {
+  const handleOpenModal = (skill: SkillType, type: SkillTypeType) => {
     setSelectedSkillType(type);
     setSelectedSkill(skill);
     setIsModalOpen(true);
@@ -48,42 +41,6 @@ const Skills: FC<ISkillsProps> = ({}) => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  const determineType = (val: number): SkillDef => {
-    switch (val) {
-      case 0:
-        return "frontend";
-      case 1:
-        return "backend";
-      default:
-        return "devops";
-    }
-  };
-
-  const determineLoading = (val: number): boolean => {
-    switch (val) {
-      case 0:
-        return frontend?.isLoading;
-      case 1:
-        return backend?.isLoading;
-      default:
-        return tools?.isLoading;
-    }
-  };
-
-  const determineSkills = (val: number): SkillType[] => {
-    switch (val) {
-      case 0: {
-        const data = frontend?.data?.data || [];
-        const dataMobile = mobile?.data?.data || [];
-        return [...data, ...dataMobile];
-      }
-      case 1:
-        return backend?.data?.data || [];
-      default:
-        return tools?.data?.data || [];
-    }
   };
 
   return (
@@ -98,20 +55,10 @@ const Skills: FC<ISkillsProps> = ({}) => {
             description={t("description")}
           />
           <div id="skills" className="z-10 overflow-hidden">
-            <div className="relative z-10 mb-10 lg:mb-0 lg:grid lg:grid-cols-12 lg:items-center lg:gap-16">
-              <div className="lg:col-span-5">
-                <FilterType value={value} onChange={setValue} />
-              </div>
-              <div className="lg:col-span-7">
-                <SkillGrouped
-                  onClick={handleOpenModal}
-                  type={determineType(value)}
-                  loading={determineLoading(value)}
-                  skills={determineSkills(value)}
-                />
-              </div>
-            </div>
-
+            <SkillsFilterAndGroup
+              locale={locale}
+              handleOpenModal={handleOpenModal}
+            />
             <div className="container mx-auto flex w-full justify-center py-5">
               <Link
                 scroll
@@ -132,15 +79,13 @@ const Skills: FC<ISkillsProps> = ({}) => {
       </div>
 
       <AnimatePresence>
-        <Suspense fallback={<div>Loading...</div>}>
-          {isModalOpen && selectedSkill && (
-            <SkillModal
-              skill={selectedSkill}
-              onClose={handleCloseModal}
-              type={selectedSkillType}
-            />
-          )}
-        </Suspense>
+        {isModalOpen && selectedSkill && (
+          <SkillModal
+            skill={selectedSkill}
+            onClose={handleCloseModal}
+            type={selectedSkillType}
+          />
+        )}
       </AnimatePresence>
     </>
   );

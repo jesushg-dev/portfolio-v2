@@ -4,6 +4,18 @@ import { getNowPlaying, getTopTracks } from "@/utils/services/spotify";
 
 import { router, procedure } from "../trpc";
 
+const LanguageCode = z.enum(["es", "en", "nl"]);
+const StackType = z.enum([
+  "FRONTEND",
+  "BACKEND",
+  "MOBILE",
+  "DESKTOP",
+  "CYBERSECURITY",
+  "DEVOPS",
+  "SOFTSKILLS",
+  "TOOLS",
+]);
+
 export const appRouter = router({
   getNowPlaying: procedure.input(z.undefined()).query(async () => {
     const data = await getNowPlaying();
@@ -28,30 +40,48 @@ export const appRouter = router({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
-        type: z
-          .enum([
-            "FRONTEND",
-            "BACKEND",
-            "MOBILE",
-            "DESKTOP",
-            "CYBERSECURITY",
-            "DEVOPS",
-            "SOFTSKILLS",
-            "TOOLS",
-          ])
-          .optional(),
-        locale: z.enum(["es", "en", "nl"]).optional().default("en"),
+        type: z.array(StackType).optional(),
+        locale: LanguageCode.optional().default("en"),
       }),
     )
     .query(async ({ input, ctx }) => {
-      const { limit, cursor, type } = input;
+      const { limit, cursor, type, locale } = input;
 
-      // get certificates with translations
+      const appLanguage = await ctx.prisma.appLanguage.findUnique({
+        where: {
+          code: locale,
+        },
+      });
+
+      // get certifications with translations
       const data = await ctx.prisma.certification.findMany({
+        include: {
+          CertificationTranslation: {
+            where: {
+              appLanguageId: appLanguage?.id,
+            },
+          },
+        },
         take: limit,
         skip: cursor ? 1 : 0,
+        where: type
+          ? {
+              type: {
+                hasSome: type,
+              },
+            }
+          : undefined,
         cursor: cursor ? { id: cursor } : undefined,
-        where: type ? { type } : undefined,
+      });
+
+      // first CertificationTranslation data should be at the same level as Certification object
+      const dataWithTranslation = data.map((certification) => {
+        const { CertificationTranslation, ...rest } = certification;
+
+        return {
+          ...rest,
+          ...CertificationTranslation[0],
+        };
       });
 
       const lastCursor = data[data.length - 1]?.id || null;
@@ -61,13 +91,19 @@ export const appRouter = router({
         take: limit,
         skip: lastCursor ? 1 : 0,
         cursor: lastCursor ? { id: lastCursor } : undefined,
-        where: type ? { type } : undefined,
+        where: type
+          ? {
+              type: {
+                hasSome: type,
+              },
+            }
+          : undefined,
       });
 
       return {
         hasMore: hasMore >= 1,
         cursor: lastCursor,
-        data,
+        data: dataWithTranslation,
       };
     }),
   getProjects: procedure
@@ -76,8 +112,8 @@ export const appRouter = router({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
-        type: z.enum(["FRONTEND", "BACKEND", "MOBILE", "DESKTOP"]).optional(),
-        locale: z.enum(["es", "en", "nl"]).optional().default("en"),
+        type: StackType.optional(),
+        locale: LanguageCode.optional().default("en"),
       }),
     )
     .query(async ({ input, ctx }) => {
@@ -159,10 +195,8 @@ export const appRouter = router({
         limit: z.number(),
         cursor: z.string().nullish(),
         keyword: z.string().optional(),
-        type: z
-          .enum(["FRONTEND", "BACKEND", "MOBILE", "DESKTOP", "TOOLS"])
-          .optional(),
-        locale: z.enum(["es", "en", "nl"]).optional().default("en"),
+        type: z.array(StackType).optional(),
+        locale: LanguageCode.optional().default("en"),
       }),
     )
     .query(async ({ input, ctx }) => {
@@ -186,7 +220,13 @@ export const appRouter = router({
         },
         take: limit,
         skip: cursor ? 1 : 0,
-        where: type ? { type } : undefined,
+        where: type
+          ? {
+              type: {
+                in: type,
+              },
+            }
+          : undefined,
         cursor: cursor ? { id: cursor } : undefined,
       });
 
@@ -206,7 +246,13 @@ export const appRouter = router({
       const hasMore = await ctx.prisma.project.count({
         take: limit,
         skip: lastCursor ? 1 : 0,
-        where: type ? { type } : undefined,
+        where: type
+          ? {
+              type: {
+                in: type,
+              },
+            }
+          : undefined,
         cursor: lastCursor ? { id: lastCursor } : undefined,
       });
 

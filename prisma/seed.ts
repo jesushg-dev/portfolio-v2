@@ -2469,16 +2469,39 @@ async function main() {
     },
   });
 
-  await seedCertificates();
+  await seedCertificates(langEs.id, langEn.id, langDe.id);
 }
 
 // seed certificates data
-async function seedCertificates() {
+async function seedCertificates(esId: string, enId: string, deId: string) {
   const certPromises = certifications.map(async (certificate) => {
+    const { translations, ...rest } = certificate;
+
     const newCertificate = await prisma.certification.upsert({
       where: { id: new ObjectId().toString() },
       update: {},
-      create: { ...certificate, type: certificate.type as any },
+      create: {
+        ...rest,
+        type: [certificate.type] as any,
+        CertificationTranslation: {
+          createMany: {
+            data: [
+              {
+                title: translations[0].title,
+                appLanguageId: esId,
+              },
+              {
+                title: translations[1].title,
+                appLanguageId: enId,
+              },
+              {
+                title: translations[2].title,
+                appLanguageId: deId,
+              },
+            ],
+          },
+        },
+      },
     });
 
     return newCertificate;

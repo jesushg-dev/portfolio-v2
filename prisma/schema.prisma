@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "mongodb"
-  url      =  env("MONGODB_URI")
+  url      = env("MONGODB_URI")
 }
 
 generator client {
@@ -11,12 +11,13 @@ generator client {
 }
 
 model AppLanguage {
-  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
-  code               String               @unique
-  name               String
-  SkillTranslation   SkillTranslation[]
-  ProjectTranslation ProjectTranslation[]
-  ServiceTranslation ServiceTranslation[]
+  id                       String                     @id @default(auto()) @map("_id") @db.ObjectId
+  code                     String                     @unique
+  name                     String
+  SkillTranslation         SkillTranslation[]
+  ProjectTranslation       ProjectTranslation[]
+  ServiceTranslation       ServiceTranslation[]
+  CertificationTranslation CertificationTranslation[]
 }
 
 model Project {
@@ -24,11 +25,12 @@ model Project {
   createdAt          DateTime             @default(now())
   image              String
   type               StackType
-  githubUrl          String?             
-  websiteUrl         String?             
-  isPrivate          Boolean             @default(false)
+  githubUrl          String?
+  websiteUrl         String?
+  isPrivate          Boolean              @default(false)
   ProjectSkill       ProjectSkill[]
   ProjectTranslation ProjectTranslation[]
+  CertificateProject CertificateProject[]
 }
 
 model ProjectSkill {
@@ -57,6 +59,7 @@ model Service {
   image              String
   type               StackType
   ServiceTranslation ServiceTranslation[]
+  CertificateService CertificateService[]
 }
 
 model ServiceTranslation {
@@ -78,18 +81,7 @@ model Skill {
   type             StackType
   ProjectSkill     ProjectSkill[]
   SkillTranslation SkillTranslation[]
-}
-
-model Certification {
-  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt          DateTime             @default(now())
-  title              String
-  company            String
-  issuedDate         Int?
-  url                String?
-  idCredential       String?
-  image              String?
-  type               StackType
+  CertificateSkill CertificateSkill[]
 }
 
 model SkillTranslation {
@@ -101,6 +93,67 @@ model SkillTranslation {
   Skill         Skill?      @relation(fields: [skillId], references: [id])
   skillId       String?     @db.ObjectId
   appLanguageId String      @db.ObjectId
+}
+
+model Certification {
+  id                       String                     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt                DateTime                   @default(now())
+  company                  String
+  issuedDate               Int?
+  url                      String?
+  idCredential             String?
+  image                    String?
+  type                     StackType[]
+  CertificateSkill         CertificateSkill[]
+  CertificationTranslation CertificationTranslation[]
+  CertificateProject       CertificateProject[]
+  CertificateService       CertificateService[]
+}
+
+model CertificationTranslation {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime             @default(now())
+  title              String
+  language           AppLanguage          @relation(fields: [appLanguageId], references: [id])
+  Certification      Certification?       @relation(fields: [certificationId], references: [id])
+  certificationId    String?              @db.ObjectId
+  appLanguageId      String               @db.ObjectId
+  CertificateService CertificateService[]
+}
+
+//an certificate can validate multiple skills
+//an skill can be validated by multiple certificates
+model CertificateSkill {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime      @default(now())
+  Certification   Certification @relation(fields: [certificationId], references: [id])
+  Skill           Skill         @relation(fields: [skillId], references: [id])
+  certificationId String        @db.ObjectId
+  skillId         String        @db.ObjectId
+}
+
+//an certificate can validate multiple projects
+//an project can be validated by multiple certificates
+model CertificateProject {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime      @default(now())
+  Certification   Certification @relation(fields: [certificationId], references: [id])
+  Project         Project       @relation(fields: [projectId], references: [id])
+  certificationId String        @db.ObjectId
+  projectId       String        @db.ObjectId
+}
+
+//an certificate can validate multiple services
+//an service can be validated by multiple certificates
+model CertificateService {
+  id                         String                    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt                  DateTime                  @default(now())
+  Certification              Certification             @relation(fields: [certificationId], references: [id])
+  Service                    Service                   @relation(fields: [serviceId], references: [id])
+  certificationId            String                    @db.ObjectId
+  serviceId                  String                    @db.ObjectId
+  CertificationTranslation   CertificationTranslation? @relation(fields: [certificationTranslationId], references: [id])
+  certificationTranslationId String?                   @db.ObjectId
 }
 
 enum StackType {

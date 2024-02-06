@@ -65,10 +65,17 @@
       }
     },
     "experiences": {
+      "experience0": {
+        "position": "Fullstack Developer",
+        "company": "Contollo Consultores",
+        "dates": "agosto. 2023 – presente",
+        "responsibilities": "<item>Desarrollo de aplicaciones web con Angular</item><item>Integración de aplicaciones con servicios de terceros</item><item>Desarrollo de servicios backend con Nest.js y .NET Core</item>",
+        "skills": "Angular, Nest.js, .NET Core, TypeScript, JavaScript, Firebase, Microsoft DevOps"
+      },
       "experience1": {
         "position": "Freelance | Desarrollador Full Stack con React, Next.js y Node.js",
         "company": "Musa",
-        "dates": "junio. 2022 – presente",
+        "dates": "junio. 2022 – julio. 2023",
         "responsibilities": "<item>Diseñe y desarrolle interfaces web y aplicaciones móviles de alta calidad</item><item>Integre con éxito datos y procesos provenientes de proveedores externos, garantizando una integración sin problemas y una gestión eficiente de la información</item><item>Demostré el progreso y los logros alcanzados en términos de funcionalidad, usabilidad y rendimiento a las partes interesadas</item>",
         "skills": "Next.js, Diseño de Interfaz de Usuario, UIX, React.js, Apollo GraphQL, Redux.js, Tailwind CSS, JavaScript, Desarrollo web"
       },

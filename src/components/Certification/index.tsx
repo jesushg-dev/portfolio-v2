@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, Fragment, lazy } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
 import type { FC } from "react";
@@ -13,13 +14,11 @@ import { LIMIT_PER_PAGE_XL } from "@/utils/constants";
 import FilterType from "@/components/Certification/FilterType";
 import { stackTypes } from "@/utils/constants/certificatesType";
 import CertificateItem from "@/components/Certification/CertificateItem";
-// types
+import type { StackType } from "@prisma/client";
 
-const NoResult = lazy(() => import("@/components/Common/NoResult"));
-
-type UndefinedOrStackTypes =
-  | Exclude<(typeof stackTypes)[number], "ALL">
-  | undefined;
+const NoResult = dynamic(() => import("@/components/Common/NoResult"), {
+  loading: () => <Skeleton count={10} />,
+});
 
 const limit = LIMIT_PER_PAGE_XL;
 
@@ -61,7 +60,7 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
         type:
           stackTypes[crtValue] === "ALL"
             ? undefined
-            : (stackTypes[crtValue] as UndefinedOrStackTypes),
+            : [stackTypes[crtValue] as StackType],
       },
       {
         getNextPageParam: (val) => val.cursor,

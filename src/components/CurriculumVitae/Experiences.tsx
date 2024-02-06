@@ -7,6 +7,7 @@ import { ClientLocalAssignmentIcon } from "./ClientIcon";
 interface IExperienceProps {}
 
 const experiences = [
+  "experience0",
   "experience1",
   "experience2",
   "experience3",
