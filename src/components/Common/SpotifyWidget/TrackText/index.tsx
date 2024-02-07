@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import React, { memo } from "react";
-import Marquee from "react-fast-marquee";
+import ParallaxTex from "../../ParallaxText";
 
 interface ITrackTextProps {
   track: string;
@@ -9,23 +9,16 @@ interface ITrackTextProps {
 
 const TrackText: FC<ITrackTextProps> = ({ track, url }) => {
   return (
-    <Marquee
-      speed={40}
-      autoFill
-      pauseOnHover
-      pauseOnClick
-      delay={0}
-      direction="left"
-    >
+    <ParallaxTex baseVelocity={-5}>
       <a
         target="_blank"
         rel="noopener noreferrer"
         href={url}
         className="mr-2 select-none text-xl font-bold text-white/90 transition-all  hover:underline"
       >
-        {track} |{" "}
+        {track}
       </a>
-    </Marquee>
+    </ParallaxTex>
   );
 };
 

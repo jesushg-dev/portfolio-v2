@@ -15,6 +15,7 @@ import type { ImageLoaderProps } from "next/image";
 
 import ContactItem from "./ContactItem";
 import ContactForm from "./ContactForm";
+import HeaderArticle from "@/components/Common/HeaderArticle";
 
 interface IContactProps {}
 
@@ -35,20 +36,11 @@ const Contact: FC<IContactProps> = ({}) => {
         <div className="z-20 flex w-full flex-col rounded bg-background-50 md:flex-row md:items-center">
           <aside className="flex w-full flex-col justify-between space-y-10 px-10 py-8">
             <div className="space-y-3">
-              <div className="container mx-auto">
-                <div className="-mx-4 flex flex-wrap">
-                  <div className="w-full px-4">
-                    <div className="mx-auto mb-4 text-center">
-                      <h2 className="mb-4 text-3xl font-bold text-primaryText-900 sm:text-4xl md:text-[40px]">
-                        {t("title")}
-                      </h2>
-                      <p className="text-body-color text-base">
-                        {t("subtitle")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <HeaderArticle
+                title={t("title")}
+                description={t("subtitle")}
+                subtitle=""
+              />
               <ul className="-ml-3 flex flex-wrap justify-center gap-2">
                 <li>
                   <ContactItem

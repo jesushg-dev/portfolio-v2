@@ -3,7 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## 2.7.2 (2023-12-25)
+## 2.7.3 (2023-02-06)
+
+- Disable particles.js in the home page due performance issues
+- Add animation to title section in the home page
+- Remove `react-marquee` dependency and use framer-motion to create the marquee effect
+
+## 2.7.2 (2024-02-06)
+
 - Add internationalization support for certifications and courses
 - Fix a bug with libraries
 

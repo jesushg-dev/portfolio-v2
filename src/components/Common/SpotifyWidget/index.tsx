@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import React, { useState, memo } from "react";
+import React, { useState, useMemo, memo } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { IoPause, IoPlay, IoVolumeMediumOutline } from "react-icons/io5";
@@ -21,6 +21,13 @@ const SpotifyWidget: FC<ISpotifyWidgetProps> = () => {
   const t = useTranslations("global.footer");
 
   const { data, isLoading, refetch } = trpc.getNowPlaying.useQuery();
+  const artists = useMemo(
+    () =>
+      data === undefined || "error" in data
+        ? []
+        : data.item.artists.map((artist) => artist.name),
+    [data],
+  );
 
   const [localVolume, setLocalVolume] = useState<number>(10);
   const [isLocalPlaying, setIsLocalPlaying] = useState<boolean>(false);
@@ -138,7 +145,7 @@ const SpotifyWidget: FC<ISpotifyWidgetProps> = () => {
       <div className="relative flex h-full w-full flex-grow sm:w-4/6">
         <div className="flex w-full flex-col p-5">
           <ArtistText
-            artists={data.item.artists.map((artist) => artist.name)}
+            artists={artists}
             url={data.item.artists[0].external_urls.spotify}
           />
           <TrackText

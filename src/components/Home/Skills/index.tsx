@@ -18,9 +18,9 @@ const SkillModal = dynamic(() => import("./SkillModal"), {
   loading: () => <LoadingFixed />,
 });
 
-const BgParticles = dynamic(() => import("./BgParticles"), {
+/* const BgParticles = dynamic(() => import("./BgParticles"), {
   loading: () => <LoadingFixed />,
-});
+}); */
 
 interface ISkillsProps {}
 
@@ -47,7 +47,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
     <>
       <div className="relative bg-background-50">
         <article className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20">
-          <BgParticles />
+          {/* <BgParticles /> */}
           <HeaderArticle
             showIcon
             title={t("title")}

@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import React, { memo, useMemo } from "react";
-import Marquee from "react-fast-marquee";
+import ParallaxTex from "../../ParallaxText";
 
 interface IArtistTextProps {
   artists: string[];
@@ -8,26 +8,25 @@ interface IArtistTextProps {
 }
 
 const ArtistText: FC<IArtistTextProps> = ({ artists, url }) => {
-  const artistsText = useMemo(() => artists.join(", "), [artists]);
+  const artistsText = useMemo(
+    () =>
+      artists.length > 2
+        ? `${artists.slice(0, -1).join(", ")} & ${artists[artists.length - 1]}`
+        : artists.join(" feat "),
+    [artists],
+  );
 
   return (
-    <Marquee
-      speed={40}
-      autoFill
-      pauseOnHover
-      pauseOnClick
-      delay={0}
-      direction="left"
-    >
+    <ParallaxTex baseVelocity={-5}>
       <a
+        href={url}
         target="_blank"
         rel="noopener noreferrer"
-        href={url}
         className="mr-2 select-none text-sm font-semibold text-gray-400/90 transition-all hover:underline"
       >
-        {artistsText} |{" "}
+        {artistsText}
       </a>
-    </Marquee>
+    </ParallaxTex>
   );
 };
 

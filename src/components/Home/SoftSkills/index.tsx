@@ -26,6 +26,7 @@ import "swiper/scss/controller";
 import "swiper/scss/pagination";
 import "swiper/scss/navigation";
 import "swiper/scss/keyboard";
+import HeaderArticle from "@/components/Common/HeaderArticle";
 
 interface ISoftSkillsProps {}
 
@@ -47,9 +48,7 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
         />
       </video>
       <div className="absolute left-0 top-0 h-screen w-full bg-black bg-opacity-50" />
-      <h2 className="z-10  p-10 text-4xl font-bold text-slate-200">
-        {t("title")}
-      </h2>
+      <HeaderArticle title={t("title")} description="" subtitle="" />
       <div className=" mx-auto flex h-full w-full items-center justify-center gap-6 px-4 py-4 pt-0 text-secondaryText-50 lg:container lg:px-20 lg:py-20 lg:pt-5">
         <Swiper
           loop

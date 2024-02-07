@@ -10,7 +10,7 @@ const clientId = process.env.SPOTIFY_CLIENT_ID || "";
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET || "";
 const refreshToken = process.env.SPOTIFY_CLIENT_REFRESH_TOKEN || "";
 
-const basic = btoa(`${clientId}:${clientSecret}`);
+const basicAuthHeader = btoa(`${clientId}:${clientSecret}`);
 const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 export type TimeRangeType = "short_term" | "medium_term" | "long_term";
 
@@ -27,13 +27,16 @@ const getAccessToken = async () => {
   const response = await fetch(TOKEN_ENDPOINT, {
     method: "POST",
     headers: {
-      Authorization: `Basic ${basic}`,
+      Authorization: `Basic ${basicAuthHeader}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: serialize({
       grant_type: "refresh_token",
       refresh_token: refreshToken,
     }),
+    next: {
+      revalidate: 3600,
+    },
   });
 
   return response.json();
