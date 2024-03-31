@@ -11,6 +11,7 @@ interface IHeaderArticleProps {
   className?: string;
   subClassName?: string;
   showIcon?: boolean;
+  titleClassName?: string;
 }
 
 const animationVariants = {
@@ -25,6 +26,7 @@ const HeaderArticle: React.FC<IHeaderArticleProps> = ({
   className = "",
   subClassName = "",
   showIcon = false,
+  titleClassName = "text-primaryText-500",
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -54,8 +56,8 @@ const HeaderArticle: React.FC<IHeaderArticleProps> = ({
         )}
         <motion.div className="relative" variants={animationVariants}>
           <motion.h2
-            className=" text-3xl font-bold text-primaryText-500 sm:text-4xl md:text-[40px]"
             variants={animationVariants}
+            className={`text-3xl font-bold sm:text-4xl md:text-[40px] ${titleClassName}`}
           >
             {title}
           </motion.h2>

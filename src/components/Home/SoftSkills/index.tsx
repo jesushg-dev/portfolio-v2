@@ -48,7 +48,12 @@ const SoftSkills: FC<ISoftSkillsProps> = ({}) => {
         />
       </video>
       <div className="absolute left-0 top-0 h-screen w-full bg-black bg-opacity-50" />
-      <HeaderArticle title={t("title")} description="" subtitle="" />
+      <HeaderArticle
+        title={t("title")}
+        description=""
+        subtitle=""
+        titleClassName="text-gray-200"
+      />
       <div className=" mx-auto flex h-full w-full items-center justify-center gap-6 px-4 py-4 pt-0 text-secondaryText-50 lg:container lg:px-20 lg:py-20 lg:pt-5">
         <Swiper
           loop
