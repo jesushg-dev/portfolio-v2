@@ -74,6 +74,10 @@ const ParallaxTex: FC<IParallaxTexProps> = ({
         <span className="mr-2 block">{children} </span>
         <span className="mr-2 block">{children} </span>
         <span className="mr-2 block">{children} </span>
+        <span className="mr-2 block">{children} </span>
+        <span className="mr-2 block">{children} </span>
+        <span className="mr-2 block">{children} </span>
+        <span className="mr-2 block">{children} </span>
       </motion.div>
     </div>
   );
