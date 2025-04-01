@@ -1,16 +1,10 @@
+"use client";
+
 import React from "react";
 import type { FC } from "react";
 import Image from "next/image";
 
-import { useCvContext } from "@/hoc/CvContextProvider";
-
-interface IClientImageProps {}
-
-const ClientImage: FC<IClientImageProps> = ({}) => {
-  const { showHeadshot } = useCvContext();
-
-  if (!showHeadshot) return null;
-
+const ClientImage: FC = () => {
   return (
     <div className="mx-5 table">
       <div className="overflow-hidden bg-white shadow-lg">

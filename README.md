@@ -45,7 +45,7 @@ Additional libraries used for specific functionality include:
 - MongoDB with Mongoose: A NoSQL database and object modeling tool for Node.js.
 - Prisma: A modern database toolkit for TypeScript and Node.js.
 - trpc: A TypeScript-first framework for building scalable and type-safe APIs.
-- framer-motion: A library for creating fluid and interactive animations in React applications.
+- motion/react: A library for creating fluid and interactive animations in React applications.
 
 ## Contributing
 

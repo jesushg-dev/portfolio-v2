@@ -1,10 +1,9 @@
 import type { FC } from "react";
 import React from "react";
 
-import ScrollToTop from "../UI/ScrollToTop";
-
 import Footer from "./Footer";
 import Header from "./Header";
+import ScrollToTop from "../custom-ui/ScrollToTop";
 
 interface ILayoutProps {
   children: React.ReactNode;

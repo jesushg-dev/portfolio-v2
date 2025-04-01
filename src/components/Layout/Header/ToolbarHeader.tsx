@@ -23,7 +23,7 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
         type="button"
         onClick={toogleMainOpen}
         aria-expanded={isMenuOpen}
-        className="ml-1 inline-flex items-center rounded-lg p-2 text-sm hover:bg-background-100 focus:outline-none focus:ring-2 focus:ring-background-200 md:hidden"
+        className="hover:bg-background-100 focus:ring-background-200 ml-1 inline-flex items-center rounded-lg p-2 text-sm focus:ring-2 focus:outline-hidden md:hidden"
       >
         <span className="sr-only">Open main menu</span>
         {isMenuOpen ? (
@@ -36,7 +36,7 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
       <button
         type="button"
         onClick={toogleThemeOpen}
-        className={`ml-1 inline-flex items-center rounded-lg p-2 text-sm hover:bg-background-100 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-background-200 ${
+        className={`hover:bg-background-100 hover:text-primary-700 focus:ring-background-200 ml-1 inline-flex items-center rounded-lg p-2 text-sm focus:ring-2 focus:outline-hidden ${
           isThemeMenuOpen ? "bg-background-100 text-primary-700" : ""
         }`}
       >

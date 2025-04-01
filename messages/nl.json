@@ -1,0 +1,526 @@
+{
+  "certification": {
+    "title": "Certificeringen",
+    "subtitle": "Meester in Meerdere Vaardigheden",
+    "description": "Jouw projecten naar het hoogste niveau tillen, klaar voor nieuwe uitdagingen!",
+    "pagination": {
+      "loading": "Laden...",
+      "loadMore": "Meer Laden"
+    },
+    "seeCertificate": "Bekijk Certificaat",
+    "titles": {
+      "date": "Uitgiftedatum",
+      "institution": "Instelling",
+      "idCredential": "Credential ID"
+    },
+    "types": {
+      "all": {
+        "title": "Alle",
+        "subtitle": "Alle Certificeringen"
+      },
+      "frontend": {
+        "title": "Frontend",
+        "subtitle": "Frontend Ontwikkeling"
+      },
+      "backend": {
+        "title": "Backend",
+        "subtitle": "Backend Ontwikkeling"
+      },
+      "devops": {
+        "title": "DevOps",
+        "subtitle": "DevOps Ontwikkeling"
+      },
+      "mobile": {
+        "title": "Mobiel",
+        "subtitle": "Mobiele Ontwikkeling"
+      },
+      "cybersecurity": {
+        "title": "Cyberbeveiliging",
+        "subtitle": "Cyberbeveiliging"
+      },
+      "softskills": {
+        "title": "Zachte Vaardigheden",
+        "subtitle": "Zachte Vaardigheden"
+      }
+    }
+  },
+  "curriculum": {
+    "title": "Jesús Enmanuel Hernández González - Curriculum Vitae",
+    "degree": "Softwareontwikkelaar",
+    "aboutMe": "Full-stack webontwikkelaar met meer dan 5 jaar ervaring, gespecialiseerd in het bouwen van moderne, schaalbare oplossingen voor diverse branches. Bedreven in React.js, JavaScript, HTML, CSS, Next.js, TypeScript, C#, RESTful API's en werken in Agile/Scrum-omgevingen. Sterke communicatievaardigheden en ervaren in samenwerking binnen dynamische startupsettings.",
+    "header": {
+      "aboutMe": "Over Mij",
+      "experience": "Werkervaring",
+      "education": "Opleiding",
+      "languages": "Talen",
+      "interests": "Interesses",
+      "contact": "Contact",
+      "references": "Referenties",
+      "technicalSkills": "Technische Vaardigheden",
+      "personalSkills": "Zachte Vaardigheden",
+      "projects": "Projecten",
+      "certifications": "Certificeringen",
+      "awards": "Prijzen",
+      "designExpertise": "Ontwerpvaardigheden",
+      "additionalInformation": "Aanvullende Informatie",
+      "personalReferences": "Persoonlijke Referenties",
+      "skills": {
+        "frontEnd": "Frontend",
+        "backEnd": "Backend",
+        "database": "Databases",
+        "tools": "Tools"
+      }
+    },
+    "education": {
+      "computerEngineering": {
+        "degree": "Computertechniek",
+        "institution": "Nationale Ingenieursuniversiteit",
+        "location": "Managua",
+        "dates": "2017 - 2024"
+      },
+      "webDeveloper": {
+        "degree": "Webontwikkelaar",
+        "institution": "Platzi",
+        "location": "Online",
+        "dates": "2022 - 2024"
+      },
+      "digitalSecurity": {
+        "degree": "Junior Digitale Beveiliging en Gegevensbescherming",
+        "institution": "Numu & BID",
+        "location": "Managua",
+        "dates": "2022"
+      }
+    },
+    "contacts": {
+      "contact1": {
+        "name": "+505 8679 3204",
+        "value": "tel:505,86793204"
+      },
+      "contact2": {
+        "name": "jess232016@gmail.com",
+        "value": "mailto:jess232016@gmail.com"
+      },
+      "contact3": {
+        "name": "https://www.jesushg.com",
+        "value": "https://www.jesushg.com"
+      },
+      "contact4": {
+        "name": "linkedIn/jesus-hernandez23",
+        "value": "https://www.linkedin.com/in/jesus-hernandez23"
+      }
+    },
+    "experiences": {
+      "experience0": {
+        "position": "Full Stack Ontwikkelaar met React, Next.js & C#",
+        "company": "Contollo Consulting",
+        "dates": "Augustus 2023 – Februari 2025",
+        "responsibilities": "<item>Bouwde schaalbare webapplicaties met Next.js, .NET Core, Microservices en Azure voor meerdere projecten</item><item>Refactorde SQL-scripts naar Entity Framework Core en ontwierp databaseschema's</item><item>Samenwerking in Scrum-team via sprintreviews, inspanningsmetingen en retrospectives</item><item>Configureerde CI/CD-pipelines en integreerde third-party services</item><item>Begeleide stagiairs in best practices en codeerstandaarden</item>",
+        "skills": "Next.js, .NET Core, Azure, Entity Framework, Microservices, CI/CD"
+      },
+      "experience1": {
+        "position": "Full Stack Ontwikkelaar met React, Next.js & Node.js",
+        "company": "Musa",
+        "dates": "Juni 2022 – Juli 2023",
+        "responsibilities": "<item>Ontwierp en ontwikkelde hoogwaardige webinterfaces en mobiele applicaties</item><item>Integreerde succesvol data en processen van externe providers</item><item>Demonstreerde voortgang en resultaten aan stakeholders op functionaliteit, bruikbaarheid en prestaties</item>",
+        "skills": "Next.js, React.js, Node.js, GraphQL, REST API, Tailwind CSS"
+      },
+      "experience2": {
+        "position": "Mobiel Ontwikkelaar met React Native",
+        "company": "Telo",
+        "dates": "Februari 2022 – Mei 2022",
+        "responsibilities": "<item>Maakte gebruikersinterfaces op basis van UX-team specificaties</item><item>Implementeerde functionaliteiten in Scrum-team volgens user stories</item><item>Ondersteunde kwaliteitscontrole- en backend-teams met testen en code reviews</item>",
+        "skills": "React Native, Java, Android Ontwikkeling"
+      },
+      "experience3": {
+        "position": "IT Technicus en Webontwikkelaar met ReactJs & Next.js",
+        "company": "Vereniging van Hervormde Kerken",
+        "dates": "November 2019 - December 2021",
+        "responsibilities": "<item>Ontwikkelde moderne website voor organisatiepromotie</item><item>Gaf informatica-les aan basisschoolleerlingen</item><item>Verleende technische ondersteuning en apparatuuronderhoud</item>",
+        "skills": "React.js, Next.js, Windows, Linux, Hardware Ondersteuning"
+      },
+      "experience4": {
+        "position": "Freelance | Frontend Ontwikkelaar met ReactJs en Next.js",
+        "company": "Barter Capital",
+        "dates": "Mei 2023 - Juni 2023",
+        "responsibilities": "<item>Ontwikkelde aantrekkelijke en functionele webinterfaces met intuïtieve gebruikerservaring</item><item>Droeg bij aan dashboardontwikkeling door nieuwe functies toe te voegen</item><item>Zorgde voor correcte configuratie van webapplicaties in productieomgevingen</item>",
+        "skills": "Next.js, User Interface Design, UIX, React.js, REST API, Redux.js, Tailwind CSS"
+      }
+    },
+    "skills": {
+      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>Next.js</item><item>React.js</item><item>React Native</item><item>API REST</item><item>Socket</item><item>Tailwind</item>",
+      "backEnd": "<item>C#</item><item>.NET Core</item><item>Nest.js</item><item>Python</item><item>Node.js</item><item>PHP</item><item>GraphQL</item>",
+      "database": "<item>SQL Server</item><item>MySQL</item><item>MongoDB</item><item>SQLite</item><item>Firebase</item><item>PostgreSQL</item>",
+      "tools": "<item>Git</item><item>Azure</item><item>Docker</item><item>GCP</item><item>AWS</item>"
+    },
+    "languages": {
+      "spanish": {
+        "name": "Spaans",
+        "level": "Moedertaal of tweetalig"
+      },
+      "english": {
+        "name": "Engels",
+        "level": "Professionele beheersing"
+      },
+      "dutch": {
+        "name": "Nederlands",
+        "level": "Basisbeheersing"
+      }
+    },
+    "softSkills": "<item>Analytische vaardigheden</item><item>Individueel en teamwerk</item><item>Aanpassingsvermogen</item>",
+    "additionalInformation": "<item>Direct beschikbaar</item>",
+    "personalReferences": {
+      "reference1": {
+        "name": "Danilo Acevedo",
+        "role": "Ontwikkelaar",
+        "phoneNumber": "(+505) 8679-3204"
+      },
+      "reference2": {
+        "name": "Alfredo Antonio Eva Vargas",
+        "role": "Ontwikkelaar",
+        "phoneNumber": "(+505) 8251-9391"
+      },
+      "reference3": {
+        "name": "Juan Carlos López",
+        "role": "Ontwikkelaar",
+        "phoneNumber": "(+505) 8751-8355"
+      }
+    },
+    "telephone": "tel.",
+    "actions": {
+      "download": "CV downloaden",
+      "print": "CV afdrukken",
+      "goBack": "Terug"
+    },
+    "codedWith": "Deze CV is gemaakt met ReactJS.",
+    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download"
+  },
+  "global": {
+    "header": {
+      "menu": {
+        "home": "Home",
+        "about": "Over",
+        "skills": "Vaardigheden",
+        "services": "Diensten",
+        "portfolio": "Portfolio",
+        "contact": "Contact",
+        "language": "Taal",
+        "theme": "Themamodus",
+        "locale-options": {
+          "es": "Spaans",
+          "en": "Engels",
+          "de": "Nederlands"
+        }
+      },
+      "tools": {
+        "theme": "Themamodus",
+        "language": "Taal",
+        "newThemeSoon": "Nieuw thema wordt binnenkort toegevoegd"
+      },
+      "closeMenu": "Sluit Menu",
+      "openMenu": "Open Menu"
+    },
+    "footer": {
+      "title": "Alle Rechten Voorbehouden © ",
+      "madeWith": "Gemaakt met ",
+      "by": " door ",
+      "sections": {
+        "portfolio": {
+          "curriculum": "Curriculum Vitae",
+          "certificates": "Certificaten"
+        },
+        "miscellaneous": {
+          "opSysCv": "Win11 Simulator"
+        }
+      },
+      "titles": {
+        "portfolio": "Portfolio",
+        "miscellaneous": "Diversen",
+        "NowPlaying": "Nu aan het spelen",
+        "poweredBy": "Aangedreven door "
+      },
+      "new": "Nieuw",
+      "soon": "Binnenkort",
+      "beta": "Beta",
+      "spotify": {
+        "errors": {
+          "noFetch": "Fout: Er is iets misgegaan bij het ophalen van gegevens",
+          "noPlaying": "Er wordt niets afgespeeld"
+        },
+        "buttons": {
+          "play": "Afspelen",
+          "pause": "Pauzeren",
+          "volume": "Volume",
+          "next": "Volgende",
+          "previous": "Vorige"
+        },
+        "hints": {
+          "currentProgress": "Huidige voortgang",
+          "totalDuration": "Totale duur",
+          "localRange": "Verander huidige voortgang",
+          "disabledExteralRange": "Uitgeschakeld vanwege privacyredenen"
+        },
+        "poweredBy": "Aangedreven doorOntwikkeld met behulp van de API van"
+      }
+    },
+    "localeSwitcher": {
+      "label": "Sprache ändern",
+      "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+    },
+    "fallback": {
+      "noResults": {
+        "title": "Geen resultaten gevonden",
+        "description": "Geen resultaten gevonden voor uw zoekopdracht"
+      }
+    }
+  },
+  "main": {
+    "meta": {
+      "title": "Jesús Hernández - Full-Stack Ontwikkelaar",
+      "description": "Hallo, ik ben Jesús Hernández, een softwareontwikkelaar in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile softwareontwikkeling.",
+      "keywords": "Jesús Hernández, Jesús, Hernández, Full Stack Ontwikkelaar, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Metodologia Agil"
+    },
+    "heroMain": {
+      "titles": {
+        "degree": "Software Engineer.",
+        "web": "Webontwikkelaar.",
+        "mobile": "Mobiele ontwikkelaar.",
+        "fullstack": "Full Stack-ontwikkelaar.",
+        "backend": "Backend-ontwikkelaar.",
+        "frontend": "Frontend-ontwikkelaar."
+      },
+      "viewCV": "Bekijk CV",
+      "greeting": "Hallo, ik ben",
+      "scrollDown": "Scroll naar beneden",
+      "description": "Als engineer gebruik ik mijn technische expertise en vaardigheden om hoogwaardige softwaresystemen te bouwen en te onderhouden. Mijn passie voor technologie stimuleert me om voortdurend te leren en te groeien, en ik streef ernaar oplossingen te creëren die een positieve impact hebben op de wereld."
+    },
+    "about": {
+      "title": "Over mij",
+      "subtitle": "Een beknopt overzicht",
+      "info": {
+        "title": "Over mij",
+        "description1": "Ik ben gepassioneerd door technologie met 5 jaar ervaring als webontwikkelaar. Ik heb een opleiding gevolgd in computer engineering en mezelf autodidactisch bijgeschoold, waardoor ik prachtige en functionele websites heb gecreëerd voor diverse klanten.",
+        "description2": "Naarmate mijn ervaring groeide, heb ik mijn horizon verbreed en ben ik andere gebieden van ontwikkeling gaan verkennen, zoals mobiele en backend ontwikkeling. Deze diversificatie van vaardigheden stelde me in staat om me te storten op nog spannendere en uitdagendere projecten.",
+        "description3": "Gedurende mijn carrière is mijn drijfveer altijd geweest om te blijven leren en groeien als ontwikkelaar. De voortdurende zoektocht naar nieuwe technologieën en technieken om mijn ambacht te verfijnen, vormt de kern van mijn filosofie. Ik ben opgewonden om te ontdekken waar mijn passie voor technologie me in de toekomst naartoe zal leiden."
+      },
+      "timeline": {
+        "title": "Mijn tijdslijn",
+        "subtitle": "Continu leren...",
+        "steps": {
+          "0": {
+            "date": "maart 2017",
+            "dateTime": "2017-03-01",
+            "title": "Informatica-ingenieur (Huidig)",
+            "description": "Afronding van mijn studie terwijl ik werk en buitenschoolse verantwoordelijkheden beheer."
+          },
+          "1": {
+            "date": "oktober 2020",
+            "dateTime": "2020-10-01",
+            "title": "Webontwikkelaar en IT-technicus",
+            "description": "Onderhoud en oplossen van problemen in computersystemen en netwerken."
+          },
+          "2": {
+            "date": "februari 2022",
+            "dateTime": "2022-02-01",
+            "title": "Mobiele ontwikkelaar",
+            "description": "Creatie van softwaretoepassingen voor mobiele apparaten, consistent leveren van hoogwaardige producten."
+          },
+          "3": {
+            "date": "juni 2022",
+            "dateTime": "2022-06-01",
+            "title": "Webontwikkelaar",
+            "description": "Ontwerp, ontwikkeling en onderhoud van websites en webtoepassingen."
+          }
+        }
+      },
+      "function": {
+        "name": "overMij",
+        "json": {
+          "name": "naam",
+          "languages": "talen",
+          "profession": "beroep"
+        },
+        "language": {
+          "spanish": "Spaans",
+          "english": "Engels",
+          "dutch": "Nederlands"
+        },
+        "languageLevel": {
+          "native": "Moedertaal",
+          "advanced": "Geavanceerd",
+          "intermediate": "Gevorderd",
+          "basic": "Basis"
+        },
+        "profession": "Fullstack-ontwikkelaar"
+      }
+    },
+    "skills": {
+      "title": "Gebieden van expertise",
+      "subtitle": "Vaardigheden",
+      "description": "Ik heb een diverse vaardigheden opgebouwd door mijn opleiding en professionele ervaringen.",
+      "aux": "Ik ben voortdurend op zoek naar mogelijkheden om te leren en mijn vaardigheden te verbeteren. Ik sta altijd open voor nieuwe uitdagingen en professionele groei.",
+      "modal": {
+        "close": "Sluiten",
+        "readMore": "Lees meer",
+        "seeCertificates": "Bekijk certificaten"
+      },
+      "tabs": {
+        "frontend": {
+          "title": "Frontend",
+          "description": "Responsief webontwerp met focus op gebruikerservaring."
+        },
+        "backend": {
+          "title": "Backend",
+          "description": "Ontwikkeling van API's en webservices, met nadruk op beveiliging."
+        },
+        "mobile": {
+          "title": "Mobiel",
+          "description": "Ontwikkeling van Android- en iOS-apps, gericht op gebruikerservaring."
+        },
+        "database": {
+          "title": "Database",
+          "description": "Ontwikkeling van efficiënte en beveiligde databases."
+        },
+        "devops": {
+          "title": "DevOps",
+          "description": "Bouwen van op prestaties gerichte CI/CD-pijplijnen."
+        },
+        "tools": {
+          "title": "Gereedschappen",
+          "description": "Gebruik van diverse softwaretools voor kwaliteitsoplossingen."
+        }
+      }
+    },
+    "soft-skills": {
+      "subtitle": "Vaardigheden",
+      "title": "Soft Skills",
+      "description": "Naast mijn technische vaardigheden bezit ik ook een scala aan soft skills die mij hebben geholpen succesvol te zijn in mijn carrière.",
+      "aux": "Ik geloof dat deze vaardigheden net zo belangrijk zijn als technische expertise, en ik werk hard om ze voortdurend te ontwikkelen en te verbeteren. Ik ben ervan overtuigd dat mijn sterke communicatie, probleemoplossing en teamwork vaardigheden mij een waardevolle aanwinst maken voor elk team of project.",
+      "skills": {
+        "teamwork": {
+          "title": "Samenwerken",
+          "description": "Ik geniet ervan om samen te werken en te leren van anderen."
+        },
+        "communication": {
+          "title": "Communicatie",
+          "description": "Ik ben goed in het uiten van ideeën en actief luisteren."
+        },
+        "problemSolving": {
+          "title": "Probleemoplossend vermogen",
+          "description": "Ik gedij bij het vinden van effectieve oplossingen."
+        },
+        "goalOriented": {
+          "title": "Doelgericht",
+          "description": "Ik stel doelstellingen en werk hard om ze te bereiken."
+        },
+        "adaptability": {
+          "title": "Aanpassingsvermogen",
+          "description": "Ik omarm gemakkelijk nieuwe technologieën en frameworks."
+        },
+        "timeManagement": {
+          "title": "Tijdmanagement",
+          "description": "Ik geef prioriteit aan taken en optimaliseer efficiëntie."
+        },
+        "creativity": {
+          "title": "Creativiteit",
+          "description": "Ik denk innovatief en genereer nieuwe ideeën."
+        },
+        "leadership": {
+          "title": "Leiderschap",
+          "description": "Ik neem de leiding, neem verantwoordelijkheid en stuur taken aan."
+        },
+        "organization": {
+          "title": "Organisatie",
+          "description": "Ik hecht waarde aan ordelijkheid en houd dingen goed gestructureerd."
+        },
+        "responsibility": {
+          "title": "Verantwoordelijkheid",
+          "description": "Ik ben betrouwbaar en zorg voor het voltooien van taken."
+        },
+        "initiative": {
+          "title": "Initiatief",
+          "description": "Ik zoek actief naar nieuwe kansen en neem graag het voortouw."
+        },
+        "commitment": {
+          "title": "Toewijding",
+          "description": "Ik ben toegewijd aan het voltooien van taken en het nakomen van verantwoordelijkheden."
+        }
+      }
+    },
+    "portfolio": {
+      "subtitle": "Portfolio",
+      "title": "Beste projecten",
+      "description": "Ik ben trots op het werk dat ik heb voltooid gedurende mijn carrière.",
+      "actions": {
+        "view": "Bekijk project",
+        "source": "Bekijk bron"
+      },
+      "private": {
+        "title": "Prive",
+        "description": "Dit project is privé, ik kan je de broncode niet laten zien.",
+        "canSeeDemo": "Dit project is privé, ik kan je de broncode niet laten zien, maar je kunt de demo bekijken."
+      },
+      "pagination": {
+        "retry": "Opnieuw proberen",
+        "loading": "Laden...",
+        "noMore": "Je hebt alle projecten gezien",
+        "error": "Er is een fout opgetreden, probeer het later opnieuw",
+        "loadMore": "Meer laden"
+      },
+      "filters": {
+        "all": "Alle",
+        "frontend": "Frontend",
+        "backend": "Backend",
+        "mobile": "Mobiel",
+        "desktop": "Desktop"
+      }
+    },
+    "contact": {
+      "title": "Neem contact op 👋",
+      "title2": "Vul het formulier in om een gesprek te beginnen",
+      "subtitle": "Ik sta altijd open voor nieuwe kansen. Als je een project in gedachten hebt of gewoon hallo wilt zeggen, neem gerust contact met me op.",
+      "divider": "of",
+      "form": {
+        "name": {
+          "label": "Naam",
+          "placeholder": "Voer je naam in",
+          "success": "Naam correct ingevoerd",
+          "errors": {
+            "required": "Voer je naam in",
+            "minLength": "De naam moet minimaal 3 tekens lang zijn",
+            "maxLength": "De naam mag maximaal 20 tekens lang zijn"
+          }
+        },
+        "email": {
+          "label": "E-mail",
+          "placeholder": "Voer je e-mailadres in",
+          "success": "E-mail correct ingevoerd",
+          "errors": {
+            "required": "Voer je e-mailadres in",
+            "minLength": "De e-mail moet minimaal 3 tekens lang zijn",
+            "maxLength": "De e-mail mag maximaal 30 tekens lang zijn",
+            "pattern": "Voer een geldig e-mailadres in"
+          }
+        },
+        "message": {
+          "label": "Bericht",
+          "placeholder": "Laat hier je bericht achter, ik zal zo snel mogelijk antwoorden",
+          "success": "Bericht correct ingevoerd",
+          "errors": {
+            "required": "Voer je bericht in",
+            "minLength": "Het bericht moet minimaal 10 tekens lang zijn",
+            "maxLength": "Het bericht mag maximaal 500 tekens lang zijn"
+          }
+        },
+        "errors": {
+          "title": "Fout",
+          "description": "Er is een fout opgetreden bij het verzenden van het bericht, probeer het later opnieuw."
+        },
+        "success": {
+          "title": "Succes",
+          "description": "Je bericht is succesvol verzonden, ik zal zo snel mogelijk antwoorden."
+        },
+        "submit": "Verzenden"
+      }
+    }
+  }
+}

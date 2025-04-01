@@ -1,6 +1,5 @@
 import About from "../Home/About";
 import Portfolio from "../Home/Portfolio";
-import CurriculumVitae from "../CurriculumVitae";
 import ContactForm from "../Home/Contact/ContactForm";
 
 import type { ITaskbarIcon } from "./TaskBar/TaskBarIcons";
@@ -9,6 +8,7 @@ interface ITaskbarIconComponentProps
   extends Omit<ITaskbarIcon, "onClick" | "isActive" | "size"> {
   id: string;
   title: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: React.ComponentType<any>;
   size?: { width: number; height: number };
   skipTaskbar?: boolean;
@@ -35,13 +35,6 @@ const icons: ITaskbarIconComponentProps[] = [
     component: Portfolio,
     size: { width: 950, height: 570 },
     title: "Portfolio",
-  },
-  {
-    id: "resume",
-    icon: "https://res.cloudinary.com/js-media/image/upload/v1690088055/portfolio/win11/icons/icons8-resume-96-alt_wcl4bp.webp",
-    component: CurriculumVitae,
-    size: { width: 720, height: 570 },
-    title: "Resume",
   },
   /*  
   {

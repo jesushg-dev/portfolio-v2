@@ -1,30 +1,12 @@
-import React, { useMemo } from "react";
 import type { FC } from "react";
-import { useTranslations } from "next-intl";
 
-import Terminal from "../../Common/Terminal";
-import TimeLines from "../../Common/TimeLines";
-import HeaderArticle from "@/components/Common/HeaderArticle";
+import TimeLines from "../../shared/time-lines";
+import HeaderArticle from "@/components/shared/header-article";
+import AboutTerminal from "./about-terminal";
+import { getTranslations } from "next-intl/server";
 
-interface IAboutProps {}
-
-const About: FC<IAboutProps> = ({}) => {
-  const t = useTranslations("main.about");
-
-  const code = useMemo(() => {
-    return `
-      const ${t("function.name")} = () => {
-        return {
-          ${t("function.json.name")}: 'Jesús Enmanuel Hernández González',
-          ${t("function.json.languages")}: {
-            ${t("function.language.spanish")}: 'Native',
-            ${t("function.language.english")}: 'B1'
-          },
-          ${t("function.json.profession")}: 'Software Developer'
-        }
-      }
-    `;
-  }, [t]);
+const About: FC = async () => {
+  const t = await getTranslations("main.about");
 
   return (
     <div className="overflow-hidden">
@@ -35,22 +17,21 @@ const About: FC<IAboutProps> = ({}) => {
         <HeaderArticle title={t("title")} description="" subtitle="" />
         <article className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:pb-8">
           <div className="space-y-4">
-            <p className="text-primaryText text-center text-base">
+            <p className="text-primaryText-500 text-center text-base">
               {t("info.description1")}
             </p>
-            <p className="text-primaryText text-center text-base">
+            <p className="text-primaryText-500 text-center text-base">
               {t("info.description2")}
             </p>
-            <p className="text-primaryText text-center text-base">
+            <p className="text-primaryText-500 text-center text-base">
               {t("info.description3")}
             </p>
           </div>
-
-          <Terminal code={code} />
+          <AboutTerminal />
         </article>
 
         <aside className="flex flex-col items-center gap-2">
-          <div className="w-full border-b border-background-200 py-6 font-bold text-primary-600 lg:hidden">
+          <div className="border-background-200 text-primary-600 w-full border-b py-6 font-bold lg:hidden">
             <h2 className="text-center">{t("timeline.title")}</h2>
           </div>
           <div className="w-full overflow-x-auto lg:pt-4">

@@ -16,7 +16,7 @@ const ItemNotification: FC<ItemNotificationProps> = ({
   date,
 }) => (
   <a
-    className="block space-y-1 rounded bg-white bg-opacity-50 p-3 text-sm hover:bg-opacity-25 active:bg-opacity-50 dark:bg-black dark:bg-opacity-30 dark:hover:bg-opacity-50 dark:active:bg-opacity-30"
+    className="block space-y-1 rounded-sm bg-white/50 p-3 text-sm hover:bg-white/25 active:bg-white/50 dark:bg-black/30 dark:hover:bg-black/50 dark:active:bg-black/30"
     href={href}
   >
     <h3 className="mb-1 font-medium">{title}</h3>

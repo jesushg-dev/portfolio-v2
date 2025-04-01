@@ -3,7 +3,7 @@
 import React, { useCallback } from "react";
 import Image from "next/image";
 
-import { useWindowContext } from "@/hoc/WindowContext";
+import { useWindowContext } from "@/hoc/window-context-provider";
 
 import icons from "../icons";
 
@@ -27,8 +27,7 @@ const TaskbarIcon: React.FC<ITaskbarIcon> = ({
       type="button"
       title={title}
       onClick={onClick?.bind(null, isActive)}
-      className={`hover:bg-white-transparent relative cursor-auto rounded p-1.5 duration-200 hover:bg-black hover:bg-opacity-20 
-        ${isActive ? "bg-white-transparent bg-black bg-opacity-20" : ""} `}
+      className={`relative cursor-auto rounded p-1.5 duration-200 hover:bg-black ${isActive ? "bg-[rgba(255,255,255,0.2)]" : "hover:bg-[rgba(255,255,255,0.2)]"}`}
     >
       <Image
         width={size}
@@ -38,7 +37,7 @@ const TaskbarIcon: React.FC<ITaskbarIcon> = ({
         className="h-7 w-7 scale-90 duration-500 hover:scale-75"
       />
       {isActive && (
-        <div className="absolute bottom-0.5 left-3 right-3 h-[0.2rem] rounded-sm bg-primary-500" />
+        <div className="bg-primary-500 absolute right-3 bottom-0.5 left-3 h-[0.2rem] rounded-xs" />
       )}
     </button>
   );
@@ -59,12 +58,11 @@ const TaskbarSvgIcon: React.FC<ITaskbarSvgIcon> = ({
       type="button"
       title={title}
       onClick={onClick?.bind(null, isActive)}
-      className={`hover:bg-white-transparent relative cursor-auto rounded p-1.5 duration-200 hover:bg-black hover:bg-opacity-20 
-        ${isActive ? "bg-white-transparent bg-black bg-opacity-20" : ""} `}
+      className={`relative cursor-auto rounded p-1.5 duration-200 hover:bg-[rgba(255,255,255,0.2)] hover:bg-black ${isActive ? "bg-[rgba(255,255,255,0.2)] bg-black" : ""}`}
     >
       {children}
       {isActive && (
-        <div className="absolute bottom-0.5 left-3 right-3 h-[0.2rem] rounded-sm bg-primary-500" />
+        <div className="bg-primary-500 absolute right-3 bottom-0.5 left-3 h-[0.2rem] rounded-xs" />
       )}
     </button>
   );

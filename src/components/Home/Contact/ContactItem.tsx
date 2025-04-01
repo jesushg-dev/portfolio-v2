@@ -15,10 +15,10 @@ const ContactItem: FC<IContactItemProps> = ({ label, href, icon: Icon }) => {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`pressable group inline-block space-y-0.5 rounded-lg bg-background-50 p-3 transition-all hover:scale-105 hover:shadow-md hover:bg-${label}`}
+      className={`pressable group bg-background-50 inline-block space-y-0.5 rounded-lg p-3 transition-all hover:scale-105 hover:shadow-md hover:bg-${label}`}
     >
-      <Icon className="mx-auto h-5 w-5 text-primary-500 group-hover:text-secondaryText-50" />
-      <p className="text-xs capitalize text-primaryText-500 group-hover:text-secondaryText-50">
+      <Icon className="text-primary-500 group-hover:text-secondaryText-50 mx-auto h-5 w-5" />
+      <p className="text-primaryText-500 group-hover:text-secondaryText-50 text-xs capitalize">
         {label}
       </p>
     </a>

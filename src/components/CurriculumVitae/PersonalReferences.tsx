@@ -2,19 +2,14 @@ import React from "react";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { ClientLocalGroupsIcon } from "./ClientIcon";
-
-interface IpersonalReferencesProps {}
-
 const personalReferences = ["reference1", "reference2", "reference3"] as const;
 
-const PersonalReferences: FC<IpersonalReferencesProps> = ({}) => {
+const PersonalReferences: FC = () => {
   const t = useTranslations("curriculum");
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
-        <ClientLocalGroupsIcon />
+      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.personalReferences")}
       </h5>
 

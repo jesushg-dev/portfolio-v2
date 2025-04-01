@@ -1,11 +1,11 @@
 import type { FC } from "react";
 import React, { useTransition, useMemo } from "react";
 import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
+import { type Locale, useLocale, useTranslations } from "next-intl";
 
-import { useRouter, usePathname } from "@/navigation";
-import { Select, Option } from "@/components/UI/Select";
-import { cdFlagloader } from "@/utils/tools/medialoader";
+import { Select, Option } from "@/components/custom-ui/Select";
+import { usePathname, useRouter } from "@/i18n/routing";
+import { cdFlagloader } from "@/utils/tools/image";
 
 const locales = [
   {
@@ -23,11 +23,13 @@ const locales = [
     label: "Nederlands",
     img: "dutch_khyopk-Thumbnail_htec1d.webp",
   },
-];
+] satisfies {
+  value: Locale;
+  label: string;
+  img: string;
+}[];
 
-interface ILocaleSelectorProps {}
-
-const LocaleSelector: FC<ILocaleSelectorProps> = () => {
+const LocaleSelector: FC = () => {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -52,7 +54,7 @@ const LocaleSelector: FC<ILocaleSelectorProps> = () => {
       disabled={isPending}
       onChange={onChangeHandler}
       header={
-        <div className="flex cursor-pointer items-center justify-center gap-2 rounded p-2 text-sm shadow-none outline-none ring-0 hover:bg-background-100 hover:text-primary-700 md:font-medium">
+        <div className="hover:bg-background-100 hover:text-primary-700 flex cursor-pointer items-center justify-center gap-2 rounded-sm p-2 text-sm shadow-none ring-0 outline-hidden md:font-medium">
           <Image
             width={24}
             height={24}
@@ -60,13 +62,13 @@ const LocaleSelector: FC<ILocaleSelectorProps> = () => {
             src={locales[crtLocale]?.img ?? ""}
             alt={locales[crtLocale]?.label ?? ""}
           />
-          <span className="text-sm ">{t("menu.language")}</span>
+          <span className="text-sm">{t("menu.language")}</span>
         </div>
       }
     >
       {locales.map(({ value, label, img }) => (
         <Option key={value} label={label}>
-          <div className="flex w-full items-center gap-2 px-4 py-2 hover:bg-background-400">
+          <div className="hover:bg-background-400 flex w-full items-center gap-2 px-4 py-2">
             <Image
               width={24}
               height={24}
@@ -74,7 +76,7 @@ const LocaleSelector: FC<ILocaleSelectorProps> = () => {
               src={img}
               alt={label}
             />
-            <p className="text-sm text-primaryText-700">{label}</p>
+            <p className="text-primaryText-700 text-sm">{label}</p>
           </div>
         </Option>
       ))}

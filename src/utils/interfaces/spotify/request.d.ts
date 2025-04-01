@@ -1,10 +1,10 @@
 import type { Track } from "./entities";
-import type { SpotifyEntity } from "./entity.d";
+import type { SpotifyEntity } from "./entity";
 
 export interface PlayHistoryObject {
   track: Track;
   played_at?: string;
-  context?: unknown | null;
+  context?: unknown;
 }
 
 export interface SpotifyResponse<T extends SpotifyEntity | PlayHistoryObject> {

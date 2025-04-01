@@ -70,15 +70,15 @@ const DraggableDiv: FC<IDraggableDivSizeProps> = ({
         setLastPosition({ x: currentX, y: currentY });
       }
     },
-    [isDragging, lastPosition, direction],
+    [isDragging, lastPosition, onDrag],
   );
 
-  const handleMouseUp = useCallback(() => {
+  const handleMouseUp = () => {
     if (onStopDrag) {
       onStopDrag();
     }
     setIsDragging(false);
-  }, []);
+  };
 
   return (
     <button

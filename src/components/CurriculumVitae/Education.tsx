@@ -2,23 +2,18 @@ import React from "react";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { ClientLocalImportContactsIcon } from "./ClientIcon";
-
-interface IEducationProps {}
-
 const educations = [
   "computerEngineering",
   "webDeveloper",
   "digitalSecurity",
 ] as const;
 
-const Education: FC<IEducationProps> = ({}) => {
+const Education: FC = () => {
   const t = useTranslations("curriculum");
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
-        <ClientLocalImportContactsIcon />
+      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.education")}
       </h5>
 

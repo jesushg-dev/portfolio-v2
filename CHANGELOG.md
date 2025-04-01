@@ -3,11 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 3.0.0 (2025-04-01)
+
+### Features
+
+- Upgraded to Next.js 15
+- Added support for React 18
+- Added support for TypeScript 5.0
+- Added support for Tailwind CSS 4.0
+- Added support for new i18n features in Next.js 15
+
 ## 2.7.3 (2023-02-06)
 
 - Disable particles.js in the home page due performance issues
 - Add animation to title section in the home page
-- Remove `react-marquee` dependency and use framer-motion to create the marquee effect
+- Remove `react-marquee` dependency and use motion/react to create the marquee effect
 
 ## 2.7.2 (2024-02-06)
 

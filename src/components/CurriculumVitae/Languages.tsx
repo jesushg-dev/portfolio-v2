@@ -2,19 +2,14 @@ import React from "react";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { ClientLocalImportContactsIcon } from "./ClientIcon";
+const languages = ["english", "spanish", "dutch"] as const;
 
-interface ILanguagesProps {}
-
-const languages = ["english", "spanish"] as const;
-
-const Languages: FC<ILanguagesProps> = ({}) => {
+const Languages: FC = () => {
   const t = useTranslations("curriculum");
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
-        <ClientLocalImportContactsIcon />
+      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.languages")}
       </h5>
 

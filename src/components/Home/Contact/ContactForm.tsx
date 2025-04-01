@@ -1,21 +1,20 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useTransition } from "react";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import Input from "../../UI/Input";
-import type { IInputRef } from "../../../hooks/useRefInput";
-import TextArea from "../../UI/TextArea";
+import Input from "../../custom-ui/Input";
+import type { IInputRef } from "../../../hooks/use-ref-input";
+import TextArea from "../../custom-ui/TextArea";
 
-interface IContactFormProps {}
-
-const ContactForm: FC<IContactFormProps> = ({}) => {
+const ContactForm: FC = () => {
   const t = useTranslations("main.contact");
 
   const nameRef = useRef<IInputRef>(null);
   const emailRef = useRef<IInputRef>(null);
   const messageRef = useRef<IInputRef>(null);
+  const [pending, startTransition] = useTransition();
 
   const validateContactForm = (
     name: string,
@@ -56,41 +55,43 @@ const ContactForm: FC<IContactFormProps> = ({}) => {
     return true;
   };
 
-  const sendEmail = async (name: string, email: string, message: string) => {
-    const body = new FormData();
-    body.append("name", name);
-    body.append("email", email);
-    body.append("message", message);
+  const sendEmail = (name: string, email: string, message: string) => {
+    startTransition(async () => {
+      const body = new FormData();
+      body.append("name", name);
+      body.append("email", email);
+      body.append("message", message);
 
-    const res = await fetch("https://formspree.io/f/xnqwqkrl", {
-      method: "POST",
-      body,
-      headers: {
-        Accept: "application/json",
-      },
+      const res = await fetch("https://formspree.io/f/xnqwqkrl", {
+        method: "POST",
+        body,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (res.ok) {
+        nameRef.current?.clear();
+        emailRef.current?.clear();
+        messageRef.current?.clear();
+        alert(t("form.success.description"));
+      } else {
+        alert(t("form.errors.description"));
+      }
     });
-
-    if (res.ok) {
-      nameRef.current?.clear();
-      emailRef.current?.clear();
-      messageRef.current?.clear();
-      alert(t("form.success.description"));
-    } else {
-      alert(t("form.errors.description"));
-    }
   };
 
   const handleSubmit = async () => {
     try {
-      const name = (nameRef.current?.value() || "").trim();
-      const email = (emailRef.current?.value() || "").trim();
-      const message = (messageRef.current?.value() || "").trim();
+      const name = (nameRef.current?.value() ?? "").trim();
+      const email = (emailRef.current?.value() ?? "").trim();
+      const message = (messageRef.current?.value() ?? "").trim();
       const isValid = validateContactForm(name, email, message);
 
       if (isValid) {
         sendEmail(name, email, message);
       }
-    } catch (error) {
+    } catch {
       alert(t("form.errors.description"));
     }
   };
@@ -101,7 +102,7 @@ const ContactForm: FC<IContactFormProps> = ({}) => {
       className="w-full space-y-2 px-10 py-8"
       onSubmit={handleSubmit}
     >
-      <p className="text-center text-lg font-bold text-primaryText-900 lg:text-start">
+      <p className="text-primaryText-900 text-center text-lg font-bold lg:text-start">
         {t("title2")}
       </p>
 
@@ -144,8 +145,26 @@ const ContactForm: FC<IContactFormProps> = ({}) => {
       <button
         onClick={handleSubmit}
         type="button"
-        className="pressable mt-6 w-full rounded bg-primary-700 py-3 font-medium uppercase tracking-widest text-secondaryText-50 shadow-lg hover:bg-primary-900 hover:shadow-none focus:outline-none"
+        className="pressable bg-primary-700 text-secondaryText-50 hover:bg-primary-900 mt-6 w-full rounded-sm py-3 font-medium tracking-widest uppercase shadow-lg hover:shadow-none focus:outline-none"
       >
+        {pending ? (
+          <svg
+            className="text-secondaryText-50 mr-2 h-5 w-5 animate-spin"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" className="opacity-25" />
+            <path
+              d="M4 12a8 8 0 1 0 16 0 8 8 0 1 0-16 0"
+              className="opacity-75"
+            />
+          </svg>
+        ) : null}
         {t("form.submit")}
       </button>
     </form>

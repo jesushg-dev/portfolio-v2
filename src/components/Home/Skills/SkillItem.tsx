@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import React from "react";
-import type { ImageLoaderProps } from "next/image";
 import Image from "next/image";
+import { siLoader } from "@/utils/tools/image";
 
 interface ISkillItemProps {
   id: string;
@@ -10,10 +10,6 @@ interface ISkillItemProps {
   description: string;
   onClick?: () => void;
 }
-
-const siLoader = ({ src }: ImageLoaderProps) => {
-  return `https://cdn.simpleicons.org/${src}`;
-};
 
 const SkillItem: FC<ISkillItemProps> = ({
   id,
@@ -29,9 +25,9 @@ const SkillItem: FC<ISkillItemProps> = ({
         type="button"
         title={title}
         onClick={onClick}
-        className=" flex flex-grow flex-col items-center gap-4 rounded-lg p-4 shadow-sm transition-transform hover:scale-110 hover:transform hover:shadow-lg"
+        className="flex grow cursor-pointer flex-col items-center gap-4 rounded-lg p-4 shadow-xs transition-transform hover:scale-110 hover:transform hover:shadow-lg"
       >
-        <span className="relative block h-8 w-8 rounded-full bg-background-100">
+        <span className="bg-background-100 relative block h-8 w-8 rounded-full">
           <Image
             width={32}
             height={32}
@@ -40,10 +36,10 @@ const SkillItem: FC<ISkillItemProps> = ({
             loader={siLoader}
           />
         </span>
-        <span className="text-center text-xs font-bold leading-none text-primaryText-700 group-hover:text-primary-700">
+        <span className="text-primaryText-700 group-hover:text-primary-700 text-center text-xs leading-none font-bold">
           {title}
         </span>
-        <span className="hidden text-center text-sm text-primaryText-800">
+        <span className="text-primaryText-800 hidden text-center text-sm">
           {description}
         </span>
       </button>

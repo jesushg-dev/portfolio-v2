@@ -10,14 +10,8 @@ import {
 import type { FC } from "react";
 import type { IconType } from "react-icons/lib";
 
-import { useCvContext } from "@/hoc/CvContextProvider";
-
 // Generic Icon Component
 const IconComponent: FC<{ Icon: IconType }> = ({ Icon }) => {
-  const { showSectionIcons } = useCvContext();
-
-  if (!showSectionIcons) return null;
-
   return <Icon className="text-xs" />;
 };
 

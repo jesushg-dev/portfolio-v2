@@ -1,6 +1,4 @@
+/** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions} */
 export default {
-  singleQuote: true,
-  trailingComma: "none",
-  bracketSpacing: false,
   plugins: ["prettier-plugin-tailwindcss"],
 };

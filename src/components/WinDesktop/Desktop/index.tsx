@@ -5,12 +5,11 @@ import type { FC, ReactElement } from "react";
 import { useDroppable, useDraggable, DndContext } from "@dnd-kit/core";
 import type { DragEndEvent, UniqueIdentifier } from "@dnd-kit/core";
 
-import { useWindowContext } from "@/hoc/WindowContext";
-import { useDesktopContext } from "@/hoc/DesktopContextProvider";
-
 import icons from "../icons";
 
 import DesktopIcon from "./DesktopIcon";
+import { useWindowContext } from "@/hoc/window-context-provider";
+import { useDesktopContext } from "@/hoc/desktop-context-provider";
 
 const IconSize = { height: 100, width: 100 };
 
@@ -54,8 +53,6 @@ export const Draggable: FC<ICommonProps> = ({ id, children }) => {
   );
 };
 
-interface IDesktopProps {}
-
 const initialState: Record<UniqueIdentifier, UniqueIdentifier> = icons.reduce(
   (acc, icon, index) => {
     acc[index] = icon.id;
@@ -64,7 +61,7 @@ const initialState: Record<UniqueIdentifier, UniqueIdentifier> = icons.reduce(
   {} as Record<UniqueIdentifier, UniqueIdentifier>,
 );
 
-const Desktop: FC<IDesktopProps> = ({}) => {
+const Desktop: FC = ({}) => {
   const { handleWindow } = useWindowContext();
   const { width, height } = useDesktopContext().sizeScreen;
   const [parents, setParents] =
@@ -73,7 +70,7 @@ const Desktop: FC<IDesktopProps> = ({}) => {
   // get total number of icons that can fit on the div and also add some extra icons due not being able to fit perfectly
   const totalIcons =
     Math.floor((width / IconSize.width) * (height / IconSize.height)) + 3;
-  const iconsArray = [...Array(totalIcons)].map((_, id) => id);
+  const iconsArray = Array.from({ length: totalIcons }, (_, id) => id);
 
   const DraggableMarkup: FC<{ id: number }> = useCallback(
     ({ id }) => {

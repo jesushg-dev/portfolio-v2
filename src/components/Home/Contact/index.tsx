@@ -15,25 +15,23 @@ import type { ImageLoaderProps } from "next/image";
 
 import ContactItem from "./ContactItem";
 import ContactForm from "./ContactForm";
-import HeaderArticle from "@/components/Common/HeaderArticle";
-
-interface IContactProps {}
+import HeaderArticle from "@/components/shared/header-article";
 
 const cloudinaryLoader = ({ src, width, quality }: ImageLoaderProps) => {
   const qualityString = quality ? `,q_${quality}` : "";
   return `https://res.cloudinary.com/js-media/image/upload/w_${width}${qualityString},c_limit/v1670990294/portfolio/hero/${src}`;
 };
 
-const Contact: FC<IContactProps> = ({}) => {
+const Contact: FC = () => {
   const t = useTranslations("main.contact");
 
   return (
     <section
       id="contact"
-      className="hero w-full bg-black before:bg-hero-contact before:lg:bg-local"
+      className="hero before:bg-hero-contact w-full bg-black lg:before:bg-local"
     >
       <div className="mx-auto flex items-center p-4 lg:container lg:p-20">
-        <div className="z-20 flex w-full flex-col rounded bg-background-50 md:flex-row md:items-center">
+        <div className="bg-background-50 z-20 flex w-full flex-col rounded-sm md:flex-row md:items-center">
           <aside className="flex w-full flex-col justify-between space-y-10 px-10 py-8">
             <div className="space-y-3">
               <HeaderArticle
@@ -90,8 +88,8 @@ const Contact: FC<IContactProps> = ({}) => {
           </aside>
 
           <div className="inline-flex w-full items-center justify-center md:flex md:h-full md:w-2">
-            <hr className="my-8 h-px w-64 border-0 bg-background-200 lg:h-64 lg:w-px" />
-            <span className="absolute bg-background-50 px-3 font-medium text-primaryText-900">
+            <hr className="bg-background-200 my-8 h-px w-64 border-0 lg:h-64 lg:w-px" />
+            <span className="bg-background-50 text-primaryText-900 absolute px-3 font-medium">
               {t("divider")}
             </span>
           </div>

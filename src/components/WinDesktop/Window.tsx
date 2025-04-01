@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useDraggable } from "@dnd-kit/core";
-
-import { useDesktopContext } from "@/hoc/DesktopContextProvider";
+import { useDesktopContext } from "@/hoc/desktop-context-provider";
 
 const windowVariants = {
   hidden: {
@@ -158,7 +157,7 @@ const Window: React.FC<WindowProps> = ({
       {isResizing && (
         <button
           type="button"
-          className="absolute bottom-0 right-0 h-4 w-4 cursor-se-resize bg-gray-500"
+          className="absolute right-0 bottom-0 h-4 w-4 cursor-se-resize bg-gray-500"
           onMouseDown={handleMouseDown}
         />
       )}

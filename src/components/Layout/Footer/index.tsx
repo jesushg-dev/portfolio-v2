@@ -7,22 +7,20 @@ import { IoMail } from "react-icons/io5";
 import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
 
-import { Link } from "@/navigation";
-import SpotifyWidget from "@/components/Common/SpotifyWidget";
+import { Link } from "@/i18n/routing";
+import SpotifyWidget from "@/components/shared/SpotifyWidget";
 
-interface IFooterProps {}
-
-const Footer: FC<IFooterProps> = ({}) => {
+const Footer: FC = () => {
   const t = useTranslations("global.footer");
 
   return (
     <footer className="z-10 bg-gray-900">
-      <div className="container mx-auto flex max-w-screen-xl flex-wrap items-center justify-between px-4 py-10 sm:px-6 lg:px-8 lg:pt-20">
+      <div className="container mx-auto flex max-w-(--breakpoint-xl) flex-wrap items-center justify-between px-4 py-10 sm:px-6 lg:px-8 lg:pt-20">
         {/* Grid */}
         <div className="grid w-full grid-cols-2 gap-6 md:grid-cols-4 lg:grid-cols-5">
           <div className="col-span-full lg:col-span-1">
             <Link
-              className=" group text-xl font-semibold text-white"
+              className="group text-xl font-semibold text-white"
               href="/"
               aria-label="Brand"
             >
@@ -59,10 +57,10 @@ const Footer: FC<IFooterProps> = ({}) => {
             </h4>
             <div className="mt-3 grid space-y-3">
               <div className="flex items-center gap-2">
-                <span className="inline-flex gap-x-2 text-gray-400 ">
+                <span className="inline-flex gap-x-2 text-gray-400">
                   {t("sections.miscellaneous.opSysCv")}
                 </span>
-                <span className="ml-1 inline rounded-md bg-primary-700 px-2 py-1 text-xs text-white">
+                <span className="bg-primary-700 ml-1 inline rounded-md px-2 py-1 text-xs text-white">
                   {t("soon")}
                 </span>
               </div>
@@ -79,10 +77,10 @@ const Footer: FC<IFooterProps> = ({}) => {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-3 mt-2 flex items-center gap-2 text-xs"
+              className="mt-2 ml-3 flex items-center gap-2 text-xs"
               href="https://developer.spotify.com/documentation/web-api"
             >
-              <span className=" text-sm text-gray-400">
+              <span className="text-sm text-gray-400">
                 {t("spotify.poweredBy")}
               </span>
               <Image
@@ -113,31 +111,31 @@ const Footer: FC<IFooterProps> = ({}) => {
           <div>
             <a
               href="https://linkedin.com/in/jesus-hernandez23"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900"
+              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
             >
               <FaLinkedinIn className="h-5 w-5" />
             </a>
             <a
               href="https://github.com/jess232017"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900"
+              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
             >
               <FaGithub className="h-5 w-5" />
             </a>
             <a
               href="https://wa.me/+50586793204"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900"
+              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
             >
               <RiWhatsappFill className="h-5 w-5" />
             </a>
             <a
               href="tel:86793204"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900"
+              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
             >
               <RiPhoneFill className="h-5 w-5" />
             </a>
             <a
               href="mailto:jess232016@gmail.com"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900"
+              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
             >
               <IoMail className="h-5 w-5" />
             </a>

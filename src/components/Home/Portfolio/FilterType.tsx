@@ -3,8 +3,8 @@ import React, { memo } from "react";
 import { FaEye, FaDesktop, FaDatabase, FaMobile } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
-import Tab from "@/components/UI/Tab";
-import TabItem from "@/components/UI/Tab/TabItem";
+import Tab from "@/components/custom-ui/Tab";
+import TabItem from "@/components/custom-ui/Tab/TabItem";
 
 interface IFilterTypeProps {
   value: number;

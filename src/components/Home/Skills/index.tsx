@@ -5,27 +5,25 @@ import React, { useState } from "react";
 import dynamic from "next/dynamic";
 
 import { useLocale, useTranslations } from "next-intl";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 
-import { Link } from "@/navigation";
-import HeaderArticle from "@/components/Common/HeaderArticle";
+import { Link } from "@/i18n/routing";
+import HeaderArticle from "@/components/shared/header-article";
 import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
 
-import { LoadingFixed } from "@/components/Common/Loading";
+import { LoadingFixed } from "@/components/shared/loading";
 import SkillsFilterAndGroup from "./SkillsFilterAndGroup";
 
 const SkillModal = dynamic(() => import("./SkillModal"), {
   loading: () => <LoadingFixed />,
 });
 
-/* const BgParticles = dynamic(() => import("./BgParticles"), {
+const BgParticles = dynamic(() => import("./BgParticles"), {
   loading: () => <LoadingFixed />,
-}); */
+});
 
-interface ISkillsProps {}
-
-const Skills: FC<ISkillsProps> = ({}) => {
-  const locale = useLocale() as "en" | "es" | "nl";
+const Skills: FC = () => {
+  const locale = useLocale();
 
   const t = useTranslations("main.skills");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,9 +43,9 @@ const Skills: FC<ISkillsProps> = ({}) => {
 
   return (
     <>
-      <div className="relative bg-background-50">
+      <div className="bg-background-50 relative">
         <article className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20">
-          {/* <BgParticles /> */}
+          <BgParticles />
           <HeaderArticle
             showIcon
             title={t("title")}
@@ -63,7 +61,7 @@ const Skills: FC<ISkillsProps> = ({}) => {
               <Link
                 scroll
                 href="/certificates"
-                className="group z-30 mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600"
+                className="group text-primary-600 z-30 mt-4 inline-flex items-center gap-1 text-sm font-medium"
               >
                 {t("modal.seeCertificates")}
                 <span

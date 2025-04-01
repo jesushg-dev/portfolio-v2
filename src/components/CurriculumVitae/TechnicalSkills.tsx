@@ -2,13 +2,9 @@ import React, { useCallback } from "react";
 import type { FC, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
-import { ClientLocalSettingsIcon } from "./ClientIcon";
-
-interface ITechnicalSkillsProps {}
-
 const skillsSection = ["frontEnd", "backEnd", "database", "tools"] as const;
 
-const TechnicalSkills: FC<ITechnicalSkillsProps> = ({}) => {
+const TechnicalSkills: FC = () => {
   const t = useTranslations("curriculum");
 
   const renderItems = useCallback(
@@ -22,8 +18,7 @@ const TechnicalSkills: FC<ITechnicalSkillsProps> = ({}) => {
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
-        <ClientLocalSettingsIcon />
+      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.technicalSkills")}
       </h5>
       {skillsSection.map((section) => (
@@ -32,7 +27,7 @@ const TechnicalSkills: FC<ITechnicalSkillsProps> = ({}) => {
             {t(`header.skills.${section}`)}
           </p>
 
-          <ul className="grid list-disc grid-cols-2 gap-1 pl-6 text-xs ">
+          <ul className="grid list-disc grid-cols-2 gap-1 pl-6 text-xs">
             {t.rich(`skills.${section}`, {
               item: renderItems,
             })}

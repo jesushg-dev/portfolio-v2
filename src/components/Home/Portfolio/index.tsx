@@ -2,12 +2,12 @@
 
 import type { FC } from "react";
 import React, { useRef, useMemo, useState, Fragment } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { useTranslations, useLocale } from "next-intl";
 
-import { trpcReact as trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 import { LIMIT_PER_PAGE } from "@/utils/constants";
-import HeaderArticle from "@/components/Common/HeaderArticle";
+import HeaderArticle from "@/components/shared/header-article";
 
 import FilterType from "./FilterType";
 import PortfolioItem from "./ProjectItem";
@@ -36,10 +36,8 @@ const item = {
 
 const limit = LIMIT_PER_PAGE;
 
-interface IPortfolioProps {}
-
-const Portfolio: FC<IPortfolioProps> = ({}) => {
-  const locale = useLocale() as "en" | "es" | "nl";
+const Portfolio: FC = ({}) => {
+  const locale = useLocale();
   const ref = useRef(null);
 
   const t = useTranslations("main.portfolio");
@@ -58,7 +56,7 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
 
   const [crtValue, setCrtValue] = useState<number>(0);
   const { data, isFetching, isLoading, fetchNextPage } =
-    trpc.getProjects.useInfiniteQuery(
+    api.portfolio.getProjects.useInfiniteQuery(
       { limit, locale, type: type[crtValue] },
       {
         getNextPageParam: (info) => info.cursor,
@@ -66,7 +64,7 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
     );
 
   const handleFetchMore = () => {
-    fetchNextPage();
+    void fetchNextPage();
   };
 
   return (
@@ -108,15 +106,15 @@ const Portfolio: FC<IPortfolioProps> = ({}) => {
 
           <div className="mt-8 flex flex-col items-center justify-center gap-4">
             {isLoading ? (
-              <div className="h-10 w-10 animate-spin rounded-full border border-b-2 border-primary-900 " />
+              <div className="border-primary-900 h-10 w-10 animate-spin rounded-full border border-b-2" />
             ) : null}
 
             {data?.pages[data.pages.length - 1].hasMore ? (
               <button
                 type="button"
-                disabled={isFetching || isLoading}
-                className="rounded bg-primary-500 px-4 py-2 font-bold text-secondaryText-50 hover:bg-primary-700"
                 onClick={handleFetchMore}
+                disabled={isFetching ?? isLoading}
+                className="bg-primary-500 pressable text-secondaryText-50 hover:bg-primary-700 rounded-sm px-4 py-2 font-bold"
               >
                 {isFetching
                   ? t("pagination.loading")

@@ -1,10 +1,6 @@
-import React, { useCallback } from "react";
+import React from "react";
 import type { FC, ReactNode } from "react";
 import { useTranslations } from "next-intl";
-
-import { ClientLocalAssignmentIcon } from "./ClientIcon";
-
-interface IExperienceProps {}
 
 const experiences = [
   "experience0",
@@ -14,18 +10,14 @@ const experiences = [
   "experience4",
 ] as const;
 
-const Experience: FC<IExperienceProps> = ({}) => {
+const Experience: FC = () => {
   const t = useTranslations("curriculum");
 
-  const renderItems = useCallback(
-    (chunks: ReactNode) => <li className="">{chunks}.</li>,
-    [t],
-  );
+  const renderItems = (chunks: ReactNode) => <li className="">{chunks}.</li>;
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
-        <ClientLocalAssignmentIcon />
+      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.experience")}
       </h5>
 
@@ -34,7 +26,7 @@ const Experience: FC<IExperienceProps> = ({}) => {
           <h3 className="text-sm font-bold">
             {t(`experiences.${experience}.position`)}
           </h3>
-          <h4 className="my-1 text-xs ">
+          <h4 className="my-1 text-xs">
             {t(`experiences.${experience}.company`)} ·{" "}
             {t(`experiences.${experience}.dates`)}
           </h4>

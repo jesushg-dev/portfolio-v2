@@ -3,7 +3,7 @@ import { loadFull } from "tsparticles";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import type { Engine } from "@tsparticles/engine";
 
-import { useThemeContext } from "@/hoc/ThemeContextProvider";
+import { useThemeContext } from "@/hoc/theme-context-provider";
 
 import generateParticlesConfig from "../../../utils/config/particles";
 
@@ -22,7 +22,7 @@ const BgParticles = () => {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
-    initParticlesEngine(async (engine: Engine) => {
+    void initParticlesEngine(async (engine: Engine) => {
       await loadFull(engine);
     }).then(() => {
       setInit(true);

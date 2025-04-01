@@ -8,9 +8,7 @@ import StartMenu from "../StartMenu";
 import TaskBarIcons, { TaskbarIcon, TaskbarSvgIcon } from "./TaskBarIcons";
 import LanguageDisplay from "./LanguageDisplay";
 
-interface ITaskBarProps {}
-
-const TaskBar: FC<ITaskBarProps> = ({}) => {
+const TaskBar: FC = () => {
   return (
     <div className="bg-black-dark-transparent grid w-screen grid-cols-3 items-center py-2 backdrop-blur-xl">
       <div className="ml-2">

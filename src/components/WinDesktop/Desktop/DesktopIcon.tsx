@@ -14,7 +14,7 @@ const DesktopIcon: React.FC<IDesktopIcon> = ({ id, icon, title, onClick }) => {
       data-id={id}
       type="button"
       onClick={onClick}
-      className="pressable supports-backdrop-blur:bg-white/95 flex w-full select-none flex-col items-center rounded p-2 text-xs text-white duration-500 hover:bg-slate-900/75 hover:backdrop-blur hover:transition-colors"
+      className="pressable flex w-full flex-col items-center rounded-sm p-2 text-xs text-white duration-500 select-none hover:bg-slate-900/75 hover:backdrop-blur-sm hover:transition-colors supports-backdrop-blur:bg-white/95"
     >
       <Image src={icon} alt={title} height={40} width={40} className="mb-2" />
       <span>{title}</span>

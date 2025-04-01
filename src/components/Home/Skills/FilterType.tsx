@@ -7,8 +7,8 @@ import {
   HiOutlineDatabase,
 } from "react-icons/hi";
 
-import Tab from "@/components/UI/Tab";
-import TabItem from "@/components/UI/Tab/TabItem";
+import Tab from "@/components/custom-ui/Tab";
+import TabItem from "@/components/custom-ui/Tab/TabItem";
 
 interface IFilterTypeProps {
   value: number;

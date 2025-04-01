@@ -3,12 +3,12 @@
 import React, { useCallback } from "react";
 import { motion } from "framer-motion";
 
-import useCalendar from "@/hooks/useCalendar";
+import useCalendar from "@/hooks/use-calendar";
 import Popover, {
   PopoverClose,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/Common/Popover";
+} from "@/components/shared/popover";
 
 import WatchBar from "./WatchBar";
 
@@ -26,7 +26,7 @@ const Watch = () => {
           key={day.toISOString()}
           className={`flex h-8 w-8 items-center justify-center rounded-full text-sm duration-150 ${
             dayInCurrentMonth
-              ? "bg-transparent text-gray-600 hover:bg-gray-600 hover:bg-opacity-10 dark:text-gray-300 dark:hover:bg-white dark:hover:bg-opacity-10"
+              ? "hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-transparent text-gray-600 hover:bg-gray-600 dark:text-gray-300 dark:hover:bg-white"
               : "text-gray-400 dark:text-gray-500"
           }`}
           initial={{ opacity: 0, scale: 0.9 }}
@@ -45,19 +45,19 @@ const Watch = () => {
     <Popover placement="bottom-end">
       <PopoverTrigger
         type="button"
-        className="hover:bg-white-transparent relative cursor-auto rounded p-1.5 duration-200 hover:bg-black hover:bg-opacity-20"
+        className="hover:bg-white-transparent hover:bg-opacity-20 relative cursor-auto rounded-sm p-1.5 duration-200 hover:bg-black"
       >
         <WatchBar />
       </PopoverTrigger>
-      <PopoverContent className="Popover calendar flex flex-col overflow-hidden rounded-md bg-white bg-opacity-80 shadow-md backdrop-blur-lg backdrop-filter duration-200 dark:bg-gray-600 dark:bg-opacity-50">
-        <div className="flex items-center bg-black bg-opacity-5 px-6 py-4">
-          <span className="flex-grow text-sm text-gray-700 dark:text-white">
+      <PopoverContent className="Popover calendar bg-opacity-80 dark:bg-opacity-50 flex flex-col overflow-hidden rounded-md bg-white shadow-md backdrop-blur-lg backdrop-filter duration-200 dark:bg-gray-600">
+        <div className="bg-opacity-5 flex items-center bg-black px-6 py-4">
+          <span className="grow text-sm text-gray-700 dark:text-white">
             {date.toLocaleString("default", { weekday: "long" })},{" "}
             {currentDate.getDate()}{" "}
           </span>
           <PopoverClose
             type="button"
-            className="rounded-md border border-gray-400 border-opacity-20 bg-gray-400 bg-opacity-10 p-1.5"
+            className="border-opacity-20 bg-opacity-10 rounded-md border border-gray-400 bg-gray-400 p-1.5"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -70,14 +70,14 @@ const Watch = () => {
           </PopoverClose>
         </div>
         <div className="flex items-center justify-center gap-3 px-6 pt-4">
-          <span className="flex-grow text-sm text-gray-700 dark:text-white">
+          <span className="grow text-sm text-gray-700 dark:text-white">
             {currentDate.toLocaleString("default", { month: "long" })}{" "}
             {currentDate.getFullYear()}
           </span>
           <button
             type="button"
             onClick={prevMonth}
-            className="flex items-center justify-center rounded-md duration-150 hover:bg-gray-600 hover:bg-opacity-10 dark:hover:bg-white dark:hover:bg-opacity-10"
+            className="hover:bg-opacity-10 dark:hover:bg-opacity-10 flex items-center justify-center rounded-md duration-150 hover:bg-gray-600 dark:hover:bg-white"
           >
             <svg
               width={24}
@@ -93,7 +93,7 @@ const Watch = () => {
           <button
             type="button"
             onClick={nextMonth}
-            className="flex items-center justify-center rounded-md duration-150 hover:bg-gray-600 hover:bg-opacity-10 dark:hover:bg-white dark:hover:bg-opacity-10"
+            className="hover:bg-opacity-10 dark:hover:bg-opacity-10 flex items-center justify-center rounded-md duration-150 hover:bg-gray-600 dark:hover:bg-white"
           >
             <svg
               width={24}
@@ -106,7 +106,7 @@ const Watch = () => {
             </svg>
           </button>
         </div>
-        <div className="grid flex-grow grid-cols-7 grid-rows-6 items-center gap-2 p-4">
+        <div className="grid grow grid-cols-7 grid-rows-6 items-center gap-2 p-4">
           <div className="flex items-center justify-center text-sm text-gray-600 dark:text-gray-100">
             {" Su "}
           </div>

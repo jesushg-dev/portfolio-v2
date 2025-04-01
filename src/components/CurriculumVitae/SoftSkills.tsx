@@ -2,11 +2,7 @@ import React, { useCallback } from "react";
 import type { FC, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
-import { ClientLocalInsightsIcon } from "./ClientIcon";
-
-interface IExperienceProps {}
-
-const Experience: FC<IExperienceProps> = ({}) => {
+const Experience: FC = () => {
   const t = useTranslations("curriculum");
 
   const renderItems = useCallback(
@@ -16,8 +12,7 @@ const Experience: FC<IExperienceProps> = ({}) => {
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
-        <ClientLocalInsightsIcon />
+      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.personalSkills")}
       </h5>
 

@@ -3,24 +3,21 @@
 import React from "react";
 import type { FC } from "react";
 
-import Popover, {
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/Common/Popover";
-
 import TileButton from "./TileButton";
 import notifications from "./example_notification.json";
 import ItemNotification from "./ItemNotification";
 import NotificationHeader from "./NotificationHeader";
+import Popover, {
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/shared/popover";
 
-interface INotificationCenterProps {}
-
-const NotificationCenter: FC<INotificationCenterProps> = ({}) => {
+const NotificationCenter: FC = ({}) => {
   return (
     <Popover placement="bottom-end">
       <PopoverTrigger
         type="button"
-        className="hover:bg-white-transparent relative cursor-auto rounded p-1.5 duration-200 hover:bg-black hover:bg-opacity-20"
+        className="hover:bg-white-transparent relative cursor-auto rounded-sm p-1.5 duration-200 hover:bg-black"
       >
         <svg
           fill="none"
@@ -58,15 +55,15 @@ const NotificationCenter: FC<INotificationCenterProps> = ({}) => {
       <PopoverContent
         id="notifications-area"
         portalId="desktop-system"
-        className="flex h-full w-96 flex-col bg-white bg-opacity-75 backdrop-blur-lg backdrop-filter dark:bg-gray-800 dark:bg-opacity-75 dark:backdrop-blur-lg dark:backdrop-filter"
+        className="flex h-full w-96 flex-col bg-white/75 backdrop-blur-lg backdrop-filter dark:bg-gray-800/75 dark:backdrop-blur-lg dark:backdrop-filter"
       >
-        <div className="flex flex-grow flex-col space-y-4 p-4">
+        <div className="flex grow flex-col space-y-4 p-4">
           <div className="text-right">
             <a className="text-sm font-medium text-blue-900 hover:text-blue-600 active:text-blue-900 dark:text-blue-600 dark:hover:text-blue-400 dark:active:text-blue-600">
               Manage notifications
             </a>
           </div>
-          <div className="relative flex-grow">
+          <div className="relative grow">
             <div className="absolute inset-0 overflow-y-auto">
               <div className="space-y-2">
                 <NotificationHeader

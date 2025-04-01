@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import React, { memo } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import SkillItem from "./SkillItem";
 import type { SkillType, SkillTypeType } from "../../../utils/interfaces/types";
@@ -42,14 +42,14 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({
     >
       {loading ? (
         <div className="flex w-full items-center justify-center">
-          <div className="h-10 w-10 animate-spin rounded-full border  border-b-2 border-primary-900 " />
+          <div className="border-primary-900 h-10 w-10 animate-spin rounded-full border border-b-2" />
         </div>
       ) : (
         <motion.ul
           initial="hidden"
           variants={container}
           animate="visible"
-          className="grid grid-cols-skills gap-4"
+          className="grid grid-cols-(--grid-cols-skills) gap-4"
         >
           {skills.map((skill) => (
             <motion.li layout variants={item} key={skill.id} className="flex">

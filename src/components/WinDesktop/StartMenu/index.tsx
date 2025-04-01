@@ -4,7 +4,7 @@ import Image from "next/image";
 import Popover, {
   PopoverContent,
   PopoverTrigger,
-} from "@/components/Common/Popover";
+} from "@/components/shared/popover";
 
 const arrayIcons = [
   {
@@ -95,7 +95,7 @@ const StartMenu = () => {
       <PopoverTrigger
         type="button"
         id="windows-icon"
-        className="hover:bg-white-transparent relative cursor-auto rounded p-1.5 duration-200 hover:bg-black hover:bg-opacity-20"
+        className="relative cursor-auto rounded-sm p-1.5 duration-200 hover:bg-black hover:bg-white/20"
       >
         <Image
           width={32}
@@ -107,19 +107,19 @@ const StartMenu = () => {
       </PopoverTrigger>
       <PopoverContent
         portalId="desktop-system"
-        className="start-menu flex h-[90vh] max-h-[90vh] flex-col overflow-hidden rounded-md bg-white bg-opacity-80 backdrop-blur-lg backdrop-filter duration-200 dark:bg-gray-600 dark:bg-opacity-50 "
+        className="start-menu flex h-[90vh] max-h-[90vh] flex-col overflow-hidden rounded-md bg-white bg-white/80 backdrop-blur-lg backdrop-filter duration-200 dark:bg-black/50 dark:bg-gray-600"
       >
-        <div className="flex flex-grow flex-col p-6">
+        <div className="flex grow flex-col p-6">
           <div>
-            <div className="flex-grow">
+            <div className="grow">
               <div className="flex items-center px-6 py-4">
                 <span className="text-xs font-semibold dark:text-white">
                   Pinned
                 </span>
-                <div className="flex-grow" />
+                <div className="grow" />
                 <button
                   type="button"
-                  className="flex items-center gap-2 rounded-sm bg-white px-3 py-1 text-xs shadow-sm duration-100 hover:bg-gray-50 dark:bg-opacity-10 dark:text-white dark:hover:bg-opacity-20"
+                  className="flex items-center gap-2 rounded-xs bg-white px-3 py-1 text-xs shadow-xs duration-100 hover:bg-gray-50 dark:bg-black/10 dark:text-white dark:hover:bg-black/20"
                 >
                   <span>All apps</span>
                   <svg
@@ -139,7 +139,7 @@ const StartMenu = () => {
               {arrayIcons.map((icon) => (
                 <div
                   key={icon.title}
-                  className="flex flex-col items-center justify-center gap-1 rounded-sm py-2 duration-150 hover:bg-white hover:bg-opacity-50 active:bg-opacity-30 dark:hover:bg-opacity-10 dark:active:bg-opacity-5"
+                  className="flex flex-col items-center justify-center gap-1 rounded-xs py-2 duration-150 hover:bg-white hover:bg-white/50 active:bg-white/30 dark:hover:bg-black/10 dark:active:bg-black/5"
                 >
                   <Image src={icon.src} width={24} height={24} alt={icon.alt} />
                   <span className="text-center text-xs font-medium text-gray-800 dark:text-gray-200">
@@ -149,15 +149,15 @@ const StartMenu = () => {
               ))}
             </div>
           </div>
-          <div className="flex flex-grow flex-col">
+          <div className="flex grow flex-col">
             <div className="flex items-center px-6 py-4">
               <span className="text-xs font-semibold dark:text-white">
                 Recommended
               </span>
-              <div className="flex-grow" />
+              <div className="grow" />
               <button
                 type="button"
-                className="flex items-center gap-2 rounded-sm bg-white px-3 py-1 text-xs shadow-sm duration-100 hover:bg-gray-50 dark:bg-opacity-10 dark:text-white dark:hover:bg-opacity-20"
+                className="flex items-center gap-2 rounded-xs bg-white px-3 py-1 text-xs shadow-xs duration-100 hover:bg-gray-50 dark:bg-black/10 dark:text-white dark:hover:bg-black/20"
               >
                 <span>More</span>
                 <svg
@@ -190,7 +190,7 @@ const StartMenu = () => {
                         <span className="text-xs font-medium text-gray-800 dark:text-gray-200">
                           {icon.title}
                         </span>
-                        <span className="text-xs font-medium text-gray-500 dark:text-white dark:text-opacity-30">
+                        <span className="dark:text-opacity-30 text-xs font-medium text-gray-500 dark:text-white">
                           17min ago
                         </span>
                       </div>
@@ -201,7 +201,7 @@ const StartMenu = () => {
             </div>
           </div>
         </div>
-        <div className="bg-black bg-opacity-5 px-12 py-4 dark:bg-opacity-10">
+        <div className="bg-black/5 px-12 py-4 dark:bg-black/10">
           <div className="user flex items-center gap-2">
             <Image
               src="/win11-vue/img/bilal-bentoumi.ab0d7f93.jpg"
@@ -213,7 +213,7 @@ const StartMenu = () => {
             <span className="text-xs text-gray-800 dark:text-gray-300">
               Jesus Hernandez
             </span>
-            <div className="flex-grow" />
+            <div className="grow" />
             <Image
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAQAAAAkGDomAAACvklEQVRo3u2aS5mEMAyAkYAEJKwEJCChEioBCUhAAhIqYSWMBBxkD/sYCmmbV8seaG7zAfM3TdM0SQedmczwO2a7r3YP4AP4AD6AD+ADeBPgAAMZ8PpsZUAHGwCsZMAVADZwbQAdvH4wdjLg/vP7iw8phfseEwlwit5hQnJsLsB5rCTA9fJeoNskFc//LdN77OBJgDPhXRVgj+rAsdyMQ/XfWwD28HmBG0V+cLxAfpYRS3gfp+XZMyZOcdTu8r0PDeAZb8vOmHaS9LBxEPOLG+N5s6POnxB7CWBse/vJ52nP4imafMYW05/YOJYiCBZi89m4gJ6Nx49mYkTPARyiV6dq4dYUqWGgAwbG1tDFgz7yr0RAR7ENs4D1aOuOBviiOQAjwKMze1EAXX5GFUL+7D/m9Bea3UlCWoe52YzNAMe0DtNz4epPd6tL/u/Z/0ntTwt4XLkhDegP+7f1vXjHPW/KJy3NARfc98YPyTeIHvC4URKAiUeapT5Q9eAWGG4BDJgV4lYw3wI4YzsAn8Ek+gOtTNgK4oDjLYBjCfA9+lsAe2yT4oDdTfIAPoBoPNFMhhLgv3czQRELWogrAS416hyWR502WNBKMVgYb97HxXCrE+RjaoQKUCvk18lKCfl1lyadkC5NumunjYvJXjt1F3ebHRzqpT4szpBi6kOTPLLQXzF5pEm/WdgfIf0mT2BKA31mAlOeApaJIAUsTaJLRJREl5YhdMcbqwwhK+RwRVHIkZXCNHjsUpikmMhbXHUxkV+OlW0NcTmWX9Cm+j2zgja3JYB2api2BPCaKsohQYWmCmxRUm0pec1d21I2m7aUXGPPStjbE6y1G3vSrVG/2pzBwXg4CQYYwcGcecO8NQpvLpOMas1lFpDV2/NyJl8aoVWD49vOPLK7sbGBb90iGns3DwuEk04DBFjA6y9eX61IUuIMdVTmAAAAAElFTkSuQmCC"
               width={14}

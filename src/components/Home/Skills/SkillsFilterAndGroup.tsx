@@ -3,7 +3,7 @@
 import React, { useState, useEffect, memo } from "react";
 import FilterType from "./FilterType";
 import SkillGrouped from "./SkillGrouped";
-import { trpcReact as trpc } from "@/utils/trpc";
+import { api } from "@/trpc/react";
 import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
 import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
 
@@ -32,7 +32,7 @@ const SkillsFilterAndGroup: React.FC<SkillsFilterAndGroupProps> = ({
     }
   };
 
-  const { data, isLoading } = trpc.getSkills.useQuery(
+  const { data, isLoading } = api.portfolio.getSkills.useQuery(
     {
       limit: LIMIT_PER_PAGE_BIG,
       locale,

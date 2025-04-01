@@ -4,28 +4,23 @@ import { FaLinkedin } from "react-icons/fa";
 import { MdPhone, MdEmail, MdWeb } from "react-icons/md";
 import { useTranslations } from "next-intl";
 
-import { ClientLocalImportContactsIcon } from "./ClientIcon";
-
-interface IContactMeProps {}
-
 const contactmes = ["contact1", "contact2", "contact3", "contact4"] as const;
 
 type ContactMeType = (typeof contactmes)[number];
 
-const contactIcons: Record<ContactMeType, JSX.Element> = {
+const contactIcons: Record<ContactMeType, React.JSX.Element> = {
   contact1: <MdPhone className="text-xs" />,
   contact2: <MdEmail className="text-xs" />,
   contact3: <MdWeb className="text-xs" />,
   contact4: <FaLinkedin className="text-xs" />,
 };
 
-const ContactMe: FC<IContactMeProps> = ({}) => {
+const ContactMe: FC = () => {
   const t = useTranslations("curriculum");
 
   return (
     <>
-      <h5 className="text-blue mb-1 flex items-center gap-1 text-lg font-semibold uppercase tracking-tight text-cv">
-        <ClientLocalImportContactsIcon />
+      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.contact")}
       </h5>
 

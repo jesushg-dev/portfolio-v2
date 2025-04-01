@@ -1,0 +1,528 @@
+{
+  "certification": {
+    "title": "Certificates",
+    "subtitle": "Mastery in Diverse Skills",
+    "description": "Empowering projects and ready to take on new challenges!",
+    "pagination": {
+      "loading": "Loading...",
+      "loadMore": "Load More"
+    },
+    "seeCertificate": "See Certificate",
+    "titles": {
+      "date": "Issued Date",
+      "institution": "Institution",
+      "idCredential": "Credential ID"
+    },
+    "types": {
+      "all": {
+        "title": "All",
+        "subtitle": "All Certificates"
+      },
+      "frontend": {
+        "title": "Frontend",
+        "subtitle": "Frontend Development"
+      },
+      "backend": {
+        "title": "Backend",
+        "subtitle": "Backend Development"
+      },
+      "devops": {
+        "title": "DevOps",
+        "subtitle": "DevOps Development"
+      },
+      "mobile": {
+        "title": "Mobile",
+        "subtitle": "Mobile Development"
+      },
+      "cybersecurity": {
+        "title": "Cybersecurity",
+        "subtitle": "Cybersecurity"
+      },
+      "softskills": {
+        "title": "Soft Skills",
+        "subtitle": "Soft Skills"
+      }
+    }
+  },
+  "curriculum": {
+    "title": "Jesús Enmanuel Hernández González - Curriculum Vitae",
+    "degree": "Software Developer",
+    "aboutMe": "Full-stack web developer with over 5 years of experience, specializing in building modern, scalable solutions across various industries. Proficient in React.js, JavaScript, HTML, CSS, Next.js, TypeScript, C#, RESTful APIs and working in Agile/Scrum environments. Strong communication skills and adept at collaborating in dynamic startup settings.",
+    "header": {
+      "aboutMe": "About Me",
+      "experience": "Professional Experience",
+      "education": "Education",
+      "languages": "Languages",
+      "interests": "Interests",
+      "contact": "Contact Me",
+      "references": "References",
+      "technicalSkills": "Technical Skills",
+      "personalSkills": "Soft Skills",
+      "projects": "Projects",
+      "certifications": "Certifications",
+      "awards": "Awards",
+      "designExpertise": "Design Expertise",
+      "additionalInformation": "Additional Information",
+      "personalReferences": "Personal References",
+      "skills": {
+        "frontEnd": "Frontend",
+        "backEnd": "Backend",
+        "database": "Databases",
+        "tools": "Tools"
+      }
+    },
+    "education": {
+      "computerEngineering": {
+        "degree": "Computer Engineering",
+        "institution": "National University of Engineering",
+        "location": "Managua",
+        "dates": "2017 - 2024"
+      },
+      "webDeveloper": {
+        "degree": "Web Developer",
+        "institution": "Platzi",
+        "location": "Online",
+        "dates": "2022 - 2024"
+      },
+      "digitalSecurity": {
+        "degree": "Junior in Digital Security and Data Protection",
+        "institution": "Numu & BID",
+        "location": "Managua",
+        "dates": "2022"
+      }
+    },
+    "contacts": {
+      "contact1": {
+        "name": "+505 8679 3204",
+        "value": "tel:505,86793204"
+      },
+      "contact2": {
+        "name": "jess232016@gmail.com",
+        "value": "mailto:jess232016@gmail.com"
+      },
+      "contact3": {
+        "name": "https://www.jesushg.com",
+        "value": "https://www.jesushg.com"
+      },
+      "contact4": {
+        "name": "linkedIn/jesus-hernandez23",
+        "value": "https://www.linkedin.com/in/jesus-hernandez23"
+      }
+    },
+    "experiences": {
+      "experience0": {
+        "position": "Full Stack Developer with React, Next.js & C#",
+        "company": "Contollo Consulting",
+        "dates": "August 2023 – February 2025",
+        "responsibilities": "<item>Built scalable web applications using Next.js, .NET Core, Microservices, and Azure across multiple concurrent projects</item><item>Refactored SQL scripts to Entity Framework Core and designed database schemas</item><item>Collaborated in Scrum team through sprint reviews, effort measurements, and retrospectives</item><item>Configured CI/CD pipelines and integrated third-party services</item><item>Led trainees on best practices and coding standards</item>",
+        "skills": "Next.js, .NET Core, Azure, Entity Framework, Microservices, CI/CD"
+      },
+      "experience1": {
+        "position": "Full Stack Developer with React, Next.js & Node.js",
+        "company": "Musa",
+        "dates": "June 2022 – July 2023",
+        "responsibilities": "<item>Designed and developed high-quality web interfaces and mobile applications</item><item>Successfully integrated data and processes from external providers</item><item>Demonstrated progress and achievements in functionality, usability, and performance to stakeholders</item>",
+        "skills": "Next.js, React.js, Node.js, GraphQL, REST API, Tailwind CSS"
+      },
+      "experience2": {
+        "position": "Mobile Developer with React Native",
+        "company": "Telo",
+        "dates": "February 2022 – May 2022",
+        "responsibilities": "<item>Created user interfaces based on UX team specifications</item><item>Implemented functionalities in Scrum team following user stories</item><item>Supported quality control and backend teams with testing and code reviews</item>",
+        "skills": "React Native, Java, Android Development"
+      },
+      "experience3": {
+        "position": "IT Technician and Web Developer with ReactJs & Next.js",
+        "company": "Reformed Churches Association",
+        "dates": "November 2019 - December 2021",
+        "responsibilities": "<item>Developed modern website for organizational promotion</item><item>Taught computer science to elementary students</item><item>Provided technical support and equipment maintenance</item>",
+        "skills": "React.js, Next.js, Windows, Linux, Hardware Support"
+      },
+      "experience4": {
+        "position": "Freelance | Frontend Developer with ReactJs and Next.js",
+        "company": "Barter Capital",
+        "dates": "May 2023 - June 2023",
+        "responsibilities": "<item>Developed attractive and functional web interfaces that offer an intuitive user experience</item><item>Contributed to the development of the existing dashboard by adding new features that improved the usability and efficiency of the platform</item><item>Ensured proper configuration and functioning of web applications in production environments, ensuring a seamless experience for end users</item>",
+        "skills": "Next.js, User Interface Design, UIX, React.js, REST API, Redux.js, Tailwind CSS, JavaScript, Web Development"
+      }
+    },
+    "skills": {
+      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>Next.js</item><item>React.js</item><item>React Native</item><item>API REST</item><item>Socket</item><item>Tailwind</item>",
+      "backEnd": "<item>C#</item><item>.NET Core</item><item>Nest.js</item><item>Python</item><item>Node.js</item><item>PHP</item><item>GraphQL</item>",
+      "database": "<item>SQL Server</item><item>MySQL</item><item>MongoDB</item><item>SQLite</item><item>Firebase</item><item>PostgreSQL</item>",
+      "tools": "<item>Git</item><item>Azure</item><item>Docker</item><item>GCP</item><item>AWS</item>"
+    },
+    "languages": {
+      "spanish": {
+        "name": "Spanish",
+        "level": "Native or bilingual proficiency"
+      },
+      "english": {
+        "name": "English",
+        "level": "Professional working proficiency"
+      },
+      "dutch": {
+        "name": "Dutch",
+        "level": "Basic proficiency"
+      }
+    },
+    "softSkills": "<item>Analytical skills</item><item>Individual and team work</item><item>Ability to adapt</item>",
+    "additionalInformation": "<item>Immediate availability</item>",
+    "personalReferences": {
+      "reference1": {
+        "name": "Danilo Acevedo",
+        "role": "Developer",
+        "phoneNumber": "(+505) 8679-3204"
+      },
+      "reference2": {
+        "name": "Alfredo Antonio Eva Vargas",
+        "role": "Developer",
+        "phoneNumber": "(+505) 8251-9391"
+      },
+      "reference3": {
+        "name": "Juan Carlos López",
+        "role": "Developer",
+        "phoneNumber": "(+505) 8751-8355"
+      }
+    },
+    "telephone": "tel.",
+    "actions": {
+      "download": "Download CV",
+      "print": "Print CV",
+      "goBack": "Go Back"
+    },
+    "codedWith": "This CV was created using ReactJS.",
+    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download"
+  },
+  "global": {
+    "header": {
+      "menu": {
+        "home": "Home",
+        "about": "About",
+        "skills": "Skills",
+        "services": "Services",
+        "portfolio": "Portfolio",
+        "contact": "Contact",
+        "language": "Language",
+        "theme": "Theme Mode",
+        "locale-options": {
+          "es": "Spanish",
+          "en": "English",
+          "de": "Dutch"
+        }
+      },
+      "tools": {
+        "theme": "Theme Mode",
+        "language": "Language",
+        "newThemeSoon": "New theme will be add soon"
+      },
+      "closeMenu": "Close Menu",
+      "openMenu": "Open Menu"
+    },
+    "footer": {
+      "title": "All rights reserved © ",
+      "madeWith": "Made with ",
+      "by": " by ",
+      "sections": {
+        "portfolio": {
+          "curriculum": "Curriculum Vitae",
+          "certificates": "Certificates"
+        },
+        "miscellaneous": {
+          "opSysCv": "Win11 Simulator"
+        }
+      },
+      "titles": {
+        "portfolio": "Portfolio",
+        "miscellaneous": "Miscellaneous",
+        "NowPlaying": "Now Playing"
+      },
+      "new": "New",
+      "soon": "Soon",
+      "beta": "Beta",
+      "spotify": {
+        "errors": {
+          "noFetch": "Error: Something went wrong while fetching data",
+          "noPlaying": "Nothing is playing"
+        },
+        "buttons": {
+          "play": "Play",
+          "pause": "Pause",
+          "volume": "Volume",
+          "next": "Next",
+          "previous": "Previous"
+        },
+        "hints": {
+          "currentProgress": "Current progress",
+          "totalDuration": "Total duration",
+          "localRange": "Change current progress",
+          "disabledExteralRange": "Disabled due privacy reasons"
+        },
+        "poweredBy": "Powered by"
+      }
+    },
+    "localeSwitcher": {
+      "label": "Sprache ändern",
+      "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+    },
+    "fallback": {
+      "noResults": {
+        "title": "No results",
+        "description": "No results found for your search"
+      }
+    }
+  },
+  "main": {
+    "meta": {
+      "title": "Jesús Hernández - Full Stack Developer",
+      "description": "Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology",
+      "keywords": "Jesus Hernandez, Jesus, Hernandez, Full Stack Developer, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Agile Methodology, Agile, Methodology"
+    },
+    "heroMain": {
+      "titles": {
+        "degree": "Software Engineer.",
+        "web": "Web Developer.",
+        "mobile": "Mobile Developer.",
+        "fullstack": "Full Stack Developer.",
+        "backend": "Backend Developer.",
+        "frontend": "Frontend Developer."
+      },
+      "viewCV": "View CV",
+      "greeting": "Hello, I'm",
+      "scrollDown": "Scroll Down",
+      "description": "As a engineer, I use my technical expertise and skills to build and maintain high-quality software systems. My passion for technology drives me to constantly learn and grow, and I strive to create solutions that have a positive impact on the world."
+    },
+    "about": {
+      "subtitle": "A Brief Overview",
+      "title": "About Me",
+      "info": {
+        "title": "About Me",
+        "description1": "I am a technology enthusiast with 5 years of experience as a web developer. I studied computer engineering and also pursued self-learning, crafting beautiful and functional websites for diverse clients.",
+        "description2": "As my experience expanded, I ventured into other areas of development, exploring the realms of mobile and backend development. This diversified skill set allowed me to embark on even more exciting and challenging projects.",
+        "description3": "Throughout my career, my drive to learn and grow as a developer has been my guiding force. Constantly seeking new technologies and techniques to refine my craft is at the core of my philosophy. I am thrilled to uncover where my passion for technology will lead me in the future."
+      },
+      "timeline": {
+        "title": "My timeline",
+        "subtitle": "Continuous learning...",
+        "steps": {
+          "0": {
+            "date": "March, 2017",
+            "dateTime": "2017-03-01",
+            "title": "Computer Engineering (Present)",
+            "description": "Completing my degree while managing work and extracurricular responsibilities."
+          },
+          "1": {
+            "date": "October, 2020",
+            "dateTime": "2020-10-01",
+            "title": "Web Developer and IT Technician",
+            "description": "Maintenance and troubleshooting of computer systems and networks."
+          },
+          "2": {
+            "date": "February, 2022",
+            "dateTime": "2022-02-01",
+            "title": "Mobile Developer",
+            "description": "Creation of software applications for mobile devices, consistently delivering high-quality products."
+          },
+          "3": {
+            "date": "June, 2022",
+            "dateTime": "2022-06-01",
+            "title": "Web Developer",
+            "description": "Design, development, and maintenance of websites and web applications."
+          }
+        }
+      },
+      "function": {
+        "name": "aboutMe",
+        "json": {
+          "name": "name",
+          "languages": "languages",
+          "profession": "profession"
+        },
+        "language": {
+          "spanish": "spanish",
+          "english": "english",
+          "dutch": "dutch"
+        },
+        "languageLevel": {
+          "native": "Native",
+          "advanced": "Advanced",
+          "intermediate": "Intermediate",
+          "basic": "Basic"
+        },
+        "profession": "Fullstack Developer"
+      }
+    },
+    "skills": {
+      "title": "Areas of Expertise",
+      "subtitle": "Skills",
+      "description": "I have a diverse skill set, developed through my education and professional experiences.",
+      "aux": "I am constantly seeking to learn and improve my skills, and I am always open to new opportunities to challenge myself and grow professionally.",
+      "modal": {
+        "close": "Close",
+        "readMore": "Read more",
+        "seeCertificates": "See certificates"
+      },
+      "tabs": {
+        "frontend": {
+          "title": "Frontend",
+          "description": "Responsive web design with user experience focus."
+        },
+        "backend": {
+          "title": "Backend",
+          "description": "API and web service development, emphasizing security."
+        },
+        "mobile": {
+          "title": "Mobile",
+          "description": "Android and iOS app development, user experience oriented."
+        },
+        "database": {
+          "title": "Database",
+          "description": "Development of efficient and secure databases."
+        },
+        "devops": {
+          "title": "DevOps",
+          "description": "Building performance-centric CI/CD pipelines."
+        },
+        "tools": {
+          "title": "Tools",
+          "description": "Utilizing diverse software tools for quality solutions."
+        }
+      }
+    },
+    "soft-skills": {
+      "subtitle": "Skills",
+      "title": "Soft Skills",
+      "description": "In addition to my technical skills, I also possess a range of soft skills that have helped me succeed in my career",
+      "aux": "I believe that these skills are just as important as technical expertise, and I work hard to continually develop and improve them. I am confident that my strong communication, problem-solving, and teamwork skills make me a valuable asset to any team or project.",
+      "skills": {
+        "teamwork": {
+          "title": "Teamwork",
+          "description": "I enjoy collaborating and learning from others."
+        },
+        "communication": {
+          "title": "Communication",
+          "description": "I excel at expressing ideas and actively listening."
+        },
+        "problemSolving": {
+          "title": "Problem Solving",
+          "description": "I am adept at finding effective solutions."
+        },
+        "goalOriented": {
+          "title": "Goal-Oriented",
+          "description": "I set objectives and work hard to achieve them."
+        },
+        "adaptability": {
+          "title": "Adaptability",
+          "description": "I easily embrace new technologies and frameworks."
+        },
+        "timeManagement": {
+          "title": "Time Management",
+          "description": "I prioritize tasks and optimize efficiency."
+        },
+        "creativity": {
+          "title": "Creativity",
+          "description": "I think innovatively and generate fresh ideas."
+        },
+        "leadership": {
+          "title": "Leadership",
+          "description": "I take charge, assume responsibilities, and direct tasks."
+        },
+        "organization": {
+          "title": "Organization",
+          "description": "I value order and maintain well-structured things."
+        },
+        "responsibility": {
+          "title": "Responsibility",
+          "description": "I am reliable and ensure tasks are completed."
+        },
+        "initiative": {
+          "title": "Initiative",
+          "description": "I actively seek new opportunities and enjoy taking the lead."
+        },
+        "commitment": {
+          "title": "Commitment",
+          "description": "I am dedicated to completing tasks and fulfilling responsibilities."
+        }
+      }
+    },
+    "portfolio": {
+      "subtitle": "Portfolio",
+      "title": "Best Projects",
+      "description": "I am proud of the work I have completed throughout my career.",
+      "actions": {
+        "view": "View project",
+        "source": "View source"
+      },
+      "private": {
+        "title": "Private",
+        "description": "This project is private, i can't show you the source code.",
+        "canSeeDemo": "This project is private, i can't show you the source code, but you can see the demo."
+      },
+      "pagination": {
+        "retry": "Retry",
+        "loading": "Loading...",
+        "noMore": "You have seen all the projects",
+        "error": "An error has occurred, please try again later",
+        "loadMore": "Load more"
+      },
+      "filters": {
+        "all": "All",
+        "frontend": "Frontend",
+        "backend": "Backend",
+        "mobile": "Mobile",
+        "desktop": "Desktop"
+      }
+    },
+    "contact": {
+      "title": "Get in touch 👋",
+      "title2": "Fill in the form to start a conversation",
+      "subtitle": "I am always open to new opportunities, if you have a project in mind or just want to say hi, feel free to contact me.",
+      "divider": "or",
+      "form": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter your name",
+          "success": "Name entered correctly",
+          "errors": {
+            "required": "Please enter your name",
+            "minLength": "The name must be at least 3 characters long",
+            "maxLength": "The name must be at most 20 characters long"
+          }
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email",
+          "success": "Email entered correctly",
+          "errors": {
+            "required": "Please enter your email",
+            "minLength": "The email must be at least 3 characters long",
+            "maxLength": "The email must be at most 30 characters long",
+            "pattern": "Please enter a valid email"
+          }
+        },
+        "message": {
+          "label": "Message",
+          "placeholder": "Leave your message here, I will answer you as soon as possible",
+          "success": "Message entered correctly",
+          "errors": {
+            "required": "Please enter your message",
+            "minLength": "The message must be at least 10 characters long",
+            "maxLength": "The message must be at most 500 characters long"
+          }
+        },
+        "errors": {
+          "title": "Error",
+          "description": "An error has occurred while sending the message, please try again later."
+        },
+        "success": {
+          "title": "Success",
+          "description": "Your message has been sent successfully, I will answer you as soon as possible."
+        },
+        "submit": "Submit"
+      }
+    }
+  },
+  "metadata": {
+    "description": "dd"
+  }
+}
