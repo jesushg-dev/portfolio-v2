@@ -812,3 +812,7 @@
     transform: rotate(360deg);
   }
 }
+
+video::-webkit-media-controls {
+  display: none !important;
+}

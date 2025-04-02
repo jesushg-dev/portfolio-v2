@@ -6,9 +6,10 @@ import SkillGrouped from "./SkillGrouped";
 import { api } from "@/trpc/react";
 import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
 import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
+import { type Locale } from "next-intl";
 
 interface SkillsFilterAndGroupProps {
-  locale: "en" | "es" | "nl";
+  locale: Locale;
   handleOpenModal: (skill: SkillType, type: SkillTypeType) => void;
 }
 

@@ -17,18 +17,17 @@ import Player from "./Player";
 
 const SpotifyWidget: FC = () => {
   const t = useTranslations("global.footer");
+  const [localVolume, setLocalVolume] = useState<number>(10);
+  const [isLocalPlaying, setIsLocalPlaying] = useState<boolean>(false);
 
   const { data, isLoading, refetch } = api.spotify.getNowPlaying.useQuery();
   const artists = useMemo(
     () =>
-      data === undefined || "error" in data
-        ? []
-        : data.item.artists.map((artist) => artist.name),
+      data && !("error" in data) && data.currently_playing_type === "track"
+        ? data.item.artists.map((artist) => artist.name)
+        : [],
     [data],
   );
-
-  const [localVolume, setLocalVolume] = useState<number>(10);
-  const [isLocalPlaying, setIsLocalPlaying] = useState<boolean>(false);
 
   const togglePlayPause = () => {
     setIsLocalPlaying((prev) => !prev);

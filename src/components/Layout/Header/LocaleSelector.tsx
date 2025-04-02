@@ -11,17 +11,17 @@ const locales = [
   {
     value: "es",
     label: "Español",
-    img: "spanish_kitwbr-Thumbnail_xnyll7.webp",
+    img: "spanish_flag_k7ij7d.webp",
   },
   {
     value: "en",
     label: "English",
-    img: "english_sdpecu-Thumbnail_btswuv.webp",
+    img: "english_flag_xeqq0r.webp",
   },
   {
     value: "nl",
     label: "Nederlands",
-    img: "dutch_khyopk-Thumbnail_htec1d.webp",
+    img: "dutch_flag_lv5lyh.webp",
   },
 ] satisfies {
   value: Locale;
@@ -45,6 +45,7 @@ const LocaleSelector: FC = () => {
     const nextLocale = locales[index].value;
     startTransition(() => {
       router.replace(pathname, { locale: nextLocale });
+      router.refresh();
     });
   };
 

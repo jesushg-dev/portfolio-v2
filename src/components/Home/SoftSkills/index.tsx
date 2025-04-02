@@ -13,6 +13,9 @@ const SoftSkills: FC = async () => {
         loop
         muted
         autoPlay
+        playsInline
+        disablePictureInPicture
+        disableRemotePlayback
         poster="https://res.cloudinary.com/js-media/image/upload/v1642524508/portfolio/hero/1947484_ehwya0.webp"
         className="absolute inset-0 z-[-1] h-screen w-[100vw] object-cover"
       >
