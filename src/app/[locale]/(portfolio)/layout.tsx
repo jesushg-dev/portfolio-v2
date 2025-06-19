@@ -5,6 +5,12 @@ import type { Locale } from "next-intl";
 
 import Layout from "@/components/Layout";
 
+
+import { Inter } from "next/font/google";
+import clsx from "clsx";
+
+const inter = Inter({ subsets: ["latin"] });
+
 export default async function RootLayout({
   children,
   params,
@@ -14,6 +20,14 @@ export default async function RootLayout({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  
+  return <html className="h-full" lang={locale}>
+      <body
+        className={clsx(
+          inter.className,
+          "bg-background-200 flex min-h-screen flex-col justify-between overflow-x-hidden scroll-smooth",
+        )}
+      ><Layout headerAlwaysVisible>{children}</Layout></body>
+  </html>;
 
-  return <Layout headerAlwaysVisible>{children}</Layout>;
 }
