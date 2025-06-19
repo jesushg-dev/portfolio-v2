@@ -1,6 +1,13 @@
 {
   "title": "helpdesk",
-  "slug": "helpdesk",
   "type": "object",
-  "properties": {}
+  "properties": {
+    "roles": {
+      "description": "No son como yo esperaba como los imaginaba",
+      "required": true,
+      "fieldType": "Boolean",
+      "dataType": "boolean",
+      "title": "roles"
+    }
+  }
 }
