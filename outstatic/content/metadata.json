@@ -1,11 +1,11 @@
 {
-  "commit": "",
-  "generated": "2025-06-19T22:00:14.663Z",
+  "commit": "39cb76bb2018a24854830aa9d8630bf9e607bc77",
+  "generated": "2025-06-19T22:11:00.244Z",
   "metadata": [
     {
       "__outstatic": {
-        "commit": "",
-        "hash": "1304699211",
+        "commit": "39cb76bb2018a24854830aa9d8630bf9e607bc77",
+        "hash": "2368127398",
         "path": "outstatic/content/helpdesk/chdajdfdf.mdx"
       },
       "author": {
@@ -14,6 +14,7 @@
       },
       "collection": "helpdesk",
       "publishedAt": "2025-06-19T21:23:19.192Z",
+      "roles": true,
       "slug": "chdajdfdf",
       "status": "published",
       "title": "chdaj"
