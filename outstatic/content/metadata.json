@@ -1,11 +1,11 @@
 {
-  "commit": "6642241fffe8284267af5a37524d74a36ebe070a",
-  "generated": "2025-06-19T22:38:46.147Z",
+  "commit": "162c13c11bf5e20caaa18412d5e57f5a01c317a3",
+  "generated": "2025-06-19T22:40:22.023Z",
   "metadata": [
     {
       "__outstatic": {
-        "commit": "6642241fffe8284267af5a37524d74a36ebe070a",
-        "hash": "1268008184",
+        "commit": "162c13c11bf5e20caaa18412d5e57f5a01c317a3",
+        "hash": "2277556503",
         "path": "outstatic/content/helpdesk/portafolio-personal.mdx"
       },
       "author": {
