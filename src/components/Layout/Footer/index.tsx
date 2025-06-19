@@ -58,7 +58,7 @@ const Footer: FC = () => {
             <div className="mt-3 grid space-y-3">
               <div className="flex items-center gap-2">
                 <span className="inline-flex gap-x-2 text-gray-400">
-                  {t("sections.miscellaneous.opSysCv")}
+                  {t("sections.miscellaneous.cvGenerator")}
                 </span>
                 <span className="bg-primary-700 ml-1 inline rounded-md px-2 py-1 text-xs text-white">
                   {t("soon")}

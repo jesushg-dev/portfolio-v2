@@ -55,46 +55,48 @@ const TabItem: FC<TabItemProps> = ({
   }, [isActive, variant]);
 
   return (
-    <div className="relative" role="tab">
-      {isActive && (
-        <motion.div
-          layoutId={`background-tab${tabId}`}
-          className={`absolute inset-0 -z-10 rounded-xl shadow-md ${
-            variant === "primary" ? "bg-primary-600" : "bg-background-100"
-          }`}
-        />
-      )}
-      <motion.button
-        type="button"
-        title={title}
-        id={`tab-${index}`}
-        animate={isActive ? "active" : "inactive"}
-        variants={variants}
-        initial="inactive"
-        whileHover="hover"
-        onClick={() => setCurrentTab(index)}
-        className={`w-full cursor-pointer rounded-xl p-4 text-left md:p-5 ${isActive ? "" : "hover:bg-background-800/30"}`}
-      >
-        <span className={`flex items-center transition-all ${textClassName}`}>
-          <Icon
-            className={` ${minimal ? "mt-0" : "mt-2 h-6 w-6 shrink-0 md:h-7 md:w-7"}`}
-            width={16}
-            height={16}
+    <div role="tablist">
+      <div className="relative" role="tab">
+        {isActive && (
+          <motion.div
+            layoutId={`background-tab${tabId}`}
+            className={`absolute inset-0 -z-10 rounded-xl shadow-md ${
+              variant === "primary" ? "bg-primary-600" : "bg-background-100"
+            }`}
           />
-          <span className="ml-6 grow">
-            <span
-              className={`block font-semibold whitespace-nowrap ${minimal ? "" : "text-lg"} `}
-            >
-              {title}
-            </span>
-            {minimal ? null : (
-              <span className="text-primaryText-800 mt-1 hidden lg:block">
-                {description}
+        )}
+        <motion.button
+          type="button"
+          title={title}
+          id={`tab-${index}`}
+          animate={isActive ? "active" : "inactive"}
+          variants={variants}
+          initial="inactive"
+          whileHover="hover"
+          onClick={() => setCurrentTab(index)}
+          className={`w-full cursor-pointer rounded-xl p-4 text-left md:p-5 ${isActive ? "" : "hover:bg-background-800/30"}`}
+        >
+          <span className={`flex items-center transition-all ${textClassName}`}>
+            <Icon
+              className={` ${minimal ? "mt-0" : "mt-2 h-6 w-6 shrink-0 md:h-7 md:w-7"}`}
+              width={16}
+              height={16}
+            />
+            <span className="ml-6 grow">
+              <span
+                className={`block font-semibold whitespace-nowrap ${minimal ? "" : "text-lg"} `}
+              >
+                {title}
               </span>
-            )}
+              {minimal ? null : (
+                <span className="text-primaryText-800 mt-1 hidden lg:block">
+                  {description}
+                </span>
+              )}
+            </span>
           </span>
-        </span>
-      </motion.button>
+        </motion.button>
+      </div>
     </div>
   );
 };

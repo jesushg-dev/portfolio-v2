@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import useCalendar from "@/hooks/use-calendar";
 import Popover, {

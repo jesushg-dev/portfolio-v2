@@ -16,7 +16,7 @@ interface IHeaderArticleProps {
 
 const animationVariants = {
   hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring" } },
+  visible: { opacity: 1, y: 0, transition: { type: "spring" as const } },
 };
 
 const HeaderArticle: React.FC<IHeaderArticleProps> = ({

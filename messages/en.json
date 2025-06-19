@@ -46,7 +46,7 @@
   },
   "curriculum": {
     "title": "Jesús Enmanuel Hernández González - Curriculum Vitae",
-    "degree": "Software Developer",
+    "degree": "Fullstack Developer",
     "aboutMe": "Full-stack web developer with over 5 years of experience, specializing in building modern, scalable solutions across various industries. Proficient in React.js, JavaScript, HTML, CSS, Next.js, TypeScript, C#, RESTful APIs and working in Agile/Scrum environments. Strong communication skills and adept at collaborating in dynamic startup settings.",
     "header": {
       "aboutMe": "About Me",
@@ -192,7 +192,8 @@
       "goBack": "Go Back"
     },
     "codedWith": "This CV was created using ReactJS.",
-    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download"
+    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download",
+    "clientImageAlt": "Photo of Jesús Hernández"
   },
   "global": {
     "header": {
@@ -229,6 +230,7 @@
           "certificates": "Certificates"
         },
         "miscellaneous": {
+          "cvGenerator": "CV Generator",
           "opSysCv": "Win11 Simulator"
         }
       },

@@ -19,7 +19,6 @@ import type {
   WindowState,
 } from "@/hoc/window-context-provider";
 import { useDesktopContext } from "@/hoc/desktop-context-provider";
-import type { ResizeDirection } from "re-resizable";
 
 interface IWindowDndProps {
   id: string;
@@ -61,7 +60,7 @@ const WindowDnd: FC<IWindowDndProps> = ({
 
   const onResizeStop = (
     _e: MouseEvent | TouchEvent,
-    _dir: ResizeDirection,
+    _dir: unknown,
     elementRef: HTMLElement,
     _delta: ResizableDelta,
     position: Position,

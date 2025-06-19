@@ -4,6 +4,7 @@ import { FaDownload } from "react-icons/fa";
 import { Link } from "@/i18n/routing";
 import HeroWriter from "./hero-writer";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 
 const Contact: FC = async () => {
   const t = await getTranslations("main.heroMain");
@@ -16,7 +17,15 @@ const Contact: FC = async () => {
       <div className="z-10 mx-auto flex w-full flex-col items-start justify-center gap-2 px-4 py-8 pt-28 lg:container lg:px-10 lg:py-20">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="order-1 flex w-full justify-center lg:order-2 lg:w-2/5 lg:justify-end">
-            <div className="circle-img overflow-hidden transition-all ease-in-out hover:scale-105" />
+            <div className="bg-primary-500 relative h-44 w-44 overflow-hidden rounded-full p-2 lg:h-72 lg:w-72">
+              <Image
+                width={300}
+                height={300}
+                src="https://res.cloudinary.com/js-media/image/upload/v1750355900/portfolio/carnet/uefv0bzpwxnlrrniisba.webp"
+                alt="profile"
+                className="absolute top-0 left-1/2 h-[150%] w-auto max-w-none -translate-x-1/2 object-cover"
+              />
+            </div>
           </div>
           <div className="order-2 flex w-full flex-col items-center justify-center gap-4 lg:order-1 lg:w-3/5 lg:items-start lg:justify-start">
             <h1 className="text-center text-4xl font-semibold text-white antialiased lg:text-start">

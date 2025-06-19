@@ -46,7 +46,7 @@
   },
   "curriculum": {
     "title": "Jesús Enmanuel Hernández González - Curriculum Vitae",
-    "degree": "Desarrollador de Software",
+    "degree": "Desarrollador Fullstack",
     "aboutMe": "Desarrollador web full-stack con más de 5 años de experiencia, especializado en la creación de soluciones modernas y escalables en diversas industrias. Con conocimientos en soporte técnico y ciberseguridad.",
     "header": {
       "aboutMe": "Sobre Mí",
@@ -192,7 +192,8 @@
       "goBack": "Regresar"
     },
     "codedWith": "Este CV fue creado con ReactJS.",
-    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download"
+    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download",
+    "clientImageAlt": "Foto de Jesús Hernández"
   },
   "global": {
     "header": {
@@ -229,6 +230,7 @@
           "certificates": "Certificados"
         },
         "miscellaneous": {
+          "cvGenerator": "Generador de CV",
           "opSysCv": "Win11 Simulador"
         }
       },
