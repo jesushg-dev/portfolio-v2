@@ -1,12 +1,12 @@
 {
-  "commit": "39cb76bb2018a24854830aa9d8630bf9e607bc77",
-  "generated": "2025-06-19T22:11:00.244Z",
+  "commit": "6642241fffe8284267af5a37524d74a36ebe070a",
+  "generated": "2025-06-19T22:38:46.147Z",
   "metadata": [
     {
       "__outstatic": {
-        "commit": "39cb76bb2018a24854830aa9d8630bf9e607bc77",
-        "hash": "2368127398",
-        "path": "outstatic/content/helpdesk/chdajdfdf.mdx"
+        "commit": "6642241fffe8284267af5a37524d74a36ebe070a",
+        "hash": "1268008184",
+        "path": "outstatic/content/helpdesk/portafolio-personal.mdx"
       },
       "author": {
         "name": "Jesús Hernández",
@@ -15,9 +15,9 @@
       "collection": "helpdesk",
       "publishedAt": "2025-06-19T21:23:19.192Z",
       "roles": true,
-      "slug": "chdajdfdf",
+      "slug": "portafolio-personal",
       "status": "published",
-      "title": "chdaj"
+      "title": "Portafolio Personal"
     }
   ]
 }
