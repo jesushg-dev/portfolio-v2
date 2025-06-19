@@ -8,6 +8,13 @@
       "fieldType": "Boolean",
       "dataType": "boolean",
       "title": "roles"
+    },
+    "roels": {
+      "description": "dfdf",
+      "required": true,
+      "fieldType": "Image",
+      "dataType": "image",
+      "title": "Roels"
     }
   }
 }
