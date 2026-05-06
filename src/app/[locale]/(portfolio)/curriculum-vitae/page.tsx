@@ -17,13 +17,13 @@ import { CvContextProvider } from "@/hoc/cv-context-provider";
 import SoftSkills from "@/components/CurriculumVitae/SoftSkills";
 
 interface ICvPageProps {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }
 
 const CvPage: FC<ICvPageProps> = async ({ params }) => {
   const { locale } = await params;
   // Enable static rendering
-  setRequestLocale(locale);
+  setRequestLocale(locale as Locale);
 
   const t = await getTranslations("curriculum");
 
@@ -89,7 +89,10 @@ export async function generateMetadata({
   params,
 }: Omit<ICvPageProps, "children">): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "curriculum" });
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: "curriculum",
+  });
 
   return {
     title: t("title"),

@@ -94,7 +94,7 @@ const Desktop: FC = ({}) => {
         </Draggable>
       );
     },
-    [parents],
+    [handleWindow, parents],
   );
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {

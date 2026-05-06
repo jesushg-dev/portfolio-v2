@@ -6,7 +6,6 @@ import React, {
   useCallback,
   useMemo,
   useContext,
-  useEffect,
 } from "react";
 import {
   autoUpdate,
@@ -51,7 +50,9 @@ export const Select: FC<ISelectProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(
+    value ?? null,
+  );
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
 
   const { refs, floatingStyles, context } = useFloating({
@@ -117,16 +118,22 @@ export const Select: FC<ISelectProps> = ({
     [activeIndex, selectedIndex, getItemProps, handleSelect],
   );
 
-  useEffect(() => {
-    if (value !== undefined && value !== null) {
-      setSelectedIndex(value);
-      setSelectedLabel(labelsRef.current[value]);
-    }
-  }, [value]);
+  const setFloatingRef = useCallback(
+    (node: HTMLElement | null) => {
+      refs.setFloating(node);
+    },
+    [refs],
+  );
+  const setReferenceRef = useCallback(
+    (node: HTMLElement | null) => {
+      refs.setReference(node);
+    },
+    [refs],
+  );
 
   return (
     <>
-      <div ref={refs.setReference} {...getReferenceProps()}>
+      <div ref={setReferenceRef} {...getReferenceProps()}>
         {header ?? (
           <span className="text-primaryText-700 text-sm">
             {selectedLabel ?? "Select..."}
@@ -141,7 +148,7 @@ export const Select: FC<ISelectProps> = ({
             disabled={disabled}
           >
             <div
-              ref={refs.setFloating}
+              ref={setFloatingRef}
               className="bg-background-50 rounded-lg shadow-none ring-0 outline-hidden"
               style={floatingStyles}
               {...getFloatingProps()}

@@ -39,23 +39,18 @@ export const PopoverTrigger = forwardRef<
   HTMLProps<HTMLElement> & PopoverTriggerProps
 >(function PopoverTrigger({ children, asChild = false, ...props }, propRef) {
   const context = usePopoverContext();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-  const childrenRef = (children as any).ref;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
+  const ref = useMergeRefs([context.refs.setReference, propRef]);
 
   // `asChild` allows the user to pass any element as the anchor
   if (asChild && isValidElement(children)) {
-    return cloneElement(
-      children,
-      context.getReferenceProps({
-        ref,
-        ...props,
-        ...(isValidElement(children) && typeof children.props === "object"
-          ? children.props
-          : {}),
-      }),
-    );
+    const referenceProps = context.getReferenceProps({
+      ...props,
+      ...(isValidElement(children) && typeof children.props === "object"
+        ? children.props
+        : {}),
+    });
+
+    return <span ref={ref}>{cloneElement(children, { ...referenceProps })}</span>;
   }
 
   return (

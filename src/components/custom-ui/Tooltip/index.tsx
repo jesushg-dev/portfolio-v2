@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "use client";
 import * as React from "react";
 import {
@@ -108,20 +107,19 @@ export const TooltipTrigger = React.forwardRef<
   React.HTMLProps<HTMLElement> & { asChild?: boolean }
 >(function TooltipTrigger({ children, asChild = false, ...props }, propRef) {
   const context = useTooltipContext();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-  const childrenRef = (children as any).ref;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
+  const ref = useMergeRefs([context.refs.setReference, propRef]);
 
   // `asChild` allows the user to pass any element as the anchor
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(
-      children,
-      context.getReferenceProps({
-        ref,
-        ...props,
-        ...(typeof children.props === "object" ? children.props : {}),
-      }),
+    const referenceProps = context.getReferenceProps({
+      ...props,
+      ...(typeof children.props === "object" ? children.props : {}),
+    });
+
+    return (
+      <span ref={ref}>
+        {React.cloneElement(children, { ...referenceProps })}
+      </span>
     );
   }
 

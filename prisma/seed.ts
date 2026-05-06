@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ObjectId } from "bson";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type StackType } from "@prisma/client";
 
 import certifications from "./data/certifications.json";
 
@@ -2482,7 +2483,7 @@ async function seedCertificates(esId: string, enId: string, deId: string) {
       update: {},
       create: {
         ...rest,
-        type: [certificate.type] as any,
+        type: [certificate.type as StackType],
         CertificationTranslation: {
           createMany: {
             data: [

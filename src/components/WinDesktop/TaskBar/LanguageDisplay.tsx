@@ -1,16 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { TaskbarSvgIcon } from "./TaskBarIcons";
 
 const LanguageDisplay = () => {
-  const [keyboardLanguage, setKeyboardLanguage] = useState("");
-
-  useEffect(() => {
-    const { language } = navigator;
-    setKeyboardLanguage(language);
-  }, []);
+  const [keyboardLanguage] = useState(
+    typeof navigator !== "undefined" ? navigator.language : "",
+  );
 
   return (
     <TaskbarSvgIcon title="Language Display" isActive={false}>

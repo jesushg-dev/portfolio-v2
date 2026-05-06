@@ -105,7 +105,7 @@ const buildSpotifyRequest = async <T>(
     if (response.ok) return json as T;
 
     const errorParsed = SpotifyErrorSchema.safeParse(json);
-    if (errorParsed.success) return errorParsed.data as ErrorResponse;
+    if (errorParsed.success) return errorParsed.data;
     throw new Error(
       `Unexpected error: ${response.status} ${response.statusText}`,
     );

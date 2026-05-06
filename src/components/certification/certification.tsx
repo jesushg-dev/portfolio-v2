@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useMemo, Fragment } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { motion } from "motion/react";
@@ -49,7 +49,13 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
   const { push } = useRouter();
   const t = useTranslations("certification");
   const locale = useLocale();
-  const [crtValue, setCrtValue] = useState<number>(0);
+  const crtValue = useMemo(() => {
+    if (slug?.length > 0) {
+      const slugUpperCase = slug[0].toUpperCase();
+      return stackTypes.findIndex((type) => type === slugUpperCase);
+    }
+    return 0;
+  }, [slug]);
 
   const { data, isFetching, isLoading, fetchNextPage } =
     api.portfolio.getCertificates.useInfiniteQuery(
@@ -78,13 +84,6 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
         : "/certificates",
     );
   };
-
-  useEffect(() => {
-    if (slug?.length > 0) {
-      const slugUpperCase = slug[0].toUpperCase();
-      setCrtValue(stackTypes.findIndex((type) => type === slugUpperCase));
-    }
-  }, [slug]);
 
   return (
     <div className="container mx-auto">

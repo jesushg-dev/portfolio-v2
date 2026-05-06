@@ -13,7 +13,7 @@ const TechnicalSkills: FC = () => {
         <p>{chunks}</p>
       </li>
     ),
-    [t],
+    [],
   );
 
   return (

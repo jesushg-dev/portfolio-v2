@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
@@ -24,23 +24,15 @@ const ProgressTimer: FC<IProgressTimer> = ({
   const t = useTranslations("global.footer");
 
   const [crtProgress, setCrtProgress] = useState<number>(progressMs);
-  const [crtProgressPercentage, setCrtProgressPercentage] = useState<number>(0);
-
-  useEffect(() => {
-    setCrtProgress(progressMs);
-  }, [progressMs]);
-
-  useEffect(() => {
-    setCrtProgressPercentage((crtProgress / durationMs) * 100);
-    if (crtProgress >= durationMs) {
-      onFinish?.();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [crtProgress, durationMs]);
+  const crtProgressPercentage = (crtProgress / durationMs) * 100;
 
   useInterval(() => {
     if (!isPlaying) return;
-    setCrtProgress(crtProgress + ETime.SECOND);
+    setCrtProgress((prev) => {
+      const next = prev + ETime.SECOND;
+      if (next >= durationMs) onFinish?.();
+      return next;
+    });
   }, ETime.SECOND);
 
   return (

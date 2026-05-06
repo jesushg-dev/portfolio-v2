@@ -1,4 +1,4 @@
-import React, { useMemo, memo, useState, useEffect } from "react";
+import React, { useMemo, memo } from "react";
 import type { FC } from "react";
 import { AnimatePresence } from "motion/react";
 
@@ -28,7 +28,6 @@ const Tab: FC<ITabProps> = ({
   vertical = false,
   variant = "primary",
 }) => {
-  const [crtTab, setCrtTab] = useState(currentTab);
   // Check that every child element is a TabItem
   const tabItems = useMemo(() => {
     return React.Children.toArray(children).filter(
@@ -37,13 +36,8 @@ const Tab: FC<ITabProps> = ({
   }, [children]);
 
   const handleTabChange = (value: number) => {
-    setCrtTab(value);
     setCurrentTab(value);
   };
-
-  useEffect(() => {
-    setCrtTab(currentTab);
-  }, [currentTab]);
 
   if (tabItems.length !== React.Children.count(children)) {
     throw new Error(
@@ -57,7 +51,7 @@ const Tab: FC<ITabProps> = ({
       minimal={minimal}
       variant={variant}
       vertical={vertical}
-      currentTab={crtTab}
+      currentTab={currentTab}
       setCurrentTab={handleTabChange}
     >
       <nav className={className}>

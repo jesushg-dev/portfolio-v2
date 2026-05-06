@@ -4,7 +4,6 @@ import React, {
   createContext,
   useState,
   useContext,
-  useEffect,
   useMemo,
 } from "react";
 import type { FC, ReactNode } from "react";
@@ -36,15 +35,10 @@ export const CvContextProvider: FC<ICvContextProviderProps> = ({
   // State variables
   const locale = useLocale();
 
-  const [showHeadshot, setShowHeadshot] = useState(false);
+  const [showHeadshot, setShowHeadshot] = useState(locale === "es");
   const [showSectionIcons, setShowSectionIcons] = useState(false);
   const [addSplashOfColor, setAddSplashOfColor] = useState(false);
   const [showVisualizations, setShowVisualizations] = useState(false);
-
-  useEffect(() => {
-    const newShowHeadshot = locale === "es";
-    setShowHeadshot(newShowHeadshot);
-  }, [locale]);
 
   // useMemo to memoize the context value
   const contextValue = useMemo(() => {

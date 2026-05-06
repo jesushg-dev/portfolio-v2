@@ -7,7 +7,7 @@ const Experience: FC = () => {
 
   const renderItems = useCallback(
     (chunks: ReactNode) => <li className="">{chunks}.</li>,
-    [t],
+    [],
   );
 
   return (

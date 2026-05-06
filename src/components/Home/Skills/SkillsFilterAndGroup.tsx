@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, memo } from "react";
 import FilterType from "./FilterType";
 import SkillGrouped from "./SkillGrouped";
 import { api } from "@/trpc/react";
@@ -18,7 +18,6 @@ const SkillsFilterAndGroup: React.FC<SkillsFilterAndGroupProps> = ({
   locale,
 }) => {
   const [value, setValue] = useState(0);
-  const [skillsData, setSkillsData] = useState<SkillType[]>([]);
 
   const mapValueToSkillType = (val: number): SkillTypeType[] => {
     switch (val) {
@@ -44,11 +43,7 @@ const SkillsFilterAndGroup: React.FC<SkillsFilterAndGroupProps> = ({
     },
   );
 
-  useEffect(() => {
-    if (data) {
-      setSkillsData(data.data);
-    }
-  }, [data]);
+  const skillsData = data?.data ?? [];
 
   return (
     <div className="relative z-10 mb-10 lg:mb-0 lg:grid lg:grid-cols-12 lg:items-center lg:gap-16">
