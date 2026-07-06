@@ -1,12 +1,14 @@
 "use client";
 
 import type { FC } from "react";
-import React, {
+import {
   useState,
   useMemo,
   useEffect,
   createContext,
   startTransition,
+  type ReactNode,
+  useContext,
 } from "react";
 
 import { ETheme } from "@/utils/constants/theme";
@@ -34,7 +36,7 @@ const ThemeContext = createContext<IThemeContext>({
 // Provider component that wraps app and makes theme object available
 
 interface IThemeContextProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
@@ -83,7 +85,7 @@ const ThemeContextProvider: FC<IThemeContextProviderProps> = ({ children }) => {
 // Custom hook that shorthands the context!
 
 const useThemeContext = () => {
-  const context = React.useContext(ThemeContext);
+  const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error(
       "useThemeContext must be used within a ThemeContextProvider",

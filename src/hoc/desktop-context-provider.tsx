@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useRef, createContext, useMemo } from "react";
+import {
+  useRef,
+  createContext,
+  useMemo,
+  type ReactNode,
+  useContext,
+} from "react";
 import type { FC } from "react";
 
 import useSize from "@/hooks/use-size";
@@ -16,7 +22,7 @@ const DesktopContext = createContext<IDesktopContext>({
 
 // Provider component that wraps app and makes theme object available
 interface IDesktopContextProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const DesktopContextProvider: FC<IDesktopContextProviderProps> = ({
@@ -41,7 +47,7 @@ const DesktopContextProvider: FC<IDesktopContextProviderProps> = ({
 };
 
 export const useDesktopContext = () => {
-  const context = React.useContext(DesktopContext);
+  const context = useContext(DesktopContext);
   if (context === undefined) {
     throw new Error(
       "useThemeContext must be used within a ThemeContextProvider",

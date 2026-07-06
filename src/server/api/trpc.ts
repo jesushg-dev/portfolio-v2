@@ -6,11 +6,13 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
+import { auth } from "@/lib/auth";
+import { resolveTenant } from "@/lib/tenant/resolve";
 
 /**
  * 1. CONTEXT
@@ -25,8 +27,14 @@ import { db } from "@/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const session = await auth.api.getSession({ headers: opts.headers });
+  const tenant = await resolveTenant();
+
   return {
     db,
+    session,
+    user: session?.user ?? null,
+    tenant,
     ...opts,
   };
 };
@@ -73,17 +81,10 @@ export const createCallerFactory = t.createCallerFactory;
  */
 export const createTRPCRouter = t.router;
 
-/**
- * Middleware for timing procedure execution and adding an artificial delay in development.
- *
- * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
- * network latency that would occur in production but not in local development.
- */
 const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now();
 
   if (t._config.isDev) {
-    // artificial delay in dev
     const waitMs = Math.floor(Math.random() * 400) + 100;
     await new Promise((resolve) => setTimeout(resolve, waitMs));
   }
@@ -104,3 +105,48 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * are logged in.
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
+
+/**
+ * Protected procedure
+ *
+ * Requires an authenticated session. Procedures using this middleware can rely on
+ * `ctx.user` and `ctx.session` being non-null.
+ */
+export const protectedProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(({ ctx, next }) => {
+    if (!ctx.session || !ctx.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    return next({
+      ctx: {
+        ...ctx,
+        session: ctx.session,
+        user: ctx.user,
+      },
+    });
+  });
+
+/**
+ * Tenant-scoped procedure
+ *
+ * Available when a tenant is resolvable from the request (apex → primary owner,
+ * or subdomain → corresponding profile). Procedures using this middleware can
+ * rely on `ctx.tenant` being non-null.
+ */
+export const tenantProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(({ ctx, next }) => {
+    if (!ctx.tenant) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Tenant could not be resolved from the request host",
+      });
+    }
+    return next({
+      ctx: {
+        ...ctx,
+        tenant: ctx.tenant,
+      },
+    });
+  });

@@ -1,4 +1,4 @@
-import React, { createContext, useMemo } from "react";
+import { createContext, useMemo, type ReactNode, useContext } from "react";
 
 interface ITabContext {
   tabId: string;
@@ -13,7 +13,7 @@ const TabContext = createContext<ITabContext | undefined>(undefined);
 interface ITabContextProviderProps {
   tabId: string;
   minimal: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
   vertical: boolean;
   variant: "primary" | "secondary";
   currentTab: number;
@@ -41,7 +41,7 @@ const TabContextProvider = ({
 
 // create a usContext but validate if it is used inside a Tab
 export const useTabContext = () => {
-  const context = React.useContext(TabContext);
+  const context = useContext(TabContext);
   if (context === undefined) {
     throw new Error("useTabContext must be used within a TabProvider");
   }
