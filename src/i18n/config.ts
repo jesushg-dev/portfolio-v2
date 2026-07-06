@@ -8,6 +8,12 @@ export const localsDisplay: Record<Locale, string> = {
   nl: "Nederlands",
 } as const;
 
+export const appLocales = [
+  { value: "es", label: "Español", img: "spanish_flag_k7ij7d.webp" },
+  { value: "en", label: "English", img: "english_flag_xeqq0r.webp" },
+  { value: "nl", label: "Nederlands", img: "dutch_flag_lv5lyh.webp" },
+] satisfies { value: Locale; label: string; img: string }[];
+
 export type Locale = (typeof locales)[number];
 
 export const pathnames = {
@@ -47,6 +53,76 @@ export const pathnames = {
     en: "/certificates/softskills",
     es: "/certificados/habilidades",
     nl: "/certificaten/vaardigheden",
+  },
+  "/admin": {
+    en: "/admin",
+    es: "/panel",
+    nl: "/admin",
+  },
+  "/admin/profile": {
+    en: "/admin/profile",
+    es: "/panel/perfil",
+    nl: "/admin/profile",
+  },
+  "/admin/profile/about-me": {
+    en: "/admin/profile/about-me",
+    es: "/panel/perfil/sobre-mi",
+    nl: "/admin/profile/over-mij",
+  },
+  "/admin/profile/console": {
+    en: "/admin/profile/console",
+    es: "/panel/perfil/consola",
+    nl: "/admin/profile/console",
+  },
+  "/admin/about": {
+    en: "/admin/about",
+    es: "/panel/sobre",
+    nl: "/admin/about",
+  },
+  "/admin/skills": {
+    en: "/admin/skills",
+    es: "/panel/habilidades",
+    nl: "/admin/skills",
+  },
+  "/admin/projects": {
+    en: "/admin/projects",
+    es: "/panel/proyectos",
+    nl: "/admin/projects",
+  },
+  "/admin/services": {
+    en: "/admin/services",
+    es: "/panel/servicios",
+    nl: "/admin/services",
+  },
+  "/admin/certifications": {
+    en: "/admin/certifications",
+    es: "/panel/certificaciones",
+    nl: "/admin/certifications",
+  },
+  "/admin/settings": {
+    en: "/admin/settings",
+    es: "/panel/configuracion",
+    nl: "/admin/settings",
+  },
+  "/admin/cv": {
+    en: "/admin/cv",
+    es: "/panel/cv",
+    nl: "/admin/cv",
+  },
+  "/admin/timeline": {
+    en: "/admin/timeline",
+    es: "/panel/timeline",
+    nl: "/admin/timeline",
+  },
+  "/admin/timeline/new": {
+    en: "/admin/timeline/new",
+    es: "/panel/timeline/nuevo",
+    nl: "/admin/timeline/new",
+  },
+  "/admin/timeline/[id]/edit": {
+    en: "/admin/timeline/[id]/edit",
+    es: "/panel/timeline/[id]/editar",
+    nl: "/admin/timeline/[id]/edit",
   },
 } satisfies Pathnames<typeof locales>;
 

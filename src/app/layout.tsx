@@ -15,9 +15,15 @@ import { TRPCReactProvider } from "@/trpc/react";
 import PreloadTheme from "@/hoc/preload-theme";
 import ThemeContextProvider from "@/hoc/theme-context-provider";
 import clsx from "clsx";
-import { Inter } from "next/font/google";
+import { Inter, Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "@/components/ui/sonner";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -91,10 +97,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <html className="h-full">
+    <html className={cn("h-full", "font-sans", geist.variable)}>
       <PreloadTheme />
       <body
         className={clsx(
@@ -104,9 +110,12 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider>
           <TRPCReactProvider>
-            <ThemeContextProvider>{children}</ThemeContextProvider>
+            <ThemeContextProvider>
+              <NuqsAdapter>{children}</NuqsAdapter>
+            </ThemeContextProvider>
           </TRPCReactProvider>
         </NextIntlClientProvider>
+        <Toaster />
       </body>
     </html>
   );

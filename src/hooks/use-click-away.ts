@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, type RefObject } from "react";
 
 export function useClickAway(
-  ref: React.RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement>,
   handler: (event: MouseEvent | TouchEvent) => void,
 ) {
   useEffect(() => {

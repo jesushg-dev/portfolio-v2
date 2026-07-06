@@ -1,5 +1,10 @@
-import type React from "react";
-import { useImperativeHandle, useState, useRef, useCallback } from "react";
+import {
+  useImperativeHandle,
+  useState,
+  useRef,
+  useCallback,
+  type ForwardedRef,
+} from "react";
 
 export type ValidityType = "idle" | "success" | "error";
 
@@ -12,7 +17,7 @@ export interface IInputRef {
   setSuccessMessage: (message: string) => void;
 }
 
-const useRefInput = (ref: React.ForwardedRef<IInputRef>) => {
+const useRefInput = (ref: ForwardedRef<IInputRef>) => {
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
   const [message, setMessage] = useState("");

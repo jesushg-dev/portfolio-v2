@@ -1,11 +1,10 @@
-import React from "react";
 import type { FC } from "react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "next-intl";
 import Certification from "@/components/certification/certification";
-import type { stackTypes } from "@/utils/constants/certificatesType";
+import type { stackTypes } from "@/utils/constants/certificates-type";
 
 interface ICvPageProps {
   params: Promise<{
