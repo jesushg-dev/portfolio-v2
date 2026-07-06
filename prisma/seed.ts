@@ -1,8 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { readFileSync } from "node:fs";
 import { ObjectId } from "bson";
 import { PrismaClient, type StackType } from "@prisma/client";
 
-import certifications from "./data/certifications.json";
+interface CertificationSeed {
+  company: string;
+  issuedDate: number;
+  url: string;
+  idCredential: string;
+  image: string;
+  type: StackType;
+  translations: { title: string }[];
+}
+
+const certifications = JSON.parse(
+  readFileSync(new URL("./data/certifications.json", import.meta.url), "utf8"),
+) as CertificationSeed[];
+import { seedOwner } from "./seed-owner";
 
 const prisma = new PrismaClient();
 
@@ -2471,11 +2485,16 @@ async function main() {
   });
 
   await seedCertificates(langEs.id, langEn.id, langDe.id);
+
+  // Create the primary owner (Jesús) and migrate the legacy `messages/*.json`
+  // CV content into the new `Cv*` tables. Existing Project / Skill / Service
+  // / Certification rows without a `userId` are also reassigned to the owner.
+  await seedOwner(prisma);
 }
 
 // seed certificates data
 async function seedCertificates(esId: string, enId: string, deId: string) {
-  const certPromises = certifications.map(async (certificate) => {
+  const certPromises = certifications.map(async (certificate: CertificationSeed) => {
     const { translations, ...rest } = certificate;
 
     const newCertificate = await prisma.certification.upsert({
@@ -2483,20 +2502,20 @@ async function seedCertificates(esId: string, enId: string, deId: string) {
       update: {},
       create: {
         ...rest,
-        type: [certificate.type as StackType],
+        type: [certificate.type],
         CertificationTranslation: {
           createMany: {
             data: [
               {
-                title: translations[0].title,
+                title: translations[0]?.title ?? "",
                 appLanguageId: esId,
               },
               {
-                title: translations[1].title,
+                title: translations[1]?.title ?? "",
                 appLanguageId: enId,
               },
               {
-                title: translations[2].title,
+                title: translations[2]?.title ?? "",
                 appLanguageId: deId,
               },
             ],

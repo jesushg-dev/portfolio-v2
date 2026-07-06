@@ -1,17 +1,18 @@
+import { type ReactNode } from "react";
 import "@/app/globals.css";
 
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "next-intl";
-import { locales } from "@/i18n/config";
-import { stackTypes } from "@/utils/constants/certificatesType";
 
 import HeaderArticle from "@/components/shared/header-article";
+
+export const dynamic = "force-dynamic";
 
 export default async function RootLayout({
   children,
   params,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
@@ -57,15 +58,3 @@ export default async function RootLayout({
     </div>
   );
 }
-
-export const generateStaticParams = () => {
-  const result = locales.flatMap((locale) => [
-    ...stackTypes.map((type) => ({
-      locale,
-      slug: [type.toLowerCase()], // slug is an array of the stack type
-    })),
-    { locale, slug: [] }, // When there is no slug, return an empty array
-  ]);
-
-  return result;
-};

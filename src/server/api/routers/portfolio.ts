@@ -27,6 +27,7 @@ export const portfolioRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const { limit, cursor, type, locale } = input;
+      const tenantUserId = ctx.tenant?.userId ?? null;
 
       const appLanguage = await ctx.db.appLanguage.findUnique({
         where: {
@@ -34,7 +35,12 @@ export const portfolioRouter = createTRPCRouter({
         },
       });
 
-      // get certifications with translations
+      // get certifications with translations (scoped to tenant when present)
+      const baseWhere = {
+        ...(type ? { type: { hasSome: type } } : {}),
+        ...(tenantUserId ? { userId: tenantUserId } : {}),
+      };
+
       const data = await ctx.db.certification.findMany({
         include: {
           CertificationTranslation: {
@@ -45,13 +51,7 @@ export const portfolioRouter = createTRPCRouter({
         },
         take: limit,
         skip: cursor ? 1 : 0,
-        where: type
-          ? {
-              type: {
-                hasSome: type,
-              },
-            }
-          : undefined,
+        where: baseWhere,
         cursor: cursor ? { id: cursor } : undefined,
       });
 
@@ -67,18 +67,12 @@ export const portfolioRouter = createTRPCRouter({
 
       const lastCursor = data[data.length - 1]?.id ?? null;
 
-      // check if there are more projects to fetch
+      // check if there are more certificates to fetch (also tenant-scoped)
       const hasMore = await ctx.db.certification.count({
         take: limit,
         skip: lastCursor ? 1 : 0,
         cursor: lastCursor ? { id: lastCursor } : undefined,
-        where: type
-          ? {
-              type: {
-                hasSome: type,
-              },
-            }
-          : undefined,
+        where: baseWhere,
       });
 
       return {
@@ -99,6 +93,7 @@ export const portfolioRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const { limit, locale, cursor, type } = input;
+      const tenantUserId = ctx.tenant?.userId ?? null;
 
       // get language selected
       const appLanguage = await ctx.db.appLanguage.findUnique({
@@ -107,7 +102,12 @@ export const portfolioRouter = createTRPCRouter({
         },
       });
 
-      // get projects with skills and translations
+      const projectWhere = {
+        ...(type ? { type } : {}),
+        ...(tenantUserId ? { userId: tenantUserId } : {}),
+      };
+
+      // get projects with skills and translations (tenant-scoped when present)
       const data = await ctx.db.project.findMany({
         include: {
           ProjectTranslation: {
@@ -131,7 +131,7 @@ export const portfolioRouter = createTRPCRouter({
         },
         take: limit,
         skip: cursor ? 1 : 0,
-        where: type ? { type } : undefined,
+        where: projectWhere,
         cursor: cursor ? { id: cursor } : undefined,
       });
 
@@ -156,11 +156,11 @@ export const portfolioRouter = createTRPCRouter({
 
       const lastCursor = data[data.length - 1]?.id ?? null;
 
-      // check if there are more projects to fetch
+      // check if there are more projects to fetch (tenant-scoped)
       const hasMore = await ctx.db.project.count({
         take: limit,
         skip: lastCursor ? 1 : 0,
-        where: type ? { type } : undefined,
+        where: projectWhere,
         cursor: lastCursor ? { id: lastCursor } : undefined,
       });
 
@@ -182,6 +182,7 @@ export const portfolioRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const { limit, type, locale, cursor } = input;
+      const tenantUserId = ctx.tenant?.userId ?? null;
 
       // get language selected
       const appLanguage = await ctx.db.appLanguage.findUnique({
@@ -190,7 +191,12 @@ export const portfolioRouter = createTRPCRouter({
         },
       });
 
-      // get skills with translations
+      const skillWhere = {
+        ...(type ? { type: { in: type } } : {}),
+        ...(tenantUserId ? { userId: tenantUserId } : {}),
+      };
+
+      // get skills with translations (tenant-scoped when present)
       const data = await ctx.db.skill.findMany({
         include: {
           SkillTranslation: {
@@ -201,13 +207,7 @@ export const portfolioRouter = createTRPCRouter({
         },
         take: limit,
         skip: cursor ? 1 : 0,
-        where: type
-          ? {
-              type: {
-                in: type,
-              },
-            }
-          : undefined,
+        where: skillWhere,
         cursor: cursor ? { id: cursor } : undefined,
       });
 
@@ -223,17 +223,11 @@ export const portfolioRouter = createTRPCRouter({
 
       const lastCursor = data[data.length - 1]?.id ?? null;
 
-      // check if there are more skills to fetch
-      const hasMore = await ctx.db.project.count({
+      // check if there are more skills to fetch (tenant-scoped)
+      const hasMore = await ctx.db.skill.count({
         take: limit,
         skip: lastCursor ? 1 : 0,
-        where: type
-          ? {
-              type: {
-                in: type,
-              },
-            }
-          : undefined,
+        where: skillWhere,
         cursor: lastCursor ? { id: lastCursor } : undefined,
       });
 
@@ -242,5 +236,70 @@ export const portfolioRouter = createTRPCRouter({
         cursor: lastCursor,
         data: dataWithTranslation,
       };
+    }),
+  getTimeline: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+
+      if (!tenantUserId) {
+        return [];
+      }
+
+      const timelineItems = await ctx.db.timelineItem.findMany({
+        where: { userId: tenantUserId },
+        orderBy: [{ order: "asc" }, { startDate: "desc" }],
+      });
+
+      const parseLocalized = (field: unknown) => {
+        if (!field || typeof field !== "object") return "";
+
+        const value = field as {
+          default?: string;
+          translations?: Record<string, string | undefined>;
+        };
+
+        const localized = value.translations?.[input.locale];
+        if (localized?.trim()) {
+          return localized;
+        }
+
+        return value.default ?? "";
+      };
+
+      const formatDate = (
+        startDate: Date,
+        endDate: Date | null,
+        current: boolean,
+      ) => {
+        const startYear = startDate.getFullYear();
+
+        if (current) {
+          return `${startYear} - Present`;
+        }
+
+        if (endDate) {
+          return `${startYear} - ${endDate.getFullYear()}`;
+        }
+
+        return `${startYear}`;
+      };
+
+      return timelineItems.map((item) => {
+        const title = parseLocalized(item.title);
+        const description = parseLocalized(item.description);
+
+        return {
+          id: item.id,
+          title: item.organization ? `${title} - ${item.organization}` : title,
+          description,
+          date: formatDate(item.startDate, item.endDate ?? null, item.current),
+          dateTime: item.startDate.toISOString().split("T")[0],
+        };
+      });
     }),
 });

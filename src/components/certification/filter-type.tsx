@@ -1,4 +1,3 @@
-import React from "react";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 import { MdOutlineSecurity } from "react-icons/md";
@@ -9,8 +8,8 @@ import {
   HiOutlineDatabase,
 } from "react-icons/hi";
 
-import Tab from "@/components/custom-ui/Tab";
-import TabItem from "@/components/custom-ui/Tab/TabItem";
+import Tab from "@/components/custom-ui/custom-tab";
+import TabItem from "@/components/custom-ui/custom-tab/tab-item";
 
 // types
 

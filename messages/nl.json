@@ -45,9 +45,7 @@
     }
   },
   "curriculum": {
-    "title": "Jesús Enmanuel Hernández González - Curriculum Vitae",
-    "degree": "Fullstack ontwikkelaar",
-    "aboutMe": "Full-stack webontwikkelaar met meer dan 5 jaar ervaring, gespecialiseerd in het bouwen van moderne, schaalbare oplossingen voor diverse branches. Bedreven in React.js, JavaScript, HTML, CSS, Next.js, TypeScript, C#, RESTful API's en werken in Agile/Scrum-omgevingen. Sterke communicatievaardigheden en ervaren in samenwerking binnen dynamische startupsettings.",
+    "title": "Curriculum Vitae",
     "header": {
       "aboutMe": "Over Mij",
       "experience": "Werkervaring",
@@ -71,129 +69,13 @@
         "tools": "Tools"
       }
     },
-    "education": {
-      "computerEngineering": {
-        "degree": "Computertechniek",
-        "institution": "Nationale Ingenieursuniversiteit",
-        "location": "Managua",
-        "dates": "2017 - 2024"
-      },
-      "webDeveloper": {
-        "degree": "Webontwikkelaar",
-        "institution": "Platzi",
-        "location": "Online",
-        "dates": "2022 - 2024"
-      },
-      "digitalSecurity": {
-        "degree": "Junior Digitale Beveiliging en Gegevensbescherming",
-        "institution": "Numu & BID",
-        "location": "Managua",
-        "dates": "2022"
-      }
-    },
-    "contacts": {
-      "contact1": {
-        "name": "+505 8679 3204",
-        "value": "tel:505,86793204"
-      },
-      "contact2": {
-        "name": "jess232016@gmail.com",
-        "value": "mailto:jess232016@gmail.com"
-      },
-      "contact3": {
-        "name": "https://www.jesushg.com",
-        "value": "https://www.jesushg.com"
-      },
-      "contact4": {
-        "name": "linkedIn/jesus-hernandez23",
-        "value": "https://www.linkedin.com/in/jesus-hernandez23"
-      }
-    },
-    "experiences": {
-      "experience0": {
-        "position": "Full Stack Ontwikkelaar met React, Next.js & C#",
-        "company": "Contollo Consulting",
-        "dates": "Augustus 2023 – Februari 2025",
-        "responsibilities": "<item>Bouwde schaalbare webapplicaties met Next.js, .NET Core, Microservices en Azure voor meerdere projecten</item><item>Refactorde SQL-scripts naar Entity Framework Core en ontwierp databaseschema's</item><item>Samenwerking in Scrum-team via sprintreviews, inspanningsmetingen en retrospectives</item><item>Configureerde CI/CD-pipelines en integreerde third-party services</item><item>Begeleide stagiairs in best practices en codeerstandaarden</item>",
-        "skills": "Next.js, .NET Core, Azure, Entity Framework, Microservices, CI/CD"
-      },
-      "experience1": {
-        "position": "Full Stack Ontwikkelaar met React, Next.js & Node.js",
-        "company": "Musa",
-        "dates": "Juni 2022 – Juli 2023",
-        "responsibilities": "<item>Ontwierp en ontwikkelde hoogwaardige webinterfaces en mobiele applicaties</item><item>Integreerde succesvol data en processen van externe providers</item><item>Demonstreerde voortgang en resultaten aan stakeholders op functionaliteit, bruikbaarheid en prestaties</item>",
-        "skills": "Next.js, React.js, Node.js, GraphQL, REST API, Tailwind CSS"
-      },
-      "experience2": {
-        "position": "Mobiel Ontwikkelaar met React Native",
-        "company": "Telo",
-        "dates": "Februari 2022 – Mei 2022",
-        "responsibilities": "<item>Maakte gebruikersinterfaces op basis van UX-team specificaties</item><item>Implementeerde functionaliteiten in Scrum-team volgens user stories</item><item>Ondersteunde kwaliteitscontrole- en backend-teams met testen en code reviews</item>",
-        "skills": "React Native, Java, Android Ontwikkeling"
-      },
-      "experience3": {
-        "position": "IT Technicus en Webontwikkelaar met ReactJs & Next.js",
-        "company": "Vereniging van Hervormde Kerken",
-        "dates": "November 2019 - December 2021",
-        "responsibilities": "<item>Ontwikkelde moderne website voor organisatiepromotie</item><item>Gaf informatica-les aan basisschoolleerlingen</item><item>Verleende technische ondersteuning en apparatuuronderhoud</item>",
-        "skills": "React.js, Next.js, Windows, Linux, Hardware Ondersteuning"
-      },
-      "experience4": {
-        "position": "Freelance | Frontend Ontwikkelaar met ReactJs en Next.js",
-        "company": "Barter Capital",
-        "dates": "Mei 2023 - Juni 2023",
-        "responsibilities": "<item>Ontwikkelde aantrekkelijke en functionele webinterfaces met intuïtieve gebruikerservaring</item><item>Droeg bij aan dashboardontwikkeling door nieuwe functies toe te voegen</item><item>Zorgde voor correcte configuratie van webapplicaties in productieomgevingen</item>",
-        "skills": "Next.js, User Interface Design, UIX, React.js, REST API, Redux.js, Tailwind CSS"
-      }
-    },
-    "skills": {
-      "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>Next.js</item><item>React.js</item><item>React Native</item><item>API REST</item><item>Socket</item><item>Tailwind</item>",
-      "backEnd": "<item>C#</item><item>.NET Core</item><item>Nest.js</item><item>Python</item><item>Node.js</item><item>PHP</item><item>GraphQL</item>",
-      "database": "<item>SQL Server</item><item>MySQL</item><item>MongoDB</item><item>SQLite</item><item>Firebase</item><item>PostgreSQL</item>",
-      "tools": "<item>Git</item><item>Azure</item><item>Docker</item><item>GCP</item><item>AWS</item>"
-    },
-    "languages": {
-      "spanish": {
-        "name": "Spaans",
-        "level": "Moedertaal of tweetalig"
-      },
-      "english": {
-        "name": "Engels",
-        "level": "Professionele beheersing"
-      },
-      "dutch": {
-        "name": "Nederlands",
-        "level": "Basisbeheersing"
-      }
-    },
-    "softSkills": "<item>Analytische vaardigheden</item><item>Individueel en teamwerk</item><item>Aanpassingsvermogen</item>",
-    "additionalInformation": "<item>Direct beschikbaar</item>",
-    "personalReferences": {
-      "reference1": {
-        "name": "Danilo Acevedo",
-        "role": "Ontwikkelaar",
-        "phoneNumber": "(+505) 8679-3204"
-      },
-      "reference2": {
-        "name": "Alfredo Antonio Eva Vargas",
-        "role": "Ontwikkelaar",
-        "phoneNumber": "(+505) 8251-9391"
-      },
-      "reference3": {
-        "name": "Juan Carlos López",
-        "role": "Ontwikkelaar",
-        "phoneNumber": "(+505) 8751-8355"
-      }
-    },
-    "telephone": "tel.",
     "actions": {
       "download": "CV downloaden",
       "print": "CV afdrukken",
       "goBack": "Terug"
     },
-    "codedWith": "Deze CV is gemaakt met ReactJS.",
-    "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download",
-    "clientImageAlt": "Foto van Jesús Hernández"
+    "telephone": "tel.",
+    "codedWith": "Deze CV is gemaakt met ReactJS."
   },
   "global": {
     "header": {
@@ -523,6 +405,453 @@
         },
         "submit": "Verzenden"
       }
+    }
+  },
+  "admin": {
+    "shell": {
+      "title": "Admin Paneel",
+      "signedInAs": "Ingelogd als",
+      "signOut": "Uitloggen"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "cv": "CV Editor",
+      "settings": "Instellingen",
+      "overview": "Overzicht",
+      "profile": "Profiel & Hero",
+      "timeline": "Tijdlijn",
+      "skills": "Vaardigheden",
+      "projects": "Projecten",
+      "services": "Diensten",
+      "certifications": "Certificeringen",
+      "portfolioGroup": "Portfolio Inhoud"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Welkom terug! Beheer je publieke portfolio hier.",
+      "welcomeTitle": "Welkom in je Portfolio Admin",
+      "welcomeSubtitle": "Beheer al je portfolio-inhoud op een plek. Wissel tussen talen om vertaalde content te beheren.",
+      "noProfile": "Profiel nog niet ingesteld",
+      "noProfileHint": "Ga naar <link>Instellingen</link> om je publieke profiel aan te maken.",
+      "publicUrl": "Publieke URL",
+      "defaultLanguage": "Standaardtaal",
+      "published": "Gepubliceerd",
+      "draft": "Concept",
+      "nextSteps": "Volgende stappen",
+      "editCv": "Bewerk je <cv>CV</cv>",
+      "publishInSettings": "Publiceer je portfolio in <link>Instellingen</link>",
+      "manage": "Beheren",
+      "stats": {
+        "certificates": {
+          "title": "Certificaten",
+          "description": "Beheer certificeringen"
+        },
+        "projects": {
+          "title": "Projecten",
+          "description": "Beheer portfolio-projecten"
+        },
+        "skills": {
+          "title": "Vaardigheden",
+          "description": "Beheer je vaardigheden"
+        },
+        "services": {
+          "title": "Diensten",
+          "description": "Beheer actieve diensten"
+        }
+      },
+      "quickStart": {
+        "title": "Snel starten",
+        "languageSupport": {
+          "title": "Taalondersteuning",
+          "subtitle": "Alle content ondersteunt English, Español en Nederlands",
+          "description": "Bij het bewerken van content zie je taaltabs om tussen vertalingen te wisselen. Elke taal heeft eigen velden voor titel en beschrijving."
+        },
+        "gettingStarted": {
+          "title": "Aan de slag",
+          "subtitle": "Maak je eerste content-item",
+          "description": "Klik op een categorie in de zijbalk om je content te beheren. Gebruik de knop Add New om nieuwe items te maken."
+        }
+      }
+    },
+    "cv": {
+      "title": "Curriculum vitae",
+      "subtitle": "Kies een taal, bewerk elke sectie en open Voorbeeld om het publieke CV te zien.",
+      "edit": "Bewerken",
+      "preview": "Voorbeeld",
+      "editing": "Bewerken",
+      "previewRefresh": "{locale} — sla elke sectie op om te vernieuwen",
+      "noProfile": "Maak je profiel aan in <link>Instellingen</link> voordat je je CV bewerkt.",
+      "loading": "CV laden...",
+      "loadError": "Kon CV niet laden. Vernieuw de pagina.",
+      "headerSection": "Koptekst",
+      "empty": "+ Toevoegen"
+    },
+    "settings": {
+      "title": "Instellingen",
+      "subtitle": "Publieke URL, standaardtaal en zichtbaarheid.",
+      "username": "Gebruikersnaam (subdomein)",
+      "displayName": "Weergavenaam",
+      "defaultLocale": "Standaardtaal",
+      "defaultLocaleHint": "De taal van je CV wanneer geen vertaling beschikbaar is.",
+      "cvPdfUrl": "CV PDF URL (optioneel)",
+      "publish": "Publiceer mijn CV",
+      "saved": "Instellingen opgeslagen.",
+      "save": "Instellingen opslaan",
+      "saving": "Opslaan..."
+    },
+    "actions": {
+      "edit": "Bewerken",
+      "cancel": "Annuleren",
+      "delete": "Verwijderen",
+      "deleting": "Verwijderen...",
+      "save": "Opslaan",
+      "saving": "Opslaan...",
+      "remove": "Verwijderen",
+      "addNew": "+ Toevoegen"
+    },
+    "forms": {
+      "saved": "Opgeslagen.",
+      "order": "Volgorde",
+      "loading": "Laden...",
+      "save": "Opslaan",
+      "saving": "Bezig met opslaan...",
+      "cancel": "Annuleren",
+      "saveFailed": "Kon niet opslaan",
+      "deleteFailed": "Kon niet verwijderen",
+      "addNew": "+ Toevoegen",
+      "header": {
+        "fullName": "Volledige naam",
+        "degree": "Functie / rol",
+        "photoUrl": "Foto-URL (optioneel)",
+        "photoAlt": "Alt-tekst foto",
+        "save": "Koptekst opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon koptekst niet opslaan",
+        "deleteFailed": "Kon niet verwijderen"
+      },
+      "about": {
+        "label": "Over mij",
+        "save": "Over mij opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon over mij niet opslaan",
+        "deleteFailed": "Kon niet verwijderen",
+        "addNew": "Nieuwe ervaring toevoegen"
+      },
+      "contact": {
+        "type": "Type",
+        "value": "Waarde",
+        "labelOptional": "Label (optioneel)",
+        "labelHint": "Tekst naast het contact.",
+        "add": "+ Contact toevoegen",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon contact niet opslaan",
+        "deleteFailed": "Kon contact niet verwijderen"
+      },
+      "education": {
+        "institution": "Instelling",
+        "degree": "Diploma / programma",
+        "location": "Locatie (optioneel)",
+        "description": "Beschrijving (optioneel)",
+        "startYear": "Startjaar",
+        "endYear": "Eindjaar",
+        "dates": "Of datumtekst",
+        "add": "+ Opleiding toevoegen",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon opleiding niet opslaan",
+        "deleteFailed": "Kon opleiding niet verwijderen"
+      },
+      "language": {
+        "name": "Taal",
+        "level": "Niveau",
+        "add": "+ Taal toevoegen",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon taal niet opslaan",
+        "deleteFailed": "Kon taal niet verwijderen"
+      },
+      "skills": {
+        "category": "Categorie",
+        "items": "Vaardigheden (kommagescheiden)",
+        "add": "+ Groep toevoegen",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon vaardigheden niet opslaan",
+        "deleteFailed": "Kon groep niet verwijderen"
+      },
+      "experience": {
+        "company": "Bedrijf",
+        "role": "Rol",
+        "location": "Locatie (optioneel)",
+        "dates": "Datums",
+        "skills": "Vaardigheden (vrije tekst)",
+        "current": "Huidige functie",
+        "responsibilities": "Verantwoordelijkheden",
+        "responsibility": "Verantwoordelijkheid {n}",
+        "addResponsibility": "+ Verantwoordelijkheid toevoegen",
+        "remove": "Verwijderen",
+        "add": "+ Werkervaring toevoegen",
+        "save": "Ervaring opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon ervaring niet opslaan",
+        "deleteFailed": "Kon ervaring niet verwijderen"
+      },
+      "softSkill": {
+        "label": "Soft skill",
+        "add": "+ Soft skill toevoegen",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon soft skill niet opslaan",
+        "deleteFailed": "Kon soft skill niet verwijderen"
+      },
+      "additional": {
+        "label": "Extra informatie",
+        "add": "+ Item toevoegen",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon item niet opslaan",
+        "deleteFailed": "Kon item niet verwijderen"
+      },
+      "localized": {
+        "requiredDefault": "Verplicht in standaardtaal",
+        "optionalTranslation": "Optionele vertaling",
+        "defaultRequired": "Waarde in standaardtaal is verplicht"
+      }
+    },
+    "errors": {
+      "saveFailed": "Kon niet opslaan",
+      "deleteFailed": "Kon niet verwijderen",
+      "saveHeader": "Kon koptekst niet opslaan",
+      "saveAbout": "Kon over mij niet opslaan",
+      "saveSettings": "Kon instellingen niet opslaan"
+    },
+    "profile": {
+      "title": "Profiel & Hero Sectie",
+      "subtitle": "Bewerk je naam, foto en professionele titel.",
+      "heroSection": "Identiteit",
+      "fullNameLabel": "Volledige naam",
+      "photoUrlLabel": "Foto URL",
+      "professionalTitle": "Professionele Titel",
+      "degreeLabel": "Professionele titel / graad",
+      "altTextTitle": "Alternatieve Tekst Afbeelding",
+      "altTextHint": "Beschrijft je foto voor schermlezers en SEO.",
+      "altTextLabel": "Afbeeldingsbeschrijving",
+      "aboutMeTitle": "Over mij",
+      "descriptionLabel": "Beschrijving",
+      "aboutMeTab": "Over mij",
+      "consoleTab": "Codeblok",
+      "heroConsoleTitle": "Hero Codeblok",
+      "heroConsoleSubtitle": "Schrijf de ruwe code die u in het gestileerde codeblok van de hero van uw portfolio wilt laten verschijnen.",
+      "saveReminder": "Vergeet niet uw wijzigingen op te slaan.",
+      "save": "Wijzigingen opslaan",
+      "saving": "Opslaan…",
+      "savedSuccess": "Succesvol opgeslagen!"
+    },
+    "about": {
+      "title": "Over mij & Tijdlijn",
+      "subtitle": "Schrijf je verhaal en beheer je ervaringstijdlijn.",
+      "descriptionLabel": "Over mij",
+      "descriptionHint": "Deze tekst verschijnt in de Over sectie van je portfolio.",
+      "consoleHint": "Deze waarden verschijnen in het geanimeerde codeblok van je portfolio.",
+      "timelineHint": "Sleep om te herordenen. Klik op een item om te bewerken.",
+      "save": "Wijzigingen opslaan",
+      "saving": "Opslaan…",
+      "savedSuccess": "Succesvol opgeslagen!"
+    },
+    "skills": {
+      "title": "Vaardigheden",
+      "subtitle": "Beheer de technologieën en tools in je portfolio.",
+      "addNew": "Vaardigheid toevoegen",
+      "allTypes": "Alle types",
+      "noSkills": "Nog geen vaardigheden. Voeg de eerste toe.",
+      "save": "Opslaan",
+      "saving": "Opslaan…",
+      "savedSuccess": "Opgeslagen!",
+      "deleteSuccess": "Vaardigheid succesvol verwijderd.",
+      "deleteError": "Vaardigheid verwijderen is mislukt.",
+      "deleteConfirm": "Deze vaardigheid verwijderen? Dit verwijdert het ook uit bijbehorende projecten en certificaten.",
+      "edit": "Bewerken",
+      "cancel": "Annuleren",
+      "columnTitle": "Titel",
+      "columnType": "Type",
+      "columnSkills": "Vaardigheden",
+      "columnActions": "Acties",
+      "columnCompany": "Bedrijf",
+      "columnIssued": "Uitgegeven",
+      "columnOrganization": "Organisatie",
+      "columnCategory": "Categorie",
+      "columnPeriod": "Periode",
+      "columnLocation": "Locatie"
+    },
+    "projects": {
+      "title": "Projecten",
+      "subtitle": "Laat je werk zien.",
+      "addNew": "Project toevoegen",
+      "count": "{count, plural, one {# project} other {# projecten}}",
+      "noProjects": "Nog geen projecten.",
+      "untitled": "Project zonder titel",
+      "noTranslation": "Geen vertaling",
+      "save": "Opslaan",
+      "saving": "Opslaan…",
+      "savedSuccess": "Opgeslagen!",
+      "deleteSuccess": "Project succesvol verwijderd.",
+      "deleteError": "Project verwijderen is mislukt.",
+      "edit": "Bewerken",
+      "cancel": "Annuleren",
+      "columnTitle": "Titel",
+      "columnType": "Type",
+      "columnSkills": "Vaardigheden",
+      "columnActions": "Acties",
+      "columnCompany": "Bedrijf",
+      "columnIssued": "Uitgegeven",
+      "columnOrganization": "Organisatie",
+      "columnCategory": "Categorie",
+      "columnPeriod": "Periode",
+      "columnLocation": "Locatie",
+      "create": "Project toevoegen"
+    },
+    "services": {
+      "title": "Diensten",
+      "subtitle": "Beschrijf wat je aanbiedt.",
+      "addNew": "Dienst toevoegen",
+      "count": "{count, plural, one {# dienst} other {# diensten}}",
+      "noServices": "Nog geen diensten.",
+      "untitled": "Dienst zonder titel",
+      "noTranslation": "Geen vertaling",
+      "save": "Opslaan",
+      "saving": "Opslaan…",
+      "savedSuccess": "Opgeslagen!",
+      "deleteSuccess": "Dienst succesvol verwijderd.",
+      "deleteError": "Dienst verwijderen is mislukt.",
+      "edit": "Bewerken",
+      "cancel": "Annuleren",
+      "columnTitle": "Titel",
+      "columnType": "Type",
+      "columnSkills": "Vaardigheden",
+      "columnActions": "Acties",
+      "columnCompany": "Bedrijf",
+      "columnIssued": "Uitgegeven",
+      "columnOrganization": "Organisatie",
+      "columnCategory": "Categorie",
+      "columnPeriod": "Periode",
+      "columnLocation": "Locatie",
+      "create": "Dienst toevoegen"
+    },
+    "certifications": {
+      "title": "Certificeringen",
+      "subtitle": "Toon je referenties.",
+      "addNew": "Certificering toevoegen",
+      "count": "{count, plural, one {# certificering} other {# certificeringen}}",
+      "noCertifications": "Nog geen certificeringen.",
+      "untitled": "Certificering zonder titel",
+      "save": "Opslaan",
+      "saving": "Opslaan…",
+      "savedSuccess": "Opgeslagen!",
+      "deleteSuccess": "Certificering succesvol verwijderd.",
+      "deleteError": "Certificering verwijderen is mislukt.",
+      "edit": "Bewerken",
+      "cancel": "Annuleren",
+      "columnTitle": "Titel",
+      "columnType": "Type",
+      "columnSkills": "Vaardigheden",
+      "columnActions": "Acties",
+      "columnCompany": "Bedrijf",
+      "columnIssued": "Uitgegeven",
+      "columnOrganization": "Organisatie",
+      "columnCategory": "Categorie",
+      "columnPeriod": "Periode",
+      "columnLocation": "Locatie",
+      "create": "Certificering toevoegen"
+    },
+    "timeline": {
+      "title": "Tijdlijn",
+      "subtitle": "Beheer je tijdlijnitems voor werk, studie en cursussen.",
+      "addNew": "Item toevoegen",
+      "deleteSuccess": "Tijdlijnitem verwijderd.",
+      "deleteError": "Tijdlijnitem verwijderen is mislukt.",
+      "noStartDate": "Geen startdatum",
+      "present": "Heden",
+      "untitled": "Naamloos item",
+      "count": "{count, plural, one {# tijdlijnitem} other {# tijdlijnitems}}",
+      "edit": "Bewerken",
+      "save": "Opslaan",
+      "cancel": "Annuleren",
+      "saving": "Opslaan...",
+      "columnTitle": "Titel",
+      "columnType": "Type",
+      "columnSkills": "Vaardigheden",
+      "columnActions": "Acties",
+      "columnCompany": "Bedrijf",
+      "columnIssued": "Uitgegeven",
+      "columnOrganization": "Organisatie",
+      "columnCategory": "Categorie",
+      "columnPeriod": "Periode",
+      "columnLocation": "Locatie"
+    },
+    "dataTable": {
+      "searchBy": "Zoeken op",
+      "allColumns": "Alle kolommen",
+      "searchPlaceholder": "Zoeken...",
+      "results": "{count, plural, one {# resultaat} other {# resultaten}}",
+      "noResults": "Geen resultaten.",
+      "showing": "Toont {start}-{end} van {total}",
+      "rowsPerPage": "Rijen per pagina",
+      "pageOf": "Pagina {page} van {total}",
+      "previous": "Vorige",
+      "next": "Volgende",
+      "columns": {
+        "title": "Titel",
+        "type": "Type",
+        "skills": "Vaardigheden",
+        "actions": "Acties",
+        "company": "Bedrijf",
+        "issued": "Uitgegeven",
+        "organization": "Organisatie",
+        "category": "Categorie",
+        "period": "Periode",
+        "location": "Locatie"
+      }
+    },
+    "nudge": {
+      "title": "Je hebt \"{field}\" bijgewerkt",
+      "question": "Wil je de andere taalversies bijwerken?",
+      "applyAll": "Gebruik dezelfde tekst voor alle {count} talen",
+      "dismiss": "Ik ben klaar",
+      "skip": "Overslaan",
+      "edit": "Bewerken",
+      "copyFromEdited": "Kopieer van bewerkt",
+      "previousValue": "Vorig: \"{value}\"",
+      "saved": "Opgeslagen",
+      "skipped": "Overgeslagen"
+    },
+    "common": {
+      "save": "Wijzigingen opslaan",
+      "saving": "Opslaan…",
+      "cancel": "Annuleren",
+      "delete": "Verwijderen",
+      "edit": "Bewerken",
+      "add": "Toevoegen",
+      "confirm": "Weet je het zeker?",
+      "noItems": "Hier is nog niets."
     }
   }
 }

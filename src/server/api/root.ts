@@ -1,4 +1,7 @@
 import { portfolioRouter } from "@/server/api/routers/portfolio";
+import { cvRouter } from "@/server/api/routers/cv";
+import { portfolioAdminRouter } from "@/server/api/routers/portfolio-admin";
+import { timelineAdminRouter } from "@/server/api/routers/timeline-admin";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { spotifyRouter } from "./routers/spotify";
 
@@ -9,6 +12,9 @@ import { spotifyRouter } from "./routers/spotify";
  */
 export const appRouter = createTRPCRouter({
   portfolio: portfolioRouter,
+  portfolioAdmin: portfolioAdminRouter,
+  timelineAdmin: timelineAdminRouter,
+  cv: cvRouter,
   spotify: spotifyRouter,
 });
 

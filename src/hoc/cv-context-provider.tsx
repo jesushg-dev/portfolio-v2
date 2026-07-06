@@ -1,11 +1,6 @@
 "use client";
 
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useMemo,
-} from "react";
+import { createContext, useState, useContext, useMemo } from "react";
 import type { FC, ReactNode } from "react";
 import { useLocale } from "next-intl";
 

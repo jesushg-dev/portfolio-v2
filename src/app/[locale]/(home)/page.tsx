@@ -1,9 +1,9 @@
-import About from "@/components/Home/About";
-import Contact from "@/components/Home/Contact";
-import Hero from "@/components/Home/hero";
-import Portfolio from "@/components/Home/Portfolio";
-import Skills from "@/components/Home/Skills";
-import SoftSkills from "@/components/Home/SoftSkills";
+import About from "@/features/home/components/about";
+import Contact from "@/features/home/components/contact";
+import Hero from "@/features/home/components/hero";
+import Portfolio from "@/features/home/components/portfolio";
+import Skills from "@/features/home/components/skills";
+import SoftSkills from "@/features/home/components/soft-skills";
 
 export default function Home() {
   return (

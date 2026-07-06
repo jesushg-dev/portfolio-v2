@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type RefObject } from "react";
 
 interface Size {
   width: number;
   height: number;
 }
 
-const useSize = (elementRef: React.RefObject<HTMLDivElement | null>): Size => {
+const useSize = (elementRef: RefObject<HTMLDivElement | null>): Size => {
   const [size, setSize] = useState<Size>({
     width: 0,
     height: 0,

@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, useState, useContext, useMemo } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useMemo,
+  type ComponentType,
+  type ReactNode,
+} from "react";
 import type { FC } from "react";
 
 export interface ISize {
@@ -22,16 +29,18 @@ export interface WindowState {
   isMaximized: boolean;
   position: IPosition;
   isFocused: boolean;
-  component: React.ComponentType<unknown>;
+  component: ComponentType<unknown>;
 }
 
-export interface IHandleWindowProps
-  extends Pick<WindowState, "component" | "id" | "icon" | "title"> {
+export interface IHandleWindowProps extends Pick<
+  WindowState,
+  "component" | "id" | "icon" | "title"
+> {
   size?: ISize;
 }
 
 interface WindowProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 interface WindowContextType {

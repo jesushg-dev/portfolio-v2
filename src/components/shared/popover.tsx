@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   cloneElement,
   forwardRef,
   isValidElement,
@@ -50,7 +50,9 @@ export const PopoverTrigger = forwardRef<
         : {}),
     });
 
-    return <span ref={ref}>{cloneElement(children, { ...referenceProps })}</span>;
+    return (
+      <span ref={ref}>{cloneElement(children, { ...referenceProps })}</span>
+    );
   }
 
   return (
@@ -70,31 +72,30 @@ interface IPopoverContentProps extends HTMLProps<HTMLDivElement> {
   portalId?: string;
 }
 
-export const PopoverContent = React.forwardRef<
-  HTMLDivElement,
-  IPopoverContentProps
->(function PopoverContent({ style, portalId, ...props }, propRef) {
-  const { context: floatingContext, ...context } = usePopoverContext();
-  const ref = useMergeRefs([context.refs.setFloating, propRef]);
+export const PopoverContent = forwardRef<HTMLDivElement, IPopoverContentProps>(
+  function PopoverContent({ style, portalId, ...props }, propRef) {
+    const { context: floatingContext, ...context } = usePopoverContext();
+    const ref = useMergeRefs([context.refs.setFloating, propRef]);
 
-  if (!floatingContext.open) return null;
+    if (!floatingContext.open) return null;
 
-  return (
-    <FloatingPortal id={portalId}>
-      <FloatingFocusManager context={floatingContext} modal={context.modal}>
-        <div
-          ref={ref}
-          style={{ ...context.floatingStyles, ...style }}
-          aria-labelledby={context.labelId}
-          aria-describedby={context.descriptionId}
-          {...context.getFloatingProps(props)}
-        >
-          {props.children}
-        </div>
-      </FloatingFocusManager>
-    </FloatingPortal>
-  );
-});
+    return (
+      <FloatingPortal id={portalId}>
+        <FloatingFocusManager context={floatingContext} modal={context.modal}>
+          <div
+            ref={ref}
+            style={{ ...context.floatingStyles, ...style }}
+            aria-labelledby={context.labelId}
+            aria-describedby={context.descriptionId}
+            {...context.getFloatingProps(props)}
+          >
+            {props.children}
+          </div>
+        </FloatingFocusManager>
+      </FloatingPortal>
+    );
+  },
+);
 
 export const PopoverHeading = forwardRef<
   HTMLHeadingElement,

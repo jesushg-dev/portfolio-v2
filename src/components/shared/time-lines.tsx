@@ -1,9 +1,10 @@
-import React from "react";
+"use client";
+
 import type { FC } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { VscLoading } from "react-icons/vsc";
 
-import { Link } from "@/i18n/routing";
+import { api } from "@/trpc/react";
 
 interface ITimeLineProps {
   title: string;
@@ -31,27 +32,39 @@ const availableSteps = ["0", "1", "2", "3"] as const;
 
 const TimeLines: FC = () => {
   const t = useTranslations("main.about.timeline");
+  const locale = useLocale();
+
+  const { data: timelineData, isLoading } = api.portfolio.getTimeline.useQuery({
+    locale: locale,
+  });
 
   return (
     <ol id="timeline" className="relative flex w-full gap-4">
-      {availableSteps.map((val) => (
-        <TimeLine
-          key={t(`steps.${val}.date`)}
-          date={t(`steps.${val}.date`)}
-          title={t(`steps.${val}.title`)}
-          text={t(`steps.${val}.description`)}
-          dateTime={t(`steps.${val}.dateTime`)}
-        />
-      ))}
-      <li className="text-primaryText-800 -ml-1 flex items-center gap-4 text-sm">
-        <Link
-          href="/curriculum-vitae"
-          className="hover:text-primary-900 flex items-center gap-3"
-        >
-          <VscLoading className="text-md border-primary-900 text-primary-200 animate-spin border" />
-          {t("subtitle")}
-        </Link>
-      </li>
+      {isLoading ? (
+        <li className="flex w-full items-center justify-center py-4">
+          <VscLoading className="text-primary-500 animate-spin text-2xl" />
+        </li>
+      ) : timelineData && timelineData.length > 0 ? (
+        timelineData.map((exp) => (
+          <TimeLine
+            key={exp.id}
+            date={exp.date}
+            title={exp.title}
+            text={exp.description}
+            dateTime={exp.dateTime}
+          />
+        ))
+      ) : (
+        availableSteps.map((val) => (
+          <TimeLine
+            key={t(`steps.${val}.date`)}
+            date={t(`steps.${val}.date`)}
+            title={t(`steps.${val}.title`)}
+            text={t(`steps.${val}.description`)}
+            dateTime={t(`steps.${val}.dateTime`)}
+          />
+        ))
+      )}
     </ol>
   );
 };
