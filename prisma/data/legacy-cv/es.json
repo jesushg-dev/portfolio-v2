@@ -1,0 +1,111 @@
+{
+  "degree": "Desarrollador Fullstack",
+  "aboutMe": "Desarrollador web full-stack con más de 5 años de experiencia, especializado en la creación de soluciones modernas y escalables en diversas industrias. Con conocimientos en soporte técnico y ciberseguridad.",
+  "clientImageAlt": "Foto de Jesús Hernández",
+  "education": {
+    "computerEngineering": {
+      "degree": "Ingeniería en Computación",
+      "institution": "Universidad Nacional de Ingeniería",
+      "location": "Managua | Managua",
+      "dates": "2017 – 2024"
+    },
+    "webDeveloper": {
+      "degree": "Desarrollador Web",
+      "institution": "Platzi",
+      "location": "Online",
+      "dates": "2022 - 2024"
+    },
+    "digitalSecurity": {
+      "degree": "Junior en Seguridad Digital y Protección de Datos",
+      "institution": "Numu & BID",
+      "location": "Managua",
+      "dates": "2022"
+    }
+  },
+  "contacts": {
+    "contact1": {
+      "name": "+505 8679 3204",
+      "value": "tel:505,86793204"
+    },
+    "contact2": {
+      "name": "jess232016@gmail.com",
+      "value": "mailto:jess232016@gmail.com"
+    },
+    "contact3": {
+      "name": "https://www.jesushg.com",
+      "value": "https://www.jesushg.com"
+    },
+    "contact4": {
+      "name": "linkedIn/jesus-hernandez23",
+      "value": "https://www.linkedin.com/in/jesus-hernandez23"
+    }
+  },
+  "experiences": {
+    "experience0": {
+      "position": "Analista y Desarrollador Full Stack con React, Next.js y C#",
+      "company": "Contollo Consulting",
+      "dates": "agosto 2023 – febrero 2025",
+      "responsibilities": "<item>Construí aplicaciones web escalables usando Next.js, .NET Core, Microservicios y Azure en múltiples proyectos</item><item>Refactoricé scripts SQL a Entity Framework Core y diseñé esquemas de bases de datos</item><item>Colaboré en equipo Scrum mediante revisiones, mediciones de esfuerzo y retrospectivas</item><item>Configuré pipelines CI/CD e integré servicios de terceros</item><item>Lideré pasantes en buenas prácticas y estándares de código</item>",
+      "skills": "Next.js, .NET Core, Azure, Entity Framework, Microservicios, CI/CD"
+    },
+    "experience1": {
+      "position": "Desarrollador Full Stack con React, Next.js y Node.js",
+      "company": "Musa",
+      "dates": "junio 2022 – julio 2023",
+      "responsibilities": "<item>Diseñé y desarrollé interfaces web de alta calidad y aplicaciones móviles</item><item>Integré exitosamente datos y procesos de proveedores externos</item><item>Presenté avances en funcionalidad, usabilidad y rendimiento a stakeholders</item>",
+      "skills": "Next.js, React.js, Node.js, GraphQL, REST API, Tailwind CSS"
+    },
+    "experience2": {
+      "position": "Desarrollador móvil con React Native",
+      "company": "Telo Group",
+      "dates": "febrero 2022 – mayo 2022",
+      "responsibilities": "<item>Creé interfaces de usuario basadas en especificaciones del equipo UX</item><item>Implementé funcionalidades en equipo Scrum según historias de usuario</item><item>Apoyé equipos de calidad y backend con pruebas y revisiones de código</item>",
+      "skills": "React Native, Java, Desarrollo Android"
+    },
+    "experience3": {
+      "position": "Técnico en TI y Desarrollador Web con ReactJs y Next.js",
+      "company": "Asociación de Iglesias Reformadas",
+      "dates": "noviembre 2019 - diciembre 2021",
+      "responsibilities": "<item>Desarrollé sitio web moderno para promoción organizacional</item><item>Enseñé informática a estudiantes de primaria</item><item>Brindé soporte técnico integral y mantenimiento de equipos</item>",
+      "skills": "React.js, Next.js, Windows, Linux, Soporte Hardware"
+    },
+    "experience4": {
+      "position": "Freelance | Desarrollador Frontend con ReactJs y Next.js",
+      "company": "Barter Capital",
+      "dates": "mayo 2023 - junio 2023",
+      "responsibilities": "<item>Desarrollé interfaces web atractivas y funcionales con experiencia intuitiva</item><item>Agregué nuevas funcionalidades a dashboard existente</item><item>Aseguré configuración correcta de aplicaciones en producción</item>",
+      "skills": "Next.js, Diseño de Interfaz, UIX, React.js, REST API, Redux.js, Tailwind CSS"
+    }
+  },
+  "skills": {
+    "frontEnd": "<item>HTML</item><item>CSS</item><item>JavaScript</item><item>TypeScript</item><item>Next.js</item><item>React</item><item>React Native</item><item>API REST</item><item>Socket</item><item>Taiwind</item>",
+    "backEnd": "<item>C#</item><item>.NET Core</item><item>Nest.js</item><item>Python</item><item>Node-JS</item><item>PHP</item><item>GraphQL</item>",
+    "database": "<item>SQL Server</item><item>MySQL</item><item>MongoDB</item><item>SQLite</item><item>Firebase</item><item>PostgreSQL</item>",
+    "tools": "<item>Git</item><item>Azure</item><item>Docker</item><item>GCP</item><item>AWS</item>"
+  },
+  "languages": {
+    "spanish": { "name": "Español", "level": "Nativo o bilingüe" },
+    "english": { "name": "Inglés", "level": "Competencia profesional" },
+    "dutch": { "name": "Holandés", "level": "Básico" }
+  },
+  "softSkills": "<item>Capacidad de Análisis</item><item>Trabajo individual y en equipo</item><item>Capacidad de adaptación</item>",
+  "additionalInformation": "<item>Disponibilidad inmediata</item>",
+  "personalReferences": {
+    "reference1": {
+      "name": "Danilo Acevedo",
+      "role": "Desarrollador",
+      "phoneNumber": "(+505) 8679-3204"
+    },
+    "reference2": {
+      "name": "Alfredo Antonio Eva Vargas",
+      "role": "Desarrollador",
+      "phoneNumber": "(+505) 8251-9391"
+    },
+    "reference3": {
+      "name": "Juan Carlos López",
+      "role": "Desarrollador",
+      "phoneNumber": "(+505) 8751-8355"
+    }
+  },
+  "downloadLink": "https://drive.google.com/uc?id=1rp2NFGTcvI-aQLczfcf3e9LZGnaVmvUY&export=download"
+}
