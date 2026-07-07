@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useRef } from "react";
+import { memo, useRef, type FC } from "react";
 
 import { motion, useInView } from "motion/react";
 
@@ -19,7 +19,7 @@ const animationVariants = {
   visible: { opacity: 1, y: 0, transition: { type: "spring" as const } },
 };
 
-const HeaderArticle: React.FC<IHeaderArticleProps> = ({
+const HeaderArticle: FC<IHeaderArticleProps> = ({
   title,
   subtitle = "",
   description = "",

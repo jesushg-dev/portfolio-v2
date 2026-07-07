@@ -1,4 +1,10 @@
-import { createContext, useContext } from "react";
+import {
+  createContext,
+  useContext,
+  type Dispatch,
+  type SetStateAction,
+  type ReactNode,
+} from "react";
 import type { FC } from "react";
 
 import usePopover from "../../hooks/use-popover";
@@ -6,17 +12,15 @@ import type { PopoverOptions } from "../../hooks/use-popover";
 
 type ContextType =
   | (ReturnType<typeof usePopover> & {
-      setLabelId: React.Dispatch<React.SetStateAction<string | undefined>>;
-      setDescriptionId: React.Dispatch<
-        React.SetStateAction<string | undefined>
-      >;
+      setLabelId: Dispatch<SetStateAction<string | undefined>>;
+      setDescriptionId: Dispatch<SetStateAction<string | undefined>>;
     })
   | null;
 
 const PopoverContext = createContext<ContextType>(null);
 
 interface IPopoverContextProviderProps extends PopoverOptions {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const PopoverContextProvider: FC<IPopoverContextProviderProps> = ({

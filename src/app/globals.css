@@ -1,6 +1,29 @@
 @import "tailwindcss";
 
 @theme {
+  /* Shadcn semantic color bridge (uses this project's theme scales) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+
   /*========== MAIN-LIGHT THEME ==========*/
   --color-primary-50: #eff7ff;
   --color-primary-100: #dbeafe;
@@ -140,53 +163,34 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+  :root {
+    --radius: 0.75rem;
+    --background: var(--color-background-100);
+    --foreground: var(--color-primaryText-500);
+    --card: var(--color-background-50);
+    --card-foreground: var(--color-primaryText-500);
+    --popover: var(--color-background-50);
+    --popover-foreground: var(--color-primaryText-500);
+    --primary: var(--color-primary-600);
+    --primary-foreground: var(--color-secondaryText-50);
+    --secondary: var(--color-primaryLight-500);
+    --secondary-foreground: var(--color-primaryText-500);
+    --muted: var(--color-background-200);
+    --muted-foreground: var(--color-primaryText-100);
+    --accent: var(--color-secondary-100);
+    --accent-foreground: var(--color-primaryText-500);
+    --destructive: #dc2626;
+    --border: var(--color-divider-50);
+    --input: var(--color-divider-50);
+    --ring: var(--color-primary-400);
+  }
+
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
-  }
-
-  /* Dashboard UI token bridge: keeps admin surfaces aligned with portfolio-data-management styles. */
-  .dashboard-theme {
-    --color-card: oklch(1 0 0);
-    --color-card-foreground: oklch(0.145 0 0);
-    --color-popover: oklch(1 0 0);
-    --color-popover-foreground: oklch(0.145 0 0);
-    --color-primary: oklch(0.205 0 0);
-    --color-primary-foreground: oklch(0.985 0 0);
-    --color-secondary: oklch(0.97 0 0);
-    --color-secondary-foreground: oklch(0.205 0 0);
-    --color-muted: oklch(0.97 0 0);
-    --color-muted-foreground: oklch(0.556 0 0);
-    --color-accent: oklch(0.97 0 0);
-    --color-accent-foreground: oklch(0.205 0 0);
-    --color-destructive: oklch(0.577 0.245 27.325);
-    --color-border: oklch(0.922 0 0);
-    --color-input: oklch(0.922 0 0);
-    --color-ring: oklch(0.708 0 0);
-    --color-background: oklch(1 0 0);
-    --color-foreground: oklch(0.145 0 0);
-
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
   }
 
   /*========== GLOBAL VARIABLES ==========*/
@@ -740,6 +744,13 @@
     --color-background-800: #020000;
     --color-background-900: #000000;
   }
+
+  [data-theme="main-dark"],
+  [data-theme="orange-dark"],
+  [data-theme="christmas-dark"] {
+    --accent: rgba(255, 255, 255, 0.1);
+    --accent-foreground: var(--color-primaryText-50);
+  }
 }
 
 @utility hero {
@@ -789,6 +800,15 @@
 
 @utility pressable {
   @apply transform cursor-pointer tracking-wide transition duration-300 ease-in-out active:scale-95;
+}
+
+@utility no-visible-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer components {

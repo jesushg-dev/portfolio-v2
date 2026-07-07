@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, Fragment } from "react";
+import { useMemo, Fragment } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { motion } from "motion/react";
@@ -11,7 +11,7 @@ import { useRouter } from "@/i18n/routing";
 import { api } from "@/trpc/react";
 import { LIMIT_PER_PAGE_XL } from "@/utils/constants";
 import FilterType from "@/components/certification/filter-type";
-import { stackTypes, typeSKills } from "@/utils/constants/certificatesType";
+import { stackTypes, typeSKills } from "@/utils/constants/certificates-type";
 import CertificateItem from "@/components/certification/certification-item";
 import type { StackType } from "@prisma/client";
 

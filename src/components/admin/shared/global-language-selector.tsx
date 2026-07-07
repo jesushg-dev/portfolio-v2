@@ -1,5 +1,4 @@
 import { Globe } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export interface GlobalLanguageSelectorProps {
@@ -21,26 +20,21 @@ export function GlobalLanguageSelector({
         <Globe className="h-4 w-4" />
         <span className="text-sm font-medium">Editing Language:</span>
       </div>
-      <div
-        role="tablist"
-        aria-label="Editing language"
-        className="flex items-center gap-1 overflow-x-auto"
-      >
+      <div className="flex items-center gap-1 overflow-x-auto">
         {languages.map((lang) => {
           const isActive = activeLangId === lang.id;
           return (
             <Button
               key={lang.id}
               type="button"
-              role="tab"
-              aria-selected={isActive}
               variant={isActive ? "default" : "ghost"}
               size="sm"
               onClick={() => onLangChange(lang.id)}
-              className={cn(
-                "h-8 rounded-md px-3 transition-colors",
-                isActive && "shadow-sm",
-              )}
+              className={`h-8 rounded-md px-3 transition-colors ${
+                isActive
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
             >
               {lang.name}
             </Button>

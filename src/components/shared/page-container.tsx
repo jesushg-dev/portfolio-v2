@@ -1,7 +1,5 @@
 "use client";
-
-import * as React from "react";
-import { useState } from "react";
+import { useState, type ReactNode, Fragment } from "react";
 import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -21,12 +19,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-type FooterAction = React.ReactNode;
+type FooterAction = ReactNode;
 
 interface PageBase {
   title: string;
   description?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   footerActions?: FooterAction[];
 }
@@ -55,7 +53,7 @@ export const PageCardWrapper = ({
         {footerActions.length > 0 && (
           <CardFooter className="flex justify-end gap-2">
             {footerActions.map((action, index) => (
-              <React.Fragment key={index}>{action}</React.Fragment>
+              <Fragment key={index}>{action}</Fragment>
             ))}
           </CardFooter>
         )}
@@ -85,7 +83,8 @@ export const PageDialogWrapper = ({
       <DialogContent
         className={cn(
           "max-h-[calc(100vh-2rem)]",
-          "flex flex-col overflow-hidden bg-white text-gray-900",
+          "flex flex-col overflow-hidden",
+          "sm:max-w-5xl",
           className,
         )}
       >

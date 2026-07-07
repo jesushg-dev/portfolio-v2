@@ -6,11 +6,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { User } from "lucide-react";
-import { toast } from "sonner";
 
 import type { Locale } from "@/i18n/config";
-import { locales } from "@/i18n/config";
 import { api } from "@/trpc/react";
+import { LocalizedField } from "@/components/admin/localized-field";
+import { TranslationNudgeBanner } from "@/components/admin/translation-nudge-banner";
+import { useTranslationNudge } from "@/hooks/admin/use-translation-nudge";
 import {
   FormRoot,
   FormContent,
@@ -20,28 +21,18 @@ import {
 } from "@/components/shared/form-root";
 import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
 
-// ---------------------------------------------------------------------------
-// App locales as "languages" array for GlobalLanguageSelector
-// ---------------------------------------------------------------------------
-
-const LOCALE_NAMES: Record<Locale, string> = {
-  en: "English",
-  es: "Español",
-  nl: "Nederlands",
+const LOCALE_META: Record<Locale, { label: string; flag: string }> = {
+  en: { label: "English", flag: "🇬🇧" },
+  es: { label: "Español", flag: "🇪🇸" },
+  nl: { label: "Nederlands", flag: "🇳🇱" },
 };
 
-const APP_LANGUAGES = locales.map((loc) => ({
-  id: loc,
-  code: loc,
-  name: LOCALE_NAMES[loc],
-}));
-
-// ---------------------------------------------------------------------------
-// Schema
-// ---------------------------------------------------------------------------
+const OTHER_LOCALES: Record<Locale, Locale[]> = {
+  en: ["es", "nl"],
+  es: ["en", "nl"],
+  nl: ["en", "es"],
+};
 
 const LocalizedTextSchema = z.object({
   default: z.string(),
@@ -57,48 +48,10 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-/** Read the value for the active locale from a LocalizedText field */
-function getLocaleValue(
-  field: { default: string; translations?: Record<string, string> },
-  activeLang: Locale,
-  defaultLocale: Locale,
-): string {
-  if (activeLang === defaultLocale) return field.default;
-  return field.translations?.[activeLang] ?? "";
-}
-
-/** Return a new LocalizedText after setting the value for the active locale */
-function setLocaleValue(
-  field: { default: string; translations?: Record<string, string> },
-  activeLang: Locale,
-  defaultLocale: Locale,
-  text: string,
-): { default: string; translations?: Record<string, string> } {
-  if (activeLang === defaultLocale) {
-    return { ...field, default: text };
-  }
-  return {
-    ...field,
-    translations: { ...field.translations, [activeLang]: text },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Props
-// ---------------------------------------------------------------------------
-
 interface HeroFormProps {
   locale: Locale;
   initial?: FormValues;
 }
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 export function HeroForm({ locale, initial }: HeroFormProps) {
   const t = useTranslations("admin.profile");
@@ -116,9 +69,9 @@ export function HeroForm({ locale, initial }: HeroFormProps) {
 
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [activeLang, setActiveLang] = useState<Locale>(locale);
 
   const upsertHeader = api.cv.upsertHeader.useMutation();
+  const degreeNudge = useTranslationNudge(`profile_degree_${locale}`);
 
   const photoUrlValue = form.watch("photoUrl");
   const fullNameValue = form.watch("fullName");
@@ -136,26 +89,38 @@ export function HeroForm({ locale, initial }: HeroFormProps) {
           });
 
           await utils.cv.getMine.invalidate();
-          toast.success(t("savedSuccess") || "Saved");
+
+          const prevDegreeDefault = initial?.degree?.default ?? "";
+          if (values.degree.default !== prevDegreeDefault) {
+            const otherLocaleValues = Object.fromEntries(
+              OTHER_LOCALES[locale].map((loc) => [
+                loc,
+                {
+                  ...LOCALE_META[loc],
+                  value: values.degree.translations?.[loc] ?? "",
+                },
+              ]),
+            );
+            degreeNudge.triggerNudge({
+              storageKey: `profile_degree_${locale}`,
+              fieldLabel: t("degreeLabel"),
+              editedLocale: locale,
+              editedValue: values.degree.default,
+              otherLocaleValues,
+            });
+          }
         } catch (err) {
           setServerError(err instanceof Error ? err.message : "Save failed");
         }
       });
     },
-    [upsertHeader, utils, t],
+    [initial, locale, t, degreeNudge, upsertHeader, utils],
   );
 
   return (
     <Form {...form}>
       <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
-        <GlobalLanguageSelector
-          languages={APP_LANGUAGES}
-          activeLangId={activeLang}
-          onLangChange={(id) => setActiveLang(id as Locale)}
-        />
-
         <FormContent error={serverError}>
-          {/* ── Hero section: name + photo ── */}
           <FormSection title={t("heroSection")}>
             <div className="flex items-start gap-6">
               <div className="mt-2 shrink-0">
@@ -206,71 +171,81 @@ export function HeroForm({ locale, initial }: HeroFormProps) {
             </div>
           </FormSection>
 
-          {/* ── Professional title (degree) — per-locale ── */}
           <FormSection title={t("professionalTitle")}>
             <FormField
               control={form.control}
               name="degree"
               render={({ field }) => (
-                <FormItem
-                  label={`${t("degreeLabel")} (${LOCALE_NAMES[activeLang]})`}
-                >
+                <FormItem label={t("degreeLabel")}>
                   <FormControl>
-                    <Input
-                      value={getLocaleValue(field.value, activeLang, locale)}
-                      onChange={(e) =>
-                        field.onChange(
-                          setLocaleValue(
-                            field.value,
-                            activeLang,
-                            locale,
-                            e.target.value,
-                          ),
-                        )
-                      }
+                    <LocalizedField
+                      mode="app-locales"
+                      label={t("degreeLabel")}
+                      value={field.value}
+                      onChange={field.onChange}
+                      defaultLocale={locale}
                       placeholder="e.g. Web Developer"
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
-          </FormSection>
 
-          {/* ── Image alt text — per-locale ── */}
-          <FormSection title={t("altTextTitle") || "Alt Text"}>
-            <p className="text-muted-foreground mb-4 text-xs">
-              {t("altTextHint")}
-            </p>
-            <FormField
-              control={form.control}
-              name="clientImageAlt"
-              render={({ field }) => (
-                <FormItem
-                  label={`${t("altTextLabel") || "Image Alt Text"} (${LOCALE_NAMES[activeLang]})`}
-                >
-                  <FormControl>
-                    <Textarea
-                      rows={2}
-                      value={getLocaleValue(field.value, activeLang, locale)}
-                      onChange={(e) =>
-                        field.onChange(
-                          setLocaleValue(
-                            field.value,
-                            activeLang,
-                            locale,
-                            e.target.value,
-                          ),
-                        )
-                      }
-                      placeholder="e.g. Photo of Jesús sitting at a desk"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            {degreeNudge.nudge && (
+              <div className="mt-4">
+                <TranslationNudgeBanner
+                  nudge={degreeNudge.nudge}
+                  onSaveLocale={async (loc, value) => {
+                    if (!value) {
+                      degreeNudge.markSkipped(loc);
+                      return;
+                    }
+                    const updatedDegree = {
+                      ...form.getValues("degree"),
+                      translations: {
+                        ...form.getValues("degree").translations,
+                        [loc]: value,
+                      },
+                    };
+                    form.setValue("degree", updatedDegree, {
+                      shouldDirty: true,
+                    });
+
+                    await upsertHeader.mutateAsync({
+                      ...form.getValues(),
+                      degree: updatedDegree,
+                      photoUrl: form.getValues("photoUrl") || null,
+                    });
+                    degreeNudge.markDone(loc);
+                  }}
+                  onApplyAll={async (value) => {
+                    const allTranslations = Object.fromEntries(
+                      OTHER_LOCALES[locale].map((loc) => [loc, value]),
+                    );
+                    const updatedDegree = {
+                      ...form.getValues("degree"),
+                      translations: {
+                        ...form.getValues("degree").translations,
+                        ...allTranslations,
+                      },
+                    };
+                    form.setValue("degree", updatedDegree, {
+                      shouldDirty: true,
+                    });
+
+                    await upsertHeader.mutateAsync({
+                      ...form.getValues(),
+                      degree: updatedDegree,
+                      photoUrl: form.getValues("photoUrl") || null,
+                    });
+                    degreeNudge.markAllDone();
+                  }}
+                  onDismiss={() => degreeNudge.dismiss()}
+                />
+              </div>
+            )}
           </FormSection>
         </FormContent>
-
         <FormActions
           isPending={isPending}
           title={isPending ? t("saving") : t("save")}

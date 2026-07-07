@@ -1,4 +1,5 @@
-import React from "react";
+import { type ReactNode } from "react";
+
 import { useTranslations } from "next-intl";
 import type { FC } from "react";
 
@@ -9,7 +10,7 @@ import NoSvgAlt from "./no-svg-alt";
 interface INoResultProps {
   title?: string;
   description?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 const NoResult: FC<INoResultProps> = ({ title, description, children }) => {

@@ -3,26 +3,19 @@ import type { FC } from "react";
 import TimeLines from "@/components/shared/time-lines";
 import HeaderArticle from "@/components/shared/header-article";
 import AboutTerminal from "./about-terminal";
-import { getLocale, getTranslations } from "next-intl/server";
-import type { Locale } from "@/i18n/config";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { getTranslations } from "next-intl/server";
 
 import { resolveTenant } from "@/lib/tenant/resolve";
 import { db } from "@/server/db";
 
 const About: FC = async () => {
   const t = await getTranslations("main.about");
-  const locale = await getLocale();
 
   const tenant = await resolveTenant();
-  const cvAboutMe = tenant
+  const aboutMe = tenant
     ? await db.cvAboutMe.findUnique({ where: { userId: tenant.userId } })
     : null;
-  const aboutMeJson = cvAboutMe?.aboutMe as Record<string, unknown> | null;
-  const consoleCode = getLocalizedText(
-    aboutMeJson?.consoleCode,
-    locale as Locale,
-  );
+  const consoleCode = aboutMe?.consoleCode;
 
   return (
     <div className="overflow-hidden">
