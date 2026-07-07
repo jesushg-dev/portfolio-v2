@@ -10,18 +10,299 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// ============================================================================
+// AUTH MODELS (Better Auth)
+// ============================================================================
+
+model User {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+  profile  Profile?
+
+  // Per-user CV
+  CvHeader            CvHeader?
+  CvAboutMe           CvAboutMe?
+  CvContact           CvContact[]
+  CvEducation         CvEducation[]
+  CvLanguage          CvLanguage[]
+  CvTechnicalSkill    CvTechnicalSkill[]
+  CvExperience        CvExperience[]
+  CvSoftSkill         CvSoftSkill[]
+  CvAdditionalInfo    CvAdditionalInfo[]
+  CvPersonalReference CvPersonalReference[]
+  CvPdfLink           CvPdfLink[]
+
+  // Per-user portfolio (existing models become tenant-scoped)
+  Project             Project[]
+  Skill               Skill[]
+  Service             Service[]
+  Certification       Certification[]
+  TimelineItem        TimelineItem[]
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                    String    @id @default(auto()) @map("_id") @db.ObjectId
+  accountId             String
+  providerId            String
+  userId                String    @db.ObjectId
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model Verification {
+  id         String   @id @default(cuid()) @map("_id")
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// ============================================================================
+// TENANT / PROFILE
+// ============================================================================
+
+model Profile {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @unique @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username      String   @unique
+  displayName   String?
+  defaultLocale String   @default("en")
+  isPrimary     Boolean  @default(false)
+  isPublished   Boolean  @default(false)
+  customDomain  String?  @unique
+  cvPdfUrl      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ============================================================================
+// CV PDF LINKS (per-user, per-locale)
+// ============================================================================
+
+/// Stores a separate PDF download URL for each locale so users can have
+/// language-specific CV files (e.g., a Spanish CV and an English CV).
+model CvPdfLink {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// BCP-47 locale code, e.g. "en", "es", "nl"
+  locale    String
+  /// Direct URL to the PDF file
+  url       String
+  /// Optional human-readable label, e.g. "Currículum en Español"
+  label     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, locale])
+}
+
+// ============================================================================
+// CV MODELS (per-user, multi-locale via Json LocalizedText)
+// LocalizedText shape:
+//   { default: string, translations?: { en?: string, es?: string, nl?: string } }
+// ============================================================================
+
+model CvHeader {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @unique @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName        String
+  degree          Json
+  photoUrl        String?
+  clientImageAlt  Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model CvAboutMe {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @unique @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aboutMe   Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CvContact {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String          @db.ObjectId
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      CvContactType
+  value     String
+  label     Json?
+  order     Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model CvEducation {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution String
+  degreeName  Json
+  location    Json?
+  description Json?
+  startYear   Int?
+  endYear     Int?
+  dates       String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CvLanguage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      Json
+  level     Json
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CvTechnicalSkill {
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String           @db.ObjectId
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  CvSkillCategory
+  items     String[]
+  order     Int              @default(0)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+model CvExperience {
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String             @db.ObjectId
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company          String
+  role             Json
+  location         Json?
+  dates            String?
+  startDate        DateTime?
+  endDate          DateTime?
+  current          Boolean            @default(false)
+  skills           String?
+  order            Int                @default(0)
+  responsibilities CvResponsibility[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model CvResponsibility {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  experienceId String       @db.ObjectId
+  experience   CvExperience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  text         Json
+  order        Int          @default(0)
+  createdAt    DateTime     @default(now())
+}
+
+model CvSoftSkill {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      Json
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CvAdditionalInfo {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text      Json
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CvPersonalReference {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  role      Json?
+  contact   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum CvContactType {
+  EMAIL
+  PHONE
+  LINKEDIN
+  GITHUB
+  WEBSITE
+  LOCATION
+  OTHER
+}
+
+enum CvSkillCategory {
+  FRONTEND
+  BACKEND
+  DATABASE
+  TOOLS
+  MOBILE
+  DESKTOP
+  DEVOPS
+  CYBERSECURITY
+  OTHER
+}
+
+// ============================================================================
+// PORTFOLIO MODELS (now tenant-scoped via userId)
+// ============================================================================
+
 model AppLanguage {
   id                       String                     @id @default(auto()) @map("_id") @db.ObjectId
   code                     String                     @unique
   name                     String
   SkillTranslation         SkillTranslation[]
   ProjectTranslation       ProjectTranslation[]
-  ServiceTranslation       ServiceTranslation[]
-  CertificationTranslation CertificationTranslation[]
+  ServiceTranslation             ServiceTranslation[]
+  CertificationTranslation       CertificationTranslation[]
 }
 
 model Project {
   id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String?              @db.ObjectId
+  user               User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt          DateTime             @default(now())
   image              String
   type               StackType
@@ -55,11 +336,14 @@ model ProjectTranslation {
 
 model Service {
   id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String?              @db.ObjectId
+  user               User?                @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt          DateTime             @default(now())
   image              String
   type               StackType
   ServiceTranslation ServiceTranslation[]
   CertificateService CertificateService[]
+  ServiceSkill       ServiceSkill[]
 }
 
 model ServiceTranslation {
@@ -75,6 +359,8 @@ model ServiceTranslation {
 
 model Skill {
   id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String?            @db.ObjectId
+  user             User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt        DateTime           @default(now())
   image            String
   title            String
@@ -82,6 +368,7 @@ model Skill {
   ProjectSkill     ProjectSkill[]
   SkillTranslation SkillTranslation[]
   CertificateSkill CertificateSkill[]
+  ServiceSkill     ServiceSkill[]
 }
 
 model SkillTranslation {
@@ -97,6 +384,8 @@ model SkillTranslation {
 
 model Certification {
   id                       String                     @id @default(auto()) @map("_id") @db.ObjectId
+  userId                   String?                    @db.ObjectId
+  user                     User?                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt                DateTime                   @default(now())
   company                  String
   issuedDate               Int?
@@ -143,6 +432,17 @@ model CertificateProject {
   projectId       String        @db.ObjectId
 }
 
+model ServiceSkill {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  Service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  Skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  serviceId String   @db.ObjectId
+  skillId   String   @db.ObjectId
+
+  @@unique([serviceId, skillId])
+}
+
 //an certificate can validate multiple services
 //an service can be validated by multiple certificates
 model CertificateService {
@@ -165,4 +465,27 @@ enum StackType {
   DEVOPS
   SOFTSKILLS
   TOOLS
+}
+
+model TimelineItem {
+  id           String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String           @db.ObjectId
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        Json
+  description  Json
+  category     TimelineCategory
+  organization String
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  current      Boolean          @default(false)
+  order        Int              @default(0)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+enum TimelineCategory {
+  WORK
+  STUDY
+  COURSE
 }
