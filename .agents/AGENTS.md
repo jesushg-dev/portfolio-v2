@@ -337,3 +337,58 @@ const handleSubmit = useCallback(
 ```
 
 This rule applies to ALL handlers: `handleSubmit`, `handleDelete`, `handleReorder`, etc.
+
+## Unit Testing
+
+This project uses **Jest** with `next/jest`, **Testing Library**, and **jsdom**. See [`docs/testing.md`](../docs/testing.md) for the full guide.
+
+### File placement — co-locate tests
+
+### ✅ ALWAYS place test files next to the code they cover
+
+```
+src/components/curriculum-vitae/
+  education.tsx
+  education.test.tsx        ← same folder
+
+src/lib/i18n/
+  localized.ts
+  localized.test.ts
+```
+
+### ❌ NEVER mirror the entire `src/` tree under a top-level `tests/` folder
+
+A parallel `tests/components/...` structure drifts out of sync, especially with App Router route groups `(portfolio)` and catch-all segments `[[...slug]]`. Keep unit tests co-located; centralize only shared infrastructure.
+
+### Shared test infrastructure lives in `src/test-utils/`
+
+| Path | Purpose |
+|------|---------|
+| `src/test-utils/setup.ts` | Global mocks (`next-intl`, `next/image`, `motion/react`) |
+| `src/test-utils/render-with-intl.tsx` | Render helper for components using `useTranslations` |
+| `src/test-utils/fixtures/` | Reusable mock data (e.g. CV fixtures) |
+| `src/test-utils/mocks/` | Optional per-domain mock helpers (e.g. tRPC) |
+
+### Naming and discovery
+
+- File pattern: `*.test.ts` or `*.test.tsx`
+- Jest config: `jest.config.mjs` (via `next/jest`)
+- Run: `pnpm test`, `pnpm test:watch`, `pnpm test:coverage`
+
+### What to test and how
+
+| Layer | Approach |
+|-------|----------|
+| Pure utilities | Direct `describe`/`it` — no DOM |
+| Presentational components | `renderWithIntl()` + Testing Library queries |
+| Client components with tRPC | `jest.mock("@/trpc/react", …)` in the test file |
+| App Router pages (RSC) | Smoke tests: mock `next-intl/server`, Prisma, tenant; invoke the async page export and render the result |
+| E2E (future) | Separate `e2e/` folder with Playwright — not mixed with unit tests |
+
+### ✅ ALWAYS extract testable pure logic from components
+
+If inline logic is worth testing (e.g. slug → tab index, date formatting), move it to a sibling `.ts` file and unit-test that file directly.
+
+### ❌ NEVER disable tests or skip type-checking in CI to make tests pass
+
+Fix mocks, types, and fixtures properly. Both `pnpm test` and `pnpm type-check` run in CI (`.github/workflows/test.yml`).
