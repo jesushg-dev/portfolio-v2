@@ -136,7 +136,19 @@
           "pause": "Pauzeren",
           "volume": "Volume",
           "next": "Volgende",
-          "previous": "Vorige"
+          "previous": "Vorige",
+          "shuffle": "Shuffle"
+        },
+        "recentlyPlayed": "Onlangs afgespeeld",
+        "notPlayingNow": "Er wordt niets afgespeeld",
+        "lastPlayed": "Laatst afgespeeld",
+        "fullscreen": {
+          "expand": "Speler uitvouwen",
+          "close": "Speler sluiten",
+          "openInSpotify": "Openen in Spotify",
+          "lyrics": "Songtekst",
+          "more": "Meer opties",
+          "repeat": "Herhalen"
         },
         "hints": {
           "currentProgress": "Huidige voortgang",

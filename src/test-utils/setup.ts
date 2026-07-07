@@ -8,13 +8,22 @@ jest.mock("next-intl", () => {
   const messages = enMessages as Record<string, unknown>;
 
   const resolveMessage = (namespace: string, key: string): string => {
+    const namespaceParts = namespace.split(".");
+    let value: unknown = messages;
+
+    for (const part of namespaceParts) {
+      if (value && typeof value === "object") {
+        value = (value as Record<string, unknown>)[part];
+      }
+    }
+
     const parts = key.split(".");
-    let value: unknown = messages[namespace];
     for (const part of parts) {
       if (value && typeof value === "object") {
         value = (value as Record<string, unknown>)[part];
       }
     }
+
     return typeof value === "string" ? value : key;
   };
 
@@ -42,9 +51,28 @@ jest.mock("motion/react", () => {
     },
   );
 
+  const useMotionValue = (initial: number) => {
+    let current = initial;
+
+    return {
+      get: () => current,
+      set: (next: number) => {
+        current = next;
+      },
+      stop: jest.fn(),
+    };
+  };
+
   return {
     motion,
     AnimatePresence: ({ children }: PropsWithChildren) =>
       createElement("div", null, children),
+    useMotionValue,
+    animate: jest.fn(
+      (value: { set: (next: number) => void }, target: number) => {
+        value.set(target);
+        return Promise.resolve();
+      },
+    ),
   };
 });

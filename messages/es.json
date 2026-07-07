@@ -136,7 +136,19 @@
           "pause": "Pausar",
           "volume": "Volumen",
           "next": "Siguiente",
-          "previous": "Anterior"
+          "previous": "Anterior",
+          "shuffle": "Aleatorio"
+        },
+        "recentlyPlayed": "Reproducido recientemente",
+        "notPlayingNow": "No hay nada reproduciéndose",
+        "lastPlayed": "Última canción",
+        "fullscreen": {
+          "expand": "Expandir reproductor",
+          "close": "Cerrar reproductor",
+          "openInSpotify": "Abrir en Spotify",
+          "lyrics": "Letra",
+          "more": "Más opciones",
+          "repeat": "Repetir"
         },
         "hints": {
           "currentProgress": "Progreso actual",

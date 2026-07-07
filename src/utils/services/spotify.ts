@@ -1,11 +1,15 @@
 import { z } from "zod";
 
 import type {
-  PlayHistoryObject,
   SpotifyResponse,
   ErrorResponse,
   NowPlayingResponse,
+  QueueResponse,
+  RecentlyPlayedResponse,
 } from "@/utils/interfaces/spotify";
+import type { Track } from "@/utils/interfaces/spotify/entities";
+
+/** Refresh token must include scopes from `spotify-scopes.ts`. */
 
 const URL_SPOTIFY = "https://api.spotify.com/";
 const clientId = process.env.SPOTIFY_CLIENT_ID ?? "";
@@ -124,11 +128,13 @@ const NOW_PLAYING_ENDPOINT = `${URL_SPOTIFY}v1/me/player/currently-playing`;
 export const getNowPlaying = async () =>
   buildSpotifyRequest<NowPlayingResponse>(NOW_PLAYING_ENDPOINT);
 
+const QUEUE_ENDPOINT = `${URL_SPOTIFY}v1/me/player/queue`;
+export const getQueue = async () =>
+  buildSpotifyRequest<QueueResponse>(QUEUE_ENDPOINT);
+
 const RECENTLY_PLAYED_ENDPOINT = `${URL_SPOTIFY}v1/me/player/recently-played?limit=1`;
 export const getRecentlyPlayed = async () =>
-  buildSpotifyRequest<SpotifyResponse<PlayHistoryObject>>(
-    RECENTLY_PLAYED_ENDPOINT,
-  );
+  buildSpotifyRequest<RecentlyPlayedResponse>(RECENTLY_PLAYED_ENDPOINT);
 
 const TOP_TRACKS_ENDPOINT = "v1/me/top/tracks";
 export const getTopTracks = async (
@@ -136,6 +142,6 @@ export const getTopTracks = async (
   limit: number,
   offset: number,
 ) =>
-  buildSpotifyRequest<SpotifyResponse<PlayHistoryObject>>(
+  buildSpotifyRequest<SpotifyResponse<Track>>(
     `${URL_SPOTIFY}${TOP_TRACKS_ENDPOINT}?time_range=${timeRange}&limit=${limit}&offset=${offset}`,
   );

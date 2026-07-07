@@ -67,29 +67,29 @@ const Footer: FC = () => {
             </div>
           </div>
           {/* End Col */}
-          <div className="col-span-2">
+          <div className="col-span-2 max-md:mt-2 max-md:border-t max-md:border-white/10 max-md:pt-6 lg:border-l lg:border-white/10 lg:pl-6">
             <h4 className="font-semibold text-gray-100">
               {t("titles.NowPlaying")}
             </h4>
-            <div className="mt-4 flex w-full rounded-md bg-gray-800 p-2">
+            <div className="mt-4 w-full rounded-lg border border-white/8 bg-gray-800/50 p-2.5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
               <SpotifyWidget />
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2.5 flex items-center justify-end gap-2 px-1 text-xs"
+                href="https://developer.spotify.com/documentation/web-api"
+              >
+                <span className="text-sm text-gray-400">
+                  {t("spotify.poweredBy")}
+                </span>
+                <Image
+                  src="https://res.cloudinary.com/js-media/image/upload/v1691956781/portfolio/win11/Spotify_Logo_RGB_Green_a3ceey.webp"
+                  alt="Spotify"
+                  width={60}
+                  height={1}
+                />
+              </a>
             </div>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 ml-3 flex items-center gap-2 text-xs"
-              href="https://developer.spotify.com/documentation/web-api"
-            >
-              <span className="text-sm text-gray-400">
-                {t("spotify.poweredBy")}
-              </span>
-              <Image
-                src="https://res.cloudinary.com/js-media/image/upload/v1691956781/portfolio/win11/Spotify_Logo_RGB_Green_a3ceey.webp"
-                alt="Spotify"
-                width={60}
-                height={1}
-              />
-            </a>
           </div>
           {/* End Col */}
         </div>

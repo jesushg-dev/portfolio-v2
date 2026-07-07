@@ -13,7 +13,8 @@ const TrackText: FC<ITrackTextProps> = ({ track, url }) => {
       rel="noopener noreferrer"
       href={url}
       title={track}
-      className="mt-1 block truncate text-xl font-bold text-white/90 transition-all select-none hover:underline"
+      className="mt-0.5 block truncate text-sm leading-tight font-bold text-white transition-colors select-none hover:underline"
+      onClick={(event) => event.stopPropagation()}
     >
       {track}
     </a>
