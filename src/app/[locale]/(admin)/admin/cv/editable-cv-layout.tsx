@@ -164,140 +164,140 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
   return (
     <div className="relative">
       <CvContextProvider>
-          <EditableSection
-            id="header"
-            title={t("headerSection")}
-            onClick={() => setActiveSection("header")}
-            isEmpty={!data.header}
-            t={t}
-          >
-            <HeaderCv
-              header={data.header}
-              fallbackName={data.profile?.displayName ?? null}
-              locale={currentLocale}
-              defaultLocale={defaultLocale}
-            />
-          </EditableSection>
+        <EditableSection
+          id="header"
+          title={t("headerSection")}
+          onClick={() => setActiveSection("header")}
+          isEmpty={!data.header}
+          t={t}
+        >
+          <HeaderCv
+            header={data.header}
+            fallbackName={data.profile?.displayName ?? null}
+            locale={currentLocale}
+            defaultLocale={defaultLocale}
+          />
+        </EditableSection>
 
-          <div className="bg-card grid grid-cols-1 p-5 pb-10 sm:grid-cols-9">
-            <div className="flex flex-col gap-6 sm:col-span-3">
-              <EditableSection
-                id="contacts"
-                title={t("sections.contact")}
-                onClick={() => setActiveSection("contacts")}
-                isEmpty={data.contacts.length === 0}
-                t={t}
-              >
-                <ContactMe
-                  contacts={data.contacts}
-                  locale={currentLocale}
-                  defaultLocale={defaultLocale}
-                />
-              </EditableSection>
+        <div className="bg-card grid grid-cols-1 p-5 pb-10 sm:grid-cols-9">
+          <div className="flex flex-col gap-6 sm:col-span-3">
+            <EditableSection
+              id="contacts"
+              title={t("sections.contact")}
+              onClick={() => setActiveSection("contacts")}
+              isEmpty={data.contacts.length === 0}
+              t={t}
+            >
+              <ContactMe
+                contacts={data.contacts}
+                locale={currentLocale}
+                defaultLocale={defaultLocale}
+              />
+            </EditableSection>
 
-              <EditableSection
-                id="education"
-                title={t("sections.education")}
-                onClick={() => setActiveSection("education")}
-                isEmpty={data.educations.length === 0}
-                t={t}
-              >
-                <Education
-                  educations={data.educations}
-                  locale={currentLocale}
-                  defaultLocale={defaultLocale}
-                />
-              </EditableSection>
+            <EditableSection
+              id="education"
+              title={t("sections.education")}
+              onClick={() => setActiveSection("education")}
+              isEmpty={data.educations.length === 0}
+              t={t}
+            >
+              <Education
+                educations={data.educations}
+                locale={currentLocale}
+                defaultLocale={defaultLocale}
+              />
+            </EditableSection>
 
-              <EditableSection
-                id="languages"
-                title={t("sections.languages")}
-                onClick={() => setActiveSection("languages")}
-                isEmpty={data.languages.length === 0}
-                t={t}
-              >
-                <Languages
-                  languages={data.languages}
-                  locale={currentLocale}
-                  defaultLocale={defaultLocale}
-                />
-              </EditableSection>
+            <EditableSection
+              id="languages"
+              title={t("sections.languages")}
+              onClick={() => setActiveSection("languages")}
+              isEmpty={data.languages.length === 0}
+              t={t}
+            >
+              <Languages
+                languages={data.languages}
+                locale={currentLocale}
+                defaultLocale={defaultLocale}
+              />
+            </EditableSection>
 
-              <EditableSection
-                id="skills"
-                title={t("sections.technicalSkills")}
-                onClick={() => setActiveSection("skills")}
-                isEmpty={data.technicalSkills.length === 0}
-                t={t}
-              >
-                <TechnicalSkills technicalSkills={data.technicalSkills} />
-              </EditableSection>
-            </div>
-
-            <div className="col-span-1 hidden w-full justify-center sm:flex">
-              <div className="border-border h-full w-[1px] border-r" />
-            </div>
-
-            <div className="flex flex-col gap-6 sm:col-span-5">
-              <EditableSection
-                id="about"
-                title={t("sections.aboutMe")}
-                onClick={() => setActiveSection("about")}
-                isEmpty={!aboutMeText}
-                t={t}
-              >
-                <div className="mb-4">
-                  <h5 className="text-primary mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
-                    {t("sections.aboutMe")}
-                  </h5>
-                  <h3 className="text-foreground text-xs">{aboutMeText}</h3>
-                </div>
-              </EditableSection>
-
-              <EditableSection
-                id="experience"
-                title={t("sections.experience")}
-                onClick={() => setActiveSection("experience")}
-                isEmpty={data.experiences.length === 0}
-                t={t}
-              >
-                <Experience
-                  experiences={data.experiences}
-                  locale={currentLocale}
-                  defaultLocale={defaultLocale}
-                />
-              </EditableSection>
-
-              <EditableSection
-                id="soft-skills"
-                title={t("sections.personalSkills")}
-                onClick={() => setActiveSection("soft-skills")}
-                isEmpty={data.softSkills.length === 0}
-                t={t}
-              >
-                <SoftSkills
-                  softSkills={data.softSkills}
-                  locale={currentLocale}
-                  defaultLocale={defaultLocale}
-                />
-              </EditableSection>
-
-              <EditableSection
-                id="additional"
-                title={t("sections.additionalInformation")}
-                onClick={() => setActiveSection("additional")}
-                isEmpty={data.additionalInformation.length === 0}
-                t={t}
-              >
-                <AdditionalInformation
-                  additionalInformation={data.additionalInformation}
-                  locale={currentLocale}
-                  defaultLocale={defaultLocale}
-                />
-              </EditableSection>
-            </div>
+            <EditableSection
+              id="skills"
+              title={t("sections.technicalSkills")}
+              onClick={() => setActiveSection("skills")}
+              isEmpty={data.technicalSkills.length === 0}
+              t={t}
+            >
+              <TechnicalSkills technicalSkills={data.technicalSkills} />
+            </EditableSection>
           </div>
-        </CvContextProvider>
+
+          <div className="col-span-1 hidden w-full justify-center sm:flex">
+            <div className="border-border h-full w-[1px] border-r" />
+          </div>
+
+          <div className="flex flex-col gap-6 sm:col-span-5">
+            <EditableSection
+              id="about"
+              title={t("sections.aboutMe")}
+              onClick={() => setActiveSection("about")}
+              isEmpty={!aboutMeText}
+              t={t}
+            >
+              <div className="mb-4">
+                <h5 className="text-primary mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+                  {t("sections.aboutMe")}
+                </h5>
+                <h3 className="text-foreground text-xs">{aboutMeText}</h3>
+              </div>
+            </EditableSection>
+
+            <EditableSection
+              id="experience"
+              title={t("sections.experience")}
+              onClick={() => setActiveSection("experience")}
+              isEmpty={data.experiences.length === 0}
+              t={t}
+            >
+              <Experience
+                experiences={data.experiences}
+                locale={currentLocale}
+                defaultLocale={defaultLocale}
+              />
+            </EditableSection>
+
+            <EditableSection
+              id="soft-skills"
+              title={t("sections.personalSkills")}
+              onClick={() => setActiveSection("soft-skills")}
+              isEmpty={data.softSkills.length === 0}
+              t={t}
+            >
+              <SoftSkills
+                softSkills={data.softSkills}
+                locale={currentLocale}
+                defaultLocale={defaultLocale}
+              />
+            </EditableSection>
+
+            <EditableSection
+              id="additional"
+              title={t("sections.additionalInformation")}
+              onClick={() => setActiveSection("additional")}
+              isEmpty={data.additionalInformation.length === 0}
+              t={t}
+            >
+              <AdditionalInformation
+                additionalInformation={data.additionalInformation}
+                locale={currentLocale}
+                defaultLocale={defaultLocale}
+              />
+            </EditableSection>
+          </div>
+        </div>
+      </CvContextProvider>
 
       <Dialog open={activeSection !== null} onOpenChange={handleClose}>
         <DialogContent className="max-h-[85vh] w-full max-w-5xl overflow-y-auto">

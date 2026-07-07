@@ -104,11 +104,7 @@ const ResetPasswordForm: FC = () => {
             name="password"
             render={({ field }) => (
               <FormItem label="New password">
-                <Input
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <Input type="password" autoComplete="new-password" {...field} />
               </FormItem>
             )}
           />
@@ -118,11 +114,7 @@ const ResetPasswordForm: FC = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem label="Confirm password">
-                <Input
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <Input type="password" autoComplete="new-password" {...field} />
               </FormItem>
             )}
           />
@@ -136,9 +128,7 @@ const ResetPasswordForm: FC = () => {
         </FormContent>
 
         <FormActions
-          isPending={
-            form.formState.isSubmitting || isPending || !token
-          }
+          isPending={form.formState.isSubmitting || isPending || !token}
           title="Update password"
         />
 

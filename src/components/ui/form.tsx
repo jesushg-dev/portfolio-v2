@@ -5,11 +5,11 @@ import {
   forwardRef,
   type HTMLAttributes,
   useId,
-  type ElementRef,
+  type ComponentRef,
   type ComponentPropsWithoutRef,
 } from "react";
 
-import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
 import {
   Controller,
   FormProvider,
@@ -86,7 +86,7 @@ FormItem.displayName = "FormItem";
 
 /* ── FormLabel ──────────────────────────────────────────────────────────── */
 const FormLabel = forwardRef<
-  ElementRef<typeof Label>,
+  ComponentRef<typeof Label>,
   ComponentPropsWithoutRef<typeof Label>
 >(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField();
@@ -103,13 +103,13 @@ FormLabel.displayName = "FormLabel";
 
 /* ── FormControl ────────────────────────────────────────────────────────── */
 const FormControl = forwardRef<
-  ElementRef<"div">,
-  ComponentPropsWithoutRef<"div">
+  ComponentRef<typeof Slot>,
+  ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
   return (
-    <div
+    <Slot
       ref={ref}
       id={formItemId}
       aria-describedby={

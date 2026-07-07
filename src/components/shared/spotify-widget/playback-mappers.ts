@@ -90,7 +90,8 @@ export function mapEpisodeNowPlaying(
     subtitle: episode.show.name,
     subtitleUrl: resolveSpotifyUrl(episode.show.external_urls.spotify),
     durationMs: episode.duration_ms,
-    progressMs: data.progress_ms ?? episode.resume_point?.resume_position_ms ?? 0,
+    progressMs:
+      data.progress_ms ?? episode.resume_point?.resume_position_ms ?? 0,
     isPlaying: data.is_playing,
     contentUrl: resolveSpotifyUrl(episode.external_urls.spotify),
     imageUrl: episode.images[0]?.url ?? episode.show.images[0]?.url,
@@ -141,9 +142,7 @@ export function resolveTrackFromQueue(queue: QueueResponse): Track | null {
   return queuedTrack ?? null;
 }
 
-export function resolveEpisodeFromQueue(
-  queue: QueueResponse,
-): Episode | null {
+export function resolveEpisodeFromQueue(queue: QueueResponse): Episode | null {
   const { currently_playing: currentlyPlaying } = queue;
 
   if (currentlyPlaying && isEpisode(currentlyPlaying)) {
@@ -176,7 +175,9 @@ export function needsQueueFallback(data: NowPlayingResponse): boolean {
   return false;
 }
 
-export function resolveTrackFromNowPlaying(data: NowPlayingResponse): Track | null {
+export function resolveTrackFromNowPlaying(
+  data: NowPlayingResponse,
+): Track | null {
   if (data.item && isTrack(data.item) && !data.item.explicit) {
     return data.item;
   }

@@ -11,7 +11,10 @@ interface AnimatedGradientProps {
   instant?: boolean;
 }
 
-const GRADIENT_TRANSITION = { duration: 0.32, ease: [0.22, 1, 0.36, 1] } as const;
+const GRADIENT_TRANSITION = {
+  duration: 0.32,
+  ease: [0.22, 1, 0.36, 1],
+} as const;
 
 const AnimatedGradient: FC<AnimatedGradientProps> = ({
   accentColor,

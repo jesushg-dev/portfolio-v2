@@ -9,9 +9,7 @@ const localeMap = {
 
 export function formatPlayedAt(playedAt: string, locale: string): string {
   const dateFnsLocale =
-    locale in localeMap
-      ? localeMap[locale as keyof typeof localeMap]
-      : enUS;
+    locale in localeMap ? localeMap[locale as keyof typeof localeMap] : enUS;
 
   return formatDistanceToNow(new Date(playedAt), {
     addSuffix: true,

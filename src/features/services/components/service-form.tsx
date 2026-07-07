@@ -175,7 +175,8 @@ export const ServiceForm: FC<ServiceFormProps> = ({
             await Promise.all(
               values.translations
                 .filter(
-                  (tr) => tr.title.trim() !== "" || tr.description.trim() !== "",
+                  (tr) =>
+                    tr.title.trim() !== "" || tr.description.trim() !== "",
                 )
                 .map((trans) =>
                   upsertTranslation.mutateAsync({

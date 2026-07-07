@@ -16,14 +16,12 @@ interface SpotifyPlaybackHookResult {
   isFetchError: boolean;
 }
 
-const mockUseSpotifyPlayback = jest.fn(
-  (): SpotifyPlaybackHookResult => ({
-    playback: null,
-    error: null,
-    isLoading: false,
-    isFetchError: false,
-  }),
-);
+const mockUseSpotifyPlayback = jest.fn((): SpotifyPlaybackHookResult => ({
+  playback: null,
+  error: null,
+  isLoading: false,
+  isFetchError: false,
+}));
 
 jest.mock("./use-spotify-playback", () => ({
   useSpotifyPlayback: (): SpotifyPlaybackHookResult => mockUseSpotifyPlayback(),
@@ -101,7 +99,9 @@ describe("SpotifyWidget", () => {
     renderWithIntl(<SpotifyWidget />);
 
     expect(screen.getByText("Get Lucky")).toBeInTheDocument();
-    expect(screen.getByText("Daft Punk feat Pharrell Williams")).toBeInTheDocument();
+    expect(
+      screen.getByText("Daft Punk feat Pharrell Williams"),
+    ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Get Lucky" })).toHaveAttribute(
       "href",
       "https://open.spotify.com/track/track-1",

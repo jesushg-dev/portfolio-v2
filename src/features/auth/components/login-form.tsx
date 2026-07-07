@@ -14,11 +14,7 @@ import { cn } from "@/lib/utils";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  FormContent,
-  FormItem,
-  FormRoot,
-} from "@/components/shared/form-root";
+import { FormContent, FormItem, FormRoot } from "@/components/shared/form-root";
 import FormStatus from "@/components/admin/shared/form-status";
 
 const LoginSchema = z.object({

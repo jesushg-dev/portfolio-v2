@@ -37,10 +37,7 @@ export default async function EditTimelineItemModal({ params }: Props) {
   }
 
   return (
-    <ModalWrapper
-      title={t("editEntry")}
-      description={t("editDescription")}
-    >
+    <ModalWrapper title={t("editEntry")} description={t("editDescription")}>
       <TimelineItemForm initialData={experience} languages={languages} />
     </ModalWrapper>
   );

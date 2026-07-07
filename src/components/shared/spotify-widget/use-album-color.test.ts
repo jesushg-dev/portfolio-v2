@@ -15,7 +15,9 @@ describe("buildSpotifyFullscreenBg", () => {
   it("darkens the accent color for fullscreen backgrounds", () => {
     const background = buildSpotifyFullscreenBg("#1db954");
 
-    expect(background).toMatch(/^linear-gradient\(180deg, #[0-9a-f]{6} 0%, #[0-9a-f]{6} 100%\)$/);
+    expect(background).toMatch(
+      /^linear-gradient\(180deg, #[0-9a-f]{6} 0%, #[0-9a-f]{6} 100%\)$/,
+    );
     expect(background).not.toContain("#1db954");
   });
 });

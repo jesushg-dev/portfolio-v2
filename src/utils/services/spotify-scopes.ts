@@ -15,7 +15,12 @@ export const SPOTIFY_REQUIRED_SCOPES = [
 export function isInsufficientScopeError(
   data: ErrorResponse | Record<string, unknown> | undefined,
 ): boolean {
-  if (!data || !("error" in data) || typeof data.error !== "object" || data.error === null) {
+  if (
+    !data ||
+    !("error" in data) ||
+    typeof data.error !== "object" ||
+    data.error === null
+  ) {
     return false;
   }
 
@@ -45,14 +50,20 @@ export function getSpotifyQueryError(data: unknown): SpotifyApiError | null {
     return null;
   }
 
-  if (isInsufficientScopeError({ error: { status: error.status, message: error.message } })) {
+  if (
+    isInsufficientScopeError({
+      error: { status: error.status, message: error.message },
+    })
+  ) {
     return null;
   }
 
   return { status: error.status, message: error.message };
 }
 
-export function resolveSpotifyUrl(...candidates: Array<string | undefined>): string {
+export function resolveSpotifyUrl(
+  ...candidates: Array<string | undefined>
+): string {
   for (const candidate of candidates) {
     if (candidate) return candidate;
   }

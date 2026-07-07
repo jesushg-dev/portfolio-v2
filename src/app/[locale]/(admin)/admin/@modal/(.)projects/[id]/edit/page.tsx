@@ -33,10 +33,7 @@ export default async function EditProjectModal({
   if (!project) notFound();
 
   return (
-    <PageDialogWrapper
-      title={t("edit")}
-      description={t("editDescription")}
-    >
+    <PageDialogWrapper title={t("edit")} description={t("editDescription")}>
       <ProjectForm initialData={project} languages={languages} />
     </PageDialogWrapper>
   );

@@ -6,7 +6,13 @@ import { renderWithIntl } from "@/test-utils/render-with-intl";
 
 const mockUseInfiniteQuery = jest.fn<
   {
-    data?: { pages: Array<{ data: unknown[]; cursor: string | null; hasMore: boolean }> };
+    data?: {
+      pages: Array<{
+        data: unknown[];
+        cursor: string | null;
+        hasMore: boolean;
+      }>;
+    };
     isLoading: boolean;
     isFetching: boolean;
     fetchNextPage: jest.Mock;
@@ -60,13 +66,17 @@ describe("Certification", () => {
       isFetching: false,
       fetchNextPage: jest.fn(),
     });
-    const { container } = renderWithIntl(<Certification slug={undefined as never} />);
+    const { container } = renderWithIntl(
+      <Certification slug={undefined as never} />,
+    );
     expect(container.querySelector(".react-loading-skeleton")).toBeTruthy();
   });
 
   it("renders certificate items from query data", () => {
     mockUseInfiniteQuery.mockReturnValue({
-      data: { pages: [{ data: [certificate], cursor: "cert-1", hasMore: false }] },
+      data: {
+        pages: [{ data: [certificate], cursor: "cert-1", hasMore: false }],
+      },
       isLoading: false,
       isFetching: false,
       fetchNextPage: jest.fn(),
@@ -89,7 +99,9 @@ describe("Certification", () => {
   it("shows load more button when hasMore is true", async () => {
     const fetchNextPage = jest.fn();
     mockUseInfiniteQuery.mockReturnValue({
-      data: { pages: [{ data: [certificate], cursor: "cert-1", hasMore: true }] },
+      data: {
+        pages: [{ data: [certificate], cursor: "cert-1", hasMore: true }],
+      },
       isLoading: false,
       isFetching: false,
       fetchNextPage,

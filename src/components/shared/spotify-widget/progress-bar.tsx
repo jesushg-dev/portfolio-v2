@@ -28,7 +28,10 @@ const ProgressBar: FC<ProgressBarProps> = ({
   if (readOnly) {
     return (
       <div
-        className={cn("relative h-1 w-full overflow-hidden rounded-full bg-white/20", className)}
+        className={cn(
+          "relative h-1 w-full overflow-hidden rounded-full bg-white/20",
+          className,
+        )}
         role="progressbar"
         aria-valuenow={clamped}
         aria-valuemin={0}

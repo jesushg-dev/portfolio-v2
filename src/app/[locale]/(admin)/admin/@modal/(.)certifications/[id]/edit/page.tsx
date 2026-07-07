@@ -33,10 +33,7 @@ export default async function EditCertificationModal({
   if (!certification) notFound();
 
   return (
-    <PageDialogWrapper
-      title={t("edit")}
-      description={t("editDescription")}
-    >
+    <PageDialogWrapper title={t("edit")} description={t("editDescription")}>
       <CertificationForm initialData={certification} languages={languages} />
     </PageDialogWrapper>
   );

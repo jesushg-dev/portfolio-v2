@@ -97,12 +97,15 @@ export function useSpotifyPlayback() {
     wasActivelyPlayingRef.current = isActivelyPlaying;
   }, [isActivelyPlaying, utils]);
 
-  const recentlyPlayedQuery = api.spotify.getRecentlyPlayed.useQuery(undefined, {
-    enabled: !nowPlayingQuery.isLoading,
-    staleTime: ETime.HALF_SECOND,
-    refetchOnWindowFocus: true,
-    refetchInterval: shouldUseRecentlyPlayed ? ETime.HALF_MINUTE : false,
-  });
+  const recentlyPlayedQuery = api.spotify.getRecentlyPlayed.useQuery(
+    undefined,
+    {
+      enabled: !nowPlayingQuery.isLoading,
+      staleTime: ETime.HALF_SECOND,
+      refetchOnWindowFocus: true,
+      refetchInterval: shouldUseRecentlyPlayed ? ETime.HALF_MINUTE : false,
+    },
+  );
 
   const playback = useMemo((): SpotifyPlayback | null => {
     if (!nowPlayingQuery.data) return null;
@@ -143,10 +146,7 @@ export function useSpotifyPlayback() {
 
     if (!shouldUseRecentlyPlayed) return null;
 
-    if (
-      !recentlyPlayedQuery.data ||
-      "error" in recentlyPlayedQuery.data
-    ) {
+    if (!recentlyPlayedQuery.data || "error" in recentlyPlayedQuery.data) {
       return null;
     }
 

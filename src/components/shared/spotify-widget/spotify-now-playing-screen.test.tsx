@@ -50,10 +50,9 @@ describe("SpotifyNowPlayingScreen", () => {
     );
 
     expect(screen.getByText("Now Playing")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open in Spotify" })).toHaveAttribute(
-      "href",
-      "https://open.spotify.com/track/track-1",
-    );
+    expect(
+      screen.getByRole("link", { name: "Open in Spotify" }),
+    ).toHaveAttribute("href", "https://open.spotify.com/track/track-1");
     expect(screen.getByRole("link", { name: "Get Lucky" })).toHaveAttribute(
       "href",
       "https://open.spotify.com/track/track-1",
@@ -79,7 +78,9 @@ describe("SpotifyNowPlayingScreen", () => {
     );
 
     expect(screen.getByText("Last played")).toBeInTheDocument();
-    expect(screen.getByText(/Nothing is playing right now/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Nothing is playing right now/),
+    ).toBeInTheDocument();
     expect(screen.queryByText("Now Playing")).not.toBeInTheDocument();
   });
 
@@ -101,10 +102,9 @@ describe("SpotifyNowPlayingScreen", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: "Taste the Cloud" })).toHaveAttribute(
-      "href",
-      "https://open.spotify.com/episode/episode-1",
-    );
+    expect(
+      screen.getByRole("link", { name: "Taste the Cloud" }),
+    ).toHaveAttribute("href", "https://open.spotify.com/episode/episode-1");
     expect(screen.getByRole("link", { name: "Syntax FM" })).toHaveAttribute(
       "href",
       "https://open.spotify.com/show/show-1",

@@ -84,9 +84,7 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
           await utils.cv.getMine.invalidate();
           setSuccess(true);
         } catch (err) {
-          setServerError(
-            err instanceof Error ? err.message : t("saveFailed"),
-          );
+          setServerError(err instanceof Error ? err.message : t("saveFailed"));
         }
       });
     },

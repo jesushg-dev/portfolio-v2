@@ -14,11 +14,7 @@ describe("Education", () => {
 
   it("renders localized degree name for the current locale", () => {
     renderWithIntl(
-      <Education
-        educations={[mockEducation]}
-        locale="es"
-        defaultLocale="en"
-      />,
+      <Education educations={[mockEducation]} locale="es" defaultLocale="en" />,
     );
     expect(screen.getByText("Ciencias de la Computación")).toBeInTheDocument();
     expect(screen.getByText(/Test University/)).toBeInTheDocument();
@@ -26,11 +22,7 @@ describe("Education", () => {
 
   it("renders section heading", () => {
     renderWithIntl(
-      <Education
-        educations={[mockEducation]}
-        locale="en"
-        defaultLocale="en"
-      />,
+      <Education educations={[mockEducation]} locale="en" defaultLocale="en" />,
     );
     expect(screen.getByText("Education")).toBeInTheDocument();
   });

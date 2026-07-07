@@ -120,11 +120,7 @@ const RegisterForm: FC = () => {
             name="password"
             render={({ field }) => (
               <FormItem label="Password">
-                <Input
-                  type="password"
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <Input type="password" autoComplete="new-password" {...field} />
               </FormItem>
             )}
           />

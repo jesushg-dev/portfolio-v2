@@ -8,10 +8,7 @@ export default async function NewTimelineItemModal() {
 
   const t = await getTranslations("admin.timeline");
   return (
-    <ModalWrapper
-      title={t("addNew")}
-      description={t("createDescription")}
-    >
+    <ModalWrapper title={t("addNew")} description={t("createDescription")}>
       <TimelineItemForm languages={languages} />
     </ModalWrapper>
   );

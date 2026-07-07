@@ -57,14 +57,14 @@ describe("resolveStepsForLocale", () => {
     const result = resolveStepsForLocale(steps, "en");
 
     expect(result.commands).toEqual(["cat ~/profile.json", "whoami"]);
-    expect(result.outputs[0]).toEqual(['{', '  "name": "Jesus"', "}"]);
+    expect(result.outputs[0]).toEqual(["{", '  "name": "Jesus"', "}"]);
     expect(result.outputs[1]).toEqual(["jesus"]);
   });
 
   it("resolves Spanish translations", () => {
     const result = resolveStepsForLocale(steps, "es");
 
-    expect(result.outputs[0]).toEqual(['{', '  "nombre": "Jesús"', "}"]);
+    expect(result.outputs[0]).toEqual(["{", '  "nombre": "Jesús"', "}"]);
     expect(result.outputs[1]).toEqual(["jesús"]);
   });
 

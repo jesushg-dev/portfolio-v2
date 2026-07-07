@@ -46,7 +46,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
       style={{ y: dragY, background: buildSpotifyFullscreenBg(accentColor) }}
       className="relative flex size-full min-h-0 cursor-grab flex-col text-white active:cursor-grabbing"
     >
-      <header className="relative z-20 shrink-0 px-3.5 pb-1 pt-[2.375rem]">
+      <header className="relative z-20 shrink-0 px-3.5 pt-[2.375rem] pb-1">
         <div className="grid grid-cols-[1.75rem_1fr_1.75rem] items-center gap-2">
           <button
             type="button"
@@ -77,7 +77,10 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
           </p>
         )}
 
-        <div className="mx-auto w-full shrink-0" style={{ maxWidth: coverSize }}>
+        <div
+          className="mx-auto w-full shrink-0"
+          style={{ maxWidth: coverSize }}
+        >
           <div
             className="mx-auto aspect-square w-full touch-none"
             style={{

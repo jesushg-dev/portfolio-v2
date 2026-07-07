@@ -72,7 +72,7 @@ const ContactForm: FC = () => {
     <Form {...form}>
       <FormRoot
         id="contact-form"
-        className="text-card-foreground box-border mx-auto w-full h-full min-w-0 max-w-md flex-none flex-col justify-center gap-4 overflow-visible p-0"
+        className="text-card-foreground mx-auto box-border h-full w-full max-w-md min-w-0 flex-none flex-col justify-center gap-4 overflow-visible p-0"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <p className="text-foreground text-center text-lg font-bold">
@@ -132,7 +132,7 @@ const ContactForm: FC = () => {
           disabled={isPending}
           whileHover={{ scale: isPending ? 1 : 1.02 }}
           whileTap={{ scale: isPending ? 1 : 0.97 }}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 pressable relative mt-2 box-border flex w-full min-w-0 max-w-full items-center justify-center gap-2 overflow-hidden rounded-lg px-6 py-3 font-semibold tracking-widest uppercase shadow-lg transition-all disabled:opacity-60"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 pressable relative mt-2 box-border flex w-full max-w-full min-w-0 items-center justify-center gap-2 overflow-hidden rounded-lg px-6 py-3 font-semibold tracking-widest uppercase shadow-lg transition-all disabled:opacity-60"
         >
           {!isPending && (
             <span

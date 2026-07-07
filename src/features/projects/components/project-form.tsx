@@ -361,10 +361,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 name="githubUrl"
                 render={({ field }) => (
                   <FormItem label={t("githubUrl")}>
-                    <Input
-                      placeholder={t("githubUrlPlaceholder")}
-                      {...field}
-                    />
+                    <Input placeholder={t("githubUrlPlaceholder")} {...field} />
                   </FormItem>
                 )}
               />

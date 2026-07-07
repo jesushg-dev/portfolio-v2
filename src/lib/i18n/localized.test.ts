@@ -25,9 +25,9 @@ describe("getLocalizedText", () => {
   });
 
   it("falls back to default when no translation matches", () => {
-    expect(
-      getLocalizedText({ default: "Hello", translations: {} }, "nl"),
-    ).toBe("Hello");
+    expect(getLocalizedText({ default: "Hello", translations: {} }, "nl")).toBe(
+      "Hello",
+    );
   });
 
   it("returns empty string for invalid values", () => {
@@ -40,10 +40,7 @@ describe("getLocalizedText", () => {
 describe("buildLocalizedText", () => {
   it("builds localized text with default and translations", () => {
     expect(
-      buildLocalizedText(
-        { en: "Hello", es: "Hola", nl: "Hallo" },
-        "en",
-      ),
+      buildLocalizedText({ en: "Hello", es: "Hola", nl: "Hallo" }, "en"),
     ).toEqual({
       default: "Hello",
       translations: { es: "Hola", nl: "Hallo" },
@@ -51,8 +48,8 @@ describe("buildLocalizedText", () => {
   });
 
   it("throws when default locale value is missing", () => {
-    expect(() =>
-      buildLocalizedText({ es: "Hola" }, "en"),
-    ).toThrow('Default locale "en" is missing in values');
+    expect(() => buildLocalizedText({ es: "Hola" }, "en")).toThrow(
+      'Default locale "en" is missing in values',
+    );
   });
 });

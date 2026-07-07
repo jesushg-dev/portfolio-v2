@@ -9,10 +9,7 @@ export default async function NewProjectModal() {
   const t = await getTranslations("admin.projects");
 
   return (
-    <PageDialogWrapper
-      title={t("addNew")}
-      description={t("createDescription")}
-    >
+    <PageDialogWrapper title={t("addNew")} description={t("createDescription")}>
       <ProjectForm languages={languages} />
     </PageDialogWrapper>
   );

@@ -45,7 +45,8 @@ jest.mock("motion/react", () => {
   const motion = new Proxy(
     {},
     {
-      get: (_target, prop: string) =>
+      get:
+        (_target, prop: string) =>
         ({ children, ...props }: PropsWithChildren<Record<string, unknown>>) =>
           createElement(prop, props, children),
     },

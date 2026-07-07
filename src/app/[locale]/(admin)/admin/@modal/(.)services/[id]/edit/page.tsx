@@ -33,10 +33,7 @@ export default async function EditServiceModal({
   if (!service) notFound();
 
   return (
-    <PageDialogWrapper
-      title={t("edit")}
-      description={t("editDescription")}
-    >
+    <PageDialogWrapper title={t("edit")} description={t("editDescription")}>
       <ServiceForm initialData={service} languages={languages} />
     </PageDialogWrapper>
   );

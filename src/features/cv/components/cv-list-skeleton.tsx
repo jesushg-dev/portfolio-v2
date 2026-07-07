@@ -15,7 +15,9 @@ function CvListItemSkeleton({ lines = 1 }: { lines?: 1 | 2 }) {
         <Skeleton className="mt-1 size-4 shrink-0 rounded-sm" />
         <div className="flex-1 space-y-2">
           {lines === 2 ? <Skeleton className="h-3 w-16" /> : null}
-          <Skeleton className={`h-4 ${lines === 2 ? "w-48" : "w-full max-w-xs"}`} />
+          <Skeleton
+            className={`h-4 ${lines === 2 ? "w-48" : "w-full max-w-xs"}`}
+          />
           {lines === 2 ? <Skeleton className="h-3 w-32" /> : null}
         </div>
       </div>

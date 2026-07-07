@@ -105,8 +105,13 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const { data: terminalData, isLoading, isError, error, refetch } =
-    api.cv.getTerminalMine.useQuery();
+  const {
+    data: terminalData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = api.cv.getTerminalMine.useQuery();
 
   const form = useForm<ConsoleFormValues>({
     resolver: zodResolver(consoleFormSchema),
@@ -205,9 +210,7 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
     return (
       <div className="border-destructive/30 bg-destructive/5 text-destructive rounded-lg border p-4">
         <p className="text-sm font-medium">{t("loadFailed")}</p>
-        <p className="text-muted-foreground mt-1 text-sm">
-          {error.message}
-        </p>
+        <p className="text-muted-foreground mt-1 text-sm">{error.message}</p>
         <Button
           type="button"
           variant="outline"
@@ -231,7 +234,10 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
         />
 
         <FormContent error={serverError}>
-          <FormSection title={t("settingsTitle")} description={t("settingsDescription")}>
+          <FormSection
+            title={t("settingsTitle")}
+            description={t("settingsDescription")}
+          >
             <FormField
               control={form.control}
               name="username"
@@ -397,7 +403,9 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
 
         <FormActions
           isPending={isPending || upsertTerminal.isPending}
-          title={isPending || upsertTerminal.isPending ? t("saving") : t("save")}
+          title={
+            isPending || upsertTerminal.isPending ? t("saving") : t("save")
+          }
         />
       </FormRoot>
     </Form>

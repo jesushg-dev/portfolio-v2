@@ -43,23 +43,23 @@ Any staged file in `src/components/ui/**/*.{ts,tsx}` that contains a `dark:` cla
 
 ### Semantic token reference
 
-| Tailwind class          | CSS var              | Changes with theme |
-| ----------------------- | -------------------- | ------------------ |
-| `bg-background`         | `--background`       | ✅                 |
-| `text-foreground`       | `--foreground`       | ✅                 |
-| `bg-card`               | `--card`             | ✅                 |
-| `text-card-foreground`  | `--card-foreground`  | ✅                 |
-| `bg-primary`            | `--primary`          | ✅                 |
-| `text-primary-foreground` | `--primary-foreground` | ✅              |
-| `bg-secondary`          | `--secondary`        | ✅                 |
-| `bg-muted`              | `--muted`            | ✅                 |
-| `text-muted-foreground` | `--muted-foreground` | ✅                 |
-| `bg-accent`             | `--accent`           | ✅                 |
-| `border-input`          | `--input`            | ✅                 |
-| `border-border`         | `--border`           | ✅                 |
-| `ring-ring`             | `--ring`             | ✅                 |
-| `bg-popover`            | `--popover`          | ✅                 |
-| `text-destructive`      | `--destructive`      | ✅                 |
+| Tailwind class            | CSS var                | Changes with theme |
+| ------------------------- | ---------------------- | ------------------ |
+| `bg-background`           | `--background`         | ✅                 |
+| `text-foreground`         | `--foreground`         | ✅                 |
+| `bg-card`                 | `--card`               | ✅                 |
+| `text-card-foreground`    | `--card-foreground`    | ✅                 |
+| `bg-primary`              | `--primary`            | ✅                 |
+| `text-primary-foreground` | `--primary-foreground` | ✅                 |
+| `bg-secondary`            | `--secondary`          | ✅                 |
+| `bg-muted`                | `--muted`              | ✅                 |
+| `text-muted-foreground`   | `--muted-foreground`   | ✅                 |
+| `bg-accent`               | `--accent`             | ✅                 |
+| `border-input`            | `--input`              | ✅                 |
+| `border-border`           | `--border`             | ✅                 |
+| `ring-ring`               | `--ring`               | ✅                 |
+| `bg-popover`              | `--popover`            | ✅                 |
+| `text-destructive`        | `--destructive`        | ✅                 |
 
 ### Two color systems — know which to use
 
@@ -362,12 +362,12 @@ A parallel `tests/components/...` structure drifts out of sync, especially with 
 
 ### Shared test infrastructure lives in `src/test-utils/`
 
-| Path | Purpose |
-|------|---------|
-| `src/test-utils/setup.ts` | Global mocks (`next-intl`, `next/image`, `motion/react`) |
-| `src/test-utils/render-with-intl.tsx` | Render helper for components using `useTranslations` |
-| `src/test-utils/fixtures/` | Reusable mock data (e.g. CV fixtures) |
-| `src/test-utils/mocks/` | Optional per-domain mock helpers (e.g. tRPC) |
+| Path                                  | Purpose                                                  |
+| ------------------------------------- | -------------------------------------------------------- |
+| `src/test-utils/setup.ts`             | Global mocks (`next-intl`, `next/image`, `motion/react`) |
+| `src/test-utils/render-with-intl.tsx` | Render helper for components using `useTranslations`     |
+| `src/test-utils/fixtures/`            | Reusable mock data (e.g. CV fixtures)                    |
+| `src/test-utils/mocks/`               | Optional per-domain mock helpers (e.g. tRPC)             |
 
 ### Naming and discovery
 
@@ -377,13 +377,13 @@ A parallel `tests/components/...` structure drifts out of sync, especially with 
 
 ### What to test and how
 
-| Layer | Approach |
-|-------|----------|
-| Pure utilities | Direct `describe`/`it` — no DOM |
-| Presentational components | `renderWithIntl()` + Testing Library queries |
-| Client components with tRPC | `jest.mock("@/trpc/react", …)` in the test file |
-| App Router pages (RSC) | Smoke tests: mock `next-intl/server`, Prisma, tenant; invoke the async page export and render the result |
-| E2E (future) | Separate `e2e/` folder with Playwright — not mixed with unit tests |
+| Layer                       | Approach                                                                                                 |
+| --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Pure utilities              | Direct `describe`/`it` — no DOM                                                                          |
+| Presentational components   | `renderWithIntl()` + Testing Library queries                                                             |
+| Client components with tRPC | `jest.mock("@/trpc/react", …)` in the test file                                                          |
+| App Router pages (RSC)      | Smoke tests: mock `next-intl/server`, Prisma, tenant; invoke the async page export and render the result |
+| E2E (future)                | Separate `e2e/` folder with Playwright — not mixed with unit tests                                       |
 
 ### ✅ ALWAYS extract testable pure logic from components
 

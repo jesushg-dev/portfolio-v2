@@ -16,7 +16,11 @@ describe("ProgressTimer", () => {
 
   it("renders the current and total duration", () => {
     renderWithIntl(
-      <ProgressTimer progressMs={45_000} durationMs={248_000} isPlaying={false} />,
+      <ProgressTimer
+        progressMs={45_000}
+        durationMs={248_000}
+        isPlaying={false}
+      />,
     );
 
     expect(screen.getByTitle("Current progress")).toHaveTextContent("00:45");
@@ -37,11 +41,19 @@ describe("ProgressTimer", () => {
 
   it("syncs when the server progress changes", () => {
     const { rerender } = renderWithIntl(
-      <ProgressTimer progressMs={45_000} durationMs={248_000} isPlaying={false} />,
+      <ProgressTimer
+        progressMs={45_000}
+        durationMs={248_000}
+        isPlaying={false}
+      />,
     );
 
     rerender(
-      <ProgressTimer progressMs={90_000} durationMs={248_000} isPlaying={false} />,
+      <ProgressTimer
+        progressMs={90_000}
+        durationMs={248_000}
+        isPlaying={false}
+      />,
     );
 
     expect(screen.getByTitle("Current progress")).toHaveTextContent("01:30");
@@ -49,7 +61,11 @@ describe("ProgressTimer", () => {
 
   it("does not advance when playback is paused", () => {
     renderWithIntl(
-      <ProgressTimer progressMs={45_000} durationMs={248_000} isPlaying={false} />,
+      <ProgressTimer
+        progressMs={45_000}
+        durationMs={248_000}
+        isPlaying={false}
+      />,
     );
 
     act(() => {

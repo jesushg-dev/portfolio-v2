@@ -60,9 +60,7 @@ describe("captureExpandRects", () => {
       height: 14,
     } as DOMRect);
 
-    expect(
-      captureExpandRects({ cover, title, artist }),
-    ).toEqual({
+    expect(captureExpandRects({ cover, title, artist })).toEqual({
       cover: { top: 1, left: 2, width: 64, height: 64 },
       title: { top: 3, left: 4, width: 200, height: 18 },
       artist: { top: 5, left: 6, width: 200, height: 14 },

@@ -110,9 +110,7 @@ describe("mapRecentlyPlayed", () => {
   });
 
   it("returns null when history is empty", () => {
-    expect(
-      mapRecentlyPlayed({ ...mockRecentlyPlayed, items: [] }),
-    ).toBeNull();
+    expect(mapRecentlyPlayed({ ...mockRecentlyPlayed, items: [] })).toBeNull();
   });
 });
 

@@ -209,15 +209,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
         }
       });
     },
-    [
-      isEditMode,
-      updateSkill,
-      upsertTranslation,
-      createSkill,
-      utils,
-      router,
-      t,
-    ],
+    [isEditMode, updateSkill, upsertTranslation, createSkill, utils, router, t],
   );
 
   const isSaving =

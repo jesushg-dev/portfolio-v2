@@ -14,11 +14,7 @@ describe("Languages", () => {
 
   it("renders localized language name and level", () => {
     renderWithIntl(
-      <Languages
-        languages={[mockLanguage]}
-        locale="es"
-        defaultLocale="en"
-      />,
+      <Languages languages={[mockLanguage]} locale="es" defaultLocale="en" />,
     );
     expect(screen.getByText("Inglés")).toBeInTheDocument();
     expect(screen.getByText("Fluido")).toBeInTheDocument();

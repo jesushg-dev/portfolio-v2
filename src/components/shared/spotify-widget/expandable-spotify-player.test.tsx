@@ -75,7 +75,9 @@ describe("ExpandableSpotifyPlayer", () => {
       "href",
       "https://open.spotify.com/artist/artist-1",
     );
-    expect(screen.getByRole("button", { name: "Expand player" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Expand player" }),
+    ).toBeInTheDocument();
   });
 
   it("opens the fullscreen player when the expand control is clicked", async () => {
@@ -95,7 +97,9 @@ describe("ExpandableSpotifyPlayer", () => {
 
     renderWithIntl(<ExpandableSpotifyPlayer playback={playback!} />);
 
-    expect(screen.getByText("Nothing is playing right now")).toBeInTheDocument();
+    expect(
+      screen.getByText("Nothing is playing right now"),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Last played/)).toBeInTheDocument();
     expect(screen.queryByTitle("Current progress")).not.toBeInTheDocument();
   });
@@ -108,10 +112,9 @@ describe("ExpandableSpotifyPlayer", () => {
 
     renderWithIntl(<ExpandableSpotifyPlayer playback={playback} />);
 
-    expect(screen.getByRole("link", { name: "Taste the Cloud" })).toHaveAttribute(
-      "href",
-      "https://open.spotify.com/episode/episode-1",
-    );
+    expect(
+      screen.getByRole("link", { name: "Taste the Cloud" }),
+    ).toHaveAttribute("href", "https://open.spotify.com/episode/episode-1");
     expect(screen.getByRole("link", { name: "Syntax FM" })).toHaveAttribute(
       "href",
       "https://open.spotify.com/show/show-1",

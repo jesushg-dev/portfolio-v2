@@ -42,8 +42,7 @@ export function getExpandedTargets(screenRect: DOMRect) {
 
   const metaHeight = 6.75 * 16;
   const blockHeight = coverSize + metaHeight;
-  const coverTop =
-    screenRect.top + (screenRect.height - blockHeight) / 2 - 8;
+  const coverTop = screenRect.top + (screenRect.height - blockHeight) / 2 - 8;
 
   const textLeft = screenRect.left + screenRect.width * 0.03;
   const textWidth = screenRect.width * EXPANDED_COVER_WIDTH_RATIO;

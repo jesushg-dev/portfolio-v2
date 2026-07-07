@@ -30,7 +30,11 @@ describe("CertificateItem", () => {
   it("renders external link to certificate", () => {
     renderWithIntl(<CertificateItem {...baseCertificate} />);
     const links = screen.getAllByRole("link");
-    expect(links.some((link) => link.getAttribute("href") === "https://example.com/cert")).toBe(true);
+    expect(
+      links.some(
+        (link) => link.getAttribute("href") === "https://example.com/cert",
+      ),
+    ).toBe(true);
   });
 
   it("uses placeholder image when image is null", () => {

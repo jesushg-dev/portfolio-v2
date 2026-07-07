@@ -107,7 +107,9 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
 
     const frame = requestAnimationFrame(() => {
       if (!screenRef.current) return;
-      setFlyTargets(getExpandedTargets(screenRef.current.getBoundingClientRect()));
+      setFlyTargets(
+        getExpandedTargets(screenRef.current.getBoundingClientRect()),
+      );
     });
 
     return () => cancelAnimationFrame(frame);
@@ -178,9 +180,7 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
               height={64}
               className="size-16 rounded-[0.25rem] object-cover shadow-lg"
             />
-            {playback.isPlaying && (
-              <PlayingIndicator color={accentColor} />
-            )}
+            {playback.isPlaying && <PlayingIndicator color={accentColor} />}
           </div>
 
           <div className="relative z-10 min-w-0 flex-1">
@@ -444,9 +444,7 @@ const RecentlyPlayedNotice: FC<RecentlyPlayedNoticeProps> = ({
   compact = false,
 }) => {
   const t = useTranslations("global.footer");
-  const playedAtLabel = playedAt
-    ? formatPlayedAt(playedAt, locale)
-    : null;
+  const playedAtLabel = playedAt ? formatPlayedAt(playedAt, locale) : null;
 
   return (
     <div className={compact ? "mb-1" : "mb-2 text-center"}>
@@ -461,9 +459,7 @@ const RecentlyPlayedNotice: FC<RecentlyPlayedNoticeProps> = ({
       </p>
       <p
         className={
-          compact
-            ? "text-[0.625rem] text-white/55"
-            : "text-xs text-white/60"
+          compact ? "text-[0.625rem] text-white/55" : "text-xs text-white/60"
         }
       >
         {t("spotify.lastPlayed")}

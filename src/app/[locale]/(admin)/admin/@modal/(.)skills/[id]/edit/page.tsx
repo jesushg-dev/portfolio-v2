@@ -24,10 +24,7 @@ export default async function EditSkillModal({ params }: Props) {
   }
 
   return (
-    <ModalWrapper
-      title={t("edit")}
-      description={t("editDescription")}
-    >
+    <ModalWrapper title={t("edit")} description={t("editDescription")}>
       <SkillForm initialData={skill} languages={languages} />
     </ModalWrapper>
   );

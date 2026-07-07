@@ -1,7 +1,12 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import { animate, useMotionValue, type MotionValue, type PanInfo } from "motion/react";
+import {
+  animate,
+  useMotionValue,
+  type MotionValue,
+  type PanInfo,
+} from "motion/react";
 
 const CLOSE_OFFSET = 72;
 const CLOSE_VELOCITY = 420;
