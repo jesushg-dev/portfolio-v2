@@ -1,4 +1,5 @@
 import { Globe } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
 export interface GlobalLanguageSelectorProps {
@@ -12,13 +13,15 @@ export function GlobalLanguageSelector({
   activeLangId,
   onLangChange,
 }: GlobalLanguageSelectorProps) {
+  const t = useTranslations("admin.forms");
+
   if (!languages || languages.length === 0) return null;
 
   return (
     <div className="bg-muted/30 border-border/50 mb-6 flex items-center gap-3 rounded-lg border p-2">
       <div className="text-muted-foreground flex items-center gap-2 px-2">
         <Globe className="h-4 w-4" />
-        <span className="text-sm font-medium">Editing Language:</span>
+        <span className="text-sm font-medium">{t("editingLanguage")}</span>
       </div>
       <div className="flex items-center gap-1 overflow-x-auto">
         {languages.map((lang) => {

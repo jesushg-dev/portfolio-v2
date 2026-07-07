@@ -496,6 +496,8 @@
       "preview": "Preview",
       "editing": "Editing",
       "editingHint": "Click the edit button on any section to update it.",
+      "editingBanner": "Editing — Click the edit button on any section to update it.",
+      "previewLanguage": "Preview language",
       "clickToAdd": "Click to add",
       "previewRefresh": "{locale} — save each section to refresh",
       "noProfile": "Create your profile in <link>Settings</link> before editing your CV.",
@@ -545,6 +547,7 @@
       "deleteFailed": "Delete failed",
       "addNew": "+ Add new",
       "header": {
+        "sectionTitle": "Header",
         "fullName": "Full name",
         "degree": "Degree / role",
         "photoUrl": "Photo URL (optional)",

@@ -24,6 +24,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
 
+  /* US Letter page (8.5in × 11in @ 96dpi) */
+  --max-width-letter: 51rem;
+  --height-letter: 66rem;
+
   /*========== MAIN-LIGHT THEME ==========*/
   --color-primary-50: #eff7ff;
   --color-primary-100: #dbeafe;

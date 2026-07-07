@@ -497,6 +497,8 @@
       "preview": "Voorbeeld",
       "editing": "Bewerken",
       "editingHint": "Klik op de bewerkknop van een sectie om deze bij te werken.",
+      "editingBanner": "Bewerken — Klik op de bewerkknop van een sectie om deze bij te werken.",
+      "previewLanguage": "Voorbeeldtaal",
       "clickToAdd": "Klik om toe te voegen",
       "previewRefresh": "{locale} — sla elke sectie op om te vernieuwen",
       "noProfile": "Maak je profiel aan in <link>Instellingen</link> voordat je je CV bewerkt.",
@@ -546,6 +548,7 @@
       "deleteFailed": "Kon niet verwijderen",
       "addNew": "+ Toevoegen",
       "header": {
+        "sectionTitle": "Koptekst",
         "fullName": "Volledige naam",
         "degree": "Functie / rol",
         "photoUrl": "Foto-URL (optioneel)",

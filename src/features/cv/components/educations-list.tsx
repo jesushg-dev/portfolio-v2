@@ -147,7 +147,7 @@ const EducationsList: FC = () => {
         <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
           <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
             <DialogTitle>
-              {editingId ? "Edit Education" : "Add Education"}
+              {editingId ? t("edit") : t("create")}
             </DialogTitle>
             <CvLanguageTabs />
           </DialogHeader>

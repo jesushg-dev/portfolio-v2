@@ -49,7 +49,7 @@ export const CvEditorSkeleton: FC = () => {
         </nav>
       </div>
 
-      <div className="border-border overflow-hidden rounded-xl border shadow-sm">
+      <div className="border-border mx-auto w-full max-w-letter overflow-hidden rounded-xl border shadow-sm">
         <Skeleton className="h-9 w-full rounded-none" />
 
         <div className="bg-muted/30 flex flex-row items-center justify-between border-b px-8 py-6">

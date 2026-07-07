@@ -13,6 +13,7 @@ import CvPreview from "@/components/curriculum-vitae/cv-preview";
 import EditableCvLayout from "./editable-cv-layout";
 import { getLocalizedText } from "@/lib/i18n/localized";
 import { CvEditorSkeleton } from "@/features/cv/components/cv-editor-skeleton";
+import { CvPageFrame } from "@/features/cv/components/cv-page-frame";
 
 const SECTION_LINKS = [
   { id: "header", labelKey: "cvHeader" as const },
@@ -98,7 +99,7 @@ const CvEditorContent: FC<{ defaultLocale: Locale; t: CvTranslator }> = ({
 
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-muted-foreground text-xs font-medium">
-              {t("preview")}
+              {t("previewLanguage")}
             </span>
             <LocaleSegment
               value={previewLocale}
@@ -127,27 +128,28 @@ const CvEditorContent: FC<{ defaultLocale: Locale; t: CvTranslator }> = ({
       </div>
 
       {view === "preview" && previewData ? (
-        <div className="border-border overflow-hidden rounded-xl border shadow-sm">
-          <p className="border-border/70 bg-muted/40 text-muted-foreground border-b px-4 py-2 text-xs">
-            {t("previewRefresh", {
-              locale: localsDisplay[previewLocale],
-            })}
-          </p>
+        <CvPageFrame
+          hint={t("previewRefresh", {
+            locale: localsDisplay[previewLocale],
+          })}
+        >
           <CvPreview
             data={previewData}
             aboutMeText={aboutMePreview}
             currentLocale={previewLocale}
             defaultLocale={defaultLocale}
           />
-        </div>
+        </CvPageFrame>
       ) : (
-        <EditableCvLayout
-          data={previewData!}
-          aboutMeText={aboutMePreview}
-          currentLocale={previewLocale}
-          defaultLocale={defaultLocale}
-          t={t}
-        />
+        <CvPageFrame hint={t("editingBanner")}>
+          <EditableCvLayout
+            data={previewData!}
+            aboutMeText={aboutMePreview}
+            currentLocale={previewLocale}
+            defaultLocale={defaultLocale}
+            t={t}
+          />
+        </CvPageFrame>
       )}
     </>
   );

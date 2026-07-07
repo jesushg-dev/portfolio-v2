@@ -95,7 +95,7 @@ const HeaderForm: FC = () => {
         <FormContent
           error={upsertHeader.error ? upsertHeader.error.message : null}
         >
-          <FormSection title={"Header"}>
+          <FormSection title={t("sectionTitle")}>
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}

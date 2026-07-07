@@ -502,6 +502,8 @@
       "preview": "Vista previa",
       "editing": "Editando",
       "editingHint": "Haz clic en el botón de editar de cualquier sección para actualizarla.",
+      "editingBanner": "Editando — Haz clic en el botón de editar de cualquier sección para actualizarla.",
+      "previewLanguage": "Idioma de vista previa",
       "clickToAdd": "Haz clic para añadir",
       "previewRefresh": "{locale} — guarda cada sección para actualizar",
       "noProfile": "Crea tu perfil en <link>Ajustes</link> antes de editar el CV.",
@@ -551,6 +553,7 @@
       "deleteFailed": "No se pudo eliminar",
       "addNew": "+ Añadir",
       "header": {
+        "sectionTitle": "Cabecera",
         "fullName": "Nombre completo",
         "degree": "Título / rol",
         "photoUrl": "URL de la foto (opcional)",
