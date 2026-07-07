@@ -28,6 +28,7 @@ interface ILocalizedTextFieldProps<TFieldValues extends FieldValues> {
   required?: boolean;
   placeholder?: string;
   description?: string;
+  inputId?: string;
 }
 
 export function LocalizedTextField<TFieldValues extends FieldValues>({
@@ -39,6 +40,7 @@ export function LocalizedTextField<TFieldValues extends FieldValues>({
   required,
   placeholder,
   description,
+  inputId,
 }: ILocalizedTextFieldProps<TFieldValues>) {
   const t = useTranslations("admin.forms.localized");
   const editorLocale = useCvEditorLocale();
@@ -78,11 +80,12 @@ export function LocalizedTextField<TFieldValues extends FieldValues>({
         const fieldPlaceholder =
           placeholder ??
           (isDefaultLocale ? t("requiredDefault") : t("optionalTranslation"));
+        const fieldId = inputId ? `${inputId}-${activeLocale}` : undefined;
 
         return (
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <Label>
+              <Label htmlFor={fieldId}>
                 {label}
                 {required ? (
                   <span className="text-destructive ml-0.5">*</span>
@@ -108,6 +111,7 @@ export function LocalizedTextField<TFieldValues extends FieldValues>({
 
             {multiline ? (
               <Textarea
+                id={fieldId}
                 value={getLocaleValue(activeLocale)}
                 onChange={(e) => setLocaleValue(activeLocale, e.target.value)}
                 onBlur={field.onBlur}
@@ -117,6 +121,7 @@ export function LocalizedTextField<TFieldValues extends FieldValues>({
               />
             ) : (
               <Input
+                id={fieldId}
                 type="text"
                 value={getLocaleValue(activeLocale)}
                 onChange={(e) => setLocaleValue(activeLocale, e.target.value)}

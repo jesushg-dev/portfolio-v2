@@ -10,7 +10,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -270,6 +270,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
           languages={languages}
           activeLangId={activeLangId}
           onLangChange={setActiveLangId}
+          buttonIdPrefix="project"
         />
         <FormContent error={anyError}>
           <FormSection title={t("generalSection")}>
@@ -283,6 +284,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                       label={t("titleWithLanguage", {
                         language: activeLang.name,
                       })}
+                      inputId={`project-title-${activeLang.code}`}
                     >
                       <Input {...field} />
                     </FormItem>
@@ -296,6 +298,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                       label={t("descriptionWithLanguage", {
                         language: activeLang.name,
                       })}
+                      inputId={`project-description-${activeLang.code}`}
                     >
                       <Textarea rows={4} {...field} />
                     </FormItem>
@@ -308,7 +311,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
               control={form.control}
               name="image"
               render={({ field }) => (
-                <FormItem label={t("imageUrl")}>
+                <FormItem label={t("imageUrl")} inputId="project-image">
                   <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                 </FormItem>
               )}
@@ -319,14 +322,13 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 control={form.control}
                 name="type"
                 render={({ field }) => (
-                  <FormItem label={t("projectType")}>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("selectType")} />
-                      </SelectTrigger>
+                  <FormItem label={t("projectType")} inputId="project-type">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("selectType")} />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         {StackTypeSchema.options.map((opt) => (
                           <SelectItem key={opt} value={opt}>
@@ -360,7 +362,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 control={form.control}
                 name="githubUrl"
                 render={({ field }) => (
-                  <FormItem label={t("githubUrl")}>
+                  <FormItem label={t("githubUrl")} inputId="project-github-url">
                     <Input placeholder={t("githubUrlPlaceholder")} {...field} />
                   </FormItem>
                 )}
@@ -369,7 +371,10 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 control={form.control}
                 name="websiteUrl"
                 render={({ field }) => (
-                  <FormItem label={t("liveDemoUrl")}>
+                  <FormItem
+                    label={t("liveDemoUrl")}
+                    inputId="project-live-demo-url"
+                  >
                     <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                   </FormItem>
                 )}
@@ -385,7 +390,10 @@ export const ProjectForm: FC<ProjectFormProps> = ({
               control={form.control}
               name="skillIds"
               render={({ field }) => (
-                <FormItem label={t("associatedSkills")}>
+                <FormItem
+                  label={t("associatedSkills")}
+                  inputId="project-skill-picker"
+                >
                   <SkillPicker
                     availableSkills={availableSkills}
                     selectedSkillIds={field.value}

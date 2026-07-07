@@ -38,6 +38,7 @@ import SkillsList from "@/features/cv/components/skills-list";
 import AdditionalList from "@/features/cv/components/additional-list";
 import SoftSkillsList from "@/features/cv/components/soft-skills-list";
 
+import type { CvData } from "@/components/curriculum-vitae/types";
 import type {
   CvHeader,
   Profile,
@@ -45,10 +46,8 @@ import type {
   CvEducation,
   CvLanguage,
   CvTechnicalSkill,
-  CvExperience,
   CvSoftSkill,
   CvAdditionalInfo,
-  CvResponsibility,
 } from "@prisma/client";
 
 type SectionType =
@@ -72,7 +71,7 @@ interface ICvEditableLayoutProps {
     educations: CvEducation[];
     languages: CvLanguage[];
     technicalSkills: CvTechnicalSkill[];
-    experiences: (CvExperience & { responsibilities: CvResponsibility[] })[];
+    experiences: CvData["experiences"];
     softSkills: CvSoftSkill[];
     additionalInformation: CvAdditionalInfo[];
   };

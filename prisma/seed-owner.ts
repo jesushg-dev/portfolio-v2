@@ -321,7 +321,7 @@ export async function seedOwner(prisma: PrismaClient): Promise<string> {
           (l) => messages[l].curriculum.experiences[key]?.position,
         ) as any,
         dates: base.dates,
-        skills: base.skills,
+        skills: null,
         order: i,
         responsibilities: {
           createMany: {
@@ -330,6 +330,38 @@ export async function seedOwner(prisma: PrismaClient): Promise<string> {
         },
       },
     });
+
+    const createdExperience = await prisma.cvExperience.findFirst({
+      where: { userId: owner.id, company: base.company, order: i },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (createdExperience && base.skills) {
+      const skillTitles = base.skills
+        .split(",")
+        .map((title) => title.trim())
+        .filter(Boolean);
+      if (skillTitles.length > 0) {
+        const matchedSkills = await prisma.skill.findMany({
+          where: { title: { in: skillTitles } },
+          select: { id: true, title: true },
+        });
+        const titleToId = new Map(
+          matchedSkills.map((skill) => [skill.title.toLowerCase(), skill.id]),
+        );
+        const skillIds = skillTitles
+          .map((title) => titleToId.get(title.toLowerCase()))
+          .filter((id): id is string => !!id);
+        if (skillIds.length > 0) {
+          await prisma.cvExperienceSkill.createMany({
+            data: skillIds.map((skillId) => ({
+              experienceId: createdExperience.id,
+              skillId,
+            })),
+          });
+        }
+      }
+    }
   }
 
   // ---------- Soft skills ----------

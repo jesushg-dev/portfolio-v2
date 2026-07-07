@@ -26,7 +26,15 @@
     "prettier": "prettier --write .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test --project=login --project=smoke",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:skills": "playwright test --project=skills",
+    "test:e2e:skills:headed": "playwright test --project=skills --headed",
+    "test:e2e:skills:ui": "playwright test --project=skills --ui"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -99,6 +107,7 @@
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.4",
     "@next/eslint-plugin-next": "16.2.10",
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.3.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

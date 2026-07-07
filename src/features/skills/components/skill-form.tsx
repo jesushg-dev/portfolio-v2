@@ -10,7 +10,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -226,6 +226,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
           languages={languages}
           activeLangId={activeLangId}
           onLangChange={setActiveLangId}
+          buttonIdPrefix="skill"
         />
         <FormContent error={anyError}>
           <FormSection title={t("generalSection")}>
@@ -233,7 +234,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem label={t("title")}>
+                <FormItem label={t("title")} inputId="skill-title">
                   <Input placeholder={t("titlePlaceholder")} {...field} />
                 </FormItem>
               )}
@@ -249,6 +250,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                       label={t("descriptionWithLanguage", {
                         language: activeLang.name,
                       })}
+                      inputId={`skill-description-${activeLang.code}`}
                     >
                       <Textarea
                         rows={3}
@@ -267,6 +269,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                       label={t("wikiUrlWithLanguage", {
                         language: activeLang.name,
                       })}
+                      inputId={`skill-wiki-${activeLang.code}`}
                     >
                       <Input placeholder={t("wikiUrlPlaceholder")} {...field} />
                     </FormItem>
@@ -279,7 +282,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                 control={form.control}
                 name="image"
                 render={({ field }) => (
-                  <FormItem label={t("imageUrl")}>
+                  <FormItem label={t("imageUrl")} inputId="skill-image">
                     <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                   </FormItem>
                 )}
@@ -289,14 +292,13 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                 control={form.control}
                 name="type"
                 render={({ field }) => (
-                  <FormItem label={t("type")}>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("selectType")} />
-                      </SelectTrigger>
+                  <FormItem label={t("type")} inputId="skill-type">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("selectType")} />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         {StackTypeSchema.options.map((opt) => (
                           <SelectItem key={opt} value={opt}>

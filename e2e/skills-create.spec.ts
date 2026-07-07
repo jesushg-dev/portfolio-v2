@@ -1,0 +1,42 @@
+import { test, expect } from "@playwright/test";
+
+import {
+  cleanupUserSkills,
+  fillSkillForm,
+  goToSkillsList,
+  portfolioSkills,
+} from "./helpers/fill-skill-form";
+
+// ~1 min/skill in headed mode; 42 skills need well above the default 60s test timeout.
+test.setTimeout(45 * 60 * 1000);
+
+test.describe.configure({ mode: "serial" });
+
+test.describe("skills create", () => {
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext({
+      storageState: "e2e/.auth/user.json",
+    });
+    const page = await context.newPage();
+    await cleanupUserSkills(page);
+    await context.close();
+  });
+
+  test("creates all 42 portfolio skills from the shared fixture", async ({
+    page,
+  }) => {
+    await page.goto("/admin");
+
+    for (const skill of portfolioSkills) {
+      await fillSkillForm(page, skill, { verifyInList: false });
+    }
+
+    await goToSkillsList(page);
+    await page.goto("/admin/skills?perPage=100");
+    for (const skill of portfolioSkills) {
+      await expect(
+        page.getByRole("cell", { name: skill.title, exact: true }),
+      ).toBeVisible();
+    }
+  });
+});

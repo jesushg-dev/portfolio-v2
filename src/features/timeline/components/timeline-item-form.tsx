@@ -10,7 +10,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -260,6 +260,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
           languages={languages}
           activeLangId={activeLangId}
           onLangChange={setActiveLangId}
+          buttonIdPrefix="timeline"
         />
 
         <FormContent error={anyError}>
@@ -270,7 +271,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                   control={form.control}
                   name={`translations.${activeIndex}.title`}
                   render={({ field }) => (
-                    <FormItem label={t("title")}>
+                    <FormItem label={t("title")} inputId="timeline-title">
                       <Input placeholder={t("titlePlaceholder")} {...field} />
                     </FormItem>
                   )}
@@ -280,7 +281,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                   control={form.control}
                   name={`translations.${activeIndex}.description`}
                   render={({ field }) => (
-                    <FormItem label={t("description")}>
+                    <FormItem
+                      label={t("description")}
+                      inputId="timeline-description"
+                    >
                       <Textarea
                         rows={4}
                         placeholder={t("descriptionPlaceholder")}
@@ -296,7 +300,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
               control={form.control}
               name="organization"
               render={({ field }) => (
-                <FormItem label={t("organization")}>
+                <FormItem
+                  label={t("organization")}
+                  inputId="timeline-organization"
+                >
                   <Input
                     placeholder={t("organizationPlaceholder")}
                     {...field}
@@ -310,11 +317,13 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="category"
                 render={({ field }) => (
-                  <FormItem label={t("category")}>
+                  <FormItem label={t("category")} inputId="timeline-category">
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("selectCategory")} />
-                      </SelectTrigger>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("selectCategory")} />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         <SelectItem value="WORK">
                           {t("categoryWork")}
@@ -335,7 +344,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="location"
                 render={({ field }) => (
-                  <FormItem label={t("location")}>
+                  <FormItem label={t("location")} inputId="timeline-location">
                     <Input placeholder={t("locationPlaceholder")} {...field} />
                   </FormItem>
                 )}
@@ -347,7 +356,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="startDate"
                 render={({ field }) => (
-                  <FormItem label={t("startDate")}>
+                  <FormItem
+                    label={t("startDate")}
+                    inputId="timeline-start-date"
+                  >
                     <Input type="date" {...field} />
                   </FormItem>
                 )}
@@ -357,7 +369,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="endDate"
                 render={({ field }) => (
-                  <FormItem label={t("endDate")}>
+                  <FormItem label={t("endDate")} inputId="timeline-end-date">
                     <Input type="date" disabled={isCurrent} {...field} />
                   </FormItem>
                 )}
@@ -369,7 +381,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="current"
                 render={({ field }) => (
-                  <FormItem label={t("currentEntry")}>
+                  <FormItem
+                    label={t("currentEntry")}
+                    inputId="timeline-current"
+                  >
                     <div className="flex h-10 items-center">
                       <Switch
                         checked={field.value}
@@ -384,7 +399,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="order"
                 render={({ field }) => (
-                  <FormItem label={t("displayOrder")}>
+                  <FormItem
+                    label={t("displayOrder")}
+                    inputId="timeline-display-order"
+                  >
                     <Input
                       type="number"
                       min={0}

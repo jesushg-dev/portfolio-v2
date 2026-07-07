@@ -145,7 +145,10 @@ export function HeroForm({ locale, initial }: HeroFormProps) {
                   control={form.control}
                   name="fullName"
                   render={({ field }) => (
-                    <FormItem label={t("fullNameLabel")}>
+                    <FormItem
+                      label={t("fullNameLabel")}
+                      inputId="profile-hero-full-name"
+                    >
                       <FormControl>
                         <Input {...field} placeholder="Jesús Hernández" />
                       </FormControl>
@@ -156,7 +159,10 @@ export function HeroForm({ locale, initial }: HeroFormProps) {
                   control={form.control}
                   name="photoUrl"
                   render={({ field }) => (
-                    <FormItem label={t("photoUrlLabel")}>
+                    <FormItem
+                      label={t("photoUrlLabel")}
+                      inputId="profile-hero-photo-url"
+                    >
                       <FormControl>
                         <Input
                           {...field}
@@ -176,7 +182,10 @@ export function HeroForm({ locale, initial }: HeroFormProps) {
               control={form.control}
               name="degree"
               render={({ field }) => (
-                <FormItem label={t("degreeLabel")}>
+                <FormItem
+                  label={t("degreeLabel")}
+                  inputId="profile-hero-degree"
+                >
                   <FormControl>
                     <LocalizedField
                       mode="app-locales"

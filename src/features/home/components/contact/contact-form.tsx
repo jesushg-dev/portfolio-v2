@@ -84,7 +84,7 @@ const ContactForm: FC = () => {
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem label={t("form.name.label")}>
+              <FormItem label={t("form.name.label")} inputId="contact-name">
                 <Input
                   {...field}
                   autoComplete="name"
@@ -99,7 +99,7 @@ const ContactForm: FC = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem label={t("form.email.label")}>
+              <FormItem label={t("form.email.label")} inputId="contact-email">
                 <Input
                   {...field}
                   type="email"
@@ -115,7 +115,10 @@ const ContactForm: FC = () => {
             control={form.control}
             name="message"
             render={({ field }) => (
-              <FormItem label={t("form.message.label")}>
+              <FormItem
+                label={t("form.message.label")}
+                inputId="contact-message"
+              >
                 <Textarea
                   {...field}
                   rows={4}

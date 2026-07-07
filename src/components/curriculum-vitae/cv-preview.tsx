@@ -12,6 +12,7 @@ import AdditionalInformation from "@/components/curriculum-vitae/additional-info
 import { CvContextProvider } from "@/hoc/cv-context-provider";
 import type { Locale as AppLocale } from "@/i18n/config";
 
+import type { CvData } from "./types";
 import type {
   CvHeader,
   Profile,
@@ -19,10 +20,8 @@ import type {
   CvEducation,
   CvLanguage,
   CvTechnicalSkill,
-  CvExperience,
   CvSoftSkill,
   CvAdditionalInfo,
-  CvResponsibility,
 } from "@prisma/client";
 
 interface ICvPreviewProps {
@@ -33,7 +32,7 @@ interface ICvPreviewProps {
     educations: CvEducation[];
     languages: CvLanguage[];
     technicalSkills: CvTechnicalSkill[];
-    experiences: (CvExperience & { responsibilities: CvResponsibility[] })[];
+    experiences: CvData["experiences"];
     softSkills: CvSoftSkill[];
     additionalInformation: CvAdditionalInfo[];
   };

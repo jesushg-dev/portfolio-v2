@@ -242,7 +242,10 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
               control={form.control}
               name="username"
               render={({ field }) => (
-                <FormItem label={t("usernameLabel")}>
+                <FormItem
+                  label={t("usernameLabel")}
+                  inputId="profile-console-username"
+                >
                   <FormControl>
                     <Input {...field} placeholder={t("usernamePlaceholder")} />
                   </FormControl>
@@ -255,7 +258,10 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
                 control={form.control}
                 name="typingSpeed"
                 render={({ field }) => (
-                  <FormItem label={t("typingSpeedLabel")}>
+                  <FormItem
+                    label={t("typingSpeedLabel")}
+                    inputId="profile-console-typing-speed"
+                  >
                     <FormControl>
                       <Input
                         type="number"
@@ -273,7 +279,10 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
                 control={form.control}
                 name="delayBetweenCommands"
                 render={({ field }) => (
-                  <FormItem label={t("delayLabel")}>
+                  <FormItem
+                    label={t("delayLabel")}
+                    inputId="profile-console-delay"
+                  >
                     <FormControl>
                       <Input
                         type="number"
@@ -348,7 +357,10 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
                               control={form.control}
                               name={`steps.${stepIndex}.translations.${translationIndex}.command`}
                               render={({ field: commandField }) => (
-                                <FormItem label={t("commandLabel")}>
+                                <FormItem
+                                  label={t("commandLabel")}
+                                  inputId={`profile-console-command-${stepIndex}`}
+                                >
                                   <FormControl>
                                     <Input
                                       {...commandField}

@@ -8,7 +8,7 @@ import { z } from "zod";
 import { useTranslations } from "next-intl";
 
 import { api } from "@/trpc/react";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -102,7 +102,7 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
             control={form.control}
             name="username"
             render={({ field }) => (
-              <FormItem label={t("username")}>
+              <FormItem label={t("username")} inputId="settings-username">
                 <Input {...field} />
               </FormItem>
             )}
@@ -112,7 +112,10 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
             control={form.control}
             name="displayName"
             render={({ field }) => (
-              <FormItem label={t("displayName")}>
+              <FormItem
+                label={t("displayName")}
+                inputId="settings-display-name"
+              >
                 <Input {...field} />
               </FormItem>
             )}
@@ -125,11 +128,14 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
               <FormItem
                 label={t("defaultLocale")}
                 description={t("defaultLocaleHint")}
+                inputId="settings-default-locale"
               >
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t("defaultLocale")} />
-                  </SelectTrigger>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("defaultLocale")} />
+                    </SelectTrigger>
+                  </FormControl>
                   <SelectContent>
                     <SelectItem value="en">English</SelectItem>
                     <SelectItem value="es">Español</SelectItem>
@@ -144,7 +150,7 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
             control={form.control}
             name="cvPdfUrl"
             render={({ field }) => (
-              <FormItem label={t("cvPdfUrl")}>
+              <FormItem label={t("cvPdfUrl")} inputId="settings-cv-pdf-url">
                 <Input type="url" {...field} />
               </FormItem>
             )}

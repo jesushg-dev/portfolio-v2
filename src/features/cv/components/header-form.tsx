@@ -101,7 +101,7 @@ const HeaderForm: FC = () => {
                 control={form.control}
                 name="fullName"
                 render={({ field }) => (
-                  <FormItem label={t("fullName")}>
+                  <FormItem label={t("fullName")} inputId="cv-header-full-name">
                     <Input {...field} />
                   </FormItem>
                 )}
@@ -111,7 +111,7 @@ const HeaderForm: FC = () => {
                 control={form.control}
                 name="photoUrl"
                 render={({ field }) => (
-                  <FormItem label={t("photoUrl")}>
+                  <FormItem label={t("photoUrl")} inputId="cv-header-photo-url">
                     <Input type="url" {...field} />
                   </FormItem>
                 )}

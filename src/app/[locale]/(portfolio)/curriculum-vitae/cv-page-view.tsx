@@ -54,7 +54,10 @@ const CvPageView: FC<CvPageViewProps> = async ({ locale }) => {
     }),
     db.cvExperience.findMany({
       where: { userId },
-      include: { responsibilities: { orderBy: { order: "asc" } } },
+      include: {
+        responsibilities: { orderBy: { order: "asc" } },
+        CvExperienceSkill: { include: { skill: true } },
+      },
       orderBy: { order: "asc" },
     }),
     db.cvSoftSkill.findMany({

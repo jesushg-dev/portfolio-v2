@@ -159,6 +159,7 @@ type FormItemProps = {
   description?: string;
   children: ReactNode;
   className?: string;
+  inputId?: string;
 };
 
 export const FormItem = ({
@@ -166,8 +167,9 @@ export const FormItem = ({
   description,
   children,
   className,
+  inputId,
 }: FormItemProps) => (
-  <ShadcnFormItem className={className}>
+  <ShadcnFormItem id={inputId} className={className}>
     <FormLabel>{label}</FormLabel>
     <FormControl>{children}</FormControl>
     {description && <FormDescription>{description}</FormDescription>}

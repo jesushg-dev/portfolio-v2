@@ -54,34 +54,49 @@ const useFormField = () => {
 
   if (!fieldContext) throw new Error("useFormField must be inside <FormField>");
 
-  const { id } = itemContext;
+  const { id, useExplicitControlId } = itemContext;
+  const formItemId = useExplicitControlId ? id : `${id}-form-item`;
+  const formDescriptionId = useExplicitControlId
+    ? `${id}-description`
+    : `${id}-form-item-description`;
+  const formMessageId = useExplicitControlId
+    ? `${id}-message`
+    : `${id}-form-item-message`;
   return {
     id,
     name: fieldContext.name,
-    formItemId: `${id}-form-item`,
-    formDescriptionId: `${id}-form-item-description`,
-    formMessageId: `${id}-form-item-message`,
+    formItemId,
+    formDescriptionId,
+    formMessageId,
     ...fieldState,
   };
 };
 
 /* ── FormItem ───────────────────────────────────────────────────────────── */
-type FormItemContextValue = { id: string };
+type FormItemContextValue = { id: string; useExplicitControlId: boolean };
 
 const FormItemContext = createContext<FormItemContextValue>(
   {} as FormItemContextValue,
 );
 
-const FormItem = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => {
-    const id = useId();
-    return (
-      <FormItemContext.Provider value={{ id }}>
-        <div ref={ref} className={cn("space-y-2", className)} {...props} />
-      </FormItemContext.Provider>
-    );
-  },
-);
+const FormItem = forwardRef<
+  HTMLDivElement,
+  HTMLAttributes<HTMLDivElement> & { id?: string }
+>(({ className, id: idProp, ...props }, ref) => {
+  const generatedId = useId();
+  const useExplicitControlId = idProp !== undefined;
+  const id = idProp ?? generatedId;
+  return (
+    <FormItemContext.Provider value={{ id, useExplicitControlId }}>
+      <div
+        ref={ref}
+        className={cn("space-y-2", className)}
+        {...(idProp ? {} : { id })}
+        {...props}
+      />
+    </FormItemContext.Provider>
+  );
+});
 FormItem.displayName = "FormItem";
 
 /* ── FormLabel ──────────────────────────────────────────────────────────── */

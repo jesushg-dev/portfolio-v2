@@ -258,6 +258,7 @@ model CvExperience {
   skills           String?
   order            Int                @default(0)
   responsibilities CvResponsibility[]
+  CvExperienceSkill CvExperienceSkill[]
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
 }
@@ -269,6 +270,17 @@ model CvResponsibility {
   text         Json
   order        Int          @default(0)
   createdAt    DateTime     @default(now())
+}
+
+model CvExperienceSkill {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  experienceId String       @db.ObjectId
+  skillId      String       @db.ObjectId
+  experience   CvExperience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  skill        Skill        @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  createdAt    DateTime     @default(now())
+
+  @@unique([experienceId, skillId])
 }
 
 model CvSoftSkill {
@@ -410,6 +422,7 @@ model Skill {
   SkillTranslation SkillTranslation[]
   CertificateSkill CertificateSkill[]
   ServiceSkill     ServiceSkill[]
+  CvExperienceSkill CvExperienceSkill[]
 }
 
 model SkillTranslation {

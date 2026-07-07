@@ -129,7 +129,10 @@ export function AboutMeForm({ locale, initial }: AboutMeFormProps) {
               control={form.control}
               name="aboutMe"
               render={({ field }) => (
-                <FormItem label={t("descriptionLabel")}>
+                <FormItem
+                  label={t("descriptionLabel")}
+                  inputId="profile-about-description"
+                >
                   <FormControl>
                     <LocalizedField
                       mode="app-locales"

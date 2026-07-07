@@ -31,6 +31,9 @@ const ForgotPasswordForm: FC = () => {
 
   const form = useForm<ForgotPasswordInput>({
     resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
   });
 
   const onSubmit = useCallback((data: ForgotPasswordInput) => {
@@ -62,7 +65,7 @@ const ForgotPasswordForm: FC = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem label="Email">
+              <FormItem label="Email" inputId="forgot-password-email">
                 <Input type="email" autoComplete="email" {...field} />
               </FormItem>
             )}

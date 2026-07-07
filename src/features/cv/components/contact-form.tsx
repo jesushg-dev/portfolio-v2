@@ -10,7 +10,7 @@ import { api } from "@/trpc/react";
 
 import { LocalizedTextSchema } from "@/lib/i18n/localized";
 import LocalizedTextField from "@/components/admin/shared/localized-text-field";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -101,14 +101,13 @@ export const ContactForm: FC<{
               control={form.control}
               name="type"
               render={({ field }) => (
-                <FormItem label={t("type")}>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
+                <FormItem label={t("type")} inputId="cv-contact-type">
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
                     <SelectContent>
                       {TYPES.map((tItem) => (
                         <SelectItem key={tItem} value={tItem}>
@@ -125,7 +124,7 @@ export const ContactForm: FC<{
               control={form.control}
               name="value"
               render={({ field }) => (
-                <FormItem label={t("value")}>
+                <FormItem label={t("value")} inputId="cv-contact-value">
                   <Input placeholder="name@example.com" {...field} />
                 </FormItem>
               )}

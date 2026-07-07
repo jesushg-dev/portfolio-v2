@@ -79,7 +79,10 @@ const getFullCvForUser = async (ctx: { db: typeof db }, userId: string) => {
     }),
     ctx.db.cvExperience.findMany({
       where: { userId },
-      include: { responsibilities: { orderBy: { order: "asc" } } },
+      include: {
+        responsibilities: { orderBy: { order: "asc" } },
+        CvExperienceSkill: { include: { skill: true } },
+      },
       orderBy: { order: "asc" },
     }),
     ctx.db.cvSoftSkill.findMany({
@@ -440,6 +443,7 @@ export const cvRouter = createTRPCRouter({
         endDate: z.date().optional(),
         current: z.boolean().default(false),
         skills: z.string().optional(),
+        skillIds: z.array(z.string()).default([]),
         order: z.number().int().nonnegative().default(0),
         responsibilities: z
           .array(
@@ -452,14 +456,25 @@ export const cvRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { responsibilities, role, location, ...rest } = input;
+      const {
+        responsibilities,
+        role,
+        location,
+        skillIds,
+        skills: _legacySkills,
+        ...rest
+      } = input;
       return ctx.db.cvExperience.create({
         data: {
           ...rest,
+          skills: null,
           role: role as Prisma.InputJsonValue,
           location: (location ?? undefined) as
             Prisma.InputJsonValue | undefined,
           userId: ctx.user.id,
+          CvExperienceSkill: skillIds.length
+            ? { createMany: { data: skillIds.map((skillId) => ({ skillId })) } }
+            : undefined,
           responsibilities: responsibilities.length
             ? {
                 createMany: {
@@ -471,7 +486,10 @@ export const cvRouter = createTRPCRouter({
               }
             : undefined,
         },
-        include: { responsibilities: true },
+        include: {
+          responsibilities: true,
+          CvExperienceSkill: { include: { skill: true } },
+        },
       });
     }),
   updateExperience: protectedProcedure
@@ -486,6 +504,7 @@ export const cvRouter = createTRPCRouter({
         endDate: z.date().optional(),
         current: z.boolean().default(false),
         skills: z.string().optional(),
+        skillIds: z.array(z.string()).default([]),
         order: z.number().int().nonnegative().default(0),
         responsibilities: z
           .array(
@@ -498,7 +517,15 @@ export const cvRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, responsibilities, role, location, ...data } = input;
+      const {
+        id,
+        responsibilities,
+        role,
+        location,
+        skillIds,
+        skills: _legacySkills,
+        ...data
+      } = input;
       const existing = await ctx.db.cvExperience.findUnique({ where: { id } });
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
@@ -507,10 +534,19 @@ export const cvRouter = createTRPCRouter({
       await ctx.db.cvResponsibility.deleteMany({
         where: { experienceId: id },
       });
+      await ctx.db.cvExperienceSkill.deleteMany({
+        where: { experienceId: id },
+      });
+      if (skillIds.length > 0) {
+        await ctx.db.cvExperienceSkill.createMany({
+          data: skillIds.map((skillId) => ({ experienceId: id, skillId })),
+        });
+      }
       return ctx.db.cvExperience.update({
         where: { id },
         data: {
           ...data,
+          skills: null,
           role: role as Prisma.InputJsonValue,
           location: (location ?? undefined) as
             Prisma.InputJsonValue | undefined,
@@ -525,7 +561,40 @@ export const cvRouter = createTRPCRouter({
               }
             : undefined,
         },
-        include: { responsibilities: true },
+        include: {
+          responsibilities: true,
+          CvExperienceSkill: { include: { skill: true } },
+        },
+      });
+    }),
+  syncExperienceSkills: protectedProcedure
+    .input(
+      z.object({
+        experienceId: z.string(),
+        skillIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.cvExperience.findUnique({
+        where: { id: input.experienceId },
+      });
+      if (existing?.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+      await ctx.db.cvExperienceSkill.deleteMany({
+        where: { experienceId: input.experienceId },
+      });
+      if (input.skillIds.length > 0) {
+        await ctx.db.cvExperienceSkill.createMany({
+          data: input.skillIds.map((skillId) => ({
+            experienceId: input.experienceId,
+            skillId,
+          })),
+        });
+      }
+      return ctx.db.cvExperience.findUnique({
+        where: { id: input.experienceId },
+        include: { CvExperienceSkill: { include: { skill: true } } },
       });
     }),
   deleteExperience: protectedProcedure

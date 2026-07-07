@@ -170,7 +170,11 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
     <div className="relative flex h-full min-h-[500px] flex-col">
       <DataTable table={table}>
         <DataTableToolbar table={table}>
-          <Link href="/admin/skills/new" className={buttonVariants()}>
+          <Link
+            id="skills-add"
+            href="/admin/skills/new"
+            className={buttonVariants()}
+          >
             <Plus className="mr-2 h-4 w-4" />
             {t("addNew")}
           </Link>

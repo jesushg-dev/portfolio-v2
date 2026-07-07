@@ -236,6 +236,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
           languages={languages}
           activeLangId={activeLangId}
           onLangChange={setActiveLangId}
+          buttonIdPrefix="certification"
         />
         <FormContent error={anyError}>
           <FormSection title={t("generalSection")}>
@@ -249,6 +250,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                       label={t("titleWithLanguage", {
                         language: activeLang.name,
                       })}
+                      inputId={`certification-title-${activeLang.code}`}
                     >
                       <Input {...field} />
                     </FormItem>
@@ -261,7 +263,10 @@ export const CertificationForm: FC<CertificationFormProps> = ({
               control={form.control}
               name="company"
               render={({ field }) => (
-                <FormItem label={t("issuingCompany")}>
+                <FormItem
+                  label={t("issuingCompany")}
+                  inputId="certification-issuing-company"
+                >
                   <Input
                     placeholder={t("issuingCompanyPlaceholder")}
                     {...field}
@@ -275,7 +280,10 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                 control={form.control}
                 name="url"
                 render={({ field }) => (
-                  <FormItem label={t("credentialUrl")}>
+                  <FormItem
+                    label={t("credentialUrl")}
+                    inputId="certification-credential-url"
+                  >
                     <Input
                       placeholder={t("credentialUrlPlaceholder")}
                       {...field}
@@ -287,7 +295,10 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                 control={form.control}
                 name="idCredential"
                 render={({ field }) => (
-                  <FormItem label={t("credentialId")}>
+                  <FormItem
+                    label={t("credentialId")}
+                    inputId="certification-credential-id"
+                  >
                     <Input
                       placeholder={t("credentialIdPlaceholder")}
                       {...field}
@@ -301,7 +312,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
               control={form.control}
               name="image"
               render={({ field }) => (
-                <FormItem label={t("imageUrl")}>
+                <FormItem label={t("imageUrl")} inputId="certification-image">
                   <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                 </FormItem>
               )}
@@ -311,7 +322,10 @@ export const CertificationForm: FC<CertificationFormProps> = ({
               control={form.control}
               name="type"
               render={() => (
-                <FormItem label={t("relatedTypes")}>
+                <FormItem
+                  label={t("relatedTypes")}
+                  inputId="certification-type"
+                >
                   <div className="mt-2 grid grid-cols-2 gap-2">
                     {StackTypeSchema.options.map((item) => (
                       <FormField
@@ -352,7 +366,10 @@ export const CertificationForm: FC<CertificationFormProps> = ({
               control={form.control}
               name="skillIds"
               render={({ field }) => (
-                <FormItem label={t("associatedSkills")}>
+                <FormItem
+                  label={t("associatedSkills")}
+                  inputId="certification-skill-picker"
+                >
                   <SkillPicker
                     availableSkills={availableSkills}
                     selectedSkillIds={field.value}

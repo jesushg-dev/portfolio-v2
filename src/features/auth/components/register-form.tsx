@@ -41,6 +41,12 @@ const RegisterForm: FC = () => {
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      username: "",
+    },
   });
 
   const onSubmit = useCallback(
@@ -86,7 +92,7 @@ const RegisterForm: FC = () => {
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem label="Full name">
+              <FormItem label="Full name" inputId="register-name">
                 <Input autoComplete="name" {...field} />
               </FormItem>
             )}
@@ -99,6 +105,7 @@ const RegisterForm: FC = () => {
               <FormItem
                 label="Username (subdomain)"
                 description="e.g. jesus → jesus.jesushg.com"
+                inputId="register-username"
               >
                 <Input autoComplete="username" {...field} />
               </FormItem>
@@ -109,7 +116,7 @@ const RegisterForm: FC = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem label="Email">
+              <FormItem label="Email" inputId="register-email">
                 <Input type="email" autoComplete="email" {...field} />
               </FormItem>
             )}
@@ -119,7 +126,7 @@ const RegisterForm: FC = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem label="Password">
+              <FormItem label="Password" inputId="register-password">
                 <Input type="password" autoComplete="new-password" {...field} />
               </FormItem>
             )}

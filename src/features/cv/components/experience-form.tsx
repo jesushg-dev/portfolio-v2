@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, type FC } from "react";
+import { useCallback, useTransition, type FC } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { api } from "@/trpc/react";
 
 import { LocalizedTextSchema } from "@/lib/i18n/localized";
 import LocalizedTextField from "@/components/admin/shared/localized-text-field";
+import { SkillPicker } from "@/components/admin/skill-picker";
 import {
   Sortable,
   SortableContent,
@@ -42,24 +43,27 @@ export const ExperienceSchema = z.object({
   location: LocalizedTextSchema.optional(),
   dates: z.string().optional(),
   current: z.boolean(),
-  skills: z.string().optional(),
+  skillIds: z.array(z.string()),
   responsibilities: z.array(ResponsibilitySchema),
 });
 
 export type ExperienceInput = z.infer<typeof ExperienceSchema>;
 
+type ExperienceInitial = {
+  id: string;
+  company: string;
+  role: unknown;
+  location: unknown;
+  dates?: string | null;
+  current?: boolean;
+  skills?: string | null;
+  CvExperienceSkill?: { skillId: string }[];
+  responsibilities: { text: unknown; order: number }[];
+};
+
 export const ExperienceForm: FC<{
   defaultLocale: Locale;
-  initial?: {
-    id: string;
-    company: string;
-    role: unknown;
-    location: unknown;
-    dates?: string | null;
-    current?: boolean;
-    skills?: string | null;
-    responsibilities: { text: unknown; order: number }[];
-  };
+  initial?: ExperienceInitial;
   onSuccess: () => void;
   onCancel: () => void;
 }> = ({ defaultLocale, initial, onSuccess, onCancel }) => {
@@ -68,6 +72,9 @@ export const ExperienceForm: FC<{
   const create = api.cv.createExperience.useMutation();
   const update = api.cv.updateExperience.useMutation();
   const [isPending, startTransition] = useTransition();
+
+  const { data: availableSkills = [] } =
+    api.portfolioAdmin.getMySkills.useQuery();
 
   const form = useForm<ExperienceInput>({
     resolver: zodResolver(ExperienceSchema),
@@ -80,7 +87,7 @@ export const ExperienceForm: FC<{
         (initial?.location as { default: string } | undefined) ?? undefined,
       dates: initial?.dates ?? "",
       current: initial?.current ?? false,
-      skills: initial?.skills ?? "",
+      skillIds: initial?.CvExperienceSkill?.map((row) => row.skillId) ?? [],
       responsibilities:
         initial?.responsibilities
           ?.sort((a, b) => a.order - b.order)
@@ -96,24 +103,29 @@ export const ExperienceForm: FC<{
     name: "responsibilities",
   });
 
-  const handleSubmit = (input: ExperienceInput) => {
-    startTransition(async () => {
-      try {
-        if (initial?.id) {
-          await update.mutateAsync({ id: initial.id, ...input });
-        } else {
-          await create.mutateAsync(input);
+  const handleSubmit = useCallback(
+    (input: ExperienceInput) => {
+      startTransition(async () => {
+        try {
+          if (initial?.id) {
+            await update.mutateAsync({ id: initial.id, ...input });
+          } else {
+            await create.mutateAsync(input);
+          }
+          await utils.cv.getMine.invalidate();
+          toast.success(t("save") || "Saved successfully");
+          onSuccess();
+        } catch (err) {
+          toast.error(
+            err instanceof Error
+              ? err.message
+              : t("saveFailed") || "Save failed",
+          );
         }
-        await utils.cv.getMine.invalidate();
-        toast.success(t("save") || "Saved successfully");
-        onSuccess();
-      } catch (err) {
-        toast.error(
-          err instanceof Error ? err.message : t("saveFailed") || "Save failed",
-        );
-      }
-    });
-  };
+      });
+    },
+    [initial?.id, update, create, utils, t, onSuccess],
+  );
 
   return (
     <Form {...form}>
@@ -125,7 +137,7 @@ export const ExperienceForm: FC<{
                 control={form.control}
                 name="company"
                 render={({ field }) => (
-                  <FormItem label={t("company")}>
+                  <FormItem label={t("company")} inputId="experience-company">
                     <Input {...field} />
                   </FormItem>
                 )}
@@ -134,7 +146,7 @@ export const ExperienceForm: FC<{
                 control={form.control}
                 name="dates"
                 render={({ field }) => (
-                  <FormItem label={t("dates")}>
+                  <FormItem label={t("dates")} inputId="experience-dates">
                     <Input
                       placeholder="August 2023 – February 2025"
                       {...field}
@@ -150,6 +162,7 @@ export const ExperienceForm: FC<{
               label={t("role")}
               defaultLocale={defaultLocale}
               required
+              inputId="experience-role"
             />
 
             <LocalizedTextField
@@ -157,14 +170,26 @@ export const ExperienceForm: FC<{
               control={form.control}
               label={t("location")}
               defaultLocale={defaultLocale}
+              inputId="experience-location"
             />
 
             <FormField
               control={form.control}
-              name="skills"
+              name="skillIds"
               render={({ field }) => (
-                <FormItem label={t("skills")}>
-                  <Input {...field} />
+                <FormItem label={t("skills")} inputId="experience-skill-picker">
+                  <div id="experience-skill-picker">
+                    <SkillPicker
+                      availableSkills={availableSkills.map((skill) => ({
+                        id: skill.id,
+                        title: skill.title,
+                        image: skill.image,
+                        type: skill.type,
+                      }))}
+                      selectedSkillIds={field.value}
+                      onChange={field.onChange}
+                    />
+                  </div>
                 </FormItem>
               )}
             />

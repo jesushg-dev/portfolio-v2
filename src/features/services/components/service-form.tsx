@@ -10,7 +10,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { fillMissingTranslations } from "@/utils/form-translations";
@@ -231,6 +231,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
           languages={languages}
           activeLangId={activeLangId}
           onLangChange={setActiveLangId}
+          buttonIdPrefix="service"
         />
         <FormContent error={anyError}>
           <FormSection title={t("generalSection")}>
@@ -244,6 +245,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                       label={t("titleWithLanguage", {
                         language: activeLang.name,
                       })}
+                      inputId={`service-title-${activeLang.code}`}
                     >
                       <Input {...field} />
                     </FormItem>
@@ -257,6 +259,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                       label={t("descriptionWithLanguage", {
                         language: activeLang.name,
                       })}
+                      inputId={`service-description-${activeLang.code}`}
                     >
                       <Textarea rows={4} {...field} />
                     </FormItem>
@@ -270,7 +273,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                 control={form.control}
                 name="image"
                 render={({ field }) => (
-                  <FormItem label={t("imageUrl")}>
+                  <FormItem label={t("imageUrl")} inputId="service-image">
                     <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                   </FormItem>
                 )}
@@ -279,14 +282,13 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                 control={form.control}
                 name="type"
                 render={({ field }) => (
-                  <FormItem label={t("serviceType")}>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("selectType")} />
-                      </SelectTrigger>
+                  <FormItem label={t("serviceType")} inputId="service-type">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t("selectType")} />
+                        </SelectTrigger>
+                      </FormControl>
                       <SelectContent>
                         {StackTypeSchema.options.map((opt) => (
                           <SelectItem key={opt} value={opt}>
@@ -309,7 +311,10 @@ export const ServiceForm: FC<ServiceFormProps> = ({
               control={form.control}
               name="skillIds"
               render={({ field }) => (
-                <FormItem label={t("associatedSkills")}>
+                <FormItem
+                  label={t("associatedSkills")}
+                  inputId="service-skill-picker"
+                >
                   <SkillPicker
                     availableSkills={availableSkills}
                     selectedSkillIds={field.value}

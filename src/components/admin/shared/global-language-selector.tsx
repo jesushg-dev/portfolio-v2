@@ -6,12 +6,14 @@ export interface GlobalLanguageSelectorProps {
   languages: { id: string; name: string; code: string }[];
   activeLangId: string;
   onLangChange: (id: string) => void;
+  buttonIdPrefix?: string;
 }
 
 export function GlobalLanguageSelector({
   languages,
   activeLangId,
   onLangChange,
+  buttonIdPrefix,
 }: GlobalLanguageSelectorProps) {
   const t = useTranslations("admin.forms");
 
@@ -29,6 +31,11 @@ export function GlobalLanguageSelector({
           return (
             <Button
               key={lang.id}
+              id={
+                buttonIdPrefix
+                  ? `${buttonIdPrefix}-lang-${lang.code}`
+                  : undefined
+              }
               type="button"
               variant={isActive ? "default" : "ghost"}
               size="sm"

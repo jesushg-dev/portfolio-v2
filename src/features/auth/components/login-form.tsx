@@ -51,6 +51,10 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = useCallback(
@@ -128,7 +132,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem label="Email">
+                  <FormItem label="Email" inputId="login-email">
                     <Input
                       type="email"
                       autoComplete="email"
@@ -143,7 +147,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem label="Password">
+                  <FormItem label="Password" inputId="login-password">
                     <Input
                       type="password"
                       autoComplete="current-password"

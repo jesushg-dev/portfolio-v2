@@ -52,6 +52,10 @@ const ResetPasswordForm: FC = () => {
 
   const form = useForm<ResetPasswordInput>({
     resolver: zodResolver(ResetPasswordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   const onSubmit = useCallback(
@@ -103,7 +107,7 @@ const ResetPasswordForm: FC = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem label="New password">
+              <FormItem label="New password" inputId="reset-password">
                 <Input type="password" autoComplete="new-password" {...field} />
               </FormItem>
             )}
@@ -113,7 +117,10 @@ const ResetPasswordForm: FC = () => {
             control={form.control}
             name="confirmPassword"
             render={({ field }) => (
-              <FormItem label="Confirm password">
+              <FormItem
+                label="Confirm password"
+                inputId="reset-password-confirm"
+              >
                 <Input type="password" autoComplete="new-password" {...field} />
               </FormItem>
             )}

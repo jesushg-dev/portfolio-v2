@@ -96,7 +96,10 @@ const PdfLinksForm: FC<PdfLinksFormProps> = ({ initialLinks }) => {
                 control={form.control}
                 name={`links.${locale}`}
                 render={({ field }) => (
-                  <FormItem label={localsDisplay[locale]}>
+                  <FormItem
+                    label={localsDisplay[locale]}
+                    inputId={`settings-pdf-${locale}`}
+                  >
                     <Input
                       type="url"
                       placeholder={t("pdfLinkPlaceholder", { locale })}

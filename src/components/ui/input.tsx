@@ -3,7 +3,11 @@ import { Input as InputPrimitive } from "@base-ui/react/input";
 
 import { cn } from "@/lib/utils";
 
-function Input({ className, type, ...props }: ComponentProps<"input">) {
+function Input({ className, type, value, ...props }: ComponentProps<"input">) {
+  const isCheckable = type === "checkbox" || type === "radio";
+  const controlledProps =
+    value !== undefined && !isCheckable ? { value: value ?? "" } : { value };
+
   return (
     <InputPrimitive
       type={type}
@@ -13,6 +17,7 @@ function Input({ className, type, ...props }: ComponentProps<"input">) {
         className,
       )}
       {...props}
+      {...controlledProps}
     />
   );
 }

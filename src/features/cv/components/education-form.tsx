@@ -100,7 +100,10 @@ export const EducationForm: FC<{
               control={form.control}
               name="institution"
               render={({ field }) => (
-                <FormItem label={t("institution")}>
+                <FormItem
+                  label={t("institution")}
+                  inputId="education-institution"
+                >
                   <Input {...field} />
                 </FormItem>
               )}
@@ -112,6 +115,7 @@ export const EducationForm: FC<{
               label={t("degree")}
               defaultLocale={defaultLocale}
               required
+              inputId="education-degree"
             />
             <LocalizedTextField
               name="location"
@@ -132,7 +136,10 @@ export const EducationForm: FC<{
                 control={form.control}
                 name="startYear"
                 render={({ field }) => (
-                  <FormItem label={t("startYear")}>
+                  <FormItem
+                    label={t("startYear")}
+                    inputId="education-start-year"
+                  >
                     <Input
                       type="number"
                       {...field}
@@ -147,7 +154,7 @@ export const EducationForm: FC<{
                 control={form.control}
                 name="endYear"
                 render={({ field }) => (
-                  <FormItem label={t("endYear")}>
+                  <FormItem label={t("endYear")} inputId="education-end-year">
                     <Input
                       type="number"
                       {...field}
@@ -162,7 +169,7 @@ export const EducationForm: FC<{
                 control={form.control}
                 name="dates"
                 render={({ field }) => (
-                  <FormItem label={t("dates")}>
+                  <FormItem label={t("dates")} inputId="education-dates">
                     <Input placeholder="2017 - 2024" {...field} />
                   </FormItem>
                 )}

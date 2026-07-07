@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
 
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -102,11 +102,13 @@ export const SkillForm: FC<{
             control={form.control}
             name="category"
             render={({ field }) => (
-              <FormItem label={t("category")}>
+              <FormItem label={t("category")} inputId="cv-skill-category">
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t("category")} />
-                  </SelectTrigger>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("category")} />
+                    </SelectTrigger>
+                  </FormControl>
                   <SelectContent>
                     {CATEGORIES.map((c) => (
                       <SelectItem key={c} value={c}>
@@ -123,7 +125,7 @@ export const SkillForm: FC<{
             control={form.control}
             name="itemsCsv"
             render={({ field }) => (
-              <FormItem label={t("items")}>
+              <FormItem label={t("items")} inputId="cv-skill-items">
                 <Input
                   placeholder="React, Next.js, Tailwind, Redux"
                   {...field}
