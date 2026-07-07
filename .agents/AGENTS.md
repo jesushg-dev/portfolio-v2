@@ -48,7 +48,9 @@ Any staged file in `src/components/ui/**/*.{ts,tsx}` that contains a `dark:` cla
 | `bg-background`         | `--background`       | ✅                 |
 | `text-foreground`       | `--foreground`       | ✅                 |
 | `bg-card`               | `--card`             | ✅                 |
+| `text-card-foreground`  | `--card-foreground`  | ✅                 |
 | `bg-primary`            | `--primary`          | ✅                 |
+| `text-primary-foreground` | `--primary-foreground` | ✅              |
 | `bg-secondary`          | `--secondary`        | ✅                 |
 | `bg-muted`              | `--muted`            | ✅                 |
 | `text-muted-foreground` | `--muted-foreground` | ✅                 |
@@ -58,6 +60,72 @@ Any staged file in `src/components/ui/**/*.{ts,tsx}` that contains a `dark:` cla
 | `ring-ring`             | `--ring`             | ✅                 |
 | `bg-popover`            | `--popover`          | ✅                 |
 | `text-destructive`      | `--destructive`      | ✅                 |
+
+### Two color systems — know which to use
+
+This project has **two** related color layers. Mixing them incorrectly is the #1 cause of unreadable text in dark themes.
+
+#### 1. Shadcn semantic tokens (preferred for new code & `src/components/ui/`)
+
+Classes like `text-foreground`, `bg-card`, `text-muted-foreground`, `border-input`.
+
+Defined in `:root` inside `src/app/globals.css` as aliases to the palette, e.g.:
+
+```css
+:root {
+  --foreground: var(--color-primaryText-500);
+  --card: var(--color-background-50);
+  --card-foreground: var(--color-primaryText-500);
+}
+```
+
+Because they reference `--color-*` variables, they **automatically track** the active `[data-theme="..."]` block. Use these for:
+
+- Shadcn UI components (`Input`, `Label`, `Button`, …)
+- Admin forms and any new surface
+- Text that must contrast with `bg-card` / `bg-background`
+
+#### 2. Legacy palette scales (portfolio sections only)
+
+Classes like `text-primaryText-500`, `bg-background-50`, `text-secondaryText-50`.
+
+These are the raw `--color-primaryText-*`, `--color-background-*` scales declared in `@theme` and overridden per `[data-theme]`. They also change with theme, **but**:
+
+- They are **not** the same API Shadcn components expect
+- Hard-coding a shade like `text-primaryText-900` for headings while labels inherit browser default black → broken contrast in dark mode
+- Never use undefined CSS vars like `var(--background-50)` — the correct name is `var(--color-background-50)` or, preferably, the Tailwind class `bg-card`
+
+**Rule of thumb:** if you are touching `src/components/ui/` or a form, use semantic tokens only. Legacy `primaryText-*` / `background-*` may remain in older portfolio feature components until migrated.
+
+### Installing Shadcn / third-party UI components
+
+After `pnpm dlx shadcn@latest add <component>`, **always** post-process the generated files:
+
+1. **Remove every `dark:` class** — they never activate; our themes use `data-theme`, not `.dark`.
+2. **Replace hardcoded neutrals** (`text-zinc-900`, `bg-white`, `dark:text-white`, etc.) with semantic tokens (`text-foreground`, `bg-card`, `border-border`, …).
+3. **Replace `framer-motion` imports** with `motion/react` (see Animation Libraries below).
+4. **Ensure `Label` / form text** includes `text-foreground` (our `label.tsx` already does — do not remove it).
+5. **Prefer existing primitives** from `@/components/ui/` (`Input`, `Textarea`, `Button`) instead of raw `<input>` with hand-rolled colors.
+6. **Do not add** `className="dark:..."` workarounds — fix the token, not the variant.
+
+Generated Shadcn snippets assume the default `.dark` class strategy. This project is **not** that setup.
+
+### Surfaces & text inheritance
+
+When building a card or panel, set **both** background and foreground on the container so children inherit theme-aware text:
+
+```tsx
+// ✅ CORRECT — children inherit readable text in every theme
+<div className="bg-card text-card-foreground rounded-sm p-6">
+  <h2 className="text-foreground font-bold">Title</h2>
+  <p className="text-muted-foreground">Description</p>
+</div>
+
+// ❌ WRONG — bg without text color; labels inherit browser default (often black)
+<div className="bg-background-50 rounded-sm p-6">
+  <label>Name</label>
+</div>
+```
 
 ## Animation Libraries
 
@@ -170,31 +238,53 @@ Never disable ESLint rules or turn warnings/errors to `off` or `warn` in `eslint
 
 When asked to fix linting or type-checking errors, you must fix the actual code. If there are 400 errors, you must resolve them by writing proper types, refactoring unsafe assignments, and updating the code logic. Disabling the rule is strictly prohibited.
 
-## i18n — useTranslations
+## i18n — useTranslations / getTranslations
 
-### ❌ NEVER mix multiple `useTranslations` namespaces in the same component
+### ❌ NEVER call `useTranslations` or `getTranslations` more than once per file
 
-Mixing namespaces causes false positives in i18n plugins and type checkers.
+Multiple calls in the same file break i18n editor plugins and type checkers. This applies to **the entire file** — including helper components, subcomponents, and `generateMetadata` in the same module.
 
 ```tsx
-// ❌ WRONG — mixing namespaces in one component
+// ❌ WRONG — two namespaces in one file
 const t = useTranslations("admin.forms.additional");
-const tForms = useTranslations("admin.forms"); // ← second call
-const tErrors = useTranslations("admin.errors"); // ← third call
+const tActions = useTranslations("admin.actions"); // ← second call in same file
+
+// ❌ WRONG — page + generateMetadata each calling getTranslations
+export default async function Page() {
+  const t = await getTranslations("curriculum");
+}
+export async function generateMetadata() {
+  const t = await getTranslations("curriculum"); // ← second call in same file
+}
 ```
 
-### ✅ ALWAYS use exactly ONE `useTranslations` call per component
+### ✅ ALWAYS use exactly ONE translation call per file
 
-Each namespace must be **self-contained** — include every string the component needs (loading states, error messages, action labels) directly in that namespace's JSON file. Duplication in JSON is acceptable; mixing calls in code is not.
+Each namespace must be **self-contained** — include every string the file needs (loading states, error messages, action labels) directly in that namespace's JSON file. Duplication in JSON is acceptable; multiple calls in code is not.
+
+**Same file, multiple components:** call the hook once in the parent and pass `t` (or pre-translated strings) to child components defined in that file.
+
+**Page + `generateMetadata`:** split into separate files so each has its own single call, or keep metadata strings in the page namespace and extract the view to another file.
 
 ```tsx
-// ✅ CORRECT — single namespace that owns all strings for this component
+// ✅ CORRECT — single namespace, single call
 const t = useTranslations("admin.forms.additional");
 
-// Accessing loading, errors, and actions all from the same namespace:
 <p>{t("loading")}</p>
 <p>{t("saveFailed")}</p>
 <button>{t("save")}</button>
+```
+
+```tsx
+// ✅ CORRECT — child in same file receives t from parent
+function LocaleRow({ t, ... }: { t: ReturnType<typeof useTranslations<"admin.nudge">> }) {
+  return <span>{t("saved")}</span>;
+}
+
+export function Banner() {
+  const t = useTranslations("admin.nudge");
+  return <LocaleRow t={t} />;
+}
 ```
 
 ## Mutation Handlers — useCallback + useTransition

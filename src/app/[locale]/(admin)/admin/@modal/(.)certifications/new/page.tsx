@@ -11,7 +11,7 @@ export default async function NewCertificationModal() {
   return (
     <PageDialogWrapper
       title={t("create") || "Create"}
-      description="Add a new certification"
+      description={t("createDescription")}
     >
       <CertificationForm languages={languages} />
     </PageDialogWrapper>

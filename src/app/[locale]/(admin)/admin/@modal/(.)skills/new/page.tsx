@@ -10,7 +10,7 @@ export default async function NewSkillModal() {
   return (
     <ModalWrapper
       title={t("addNew") || "Create Skill"}
-      description="Add a new skill to your portfolio"
+      description={t("createDescription")}
     >
       <SkillForm languages={languages} />
     </ModalWrapper>

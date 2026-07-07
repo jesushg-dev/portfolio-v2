@@ -14,7 +14,7 @@ export default async function EditProjectModal({
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
   const { id } = await params;
-  const tActions = await getTranslations("admin.actions");
+  const t = await getTranslations("admin.projects");
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -34,8 +34,8 @@ export default async function EditProjectModal({
 
   return (
     <PageDialogWrapper
-      title={tActions("edit")}
-      description="Edit existing portfolio project"
+      title={t("edit")}
+      description={t("editDescription")}
     >
       <ProjectForm initialData={project} languages={languages} />
     </PageDialogWrapper>

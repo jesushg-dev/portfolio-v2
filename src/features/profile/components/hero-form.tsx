@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { User } from "lucide-react";
@@ -73,8 +73,8 @@ export function HeroForm({ locale, initial }: HeroFormProps) {
   const upsertHeader = api.cv.upsertHeader.useMutation();
   const degreeNudge = useTranslationNudge(`profile_degree_${locale}`);
 
-  const photoUrlValue = form.watch("photoUrl");
-  const fullNameValue = form.watch("fullName");
+  const photoUrlValue = useWatch({ control: form.control, name: "photoUrl" });
+  const fullNameValue = useWatch({ control: form.control, name: "fullName" });
 
   const handleSubmit = useCallback(
     (values: FormValues) => {

@@ -11,7 +11,7 @@ export default async function NewServiceModal() {
   return (
     <PageDialogWrapper
       title={t("create") || "Create"}
-      description="Create a new service offering"
+      description={t("createDescription")}
     >
       <ServiceForm languages={languages} />
     </PageDialogWrapper>

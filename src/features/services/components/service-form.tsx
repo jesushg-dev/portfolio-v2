@@ -1,7 +1,7 @@
 "use client";
 import type { AppLanguage, Skill, Service } from "@prisma/client";
 
-import { type FC, useTransition, useState } from "react";
+import { type FC, useTransition, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -43,38 +43,6 @@ const StackTypeSchema = z.enum([
   "TOOLS",
 ]);
 
-const serviceFormSchema = z.object({
-  id: z.string().optional(),
-  image: z.string().min(1, "Image is required"),
-  type: StackTypeSchema,
-  skillIds: z.array(z.string()),
-  translations: z
-    .array(
-      z
-        .object({
-          appLanguageId: z.string(),
-          title: z.string(),
-          description: z.string(),
-        })
-        .superRefine((val, ctx) => {
-          if (val.appLanguageId === "en") {
-            if (!val.title || val.title.trim() === "") {
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Title is required for the primary language",
-                path: ["title"],
-              });
-            }
-          }
-        }),
-    )
-    .refine((val) => val.length >= 1, {
-      message: "At least one language is required",
-    }),
-});
-
-type TServiceForm = z.infer<typeof serviceFormSchema>;
-
 interface ServiceInitialData extends Service {
   ServiceTranslation?: {
     appLanguageId: string;
@@ -97,9 +65,45 @@ export const ServiceForm: FC<ServiceFormProps> = ({
   languages,
 }) => {
   const isEditMode = !!initialData;
-  const t = useTranslations("admin.services");
+  const t = useTranslations("admin.forms.service");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const serviceFormSchema = useMemo(
+    () =>
+      z.object({
+        id: z.string().optional(),
+        image: z.string().min(1, t("imageRequired")),
+        type: StackTypeSchema,
+        skillIds: z.array(z.string()),
+        translations: z
+          .array(
+            z
+              .object({
+                appLanguageId: z.string(),
+                title: z.string(),
+                description: z.string(),
+              })
+              .superRefine((val, ctx) => {
+                if (val.appLanguageId === "en") {
+                  if (!val.title || val.title.trim() === "") {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom,
+                      message: t("titleRequiredPrimary"),
+                      path: ["title"],
+                    });
+                  }
+                }
+              }),
+          )
+          .refine((val) => val.length >= 1, {
+            message: t("atLeastOneLanguage"),
+          }),
+      }),
+    [t],
+  );
+
+  type TServiceForm = z.infer<typeof serviceFormSchema>;
 
   const createService = api.portfolioAdmin.createService.useMutation();
   const updateService = api.portfolioAdmin.updateService.useMutation();
@@ -152,51 +156,61 @@ export const ServiceForm: FC<ServiceFormProps> = ({
   const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
   const activeLang = languages.find((l) => l.id === activeLangId);
 
-  const onSubmit = (values: TServiceForm) => {
-    startTransition(async () => {
-      try {
-        if (isEditMode && values.id) {
-          await updateService.mutateAsync({
-            id: values.id,
-            image: values.image,
-            type: values.type,
-          });
+  const onSubmit = useCallback(
+    (values: TServiceForm) => {
+      startTransition(async () => {
+        try {
+          if (isEditMode && values.id) {
+            await updateService.mutateAsync({
+              id: values.id,
+              image: values.image,
+              type: values.type,
+            });
 
-          await syncSkills.mutateAsync({
-            serviceId: values.id,
-            skillIds: values.skillIds,
-          });
+            await syncSkills.mutateAsync({
+              serviceId: values.id,
+              skillIds: values.skillIds,
+            });
 
-          await Promise.all(
-            values.translations
-              .filter(
-                (t) => t.title.trim() !== "" || t.description.trim() !== "",
-              )
-              .map((trans) =>
-                upsertTranslation.mutateAsync({
-                  serviceId: values.id!,
-                  appLanguageId: trans.appLanguageId,
-                  title: trans.title,
-                  description: trans.description,
-                }),
-              ),
-          );
+            await Promise.all(
+              values.translations
+                .filter(
+                  (tr) => tr.title.trim() !== "" || tr.description.trim() !== "",
+                )
+                .map((trans) =>
+                  upsertTranslation.mutateAsync({
+                    serviceId: values.id!,
+                    appLanguageId: trans.appLanguageId,
+                    title: trans.title,
+                    description: trans.description,
+                  }),
+                ),
+            );
 
-          toast.success("Service updated");
-        } else {
-          await createService.mutateAsync(values);
-          toast.success("Service created");
+            toast.success(t("updatedSuccess"));
+          } else {
+            await createService.mutateAsync(values);
+            toast.success(t("createdSuccess"));
+          }
+
+          await utils.portfolioAdmin.getMyServices.invalidate();
+          router.back();
+        } catch {
+          toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
-
-        await utils.portfolioAdmin.getMyServices.invalidate();
-        router.back();
-      } catch {
-        toast.error(
-          isEditMode ? "Failed to update service" : "Failed to create service",
-        );
-      }
-    });
-  };
+      });
+    },
+    [
+      isEditMode,
+      updateService,
+      syncSkills,
+      upsertTranslation,
+      createService,
+      utils,
+      router,
+      t,
+    ],
+  );
 
   const isSaving =
     createService.isPending ||
@@ -218,14 +232,18 @@ export const ServiceForm: FC<ServiceFormProps> = ({
           onLangChange={setActiveLangId}
         />
         <FormContent error={anyError}>
-          <FormSection title="General Information">
+          <FormSection title={t("generalSection")}>
             {activeIndex !== -1 && activeLang && (
               <div className="mb-4 grid gap-4">
                 <FormField
                   control={form.control}
                   name={`translations.${activeIndex}.title`}
                   render={({ field }) => (
-                    <FormItem label={`Title (${activeLang.name})`}>
+                    <FormItem
+                      label={t("titleWithLanguage", {
+                        language: activeLang.name,
+                      })}
+                    >
                       <Input {...field} />
                     </FormItem>
                   )}
@@ -234,7 +252,11 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                   control={form.control}
                   name={`translations.${activeIndex}.description`}
                   render={({ field }) => (
-                    <FormItem label={`Description (${activeLang.name})`}>
+                    <FormItem
+                      label={t("descriptionWithLanguage", {
+                        language: activeLang.name,
+                      })}
+                    >
                       <Textarea rows={4} {...field} />
                     </FormItem>
                   )}
@@ -247,8 +269,8 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                 control={form.control}
                 name="image"
                 render={({ field }) => (
-                  <FormItem label="Image URL / Icon">
-                    <Input placeholder="https://..." {...field} />
+                  <FormItem label={t("imageUrl")}>
+                    <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                   </FormItem>
                 )}
               />
@@ -256,13 +278,13 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                 control={form.control}
                 name="type"
                 render={({ field }) => (
-                  <FormItem label="Service Type">
+                  <FormItem label={t("serviceType")}>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a type" />
+                        <SelectValue placeholder={t("selectType")} />
                       </SelectTrigger>
                       <SelectContent>
                         {StackTypeSchema.options.map((opt) => (
@@ -278,12 +300,15 @@ export const ServiceForm: FC<ServiceFormProps> = ({
             </div>
           </FormSection>
 
-          <FormSection title="Skills" className="mt-4 border-t pt-4">
+          <FormSection
+            title={t("skillsSection")}
+            className="mt-4 border-t pt-4"
+          >
             <FormField
               control={form.control}
               name="skillIds"
               render={({ field }) => (
-                <FormItem label="Associated Skills">
+                <FormItem label={t("associatedSkills")}>
                   <SkillPicker
                     availableSkills={availableSkills}
                     selectedSkillIds={field.value}
@@ -294,9 +319,12 @@ export const ServiceForm: FC<ServiceFormProps> = ({
             />
           </FormSection>
         </FormContent>
-        <FormActions isPending={isPending || isSaving} title={t("save")}>
+        <FormActions
+          isPending={isPending || isSaving}
+          title={isEditMode ? t("save") : t("create")}
+        >
           <Button type="button" variant="ghost" onClick={() => router.back()}>
-            {t("cancel") || "Cancel"}
+            {t("cancel")}
           </Button>
         </FormActions>
       </FormRoot>

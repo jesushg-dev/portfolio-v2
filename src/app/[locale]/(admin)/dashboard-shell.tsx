@@ -110,8 +110,7 @@ const LogoIcon = ({ userName }: { userName: string }) => {
 const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const tShell = useTranslations("admin.shell");
-  const tNav = useTranslations("admin.nav");
+  const t = useTranslations("admin.shell");
   const [open, setOpen] = useState(false);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
 
@@ -149,14 +148,14 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
         return normalizedPathname.startsWith(item.href);
       });
 
-    return matched ? tNav(matched.labelKey) : tShell("title");
-  }, [normalizedPathname, tNav, tShell]);
+    return matched ? t(`nav.${matched.labelKey}`) : t("title");
+  }, [normalizedPathname, t]);
 
   const pageSubtitle = useMemo(() => {
-    if (normalizedPathname.endsWith("/new")) return "Create new item";
-    if (normalizedPathname.includes("/edit")) return "Edit item";
+    if (normalizedPathname.endsWith("/new")) return t("createNewItem");
+    if (normalizedPathname.includes("/edit")) return t("editItem");
     return "";
-  }, [normalizedPathname]);
+  }, [normalizedPathname, t]);
 
   const portfolioItems = NAV_ITEMS.filter((i) => i.group === "portfolio");
   const topItems = NAV_ITEMS.filter(
@@ -171,7 +170,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
           <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
             <div className="flex h-12 items-center">
               {open ? (
-                <Logo userName={userName} title={tShell("title")} />
+                <Logo userName={userName} title={t("title")} />
               ) : (
                 <LogoIcon userName={userName} />
               )}
@@ -184,7 +183,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
                   <SidebarLink
                     key={item.labelKey}
                     link={{
-                      label: tNav(item.labelKey),
+                      label: t(`nav.${item.labelKey}`),
                       href: item.href,
                       icon: <Icon className="h-5 w-5 shrink-0" />,
                       active: isActive(item),
@@ -198,7 +197,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
               <div className="mb-1 flex h-6 items-end px-3">
                 {open && (
                   <p className="text-muted-foreground/80 text-[10px] font-semibold tracking-widest uppercase">
-                    {tNav("portfolioGroup")}
+                    {t("nav.portfolioGroup")}
                   </p>
                 )}
               </div>
@@ -209,7 +208,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
                     <SidebarLink
                       key={item.labelKey}
                       link={{
-                        label: tNav(item.labelKey),
+                        label: t(`nav.${item.labelKey}`),
                         href: item.href,
                         icon: <Icon className="h-5 w-5 shrink-0" />,
                         active: isActive(item),
@@ -224,7 +223,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
           <div className="flex flex-col gap-1">
             <SidebarLink
               link={{
-                label: tNav("settings"),
+                label: t("nav.settings"),
                 href: settingsItem.href,
                 icon: <Settings className="h-5 w-5 shrink-0" />,
                 active: isActive(settingsItem),
@@ -240,7 +239,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
               </div>
               {open && (
                 <span className="inline-block text-sm font-medium whitespace-pre transition duration-150 group-hover/sidebar:translate-x-1">
-                  {tShell("signOut")}
+                  {t("signOut")}
                 </span>
               )}
             </button>
@@ -267,7 +266,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
             <div className="flex items-center gap-3 pl-4">
               <button
                 type="button"
-                aria-label="Toggle theme selector"
+                aria-label={t("toggleThemeAria")}
                 onClick={() => setThemeMenuOpen((prev) => !prev)}
                 className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg border p-2"
               >
@@ -278,7 +277,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
                   {userName}
                 </p>
                 <p className="text-muted-foreground text-xs">
-                  Portfolio Manager
+                  {t("portfolioManager")}
                 </p>
               </div>
               <div className="bg-primary text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold">

@@ -19,8 +19,10 @@ import {
 import { GripVertical } from "lucide-react";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormActions,
+  FormCheckboxItem,
   FormContent,
   FormItem,
   FormRoot,
@@ -167,14 +169,20 @@ export const ExperienceForm: FC<{
               )}
             />
 
-            <label className="text-foreground flex cursor-pointer items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                {...form.register("current")}
-                className="border-border text-primary focus:ring-primary rounded"
-              />{" "}
-              {t("current")}
-            </label>
+            <FormField
+              control={form.control}
+              name="current"
+              render={({ field }) => (
+                <FormCheckboxItem label={t("current")}>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={(checked) =>
+                      field.onChange(checked === true)
+                    }
+                  />
+                </FormCheckboxItem>
+              )}
+            />
           </FormSection>
 
           <FormSection

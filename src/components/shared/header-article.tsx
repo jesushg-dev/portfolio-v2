@@ -26,7 +26,7 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({
   className = "",
   subClassName = "",
   showIcon = false,
-  titleClassName = "text-primaryText-500",
+  titleClassName = "text-foreground",
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -107,7 +107,7 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({
         </motion.div>
         {description && (
           <motion.p
-            className="text-primaryText-500 mt-2 text-base"
+            className="text-muted-foreground mt-2 text-base"
             variants={animationVariants}
           >
             {description}

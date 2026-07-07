@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   DndContext,
   closestCenter,
@@ -28,6 +29,9 @@ import {
 
 import type { Locale } from "@/i18n/config";
 import { LocalizedField } from "@/components/admin/localized-field";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -66,11 +70,13 @@ function ExperienceRow({
   defaultLocale,
   onSave,
   onDelete,
+  t,
 }: {
   entry: ExperienceEntry;
   defaultLocale: Locale;
   onSave: (entry: ExperienceEntry) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
+  t: ReturnType<typeof useTranslations<"admin.forms.experience">>;
 }) {
   const [isOpen, setIsOpen] = useState(entry._status === "new");
   const [draft, setDraft] = useState<ExperienceEntry>(entry);
@@ -103,7 +109,7 @@ function ExperienceRow({
   };
 
   const handleDelete = async () => {
-    if (!confirm("Delete this experience?")) return;
+    if (!confirm(t("deleteConfirm"))) return;
     setIsDeleting(true);
     try {
       await onDelete(entry.id);
@@ -146,7 +152,7 @@ function ExperienceRow({
           {...attributes}
           {...listeners}
           className="shrink-0 cursor-grab touch-none text-gray-300 hover:text-gray-500 active:cursor-grabbing"
-          aria-label="Drag to reorder"
+          aria-label={t("dragToReorder")}
         >
           <GripVertical className="h-4 w-4" />
         </button>
@@ -154,12 +160,12 @@ function ExperienceRow({
         {/* Summary */}
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-gray-800">
-            {draft.role.default || "New experience"}
+            {draft.role.default || t("newEntry")}
           </p>
           <p className="truncate text-xs text-gray-500">
             {draft.company}
             {draft.dates ? ` · ${draft.dates}` : ""}
-            {draft.current ? " (Present)" : ""}
+            {draft.current ? ` (${t("present")})` : ""}
           </p>
         </div>
 
@@ -170,7 +176,7 @@ function ExperienceRow({
             onClick={handleDelete}
             disabled={isDeleting}
             className="rounded p-1 text-gray-300 hover:bg-red-50 hover:text-red-400"
-            aria-label="Delete"
+            aria-label={t("remove")}
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -192,75 +198,75 @@ function ExperienceRow({
       {isOpen && (
         <div className="space-y-4 border-t border-gray-100 px-4 pt-3 pb-4">
           {/* Company */}
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">
-              Company / Organization
-            </label>
-            <input
+          <div className="space-y-1">
+            <Label className="text-xs font-medium text-gray-600">
+              {t("company")}
+            </Label>
+            <Input
               type="text"
               value={draft.company}
               onChange={(e) =>
                 setDraft((d) => ({ ...d, company: e.target.value }))
               }
-              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:border-blue-400 focus:outline-none"
-              placeholder="e.g. Google"
+              placeholder={t("companyPlaceholder")}
             />
           </div>
 
-          {/* Role — multilingual */}
           <LocalizedField
             mode="app-locales"
-            label="Role / Position"
+            label={t("role")}
             value={draft.role}
             onChange={(v) => setDraft((d) => ({ ...d, role: v }))}
             defaultLocale={defaultLocale}
-            placeholder="e.g. Frontend Developer"
+            placeholder={t("rolePlaceholder")}
           />
 
-          {/* Dates + current toggle */}
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-600">
-                Dates (display string)
-              </label>
-              <input
+            <div className="space-y-1">
+              <Label className="text-xs font-medium text-gray-600">
+                {t("datesDisplay")}
+              </Label>
+              <Input
                 type="text"
                 value={draft.dates}
                 onChange={(e) =>
                   setDraft((d) => ({ ...d, dates: e.target.value }))
                 }
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:border-blue-400 focus:outline-none"
-                placeholder="e.g. Jan 2022 – Present"
+                placeholder={t("datesPlaceholder")}
               />
             </div>
             <div className="flex items-end pb-2">
-              <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-700">
-                <input
-                  type="checkbox"
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id={`current-${entry.id}`}
                   checked={draft.current}
-                  onChange={(e) =>
-                    setDraft((d) => ({ ...d, current: e.target.checked }))
+                  onCheckedChange={(checked) =>
+                    setDraft((d) => ({ ...d, current: checked === true }))
                   }
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600"
                 />
-                Currently working here
-              </label>
+                <Label
+                  htmlFor={`current-${entry.id}`}
+                  className="cursor-pointer text-sm text-gray-700"
+                >
+                  {t("currentlyWorking")}
+                </Label>
+              </div>
             </div>
           </div>
 
           {/* Responsibilities */}
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <label className="text-xs font-medium text-gray-600">
-                Responsibilities
-              </label>
+              <Label className="text-xs font-medium text-gray-600">
+                {t("responsibilities")}
+              </Label>
               <button
                 type="button"
                 onClick={addResponsibility}
                 className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-blue-600 hover:bg-blue-50"
               >
                 <Plus className="h-3 w-3" />
-                Add
+                {t("addLabel")}
               </button>
             </div>
             <div className="space-y-2">
@@ -282,7 +288,7 @@ function ExperienceRow({
                       }))
                     }
                     defaultLocale={defaultLocale}
-                    placeholder="Describe what you did…"
+                    placeholder={t("responsibilityPlaceholder")}
                     multiline
                     rows={2}
                   />
@@ -297,7 +303,7 @@ function ExperienceRow({
               ))}
               {draft.responsibilities.length === 0 && (
                 <p className="text-xs text-gray-400">
-                  No responsibilities added.
+                  {t("noResponsibilities")}
                 </p>
               )}
             </div>
@@ -310,7 +316,7 @@ function ExperienceRow({
               onClick={() => setIsOpen(false)}
               className="rounded-lg px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-100"
             >
-              Cancel
+              {t("cancel")}
             </button>
             <button
               type="button"
@@ -318,7 +324,7 @@ function ExperienceRow({
               disabled={isSaving}
               className="rounded-lg bg-gray-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
             >
-              {isSaving ? "Saving…" : "Save"}
+              {isSaving ? t("saving") : t("save")}
             </button>
           </div>
         </div>
@@ -338,6 +344,7 @@ export function TimelineEditor({
   onDelete,
   onReorder,
 }: TimelineEditorProps) {
+  const t = useTranslations("admin.forms.experience");
   const [items, setItems] = useState(entries);
 
   const sensors = useSensors(
@@ -390,6 +397,7 @@ export function TimelineEditor({
               key={entry.id}
               entry={entry}
               defaultLocale={defaultLocale}
+              t={t}
               onSave={async (saved) => {
                 await onSave(saved);
                 setItems((prev) =>
@@ -409,7 +417,7 @@ export function TimelineEditor({
 
       {items.length === 0 && (
         <p className="rounded-lg border border-dashed border-gray-200 py-8 text-center text-sm text-gray-400">
-          No experience entries yet.
+          {t("noEntries")}
         </p>
       )}
 
@@ -419,7 +427,7 @@ export function TimelineEditor({
         className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-3 text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600"
       >
         <Plus className="h-4 w-4" />
-        Add experience
+        {t("addExperience")}
       </button>
     </div>
   );

@@ -14,7 +14,7 @@ export default async function EditCertificationModal({
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
   const { id } = await params;
-  const tActions = await getTranslations("admin.actions");
+  const t = await getTranslations("admin.certifications");
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -34,8 +34,8 @@ export default async function EditCertificationModal({
 
   return (
     <PageDialogWrapper
-      title={tActions("edit") || "Edit"}
-      description="Edit existing certification"
+      title={t("edit")}
+      description={t("editDescription")}
     >
       <CertificationForm initialData={certification} languages={languages} />
     </PageDialogWrapper>

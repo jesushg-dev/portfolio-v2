@@ -12,10 +12,36 @@ const About: FC = async () => {
   const t = await getTranslations("main.about");
 
   const tenant = await resolveTenant();
-  const aboutMe = tenant
+  const aboutMeRow = tenant
     ? await db.cvAboutMe.findUnique({ where: { userId: tenant.userId } })
     : null;
-  const consoleCode = aboutMe?.consoleCode;
+
+  // Console data lives inside the `aboutMe` JSON blob under the `console` key.
+  // Build the multi-line string that <AboutTerminal consoleCode=…> expects.
+  let consoleCode: string | null = null;
+  if (aboutMeRow?.aboutMe && typeof aboutMeRow.aboutMe === "object") {
+    const json = aboutMeRow.aboutMe as Record<string, unknown>;
+    const c = json.console as
+      | {
+          name?: string;
+          profession?: string;
+          languages?: { spanish?: string; english?: string; dutch?: string };
+        }
+      | undefined;
+    if (c) {
+      consoleCode = [
+        "{",
+        `  "name": "${c.name ?? ""}",`,
+        `  "languages": {`,
+        `    "spanish": "${c.languages?.spanish ?? ""}",`,
+        `    "english": "${c.languages?.english ?? ""}",`,
+        `    "dutch": "${c.languages?.dutch ?? ""}"`,
+        `  },`,
+        `  "profession": "${c.profession ?? ""}"`,
+        "}",
+      ].join("\n");
+    }
+  }
 
   return (
     <div className="overflow-hidden">

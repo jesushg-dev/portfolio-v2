@@ -14,7 +14,7 @@ export default async function EditServiceModal({
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
   const { id } = await params;
-  const tActions = await getTranslations("admin.actions");
+  const t = await getTranslations("admin.services");
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -34,8 +34,8 @@ export default async function EditServiceModal({
 
   return (
     <PageDialogWrapper
-      title={tActions("edit") || "Edit"}
-      description="Edit existing service"
+      title={t("edit")}
+      description={t("editDescription")}
     >
       <ServiceForm initialData={service} languages={languages} />
     </PageDialogWrapper>

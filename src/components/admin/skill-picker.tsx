@@ -2,6 +2,9 @@
 
 import { useMemo, useState } from "react";
 import { Search, Check } from "lucide-react";
+import { useTranslations } from "next-intl";
+
+import { Input } from "@/components/ui/input";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -43,6 +46,7 @@ export function SkillPicker({
   onChange,
   compact = false,
 }: SkillPickerProps) {
+  const t = useTranslations("admin.forms.skillPicker");
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<string>(ALL_FILTER);
 
@@ -92,7 +96,7 @@ export function SkillPicker({
         ))}
         {selectedSkills.length === 0 && (
           <span className="text-muted-foreground text-xs">
-            No skills selected
+            {t("noSelected")}
           </span>
         )}
       </div>
@@ -111,7 +115,7 @@ export function SkillPicker({
               type="button"
               onClick={() => toggle(s.id)}
               className="border-primary/30 bg-primary/10 text-primary hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium"
-              title="Click to remove"
+              title={t("clickToRemove")}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -129,12 +133,12 @@ export function SkillPicker({
       {/* Search */}
       <div className="relative">
         <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
-        <input
+        <Input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search skills…"
-          className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-lg border py-2 pr-3 pl-9 text-sm focus:outline-none focus-visible:ring-3"
+          placeholder={t("searchPlaceholder")}
+          className="pl-9"
         />
       </div>
 
@@ -151,7 +155,7 @@ export function SkillPicker({
                 : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
             }`}
           >
-            {type === ALL_FILTER ? "All" : type}
+            {type === ALL_FILTER ? t("allTypes") : type}
           </button>
         ))}
       </div>
@@ -198,17 +202,16 @@ export function SkillPicker({
         })}
         {filtered.length === 0 && (
           <p className="text-muted-foreground col-span-full py-6 text-center text-sm">
-            No skills found
+            {t("noResults")}
           </p>
         )}
       </div>
 
       {/* Footer summary */}
       <p className="text-muted-foreground text-right text-xs">
-        {selectedSkillIds.length} skill
-        {selectedSkillIds.length !== 1 ? "s" : ""} selected
+        {t("selectedCount", { count: selectedSkillIds.length })}
         {filtered.length < availableSkills.length &&
-          ` · ${filtered.length} of ${availableSkills.length} shown`}
+          ` · ${t("shownCount", { shown: filtered.length, total: availableSkills.length })}`}
       </p>
     </div>
   );

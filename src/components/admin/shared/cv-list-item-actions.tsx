@@ -14,7 +14,7 @@ const CvListItemActions: FC<ICvListItemActionsProps> = ({
   onEditToggle,
   onDelete,
 }) => {
-  const t = useTranslations("admin.actions");
+  const t = useTranslations("admin.common");
 
   return (
     <div className="flex shrink-0 gap-3">

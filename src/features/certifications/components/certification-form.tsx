@@ -1,7 +1,7 @@
 "use client";
 import type { AppLanguage, Certification } from "@prisma/client";
 
-import { type FC, useTransition, useState } from "react";
+import { type FC, useTransition, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -37,41 +37,6 @@ const StackTypeSchema = z.enum([
   "TOOLS",
 ]);
 
-const certFormSchema = z.object({
-  id: z.string().optional(),
-  company: z.string().min(1, "Company is required"),
-  issuedDate: z.number().int().optional().nullable(),
-  url: z.string().url().optional().or(z.literal("")),
-  idCredential: z.string().optional().or(z.literal("")),
-  image: z.string().optional().or(z.literal("")),
-  type: z.array(StackTypeSchema),
-  skillIds: z.array(z.string()),
-  translations: z
-    .array(
-      z
-        .object({
-          appLanguageId: z.string(),
-          title: z.string(),
-        })
-        .superRefine((val, ctx) => {
-          if (val.appLanguageId === "en") {
-            if (!val.title || val.title.trim() === "") {
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Title is required for the primary language",
-                path: ["title"],
-              });
-            }
-          }
-        }),
-    )
-    .refine((val) => val.length >= 1, {
-      message: "At least one language is required",
-    }),
-});
-
-type TCertForm = z.infer<typeof certFormSchema>;
-
 interface CertificationInitialData extends Certification {
   CertificationTranslation?: {
     appLanguageId: string;
@@ -92,9 +57,48 @@ export const CertificationForm: FC<CertificationFormProps> = ({
   languages,
 }) => {
   const isEditMode = !!initialData;
-  const t = useTranslations("admin.certifications");
+  const t = useTranslations("admin.forms.certification");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const certFormSchema = useMemo(
+    () =>
+      z.object({
+        id: z.string().optional(),
+        company: z.string().min(1, t("companyRequired")),
+        issuedDate: z.number().int().optional().nullable(),
+        url: z.string().url().optional().or(z.literal("")),
+        idCredential: z.string().optional().or(z.literal("")),
+        image: z.string().optional().or(z.literal("")),
+        type: z.array(StackTypeSchema),
+        skillIds: z.array(z.string()),
+        translations: z
+          .array(
+            z
+              .object({
+                appLanguageId: z.string(),
+                title: z.string(),
+              })
+              .superRefine((val, ctx) => {
+                if (val.appLanguageId === "en") {
+                  if (!val.title || val.title.trim() === "") {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom,
+                      message: t("titleRequiredPrimary"),
+                      path: ["title"],
+                    });
+                  }
+                }
+              }),
+          )
+          .refine((val) => val.length >= 1, {
+            message: t("atLeastOneLanguage"),
+          }),
+      }),
+    [t],
+  );
+
+  type TCertForm = z.infer<typeof certFormSchema>;
 
   const createCert = api.portfolioAdmin.createCertification.useMutation();
   const updateCert = api.portfolioAdmin.updateCertification.useMutation();
@@ -151,60 +155,68 @@ export const CertificationForm: FC<CertificationFormProps> = ({
   const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
   const activeLang = languages.find((l) => l.id === activeLangId);
 
-  const onSubmit = (values: TCertForm) => {
-    startTransition(async () => {
-      try {
-        if (isEditMode && values.id) {
-          await updateCert.mutateAsync({
-            id: values.id,
-            company: values.company,
-            issuedDate: values.issuedDate ?? null,
-            url: values.url ?? null,
-            idCredential: values.idCredential ?? null,
-            image: values.image ?? null,
-            type: values.type,
-          });
+  const onSubmit = useCallback(
+    (values: TCertForm) => {
+      startTransition(async () => {
+        try {
+          if (isEditMode && values.id) {
+            await updateCert.mutateAsync({
+              id: values.id,
+              company: values.company,
+              issuedDate: values.issuedDate ?? null,
+              url: values.url ?? null,
+              idCredential: values.idCredential ?? null,
+              image: values.image ?? null,
+              type: values.type,
+            });
 
-          await syncSkills.mutateAsync({
-            certificationId: values.id,
-            skillIds: values.skillIds,
-          });
+            await syncSkills.mutateAsync({
+              certificationId: values.id,
+              skillIds: values.skillIds,
+            });
 
-          await Promise.all(
-            values.translations
-              .filter((t) => t.title.trim() !== "")
-              .map((trans) =>
-                upsertTranslation.mutateAsync({
-                  certificationId: values.id!,
-                  appLanguageId: trans.appLanguageId,
-                  title: trans.title,
-                }),
-              ),
-          );
+            await Promise.all(
+              values.translations
+                .filter((tr) => tr.title.trim() !== "")
+                .map((trans) =>
+                  upsertTranslation.mutateAsync({
+                    certificationId: values.id!,
+                    appLanguageId: trans.appLanguageId,
+                    title: trans.title,
+                  }),
+                ),
+            );
 
-          toast.success("Certification updated");
-        } else {
-          await createCert.mutateAsync({
-            ...values,
-            issuedDate: values.issuedDate ?? undefined,
-            url: values.url ?? undefined,
-            idCredential: values.idCredential ?? undefined,
-            image: values.image ?? undefined,
-          });
-          toast.success("Certification created");
+            toast.success(t("updatedSuccess"));
+          } else {
+            await createCert.mutateAsync({
+              ...values,
+              issuedDate: values.issuedDate ?? undefined,
+              url: values.url ?? undefined,
+              idCredential: values.idCredential ?? undefined,
+              image: values.image ?? undefined,
+            });
+            toast.success(t("createdSuccess"));
+          }
+
+          await utils.portfolioAdmin.getMyCertifications.invalidate();
+          router.back();
+        } catch {
+          toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
-
-        await utils.portfolioAdmin.getMyCertifications.invalidate();
-        router.back();
-      } catch {
-        toast.error(
-          isEditMode
-            ? "Failed to update certification"
-            : "Failed to create certification",
-        );
-      }
-    });
-  };
+      });
+    },
+    [
+      isEditMode,
+      updateCert,
+      syncSkills,
+      upsertTranslation,
+      createCert,
+      utils,
+      router,
+      t,
+    ],
+  );
 
   const isSaving =
     createCert.isPending ||
@@ -226,14 +238,18 @@ export const CertificationForm: FC<CertificationFormProps> = ({
           onLangChange={setActiveLangId}
         />
         <FormContent error={anyError}>
-          <FormSection title="General Information">
+          <FormSection title={t("generalSection")}>
             {activeIndex !== -1 && activeLang && (
               <div className="mb-4 grid gap-4">
                 <FormField
                   control={form.control}
                   name={`translations.${activeIndex}.title`}
                   render={({ field }) => (
-                    <FormItem label={`Title (${activeLang.name})`}>
+                    <FormItem
+                      label={t("titleWithLanguage", {
+                        language: activeLang.name,
+                      })}
+                    >
                       <Input {...field} />
                     </FormItem>
                   )}
@@ -245,8 +261,11 @@ export const CertificationForm: FC<CertificationFormProps> = ({
               control={form.control}
               name="company"
               render={({ field }) => (
-                <FormItem label="Issuing Company">
-                  <Input placeholder="E.g. Google, Microsoft..." {...field} />
+                <FormItem label={t("issuingCompany")}>
+                  <Input
+                    placeholder={t("issuingCompanyPlaceholder")}
+                    {...field}
+                  />
                 </FormItem>
               )}
             />
@@ -256,8 +275,11 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                 control={form.control}
                 name="url"
                 render={({ field }) => (
-                  <FormItem label="Credential URL">
-                    <Input placeholder="https://..." {...field} />
+                  <FormItem label={t("credentialUrl")}>
+                    <Input
+                      placeholder={t("credentialUrlPlaceholder")}
+                      {...field}
+                    />
                   </FormItem>
                 )}
               />
@@ -265,8 +287,11 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                 control={form.control}
                 name="idCredential"
                 render={({ field }) => (
-                  <FormItem label="Credential ID">
-                    <Input placeholder="XYZ-12345" {...field} />
+                  <FormItem label={t("credentialId")}>
+                    <Input
+                      placeholder={t("credentialIdPlaceholder")}
+                      {...field}
+                    />
                   </FormItem>
                 )}
               />
@@ -276,8 +301,8 @@ export const CertificationForm: FC<CertificationFormProps> = ({
               control={form.control}
               name="image"
               render={({ field }) => (
-                <FormItem label="Image URL / Logo">
-                  <Input placeholder="https://..." {...field} />
+                <FormItem label={t("imageUrl")}>
+                  <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                 </FormItem>
               )}
             />
@@ -286,7 +311,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
               control={form.control}
               name="type"
               render={() => (
-                <FormItem label="Related Types">
+                <FormItem label={t("relatedTypes")}>
                   <div className="mt-2 grid grid-cols-2 gap-2">
                     {StackTypeSchema.options.map((item) => (
                       <FormField
@@ -319,12 +344,15 @@ export const CertificationForm: FC<CertificationFormProps> = ({
             />
           </FormSection>
 
-          <FormSection title="Skills" className="mt-4 border-t pt-4">
+          <FormSection
+            title={t("skillsSection")}
+            className="mt-4 border-t pt-4"
+          >
             <FormField
               control={form.control}
               name="skillIds"
               render={({ field }) => (
-                <FormItem label="Associated Skills">
+                <FormItem label={t("associatedSkills")}>
                   <SkillPicker
                     availableSkills={availableSkills}
                     selectedSkillIds={field.value}
@@ -337,10 +365,10 @@ export const CertificationForm: FC<CertificationFormProps> = ({
         </FormContent>
         <FormActions
           isPending={isPending || isSaving}
-          title={isEditMode ? t("save") || "Save" : t("create") || "Create"}
+          title={isEditMode ? t("save") : t("create")}
         >
           <Button type="button" variant="ghost" onClick={() => router.back()}>
-            {t("cancel") || "Cancel"}
+            {t("cancel")}
           </Button>
         </FormActions>
       </FormRoot>

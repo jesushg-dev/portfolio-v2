@@ -12,6 +12,7 @@ import { api } from "@/trpc/react";
 import { LIMIT_PER_PAGE_XL } from "@/utils/constants";
 import FilterType from "@/components/certification/filter-type";
 import { stackTypes, typeSKills } from "@/utils/constants/certificates-type";
+import { resolveCertificateTabIndex } from "./resolve-certificate-tab";
 import CertificateItem from "@/components/certification/certification-item";
 import type { StackType } from "@prisma/client";
 
@@ -49,13 +50,7 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
   const { push } = useRouter();
   const t = useTranslations("certification");
   const locale = useLocale();
-  const crtValue = useMemo(() => {
-    if (slug?.length > 0) {
-      const slugUpperCase = slug[0].toUpperCase();
-      return stackTypes.findIndex((type) => type === slugUpperCase);
-    }
-    return 0;
-  }, [slug]);
+  const crtValue = useMemo(() => resolveCertificateTabIndex(slug), [slug]);
 
   const { data, isFetching, isLoading, fetchNextPage } =
     api.portfolio.getCertificates.useInfiniteQuery(

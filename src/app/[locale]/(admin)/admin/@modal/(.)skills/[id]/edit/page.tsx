@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { db } from "@/server/db";
 import { ModalWrapper } from "@/components/shared/modal-wrapper";
 import { SkillForm } from "@/features/skills/components/skill-form";
@@ -9,6 +10,7 @@ interface Props {
 
 export default async function EditSkillModal({ params }: Props) {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
+  const t = await getTranslations("admin.skills");
 
   const { id } = await params;
 
@@ -23,8 +25,8 @@ export default async function EditSkillModal({ params }: Props) {
 
   return (
     <ModalWrapper
-      title="Edit Skill"
-      description="Update an existing skill in your portfolio"
+      title={t("edit")}
+      description={t("editDescription")}
     >
       <SkillForm initialData={skill} languages={languages} />
     </ModalWrapper>

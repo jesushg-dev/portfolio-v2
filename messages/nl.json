@@ -47,6 +47,7 @@
   "curriculum": {
     "title": "Curriculum Vitae",
     "header": {
+      "cvHeader": "Koptekst",
       "aboutMe": "Over Mij",
       "experience": "Werkervaring",
       "education": "Opleiding",
@@ -411,20 +412,24 @@
     "shell": {
       "title": "Admin Paneel",
       "signedInAs": "Ingelogd als",
-      "signOut": "Uitloggen"
-    },
-    "nav": {
-      "dashboard": "Dashboard",
-      "cv": "CV Editor",
-      "settings": "Instellingen",
-      "overview": "Overzicht",
-      "profile": "Profiel & Hero",
-      "timeline": "Tijdlijn",
-      "skills": "Vaardigheden",
-      "projects": "Projecten",
-      "services": "Diensten",
-      "certifications": "Certificeringen",
-      "portfolioGroup": "Portfolio Inhoud"
+      "signOut": "Uitloggen",
+      "createNewItem": "Nieuw item maken",
+      "editItem": "Item bewerken",
+      "toggleThemeAria": "Themakiezer wisselen",
+      "portfolioManager": "Portfolio Manager",
+      "nav": {
+        "dashboard": "Dashboard",
+        "cv": "CV Editor",
+        "settings": "Instellingen",
+        "overview": "Overzicht",
+        "profile": "Profiel & Hero",
+        "timeline": "Tijdlijn",
+        "skills": "Vaardigheden",
+        "projects": "Projecten",
+        "services": "Diensten",
+        "certifications": "Certificeringen",
+        "portfolioGroup": "Portfolio Inhoud"
+      }
     },
     "dashboard": {
       "title": "Dashboard",
@@ -479,12 +484,26 @@
       "edit": "Bewerken",
       "preview": "Voorbeeld",
       "editing": "Bewerken",
+      "editingHint": "Klik op de bewerkknop van een sectie om deze bij te werken.",
+      "clickToAdd": "Klik om toe te voegen",
       "previewRefresh": "{locale} — sla elke sectie op om te vernieuwen",
       "noProfile": "Maak je profiel aan in <link>Instellingen</link> voordat je je CV bewerkt.",
       "loading": "CV laden...",
       "loadError": "Kon CV niet laden. Vernieuw de pagina.",
       "headerSection": "Koptekst",
-      "empty": "+ Toevoegen"
+      "empty": "+ Toevoegen",
+      "deleting": "Verwijderen...",
+      "sections": {
+        "cvHeader": "Koptekst",
+        "aboutMe": "Over mij",
+        "experience": "Werkervaring",
+        "education": "Opleiding",
+        "languages": "Talen",
+        "contact": "Contact",
+        "technicalSkills": "Technische vaardigheden",
+        "personalSkills": "Persoonlijke vaardigheden",
+        "additionalInformation": "Aanvullende informatie"
+      }
     },
     "settings": {
       "title": "Instellingen",
@@ -496,18 +515,13 @@
       "cvPdfUrl": "CV PDF URL (optioneel)",
       "publish": "Publiceer mijn CV",
       "saved": "Instellingen opgeslagen.",
+      "saveFailed": "Instellingen konden niet worden opgeslagen",
       "save": "Instellingen opslaan",
-      "saving": "Opslaan..."
-    },
-    "actions": {
-      "edit": "Bewerken",
-      "cancel": "Annuleren",
-      "delete": "Verwijderen",
-      "deleting": "Verwijderen...",
-      "save": "Opslaan",
       "saving": "Opslaan...",
-      "remove": "Verwijderen",
-      "addNew": "+ Toevoegen"
+      "pdfSectionTitle": "PDF CV's (meertalig)",
+      "pdfSectionDescription": "Geef aparte PDF-links voor elke taal. Wanneer bezoekers je portfolio in een specifieke taal bekijken, downloaden ze de bijbehorende PDF.",
+      "pdfLinkPlaceholder": "https://voorbeeld.nl/cv-{locale}.pdf",
+      "usernameValidation": "Gebruik kleine letters, cijfers en streepjes"
     },
     "forms": {
       "saved": "Opgeslagen.",
@@ -529,7 +543,11 @@
         "cancel": "Annuleren",
         "loading": "Laden...",
         "saveFailed": "Kon koptekst niet opslaan",
-        "deleteFailed": "Kon niet verwijderen"
+        "deleteFailed": "Kon niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen"
       },
       "about": {
         "label": "Over mij",
@@ -539,6 +557,10 @@
         "loading": "Laden...",
         "saveFailed": "Kon over mij niet opslaan",
         "deleteFailed": "Kon niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen",
         "addNew": "Nieuwe ervaring toevoegen"
       },
       "contact": {
@@ -552,7 +574,11 @@
         "cancel": "Annuleren",
         "loading": "Laden...",
         "saveFailed": "Kon contact niet opslaan",
-        "deleteFailed": "Kon contact niet verwijderen"
+        "deleteFailed": "Kon contact niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen"
       },
       "education": {
         "institution": "Instelling",
@@ -568,7 +594,11 @@
         "cancel": "Annuleren",
         "loading": "Laden...",
         "saveFailed": "Kon opleiding niet opslaan",
-        "deleteFailed": "Kon opleiding niet verwijderen"
+        "deleteFailed": "Kon opleiding niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen"
       },
       "language": {
         "name": "Taal",
@@ -579,37 +609,64 @@
         "cancel": "Annuleren",
         "loading": "Laden...",
         "saveFailed": "Kon taal niet opslaan",
-        "deleteFailed": "Kon taal niet verwijderen"
+        "deleteFailed": "Kon taal niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen"
       },
       "skills": {
         "category": "Categorie",
         "items": "Vaardigheden (kommagescheiden)",
+        "itemsPlaceholder": "React, Next.js, Tailwind, Redux",
         "add": "+ Groep toevoegen",
         "save": "Opslaan",
         "saving": "Bezig met opslaan...",
         "cancel": "Annuleren",
         "loading": "Laden...",
         "saveFailed": "Kon vaardigheden niet opslaan",
-        "deleteFailed": "Kon groep niet verwijderen"
+        "deleteFailed": "Kon groep niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen"
       },
       "experience": {
         "company": "Bedrijf",
         "role": "Rol",
         "location": "Locatie (optioneel)",
         "dates": "Datums",
+        "datesDisplay": "Datums (weergavetekst)",
         "skills": "Vaardigheden (vrije tekst)",
         "current": "Huidige functie",
+        "currentlyWorking": "Werk hier momenteel",
         "responsibilities": "Verantwoordelijkheden",
         "responsibility": "Verantwoordelijkheid {n}",
         "addResponsibility": "+ Verantwoordelijkheid toevoegen",
         "remove": "Verwijderen",
         "add": "+ Werkervaring toevoegen",
+        "addExperience": "Werkervaring toevoegen",
         "save": "Ervaring opslaan",
         "saving": "Bezig met opslaan...",
         "cancel": "Annuleren",
         "loading": "Laden...",
         "saveFailed": "Kon ervaring niet opslaan",
-        "deleteFailed": "Kon ervaring niet verwijderen"
+        "deleteFailed": "Kon ervaring niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen",
+        "deleteConfirm": "Deze ervaring verwijderen?",
+        "newEntry": "Nieuwe ervaring",
+        "companyPlaceholder": "bijv. Google",
+        "rolePlaceholder": "bijv. Frontend Developer",
+        "datesPlaceholder": "bijv. jan 2022 – Heden",
+        "responsibilityPlaceholder": "Beschrijf wat je deed…",
+        "noResponsibilities": "Geen verantwoordelijkheden toegevoegd.",
+        "noEntries": "Nog geen werkervaring.",
+        "present": "Heden",
+        "dragToReorder": "Sleep om te herordenen",
+        "addLabel": "Toevoegen"
       },
       "softSkill": {
         "label": "Soft skill",
@@ -619,7 +676,11 @@
         "cancel": "Annuleren",
         "loading": "Laden...",
         "saveFailed": "Kon soft skill niet opslaan",
-        "deleteFailed": "Kon soft skill niet verwijderen"
+        "deleteFailed": "Kon soft skill niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen"
       },
       "additional": {
         "label": "Extra informatie",
@@ -629,12 +690,163 @@
         "cancel": "Annuleren",
         "loading": "Laden...",
         "saveFailed": "Kon item niet opslaan",
-        "deleteFailed": "Kon item niet verwijderen"
+        "deleteFailed": "Kon item niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen"
       },
       "localized": {
         "requiredDefault": "Verplicht in standaardtaal",
         "optionalTranslation": "Optionele vertaling",
-        "defaultRequired": "Waarde in standaardtaal is verplicht"
+        "defaultRequired": "Waarde in standaardtaal is verplicht",
+        "defaultFallbackHint": "Dit is je standaardtaal — deze wordt altijd als fallback getoond.",
+        "addLanguage": "Taal toevoegen",
+        "languageAria": "Taal",
+        "save": "Opslaan",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "savedSuccess": "Succesvol opgeslagen",
+        "saveFailed": "Opslaan mislukt",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen",
+        "deleteFailed": "Verwijderen mislukt"
+      },
+      "editingLanguage": "Bewerkingstaal:",
+      "skillPicker": {
+        "noSelected": "Geen vaardigheden geselecteerd",
+        "clickToRemove": "Klik om te verwijderen",
+        "searchPlaceholder": "Vaardigheden zoeken…",
+        "noResults": "Geen vaardigheden gevonden",
+        "selectedCount": "{count, plural, one {# vaardigheid geselecteerd} other {# vaardigheden geselecteerd}}",
+        "shownCount": "{shown} van {total} getoond",
+        "allTypes": "Alle types"
+      },
+      "project": {
+        "generalSection": "Algemene informatie",
+        "skillsSection": "Vaardigheden",
+        "titleWithLanguage": "Titel ({language})",
+        "descriptionWithLanguage": "Beschrijving ({language})",
+        "imageUrl": "Afbeelding-URL",
+        "imageUrlPlaceholder": "https://...",
+        "projectType": "Projecttype",
+        "selectType": "Selecteer een type",
+        "privateProject": "Privéproject",
+        "privateProjectDescription": "Verbergen op publiek portfolio",
+        "githubUrl": "GitHub-URL",
+        "githubUrlPlaceholder": "https://github.com/...",
+        "liveDemoUrl": "Live demo-URL",
+        "associatedSkills": "Gekoppelde vaardigheden",
+        "save": "Opslaan",
+        "create": "Maken",
+        "cancel": "Annuleren",
+        "updatedSuccess": "Project bijgewerkt",
+        "createdSuccess": "Project aangemaakt",
+        "updateFailed": "Project bijwerken mislukt",
+        "createFailed": "Project aanmaken mislukt",
+        "imageRequired": "Afbeelding is verplicht",
+        "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
+        "atLeastOneLanguage": "Minstens één taal is verplicht"
+      },
+      "service": {
+        "generalSection": "Algemene informatie",
+        "skillsSection": "Vaardigheden",
+        "titleWithLanguage": "Titel ({language})",
+        "descriptionWithLanguage": "Beschrijving ({language})",
+        "imageUrl": "Afbeelding-URL / pictogram",
+        "imageUrlPlaceholder": "https://...",
+        "serviceType": "Diensttype",
+        "selectType": "Selecteer een type",
+        "associatedSkills": "Gekoppelde vaardigheden",
+        "save": "Opslaan",
+        "create": "Maken",
+        "cancel": "Annuleren",
+        "updatedSuccess": "Dienst bijgewerkt",
+        "createdSuccess": "Dienst aangemaakt",
+        "updateFailed": "Dienst bijwerken mislukt",
+        "createFailed": "Dienst aanmaken mislukt",
+        "imageRequired": "Afbeelding is verplicht",
+        "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
+        "atLeastOneLanguage": "Minstens één taal is verplicht"
+      },
+      "certification": {
+        "generalSection": "Algemene informatie",
+        "skillsSection": "Vaardigheden",
+        "titleWithLanguage": "Titel ({language})",
+        "issuingCompany": "Uitgevende organisatie",
+        "issuingCompanyPlaceholder": "Bijv. Google, Microsoft...",
+        "credentialUrl": "Credential-URL",
+        "credentialUrlPlaceholder": "https://...",
+        "credentialId": "Credential-ID",
+        "credentialIdPlaceholder": "XYZ-12345",
+        "imageUrl": "Afbeelding-URL / logo",
+        "imageUrlPlaceholder": "https://...",
+        "relatedTypes": "Gerelateerde types",
+        "associatedSkills": "Gekoppelde vaardigheden",
+        "save": "Opslaan",
+        "create": "Maken",
+        "cancel": "Annuleren",
+        "updatedSuccess": "Certificering bijgewerkt",
+        "createdSuccess": "Certificering aangemaakt",
+        "updateFailed": "Certificering bijwerken mislukt",
+        "createFailed": "Certificering aanmaken mislukt",
+        "companyRequired": "Organisatie is verplicht",
+        "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
+        "atLeastOneLanguage": "Minstens één taal is verplicht"
+      },
+      "timelineItem": {
+        "generalSection": "Algemene informatie",
+        "title": "Titel",
+        "titlePlaceholder": "bijv. Start informatica-opleiding",
+        "description": "Beschrijving",
+        "descriptionPlaceholder": "Beschrijf wat je deed of leerde in dit tijdlijnitem",
+        "organization": "Organisatie",
+        "organizationPlaceholder": "Bijv. universiteit, bedrijf, academie...",
+        "category": "Categorie",
+        "selectCategory": "Selecteer categorie",
+        "categoryWork": "Werk",
+        "categoryStudy": "Studie",
+        "categoryCourse": "Cursus",
+        "location": "Locatie (optioneel)",
+        "locationPlaceholder": "Remote, Madrid, Amsterdam...",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
+        "currentEntry": "Huidig item?",
+        "displayOrder": "Weergavevolgorde",
+        "save": "Opslaan",
+        "create": "Maken",
+        "cancel": "Annuleren",
+        "updatedSuccess": "Tijdlijnitem bijgewerkt",
+        "createdSuccess": "Tijdlijnitem aangemaakt",
+        "updateFailed": "Tijdlijnitem bijwerken mislukt",
+        "createFailed": "Tijdlijnitem aanmaken mislukt",
+        "organizationRequired": "Organisatie is verplicht",
+        "startDateRequired": "Startdatum is verplicht",
+        "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
+        "atLeastOneLanguage": "Minstens één taal is verplicht"
+      },
+      "portfolioSkill": {
+        "generalSection": "Algemene informatie",
+        "title": "Titel",
+        "titlePlaceholder": "bijv. React",
+        "descriptionWithLanguage": "Beschrijving ({language})",
+        "descriptionPlaceholder": "Een korte beschrijving van deze vaardigheid...",
+        "wikiUrlWithLanguage": "Wiki-URL ({language})",
+        "wikiUrlPlaceholder": "https://nl.wikipedia.org/wiki/React",
+        "imageUrl": "Afbeelding-URL",
+        "imageUrlPlaceholder": "https://...",
+        "type": "Type",
+        "selectType": "Selecteer type",
+        "save": "Opslaan",
+        "create": "Maken",
+        "cancel": "Annuleren",
+        "updatedSuccess": "Vaardigheid bijgewerkt",
+        "createdSuccess": "Vaardigheid aangemaakt",
+        "updateFailed": "Vaardigheid bijwerken mislukt",
+        "createFailed": "Vaardigheid aanmaken mislukt",
+        "titleRequired": "Titel is verplicht",
+        "imageRequired": "Afbeelding-URL is verplicht"
       }
     },
     "errors": {
@@ -664,18 +876,15 @@
       "saveReminder": "Vergeet niet uw wijzigingen op te slaan.",
       "save": "Wijzigingen opslaan",
       "saving": "Opslaan…",
-      "savedSuccess": "Succesvol opgeslagen!"
-    },
-    "about": {
-      "title": "Over mij & Tijdlijn",
-      "subtitle": "Schrijf je verhaal en beheer je ervaringstijdlijn.",
-      "descriptionLabel": "Over mij",
-      "descriptionHint": "Deze tekst verschijnt in de Over sectie van je portfolio.",
-      "consoleHint": "Deze waarden verschijnen in het geanimeerde codeblok van je portfolio.",
-      "timelineHint": "Sleep om te herordenen. Klik op een item om te bewerken.",
-      "save": "Wijzigingen opslaan",
-      "saving": "Opslaan…",
-      "savedSuccess": "Succesvol opgeslagen!"
+      "savedSuccess": "Succesvol opgeslagen!",
+      "heroTab": "Hero & Profiel",
+      "fullNamePlaceholder": "Jesús Hernández",
+      "photoUrlPlaceholder": "https://voorbeeld.nl/foto.jpg",
+      "degreePlaceholder": "bijv. Web Developer",
+      "altTextPlaceholder": "bijv. Foto van Jesús aan een bureau",
+      "aboutPlaceholder": "Ik ben een gepassioneerde software engineer...",
+      "consoleCodePlaceholder": "const dev = {\n  name: 'Jesús',\n  roles: ['Developer', 'Engineer']\n};",
+      "aboutDescriptionHint": "Geef een gedetailleerde beschrijving van jezelf. Je kunt meerdere alinea's gebruiken."
     },
     "skills": {
       "title": "Vaardigheden",
@@ -689,6 +898,9 @@
       "deleteSuccess": "Vaardigheid succesvol verwijderd.",
       "deleteError": "Vaardigheid verwijderen is mislukt.",
       "deleteConfirm": "Deze vaardigheid verwijderen? Dit verwijdert het ook uit bijbehorende projecten en certificaten.",
+      "create": "Vaardigheid maken",
+      "createDescription": "Voeg een nieuwe vaardigheid toe aan je portfolio.",
+      "editDescription": "Werk een bestaande vaardigheid in je portfolio bij.",
       "edit": "Bewerken",
       "cancel": "Annuleren",
       "columnTitle": "Titel",
@@ -700,7 +912,11 @@
       "columnOrganization": "Organisatie",
       "columnCategory": "Categorie",
       "columnPeriod": "Periode",
-      "columnLocation": "Locatie"
+      "columnLocation": "Locatie",
+      "delete": "Verwijderen",
+      "deleting": "Verwijderen...",
+      "saveFailed": "Vaardigheid opslaan mislukt",
+      "deleteFailed": "Vaardigheid verwijderen mislukt"
     },
     "projects": {
       "title": "Projecten",
@@ -727,7 +943,13 @@
       "columnCategory": "Categorie",
       "columnPeriod": "Periode",
       "columnLocation": "Locatie",
-      "create": "Project toevoegen"
+      "create": "Project toevoegen",
+      "createDescription": "Maak een nieuw portfolio-project.",
+      "editDescription": "Bewerk een bestaand portfolio-project.",
+      "delete": "Verwijderen",
+      "deleting": "Verwijderen...",
+      "saveFailed": "Project opslaan mislukt",
+      "deleteFailed": "Project verwijderen mislukt"
     },
     "services": {
       "title": "Diensten",
@@ -754,7 +976,13 @@
       "columnCategory": "Categorie",
       "columnPeriod": "Periode",
       "columnLocation": "Locatie",
-      "create": "Dienst toevoegen"
+      "create": "Dienst toevoegen",
+      "createDescription": "Maak een nieuw dienstaanbod.",
+      "editDescription": "Bewerk een bestaande dienst.",
+      "delete": "Verwijderen",
+      "deleting": "Verwijderen...",
+      "saveFailed": "Dienst opslaan mislukt",
+      "deleteFailed": "Dienst verwijderen mislukt"
     },
     "certifications": {
       "title": "Certificeringen",
@@ -780,7 +1008,13 @@
       "columnCategory": "Categorie",
       "columnPeriod": "Periode",
       "columnLocation": "Locatie",
-      "create": "Certificering toevoegen"
+      "create": "Certificering toevoegen",
+      "createDescription": "Voeg een nieuwe certificering toe.",
+      "editDescription": "Bewerk een bestaande certificering.",
+      "delete": "Verwijderen",
+      "deleting": "Verwijderen...",
+      "saveFailed": "Certificering opslaan mislukt",
+      "deleteFailed": "Certificering verwijderen mislukt"
     },
     "timeline": {
       "title": "Tijdlijn",
@@ -805,7 +1039,18 @@
       "columnOrganization": "Organisatie",
       "columnCategory": "Categorie",
       "columnPeriod": "Periode",
-      "columnLocation": "Locatie"
+      "columnLocation": "Locatie",
+      "organization": "Organisatie",
+      "category": "Categorie",
+      "period": "Periode",
+      "location": "Locatie",
+      "actions": "Acties",
+      "deleting": "Verwijderen...",
+      "create": "Maken",
+      "delete": "Verwijderen",
+      "createDescription": "Voeg een nieuw item toe aan je tijdlijn.",
+      "editDescription": "Werk een bestaand tijdlijnitem bij.",
+      "editEntry": "Tijdlijnitem bewerken"
     },
     "dataTable": {
       "searchBy": "Zoeken op",
@@ -841,7 +1086,13 @@
       "copyFromEdited": "Kopieer van bewerkt",
       "previousValue": "Vorig: \"{value}\"",
       "saved": "Opgeslagen",
-      "skipped": "Overgeslagen"
+      "skipped": "Overgeslagen",
+      "close": "Sluiten",
+      "translationPlaceholder": "Vertaling in {label}…",
+      "saveLocale": "Opslaan {label}",
+      "dismissAria": "Sluiten",
+      "applying": "Toepassen…",
+      "saving": "Opslaan…"
     },
     "common": {
       "save": "Wijzigingen opslaan",
@@ -851,7 +1102,12 @@
       "edit": "Bewerken",
       "add": "Toevoegen",
       "confirm": "Weet je het zeker?",
-      "noItems": "Hier is nog niets."
+      "noItems": "Hier is nog niets.",
+      "dragToReorder": "Sleep om te herordenen",
+      "editItem": "Item bewerken",
+      "addItem": "Item toevoegen",
+      "deleteSuccess": "Succesvol verwijderd",
+      "close": "Sluiten"
     }
   }
 }

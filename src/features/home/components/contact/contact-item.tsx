@@ -25,17 +25,15 @@ const ContactItem: FC<IContactItemProps> = ({ label, href, icon: Icon }) => {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="pressable group inline-block space-y-0.5 rounded-lg p-3 transition-all hover:scale-105 hover:shadow-md"
+      className="pressable group bg-card inline-block space-y-0.5 rounded-lg p-3 transition-all hover:scale-105 hover:shadow-md"
       style={{
-        backgroundColor: hovered
-          ? contactColors[label]
-          : "var(--background-50)",
+        backgroundColor: hovered ? contactColors[label] : undefined,
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <Icon className="text-primary-500 group-hover:text-secondaryText-50 mx-auto h-5 w-5" />
-      <p className="text-primaryText-500 group-hover:text-secondaryText-50 text-xs capitalize">
+      <p className="text-muted-foreground group-hover:text-secondaryText-50 text-xs capitalize">
         {label}
       </p>
     </a>

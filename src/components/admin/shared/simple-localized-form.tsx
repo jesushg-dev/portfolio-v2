@@ -34,7 +34,7 @@ export const SimpleLocalizedForm: FC<{
   onSubmit: (data: ItemInput) => Promise<void>;
   onCancel: () => void;
 }> = ({ fieldLabel, defaultLocale, initial, onSubmit, onCancel }) => {
-  const tActions = useTranslations("admin.actions");
+  const t = useTranslations("admin.forms");
 
   const form = useForm<ItemInput>({
     resolver: zodResolver(ItemSchema),
@@ -61,7 +61,7 @@ export const SimpleLocalizedForm: FC<{
         </FormContent>
         <FormActions
           isPending={form.formState.isSubmitting}
-          title={tActions("save") || "Save"}
+          title={t("save")}
           onClick={onCancel}
         >
           <button
@@ -69,7 +69,7 @@ export const SimpleLocalizedForm: FC<{
             onClick={onCancel}
             className="text-muted-foreground hover:bg-muted rounded-md px-4 py-2 text-sm"
           >
-            {tActions("cancel")}
+            {t("cancel")}
           </button>
         </FormActions>
       </FormRoot>

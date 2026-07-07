@@ -2,8 +2,11 @@
 
 import { type ReactNode, useState } from "react";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { locales, type Locale } from "@/i18n/config";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 // ---------------------------------------------------------------------------
 // Locale metadata — kept in sync with next-intl config
@@ -107,6 +110,7 @@ function TabList({
 // ---------------------------------------------------------------------------
 
 export function LocalizedField(props: LocalizedFieldProps) {
+  const t = useTranslations("admin.forms.localized");
   const {
     label,
     placeholder,
@@ -164,7 +168,7 @@ export function LocalizedField(props: LocalizedFieldProps) {
           {children ? (
             children(resolvedActiveLocale)
           ) : multiline ? (
-            <textarea
+            <Textarea
               value={getCurrentText(resolvedActiveLocale)}
               onChange={(e) =>
                 setLocaleText(resolvedActiveLocale, e.target.value)
@@ -172,10 +176,10 @@ export function LocalizedField(props: LocalizedFieldProps) {
               placeholder={placeholder}
               rows={rows}
               disabled={disabled}
-              className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full resize-none rounded-md border px-3 py-2 text-sm focus:outline-none focus-visible:ring-3 disabled:opacity-50"
+              className="resize-none"
             />
           ) : (
-            <input
+            <Input
               type="text"
               value={getCurrentText(resolvedActiveLocale)}
               onChange={(e) =>
@@ -183,12 +187,11 @@ export function LocalizedField(props: LocalizedFieldProps) {
               }
               placeholder={placeholder}
               disabled={disabled}
-              className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus-visible:ring-3 disabled:opacity-50"
             />
           )}
           {resolvedActiveLocale === defaultLocale && (
             <p className="text-muted-foreground/80 mt-1 text-[10px]">
-              This is your default language — it is always shown as a fallback.
+              {t("defaultFallbackHint")}
             </p>
           )}
         </div>
@@ -246,7 +249,7 @@ export function LocalizedField(props: LocalizedFieldProps) {
                 className="border-input text-muted-foreground hover:border-ring hover:text-foreground flex items-center gap-1 rounded-md border border-dashed px-2 py-1 text-xs"
               >
                 <Plus className="h-3 w-3" />
-                Add language
+                {t("addLanguage")}
               </button>
               {showAddMenu && (
                 <div className="border-border bg-popover absolute top-full right-0 z-10 mt-1 w-44 rounded-lg border shadow-lg">
@@ -271,7 +274,7 @@ export function LocalizedField(props: LocalizedFieldProps) {
         {children ? (
           children(resolvedActiveLangId)
         ) : multiline ? (
-          <textarea
+          <Textarea
             value={value[resolvedActiveLangId] ?? ""}
             onChange={(e) =>
               onChange({ ...value, [resolvedActiveLangId]: e.target.value })
@@ -279,10 +282,10 @@ export function LocalizedField(props: LocalizedFieldProps) {
             placeholder={placeholder}
             rows={rows}
             disabled={disabled}
-            className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full resize-none rounded-md border px-3 py-2 text-sm focus:outline-none focus-visible:ring-3 disabled:opacity-50"
+            className="resize-none"
           />
         ) : (
-          <input
+          <Input
             type="text"
             value={value[resolvedActiveLangId] ?? ""}
             onChange={(e) =>
@@ -290,7 +293,6 @@ export function LocalizedField(props: LocalizedFieldProps) {
             }
             placeholder={placeholder}
             disabled={disabled}
-            className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus-visible:ring-3 disabled:opacity-50"
           />
         )}
       </div>

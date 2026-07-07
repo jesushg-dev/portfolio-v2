@@ -9,14 +9,7 @@ import {
 import type { FC } from "react";
 
 import type { CertificateType } from "@/utils/interfaces/types";
-
-const formatIssuedDate = (issuedDate: number | null) => {
-  if (!issuedDate) return "";
-  const date = new Date(issuedDate);
-  const month = date.toLocaleString("default", { month: "long" });
-  const year = date.getFullYear();
-  return `${month}, ${year}`;
-};
+import { formatIssuedDate } from "./format-issued-date";
 
 const CertificateItem: FC<CertificateType> = ({
   image,

@@ -12,8 +12,9 @@ import { api } from "@/trpc/react";
 import CvPreview from "@/components/curriculum-vitae/cv-preview";
 import EditableCvLayout from "./editable-cv-layout";
 import { getLocalizedText } from "@/lib/i18n/localized";
+
 const SECTION_LINKS = [
-  { id: "header", label: "Header" },
+  { id: "header", labelKey: "cvHeader" as const },
   { id: "contacts", labelKey: "contact" as const },
   { id: "education", labelKey: "education" as const },
   { id: "languages", labelKey: "languages" as const },
@@ -26,9 +27,12 @@ const SECTION_LINKS = [
 
 type EditorView = "edit" | "preview";
 
-const CvEditorContent: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
-  const t = useTranslations("curriculum");
-  const tCv = useTranslations("admin.cv");
+type CvTranslator = ReturnType<typeof useTranslations<"admin.cv">>;
+
+const CvEditorContent: FC<{ defaultLocale: Locale; t: CvTranslator }> = ({
+  defaultLocale,
+  t,
+}) => {
   const { data } = api.cv.getMine.useQuery();
   const [view, setView] = useState<EditorView>("edit");
   const [previewLocaleOverride, setPreviewLocaleOverride] =
@@ -76,7 +80,7 @@ const CvEditorContent: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tCv("edit")}
+              {t("edit")}
             </button>
             <button
               type="button"
@@ -87,13 +91,13 @@ const CvEditorContent: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tCv("preview")}
+              {t("preview")}
             </button>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-muted-foreground text-xs font-medium">
-              {tCv("preview")}
+              {t("preview")}
             </span>
             <LocaleSegment
               value={previewLocale}
@@ -106,10 +110,7 @@ const CvEditorContent: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
         {view === "edit" ? (
           <nav className="mt-3 flex gap-1 overflow-x-auto pt-3">
             {SECTION_LINKS.map((section) => {
-              const label =
-                "label" in section
-                  ? section.label
-                  : t(`header.${section.labelKey}`);
+              const label = t(`sections.${section.labelKey}`);
               return (
                 <a
                   key={section.id}
@@ -127,7 +128,7 @@ const CvEditorContent: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
       {view === "preview" && previewData ? (
         <div className="border-border overflow-hidden rounded-xl border shadow-sm">
           <p className="border-border/70 bg-muted/40 text-muted-foreground border-b px-4 py-2 text-xs">
-            {tCv("previewRefresh", {
+            {t("previewRefresh", {
               locale: localsDisplay[previewLocale],
             })}
           </p>
@@ -144,6 +145,7 @@ const CvEditorContent: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
           aboutMeText={aboutMePreview}
           currentLocale={previewLocale}
           defaultLocale={defaultLocale}
+          t={t}
         />
       )}
     </>
@@ -151,14 +153,14 @@ const CvEditorContent: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
 };
 
 const CvEditor: FC = () => {
-  const tCv = useTranslations("admin.cv");
+  const t = useTranslations("admin.cv");
   const { data, isLoading, isError } = api.cv.getMine.useQuery();
   const defaultLocale = (data?.profile?.defaultLocale as Locale) ?? "en";
 
   if (isLoading) {
     return (
       <div className="flex flex-col gap-3 py-12">
-        <p className="text-muted-foreground text-sm">{tCv("loading")}</p>
+        <p className="text-muted-foreground text-sm">{t("loading")}</p>
         <div className="bg-muted h-8 w-48 animate-pulse rounded-lg" />
         <div className="bg-muted/70 h-64 animate-pulse rounded-xl" />
       </div>
@@ -168,7 +170,7 @@ const CvEditor: FC = () => {
   if (isError || !data) {
     return (
       <p className="bg-destructive/10 text-destructive rounded-lg px-4 py-3 text-sm">
-        {tCv("loadError")}
+        {t("loadError")}
       </p>
     );
   }
@@ -177,7 +179,7 @@ const CvEditor: FC = () => {
     return (
       <div className="border-border bg-muted/40 rounded-xl border p-5">
         <p className="text-foreground text-sm">
-          {tCv.rich("noProfile", {
+          {t.rich("noProfile", {
             link: (chunks) => (
               <Link href="/admin/settings" className="font-medium underline">
                 {chunks}
@@ -193,11 +195,11 @@ const CvEditor: FC = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-foreground text-2xl font-semibold tracking-tight">
-          {tCv("title")}
+          {t("title")}
         </h1>
-        <p className="text-muted-foreground mt-1 text-sm">{tCv("subtitle")}</p>
+        <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
-      <CvEditorContent defaultLocale={defaultLocale} />
+      <CvEditorContent defaultLocale={defaultLocale} t={t} />
     </div>
   );
 };

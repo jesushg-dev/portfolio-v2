@@ -1,7 +1,7 @@
 "use client";
 import type { AppLanguage, Skill } from "@prisma/client";
 
-import { type FC, useTransition, useState } from "react";
+import { type FC, useTransition, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -41,22 +41,6 @@ const StackTypeSchema = z.enum([
   "TOOLS",
 ]);
 
-const skillFormSchema = z.object({
-  id: z.string().optional(),
-  title: z.string().min(1, "Title is required"),
-  image: z.string().min(1, "Image URL is required"),
-  type: StackTypeSchema,
-  translations: z.array(
-    z.object({
-      appLanguageId: z.string(),
-      description: z.string(),
-      urlWiki: z.string(),
-    }),
-  ),
-});
-
-type TSkillForm = z.infer<typeof skillFormSchema>;
-
 interface SkillInitialData extends Skill {
   SkillTranslation?: {
     appLanguageId: string;
@@ -72,9 +56,29 @@ interface SkillFormProps {
 
 export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
   const isEditMode = !!initialData;
-  const t = useTranslations("admin.skills");
+  const t = useTranslations("admin.forms.portfolioSkill");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const skillFormSchema = useMemo(
+    () =>
+      z.object({
+        id: z.string().optional(),
+        title: z.string().min(1, t("titleRequired")),
+        image: z.string().min(1, t("imageRequired")),
+        type: StackTypeSchema,
+        translations: z.array(
+          z.object({
+            appLanguageId: z.string(),
+            description: z.string(),
+            urlWiki: z.string(),
+          }),
+        ),
+      }),
+    [t],
+  );
+
+  type TSkillForm = z.infer<typeof skillFormSchema>;
 
   const createSkill = api.portfolioAdmin.createSkill.useMutation();
   const updateSkill = api.portfolioAdmin.updateSkill.useMutation();
@@ -95,7 +99,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
           })) ?? [];
 
         const existingLangIds = new Set(
-          existingTranslations.map((t) => t.appLanguageId),
+          existingTranslations.map((tr) => tr.appLanguageId),
         );
         const missingLangs = languages.filter(
           (l) => !existingLangIds.has(l.id),
@@ -149,61 +153,72 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
   const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
   const activeLang = languages.find((l) => l.id === activeLangId);
 
-  const onSubmit = (values: TSkillForm) => {
-    startTransition(async () => {
-      try {
-        if (isEditMode && values.id) {
-          await updateSkill.mutateAsync({
-            id: values.id,
-            title: values.title,
-            image: values.image,
-            type: values.type,
-          });
+  const onSubmit = useCallback(
+    (values: TSkillForm) => {
+      startTransition(async () => {
+        try {
+          if (isEditMode && values.id) {
+            await updateSkill.mutateAsync({
+              id: values.id,
+              title: values.title,
+              image: values.image,
+              type: values.type,
+            });
 
-          await Promise.all(
-            values.translations
-              .filter(
-                (t) => t.description.trim() !== "" || t.urlWiki.trim() !== "",
-              )
-              .map((trans) =>
-                upsertTranslation.mutateAsync({
-                  skillId: values.id!,
-                  appLanguageId: trans.appLanguageId,
-                  description: trans.description ?? "",
-                  urlWiki: trans.urlWiki ?? "",
-                }),
-              ),
-          );
+            await Promise.all(
+              values.translations
+                .filter(
+                  (tr) =>
+                    tr.description.trim() !== "" || tr.urlWiki.trim() !== "",
+                )
+                .map((trans) =>
+                  upsertTranslation.mutateAsync({
+                    skillId: values.id!,
+                    appLanguageId: trans.appLanguageId,
+                    description: trans.description ?? "",
+                    urlWiki: trans.urlWiki ?? "",
+                  }),
+                ),
+            );
 
-          toast.success(t("savedSuccess") || "Skill updated");
-        } else {
-          await createSkill.mutateAsync({
-            title: values.title,
-            image: values.image,
-            type: values.type,
-            translations: values.translations
-              .filter(
-                (t) => t.description.trim() !== "" || t.urlWiki.trim() !== "",
-              )
-              .map((t) => ({
-                appLanguageId: t.appLanguageId,
-                description: t.description ?? "",
-                urlWiki: t.urlWiki ?? "",
-              })),
-          });
+            toast.success(t("updatedSuccess"));
+          } else {
+            await createSkill.mutateAsync({
+              title: values.title,
+              image: values.image,
+              type: values.type,
+              translations: values.translations
+                .filter(
+                  (tr) =>
+                    tr.description.trim() !== "" || tr.urlWiki.trim() !== "",
+                )
+                .map((tr) => ({
+                  appLanguageId: tr.appLanguageId,
+                  description: tr.description ?? "",
+                  urlWiki: tr.urlWiki ?? "",
+                })),
+            });
 
-          toast.success(t("savedSuccess") || "Skill created");
+            toast.success(t("createdSuccess"));
+          }
+
+          await utils.portfolioAdmin.getMySkills.invalidate();
+          router.back();
+        } catch {
+          toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
-
-        await utils.portfolioAdmin.getMySkills.invalidate();
-        router.back();
-      } catch {
-        toast.error(
-          isEditMode ? "Failed to update skill" : "Failed to create skill",
-        );
-      }
-    });
-  };
+      });
+    },
+    [
+      isEditMode,
+      updateSkill,
+      upsertTranslation,
+      createSkill,
+      utils,
+      router,
+      t,
+    ],
+  );
 
   const isSaving =
     createSkill.isPending ||
@@ -221,13 +236,13 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
           onLangChange={setActiveLangId}
         />
         <FormContent error={anyError}>
-          <FormSection title="General Information">
+          <FormSection title={t("generalSection")}>
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem label="Title *">
-                  <Input placeholder="e.g. React" {...field} />
+                <FormItem label={t("title")}>
+                  <Input placeholder={t("titlePlaceholder")} {...field} />
                 </FormItem>
               )}
             />
@@ -238,10 +253,14 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                   control={form.control}
                   name={`translations.${activeIndex}.description`}
                   render={({ field }) => (
-                    <FormItem label={`Description (${activeLang.name})`}>
+                    <FormItem
+                      label={t("descriptionWithLanguage", {
+                        language: activeLang.name,
+                      })}
+                    >
                       <Textarea
                         rows={3}
-                        placeholder="A short description about this skill..."
+                        placeholder={t("descriptionPlaceholder")}
                         {...field}
                       />
                     </FormItem>
@@ -252,11 +271,12 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                   control={form.control}
                   name={`translations.${activeIndex}.urlWiki`}
                   render={({ field }) => (
-                    <FormItem label={`Wiki URL (${activeLang.name})`}>
-                      <Input
-                        placeholder="https://en.wikipedia.org/wiki/React_(JavaScript_library)"
-                        {...field}
-                      />
+                    <FormItem
+                      label={t("wikiUrlWithLanguage", {
+                        language: activeLang.name,
+                      })}
+                    >
+                      <Input placeholder={t("wikiUrlPlaceholder")} {...field} />
                     </FormItem>
                   )}
                 />
@@ -267,8 +287,8 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                 control={form.control}
                 name="image"
                 render={({ field }) => (
-                  <FormItem label="Image URL *">
-                    <Input placeholder="https://..." {...field} />
+                  <FormItem label={t("imageUrl")}>
+                    <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                   </FormItem>
                 )}
               />
@@ -277,18 +297,18 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                 control={form.control}
                 name="type"
                 render={({ field }) => (
-                  <FormItem label="Type *">
+                  <FormItem label={t("type")}>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
+                        <SelectValue placeholder={t("selectType")} />
                       </SelectTrigger>
                       <SelectContent>
-                        {StackTypeSchema.options.map((t) => (
-                          <SelectItem key={t} value={t}>
-                            {t}
+                        {StackTypeSchema.options.map((opt) => (
+                          <SelectItem key={opt} value={opt}>
+                            {opt}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -301,10 +321,10 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
         </FormContent>
         <FormActions
           isPending={isPending || isSaving}
-          title={isEditMode ? t("save") || "Save" : t("save") || "Create"}
+          title={isEditMode ? t("save") : t("create")}
         >
           <Button type="button" variant="ghost" onClick={() => router.back()}>
-            {t("cancel") || "Cancel"}
+            {t("cancel")}
           </Button>
         </FormActions>
       </FormRoot>

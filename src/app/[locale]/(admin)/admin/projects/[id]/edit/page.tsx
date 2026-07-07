@@ -13,7 +13,7 @@ export default async function EditProjectPage({
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
   const { id } = await params;
-  const tActions = await getTranslations("admin.actions");
+  const t = await getTranslations("admin.projects");
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -34,11 +34,9 @@ export default async function EditProjectPage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {tActions("edit")}
-        </h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("edit")}</h1>
         <p className="text-muted-foreground mt-1 text-sm">
-          Edit existing portfolio project
+          {t("editDescription")}
         </p>
       </div>
       <div className="mx-auto w-full max-w-3xl">

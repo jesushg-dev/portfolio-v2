@@ -1,7 +1,7 @@
 "use client";
 import type { AppLanguage, Skill, Project } from "@prisma/client";
 
-import { type FC, useTransition, useState, useCallback } from "react";
+import { type FC, useTransition, useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -44,41 +44,6 @@ const StackTypeSchema = z.enum([
   "TOOLS",
 ]);
 
-const projectFormSchema = z.object({
-  id: z.string().optional(),
-  image: z.string().min(1, "Image is required"),
-  type: StackTypeSchema,
-  githubUrl: z.string().url().optional().or(z.literal("")),
-  websiteUrl: z.string().url().optional().or(z.literal("")),
-  isPrivate: z.boolean(),
-  skillIds: z.array(z.string()),
-  translations: z
-    .array(
-      z
-        .object({
-          appLanguageId: z.string(),
-          title: z.string(),
-          description: z.string(),
-        })
-        .superRefine((val, ctx) => {
-          if (val.appLanguageId === "en") {
-            if (!val.title || val.title.trim() === "") {
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Title is required for the primary language",
-                path: ["title"],
-              });
-            }
-          }
-        }),
-    )
-    .refine((val) => val.length >= 1, {
-      message: "At least one language is required",
-    }),
-});
-
-type TProjectForm = z.infer<typeof projectFormSchema>;
-
 interface ProjectInitialData extends Project {
   ProjectTranslation?: {
     appLanguageId: string;
@@ -101,9 +66,48 @@ export const ProjectForm: FC<ProjectFormProps> = ({
   languages,
 }) => {
   const isEditMode = !!initialData;
-  const tCommon = useTranslations("admin.actions");
+  const t = useTranslations("admin.forms.project");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const projectFormSchema = useMemo(
+    () =>
+      z.object({
+        id: z.string().optional(),
+        image: z.string().min(1, t("imageRequired")),
+        type: StackTypeSchema,
+        githubUrl: z.string().url().optional().or(z.literal("")),
+        websiteUrl: z.string().url().optional().or(z.literal("")),
+        isPrivate: z.boolean(),
+        skillIds: z.array(z.string()),
+        translations: z
+          .array(
+            z
+              .object({
+                appLanguageId: z.string(),
+                title: z.string(),
+                description: z.string(),
+              })
+              .superRefine((val, ctx) => {
+                if (val.appLanguageId === "en") {
+                  if (!val.title || val.title.trim() === "") {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom,
+                      message: t("titleRequiredPrimary"),
+                      path: ["title"],
+                    });
+                  }
+                }
+              }),
+          )
+          .refine((val) => val.length >= 1, {
+            message: t("atLeastOneLanguage"),
+          }),
+      }),
+    [t],
+  );
+
+  type TProjectForm = z.infer<typeof projectFormSchema>;
 
   const createProject = api.portfolioAdmin.createProject.useMutation();
   const updateProject = api.portfolioAdmin.updateProject.useMutation();
@@ -133,7 +137,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
           })) ?? [];
 
         const existingLangIds = new Set(
-          existingTranslations.map((t) => t.appLanguageId),
+          existingTranslations.map((tr) => tr.appLanguageId),
         );
         const missingLangs = languages.filter(
           (l) => !existingLangIds.has(l.id),
@@ -223,20 +227,16 @@ export const ProjectForm: FC<ProjectFormProps> = ({
               ),
             );
 
-            toast.success("Project updated");
+            toast.success(t("updatedSuccess"));
           } else {
             await createProject.mutateAsync(values);
-            toast.success("Project created");
+            toast.success(t("createdSuccess"));
           }
 
           await utils.portfolioAdmin.getMyProjects.invalidate();
           router.back();
         } catch {
-          toast.error(
-            isEditMode
-              ? "Failed to update project"
-              : "Failed to create project",
-          );
+          toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
       });
     },
@@ -248,6 +248,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
       createProject,
       utils,
       router,
+      t,
     ],
   );
 
@@ -271,14 +272,18 @@ export const ProjectForm: FC<ProjectFormProps> = ({
           onLangChange={setActiveLangId}
         />
         <FormContent error={anyError}>
-          <FormSection title="General Information">
+          <FormSection title={t("generalSection")}>
             {activeIndex !== -1 && activeLang && (
               <div className="mb-4 grid gap-4">
                 <FormField
                   control={form.control}
                   name={`translations.${activeIndex}.title`}
                   render={({ field }) => (
-                    <FormItem label={`Title (${activeLang.name})`}>
+                    <FormItem
+                      label={t("titleWithLanguage", {
+                        language: activeLang.name,
+                      })}
+                    >
                       <Input {...field} />
                     </FormItem>
                   )}
@@ -287,7 +292,11 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                   control={form.control}
                   name={`translations.${activeIndex}.description`}
                   render={({ field }) => (
-                    <FormItem label={`Description (${activeLang.name})`}>
+                    <FormItem
+                      label={t("descriptionWithLanguage", {
+                        language: activeLang.name,
+                      })}
+                    >
                       <Textarea rows={4} {...field} />
                     </FormItem>
                   )}
@@ -299,8 +308,8 @@ export const ProjectForm: FC<ProjectFormProps> = ({
               control={form.control}
               name="image"
               render={({ field }) => (
-                <FormItem label="Image URL">
-                  <Input placeholder="https://..." {...field} />
+                <FormItem label={t("imageUrl")}>
+                  <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                 </FormItem>
               )}
             />
@@ -310,13 +319,13 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 control={form.control}
                 name="type"
                 render={({ field }) => (
-                  <FormItem label="Project Type">
+                  <FormItem label={t("projectType")}>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a type" />
+                        <SelectValue placeholder={t("selectType")} />
                       </SelectTrigger>
                       <SelectContent>
                         {StackTypeSchema.options.map((opt) => (
@@ -334,8 +343,8 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 name="isPrivate"
                 render={({ field }) => (
                   <FormCheckboxItem
-                    label="Private Project"
-                    description="Hide from public portfolio"
+                    label={t("privateProject")}
+                    description={t("privateProjectDescription")}
                   >
                     <Switch
                       checked={field.value}
@@ -351,8 +360,11 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 control={form.control}
                 name="githubUrl"
                 render={({ field }) => (
-                  <FormItem label="GitHub URL">
-                    <Input placeholder="https://github.com/..." {...field} />
+                  <FormItem label={t("githubUrl")}>
+                    <Input
+                      placeholder={t("githubUrlPlaceholder")}
+                      {...field}
+                    />
                   </FormItem>
                 )}
               />
@@ -360,20 +372,23 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 control={form.control}
                 name="websiteUrl"
                 render={({ field }) => (
-                  <FormItem label="Live Demo URL">
-                    <Input placeholder="https://..." {...field} />
+                  <FormItem label={t("liveDemoUrl")}>
+                    <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                   </FormItem>
                 )}
               />
             </div>
           </FormSection>
 
-          <FormSection title="Skills" className="mt-4 border-t pt-4">
+          <FormSection
+            title={t("skillsSection")}
+            className="mt-4 border-t pt-4"
+          >
             <FormField
               control={form.control}
               name="skillIds"
               render={({ field }) => (
-                <FormItem label="Associated Skills">
+                <FormItem label={t("associatedSkills")}>
                   <SkillPicker
                     availableSkills={availableSkills}
                     selectedSkillIds={field.value}
@@ -386,14 +401,10 @@ export const ProjectForm: FC<ProjectFormProps> = ({
         </FormContent>
         <FormActions
           isPending={isPending || isSaving}
-          title={
-            isEditMode
-              ? tCommon("save") || "Save"
-              : tCommon("addNew") || "Create"
-          }
+          title={isEditMode ? t("save") : t("create")}
         >
           <Button type="button" variant="ghost" onClick={() => router.back()}>
-            {tCommon("cancel") || "Cancel"}
+            {t("cancel")}
           </Button>
         </FormActions>
       </FormRoot>

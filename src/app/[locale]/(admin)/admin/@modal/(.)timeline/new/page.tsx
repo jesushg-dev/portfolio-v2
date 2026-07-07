@@ -10,7 +10,7 @@ export default async function NewTimelineItemModal() {
   return (
     <ModalWrapper
       title={t("addNew")}
-      description="Add a new item to your timeline"
+      description={t("createDescription")}
     >
       <TimelineItemForm languages={languages} />
     </ModalWrapper>

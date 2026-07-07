@@ -11,6 +11,13 @@ import { LocalizedField } from "@/components/admin/localized-field";
 import { TranslationNudgeBanner } from "@/components/admin/translation-nudge-banner";
 import { useTranslationNudge } from "@/hooks/admin/use-translation-nudge";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  FormActions,
+  FormContent,
+  FormRoot,
+} from "@/components/shared/form-root";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -52,11 +59,6 @@ function extractLocalizedText(raw: unknown) {
 }
 
 type TabKey = "hero" | "about" | "console";
-const TABS: { key: TabKey; label: string; icon: LucideIcon }[] = [
-  { key: "hero", label: "Hero & Profile", icon: ImageIcon },
-  { key: "about", label: "About Me", icon: FileText },
-  { key: "console", label: "Code Block", icon: Code2 },
-];
 
 // ---------------------------------------------------------------------------
 // Component
@@ -102,6 +104,12 @@ export default function ProfileForm({
 
   const degreeNudge = useTranslationNudge(`profile_degree_${locale}`);
   const aboutNudge = useTranslationNudge(`about_text_${locale}`);
+
+  const TABS: { key: TabKey; label: string; icon: LucideIcon }[] = [
+    { key: "hero", label: t("heroTab"), icon: ImageIcon },
+    { key: "about", label: t("aboutMeTab"), icon: FileText },
+    { key: "console", label: t("consoleTab"), icon: Code2 },
+  ];
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
@@ -158,7 +166,7 @@ export default function ProfileForm({
         );
         aboutNudge.triggerNudge({
           storageKey: `about_text_${locale}`,
-          fieldLabel: t("descriptionLabel") || "About Me Description",
+          fieldLabel: t("descriptionLabel"),
           editedLocale: locale,
           editedValue: aboutText.default,
           otherLocaleValues,
@@ -197,7 +205,8 @@ export default function ProfileForm({
         })}
       </div>
 
-      <form onSubmit={handleSave} className="p-6">
+      <FormRoot onSubmit={handleSave} className="p-6">
+        <FormContent className="px-0">
         {/* --- HERO TAB --- */}
         {activeTab === "hero" && (
           <div className="space-y-6">
@@ -226,29 +235,23 @@ export default function ProfileForm({
 
               {/* Fields */}
               <div className="min-w-0 flex-1 space-y-4">
-                <div>
-                  <label className="text-foreground mb-1 block text-sm font-medium">
-                    {t("fullNameLabel")}
-                  </label>
-                  <input
+                <div className="space-y-1">
+                  <Label>{t("fullNameLabel")}</Label>
+                  <Input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
-                    className="border-input bg-background text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-lg border px-4 py-2 text-sm focus:outline-none focus-visible:ring-3"
-                    placeholder="Jesús Hernández"
+                    placeholder={t("fullNamePlaceholder")}
                   />
                 </div>
-                <div>
-                  <label className="text-foreground mb-1 block text-sm font-medium">
-                    {t("photoUrlLabel")}
-                  </label>
-                  <input
+                <div className="space-y-1">
+                  <Label>{t("photoUrlLabel")}</Label>
+                  <Input
                     type="url"
                     value={photoUrl}
                     onChange={(e) => setPhotoUrl(e.target.value)}
-                    className="border-input bg-background text-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-lg border px-4 py-2 text-sm focus:outline-none focus-visible:ring-3"
-                    placeholder="https://example.com/photo.jpg"
+                    placeholder={t("photoUrlPlaceholder")}
                   />
                 </div>
               </div>
@@ -266,7 +269,7 @@ export default function ProfileForm({
                 value={degree}
                 onChange={setDegree}
                 defaultLocale={locale}
-                placeholder="e.g. Web Developer"
+                placeholder={t("degreePlaceholder")}
               />
 
               {degreeNudge.nudge && (
@@ -332,7 +335,7 @@ export default function ProfileForm({
                 value={clientImageAlt}
                 onChange={setClientImageAlt}
                 defaultLocale={locale}
-                placeholder="e.g. Photo of Jesús sitting at a desk"
+                placeholder={t("altTextPlaceholder")}
               />
             </div>
           </div>
@@ -342,21 +345,20 @@ export default function ProfileForm({
         {activeTab === "about" && (
           <div className="space-y-6">
             <h2 className="text-foreground text-lg font-semibold">
-              {t("aboutMeTitle") ?? "About Me"}
+              {t("aboutMeTitle")}
             </h2>
             <p className="text-muted-foreground text-sm">
-              Provide a detailed description of yourself. You can use multiple
-              paragraphs.
+              {t("aboutDescriptionHint")}
             </p>
 
             <LocalizedField
               mode="app-locales"
-              label={t("descriptionLabel") ?? "Description"}
+              label={t("descriptionLabel")}
               value={aboutText}
               onChange={setAboutText}
               defaultLocale={locale}
               multiline={true}
-              placeholder="I am a passionate software engineer..."
+              placeholder={t("aboutPlaceholder")}
             />
 
             {aboutNudge.nudge && (
@@ -412,11 +414,10 @@ export default function ProfileForm({
         {activeTab === "console" && (
           <div className="space-y-4">
             <h2 className="text-foreground text-lg font-semibold">
-              Hero Code Block
+              {t("heroConsoleTitle")}
             </h2>
             <p className="text-muted-foreground text-sm">
-              Write the raw code you want to appear in the stylized code block
-              section of your portfolio hero.
+              {t("heroConsoleSubtitle")}
             </p>
 
             <div className="border-input bg-muted/30 overflow-hidden rounded-lg border p-1">
@@ -424,7 +425,7 @@ export default function ProfileForm({
                 value={consoleCode}
                 onChange={(e) => setConsoleCode(e.target.value)}
                 className="text-foreground min-h-[300px] w-full resize-y border-none bg-transparent p-4 font-mono text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
-                placeholder="const developer = {\n  name: 'John Doe'\n};"
+                placeholder={t("consoleCodePlaceholder")}
                 spellCheck={false}
               />
             </div>
@@ -441,19 +442,18 @@ export default function ProfileForm({
             </p>
           ) : (
             <p className="text-muted-foreground text-sm">
-              Don&apos;t forget to save your changes.
+              {t("saveReminder")}
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={isSaving}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-6 py-2.5 text-sm font-medium shadow transition-colors disabled:opacity-50"
-          >
-            {isSaving ? t("saving") : t("save")}
-          </button>
+          <FormActions
+            isPending={isSaving}
+            title={isSaving ? t("saving") : t("save")}
+            className="mt-0 w-auto"
+          />
         </div>
-      </form>
+        </FormContent>
+      </FormRoot>
     </div>
   );
 }

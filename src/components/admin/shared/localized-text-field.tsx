@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
+import { useState } from "react";
 import {
   Controller,
   type Control,
@@ -12,6 +12,9 @@ import { useTranslations } from "next-intl";
 
 import { type Locale } from "@/i18n/config";
 import type { LocalizedText } from "@/lib/i18n/localized";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 import { useCvEditorLocale } from "./cv-editor-locale-context";
 import LocaleSegment from "./locale-segment";
@@ -71,18 +74,20 @@ export function LocalizedTextField<TFieldValues extends FieldValues>({
           return value.translations?.[loc] ?? "";
         };
 
-        const Element = multiline ? "textarea" : "input";
         const isDefaultLocale = activeLocale === defaultLocale;
+        const fieldPlaceholder =
+          placeholder ??
+          (isDefaultLocale ? t("requiredDefault") : t("optionalTranslation"));
 
         return (
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <label className="text-foreground text-sm font-medium">
+              <Label>
                 {label}
                 {required ? (
                   <span className="text-destructive ml-0.5">*</span>
                 ) : null}
-              </label>
+              </Label>
               {showFieldTabs ? (
                 <LocaleSegment
                   value={activeLocale}
@@ -101,21 +106,24 @@ export function LocalizedTextField<TFieldValues extends FieldValues>({
               <p className="text-muted-foreground text-xs">{description}</p>
             ) : null}
 
-            <Element
-              value={getLocaleValue(activeLocale)}
-              onChange={(
-                e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-              ) => setLocaleValue(activeLocale, e.target.value)}
-              onBlur={field.onBlur}
-              placeholder={
-                placeholder ??
-                (isDefaultLocale
-                  ? t("requiredDefault")
-                  : t("optionalTranslation"))
-              }
-              rows={multiline ? 5 : undefined}
-              className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-lg border px-3 py-2.5 text-sm shadow-sm transition-colors focus:outline-none focus-visible:ring-3"
-            />
+            {multiline ? (
+              <Textarea
+                value={getLocaleValue(activeLocale)}
+                onChange={(e) => setLocaleValue(activeLocale, e.target.value)}
+                onBlur={field.onBlur}
+                placeholder={fieldPlaceholder}
+                rows={5}
+                className="resize-none"
+              />
+            ) : (
+              <Input
+                type="text"
+                value={getLocaleValue(activeLocale)}
+                onChange={(e) => setLocaleValue(activeLocale, e.target.value)}
+                onBlur={field.onBlur}
+                placeholder={fieldPlaceholder}
+              />
+            )}
 
             {fieldState.error ? (
               <p className="text-destructive text-xs">

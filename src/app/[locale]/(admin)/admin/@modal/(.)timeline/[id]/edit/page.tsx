@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
+import { getTranslations } from "next-intl/server";
 import { db } from "@/server/db";
 import { ModalWrapper } from "@/components/shared/modal-wrapper";
 import { auth } from "@/lib/auth";
@@ -11,6 +12,7 @@ interface Props {
 
 export default async function EditTimelineItemModal({ params }: Props) {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
+  const t = await getTranslations("admin.timeline");
 
   const { id } = await params;
   const session = await auth.api.getSession({ headers: await headers() });
@@ -36,8 +38,8 @@ export default async function EditTimelineItemModal({ params }: Props) {
 
   return (
     <ModalWrapper
-      title="Edit Timeline Entry"
-      description="Update an existing item in your timeline"
+      title={t("editEntry")}
+      description={t("editDescription")}
     >
       <TimelineItemForm initialData={experience} languages={languages} />
     </ModalWrapper>

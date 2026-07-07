@@ -1,14 +1,13 @@
 "use no memo";
 "use client";
 
-import { type FC, useTransition, useState } from "react";
+import { type FC, useTransition, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   useForm,
   useFieldArray,
   useWatch,
-  type Control,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,61 +34,11 @@ import {
   FormSection,
 } from "@/components/shared/form-root";
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
-
-const expFormSchema = z.object({
-  id: z.string().optional(),
-  organization: z.string().min(1, "Organization is required"),
-  location: z.string().optional().or(z.literal("")),
-  category: z.enum(["WORK", "STUDY", "COURSE"]),
-  startDate: z.string().min(1, "Start date is required"),
-  endDate: z.string().optional().or(z.literal("")),
-  current: z.boolean(),
-  order: z.number().int().nonnegative(),
-  translations: z
-    .array(
-      z
-        .object({
-          appLanguageId: z.string(),
-          title: z.string(),
-          description: z.string(),
-        })
-        .superRefine((val, ctx) => {
-          if (val.appLanguageId === "en") {
-            if (!val.title || val.title.trim() === "") {
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Title is required for the primary language",
-                path: ["title"],
-              });
-            }
-          }
-        }),
-    )
-    .min(1, "At least one language is required"),
-});
-
-type TExpForm = z.infer<typeof expFormSchema>;
-
-const EndDateField = ({ control }: { control: Control<TExpForm> }) => {
-  const isCurrent = useWatch({ control, name: "current" });
-  return (
-    <FormField
-      control={control}
-      name="endDate"
-      render={({ field }) => (
-        <FormItem label="End Date">
-          <Input type="date" disabled={isCurrent} {...field} />
-        </FormItem>
-      )}
-    />
-  );
-};
-
 import type { RouterOutputs } from "@/trpc/react";
 import type { AppLanguage } from "@prisma/client";
 
 interface TimelineItemFormProps {
-  initialData?: RouterOutputs["timelineAdmin"]["getMine"][number]; // If provided, it's edit mode
+  initialData?: RouterOutputs["timelineAdmin"]["getMine"][number];
   languages: AppLanguage[];
 }
 
@@ -98,9 +47,47 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
   languages,
 }) => {
   const isEditMode = !!initialData;
-  const tCommon = useTranslations("admin.actions");
+  const t = useTranslations("admin.forms.timelineItem");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const expFormSchema = useMemo(
+    () =>
+      z.object({
+        id: z.string().optional(),
+        organization: z.string().min(1, t("organizationRequired")),
+        location: z.string().optional().or(z.literal("")),
+        category: z.enum(["WORK", "STUDY", "COURSE"]),
+        startDate: z.string().min(1, t("startDateRequired")),
+        endDate: z.string().optional().or(z.literal("")),
+        current: z.boolean(),
+        order: z.number().int().nonnegative(),
+        translations: z
+          .array(
+            z
+              .object({
+                appLanguageId: z.string(),
+                title: z.string(),
+                description: z.string(),
+              })
+              .superRefine((val, ctx) => {
+                if (val.appLanguageId === "en") {
+                  if (!val.title || val.title.trim() === "") {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom,
+                      message: t("titleRequiredPrimary"),
+                      path: ["title"],
+                    });
+                  }
+                }
+              }),
+          )
+          .min(1, t("atLeastOneLanguage")),
+      }),
+    [t],
+  );
+
+  type TExpForm = z.infer<typeof expFormSchema>;
 
   const createItem = api.timelineAdmin.createItem.useMutation();
   const updateItem = api.timelineAdmin.updateItem.useMutation();
@@ -128,7 +115,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
         }));
 
         const existingLangIds = new Set(
-          existingTranslations.map((t) => t.appLanguageId),
+          existingTranslations.map((tr) => tr.appLanguageId),
         );
         const missingLangs = languages.filter(
           (l) => !existingLangIds.has(l.id),
@@ -192,80 +179,80 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
   );
 
   const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
+  const isCurrent = useWatch({ control: form.control, name: "current" });
 
-  const onSubmit = (values: TExpForm) => {
-    startTransition(async () => {
-      try {
-        const enTrans =
-          values.translations.find((entry) => entry.appLanguageId === "en") ??
-          values.translations[0];
+  const onSubmit = useCallback(
+    (values: TExpForm) => {
+      startTransition(async () => {
+        try {
+          const enTrans =
+            values.translations.find((entry) => entry.appLanguageId === "en") ??
+            values.translations[0];
 
-        const titlePayload = {
-          default: enTrans.title,
-          translations: Object.fromEntries(
-            values.translations.map((entry) => [
-              entry.appLanguageId,
-              entry.title,
-            ]),
-          ),
-        };
+          const titlePayload = {
+            default: enTrans.title,
+            translations: Object.fromEntries(
+              values.translations.map((entry) => [
+                entry.appLanguageId,
+                entry.title,
+              ]),
+            ),
+          };
 
-        const descriptionPayload = {
-          default: enTrans.description,
-          translations: Object.fromEntries(
-            values.translations.map((entry) => [
-              entry.appLanguageId,
-              entry.description,
-            ]),
-          ),
-        };
+          const descriptionPayload = {
+            default: enTrans.description,
+            translations: Object.fromEntries(
+              values.translations.map((entry) => [
+                entry.appLanguageId,
+                entry.description,
+              ]),
+            ),
+          };
 
-        if (isEditMode && values.id) {
-          await updateItem.mutateAsync({
-            id: values.id,
-            title: titlePayload,
-            description: descriptionPayload,
-            category: values.category,
-            organization: values.organization,
-            location: values.location ?? undefined,
-            startDate: new Date(values.startDate),
-            endDate:
-              values.current || !values.endDate
-                ? undefined
-                : new Date(values.endDate),
-            current: values.current,
-            order: values.order,
-          });
-          toast.success("Timeline entry updated");
-        } else {
-          await createItem.mutateAsync({
-            title: titlePayload,
-            description: descriptionPayload,
-            category: values.category,
-            organization: values.organization,
-            location: values.location ?? undefined,
-            startDate: new Date(values.startDate),
-            endDate:
-              values.current || !values.endDate
-                ? undefined
-                : new Date(values.endDate),
-            current: values.current,
-            order: values.order,
-          });
-          toast.success("Timeline entry created");
+          if (isEditMode && values.id) {
+            await updateItem.mutateAsync({
+              id: values.id,
+              title: titlePayload,
+              description: descriptionPayload,
+              category: values.category,
+              organization: values.organization,
+              location: values.location ?? undefined,
+              startDate: new Date(values.startDate),
+              endDate:
+                values.current || !values.endDate
+                  ? undefined
+                  : new Date(values.endDate),
+              current: values.current,
+              order: values.order,
+            });
+            toast.success(t("updatedSuccess"));
+          } else {
+            await createItem.mutateAsync({
+              title: titlePayload,
+              description: descriptionPayload,
+              category: values.category,
+              organization: values.organization,
+              location: values.location ?? undefined,
+              startDate: new Date(values.startDate),
+              endDate:
+                values.current || !values.endDate
+                  ? undefined
+                  : new Date(values.endDate),
+              current: values.current,
+              order: values.order,
+            });
+            toast.success(t("createdSuccess"));
+          }
+
+          await utils.timelineAdmin.getMine.invalidate();
+          router.back();
+        } catch {
+          toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
-
-        await utils.timelineAdmin.getMine.invalidate();
-        router.back();
-      } catch {
-        toast.error(
-          isEditMode
-            ? "Failed to update timeline entry"
-            : "Failed to create timeline entry",
-        );
-      }
-    });
-  };
+      });
+    },
+    [isEditMode, updateItem, createItem, utils, router, t],
+  );
 
   const isSaving = createItem.isPending || updateItem.isPending;
   const anyError = createItem.error ?? updateItem.error;
@@ -280,18 +267,15 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
         />
 
         <FormContent error={anyError}>
-          <FormSection title="General Information">
+          <FormSection title={t("generalSection")}>
             {activeIndex !== -1 && (
               <div className="mb-4 grid gap-4">
                 <FormField
                   control={form.control}
                   name={`translations.${activeIndex}.title`}
                   render={({ field }) => (
-                    <FormItem label="Title">
-                      <Input
-                        placeholder="e.g. Started Computer Science degree"
-                        {...field}
-                      />
+                    <FormItem label={t("title")}>
+                      <Input placeholder={t("titlePlaceholder")} {...field} />
                     </FormItem>
                   )}
                 />
@@ -300,10 +284,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                   control={form.control}
                   name={`translations.${activeIndex}.description`}
                   render={({ field }) => (
-                    <FormItem label="Description">
+                    <FormItem label={t("description")}>
                       <Textarea
                         rows={4}
-                        placeholder="Describe what you did or learned in this timeline entry"
+                        placeholder={t("descriptionPlaceholder")}
                         {...field}
                       />
                     </FormItem>
@@ -316,9 +300,9 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
               control={form.control}
               name="organization"
               render={({ field }) => (
-                <FormItem label="Organization">
+                <FormItem label={t("organization")}>
                   <Input
-                    placeholder="E.g. University, Company, Academy..."
+                    placeholder={t("organizationPlaceholder")}
                     {...field}
                   />
                 </FormItem>
@@ -330,15 +314,21 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="category"
                 render={({ field }) => (
-                  <FormItem label="Category">
+                  <FormItem label={t("category")}>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
+                        <SelectValue placeholder={t("selectCategory")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="WORK">Work</SelectItem>
-                        <SelectItem value="STUDY">Study</SelectItem>
-                        <SelectItem value="COURSE">Course</SelectItem>
+                        <SelectItem value="WORK">
+                          {t("categoryWork")}
+                        </SelectItem>
+                        <SelectItem value="STUDY">
+                          {t("categoryStudy")}
+                        </SelectItem>
+                        <SelectItem value="COURSE">
+                          {t("categoryCourse")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -349,11 +339,8 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="location"
                 render={({ field }) => (
-                  <FormItem label="Location (optional)">
-                    <Input
-                      placeholder="Remote, Madrid, Amsterdam..."
-                      {...field}
-                    />
+                  <FormItem label={t("location")}>
+                    <Input placeholder={t("locationPlaceholder")} {...field} />
                   </FormItem>
                 )}
               />
@@ -364,13 +351,21 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="startDate"
                 render={({ field }) => (
-                  <FormItem label="Start Date">
+                  <FormItem label={t("startDate")}>
                     <Input type="date" {...field} />
                   </FormItem>
                 )}
               />
 
-              <EndDateField control={form.control} />
+              <FormField
+                control={form.control}
+                name="endDate"
+                render={({ field }) => (
+                  <FormItem label={t("endDate")}>
+                    <Input type="date" disabled={isCurrent} {...field} />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -378,7 +373,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="current"
                 render={({ field }) => (
-                  <FormItem label="Current entry?">
+                  <FormItem label={t("currentEntry")}>
                     <div className="flex h-10 items-center">
                       <Switch
                         checked={field.value}
@@ -393,7 +388,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 control={form.control}
                 name="order"
                 render={({ field }) => (
-                  <FormItem label="Display Order">
+                  <FormItem label={t("displayOrder")}>
                     <Input
                       type="number"
                       min={0}
@@ -410,10 +405,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
         </FormContent>
         <FormActions
           isPending={isPending || isSaving}
-          title={isEditMode ? tCommon("save") : tCommon("save") || "Create"}
+          title={isEditMode ? t("save") : t("create")}
         >
           <Button type="button" variant="ghost" onClick={() => router.back()}>
-            {tCommon("cancel") || "Cancel"}
+            {t("cancel")}
           </Button>
         </FormActions>
       </FormRoot>

@@ -6,12 +6,12 @@ import { db } from "@/server/db";
 export default async function NewProjectModal() {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
-  const t = await getTranslations("admin.actions");
+  const t = await getTranslations("admin.projects");
 
   return (
     <PageDialogWrapper
       title={t("addNew")}
-      description="Create a new portfolio project"
+      description={t("createDescription")}
     >
       <ProjectForm languages={languages} />
     </PageDialogWrapper>
