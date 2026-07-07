@@ -248,7 +248,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
       </Sidebar>
 
       <main className="flex min-w-0 flex-1 flex-col overflow-y-auto">
-        <header className="border-border bg-background/95 sticky top-0 z-30 hidden border-b backdrop-blur md:block">
+        <header className="border-border/60 bg-background/75 supports-[backdrop-filter]:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block">
           <div className="flex h-16 items-center justify-between px-4 md:px-6">
             <div className="flex items-center gap-3">
               <div>

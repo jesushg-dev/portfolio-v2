@@ -30,6 +30,7 @@ model User {
   // Per-user CV
   CvHeader            CvHeader?
   CvAboutMe           CvAboutMe?
+  CvTerminal          CvTerminal?
   CvContact           CvContact[]
   CvEducation         CvEducation[]
   CvLanguage          CvLanguage[]
@@ -152,6 +153,45 @@ model CvAboutMe {
   aboutMe   Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+/// Configurable terminal sequence for the portfolio About section.
+model CvTerminal {
+  id                   String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId               String           @unique @db.ObjectId
+  user                 User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username             String           @default("Jesus-Macbook")
+  typingSpeed          Int              @default(45)
+  delayBetweenCommands Int              @default(1000)
+  steps                CvTerminalStep[]
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+}
+
+model CvTerminalStep {
+  id           String                      @id @default(auto()) @map("_id") @db.ObjectId
+  terminalId   String                      @db.ObjectId
+  terminal     CvTerminal                  @relation(fields: [terminalId], references: [id], onDelete: Cascade)
+  order        Int                         @default(0)
+  translations CvTerminalStepTranslation[]
+  createdAt    DateTime                    @default(now())
+  updatedAt    DateTime                    @updatedAt
+
+  @@index([terminalId, order])
+}
+
+model CvTerminalStepTranslation {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  stepId        String         @db.ObjectId
+  step          CvTerminalStep @relation(fields: [stepId], references: [id], onDelete: Cascade)
+  appLanguageId String         @db.ObjectId
+  language      AppLanguage    @relation(fields: [appLanguageId], references: [id])
+  command       String
+  output        String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([stepId, appLanguageId])
 }
 
 model CvContact {
@@ -297,6 +337,7 @@ model AppLanguage {
   ProjectTranslation       ProjectTranslation[]
   ServiceTranslation             ServiceTranslation[]
   CertificationTranslation       CertificationTranslation[]
+  CvTerminalStepTranslation      CvTerminalStepTranslation[]
 }
 
 model Project {

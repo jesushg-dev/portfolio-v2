@@ -3,6 +3,7 @@ import { memo } from "react";
 import { motion } from "motion/react";
 
 import SkillItem from "./skill-item";
+import { SkillsGridSkeleton } from "./skills-grid-skeleton";
 import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
 
 const container = {
@@ -41,9 +42,7 @@ const SkillGrouped: FC<ISkillGroupedProps> = ({
       className={`${ctxClass} flex h-full w-full flex-col justify-start gap-6`}
     >
       {loading ? (
-        <div className="flex w-full items-center justify-center">
-          <div className="border-primary-900 h-10 w-10 animate-spin rounded-full border border-b-2" />
-        </div>
+        <SkillsGridSkeleton />
       ) : (
         <motion.ul
           initial="hidden"

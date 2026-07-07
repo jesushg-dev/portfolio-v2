@@ -27,6 +27,7 @@ import {
 import { GripVertical } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { ExperienceForm } from "./experience-form";
+import { CvListSkeleton } from "./cv-list-skeleton";
 
 const ExperiencesList: FC = () => {
   const t = useTranslations("admin.forms.experience");
@@ -86,8 +87,7 @@ const ExperiencesList: FC = () => {
     [remove, utils, t],
   );
 
-  if (isLoading || !data)
-    return <p className="text-muted-foreground text-sm">{t("loading")}</p>;
+  if (isLoading || !data) return <CvListSkeleton lines={2} />;
 
   const defaultLocale = (data.profile?.defaultLocale as Locale) ?? "en";
 

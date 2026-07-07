@@ -20,6 +20,7 @@ import {
   FormRoot,
   FormSection,
 } from "@/components/shared/form-root";
+import { CvModalFormSkeleton } from "./cv-modal-form-skeleton";
 import type { Locale } from "@/i18n/config";
 
 const HeaderSchema = z.object({
@@ -86,8 +87,7 @@ const HeaderForm: FC = () => {
     [upsertHeader, utils, t],
   );
 
-  if (isLoading)
-    return <p className="text-muted-foreground text-sm">{t("loading")}</p>;
+  if (isLoading) return <CvModalFormSkeleton variant="header" />;
 
   return (
     <Form {...form}>

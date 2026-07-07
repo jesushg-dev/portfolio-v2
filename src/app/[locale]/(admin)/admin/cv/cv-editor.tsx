@@ -12,6 +12,7 @@ import { api } from "@/trpc/react";
 import CvPreview from "@/components/curriculum-vitae/cv-preview";
 import EditableCvLayout from "./editable-cv-layout";
 import { getLocalizedText } from "@/lib/i18n/localized";
+import { CvEditorSkeleton } from "@/features/cv/components/cv-editor-skeleton";
 
 const SECTION_LINKS = [
   { id: "header", labelKey: "cvHeader" as const },
@@ -158,13 +159,7 @@ const CvEditor: FC = () => {
   const defaultLocale = (data?.profile?.defaultLocale as Locale) ?? "en";
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col gap-3 py-12">
-        <p className="text-muted-foreground text-sm">{t("loading")}</p>
-        <div className="bg-muted h-8 w-48 animate-pulse rounded-lg" />
-        <div className="bg-muted/70 h-64 animate-pulse rounded-xl" />
-      </div>
-    );
+    return <CvEditorSkeleton />;
   }
 
   if (isError || !data) {

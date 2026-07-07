@@ -77,12 +77,6 @@ export function AboutMeForm({ locale, initial }: AboutMeFormProps) {
   const upsertAboutMe = api.cv.upsertAboutMe.useMutation();
   const aboutNudge = useTranslationNudge(`about_text_${locale}`);
 
-  // Retrieve the existing consoleCode so we do not overwrite it on save
-  const existingConsoleCode =
-    typeof initial?.consoleCode === "string"
-      ? initial.consoleCode
-      : "const dev = {\n  name: 'Jesús',\n  roles: ['Developer', 'Engineer']\n};";
-
   const handleSubmit = useCallback(
     (values: FormValues) => {
       startTransition(async () => {
@@ -91,7 +85,6 @@ export function AboutMeForm({ locale, initial }: AboutMeFormProps) {
           const payload = {
             default: values.aboutMe.default,
             translations: values.aboutMe.translations,
-            consoleCode: existingConsoleCode,
           };
 
           await upsertAboutMe.mutateAsync({
@@ -124,7 +117,7 @@ export function AboutMeForm({ locale, initial }: AboutMeFormProps) {
         }
       });
     },
-    [initial, locale, t, aboutNudge, upsertAboutMe, utils, existingConsoleCode],
+    [initial, locale, t, aboutNudge, upsertAboutMe, utils],
   );
 
   return (
@@ -174,7 +167,6 @@ export function AboutMeForm({ locale, initial }: AboutMeFormProps) {
                       aboutMe: {
                         default: updated.default,
                         translations: updated.translations,
-                        consoleCode: existingConsoleCode,
                       },
                     });
                     aboutNudge.markDone(loc);
@@ -196,7 +188,6 @@ export function AboutMeForm({ locale, initial }: AboutMeFormProps) {
                       aboutMe: {
                         default: updated.default,
                         translations: updated.translations,
-                        consoleCode: existingConsoleCode,
                       },
                     });
                     aboutNudge.markAllDone();

@@ -19,6 +19,7 @@ import {
   FormSection,
 } from "@/components/shared/form-root";
 
+import { CvModalFormSkeleton } from "./cv-modal-form-skeleton";
 import type { Locale } from "@/i18n/config";
 
 const AboutSchema = z.object({
@@ -67,8 +68,7 @@ const AboutForm: FC = () => {
     [upsertAboutMe, utils, t],
   );
 
-  if (isLoading)
-    return <p className="text-muted-foreground text-sm">{t("loading")}</p>;
+  if (isLoading) return <CvModalFormSkeleton variant="about" />;
 
   return (
     <Form {...form}>

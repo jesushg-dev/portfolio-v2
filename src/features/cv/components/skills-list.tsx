@@ -27,6 +27,7 @@ import { GripVertical } from "lucide-react";
 import { toast } from "sonner";
 
 import { SkillForm } from "./skill-form";
+import { CvListSkeleton } from "./cv-list-skeleton";
 
 const SkillsList: FC = () => {
   const t = useTranslations("admin.forms.skills");
@@ -80,8 +81,7 @@ const SkillsList: FC = () => {
     [remove, utils, t],
   );
 
-  if (isLoading || !data)
-    return <p className="text-muted-foreground text-sm">{t("loading")}</p>;
+  if (isLoading || !data) return <CvListSkeleton lines={2} />;
 
   return (
     <div className="flex flex-col gap-5">

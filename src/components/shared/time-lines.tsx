@@ -2,9 +2,9 @@
 
 import type { FC } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { VscLoading } from "react-icons/vsc";
 
 import { api } from "@/trpc/react";
+import { TimelineSkeleton } from "@/features/home/components/about/timeline-skeleton";
 
 interface ITimeLineProps {
   title: string;
@@ -41,9 +41,7 @@ const TimeLines: FC = () => {
   return (
     <ol id="timeline" className="relative flex w-full gap-4">
       {isLoading ? (
-        <li className="flex w-full items-center justify-center py-4">
-          <VscLoading className="text-primary-500 animate-spin text-2xl" />
-        </li>
+        <TimelineSkeleton />
       ) : timelineData && timelineData.length > 0 ? (
         timelineData.map((exp) => (
           <TimeLine

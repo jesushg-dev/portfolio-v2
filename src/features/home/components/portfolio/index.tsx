@@ -11,6 +11,7 @@ import HeaderArticle from "@/components/shared/header-article";
 
 import FilterType from "./filter-type";
 import PortfolioItem from "./project-item";
+import { PortfolioGridSkeleton } from "./portfolio-grid-skeleton";
 
 const type = [undefined, "FRONTEND", "BACKEND", "MOBILE", "DESKTOP"] as const;
 
@@ -80,35 +81,35 @@ const Portfolio: FC = ({}) => {
         />
         <FilterType value={crtValue} onChange={setCrtValue} />
         <section ref={ref}>
-          <motion.ul
-            initial="hidden"
-            variants={container}
-            animate={isInView ? "visible" : "hidden"}
-            className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
-          >
-            {data?.pages.map((page, idx) => (
-              <Fragment key={page.cursor ?? idx}>
-                {page.data.map((project) => (
-                  <motion.li
-                    layout
-                    key={project.id}
-                    className="flex justify-center"
-                    variants={item}
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <PortfolioItem {...project} {...labels} />
-                  </motion.li>
-                ))}
-              </Fragment>
-            ))}
-          </motion.ul>
+          {isLoading ? (
+            <PortfolioGridSkeleton />
+          ) : (
+            <motion.ul
+              initial="hidden"
+              variants={container}
+              animate={isInView ? "visible" : "hidden"}
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
+            >
+              {data?.pages.map((page, idx) => (
+                <Fragment key={page.cursor ?? idx}>
+                  {page.data.map((project) => (
+                    <motion.li
+                      layout
+                      key={project.id}
+                      className="flex justify-center"
+                      variants={item}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <PortfolioItem {...project} {...labels} />
+                    </motion.li>
+                  ))}
+                </Fragment>
+              ))}
+            </motion.ul>
+          )}
 
           <div className="mt-8 flex flex-col items-center justify-center gap-4">
-            {isLoading ? (
-              <div className="border-primary-900 h-10 w-10 animate-spin rounded-full border border-b-2" />
-            ) : null}
-
             {data?.pages[data.pages.length - 1].hasMore ? (
               <button
                 type="button"

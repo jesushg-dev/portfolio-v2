@@ -1,14 +1,22 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { type Prisma } from "@prisma/client";
-import { type db } from "@/server/db";
+import { db } from "@/server/db";
 
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
+  tenantProcedure,
 } from "@/server/api/trpc";
 import { LocalizedTextSchema } from "@/lib/i18n/localized";
+import { locales } from "@/i18n/config";
+import { TerminalUpsertSchema } from "@/features/terminal/server/schemas";
+import {
+  getTerminalDisplayDto,
+  getTerminalEditorDto,
+  upsertTerminalFromEditor,
+} from "@/features/terminal/server/terminal";
 
 const CvContactType = z.enum([
   "EMAIL",
@@ -163,6 +171,32 @@ export const cvRouter = createTRPCRouter({
         },
         update: { aboutMe: input.aboutMe as Prisma.InputJsonValue },
       });
+    }),
+
+  // ---------- Terminal (About section) ----------
+  getTerminalMine: protectedProcedure.query(async ({ ctx }) => {
+    return getTerminalEditorDto(ctx.db, ctx.user.id);
+  }),
+
+  getTerminalPublic: tenantProcedure
+    .input(
+      z.object({
+        locale: z.enum(locales),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return getTerminalDisplayDto(
+        ctx.db,
+        ctx.tenant.userId,
+        input.locale,
+        ctx.tenant.defaultLocale,
+      );
+    }),
+
+  upsertTerminal: protectedProcedure
+    .input(TerminalUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
+      return upsertTerminalFromEditor(ctx.db, ctx.user.id, input);
     }),
 
   // ---------- Contacts ----------

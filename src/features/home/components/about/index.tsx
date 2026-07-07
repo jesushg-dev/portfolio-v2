@@ -1,47 +1,26 @@
 import type { FC } from "react";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import TimeLines from "@/components/shared/time-lines";
 import HeaderArticle from "@/components/shared/header-article";
 import AboutTerminal from "./about-terminal";
-import { getTranslations } from "next-intl/server";
 
 import { resolveTenant } from "@/lib/tenant/resolve";
-import { db } from "@/server/db";
+import { api } from "@/trpc/server";
+import { type Locale, locales } from "@/i18n/config";
+
+const isLocale = (value: string): value is Locale =>
+  (locales as readonly string[]).includes(value);
 
 const About: FC = async () => {
   const t = await getTranslations("main.about");
+  const locale = await getLocale();
 
   const tenant = await resolveTenant();
-  const aboutMeRow = tenant
-    ? await db.cvAboutMe.findUnique({ where: { userId: tenant.userId } })
-    : null;
-
-  // Console data lives inside the `aboutMe` JSON blob under the `console` key.
-  // Build the multi-line string that <AboutTerminal consoleCode=…> expects.
-  let consoleCode: string | null = null;
-  if (aboutMeRow?.aboutMe && typeof aboutMeRow.aboutMe === "object") {
-    const json = aboutMeRow.aboutMe as Record<string, unknown>;
-    const c = json.console as
-      | {
-          name?: string;
-          profession?: string;
-          languages?: { spanish?: string; english?: string; dutch?: string };
-        }
-      | undefined;
-    if (c) {
-      consoleCode = [
-        "{",
-        `  "name": "${c.name ?? ""}",`,
-        `  "languages": {`,
-        `    "spanish": "${c.languages?.spanish ?? ""}",`,
-        `    "english": "${c.languages?.english ?? ""}",`,
-        `    "dutch": "${c.languages?.dutch ?? ""}"`,
-        `  },`,
-        `  "profession": "${c.profession ?? ""}"`,
-        "}",
-      ].join("\n");
-    }
-  }
+  const terminalData =
+    tenant && isLocale(locale)
+      ? await api.cv.getTerminalPublic({ locale })
+      : null;
 
   return (
     <div className="overflow-hidden">
@@ -62,7 +41,7 @@ const About: FC = async () => {
               {t("info.description3")}
             </p>
           </div>
-          <AboutTerminal consoleCode={consoleCode} />
+          {terminalData ? <AboutTerminal data={terminalData} /> : null}
         </article>
 
         <aside className="flex flex-col items-center gap-2">

@@ -13,6 +13,7 @@ import type { LocalizedTextSchema } from "@/lib/i18n/localized";
 type LocalizedText = z.infer<typeof LocalizedTextSchema>;
 import type { Locale } from "@/i18n/config";
 import { toast } from "sonner";
+import { CvListSkeleton } from "./cv-list-skeleton";
 
 const AdditionalList: FC = () => {
   const t = useTranslations("admin.forms.additional");
@@ -97,8 +98,7 @@ const AdditionalList: FC = () => {
     [remove, utils, t],
   );
 
-  if (isLoading || !data)
-    return <p className="text-muted-foreground text-sm">{t("loading")}</p>;
+  if (isLoading || !data) return <CvListSkeleton />;
 
   const defaultLocale = (data.profile?.defaultLocale as Locale) ?? "en";
 

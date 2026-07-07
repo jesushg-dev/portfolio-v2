@@ -1,48 +1,20 @@
-"use client";
-
-import { useMemo, type FC } from "react";
-import { useTranslations } from "next-intl";
+import type { FC } from "react";
 
 import { Terminal } from "@/components/ui/terminal";
+import type { TerminalDisplayDTO } from "@/features/terminal/lib/types";
 
 interface Props {
-  consoleCode?: string | null;
+  data: TerminalDisplayDTO;
 }
 
-const AboutTerminal: FC<Props> = ({ consoleCode }) => {
-  const t = useTranslations("main.about");
-
-  const { commands, outputs } = useMemo(() => {
-    const profilePath = "~/profile.json";
-
-    return {
-      commands: ["whoami", `cat ${profilePath}`],
-      outputs: {
-        0: ["jesus"],
-        1: consoleCode
-          ? consoleCode.split("\n")
-          : [
-              "{",
-              `  "${t("function.json.name")}": "Jesús Enmanuel Hernández González",`,
-              `  "${t("function.json.languages")}": {`,
-              `    "${t("function.language.spanish")}": "${t("function.languageLevel.native")}",`,
-              `    "${t("function.language.english")}": "${t("function.languageLevel.advanced")}",`,
-              `    "${t("function.language.dutch")}": "${t("function.languageLevel.basic")}"`,
-              "  },",
-              `  "${t("function.json.profession")}": "${t("function.profession")}"`,
-              "}",
-            ],
-      },
-    };
-  }, [t, consoleCode]);
-
+const AboutTerminal: FC<Props> = ({ data }) => {
   return (
     <Terminal
-      username="Jesus-Macbook"
-      commands={commands}
-      outputs={outputs}
-      typingSpeed={45}
-      delayBetweenCommands={1000}
+      username={data.username}
+      commands={data.commands}
+      outputs={data.outputs}
+      typingSpeed={data.typingSpeed}
+      delayBetweenCommands={data.delayBetweenCommands}
       enableSound={false}
       className="px-0"
     />

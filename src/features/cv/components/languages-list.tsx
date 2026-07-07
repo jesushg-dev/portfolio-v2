@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/sortable";
 import { GripVertical } from "lucide-react";
 import { LanguageForm } from "./language-form";
+import { CvListSkeleton } from "./cv-list-skeleton";
 import { getLocalizedText } from "@/lib/i18n/localized";
 import type { Locale } from "@/i18n/config";
 
@@ -79,8 +80,7 @@ const LanguagesList: FC = () => {
     [remove, utils, t],
   );
 
-  if (isLoading || !data)
-    return <p className="text-muted-foreground text-sm">{t("loading")}</p>;
+  if (isLoading || !data) return <CvListSkeleton lines={2} />;
 
   const defaultLocale = (data.profile?.defaultLocale as Locale) ?? "en";
 
