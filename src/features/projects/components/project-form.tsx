@@ -229,7 +229,15 @@ export const ProjectForm: FC<ProjectFormProps> = ({
 
             toast.success(t("updatedSuccess"));
           } else {
-            await createProject.mutateAsync(values);
+            await createProject.mutateAsync({
+              image: values.image,
+              type: values.type,
+              githubUrl: values.githubUrl?.trim() ?? undefined,
+              websiteUrl: values.websiteUrl?.trim() ?? undefined,
+              isPrivate: values.isPrivate,
+              skillIds: values.skillIds,
+              translations: values.translations,
+            });
             toast.success(t("createdSuccess"));
           }
 

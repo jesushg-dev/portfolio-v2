@@ -181,7 +181,11 @@ export const ProjectsList: FC<ProjectsListProps> = ({ initialProjects }) => {
     <div className="relative flex h-full min-h-[500px] flex-col">
       <DataTable table={table}>
         <DataTableToolbar table={table}>
-          <Link href="/admin/projects/new" className={buttonVariants()}>
+          <Link
+            id="projects-add"
+            href="/admin/projects/new"
+            className={buttonVariants()}
+          >
             <Plus className="mr-2 h-4 w-4" />
             {t("addNew")}
           </Link>

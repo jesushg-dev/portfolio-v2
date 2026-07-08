@@ -170,13 +170,16 @@ End-to-end tests live in `e2e/` and use Playwright with a real dev server (`pnpm
 
 ### Commands
 
-| Script                        | What runs                                                           |
-| ----------------------------- | ------------------------------------------------------------------- |
-| `pnpm test:e2e`               | **Smoke** — login, dashboard, and one skill create (`skills-smoke`) |
-| `pnpm test:e2e:skills`        | Full **skills** suite — serial 42-skill create (`skills-create`)    |
-| `pnpm test:e2e:skills:headed` | Same as above with a visible browser (~3 min warm / longer on cold) |
-| `pnpm test:e2e:skills:ui`     | Playwright UI mode for the skills project                           |
-| `pnpm test:e2e:ui`            | Playwright UI for all projects                                      |
+| Script                          | What runs                                                              |
+| ------------------------------- | ---------------------------------------------------------------------- |
+| `pnpm test:e2e`                 | **Smoke** — login, dashboard, one skill + one project create           |
+| `pnpm test:e2e:skills`          | Full **skills** suite — serial 42-skill create (`skills-create`)       |
+| `pnpm test:e2e:skills:headed`   | Same as above with a visible browser (~3 min warm / longer on cold)    |
+| `pnpm test:e2e:skills:ui`       | Playwright UI mode for the skills project                              |
+| `pnpm test:e2e:projects`        | Full **projects** suite — serial 19-project create (`projects-create`) |
+| `pnpm test:e2e:projects:headed` | Projects suite with visible browser                                    |
+| `pnpm test:e2e:projects:ui`     | Playwright UI mode for the projects project                            |
+| `pnpm test:e2e:ui`              | Playwright UI for all projects                                         |
 
 Auth session is saved to `e2e/.auth/user.json` by `e2e/auth.setup.ts` (gitignored).
 
@@ -194,6 +197,20 @@ Portfolio skills for seed and E2E share one source of truth:
 - **`skills-smoke.spec.ts`** — creates **one** skill; fast enough for CI smoke (`pnpm test:e2e`).
 - **`skills-create.spec.ts`** — **serial** run that creates all **42** skills through the UI; use `pnpm test:e2e:skills` locally or in a dedicated job. Expect a few minutes on a warm dev server; longer on cold start.
 
+### Projects fixture
+
+Portfolio projects for seed and E2E share one source of truth:
+
+- `prisma/data/portfolio-projects.json` — 19 projects with translations and `skillKeys`
+- `e2e/fixtures/portfolio-projects.ts` — typed re-export for tests
+
+`e2e/helpers/fill-project-form.ts` fills the admin project form via `#project-*` IDs and selects associated skills through `SkillPicker` (`#skill-picker-*`). `ensure-portfolio-skills.ts` creates any missing fixture skills via tRPC before project tests (projects depend on skills existing for the picker). `cleanupUserProjects` removes fixture projects before each run.
+
+### Smoke vs full projects suite
+
+- **`projects-smoke.spec.ts`** — creates **one** project; included in `pnpm test:e2e` smoke.
+- **`projects-create.spec.ts`** — **serial** run that creates all **19** projects through the UI; use `pnpm test:e2e:projects`. Skills are ensured via API in `beforeAll`, not the 42-skill UI suite.
+
 ### Human navigation (required for new E2E specs)
 
 E2E tests must follow **real user paths** through the UI. Do not deep-link with `page.goto()` into admin forms unless there is no clickable equivalent.
@@ -201,7 +218,7 @@ E2E tests must follow **real user paths** through the UI. Do not deep-link with 
 **Do**
 
 - Start from a realistic entry point (e.g. `/admin` after auth setup).
-- Use the **sidebar**, toolbar links, and buttons (`#skills-add`, etc.) to reach each screen.
+- Use the **sidebar**, toolbar links, and buttons (`#skills-add`, `#projects-add`, etc.) to reach each screen.
 - Wait for the previous action to finish (mutation response, leave `/new`, list visible) before starting the next step.
 - Use stable `inputId` / `#…` selectors on fields once the form is open.
 - Use `page.goto()` only for exceptions: login page, initial `/admin` landing, or query params with no UI (e.g. `?perPage=100` to assert pagination).
@@ -212,7 +229,12 @@ E2E tests must follow **real user paths** through the UI. Do not deep-link with 
 - Change app navigation (`router.push`, redirects) **only** to make tests pass — fix waits and user-like flows in `e2e/helpers/` instead.
 - Fire the next `goto` or click while a tRPC mutation or `router.back()` from the prior save is still in flight.
 
-**Reference implementation:** `e2e/helpers/fill-skill-form.ts` — `goToSkillsList()` (sidebar), `#skills-add`, fill form, wait for save, repeat. Reuse this pattern for projects, services, certifications, and CV sections.
+**Reference implementations:**
+
+- `e2e/helpers/fill-skill-form.ts` — `goToSkillsList()` (sidebar), `#skills-add`, fill form, wait for save, repeat.
+- `e2e/helpers/fill-project-form.ts` — same pattern for projects; skill associations via `SkillPicker`.
+
+Reuse this pattern for services, certifications, and CV sections.
 
 **App code vs test code**
 

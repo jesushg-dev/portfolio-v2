@@ -34,7 +34,10 @@
     "test:e2e:report": "playwright show-report",
     "test:e2e:skills": "playwright test --project=skills",
     "test:e2e:skills:headed": "playwright test --project=skills --headed",
-    "test:e2e:skills:ui": "playwright test --project=skills --ui"
+    "test:e2e:skills:ui": "playwright test --project=skills --ui",
+    "test:e2e:projects": "playwright test --project=projects",
+    "test:e2e:projects:headed": "playwright test --project=projects --headed",
+    "test:e2e:projects:ui": "playwright test --project=projects --ui"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

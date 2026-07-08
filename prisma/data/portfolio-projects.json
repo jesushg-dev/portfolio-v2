@@ -1,0 +1,503 @@
+[
+  {
+    "key": "Portfolio",
+    "image": "portf-1_bkhwxr",
+    "type": "FRONTEND",
+    "githubUrl": "https://github.com/jess232017/portfolio-v2",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Portfolio",
+        "description": "Pagina web de mi portafolio personal en donde expongo mis habilidades y conocimientos de forma dinámica."
+      },
+      {
+        "locale": "en",
+        "title": "Portfolio",
+        "description": "My personal portfolio website where I expose my skills and knowledge in a dynamic way."
+      },
+      {
+        "locale": "nl",
+        "title": "Portfolio",
+        "description": "Mijn persoonlijke portfoliowebsite waar ik mijn vaardigheden en kennis op een dynamische manier blootleg."
+      }
+    ],
+    "skillKeys": [
+      "React",
+      "Nextjs",
+      "Tailwind",
+      "Typescript",
+      "Prisma",
+      "MongoDb"
+    ]
+  },
+  {
+    "key": "RickAndMorty",
+    "image": "Rick_and_morty_dn7xnz",
+    "type": "FRONTEND",
+    "githubUrl": "https://github.com/jess232017/rick-and-morty",
+    "websiteUrl": "https://rick-and-morty-virid.vercel.app/",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Rick y Morty | Wiki",
+        "description": "Aplicación web para consultar los personajes de la serie Rick y Morty."
+      },
+      {
+        "locale": "en",
+        "title": "Rick and Morty | Wiki",
+        "description": "Web application to consult the characters of the Rick and Morty series."
+      },
+      {
+        "locale": "nl",
+        "title": "Rick und Morty | Wiki",
+        "description": "Webtoepassing om de personages van de Rick and Morty-serie te raadplegen."
+      }
+    ],
+    "skillKeys": ["React", "Bootstrap"]
+  },
+  {
+    "key": "SoftSkillsQuiz",
+    "image": "soft-skill-quiz_rqnzmm",
+    "type": "FRONTEND",
+    "githubUrl": "https://github.com/jess232017/SoftSkill-Quiz",
+    "websiteUrl": "https://soft-skill-quiz.vercel.app/",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Soft Skills Quiz",
+        "description": "Aplicación web que permite realizar un test de habilidades blandas para desarrolladores."
+      },
+      {
+        "locale": "en",
+        "title": "Soft Skills Quiz",
+        "description": "Web application that allows you to take a test of soft skills for developers."
+      },
+      {
+        "locale": "nl",
+        "title": "Soft Skills Quiz",
+        "description": "Webapplicatie waarmee je een softwaretest voor ontwikkelaars kunt doen."
+      }
+    ],
+    "skillKeys": ["React", "Tailwind", "Typescript"]
+  },
+  {
+    "key": "MusaEcommerce",
+    "image": "musa-client_blxhyy",
+    "type": "FRONTEND",
+    "githubUrl": "musa-client_blxhyy",
+    "websiteUrl": "",
+    "isPrivate": true,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Musa Ecommerce",
+        "description": "Aplicación web para la venta de productos perecederos."
+      },
+      {
+        "locale": "en",
+        "title": "Musa Ecommerce",
+        "description": "Web application for the sale of perishable products."
+      },
+      {
+        "locale": "nl",
+        "title": "Musa Ecommerce",
+        "description": "Webapplicatie voor de verkoop van bederfelijke producten."
+      }
+    ],
+    "skillKeys": ["Nextjs", "Tailwind", "Typescript"]
+  },
+  {
+    "key": "MusaAdmin",
+    "image": "musa-admin_oufeum",
+    "type": "FRONTEND",
+    "githubUrl": "musa-admin_oufeum",
+    "websiteUrl": "",
+    "isPrivate": true,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Musa Admin",
+        "description": "Aplicación web para la administración de la tienda online Musa Ecommerce."
+      },
+      {
+        "locale": "en",
+        "title": "Musa Admin",
+        "description": "Web application for the administration of the online store Musa Ecommerce."
+      },
+      {
+        "locale": "nl",
+        "title": "Musa Admin",
+        "description": "WWebapplicatie voor de administratie van de online winkel Musa Ecommerce."
+      }
+    ],
+    "skillKeys": ["React", "Tailwind", "Typescript"]
+  },
+  {
+    "key": "Covid19",
+    "image": "portf-2_crm7bn",
+    "type": "FRONTEND",
+    "githubUrl": "https://github.com/jess232017/SensorTemperatura",
+    "websiteUrl": "https://stc-uni.netlify.app/",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Sistema de Control de Temperatura",
+        "description": "Proyecto Web que permite registrar el ingreso al recinto de los estudiantes y su temperatura."
+      },
+      {
+        "locale": "en",
+        "title": "Temperature Control System",
+        "description": "Web project that allows to register the entry of the students and their temperature."
+      },
+      {
+        "locale": "nl",
+        "title": "Temperaturkontrollsystem",
+        "description": "Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur."
+      }
+    ],
+    "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"]
+  },
+  {
+    "key": "Lotty",
+    "image": "loto-nic_mtnoh7",
+    "type": "FRONTEND",
+    "githubUrl": "https://github.com/jess232017/Loto-Nicaragua",
+    "websiteUrl": "https://loto-nicaragua.vercel.app/",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Lotty",
+        "description": "Aplicación web para consultar los resultados de la loto de Nicaragua."
+      },
+      {
+        "locale": "en",
+        "title": "Lotty",
+        "description": "Web application to consult the results of the Nicaraguan lottery."
+      },
+      {
+        "locale": "nl",
+        "title": "Lotty",
+        "description": "Webapplicatie om de resultaten van de Nicaraguaanse loterij te raadplegen."
+      }
+    ],
+    "skillKeys": ["React", "Bootstrap"]
+  },
+  {
+    "key": "LottyApi",
+    "image": "api-rest_u56jdu",
+    "type": "BACKEND",
+    "githubUrl": "https://github.com/jess232017/Loto-Api",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Lotty Api",
+        "description": "Api Rest para la aplicación móvil Lucky App."
+      },
+      {
+        "locale": "en",
+        "title": "Lotty Api",
+        "description": "Rest Api for the mobile application Lucky App."
+      },
+      {
+        "locale": "nl",
+        "title": "Lotty Api",
+        "description": "Rest Api voor de mobiele applicatie Lucky App."
+      }
+    ],
+    "skillKeys": ["Nodejs", "Mysql"]
+  },
+  {
+    "key": "TechService",
+    "image": "Tech_Service_xjuilx",
+    "type": "MOBILE",
+    "githubUrl": "https://github.com/jess232017/TechService",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Tech Service",
+        "description": "Aplicación móvil Android para el control de servicios de reparación brindados a dispositivos tecnológicos."
+      },
+      {
+        "locale": "en",
+        "title": "Tech Service",
+        "description": "Android mobile application for the control of repair services provided to technological devices."
+      },
+      {
+        "locale": "nl",
+        "title": "Tech Service",
+        "description": "Mobiele Android-toepassing voor de controle van reparatiediensten voor technologische apparaten."
+      }
+    ],
+    "skillKeys": ["Java", "Android", "Php"]
+  },
+  {
+    "key": "TechServiceApi",
+    "image": "api-rest_szxffg",
+    "type": "BACKEND",
+    "githubUrl": "https://github.com/jess232017/Api_TechService",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Tech Service API",
+        "description": "API REST para el control de servicios de reparación brindados a dispositivos tecnológicos."
+      },
+      {
+        "locale": "en",
+        "title": "Tech Service API",
+        "description": "REST API for the control of repair services provided to technological devices."
+      },
+      {
+        "locale": "nl",
+        "title": "Tech Service API",
+        "description": "REST API voor het beheer van reparatieservices voor technologische apparaten."
+      }
+    ],
+    "skillKeys": ["Php", "Mysql"]
+  },
+  {
+    "key": "PosInventory",
+    "image": "portf-5_f1z3la",
+    "type": "DESKTOP",
+    "githubUrl": "https://github.com/jess232017/Control-Inventario-y-Ventas",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Control de Inventario y Ventas",
+        "description": "Sistema de control de inventario y ventas para una tienda de ropa."
+      },
+      {
+        "locale": "en",
+        "title": "Inventory and Sales Control",
+        "description": "Inventory and sales control system for a clothing store."
+      },
+      {
+        "locale": "nl",
+        "title": "Inventar- und Verkaufskontrolle",
+        "description": "Inventaris- en verkoopcontrolesysteem voor een kledingwinkel."
+      }
+    ],
+    "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"]
+  },
+  {
+    "key": "FoodDelivery",
+    "image": "port-6_avknde",
+    "type": "MOBILE",
+    "githubUrl": "https://github.com/jess232017/Food-Service",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Food Service",
+        "description": "Aplicación móvil Android para el control de pedidos de comida."
+      },
+      {
+        "locale": "en",
+        "title": "Food Service",
+        "description": "Android mobile application for the control of food orders."
+      },
+      {
+        "locale": "nl",
+        "title": "Food Service",
+        "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+      }
+    ],
+    "skillKeys": ["Java", "Android", "Mysql"]
+  },
+  {
+    "key": "Ecommerce",
+    "image": "port-7png_jclbvc",
+    "type": "FRONTEND",
+    "githubUrl": "https://github.com/jess232017/Tienda-AdminMUI",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Tienda Cliente",
+        "description": "Aplicación web para la compra de productos en línea."
+      },
+      {
+        "locale": "en",
+        "title": "Store Client",
+        "description": "Web application for online product purchase."
+      },
+      {
+        "locale": "nl",
+        "title": "Store Client",
+        "description": "Webtoepassing voor online aankoop van producten."
+      }
+    ],
+    "skillKeys": ["React", "Redux", "Material", "Sass"]
+  },
+  {
+    "key": "EcommerceAdmin",
+    "image": "port-8_njbkie",
+    "type": "FRONTEND",
+    "githubUrl": "https://github.com/jess232017/Tienda-Admin",
+    "websiteUrl": "https://tiendajs-admin.netlify.app/",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Tienda Admin",
+        "description": "Administrador de una tienda online."
+      },
+      {
+        "locale": "en",
+        "title": "Store Admin",
+        "description": "Administrator of an online store."
+      },
+      {
+        "locale": "nl",
+        "title": "Store Admin",
+        "description": "Beheerder van een online winkel."
+      }
+    ],
+    "skillKeys": ["React", "Redux", "Material", "Sass"]
+  },
+  {
+    "key": "EcommerceApi",
+    "image": "api-rest_yaux6m",
+    "type": "BACKEND",
+    "githubUrl": "-",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Tienda Api",
+        "description": "Api Rest para el administrador de una tienda online."
+      },
+      {
+        "locale": "en",
+        "title": "Store Api",
+        "description": "Rest Api for the administrator of an online store."
+      },
+      {
+        "locale": "nl",
+        "title": "Store Api",
+        "description": "Rest Api voor de beheerder van een online winkel."
+      }
+    ],
+    "skillKeys": ["Csharp", "SqlServer", "Entity", "Dotnet", "Swagger"]
+  },
+  {
+    "key": "KwhMonitor",
+    "image": "port-9_lw4apk",
+    "type": "MOBILE",
+    "githubUrl": "https://github.com/jess232017/Gestor-de-Consumo-Eletrico",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Kwh Monitor",
+        "description": "Aplicación móvil Android para el control de consumo de energía eléctrica."
+      },
+      {
+        "locale": "en",
+        "title": "Kwh Monitor",
+        "description": "Android mobile application for the control of electricity consumption."
+      },
+      {
+        "locale": "nl",
+        "title": "Kwh Monitor",
+        "description": "Mobiele Android-toepassing voor de controle van het elektriciteitsverbruik."
+      }
+    ],
+    "skillKeys": ["Java", "Android", "Mysql", "Nodejs"]
+  },
+  {
+    "key": "KwhMonitorApi",
+    "image": "api-rest_u56jdu",
+    "type": "BACKEND",
+    "githubUrl": "https://github.com/jess232017/Consultar-Consumo-API",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Kwh Monitor Api",
+        "description": "Api Rest para la aplicación móvil Kwh Monitor."
+      },
+      {
+        "locale": "en",
+        "title": "Kwh Monitor Api",
+        "description": "Rest Api for the mobile application Kwh Monitor."
+      },
+      {
+        "locale": "nl",
+        "title": "Kwh Monitor Api",
+        "description": "Rest Api voor de mobiele toepassing Kwh Monitor."
+      }
+    ],
+    "skillKeys": ["Nodejs", "Mysql"]
+  },
+  {
+    "key": "LuckyApp",
+    "image": "port-10_f80urb",
+    "type": "MOBILE",
+    "githubUrl": "https://github.com/jess232017/Rifa-App",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Lucky App",
+        "description": "Aplicación móvil Android para el control de pedidos de comida."
+      },
+      {
+        "locale": "en",
+        "title": "Lucky App",
+        "description": "Android mobile application for the control of food orders."
+      },
+      {
+        "locale": "nl",
+        "title": "Lucky App",
+        "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+      }
+    ],
+    "skillKeys": ["Java", "Android"]
+  },
+  {
+    "key": "YourFarm",
+    "image": "port-11_cng5re",
+    "type": "MOBILE",
+    "githubUrl": "https://github.com/jess232017/Tu-Finca",
+    "websiteUrl": "",
+    "isPrivate": false,
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Tu finca",
+        "description": "Aplicación móvil Android para el control de pedidos de comida."
+      },
+      {
+        "locale": "en",
+        "title": "Your farm",
+        "description": "Android mobile application for the control of food orders."
+      },
+      {
+        "locale": "nl",
+        "title": "Your farm",
+        "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+      }
+    ],
+    "skillKeys": ["Java", "Android"]
+  }
+]

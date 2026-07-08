@@ -255,7 +255,17 @@ export const portfolioAdminRouter = createTRPCRouter({
         await ctx.db.project.findUnique({ where: { id: input.id } }),
         ctx.user.id,
       );
-      return ctx.db.project.delete({ where: { id: input.id } });
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.projectSkill.deleteMany({ where: { projectId: input.id } });
+        await tx.projectTranslation.deleteMany({
+          where: { projectId: input.id },
+        });
+        await tx.certificateProject.deleteMany({
+          where: { projectId: input.id },
+        });
+        return tx.project.delete({ where: { id: input.id } });
+      });
     }),
 
   upsertProjectTranslation: protectedProcedure
