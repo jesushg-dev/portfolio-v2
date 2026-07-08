@@ -1,32 +1,22 @@
 "use client";
 import type { FC } from "react";
-import { useMemo } from "react";
-import { useTranslations } from "next-intl";
 import TypeWriter from "@/components/shared/type-writer";
 
-const titles = [
-  "degree",
-  "web",
-  "mobile",
-  "fullstack",
-  "frontend",
-  "backend",
-] as const;
+interface HeroWriterProps {
+  titles: string[];
+}
 
-const HeroWriter: FC = () => {
-  const t = useTranslations("main.heroMain");
-  const strings = useMemo(
-    () => titles.map((title) => t(`titles.${title}`)),
-    [t],
-  );
+const HeroWriter: FC<HeroWriterProps> = ({ titles }) => {
+  if (titles.length === 0) return null;
 
   return (
     <TypeWriter
       delay={1}
-      texts={strings}
+      texts={titles}
       wrapperClassName="text-2xl"
       cursorClassName="text-2xl text-primary-500"
     />
   );
 };
+
 export default HeroWriter;

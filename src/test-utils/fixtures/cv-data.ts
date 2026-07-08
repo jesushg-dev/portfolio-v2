@@ -59,6 +59,8 @@ export const mockCvPreviewData = {
     fullName: "Jane Doe",
     degree: { default: "Software Engineer" },
     photoUrl: null,
+    backgroundImageUrl: null,
+    heroSummary: null,
     clientImageAlt: null,
     createdAt: new Date(),
     updatedAt: new Date(),

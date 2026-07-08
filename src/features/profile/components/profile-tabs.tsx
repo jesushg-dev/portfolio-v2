@@ -1,17 +1,18 @@
 "use client";
 
-import { User, FileText, Code2 } from "lucide-react";
+import { User, Code2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/routing";
 
 type TabLinkType = {
-  id: number;
+  id: string;
   href: React.ComponentProps<typeof Link>["href"];
   label: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   exact?: boolean;
 };
+
 
 export const ProfileTabs = () => {
   const t = useTranslations("admin.profile");
@@ -19,20 +20,14 @@ export const ProfileTabs = () => {
 
   const tabs: TabLinkType[] = [
     {
-      id: 0,
+      id: "profile-tab-hero",
       href: "/admin/profile",
       label: t("heroSection"),
       icon: User,
       exact: true,
     },
     {
-      id: 1,
-      href: "/admin/profile/about-me",
-      label: t("aboutMeTab"),
-      icon: FileText,
-    },
-    {
-      id: 2,
+      id: "profile-tab-console",
       href: "/admin/profile/console",
       label: t("consoleTab"),
       icon: Code2,
@@ -50,6 +45,7 @@ export const ProfileTabs = () => {
         return (
           <Link
             key={tab.id}
+            id={tab.id}
             href={tab.href}
             className={`flex items-center gap-2 border-b-2 px-5 py-3.5 text-sm font-medium transition-colors ${
               isActive

@@ -1,9 +1,10 @@
 import type { FC } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import TimeLines from "@/components/shared/time-lines";
 import HeaderArticle from "@/components/shared/header-article";
+import { TimelineHorizontalPreview } from "./timeline-horizontal-preview";
 import AboutTerminal from "./about-terminal";
+import AboutTerminalEmpty from "./about-terminal-empty";
 
 import { resolveTenant } from "@/lib/tenant/resolve";
 import { api } from "@/trpc/server";
@@ -17,10 +18,19 @@ const About: FC = async () => {
   const locale = await getLocale();
 
   const tenant = await resolveTenant();
-  const terminalData =
+
+  const [aboutData, terminalData] = await Promise.all([
     tenant && isLocale(locale)
-      ? await api.cv.getTerminalPublic({ locale })
-      : null;
+      ? api.portfolio.getAboutPublic({ locale })
+      : Promise.resolve(null),
+    tenant && isLocale(locale)
+      ? api.cv.getTerminalPublic({ locale })
+      : Promise.resolve(null),
+  ]);
+
+  const paragraphs = aboutData?.paragraphs ?? [];
+  const hasTerminal = aboutData?.hasTerminal ?? false;
+  const showTerminalColumn = Boolean(tenant && (hasTerminal || terminalData));
 
   return (
     <div className="overflow-hidden">
@@ -29,19 +39,35 @@ const About: FC = async () => {
         className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20"
       >
         <HeaderArticle title={t("title")} description="" subtitle="" />
-        <article className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:pb-8">
-          <div className="space-y-4">
-            <p className="text-primaryText-500 text-center text-base">
-              {t("info.description1")}
-            </p>
-            <p className="text-primaryText-500 text-center text-base">
-              {t("info.description2")}
-            </p>
-            <p className="text-primaryText-500 text-center text-base">
-              {t("info.description3")}
-            </p>
-          </div>
-          {terminalData ? <AboutTerminal data={terminalData} /> : null}
+        <article
+          className={
+            showTerminalColumn
+              ? "grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:pb-8"
+              : "grid grid-cols-1 gap-4 lg:pb-8"
+          }
+        >
+          {paragraphs.length > 0 ? (
+            <div
+              className={`space-y-4 ${showTerminalColumn ? "" : "mx-auto max-w-3xl"}`}
+            >
+              {paragraphs.map((paragraph) => (
+                <p
+                  key={paragraph}
+                  className="text-primaryText-500 text-center text-base lg:text-start"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          ) : null}
+
+          {showTerminalColumn ? (
+            terminalData ? (
+              <AboutTerminal data={terminalData} />
+            ) : (
+              <AboutTerminalEmpty />
+            )
+          ) : null}
         </article>
 
         <aside className="flex flex-col items-center gap-2">
@@ -50,7 +76,7 @@ const About: FC = async () => {
           </div>
           <div className="w-full overflow-x-auto lg:pt-4">
             <div className="flex flex-col items-center gap-2">
-              <TimeLines />
+              <TimelineHorizontalPreview />
             </div>
           </div>
         </aside>

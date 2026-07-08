@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 import { getLocalizedText } from "@/lib/i18n/localized";
+import {
+  getHeroTitlesForLocale,
+  splitAboutParagraphs,
+} from "@/features/profile/server/hero-titles";
+import { mapTimelineItemsToPublic } from "@/features/timeline/lib/map-timeline-public";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
   looksLikeSkillObjectId,
@@ -383,6 +388,36 @@ export const portfolioRouter = createTRPCRouter({
         projects,
       };
     }),
+  getTimelinePublic: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+        limit: z.number().int().positive().optional(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+
+      if (!tenantUserId) {
+        return [];
+      }
+
+      const defaultLocale = (ctx.tenant?.defaultLocale ?? "en");
+      const locale = input.locale;
+
+      const timelineItems = await ctx.db.timelineItem.findMany({
+        where: { userId: tenantUserId },
+        orderBy: [{ startDate: "asc" }, { createdAt: "asc" }],
+      });
+
+      return mapTimelineItemsToPublic(
+        timelineItems,
+        locale,
+        defaultLocale,
+        input.limit,
+      );
+    }),
+
   getTimeline: publicProcedure
     .input(
       z.object({
@@ -396,56 +431,104 @@ export const portfolioRouter = createTRPCRouter({
         return [];
       }
 
+      const defaultLocale = (ctx.tenant?.defaultLocale ?? "en");
+      const locale = input.locale;
+
       const timelineItems = await ctx.db.timelineItem.findMany({
         where: { userId: tenantUserId },
-        orderBy: [{ order: "asc" }, { startDate: "desc" }],
+        orderBy: [{ startDate: "asc" }, { createdAt: "asc" }],
       });
 
-      const parseLocalized = (field: unknown) => {
-        if (!field || typeof field !== "object") return "";
-
-        const value = field as {
-          default?: string;
-          translations?: Record<string, string | undefined>;
-        };
-
-        const localized = value.translations?.[input.locale];
-        if (localized?.trim()) {
-          return localized;
-        }
-
-        return value.default ?? "";
-      };
-
-      const formatDate = (
-        startDate: Date,
-        endDate: Date | null,
-        current: boolean,
-      ) => {
-        const startYear = startDate.getFullYear();
-
-        if (current) {
-          return `${startYear} - Present`;
-        }
-
-        if (endDate) {
-          return `${startYear} - ${endDate.getFullYear()}`;
-        }
-
-        return `${startYear}`;
-      };
-
-      return timelineItems.map((item) => {
-        const title = parseLocalized(item.title);
-        const description = parseLocalized(item.description);
-
-        return {
+      return mapTimelineItemsToPublic(timelineItems, locale, defaultLocale).map(
+        (item) => ({
           id: item.id,
-          title: item.organization ? `${title} - ${item.organization}` : title,
-          description,
-          date: formatDate(item.startDate, item.endDate ?? null, item.current),
-          dateTime: item.startDate.toISOString().split("T")[0],
-        };
+          title: item.title,
+          description: item.description,
+          date: item.date,
+          dateTime: item.dateTime,
+        }),
+      );
+    }),
+
+  getHeroPublic: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return null;
+
+      const header = await ctx.db.cvHeader.findUnique({
+        where: { userId: tenantUserId },
       });
+
+      if (!header) return null;
+
+      const profile = await ctx.db.profile.findUnique({
+        where: { userId: tenantUserId },
+        select: { displayName: true },
+      });
+
+      const defaultLocale = (ctx.tenant?.defaultLocale ?? "en");
+      const locale = input.locale;
+
+      const titles = await getHeroTitlesForLocale(
+        ctx.db,
+        tenantUserId,
+        locale,
+        defaultLocale,
+      );
+
+      return {
+        fullName: profile?.displayName?.trim() ?? header.fullName,
+        photoUrl: header.photoUrl,
+        backgroundImageUrl: header.backgroundImageUrl,
+        heroSummary: getLocalizedText(
+          header.heroSummary,
+          locale,
+          defaultLocale,
+        ),
+        imageAlt: getLocalizedText(
+          header.clientImageAlt,
+          locale,
+          defaultLocale,
+        ),
+        titles,
+      };
+    }),
+
+  getAboutPublic: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return null;
+
+      const defaultLocale = (ctx.tenant?.defaultLocale ?? "en");
+      const locale = input.locale;
+
+      const [aboutMe, terminal] = await Promise.all([
+        ctx.db.cvAboutMe.findUnique({ where: { userId: tenantUserId } }),
+        ctx.db.cvTerminal.findUnique({
+          where: { userId: tenantUserId },
+          include: { steps: true },
+        }),
+      ]);
+
+      const aboutText = getLocalizedText(
+        aboutMe?.aboutMe,
+        locale,
+        defaultLocale,
+      );
+
+      return {
+        paragraphs: splitAboutParagraphs(aboutText),
+        hasTerminal: Boolean(terminal && terminal.steps.length > 0),
+      };
     }),
 });

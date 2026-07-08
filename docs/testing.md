@@ -173,7 +173,7 @@ End-to-end tests live in `e2e/` and use Playwright with a real dev server (`pnpm
 
 | Script                                | What runs                                                                              |
 | ------------------------------------- | -------------------------------------------------------------------------------------- |
-| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, and CV contact create |
+| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, CV contact, profile hero, and timeline entry |
 | `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)                       |
 | `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)                    |
 | `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                              |
@@ -186,6 +186,12 @@ End-to-end tests live in `e2e/` and use Playwright with a real dev server (`pnpm
 | `pnpm test:e2e:cv`                    | Full **CV** suite — serial rebuild from `portfolio-cv.json` (`cv-create`)              |
 | `pnpm test:e2e:cv:headed`             | CV suite with visible browser                                                          |
 | `pnpm test:e2e:cv:ui`                 | Playwright UI mode for the CV project                                                  |
+| `pnpm test:e2e:profile`               | Full **profile** suite — hero + console from `portfolio-home.json` (`profile-create`)  |
+| `pnpm test:e2e:profile:headed`        | Profile suite with visible browser                                                     |
+| `pnpm test:e2e:profile:ui`            | Playwright UI mode for the profile project                                              |
+| `pnpm test:e2e:timeline`              | Full **timeline** suite — serial 9-entry create from `portfolio-timeline.json`         |
+| `pnpm test:e2e:timeline:headed`     | Timeline suite with visible browser                                                    |
+| `pnpm test:e2e:timeline:ui`         | Playwright UI mode for the timeline project                                            |
 | `pnpm test:e2e:ui`                    | Playwright UI for all projects                                                         |
 
 Auth session is saved to `e2e/.auth/user.json` by `e2e/auth.setup.ts` (gitignored).
@@ -234,6 +240,36 @@ Portfolio certifications for seed and E2E share one source of truth:
 - **`certifications-smoke.spec.ts`** — creates **one** certification; included in `pnpm test:e2e` smoke.
 - **`certifications-create.spec.ts`** — **serial** run that creates all **49** certifications; use `pnpm test:e2e:certifications`.
 
+### Profile fixture
+
+Portfolio home/profile content for seed and E2E share one source of truth:
+
+- `prisma/data/portfolio-home.json` — hero summary, rotating titles, terminal steps, background image
+- `prisma/data/portfolio-cv.json` — `aboutMe` paragraphs (home About section)
+- `e2e/fixtures/portfolio-home.ts` — typed re-export for tests
+
+`e2e/helpers/fill-profile-form.ts` drives `/admin/profile` (hero) and `/admin/profile/console` via `#profile-*` IDs. `cleanupUserProfile` clears hero titles, hero summary/background, and terminal steps only — it does not touch skills, projects, certifications, or CV list sections.
+
+### Smoke vs full profile suite
+
+- **`profile-smoke.spec.ts`** — saves **one** hero title + summary; included in `pnpm test:e2e` smoke.
+- **`profile-create.spec.ts`** — **serial** run that fills hero (6 titles, 3 locales) and console (3 steps); use `pnpm test:e2e:profile`.
+
+### Timeline fixture
+
+Timeline entries for seed and E2E share one source of truth:
+
+- `prisma/data/portfolio-timeline.json` — 9 items (study, work history, courses)
+- `prisma/seed-portfolio-timeline.ts` — wipes and recreates owner timeline rows
+- `e2e/fixtures/portfolio-timeline.ts` — typed re-export for tests
+
+`e2e/helpers/fill-timeline-form.ts` drives `/admin/timeline/new` via `#timeline-*` IDs and locale tabs (`#timeline-lang-es|en|nl`). `cleanupUserTimeline` removes every owner timeline item via tRPC before each run.
+
+### Smoke vs full timeline suite
+
+- **`timeline-smoke.spec.ts`** — creates **one** timeline entry; included in `pnpm test:e2e` smoke.
+- **`timeline-create.spec.ts`** — **serial** run that creates all **9** entries through the UI; use `pnpm test:e2e:timeline`.
+
 ### CV fixture
 
 Portfolio CV for seed and E2E share one source of truth:
@@ -270,7 +306,7 @@ E2E tests must follow **real user paths** through the UI. Do not deep-link with 
 **Do**
 
 - Start from a realistic entry point (e.g. `/admin` after auth setup).
-- Use the **sidebar**, toolbar links, and buttons (`#skills-add`, `#projects-add`, `#certifications-add`, etc.) to reach each screen.
+- Use the **sidebar**, toolbar links, and buttons (`#skills-add`, `#projects-add`, `#certifications-add`, `#timeline-add`, etc.) to reach each screen.
 - Wait for the previous action to finish (mutation response, leave `/new`, list visible) before starting the next step.
 - Use stable `inputId` / `#…` selectors on fields once the form is open.
 - Use `page.goto()` only for exceptions: login page, initial `/admin` landing, or query params with no UI (e.g. `?perPage=100` to assert pagination).
@@ -286,6 +322,7 @@ E2E tests must follow **real user paths** through the UI. Do not deep-link with 
 - `e2e/helpers/fill-skill-form.ts` — `goToSkillsList()` (sidebar), `#skills-add`, fill form, wait for save, repeat.
 - `e2e/helpers/fill-project-form.ts` — same pattern for projects; skill associations via `SkillPicker`.
 - `e2e/helpers/fill-certification-form.ts` — certifications with type checkboxes and optional skill associations.
+- `e2e/helpers/fill-timeline-form.ts` — timeline items via sidebar → `#timeline-add`.
 - `e2e/helpers/fill-cv-form.ts` — CV sections via nested modals and locale tabs (`#cv-locale-tabs`).
 
 Reuse this pattern for services and CV sections.

@@ -231,6 +231,7 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
           languages={languages}
           activeLangId={activeLangId}
           onLangChange={setActiveLangId}
+          buttonIdPrefix="profile-console"
         />
 
         <FormContent error={serverError}>
@@ -379,6 +380,7 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
                                 <FormItem
                                   label={t("outputLabel")}
                                   description={t("outputHint")}
+                                  inputId={`profile-console-output-${stepIndex}`}
                                 >
                                   <FormControl>
                                     <Textarea
@@ -406,6 +408,7 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
               size="sm"
               onClick={handleAddStep}
               className="mt-4"
+              id="profile-console-add-step"
             >
               <Plus className="mr-1 size-4" />
               {t("addStep")}
@@ -418,6 +421,7 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
           title={
             isPending || upsertTerminal.isPending ? t("saving") : t("save")
           }
+          submitId="profile-console-submit"
         />
       </FormRoot>
     </Form>

@@ -177,85 +177,41 @@
       "keywords": "Jesús Hernández, Jesús, Hernández, Full Stack Developer, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Metodologia Agil"
     },
     "heroMain": {
-      "titles": {
-        "degree": "Ingeniero en Computación.",
-        "web": "Desarrollador Web.",
-        "mobile": "Desarrollador Móvil.",
-        "fullstack": "Desarrollador Full Stack.",
-        "backend": "Desarrollador Backend.",
-        "frontend": "Desarrollador Frontend."
-      },
       "viewCV": "Ver CV",
       "greeting": "Hola! Soy",
-      "scrollDown": "Desplazarse hacia abajo",
-      "description": "Como ingeniero, utilizo mi experiencia técnica y mis habilidades para construir y mantener sistemas de software de alta calidad. Mi pasión por la tecnología me impulsa a aprender y a crear soluciones que tengan un impacto positivo en el mundo."
+      "scrollDown": "Desplazarse hacia abajo"
+    },
+    "timeline": {
+      "title": "Mi recorrido",
+      "subtitle": "Una línea de tiempo de trabajo, estudio y crecimiento",
+      "empty": "Aún no hay entradas en la línea de tiempo.",
+      "metaTitle": "Línea de tiempo",
+      "metaDescription": "Explora mi trayectoria profesional y académica a lo largo del tiempo."
     },
     "about": {
       "title": "Acerca de mí",
       "subtitle": "Breve resumen",
-      "info": {
-        "title": "Sobre mí",
-        "description1": "Soy un apasionado de la tecnología con 5 años de experiencia como desarrollador web. Estudié ingeniería en computación y también me formé de manera autodidacta, creando sitios web hermosos y funcionales para diversos clientes.",
-        "description2": "A medida que mi experiencia crecía, también amplié mi horizonte en otras áreas del desarrollo, explorando el mundo del desarrollo móvil y de backend. Esta diversificación de habilidades me permitió embarcarme en proyectos aún más emocionantes y desafiantes.",
-        "description3": "A lo largo de mi carrera, el impulso de aprender y crecer como desarrollador siempre ha sido mi motor. La búsqueda constante de nuevas tecnologías y técnicas para perfeccionar mi oficio es mi filosofía. Estoy emocionado por descubrir a dónde me llevará mi pasión por la tecnología en el futuro."
+      "terminalEmpty": {
+        "title": "Terminal no configurada",
+        "description": "Añade una secuencia de terminal animada desde la pestaña Terminal del perfil en el admin."
       },
       "timeline": {
         "title": "Línea de tiempo",
-        "title2": "Llena el formulario para contactarme",
         "subtitle": "En constante aprendizaje...",
-        "steps": {
-          "0": {
-            "date": "Marzo, 2017",
-            "dateTime": "2017-03-01",
-            "title": "Ingeniería en computación (Actualidad)",
-            "description": "Completando mi carrera mientras gestiono responsabilidades laborales y extracurriculares."
-          },
-          "1": {
-            "date": "Octubre, 2020",
-            "dateTime": "2020-10-01",
-            "title": "Desarrollador Web y Técnico TI",
-            "description": "Mantenimiento y resolución de problemas en sistemas y redes informáticas."
-          },
-          "2": {
-            "date": "Febrero, 2022",
-            "dateTime": "2022-02-01",
-            "title": "Desarrollador Móvil",
-            "description": "Creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente."
-          },
-          "3": {
-            "date": "Junio, 2022",
-            "dateTime": "2022-06-01",
-            "title": "Desarrollador Web",
-            "description": "Diseño, desarrollo y mantenimiento de sitios web y aplicaciones web."
-          }
+        "viewAll": "Ver línea de tiempo completa",
+        "empty": "Aún no hay entradas en la línea de tiempo.",
+        "categories": {
+          "WORK": "Trabajo",
+          "STUDY": "Estudio",
+          "COURSE": "Curso"
         }
-      },
-      "function": {
-        "name": "sobreMi",
-        "json": {
-          "name": "nombre",
-          "languages": "idiomas",
-          "profession": "profession"
-        },
-        "language": {
-          "spanish": "español",
-          "english": "inglés",
-          "dutch": "neerlandés"
-        },
-        "languageLevel": {
-          "native": "Nativo",
-          "advanced": "Avanzado",
-          "intermediate": "Intermedio",
-          "basic": "Básico"
-        },
-        "profession": "Desarrollador Fullstack"
       }
     },
     "skills": {
       "title": "Áreas de especialización",
       "subtitle": "Habilidades",
       "description": "Tengo un conjunto de diversas habilidades, desarrolladas a través de mi educación y experiencias profesionales.",
-      "aux": "I have experience in the following technologies",
+      "aux": "Busco constantemente aprender y mejorar mis habilidades, y siempre estoy abierto a nuevas oportunidades para desafiarme y crecer profesionalmente.",
       "page": {
         "breadcrumbHome": "Inicio",
         "breadcrumbSkills": "Habilidades",
@@ -851,6 +807,13 @@
         "titlePlaceholder": "ej. Inicio de la carrera en Informática",
         "description": "Descripción",
         "descriptionPlaceholder": "Describe lo que hiciste o aprendiste en esta entrada",
+        "imagesLabel": "URL de imagen",
+        "imagesSection": "Imágenes",
+        "imagesHint": "Imágenes opcionales que se muestran en la página del timeline y en el preview del home.",
+        "imageUrlPlaceholder": "https://res.cloudinary.com/.../imagen.webp",
+        "imageUrlInvalid": "Introduce una URL de imagen válida",
+        "addImage": "Añadir imagen",
+        "removeImage": "Eliminar imagen",
         "organization": "Organización",
         "organizationPlaceholder": "Ej. Universidad, empresa, academia...",
         "category": "Categoría",
@@ -908,18 +871,29 @@
     },
     "profile": {
       "title": "Perfil y sección Hero",
-      "subtitle": "Edita tu nombre, foto y título profesional.",
+      "subtitle": "Edita tu identidad del hero, títulos rotativos, resumen y texto sobre mí.",
       "heroSection": "Identidad",
-      "fullNameLabel": "Nombre completo",
+      "fullNameLabel": "Nombre para mostrar",
       "photoUrlLabel": "URL de la foto",
+      "backgroundImageLabel": "URL de imagen de fondo del hero",
+      "backgroundImagePlaceholder": "https://ejemplo.com/fondo-hero.jpg",
       "professionalTitle": "Título Profesional",
       "degreeLabel": "Título profesional / grado",
+      "rotatingTitlesLabel": "Títulos rotativos",
+      "rotatingTitlesHint": "Se muestran en la animación typewriter del hero. Arrastra para reordenar.",
+      "titleWithLanguage": "Título ({language})",
+      "addTitle": "Añadir título",
+      "removeTitle": "Eliminar título",
+      "heroSummaryLabel": "Resumen del hero",
+      "heroSummaryWithLanguage": "Resumen breve ({language})",
+      "heroSummaryHint": "Descripción breve mostrada debajo de tus títulos en el hero.",
+      "heroSummaryPlaceholder": "Una breve introducción para la sección hero...",
+      "descriptionWithLanguage": "Texto sobre mí ({language})",
       "altTextTitle": "Texto alternativo de imagen",
       "altTextHint": "Describe tu foto para lectores de pantalla y SEO.",
       "altTextLabel": "Descripción de la imagen",
       "aboutMeTitle": "Sobre mí",
       "descriptionLabel": "Descripción",
-      "aboutMeTab": "Sobre mí",
       "consoleTab": "Terminal",
       "heroConsoleTitle": "Terminal del About",
       "heroConsoleSubtitle": "Configura la secuencia animada de terminal que se muestra en tu sección Sobre mí.",
@@ -927,6 +901,7 @@
       "save": "Guardar cambios",
       "saving": "Guardando…",
       "savedSuccess": "¡Guardado exitosamente!",
+      "saveFailed": "No se pudo guardar el perfil",
       "heroTab": "Hero y perfil",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://ejemplo.com/foto.jpg",
@@ -1111,6 +1086,7 @@
       "columnCategory": "Categoría",
       "columnPeriod": "Período",
       "columnLocation": "Ubicación",
+      "columnImages": "Imágenes",
       "organization": "Organización",
       "category": "Categoría",
       "period": "Período",

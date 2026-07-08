@@ -1,0 +1,182 @@
+{
+  "items": [
+    {
+      "key": "study-computer-engineering",
+      "title": {
+        "es": "Ingeniería en Computación",
+        "en": "Computer Engineering",
+        "nl": "Computertechniek"
+      },
+      "description": {
+        "es": "Formación en ingeniería de software, sistemas y redes. Completé la carrera en 2023 mientras gestionaba responsabilidades laborales y extracurriculares.",
+        "en": "Training in software engineering, systems, and networking. I completed the degree in 2023 while managing work and extracurricular responsibilities.",
+        "nl": "Opleiding in software engineering, systemen en netwerken. Ik rondde de studie af in 2023 terwijl ik werk en buitenschoolse verantwoordelijkheden combineerde."
+      },
+      "category": "STUDY",
+      "organization": "Universidad Nacional de Ingeniería",
+      "location": "Managua",
+      "startDate": "2017-03-01",
+      "endDate": "2023-12-01",
+      "current": false,
+      "images": []
+    },
+    {
+      "key": "work-it-technician",
+      "title": {
+        "es": "Desarrollador Web y Técnico TI",
+        "en": "Web Developer and IT Technician",
+        "nl": "Webontwikkelaar en IT-technicus"
+      },
+      "description": {
+        "es": "Mantenimiento y resolución de problemas en sistemas y redes informáticas, además de desarrollo de sitios web para clientes locales.",
+        "en": "Maintenance and troubleshooting of computer systems and networks, plus web development for local clients.",
+        "nl": "Onderhoud en probleemoplossing van computersystemen en netwerken, plus webontwikkeling voor lokale klanten."
+      },
+      "category": "WORK",
+      "organization": "Freelance",
+      "location": "Managua",
+      "startDate": "2020-10-01",
+      "endDate": "2022-01-31",
+      "current": false,
+      "images": []
+    },
+    {
+      "key": "work-mobile-developer",
+      "title": {
+        "es": "Desarrollador Móvil",
+        "en": "Mobile Developer",
+        "nl": "Mobiele ontwikkelaar"
+      },
+      "description": {
+        "es": "Creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente.",
+        "en": "Built mobile software applications, consistently delivering high-quality products.",
+        "nl": "Bouwde mobiele softwareapplicaties en leverde consequent producten van hoge kwaliteit."
+      },
+      "category": "WORK",
+      "organization": "Freelance",
+      "location": "Managua",
+      "startDate": "2022-02-01",
+      "endDate": "2022-05-31",
+      "current": false,
+      "images": []
+    },
+    {
+      "key": "work-musa",
+      "title": {
+        "es": "Desarrollador Full Stack",
+        "en": "Full Stack Developer",
+        "nl": "Full Stack Ontwikkelaar"
+      },
+      "description": {
+        "es": "Diseño y desarrollo de interfaces web y aplicaciones móviles. Integración de datos de proveedores externos y refactorización de proyectos para mejorar mantenibilidad.",
+        "en": "Designed and developed web interfaces and mobile applications. Integrated external provider data and refactored projects to improve maintainability.",
+        "nl": "Ontwierp en ontwikkelde webinterfaces en mobiele applicaties. Integreerde data van externe leveranciers en refactorde projecten voor betere onderhoudbaarheid."
+      },
+      "category": "WORK",
+      "organization": "Musa",
+      "location": "Managua",
+      "startDate": "2022-06-01",
+      "endDate": "2023-07-31",
+      "current": false,
+      "images": []
+    },
+    {
+      "key": "work-contollo",
+      "title": {
+        "es": "Senior Software Engineer",
+        "en": "Senior Software Engineer",
+        "nl": "Senior Software Engineer"
+      },
+      "description": {
+        "es": "Desarrollo full stack con C#, Nest.js, Angular y React/Next.js. Creación de APIs seguras integradas con sistemas empresariales como QuickBooks.",
+        "en": "Full-stack development with C#, Nest.js, Angular, and React/Next.js. Built secure APIs integrated with enterprise systems such as QuickBooks.",
+        "nl": "Full-stack development met C#, Nest.js, Angular en React/Next.js. Bouwde beveiligde API's geïntegreerd met enterprise-systemen zoals QuickBooks."
+      },
+      "category": "WORK",
+      "organization": "Contollo",
+      "location": "Remote",
+      "startDate": "2023-08-01",
+      "endDate": "2024-11-30",
+      "current": false,
+      "images": []
+    },
+    {
+      "key": "work-claro",
+      "title": {
+        "es": "Senior Software Engineer",
+        "en": "Senior Software Engineer",
+        "nl": "Senior Software Engineer"
+      },
+      "description": {
+        "es": "Diseño y desarrollo de un sistema interno de Gestión de Solicitudes de Servicio para Claro Nicaragua con React, Next.js, Prisma y SQL Server.",
+        "en": "Designed and developed an internal Service Request Management system for Claro Nicaragua using React, Next.js, Prisma, and SQL Server.",
+        "nl": "Ontwierp en ontwikkelde een intern Service Request Management-systeem voor Claro Nicaragua met React, Next.js, Prisma en SQL Server."
+      },
+      "category": "WORK",
+      "organization": "Claro Nicaragua",
+      "location": "Managua",
+      "startDate": "2024-09-01",
+      "endDate": "2025-08-31",
+      "current": false,
+      "images": []
+    },
+    {
+      "key": "work-imagemaker",
+      "title": {
+        "es": "Senior Software Engineer",
+        "en": "Senior Software Engineer",
+        "nl": "Senior Software Engineer"
+      },
+      "description": {
+        "es": "Parte del equipo de tecnología de Walmart (Imagemaker). Desarrollo de funcionalidades críticas en React, Flutter y VTEX, automatización E2E con Playwright y soporte de incidentes en producción.",
+        "en": "Part of Walmart's technology team (Imagemaker). Building critical features in React, Flutter, and VTEX, E2E automation with Playwright, and production incident support.",
+        "nl": "Deel van het technologieteam van Walmart (Imagemaker). Bouwt kritieke features in React, Flutter en VTEX, E2E-automatisering met Playwright en productie-incidentondersteuning."
+      },
+      "category": "WORK",
+      "organization": "Imagemaker",
+      "location": "Remote",
+      "startDate": "2025-08-01",
+      "current": true,
+      "images": []
+    },
+    {
+      "key": "course-platzi",
+      "title": {
+        "es": "Ruta de Desarrollador Web",
+        "en": "Web Developer Path",
+        "nl": "Webontwikkelaar traject"
+      },
+      "description": {
+        "es": "Formación continua en desarrollo web moderno: HTML, CSS, JavaScript, React, Node.js y buenas prácticas de ingeniería de software.",
+        "en": "Continuous training in modern web development: HTML, CSS, JavaScript, React, Node.js, and software engineering best practices.",
+        "nl": "Doorlopende training in moderne webontwikkeling: HTML, CSS, JavaScript, React, Node.js en software engineering best practices."
+      },
+      "category": "COURSE",
+      "organization": "Platzi",
+      "location": "Online",
+      "startDate": "2022-01-01",
+      "endDate": "2024-06-30",
+      "current": false,
+      "images": []
+    },
+    {
+      "key": "course-continuous-learning",
+      "title": {
+        "es": "Aprendizaje continuo",
+        "en": "Continuous learning",
+        "nl": "Continu leren"
+      },
+      "description": {
+        "es": "Exploración constante de nuevas tecnologías, certificaciones y prácticas para mantenerme actualizado en un sector en evolución.",
+        "en": "Ongoing exploration of new technologies, certifications, and practices to stay current in a fast-moving industry.",
+        "nl": "Voortdurende verkenning van nieuwe technologieën, certificeringen en practices om bij te blijven in een snel evoluerende sector."
+      },
+      "category": "COURSE",
+      "organization": "Platzi & comunidad open source",
+      "location": "Online",
+      "startDate": "2022-01-01",
+      "current": true,
+      "images": []
+    }
+  ]
+}

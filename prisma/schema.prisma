@@ -40,6 +40,7 @@ model User {
   CvAdditionalInfo    CvAdditionalInfo[]
   CvPersonalReference CvPersonalReference[]
   CvPdfLink           CvPdfLink[]
+  CvHeroTitle         CvHeroTitle[]
 
   // Per-user portfolio (existing models become tenant-scoped)
   Project             Project[]
@@ -135,15 +136,43 @@ model CvPdfLink {
 // ============================================================================
 
 model CvHeader {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String   @unique @db.ObjectId
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  fullName        String
-  degree          Json
-  photoUrl        String?
-  clientImageAlt  Json?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @unique @db.ObjectId
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName           String
+  degree             Json
+  photoUrl           String?
+  backgroundImageUrl String?
+  heroSummary        Json?
+  clientImageAlt     Json?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+/// Rotating professional titles shown in the portfolio hero typewriter.
+model CvHeroTitle {
+  id           String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                   @db.ObjectId
+  user         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order        Int                      @default(0)
+  translations CvHeroTitleTranslation[]
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+
+  @@index([userId, order])
+}
+
+model CvHeroTitleTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  heroTitleId   String      @db.ObjectId
+  heroTitle     CvHeroTitle @relation(fields: [heroTitleId], references: [id], onDelete: Cascade)
+  appLanguageId String      @db.ObjectId
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  text          String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([heroTitleId, appLanguageId])
 }
 
 model CvAboutMe {
@@ -350,6 +379,7 @@ model AppLanguage {
   ServiceTranslation             ServiceTranslation[]
   CertificationTranslation       CertificationTranslation[]
   CvTerminalStepTranslation      CvTerminalStepTranslation[]
+  CvHeroTitleTranslation         CvHeroTitleTranslation[]
 }
 
 model Project {
@@ -536,6 +566,7 @@ model TimelineItem {
   endDate      DateTime?
   current      Boolean          @default(false)
   order        Int              @default(0)
+  images       String[]         @default([])
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 }

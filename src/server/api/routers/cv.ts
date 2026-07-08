@@ -17,6 +17,14 @@ import {
   getTerminalEditorDto,
   upsertTerminalFromEditor,
 } from "@/features/terminal/server/terminal";
+import {
+  HeroTitlesUpsertSchema,
+  PortfolioHeaderUpsertSchema,
+} from "@/features/profile/server/schemas";
+import {
+  getHeroTitlesEditorDto,
+  upsertHeroTitlesFromEditor,
+} from "@/features/profile/server/hero-titles";
 
 const CvContactType = z.enum([
   "EMAIL",
@@ -136,30 +144,100 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         fullName: z.string().min(1),
-        degree: LocalizedTextSchema,
+        degree: LocalizedTextSchema.optional(),
         photoUrl: z.string().url().nullable().optional(),
+        backgroundImageUrl: z.string().url().nullable().optional(),
+        heroSummary: LocalizedTextSchema.nullable().optional(),
         clientImageAlt: LocalizedTextSchema.nullable().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.cvHeader.findUnique({
+        where: { userId: ctx.user.id },
+      });
+
+      const degreeValue = (input.degree ??
+        existing?.degree ?? { default: "" }) as Prisma.InputJsonValue;
+
       return ctx.db.cvHeader.upsert({
         where: { userId: ctx.user.id },
         create: {
           userId: ctx.user.id,
           fullName: input.fullName,
-          degree: input.degree as Prisma.InputJsonValue,
+          degree: degreeValue,
           photoUrl: input.photoUrl ?? null,
+          backgroundImageUrl: input.backgroundImageUrl ?? null,
+          heroSummary: (input.heroSummary ?? undefined) as
+            Prisma.InputJsonValue | undefined,
           clientImageAlt: (input.clientImageAlt ?? undefined) as
             Prisma.InputJsonValue | undefined,
         },
         update: {
           fullName: input.fullName,
-          degree: input.degree as Prisma.InputJsonValue,
+          ...(input.degree
+            ? { degree: input.degree as Prisma.InputJsonValue }
+            : {}),
           photoUrl: input.photoUrl ?? null,
+          ...(input.backgroundImageUrl !== undefined
+            ? { backgroundImageUrl: input.backgroundImageUrl }
+            : {}),
+          ...(input.heroSummary !== undefined
+            ? { heroSummary: input.heroSummary as Prisma.InputJsonValue }
+            : {}),
+          ...(input.clientImageAlt !== undefined
+            ? {
+                clientImageAlt: input.clientImageAlt as
+                  Prisma.InputJsonValue | undefined,
+              }
+            : {}),
+        },
+      });
+    }),
+
+  upsertPortfolioHeader: protectedProcedure
+    .input(PortfolioHeaderUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.cvHeader.findUnique({
+        where: { userId: ctx.user.id },
+      });
+
+      const degreeValue = (existing?.degree ?? {
+        default: "",
+      }) as Prisma.InputJsonValue;
+
+      return ctx.db.cvHeader.upsert({
+        where: { userId: ctx.user.id },
+        create: {
+          userId: ctx.user.id,
+          fullName: input.fullName,
+          degree: degreeValue,
+          photoUrl: input.photoUrl ?? null,
+          backgroundImageUrl: input.backgroundImageUrl ?? null,
+          heroSummary: (input.heroSummary ?? undefined) as
+            Prisma.InputJsonValue | undefined,
+          clientImageAlt: (input.clientImageAlt ?? undefined) as
+            Prisma.InputJsonValue | undefined,
+        },
+        update: {
+          fullName: input.fullName,
+          photoUrl: input.photoUrl ?? null,
+          backgroundImageUrl: input.backgroundImageUrl ?? null,
+          heroSummary: (input.heroSummary ?? undefined) as
+            Prisma.InputJsonValue | undefined,
           clientImageAlt: (input.clientImageAlt ?? undefined) as
             Prisma.InputJsonValue | undefined,
         },
       });
+    }),
+
+  getHeroTitlesMine: protectedProcedure.query(async ({ ctx }) => {
+    return getHeroTitlesEditorDto(ctx.db, ctx.user.id);
+  }),
+
+  upsertHeroTitles: protectedProcedure
+    .input(HeroTitlesUpsertSchema)
+    .mutation(async ({ ctx, input }) => {
+      return upsertHeroTitlesFromEditor(ctx.db, ctx.user.id, input);
     }),
 
   // ---------- About me ----------

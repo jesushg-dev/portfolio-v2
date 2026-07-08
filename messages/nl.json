@@ -177,77 +177,34 @@
       "keywords": "Jesús Hernández, Jesús, Hernández, Full Stack Ontwikkelaar, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Metodologia Agil"
     },
     "heroMain": {
-      "titles": {
-        "degree": "Software Engineer.",
-        "web": "Webontwikkelaar.",
-        "mobile": "Mobiele ontwikkelaar.",
-        "fullstack": "Full Stack-ontwikkelaar.",
-        "backend": "Backend-ontwikkelaar.",
-        "frontend": "Frontend-ontwikkelaar."
-      },
       "viewCV": "Bekijk CV",
       "greeting": "Hallo, ik ben",
-      "scrollDown": "Scroll naar beneden",
-      "description": "Als engineer gebruik ik mijn technische expertise en vaardigheden om hoogwaardige softwaresystemen te bouwen en te onderhouden. Mijn passie voor technologie stimuleert me om voortdurend te leren en te groeien, en ik streef ernaar oplossingen te creëren die een positieve impact hebben op de wereld."
+      "scrollDown": "Scroll naar beneden"
+    },
+    "timeline": {
+      "title": "Mijn reis",
+      "subtitle": "Een tijdlijn van werk, studie en groei",
+      "empty": "Nog geen tijdlijnitems.",
+      "metaTitle": "Tijdlijn",
+      "metaDescription": "Ontdek mijn professionele en academische reis door de tijd."
     },
     "about": {
       "title": "Over mij",
       "subtitle": "Een beknopt overzicht",
-      "info": {
-        "title": "Over mij",
-        "description1": "Ik ben gepassioneerd door technologie met 5 jaar ervaring als webontwikkelaar. Ik heb een opleiding gevolgd in computer engineering en mezelf autodidactisch bijgeschoold, waardoor ik prachtige en functionele websites heb gecreëerd voor diverse klanten.",
-        "description2": "Naarmate mijn ervaring groeide, heb ik mijn horizon verbreed en ben ik andere gebieden van ontwikkeling gaan verkennen, zoals mobiele en backend ontwikkeling. Deze diversificatie van vaardigheden stelde me in staat om me te storten op nog spannendere en uitdagendere projecten.",
-        "description3": "Gedurende mijn carrière is mijn drijfveer altijd geweest om te blijven leren en groeien als ontwikkelaar. De voortdurende zoektocht naar nieuwe technologieën en technieken om mijn ambacht te verfijnen, vormt de kern van mijn filosofie. Ik ben opgewonden om te ontdekken waar mijn passie voor technologie me in de toekomst naartoe zal leiden."
+      "terminalEmpty": {
+        "title": "Terminal niet geconfigureerd",
+        "description": "Voeg een geanimeerde terminalreeks toe via het Terminal-tabblad in het adminprofiel."
       },
       "timeline": {
         "title": "Mijn tijdslijn",
         "subtitle": "Continu leren...",
-        "steps": {
-          "0": {
-            "date": "maart 2017",
-            "dateTime": "2017-03-01",
-            "title": "Informatica-ingenieur (Huidig)",
-            "description": "Afronding van mijn studie terwijl ik werk en buitenschoolse verantwoordelijkheden beheer."
-          },
-          "1": {
-            "date": "oktober 2020",
-            "dateTime": "2020-10-01",
-            "title": "Webontwikkelaar en IT-technicus",
-            "description": "Onderhoud en oplossen van problemen in computersystemen en netwerken."
-          },
-          "2": {
-            "date": "februari 2022",
-            "dateTime": "2022-02-01",
-            "title": "Mobiele ontwikkelaar",
-            "description": "Creatie van softwaretoepassingen voor mobiele apparaten, consistent leveren van hoogwaardige producten."
-          },
-          "3": {
-            "date": "juni 2022",
-            "dateTime": "2022-06-01",
-            "title": "Webontwikkelaar",
-            "description": "Ontwerp, ontwikkeling en onderhoud van websites en webtoepassingen."
-          }
+        "viewAll": "Bekijk volledige tijdlijn",
+        "empty": "Nog geen tijdlijnitems.",
+        "categories": {
+          "WORK": "Werk",
+          "STUDY": "Studie",
+          "COURSE": "Cursus"
         }
-      },
-      "function": {
-        "name": "overMij",
-        "json": {
-          "name": "naam",
-          "languages": "talen",
-          "profession": "beroep"
-        },
-        "language": {
-          "spanish": "Spaans",
-          "english": "Engels",
-          "dutch": "Nederlands"
-        },
-        "languageLevel": {
-          "native": "Moedertaal",
-          "advanced": "Geavanceerd",
-          "intermediate": "Gevorderd",
-          "basic": "Basis"
-        },
-        "profession": "Fullstack-ontwikkelaar"
       }
     },
     "skills": {
@@ -846,6 +803,13 @@
         "titlePlaceholder": "bijv. Start informatica-opleiding",
         "description": "Beschrijving",
         "descriptionPlaceholder": "Beschrijf wat je deed of leerde in dit tijdlijnitem",
+        "imagesLabel": "Afbeeldings-URL",
+        "imagesSection": "Afbeeldingen",
+        "imagesHint": "Optionele afbeeldingen voor de tijdlijnpagina en de home-preview.",
+        "imageUrlPlaceholder": "https://res.cloudinary.com/.../afbeelding.webp",
+        "imageUrlInvalid": "Voer een geldige afbeeldings-URL in",
+        "addImage": "Afbeelding toevoegen",
+        "removeImage": "Afbeelding verwijderen",
         "organization": "Organisatie",
         "organizationPlaceholder": "Bijv. universiteit, bedrijf, academie...",
         "category": "Categorie",
@@ -903,18 +867,29 @@
     },
     "profile": {
       "title": "Profiel & Hero Sectie",
-      "subtitle": "Bewerk je naam, foto en professionele titel.",
+      "subtitle": "Bewerk je hero-identiteit, roterende titels, samenvatting en over-mij-tekst.",
       "heroSection": "Identiteit",
-      "fullNameLabel": "Volledige naam",
+      "fullNameLabel": "Weergavenaam",
       "photoUrlLabel": "Foto URL",
+      "backgroundImageLabel": "Hero-achtergrondafbeelding URL",
+      "backgroundImagePlaceholder": "https://voorbeeld.nl/hero-achtergrond.jpg",
       "professionalTitle": "Professionele Titel",
       "degreeLabel": "Professionele titel / graad",
+      "rotatingTitlesLabel": "Roterende titels",
+      "rotatingTitlesHint": "Getoond in de typewriter-animatie van de hero. Sleep om te herschikken.",
+      "titleWithLanguage": "Titel ({language})",
+      "addTitle": "Titel toevoegen",
+      "removeTitle": "Titel verwijderen",
+      "heroSummaryLabel": "Hero-samenvatting",
+      "heroSummaryWithLanguage": "Korte samenvatting ({language})",
+      "heroSummaryHint": "Korte beschrijving onder je titels in de hero-sectie.",
+      "heroSummaryPlaceholder": "Een korte introductie voor de hero-sectie...",
+      "descriptionWithLanguage": "Over-mij-tekst ({language})",
       "altTextTitle": "Alternatieve Tekst Afbeelding",
       "altTextHint": "Beschrijft je foto voor schermlezers en SEO.",
       "altTextLabel": "Afbeeldingsbeschrijving",
       "aboutMeTitle": "Over mij",
       "descriptionLabel": "Beschrijving",
-      "aboutMeTab": "Over mij",
       "consoleTab": "Terminal",
       "heroConsoleTitle": "About-terminal",
       "heroConsoleSubtitle": "Configureer de geanimeerde terminalreeks in je Over mij-sectie.",
@@ -922,6 +897,7 @@
       "save": "Wijzigingen opslaan",
       "saving": "Opslaan…",
       "savedSuccess": "Succesvol opgeslagen!",
+      "saveFailed": "Kon profiel niet opslaan",
       "heroTab": "Hero & Profiel",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://voorbeeld.nl/foto.jpg",
@@ -1108,6 +1084,7 @@
       "columnCategory": "Categorie",
       "columnPeriod": "Periode",
       "columnLocation": "Locatie",
+      "columnImages": "Afbeeldingen",
       "organization": "Organisatie",
       "category": "Categorie",
       "period": "Periode",

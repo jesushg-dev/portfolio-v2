@@ -3,6 +3,8 @@ import { ObjectId } from "bson";
 import { PrismaClient } from "@prisma/client";
 
 import { seedPortfolioCv } from "./seed-portfolio-cv";
+import { seedPortfolioHome } from "./seed-portfolio-home";
+import { seedPortfolioTimeline } from "./seed-portfolio-timeline";
 import { seedPortfolioUser } from "./seed-portfolio-user";
 import { seedPortfolioSkills } from "./seed-portfolio-skills";
 import { seedPortfolioProjects } from "./seed-portfolio-projects";
@@ -216,6 +218,10 @@ async function main() {
   await seedPortfolioCertifications(prisma, langIds, skillsByKey, userId);
 
   await seedPortfolioCv(prisma, userId, skillsByKey);
+
+  await seedPortfolioHome(prisma, userId, langIds);
+
+  await seedPortfolioTimeline(prisma, userId);
 }
 
 main()

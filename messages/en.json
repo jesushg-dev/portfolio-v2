@@ -176,77 +176,34 @@
       "keywords": "Jesus Hernandez, Jesus, Hernandez, Full Stack Developer, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Agile Methodology, Agile, Methodology"
     },
     "heroMain": {
-      "titles": {
-        "degree": "Software Engineer.",
-        "web": "Web Developer.",
-        "mobile": "Mobile Developer.",
-        "fullstack": "Full Stack Developer.",
-        "backend": "Backend Developer.",
-        "frontend": "Frontend Developer."
-      },
       "viewCV": "View CV",
       "greeting": "Hello, I'm",
-      "scrollDown": "Scroll Down",
-      "description": "As a engineer, I use my technical expertise and skills to build and maintain high-quality software systems. My passion for technology drives me to constantly learn and grow, and I strive to create solutions that have a positive impact on the world."
+      "scrollDown": "Scroll Down"
+    },
+    "timeline": {
+      "title": "My Journey",
+      "subtitle": "A timeline of work, study, and growth",
+      "empty": "No timeline entries yet.",
+      "metaTitle": "Timeline",
+      "metaDescription": "Explore my professional and academic journey over time."
     },
     "about": {
       "subtitle": "A Brief Overview",
       "title": "About Me",
-      "info": {
-        "title": "About Me",
-        "description1": "I am a technology enthusiast with 5 years of experience as a web developer. I studied computer engineering and also pursued self-learning, crafting beautiful and functional websites for diverse clients.",
-        "description2": "As my experience expanded, I ventured into other areas of development, exploring the realms of mobile and backend development. This diversified skill set allowed me to embark on even more exciting and challenging projects.",
-        "description3": "Throughout my career, my drive to learn and grow as a developer has been my guiding force. Constantly seeking new technologies and techniques to refine my craft is at the core of my philosophy. I am thrilled to uncover where my passion for technology will lead me in the future."
+      "terminalEmpty": {
+        "title": "Terminal not configured",
+        "description": "Add an animated terminal sequence from the admin profile console tab."
       },
       "timeline": {
         "title": "My timeline",
         "subtitle": "Continuous learning...",
-        "steps": {
-          "0": {
-            "date": "March, 2017",
-            "dateTime": "2017-03-01",
-            "title": "Computer Engineering (Present)",
-            "description": "Completing my degree while managing work and extracurricular responsibilities."
-          },
-          "1": {
-            "date": "October, 2020",
-            "dateTime": "2020-10-01",
-            "title": "Web Developer and IT Technician",
-            "description": "Maintenance and troubleshooting of computer systems and networks."
-          },
-          "2": {
-            "date": "February, 2022",
-            "dateTime": "2022-02-01",
-            "title": "Mobile Developer",
-            "description": "Creation of software applications for mobile devices, consistently delivering high-quality products."
-          },
-          "3": {
-            "date": "June, 2022",
-            "dateTime": "2022-06-01",
-            "title": "Web Developer",
-            "description": "Design, development, and maintenance of websites and web applications."
-          }
+        "viewAll": "View full timeline",
+        "empty": "No timeline entries yet.",
+        "categories": {
+          "WORK": "Work",
+          "STUDY": "Study",
+          "COURSE": "Course"
         }
-      },
-      "function": {
-        "name": "aboutMe",
-        "json": {
-          "name": "name",
-          "languages": "languages",
-          "profession": "profession"
-        },
-        "language": {
-          "spanish": "spanish",
-          "english": "english",
-          "dutch": "dutch"
-        },
-        "languageLevel": {
-          "native": "Native",
-          "advanced": "Advanced",
-          "intermediate": "Intermediate",
-          "basic": "Basic"
-        },
-        "profession": "Fullstack Developer"
       }
     },
     "skills": {
@@ -845,6 +802,13 @@
         "titlePlaceholder": "e.g. Started Computer Science degree",
         "description": "Description",
         "descriptionPlaceholder": "Describe what you did or learned in this timeline entry",
+        "imagesLabel": "Image URL",
+        "imagesSection": "Images",
+        "imagesHint": "Optional images shown in the timeline page and home preview.",
+        "imageUrlPlaceholder": "https://res.cloudinary.com/.../image.webp",
+        "imageUrlInvalid": "Enter a valid image URL",
+        "addImage": "Add image",
+        "removeImage": "Remove image",
         "organization": "Organization",
         "organizationPlaceholder": "E.g. University, Company, Academy...",
         "category": "Category",
@@ -902,18 +866,29 @@
     },
     "profile": {
       "title": "Profile & Hero Section",
-      "subtitle": "Edit your name, photo, and professional title.",
+      "subtitle": "Edit your hero identity, rotating titles, summary, and about text.",
       "heroSection": "Identity",
-      "fullNameLabel": "Full name",
+      "fullNameLabel": "Display name",
       "photoUrlLabel": "Photo URL",
+      "backgroundImageLabel": "Hero background image URL",
+      "backgroundImagePlaceholder": "https://example.com/hero-background.jpg",
       "professionalTitle": "Professional Title",
       "degreeLabel": "Professional title / degree",
+      "rotatingTitlesLabel": "Rotating titles",
+      "rotatingTitlesHint": "Shown in the hero typewriter animation. Drag to reorder.",
+      "titleWithLanguage": "Title ({language})",
+      "addTitle": "Add title",
+      "removeTitle": "Remove title",
+      "heroSummaryLabel": "Hero summary",
+      "heroSummaryWithLanguage": "Short summary ({language})",
+      "heroSummaryHint": "Brief description shown below your titles in the hero section.",
+      "heroSummaryPlaceholder": "A short introduction for the hero section...",
+      "descriptionWithLanguage": "About text ({language})",
       "altTextTitle": "Image Alt Text",
       "aboutMeTitle": "About Me",
       "descriptionLabel": "Description",
       "altTextHint": "Describes your photo for screen readers and SEO.",
       "altTextLabel": "Image description",
-      "aboutMeTab": "About Me",
       "consoleTab": "Terminal",
       "heroConsoleTitle": "About Terminal",
       "heroConsoleSubtitle": "Configure the animated terminal sequence shown in your About section.",
@@ -921,6 +896,7 @@
       "save": "Save changes",
       "saving": "Saving…",
       "savedSuccess": "Saved successfully!",
+      "saveFailed": "Could not save profile",
       "heroTab": "Hero & Profile",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://example.com/photo.jpg",
@@ -1105,6 +1081,7 @@
       "columnCategory": "Category",
       "columnPeriod": "Period",
       "columnLocation": "Location",
+      "columnImages": "Images",
       "organization": "Organization",
       "category": "Category",
       "period": "Period",

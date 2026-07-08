@@ -1,0 +1,83 @@
+{
+  "backgroundImageUrl": "https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp",
+  "heroSummary": {
+    "es": "Como ingeniero, uso mi experiencia técnica y habilidades para construir y mantener sistemas de software de alta calidad. Mi pasión por la tecnología me impulsa a aprender y crecer constantemente, y me esfuerzo por crear soluciones que tengan un impacto positivo en el mundo.",
+    "en": "As an engineer, I use my technical expertise and skills to build and maintain high-quality software systems. My passion for technology drives me to constantly learn and grow, and I strive to create solutions that have a positive impact on the world.",
+    "nl": "Als ingenieur gebruik ik mijn technische expertise en vaardigheden om hoogwaardige softwaresystemen te bouwen en te onderhouden. Mijn passie voor technologie drijft me om voortdurend te leren en te groeien, en ik streef ernaar oplossingen te creëren die een positieve impact op de wereld hebben."
+  },
+  "heroTitles": [
+    {
+      "es": "Desarrollador Móvil.",
+      "en": "Mobile Developer.",
+      "nl": "Mobiele ontwikkelaar."
+    },
+    {
+      "es": "Desarrollador Full Stack.",
+      "en": "Full Stack Developer.",
+      "nl": "Fullstack ontwikkelaar."
+    },
+    {
+      "es": "Desarrollador Frontend.",
+      "en": "Frontend Developer.",
+      "nl": "Frontend ontwikkelaar."
+    },
+    {
+      "es": "Desarrollador Backend.",
+      "en": "Backend Developer.",
+      "nl": "Backend ontwikkelaar."
+    },
+    {
+      "es": "Ingeniero de Software.",
+      "en": "Software Engineer.",
+      "nl": "Software Engineer."
+    },
+    {
+      "es": "Desarrollador Web.",
+      "en": "Web Developer.",
+      "nl": "Webontwikkelaar."
+    }
+  ],
+  "terminal": {
+    "username": "Jesus-Macbook",
+    "typingSpeed": 45,
+    "delayBetweenCommands": 1000,
+    "steps": [
+      {
+        "command": {
+          "es": "whoami",
+          "en": "whoami",
+          "nl": "whoami"
+        },
+        "output": {
+          "es": "jesús-hernández",
+          "en": "jesus-hernandez",
+          "nl": "jesus-hernandez"
+        }
+      },
+      {
+        "command": {
+          "es": "echo $USER",
+          "en": "echo $USER",
+          "nl": "echo $USER"
+        },
+        "output": {
+          "es": "Jesús Enmanuel Hernández González",
+          "en": "Jesús Enmanuel Hernández González",
+          "nl": "Jesús Enmanuel Hernández González"
+        }
+      },
+      {
+        "command": {
+          "es": "cat ~/profile.json",
+          "en": "cat ~/profile.json",
+          "nl": "cat ~/profile.json"
+        },
+        "output": {
+          "es": "{\n  \"nombre\": \"Jesús Enmanuel Hernández González\",\n  \"idiomas\": {\n    \"español\": \"Nativo\",\n    \"inglés\": \"B2+\",\n    \"holandés\": \"A1\"\n  },\n  \"profesión\": \"Desarrollador de Software\"\n}",
+          "en": "{\n  \"name\": \"Jesús Enmanuel Hernández González\",\n  \"languages\": {\n    \"spanish\": \"Native\",\n    \"english\": \"B2+\",\n    \"dutch\": \"A1\"\n  },\n  \"profession\": \"Software Developer\"\n}",
+          "nl": "{\n  \"naam\": \"Jesús Enmanuel Hernández González\",\n  \"talen\": {\n    \"spaans\": \"Moedertaal\",\n    \"engels\": \"B2+\",\n    \"nederlands\": \"A1\"\n  },\n  \"beroep\": \"Softwareontwikkelaar\"\n}"
+        }
+      }
+    ]
+  }
+}

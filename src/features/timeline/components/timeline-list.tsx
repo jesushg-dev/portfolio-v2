@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState, type FC } from "react";
+import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Plus, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -15,6 +15,8 @@ import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 
 import type { RouterOutputs } from "@/trpc/react";
+
+import { readTimelineImages } from "@/features/timeline/lib/timeline-admin-item";
 
 type TimelineItemRow = RouterOutputs["timelineAdmin"]["getMine"][number];
 
@@ -48,6 +50,7 @@ export const TimelineList: FC<TimelineListProps> = ({
 
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
 
   const { data: items = initialItems } = api.timelineAdmin.getMine.useQuery(
     undefined,
@@ -56,24 +59,24 @@ export const TimelineList: FC<TimelineListProps> = ({
     },
   );
 
-  const deleteItem = api.timelineAdmin.deleteItem.useMutation({
-    onSuccess: () => {
-      toast.success("Deleted successfully");
-      void utils.timelineAdmin.getMine.invalidate();
-      setDeletingId(null);
-    },
-    onError: () => {
-      toast.error(t("deleteError"));
-      setDeletingId(null);
-    },
-  });
+  const deleteItem = api.timelineAdmin.deleteItem.useMutation();
 
   const handleDelete = useCallback(
     (id: string) => {
-      setDeletingId(id);
-      deleteItem.mutate({ id });
+      startTransition(async () => {
+        setDeletingId(id);
+        try {
+          await deleteItem.mutateAsync({ id });
+          toast.success(t("deleteSuccess"));
+          await utils.timelineAdmin.getMine.invalidate();
+        } catch {
+          toast.error(t("deleteError"));
+        } finally {
+          setDeletingId(null);
+        }
+      });
     },
-    [deleteItem],
+    [deleteItem, t, utils],
   );
 
   const parseDate = useCallback((dateLike: unknown) => {
@@ -182,7 +185,7 @@ export const TimelineList: FC<TimelineListProps> = ({
         ),
       },
       {
-        accessorKey: "period",
+        accessorKey: "startDate",
         header: ({ column }) => (
           <Button
             variant="ghost"
@@ -213,6 +216,36 @@ export const TimelineList: FC<TimelineListProps> = ({
             {row.original.location ?? "-"}
           </span>
         ),
+      },
+      {
+        id: "images",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} label={t("columnImages")} />
+        ),
+        cell: ({ row }) => {
+          const images = readTimelineImages(row.original);
+          if (images.length === 0) {
+            return <span className="text-muted-foreground text-xs">—</span>;
+          }
+
+          return (
+            <div className="flex items-center gap-2">
+              <div className="bg-muted relative h-10 w-14 overflow-hidden rounded-md">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={images[0]}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              {images.length > 1 ? (
+                <span className="text-muted-foreground text-xs">
+                  +{images.length - 1}
+                </span>
+              ) : null}
+            </div>
+          );
+        },
       },
       {
         id: "actions",
@@ -256,7 +289,7 @@ export const TimelineList: FC<TimelineListProps> = ({
     manualSorting: false,
     manualFiltering: false,
     initialState: {
-      sorting: [{ id: "title", desc: false }],
+      sorting: [{ id: "startDate", desc: true }],
     },
     shallow: true,
   });
@@ -265,7 +298,11 @@ export const TimelineList: FC<TimelineListProps> = ({
     <div className="relative flex h-full min-h-[500px] flex-col">
       <DataTable table={table}>
         <DataTableToolbar table={table}>
-          <Link href="/admin/timeline/new" className={buttonVariants()}>
+          <Link
+            id="timeline-add"
+            href="/admin/timeline/new"
+            className={buttonVariants()}
+          >
             <Plus className="mr-2 h-4 w-4" />
             {t("addNew")}
           </Link>

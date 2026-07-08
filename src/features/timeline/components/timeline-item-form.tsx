@@ -1,7 +1,6 @@
-"use no memo";
 "use client";
 
-import { type FC, useTransition, useState, useMemo, useCallback } from "react";
+import { type FC, useTransition, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
@@ -9,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 
-import { api } from "@/trpc/react";
+import { Plus, Trash2 } from "lucide-react";
 import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,8 +29,15 @@ import {
   FormSection,
 } from "@/components/shared/form-root";
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
+import {
+  languageMapFromLocalized,
+  localizedFromLanguageMap,
+} from "@/features/profile/server/hero-titles";
 import type { RouterOutputs } from "@/trpc/react";
+import { api } from "@/trpc/react";
 import type { AppLanguage } from "@prisma/client";
+
+import { readTimelineImages } from "@/features/timeline/lib/timeline-admin-item";
 
 interface TimelineItemFormProps {
   initialData?: RouterOutputs["timelineAdmin"]["getMine"][number];
@@ -47,6 +53,8 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
+  const primaryLang = languages.find((l) => l.code === "en") ?? languages[0];
+
   const expFormSchema = useMemo(
     () =>
       z.object({
@@ -57,7 +65,11 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
         startDate: z.string().min(1, t("startDateRequired")),
         endDate: z.string().optional().or(z.literal("")),
         current: z.boolean(),
-        order: z.number().int().nonnegative(),
+        images: z.array(
+          z.object({
+            url: z.string().url(t("imageUrlInvalid")).or(z.literal("")),
+          }),
+        ),
         translations: z
           .array(
             z
@@ -67,7 +79,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 description: z.string(),
               })
               .superRefine((val, ctx) => {
-                if (val.appLanguageId === "en") {
+                if (val.appLanguageId === primaryLang?.id) {
                   if (!val.title || val.title.trim() === "") {
                     ctx.addIssue({
                       code: z.ZodIssueCode.custom,
@@ -80,7 +92,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
           )
           .min(1, t("atLeastOneLanguage")),
       }),
-    [t],
+    [primaryLang?.id, t],
   );
 
   type TExpForm = z.infer<typeof expFormSchema>;
@@ -89,42 +101,24 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
   const updateItem = api.timelineAdmin.updateItem.useMutation();
   const utils = api.useUtils();
 
-  const primaryLang = languages.find((l) => l.code === "en") ?? languages[0];
+  const languageCodes = languages.map((language) => language.code);
 
   const defaultTranslations = isEditMode
     ? (() => {
-        const existingTranslations = Object.entries(
-          (
-            initialData.title as {
-              translations?: Record<string, string>;
-            } | null
-          )?.translations ?? {},
-        ).map(([langId, title]) => ({
-          appLanguageId: langId,
-          title: title,
-          description:
-            (
-              initialData.description as {
-                translations?: Record<string, string>;
-              } | null
-            )?.translations?.[langId] ?? "",
+        const titleMap = languageMapFromLocalized(
+          initialData.title,
+          languageCodes,
+        );
+        const descriptionMap = languageMapFromLocalized(
+          initialData.description,
+          languageCodes,
+        );
+
+        return languages.map((language) => ({
+          appLanguageId: language.id,
+          title: titleMap[language.code] ?? "",
+          description: descriptionMap[language.code] ?? "",
         }));
-
-        const existingLangIds = new Set(
-          existingTranslations.map((tr) => tr.appLanguageId),
-        );
-        const missingLangs = languages.filter(
-          (l) => !existingLangIds.has(l.id),
-        );
-
-        return [
-          ...existingTranslations,
-          ...missingLangs.map((l) => ({
-            appLanguageId: l.id,
-            title: "",
-            description: "",
-          })),
-        ];
       })()
     : languages.map((l) => ({
         appLanguageId: l.id,
@@ -147,7 +141,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
             ? new Date(initialData.endDate).toISOString().split("T")[0]
             : "",
           current: initialData.current ?? false,
-          order: initialData.order ?? 0,
+          images: (() => {
+            const urls = readTimelineImages(initialData);
+            return urls.length > 0 ? urls.map((url: string) => ({ url })) : [];
+          })(),
           translations: defaultTranslations,
         }
       : {
@@ -157,98 +154,109 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
           startDate: "",
           endDate: "",
           current: false,
-          order: 0,
+          images: [],
           translations: defaultTranslations,
         }) as TExpForm,
     mode: "onBlur",
   });
 
-  const { fields } = useFieldArray({
+  const { fields: translationFields } = useFieldArray({
     control: form.control,
     name: "translations",
   });
 
+  const {
+    fields: imageFields,
+    append: appendImage,
+    remove: removeImage,
+  } = useFieldArray({
+    control: form.control,
+    name: "images",
+  });
+
+  const imageUrls = useWatch({ control: form.control, name: "images" });
+
   const [activeLangId, setActiveLangId] = useState<string>(
     isEditMode
-      ? (fields[0]?.appLanguageId ?? languages[0]?.id ?? "")
+      ? (translationFields[0]?.appLanguageId ?? languages[0]?.id ?? "")
       : (primaryLang?.id ?? languages[0]?.id ?? ""),
   );
 
-  const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
+  const activeIndex = translationFields.findIndex(
+    (f) => f.appLanguageId === activeLangId,
+  );
   const isCurrent = useWatch({ control: form.control, name: "current" });
 
-  const onSubmit = useCallback(
-    (values: TExpForm) => {
-      startTransition(async () => {
-        try {
-          const enTrans =
-            values.translations.find((entry) => entry.appLanguageId === "en") ??
-            values.translations[0];
+  const onSubmit = (values: TExpForm) => {
+    startTransition(async () => {
+      try {
+        const primaryCode = primaryLang?.code ?? "en";
 
-          const titlePayload = {
-            default: enTrans.title,
-            translations: Object.fromEntries(
-              values.translations.map((entry) => [
-                entry.appLanguageId,
-                entry.title,
-              ]),
-            ),
-          };
+        const titleByCode = Object.fromEntries(
+          values.translations.map((entry) => {
+            const language = languages.find(
+              (lang) => lang.id === entry.appLanguageId,
+            );
+            return [language?.code ?? primaryCode, entry.title];
+          }),
+        );
 
-          const descriptionPayload = {
-            default: enTrans.description,
-            translations: Object.fromEntries(
-              values.translations.map((entry) => [
-                entry.appLanguageId,
-                entry.description,
-              ]),
-            ),
-          };
+        const descriptionByCode = Object.fromEntries(
+          values.translations.map((entry) => {
+            const language = languages.find(
+              (lang) => lang.id === entry.appLanguageId,
+            );
+            return [language?.code ?? primaryCode, entry.description];
+          }),
+        );
 
-          if (isEditMode && values.id) {
-            await updateItem.mutateAsync({
-              id: values.id,
-              title: titlePayload,
-              description: descriptionPayload,
-              category: values.category,
-              organization: values.organization,
-              location: values.location ?? undefined,
-              startDate: new Date(values.startDate),
-              endDate:
-                values.current || !values.endDate
-                  ? undefined
-                  : new Date(values.endDate),
-              current: values.current,
-              order: values.order,
-            });
-            toast.success(t("updatedSuccess"));
-          } else {
-            await createItem.mutateAsync({
-              title: titlePayload,
-              description: descriptionPayload,
-              category: values.category,
-              organization: values.organization,
-              location: values.location ?? undefined,
-              startDate: new Date(values.startDate),
-              endDate:
-                values.current || !values.endDate
-                  ? undefined
-                  : new Date(values.endDate),
-              current: values.current,
-              order: values.order,
-            });
-            toast.success(t("createdSuccess"));
-          }
+        const titlePayload = localizedFromLanguageMap(
+          titleByCode,
+          primaryCode,
+        );
 
-          await utils.timelineAdmin.getMine.invalidate();
-          router.back();
-        } catch {
-          toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
+        const descriptionPayload = localizedFromLanguageMap(
+          descriptionByCode,
+          primaryCode,
+        );
+
+        const imagesPayload = values.images
+          .map((entry) => entry.url.trim())
+          .filter(Boolean);
+
+        const sharedPayload = {
+          title: titlePayload,
+          description: descriptionPayload,
+          category: values.category,
+          organization: values.organization,
+          location: values.location ?? undefined,
+          startDate: new Date(values.startDate),
+          endDate:
+            values.current || !values.endDate
+              ? undefined
+              : new Date(values.endDate),
+          current: values.current,
+          images: imagesPayload,
+        };
+
+        if (isEditMode && values.id) {
+          await updateItem.mutateAsync({
+            id: values.id,
+            ...sharedPayload,
+          });
+          toast.success(t("updatedSuccess"));
+        } else {
+          await createItem.mutateAsync(sharedPayload);
+          toast.success(t("createdSuccess"));
         }
-      });
-    },
-    [isEditMode, updateItem, createItem, utils, router, t],
-  );
+
+        await utils.timelineAdmin.getMine.invalidate();
+        router.back();
+      } catch {
+        toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
+      }
+    });
+  };
 
   const isSaving = createItem.isPending || updateItem.isPending;
   const anyError = createItem.error ?? updateItem.error;
@@ -318,7 +326,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                 name="category"
                 render={({ field }) => (
                   <FormItem label={t("category")} inputId="timeline-category">
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder={t("selectCategory")} />
@@ -388,38 +396,96 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
                     <div className="flex h-10 items-center">
                       <Switch
                         checked={field.value}
-                        onCheckedChange={field.onChange}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                          if (checked) {
+                            form.setValue("endDate", "");
+                          }
+                        }}
                       />
                     </div>
                   </FormItem>
                 )}
               />
+            </div>
+          </FormSection>
 
-              <FormField
-                control={form.control}
-                name="order"
-                render={({ field }) => (
-                  <FormItem
-                    label={t("displayOrder")}
-                    inputId="timeline-display-order"
+          <FormSection title={t("imagesSection")} description={t("imagesHint")}>
+            <div className="space-y-4">
+              {imageFields.map((field, index) => {
+                const previewUrl = imageUrls?.[index]?.url?.trim() ?? "";
+
+                return (
+                  <div
+                    key={field.id}
+                    className="border-border bg-card flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-start"
                   >
-                    <Input
-                      type="number"
-                      min={0}
-                      {...field}
-                      onChange={(e) =>
-                        field.onChange(e.target.valueAsNumber || 0)
-                      }
-                    />
-                  </FormItem>
-                )}
-              />
+                    {previewUrl ? (
+                      <div className="bg-muted relative h-20 w-full shrink-0 overflow-hidden rounded-md sm:h-20 sm:w-28">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={previewUrl}
+                          alt=""
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display =
+                              "none";
+                          }}
+                        />
+                      </div>
+                    ) : null}
+
+                    <div className="min-w-0 flex-1">
+                      <FormField
+                        control={form.control}
+                        name={`images.${index}.url`}
+                        render={({ field: urlField }) => (
+                          <FormItem
+                            label={t("imagesLabel")}
+                            inputId={`timeline-image-${index}`}
+                          >
+                            <FormControl>
+                              <Input
+                                {...urlField}
+                                type="url"
+                                placeholder={t("imageUrlPlaceholder")}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="text-muted-foreground hover:text-destructive shrink-0"
+                      onClick={() => removeImage(index)}
+                      aria-label={t("removeImage")}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                );
+              })}
+
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => appendImage({ url: "" })}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                {t("addImage")}
+              </Button>
             </div>
           </FormSection>
         </FormContent>
         <FormActions
           isPending={isPending || isSaving}
           title={isEditMode ? t("save") : t("create")}
+          submitId="timeline-form-submit"
         >
           <Button type="button" variant="ghost" onClick={() => router.back()}>
             {t("cancel")}

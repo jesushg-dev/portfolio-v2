@@ -23,7 +23,10 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   const isOnTop = useIsOnTop();
   const path = String(pathname);
   const useSolidHeader =
-    alwaysVisible || /\/(skills|habilidades|vaardigheden)\//.test(path);
+    alwaysVisible ||
+    /\/(skills|habilidades|vaardigheden|timeline|linea-de-tiempo|tijdlijn)(\/|$)/.test(
+      path,
+    );
   const handleScroll = (id: string) => {
     const element = document.getElementById(id);
     if (element) {

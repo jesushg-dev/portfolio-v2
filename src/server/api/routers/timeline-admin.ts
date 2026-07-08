@@ -16,26 +16,27 @@ const baseTimelineInput = z.object({
   startDate: z.date(),
   endDate: z.date().optional(),
   current: z.boolean().default(false),
-  order: z.number().int().nonnegative().default(0),
+  images: z.array(z.string().url()).optional(),
 });
 
 export const timelineAdminRouter = createTRPCRouter({
   getMine: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.timelineItem.findMany({
       where: { userId: ctx.user.id },
-      orderBy: [{ order: "asc" }, { startDate: "desc" }],
+      orderBy: [{ startDate: "desc" }, { createdAt: "desc" }],
     });
   }),
 
   createItem: protectedProcedure
     .input(baseTimelineInput)
     .mutation(async ({ ctx, input }) => {
-      const { title, description, ...rest } = input;
+      const { title, description, images, ...rest } = input;
       return ctx.db.timelineItem.create({
         data: {
           ...rest,
           title: title as Prisma.InputJsonValue,
           description: description as Prisma.InputJsonValue,
+          images: images ?? [],
           userId: ctx.user.id,
         },
       });
@@ -44,7 +45,7 @@ export const timelineAdminRouter = createTRPCRouter({
   updateItem: protectedProcedure
     .input(baseTimelineInput.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { id, title, description, ...data } = input;
+      const { id, title, description, images, ...data } = input;
       const existing = await ctx.db.timelineItem.findUnique({ where: { id } });
 
       if (existing?.userId !== ctx.user.id) {
@@ -57,6 +58,7 @@ export const timelineAdminRouter = createTRPCRouter({
           ...data,
           title: title as Prisma.InputJsonValue,
           description: description as Prisma.InputJsonValue,
+          ...(images !== undefined ? { images } : {}),
         },
       });
     }),
