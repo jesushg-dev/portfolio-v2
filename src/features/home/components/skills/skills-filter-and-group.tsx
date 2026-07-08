@@ -10,11 +10,11 @@ import { type Locale } from "next-intl";
 
 interface SkillsFilterAndGroupProps {
   locale: Locale;
-  handleOpenModal: (skill: SkillType, type: SkillTypeType) => void;
+  handleOpenSkill: (skill: SkillType, type: SkillTypeType) => void;
 }
 
 const SkillsFilterAndGroup: FC<SkillsFilterAndGroupProps> = ({
-  handleOpenModal,
+  handleOpenSkill,
   locale,
 }) => {
   const [value, setValue] = useState(0);
@@ -54,7 +54,7 @@ const SkillsFilterAndGroup: FC<SkillsFilterAndGroupProps> = ({
         <SkillGrouped
           loading={isLoading}
           skills={skillsData}
-          onClick={handleOpenModal}
+          onClick={handleOpenSkill}
           type={mapValueToSkillType(value)[0]}
         />
       </div>

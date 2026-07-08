@@ -1,6 +1,11 @@
 import { z } from "zod";
 
+import { getLocalizedText } from "@/lib/i18n/localized";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  looksLikeSkillObjectId,
+  skillSlugFromTitle,
+} from "@/utils/tools/skill-slug";
 
 const LanguageCode = z.enum(["es", "en", "nl"]);
 const StackType = z.enum([
@@ -13,6 +18,19 @@ const StackType = z.enum([
   "SOFTSKILLS",
   "TOOLS",
 ]);
+
+/** Merge translation fields onto an entity without overwriting its primary `id`. */
+function mergeTranslation<
+  T extends { id: string },
+  U extends { id?: string } | undefined,
+>(entity: T, translation: U): T & Omit<NonNullable<U>, "id"> {
+  if (!translation) {
+    return entity as T & Omit<NonNullable<U>, "id">;
+  }
+  const translationFields = { ...translation };
+  delete translationFields.id;
+  return { ...entity, ...translationFields };
+}
 
 export const portfolioRouter = createTRPCRouter({
   getCertificates: publicProcedure
@@ -59,10 +77,7 @@ export const portfolioRouter = createTRPCRouter({
       const dataWithTranslation = data.map((certification) => {
         const { CertificationTranslation, ...rest } = certification;
 
-        return {
-          ...rest,
-          ...CertificationTranslation[0],
-        };
+        return mergeTranslation(rest, CertificationTranslation[0]);
       });
 
       const lastCursor = data[data.length - 1]?.id ?? null;
@@ -141,17 +156,10 @@ export const portfolioRouter = createTRPCRouter({
 
         const skills = ProjectSkill.map(({ Skill }) => {
           const { SkillTranslation, ...val } = Skill;
-          return {
-            ...val,
-            ...SkillTranslation[0],
-          };
+          return mergeTranslation(val, SkillTranslation[0]);
         });
 
-        return {
-          skills,
-          ...rest,
-          ...ProjectTranslation[0],
-        };
+        return mergeTranslation({ skills, ...rest }, ProjectTranslation[0]);
       });
 
       const lastCursor = data[data.length - 1]?.id ?? null;
@@ -215,10 +223,7 @@ export const portfolioRouter = createTRPCRouter({
       const dataWithTranslation = data.map((skill) => {
         const { SkillTranslation, ...rest } = skill;
 
-        return {
-          ...rest,
-          ...SkillTranslation[0],
-        };
+        return mergeTranslation(rest, SkillTranslation[0]);
       });
 
       const lastCursor = data[data.length - 1]?.id ?? null;
@@ -235,6 +240,147 @@ export const portfolioRouter = createTRPCRouter({
         hasMore: hasMore >= 1,
         cursor: lastCursor,
         data: dataWithTranslation,
+      };
+    }),
+  getSkillDetail: publicProcedure
+    .input(
+      z.object({
+        /** URL segment: title slug (e.g. `next-js`) or legacy ObjectId. */
+        slug: z.string().min(1),
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+
+      const appLanguage = await ctx.db.appLanguage.findUnique({
+        where: { code: input.locale },
+      });
+
+      const skillInclude = {
+        SkillTranslation: {
+          where: { appLanguageId: appLanguage?.id },
+        },
+        CertificateSkill: {
+          include: {
+            Certification: {
+              include: {
+                CertificationTranslation: {
+                  where: { appLanguageId: appLanguage?.id },
+                },
+              },
+            },
+          },
+        },
+        CvExperienceSkill: {
+          include: { experience: true as const },
+        },
+        ProjectSkill: {
+          include: {
+            Project: {
+              include: {
+                ProjectTranslation: {
+                  where: { appLanguageId: appLanguage?.id },
+                },
+                ProjectSkill: {
+                  include: {
+                    Skill: {
+                      include: {
+                        SkillTranslation: {
+                          where: { appLanguageId: appLanguage?.id },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+
+      const tenantWhere = tenantUserId ? { userId: tenantUserId } : {};
+
+      let skill = looksLikeSkillObjectId(input.slug)
+        ? await ctx.db.skill.findFirst({
+            where: { id: input.slug, ...tenantWhere },
+            include: skillInclude,
+          })
+        : null;
+
+      if (!skill) {
+        const candidates = await ctx.db.skill.findMany({
+          where: tenantWhere,
+          include: skillInclude,
+        });
+        skill =
+          candidates.find(
+            (row) => skillSlugFromTitle(row.title) === input.slug,
+          ) ?? null;
+      }
+
+      if (!skill) return null;
+
+      const {
+        SkillTranslation,
+        CertificateSkill,
+        CvExperienceSkill,
+        ProjectSkill,
+        ...rest
+      } = skill;
+
+      const formatExperienceDates = (
+        dates: string | null,
+        startDate: Date | null,
+        endDate: Date | null,
+        current: boolean,
+      ) => {
+        if (dates?.trim()) return dates;
+        if (!startDate) return "";
+        const startYear = startDate.getFullYear();
+        if (current) return `${startYear} – Present`;
+        if (endDate) return `${startYear} – ${endDate.getFullYear()}`;
+        return `${startYear}`;
+      };
+
+      const certificates = CertificateSkill.map(({ Certification }) => {
+        const { CertificationTranslation, ...cert } = Certification;
+        return mergeTranslation(cert, CertificationTranslation[0]);
+      });
+
+      const experiences = CvExperienceSkill.map(({ experience }) => ({
+        id: experience.id,
+        company: experience.company,
+        role: getLocalizedText(experience.role, input.locale),
+        dates: formatExperienceDates(
+          experience.dates,
+          experience.startDate,
+          experience.endDate,
+          experience.current,
+        ),
+        order: experience.order,
+      })).sort((a, b) => a.order - b.order);
+
+      const projects = ProjectSkill.map(({ Project }) => {
+        const {
+          ProjectTranslation,
+          ProjectSkill: nestedSkills,
+          ...project
+        } = Project;
+
+        const skills = nestedSkills.map(({ Skill }) => {
+          const { SkillTranslation, ...val } = Skill;
+          return mergeTranslation(val, SkillTranslation[0]);
+        });
+
+        return mergeTranslation({ ...project, skills }, ProjectTranslation[0]);
+      });
+
+      return {
+        ...mergeTranslation(rest, SkillTranslation[0]),
+        certificates,
+        experiences,
+        projects,
       };
     }),
   getTimeline: publicProcedure

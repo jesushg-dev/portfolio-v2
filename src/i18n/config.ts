@@ -54,6 +54,11 @@ export const pathnames = {
     es: "/certificados/habilidades",
     nl: "/certificaten/vaardigheden",
   },
+  "/skills/[slug]": {
+    en: "/skills/[slug]",
+    es: "/habilidades/[slug]",
+    nl: "/vaardigheden/[slug]",
+  },
   "/admin": {
     en: "/admin",
     es: "/panel",

@@ -18,7 +18,6 @@ const SkillItem: FC<ISkillItemProps> = ({
   description,
   onClick,
 }) => {
-  /* border border-primary-50 bg-background-50/50 shadow backdrop-blur-xl */
   return (
     <div id={id} className="group flex h-full w-full">
       <button

@@ -37,13 +37,20 @@ export async function generateMetadata({
 
 export default async function RootLayout({
   children,
+  modal,
   params,
 }: {
   children: ReactNode;
+  modal: ReactNode;
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
-  return <Layout>{children}</Layout>;
+  return (
+    <>
+      <Layout>{children}</Layout>
+      {modal}
+    </>
+  );
 }

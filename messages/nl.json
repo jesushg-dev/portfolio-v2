@@ -255,10 +255,40 @@
       "subtitle": "Vaardigheden",
       "description": "Ik heb een diverse vaardigheden opgebouwd door mijn opleiding en professionele ervaringen.",
       "aux": "Ik ben voortdurend op zoek naar mogelijkheden om te leren en mijn vaardigheden te verbeteren. Ik sta altijd open voor nieuwe uitdagingen en professionele groei.",
+      "page": {
+        "breadcrumbHome": "Home",
+        "breadcrumbSkills": "Vaardigheden",
+        "metaTitle": "{title} · Vaardigheden",
+        "notFound": "Vaardigheid niet gevonden.",
+        "aboutTechnology": "Over deze technologie",
+        "viewProject": "Bekijk project",
+        "viewSource": "Bekijk bron",
+        "privateLabel": "Privé",
+        "privateDescription": "Dit project is privé, ik kan de broncode niet tonen.",
+        "canSeeDemo": "Dit project is privé, ik kan de broncode niet tonen, maar je kunt de demo bekijken.",
+        "certificatesTitle": "Certificaten met {skill}",
+        "certificatesDescription": "Cursussen en credentials waar ik {skill} leerde of verdiepte.",
+        "experiencesTitle": "Waar ik {skill} gebruikte",
+        "experiencesDescription": "Rollen en teams waar {skill} deel uitmaakte van het dagelijks werk.",
+        "projectsTitle": "Projecten met {skill}",
+        "projectsDescription": "Geselecteerd werk dat {skill} in productie gebruikt."
+      },
       "modal": {
         "close": "Sluiten",
         "readMore": "Lees meer",
-        "seeCertificates": "Bekijk certificaten"
+        "viewMoreDetails": "Meer details bekijken",
+        "seeCertificates": "Bekijk certificaten",
+        "certificates": "Certificeringen",
+        "experiences": "Professionele ervaring",
+        "projects": "Gerelateerde projecten",
+        "tabCertificates": "Certificaten",
+        "tabExperiences": "Ervaring",
+        "tabProjects": "Projecten",
+        "viewCertificate": "Bekijk certificaat",
+        "viewProject": "Bekijk project",
+        "viewSource": "Bekijk broncode",
+        "noRelatedContent": "Nog geen gekoppelde certificeringen, ervaring of projecten.",
+        "loadError": "Details konden niet worden geladen. Probeer het opnieuw."
       },
       "tabs": {
         "frontend": {

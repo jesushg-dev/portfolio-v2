@@ -10,6 +10,9 @@ export type SkillsInputTypes =
   inferRouterInputs<AppRouter>["portfolio"]["getSkills"];
 export type SkillType = SkillsOutputTypes[0];
 export type SkillTypeType = SkillType["type"];
+export type SkillDetailType = NonNullable<
+  RouterOutputType["portfolio"]["getSkillDetail"]
+>;
 
 export type ProjectsOutputTypes =
   RouterOutputType["portfolio"]["getProjects"]["data"];

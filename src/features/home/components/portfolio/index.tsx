@@ -98,8 +98,8 @@ const Portfolio: FC = ({}) => {
                       key={project.id}
                       className="flex justify-center"
                       variants={item}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.5 }}
+                      whileHover={{ y: -4 }}
+                      transition={{ duration: 0.25 }}
                     >
                       <PortfolioItem {...project} {...labels} />
                     </motion.li>

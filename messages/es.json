@@ -256,10 +256,40 @@
       "subtitle": "Habilidades",
       "description": "Tengo un conjunto de diversas habilidades, desarrolladas a través de mi educación y experiencias profesionales.",
       "aux": "I have experience in the following technologies",
+      "page": {
+        "breadcrumbHome": "Inicio",
+        "breadcrumbSkills": "Habilidades",
+        "metaTitle": "{title} · Habilidades",
+        "notFound": "Habilidad no encontrada.",
+        "aboutTechnology": "Sobre esta tecnología",
+        "viewProject": "Ver proyecto",
+        "viewSource": "Ver código",
+        "privateLabel": "Privado",
+        "privateDescription": "Este proyecto es privado, no puedo mostrarte el código fuente.",
+        "canSeeDemo": "Este proyecto es privado, no puedo mostrarte el código fuente, pero puedes ver la demo.",
+        "certificatesTitle": "Certificados con {skill}",
+        "certificatesDescription": "Cursos y credenciales donde aprendí o profundicé en {skill}.",
+        "experiencesTitle": "Dónde usé {skill}",
+        "experiencesDescription": "Roles y equipos donde {skill} formó parte del día a día.",
+        "projectsTitle": "Proyectos con {skill}",
+        "projectsDescription": "Trabajos seleccionados que usan {skill} en producción."
+      },
       "modal": {
         "close": "Cerrar",
         "readMore": "Leer más",
-        "seeCertificates": "Ver certificados"
+        "viewMoreDetails": "Ver más detalle",
+        "seeCertificates": "Ver certificados",
+        "certificates": "Certificaciones",
+        "experiences": "Experiencia profesional",
+        "projects": "Proyectos relacionados",
+        "tabCertificates": "Certificados",
+        "tabExperiences": "Experiencia",
+        "tabProjects": "Proyectos",
+        "viewCertificate": "Ver certificado",
+        "viewProject": "Ver proyecto",
+        "viewSource": "Ver código fuente",
+        "noRelatedContent": "Aún no hay certificaciones, experiencia o proyectos vinculados.",
+        "loadError": "No se pudieron cargar los detalles. Intenta de nuevo."
       },
       "tabs": {
         "frontend": {

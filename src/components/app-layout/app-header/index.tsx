@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { Link } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 
 import NavButton from "./nav-button";
 import ToolbarHeader from "./toolbar-header";
@@ -17,10 +17,13 @@ interface IHeaderProps {
 
 const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   const t = useTranslations("global.header");
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const isOnTop = useIsOnTop();
-
+  const path = String(pathname);
+  const useSolidHeader =
+    alwaysVisible || /\/(skills|habilidades|vaardigheden)\//.test(path);
   const handleScroll = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -43,7 +46,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   return (
     <header
       className={`fixed right-0 left-0 z-40 w-full transition-all duration-700 print:hidden ${
-        isOnTop && !alwaysVisible
+        isOnTop && !useSolidHeader
           ? "top-5 bg-transparent text-white"
           : "bg-background-50/90 text-primaryText-900 hover:bg-background-50/100 top-0 shadow-sm backdrop-blur-lg backdrop-filter"
       }`}
@@ -54,14 +57,14 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
           <Link
             href="/"
             className={`group text-2xl font-bold tracking-tighter ${
-              isOnTop && !alwaysVisible ? "text-white" : "text-primary-700"
+              isOnTop && !useSolidHeader ? "text-white" : "text-primary-700"
             } transform transition duration-600 ease-in-out`}
           >
             <span className="tracking-relaxed">
               Jehg{" "}
               <span
                 className={`tracking-relaxed ${
-                  isOnTop && !alwaysVisible
+                  isOnTop && !useSolidHeader
                     ? "text-primary-500"
                     : "text-secondaryText-500 group-hover:text-white"
                 } `}
@@ -78,7 +81,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
               toogleThemeOpen,
             }}
           />
-          {!alwaysVisible && (
+          {!useSolidHeader && (
             <div
               id="mobile-menu-language-select"
               className={`${

@@ -254,10 +254,40 @@
       "subtitle": "Skills",
       "description": "I have a diverse skill set, developed through my education and professional experiences.",
       "aux": "I am constantly seeking to learn and improve my skills, and I am always open to new opportunities to challenge myself and grow professionally.",
+      "page": {
+        "breadcrumbHome": "Home",
+        "breadcrumbSkills": "Skills",
+        "metaTitle": "{title} · Skills",
+        "notFound": "Skill not found.",
+        "aboutTechnology": "About this technology",
+        "viewProject": "View project",
+        "viewSource": "View source",
+        "privateLabel": "Private",
+        "privateDescription": "This project is private, i can't show you the source code.",
+        "canSeeDemo": "This project is private, i can't show you the source code, but you can see the demo.",
+        "certificatesTitle": "Certificates with {skill}",
+        "certificatesDescription": "Courses and credentials where I learned or deepened {skill}.",
+        "experiencesTitle": "Where I used {skill}",
+        "experiencesDescription": "Roles and teams where {skill} was part of the day-to-day work.",
+        "projectsTitle": "Projects built with {skill}",
+        "projectsDescription": "Selected work that ships {skill} in production."
+      },
       "modal": {
         "close": "Close",
         "readMore": "Read more",
-        "seeCertificates": "See certificates"
+        "viewMoreDetails": "View more details",
+        "seeCertificates": "See certificates",
+        "certificates": "Certifications",
+        "experiences": "Professional experience",
+        "projects": "Related projects",
+        "tabCertificates": "Certificates",
+        "tabExperiences": "Experience",
+        "tabProjects": "Projects",
+        "viewCertificate": "View certificate",
+        "viewProject": "View project",
+        "viewSource": "View source code",
+        "noRelatedContent": "No linked certifications, experience, or projects yet.",
+        "loadError": "Could not load skill details. Please try again."
       },
       "tabs": {
         "frontend": {
