@@ -34,7 +34,8 @@ export default defineConfig({
     },
     {
       name: "smoke",
-      testMatch: /(dashboard|skills-smoke|projects-smoke)\.spec\.ts/,
+      testMatch:
+        /(dashboard|skills-smoke|projects-smoke|certifications-smoke)\.spec\.ts/,
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
@@ -56,6 +57,16 @@ export default defineConfig({
       testMatch: /projects-create\.spec\.ts/,
       dependencies: ["setup"],
       timeout: 45 * 60 * 1000,
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: authFile,
+      },
+    },
+    {
+      name: "certifications",
+      testMatch: /certifications-create\.spec\.ts/,
+      dependencies: ["setup"],
+      timeout: 60 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
         storageState: authFile,

@@ -190,11 +190,16 @@ export const CertificationForm: FC<CertificationFormProps> = ({
             toast.success(t("updatedSuccess"));
           } else {
             await createCert.mutateAsync({
-              ...values,
+              company: values.company,
               issuedDate: values.issuedDate ?? undefined,
-              url: values.url ?? undefined,
-              idCredential: values.idCredential ?? undefined,
-              image: values.image ?? undefined,
+              url: values.url?.trim() ? values.url.trim() : undefined,
+              idCredential: values.idCredential?.trim()
+                ? values.idCredential.trim()
+                : undefined,
+              image: values.image?.trim() ? values.image.trim() : undefined,
+              type: values.type,
+              skillIds: values.skillIds,
+              translations: values.translations,
             });
             toast.success(t("createdSuccess"));
           }

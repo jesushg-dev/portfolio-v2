@@ -5,6 +5,7 @@ import { Search, Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Input } from "@/components/ui/input";
+import { resolveSkillImageUrl } from "@/utils/tools/image";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -96,7 +97,13 @@ export function SkillPicker({
             className="border-border bg-card text-foreground hover:border-destructive/40 hover:text-destructive flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={s.image} alt="" className="h-3.5 w-3.5 object-contain" />
+            <img
+              src={resolveSkillImageUrl(s.image)}
+              alt=""
+              className="h-3.5 w-3.5 object-contain"
+              loading="lazy"
+              decoding="async"
+            />
             {s.title}
             <span className="text-muted-foreground ml-0.5">×</span>
           </button>
@@ -112,7 +119,7 @@ export function SkillPicker({
 
   // ── Full picker ───────────────────────────────────────────────────────────
   return (
-    <div className="space-y-3">
+    <div id="skill-picker" className="space-y-3">
       {/* Selected counter */}
       {selectedSkillIds.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
@@ -126,9 +133,11 @@ export function SkillPicker({
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={s.image}
+                src={resolveSkillImageUrl(s.image)}
                 alt=""
                 className="h-3.5 w-3.5 object-contain"
+                loading="lazy"
+                decoding="async"
               />
               {s.title}
               <span className="ml-0.5 opacity-60">×</span>
@@ -169,7 +178,10 @@ export function SkillPicker({
       </div>
 
       {/* Skills grid */}
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5">
+      <div
+        id="skill-picker-grid"
+        className="grid max-h-72 grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-4 md:grid-cols-5"
+      >
         {filtered.map((skill) => {
           const isSelected = selectedSkillIds.includes(skill.id);
           return (
@@ -193,9 +205,11 @@ export function SkillPicker({
               {/* Skill image */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={skill.image}
+                src={resolveSkillImageUrl(skill.image)}
                 alt={skill.title}
                 className="h-8 w-8 object-contain"
+                loading="lazy"
+                decoding="async"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = "none";
                 }}

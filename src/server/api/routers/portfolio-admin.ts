@@ -33,6 +33,11 @@ async function assertOwner<T extends { userId?: string | null }>(
   return entity;
 }
 
+const optionalUrl = z
+  .union([z.string().url(), z.literal("")])
+  .optional()
+  .transform((value) => (value === "" ? undefined : value));
+
 // ---------------------------------------------------------------------------
 // Router
 // ---------------------------------------------------------------------------
@@ -193,8 +198,8 @@ export const portfolioAdminRouter = createTRPCRouter({
       z.object({
         image: z.string().min(1),
         type: StackTypeSchema,
-        githubUrl: z.string().url().optional(),
-        websiteUrl: z.string().url().optional(),
+        githubUrl: optionalUrl,
+        websiteUrl: optionalUrl,
         isPrivate: z.boolean().default(false),
         skillIds: z.array(z.string()).default([]),
         translations: z
@@ -487,7 +492,7 @@ export const portfolioAdminRouter = createTRPCRouter({
       z.object({
         company: z.string().min(1),
         issuedDate: z.number().int().optional(),
-        url: z.string().url().optional(),
+        url: optionalUrl,
         idCredential: z.string().optional(),
         image: z.string().optional(),
         type: z.array(StackTypeSchema).default([]),
@@ -550,7 +555,22 @@ export const portfolioAdminRouter = createTRPCRouter({
         await ctx.db.certification.findUnique({ where: { id: input.id } }),
         ctx.user.id,
       );
-      return ctx.db.certification.delete({ where: { id: input.id } });
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.certificateSkill.deleteMany({
+          where: { certificationId: input.id },
+        });
+        await tx.certificateProject.deleteMany({
+          where: { certificationId: input.id },
+        });
+        await tx.certificateService.deleteMany({
+          where: { certificationId: input.id },
+        });
+        await tx.certificationTranslation.deleteMany({
+          where: { certificationId: input.id },
+        });
+        return tx.certification.delete({ where: { id: input.id } });
+      });
     }),
 
   upsertCertificationTranslation: protectedProcedure

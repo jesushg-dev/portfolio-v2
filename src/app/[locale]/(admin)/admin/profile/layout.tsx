@@ -1,14 +1,16 @@
 import { getTranslations } from "next-intl/server";
-import type { FC, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { ProfileTabs } from "@/features/profile/components/profile-tabs";
 
-interface Props {
-  children: ReactNode;
-  tabs: ReactNode;
-}
+type ProfileLayoutProps = LayoutProps<"/[locale]/admin/profile"> & {
+  tabs?: ReactNode;
+};
 
-const ProfileLayout: FC<Props> = async ({ children, tabs }) => {
+export default async function ProfileLayout({
+  children,
+  tabs,
+}: ProfileLayoutProps) {
   const t = await getTranslations("admin.profile");
 
   return (
@@ -27,6 +29,4 @@ const ProfileLayout: FC<Props> = async ({ children, tabs }) => {
       </div>
     </div>
   );
-};
-
-export default ProfileLayout;
+}

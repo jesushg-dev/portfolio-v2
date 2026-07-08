@@ -8,6 +8,7 @@ import {
   portfolioSkills,
   type PortfolioSkillFixture,
 } from "../fixtures/portfolio-skills";
+import { selectSkillsInPicker } from "./skill-picker-actions";
 
 const PROJECT_LOCALES = ["es", "en", "nl"] as const;
 
@@ -20,11 +21,17 @@ type FillProjectFormOptions = {
   verifyInList?: boolean;
 };
 
-function toSkillSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+async function waitForSkillsQuery(page: Page): Promise<void> {
+  const skillsLoaded = await page.locator('[id^="skill-picker-"]').count();
+  if (skillsLoaded > 0) return;
+
+  await page.waitForResponse(
+    (response) =>
+      response.url().includes("/api/trpc/portfolioAdmin.getMySkills") &&
+      response.request().method() === "GET" &&
+      response.ok(),
+    { timeout: 30_000 },
+  );
 }
 
 function isValidUrl(value: string): boolean {
@@ -45,11 +52,26 @@ export function projectListTitle(project: PortfolioProjectFixture): string {
 }
 
 async function assertCreateProjectSucceeded(response: Response): Promise<void> {
+  const text = await response.text().catch(() => "");
   if (!response.ok()) {
-    const text = await response.text().catch(() => "");
     throw new Error(
       `createProject request failed: ${response.status()} ${text}`.trim(),
     );
+  }
+
+  if (!text.trim()) return;
+
+  try {
+    const payload = JSON.parse(text) as [
+      { error?: { json?: { message?: string } } },
+    ];
+    const message = payload[0]?.error?.json?.message;
+    if (message) {
+      throw new Error(`createProject mutation failed: ${message}`);
+    }
+  } catch (error) {
+    if (error instanceof SyntaxError) return;
+    throw error;
   }
 }
 
@@ -62,20 +84,28 @@ function projectsNavLink(page: Page) {
 
 /** Navigate to the projects list via the admin sidebar. */
 export async function goToProjectsList(page: Page): Promise<void> {
-  if (/\/admin\/projects(\?|$)/.test(page.url())) {
+  const addButton = page.locator("#projects-add");
+  if (await addButton.isVisible()) {
     return;
   }
 
   const navLink = projectsNavLink(page);
   await navLink.waitFor({ state: "visible", timeout: 15_000 });
   await navLink.click();
-  await page.waitForURL(/\/admin\/projects(\?|$)/, { timeout: 15_000 });
+  await page.waitForURL(/\/admin\/projects(\?|$)/, { timeout: 20_000 });
+  await addButton.waitFor({ state: "visible", timeout: 15_000 });
 }
 
 async function openNewProjectForm(page: Page): Promise<void> {
   await goToProjectsList(page);
-  await page.locator("#projects-add").click();
-  await page.waitForURL(/\/admin\/projects\/new\/?$/, { timeout: 15_000 });
+
+  const addButton = page.locator("#projects-add");
+  await addButton.scrollIntoViewIfNeeded();
+  await addButton.waitFor({ state: "visible", timeout: 15_000 });
+  await addButton.click();
+
+  await page.waitForURL(/\/admin\/projects\/new\/?$/, { timeout: 20_000 });
+  await waitForSkillsQuery(page);
 }
 
 async function waitForProjectSaveToFinish(page: Page): Promise<void> {
@@ -83,35 +113,19 @@ async function waitForProjectSaveToFinish(page: Page): Promise<void> {
     timeout: 30_000,
   });
 
-  if (!/\/admin\/projects(\?|$)/.test(page.url())) {
+  const addButton = page.locator("#projects-add");
+  if (!(await addButton.isVisible())) {
     await goToProjectsList(page);
   }
 
-  await page
-    .locator("#projects-add")
-    .waitFor({ state: "visible", timeout: 15_000 });
+  await addButton.waitFor({ state: "visible", timeout: 15_000 });
 }
 
 async function selectProjectSkills(
   page: Page,
   skillKeys: string[],
 ): Promise<void> {
-  await page.locator("#skill-picker-search").waitFor({ state: "visible" });
-
-  for (const skillKey of skillKeys) {
-    const skill = skillsByKey[skillKey];
-    if (!skill) {
-      throw new Error(`Unknown skill key "${skillKey}" in project fixture`);
-    }
-
-    await page.locator("#skill-picker-search").fill(skill.title);
-    const pickerButton = page.locator(
-      `#skill-picker-${toSkillSlug(skill.title)}`,
-    );
-    await pickerButton.waitFor({ state: "visible", timeout: 10_000 });
-    await pickerButton.click();
-    await page.locator("#skill-picker-search").fill("");
-  }
+  await selectSkillsInPicker(page, skillKeys, skillsByKey);
 }
 
 export async function fillProjectForm(
@@ -183,23 +197,40 @@ export async function fillProjectForm(
   }
 }
 
+function projectListRow(page: Page, title: string) {
+  return page
+    .locator("table tbody tr")
+    .filter({ has: page.getByText(title, { exact: true }) })
+    .first();
+}
+
+async function ensureProjectsListPerPage(
+  page: Page,
+  perPage: number,
+): Promise<void> {
+  if (page.url().includes(`perPage=${perPage}`)) return;
+
+  const listUrl = `/admin/projects?perPage=${perPage}`;
+  try {
+    await page.goto(listUrl, { waitUntil: "domcontentloaded" });
+  } catch {
+    await page.waitForURL(/\/admin\/projects/, { timeout: 15_000 });
+  }
+}
+
 export async function expectProjectListContains(
   page: Page,
   title: string,
 ): Promise<void> {
-  await goToProjectsList(page);
+  await waitForProjectSaveToFinish(page);
 
-  if (!page.url().includes("perPage=")) {
-    await page.goto(`${page.url().split("?")[0]}?perPage=100`, {
-      waitUntil: "domcontentloaded",
-    });
+  const row = projectListRow(page, title);
+  if ((await row.count()) > 0) {
+    return;
   }
 
-  await page
-    .locator("table tbody tr")
-    .filter({ has: page.getByText(title, { exact: true }) })
-    .first()
-    .waitFor({ timeout: 15_000 });
+  await ensureProjectsListPerPage(page, 100);
+  await row.waitFor({ timeout: 15_000 });
 }
 
 export async function cleanupUserProjects(page: Page): Promise<void> {

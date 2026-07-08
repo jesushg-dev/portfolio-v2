@@ -2,7 +2,7 @@ export default {
   extends: ["@commitlint/config-conventional"],
 
   rules: {
-    "header-max-length": [2, "always", 70],
+    "header-max-length": [2, "always", 90],
 
     "subject-case": [2, "always", "lower-case"],
 

@@ -44,6 +44,14 @@ const StackTypeSchema = z.enum([
   "TOOLS",
 ]);
 
+function optionalUrlValue(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+  return trimmed;
+}
+
 interface ProjectInitialData extends Project {
   ProjectTranslation?: {
     appLanguageId: string;
@@ -206,8 +214,8 @@ export const ProjectForm: FC<ProjectFormProps> = ({
               id: values.id,
               image: values.image,
               type: values.type,
-              githubUrl: values.githubUrl ?? null,
-              websiteUrl: values.websiteUrl ?? null,
+              githubUrl: optionalUrlValue(values.githubUrl) ?? null,
+              websiteUrl: optionalUrlValue(values.websiteUrl) ?? null,
               isPrivate: values.isPrivate,
             });
 
@@ -232,8 +240,8 @@ export const ProjectForm: FC<ProjectFormProps> = ({
             await createProject.mutateAsync({
               image: values.image,
               type: values.type,
-              githubUrl: values.githubUrl?.trim() ?? undefined,
-              websiteUrl: values.websiteUrl?.trim() ?? undefined,
+              githubUrl: optionalUrlValue(values.githubUrl),
+              websiteUrl: optionalUrlValue(values.websiteUrl),
               isPrivate: values.isPrivate,
               skillIds: values.skillIds,
               translations: values.translations,

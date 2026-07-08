@@ -15,3 +15,10 @@ export const cloudinaryLoader = (props: ImageLoaderProps) => {
 export const siLoader = ({ src }: ImageLoaderProps) => {
   return `https://cdn.simpleicons.org/${src}`;
 };
+
+/** Resolves a skill icon stored as a Simple Icons slug or full URL. */
+export function resolveSkillImageUrl(src: string): string {
+  if (!src.trim()) return "";
+  if (src.startsWith("http://") || src.startsWith("https://")) return src;
+  return siLoader({ src, width: 32 });
+}

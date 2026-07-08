@@ -37,7 +37,10 @@
     "test:e2e:skills:ui": "playwright test --project=skills --ui",
     "test:e2e:projects": "playwright test --project=projects",
     "test:e2e:projects:headed": "playwright test --project=projects --headed",
-    "test:e2e:projects:ui": "playwright test --project=projects --ui"
+    "test:e2e:projects:ui": "playwright test --project=projects --ui",
+    "test:e2e:certifications": "playwright test --project=certifications",
+    "test:e2e:certifications:headed": "playwright test --project=certifications --headed",
+    "test:e2e:certifications:ui": "playwright test --project=certifications --ui"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

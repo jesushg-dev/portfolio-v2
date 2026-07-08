@@ -189,7 +189,11 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     <div className="relative flex h-full min-h-[500px] flex-col">
       <DataTable table={table}>
         <DataTableToolbar table={table}>
-          <Link href="/admin/certifications/new" className={buttonVariants()}>
+          <Link
+            id="certifications-add"
+            href="/admin/certifications/new"
+            className={buttonVariants()}
+          >
             <Plus className="mr-2 h-4 w-4" />
             {t("addNew")}
           </Link>
