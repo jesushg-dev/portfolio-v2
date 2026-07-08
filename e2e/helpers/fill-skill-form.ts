@@ -135,8 +135,6 @@ export async function expectSkillListContains(
 }
 
 export async function cleanupUserSkills(page: Page): Promise<void> {
-  const fixtureTitles = new Set(portfolioSkills.map((skill) => skill.title));
-
   const listResponse = await page.request.get(
     `/api/trpc/portfolioAdmin.getMySkills?batch=1&input=${encodeURIComponent(
       JSON.stringify({ "0": { json: null } }),
@@ -160,9 +158,8 @@ export async function cleanupUserSkills(page: Page): Promise<void> {
   ];
 
   const skills = listPayload[0]?.result?.data?.json ?? [];
-  const deletable = skills.filter((skill) => fixtureTitles.has(skill.title));
 
-  for (const skill of deletable) {
+  for (const skill of skills) {
     const deleteResponse = await page.request.post(
       "/api/trpc/portfolioAdmin.deleteSkill?batch=1",
       {

@@ -28,6 +28,7 @@ export async function seedPortfolioProjects(
   prisma: PrismaClient,
   langIds: Record<"es" | "en" | "nl", string>,
   skillsByKey: Record<string, Skill>,
+  userId: string,
 ): Promise<Record<string, Project>> {
   const result: Record<string, Project> = {};
 
@@ -46,6 +47,7 @@ export async function seedPortfolioProjects(
       where: { id: new ObjectId().toString() },
       update: {},
       create: {
+        userId,
         image: project.image,
         type: project.type,
         githubUrl: project.githubUrl || null,

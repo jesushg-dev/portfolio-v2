@@ -6,6 +6,7 @@ import {
 } from "../fixtures/portfolio-skills";
 
 type AppLanguageRow = { id: string; code: string };
+type SkillRow = { title: string };
 
 function trpcGetInput(procedure: string, input: unknown = null): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(
@@ -60,8 +61,21 @@ function buildSkillCreateInput(
   };
 }
 
-/** Ensures all fixture skills exist for the logged-in user (via tRPC, not UI). */
+/** Creates any missing fixture skills via tRPC (does not delete existing skills). */
 export async function ensurePortfolioSkills(page: Page): Promise<void> {
+  const existing = await trpcQuery<SkillRow[]>(
+    page,
+    "portfolioAdmin.getMySkills",
+  );
+  const existingTitles = new Set(existing.map((skill) => skill.title));
+
+  const missing = portfolioSkills.filter(
+    (skill) => !existingTitles.has(skill.title),
+  );
+  if (missing.length === 0) {
+    return;
+  }
+
   const languages = await trpcQuery<AppLanguageRow[]>(
     page,
     "portfolioAdmin.getAppLanguages",
@@ -81,20 +95,11 @@ export async function ensurePortfolioSkills(page: Page): Promise<void> {
     nl: nlId,
   };
 
-  const existing = await trpcQuery<{ title: string }[]>(
-    page,
-    "portfolioAdmin.getMySkills",
-  );
-  const existingTitles = new Set(existing.map((skill) => skill.title));
-
-  for (const skill of portfolioSkills) {
-    if (existingTitles.has(skill.title)) continue;
-
+  for (const skill of missing) {
     await trpcMutate(
       page,
       "portfolioAdmin.createSkill",
       buildSkillCreateInput(skill, langIds),
     );
-    existingTitles.add(skill.title);
   }
 }

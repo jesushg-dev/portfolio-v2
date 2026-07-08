@@ -36,6 +36,7 @@ export async function seedPortfolioCertifications(
   prisma: PrismaClient,
   langIds: Record<"es" | "en" | "nl", string>,
   skillsByKey: Record<string, Skill>,
+  userId: string,
 ): Promise<Record<string, Certification>> {
   const result: Record<string, Certification> = {};
 
@@ -59,6 +60,7 @@ export async function seedPortfolioCertifications(
       where: { id: new ObjectId().toString() },
       update: {},
       create: {
+        userId,
         company: certification.company,
         issuedDate: certification.issuedDate,
         url: certification.url.trim() || null,

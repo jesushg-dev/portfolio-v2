@@ -32,13 +32,6 @@ interface SkillPickerProps {
 
 const ALL_FILTER = "ALL";
 
-function toSkillSlug(title: string): string {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
 function getUniqueTypes(skills: SkillOption[]): string[] {
   const types = new Set(skills.map((s) => s.type));
   return Array.from(types).sort();
@@ -187,7 +180,7 @@ export function SkillPicker({
           return (
             <button
               key={skill.id}
-              id={`skill-picker-${toSkillSlug(skill.title)}`}
+              id={`skill-picker-${skill.id}`}
               type="button"
               onClick={() => toggle(skill.id)}
               className={`relative flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition-all hover:shadow-sm ${

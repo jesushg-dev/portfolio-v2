@@ -91,6 +91,18 @@ export const portfolioAdminRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { translations, ...rest } = input;
+
+      const duplicate = await ctx.db.skill.findFirst({
+        where: { userId: ctx.user.id, title: rest.title },
+        select: { id: true },
+      });
+      if (duplicate) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `You already have a skill titled "${rest.title}".`,
+        });
+      }
+
       return ctx.db.skill.create({
         data: {
           ...rest,
@@ -118,6 +130,22 @@ export const portfolioAdminRouter = createTRPCRouter({
         await ctx.db.skill.findUnique({ where: { id } }),
         ctx.user.id,
       );
+
+      const duplicate = await ctx.db.skill.findFirst({
+        where: {
+          userId: ctx.user.id,
+          title: data.title,
+          NOT: { id },
+        },
+        select: { id: true },
+      });
+      if (duplicate) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `You already have a skill titled "${data.title}".`,
+        });
+      }
+
       return ctx.db.skill.update({ where: { id }, data });
     }),
 
@@ -128,7 +156,15 @@ export const portfolioAdminRouter = createTRPCRouter({
         await ctx.db.skill.findUnique({ where: { id: input.id } }),
         ctx.user.id,
       );
-      return ctx.db.skill.delete({ where: { id: input.id } });
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.projectSkill.deleteMany({ where: { skillId: input.id } });
+        await tx.certificateSkill.deleteMany({ where: { skillId: input.id } });
+        await tx.serviceSkill.deleteMany({ where: { skillId: input.id } });
+        await tx.cvExperienceSkill.deleteMany({ where: { skillId: input.id } });
+        await tx.skillTranslation.deleteMany({ where: { skillId: input.id } });
+        return tx.skill.delete({ where: { id: input.id } });
+      });
     }),
 
   /**

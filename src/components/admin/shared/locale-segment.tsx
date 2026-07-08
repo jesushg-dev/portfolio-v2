@@ -9,6 +9,8 @@ interface ILocaleSegmentProps {
   onChange: (locale: Locale) => void;
   defaultLocale: Locale;
   size?: "sm" | "md";
+  id?: string;
+  buttonIdPrefix?: string;
 }
 
 const LocaleSegment: FC<ILocaleSegmentProps> = ({
@@ -16,8 +18,11 @@ const LocaleSegment: FC<ILocaleSegmentProps> = ({
   onChange,
   defaultLocale,
   size = "md",
+  id,
+  buttonIdPrefix,
 }) => (
   <div
+    id={id}
     role="group"
     aria-label="Language"
     className={`border-border bg-muted/50 inline-flex rounded-lg border p-0.5 ${
@@ -29,6 +34,7 @@ const LocaleSegment: FC<ILocaleSegmentProps> = ({
       return (
         <button
           key={loc}
+          id={buttonIdPrefix ? `${buttonIdPrefix}-${loc}` : undefined}
           type="button"
           onClick={() => onChange(loc)}
           className={`rounded-md px-3 py-1.5 font-medium transition-all ${

@@ -11,6 +11,7 @@ import { api } from "@/trpc/react";
 import { LocalizedTextSchema } from "@/lib/i18n/localized";
 import LocalizedTextField from "@/components/admin/shared/localized-text-field";
 import { Form, FormField } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   FormActions,
@@ -93,7 +94,10 @@ export const EducationForm: FC<{
 
   return (
     <Form {...form}>
-      <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
+      <FormRoot
+        id="cv-education-form"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <FormContent>
           <FormSection title={t("institution")}>
             <FormField
@@ -122,6 +126,7 @@ export const EducationForm: FC<{
               control={form.control}
               label={t("location")}
               defaultLocale={defaultLocale}
+              inputId="education-location"
             />
             <LocalizedTextField
               name="description"
@@ -129,6 +134,7 @@ export const EducationForm: FC<{
               label={t("description")}
               defaultLocale={defaultLocale}
               multiline
+              inputId="education-description"
             />
 
             <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -180,15 +186,11 @@ export const EducationForm: FC<{
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save")}
-          onClick={onCancel}
+          submitId="cv-education-form-submit"
         >
-          <button
-            type="button"
-            onClick={onCancel}
-            className="text-muted-foreground hover:bg-muted rounded-md px-4 py-2 text-sm"
-          >
+          <Button type="button" variant="ghost" onClick={onCancel}>
             {t("cancel")}
-          </button>
+          </Button>
         </FormActions>
       </FormRoot>
     </Form>

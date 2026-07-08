@@ -264,6 +264,8 @@ Each namespace must be **self-contained** — include every string the file need
 
 **Same file, multiple components:** call the hook once in the parent and pass `t` (or pre-translated strings) to child components defined in that file.
 
+**Component order in the file:** declare the parent that calls `useTranslations` / `getTranslations` **before** any same-file child that receives `t` as a prop. i18n editor plugins resolve namespaces top-to-bottom; if the child appears first, the plugin can mis-attribute keys. Use `function` declarations so the parent can sit above children that it renders.
+
 **Page + `generateMetadata`:** split into separate files so each has its own single call, or keep metadata strings in the page namespace and extract the view to another file.
 
 ```tsx
@@ -276,8 +278,24 @@ const t = useTranslations("admin.forms.additional");
 ```
 
 ```tsx
-// ✅ CORRECT — child in same file receives t from parent
+// ✅ CORRECT — hook parent first, child below receives t
+export function Banner() {
+  const t = useTranslations("admin.nudge");
+  return <LocaleRow t={t} />;
+}
+
 function LocaleRow({ t, ... }: { t: ReturnType<typeof useTranslations<"admin.nudge">> }) {
+  return <span>{t("saved")}</span>;
+}
+```
+
+```tsx
+// ❌ WRONG — child defined before the hook parent (breaks i18n editor plugins)
+function LocaleRow({
+  t,
+}: {
+  t: ReturnType<typeof useTranslations<"admin.nudge">>;
+}) {
   return <span>{t("saved")}</span>;
 }
 

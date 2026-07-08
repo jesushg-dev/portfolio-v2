@@ -84,19 +84,28 @@ To support `{username}.jesushg.com` in production:
 
 ### Seeding the primary owner
 
+Add owner credentials to `.env.local` (same values used by Playwright e2e):
+
+```
+OWNER_USER_EMAIL=your-email@example.com
+OWNER_USER_PASSWORD=your-secure-password
+```
+
 After running `prisma db push`, run:
 
 ```
 pnpm prisma db seed
 ```
 
-`prisma/seed.ts` calls `seedOwner` (`prisma/seed-owner.ts`) which:
+`prisma/seed.ts` seeds languages, the primary owner, portfolio content, and CV via shared JSON fixtures:
 
-1. Creates/updates the primary `User` + `Profile` (`username = "jesus"`, `isPrimary = true`).
-2. Reassigns existing `Project`/`Skill`/`Service`/`Certification` rows without a `userId` to that owner.
-3. Migrates the legacy CV content from `prisma/data/legacy-cv/{en,es,nl}.json` into the new `Cv*` tables, populating `LocalizedText` JSON fields with all three translations.
+1. `seedPortfolioUser` (`prisma/seed-portfolio-user.ts`) creates/updates the primary `User` + `Profile` + credential `Account` using `OWNER_USER_EMAIL` and `OWNER_USER_PASSWORD` from `.env.local`.
+2. `seedPortfolioSkills`, projects, certifications, and inline services each receive `userId` at creation time — no retroactive `updateMany`.
+3. `seedPortfolioCv` (`prisma/seed-portfolio-cv.ts`) loads CV sections from `prisma/data/portfolio-cv.json`, including `CvExperienceSkill` links via `skillKeys`.
 
-The seed is idempotent: re-running it `upsert`s the user/profile/header/about-me and `deleteMany`+`create`s the list-style sections (contacts, education, languages, technical skills, experiences, soft skills, additional info, personal references).
+Profile metadata (name, username, display name) lives in `prisma/data/portfolio-profile.json`. The same `OWNER_USER_*` credentials are used by Playwright e2e login.
+
+The seed is idempotent: re-running it `upsert`s the user/profile/header/about-me and `deleteMany`+`create`s the list-style CV sections (contacts, education, languages, technical skills, experiences, soft skills, additional info, personal references).
 
 ## Skills Used
 

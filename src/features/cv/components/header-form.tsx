@@ -91,7 +91,7 @@ const HeaderForm: FC = () => {
 
   return (
     <Form {...form}>
-      <FormRoot onSubmit={form.handleSubmit(onSubmit)}>
+      <FormRoot id="cv-header-form" onSubmit={form.handleSubmit(onSubmit)}>
         <FormContent
           error={upsertHeader.error ? upsertHeader.error.message : null}
         >
@@ -124,6 +124,7 @@ const HeaderForm: FC = () => {
               label={t("degree")}
               defaultLocale={defaultLocale}
               required
+              inputId="cv-header-degree"
             />
 
             <LocalizedTextField
@@ -131,6 +132,7 @@ const HeaderForm: FC = () => {
               control={form.control}
               label={t("photoAlt") || "Photo Alt Text"}
               defaultLocale={defaultLocale}
+              inputId="cv-header-photo-alt"
             />
           </FormSection>
         </FormContent>
@@ -139,6 +141,7 @@ const HeaderForm: FC = () => {
             form.formState.isSubmitting || upsertHeader.isPending || isPending
           }
           title={t("save") || "Save"}
+          submitId="cv-header-form-submit"
         />
       </FormRoot>
     </Form>

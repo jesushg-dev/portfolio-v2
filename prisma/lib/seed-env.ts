@@ -1,10 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-/**
- * Loads key/value pairs from .env-style files into `process.env`
- * without overwriting variables already set in the shell.
- */
 function loadEnvFile(filename: string): void {
   const filePath = resolve(process.cwd(), filename);
   if (!existsSync(filePath)) return;
@@ -34,28 +30,22 @@ function loadEnvFile(filename: string): void {
 loadEnvFile(".env");
 loadEnvFile(".env.local");
 
-export const e2eEnv = {
-  baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",
-  ownerEmail: process.env.OWNER_USER_EMAIL,
-  ownerPassword: process.env.OWNER_USER_PASSWORD,
-} as const;
-
-export function requireE2eCredentials(): {
+export function requireOwnerCredentials(): {
   email: string;
   password: string;
 } {
-  const { ownerEmail, ownerPassword } = e2eEnv;
+  const email = process.env.OWNER_USER_EMAIL;
+  const password = process.env.OWNER_USER_PASSWORD;
 
-  if (!ownerEmail || !ownerPassword) {
+  if (!email || !password) {
     throw new Error(
       [
         "Owner credentials are missing.",
         "Add OWNER_USER_EMAIL and OWNER_USER_PASSWORD to .env.local (not committed).",
-        "Run pnpm db:seed first so the same user exists in the database.",
-        "See e2e/env.example for the expected variables.",
+        "The same values are used by prisma db seed and Playwright e2e login.",
       ].join(" "),
     );
   }
 
-  return { email: ownerEmail, password: ownerPassword };
+  return { email, password };
 }

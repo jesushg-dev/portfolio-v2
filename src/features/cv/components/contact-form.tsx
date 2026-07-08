@@ -11,6 +11,7 @@ import { api } from "@/trpc/react";
 import { LocalizedTextSchema } from "@/lib/i18n/localized";
 import LocalizedTextField from "@/components/admin/shared/localized-text-field";
 import { Form, FormField, FormControl } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -94,7 +95,7 @@ export const ContactForm: FC<{
 
   return (
     <Form {...form}>
-      <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
+      <FormRoot id="cv-contact-form" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormContent>
           <FormSection>
             <FormField
@@ -110,7 +111,11 @@ export const ContactForm: FC<{
                     </FormControl>
                     <SelectContent>
                       {TYPES.map((tItem) => (
-                        <SelectItem key={tItem} value={tItem}>
+                        <SelectItem
+                          key={tItem}
+                          value={tItem}
+                          id={`cv-contact-type-option-${tItem}`}
+                        >
                           {tItem}
                         </SelectItem>
                       ))}
@@ -138,21 +143,18 @@ export const ContactForm: FC<{
               label={t("labelHint")}
               defaultLocale={defaultLocale}
               placeholder="e.g. Email me"
+              inputId="cv-contact-label"
             />
           </FormSection>
         </FormContent>
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save") || "Save"}
-          onClick={onCancel}
+          submitId="cv-contact-form-submit"
         >
-          <button
-            type="button"
-            onClick={onCancel}
-            className="text-muted-foreground hover:bg-muted rounded-md px-4 py-2 text-sm"
-          >
+          <Button type="button" variant="ghost" onClick={onCancel}>
             {t("cancel")}
-          </button>
+          </Button>
         </FormActions>
       </FormRoot>
     </Form>

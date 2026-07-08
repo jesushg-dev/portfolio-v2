@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { FC, ReactNode } from "react";
-import type { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { FaEdit } from "react-icons/fa";
 
 import {
@@ -78,57 +78,15 @@ interface ICvEditableLayoutProps {
   aboutMeText: string | null;
   currentLocale: AppLocale;
   defaultLocale: AppLocale;
-  t: CvTranslator;
 }
-
-const EditableSection: FC<{
-  id: SectionType;
-  title: string;
-  onClick: () => void;
-  children: ReactNode;
-  isEmpty?: boolean;
-  t: CvTranslator;
-}> = ({ id, title, onClick, children, isEmpty = false, t }) => {
-  return (
-    <FollowerPointerCard title={`${t("edit")} ${title}`}>
-      <div
-        id={id}
-        className="group hover:border-primary-500/50 hover:bg-muted/10 relative -m-2 scroll-mt-32 rounded-xl border border-transparent p-2 transition-colors"
-      >
-        <div className="absolute top-2 right-2 z-10 opacity-0 transition-opacity group-hover:opacity-100">
-          <button
-            type="button"
-            onClick={onClick}
-            className="bg-primary-600 hover:bg-primary-700 flex cursor-none items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold text-white shadow-md transition-colors"
-          >
-            <FaEdit /> {t("edit")} {title}
-          </button>
-        </div>
-        {isEmpty ? (
-          <div
-            className="border-muted-foreground/30 bg-muted/20 text-muted-foreground hover:border-primary-500/50 hover:bg-muted/40 hover:text-primary-600 flex h-24 w-full cursor-none flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors"
-            onClick={onClick}
-          >
-            <p className="text-sm font-medium">
-              {t("empty")} {title}
-            </p>
-            <p className="text-xs opacity-70">{t("clickToAdd")}</p>
-          </div>
-        ) : (
-          children
-        )}
-      </div>
-    </FollowerPointerCard>
-  );
-};
 
 const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
   data,
   aboutMeText,
   currentLocale,
   defaultLocale,
-  t,
 }) => {
+  const t = useTranslations("admin.cv");
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
 
   const handleClose = (open: boolean) => {
@@ -299,7 +257,11 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
       </CvContextProvider>
 
       <Dialog open={activeSection !== null} onOpenChange={handleClose}>
-        <DialogContent className="max-h-[85vh] w-full max-w-5xl overflow-y-auto">
+        <DialogContent
+          id="cv-section-modal"
+          closeButtonId="cv-section-modal-close"
+          className="max-h-[85vh] w-full overflow-y-auto sm:max-w-5xl"
+        >
           <CvEditorLocaleProvider defaultLocale={defaultLocale}>
             <DialogHeader className="border-border flex flex-row items-center justify-between border-b pb-3">
               <DialogTitle className="text-lg">
@@ -325,6 +287,49 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
         </DialogContent>
       </Dialog>
     </div>
+  );
+};
+
+const EditableSection: FC<{
+  id: SectionType;
+  title: string;
+  onClick: () => void;
+  children: ReactNode;
+  isEmpty?: boolean;
+  t: CvTranslator;
+}> = ({ id, title, onClick, children, isEmpty = false, t }) => {
+  return (
+    <FollowerPointerCard title={`${t("edit")} ${title}`}>
+      <div
+        id={id}
+        className="group hover:border-primary-500/50 hover:bg-muted/10 relative -m-2 scroll-mt-32 rounded-xl border border-transparent p-2 transition-colors"
+      >
+        <div className="absolute top-2 right-2 z-10 opacity-0 transition-opacity group-hover:opacity-100">
+          <button
+            id={`cv-section-${id}-edit`}
+            type="button"
+            onClick={onClick}
+            className="bg-primary-600 hover:bg-primary-700 flex cursor-none items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold text-white shadow-md transition-colors"
+          >
+            <FaEdit /> {t("edit")} {title}
+          </button>
+        </div>
+        {isEmpty ? (
+          <div
+            id={`cv-section-${id}-empty`}
+            className="border-muted-foreground/30 bg-muted/20 text-muted-foreground hover:border-primary-500/50 hover:bg-muted/40 hover:text-primary-600 flex h-24 w-full cursor-none flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors"
+            onClick={onClick}
+          >
+            <p className="text-sm font-medium">
+              {t("empty")} {title}
+            </p>
+            <p className="text-xs opacity-70">{t("clickToAdd")}</p>
+          </div>
+        ) : (
+          children
+        )}
+      </div>
+    </FollowerPointerCard>
   );
 };
 

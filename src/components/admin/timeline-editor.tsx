@@ -61,6 +61,110 @@ interface TimelineEditorProps {
   onReorder: (orderedIds: string[]) => void;
 }
 
+type ExperienceTranslator = ReturnType<
+  typeof useTranslations<"admin.forms.experience">
+>;
+
+// ---------------------------------------------------------------------------
+// Timeline editor
+// ---------------------------------------------------------------------------
+
+export function TimelineEditor({
+  entries,
+  defaultLocale,
+  onSave,
+  onDelete,
+  onReorder,
+}: TimelineEditorProps) {
+  const t = useTranslations("admin.forms.experience");
+  const [items, setItems] = useState(entries);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = items.findIndex((i) => i.id === active.id);
+    const newIndex = items.findIndex((i) => i.id === over.id);
+    const reordered = arrayMove(items, oldIndex, newIndex);
+    setItems(reordered);
+    onReorder(reordered.map((i) => i.id));
+  };
+
+  const addNew = () => {
+    const tempId = `new_${Date.now()}`;
+    setItems((prev) => [
+      ...prev,
+      {
+        id: tempId,
+        company: "",
+        role: { default: "" },
+        dates: "",
+        current: false,
+        responsibilities: [],
+        _status: "new",
+      },
+    ]);
+  };
+
+  return (
+    <div className="space-y-3">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={items.map((i) => i.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {items.map((entry) => (
+            <ExperienceRow
+              key={entry.id}
+              entry={entry}
+              defaultLocale={defaultLocale}
+              t={t}
+              onSave={async (saved) => {
+                await onSave(saved);
+                setItems((prev) =>
+                  prev.map((i) =>
+                    i.id === saved.id ? { ...saved, _status: "saved" } : i,
+                  ),
+                );
+              }}
+              onDelete={async (id) => {
+                await onDelete(id);
+                setItems((prev) => prev.filter((i) => i.id !== id));
+              }}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
+
+      {items.length === 0 && (
+        <p className="rounded-lg border border-dashed border-gray-200 py-8 text-center text-sm text-gray-400">
+          {t("noEntries")}
+        </p>
+      )}
+
+      <button
+        type="button"
+        onClick={addNew}
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-3 text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600"
+      >
+        <Plus className="h-4 w-4" />
+        {t("addExperience")}
+      </button>
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Single sortable row
 // ---------------------------------------------------------------------------
@@ -76,7 +180,7 @@ function ExperienceRow({
   defaultLocale: Locale;
   onSave: (entry: ExperienceEntry) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
-  t: ReturnType<typeof useTranslations<"admin.forms.experience">>;
+  t: ExperienceTranslator;
 }) {
   const [isOpen, setIsOpen] = useState(entry._status === "new");
   const [draft, setDraft] = useState<ExperienceEntry>(entry);
@@ -329,106 +433,6 @@ function ExperienceRow({
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Timeline editor
-// ---------------------------------------------------------------------------
-
-export function TimelineEditor({
-  entries,
-  defaultLocale,
-  onSave,
-  onDelete,
-  onReorder,
-}: TimelineEditorProps) {
-  const t = useTranslations("admin.forms.experience");
-  const [items, setItems] = useState(entries);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = items.findIndex((i) => i.id === active.id);
-    const newIndex = items.findIndex((i) => i.id === over.id);
-    const reordered = arrayMove(items, oldIndex, newIndex);
-    setItems(reordered);
-    onReorder(reordered.map((i) => i.id));
-  };
-
-  const addNew = () => {
-    const tempId = `new_${Date.now()}`;
-    setItems((prev) => [
-      ...prev,
-      {
-        id: tempId,
-        company: "",
-        role: { default: "" },
-        dates: "",
-        current: false,
-        responsibilities: [],
-        _status: "new",
-      },
-    ]);
-  };
-
-  return (
-    <div className="space-y-3">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={items.map((i) => i.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          {items.map((entry) => (
-            <ExperienceRow
-              key={entry.id}
-              entry={entry}
-              defaultLocale={defaultLocale}
-              t={t}
-              onSave={async (saved) => {
-                await onSave(saved);
-                setItems((prev) =>
-                  prev.map((i) =>
-                    i.id === saved.id ? { ...saved, _status: "saved" } : i,
-                  ),
-                );
-              }}
-              onDelete={async (id) => {
-                await onDelete(id);
-                setItems((prev) => prev.filter((i) => i.id !== id));
-              }}
-            />
-          ))}
-        </SortableContext>
-      </DndContext>
-
-      {items.length === 0 && (
-        <p className="rounded-lg border border-dashed border-gray-200 py-8 text-center text-sm text-gray-400">
-          {t("noEntries")}
-        </p>
-      )}
-
-      <button
-        type="button"
-        onClick={addNew}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-3 text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600"
-      >
-        <Plus className="h-4 w-4" />
-        {t("addExperience")}
-      </button>
     </div>
   );
 }

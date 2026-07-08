@@ -72,7 +72,7 @@ const AboutForm: FC = () => {
 
   return (
     <Form {...form}>
-      <FormRoot onSubmit={form.handleSubmit(onSubmit)}>
+      <FormRoot id="cv-about-form" onSubmit={form.handleSubmit(onSubmit)}>
         <FormContent
           error={upsertAboutMe.error ? upsertAboutMe.error.message : null}
         >
@@ -84,6 +84,7 @@ const AboutForm: FC = () => {
               multiline
               defaultLocale={defaultLocale}
               required
+              inputId="cv-about-me"
             />
           </FormSection>
         </FormContent>
@@ -92,6 +93,7 @@ const AboutForm: FC = () => {
             form.formState.isSubmitting || upsertAboutMe.isPending || isPending
           }
           title={t("save") || "Save"}
+          submitId="cv-about-form-submit"
         />
       </FormRoot>
     </Form>

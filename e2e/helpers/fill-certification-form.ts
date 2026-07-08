@@ -251,12 +251,6 @@ export async function expectCertificationListContains(
 }
 
 export async function cleanupUserCertifications(page: Page): Promise<void> {
-  const fixtureTitles = new Set(
-    portfolioCertifications.map((certification) =>
-      certificationListTitle(certification),
-    ),
-  );
-
   const listResponse = await page.request.get(
     `/api/trpc/portfolioAdmin.getMyCertifications?batch=1&input=${encodeURIComponent(
       JSON.stringify({ "0": { json: null } }),
@@ -273,25 +267,15 @@ export async function cleanupUserCertifications(page: Page): Promise<void> {
     {
       result?: {
         data?: {
-          json?: {
-            id: string;
-            CertificationTranslation?: { title: string }[];
-          }[];
+          json?: { id: string }[];
         };
       };
     },
   ];
 
   const certifications = listPayload[0]?.result?.data?.json ?? [];
-  const deletable = certifications.filter((certification) => {
-    const titles =
-      certification.CertificationTranslation?.map(
-        (translation) => translation.title,
-      ) ?? [];
-    return titles.some((title) => fixtureTitles.has(title));
-  });
 
-  for (const certification of deletable) {
+  for (const certification of certifications) {
     const deleteResponse = await page.request.post(
       "/api/trpc/portfolioAdmin.deleteCertification?batch=1",
       {

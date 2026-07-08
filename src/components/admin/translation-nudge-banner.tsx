@@ -17,6 +17,96 @@ interface TranslationNudgeBannerProps {
   onDismiss: () => void;
 }
 
+type NudgeTranslator = ReturnType<typeof useTranslations<"admin.nudge">>;
+
+export function TranslationNudgeBanner({
+  nudge,
+  onSaveLocale,
+  onApplyAll,
+  onDismiss,
+}: TranslationNudgeBannerProps) {
+  const t = useTranslations("admin.nudge");
+  const [isApplyingAll, setIsApplyingAll] = useState(false);
+
+  const pendingCount = nudge.pendingLocales.filter(
+    (p) => p.status === "pending",
+  ).length;
+
+  const handleApplyAll = async () => {
+    setIsApplyingAll(true);
+    try {
+      await onApplyAll(nudge.editedValue);
+    } finally {
+      setIsApplyingAll(false);
+    }
+  };
+
+  return (
+    <div className="animate-in slide-in-from-bottom-2 mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm">
+      <div className="mb-3 flex items-start gap-2">
+        <Zap className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-blue-900">
+            {t("title", { field: nudge.fieldLabel })}
+          </p>
+          <p className="text-xs text-blue-600">{t("question")}</p>
+        </div>
+        <button
+          type="button"
+          onClick={onDismiss}
+          className="shrink-0 rounded p-1 text-blue-400 hover:bg-blue-100 hover:text-blue-600"
+          aria-label={t("dismissAria")}
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        {nudge.pendingLocales.map((item) => (
+          <LocaleRow
+            key={item.locale}
+            item={item}
+            editedValue={nudge.editedValue}
+            t={t}
+            onSave={async (locale, value) => {
+              await onSaveLocale(locale, value);
+            }}
+            onSkip={async (locale) => {
+              try {
+                await onSaveLocale(locale, "");
+              } catch {
+                // Ignore
+              }
+            }}
+          />
+        ))}
+      </div>
+
+      {pendingCount > 1 && (
+        <div className="mt-3 flex items-center justify-between border-t border-blue-200 pt-3">
+          <button
+            type="button"
+            onClick={handleApplyAll}
+            disabled={isApplyingAll}
+            className="text-xs font-medium text-blue-600 hover:text-blue-800 disabled:opacity-50"
+          >
+            {isApplyingAll
+              ? t("applying")
+              : t("applyAll", { count: pendingCount })}
+          </button>
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="text-xs text-gray-400 hover:text-gray-600"
+          >
+            {t("dismiss")}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function LocaleRow({
   item,
   editedValue,
@@ -28,7 +118,7 @@ function LocaleRow({
   editedValue: string;
   onSave: (locale: string, value: string) => Promise<void> | void;
   onSkip: (locale: string) => void;
-  t: ReturnType<typeof useTranslations<"admin.nudge">>;
+  t: NudgeTranslator;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [draftValue, setDraftValue] = useState(item.previousValue);
@@ -128,94 +218,6 @@ function LocaleRow({
               {isSaving ? t("saving") : t("saveLocale", { label: item.label })}
             </button>
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export function TranslationNudgeBanner({
-  nudge,
-  onSaveLocale,
-  onApplyAll,
-  onDismiss,
-}: TranslationNudgeBannerProps) {
-  const t = useTranslations("admin.nudge");
-  const [isApplyingAll, setIsApplyingAll] = useState(false);
-
-  const pendingCount = nudge.pendingLocales.filter(
-    (p) => p.status === "pending",
-  ).length;
-
-  const handleApplyAll = async () => {
-    setIsApplyingAll(true);
-    try {
-      await onApplyAll(nudge.editedValue);
-    } finally {
-      setIsApplyingAll(false);
-    }
-  };
-
-  return (
-    <div className="animate-in slide-in-from-bottom-2 mt-4 rounded-xl border border-blue-200 bg-blue-50 p-4 shadow-sm">
-      <div className="mb-3 flex items-start gap-2">
-        <Zap className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" />
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-blue-900">
-            {t("title", { field: nudge.fieldLabel })}
-          </p>
-          <p className="text-xs text-blue-600">{t("question")}</p>
-        </div>
-        <button
-          type="button"
-          onClick={onDismiss}
-          className="shrink-0 rounded p-1 text-blue-400 hover:bg-blue-100 hover:text-blue-600"
-          aria-label={t("dismissAria")}
-        >
-          <X className="h-3.5 w-3.5" />
-        </button>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        {nudge.pendingLocales.map((item) => (
-          <LocaleRow
-            key={item.locale}
-            item={item}
-            editedValue={nudge.editedValue}
-            t={t}
-            onSave={async (locale, value) => {
-              await onSaveLocale(locale, value);
-            }}
-            onSkip={async (locale) => {
-              try {
-                await onSaveLocale(locale, "");
-              } catch {
-                // Ignore
-              }
-            }}
-          />
-        ))}
-      </div>
-
-      {pendingCount > 1 && (
-        <div className="mt-3 flex items-center justify-between border-t border-blue-200 pt-3">
-          <button
-            type="button"
-            onClick={handleApplyAll}
-            disabled={isApplyingAll}
-            className="text-xs font-medium text-blue-600 hover:text-blue-800 disabled:opacity-50"
-          >
-            {isApplyingAll
-              ? t("applying")
-              : t("applyAll", { count: pendingCount })}
-          </button>
-          <button
-            type="button"
-            onClick={onDismiss}
-            className="text-xs text-gray-400 hover:text-gray-600"
-          >
-            {t("dismiss")}
-          </button>
         </div>
       )}
     </div>

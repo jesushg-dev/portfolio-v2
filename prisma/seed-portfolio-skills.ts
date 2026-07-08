@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import { ObjectId } from "bson";
 import type { PrismaClient, Skill, StackType } from "@prisma/client";
 
 export interface PortfolioSkillSeed {
@@ -21,32 +20,55 @@ const portfolioSkills = JSON.parse(
   ),
 ) as PortfolioSkillSeed[];
 
+function translationRows(
+  skill: PortfolioSkillSeed,
+  langIds: Record<"es" | "en" | "nl", string>,
+) {
+  return skill.translations.map((translation) => ({
+    description: translation.description,
+    urlWiki: translation.urlWiki,
+    appLanguageId: langIds[translation.locale],
+  }));
+}
+
 export async function seedPortfolioSkills(
   prisma: PrismaClient,
   langIds: Record<"es" | "en" | "nl", string>,
+  userId: string,
 ): Promise<Record<string, Skill>> {
   const result: Record<string, Skill> = {};
 
   for (const skill of portfolioSkills) {
-    const created = await prisma.skill.upsert({
-      where: { id: new ObjectId().toString() },
-      update: {},
+    const upserted = await prisma.skill.upsert({
+      where: {
+        userId_title: {
+          userId,
+          title: skill.title,
+        },
+      },
+      update: {
+        type: skill.type,
+        image: skill.image,
+        SkillTranslation: {
+          deleteMany: {},
+          createMany: {
+            data: translationRows(skill, langIds),
+          },
+        },
+      },
       create: {
+        userId,
         title: skill.title,
         type: skill.type,
         image: skill.image,
         SkillTranslation: {
           createMany: {
-            data: skill.translations.map((translation) => ({
-              description: translation.description,
-              urlWiki: translation.urlWiki,
-              appLanguageId: langIds[translation.locale],
-            })),
+            data: translationRows(skill, langIds),
           },
         },
       },
     });
-    result[skill.key] = created;
+    result[skill.key] = upserted;
   }
 
   return result;

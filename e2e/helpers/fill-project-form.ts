@@ -234,10 +234,6 @@ export async function expectProjectListContains(
 }
 
 export async function cleanupUserProjects(page: Page): Promise<void> {
-  const fixtureTitles = new Set(
-    portfolioProjects.map((project) => projectListTitle(project)),
-  );
-
   const listResponse = await page.request.get(
     `/api/trpc/portfolioAdmin.getMyProjects?batch=1&input=${encodeURIComponent(
       JSON.stringify({ "0": { json: null } }),
@@ -254,23 +250,15 @@ export async function cleanupUserProjects(page: Page): Promise<void> {
     {
       result?: {
         data?: {
-          json?: {
-            id: string;
-            ProjectTranslation?: { title: string }[];
-          }[];
+          json?: { id: string }[];
         };
       };
     },
   ];
 
   const projects = listPayload[0]?.result?.data?.json ?? [];
-  const deletable = projects.filter((project) => {
-    const titles =
-      project.ProjectTranslation?.map((translation) => translation.title) ?? [];
-    return titles.some((title) => fixtureTitles.has(title));
-  });
 
-  for (const project of deletable) {
+  for (const project of projects) {
     const deleteResponse = await page.request.post(
       "/api/trpc/portfolioAdmin.deleteProject?batch=1",
       {

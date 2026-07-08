@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "npx tsx prisma/seed.ts"
   },
   "lint-staged": {
     "src/components/ui/**/*.{ts,tsx}": [
@@ -28,10 +28,6 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test --project=login --project=smoke",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:debug": "playwright test --debug",
-    "test:e2e:report": "playwright show-report",
     "test:e2e:skills": "playwright test --project=skills",
     "test:e2e:skills:headed": "playwright test --project=skills --headed",
     "test:e2e:skills:ui": "playwright test --project=skills --ui",
@@ -40,7 +36,14 @@
     "test:e2e:projects:ui": "playwright test --project=projects --ui",
     "test:e2e:certifications": "playwright test --project=certifications",
     "test:e2e:certifications:headed": "playwright test --project=certifications --headed",
-    "test:e2e:certifications:ui": "playwright test --project=certifications --ui"
+    "test:e2e:certifications:ui": "playwright test --project=certifications --ui",
+    "test:e2e:cv": "playwright test --project=cv",
+    "test:e2e:cv:headed": "playwright test --project=cv --headed",
+    "test:e2e:cv:ui": "playwright test --project=cv --ui",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

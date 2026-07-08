@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sortable";
 import { GripVertical } from "lucide-react";
 import { Form, FormField } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -124,12 +125,15 @@ export const ExperienceForm: FC<{
         }
       });
     },
-    [initial?.id, update, create, utils, t, onSuccess],
+    [initial, update, create, utils, t, onSuccess],
   );
 
   return (
     <Form {...form}>
-      <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
+      <FormRoot
+        id="cv-experience-form"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <FormContent>
           <FormSection title={t("company")}>
             <div className="grid grid-cols-2 gap-4">
@@ -238,6 +242,7 @@ export const ExperienceForm: FC<{
                               defaultLocale={defaultLocale}
                               required
                               multiline
+                              inputId={`experience-responsibility-${idx}`}
                             />
                           </div>
                           <button
@@ -255,6 +260,7 @@ export const ExperienceForm: FC<{
               </SortableContent>
             </Sortable>
             <button
+              id="experience-add-responsibility"
               type="button"
               onClick={() =>
                 append({ text: { default: "" }, order: fields.length })
@@ -268,15 +274,11 @@ export const ExperienceForm: FC<{
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save")}
-          onClick={onCancel}
+          submitId="cv-experience-form-submit"
         >
-          <button
-            type="button"
-            onClick={onCancel}
-            className="text-muted-foreground hover:bg-muted rounded-md px-4 py-2 text-sm"
-          >
+          <Button type="button" variant="ghost" onClick={onCancel}>
             {t("cancel")}
-          </button>
+          </Button>
         </FormActions>
       </FormRoot>
     </Form>

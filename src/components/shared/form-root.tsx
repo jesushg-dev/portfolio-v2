@@ -250,6 +250,7 @@ type FormActionsProps = {
   className?: string;
   children?: ReactNode;
   onClick?: () => void;
+  submitId?: string;
 };
 
 export const FormActions = ({
@@ -258,12 +259,14 @@ export const FormActions = ({
   onClick,
   className,
   children,
+  submitId,
 }: FormActionsProps) => (
   <div
     className={cn("mt-4 flex w-full items-center justify-end gap-2", className)}
   >
     {children}
     <Button
+      id={submitId}
       type={onClick ? "button" : "submit"}
       onClick={onClick}
       className="w-full sm:w-auto"

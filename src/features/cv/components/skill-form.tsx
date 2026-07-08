@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { api } from "@/trpc/react";
 
 import { Form, FormField, FormControl } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -96,7 +97,7 @@ export const SkillForm: FC<{
 
   return (
     <Form {...form}>
-      <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
+      <FormRoot id="cv-skill-form" onSubmit={form.handleSubmit(handleSubmit)}>
         <FormContent>
           <FormField
             control={form.control}
@@ -105,13 +106,17 @@ export const SkillForm: FC<{
               <FormItem label={t("category")} inputId="cv-skill-category">
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder={t("category")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {CATEGORIES.map((c) => (
-                      <SelectItem key={c} value={c}>
+                      <SelectItem
+                        key={c}
+                        value={c}
+                        id={`cv-skill-category-option-${c}`}
+                      >
                         {c}
                       </SelectItem>
                     ))}
@@ -137,15 +142,11 @@ export const SkillForm: FC<{
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save")}
-          onClick={onCancel}
+          submitId="cv-skill-form-submit"
         >
-          <button
-            type="button"
-            onClick={onCancel}
-            className="text-muted-foreground hover:bg-muted rounded-md px-4 py-2 text-sm"
-          >
+          <Button type="button" variant="ghost" onClick={onCancel}>
             {t("cancel")}
-          </button>
+          </Button>
         </FormActions>
       </FormRoot>
     </Form>

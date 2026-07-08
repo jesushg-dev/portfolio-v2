@@ -11,6 +11,7 @@ import { api } from "@/trpc/react";
 import { LocalizedTextSchema } from "@/lib/i18n/localized";
 import LocalizedTextField from "@/components/admin/shared/localized-text-field";
 import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import {
   FormActions,
   FormContent,
@@ -19,54 +20,47 @@ import {
 } from "@/components/shared/form-root";
 
 import type { Locale } from "@/i18n/config";
-import { Button } from "@/components/ui/button";
 
-export const LanguageSchema = z.object({
-  name: LocalizedTextSchema,
-  level: LocalizedTextSchema,
+export const AdditionalInfoSchema = z.object({
+  text: LocalizedTextSchema,
 });
 
-export type LanguageInput = z.infer<typeof LanguageSchema>;
+export type AdditionalInfoInput = z.infer<typeof AdditionalInfoSchema>;
 
-export const LanguageForm: FC<{
+export const AdditionalForm: FC<{
   defaultLocale: Locale;
-  initial?: { id: string; name: unknown; level: unknown };
+  initial?: { id: string; text: unknown };
   onSuccess: () => void;
   onCancel: () => void;
 }> = ({ defaultLocale, initial, onSuccess, onCancel }) => {
-  const t = useTranslations("admin.forms.language");
+  const t = useTranslations("admin.forms.additional");
   const utils = api.useUtils();
-  const create = api.cv.createLanguage.useMutation();
-  const update = api.cv.updateLanguage.useMutation();
+  const create = api.cv.createAdditionalInfo.useMutation();
+  const update = api.cv.updateAdditionalInfo.useMutation();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<LanguageInput>({
-    resolver: zodResolver(LanguageSchema),
+  const form = useForm<AdditionalInfoInput>({
+    resolver: zodResolver(AdditionalInfoSchema),
     defaultValues: {
-      name: (initial?.name as { default: string } | undefined) ?? {
-        default: "",
-      },
-      level: (initial?.level as { default: string } | undefined) ?? {
+      text: (initial?.text as { default: string } | undefined) ?? {
         default: "",
       },
     },
   });
 
-  const handleSubmit = (input: LanguageInput) => {
+  const handleSubmit = (input: AdditionalInfoInput) => {
     startTransition(async () => {
       try {
         if (initial?.id) {
-          await update.mutateAsync({ id: initial.id, ...input });
+          await update.mutateAsync({ id: initial.id, text: input.text });
         } else {
-          await create.mutateAsync(input);
+          await create.mutateAsync({ text: input.text });
         }
         await utils.cv.getMine.invalidate();
-        toast.success(t("savedSuccess") || "Saved successfully");
+        toast.success(t("savedSuccess"));
         onSuccess();
       } catch (err) {
-        toast.error(
-          err instanceof Error ? err.message : t("saveFailed") || "Save failed",
-        );
+        toast.error(err instanceof Error ? err.message : t("saveFailed"));
       }
     });
   };
@@ -74,33 +68,25 @@ export const LanguageForm: FC<{
   return (
     <Form {...form}>
       <FormRoot
-        id="cv-language-form"
+        id="cv-additional-form"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormContent>
-          <FormSection title={"Language"}>
+          <FormSection title={t("label")}>
             <LocalizedTextField
-              name="name"
+              name="text"
               control={form.control}
-              label={t("name")}
+              label={t("label")}
               defaultLocale={defaultLocale}
               required
-              inputId="cv-language-name"
-            />
-            <LocalizedTextField
-              name="level"
-              control={form.control}
-              label={t("level")}
-              defaultLocale={defaultLocale}
-              required
-              inputId="cv-language-level"
+              inputId="cv-additional-text"
             />
           </FormSection>
         </FormContent>
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save")}
-          submitId="cv-language-form-submit"
+          submitId="cv-additional-form-submit"
         >
           <Button type="button" variant="ghost" onClick={onCancel}>
             {t("cancel")}

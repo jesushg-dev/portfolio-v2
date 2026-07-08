@@ -2,7 +2,8 @@
 import { ObjectId } from "bson";
 import { PrismaClient } from "@prisma/client";
 
-import { seedOwner } from "./seed-owner";
+import { seedPortfolioCv } from "./seed-portfolio-cv";
+import { seedPortfolioUser } from "./seed-portfolio-user";
 import { seedPortfolioSkills } from "./seed-portfolio-skills";
 import { seedPortfolioProjects } from "./seed-portfolio-projects";
 import { seedPortfolioCertifications } from "./seed-portfolio-certifications";
@@ -37,54 +38,15 @@ async function main() {
     },
   });
 
-  const skillsByKey = await seedPortfolioSkills(prisma, {
+  const langIds = {
     es: langEs.id,
     en: langEn.id,
     nl: langNl.id,
-  });
+  };
 
-  const skillJava = skillsByKey.Java;
-  const skillPhp = skillsByKey.Php;
-  const skillCsharp = skillsByKey.Csharp;
-  const skillEntity = skillsByKey.Entity;
-  const skillDotnet = skillsByKey.Dotnet;
-  const skillSwagger = skillsByKey.Swagger;
-  const skillNodejs = skillsByKey.Nodejs;
-  const skillExpress = skillsByKey.Express;
-  const skillMysql = skillsByKey.Mysql;
-  const skillSqlServer = skillsByKey.SqlServer;
-  const skillMongoDb = skillsByKey.MongoDb;
-  const skillFirebase = skillsByKey.Firebase;
-  const skillNpm = skillsByKey.Npm;
-  const skillYarn = skillsByKey.Yarn;
-  const skillVite = skillsByKey.Vite;
-  const skillGit = skillsByKey.Git;
-  const skillGithub = skillsByKey.Github;
-  const skillBitbucket = skillsByKey.Bitbucket;
-  const skillVscode = skillsByKey.Vscode;
-  const skillPostman = skillsByKey.Postman;
-  const skillGraphQL = skillsByKey.GraphQL;
-  const skillPrisma = skillsByKey.Prisma;
-  const skillAzure = skillsByKey.Azure;
-  const skillNotion = skillsByKey.Notion;
-  const skillHtml = skillsByKey.Html;
-  const skillCss = skillsByKey.Css;
-  const skillJavascript = skillsByKey.Javascript;
-  const skillTypescript = skillsByKey.Typescript;
-  const skillReact = skillsByKey.React;
-  const skillNextjs = skillsByKey.Nextjs;
-  const skillRedux = skillsByKey.Redux;
-  const skillTailwind = skillsByKey.Tailwind;
-  const skillMaterial = skillsByKey.Material;
-  const skillStyled = skillsByKey.Styled;
-  const skillSass = skillsByKey.Sass;
-  const skillBootstrap = skillsByKey.Bootstrap;
-  const skillApollo = skillsByKey.Apollo;
-  const skillWebSockets = skillsByKey.WebSockets;
-  const skillReactNative = skillsByKey.ReactNative;
-  const skillAndroid = skillsByKey.Android;
-  const skillWindforms = skillsByKey.Windforms;
-  const skillDevExpress = skillsByKey.DevExpress;
+  const { userId } = await seedPortfolioUser(prisma);
+
+  const skillsByKey = await seedPortfolioSkills(prisma, langIds, userId);
 
   // services
 
@@ -92,6 +54,7 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
+      userId,
       type: "FRONTEND",
       image: "frontend",
       ServiceTranslation: {
@@ -122,6 +85,7 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
+      userId,
       type: "BACKEND",
       image: "backend",
       ServiceTranslation: {
@@ -152,6 +116,7 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
+      userId,
       type: "MOBILE",
       image: "mobile",
       ServiceTranslation: {
@@ -182,6 +147,7 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
+      userId,
       type: "TOOLS",
       image: "sysadmin",
       ServiceTranslation: {
@@ -215,6 +181,7 @@ async function main() {
     where: { id: new ObjectId().toString() },
     update: {},
     create: {
+      userId,
       type: "TOOLS",
       image: "cybersecurity",
       ServiceTranslation: {
@@ -244,30 +211,11 @@ async function main() {
     },
   });
 
-  await seedPortfolioProjects(
-    prisma,
-    {
-      es: langEs.id,
-      en: langEn.id,
-      nl: langNl.id,
-    },
-    skillsByKey,
-  );
+  await seedPortfolioProjects(prisma, langIds, skillsByKey, userId);
 
-  await seedPortfolioCertifications(
-    prisma,
-    {
-      es: langEs.id,
-      en: langEn.id,
-      nl: langNl.id,
-    },
-    skillsByKey,
-  );
+  await seedPortfolioCertifications(prisma, langIds, skillsByKey, userId);
 
-  // Create the primary owner (Jesús) and migrate the legacy `messages/*.json`
-  // CV content into the new `Cv*` tables. Existing Project / Skill / Service
-  // / Certification rows without a `userId` are also reassigned to the owner.
-  await seedOwner(prisma);
+  await seedPortfolioCv(prisma, userId, skillsByKey);
 }
 
 main()

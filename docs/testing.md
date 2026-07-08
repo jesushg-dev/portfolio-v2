@@ -163,26 +163,30 @@ End-to-end tests live in `e2e/` and use Playwright with a real dev server (`pnpm
 ### Prerequisites
 
 1. Copy `e2e/env.example` values into `.env.local` (gitignored):
-   - `E2E_USER_EMAIL` / `E2E_USER_PASSWORD` — credentials for an existing user in your test database
+   - `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD` — same credentials used by `pnpm db:seed` and Playwright login
    - Optional `E2E_BASE_URL` (defaults to `http://localhost:3000`)
-2. Install browsers once: `pnpm exec playwright install chromium`
-3. The test DB should be reachable via your normal `.env` / `DATABASE_URL` when the dev server starts.
+2. Run `pnpm db:seed` so the owner user and credential account exist before e2e.
+3. Install browsers once: `pnpm exec playwright install chromium`
+4. The test DB should be reachable via your normal `.env` / `DATABASE_URL` when the dev server starts.
 
 ### Commands
 
-| Script                                | What runs                                                                  |
-| ------------------------------------- | -------------------------------------------------------------------------- |
-| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, and certification create |
-| `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)           |
-| `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)        |
-| `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                  |
-| `pnpm test:e2e:projects`              | Full **projects** suite — serial 19-project create (`projects-create`)     |
-| `pnpm test:e2e:projects:headed`       | Projects suite with visible browser                                        |
-| `pnpm test:e2e:projects:ui`           | Playwright UI mode for the projects project                                |
-| `pnpm test:e2e:certifications`        | Full **certifications** suite — serial 49-cert create                      |
-| `pnpm test:e2e:certifications:headed` | Certifications suite with visible browser                                  |
-| `pnpm test:e2e:certifications:ui`     | Playwright UI mode for the certifications project                          |
-| `pnpm test:e2e:ui`                    | Playwright UI for all projects                                             |
+| Script                                | What runs                                                                              |
+| ------------------------------------- | -------------------------------------------------------------------------------------- |
+| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, and CV contact create |
+| `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)                       |
+| `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)                    |
+| `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                              |
+| `pnpm test:e2e:projects`              | Full **projects** suite — serial 19-project create (`projects-create`)                 |
+| `pnpm test:e2e:projects:headed`       | Projects suite with visible browser                                                    |
+| `pnpm test:e2e:projects:ui`           | Playwright UI mode for the projects project                                            |
+| `pnpm test:e2e:certifications`        | Full **certifications** suite — serial 49-cert create                                  |
+| `pnpm test:e2e:certifications:headed` | Certifications suite with visible browser                                              |
+| `pnpm test:e2e:certifications:ui`     | Playwright UI mode for the certifications project                                      |
+| `pnpm test:e2e:cv`                    | Full **CV** suite — serial rebuild from `portfolio-cv.json` (`cv-create`)              |
+| `pnpm test:e2e:cv:headed`             | CV suite with visible browser                                                          |
+| `pnpm test:e2e:cv:ui`                 | Playwright UI mode for the CV project                                                  |
+| `pnpm test:e2e:ui`                    | Playwright UI for all projects                                                         |
 
 Auth session is saved to `e2e/.auth/user.json` by `e2e/auth.setup.ts` (gitignored).
 
@@ -193,7 +197,9 @@ Portfolio skills for seed and E2E share one source of truth:
 - `prisma/data/portfolio-skills.json` — 42 skills used by `prisma/seed.ts`
 - `e2e/fixtures/portfolio-skills.ts` — typed re-export for tests
 
-`e2e/helpers/fill-skill-form.ts` fills the admin skill form via stable `#skill-*` input IDs. `skills-cleanup.ts` removes fixture skills via tRPC before the full suite so runs stay idempotent when the DB was already seeded.
+`e2e/helpers/fill-skill-form.ts` fills the admin skill form via stable `#skill-*` input IDs. `cleanupUserSkills` removes **every** owner skill via tRPC before the skills suite (including legacy/orphan rows, not only fixture titles).
+
+`ensure-portfolio-skills.ts` creates **missing** fixture skills via tRPC when a suite needs the skill picker (projects, certifications, CV). It does **not** delete existing skills — so running skills → projects in sequence keeps the 42 skills intact.
 
 ### Smoke vs full skills suite
 
@@ -207,7 +213,7 @@ Portfolio projects for seed and E2E share one source of truth:
 - `prisma/data/portfolio-projects.json` — 19 projects with translations and `skillKeys`
 - `e2e/fixtures/portfolio-projects.ts` — typed re-export for tests
 
-`e2e/helpers/fill-project-form.ts` fills the admin project form via `#project-*` IDs and selects associated skills through `SkillPicker` (`#skill-picker-*`). `ensure-portfolio-skills.ts` creates any missing fixture skills via tRPC before project tests (projects depend on skills existing for the picker). `cleanupUserProjects` removes fixture projects before each run.
+`e2e/helpers/fill-project-form.ts` fills the admin project form via `#project-*` IDs and selects associated skills through `SkillPicker` (`#skill-picker-*`). `cleanupUserProjects` clears all owner projects before each run; `ensurePortfolioSkills` fills in any missing fixture skills without touching other domains.
 
 ### Smoke vs full projects suite
 
@@ -221,12 +227,41 @@ Portfolio certifications for seed and E2E share one source of truth:
 - `prisma/data/portfolio-certifications.json` — 49 certifications with `es`/`en`/`nl` titles
 - `e2e/fixtures/portfolio-certifications.ts` — typed re-export for tests
 
-`e2e/helpers/fill-certification-form.ts` fills the admin certification form via `#certification-*` IDs, toggles stack-type checkboxes, and optionally selects skills. `ensure-portfolio-skills.ts` runs before certification tests when skills are needed for the picker.
+`e2e/helpers/fill-certification-form.ts` fills the admin certification form via `#certification-*` IDs, toggles stack-type checkboxes, and optionally selects skills. `cleanupUserCertifications` clears all owner certifications before each run; `ensurePortfolioSkills` supplies missing fixture skills for the picker.
 
 ### Smoke vs full certifications suite
 
 - **`certifications-smoke.spec.ts`** — creates **one** certification; included in `pnpm test:e2e` smoke.
 - **`certifications-create.spec.ts`** — **serial** run that creates all **49** certifications; use `pnpm test:e2e:certifications`.
+
+### CV fixture
+
+Portfolio CV for seed and E2E share one source of truth:
+
+- `prisma/data/portfolio-cv.json` — header, about, contacts, education, languages, technical skills, experiences (with `skillKeys`), soft skills, additional info
+- `e2e/fixtures/portfolio-cv.ts` — typed re-export for tests
+
+`e2e/helpers/fill-cv-form.ts` drives the CV editor at `/admin/cv` using **stable `#cv-*` IDs only** (no label/role text queries): `#cv-section-modal`, `#cv-item-modal`, `#cv-locale-es|en|nl`, `#cv-header-form-submit`, `#cv-contact-type-option-PHONE`, `#cv-editor-preview`, `#cv-admin-preview`, etc. Add matching IDs when extending forms. `cleanupUserCv` clears list sections via tRPC before each run.
+
+`e2e/helpers/verify-cv-preview.ts` asserts the rendered CV after save: admin **Preview** tab (`#cv-admin-preview`) and the public page at `/curriculum-vitae` (`#cv-public-preview`), using fixture strings for the owner’s `defaultLocale` from `portfolio-profile.json`.
+
+Personal references in the fixture are seed-only (no admin UI yet) and are not part of the E2E create flow.
+
+### Smoke vs full CV suite
+
+- **`cv-smoke.spec.ts`** — creates **one** contact; included in `pnpm test:e2e` smoke.
+- **`cv-create.spec.ts`** — **serial** run that rebuilds the full CV through the UI, then checks admin preview and the public `/curriculum-vitae` page; use `pnpm test:e2e:cv`.
+
+### Owner user and CV fixture
+
+The primary portfolio user is shared between seed and e2e:
+
+- `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD` in `.env.local` — used by `pnpm db:seed` and Playwright login
+- `prisma/data/portfolio-profile.json` — profile metadata (`username`, `displayName`, `photoUrl`, …)
+- `prisma/data/portfolio-cv.json` — CV sections (header, experiences with `skillKeys`, etc.)
+- `e2e/fixtures/portfolio-profile.ts` — typed re-export for tests
+
+Run `pnpm db:seed` before e2e so the owner account exists with a credential password matching `OWNER_USER_PASSWORD`.
 
 ### Human navigation (required for new E2E specs)
 
@@ -251,6 +286,7 @@ E2E tests must follow **real user paths** through the UI. Do not deep-link with 
 - `e2e/helpers/fill-skill-form.ts` — `goToSkillsList()` (sidebar), `#skills-add`, fill form, wait for save, repeat.
 - `e2e/helpers/fill-project-form.ts` — same pattern for projects; skill associations via `SkillPicker`.
 - `e2e/helpers/fill-certification-form.ts` — certifications with type checkboxes and optional skill associations.
+- `e2e/helpers/fill-cv-form.ts` — CV sections via nested modals and locale tabs (`#cv-locale-tabs`).
 
 Reuse this pattern for services and CV sections.
 

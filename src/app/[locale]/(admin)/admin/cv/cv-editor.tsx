@@ -29,13 +29,10 @@ const SECTION_LINKS = [
 
 type EditorView = "edit" | "preview";
 
-type CvTranslator = ReturnType<typeof useTranslations<"admin.cv">>;
-
-const CvEditorContent: FC<{ defaultLocale: Locale; t: CvTranslator }> = ({
-  defaultLocale,
-  t,
-}) => {
-  const { data } = api.cv.getMine.useQuery();
+const CvEditor: FC = () => {
+  const t = useTranslations("admin.cv");
+  const { data, isLoading, isError } = api.cv.getMine.useQuery();
+  const defaultLocale = (data?.profile?.defaultLocale as Locale) ?? "en";
   const [view, setView] = useState<EditorView>("edit");
   const [previewLocaleOverride, setPreviewLocaleOverride] =
     useState<Locale | null>(null);
@@ -65,100 +62,6 @@ const CvEditorContent: FC<{ defaultLocale: Locale; t: CvTranslator }> = ({
     previewLocale,
     defaultLocale,
   );
-
-  if (!data?.profile) return null;
-
-  return (
-    <>
-      <div className="bg-card/95 supports-[backdrop-filter]:bg-card/80 sticky top-0 z-10 mb-6 rounded-xl px-4 py-3 shadow-sm backdrop-blur">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="bg-muted/50 inline-flex rounded-lg p-0.5">
-            <button
-              type="button"
-              onClick={() => setView("edit")}
-              className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
-                view === "edit"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {t("edit")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setView("preview")}
-              className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
-                view === "preview"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {t("preview")}
-            </button>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-muted-foreground text-xs font-medium">
-              {t("previewLanguage")}
-            </span>
-            <LocaleSegment
-              value={previewLocale}
-              onChange={setPreviewLocaleOverride}
-              defaultLocale={defaultLocale}
-            />
-          </div>
-        </div>
-
-        {view === "edit" ? (
-          <nav className="mt-3 flex gap-1 overflow-x-auto pt-3">
-            {SECTION_LINKS.map((section) => {
-              const label = t(`sections.${section.labelKey}`);
-              return (
-                <a
-                  key={section.id}
-                  href={`#${section.id}`}
-                  className="text-muted-foreground hover:bg-muted hover:text-foreground shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-colors"
-                >
-                  {label}
-                </a>
-              );
-            })}
-          </nav>
-        ) : null}
-      </div>
-
-      {view === "preview" && previewData ? (
-        <CvPageFrame
-          hint={t("previewRefresh", {
-            locale: localsDisplay[previewLocale],
-          })}
-        >
-          <CvPreview
-            data={previewData}
-            aboutMeText={aboutMePreview}
-            currentLocale={previewLocale}
-            defaultLocale={defaultLocale}
-          />
-        </CvPageFrame>
-      ) : (
-        <CvPageFrame hint={t("editingBanner")}>
-          <EditableCvLayout
-            data={previewData!}
-            aboutMeText={aboutMePreview}
-            currentLocale={previewLocale}
-            defaultLocale={defaultLocale}
-            t={t}
-          />
-        </CvPageFrame>
-      )}
-    </>
-  );
-};
-
-const CvEditor: FC = () => {
-  const t = useTranslations("admin.cv");
-  const { data, isLoading, isError } = api.cv.getMine.useQuery();
-  const defaultLocale = (data?.profile?.defaultLocale as Locale) ?? "en";
 
   if (isLoading) {
     return <CvEditorSkeleton />;
@@ -196,7 +99,93 @@ const CvEditor: FC = () => {
         </h1>
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
-      <CvEditorContent defaultLocale={defaultLocale} t={t} />
+
+      <div className="bg-card/95 supports-[backdrop-filter]:bg-card/80 sticky top-0 z-10 mb-6 rounded-xl px-4 py-3 shadow-sm backdrop-blur">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="bg-muted/50 inline-flex rounded-lg p-0.5">
+            <button
+              id="cv-editor-edit"
+              type="button"
+              onClick={() => setView("edit")}
+              className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
+                view === "edit"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t("edit")}
+            </button>
+            <button
+              id="cv-editor-preview"
+              type="button"
+              onClick={() => setView("preview")}
+              className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
+                view === "preview"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t("preview")}
+            </button>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-muted-foreground text-xs font-medium">
+              {t("previewLanguage")}
+            </span>
+            <LocaleSegment
+              id="cv-preview-locale-tabs"
+              buttonIdPrefix="cv-preview-locale"
+              value={previewLocale}
+              onChange={setPreviewLocaleOverride}
+              defaultLocale={defaultLocale}
+            />
+          </div>
+        </div>
+
+        {view === "edit" ? (
+          <nav className="mt-3 flex gap-1 overflow-x-auto pt-3">
+            {SECTION_LINKS.map((section) => {
+              const label = t(`sections.${section.labelKey}`);
+              return (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  className="text-muted-foreground hover:bg-muted hover:text-foreground shrink-0 rounded-md px-2.5 py-1 text-xs font-medium transition-colors"
+                >
+                  {label}
+                </a>
+              );
+            })}
+          </nav>
+        ) : null}
+      </div>
+
+      {view === "preview" && previewData ? (
+        <CvPageFrame
+          hint={t("previewRefresh", {
+            locale: localsDisplay[previewLocale],
+          })}
+        >
+          <div id="cv-admin-preview">
+            <CvPreview
+              data={previewData}
+              aboutMeText={aboutMePreview}
+              currentLocale={previewLocale}
+              defaultLocale={defaultLocale}
+            />
+          </div>
+        </CvPageFrame>
+      ) : (
+        <CvPageFrame hint={t("editingBanner")}>
+          <EditableCvLayout
+            data={previewData!}
+            aboutMeText={aboutMePreview}
+            currentLocale={previewLocale}
+            defaultLocale={defaultLocale}
+          />
+        </CvPageFrame>
+      )}
     </div>
   );
 };

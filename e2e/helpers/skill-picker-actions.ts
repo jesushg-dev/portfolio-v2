@@ -9,10 +9,19 @@ export function toSkillSlug(title: string): string {
     .replace(/^-|-$/g, "");
 }
 
-async function resetSkillPickerFilters(page: Page): Promise<void> {
-  await page.locator("#skill-picker-search").waitFor({ state: "visible" });
+async function getSkillPickerRoot(page: Page): Promise<Locator> {
+  const inItemModal = page.locator("#cv-item-modal #skill-picker");
+  if (await inItemModal.isVisible()) {
+    return inItemModal;
+  }
+  return page.locator("#skill-picker").first();
+}
 
-  const allTypesButton = page
+async function resetSkillPickerFilters(page: Page): Promise<void> {
+  const picker = await getSkillPickerRoot(page);
+  await picker.locator("#skill-picker-search").waitFor({ state: "visible" });
+
+  const allTypesButton = picker
     .getByRole("button", {
       name: /all types|todos los tipos|alle types/i,
     })
@@ -22,16 +31,17 @@ async function resetSkillPickerFilters(page: Page): Promise<void> {
     await allTypesButton.click();
   }
 
-  await page.locator("#skill-picker-search").fill("");
+  await picker.locator("#skill-picker-search").fill("");
 }
 
 /** Scroll the picker section and tile into view inside nested scroll containers. */
 async function scrollSkillTileIntoView(
   page: Page,
+  picker: Locator,
   pickerButton: Locator,
 ): Promise<void> {
-  await page.locator("#skill-picker").scrollIntoViewIfNeeded();
-  await page.locator("#skill-picker-grid").scrollIntoViewIfNeeded();
+  await picker.scrollIntoViewIfNeeded();
+  await picker.locator("#skill-picker-grid").scrollIntoViewIfNeeded();
 
   await pickerButton.evaluate((element) => {
     element.scrollIntoView({ block: "center", inline: "nearest" });
@@ -40,10 +50,11 @@ async function scrollSkillTileIntoView(
 
 async function clickSkillTile(
   page: Page,
+  picker: Locator,
   pickerButton: Locator,
 ): Promise<void> {
   for (let attempt = 0; attempt < 3; attempt += 1) {
-    await scrollSkillTileIntoView(page, pickerButton);
+    await scrollSkillTileIntoView(page, picker, pickerButton);
 
     try {
       await pickerButton.click({ timeout: 5_000 });
@@ -56,11 +67,19 @@ async function clickSkillTile(
   }
 }
 
+function skillTileByTitle(picker: Locator, title: string): Locator {
+  return picker
+    .locator("#skill-picker-grid button")
+    .filter({ hasText: title })
+    .first();
+}
+
 /** Wait until skill tiles are rendered in the picker grid. */
 export async function waitForSkillPickerReady(page: Page): Promise<void> {
   await resetSkillPickerFilters(page);
-  await page.locator("#skill-picker").scrollIntoViewIfNeeded();
-  await page
+  const picker = await getSkillPickerRoot(page);
+  await picker.scrollIntoViewIfNeeded();
+  await picker
     .locator("#skill-picker-grid [id^='skill-picker-']")
     .first()
     .waitFor({ state: "visible", timeout: 20_000 });
@@ -74,6 +93,7 @@ export async function selectSkillsInPicker(
   if (skillKeys.length === 0) return;
 
   await waitForSkillPickerReady(page);
+  const picker = await getSkillPickerRoot(page);
 
   for (const skillKey of skillKeys) {
     const skill = skillsByKey[skillKey];
@@ -81,13 +101,11 @@ export async function selectSkillsInPicker(
       throw new Error(`Unknown skill key "${skillKey}"`);
     }
 
-    await page.locator("#skill-picker-search").fill(skill.title);
+    await picker.locator("#skill-picker-search").fill(skill.title);
 
-    const pickerButton = page.locator(
-      `#skill-picker-${toSkillSlug(skill.title)}`,
-    );
+    const pickerButton = skillTileByTitle(picker, skill.title);
     await pickerButton.waitFor({ state: "visible", timeout: 15_000 });
-    await clickSkillTile(page, pickerButton);
-    await page.locator("#skill-picker-search").fill("");
+    await clickSkillTile(page, picker, pickerButton);
+    await picker.locator("#skill-picker-search").fill("");
   }
 }

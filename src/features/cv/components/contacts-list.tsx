@@ -131,7 +131,11 @@ const ContactsList: FC = () => {
           }
         }}
       >
-        <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
+        <DialogContent
+          id="cv-item-modal"
+          closeButtonId="cv-item-modal-close"
+          className="max-h-[90vh] w-full overflow-y-auto sm:max-w-4xl"
+        >
           <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
             <DialogTitle>
               {editingId
@@ -162,7 +166,9 @@ const ContactsList: FC = () => {
       </Dialog>
 
       {!editingId && !creating ? (
-        <CvAddButton onClick={() => setCreating(true)}>{t("add")}</CvAddButton>
+        <CvAddButton id="cv-contacts-add" onClick={() => setCreating(true)}>
+          {t("add")}
+        </CvAddButton>
       ) : null}
 
       <FormStatus error={serverError} />

@@ -7,6 +7,8 @@ const CvLanguageTabs: FC = () => {
   if (!localeCtx) return null;
   return (
     <LocaleSegment
+      id="cv-locale-tabs"
+      buttonIdPrefix="cv-locale"
       value={localeCtx.editLocale}
       onChange={localeCtx.setEditLocale}
       defaultLocale={localeCtx.defaultLocale}

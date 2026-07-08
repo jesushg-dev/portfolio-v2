@@ -11,6 +11,7 @@ import { api } from "@/trpc/react";
 import { LocalizedTextSchema } from "@/lib/i18n/localized";
 import LocalizedTextField from "@/components/admin/shared/localized-text-field";
 import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import {
   FormActions,
   FormContent,
@@ -19,54 +20,47 @@ import {
 } from "@/components/shared/form-root";
 
 import type { Locale } from "@/i18n/config";
-import { Button } from "@/components/ui/button";
 
-export const LanguageSchema = z.object({
+export const SoftSkillSchema = z.object({
   name: LocalizedTextSchema,
-  level: LocalizedTextSchema,
 });
 
-export type LanguageInput = z.infer<typeof LanguageSchema>;
+export type SoftSkillInput = z.infer<typeof SoftSkillSchema>;
 
-export const LanguageForm: FC<{
+export const SoftSkillForm: FC<{
   defaultLocale: Locale;
-  initial?: { id: string; name: unknown; level: unknown };
+  initial?: { id: string; name: unknown };
   onSuccess: () => void;
   onCancel: () => void;
 }> = ({ defaultLocale, initial, onSuccess, onCancel }) => {
-  const t = useTranslations("admin.forms.language");
+  const t = useTranslations("admin.forms.softSkill");
   const utils = api.useUtils();
-  const create = api.cv.createLanguage.useMutation();
-  const update = api.cv.updateLanguage.useMutation();
+  const create = api.cv.createSoftSkill.useMutation();
+  const update = api.cv.updateSoftSkill.useMutation();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<LanguageInput>({
-    resolver: zodResolver(LanguageSchema),
+  const form = useForm<SoftSkillInput>({
+    resolver: zodResolver(SoftSkillSchema),
     defaultValues: {
       name: (initial?.name as { default: string } | undefined) ?? {
-        default: "",
-      },
-      level: (initial?.level as { default: string } | undefined) ?? {
         default: "",
       },
     },
   });
 
-  const handleSubmit = (input: LanguageInput) => {
+  const handleSubmit = (input: SoftSkillInput) => {
     startTransition(async () => {
       try {
         if (initial?.id) {
-          await update.mutateAsync({ id: initial.id, ...input });
+          await update.mutateAsync({ id: initial.id, name: input.name });
         } else {
-          await create.mutateAsync(input);
+          await create.mutateAsync({ name: input.name });
         }
         await utils.cv.getMine.invalidate();
-        toast.success(t("savedSuccess") || "Saved successfully");
+        toast.success(t("savedSuccess"));
         onSuccess();
       } catch (err) {
-        toast.error(
-          err instanceof Error ? err.message : t("saveFailed") || "Save failed",
-        );
+        toast.error(err instanceof Error ? err.message : t("saveFailed"));
       }
     });
   };
@@ -74,33 +68,25 @@ export const LanguageForm: FC<{
   return (
     <Form {...form}>
       <FormRoot
-        id="cv-language-form"
+        id="cv-soft-skill-form"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormContent>
-          <FormSection title={"Language"}>
+          <FormSection title={t("label")}>
             <LocalizedTextField
               name="name"
               control={form.control}
-              label={t("name")}
+              label={t("label")}
               defaultLocale={defaultLocale}
               required
-              inputId="cv-language-name"
-            />
-            <LocalizedTextField
-              name="level"
-              control={form.control}
-              label={t("level")}
-              defaultLocale={defaultLocale}
-              required
-              inputId="cv-language-level"
+              inputId="cv-soft-skill-text"
             />
           </FormSection>
         </FormContent>
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save")}
-          submitId="cv-language-form-submit"
+          submitId="cv-soft-skill-form-submit"
         >
           <Button type="button" variant="ghost" onClick={onCancel}>
             {t("cancel")}

@@ -106,8 +106,8 @@ const CvPageView: FC<CvPageViewProps> = async ({ locale }) => {
           ) : null}
         </div>
       </div>
-      <section className="page print:max-w-letter print:max-h-letter print:my-o lg:h-letter md:max-w-letter md:h-letter my-6 mb-0 overflow-hidden bg-gray-100 sm:mb-6 print:mx-0 print:border-0 print:bg-white">
-        <div style={{ opacity: 1 }} className="bg-white text-black">
+      <section className="page md:max-w-letter print:max-w-letter print:max-h-letter print:my-o my-6 mb-0 bg-gray-100 sm:mb-6 print:mx-0 print:overflow-hidden print:border-0 print:bg-white">
+        <div id="cv-public-preview" className="bg-white text-black">
           <CvPreview
             data={{
               header,
