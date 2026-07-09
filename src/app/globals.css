@@ -194,7 +194,7 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--border, currentColor);
   }
 
   /*========== GLOBAL VARIABLES ==========*/
@@ -754,6 +754,8 @@
   [data-theme="christmas-dark"] {
     --accent: rgba(255, 255, 255, 0.1);
     --accent-foreground: var(--color-primaryText-50);
+    --border: var(--color-divider-300);
+    --input: var(--color-divider-300);
   }
 }
 

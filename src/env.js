@@ -11,6 +11,7 @@ export const env = createEnv({
     SPOTIFY_CLIENT_ID: z.string(),
     SPOTIFY_CLIENT_SECRET: z.string(),
     SPOTIFY_CLIENT_REFRESH_TOKEN: z.string(),
+
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),

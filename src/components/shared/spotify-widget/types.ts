@@ -17,6 +17,8 @@ export interface SpotifyPlayback {
   title: string;
   subtitle: string;
   subtitleUrl: string;
+  primaryArtist: string;
+  albumName: string;
   durationMs: number;
   progressMs: number;
   isPlaying: boolean;

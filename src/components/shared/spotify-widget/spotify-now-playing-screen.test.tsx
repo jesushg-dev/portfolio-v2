@@ -18,6 +18,16 @@ import {
   mapTrackNowPlaying,
 } from "./playback-mappers";
 
+jest.mock("./use-track-lyrics", () => ({
+  useTrackLyrics: () => ({ status: "empty", lyrics: null }),
+  previewLyricsLines: (text: string) =>
+    text
+      .split("\n")
+      .map((line: string) => line.trim())
+      .filter(Boolean)
+      .slice(0, 3),
+}));
+
 const dragProps = {
   drag: "y" as const,
   dragConstraints: { top: 0, bottom: 0 },

@@ -150,6 +150,12 @@
           "more": "Más opciones",
           "repeat": "Repetir"
         },
+        "lyrics": "Letra",
+        "lyricsLoading": "Cargando letra…",
+        "lyricsUnavailable": "No se encontró la letra",
+        "lyricsExpand": "Ver letra completa",
+        "lyricsBack": "Volver a reproduciendo",
+        "lyricsProvidedBy": "Letra proporcionada por {provider}",
         "hints": {
           "currentProgress": "Progreso actual",
           "totalDuration": "Duración total",

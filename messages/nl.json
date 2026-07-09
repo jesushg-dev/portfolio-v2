@@ -150,6 +150,12 @@
           "more": "Meer opties",
           "repeat": "Herhalen"
         },
+        "lyrics": "Songtekst",
+        "lyricsLoading": "Songtekst laden…",
+        "lyricsUnavailable": "Geen songtekst gevonden",
+        "lyricsExpand": "Volledige songtekst tonen",
+        "lyricsBack": "Terug naar nu aan het spelen",
+        "lyricsProvidedBy": "Songtekst geleverd door {provider}",
         "hints": {
           "currentProgress": "Huidige voortgang",
           "totalDuration": "Totale duur",

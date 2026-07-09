@@ -149,6 +149,12 @@
           "more": "More options",
           "repeat": "Repeat"
         },
+        "lyrics": "Lyrics",
+        "lyricsLoading": "Loading lyrics…",
+        "lyricsUnavailable": "No lyrics found",
+        "lyricsExpand": "Show full lyrics",
+        "lyricsBack": "Back to now playing",
+        "lyricsProvidedBy": "Lyrics provided by {provider}",
         "hints": {
           "currentProgress": "Current progress",
           "totalDuration": "Total duration",

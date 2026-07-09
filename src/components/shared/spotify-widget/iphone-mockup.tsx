@@ -30,7 +30,7 @@ const IPhoneMockup: FC<IPhoneMockupProps> = ({
         className="absolute inset-[0.1875rem] overflow-hidden rounded-[1.9rem] bg-[#191414]"
       >
         <div
-          className="pointer-events-none absolute top-[0.375rem] left-1/2 z-30 h-[1.375rem] w-[4.5rem] -translate-x-1/2 rounded-full bg-black"
+          className="pointer-events-none absolute top-[0.375rem] left-1/2 z-50 h-[1.375rem] w-[4.5rem] -translate-x-1/2 rounded-full bg-black"
           aria-hidden
         />
         <div className="relative size-full">{children}</div>
