@@ -48,10 +48,13 @@ const SoftSkillsCarousel: FC<SoftSkillsCarouselProps> = ({ items }) => {
       setSelectedIndex(api.selectedScrollSnap());
     };
 
+    const frame = requestAnimationFrame(handleSelect);
+
     api.on("reInit", handleSelect);
     api.on("select", handleSelect);
 
     return () => {
+      cancelAnimationFrame(frame);
       api.off("reInit", handleSelect);
       api.off("select", handleSelect);
     };
@@ -125,8 +128,8 @@ const SoftSkillsCarousel: FC<SoftSkillsCarouselProps> = ({ items }) => {
           );
         })}
       </CarouselContent>
-      <CarouselPrevious className="-left-2 border-white/25 bg-black/45 text-white hover:bg-black/65 hover:text-white sm:-left-4" />
-      <CarouselNext className="-right-2 border-white/25 bg-black/45 text-white hover:bg-black/65 hover:text-white sm:-right-4" />
+      <CarouselPrevious className="-top-20 -left-2 border-white/25 bg-black/45 text-white hover:bg-black/65 hover:text-white" />
+      <CarouselNext className="-top-20 -right-2 border-white/25 bg-black/45 text-white hover:bg-black/65 hover:text-white" />
     </Carousel>
   );
 };

@@ -95,10 +95,13 @@ function Carousel({
       setCanScrollNext(api.canScrollNext());
     };
 
+    const frame = requestAnimationFrame(handleSelect);
+
     api.on("reInit", handleSelect);
     api.on("select", handleSelect);
 
     return () => {
+      cancelAnimationFrame(frame);
       api.off("reInit", handleSelect);
       api.off("select", handleSelect);
     };
