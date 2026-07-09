@@ -103,7 +103,10 @@ model Profile {
   defaultLocale String   @default("en")
   isPrimary     Boolean  @default(false)
   isPublished   Boolean  @default(false)
-  customDomain  String?  @unique
+  /// Optional custom domain. Not @unique: MongoDB unique indexes only allow
+  /// one null, which breaks multi-user signup. Enforce uniqueness in app code
+  /// when a domain is actually set.
+  customDomain  String?
   cvPdfUrl      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

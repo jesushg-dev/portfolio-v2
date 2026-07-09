@@ -49,6 +49,7 @@ describe("SpotifyNowPlayingScreen", () => {
     renderWithIntl(
       <SpotifyNowPlayingScreen
         playback={playback}
+        liveProgressMs={playback.progressMs}
         accentColor="#1db954"
         locale="en"
         flyComplete
@@ -78,6 +79,7 @@ describe("SpotifyNowPlayingScreen", () => {
     renderWithIntl(
       <SpotifyNowPlayingScreen
         playback={playback!}
+        liveProgressMs={playback!.progressMs}
         accentColor="#191414"
         locale="en"
         flyComplete
@@ -103,6 +105,7 @@ describe("SpotifyNowPlayingScreen", () => {
     renderWithIntl(
       <SpotifyNowPlayingScreen
         playback={playback}
+        liveProgressMs={playback.progressMs}
         accentColor="#191414"
         locale="en"
         flyComplete
@@ -130,6 +133,7 @@ describe("SpotifyNowPlayingScreen", () => {
     renderWithIntl(
       <SpotifyNowPlayingScreen
         playback={playback}
+        liveProgressMs={playback.progressMs}
         accentColor="#1db954"
         locale="en"
         flyComplete

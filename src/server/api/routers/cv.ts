@@ -798,10 +798,26 @@ export const cvRouter = createTRPCRouter({
           message: "Username is already taken",
         });
       }
+
+      // Omit customDomain on create so MongoDB does not store an explicit null
+      // under a legacy unique index (only one null was allowed).
       return ctx.db.profile.upsert({
         where: { userId: ctx.user.id },
-        create: { ...input, userId: ctx.user.id },
-        update: input,
+        create: {
+          userId: ctx.user.id,
+          username: input.username,
+          displayName: input.displayName,
+          defaultLocale: input.defaultLocale,
+          isPublished: input.isPublished,
+          ...(input.cvPdfUrl !== undefined ? { cvPdfUrl: input.cvPdfUrl } : {}),
+        },
+        update: {
+          username: input.username,
+          displayName: input.displayName,
+          defaultLocale: input.defaultLocale,
+          isPublished: input.isPublished,
+          ...(input.cvPdfUrl !== undefined ? { cvPdfUrl: input.cvPdfUrl } : {}),
+        },
       });
     }),
 

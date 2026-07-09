@@ -110,10 +110,12 @@
       "sections": {
         "portfolio": {
           "curriculum": "Curriculum Vitae",
-          "certificates": "Certificados"
+          "certificates": "Certificados",
+          "timeline": "Línea de tiempo"
         },
         "miscellaneous": {
           "cvGenerator": "Generador de CV",
+          "cvGeneratorHint": "Crea una cuenta gratis para armar y editar tu propio CV.",
           "opSysCv": "Win11 Simulador"
         }
       },
@@ -126,6 +128,7 @@
       "new": "Nuevo",
       "soon": "Pronto",
       "beta": "Beta",
+      "peoplePledge": "The People Pledge",
       "spotify": {
         "errors": {
           "noFetch": "Error: Algo salió mal al obtener la información",

@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import type { Locale } from "next-intl";
+import { Suspense } from "react";
 import { setRequestLocale } from "next-intl/server";
 
 import RegisterForm from "@/features/auth/components/register-form";
@@ -13,17 +14,9 @@ const RegisterPage: FC<IRegisterPageProps> = async ({ params }) => {
   setRequestLocale(locale as Locale);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Create your portfolio
-        </h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Get your own subdomain in seconds.
-        </p>
-      </div>
+    <Suspense fallback={null}>
       <RegisterForm />
-    </div>
+    </Suspense>
   );
 };
 

@@ -1,37 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+"use client";
+
 import type { FC } from "react";
 
-import useInterval from "@/hooks/use-interval";
-import { ETime } from "@/utils/constants/times";
 import { convertMsToMmSs } from "@/utils/tools/time";
 
 interface SpotifyFullscreenProgressProps {
   progressMs: number;
   durationMs: number;
+  /** @deprecated Parent should pass a live wall-clock progress value. */
   isPlaying?: boolean;
 }
 
+/** Displays progress supplied by the parent playback clock. */
 const SpotifyFullscreenProgress: FC<SpotifyFullscreenProgressProps> = ({
   progressMs,
   durationMs,
-  isPlaying,
 }) => {
-  const [currentMs, setCurrentMs] = useState(progressMs);
-  const syncedProgress = useRef(progressMs);
-
-  useEffect(() => {
-    if (syncedProgress.current !== progressMs) {
-      syncedProgress.current = progressMs;
-      setCurrentMs(progressMs);
-    }
-  }, [progressMs]);
-
-  useInterval(() => {
-    if (!isPlaying) return;
-    setCurrentMs((prev) => Math.min(prev + ETime.SECOND, durationMs));
-  }, ETime.SECOND);
-
-  const percentage = Math.min(100, (currentMs / durationMs) * 100);
+  const currentMs = Math.min(progressMs, durationMs);
+  const percentage =
+    durationMs > 0 ? Math.min(100, (currentMs / durationMs) * 100) : 0;
   const remainingMs = Math.max(0, durationMs - currentMs);
 
   return (

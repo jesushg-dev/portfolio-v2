@@ -110,10 +110,12 @@
       "sections": {
         "portfolio": {
           "curriculum": "Curriculum Vitae",
-          "certificates": "Certificates"
+          "certificates": "Certificates",
+          "timeline": "Timeline"
         },
         "miscellaneous": {
           "cvGenerator": "CV Generator",
+          "cvGeneratorHint": "Create a free account to build and edit your own CV.",
           "opSysCv": "Win11 Simulator"
         }
       },
@@ -125,6 +127,7 @@
       "new": "New",
       "soon": "Soon",
       "beta": "Beta",
+      "peoplePledge": "The People Pledge",
       "spotify": {
         "errors": {
           "noFetch": "Error: Something went wrong while fetching data",

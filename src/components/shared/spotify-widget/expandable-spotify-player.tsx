@@ -32,6 +32,7 @@ import {
   type ExpandRects,
 } from "./expand-rects";
 import { useDragToClose } from "./use-drag-to-close";
+import { usePlaybackClock } from "./use-playback-clock";
 import {
   SPOTIFY_BACKDROP_TRANSITION,
   SPOTIFY_LAYOUT_SPRING,
@@ -71,6 +72,14 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
   const accentColor = useAlbumColor(playback.imageUrl);
   const hasPreview = Boolean(playback.previewUrl);
   const isRecentlyPlayed = playback.source === "recently_played";
+  const isSpotifyPlaying =
+    playback.source === "now_playing" && playback.isPlaying;
+  // Keep ticking while collapsed so lyrics/progress stay in sync on reopen.
+  const liveProgressMs = usePlaybackClock(
+    playback.progressMs,
+    playback.durationMs,
+    isSpotifyPlaying,
+  );
 
   const closeExpandedState = useCallback(() => {
     setIsExpanded(false);
@@ -178,7 +187,7 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
               alt={playback.imageAlt}
               width={64}
               height={64}
-              className="size-16 rounded-[0.25rem] object-cover shadow-lg"
+              className="size-16 rounded-lg object-cover shadow-lg"
             />
             {playback.isPlaying && <PlayingIndicator color={accentColor} />}
           </div>
@@ -292,7 +301,7 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
         createPortal(
           <AnimatePresence>
             {isExpanded && (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+              <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
                 <motion.button
                   type="button"
                   initial={{ opacity: 0 }}
@@ -307,7 +316,7 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
                 {showFlyingLayer && (
                   <>
                     <motion.div
-                      className="pointer-events-none fixed z-[102] overflow-hidden shadow-2xl"
+                      className="pointer-events-none fixed z-102 overflow-hidden shadow-2xl"
                       style={{ y }}
                       initial={{
                         top: expandRects.cover.top,
@@ -343,7 +352,7 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
                     </motion.div>
 
                     <motion.p
-                      className="pointer-events-none fixed z-[102] truncate font-bold text-white"
+                      className="pointer-events-none fixed z-102 truncate font-bold text-white"
                       style={{ y }}
                       initial={{
                         top: expandRects.title.top,
@@ -372,7 +381,7 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
                     </motion.p>
 
                     <motion.p
-                      className="pointer-events-none fixed z-[102] truncate text-white/70"
+                      className="pointer-events-none fixed z-102 truncate text-white/70"
                       style={{ y }}
                       initial={{
                         top: expandRects.artist.top,
@@ -408,11 +417,12 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.94 }}
                   transition={SPOTIFY_PANEL_SPRING}
-                  className="relative z-[101] will-change-transform"
+                  className="relative z-101 will-change-transform"
                 >
                   <IPhoneMockup screenRef={screenRef}>
                     <SpotifyNowPlayingScreen
                       playback={playback}
+                      liveProgressMs={liveProgressMs}
                       accentColor={accentColor}
                       locale={locale}
                       flyComplete={flyComplete}

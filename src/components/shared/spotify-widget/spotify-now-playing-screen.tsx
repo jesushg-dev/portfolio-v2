@@ -21,6 +21,8 @@ import type {
 
 interface SpotifyNowPlayingScreenProps {
   playback: SpotifyPlayback;
+  /** Wall-clock progress from the parent player (survives close/reopen). */
+  liveProgressMs: number;
   accentColor: string;
   locale: string;
   flyComplete: boolean;
@@ -38,6 +40,7 @@ function trackLyricsKey(playback: SpotifyPlayback): string {
 
 const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
   playback,
+  liveProgressMs,
   accentColor,
   locale,
   flyComplete,
@@ -166,9 +169,8 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
             {playback.source === "now_playing" && (
               <div className="mt-3">
                 <SpotifyFullscreenProgress
-                  progressMs={playback.progressMs}
+                  progressMs={liveProgressMs}
                   durationMs={playback.durationMs}
-                  isPlaying={playback.isPlaying}
                 />
               </div>
             )}
@@ -188,11 +190,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               accentColor={accentColor}
               height={Math.round(coverSize * 0.9)}
               lyricsState={lyricsState}
-              progressMs={playback.progressMs}
-              durationMs={playback.durationMs}
-              isPlaying={
-                playback.source === "now_playing" && playback.isPlaying
-              }
+              progressMs={liveProgressMs}
               labels={{
                 title: t("spotify.lyrics"),
                 loading: t("spotify.lyricsLoading"),
@@ -214,9 +212,8 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
             syncedLyrics={lyricsState.lyrics.syncedLyrics}
             accentColor={accentColor}
             showProgress={playback.source === "now_playing"}
-            progressMs={playback.progressMs}
+            progressMs={liveProgressMs}
             durationMs={playback.durationMs}
-            isPlaying={playback.isPlaying}
             backLabel={t("spotify.lyricsBack")}
             providedByLabel={t("spotify.lyricsProvidedBy", {
               provider: "LRCLIB",

@@ -32,7 +32,8 @@ jest.mock("react-use-audio-player", () => ({
 
 jest.mock("./use-album-color", () => ({
   useAlbumColor: () => "#1db954",
-  buildSpotifyGradient: (hex: string) => `gradient(${hex})`,
+  SPOTIFY_PLAYER_BASE: "#191414",
+  buildSpotifyAccentOverlay: (hex: string) => `${hex}66`,
   buildSpotifyFullscreenBg: (hex: string) => `fullscreen(${hex})`,
 }));
 

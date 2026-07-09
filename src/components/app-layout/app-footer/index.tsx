@@ -1,8 +1,10 @@
-import type { FC } from "react";
+"use client";
 
+import type { FC } from "react";
 import Image from "next/image";
+import NextLink from "next/link";
 import { useTranslations } from "next-intl";
-import { FcLike } from "react-icons/fc";
+import { Heart } from "lucide-react";
 import { IoMail } from "react-icons/io5";
 import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
@@ -10,137 +12,185 @@ import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
 import { Link } from "@/i18n/routing";
 import SpotifyWidget from "@/components/shared/spotify-widget";
 
+const SOCIAL_LINKS = [
+  {
+    href: "https://linkedin.com/in/jesus-hernandez23",
+    label: "LinkedIn",
+    icon: FaLinkedinIn,
+  },
+  {
+    href: "https://github.com/jess232017",
+    label: "GitHub",
+    icon: FaGithub,
+  },
+  {
+    href: "https://wa.me/+50586793204",
+    label: "WhatsApp",
+    icon: RiWhatsappFill,
+  },
+  {
+    href: "tel:86793204",
+    label: "Phone",
+    icon: RiPhoneFill,
+  },
+  {
+    href: "mailto:jess232016@gmail.com",
+    label: "Email",
+    icon: IoMail,
+  },
+] as const;
+
+const PEOPLE_PLEDGE_URL = "https://people.pledge.party/";
+
 const Footer: FC = () => {
   const t = useTranslations("global.footer");
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="z-10 bg-gray-900">
-      <div className="container mx-auto flex max-w-(--breakpoint-xl) flex-wrap items-center justify-between px-4 py-10 sm:px-6 lg:px-8 lg:pt-20">
-        {/* Grid */}
-        <div className="grid w-full grid-cols-2 gap-6 md:grid-cols-4 lg:grid-cols-5">
-          <div className="col-span-full lg:col-span-1">
+    <footer className="bg-primary-800 text-primary-foreground relative z-10">
+      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_0.9fr_1.4fr] lg:gap-6">
+          <div className="space-y-3">
             <Link
-              className="group text-xl font-semibold text-white"
               href="/"
-              aria-label="Brand"
+              aria-label="Jehg"
+              className="group text-primary-foreground inline-flex items-baseline text-xl font-semibold tracking-tight"
             >
-              Jehg{" "}
-              <span className="tracking-relaxed text-secondaryText-500 group-hover:text-white">
+              Jehg
+              <span className="text-primary-foreground/70 group-hover:text-primary-foreground transition-colors">
                 .
               </span>
             </Link>
+            <p className="text-primary-foreground/80 max-w-xs text-sm leading-relaxed">
+              {t("madeWith")}
+              <Heart
+                aria-hidden
+                className="text-primary-foreground mx-1 inline size-3.5 fill-current align-[-2px]"
+              />
+              {t("by")} Jesús Hernández
+            </p>
+            <a
+              href={PEOPLE_PLEDGE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={t("peoplePledge")}
+              className="inline-flex opacity-90 transition-opacity hover:opacity-100"
+            >
+              <Image
+                src="/badges/people-pledge-seal.svg"
+                alt=""
+                width={88}
+                height={31}
+                className="h-8 w-auto"
+              />
+            </a>
           </div>
-          {/* End Col */}
-          <div className="col-span-1">
-            <h4 className="font-semibold text-gray-100">
+
+          <nav aria-labelledby="footer-portfolio" className="space-y-2.5">
+            <h4
+              id="footer-portfolio"
+              className="text-primary-foreground text-sm font-semibold tracking-wide"
+            >
               {t("titles.portfolio")}
             </h4>
-            <div className="mt-3 grid space-y-3">
-              <Link
-                className="inline-flex gap-x-2 text-gray-400 hover:text-gray-200"
-                href="/certificates"
-              >
-                {t("sections.portfolio.certificates")}
-              </Link>
-              <Link
-                className="inline-flex gap-x-2 text-gray-400 hover:text-gray-200"
-                href="/curriculum-vitae"
-              >
-                {t("sections.portfolio.curriculum")}
-              </Link>
-            </div>
-          </div>
-          {/* End Col */}
-          <div className="col-span-1">
-            <h4 className="font-semibold text-gray-100">
+            <ul className="space-y-1.5">
+              <li>
+                <Link
+                  href="/certificates"
+                  className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
+                >
+                  {t("sections.portfolio.certificates")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/curriculum-vitae"
+                  className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
+                >
+                  {t("sections.portfolio.curriculum")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/timeline"
+                  className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
+                >
+                  {t("sections.portfolio.timeline")}
+                </Link>
+              </li>
+            </ul>
+          </nav>
+
+          <div className="space-y-2.5">
+            <h4 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.miscellaneous")}
             </h4>
-            <div className="mt-3 grid space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex gap-x-2 text-gray-400">
-                  {t("sections.miscellaneous.cvGenerator")}
-                </span>
-                <span className="bg-primary-700 ml-1 inline rounded-md px-2 py-1 text-xs text-white">
-                  {t("soon")}
-                </span>
-              </div>
+            <div className="flex items-center gap-2">
+              <NextLink
+                href="/register?next=/admin/cv"
+                className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
+              >
+                {t("sections.miscellaneous.cvGenerator")}
+              </NextLink>
+              <span className="bg-primary-foreground/15 text-primary-foreground rounded-md px-2 py-0.5 text-xs font-medium">
+                {t("beta")}
+              </span>
             </div>
+            <p className="text-primary-foreground/65 max-w-xs text-xs leading-relaxed">
+              {t("sections.miscellaneous.cvGeneratorHint")}
+            </p>
           </div>
-          {/* End Col */}
-          <div className="col-span-2 max-md:mt-2 max-md:border-t max-md:border-white/10 max-md:pt-6 lg:border-l lg:border-white/10 lg:pl-6">
-            <h4 className="font-semibold text-gray-100">
+
+          <div className="space-y-2.5 md:col-span-2 lg:col-span-1">
+            <h4 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.NowPlaying")}
             </h4>
-            <div className="mt-4 w-full rounded-lg border border-white/8 bg-gray-800/50 p-2.5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
+            <div className="border-primary-foreground/15 bg-primary-foreground/10 rounded-xl border p-2.5 shadow-sm backdrop-blur-sm">
               <SpotifyWidget />
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2.5 flex items-center justify-end gap-2 px-1 text-xs"
+                className="mt-2 flex items-center justify-end gap-2 px-1"
                 href="https://developer.spotify.com/documentation/web-api"
               >
-                <span className="text-sm text-gray-400">
+                <span className="text-primary-foreground/70 text-xs">
                   {t("spotify.poweredBy")}
                 </span>
                 <Image
                   src="https://res.cloudinary.com/js-media/image/upload/v1691956781/portfolio/win11/Spotify_Logo_RGB_Green_a3ceey.webp"
                   alt="Spotify"
                   width={60}
-                  height={1}
+                  height={18}
                 />
               </a>
             </div>
           </div>
-          {/* End Col */}
         </div>
-        {/* End Grid */}
-        <div className="mt-5 grid w-full gap-y-2 sm:mt-7 sm:flex sm:items-center sm:justify-between sm:gap-y-0">
-          <div className="flex flex-col items-start justify-start gap-1">
-            <p className="flex items-center text-sm text-gray-400">
-              {t("madeWith")} <FcLike className="mx-auto md:mx-1" /> {t("by")}{" "}
-              Jesús Hernández
-            </p>
-            <p className="flex items-center text-xs text-gray-400">
-              {t("title")}
-              {Date().split(" ")[3]}
-            </p>
-          </div>
+      </div>
 
-          {/* End Col */}
-          {/* Social Brands */}
-          <div>
-            <a
-              href="https://linkedin.com/in/jesus-hernandez23"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
-            >
-              <FaLinkedinIn className="h-5 w-5" />
-            </a>
-            <a
-              href="https://github.com/jess232017"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
-            >
-              <FaGithub className="h-5 w-5" />
-            </a>
-            <a
-              href="https://wa.me/+50586793204"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
-            >
-              <RiWhatsappFill className="h-5 w-5" />
-            </a>
-            <a
-              href="tel:86793204"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
-            >
-              <RiPhoneFill className="h-5 w-5" />
-            </a>
-            <a
-              href="mailto:jess232016@gmail.com"
-              className="inline-flex h-10 w-10 items-center justify-center gap-x-3.5 rounded-md text-center text-gray-200 transition hover:bg-white/[.1] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-hidden"
-            >
-              <IoMail className="h-5 w-5" />
-            </a>
+      <div className="border-primary-foreground/15 border-t">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+          <p className="text-primary-foreground/70 text-xs">
+            {t("title")}
+            {year}
+          </p>
+
+          <div className="flex items-center gap-1">
+            {SOCIAL_LINKS.map(({ href, label, icon: Icon }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={
+                  href.startsWith("http") ? "noopener noreferrer" : undefined
+                }
+                className="text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground/40 inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
+              >
+                <Icon className="size-4" />
+              </a>
+            ))}
           </div>
-          {/* End Social Brands */}
         </div>
       </div>
     </footer>

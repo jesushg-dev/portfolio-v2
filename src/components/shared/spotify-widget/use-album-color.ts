@@ -75,8 +75,15 @@ function darkenHex(hex: string, amount: number): string {
   return `#${[mix(r), mix(g), mix(b)].map((c) => c.toString(16).padStart(2, "0")).join("")}`;
 }
 
-export function buildSpotifyGradient(hex: string): string {
-  return `linear-gradient(145deg, ${hex}cc 0%, ${hex}55 28%, #121212 72%, ${SPOTIFY_FALLBACK} 100%)`;
+export const SPOTIFY_PLAYER_BASE = SPOTIFY_FALLBACK;
+
+/** Solid accent wash over the dark base (hex + alpha). */
+export function buildSpotifyAccentOverlay(hex: string, alpha = 0.4): string {
+  const clamped = Math.min(1, Math.max(0, alpha));
+  const a = Math.round(clamped * 255)
+    .toString(16)
+    .padStart(2, "0");
+  return `${hex}${a}`;
 }
 
 export function buildSpotifyFullscreenBg(hex: string): string {

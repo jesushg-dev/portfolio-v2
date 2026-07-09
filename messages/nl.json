@@ -110,10 +110,12 @@
       "sections": {
         "portfolio": {
           "curriculum": "Curriculum Vitae",
-          "certificates": "Certificaten"
+          "certificates": "Certificaten",
+          "timeline": "Tijdlijn"
         },
         "miscellaneous": {
           "cvGenerator": "CV Generator",
+          "cvGeneratorHint": "Maak een gratis account om je eigen CV te bouwen en te bewerken.",
           "opSysCv": "Win11 Simulator"
         }
       },
@@ -126,6 +128,7 @@
       "new": "Nieuw",
       "soon": "Binnenkort",
       "beta": "Beta",
+      "peoplePledge": "The People Pledge",
       "spotify": {
         "errors": {
           "noFetch": "Fout: Er is iets misgegaan bij het ophalen van gegevens",

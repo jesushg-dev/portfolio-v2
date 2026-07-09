@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import type { FC, SVGProps } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,6 +28,13 @@ type LoginInput = z.infer<typeof LoginSchema>;
 const LOGIN_SHOWCASE_IMAGE =
   "https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp";
 
+function safeInternalPath(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) {
+    return "/admin";
+  }
+  return value;
+}
+
 interface LoginFormProps {
   socialProviders?: {
     github?: boolean;
@@ -42,6 +49,11 @@ const fieldInputClassName = "mt-1 h-11 shadow-sm";
 
 const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = useMemo(
+    () => safeInternalPath(searchParams.get("next")),
+    [searchParams],
+  );
   const [serverError, setServerError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const hasSocialProviders = socialProviders?.github ?? socialProviders?.google;
@@ -64,17 +76,17 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
         const { error } = await authClient.signIn.email({
           email: data.email,
           password: data.password,
-          callbackURL: "/admin",
+          callbackURL: redirectTo,
         });
         if (error) {
           setServerError(error.message ?? "Could not sign in");
           return;
         }
-        router.push("/admin");
+        router.push(redirectTo);
         router.refresh();
       });
     },
-    [router],
+    [redirectTo, router],
   );
 
   const handleSocialSignIn = useCallback(
@@ -83,14 +95,14 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
       setSocialLoading(provider);
       const { error } = await authClient.signIn.social({
         provider,
-        callbackURL: "/admin",
+        callbackURL: redirectTo,
       });
       if (error) {
         setServerError(error.message ?? "Could not sign in");
         setSocialLoading(null);
       }
     },
-    [],
+    [redirectTo],
   );
 
   const socialCount =
@@ -123,8 +135,9 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
               Welcome back!
             </h1>
             <p className="text-muted-foreground mt-4 max-w-xl text-left text-sm md:text-base">
-              Sign in to manage your portfolio, projects, skills, and
-              certifications from one place.
+              {redirectTo.startsWith("/admin/cv")
+                ? "Welcome back. Sign in to continue editing your CV, or create a free account if you’re new."
+                : "Sign in to manage your portfolio, projects, skills, and certifications from one place."}
             </p>
 
             <FormContent className="mt-8 gap-6 px-0">
@@ -222,7 +235,11 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
               <p>
                 Don&apos;t have an account?{" "}
                 <Link
-                  href="/register"
+                  href={
+                    redirectTo === "/admin"
+                      ? "/register"
+                      : `/register?next=${encodeURIComponent(redirectTo)}`
+                  }
                   className="text-primary font-medium hover:underline"
                 >
                   Sign up
@@ -248,7 +265,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
 
 function LoginShowcase() {
   return (
-    <div className="relative flex min-h-80 flex-col items-start justify-end overflow-hidden rounded-2xl md:min-h-[32rem]">
+    <div className="relative flex min-h-80 flex-col items-start justify-end overflow-hidden rounded-2xl md:min-h-128">
       <Image
         src={LOGIN_SHOWCASE_IMAGE}
         alt=""
@@ -259,7 +276,7 @@ function LoginShowcase() {
       />
       <div
         aria-hidden
-        className="from-background-900 via-background-900/80 pointer-events-none absolute inset-0 bg-gradient-to-t to-transparent"
+        className="from-background-900 via-background-900/80 pointer-events-none absolute inset-0 bg-linear-to-t to-transparent"
       />
 
       <div className="relative z-10 mb-2 flex flex-wrap items-center gap-2 p-4 md:p-8 md:pb-0">

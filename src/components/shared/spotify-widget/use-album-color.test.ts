@@ -1,13 +1,19 @@
 import {
+  buildSpotifyAccentOverlay,
   buildSpotifyFullscreenBg,
-  buildSpotifyGradient,
+  SPOTIFY_PLAYER_BASE,
 } from "./use-album-color";
 
-describe("buildSpotifyGradient", () => {
-  it("builds a multi-stop gradient using the accent color", () => {
-    expect(buildSpotifyGradient("#1db954")).toBe(
-      "linear-gradient(145deg, #1db954cc 0%, #1db95455 28%, #121212 72%, #191414 100%)",
-    );
+describe("buildSpotifyAccentOverlay", () => {
+  it("appends alpha to a solid accent color", () => {
+    expect(buildSpotifyAccentOverlay("#1db954")).toBe("#1db95466");
+    expect(buildSpotifyAccentOverlay("#1db954", 0.25)).toBe("#1db95440");
+  });
+});
+
+describe("SPOTIFY_PLAYER_BASE", () => {
+  it("uses Spotify dark base", () => {
+    expect(SPOTIFY_PLAYER_BASE).toBe("#191414");
   });
 });
 

@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import type { Locale } from "next-intl";
+import { Suspense } from "react";
 import { setRequestLocale } from "next-intl/server";
 
 import LoginForm from "@/features/auth/components/login-form";
@@ -14,12 +15,14 @@ const LoginPage: FC<ILoginPageProps> = async ({ params }) => {
   setRequestLocale(locale as Locale);
 
   return (
-    <LoginForm
-      socialProviders={{
-        github: !!env.GITHUB_CLIENT_ID,
-        google: !!env.GOOGLE_CLIENT_ID,
-      }}
-    />
+    <Suspense fallback={null}>
+      <LoginForm
+        socialProviders={{
+          github: !!env.GITHUB_CLIENT_ID,
+          google: !!env.GOOGLE_CLIENT_ID,
+        }}
+      />
+    </Suspense>
   );
 };
 

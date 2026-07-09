@@ -7,7 +7,6 @@ import { motion } from "motion/react";
 import SpotifyFullscreenProgress from "./spotify-fullscreen-progress";
 import { buildSpotifyFullscreenBg } from "./use-album-color";
 import { findActiveLyricIndex, parseLrc } from "./parse-lrc";
-import { usePlaybackClock } from "./use-playback-clock";
 import { LyricLineContent } from "./lyric-line-content";
 
 type LyricsFullscreenProps = {
@@ -19,7 +18,6 @@ type LyricsFullscreenProps = {
   showProgress: boolean;
   progressMs: number;
   durationMs: number;
-  isPlaying: boolean;
   backLabel: string;
   providedByLabel: string;
   onBack: () => void;
@@ -34,12 +32,11 @@ const LyricsFullscreen: FC<LyricsFullscreenProps> = ({
   showProgress,
   progressMs,
   durationMs,
-  isPlaying,
   backLabel,
   providedByLabel,
   onBack,
 }) => {
-  const currentMs = usePlaybackClock(progressMs, durationMs, isPlaying);
+  const currentMs = progressMs;
   const syncedLines = useMemo(
     () => (syncedLyrics ? parseLrc(syncedLyrics) : []),
     [syncedLyrics],
@@ -154,7 +151,6 @@ const LyricsFullscreen: FC<LyricsFullscreenProps> = ({
           <SpotifyFullscreenProgress
             progressMs={progressMs}
             durationMs={durationMs}
-            isPlaying={isPlaying}
           />
         </div>
       )}

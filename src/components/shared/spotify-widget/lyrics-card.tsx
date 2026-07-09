@@ -10,7 +10,6 @@ import {
   lyricPreviewWindow,
   parseLrc,
 } from "./parse-lrc";
-import { usePlaybackClock } from "./use-playback-clock";
 import { LyricLineContent } from "./lyric-line-content";
 
 type LyricsCardProps = {
@@ -18,8 +17,6 @@ type LyricsCardProps = {
   height: number;
   lyricsState: UseTrackLyricsResult;
   progressMs: number;
-  durationMs: number;
-  isPlaying: boolean;
   labels: {
     title: string;
     loading: string;
@@ -51,13 +48,11 @@ const LyricsCard: FC<LyricsCardProps> = ({
   height,
   lyricsState,
   progressMs,
-  durationMs,
-  isPlaying,
   labels,
   onExpand,
 }) => {
   const { status, lyrics } = lyricsState;
-  const currentMs = usePlaybackClock(progressMs, durationMs, isPlaying);
+  const currentMs = progressMs;
 
   const syncedLines = useMemo(
     () => (lyrics?.syncedLyrics ? parseLrc(lyrics.syncedLyrics) : []),
