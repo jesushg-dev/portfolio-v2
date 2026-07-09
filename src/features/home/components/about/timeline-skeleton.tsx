@@ -8,14 +8,14 @@ type TimelineSkeletonProps = {
 
 function TimelineItemSkeleton() {
   return (
-    <li className="flex w-[17.5rem] min-w-[17.5rem] max-w-[17.5rem] shrink-0 flex-col">
+    <li className="flex w-[17.5rem] max-w-[17.5rem] min-w-[17.5rem] shrink-0 flex-col">
       <div className="flex h-(--timeline-year-h) items-end justify-center px-1 pb-1">
         <Skeleton className="h-3 w-24" />
       </div>
       <div className="flex h-(--timeline-dot-row-h) items-center justify-center">
         <Skeleton className="size-8 rounded-full" />
       </div>
-      <div className="mx-auto h-4 w-px bg-primary-500/20" aria-hidden />
+      <div className="bg-primary-500/20 mx-auto h-4 w-px" aria-hidden />
       <div className="space-y-2 px-1 pt-1">
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-3.5 w-full" />

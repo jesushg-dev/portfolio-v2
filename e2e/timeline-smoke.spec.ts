@@ -12,7 +12,9 @@ test.describe("timeline smoke", () => {
     await cleanupUserTimeline(page);
   });
 
-  test("creates one timeline entry from the shared fixture", async ({ page }) => {
+  test("creates one timeline entry from the shared fixture", async ({
+    page,
+  }) => {
     const item = portfolioTimeline.items[0];
     if (!item) {
       throw new Error("portfolio-timeline fixture has no items");

@@ -1,38 +1,67 @@
-import type { FC } from "react";
+import type { CSSProperties, FC } from "react";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
-import { getTranslations } from "next-intl/server";
-import SoftSkillSwiper from "./soft-skill-swiper";
+import { api } from "@/trpc/server";
+import { type Locale, locales } from "@/i18n/config";
+import SoftSkillsCarousel from "./soft-skills-carousel";
+
+const isLocale = (value: string): value is Locale =>
+  (locales as readonly string[]).includes(value);
+
+function backgroundImageStyle(url: string): CSSProperties {
+  return { backgroundImage: `url(${url})` };
+}
 
 const SoftSkills: FC = async () => {
   const t = await getTranslations("main.soft-skills");
+  const locale = await getLocale();
+
+  const data = isLocale(locale)
+    ? await api.portfolio.getSoftSkillsPublic({ locale })
+    : null;
+
+  const section = data?.section;
+  const items = data?.items ?? [];
 
   return (
-    <section className="hero relative flex h-[55vh] w-full flex-col items-center overflow-hidden md:h-[65vh]">
-      <video
-        loop
-        muted
-        autoPlay
-        playsInline
-        disablePictureInPicture
-        disableRemotePlayback
-        poster="https://res.cloudinary.com/js-media/image/upload/v1642524508/portfolio/hero/1947484_ehwya0.webp"
-        className="absolute inset-0 z-[-1] h-screen w-[100vw] object-cover"
-      >
-        <source
-          src="https://res.cloudinary.com/js-media/video/upload/v1743563600/portfolio/hero-soft-skills_wjhagr.webm"
-          type="video/webm"
+    <section className="relative flex min-h-[55vh] w-full flex-col items-center overflow-hidden md:min-h-[65vh]">
+      {section?.mediaType === "IMAGE" && section.imageUrl ? (
+        <div
+          aria-hidden
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={backgroundImageStyle(section.imageUrl)}
         />
-      </video>
-      <div className="absolute top-0 left-0 h-screen w-full bg-black/50" />
-      <HeaderArticle
-        title={t("title")}
-        description=""
-        subtitle=""
-        titleClassName="text-gray-200"
-      />
-      <div className="text-secondaryText-50 mx-auto flex h-full w-full items-center justify-center gap-6 px-4 py-4 pt-0 lg:container lg:px-20 lg:py-20 lg:pt-5">
-        <SoftSkillSwiper />
+      ) : (
+        <video
+          loop
+          muted
+          autoPlay
+          playsInline
+          disablePictureInPicture
+          disableRemotePlayback
+          poster={section?.posterUrl ?? undefined}
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+        >
+          {section?.videoUrl ? (
+            <source src={section.videoUrl} type="video/webm" />
+          ) : null}
+        </video>
+      )}
+
+      <div className="absolute inset-0 z-[1] bg-black/55" />
+
+      <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center">
+        <HeaderArticle
+          title={t("title")}
+          description=""
+          subtitle=""
+          className="w-full"
+          titleClassName="text-white"
+        />
+        <div className="flex w-full flex-1 items-center justify-center">
+          <SoftSkillsCarousel items={items} />
+        </div>
       </div>
     </section>
   );

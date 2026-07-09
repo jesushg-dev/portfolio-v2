@@ -210,10 +210,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
           }),
         );
 
-        const titlePayload = localizedFromLanguageMap(
-          titleByCode,
-          primaryCode,
-        );
+        const titlePayload = localizedFromLanguageMap(titleByCode, primaryCode);
 
         const descriptionPayload = localizedFromLanguageMap(
           descriptionByCode,

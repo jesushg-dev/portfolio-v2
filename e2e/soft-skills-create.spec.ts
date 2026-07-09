@@ -1,0 +1,56 @@
+import { test, expect } from "@playwright/test";
+
+import { portfolioSoftSkills } from "./fixtures/portfolio-soft-skills";
+import {
+  cleanupUserSoftSkills,
+  extractLocalizedText,
+  fillSoftSkillsFromFixture,
+  getSoftSkillsMine,
+  getSoftSkillsSection,
+} from "./helpers/fill-soft-skills-form";
+
+test.setTimeout(30 * 60 * 1000);
+
+test.describe.configure({ mode: "serial" });
+
+test.describe("soft skills create", () => {
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext({
+      storageState: "e2e/.auth/user.json",
+    });
+    const page = await context.newPage();
+    await cleanupUserSoftSkills(page);
+    await context.close();
+  });
+
+  test("creates section settings and all soft skills from the shared fixture", async ({
+    page,
+  }) => {
+    await page.goto("/admin");
+    await fillSoftSkillsFromFixture(page);
+
+    const section = await getSoftSkillsSection(page);
+    expect(section.mediaType).toBe(portfolioSoftSkills.section.mediaType);
+    expect(section.videoUrl).toBe(portfolioSoftSkills.section.videoUrl);
+    expect(section.posterUrl).toBe(portfolioSoftSkills.section.posterUrl);
+
+    const items = await getSoftSkillsMine(page);
+    expect(items).toHaveLength(portfolioSoftSkills.items.length);
+
+    const teamwork = items.find(
+      (row) => extractLocalizedText(row.title, "en") === "Teamwork",
+    );
+    expect(teamwork).toBeDefined();
+    expect(teamwork?.icon).toBe("RiTeamLine");
+    expect(teamwork?.order).toBe(0);
+
+    const leadership = items.find(
+      (row) => extractLocalizedText(row.title, "en") === "Leadership",
+    );
+    expect(leadership).toBeDefined();
+    expect(leadership?.icon).toBe("RiHandHeartLine");
+
+    const orders = items.map((row) => row.order);
+    expect(orders).toEqual([...orders].sort((a, b) => a - b));
+  });
+});

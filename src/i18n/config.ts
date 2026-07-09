@@ -134,6 +134,26 @@ export const pathnames = {
     es: "/panel/timeline/[id]/editar",
     nl: "/admin/timeline/[id]/edit",
   },
+  "/admin/soft-skills": {
+    en: "/admin/soft-skills",
+    es: "/panel/habilidades-blandas",
+    nl: "/admin/soft-skills",
+  },
+  "/admin/soft-skills/new": {
+    en: "/admin/soft-skills/new",
+    es: "/panel/habilidades-blandas/nuevo",
+    nl: "/admin/soft-skills/new",
+  },
+  "/admin/soft-skills/settings": {
+    en: "/admin/soft-skills/settings",
+    es: "/panel/habilidades-blandas/configuracion",
+    nl: "/admin/soft-skills/settings",
+  },
+  "/admin/soft-skills/[id]/edit": {
+    en: "/admin/soft-skills/[id]/edit",
+    es: "/panel/habilidades-blandas/[id]/editar",
+    nl: "/admin/soft-skills/[id]/edit",
+  },
 } satisfies Pathnames<typeof locales>;
 
 export const defaultLocale: Locale = "en";

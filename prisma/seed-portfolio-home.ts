@@ -32,7 +32,7 @@ const portfolioHome = JSON.parse(
 function asJson(
   value: ReturnType<typeof toLocalizedText>,
 ): Prisma.InputJsonValue {
-  return value as Prisma.InputJsonValue;
+  return value;
 }
 
 export async function seedPortfolioHome(
@@ -82,7 +82,9 @@ export async function seedPortfolioHome(
     },
   });
 
-  await prisma.cvTerminalStep.deleteMany({ where: { terminalId: terminal.id } });
+  await prisma.cvTerminalStep.deleteMany({
+    where: { terminalId: terminal.id },
+  });
   for (const [index, step] of data.terminal.steps.entries()) {
     const commandDefault = toLocalizedText(step.command).default;
     const outputDefault = toLocalizedText(step.output).default;

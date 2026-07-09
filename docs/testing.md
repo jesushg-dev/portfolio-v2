@@ -171,28 +171,31 @@ End-to-end tests live in `e2e/` and use Playwright with a real dev server (`pnpm
 
 ### Commands
 
-| Script                                | What runs                                                                              |
-| ------------------------------------- | -------------------------------------------------------------------------------------- |
-| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, CV contact, profile hero, and timeline entry |
-| `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)                       |
-| `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)                    |
-| `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                              |
-| `pnpm test:e2e:projects`              | Full **projects** suite — serial 19-project create (`projects-create`)                 |
-| `pnpm test:e2e:projects:headed`       | Projects suite with visible browser                                                    |
-| `pnpm test:e2e:projects:ui`           | Playwright UI mode for the projects project                                            |
-| `pnpm test:e2e:certifications`        | Full **certifications** suite — serial 49-cert create                                  |
-| `pnpm test:e2e:certifications:headed` | Certifications suite with visible browser                                              |
-| `pnpm test:e2e:certifications:ui`     | Playwright UI mode for the certifications project                                      |
-| `pnpm test:e2e:cv`                    | Full **CV** suite — serial rebuild from `portfolio-cv.json` (`cv-create`)              |
-| `pnpm test:e2e:cv:headed`             | CV suite with visible browser                                                          |
-| `pnpm test:e2e:cv:ui`                 | Playwright UI mode for the CV project                                                  |
-| `pnpm test:e2e:profile`               | Full **profile** suite — hero + console from `portfolio-home.json` (`profile-create`)  |
-| `pnpm test:e2e:profile:headed`        | Profile suite with visible browser                                                     |
-| `pnpm test:e2e:profile:ui`            | Playwright UI mode for the profile project                                              |
-| `pnpm test:e2e:timeline`              | Full **timeline** suite — serial 9-entry create from `portfolio-timeline.json`         |
-| `pnpm test:e2e:timeline:headed`     | Timeline suite with visible browser                                                    |
-| `pnpm test:e2e:timeline:ui`         | Playwright UI mode for the timeline project                                            |
-| `pnpm test:e2e:ui`                    | Playwright UI for all projects                                                         |
+| Script                                | What runs                                                                                                                 |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, CV contact, profile hero, timeline entry, and soft skill |
+| `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)                                                          |
+| `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)                                                       |
+| `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                                                                 |
+| `pnpm test:e2e:projects`              | Full **projects** suite — serial 19-project create (`projects-create`)                                                    |
+| `pnpm test:e2e:projects:headed`       | Projects suite with visible browser                                                                                       |
+| `pnpm test:e2e:projects:ui`           | Playwright UI mode for the projects project                                                                               |
+| `pnpm test:e2e:certifications`        | Full **certifications** suite — serial 49-cert create                                                                     |
+| `pnpm test:e2e:certifications:headed` | Certifications suite with visible browser                                                                                 |
+| `pnpm test:e2e:certifications:ui`     | Playwright UI mode for the certifications project                                                                         |
+| `pnpm test:e2e:cv`                    | Full **CV** suite — serial rebuild from `portfolio-cv.json` (`cv-create`)                                                 |
+| `pnpm test:e2e:cv:headed`             | CV suite with visible browser                                                                                             |
+| `pnpm test:e2e:cv:ui`                 | Playwright UI mode for the CV project                                                                                     |
+| `pnpm test:e2e:profile`               | Full **profile** suite — hero + console from `portfolio-home.json` (`profile-create`)                                     |
+| `pnpm test:e2e:profile:headed`        | Profile suite with visible browser                                                                                        |
+| `pnpm test:e2e:profile:ui`            | Playwright UI mode for the profile project                                                                                |
+| `pnpm test:e2e:timeline`              | Full **timeline** suite — serial 9-entry create from `portfolio-timeline.json`                                            |
+| `pnpm test:e2e:timeline:headed`       | Timeline suite with visible browser                                                                                       |
+| `pnpm test:e2e:timeline:ui`           | Playwright UI mode for the timeline project                                                                               |
+| `pnpm test:e2e:soft-skills`           | Full **soft skills** suite — section + 8 items from `portfolio-soft-skills.json`                                          |
+| `pnpm test:e2e:soft-skills:headed`    | Soft skills suite with visible browser                                                                                    |
+| `pnpm test:e2e:soft-skills:ui`        | Playwright UI mode for the soft skills project                                                                            |
+| `pnpm test:e2e:ui`                    | Playwright UI for all projects                                                                                            |
 
 Auth session is saved to `e2e/.auth/user.json` by `e2e/auth.setup.ts` (gitignored).
 
@@ -270,6 +273,21 @@ Timeline entries for seed and E2E share one source of truth:
 - **`timeline-smoke.spec.ts`** — creates **one** timeline entry; included in `pnpm test:e2e` smoke.
 - **`timeline-create.spec.ts`** — **serial** run that creates all **9** entries through the UI; use `pnpm test:e2e:timeline`.
 
+### Soft skills fixture
+
+Portfolio soft skills for seed and E2E share one source of truth:
+
+- `prisma/data/portfolio-soft-skills.json` — section media (video/poster) + 8 items with icons and translations
+- `prisma/seed-portfolio-soft-skills.ts` — wipes and recreates owner soft skills + section
+- `e2e/fixtures/portfolio-soft-skills.ts` — typed re-export for tests
+
+`e2e/helpers/fill-soft-skills-form.ts` drives `/admin/soft-skills/settings` and `/admin/soft-skills/new` via `#soft-skills-*` / `#soft-skill-*` IDs and locale tabs (`#soft-skill-lang-es|en|nl`). `cleanupUserSoftSkills` removes every owner soft skill item via tRPC before each run.
+
+### Smoke vs full soft skills suite
+
+- **`soft-skills-smoke.spec.ts`** — creates **one** soft skill; included in `pnpm test:e2e` smoke.
+- **`soft-skills-create.spec.ts`** — **serial** run that saves section settings and creates all **8** items through the UI; use `pnpm test:e2e:soft-skills`.
+
 ### CV fixture
 
 Portfolio CV for seed and E2E share one source of truth:
@@ -306,7 +324,7 @@ E2E tests must follow **real user paths** through the UI. Do not deep-link with 
 **Do**
 
 - Start from a realistic entry point (e.g. `/admin` after auth setup).
-- Use the **sidebar**, toolbar links, and buttons (`#skills-add`, `#projects-add`, `#certifications-add`, `#timeline-add`, etc.) to reach each screen.
+- Use the **sidebar**, toolbar links, and buttons (`#skills-add`, `#projects-add`, `#certifications-add`, `#timeline-add`, `#soft-skills-add`, etc.) to reach each screen.
 - Wait for the previous action to finish (mutation response, leave `/new`, list visible) before starting the next step.
 - Use stable `inputId` / `#…` selectors on fields once the form is open.
 - Use `page.goto()` only for exceptions: login page, initial `/admin` landing, or query params with no UI (e.g. `?perPage=100` to assert pagination).
@@ -323,6 +341,7 @@ E2E tests must follow **real user paths** through the UI. Do not deep-link with 
 - `e2e/helpers/fill-project-form.ts` — same pattern for projects; skill associations via `SkillPicker`.
 - `e2e/helpers/fill-certification-form.ts` — certifications with type checkboxes and optional skill associations.
 - `e2e/helpers/fill-timeline-form.ts` — timeline items via sidebar → `#timeline-add`.
+- `e2e/helpers/fill-soft-skills-form.ts` — section settings via `#soft-skills-settings`, items via `#soft-skills-add`.
 - `e2e/helpers/fill-cv-form.ts` — CV sections via nested modals and locale tabs (`#cv-locale-tabs`).
 
 Reuse this pattern for services and CV sections.

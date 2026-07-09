@@ -74,7 +74,7 @@ const TimelineCard: FC<TimelineCardProps> = ({
   return (
     <motion.li
       variants={cardVariants}
-      className="flex w-[17.5rem] min-w-[17.5rem] max-w-[17.5rem] shrink-0 snap-center flex-col"
+      className="flex w-[17.5rem] max-w-[17.5rem] min-w-[17.5rem] shrink-0 snap-center flex-col"
     >
       <div className="flex h-(--timeline-year-h) items-end justify-center px-1 pb-1">
         <time
@@ -100,7 +100,10 @@ const TimelineCard: FC<TimelineCardProps> = ({
         </Tooltip>
       </div>
 
-      <div className="bg-primary-500/25 mx-auto h-4 w-px shrink-0" aria-hidden />
+      <div
+        className="bg-primary-500/25 mx-auto h-4 w-px shrink-0"
+        aria-hidden
+      />
 
       <article className="space-y-2 px-1 pt-1">
         {image ? (

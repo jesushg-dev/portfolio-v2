@@ -216,7 +216,9 @@ export async function fillTimelineSmoke(
 }
 
 export async function getTimelineMine(page: Page): Promise<TimelineMineItem[]> {
-  const response = await page.request.get(trpcGetInput("timelineAdmin.getMine"));
+  const response = await page.request.get(
+    trpcGetInput("timelineAdmin.getMine"),
+  );
   if (!response.ok()) {
     throw new Error(
       `timelineAdmin.getMine failed: ${response.status()} ${await response.text()}`,

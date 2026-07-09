@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState, useTransition } from "react";
 import type { AppLanguage } from "@prisma/client";
 import { useTranslations } from "next-intl";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import type { Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GripVertical, Plus, Trash2 } from "lucide-react";
 import { z } from "zod";
@@ -180,7 +181,7 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
         }
       });
     },
-    [primaryLang?.id, upsertTerminal, utils, t],
+    [primaryLang, upsertTerminal, utils, t],
   );
 
   const handleAddStep = useCallback(() => {
@@ -318,86 +319,18 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
             >
               <SortableContent asChild>
                 <div className="flex flex-col gap-4">
-                  {fields.map((field, stepIndex) => {
-                    const translations =
-                      form.watch(`steps.${stepIndex}.translations`) ?? [];
-                    const translationIndex = translations.findIndex(
-                      (translation) =>
-                        translation.appLanguageId === activeLangId,
-                    );
-
-                    if (translationIndex < 0) return null;
-
-                    return (
-                      <SortableItem key={field.id} value={field.id} asChild>
-                        <div className="border-border bg-card text-card-foreground rounded-lg border p-4">
-                          <div className="mb-3 flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2">
-                              <SortableItemHandle className="text-muted-foreground hover:text-foreground">
-                                <GripVertical className="size-4" />
-                              </SortableItemHandle>
-                              <span className="text-sm font-medium">
-                                {t("stepLabel", { n: stepIndex + 1 })}
-                              </span>
-                            </div>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleRemoveStep(stepIndex)}
-                              disabled={fields.length <= 1}
-                              className="text-muted-foreground hover:text-destructive h-8"
-                            >
-                              <Trash2 className="mr-1 size-4" />
-                              {t("removeStep")}
-                            </Button>
-                          </div>
-
-                          <div className="space-y-4">
-                            <FormField
-                              control={form.control}
-                              name={`steps.${stepIndex}.translations.${translationIndex}.command`}
-                              render={({ field: commandField }) => (
-                                <FormItem
-                                  label={t("commandLabel")}
-                                  inputId={`profile-console-command-${stepIndex}`}
-                                >
-                                  <FormControl>
-                                    <Input
-                                      {...commandField}
-                                      className="font-mono text-sm"
-                                      placeholder={t("commandPlaceholder")}
-                                    />
-                                  </FormControl>
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={form.control}
-                              name={`steps.${stepIndex}.translations.${translationIndex}.output`}
-                              render={({ field: outputField }) => (
-                                <FormItem
-                                  label={t("outputLabel")}
-                                  description={t("outputHint")}
-                                  inputId={`profile-console-output-${stepIndex}`}
-                                >
-                                  <FormControl>
-                                    <Textarea
-                                      {...outputField}
-                                      rows={8}
-                                      className="font-mono text-sm"
-                                      placeholder={t("outputPlaceholder")}
-                                    />
-                                  </FormControl>
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-                        </div>
-                      </SortableItem>
-                    );
-                  })}
+                  {fields.map((field, stepIndex) => (
+                    <ConsoleStepSortableItem
+                      key={field.id}
+                      fieldId={field.id}
+                      stepIndex={stepIndex}
+                      activeLangId={activeLangId}
+                      control={form.control}
+                      fieldsLength={fields.length}
+                      onRemove={handleRemoveStep}
+                      t={t}
+                    />
+                  ))}
                 </div>
               </SortableContent>
             </Sortable>
@@ -425,5 +358,106 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
         />
       </FormRoot>
     </Form>
+  );
+}
+
+type ConsoleStepSortableItemProps = {
+  fieldId: string;
+  stepIndex: number;
+  activeLangId: string;
+  control: Control<ConsoleFormValues>;
+  fieldsLength: number;
+  onRemove: (stepIndex: number) => void;
+  t: ReturnType<typeof useTranslations<"admin.profile.console">>;
+};
+
+function ConsoleStepSortableItem({
+  fieldId,
+  stepIndex,
+  activeLangId,
+  control,
+  fieldsLength,
+  onRemove,
+  t,
+}: ConsoleStepSortableItemProps) {
+  const translations =
+    useWatch({
+      control,
+      name: `steps.${stepIndex}.translations`,
+    }) ?? [];
+  const translationIndex = translations.findIndex(
+    (translation) => translation.appLanguageId === activeLangId,
+  );
+
+  if (translationIndex < 0) return null;
+
+  return (
+    <SortableItem value={fieldId} asChild>
+      <div className="border-border bg-card text-card-foreground rounded-lg border p-4">
+        <div className="mb-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <SortableItemHandle className="text-muted-foreground hover:text-foreground">
+              <GripVertical className="size-4" />
+            </SortableItemHandle>
+            <span className="text-sm font-medium">
+              {t("stepLabel", { n: stepIndex + 1 })}
+            </span>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => onRemove(stepIndex)}
+            disabled={fieldsLength <= 1}
+            className="text-muted-foreground hover:text-destructive h-8"
+          >
+            <Trash2 className="mr-1 size-4" />
+            {t("removeStep")}
+          </Button>
+        </div>
+
+        <div className="space-y-4">
+          <FormField
+            control={control}
+            name={`steps.${stepIndex}.translations.${translationIndex}.command`}
+            render={({ field: commandField }) => (
+              <FormItem
+                label={t("commandLabel")}
+                inputId={`profile-console-command-${stepIndex}`}
+              >
+                <FormControl>
+                  <Input
+                    {...commandField}
+                    className="font-mono text-sm"
+                    placeholder={t("commandPlaceholder")}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={control}
+            name={`steps.${stepIndex}.translations.${translationIndex}.output`}
+            render={({ field: outputField }) => (
+              <FormItem
+                label={t("outputLabel")}
+                description={t("outputHint")}
+                inputId={`profile-console-output-${stepIndex}`}
+              >
+                <FormControl>
+                  <Textarea
+                    {...outputField}
+                    rows={8}
+                    className="font-mono text-sm"
+                    placeholder={t("outputPlaceholder")}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+    </SortableItem>
   );
 }

@@ -1,13 +1,5 @@
 import "@/app/globals.css";
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/autoplay";
-import "swiper/css/controller";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css/keyboard";
-
 import type { Metadata } from "next";
 import { locales } from "@/i18n/config";
 import { NextIntlClientProvider } from "next-intl";

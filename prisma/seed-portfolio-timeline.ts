@@ -24,7 +24,10 @@ interface PortfolioTimelineSeed {
 }
 
 const portfolioTimeline = JSON.parse(
-  readFileSync(new URL("./data/portfolio-timeline.json", import.meta.url), "utf8"),
+  readFileSync(
+    new URL("./data/portfolio-timeline.json", import.meta.url),
+    "utf8",
+  ),
 ) as PortfolioTimelineSeed;
 
 function asJson(
@@ -59,9 +62,7 @@ export async function seedPortfolioTimeline(
     });
   }
 
-  console.log(
-    `[seed-portfolio-timeline] done. items=${data.items.length}`,
-  );
+  console.log(`[seed-portfolio-timeline] done. items=${data.items.length}`);
 }
 
 export { portfolioTimeline };

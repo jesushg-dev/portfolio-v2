@@ -1,0 +1,122 @@
+{
+  "section": {
+    "mediaType": "VIDEO",
+    "videoUrl": "https://res.cloudinary.com/js-media/video/upload/v1743563600/portfolio/hero-soft-skills_wjhagr.webm",
+    "posterUrl": "https://res.cloudinary.com/js-media/image/upload/v1642524508/portfolio/hero/1947484_ehwya0.webp",
+    "imageUrl": null
+  },
+  "items": [
+    {
+      "icon": "RiTeamLine",
+      "order": 0,
+      "title": {
+        "en": "Teamwork",
+        "es": "Trabajo en equipo",
+        "nl": "Teamwork"
+      },
+      "description": {
+        "en": "I enjoy collaborating and learning from others.",
+        "es": "Disfruto colaborar y aprender de los demás.",
+        "nl": "Ik werk graag samen en leer van anderen."
+      }
+    },
+    {
+      "icon": "RiShieldStarLine",
+      "order": 1,
+      "title": {
+        "en": "Problem Solving",
+        "es": "Resolución de problemas",
+        "nl": "Probleemoplossing"
+      },
+      "description": {
+        "en": "I am adept at finding effective solutions.",
+        "es": "Soy hábil encontrando soluciones efectivas.",
+        "nl": "Ik ben bedreven in het vinden van effectieve oplossingen."
+      }
+    },
+    {
+      "icon": "RiMedal2Line",
+      "order": 2,
+      "title": {
+        "en": "Goal-Oriented",
+        "es": "Orientado a objetivos",
+        "nl": "Doelgericht"
+      },
+      "description": {
+        "en": "I set objectives and work hard to achieve them.",
+        "es": "Establezco objetivos y trabajo duro para lograrlos.",
+        "nl": "Ik stel doelen en werk hard om ze te bereiken."
+      }
+    },
+    {
+      "icon": "RiSettingsLine",
+      "order": 3,
+      "title": {
+        "en": "Adaptability",
+        "es": "Adaptabilidad",
+        "nl": "Aanpassingsvermogen"
+      },
+      "description": {
+        "en": "I easily embrace new technologies and frameworks.",
+        "es": "Adopto fácilmente nuevas tecnologías y frameworks.",
+        "nl": "Ik omarm gemakkelijk nieuwe technologieën en frameworks."
+      }
+    },
+    {
+      "icon": "RiTimerFlashLine",
+      "order": 4,
+      "title": {
+        "en": "Time Management",
+        "es": "Gestión del tiempo",
+        "nl": "Tijdmanagement"
+      },
+      "description": {
+        "en": "I prioritize tasks and optimize efficiency.",
+        "es": "Priorizo tareas y optimizo la eficiencia.",
+        "nl": "Ik stel prioriteiten en optimaliseer efficiëntie."
+      }
+    },
+    {
+      "icon": "RiHandHeartLine",
+      "order": 5,
+      "title": {
+        "en": "Leadership",
+        "es": "Liderazgo",
+        "nl": "Leiderschap"
+      },
+      "description": {
+        "en": "I take charge, assume responsibilities, and direct tasks.",
+        "es": "Tomo la iniciativa, asumo responsabilidades y dirijo tareas.",
+        "nl": "Ik neem de leiding, neem verantwoordelijkheid en stuur taken aan."
+      }
+    },
+    {
+      "icon": "RiMapPinTimeLine",
+      "order": 6,
+      "title": {
+        "en": "Responsibility",
+        "es": "Responsabilidad",
+        "nl": "Verantwoordelijkheid"
+      },
+      "description": {
+        "en": "I take ownership and follow through on commitments.",
+        "es": "Asumo la responsabilidad y cumplo con los compromisos.",
+        "nl": "Ik neem eigenaarschap en kom afspraken na."
+      }
+    },
+    {
+      "icon": "RiDashboard3Line",
+      "order": 7,
+      "title": {
+        "en": "Commitment",
+        "es": "Compromiso",
+        "nl": "Toewijding"
+      },
+      "description": {
+        "en": "I stay dedicated and deliver consistent results.",
+        "es": "Me mantengo dedicado y entrego resultados consistentes.",
+        "nl": "Ik blijf toegewijd en lever consistente resultaten."
+      }
+    }
+  ]
+}

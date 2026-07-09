@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState, useTransition } from "react";
 import type { AppLanguage, CvAboutMe, CvHeader } from "@prisma/client";
 import { useTranslations } from "next-intl";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GripVertical, Plus, Trash2, User } from "lucide-react";
 import { z } from "zod";
@@ -174,15 +174,25 @@ export function ProfileHeroForm({
   const upsertHeroTitles = api.cv.upsertHeroTitles.useMutation();
 
   const activeLang = languages.find((language) => language.id === activeLangId);
-  const heroSummaryIndex = form
-    .watch("heroSummaryTranslations")
-    .findIndex((item) => item.appLanguageId === activeLangId);
-  const aboutMeIndex = form
-    .watch("aboutMeTranslations")
-    .findIndex((item) => item.appLanguageId === activeLangId);
+  const heroSummaryTranslations = useWatch({
+    control: form.control,
+    name: "heroSummaryTranslations",
+  });
+  const aboutMeTranslations = useWatch({
+    control: form.control,
+    name: "aboutMeTranslations",
+  });
+  const photoUrlValue = useWatch({ control: form.control, name: "photoUrl" });
+  const fullNameValue = useWatch({ control: form.control, name: "fullName" });
 
-  const photoUrlValue = form.watch("photoUrl");
-  const fullNameValue = form.watch("fullName");
+  const heroSummaryIndex =
+    heroSummaryTranslations?.findIndex(
+      (item) => item.appLanguageId === activeLangId,
+    ) ?? -1;
+  const aboutMeIndex =
+    aboutMeTranslations?.findIndex(
+      (item) => item.appLanguageId === activeLangId,
+    ) ?? -1;
 
   const handleSubmit = useCallback(
     (values: ProfileHeroFormValues) => {
@@ -243,7 +253,7 @@ export function ProfileHeroForm({
       });
     },
     [
-      header?.clientImageAlt,
+      header,
       languages,
       primaryLang,
       t,

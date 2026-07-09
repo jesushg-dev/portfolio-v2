@@ -37,10 +37,7 @@ type TerminalMine = {
   delayBetweenCommands: number;
   steps: {
     order: number;
-    translationsByLangId: Record<
-      string,
-      { command: string; output: string }
-    >;
+    translationsByLangId: Record<string, { command: string; output: string }>;
   }[];
 };
 
@@ -210,7 +207,9 @@ export async function fillProfileHeroFromFixture(
 ): Promise<void> {
   await goToProfileHero(page);
 
-  await page.locator("#profile-hero-full-name").fill(portfolioCv.header.fullName);
+  await page
+    .locator("#profile-hero-full-name")
+    .fill(portfolioCv.header.fullName);
   await page.locator("#profile-hero-photo-url").fill(portfolioProfile.photoUrl);
   await page
     .locator("#profile-hero-background-url")
@@ -238,7 +237,9 @@ export async function fillProfileHeroFromFixture(
       .fill(portfolioCv.aboutMe[locale]);
 
     for (const [index, title] of fixture.heroTitles.entries()) {
-      await page.locator(`#profile-hero-title-${index}-${locale}`).fill(title[locale]);
+      await page
+        .locator(`#profile-hero-title-${index}-${locale}`)
+        .fill(title[locale]);
     }
   }
 
@@ -251,7 +252,9 @@ export async function fillProfileConsoleFromFixture(
 ): Promise<void> {
   await goToProfileConsole(page);
 
-  await page.locator("#profile-console-username").fill(fixture.terminal.username);
+  await page
+    .locator("#profile-console-username")
+    .fill(fixture.terminal.username);
   await page
     .locator("#profile-console-typing-speed")
     .fill(String(fixture.terminal.typingSpeed));
@@ -260,7 +263,9 @@ export async function fillProfileConsoleFromFixture(
     .fill(String(fixture.terminal.delayBetweenCommands));
 
   const stepCount = fixture.terminal.steps.length;
-  let visibleSteps = await page.locator('[id^="profile-console-command-"]').count();
+  let visibleSteps = await page
+    .locator('[id^="profile-console-command-"]')
+    .count();
 
   while (visibleSteps < stepCount) {
     await page.locator("#profile-console-add-step").click();
@@ -298,13 +303,15 @@ export async function getHeroTitlesMine(page: Page): Promise<HeroTitlesMine> {
   return trpcQuery<HeroTitlesMine>(page, "cv.getHeroTitlesMine");
 }
 
-export async function getTerminalMine(page: Page): Promise<TerminalMine | null> {
+export async function getTerminalMine(
+  page: Page,
+): Promise<TerminalMine | null> {
   return trpcQuery<TerminalMine | null>(page, "cv.getTerminalMine");
 }
 
 export async function fillProfileHeroSmoke(
   page: Page,
-  title: LocalizedFixture = portfolioHome.heroTitles[0]!,
+  title: LocalizedFixture = portfolioHome.heroTitles[0],
   heroSummary: LocalizedFixture = portfolioHome.heroSummary,
 ): Promise<void> {
   await goToProfileHero(page);

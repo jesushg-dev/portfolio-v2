@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";

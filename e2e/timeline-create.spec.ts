@@ -43,9 +43,9 @@ test.describe("timeline create", () => {
 
     const imagemaker = items.find((row) => row.organization === "Imagemaker");
     expect(imagemaker).toBeDefined();
-    expect(
-      extractLocalizedText(imagemaker?.title, "en"),
-    ).toBe("Senior Software Engineer");
+    expect(extractLocalizedText(imagemaker?.title, "en")).toBe(
+      "Senior Software Engineer",
+    );
 
     const startDates = items.map((row) => new Date(row.startDate).getTime());
     expect(startDates).toEqual([...startDates].sort((a, b) => b - a));

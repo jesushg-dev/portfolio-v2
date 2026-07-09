@@ -24,5 +24,8 @@ export type PortfolioTimelineFixture = {
 const fixtureDir = dirname(fileURLToPath(import.meta.url));
 
 export const portfolioTimeline = JSON.parse(
-  readFileSync(join(fixtureDir, "../../prisma/data/portfolio-timeline.json"), "utf8"),
+  readFileSync(
+    join(fixtureDir, "../../prisma/data/portfolio-timeline.json"),
+    "utf8",
+  ),
 ) as PortfolioTimelineFixture;

@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { type Prisma } from "@prisma/client";
-import { db } from "@/server/db";
+import type { Prisma, PrismaClient } from "@prisma/client";
 
 import {
   createTRPCRouter,
@@ -52,7 +51,7 @@ const CvSkillCategory = z.enum([
  * Returns every CV section for a given userId. Used by the public CV page
  * (server-side) and by the dashboard to hydrate forms.
  */
-const getFullCvForUser = async (ctx: { db: typeof db }, userId: string) => {
+const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
   const [
     profile,
     header,
@@ -520,7 +519,6 @@ export const cvRouter = createTRPCRouter({
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean().default(false),
-        skills: z.string().optional(),
         skillIds: z.array(z.string()).default([]),
         order: z.number().int().nonnegative().default(0),
         responsibilities: z
@@ -534,14 +532,7 @@ export const cvRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const {
-        responsibilities,
-        role,
-        location,
-        skillIds,
-        skills: _legacySkills,
-        ...rest
-      } = input;
+      const { responsibilities, role, location, skillIds, ...rest } = input;
       return ctx.db.cvExperience.create({
         data: {
           ...rest,
@@ -581,7 +572,6 @@ export const cvRouter = createTRPCRouter({
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean().default(false),
-        skills: z.string().optional(),
         skillIds: z.array(z.string()).default([]),
         order: z.number().int().nonnegative().default(0),
         responsibilities: z
@@ -595,15 +585,7 @@ export const cvRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const {
-        id,
-        responsibilities,
-        role,
-        location,
-        skillIds,
-        skills: _legacySkills,
-        ...data
-      } = input;
+      const { id, responsibilities, role, location, skillIds, ...data } = input;
       const existing = await ctx.db.cvExperience.findUnique({ where: { id } });
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });

@@ -2,6 +2,10 @@ import { z } from "zod";
 
 import { getLocalizedText } from "@/lib/i18n/localized";
 import {
+  DEFAULT_SOFT_SKILLS_POSTER_URL,
+  DEFAULT_SOFT_SKILLS_VIDEO_URL,
+} from "@/features/soft-skills/lib/soft-skills-media";
+import {
   getHeroTitlesForLocale,
   splitAboutParagraphs,
 } from "@/features/profile/server/hero-titles";
@@ -402,7 +406,7 @@ export const portfolioRouter = createTRPCRouter({
         return [];
       }
 
-      const defaultLocale = (ctx.tenant?.defaultLocale ?? "en");
+      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
       const locale = input.locale;
 
       const timelineItems = await ctx.db.timelineItem.findMany({
@@ -431,7 +435,7 @@ export const portfolioRouter = createTRPCRouter({
         return [];
       }
 
-      const defaultLocale = (ctx.tenant?.defaultLocale ?? "en");
+      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
       const locale = input.locale;
 
       const timelineItems = await ctx.db.timelineItem.findMany({
@@ -471,7 +475,7 @@ export const portfolioRouter = createTRPCRouter({
         select: { displayName: true },
       });
 
-      const defaultLocale = (ctx.tenant?.defaultLocale ?? "en");
+      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
       const locale = input.locale;
 
       const titles = await getHeroTitlesForLocale(
@@ -509,7 +513,7 @@ export const portfolioRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return null;
 
-      const defaultLocale = (ctx.tenant?.defaultLocale ?? "en");
+      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
       const locale = input.locale;
 
       const [aboutMe, terminal] = await Promise.all([
@@ -529,6 +533,60 @@ export const portfolioRouter = createTRPCRouter({
       return {
         paragraphs: splitAboutParagraphs(aboutText),
         hasTerminal: Boolean(terminal && terminal.steps.length > 0),
+      };
+    }),
+
+  getSoftSkillsPublic: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+
+      if (!tenantUserId) {
+        return {
+          section: {
+            mediaType: "VIDEO" as const,
+            videoUrl: DEFAULT_SOFT_SKILLS_VIDEO_URL,
+            posterUrl: DEFAULT_SOFT_SKILLS_POSTER_URL,
+            imageUrl: null,
+          },
+          items: [],
+        };
+      }
+
+      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
+      const locale = input.locale;
+
+      const [section, items] = await Promise.all([
+        ctx.db.softSkillsSection.findUnique({
+          where: { userId: tenantUserId },
+        }),
+        ctx.db.portfolioSoftSkill.findMany({
+          where: { userId: tenantUserId, isVisible: true },
+          orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+        }),
+      ]);
+
+      return {
+        section: {
+          mediaType: section?.mediaType ?? "VIDEO",
+          videoUrl: section?.videoUrl ?? DEFAULT_SOFT_SKILLS_VIDEO_URL,
+          posterUrl: section?.posterUrl ?? DEFAULT_SOFT_SKILLS_POSTER_URL,
+          imageUrl: section?.imageUrl ?? null,
+        },
+        items: items.map((item) => ({
+          id: item.id,
+          icon: item.icon,
+          title: getLocalizedText(item.title, locale, defaultLocale),
+          description: getLocalizedText(
+            item.description,
+            locale,
+            defaultLocale,
+          ),
+        })),
       };
     }),
 });

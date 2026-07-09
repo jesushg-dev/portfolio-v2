@@ -45,8 +45,8 @@ test.describe("profile create", () => {
     );
     expect(whoamiStep).toBeDefined();
     expect(
-      Object.values(whoamiStep?.translationsByLangId ?? {}).some((translation) =>
-        translation.output.includes("jesus-hernandez"),
+      Object.values(whoamiStep?.translationsByLangId ?? {}).some(
+        (translation) => translation.output.includes("jesus-hernandez"),
       ),
     ).toBe(true);
 
@@ -58,7 +58,8 @@ test.describe("profile create", () => {
     expect(profileJsonStep).toBeDefined();
     expect(
       Object.values(profileJsonStep?.translationsByLangId ?? {}).some(
-        (translation) => translation.output.includes(portfolioCv.header.fullName),
+        (translation) =>
+          translation.output.includes(portfolioCv.header.fullName),
       ),
     ).toBe(true);
   });

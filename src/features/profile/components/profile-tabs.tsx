@@ -13,7 +13,6 @@ type TabLinkType = {
   exact?: boolean;
 };
 
-
 export const ProfileTabs = () => {
   const t = useTranslations("admin.profile");
   const pathname = usePathname();

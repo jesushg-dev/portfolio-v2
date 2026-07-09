@@ -16,6 +16,7 @@ import {
   LogOut,
   Clock,
   Palette,
+  Sparkles,
 } from "lucide-react";
 
 import { Link as CustomLink } from "@/i18n/routing";
@@ -35,6 +36,7 @@ type NavItem = {
     | "profile"
     | "cv"
     | "timeline"
+    | "softSkills"
     | "skills"
     | "projects"
     | "services"
@@ -48,12 +50,23 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/admin", labelKey: "overview", icon: LayoutDashboard },
   { href: "/admin/profile", labelKey: "profile", icon: User },
   { href: "/admin/cv", labelKey: "cv", icon: FileText },
-  { href: "/admin/timeline", labelKey: "timeline", icon: Clock },
   // ── Portfolio content ─────────────────────────────────
   {
     href: "/admin/skills",
     labelKey: "skills",
     icon: Code2,
+    group: "portfolio",
+  },
+  {
+    href: "/admin/timeline",
+    labelKey: "timeline",
+    icon: Clock,
+    group: "portfolio",
+  },
+  {
+    href: "/admin/soft-skills",
+    labelKey: "softSkills",
+    icon: Sparkles,
     group: "portfolio",
   },
   {
