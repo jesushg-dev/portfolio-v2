@@ -32,7 +32,10 @@ import {
   type ExpandRects,
 } from "./expand-rects";
 import { useDragToClose } from "./use-drag-to-close";
-import { usePlaybackClock } from "./use-playback-clock";
+import {
+  SpotifyPlaybackProvider,
+  useSpotifyPlaybackContext,
+} from "./spotify-playback-context";
 import {
   SPOTIFY_BACKDROP_TRANSITION,
   SPOTIFY_LAYOUT_SPRING,
@@ -45,7 +48,14 @@ interface ExpandableSpotifyPlayerProps {
 
 const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
   playback,
-}) => {
+}) => (
+  <SpotifyPlaybackProvider playback={playback}>
+    <ExpandableSpotifyPlayerContent />
+  </SpotifyPlaybackProvider>
+);
+
+const ExpandableSpotifyPlayerContent: FC = () => {
+  const { playback, liveProgressMs } = useSpotifyPlaybackContext();
   const t = useTranslations("global.footer");
   const locale = useLocale();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -72,14 +82,6 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
   const accentColor = useAlbumColor(playback.imageUrl);
   const hasPreview = Boolean(playback.previewUrl);
   const isRecentlyPlayed = playback.source === "recently_played";
-  const isSpotifyPlaying =
-    playback.source === "now_playing" && playback.isPlaying;
-  // Keep ticking while collapsed so lyrics/progress stay in sync on reopen.
-  const liveProgressMs = usePlaybackClock(
-    playback.progressMs,
-    playback.durationMs,
-    isSpotifyPlaying,
-  );
 
   const closeExpandedState = useCallback(() => {
     setIsExpanded(false);
@@ -242,9 +244,8 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
                 />
                 <ProgressTimer
                   isHidden={isLocalPlaying && hasPreview}
-                  progressMs={playback.progressMs}
+                  progressMs={liveProgressMs}
                   durationMs={playback.durationMs}
-                  isPlaying={playback.isPlaying}
                   accentColor={accentColor}
                 />
               </div>
@@ -421,8 +422,6 @@ const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
                 >
                   <IPhoneMockup screenRef={screenRef}>
                     <SpotifyNowPlayingScreen
-                      playback={playback}
-                      liveProgressMs={liveProgressMs}
                       accentColor={accentColor}
                       locale={locale}
                       flyComplete={flyComplete}

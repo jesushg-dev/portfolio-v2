@@ -40,6 +40,8 @@ describe("mapTrackNowPlaying", () => {
     const playback = mapTrackNowPlaying(mockTrack, mockNowPlayingTrack);
 
     expect(playback).toMatchObject({
+      contentId: "track-1",
+      snapshotTimestamp: mockNowPlayingTrack.timestamp,
       contentType: "track",
       source: "now_playing",
       title: "Get Lucky",
@@ -71,6 +73,8 @@ describe("mapEpisodeNowPlaying", () => {
     );
 
     expect(playback).toMatchObject({
+      contentId: "episode-1",
+      snapshotTimestamp: mockNowPlayingEpisodeNullItem.timestamp,
       contentType: "episode",
       source: "now_playing",
       title: "Taste the Cloud",
@@ -100,6 +104,8 @@ describe("mapRecentlyPlayed", () => {
     const playback = mapRecentlyPlayed(mockRecentlyPlayed);
 
     expect(playback).toMatchObject({
+      contentId: "track-1",
+      snapshotTimestamp: Date.parse("2024-01-15T10:30:00.000Z"),
       source: "recently_played",
       title: "Get Lucky",
       primaryArtist: "Daft Punk",

@@ -11,12 +11,14 @@ import {
 } from "@/test-utils/fixtures/spotify-data";
 
 import SpotifyNowPlayingScreen from "./spotify-now-playing-screen";
+import type { SpotifyPlayback } from "./types";
 import type { SpotifyDragMotionValue } from "./use-drag-to-close";
 import {
   mapEpisodeNowPlaying,
   mapRecentlyPlayed,
   mapTrackNowPlaying,
 } from "./playback-mappers";
+import { SpotifyPlaybackProvider } from "./spotify-playback-context";
 
 jest.mock("./use-track-lyrics", () => ({
   useTrackLyrics: () => ({ status: "empty", lyrics: null }),
@@ -42,14 +44,13 @@ const motionY = {
   stop: jest.fn(),
 } as unknown as SpotifyDragMotionValue;
 
-describe("SpotifyNowPlayingScreen", () => {
-  it("renders now playing header and spotify links for a track", () => {
-    const playback = mapTrackNowPlaying(mockTrack, mockNowPlayingTrack);
-
-    renderWithIntl(
+function renderNowPlayingScreen(
+  playback: SpotifyPlayback,
+  props: Partial<React.ComponentProps<typeof SpotifyNowPlayingScreen>> = {},
+) {
+  return renderWithIntl(
+    <SpotifyPlaybackProvider playback={playback}>
       <SpotifyNowPlayingScreen
-        playback={playback}
-        liveProgressMs={playback.progressMs}
         accentColor="#1db954"
         locale="en"
         flyComplete
@@ -57,8 +58,17 @@ describe("SpotifyNowPlayingScreen", () => {
         dragY={motionY}
         dragProps={dragProps}
         onClose={jest.fn()}
-      />,
-    );
+        {...props}
+      />
+    </SpotifyPlaybackProvider>,
+  );
+}
+
+describe("SpotifyNowPlayingScreen", () => {
+  it("renders now playing header and spotify links for a track", () => {
+    const playback = mapTrackNowPlaying(mockTrack, mockNowPlayingTrack);
+
+    renderNowPlayingScreen(playback, { accentColor: "#1db954" });
 
     expect(screen.getByText("Now Playing")).toBeInTheDocument();
     expect(
@@ -76,18 +86,10 @@ describe("SpotifyNowPlayingScreen", () => {
   it("renders recently played header and idle notice for history fallback", () => {
     const playback = mapRecentlyPlayed(mockRecentlyPlayed);
 
-    renderWithIntl(
-      <SpotifyNowPlayingScreen
-        playback={playback!}
-        liveProgressMs={playback!.progressMs}
-        accentColor="#191414"
-        locale="en"
-        flyComplete
-        dragY={motionY}
-        dragProps={dragProps}
-        onClose={jest.fn()}
-      />,
-    );
+    renderNowPlayingScreen(playback!, {
+      accentColor: "#191414",
+      coverSize: undefined,
+    });
 
     expect(screen.getByText("Last played")).toBeInTheDocument();
     expect(
@@ -102,18 +104,7 @@ describe("SpotifyNowPlayingScreen", () => {
       mockNowPlayingEpisodeNullItem,
     );
 
-    renderWithIntl(
-      <SpotifyNowPlayingScreen
-        playback={playback}
-        liveProgressMs={playback.progressMs}
-        accentColor="#191414"
-        locale="en"
-        flyComplete
-        dragY={motionY}
-        dragProps={dragProps}
-        onClose={jest.fn()}
-      />,
-    );
+    renderNowPlayingScreen(playback, { accentColor: "#191414" });
 
     expect(
       screen.getByRole("link", { name: "Taste the Cloud" }),
@@ -130,18 +121,7 @@ describe("SpotifyNowPlayingScreen", () => {
     const playback = mapTrackNowPlaying(mockTrack, mockNowPlayingTrack);
     const user = userEvent.setup();
 
-    renderWithIntl(
-      <SpotifyNowPlayingScreen
-        playback={playback}
-        liveProgressMs={playback.progressMs}
-        accentColor="#1db954"
-        locale="en"
-        flyComplete
-        dragY={motionY}
-        dragProps={dragProps}
-        onClose={onClose}
-      />,
-    );
+    renderNowPlayingScreen(playback, { onClose });
 
     await user.click(screen.getByRole("button", { name: "Close player" }));
     expect(onClose).toHaveBeenCalledTimes(1);

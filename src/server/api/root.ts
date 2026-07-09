@@ -3,6 +3,7 @@ import { cvRouter } from "@/server/api/routers/cv";
 import { portfolioAdminRouter } from "@/server/api/routers/portfolio-admin";
 import { timelineAdminRouter } from "@/server/api/routers/timeline-admin";
 import { softSkillsAdminRouter } from "@/server/api/routers/soft-skills-admin";
+import { contactRouter } from "@/server/api/routers/contact";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { spotifyRouter } from "./routers/spotify";
 
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   softSkillsAdmin: softSkillsAdminRouter,
   cv: cvRouter,
   spotify: spotifyRouter,
+  contact: contactRouter,
 });
 
 // export type definition of API

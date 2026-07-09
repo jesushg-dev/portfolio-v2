@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { api } from "@/trpc/react";
 import { ETime } from "@/utils/constants/times";
@@ -10,16 +10,10 @@ import { getSpotifyQueryError } from "@/utils/services/spotify-scopes";
 import {
   isActiveEpisodePlayback,
   isActiveTrackPlayback,
-  mapEpisodeNowPlaying,
-  mapRecentlyPlayed,
-  mapTrackNowPlaying,
   needsQueueFallback,
-  resolveEpisodeFromNowPlaying,
-  resolveEpisodeFromQueue,
-  resolveTrackFromNowPlaying,
-  resolveTrackFromQueue,
 } from "./playback-mappers";
-import type { SpotifyPlayback, SpotifyPlaybackError } from "./types";
+import { resolveSpotifyPlayback } from "./resolve-spotify-playback";
+import type { SpotifyPlaybackError } from "./types";
 
 const NEAR_END_MS = 45 * ETime.SECOND;
 const FAST_POLL_MS = 5 * ETime.SECOND;
@@ -107,58 +101,14 @@ export function useSpotifyPlayback() {
     },
   );
 
-  const playback = useMemo((): SpotifyPlayback | null => {
-    if (!nowPlayingQuery.data) return null;
-
-    if (!("error" in nowPlayingQuery.data)) {
-      const data = nowPlayingQuery.data;
-
-      if (isActiveTrackPlayback(data)) {
-        const track =
-          resolveTrackFromNowPlaying(data) ??
-          (queueQuery.data && !("error" in queueQuery.data)
-            ? resolveTrackFromQueue(queueQuery.data)
-            : null);
-
-        if (track && !track.explicit) {
-          return mapTrackNowPlaying(track, data);
-        }
-
-        return null;
-      }
-
-      if (isActiveEpisodePlayback(data)) {
-        const episode =
-          resolveEpisodeFromNowPlaying(data) ??
-          (queueQuery.data && !("error" in queueQuery.data)
-            ? resolveEpisodeFromQueue(queueQuery.data)
-            : null);
-
-        if (episode && !episode.explicit) {
-          return mapEpisodeNowPlaying(episode, data);
-        }
-
-        return null;
-      }
-    } else if (nowPlayingQuery.data.error.status !== 204) {
-      return null;
-    }
-
-    if (!shouldUseRecentlyPlayed) return null;
-
-    if (!recentlyPlayedQuery.data || "error" in recentlyPlayedQuery.data) {
-      return null;
-    }
-
-    return mapRecentlyPlayed(recentlyPlayedQuery.data);
-  }, [
+  const playback = resolveSpotifyPlayback(
     nowPlayingQuery.data,
     queueQuery.data,
     recentlyPlayedQuery.data,
     shouldUseRecentlyPlayed,
-  ]);
+  );
 
-  const error = useMemo((): SpotifyPlaybackError | null => {
+  const error = ((): SpotifyPlaybackError | null => {
     if (!nowPlayingQuery.data) return null;
 
     if ("error" in nowPlayingQuery.data) {
@@ -174,12 +124,7 @@ export function useSpotifyPlayback() {
     }
 
     return null;
-  }, [
-    nowPlayingQuery.data,
-    recentlyPlayedQuery.data,
-    shouldUseRecentlyPlayed,
-    playback,
-  ]);
+  })();
 
   const isLoading =
     nowPlayingQuery.isLoading ||

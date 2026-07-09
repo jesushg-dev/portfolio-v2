@@ -59,6 +59,8 @@ export function mapTrackNowPlaying(
   const artists = resolveDisplayArtists(track);
 
   return {
+    contentId: track.id,
+    snapshotTimestamp: data.timestamp,
     contentType: "track",
     source: "now_playing",
     title: track.name,
@@ -86,6 +88,8 @@ export function mapEpisodeNowPlaying(
   data: NowPlayingResponse,
 ): SpotifyPlayback {
   return {
+    contentId: episode.id,
+    snapshotTimestamp: data.timestamp,
     contentType: "episode",
     source: "now_playing",
     title: episode.name,
@@ -115,6 +119,8 @@ export function mapRecentlyPlayed(
   const artists = resolveDisplayArtists(history.track);
 
   return {
+    contentId: history.track.id,
+    snapshotTimestamp: history.played_at ? Date.parse(history.played_at) : 0,
     contentType: "track",
     source: "recently_played",
     title: history.track.name,

@@ -12,6 +12,9 @@ export interface SpotifyPlaybackContext {
 }
 
 export interface SpotifyPlayback {
+  contentId: string;
+  /** Spotify poll timestamp (now playing) or played_at epoch — forces clock resync. */
+  snapshotTimestamp: number;
   contentType: SpotifyContentType;
   source: SpotifyPlaybackSource;
   title: string;

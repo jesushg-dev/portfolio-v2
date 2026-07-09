@@ -368,11 +368,14 @@
       }
     },
     "contact": {
-      "title": "Contáctame 👋",
-      "title2": "Llena el formulario para iniciar una conversación",
-      "subtitle": "Siempre estoy abierto a nuevas oportunidades, no dudes en contactarme si tienes alguna pregunta o proyecto en mente.",
+      "title": "Contáctame",
+      "title2": "Envía un mensaje",
+      "eyebrow": "Contacto",
+      "subtitle": "Siempre estoy abierto a nuevas oportunidades. Si tienes un proyecto en mente o solo quieres saludar, escríbeme.",
       "divider": "o",
+      "noChannels": "Usa el formulario para escribirme. Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "form": {
+        "helper": "Tu mensaje llega directo al correo de este portafolio.",
         "name": {
           "label": "Nombre",
           "placeholder": "Ingresa tu nombre",
@@ -401,7 +404,7 @@
           "errors": {
             "required": "El mensaje es requerido",
             "minLength": "El mensaje debe tener al menos 10 caracteres",
-            "maxLength": "El mensaje debe tener como máximo 500 caracteres"
+            "maxLength": "El mensaje debe tener como máximo 2000 caracteres"
           }
         },
         "errors": {
@@ -412,7 +415,7 @@
           "title": "Mensaje enviado",
           "description": "Tu mensaje ha sido enviado correctamente, te responderé lo más pronto posible."
         },
-        "submit": "Enviar"
+        "submit": "Enviar mensaje"
       },
       "social": {
         "title": "Redes sociales",

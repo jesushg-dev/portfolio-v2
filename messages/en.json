@@ -367,11 +367,14 @@
       }
     },
     "contact": {
-      "title": "Get in touch 👋",
-      "title2": "Fill in the form to start a conversation",
-      "subtitle": "I am always open to new opportunities, if you have a project in mind or just want to say hi, feel free to contact me.",
+      "title": "Get in touch",
+      "title2": "Send a message",
+      "eyebrow": "Contact",
+      "subtitle": "I am always open to new opportunities. If you have a project in mind or just want to say hi, feel free to reach out.",
       "divider": "or",
+      "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
       "form": {
+        "helper": "Your message goes straight to this portfolio’s inbox.",
         "name": {
           "label": "Name",
           "placeholder": "Enter your name",
@@ -400,7 +403,7 @@
           "errors": {
             "required": "Please enter your message",
             "minLength": "The message must be at least 10 characters long",
-            "maxLength": "The message must be at most 500 characters long"
+            "maxLength": "The message must be at most 2000 characters long"
           }
         },
         "errors": {
@@ -411,7 +414,7 @@
           "title": "Success",
           "description": "Your message has been sent successfully, I will answer you as soon as possible."
         },
-        "submit": "Submit"
+        "submit": "Send message"
       }
     }
   },

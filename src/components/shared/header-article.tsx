@@ -48,7 +48,7 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({
       >
         {subtitle && (
           <motion.span
-            className="text-primary-700 block text-lg font-semibold"
+            className="text-primary block text-lg font-semibold"
             variants={animationVariants}
           >
             {subtitle}
@@ -63,7 +63,7 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({
           </motion.h2>
           {showIcon && (
             <motion.div
-              className="absolute -end-14 -top-14 hidden translate-x-20 -translate-y-14 md:block"
+              className="absolute -inset-e-14 -top-14 hidden translate-x-20 -translate-y-14 md:block"
               variants={animationVariants}
             >
               <svg

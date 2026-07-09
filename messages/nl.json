@@ -368,11 +368,14 @@
       }
     },
     "contact": {
-      "title": "Neem contact op 👋",
-      "title2": "Vul het formulier in om een gesprek te beginnen",
-      "subtitle": "Ik sta altijd open voor nieuwe kansen. Als je een project in gedachten hebt of gewoon hallo wilt zeggen, neem gerust contact met me op.",
+      "title": "Neem contact op",
+      "title2": "Stuur een bericht",
+      "eyebrow": "Contact",
+      "subtitle": "Ik sta altijd open voor nieuwe kansen. Heb je een project in gedachten of wil je gewoon hallo zeggen? Stuur gerust een bericht.",
       "divider": "of",
+      "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "form": {
+        "helper": "Je bericht gaat rechtstreeks naar de inbox van dit portfolio.",
         "name": {
           "label": "Naam",
           "placeholder": "Voer je naam in",
@@ -401,7 +404,7 @@
           "errors": {
             "required": "Voer je bericht in",
             "minLength": "Het bericht moet minimaal 10 tekens lang zijn",
-            "maxLength": "Het bericht mag maximaal 500 tekens lang zijn"
+            "maxLength": "Het bericht mag maximaal 2000 tekens lang zijn"
           }
         },
         "errors": {
@@ -412,7 +415,7 @@
           "title": "Succes",
           "description": "Je bericht is succesvol verzonden, ik zal zo snel mogelijk antwoorden."
         },
-        "submit": "Verzenden"
+        "submit": "Bericht verzenden"
       }
     }
   },

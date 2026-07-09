@@ -1,10 +1,14 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
-import { Resend } from "resend";
 
 import { db } from "@/server/db";
 import { env } from "@/env";
+import {
+  isResendConfigured,
+  resend,
+  resendFromEmail,
+} from "@/lib/email/resend";
 
 const fallbackBaseURL =
   env.NODE_ENV === "production"
@@ -14,12 +18,6 @@ const fallbackBaseURL =
       : `http://${env.NEXT_PUBLIC_DEV_DOMAIN}`;
 
 const baseURL = env.BETTER_AUTH_URL ?? fallbackBaseURL;
-const resendApiKey = process.env.RESEND_API_KEY;
-const resendEmailDomain = process.env.RESEND_EMAIL_DOMAIN;
-const resendFromEmail = resendEmailDomain
-  ? `Portfolio <no-reply@${resendEmailDomain}>`
-  : undefined;
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 const socialProviders: Record<
   string,
@@ -63,7 +61,7 @@ export const auth = betterAuth({
       console.log("[better-auth][reset-password] token:", data.token);
       console.log("[better-auth][reset-password] url:", data.url);
 
-      if (!resend || !resendEmailDomain || !resendFromEmail) {
+      if (!isResendConfigured() || !resend || !resendFromEmail) {
         console.warn(
           "[better-auth][reset-password] RESEND_API_KEY or RESEND_EMAIL_DOMAIN missing, skipped email send.",
         );

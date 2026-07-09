@@ -7,22 +7,19 @@ import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { FaSpotify } from "react-icons/fa";
 
-import type { SpotifyPlayback } from "./types";
 import SpotifyFullscreenProgress from "./spotify-fullscreen-progress";
 import { buildSpotifyFullscreenBg } from "./use-album-color";
 import { formatPlayedAt } from "./format-played-at";
 import LyricsCard from "./lyrics-card";
 import LyricsFullscreen from "./lyrics-fullscreen";
 import { useTrackLyrics } from "./use-track-lyrics";
+import { useSpotifyPlaybackContext } from "./spotify-playback-context";
 import type {
   SpotifyDragMotionValue,
   SpotifyDragToCloseProps,
 } from "./use-drag-to-close";
 
 interface SpotifyNowPlayingScreenProps {
-  playback: SpotifyPlayback;
-  /** Wall-clock progress from the parent player (survives close/reopen). */
-  liveProgressMs: number;
   accentColor: string;
   locale: string;
   flyComplete: boolean;
@@ -34,13 +31,7 @@ interface SpotifyNowPlayingScreenProps {
 
 const DEFAULT_COVER = 220;
 
-function trackLyricsKey(playback: SpotifyPlayback): string {
-  return `${playback.title}|${playback.primaryArtist}|${playback.durationMs}`;
-}
-
 const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
-  playback,
-  liveProgressMs,
   accentColor,
   locale,
   flyComplete,
@@ -49,14 +40,14 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
   dragProps,
   onClose,
 }) => {
+  const { playback, liveProgressMs } = useSpotifyPlaybackContext();
   const t = useTranslations("global.footer");
   const isRecentlyPlayed = playback.source === "recently_played";
   const showLyrics = playback.contentType === "track";
-  const currentTrackKey = trackLyricsKey(playback);
   const [lyricsOpenForTrack, setLyricsOpenForTrack] = useState<string | null>(
     null,
   );
-  const lyricsOpen = lyricsOpenForTrack === currentTrackKey;
+  const lyricsOpen = lyricsOpenForTrack === playback.contentId;
 
   const lyricsState = useTrackLyrics({
     enabled: showLyrics && flyComplete,
@@ -197,7 +188,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
                 unavailable: t("spotify.lyricsUnavailable"),
                 expand: t("spotify.lyricsExpand"),
               }}
-              onExpand={() => setLyricsOpenForTrack(currentTrackKey)}
+              onExpand={() => setLyricsOpenForTrack(playback.contentId)}
             />
           </div>
         )}

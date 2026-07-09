@@ -14,10 +14,12 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
+import { api } from "@/trpc/react";
 
 const ContactForm: FC = () => {
   const t = useTranslations("main.contact");
   const [isPending, startTransition] = useTransition();
+  const sendMessage = api.contact.sendMessage.useMutation();
 
   const contactSchema = useMemo(
     () =>
@@ -27,7 +29,10 @@ const ContactForm: FC = () => {
           .string()
           .min(1, t("form.email.errors.required"))
           .email(t("form.email.errors.pattern")),
-        message: z.string().min(1, t("form.message.errors.required")),
+        message: z
+          .string()
+          .min(10, t("form.message.errors.minLength"))
+          .max(2000, t("form.message.errors.maxLength")),
       }),
     [t],
   );
@@ -42,30 +47,16 @@ const ContactForm: FC = () => {
   const onSubmit = useCallback(
     (data: ContactInput) => {
       startTransition(async () => {
-        const body = new FormData();
-        body.append("name", data.name);
-        body.append("email", data.email);
-        body.append("message", data.message);
-
         try {
-          const res = await fetch("https://formspree.io/f/xnqwqkrl", {
-            method: "POST",
-            body,
-            headers: { Accept: "application/json" },
-          });
-
-          if (res.ok) {
-            form.reset();
-            toast.success(t("form.success.description"));
-          } else {
-            toast.error(t("form.errors.description"));
-          }
+          await sendMessage.mutateAsync(data);
+          form.reset();
+          toast.success(t("form.success.description"));
         } catch {
           toast.error(t("form.errors.description"));
         }
       });
     },
-    [form, t],
+    [form, sendMessage, t],
   );
 
   return (
@@ -75,9 +66,12 @@ const ContactForm: FC = () => {
         className="text-card-foreground mx-auto box-border h-full w-full max-w-md min-w-0 flex-none flex-col justify-center gap-4 overflow-visible p-0"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <p className="text-foreground text-center text-lg font-bold">
-          {t("title2")}
-        </p>
+        <div className="space-y-1 text-center md:text-left">
+          <p className="text-foreground text-lg font-semibold tracking-tight">
+            {t("title2")}
+          </p>
+          <p className="text-muted-foreground text-sm">{t("form.helper")}</p>
+        </div>
 
         <div className="min-w-0 space-y-4">
           <FormField
@@ -89,7 +83,7 @@ const ContactForm: FC = () => {
                   {...field}
                   autoComplete="name"
                   placeholder={t("form.name.placeholder")}
-                  className="h-11 px-4"
+                  className="bg-background/70 h-11 px-4"
                 />
               </FormItem>
             )}
@@ -105,7 +99,7 @@ const ContactForm: FC = () => {
                   type="email"
                   autoComplete="email"
                   placeholder={t("form.email.placeholder")}
-                  className="h-11 px-4"
+                  className="bg-background/70 h-11 px-4"
                 />
               </FormItem>
             )}
@@ -121,9 +115,9 @@ const ContactForm: FC = () => {
               >
                 <Textarea
                   {...field}
-                  rows={4}
+                  rows={5}
                   placeholder={t("form.message.placeholder")}
-                  className="min-h-28 px-4 py-3"
+                  className="bg-background/70 min-h-32 px-4 py-3"
                 />
               </FormItem>
             )}
@@ -132,21 +126,25 @@ const ContactForm: FC = () => {
 
         <motion.button
           type="submit"
-          disabled={isPending}
-          whileHover={{ scale: isPending ? 1 : 1.02 }}
-          whileTap={{ scale: isPending ? 1 : 0.97 }}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 pressable relative mt-2 box-border flex w-full max-w-full min-w-0 items-center justify-center gap-2 overflow-hidden rounded-lg px-6 py-3 font-semibold tracking-widest uppercase shadow-lg transition-all disabled:opacity-60"
+          disabled={isPending || sendMessage.isPending}
+          whileHover={{
+            scale: isPending || sendMessage.isPending ? 1 : 1.015,
+          }}
+          whileTap={{
+            scale: isPending || sendMessage.isPending ? 1 : 0.98,
+          }}
+          className="bg-primary text-primary-foreground hover:bg-primary/90 pressable relative mt-1 box-border flex w-full max-w-full min-w-0 items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3.5 text-sm font-semibold tracking-[0.14em] uppercase shadow-lg transition-all disabled:opacity-60"
         >
-          {!isPending && (
+          {!(isPending || sendMessage.isPending) && (
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_2.5s_infinite] bg-linear-to-r from-transparent via-white/20 to-transparent"
             />
           )}
 
-          {isPending ? (
+          {isPending || sendMessage.isPending ? (
             <svg
-              className="h-5 w-5 animate-spin"
+              className="size-5 animate-spin"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
@@ -162,7 +160,7 @@ const ContactForm: FC = () => {
               />
             </svg>
           ) : (
-            <Send className="h-4 w-4" />
+            <Send className="size-4" />
           )}
           {t("form.submit")}
         </motion.button>

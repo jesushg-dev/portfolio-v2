@@ -6,8 +6,8 @@ import useInterval from "@/hooks/use-interval";
 import { ETime } from "@/utils/constants/times";
 
 /**
- * Local progress ticker that resyncs when Spotify polls a new progressMs.
- * Kept alive on the compact player so lyrics stay in sync after close/reopen.
+ * Local progress ticker. Resyncs when Spotify polls a new progressMs.
+ * Pair with a parent `key={contentId}` remount so track changes start fresh.
  */
 export function usePlaybackClock(
   progressMs: number,
@@ -17,8 +17,6 @@ export function usePlaybackClock(
   const [currentMs, setCurrentMs] = useState(progressMs);
   const [syncedProgressMs, setSyncedProgressMs] = useState(progressMs);
 
-  // Adjust local state during render when Spotify reports a new snapshot.
-  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
   if (progressMs !== syncedProgressMs) {
     setSyncedProgressMs(progressMs);
     setCurrentMs(progressMs);
