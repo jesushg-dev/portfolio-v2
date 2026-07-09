@@ -1,33 +1,42 @@
 "use client";
 
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import type { FC } from "react";
-import Link from "next/link";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLocale, useTranslations } from "next-intl";
 
 import { authClient } from "@/lib/auth-client";
+import { buildLocalizedCallbackUrl } from "@/lib/auth-routing";
+import { Link } from "@/i18n/routing";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  FormActions,
-  FormContent,
-  FormItem,
-  FormRoot,
-} from "@/components/shared/form-root";
+import { Button } from "@/components/ui/button";
+import { FormContent, FormItem, FormRoot } from "@/components/shared/form-root";
 import FormStatus from "@/components/admin/shared/form-status";
+import AuthBrandHeader from "@/features/auth/components/auth-brand-header";
+import AuthSplitLayout from "@/features/auth/components/auth-split-layout";
+import AuthShowcasePanel from "@/features/auth/components/auth-showcase-panel";
 
-const ForgotPasswordSchema = z.object({
-  email: z.string().email(),
-});
-
-type ForgotPasswordInput = z.infer<typeof ForgotPasswordSchema>;
+const fieldInputClassName = "mt-1 h-11 shadow-sm";
 
 const ForgotPasswordForm: FC = () => {
+  const t = useTranslations("auth");
+  const locale = useLocale();
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const ForgotPasswordSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(),
+      }),
+    [],
+  );
+
+  type ForgotPasswordInput = z.infer<typeof ForgotPasswordSchema>;
 
   const form = useForm<ForgotPasswordInput>({
     resolver: zodResolver(ForgotPasswordSchema),
@@ -36,62 +45,95 @@ const ForgotPasswordForm: FC = () => {
     },
   });
 
-  const onSubmit = useCallback((data: ForgotPasswordInput) => {
-    startTransition(async () => {
-      setServerError(null);
-      setSuccessMessage(null);
+  const resetRedirectUrl = useMemo(
+    () => buildLocalizedCallbackUrl(locale, "/reset-password"),
+    [locale],
+  );
 
-      const { error } = await authClient.requestPasswordReset({
-        email: data.email,
-        redirectTo: "/reset-password",
+  const onSubmit = useCallback(
+    (data: ForgotPasswordInput) => {
+      startTransition(async () => {
+        setServerError(null);
+        setSuccessMessage(null);
+
+        const { error } = await authClient.requestPasswordReset({
+          email: data.email,
+          redirectTo: resetRedirectUrl,
+        });
+
+        if (error) {
+          setServerError(error.message ?? t("forgotPassword.error"));
+          return;
+        }
+
+        setSuccessMessage(t("forgotPassword.success"));
       });
-
-      if (error) {
-        setServerError(error.message ?? "Could not send reset link");
-        return;
-      }
-
-      setSuccessMessage(
-        "If this email exists, a reset link was generated. Check server logs for now.",
-      );
-    });
-  }, []);
+    },
+    [resetRedirectUrl, t],
+  );
 
   return (
-    <Form {...form}>
-      <FormRoot onSubmit={form.handleSubmit(onSubmit)}>
-        <FormContent>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem label="Email" inputId="forgot-password-email">
-                <Input type="email" autoComplete="email" {...field} />
-              </FormItem>
-            )}
-          />
+    <AuthSplitLayout
+      form={
+        <Form {...form}>
+          <FormRoot onSubmit={form.handleSubmit(onSubmit)}>
+            <AuthBrandHeader />
 
-          <FormStatus error={serverError} />
-          {successMessage ? (
-            <p className="bg-primary/10 text-primary rounded-md px-3 py-2 text-sm">
-              {successMessage}
+            <h1 className="text-foreground mt-6 text-left text-3xl font-medium tracking-tight md:text-4xl">
+              {t("forgotPassword.title")}
+            </h1>
+            <p className="text-muted-foreground mt-4 text-sm md:text-base">
+              {t("forgotPassword.description")}
             </p>
-          ) : null}
-        </FormContent>
 
-        <FormActions
-          isPending={form.formState.isSubmitting || isPending}
-          title="Send reset link"
-        />
+            <FormContent className="mt-8 gap-6 px-0">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("forgotPassword.email")}
+                    inputId="forgot-password-email"
+                  >
+                    <Input
+                      type="email"
+                      autoComplete="email"
+                      className={fieldInputClassName}
+                      {...field}
+                    />
+                  </FormItem>
+                )}
+              />
 
-        <p className="text-muted-foreground text-center text-sm">
-          Remembered your password?{" "}
-          <Link href="/login" className="text-primary font-medium">
-            Sign in
-          </Link>
-        </p>
-      </FormRoot>
-    </Form>
+              <FormStatus error={serverError} />
+              {successMessage ? (
+                <p className="bg-primary/10 text-primary rounded-md px-3 py-2 text-sm">
+                  {successMessage}
+                </p>
+              ) : null}
+            </FormContent>
+
+            <Button
+              type="submit"
+              disabled={form.formState.isSubmitting || isPending}
+              className="mt-2 h-11 w-full rounded-xl text-sm font-medium"
+            >
+              {form.formState.isSubmitting || isPending
+                ? t("forgotPassword.submitting")
+                : t("forgotPassword.submit")}
+            </Button>
+
+            <p className="text-muted-foreground mt-6 text-center text-sm">
+              {t("forgotPassword.remembered")}{" "}
+              <Link href="/login" className="text-primary font-medium">
+                {t("forgotPassword.signIn")}
+              </Link>
+            </p>
+          </FormRoot>
+        </Form>
+      }
+      showcase={<AuthShowcasePanel variant="trust" />}
+    />
   );
 };
 

@@ -1,7 +1,9 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { headers } from "next/headers";
+import type { Locale } from "next-intl";
 import { db } from "@/server/db";
 import { auth } from "@/lib/auth";
+import { redirectToLogin } from "@/lib/auth-redirect";
 import { TimelineItemForm } from "@/features/timeline/components/timeline-item-form";
 
 interface Props {
@@ -11,12 +13,14 @@ interface Props {
 export default async function EditTimelineItemPage({ params }: Props) {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
-  const { id } = await params;
+  const { id, locale } = await params;
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.user?.id) {
-    redirect("/login");
+    return redirectToLogin(locale as Locale);
   }
+
+  const userId = session.user.id;
 
   const timelineItemDelegate = (db as { timelineItem?: typeof db.timelineItem })
     .timelineItem;
@@ -26,7 +30,7 @@ export default async function EditTimelineItemPage({ params }: Props) {
   }
 
   const experience = await timelineItemDelegate.findFirst({
-    where: { id, userId: session.user.id },
+    where: { id, userId },
   });
 
   if (!experience) {

@@ -92,7 +92,7 @@
         "locale-options": {
           "es": "Español",
           "en": "Inglés",
-          "de": "Holandés"
+          "nl": "Holandés"
         }
       },
       "tools": {
@@ -169,8 +169,8 @@
       }
     },
     "localeSwitcher": {
-      "label": "Sprache ändern",
-      "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+      "label": "Cambiar idioma",
+      "locale": "{locale, select, en {Inglés} es {Español} nl {Holandés} other {Desconocido}}"
     },
     "fallback": {
       "noResults": {
@@ -1235,5 +1235,106 @@
       "deleteSuccess": "Eliminado con éxito",
       "close": "Cerrar"
     }
+  },
+  "auth": {
+    "validation": {
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "usernameFormat": "Usa letras minúsculas, números y guiones"
+    },
+    "showcase": {
+      "badgePortfolio": "Portafolio",
+      "badgeAdmin": "Panel de administración",
+      "badgeCv": "Generador de CV",
+      "heroQuote": "Gestiona todo tu portafolio desde un solo panel — proyectos, habilidades, línea de tiempo y CV en un flujo de trabajo.",
+      "heroAuthor": "Jesús Hernández",
+      "heroRole": "Desarrollador Full Stack,",
+      "communityTitle": "La gente nos elige",
+      "communityDescription": "Jehg. es usado por desarrolladores de todo el mundo para mostrar su trabajo y gestionar su portafolio desde un solo lugar.",
+      "avatarLabel": "+ desarrolladores",
+      "trustTitle": "Recuperación segura de cuenta",
+      "trustDescription": "Usamos cifrado estándar de la industria para tus credenciales. Los enlaces de restablecimiento expiran rápidamente por tu seguridad."
+    },
+    "login": {
+      "title": "¡Bienvenido de nuevo!",
+      "subtitleDefault": "Inicia sesión para gestionar tu portafolio, proyectos, habilidades y certificaciones desde un solo lugar.",
+      "subtitleCv": "Bienvenido de nuevo. Inicia sesión para seguir editando tu CV, o crea una cuenta gratuita si eres nuevo.",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "emailPlaceholder": "tucorreo@tudominio.com",
+      "passwordPlaceholder": "Introduce tu contraseña",
+      "submit": "Iniciar sesión",
+      "submitting": "Iniciando sesión...",
+      "or": "o",
+      "noAccount": "¿No tienes cuenta?",
+      "signUp": "Regístrate",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "signInGoogle": "Iniciar sesión con Google",
+      "signInGithub": "Iniciar sesión con GitHub",
+      "connectingGoogle": "Conectando con Google",
+      "connectingGithub": "Conectando con GitHub",
+      "errorSignIn": "No se pudo iniciar sesión"
+    },
+    "register": {
+      "titlePortfolio": "Crea tu portafolio",
+      "titleCv": "Construye tu CV",
+      "descriptionPortfolio": "Crea una cuenta gratuita para obtener tu propio espacio de portafolio: proyectos, habilidades, certificaciones, línea de tiempo y un generador de CV que puedes editar en cualquier momento. Elige un nombre de usuario para tu subdominio y listo.",
+      "descriptionCv": "Crea una cuenta gratuita para empezar tu CV. Tendrás un espacio personal para añadir experiencia, educación, habilidades e idiomas — luego exporta o comparte cuando estés listo. Este generador aún está en beta.",
+      "bulletPortfolio1": "Tu propio subdominio para un portafolio público",
+      "bulletPortfolio2": "Herramientas de administración para proyectos, habilidades y certificados",
+      "bulletPortfolio3": "Editor de CV integrado (beta) incluido",
+      "bulletCv1": "Edita experiencia, educación, habilidades e idiomas",
+      "bulletCv2": "Mantén borradores privados hasta que publiques",
+      "bulletCv3": "Vuelve en cualquier momento desde cualquier dispositivo",
+      "fullName": "Nombre completo",
+      "fullNamePlaceholder": "Tu nombre",
+      "username": "Nombre de usuario (subdominio)",
+      "usernameDescription": "ej. jesus → jesus.jesushg.com",
+      "usernamePlaceholder": "tu-nombre",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "tucorreo@tudominio.com",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Al menos 8 caracteres",
+      "submit": "Crear cuenta",
+      "submitCv": "Crear cuenta y empezar CV",
+      "submitting": "Creando cuenta…",
+      "hasAccount": "¿Ya tienes cuenta?",
+      "signIn": "Iniciar sesión",
+      "errorSignUp": "No se pudo registrar",
+      "errorProfile": "No se pudo crear el perfil"
+    },
+    "forgotPassword": {
+      "title": "Restablece tu contraseña",
+      "description": "Introduce tu correo y te enviaremos un enlace de restablecimiento.",
+      "email": "Correo electrónico",
+      "submit": "Enviar enlace",
+      "submitting": "Enviando...",
+      "remembered": "¿Recordaste tu contraseña?",
+      "signIn": "Iniciar sesión",
+      "success": "Si este correo existe, se envió un enlace. Revisa tu bandeja de entrada.",
+      "error": "No se pudo enviar el enlace"
+    },
+    "resetPassword": {
+      "title": "Establece una nueva contraseña",
+      "description": "Usa el token de tu enlace de restablecimiento para actualizar tu contraseña.",
+      "loading": "Cargando...",
+      "tokenMissing": "Token de restablecimiento inválido o ausente. Abre de nuevo el enlace de tu correo.",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "submit": "Actualizar contraseña",
+      "submitting": "Actualizando...",
+      "backToSignIn": "Volver a iniciar sesión",
+      "success": "Contraseña actualizada. Redirigiendo al inicio de sesión...",
+      "error": "No se pudo restablecer la contraseña",
+      "errorToken": "Falta el token de restablecimiento en la URL."
+    },
+    "email": {
+      "resetSubject": "Restablece tu contraseña",
+      "resetBody": "Solicitaste restablecer tu contraseña.",
+      "resetLink": "Haz clic aquí para restablecer tu contraseña",
+      "resetIgnore": "Si no solicitaste esto, puedes ignorar este correo."
+    }
+  },
+  "metadata": {
+    "description": "Portafolio y panel de administración de Jesús Hernández"
   }
 }

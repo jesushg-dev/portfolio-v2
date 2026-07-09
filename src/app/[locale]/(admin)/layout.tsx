@@ -1,10 +1,10 @@
 import type { FC, ReactNode } from "react";
 import type { Locale } from "next-intl";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 
 import { auth } from "@/lib/auth";
+import { redirectToLogin } from "@/lib/auth-redirect";
 import DashboardShell from "./dashboard-shell";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -22,12 +22,14 @@ const DashboardLayout: FC<IDashboardLayoutProps> = async ({
 
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) {
-    redirect("/login");
+    return redirectToLogin(locale as Locale);
   }
+
+  const { user } = session;
 
   return (
     <TooltipProvider>
-      <DashboardShell userName={session.user.name ?? session.user.email}>
+      <DashboardShell userName={user.name ?? user.email}>
         {children}
       </DashboardShell>
     </TooltipProvider>

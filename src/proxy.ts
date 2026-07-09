@@ -77,6 +77,8 @@ export default function middleware(req: NextRequest) {
 
   const response = intlMiddleware(req) ?? NextResponse.next();
 
+  forwardRequestHeader(response, "pathname", req.nextUrl.pathname);
+
   if (parsed.type === "tenant") {
     forwardRequestHeader(response, TENANT_HEADER, parsed.slug);
     response.headers.set(TENANT_HEADER, parsed.slug);

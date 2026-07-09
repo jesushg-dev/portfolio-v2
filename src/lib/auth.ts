@@ -9,6 +9,10 @@ import {
   resend,
   resendFromEmail,
 } from "@/lib/email/resend";
+import {
+  detectLocaleFromResetUrl,
+  getResetPasswordEmailCopy,
+} from "@/lib/auth-email";
 
 const fallbackBaseURL =
   env.NODE_ENV === "production"
@@ -71,18 +75,21 @@ export const auth = betterAuth({
       const resetUrl =
         data.url ?? `${baseURL}/reset-password?token=${data.token ?? ""}`;
 
+      const locale = detectLocaleFromResetUrl(resetUrl);
+      const copy = getResetPasswordEmailCopy(locale);
+
       await resend.emails.send({
         from: resendFromEmail,
         to,
-        subject: "Reset your password",
+        subject: copy.subject,
         html: `
-          <p>You requested to reset your password.</p>
+          <p>${copy.body}</p>
           <p>
             <a href="${resetUrl}" target="_blank" rel="noreferrer">
-              Click here to reset your password
+              ${copy.link}
             </a>
           </p>
-          <p>If you didn't request this, you can ignore this email.</p>
+          <p>${copy.ignore}</p>
         `,
       });
     },

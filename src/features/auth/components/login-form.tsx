@@ -5,35 +5,30 @@ import type { FC, SVGProps } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 
 import { authClient } from "@/lib/auth-client";
+import {
+  buildLocalizedCallbackUrl,
+  safeInternalPath,
+  type AppHref,
+} from "@/lib/auth-routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormContent, FormItem, FormRoot } from "@/components/shared/form-root";
 import FormStatus from "@/components/admin/shared/form-status";
+import AuthBrandHeader from "@/features/auth/components/auth-brand-header";
+import AuthSplitLayout from "@/features/auth/components/auth-split-layout";
+import AuthShowcasePanel from "@/features/auth/components/auth-showcase-panel";
 
-const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+const fieldInputClassName = "mt-1 h-11 shadow-sm";
 
-type LoginInput = z.infer<typeof LoginSchema>;
-
-/** Temporary showcase image — swap when final auth artwork is ready. */
-const LOGIN_SHOWCASE_IMAGE =
-  "https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp";
-
-function safeInternalPath(value: string | null): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/admin";
-  }
-  return value;
-}
+const socialButtonClassName =
+  "bg-foreground text-background hover:bg-foreground/90 flex w-full cursor-pointer items-center justify-center rounded-xl py-4 text-sm font-medium transition duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50";
 
 interface LoginFormProps {
   socialProviders?: {
@@ -42,12 +37,9 @@ interface LoginFormProps {
   };
 }
 
-const socialButtonClassName =
-  "bg-foreground text-background hover:bg-foreground/90 flex w-full cursor-pointer items-center justify-center rounded-xl py-4 text-sm font-medium transition duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50";
-
-const fieldInputClassName = "mt-1 h-11 shadow-sm";
-
 const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
+  const t = useTranslations("auth.login");
+  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = useMemo(
@@ -61,6 +53,17 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
     "github" | "google" | null
   >(null);
 
+  const LoginSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(),
+        password: z.string().min(8),
+      }),
+    [],
+  );
+
+  type LoginInput = z.infer<typeof LoginSchema>;
+
   const form = useForm<LoginInput>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -69,6 +72,11 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
     },
   });
 
+  const callbackURL = useMemo(
+    () => buildLocalizedCallbackUrl(locale, redirectTo),
+    [locale, redirectTo],
+  );
+
   const onSubmit = useCallback(
     (data: LoginInput) => {
       startTransition(async () => {
@@ -76,17 +84,17 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
         const { error } = await authClient.signIn.email({
           email: data.email,
           password: data.password,
-          callbackURL: redirectTo,
+          callbackURL,
         });
         if (error) {
-          setServerError(error.message ?? "Could not sign in");
+          setServerError(error.message ?? t("errorSignIn"));
           return;
         }
         router.push(redirectTo);
         router.refresh();
       });
     },
-    [redirectTo, router],
+    [callbackURL, redirectTo, router, t],
   );
 
   const handleSocialSignIn = useCallback(
@@ -95,49 +103,45 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
       setSocialLoading(provider);
       const { error } = await authClient.signIn.social({
         provider,
-        callbackURL: redirectTo,
+        callbackURL,
       });
       if (error) {
-        setServerError(error.message ?? "Could not sign in");
+        setServerError(error.message ?? t("errorSignIn"));
         setSocialLoading(null);
       }
     },
-    [redirectTo],
+    [callbackURL, t],
   );
 
   const socialCount =
     Number(socialProviders?.github ?? false) +
     Number(socialProviders?.google ?? false);
 
+  const registerHref: AppHref =
+    redirectTo === "/admin"
+      ? "/register"
+      : {
+          pathname: "/register",
+          query: { next: redirectTo },
+        };
+
   return (
-    <div className="mx-auto w-full max-w-7xl py-10 md:py-20">
-      <div className="grid grid-cols-1 gap-10 px-4 md:grid-cols-2 md:px-8 lg:gap-24 xl:gap-40">
+    <AuthSplitLayout
+      form={
         <Form {...form}>
           <FormRoot
             className="flex-none overflow-visible"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <Link
-              href="/"
-              className="text-foreground inline-flex items-center gap-2 text-sm font-medium"
-            >
-              <Image
-                alt="Jehg"
-                width={28}
-                height={28}
-                src="/icon-192x192.png"
-                className="rounded-sm"
-              />
-              <span>Jehg.</span>
-            </Link>
+            <AuthBrandHeader />
 
             <h1 className="text-foreground mt-6 text-left text-3xl font-medium tracking-tight md:text-4xl">
-              Welcome back!
+              {t("title")}
             </h1>
             <p className="text-muted-foreground mt-4 max-w-xl text-left text-sm md:text-base">
               {redirectTo.startsWith("/admin/cv")
-                ? "Welcome back. Sign in to continue editing your CV, or create a free account if you’re new."
-                : "Sign in to manage your portfolio, projects, skills, and certifications from one place."}
+                ? t("subtitleCv")
+                : t("subtitleDefault")}
             </p>
 
             <FormContent className="mt-8 gap-6 px-0">
@@ -145,11 +149,11 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem label="Email" inputId="login-email">
+                  <FormItem label={t("email")} inputId="login-email">
                     <Input
                       type="email"
                       autoComplete="email"
-                      placeholder="youremail@yourdomain.com"
+                      placeholder={t("emailPlaceholder")}
                       className={fieldInputClassName}
                       {...field}
                     />
@@ -160,11 +164,11 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem label="Password" inputId="login-password">
+                  <FormItem label={t("password")} inputId="login-password">
                     <Input
                       type="password"
                       autoComplete="current-password"
-                      placeholder="Enter your password"
+                      placeholder={t("passwordPlaceholder")}
                       className={fieldInputClassName}
                       {...field}
                     />
@@ -180,14 +184,16 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
               disabled={isPending || !!socialLoading}
               className="mt-2 h-11 w-full rounded-xl text-sm font-medium"
             >
-              {isPending ? "Signing in..." : "Sign in"}
+              {isPending ? t("submitting") : t("submit")}
             </Button>
 
             {hasSocialProviders ? (
               <>
                 <div className="mt-6 flex items-center">
                   <div className="bg-border h-px flex-1" />
-                  <span className="text-muted-foreground px-4 text-sm">or</span>
+                  <span className="text-muted-foreground px-4 text-sm">
+                    {t("or")}
+                  </span>
                   <div className="bg-border h-px flex-1" />
                 </div>
 
@@ -205,8 +211,8 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                       className={socialButtonClassName}
                       aria-label={
                         socialLoading === "google"
-                          ? "Connecting with Google"
-                          : "Sign in with Google"
+                          ? t("connectingGoogle")
+                          : t("signInGoogle")
                       }
                     >
                       <GoogleBrandIcon />
@@ -220,8 +226,8 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                       className={socialButtonClassName}
                       aria-label={
                         socialLoading === "github"
-                          ? "Connecting with GitHub"
-                          : "Sign in with GitHub"
+                          ? t("connectingGithub")
+                          : t("signInGithub")
                       }
                     >
                       <GitHubBrandIcon />
@@ -233,16 +239,12 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
 
             <div className="text-muted-foreground mt-8 space-y-2 text-center text-sm">
               <p>
-                Don&apos;t have an account?{" "}
+                {t("noAccount")}{" "}
                 <Link
-                  href={
-                    redirectTo === "/admin"
-                      ? "/register"
-                      : `/register?next=${encodeURIComponent(redirectTo)}`
-                  }
+                  href={registerHref}
                   className="text-primary font-medium hover:underline"
                 >
-                  Sign up
+                  {t("signUp")}
                 </Link>
               </p>
               <p>
@@ -250,58 +252,17 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                   href="/forgot-password"
                   className="text-primary font-medium hover:underline"
                 >
-                  Forgot your password?
+                  {t("forgotPassword")}
                 </Link>
               </p>
             </div>
           </FormRoot>
         </Form>
-
-        <LoginShowcase />
-      </div>
-    </div>
+      }
+      showcase={<AuthShowcasePanel variant="hero" />}
+    />
   );
 };
-
-function LoginShowcase() {
-  return (
-    <div className="relative flex min-h-80 flex-col items-start justify-end overflow-hidden rounded-2xl md:min-h-128">
-      <Image
-        src={LOGIN_SHOWCASE_IMAGE}
-        alt=""
-        fill
-        priority
-        sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover"
-      />
-      <div
-        aria-hidden
-        className="from-background-900 via-background-900/80 pointer-events-none absolute inset-0 bg-linear-to-t to-transparent"
-      />
-
-      <div className="relative z-10 mb-2 flex flex-wrap items-center gap-2 p-4 md:p-8 md:pb-0">
-        <span className="text-secondaryText-50 rounded-md bg-black/40 px-2 py-1 text-xs backdrop-blur-sm">
-          Portfolio
-        </span>
-        <span className="text-secondaryText-50 rounded-md bg-black/40 px-2 py-1 text-xs backdrop-blur-sm">
-          Admin Panel
-        </span>
-      </div>
-
-      <div className="relative z-10 m-4 max-w-sm rounded-xl bg-black/40 p-4 backdrop-blur-sm md:m-8">
-        <h2 className="text-secondaryText-50 text-base leading-relaxed font-medium">
-          Manage your entire portfolio from a single dashboard — projects,
-          skills, timeline, and CV in one workflow.
-        </h2>
-        <p className="text-secondaryText-50/60 mt-4 text-sm">Jesús Hernández</p>
-        <p className="text-secondaryText-50/60 mt-1 text-sm">
-          Full Stack Developer,{" "}
-          <span className="text-secondaryText-50 font-semibold">Jehg.</span>
-        </p>
-      </div>
-    </div>
-  );
-}
 
 function GoogleBrandIcon(props: SVGProps<SVGSVGElement>) {
   return (

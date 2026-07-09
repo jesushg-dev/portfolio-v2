@@ -5,41 +5,27 @@ import type { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 
 import { authClient } from "@/lib/auth-client";
+import { safeInternalPath, type AppHref } from "@/lib/auth-routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { api } from "@/trpc/react";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormContent, FormItem, FormRoot } from "@/components/shared/form-root";
 import FormStatus from "@/components/admin/shared/form-status";
-
-const RegisterSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
-  password: z.string().min(8),
-  username: z
-    .string()
-    .min(3)
-    .max(40)
-    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and dashes"),
-});
-
-type RegisterInput = z.infer<typeof RegisterSchema>;
-
-function safeInternalPath(value: string | null): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/admin";
-  }
-  return value;
-}
+import AuthBrandHeader from "@/features/auth/components/auth-brand-header";
+import AuthSplitLayout from "@/features/auth/components/auth-split-layout";
+import AuthShowcasePanel from "@/features/auth/components/auth-showcase-panel";
 
 const fieldInputClassName = "mt-1 h-11 shadow-sm";
 
 const RegisterForm: FC = () => {
+  const t = useTranslations("auth");
+  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = useMemo(
@@ -51,6 +37,23 @@ const RegisterForm: FC = () => {
   const [isPending, startTransition] = useTransition();
   const upsertProfile = api.cv.upsertProfile.useMutation();
 
+  const RegisterSchema = useMemo(
+    () =>
+      z.object({
+        name: z.string().min(1),
+        email: z.string().email(),
+        password: z.string().min(8),
+        username: z
+          .string()
+          .min(3)
+          .max(40)
+          .regex(/^[a-z0-9-]+$/, t("validation.usernameFormat")),
+      }),
+    [t],
+  );
+
+  type RegisterInput = z.infer<typeof RegisterSchema>;
+
   const form = useForm<RegisterInput>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -60,6 +63,18 @@ const RegisterForm: FC = () => {
       username: "",
     },
   });
+
+  const bullets = isCvFlow
+    ? [
+        t("register.bulletCv1"),
+        t("register.bulletCv2"),
+        t("register.bulletCv3"),
+      ]
+    : [
+        t("register.bulletPortfolio1"),
+        t("register.bulletPortfolio2"),
+        t("register.bulletPortfolio3"),
+      ];
 
   const onSubmit = useCallback(
     (data: RegisterInput) => {
@@ -71,7 +86,7 @@ const RegisterForm: FC = () => {
           name: data.name,
         });
         if (error) {
-          setServerError(error.message ?? "Could not sign up");
+          setServerError(error.message ?? t("register.errorSignUp"));
           return;
         }
 
@@ -79,12 +94,12 @@ const RegisterForm: FC = () => {
           await upsertProfile.mutateAsync({
             username: data.username,
             displayName: data.name,
-            defaultLocale: "en",
+            defaultLocale: locale,
             isPublished: false,
           });
         } catch (err) {
           setServerError(
-            err instanceof Error ? err.message : "Could not create profile",
+            err instanceof Error ? err.message : t("register.errorProfile"),
           );
           return;
         }
@@ -93,53 +108,38 @@ const RegisterForm: FC = () => {
         router.refresh();
       });
     },
-    [redirectTo, router, upsertProfile],
+    [locale, redirectTo, router, t, upsertProfile],
   );
 
+  const loginHref: AppHref =
+    redirectTo === "/admin"
+      ? "/login"
+      : {
+          pathname: "/login",
+          query: { next: redirectTo },
+        };
+
   return (
-    <div className="mx-auto w-full max-w-lg py-10 md:py-16">
-      <div className="px-4 sm:px-6">
+    <AuthSplitLayout
+      form={
         <Form {...form}>
           <FormRoot
             className="flex-none overflow-visible"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <Link
-              href="/"
-              className="text-foreground inline-flex items-center gap-2 text-sm font-medium"
-            >
-              <Image
-                alt="Jehg"
-                width={28}
-                height={28}
-                src="/icon-192x192.png"
-                className="rounded-sm"
-              />
-              <span>Jehg.</span>
-            </Link>
+            <AuthBrandHeader />
 
             <h1 className="text-foreground mt-6 text-left text-3xl font-medium tracking-tight md:text-4xl">
-              {isCvFlow ? "Build your CV" : "Create your portfolio"}
+              {isCvFlow ? t("register.titleCv") : t("register.titlePortfolio")}
             </h1>
             <p className="text-muted-foreground mt-4 max-w-xl text-left text-sm leading-relaxed md:text-base">
               {isCvFlow
-                ? "Create a free account to start your CV. You’ll get a personal space to add experience, education, skills, and languages — then export or share when you’re ready. This generator is still in beta."
-                : "Create a free account to get your own portfolio space: projects, skills, certifications, timeline, and a CV builder you can edit anytime. Pick a username for your subdomain and you’re ready to go."}
+                ? t("register.descriptionCv")
+                : t("register.descriptionPortfolio")}
             </p>
 
             <ul className="text-muted-foreground mt-5 space-y-2 text-sm">
-              {(isCvFlow
-                ? [
-                    "Edit experience, education, skills, and languages",
-                    "Keep drafts private until you publish",
-                    "Come back anytime from any device",
-                  ]
-                : [
-                    "Your own subdomain for a public portfolio",
-                    "Admin tools for projects, skills, and certificates",
-                    "Built-in CV editor (beta) included",
-                  ]
-              ).map((item) => (
+              {bullets.map((item) => (
                 <li key={item} className="flex gap-2">
                   <span
                     aria-hidden
@@ -155,10 +155,13 @@ const RegisterForm: FC = () => {
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem label="Full name" inputId="register-name">
+                  <FormItem
+                    label={t("register.fullName")}
+                    inputId="register-name"
+                  >
                     <Input
                       autoComplete="name"
-                      placeholder="Your name"
+                      placeholder={t("register.fullNamePlaceholder")}
                       className={fieldInputClassName}
                       {...field}
                     />
@@ -171,13 +174,13 @@ const RegisterForm: FC = () => {
                 name="username"
                 render={({ field }) => (
                   <FormItem
-                    label="Username (subdomain)"
-                    description="e.g. jesus → jesus.jesushg.com"
+                    label={t("register.username")}
+                    description={t("register.usernameDescription")}
                     inputId="register-username"
                   >
                     <Input
                       autoComplete="username"
-                      placeholder="your-name"
+                      placeholder={t("register.usernamePlaceholder")}
                       className={fieldInputClassName}
                       {...field}
                     />
@@ -189,11 +192,14 @@ const RegisterForm: FC = () => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem label="Email" inputId="register-email">
+                  <FormItem
+                    label={t("register.email")}
+                    inputId="register-email"
+                  >
                     <Input
                       type="email"
                       autoComplete="email"
-                      placeholder="youremail@yourdomain.com"
+                      placeholder={t("register.emailPlaceholder")}
                       className={fieldInputClassName}
                       {...field}
                     />
@@ -205,11 +211,14 @@ const RegisterForm: FC = () => {
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem label="Password" inputId="register-password">
+                  <FormItem
+                    label={t("register.password")}
+                    inputId="register-password"
+                  >
                     <Input
                       type="password"
                       autoComplete="new-password"
-                      placeholder="At least 8 characters"
+                      placeholder={t("register.passwordPlaceholder")}
                       className={fieldInputClassName}
                       {...field}
                     />
@@ -226,29 +235,26 @@ const RegisterForm: FC = () => {
               className="mt-2 h-11 w-full rounded-xl text-sm font-medium"
             >
               {isPending || form.formState.isSubmitting
-                ? "Creating account…"
+                ? t("register.submitting")
                 : isCvFlow
-                  ? "Create account & start CV"
-                  : "Create account"}
+                  ? t("register.submitCv")
+                  : t("register.submit")}
             </Button>
 
             <p className="text-muted-foreground mt-6 text-center text-sm">
-              Already have an account?{" "}
+              {t("register.hasAccount")}{" "}
               <Link
-                href={
-                  redirectTo === "/admin"
-                    ? "/login"
-                    : `/login?next=${encodeURIComponent(redirectTo)}`
-                }
+                href={loginHref}
                 className="text-primary font-medium hover:underline"
               >
-                Sign in
+                {t("register.signIn")}
               </Link>
             </p>
           </FormRoot>
         </Form>
-      </div>
-    </div>
+      }
+      showcase={<AuthShowcasePanel variant="community" />}
+    />
   );
 };
 

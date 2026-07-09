@@ -51,7 +51,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
       className={`fixed right-0 left-0 z-40 w-full transition-all duration-700 print:hidden ${
         isOnTop && !useSolidHeader
           ? "top-5 bg-transparent text-white"
-          : "bg-background-50/90 text-primaryText-900 hover:bg-background-50/100 top-0 shadow-sm backdrop-blur-lg backdrop-filter"
+          : "bg-background-50/90 text-primaryText-900 hover:bg-background-50 top-0 shadow-sm backdrop-blur-lg backdrop-filter"
       }`}
     >
       <ThemeSelector onChange={toogleThemeOpen} visible={isThemeMenuOpen} />
@@ -80,6 +80,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
             {...{
               isMenuOpen,
               isThemeMenuOpen,
+              inverted: isOnTop && !useSolidHeader,
               toogleMainOpen,
               toogleThemeOpen,
             }}

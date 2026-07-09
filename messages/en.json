@@ -92,7 +92,7 @@
         "locale-options": {
           "es": "Spanish",
           "en": "English",
-          "de": "Dutch"
+          "nl": "Dutch"
         }
       },
       "tools": {
@@ -168,8 +168,8 @@
       }
     },
     "localeSwitcher": {
-      "label": "Sprache ändern",
-      "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+      "label": "Change language",
+      "locale": "{locale, select, en {English} es {Spanish} nl {Dutch} other {Unknown}}"
     },
     "fallback": {
       "noResults": {
@@ -1231,7 +1231,105 @@
       "close": "Close"
     }
   },
+  "auth": {
+    "validation": {
+      "passwordMismatch": "Passwords do not match",
+      "usernameFormat": "Use lowercase letters, numbers and dashes"
+    },
+    "showcase": {
+      "badgePortfolio": "Portfolio",
+      "badgeAdmin": "Admin Panel",
+      "badgeCv": "CV Builder",
+      "heroQuote": "Manage your entire portfolio from a single dashboard — projects, skills, timeline, and CV in one workflow.",
+      "heroAuthor": "Jesús Hernández",
+      "heroRole": "Full Stack Developer,",
+      "communityTitle": "People love us",
+      "communityDescription": "Jehg. is used by developers worldwide to showcase their work and manage their portfolio from one place.",
+      "avatarLabel": "+ developers",
+      "trustTitle": "Secure account recovery",
+      "trustDescription": "We use industry-standard encryption for your credentials. Reset links expire quickly for your safety."
+    },
+    "login": {
+      "title": "Welcome back!",
+      "subtitleDefault": "Sign in to manage your portfolio, projects, skills, and certifications from one place.",
+      "subtitleCv": "Welcome back. Sign in to continue editing your CV, or create a free account if you're new.",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "youremail@yourdomain.com",
+      "passwordPlaceholder": "Enter your password",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "or": "or",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "forgotPassword": "Forgot your password?",
+      "signInGoogle": "Sign in with Google",
+      "signInGithub": "Sign in with GitHub",
+      "connectingGoogle": "Connecting with Google",
+      "connectingGithub": "Connecting with GitHub",
+      "errorSignIn": "Could not sign in"
+    },
+    "register": {
+      "titlePortfolio": "Create your portfolio",
+      "titleCv": "Build your CV",
+      "descriptionPortfolio": "Create a free account to get your own portfolio space: projects, skills, certifications, timeline, and a CV builder you can edit anytime. Pick a username for your subdomain and you're ready to go.",
+      "descriptionCv": "Create a free account to start your CV. You'll get a personal space to add experience, education, skills, and languages — then export or share when you're ready. This generator is still in beta.",
+      "bulletPortfolio1": "Your own subdomain for a public portfolio",
+      "bulletPortfolio2": "Admin tools for projects, skills, and certificates",
+      "bulletPortfolio3": "Built-in CV editor (beta) included",
+      "bulletCv1": "Edit experience, education, skills, and languages",
+      "bulletCv2": "Keep drafts private until you publish",
+      "bulletCv3": "Come back anytime from any device",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Your name",
+      "username": "Username (subdomain)",
+      "usernameDescription": "e.g. jesus → jesus.jesushg.com",
+      "usernamePlaceholder": "your-name",
+      "email": "Email",
+      "emailPlaceholder": "youremail@yourdomain.com",
+      "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "submit": "Create account",
+      "submitCv": "Create account & start CV",
+      "submitting": "Creating account…",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "errorSignUp": "Could not sign up",
+      "errorProfile": "Could not create profile"
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "description": "Enter your email and we'll send you a reset link.",
+      "email": "Email",
+      "submit": "Send reset link",
+      "submitting": "Sending...",
+      "remembered": "Remembered your password?",
+      "signIn": "Sign in",
+      "success": "If this email exists, a reset link was sent. Check your inbox.",
+      "error": "Could not send reset link"
+    },
+    "resetPassword": {
+      "title": "Set a new password",
+      "description": "Use the token from your reset link to update your password.",
+      "loading": "Loading...",
+      "tokenMissing": "Invalid or missing reset token. Open the link from your reset email again.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "submit": "Update password",
+      "submitting": "Updating...",
+      "backToSignIn": "Back to Sign in",
+      "success": "Password updated successfully. Redirecting to login...",
+      "error": "Could not reset password",
+      "errorToken": "Missing reset token in URL."
+    },
+    "email": {
+      "resetSubject": "Reset your password",
+      "resetBody": "You requested to reset your password.",
+      "resetLink": "Click here to reset your password",
+      "resetIgnore": "If you didn't request this, you can ignore this email."
+    }
+  },
   "metadata": {
-    "description": "dd"
+    "description": "Jesús Hernández portfolio and admin dashboard"
   }
 }

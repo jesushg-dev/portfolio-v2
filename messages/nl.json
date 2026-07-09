@@ -11,7 +11,7 @@
     "titles": {
       "date": "Uitgiftedatum",
       "institution": "Instelling",
-      "idCredential": "Credential ID"
+      "idCredential": "Referentie-ID"
     },
     "types": {
       "all": {
@@ -67,7 +67,7 @@
         "frontEnd": "Frontend",
         "backEnd": "Backend",
         "database": "Databases",
-        "tools": "Tools"
+        "tools": "Gereedschap"
       }
     },
     "actions": {
@@ -81,7 +81,7 @@
   "global": {
     "header": {
       "menu": {
-        "home": "Home",
+        "home": "Start",
         "about": "Over",
         "skills": "Vaardigheden",
         "services": "Diensten",
@@ -92,7 +92,7 @@
         "locale-options": {
           "es": "Spaans",
           "en": "Engels",
-          "de": "Nederlands"
+          "nl": "Nederlands"
         }
       },
       "tools": {
@@ -101,7 +101,7 @@
         "newThemeSoon": "Nieuw thema wordt binnenkort toegevoegd"
       },
       "closeMenu": "Sluit Menu",
-      "openMenu": "Open Menu"
+      "openMenu": "Menu openen"
     },
     "footer": {
       "title": "Alle Rechten Voorbehouden © ",
@@ -114,21 +114,20 @@
           "timeline": "Tijdlijn"
         },
         "miscellaneous": {
-          "cvGenerator": "CV Generator",
+          "cvGenerator": "CV-generator",
           "cvGeneratorHint": "Maak een gratis account om je eigen CV te bouwen en te bewerken.",
-          "opSysCv": "Win11 Simulator"
+          "opSysCv": "Win11-simulator"
         }
       },
       "titles": {
         "portfolio": "Portfolio",
         "miscellaneous": "Diversen",
-        "NowPlaying": "Nu aan het spelen",
-        "poweredBy": "Aangedreven door "
+        "NowPlaying": "Nu aan het spelen"
       },
       "new": "Nieuw",
       "soon": "Binnenkort",
-      "beta": "Beta",
-      "peoplePledge": "The People Pledge",
+      "beta": "Bèta",
+      "peoplePledge": "De Mensenbelofte",
       "spotify": {
         "errors": {
           "noFetch": "Fout: Er is iets misgegaan bij het ophalen van gegevens",
@@ -140,7 +139,7 @@
           "volume": "Volume",
           "next": "Volgende",
           "previous": "Vorige",
-          "shuffle": "Shuffle"
+          "shuffle": "Willekeurig"
         },
         "recentlyPlayed": "Onlangs afgespeeld",
         "notPlayingNow": "Er wordt niets afgespeeld",
@@ -165,12 +164,12 @@
           "localRange": "Verander huidige voortgang",
           "disabledExteralRange": "Uitgeschakeld vanwege privacyredenen"
         },
-        "poweredBy": "Aangedreven doorOntwikkeld met behulp van de API van"
+        "poweredBy": "Ontwikkeld met behulp van de Spotify API"
       }
     },
     "localeSwitcher": {
-      "label": "Sprache ändern",
-      "locale": "{locale, select, de {Deutsch} en {Englisch} other {Unbekannt}}"
+      "label": "Taal wijzigen",
+      "locale": "{locale, select, en {Engels} es {Spaans} nl {Nederlands} other {Onbekend}}"
     },
     "fallback": {
       "noResults": {
@@ -183,7 +182,7 @@
     "meta": {
       "title": "Jesús Hernández - Full-Stack Ontwikkelaar",
       "description": "Hallo, ik ben Jesús Hernández, een softwareontwikkelaar in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile softwareontwikkeling.",
-      "keywords": "Jesús Hernández, Jesús, Hernández, Full Stack Ontwikkelaar, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Metodologia Agil"
+      "keywords": "Jesús Hernández, Jesús, Hernández, Full Stack Ontwikkelaar, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Agile methodologie"
     },
     "heroMain": {
       "viewCV": "Bekijk CV",
@@ -222,7 +221,7 @@
       "description": "Ik heb een diverse vaardigheden opgebouwd door mijn opleiding en professionele ervaringen.",
       "aux": "Ik ben voortdurend op zoek naar mogelijkheden om te leren en mijn vaardigheden te verbeteren. Ik sta altijd open voor nieuwe uitdagingen en professionele groei.",
       "page": {
-        "breadcrumbHome": "Home",
+        "breadcrumbHome": "Start",
         "breadcrumbSkills": "Vaardigheden",
         "metaTitle": "{title} · Vaardigheden",
         "notFound": "Vaardigheid niet gevonden.",
@@ -270,7 +269,7 @@
           "description": "Ontwikkeling van Android- en iOS-apps, gericht op gebruikerservaring."
         },
         "database": {
-          "title": "Database",
+          "title": "Databases",
           "description": "Ontwikkeling van efficiënte en beveiligde databases."
         },
         "devops": {
@@ -285,7 +284,7 @@
     },
     "soft-skills": {
       "subtitle": "Vaardigheden",
-      "title": "Soft Skills",
+      "title": "Soft skills",
       "description": "Naast mijn technische vaardigheden bezit ik ook een scala aan soft skills die mij hebben geholpen succesvol te zijn in mijn carrière.",
       "aux": "Ik geloof dat deze vaardigheden net zo belangrijk zijn als technische expertise, en ik werk hard om ze voortdurend te ontwikkelen en te verbeteren. Ik ben ervan overtuigd dat mijn sterke communicatie, probleemoplossing en teamwork vaardigheden mij een waardevolle aanwinst maken voor elk team of project.",
       "skills": {
@@ -364,7 +363,7 @@
         "frontend": "Frontend",
         "backend": "Backend",
         "mobile": "Mobiel",
-        "desktop": "Desktop"
+        "desktop": "Bureaublad"
       }
     },
     "contact": {
@@ -416,6 +415,10 @@
           "description": "Je bericht is succesvol verzonden, ik zal zo snel mogelijk antwoorden."
         },
         "submit": "Bericht verzenden"
+      },
+      "social": {
+        "title": "Sociale netwerken",
+        "subtitle": "Volg mij op mijn sociale netwerken"
       }
     }
   },
@@ -427,10 +430,10 @@
       "createNewItem": "Nieuw item maken",
       "editItem": "Item bewerken",
       "toggleThemeAria": "Themakiezer wisselen",
-      "portfolioManager": "Portfolio Manager",
+      "portfolioManager": "Portfoliobeheerder",
       "nav": {
         "dashboard": "Dashboard",
-        "cv": "CV Editor",
+        "cv": "CV-editor",
         "settings": "Instellingen",
         "overview": "Overzicht",
         "profile": "Profiel & Hero",
@@ -579,7 +582,7 @@
         "addNew": "Nieuwe ervaring toevoegen"
       },
       "contact": {
-        "type": "Type",
+        "type": "Soort",
         "value": "Waarde",
         "labelOptional": "Label (optioneel)",
         "labelHint": "Tekst naast het contact.",
@@ -900,7 +903,7 @@
         "wikiUrlPlaceholder": "https://nl.wikipedia.org/wiki/React",
         "imageUrl": "Afbeelding-URL",
         "imageUrlPlaceholder": "https://...",
-        "type": "Type",
+        "type": "Soort",
         "selectType": "Selecteer type",
         "save": "Opslaan",
         "create": "Maken",
@@ -1003,7 +1006,7 @@
       "edit": "Bewerken",
       "cancel": "Annuleren",
       "columnTitle": "Titel",
-      "columnType": "Type",
+      "columnType": "Soort",
       "columnSkills": "Vaardigheden",
       "columnActions": "Acties",
       "columnCompany": "Bedrijf",
@@ -1013,9 +1016,7 @@
       "columnPeriod": "Periode",
       "columnLocation": "Locatie",
       "delete": "Verwijderen",
-      "deleting": "Verwijderen...",
-      "saveFailed": "Vaardigheid opslaan mislukt",
-      "deleteFailed": "Vaardigheid verwijderen mislukt"
+      "deleting": "Verwijderen..."
     },
     "projects": {
       "title": "Projecten",
@@ -1033,7 +1034,7 @@
       "edit": "Bewerken",
       "cancel": "Annuleren",
       "columnTitle": "Titel",
-      "columnType": "Type",
+      "columnType": "Soort",
       "columnSkills": "Vaardigheden",
       "columnActions": "Acties",
       "columnCompany": "Bedrijf",
@@ -1066,7 +1067,7 @@
       "edit": "Bewerken",
       "cancel": "Annuleren",
       "columnTitle": "Titel",
-      "columnType": "Type",
+      "columnType": "Soort",
       "columnSkills": "Vaardigheden",
       "columnActions": "Acties",
       "columnCompany": "Bedrijf",
@@ -1098,7 +1099,7 @@
       "edit": "Bewerken",
       "cancel": "Annuleren",
       "columnTitle": "Titel",
-      "columnType": "Type",
+      "columnType": "Soort",
       "columnSkills": "Vaardigheden",
       "columnActions": "Acties",
       "columnCompany": "Bedrijf",
@@ -1130,7 +1131,7 @@
       "cancel": "Annuleren",
       "saving": "Opslaan...",
       "columnTitle": "Titel",
-      "columnType": "Type",
+      "columnType": "Soort",
       "columnSkills": "Vaardigheden",
       "columnActions": "Acties",
       "columnCompany": "Bedrijf",
@@ -1189,7 +1190,7 @@
       "next": "Volgende",
       "columns": {
         "title": "Titel",
-        "type": "Type",
+        "type": "Soort",
         "skills": "Vaardigheden",
         "actions": "Acties",
         "company": "Bedrijf",
@@ -1233,5 +1234,106 @@
       "deleteSuccess": "Succesvol verwijderd",
       "close": "Sluiten"
     }
+  },
+  "auth": {
+    "validation": {
+      "passwordMismatch": "Wachtwoorden komen niet overeen",
+      "usernameFormat": "Gebruik kleine letters, cijfers en streepjes"
+    },
+    "showcase": {
+      "badgePortfolio": "Portfolio",
+      "badgeAdmin": "Beheerpaneel",
+      "badgeCv": "CV-bouwer",
+      "heroQuote": "Beheer je volledige portfolio vanuit één dashboard — projecten, vaardigheden, tijdlijn en CV in één workflow.",
+      "heroAuthor": "Jesús Hernández",
+      "heroRole": "Full Stack-ontwikkelaar,",
+      "communityTitle": "Mensen kiezen voor ons",
+      "communityDescription": "Jehg. wordt wereldwijd gebruikt door ontwikkelaars om hun werk te tonen en hun portfolio vanuit één plek te beheren.",
+      "avatarLabel": "+ ontwikkelaars",
+      "trustTitle": "Veilig accountherstel",
+      "trustDescription": "We gebruiken industriestandaard versleuteling voor je gegevens. Herstellinks verlopen snel voor je veiligheid."
+    },
+    "login": {
+      "title": "Welkom terug!",
+      "subtitleDefault": "Log in om je portfolio, projecten, vaardigheden en certificeringen vanuit één plek te beheren.",
+      "subtitleCv": "Welkom terug. Log in om verder te werken aan je CV, of maak een gratis account aan als je nieuw bent.",
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "emailPlaceholder": "jouwemail@jouwdomein.nl",
+      "passwordPlaceholder": "Voer je wachtwoord in",
+      "submit": "Inloggen",
+      "submitting": "Bezig met inloggen...",
+      "or": "of",
+      "noAccount": "Nog geen account?",
+      "signUp": "Registreren",
+      "forgotPassword": "Wachtwoord vergeten?",
+      "signInGoogle": "Inloggen met Google",
+      "signInGithub": "Inloggen met GitHub",
+      "connectingGoogle": "Verbinden met Google",
+      "connectingGithub": "Verbinden met GitHub",
+      "errorSignIn": "Inloggen mislukt"
+    },
+    "register": {
+      "titlePortfolio": "Maak je portfolio",
+      "titleCv": "Bouw je CV",
+      "descriptionPortfolio": "Maak een gratis account voor je eigen portfolioruimte: projecten, vaardigheden, certificeringen, tijdlijn en een CV-bouwer die je altijd kunt bewerken. Kies een gebruikersnaam voor je subdomein en je bent klaar.",
+      "descriptionCv": "Maak een gratis account om je CV te starten. Je krijgt een persoonlijke ruimte voor ervaring, opleiding, vaardigheden en talen — exporteer of deel wanneer je klaar bent. Deze generator is nog in bèta.",
+      "bulletPortfolio1": "Je eigen subdomein voor een openbaar portfolio",
+      "bulletPortfolio2": "Beheertools voor projecten, vaardigheden en certificaten",
+      "bulletPortfolio3": "Ingebouwde CV-editor (bèta) inbegrepen",
+      "bulletCv1": "Bewerk ervaring, opleiding, vaardigheden en talen",
+      "bulletCv2": "Houd concepten privé tot je publiceert",
+      "bulletCv3": "Kom altijd terug vanaf elk apparaat",
+      "fullName": "Volledige naam",
+      "fullNamePlaceholder": "Je naam",
+      "username": "Gebruikersnaam (subdomein)",
+      "usernameDescription": "bijv. jesus → jesus.jesushg.com",
+      "usernamePlaceholder": "jouw-naam",
+      "email": "E-mail",
+      "emailPlaceholder": "jouwemail@jouwdomein.nl",
+      "password": "Wachtwoord",
+      "passwordPlaceholder": "Minimaal 8 tekens",
+      "submit": "Account aanmaken",
+      "submitCv": "Account aanmaken en CV starten",
+      "submitting": "Account aanmaken…",
+      "hasAccount": "Heb je al een account?",
+      "signIn": "Inloggen",
+      "errorSignUp": "Registreren mislukt",
+      "errorProfile": "Profiel aanmaken mislukt"
+    },
+    "forgotPassword": {
+      "title": "Wachtwoord herstellen",
+      "description": "Voer je e-mail in en we sturen je een herstellink.",
+      "email": "E-mail",
+      "submit": "Herstellink versturen",
+      "submitting": "Versturen...",
+      "remembered": "Wachtwoord weer te binnen?",
+      "signIn": "Inloggen",
+      "success": "Als dit e-mailadres bestaat, is er een link verstuurd. Controleer je inbox.",
+      "error": "Herstellink versturen mislukt"
+    },
+    "resetPassword": {
+      "title": "Nieuw wachtwoord instellen",
+      "description": "Gebruik het token uit je herstellink om je wachtwoord bij te werken.",
+      "loading": "Laden...",
+      "tokenMissing": "Ongeldig of ontbrekend token. Open de link uit je e-mail opnieuw.",
+      "newPassword": "Nieuw wachtwoord",
+      "confirmPassword": "Bevestig wachtwoord",
+      "submit": "Wachtwoord bijwerken",
+      "submitting": "Bijwerken...",
+      "backToSignIn": "Terug naar inloggen",
+      "success": "Wachtwoord bijgewerkt. Doorverwijzen naar inloggen...",
+      "error": "Wachtwoord herstellen mislukt",
+      "errorToken": "Hersteltoken ontbreekt in de URL."
+    },
+    "email": {
+      "resetSubject": "Herstel je wachtwoord",
+      "resetBody": "Je hebt gevraagd om je wachtwoord te herstellen.",
+      "resetLink": "Klik hier om je wachtwoord te herstellen",
+      "resetIgnore": "Als je dit niet hebt aangevraagd, kun je deze e-mail negeren."
+    }
+  },
+  "metadata": {
+    "description": "Portfolio en beheerpaneel van Jesús Hernández"
   }
 }

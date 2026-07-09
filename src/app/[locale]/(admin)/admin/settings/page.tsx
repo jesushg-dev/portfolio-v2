@@ -2,9 +2,9 @@ import type { FC } from "react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
+import { redirectToLogin } from "@/lib/auth-redirect";
 import { db } from "@/server/db";
 import SettingsForm from "./settings-form";
 import PdfLinksForm from "./pdf-links-form";
@@ -19,14 +19,18 @@ const SettingsPage: FC<ISettingsPageProps> = async ({ params }) => {
 
   const t = await getTranslations("admin.settings");
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user) redirect("/login");
+  if (!session?.user) {
+    return redirectToLogin(locale as Locale);
+  }
+
+  const { user } = session;
 
   const [profile, pdfLinks] = await Promise.all([
     db.profile.findUnique({
-      where: { userId: session.user.id },
+      where: { userId: user.id },
     }),
     db.cvPdfLink.findMany({
-      where: { userId: session.user.id },
+      where: { userId: user.id },
     }),
   ]);
 
@@ -49,7 +53,7 @@ const SettingsPage: FC<ISettingsPageProps> = async ({ params }) => {
         <SettingsForm
           defaultValues={{
             username: profile?.username ?? "",
-            displayName: profile?.displayName ?? session.user.name ?? "",
+            displayName: profile?.displayName ?? user.name ?? "",
             defaultLocale:
               (profile?.defaultLocale as "en" | "es" | "nl") ?? "en",
             isPublished: profile?.isPublished ?? false,

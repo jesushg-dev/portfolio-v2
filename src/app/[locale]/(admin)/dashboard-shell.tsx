@@ -2,7 +2,6 @@
 
 import type { FC, ReactNode, ComponentProps } from "react";
 import { useMemo, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   LayoutDashboard,
@@ -19,7 +18,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { Link as CustomLink } from "@/i18n/routing";
+import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 import ThemeSelector from "@/components/app-layout/app-header/theme-selector";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
@@ -135,18 +134,17 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
 
   const normalizedPathname = useMemo(() => {
     if (!pathname) return "";
-    return pathname.replace(/^\/[a-z]{2}(?=\/|$)/, "") || "/";
+    return pathname;
   }, [pathname]);
+
+  const isAdminOverview = (path: string) =>
+    path === "/admin" || path === "/admin/";
 
   const isActive = (item: NavItem) => {
     if (item.href === "/admin") {
-      // Exact match for overview — avoid matching all sub-routes
-      return (
-        normalizedPathname.endsWith("/admin") ||
-        normalizedPathname.endsWith("/admin/")
-      );
+      return isAdminOverview(normalizedPathname);
     }
-    return normalizedPathname.includes(item.href);
+    return normalizedPathname.startsWith(item.href);
   };
 
   const pageTitle = useMemo(() => {
@@ -154,9 +152,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
       .sort((a, b) => b.href.length - a.href.length)
       .find((item) => {
         if (item.href === "/admin") {
-          return (
-            normalizedPathname === "/admin" || normalizedPathname === "/admin/"
-          );
+          return isAdminOverview(normalizedPathname);
         }
         return normalizedPathname.startsWith(item.href);
       });

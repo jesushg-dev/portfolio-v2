@@ -2,7 +2,6 @@
 
 import type { FC } from "react";
 import Image from "next/image";
-import NextLink from "next/link";
 import { useTranslations } from "next-intl";
 import { Heart } from "lucide-react";
 import { IoMail } from "react-icons/io5";
@@ -126,12 +125,15 @@ const Footer: FC = () => {
               {t("titles.miscellaneous")}
             </h4>
             <div className="flex items-center gap-2">
-              <NextLink
-                href="/register?next=/admin/cv"
+              <Link
+                href={{
+                  pathname: "/register",
+                  query: { next: "/admin/cv" },
+                }}
                 className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
               >
                 {t("sections.miscellaneous.cvGenerator")}
-              </NextLink>
+              </Link>
               <span className="bg-primary-foreground/15 text-primary-foreground rounded-md px-2 py-0.5 text-xs font-medium">
                 {t("beta")}
               </span>
