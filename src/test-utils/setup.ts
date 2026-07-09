@@ -4,6 +4,52 @@ import { createElement } from "react";
 
 import enMessages from "../../messages/en.json";
 
+const mockMotionPropKeys = new Set([
+  "animate",
+  "custom",
+  "drag",
+  "dragConstraints",
+  "dragElastic",
+  "dragMomentum",
+  "exit",
+  "initial",
+  "layout",
+  "layoutId",
+  "onAnimationComplete",
+  "onDrag",
+  "onDragEnd",
+  "onDragStart",
+  "transition",
+  "variants",
+  "whileHover",
+  "whileInView",
+  "whileTap",
+]);
+
+const mockNextImagePropKeys = new Set([
+  "blurDataURL",
+  "fill",
+  "loader",
+  "placeholder",
+  "priority",
+  "quality",
+  "sizes",
+  "unoptimized",
+]);
+
+function mockOmitKeys(
+  props: Record<string, unknown>,
+  keys: Set<string>,
+): Record<string, unknown> {
+  const filtered: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(props)) {
+    if (!keys.has(key)) {
+      filtered[key] = value;
+    }
+  }
+  return filtered;
+}
+
 jest.mock("next-intl", () => {
   const messages = enMessages as Record<string, unknown>;
 
@@ -37,8 +83,15 @@ jest.mock("next-intl", () => {
 
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: ImgHTMLAttributes<HTMLImageElement>) =>
-    createElement("img", props),
+  default: ({
+    children,
+    ...props
+  }: PropsWithChildren<ImgHTMLAttributes<HTMLImageElement>>) =>
+    createElement(
+      "img",
+      mockOmitKeys(props as Record<string, unknown>, mockNextImagePropKeys),
+      children,
+    ),
 }));
 
 jest.mock("motion/react", () => {
@@ -48,7 +101,11 @@ jest.mock("motion/react", () => {
       get:
         (_target, prop: string) =>
         ({ children, ...props }: PropsWithChildren<Record<string, unknown>>) =>
-          createElement(prop, props, children),
+          createElement(
+            prop,
+            mockOmitKeys(props, mockMotionPropKeys),
+            children,
+          ),
     },
   );
 

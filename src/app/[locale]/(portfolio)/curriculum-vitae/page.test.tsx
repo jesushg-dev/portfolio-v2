@@ -144,10 +144,11 @@ describe("CvPageView", () => {
 });
 
 describe("CvPage", () => {
-  it("renders CvPageView wrapper", async () => {
+  it("passes locale to CvPageView", async () => {
     const ui = await CvPage({ params: Promise.resolve({ locale: "en" }) });
-    renderWithIntl(ui as ReactElement);
-    expect(ui).toBeTruthy();
+
+    expect(ui.type).toBe(CvPageView);
+    expect(ui.props).toEqual({ locale: "en" });
   });
 });
 

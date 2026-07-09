@@ -3,9 +3,10 @@ import type { ReactNode } from "react";
 
 import { ProfileTabs } from "@/features/profile/components/profile-tabs";
 
-type ProfileLayoutProps = LayoutProps<"/[locale]/admin/profile"> & {
+interface ProfileLayoutProps {
+  children: ReactNode;
   tabs?: ReactNode;
-};
+}
 
 export default async function ProfileLayout({
   children,
