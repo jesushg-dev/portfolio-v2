@@ -33,7 +33,7 @@ export function DataTable<TData>({
       {...props}
     >
       {children}
-      <div className="bg-card border-divider/30 min-h-0 flex-1 overflow-auto rounded-md border">
+      <div className="bg-card text-card-foreground border-border min-h-0 flex-1 overflow-auto rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -83,7 +83,7 @@ export function DataTable<TData>({
               <TableRow>
                 <TableCell
                   colSpan={table.getAllColumns().length}
-                  className="h-24 text-center"
+                  className="text-muted-foreground h-24 text-center"
                 >
                   No results.
                 </TableCell>

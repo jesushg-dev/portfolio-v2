@@ -88,8 +88,8 @@ export const ProjectsList: FC<ProjectsListProps> = ({ initialProjects }) => {
             t("noTranslation");
           return (
             <div className="space-y-0.5">
-              <p className="font-medium text-gray-900">{title}</p>
-              <p className="line-clamp-2 text-xs text-gray-500">
+              <p className="text-foreground font-medium">{title}</p>
+              <p className="text-muted-foreground line-clamp-2 text-xs">
                 {description}
               </p>
             </div>
@@ -103,7 +103,7 @@ export const ProjectsList: FC<ProjectsListProps> = ({ initialProjects }) => {
           <DataTableColumnHeader column={column} label={t("columnType")} />
         ),
         cell: ({ row }) => (
-          <span className="text-xs tracking-wide text-gray-500 uppercase">
+          <span className="text-muted-foreground text-xs tracking-wide uppercase">
             {row.original.type ?? "-"}
           </span>
         ),
@@ -124,7 +124,7 @@ export const ProjectsList: FC<ProjectsListProps> = ({ initialProjects }) => {
             ).filter(Boolean) ?? [];
 
           return (
-            <p className="line-clamp-2 text-xs text-gray-500">
+            <p className="text-muted-foreground line-clamp-2 text-xs">
               {skillTitles.length > 0 ? skillTitles.join(", ") : "-"}
             </p>
           );
@@ -139,17 +139,19 @@ export const ProjectsList: FC<ProjectsListProps> = ({ initialProjects }) => {
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/projects/${project.id}/edit`}
-                className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-200"
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
               >
                 <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
               </Link>
               {deletingId === project.id ? (
-                <span className="text-xs text-red-500">{t("deleting")}</span>
+                <span className="text-destructive text-xs">
+                  {t("deleting")}
+                </span>
               ) : (
                 <button
                   type="button"
                   onClick={() => handleDelete(project.id)}
-                  className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded p-1.5"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

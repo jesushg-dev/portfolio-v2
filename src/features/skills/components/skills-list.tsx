@@ -105,7 +105,7 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
           <DataTableColumnHeader column={column} label={t("columnType")} />
         ),
         cell: ({ row }) => (
-          <span className="text-xs tracking-wide text-gray-500 uppercase">
+          <span className="text-muted-foreground text-xs tracking-wide uppercase">
             {row.original.type}
           </span>
         ),
@@ -128,18 +128,20 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/skills/${skill.id}/edit`}
-                className="rounded p-1 text-gray-400 hover:bg-blue-50 hover:text-blue-600"
+                className="text-muted-foreground hover:bg-primary/10 hover:text-primary rounded p-1"
                 aria-label={t("edit")}
               >
                 <Pencil className="h-3 w-3" />
               </Link>
               {deletingId === skill.id ? (
-                <span className="text-xs text-red-500">{t("deleting")}</span>
+                <span className="text-destructive text-xs">
+                  {t("deleting")}
+                </span>
               ) : (
                 <button
                   type="button"
                   onClick={() => handleDelete(skill.id)}
-                  className="rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded p-1"
                   aria-label={t("delete")}
                 >
                   <Trash2 className="h-3 w-3" />
