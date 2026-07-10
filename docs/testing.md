@@ -23,14 +23,14 @@ Full E2E suites (30–60 min) run nightly or on demand via [`.github/workflows/e
 
 Store secrets under **Settings → Environments → Preview** (not only at repository level). Each job declares `environment: Preview` so GitHub injects those secrets into `${{ secrets.* }}`.
 
-| Secret | Purpose |
-| ------ | ------- |
-| `MONGODB_URI` | Connection string to the **non-production** database (e.g. `...mongodb.net/portfolio_e2e`) |
-| `BETTER_AUTH_SECRET` | Auth secret for CI builds and e2e |
-| `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD` | Same credentials used by `pnpm db:seed` and Playwright login |
-| `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` / `SPOTIFY_CLIENT_REFRESH_TOKEN` | Required by `src/env.js` at build time |
-| `VERCEL_TOKEN` | Vercel API token for `wait-for-vercel-preview` |
-| `VERCEL_AUTOMATION_BYPASS_SECRET` | Optional — only if Preview deployments use Vercel Deployment Protection |
+| Secret                                                                         | Purpose                                                                                                                                                    |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MONGODB_URI`                                                                  | Connection string to the **non-production** database. Must include the DB name in the path: `...mongodb.net/portfolio_e2e?...` (see troubleshooting below) |
+| `BETTER_AUTH_SECRET`                                                           | Auth secret for CI builds and e2e                                                                                                                          |
+| `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD`                                     | Same credentials used by `pnpm db:seed` and Playwright login                                                                                               |
+| `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` / `SPOTIFY_CLIENT_REFRESH_TOKEN` | Required by `src/env.js` at build time                                                                                                                     |
+| `VERCEL_TOKEN`                                                                 | Vercel API token for `wait-for-vercel-preview`                                                                                                             |
+| `VERCEL_AUTOMATION_BYPASS_SECRET`                                              | Optional — only if Preview deployments use Vercel Deployment Protection                                                                                    |
 
 Secret names must match what the app expects (`MONGODB_URI`, not `MONGODB_URI_E2E`).
 
@@ -52,6 +52,24 @@ Preview deployments and CI both use the e2e database; production stays untouched
 5. **GitHub → Environments → Preview** — add all secrets from the table above (exact names).
 6. **Vercel token** — create at [vercel.com/account/tokens](https://vercel.com/account/tokens) and save as `VERCEL_TOKEN`.
 7. Open a test PR and confirm all three CI jobs pass (`unit`, `e2e-smoke`, `e2e-preview`).
+
+#### Troubleshooting: Prisma P1013 (database name missing)
+
+If CI fails with `Database must be defined in the connection string`, your `MONGODB_URI` points at the cluster host but **omits the database name**. Prisma requires it in the URI path:
+
+```text
+# Wrong — ends at host or only has ?query
+mongodb+srv://user:pass@portfolio-e2e.xxxxx.mongodb.net/?retryWrites=true&w=majority
+
+# Correct — /portfolio_e2e before the ?
+mongodb+srv://user:pass@portfolio-e2e.xxxxx.mongodb.net/portfolio_e2e?retryWrites=true&w=majority
+```
+
+The cluster hostname (`portfolio-e2e.xxxxx.mongodb.net`) is **not** the database name. Add `/portfolio_e2e` (or any name you choose) after the host. MongoDB creates the database on first write.
+
+Fix the secret in **GitHub → Environments → Preview** and the matching **Vercel → Preview** variable, then re-run the workflow.
+
+Locally, `pnpm db:push` runs the same validation via `scripts/validate-mongodb-uri.mjs`.
 
 ## Where tests live
 
@@ -205,38 +223,38 @@ End-to-end tests live in `e2e/` and use Playwright. Locally, Playwright starts `
 1. Copy `e2e/env.example` values into `.env.local` (gitignored):
    - `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD` — same credentials used by `pnpm db:seed` and Playwright login
    - Optional `E2E_BASE_URL` (defaults to `http://localhost:3000`)
-2. Run `pnpm db:seed` so the owner user and credential account exist before e2e.
+2. `e2e/helpers/fill-register-form.ts` ensures the owner exists via **sign-in or register UI** (`#register-*` IDs) before authenticated suites — no `pnpm db:seed` required for login. Run `pnpm db:seed` when you want the full portfolio fixture data.
 3. Install browsers once: `pnpm exec playwright install chromium`
 4. The test DB should be reachable via `MONGODB_URI` in `.env.local` when the dev server starts. **Never point local e2e or Preview at the production database.**
 
 ### Commands
 
-| Script                                | What runs                                                                                                                 |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, CV contact, profile hero, timeline entry, and soft skill |
-| `pnpm test:e2e:full`                  | **Full suites** — all serial create projects (skills, projects, certifications, profile, timeline, soft-skills, cv) |
-| `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)                                                          |
-| `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)                                                       |
-| `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                                                                 |
-| `pnpm test:e2e:projects`              | Full **projects** suite — serial 19-project create (`projects-create`)                                                    |
-| `pnpm test:e2e:projects:headed`       | Projects suite with visible browser                                                                                       |
-| `pnpm test:e2e:projects:ui`           | Playwright UI mode for the projects project                                                                               |
-| `pnpm test:e2e:certifications`        | Full **certifications** suite — serial 49-cert create                                                                     |
-| `pnpm test:e2e:certifications:headed` | Certifications suite with visible browser                                                                                 |
-| `pnpm test:e2e:certifications:ui`     | Playwright UI mode for the certifications project                                                                         |
-| `pnpm test:e2e:cv`                    | Full **CV** suite — serial rebuild from `portfolio-cv.json` (`cv-create`)                                                 |
-| `pnpm test:e2e:cv:headed`             | CV suite with visible browser                                                                                             |
-| `pnpm test:e2e:cv:ui`                 | Playwright UI mode for the CV project                                                                                     |
-| `pnpm test:e2e:profile`               | Full **profile** suite — hero + console from `portfolio-home.json` (`profile-create`)                                     |
-| `pnpm test:e2e:profile:headed`        | Profile suite with visible browser                                                                                        |
-| `pnpm test:e2e:profile:ui`            | Playwright UI mode for the profile project                                                                                |
-| `pnpm test:e2e:timeline`              | Full **timeline** suite — serial 9-entry create from `portfolio-timeline.json`                                            |
-| `pnpm test:e2e:timeline:headed`       | Timeline suite with visible browser                                                                                       |
-| `pnpm test:e2e:timeline:ui`           | Playwright UI mode for the timeline project                                                                               |
-| `pnpm test:e2e:soft-skills`           | Full **soft skills** suite — section + 8 items from `portfolio-soft-skills.json`                                          |
-| `pnpm test:e2e:soft-skills:headed`    | Soft skills suite with visible browser                                                                                    |
-| `pnpm test:e2e:soft-skills:ui`        | Playwright UI mode for the soft skills project                                                                            |
-| `pnpm test:e2e:ui`                    | Playwright UI for all projects                                                                                            |
+| Script                                | What runs                                                                                                                                   |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, CV contact, profile hero, timeline entry, and soft skill                   |
+| `pnpm test:e2e:full`                  | **Full suites** — register + auth setup + all serial create projects (skills, projects, certifications, profile, timeline, soft-skills, cv) |
+| `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)                                                                            |
+| `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)                                                                         |
+| `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                                                                                   |
+| `pnpm test:e2e:projects`              | Full **projects** suite — serial 19-project create (`projects-create`)                                                                      |
+| `pnpm test:e2e:projects:headed`       | Projects suite with visible browser                                                                                                         |
+| `pnpm test:e2e:projects:ui`           | Playwright UI mode for the projects project                                                                                                 |
+| `pnpm test:e2e:certifications`        | Full **certifications** suite — serial 49-cert create                                                                                       |
+| `pnpm test:e2e:certifications:headed` | Certifications suite with visible browser                                                                                                   |
+| `pnpm test:e2e:certifications:ui`     | Playwright UI mode for the certifications project                                                                                           |
+| `pnpm test:e2e:cv`                    | Full **CV** suite — serial rebuild from `portfolio-cv.json` (`cv-create`)                                                                   |
+| `pnpm test:e2e:cv:headed`             | CV suite with visible browser                                                                                                               |
+| `pnpm test:e2e:cv:ui`                 | Playwright UI mode for the CV project                                                                                                       |
+| `pnpm test:e2e:profile`               | Full **profile** suite — hero + console from `portfolio-home.json` (`profile-create`)                                                       |
+| `pnpm test:e2e:profile:headed`        | Profile suite with visible browser                                                                                                          |
+| `pnpm test:e2e:profile:ui`            | Playwright UI mode for the profile project                                                                                                  |
+| `pnpm test:e2e:timeline`              | Full **timeline** suite — serial 9-entry create from `portfolio-timeline.json`                                                              |
+| `pnpm test:e2e:timeline:headed`       | Timeline suite with visible browser                                                                                                         |
+| `pnpm test:e2e:timeline:ui`           | Playwright UI mode for the timeline project                                                                                                 |
+| `pnpm test:e2e:soft-skills`           | Full **soft skills** suite — section + 8 items from `portfolio-soft-skills.json`                                                            |
+| `pnpm test:e2e:soft-skills:headed`    | Soft skills suite with visible browser                                                                                                      |
+| `pnpm test:e2e:soft-skills:ui`        | Playwright UI mode for the soft skills project                                                                                              |
+| `pnpm test:e2e:ui`                    | Playwright UI for all projects                                                                                                              |
 
 Auth session is saved to `e2e/.auth/user.json` by `e2e/auth.setup.ts` (gitignored).
 
@@ -283,6 +301,21 @@ Portfolio certifications for seed and E2E share one source of truth:
 
 - **`certifications-smoke.spec.ts`** — creates **one** certification; included in `pnpm test:e2e` smoke.
 - **`certifications-create.spec.ts`** — **serial** run that creates all **49** certifications; use `pnpm test:e2e:certifications`.
+
+### Owner / register fixture
+
+The primary portfolio user is shared between seed and e2e:
+
+- `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD` in `.env.local` — credentials for register + login
+- `prisma/data/portfolio-profile.json` — `name`, `username`, `displayName`, …
+- `e2e/fixtures/portfolio-profile.ts` — typed re-export for tests
+
+`e2e/helpers/fill-register-form.ts` drives `/register?next=/admin` via `#register-name`, `#register-username`, `#register-email`, `#register-password`, `#register-form-submit`. `ensureOwnerAccount()` tries sign-in first; if the user is missing, it completes registration through the UI (not `db:seed`).
+
+### Smoke vs full register suite
+
+- **`register-smoke.spec.ts`** — ensures owner exists (sign-in or register UI); included in `pnpm test:e2e` smoke.
+- **`register-create.spec.ts`** — explicit register flow from the shared fixture; use `pnpm test:e2e:register`.
 
 ### Profile fixture
 
@@ -356,7 +389,7 @@ The primary portfolio user is shared between seed and e2e:
 - `prisma/data/portfolio-cv.json` — CV sections (header, experiences with `skillKeys`, etc.)
 - `e2e/fixtures/portfolio-profile.ts` — typed re-export for tests
 
-Run `pnpm db:seed` before e2e so the owner account exists with a credential password matching `OWNER_USER_PASSWORD`.
+Playwright setup calls `ensureOwnerAccount()` (`e2e/helpers/fill-register-form.ts`): tries sign-in first, then fills `/register?next=/admin` from `portfolio-profile.json` + `OWNER_USER_*` env vars. Run `pnpm db:seed` when you need the full seeded portfolio, not only auth.
 
 ### Human navigation (required for new E2E specs)
 

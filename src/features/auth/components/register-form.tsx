@@ -231,6 +231,7 @@ const RegisterForm: FC = () => {
 
             <Button
               type="submit"
+              id="register-form-submit"
               disabled={isPending || form.formState.isSubmitting}
               className="mt-2 h-11 w-full rounded-xl text-sm font-medium"
             >

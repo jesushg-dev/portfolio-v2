@@ -105,12 +105,25 @@ export const SoftSkillsSectionForm: FC<SoftSkillsSectionFormProps> = ({
                   inputId="soft-skills-section-media-type"
                 >
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger
+                      id="soft-skills-section-media-type"
+                      className="w-full"
+                    >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="VIDEO">{t("mediaVideo")}</SelectItem>
-                      <SelectItem value="IMAGE">{t("mediaImage")}</SelectItem>
+                      <SelectItem
+                        value="VIDEO"
+                        id="soft-skills-section-media-type-option-VIDEO"
+                      >
+                        {t("mediaVideo")}
+                      </SelectItem>
+                      <SelectItem
+                        value="IMAGE"
+                        id="soft-skills-section-media-type-option-IMAGE"
+                      >
+                        {t("mediaImage")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>

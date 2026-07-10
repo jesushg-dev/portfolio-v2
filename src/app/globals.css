@@ -135,10 +135,8 @@
 
   /* ========== Background Images ========== */
   --background-image-windows-11: url("https://res.cloudinary.com/js-media/image/upload/v1690086146/portfolio/win11/screensaver_spul4s.webp");
-  --background-image-hero-main: url("https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp");
   --background-image-hero-skills: url("https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/1947484_ehwya0.webp");
   --background-image-hero-contact: url("https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3239480_nnfqfm.webp");
-  --background-image-profile-photo: url("https://res.cloudinary.com/js-media/image/upload/v1750355900/portfolio/carnet/uefv0bzpwxnlrrniisba.webp");
 
   --shadow-icon: 0px 10px 10px rgba(0, 0, 0, 0.1);
 
@@ -763,7 +761,7 @@
   &::before {
     content: "";
     @apply absolute right-0 left-0 z-0 block h-full w-full bg-cover bg-bottom bg-no-repeat brightness-75 md:bg-center lg:bg-fixed;
-    background-image: var(--hero-bg, var(--background-image-hero-main));
+    background-image: var(--hero-bg);
   }
 }
 
@@ -774,7 +772,7 @@
 
   &::before {
     content: "Scroll down";
-    @apply absolute whitespace-nowrap text-white;
+    @apply text-secondaryText-50 absolute whitespace-nowrap;
     left: 50%;
     top: -1.1em;
     transform: translate(-50%, -100%);
@@ -786,7 +784,7 @@
 
   &::after {
     content: "";
-    @apply absolute h-1 w-1 rounded-full bg-gray-600;
+    @apply bg-secondaryText-600 absolute h-1 w-1 rounded-full;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(0.001deg);
@@ -796,7 +794,7 @@
 
 @utility circle-img {
   shape-outside: circle(50%);
-  @apply bg-primary-500 bg-profile-photo float-right h-44 w-44 rounded-full bg-cover bg-center p-2 lg:mr-4 lg:mb-1 lg:h-72 lg:w-72;
+  @apply bg-primary-500 bg-background-700 float-right h-44 w-44 rounded-full bg-cover bg-center p-2 lg:mr-4 lg:mb-1 lg:h-72 lg:w-72;
 }
 
 @utility time-dot {

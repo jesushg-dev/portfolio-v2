@@ -36,6 +36,7 @@ export default defineConfig({
   },
   use: {
     baseURL: e2eEnv.baseURL,
+    actionTimeout: 15_000,
     ...(e2eEnv.vercelBypassHeaders
       ? { extraHTTPHeaders: e2eEnv.vercelBypassHeaders }
       : {}),
@@ -57,7 +58,7 @@ export default defineConfig({
     {
       name: "smoke",
       testMatch:
-        /(dashboard|skills-smoke|projects-smoke|certifications-smoke|cv-smoke|profile-smoke|timeline-smoke|soft-skills-smoke)\.spec\.ts/,
+        /(dashboard|register-smoke|skills-smoke|projects-smoke|certifications-smoke|cv-smoke|profile-smoke|timeline-smoke|soft-skills-smoke)\.spec\.ts/,
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
@@ -65,8 +66,16 @@ export default defineConfig({
       },
     },
     {
+      name: "register",
+      testMatch: /register-create\.spec\.ts/,
+      timeout: 10 * 60 * 1000,
+      use: {
+        ...devices["Desktop Chrome"],
+      },
+    },
+    {
       name: "skills",
-      testMatch: /skills-create\.spec\.ts/,
+      testMatch: "**/skills-create.spec.ts",
       dependencies: ["setup"],
       timeout: 45 * 60 * 1000,
       use: {
@@ -76,7 +85,7 @@ export default defineConfig({
     },
     {
       name: "projects",
-      testMatch: /projects-create\.spec\.ts/,
+      testMatch: "**/projects-create.spec.ts",
       dependencies: ["setup"],
       timeout: 45 * 60 * 1000,
       use: {
@@ -86,7 +95,7 @@ export default defineConfig({
     },
     {
       name: "certifications",
-      testMatch: /certifications-create\.spec\.ts/,
+      testMatch: "**/certifications-create.spec.ts",
       dependencies: ["setup"],
       timeout: 60 * 60 * 1000,
       use: {
@@ -96,7 +105,7 @@ export default defineConfig({
     },
     {
       name: "profile",
-      testMatch: /profile-create\.spec\.ts/,
+      testMatch: "**/profile-create.spec.ts",
       dependencies: ["setup"],
       timeout: 30 * 60 * 1000,
       use: {
@@ -106,7 +115,7 @@ export default defineConfig({
     },
     {
       name: "timeline",
-      testMatch: /timeline-create\.spec\.ts/,
+      testMatch: "**/timeline-create.spec.ts",
       dependencies: ["setup"],
       timeout: 45 * 60 * 1000,
       use: {
@@ -116,7 +125,7 @@ export default defineConfig({
     },
     {
       name: "soft-skills",
-      testMatch: /soft-skills-create\.spec\.ts/,
+      testMatch: "**/soft-skills-create.spec.ts",
       dependencies: ["setup"],
       timeout: 30 * 60 * 1000,
       use: {
@@ -126,7 +135,7 @@ export default defineConfig({
     },
     {
       name: "cv",
-      testMatch: /cv-create\.spec\.ts/,
+      testMatch: "**/cv-create.spec.ts",
       dependencies: ["setup"],
       timeout: 60 * 60 * 1000,
       use: {

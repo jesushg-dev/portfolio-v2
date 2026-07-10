@@ -14,14 +14,40 @@ import {
   getResetPasswordEmailCopy,
 } from "@/lib/auth-email";
 
-const fallbackBaseURL =
-  env.NODE_ENV === "production"
-    ? `https://${env.PRIMARY_DOMAIN}`
+const productionBaseURL = `https://${env.PRIMARY_DOMAIN}`;
+
+const devDomainHost = env.NEXT_PUBLIC_DEV_DOMAIN.replace(/^https?:\/\//, "");
+
+const betterAuthUrlHost = env.BETTER_AUTH_URL
+  ? new URL(env.BETTER_AUTH_URL).host
+  : null;
+
+/** Canonical URL for emails and other server-generated links (not per-request cookies). */
+const canonicalBaseURL =
+  env.BETTER_AUTH_URL ??
+  (env.NODE_ENV === "production"
+    ? productionBaseURL
     : env.NEXT_PUBLIC_DEV_DOMAIN.startsWith("http")
       ? env.NEXT_PUBLIC_DEV_DOMAIN
-      : `http://${env.NEXT_PUBLIC_DEV_DOMAIN}`;
+      : `http://${env.NEXT_PUBLIC_DEV_DOMAIN}`);
 
-const baseURL = env.BETTER_AUTH_URL ?? fallbackBaseURL;
+/**
+ * Resolve auth base URL per request so session cookies match the browser origin.
+ * `BETTER_AUTH_URL` is only a fallback/canonical URL — never a static override,
+ * otherwise cookies get `Domain=lvh.me` while the app runs on localhost.
+ */
+const baseURL = {
+  allowedHosts: [
+    env.PRIMARY_DOMAIN,
+    `*.${env.PRIMARY_DOMAIN}`,
+    "localhost:3000",
+    "127.0.0.1:3000",
+    devDomainHost,
+    "*.lvh.me:3000",
+    ...(betterAuthUrlHost ? [betterAuthUrlHost] : []),
+  ],
+  fallback: env.BETTER_AUTH_URL ?? productionBaseURL,
+};
 
 const socialProviders: Record<
   string,
@@ -73,7 +99,8 @@ export const auth = betterAuth({
       }
 
       const resetUrl =
-        data.url ?? `${baseURL}/reset-password?token=${data.token ?? ""}`;
+        data.url ??
+        `${canonicalBaseURL}/reset-password?token=${data.token ?? ""}`;
 
       const locale = detectLocaleFromResetUrl(resetUrl);
       const copy = getResetPasswordEmailCopy(locale);

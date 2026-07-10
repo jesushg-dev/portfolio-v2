@@ -1,28 +1,22 @@
 import { test, expect } from "@playwright/test";
 
 import { requireE2eCredentials } from "./env";
+import { ensureOwnerAccount, signInOwner } from "./helpers/fill-register-form";
 
 test.describe("login", () => {
+  test.beforeAll(async ({ browser }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await ensureOwnerAccount(page);
+    await context.close();
+  });
+
   test("signs in with email and password and lands on the dashboard", async ({
     page,
   }) => {
     const { email, password } = requireE2eCredentials();
 
-    await page.goto("/login");
-    await expect(
-      page.getByRole("heading", { name: "Welcome back!" }),
-    ).toBeVisible();
-
-    await page.locator("#login-email").fill(email);
-    await page.locator("#login-password").fill(password);
-
-    const signInResponse = page.waitForResponse(
-      (response) =>
-        response.url().includes("/api/auth/sign-in/email") &&
-        response.request().method() === "POST",
-    );
-    await page.getByRole("button", { name: "Sign in", exact: true }).click();
-    await signInResponse;
+    await signInOwner(page, email, password);
 
     await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 60_000 });
     await expect(

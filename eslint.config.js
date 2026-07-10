@@ -10,6 +10,7 @@ export default tseslint.config(
       "eslint.config.js",
       "postcss.config.mjs",
       "prettier.config.js",
+      "prisma.config.ts",
     ],
   },
   ...nextVitals,

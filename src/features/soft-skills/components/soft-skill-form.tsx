@@ -236,14 +236,18 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
                 <div className="space-y-3">
                   <FormItem label={t("icon")} inputId="soft-skill-icon">
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger id="soft-skill-icon" className="w-full">
                         <SelectValue placeholder={t("selectIcon")} />
                       </SelectTrigger>
                       <SelectContent>
                         {SOFT_SKILL_ICON_KEYS.map((key) => {
                           const Icon = resolveSoftSkillIcon(key);
                           return (
-                            <SelectItem key={key} value={key}>
+                            <SelectItem
+                              key={key}
+                              value={key}
+                              id={`soft-skill-icon-option-${key}`}
+                            >
                               <span className="flex items-center gap-2">
                                 <Icon className="h-4 w-4" />
                                 {key}

@@ -13,9 +13,9 @@
     }
   },
   "aboutMe": {
-    "es": "Soy un entusiasta de la tecnología con 5 años de experiencia como desarrollador web. Estudié ingeniería en computación y también aprendí de forma autodidacta, creando sitios web hermosos y funcionales para clientes diversos.\n\nA medida que mi experiencia creció, me aventuré en otras áreas del desarrollo, explorando los mundos del desarrollo móvil y backend. Este conjunto diversificado de habilidades me permitió embarcarme en proyectos aún más emocionantes y desafiantes.\n\nA lo largo de mi carrera, mi impulso por aprender y crecer como desarrollador ha sido mi fuerza guía. Buscar constantemente nuevas tecnologías y técnicas para perfeccionar mi oficio está en el centro de mi filosofía. Estoy emocionado por descubrir hacia dónde me llevará mi pasión por la tecnología en el futuro.",
-    "en": "I am a technology enthusiast with 5 years of experience as a web developer. I studied computer engineering and also pursued self-learning, crafting beautiful and functional websites for diverse clients.\n\nAs my experience expanded, I ventured into other areas of development, exploring the realms of mobile and backend development. This diversified skill set allowed me to embark on even more exciting and challenging projects.\n\nThroughout my career, my drive to learn and grow as a developer has been my guiding force. Constantly seeking new technologies and techniques to refine my craft is at the core of my philosophy. I am thrilled to uncover where my passion for technology will lead me in the future.",
-    "nl": "Ik ben een technologie-enthousiasteling met 5 jaar ervaring als webontwikkelaar. Ik studeerde computertechniek en leerde ook autodidactisch, waarbij ik mooie en functionele websites bouwde voor uiteenlopende klanten.\n\nNaarmate mijn ervaring groeide, verkende ik andere ontwikkelingsgebieden, waaronder mobiel en backend. Deze brede skillset stelde me in staat om nog spannendere en uitdagendere projecten aan te pakken.\n\nGedurende mijn carrière is mijn drang om te leren en te groeien als ontwikkelaar mijn leidende kracht geweest. Voortdurend nieuwe technologieën en technieken zoeken om mijn vak te verfijnen staat centraal in mijn filosofie. Ik ben benieuwd waar mijn passie voor technologie me in de toekomst zal brengen."
+    "es": "Líder Fullstack con +6 años especializado en .NET Core, React y SQL Server, acostumbrado a entornos corporativos y financieros de alta exigencia (Walmart, Claro). Experiencia liderando equipos técnicos de hasta 6 personas y coordinando proveedores externos en ciclos completos de desarrollo. He dirigido migraciones de sistemas legacy (.NET Framework a .NET Core) hacia arquitecturas de microservicios RESTful, aplicando prácticas de código seguro y prevención de vulnerabilidades. Enfoque en entregables de alto impacto, CI/CD y automatización de procesos.",
+    "en": "Fullstack Lead with 6+ years specializing in .NET Core, React, and SQL Server, accustomed to high-demand corporate and financial environments (Walmart, Claro). Experienced in leading technical teams of up to 6 people and coordinating external vendors in full development cycles. I have led migrations from legacy systems (.NET Framework to .NET Core) to RESTful microservices architectures, applying secure coding practices and vulnerability prevention. Focus on high-impact deliverables, CI/CD, and process automation.",
+    "nl": "Fullstack Lead met 6+ jaar ervaring gespecialiseerd in .NET Core, React en SQL Server, gewend aan veeleisende zakelijke en financiële omgevingen (Walmart, Claro). Ervaring met het leiden van technische teams tot 6 personen en coördinatie van externe leveranciers in volledige ontwikkelcycli. Ik heb migraties van legacy-systemen (.NET Framework naar .NET Core) naar RESTful microservices-architecturen geleid, met toepassing van veilige codering en preventie van kwetsbaarheden. Focus op high-impact deliverables, CI/CD en procesautomatisering."
   },
   "contacts": [
     {
@@ -209,51 +209,27 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Formo parte del equipo de tecnología de Walmart, una plataforma de e-commerce de gran escala con millones de interacciones digitales. Colaboro de forma transversal con desarrollo, producto, QA, backend, frontend y negocio para entregar soluciones robustas, escalables y de alto impacto.",
-            "en": "I am part of Walmart's technology team, a large-scale e-commerce platform with millions of digital interactions. I work cross-functionally with engineering, product, QA, backend, frontend, and business teams to deliver robust, scalable, high-impact solutions.",
-            "nl": "Ik maak deel uit van het technologieteam van Walmart, een grootschalig e-commerceplatform met miljoenen digitale interacties. Ik werk cross-functioneel met development, product, QA, backend, frontend en business om robuuste, schaalbare oplossingen met grote impact te leveren."
+            "es": "Desarrollé funcionalidades clave full-stack para flujos críticos como órdenes y facturación, estableciendo la base arquitectónica.",
+            "en": "Developed key full-stack features for critical flows such as orders and billing, establishing the architectural foundation.",
+            "nl": "Ontwikkelde belangrijke full-stack functionaliteiten voor kritieke flows zoals bestellingen en facturatie, met de architectonische basis."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Diseñé e implementé funcionalidades críticas en React, Flutter y VTEX para flujos como búsqueda, catálogo, checkout, órdenes, cuenta y facturación. Creé nuevos proyectos desde cero definiendo estándares de buenas prácticas, estructura modular y procesos de onboarding eficiente, asegurando su integración dentro del ecosistema interno de Walmart.",
-            "en": "Designed and implemented critical features in React, Flutter, and VTEX for flows such as search, catalog, checkout, orders, account, and billing. Built new projects from scratch defining best-practice standards, modular structure, and efficient onboarding, ensuring integration within Walmart's internal ecosystem.",
-            "nl": "Ontwierp en implementeerde kritieke functionaliteiten in React, Flutter en VTEX voor flows zoals zoeken, catalogus, checkout, bestellingen, account en facturatie. Bouwde nieuwe projecten vanaf nul met best practices, modulaire structuur en efficiënte onboarding binnen het interne Walmart-ecosysteem."
+            "es": "Resolví incidentes críticos en producción (apps móviles y backend), mejorando el MTTR en un 40%.",
+            "en": "Resolved critical production incidents (mobile apps and backend), improving MTTR by 40%.",
+            "nl": "Lost kritieke productie-incidenten op (mobiele apps en backend) en verbeterde MTTR met 40%."
           },
           "order": 1
         },
         {
           "text": {
-            "es": "Lideré spikes técnicos y decisiones de arquitectura que redujeron el retrabajo en aproximadamente un 25 %, acelerando la entrega de iniciativas estratégicas.",
-            "en": "Led technical spikes and architecture decisions that reduced rework by approximately 25%, accelerating delivery of strategic initiatives.",
-            "nl": "Leidde technische spikes en architectuurbeslissingen die rework met ongeveer 25% verminderden en de levering van strategische initiatieven versnelden."
+            "es": "Colaboré con el equipo de QA para garantizar la estabilidad del sistema, utilizando herramientas de IA para agilizar la entrega de valor y acelerar la resolución de bugs.",
+            "en": "Collaborated with the QA team to ensure system stability, using AI tools to accelerate value delivery and bug resolution.",
+            "nl": "Werkte samen met het QA-team om systeemstabiliteit te garanderen, met AI-tools om waardelevering en bugoplossing te versnellen."
           },
           "order": 2
-        },
-        {
-          "text": {
-            "es": "Fortalecí la calidad del producto mediante automatización de pruebas E2E con Playwright (cobertura de flujos críticos +30 pp), pruebas unitarias (coverage +15 pp) y validación funcional end-to-end en releases de alto impacto, reduciendo los tiempos de pruebas regresivas de 7 días a 4 días.",
-            "en": "Strengthened product quality through E2E test automation with Playwright (critical flow coverage +30 pp), unit tests (coverage +15 pp), and end-to-end functional validation on high-impact releases, reducing regression testing time from 7 days to 4 days.",
-            "nl": "Versterkte productkwaliteit via E2E-testautomatisering met Playwright (dekking kritieke flows +30 pp), unit tests (coverage +15 pp) en end-to-end functionele validatie bij high-impact releases, waardoor regressietesttijd daalde van 7 naar 4 dagen."
-          },
-          "order": 3
-        },
-        {
-          "text": {
-            "es": "Brindé soporte y resolución de incidentes críticos en producción para app mobile y backend, diagnosticando fallos en flujos de alto impacto como checkout, órdenes y cuenta, y mejorando el MTTR en un 40 %, con foco en la comunicación con negocio y la prevención de recurrencias.",
-            "en": "Provided support and resolution of critical production incidents for mobile app and backend, diagnosing failures in high-impact flows such as checkout, orders, and account, and improving MTTR by 40%, with a focus on business communication and preventing recurrence.",
-            "nl": "Bood ondersteuning en oplossing van kritieke productie-incidenten voor mobiele app en backend, diagnosticeerde storingen in high-impact flows zoals checkout, bestellingen en account, en verbeterde MTTR met 40%, met focus op businesscommunicatie en het voorkomen van herhaling."
-          },
-          "order": 4
-        },
-        {
-          "text": {
-            "es": "Impulsé mejoras de mantenibilidad con prácticas de código limpio, manejo de errores, estándares y revisiones, elevando la calidad técnica y la productividad del equipo.",
-            "en": "Drove maintainability improvements with clean code practices, error handling, standards, and code reviews, raising technical quality and team productivity.",
-            "nl": "Stimuleerde onderhoudbaarheid via clean code, error handling, standaarden en code reviews, waardoor technische kwaliteit en teamproductiviteit stegen."
-          },
-          "order": 5
         }
       ],
       "order": 0
@@ -278,43 +254,19 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Diseñé y desarrollé un sistema interno de Gestión de Solicitudes de Servicio para Claro Nicaragua, reemplazando un sistema HelpDesk obsoleto. El proyecto, alineado con ITIL v2011, mejoró la eficiencia operativa y la experiencia del cliente.",
-            "en": "Designed and developed an internal Service Request Management system for Claro Nicaragua, replacing an obsolete HelpDesk system. The project, aligned with ITIL v2011, improved operational efficiency and customer experience.",
-            "nl": "Ontwierp en ontwikkelde een intern Service Request Management-systeem voor Claro Nicaragua ter vervanging van een verouderd HelpDesk-systeem. Het project, afgestemd op ITIL v2011, verbeterde operationele efficiëntie en klantervaring."
+            "es": "Construí un sistema web para solicitudes de servicios de telecomunicaciones usando React, Next.js, Prisma, tRPC, TypeScript y SQL Server.",
+            "en": "Built a web system for telecom service requests using React, Next.js, Prisma, tRPC, TypeScript, and SQL Server.",
+            "nl": "Bouwde een websysteem voor telecomservice-aanvragen met React, Next.js, Prisma, tRPC, TypeScript en SQL Server."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Construí un sistema web para solicitudes de servicios de telecomunicaciones usando React, Next.js, Prisma, tRPC, TypeScript y SQL Server.",
-            "en": "Built a web system for telecommunications service requests using React, Next.js, Prisma, tRPC, TypeScript, and SQL Server.",
-            "nl": "Bouwde een websysteem voor telecomservicerequests met React, Next.js, Prisma, tRPC, TypeScript en SQL Server."
+            "es": "Implementé notificaciones automatizadas y gestión dinámica de estados, aumentando la trazabilidad de solicitudes en un 80% y reduciendo tareas manuales.",
+            "en": "Implemented automated notifications and dynamic state management, increasing request traceability by 80% and reducing manual tasks.",
+            "nl": "Implementeerde geautomatiseerde meldingen en dynamisch statusbeheer, verhoogde traceerbaarheid van aanvragen met 80% en verminderde handmatig werk."
           },
           "order": 1
-        },
-        {
-          "text": {
-            "es": "Optimicé flujos de trabajo con mejores prácticas ITIL para mayor trazabilidad y priorización.",
-            "en": "Optimized workflows with ITIL best practices for greater traceability and prioritization.",
-            "nl": "Optimaliseerde workflows met ITIL best practices voor betere traceerbaarheid en prioritering."
-          },
-          "order": 2
-        },
-        {
-          "text": {
-            "es": "Implementé notificaciones automatizadas y gestión dinámica de estados para reducir tareas manuales.",
-            "en": "Implemented automated notifications and dynamic state management to reduce manual tasks.",
-            "nl": "Implementeerde geautomatiseerde notificaties en dynamisch statusbeheer om handmatig werk te verminderen."
-          },
-          "order": 3
-        },
-        {
-          "text": {
-            "es": "Aumenté un 80 % la trazabilidad de solicitudes mediante seguimiento claro de estados y asignación de responsabilidades.",
-            "en": "Increased request traceability by 80% through clear status tracking and responsibility assignment.",
-            "nl": "Verhoogde de traceerbaarheid van aanvragen met 80% via duidelijke statusopvolging en toewijzing van verantwoordelijkheden."
-          },
-          "order": 4
         }
       ],
       "order": 1
@@ -322,102 +274,50 @@
     {
       "key": "experience2",
       "company": "Contollo",
-      "dates": "noviembre 2024 – marzo 2025",
+      "dates": "agosto 2023 – marzo 2025",
       "role": {
-        "es": "Development Team Lead",
-        "en": "Development Team Lead",
-        "nl": "Development Team Lead"
+        "es": "Senior Software Engineer & Líder de Equipo",
+        "en": "Senior Software Engineer & Team Lead",
+        "nl": "Senior Software Engineer & Team Lead"
       },
-      "skillKeys": ["Git", "Azure", "Dotnet", "Typescript"],
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "Dotnet",
+        "Entity",
+        "Csharp",
+        "Nodejs",
+        "Git",
+        "Azure",
+        "Typescript"
+      ],
       "responsibilities": [
         {
           "text": {
-            "es": "Guié y apoyé a desarrolladores junior, asegurando su crecimiento profesional y fortaleciendo la capacidad técnica del equipo a través de buenas prácticas y estándares de desarrollo.",
-            "en": "Mentored and supported junior developers, ensuring their professional growth and strengthening the team's technical capacity through best practices and development standards.",
-            "nl": "Begeleidde en ondersteunde junior developers, stimuleerde hun professionele groei en versterkte de technische capaciteit van het team via best practices en ontwikkelstandaarden."
+            "es": "Dirigí la arquitectura frontend para más de 5 proyectos, creando librerías de componentes reutilizables y estándares de codificación.",
+            "en": "Led frontend architecture for 5+ projects, creating reusable component libraries and coding standards.",
+            "nl": "Leidde frontend-architectuur voor 5+ projecten, creëerde herbruikbare componentbibliotheken en codeerstandaarden."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Coordiné equipos de desarrollo, diseño y producto para garantizar una alineación efectiva en los proyectos.",
-            "en": "Coordinated development, design, and product teams to ensure effective alignment across projects.",
-            "nl": "Coördineerde development-, design- en productteams om effectieve afstemming in projecten te waarborgen."
+            "es": "Desarrollé integración .NET Core + SQL Server con QuickBooks para dashboards financieros, optimizando consultas y manejo de datos sensibles.",
+            "en": "Developed .NET Core + SQL Server integration with QuickBooks for financial dashboards, optimizing queries and sensitive data handling.",
+            "nl": "Ontwikkelde .NET Core + SQL Server-integratie met QuickBooks voor financiële dashboards, optimaliseerde queries en verwerking van gevoelige gegevens."
           },
           "order": 1
         },
         {
           "text": {
-            "es": "Desarrollé soluciones innovadoras en entornos de alta presión, contribuyendo a que la empresa ganara dos hackathons.",
-            "en": "Developed innovative solutions under high-pressure environments, contributing to the company winning two hackathons.",
-            "nl": "Ontwikkelde innovatieve oplossingen onder hoge druk en droeg bij aan het winnen van twee hackathons door het bedrijf."
+            "es": "Implementé CI/CD en Azure DevOps, reduciendo tiempos de despliegue en un 65%, e integré análisis de seguridad. Mentoricé a 4 desarrolladores junior.",
+            "en": "Implemented CI/CD in Azure DevOps, reducing deployment time by 65%, and integrated security analysis. Mentored 4 junior developers.",
+            "nl": "Implementeerde CI/CD in Azure DevOps, verminderde deploymenttijd met 65%, en integreerde beveiligingsanalyse. Begeleidde 4 junior developers."
           },
           "order": 2
-        },
-        {
-          "text": {
-            "es": "Implementé CI/CD, pruebas automatizadas y herramientas de monitoreo para mejorar la eficiencia del equipo.",
-            "en": "Implemented CI/CD, automated testing, and monitoring tools to improve team efficiency.",
-            "nl": "Implementeerde CI/CD, geautomatiseerde tests en monitoringtools om de efficiëntie van het team te verbeteren."
-          },
-          "order": 3
-        },
-        {
-          "text": {
-            "es": "Aseguré que las soluciones desarrolladas fueran intuitivas, accesibles y alineadas con las necesidades del negocio.",
-            "en": "Ensured developed solutions were intuitive, accessible, and aligned with business needs.",
-            "nl": "Zorgde ervoor dat ontwikkelde oplossingen intuïtief, toegankelijk en afgestemd op businessbehoeften waren."
-          },
-          "order": 4
         }
       ],
       "order": 2
-    },
-    {
-      "key": "experience3",
-      "company": "Contollo",
-      "dates": "agosto 2023 – noviembre 2024",
-      "role": {
-        "es": "Senior Software Engineer",
-        "en": "Senior Software Engineer",
-        "nl": "Senior Software Engineer"
-      },
-      "skillKeys": ["Nextjs", "Dotnet", "Entity", "Csharp", "Nodejs", "React"],
-      "responsibilities": [
-        {
-          "text": {
-            "es": "Desarrollé aplicaciones backend utilizando C# o Nest.js y frontend con Angular o React/Next.js, implementando soluciones robustas y dinámicas.",
-            "en": "Developed backend applications using C# or Nest.js and frontend with Angular or React/Next.js, delivering robust and dynamic solutions.",
-            "nl": "Ontwikkelde backend-applicaties met C# of Nest.js en frontend met Angular of React/Next.js, met robuuste en dynamische oplossingen."
-          },
-          "order": 0
-        },
-        {
-          "text": {
-            "es": "Fui responsable de crear y mantener servicios y APIs seguras que mejoran la conectividad de sistemas empresariales como QuickBooks y DevExpress Report Manager, optimizando flujos de datos.",
-            "en": "Created and maintained secure services and APIs that improve connectivity with enterprise systems such as QuickBooks and DevExpress Report Manager, optimizing data flows.",
-            "nl": "Creëerde en onderhield beveiligde services en API's die connectiviteit met enterprise-systemen zoals QuickBooks en DevExpress Report Manager verbeterden en dataflows optimaliseerden."
-          },
-          "order": 1
-        },
-        {
-          "text": {
-            "es": "Trabajé en colaboración con equipos internacionales para entregar soluciones personalizadas a clientes extranjeros.",
-            "en": "Collaborated with international teams to deliver tailored solutions for foreign clients.",
-            "nl": "Werkte samen met internationale teams om maatwerkoplossingen voor buitenlandse klanten te leveren."
-          },
-          "order": 2
-        },
-        {
-          "text": {
-            "es": "Implementé metodologías Scrum, asegurando entregas ágiles y de alta calidad.",
-            "en": "Implemented Scrum methodologies, ensuring agile and high-quality deliveries.",
-            "nl": "Implementeerde Scrum-methodologieën en zorgde voor agile opleveringen van hoge kwaliteit."
-          },
-          "order": 3
-        }
-      ],
-      "order": 3
     },
     {
       "key": "experience4",
@@ -439,38 +339,22 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Colaboré estrechamente con las partes interesadas del negocio y el equipo de desarrollo backend para diseñar y desarrollar interfaces web y aplicaciones móviles de alta calidad, alineadas con los objetivos del proyecto.",
-            "en": "Worked closely with business stakeholders and the backend team to design and develop high-quality web interfaces and mobile applications aligned with project goals.",
-            "nl": "Werkte nauw samen met business stakeholders en het backendteam om hoogwaardige webinterfaces en mobiele applicaties te ontwerpen en ontwikkelen, afgestemd op projectdoelen."
+            "es": "Modernicé sistema legacy: migración de jQuery a React+TS y refactorización de monolito a CQRS y Event-Driven, mejorando rendimiento un 35%.",
+            "en": "Modernized legacy system: migrated from jQuery to React+TS and refactored monolith to CQRS and Event-Driven, improving performance by 35%.",
+            "nl": "Moderniseerde legacy-systeem: migratie van jQuery naar React+TS en refactoring van monoliet naar CQRS en Event-Driven, verbeterde prestaties met 35%."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Logré una integración exitosa de datos y procesos de proveedores externos, asegurando una gestión eficiente de la información y una integración fluida en los sistemas existentes.",
-            "en": "Achieved successful integration of external provider data and processes, ensuring efficient information management and seamless integration into existing systems.",
-            "nl": "Realiseerde succesvolle integratie van data en processen van externe leveranciers, met efficiënt informatiebeheer en naadloze aansluiting op bestaande systemen."
+            "es": "Diseñé APIs (GraphQL/Nest.js) y aumenté la confiabilidad de sincronización un 90%.",
+            "en": "Designed APIs (GraphQL/Nest.js) and increased synchronization reliability by 90%.",
+            "nl": "Ontwierp API's (GraphQL/Nest.js) en verhoogde synchronisatiebetrouwbaarheid met 90%."
           },
           "order": 1
-        },
-        {
-          "text": {
-            "es": "Refactoricé proyectos existentes, optimizando su estructura para cumplir con los estándares de código limpio, mejorando la mantenibilidad y eficiencia del software.",
-            "en": "Refactored existing projects, optimizing their structure to meet clean code standards and improving software maintainability and efficiency.",
-            "nl": "Refactorde bestaande projecten, optimaliseerde de structuur volgens clean code-standaarden en verbeterde onderhoudbaarheid en efficiëntie van de software."
-          },
-          "order": 2
-        },
-        {
-          "text": {
-            "es": "Presenté los avances y resultados a los product owners y demás partes interesadas, destacando mejoras en funcionalidad, usabilidad y rendimiento, y asegurando la alineación con las expectativas del proyecto.",
-            "en": "Presented progress and results to product owners and stakeholders, highlighting improvements in functionality, usability, and performance, and ensuring alignment with project expectations.",
-            "nl": "Presenteerde voortgang en resultaten aan product owners en stakeholders, benadrukte verbeteringen in functionaliteit, bruikbaarheid en prestaties, en waarborgde afstemming met projectverwachtingen."
-          },
-          "order": 3
         }
       ],
-      "order": 4
+      "order": 3
     },
     {
       "key": "experience5",
@@ -485,38 +369,22 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Creé interfaces de usuario basadas en las especificaciones de diseño proporcionadas por el equipo de UX, garantizando una experiencia visualmente atractiva y funcional.",
-            "en": "Created user interfaces based on design specifications from the UX team, ensuring a visually appealing and functional experience.",
-            "nl": "Creëerde gebruikersinterfaces op basis van designspecificaties van het UX-team, met een visueel aantrekkelijke en functionele ervaring."
+            "es": "Desarrollé apps React Native con autenticación biométrica y sincronización offline.",
+            "en": "Developed React Native apps with biometric authentication and offline synchronization.",
+            "nl": "Ontwikkelde React Native-apps met biometrische authenticatie en offline synchronisatie."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Participé en un equipo Scrum, implementando funcionalidades según las historias de usuario, cumpliendo con los plazos y objetivos del proyecto.",
-            "en": "Participated in a Scrum team, implementing features according to user stories and meeting project deadlines and goals.",
-            "nl": "Nam deel aan een Scrum-team, implementeerde functionaliteiten volgens user stories en haalde projectdeadlines en -doelen."
+            "es": "Implementé pruebas unitarias (Jest) y CI, reduciendo bugs en producción en un 70%.",
+            "en": "Implemented unit tests (Jest) and CI, reducing production bugs by 70%.",
+            "nl": "Implementeerde unit tests (Jest) en CI, verminderde productiebugs met 70%."
           },
           "order": 1
-        },
-        {
-          "text": {
-            "es": "Apoyé a los equipos de control de calidad y desarrollo backend mediante pruebas, revisiones de código y resolución efectiva de problemas.",
-            "en": "Supported QA and backend teams through testing, code reviews, and effective problem resolution.",
-            "nl": "Ondersteunde QA- en backendteams via testen, code reviews en effectieve probleemoplossing."
-          },
-          "order": 2
-        },
-        {
-          "text": {
-            "es": "Colaboré activamente con otros miembros del equipo, fomentando un ambiente de trabajo colaborativo y proactivo.",
-            "en": "Collaborated actively with other team members, fostering a collaborative and proactive work environment.",
-            "nl": "Werkte actief samen met andere teamleden en stimuleerde een collaboratieve en proactieve werkomgeving."
-          },
-          "order": 3
         }
       ],
-      "order": 5
+      "order": 4
     },
     {
       "key": "experience6",
@@ -531,30 +399,22 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Desarrollé, desplegué y mantuve una web moderna y atractiva para promover y dar a conocer la organización y sus actividades, con foco en una experiencia de usuario excepcional, navegación intuitiva y diseño visualmente atractivo.",
-            "en": "Developed, deployed, and maintained a modern, attractive website to promote the organization and its activities, with a focus on exceptional user experience, intuitive navigation, and appealing visual design.",
-            "nl": "Ontwikkelde, implementeerde en onderhield een moderne, aantrekkelijke website om de organisatie en haar activiteiten te promoten, met focus op uitstekende gebruikerservaring, intuïtieve navigatie en aantrekkelijk visueel ontwerp."
+            "es": "Desarrollé y mantuve sitio web institucional con React/Next.js, modernizando CSS con BEM/SASS.",
+            "en": "Developed and maintained institutional website with React/Next.js, modernizing CSS with BEM/SASS.",
+            "nl": "Ontwikkelde en onderhield institutionele website met React/Next.js, moderniseerde CSS met BEM/SASS."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Enseñé informática a estudiantes de primaria, brindándoles conocimientos fundamentales en tecnología y herramientas informáticas para fomentar su curiosidad por el mundo digital.",
-            "en": "Taught computer science to elementary students, providing fundamental knowledge in technology and digital tools to foster their curiosity about the digital world.",
-            "nl": "Gaf informatica aan basisschoolleerlingen en bood fundamentele kennis over technologie en digitale tools om hun nieuwsgierigheid naar de digitale wereld te stimuleren."
+            "es": "Brindé soporte técnico integral y enseñé informática a estudiantes de primaria, fomentando el interés por la tecnología.",
+            "en": "Provided comprehensive technical support and taught computer science to elementary students, fostering interest in technology.",
+            "nl": "Bood uitgebreide technische ondersteuning en gaf informatica aan basisschoolleerlingen, stimuleerde interesse in technologie."
           },
           "order": 1
-        },
-        {
-          "text": {
-            "es": "Proporcioné soporte técnico integral, incluyendo mantenimiento y configuración de equipos y software, resolviendo problemas de manera eficiente y minimizando el tiempo de inactividad.",
-            "en": "Provided comprehensive technical support, including equipment and software maintenance and configuration, resolving issues efficiently and minimizing downtime.",
-            "nl": "Verleende uitgebreide technische ondersteuning, inclusief onderhoud en configuratie van apparatuur en software, loste problemen efficiënt op en minimaliseerde downtime."
-          },
-          "order": 2
         }
       ],
-      "order": 6
+      "order": 5
     }
   ],
   "softSkills": [

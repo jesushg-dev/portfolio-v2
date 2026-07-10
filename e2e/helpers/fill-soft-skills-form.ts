@@ -1,5 +1,7 @@
 import type { Page, Response } from "@playwright/test";
 
+import { clickSelectOption } from "./select-option";
+
 import {
   portfolioSoftSkills,
   type PortfolioSoftSkillItemFixture,
@@ -161,12 +163,11 @@ export async function fillSoftSkillsSectionFromFixture(
 ): Promise<void> {
   await openSoftSkillsSettings(page);
 
-  await page.locator("#soft-skills-section-media-type").click();
-  await page
-    .getByRole("option", {
-      name: section.mediaType === "VIDEO" ? /video/i : /image/i,
-    })
-    .click();
+  await clickSelectOption(
+    page,
+    "soft-skills-section-media-type",
+    `soft-skills-section-media-type-option-${section.mediaType}`,
+  );
 
   if (section.mediaType === "VIDEO") {
     if (section.videoUrl) {
@@ -204,8 +205,11 @@ export async function fillSoftSkillItemForm(
 
   await openNewSoftSkillForm(page);
 
-  await page.locator("#soft-skill-icon").click();
-  await page.getByRole("option", { name: item.icon, exact: true }).click();
+  await clickSelectOption(
+    page,
+    "soft-skill-icon",
+    `soft-skill-icon-option-${item.icon}`,
+  );
 
   await setVisibleSwitch(page, true);
   await page.locator("#soft-skill-order").fill(String(item.order));

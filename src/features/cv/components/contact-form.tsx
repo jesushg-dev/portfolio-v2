@@ -105,7 +105,7 @@ export const ContactForm: FC<{
                 <FormItem label={t("type")} inputId="cv-contact-type">
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger id="cv-contact-type" className="w-full">
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>

@@ -1,5 +1,7 @@
 import type { Page, Response } from "@playwright/test";
 
+import { clickSelectOption } from "./select-option";
+
 import {
   portfolioSkills,
   type PortfolioSkillFixture,
@@ -64,6 +66,22 @@ async function waitForSkillSaveToFinish(page: Page): Promise<void> {
     .waitFor({ state: "visible", timeout: 15_000 });
 }
 
+/** Switch the skill form to a locale and wait until its fields are visible. */
+async function switchSkillLanguage(page: Page, locale: string): Promise<void> {
+  const description = page.locator(`#skill-description-${locale}`);
+  if (await description.isVisible()) return;
+
+  const tab = page.locator(`#skill-lang-${locale}`);
+  await tab.scrollIntoViewIfNeeded();
+  await tab.click({ timeout: 10_000 });
+  await description.waitFor({ state: "visible", timeout: 10_000 });
+}
+
+/** Pick a stack type from the select using stable option ids. */
+async function selectSkillType(page: Page, type: string): Promise<void> {
+  await clickSelectOption(page, "skill-type", `skill-type-option-${type}`);
+}
+
 export async function fillSkillForm(
   page: Page,
   skill: PortfolioSkillFixture,
@@ -77,14 +95,11 @@ export async function fillSkillForm(
   await page.locator("#skill-title").fill(skill.title);
   await page.locator("#skill-image").fill(skill.image);
 
-  await page.locator("#skill-type").click();
-  await page.getByRole("option", { name: skill.type, exact: true }).click();
-
   for (const locale of SKILL_LOCALES) {
     const translation = skill.translations.find((row) => row.locale === locale);
     if (!translation) continue;
 
-    await page.locator(`#skill-lang-${locale}`).click();
+    await switchSkillLanguage(page, locale);
 
     if (translation.description) {
       await page
@@ -97,6 +112,8 @@ export async function fillSkillForm(
     }
   }
 
+  await selectSkillType(page, skill.type);
+
   const createResponse = page.waitForResponse(
     (response) =>
       response.url().includes("/api/trpc/portfolioAdmin.createSkill") &&
@@ -105,7 +122,7 @@ export async function fillSkillForm(
     { timeout: 30_000 },
   );
 
-  await page.getByRole("button", { name: /create|crear|aanmaken/i }).click();
+  await page.locator("#skill-form-submit").click();
 
   await assertCreateSkillSucceeded(await createResponse);
 

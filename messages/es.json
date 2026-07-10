@@ -188,7 +188,11 @@
     "heroMain": {
       "viewCV": "Ver CV",
       "greeting": "Hola! Soy",
-      "scrollDown": "Desplazarse hacia abajo"
+      "scrollDown": "Desplazarse hacia abajo",
+      "empty": {
+        "title": "Hero sin configurar",
+        "description": "Añade tu foto, fondo e introducción desde la pestaña de hero en el perfil del admin."
+      }
     },
     "timeline": {
       "title": "Mi recorrido",

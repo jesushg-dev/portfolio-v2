@@ -14,7 +14,7 @@ import {
   safeInternalPath,
   type AppHref,
 } from "@/lib/auth-routing";
-import { Link, useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -40,7 +40,6 @@ interface LoginFormProps {
 const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
   const t = useTranslations("auth.login");
   const locale = useLocale();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = useMemo(
     () => safeInternalPath(searchParams.get("next")),
@@ -90,11 +89,11 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
           setServerError(error.message ?? t("errorSignIn"));
           return;
         }
-        router.push(redirectTo);
-        router.refresh();
+        // Full navigation so the session cookie set by the auth API is sent on the next request.
+        window.location.assign(callbackURL);
       });
     },
-    [callbackURL, redirectTo, router, t],
+    [callbackURL, t],
   );
 
   const handleSocialSignIn = useCallback(

@@ -106,7 +106,7 @@ export const SkillForm: FC<{
               <FormItem label={t("category")} inputId="cv-skill-category">
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger id="cv-skill-category" className="w-full">
                       <SelectValue placeholder={t("category")} />
                     </SelectTrigger>
                   </FormControl>

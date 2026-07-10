@@ -295,13 +295,17 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                   <FormItem label={t("type")} inputId="skill-type">
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger id="skill-type">
                           <SelectValue placeholder={t("selectType")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {StackTypeSchema.options.map((opt) => (
-                          <SelectItem key={opt} value={opt}>
+                          <SelectItem
+                            key={opt}
+                            value={opt}
+                            id={`skill-type-option-${opt}`}
+                          >
                             {opt}
                           </SelectItem>
                         ))}
@@ -316,8 +320,14 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
         <FormActions
           isPending={isPending || isSaving}
           title={isEditMode ? t("save") : t("create")}
+          submitId="skill-form-submit"
         >
-          <Button type="button" variant="ghost" onClick={() => router.back()}>
+          <Button
+            id="skill-form-cancel"
+            type="button"
+            variant="ghost"
+            onClick={() => router.back()}
+          >
             {t("cancel")}
           </Button>
         </FormActions>

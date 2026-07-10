@@ -187,7 +187,11 @@
     "heroMain": {
       "viewCV": "Bekijk CV",
       "greeting": "Hallo, ik ben",
-      "scrollDown": "Scroll naar beneden"
+      "scrollDown": "Scroll naar beneden",
+      "empty": {
+        "title": "Hero niet geconfigureerd",
+        "description": "Voeg je profielfoto, achtergrond en intro toe via het hero-tabblad in het adminprofiel."
+      }
     },
     "timeline": {
       "title": "Mijn reis",

@@ -6,6 +6,10 @@ import {
   goToSkillsList,
   portfolioSkills,
 } from "./helpers/fill-skill-form";
+import {
+  disconnectE2ePrisma,
+  ensureAppLanguages,
+} from "./helpers/ensure-app-languages";
 
 // ~1 min/skill in headed mode; 42 skills need well above the default 60s test timeout.
 test.setTimeout(45 * 60 * 1000);
@@ -14,12 +18,18 @@ test.describe.configure({ mode: "serial" });
 
 test.describe("skills create", () => {
   test.beforeAll(async ({ browser }) => {
+    await ensureAppLanguages();
+
     const context = await browser.newContext({
       storageState: "e2e/.auth/user.json",
     });
     const page = await context.newPage();
     await cleanupUserSkills(page);
     await context.close();
+  });
+
+  test.afterAll(async () => {
+    await disconnectE2ePrisma();
   });
 
   test("creates all 42 portfolio skills from the shared fixture", async ({

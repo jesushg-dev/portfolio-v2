@@ -5,8 +5,20 @@ import {
   fillSkillForm,
   portfolioSkills,
 } from "./helpers/fill-skill-form";
+import {
+  disconnectE2ePrisma,
+  ensureAppLanguages,
+} from "./helpers/ensure-app-languages";
 
 test.describe("skills smoke", () => {
+  test.beforeAll(async () => {
+    await ensureAppLanguages();
+  });
+
+  test.afterAll(async () => {
+    await disconnectE2ePrisma();
+  });
+
   test.beforeEach(async ({ page }) => {
     await cleanupUserSkills(page);
   });

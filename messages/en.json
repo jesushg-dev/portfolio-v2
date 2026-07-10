@@ -187,7 +187,11 @@
     "heroMain": {
       "viewCV": "View CV",
       "greeting": "Hello, I'm",
-      "scrollDown": "Scroll Down"
+      "scrollDown": "Scroll Down",
+      "empty": {
+        "title": "Hero not configured",
+        "description": "Add your profile photo, background, and intro from the admin profile hero tab."
+      }
     },
     "timeline": {
       "title": "My Journey",

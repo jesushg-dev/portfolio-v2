@@ -17,6 +17,7 @@ import {
   type PortfolioSkillFixture,
 } from "../fixtures/portfolio-skills";
 import { selectSkillsInPicker } from "./skill-picker-actions";
+import { clickSelectOption } from "./select-option";
 
 const CV_LOCALES = ["es", "en", "nl"] as const;
 
@@ -219,8 +220,11 @@ export async function fillCvContact(
   contact: PortfolioCvContactFixture,
 ): Promise<void> {
   await openCvItemModal(page, "cv-contacts-add");
-  await page.locator("#cv-contact-type").click();
-  await page.locator(`#cv-contact-type-option-${contact.type}`).click();
+  await clickSelectOption(
+    page,
+    "cv-contact-type",
+    `cv-contact-type-option-${contact.type}`,
+  );
   await page.locator("#cv-contact-value").fill(contact.value);
   await fillLocalizedField(page, "cv-contact-label", contact.label);
   await submitCvForm(page, "cv-contact-form", "createContact");
@@ -260,8 +264,11 @@ export async function fillCvTechnicalSkill(
   skill: PortfolioCvTechnicalSkillFixture,
 ): Promise<void> {
   await openCvItemModal(page, "cv-skills-add");
-  await page.locator("#cv-skill-category").click();
-  await page.locator(`#cv-skill-category-option-${skill.category}`).click();
+  await clickSelectOption(
+    page,
+    "cv-skill-category",
+    `cv-skill-category-option-${skill.category}`,
+  );
   await page.locator("#cv-skill-items").fill(skill.items.join(", "));
   await submitCvForm(page, "cv-skill-form", "createTechnicalSkill");
   await waitForCvItemModalClosed(page);

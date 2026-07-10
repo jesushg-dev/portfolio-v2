@@ -1,7 +1,7 @@
-import type { IOptions, RecursivePartial } from "@tsparticles/engine";
+import type { ISourceOptions } from "@tsparticles/engine";
 
-const generateParticlesConfig = (color: string[]) => {
-  const skillParticles: RecursivePartial<IOptions> = {
+const generateParticlesConfig = (color: readonly string[]): ISourceOptions => {
+  const skillParticles: ISourceOptions = {
     backgroundMode: false,
     background: {
       color: {

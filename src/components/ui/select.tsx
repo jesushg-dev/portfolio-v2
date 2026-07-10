@@ -112,24 +112,20 @@ function SelectLabel({
 }
 
 type SelectItemProps = SelectPrimitive.Item.Props & {
-  /** Stable DOM id for tests; Base UI omits `id` from its public types but forwards it. */
+  /** Stable DOM id for tests — mirrored to `data-option-id` (Base UI omits `id`). */
   id?: string;
 };
 
 function SelectItem({ className, children, id, ...props }: SelectItemProps) {
-  const itemProps = {
-    ...props,
-    ...(id !== undefined ? { id } : {}),
-  } as SelectPrimitive.Item.Props;
-
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
+      {...(id ? { "data-option-id": id } : {})}
       className={cn(
         "focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className,
       )}
-      {...itemProps}
+      {...props}
     >
       <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
         {children}
