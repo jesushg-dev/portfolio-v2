@@ -18,6 +18,7 @@ import { IoPause, IoPlay, IoVolumeMediumOutline } from "react-icons/io5";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 
 import type { SpotifyPlayback } from "./types";
+import type { TrackLyricsRequest } from "./track-lyrics-types";
 import ProgressTimer from "./progress-timer";
 import Player from "./player";
 import PlayingIndicator from "./playing-indicator";
@@ -44,12 +45,17 @@ import {
 
 interface ExpandableSpotifyPlayerProps {
   playback: SpotifyPlayback;
+  nextTrackLyrics?: TrackLyricsRequest | null;
 }
 
 const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
   playback,
+  nextTrackLyrics = null,
 }) => (
-  <SpotifyPlaybackProvider playback={playback}>
+  <SpotifyPlaybackProvider
+    playback={playback}
+    nextTrackLyrics={nextTrackLyrics}
+  >
     <ExpandableSpotifyPlayerContent />
   </SpotifyPlaybackProvider>
 );

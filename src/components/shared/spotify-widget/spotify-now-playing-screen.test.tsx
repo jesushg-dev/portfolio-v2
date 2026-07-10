@@ -22,6 +22,7 @@ import { SpotifyPlaybackProvider } from "./spotify-playback-context";
 
 jest.mock("./use-track-lyrics", () => ({
   useTrackLyrics: () => ({ status: "empty", lyrics: null }),
+  prefetchTrackLyrics: jest.fn(() => Promise.resolve()),
   previewLyricsLines: (text: string) =>
     text
       .split("\n")

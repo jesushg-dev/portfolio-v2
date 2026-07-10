@@ -37,6 +37,15 @@ jest.mock("./use-album-color", () => ({
   buildSpotifyFullscreenBg: (hex: string) => `fullscreen(${hex})`,
 }));
 
+jest.mock("./use-track-lyrics", () => ({
+  useTrackLyrics: () => ({ status: "empty", lyrics: null }),
+  prefetchTrackLyrics: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock("./use-prefetch-next-lyrics", () => ({
+  usePrefetchNextLyrics: jest.fn(),
+}));
+
 function mockBoundingClientRect() {
   const rect = {
     top: 120,
@@ -79,6 +88,31 @@ describe("ExpandableSpotifyPlayer", () => {
     expect(
       screen.getByRole("button", { name: "Expand player" }),
     ).toBeInTheDocument();
+  });
+
+  it("keeps the fullscreen player open when playback changes to another track", async () => {
+    const user = userEvent.setup();
+    const firstPlayback = mapTrackNowPlaying(mockTrack, mockNowPlayingTrack);
+    const secondPlayback = mapTrackNowPlaying(
+      { ...mockTrack, id: "track-2", name: "Next Track" },
+      {
+        ...mockNowPlayingTrack,
+        progress_ms: 2_000,
+        timestamp: mockNowPlayingTrack.timestamp + 1,
+      },
+    );
+
+    const { rerender } = renderWithIntl(
+      <ExpandableSpotifyPlayer playback={firstPlayback} />,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Expand player" }));
+    expect(screen.getByText("Now Playing")).toBeInTheDocument();
+
+    rerender(<ExpandableSpotifyPlayer playback={secondPlayback} />);
+
+    expect(screen.getByText("Now Playing")).toBeInTheDocument();
+    expect(screen.getAllByText("Next Track").length).toBeGreaterThan(0);
   });
 
   it("opens the fullscreen player when the expand control is clicked", async () => {

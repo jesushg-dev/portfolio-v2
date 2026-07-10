@@ -12,7 +12,8 @@ import { useSpotifyPlayback } from "./use-spotify-playback";
 
 const SpotifyWidget: FC = () => {
   const t = useTranslations("global.footer");
-  const { playback, error, isLoading, isFetchError } = useSpotifyPlayback();
+  const { playback, error, isLoading, isFetchError, nextTrackLyrics } =
+    useSpotifyPlayback();
 
   if (isLoading) {
     return <SpotifyWidgetSkeleton />;
@@ -46,7 +47,12 @@ const SpotifyWidget: FC = () => {
     );
   }
 
-  return <ExpandableSpotifyPlayer playback={playback} />;
+  return (
+    <ExpandableSpotifyPlayer
+      playback={playback}
+      nextTrackLyrics={nextTrackLyrics}
+    />
+  );
 };
 
 export default memo(SpotifyWidget);

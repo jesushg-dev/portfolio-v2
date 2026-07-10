@@ -49,10 +49,19 @@ const LyricsFullscreen: FC<LyricsFullscreenProps> = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const activeLineRef = useRef<HTMLParagraphElement>(null);
 
+  const previousActiveIndexRef = useRef(activeIndex);
+
   useEffect(() => {
     if (!useSynced || activeIndex < 0) return;
+
+    const jumpedToStart =
+      previousActiveIndexRef.current >= 0 &&
+      activeIndex < previousActiveIndexRef.current - 2;
+
+    previousActiveIndexRef.current = activeIndex;
+
     activeLineRef.current?.scrollIntoView({
-      behavior: "smooth",
+      behavior: jumpedToStart ? "instant" : "smooth",
       block: "center",
     });
   }, [activeIndex, useSynced]);

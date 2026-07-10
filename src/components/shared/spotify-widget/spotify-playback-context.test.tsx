@@ -12,13 +12,21 @@ import {
   useSpotifyPlaybackContext,
 } from "./spotify-playback-context";
 
+jest.mock("./use-track-lyrics", () => ({
+  prefetchTrackLyrics: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock("./use-prefetch-next-lyrics", () => ({
+  usePrefetchNextLyrics: jest.fn(),
+}));
+
 function ProgressReadout() {
   const { liveProgressMs } = useSpotifyPlaybackContext();
   return <span data-testid="progress">{liveProgressMs}</span>;
 }
 
 describe("SpotifyPlaybackProvider", () => {
-  it("remounts the clock when contentId changes", () => {
+  it("resets live progress when contentId changes", () => {
     const firstTrack = mapTrackNowPlaying(mockTrack, {
       ...mockNowPlayingTrack,
       progress_ms: 175_000,

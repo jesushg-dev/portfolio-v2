@@ -157,7 +157,7 @@ const LyricsCard: FC<LyricsCardProps> = ({
           <div
             ref={trackRef}
             className="space-y-1.5 will-change-transform"
-            style={{ transition: "transform 280ms ease-out" }}
+            style={{ transition: "transform 120ms ease-out" }}
           >
             {syncedPreview.lines.map((line, index) => {
               const isActive = index === syncedPreview.activeOffset;

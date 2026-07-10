@@ -302,4 +302,27 @@ describe("useSpotifyPlayback", () => {
 
     expect(interval).toBe(15 * ETime.SECOND);
   });
+
+  it("fetches queue while an active track is playing", () => {
+    const nextTrack = { ...mockTrack, id: "track-next", name: "Next Song" };
+
+    mockNowPlayingQuery.mockReturnValue(mockQueryResult(mockNowPlayingTrack));
+    mockQueueQuery.mockReturnValue(
+      mockQueryResult({
+        currently_playing: mockTrack,
+        queue: [nextTrack],
+      }),
+    );
+
+    const { result } = renderHook(() => useSpotifyPlayback());
+
+    expect(queueOptions?.enabled).toBe(true);
+    expect(result.current.nextTrackLyrics).toEqual({
+      contentId: "track-next",
+      title: "Next Song",
+      artist: "Daft Punk",
+      album: "Random Access Memories",
+      durationMs: 248_000,
+    });
+  });
 });

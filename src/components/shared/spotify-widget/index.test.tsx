@@ -8,9 +8,11 @@ import {
 } from "@/test-utils/fixtures/spotify-data";
 import { mapRecentlyPlayed, mapTrackNowPlaying } from "./playback-mappers";
 import type { SpotifyPlayback, SpotifyPlaybackError } from "./types";
+import type { TrackLyricsRequest } from "./track-lyrics-types";
 
 interface SpotifyPlaybackHookResult {
   playback: SpotifyPlayback | null;
+  nextTrackLyrics: TrackLyricsRequest | null;
   error: SpotifyPlaybackError | null;
   isLoading: boolean;
   isFetchError: boolean;
@@ -18,6 +20,7 @@ interface SpotifyPlaybackHookResult {
 
 const mockUseSpotifyPlayback = jest.fn((): SpotifyPlaybackHookResult => ({
   playback: null,
+  nextTrackLyrics: null,
   error: null,
   isLoading: false,
   isFetchError: false,
@@ -37,6 +40,7 @@ describe("SpotifyWidget", () => {
   it("shows skeleton while loading", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
+      nextTrackLyrics: null,
       error: null,
       isLoading: true,
       isFetchError: false,
@@ -50,6 +54,7 @@ describe("SpotifyWidget", () => {
   it("shows fetch error message", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
+      nextTrackLyrics: null,
       error: null,
       isLoading: false,
       isFetchError: true,
@@ -66,6 +71,7 @@ describe("SpotifyWidget", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
       error: { status: 500, message: "Server error" },
+      nextTrackLyrics: null,
       isLoading: false,
       isFetchError: false,
     });
@@ -78,6 +84,7 @@ describe("SpotifyWidget", () => {
   it("shows empty state when nothing is playing", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
+      nextTrackLyrics: null,
       error: null,
       isLoading: false,
       isFetchError: false,
@@ -91,6 +98,7 @@ describe("SpotifyWidget", () => {
   it("renders the expandable player when playback is available", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: mapTrackNowPlaying(mockTrack, mockNowPlayingTrack),
+      nextTrackLyrics: null,
       error: null,
       isLoading: false,
       isFetchError: false,
@@ -113,6 +121,7 @@ describe("SpotifyWidget", () => {
 
     mockUseSpotifyPlayback.mockReturnValue({
       playback,
+      nextTrackLyrics: null,
       error: null,
       isLoading: false,
       isFetchError: false,

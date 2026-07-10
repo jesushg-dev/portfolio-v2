@@ -9,6 +9,7 @@ import type { Episode, Track } from "@/utils/interfaces/spotify/entities";
 import { resolveSpotifyUrl } from "@/utils/services/spotify-scopes";
 
 import type { SpotifyPlayback, SpotifyPlaybackContext } from "./types";
+import type { TrackLyricsRequest } from "./track-lyrics-types";
 
 export function isTrack(item: Track | Episode): item is Track {
   return item.type === "track";
@@ -202,6 +203,30 @@ export function resolveEpisodeFromNowPlaying(
 ): Episode | null {
   if (data.item && isEpisode(data.item) && !data.item.explicit) {
     return data.item;
+  }
+
+  return null;
+}
+
+export function trackToLyricsRequest(track: Track): TrackLyricsRequest {
+  return {
+    contentId: track.id,
+    title: track.name,
+    artist: track.artists[0]?.name ?? "",
+    album: track.album.name,
+    durationMs: track.duration_ms,
+  };
+}
+
+/** First upcoming track in the queue after the currently playing item. */
+export function resolveNextQueuedTrack(
+  queue: QueueResponse,
+  currentContentId: string,
+): Track | null {
+  for (const item of queue.queue) {
+    if (isTrack(item) && item.id !== currentContentId && !item.explicit) {
+      return item;
+    }
   }
 
   return null;

@@ -1,139 +1,232 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
-export type TrackLyrics = {
-  plainLyrics: string;
-  syncedLyrics: string | null;
-};
+import type {
+  LyricsCacheEntry,
+  TrackLyricsPayload,
+  TrackLyricsRequest,
+} from "./track-lyrics-types";
 
 type LyricsStatus = "idle" | "loading" | "ready" | "empty" | "error";
+
+export type TrackLyrics = TrackLyricsPayload;
 
 export type UseTrackLyricsResult = {
   status: LyricsStatus;
   lyrics: TrackLyrics | null;
 };
 
-type LyricsQuery = {
+type LyricsQuery = TrackLyricsRequest & {
   enabled: boolean;
-  title: string;
-  artist: string;
-  album: string;
-  durationMs: number;
 };
 
-type CacheEntry =
-  | { status: "ready"; lyrics: TrackLyrics }
-  | { status: "empty" }
-  | { status: "error" };
+const SESSION_STORAGE_KEY = "spotify-lyrics-cache-v2";
+const MAX_SESSION_ENTRIES = 40;
 
-const lyricsCache = new Map<string, CacheEntry>();
+const lyricsCache = new Map<string, LyricsCacheEntry>();
+const inflight = new Map<string, Promise<void>>();
+const cacheListeners = new Set<() => void>();
 
-function cacheKey(
-  title: string,
-  artist: string,
-  album: string,
-  durationMs: number,
-): string {
-  return `${artist.toLowerCase()}|${title.toLowerCase()}|${album.toLowerCase()}|${Math.round(durationMs / 1000)}`;
+let sessionHydrated = false;
+let cacheVersion = 0;
+
+function notifyCacheListeners(): void {
+  cacheVersion += 1;
+  for (const listener of cacheListeners) {
+    listener();
+  }
 }
 
-function resultFromCache(entry: CacheEntry): UseTrackLyricsResult {
+function subscribeToLyricsCache(listener: () => void): () => void {
+  cacheListeners.add(listener);
+  return () => {
+    cacheListeners.delete(listener);
+  };
+}
+
+function getLyricsCacheVersion(): number {
+  return cacheVersion;
+}
+
+function buildLyricsCacheKey(request: TrackLyricsRequest): string {
+  if (request.contentId) {
+    return `spotify:${request.contentId}`;
+  }
+
+  return `${request.artist.toLowerCase()}|${request.title.toLowerCase()}|${request.album.toLowerCase()}|${Math.round(request.durationMs / 1000)}`;
+}
+
+function resultFromCache(entry: LyricsCacheEntry): UseTrackLyricsResult {
   if (entry.status === "ready") {
     return { status: "ready", lyrics: entry.lyrics };
   }
+
   return { status: entry.status, lyrics: null };
+}
+
+function hydrateSessionCache(): void {
+  if (sessionHydrated || typeof window === "undefined") return;
+  sessionHydrated = true;
+
+  try {
+    const raw = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (!raw) return;
+
+    const parsed = JSON.parse(raw) as Record<string, LyricsCacheEntry>;
+    for (const [key, entry] of Object.entries(parsed)) {
+      if (!lyricsCache.has(key)) {
+        lyricsCache.set(key, entry);
+      }
+    }
+  } catch {
+    // Ignore corrupt session cache.
+  }
+}
+
+function persistSessionCache(): void {
+  if (typeof window === "undefined") return;
+
+  const entries = [...lyricsCache.entries()]
+    .filter(([, entry]) => entry.status === "ready" || entry.status === "empty")
+    .slice(-MAX_SESSION_ENTRIES);
+
+  try {
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEY,
+      JSON.stringify(Object.fromEntries(entries)),
+    );
+  } catch {
+    // Storage full or unavailable.
+  }
+}
+
+function setCacheEntry(key: string, entry: LyricsCacheEntry): void {
+  lyricsCache.set(key, entry);
+  persistSessionCache();
+  notifyCacheListeners();
+}
+
+function shouldSkipPrefetch(key: string): boolean {
+  const cached = lyricsCache.get(key);
+  return cached?.status === "ready" || cached?.status === "empty";
+}
+
+function buildLyricsUrl(request: TrackLyricsRequest): string {
+  const params = new URLSearchParams({
+    artist: request.artist,
+    title: request.title,
+    album: request.album,
+    duration: String(Math.round(request.durationMs / 1000)),
+    spotifyId: request.contentId,
+  });
+
+  return `/api/lyrics?${params.toString()}`;
+}
+
+export async function prefetchTrackLyrics(
+  request: TrackLyricsRequest,
+): Promise<void> {
+  hydrateSessionCache();
+
+  if (!request.title || !request.artist) return Promise.resolve();
+
+  const key = buildLyricsCacheKey(request);
+  if (shouldSkipPrefetch(key)) return Promise.resolve();
+
+  const pending = inflight.get(key);
+  if (pending) return pending;
+
+  const fetchPromise = (async () => {
+    try {
+      const res = await fetch(buildLyricsUrl(request));
+
+      if (res.status === 404) {
+        setCacheEntry(key, { status: "empty" });
+        return;
+      }
+
+      if (!res.ok) {
+        setCacheEntry(key, { status: "error" });
+        return;
+      }
+
+      const data = (await res.json()) as {
+        plainLyrics?: string;
+        syncedLyrics?: string | null;
+      };
+
+      if (!data.plainLyrics?.trim()) {
+        setCacheEntry(key, { status: "empty" });
+        return;
+      }
+
+      setCacheEntry(key, {
+        status: "ready",
+        lyrics: {
+          plainLyrics: data.plainLyrics,
+          syncedLyrics: data.syncedLyrics ?? null,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      setCacheEntry(key, { status: "error" });
+    } finally {
+      inflight.delete(key);
+    }
+  })();
+
+  inflight.set(key, fetchPromise);
+  return fetchPromise;
+}
+
+const IDLE_RESULT: UseTrackLyricsResult = { status: "idle", lyrics: null };
+const LOADING_RESULT: UseTrackLyricsResult = {
+  status: "loading",
+  lyrics: null,
+};
+
+function readLyricsCache(key: string | null): UseTrackLyricsResult {
+  if (!key) return IDLE_RESULT;
+
+  const cached = lyricsCache.get(key);
+  if (cached) return resultFromCache(cached);
+
+  if (inflight.has(key)) return LOADING_RESULT;
+
+  return LOADING_RESULT;
 }
 
 export function useTrackLyrics({
   enabled,
+  contentId,
   title,
   artist,
   album,
   durationMs,
 }: LyricsQuery): UseTrackLyricsResult {
+  hydrateSessionCache();
+
   const key =
     enabled && title && artist
-      ? cacheKey(title, artist, album, durationMs)
+      ? buildLyricsCacheKey({ contentId, title, artist, album, durationMs })
       : null;
 
-  // Bumped only from async fetch callbacks to re-read the cache.
-  const [cacheVersion, setCacheVersion] = useState(0);
-
   useEffect(() => {
-    if (!key) return;
-    if (lyricsCache.has(key)) return;
+    if (!enabled || !title || !artist) return;
 
-    const controller = new AbortController();
-    const params = new URLSearchParams({
-      artist,
-      title,
-      album,
-      duration: String(Math.round(durationMs / 1000)),
-    });
+    void prefetchTrackLyrics({ contentId, title, artist, album, durationMs });
+  }, [enabled, contentId, title, artist, album, durationMs]);
 
-    void (async () => {
-      try {
-        const res = await fetch(`/api/lyrics?${params.toString()}`, {
-          signal: controller.signal,
-        });
+  const version = useSyncExternalStore(
+    subscribeToLyricsCache,
+    getLyricsCacheVersion,
+    getLyricsCacheVersion,
+  );
 
-        if (controller.signal.aborted) return;
+  void version;
 
-        if (res.status === 404) {
-          lyricsCache.set(key, { status: "empty" });
-          setCacheVersion((v) => v + 1);
-          return;
-        }
-
-        if (!res.ok) {
-          lyricsCache.set(key, { status: "error" });
-          setCacheVersion((v) => v + 1);
-          return;
-        }
-
-        const data = (await res.json()) as {
-          plainLyrics?: string;
-          syncedLyrics?: string | null;
-        };
-
-        if (!data.plainLyrics?.trim()) {
-          lyricsCache.set(key, { status: "empty" });
-          setCacheVersion((v) => v + 1);
-          return;
-        }
-
-        lyricsCache.set(key, {
-          status: "ready",
-          lyrics: {
-            plainLyrics: data.plainLyrics,
-            syncedLyrics: data.syncedLyrics ?? null,
-          },
-        });
-        setCacheVersion((v) => v + 1);
-      } catch (err) {
-        if (controller.signal.aborted) return;
-        console.error(err);
-        lyricsCache.set(key, { status: "error" });
-        setCacheVersion((v) => v + 1);
-      }
-    })();
-
-    return () => controller.abort();
-  }, [key, title, artist, album, durationMs]);
-
-  void cacheVersion;
-
-  if (!key) {
-    return { status: "idle", lyrics: null };
-  }
-
-  const cached = lyricsCache.get(key);
-  if (cached) {
-    return resultFromCache(cached);
-  }
-
-  return { status: "loading", lyrics: null };
+  return readLyricsCache(key);
 }
 
 export function previewLyricsLines(
@@ -150,4 +243,14 @@ export function previewLyricsLines(
 /** Test helper — clears in-memory lyrics cache. */
 export function clearLyricsCacheForTests(): void {
   lyricsCache.clear();
+  inflight.clear();
+  cacheListeners.clear();
+  cacheVersion = 0;
+  sessionHydrated = false;
+
+  if (typeof window !== "undefined") {
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+  }
 }
+
+export { buildLyricsCacheKey };

@@ -1,14 +1,18 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
 
 import type { SpotifyPlayback } from "./types";
+import type { TrackLyricsRequest } from "./track-lyrics-types";
 import { usePlaybackClock } from "./use-playback-clock";
+import { usePrefetchNextLyrics } from "./use-prefetch-next-lyrics";
+import { prefetchTrackLyrics } from "./use-track-lyrics";
 
 export interface SpotifyPlaybackContextValue {
   playback: SpotifyPlayback;
   liveProgressMs: number;
   isSpotifyPlaying: boolean;
+  nextTrackLyrics: TrackLyricsRequest | null;
 }
 
 const SpotifyPlaybackContext =
@@ -16,25 +20,60 @@ const SpotifyPlaybackContext =
 
 interface SpotifyPlaybackProviderProps {
   playback: SpotifyPlayback;
+  nextTrackLyrics?: TrackLyricsRequest | null;
   children: ReactNode;
 }
 
 function PlaybackClockBridge({
   playback,
+  nextTrackLyrics = null,
   children,
 }: SpotifyPlaybackProviderProps) {
   const isSpotifyPlaying =
     playback.source === "now_playing" && playback.isPlaying;
 
   const liveProgressMs = usePlaybackClock(
+    playback.contentId,
     playback.progressMs,
     playback.durationMs,
     isSpotifyPlaying,
   );
 
+  useEffect(() => {
+    if (playback.contentType !== "track") return;
+
+    void prefetchTrackLyrics({
+      contentId: playback.contentId,
+      title: playback.title,
+      artist: playback.primaryArtist,
+      album: playback.albumName,
+      durationMs: playback.durationMs,
+    });
+  }, [
+    playback.contentId,
+    playback.contentType,
+    playback.title,
+    playback.primaryArtist,
+    playback.albumName,
+    playback.durationMs,
+  ]);
+
+  usePrefetchNextLyrics({
+    currentContentId: playback.contentId,
+    nextTrack: nextTrackLyrics,
+    liveProgressMs,
+    durationMs: playback.durationMs,
+    isPlaying: isSpotifyPlaying,
+  });
+
   return (
     <SpotifyPlaybackContext.Provider
-      value={{ playback, liveProgressMs, isSpotifyPlaying }}
+      value={{
+        playback,
+        liveProgressMs,
+        isSpotifyPlaying,
+        nextTrackLyrics,
+      }}
     >
       {children}
     </SpotifyPlaybackContext.Provider>
@@ -43,10 +82,11 @@ function PlaybackClockBridge({
 
 export function SpotifyPlaybackProvider({
   playback,
+  nextTrackLyrics = null,
   children,
 }: SpotifyPlaybackProviderProps) {
   return (
-    <PlaybackClockBridge key={playback.contentId} playback={playback}>
+    <PlaybackClockBridge playback={playback} nextTrackLyrics={nextTrackLyrics}>
       {children}
     </PlaybackClockBridge>
   );

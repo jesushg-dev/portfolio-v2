@@ -51,6 +51,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
 
   const lyricsState = useTrackLyrics({
     enabled: showLyrics && flyComplete,
+    contentId: playback.contentId,
     title: playback.title,
     artist: playback.primaryArtist,
     album: playback.albumName,
@@ -178,6 +179,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
             }}
           >
             <LyricsCard
+              key={playback.contentId}
               accentColor={accentColor}
               height={Math.round(coverSize * 0.9)}
               lyricsState={lyricsState}
@@ -197,6 +199,7 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
       <AnimatePresence>
         {lyricsOpen && lyricsState.lyrics && (
           <LyricsFullscreen
+            key={playback.contentId}
             title={playback.title}
             artist={playback.subtitle}
             plainLyrics={lyricsState.lyrics.plainLyrics}
