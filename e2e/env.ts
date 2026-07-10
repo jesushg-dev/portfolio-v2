@@ -34,10 +34,21 @@ function loadEnvFile(filename: string): void {
 loadEnvFile(".env");
 loadEnvFile(".env.local");
 
+function resolveVercelBypassHeaders(): Record<string, string> | undefined {
+  const bypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+  if (!bypassSecret) return undefined;
+
+  return {
+    "x-vercel-protection-bypass": bypassSecret,
+    "x-vercel-set-bypass-cookie": "true",
+  };
+}
+
 export const e2eEnv = {
   baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",
   ownerEmail: process.env.OWNER_USER_EMAIL,
   ownerPassword: process.env.OWNER_USER_PASSWORD,
+  vercelBypassHeaders: resolveVercelBypassHeaders(),
 } as const;
 
 export function requireE2eCredentials(): {

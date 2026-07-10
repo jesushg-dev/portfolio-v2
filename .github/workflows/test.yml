@@ -4,9 +4,19 @@ on:
   push:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  deployments: read
+
 jobs:
-  test:
+  unit:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: Preview
     steps:
       - uses: actions/checkout@v5
 
@@ -18,5 +28,112 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test
+      - run: pnpm lint
       - run: pnpm type-check
+      - run: pnpm test
+      - run: pnpm build
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_CLIENT_REFRESH_TOKEN: ${{ secrets.SPOTIFY_CLIENT_REFRESH_TOKEN }}
+
+  e2e-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: Preview
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - run: pnpm db:push && pnpm db:seed
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          OWNER_USER_EMAIL: ${{ secrets.OWNER_USER_EMAIL }}
+          OWNER_USER_PASSWORD: ${{ secrets.OWNER_USER_PASSWORD }}
+
+      - run: pnpm test:e2e
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+          BETTER_AUTH_URL: http://localhost:3000
+          OWNER_USER_EMAIL: ${{ secrets.OWNER_USER_EMAIL }}
+          OWNER_USER_PASSWORD: ${{ secrets.OWNER_USER_PASSWORD }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_CLIENT_REFRESH_TOKEN: ${{ secrets.SPOTIFY_CLIENT_REFRESH_TOKEN }}
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-smoke
+          path: playwright-report/
+          retention-days: 7
+
+  e2e-preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: Preview
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v5
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec playwright install --with-deps chromium
+
+      - run: pnpm db:push && pnpm db:seed
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          OWNER_USER_EMAIL: ${{ secrets.OWNER_USER_EMAIL }}
+          OWNER_USER_PASSWORD: ${{ secrets.OWNER_USER_PASSWORD }}
+
+      - name: Wait for Vercel Preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.2
+        id: vercel
+        with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          max_timeout: 300
+          vercel_protection_bypass_secret: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+
+      - run: pnpm test:e2e
+        env:
+          E2E_BASE_URL: ${{ steps.vercel.outputs.url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          OWNER_USER_EMAIL: ${{ secrets.OWNER_USER_EMAIL }}
+          OWNER_USER_PASSWORD: ${{ secrets.OWNER_USER_PASSWORD }}
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-preview
+          path: playwright-report/
+          retention-days: 7

@@ -4,6 +4,25 @@ import { e2eEnv } from "./e2e/env";
 
 const authFile = "e2e/.auth/user.json";
 
+const isLocalTarget =
+  e2eEnv.baseURL.startsWith("http://localhost") ||
+  e2eEnv.baseURL.startsWith("http://127.0.0.1");
+
+const webServer = isLocalTarget
+  ? process.env.CI
+    ? {
+        command: "pnpm build && pnpm start",
+        url: "http://localhost:3000",
+        timeout: 180_000,
+      }
+    : {
+        command: "pnpm dev",
+        url: "http://localhost:3000",
+        reuseExistingServer: true,
+        timeout: 120_000,
+      }
+  : undefined;
+
 export default defineConfig({
   testDir: "e2e",
   fullyParallel: false,
@@ -17,6 +36,9 @@ export default defineConfig({
   },
   use: {
     baseURL: e2eEnv.baseURL,
+    ...(e2eEnv.vercelBypassHeaders
+      ? { extraHTTPHeaders: e2eEnv.vercelBypassHeaders }
+      : {}),
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
@@ -113,10 +135,5 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    command: "pnpm dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  ...(webServer ? { webServer } : {}),
 });

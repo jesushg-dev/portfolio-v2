@@ -11,7 +11,47 @@ pnpm test:coverage  # with coverage report
 pnpm type-check     # also runs in CI alongside tests
 ```
 
-CI runs on every push and pull request via [`.github/workflows/test.yml`](../.github/workflows/test.yml).
+CI runs on every push and pull request via [`.github/workflows/test.yml`](../.github/workflows/test.yml):
+
+- **unit** — lint, type-check, Jest, production build
+- **e2e-smoke** — Playwright smoke against a local `next start` on the runner (isolated e2e database)
+- **e2e-preview** — Playwright smoke against the Vercel Preview URL for the PR (pull requests only)
+
+Full E2E suites (30–60 min) run nightly or on demand via [`.github/workflows/e2e-nightly.yml`](../.github/workflows/e2e-nightly.yml).
+
+### CI secrets (GitHub environment: Preview)
+
+Store secrets under **Settings → Environments → Preview** (not only at repository level). Each job declares `environment: Preview` so GitHub injects those secrets into `${{ secrets.* }}`.
+
+| Secret | Purpose |
+| ------ | ------- |
+| `MONGODB_URI` | Connection string to the **non-production** database (e.g. `...mongodb.net/portfolio_e2e`) |
+| `BETTER_AUTH_SECRET` | Auth secret for CI builds and e2e |
+| `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD` | Same credentials used by `pnpm db:seed` and Playwright login |
+| `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` / `SPOTIFY_CLIENT_REFRESH_TOKEN` | Required by `src/env.js` at build time |
+| `VERCEL_TOKEN` | Vercel API token for `wait-for-vercel-preview` |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` | Optional — only if Preview deployments use Vercel Deployment Protection |
+
+Secret names must match what the app expects (`MONGODB_URI`, not `MONGODB_URI_E2E`).
+
+### Vercel environment isolation
+
+Scope `MONGODB_URI` per environment in the Vercel dashboard:
+
+- **Production** → production database name
+- **Preview** → e2e database name (same cluster, different DB — never share production data)
+
+Preview deployments and CI both use the e2e database; production stays untouched.
+
+#### One-time setup checklist
+
+1. **Atlas** — create database `portfolio_e2e` on your non-prod cluster (or reuse the cluster from the Vercel integration with a different DB name in the URI).
+2. **Vercel → Environment Variables** — set `MONGODB_URI` separately for Production vs Preview (Preview → `.../portfolio_e2e`).
+3. **Vercel → Preview env** — add `BETTER_AUTH_SECRET` (distinct from prod) and `BETTER_AUTH_URL` if Better Auth needs an explicit public URL on preview.
+4. **Vercel → Deployment Protection** — if enabled on Preview, create an Automation Bypass secret and copy it to GitHub as `VERCEL_AUTOMATION_BYPASS_SECRET`.
+5. **GitHub → Environments → Preview** — add all secrets from the table above (exact names).
+6. **Vercel token** — create at [vercel.com/account/tokens](https://vercel.com/account/tokens) and save as `VERCEL_TOKEN`.
+7. Open a test PR and confirm all three CI jobs pass (`unit`, `e2e-smoke`, `e2e-preview`).
 
 ## Where tests live
 
@@ -158,7 +198,7 @@ Expand to admin, auth, and tRPC routers incrementally using the same patterns.
 
 ## E2E tests (Playwright)
 
-End-to-end tests live in `e2e/` and use Playwright with a real dev server (`pnpm dev` on `http://localhost:3000`).
+End-to-end tests live in `e2e/` and use Playwright. Locally, Playwright starts `pnpm dev` on `http://localhost:3000`. In CI, it uses `pnpm build && pnpm start` on the runner, or hits a Vercel Preview URL when `E2E_BASE_URL` is set.
 
 ### Prerequisites
 
@@ -167,13 +207,14 @@ End-to-end tests live in `e2e/` and use Playwright with a real dev server (`pnpm
    - Optional `E2E_BASE_URL` (defaults to `http://localhost:3000`)
 2. Run `pnpm db:seed` so the owner user and credential account exist before e2e.
 3. Install browsers once: `pnpm exec playwright install chromium`
-4. The test DB should be reachable via your normal `.env` / `DATABASE_URL` when the dev server starts.
+4. The test DB should be reachable via `MONGODB_URI` in `.env.local` when the dev server starts. **Never point local e2e or Preview at the production database.**
 
 ### Commands
 
 | Script                                | What runs                                                                                                                 |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, CV contact, profile hero, timeline entry, and soft skill |
+| `pnpm test:e2e:full`                  | **Full suites** — all serial create projects (skills, projects, certifications, profile, timeline, soft-skills, cv) |
 | `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)                                                          |
 | `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)                                                       |
 | `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                                                                 |

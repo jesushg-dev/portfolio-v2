@@ -28,6 +28,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test --project=login --project=smoke",
+    "test:e2e:full": "playwright test --project=setup --project=skills --project=projects --project=certifications --project=profile --project=timeline --project=soft-skills --project=cv",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug",
