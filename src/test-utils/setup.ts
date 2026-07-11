@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import type { ImgHTMLAttributes, PropsWithChildren, ReactNode } from "react";
-import { createElement } from "react";
+import { createElement, Fragment } from "react";
 
 import enMessages from "../../messages/en.json";
 
@@ -73,9 +73,32 @@ jest.mock("next-intl", () => {
     return typeof value === "string" ? value : key;
   };
 
+  const renderRich = (
+    namespace: string,
+    key: string,
+    values?: Record<string, (chunks: ReactNode) => ReactNode>,
+  ): ReactNode => {
+    const template = resolveMessage(namespace, key);
+    const linkRenderer = values?.link;
+    if (!linkRenderer) return template;
+
+    const match = /^(.*)<link>([\s\S]*)<\/link>([\s\S]*)$/.exec(template);
+    if (!match) return template;
+
+    const [, before, linkText, after] = match;
+    return createElement(Fragment, null, before, linkRenderer(linkText), after);
+  };
+
   return {
-    useTranslations: (namespace: string) => (key: string) =>
-      resolveMessage(namespace, key),
+    useTranslations: (namespace: string) => {
+      const translate = (key: string) => resolveMessage(namespace, key);
+      translate.rich = (
+        key: string,
+        values: Record<string, (chunks: ReactNode) => ReactNode>,
+      ) => renderRich(namespace, key, values);
+
+      return translate;
+    },
     useLocale: () => "en",
     NextIntlClientProvider: ({ children }: { children: ReactNode }) => children,
   };

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { keepPreviousData } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 
 import { api } from "@/trpc/react";
 import { ETime } from "@/utils/constants/times";
@@ -19,7 +20,7 @@ import {
 } from "./playback-mappers";
 import { resolveSpotifyPlayback } from "./resolve-spotify-playback";
 import { SPOTIFY_NEAR_END_MS } from "./spotify-timing";
-import type { SpotifyPlaybackError } from "./types";
+import type { SpotifyPlayback, SpotifyPlaybackError } from "./types";
 import type { TrackLyricsRequest } from "./track-lyrics-types";
 
 const FAST_POLL_MS = 5 * ETime.SECOND;
@@ -28,6 +29,20 @@ const IDLE_POLL_MS = 15 * ETime.SECOND;
 
 function isValidNowPlaying(data: NowPlayingResponse): boolean {
   return isActiveTrackPlayback(data) || isActiveEpisodePlayback(data);
+}
+
+function isNowPlayingIdleResponse(
+  data: NowPlayingResponse | { error: { status: number } } | undefined,
+): boolean {
+  return (
+    data !== undefined &&
+    "error" in data &&
+    data.error.status === 204
+  );
+}
+
+function isTransientSpotifyError(error: SpotifyPlaybackError): boolean {
+  return error.status === 502;
 }
 
 function getNowPlayingPollInterval(
@@ -73,10 +88,17 @@ function resolveNextTrackLyrics(
 export function useSpotifyPlayback() {
   const utils = api.useUtils();
   const wasActivelyPlayingRef = useRef(false);
+  const [lastPlayback, setLastPlayback] = useState<SpotifyPlayback | null>(
+    null,
+  );
+  const [lastStoredContentId, setLastStoredContentId] = useState<
+    string | null
+  >(null);
 
   const nowPlayingQuery = api.spotify.getNowPlaying.useQuery(undefined, {
     staleTime: ETime.HALF_SECOND,
     refetchOnWindowFocus: true,
+    placeholderData: keepPreviousData,
     refetchInterval: (query) => getNowPlayingPollInterval(query.state.data),
   });
 
@@ -102,6 +124,7 @@ export function useSpotifyPlayback() {
     enabled: shouldFetchQueue,
     staleTime: ETime.HALF_SECOND,
     refetchOnWindowFocus: true,
+    placeholderData: keepPreviousData,
     refetchInterval: () => {
       if (needsQueue) return ETime.HALF_MINUTE;
       if (nearEnd) return FAST_POLL_MS;
@@ -110,14 +133,13 @@ export function useSpotifyPlayback() {
     },
   });
 
-  const isIdle =
-    nowPlayingQuery.data !== undefined &&
-    "error" in nowPlayingQuery.data &&
-    nowPlayingQuery.data.error.status === 204;
+  const isNowPlayingIdle = isNowPlayingIdleResponse(nowPlayingQuery.data);
 
   const shouldUseRecentlyPlayed =
     nowPlayingQuery.data !== undefined &&
-    (isIdle ||
+    !nowPlayingQuery.isLoading &&
+    !nowPlayingQuery.isFetching &&
+    (isNowPlayingIdle ||
       (!("error" in nowPlayingQuery.data) &&
         !isValidNowPlaying(nowPlayingQuery.data)));
 
@@ -140,9 +162,10 @@ export function useSpotifyPlayback() {
   const recentlyPlayedQuery = api.spotify.getRecentlyPlayed.useQuery(
     undefined,
     {
-      enabled: !nowPlayingQuery.isLoading,
-      staleTime: ETime.HALF_SECOND,
+      enabled: shouldUseRecentlyPlayed,
+      staleTime: ETime.HALF_MINUTE,
       refetchOnWindowFocus: true,
+      placeholderData: keepPreviousData,
       refetchInterval: shouldUseRecentlyPlayed ? ETime.HALF_MINUTE : false,
     },
   );
@@ -154,9 +177,24 @@ export function useSpotifyPlayback() {
     shouldUseRecentlyPlayed,
   );
 
+  const playbackContentId = playback?.contentId ?? null;
+  if (playback && playbackContentId !== lastStoredContentId) {
+    setLastStoredContentId(playbackContentId);
+    setLastPlayback(playback);
+  }
+
+  const hasTransientFailure =
+    nowPlayingQuery.data !== undefined &&
+    "error" in nowPlayingQuery.data &&
+    nowPlayingQuery.data.error.status === 502;
+
+  const displayPlayback =
+    playback ??
+    (nowPlayingQuery.isFetching || hasTransientFailure ? lastPlayback : null);
+
   const nextTrackLyrics =
-    playback?.contentType === "track"
-      ? resolveNextTrackLyrics(queueQuery.data, playback.contentId)
+    displayPlayback?.contentType === "track"
+      ? resolveNextTrackLyrics(queueQuery.data, displayPlayback.contentId)
       : null;
 
   const error = ((): SpotifyPlaybackError | null => {
@@ -167,7 +205,16 @@ export function useSpotifyPlayback() {
         return getSpotifyQueryError(recentlyPlayedQuery.data);
       }
 
-      return getSpotifyQueryError(nowPlayingQuery.data);
+      const nowPlayingError = getSpotifyQueryError(nowPlayingQuery.data);
+      if (
+        nowPlayingError &&
+        isTransientSpotifyError(nowPlayingError) &&
+        lastPlayback
+      ) {
+        return null;
+      }
+
+      return nowPlayingError;
     }
 
     if (shouldUseRecentlyPlayed && !playback) {
@@ -182,10 +229,11 @@ export function useSpotifyPlayback() {
     (needsQueue && queueQuery.isLoading && !queueQuery.data) ||
     (shouldUseRecentlyPlayed &&
       recentlyPlayedQuery.isLoading &&
-      !recentlyPlayedQuery.data);
+      !recentlyPlayedQuery.data &&
+      !lastPlayback);
 
   return {
-    playback,
+    playback: displayPlayback,
     nextTrackLyrics,
     error,
     isLoading,

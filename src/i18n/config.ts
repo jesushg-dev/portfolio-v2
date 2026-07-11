@@ -68,6 +68,11 @@ export const pathnames = {
     es: "/linea-de-tiempo",
     nl: "/tijdlijn",
   },
+  "/privacy": {
+    en: "/privacy",
+    es: "/privacidad",
+    nl: "/privacy",
+  },
   "/login": {
     en: "/login",
     es: "/iniciar-sesion",
@@ -132,6 +137,11 @@ export const pathnames = {
     en: "/admin/certifications",
     es: "/panel/certificaciones",
     nl: "/beheer/certificeringen",
+  },
+  "/admin/spotify": {
+    en: "/admin/spotify",
+    es: "/panel/spotify",
+    nl: "/beheer/spotify",
   },
   "/admin/settings": {
     en: "/admin/settings",

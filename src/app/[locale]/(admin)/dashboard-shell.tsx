@@ -16,6 +16,7 @@ import {
   Clock,
   Palette,
   Sparkles,
+  Music2,
 } from "lucide-react";
 
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
@@ -40,6 +41,7 @@ type NavItem = {
     | "projects"
     | "services"
     | "certifications"
+    | "spotify"
     | "settings";
   icon: typeof LayoutDashboard;
   group?: "portfolio";
@@ -86,6 +88,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: Award,
     group: "portfolio",
   },
+  { href: "/admin/spotify", labelKey: "spotify", icon: Music2 },
   // ── Config ─────────────────────────────────────────────
   { href: "/admin/settings", labelKey: "settings", icon: Settings },
 ];
@@ -257,7 +260,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
       </Sidebar>
 
       <main className="flex min-w-0 flex-1 flex-col overflow-y-auto">
-        <header className="border-border/60 bg-background/75 supports-[backdrop-filter]:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block">
+        <header className="border-border/60 bg-background/75 supports-backdrop-filter:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block">
           <div className="flex h-16 items-center justify-between px-4 md:px-6">
             <div className="flex items-center gap-3">
               <div>

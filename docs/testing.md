@@ -23,14 +23,13 @@ Full E2E suites (30–60 min) run nightly or on demand via [`.github/workflows/e
 
 Store secrets under **Settings → Environments → Preview** (not only at repository level). Each job declares `environment: Preview` so GitHub injects those secrets into `${{ secrets.* }}`.
 
-| Secret                                                                         | Purpose                                                                                                                                                    |
-| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `MONGODB_URI`                                                                  | Connection string to the **non-production** database. Must include the DB name in the path: `...mongodb.net/portfolio_e2e?...` (see troubleshooting below) |
-| `BETTER_AUTH_SECRET`                                                           | Auth secret for CI builds and e2e                                                                                                                          |
-| `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD`                                     | Same credentials used by `pnpm db:seed` and Playwright login                                                                                               |
-| `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` / `SPOTIFY_CLIENT_REFRESH_TOKEN` | Required by `src/env.js` at build time                                                                                                                     |
-| `VERCEL_TOKEN`                                                                 | Vercel API token for `wait-for-vercel-preview`                                                                                                             |
-| `VERCEL_AUTOMATION_BYPASS_SECRET`                                              | Optional — only if Preview deployments use Vercel Deployment Protection                                                                                    |
+| Secret                                     | Purpose                                                                                                                                                    |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MONGODB_URI`                              | Connection string to the **non-production** database. Must include the DB name in the path: `...mongodb.net/portfolio_e2e?...` (see troubleshooting below) |
+| `BETTER_AUTH_SECRET`                       | Auth secret for CI builds and e2e                                                                                                                          |
+| `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD` | Same credentials used by `pnpm db:seed` and Playwright login                                                                                               |
+| `VERCEL_TOKEN`                             | Vercel API token for `wait-for-vercel-preview`                                                                                                             |
+| `VERCEL_AUTOMATION_BYPASS_SECRET`          | Optional — only if Preview deployments use Vercel Deployment Protection                                                                                    |
 
 Secret names must match what the app expects (`MONGODB_URI`, not `MONGODB_URI_E2E`).
 

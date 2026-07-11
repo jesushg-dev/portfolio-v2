@@ -447,6 +447,7 @@
         "projects": "Projecten",
         "services": "Diensten",
         "certifications": "Certificeringen",
+        "spotify": "Spotify",
         "portfolioGroup": "Portfolio Inhoud"
       }
     },
@@ -543,6 +544,61 @@
       "pdfSectionDescription": "Geef aparte PDF-links voor elke taal. Wanneer bezoekers je portfolio in een specifieke taal bekijken, downloaden ze de bijbehorende PDF.",
       "pdfLinkPlaceholder": "https://voorbeeld.nl/cv-{locale}.pdf",
       "usernameValidation": "Gebruik kleine letters, cijfers en streepjes"
+    },
+    "spotify": {
+      "title": "Spotify",
+      "subtitle": "Koppel Spotify zodat bezoekers kunnen zien waar je naar luistert.",
+      "storagePolicy": "Spotify raadt aan refresh tokens op je server op te slaan in een veilige database — niet in browsercookies. Je koppeling wordt versleuteld opgeslagen in een rij die alleen aan jouw account is gekoppeld, gescheiden van andere portfolio's.",
+      "disconnectPolicy": "Je kunt hieronder op elk moment ontkoppelen. Bij ontkoppeling verwijderen we je Spotify-tokens direct uit onze database, conform de Spotify-developervoorwaarden.",
+      "privacyNote": "Zie ons <link>privacybeleid</link> voor welke Spotify-gegevens we opslaan en waarom.",
+      "redirectUriLabel": "Redirect URI (voeg toe in je Spotify-app)",
+      "redirectUriHint": "Spotify Developer Dashboard → je app → Settings → Redirect URIs",
+      "scopesTitle": "Gevraagde rechten",
+      "scopes": {
+        "nowPlaying": "Je huidige nummer zien",
+        "playbackState": "Afspeelstatus en wachtrij lezen",
+        "recentlyPlayed": "Recent afgespeeld tonen wanneer er niets speelt"
+      },
+      "connect": {
+        "title": "Koppel je Spotify-app",
+        "description": "Registreer je eigen app in het Spotify Developer Dashboard. Elk portfolio gebruikt een eigen app zodat je koppeling gescheiden blijft van andere gebruikers.",
+        "premiumNote": "Spotify vereist sinds maart 2026 een Premium-account om een developer-app te registreren.",
+        "visitorNote": "Na koppeling werkt de Now Playing-widget voor alle bezoekers van je portfolio. Je refresh token wordt versleuteld op onze server opgeslagen.",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "clientIdPlaceholder": "Plak je Client ID",
+        "clientSecretPlaceholder": "Plak je Client Secret",
+        "dashboardLink": "Spotify Developer Dashboard openen",
+        "connect": "Koppelen met Spotify",
+        "connecting": "Doorverwijzen naar Spotify…",
+        "validationError": "Voer een geldige Client ID en Client Secret van je Spotify-app in."
+      },
+      "status": {
+        "connected": "Gekoppeld met Spotify",
+        "disconnected": "Niet gekoppeld",
+        "refreshError": "Je Spotify-koppeling kon niet worden vernieuwd",
+        "connectedAt": "Gekoppeld op {date}",
+        "clientId": "Client ID: {id}",
+        "test": "Now playing testen",
+        "testing": "Afspeelstatus controleren…",
+        "testEmpty": "Er speelt nu niets",
+        "testTrack": "Nu: {title} — {artist}",
+        "disconnect": "Spotify ontkoppelen",
+        "disconnecting": "Ontkoppelen…",
+        "reconnect": "Spotify opnieuw koppelen"
+      },
+      "callback": {
+        "connected": "Spotify succesvol gekoppeld.",
+        "exchangeFailed": "Spotify-autorisatie kon niet worden voltooid. Probeer opnieuw.",
+        "invalidState": "Autorisatiesessie verlopen. Begin opnieuw op deze pagina.",
+        "missingParams": "Spotify gaf niet de verwachte autorisatiegegevens terug.",
+        "noRefreshToken": "Spotify gaf geen refresh token terug. Trek toegang in bij Spotify en koppel opnieuw.",
+        "accessDenied": "Je hebt toegang tot Spotify geweigerd."
+      },
+      "actions": {
+        "connectFailed": "Spotify-autorisatie kon niet worden gestart",
+        "disconnectFailed": "Spotify kon niet worden ontkoppeld"
+      }
     },
     "forms": {
       "saved": "Opgeslagen.",
@@ -1335,6 +1391,26 @@
       "resetBody": "Je hebt gevraagd om je wachtwoord te herstellen.",
       "resetLink": "Klik hier om je wachtwoord te herstellen",
       "resetIgnore": "Als je dit niet hebt aangevraagd, kun je deze e-mail negeren."
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacybeleid",
+      "subtitle": "Hoe wij met je gegevens omgaan",
+      "updatedAt": "Laatst bijgewerkt: juli 2026",
+      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt uit wat we verzamelen wanneer je Spotify koppelt en hoe je dat kunt verwijderen.",
+      "spotify": {
+        "title": "Spotify-integratie",
+        "intro": "Als je Spotify koppelt in het adminpaneel, slaan we de credentials van je eigen Spotify Developer-app op zodat de Now Playing-widget je afspeelstatus op je openbare portfolio kan tonen.",
+        "storedTitle": "Wat we opslaan",
+        "storedClientId": "Je Spotify-app Client ID",
+        "storedClientSecret": "Je Spotify-app Client Secret, versleuteld opgeslagen",
+        "storedRefreshToken": "Je Spotify refresh token, versleuteld opgeslagen",
+        "storedScope": "De OAuth-scopes die tijdens autorisatie zijn verleend",
+        "purpose": "We gebruiken deze gegevens alleen om namens jou Spotify-afspeelinformatie op te vragen voor bezoekers van je portfolio. We verkopen of delen ze niet met derden.",
+        "disconnect": "Je kunt Spotify op elk moment ontkoppelen via Admin → Spotify. Bij ontkoppeling verwijderen we je Spotify-tokens en app-credentials direct uit onze database.",
+        "retention": "Als je ontkoppelt of ons vraagt te stoppen met het verwerken van je Spotify-gegevens, verwijderen we die zonder onredelijke vertraging en uiterlijk binnen vijf dagen, conform de Spotify-developervoorwaarden."
+      }
     }
   },
   "metadata": {

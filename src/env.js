@@ -8,9 +8,7 @@ export const env = createEnv({
    */
   server: {
     MONGODB_URI: z.string(),
-    SPOTIFY_CLIENT_ID: z.string(),
-    SPOTIFY_CLIENT_SECRET: z.string(),
-    SPOTIFY_CLIENT_REFRESH_TOKEN: z.string(),
+    SPOTIFY_REDIRECT_URI: z.string().url().optional(),
 
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -49,9 +47,7 @@ export const env = createEnv({
   runtimeEnv: {
     MONGODB_URI: process.env.MONGODB_URI,
     NODE_ENV: process.env.NODE_ENV,
-    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
-    SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
-    SPOTIFY_CLIENT_REFRESH_TOKEN: process.env.SPOTIFY_CLIENT_REFRESH_TOKEN,
+    SPOTIFY_REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,

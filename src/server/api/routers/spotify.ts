@@ -7,29 +7,41 @@ import {
   getTopTracks,
 } from "@/utils/services/spotify";
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  tenantProcedure,
+} from "@/server/api/trpc";
 
 export const spotifyRouter = createTRPCRouter({
-  getNowPlaying: publicProcedure.input(z.undefined()).query(async () => {
-    return await getNowPlaying();
+  getNowPlaying: tenantProcedure.input(z.undefined()).query(async ({ ctx }) => {
+    return getNowPlaying(ctx.tenant.userId);
   }),
-  getQueue: publicProcedure.input(z.undefined()).query(async () => {
-    return await getQueue();
+  getQueue: tenantProcedure.input(z.undefined()).query(async ({ ctx }) => {
+    return getQueue(ctx.tenant.userId);
   }),
-  getRecentlyPlayed: publicProcedure.input(z.undefined()).query(async () => {
-    return await getRecentlyPlayed();
-  }),
+  getRecentlyPlayed: tenantProcedure
+    .input(z.undefined())
+    .query(async ({ ctx }) => {
+      return getRecentlyPlayed(ctx.tenant.userId);
+    }),
   getTopTracks: publicProcedure
     .input(
       z.object({
         timeRange: z.enum(["short_term", "medium_term", "long_term"]),
         limit: z.number(),
         offset: z.number(),
+        userId: z.string().optional(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
+      const userId = input.userId ?? ctx.tenant?.userId;
+      if (!userId) {
+        return {
+          error: { message: "Tenant not found", status: 404 },
+        };
+      }
       const { timeRange, limit, offset } = input;
-      const data = await getTopTracks(timeRange, limit, offset);
-      return data;
+      return getTopTracks(userId, timeRange, limit, offset);
     }),
 });

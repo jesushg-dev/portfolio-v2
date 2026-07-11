@@ -303,6 +303,40 @@ describe("useSpotifyPlayback", () => {
     expect(interval).toBe(15 * ETime.SECOND);
   });
 
+  it("does not fall back to recently played while now playing is refetching", () => {
+    mockNowPlayingQuery.mockReturnValue(
+      mockQueryResult(mockNowPlayingIdle, { isFetching: true }),
+    );
+    mockRecentlyPlayedQuery.mockReturnValue(
+      mockQueryResult(mockRecentlyPlayed),
+    );
+
+    const { result } = renderHook(() => useSpotifyPlayback());
+
+    expect(result.current.playback).toBeNull();
+  });
+
+  it("keeps the last playback visible during transient refetch errors", async () => {
+    mockNowPlayingQuery.mockReturnValue(mockQueryResult(mockNowPlayingTrack));
+
+    const { result, rerender } = renderHook(() => useSpotifyPlayback());
+
+    await waitFor(() => {
+      expect(result.current.playback?.title).toBe("Get Lucky");
+    });
+
+    mockNowPlayingQuery.mockReturnValue(
+      mockQueryResult(
+        { error: { status: 502, message: "Spotify temporarily unavailable" } },
+        { isFetching: true },
+      ),
+    );
+    rerender();
+
+    expect(result.current.playback?.title).toBe("Get Lucky");
+    expect(result.current.error).toBeNull();
+  });
+
   it("fetches queue while an active track is playing", () => {
     const nextTrack = { ...mockTrack, id: "track-next", name: "Next Song" };
 

@@ -448,6 +448,7 @@
         "projects": "Proyectos",
         "services": "Servicios",
         "certifications": "Certificaciones",
+        "spotify": "Spotify",
         "portfolioGroup": "Contenido del Portafolio"
       }
     },
@@ -544,6 +545,61 @@
       "pdfSectionDescription": "Proporciona enlaces PDF separados para cada idioma. Cuando los visitantes vean tu portafolio en un idioma específico, descargarán el PDF correspondiente.",
       "pdfLinkPlaceholder": "https://ejemplo.com/cv-{locale}.pdf",
       "usernameValidation": "Usa letras minúsculas, números y guiones"
+    },
+    "spotify": {
+      "title": "Spotify",
+      "subtitle": "Conecta Spotify para que los visitantes vean lo que estás escuchando.",
+      "storagePolicy": "Spotify recomienda guardar los refresh tokens en tu servidor, en una base de datos segura — no en cookies del navegador. Tu conexión se guarda cifrada en una fila exclusiva de tu cuenta, separada de otros portafolios.",
+      "disconnectPolicy": "Puedes desconectar en cualquier momento abajo. Al desconectar, borramos tus tokens de Spotify de la base de datos de inmediato, según los términos de desarrollador de Spotify.",
+      "privacyNote": "Consulta nuestra <link>política de privacidad</link> para ver qué datos de Spotify guardamos y por qué.",
+      "redirectUriLabel": "Redirect URI (agrégala en tu app de Spotify)",
+      "redirectUriHint": "Spotify Developer Dashboard → tu app → Settings → Redirect URIs",
+      "scopesTitle": "Permisos solicitados",
+      "scopes": {
+        "nowPlaying": "Ver la canción que estás escuchando",
+        "playbackState": "Leer estado de reproducción y cola",
+        "recentlyPlayed": "Mostrar lo último reproducido cuando no hay nada sonando"
+      },
+      "connect": {
+        "title": "Conecta tu app de Spotify",
+        "description": "Registra tu propia app en Spotify Developer Dashboard. Cada portafolio usa su propia app para mantener la conexión separada de otros usuarios.",
+        "premiumNote": "Spotify exige cuenta Premium para registrar una app de desarrollador desde marzo de 2026.",
+        "visitorNote": "Una vez conectado, el widget Now Playing funciona para todos los visitantes de tu portafolio. Tu refresh token se guarda cifrado en nuestro servidor.",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "clientIdPlaceholder": "Pega tu Client ID",
+        "clientSecretPlaceholder": "Pega tu Client Secret",
+        "dashboardLink": "Abrir Spotify Developer Dashboard",
+        "connect": "Conectar con Spotify",
+        "connecting": "Redirigiendo a Spotify…",
+        "validationError": "Ingresa un Client ID y Client Secret válidos de tu app de Spotify."
+      },
+      "status": {
+        "connected": "Conectado a Spotify",
+        "disconnected": "Sin conectar",
+        "refreshError": "No se pudo renovar tu conexión con Spotify",
+        "connectedAt": "Conectado el {date}",
+        "clientId": "Client ID: {id}",
+        "test": "Probar now playing",
+        "testing": "Consultando reproducción…",
+        "testEmpty": "No hay nada reproduciéndose ahora",
+        "testTrack": "Reproduciendo: {title} — {artist}",
+        "disconnect": "Desconectar Spotify",
+        "disconnecting": "Desconectando…",
+        "reconnect": "Reconectar Spotify"
+      },
+      "callback": {
+        "connected": "Spotify conectado correctamente.",
+        "exchangeFailed": "No se pudo completar la autorización de Spotify. Intenta de nuevo.",
+        "invalidState": "La sesión de autorización expiró. Empieza de nuevo desde esta página.",
+        "missingParams": "Spotify no devolvió los datos de autorización esperados.",
+        "noRefreshToken": "Spotify no devolvió refresh token. Revoca el acceso en Spotify y reconecta.",
+        "accessDenied": "Denegaste el acceso a Spotify."
+      },
+      "actions": {
+        "connectFailed": "No se pudo iniciar la autorización de Spotify",
+        "disconnectFailed": "No se pudo desconectar Spotify"
+      }
     },
     "forms": {
       "saved": "Guardado.",
@@ -1336,6 +1392,26 @@
       "resetBody": "Solicitaste restablecer tu contraseña.",
       "resetLink": "Haz clic aquí para restablecer tu contraseña",
       "resetIgnore": "Si no solicitaste esto, puedes ignorar este correo."
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Política de privacidad",
+      "subtitle": "Cómo tratamos tus datos",
+      "updatedAt": "Última actualización: julio de 2026",
+      "intro": "Esta plataforma de portafolios guarda solo los datos necesarios para ofrecer sus funciones. Esta página explica qué recopilamos cuando conectas Spotify y cómo puedes eliminarlo.",
+      "spotify": {
+        "title": "Integración con Spotify",
+        "intro": "Si conectas Spotify en el panel de administración, guardamos las credenciales de tu propia app de Spotify Developer para que el widget Now Playing muestre tu reproducción en tu portafolio público.",
+        "storedTitle": "Qué guardamos",
+        "storedClientId": "El Client ID de tu app de Spotify",
+        "storedClientSecret": "El Client Secret de tu app, cifrado en reposo",
+        "storedRefreshToken": "Tu refresh token de Spotify, cifrado en reposo",
+        "storedScope": "Los scopes OAuth concedidos durante la autorización",
+        "purpose": "Usamos estos datos solo para solicitar información de reproducción a Spotify en tu nombre para los visitantes de tu portafolio. No los vendemos ni los compartimos con terceros.",
+        "disconnect": "Puedes desconectar Spotify en cualquier momento desde Admin → Spotify. Al desconectar, borramos de inmediato tus tokens y credenciales de Spotify de nuestra base de datos.",
+        "retention": "Si te desconectas o nos pides dejar de procesar tus datos de Spotify, los eliminamos sin demora indebida y como máximo en cinco días, conforme a los términos de desarrollador de Spotify."
+      }
     }
   },
   "metadata": {

@@ -13,5 +13,7 @@ export type TrackLyricsPayload = {
 
 export type LyricsCacheEntry =
   | { status: "ready"; lyrics: TrackLyricsPayload }
-  | { status: "empty" }
-  | { status: "error" };
+  | { status: "empty"; cachedAt: number }
+  | { status: "error"; cachedAt: number };
+
+export type LyricsPrefetchMode = "background" | "active";

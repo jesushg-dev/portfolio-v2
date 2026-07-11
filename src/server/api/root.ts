@@ -6,6 +6,7 @@ import { softSkillsAdminRouter } from "@/server/api/routers/soft-skills-admin";
 import { contactRouter } from "@/server/api/routers/contact";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { spotifyRouter } from "./routers/spotify";
+import { spotifyAdminRouter } from "./routers/spotify-admin";
 
 /**
  * This is the primary router for your server.
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   softSkillsAdmin: softSkillsAdminRouter,
   cv: cvRouter,
   spotify: spotifyRouter,
+  spotifyAdmin: spotifyAdminRouter,
   contact: contactRouter,
 });
 

@@ -4,6 +4,7 @@ import { useEffect, useSyncExternalStore } from "react";
 
 import type {
   LyricsCacheEntry,
+  LyricsPrefetchMode,
   TrackLyricsPayload,
   TrackLyricsRequest,
 } from "./track-lyrics-types";
@@ -21,8 +22,10 @@ type LyricsQuery = TrackLyricsRequest & {
   enabled: boolean;
 };
 
-const SESSION_STORAGE_KEY = "spotify-lyrics-cache-v2";
+const SESSION_STORAGE_KEY = "spotify-lyrics-cache-v3";
 const MAX_SESSION_ENTRIES = 40;
+/** Background prefetches may retry empty/error after this window. */
+const BACKGROUND_MISS_RETRY_MS = 10 * 60 * 1000;
 
 const lyricsCache = new Map<string, LyricsCacheEntry>();
 const inflight = new Map<string, Promise<void>>();
@@ -75,9 +78,8 @@ function hydrateSessionCache(): void {
 
     const parsed = JSON.parse(raw) as Record<string, LyricsCacheEntry>;
     for (const [key, entry] of Object.entries(parsed)) {
-      if (!lyricsCache.has(key)) {
-        lyricsCache.set(key, entry);
-      }
+      if (entry.status !== "ready" || lyricsCache.has(key)) continue;
+      lyricsCache.set(key, entry);
     }
   } catch {
     // Ignore corrupt session cache.
@@ -88,10 +90,15 @@ function persistSessionCache(): void {
   if (typeof window === "undefined") return;
 
   const entries = [...lyricsCache.entries()]
-    .filter(([, entry]) => entry.status === "ready" || entry.status === "empty")
+    .filter(([, entry]) => entry.status === "ready")
     .slice(-MAX_SESSION_ENTRIES);
 
   try {
+    if (entries.length === 0) {
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+      return;
+    }
+
     sessionStorage.setItem(
       SESSION_STORAGE_KEY,
       JSON.stringify(Object.fromEntries(entries)),
@@ -107,9 +114,28 @@ function setCacheEntry(key: string, entry: LyricsCacheEntry): void {
   notifyCacheListeners();
 }
 
-function shouldSkipPrefetch(key: string): boolean {
+function isRecentMiss(entry: LyricsCacheEntry): boolean {
+  if (entry.status !== "empty" && entry.status !== "error") return false;
+  return Date.now() - entry.cachedAt < BACKGROUND_MISS_RETRY_MS;
+}
+
+function shouldSkipPrefetch(
+  key: string,
+  mode: LyricsPrefetchMode = "background",
+): boolean {
   const cached = lyricsCache.get(key);
-  return cached?.status === "ready" || cached?.status === "empty";
+  if (!cached) return false;
+  if (cached.status === "ready") return true;
+  if (mode === "active") return false;
+
+  return isRecentMiss(cached);
+}
+
+function clearStaleEntryForActiveFetch(key: string): void {
+  const cached = lyricsCache.get(key);
+  if (!cached || cached.status === "ready") return;
+
+  lyricsCache.delete(key);
 }
 
 function buildLyricsUrl(request: TrackLyricsRequest): string {
@@ -124,30 +150,49 @@ function buildLyricsUrl(request: TrackLyricsRequest): string {
   return `/api/lyrics?${params.toString()}`;
 }
 
+function parseLyricsPayload(data: {
+  plainLyrics?: string;
+  syncedLyrics?: string | null;
+}): TrackLyricsPayload | null {
+  const plainLyrics = data.plainLyrics?.trim();
+  const syncedLyrics = data.syncedLyrics ?? null;
+
+  if (plainLyrics) {
+    return { plainLyrics, syncedLyrics };
+  }
+
+  return null;
+}
+
 export async function prefetchTrackLyrics(
   request: TrackLyricsRequest,
+  mode: LyricsPrefetchMode = "background",
 ): Promise<void> {
   hydrateSessionCache();
 
   if (!request.title || !request.artist) return Promise.resolve();
 
   const key = buildLyricsCacheKey(request);
-  if (shouldSkipPrefetch(key)) return Promise.resolve();
+  if (shouldSkipPrefetch(key, mode)) return Promise.resolve();
 
   const pending = inflight.get(key);
   if (pending) return pending;
+
+  if (mode === "active") {
+    clearStaleEntryForActiveFetch(key);
+  }
 
   const fetchPromise = (async () => {
     try {
       const res = await fetch(buildLyricsUrl(request));
 
       if (res.status === 404) {
-        setCacheEntry(key, { status: "empty" });
+        setCacheEntry(key, { status: "empty", cachedAt: Date.now() });
         return;
       }
 
       if (!res.ok) {
-        setCacheEntry(key, { status: "error" });
+        setCacheEntry(key, { status: "error", cachedAt: Date.now() });
         return;
       }
 
@@ -156,21 +201,19 @@ export async function prefetchTrackLyrics(
         syncedLyrics?: string | null;
       };
 
-      if (!data.plainLyrics?.trim()) {
-        setCacheEntry(key, { status: "empty" });
+      const payload = parseLyricsPayload(data);
+      if (!payload) {
+        setCacheEntry(key, { status: "empty", cachedAt: Date.now() });
         return;
       }
 
       setCacheEntry(key, {
         status: "ready",
-        lyrics: {
-          plainLyrics: data.plainLyrics,
-          syncedLyrics: data.syncedLyrics ?? null,
-        },
+        lyrics: payload,
       });
     } catch (err) {
       console.error(err);
-      setCacheEntry(key, { status: "error" });
+      setCacheEntry(key, { status: "error", cachedAt: Date.now() });
     } finally {
       inflight.delete(key);
     }
@@ -215,7 +258,10 @@ export function useTrackLyrics({
   useEffect(() => {
     if (!enabled || !title || !artist) return;
 
-    void prefetchTrackLyrics({ contentId, title, artist, album, durationMs });
+    void prefetchTrackLyrics(
+      { contentId, title, artist, album, durationMs },
+      "active",
+    );
   }, [enabled, contentId, title, artist, album, durationMs]);
 
   const version = useSyncExternalStore(

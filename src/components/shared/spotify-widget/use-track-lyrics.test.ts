@@ -114,4 +114,41 @@ describe("prefetchTrackLyrics", () => {
     });
     expect(result.current.lyrics?.plainLyrics).toBe("Late listener");
   });
+
+  it("retries a stale empty background prefetch when the UI becomes active", async () => {
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        json: async () => ({ error: "Lyrics not found" }),
+      })
+      .mockResolvedValueOnce(
+        lyricsResponse({ plainLyrics: "Retried line", syncedLyrics: null }),
+      );
+
+    await prefetchTrackLyrics(request);
+
+    const { result } = renderHook(() =>
+      useTrackLyrics({ enabled: true, ...request }),
+    );
+
+    await waitFor(() => {
+      expect(result.current.status).toBe("ready");
+    });
+
+    expect(result.current.lyrics?.plainLyrics).toBe("Retried line");
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not persist empty misses to session storage", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 404,
+      json: async () => ({ error: "Lyrics not found" }),
+    });
+
+    await prefetchTrackLyrics(request);
+
+    expect(sessionStorage.getItem("spotify-lyrics-cache-v3")).toBeNull();
+  });
 });
