@@ -1,54 +1,35 @@
-import { notFound } from "next/navigation";
-import { headers } from "next/headers";
-import type { Locale } from "next-intl";
-import { db } from "@/server/db";
-import { auth } from "@/lib/auth";
-import { redirectToLogin } from "@/lib/auth-redirect";
+import { getTranslations } from "next-intl/server";
 import { TimelineItemForm } from "@/features/timeline/components/timeline-item-form";
+import { getTimelineEditPageData } from "@/features/timeline/server/timeline-queries";
 
-interface Props {
-  params: Promise<{ id: string; locale: string }>;
-}
+export default async function EditTimelinePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const [t, pageData] = await Promise.all([
+    getTranslations("admin.timeline"),
+    getTimelineEditPageData(id),
+  ]);
 
-export default async function EditTimelineItemPage({ params }: Props) {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
-
-  const { id, locale } = await params;
-  const session = await auth.api.getSession({ headers: await headers() });
-
-  if (!session?.user?.id) {
-    return redirectToLogin(locale as Locale);
-  }
-
-  const userId = session.user.id;
-
-  const timelineItemDelegate = (db as { timelineItem?: typeof db.timelineItem })
-    .timelineItem;
-
-  if (!timelineItemDelegate) {
-    notFound();
-  }
-
-  const experience = await timelineItemDelegate.findFirst({
-    where: { id, userId },
-  });
-
-  if (!experience) {
-    notFound();
-  }
+  if (!pageData) return null;
+  const { formDto, languages } = pageData;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Edit Timeline Entry
-        </h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("edit")}</h1>
         <p className="text-muted-foreground mt-1 text-sm">
-          Update an existing item in your timeline.
+          {t("editDescription")}
         </p>
       </div>
       <div className="mx-auto w-full max-w-3xl">
-        <TimelineItemForm initialData={experience} languages={languages} />
+        <TimelineItemForm
+          key={formDto.id}
+          initialData={formDto}
+          languages={languages}
+        />
       </div>
     </div>
   );

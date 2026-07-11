@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useMemo, useState, type FC } from "react";
+import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Loader2, Pencil, Trash2, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { api } from "@/trpc/react";
@@ -11,12 +11,12 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { useDataTable } from "@/hooks/use-data-table";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants, Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import type { RouterOutputs } from "@/trpc/react";
 
-type SkillRow = RouterOutputs["portfolioAdmin"]["getMySkills"][number];
+type SkillRow = RouterOutputs["skillsAdmin"]["getMine"][number];
 
 interface SkillsListProps {
   initialSkills: SkillRow[];
@@ -27,29 +27,32 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const { data: skills = initialSkills } =
-    api.portfolioAdmin.getMySkills.useQuery(undefined, {
+  const { data: skills = initialSkills } = api.skillsAdmin.getMine.useQuery(
+    undefined,
+    {
       initialData: initialSkills,
-    });
+    },
+  );
 
-  const deleteSkill = api.portfolioAdmin.deleteSkill.useMutation({
-    onSuccess: () => {
-      toast.success("Deleted successfully");
-      void utils.portfolioAdmin.getMySkills.invalidate();
-      setDeletingId(null);
-    },
-    onError: () => {
-      toast.error(t("deleteError"));
-      setDeletingId(null);
-    },
-  });
+  const deleteSkill = api.skillsAdmin.deleteItem.useMutation();
+  const [isPending, startTransition] = useTransition();
 
   const handleDelete = useCallback(
     (id: string) => {
-      setDeletingId(id);
-      deleteSkill.mutate({ id });
+      startTransition(async () => {
+        setDeletingId(id);
+        try {
+          await deleteSkill.mutateAsync({ id });
+          toast.success(t("deleteSuccess") || "Deleted successfully");
+          await utils.skillsAdmin.getMine.invalidate();
+        } catch {
+          toast.error(t("deleteError"));
+        } finally {
+          setDeletingId(null);
+        }
+      });
     },
-    [deleteSkill],
+    [deleteSkill, t, utils],
   );
 
   const typedSkills = skills;
@@ -121,6 +124,7 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
       },
       {
         id: "actions",
+        size: 100,
         header: t("columnActions"),
         cell: ({ row }) => {
           const skill = row.original;
@@ -128,31 +132,31 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/skills/${skill.id}/edit`}
-                className="text-muted-foreground hover:bg-primary/10 hover:text-primary rounded p-1"
-                aria-label={t("edit")}
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
               >
-                <Pencil className="h-3 w-3" />
+                <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
               </Link>
-              {deletingId === skill.id ? (
-                <span className="text-destructive text-xs">
-                  {t("deleting")}
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => handleDelete(skill.id)}
-                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded p-1"
-                  aria-label={t("delete")}
-                >
-                  <Trash2 className="h-3 w-3" />
-                </button>
-              )}
+
+              <Button
+                disabled={isPending || deletingId === skill.id}
+                variant="ghost"
+                size="icon"
+                type="button"
+                onClick={() => handleDelete(skill.id)}
+                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
+              >
+                {deletingId === skill.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
+              </Button>
             </div>
           );
         },
       },
     ],
-    [deletingId, handleDelete, t, uniqueTypes],
+    [deletingId, handleDelete, isPending, t, uniqueTypes],
   );
 
   const { table } = useDataTable({

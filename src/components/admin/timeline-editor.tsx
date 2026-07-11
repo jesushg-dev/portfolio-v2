@@ -30,6 +30,7 @@ import {
 import type { Locale } from "@/i18n/config";
 import { LocalizedField } from "@/components/admin/localized-field";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
@@ -153,14 +154,15 @@ export function TimelineEditor({
         </p>
       )}
 
-      <button
+      <Button
+        variant="outline"
         type="button"
         onClick={addNew}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-3 text-sm text-gray-500 hover:border-blue-400 hover:text-blue-600"
+        className="w-full border-dashed"
       >
-        <Plus className="h-4 w-4" />
+        <Plus className="mr-2 h-4 w-4" />
         {t("addExperience")}
-      </button>
+      </Button>
     </div>
   );
 }
@@ -275,26 +277,30 @@ function ExperienceRow({
 
         {/* Actions */}
         <div className="flex shrink-0 items-center gap-1">
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             type="button"
             onClick={handleDelete}
             disabled={isDeleting}
-            className="rounded p-1 text-gray-300 hover:bg-red-50 hover:text-red-400"
+            className="h-8 w-8 text-gray-400 hover:bg-red-50 hover:text-red-500"
             aria-label={t("remove")}
           >
             <Trash2 className="h-4 w-4" />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
             type="button"
             onClick={() => setIsOpen((v) => !v)}
-            className="rounded p-1 text-gray-400 hover:bg-gray-100"
+            className="h-8 w-8 text-gray-400"
           >
             {isOpen ? (
               <ChevronUp className="h-4 w-4" />
             ) : (
               <ChevronDown className="h-4 w-4" />
             )}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -364,14 +370,16 @@ function ExperienceRow({
               <Label className="text-xs font-medium text-gray-600">
                 {t("responsibilities")}
               </Label>
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 type="button"
                 onClick={addResponsibility}
-                className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-blue-600 hover:bg-blue-50"
+                className="h-7 text-xs text-blue-600 hover:bg-blue-50 hover:text-blue-700"
               >
-                <Plus className="h-3 w-3" />
+                <Plus className="mr-1 h-3 w-3" />
                 {t("addLabel")}
-              </button>
+              </Button>
             </div>
             <div className="space-y-2">
               {draft.responsibilities.map((resp, idx) => (
@@ -396,13 +404,15 @@ function ExperienceRow({
                     multiline
                     rows={2}
                   />
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     type="button"
                     onClick={() => removeResponsibility(resp.id)}
-                    className="mt-2 shrink-0 rounded p-1 text-gray-300 hover:bg-red-50 hover:text-red-400"
+                    className="mt-2 h-7 w-7 shrink-0 text-gray-400 hover:bg-red-50 hover:text-red-500"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+                  </Button>
                 </div>
               ))}
               {draft.responsibilities.length === 0 && (
@@ -415,21 +425,16 @@ function ExperienceRow({
 
           {/* Save */}
           <div className="flex justify-end gap-2 border-t border-gray-100 pt-2">
-            <button
+            <Button
+              variant="ghost"
               type="button"
               onClick={() => setIsOpen(false)}
-              className="rounded-lg px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-100"
             >
               {t("cancel")}
-            </button>
-            <button
-              type="button"
-              onClick={handleSave}
-              disabled={isSaving}
-              className="rounded-lg bg-gray-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
-            >
+            </Button>
+            <Button type="button" onClick={handleSave} disabled={isSaving}>
               {isSaving ? t("saving") : t("save")}
-            </button>
+            </Button>
           </div>
         </div>
       )}

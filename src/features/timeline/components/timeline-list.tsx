@@ -2,12 +2,14 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Plus, Pencil, Trash2 } from "lucide-react";
+import { Loader2, ArrowUpDown, Plus, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import type { Locale } from "@/i18n/config";
+import { getTimelineTranslationText } from "@/features/timeline/lib/timeline-editor-dto";
+import type { AppLanguage } from "@prisma/client";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
@@ -22,6 +24,7 @@ type TimelineItemRow = RouterOutputs["timelineAdmin"]["getMine"][number];
 
 interface TimelineListProps {
   initialItems: TimelineItemRow[];
+  languages: AppLanguage[];
   locale: Locale;
 }
 
@@ -31,26 +34,16 @@ const isTimelineItemRow = (value: unknown): value is TimelineItemRow => {
   return typeof row.id === "string";
 };
 
-function extractLocalizedText(raw: unknown, locale: Locale): string {
-  if (!raw || typeof raw !== "object") return "";
-  const obj = raw as Record<string, unknown>;
-  const defaultText = typeof obj.default === "string" ? obj.default : "";
-  const translations = obj.translations as Record<string, string> | undefined;
-  if (translations?.[locale]) {
-    return translations[locale];
-  }
-  return defaultText;
-}
-
 export const TimelineList: FC<TimelineListProps> = ({
   initialItems,
+  languages,
   locale,
 }) => {
   const t = useTranslations("admin.timeline");
 
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const { data: items = initialItems } = api.timelineAdmin.getMine.useQuery(
     undefined,
@@ -132,10 +125,17 @@ export const TimelineList: FC<TimelineListProps> = ({
         enableColumnFilter: true,
         cell: ({ row }) => {
           const item = row.original;
-          const titleText = extractLocalizedText(item.title, locale);
-          const descriptionText = extractLocalizedText(
-            item.description,
+          const titleText = getTimelineTranslationText(
+            item,
+            languages,
             locale,
+            "title",
+          );
+          const descriptionText = getTimelineTranslationText(
+            item,
+            languages,
+            locale,
+            "description",
           );
 
           return (
@@ -249,6 +249,7 @@ export const TimelineList: FC<TimelineListProps> = ({
       },
       {
         id: "actions",
+        size: 100,
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnActions")} />
         ),
@@ -262,25 +263,36 @@ export const TimelineList: FC<TimelineListProps> = ({
               >
                 <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
               </Link>
-              {deletingId === item.id ? (
-                <span className="text-destructive text-xs">
-                  {t("deleting")}
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => handleDelete(item.id)}
-                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded p-1.5"
-                >
+
+              <Button
+                disabled={isPending || deletingId === item.id}
+                variant="ghost"
+                size="icon"
+                type="button"
+                onClick={() => handleDelete(item.id)}
+                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
+              >
+                {deletingId === item.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
                   <Trash2 className="h-4 w-4" />
-                </button>
-              )}
+                )}
+              </Button>
             </div>
           );
         },
       },
     ],
-    [deletingId, getDateLabel, handleDelete, locale, parseDate, t],
+    [
+      deletingId,
+      getDateLabel,
+      handleDelete,
+      isPending,
+      languages,
+      locale,
+      parseDate,
+      t,
+    ],
   );
 
   const { table } = useDataTable({

@@ -24,7 +24,7 @@ const About: FC = async () => {
       ? api.portfolio.getAboutPublic({ locale })
       : Promise.resolve(null),
     tenant && isLocale(locale)
-      ? api.cv.getTerminalPublic({ locale })
+      ? api.terminal.getPublic({ locale })
       : Promise.resolve(null),
   ]);
 

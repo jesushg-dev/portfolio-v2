@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, useTransition, useState, useMemo } from "react";
+import { type FC, useTransition, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
@@ -30,30 +30,35 @@ import {
 } from "@/components/shared/form-root";
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
 import {
-  languageMapFromLocalized,
-  localizedFromLanguageMap,
-} from "@/features/profile/server/hero-titles";
-import type { RouterOutputs } from "@/trpc/react";
+  resolvePrimaryLanguage,
+  titleDescriptionTranslationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
+import {
+  type TimelineCreateFormDTO,
+  type TimelineFormDTO,
+} from "@/features/timeline/lib/timeline-editor-dto";
 import { api } from "@/trpc/react";
 import type { AppLanguage } from "@prisma/client";
 
-import { readTimelineImages } from "@/features/timeline/lib/timeline-admin-item";
-
 interface TimelineItemFormProps {
-  initialData?: RouterOutputs["timelineAdmin"]["getMine"][number];
   languages: AppLanguage[];
+  initialData: TimelineFormDTO | TimelineCreateFormDTO;
 }
 
 export const TimelineItemForm: FC<TimelineItemFormProps> = ({
   initialData,
   languages,
 }) => {
-  const isEditMode = !!initialData;
+  const isEditMode = "id" in initialData;
   const t = useTranslations("admin.forms.timelineItem");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const primaryLang = languages.find((l) => l.code === "en") ?? languages[0];
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
 
   const expFormSchema = useMemo(
     () =>
@@ -70,27 +75,10 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
             url: z.string().url(t("imageUrlInvalid")).or(z.literal("")),
           }),
         ),
-        translations: z
-          .array(
-            z
-              .object({
-                appLanguageId: z.string(),
-                title: z.string(),
-                description: z.string(),
-              })
-              .superRefine((val, ctx) => {
-                if (val.appLanguageId === primaryLang?.id) {
-                  if (!val.title || val.title.trim() === "") {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message: t("titleRequiredPrimary"),
-                      path: ["title"],
-                    });
-                  }
-                }
-              }),
-          )
-          .min(1, t("atLeastOneLanguage")),
+        translations: titleDescriptionTranslationMapSchema(
+          primaryLang?.id,
+          t("titleRequiredPrimary"),
+        ),
       }),
     [primaryLang?.id, t],
   );
@@ -101,68 +89,18 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
   const updateItem = api.timelineAdmin.updateItem.useMutation();
   const utils = api.useUtils();
 
-  const languageCodes = languages.map((language) => language.code);
-
-  const defaultTranslations = isEditMode
-    ? (() => {
-        const titleMap = languageMapFromLocalized(
-          initialData.title,
-          languageCodes,
-        );
-        const descriptionMap = languageMapFromLocalized(
-          initialData.description,
-          languageCodes,
-        );
-
-        return languages.map((language) => ({
-          appLanguageId: language.id,
-          title: titleMap[language.code] ?? "",
-          description: descriptionMap[language.code] ?? "",
-        }));
-      })()
-    : languages.map((l) => ({
-        appLanguageId: l.id,
-        title: "",
-        description: "",
-      }));
-
   const form = useForm<TExpForm>({
     resolver: zodResolver(expFormSchema),
-    defaultValues: (isEditMode
-      ? {
-          id: initialData.id,
-          organization: initialData.organization ?? "",
-          location: initialData.location ?? "",
-          category: initialData.category,
-          startDate: initialData.startDate
-            ? new Date(initialData.startDate).toISOString().split("T")[0]
-            : "",
-          endDate: initialData.endDate
-            ? new Date(initialData.endDate).toISOString().split("T")[0]
-            : "",
-          current: initialData.current ?? false,
-          images: (() => {
-            const urls = readTimelineImages(initialData);
-            return urls.length > 0 ? urls.map((url: string) => ({ url })) : [];
-          })(),
-          translations: defaultTranslations,
-        }
-      : {
-          organization: "",
-          location: "",
-          category: "WORK",
-          startDate: "",
-          endDate: "",
-          current: false,
-          images: [],
-          translations: defaultTranslations,
-        }) as TExpForm,
+    defaultValues: initialData as TExpForm,
     mode: "onBlur",
   });
 
-  const { fields: translationFields } = useFieldArray({
-    control: form.control,
-    name: "translations",
+  const { activeLangId, setActiveLangId } = useLocalizedForm({
+    languages,
+    form,
+    buildDefaultValues: () => initialData as TExpForm,
+    resourceId: "id" in initialData ? initialData.id : undefined,
+    completenessFields: ["title", "description"],
   });
 
   const {
@@ -175,85 +113,42 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
   });
 
   const imageUrls = useWatch({ control: form.control, name: "images" });
-
-  const [activeLangId, setActiveLangId] = useState<string>(
-    isEditMode
-      ? (translationFields[0]?.appLanguageId ?? languages[0]?.id ?? "")
-      : (primaryLang?.id ?? languages[0]?.id ?? ""),
-  );
-
-  const activeIndex = translationFields.findIndex(
-    (f) => f.appLanguageId === activeLangId,
-  );
   const isCurrent = useWatch({ control: form.control, name: "current" });
 
-  const onSubmit = (values: TExpForm) => {
-    startTransition(async () => {
-      try {
-        const primaryCode = primaryLang?.code ?? "en";
+  const onSubmit = useCallback(
+    (values: TExpForm) => {
+      startTransition(async () => {
+        try {
+          const mutationValues = {
+            ...values,
+            location: values.location ?? undefined,
+            startDate: new Date(values.startDate),
+            endDate: values.endDate ? new Date(values.endDate) : undefined,
+            images: values.images
+              .map((entry) => entry.url.trim())
+              .filter(Boolean),
+          };
 
-        const titleByCode = Object.fromEntries(
-          values.translations.map((entry) => {
-            const language = languages.find(
-              (lang) => lang.id === entry.appLanguageId,
-            );
-            return [language?.code ?? primaryCode, entry.title];
-          }),
-        );
+          if (isEditMode && values.id) {
+            await updateItem.mutateAsync({
+              ...mutationValues,
+              id: values.id,
+            });
+            toast.success(t("updatedSuccess"));
+          } else {
+            await createItem.mutateAsync(mutationValues);
+            toast.success(t("createdSuccess"));
+          }
 
-        const descriptionByCode = Object.fromEntries(
-          values.translations.map((entry) => {
-            const language = languages.find(
-              (lang) => lang.id === entry.appLanguageId,
-            );
-            return [language?.code ?? primaryCode, entry.description];
-          }),
-        );
-
-        const titlePayload = localizedFromLanguageMap(titleByCode, primaryCode);
-
-        const descriptionPayload = localizedFromLanguageMap(
-          descriptionByCode,
-          primaryCode,
-        );
-
-        const imagesPayload = values.images
-          .map((entry) => entry.url.trim())
-          .filter(Boolean);
-
-        const sharedPayload = {
-          title: titlePayload,
-          description: descriptionPayload,
-          category: values.category,
-          organization: values.organization,
-          location: values.location ?? undefined,
-          startDate: new Date(values.startDate),
-          endDate:
-            values.current || !values.endDate
-              ? undefined
-              : new Date(values.endDate),
-          current: values.current,
-          images: imagesPayload,
-        };
-
-        if (isEditMode && values.id) {
-          await updateItem.mutateAsync({
-            id: values.id,
-            ...sharedPayload,
-          });
-          toast.success(t("updatedSuccess"));
-        } else {
-          await createItem.mutateAsync(sharedPayload);
-          toast.success(t("createdSuccess"));
+          await utils.timelineAdmin.getMine.invalidate();
+          router.back();
+        } catch {
+          toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
-
-        await utils.timelineAdmin.getMine.invalidate();
-        router.back();
-      } catch {
-        toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
-      }
-    });
-  };
+      });
+    },
+    [createItem, isEditMode, router, t, updateItem, utils],
+  );
 
   const isSaving = createItem.isPending || updateItem.isPending;
   const anyError = createItem.error ?? updateItem.error;
@@ -270,36 +165,50 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
 
         <FormContent error={anyError}>
           <FormSection title={t("generalSection")}>
-            {activeIndex !== -1 && (
-              <div className="mb-4 grid gap-4">
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.title`}
-                  render={({ field }) => (
-                    <FormItem label={t("title")} inputId="timeline-title">
-                      <Input placeholder={t("titlePlaceholder")} {...field} />
-                    </FormItem>
-                  )}
-                />
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
 
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.description`}
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("description")}
-                      inputId="timeline-description"
-                    >
-                      <Textarea
-                        rows={4}
-                        placeholder={t("descriptionPlaceholder")}
-                        {...field}
-                      />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "mb-4 grid gap-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.title`}
+                    render={({ field: titleField }) => (
+                      <FormItem
+                        label={t("title")}
+                        inputId={`timeline-title-${lang.code}`}
+                      >
+                        <Input
+                          placeholder={t("titlePlaceholder")}
+                          {...titleField}
+                        />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.description`}
+                    render={({ field: descField }) => (
+                      <FormItem
+                        label={t("description")}
+                        inputId={`timeline-description-${lang.code}`}
+                      >
+                        <Textarea
+                          rows={4}
+                          placeholder={t("descriptionPlaceholder")}
+                          {...descField}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
 
             <FormField
               control={form.control}

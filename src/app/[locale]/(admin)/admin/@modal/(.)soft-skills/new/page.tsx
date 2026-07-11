@@ -1,15 +1,17 @@
 import { getTranslations } from "next-intl/server";
-import { ModalWrapper } from "@/components/shared/modal-wrapper";
+import { PageDialogWrapper } from "@/components/shared/page-container";
 import { SoftSkillForm } from "@/features/soft-skills/components/soft-skill-form";
-import { db } from "@/server/db";
+import { getSoftSkillCreatePageData } from "@/features/soft-skills/server/soft-skill-queries";
 
 export default async function NewSoftSkillModal() {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
-  const t = await getTranslations("admin.softSkills");
+  const [t, { initialData, languages }] = await Promise.all([
+    getTranslations("admin.softSkills"),
+    getSoftSkillCreatePageData(),
+  ]);
 
   return (
-    <ModalWrapper title={t("addNew")} description={t("createDescription")}>
-      <SoftSkillForm languages={languages} />
-    </ModalWrapper>
+    <PageDialogWrapper title={t("addNew")} description={t("createDescription")}>
+      <SoftSkillForm initialData={initialData} languages={languages} />
+    </PageDialogWrapper>
   );
 }

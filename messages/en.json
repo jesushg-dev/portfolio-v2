@@ -929,7 +929,9 @@
         "updateFailed": "Failed to update soft skill",
         "createFailed": "Failed to create soft skill",
         "titleRequiredPrimary": "Title is required for the primary language",
-        "atLeastOneLanguage": "At least one language is required"
+        "atLeastOneLanguage": "At least one language is required",
+        "copyFromPrimary": "Copy from {language}",
+        "unsavedChangesConfirm": "You have unsaved changes. Leave anyway?"
       },
       "softSkillsSection": {
         "title": "Section background",
@@ -1222,6 +1224,7 @@
       "emptyDescription": "Create your first soft skill or run the portfolio seed.",
       "deleteSuccess": "Soft skill deleted.",
       "deleteError": "Failed to delete soft skill.",
+      "deleting": "Deleting",
       "untitled": "Untitled",
       "visible": "Visible",
       "hidden": "Hidden",

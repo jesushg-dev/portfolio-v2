@@ -1,10 +1,10 @@
 "use client";
-import type { AppLanguage, Skill, Service } from "@prisma/client";
+import type { AppLanguage } from "@prisma/client";
 
-import { type FC, useTransition, useState, useMemo, useCallback } from "react";
+import { type FC, useTransition, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -13,7 +13,6 @@ import { api } from "@/trpc/react";
 import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { fillMissingTranslations } from "@/utils/form-translations";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -31,43 +30,35 @@ import {
   FormSection,
 } from "@/components/shared/form-root";
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
-
-const StackTypeSchema = z.enum([
-  "FRONTEND",
-  "BACKEND",
-  "MOBILE",
-  "DESKTOP",
-  "CYBERSECURITY",
-  "DEVOPS",
-  "SOFTSKILLS",
-  "TOOLS",
-]);
-
-interface ServiceInitialData extends Service {
-  ServiceTranslation?: {
-    appLanguageId: string;
-    title: string;
-    description: string;
-  }[];
-  ServiceSkill?: {
-    skillId: string;
-    skill?: Skill;
-  }[];
-}
+import {
+  resolvePrimaryLanguage,
+  titleDescriptionTranslationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
+import {
+  type ServiceCreateFormDTO,
+  type ServiceEditorDTO,
+} from "@/features/services/lib/service-editor-dto";
+import { StackTypeSchema } from "@/features/portfolio/server/portfolio-admin-shared";
 
 interface ServiceFormProps {
-  initialData?: ServiceInitialData;
   languages: AppLanguage[];
+  initialData: ServiceEditorDTO | ServiceCreateFormDTO;
 }
 
 export const ServiceForm: FC<ServiceFormProps> = ({
   initialData,
   languages,
 }) => {
-  const isEditMode = !!initialData;
+  const isEditMode = "id" in initialData;
   const t = useTranslations("admin.forms.service");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
 
   const serviceFormSchema = useMemo(
     () =>
@@ -76,42 +67,20 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         image: z.string().min(1, t("imageRequired")),
         type: StackTypeSchema,
         skillIds: z.array(z.string()),
-        translations: z
-          .array(
-            z
-              .object({
-                appLanguageId: z.string(),
-                title: z.string(),
-                description: z.string(),
-              })
-              .superRefine((val, ctx) => {
-                if (val.appLanguageId === "en") {
-                  if (!val.title || val.title.trim() === "") {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message: t("titleRequiredPrimary"),
-                      path: ["title"],
-                    });
-                  }
-                }
-              }),
-          )
-          .refine((val) => val.length >= 1, {
-            message: t("atLeastOneLanguage"),
-          }),
+        translations: titleDescriptionTranslationMapSchema(
+          primaryLang?.id,
+          t("titleRequiredPrimary"),
+        ),
       }),
-    [t],
+    [primaryLang?.id, t],
   );
 
   type TServiceForm = z.infer<typeof serviceFormSchema>;
 
-  const createService = api.portfolioAdmin.createService.useMutation();
-  const updateService = api.portfolioAdmin.updateService.useMutation();
-  const upsertTranslation =
-    api.portfolioAdmin.upsertServiceTranslation.useMutation();
-  const syncSkills = api.portfolioAdmin.syncServiceSkills.useMutation();
+  const createService = api.servicesAdmin.createItem.useMutation();
+  const updateService = api.servicesAdmin.updateItem.useMutation();
 
-  const { data: rawSkills = [] } = api.portfolioAdmin.getMySkills.useQuery();
+  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
   const utils = api.useUtils();
 
   const availableSkills = rawSkills.map((s) => ({
@@ -121,40 +90,18 @@ export const ServiceForm: FC<ServiceFormProps> = ({
     type: s.type,
   }));
 
-  const primaryLang = languages.find((l) => l.code === "en") ?? languages[0];
-
-  const defaultTranslations = fillMissingTranslations(
-    isEditMode ? initialData : {},
-    languages,
-  );
-
   const form = useForm<TServiceForm>({
     resolver: zodResolver(serviceFormSchema),
-    defaultValues: {
-      id: isEditMode ? initialData.id : undefined,
-      image: isEditMode ? (initialData.image ?? "") : "",
-      type: isEditMode ? initialData.type : "FRONTEND",
-      skillIds: isEditMode
-        ? (initialData.ServiceSkill?.map((ss) => ss.skillId) ?? [])
-        : [],
-      translations: defaultTranslations,
-    },
+    defaultValues: initialData as TServiceForm,
     mode: "onBlur",
   });
 
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "translations",
+  const { activeLangId, setActiveLangId } = useLocalizedForm({
+    languages,
+    form,
+    buildDefaultValues: () => initialData as TServiceForm,
+    resourceId: "id" in initialData ? initialData.id : undefined,
   });
-
-  const [activeLangId, setActiveLangId] = useState<string>(
-    isEditMode
-      ? (fields[0]?.appLanguageId ?? languages[0]?.id ?? "")
-      : (primaryLang?.id ?? languages[0]?.id ?? ""),
-  );
-
-  const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
-  const activeLang = languages.find((l) => l.id === activeLangId);
 
   const onSubmit = useCallback(
     (values: TServiceForm) => {
@@ -163,66 +110,26 @@ export const ServiceForm: FC<ServiceFormProps> = ({
           if (isEditMode && values.id) {
             await updateService.mutateAsync({
               id: values.id,
-              image: values.image,
-              type: values.type,
+              ...values,
             });
-
-            await syncSkills.mutateAsync({
-              serviceId: values.id,
-              skillIds: values.skillIds,
-            });
-
-            await Promise.all(
-              values.translations
-                .filter(
-                  (tr) =>
-                    tr.title.trim() !== "" || tr.description.trim() !== "",
-                )
-                .map((trans) =>
-                  upsertTranslation.mutateAsync({
-                    serviceId: values.id!,
-                    appLanguageId: trans.appLanguageId,
-                    title: trans.title,
-                    description: trans.description,
-                  }),
-                ),
-            );
-
             toast.success(t("updatedSuccess"));
           } else {
             await createService.mutateAsync(values);
             toast.success(t("createdSuccess"));
           }
 
-          await utils.portfolioAdmin.getMyServices.invalidate();
+          await utils.servicesAdmin.getMine.invalidate();
           router.back();
         } catch {
           toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
       });
     },
-    [
-      isEditMode,
-      updateService,
-      syncSkills,
-      upsertTranslation,
-      createService,
-      utils,
-      router,
-      t,
-    ],
+    [isEditMode, updateService, createService, utils, router, t],
   );
 
-  const isSaving =
-    createService.isPending ||
-    updateService.isPending ||
-    syncSkills.isPending ||
-    upsertTranslation.isPending;
-  const anyError =
-    createService.error ??
-    updateService.error ??
-    upsertTranslation.error ??
-    syncSkills.error;
+  const isSaving = createService.isPending || updateService.isPending;
+  const anyError = createService.error ?? updateService.error;
 
   return (
     <Form {...form}>
@@ -235,38 +142,46 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         />
         <FormContent error={anyError}>
           <FormSection title={t("generalSection")}>
-            {activeIndex !== -1 && activeLang && (
-              <div className="mb-4 grid gap-4">
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.title`}
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("titleWithLanguage", {
-                        language: activeLang.name,
-                      })}
-                      inputId={`service-title-${activeLang.code}`}
-                    >
-                      <Input {...field} />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.description`}
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("descriptionWithLanguage", {
-                        language: activeLang.name,
-                      })}
-                      inputId={`service-description-${activeLang.code}`}
-                    >
-                      <Textarea rows={4} {...field} />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "mb-4 grid gap-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.title`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("titleWithLanguage", {
+                          language: lang.name ?? lang.code,
+                        })}
+                        inputId={`service-title-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.description`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("descriptionWithLanguage", {
+                          language: lang.name ?? lang.code,
+                        })}
+                        inputId={`service-description-${lang.code}`}
+                      >
+                        <Textarea rows={4} {...field} />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
 
             <div className="grid grid-cols-2 gap-4">
               <FormField

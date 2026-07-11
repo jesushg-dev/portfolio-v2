@@ -7,6 +7,7 @@ export interface GlobalLanguageSelectorProps {
   activeLangId: string;
   onLangChange: (id: string) => void;
   buttonIdPrefix?: string;
+  statusByLangId?: Record<string, "empty" | "partial" | "complete">;
 }
 
 export function GlobalLanguageSelector({
@@ -14,6 +15,7 @@ export function GlobalLanguageSelector({
   activeLangId,
   onLangChange,
   buttonIdPrefix,
+  statusByLangId,
 }: GlobalLanguageSelectorProps) {
   const t = useTranslations("admin.forms");
 
@@ -28,6 +30,7 @@ export function GlobalLanguageSelector({
       <div className="flex items-center gap-1 overflow-x-auto">
         {languages.map((lang) => {
           const isActive = activeLangId === lang.id;
+          const status = statusByLangId?.[lang.id];
           return (
             <Button
               key={lang.id}
@@ -46,6 +49,17 @@ export function GlobalLanguageSelector({
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
             >
+              {status ? (
+                <span
+                  className={`mr-1.5 inline-block h-1.5 w-1.5 rounded-full ${
+                    status === "complete"
+                      ? "bg-emerald-500"
+                      : status === "partial"
+                        ? "bg-amber-500"
+                        : "bg-muted-foreground/40"
+                  }`}
+                />
+              ) : null}
               {lang.name}
             </Button>
           );

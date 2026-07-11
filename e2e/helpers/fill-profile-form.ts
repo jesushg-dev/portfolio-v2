@@ -27,7 +27,7 @@ type CvMineHeaderResponse = {
 type HeroTitlesMine = {
   titles: {
     order: number;
-    translationsByLangId: Record<string, { text: string }>;
+    translations: Record<string, { text: string }>;
   }[];
 };
 
@@ -37,7 +37,7 @@ type TerminalMine = {
   delayBetweenCommands: number;
   steps: {
     order: number;
-    translationsByLangId: Record<string, { command: string; output: string }>;
+    translations: Record<string, { command: string; output: string }>;
   }[];
 };
 
@@ -121,39 +121,17 @@ async function submitProfileHeroForm(
   page: Page,
   options?: { includeAboutMe?: boolean },
 ): Promise<void> {
+  void options;
   const submit = page.locator("#profile-hero-submit");
-  const waits: Promise<unknown>[] = [
-    page.waitForResponse(
-      (response) =>
-        response.url().includes("/api/trpc/cv.upsertPortfolioHeader") &&
-        response.request().method() === "POST" &&
-        response.ok(),
-      { timeout: 30_000 },
-    ),
-    page.waitForResponse(
-      (response) =>
-        response.url().includes("/api/trpc/cv.upsertHeroTitles") &&
-        response.request().method() === "POST" &&
-        response.ok(),
-      { timeout: 30_000 },
-    ),
-  ];
-
-  if (options?.includeAboutMe) {
-    waits.push(
-      page.waitForResponse(
-        (response) =>
-          response.url().includes("/api/trpc/cv.upsertAboutMe") &&
-          response.request().method() === "POST" &&
-          response.ok(),
-        { timeout: 30_000 },
-      ),
-    );
-  }
-
-  const responses = Promise.all(waits);
+  const savePromise = page.waitForResponse(
+    (response) =>
+      response.url().includes("/api/trpc/profileAdmin.upsertHero") &&
+      response.request().method() === "POST" &&
+      response.ok(),
+    { timeout: 30_000 },
+  );
   await submit.click();
-  await responses;
+  await savePromise;
   await expect(submit).toBeEnabled({ timeout: 30_000 });
   await expect(submit).not.toHaveText(/Saving/i);
 }
@@ -162,42 +140,42 @@ async function submitProfileHeroForm(
 export async function cleanupUserProfile(page: Page): Promise<void> {
   const [cv, languages] = await Promise.all([
     trpcQuery<CvMineHeaderResponse>(page, "cv.getMine"),
-    trpcQuery<AppLanguageRow[]>(page, "portfolioAdmin.getAppLanguages"),
+    trpcQuery<AppLanguageRow[]>(page, "appLanguagesAdmin.getAll"),
   ]);
 
-  await trpcMutate(page, "cv.upsertHeroTitles", { titles: [] });
+  await trpcMutate(page, "profileAdmin.upsertHeroTitles", { titles: [] });
 
   if (cv.header) {
-    await trpcMutate(page, "cv.upsertPortfolioHeader", {
+    await trpcMutate(page, "profileAdmin.upsertPortfolioHeader", {
       fullName: cv.header.fullName,
       photoUrl: cv.header.photoUrl,
       backgroundImageUrl: null,
       heroSummary: null,
-      clientImageAlt: cv.header.clientImageAlt,
+      clientImageAlt: null,
     });
   }
 
-  await trpcMutate(page, "cv.upsertTerminal", {
+  await trpcMutate(page, "terminal.upsert", {
     username: "Jesus-Macbook",
     typingSpeed: 45,
     delayBetweenCommands: 1000,
     steps: [
       {
         order: 0,
-        translations: languages.map((language) => ({
-          appLanguageId: language.id,
-          command: "clear",
-          output: "",
-        })),
+        translations: Object.fromEntries(
+          languages.map((language) => [
+            language.id,
+            { command: "clear", output: "" },
+          ]),
+        ),
       },
     ],
   });
 
   await trpcMutate(page, "cv.upsertAboutMe", {
-    aboutMe: {
-      default: ".",
-      translations: { es: ".", nl: "." },
-    },
+    aboutMe: Object.fromEntries(
+      languages.map((language) => [language.id, { text: "." }]),
+    ),
   });
 }
 
@@ -246,6 +224,10 @@ export async function fillProfileHeroFromFixture(
   await submitProfileHeroForm(page, { includeAboutMe: true });
 }
 
+async function countConsoleSteps(page: Page): Promise<number> {
+  return page.locator('[id^="profile-console-command-"][id$="-en"]').count();
+}
+
 export async function fillProfileConsoleFromFixture(
   page: Page,
   fixture: PortfolioHomeFixture = portfolioHome,
@@ -263,13 +245,11 @@ export async function fillProfileConsoleFromFixture(
     .fill(String(fixture.terminal.delayBetweenCommands));
 
   const stepCount = fixture.terminal.steps.length;
-  let visibleSteps = await page
-    .locator('[id^="profile-console-command-"]')
-    .count();
+  let visibleSteps = await countConsoleSteps(page);
 
   while (visibleSteps < stepCount) {
     await page.locator("#profile-console-add-step").click();
-    visibleSteps += 1;
+    visibleSteps = await countConsoleSteps(page);
   }
 
   for (const locale of PROFILE_LOCALES) {
@@ -277,10 +257,10 @@ export async function fillProfileConsoleFromFixture(
 
     for (const [index, step] of fixture.terminal.steps.entries()) {
       await page
-        .locator(`#profile-console-command-${index}`)
+        .locator(`#profile-console-command-${index}-${locale}`)
         .fill(step.command[locale]);
       await page
-        .locator(`#profile-console-output-${index}`)
+        .locator(`#profile-console-output-${index}-${locale}`)
         .fill(step.output[locale]);
     }
   }
@@ -288,7 +268,7 @@ export async function fillProfileConsoleFromFixture(
   const submit = page.locator("#profile-console-submit");
   const savePromise = page.waitForResponse(
     (response) =>
-      response.url().includes("/api/trpc/cv.upsertTerminal") &&
+      response.url().includes("/api/trpc/terminal.upsert") &&
       response.request().method() === "POST" &&
       response.ok(),
     { timeout: 30_000 },
@@ -300,13 +280,13 @@ export async function fillProfileConsoleFromFixture(
 }
 
 export async function getHeroTitlesMine(page: Page): Promise<HeroTitlesMine> {
-  return trpcQuery<HeroTitlesMine>(page, "cv.getHeroTitlesMine");
+  return trpcQuery<HeroTitlesMine>(page, "profileAdmin.getHeroTitlesMine");
 }
 
 export async function getTerminalMine(
   page: Page,
 ): Promise<TerminalMine | null> {
-  return trpcQuery<TerminalMine | null>(page, "cv.getTerminalMine");
+  return trpcQuery<TerminalMine | null>(page, "terminal.getMine");
 }
 
 export async function fillProfileHeroSmoke(

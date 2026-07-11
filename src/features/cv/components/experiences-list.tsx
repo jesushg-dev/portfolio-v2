@@ -12,9 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import CvLanguageTabs from "@/components/admin/shared/cv/cv-language-tabs";
 import { api } from "@/trpc/react";
-import { getLocalizedText } from "@/lib/i18n/localized";
 import FormStatus from "@/components/admin/shared/form-status";
 import CvAddButton from "@/components/admin/shared/cv-add-button";
 import CvListItemActions from "@/components/admin/shared/cv-list-item-actions";
@@ -26,12 +24,17 @@ import {
 } from "@/components/ui/sortable";
 import { GripVertical } from "lucide-react";
 import type { Locale } from "@/i18n/config";
+import type { AppLanguage } from "@prisma/client";
+import { getRowTextForLocale } from "@/lib/i18n/localized-display";
+import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
 import { ExperienceForm } from "./experience-form";
 import { CvListSkeleton } from "./cv-list-skeleton";
 
-const ExperiencesList: FC = () => {
+const ExperiencesList: FC<{
+  languages: AppLanguage[];
+  displayLocale: Locale;
+}> = ({ languages, displayLocale }) => {
   const t = useTranslations("admin.forms.experience");
-  const [, startTransition] = useTransition();
 
   const { data, isLoading } = api.cv.getMine.useQuery();
   const utils = api.useUtils();
@@ -46,6 +49,9 @@ const ExperiencesList: FC = () => {
     data?.experiences ?? [],
     (state, newItems: NonNullable<typeof data>["experiences"]) => newItems,
   );
+
+  const [isPending, startTransition] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleReorder = useCallback(
     (newItems: NonNullable<typeof data>["experiences"]) => {
@@ -71,6 +77,7 @@ const ExperiencesList: FC = () => {
 
   const handleDelete = useCallback(
     (id: string) => {
+      setDeletingId(id);
       startTransition(async () => {
         setServerError(null);
         try {
@@ -81,15 +88,17 @@ const ExperiencesList: FC = () => {
           const msg = err instanceof Error ? err.message : t("deleteFailed");
           toast.error(msg);
           setServerError(msg);
+        } finally {
+          setDeletingId(null);
         }
       });
     },
     [remove, utils, t],
   );
 
-  if (isLoading || !data) return <CvListSkeleton lines={2} />;
-
-  const defaultLocale = (data.profile?.defaultLocale as Locale) ?? "en";
+  if (isLoading || !data || languages.length === 0) {
+    return <CvListSkeleton lines={2} />;
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -109,10 +118,10 @@ const ExperiencesList: FC = () => {
                     </SortableItemHandle>
                     <div>
                       <p className="text-foreground text-sm font-medium">
-                        {getLocalizedText(
-                          exp.role,
-                          defaultLocale,
-                          defaultLocale,
+                        {getRowTextForLocale(
+                          localizedJsonToTextMap(exp.role, languages),
+                          languages,
+                          displayLocale,
                         )}
                       </p>
                       <p className="text-muted-foreground text-xs">
@@ -124,6 +133,8 @@ const ExperiencesList: FC = () => {
                     </div>
                   </div>
                   <CvListItemActions
+                    isPending={isPending}
+                    isDeleting={deletingId === exp.id}
                     isEditing={editingId === exp.id}
                     onEditToggle={() =>
                       setEditingId(editingId === exp.id ? null : exp.id)
@@ -153,11 +164,11 @@ const ExperiencesList: FC = () => {
         >
           <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
             <DialogTitle>{editingId ? t("edit") : t("create")}</DialogTitle>
-            <CvLanguageTabs />
           </DialogHeader>
           {(editingId ?? creating) && (
             <ExperienceForm
-              defaultLocale={defaultLocale}
+              key={editingId ?? "create"}
+              languages={languages}
               initial={
                 editingId
                   ? data.experiences.find((e) => e.id === editingId)

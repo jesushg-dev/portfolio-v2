@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition } from "react";
-import type { AppLanguage, CvAboutMe, CvHeader } from "@prisma/client";
+import type { AppLanguage } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,111 +27,58 @@ import {
   SortableItem,
   SortableItemHandle,
 } from "@/components/ui/sortable";
-import type { HeroTitleEditorDTO } from "@/features/profile/server/hero-titles";
 import {
-  languageMapFromLocalized,
-  localizedFromLanguageMap,
-} from "@/features/profile/server/hero-titles";
-
-const translationSchema = z.object({
-  appLanguageId: z.string().min(1),
-  text: z.string(),
-});
-
-const profileHeroFormSchema = z.object({
-  fullName: z.string().min(1),
-  photoUrl: z.string().url().or(z.literal("")),
-  backgroundImageUrl: z.string().url().or(z.literal("")),
-  heroSummaryTranslations: z.array(translationSchema),
-  aboutMeTranslations: z.array(translationSchema),
-  titles: z.array(
-    z.object({
-      order: z.number().int().nonnegative(),
-      translations: z.array(translationSchema).min(1),
-    }),
-  ),
-});
-
-type ProfileHeroFormValues = z.infer<typeof profileHeroFormSchema>;
-
-function createEmptyTranslations(languages: AppLanguage[]) {
-  return languages.map((language) => ({
-    appLanguageId: language.id,
-    text: "",
-  }));
-}
-
-function localizedToTranslations(
-  value: unknown,
-  languages: AppLanguage[],
-  primaryCode: string,
-) {
-  const codes = languages.map((language) => language.code);
-  const map = languageMapFromLocalized(value, codes);
-
-  return languages.map((language) => ({
-    appLanguageId: language.id,
-    text: map[language.code] ?? map[primaryCode] ?? "",
-  }));
-}
-
-function heroTitlesToFormValues(
-  dto: HeroTitleEditorDTO | null | undefined,
-  languages: AppLanguage[],
-) {
-  if (!dto?.titles.length) {
-    return [
-      {
-        order: 0,
-        translations: createEmptyTranslations(languages),
-      },
-    ];
-  }
-
-  return dto.titles.map((title) => ({
-    order: title.order,
-    translations: languages.map((language) => ({
-      appLanguageId: language.id,
-      text: title.translationsByLangId[language.id]?.text ?? "",
-    })),
-  }));
-}
-
-function translationsToLocalized(
-  translations: { appLanguageId: string; text: string }[],
-  languages: AppLanguage[],
-  primaryLang: AppLanguage,
-) {
-  const valuesByCode = Object.fromEntries(
-    languages.map((language) => {
-      const translation = translations.find(
-        (item) => item.appLanguageId === language.id,
-      );
-      return [language.code, translation?.text ?? ""];
-    }),
-  );
-
-  return localizedFromLanguageMap(valuesByCode, primaryLang.code);
-}
+  resolvePrimaryLanguage,
+  textTranslationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
+import type { ProfileHeroEditorDTO } from "@/features/profile/lib/profile-hero-editor-dto";
 
 interface ProfileHeroFormProps {
   languages: AppLanguage[];
-  header: CvHeader | null;
-  aboutMe: CvAboutMe | null;
-  heroTitles: HeroTitleEditorDTO | null;
+  initialData: ProfileHeroEditorDTO;
 }
 
 export function ProfileHeroForm({
   languages,
-  header,
-  aboutMe,
-  heroTitles,
+  initialData,
 }: ProfileHeroFormProps) {
   const t = useTranslations("admin.profile");
   const utils = api.useUtils();
 
-  const primaryLang =
-    languages.find((language) => language.code === "en") ?? languages[0];
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
+
+  const profileHeroFormSchema = useMemo(
+    () =>
+      z.object({
+        fullName: z.string().min(1),
+        photoUrl: z.string().url().or(z.literal("")),
+        backgroundImageUrl: z.string().url().or(z.literal("")),
+        heroSummaryTranslations: textTranslationMapSchema(
+          primaryLang?.id,
+          t("heroSummaryLabel"),
+        ),
+        aboutMeTranslations: textTranslationMapSchema(
+          primaryLang?.id,
+          t("aboutMeTitle"),
+        ),
+        titles: z.array(
+          z.object({
+            order: z.number().int().nonnegative(),
+            translations: textTranslationMapSchema(
+              primaryLang?.id,
+              t("rotatingTitlesLabel"),
+            ),
+          }),
+        ),
+      }),
+    [primaryLang?.id, t],
+  );
+
+  type ProfileHeroFormValues = z.infer<typeof profileHeroFormSchema>;
 
   const [activeLangId, setActiveLangId] = useState(
     primaryLang?.id ?? languages[0]?.id ?? "",
@@ -139,25 +86,25 @@ export function ProfileHeroForm({
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const defaultValues = useMemo<ProfileHeroFormValues>(() => {
-    const primaryCode = primaryLang?.code ?? "en";
-    return {
-      fullName: header?.fullName ?? "",
-      photoUrl: header?.photoUrl ?? "",
-      backgroundImageUrl: header?.backgroundImageUrl ?? "",
-      heroSummaryTranslations: localizedToTranslations(
-        header?.heroSummary,
-        languages,
-        primaryCode,
-      ),
-      aboutMeTranslations: localizedToTranslations(
-        aboutMe?.aboutMe,
-        languages,
-        primaryCode,
-      ),
-      titles: heroTitlesToFormValues(heroTitles, languages),
-    };
-  }, [aboutMe?.aboutMe, header, heroTitles, languages, primaryLang?.code]);
+  const defaultValues = useMemo<ProfileHeroFormValues>(
+    () => ({
+      fullName: initialData.fullName,
+      photoUrl: initialData.photoUrl,
+      backgroundImageUrl: initialData.backgroundImageUrl,
+      heroSummaryTranslations: initialData.heroSummaryTranslations,
+      aboutMeTranslations: initialData.aboutMeTranslations,
+      titles:
+        initialData.titles.length > 0
+          ? initialData.titles
+          : [
+              {
+                order: 0,
+                translations: buildEmptyTranslationMap(languages, { text: "" }),
+              },
+            ],
+    }),
+    [initialData, languages],
+  );
 
   const form = useForm<ProfileHeroFormValues>({
     resolver: zodResolver(profileHeroFormSchema),
@@ -169,105 +116,49 @@ export function ProfileHeroForm({
     name: "titles",
   });
 
-  const upsertPortfolioHeader = api.cv.upsertPortfolioHeader.useMutation();
-  const upsertAboutMe = api.cv.upsertAboutMe.useMutation();
-  const upsertHeroTitles = api.cv.upsertHeroTitles.useMutation();
+  const upsertProfileHero = api.profileAdmin.upsertHero.useMutation();
 
-  const activeLang = languages.find((language) => language.id === activeLangId);
-  const heroSummaryTranslations = useWatch({
-    control: form.control,
-    name: "heroSummaryTranslations",
-  });
-  const aboutMeTranslations = useWatch({
-    control: form.control,
-    name: "aboutMeTranslations",
-  });
   const photoUrlValue = useWatch({ control: form.control, name: "photoUrl" });
   const fullNameValue = useWatch({ control: form.control, name: "fullName" });
 
-  const heroSummaryIndex =
-    heroSummaryTranslations?.findIndex(
-      (item) => item.appLanguageId === activeLangId,
-    ) ?? -1;
-  const aboutMeIndex =
-    aboutMeTranslations?.findIndex(
-      (item) => item.appLanguageId === activeLangId,
-    ) ?? -1;
-
   const handleSubmit = useCallback(
     (values: ProfileHeroFormValues) => {
-      if (!primaryLang) return;
-
       startTransition(async () => {
         setServerError(null);
         try {
-          const heroSummary = translationsToLocalized(
-            values.heroSummaryTranslations,
-            languages,
-            primaryLang,
-          );
-          const aboutMePayload = translationsToLocalized(
-            values.aboutMeTranslations,
-            languages,
-            primaryLang,
-          );
-
           const titlesPayload = values.titles
             .map((title, index) => ({
               order: index,
-              translations: title.translations.map((translation) => ({
-                appLanguageId: translation.appLanguageId,
-                text: translation.text.trim(),
-              })),
+              translations: title.translations,
             }))
             .filter((title) =>
-              title.translations.some((translation) => translation.text !== ""),
+              Object.values(title.translations).some(
+                (entry) => entry.text.trim() !== "",
+              ),
             );
 
-          await upsertPortfolioHeader.mutateAsync({
+          await upsertProfileHero.mutateAsync({
             fullName: values.fullName,
-            photoUrl: values.photoUrl || null,
-            backgroundImageUrl: values.backgroundImageUrl || null,
-            heroSummary: heroSummary.default ? heroSummary : null,
-            clientImageAlt: header?.clientImageAlt
-              ? (header.clientImageAlt as {
-                  default: string;
-                  translations?: Record<string, string>;
-                })
-              : null,
+            photoUrl: values.photoUrl,
+            backgroundImageUrl: values.backgroundImageUrl,
+            heroSummaryTranslations: values.heroSummaryTranslations,
+            aboutMeTranslations: values.aboutMeTranslations,
+            titles: titlesPayload,
           });
 
-          if (aboutMePayload.default) {
-            await upsertAboutMe.mutateAsync({ aboutMe: aboutMePayload });
-          }
-
-          await upsertHeroTitles.mutateAsync({ titles: titlesPayload });
-
-          await Promise.all([
-            utils.cv.getMine.invalidate(),
-            utils.cv.getHeroTitlesMine.invalidate(),
-          ]);
+          await utils.profileAdmin.getHeroMine.invalidate();
         } catch (err) {
           setServerError(err instanceof Error ? err.message : t("saveFailed"));
         }
       });
     },
-    [
-      header,
-      languages,
-      primaryLang,
-      t,
-      upsertAboutMe,
-      upsertHeroTitles,
-      upsertPortfolioHeader,
-      utils,
-    ],
+    [t, upsertProfileHero, utils],
   );
 
   const handleAddTitle = useCallback(() => {
     append({
       order: fields.length,
-      translations: createEmptyTranslations(languages),
+      translations: buildEmptyTranslationMap(languages, { text: "" }),
     });
   }, [append, fields.length, languages]);
 
@@ -380,55 +271,58 @@ export function ProfileHeroForm({
             >
               <SortableContent asChild>
                 <div className="flex flex-col gap-3">
-                  {fields.map((field, index) => {
-                    const translationIndex = form
-                      .getValues(`titles.${index}.translations`)
-                      .findIndex((item) => item.appLanguageId === activeLangId);
-
-                    return (
-                      <SortableItem key={field.id} value={field.id}>
-                        <div className="border-border bg-card flex items-start gap-3 rounded-lg border p-4">
-                          <SortableItemHandle className="text-muted-foreground mt-2 shrink-0 cursor-grab">
-                            <GripVertical className="h-4 w-4" />
-                          </SortableItemHandle>
-                          <div className="min-w-0 flex-1">
-                            {translationIndex !== -1 && activeLang ? (
-                              <FormField
-                                control={form.control}
-                                name={`titles.${index}.translations.${translationIndex}.text`}
-                                render={({ field: textField }) => (
-                                  <FormItem
-                                    label={t("titleWithLanguage", {
-                                      language: activeLang.name,
-                                    })}
-                                    inputId={`profile-hero-title-${index}-${activeLang.code}`}
-                                  >
-                                    <FormControl>
-                                      <Input
-                                        {...textField}
-                                        placeholder={t("degreePlaceholder")}
-                                      />
-                                    </FormControl>
-                                  </FormItem>
-                                )}
-                              />
-                            ) : null}
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="text-muted-foreground hover:text-destructive shrink-0"
-                            onClick={() => handleRemoveTitle(index)}
-                            disabled={fields.length <= 1}
-                            aria-label={t("removeTitle")}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                  {fields.map((field, index) => (
+                    <SortableItem key={field.id} value={field.id}>
+                      <div className="border-border bg-card flex items-start gap-3 rounded-lg border p-4">
+                        <SortableItemHandle className="text-muted-foreground mt-2 shrink-0 cursor-grab">
+                          <GripVertical className="h-4 w-4" />
+                        </SortableItemHandle>
+                        <div className="min-w-0 flex-1">
+                          {languages.map((lang) => {
+                            const isActive = lang.id === activeLangId;
+                            return (
+                              <div
+                                key={lang.id}
+                                className={isActive ? "block" : "hidden"}
+                                aria-hidden={!isActive}
+                              >
+                                <FormField
+                                  control={form.control}
+                                  name={`titles.${index}.translations.${lang.id}.text`}
+                                  render={({ field: textField }) => (
+                                    <FormItem
+                                      label={t("titleWithLanguage", {
+                                        language: lang.name,
+                                      })}
+                                      inputId={`profile-hero-title-${index}-${lang.code}`}
+                                    >
+                                      <FormControl>
+                                        <Input
+                                          {...textField}
+                                          placeholder={t("degreePlaceholder")}
+                                        />
+                                      </FormControl>
+                                    </FormItem>
+                                  )}
+                                />
+                              </div>
+                            );
+                          })}
                         </div>
-                      </SortableItem>
-                    );
-                  })}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="text-muted-foreground hover:text-destructive shrink-0"
+                          onClick={() => handleRemoveTitle(index)}
+                          disabled={fields.length <= 1}
+                          aria-label={t("removeTitle")}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </SortableItem>
+                  ))}
                 </div>
               </SortableContent>
             </Sortable>
@@ -446,57 +340,75 @@ export function ProfileHeroForm({
             </Button>
           </FormSection>
 
-          {heroSummaryIndex !== -1 && activeLang ? (
-            <FormSection title={t("heroSummaryLabel")}>
-              <FormField
-                control={form.control}
-                name={`heroSummaryTranslations.${heroSummaryIndex}.text`}
-                render={({ field }) => (
-                  <FormItem
-                    label={t("heroSummaryWithLanguage", {
-                      language: activeLang.name,
-                    })}
-                    inputId={`profile-hero-summary-${activeLang.code}`}
-                    description={t("heroSummaryHint")}
-                  >
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        rows={3}
-                        placeholder={t("heroSummaryPlaceholder")}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </FormSection>
-          ) : null}
+          <FormSection title={t("heroSummaryLabel")}>
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "block" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`heroSummaryTranslations.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("heroSummaryWithLanguage", {
+                          language: lang.name,
+                        })}
+                        inputId={`profile-hero-summary-${lang.code}`}
+                        description={t("heroSummaryHint")}
+                      >
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            rows={3}
+                            placeholder={t("heroSummaryPlaceholder")}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
+          </FormSection>
 
-          {aboutMeIndex !== -1 && activeLang ? (
-            <FormSection title={t("aboutMeTitle")}>
-              <FormField
-                control={form.control}
-                name={`aboutMeTranslations.${aboutMeIndex}.text`}
-                render={({ field }) => (
-                  <FormItem
-                    label={t("descriptionWithLanguage", {
-                      language: activeLang.name,
-                    })}
-                    inputId={`profile-about-${activeLang.code}`}
-                    description={t("aboutDescriptionHint")}
-                  >
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        rows={6}
-                        placeholder={t("aboutPlaceholder")}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </FormSection>
-          ) : null}
+          <FormSection title={t("aboutMeTitle")}>
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "block" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`aboutMeTranslations.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("descriptionWithLanguage", {
+                          language: lang.name,
+                        })}
+                        inputId={`profile-about-${lang.code}`}
+                        description={t("aboutDescriptionHint")}
+                      >
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            rows={6}
+                            placeholder={t("aboutPlaceholder")}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
+          </FormSection>
         </FormContent>
 
         <FormActions

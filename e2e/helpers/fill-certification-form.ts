@@ -95,19 +95,6 @@ export async function goToCertificationsList(page: Page): Promise<void> {
   await addButton.waitFor({ state: "visible", timeout: 15_000 });
 }
 
-async function waitForSkillsQuery(page: Page): Promise<void> {
-  const skillsLoaded = await page.locator('[id^="skill-picker-"]').count();
-  if (skillsLoaded > 0) return;
-
-  await page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/trpc/portfolioAdmin.getMySkills") &&
-      response.request().method() === "GET" &&
-      response.ok(),
-    { timeout: 30_000 },
-  );
-}
-
 async function openNewCertificationForm(page: Page): Promise<void> {
   await goToCertificationsList(page);
 
@@ -119,7 +106,6 @@ async function openNewCertificationForm(page: Page): Promise<void> {
   await page.waitForURL(/\/admin\/certifications\/new\/?$/, {
     timeout: 20_000,
   });
-  await waitForSkillsQuery(page);
 }
 
 async function waitForCertificationSaveToFinish(page: Page): Promise<void> {
@@ -194,7 +180,7 @@ export async function fillCertificationForm(
 
   const createResponse = page.waitForResponse(
     (response) =>
-      response.url().includes("/api/trpc/portfolioAdmin.createCertification") &&
+      response.url().includes("/api/trpc/certificationsAdmin.createItem") &&
       response.request().method() === "POST",
     { timeout: 30_000 },
   );
@@ -251,44 +237,19 @@ export async function expectCertificationListContains(
 }
 
 export async function cleanupUserCertifications(page: Page): Promise<void> {
-  const listResponse = await page.request.get(
-    `/api/trpc/portfolioAdmin.getMyCertifications?batch=1&input=${encodeURIComponent(
-      JSON.stringify({ "0": { json: null } }),
-    )}`,
+  const deleteResponse = await page.request.post(
+    `/api/trpc/certificationsAdmin.deleteAll?batch=1`,
+    {
+      data: {
+        "0": { json: null },
+      },
+    },
   );
 
-  if (!listResponse.ok()) {
+  if (!deleteResponse.ok()) {
     throw new Error(
-      `Failed to list certifications for cleanup: ${listResponse.status()} ${await listResponse.text()}`,
+      `Failed to cleanup cleanupUserCertifications: ${deleteResponse.status()} ${await deleteResponse.text()}`,
     );
-  }
-
-  const listPayload = (await listResponse.json()) as [
-    {
-      result?: {
-        data?: {
-          json?: { id: string }[];
-        };
-      };
-    },
-  ];
-
-  const certifications = listPayload[0]?.result?.data?.json ?? [];
-
-  for (const certification of certifications) {
-    const deleteResponse = await page.request.post(
-      "/api/trpc/portfolioAdmin.deleteCertification?batch=1",
-      {
-        headers: { "content-type": "application/json" },
-        data: { "0": { json: { id: certification.id } } },
-      },
-    );
-
-    if (!deleteResponse.ok()) {
-      throw new Error(
-        `Failed to delete certification ${certification.id}: ${deleteResponse.status()} ${await deleteResponse.text()}`,
-      );
-    }
   }
 }
 

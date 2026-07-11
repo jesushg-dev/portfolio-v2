@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useOptimistic, useCallback, startTransition } from "react";
+import { useState, useOptimistic, useCallback, useTransition } from "react";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
@@ -11,9 +11,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import CvLanguageTabs from "@/components/admin/shared/cv/cv-language-tabs";
 import { api } from "@/trpc/react";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { getRowTextForLocale } from "@/lib/i18n/localized-display";
+import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
 import FormStatus from "@/components/admin/shared/form-status";
 import CvAddButton from "@/components/admin/shared/cv-add-button";
 import CvListItemActions from "@/components/admin/shared/cv-list-item-actions";
@@ -25,11 +25,15 @@ import {
 } from "@/components/ui/sortable";
 import { GripVertical } from "lucide-react";
 import type { Locale } from "@/i18n/config";
+import type { AppLanguage } from "@prisma/client";
 
 import { SoftSkillForm } from "./soft-skill-form";
 import { CvListSkeleton } from "./cv-list-skeleton";
 
-const SoftSkillsList: FC = () => {
+const SoftSkillsList: FC<{
+  languages: AppLanguage[];
+  displayLocale: Locale;
+}> = ({ languages, displayLocale }) => {
   const t = useTranslations("admin.forms.softSkill");
   const { data, isLoading } = api.cv.getMine.useQuery();
   const utils = api.useUtils();
@@ -44,6 +48,9 @@ const SoftSkillsList: FC = () => {
     data?.softSkills ?? [],
     (state, newItems: NonNullable<typeof data>["softSkills"]) => newItems,
   );
+
+  const [isPending, startTransition] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleReorder = useCallback(
     (newItems: NonNullable<typeof data>["softSkills"]) => {
@@ -66,6 +73,7 @@ const SoftSkillsList: FC = () => {
 
   const handleDelete = useCallback(
     (id: string) => {
+      setDeletingId(id);
       startTransition(async () => {
         setServerError(null);
         try {
@@ -75,15 +83,17 @@ const SoftSkillsList: FC = () => {
           setServerError(
             err instanceof Error ? err.message : t("deleteFailed"),
           );
+        } finally {
+          setDeletingId(null);
         }
       });
     },
     [remove, utils, t],
   );
 
-  if (isLoading || !data) return <CvListSkeleton />;
-
-  const defaultLocale = (data.profile?.defaultLocale as Locale) ?? "en";
+  if (isLoading || !data || languages.length === 0) {
+    return <CvListSkeleton />;
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -102,14 +112,16 @@ const SoftSkillsList: FC = () => {
                       <GripVertical className="size-4" />
                     </SortableItemHandle>
                     <p className="text-foreground text-sm">
-                      {getLocalizedText(
-                        skill.name,
-                        defaultLocale,
-                        defaultLocale,
+                      {getRowTextForLocale(
+                        localizedJsonToTextMap(skill.name, languages),
+                        languages,
+                        displayLocale,
                       )}
                     </p>
                   </div>
                   <CvListItemActions
+                    isPending={isPending}
+                    isDeleting={deletingId === skill.id}
                     isEditing={editingId === skill.id}
                     onEditToggle={() =>
                       setEditingId(editingId === skill.id ? null : skill.id)
@@ -139,11 +151,11 @@ const SoftSkillsList: FC = () => {
         >
           <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
             <DialogTitle>{editingId ? t("edit") : t("create")}</DialogTitle>
-            <CvLanguageTabs />
           </DialogHeader>
           {(editingId ?? creating) && (
             <SoftSkillForm
-              defaultLocale={defaultLocale}
+              key={editingId ?? "create"}
+              languages={languages}
               initial={
                 editingId
                   ? data.softSkills.find((s) => s.id === editingId)

@@ -1,18 +1,17 @@
-import { ModalWrapper } from "@/components/shared/modal-wrapper";
-import { SkillForm } from "@/features/skills/components/skill-form";
 import { getTranslations } from "next-intl/server";
-import { db } from "@/server/db";
+import { SkillForm } from "@/features/skills/components/skill-form";
+import { getSkillCreatePageData } from "@/features/skills/server/skill-queries";
+import { PageDialogWrapper } from "@/components/shared/page-container";
 
 export default async function NewSkillModal() {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
+  const [t, { initialData, languages }] = await Promise.all([
+    getTranslations("admin.skills"),
+    getSkillCreatePageData(),
+  ]);
 
-  const t = await getTranslations("admin.skills");
   return (
-    <ModalWrapper
-      title={t("addNew") || "Create Skill"}
-      description={t("createDescription")}
-    >
-      <SkillForm languages={languages} />
-    </ModalWrapper>
+    <PageDialogWrapper title={t("addNew")} description={t("createDescription")}>
+      <SkillForm initialData={initialData} languages={languages} />
+    </PageDialogWrapper>
   );
 }

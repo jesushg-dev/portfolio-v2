@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useOptimistic, useCallback, startTransition } from "react";
+import { useState, useOptimistic, useCallback, useTransition } from "react";
 import type { FC } from "react";
 
 import { useTranslations } from "next-intl";
@@ -12,7 +12,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import CvLanguageTabs from "@/components/admin/shared/cv/cv-language-tabs";
 import { api } from "@/trpc/react";
 import FormStatus from "@/components/admin/shared/form-status";
 import CvAddButton from "@/components/admin/shared/cv-add-button";
@@ -26,10 +25,15 @@ import {
 import { GripVertical } from "lucide-react";
 import { LanguageForm } from "./language-form";
 import { CvListSkeleton } from "./cv-list-skeleton";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { getRowTextForLocale } from "@/lib/i18n/localized-display";
+import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
 import type { Locale } from "@/i18n/config";
+import type { AppLanguage } from "@prisma/client";
 
-const LanguagesList: FC = () => {
+const LanguagesList: FC<{
+  languages: AppLanguage[];
+  displayLocale: Locale;
+}> = ({ languages, displayLocale }) => {
   const t = useTranslations("admin.forms.language");
   const { data, isLoading } = api.cv.getMine.useQuery();
   const utils = api.useUtils();
@@ -43,6 +47,9 @@ const LanguagesList: FC = () => {
     data?.languages ?? [],
     (state, newItems: NonNullable<typeof data>["languages"]) => newItems,
   );
+
+  const [isPending, startTransition] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleReorder = useCallback(
     (newItems: NonNullable<typeof data>["languages"]) => {
@@ -65,6 +72,7 @@ const LanguagesList: FC = () => {
 
   const handleDelete = useCallback(
     (id: string) => {
+      setDeletingId(id);
       startTransition(async () => {
         setServerError(null);
         try {
@@ -74,15 +82,17 @@ const LanguagesList: FC = () => {
           setServerError(
             err instanceof Error ? err.message : t("deleteFailed"),
           );
+        } finally {
+          setDeletingId(null);
         }
       });
     },
     [remove, utils, t],
   );
 
-  if (isLoading || !data) return <CvListSkeleton lines={2} />;
-
-  const defaultLocale = (data.profile?.defaultLocale as Locale) ?? "en";
+  if (isLoading || !data || languages.length === 0) {
+    return <CvListSkeleton lines={2} />;
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -102,22 +112,24 @@ const LanguagesList: FC = () => {
                     </SortableItemHandle>
                     <div>
                       <p className="text-foreground text-sm font-medium">
-                        {getLocalizedText(
-                          language.name,
-                          defaultLocale,
-                          defaultLocale,
+                        {getRowTextForLocale(
+                          localizedJsonToTextMap(language.name, languages),
+                          languages,
+                          displayLocale,
                         )}
                       </p>
                       <p className="text-muted-foreground text-xs">
-                        {getLocalizedText(
-                          language.level,
-                          defaultLocale,
-                          defaultLocale,
+                        {getRowTextForLocale(
+                          localizedJsonToTextMap(language.level, languages),
+                          languages,
+                          displayLocale,
                         )}
                       </p>
                     </div>
                   </div>
                   <CvListItemActions
+                    isPending={isPending}
+                    isDeleting={deletingId === language.id}
                     isEditing={editingId === language.id}
                     onEditToggle={() =>
                       setEditingId(
@@ -149,11 +161,10 @@ const LanguagesList: FC = () => {
         >
           <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
             <DialogTitle>{editingId ? t("edit") : t("create")}</DialogTitle>
-            <CvLanguageTabs />
           </DialogHeader>
           {(editingId ?? creating) && (
             <LanguageForm
-              defaultLocale={defaultLocale}
+              languages={languages}
               initial={
                 editingId
                   ? data.languages.find((l) => l.id === editingId)

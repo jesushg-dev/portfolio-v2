@@ -13,7 +13,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import CvLanguageTabs from "@/components/admin/shared/cv/cv-language-tabs";
 import { api } from "@/trpc/react";
 import FormStatus from "@/components/admin/shared/form-status";
 import CvAddButton from "@/components/admin/shared/cv-add-button";
@@ -26,13 +25,17 @@ import {
 } from "@/components/ui/sortable";
 import { GripVertical } from "lucide-react";
 import type { Locale } from "@/i18n/config";
+import type { AppLanguage } from "@prisma/client";
+import { getRowTextForLocale } from "@/lib/i18n/localized-display";
+import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
 import { EducationForm } from "./education-form";
 import { CvListSkeleton } from "./cv-list-skeleton";
-import { getLocalizedText } from "@/lib/i18n/localized";
 
-const EducationsList: FC = () => {
+const EducationsList: FC<{
+  languages: AppLanguage[];
+  displayLocale: Locale;
+}> = ({ languages, displayLocale }) => {
   const t = useTranslations("admin.forms.education");
-  const [, startTransition] = useTransition();
 
   const { data, isLoading } = api.cv.getMine.useQuery();
   const utils = api.useUtils();
@@ -47,6 +50,9 @@ const EducationsList: FC = () => {
     data?.educations ?? [],
     (state, newItems: NonNullable<typeof data>["educations"]) => newItems,
   );
+
+  const [isPending, startTransition] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleReorder = useCallback(
     (newItems: NonNullable<typeof data>["educations"]) => {
@@ -72,6 +78,7 @@ const EducationsList: FC = () => {
 
   const handleDelete = useCallback(
     (id: string) => {
+      setDeletingId(id);
       startTransition(async () => {
         setServerError(null);
         try {
@@ -82,15 +89,17 @@ const EducationsList: FC = () => {
           const msg = err instanceof Error ? err.message : t("deleteFailed");
           toast.error(msg);
           setServerError(msg);
+        } finally {
+          setDeletingId(null);
         }
       });
     },
     [remove, utils, t],
   );
 
-  if (isLoading || !data) return <CvListSkeleton lines={2} />;
-
-  const defaultLocale = (data.profile?.defaultLocale as Locale) ?? "en";
+  if (isLoading || !data || languages.length === 0) {
+    return <CvListSkeleton lines={2} />;
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -110,10 +119,10 @@ const EducationsList: FC = () => {
                     </SortableItemHandle>
                     <div>
                       <p className="text-foreground text-sm font-medium">
-                        {getLocalizedText(
-                          edu.degreeName,
-                          defaultLocale,
-                          defaultLocale,
+                        {getRowTextForLocale(
+                          localizedJsonToTextMap(edu.degreeName, languages),
+                          languages,
+                          displayLocale,
                         )}
                       </p>
                       <p className="text-muted-foreground text-xs">
@@ -122,6 +131,8 @@ const EducationsList: FC = () => {
                     </div>
                   </div>
                   <CvListItemActions
+                    isPending={isPending}
+                    isDeleting={deletingId === edu.id}
                     isEditing={editingId === edu.id}
                     onEditToggle={() =>
                       setEditingId(editingId === edu.id ? null : edu.id)
@@ -151,11 +162,11 @@ const EducationsList: FC = () => {
         >
           <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
             <DialogTitle>{editingId ? t("edit") : t("create")}</DialogTitle>
-            <CvLanguageTabs />
           </DialogHeader>
           {(editingId ?? creating) && (
             <EducationForm
-              defaultLocale={defaultLocale}
+              key={editingId ?? "create"}
+              languages={languages}
               initial={
                 editingId
                   ? data.educations.find((e) => e.id === editingId)

@@ -1,35 +1,33 @@
-import { notFound } from "next/navigation";
-import { db } from "@/server/db";
+import { getTranslations } from "next-intl/server";
 import { SkillForm } from "@/features/skills/components/skill-form";
+import { getSkillEditPageData } from "@/features/skills/server/skill-queries";
 
-interface Props {
-  params: Promise<{ id: string; locale: string }>;
-}
-
-export default async function EditSkillPage({ params }: Props) {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
-
+export default async function EditSkillPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
-
-  const skill = await db.skill.findUnique({
-    where: { id },
-    include: { SkillTranslation: true },
-  });
-
-  if (!skill) {
-    notFound();
-  }
-
+  const [t, pageData] = await Promise.all([
+    getTranslations("admin.skills"),
+    getSkillEditPageData(id),
+  ]);
+  if (!pageData) return null;
+  const { editorDto, languages } = pageData;
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Edit Skill</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("edit")}</h1>
         <p className="text-muted-foreground mt-1 text-sm">
-          Update an existing skill in your portfolio.
+          {t("editDescription")}
         </p>
       </div>
       <div className="mx-auto w-full max-w-3xl">
-        <SkillForm initialData={skill} languages={languages} />
+        <SkillForm
+          key={editorDto.id}
+          initialData={editorDto}
+          languages={languages}
+        />
       </div>
     </div>
   );

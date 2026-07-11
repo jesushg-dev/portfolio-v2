@@ -12,11 +12,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import CvLanguageTabs from "@/components/admin/shared/cv/cv-language-tabs";
 import { api } from "@/trpc/react";
 import FormStatus from "@/components/admin/shared/form-status";
 import CvAddButton from "@/components/admin/shared/cv-add-button";
 import CvListItemActions from "@/components/admin/shared/cv-list-item-actions";
+import type { AppLanguage } from "@prisma/client";
 import type { Locale } from "@/i18n/config";
 import {
   Sortable,
@@ -29,7 +29,10 @@ import { toast } from "sonner";
 import { ContactForm } from "./contact-form";
 import { CvListSkeleton } from "./cv-list-skeleton";
 
-const ContactsList: FC = () => {
+const ContactsList: FC<{
+  languages: AppLanguage[];
+  displayLocale: Locale;
+}> = ({ languages }) => {
   const t = useTranslations("admin.forms.contact");
   const { data, isLoading } = api.cv.getMine.useQuery();
   const utils = api.useUtils();
@@ -44,7 +47,8 @@ const ContactsList: FC = () => {
     (state, newItems: NonNullable<typeof data>["contacts"]) => newItems,
   );
 
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleReorder = useCallback(
     (newItems: NonNullable<typeof data>["contacts"]) => {
@@ -67,6 +71,7 @@ const ContactsList: FC = () => {
 
   const handleDelete = useCallback(
     (id: string) => {
+      setDeletingId(id);
       startTransition(async () => {
         setServerError(null);
         try {
@@ -75,15 +80,17 @@ const ContactsList: FC = () => {
           await utils.cv.getMine.invalidate();
         } catch {
           toast.error(t("deleteFailed"));
+        } finally {
+          setDeletingId(null);
         }
       });
     },
     [remove, utils, t],
   );
 
-  if (isLoading || !data) return <CvListSkeleton lines={2} />;
-
-  const defaultLocale = (data.profile?.defaultLocale as Locale) ?? "en";
+  if (isLoading || !data || languages.length === 0) {
+    return <CvListSkeleton lines={2} />;
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -109,6 +116,8 @@ const ContactsList: FC = () => {
                     </div>
                   </div>
                   <CvListItemActions
+                    isPending={isPending}
+                    isDeleting={deletingId === contact.id}
                     isEditing={editingId === contact.id}
                     onEditToggle={() =>
                       setEditingId(editingId === contact.id ? null : contact.id)
@@ -142,11 +151,10 @@ const ContactsList: FC = () => {
                 ? t("edit") || "Edit Contact"
                 : t("create") || "Add Contact"}
             </DialogTitle>
-            <CvLanguageTabs />
           </DialogHeader>
           {(editingId ?? creating) && (
             <ContactForm
-              defaultLocale={defaultLocale}
+              languages={languages}
               initial={
                 editingId
                   ? data.contacts.find((c) => c.id === editingId)

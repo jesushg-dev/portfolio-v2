@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { locales, type Locale } from "@/i18n/config";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 // ---------------------------------------------------------------------------
 // Locale metadata — kept in sync with next-intl config
@@ -243,14 +244,16 @@ export function LocalizedField(props: LocalizedFieldProps) {
           {/* Add language button */}
           {addableLanguages.length > 0 && (
             <div className="relative ml-2 shrink-0">
-              <button
+              <Button
+                variant="outline"
+                size="sm"
                 type="button"
                 onClick={() => setShowAddMenu((v) => !v)}
-                className="border-input text-muted-foreground hover:border-ring hover:text-foreground flex items-center gap-1 rounded-md border border-dashed px-2 py-1 text-xs"
+                className="h-7 border-dashed px-2 text-xs"
               >
-                <Plus className="h-3 w-3" />
+                <Plus className="mr-1 h-3 w-3" />
                 {t("addLanguage")}
-              </button>
+              </Button>
               {showAddMenu && (
                 <div className="border-border bg-popover absolute top-full right-0 z-10 mt-1 w-44 rounded-lg border shadow-lg">
                   {addableLanguages.map((lang) => (

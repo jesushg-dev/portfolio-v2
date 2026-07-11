@@ -1,10 +1,10 @@
 "use client";
-import type { AppLanguage, Certification } from "@prisma/client";
+import type { AppLanguage } from "@prisma/client";
 
-import { type FC, useTransition, useState, useMemo, useCallback } from "react";
+import { type FC, useTransition, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SkillPicker } from "@/components/admin/skill-picker";
-import { fillMissingTranslations } from "@/utils/form-translations";
 import {
   FormActions,
   FormContent,
@@ -25,41 +24,35 @@ import {
   FormCheckboxItem,
 } from "@/components/shared/form-root";
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
-
-const StackTypeSchema = z.enum([
-  "FRONTEND",
-  "BACKEND",
-  "MOBILE",
-  "DESKTOP",
-  "CYBERSECURITY",
-  "DEVOPS",
-  "SOFTSKILLS",
-  "TOOLS",
-]);
-
-interface CertificationInitialData extends Certification {
-  CertificationTranslation?: {
-    appLanguageId: string;
-    title: string;
-  }[];
-  CertificateSkill?: {
-    skillId: string;
-  }[];
-}
+import {
+  resolvePrimaryLanguage,
+  translationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
+import {
+  type CertificationEditorDTO,
+  type CertificationCreateFormDTO,
+} from "@/features/certifications/lib/certification-editor-dto";
+import { StackTypeSchema } from "@/features/portfolio/server/portfolio-admin-shared";
 
 interface CertificationFormProps {
-  initialData?: CertificationInitialData;
   languages: AppLanguage[];
+  initialData: CertificationEditorDTO | CertificationCreateFormDTO;
 }
 
 export const CertificationForm: FC<CertificationFormProps> = ({
   initialData,
   languages,
 }) => {
-  const isEditMode = !!initialData;
+  const isEditMode = "id" in initialData;
   const t = useTranslations("admin.forms.certification");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
 
   const certFormSchema = useMemo(
     () =>
@@ -72,41 +65,24 @@ export const CertificationForm: FC<CertificationFormProps> = ({
         image: z.string().optional().or(z.literal("")),
         type: z.array(StackTypeSchema),
         skillIds: z.array(z.string()),
-        translations: z
-          .array(
-            z
-              .object({
-                appLanguageId: z.string(),
-                title: z.string(),
-              })
-              .superRefine((val, ctx) => {
-                if (val.appLanguageId === "en") {
-                  if (!val.title || val.title.trim() === "") {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message: t("titleRequiredPrimary"),
-                      path: ["title"],
-                    });
-                  }
-                }
-              }),
-          )
-          .refine((val) => val.length >= 1, {
-            message: t("atLeastOneLanguage"),
+        translations: translationMapSchema(
+          z.object({
+            title: z.string(),
           }),
+          primaryLang?.id,
+          "title",
+          t("titleRequiredPrimary"),
+        ),
       }),
-    [t],
+    [primaryLang?.id, t],
   );
 
   type TCertForm = z.infer<typeof certFormSchema>;
 
-  const createCert = api.portfolioAdmin.createCertification.useMutation();
-  const updateCert = api.portfolioAdmin.updateCertification.useMutation();
-  const upsertTranslation =
-    api.portfolioAdmin.upsertCertificationTranslation.useMutation();
-  const syncSkills = api.portfolioAdmin.syncCertificationSkills.useMutation();
+  const createCert = api.certificationsAdmin.createItem.useMutation();
+  const updateCert = api.certificationsAdmin.updateItem.useMutation();
 
-  const { data: rawSkills = [] } = api.portfolioAdmin.getMySkills.useQuery();
+  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
   const utils = api.useUtils();
 
   const availableSkills = rawSkills.map((s) => ({
@@ -116,123 +92,53 @@ export const CertificationForm: FC<CertificationFormProps> = ({
     type: s.type,
   }));
 
-  const primaryLang = languages.find((l) => l.code === "en") ?? languages[0];
-
-  const defaultTranslations = fillMissingTranslations(
-    isEditMode ? initialData : {},
-    languages,
-  );
-
   const form = useForm<TCertForm>({
     resolver: zodResolver(certFormSchema),
-    defaultValues: {
-      id: isEditMode ? initialData.id : undefined,
-      company: isEditMode ? (initialData.company ?? "") : "",
-      issuedDate: isEditMode ? initialData.issuedDate : undefined,
-      url: isEditMode ? (initialData.url ?? "") : "",
-      idCredential: isEditMode ? (initialData.idCredential ?? "") : "",
-      image: isEditMode ? (initialData.image ?? "") : "",
-      type: isEditMode ? (initialData.type ?? []) : [],
-      skillIds: isEditMode
-        ? (initialData.CertificateSkill?.map((s) => s.skillId) ?? [])
-        : [],
-      translations: defaultTranslations,
-    },
+    defaultValues: initialData as TCertForm,
     mode: "onBlur",
   });
 
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "translations",
+  const { activeLangId, setActiveLangId } = useLocalizedForm({
+    languages,
+    form,
+    buildDefaultValues: () => initialData as TCertForm,
+    resourceId: "id" in initialData ? initialData.id : undefined,
   });
-
-  const [activeLangId, setActiveLangId] = useState<string>(
-    isEditMode
-      ? (fields[0]?.appLanguageId ?? languages[0]?.id ?? "")
-      : (primaryLang?.id ?? languages[0]?.id ?? ""),
-  );
-
-  const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
-  const activeLang = languages.find((l) => l.id === activeLangId);
 
   const onSubmit = useCallback(
     (values: TCertForm) => {
       startTransition(async () => {
         try {
+          const data = {
+            ...values,
+            issuedDate: values.issuedDate ?? undefined,
+            url: values.url ?? undefined,
+            idCredential: values.idCredential ?? undefined,
+            image: values.image ?? undefined,
+          };
           if (isEditMode && values.id) {
             await updateCert.mutateAsync({
               id: values.id,
-              company: values.company,
-              issuedDate: values.issuedDate ?? null,
-              url: values.url ?? null,
-              idCredential: values.idCredential ?? null,
-              image: values.image ?? null,
-              type: values.type,
+              ...data,
             });
-
-            await syncSkills.mutateAsync({
-              certificationId: values.id,
-              skillIds: values.skillIds,
-            });
-
-            await Promise.all(
-              values.translations
-                .filter((tr) => tr.title.trim() !== "")
-                .map((trans) =>
-                  upsertTranslation.mutateAsync({
-                    certificationId: values.id!,
-                    appLanguageId: trans.appLanguageId,
-                    title: trans.title,
-                  }),
-                ),
-            );
-
             toast.success(t("updatedSuccess"));
           } else {
-            await createCert.mutateAsync({
-              company: values.company,
-              issuedDate: values.issuedDate ?? undefined,
-              url: values.url?.trim() ? values.url.trim() : undefined,
-              idCredential: values.idCredential?.trim()
-                ? values.idCredential.trim()
-                : undefined,
-              image: values.image?.trim() ? values.image.trim() : undefined,
-              type: values.type,
-              skillIds: values.skillIds,
-              translations: values.translations,
-            });
+            await createCert.mutateAsync(data);
             toast.success(t("createdSuccess"));
           }
 
-          await utils.portfolioAdmin.getMyCertifications.invalidate();
+          await utils.certificationsAdmin.getMine.invalidate();
           router.back();
         } catch {
           toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
       });
     },
-    [
-      isEditMode,
-      updateCert,
-      syncSkills,
-      upsertTranslation,
-      createCert,
-      utils,
-      router,
-      t,
-    ],
+    [isEditMode, updateCert, createCert, utils, router, t],
   );
 
-  const isSaving =
-    createCert.isPending ||
-    updateCert.isPending ||
-    syncSkills.isPending ||
-    upsertTranslation.isPending;
-  const anyError =
-    createCert.error ??
-    updateCert.error ??
-    upsertTranslation.error ??
-    syncSkills.error;
+  const isSaving = createCert.isPending || updateCert.isPending;
+  const anyError = createCert.error ?? updateCert.error;
 
   return (
     <Form {...form}>
@@ -245,24 +151,32 @@ export const CertificationForm: FC<CertificationFormProps> = ({
         />
         <FormContent error={anyError}>
           <FormSection title={t("generalSection")}>
-            {activeIndex !== -1 && activeLang && (
-              <div className="mb-4 grid gap-4">
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.title`}
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("titleWithLanguage", {
-                        language: activeLang.name,
-                      })}
-                      inputId={`certification-title-${activeLang.code}`}
-                    >
-                      <Input {...field} />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "mb-4 grid gap-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.title`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("titleWithLanguage", {
+                          language: lang.name ?? lang.code,
+                        })}
+                        inputId={`certification-title-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
 
             <FormField
               control={form.control}

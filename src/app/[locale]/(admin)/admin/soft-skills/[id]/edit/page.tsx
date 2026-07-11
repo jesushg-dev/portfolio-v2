@@ -1,29 +1,20 @@
-import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { headers } from "next/headers";
-
 import { SoftSkillForm } from "@/features/soft-skills/components/soft-skill-form";
-import { auth } from "@/lib/auth";
-import { db } from "@/server/db";
+import { getSoftSkillEditPageData } from "@/features/soft-skills/server/soft-skill-queries";
 
-interface Props {
+export default async function EditSoftSkillPage({
+  params,
+}: {
   params: Promise<{ id: string }>;
-}
-
-export default async function EditSoftSkillPage({ params }: Props) {
+}) {
   const { id } = await params;
-  const session = await auth.api.getSession({ headers: await headers() });
-  const userId = session!.user.id;
-  const t = await getTranslations("admin.softSkills");
-
-  const [item, languages] = await Promise.all([
-    db.portfolioSoftSkill.findUnique({ where: { id } }),
-    db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+  const [t, pageData] = await Promise.all([
+    getTranslations("admin.softSkills"),
+    getSoftSkillEditPageData(id),
   ]);
 
-  if (item?.userId !== userId) {
-    notFound();
-  }
+  if (!pageData) return null;
+  const { editorDto, languages } = pageData;
 
   return (
     <div className="space-y-6">
@@ -34,7 +25,11 @@ export default async function EditSoftSkillPage({ params }: Props) {
         </p>
       </div>
       <div className="mx-auto w-full max-w-3xl">
-        <SoftSkillForm initialData={item} languages={languages} />
+        <SoftSkillForm
+          key={editorDto.id}
+          initialData={editorDto}
+          languages={languages}
+        />
       </div>
     </div>
   );

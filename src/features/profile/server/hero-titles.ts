@@ -1,12 +1,8 @@
-import type { PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 
-import { type Locale, locales } from "@/i18n/config";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { type Locale } from "@/i18n/config";
 
-import type { HeroTitlesUpsertSchema } from "./schemas";
-import type { z } from "zod";
-
-type DbClient = PrismaClient;
+type DbLike = PrismaClient | Prisma.TransactionClient;
 
 const heroTitleInclude = {
   translations: {
@@ -19,7 +15,7 @@ const heroTitleInclude = {
 export type HeroTitleEditorDTO = {
   titles: {
     order: number;
-    translationsByLangId: Record<
+    translations: Record<
       string,
       {
         text: string;
@@ -36,7 +32,7 @@ export type HeroTitleResolved = {
   }[];
 };
 
-export async function fetchHeroTitlesForUser(client: DbClient, userId: string) {
+export async function fetchHeroTitlesForUser(client: DbLike, userId: string) {
   return client.cvHeroTitle.findMany({
     where: { userId },
     orderBy: { order: "asc" },
@@ -50,7 +46,7 @@ export function mapHeroTitlesToEditorDto(
   return {
     titles: titles.map((title) => ({
       order: title.order,
-      translationsByLangId: Object.fromEntries(
+      translations: Object.fromEntries(
         title.translations.map((translation) => [
           translation.appLanguageId,
           { text: translation.text },
@@ -105,7 +101,7 @@ export function resolveHeroTitlesForLocale(
 }
 
 export async function getHeroTitlesEditorDto(
-  client: DbClient,
+  client: DbLike,
   userId: string,
 ): Promise<HeroTitleEditorDTO> {
   const titles = await fetchHeroTitlesForUser(client, userId);
@@ -113,7 +109,7 @@ export async function getHeroTitlesEditorDto(
 }
 
 export async function getHeroTitlesForLocale(
-  client: DbClient,
+  client: DbLike,
   userId: string,
   locale: Locale,
   defaultLocale?: Locale,
@@ -126,32 +122,11 @@ export async function getHeroTitlesForLocale(
   );
 }
 
-export async function upsertHeroTitlesFromEditor(
-  client: DbClient,
-  userId: string,
-  input: z.infer<typeof HeroTitlesUpsertSchema>,
-): Promise<HeroTitleEditorDTO> {
-  await client.$transaction(async (tx) => {
-    await tx.cvHeroTitle.deleteMany({ where: { userId } });
-
-    for (const title of [...input.titles].sort((a, b) => a.order - b.order)) {
-      await tx.cvHeroTitle.create({
-        data: {
-          userId,
-          order: title.order,
-          translations: {
-            create: title.translations.map((translation) => ({
-              appLanguageId: translation.appLanguageId,
-              text: translation.text,
-            })),
-          },
-        },
-      });
-    }
-  });
-
-  return getHeroTitlesEditorDto(client, userId);
-}
+export {
+  isLocale,
+  languageMapFromLocalized,
+  localizedFromLanguageMap,
+} from "@/lib/i18n/localized-json";
 
 export function splitAboutParagraphs(text: string): string[] {
   const trimmed = text.trim();
@@ -160,37 +135,4 @@ export function splitAboutParagraphs(text: string): string[] {
     .split(/\n\n+/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean);
-}
-
-export function isLocale(value: string): value is Locale {
-  return (locales as readonly string[]).includes(value);
-}
-
-export function localizedFromLanguageMap(
-  valuesByCode: Record<string, string>,
-  primaryCode: string,
-): { default: string; translations?: Record<string, string> } {
-  const defaultText = valuesByCode[primaryCode]?.trim() ?? "";
-  const translations = Object.fromEntries(
-    Object.entries(valuesByCode).filter(
-      ([code, value]) => code !== primaryCode && value.trim() !== "",
-    ),
-  );
-
-  return {
-    default: defaultText,
-    ...(Object.keys(translations).length > 0 ? { translations } : {}),
-  };
-}
-
-export function languageMapFromLocalized(
-  value: unknown,
-  languageCodes: string[],
-): Record<string, string> {
-  return Object.fromEntries(
-    languageCodes.map((code) => [
-      code,
-      getLocalizedText(value, isLocale(code) ? code : "en"),
-    ]),
-  );
 }

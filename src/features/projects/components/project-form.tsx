@@ -1,10 +1,10 @@
 "use client";
-import type { AppLanguage, Skill, Project } from "@prisma/client";
+import type { AppLanguage } from "@prisma/client";
 
-import { type FC, useTransition, useState, useCallback, useMemo } from "react";
+import { type FC, useTransition, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -32,51 +32,35 @@ import {
   FormSection,
 } from "@/components/shared/form-root";
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
-
-const StackTypeSchema = z.enum([
-  "FRONTEND",
-  "BACKEND",
-  "MOBILE",
-  "DESKTOP",
-  "CYBERSECURITY",
-  "DEVOPS",
-  "SOFTSKILLS",
-  "TOOLS",
-]);
-
-function optionalUrlValue(value: string | undefined): string | undefined {
-  const trimmed = value?.trim();
-  if (!trimmed) {
-    return undefined;
-  }
-  return trimmed;
-}
-
-interface ProjectInitialData extends Project {
-  ProjectTranslation?: {
-    appLanguageId: string;
-    title: string;
-    description: string;
-  }[];
-  ProjectSkill?: {
-    skillId: string;
-    skill?: Skill;
-  }[];
-}
+import {
+  resolvePrimaryLanguage,
+  titleDescriptionTranslationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
+import {
+  type ProjectCreateFormDTO,
+  type ProjectEditorDTO,
+} from "@/features/projects/lib/project-editor-dto";
+import { StackTypeSchema } from "@/lib/admin/portfolio-schemas";
 
 interface ProjectFormProps {
-  initialData?: ProjectInitialData;
   languages: AppLanguage[];
+  initialData: ProjectEditorDTO | ProjectCreateFormDTO;
 }
 
 export const ProjectForm: FC<ProjectFormProps> = ({
   initialData,
   languages,
 }) => {
-  const isEditMode = !!initialData;
+  const isEditMode = "id" in initialData;
   const t = useTranslations("admin.forms.project");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
 
   const projectFormSchema = useMemo(
     () =>
@@ -88,196 +72,74 @@ export const ProjectForm: FC<ProjectFormProps> = ({
         websiteUrl: z.string().url().optional().or(z.literal("")),
         isPrivate: z.boolean(),
         skillIds: z.array(z.string()),
-        translations: z
-          .array(
-            z
-              .object({
-                appLanguageId: z.string(),
-                title: z.string(),
-                description: z.string(),
-              })
-              .superRefine((val, ctx) => {
-                if (val.appLanguageId === "en") {
-                  if (!val.title || val.title.trim() === "") {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message: t("titleRequiredPrimary"),
-                      path: ["title"],
-                    });
-                  }
-                }
-              }),
-          )
-          .refine((val) => val.length >= 1, {
-            message: t("atLeastOneLanguage"),
-          }),
+        translations: titleDescriptionTranslationMapSchema(
+          primaryLang?.id,
+          t("titleRequiredPrimary"),
+        ),
       }),
-    [t],
+    [primaryLang?.id, t],
   );
 
   type TProjectForm = z.infer<typeof projectFormSchema>;
 
-  const createProject = api.portfolioAdmin.createProject.useMutation();
-  const updateProject = api.portfolioAdmin.updateProject.useMutation();
-  const upsertTranslation =
-    api.portfolioAdmin.upsertProjectTranslation.useMutation();
-  const syncSkills = api.portfolioAdmin.syncProjectSkills.useMutation();
+  const createProject = api.projectsAdmin.createItem.useMutation();
+  const updateProject = api.projectsAdmin.updateItem.useMutation();
 
-  const { data: rawSkills = [] } = api.portfolioAdmin.getMySkills.useQuery();
+  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
   const utils = api.useUtils();
 
-  const availableSkills = rawSkills.map((s) => ({
-    id: s.id,
-    title: s.title,
-    image: s.image,
-    type: s.type,
+  const availableSkills = rawSkills.map((skill) => ({
+    id: skill.id,
+    title: skill.title,
+    image: skill.image,
+    type: skill.type,
   }));
-
-  const primaryLang = languages.find((l) => l.code === "en") ?? languages[0];
-
-  const defaultTranslations = isEditMode
-    ? (() => {
-        const existingTranslations =
-          initialData.ProjectTranslation?.map((pt) => ({
-            appLanguageId: pt.appLanguageId,
-            title: pt.title,
-            description: pt.description,
-          })) ?? [];
-
-        const existingLangIds = new Set(
-          existingTranslations.map((tr) => tr.appLanguageId),
-        );
-        const missingLangs = languages.filter(
-          (l) => !existingLangIds.has(l.id),
-        );
-
-        return [
-          ...existingTranslations,
-          ...missingLangs.map((l) => ({
-            appLanguageId: l.id,
-            title: "",
-            description: "",
-          })),
-        ];
-      })()
-    : languages.map((l) => ({
-        appLanguageId: l.id,
-        title: "",
-        description: "",
-      }));
 
   const form = useForm<TProjectForm>({
     resolver: zodResolver(projectFormSchema),
-    defaultValues: (isEditMode
-      ? {
-          id: initialData.id,
-          image: initialData.image ?? "",
-          type: initialData.type,
-          githubUrl: initialData.githubUrl ?? "",
-          websiteUrl: initialData.websiteUrl ?? "",
-          isPrivate: initialData.isPrivate ?? false,
-          skillIds: initialData.ProjectSkill?.map((ps) => ps.skillId) ?? [],
-          translations: defaultTranslations,
-        }
-      : {
-          image: "",
-          type: "FRONTEND",
-          githubUrl: "",
-          websiteUrl: "",
-          isPrivate: false,
-          skillIds: [],
-          translations: defaultTranslations,
-        }) as TProjectForm,
+    defaultValues: initialData as TProjectForm,
     mode: "onBlur",
   });
 
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "translations",
+  const { activeLangId, setActiveLangId } = useLocalizedForm({
+    languages,
+    form,
+    buildDefaultValues: () => initialData as TProjectForm,
+    resourceId: "id" in initialData ? initialData.id : undefined,
   });
-
-  const [activeLangId, setActiveLangId] = useState<string>(
-    isEditMode
-      ? (fields[0]?.appLanguageId ?? languages[0]?.id ?? "")
-      : (primaryLang?.id ?? languages[0]?.id ?? ""),
-  );
-
-  const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
-  const activeLang = languages.find((l) => l.id === activeLangId);
 
   const onSubmit = useCallback(
     (values: TProjectForm) => {
       startTransition(async () => {
         try {
+          const data = {
+            ...values,
+            githubUrl: values.githubUrl ?? undefined,
+            websiteUrl: values.websiteUrl ?? undefined,
+          };
           if (isEditMode && values.id) {
             await updateProject.mutateAsync({
+              ...data,
               id: values.id,
-              image: values.image,
-              type: values.type,
-              githubUrl: optionalUrlValue(values.githubUrl) ?? null,
-              websiteUrl: optionalUrlValue(values.websiteUrl) ?? null,
-              isPrivate: values.isPrivate,
             });
-
-            await syncSkills.mutateAsync({
-              projectId: values.id,
-              skillIds: values.skillIds,
-            });
-
-            await Promise.all(
-              values.translations.map((trans) =>
-                upsertTranslation.mutateAsync({
-                  projectId: values.id!,
-                  appLanguageId: trans.appLanguageId,
-                  title: trans.title,
-                  description: trans.description,
-                }),
-              ),
-            );
-
             toast.success(t("updatedSuccess"));
           } else {
-            await createProject.mutateAsync({
-              image: values.image,
-              type: values.type,
-              githubUrl: optionalUrlValue(values.githubUrl),
-              websiteUrl: optionalUrlValue(values.websiteUrl),
-              isPrivate: values.isPrivate,
-              skillIds: values.skillIds,
-              translations: values.translations,
-            });
+            await createProject.mutateAsync(data);
             toast.success(t("createdSuccess"));
           }
 
-          await utils.portfolioAdmin.getMyProjects.invalidate();
+          await utils.projectsAdmin.getMine.invalidate();
           router.back();
         } catch {
           toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
       });
     },
-    [
-      isEditMode,
-      updateProject,
-      syncSkills,
-      upsertTranslation,
-      createProject,
-      utils,
-      router,
-      t,
-    ],
+    [isEditMode, updateProject, createProject, utils, router, t],
   );
 
-  const isSaving =
-    createProject.isPending ||
-    updateProject.isPending ||
-    syncSkills.isPending ||
-    upsertTranslation.isPending;
-  const anyError =
-    createProject.error ??
-    updateProject.error ??
-    upsertTranslation.error ??
-    syncSkills.error;
+  const isSaving = createProject.isPending || updateProject.isPending;
+  const anyError = createProject.error ?? updateProject.error;
 
   return (
     <Form {...form}>
@@ -290,38 +152,46 @@ export const ProjectForm: FC<ProjectFormProps> = ({
         />
         <FormContent error={anyError}>
           <FormSection title={t("generalSection")}>
-            {activeIndex !== -1 && activeLang && (
-              <div className="mb-4 grid gap-4">
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.title`}
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("titleWithLanguage", {
-                        language: activeLang.name,
-                      })}
-                      inputId={`project-title-${activeLang.code}`}
-                    >
-                      <Input {...field} />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.description`}
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("descriptionWithLanguage", {
-                        language: activeLang.name,
-                      })}
-                      inputId={`project-description-${activeLang.code}`}
-                    >
-                      <Textarea rows={4} {...field} />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "mb-4 grid gap-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.title`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("titleWithLanguage", {
+                          language: lang.name ?? lang.code,
+                        })}
+                        inputId={`project-title-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.description`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("descriptionWithLanguage", {
+                          language: lang.name ?? lang.code,
+                        })}
+                        inputId={`project-description-${lang.code}`}
+                      >
+                        <Textarea rows={4} {...field} />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
 
             <FormField
               control={form.control}

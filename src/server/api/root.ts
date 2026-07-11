@@ -1,24 +1,31 @@
 import { portfolioRouter } from "@/server/api/routers/portfolio";
-import { cvRouter } from "@/server/api/routers/cv";
-import { portfolioAdminRouter } from "@/server/api/routers/portfolio-admin";
-import { timelineAdminRouter } from "@/server/api/routers/timeline-admin";
-import { softSkillsAdminRouter } from "@/server/api/routers/soft-skills-admin";
+import { cvRouter } from "@/features/cv/server/cv.router";
+import { profileAdminRouter } from "@/features/profile/server/profile-admin.router";
+import { terminalRouter } from "@/features/terminal/server/terminal.router";
 import { contactRouter } from "@/server/api/routers/contact";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
-import { spotifyRouter } from "./routers/spotify";
-import { spotifyAdminRouter } from "./routers/spotify-admin";
+import { spotifyRouter } from "@/server/api/routers/spotify";
+import { spotifyAdminRouter } from "@/server/api/routers/spotify-admin";
+import { appLanguagesAdminRouter } from "@/features/portfolio/server/app-languages-admin.router";
+import { projectsAdminRouter } from "@/features/projects/server/projects-admin.router";
+import { servicesAdminRouter } from "@/features/services/server/services-admin.router";
+import { certificationsAdminRouter } from "@/features/certifications/server/certifications-admin.router";
+import { skillsAdminRouter } from "@/features/skills/server/skills-admin.router";
+import { softSkillsAdminRouter } from "@/features/soft-skills/server/soft-skills-admin.router";
+import { timelineAdminRouter } from "@/features/timeline/server/timeline-admin.router";
 
-/**
- * This is the primary router for your server.
- *
- * All routers added in /api/routers should be manually added here.
- */
 export const appRouter = createTRPCRouter({
   portfolio: portfolioRouter,
-  portfolioAdmin: portfolioAdminRouter,
+  appLanguagesAdmin: appLanguagesAdminRouter,
+  projectsAdmin: projectsAdminRouter,
+  servicesAdmin: servicesAdminRouter,
+  certificationsAdmin: certificationsAdminRouter,
+  skillsAdmin: skillsAdminRouter,
   timelineAdmin: timelineAdminRouter,
   softSkillsAdmin: softSkillsAdminRouter,
   cv: cvRouter,
+  profileAdmin: profileAdminRouter,
+  terminal: terminalRouter,
   spotify: spotifyRouter,
   spotifyAdmin: spotifyAdminRouter,
   contact: contactRouter,

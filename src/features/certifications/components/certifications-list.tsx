@@ -2,20 +2,22 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 import { api, type RouterOutputs } from "@/trpc/react";
 import { toast } from "sonner";
+import type { Locale } from "@/i18n/config";
+import type { AppLanguage } from "@prisma/client";
+import { getLocalizedFieldForLocale } from "@/lib/i18n/localized-display";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { useDataTable } from "@/hooks/use-data-table";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants, Button } from "@/components/ui/button";
 
-type CertificationRow =
-  RouterOutputs["portfolioAdmin"]["getMyCertifications"][number];
+type CertificationRow = RouterOutputs["certificationsAdmin"]["getMine"][number];
 
 interface SkillRow {
   id: string;
@@ -24,25 +26,28 @@ interface SkillRow {
 
 interface CertificationsListProps {
   initialCertifications: CertificationRow[];
+  languages: AppLanguage[];
+  locale: Locale;
 }
 
 export const CertificationsList: FC<CertificationsListProps> = ({
   initialCertifications,
+  languages,
+  locale,
 }) => {
   const t = useTranslations("admin.certifications");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const { data: certifications = initialCertifications } =
-    api.portfolioAdmin.getMyCertifications.useQuery(undefined, {
+    api.certificationsAdmin.getMine.useQuery(undefined, {
       initialData: initialCertifications,
     });
 
-  const { data: rawSkills = [] } = api.portfolioAdmin.getMySkills.useQuery();
+  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
 
-  const deleteCertification =
-    api.portfolioAdmin.deleteCertification.useMutation();
+  const deleteCertification = api.certificationsAdmin.deleteItem.useMutation();
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -51,7 +56,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
         try {
           await deleteCertification.mutateAsync({ id });
           toast.success(t("deleteSuccess") || "Deleted successfully");
-          await utils.portfolioAdmin.getMyCertifications.invalidate();
+          await utils.certificationsAdmin.getMine.invalidate();
         } catch {
           toast.error(t("deleteError"));
         } finally {
@@ -74,7 +79,13 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     () => [
       {
         id: "title",
-        accessorFn: (row) => row.CertificationTranslation?.[0]?.title ?? "",
+        accessorFn: (row) =>
+          getLocalizedFieldForLocale(
+            row.translations,
+            languages,
+            locale,
+            "title",
+          ),
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnTitle")} />
         ),
@@ -86,7 +97,12 @@ export const CertificationsList: FC<CertificationsListProps> = ({
         enableColumnFilter: true,
         cell: ({ row }) => (
           <p className="text-foreground font-medium">
-            {row.original.CertificationTranslation?.[0]?.title ?? t("untitled")}
+            {getLocalizedFieldForLocale(
+              row.original.translations,
+              languages,
+              locale,
+              "title",
+            ) || t("untitled")}
           </p>
         ),
       },
@@ -118,9 +134,8 @@ export const CertificationsList: FC<CertificationsListProps> = ({
       {
         id: "skills",
         accessorFn: (row) =>
-          row.CertificateSkill?.map(
-            (cs) => skillsById.get(cs.skillId)?.title ?? "",
-          )
+          row.skillIds
+            .map((skillId) => skillsById.get(skillId)?.title ?? "")
             .filter(Boolean)
             .join(", ") ?? "",
         header: ({ column }) => (
@@ -128,9 +143,9 @@ export const CertificationsList: FC<CertificationsListProps> = ({
         ),
         cell: ({ row }) => {
           const skillTitles =
-            row.original.CertificateSkill?.map(
-              (cs) => skillsById.get(cs.skillId)?.title ?? "",
-            ).filter(Boolean) ?? [];
+            row.original.skillIds
+              .map((skillId) => skillsById.get(skillId)?.title ?? "")
+              .filter(Boolean) ?? [];
           return (
             <p className="text-muted-foreground line-clamp-2 text-xs">
               {skillTitles.length > 0 ? skillTitles.join(", ") : "-"}
@@ -140,6 +155,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
       },
       {
         id: "actions",
+        size: 100,
         header: t("columnActions"),
         cell: ({ row }) => {
           const cert = row.original;
@@ -151,25 +167,27 @@ export const CertificationsList: FC<CertificationsListProps> = ({
               >
                 <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
               </Link>
-              {deletingId === cert.id ? (
-                <span className="text-destructive text-xs">
-                  {t("deleting")}
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => handleDelete(cert.id)}
-                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded p-1.5"
-                >
+
+              <Button
+                disabled={isPending || deletingId === cert.id}
+                variant="ghost"
+                size="icon"
+                type="button"
+                onClick={() => handleDelete(cert.id)}
+                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
+              >
+                {deletingId === cert.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
                   <Trash2 className="h-4 w-4" />
-                </button>
-              )}
+                )}
+              </Button>
             </div>
           );
         },
       },
     ],
-    [deletingId, handleDelete, skillsById, t],
+    [deletingId, handleDelete, isPending, languages, locale, skillsById, t],
   );
 
   const { table } = useDataTable({

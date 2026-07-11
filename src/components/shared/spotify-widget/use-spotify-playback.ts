@@ -34,11 +34,7 @@ function isValidNowPlaying(data: NowPlayingResponse): boolean {
 function isNowPlayingIdleResponse(
   data: NowPlayingResponse | { error: { status: number } } | undefined,
 ): boolean {
-  return (
-    data !== undefined &&
-    "error" in data &&
-    data.error.status === 204
-  );
+  return data !== undefined && "error" in data && data.error.status === 204;
 }
 
 function isTransientSpotifyError(error: SpotifyPlaybackError): boolean {
@@ -91,9 +87,9 @@ export function useSpotifyPlayback() {
   const [lastPlayback, setLastPlayback] = useState<SpotifyPlayback | null>(
     null,
   );
-  const [lastStoredContentId, setLastStoredContentId] = useState<
-    string | null
-  >(null);
+  const [lastStoredContentId, setLastStoredContentId] = useState<string | null>(
+    null,
+  );
 
   const nowPlayingQuery = api.spotify.getNowPlaying.useQuery(undefined, {
     staleTime: ETime.HALF_SECOND,

@@ -9,12 +9,14 @@ const TIMELINE_LOCALES = ["es", "en", "nl"] as const;
 
 type TimelineMineItem = {
   id: string;
-  title: unknown;
   organization: string;
   category: string;
   current: boolean;
   startDate: string;
+  translations: Record<string, { title: string; description: string }>;
 };
+
+type AppLanguageRow = { id: string; code: string };
 
 type FillTimelineFormOptions = {
   verifyInList?: boolean;
@@ -35,12 +37,34 @@ function trpcGetInput(procedure: string, input: unknown = null): string {
   )}`;
 }
 
-function extractLocalizedText(raw: unknown, locale: string): string {
-  if (!raw || typeof raw !== "object") return "";
-  const obj = raw as Record<string, unknown>;
-  const defaultText = typeof obj.default === "string" ? obj.default : "";
-  const translations = obj.translations as Record<string, string> | undefined;
-  return translations?.[locale] ?? defaultText;
+export function extractLocalizedText(
+  item: Pick<TimelineMineItem, "translations"> | undefined,
+  languages: AppLanguageRow[],
+  locale: string,
+  field: "title" | "description" = "title",
+): string {
+  if (!item) return "";
+
+  const language = languages.find((row) => row.code === locale);
+  if (!language) return "";
+
+  return item.translations[language.id]?.[field] ?? "";
+}
+
+export async function getAppLanguages(page: Page): Promise<AppLanguageRow[]> {
+  const response = await page.request.get(
+    trpcGetInput("appLanguagesAdmin.getAll"),
+  );
+  if (!response.ok()) {
+    throw new Error(
+      `appLanguagesAdmin.getAll failed: ${response.status()} ${await response.text()}`,
+    );
+  }
+
+  const payload = (await response.json()) as [
+    { result?: { data?: { json?: AppLanguageRow[] } } },
+  ];
+  return payload[0]?.result?.data?.json ?? [];
 }
 
 export function timelineListTitle(item: PortfolioTimelineItemFixture): string {
@@ -141,8 +165,10 @@ export async function fillTimelineItemForm(
 
   for (const locale of TIMELINE_LOCALES) {
     await page.locator(`#timeline-lang-${locale}`).click();
-    await page.locator("#timeline-title").fill(item.title[locale]);
-    await page.locator("#timeline-description").fill(item.description[locale]);
+    await page.locator(`#timeline-title-${locale}`).fill(item.title[locale]);
+    await page
+      .locator(`#timeline-description-${locale}`)
+      .fill(item.description[locale]);
   }
 
   await page.locator("#timeline-organization").fill(item.organization);
@@ -232,23 +258,18 @@ export async function getTimelineMine(page: Page): Promise<TimelineMineItem[]> {
 }
 
 export async function cleanupUserTimeline(page: Page): Promise<void> {
-  const items = await getTimelineMine(page);
-
-  for (const item of items) {
-    const deleteResponse = await page.request.post(
-      "/api/trpc/timelineAdmin.deleteItem?batch=1",
-      {
-        headers: { "content-type": "application/json" },
-        data: { "0": { json: { id: item.id } } },
+  const deleteResponse = await page.request.post(
+    `/api/trpc/timelineAdmin.deleteAll?batch=1`,
+    {
+      data: {
+        "0": { json: null },
       },
-    );
+    },
+  );
 
-    if (!deleteResponse.ok()) {
-      throw new Error(
-        `Failed to delete timeline item ${item.id}: ${deleteResponse.status()} ${await deleteResponse.text()}`,
-      );
-    }
+  if (!deleteResponse.ok()) {
+    throw new Error(
+      `Failed to cleanup cleanupUserTimeline: ${deleteResponse.status()} ${await deleteResponse.text()}`,
+    );
   }
 }
-
-export { portfolioTimeline, extractLocalizedText };

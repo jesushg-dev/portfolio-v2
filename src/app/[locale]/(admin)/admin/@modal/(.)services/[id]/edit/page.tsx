@@ -1,40 +1,29 @@
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-import { db } from "@/server/db";
 import { PageDialogWrapper } from "@/components/shared/page-container";
 import { ServiceForm } from "@/features/services/components/service-form";
+import { getServiceEditPageData } from "@/features/services/server/service-queries";
 
 export default async function EditServiceModal({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
-
   const { id } = await params;
-  const t = await getTranslations("admin.services");
+  const [t, pageData] = await Promise.all([
+    getTranslations("admin.services"),
+    getServiceEditPageData(id),
+  ]);
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) return null;
-
-  const service = await db.service.findUnique({
-    where: { id, userId: session.user.id },
-    include: {
-      ServiceTranslation: true,
-      ServiceSkill: true,
-    },
-  });
-
-  if (!service) notFound();
+  if (!pageData) return null;
+  const { editorDto, languages } = pageData;
 
   return (
     <PageDialogWrapper title={t("edit")} description={t("editDescription")}>
-      <ServiceForm initialData={service} languages={languages} />
+      <ServiceForm
+        key={editorDto.id}
+        initialData={editorDto}
+        languages={languages}
+      />
     </PageDialogWrapper>
   );
 }

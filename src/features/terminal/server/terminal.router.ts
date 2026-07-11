@@ -2,16 +2,47 @@ import "server-only";
 
 import { TRPCError } from "@trpc/server";
 import { type Prisma } from "@prisma/client";
+import { z } from "zod";
 
-import { type Locale } from "@/i18n/config";
+import { type Locale, locales } from "@/i18n/config";
 import { resolveStepsForLocale } from "@/features/terminal/lib/resolve";
 import type {
   TerminalDisplayDTO,
   TerminalEditorDTO,
   TerminalStepResolved,
-  TerminalUpsertInput,
 } from "@/features/terminal/lib/types";
-import { type db } from "@/server/db";
+import { translationMapEntries } from "@/lib/i18n/translation-map";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  tenantProcedure,
+} from "@/server/api/trpc";
+import type { db } from "@/server/db";
+
+type DbClient = typeof db;
+type DbLike = Prisma.TransactionClient | DbClient;
+
+const TerminalStepTranslationMapSchema = z.record(
+  z.string(),
+  z.object({
+    command: z.string(),
+    output: z.string(),
+  }),
+);
+
+const TerminalUpsertSchema = z.object({
+  username: z.string().min(1),
+  typingSpeed: z.number().int().positive().optional(),
+  delayBetweenCommands: z.number().int().nonnegative().optional(),
+  steps: z
+    .array(
+      z.object({
+        order: z.number().int().nonnegative(),
+        translations: TerminalStepTranslationMapSchema,
+      }),
+    )
+    .min(1),
+});
 
 const terminalInclude = {
   steps: {
@@ -28,36 +59,36 @@ type TerminalWithRelations = Prisma.CvTerminalGetPayload<{
   include: typeof terminalInclude;
 }>;
 
-type DbClient = typeof db;
-
 const DEFAULT_TERMINAL_TYPING_SPEED = 45;
 const DEFAULT_TERMINAL_DELAY = 1000;
 
-const mapTerminalToEditorDto = (
+function mapTerminalToEditorDto(
   terminal: TerminalWithRelations,
-): TerminalEditorDTO => ({
-  username: terminal.username,
-  typingSpeed: terminal.typingSpeed,
-  delayBetweenCommands: terminal.delayBetweenCommands,
-  steps: terminal.steps.map((step) => ({
-    id: step.id,
-    order: step.order,
-    translationsByLangId: Object.fromEntries(
-      step.translations.map((translation) => [
-        translation.appLanguageId,
-        {
-          command: translation.command,
-          output: translation.output,
-        },
-      ]),
-    ),
-  })),
-});
+): TerminalEditorDTO {
+  return {
+    username: terminal.username,
+    typingSpeed: terminal.typingSpeed,
+    delayBetweenCommands: terminal.delayBetweenCommands,
+    steps: terminal.steps.map((step) => ({
+      id: step.id,
+      order: step.order,
+      translations: Object.fromEntries(
+        step.translations.map((translation) => [
+          translation.appLanguageId,
+          {
+            command: translation.command,
+            output: translation.output,
+          },
+        ]),
+      ),
+    })),
+  };
+}
 
-const mapTerminalToResolvedSteps = (
+function mapTerminalToResolvedSteps(
   terminal: TerminalWithRelations,
-): TerminalStepResolved[] =>
-  terminal.steps.map((step) => ({
+): TerminalStepResolved[] {
+  return terminal.steps.map((step) => ({
     order: step.order,
     translations: step.translations.map((translation) => ({
       appLanguageId: translation.appLanguageId,
@@ -66,30 +97,32 @@ const mapTerminalToResolvedSteps = (
       output: translation.output,
     })),
   }));
+}
 
-const fetchTerminalForUser = async (
-  client: DbClient,
+async function fetchTerminalForUser(
+  client: DbLike,
   userId: string,
-): Promise<TerminalWithRelations | null> =>
-  client.cvTerminal.findUnique({
+): Promise<TerminalWithRelations | null> {
+  return client.cvTerminal.findUnique({
     where: { userId },
     include: terminalInclude,
   });
+}
 
-export const getTerminalEditorDto = async (
-  client: DbClient,
+async function getTerminalEditorDto(
+  client: DbLike,
   userId: string,
-): Promise<TerminalEditorDTO | null> => {
+): Promise<TerminalEditorDTO | null> {
   const terminal = await fetchTerminalForUser(client, userId);
   return terminal ? mapTerminalToEditorDto(terminal) : null;
-};
+}
 
-export const getTerminalDisplayDto = async (
-  client: DbClient,
+async function getTerminalDisplayDto(
+  client: DbLike,
   userId: string,
   locale: Locale,
   defaultLocale?: Locale,
-): Promise<TerminalDisplayDTO | null> => {
+): Promise<TerminalDisplayDTO | null> {
   const terminal = await fetchTerminalForUser(client, userId);
   if (!terminal || terminal.steps.length === 0) {
     return null;
@@ -108,13 +141,13 @@ export const getTerminalDisplayDto = async (
     typingSpeed: terminal.typingSpeed,
     delayBetweenCommands: terminal.delayBetweenCommands,
   };
-};
+}
 
-export const upsertTerminalFromEditor = async (
+async function upsertTerminal(
   client: DbClient,
   userId: string,
-  input: TerminalUpsertInput,
-): Promise<TerminalEditorDTO> => {
+  input: z.infer<typeof TerminalUpsertSchema>,
+): Promise<TerminalEditorDTO> {
   const terminal = await client.$transaction(async (tx) => {
     const upserted = await tx.cvTerminal.upsert({
       where: { userId },
@@ -138,12 +171,18 @@ export const upsertTerminalFromEditor = async (
     });
 
     for (const step of [...input.steps].sort((a, b) => a.order - b.order)) {
+      const translations = translationMapEntries(step.translations).filter(
+        (entry) => entry.command.trim() !== "" || entry.output.trim() !== "",
+      );
+
+      if (translations.length === 0) continue;
+
       await tx.cvTerminalStep.create({
         data: {
           terminalId: upserted.id,
           order: step.order,
           translations: {
-            create: step.translations.map((translation) => ({
+            create: translations.map((translation) => ({
               appLanguageId: translation.appLanguageId,
               command: translation.command,
               output: translation.output,
@@ -167,4 +206,27 @@ export const upsertTerminalFromEditor = async (
   }
 
   return mapTerminalToEditorDto(terminal);
-};
+}
+
+export const terminalRouter = createTRPCRouter({
+  getMine: protectedProcedure.query(async ({ ctx }) =>
+    getTerminalEditorDto(ctx.db, ctx.user.id),
+  ),
+
+  getPublic: tenantProcedure
+    .input(z.object({ locale: z.enum(locales) }))
+    .query(async ({ ctx, input }) =>
+      getTerminalDisplayDto(
+        ctx.db,
+        ctx.tenant.userId,
+        input.locale,
+        ctx.tenant.defaultLocale,
+      ),
+    ),
+
+  upsert: protectedProcedure
+    .input(TerminalUpsertSchema)
+    .mutation(async ({ ctx, input }) =>
+      upsertTerminal(ctx.db, ctx.user.id, input),
+    ),
+});

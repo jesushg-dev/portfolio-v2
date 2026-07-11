@@ -1,19 +1,17 @@
 import { getTranslations } from "next-intl/server";
 import { PageDialogWrapper } from "@/components/shared/page-container";
 import { ServiceForm } from "@/features/services/components/service-form";
-import { db } from "@/server/db";
+import { getServiceCreatePageData } from "@/features/services/server/service-queries";
 
 export default async function NewServiceModal() {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
-
-  const t = await getTranslations("admin.services");
+  const [t, { initialData, languages }] = await Promise.all([
+    getTranslations("admin.services"),
+    getServiceCreatePageData(),
+  ]);
 
   return (
-    <PageDialogWrapper
-      title={t("create") || "Create"}
-      description={t("createDescription")}
-    >
-      <ServiceForm languages={languages} />
+    <PageDialogWrapper title={t("create")} description={t("createDescription")}>
+      <ServiceForm initialData={initialData} languages={languages} />
     </PageDialogWrapper>
   );
 }

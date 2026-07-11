@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import { ObjectId } from "bson";
 import type {
   Certification,
   PrismaClient,
@@ -40,6 +39,8 @@ export async function seedPortfolioCertifications(
 ): Promise<Record<string, Certification>> {
   const result: Record<string, Certification> = {};
 
+  await prisma.certification.deleteMany({ where: { userId } });
+
   for (const certification of portfolioCertifications) {
     const skillKeys =
       certification.skillKeys.length > 0
@@ -56,10 +57,8 @@ export async function seedPortfolioCertifications(
       return skill.id;
     });
 
-    const created = await prisma.certification.upsert({
-      where: { id: new ObjectId().toString() },
-      update: {},
-      create: {
+    const created = await prisma.certification.create({
+      data: {
         userId,
         company: certification.company,
         issuedDate: certification.issuedDate,

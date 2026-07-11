@@ -27,9 +27,6 @@ import AuthShowcasePanel from "@/features/auth/components/auth-showcase-panel";
 
 const fieldInputClassName = "mt-1 h-11 shadow-sm";
 
-const socialButtonClassName =
-  "bg-foreground text-background hover:bg-foreground/90 flex w-full cursor-pointer items-center justify-center rounded-xl py-4 text-sm font-medium transition duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50";
-
 interface LoginFormProps {
   socialProviders?: {
     github?: boolean;
@@ -203,11 +200,12 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                   )}
                 >
                   {socialProviders?.google ? (
-                    <button
+                    <Button
                       type="button"
+                      variant="outline"
                       disabled={!!socialLoading}
                       onClick={() => void handleSocialSignIn("google")}
-                      className={socialButtonClassName}
+                      className="w-full rounded-xl py-6"
                       aria-label={
                         socialLoading === "google"
                           ? t("connectingGoogle")
@@ -215,14 +213,15 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                       }
                     >
                       <GoogleBrandIcon />
-                    </button>
+                    </Button>
                   ) : null}
                   {socialProviders?.github ? (
-                    <button
+                    <Button
                       type="button"
+                      variant="outline"
                       disabled={!!socialLoading}
                       onClick={() => void handleSocialSignIn("github")}
-                      className={socialButtonClassName}
+                      className="w-full rounded-xl py-6"
                       aria-label={
                         socialLoading === "github"
                           ? t("connectingGithub")
@@ -230,7 +229,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                       }
                     >
                       <GitHubBrandIcon />
-                    </button>
+                    </Button>
                   ) : null}
                 </div>
               </>

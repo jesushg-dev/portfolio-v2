@@ -6,24 +6,51 @@ import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
-  tenantProcedure,
 } from "@/server/api/trpc";
-import { LocalizedTextSchema } from "@/lib/i18n/localized";
-import { locales } from "@/i18n/config";
-import { TerminalUpsertSchema } from "@/features/terminal/server/schemas";
 import {
-  getTerminalDisplayDto,
-  getTerminalEditorDto,
-  upsertTerminalFromEditor,
-} from "@/features/terminal/server/terminal";
-import {
-  HeroTitlesUpsertSchema,
-  PortfolioHeaderUpsertSchema,
-} from "@/features/profile/server/schemas";
-import {
-  getHeroTitlesEditorDto,
-  upsertHeroTitlesFromEditor,
-} from "@/features/profile/server/hero-titles";
+  optionalTextMapToLocalizedJson,
+  textMapToLocalizedJson,
+  type TextTranslationMap,
+} from "@/lib/i18n/localized-text-map";
+
+type CvDbClient = Pick<PrismaClient, "appLanguage">;
+
+async function persistRequiredTextMap(
+  db: CvDbClient,
+  map: TextTranslationMap,
+): Promise<Prisma.InputJsonValue> {
+  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
+  const localized = textMapToLocalizedJson(map, languages);
+  if (!localized) {
+    throw new Error("Primary language text is required");
+  }
+  return localized as Prisma.InputJsonValue;
+}
+
+async function persistOptionalTextMap(
+  db: CvDbClient,
+  map: TextTranslationMap | undefined,
+): Promise<Prisma.InputJsonValue | undefined> {
+  if (!map) return undefined;
+  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
+  return optionalTextMapToLocalizedJson(map, languages) as
+    Prisma.InputJsonValue | undefined;
+}
+
+async function persistNullableTextMap(
+  db: CvDbClient,
+  map: TextTranslationMap | null | undefined,
+): Promise<Prisma.InputJsonValue | null | undefined> {
+  if (map === null) return null;
+  return persistOptionalTextMap(db, map ?? undefined);
+}
+
+const CvTextTranslationMapSchema = z.record(
+  z.string(),
+  z.object({
+    text: z.string(),
+  }),
+);
 
 const CvContactType = z.enum([
   "EMAIL",
@@ -143,11 +170,11 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         fullName: z.string().min(1),
-        degree: LocalizedTextSchema.optional(),
+        degree: CvTextTranslationMapSchema.optional(),
         photoUrl: z.string().url().nullable().optional(),
         backgroundImageUrl: z.string().url().nullable().optional(),
-        heroSummary: LocalizedTextSchema.nullable().optional(),
-        clientImageAlt: LocalizedTextSchema.nullable().optional(),
+        heroSummary: CvTextTranslationMapSchema.nullable().optional(),
+        clientImageAlt: CvTextTranslationMapSchema.nullable().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -155,8 +182,21 @@ export const cvRouter = createTRPCRouter({
         where: { userId: ctx.user.id },
       });
 
-      const degreeValue = (input.degree ??
-        existing?.degree ?? { default: "" }) as Prisma.InputJsonValue;
+      const persistedDegree = input.degree
+        ? await persistRequiredTextMap(ctx.db, input.degree)
+        : undefined;
+
+      const degreeValue = persistedDegree ??
+        (existing?.degree as Prisma.InputJsonValue) ?? { default: "" };
+
+      const heroSummaryValue = await persistNullableTextMap(
+        ctx.db,
+        input.heroSummary,
+      );
+      const clientImageAltValue = await persistNullableTextMap(
+        ctx.db,
+        input.clientImageAlt,
+      );
 
       return ctx.db.cvHeader.upsert({
         where: { userId: ctx.user.id },
@@ -166,117 +206,39 @@ export const cvRouter = createTRPCRouter({
           degree: degreeValue,
           photoUrl: input.photoUrl ?? null,
           backgroundImageUrl: input.backgroundImageUrl ?? null,
-          heroSummary: (input.heroSummary ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-          clientImageAlt: (input.clientImageAlt ?? undefined) as
-            Prisma.InputJsonValue | undefined,
+          heroSummary: heroSummaryValue,
+          clientImageAlt: clientImageAltValue,
         },
         update: {
           fullName: input.fullName,
-          ...(input.degree
-            ? { degree: input.degree as Prisma.InputJsonValue }
-            : {}),
+          ...(persistedDegree ? { degree: persistedDegree } : {}),
           photoUrl: input.photoUrl ?? null,
           ...(input.backgroundImageUrl !== undefined
             ? { backgroundImageUrl: input.backgroundImageUrl }
             : {}),
           ...(input.heroSummary !== undefined
-            ? { heroSummary: input.heroSummary as Prisma.InputJsonValue }
+            ? { heroSummary: heroSummaryValue }
             : {}),
           ...(input.clientImageAlt !== undefined
-            ? {
-                clientImageAlt: input.clientImageAlt as
-                  Prisma.InputJsonValue | undefined,
-              }
+            ? { clientImageAlt: clientImageAltValue }
             : {}),
         },
       });
-    }),
-
-  upsertPortfolioHeader: protectedProcedure
-    .input(PortfolioHeaderUpsertSchema)
-    .mutation(async ({ ctx, input }) => {
-      const existing = await ctx.db.cvHeader.findUnique({
-        where: { userId: ctx.user.id },
-      });
-
-      const degreeValue = (existing?.degree ?? {
-        default: "",
-      }) as Prisma.InputJsonValue;
-
-      return ctx.db.cvHeader.upsert({
-        where: { userId: ctx.user.id },
-        create: {
-          userId: ctx.user.id,
-          fullName: input.fullName,
-          degree: degreeValue,
-          photoUrl: input.photoUrl ?? null,
-          backgroundImageUrl: input.backgroundImageUrl ?? null,
-          heroSummary: (input.heroSummary ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-          clientImageAlt: (input.clientImageAlt ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-        },
-        update: {
-          fullName: input.fullName,
-          photoUrl: input.photoUrl ?? null,
-          backgroundImageUrl: input.backgroundImageUrl ?? null,
-          heroSummary: (input.heroSummary ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-          clientImageAlt: (input.clientImageAlt ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-        },
-      });
-    }),
-
-  getHeroTitlesMine: protectedProcedure.query(async ({ ctx }) => {
-    return getHeroTitlesEditorDto(ctx.db, ctx.user.id);
-  }),
-
-  upsertHeroTitles: protectedProcedure
-    .input(HeroTitlesUpsertSchema)
-    .mutation(async ({ ctx, input }) => {
-      return upsertHeroTitlesFromEditor(ctx.db, ctx.user.id, input);
     }),
 
   // ---------- About me ----------
   upsertAboutMe: protectedProcedure
-    .input(z.object({ aboutMe: LocalizedTextSchema }))
+    .input(z.object({ aboutMe: CvTextTranslationMapSchema }))
     .mutation(async ({ ctx, input }) => {
+      const aboutMe = await persistRequiredTextMap(ctx.db, input.aboutMe);
       return ctx.db.cvAboutMe.upsert({
         where: { userId: ctx.user.id },
         create: {
           userId: ctx.user.id,
-          aboutMe: input.aboutMe as Prisma.InputJsonValue,
+          aboutMe,
         },
-        update: { aboutMe: input.aboutMe as Prisma.InputJsonValue },
+        update: { aboutMe },
       });
-    }),
-
-  // ---------- Terminal (About section) ----------
-  getTerminalMine: protectedProcedure.query(async ({ ctx }) => {
-    return getTerminalEditorDto(ctx.db, ctx.user.id);
-  }),
-
-  getTerminalPublic: tenantProcedure
-    .input(
-      z.object({
-        locale: z.enum(locales),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      return getTerminalDisplayDto(
-        ctx.db,
-        ctx.tenant.userId,
-        input.locale,
-        ctx.tenant.defaultLocale,
-      );
-    }),
-
-  upsertTerminal: protectedProcedure
-    .input(TerminalUpsertSchema)
-    .mutation(async ({ ctx, input }) => {
-      return upsertTerminalFromEditor(ctx.db, ctx.user.id, input);
     }),
 
   // ---------- Contacts ----------
@@ -285,7 +247,7 @@ export const cvRouter = createTRPCRouter({
       z.object({
         type: CvContactType,
         value: z.string().min(1),
-        label: LocalizedTextSchema.optional(),
+        label: CvTextTranslationMapSchema.optional(),
         order: z.number().int().nonnegative().default(0),
       }),
     )
@@ -294,7 +256,7 @@ export const cvRouter = createTRPCRouter({
       return ctx.db.cvContact.create({
         data: {
           ...rest,
-          label: (label ?? undefined) as Prisma.InputJsonValue | undefined,
+          label: await persistOptionalTextMap(ctx.db, label),
           userId: ctx.user.id,
         },
       });
@@ -305,7 +267,7 @@ export const cvRouter = createTRPCRouter({
         id: z.string(),
         type: CvContactType,
         value: z.string().min(1),
-        label: LocalizedTextSchema.optional(),
+        label: CvTextTranslationMapSchema.optional(),
         order: z.number().int().nonnegative().default(0),
       }),
     )
@@ -319,7 +281,7 @@ export const cvRouter = createTRPCRouter({
         where: { id },
         data: {
           ...data,
-          label: (label ?? undefined) as Prisma.InputJsonValue | undefined,
+          label: await persistOptionalTextMap(ctx.db, label),
         },
       });
     }),
@@ -340,9 +302,9 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         institution: z.string().min(1),
-        degreeName: LocalizedTextSchema,
-        location: LocalizedTextSchema.optional(),
-        description: LocalizedTextSchema.optional(),
+        degreeName: CvTextTranslationMapSchema,
+        location: CvTextTranslationMapSchema.optional(),
+        description: CvTextTranslationMapSchema.optional(),
         startYear: z.number().int().optional(),
         endYear: z.number().int().optional(),
         dates: z.string().optional(),
@@ -354,11 +316,9 @@ export const cvRouter = createTRPCRouter({
       return ctx.db.cvEducation.create({
         data: {
           ...rest,
-          degreeName: degreeName as Prisma.InputJsonValue,
-          location: (location ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-          description: (description ?? undefined) as
-            Prisma.InputJsonValue | undefined,
+          degreeName: await persistRequiredTextMap(ctx.db, degreeName),
+          location: await persistOptionalTextMap(ctx.db, location),
+          description: await persistOptionalTextMap(ctx.db, description),
           userId: ctx.user.id,
         },
       });
@@ -368,9 +328,9 @@ export const cvRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         institution: z.string().min(1),
-        degreeName: LocalizedTextSchema,
-        location: LocalizedTextSchema.optional(),
-        description: LocalizedTextSchema.optional(),
+        degreeName: CvTextTranslationMapSchema,
+        location: CvTextTranslationMapSchema.optional(),
+        description: CvTextTranslationMapSchema.optional(),
         startYear: z.number().int().optional(),
         endYear: z.number().int().optional(),
         dates: z.string().optional(),
@@ -387,11 +347,9 @@ export const cvRouter = createTRPCRouter({
         where: { id },
         data: {
           ...data,
-          degreeName: degreeName as Prisma.InputJsonValue,
-          location: (location ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-          description: (description ?? undefined) as
-            Prisma.InputJsonValue | undefined,
+          degreeName: await persistRequiredTextMap(ctx.db, degreeName),
+          location: await persistOptionalTextMap(ctx.db, location),
+          description: await persistOptionalTextMap(ctx.db, description),
         },
       });
     }),
@@ -411,8 +369,8 @@ export const cvRouter = createTRPCRouter({
   createLanguage: protectedProcedure
     .input(
       z.object({
-        name: LocalizedTextSchema,
-        level: LocalizedTextSchema,
+        name: CvTextTranslationMapSchema,
+        level: CvTextTranslationMapSchema,
         order: z.number().int().nonnegative().default(0),
       }),
     )
@@ -421,8 +379,8 @@ export const cvRouter = createTRPCRouter({
       return ctx.db.cvLanguage.create({
         data: {
           ...rest,
-          name: name as Prisma.InputJsonValue,
-          level: level as Prisma.InputJsonValue,
+          name: await persistRequiredTextMap(ctx.db, name),
+          level: await persistRequiredTextMap(ctx.db, level),
           userId: ctx.user.id,
         },
       });
@@ -431,8 +389,8 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        name: LocalizedTextSchema,
-        level: LocalizedTextSchema,
+        name: CvTextTranslationMapSchema,
+        level: CvTextTranslationMapSchema,
         order: z.number().int().nonnegative().default(0),
       }),
     )
@@ -446,8 +404,8 @@ export const cvRouter = createTRPCRouter({
         where: { id },
         data: {
           ...data,
-          name: name as Prisma.InputJsonValue,
-          level: level as Prisma.InputJsonValue,
+          name: await persistRequiredTextMap(ctx.db, name),
+          level: await persistRequiredTextMap(ctx.db, level),
         },
       });
     }),
@@ -513,8 +471,8 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         company: z.string().min(1),
-        role: LocalizedTextSchema,
-        location: LocalizedTextSchema.optional(),
+        role: CvTextTranslationMapSchema,
+        location: CvTextTranslationMapSchema.optional(),
         dates: z.string().optional(),
         startDate: z.date().optional(),
         endDate: z.date().optional(),
@@ -524,7 +482,7 @@ export const cvRouter = createTRPCRouter({
         responsibilities: z
           .array(
             z.object({
-              text: LocalizedTextSchema,
+              text: CvTextTranslationMapSchema,
               order: z.number().int().nonnegative().default(0),
             }),
           )
@@ -533,24 +491,26 @@ export const cvRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { responsibilities, role, location, skillIds, ...rest } = input;
+      const persistedResponsibilities = await Promise.all(
+        responsibilities.map(async (r) => ({
+          order: r.order,
+          text: await persistRequiredTextMap(ctx.db, r.text),
+        })),
+      );
       return ctx.db.cvExperience.create({
         data: {
           ...rest,
           skills: null,
-          role: role as Prisma.InputJsonValue,
-          location: (location ?? undefined) as
-            Prisma.InputJsonValue | undefined,
+          role: await persistRequiredTextMap(ctx.db, role),
+          location: await persistOptionalTextMap(ctx.db, location),
           userId: ctx.user.id,
           CvExperienceSkill: skillIds.length
             ? { createMany: { data: skillIds.map((skillId) => ({ skillId })) } }
             : undefined,
-          responsibilities: responsibilities.length
+          responsibilities: persistedResponsibilities.length
             ? {
                 createMany: {
-                  data: responsibilities.map((r) => ({
-                    ...r,
-                    text: r.text as Prisma.InputJsonValue,
-                  })),
+                  data: persistedResponsibilities,
                 },
               }
             : undefined,
@@ -566,8 +526,8 @@ export const cvRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         company: z.string().min(1),
-        role: LocalizedTextSchema,
-        location: LocalizedTextSchema.optional(),
+        role: CvTextTranslationMapSchema,
+        location: CvTextTranslationMapSchema.optional(),
         dates: z.string().optional(),
         startDate: z.date().optional(),
         endDate: z.date().optional(),
@@ -577,7 +537,7 @@ export const cvRouter = createTRPCRouter({
         responsibilities: z
           .array(
             z.object({
-              text: LocalizedTextSchema,
+              text: CvTextTranslationMapSchema,
               order: z.number().int().nonnegative().default(0),
             }),
           )
@@ -590,6 +550,12 @@ export const cvRouter = createTRPCRouter({
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
+      const persistedResponsibilities = await Promise.all(
+        responsibilities.map(async (r) => ({
+          order: r.order,
+          text: await persistRequiredTextMap(ctx.db, r.text),
+        })),
+      );
       // Replace responsibilities atomically (within MongoDB constraints).
       await ctx.db.cvResponsibility.deleteMany({
         where: { experienceId: id },
@@ -607,16 +573,12 @@ export const cvRouter = createTRPCRouter({
         data: {
           ...data,
           skills: null,
-          role: role as Prisma.InputJsonValue,
-          location: (location ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-          responsibilities: responsibilities.length
+          role: await persistRequiredTextMap(ctx.db, role),
+          location: await persistOptionalTextMap(ctx.db, location),
+          responsibilities: persistedResponsibilities.length
             ? {
                 createMany: {
-                  data: responsibilities.map((r) => ({
-                    ...r,
-                    text: r.text as Prisma.InputJsonValue,
-                  })),
+                  data: persistedResponsibilities,
                 },
               }
             : undefined,
@@ -676,7 +638,7 @@ export const cvRouter = createTRPCRouter({
   createSoftSkill: protectedProcedure
     .input(
       z.object({
-        name: LocalizedTextSchema,
+        name: CvTextTranslationMapSchema,
         order: z.number().int().nonnegative().default(0),
       }),
     )
@@ -685,7 +647,7 @@ export const cvRouter = createTRPCRouter({
       return ctx.db.cvSoftSkill.create({
         data: {
           ...rest,
-          name: name as Prisma.InputJsonValue,
+          name: await persistRequiredTextMap(ctx.db, name),
           userId: ctx.user.id,
         },
       });
@@ -694,7 +656,7 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        name: LocalizedTextSchema,
+        name: CvTextTranslationMapSchema,
         order: z.number().int().nonnegative().default(0),
       }),
     )
@@ -706,7 +668,7 @@ export const cvRouter = createTRPCRouter({
       }
       return ctx.db.cvSoftSkill.update({
         where: { id },
-        data: { ...rest, name: name as Prisma.InputJsonValue },
+        data: { ...rest, name: await persistRequiredTextMap(ctx.db, name) },
       });
     }),
   deleteSoftSkill: protectedProcedure
@@ -725,7 +687,7 @@ export const cvRouter = createTRPCRouter({
   createAdditionalInfo: protectedProcedure
     .input(
       z.object({
-        text: LocalizedTextSchema,
+        text: CvTextTranslationMapSchema,
         order: z.number().int().nonnegative().default(0),
       }),
     )
@@ -734,7 +696,7 @@ export const cvRouter = createTRPCRouter({
       return ctx.db.cvAdditionalInfo.create({
         data: {
           ...rest,
-          text: text as Prisma.InputJsonValue,
+          text: await persistRequiredTextMap(ctx.db, text),
           userId: ctx.user.id,
         },
       });
@@ -743,7 +705,7 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        text: LocalizedTextSchema,
+        text: CvTextTranslationMapSchema,
         order: z.number().int().nonnegative().default(0),
       }),
     )
@@ -757,7 +719,7 @@ export const cvRouter = createTRPCRouter({
       }
       return ctx.db.cvAdditionalInfo.update({
         where: { id },
-        data: { ...rest, text: text as Prisma.InputJsonValue },
+        data: { ...rest, text: await persistRequiredTextMap(ctx.db, text) },
       });
     }),
   deleteAdditionalInfo: protectedProcedure

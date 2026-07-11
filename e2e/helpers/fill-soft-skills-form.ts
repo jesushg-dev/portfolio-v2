@@ -15,8 +15,7 @@ type SoftSkillMineItem = {
   icon: string;
   order: number;
   isVisible: boolean;
-  title: unknown;
-  description: unknown;
+  translations: Record<string, { title: string; description: string }>;
 };
 
 type SoftSkillsSection = {
@@ -48,6 +47,15 @@ export function softSkillListTitle(
   item: PortfolioSoftSkillItemFixture,
 ): string {
   return item.title.en;
+}
+
+export function softSkillHasTranslationTitle(
+  item: SoftSkillMineItem,
+  title: string,
+): boolean {
+  return Object.values(item.translations).some(
+    (translation) => translation.title === title,
+  );
 }
 
 function softSkillsNavLink(page: Page) {
@@ -216,9 +224,9 @@ export async function fillSoftSkillItemForm(
 
   for (const locale of SOFT_SKILL_LOCALES) {
     await page.locator(`#soft-skill-lang-${locale}`).click();
-    await page.locator("#soft-skill-title").fill(item.title[locale]);
+    await page.locator(`#soft-skill-title-${locale}`).fill(item.title[locale]);
     await page
-      .locator("#soft-skill-description")
+      .locator(`#soft-skill-description-${locale}`)
       .fill(item.description[locale]);
   }
 
@@ -316,22 +324,19 @@ export async function getSoftSkillsSection(
 }
 
 export async function cleanupUserSoftSkills(page: Page): Promise<void> {
-  const items = await getSoftSkillsMine(page);
-
-  for (const item of items) {
-    const deleteResponse = await page.request.post(
-      "/api/trpc/softSkillsAdmin.deleteItem?batch=1",
-      {
-        headers: { "content-type": "application/json" },
-        data: { "0": { json: { id: item.id } } },
+  const deleteResponse = await page.request.post(
+    `/api/trpc/softSkillsAdmin.deleteAll?batch=1`,
+    {
+      data: {
+        "0": { json: null },
       },
-    );
+    },
+  );
 
-    if (!deleteResponse.ok()) {
-      throw new Error(
-        `Failed to delete soft skill ${item.id}: ${deleteResponse.status()} ${await deleteResponse.text()}`,
-      );
-    }
+  if (!deleteResponse.ok()) {
+    throw new Error(
+      `Failed to cleanup cleanupUserSoftSkills: ${deleteResponse.status()} ${await deleteResponse.text()}`,
+    );
   }
 }
 

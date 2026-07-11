@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, type FC } from "react";
+import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,68 +8,96 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
 
-import { LocalizedTextSchema } from "@/lib/i18n/localized";
-import LocalizedTextField from "@/components/admin/shared/localized-text-field";
-import { Form } from "@/components/ui/form";
+import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
+import { Form, FormField } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   FormActions,
   FormContent,
+  FormItem,
   FormRoot,
   FormSection,
 } from "@/components/shared/form-root";
-
-import type { Locale } from "@/i18n/config";
-import { Button } from "@/components/ui/button";
+import {
+  resolvePrimaryLanguage,
+  textTranslationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
+import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
+import type { AppLanguage } from "@prisma/client";
 
 export const LanguageSchema = z.object({
-  name: LocalizedTextSchema,
-  level: LocalizedTextSchema,
+  name: z.record(z.string(), z.object({ text: z.string() })),
+  level: z.record(z.string(), z.object({ text: z.string() })),
 });
 
 export type LanguageInput = z.infer<typeof LanguageSchema>;
 
 export const LanguageForm: FC<{
-  defaultLocale: Locale;
+  languages: AppLanguage[];
   initial?: { id: string; name: unknown; level: unknown };
   onSuccess: () => void;
   onCancel: () => void;
-}> = ({ defaultLocale, initial, onSuccess, onCancel }) => {
+}> = ({ languages, initial, onSuccess, onCancel }) => {
   const t = useTranslations("admin.forms.language");
   const utils = api.useUtils();
   const create = api.cv.createLanguage.useMutation();
   const update = api.cv.updateLanguage.useMutation();
   const [isPending, startTransition] = useTransition();
 
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
+  const [activeLangId, setActiveLangId] = useState(
+    primaryLang?.id ?? languages[0]?.id ?? "",
+  );
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        name: textTranslationMapSchema(primaryLang?.id, t("name")),
+        level: textTranslationMapSchema(primaryLang?.id, t("level")),
+      }),
+    [primaryLang?.id, t],
+  );
+
   const form = useForm<LanguageInput>({
-    resolver: zodResolver(LanguageSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      name: (initial?.name as { default: string } | undefined) ?? {
-        default: "",
-      },
-      level: (initial?.level as { default: string } | undefined) ?? {
-        default: "",
-      },
+      name: initial
+        ? localizedJsonToTextMap(initial.name, languages)
+        : buildEmptyTranslationMap(languages, { text: "" }),
+      level: initial
+        ? localizedJsonToTextMap(initial.level, languages)
+        : buildEmptyTranslationMap(languages, { text: "" }),
     },
   });
 
-  const handleSubmit = (input: LanguageInput) => {
-    startTransition(async () => {
-      try {
-        if (initial?.id) {
-          await update.mutateAsync({ id: initial.id, ...input });
-        } else {
-          await create.mutateAsync(input);
+  const handleSubmit = useCallback(
+    (input: LanguageInput) => {
+      startTransition(async () => {
+        try {
+          if (initial?.id) {
+            await update.mutateAsync({ id: initial.id, ...input });
+          } else {
+            await create.mutateAsync(input);
+          }
+          await utils.cv.getMine.invalidate();
+          toast.success(t("savedSuccess") || "Saved successfully");
+          onSuccess();
+        } catch (err) {
+          toast.error(
+            err instanceof Error
+              ? err.message
+              : t("saveFailed") || "Save failed",
+          );
         }
-        await utils.cv.getMine.invalidate();
-        toast.success(t("savedSuccess") || "Saved successfully");
-        onSuccess();
-      } catch (err) {
-        toast.error(
-          err instanceof Error ? err.message : t("saveFailed") || "Save failed",
-        );
-      }
-    });
-  };
+      });
+    },
+    [create, initial, onSuccess, t, update, utils],
+  );
 
   return (
     <Form {...form}>
@@ -77,24 +105,50 @@ export const LanguageForm: FC<{
         id="cv-language-form"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
+        <GlobalLanguageSelector
+          languages={languages}
+          activeLangId={activeLangId}
+          onLangChange={setActiveLangId}
+          buttonIdPrefix="cv-language"
+        />
+
         <FormContent>
-          <FormSection title={"Language"}>
-            <LocalizedTextField
-              name="name"
-              control={form.control}
-              label={t("name")}
-              defaultLocale={defaultLocale}
-              required
-              inputId="cv-language-name"
-            />
-            <LocalizedTextField
-              name="level"
-              control={form.control}
-              label={t("level")}
-              defaultLocale={defaultLocale}
-              required
-              inputId="cv-language-level"
-            />
+          <FormSection title="Language">
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "space-y-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`name.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("name")}
+                        inputId={`cv-language-name-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`level.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("level")}
+                        inputId={`cv-language-level-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
           </FormSection>
         </FormContent>
         <FormActions

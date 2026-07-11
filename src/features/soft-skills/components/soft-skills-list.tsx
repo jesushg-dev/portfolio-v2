@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Plus, Pencil, Trash2, Settings2 } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { api } from "@/trpc/react";
@@ -15,35 +15,28 @@ import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { resolveSoftSkillIcon } from "@/features/soft-skills/lib/soft-skill-icons";
+import { getSoftSkillTranslationText } from "@/features/soft-skills/lib/soft-skill-editor-dto";
 import type { RouterOutputs } from "@/trpc/react";
+import type { AppLanguage } from "@prisma/client";
 
 type SoftSkillRow = RouterOutputs["softSkillsAdmin"]["getMine"][number];
 
 interface SoftSkillsListProps {
   initialItems: SoftSkillRow[];
+  languages: AppLanguage[];
   locale: Locale;
-}
-
-function extractLocalizedText(raw: unknown, locale: Locale): string {
-  if (!raw || typeof raw !== "object") return "";
-  const obj = raw as Record<string, unknown>;
-  const defaultText = typeof obj.default === "string" ? obj.default : "";
-  const translations = obj.translations as Record<string, string> | undefined;
-  if (translations?.[locale]) {
-    return translations[locale];
-  }
-  return defaultText;
 }
 
 export const SoftSkillsList: FC<SoftSkillsListProps> = ({
   initialItems,
+  languages,
   locale,
 }) => {
   const t = useTranslations("admin.softSkills");
 
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const { data: items = initialItems } = api.softSkillsAdmin.getMine.useQuery(
     undefined,
@@ -98,10 +91,17 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
         },
         enableColumnFilter: true,
         cell: ({ row }) => {
-          const titleText = extractLocalizedText(row.original.title, locale);
-          const descriptionText = extractLocalizedText(
-            row.original.description,
+          const titleText = getSoftSkillTranslationText(
+            row.original,
+            languages,
             locale,
+            "title",
+          );
+          const descriptionText = getSoftSkillTranslationText(
+            row.original,
+            languages,
+            locale,
+            "description",
           );
 
           return (
@@ -138,6 +138,7 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
       },
       {
         id: "actions",
+        size: 100,
         header: t("columnActions"),
         cell: ({ row }) => {
           const item = row.original;
@@ -145,30 +146,31 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/soft-skills/${item.id}/edit`}
-                className={buttonVariants({
-                  variant: "ghost",
-                  size: "icon-sm",
-                })}
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
               >
-                <Pencil className="h-4 w-4" />
-                <span className="sr-only">{t("edit")}</span>
+                <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
               </Link>
+
               <Button
-                type="button"
+                disabled={isPending || deletingId === item.id}
                 variant="ghost"
-                size="icon-sm"
-                disabled={deletingId === item.id}
+                size="icon"
+                type="button"
                 onClick={() => handleDelete(item.id)}
+                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
               >
-                <Trash2 className="text-destructive h-4 w-4" />
-                <span className="sr-only">{t("delete")}</span>
+                {deletingId === item.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
               </Button>
             </div>
           );
         },
       },
     ],
-    [deletingId, handleDelete, locale, t],
+    [deletingId, handleDelete, isPending, languages, locale, t],
   );
 
   const { table } = useDataTable({
@@ -180,39 +182,6 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
     manualFiltering: false,
     shallow: true,
   });
-
-  if (items.length === 0) {
-    return (
-      <div className="border-border bg-card flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed px-6 py-16 text-center">
-        <div className="space-y-1">
-          <p className="text-foreground text-base font-medium">
-            {t("emptyTitle")}
-          </p>
-          <p className="text-muted-foreground max-w-sm text-sm">
-            {t("emptyDescription")}
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <Link
-            href="/admin/soft-skills/settings"
-            id="soft-skills-settings"
-            className={buttonVariants({ variant: "outline" })}
-          >
-            <Settings2 className="mr-2 h-4 w-4" />
-            {t("sectionSettings")}
-          </Link>
-          <Link
-            href="/admin/soft-skills/new"
-            id="soft-skills-add"
-            className={buttonVariants()}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            {t("addNew")}
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative flex h-full min-h-[500px] flex-col">

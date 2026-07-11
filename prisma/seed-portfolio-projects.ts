@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import { ObjectId } from "bson";
 import type { PrismaClient, Project, Skill, StackType } from "@prisma/client";
 
 export interface PortfolioProjectSeed {
@@ -32,6 +31,8 @@ export async function seedPortfolioProjects(
 ): Promise<Record<string, Project>> {
   const result: Record<string, Project> = {};
 
+  await prisma.project.deleteMany({ where: { userId } });
+
   for (const project of portfolioProjects) {
     const skillIds = project.skillKeys.map((skillKey) => {
       const skill = skillsByKey[skillKey];
@@ -43,10 +44,8 @@ export async function seedPortfolioProjects(
       return skill.id;
     });
 
-    const created = await prisma.project.upsert({
-      where: { id: new ObjectId().toString() },
-      update: {},
-      create: {
+    const created = await prisma.project.create({
+      data: {
         userId,
         image: project.image,
         type: project.type,

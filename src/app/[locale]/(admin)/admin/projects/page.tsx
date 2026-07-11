@@ -1,11 +1,9 @@
 import type { FC } from "react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { headers } from "next/headers";
 
-import { auth } from "@/lib/auth";
-import { db } from "@/server/db";
 import { ProjectsList } from "@/features/projects/components/projects-list";
+import { getUserProjectsWithLanguages } from "@/features/projects/server/project-queries";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -14,19 +12,10 @@ interface Props {
 const ProjectsPage: FC<Props> = async ({ params }) => {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
-  const t = await getTranslations("admin.projects");
-
-  const session = await auth.api.getSession({ headers: await headers() });
-  const userId = session!.user.id;
-
-  const projects = await db.project.findMany({
-    where: { userId },
-    include: {
-      ProjectTranslation: { include: { language: true } },
-      ProjectSkill: { include: { Skill: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const [t, { data: initialProjects, languages }] = await Promise.all([
+    getTranslations("admin.projects"),
+    getUserProjectsWithLanguages(),
+  ]);
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -35,7 +24,11 @@ const ProjectsPage: FC<Props> = async ({ params }) => {
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
       <div className="min-h-0 flex-1">
-        <ProjectsList initialProjects={projects} />
+        <ProjectsList
+          initialProjects={initialProjects}
+          languages={languages}
+          locale={locale as Locale}
+        />
       </div>
     </div>
   );

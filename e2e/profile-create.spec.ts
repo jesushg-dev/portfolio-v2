@@ -39,27 +39,26 @@ test.describe("profile create", () => {
     expect(terminal?.steps).toHaveLength(portfolioHome.terminal.steps.length);
 
     const whoamiStep = terminal?.steps.find((step) =>
-      Object.values(step.translationsByLangId).some(
+      Object.values(step.translations).some(
         (translation) => translation.command === "whoami",
       ),
     );
     expect(whoamiStep).toBeDefined();
     expect(
-      Object.values(whoamiStep?.translationsByLangId ?? {}).some(
-        (translation) => translation.output.includes("jesus-hernandez"),
+      Object.values(whoamiStep?.translations ?? {}).some((translation) =>
+        translation.output.includes("jesus-hernandez"),
       ),
     ).toBe(true);
 
     const profileJsonStep = terminal?.steps.find((step) =>
-      Object.values(step.translationsByLangId).some((translation) =>
+      Object.values(step.translations).some((translation) =>
         translation.command.includes("profile.json"),
       ),
     );
     expect(profileJsonStep).toBeDefined();
     expect(
-      Object.values(profileJsonStep?.translationsByLangId ?? {}).some(
-        (translation) =>
-          translation.output.includes(portfolioCv.header.fullName),
+      Object.values(profileJsonStep?.translations ?? {}).some((translation) =>
+        translation.output.includes(portfolioCv.header.fullName),
       ),
     ).toBe(true);
   });

@@ -44,7 +44,8 @@ const SkillsList: FC = () => {
     (state, newItems: NonNullable<typeof data>["technicalSkills"]) => newItems,
   );
 
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleReorder = useCallback(
     (newItems: NonNullable<typeof data>["technicalSkills"]) => {
@@ -67,6 +68,7 @@ const SkillsList: FC = () => {
 
   const handleDelete = useCallback(
     (id: string) => {
+      setDeletingId(id);
       startTransition(async () => {
         setServerError(null);
         try {
@@ -75,6 +77,8 @@ const SkillsList: FC = () => {
           await utils.cv.getMine.invalidate();
         } catch {
           toast.error(t("deleteFailed"));
+        } finally {
+          setDeletingId(null);
         }
       });
     },
@@ -109,6 +113,8 @@ const SkillsList: FC = () => {
                     </div>
                   </div>
                   <CvListItemActions
+                    isPending={isPending}
+                    isDeleting={deletingId === section.id}
                     isEditing={editingId === section.id}
                     onEditToggle={() =>
                       setEditingId(editingId === section.id ? null : section.id)

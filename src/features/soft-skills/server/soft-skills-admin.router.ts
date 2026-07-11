@@ -1,25 +1,37 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { type PrismaClient, type Prisma } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 
-import { LocalizedTextSchema } from "@/lib/i18n/localized";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   DEFAULT_SOFT_SKILLS_POSTER_URL,
   DEFAULT_SOFT_SKILLS_VIDEO_URL,
 } from "@/features/soft-skills/lib/soft-skills-media";
 import { isSoftSkillIconKey } from "@/features/soft-skills/lib/soft-skill-icons";
+import {
+  mapSoftSkillToEditorDto,
+  mapSoftSkillsToEditorDto,
+} from "@/features/soft-skills/lib/soft-skill-editor-dto";
+import { resolvePrimaryLanguage } from "@/lib/i18n/localized-form";
+import { translationMapToLocalizedFields } from "@/lib/i18n/localized-persist";
 
 const SoftSkillsMediaTypeSchema = z.enum(["VIDEO", "IMAGE"]);
 
-const baseSoftSkillInput = z.object({
+const SoftSkillTranslationMapSchema = z.record(
+  z.string(),
+  z.object({
+    title: z.string(),
+    description: z.string(),
+  }),
+);
+
+const softSkillUpsertInput = z.object({
   icon: z.string().min(1).refine(isSoftSkillIconKey, {
     message: "Invalid icon key",
   }),
-  title: LocalizedTextSchema,
-  description: LocalizedTextSchema,
   isVisible: z.boolean().default(true),
   order: z.number().int().nonnegative().default(0),
+  translations: SoftSkillTranslationMapSchema,
 });
 
 const sectionInput = z.object({
@@ -45,10 +57,15 @@ async function ensureSection(userId: string, db: PrismaClient) {
 
 export const softSkillsAdminRouter = createTRPCRouter({
   getMine: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.portfolioSoftSkill.findMany({
-      where: { userId: ctx.user.id },
-      orderBy: [{ order: "asc" }, { createdAt: "asc" }],
-    });
+    const [items, languages] = await Promise.all([
+      ctx.db.portfolioSoftSkill.findMany({
+        where: { userId: ctx.user.id },
+        orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+      }),
+      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+    ]);
+
+    return mapSoftSkillsToEditorDto(items, languages);
   }),
 
   getSection: protectedProcedure.query(async ({ ctx }) => {
@@ -56,23 +73,37 @@ export const softSkillsAdminRouter = createTRPCRouter({
   }),
 
   createItem: protectedProcedure
-    .input(baseSoftSkillInput)
+    .input(softSkillUpsertInput)
     .mutation(async ({ ctx, input }) => {
-      const { title, description, ...rest } = input;
-      return ctx.db.portfolioSoftSkill.create({
+      const languages = await ctx.db.appLanguage.findMany({
+        orderBy: { code: "asc" },
+      });
+      const primaryLanguage = resolvePrimaryLanguage(languages);
+      const primaryCode = primaryLanguage?.code ?? "en";
+      const { title, description } = translationMapToLocalizedFields(
+        input.translations,
+        languages,
+        primaryCode,
+      );
+
+      const created = await ctx.db.portfolioSoftSkill.create({
         data: {
-          ...rest,
-          title: title as Prisma.InputJsonValue,
-          description: description as Prisma.InputJsonValue,
+          icon: input.icon,
+          isVisible: input.isVisible,
+          order: input.order,
+          title,
+          description,
           userId: ctx.user.id,
         },
       });
+
+      return mapSoftSkillToEditorDto(created, languages);
     }),
 
   updateItem: protectedProcedure
-    .input(baseSoftSkillInput.extend({ id: z.string() }))
+    .input(softSkillUpsertInput.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { id, title, description, ...data } = input;
+      const { id, translations, ...data } = input;
       const existing = await ctx.db.portfolioSoftSkill.findUnique({
         where: { id },
       });
@@ -81,14 +112,27 @@ export const softSkillsAdminRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      return ctx.db.portfolioSoftSkill.update({
+      const languages = await ctx.db.appLanguage.findMany({
+        orderBy: { code: "asc" },
+      });
+      const primaryLanguage = resolvePrimaryLanguage(languages);
+      const primaryCode = primaryLanguage?.code ?? "en";
+      const { title, description } = translationMapToLocalizedFields(
+        translations,
+        languages,
+        primaryCode,
+      );
+
+      const updated = await ctx.db.portfolioSoftSkill.update({
         where: { id },
         data: {
           ...data,
-          title: title as Prisma.InputJsonValue,
-          description: description as Prisma.InputJsonValue,
+          title,
+          description,
         },
       });
+
+      return mapSoftSkillToEditorDto(updated, languages);
     }),
 
   deleteItem: protectedProcedure

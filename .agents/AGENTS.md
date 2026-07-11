@@ -410,3 +410,184 @@ If inline logic is worth testing (e.g. slug → tab index, date formatting), mov
 ### ❌ NEVER disable tests or skip type-checking in CI to make tests pass
 
 Fix mocks, types, and fixtures properly. Both `pnpm test` and `pnpm type-check` run in CI (`.github/workflows/test.yml`).
+
+## tRPC admin routers — feature-based layout
+
+Portfolio admin procedures live under `src/features/{domain}/server/*-admin.router.ts`, not in `src/server/api/routers/`.
+
+| Namespace             | Router file                                                     |
+| --------------------- | --------------------------------------------------------------- |
+| `projectsAdmin`       | `features/projects/server/projects-admin.router.ts`             |
+| `servicesAdmin`       | `features/services/server/services-admin.router.ts`             |
+| `certificationsAdmin` | `features/certifications/server/certifications-admin.router.ts` |
+| `skillsAdmin`         | `features/skills/server/skills-admin.router.ts`                 |
+| `softSkillsAdmin`     | `features/soft-skills/server/soft-skills-admin.router.ts`       |
+| `timelineAdmin`       | `features/timeline/server/timeline-admin.router.ts`             |
+| `appLanguagesAdmin`   | `features/portfolio/server/app-languages-admin.router.ts`       |
+
+Convention per domain: `getMine`, `createItem`, `updateItem`, `deleteItem`. Register new routers in `src/server/api/root.ts`.
+
+### Router-only helpers — colocate, do not split
+
+If helper functions/schemas are **only used by one tRPC router**, keep them **in that router file** (private `async function` / `const` schema at the top). Do not create a sibling `*-persist.ts`, `*-localized.ts`, or thin re-export adapter unless a **second** router or Server Component imports it.
+
+```tsx
+// ✅ CORRECT — persist helpers live in cv.router.ts
+async function persistRequiredTextMap(db, map) {
+  /* ... */
+}
+
+// ❌ WRONG — cv-localized-persist.ts imported only by cv.router.ts
+```
+
+## Admin forms — DTOs, queries, and direct mutations
+
+Portfolio admin forms follow a **single-shape, no double-mapping** architecture. Reference implementation: `certifications`.
+
+### Layer responsibilities
+
+| Layer                  | Location                                     | Purpose                                                                   |
+| ---------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
+| Types + Prisma mappers | `features/{domain}/lib/*-editor-dto.ts`      | `*EditorDTO`, `*CreateFormDTO`, `map*ToEditorDto`, `buildEmpty*CreateDto` |
+| Server page queries    | `features/{domain}/server/*-queries.ts`      | Auth, DB fetch, map to DTO; used by RSC pages only                        |
+| tRPC router            | `features/{domain}/server/*-admin.router.ts` | Mutations + `getMine`; imports mappers from `lib/*-editor-dto.ts`         |
+| Client form            | `features/{domain}/components/*-form.tsx`    | Zod + react-hook-form; receives `initialData` from server                 |
+
+Shared auth helper: `src/lib/admin/get-authenticated-user-id.ts`.
+
+### ❌ NEVER add pass-through mappers
+
+Do **not** create helpers whose only job is reshaping data the form already has:
+
+```tsx
+// ❌ WRONG — pointless indirection
+export function toProjectMutationData(values, mode) {
+  return { image: values.image, type: values.type, ... };
+}
+await createProject.mutateAsync(toProjectMutationData(values, "create"));
+
+// ❌ WRONG — separate DB + auth boilerplate in every page
+const session = await auth.api.getSession({ headers: await headers() });
+const project = await db.project.findUnique({ ... });
+const editorDto = mapProjectToEditorDto(project, languages);
+
+// ❌ WRONG — normalizeOptionalString / toFormOptionalString round-trips
+githubUrl: normalizeOptionalString(values.githubUrl, "create");
+```
+
+### ✅ CORRECT — one DTO shape end-to-end
+
+1. **Mapper in `lib/*-editor-dto.ts`** outputs the same shape the form uses (`url: certification.url ?? ""`, not `string | null`).
+2. **Query in `server/*-queries.ts`** encapsulates page data loading:
+
+```tsx
+// features/certifications/server/certification-queries.ts
+export async function getCertificationEditorDto(id: string) {
+  /* auth + db + map */
+}
+export async function buildCertificationCreateDto() {
+  /* empty create DTO */
+}
+export async function getUserCertificationsWithLanguages() {
+  /* list page */
+}
+```
+
+3. **Page stays thin** — one `Promise.all` for translations + page data; list pages call `setRequestLocale` first:
+
+```tsx
+const { locale } = await params;
+setRequestLocale(locale as Locale);
+const [t, { initialData, languages }] = await Promise.all([
+  getTranslations("admin.certifications"),
+  getCertificationCreatePageData(),
+]);
+```
+
+4. **No wrapper helpers** — call `buildEmptyTranslationMap` / `mergeTranslationMap` directly; do not add `createEmptyTitleDescriptionTranslationMap`, `createEmptyTextTranslationMap`, `mergeProjectTranslationMap`, or `getAppLanguages` indirection layers. Use `db.appLanguage.findMany({ orderBy: { code: "asc" } })` inline in queries and routers. Keep `localized-text-map.ts` only for Prisma JSON ↔ text-map conversions (`localizedJsonToTextMap`, `textMapToLocalizedJson`), not empty-map factories.
+
+5. **Form submits values directly** — coerce optional fields with `?? undefined` (not `=== "" ? undefined`), and dates inline in `onSubmit` when tRPC expects `Date`:
+
+```tsx
+const data = {
+  ...values,
+  url: values.url ?? undefined,
+};
+await createCert.mutateAsync(data);
+```
+
+6. **Create/edit page data** lives in `get*CreatePageData()` / `get*EditPageData()` — each returns `{ initialData | editorDto, languages }` in one call; never export separate `get*Languages()` or duplicate language fetches in the page.
+
+### Form component contract
+
+- Props: `initialData: *EditorDTO | *CreateFormDTO` (required) + `languages`
+- Edit mode: `"id" in initialData` — not `Boolean(initialData)` or optional `initialData?`
+- `defaultValues: initialData as TForm` + `useLocalizedForm({ buildDefaultValues: () => initialData as TForm, resourceId: "id" in initialData ? initialData.id : undefined })`
+- Never import `features/*/server/*` from `"use client"` files
+
+### Timeline exception
+
+When the form shape differs from the list/API DTO (date strings, `{ url }[]` images), define `TimelineFormDTO` in `lib/timeline-editor-dto.ts` and expose `mapTimelineToFormDto` + `getTimelineFormDto` in queries. Still no client-side Prisma mappers.
+
+## i18n — editor rows vs display locale
+
+Do not mix form/editor concerns with list display in one module.
+
+| Module                              | Purpose                                                                                                   |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `src/lib/i18n/editor-rows.ts`       | `LanguageRef` — shared app-language reference type                                                        |
+| `src/lib/i18n/translation-map.ts`   | `TranslationMap`, `mergeTranslationMap`, `buildEmptyTranslationMap` — form/editor translation maps        |
+| `src/lib/i18n/localized-display.ts` | `getTitleDescriptionForLocale`, `getLocalizedFieldForLocale` — resolve text for active UI locale in lists |
+| `src/lib/i18n/localized-form.ts`    | Zod map schemas (`translationMapSchema`) and completeness for admin forms                                 |
+
+## Admin create/edit pages — server-built `initialData`
+
+Never pass inline helpers like `defaultTranslations={emptyXTranslations(languages)}` in JSX. Never leave create forms without `initialData`.
+
+**Create (Server Component):**
+
+```tsx
+const [t, { initialData, languages }] = await Promise.all([
+  getTranslations("admin.projects"),
+  getProjectCreatePageData(),
+]);
+
+<ProjectForm initialData={initialData} languages={languages} />;
+```
+
+**Edit:** `getProjectEditPageData(id)` returns `{ editorDto, languages } | null` in one call.
+
+Forms accept `initialData: EditorDTO | CreateFormDTO` only — no separate `defaultTranslations` prop. Use `"id" in initialData` for edit vs create mode.
+
+## Dynamic edit routes — form remount (`[id]/edit`)
+
+When generating or modifying a Server Component page that renders a client form with `initialData` from a dynamic route (`app/**/[id]/edit/page.tsx` or similar):
+
+1. **Always** pass `key={item.id}` (or `key={id}`) to the client form so React remounts when switching items without leaving the layout. Do not assume navigation alone remounts the form within the same dynamic segment.
+2. If the form uses `react-hook-form`, avoid static `defaultValues` derived from props that can change without remount. Prefer `defaultValues` as a function (sync or async) or a defensive `useEffect` with `form.reset()` tied to the resource id, in addition to `key`.
+3. For multilanguage fields, do not conditionally unmount inactive language `FormField`s — hide them with CSS to preserve focus and scroll when switching tabs.
+4. Apply this to all portfolio admin forms with the same pattern: CvExperience, CvEducation, CvHeroTitle, Project, Service, Certification, TimelineItem, PortfolioSoftSkill.
+
+## Multilanguage normalization lives in the backend (tRPC), not the client
+
+1. No function that transforms between Prisma `Json` shape (`{ default, translations }`) and form shape may be imported in a `"use client"` file. Code under `features/*/server/` must only be imported from tRPC routers, route handlers, or Server Components.
+2. tRPC procedures (`getMine`, `createItem`, `updateItem`, etc.) expose/receive editor DTOs ready for forms (`translations` as a `TranslationMap`, not raw Prisma `Json`). Mapping to/from Prisma happens in the router mutation or in `lib/*-editor-dto.ts` mappers.
+3. **Prisma ↔ DTO mappers live in `features/{domain}/lib/*-editor-dto.ts`**, not in `server/*-editor.ts`. Page-specific DB + auth orchestration lives in `features/{domain}/server/*-queries.ts`. Do not split the same mapper across both files.
+4. List/table display must resolve text for the **active UI locale** (`getTitleDescriptionForLocale`, `getSoftSkillTranslationText`, etc.) — never hardcode `translations[0]`.
+
+## Admin multilanguage forms — `useLocalizedForm`
+
+For admin forms with a `translations` map and `GlobalLanguageSelector`, use the shared hook instead of duplicating `activeLangId` state and reset-on-`resourceId` logic.
+
+| Layer                                  | Location                                      |
+| -------------------------------------- | --------------------------------------------- |
+| Pure helpers (rows, completeness, Zod) | `src/lib/i18n/localized-form.ts`              |
+| Client hook                            | `src/hooks/admin/use-localized-form.ts`       |
+| Feature form                           | `src/features/{domain}/components/*-form.tsx` |
+
+1. Build create/edit data via `get*CreatePageData()` / `get*EditPageData()` from `*-queries.ts`. Pass the full object as `initialData`; never assemble translation rows in `"use client"` or pass a separate `defaultTranslations` prop.
+2. Pass `resourceId: "id" in initialData ? initialData.id : undefined` so the hook resets when navigating between `[id]/edit` routes (in addition to `key={id}` on the page).
+3. Use `translationMapSchema` / `titleDescriptionTranslationMapSchema` in the Zod schema instead of inline `superRefine` blocks.
+4. Optional: pass `completenessFields` and `copyFields` to wire `statusByLangId` and `copyFieldsFromPrimary` on `GlobalLanguageSelector`.
+5. Do **not** put the hook inside a feature folder — it is cross-feature admin infrastructure. Forms with a different shape (e.g. `profile-hero-form`, per-locale record maps) keep their own logic.
+6. Never import `features/*/server/*` from `"use client"` files; `initialData` arrives from Server Component pages only.

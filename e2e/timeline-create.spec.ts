@@ -5,6 +5,7 @@ import {
   cleanupUserTimeline,
   extractLocalizedText,
   fillTimelineFromFixture,
+  getAppLanguages,
   getTimelineMine,
 } from "./helpers/fill-timeline-form";
 
@@ -28,7 +29,10 @@ test.describe("timeline create", () => {
     await page.goto("/admin");
     await fillTimelineFromFixture(page);
 
-    const items = await getTimelineMine(page);
+    const [items, languages] = await Promise.all([
+      getTimelineMine(page),
+      getAppLanguages(page),
+    ]);
     expect(items).toHaveLength(portfolioTimeline.items.length);
 
     const studyItem = items.find(
@@ -43,7 +47,7 @@ test.describe("timeline create", () => {
 
     const imagemaker = items.find((row) => row.organization === "Imagemaker");
     expect(imagemaker).toBeDefined();
-    expect(extractLocalizedText(imagemaker?.title, "en")).toBe(
+    expect(extractLocalizedText(imagemaker, languages, "en", "title")).toBe(
       "Senior Software Engineer",
     );
 

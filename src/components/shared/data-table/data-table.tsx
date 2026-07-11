@@ -44,6 +44,12 @@ export function DataTable<TData>({
                     colSpan={header.colSpan}
                     style={{
                       ...getColumnPinningStyle({ column: header.column }),
+                      width:
+                        header.column.getSize() !== 150
+                          ? header.column.getSize()
+                          : undefined,
+                      minWidth: header.column.columnDef.minSize,
+                      maxWidth: header.column.columnDef.maxSize,
                     }}
                   >
                     {header.isPlaceholder
@@ -69,6 +75,12 @@ export function DataTable<TData>({
                       key={cell.id}
                       style={{
                         ...getColumnPinningStyle({ column: cell.column }),
+                        width:
+                          cell.column.getSize() !== 150
+                            ? cell.column.getSize()
+                            : undefined,
+                        minWidth: cell.column.columnDef.minSize,
+                        maxWidth: cell.column.columnDef.maxSize,
                       }}
                     >
                       {flexRender(

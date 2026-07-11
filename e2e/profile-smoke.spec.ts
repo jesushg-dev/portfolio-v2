@@ -26,7 +26,7 @@ test.describe("profile smoke", () => {
     const heroTitles = await getHeroTitlesMine(page);
     expect(heroTitles.titles).toHaveLength(1);
     expect(
-      Object.values(heroTitles.titles[0]?.translationsByLangId ?? {}).some(
+      Object.values(heroTitles.titles[0]?.translations ?? {}).some(
         (translation) => translation.text === title.en,
       ),
     ).toBe(true);

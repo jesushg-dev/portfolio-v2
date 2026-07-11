@@ -2,19 +2,22 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 import { api, type RouterOutputs } from "@/trpc/react";
 import { toast } from "sonner";
+import type { Locale } from "@/i18n/config";
+import type { AppLanguage } from "@prisma/client";
+import { getTitleDescriptionForLocale } from "@/lib/i18n/localized-display";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { useDataTable } from "@/hooks/use-data-table";
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants, Button } from "@/components/ui/button";
 
-type ServiceRow = RouterOutputs["portfolioAdmin"]["getMyServices"][number];
+type ServiceRow = RouterOutputs["servicesAdmin"]["getMine"][number];
 
 interface SkillRow {
   id: string;
@@ -23,22 +26,28 @@ interface SkillRow {
 
 interface ServicesListProps {
   initialServices: ServiceRow[];
+  languages: AppLanguage[];
+  locale: Locale;
 }
 
-export const ServicesList: FC<ServicesListProps> = ({ initialServices }) => {
+export const ServicesList: FC<ServicesListProps> = ({
+  initialServices,
+  languages,
+  locale,
+}) => {
   const t = useTranslations("admin.services");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const { data: services = initialServices } =
-    api.portfolioAdmin.getMyServices.useQuery(undefined, {
+    api.servicesAdmin.getMine.useQuery(undefined, {
       initialData: initialServices,
     });
 
-  const { data: rawSkills = [] } = api.portfolioAdmin.getMySkills.useQuery();
+  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
 
-  const deleteService = api.portfolioAdmin.deleteService.useMutation();
-  const [, startTransition] = useTransition();
+  const deleteService = api.servicesAdmin.deleteItem.useMutation();
+  const [isPending, startTransition] = useTransition();
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -47,7 +56,7 @@ export const ServicesList: FC<ServicesListProps> = ({ initialServices }) => {
         try {
           await deleteService.mutateAsync({ id });
           toast.success(t("deleteSuccess") || "Deleted successfully");
-          await utils.portfolioAdmin.getMyServices.invalidate();
+          await utils.servicesAdmin.getMine.invalidate();
         } catch {
           toast.error(t("deleteError"));
         } finally {
@@ -70,7 +79,13 @@ export const ServicesList: FC<ServicesListProps> = ({ initialServices }) => {
     () => [
       {
         id: "title",
-        accessorFn: (row) => row.ServiceTranslation?.[0]?.title ?? "",
+        accessorFn: (row) =>
+          getTitleDescriptionForLocale(
+            row.translations,
+            languages,
+            locale,
+            "title",
+          ),
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnTitle")} />
         ),
@@ -82,10 +97,19 @@ export const ServicesList: FC<ServicesListProps> = ({ initialServices }) => {
         enableColumnFilter: true,
         cell: ({ row }) => {
           const title =
-            row.original.ServiceTranslation?.[0]?.title ?? t("untitled");
+            getTitleDescriptionForLocale(
+              row.original.translations,
+              languages,
+              locale,
+              "title",
+            ) || t("untitled");
           const description =
-            row.original.ServiceTranslation?.[0]?.description ??
-            t("noTranslation");
+            getTitleDescriptionForLocale(
+              row.original.translations,
+              languages,
+              locale,
+              "description",
+            ) || t("noTranslation");
 
           return (
             <div className="space-y-0.5">
@@ -118,7 +142,8 @@ export const ServicesList: FC<ServicesListProps> = ({ initialServices }) => {
       {
         id: "skills",
         accessorFn: (row) =>
-          row.ServiceSkill?.map((ss) => skillsById.get(ss.skillId)?.title ?? "")
+          row.skillIds
+            .map((skillId) => skillsById.get(skillId)?.title ?? "")
             .filter(Boolean)
             .join(", ") ?? "",
         header: ({ column }) => (
@@ -126,9 +151,9 @@ export const ServicesList: FC<ServicesListProps> = ({ initialServices }) => {
         ),
         cell: ({ row }) => {
           const skillTitles =
-            row.original.ServiceSkill?.map(
-              (ss) => skillsById.get(ss.skillId)?.title ?? "",
-            ).filter(Boolean) ?? [];
+            row.original.skillIds
+              .map((skillId) => skillsById.get(skillId)?.title ?? "")
+              .filter(Boolean) ?? [];
 
           return (
             <p className="text-muted-foreground line-clamp-2 text-xs">
@@ -139,6 +164,7 @@ export const ServicesList: FC<ServicesListProps> = ({ initialServices }) => {
       },
       {
         id: "actions",
+        size: 100,
         header: t("columnActions"),
         cell: ({ row }) => {
           const service = row.original;
@@ -150,25 +176,27 @@ export const ServicesList: FC<ServicesListProps> = ({ initialServices }) => {
               >
                 <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
               </Link>
-              {deletingId === service.id ? (
-                <span className="text-destructive text-xs">
-                  {t("deleting")}
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => handleDelete(service.id)}
-                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded p-1.5"
-                >
+
+              <Button
+                disabled={isPending || deletingId === service.id}
+                variant="ghost"
+                size="icon"
+                type="button"
+                onClick={() => handleDelete(service.id)}
+                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
+              >
+                {deletingId === service.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
                   <Trash2 className="h-4 w-4" />
-                </button>
-              )}
+                )}
+              </Button>
             </div>
           );
         },
       },
     ],
-    [deletingId, handleDelete, skillsById, t],
+    [deletingId, handleDelete, isPending, languages, locale, skillsById, t],
   );
 
   const { table } = useDataTable({

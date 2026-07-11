@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useTransition, type FC } from "react";
+import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,8 +8,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
 
-import { LocalizedTextSchema } from "@/lib/i18n/localized";
-import LocalizedTextField from "@/components/admin/shared/localized-text-field";
+import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
 import { SkillPicker } from "@/components/admin/skill-picker";
 import {
   Sortable,
@@ -21,6 +20,7 @@ import { GripVertical } from "lucide-react";
 import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormActions,
@@ -30,18 +30,26 @@ import {
   FormRoot,
   FormSection,
 } from "@/components/shared/form-root";
-
-import type { Locale } from "@/i18n/config";
+import {
+  resolvePrimaryLanguage,
+  textTranslationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
+import {
+  localizedJsonToTextMap,
+  TextTranslationMapSchema,
+} from "@/lib/i18n/localized-text-map";
+import type { AppLanguage } from "@prisma/client";
 
 export const ResponsibilitySchema = z.object({
-  text: LocalizedTextSchema,
+  text: z.record(z.string(), z.object({ text: z.string() })),
   order: z.number().int().nonnegative(),
 });
 
 export const ExperienceSchema = z.object({
   company: z.string().min(1),
-  role: LocalizedTextSchema,
-  location: LocalizedTextSchema.optional(),
+  role: z.record(z.string(), z.object({ text: z.string() })),
+  location: TextTranslationMapSchema.optional(),
   dates: z.string().optional(),
   current: z.boolean(),
   skillIds: z.array(z.string()),
@@ -63,29 +71,59 @@ type ExperienceInitial = {
 };
 
 export const ExperienceForm: FC<{
-  defaultLocale: Locale;
+  languages: AppLanguage[];
   initial?: ExperienceInitial;
   onSuccess: () => void;
   onCancel: () => void;
-}> = ({ defaultLocale, initial, onSuccess, onCancel }) => {
+}> = ({ languages, initial, onSuccess, onCancel }) => {
   const t = useTranslations("admin.forms.experience");
   const utils = api.useUtils();
   const create = api.cv.createExperience.useMutation();
   const update = api.cv.updateExperience.useMutation();
   const [isPending, startTransition] = useTransition();
 
-  const { data: availableSkills = [] } =
-    api.portfolioAdmin.getMySkills.useQuery();
+  const { data: availableSkills = [] } = api.skillsAdmin.getMine.useQuery();
+
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
+  const [activeLangId, setActiveLangId] = useState(
+    primaryLang?.id ?? languages[0]?.id ?? "",
+  );
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        company: z.string().min(1),
+        role: textTranslationMapSchema(primaryLang?.id, t("role")),
+        location: TextTranslationMapSchema.optional(),
+        dates: z.string().optional(),
+        current: z.boolean(),
+        skillIds: z.array(z.string()),
+        responsibilities: z.array(
+          z.object({
+            text: textTranslationMapSchema(
+              primaryLang?.id,
+              t("responsibility", { n: 1 }),
+            ),
+            order: z.number().int().nonnegative(),
+          }),
+        ),
+      }),
+    [primaryLang?.id, t],
+  );
 
   const form = useForm<ExperienceInput>({
-    resolver: zodResolver(ExperienceSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       company: initial?.company ?? "",
-      role: (initial?.role as { default: string } | undefined) ?? {
-        default: "",
-      },
-      location:
-        (initial?.location as { default: string } | undefined) ?? undefined,
+      role: initial
+        ? localizedJsonToTextMap(initial.role, languages)
+        : buildEmptyTranslationMap(languages, { text: "" }),
+      location: initial?.location
+        ? localizedJsonToTextMap(initial.location, languages)
+        : buildEmptyTranslationMap(languages, { text: "" }),
       dates: initial?.dates ?? "",
       current: initial?.current ?? false,
       skillIds: initial?.CvExperienceSkill?.map((row) => row.skillId) ?? [],
@@ -93,7 +131,7 @@ export const ExperienceForm: FC<{
         initial?.responsibilities
           ?.sort((a, b) => a.order - b.order)
           .map((r, index) => ({
-            text: (r.text as { default: string }) ?? { default: "" },
+            text: localizedJsonToTextMap(r.text, languages),
             order: index,
           })) ?? [],
     },
@@ -134,6 +172,13 @@ export const ExperienceForm: FC<{
         id="cv-experience-form"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
+        <GlobalLanguageSelector
+          languages={languages}
+          activeLangId={activeLangId}
+          onLangChange={setActiveLangId}
+          buttonIdPrefix="cv-experience"
+        />
+
         <FormContent>
           <FormSection title={t("company")}>
             <div className="grid grid-cols-2 gap-4">
@@ -160,22 +205,41 @@ export const ExperienceForm: FC<{
               />
             </div>
 
-            <LocalizedTextField
-              name="role"
-              control={form.control}
-              label={t("role")}
-              defaultLocale={defaultLocale}
-              required
-              inputId="experience-role"
-            />
-
-            <LocalizedTextField
-              name="location"
-              control={form.control}
-              label={t("location")}
-              defaultLocale={defaultLocale}
-              inputId="experience-location"
-            />
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "space-y-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`role.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("role")}
+                        inputId={`experience-role-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`location.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("location")}
+                        inputId={`experience-location-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
 
             <FormField
               control={form.control}
@@ -235,23 +299,41 @@ export const ExperienceForm: FC<{
                             <GripVertical className="size-4" />
                           </SortableItemHandle>
                           <div className="flex-1">
-                            <LocalizedTextField
-                              name={`responsibilities.${idx}.text`}
-                              control={form.control}
-                              label={t("responsibility", { n: idx + 1 })}
-                              defaultLocale={defaultLocale}
-                              required
-                              multiline
-                              inputId={`experience-responsibility-${idx}`}
-                            />
+                            {languages.map((lang) => {
+                              const isActive = lang.id === activeLangId;
+                              return (
+                                <div
+                                  key={lang.id}
+                                  className={isActive ? "block" : "hidden"}
+                                  aria-hidden={!isActive}
+                                >
+                                  <FormField
+                                    control={form.control}
+                                    name={`responsibilities.${idx}.text.${lang.id}.text`}
+                                    render={({ field: textField }) => (
+                                      <FormItem
+                                        label={t("responsibility", {
+                                          n: idx + 1,
+                                        })}
+                                        inputId={`experience-responsibility-${idx}-${lang.code}`}
+                                      >
+                                        <Textarea {...textField} rows={3} />
+                                      </FormItem>
+                                    )}
+                                  />
+                                </div>
+                              );
+                            })}
                           </div>
-                          <button
+                          <Button
+                            variant="ghost"
+                            size="sm"
                             type="button"
                             onClick={() => remove(idx)}
-                            className="text-muted-foreground hover:text-destructive mt-8 text-xs font-medium transition-colors"
+                            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive mt-8 h-8 text-xs"
                           >
                             {t("remove")}
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </SortableItem>
@@ -259,16 +341,20 @@ export const ExperienceForm: FC<{
                 </div>
               </SortableContent>
             </Sortable>
-            <button
+            <Button
               id="experience-add-responsibility"
+              variant="outline"
               type="button"
               onClick={() =>
-                append({ text: { default: "" }, order: fields.length })
+                append({
+                  text: buildEmptyTranslationMap(languages, { text: "" }),
+                  order: fields.length,
+                })
               }
-              className="border-border bg-background text-foreground hover:bg-muted mt-4 inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium shadow-sm transition-colors"
+              className="mt-4"
             >
               {t("addResponsibility")}
-            </button>
+            </Button>
           </FormSection>
         </FormContent>
         <FormActions

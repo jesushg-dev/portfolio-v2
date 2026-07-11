@@ -934,7 +934,9 @@
         "updateFailed": "No se pudo actualizar la habilidad blanda",
         "createFailed": "No se pudo crear la habilidad blanda",
         "titleRequiredPrimary": "El título es obligatorio para el idioma principal",
-        "atLeastOneLanguage": "Se requiere al menos un idioma"
+        "atLeastOneLanguage": "Se requiere al menos un idioma",
+        "copyFromPrimary": "Copiar desde {language}",
+        "unsavedChangesConfirm": "Tienes cambios sin guardar. ¿Salir de todos modos?"
       },
       "softSkillsSection": {
         "title": "Fondo de la sección",
@@ -1227,6 +1229,7 @@
       "emptyDescription": "Crea tu primera habilidad blanda o ejecuta el seed del portafolio.",
       "deleteSuccess": "Habilidad blanda eliminada.",
       "deleteError": "No se pudo eliminar la habilidad blanda.",
+      "deleting": "Eliminando...",
       "untitled": "Sin título",
       "visible": "Visible",
       "hidden": "Oculto",

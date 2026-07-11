@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
 import { Form, FormField } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -186,9 +187,9 @@ export const SoftSkillsSectionForm: FC<SoftSkillsSectionFormProps> = ({
           title={t("save")}
           submitId="soft-skills-section-form-submit"
         >
-          <button type="button" onClick={() => router.back()}>
+          <Button variant="ghost" type="button" onClick={() => router.back()}>
             {t("cancel")}
-          </button>
+          </Button>
         </FormActions>
       </FormRoot>
     </Form>

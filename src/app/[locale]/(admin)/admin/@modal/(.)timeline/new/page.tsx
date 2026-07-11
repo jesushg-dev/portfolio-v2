@@ -1,15 +1,17 @@
 import { getTranslations } from "next-intl/server";
-import { ModalWrapper } from "@/components/shared/modal-wrapper";
+import { PageDialogWrapper } from "@/components/shared/page-container";
 import { TimelineItemForm } from "@/features/timeline/components/timeline-item-form";
-import { db } from "@/server/db";
+import { getTimelineCreatePageData } from "@/features/timeline/server/timeline-queries";
 
-export default async function NewTimelineItemModal() {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
+export default async function NewTimelineModal() {
+  const [t, { initialData, languages }] = await Promise.all([
+    getTranslations("admin.timeline"),
+    getTimelineCreatePageData(),
+  ]);
 
-  const t = await getTranslations("admin.timeline");
   return (
-    <ModalWrapper title={t("addNew")} description={t("createDescription")}>
-      <TimelineItemForm languages={languages} />
-    </ModalWrapper>
+    <PageDialogWrapper title={t("create")} description={t("createDescription")}>
+      <TimelineItemForm initialData={initialData} languages={languages} />
+    </PageDialogWrapper>
   );
 }

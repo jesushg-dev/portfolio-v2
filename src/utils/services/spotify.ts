@@ -146,10 +146,7 @@ export const getQueue = async (userId: string) =>
 
 const RECENTLY_PLAYED_ENDPOINT = `${URL_SPOTIFY}v1/me/player/recently-played?limit=1`;
 export const getRecentlyPlayed = async (userId: string) =>
-  buildSpotifyRequest<RecentlyPlayedResponse>(
-    userId,
-    RECENTLY_PLAYED_ENDPOINT,
-  );
+  buildSpotifyRequest<RecentlyPlayedResponse>(userId, RECENTLY_PLAYED_ENDPOINT);
 
 const TOP_TRACKS_ENDPOINT = "v1/me/top/tracks";
 export const getTopTracks = async (

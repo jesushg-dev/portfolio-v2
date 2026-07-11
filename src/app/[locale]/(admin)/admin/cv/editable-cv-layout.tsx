@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { CvContextProvider } from "@/hoc/cv-context-provider";
 import type { Locale as AppLocale } from "@/i18n/config";
-import { CvEditorLocaleProvider } from "@/components/admin/shared/cv-editor-locale-context";
-import CvLanguageTabs from "@/components/admin/shared/cv/cv-language-tabs";
+import { api } from "@/trpc/react";
 import { FollowerPointerCard } from "@/components/ui/following-pointer";
 
 // Display Components
@@ -87,6 +86,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
   defaultLocale,
 }) => {
   const t = useTranslations("admin.cv");
+  const { data: languages = [] } = api.appLanguagesAdmin.getAll.useQuery();
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
 
   const handleClose = (open: boolean) => {
@@ -192,7 +192,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
           </div>
 
           <div className="col-span-1 hidden w-full justify-center sm:flex">
-            <div className="border-border h-full w-[1px] border-r" />
+            <div className="border-border h-full w-px border-r" />
           </div>
 
           <div className="flex flex-col gap-6 sm:col-span-5">
@@ -262,28 +262,53 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
           closeButtonId="cv-section-modal-close"
           className="max-h-[85vh] w-full overflow-y-auto sm:max-w-5xl"
         >
-          <CvEditorLocaleProvider defaultLocale={defaultLocale}>
-            <DialogHeader className="border-border flex flex-row items-center justify-between border-b pb-3">
-              <DialogTitle className="text-lg">
-                {activeSection ? getModalTitle(activeSection) : ""}
-              </DialogTitle>
-              {(activeSection === "about" || activeSection === "header") && (
-                <CvLanguageTabs />
-              )}
-            </DialogHeader>
+          <DialogHeader className="border-border flex flex-row items-center justify-between border-b pb-3">
+            <DialogTitle className="text-lg">
+              {activeSection ? getModalTitle(activeSection) : ""}
+            </DialogTitle>
+          </DialogHeader>
 
-            <div className="mt-4">
-              {activeSection === "header" && <HeaderForm />}
-              {activeSection === "contacts" && <ContactsList />}
-              {activeSection === "education" && <EducationsList />}
-              {activeSection === "languages" && <LanguagesList />}
-              {activeSection === "skills" && <SkillsList />}
-              {activeSection === "about" && <AboutForm />}
-              {activeSection === "experience" && <ExperiencesList />}
-              {activeSection === "soft-skills" && <SoftSkillsList />}
-              {activeSection === "additional" && <AdditionalList />}
-            </div>
-          </CvEditorLocaleProvider>
+          <div className="mt-4">
+            {activeSection === "header" && <HeaderForm languages={languages} />}
+            {activeSection === "contacts" && (
+              <ContactsList
+                languages={languages}
+                displayLocale={currentLocale}
+              />
+            )}
+            {activeSection === "education" && (
+              <EducationsList
+                languages={languages}
+                displayLocale={currentLocale}
+              />
+            )}
+            {activeSection === "languages" && (
+              <LanguagesList
+                languages={languages}
+                displayLocale={currentLocale}
+              />
+            )}
+            {activeSection === "skills" && <SkillsList />}
+            {activeSection === "about" && <AboutForm languages={languages} />}
+            {activeSection === "experience" && (
+              <ExperiencesList
+                languages={languages}
+                displayLocale={currentLocale}
+              />
+            )}
+            {activeSection === "soft-skills" && (
+              <SoftSkillsList
+                languages={languages}
+                displayLocale={currentLocale}
+              />
+            )}
+            {activeSection === "additional" && (
+              <AdditionalList
+                languages={languages}
+                displayLocale={currentLocale}
+              />
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>

@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useCallback, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import type { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,8 +15,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
-import { LocalizedTextSchema } from "@/lib/i18n/localized";
-import LocalizedTextField from "@/components/admin/shared/localized-text-field";
+import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,36 +25,59 @@ import {
   FormRoot,
   FormSection,
 } from "@/components/shared/form-root";
+import {
+  resolvePrimaryLanguage,
+  textTranslationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
+import {
+  localizedJsonToTextMap,
+  TextTranslationMapSchema,
+} from "@/lib/i18n/localized-text-map";
+import type { TextTranslationMap } from "@/lib/i18n/localized-text-map";
 import { CvModalFormSkeleton } from "./cv-modal-form-skeleton";
-import type { Locale } from "@/i18n/config";
+import type { AppLanguage } from "@prisma/client";
 
-const HeaderSchema = z.object({
-  fullName: z.string().min(1, "Full name is required"),
-  degree: LocalizedTextSchema,
-  photoUrl: z.string().url().or(z.literal("")).optional(),
-  clientImageAlt: LocalizedTextSchema.optional(),
-});
+type HeaderInput = {
+  fullName: string;
+  degree: TextTranslationMap;
+  photoUrl?: string;
+  clientImageAlt?: TextTranslationMap;
+};
 
-type HeaderInput = z.infer<typeof HeaderSchema>;
-
-const HeaderForm: FC = () => {
+const HeaderForm: FC<{ languages: AppLanguage[] }> = ({ languages }) => {
   const t = useTranslations("admin.forms.header");
   const { data, isLoading } = api.cv.getMine.useQuery();
   const utils = api.useUtils();
   const upsertHeader = api.cv.upsertHeader.useMutation();
 
   const [isPending, startTransition] = useTransition();
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
+  const [activeLangId, setActiveLangId] = useState(
+    primaryLang?.id ?? languages[0]?.id ?? "",
+  );
 
-  const defaultLocale: Locale =
-    (data?.profile?.defaultLocale as Locale) ?? "en";
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        fullName: z.string().min(1, "Full name is required"),
+        degree: textTranslationMapSchema(primaryLang?.id, t("degree")),
+        photoUrl: z.string().url().or(z.literal("")).optional(),
+        clientImageAlt: TextTranslationMapSchema.optional(),
+      }),
+    [primaryLang?.id, t],
+  );
 
   const form = useForm<HeaderInput>({
-    resolver: zodResolver(HeaderSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
-      degree: { default: "" },
+      degree: buildEmptyTranslationMap(languages, { text: "" }),
       photoUrl: "",
-      clientImageAlt: undefined,
+      clientImageAlt: buildEmptyTranslationMap(languages, { text: "" }),
     },
   });
 
@@ -57,15 +85,15 @@ const HeaderForm: FC = () => {
     if (!data) return;
     form.reset({
       fullName: data.header?.fullName ?? "",
-      degree: (data.header?.degree as { default: string } | undefined) ?? {
-        default: "",
-      },
+      degree: data.header?.degree
+        ? localizedJsonToTextMap(data.header.degree, languages)
+        : buildEmptyTranslationMap(languages, { text: "" }),
       photoUrl: data.header?.photoUrl ?? "",
-      clientImageAlt:
-        (data.header?.clientImageAlt as { default: string } | undefined) ??
-        undefined,
+      clientImageAlt: data.header?.clientImageAlt
+        ? localizedJsonToTextMap(data.header.clientImageAlt, languages)
+        : buildEmptyTranslationMap(languages, { text: "" }),
     });
-  }, [data, form]);
+  }, [data, form, languages]);
 
   const onSubmit = useCallback(
     (input: HeaderInput) => {
@@ -92,6 +120,13 @@ const HeaderForm: FC = () => {
   return (
     <Form {...form}>
       <FormRoot id="cv-header-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <GlobalLanguageSelector
+          languages={languages}
+          activeLangId={activeLangId}
+          onLangChange={setActiveLangId}
+          buttonIdPrefix="cv-header"
+        />
+
         <FormContent
           error={upsertHeader.error ? upsertHeader.error.message : null}
         >
@@ -118,22 +153,41 @@ const HeaderForm: FC = () => {
               />
             </div>
 
-            <LocalizedTextField
-              name="degree"
-              control={form.control}
-              label={t("degree")}
-              defaultLocale={defaultLocale}
-              required
-              inputId="cv-header-degree"
-            />
-
-            <LocalizedTextField
-              name="clientImageAlt"
-              control={form.control}
-              label={t("photoAlt") || "Photo Alt Text"}
-              defaultLocale={defaultLocale}
-              inputId="cv-header-photo-alt"
-            />
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "space-y-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`degree.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("degree")}
+                        inputId={`cv-header-degree-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`clientImageAlt.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("photoAlt") || "Photo Alt Text"}
+                        inputId={`cv-header-photo-alt-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
           </FormSection>
         </FormContent>
         <FormActions

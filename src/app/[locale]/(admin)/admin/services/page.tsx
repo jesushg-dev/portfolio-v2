@@ -1,11 +1,9 @@
 import type { FC } from "react";
 import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { headers } from "next/headers";
 
-import { auth } from "@/lib/auth";
-import { db } from "@/server/db";
 import { ServicesList } from "@/features/services/components/services-list";
+import { getUserServicesWithLanguages } from "@/features/services/server/service-queries";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -14,19 +12,10 @@ interface Props {
 const ServicesPage: FC<Props> = async ({ params }) => {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
-  const t = await getTranslations("admin.services");
-
-  const session = await auth.api.getSession({ headers: await headers() });
-  const userId = session!.user.id;
-
-  const services = await db.service.findMany({
-    where: { userId },
-    include: {
-      ServiceTranslation: { include: { language: true } },
-      ServiceSkill: { include: { Skill: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const [t, { data, languages }] = await Promise.all([
+    getTranslations("admin.services"),
+    getUserServicesWithLanguages(),
+  ]);
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -35,7 +24,11 @@ const ServicesPage: FC<Props> = async ({ params }) => {
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
       <div className="min-h-0 flex-1">
-        <ServicesList initialServices={services} />
+        <ServicesList
+          initialServices={data}
+          languages={languages}
+          locale={locale as Locale}
+        />
       </div>
     </div>
   );

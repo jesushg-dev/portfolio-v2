@@ -43,10 +43,11 @@ function getUniqueTypes(skills: SkillOption[]): string[] {
 
 export function SkillPicker({
   availableSkills,
-  selectedSkillIds,
+  selectedSkillIds: selectedSkillIdsProp,
   onChange,
   compact = false,
 }: SkillPickerProps) {
+  const selectedSkillIds = selectedSkillIdsProp ?? [];
   const t = useTranslations("admin.forms.skillPicker");
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<string>(ALL_FILTER);

@@ -1,14 +1,15 @@
 "use client";
 
-import { type FC, useTransition, useState, useMemo, useCallback } from "react";
+import { type FC, useMemo, useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useForm, useFieldArray, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 
 import { Form, FormField } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -28,32 +29,39 @@ import {
 } from "@/components/shared/form-root";
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
 import {
-  languageMapFromLocalized,
-  localizedFromLanguageMap,
-} from "@/features/profile/server/hero-titles";
+  resolvePrimaryLanguage,
+  titleDescriptionTranslationMapSchema,
+} from "@/lib/i18n/localized-form";
+import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
 import {
   SOFT_SKILL_ICON_KEYS,
   resolveSoftSkillIcon,
 } from "@/features/soft-skills/lib/soft-skill-icons";
-import type { RouterOutputs } from "@/trpc/react";
+import {
+  type SoftSkillCreateFormDTO,
+  type SoftSkillEditorDTO,
+} from "@/features/soft-skills/lib/soft-skill-editor-dto";
 import { api } from "@/trpc/react";
 import type { AppLanguage } from "@prisma/client";
 
 interface SoftSkillFormProps {
-  initialData?: RouterOutputs["softSkillsAdmin"]["getMine"][number];
   languages: AppLanguage[];
+  initialData: SoftSkillEditorDTO | SoftSkillCreateFormDTO;
 }
 
 export const SoftSkillForm: FC<SoftSkillFormProps> = ({
   initialData,
   languages,
 }) => {
-  const isEditMode = !!initialData;
+  const isEditMode = "id" in initialData;
   const t = useTranslations("admin.forms.portfolioSoftSkill");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const primaryLang = languages.find((l) => l.code === "en") ?? languages[0];
+  const primaryLang = useMemo(
+    () => resolvePrimaryLanguage(languages),
+    [languages],
+  );
 
   const formSchema = useMemo(
     () =>
@@ -62,137 +70,56 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
         icon: z.string().min(1, t("iconRequired")),
         isVisible: z.boolean(),
         order: z.number().int().nonnegative(),
-        translations: z
-          .array(
-            z
-              .object({
-                appLanguageId: z.string(),
-                title: z.string(),
-                description: z.string(),
-              })
-              .superRefine((val, ctx) => {
-                if (val.appLanguageId === primaryLang?.id) {
-                  if (!val.title || val.title.trim() === "") {
-                    ctx.addIssue({
-                      code: z.ZodIssueCode.custom,
-                      message: t("titleRequiredPrimary"),
-                      path: ["title"],
-                    });
-                  }
-                }
-              }),
-          )
-          .min(1, t("atLeastOneLanguage")),
+        translations: titleDescriptionTranslationMapSchema(
+          primaryLang?.id,
+          t("titleRequiredPrimary"),
+        ),
       }),
     [primaryLang?.id, t],
   );
 
   type FormValues = z.infer<typeof formSchema>;
 
-  const createItem = api.softSkillsAdmin.createItem.useMutation();
-  const updateItem = api.softSkillsAdmin.updateItem.useMutation();
-  const utils = api.useUtils();
-
-  const languageCodes = languages.map((language) => language.code);
-
-  const defaultTranslations = isEditMode
-    ? (() => {
-        const titleMap = languageMapFromLocalized(
-          initialData.title,
-          languageCodes,
-        );
-        const descriptionMap = languageMapFromLocalized(
-          initialData.description,
-          languageCodes,
-        );
-
-        return languages.map((language) => ({
-          appLanguageId: language.id,
-          title: titleMap[language.code] ?? "",
-          description: descriptionMap[language.code] ?? "",
-        }));
-      })()
-    : languages.map((l) => ({
-        appLanguageId: l.id,
-        title: "",
-        description: "",
-      }));
-
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: (isEditMode
-      ? {
-          id: initialData.id,
-          icon: initialData.icon,
-          isVisible: initialData.isVisible,
-          order: initialData.order,
-          translations: defaultTranslations,
-        }
-      : {
-          icon: "RiTeamLine",
-          isVisible: true,
-          order: 0,
-          translations: defaultTranslations,
-        }) as FormValues,
+    defaultValues: initialData as FormValues,
     mode: "onBlur",
   });
 
-  const { fields: translationFields } = useFieldArray({
-    control: form.control,
-    name: "translations",
+  const {
+    activeLangId,
+    setActiveLangId,
+    statusByLangId,
+    copyFieldsFromPrimary,
+    isFormLoading,
+  } = useLocalizedForm({
+    languages,
+    form,
+    buildDefaultValues: () => initialData as FormValues,
+    resourceId: "id" in initialData ? initialData.id : undefined,
+    completenessFields: ["title", "description"],
+    copyFields: ["title", "description"],
   });
-
-  const [activeLangId, setActiveLangId] = useState<string>(
-    primaryLang?.id ?? languages[0]?.id ?? "",
-  );
-
-  const activeIndex = translationFields.findIndex(
-    (f) => f.appLanguageId === activeLangId,
-  );
 
   const selectedIcon = useWatch({ control: form.control, name: "icon" });
   const SelectedIcon = resolveSoftSkillIcon(selectedIcon);
+
+  const createItem = api.softSkillsAdmin.createItem.useMutation();
+  const updateItem = api.softSkillsAdmin.updateItem.useMutation();
+  const utils = api.useUtils();
 
   const onSubmit = useCallback(
     (values: FormValues) => {
       startTransition(async () => {
         try {
-          const primaryCode = primaryLang?.code ?? "en";
-
-          const titleByCode = Object.fromEntries(
-            values.translations.map((entry) => {
-              const language = languages.find(
-                (lang) => lang.id === entry.appLanguageId,
-              );
-              return [language?.code ?? primaryCode, entry.title];
-            }),
-          );
-
-          const descriptionByCode = Object.fromEntries(
-            values.translations.map((entry) => {
-              const language = languages.find(
-                (lang) => lang.id === entry.appLanguageId,
-              );
-              return [language?.code ?? primaryCode, entry.description];
-            }),
-          );
-
-          const payload = {
-            icon: values.icon,
-            isVisible: values.isVisible,
-            order: values.order,
-            title: localizedFromLanguageMap(titleByCode, primaryCode),
-            description: localizedFromLanguageMap(
-              descriptionByCode,
-              primaryCode,
-            ),
-          };
-
           if (isEditMode && values.id) {
-            await updateItem.mutateAsync({ id: values.id, ...payload });
+            await updateItem.mutateAsync({
+              id: values.id,
+              ...values,
+            });
             toast.success(t("updatedSuccess"));
           } else {
-            await createItem.mutateAsync(payload);
+            await createItem.mutateAsync(values);
             toast.success(t("createdSuccess"));
           }
 
@@ -203,19 +130,28 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
         }
       });
     },
-    [
-      createItem,
-      isEditMode,
-      languages,
-      primaryLang,
-      router,
-      t,
-      updateItem,
-      utils,
-    ],
+    [createItem, isEditMode, router, t, updateItem, utils],
   );
 
+  const handleCancel = useCallback(() => {
+    if (form.formState.isDirty) {
+      const confirmLeave = window.confirm(t("unsavedChangesConfirm"));
+      if (!confirmLeave) return;
+    }
+    router.back();
+  }, [form.formState.isDirty, router, t]);
+
   const isSaving = createItem.isPending || updateItem.isPending;
+
+  if (isFormLoading) {
+    return (
+      <div className="space-y-4 p-6">
+        <div className="bg-muted h-10 w-full animate-pulse rounded-md" />
+        <div className="bg-muted h-32 w-full animate-pulse rounded-md" />
+        <div className="bg-muted h-10 w-2/3 animate-pulse rounded-md" />
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
@@ -225,6 +161,7 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
           activeLangId={activeLangId}
           onLangChange={setActiveLangId}
           buttonIdPrefix="soft-skill"
+          statusByLangId={statusByLangId}
         />
 
         <FormContent>
@@ -305,46 +242,69 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
             />
           </FormSection>
 
-          {activeIndex >= 0 ? (
-            <FormSection title={t("contentSection")}>
-              <FormField
-                control={form.control}
-                name={`translations.${activeIndex}.title`}
-                render={({ field }) => (
-                  <FormItem
-                    label={t("titleWithLanguage", {
-                      language:
-                        languages.find((l) => l.id === activeLangId)?.code ??
-                        "",
-                    })}
-                    inputId="soft-skill-title"
-                  >
-                    <Input {...field} placeholder={t("titlePlaceholder")} />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`translations.${activeIndex}.description`}
-                render={({ field }) => (
-                  <FormItem
-                    label={t("descriptionWithLanguage", {
-                      language:
-                        languages.find((l) => l.id === activeLangId)?.code ??
-                        "",
-                    })}
-                    inputId="soft-skill-description"
-                  >
-                    <Textarea
-                      {...field}
-                      placeholder={t("descriptionPlaceholder")}
-                      rows={4}
-                    />
-                  </FormItem>
-                )}
-              />
-            </FormSection>
-          ) : null}
+          <FormSection title={t("contentSection")}>
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              const isPrimary = lang.id === primaryLang?.id;
+
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "space-y-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  {!isPrimary && (
+                    <Button
+                      variant="link"
+                      type="button"
+                      onClick={() => copyFieldsFromPrimary(lang.id)}
+                      className="text-muted-foreground hover:text-foreground h-auto p-0 text-xs"
+                    >
+                      {t("copyFromPrimary", {
+                        language: primaryLang?.code ?? "",
+                      })}
+                    </Button>
+                  )}
+
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.title`}
+                    render={({ field: titleField }) => (
+                      <FormItem
+                        label={t("titleWithLanguage", {
+                          language: lang.code,
+                        })}
+                        inputId={`soft-skill-title-${lang.code}`}
+                      >
+                        <Input
+                          {...titleField}
+                          placeholder={t("titlePlaceholder")}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.description`}
+                    render={({ field: descField }) => (
+                      <FormItem
+                        label={t("descriptionWithLanguage", {
+                          language: lang.code,
+                        })}
+                        inputId={`soft-skill-description-${lang.code}`}
+                      >
+                        <Textarea
+                          {...descField}
+                          placeholder={t("descriptionPlaceholder")}
+                          rows={4}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
+          </FormSection>
         </FormContent>
 
         <FormActions
@@ -352,9 +312,9 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
           title={isEditMode ? t("save") : t("create")}
           submitId="soft-skill-form-submit"
         >
-          <button type="button" onClick={() => router.back()}>
+          <Button variant="ghost" type="button" onClick={handleCancel}>
             {t("cancel")}
-          </button>
+          </Button>
         </FormActions>
       </FormRoot>
     </Form>

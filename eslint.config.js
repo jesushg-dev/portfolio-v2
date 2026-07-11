@@ -51,7 +51,7 @@ export default tseslint.config(
             {
               target: "./src/features/cv",
               from: "./src/features",
-              except: ["./cv"],
+              except: ["./cv", "./profile", "./terminal"],
             },
             {
               target: "./src/features/projects",

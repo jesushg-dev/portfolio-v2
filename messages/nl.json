@@ -933,7 +933,9 @@
         "updateFailed": "Soft skill bijwerken mislukt",
         "createFailed": "Soft skill aanmaken mislukt",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
-        "atLeastOneLanguage": "Minstens één taal is verplicht"
+        "atLeastOneLanguage": "Minstens één taal is verplicht",
+        "copyFromPrimary": "Kopiëren van {language}",
+        "unsavedChangesConfirm": "Je hebt niet-opgeslagen wijzigingen. Toch verlaten?"
       },
       "softSkillsSection": {
         "title": "Sectie-achtergrond",
@@ -1226,6 +1228,7 @@
       "emptyDescription": "Maak je eerste soft skill of voer de portfolio-seed uit.",
       "deleteSuccess": "Soft skill verwijderd.",
       "deleteError": "Soft skill verwijderen mislukt.",
+      "deleting": "Verwijderen...",
       "untitled": "Zonder titel",
       "visible": "Zichtbaar",
       "hidden": "Verborgen",

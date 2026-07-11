@@ -3,10 +3,10 @@ import { test, expect } from "@playwright/test";
 import { portfolioSoftSkills } from "./fixtures/portfolio-soft-skills";
 import {
   cleanupUserSoftSkills,
-  extractLocalizedText,
   fillSoftSkillsFromFixture,
   getSoftSkillsMine,
   getSoftSkillsSection,
+  softSkillHasTranslationTitle,
 } from "./helpers/fill-soft-skills-form";
 
 test.setTimeout(30 * 60 * 1000);
@@ -37,15 +37,15 @@ test.describe("soft skills create", () => {
     const items = await getSoftSkillsMine(page);
     expect(items).toHaveLength(portfolioSoftSkills.items.length);
 
-    const teamwork = items.find(
-      (row) => extractLocalizedText(row.title, "en") === "Teamwork",
+    const teamwork = items.find((row) =>
+      softSkillHasTranslationTitle(row, "Teamwork"),
     );
     expect(teamwork).toBeDefined();
     expect(teamwork?.icon).toBe("RiTeamLine");
     expect(teamwork?.order).toBe(0);
 
-    const leadership = items.find(
-      (row) => extractLocalizedText(row.title, "en") === "Leadership",
+    const leadership = items.find((row) =>
+      softSkillHasTranslationTitle(row, "Leadership"),
     );
     expect(leadership).toBeDefined();
     expect(leadership?.icon).toBe("RiHandHeartLine");

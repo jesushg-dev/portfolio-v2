@@ -116,7 +116,7 @@ export async function fillSkillForm(
 
   const createResponse = page.waitForResponse(
     (response) =>
-      response.url().includes("/api/trpc/portfolioAdmin.createSkill") &&
+      response.url().includes("/api/trpc/skillsAdmin.createItem") &&
       response.request().method() === "POST" &&
       response.ok(),
     { timeout: 30_000 },
@@ -152,44 +152,19 @@ export async function expectSkillListContains(
 }
 
 export async function cleanupUserSkills(page: Page): Promise<void> {
-  const listResponse = await page.request.get(
-    `/api/trpc/portfolioAdmin.getMySkills?batch=1&input=${encodeURIComponent(
-      JSON.stringify({ "0": { json: null } }),
-    )}`,
+  const deleteResponse = await page.request.post(
+    `/api/trpc/skillsAdmin.deleteAll?batch=1`,
+    {
+      data: {
+        "0": { json: null },
+      },
+    },
   );
 
-  if (!listResponse.ok()) {
+  if (!deleteResponse.ok()) {
     throw new Error(
-      `Failed to list skills for cleanup: ${listResponse.status()} ${await listResponse.text()}`,
+      `Failed to cleanup cleanupUserSkills: ${deleteResponse.status()} ${await deleteResponse.text()}`,
     );
-  }
-
-  const listPayload = (await listResponse.json()) as [
-    {
-      result?: {
-        data?: {
-          json?: { id: string; title: string }[];
-        };
-      };
-    },
-  ];
-
-  const skills = listPayload[0]?.result?.data?.json ?? [];
-
-  for (const skill of skills) {
-    const deleteResponse = await page.request.post(
-      "/api/trpc/portfolioAdmin.deleteSkill?batch=1",
-      {
-        headers: { "content-type": "application/json" },
-        data: { "0": { json: { id: skill.id } } },
-      },
-    );
-
-    if (!deleteResponse.ok()) {
-      throw new Error(
-        `Failed to delete skill "${skill.title}": ${deleteResponse.status()} ${await deleteResponse.text()}`,
-      );
-    }
   }
 }
 

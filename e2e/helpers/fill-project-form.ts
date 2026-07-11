@@ -21,19 +21,6 @@ type FillProjectFormOptions = {
   verifyInList?: boolean;
 };
 
-async function waitForSkillsQuery(page: Page): Promise<void> {
-  const skillsLoaded = await page.locator('[id^="skill-picker-"]').count();
-  if (skillsLoaded > 0) return;
-
-  await page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/trpc/portfolioAdmin.getMySkills") &&
-      response.request().method() === "GET" &&
-      response.ok(),
-    { timeout: 30_000 },
-  );
-}
-
 function isValidUrl(value: string): boolean {
   if (!value.trim()) return false;
   try {
@@ -105,7 +92,6 @@ async function openNewProjectForm(page: Page): Promise<void> {
   await addButton.click();
 
   await page.waitForURL(/\/admin\/projects\/new\/?$/, { timeout: 20_000 });
-  await waitForSkillsQuery(page);
 }
 
 async function waitForProjectSaveToFinish(page: Page): Promise<void> {
@@ -181,7 +167,7 @@ export async function fillProjectForm(
 
   const createResponse = page.waitForResponse(
     (response) =>
-      response.url().includes("/api/trpc/portfolioAdmin.createProject") &&
+      response.url().includes("/api/trpc/projectsAdmin.createItem") &&
       response.request().method() === "POST",
     { timeout: 30_000 },
   );
@@ -234,44 +220,19 @@ export async function expectProjectListContains(
 }
 
 export async function cleanupUserProjects(page: Page): Promise<void> {
-  const listResponse = await page.request.get(
-    `/api/trpc/portfolioAdmin.getMyProjects?batch=1&input=${encodeURIComponent(
-      JSON.stringify({ "0": { json: null } }),
-    )}`,
+  const deleteResponse = await page.request.post(
+    `/api/trpc/projectsAdmin.deleteAll?batch=1`,
+    {
+      data: {
+        "0": { json: null },
+      },
+    },
   );
 
-  if (!listResponse.ok()) {
+  if (!deleteResponse.ok()) {
     throw new Error(
-      `Failed to list projects for cleanup: ${listResponse.status()} ${await listResponse.text()}`,
+      `Failed to cleanup cleanupUserProjects: ${deleteResponse.status()} ${await deleteResponse.text()}`,
     );
-  }
-
-  const listPayload = (await listResponse.json()) as [
-    {
-      result?: {
-        data?: {
-          json?: { id: string }[];
-        };
-      };
-    },
-  ];
-
-  const projects = listPayload[0]?.result?.data?.json ?? [];
-
-  for (const project of projects) {
-    const deleteResponse = await page.request.post(
-      "/api/trpc/portfolioAdmin.deleteProject?batch=1",
-      {
-        headers: { "content-type": "application/json" },
-        data: { "0": { json: { id: project.id } } },
-      },
-    );
-
-    if (!deleteResponse.ok()) {
-      throw new Error(
-        `Failed to delete project ${project.id}: ${deleteResponse.status()} ${await deleteResponse.text()}`,
-      );
-    }
   }
 }
 

@@ -9,6 +9,7 @@ import type {
   TranslationNudgeState,
 } from "@/hooks/admin/use-translation-nudge";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 interface TranslationNudgeBannerProps {
   nudge: TranslationNudgeState;
@@ -51,14 +52,16 @@ export function TranslationNudgeBanner({
           </p>
           <p className="text-xs text-blue-600">{t("question")}</p>
         </div>
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           type="button"
           onClick={onDismiss}
-          className="shrink-0 rounded p-1 text-blue-400 hover:bg-blue-100 hover:text-blue-600"
+          className="h-7 w-7 shrink-0 text-blue-400 hover:bg-blue-100 hover:text-blue-600"
           aria-label={t("dismissAria")}
         >
           <X className="h-3.5 w-3.5" />
-        </button>
+        </Button>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -84,23 +87,25 @@ export function TranslationNudgeBanner({
 
       {pendingCount > 1 && (
         <div className="mt-3 flex items-center justify-between border-t border-blue-200 pt-3">
-          <button
+          <Button
+            variant="ghost"
             type="button"
             onClick={handleApplyAll}
             disabled={isApplyingAll}
-            className="text-xs font-medium text-blue-600 hover:text-blue-800 disabled:opacity-50"
+            className="h-auto p-0 text-xs font-medium text-blue-600 hover:bg-transparent hover:text-blue-800 disabled:opacity-50"
           >
             {isApplyingAll
               ? t("applying")
               : t("applyAll", { count: pendingCount })}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
             type="button"
             onClick={onDismiss}
-            className="text-xs text-gray-400 hover:text-gray-600"
+            className="h-auto p-0 text-xs text-gray-400 hover:bg-transparent hover:text-gray-600"
           >
             {t("dismiss")}
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -162,10 +167,12 @@ function LocaleRow({
           · &quot;{item.previousValue}&quot;
         </span>
         <div className="ml-auto flex items-center gap-1">
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             type="button"
             onClick={() => setIsExpanded((v) => !v)}
-            className="rounded px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50"
+            className="h-7 px-2 text-xs font-medium text-blue-600 hover:bg-blue-50"
           >
             {isExpanded ? (
               <span className="flex items-center gap-1">
@@ -176,14 +183,16 @@ function LocaleRow({
                 <ChevronDown className="h-3 w-3" /> {t("edit")}
               </span>
             )}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             type="button"
             onClick={() => onSkip(item.locale)}
-            className="rounded px-2 py-1 text-xs text-gray-400 hover:bg-gray-50 hover:text-gray-600"
+            className="h-7 px-2 text-xs text-gray-400 hover:bg-gray-50 hover:text-gray-600"
           >
             {t("skip")}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -200,23 +209,24 @@ function LocaleRow({
             placeholder={t("translationPlaceholder", { label: item.label })}
           />
           <div className="mt-2 flex items-center justify-end gap-2">
-            <button
+            <Button
+              variant="ghost"
               type="button"
               onClick={() => {
                 setDraftValue(editedValue);
               }}
-              className="text-xs text-gray-400 hover:text-gray-600"
+              className="h-auto p-0 text-xs text-gray-400 hover:bg-transparent hover:text-gray-600"
             >
               {t("copyFromEdited")}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={handleSave}
               disabled={isSaving || !draftValue.trim()}
-              className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              className="h-7 rounded-md bg-blue-600 px-3 text-xs font-medium text-white hover:bg-blue-700"
             >
               {isSaving ? t("saving") : t("saveLocale", { label: item.label })}
-            </button>
+            </Button>
           </div>
         </div>
       )}

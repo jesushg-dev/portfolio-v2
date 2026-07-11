@@ -1,35 +1,20 @@
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
-import { db } from "@/server/db";
 import { CertificationForm } from "@/features/certifications/components/certification-form";
+import { getCertificationEditPageData } from "@/features/certifications/server/certification-queries";
 
 export default async function EditCertificationPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
-
   const { id } = await params;
-  const t = await getTranslations("admin.certifications");
+  const [t, pageData] = await Promise.all([
+    getTranslations("admin.certifications"),
+    getCertificationEditPageData(id),
+  ]);
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) return null;
-
-  const certification = await db.certification.findUnique({
-    where: { id, userId: session.user.id },
-    include: {
-      CertificationTranslation: true,
-      CertificateSkill: true,
-    },
-  });
-
-  if (!certification) notFound();
+  if (!pageData) return null;
+  const { editorDto, languages } = pageData;
 
   return (
     <div className="space-y-6">
@@ -40,7 +25,11 @@ export default async function EditCertificationPage({
         </p>
       </div>
       <div className="mx-auto w-full max-w-3xl">
-        <CertificationForm initialData={certification} languages={languages} />
+        <CertificationForm
+          key={editorDto.id}
+          initialData={editorDto}
+          languages={languages}
+        />
       </div>
     </div>
   );

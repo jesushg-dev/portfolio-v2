@@ -63,10 +63,7 @@ function buildSkillCreateInput(
 
 /** Creates any missing fixture skills via tRPC (does not delete existing skills). */
 export async function ensurePortfolioSkills(page: Page): Promise<void> {
-  const existing = await trpcQuery<SkillRow[]>(
-    page,
-    "portfolioAdmin.getMySkills",
-  );
+  const existing = await trpcQuery<SkillRow[]>(page, "skillsAdmin.getMine");
   const existingTitles = new Set(existing.map((skill) => skill.title));
 
   const missing = portfolioSkills.filter(
@@ -78,7 +75,7 @@ export async function ensurePortfolioSkills(page: Page): Promise<void> {
 
   const languages = await trpcQuery<AppLanguageRow[]>(
     page,
-    "portfolioAdmin.getAppLanguages",
+    "appLanguagesAdmin.getAll",
   );
 
   const esId = languages.find((lang) => lang.code === "es")?.id;
@@ -98,7 +95,7 @@ export async function ensurePortfolioSkills(page: Page): Promise<void> {
   for (const skill of missing) {
     await trpcMutate(
       page,
-      "portfolioAdmin.createSkill",
+      "skillsAdmin.createItem",
       buildSkillCreateInput(skill, langIds),
     );
   }

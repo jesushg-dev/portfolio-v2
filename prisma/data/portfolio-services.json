@@ -1,0 +1,112 @@
+[
+  {
+    "key": "frontend",
+    "type": "FRONTEND",
+    "image": "frontend",
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Desarrollo frontend",
+        "description": "Desarrollo de interfaces de usuario."
+      },
+      {
+        "locale": "en",
+        "title": "Frontend development",
+        "description": "User interface development."
+      },
+      {
+        "locale": "nl",
+        "title": "Frontend-Entwicklung",
+        "description": "Entwicklung der Benutzeroberfläche."
+      }
+    ]
+  },
+  {
+    "key": "backend",
+    "type": "BACKEND",
+    "image": "backend",
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Desarrollo backend",
+        "description": "Desarrollo de servicios y APIs."
+      },
+      {
+        "locale": "en",
+        "title": "Backend development",
+        "description": "Services and APIs development."
+      },
+      {
+        "locale": "nl",
+        "title": "Backend-Entwicklung",
+        "description": "Entwicklung von Diensten und APIs."
+      }
+    ]
+  },
+  {
+    "key": "mobile",
+    "type": "MOBILE",
+    "image": "mobile",
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Desarrollo móvil",
+        "description": "Desarrollo de aplicaciones móviles."
+      },
+      {
+        "locale": "en",
+        "title": "Mobile development",
+        "description": "Mobile applications development."
+      },
+      {
+        "locale": "nl",
+        "title": "Mobile Entwicklung",
+        "description": "Entwicklung von mobilen Anwendungen."
+      }
+    ]
+  },
+  {
+    "key": "tools",
+    "type": "TOOLS",
+    "image": "sysadmin",
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Administración de sistemas",
+        "description": "Administración de servidores y sistemas Web, FTP, SSH, VoIP, etc. en Linux"
+      },
+      {
+        "locale": "en",
+        "title": "Systems administration",
+        "description": "Servers and systems administration Web, FTP, SSH, VoIP, etc. in Linux"
+      },
+      {
+        "locale": "nl",
+        "title": "Systemadministration",
+        "description": "Server- und Systemadministration Web, FTP, SSH, VoIP, etc. in Linux"
+      }
+    ]
+  },
+  {
+    "key": "cybersecurity",
+    "type": "TOOLS",
+    "image": "cybersecurity",
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Ciberseguridad",
+        "description": "Auditorías de seguridad, análisis de vulnerabilidades, pentesting, etc."
+      },
+      {
+        "locale": "en",
+        "title": "Cybersecurity",
+        "description": "Security audits, vulnerability analysis, pentesting, etc."
+      },
+      {
+        "locale": "nl",
+        "title": "Cybersicherheit",
+        "description": "Sicherheitsaudits, Schwachstellenanalyse, Pentesting, etc."
+      }
+    ]
+  }
+]

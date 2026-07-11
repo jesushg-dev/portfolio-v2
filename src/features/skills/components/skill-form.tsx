@@ -1,10 +1,10 @@
 "use client";
-import type { AppLanguage, Skill } from "@prisma/client";
+import type { AppLanguage } from "@prisma/client";
 
-import { type FC, useTransition, useState, useMemo, useCallback } from "react";
+import { type FC, useTransition, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -29,33 +29,21 @@ import {
   FormSection,
 } from "@/components/shared/form-root";
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
-
-const StackTypeSchema = z.enum([
-  "FRONTEND",
-  "BACKEND",
-  "MOBILE",
-  "DESKTOP",
-  "CYBERSECURITY",
-  "DEVOPS",
-  "SOFTSKILLS",
-  "TOOLS",
-]);
-
-interface SkillInitialData extends Skill {
-  SkillTranslation?: {
-    appLanguageId: string;
-    description?: string | null;
-    urlWiki?: string | null;
-  }[];
-}
+import { translationMapSchema } from "@/lib/i18n/localized-form";
+import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
+import {
+  type SkillCreateFormDTO,
+  type SkillEditorDTO,
+} from "@/features/skills/lib/skill-editor-dto";
+import { StackTypeSchema } from "@/features/portfolio/server/portfolio-admin-shared";
 
 interface SkillFormProps {
-  initialData?: SkillInitialData;
   languages: AppLanguage[];
+  initialData: SkillEditorDTO | SkillCreateFormDTO;
 }
 
 export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
-  const isEditMode = !!initialData;
+  const isEditMode = "id" in initialData;
   const t = useTranslations("admin.forms.portfolioSkill");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -67,12 +55,14 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
         title: z.string().min(1, t("titleRequired")),
         image: z.string().min(1, t("imageRequired")),
         type: StackTypeSchema,
-        translations: z.array(
+        translations: translationMapSchema(
           z.object({
-            appLanguageId: z.string(),
             description: z.string(),
             urlWiki: z.string(),
           }),
+          undefined,
+          "description",
+          t("titleRequired"),
         ),
       }),
     [t],
@@ -80,78 +70,23 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
 
   type TSkillForm = z.infer<typeof skillFormSchema>;
 
-  const createSkill = api.portfolioAdmin.createSkill.useMutation();
-  const updateSkill = api.portfolioAdmin.updateSkill.useMutation();
-  const upsertTranslation =
-    api.portfolioAdmin.upsertSkillTranslation.useMutation();
+  const createSkill = api.skillsAdmin.createItem.useMutation();
+  const updateSkill = api.skillsAdmin.updateItem.useMutation();
 
   const utils = api.useUtils();
 
-  const primaryLang = languages.find((l) => l.code === "en") ?? languages[0];
-
-  const defaultTranslations = isEditMode
-    ? (() => {
-        const existingTranslations =
-          initialData.SkillTranslation?.map((st) => ({
-            appLanguageId: st.appLanguageId,
-            description: st.description ?? "",
-            urlWiki: st.urlWiki ?? "",
-          })) ?? [];
-
-        const existingLangIds = new Set(
-          existingTranslations.map((tr) => tr.appLanguageId),
-        );
-        const missingLangs = languages.filter(
-          (l) => !existingLangIds.has(l.id),
-        );
-
-        return [
-          ...existingTranslations,
-          ...missingLangs.map((l) => ({
-            appLanguageId: l.id,
-            description: "",
-            urlWiki: "",
-          })),
-        ];
-      })()
-    : languages.map((l) => ({
-        appLanguageId: l.id,
-        description: "",
-        urlWiki: "",
-      }));
-
   const form = useForm<TSkillForm>({
     resolver: zodResolver(skillFormSchema),
-    defaultValues: isEditMode
-      ? {
-          id: initialData.id,
-          title: initialData.title ?? "",
-          image: initialData.image ?? "",
-          type: initialData.type,
-          translations: defaultTranslations,
-        }
-      : {
-          title: "",
-          image: "",
-          type: "FRONTEND",
-          translations: defaultTranslations,
-        },
+    defaultValues: initialData as TSkillForm,
     mode: "onBlur",
   });
 
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "translations",
+  const { activeLangId, setActiveLangId } = useLocalizedForm({
+    languages,
+    form,
+    buildDefaultValues: () => initialData as TSkillForm,
+    resourceId: "id" in initialData ? initialData.id : undefined,
   });
-
-  const [activeLangId, setActiveLangId] = useState<string>(
-    isEditMode
-      ? (fields[0]?.appLanguageId ?? languages[0]?.id ?? "")
-      : (primaryLang?.id ?? languages[0]?.id ?? ""),
-  );
-
-  const activeIndex = fields.findIndex((f) => f.appLanguageId === activeLangId);
-  const activeLang = languages.find((l) => l.id === activeLangId);
 
   const onSubmit = useCallback(
     (values: TSkillForm) => {
@@ -160,64 +95,26 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
           if (isEditMode && values.id) {
             await updateSkill.mutateAsync({
               id: values.id,
-              title: values.title,
-              image: values.image,
-              type: values.type,
+              ...values,
             });
-
-            await Promise.all(
-              values.translations
-                .filter(
-                  (tr) =>
-                    tr.description.trim() !== "" || tr.urlWiki.trim() !== "",
-                )
-                .map((trans) =>
-                  upsertTranslation.mutateAsync({
-                    skillId: values.id!,
-                    appLanguageId: trans.appLanguageId,
-                    description: trans.description ?? "",
-                    urlWiki: trans.urlWiki ?? "",
-                  }),
-                ),
-            );
-
             toast.success(t("updatedSuccess"));
           } else {
-            await createSkill.mutateAsync({
-              title: values.title,
-              image: values.image,
-              type: values.type,
-              translations: values.translations
-                .filter(
-                  (tr) =>
-                    tr.description.trim() !== "" || tr.urlWiki.trim() !== "",
-                )
-                .map((tr) => ({
-                  appLanguageId: tr.appLanguageId,
-                  description: tr.description ?? "",
-                  urlWiki: tr.urlWiki ?? "",
-                })),
-            });
-
+            await createSkill.mutateAsync(values);
             toast.success(t("createdSuccess"));
           }
 
-          await utils.portfolioAdmin.getMySkills.invalidate();
+          await utils.skillsAdmin.getMine.invalidate();
           router.back();
         } catch {
           toast.error(isEditMode ? t("updateFailed") : t("createFailed"));
         }
       });
     },
-    [isEditMode, updateSkill, upsertTranslation, createSkill, utils, router, t],
+    [isEditMode, updateSkill, createSkill, utils, router, t],
   );
 
-  const isSaving =
-    createSkill.isPending ||
-    updateSkill.isPending ||
-    upsertTranslation.isPending;
-  const anyError =
-    createSkill.error ?? updateSkill.error ?? upsertTranslation.error;
+  const isSaving = createSkill.isPending || updateSkill.isPending;
+  const anyError = createSkill.error ?? updateSkill.error;
 
   return (
     <Form {...form}>
@@ -240,43 +137,54 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
               )}
             />
 
-            {activeIndex !== -1 && activeLang && (
-              <div className="mt-4 grid gap-4">
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.description`}
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("descriptionWithLanguage", {
-                        language: activeLang.name,
-                      })}
-                      inputId={`skill-description-${activeLang.code}`}
-                    >
-                      <Textarea
-                        rows={3}
-                        placeholder={t("descriptionPlaceholder")}
-                        {...field}
-                      />
-                    </FormItem>
-                  )}
-                />
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
 
-                <FormField
-                  control={form.control}
-                  name={`translations.${activeIndex}.urlWiki`}
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("wikiUrlWithLanguage", {
-                        language: activeLang.name,
-                      })}
-                      inputId={`skill-wiki-${activeLang.code}`}
-                    >
-                      <Input placeholder={t("wikiUrlPlaceholder")} {...field} />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "mt-4 grid gap-4" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.description`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("descriptionWithLanguage", {
+                          language: lang.name ?? lang.code,
+                        })}
+                        inputId={`skill-description-${lang.code}`}
+                      >
+                        <Textarea
+                          rows={3}
+                          placeholder={t("descriptionPlaceholder")}
+                          {...field}
+                        />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.urlWiki`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("wikiUrlWithLanguage", {
+                          language: lang.name ?? lang.code,
+                        })}
+                        inputId={`skill-wiki-${lang.code}`}
+                      >
+                        <Input
+                          placeholder={t("wikiUrlPlaceholder")}
+                          {...field}
+                        />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
             <div className="mt-4 grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
