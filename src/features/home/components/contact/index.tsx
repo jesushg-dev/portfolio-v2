@@ -7,7 +7,7 @@ import { api } from "@/trpc/server";
 import ContactForm from "./contact-form";
 import ContactIllustration from "./contact-illustration";
 import ContactItem from "./contact-item";
-import { buildContactLinks } from "./contact-links";
+import { buildContactLinks } from "@/utils/contact-links";
 
 const Contact: FC = async () => {
   const t = await getTranslations("main.contact");

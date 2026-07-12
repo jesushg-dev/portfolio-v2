@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 import type { IconType } from "react-icons";
 
-import type { ContactIconKey } from "./contact-links";
+import type { ContactIconKey } from "@/utils/contact-links";
 
 const CONTACT_ICONS: Record<ContactIconKey, IconType> = {
   email: FaRegEnvelope,

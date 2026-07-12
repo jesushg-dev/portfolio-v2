@@ -1,49 +1,40 @@
-"use client";
-
-import type { FC } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Heart } from "lucide-react";
 import { IoMail } from "react-icons/io5";
-import { FaLinkedinIn, FaGithub } from "react-icons/fa";
+import {
+  FaLinkedinIn,
+  FaGithub,
+  FaGlobe,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
+import type { IconType } from "react-icons";
 
 import { Link } from "@/i18n/routing";
 import SpotifyWidget from "@/components/shared/spotify-widget";
+import { api } from "@/trpc/server";
+import { buildContactLinks } from "@/utils/contact-links";
+import type { ContactIconKey } from "@/utils/contact-links";
 
-const SOCIAL_LINKS = [
-  {
-    href: "https://linkedin.com/in/jesus-hernandez23",
-    label: "LinkedIn",
-    icon: FaLinkedinIn,
-  },
-  {
-    href: "https://github.com/jess232017",
-    label: "GitHub",
-    icon: FaGithub,
-  },
-  {
-    href: "https://wa.me/+50586793204",
-    label: "WhatsApp",
-    icon: RiWhatsappFill,
-  },
-  {
-    href: "tel:86793204",
-    label: "Phone",
-    icon: RiPhoneFill,
-  },
-  {
-    href: "mailto:jess232016@gmail.com",
-    label: "Email",
-    icon: IoMail,
-  },
-] as const;
+const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
+  email: IoMail,
+  phone: RiPhoneFill,
+  whatsapp: RiWhatsappFill,
+  linkedin: FaLinkedinIn,
+  github: FaGithub,
+  website: FaGlobe,
+  location: FaMapMarkerAlt,
+};
 
 const PEOPLE_PLEDGE_URL = "https://people.pledge.party/";
 
-const Footer: FC = () => {
-  const t = useTranslations("global.footer");
+const Footer = async () => {
+  const t = await getTranslations("global.footer");
   const year = new Date().getFullYear();
+
+  const data = await api.contact.getPublic();
+  const socialLinks = buildContactLinks(data.contacts);
 
   return (
     <footer className="bg-primary-800 text-primary-foreground relative z-10">
@@ -178,20 +169,25 @@ const Footer: FC = () => {
           </p>
 
           <div className="flex items-center gap-1">
-            {SOCIAL_LINKS.map(({ href, label, icon: Icon }) => (
-              <a
-                key={label}
-                href={href}
-                aria-label={label}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel={
-                  href.startsWith("http") ? "noopener noreferrer" : undefined
-                }
-                className="text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground/40 inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
-              >
-                <Icon className="size-4" />
-              </a>
-            ))}
+            {socialLinks.map((link) => {
+              const Icon = FOOTER_ICONS[link.icon];
+              return (
+                <a
+                  key={link.key}
+                  href={link.href}
+                  aria-label={link.label}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={
+                    link.href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                  className="text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground/40 inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
+                >
+                  <Icon className="size-4" />
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>
