@@ -11,6 +11,8 @@ import {
   mapProjectsToEditorDto,
 } from "@/features/projects/lib/project-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
+import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
+import { type Prisma, type StackType } from "@prisma/client";
 
 const ProjectTranslationMapSchema = z.record(
   z.string(),
@@ -31,21 +33,55 @@ const projectUpsertInput = z.object({
 });
 
 export const projectsAdminRouter = createTRPCRouter({
-  getMine: protectedProcedure.query(async ({ ctx }) => {
-    const [projects, languages] = await Promise.all([
-      ctx.db.project.findMany({
-        where: { userId: ctx.user.id },
-        include: {
-          ProjectTranslation: true,
-          ProjectSkill: true,
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    ]);
+  getMine: protectedProcedure
+    .input(dataTableParamsSchema)
+    .query(async ({ ctx, input }) => {
+      const skip =
+        input.page && input.perPage
+          ? (input.page - 1) * input.perPage
+          : undefined;
+      const take = input.perPage ?? undefined;
 
-    return mapProjectsToEditorDto(projects, languages);
-  }),
+      let orderBy: Prisma.ProjectOrderByWithRelationInput = {
+        createdAt: "desc",
+      };
+      if (input.sort && input.sort.length > 0) {
+        const sortField = input.sort[0];
+        if (sortField.id === "type") {
+          orderBy = { type: sortField.desc ? "desc" : "asc" };
+        }
+      }
+
+      const where: Prisma.ProjectWhereInput = { userId: ctx.user.id };
+      if (input.filters && input.filters.length > 0) {
+        // Implement basic string filtering if any (e.g., type)
+        const typeFilter = input.filters.find((f) => f.id === "type");
+        if (typeFilter && typeof typeFilter.value === "string") {
+          where.type = typeFilter.value as StackType;
+        }
+      }
+
+      const [projects, totalCount, languages] = await Promise.all([
+        ctx.db.project.findMany({
+          where,
+          include: {
+            ProjectTranslation: true,
+            ProjectSkill: true,
+          },
+          orderBy,
+          skip,
+          take,
+        }),
+        ctx.db.project.count({ where }),
+        ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ]);
+
+      return {
+        data: mapProjectsToEditorDto(projects, languages),
+        pageCount: take ? Math.ceil(totalCount / take) : 1,
+        totalCount,
+      };
+    }),
 
   createItem: protectedProcedure
     .input(projectUpsertInput)

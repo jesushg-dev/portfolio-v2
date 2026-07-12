@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import type { PrismaClient } from "@prisma/client";
+import { type PrismaClient, type Prisma } from "@prisma/client";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -14,6 +14,7 @@ import {
 } from "@/features/soft-skills/lib/soft-skill-editor-dto";
 import { resolvePrimaryLanguage } from "@/lib/i18n/localized-form";
 import { translationMapToLocalizedFields } from "@/lib/i18n/localized-persist";
+import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 
 const SoftSkillsMediaTypeSchema = z.enum(["VIDEO", "IMAGE"]);
 
@@ -56,17 +57,48 @@ async function ensureSection(userId: string, db: PrismaClient) {
 }
 
 export const softSkillsAdminRouter = createTRPCRouter({
-  getMine: protectedProcedure.query(async ({ ctx }) => {
-    const [items, languages] = await Promise.all([
-      ctx.db.portfolioSoftSkill.findMany({
-        where: { userId: ctx.user.id },
-        orderBy: [{ order: "asc" }, { createdAt: "asc" }],
-      }),
-      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    ]);
+  getMine: protectedProcedure
+    .input(dataTableParamsSchema)
+    .query(async ({ ctx, input }) => {
+      const skip =
+        input.page && input.perPage
+          ? (input.page - 1) * input.perPage
+          : undefined;
+      const take = input.perPage ?? undefined;
 
-    return mapSoftSkillsToEditorDto(items, languages);
-  }),
+      let orderBy:
+        | Prisma.PortfolioSoftSkillOrderByWithRelationInput
+        | Prisma.PortfolioSoftSkillOrderByWithRelationInput[] = [
+        { order: "asc" },
+        { createdAt: "asc" },
+      ];
+      if (input.sort && input.sort.length > 0) {
+        const sortField = input.sort[0];
+        if (sortField.id === "order")
+          orderBy = { order: sortField.desc ? "desc" : "asc" };
+      }
+
+      const where: Prisma.PortfolioSoftSkillWhereInput = {
+        userId: ctx.user.id,
+      };
+
+      const [items, totalCount, languages] = await Promise.all([
+        ctx.db.portfolioSoftSkill.findMany({
+          where,
+          orderBy,
+          skip,
+          take,
+        }),
+        ctx.db.portfolioSoftSkill.count({ where }),
+        ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ]);
+
+      return {
+        data: mapSoftSkillsToEditorDto(items, languages),
+        pageCount: take ? Math.ceil(totalCount / take) : 1,
+        totalCount,
+      };
+    }),
 
   getSection: protectedProcedure.query(async ({ ctx }) => {
     return ensureSection(ctx.user.id, ctx.db);

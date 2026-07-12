@@ -45,10 +45,11 @@ const ARRAY_SEPARATOR = ",";
 const DEBOUNCE_MS = 300;
 const THROTTLE_MS = 50;
 
-interface UseDataTableProps<TData>
-  extends
-    Omit<TableOptions<TData>, "state" | "pageCount" | "getCoreRowModel">,
-    Required<Pick<TableOptions<TData>, "pageCount">> {
+interface UseDataTableProps<TData> extends Omit<
+  TableOptions<TData>,
+  "state" | "pageCount" | "getCoreRowModel"
+> {
+  rowCount: number;
   initialState?: Omit<Partial<TableState>, "sorting"> & {
     sorting?: ExtendedColumnSort<TData>[];
   };
@@ -68,7 +69,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
 
   const {
     columns,
-    pageCount = -1,
+    rowCount,
     initialState,
     queryKeys,
     history = "replace",
@@ -270,7 +271,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     ...tableProps,
     columns,
     initialState,
-    pageCount,
+    rowCount,
     state: {
       pagination,
       sorting,

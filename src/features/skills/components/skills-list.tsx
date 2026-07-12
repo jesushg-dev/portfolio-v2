@@ -10,27 +10,51 @@ import { toast } from "sonner";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
+import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useQueryState, parseAsInteger } from "nuqs";
+import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
 
 import type { RouterOutputs } from "@/trpc/react";
 
-type SkillRow = RouterOutputs["skillsAdmin"]["getMine"][number];
+type SkillRow = RouterOutputs["skillsAdmin"]["getMine"]["data"][number];
 
 interface SkillsListProps {
   initialSkills: SkillRow[];
+  pageCount: number;
+  totalCount: number;
 }
 
-export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
+export const SkillsList: FC<SkillsListProps> = ({
+  initialSkills,
+  pageCount: initialPageCount,
+  totalCount: initialTotalCount,
+}) => {
   const t = useTranslations("admin.skills");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const { data: skills = initialSkills } = api.skillsAdmin.getMine.useQuery(
-    undefined,
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
+  const [sort] = useQueryState("sort", getSortingStateParser<SkillRow>());
+  const [filters] = useQueryState("filters", getFiltersStateParser<SkillRow>());
+
+  const {
+    data: { data: skills, totalCount: trpcTotalCount } = {
+      data: initialSkills,
+      totalCount: initialTotalCount,
+    },
+    isFetching,
+  } = api.skillsAdmin.getMine.useQuery(
+    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
     {
-      initialData: initialSkills,
+      placeholderData: {
+        data: initialSkills,
+        pageCount: initialPageCount,
+        totalCount: initialTotalCount,
+      },
     },
   );
 
@@ -132,9 +156,9 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/skills/${skill.id}/edit`}
-                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
-                <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
+                <Pencil className="h-3 w-3" /> {t("edit")}
               </Link>
 
               <Button
@@ -162,10 +186,10 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
   const { table } = useDataTable({
     data: typedSkills,
     columns,
-    pageCount: 1,
-    manualPagination: false,
-    manualSorting: false,
-    manualFiltering: false,
+    rowCount: trpcTotalCount,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
     initialState: {
       sorting: [{ id: "title", desc: false }],
     },
@@ -173,7 +197,8 @@ export const SkillsList: FC<SkillsListProps> = ({ initialSkills }) => {
   });
 
   return (
-    <div className="relative flex h-full min-h-[500px] flex-col">
+    <div className="relative flex h-full flex-col">
+      <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
           <Link

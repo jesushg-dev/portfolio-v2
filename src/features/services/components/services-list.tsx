@@ -14,10 +14,13 @@ import { getTitleDescriptionForLocale } from "@/lib/i18n/localized-display";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
+import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
+import { useQueryState, parseAsInteger } from "nuqs";
+import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
 
-type ServiceRow = RouterOutputs["servicesAdmin"]["getMine"][number];
+type ServiceRow = RouterOutputs["servicesAdmin"]["getMine"]["data"][number];
 
 interface SkillRow {
   id: string;
@@ -28,23 +31,48 @@ interface ServicesListProps {
   initialServices: ServiceRow[];
   languages: AppLanguage[];
   locale: Locale;
+  pageCount: number;
+  totalCount: number;
 }
 
 export const ServicesList: FC<ServicesListProps> = ({
   initialServices,
   languages,
   locale,
+  pageCount: initialPageCount,
+  totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.services");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const { data: services = initialServices } =
-    api.servicesAdmin.getMine.useQuery(undefined, {
-      initialData: initialServices,
-    });
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
+  const [sort] = useQueryState("sort", getSortingStateParser<ServiceRow>());
+  const [filters] = useQueryState(
+    "filters",
+    getFiltersStateParser<ServiceRow>(),
+  );
 
-  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
+  const {
+    data: { data: services, totalCount: trpcTotalCount } = {
+      data: initialServices,
+      totalCount: initialTotalCount,
+    },
+    isFetching,
+  } = api.servicesAdmin.getMine.useQuery(
+    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    {
+      placeholderData: {
+        data: initialServices,
+        pageCount: initialPageCount,
+        totalCount: initialTotalCount,
+      },
+    },
+  );
+
+  const { data: { data: rawSkills = [] } = {} } =
+    api.skillsAdmin.getMine.useQuery({});
 
   const deleteService = api.servicesAdmin.deleteItem.useMutation();
   const [isPending, startTransition] = useTransition();
@@ -94,7 +122,8 @@ export const ServicesList: FC<ServicesListProps> = ({
           placeholder: "Search title...",
           variant: "text",
         },
-        enableColumnFilter: true,
+        enableSorting: false,
+        enableColumnFilter: false,
         cell: ({ row }) => {
           const title =
             getTitleDescriptionForLocale(
@@ -172,9 +201,9 @@ export const ServicesList: FC<ServicesListProps> = ({
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/services/${service.id}/edit`}
-                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
-                <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
+                <Pencil className="h-3 w-3" /> {t("edit")}
               </Link>
 
               <Button
@@ -202,20 +231,19 @@ export const ServicesList: FC<ServicesListProps> = ({
   const { table } = useDataTable({
     data: services,
     columns,
-    pageCount: 1,
-    manualPagination: false,
-    manualSorting: false,
-    manualFiltering: false,
+    rowCount: trpcTotalCount,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
     initialState: {
-      sorting: [
-        { id: "title" as Extract<keyof ServiceRow, string>, desc: false },
-      ],
+      sorting: [{ id: "type", desc: true }],
     },
     shallow: true,
   });
 
   return (
-    <div className="relative flex h-full min-h-[500px] flex-col">
+    <div className="relative flex h-full flex-col">
+      <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
           <Link href="/admin/services/new" className={buttonVariants()}>

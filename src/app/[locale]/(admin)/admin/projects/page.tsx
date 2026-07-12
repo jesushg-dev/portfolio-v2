@@ -7,15 +7,22 @@ import { getUserProjectsWithLanguages } from "@/features/projects/server/project
 
 interface Props {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-const ProjectsPage: FC<Props> = async ({ params }) => {
-  const { locale } = await params;
+const ProjectsPage: FC<Props> = async ({ params, searchParams }) => {
+  const [{ locale }, search] = await Promise.all([params, searchParams]);
   setRequestLocale(locale as Locale);
-  const [t, { data: initialProjects, languages }] = await Promise.all([
-    getTranslations("admin.projects"),
-    getUserProjectsWithLanguages(),
-  ]);
+
+  const page = typeof search.page === "string" ? parseInt(search.page) || 1 : 1;
+  const perPage =
+    typeof search.perPage === "string" ? parseInt(search.perPage) || 10 : 10;
+
+  const [t, { data: initialProjects, languages, pageCount, totalCount }] =
+    await Promise.all([
+      getTranslations("admin.projects"),
+      getUserProjectsWithLanguages({ page, perPage, sort: [], filters: [] }),
+    ]);
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -28,6 +35,8 @@ const ProjectsPage: FC<Props> = async ({ params }) => {
           initialProjects={initialProjects}
           languages={languages}
           locale={locale as Locale}
+          pageCount={pageCount}
+          totalCount={totalCount}
         />
       </div>
     </div>

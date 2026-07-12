@@ -11,6 +11,8 @@ import {
   mapSkillsToEditorDto,
 } from "@/features/skills/lib/skill-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
+import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
+import type { Prisma, StackType } from "@prisma/client";
 
 const SkillTranslationMapSchema = z.record(
   z.string(),
@@ -28,21 +30,57 @@ const skillUpsertInput = z.object({
 });
 
 export const skillsAdminRouter = createTRPCRouter({
-  getMine: protectedProcedure.query(async ({ ctx }) => {
-    const [skills, languages] = await Promise.all([
-      ctx.db.skill.findMany({
-        where: { userId: ctx.user.id },
-        include: {
-          SkillTranslation: true,
-          _count: { select: { ProjectSkill: true, CertificateSkill: true } },
-        },
-        orderBy: { title: "asc" },
-      }),
-      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    ]);
+  getMine: protectedProcedure
+    .input(dataTableParamsSchema)
+    .query(async ({ ctx, input }) => {
+      const skip =
+        input.page && input.perPage
+          ? (input.page - 1) * input.perPage
+          : undefined;
+      const take = input.perPage ?? undefined;
 
-    return mapSkillsToEditorDto(skills, languages);
-  }),
+      let orderBy: Prisma.SkillOrderByWithRelationInput = { title: "asc" };
+      if (input.sort && input.sort.length > 0) {
+        const sortField = input.sort[0];
+        if (sortField.id === "title")
+          orderBy = { title: sortField.desc ? "desc" : "asc" };
+        if (sortField.id === "type")
+          orderBy = { type: sortField.desc ? "desc" : "asc" };
+      }
+
+      const where: Prisma.SkillWhereInput = { userId: ctx.user.id };
+      if (input.filters && input.filters.length > 0) {
+        const titleFilter = input.filters.find((f) => f.id === "title");
+        if (titleFilter && typeof titleFilter.value === "string") {
+          where.title = { contains: titleFilter.value, mode: "insensitive" };
+        }
+        const typeFilter = input.filters.find((f) => f.id === "type");
+        if (typeFilter && typeof typeFilter.value === "string") {
+          where.type = typeFilter.value as StackType;
+        }
+      }
+
+      const [skills, totalCount, languages] = await Promise.all([
+        ctx.db.skill.findMany({
+          where,
+          include: {
+            SkillTranslation: true,
+            _count: { select: { ProjectSkill: true, CertificateSkill: true } },
+          },
+          orderBy,
+          skip,
+          take,
+        }),
+        ctx.db.skill.count({ where }),
+        ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ]);
+
+      return {
+        data: mapSkillsToEditorDto(skills, languages),
+        pageCount: take ? Math.ceil(totalCount / take) : 1,
+        totalCount,
+      };
+    }),
 
   createItem: protectedProcedure
     .input(skillUpsertInput)

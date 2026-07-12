@@ -85,7 +85,8 @@ export const ProjectForm: FC<ProjectFormProps> = ({
   const createProject = api.projectsAdmin.createItem.useMutation();
   const updateProject = api.projectsAdmin.updateItem.useMutation();
 
-  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
+  const { data: { data: rawSkills = [] } = {} } =
+    api.skillsAdmin.getMine.useQuery({});
   const utils = api.useUtils();
 
   const availableSkills = rawSkills.map((skill) => ({

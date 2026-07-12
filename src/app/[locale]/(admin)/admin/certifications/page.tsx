@@ -7,15 +7,27 @@ import { getUserCertificationsWithLanguages } from "@/features/certifications/se
 
 interface Props {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-const CertificationsPage: FC<Props> = async ({ params }) => {
-  const { locale } = await params;
+const CertificationsPage: FC<Props> = async ({ params, searchParams }) => {
+  const [{ locale }, search] = await Promise.all([params, searchParams]);
   setRequestLocale(locale as Locale);
-  const [t, { data: initialCertifications, languages }] = await Promise.all([
-    getTranslations("admin.certifications"),
-    getUserCertificationsWithLanguages(),
-  ]);
+
+  const page = typeof search.page === "string" ? parseInt(search.page) || 1 : 1;
+  const perPage =
+    typeof search.perPage === "string" ? parseInt(search.perPage) || 10 : 10;
+
+  const [t, { data: initialCertifications, languages, pageCount, totalCount }] =
+    await Promise.all([
+      getTranslations("admin.certifications"),
+      getUserCertificationsWithLanguages({
+        page,
+        perPage,
+        sort: [],
+        filters: [],
+      }),
+    ]);
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -28,6 +40,8 @@ const CertificationsPage: FC<Props> = async ({ params }) => {
           initialCertifications={initialCertifications}
           languages={languages}
           locale={locale as Locale}
+          pageCount={pageCount}
+          totalCount={totalCount}
         />
       </div>
     </div>

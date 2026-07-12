@@ -7,6 +7,8 @@ import {
   mapProjectToEditorDto,
   mapProjectsToEditorDto,
 } from "@/features/projects/lib/project-editor-dto";
+import type { DataTableParams } from "@/lib/admin/data-table-schemas";
+import type { Prisma, StackType } from "@prisma/client";
 
 export async function getProjectCreatePageData() {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
@@ -40,23 +42,52 @@ export async function getProjectEditPageData(id: string) {
   };
 }
 
-export async function getUserProjectsWithLanguages() {
+export async function getUserProjectsWithLanguages(params: DataTableParams) {
   const [languages, userId] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
     getAuthenticatedUserId(),
   ]);
 
-  const projects = await db.project.findMany({
-    where: { userId: userId! },
-    include: {
-      ProjectTranslation: { include: { language: true } },
-      ProjectSkill: { include: { Skill: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const skip =
+    params.page && params.perPage
+      ? (params.page - 1) * params.perPage
+      : undefined;
+  const take = params.perPage ?? undefined;
+
+  let orderBy: Prisma.ProjectOrderByWithRelationInput = { createdAt: "desc" };
+  if (params.sort && params.sort.length > 0) {
+    const sortField = params.sort[0];
+    if (sortField.id === "type") {
+      orderBy = { type: sortField.desc ? "desc" : "asc" };
+    }
+  }
+
+  const where: Prisma.ProjectWhereInput = { userId: userId! };
+  if (params.filters && params.filters.length > 0) {
+    const typeFilter = params.filters.find((f) => f.id === "type");
+    if (typeFilter && typeof typeFilter.value === "string") {
+      where.type = typeFilter.value as StackType;
+    }
+  }
+
+  const [projects, totalCount] = await Promise.all([
+    db.project.findMany({
+      where,
+      include: {
+        ProjectTranslation: { include: { language: true } },
+        ProjectSkill: { include: { Skill: true } },
+      },
+      orderBy,
+      skip,
+      take,
+    }),
+    db.project.count({ where }),
+  ]);
 
   return {
     data: mapProjectsToEditorDto(projects, languages),
     languages,
+    pageCount: take ? Math.ceil(totalCount / take) : 1,
+    totalCount,
   };
 }

@@ -7,14 +7,20 @@ import { getUserServicesWithLanguages } from "@/features/services/server/service
 
 interface Props {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-const ServicesPage: FC<Props> = async ({ params }) => {
-  const { locale } = await params;
+const ServicesPage: FC<Props> = async ({ params, searchParams }) => {
+  const [{ locale }, search] = await Promise.all([params, searchParams]);
   setRequestLocale(locale as Locale);
-  const [t, { data, languages }] = await Promise.all([
+
+  const page = typeof search.page === "string" ? parseInt(search.page) || 1 : 1;
+  const perPage =
+    typeof search.perPage === "string" ? parseInt(search.perPage) || 10 : 10;
+
+  const [t, { data, languages, pageCount, totalCount }] = await Promise.all([
     getTranslations("admin.services"),
-    getUserServicesWithLanguages(),
+    getUserServicesWithLanguages({ page, perPage, sort: [], filters: [] }),
   ]);
 
   return (
@@ -28,6 +34,8 @@ const ServicesPage: FC<Props> = async ({ params }) => {
           initialServices={data}
           languages={languages}
           locale={locale as Locale}
+          pageCount={pageCount}
+          totalCount={totalCount}
         />
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -14,10 +14,14 @@ import { getLocalizedFieldForLocale } from "@/lib/i18n/localized-display";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
+import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
+import { useQueryState, parseAsInteger } from "nuqs";
+import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
 
-type CertificationRow = RouterOutputs["certificationsAdmin"]["getMine"][number];
+type CertificationRow =
+  RouterOutputs["certificationsAdmin"]["getMine"]["data"][number];
 
 interface SkillRow {
   id: string;
@@ -28,24 +32,52 @@ interface CertificationsListProps {
   initialCertifications: CertificationRow[];
   languages: AppLanguage[];
   locale: Locale;
+  pageCount: number;
+  totalCount: number;
 }
 
 export const CertificationsList: FC<CertificationsListProps> = ({
   initialCertifications,
   languages,
   locale,
+  pageCount: initialPageCount,
+  totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.certifications");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const { data: certifications = initialCertifications } =
-    api.certificationsAdmin.getMine.useQuery(undefined, {
-      initialData: initialCertifications,
-    });
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
+  const [sort] = useQueryState(
+    "sort",
+    getSortingStateParser<CertificationRow>(),
+  );
+  const [filters] = useQueryState(
+    "filters",
+    getFiltersStateParser<CertificationRow>(),
+  );
 
-  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
+  const {
+    data: { data: certifications, totalCount: trpcTotalCount } = {
+      data: initialCertifications,
+      totalCount: initialTotalCount,
+    },
+    isFetching,
+  } = api.certificationsAdmin.getMine.useQuery(
+    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    {
+      placeholderData: {
+        data: initialCertifications,
+        pageCount: initialPageCount,
+        totalCount: initialTotalCount,
+      },
+    },
+  );
+
+  const { data: { data: rawSkills = [] } = {} } =
+    api.skillsAdmin.getMine.useQuery({});
 
   const deleteCertification = api.certificationsAdmin.deleteItem.useMutation();
 
@@ -94,7 +126,8 @@ export const CertificationsList: FC<CertificationsListProps> = ({
           placeholder: "Search title...",
           variant: "text",
         },
-        enableColumnFilter: true,
+        enableSorting: false,
+        enableColumnFilter: false,
         cell: ({ row }) => (
           <p className="text-foreground font-medium">
             {getLocalizedFieldForLocale(
@@ -163,9 +196,9 @@ export const CertificationsList: FC<CertificationsListProps> = ({
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/certifications/${cert.id}/edit`}
-                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
-                <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
+                <Pencil className="h-3 w-3" /> {t("edit")}
               </Link>
 
               <Button
@@ -193,20 +226,19 @@ export const CertificationsList: FC<CertificationsListProps> = ({
   const { table } = useDataTable({
     data: certifications,
     columns,
-    pageCount: 1,
-    manualPagination: false,
-    manualSorting: false,
-    manualFiltering: false,
+    rowCount: trpcTotalCount,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
     initialState: {
-      sorting: [
-        { id: "title" as Extract<keyof CertificationRow, string>, desc: false },
-      ],
+      sorting: [{ id: "issuedDate", desc: true }],
     },
     shallow: true,
   });
 
   return (
-    <div className="relative flex h-full min-h-[500px] flex-col">
+    <div className="relative flex h-full flex-col">
+      <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
           <Link

@@ -82,7 +82,8 @@ export const CertificationForm: FC<CertificationFormProps> = ({
   const createCert = api.certificationsAdmin.createItem.useMutation();
   const updateCert = api.certificationsAdmin.updateItem.useMutation();
 
-  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
+  const { data: { data: rawSkills = [] } = {} } =
+    api.skillsAdmin.getMine.useQuery({});
   const utils = api.useUtils();
 
   const availableSkills = rawSkills.map((s) => ({

@@ -1251,6 +1251,7 @@
       "pageOf": "Pagina {page} van {total}",
       "previous": "Vorige",
       "next": "Volgende",
+      "loading": "Laden...",
       "columns": {
         "title": "Titel",
         "type": "Soort",

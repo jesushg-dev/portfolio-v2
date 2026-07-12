@@ -11,6 +11,7 @@ import type { Locale } from "@/i18n/config";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
+import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,19 +19,25 @@ import { resolveSoftSkillIcon } from "@/features/soft-skills/lib/soft-skill-icon
 import { getSoftSkillTranslationText } from "@/features/soft-skills/lib/soft-skill-editor-dto";
 import type { RouterOutputs } from "@/trpc/react";
 import type { AppLanguage } from "@prisma/client";
+import { useQueryState, parseAsInteger } from "nuqs";
+import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
 
-type SoftSkillRow = RouterOutputs["softSkillsAdmin"]["getMine"][number];
+type SoftSkillRow = RouterOutputs["softSkillsAdmin"]["getMine"]["data"][number];
 
 interface SoftSkillsListProps {
   initialItems: SoftSkillRow[];
   languages: AppLanguage[];
   locale: Locale;
+  pageCount: number;
+  totalCount: number;
 }
 
 export const SoftSkillsList: FC<SoftSkillsListProps> = ({
   initialItems,
   languages,
   locale,
+  pageCount: initialPageCount,
+  totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.softSkills");
 
@@ -38,9 +45,29 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const { data: items = initialItems } = api.softSkillsAdmin.getMine.useQuery(
-    undefined,
-    { initialData: initialItems },
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
+  const [sort] = useQueryState("sort", getSortingStateParser<SoftSkillRow>());
+  const [filters] = useQueryState(
+    "filters",
+    getFiltersStateParser<SoftSkillRow>(),
+  );
+
+  const {
+    data: { data: items, totalCount: trpcTotalCount } = {
+      data: initialItems,
+      totalCount: initialTotalCount,
+    },
+    isFetching,
+  } = api.softSkillsAdmin.getMine.useQuery(
+    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    {
+      placeholderData: {
+        data: initialItems,
+        pageCount: initialPageCount,
+        totalCount: initialTotalCount,
+      },
+    },
   );
 
   const deleteItem = api.softSkillsAdmin.deleteItem.useMutation();
@@ -89,7 +116,8 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
           placeholder: "Search title...",
           variant: "text",
         },
-        enableColumnFilter: true,
+        enableSorting: false,
+        enableColumnFilter: false,
         cell: ({ row }) => {
           const titleText = getSoftSkillTranslationText(
             row.original,
@@ -146,9 +174,9 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/soft-skills/${item.id}/edit`}
-                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
-                <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
+                <Pencil className="h-3 w-3" /> {t("edit")}
               </Link>
 
               <Button
@@ -176,15 +204,19 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
   const { table } = useDataTable({
     data: items,
     columns,
-    pageCount: 1,
-    manualPagination: false,
-    manualSorting: false,
-    manualFiltering: false,
+    rowCount: trpcTotalCount,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
+    initialState: {
+      sorting: [{ id: "order", desc: false }],
+    },
     shallow: true,
   });
 
   return (
-    <div className="relative flex h-full min-h-[500px] flex-col">
+    <div className="relative flex h-full flex-col">
+      <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
           <div className="flex flex-wrap items-center gap-2">

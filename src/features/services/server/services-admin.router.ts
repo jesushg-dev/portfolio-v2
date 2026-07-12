@@ -10,6 +10,8 @@ import {
   mapServicesToEditorDto,
 } from "@/features/services/lib/service-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
+import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
+import type { Prisma, StackType } from "@prisma/client";
 
 const ServiceTranslationMapSchema = z.record(
   z.string(),
@@ -27,21 +29,63 @@ const serviceUpsertInput = z.object({
 });
 
 export const servicesAdminRouter = createTRPCRouter({
-  getMine: protectedProcedure.query(async ({ ctx }) => {
-    const [services, languages] = await Promise.all([
-      ctx.db.service.findMany({
-        where: { userId: ctx.user.id },
-        include: {
-          ServiceTranslation: true,
-          ServiceSkill: true,
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    ]);
+  getMine: protectedProcedure
+    .input(dataTableParamsSchema)
+    .query(async ({ ctx, input }) => {
+      const skip =
+        input.page && input.perPage
+          ? (input.page - 1) * input.perPage
+          : undefined;
+      const take = input.perPage ?? undefined;
 
-    return mapServicesToEditorDto(services, languages);
-  }),
+      let orderBy: Prisma.ServiceOrderByWithRelationInput = {
+        createdAt: "desc",
+      };
+      if (input.sort && input.sort.length > 0) {
+        const sortField = input.sort[0];
+        if (sortField.id === "type")
+          orderBy = { type: sortField.desc ? "desc" : "asc" };
+        if (sortField.id === "createdAt")
+          orderBy = { createdAt: sortField.desc ? "desc" : "asc" };
+      }
+
+      const where: Prisma.ServiceWhereInput = { userId: ctx.user.id };
+      if (input.filters && input.filters.length > 0) {
+        const titleFilter = input.filters.find((f) => f.id === "title");
+        if (titleFilter && typeof titleFilter.value === "string") {
+          where.ServiceTranslation = {
+            some: {
+              title: { contains: titleFilter.value, mode: "insensitive" },
+            },
+          };
+        }
+        const typeFilter = input.filters.find((f) => f.id === "type");
+        if (typeFilter && typeof typeFilter.value === "string") {
+          where.type = typeFilter.value as StackType;
+        }
+      }
+
+      const [services, totalCount, languages] = await Promise.all([
+        ctx.db.service.findMany({
+          where,
+          include: {
+            ServiceTranslation: true,
+            ServiceSkill: true,
+          },
+          orderBy,
+          skip,
+          take,
+        }),
+        ctx.db.service.count({ where }),
+        ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ]);
+
+      return {
+        data: mapServicesToEditorDto(services, languages),
+        pageCount: take ? Math.ceil(totalCount / take) : 1,
+        totalCount,
+      };
+    }),
 
   createItem: protectedProcedure
     .input(serviceUpsertInput)

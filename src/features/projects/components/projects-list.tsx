@@ -13,10 +13,13 @@ import { getTitleDescriptionForLocale } from "@/lib/i18n/localized-display";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
+import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
+import { useQueryState, parseAsInteger } from "nuqs";
+import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
 
-type ProjectRow = RouterOutputs["projectsAdmin"]["getMine"][number];
+type ProjectRow = RouterOutputs["projectsAdmin"]["getMine"]["data"][number];
 
 interface SkillRow {
   id: string;
@@ -28,23 +31,48 @@ interface ProjectsListProps {
   initialProjects: ProjectRow[];
   languages: AppLanguage[];
   locale: Locale;
+  pageCount: number;
+  totalCount: number;
 }
 
 export const ProjectsList: FC<ProjectsListProps> = ({
   initialProjects,
   languages,
   locale,
+  pageCount: initialPageCount,
+  totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.projects");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const { data: projects = initialProjects } =
-    api.projectsAdmin.getMine.useQuery(undefined, {
-      initialData: initialProjects,
-    });
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
+  const [sort] = useQueryState("sort", getSortingStateParser<ProjectRow>());
+  const [filters] = useQueryState(
+    "filters",
+    getFiltersStateParser<ProjectRow>(),
+  );
 
-  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
+  const {
+    data: { data: projects, totalCount: trpcTotalCount } = {
+      data: initialProjects,
+      totalCount: initialTotalCount,
+    },
+    isFetching,
+  } = api.projectsAdmin.getMine.useQuery(
+    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    {
+      placeholderData: {
+        data: initialProjects,
+        pageCount: initialPageCount,
+        totalCount: initialTotalCount,
+      },
+    },
+  );
+
+  const { data: { data: rawSkills = [] } = {} } =
+    api.skillsAdmin.getMine.useQuery({});
 
   const deleteProject = api.projectsAdmin.deleteItem.useMutation();
   const [isPending, startTransition] = useTransition();
@@ -79,6 +107,8 @@ export const ProjectsList: FC<ProjectsListProps> = ({
     () => [
       {
         id: "title",
+        enableSorting: false,
+        enableColumnFilter: false,
         accessorFn: (row) =>
           getTitleDescriptionForLocale(
             row.translations,
@@ -94,7 +124,6 @@ export const ProjectsList: FC<ProjectsListProps> = ({
           placeholder: "Search title...",
           variant: "text",
         },
-        enableColumnFilter: true,
         cell: ({ row }) => {
           const title =
             getTitleDescriptionForLocale(
@@ -134,6 +163,8 @@ export const ProjectsList: FC<ProjectsListProps> = ({
       },
       {
         id: "skills",
+        enableSorting: false,
+        enableColumnFilter: false,
         accessorFn: (row) =>
           row.skillIds
             .map((skillId) => skillsById.get(skillId)?.title ?? "")
@@ -165,9 +196,9 @@ export const ProjectsList: FC<ProjectsListProps> = ({
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/projects/${project.id}/edit`}
-                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
-                <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
+                <Pencil className="h-3 w-3" /> {t("edit")}
               </Link>
 
               <Button
@@ -195,20 +226,19 @@ export const ProjectsList: FC<ProjectsListProps> = ({
   const { table } = useDataTable({
     data: projects,
     columns,
-    pageCount: 1,
-    manualPagination: false,
-    manualSorting: false,
-    manualFiltering: false,
+    rowCount: trpcTotalCount,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
     initialState: {
-      sorting: [
-        { id: "title" as Extract<keyof ProjectRow, string>, desc: false },
-      ],
+      sorting: [{ id: "type", desc: false }],
     },
     shallow: true,
   });
 
   return (
-    <div className="relative flex h-full min-h-[500px] flex-col">
+    <div className="relative flex h-full flex-col">
+      <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
           <Link

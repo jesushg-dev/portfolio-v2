@@ -80,7 +80,8 @@ export const ServiceForm: FC<ServiceFormProps> = ({
   const createService = api.servicesAdmin.createItem.useMutation();
   const updateService = api.servicesAdmin.updateItem.useMutation();
 
-  const { data: rawSkills = [] } = api.skillsAdmin.getMine.useQuery();
+  const { data: { data: rawSkills = [] } = {} } =
+    api.skillsAdmin.getMine.useQuery({});
   const utils = api.useUtils();
 
   const availableSkills = rawSkills.map((s) => ({

@@ -11,6 +11,8 @@ import {
   mapCertificationsToEditorDto,
 } from "@/features/certifications/lib/certification-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
+import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
+import type { Prisma } from "@prisma/client";
 
 const CertificationTranslationMapSchema = z.record(
   z.string(),
@@ -31,21 +33,66 @@ const certificationUpsertInput = z.object({
 });
 
 export const certificationsAdminRouter = createTRPCRouter({
-  getMine: protectedProcedure.query(async ({ ctx }) => {
-    const [certifications, languages] = await Promise.all([
-      ctx.db.certification.findMany({
-        where: { userId: ctx.user.id },
-        include: {
-          CertificationTranslation: true,
-          CertificateSkill: true,
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    ]);
+  getMine: protectedProcedure
+    .input(dataTableParamsSchema)
+    .query(async ({ ctx, input }) => {
+      const skip =
+        input.page && input.perPage
+          ? (input.page - 1) * input.perPage
+          : undefined;
+      const take = input.perPage ?? undefined;
 
-    return mapCertificationsToEditorDto(certifications, languages);
-  }),
+      let orderBy: Prisma.CertificationOrderByWithRelationInput = {
+        createdAt: "desc",
+      };
+      if (input.sort && input.sort.length > 0) {
+        const sortField = input.sort[0];
+        if (sortField.id === "company")
+          orderBy = { company: sortField.desc ? "desc" : "asc" };
+        if (sortField.id === "createdAt")
+          orderBy = { createdAt: sortField.desc ? "desc" : "asc" };
+      }
+
+      const where: Prisma.CertificationWhereInput = { userId: ctx.user.id };
+      if (input.filters && input.filters.length > 0) {
+        const titleFilter = input.filters.find((f) => f.id === "title");
+        if (titleFilter && typeof titleFilter.value === "string") {
+          where.CertificationTranslation = {
+            some: {
+              title: { contains: titleFilter.value, mode: "insensitive" },
+            },
+          };
+        }
+        const companyFilter = input.filters.find((f) => f.id === "company");
+        if (companyFilter && typeof companyFilter.value === "string") {
+          where.company = {
+            contains: companyFilter.value,
+            mode: "insensitive",
+          };
+        }
+      }
+
+      const [certifications, totalCount, languages] = await Promise.all([
+        ctx.db.certification.findMany({
+          where,
+          include: {
+            CertificationTranslation: true,
+            CertificateSkill: true,
+          },
+          orderBy,
+          skip,
+          take,
+        }),
+        ctx.db.certification.count({ where }),
+        ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ]);
+
+      return {
+        data: mapCertificationsToEditorDto(certifications, languages),
+        pageCount: take ? Math.ceil(totalCount / take) : 1,
+        totalCount,
+      };
+    }),
 
   createItem: protectedProcedure
     .input(certificationUpsertInput)

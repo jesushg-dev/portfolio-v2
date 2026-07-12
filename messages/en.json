@@ -1247,6 +1247,7 @@
       "pageOf": "Page {page} of {total}",
       "previous": "Previous",
       "next": "Next",
+      "loading": "Loading...",
       "columns": {
         "title": "Title",
         "type": "Type",

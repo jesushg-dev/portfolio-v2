@@ -7,6 +7,8 @@ import {
   mapSoftSkillToEditorDto,
   mapSoftSkillsToEditorDto,
 } from "@/features/soft-skills/lib/soft-skill-editor-dto";
+import type { DataTableParams } from "@/lib/admin/data-table-schemas";
+import type { Prisma } from "@prisma/client";
 
 export async function getSoftSkillCreatePageData() {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
@@ -36,19 +38,46 @@ export async function getSoftSkillEditPageData(id: string) {
   };
 }
 
-export async function getUserSoftSkillsWithLanguages() {
+export async function getUserSoftSkillsWithLanguages(params: DataTableParams) {
   const [languages, userId] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
     getAuthenticatedUserId(),
   ]);
 
-  const items = await db.portfolioSoftSkill.findMany({
-    where: { userId: userId! },
-    orderBy: [{ order: "asc" }, { createdAt: "asc" }],
-  });
+  const skip =
+    params.page && params.perPage
+      ? (params.page - 1) * params.perPage
+      : undefined;
+  const take = params.perPage ?? undefined;
+
+  let orderBy:
+    | Prisma.PortfolioSoftSkillOrderByWithRelationInput
+    | Prisma.PortfolioSoftSkillOrderByWithRelationInput[] = [
+    { order: "asc" },
+    { createdAt: "asc" },
+  ];
+  if (params.sort && params.sort.length > 0) {
+    const sortField = params.sort[0];
+    if (sortField.id === "order")
+      orderBy = { order: sortField.desc ? "desc" : "asc" };
+  }
+
+  const where: Prisma.PortfolioSoftSkillWhereInput = { userId: userId! };
+
+  const [items, totalCount] = await Promise.all([
+    db.portfolioSoftSkill.findMany({
+      where,
+      orderBy,
+      skip,
+      take,
+    }),
+    db.portfolioSoftSkill.count({ where }),
+  ]);
 
   return {
     data: mapSoftSkillsToEditorDto(items, languages),
     languages,
+    pageCount: take ? Math.ceil(totalCount / take) : 1,
+    totalCount,
   };
 }

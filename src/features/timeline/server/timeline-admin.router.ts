@@ -8,6 +8,8 @@ import {
 } from "@/features/timeline/lib/timeline-editor-dto";
 import { resolvePrimaryLanguage } from "@/lib/i18n/localized-form";
 import { translationMapToLocalizedFields } from "@/lib/i18n/localized-persist";
+import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
+import type { Prisma, TimelineCategory } from "@prisma/client";
 
 const TimelineCategorySchema = z.enum(["WORK", "STUDY", "COURSE"]);
 
@@ -31,17 +33,63 @@ const timelineUpsertInput = z.object({
 });
 
 export const timelineAdminRouter = createTRPCRouter({
-  getMine: protectedProcedure.query(async ({ ctx }) => {
-    const [items, languages] = await Promise.all([
-      ctx.db.timelineItem.findMany({
-        where: { userId: ctx.user.id },
-        orderBy: [{ startDate: "desc" }, { createdAt: "desc" }],
-      }),
-      ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    ]);
+  getMine: protectedProcedure
+    .input(dataTableParamsSchema)
+    .query(async ({ ctx, input }) => {
+      const skip =
+        input.page && input.perPage
+          ? (input.page - 1) * input.perPage
+          : undefined;
+      const take = input.perPage ?? undefined;
 
-    return mapTimelinesToEditorDto(items, languages);
-  }),
+      let orderBy:
+        | Prisma.TimelineItemOrderByWithRelationInput
+        | Prisma.TimelineItemOrderByWithRelationInput[] = [
+        { startDate: "desc" },
+        { createdAt: "desc" },
+      ];
+      if (input.sort && input.sort.length > 0) {
+        const sortField = input.sort[0];
+        if (sortField.id === "category")
+          orderBy = { category: sortField.desc ? "desc" : "asc" };
+        if (sortField.id === "startDate")
+          orderBy = { startDate: sortField.desc ? "desc" : "asc" };
+        if (sortField.id === "organization")
+          orderBy = { organization: sortField.desc ? "desc" : "asc" };
+      }
+
+      const where: Prisma.TimelineItemWhereInput = { userId: ctx.user.id };
+      if (input.filters && input.filters.length > 0) {
+        const orgFilter = input.filters.find((f) => f.id === "organization");
+        if (orgFilter && typeof orgFilter.value === "string") {
+          where.organization = {
+            contains: orgFilter.value,
+            mode: "insensitive",
+          };
+        }
+        const categoryFilter = input.filters.find((f) => f.id === "category");
+        if (categoryFilter && typeof categoryFilter.value === "string") {
+          where.category = categoryFilter.value as TimelineCategory;
+        }
+      }
+
+      const [items, totalCount, languages] = await Promise.all([
+        ctx.db.timelineItem.findMany({
+          where,
+          orderBy,
+          skip,
+          take,
+        }),
+        ctx.db.timelineItem.count({ where }),
+        ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ]);
+
+      return {
+        data: mapTimelinesToEditorDto(items, languages),
+        pageCount: take ? Math.ceil(totalCount / take) : 1,
+        totalCount,
+      };
+    }),
 
   createItem: protectedProcedure
     .input(timelineUpsertInput)

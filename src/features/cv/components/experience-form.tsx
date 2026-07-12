@@ -82,7 +82,8 @@ export const ExperienceForm: FC<{
   const update = api.cv.updateExperience.useMutation();
   const [isPending, startTransition] = useTransition();
 
-  const { data: availableSkills = [] } = api.skillsAdmin.getMine.useQuery();
+  const { data: { data: availableSkills = [] } = {} } =
+    api.skillsAdmin.getMine.useQuery({});
 
   const primaryLang = useMemo(
     () => resolvePrimaryLanguage(languages),

@@ -13,19 +13,25 @@ import type { AppLanguage } from "@prisma/client";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
+import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
+import { useQueryState, parseAsInteger } from "nuqs";
+import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
 
 import type { RouterOutputs } from "@/trpc/react";
 
 import { readTimelineImages } from "@/features/timeline/lib/timeline-admin-item";
 
-type TimelineItemRow = RouterOutputs["timelineAdmin"]["getMine"][number];
+type TimelineItemRow =
+  RouterOutputs["timelineAdmin"]["getMine"]["data"][number];
 
 interface TimelineListProps {
   initialItems: TimelineItemRow[];
   languages: AppLanguage[];
   locale: Locale;
+  pageCount: number;
+  totalCount: number;
 }
 
 const isTimelineItemRow = (value: unknown): value is TimelineItemRow => {
@@ -38,6 +44,8 @@ export const TimelineList: FC<TimelineListProps> = ({
   initialItems,
   languages,
   locale,
+  pageCount: initialPageCount,
+  totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.timeline");
 
@@ -45,10 +53,31 @@ export const TimelineList: FC<TimelineListProps> = ({
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const { data: items = initialItems } = api.timelineAdmin.getMine.useQuery(
-    undefined,
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
+  const [sort] = useQueryState(
+    "sort",
+    getSortingStateParser<TimelineItemRow>(),
+  );
+  const [filters] = useQueryState(
+    "filters",
+    getFiltersStateParser<TimelineItemRow>(),
+  );
+
+  const {
+    data: { data: items, totalCount: trpcTotalCount } = {
+      data: initialItems,
+      totalCount: initialTotalCount,
+    },
+    isFetching,
+  } = api.timelineAdmin.getMine.useQuery(
+    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
     {
-      initialData: initialItems,
+      placeholderData: {
+        data: initialItems,
+        pageCount: initialPageCount,
+        totalCount: initialTotalCount,
+      },
     },
   );
 
@@ -122,6 +151,7 @@ export const TimelineList: FC<TimelineListProps> = ({
           placeholder: "Search title...",
           variant: "text",
         },
+        enableSorting: false,
         enableColumnFilter: true,
         cell: ({ row }) => {
           const item = row.original;
@@ -259,9 +289,9 @@ export const TimelineList: FC<TimelineListProps> = ({
             <div className="flex items-center gap-2">
               <Link
                 href={`/admin/timeline/${item.id}/edit`}
-                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg px-2.5 py-1 text-xs font-medium"
+                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
-                <Pencil className="mr-1 inline-block h-3 w-3" /> {t("edit")}
+                <Pencil className="h-3 w-3" /> {t("edit")}
               </Link>
 
               <Button
@@ -298,10 +328,10 @@ export const TimelineList: FC<TimelineListProps> = ({
   const { table } = useDataTable({
     data: timelineItems,
     columns,
-    pageCount: 1,
-    manualPagination: false,
-    manualSorting: false,
-    manualFiltering: false,
+    rowCount: trpcTotalCount,
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true,
     initialState: {
       sorting: [{ id: "startDate", desc: true }],
     },
@@ -309,7 +339,8 @@ export const TimelineList: FC<TimelineListProps> = ({
   });
 
   return (
-    <div className="relative flex h-full min-h-[500px] flex-col">
+    <div className="relative flex h-full flex-col">
+      <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
           <Link
