@@ -157,3 +157,24 @@ jest.mock("motion/react", () => {
     ),
   };
 });
+
+jest.mock("next-intl/server", () => ({
+  getTranslations: jest.fn(() => Promise.resolve((key: string) => key)),
+  setRequestLocale: jest.fn(),
+}));
+
+jest.mock("next/headers", () => ({
+  headers: jest.fn(() => Promise.resolve(new Headers())),
+}));
+
+jest.mock("@/lib/auth", () => ({
+  auth: {
+    api: {
+      getSession: jest.fn(),
+    },
+  },
+}));
+
+jest.mock("@/lib/auth-redirect", () => ({
+  redirectToLogin: jest.fn(),
+}));
