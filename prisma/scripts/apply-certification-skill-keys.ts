@@ -8,12 +8,12 @@ const skills = JSON.parse(
 
 const certifications = JSON.parse(
   readFileSync("prisma/data/portfolio-certifications.json", "utf8"),
-) as Array<{
+) as {
   key: string;
   translations: { locale: string; title: string }[];
   type: string;
   skillKeys: string[];
-}>;
+}[];
 
 const updated = certifications.map((certification) => ({
   ...certification,

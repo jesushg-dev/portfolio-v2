@@ -9,7 +9,7 @@ import { buildSpotifyFullscreenBg } from "./use-album-color";
 import { findActiveLyricIndex, parseLrc } from "./parse-lrc";
 import { LyricLineContent } from "./lyric-line-content";
 
-type LyricsFullscreenProps = {
+interface LyricsFullscreenProps {
   title: string;
   artist: string;
   plainLyrics: string;
@@ -21,7 +21,7 @@ type LyricsFullscreenProps = {
   backLabel: string;
   providedByLabel: string;
   onBack: () => void;
-};
+}
 
 const LyricsFullscreen: FC<LyricsFullscreenProps> = ({
   title,

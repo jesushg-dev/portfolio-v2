@@ -7,11 +7,11 @@ import { ETime } from "@/utils/constants/times";
 
 import { resolveProgressOnTrackChange } from "./resolve-track-progress";
 
-type TrackSnapshot = {
+interface TrackSnapshot {
   contentId: string;
   progressMs: number;
   durationMs: number;
-};
+}
 
 function createTrackSnapshot(
   contentId: string,

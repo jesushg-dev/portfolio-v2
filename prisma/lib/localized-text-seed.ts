@@ -2,10 +2,10 @@ export type LocaleCode = "es" | "en" | "nl";
 
 export type LocaleMap = Partial<Record<LocaleCode, string>>;
 
-export type LocalizedTextSeed = {
+export interface LocalizedTextSeed {
   default: string;
   translations?: Partial<Record<LocaleCode, string>>;
-};
+}
 
 export const DEFAULT_LOCALE: LocaleCode = "es";
 

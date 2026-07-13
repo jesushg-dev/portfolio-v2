@@ -223,7 +223,9 @@ export function DataTableFilterList<TData>({
   return (
     <Sortable
       value={filters}
-      onValueChange={setFilters}
+      onValueChange={(val) => {
+        void setFilters(val);
+      }}
       getItemValue={(item) => item.filterId}
     >
       <Popover open={open} onOpenChange={setOpen}>
@@ -281,7 +283,9 @@ export function DataTableFilterList<TData>({
                     index={index}
                     filterItemId={`${id}-filter-${filter.filterId}`}
                     joinOperator={joinOperator}
-                    setJoinOperator={setJoinOperator}
+                    setJoinOperator={(op) => {
+                      void setJoinOperator(op);
+                    }}
                     columns={columns}
                     onFilterUpdate={onFilterUpdate}
                     onFilterRemove={onFilterRemove}

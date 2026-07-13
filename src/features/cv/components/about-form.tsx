@@ -35,9 +35,9 @@ import type { TextTranslationMap } from "@/lib/i18n/localized-text-map";
 import { CvModalFormSkeleton } from "./cv-modal-form-skeleton";
 import type { AppLanguage } from "@prisma/client";
 
-type AboutInput = {
+interface AboutInput {
   aboutMe: TextTranslationMap;
-};
+}
 
 const AboutForm: FC<{ languages: AppLanguage[] }> = ({ languages }) => {
   const t = useTranslations("admin.forms.about");

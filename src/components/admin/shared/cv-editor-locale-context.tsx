@@ -11,11 +11,11 @@ import {
 
 import { type Locale } from "@/i18n/config";
 
-type CvEditorLocaleContextValue = {
+interface CvEditorLocaleContextValue {
   editLocale: Locale;
   setEditLocale: (locale: Locale) => void;
   defaultLocale: Locale;
-};
+}
 
 const CvEditorLocaleContext = createContext<CvEditorLocaleContextValue | null>(
   null,

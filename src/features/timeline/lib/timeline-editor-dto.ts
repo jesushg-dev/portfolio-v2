@@ -8,14 +8,14 @@ import {
 import { getTitleDescriptionForLocale } from "@/lib/i18n/localized-display";
 import { localizedFieldsToTranslationMap } from "@/lib/i18n/localized-persist";
 
-export type TimelineTranslationFields = {
+export interface TimelineTranslationFields {
   title: string;
   description: string;
-};
+}
 
 export type TimelineTranslationMap = TranslationMap<TimelineTranslationFields>;
 
-export type TimelineEditorDTO = {
+export interface TimelineEditorDTO {
   id: string;
   organization: string;
   location: string | null;
@@ -25,9 +25,9 @@ export type TimelineEditorDTO = {
   current: boolean;
   images: string[];
   translations: TimelineTranslationMap;
-};
+}
 
-export type TimelineFormDTO = {
+export interface TimelineFormDTO {
   id?: string;
   organization: string;
   location: string;
@@ -37,7 +37,7 @@ export type TimelineFormDTO = {
   current: boolean;
   images: { url: string }[];
   translations: TimelineTranslationMap;
-};
+}
 
 export type TimelineCreateFormDTO = Omit<TimelineFormDTO, "id">;
 

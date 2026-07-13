@@ -14,9 +14,9 @@ const skillsByKey = Object.fromEntries(
   portfolioSkills.map((skill) => [skill.key, skill]),
 );
 
-type FillCertificationFormOptions = {
+interface FillCertificationFormOptions {
   verifyInList?: boolean;
-};
+}
 
 function resolveCertificationSkillKeys(
   certification: PortfolioCertificationFixture,

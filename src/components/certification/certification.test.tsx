@@ -7,11 +7,11 @@ import { renderWithIntl } from "@/test-utils/render-with-intl";
 const mockUseInfiniteQuery = jest.fn<
   {
     data?: {
-      pages: Array<{
+      pages: {
         data: unknown[];
         cursor: string | null;
         hasMore: boolean;
-      }>;
+      }[];
     };
     isLoading: boolean;
     isFetching: boolean;

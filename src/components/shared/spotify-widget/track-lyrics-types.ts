@@ -6,10 +6,10 @@ export interface TrackLyricsRequest {
   durationMs: number;
 }
 
-export type TrackLyricsPayload = {
+export interface TrackLyricsPayload {
   plainLyrics: string;
   syncedLyrics: string | null;
-};
+}
 
 export type LyricsCacheEntry =
   | { status: "ready"; lyrics: TrackLyricsPayload }

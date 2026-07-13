@@ -40,13 +40,13 @@ export function buildSpotifyAuthorizeUrl(params: {
   return `${SPOTIFY_AUTHORIZE_URL}?${search.toString()}`;
 }
 
-export type SpotifyTokenResponse = {
+export interface SpotifyTokenResponse {
   access_token: string;
   token_type: string;
   scope: string;
   expires_in: number;
   refresh_token?: string;
-};
+}
 
 export class SpotifyTokenError extends Error {
   readonly status: number;

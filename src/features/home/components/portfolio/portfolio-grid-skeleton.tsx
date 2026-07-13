@@ -2,9 +2,9 @@ import type { FC } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-type PortfolioGridSkeletonProps = {
+interface PortfolioGridSkeletonProps {
   count?: number;
-};
+}
 
 function PortfolioCardSkeleton() {
   return (

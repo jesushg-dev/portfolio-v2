@@ -3,7 +3,7 @@ import type { Image, SimplifiedArtist, SpotifyEntity } from "./entity";
 interface Album extends SpotifyEntity {
   type: "album";
   popularity?: number;
-  artists?: Array<SimplifiedArtist>;
+  artists?: SimplifiedArtist[];
   album_type?: "album" | "single" | "compilation";
   total_tracks?: number;
   release_date?: string;
@@ -15,7 +15,7 @@ export interface Track extends SpotifyEntity {
   popularity?: number;
   duration_ms: number;
   album: Album;
-  artists: Array<SimplifiedArtist>;
+  artists: SimplifiedArtist[];
   preview_url: string | null;
   is_playable?: boolean;
   is_local: boolean;
@@ -30,7 +30,7 @@ export interface Show {
   href: string;
   uri: string;
   type: "show";
-  images: Array<Image>;
+  images: Image[];
   external_urls: { spotify: string };
   description?: string;
   html_description?: string;
@@ -47,7 +47,7 @@ export interface Episode {
   href: string;
   uri: string;
   type: "episode";
-  images: Array<Image>;
+  images: Image[];
   external_urls: { spotify: string };
   description: string;
   html_description?: string;

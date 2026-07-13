@@ -13,10 +13,10 @@ type LyricsStatus = "idle" | "loading" | "ready" | "empty" | "error";
 
 export type TrackLyrics = TrackLyricsPayload;
 
-export type UseTrackLyricsResult = {
+export interface UseTrackLyricsResult {
   status: LyricsStatus;
   lyrics: TrackLyrics | null;
-};
+}
 
 type LyricsQuery = TrackLyricsRequest & {
   enabled: boolean;

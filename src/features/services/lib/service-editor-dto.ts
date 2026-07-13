@@ -7,20 +7,20 @@ import {
   type TranslationMap,
 } from "@/lib/i18n/translation-map";
 
-export type ServiceTranslationFields = {
+export interface ServiceTranslationFields {
   title: string;
   description: string;
-};
+}
 
 export type ServiceTranslationMap = TranslationMap<ServiceTranslationFields>;
 
-export type ServiceEditorDTO = {
+export interface ServiceEditorDTO {
   id: string;
   image: string;
   type: Service["type"];
   skillIds: string[];
   translations: ServiceTranslationMap;
-};
+}
 
 export type ServiceCreateFormDTO = Omit<ServiceEditorDTO, "id">;
 

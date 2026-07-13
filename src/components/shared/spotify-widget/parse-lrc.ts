@@ -1,7 +1,7 @@
-export type SyncedLyricLine = {
+export interface SyncedLyricLine {
   timeMs: number;
   text: string;
-};
+}
 
 const LRC_LINE_RE = /^\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]\s*(.*)$/;
 

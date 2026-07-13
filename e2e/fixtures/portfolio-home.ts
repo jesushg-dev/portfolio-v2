@@ -7,18 +7,18 @@ const fixturePath = join(
   "../../prisma/data/portfolio-home.json",
 );
 
-export type LocalizedFixture = {
+export interface LocalizedFixture {
   es: string;
   en: string;
   nl: string;
-};
+}
 
-export type PortfolioHomeTerminalStepFixture = {
+export interface PortfolioHomeTerminalStepFixture {
   command: LocalizedFixture;
   output: LocalizedFixture;
-};
+}
 
-export type PortfolioHomeFixture = {
+export interface PortfolioHomeFixture {
   backgroundImageUrl: string;
   heroSummary: LocalizedFixture;
   heroTitles: LocalizedFixture[];
@@ -28,7 +28,7 @@ export type PortfolioHomeFixture = {
     delayBetweenCommands: number;
     steps: PortfolioHomeTerminalStepFixture[];
   };
-};
+}
 
 export const portfolioHome = JSON.parse(
   readFileSync(fixturePath, "utf8"),

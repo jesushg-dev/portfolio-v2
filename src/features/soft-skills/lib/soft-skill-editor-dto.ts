@@ -8,21 +8,21 @@ import {
 import { getLocalizedFieldForLocale } from "@/lib/i18n/localized-display";
 import { localizedFieldsToTranslationMap } from "@/lib/i18n/localized-persist";
 
-export type SoftSkillTranslationFields = {
+export interface SoftSkillTranslationFields {
   title: string;
   description: string;
-};
+}
 
 export type SoftSkillTranslationMap =
   TranslationMap<SoftSkillTranslationFields>;
 
-export type SoftSkillEditorDTO = {
+export interface SoftSkillEditorDTO {
   id: string;
   icon: string;
   isVisible: boolean;
   order: number;
   translations: SoftSkillTranslationMap;
-};
+}
 
 export type SoftSkillCreateFormDTO = Omit<SoftSkillEditorDTO, "id">;
 

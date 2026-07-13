@@ -4,14 +4,14 @@ import { dirname, join } from "node:path";
 
 export type SoftSkillLocale = "es" | "en" | "nl";
 
-export type PortfolioSoftSkillItemFixture = {
+export interface PortfolioSoftSkillItemFixture {
   icon: string;
   order: number;
   title: Record<SoftSkillLocale, string>;
   description: Record<SoftSkillLocale, string>;
-};
+}
 
-export type PortfolioSoftSkillsFixture = {
+export interface PortfolioSoftSkillsFixture {
   section: {
     mediaType: "VIDEO" | "IMAGE";
     videoUrl: string | null;
@@ -19,7 +19,7 @@ export type PortfolioSoftSkillsFixture = {
     imageUrl: string | null;
   };
   items: PortfolioSoftSkillItemFixture[];
-};
+}
 
 const fixtureDir = dirname(fileURLToPath(import.meta.url));
 

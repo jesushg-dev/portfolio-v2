@@ -3,13 +3,15 @@ import { render, screen } from "@testing-library/react";
 import CertificatesPage, { generateMetadata } from "./page";
 
 jest.mock("next-intl/server", () => ({
-  getTranslations: jest.fn(async () => (key: string) => {
-    const labels: Record<string, string> = {
-      title: "Certificates",
-      description: "Empowering projects",
-    };
-    return labels[key] ?? key;
-  }),
+  getTranslations: jest.fn(() =>
+    Promise.resolve((key: string) => {
+      const labels: Record<string, string> = {
+        title: "Certificates",
+        description: "Empowering projects",
+      };
+      return labels[key] ?? key;
+    }),
+  ),
   setRequestLocale: jest.fn(),
 }));
 

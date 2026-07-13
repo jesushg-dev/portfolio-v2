@@ -1,32 +1,32 @@
-export type TerminalStepTranslation = {
+export interface TerminalStepTranslation {
   appLanguageId: string;
   languageCode: string;
   command: string;
   output: string;
-};
+}
 
-export type TerminalStepResolved = {
+export interface TerminalStepResolved {
   order: number;
   translations: TerminalStepTranslation[];
-};
+}
 
-export type TerminalDisplayDTO = {
+export interface TerminalDisplayDTO {
   username: string;
   commands: string[];
   outputs: Record<number, string[]>;
   typingSpeed: number;
   delayBetweenCommands: number;
-};
+}
 
-export type TerminalEditorStepDTO = {
+export interface TerminalEditorStepDTO {
   id: string;
   order: number;
   translations: Record<string, { command: string; output: string }>;
-};
+}
 
-export type TerminalEditorDTO = {
+export interface TerminalEditorDTO {
   username: string;
   typingSpeed: number;
   delayBetweenCommands: number;
   steps: TerminalEditorStepDTO[];
-};
+}

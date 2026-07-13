@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { Link, useRouter } from "@/i18n/routing";
 import HeaderArticle from "@/components/shared/header-article";
-import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
+import type { SkillType } from "@/utils/interfaces/types";
 import { skillSlugFromTitle } from "@/utils/tools/skill-slug";
 
 import { LoadingFixed } from "@/components/shared/loading";
@@ -21,7 +21,7 @@ const Skills: FC = () => {
   const router = useRouter();
   const t = useTranslations("main.skills");
 
-  const handleOpenSkill = (skill: SkillType, _type: SkillTypeType) => {
+  const handleOpenSkill = (skill: SkillType) => {
     router.push(
       {
         pathname: "/skills/[slug]",

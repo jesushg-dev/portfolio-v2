@@ -11,13 +11,13 @@ import {
 const CLOSE_OFFSET = 72;
 const CLOSE_VELOCITY = 420;
 
-export type SpotifyDragToCloseProps = {
+export interface SpotifyDragToCloseProps {
   drag: "y";
   dragConstraints: { top: number; bottom: number };
   dragElastic: { top: number; bottom: number };
   dragMomentum: boolean;
   onDragEnd: (event: PointerEvent, info: PanInfo) => void;
-};
+}
 
 export function useDragToClose(onClose: () => void, enabled: boolean) {
   const y = useMotionValue(0);

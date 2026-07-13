@@ -32,7 +32,7 @@ const portfolioHome = JSON.parse(
 function asJson(
   value: ReturnType<typeof toLocalizedText>,
 ): Prisma.InputJsonValue {
-  return value;
+  return value as unknown as Prisma.InputJsonValue;
 }
 
 export async function seedPortfolioHome(

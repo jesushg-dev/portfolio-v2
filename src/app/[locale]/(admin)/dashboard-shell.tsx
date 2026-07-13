@@ -29,7 +29,7 @@ interface IDashboardShellProps {
   userName: string;
 }
 
-type NavItem = {
+interface NavItem {
   href: Extract<ComponentProps<typeof CustomLink>["href"], string>;
   labelKey:
     | "overview"
@@ -45,7 +45,7 @@ type NavItem = {
     | "settings";
   icon: typeof LayoutDashboard;
   group?: "portfolio";
-};
+}
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/admin", labelKey: "overview", icon: LayoutDashboard },
@@ -243,7 +243,9 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
             />
             <button
               type="button"
-              onClick={onSignOut}
+              onClick={() => {
+                void onSignOut();
+              }}
               className="group/sidebar text-muted-foreground hover:bg-muted hover:text-foreground flex items-center justify-start gap-3 rounded-lg px-2 py-2 transition-colors"
             >
               <div className="flex h-5 w-5 shrink-0 items-center justify-center">

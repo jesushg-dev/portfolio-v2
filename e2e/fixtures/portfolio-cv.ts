@@ -7,41 +7,41 @@ const fixturePath = join(
   "../../prisma/data/portfolio-cv.json",
 );
 
-export type LocalizedFixture = {
+export interface LocalizedFixture {
   es: string;
   en: string;
   nl: string;
-};
+}
 
-export type PortfolioCvContactFixture = {
+export interface PortfolioCvContactFixture {
   type: string;
   value: string;
   label: LocalizedFixture;
   order: number;
-};
+}
 
-export type PortfolioCvEducationFixture = {
+export interface PortfolioCvEducationFixture {
   institution: string;
   dates?: string;
   degreeName: LocalizedFixture;
   location?: LocalizedFixture;
   description?: LocalizedFixture;
   order: number;
-};
+}
 
-export type PortfolioCvLanguageFixture = {
+export interface PortfolioCvLanguageFixture {
   name: LocalizedFixture;
   level: LocalizedFixture;
   order: number;
-};
+}
 
-export type PortfolioCvTechnicalSkillFixture = {
+export interface PortfolioCvTechnicalSkillFixture {
   category: string;
   items: string[];
   order: number;
-};
+}
 
-export type PortfolioCvExperienceFixture = {
+export interface PortfolioCvExperienceFixture {
   key: string;
   company: string;
   dates: string;
@@ -49,17 +49,17 @@ export type PortfolioCvExperienceFixture = {
   skillKeys: string[];
   responsibilities: { text: LocalizedFixture; order: number }[];
   order: number;
-};
+}
 
-export type PortfolioCvSoftSkillFixture = {
+export interface PortfolioCvSoftSkillFixture {
   name: LocalizedFixture;
   order: number;
-};
+}
 
-export type PortfolioCvAdditionalFixture = {
+export interface PortfolioCvAdditionalFixture {
   text: LocalizedFixture;
   order: number;
-};
+}
 
 export interface PortfolioCvFixture {
   header: {

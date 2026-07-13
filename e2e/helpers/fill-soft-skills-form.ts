@@ -10,24 +10,24 @@ import {
 
 const SOFT_SKILL_LOCALES = ["es", "en", "nl"] as const;
 
-type SoftSkillMineItem = {
+interface SoftSkillMineItem {
   id: string;
   icon: string;
   order: number;
   isVisible: boolean;
   translations: Record<string, { title: string; description: string }>;
-};
+}
 
-type SoftSkillsSection = {
+interface SoftSkillsSection {
   mediaType: "VIDEO" | "IMAGE";
   videoUrl: string | null;
   posterUrl: string | null;
   imageUrl: string | null;
-};
+}
 
-type FillSoftSkillFormOptions = {
+interface FillSoftSkillFormOptions {
   verifyInList?: boolean;
-};
+}
 
 function trpcGetInput(procedure: string, input: unknown = null): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(

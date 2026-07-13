@@ -22,6 +22,6 @@ export interface SpotifyEntity {
   href: string;
   uri: SpotifyEntityUri;
   type: SpotifyEntityType;
-  images: Array<Image>;
+  images: Image[];
   external_urls: { spotify: string };
 }

@@ -1,12 +1,12 @@
 import type { FC } from "react";
 
 // Define a type for the component props
-type ItemNotificationProps = {
+interface ItemNotificationProps {
   href: string;
   date: string;
   title: string;
   description: string;
-};
+}
 
 const ItemNotification: FC<ItemNotificationProps> = ({
   href,

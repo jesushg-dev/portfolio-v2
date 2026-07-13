@@ -7,20 +7,23 @@ import {
 
 const TIMELINE_LOCALES = ["es", "en", "nl"] as const;
 
-type TimelineMineItem = {
+interface TimelineMineItem {
   id: string;
   organization: string;
   category: string;
   current: boolean;
   startDate: string;
   translations: Record<string, { title: string; description: string }>;
-};
+}
 
-type AppLanguageRow = { id: string; code: string };
+interface AppLanguageRow {
+  id: string;
+  code: string;
+}
 
-type FillTimelineFormOptions = {
+interface FillTimelineFormOptions {
   verifyInList?: boolean;
-};
+}
 
 const CATEGORY_LABELS: Record<
   PortfolioTimelineItemFixture["category"],

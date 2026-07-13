@@ -94,7 +94,9 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
   return (
     <Form {...form}>
       <FormRoot
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => {
+          void form.handleSubmit(onSubmit)(e);
+        }}
         className="bg-card scroll-mt-24 rounded-xl p-6 shadow-sm"
       >
         <FormContent>

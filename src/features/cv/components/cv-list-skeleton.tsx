@@ -2,11 +2,11 @@ import type { FC } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-type CvListSkeletonProps = {
+interface CvListSkeletonProps {
   items?: number;
   /** 1 = single line, 2 = title + subtitle (contacts, experiences, etc.) */
   lines?: 1 | 2;
-};
+}
 
 function CvListItemSkeleton({ lines = 1 }: { lines?: 1 | 2 }) {
   return (

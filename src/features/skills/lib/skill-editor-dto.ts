@@ -7,14 +7,14 @@ import {
   mergeTranslationMap,
 } from "@/lib/i18n/translation-map";
 
-export type SkillTranslationFields = {
+export interface SkillTranslationFields {
   description: string;
   urlWiki: string;
-};
+}
 
 export type SkillTranslationMap = TranslationMap<SkillTranslationFields>;
 
-export type SkillEditorDTO = {
+export interface SkillEditorDTO {
   id: string;
   title: string;
   image: string;
@@ -22,7 +22,7 @@ export type SkillEditorDTO = {
   translations: SkillTranslationMap;
   projectCount: number;
   certificateCount: number;
-};
+}
 
 export type SkillCreateFormDTO = Omit<
   SkillEditorDTO,

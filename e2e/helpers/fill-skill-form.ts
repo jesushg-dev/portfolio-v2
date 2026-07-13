@@ -9,10 +9,10 @@ import {
 
 const SKILL_LOCALES = ["es", "en", "nl"] as const;
 
-type FillSkillFormOptions = {
+interface FillSkillFormOptions {
   /** Skip list navigation after each create (use for bulk 42-skill runs). */
   verifyInList?: boolean;
-};
+}
 
 async function assertCreateSkillSucceeded(response: Response): Promise<void> {
   if (!response.ok()) {

@@ -8,10 +8,10 @@ import {
   translationMapEntries,
 } from "@/lib/i18n/translation-map";
 
-type TitleDescriptionFields = {
+interface TitleDescriptionFields {
   title: string;
   description: string;
-};
+}
 
 export function translationMapToLocalizedFields(
   translations: TranslationMap<TitleDescriptionFields>,

@@ -4,10 +4,10 @@ import type { FC } from "react";
 export type DirectionType = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
 //  export type DirectionType = 'up' | 'down' | 'left' | 'right' | 'up-right' | 'up-left' | 'down-right' | 'down-left';
 
-export type MovementDirectionType = {
+export interface MovementDirectionType {
   horizontal: DirectionType;
   vertical: DirectionType;
-};
+}
 
 export interface IDraggableDivSizeProps {
   className?: string;

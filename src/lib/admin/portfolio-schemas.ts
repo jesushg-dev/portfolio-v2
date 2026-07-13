@@ -24,5 +24,5 @@ export async function assertOwner<T extends { userId?: string | null }>(
   if (!entity || entity.userId !== userId) {
     throw new TRPCError({ code: "NOT_FOUND" });
   }
-  return entity;
+  return await Promise.resolve(entity);
 }

@@ -33,7 +33,7 @@ export interface DbLanguage {
 // Props
 // ---------------------------------------------------------------------------
 
-type AppLocalesMode = {
+interface AppLocalesMode {
   mode: "app-locales";
   /** Current value — a LocalizedText object */
   value: {
@@ -46,9 +46,9 @@ type AppLocalesMode = {
   }) => void;
   /** Which locale is used as the "default" field */
   defaultLocale: Locale;
-};
+}
 
-type DbLanguagesMode = {
+interface DbLanguagesMode {
   mode: "db-languages";
   /** Available languages from AppLanguage table */
   languages: DbLanguage[];
@@ -57,7 +57,7 @@ type DbLanguagesMode = {
   onChange: (value: Record<string, string>) => void;
   /** Language code to show first (required, always visible) */
   primaryCode: string;
-};
+}
 
 type LocalizedFieldProps = {
   label: string;

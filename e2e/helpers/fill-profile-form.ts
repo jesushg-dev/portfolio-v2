@@ -12,26 +12,29 @@ import { portfolioProfile } from "../fixtures/portfolio-profile";
 const PROFILE_LOCALES = ["es", "en", "nl"] as const;
 type ProfileLocale = (typeof PROFILE_LOCALES)[number];
 
-type AppLanguageRow = { id: string; code: string };
+interface AppLanguageRow {
+  id: string;
+  code: string;
+}
 
-type CvHeaderMine = {
+interface CvHeaderMine {
   fullName: string;
   photoUrl: string | null;
   clientImageAlt: unknown;
-};
+}
 
-type CvMineHeaderResponse = {
+interface CvMineHeaderResponse {
   header: CvHeaderMine | null;
-};
+}
 
-type HeroTitlesMine = {
+interface HeroTitlesMine {
   titles: {
     order: number;
     translations: Record<string, { text: string }>;
   }[];
-};
+}
 
-type TerminalMine = {
+interface TerminalMine {
   username: string;
   typingSpeed: number;
   delayBetweenCommands: number;
@@ -39,7 +42,7 @@ type TerminalMine = {
     order: number;
     translations: Record<string, { command: string; output: string }>;
   }[];
-};
+}
 
 function trpcGetInput(procedure: string, input: unknown = null): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(

@@ -7,14 +7,14 @@ import {
   type TranslationMap,
 } from "@/lib/i18n/translation-map";
 
-export type ProjectTranslationFields = {
+export interface ProjectTranslationFields {
   title: string;
   description: string;
-};
+}
 
 export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields>;
 
-export type ProjectEditorDTO = {
+export interface ProjectEditorDTO {
   id: string;
   image: string;
   type: Project["type"];
@@ -23,16 +23,16 @@ export type ProjectEditorDTO = {
   isPrivate: boolean;
   skillIds: string[];
   translations: ProjectTranslationMap;
-};
+}
 
 export type ProjectCreateFormDTO = Omit<ProjectEditorDTO, "id">;
 
-const emptyProjectTranslationFields = { title: "", description: "" };
+const emptyProjectTranslationFields = { title: "", description: "" }
 
 type ProjectWithRelations = Project & {
   ProjectTranslation: ProjectTranslation[];
   ProjectSkill: ProjectSkill[];
-};
+}
 
 export function mapProjectToEditorDto(
   project: ProjectWithRelations,
@@ -58,7 +58,7 @@ export function mapProjectToEditorDto(
       rows,
       emptyProjectTranslationFields,
     ),
-  };
+  }
 }
 
 export function mapProjectsToEditorDto(
@@ -82,5 +82,6 @@ export function buildEmptyProjectCreateDto(
       languages,
       emptyProjectTranslationFields,
     ),
-  };
+  }
 }
+

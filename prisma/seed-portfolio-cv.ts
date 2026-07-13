@@ -79,7 +79,7 @@ const portfolioCv = JSON.parse(
 function asJson(
   value: ReturnType<typeof toLocalizedText>,
 ): Prisma.InputJsonValue {
-  return value;
+  return value as unknown as Prisma.InputJsonValue;
 }
 
 function resolveSkillIds(

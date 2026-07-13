@@ -1,15 +1,15 @@
 import type { TextTranslationMap } from "@/lib/i18n/localized-text-map";
 
-export type ProfileHeroTitleEditorDTO = {
+export interface ProfileHeroTitleEditorDTO {
   order: number;
   translations: TextTranslationMap;
-};
+}
 
-export type ProfileHeroEditorDTO = {
+export interface ProfileHeroEditorDTO {
   fullName: string;
   photoUrl: string;
   backgroundImageUrl: string;
   heroSummaryTranslations: TextTranslationMap;
   aboutMeTranslations: TextTranslationMap;
   titles: ProfileHeroTitleEditorDTO[];
-};
+}

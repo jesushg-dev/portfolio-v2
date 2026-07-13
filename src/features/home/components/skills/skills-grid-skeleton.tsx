@@ -2,9 +2,9 @@ import type { FC } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-type SkillsGridSkeletonProps = {
+interface SkillsGridSkeletonProps {
   count?: number;
-};
+}
 
 function SkillCardSkeleton() {
   return (

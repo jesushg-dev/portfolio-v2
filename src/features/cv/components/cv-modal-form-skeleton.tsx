@@ -2,9 +2,9 @@ import type { FC } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-type CvModalFormSkeletonProps = {
+interface CvModalFormSkeletonProps {
   variant?: "header" | "about";
-};
+}
 
 export const CvModalFormSkeleton: FC<CvModalFormSkeletonProps> = ({
   variant = "header",

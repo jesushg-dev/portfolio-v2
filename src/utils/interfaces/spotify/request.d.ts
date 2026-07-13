@@ -14,7 +14,7 @@ export interface SpotifyResponse<T extends SpotifyEntity | PlayHistoryObject> {
   limit: number;
   offset: number;
   total: number;
-  items: Array<T>;
+  items: T[];
 }
 
 export interface RecentlyPlayedCursors {
@@ -28,7 +28,7 @@ export interface RecentlyPlayedResponse {
   limit: number;
   next: string | null;
   cursors: RecentlyPlayedCursors;
-  items: Array<PlayHistoryObject>;
+  items: PlayHistoryObject[];
 }
 
 export interface ErrorResponse {
@@ -123,5 +123,5 @@ export interface NowPlayingResponse {
 /** GET /v1/me/player/queue — 200 response body. */
 export interface QueueResponse {
   currently_playing: Track | Episode | null;
-  queue: Array<Track | Episode>;
+  queue: (Track | Episode)[];
 }

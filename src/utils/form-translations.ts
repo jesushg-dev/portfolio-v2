@@ -21,9 +21,10 @@ export function fillMissingTranslations<T extends object>(
     k.endsWith("Translation"),
   );
   if (translationKey && rawData && Array.isArray(rawData[translationKey])) {
-    const rawTranslations = rawData[translationKey] as Array<
-      Record<string, unknown>
-    >;
+    const rawTranslations = rawData[translationKey] as Record<
+      string,
+      unknown
+    >[];
     existingTranslations = rawTranslations.map((t) => ({
       appLanguageId: String(t.appLanguageId),
       title: typeof t.title === "string" ? t.title : "",

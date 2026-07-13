@@ -3,11 +3,11 @@ import { Music2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-type LyricLineContentProps = {
+interface LyricLineContentProps {
   text: string;
   className?: string;
   iconClassName?: string;
-};
+}
 
 /** Renders lyric text, or a music note for instrumental / blank gaps. */
 export function LyricLineContent({

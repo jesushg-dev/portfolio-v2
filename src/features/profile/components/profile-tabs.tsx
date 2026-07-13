@@ -5,13 +5,13 @@ import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/routing";
 
-type TabLinkType = {
+interface TabLinkType {
   id: string;
   href: React.ComponentProps<typeof Link>["href"];
   label: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   exact?: boolean;
-};
+}
 
 export const ProfileTabs = () => {
   const t = useTranslations("admin.profile");

@@ -6,12 +6,12 @@ import {
 
 export type { LanguageRef };
 
-type TranslationEntry<T extends Record<string, string>> =
+type TranslationEntry<T extends Record<keyof T, string>> =
   ({ appLanguageId: string } & T)[] | TranslationMap<T>;
 
-function toTranslationRows<T extends Record<string, string>>(
+function toTranslationRows<T extends Record<keyof T, string>>(
   translations: TranslationEntry<T>,
-): Array<{ appLanguageId: string } & T> {
+): ({ appLanguageId: string } & T)[] {
   return Array.isArray(translations)
     ? translations
     : translationMapEntries(translations);
@@ -54,7 +54,7 @@ export function getRowTextForLocale(
   return firstNonEmpty?.text?.trim() ?? "";
 }
 
-export function getLocalizedFieldForLocale<T extends Record<string, string>>(
+export function getLocalizedFieldForLocale<T extends Record<keyof T, string>>(
   translations: TranslationEntry<T>,
   languages: LanguageRef[],
   localeCode: string,
@@ -90,7 +90,7 @@ export function getLocalizedFieldForLocale<T extends Record<string, string>>(
   return typeof fallback === "string" ? fallback.trim() : "";
 }
 
-export function getTitleDescriptionForLocale<T extends Record<string, string>>(
+export function getTitleDescriptionForLocale<T extends Record<keyof T, string>>(
   translations: TranslationEntry<T & { title: string; description: string }>,
   languages: LanguageRef[],
   localeCode: string,
@@ -98,3 +98,4 @@ export function getTitleDescriptionForLocale<T extends Record<string, string>>(
 ): string {
   return getLocalizedFieldForLocale(translations, languages, localeCode, field);
 }
+

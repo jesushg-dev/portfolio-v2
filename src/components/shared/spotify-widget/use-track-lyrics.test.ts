@@ -27,7 +27,7 @@ function lyricsResponse(body: { plainLyrics: string; syncedLyrics: null }) {
   return {
     ok: true,
     status: 200,
-    json: async () => body,
+    json: () => Promise.resolve(body),
   } as Response;
 }
 
@@ -120,7 +120,7 @@ describe("prefetchTrackLyrics", () => {
       .mockResolvedValueOnce({
         ok: false,
         status: 404,
-        json: async () => ({ error: "Lyrics not found" }),
+        json: () => Promise.resolve({ error: "Lyrics not found" }),
       })
       .mockResolvedValueOnce(
         lyricsResponse({ plainLyrics: "Retried line", syncedLyrics: null }),
@@ -144,7 +144,7 @@ describe("prefetchTrackLyrics", () => {
     mockFetch.mockResolvedValue({
       ok: false,
       status: 404,
-      json: async () => ({ error: "Lyrics not found" }),
+      json: () => Promise.resolve({ error: "Lyrics not found" }),
     });
 
     await prefetchTrackLyrics(request);

@@ -1,10 +1,10 @@
 import type { CvContactType } from "@prisma/client";
 
-export type PublicContact = {
+export interface PublicContact {
   type: CvContactType;
   value: string;
   label: unknown;
-};
+}
 
 export type ContactIconKey =
   | "email"
@@ -15,13 +15,13 @@ export type ContactIconKey =
   | "website"
   | "location";
 
-export type ContactLink = {
+export interface ContactLink {
   key: string;
   href: string;
   label: string;
   icon: ContactIconKey;
   accent: string;
-};
+}
 
 function normalizeUrl(value: string, prefix: string): string {
   const trimmed = value.trim();

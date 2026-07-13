@@ -2,10 +2,10 @@ import { type Locale } from "@/i18n/config";
 
 import type { TerminalStepResolved } from "./types";
 
-export type ResolvedTerminalSequence = {
+export interface ResolvedTerminalSequence {
   commands: string[];
   outputs: Record<number, string[]>;
-};
+}
 
 function pickTranslation(
   translations: TerminalStepResolved["translations"],

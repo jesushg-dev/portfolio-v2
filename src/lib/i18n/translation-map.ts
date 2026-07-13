@@ -1,15 +1,15 @@
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 
-export type TranslationMap<T extends Record<string, string>> = Record<
+export type TranslationMap<T extends Record<keyof T, string>> = Record<
   string,
   T
 >;
 
-export type TranslationRow<T extends Record<string, string>> = {
+export type TranslationRow<T extends Record<keyof T, string>> = {
   appLanguageId: string;
 } & T;
 
-export function buildEmptyTranslationMap<T extends Record<string, string>>(
+export function buildEmptyTranslationMap<T extends Record<keyof T, string>>(
   languages: LanguageRef[],
   emptyFields: T,
 ): TranslationMap<T> {
@@ -18,7 +18,7 @@ export function buildEmptyTranslationMap<T extends Record<string, string>>(
   );
 }
 
-export function translationRowsToMap<T extends Record<string, string>>(
+export function translationRowsToMap<T extends Record<keyof T, string>>(
   rows: TranslationRow<T>[],
 ): TranslationMap<T> {
   return Object.fromEntries(
@@ -26,7 +26,7 @@ export function translationRowsToMap<T extends Record<string, string>>(
   ) as unknown as TranslationMap<T>;
 }
 
-export function translationMapToRows<T extends Record<string, string>>(
+export function translationMapToRows<T extends Record<keyof T, string>>(
   map: TranslationMap<T>,
   languages: LanguageRef[],
 ): TranslationRow<T>[] {
@@ -36,7 +36,7 @@ export function translationMapToRows<T extends Record<string, string>>(
   }));
 }
 
-export function mergeTranslationMap<T extends Record<string, string>>(
+export function mergeTranslationMap<T extends Record<keyof T, string>>(
   languages: LanguageRef[],
   source: TranslationMap<T> | TranslationRow<T>[] | undefined | null,
   emptyFields: T,
@@ -53,7 +53,7 @@ export function mergeTranslationMap<T extends Record<string, string>>(
   );
 }
 
-export function translationMapEntries<T extends Record<string, string>>(
+export function translationMapEntries<T extends Record<keyof T, string>>(
   map: TranslationMap<T>,
 ): TranslationRow<T>[] {
   return Object.entries(map).map(([appLanguageId, fields]) => ({
@@ -61,3 +61,4 @@ export function translationMapEntries<T extends Record<string, string>>(
     ...fields,
   }));
 }
+

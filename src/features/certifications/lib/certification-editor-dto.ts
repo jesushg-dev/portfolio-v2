@@ -12,14 +12,14 @@ import type { LanguageRef } from "@/lib/i18n/editor-rows";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export type CertificationTranslationFields = {
+export interface CertificationTranslationFields {
   title: string;
-};
+}
 
 export type CertificationTranslationMap =
   TranslationMap<CertificationTranslationFields>;
 
-export type CertificationEditorDTO = {
+export interface CertificationEditorDTO {
   id: string;
   company: string;
   issuedDate: number | undefined;
@@ -29,7 +29,7 @@ export type CertificationEditorDTO = {
   type: Certification["type"];
   skillIds: string[];
   translations: CertificationTranslationMap;
-};
+}
 
 export type CertificationCreateFormDTO = Omit<CertificationEditorDTO, "id">;
 

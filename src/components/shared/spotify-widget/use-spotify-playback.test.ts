@@ -13,11 +13,11 @@ import { ETime } from "@/utils/constants/times";
 
 import { useSpotifyPlayback } from "./use-spotify-playback";
 
-type QueryResult = {
+interface QueryResult {
   data: unknown;
   isLoading: boolean;
   isFetching: boolean;
-};
+}
 
 const emptyQueryResult = (): QueryResult => ({
   data: undefined,
@@ -30,10 +30,10 @@ const mockNowPlayingQuery = jest.fn(emptyQueryResult);
 const mockQueueQuery = jest.fn(emptyQueryResult);
 const mockRecentlyPlayedQuery = jest.fn(emptyQueryResult);
 
-type QueryOptions = {
+interface QueryOptions {
   refetchInterval?: (query: { state: { data: unknown } }) => number | false;
   enabled?: boolean;
-};
+}
 
 let nowPlayingOptions: QueryOptions | undefined;
 let queueOptions: QueryOptions | undefined;

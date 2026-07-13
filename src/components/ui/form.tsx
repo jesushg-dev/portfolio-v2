@@ -26,10 +26,12 @@ import { Label } from "@/components/ui/label";
 const Form = FormProvider;
 
 /* ── FormField ──────────────────────────────────────────────────────────── */
-type FormFieldContextValue<
+interface FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = { name: TName };
+> {
+  name: TName;
+}
 
 const FormFieldContext = createContext<FormFieldContextValue>(
   {} as FormFieldContextValue,
@@ -73,7 +75,10 @@ const useFormField = () => {
 };
 
 /* ── FormItem ───────────────────────────────────────────────────────────── */
-type FormItemContextValue = { id: string; useExplicitControlId: boolean };
+interface FormItemContextValue {
+  id: string;
+  useExplicitControlId: boolean;
+}
 
 const FormItemContext = createContext<FormItemContextValue>(
   {} as FormItemContextValue,

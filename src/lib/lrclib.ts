@@ -2,7 +2,7 @@ const LRCLIB_BASE = "https://lrclib.net";
 const USER_AGENT =
   "portfolio-v2/0.1 (https://github.com; lyrics demo for Spotify widget)";
 
-export type LrclibTrack = {
+export interface LrclibTrack {
   id: number;
   trackName: string;
   artistName: string;
@@ -11,13 +11,13 @@ export type LrclibTrack = {
   instrumental: boolean;
   plainLyrics: string | null;
   syncedLyrics: string | null;
-};
+}
 
-export type LrclibLyricsResult = {
+export interface LrclibLyricsResult {
   plainLyrics: string;
   syncedLyrics: string | null;
   source: "lrclib";
-};
+}
 
 async function lrclibFetch(path: string): Promise<Response> {
   return fetch(`${LRCLIB_BASE}${path}`, {

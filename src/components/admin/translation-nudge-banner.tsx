@@ -71,15 +71,17 @@ export function TranslationNudgeBanner({
             item={item}
             editedValue={nudge.editedValue}
             t={t}
-            onSave={async (locale, value) => {
-              await onSaveLocale(locale, value);
+            onSave={(locale, value) => {
+              void onSaveLocale(locale, value);
             }}
-            onSkip={async (locale) => {
-              try {
-                await onSaveLocale(locale, "");
-              } catch {
-                // Ignore
-              }
+            onSkip={(locale) => {
+              void (async () => {
+                try {
+                  await onSaveLocale(locale, "");
+                } catch {
+                  // Ignore
+                }
+              })();
             }}
           />
         ))}
@@ -90,7 +92,9 @@ export function TranslationNudgeBanner({
           <Button
             variant="ghost"
             type="button"
-            onClick={handleApplyAll}
+            onClick={() => {
+              void handleApplyAll();
+            }}
             disabled={isApplyingAll}
             className="h-auto p-0 text-xs font-medium text-blue-600 hover:bg-transparent hover:text-blue-800 disabled:opacity-50"
           >
@@ -221,7 +225,9 @@ function LocaleRow({
             </Button>
             <Button
               type="button"
-              onClick={handleSave}
+              onClick={() => {
+                void handleSave();
+              }}
               disabled={isSaving || !draftValue.trim()}
               className="h-7 rounded-md bg-blue-600 px-3 text-xs font-medium text-white hover:bg-blue-700"
             >

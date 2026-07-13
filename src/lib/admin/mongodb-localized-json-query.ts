@@ -4,11 +4,11 @@ const LOCALIZED_JSON_LOCALES = ["en", "es", "nl"] as const;
 
 export type MongoSort = Record<string, 1 | -1>;
 
-type AggregateRawDelegate = {
+interface AggregateRawDelegate {
   aggregateRaw: (args: {
     pipeline: Prisma.InputJsonValue[];
   }) => Promise<unknown>;
-};
+}
 
 export function escapeMongoRegex(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

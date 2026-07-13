@@ -25,7 +25,7 @@ const skillsByKey = Object.fromEntries(
   portfolioSkills.map((skill) => [skill.key, skill]),
 ) as Record<string, PortfolioSkillFixture>;
 
-type CvMine = {
+interface CvMine {
   header: { fullName: string } | null;
   contacts: { id: string; value: string }[];
   educations: { id: string; institution: string }[];
@@ -34,7 +34,7 @@ type CvMine = {
   experiences: { id: string; company: string }[];
   softSkills: { id: string }[];
   additionalInformation: { id: string }[];
-};
+}
 
 function trpcGetInput(procedure: string, input: unknown = null): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(

@@ -16,10 +16,10 @@ const skillsByKey = Object.fromEntries(
   portfolioSkills.map((skill) => [skill.key, skill]),
 ) as Record<string, PortfolioSkillFixture>;
 
-type FillProjectFormOptions = {
+interface FillProjectFormOptions {
   /** Skip list navigation after each create (use for bulk runs). */
   verifyInList?: boolean;
-};
+}
 
 function isValidUrl(value: string): boolean {
   if (!value.trim()) return false;

@@ -62,7 +62,7 @@ export function getSpotifyQueryError(data: unknown): SpotifyApiError | null {
 }
 
 export function resolveSpotifyUrl(
-  ...candidates: Array<string | undefined>
+  ...candidates: (string | undefined)[]
 ): string {
   for (const candidate of candidates) {
     if (candidate) return candidate;

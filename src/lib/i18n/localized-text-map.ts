@@ -12,9 +12,9 @@ import {
 } from "@/lib/i18n/translation-map";
 import { z } from "zod";
 
-export type TextTranslationFields = {
+export interface TextTranslationFields {
   text: string;
-};
+}
 
 export type TextTranslationMap = TranslationMap<TextTranslationFields>;
 

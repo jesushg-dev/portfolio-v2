@@ -1,4 +1,4 @@
-import { type FormHTMLAttributes, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { AlertCircle, CheckCircle2, LoaderCircleIcon } from "lucide-react";
 import {
   AnimatePresence,
@@ -20,25 +20,39 @@ import { PrismaErrorAlert } from "@/components/shared/prisma-error-alert";
 
 import { Hint } from "../hint";
 
-type FormRootProps = {
-  children: ReactNode;
-  className?: string;
-} & FormHTMLAttributes<HTMLFormElement>;
+interface FormRootProps extends Omit<
+  React.ComponentPropsWithoutRef<"form">,
+  "onSubmit"
+> {
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
+}
 
-export const FormRoot = ({ children, className, ...props }: FormRootProps) => (
+export const FormRoot = ({
+  children,
+  className,
+  onSubmit,
+  ...props
+}: FormRootProps) => (
   <form
     {...props}
+    onSubmit={
+      onSubmit
+        ? (e) => {
+            void onSubmit(e);
+          }
+        : undefined
+    }
     className={cn("flex flex-1 flex-col overflow-hidden", className)}
   >
     {children}
   </form>
 );
 
-type FormContentProps = {
+interface FormContentProps {
   children: ReactNode;
   className?: string;
   error?: unknown;
-};
+}
 
 export const FormContent = ({
   children,
@@ -58,21 +72,21 @@ export const FormContent = ({
   </div>
 );
 
-type FormErrorProps = {
+interface FormErrorProps {
   error?: unknown;
-};
+}
 
 export const FormError = ({ error }: FormErrorProps) => {
   if (!error || typeof error !== "object") return null;
   return <PrismaErrorAlert error={error} />;
 };
 
-type FormSectionProps = {
+interface FormSectionProps {
   children: ReactNode;
   title?: string;
   description?: string;
   className?: string;
-};
+}
 
 export const FormSection = ({
   children,
@@ -110,20 +124,20 @@ export const FormValidationStatus = ({
   </div>
 );
 
-type AnimationProps = {
+interface AnimationProps {
   initial: TargetAndTransition;
   animate: TargetAndTransition;
   exit: TargetAndTransition;
   transition?: Transition;
-};
+}
 
-type AnimatedVisibilityProps = {
+interface AnimatedVisibilityProps {
   isVisible: boolean;
   children: ReactNode;
   className?: string;
   animation?: AnimationProps;
   mode?: "sync" | "wait";
-};
+}
 
 export const AnimatedVisibility = ({
   isVisible,
@@ -154,13 +168,13 @@ export const AnimatedVisibility = ({
   </AnimatePresence>
 );
 
-type FormItemProps = {
+interface FormItemProps {
   label: string;
   description?: string;
   children: ReactNode;
   className?: string;
   inputId?: string;
-};
+}
 
 export const FormItem = ({
   label,
@@ -177,12 +191,12 @@ export const FormItem = ({
   </ShadcnFormItem>
 );
 
-type FormCheckboxItemProps = {
+interface FormCheckboxItemProps {
   label: string;
   description?: string;
   children: ReactNode;
   className?: string;
-};
+}
 
 export const FormCheckboxItem = ({
   label,
@@ -205,14 +219,14 @@ export const FormCheckboxItem = ({
   </ShadcnFormItem>
 );
 
-type FormSwitchItemProps = {
+interface FormSwitchItemProps {
   label: string;
   description?: string;
   children: ReactNode;
   className?: string;
   icon?: ReactNode;
   tooltip?: string;
-};
+}
 
 export const FormSwitchItem = ({
   label,
@@ -244,14 +258,14 @@ export const FormSwitchItem = ({
   </ShadcnFormItem>
 );
 
-type FormActionsProps = {
+interface FormActionsProps {
   isPending?: boolean;
   title?: string;
   className?: string;
   children?: ReactNode;
   onClick?: () => void;
   submitId?: string;
-};
+}
 
 export const FormActions = ({
   isPending,

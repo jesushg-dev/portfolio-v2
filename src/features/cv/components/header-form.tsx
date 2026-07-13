@@ -38,12 +38,12 @@ import type { TextTranslationMap } from "@/lib/i18n/localized-text-map";
 import { CvModalFormSkeleton } from "./cv-modal-form-skeleton";
 import type { AppLanguage } from "@prisma/client";
 
-type HeaderInput = {
+interface HeaderInput {
   fullName: string;
   degree: TextTranslationMap;
   photoUrl?: string;
   clientImageAlt?: TextTranslationMap;
-};
+}
 
 const HeaderForm: FC<{ languages: AppLanguage[] }> = ({ languages }) => {
   const t = useTranslations("admin.forms.header");

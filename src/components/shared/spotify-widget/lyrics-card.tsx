@@ -12,7 +12,7 @@ import {
 } from "./parse-lrc";
 import { LyricLineContent } from "./lyric-line-content";
 
-type LyricsCardProps = {
+interface LyricsCardProps {
   accentColor: string;
   height: number;
   lyricsState: UseTrackLyricsResult;
@@ -24,7 +24,7 @@ type LyricsCardProps = {
     expand: string;
   };
   onExpand: () => void;
-};
+}
 
 /** Enough context above/below so the active line can sit in the visual middle. */
 const PREVIEW_LINE_COUNT = 11;

@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 
 export type TimelineLocale = "es" | "en" | "nl";
 
-export type PortfolioTimelineItemFixture = {
+export interface PortfolioTimelineItemFixture {
   key: string;
   title: Record<TimelineLocale, string>;
   description: Record<TimelineLocale, string>;
@@ -15,11 +15,11 @@ export type PortfolioTimelineItemFixture = {
   endDate?: string;
   current: boolean;
   images?: string[];
-};
+}
 
-export type PortfolioTimelineFixture = {
+export interface PortfolioTimelineFixture {
   items: PortfolioTimelineItemFixture[];
-};
+}
 
 const fixtureDir = dirname(fileURLToPath(import.meta.url));
 

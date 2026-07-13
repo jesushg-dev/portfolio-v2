@@ -4,12 +4,12 @@ import { expect } from "@playwright/test";
 import { requireE2eCredentials } from "../env";
 import { portfolioProfile } from "../fixtures/portfolio-profile";
 
-export type RegisterOwnerInput = {
+export interface RegisterOwnerInput {
   name: string;
   username: string;
   email: string;
   password: string;
-};
+}
 
 const ADMIN_URL = /\/(admin|panel|beheer)\/?$/;
 

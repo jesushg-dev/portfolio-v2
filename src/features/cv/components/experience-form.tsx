@@ -58,7 +58,7 @@ export const ExperienceSchema = z.object({
 
 export type ExperienceInput = z.infer<typeof ExperienceSchema>;
 
-type ExperienceInitial = {
+interface ExperienceInitial {
   id: string;
   company: string;
   role: unknown;
@@ -68,7 +68,7 @@ type ExperienceInitial = {
   skills?: string | null;
   CvExperienceSkill?: { skillId: string }[];
   responsibilities: { text: unknown; order: number }[];
-};
+}
 
 export const ExperienceForm: FC<{
   languages: AppLanguage[];

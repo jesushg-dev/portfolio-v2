@@ -7,18 +7,18 @@ import { db } from "@/server/db";
 import { decryptSecret, encryptSecret } from "./crypto";
 import { refreshSpotifyAccessToken, SpotifyTokenError } from "./oauth";
 
-export type SpotifyClientCredentials = {
+export interface SpotifyClientCredentials {
   clientId: string;
   clientSecret: string;
   refreshToken: string;
-};
+}
 
 const TOKEN_REFRESH_BUFFER_SEC = 60;
 
-type CachedAccessToken = {
+interface CachedAccessToken {
   token: string;
   expiresAt: number;
-};
+}
 
 /** In-memory access token cache per portfolio owner (shared by all API calls). */
 const accessTokenCache = new Map<string, CachedAccessToken>();

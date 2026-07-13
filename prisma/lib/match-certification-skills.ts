@@ -8,7 +8,7 @@ export interface CertificationMatchInput {
   type?: string;
 }
 
-const TITLE_SKILL_PATTERNS: ReadonlyArray<readonly [RegExp, string]> = [
+const TITLE_SKILL_PATTERNS: readonly (readonly [RegExp, string])[] = [
   [/react\s+native/i, "ReactNative"],
   [/next\.?js/i, "Nextjs"],
   [/react\.?js/i, "React"],

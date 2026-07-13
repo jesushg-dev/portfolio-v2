@@ -281,7 +281,9 @@ function ExperienceRow({
             variant="ghost"
             size="icon"
             type="button"
-            onClick={handleDelete}
+            onClick={() => {
+              void handleDelete();
+            }}
             disabled={isDeleting}
             className="h-8 w-8 text-gray-400 hover:bg-red-50 hover:text-red-500"
             aria-label={t("remove")}
@@ -432,7 +434,13 @@ function ExperienceRow({
             >
               {t("cancel")}
             </Button>
-            <Button type="button" onClick={handleSave} disabled={isSaving}>
+            <Button
+              type="button"
+              onClick={() => {
+                void handleSave();
+              }}
+              disabled={isSaving}
+            >
               {isSaving ? t("saving") : t("save")}
             </Button>
           </div>

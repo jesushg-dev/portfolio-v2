@@ -5,16 +5,16 @@ import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
-export type SkillModalTab = {
+export interface SkillModalTab {
   id: string;
   label: string;
   count: number;
   content: ReactNode;
-};
+}
 
-type SkillModalTabsProps = {
+interface SkillModalTabsProps {
   tabs: SkillModalTab[];
-};
+}
 
 const pillTransition = {
   type: "tween" as const,

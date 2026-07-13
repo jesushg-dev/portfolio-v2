@@ -12,7 +12,7 @@ const heroTitleInclude = {
   },
 } as const;
 
-export type HeroTitleEditorDTO = {
+export interface HeroTitleEditorDTO {
   titles: {
     order: number;
     translations: Record<
@@ -22,15 +22,15 @@ export type HeroTitleEditorDTO = {
       }
     >;
   }[];
-};
+}
 
-export type HeroTitleResolved = {
+export interface HeroTitleResolved {
   order: number;
   translations: {
     languageCode: string;
     text: string;
   }[];
-};
+}
 
 export async function fetchHeroTitlesForUser(client: DbLike, userId: string) {
   return client.cvHeroTitle.findMany({

@@ -5,8 +5,13 @@ import {
   type PortfolioSkillFixture,
 } from "../fixtures/portfolio-skills";
 
-type AppLanguageRow = { id: string; code: string };
-type SkillRow = { title: string };
+interface AppLanguageRow {
+  id: string;
+  code: string;
+}
+interface SkillRow {
+  title: string;
+}
 
 function trpcGetInput(procedure: string, input: unknown = {}): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(

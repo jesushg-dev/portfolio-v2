@@ -16,15 +16,17 @@ jest.mock("@/i18n/routing", () => ({
 }));
 
 jest.mock("next-intl/server", () => ({
-  getTranslations: jest.fn(async () => (key: string) => {
-    const labels: Record<string, string> = {
-      "actions.goBack": "Go Back",
-      "actions.download": "Download CV",
-      codedWith: "This CV was created using ReactJS.",
-      title: "Curriculum Vitae",
-    };
-    return labels[key] ?? key;
-  }),
+  getTranslations: jest.fn(() =>
+    Promise.resolve((key: string) => {
+      const labels: Record<string, string> = {
+        "actions.goBack": "Go Back",
+        "actions.download": "Download CV",
+        codedWith: "This CV was created using ReactJS.",
+        title: "Curriculum Vitae",
+      };
+      return labels[key] ?? key;
+    }),
+  ),
   setRequestLocale: jest.fn(),
 }));
 

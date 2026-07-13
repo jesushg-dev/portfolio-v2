@@ -3,7 +3,7 @@ import type { TimelineCategory, TimelineItem } from "@prisma/client";
 import { type Locale } from "@/i18n/config";
 import { getLocalizedText } from "@/lib/i18n/localized";
 
-export type TimelinePublicItem = {
+export interface TimelinePublicItem {
   id: string;
   title: string;
   description: string;
@@ -17,7 +17,7 @@ export type TimelinePublicItem = {
   current: boolean;
   images: string[];
   order: number;
-};
+}
 
 export function formatTimelineDate(
   startDate: Date,
@@ -83,10 +83,10 @@ export function mapTimelineItemsToPublic(
   return mapped.slice(0, limit);
 }
 
-export type TimelineYearGroup = {
+export interface TimelineYearGroup {
   year: number;
   items: TimelinePublicItem[];
-};
+}
 
 export function groupTimelineByYear(
   items: TimelinePublicItem[],

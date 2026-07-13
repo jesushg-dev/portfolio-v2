@@ -2,9 +2,9 @@ import type { FC } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-type TimelineSkeletonProps = {
+interface TimelineSkeletonProps {
   items?: number;
-};
+}
 
 function TimelineItemSkeleton() {
   return (

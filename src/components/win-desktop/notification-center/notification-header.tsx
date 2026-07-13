@@ -1,9 +1,9 @@
 import type { FC } from "react";
 
-type NotificationHeaderProps = {
+interface NotificationHeaderProps {
   iconPath: string;
   text: string;
-};
+}
 
 const NotificationHeader: FC<NotificationHeaderProps> = ({
   iconPath,

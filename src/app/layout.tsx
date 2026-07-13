@@ -86,11 +86,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html className={cn("h-full", "font-sans", geist.variable)}>
       <PreloadTheme />
