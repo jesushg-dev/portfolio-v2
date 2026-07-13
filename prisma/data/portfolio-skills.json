@@ -578,7 +578,7 @@
     "key": "Css",
     "title": "CSS3",
     "type": "FRONTEND",
-    "image": "css3",
+    "image": "css",
     "translations": [
       {
         "locale": "es",
@@ -877,7 +877,7 @@
     "key": "ReactNative",
     "title": "React Native",
     "type": "MOBILE",
-    "image": "react-native",
+    "image": "react",
     "translations": [
       {
         "locale": "es",

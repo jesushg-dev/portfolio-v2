@@ -18,7 +18,8 @@ import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { useQueryState, parseAsInteger } from "nuqs";
-import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
+import { getSortingStateParser } from "@/lib/parsers";
+import type { FilterItemSchema } from "@/lib/parsers";
 
 type CertificationRow =
   RouterOutputs["certificationsAdmin"]["getMine"]["data"][number];
@@ -54,10 +55,31 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     "sort",
     getSortingStateParser<CertificationRow>(),
   );
-  const [filters] = useQueryState(
-    "filters",
-    getFiltersStateParser<CertificationRow>(),
-  );
+
+  // Basic filtering writes to individual keys, not the "filters" array key.
+  const [titleFilter] = useQueryState("title");
+  const [companyFilter] = useQueryState("company");
+
+  const parsedFilters = useMemo((): FilterItemSchema[] => {
+    const f: FilterItemSchema[] = [];
+    if (titleFilter)
+      f.push({
+        id: "title",
+        value: titleFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "title",
+      });
+    if (companyFilter)
+      f.push({
+        id: "company",
+        value: companyFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "company",
+      });
+    return f;
+  }, [titleFilter, companyFilter]);
 
   const {
     data: { data: certifications, totalCount: trpcTotalCount } = {
@@ -66,7 +88,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     },
     isFetching,
   } = api.certificationsAdmin.getMine.useQuery(
-    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    { page, perPage, sort: sort ?? [], filters: parsedFilters },
     {
       placeholderData: {
         data: initialCertifications,

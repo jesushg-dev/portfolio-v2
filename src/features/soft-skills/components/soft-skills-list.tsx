@@ -20,7 +20,8 @@ import { getSoftSkillTranslationText } from "@/features/soft-skills/lib/soft-ski
 import type { RouterOutputs } from "@/trpc/react";
 import type { AppLanguage } from "@prisma/client";
 import { useQueryState, parseAsInteger } from "nuqs";
-import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
+import { getSortingStateParser } from "@/lib/parsers";
+import type { FilterItemSchema } from "@/lib/parsers";
 
 type SoftSkillRow = RouterOutputs["softSkillsAdmin"]["getMine"]["data"][number];
 
@@ -48,10 +49,20 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState("sort", getSortingStateParser<SoftSkillRow>());
-  const [filters] = useQueryState(
-    "filters",
-    getFiltersStateParser<SoftSkillRow>(),
-  );
+  const [titleFilter] = useQueryState("title");
+  const parsedFilters = useMemo((): FilterItemSchema[] => {
+    const f: FilterItemSchema[] = [];
+    if (titleFilter) {
+      f.push({
+        id: "title",
+        value: titleFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "title",
+      });
+    }
+    return f;
+  }, [titleFilter]);
 
   const {
     data: { data: items, totalCount: trpcTotalCount } = {
@@ -60,7 +71,7 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
     },
     isFetching,
   } = api.softSkillsAdmin.getMine.useQuery(
-    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    { page, perPage, sort: sort ?? [], filters: parsedFilters },
     {
       placeholderData: {
         data: initialItems,
@@ -117,7 +128,7 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
           variant: "text",
         },
         enableSorting: false,
-        enableColumnFilter: false,
+        enableColumnFilter: true,
         cell: ({ row }) => {
           const titleText = getSoftSkillTranslationText(
             row.original,

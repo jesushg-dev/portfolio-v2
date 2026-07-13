@@ -14,8 +14,14 @@ import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useQueryState, parseAsInteger } from "nuqs";
-import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
+import {
+  useQueryState,
+  parseAsInteger,
+  parseAsArrayOf,
+  parseAsString,
+} from "nuqs";
+import { getSortingStateParser } from "@/lib/parsers";
+import type { FilterItemSchema } from "@/lib/parsers";
 
 import type { RouterOutputs } from "@/trpc/react";
 
@@ -39,7 +45,34 @@ export const SkillsList: FC<SkillsListProps> = ({
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState("sort", getSortingStateParser<SkillRow>());
-  const [filters] = useQueryState("filters", getFiltersStateParser<SkillRow>());
+
+  const [titleFilter] = useQueryState("title");
+  const [typeFilter] = useQueryState(
+    "type",
+    parseAsArrayOf(parseAsString, ","),
+  );
+  const parsedFilters = useMemo((): FilterItemSchema[] => {
+    const f: FilterItemSchema[] = [];
+    if (titleFilter) {
+      f.push({
+        id: "title",
+        value: titleFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "title",
+      });
+    }
+    if (Array.isArray(typeFilter) && typeFilter.length > 0) {
+      f.push({
+        id: "type",
+        value: typeFilter,
+        variant: "multiSelect",
+        operator: "inArray",
+        filterId: "type",
+      });
+    }
+    return f;
+  }, [titleFilter, typeFilter]);
 
   const {
     data: { data: skills, totalCount: trpcTotalCount } = {
@@ -48,7 +81,7 @@ export const SkillsList: FC<SkillsListProps> = ({
     },
     isFetching,
   } = api.skillsAdmin.getMine.useQuery(
-    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    { page, perPage, sort: sort ?? [], filters: parsedFilters },
     {
       placeholderData: {
         data: initialSkills,

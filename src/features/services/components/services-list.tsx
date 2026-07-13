@@ -18,7 +18,8 @@ import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { useQueryState, parseAsInteger } from "nuqs";
-import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
+import { getSortingStateParser } from "@/lib/parsers";
+import type { FilterItemSchema } from "@/lib/parsers";
 
 type ServiceRow = RouterOutputs["servicesAdmin"]["getMine"]["data"][number];
 
@@ -49,10 +50,31 @@ export const ServicesList: FC<ServicesListProps> = ({
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState("sort", getSortingStateParser<ServiceRow>());
-  const [filters] = useQueryState(
-    "filters",
-    getFiltersStateParser<ServiceRow>(),
-  );
+
+  const [titleFilter] = useQueryState("title");
+  const [typeFilter] = useQueryState("type");
+  const parsedFilters = useMemo((): FilterItemSchema[] => {
+    const f: FilterItemSchema[] = [];
+    if (titleFilter) {
+      f.push({
+        id: "title",
+        value: titleFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "title",
+      });
+    }
+    if (typeFilter) {
+      f.push({
+        id: "type",
+        value: typeFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "type",
+      });
+    }
+    return f;
+  }, [titleFilter, typeFilter]);
 
   const {
     data: { data: services, totalCount: trpcTotalCount } = {
@@ -61,7 +83,7 @@ export const ServicesList: FC<ServicesListProps> = ({
     },
     isFetching,
   } = api.servicesAdmin.getMine.useQuery(
-    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    { page, perPage, sort: sort ?? [], filters: parsedFilters },
     {
       placeholderData: {
         data: initialServices,
@@ -123,7 +145,7 @@ export const ServicesList: FC<ServicesListProps> = ({
           variant: "text",
         },
         enableSorting: false,
-        enableColumnFilter: false,
+        enableColumnFilter: true,
         cell: ({ row }) => {
           const title =
             getTitleDescriptionForLocale(

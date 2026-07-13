@@ -1,6 +1,19 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import {
+  extractArrayFilter,
+  extractStringFilter,
+} from "@/lib/admin/filter-utils";
+import {
+  buildLocalizedJsonTitleMongoMatch,
+  escapeMongoRegex,
+  mongoUserIdFilter,
+  queryPaginatedIdsWithMongoMatch,
+  reorderByIds,
+  type MongoSort,
+} from "@/lib/admin/mongodb-localized-json-query";
+
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   mapTimelinesToEditorDto,
@@ -59,21 +72,80 @@ export const timelineAdminRouter = createTRPCRouter({
       }
 
       const where: Prisma.TimelineItemWhereInput = { userId: ctx.user.id };
-      if (input.filters && input.filters.length > 0) {
-        const orgFilter = input.filters.find((f) => f.id === "organization");
-        if (orgFilter && typeof orgFilter.value === "string") {
-          where.organization = {
-            contains: orgFilter.value,
-            mode: "insensitive",
-          };
-        }
-        const categoryFilter = input.filters.find((f) => f.id === "category");
-        if (categoryFilter && typeof categoryFilter.value === "string") {
-          where.category = categoryFilter.value as TimelineCategory;
-        }
+      const orgVal = extractStringFilter(input.filters, "organization");
+      if (orgVal) {
+        where.organization = { contains: orgVal, mode: "insensitive" };
       }
 
-      const [items, totalCount, languages] = await Promise.all([
+      const categoryVals = extractArrayFilter<TimelineCategory>(
+        input.filters,
+        "category",
+      );
+      if (categoryVals && categoryVals.length > 0) {
+        where.category = { in: categoryVals };
+      }
+
+      const titleVal = extractStringFilter(input.filters, "title");
+
+      const languages = await ctx.db.appLanguage.findMany({
+        orderBy: { code: "asc" },
+      });
+
+      if (titleVal) {
+        const mongoMatch: Record<string, unknown> = {
+          userId: mongoUserIdFilter(ctx.user.id),
+        };
+        if (orgVal) {
+          mongoMatch.organization = {
+            $regex: escapeMongoRegex(orgVal),
+            $options: "i",
+          };
+        }
+        if (categoryVals && categoryVals.length > 0) {
+          mongoMatch.category = { $in: categoryVals };
+        }
+        Object.assign(
+          mongoMatch,
+          buildLocalizedJsonTitleMongoMatch("title", titleVal),
+        );
+
+        const sortField = input.sort?.[0];
+        let mongoSort: MongoSort = { startDate: -1, createdAt: -1 };
+        if (sortField) {
+          const dir: 1 | -1 = sortField.desc ? -1 : 1;
+          if (sortField.id === "category") mongoSort = { category: dir };
+          else if (sortField.id === "startDate") mongoSort = { startDate: dir };
+          else if (sortField.id === "organization") {
+            mongoSort = { organization: dir };
+          }
+        }
+
+        const { ids, totalCount } = await queryPaginatedIdsWithMongoMatch({
+          delegate: ctx.db.timelineItem,
+          match: mongoMatch,
+          sort: mongoSort,
+          skip,
+          take,
+        });
+
+        const items =
+          ids.length > 0
+            ? reorderByIds(
+                await ctx.db.timelineItem.findMany({
+                  where: { id: { in: ids } },
+                }),
+                ids,
+              )
+            : [];
+
+        return {
+          data: mapTimelinesToEditorDto(items, languages),
+          pageCount: take ? Math.ceil(totalCount / take) : 1,
+          totalCount,
+        };
+      }
+
+      const [items, totalCount] = await Promise.all([
         ctx.db.timelineItem.findMany({
           where,
           orderBy,
@@ -81,7 +153,6 @@ export const timelineAdminRouter = createTRPCRouter({
           take,
         }),
         ctx.db.timelineItem.count({ where }),
-        ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
       ]);
 
       return {

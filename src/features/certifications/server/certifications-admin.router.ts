@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { extractStringFilter } from "@/lib/admin/filter-utils";
+
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   assertOwner,
@@ -54,22 +56,18 @@ export const certificationsAdminRouter = createTRPCRouter({
       }
 
       const where: Prisma.CertificationWhereInput = { userId: ctx.user.id };
-      if (input.filters && input.filters.length > 0) {
-        const titleFilter = input.filters.find((f) => f.id === "title");
-        if (titleFilter && typeof titleFilter.value === "string") {
-          where.CertificationTranslation = {
-            some: {
-              title: { contains: titleFilter.value, mode: "insensitive" },
-            },
-          };
-        }
-        const companyFilter = input.filters.find((f) => f.id === "company");
-        if (companyFilter && typeof companyFilter.value === "string") {
-          where.company = {
-            contains: companyFilter.value,
-            mode: "insensitive",
-          };
-        }
+      const titleVal = extractStringFilter(input.filters, "title");
+      if (titleVal) {
+        where.CertificationTranslation = {
+          some: {
+            title: { contains: titleVal, mode: "insensitive" },
+          },
+        };
+      }
+
+      const companyVal = extractStringFilter(input.filters, "company");
+      if (companyVal) {
+        where.company = { contains: companyVal, mode: "insensitive" };
       }
 
       const [certifications, totalCount, languages] = await Promise.all([

@@ -42,6 +42,7 @@ export default defineConfig({
       : {}),
     trace: "on-first-retry",
     screenshot: "only-on-failure",
+    video: "on",
   },
   projects: [
     {
@@ -138,6 +139,15 @@ export default defineConfig({
       testMatch: "**/cv-create.spec.ts",
       dependencies: ["setup"],
       timeout: 60 * 60 * 1000,
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: authFile,
+      },
+    },
+    {
+      name: "pagination",
+      testMatch: "**/*-pagination.spec.ts",
+      dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
         storageState: authFile,

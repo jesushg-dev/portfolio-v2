@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { extractStringFilter } from "@/lib/admin/filter-utils";
+
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   assertOwner,
@@ -50,19 +52,18 @@ export const servicesAdminRouter = createTRPCRouter({
       }
 
       const where: Prisma.ServiceWhereInput = { userId: ctx.user.id };
-      if (input.filters && input.filters.length > 0) {
-        const titleFilter = input.filters.find((f) => f.id === "title");
-        if (titleFilter && typeof titleFilter.value === "string") {
-          where.ServiceTranslation = {
-            some: {
-              title: { contains: titleFilter.value, mode: "insensitive" },
-            },
-          };
-        }
-        const typeFilter = input.filters.find((f) => f.id === "type");
-        if (typeFilter && typeof typeFilter.value === "string") {
-          where.type = typeFilter.value as StackType;
-        }
+      const titleVal = extractStringFilter(input.filters, "title");
+      if (titleVal) {
+        where.ServiceTranslation = {
+          some: {
+            title: { contains: titleVal, mode: "insensitive" },
+          },
+        };
+      }
+
+      const typeVal = extractStringFilter(input.filters, "type");
+      if (typeVal) {
+        where.type = typeVal as StackType;
       }
 
       const [services, totalCount, languages] = await Promise.all([

@@ -17,7 +17,8 @@ import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { useQueryState, parseAsInteger } from "nuqs";
-import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
+import { getSortingStateParser } from "@/lib/parsers";
+import type { FilterItemSchema } from "@/lib/parsers";
 
 type ProjectRow = RouterOutputs["projectsAdmin"]["getMine"]["data"][number];
 
@@ -49,10 +50,21 @@ export const ProjectsList: FC<ProjectsListProps> = ({
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState("sort", getSortingStateParser<ProjectRow>());
-  const [filters] = useQueryState(
-    "filters",
-    getFiltersStateParser<ProjectRow>(),
-  );
+
+  const [titleFilter] = useQueryState("title");
+  const parsedFilters = useMemo((): FilterItemSchema[] => {
+    const f: FilterItemSchema[] = [];
+    if (titleFilter) {
+      f.push({
+        id: "title",
+        value: titleFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "title",
+      });
+    }
+    return f;
+  }, [titleFilter]);
 
   const {
     data: { data: projects, totalCount: trpcTotalCount } = {
@@ -61,7 +73,7 @@ export const ProjectsList: FC<ProjectsListProps> = ({
     },
     isFetching,
   } = api.projectsAdmin.getMine.useQuery(
-    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    { page, perPage, sort: sort ?? [], filters: parsedFilters },
     {
       placeholderData: {
         data: initialProjects,
@@ -108,7 +120,6 @@ export const ProjectsList: FC<ProjectsListProps> = ({
       {
         id: "title",
         enableSorting: false,
-        enableColumnFilter: false,
         accessorFn: (row) =>
           getTitleDescriptionForLocale(
             row.translations,
@@ -124,6 +135,7 @@ export const ProjectsList: FC<ProjectsListProps> = ({
           placeholder: "Search title...",
           variant: "text",
         },
+        enableColumnFilter: true,
         cell: ({ row }) => {
           const title =
             getTitleDescriptionForLocale(

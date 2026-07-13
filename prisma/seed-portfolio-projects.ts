@@ -31,6 +31,7 @@ export async function seedPortfolioProjects(
 ): Promise<Record<string, Project>> {
   const result: Record<string, Project> = {};
 
+  await prisma.projectSkill.deleteMany({});
   await prisma.project.deleteMany({ where: { userId } });
 
   for (const project of portfolioProjects) {

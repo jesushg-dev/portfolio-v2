@@ -1,6 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import {
+  extractStringFilter,
+  extractArrayFilter,
+} from "@/lib/admin/filter-utils";
+
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   assertOwner,
@@ -49,15 +54,14 @@ export const skillsAdminRouter = createTRPCRouter({
       }
 
       const where: Prisma.SkillWhereInput = { userId: ctx.user.id };
-      if (input.filters && input.filters.length > 0) {
-        const titleFilter = input.filters.find((f) => f.id === "title");
-        if (titleFilter && typeof titleFilter.value === "string") {
-          where.title = { contains: titleFilter.value, mode: "insensitive" };
-        }
-        const typeFilter = input.filters.find((f) => f.id === "type");
-        if (typeFilter && typeof typeFilter.value === "string") {
-          where.type = typeFilter.value as StackType;
-        }
+      const titleVal = extractStringFilter(input.filters, "title");
+      if (titleVal) {
+        where.title = { contains: titleVal, mode: "insensitive" };
+      }
+
+      const typeVals = extractArrayFilter<StackType>(input.filters, "type");
+      if (typeVals && typeVals.length > 0) {
+        where.type = { in: typeVals };
       }
 
       const [skills, totalCount, languages] = await Promise.all([

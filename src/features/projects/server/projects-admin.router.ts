@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { extractStringFilter } from "@/lib/admin/filter-utils";
+
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   assertOwner,
@@ -53,12 +55,22 @@ export const projectsAdminRouter = createTRPCRouter({
       }
 
       const where: Prisma.ProjectWhereInput = { userId: ctx.user.id };
-      if (input.filters && input.filters.length > 0) {
-        // Implement basic string filtering if any (e.g., type)
-        const typeFilter = input.filters.find((f) => f.id === "type");
-        if (typeFilter && typeof typeFilter.value === "string") {
-          where.type = typeFilter.value as StackType;
-        }
+
+      const typeVal = extractStringFilter(input.filters, "type");
+      if (typeVal) {
+        where.type = typeVal as StackType;
+      }
+
+      const titleVal = extractStringFilter(input.filters, "title");
+      if (titleVal) {
+        where.ProjectTranslation = {
+          some: {
+            title: {
+              contains: titleVal,
+              mode: "insensitive",
+            },
+          },
+        };
       }
 
       const [projects, totalCount, languages] = await Promise.all([

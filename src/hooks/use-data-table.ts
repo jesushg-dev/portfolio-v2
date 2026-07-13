@@ -1,5 +1,6 @@
 "use no memo";
 import {
+  type ColumnDef,
   type ColumnFiltersState,
   getCoreRowModel,
   getFacetedMinMaxValues,
@@ -44,6 +45,15 @@ const JOIN_OPERATOR_KEY = "joinOperator";
 const ARRAY_SEPARATOR = ",";
 const DEBOUNCE_MS = 300;
 const THROTTLE_MS = 50;
+
+function getColumnFilterId<TData>(column: ColumnDef<TData, unknown>): string {
+  if (column.id) return column.id;
+  if ("accessorKey" in column) {
+    const accessorKey = column.accessorKey;
+    if (typeof accessorKey === "string") return accessorKey;
+  }
+  return "";
+}
 
 interface UseDataTableProps<TData> extends Omit<
   TableOptions<TData>,
@@ -187,13 +197,14 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     return filterableColumns.reduce<
       Record<string, SingleParser<string> | SingleParser<string[]>>
     >((acc, column) => {
+      const columnId = getColumnFilterId(column);
       if (column.meta?.options) {
-        acc[column.id ?? ""] = parseAsArrayOf(
+        acc[columnId] = parseAsArrayOf(
           parseAsString,
           ARRAY_SEPARATOR,
         ).withOptions(queryStateOptions);
       } else {
-        acc[column.id ?? ""] = parseAsString.withOptions(queryStateOptions);
+        acc[columnId] = parseAsString.withOptions(queryStateOptions);
       }
       return acc;
     }, {});
@@ -248,7 +259,11 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
         const filterUpdates = next.reduce<
           Record<string, string | string[] | null>
         >((acc, filter) => {
-          if (filterableColumns.find((column) => column.id === filter.id)) {
+          if (
+            filterableColumns.find(
+              (column) => getColumnFilterId(column) === filter.id,
+            )
+          ) {
             acc[filter.id] = filter.value as string | string[];
           }
           return acc;

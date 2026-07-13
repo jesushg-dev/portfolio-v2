@@ -8,13 +8,13 @@ import {
 type AppLanguageRow = { id: string; code: string };
 type SkillRow = { title: string };
 
-function trpcGetInput(procedure: string, input: unknown = null): string {
+function trpcGetInput(procedure: string, input: unknown = {}): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(
     JSON.stringify({ "0": { json: input } }),
   )}`;
 }
 
-async function trpcQuery<T>(page: Page, procedure: string): Promise<T> {
+async function executeTrpcQuery<T>(page: Page, procedure: string): Promise<T> {
   const response = await page.request.get(trpcGetInput(procedure));
   if (!response.ok()) {
     throw new Error(
@@ -61,9 +61,15 @@ function buildSkillCreateInput(
   };
 }
 
+type SkillsResponse = { data: SkillRow[] } | SkillRow[];
+
 /** Creates any missing fixture skills via tRPC (does not delete existing skills). */
 export async function ensurePortfolioSkills(page: Page): Promise<void> {
-  const existing = await trpcQuery<SkillRow[]>(page, "skillsAdmin.getMine");
+  const response = await executeTrpcQuery<SkillsResponse>(
+    page,
+    "skillsAdmin.getMine",
+  );
+  const existing = Array.isArray(response) ? response : response.data;
   const existingTitles = new Set(existing.map((skill) => skill.title));
 
   const missing = portfolioSkills.filter(
@@ -73,7 +79,7 @@ export async function ensurePortfolioSkills(page: Page): Promise<void> {
     return;
   }
 
-  const languages = await trpcQuery<AppLanguageRow[]>(
+  const languages = await executeTrpcQuery<AppLanguageRow[]>(
     page,
     "appLanguagesAdmin.getAll",
   );

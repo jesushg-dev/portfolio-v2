@@ -25,4 +25,5 @@ export const dataTableParamsSchema = z.object({
   filters: z.array(dataTableFilterSchema).optional().default([]),
 });
 
+export type DataTableFilter = z.infer<typeof dataTableFilterSchema>;
 export type DataTableParams = z.infer<typeof dataTableParamsSchema>;

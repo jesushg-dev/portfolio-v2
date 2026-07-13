@@ -46,6 +46,7 @@ export function DataTableViewOptions<TData>({
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          data-testid="toggle-columns-btn"
           aria-label="Toggle columns"
           role="combobox"
           variant="outline"
@@ -65,6 +66,7 @@ export function DataTableViewOptions<TData>({
               {columns.map((column) => (
                 <CommandItem
                   key={column.id}
+                  data-testid={`toggle-column-${column.id}`}
                   data-checked={column.getIsVisible()}
                   onSelect={() =>
                     column.toggleVisibility(!column.getIsVisible())

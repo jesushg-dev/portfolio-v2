@@ -48,6 +48,7 @@ export function DataTableToolbar<TData>({
         ))}
         {isFiltered && (
           <Button
+            data-testid="reset-filters-btn"
             aria-label="Reset filters"
             variant="outline"
             className="border-dashed"
@@ -82,6 +83,7 @@ function DataTableToolbarFilter<TData>({
         case "text":
           return (
             <Input
+              data-testid={`filter-${column.id}`}
               placeholder={columnMeta.placeholder ?? columnMeta.label}
               value={(column.getFilterValue() as string) ?? ""}
               onChange={(event) => column.setFilterValue(event.target.value)}

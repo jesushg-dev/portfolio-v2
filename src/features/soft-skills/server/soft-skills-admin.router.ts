@@ -1,5 +1,14 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+
+import { extractStringFilter } from "@/lib/admin/filter-utils";
+import {
+  buildLocalizedJsonTitleMongoMatch,
+  mongoUserIdFilter,
+  queryPaginatedIdsWithMongoMatch,
+  reorderByIds,
+  type MongoSort,
+} from "@/lib/admin/mongodb-localized-json-query";
 import { type PrismaClient, type Prisma } from "@prisma/client";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -82,7 +91,51 @@ export const softSkillsAdminRouter = createTRPCRouter({
         userId: ctx.user.id,
       };
 
-      const [items, totalCount, languages] = await Promise.all([
+      const titleVal = extractStringFilter(input.filters, "title");
+
+      const languages = await ctx.db.appLanguage.findMany({
+        orderBy: { code: "asc" },
+      });
+
+      if (titleVal) {
+        const mongoMatch: Record<string, unknown> = {
+          userId: mongoUserIdFilter(ctx.user.id),
+          ...buildLocalizedJsonTitleMongoMatch("title", titleVal),
+        };
+
+        const sortField = input.sort?.[0];
+        let mongoSort: MongoSort = { order: 1, createdAt: 1 };
+        if (sortField?.id === "order") {
+          const dir: 1 | -1 = sortField.desc ? -1 : 1;
+          mongoSort = { order: dir, createdAt: dir };
+        }
+
+        const { ids, totalCount } = await queryPaginatedIdsWithMongoMatch({
+          delegate: ctx.db.portfolioSoftSkill,
+          match: mongoMatch,
+          sort: mongoSort,
+          skip,
+          take,
+        });
+
+        const items =
+          ids.length > 0
+            ? reorderByIds(
+                await ctx.db.portfolioSoftSkill.findMany({
+                  where: { id: { in: ids } },
+                }),
+                ids,
+              )
+            : [];
+
+        return {
+          data: mapSoftSkillsToEditorDto(items, languages),
+          pageCount: take ? Math.ceil(totalCount / take) : 1,
+          totalCount,
+        };
+      }
+
+      const [items, totalCount] = await Promise.all([
         ctx.db.portfolioSoftSkill.findMany({
           where,
           orderBy,
@@ -90,7 +143,6 @@ export const softSkillsAdminRouter = createTRPCRouter({
           take,
         }),
         ctx.db.portfolioSoftSkill.count({ where }),
-        ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
       ]);
 
       return {

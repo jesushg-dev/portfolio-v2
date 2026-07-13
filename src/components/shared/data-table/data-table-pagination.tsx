@@ -70,6 +70,7 @@ export function DataTablePagination<TData>({
         </div>
         <div className="flex items-center space-x-2">
           <Button
+            data-testid="pagination-first"
             aria-label="Go to first page"
             variant="outline"
             size="icon"
@@ -80,6 +81,7 @@ export function DataTablePagination<TData>({
             <ChevronsLeft />
           </Button>
           <Button
+            data-testid="pagination-previous"
             aria-label="Go to previous page"
             variant="outline"
             size="icon"
@@ -90,6 +92,7 @@ export function DataTablePagination<TData>({
             <ChevronLeft />
           </Button>
           <Button
+            data-testid="pagination-next"
             aria-label="Go to next page"
             variant="outline"
             size="icon"
@@ -100,6 +103,7 @@ export function DataTablePagination<TData>({
             <ChevronRight />
           </Button>
           <Button
+            data-testid="pagination-last"
             aria-label="Go to last page"
             variant="outline"
             size="icon"

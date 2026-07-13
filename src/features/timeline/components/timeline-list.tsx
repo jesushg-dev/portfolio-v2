@@ -17,7 +17,8 @@ import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { useQueryState, parseAsInteger } from "nuqs";
-import { getFiltersStateParser, getSortingStateParser } from "@/lib/parsers";
+import { getSortingStateParser } from "@/lib/parsers";
+import type { FilterItemSchema } from "@/lib/parsers";
 
 import type { RouterOutputs } from "@/trpc/react";
 
@@ -59,10 +60,42 @@ export const TimelineList: FC<TimelineListProps> = ({
     "sort",
     getSortingStateParser<TimelineItemRow>(),
   );
-  const [filters] = useQueryState(
-    "filters",
-    getFiltersStateParser<TimelineItemRow>(),
-  );
+
+  const [titleFilter] = useQueryState("title");
+  const [orgFilter] = useQueryState("organization");
+  const [catFilter] = useQueryState("category");
+
+  const parsedFilters = useMemo((): FilterItemSchema[] => {
+    const f: FilterItemSchema[] = [];
+    if (titleFilter) {
+      f.push({
+        id: "title",
+        value: titleFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "title",
+      });
+    }
+    if (orgFilter) {
+      f.push({
+        id: "organization",
+        value: orgFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "organization",
+      });
+    }
+    if (catFilter) {
+      f.push({
+        id: "category",
+        value: catFilter,
+        variant: "text",
+        operator: "iLike",
+        filterId: "category",
+      });
+    }
+    return f;
+  }, [titleFilter, orgFilter, catFilter]);
 
   const {
     data: { data: items, totalCount: trpcTotalCount } = {
@@ -71,7 +104,7 @@ export const TimelineList: FC<TimelineListProps> = ({
     },
     isFetching,
   } = api.timelineAdmin.getMine.useQuery(
-    { page, perPage, sort: sort ?? [], filters: filters ?? [] },
+    { page, perPage, sort: sort ?? [], filters: parsedFilters },
     {
       placeholderData: {
         data: initialItems,
