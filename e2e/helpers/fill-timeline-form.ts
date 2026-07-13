@@ -34,7 +34,7 @@ const CATEGORY_LABELS: Record<
   COURSE: /course|curso|cursus/i,
 };
 
-function trpcGetInput(procedure: string, input: unknown = null): string {
+function trpcGetInput(procedure: string, input: unknown = {}): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(
     JSON.stringify({ "0": { json: input } }),
   )}`;
@@ -244,7 +244,13 @@ export async function fillTimelineSmoke(
   await fillTimelineItemForm(page, item);
 }
 
-export async function getTimelineMine(page: Page): Promise<TimelineMineItem[]> {
+export async function getTimelineMine(
+  page: Page,
+): Promise<{
+  data: TimelineMineItem[];
+  pageCount: number;
+  totalCount: number;
+}> {
   const response = await page.request.get(
     trpcGetInput("timelineAdmin.getMine"),
   );
@@ -255,9 +261,21 @@ export async function getTimelineMine(page: Page): Promise<TimelineMineItem[]> {
   }
 
   const payload = (await response.json()) as [
-    { result?: { data?: { json?: TimelineMineItem[] } } },
+    {
+      result?: {
+        data?: {
+          json?: {
+            data: TimelineMineItem[];
+            pageCount: number;
+            totalCount: number;
+          };
+        };
+      };
+    },
   ];
-  return payload[0]?.result?.data?.json ?? [];
+  return (
+    payload[0]?.result?.data?.json ?? { data: [], pageCount: 0, totalCount: 0 }
+  );
 }
 
 export async function cleanupUserTimeline(page: Page): Promise<void> {

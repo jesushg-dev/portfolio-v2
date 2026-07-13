@@ -61,4 +61,3 @@ export function translationMapEntries<T extends Record<keyof T, string>>(
     ...fields,
   }));
 }
-

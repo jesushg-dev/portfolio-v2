@@ -22,8 +22,8 @@ test.describe("soft skills smoke", () => {
     await fillSoftSkillSmoke(page, item);
 
     const items = await getSoftSkillsMine(page);
-    expect(items).toHaveLength(1);
-    expect(items[0]?.icon).toBe(item.icon);
-    expect(items[0]?.order).toBe(item.order);
+    expect(items.data).toHaveLength(1);
+    expect(items.data[0]?.icon).toBe(item.icon);
+    expect(items.data[0]?.order).toBe(item.order);
   });
 });

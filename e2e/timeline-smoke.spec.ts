@@ -24,8 +24,8 @@ test.describe("timeline smoke", () => {
     await fillTimelineSmoke(page, item);
 
     const items = await getTimelineMine(page);
-    expect(items).toHaveLength(1);
-    expect(items[0]?.organization).toBe(item.organization);
-    expect(items[0]?.category).toBe(item.category);
+    expect(items.data).toHaveLength(1);
+    expect(items.data[0]?.organization).toBe(item.organization);
+    expect(items.data[0]?.category).toBe(item.category);
   });
 });

@@ -1,0 +1,15 @@
+FROM mcr.microsoft.com/playwright:v1.61.1-noble AS base
+RUN corepack enable && corepack prepare pnpm@latest --activate
+WORKDIR /app
+
+FROM base AS deps
+COPY package.json pnpm-lock.yaml prisma.config.ts ./
+COPY prisma ./prisma
+RUN pnpm install --frozen-lockfile
+
+FROM base AS test
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN pnpm prisma generate
+
+CMD ["sh", "-c", "pnpm db:push && pnpm test:e2e:full"]

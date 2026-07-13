@@ -27,12 +27,12 @@ export interface ProjectEditorDTO {
 
 export type ProjectCreateFormDTO = Omit<ProjectEditorDTO, "id">;
 
-const emptyProjectTranslationFields = { title: "", description: "" }
+const emptyProjectTranslationFields = { title: "", description: "" };
 
 type ProjectWithRelations = Project & {
   ProjectTranslation: ProjectTranslation[];
   ProjectSkill: ProjectSkill[];
-}
+};
 
 export function mapProjectToEditorDto(
   project: ProjectWithRelations,
@@ -58,7 +58,7 @@ export function mapProjectToEditorDto(
       rows,
       emptyProjectTranslationFields,
     ),
-  }
+  };
 }
 
 export function mapProjectsToEditorDto(
@@ -82,6 +82,5 @@ export function buildEmptyProjectCreateDto(
       languages,
       emptyProjectTranslationFields,
     ),
-  }
+  };
 }
-

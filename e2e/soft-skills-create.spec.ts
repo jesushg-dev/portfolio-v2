@@ -34,7 +34,8 @@ test.describe("soft skills create", () => {
     expect(section.videoUrl).toBe(portfolioSoftSkills.section.videoUrl);
     expect(section.posterUrl).toBe(portfolioSoftSkills.section.posterUrl);
 
-    const items = await getSoftSkillsMine(page);
+    const response = await getSoftSkillsMine(page);
+    const items = response.data;
     expect(items).toHaveLength(portfolioSoftSkills.items.length);
 
     const teamwork = items.find((row) =>

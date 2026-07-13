@@ -281,4 +281,14 @@ export const softSkillsAdminRouter = createTRPCRouter({
 
       return { success: true };
     }),
+
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
+    const items = await ctx.db.portfolioSoftSkill.findMany({
+      where: { userId: ctx.user.id },
+      select: { id: true },
+    });
+    const ids = items.map((i) => i.id);
+    if (ids.length === 0) return { count: 0 };
+    return ctx.db.portfolioSoftSkill.deleteMany({ where: { id: { in: ids } } });
+  }),
 });

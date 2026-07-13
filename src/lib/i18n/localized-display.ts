@@ -98,4 +98,3 @@ export function getTitleDescriptionForLocale<T extends Record<keyof T, string>>(
 ): string {
   return getLocalizedFieldForLocale(translations, languages, localeCode, field);
 }
-

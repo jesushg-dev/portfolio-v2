@@ -29,10 +29,11 @@ test.describe("timeline create", () => {
     await page.goto("/admin");
     await fillTimelineFromFixture(page);
 
-    const [items, languages] = await Promise.all([
+    const [response, languages] = await Promise.all([
       getTimelineMine(page),
       getAppLanguages(page),
     ]);
+    const items = response.data;
     expect(items).toHaveLength(portfolioTimeline.items.length);
 
     const studyItem = items.find(

@@ -29,7 +29,7 @@ interface FillSoftSkillFormOptions {
   verifyInList?: boolean;
 }
 
-function trpcGetInput(procedure: string, input: unknown = null): string {
+function trpcGetInput(procedure: string, input: unknown = {}): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(
     JSON.stringify({ "0": { json: input } }),
   )}`;
@@ -285,7 +285,11 @@ export async function fillSoftSkillSmoke(
 
 export async function getSoftSkillsMine(
   page: Page,
-): Promise<SoftSkillMineItem[]> {
+): Promise<{
+  data: SoftSkillMineItem[];
+  pageCount: number;
+  totalCount: number;
+}> {
   const response = await page.request.get(
     trpcGetInput("softSkillsAdmin.getMine"),
   );
@@ -296,9 +300,21 @@ export async function getSoftSkillsMine(
   }
 
   const payload = (await response.json()) as [
-    { result?: { data?: { json?: SoftSkillMineItem[] } } },
+    {
+      result?: {
+        data?: {
+          json?: {
+            data: SoftSkillMineItem[];
+            pageCount: number;
+            totalCount: number;
+          };
+        };
+      };
+    },
   ];
-  return payload[0]?.result?.data?.json ?? [];
+  return (
+    payload[0]?.result?.data?.json ?? { data: [], pageCount: 0, totalCount: 0 }
+  );
 }
 
 export async function getSoftSkillsSection(

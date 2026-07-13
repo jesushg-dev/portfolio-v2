@@ -44,7 +44,7 @@ interface TerminalMine {
   }[];
 }
 
-function trpcGetInput(procedure: string, input: unknown = null): string {
+function trpcGetInput(procedure: string, input: unknown = {}): string {
   return `/api/trpc/${procedure}?batch=1&input=${encodeURIComponent(
     JSON.stringify({ "0": { json: input } }),
   )}`;
