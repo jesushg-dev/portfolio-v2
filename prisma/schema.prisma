@@ -43,14 +43,14 @@ model User {
   CvHeroTitle         CvHeroTitle[]
 
   // Per-user portfolio (existing models become tenant-scoped)
-  Project             Project[]
-  Skill               Skill[]
-  Service             Service[]
-  Certification       Certification[]
-  TimelineItem        TimelineItem[]
-  PortfolioSoftSkill  PortfolioSoftSkill[]
-  SoftSkillsSection   SoftSkillsSection?
-  SpotifyConnection   SpotifyConnection?
+  Project            Project[]
+  Skill              Skill[]
+  Service            Service[]
+  Certification      Certification[]
+  TimelineItem       TimelineItem[]
+  PortfolioSoftSkill PortfolioSoftSkill[]
+  SoftSkillsSection  SoftSkillsSection?
+  SpotifyConnection  SpotifyConnection?
 }
 
 model Session {
@@ -230,15 +230,15 @@ model CvTerminalStepTranslation {
 }
 
 model CvContact {
-  id        String          @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String          @db.ObjectId
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String        @db.ObjectId
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   type      CvContactType
   value     String
   label     Json?
-  order     Int             @default(0)
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+  order     Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }
 
 model CvEducation {
@@ -269,33 +269,33 @@ model CvLanguage {
 }
 
 model CvTechnicalSkill {
-  id        String           @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String           @db.ObjectId
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String          @db.ObjectId
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   category  CvSkillCategory
   items     String[]
-  order     Int              @default(0)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  order     Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 }
 
 model CvExperience {
-  id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String             @db.ObjectId
-  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  company          String
-  role             Json
-  location         Json?
-  dates            String?
-  startDate        DateTime?
-  endDate          DateTime?
-  current          Boolean            @default(false)
-  skills           String?
-  order            Int                @default(0)
-  responsibilities CvResponsibility[]
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String              @db.ObjectId
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company           String
+  role              Json
+  location          Json?
+  dates             String?
+  startDate         DateTime?
+  endDate           DateTime?
+  current           Boolean             @default(false)
+  skills            String?
+  order             Int                 @default(0)
+  responsibilities  CvResponsibility[]
   CvExperienceSkill CvExperienceSkill[]
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 }
 
 model CvResponsibility {
@@ -377,15 +377,15 @@ enum CvSkillCategory {
 // ============================================================================
 
 model AppLanguage {
-  id                       String                     @id @default(auto()) @map("_id") @db.ObjectId
-  code                     String                     @unique
-  name                     String
-  SkillTranslation         SkillTranslation[]
-  ProjectTranslation       ProjectTranslation[]
-  ServiceTranslation             ServiceTranslation[]
-  CertificationTranslation       CertificationTranslation[]
-  CvTerminalStepTranslation      CvTerminalStepTranslation[]
-  CvHeroTitleTranslation         CvHeroTitleTranslation[]
+  id                        String                      @id @default(auto()) @map("_id") @db.ObjectId
+  code                      String                      @unique
+  name                      String
+  SkillTranslation          SkillTranslation[]
+  ProjectTranslation        ProjectTranslation[]
+  ServiceTranslation        ServiceTranslation[]
+  CertificationTranslation  CertificationTranslation[]
+  CvTerminalStepTranslation CvTerminalStepTranslation[]
+  CvHeroTitleTranslation    CvHeroTitleTranslation[]
 }
 
 model Project {
@@ -407,7 +407,7 @@ model ProjectSkill {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   Skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
-  Project   Project  @relation(fields: [projectId], references: [id])
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   skillId   String   @db.ObjectId
   projectId String   @db.ObjectId
 }
@@ -418,7 +418,7 @@ model ProjectTranslation {
   title         String
   description   String
   language      AppLanguage @relation(fields: [appLanguageId], references: [id])
-  Project       Project?    @relation(fields: [projectId], references: [id])
+  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   appLanguageId String      @db.ObjectId
   projectId     String?     @db.ObjectId
 }
@@ -441,23 +441,23 @@ model ServiceTranslation {
   title         String
   description   String
   language      AppLanguage @relation(fields: [appLanguageId], references: [id])
-  Service       Service?    @relation(fields: [serviceId], references: [id])
+  Service       Service?    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId     String?     @db.ObjectId
   appLanguageId String      @db.ObjectId
 }
 
 model Skill {
-  id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String             @db.ObjectId
-  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt        DateTime           @default(now())
-  image            String
-  title            String
-  type             StackType
-  ProjectSkill     ProjectSkill[]
-  SkillTranslation SkillTranslation[]
-  CertificateSkill CertificateSkill[]
-  ServiceSkill     ServiceSkill[]
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String              @db.ObjectId
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime            @default(now())
+  image             String
+  title             String
+  type              StackType
+  ProjectSkill      ProjectSkill[]
+  SkillTranslation  SkillTranslation[]
+  CertificateSkill  CertificateSkill[]
+  ServiceSkill      ServiceSkill[]
   CvExperienceSkill CvExperienceSkill[]
 
   @@unique([userId, title])
@@ -496,7 +496,7 @@ model CertificationTranslation {
   createdAt          DateTime             @default(now())
   title              String
   language           AppLanguage          @relation(fields: [appLanguageId], references: [id])
-  Certification      Certification?       @relation(fields: [certificationId], references: [id])
+  Certification      Certification?       @relation(fields: [certificationId], references: [id], onDelete: Cascade)
   certificationId    String?              @db.ObjectId
   appLanguageId      String               @db.ObjectId
   CertificateService CertificateService[]
@@ -507,7 +507,7 @@ model CertificationTranslation {
 model CertificateSkill {
   id              String        @id @default(auto()) @map("_id") @db.ObjectId
   createdAt       DateTime      @default(now())
-  Certification   Certification @relation(fields: [certificationId], references: [id])
+  Certification   Certification @relation(fields: [certificationId], references: [id], onDelete: Cascade)
   Skill           Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
   certificationId String        @db.ObjectId
   skillId         String        @db.ObjectId
@@ -518,8 +518,8 @@ model CertificateSkill {
 model CertificateProject {
   id              String        @id @default(auto()) @map("_id") @db.ObjectId
   createdAt       DateTime      @default(now())
-  Certification   Certification @relation(fields: [certificationId], references: [id])
-  Project         Project       @relation(fields: [projectId], references: [id])
+  Certification   Certification @relation(fields: [certificationId], references: [id], onDelete: Cascade)
+  Project         Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
   certificationId String        @db.ObjectId
   projectId       String        @db.ObjectId
 }
@@ -540,11 +540,11 @@ model ServiceSkill {
 model CertificateService {
   id                         String                    @id @default(auto()) @map("_id") @db.ObjectId
   createdAt                  DateTime                  @default(now())
-  Certification              Certification             @relation(fields: [certificationId], references: [id])
-  Service                    Service                   @relation(fields: [serviceId], references: [id])
+  Certification              Certification             @relation(fields: [certificationId], references: [id], onDelete: Cascade)
+  Service                    Service                   @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   certificationId            String                    @db.ObjectId
   serviceId                  String                    @db.ObjectId
-  CertificationTranslation   CertificationTranslation? @relation(fields: [certificationTranslationId], references: [id])
+  CertificationTranslation   CertificationTranslation? @relation(fields: [certificationTranslationId], references: [id], onDelete: Cascade)
   certificationTranslationId String?                   @db.ObjectId
 }
 

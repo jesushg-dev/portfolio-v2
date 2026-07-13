@@ -409,7 +409,7 @@ If inline logic is worth testing (e.g. slug → tab index, date formatting), mov
 
 ### ❌ NEVER disable tests or skip type-checking in CI to make tests pass
 
-Fix mocks, types, and fixtures properly. Both `pnpm test` and `pnpm type-check` run in CI (`.github/workflows/test.yml`).
+Fix mocks, types, and fixtures properly. Both `pnpm test` and `pnpm type` run in CI (`.github/workflows/test.yml`).
 
 ## tRPC admin routers — feature-based layout
 

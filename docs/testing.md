@@ -8,12 +8,12 @@ This project uses **Jest** (via `next/jest`), **Testing Library**, and **jsdom**
 pnpm test           # run once
 pnpm test:watch     # watch mode
 pnpm test:coverage  # with coverage report
-pnpm type-check     # also runs in CI alongside tests
+pnpm type     # also runs in CI alongside tests
 ```
 
 CI runs on every push and pull request via [`.github/workflows/test.yml`](../.github/workflows/test.yml):
 
-- **unit** — lint, type-check, Jest, production build
+- **unit** — lint, type, Jest, production build
 - **e2e-smoke** — Playwright smoke against a local `next start` on the runner (isolated e2e database)
 - **e2e-preview** — Playwright smoke against the Vercel Preview URL for the PR (pull requests only)
 
@@ -200,7 +200,7 @@ Keep page tests to a few **smoke cases** (happy path, `notFound`, `generateMetad
 - [ ] Fixtures with real Prisma/router types (`satisfies` or typed helpers)
 - [ ] No `any` to silence type errors in tests
 - [ ] Pure logic extracted when component tests would be too heavy
-- [ ] Both `pnpm test` and `pnpm type-check` pass before pushing
+- [ ] Both `pnpm test` and `pnpm type` pass before pushing
 
 ## Current coverage (portfolio)
 
