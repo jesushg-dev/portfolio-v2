@@ -10,6 +10,10 @@ import {
 export interface ProjectTranslationFields {
   title: string;
   description: string;
+  hook: string;
+  challenge: string;
+  approach: string;
+  outcome: string;
 }
 
 export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields>;
@@ -22,12 +26,23 @@ export interface ProjectEditorDTO {
   websiteUrl: string;
   isPrivate: boolean;
   skillIds: string[];
+  order: number;
+  kind: Project["kind"];
+  slug: string;
+  caseStudyEnabled: boolean;
   translations: ProjectTranslationMap;
 }
 
 export type ProjectCreateFormDTO = Omit<ProjectEditorDTO, "id">;
 
-const emptyProjectTranslationFields = { title: "", description: "" };
+const emptyProjectTranslationFields = {
+  title: "",
+  description: "",
+  hook: "",
+  challenge: "",
+  approach: "",
+  outcome: "",
+};
 
 type ProjectWithRelations = Project & {
   ProjectTranslation: ProjectTranslation[];
@@ -43,6 +58,10 @@ export function mapProjectToEditorDto(
       appLanguageId: translation.appLanguageId,
       title: translation.title,
       description: translation.description,
+      hook: translation.hook ?? "",
+      challenge: translation.challenge ?? "",
+      approach: translation.approach ?? "",
+      outcome: translation.outcome ?? "",
     })) ?? [];
 
   return {
@@ -53,6 +72,10 @@ export function mapProjectToEditorDto(
     websiteUrl: project.websiteUrl ?? "",
     isPrivate: project.isPrivate,
     skillIds: project.ProjectSkill?.map((entry) => entry.skillId) ?? [],
+    order: project.order ?? 0,
+    kind: project.kind ?? "PERSONAL",
+    slug: project.slug ?? "",
+    caseStudyEnabled: project.caseStudyEnabled ?? false,
     translations: mergeTranslationMap(
       languages,
       rows,
@@ -78,6 +101,10 @@ export function buildEmptyProjectCreateDto(
     websiteUrl: "",
     isPrivate: false,
     skillIds: [],
+    order: 0,
+    kind: "PERSONAL",
+    slug: "",
+    caseStudyEnabled: false,
     translations: buildEmptyTranslationMap(
       languages,
       emptyProjectTranslationFields,

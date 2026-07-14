@@ -51,6 +51,7 @@ model User {
   PortfolioSoftSkill PortfolioSoftSkill[]
   SoftSkillsSection  SoftSkillsSection?
   SpotifyConnection  SpotifyConnection?
+  Testimonial        Testimonial[]
 }
 
 model Session {
@@ -284,12 +285,14 @@ model CvExperience {
   userId            String              @db.ObjectId
   user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   company           String
+  companyLogoUrl    String?
   role              Json
   location          Json?
   dates             String?
   startDate         DateTime?
   endDate           DateTime?
   current           Boolean             @default(false)
+  featuredOnHome    Boolean             @default(false)
   skills            String?
   order             Int                 @default(0)
   responsibilities  CvResponsibility[]
@@ -357,6 +360,7 @@ enum CvContactType {
   GITHUB
   WEBSITE
   LOCATION
+  CALENDLY
   OTHER
 }
 
@@ -388,6 +392,12 @@ model AppLanguage {
   CvHeroTitleTranslation    CvHeroTitleTranslation[]
 }
 
+enum ProjectKind {
+  PROFESSIONAL
+  PERSONAL
+  LEARNING
+}
+
 model Project {
   id                 String               @id @default(auto()) @map("_id") @db.ObjectId
   userId             String?              @db.ObjectId
@@ -398,6 +408,10 @@ model Project {
   githubUrl          String?
   websiteUrl         String?
   isPrivate          Boolean              @default(false)
+  order              Int                  @default(0)
+  kind               ProjectKind          @default(PERSONAL)
+  slug               String?
+  caseStudyEnabled   Boolean              @default(false)
   ProjectSkill       ProjectSkill[]
   ProjectTranslation ProjectTranslation[]
   CertificateProject CertificateProject[]
@@ -417,10 +431,28 @@ model ProjectTranslation {
   createdAt     DateTime    @default(now())
   title         String
   description   String
+  hook          String?
+  challenge     String?
+  approach      String?
+  outcome       String?
   language      AppLanguage @relation(fields: [appLanguageId], references: [id])
   Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   appLanguageId String      @db.ObjectId
   projectId     String?     @db.ObjectId
+}
+
+model Testimonial {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  author    String
+  role      String
+  quote     Json
+  avatarUrl String?
+  order     Int      @default(0)
+  isVisible Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Service {

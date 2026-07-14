@@ -1,5 +1,11 @@
 import { readFileSync } from "node:fs";
-import type { PrismaClient, Project, Skill, StackType } from "@prisma/client";
+import type {
+  PrismaClient,
+  Project,
+  ProjectKind,
+  Skill,
+  StackType,
+} from "@prisma/client";
 
 export interface PortfolioProjectSeed {
   key: string;
@@ -8,10 +14,18 @@ export interface PortfolioProjectSeed {
   githubUrl: string;
   websiteUrl: string;
   isPrivate: boolean;
+  order?: number;
+  kind?: ProjectKind;
+  slug?: string;
+  caseStudyEnabled?: boolean;
   translations: {
     locale: "es" | "en" | "nl";
     title: string;
     description: string;
+    hook?: string;
+    challenge?: string;
+    approach?: string;
+    outcome?: string;
   }[];
   skillKeys: string[];
 }
@@ -22,6 +36,13 @@ const portfolioProjects = JSON.parse(
     "utf8",
   ),
 ) as PortfolioProjectSeed[];
+
+function slugFromKey(key: string): string {
+  return key
+    .replace(/([A-Z])/g, "-$1")
+    .toLowerCase()
+    .replace(/^-/, "");
+}
 
 export async function seedPortfolioProjects(
   prisma: PrismaClient,
@@ -34,7 +55,11 @@ export async function seedPortfolioProjects(
   await prisma.projectSkill.deleteMany({});
   await prisma.project.deleteMany({ where: { userId } });
 
-  for (const project of portfolioProjects) {
+  const sortedProjects = [...portfolioProjects].sort(
+    (a, b) => (a.order ?? 999) - (b.order ?? 999),
+  );
+
+  for (const project of sortedProjects) {
     const skillIds = project.skillKeys.map((skillKey) => {
       const skill = skillsByKey[skillKey];
       if (!skill) {
@@ -53,11 +78,19 @@ export async function seedPortfolioProjects(
         githubUrl: project.githubUrl || null,
         websiteUrl: project.websiteUrl || null,
         isPrivate: project.isPrivate,
+        order: project.order ?? 999,
+        kind: project.kind ?? "PERSONAL",
+        slug: project.slug ?? slugFromKey(project.key),
+        caseStudyEnabled: project.caseStudyEnabled ?? false,
         ProjectTranslation: {
           createMany: {
             data: project.translations.map((translation) => ({
               title: translation.title,
               description: translation.description,
+              hook: translation.hook ?? null,
+              challenge: translation.challenge ?? null,
+              approach: translation.approach ?? null,
+              outcome: translation.outcome ?? null,
               appLanguageId: langIds[translation.locale],
             })),
           },

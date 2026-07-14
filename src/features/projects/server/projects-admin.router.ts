@@ -21,6 +21,10 @@ const ProjectTranslationMapSchema = z.record(
   z.object({
     title: z.string(),
     description: z.string(),
+    hook: z.string().default(""),
+    challenge: z.string().default(""),
+    approach: z.string().default(""),
+    outcome: z.string().default(""),
   }),
 );
 
@@ -31,6 +35,10 @@ const projectUpsertInput = z.object({
   websiteUrl: optionalUrl,
   isPrivate: z.boolean().default(false),
   skillIds: z.array(z.string()).default([]),
+  order: z.number().int().default(0),
+  kind: z.enum(["PROFESSIONAL", "PERSONAL", "LEARNING"]).default("PERSONAL"),
+  slug: z.string().optional(),
+  caseStudyEnabled: z.boolean().default(false),
   translations: ProjectTranslationMapSchema.default({}),
 });
 
@@ -147,6 +155,10 @@ export const projectsAdminRouter = createTRPCRouter({
             data: {
               title: translation.title,
               description: translation.description,
+              hook: translation.hook ?? null,
+              challenge: translation.challenge ?? null,
+              approach: translation.approach ?? null,
+              outcome: translation.outcome ?? null,
             },
           });
         } else {

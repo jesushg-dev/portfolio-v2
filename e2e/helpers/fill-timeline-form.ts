@@ -244,9 +244,7 @@ export async function fillTimelineSmoke(
   await fillTimelineItemForm(page, item);
 }
 
-export async function getTimelineMine(
-  page: Page,
-): Promise<{
+export async function getTimelineMine(page: Page): Promise<{
   data: TimelineMineItem[];
   pageCount: number;
   totalCount: number;

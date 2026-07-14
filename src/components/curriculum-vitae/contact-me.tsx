@@ -1,6 +1,7 @@
 import type { FC } from "react";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaCalendarAlt } from "react-icons/fa";
 import { MdPhone, MdEmail, MdWeb, MdLocationOn } from "react-icons/md";
+import type { CvContactType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 
 import { getLocalizedText } from "@/lib/i18n/localized";
@@ -10,17 +11,18 @@ interface IContactMeProps extends CvLocaleProps {
   contacts: CvData["contacts"];
 }
 
-const ICONS = {
+const ICONS: Record<CvContactType, typeof MdWeb> = {
   PHONE: MdPhone,
   EMAIL: MdEmail,
   WEBSITE: MdWeb,
   LINKEDIN: FaLinkedin,
   GITHUB: FaGithub,
   LOCATION: MdLocationOn,
+  CALENDLY: FaCalendarAlt,
   OTHER: MdWeb,
-} as const;
+};
 
-const buildHref = (type: keyof typeof ICONS, value: string) => {
+const buildHref = (type: CvContactType, value: string) => {
   switch (type) {
     case "EMAIL":
       return value.startsWith("mailto:") ? value : `mailto:${value}`;
@@ -28,6 +30,8 @@ const buildHref = (type: keyof typeof ICONS, value: string) => {
       return value.startsWith("tel:")
         ? value
         : `tel:${value.replace(/[^+\d]/g, "")}`;
+    case "CALENDLY":
+      return /^https?:\/\//i.test(value) ? value : `https://${value}`;
     default:
       return value;
   }

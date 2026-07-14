@@ -57,6 +57,16 @@
         "nl": "linkedIn/jesus-hernandez23"
       },
       "order": 3
+    },
+    {
+      "type": "CALENDLY",
+      "value": "https://calendly.com/jesushg",
+      "label": {
+        "es": "Agendar llamada",
+        "en": "Schedule a call",
+        "nl": "Gesprek plannen"
+      },
+      "order": 4
     }
   ],
   "education": [
@@ -230,9 +240,18 @@
             "nl": "Werkte samen met het QA-team om systeemstabiliteit te garanderen, met AI-tools om waardelevering en bugoplossing te versnellen."
           },
           "order": 2
+        },
+        {
+          "text": {
+            "es": "Migré 177 operaciones GraphQL y estabilicé reglas de merchandising en storefronts VTEX de Centroamérica.",
+            "en": "Migrated 177 GraphQL operations and stabilized merchandising rules across Central America VTEX storefronts.",
+            "nl": "Migreerde 177 GraphQL-operaties en stabiliseerde merchandising rules voor VTEX storefronts in Midden-Amerika."
+          },
+          "order": 3
         }
       ],
-      "order": 0
+      "order": 0,
+      "featuredOnHome": true
     },
     {
       "key": "experience1",
@@ -269,7 +288,8 @@
           "order": 1
         }
       ],
-      "order": 1
+      "order": 1,
+      "featuredOnHome": true
     },
     {
       "key": "experience2",
@@ -317,7 +337,8 @@
           "order": 2
         }
       ],
-      "order": 2
+      "order": 2,
+      "featuredOnHome": true
     },
     {
       "key": "experience4",
@@ -354,7 +375,8 @@
           "order": 1
         }
       ],
-      "order": 3
+      "order": 3,
+      "featuredOnHome": true
     },
     {
       "key": "experience5",
@@ -384,7 +406,8 @@
           "order": 1
         }
       ],
-      "order": 4
+      "order": 4,
+      "featuredOnHome": false
     },
     {
       "key": "experience6",
@@ -414,7 +437,8 @@
           "order": 1
         }
       ],
-      "order": 5
+      "order": 5,
+      "featuredOnHome": false
     }
   ],
   "softSkills": [

@@ -101,7 +101,9 @@
         "newThemeSoon": "Nuevo tema pronto"
       },
       "closeMenu": "Cerrar Menú",
-      "openMenu": "Abrir Menú"
+      "openMenu": "Abrir Menú",
+      "openThemeMenu": "Abrir menú de temas",
+      "themeSelected": "Seleccionado"
     },
     "footer": {
       "title": "Todos los Derechos Reservados © ",
@@ -122,8 +124,7 @@
       "titles": {
         "portfolio": "Portafolio",
         "miscellaneous": "Misceláneos",
-        "NowPlaying": "Reproduciendo",
-        "poweredBy": "Powered by "
+        "NowPlaying": "Reproduciendo"
       },
       "new": "Nuevo",
       "soon": "Pronto",
@@ -349,7 +350,19 @@
       "description": "Estoy orgulloso del trabajo que he realizado a lo largo de mi carrera.",
       "actions": {
         "view": "Ver proyecto",
-        "source": "Ver código"
+        "source": "Ver código",
+        "caseStudy": "Ver case study"
+      },
+      "kind": {
+        "PROFESSIONAL": "Trabajo cliente",
+        "PERSONAL": "Personal",
+        "LEARNING": "Aprendizaje"
+      },
+      "caseStudy": {
+        "challenge": "El desafío",
+        "approach": "Enfoque técnico",
+        "outcome": "Resultado",
+        "backToPortfolio": "Volver al portafolio"
       },
       "private": {
         "title": "Privado",
@@ -424,6 +437,54 @@
       "social": {
         "title": "Redes sociales",
         "subtitle": "Sígueme en mis redes sociales"
+      },
+      "scheduleCall": "Agendar una llamada"
+    },
+    "experience": {
+      "title": "Experiencia Profesional",
+      "subtitle": "Empresas, roles e impacto medible",
+      "viewAll": "Ver CV completo",
+      "leadershipTitle": "Liderazgo y mentoría",
+      "leadershipDescription": "Liderazgo de equipos técnicos, coordinación de proveedores y mentoría de desarrolladores en ciclos de entrega complejos."
+    },
+    "impactStats": {
+      "teamSize": {
+        "value": "6",
+        "label": "Desarrolladores liderados"
+      },
+      "graphqlOps": {
+        "value": "177",
+        "label": "Operaciones GraphQL migradas"
+      },
+      "storefronts": {
+        "value": "6",
+        "label": "Storefronts VTEX"
+      }
+    },
+    "testimonials": {
+      "title": "Recomendaciones",
+      "subtitle": "Lo que dicen colegas"
+    },
+    "socialProof": {
+      "eyebrow": "Respaldado por desarrolladores",
+      "title": "Lo que dicen los seniors sobre mí",
+      "subtitle": "Colegas que han visto mi trabajo de cerca.",
+      "cta": "Contrátame",
+      "statsLabel": "En números",
+      "statsNote": "Números acumulados en compromisos profesionales.",
+      "stats": {
+        "teamSize": {
+          "value": "6",
+          "label": "Desarrolladores liderados"
+        },
+        "graphqlOps": {
+          "value": "177",
+          "label": "Operaciones GraphQL migradas"
+        },
+        "storefronts": {
+          "value": "6",
+          "label": "Storefronts en VTEX"
+        }
       }
     }
   },
@@ -745,7 +806,9 @@
         "noEntries": "Sin experiencias todavía.",
         "present": "Actualidad",
         "dragToReorder": "Arrastra para reordenar",
-        "addLabel": "Añadir"
+        "addLabel": "Añadir",
+        "featuredOnHome": "Mostrar en inicio",
+        "featuredOnHomeDescription": "Esta experiencia aparecerá en la sección de inicio"
       },
       "softSkill": {
         "label": "Habilidad blanda",

@@ -5,6 +5,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import { AiFillGithub, AiFillEye } from "react-icons/ai";
 
+import { Link } from "@/i18n/routing";
 import { cloudinaryLoader, siLoader } from "@/utils/tools/image";
 import { type ProjectType } from "@/utils/interfaces/types";
 
@@ -14,6 +15,8 @@ interface IPortfolioItemProps extends ProjectType {
   canSeeDemo: string;
   privateName: string;
   privateDescription: string;
+  caseStudyLabel: string;
+  kindLabels: Record<string, string>;
 }
 
 const linkButtonClass =
@@ -26,14 +29,22 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   githubUrl,
   websiteUrl,
   description,
+  hook,
+  slug,
+  kind,
+  caseStudyEnabled,
   isPrivate = false,
   urlName,
   sourceName,
   privateName,
   privateDescription,
   canSeeDemo,
+  caseStudyLabel,
+  kindLabels,
 }) => {
   const showGithub = !isPrivate && Boolean(githubUrl);
+  const cardDescription = hook ?? description;
+  const kindLabel = kind ? kindLabels[kind] : undefined;
 
   return (
     <article className="group/card bg-background-50 border-primary-100/60 mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-xl border shadow-sm transition-shadow duration-300 hover:shadow-lg">
@@ -46,6 +57,12 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
           className="object-cover transition-transform duration-500 ease-out group-hover/card:scale-[1.03]"
         />
+
+        {kindLabel ? (
+          <span className="bg-background/90 text-foreground absolute top-3 left-3 z-10 rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase shadow-md">
+            {kindLabel}
+          </span>
+        ) : null}
 
         {isPrivate ? (
           <span
@@ -94,7 +111,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
         </div>
 
         <p className="text-primaryText-700 line-clamp-2 text-sm leading-relaxed">
-          {description}
+          {cardDescription}
         </p>
 
         {skills && skills.length > 0 ? (
@@ -118,6 +135,18 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
               </li>
             ))}
           </ul>
+        ) : null}
+
+        {caseStudyEnabled && slug ? (
+          <Link
+            href={{
+              pathname: "/projects/[slug]",
+              params: { slug },
+            }}
+            className="text-primary hover:text-primary/80 mt-auto text-sm font-medium transition-colors"
+          >
+            {caseStudyLabel} →
+          </Link>
         ) : null}
       </div>
     </article>

@@ -59,6 +59,7 @@ const CvContactType = z.enum([
   "GITHUB",
   "WEBSITE",
   "LOCATION",
+  "CALENDLY",
   "OTHER",
 ]);
 
@@ -477,6 +478,7 @@ export const cvRouter = createTRPCRouter({
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean().default(false),
+        featuredOnHome: z.boolean().default(false),
         skillIds: z.array(z.string()).default([]),
         order: z.number().int().nonnegative().default(0),
         responsibilities: z
@@ -532,6 +534,7 @@ export const cvRouter = createTRPCRouter({
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean().default(false),
+        featuredOnHome: z.boolean().default(false),
         skillIds: z.array(z.string()).default([]),
         order: z.number().int().nonnegative().default(0),
         responsibilities: z

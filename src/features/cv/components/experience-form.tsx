@@ -52,6 +52,7 @@ export const ExperienceSchema = z.object({
   location: TextTranslationMapSchema.optional(),
   dates: z.string().optional(),
   current: z.boolean(),
+  featuredOnHome: z.boolean(),
   skillIds: z.array(z.string()),
   responsibilities: z.array(ResponsibilitySchema),
 });
@@ -65,6 +66,7 @@ interface ExperienceInitial {
   location: unknown;
   dates?: string | null;
   current?: boolean;
+  featuredOnHome?: boolean;
   skills?: string | null;
   CvExperienceSkill?: { skillId: string }[];
   responsibilities: { text: unknown; order: number }[];
@@ -101,6 +103,7 @@ export const ExperienceForm: FC<{
         location: TextTranslationMapSchema.optional(),
         dates: z.string().optional(),
         current: z.boolean(),
+        featuredOnHome: z.boolean(),
         skillIds: z.array(z.string()),
         responsibilities: z.array(
           z.object({
@@ -127,6 +130,7 @@ export const ExperienceForm: FC<{
         : buildEmptyTranslationMap(languages, { text: "" }),
       dates: initial?.dates ?? "",
       current: initial?.current ?? false,
+      featuredOnHome: initial?.featuredOnHome ?? false,
       skillIds: initial?.CvExperienceSkill?.map((row) => row.skillId) ?? [],
       responsibilities:
         initial?.responsibilities
@@ -269,6 +273,25 @@ export const ExperienceForm: FC<{
               render={({ field }) => (
                 <FormCheckboxItem label={t("current")}>
                   <Checkbox
+                    checked={field.value}
+                    onCheckedChange={(checked) =>
+                      field.onChange(checked === true)
+                    }
+                  />
+                </FormCheckboxItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="featuredOnHome"
+              render={({ field }) => (
+                <FormCheckboxItem
+                  label={t("featuredOnHome")}
+                  description={t("featuredOnHomeDescription")}
+                >
+                  <Checkbox
+                    id="experience-featured-on-home"
                     checked={field.value}
                     onCheckedChange={(checked) =>
                       field.onChange(checked === true)

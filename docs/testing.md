@@ -186,6 +186,13 @@ Mock server-only dependencies in the test file:
 
 Keep page tests to a few **smoke cases** (happy path, `notFound`, `generateMetadata`). Put detailed logic tests in components and utilities.
 
+## i18n regression tests
+
+- **Message key parity:** `src/lib/i18n/message-key-parity.test.ts` — asserts `messages/es.json` and `messages/nl.json` contain the same keys as `messages/en.json`. Runs in the unit CI job via `pnpm test`.
+- **Seed locale completeness:** `src/lib/i18n/localized-completeness.test.ts` — validates `prisma/data/*.json` localized maps include `en`, `es`, and `nl`.
+- **Audit script:** `node scripts/audit-locale-completeness.mjs` — same seed check for local diagnostics.
+- **Locale switching E2E:** `e2e/locale-switching.spec.ts` — public smoke test for nav/about content across locales and Backend skills tab. Runs via `pnpm test:e2e` (`public-locale` + `smoke` projects).
+
 ## Configuration
 
 | File                      | Purpose                                                         |

@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { RiSunLine, RiMoonLine, RiCheckDoubleLine } from "react-icons/ri";
 
 import { ETheme } from "@/utils/constants/theme";
@@ -15,6 +16,7 @@ interface IThemeOptionProps {
   theme: ThemeType;
   isDark: boolean;
   currentTheme?: string;
+  selectedLabel: string;
   onClick?: (isDark: boolean, theme: ThemeType) => void;
 }
 
@@ -23,6 +25,7 @@ const ThemeOption: FC<IThemeOptionProps> = ({
   theme,
   onClick,
   currentTheme,
+  selectedLabel,
 }) => {
   const themeName = useMemo(() => {
     return theme
@@ -47,7 +50,7 @@ const ThemeOption: FC<IThemeOptionProps> = ({
       </div>
       {currentTheme === theme && (
         <span className="bg-primary-500 text-primary-500 absolute top-0 right-0 -mt-1 -mr-1 inline-flex items-center justify-center rounded-full px-1 py-1 text-xs leading-none font-medium">
-          <span className="sr-only">Selected</span>
+          <span className="sr-only">{selectedLabel}</span>
           <RiCheckDoubleLine className="text-primaryText-500 h-2 w-2" />
         </span>
       )}
@@ -61,6 +64,7 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({
   className,
 }) => {
   const { theme, setTheme } = useThemeContext();
+  const t = useTranslations("global.header");
   if (!visible) return null;
 
   const onChangeTheme = (isDark: boolean, newTheme: ThemeType) => {
@@ -82,36 +86,42 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({
             theme={ETheme.MAIN_DARK}
             onClick={onChangeTheme}
             currentTheme={theme}
+            selectedLabel={t("themeSelected")}
           />
           <ThemeOption
             isDark
             theme={ETheme.ORANGE_DARK}
             onClick={onChangeTheme}
             currentTheme={theme}
+            selectedLabel={t("themeSelected")}
           />
           <ThemeOption
             isDark
             theme={ETheme.CHRISTMAS_DARK}
             onClick={onChangeTheme}
             currentTheme={theme}
+            selectedLabel={t("themeSelected")}
           />
           <ThemeOption
             isDark={false}
             theme={ETheme.MAIN_LIGHT}
             onClick={onChangeTheme}
             currentTheme={theme}
+            selectedLabel={t("themeSelected")}
           />
           <ThemeOption
             isDark={false}
             theme={ETheme.ORANGE_LIGHT}
             onClick={onChangeTheme}
             currentTheme={theme}
+            selectedLabel={t("themeSelected")}
           />
           <ThemeOption
             isDark={false}
             theme={ETheme.CHRISTMAS_LIGHT}
             onClick={onChangeTheme}
             currentTheme={theme}
+            selectedLabel={t("themeSelected")}
           />
         </div>
       </div>

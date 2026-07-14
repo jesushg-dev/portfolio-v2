@@ -142,6 +142,8 @@ export const TimelineHorizontalPreview: FC = () => {
   const { data: timelineData, isLoading } =
     api.portfolio.getTimelinePublic.useQuery({
       locale,
+      category: "WORK",
+      limit: 4,
     });
 
   const hasItems = Boolean(timelineData && timelineData.length > 0);

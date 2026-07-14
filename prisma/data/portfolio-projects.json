@@ -30,7 +30,9 @@
       "Typescript",
       "Prisma",
       "MongoDb"
-    ]
+    ],
+    "order": 2,
+    "kind": "PERSONAL"
   },
   {
     "key": "RickAndMorty",
@@ -56,7 +58,12 @@
         "description": "Webtoepassing om de personages van de Rick and Morty-serie te raadplegen."
       }
     ],
-    "skillKeys": ["React", "Bootstrap"]
+    "skillKeys": [
+      "React",
+      "Bootstrap"
+    ],
+    "order": 90,
+    "kind": "LEARNING"
   },
   {
     "key": "SoftSkillsQuiz",
@@ -82,7 +89,13 @@
         "description": "Webapplicatie waarmee je een softwaretest voor ontwikkelaars kunt doen."
       }
     ],
-    "skillKeys": ["React", "Tailwind", "Typescript"]
+    "skillKeys": [
+      "React",
+      "Tailwind",
+      "Typescript"
+    ],
+    "order": 91,
+    "kind": "LEARNING"
   },
   {
     "key": "MusaEcommerce",
@@ -95,20 +108,39 @@
       {
         "locale": "es",
         "title": "Musa Ecommerce",
-        "description": "Aplicación web para la venta de productos perecederos."
+        "description": "Aplicación web para la venta de productos perecederos.",
+        "hook": "E-commerce B2C para productos perecederos con inventario en tiempo real.",
+        "challenge": "El negocio necesitaba un canal digital confiable para productos perecederos con control de stock y flujos de checkout rápidos.",
+        "approach": "Construí el storefront con Next.js, TypeScript y Tailwind, integrando APIs internas y reglas de inventario por categoría.",
+        "outcome": "Lanzamiento estable del canal online y base reutilizable para el panel administrativo Musa Admin."
       },
       {
         "locale": "en",
         "title": "Musa Ecommerce",
-        "description": "Web application for the sale of perishable products."
+        "description": "Web application for the sale of perishable products.",
+        "hook": "B2C e-commerce for perishable goods with real-time inventory.",
+        "challenge": "The business needed a reliable digital channel for perishable products with stock control and fast checkout flows.",
+        "approach": "I built the storefront with Next.js, TypeScript, and Tailwind, integrating internal APIs and category-based inventory rules.",
+        "outcome": "Stable launch of the online channel and a reusable foundation for the Musa Admin panel."
       },
       {
         "locale": "nl",
         "title": "Musa Ecommerce",
-        "description": "Webapplicatie voor de verkoop van bederfelijke producten."
+        "description": "Webapplicatie voor de verkoop van bederfelijke producten.",
+        "hook": "B2C e-commerce voor bederfelijke producten met realtime voorraad.",
+        "challenge": "Het bedrijf had een betrouwbaar digitaal kanaal nodig voor bederfelijke producten met voorraadbeheer en snelle checkout.",
+        "approach": "Ik bouwde de storefront met Next.js, TypeScript en Tailwind en integreerde interne API's en voorraadregels per categorie.",
+        "outcome": "Stabiele lancering van het online kanaal en een herbruikbare basis voor het Musa Admin-panel."
       }
     ],
-    "skillKeys": ["Nextjs", "Tailwind", "Typescript"]
+    "skillKeys": [
+      "Nextjs",
+      "Tailwind",
+      "Typescript"
+    ],
+    "order": 0,
+    "kind": "PROFESSIONAL",
+    "caseStudyEnabled": true
   },
   {
     "key": "MusaAdmin",
@@ -121,20 +153,39 @@
       {
         "locale": "es",
         "title": "Musa Admin",
-        "description": "Aplicación web para la administración de la tienda online Musa Ecommerce."
+        "description": "Aplicación web para la administración de la tienda online Musa Ecommerce.",
+        "hook": "Panel interno para operaciones, catálogo y pedidos de Musa Ecommerce.",
+        "challenge": "El equipo operativo necesitaba gestionar catálogo y pedidos sin depender de despliegues manuales ni hojas de cálculo.",
+        "approach": "Desarrollé un admin en React con flujos CRUD, permisos por rol y sincronización con el storefront.",
+        "outcome": "Reducción de tareas manuales y trazabilidad operativa centralizada para el equipo de Musa."
       },
       {
         "locale": "en",
         "title": "Musa Admin",
-        "description": "Web application for the administration of the online store Musa Ecommerce."
+        "description": "Web application for the administration of the online store Musa Ecommerce.",
+        "hook": "Internal panel for Musa Ecommerce operations, catalog, and orders.",
+        "challenge": "The operations team needed to manage catalog and orders without manual deployments or spreadsheets.",
+        "approach": "I built a React admin with CRUD flows, role-based permissions, and synchronization with the storefront.",
+        "outcome": "Reduced manual work and centralized operational traceability for the Musa team."
       },
       {
         "locale": "nl",
         "title": "Musa Admin",
-        "description": "WWebapplicatie voor de administratie van de online winkel Musa Ecommerce."
+        "description": "WWebapplicatie voor de administratie van de online winkel Musa Ecommerce.",
+        "hook": "Intern panel voor Musa Ecommerce-operaties, catalogus en bestellingen.",
+        "challenge": "Het operationele team moest catalogus en bestellingen beheren zonder handmatige deployments of spreadsheets.",
+        "approach": "Ik bouwde een React-admin met CRUD-flows, rolgebaseerde rechten en synchronisatie met de storefront.",
+        "outcome": "Minder handmatig werk en gecentraliseerde operationele traceerbaarheid voor het Musa-team."
       }
     ],
-    "skillKeys": ["React", "Tailwind", "Typescript"]
+    "skillKeys": [
+      "React",
+      "Tailwind",
+      "Typescript"
+    ],
+    "order": 1,
+    "kind": "PROFESSIONAL",
+    "caseStudyEnabled": true
   },
   {
     "key": "Covid19",
@@ -160,7 +211,16 @@
         "description": "Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur."
       }
     ],
-    "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"]
+    "skillKeys": [
+      "Html",
+      "Css",
+      "Javascript",
+      "Sass",
+      "Bootstrap",
+      "Firebase"
+    ],
+    "order": 10,
+    "kind": "PERSONAL"
   },
   {
     "key": "Lotty",
@@ -186,7 +246,12 @@
         "description": "Webapplicatie om de resultaten van de Nicaraguaanse loterij te raadplegen."
       }
     ],
-    "skillKeys": ["React", "Bootstrap"]
+    "skillKeys": [
+      "React",
+      "Bootstrap"
+    ],
+    "order": 92,
+    "kind": "LEARNING"
   },
   {
     "key": "LottyApi",
@@ -212,7 +277,12 @@
         "description": "Rest Api voor de mobiele applicatie Lucky App."
       }
     ],
-    "skillKeys": ["Nodejs", "Mysql"]
+    "skillKeys": [
+      "Nodejs",
+      "Mysql"
+    ],
+    "order": 15,
+    "kind": "LEARNING"
   },
   {
     "key": "TechService",
@@ -238,7 +308,13 @@
         "description": "Mobiele Android-toepassing voor de controle van reparatiediensten voor technologische apparaten."
       }
     ],
-    "skillKeys": ["Java", "Android", "Php"]
+    "skillKeys": [
+      "Java",
+      "Android",
+      "Php"
+    ],
+    "order": 3,
+    "kind": "PROFESSIONAL"
   },
   {
     "key": "TechServiceApi",
@@ -264,7 +340,12 @@
         "description": "REST API voor het beheer van reparatieservices voor technologische apparaten."
       }
     ],
-    "skillKeys": ["Php", "Mysql"]
+    "skillKeys": [
+      "Php",
+      "Mysql"
+    ],
+    "order": 4,
+    "kind": "PROFESSIONAL"
   },
   {
     "key": "PosInventory",
@@ -290,7 +371,14 @@
         "description": "Inventaris- en verkoopcontrolesysteem voor een kledingwinkel."
       }
     ],
-    "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"]
+    "skillKeys": [
+      "Csharp",
+      "SqlServer",
+      "Windforms",
+      "DevExpress"
+    ],
+    "order": 5,
+    "kind": "PROFESSIONAL"
   },
   {
     "key": "FoodDelivery",
@@ -316,7 +404,13 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": ["Java", "Android", "Mysql"]
+    "skillKeys": [
+      "Java",
+      "Android",
+      "Mysql"
+    ],
+    "order": 6,
+    "kind": "PROFESSIONAL"
   },
   {
     "key": "Ecommerce",
@@ -342,7 +436,14 @@
         "description": "Webtoepassing voor online aankoop van producten."
       }
     ],
-    "skillKeys": ["React", "Redux", "Material", "Sass"]
+    "skillKeys": [
+      "React",
+      "Redux",
+      "Material",
+      "Sass"
+    ],
+    "order": 7,
+    "kind": "PROFESSIONAL"
   },
   {
     "key": "EcommerceAdmin",
@@ -368,7 +469,14 @@
         "description": "Beheerder van een online winkel."
       }
     ],
-    "skillKeys": ["React", "Redux", "Material", "Sass"]
+    "skillKeys": [
+      "React",
+      "Redux",
+      "Material",
+      "Sass"
+    ],
+    "order": 8,
+    "kind": "PROFESSIONAL"
   },
   {
     "key": "EcommerceApi",
@@ -394,7 +502,15 @@
         "description": "Rest Api voor de beheerder van een online winkel."
       }
     ],
-    "skillKeys": ["Csharp", "SqlServer", "Entity", "Dotnet", "Swagger"]
+    "skillKeys": [
+      "Csharp",
+      "SqlServer",
+      "Entity",
+      "Dotnet",
+      "Swagger"
+    ],
+    "order": 9,
+    "kind": "PROFESSIONAL"
   },
   {
     "key": "KwhMonitor",
@@ -420,7 +536,14 @@
         "description": "Mobiele Android-toepassing voor de controle van het elektriciteitsverbruik."
       }
     ],
-    "skillKeys": ["Java", "Android", "Mysql", "Nodejs"]
+    "skillKeys": [
+      "Java",
+      "Android",
+      "Mysql",
+      "Nodejs"
+    ],
+    "order": 11,
+    "kind": "PERSONAL"
   },
   {
     "key": "KwhMonitorApi",
@@ -446,7 +569,12 @@
         "description": "Rest Api voor de mobiele toepassing Kwh Monitor."
       }
     ],
-    "skillKeys": ["Nodejs", "Mysql"]
+    "skillKeys": [
+      "Nodejs",
+      "Mysql"
+    ],
+    "order": 12,
+    "kind": "PERSONAL"
   },
   {
     "key": "LuckyApp",
@@ -472,7 +600,12 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": ["Java", "Android"]
+    "skillKeys": [
+      "Java",
+      "Android"
+    ],
+    "order": 13,
+    "kind": "PERSONAL"
   },
   {
     "key": "YourFarm",
@@ -498,6 +631,11 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": ["Java", "Android"]
+    "skillKeys": [
+      "Java",
+      "Android"
+    ],
+    "order": 14,
+    "kind": "PERSONAL"
   }
 ]

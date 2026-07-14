@@ -40,6 +40,7 @@ export const TYPES = [
   "GITHUB",
   "WEBSITE",
   "LOCATION",
+  "CALENDLY",
   "OTHER",
 ] as const;
 

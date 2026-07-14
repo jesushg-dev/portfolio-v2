@@ -12,6 +12,15 @@ export const cloudinaryLoader = (props: ImageLoaderProps) => {
   return `https://res.cloudinary.com/js-media/image/upload/w_${width}${qualityString},c_limit/v1642524352/portfolio/${src}`;
 };
 
+/** Pre-built Cloudinary URL for Server Components (cannot pass loader functions to Image). */
+export function buildCloudinaryUrl(
+  src: string,
+  width: number,
+  quality?: number,
+): string {
+  return cloudinaryLoader({ src, width, quality });
+}
+
 export const siLoader = ({ src }: ImageLoaderProps) => {
   return `https://cdn.simpleicons.org/${src}`;
 };

@@ -101,7 +101,9 @@
         "newThemeSoon": "New theme will be add soon"
       },
       "closeMenu": "Close Menu",
-      "openMenu": "Open Menu"
+      "openMenu": "Open Menu",
+      "openThemeMenu": "Open theme menu",
+      "themeSelected": "Selected"
     },
     "footer": {
       "title": "All rights reserved © ",
@@ -348,7 +350,19 @@
       "description": "I am proud of the work I have completed throughout my career.",
       "actions": {
         "view": "View project",
-        "source": "View source"
+        "source": "View source",
+        "caseStudy": "Read case study"
+      },
+      "kind": {
+        "PROFESSIONAL": "Client work",
+        "PERSONAL": "Personal",
+        "LEARNING": "Learning"
+      },
+      "caseStudy": {
+        "challenge": "The challenge",
+        "approach": "Technical approach",
+        "outcome": "Outcome",
+        "backToPortfolio": "Back to portfolio"
       },
       "private": {
         "title": "Private",
@@ -419,6 +433,58 @@
           "description": "Your message has been sent successfully, I will answer you as soon as possible."
         },
         "submit": "Send message"
+      },
+      "social": {
+        "title": "Social",
+        "subtitle": "Follow me on social media"
+      },
+      "scheduleCall": "Schedule a call"
+    },
+    "experience": {
+      "title": "Professional Experience",
+      "subtitle": "Companies, roles, and measurable impact",
+      "viewAll": "View full CV",
+      "leadershipTitle": "Leadership & mentorship",
+      "leadershipDescription": "Leading technical teams, coordinating vendors, and mentoring developers through complex delivery cycles."
+    },
+    "impactStats": {
+      "teamSize": {
+        "value": "6",
+        "label": "Developers led"
+      },
+      "graphqlOps": {
+        "value": "177",
+        "label": "GraphQL ops migrated"
+      },
+      "storefronts": {
+        "value": "6",
+        "label": "VTEX storefronts"
+      }
+    },
+    "testimonials": {
+      "title": "Recommendations",
+      "subtitle": "What colleagues say"
+    },
+    "socialProof": {
+      "eyebrow": "Trusted by developers",
+      "title": "What senior developers say about me",
+      "subtitle": "Colleagues who have seen my work up close.",
+      "cta": "Hire me",
+      "statsLabel": "By the numbers",
+      "statsNote": "Numbers accumulated across professional engagements.",
+      "stats": {
+        "teamSize": {
+          "value": "6",
+          "label": "Developers led"
+        },
+        "graphqlOps": {
+          "value": "177",
+          "label": "GraphQL ops migrated"
+        },
+        "storefronts": {
+          "value": "6",
+          "label": "VTEX storefronts"
+        }
       }
     }
   },
@@ -740,7 +806,9 @@
         "noEntries": "No experience entries yet.",
         "present": "Present",
         "dragToReorder": "Drag to reorder",
-        "addLabel": "Add"
+        "addLabel": "Add",
+        "featuredOnHome": "Show on homepage",
+        "featuredOnHomeDescription": "This experience will appear in the Home section"
       },
       "softSkill": {
         "label": "Soft skill",

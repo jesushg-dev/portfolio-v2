@@ -2,6 +2,7 @@
 
 import type { FC, CSSProperties } from "react";
 import {
+  FaCalendarAlt,
   FaGithub,
   FaGlobe,
   FaLinkedin,
@@ -22,6 +23,7 @@ const CONTACT_ICONS: Record<ContactIconKey, IconType> = {
   github: FaGithub,
   website: FaGlobe,
   location: FaMapMarkerAlt,
+  calendly: FaCalendarAlt,
 };
 
 interface ContactItemProps {

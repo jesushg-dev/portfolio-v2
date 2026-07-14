@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Heart } from "lucide-react";
 import { IoMail } from "react-icons/io5";
 import {
+  FaCalendarAlt,
   FaLinkedinIn,
   FaGithub,
   FaGlobe,
@@ -25,6 +26,7 @@ const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
   github: FaGithub,
   website: FaGlobe,
   location: FaMapMarkerAlt,
+  calendly: FaCalendarAlt,
 };
 
 const PEOPLE_PLEDGE_URL = "https://people.pledge.party/";

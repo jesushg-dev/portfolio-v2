@@ -192,6 +192,12 @@ export async function SkillDetailPageView({
                       privateName={t("page.privateLabel")}
                       privateDescription={t("page.privateDescription")}
                       canSeeDemo={t("page.canSeeDemo")}
+                      caseStudyLabel=""
+                      kindLabels={{
+                        PROFESSIONAL: "",
+                        PERSONAL: "",
+                        LEARNING: "",
+                      }}
                     />
                   </li>
                 ))}

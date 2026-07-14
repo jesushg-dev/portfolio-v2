@@ -57,9 +57,16 @@ export default defineConfig({
       },
     },
     {
+      name: "public-locale",
+      testMatch: /locale-switching\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+      },
+    },
+    {
       name: "smoke",
       testMatch:
-        /(dashboard|register-smoke|skills-smoke|projects-smoke|certifications-smoke|cv-smoke|profile-smoke|timeline-smoke|soft-skills-smoke)\.spec\.ts/,
+        /(dashboard|register-smoke|skills-smoke|projects-smoke|certifications-smoke|cv-smoke|profile-smoke|timeline-smoke|soft-skills-smoke|locale-switching)\.spec\.ts/,
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],

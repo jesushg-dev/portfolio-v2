@@ -1,5 +1,7 @@
-import type { FC } from "react";
+"use client";
 
+import type { FC } from "react";
+import { useTranslations } from "next-intl";
 import { RiMenu3Line, RiCloseLine, RiPaintBrushLine } from "react-icons/ri";
 
 import LocaleSelector from "./locale-selector";
@@ -21,6 +23,8 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
   toogleMainOpen,
   toogleThemeOpen,
 }) => {
+  const t = useTranslations("global.header");
+
   return (
     <div className="flex flex-row-reverse items-center gap-1.5 md:order-2 md:flex-row">
       <button
@@ -35,7 +39,9 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
           "md:hidden",
         )}
       >
-        <span className="sr-only">Open main menu</span>
+        <span className="sr-only">
+          {isMenuOpen ? t("closeMenu") : t("openMenu")}
+        </span>
         {isMenuOpen ? (
           <RiCloseLine aria-hidden="true" className="size-[1.15rem]" />
         ) : (
@@ -52,7 +58,7 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
           iconOnly: true,
         })}
       >
-        <span className="sr-only">Open theme menu</span>
+        <span className="sr-only">{t("openThemeMenu")}</span>
         <RiPaintBrushLine aria-hidden="true" className="size-[1.15rem]" />
       </button>
     </div>

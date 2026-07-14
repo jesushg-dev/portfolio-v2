@@ -161,6 +161,29 @@
     ]
   },
   {
+    "key": "Nestjs",
+    "title": "Nest.js",
+    "type": "BACKEND",
+    "image": "nestjs",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework progresivo de Node.js para construir aplicaciones del lado del servidor eficientes y escalables.",
+        "urlWiki": "https://nestjs.com/"
+      },
+      {
+        "locale": "en",
+        "description": "Progressive Node.js framework for building efficient and scalable server-side applications.",
+        "urlWiki": "https://nestjs.com/"
+      },
+      {
+        "locale": "nl",
+        "description": "Progressief Node.js-framework voor het bouwen van efficiënte en schaalbare server-side applicaties.",
+        "urlWiki": "https://nestjs.com/"
+      }
+    ]
+  },
+  {
     "key": "Express",
     "title": "Express",
     "type": "BACKEND",

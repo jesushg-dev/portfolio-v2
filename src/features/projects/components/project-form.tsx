@@ -34,7 +34,7 @@ import {
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
 import {
   resolvePrimaryLanguage,
-  titleDescriptionTranslationMapSchema,
+  translationMapSchema,
 } from "@/lib/i18n/localized-form";
 import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
 import {
@@ -72,8 +72,21 @@ export const ProjectForm: FC<ProjectFormProps> = ({
         websiteUrl: z.string().url().optional().or(z.literal("")),
         isPrivate: z.boolean(),
         skillIds: z.array(z.string()),
-        translations: titleDescriptionTranslationMapSchema(
+        order: z.number().int(),
+        kind: z.enum(["PROFESSIONAL", "PERSONAL", "LEARNING"]),
+        slug: z.string().optional(),
+        caseStudyEnabled: z.boolean(),
+        translations: translationMapSchema(
+          z.object({
+            title: z.string(),
+            description: z.string(),
+            hook: z.string(),
+            challenge: z.string(),
+            approach: z.string(),
+            outcome: z.string(),
+          }),
           primaryLang?.id,
+          "title",
           t("titleRequiredPrimary"),
         ),
       }),
@@ -190,6 +203,54 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.hook`}
+                    render={({ field }) => (
+                      <FormItem
+                        label="Hook"
+                        inputId={`project-hook-${lang.code}`}
+                      >
+                        <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.challenge`}
+                    render={({ field }) => (
+                      <FormItem
+                        label="Challenge"
+                        inputId={`project-challenge-${lang.code}`}
+                      >
+                        <Textarea rows={3} {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.approach`}
+                    render={({ field }) => (
+                      <FormItem
+                        label="Approach"
+                        inputId={`project-approach-${lang.code}`}
+                      >
+                        <Textarea rows={3} {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.outcome`}
+                    render={({ field }) => (
+                      <FormItem
+                        label="Outcome"
+                        inputId={`project-outcome-${lang.code}`}
+                      >
+                        <Textarea rows={3} {...field} />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               );
             })}
@@ -264,6 +325,70 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                   >
                     <Input placeholder={t("imageUrlPlaceholder")} {...field} />
                   </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="order"
+                render={({ field }) => (
+                  <FormItem label="Order" inputId="project-order">
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(event) =>
+                        field.onChange(Number(event.target.value))
+                      }
+                    />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="kind"
+                render={({ field }) => (
+                  <FormItem label="Kind" inputId="project-kind">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="PROFESSIONAL">
+                          PROFESSIONAL
+                        </SelectItem>
+                        <SelectItem value="PERSONAL">PERSONAL</SelectItem>
+                        <SelectItem value="LEARNING">LEARNING</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="slug"
+                render={({ field }) => (
+                  <FormItem label="Slug" inputId="project-slug">
+                    <Input placeholder="musa-ecommerce" {...field} />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="caseStudyEnabled"
+                render={({ field }) => (
+                  <FormCheckboxItem label="Case study enabled">
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormCheckboxItem>
                 )}
               />
             </div>

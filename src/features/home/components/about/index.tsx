@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
+
 import { TimelineHorizontalPreview } from "./timeline-horizontal-preview";
 import AboutTerminal from "./about-terminal";
 import AboutTerminalEmpty from "./about-terminal-empty";

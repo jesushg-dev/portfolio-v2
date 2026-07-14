@@ -9,10 +9,20 @@ import ContactIllustration from "./contact-illustration";
 import ContactItem from "./contact-item";
 import { buildContactLinks } from "@/utils/contact-links";
 
+function getCalendlyUrl(
+  contacts: Awaited<ReturnType<typeof api.contact.getPublic>>["contacts"],
+): string | null {
+  const calendly = contacts.find((contact) => contact.type === "CALENDLY");
+  if (!calendly?.value) return null;
+  const value = calendly.value.trim();
+  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+}
+
 const Contact: FC = async () => {
   const t = await getTranslations("main.contact");
   const data = await api.contact.getPublic();
   const links = buildContactLinks(data.contacts);
+  const calendlyUrl = getCalendlyUrl(data.contacts);
 
   return (
     <section
@@ -21,7 +31,7 @@ const Contact: FC = async () => {
     >
       <div
         aria-hidden
-        className="from-primary/20 via-background to-background absolute inset-0 -z-20 bg-linear-to-br"
+        className="from-primary/20 via-card to-card absolute inset-0 -z-20 bg-linear-to-br"
       />
       <div
         aria-hidden
@@ -29,7 +39,7 @@ const Contact: FC = async () => {
       />
       <div
         aria-hidden
-        className="from-background via-background/80 to-background/95 absolute inset-0 -z-10 bg-linear-to-t"
+        className="from-card via-card/80 to-card/95 absolute inset-0 -z-10 bg-linear-to-t"
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -63,6 +73,17 @@ const Contact: FC = async () => {
                   {t("noChannels")}
                 </p>
               )}
+
+              {calendlyUrl ? (
+                <a
+                  href={calendlyUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex w-fit rounded-md px-4 py-2 text-sm font-semibold transition-colors"
+                >
+                  {t("scheduleCall")}
+                </a>
+              ) : null}
             </div>
 
             <ContactIllustration />

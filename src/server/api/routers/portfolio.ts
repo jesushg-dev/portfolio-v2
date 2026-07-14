@@ -157,6 +157,7 @@ export const portfolioRouter = createTRPCRouter({
         skip: cursor ? 1 : 0,
         where: projectWhere,
         cursor: cursor ? { id: cursor } : undefined,
+        orderBy: [{ order: "asc" }, { createdAt: "desc" }],
       });
 
       // first ProjectTranslation data should be at the same level as Project object
@@ -397,6 +398,7 @@ export const portfolioRouter = createTRPCRouter({
       z.object({
         locale: LanguageCode.optional().default("en"),
         limit: z.number().int().positive().optional(),
+        category: z.enum(["WORK", "STUDY", "COURSE"]).optional(),
       }),
     )
     .query(async ({ input, ctx }) => {
@@ -410,7 +412,10 @@ export const portfolioRouter = createTRPCRouter({
       const locale = input.locale;
 
       const timelineItems = await ctx.db.timelineItem.findMany({
-        where: { userId: tenantUserId },
+        where: {
+          userId: tenantUserId,
+          ...(input.category ? { category: input.category } : {}),
+        },
         orderBy: [{ startDate: "asc" }, { createdAt: "asc" }],
       });
 
@@ -587,6 +592,151 @@ export const portfolioRouter = createTRPCRouter({
             defaultLocale,
           ),
         })),
+      };
+    }),
+
+  getExperiencesPublic: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+        limit: z.number().int().positive().max(10).optional().default(4),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return [];
+
+      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
+      const locale = input.locale;
+
+      // Prefer explicitly featured experiences; fall back to order-based limit
+      // so existing accounts without the flag set still work.
+      let experiences = await ctx.db.cvExperience.findMany({
+        where: { userId: tenantUserId, featuredOnHome: true },
+        include: {
+          responsibilities: { orderBy: { order: "asc" } },
+        },
+        orderBy: [{ order: "asc" }, { startDate: "desc" }],
+      });
+
+      if (experiences.length === 0) {
+        experiences = await ctx.db.cvExperience.findMany({
+          where: { userId: tenantUserId },
+          include: {
+            responsibilities: { orderBy: { order: "asc" } },
+          },
+          orderBy: [{ order: "asc" }, { startDate: "desc" }],
+          take: input.limit,
+        });
+      }
+
+      return experiences.map((experience) => ({
+        id: experience.id,
+        company: experience.company,
+        companyLogoUrl: experience.companyLogoUrl,
+        current: experience.current,
+        role: getLocalizedText(experience.role, locale, defaultLocale),
+        dates: experience.dates ?? "",
+        responsibilities: experience.responsibilities.map((responsibility) =>
+          getLocalizedText(responsibility.text, locale, defaultLocale),
+        ),
+      }));
+    }),
+
+  getTestimonialsPublic: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+        limit: z.number().int().positive().max(10).optional().default(3),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return [];
+
+      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
+      const locale = input.locale;
+
+      const items = await ctx.db.testimonial.findMany({
+        where: { userId: tenantUserId, isVisible: true },
+        orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+        take: input.limit,
+      });
+
+      return items.map((item) => ({
+        id: item.id,
+        author: item.author,
+        role: item.role,
+        quote: getLocalizedText(item.quote, locale, defaultLocale),
+        avatarUrl: item.avatarUrl,
+      }));
+    }),
+
+  getProjectBySlug: publicProcedure
+    .input(
+      z.object({
+        slug: z.string().min(1),
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return null;
+
+      const appLanguage = await ctx.db.appLanguage.findUnique({
+        where: { code: input.locale },
+      });
+
+      const project = await ctx.db.project.findFirst({
+        where: {
+          userId: tenantUserId,
+          slug: input.slug,
+          caseStudyEnabled: true,
+        },
+        include: {
+          ProjectTranslation: {
+            where: { appLanguageId: appLanguage?.id },
+          },
+          ProjectSkill: {
+            include: {
+              Skill: {
+                include: {
+                  SkillTranslation: {
+                    where: { appLanguageId: appLanguage?.id },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!project) return null;
+
+      const translation = project.ProjectTranslation[0];
+      if (!translation) return null;
+
+      const skills = project.ProjectSkill.map(({ Skill }) => {
+        const { SkillTranslation, ...rest } = Skill;
+        return mergeTranslation(rest, SkillTranslation[0]);
+      });
+
+      return {
+        id: project.id,
+        slug: project.slug,
+        image: project.image,
+        type: project.type,
+        kind: project.kind,
+        githubUrl: project.githubUrl,
+        websiteUrl: project.websiteUrl,
+        isPrivate: project.isPrivate,
+        title: translation.title,
+        description: translation.description,
+        hook: translation.hook,
+        challenge: translation.challenge,
+        approach: translation.approach,
+        outcome: translation.outcome,
+        skills,
       };
     }),
 });

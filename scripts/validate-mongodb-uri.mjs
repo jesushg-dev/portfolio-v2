@@ -2,6 +2,18 @@
  * Validates that MONGODB_URI includes a database name (required by Prisma for MongoDB).
  * Run before `prisma db push` / `db seed` to surface P1013 with a clear message.
  */
+import { config } from "dotenv";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+
+const root = process.cwd();
+if (existsSync(resolve(root, ".env"))) {
+  config({ path: resolve(root, ".env") });
+}
+if (existsSync(resolve(root, ".env.local"))) {
+  config({ path: resolve(root, ".env.local"), override: true });
+}
+
 const uri = process.env.MONGODB_URI;
 
 if (!uri) {

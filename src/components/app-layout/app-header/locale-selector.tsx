@@ -83,6 +83,7 @@ const LocaleSelector: FC<LocaleSelectorProps> = ({ inverted = false }) => {
     <Select value={locale} disabled={isPending} onValueChange={onChangeHandler}>
       <SelectTrigger
         size="default"
+        data-testid="locale-selector"
         aria-label={triggerAriaLabel}
         aria-busy={isPending}
         className={cn(

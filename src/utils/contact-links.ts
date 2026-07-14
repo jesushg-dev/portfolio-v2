@@ -13,7 +13,8 @@ export type ContactIconKey =
   | "linkedin"
   | "github"
   | "website"
-  | "location";
+  | "location"
+  | "calendly";
 
 export interface ContactLink {
   key: string;
@@ -109,6 +110,15 @@ export function buildContactLinks(
           label: "location",
           icon: "location",
           accent: "#F59E0B",
+        });
+        break;
+      case "CALENDLY":
+        links.push({
+          key: `calendly-${index}`,
+          href: normalizeUrl(value, "https://"),
+          label: "calendly",
+          icon: "calendly",
+          accent: "#006BFF",
         });
         break;
       default:

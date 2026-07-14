@@ -48,9 +48,15 @@ const Portfolio: FC = ({}) => {
     () => ({
       urlName: t("actions.view"),
       sourceName: t("actions.source"),
+      caseStudyLabel: t("actions.caseStudy"),
       privateName: t("private.title"),
       privateDescription: t("private.description"),
       canSeeDemo: t("private.canSeeDemo"),
+      kindLabels: {
+        PROFESSIONAL: t("kind.PROFESSIONAL"),
+        PERSONAL: t("kind.PERSONAL"),
+        LEARNING: t("kind.LEARNING"),
+      },
     }),
     [t],
   );
@@ -69,10 +75,10 @@ const Portfolio: FC = ({}) => {
   };
 
   return (
-    <div className="overflow-hidden">
+    <div className="bg-background-50 relative w-full overflow-hidden">
       <section
         id="portfolio"
-        className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20"
+        className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
       >
         <HeaderArticle
           title={t("title")}

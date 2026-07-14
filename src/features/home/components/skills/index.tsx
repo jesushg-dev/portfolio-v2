@@ -32,7 +32,7 @@ const Skills: FC = () => {
   };
 
   return (
-    <div className="bg-background-50 relative">
+    <div className="relative">
       <article className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20">
         <BgParticles />
         <HeaderArticle

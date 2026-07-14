@@ -7,24 +7,24 @@
   },
   "heroTitles": [
     {
-      "es": "Desarrollador Móvil.",
-      "en": "Mobile Developer.",
-      "nl": "Mobiele ontwikkelaar."
-    },
-    {
       "es": "Desarrollador Full Stack.",
       "en": "Full Stack Developer.",
       "nl": "Fullstack ontwikkelaar."
     },
     {
-      "es": "Desarrollador Frontend.",
-      "en": "Frontend Developer.",
-      "nl": "Frontend ontwikkelaar."
-    },
-    {
       "es": "Desarrollador Backend.",
       "en": "Backend Developer.",
       "nl": "Backend ontwikkelaar."
+    },
+    {
+      "es": "Desarrollador Móvil.",
+      "en": "Mobile Developer.",
+      "nl": "Mobiele ontwikkelaar."
+    },
+    {
+      "es": "Desarrollador Frontend.",
+      "en": "Frontend Developer.",
+      "nl": "Frontend ontwikkelaar."
     },
     {
       "es": "Ingeniero de Software.",

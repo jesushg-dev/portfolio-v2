@@ -101,7 +101,9 @@
         "newThemeSoon": "Nieuw thema wordt binnenkort toegevoegd"
       },
       "closeMenu": "Sluit Menu",
-      "openMenu": "Menu openen"
+      "openMenu": "Menu openen",
+      "openThemeMenu": "Themamenu openen",
+      "themeSelected": "Geselecteerd"
     },
     "footer": {
       "title": "Alle Rechten Voorbehouden © ",
@@ -348,7 +350,19 @@
       "description": "Ik ben trots op het werk dat ik heb voltooid gedurende mijn carrière.",
       "actions": {
         "view": "Bekijk project",
-        "source": "Bekijk bron"
+        "source": "Bekijk bron",
+        "caseStudy": "Lees case study"
+      },
+      "kind": {
+        "PROFESSIONAL": "Klantwerk",
+        "PERSONAL": "Persoonlijk",
+        "LEARNING": "Leren"
+      },
+      "caseStudy": {
+        "challenge": "De uitdaging",
+        "approach": "Technische aanpak",
+        "outcome": "Resultaat",
+        "backToPortfolio": "Terug naar portfolio"
       },
       "private": {
         "title": "Prive",
@@ -423,6 +437,54 @@
       "social": {
         "title": "Sociale netwerken",
         "subtitle": "Volg mij op mijn sociale netwerken"
+      },
+      "scheduleCall": "Plan een gesprek"
+    },
+    "experience": {
+      "title": "Professionele ervaring",
+      "subtitle": "Bedrijven, rollen en meetbare impact",
+      "viewAll": "Bekijk volledig CV",
+      "leadershipTitle": "Leiderschap & mentoring",
+      "leadershipDescription": "Technische teams leiden, leveranciers coördineren en developers begeleiden in complexe deliverycycli."
+    },
+    "impactStats": {
+      "teamSize": {
+        "value": "6",
+        "label": "Ontwikkelaars geleid"
+      },
+      "graphqlOps": {
+        "value": "177",
+        "label": "GraphQL-operaties gemigreerd"
+      },
+      "storefronts": {
+        "value": "6",
+        "label": "VTEX storefronts"
+      }
+    },
+    "testimonials": {
+      "title": "Aanbevelingen",
+      "subtitle": "Wat collega's zeggen"
+    },
+    "socialProof": {
+      "eyebrow": "Vertrouwd door ontwikkelaars",
+      "title": "Wat senior developers over mij zeggen",
+      "subtitle": "Collega's die mijn werk van dichtbij hebben gezien.",
+      "cta": "Neem me aan",
+      "statsLabel": "In cijfers",
+      "statsNote": "Cijfers verzameld over professionele betrokkenheden.",
+      "stats": {
+        "teamSize": {
+          "value": "6",
+          "label": "Ontwikkelaars aangestuurd"
+        },
+        "graphqlOps": {
+          "value": "177",
+          "label": "GraphQL ops gemigreerd"
+        },
+        "storefronts": {
+          "value": "6",
+          "label": "VTEX storefronts"
+        }
       }
     }
   },
@@ -744,7 +806,9 @@
         "noEntries": "Nog geen werkervaring.",
         "present": "Heden",
         "dragToReorder": "Sleep om te herordenen",
-        "addLabel": "Toevoegen"
+        "addLabel": "Toevoegen",
+        "featuredOnHome": "Tonen op startpagina",
+        "featuredOnHomeDescription": "Deze ervaring verschijnt in de startpagina sectie"
       },
       "softSkill": {
         "label": "Soft skill",

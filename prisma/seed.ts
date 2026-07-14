@@ -9,6 +9,7 @@ import { seedPortfolioSkills } from "./seed-portfolio-skills";
 import { seedPortfolioProjects } from "./seed-portfolio-projects";
 import { seedPortfolioCertifications } from "./seed-portfolio-certifications";
 import { seedPortfolioServices } from "./seed-portfolio-services";
+import { seedPortfolioTestimonials } from "./seed-portfolio-testimonials";
 
 const prisma = new PrismaClient();
 
@@ -71,6 +72,8 @@ async function main() {
   await seedPortfolioTimeline(prisma, userId);
 
   await seedPortfolioSoftSkills(prisma, userId);
+
+  await seedPortfolioTestimonials(prisma, userId);
 }
 
 main()

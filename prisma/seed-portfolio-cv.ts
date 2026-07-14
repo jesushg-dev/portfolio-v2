@@ -47,6 +47,7 @@ export interface PortfolioCvSeed {
   experiences: {
     key: string;
     company: string;
+    companyLogoUrl?: string;
     dates: string;
     role: LocaleMap;
     skillKeys: string[];
@@ -55,6 +56,7 @@ export interface PortfolioCvSeed {
       order: number;
     }[];
     order: number;
+    featuredOnHome?: boolean;
   }[];
   softSkills: {
     name: LocaleMap;
@@ -195,9 +197,11 @@ export async function seedPortfolioCv(
       data: {
         userId,
         company: experience.company,
+        companyLogoUrl: experience.companyLogoUrl ?? null,
         role: asJson(toLocalizedText(experience.role)),
         dates: experience.dates,
         skills: null,
+        featuredOnHome: experience.featuredOnHome ?? false,
         order: experience.order,
         responsibilities: {
           createMany: {

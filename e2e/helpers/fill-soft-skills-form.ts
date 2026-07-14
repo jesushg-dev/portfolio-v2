@@ -283,9 +283,7 @@ export async function fillSoftSkillSmoke(
   await fillSoftSkillItemForm(page, item);
 }
 
-export async function getSoftSkillsMine(
-  page: Page,
-): Promise<{
+export async function getSoftSkillsMine(page: Page): Promise<{
   data: SoftSkillMineItem[];
   pageCount: number;
   totalCount: number;
