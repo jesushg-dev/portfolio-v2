@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { db } from "@/server/db";
-import { getAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
+import { requireAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
 import {
   buildEmptyTimelineCreateDto,
   mapTimelineToEditorDto,
@@ -21,11 +21,9 @@ export async function getTimelineCreatePageData() {
 
 export async function getTimelineEditPageData(id: string) {
   const [userId, languages] = await Promise.all([
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
   ]);
-
-  if (!userId) return null;
 
   const timelineItemDelegate = (db as { timelineItem?: typeof db.timelineItem })
     .timelineItem;
@@ -47,7 +45,7 @@ export async function getTimelineEditPageData(id: string) {
 export async function getUserTimelineWithLanguages(params: DataTableParams) {
   const [languages, userId] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
   ]);
 
   const timelineItemDelegate = (db as { timelineItem?: typeof db.timelineItem })
@@ -84,7 +82,7 @@ export async function getUserTimelineWithLanguages(params: DataTableParams) {
       orderBy = { organization: sortField.desc ? "desc" : "asc" };
   }
 
-  const where: Prisma.TimelineItemWhereInput = { userId: userId! };
+  const where: Prisma.TimelineItemWhereInput = { userId };
   if (params.filters && params.filters.length > 0) {
     const orgFilter = params.filters.find((f) => f.id === "organization");
     if (orgFilter && typeof orgFilter.value === "string") {

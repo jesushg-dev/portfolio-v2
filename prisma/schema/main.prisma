@@ -52,6 +52,12 @@ model User {
   SoftSkillsSection  SoftSkillsSection?
   SpotifyConnection  SpotifyConnection?
   Testimonial        Testimonial[]
+
+  // Job Tracker
+  Company            Company[]
+  Application        Application[]
+  ApplicationEvent   ApplicationEvent[]
+  Document           Document[]
 }
 
 model Session {

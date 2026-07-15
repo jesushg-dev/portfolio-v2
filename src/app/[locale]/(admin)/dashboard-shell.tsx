@@ -17,6 +17,7 @@ import {
   Palette,
   Sparkles,
   Music2,
+  ClipboardList,
 } from "lucide-react";
 
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
@@ -42,6 +43,7 @@ interface NavItem {
     | "services"
     | "certifications"
     | "spotify"
+    | "jobTracker"
     | "settings";
   icon: typeof LayoutDashboard;
   group?: "portfolio";
@@ -51,6 +53,11 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/admin", labelKey: "overview", icon: LayoutDashboard },
   { href: "/admin/profile", labelKey: "profile", icon: User },
   { href: "/admin/cv", labelKey: "cv", icon: FileText },
+  {
+    href: "/admin/job-tracker",
+    labelKey: "jobTracker",
+    icon: ClipboardList,
+  },
   // ── Portfolio content ─────────────────────────────────
   {
     href: "/admin/skills",

@@ -513,6 +513,7 @@
         "services": "Services",
         "certifications": "Certifications",
         "spotify": "Spotify",
+        "jobTracker": "Job Tracker",
         "portfolioGroup": "Portfolio Content"
       }
     },
@@ -942,6 +943,164 @@
         "titleRequiredPrimary": "Title is required for the primary language",
         "atLeastOneLanguage": "At least one language is required"
       },
+      "jobTrackerApplication": {
+        "validation": {
+          "positionRequired": "Position is required",
+          "companyRequired": "Select a company"
+        },
+        "toast": {
+          "success": {
+            "title": "Success",
+            "description": "Application saved successfully"
+          },
+          "error": {
+            "title": "Error",
+            "description": "Could not save application"
+          }
+        },
+        "sections": {
+          "info": "Basic Information",
+          "details": "Additional Details",
+          "documents": "Documents"
+        },
+        "fields": {
+          "position": "Position",
+          "company": "Company",
+          "status": "Status",
+          "appliedDate": "Applied Date",
+          "location": "Location",
+          "salary": "Salary",
+          "description": "Description",
+          "notes": "Notes",
+          "cv": "CV/Resume"
+        },
+        "descriptions": {
+          "cvUpload": "Upload your CV (PDF, max 5MB)"
+        },
+        "placeholders": {
+          "position": "Frontend Developer",
+          "company": "Select a company...",
+          "location": "Remote, Hybrid, etc...",
+          "salary": "€50k - €60k",
+          "description": "Job description...",
+          "notes": "Personal notes...",
+          "date": "Select a date"
+        },
+        "actions": {
+          "submit": "Save Application",
+          "save": "Save Changes",
+          "cancel": "Cancel"
+        },
+        "status": {
+          "APPLIED": "Applied",
+          "INTERVIEW": "In Interview",
+          "OFFER": "Offer Received",
+          "REJECTED": "Rejected",
+          "HIRED": "Hired"
+        }
+      },
+      "jobTrackerCompany": {
+        "validation": {
+          "nameRequired": "Name is required",
+          "emailInvalid": "Invalid email",
+          "urlInvalid": "Invalid URL"
+        },
+        "toast": {
+          "success": {
+            "title": "Success",
+            "description": "Company {name} saved successfully"
+          },
+          "error": {
+            "title": "Error",
+            "description": "Could not save company"
+          }
+        },
+        "errors": {
+          "unknown": "An unknown error occurred"
+        },
+        "sections": {
+          "info": "Company Information"
+        },
+        "fields": {
+          "name": "Name",
+          "website": "Website",
+          "email": "Email",
+          "description": "Description"
+        },
+        "placeholders": {
+          "name": "Acme Corp",
+          "email": "contact@company.com",
+          "website": "https://company.com",
+          "description": "Company description..."
+        },
+        "actions": {
+          "submit": "Save Company",
+          "save": "Save Changes",
+          "cancel": "Cancel"
+        }
+      },
+      "jobTrackerEvent": {
+        "validation": {
+          "applicationRequired": "Application is required",
+          "typeRequired": "Event type is required",
+          "titleRequired": "Title is required",
+          "dateRequired": "Date is required",
+          "durationInvalid": "Invalid duration",
+          "urlInvalid": "Invalid URL"
+        },
+        "toast": {
+          "success": {
+            "title": "Success",
+            "description": "Event {title} saved successfully"
+          },
+          "error": {
+            "title": "Error",
+            "description": "Could not save event"
+          }
+        },
+        "errors": {
+          "unknown": "An unknown error occurred"
+        },
+        "sections": {
+          "application": "Application",
+          "info": "Event Information",
+          "dateTime": "Date & Time",
+          "modality": "Modality"
+        },
+        "fields": {
+          "application": "Select Application",
+          "type": "Event Type",
+          "title": "Title",
+          "description": "Description",
+          "scheduledDate": "Scheduled Date",
+          "duration": "Duration (minutes)",
+          "isVirtual": "Virtual Meeting",
+          "isVirtualDescription": "Is this meeting taking place online?",
+          "meetingLink": "Meeting Link",
+          "location": "Location"
+        },
+        "placeholders": {
+          "application": "Select an application...",
+          "title": "E.g., Technical Interview",
+          "description": "Any details...",
+          "date": "Select date",
+          "duration": "60",
+          "meetingLink": "https://meet.google.com/...",
+          "location": "Office address..."
+        },
+        "actions": {
+          "submit": "Save Event",
+          "cancel": "Cancel"
+        },
+        "eventType": {
+          "INTERVIEW": "Interview",
+          "TECHNICAL_TEST": "Technical Test",
+          "QUESTIONNAIRE": "Questionnaire",
+          "PHONE_CALL": "Phone Call",
+          "MEETING": "Meeting",
+          "FOLLOW_UP": "Follow-up"
+        }
+      },
       "timelineItem": {
         "generalSection": "General Information",
         "title": "Title",
@@ -1366,6 +1525,114 @@
       "addItem": "Add Item",
       "deleteSuccess": "Deleted successfully",
       "close": "Close"
+    },
+    "jobTracker": {
+      "title": "Job Tracker",
+      "pageDescription": "Manage your job applications efficiently",
+      "newCompany": "New Company",
+      "newApplication": "New Application",
+      "applicationsTab": "Applications",
+      "companiesTab": "Companies",
+      "columnPosition": "Position",
+      "columnCompany": "Company",
+      "columnStatus": "Status",
+      "columnDate": "Date",
+      "columnActions": "Actions",
+      "columnName": "Name",
+      "columnEmail": "Email",
+      "columnWebsite": "Website",
+      "view": "View",
+      "edit": "Edit",
+      "viewCompany": "View company",
+      "changeStatus": "Change to {status}",
+      "websiteLink": "Website",
+      "filterPositionPlaceholder": "Search position...",
+      "filterCompanyPlaceholder": "Search company...",
+      "filterNamePlaceholder": "Search name...",
+      "filterEmailPlaceholder": "Search email...",
+      "deleteApplicationSuccess": "Application deleted",
+      "deleteApplicationError": "Could not delete application",
+      "deleteCompanySuccess": "Company deleted",
+      "deleteCompanyError": "Could not delete company",
+      "createApplication": "New Application",
+      "createApplicationDescription": "Add a new job application to your tracker",
+      "editApplication": "Edit Application",
+      "editApplicationDescription": "Update application details",
+      "createCompany": "New Company",
+      "createCompanyDescription": "Add a company to your database",
+      "editCompany": "Edit Company",
+      "editCompanyDescription": "Update company information",
+      "createEvent": "New Event",
+      "createEventDescription": "Schedule an interview or follow-up",
+      "status": {
+        "APPLIED": "Applied",
+        "INTERVIEW": "In Interview",
+        "OFFER": "Offer Received",
+        "REJECTED": "Rejected",
+        "HIRED": "Hired"
+      },
+      "eventType": {
+        "INTERVIEW": "Interview",
+        "TECHNICAL_TEST": "Technical Test",
+        "QUESTIONNAIRE": "Questionnaire",
+        "PHONE_CALL": "Phone Call",
+        "MEETING": "Meeting",
+        "FOLLOW_UP": "Follow-up"
+      },
+      "stats": {
+        "totalApplications": "Total Applications",
+        "totalApplicationsDescription": "Registered applications",
+        "totalCompanies": "Companies",
+        "totalCompaniesDescription": "Companies in your database",
+        "inProgress": "In Progress",
+        "inProgressDescription": "Ongoing interviews",
+        "offers": "Offers",
+        "offersDescription": "Offers received",
+        "hired": "Hired",
+        "hiredDescription": "Congratulations!"
+      },
+      "calendar": {
+        "title": "Upcoming Events",
+        "description": "Scheduled interviews and tests",
+        "add": "Add",
+        "empty": "You have no scheduled events",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "virtual": "Virtual",
+        "duration": "{minutes} min"
+      },
+      "detail": {
+        "title": "Application Details",
+        "description": "Timeline and application information",
+        "timelineTab": "Timeline",
+        "detailsTab": "Details",
+        "jobDescription": "Job description",
+        "salary": "Salary",
+        "location": "Location",
+        "notes": "Notes",
+        "cv": "CV used"
+      },
+      "timeline": {
+        "title": "Event Timeline",
+        "description": "History and upcoming events for this application",
+        "addEvent": "Add Event",
+        "empty": "No events recorded for this application",
+        "complete": "Complete",
+        "completeSuccess": "Event marked as completed",
+        "completeError": "Could not complete event",
+        "outcomeLabel": "Event outcome",
+        "notesLabel": "Event notes",
+        "notesPlaceholder": "How did the event go? Add your notes here...",
+        "markCompleted": "Mark as completed",
+        "cancel": "Cancel",
+        "joinMeeting": "Join meeting",
+        "completedAt": "Completed on {date}",
+        "outcome": {
+          "POSITIVE": "Positive",
+          "NEUTRAL": "Neutral",
+          "NEGATIVE": "Negative"
+        }
+      }
     }
   },
   "auth": {
@@ -1488,5 +1755,189 @@
   },
   "metadata": {
     "description": "Jesús Hernández portfolio and admin dashboard"
+  },
+  "forms": {
+    "event": {
+      "validation": {
+        "applicationRequired": "Application is required",
+        "typeRequired": "Event type is required",
+        "titleRequired": "Title must be at least 2 characters",
+        "dateRequired": "Date is required",
+        "durationInvalid": "Duration is invalid",
+        "urlInvalid": "Invalid URL"
+      },
+      "toast": {
+        "success": {
+          "title": "Success",
+          "description": "Event {title} saved successfully"
+        },
+        "error": {
+          "title": "Error",
+          "description": "Could not save event"
+        }
+      },
+      "errors": {
+        "unknown": "An unknown error occurred"
+      },
+      "sections": {
+        "application": "Application",
+        "info": "Event Information",
+        "dateTime": "Date & Time",
+        "modality": "Modality"
+      },
+      "fields": {
+        "application": "Select Application",
+        "type": "Event Type",
+        "title": "Title",
+        "description": "Description",
+        "scheduledDate": "Scheduled Date",
+        "duration": "Duration (minutes)",
+        "isVirtual": "Virtual Meeting",
+        "isVirtualDescription": "Is this meeting taking place online?",
+        "meetingLink": "Meeting Link",
+        "location": "Location"
+      },
+      "placeholders": {
+        "application": "Select an application...",
+        "title": "E.g., Technical Interview",
+        "description": "Any details...",
+        "date": "Select date",
+        "duration": "60",
+        "meetingLink": "https://meet.google.com/...",
+        "location": "Office address..."
+      },
+      "actions": {
+        "submit": "Save Event",
+        "cancel": "Cancel"
+      }
+    },
+    "application": {
+      "validation": {
+        "positionRequired": "Position must be at least 2 characters",
+        "companyRequired": "Select a company"
+      },
+      "toast": {
+        "success": {
+          "title": "Success",
+          "description": "Application saved successfully"
+        },
+        "error": {
+          "title": "Error",
+          "description": "Could not save application"
+        }
+      },
+      "sections": {
+        "info": "Basic Information",
+        "details": "Additional Details",
+        "documents": "Documents"
+      },
+      "fields": {
+        "position": "Position",
+        "company": "Company",
+        "status": "Status",
+        "appliedDate": "Applied Date",
+        "location": "Location",
+        "salary": "Salary",
+        "description": "Description",
+        "notes": "Notes",
+        "cv": "CV/Resume"
+      },
+      "descriptions": {
+        "cvUpload": "Upload your CV (PDF, max 5MB)"
+      },
+      "placeholders": {
+        "position": "Frontend Developer",
+        "company": "Select a company...",
+        "location": "Remote, Hybrid, etc...",
+        "salary": "€50k - €60k",
+        "description": "Job description...",
+        "notes": "Personal notes..."
+      },
+      "actions": {
+        "submit": "Save Application",
+        "cancel": "Cancel"
+      }
+    },
+    "companyCreate": {
+      "validation": {
+        "nameRequired": "Name must be at least 2 characters",
+        "emailInvalid": "Invalid email",
+        "urlInvalid": "Invalid URL"
+      },
+      "toast": {
+        "success": {
+          "title": "Success",
+          "description": "Company saved successfully"
+        },
+        "error": {
+          "title": "Error",
+          "description": "Could not save company"
+        }
+      },
+      "errors": {
+        "unknown": "An unknown error occurred"
+      },
+      "sections": {
+        "info": "Company Info",
+        "details": "Additional Details"
+      },
+      "fields": {
+        "name": "Name",
+        "website": "Website",
+        "email": "Email",
+        "description": "Description"
+      },
+      "placeholders": {
+        "name": "Acme Corp",
+        "website": "https://acme.com",
+        "email": "contact@acme.com",
+        "description": "Company details..."
+      },
+      "actions": {
+        "submit": "Save Company",
+        "cancel": "Cancel"
+      }
+    },
+    "companyEdit": {
+      "validation": {
+        "nameRequired": "Name must be at least 2 characters",
+        "emailInvalid": "Invalid email",
+        "urlInvalid": "Invalid URL"
+      },
+      "toast": {
+        "success": {
+          "title": "Success",
+          "description": "Company saved successfully"
+        },
+        "error": {
+          "title": "Error",
+          "description": "Could not save company"
+        }
+      },
+      "errors": {
+        "unknown": "An unknown error occurred"
+      },
+      "sections": {
+        "info": "Company Info",
+        "details": "Additional Details"
+      },
+      "fields": {
+        "name": "Name",
+        "website": "Website",
+        "email": "Email",
+        "description": "Description"
+      },
+      "placeholders": {
+        "name": "Acme Corp",
+        "website": "https://acme.com",
+        "email": "contact@acme.com",
+        "description": "Company details..."
+      },
+      "actions": {
+        "submit": "Save Changes",
+        "cancel": "Cancel"
+      },
+      "title": "Edit Company"
+    }
   }
 }

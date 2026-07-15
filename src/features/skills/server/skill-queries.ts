@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { db } from "@/server/db";
-import { getAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
+import { requireAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
 import {
   buildEmptySkillCreateDto,
   mapSkillToEditorDto,
@@ -20,11 +20,9 @@ export async function getSkillCreatePageData() {
 
 export async function getSkillEditPageData(id: string) {
   const [userId, languages] = await Promise.all([
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
   ]);
-
-  if (!userId) return null;
 
   const skill = await db.skill.findUnique({
     where: { id, userId },
@@ -45,7 +43,7 @@ export async function getSkillEditPageData(id: string) {
 export async function getUserSkillsWithLanguages(params: DataTableParams) {
   const [languages, userId] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
   ]);
 
   const skip =
@@ -63,7 +61,7 @@ export async function getUserSkillsWithLanguages(params: DataTableParams) {
       orderBy = { type: sortField.desc ? "desc" : "asc" };
   }
 
-  const where: Prisma.SkillWhereInput = { userId: userId! };
+  const where: Prisma.SkillWhereInput = { userId };
   if (params.filters && params.filters.length > 0) {
     const titleFilter = params.filters.find((f) => f.id === "title");
     if (titleFilter && typeof titleFilter.value === "string") {

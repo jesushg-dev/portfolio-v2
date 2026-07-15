@@ -5,9 +5,7 @@ import {
   DEFAULT_SOFT_SKILLS_POSTER_URL,
   DEFAULT_SOFT_SKILLS_VIDEO_URL,
 } from "@/features/soft-skills/lib/soft-skills-media";
-import {
-  splitAboutParagraphs,
-} from "@/features/profile/server/hero-titles";
+import { splitAboutParagraphs } from "@/features/profile/server/hero-titles";
 import { mapTimelineItemsToPublic } from "@/features/timeline/lib/map-timeline-public";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
@@ -313,9 +311,9 @@ export const portfolioRouter = createTRPCRouter({
 
       let skill = looksLikeSkillObjectId(input.slug)
         ? await ctx.db.skill.findFirst({
-          where: { id: input.slug, ...tenantWhere },
-          include: skillInclude,
-        })
+            where: { id: input.slug, ...tenantWhere },
+            include: skillInclude,
+          })
         : null;
 
       if (!skill) {
@@ -520,9 +518,9 @@ export const portfolioRouter = createTRPCRouter({
 
       const yearsExperience = firstExperience?.startDate
         ? Math.floor(
-          (new Date().getTime() - firstExperience.startDate.getTime()) /
-          (1000 * 60 * 60 * 24 * 365.25),
-        )
+            (new Date().getTime() - firstExperience.startDate.getTime()) /
+              (1000 * 60 * 60 * 24 * 365.25),
+          )
         : 0;
 
       return {

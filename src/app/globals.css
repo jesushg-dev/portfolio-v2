@@ -767,12 +767,12 @@
 }
 
 @utility scroll-indicator {
-  @apply z-10 h-8 w-5 rounded-full border border-muted-foreground/50;
+  @apply border-muted-foreground/50 z-10 h-8 w-5 rounded-full border;
   transform: rotate(0.001deg) translate(0%, 0);
 
   &::before {
     content: "Scroll down";
-    @apply text-secondaryText-50 absolute whitespace-nowrap hidden;
+    @apply text-secondaryText-50 absolute hidden whitespace-nowrap;
     left: 50%;
     top: -1.1em;
     transform: translate(-50%, -100%);
@@ -799,9 +799,21 @@
 
 @utility hero-bg {
   background-image:
-    radial-gradient(1100px circle at 82% 45%, color-mix(in srgb, var(--primary) 20%, transparent), transparent 60%),
-    radial-gradient(700px circle at 15% 85%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 60%),
-    linear-gradient(180deg, var(--background) 0%, color-mix(in srgb, var(--background) 90%, var(--primary)) 100%);
+    radial-gradient(
+      1100px circle at 82% 45%,
+      color-mix(in srgb, var(--primary) 20%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px circle at 15% 85%,
+      color-mix(in srgb, var(--primary) 12%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      var(--background) 0%,
+      color-mix(in srgb, var(--background) 90%, var(--primary)) 100%
+    );
 }
 
 @utility time-dot {

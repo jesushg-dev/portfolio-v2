@@ -513,6 +513,7 @@
         "services": "Servicios",
         "certifications": "Certificaciones",
         "spotify": "Spotify",
+        "jobTracker": "Seguimiento laboral",
         "portfolioGroup": "Contenido del Portafolio"
       }
     },
@@ -942,6 +943,164 @@
         "titleRequiredPrimary": "El título es obligatorio en el idioma principal",
         "atLeastOneLanguage": "Se requiere al menos un idioma"
       },
+      "jobTrackerApplication": {
+        "validation": {
+          "positionRequired": "El puesto es obligatorio",
+          "companyRequired": "Selecciona una empresa"
+        },
+        "toast": {
+          "success": {
+            "title": "Éxito",
+            "description": "Postulación guardada correctamente"
+          },
+          "error": {
+            "title": "Error",
+            "description": "No se pudo guardar la postulación"
+          }
+        },
+        "sections": {
+          "info": "Información Básica",
+          "details": "Detalles Adicionales",
+          "documents": "Documentos"
+        },
+        "fields": {
+          "position": "Puesto",
+          "company": "Empresa",
+          "status": "Estado",
+          "appliedDate": "Fecha de Postulación",
+          "location": "Ubicación",
+          "salary": "Salario",
+          "description": "Descripción",
+          "notes": "Notas",
+          "cv": "CV/Currículum"
+        },
+        "descriptions": {
+          "cvUpload": "Sube tu CV (PDF, máx 5MB)"
+        },
+        "placeholders": {
+          "position": "Desarrollador Frontend",
+          "company": "Selecciona una empresa...",
+          "location": "Remoto, Híbrido, etc...",
+          "salary": "€50k - €60k",
+          "description": "Descripción del puesto...",
+          "notes": "Notas personales...",
+          "date": "Selecciona una fecha"
+        },
+        "actions": {
+          "submit": "Guardar Postulación",
+          "save": "Guardar Cambios",
+          "cancel": "Cancelar"
+        },
+        "status": {
+          "APPLIED": "Postulado",
+          "INTERVIEW": "En Entrevista",
+          "OFFER": "Oferta Recibida",
+          "REJECTED": "Rechazado",
+          "HIRED": "Contratado"
+        }
+      },
+      "jobTrackerCompany": {
+        "validation": {
+          "nameRequired": "El nombre es obligatorio",
+          "emailInvalid": "Email inválido",
+          "urlInvalid": "URL inválida"
+        },
+        "toast": {
+          "success": {
+            "title": "Éxito",
+            "description": "Empresa {name} guardada correctamente"
+          },
+          "error": {
+            "title": "Error",
+            "description": "No se pudo guardar la empresa"
+          }
+        },
+        "errors": {
+          "unknown": "Ocurrió un error desconocido"
+        },
+        "sections": {
+          "info": "Información de la Empresa"
+        },
+        "fields": {
+          "name": "Nombre",
+          "website": "Sitio Web",
+          "email": "Correo Electrónico",
+          "description": "Descripción"
+        },
+        "placeholders": {
+          "name": "Acme Corp",
+          "email": "contacto@empresa.com",
+          "website": "https://empresa.com",
+          "description": "Descripción de la empresa..."
+        },
+        "actions": {
+          "submit": "Guardar Empresa",
+          "save": "Guardar Cambios",
+          "cancel": "Cancelar"
+        }
+      },
+      "jobTrackerEvent": {
+        "validation": {
+          "applicationRequired": "La postulación es obligatoria",
+          "typeRequired": "El tipo de evento es obligatorio",
+          "titleRequired": "El título es obligatorio",
+          "dateRequired": "La fecha es obligatoria",
+          "durationInvalid": "Duración inválida",
+          "urlInvalid": "URL inválida"
+        },
+        "toast": {
+          "success": {
+            "title": "Éxito",
+            "description": "Evento {title} guardado correctamente"
+          },
+          "error": {
+            "title": "Error",
+            "description": "No se pudo guardar el evento"
+          }
+        },
+        "errors": {
+          "unknown": "Ocurrió un error desconocido"
+        },
+        "sections": {
+          "application": "Postulación",
+          "info": "Información del Evento",
+          "dateTime": "Fecha y Hora",
+          "modality": "Modalidad"
+        },
+        "fields": {
+          "application": "Seleccionar Postulación",
+          "type": "Tipo de Evento",
+          "title": "Título",
+          "description": "Descripción",
+          "scheduledDate": "Fecha Programada",
+          "duration": "Duración (minutos)",
+          "isVirtual": "Reunión Virtual",
+          "isVirtualDescription": "¿Esta reunión es en línea?",
+          "meetingLink": "Enlace de Reunión",
+          "location": "Ubicación"
+        },
+        "placeholders": {
+          "application": "Selecciona una postulación...",
+          "title": "Ej., Entrevista Técnica",
+          "description": "Detalles adicionales...",
+          "date": "Selecciona fecha",
+          "duration": "60",
+          "meetingLink": "https://meet.google.com/...",
+          "location": "Dirección de la oficina..."
+        },
+        "actions": {
+          "submit": "Guardar Evento",
+          "cancel": "Cancelar"
+        },
+        "eventType": {
+          "INTERVIEW": "Entrevista",
+          "TECHNICAL_TEST": "Prueba Técnica",
+          "QUESTIONNAIRE": "Cuestionario",
+          "PHONE_CALL": "Llamada Telefónica",
+          "MEETING": "Reunión",
+          "FOLLOW_UP": "Seguimiento"
+        }
+      },
       "timelineItem": {
         "generalSection": "Información general",
         "title": "Título",
@@ -1366,6 +1525,114 @@
       "addItem": "Añadir elemento",
       "deleteSuccess": "Eliminado con éxito",
       "close": "Cerrar"
+    },
+    "jobTracker": {
+      "title": "Job Tracker",
+      "pageDescription": "Gestiona tus postulaciones laborales de manera eficiente",
+      "newCompany": "Nueva Empresa",
+      "newApplication": "Nueva Postulación",
+      "applicationsTab": "Postulaciones",
+      "companiesTab": "Empresas",
+      "columnPosition": "Puesto",
+      "columnCompany": "Empresa",
+      "columnStatus": "Estado",
+      "columnDate": "Fecha",
+      "columnActions": "Acciones",
+      "columnName": "Nombre",
+      "columnEmail": "Correo electrónico",
+      "columnWebsite": "Sitio web",
+      "view": "Ver",
+      "edit": "Editar",
+      "viewCompany": "Ver empresa",
+      "changeStatus": "Cambiar a {status}",
+      "websiteLink": "Sitio web",
+      "filterPositionPlaceholder": "Buscar puesto...",
+      "filterCompanyPlaceholder": "Buscar empresa...",
+      "filterNamePlaceholder": "Buscar nombre...",
+      "filterEmailPlaceholder": "Buscar correo...",
+      "deleteApplicationSuccess": "Postulación eliminada",
+      "deleteApplicationError": "No se pudo eliminar la postulación",
+      "deleteCompanySuccess": "Empresa eliminada",
+      "deleteCompanyError": "No se pudo eliminar la empresa",
+      "createApplication": "Nueva Postulación",
+      "createApplicationDescription": "Añade una nueva postulación a tu seguimiento",
+      "editApplication": "Editar Postulación",
+      "editApplicationDescription": "Actualiza los detalles de la postulación",
+      "createCompany": "Nueva Empresa",
+      "createCompanyDescription": "Añade una empresa a tu base de datos",
+      "editCompany": "Editar Empresa",
+      "editCompanyDescription": "Actualiza la información de la empresa",
+      "createEvent": "Nuevo Evento",
+      "createEventDescription": "Programa una entrevista o seguimiento",
+      "status": {
+        "APPLIED": "Postulado",
+        "INTERVIEW": "En Entrevista",
+        "OFFER": "Oferta Recibida",
+        "REJECTED": "Rechazado",
+        "HIRED": "Contratado"
+      },
+      "eventType": {
+        "INTERVIEW": "Entrevista",
+        "TECHNICAL_TEST": "Prueba Técnica",
+        "QUESTIONNAIRE": "Cuestionario",
+        "PHONE_CALL": "Llamada Telefónica",
+        "MEETING": "Reunión",
+        "FOLLOW_UP": "Seguimiento"
+      },
+      "stats": {
+        "totalApplications": "Total Postulaciones",
+        "totalApplicationsDescription": "Postulaciones registradas",
+        "totalCompanies": "Empresas",
+        "totalCompaniesDescription": "Empresas en tu base de datos",
+        "inProgress": "En Proceso",
+        "inProgressDescription": "Entrevistas en curso",
+        "offers": "Ofertas",
+        "offersDescription": "Ofertas recibidas",
+        "hired": "Contratado",
+        "hiredDescription": "¡Felicidades!"
+      },
+      "calendar": {
+        "title": "Próximos Eventos",
+        "description": "Entrevistas y pruebas programadas",
+        "add": "Agregar",
+        "empty": "No tienes eventos programados",
+        "today": "Hoy",
+        "tomorrow": "Mañana",
+        "virtual": "Virtual",
+        "duration": "{minutes} min"
+      },
+      "detail": {
+        "title": "Detalle de Postulación",
+        "description": "Timeline e información de la postulación",
+        "timelineTab": "Timeline",
+        "detailsTab": "Detalles",
+        "jobDescription": "Descripción del puesto",
+        "salary": "Salario",
+        "location": "Ubicación",
+        "notes": "Notas",
+        "cv": "CV utilizado"
+      },
+      "timeline": {
+        "title": "Timeline de Eventos",
+        "description": "Historial y próximos eventos de esta postulación",
+        "addEvent": "Agregar Evento",
+        "empty": "No hay eventos registrados para esta postulación",
+        "complete": "Completar",
+        "completeSuccess": "Evento marcado como completado",
+        "completeError": "No se pudo completar el evento",
+        "outcomeLabel": "Resultado del evento",
+        "notesLabel": "Notas del evento",
+        "notesPlaceholder": "¿Cómo fue el evento? Agrega tus notas aquí...",
+        "markCompleted": "Marcar como completado",
+        "cancel": "Cancelar",
+        "joinMeeting": "Unirse a la reunión",
+        "completedAt": "Completado el {date}",
+        "outcome": {
+          "POSITIVE": "Positivo",
+          "NEUTRAL": "Neutral",
+          "NEGATIVE": "Negativo"
+        }
+      }
     }
   },
   "auth": {
@@ -1488,5 +1755,189 @@
   },
   "metadata": {
     "description": "Portafolio y panel de administración de Jesús Hernández"
+  },
+  "forms": {
+    "event": {
+      "validation": {
+        "applicationRequired": "La postulación es requerida",
+        "typeRequired": "El tipo de evento es requerido",
+        "titleRequired": "El título debe tener al menos 2 caracteres",
+        "dateRequired": "La fecha es requerida",
+        "durationInvalid": "Duración inválida",
+        "urlInvalid": "URL inválida"
+      },
+      "toast": {
+        "success": {
+          "title": "Éxito",
+          "description": "Evento {title} guardado correctamente"
+        },
+        "error": {
+          "title": "Error",
+          "description": "No se pudo guardar el evento"
+        }
+      },
+      "errors": {
+        "unknown": "Ocurrió un error desconocido"
+      },
+      "sections": {
+        "application": "Postulación",
+        "info": "Información del Evento",
+        "dateTime": "Fecha y Hora",
+        "modality": "Modalidad"
+      },
+      "fields": {
+        "application": "Seleccionar Postulación",
+        "type": "Tipo de Evento",
+        "title": "Título",
+        "description": "Descripción",
+        "scheduledDate": "Fecha programada",
+        "duration": "Duración (minutos)",
+        "isVirtual": "Reunión Virtual",
+        "isVirtualDescription": "¿Esta reunión es en línea?",
+        "meetingLink": "Enlace de la reunión",
+        "location": "Ubicación"
+      },
+      "placeholders": {
+        "application": "Selecciona una postulación...",
+        "title": "Ej., Entrevista Técnica",
+        "description": "Algún detalle...",
+        "date": "Selecciona una fecha",
+        "duration": "60",
+        "meetingLink": "https://meet.google.com/...",
+        "location": "Dirección de la oficina..."
+      },
+      "actions": {
+        "submit": "Guardar Evento",
+        "cancel": "Cancelar"
+      }
+    },
+    "application": {
+      "validation": {
+        "positionRequired": "El puesto debe tener al menos 2 caracteres",
+        "companyRequired": "Selecciona una empresa"
+      },
+      "toast": {
+        "success": {
+          "title": "Éxito",
+          "description": "Postulación guardada correctamente"
+        },
+        "error": {
+          "title": "Error",
+          "description": "No se pudo guardar la postulación"
+        }
+      },
+      "sections": {
+        "info": "Información Básica",
+        "details": "Detalles Adicionales",
+        "documents": "Documentos"
+      },
+      "fields": {
+        "position": "Puesto",
+        "company": "Empresa",
+        "status": "Estado",
+        "appliedDate": "Fecha de Postulación",
+        "location": "Ubicación",
+        "salary": "Salario",
+        "description": "Descripción",
+        "notes": "Notas",
+        "cv": "CV/Currículum"
+      },
+      "placeholders": {
+        "position": "Desarrollador Frontend",
+        "company": "Selecciona una empresa...",
+        "location": "Remoto, Híbrido, etc...",
+        "salary": "€50k - €60k",
+        "description": "Descripción del puesto...",
+        "notes": "Notas personales..."
+      },
+      "actions": {
+        "submit": "Guardar Postulación",
+        "cancel": "Cancelar"
+      },
+      "descriptions": {
+        "cvUpload": "Sube tu CV (PDF, máx 5MB)"
+      }
+    },
+    "companyCreate": {
+      "validation": {
+        "nameRequired": "El nombre debe tener al menos 2 caracteres",
+        "emailInvalid": "Email inválido",
+        "urlInvalid": "URL inválida"
+      },
+      "toast": {
+        "success": {
+          "title": "Éxito",
+          "description": "Empresa guardada correctamente"
+        },
+        "error": {
+          "title": "Error",
+          "description": "No se pudo guardar la empresa"
+        }
+      },
+      "sections": {
+        "info": "Información de la Empresa",
+        "details": "Detalles Adicionales"
+      },
+      "fields": {
+        "name": "Nombre",
+        "website": "Sitio Web",
+        "email": "Correo Electrónico",
+        "description": "Descripción"
+      },
+      "placeholders": {
+        "name": "Acme Corp",
+        "website": "https://acme.com",
+        "email": "contacto@acme.com",
+        "description": "Detalles de la empresa..."
+      },
+      "actions": {
+        "submit": "Guardar Empresa",
+        "cancel": "Cancelar"
+      },
+      "errors": {
+        "unknown": "Ocurrió un error desconocido"
+      }
+    },
+    "companyEdit": {
+      "validation": {
+        "nameRequired": "El nombre debe tener al menos 2 caracteres",
+        "emailInvalid": "Email inválido",
+        "urlInvalid": "URL inválida"
+      },
+      "toast": {
+        "success": {
+          "title": "Éxito",
+          "description": "Empresa guardada correctamente"
+        },
+        "error": {
+          "title": "Error",
+          "description": "No se pudo guardar la empresa"
+        }
+      },
+      "sections": {
+        "info": "Información de la Empresa",
+        "details": "Detalles Adicionales"
+      },
+      "fields": {
+        "name": "Nombre",
+        "website": "Sitio Web",
+        "email": "Correo Electrónico",
+        "description": "Descripción"
+      },
+      "placeholders": {
+        "name": "Acme Corp",
+        "website": "https://acme.com",
+        "email": "contacto@acme.com",
+        "description": "Detalles de la empresa..."
+      },
+      "actions": {
+        "submit": "Guardar Cambios",
+        "cancel": "Cancelar"
+      },
+      "errors": {
+        "unknown": "Ocurrió un error desconocido"
+      },
+      "title": "Editar Empresa"
+    }
   }
 }

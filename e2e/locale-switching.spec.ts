@@ -29,6 +29,8 @@ test.describe("public locale switching", () => {
     await page.locator("#skills").scrollIntoViewIfNeeded();
     await page.getByRole("button", { name: "Backend", exact: true }).click();
     await expect(page.getByText("C#", { exact: true })).toBeVisible();
-    await expect(page.getByText("Node.js", { exact: true }).first()).toBeVisible();
+    await expect(
+      page.getByText("Node.js", { exact: true }).first(),
+    ).toBeVisible();
   });
 });

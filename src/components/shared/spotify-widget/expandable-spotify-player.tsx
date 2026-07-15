@@ -200,7 +200,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
             {playback.isPlaying && <PlayingIndicator color={accentColor} />}
           </div>
 
-          <div className="relative z-10 min-w-0 flex-1 max-w-[150px] sm:max-w-[200px]">
+          <div className="relative z-10 max-w-[150px] min-w-0 flex-1 sm:max-w-[200px]">
             {isRecentlyPlayed && (
               <RecentlyPlayedNotice
                 playedAt={playback.playedAt}

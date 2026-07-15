@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { db } from "@/server/db";
-import { getAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
+import { requireAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
 import {
   buildEmptySoftSkillCreateDto,
   mapSoftSkillToEditorDto,
@@ -20,11 +20,9 @@ export async function getSoftSkillCreatePageData() {
 
 export async function getSoftSkillEditPageData(id: string) {
   const [userId, languages] = await Promise.all([
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
   ]);
-
-  if (!userId) return null;
 
   const item = await db.portfolioSoftSkill.findUnique({
     where: { id, userId },
@@ -41,7 +39,7 @@ export async function getSoftSkillEditPageData(id: string) {
 export async function getUserSoftSkillsWithLanguages(params: DataTableParams) {
   const [languages, userId] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
   ]);
 
   const skip =
@@ -62,7 +60,7 @@ export async function getUserSoftSkillsWithLanguages(params: DataTableParams) {
       orderBy = { order: sortField.desc ? "desc" : "asc" };
   }
 
-  const where: Prisma.PortfolioSoftSkillWhereInput = { userId: userId! };
+  const where: Prisma.PortfolioSoftSkillWhereInput = { userId };
 
   const [items, totalCount] = await Promise.all([
     db.portfolioSoftSkill.findMany({

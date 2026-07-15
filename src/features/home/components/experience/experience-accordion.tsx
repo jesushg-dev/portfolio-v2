@@ -151,10 +151,8 @@ export function ExperienceAccordion({
       )}
 
       {/* Full CV link */}
-      <div className="text-center flex flex-col items-center justify-center gap-2">
-        <p className="text-muted-foreground text-sm">
-          {showingRecentLabel}
-        </p>
+      <div className="flex flex-col items-center justify-center gap-2 text-center">
+        <p className="text-muted-foreground text-sm">{showingRecentLabel}</p>
         <Link
           href="/curriculum-vitae"
           className="text-primary hover:text-primary/80 text-sm font-semibold transition-colors"

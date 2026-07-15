@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { db } from "@/server/db";
 import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
-import { getAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
+import { requireAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
 import {
   mapCertificationToEditorDto,
   mapCertificationsToEditorDto,
@@ -30,11 +30,9 @@ export async function getCertificationCreatePageData() {
 
 export async function getCertificationEditPageData(id: string) {
   const [userId, languages] = await Promise.all([
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
   ]);
-
-  if (!userId) return null;
 
   const certification = await db.certification.findUnique({
     where: { id, userId },
@@ -57,7 +55,7 @@ export async function getUserCertificationsWithLanguages(
 ) {
   const [languages, userId] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
   ]);
 
   const skip =
@@ -77,7 +75,7 @@ export async function getUserCertificationsWithLanguages(
       orderBy = { createdAt: sortField.desc ? "desc" : "asc" };
   }
 
-  const where: Prisma.CertificationWhereInput = { userId: userId! };
+  const where: Prisma.CertificationWhereInput = { userId };
   if (params.filters && params.filters.length > 0) {
     const titleFilter = params.filters.find((f) => f.id === "title");
     if (titleFilter && typeof titleFilter.value === "string") {

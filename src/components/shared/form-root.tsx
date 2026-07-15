@@ -174,6 +174,7 @@ interface FormItemProps {
   children: ReactNode;
   className?: string;
   inputId?: string;
+  required?: boolean;
 }
 
 export const FormItem = ({
@@ -182,9 +183,13 @@ export const FormItem = ({
   children,
   className,
   inputId,
+  required,
 }: FormItemProps) => (
   <ShadcnFormItem id={inputId} className={className}>
-    <FormLabel>{label}</FormLabel>
+    <FormLabel>
+      {label}
+      {required && <span className="ml-1 text-red-500">*</span>}
+    </FormLabel>
     <FormControl>{children}</FormControl>
     {description && <FormDescription>{description}</FormDescription>}
     <FormMessage />

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { db } from "@/server/db";
-import { getAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
+import { requireAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
 import {
   buildEmptyServiceCreateDto,
   mapServiceToEditorDto,
@@ -20,11 +20,9 @@ export async function getServiceCreatePageData() {
 
 export async function getServiceEditPageData(id: string) {
   const [userId, languages] = await Promise.all([
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
   ]);
-
-  if (!userId) return null;
 
   const service = await db.service.findUnique({
     where: { id, userId },
@@ -45,7 +43,7 @@ export async function getServiceEditPageData(id: string) {
 export async function getUserServicesWithLanguages(params: DataTableParams) {
   const [languages, userId] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
   ]);
 
   const skip =
@@ -63,7 +61,7 @@ export async function getUserServicesWithLanguages(params: DataTableParams) {
       orderBy = { createdAt: sortField.desc ? "desc" : "asc" };
   }
 
-  const where: Prisma.ServiceWhereInput = { userId: userId! };
+  const where: Prisma.ServiceWhereInput = { userId };
   if (params.filters && params.filters.length > 0) {
     const titleFilter = params.filters.find((f) => f.id === "title");
     if (titleFilter && typeof titleFilter.value === "string") {

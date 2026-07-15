@@ -193,6 +193,41 @@ export const pathnames = {
     es: "/panel/habilidades-blandas/[id]/editar",
     nl: "/beheer/softe-vaardigheden/[id]/bewerken",
   },
+  "/admin/job-tracker": {
+    en: "/admin/job-tracker",
+    es: "/panel/seguimiento-laboral",
+    nl: "/beheer/vacature-tracker",
+  },
+  "/admin/job-tracker/applications/new": {
+    en: "/admin/job-tracker/applications/new",
+    es: "/panel/seguimiento-laboral/postulaciones/nuevo",
+    nl: "/beheer/vacature-tracker/sollicitaties/nieuw",
+  },
+  "/admin/job-tracker/applications/[id]": {
+    en: "/admin/job-tracker/applications/[id]",
+    es: "/panel/seguimiento-laboral/postulaciones/[id]",
+    nl: "/beheer/vacature-tracker/sollicitaties/[id]",
+  },
+  "/admin/job-tracker/applications/[id]/edit": {
+    en: "/admin/job-tracker/applications/[id]/edit",
+    es: "/panel/seguimiento-laboral/postulaciones/[id]/editar",
+    nl: "/beheer/vacature-tracker/sollicitaties/[id]/bewerken",
+  },
+  "/admin/job-tracker/companies/new": {
+    en: "/admin/job-tracker/companies/new",
+    es: "/panel/seguimiento-laboral/empresas/nuevo",
+    nl: "/beheer/vacature-tracker/bedrijven/nieuw",
+  },
+  "/admin/job-tracker/companies/[id]/edit": {
+    en: "/admin/job-tracker/companies/[id]/edit",
+    es: "/panel/seguimiento-laboral/empresas/[id]/editar",
+    nl: "/beheer/vacature-tracker/bedrijven/[id]/bewerken",
+  },
+  "/admin/job-tracker/events/new": {
+    en: "/admin/job-tracker/events/new",
+    es: "/panel/seguimiento-laboral/eventos/nuevo",
+    nl: "/beheer/vacature-tracker/evenementen/nieuw",
+  },
 } satisfies Pathnames<typeof locales>;
 
 export const defaultLocale: Locale = "en";

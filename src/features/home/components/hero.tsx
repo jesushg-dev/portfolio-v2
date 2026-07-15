@@ -35,14 +35,17 @@ const Hero: FC = async () => {
   };
 
   return (
-    <section id="home" className="relative flex min-h-screen w-full items-center overflow-hidden bg-background">
+    <section
+      id="home"
+      className="bg-background relative flex min-h-screen w-full items-center overflow-hidden"
+    >
       {/* Starry Background / Glow - Now SSR */}
-      <div className="absolute inset-0 z-0 overflow-hidden bg-background">
+      <div className="bg-background absolute inset-0 z-0 overflow-hidden">
         {/* Top central glow */}
-        <div className="absolute -top-[20%] left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-[100%] bg-primary/20 blur-[100px]" />
+        <div className="bg-primary/20 absolute -top-[20%] left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-[100%] blur-[100px]" />
       </div>
 
-      <div className="z-10 mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-16 px-6 pb-24 pt-32 md:pb-32 md:pt-40 lg:flex-row">
+      <div className="z-10 mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-16 px-6 pt-32 pb-24 md:pt-40 md:pb-32 lg:flex-row">
         {/* Left Column - Content (Client Component for animations) */}
         <HeroContent heroData={parsedHeroData} stats={stats} />
 
@@ -53,7 +56,7 @@ const Hero: FC = async () => {
       {/* Scroll Down Indicator - Now SSR */}
       <div className="absolute inset-x-0 bottom-8 mx-auto hidden flex-col items-center justify-center gap-2 lg:flex">
         <div className="scroll-indicator" />
-        <p className="text-xs text-muted-foreground">{t("scrollDown")}</p>
+        <p className="text-muted-foreground text-xs">{t("scrollDown")}</p>
       </div>
     </section>
   );

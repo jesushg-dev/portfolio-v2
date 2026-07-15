@@ -36,7 +36,11 @@ const container = {
 
 const item = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 15 } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 100, damping: 15 },
+  },
 };
 
 export default function HeroContent({ heroData, stats }: HeroContentProps) {
@@ -59,53 +63,77 @@ export default function HeroContent({ heroData, stats }: HeroContentProps) {
       className="flex flex-1 flex-col text-left"
     >
       {/* Status Badge */}
-      <motion.div variants={item} className="mb-7 inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-medium">
+      <motion.div
+        variants={item}
+        className="border-primary/30 bg-primary/10 mb-7 inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium"
+      >
         <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+          <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
+          <span className="bg-primary relative inline-flex h-2 w-2 rounded-full"></span>
         </span>
-        <span className="bg-linear-to-r from-primary to-primary-600 bg-clip-text font-semibold text-transparent">
+        <span className="from-primary to-primary-600 bg-linear-to-r bg-clip-text font-semibold text-transparent">
           {t("availableForOpportunities")}
         </span>
       </motion.div>
 
       <motion.div variants={item}>
-        <p className="mb-2 text-lg text-muted-foreground">
-          {t("greeting")}
-        </p>
-        <h1 className="mb-3 font-display text-4xl font-bold leading-tight text-foreground sm:text-5xl lg:text-6xl">
-          {firstName} {lastName && <span className="bg-linear-to-r from-primary to-primary-600 bg-clip-text text-transparent">{lastName}</span>}
+        <p className="text-muted-foreground mb-2 text-lg">{t("greeting")}</p>
+        <h1 className="font-display text-foreground mb-3 text-4xl leading-tight font-bold sm:text-5xl lg:text-6xl">
+          {firstName}{" "}
+          {lastName && (
+            <span className="from-primary to-primary-600 bg-linear-to-r bg-clip-text text-transparent">
+              {lastName}
+            </span>
+          )}
         </h1>
         {heroSubtitle && (
-          <h2 className="mb-4 font-display text-2xl font-semibold text-foreground sm:text-3xl">
-            {mainTitle} {highlightTitle && <span className="text-primary">{highlightTitle}</span>}
+          <h2 className="font-display text-foreground mb-4 text-2xl font-semibold sm:text-3xl">
+            {mainTitle}{" "}
+            {highlightTitle && (
+              <span className="text-primary">{highlightTitle}</span>
+            )}
           </h2>
         )}
         {heroTagline && (
-          <p className="mb-6 font-medium leading-relaxed text-primary/80">
+          <p className="text-primary/80 mb-6 leading-relaxed font-medium">
             {heroTagline}
           </p>
         )}
         {heroSummary && (
-          <p className="mb-9 max-w-xl leading-relaxed text-muted-foreground">
+          <p className="text-muted-foreground mb-9 max-w-xl leading-relaxed">
             {heroSummary}
           </p>
         )}
       </motion.div>
 
       {/* Stats Row */}
-      <motion.div variants={item} className="mb-9 flex flex-wrap gap-x-10 gap-y-5 border-b border-border/50 pb-9">
+      <motion.div
+        variants={item}
+        className="border-border/50 mb-9 flex flex-wrap gap-x-10 gap-y-5 border-b pb-9"
+      >
         <div>
-          <p className="font-display text-3xl font-bold text-foreground">{stats.yearsExperience}+</p>
-          <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{t("yearsExperience")}</p>
+          <p className="font-display text-foreground text-3xl font-bold">
+            {stats.yearsExperience}+
+          </p>
+          <p className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+            {t("yearsExperience")}
+          </p>
         </div>
         <div>
-          <p className="font-display text-3xl font-bold text-foreground">{stats.projectsCount}+</p>
-          <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{t("projectsDelivered")}</p>
+          <p className="font-display text-foreground text-3xl font-bold">
+            {stats.projectsCount}+
+          </p>
+          <p className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+            {t("projectsDelivered")}
+          </p>
         </div>
         <div>
-          <p className="font-display text-3xl font-bold text-foreground">{stats.certificationsCount}</p>
-          <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{t("certifications")}</p>
+          <p className="font-display text-foreground text-3xl font-bold">
+            {stats.certificationsCount}
+          </p>
+          <p className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+            {t("certifications")}
+          </p>
         </div>
       </motion.div>
 
@@ -113,14 +141,14 @@ export default function HeroContent({ heroData, stats }: HeroContentProps) {
       <motion.div variants={item} className="flex flex-wrap gap-4">
         <Link
           href="/curriculum-vitae"
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-semibold text-primary-foreground transition hover:bg-primary/90"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold transition"
         >
           {t("viewCV")}
           <Download className="h-4 w-4" />
         </Link>
         <a
           href="#contact"
-          className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/50 px-6 py-3.5 font-semibold text-foreground transition hover:bg-accent hover:text-accent-foreground"
+          className="border-border bg-card/50 text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-2 rounded-xl border px-6 py-3.5 font-semibold transition"
         >
           {t("scheduleCall")}
           <ArrowRight className="h-4 w-4" />

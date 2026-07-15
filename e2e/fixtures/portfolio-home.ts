@@ -31,11 +31,14 @@ export interface PortfolioHomeFixture {
 }
 
 export const portfolioHome = (() => {
-  const data = JSON.parse(readFileSync(fixturePath, "utf8")) as Partial<PortfolioHomeFixture> & {
+  const data = JSON.parse(
+    readFileSync(fixturePath, "utf8"),
+  ) as Partial<PortfolioHomeFixture> & {
     heroSubtitle?: LocalizedFixture;
   };
   return {
     ...data,
-    heroTitles: data.heroTitles ?? (data.heroSubtitle ? [data.heroSubtitle] : []),
+    heroTitles:
+      data.heroTitles ?? (data.heroSubtitle ? [data.heroSubtitle] : []),
   } as PortfolioHomeFixture;
 })();

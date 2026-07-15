@@ -21,7 +21,12 @@ const DashboardLayout: FC<IDashboardLayoutProps> = async ({
   setRequestLocale(locale as Locale);
 
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user) {
+  const userId = session?.user?.id;
+  if (
+    !session?.user ||
+    typeof userId !== "string" ||
+    userId.length === 0
+  ) {
     return redirectToLogin(locale as Locale);
   }
 

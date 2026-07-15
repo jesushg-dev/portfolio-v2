@@ -1,7 +1,12 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
-import { useFieldArray, useForm, useWatch, type Control } from "react-hook-form";
+import {
+  useFieldArray,
+  useForm,
+  useWatch,
+  type Control,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
@@ -92,9 +97,7 @@ function EndDateInput({
           <Input
             type="month"
             value={
-              field.value
-                ? new Date(field.value).toISOString().slice(0, 7)
-                : ""
+              field.value ? new Date(field.value).toISOString().slice(0, 7) : ""
             }
             onChange={(e) =>
               field.onChange(

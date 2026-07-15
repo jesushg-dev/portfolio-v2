@@ -115,7 +115,13 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(({ ctx, next }) => {
-    if (!ctx.session || !ctx.user) {
+    const userId = ctx.user?.id;
+    if (
+      !ctx.session ||
+      !ctx.user ||
+      typeof userId !== "string" ||
+      userId.length === 0
+    ) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     return next({

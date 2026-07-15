@@ -20,7 +20,7 @@ describe("formatExperienceDates", () => {
     const endDate = new Date("2023-07-01T00:00:00.000Z");
 
     const formattedEs = formatExperienceDates(startDate, endDate, false, "es");
-    
+
     expect(formattedEs).toBe("Junio de 2022 – Julio de 2023");
   });
 

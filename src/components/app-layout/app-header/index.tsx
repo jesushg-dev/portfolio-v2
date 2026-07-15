@@ -50,7 +50,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
     <header
       className={`fixed right-0 left-0 z-40 w-full transition-all duration-700 print:hidden ${
         isOnTop && !useSolidHeader
-          ? "top-5 bg-transparent text-primaryText-900"
+          ? "text-primaryText-900 top-5 bg-transparent"
           : "bg-background-50/90 text-primaryText-900 hover:bg-background-50 top-0 shadow-sm backdrop-blur-lg backdrop-filter"
       }`}
     >
@@ -59,7 +59,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
         <div className="container mx-auto flex max-w-(--breakpoint-xl) flex-wrap items-center justify-between md:px-6 lg:px-8">
           <Link
             href="/"
-            className="group text-2xl font-bold tracking-tighter text-primary-700 transform transition duration-600 ease-in-out"
+            className="group text-primary-700 transform text-2xl font-bold tracking-tighter transition duration-600 ease-in-out"
           >
             <span className="tracking-relaxed">
               Jehg{" "}

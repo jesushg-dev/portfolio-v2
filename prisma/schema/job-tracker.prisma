@@ -1,0 +1,77 @@
+model Company {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String?
+  website     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  applications Application[]
+}
+
+model Application {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  position    String
+  description String?
+  companyId   String   @db.ObjectId
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  status      String   // "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED" | "HIRED"
+  appliedDate DateTime
+  notes       String?
+  salary      String?
+  location    String?
+  
+  // cvFile embedded as a composite type
+  cvFile      CvFile?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  events      ApplicationEvent[]
+  documents   Document[]
+}
+
+type CvFile {
+  name       String
+  url        String
+  uploadedAt DateTime
+}
+
+model ApplicationEvent {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  applicationId String   @db.ObjectId
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type          String   // "INTERVIEW" | "TECHNICAL_TEST" | "QUESTIONNAIRE" | "PHONE_CALL" | "MEETING" | "FOLLOW_UP"
+  title         String
+  description   String?
+  scheduledDate DateTime
+  duration      Int?     // in minutes
+  location      String?
+  isVirtual     Boolean?
+  meetingLink   String?
+  notes         String?
+  completed     Boolean  @default(false)
+  completedAt   DateTime?
+  outcome       String?  // "POSITIVE" | "NEGATIVE" | "NEUTRAL"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Document {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  type          String
+  url           String
+  applicationId String   @db.ObjectId
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  uploadedAt    DateTime @default(now())
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

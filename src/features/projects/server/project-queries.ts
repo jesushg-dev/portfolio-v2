@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { db } from "@/server/db";
-import { getAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
+import { requireAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
 import {
   buildEmptyProjectCreateDto,
   mapProjectToEditorDto,
@@ -20,11 +20,9 @@ export async function getProjectCreatePageData() {
 
 export async function getProjectEditPageData(id: string) {
   const [userId, languages] = await Promise.all([
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
   ]);
-
-  if (!userId) return null;
 
   const project = await db.project.findUnique({
     where: { id, userId },
@@ -45,7 +43,7 @@ export async function getProjectEditPageData(id: string) {
 export async function getUserProjectsWithLanguages(params: DataTableParams) {
   const [languages, userId] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    getAuthenticatedUserId(),
+    requireAuthenticatedUserId(),
   ]);
 
   const skip =
@@ -62,7 +60,7 @@ export async function getUserProjectsWithLanguages(params: DataTableParams) {
     }
   }
 
-  const where: Prisma.ProjectWhereInput = { userId: userId! };
+  const where: Prisma.ProjectWhereInput = { userId };
   if (params.filters && params.filters.length > 0) {
     const typeFilter = params.filters.find((f) => f.id === "type");
     if (typeFilter && typeof typeFilter.value === "string") {

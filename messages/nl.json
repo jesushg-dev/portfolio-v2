@@ -513,6 +513,7 @@
         "services": "Diensten",
         "certifications": "Certificeringen",
         "spotify": "Spotify",
+        "jobTracker": "Vacature tracker",
         "portfolioGroup": "Portfolio Inhoud"
       }
     },
@@ -942,6 +943,164 @@
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
         "atLeastOneLanguage": "Minstens één taal is verplicht"
       },
+      "jobTrackerApplication": {
+        "validation": {
+          "positionRequired": "Functie is verplicht",
+          "companyRequired": "Selecteer een bedrijf"
+        },
+        "toast": {
+          "success": {
+            "title": "Succes",
+            "description": "Sollicitatie succesvol opgeslagen"
+          },
+          "error": {
+            "title": "Fout",
+            "description": "Sollicitatie opslaan mislukt"
+          }
+        },
+        "sections": {
+          "info": "Basisinformatie",
+          "details": "Aanvullende Details",
+          "documents": "Documenten"
+        },
+        "fields": {
+          "position": "Functie",
+          "company": "Bedrijf",
+          "status": "Status",
+          "appliedDate": "Sollicitatiedatum",
+          "location": "Locatie",
+          "salary": "Salaris",
+          "description": "Beschrijving",
+          "notes": "Notities",
+          "cv": "CV"
+        },
+        "descriptions": {
+          "cvUpload": "Upload uw CV (PDF, max 5MB)"
+        },
+        "placeholders": {
+          "position": "Frontend Developer",
+          "company": "Selecteer een bedrijf...",
+          "location": "Remote, Hybride, etc...",
+          "salary": "€50k - €60k",
+          "description": "Functieomschrijving...",
+          "notes": "Persoonlijke notities...",
+          "date": "Selecteer een datum"
+        },
+        "actions": {
+          "submit": "Sollicitatie Opslaan",
+          "save": "Wijzigingen Opslaan",
+          "cancel": "Annuleren"
+        },
+        "status": {
+          "APPLIED": "Gesolliciteerd",
+          "INTERVIEW": "In Interview",
+          "OFFER": "Aanbod Ontvangen",
+          "REJECTED": "Afgewezen",
+          "HIRED": "Aangenomen"
+        }
+      },
+      "jobTrackerCompany": {
+        "validation": {
+          "nameRequired": "Naam is verplicht",
+          "emailInvalid": "Ongeldig e-mailadres",
+          "urlInvalid": "Ongeldige URL"
+        },
+        "toast": {
+          "success": {
+            "title": "Succes",
+            "description": "Bedrijf {name} succesvol opgeslagen"
+          },
+          "error": {
+            "title": "Fout",
+            "description": "Bedrijf opslaan mislukt"
+          }
+        },
+        "errors": {
+          "unknown": "Er is een onbekende fout opgetreden"
+        },
+        "sections": {
+          "info": "Bedrijfsinformatie"
+        },
+        "fields": {
+          "name": "Naam",
+          "website": "Website",
+          "email": "E-mail",
+          "description": "Beschrijving"
+        },
+        "placeholders": {
+          "name": "Acme Corp",
+          "email": "contact@bedrijf.com",
+          "website": "https://bedrijf.com",
+          "description": "Bedrijfsbeschrijving..."
+        },
+        "actions": {
+          "submit": "Bedrijf Opslaan",
+          "save": "Wijzigingen Opslaan",
+          "cancel": "Annuleren"
+        }
+      },
+      "jobTrackerEvent": {
+        "validation": {
+          "applicationRequired": "Sollicitatie is verplicht",
+          "typeRequired": "Evenementtype is verplicht",
+          "titleRequired": "Titel is verplicht",
+          "dateRequired": "Datum is verplicht",
+          "durationInvalid": "Ongeldige duur",
+          "urlInvalid": "Ongeldige URL"
+        },
+        "toast": {
+          "success": {
+            "title": "Succes",
+            "description": "Evenement {title} succesvol opgeslagen"
+          },
+          "error": {
+            "title": "Fout",
+            "description": "Evenement opslaan mislukt"
+          }
+        },
+        "errors": {
+          "unknown": "Er is een onbekende fout opgetreden"
+        },
+        "sections": {
+          "application": "Sollicitatie",
+          "info": "Evenementinformatie",
+          "dateTime": "Datum & Tijd",
+          "modality": "Modaliteit"
+        },
+        "fields": {
+          "application": "Selecteer Sollicitatie",
+          "type": "Evenementtype",
+          "title": "Titel",
+          "description": "Beschrijving",
+          "scheduledDate": "Geplande Datum",
+          "duration": "Duur (minuten)",
+          "isVirtual": "Virtuele Vergadering",
+          "isVirtualDescription": "Vindt deze vergadering online plaats?",
+          "meetingLink": "Vergaderlink",
+          "location": "Locatie"
+        },
+        "placeholders": {
+          "application": "Selecteer een sollicitatie...",
+          "title": "Bijv. Technisch Interview",
+          "description": "Extra details...",
+          "date": "Selecteer datum",
+          "duration": "60",
+          "meetingLink": "https://meet.google.com/...",
+          "location": "Kantooradres..."
+        },
+        "actions": {
+          "submit": "Evenement Opslaan",
+          "cancel": "Annuleren"
+        },
+        "eventType": {
+          "INTERVIEW": "Interview",
+          "TECHNICAL_TEST": "Technische Test",
+          "QUESTIONNAIRE": "Vragenlijst",
+          "PHONE_CALL": "Telefoongesprek",
+          "MEETING": "Vergadering",
+          "FOLLOW_UP": "Follow-up"
+        }
+      },
       "timelineItem": {
         "generalSection": "Algemene informatie",
         "title": "Titel",
@@ -1366,6 +1525,114 @@
       "addItem": "Item toevoegen",
       "deleteSuccess": "Succesvol verwijderd",
       "close": "Sluiten"
+    },
+    "jobTracker": {
+      "title": "Job Tracker",
+      "pageDescription": "Beheer uw sollicitaties efficiënt",
+      "newCompany": "Nieuw Bedrijf",
+      "newApplication": "Nieuwe Sollicitatie",
+      "applicationsTab": "Sollicitaties",
+      "companiesTab": "Bedrijven",
+      "columnPosition": "Functie",
+      "columnCompany": "Bedrijf",
+      "columnStatus": "Status",
+      "columnDate": "Datum",
+      "columnActions": "Acties",
+      "columnName": "Naam",
+      "columnEmail": "E-mail",
+      "columnWebsite": "Website",
+      "view": "Bekijken",
+      "edit": "Bewerken",
+      "viewCompany": "Bedrijf bekijken",
+      "changeStatus": "Wijzigen naar {status}",
+      "websiteLink": "Website",
+      "filterPositionPlaceholder": "Zoek functie...",
+      "filterCompanyPlaceholder": "Zoek bedrijf...",
+      "filterNamePlaceholder": "Zoek naam...",
+      "filterEmailPlaceholder": "Zoek e-mail...",
+      "deleteApplicationSuccess": "Sollicitatie verwijderd",
+      "deleteApplicationError": "Sollicitatie verwijderen mislukt",
+      "deleteCompanySuccess": "Bedrijf verwijderd",
+      "deleteCompanyError": "Bedrijf verwijderen mislukt",
+      "createApplication": "Nieuwe Sollicitatie",
+      "createApplicationDescription": "Voeg een nieuwe sollicitatie toe",
+      "editApplication": "Sollicitatie Bewerken",
+      "editApplicationDescription": "Werk sollicitatiegegevens bij",
+      "createCompany": "Nieuw Bedrijf",
+      "createCompanyDescription": "Voeg een bedrijf toe aan uw database",
+      "editCompany": "Bedrijf Bewerken",
+      "editCompanyDescription": "Werk bedrijfsinformatie bij",
+      "createEvent": "Nieuw Evenement",
+      "createEventDescription": "Plan een interview of follow-up",
+      "status": {
+        "APPLIED": "Gesolliciteerd",
+        "INTERVIEW": "In Interview",
+        "OFFER": "Aanbod Ontvangen",
+        "REJECTED": "Afgewezen",
+        "HIRED": "Aangenomen"
+      },
+      "eventType": {
+        "INTERVIEW": "Interview",
+        "TECHNICAL_TEST": "Technische Test",
+        "QUESTIONNAIRE": "Vragenlijst",
+        "PHONE_CALL": "Telefoongesprek",
+        "MEETING": "Vergadering",
+        "FOLLOW_UP": "Follow-up"
+      },
+      "stats": {
+        "totalApplications": "Totaal Sollicitaties",
+        "totalApplicationsDescription": "Geregistreerde sollicitaties",
+        "totalCompanies": "Bedrijven",
+        "totalCompaniesDescription": "Bedrijven in uw database",
+        "inProgress": "In Behandeling",
+        "inProgressDescription": "Lopende interviews",
+        "offers": "Aanbiedingen",
+        "offersDescription": "Ontvangen aanbiedingen",
+        "hired": "Aangenomen",
+        "hiredDescription": "Gefeliciteerd!"
+      },
+      "calendar": {
+        "title": "Aankomende Evenementen",
+        "description": "Geplande interviews en tests",
+        "add": "Toevoegen",
+        "empty": "U heeft geen geplande evenementen",
+        "today": "Vandaag",
+        "tomorrow": "Morgen",
+        "virtual": "Virtueel",
+        "duration": "{minutes} min"
+      },
+      "detail": {
+        "title": "Sollicitatiedetails",
+        "description": "Tijdlijn en sollicitatie-informatie",
+        "timelineTab": "Tijdlijn",
+        "detailsTab": "Details",
+        "jobDescription": "Functieomschrijving",
+        "salary": "Salaris",
+        "location": "Locatie",
+        "notes": "Notities",
+        "cv": "Gebruikt CV"
+      },
+      "timeline": {
+        "title": "Evenementen Tijdlijn",
+        "description": "Geschiedenis en aankomende evenementen",
+        "addEvent": "Evenement Toevoegen",
+        "empty": "Geen evenementen voor deze sollicitatie",
+        "complete": "Voltooien",
+        "completeSuccess": "Evenement als voltooid gemarkeerd",
+        "completeError": "Evenement voltooien mislukt",
+        "outcomeLabel": "Resultaat van evenement",
+        "notesLabel": "Notities van evenement",
+        "notesPlaceholder": "Hoe ging het evenement? Voeg uw notities toe...",
+        "markCompleted": "Markeer als voltooid",
+        "cancel": "Annuleren",
+        "joinMeeting": "Deelnemen aan vergadering",
+        "completedAt": "Voltooid op {date}",
+        "outcome": {
+          "POSITIVE": "Positief",
+          "NEUTRAL": "Neutraal",
+          "NEGATIVE": "Negatief"
+        }
+      }
     }
   },
   "auth": {
@@ -1488,5 +1755,189 @@
   },
   "metadata": {
     "description": "Portfolio en beheerpaneel van Jesús Hernández"
+  },
+  "forms": {
+    "event": {
+      "validation": {
+        "applicationRequired": "Sollicitatie is vereist",
+        "typeRequired": "Type evenement is vereist",
+        "titleRequired": "Titel moet minimaal 2 tekens lang zijn",
+        "dateRequired": "Datum is vereist",
+        "durationInvalid": "Duur is ongeldig",
+        "urlInvalid": "Ongeldige URL"
+      },
+      "toast": {
+        "success": {
+          "title": "Succes",
+          "description": "Evenement {title} succesvol opgeslagen"
+        },
+        "error": {
+          "title": "Fout",
+          "description": "Kon evenement niet opslaan"
+        }
+      },
+      "errors": {
+        "unknown": "Er is een onbekende fout opgetreden"
+      },
+      "sections": {
+        "application": "Sollicitatie",
+        "info": "Evenementinformatie",
+        "dateTime": "Datum & Tijd",
+        "modality": "Modaliteit"
+      },
+      "fields": {
+        "application": "Selecteer sollicitatie",
+        "type": "Type evenement",
+        "title": "Titel",
+        "description": "Beschrijving",
+        "scheduledDate": "Geplande datum",
+        "duration": "Duur (minuten)",
+        "isVirtual": "Virtuele bijeenkomst",
+        "isVirtualDescription": "Vindt deze vergadering online plaats?",
+        "meetingLink": "Vergaderlink",
+        "location": "Locatie"
+      },
+      "placeholders": {
+        "application": "Selecteer een sollicitatie...",
+        "title": "Bijv., Technisch interview",
+        "description": "Eventuele details...",
+        "date": "Selecteer datum",
+        "duration": "60",
+        "meetingLink": "https://meet.google.com/...",
+        "location": "Kantooradres..."
+      },
+      "actions": {
+        "submit": "Evenement Opslaan",
+        "cancel": "Annuleren"
+      }
+    },
+    "application": {
+      "validation": {
+        "positionRequired": "Functie moet minimaal 2 tekens lang zijn",
+        "companyRequired": "Selecteer een bedrijf"
+      },
+      "toast": {
+        "success": {
+          "title": "Succes",
+          "description": "Sollicitatie succesvol opgeslagen"
+        },
+        "error": {
+          "title": "Fout",
+          "description": "Kon sollicitatie niet opslaan"
+        }
+      },
+      "sections": {
+        "info": "Basisinformatie",
+        "details": "Extra Details",
+        "documents": "Documenten"
+      },
+      "fields": {
+        "position": "Functie",
+        "company": "Bedrijf",
+        "status": "Status",
+        "appliedDate": "Sollicitatiedatum",
+        "location": "Locatie",
+        "salary": "Salaris",
+        "description": "Beschrijving",
+        "notes": "Notities",
+        "cv": "CV/Hervatten"
+      },
+      "placeholders": {
+        "position": "Frontend Developer",
+        "company": "Selecteer een bedrijf...",
+        "location": "Op afstand, Hybride, enz...",
+        "salary": "€50k - €60k",
+        "description": "Functieomschrijving...",
+        "notes": "Persoonlijke notities..."
+      },
+      "actions": {
+        "submit": "Sollicitatie Opslaan",
+        "cancel": "Annuleren"
+      },
+      "descriptions": {
+        "cvUpload": "Upload je CV (PDF, max 5MB)"
+      }
+    },
+    "companyCreate": {
+      "validation": {
+        "nameRequired": "Naam moet minimaal 2 tekens lang zijn",
+        "emailInvalid": "Ongeldig e-mailadres",
+        "urlInvalid": "Ongeldige URL"
+      },
+      "toast": {
+        "success": {
+          "title": "Succes",
+          "description": "Bedrijf succesvol opgeslagen"
+        },
+        "error": {
+          "title": "Fout",
+          "description": "Kon bedrijf niet opslaan"
+        }
+      },
+      "sections": {
+        "info": "Bedrijfsinformatie",
+        "details": "Extra Details"
+      },
+      "fields": {
+        "name": "Naam",
+        "website": "Website",
+        "email": "E-mailadres",
+        "description": "Beschrijving"
+      },
+      "placeholders": {
+        "name": "Acme Corp",
+        "website": "https://acme.com",
+        "email": "contact@acme.com",
+        "description": "Bedrijfsdetails..."
+      },
+      "actions": {
+        "submit": "Bedrijf Opslaan",
+        "cancel": "Annuleren"
+      },
+      "errors": {
+        "unknown": "Er is een onbekende fout opgetreden"
+      }
+    },
+    "companyEdit": {
+      "validation": {
+        "nameRequired": "Naam moet minimaal 2 tekens lang zijn",
+        "emailInvalid": "Ongeldig e-mailadres",
+        "urlInvalid": "Ongeldige URL"
+      },
+      "toast": {
+        "success": {
+          "title": "Succes",
+          "description": "Bedrijf succesvol opgeslagen"
+        },
+        "error": {
+          "title": "Fout",
+          "description": "Kon bedrijf niet opslaan"
+        }
+      },
+      "sections": {
+        "info": "Bedrijfsinformatie",
+        "details": "Extra Details"
+      },
+      "fields": {
+        "name": "Naam",
+        "website": "Website",
+        "email": "E-mailadres",
+        "description": "Beschrijving"
+      },
+      "placeholders": {
+        "name": "Acme Corp",
+        "website": "https://acme.com",
+        "email": "contact@acme.com",
+        "description": "Bedrijfsdetails..."
+      },
+      "actions": {
+        "submit": "Wijzigingen opslaan",
+        "cancel": "Annuleren"
+      },
+      "errors": {
+        "unknown": "Er is een onbekende fout opgetreden"
+      },
+      "title": "Bedrijf bewerken"
+    }
   }
 }

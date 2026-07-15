@@ -114,7 +114,7 @@ function StatCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, delay: 0.1 + index * 0.1 }}
-      className="bg-card text-card-foreground border-border group relative overflow-hidden rounded-2xl border p-6 shadow-sm transition-shadow duration-300 hover:shadow-md h-full"
+      className="bg-card text-card-foreground border-border group relative h-full overflow-hidden rounded-2xl border p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
     >
       <span
         aria-hidden
@@ -130,16 +130,22 @@ function StatCard({
   );
 
   if (isHash) {
-    return <a href={href} className="block">{content}</a>;
+    return (
+      <a href={href} className="block">
+        {content}
+      </a>
+    );
   }
 
   return (
-    <Link href={href as React.ComponentProps<typeof Link>["href"]} className="block">
+    <Link
+      href={href as React.ComponentProps<typeof Link>["href"]}
+      className="block"
+    >
       {content}
     </Link>
   );
 }
-
 
 // ─── Main component ───────────────────────────────────────────────────────────
 const SocialProof: FC = () => {
@@ -172,8 +178,9 @@ const SocialProof: FC = () => {
       className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
     >
       <div
-        className={`grid grid-cols-1 items-start gap-12 ${showTestimonialsColumn ? "lg:grid-cols-2 lg:gap-20" : "lg:grid-cols-1"
-          }`}
+        className={`grid grid-cols-1 items-start gap-12 ${
+          showTestimonialsColumn ? "lg:grid-cols-2 lg:gap-20" : "lg:grid-cols-1"
+        }`}
       >
         {/* ── LEFT: Testimonials + CTA ───────────────────────────────── */}
         {showTestimonialsColumn && (
