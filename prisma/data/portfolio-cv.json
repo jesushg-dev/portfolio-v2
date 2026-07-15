@@ -209,7 +209,6 @@
     {
       "key": "experience0",
       "company": "Imagemaker",
-      "dates": "agosto 2025 – presente",
       "role": {
         "es": "Senior Software Engineer",
         "en": "Senior Software Engineer",
@@ -251,12 +250,13 @@
         }
       ],
       "order": 0,
-      "featuredOnHome": true
+      "featuredOnHome": true,
+      "startDate": "2025-08-01T00:00:00.000Z",
+      "endDate": null
     },
     {
       "key": "experience1",
       "company": "Claro Nicaragua",
-      "dates": "septiembre 2024 – agosto 2025",
       "role": {
         "es": "Senior Software Engineer · Freelance",
         "en": "Senior Software Engineer · Freelance",
@@ -289,12 +289,13 @@
         }
       ],
       "order": 1,
-      "featuredOnHome": true
+      "featuredOnHome": true,
+      "startDate": "2024-09-01T00:00:00.000Z",
+      "endDate": "2025-08-01T00:00:00.000Z"
     },
     {
       "key": "experience2",
       "company": "Contollo",
-      "dates": "agosto 2023 – marzo 2025",
       "role": {
         "es": "Senior Software Engineer & Líder de Equipo",
         "en": "Senior Software Engineer & Team Lead",
@@ -338,12 +339,13 @@
         }
       ],
       "order": 2,
-      "featuredOnHome": true
+      "featuredOnHome": true,
+      "startDate": "2023-08-01T00:00:00.000Z",
+      "endDate": "2025-03-01T00:00:00.000Z"
     },
     {
       "key": "experience4",
       "company": "Musa",
-      "dates": "junio 2022 – julio 2023",
       "role": {
         "es": "Desarrollador Full Stack",
         "en": "Full Stack Developer",
@@ -376,12 +378,13 @@
         }
       ],
       "order": 3,
-      "featuredOnHome": true
+      "featuredOnHome": true,
+      "startDate": "2022-06-01T00:00:00.000Z",
+      "endDate": "2023-07-01T00:00:00.000Z"
     },
     {
       "key": "experience5",
       "company": "Telo Group",
-      "dates": "febrero 2022 – mayo 2022",
       "role": {
         "es": "Desarrollador de aplicaciones móviles",
         "en": "Mobile Application Developer",
@@ -407,12 +410,13 @@
         }
       ],
       "order": 4,
-      "featuredOnHome": false
+      "featuredOnHome": false,
+      "startDate": "2022-02-01T00:00:00.000Z",
+      "endDate": "2022-05-01T00:00:00.000Z"
     },
     {
       "key": "experience6",
       "company": "Asociación de Iglesias Reformadas",
-      "dates": "noviembre 2019 – diciembre 2021",
       "role": {
         "es": "Desarrollador Frontend y Técnico de TI",
         "en": "Frontend Developer and IT Technician",
@@ -438,7 +442,9 @@
         }
       ],
       "order": 5,
-      "featuredOnHome": false
+      "featuredOnHome": false,
+      "startDate": "2019-11-01T00:00:00.000Z",
+      "endDate": "2021-12-01T00:00:00.000Z"
     }
   ],
   "softSkills": [

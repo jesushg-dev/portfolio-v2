@@ -7,6 +7,7 @@ import {
   type PortfolioCvExperienceFixture,
 } from "../fixtures/portfolio-cv";
 import { portfolioProfile } from "../fixtures/portfolio-profile";
+import { formatExperienceDates } from "../../src/utils/tools/date";
 
 export type CvPreviewLocale = "es" | "en" | "nl";
 
@@ -35,10 +36,15 @@ function educationInstitutionLine(
 /** Matches `experiences.tsx` — company and dates share one line. */
 function experienceCompanyLine(
   experience: PortfolioCvExperienceFixture,
+  locale: CvPreviewLocale,
 ): string {
-  return experience.dates
-    ? `${experience.company} · ${experience.dates}`
-    : experience.company;
+  const dates = formatExperienceDates(
+    experience.startDate ? new Date(experience.startDate) : null,
+    experience.endDate ? new Date(experience.endDate) : null,
+    experience.current,
+    locale,
+  );
+  return dates ? `${experience.company} · ${dates}` : experience.company;
 }
 
 /** Matches list items in `soft-skills.tsx` / `additional-information.tsx`. */
@@ -149,7 +155,7 @@ export async function expectCvPreviewContent(
     ).toBeVisible();
     await expect(
       root
-        .getByText(experienceCompanyLine(experience), { exact: true })
+        .getByText(experienceCompanyLine(experience, locale), { exact: true })
         .first(),
     ).toBeVisible();
   }

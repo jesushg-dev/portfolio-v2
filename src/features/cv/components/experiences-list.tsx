@@ -26,6 +26,7 @@ import { GripVertical } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import type { AppLanguage } from "@prisma/client";
 import { getRowTextForLocale } from "@/lib/i18n/localized-display";
+import { formatExperienceDates } from "@/utils/tools/date";
 import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
 import { ExperienceForm } from "./experience-form";
 import { CvListSkeleton } from "./cv-list-skeleton";
@@ -125,7 +126,13 @@ const ExperiencesList: FC<{
                         )}
                       </p>
                       <p className="text-muted-foreground text-xs">
-                        {exp.company} · {exp.dates ?? ""}
+                        {exp.company} ·{" "}
+                        {formatExperienceDates(
+                          exp.startDate,
+                          exp.endDate,
+                          exp.current,
+                          displayLocale,
+                        )}
                       </p>
                       <p className="mt-1 text-xs text-gray-400">
                         {exp.responsibilities.length} responsibilities

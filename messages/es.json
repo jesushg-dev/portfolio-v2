@@ -188,11 +188,16 @@
     },
     "heroMain": {
       "viewCV": "Ver CV",
-      "greeting": "Hola! Soy",
-      "scrollDown": "Desplazarse hacia abajo",
+      "greeting": "Hola, soy",
+      "scrollDown": "Desplázate hacia abajo",
+      "yearsExperience": "Años de experiencia",
+      "projectsDelivered": "Proyectos entregados",
+      "certifications": "Certificaciones",
+      "availableForOpportunities": "Disponible para nuevas oportunidades",
+      "scheduleCall": "Agendar una llamada",
       "empty": {
-        "title": "Hero sin configurar",
-        "description": "Añade tu foto, fondo e introducción desde la pestaña de hero en el perfil del admin."
+        "title": "Héroe no configurado",
+        "description": "Agrega tu foto de perfil, fondo y presentación desde la pestaña héroe del perfil de administrador."
       }
     },
     "timeline": {
@@ -443,7 +448,8 @@
     "experience": {
       "title": "Experiencia Profesional",
       "subtitle": "Empresas, roles e impacto medible",
-      "viewAll": "Ver CV completo",
+      "viewAll": "Ver CV completo para el historial detallado",
+      "showingRecent": "Mostrando los roles más recientes.",
       "leadershipTitle": "Liderazgo y mentoría",
       "leadershipDescription": "Liderazgo de equipos técnicos, coordinación de proveedores y mentoría de desarrolladores en ciclos de entrega complejos."
     },
@@ -467,23 +473,20 @@
     },
     "socialProof": {
       "eyebrow": "Respaldado por desarrolladores",
-      "title": "Lo que dicen los seniors sobre mí",
+      "title": "{count, plural, =0 {Lo que dicen los seniors sobre mí} =1 {Lo que dice un senior sobre mí} other {Lo que dicen los seniors sobre mí}}",
       "subtitle": "Colegas que han visto mi trabajo de cerca.",
       "cta": "Contrátame",
       "statsLabel": "En números",
       "statsNote": "Números acumulados en compromisos profesionales.",
       "stats": {
-        "teamSize": {
-          "value": "6",
-          "label": "Desarrolladores liderados"
+        "certifications": {
+          "label": "Certificaciones"
         },
-        "graphqlOps": {
-          "value": "177",
-          "label": "Operaciones GraphQL migradas"
+        "projects": {
+          "label": "Proyectos"
         },
-        "storefronts": {
-          "value": "6",
-          "label": "Storefronts en VTEX"
+        "experience": {
+          "label": "Años de Experiencia"
         }
       }
     }
@@ -776,6 +779,8 @@
         "role": "Puesto",
         "location": "Ubicación (opcional)",
         "dates": "Fechas",
+        "startDate": "Fecha de inicio",
+        "endDate": "Fecha de fin",
         "datesDisplay": "Fechas (texto a mostrar)",
         "skills": "Habilidades (texto libre)",
         "current": "Puesto actual",

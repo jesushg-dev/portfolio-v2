@@ -311,7 +311,21 @@ export async function fillCvExperience(
 ): Promise<void> {
   await openCvItemModal(page, "cv-experience-add");
   await page.locator("#experience-company").fill(experience.company);
-  await page.locator("#experience-dates").fill(experience.dates);
+  // Format date as YYYY-MM for type="month" input
+  const formatMonth = (d: string | Date) =>
+    new Date(d).toISOString().slice(0, 7);
+
+  await page
+    .locator("#experience-start-date")
+    .fill(formatMonth(experience.startDate));
+  if (experience.current) {
+    await page.locator("#experience-current").check();
+  } else if (experience.endDate) {
+    await page.locator("#experience-current").uncheck();
+    await page
+      .locator("#experience-end-date")
+      .fill(formatMonth(experience.endDate));
+  }
   await fillLocalizedField(
     page,
     "experience-role",

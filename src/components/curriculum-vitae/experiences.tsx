@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
 import { getLocalizedText } from "@/lib/i18n/localized";
+import { formatExperienceDates } from "@/utils/tools/date";
 import type { CvData, CvLocaleProps } from "./types";
 
 interface IExperiencesProps extends CvLocaleProps {
@@ -25,12 +26,19 @@ const Experiences: FC<IExperiencesProps> = ({
 
       {experiences.map((experience) => {
         const role = getLocalizedText(experience.role, locale, defaultLocale);
+        const dates = formatExperienceDates(
+          experience.startDate,
+          experience.endDate,
+          experience.current,
+          locale,
+        );
+
         return (
           <div className="mb-4" key={experience.id}>
             <h3 className="text-sm font-bold">{role}</h3>
             <h4 className="my-1 text-xs">
               {experience.company}
-              {experience.dates ? ` · ${experience.dates}` : ""}
+              {dates ? ` · ${dates}` : ""}
             </h4>
             {experience.responsibilities.length > 0 ? (
               <ul className="list-disc pl-8 text-xs">

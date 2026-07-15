@@ -3,6 +3,8 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
 FROM base AS deps
+# Provide dummy URI so prisma generate (in postinstall) doesn't crash during build
+ARG MONGODB_URI="mongodb://dummy"
 COPY package.json pnpm-lock.yaml prisma.config.ts ./
 COPY prisma ./prisma
 RUN pnpm install --frozen-lockfile
@@ -10,6 +12,8 @@ RUN pnpm install --frozen-lockfile
 FROM base AS test
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# Provide dummy URI again for the manual generate step during build
+ARG MONGODB_URI="mongodb://dummy"
 RUN pnpm prisma generate
 
 CMD ["sh", "-c", "pnpm db:push && pnpm test:e2e:full"]

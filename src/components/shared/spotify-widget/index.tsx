@@ -19,23 +19,7 @@ const SpotifyWidget: FC = () => {
     return <SpotifyWidgetSkeleton />;
   }
 
-  if (isFetchError) {
-    return (
-      <p className="rounded-lg bg-[#191414] p-4 text-center text-sm text-red-400">
-        {t("spotify.errors.noFetch")}
-      </p>
-    );
-  }
-
-  if (error) {
-    return (
-      <p className="rounded-lg bg-[#191414] p-4 text-center text-sm text-red-400">
-        Error: {error.message}
-      </p>
-    );
-  }
-
-  if (!playback) {
+  if (isFetchError || error || !playback) {
     return (
       <p
         className={cn(

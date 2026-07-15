@@ -6,7 +6,6 @@ import {
   DEFAULT_SOFT_SKILLS_VIDEO_URL,
 } from "@/features/soft-skills/lib/soft-skills-media";
 import {
-  getHeroTitlesForLocale,
   splitAboutParagraphs,
 } from "@/features/profile/server/hero-titles";
 import { mapTimelineItemsToPublic } from "@/features/timeline/lib/map-timeline-public";
@@ -15,6 +14,7 @@ import {
   looksLikeSkillObjectId,
   skillSlugFromTitle,
 } from "@/utils/tools/skill-slug";
+import { formatExperienceDates } from "@/utils/tools/date";
 
 const LanguageCode = z.enum(["es", "en", "nl"]);
 const StackType = z.enum([
@@ -313,9 +313,9 @@ export const portfolioRouter = createTRPCRouter({
 
       let skill = looksLikeSkillObjectId(input.slug)
         ? await ctx.db.skill.findFirst({
-            where: { id: input.slug, ...tenantWhere },
-            include: skillInclude,
-          })
+          where: { id: input.slug, ...tenantWhere },
+          include: skillInclude,
+        })
         : null;
 
       if (!skill) {
@@ -339,20 +339,6 @@ export const portfolioRouter = createTRPCRouter({
         ...rest
       } = skill;
 
-      const formatExperienceDates = (
-        dates: string | null,
-        startDate: Date | null,
-        endDate: Date | null,
-        current: boolean,
-      ) => {
-        if (dates?.trim()) return dates;
-        if (!startDate) return "";
-        const startYear = startDate.getFullYear();
-        if (current) return `${startYear} – Present`;
-        if (endDate) return `${startYear} – ${endDate.getFullYear()}`;
-        return `${startYear}`;
-      };
-
       const certificates = CertificateSkill.map(({ Certification }) => {
         const { CertificationTranslation, ...cert } = Certification;
         return mergeTranslation(cert, CertificationTranslation[0]);
@@ -363,10 +349,10 @@ export const portfolioRouter = createTRPCRouter({
         company: experience.company,
         role: getLocalizedText(experience.role, input.locale),
         dates: formatExperienceDates(
-          experience.dates,
           experience.startDate,
           experience.endDate,
           experience.current,
+          input.locale,
         ),
         order: experience.order,
       })).sort((a, b) => a.order - b.order);
@@ -483,17 +469,20 @@ export const portfolioRouter = createTRPCRouter({
       const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
       const locale = input.locale;
 
-      const titles = await getHeroTitlesForLocale(
-        ctx.db,
-        tenantUserId,
-        locale,
-        defaultLocale,
-      );
-
       return {
         fullName: profile?.displayName?.trim() ?? header.fullName,
         photoUrl: header.photoUrl,
         backgroundImageUrl: header.backgroundImageUrl,
+        heroSubtitle: getLocalizedText(
+          header.heroSubtitle,
+          locale,
+          defaultLocale,
+        ),
+        heroTagline: getLocalizedText(
+          header.heroTagline,
+          locale,
+          defaultLocale,
+        ),
         heroSummary: getLocalizedText(
           header.heroSummary,
           locale,
@@ -504,7 +493,42 @@ export const portfolioRouter = createTRPCRouter({
           locale,
           defaultLocale,
         ),
-        titles,
+      };
+    }),
+
+  getStatsPublic: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId)
+        return { projectsCount: 0, certificationsCount: 0, yearsExperience: 0 };
+
+      const [projectsCount, certificationsCount, firstExperience] =
+        await Promise.all([
+          ctx.db.project.count({ where: { userId: tenantUserId } }),
+          ctx.db.certification.count({ where: { userId: tenantUserId } }),
+          ctx.db.cvExperience.findFirst({
+            where: { userId: tenantUserId, startDate: { not: null } },
+            orderBy: { startDate: "asc" },
+            select: { startDate: true },
+          }),
+        ]);
+
+      const yearsExperience = firstExperience?.startDate
+        ? Math.floor(
+          (new Date().getTime() - firstExperience.startDate.getTime()) /
+          (1000 * 60 * 60 * 24 * 365.25),
+        )
+        : 0;
+
+      return {
+        projectsCount,
+        certificationsCount,
+        yearsExperience,
       };
     }),
 
@@ -636,7 +660,12 @@ export const portfolioRouter = createTRPCRouter({
         companyLogoUrl: experience.companyLogoUrl,
         current: experience.current,
         role: getLocalizedText(experience.role, locale, defaultLocale),
-        dates: experience.dates ?? "",
+        dates: formatExperienceDates(
+          experience.startDate,
+          experience.endDate,
+          experience.current,
+          locale,
+        ),
         responsibilities: experience.responsibilities.map((responsibility) =>
           getLocalizedText(responsibility.text, locale, defaultLocale),
         ),

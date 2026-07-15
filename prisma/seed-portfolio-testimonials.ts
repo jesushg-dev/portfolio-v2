@@ -6,6 +6,7 @@ import { toLocalizedText, type LocaleMap } from "./lib/localized-text-seed";
 interface TestimonialSeed {
   author: string;
   role: string;
+  avatarUrl?: string;
   quote: LocaleMap;
   order: number;
 }
@@ -29,6 +30,7 @@ export async function seedPortfolioTestimonials(
         userId,
         author: item.author,
         role: item.role,
+        avatarUrl: item.avatarUrl ?? null,
         quote: toLocalizedText(item.quote) as unknown as Prisma.InputJsonValue,
         order: item.order,
         isVisible: true,

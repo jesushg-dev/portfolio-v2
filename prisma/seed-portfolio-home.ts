@@ -13,8 +13,9 @@ interface TerminalStepSeed {
 
 interface PortfolioHomeSeed {
   backgroundImageUrl: string;
+  heroSubtitle: LocaleMap;
+  heroTagline: LocaleMap;
   heroSummary: LocaleMap;
-  heroTitles: LocaleMap[];
   terminal: {
     username: string;
     typingSpeed: number;
@@ -47,25 +48,14 @@ export async function seedPortfolioHome(
     where: { userId },
     data: {
       backgroundImageUrl: data.backgroundImageUrl,
+      heroSubtitle: asJson(toLocalizedText(data.heroSubtitle)),
+      heroTagline: asJson(toLocalizedText(data.heroTagline)),
       heroSummary: asJson(toLocalizedText(data.heroSummary)),
     },
   });
 
+  // Remove old titles if they existed
   await prisma.cvHeroTitle.deleteMany({ where: { userId } });
-  for (const [index, title] of data.heroTitles.entries()) {
-    await prisma.cvHeroTitle.create({
-      data: {
-        userId,
-        order: index,
-        translations: {
-          create: LOCALE_CODES.map((code) => ({
-            appLanguageId: langIds[code],
-            text: title[code] ?? title.es ?? "",
-          })),
-        },
-      },
-    });
-  }
 
   const terminal = await prisma.cvTerminal.upsert({
     where: { userId },
@@ -105,7 +95,7 @@ export async function seedPortfolioHome(
   }
 
   console.log(
-    `[seed-portfolio-home] done. titles=${data.heroTitles.length} terminalSteps=${data.terminal.steps.length}`,
+    `[seed-portfolio-home] done. terminalSteps=${data.terminal.steps.length}`,
   );
 }
 

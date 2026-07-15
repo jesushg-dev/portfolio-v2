@@ -14,6 +14,22 @@ import {
 } from "./lib/localized-text-seed";
 import { portfolioProfile } from "./seed-portfolio-user";
 
+interface ExperienceSeed {
+  key: string;
+  company: string;
+  companyLogoUrl?: string;
+  startDate?: string;
+  endDate?: string;
+  role: LocaleMap;
+  skillKeys: string[];
+  responsibilities: {
+    text: LocaleMap;
+    order: number;
+  }[];
+  order: number;
+  featuredOnHome?: boolean;
+}
+
 export interface PortfolioCvSeed {
   header: {
     fullName: string;
@@ -44,20 +60,7 @@ export interface PortfolioCvSeed {
     items: string[];
     order: number;
   }[];
-  experiences: {
-    key: string;
-    company: string;
-    companyLogoUrl?: string;
-    dates: string;
-    role: LocaleMap;
-    skillKeys: string[];
-    responsibilities: {
-      text: LocaleMap;
-      order: number;
-    }[];
-    order: number;
-    featuredOnHome?: boolean;
-  }[];
+  experiences: ExperienceSeed[];
   softSkills: {
     name: LocaleMap;
     order: number;
@@ -199,7 +202,9 @@ export async function seedPortfolioCv(
         company: experience.company,
         companyLogoUrl: experience.companyLogoUrl ?? null,
         role: asJson(toLocalizedText(experience.role)),
-        dates: experience.dates,
+        startDate: experience.startDate ? new Date(experience.startDate) : null,
+        endDate: experience.endDate ? new Date(experience.endDate) : null,
+        current: !experience.endDate,
         skills: null,
         featuredOnHome: experience.featuredOnHome ?? false,
         order: experience.order,

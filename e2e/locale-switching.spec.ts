@@ -16,7 +16,7 @@ test.describe("public locale switching", () => {
 
       const snapshot = localeSnapshots[locale];
       await expect(
-        page.getByRole("link", { name: snapshot.navHome, exact: true }),
+        page.getByRole("button", { name: snapshot.navHome, exact: true }),
       ).toBeVisible();
 
       await page.locator("#about").scrollIntoViewIfNeeded();
@@ -29,6 +29,6 @@ test.describe("public locale switching", () => {
     await page.locator("#skills").scrollIntoViewIfNeeded();
     await page.getByRole("button", { name: "Backend", exact: true }).click();
     await expect(page.getByText("C#", { exact: true })).toBeVisible();
-    await expect(page.getByText("Node.js", { exact: true })).toBeVisible();
+    await expect(page.getByText("Node.js", { exact: true }).first()).toBeVisible();
   });
 });

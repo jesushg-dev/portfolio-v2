@@ -1,14 +1,16 @@
 "use client";
 
 import type { FC } from "react";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import { api } from "@/trpc/react";
 import { QuoteIcon, ArrowRightIcon } from "lucide-react";
 
+import { Link } from "@/i18n/routing";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const statKeys = ["teamSize", "graphqlOps", "storefronts"] as const;
+const statKeys = ["certifications", "projects", "experience"] as const;
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 function TestimonialSkeleton() {
@@ -33,11 +35,13 @@ function TestimonialCard({
   quote,
   author,
   role,
+  avatarUrl,
   index,
 }: {
   quote: string;
   author: string;
   role?: string | null;
+  avatarUrl?: string | null;
   index: number;
 }) {
   return (
@@ -56,14 +60,27 @@ function TestimonialCard({
         {quote}
       </blockquote>
       <footer className="mt-4 flex items-center gap-2.5">
-        <span className="bg-primary text-primary-foreground flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold">
-          {author
-            .split(" ")
-            .slice(0, 2)
-            .map((w) => w[0])
-            .join("")
-            .toUpperCase()}
-        </span>
+        {avatarUrl ? (
+          <div className="border-border relative flex h-9 w-9 shrink-0 overflow-hidden rounded-full border shadow-sm">
+            <Image
+              src={avatarUrl}
+              alt={author}
+              fill
+              className="object-cover"
+              sizes="36px"
+              unoptimized
+            />
+          </div>
+        ) : (
+          <span className="bg-primary text-primary-foreground flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+            {author
+              .split(" ")
+              .slice(0, 2)
+              .map((w) => w[0])
+              .join("")
+              .toUpperCase()}
+          </span>
+        )}
         <div>
           <p className="text-foreground text-sm font-semibold">{author}</p>
           {role && (
@@ -82,18 +99,22 @@ function StatCard({
   value,
   label,
   index,
+  href,
 }: {
   value: string;
   label: string;
   index: number;
+  href: string;
 }) {
-  return (
+  const isHash = href.startsWith("#");
+
+  const content = (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, delay: 0.1 + index * 0.1 }}
-      className="bg-card text-card-foreground border-border group relative overflow-hidden rounded-2xl border p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
+      className="bg-card text-card-foreground border-border group relative overflow-hidden rounded-2xl border p-6 shadow-sm transition-shadow duration-300 hover:shadow-md h-full"
     >
       <span
         aria-hidden
@@ -107,7 +128,18 @@ function StatCard({
       </p>
     </motion.div>
   );
+
+  if (isHash) {
+    return <a href={href} className="block">{content}</a>;
+  }
+
+  return (
+    <Link href={href as React.ComponentProps<typeof Link>["href"]} className="block">
+      {content}
+    </Link>
+  );
 }
+
 
 // ─── Main component ───────────────────────────────────────────────────────────
 const SocialProof: FC = () => {
@@ -120,15 +152,28 @@ const SocialProof: FC = () => {
   const hasTestimonials = !isLoading && items.length > 0;
   const showTestimonialsColumn = isLoading || hasTestimonials;
 
+  const { data: statsData } = api.portfolio.getStatsPublic.useQuery({ locale });
+
+  const statMapping: Record<string, string | number> = {
+    certifications: statsData?.certificationsCount ?? 0,
+    projects: (statsData?.projectsCount ?? 0) + "+",
+    experience: (statsData?.yearsExperience ?? 0) + "+",
+  };
+
+  const statLinks: Record<string, string> = {
+    certifications: "/certificates",
+    projects: "#projects",
+    experience: "/curriculum-vitae",
+  };
+
   return (
     <section
       id="social-proof"
       className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
     >
       <div
-        className={`grid grid-cols-1 items-start gap-12 ${
-          showTestimonialsColumn ? "lg:grid-cols-2 lg:gap-20" : "lg:grid-cols-1"
-        }`}
+        className={`grid grid-cols-1 items-start gap-12 ${showTestimonialsColumn ? "lg:grid-cols-2 lg:gap-20" : "lg:grid-cols-1"
+          }`}
       >
         {/* ── LEFT: Testimonials + CTA ───────────────────────────────── */}
         {showTestimonialsColumn && (
@@ -144,7 +189,7 @@ const SocialProof: FC = () => {
                 {t("eyebrow")}
               </span>
               <h2 className="text-foreground text-3xl leading-tight font-extrabold tracking-tight lg:text-4xl">
-                {t("title")}
+                {t("title", { count: items.length })}
               </h2>
               <p className="text-muted-foreground mt-1 max-w-sm text-base leading-relaxed">
                 {t("subtitle")}
@@ -165,6 +210,7 @@ const SocialProof: FC = () => {
                     quote={item.quote}
                     author={item.author}
                     role={item.role}
+                    avatarUrl={item.avatarUrl}
                     index={i}
                   />
                 ))
@@ -205,9 +251,10 @@ const SocialProof: FC = () => {
             {statKeys.map((key, i) => (
               <StatCard
                 key={key}
-                value={t(`stats.${key}.value`)}
+                value={String(statMapping[key] ?? "0")}
                 label={t(`stats.${key}.label`)}
                 index={i}
+                href={statLinks[key]}
               />
             ))}
           </div>

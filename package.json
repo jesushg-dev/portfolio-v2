@@ -59,6 +59,7 @@
     "@trpc/server": "^11.18.0",
     "@tsparticles/engine": "^4.3.1",
     "@tsparticles/react": "^4.3.1",
+    "@tsparticles/slim": "^4.3.2",
     "@vercel/speed-insights": "^2.0.0",
     "better-auth": "^1.6.23",
     "bson": "^7.3.1",

@@ -150,6 +150,8 @@ model CvHeader {
   degree             Json
   photoUrl           String?
   backgroundImageUrl String?
+  heroSubtitle       Json?
+  heroTagline        Json?
   heroSummary        Json?
   clientImageAlt     Json?
   createdAt          DateTime @default(now())
@@ -288,7 +290,6 @@ model CvExperience {
   companyLogoUrl    String?
   role              Json
   location          Json?
-  dates             String?
   startDate         DateTime?
   endDate           DateTime?
   current           Boolean             @default(false)

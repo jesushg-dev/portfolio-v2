@@ -6,21 +6,35 @@
     "githubUrl": "https://github.com/jess232017/portfolio-v2",
     "websiteUrl": "",
     "isPrivate": false,
+    "slug": "portfolio",
+    "caseStudyEnabled": true,
     "translations": [
       {
         "locale": "es",
         "title": "Portfolio",
-        "description": "Pagina web de mi portafolio personal en donde expongo mis habilidades y conocimientos de forma dinámica."
+        "description": "Página web de mi portafolio personal en donde expongo mis habilidades y conocimientos de forma dinámica.",
+        "hook": "Mi espacio personal para compartir mis experiencias y proyectos.",
+        "challenge": "Necesitaba un lugar profesional para exponer mi crecimiento y atraer nuevas oportunidades.",
+        "approach": "Desarrollé la plataforma completa usando Next.js, i18n, Tailwind y un panel de administración en Prisma.",
+        "outcome": "Un sitio de alto rendimiento que me permite gestionar mi presencia en línea fácilmente."
       },
       {
         "locale": "en",
         "title": "Portfolio",
-        "description": "My personal portfolio website where I expose my skills and knowledge in a dynamic way."
+        "description": "My personal portfolio website where I expose my skills and knowledge in a dynamic way.",
+        "hook": "My personal space to share my experiences and projects.",
+        "challenge": "I needed a professional place to showcase my growth and attract new opportunities.",
+        "approach": "I developed the full platform using Next.js, i18n, Tailwind, and an admin panel on Prisma.",
+        "outcome": "A high-performance site that allows me to easily manage my online presence."
       },
       {
         "locale": "nl",
         "title": "Portfolio",
-        "description": "Mijn persoonlijke portfoliowebsite waar ik mijn vaardigheden en kennis op een dynamische manier blootleg."
+        "description": "Mijn persoonlijke portfoliowebsite waar ik mijn vaardigheden en kennis op een dynamische manier blootleg.",
+        "hook": "Mijn persoonlijke ruimte om mijn ervaringen en projecten te delen.",
+        "challenge": "Ik had een professionele plek nodig om mijn groei te laten zien en nieuwe kansen aan te trekken.",
+        "approach": "Ik heb het volledige platform ontwikkeld met Next.js, i18n, Tailwind en een beheerderspaneel op Prisma.",
+        "outcome": "Een krachtige site waarmee ik mijn online aanwezigheid eenvoudig kan beheren."
       }
     ],
     "skillKeys": [
@@ -41,27 +55,38 @@
     "githubUrl": "https://github.com/jess232017/rick-and-morty",
     "websiteUrl": "https://rick-and-morty-virid.vercel.app/",
     "isPrivate": false,
+    "slug": "rick-and-morty",
+    "caseStudyEnabled": true,
     "translations": [
       {
         "locale": "es",
         "title": "Rick y Morty | Wiki",
-        "description": "Aplicación web para consultar los personajes de la serie Rick y Morty."
+        "description": "Aplicación web para consultar los personajes de la serie Rick y Morty.",
+        "hook": "Una wiki interactiva y rápida para explorar el universo de Rick y Morty.",
+        "challenge": "Crear una interfaz ágil que pudiera consumir una API pública de manera eficiente con búsquedas y paginación.",
+        "approach": "Utilicé React y optimicé el renderizado para mantener el rendimiento al cargar múltiples imágenes.",
+        "outcome": "Una wiki rápida y accesible que demuestra mis habilidades de integración de APIs."
       },
       {
         "locale": "en",
         "title": "Rick and Morty | Wiki",
-        "description": "Web application to consult the characters of the Rick and Morty series."
+        "description": "Web application to consult the characters of the Rick and Morty series.",
+        "hook": "A fast, interactive wiki to explore the Rick and Morty universe.",
+        "challenge": "Create a snappy interface that could efficiently consume a public API with search and pagination.",
+        "approach": "I used React and optimized rendering to maintain performance when loading multiple images.",
+        "outcome": "A fast and accessible wiki demonstrating my API integration skills."
       },
       {
         "locale": "nl",
         "title": "Rick und Morty | Wiki",
-        "description": "Webtoepassing om de personages van de Rick and Morty-serie te raadplegen."
+        "description": "Webtoepassing om de personages van de Rick and Morty-serie te raadplegen.",
+        "hook": "Een snelle, interactieve wiki om het Rick and Morty universum te verkennen.",
+        "challenge": "Een vlotte interface maken die efficiënt een openbare API kon gebruiken met zoeken en pagineren.",
+        "approach": "Ik gebruikte React en optimaliseerde de weergave om de prestaties te behouden bij het laden van meerdere afbeeldingen.",
+        "outcome": "Een snelle en toegankelijke wiki die mijn API-integratievaardigheden aantoont."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Bootstrap"
-    ],
+    "skillKeys": ["React", "Bootstrap"],
     "order": 90,
     "kind": "LEARNING"
   },
@@ -89,11 +114,7 @@
         "description": "Webapplicatie waarmee je een softwaretest voor ontwikkelaars kunt doen."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Tailwind",
-      "Typescript"
-    ],
+    "skillKeys": ["React", "Tailwind", "Typescript"],
     "order": 91,
     "kind": "LEARNING"
   },
@@ -133,11 +154,7 @@
         "outcome": "Stabiele lancering van het online kanaal en een herbruikbare basis voor het Musa Admin-panel."
       }
     ],
-    "skillKeys": [
-      "Nextjs",
-      "Tailwind",
-      "Typescript"
-    ],
+    "skillKeys": ["Nextjs", "Tailwind", "Typescript"],
     "order": 0,
     "kind": "PROFESSIONAL",
     "caseStudyEnabled": true
@@ -178,11 +195,7 @@
         "outcome": "Minder handmatig werk en gecentraliseerde operationele traceerbaarheid voor het Musa-team."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Tailwind",
-      "Typescript"
-    ],
+    "skillKeys": ["React", "Tailwind", "Typescript"],
     "order": 1,
     "kind": "PROFESSIONAL",
     "caseStudyEnabled": true
@@ -211,14 +224,7 @@
         "description": "Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur."
       }
     ],
-    "skillKeys": [
-      "Html",
-      "Css",
-      "Javascript",
-      "Sass",
-      "Bootstrap",
-      "Firebase"
-    ],
+    "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"],
     "order": 10,
     "kind": "PERSONAL"
   },
@@ -246,10 +252,7 @@
         "description": "Webapplicatie om de resultaten van de Nicaraguaanse loterij te raadplegen."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Bootstrap"
-    ],
+    "skillKeys": ["React", "Bootstrap"],
     "order": 92,
     "kind": "LEARNING"
   },
@@ -277,10 +280,7 @@
         "description": "Rest Api voor de mobiele applicatie Lucky App."
       }
     ],
-    "skillKeys": [
-      "Nodejs",
-      "Mysql"
-    ],
+    "skillKeys": ["Nodejs", "Mysql"],
     "order": 15,
     "kind": "LEARNING"
   },
@@ -308,11 +308,7 @@
         "description": "Mobiele Android-toepassing voor de controle van reparatiediensten voor technologische apparaten."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android",
-      "Php"
-    ],
+    "skillKeys": ["Java", "Android", "Php"],
     "order": 3,
     "kind": "PROFESSIONAL"
   },
@@ -340,10 +336,7 @@
         "description": "REST API voor het beheer van reparatieservices voor technologische apparaten."
       }
     ],
-    "skillKeys": [
-      "Php",
-      "Mysql"
-    ],
+    "skillKeys": ["Php", "Mysql"],
     "order": 4,
     "kind": "PROFESSIONAL"
   },
@@ -371,12 +364,7 @@
         "description": "Inventaris- en verkoopcontrolesysteem voor een kledingwinkel."
       }
     ],
-    "skillKeys": [
-      "Csharp",
-      "SqlServer",
-      "Windforms",
-      "DevExpress"
-    ],
+    "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"],
     "order": 5,
     "kind": "PROFESSIONAL"
   },
@@ -404,11 +392,7 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android",
-      "Mysql"
-    ],
+    "skillKeys": ["Java", "Android", "Mysql"],
     "order": 6,
     "kind": "PROFESSIONAL"
   },
@@ -436,12 +420,7 @@
         "description": "Webtoepassing voor online aankoop van producten."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Redux",
-      "Material",
-      "Sass"
-    ],
+    "skillKeys": ["React", "Redux", "Material", "Sass"],
     "order": 7,
     "kind": "PROFESSIONAL"
   },
@@ -469,12 +448,7 @@
         "description": "Beheerder van een online winkel."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Redux",
-      "Material",
-      "Sass"
-    ],
+    "skillKeys": ["React", "Redux", "Material", "Sass"],
     "order": 8,
     "kind": "PROFESSIONAL"
   },
@@ -502,13 +476,7 @@
         "description": "Rest Api voor de beheerder van een online winkel."
       }
     ],
-    "skillKeys": [
-      "Csharp",
-      "SqlServer",
-      "Entity",
-      "Dotnet",
-      "Swagger"
-    ],
+    "skillKeys": ["Csharp", "SqlServer", "Entity", "Dotnet", "Swagger"],
     "order": 9,
     "kind": "PROFESSIONAL"
   },
@@ -536,12 +504,7 @@
         "description": "Mobiele Android-toepassing voor de controle van het elektriciteitsverbruik."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android",
-      "Mysql",
-      "Nodejs"
-    ],
+    "skillKeys": ["Java", "Android", "Mysql", "Nodejs"],
     "order": 11,
     "kind": "PERSONAL"
   },
@@ -569,10 +532,7 @@
         "description": "Rest Api voor de mobiele toepassing Kwh Monitor."
       }
     ],
-    "skillKeys": [
-      "Nodejs",
-      "Mysql"
-    ],
+    "skillKeys": ["Nodejs", "Mysql"],
     "order": 12,
     "kind": "PERSONAL"
   },
@@ -600,10 +560,7 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android"
-    ],
+    "skillKeys": ["Java", "Android"],
     "order": 13,
     "kind": "PERSONAL"
   },
@@ -631,10 +588,7 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android"
-    ],
+    "skillKeys": ["Java", "Android"],
     "order": 14,
     "kind": "PERSONAL"
   }

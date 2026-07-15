@@ -5,18 +5,27 @@ import FilterType from "./filter-type";
 import SkillGrouped from "./skill-grouped";
 import { api } from "@/trpc/react";
 import type { SkillType, SkillTypeType } from "@/utils/interfaces/types";
+import { skillSlugFromTitle } from "@/utils/tools/skill-slug";
+import { useRouter } from "@/i18n/routing";
 import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
 import { type Locale } from "next-intl";
 
 interface SkillsFilterAndGroupProps {
   locale: Locale;
-  handleOpenSkill: (skill: SkillType, type: SkillTypeType) => void;
 }
 
-const SkillsFilterAndGroup: FC<SkillsFilterAndGroupProps> = ({
-  handleOpenSkill,
-  locale,
-}) => {
+const SkillsFilterAndGroup: FC<SkillsFilterAndGroupProps> = ({ locale }) => {
+  const router = useRouter();
+
+  const handleOpenSkill = (skill: SkillType) => {
+    router.push(
+      {
+        pathname: "/skills/[slug]",
+        params: { slug: skillSlugFromTitle(skill.title) },
+      },
+      { scroll: false },
+    );
+  };
   const [value, setValue] = useState(0);
 
   const mapValueToSkillType = (val: number): SkillTypeType[] => {

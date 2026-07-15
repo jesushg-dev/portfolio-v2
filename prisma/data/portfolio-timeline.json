@@ -23,9 +23,9 @@
     {
       "key": "work-it-technician",
       "title": {
-        "es": "Desarrollador Web y Técnico TI",
-        "en": "Web Developer and IT Technician",
-        "nl": "Webontwikkelaar en IT-technicus"
+        "es": "Desarrollador Frontend y Técnico TI",
+        "en": "Frontend Developer and IT Technician",
+        "nl": "Frontend Ontwikkelaar en IT Technicus"
       },
       "description": {
         "es": "Mantenimiento y resolución de problemas en sistemas y redes informáticas, además de desarrollo de sitios web para clientes locales.",
@@ -33,7 +33,7 @@
         "nl": "Onderhoud en probleemoplossing van computersystemen en netwerken, plus webontwikkeling voor lokale klanten."
       },
       "category": "WORK",
-      "organization": "Freelance",
+      "organization": "Asociación de Iglesias Reformadas",
       "location": "Managua",
       "startDate": "2020-10-01",
       "endDate": "2022-01-31",
@@ -43,9 +43,9 @@
     {
       "key": "work-mobile-developer",
       "title": {
-        "es": "Desarrollador Móvil",
-        "en": "Mobile Developer",
-        "nl": "Mobiele ontwikkelaar"
+        "es": "Desarrollador de Aplicaciones Móviles",
+        "en": "Mobile Application Developer",
+        "nl": "Mobiele Applicatie Ontwikkelaar"
       },
       "description": {
         "es": "Creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente.",
@@ -53,7 +53,7 @@
         "nl": "Bouwde mobiele softwareapplicaties en leverde consequent producten van hoge kwaliteit."
       },
       "category": "WORK",
-      "organization": "Freelance",
+      "organization": "Telo Group",
       "location": "Managua",
       "startDate": "2022-02-01",
       "endDate": "2022-05-31",

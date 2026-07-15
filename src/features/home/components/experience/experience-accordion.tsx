@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 interface ExperienceItem {
   id: string;
@@ -50,7 +51,7 @@ function Row({
         onClick={onToggle}
         aria-expanded={isOpen}
         aria-controls={panelId}
-        className="hover:bg-accent focus-visible:ring-ring flex w-full items-center justify-between gap-4 rounded-lg py-3 pr-2 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none"
+        className="hover:bg-accent focus-visible:ring-ring flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg py-3 pr-2 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none"
       >
         <span className="flex min-w-0 flex-wrap items-baseline gap-x-2">
           <span className="text-foreground font-semibold">{exp.role}</span>
@@ -119,6 +120,8 @@ export function ExperienceAccordion({
   viewAllLabel,
 }: Props) {
   const [openIndex, setOpenIndex] = useState(0);
+  const t = useTranslations("main.experience");
+  const showingRecentLabel = t("showingRecent");
 
   return (
     <div className="flex flex-col gap-6">
@@ -148,7 +151,10 @@ export function ExperienceAccordion({
       )}
 
       {/* Full CV link */}
-      <div className="text-center">
+      <div className="text-center flex flex-col items-center justify-center gap-2">
+        <p className="text-muted-foreground text-sm">
+          {showingRecentLabel}
+        </p>
         <Link
           href="/curriculum-vitae"
           className="text-primary hover:text-primary/80 text-sm font-semibold transition-colors"

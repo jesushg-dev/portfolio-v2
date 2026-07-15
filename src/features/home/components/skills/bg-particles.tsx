@@ -1,13 +1,11 @@
-import { memo, useMemo } from "react";
+"use client";
+
+import { memo, useCallback, useMemo } from "react";
 import { loadFull } from "tsparticles";
-import Particles, {
-  ParticlesProvider,
-  useParticlesProvider,
-} from "@tsparticles/react";
-import type { ISourceOptions } from "@tsparticles/engine";
+import Particles, { ParticlesProvider } from "@tsparticles/react";
+import type { Engine, ISourceOptions } from "@tsparticles/engine";
 
 import { useThemeContext } from "@/hoc/theme-context-provider";
-
 import generateParticlesConfig from "@/utils/config/particles";
 
 const themeMap = {
@@ -19,25 +17,28 @@ const themeMap = {
   "christmas-dark": ["#E53E3E", "#12B686"],
 } as const;
 
-function BgParticlesCanvas() {
+function BgParticles() {
   const { theme } = useThemeContext();
-  const { loaded } = useParticlesProvider();
+
+  const particlesInit = useCallback(async (engine: Engine) => {
+    await loadFull(engine);
+  }, []);
 
   const skillParticles = useMemo(
     (): ISourceOptions => generateParticlesConfig(themeMap[theme]),
     [theme],
   );
 
-  if (!loaded) return null;
-
-  return <Particles id="tsparticles" options={skillParticles} />;
+  return (
+    <ParticlesProvider init={particlesInit}>
+      <Particles
+        id="tsparticles"
+        className="absolute inset-0"
+        options={skillParticles}
+      />
+    </ParticlesProvider>
+  );
 }
-
-const BgParticles = () => (
-  <ParticlesProvider init={loadFull}>
-    <BgParticlesCanvas />
-  </ParticlesProvider>
-);
 
 const areEqual = () => true;
 export default memo(BgParticles, areEqual);

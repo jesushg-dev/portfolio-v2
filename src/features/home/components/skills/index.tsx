@@ -1,13 +1,8 @@
-"use client";
-
-import type { FC } from "react";
 import dynamic from "next/dynamic";
-import { useLocale, useTranslations } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 
-import { Link, useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import HeaderArticle from "@/components/shared/header-article";
-import type { SkillType } from "@/utils/interfaces/types";
-import { skillSlugFromTitle } from "@/utils/tools/skill-slug";
 
 import { LoadingFixed } from "@/components/shared/loading";
 import SkillsFilterAndGroup from "./skills-filter-and-group";
@@ -16,20 +11,9 @@ const BgParticles = dynamic(() => import("./bg-particles"), {
   loading: () => <LoadingFixed />,
 });
 
-const Skills: FC = () => {
-  const locale = useLocale();
-  const router = useRouter();
-  const t = useTranslations("main.skills");
-
-  const handleOpenSkill = (skill: SkillType) => {
-    router.push(
-      {
-        pathname: "/skills/[slug]",
-        params: { slug: skillSlugFromTitle(skill.title) },
-      },
-      { scroll: false },
-    );
-  };
+async function Skills() {
+  const locale = await getLocale();
+  const t = await getTranslations("main.skills");
 
   return (
     <div className="relative">
@@ -42,10 +26,7 @@ const Skills: FC = () => {
           description={t("description")}
         />
         <div id="skills" className="z-10 overflow-hidden">
-          <SkillsFilterAndGroup
-            locale={locale}
-            handleOpenSkill={handleOpenSkill}
-          />
+          <SkillsFilterAndGroup locale={locale} />
           <div className="container mx-auto flex w-full justify-center py-5">
             <Link
               scroll
@@ -65,6 +46,6 @@ const Skills: FC = () => {
       </article>
     </div>
   );
-};
+}
 
 export default Skills;

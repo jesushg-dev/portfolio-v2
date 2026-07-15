@@ -62,23 +62,21 @@ describe("SpotifyWidget", () => {
 
     renderWithIntl(<SpotifyWidget />);
 
-    expect(
-      screen.getByText("Error: Something went wrong while fetching data"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Nothing is playing")).toBeInTheDocument();
   });
 
   it("shows API error message", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
-      error: { status: 500, message: "Server error" },
       nextTrackLyrics: null,
+      error: { status: 500, message: "Server error" },
       isLoading: false,
       isFetchError: false,
     });
 
     renderWithIntl(<SpotifyWidget />);
 
-    expect(screen.getByText("Error: Server error")).toBeInTheDocument();
+    expect(screen.getByText("Nothing is playing")).toBeInTheDocument();
   });
 
   it("shows empty state when nothing is playing", () => {

@@ -44,7 +44,9 @@ export interface PortfolioCvTechnicalSkillFixture {
 export interface PortfolioCvExperienceFixture {
   key: string;
   company: string;
-  dates: string;
+  startDate: Date;
+  endDate?: Date;
+  current: boolean;
   role: LocalizedFixture;
   skillKeys: string[];
   responsibilities: { text: LocalizedFixture; order: number }[];

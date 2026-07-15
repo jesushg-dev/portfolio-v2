@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch, type Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
@@ -50,7 +50,8 @@ export const ExperienceSchema = z.object({
   company: z.string().min(1),
   role: z.record(z.string(), z.object({ text: z.string() })),
   location: TextTranslationMapSchema.optional(),
-  dates: z.string().optional(),
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
   current: z.boolean(),
   featuredOnHome: z.boolean(),
   skillIds: z.array(z.string()),
@@ -64,12 +65,48 @@ interface ExperienceInitial {
   company: string;
   role: unknown;
   location: unknown;
-  dates?: string | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
   current?: boolean;
   featuredOnHome?: boolean;
   skills?: string | null;
   CvExperienceSkill?: { skillId: string }[];
   responsibilities: { text: unknown; order: number }[];
+}
+
+function EndDateInput({
+  control,
+  label,
+}: {
+  control: Control<ExperienceInput>;
+  label: string;
+}) {
+  const isCurrent = useWatch({ control, name: "current" });
+
+  return (
+    <FormField
+      control={control}
+      name="endDate"
+      render={({ field }) => (
+        <FormItem label={label} inputId="experience-end-date">
+          <Input
+            type="month"
+            value={
+              field.value
+                ? new Date(field.value).toISOString().slice(0, 7)
+                : ""
+            }
+            onChange={(e) =>
+              field.onChange(
+                e.target.value ? new Date(e.target.value) : undefined,
+              )
+            }
+            disabled={isCurrent}
+          />
+        </FormItem>
+      )}
+    />
+  );
 }
 
 export const ExperienceForm: FC<{
@@ -101,7 +138,8 @@ export const ExperienceForm: FC<{
         company: z.string().min(1),
         role: textTranslationMapSchema(primaryLang?.id, t("role")),
         location: TextTranslationMapSchema.optional(),
-        dates: z.string().optional(),
+        startDate: z.date().optional(),
+        endDate: z.date().optional(),
         current: z.boolean(),
         featuredOnHome: z.boolean(),
         skillIds: z.array(z.string()),
@@ -128,7 +166,8 @@ export const ExperienceForm: FC<{
       location: initial?.location
         ? localizedJsonToTextMap(initial.location, languages)
         : buildEmptyTranslationMap(languages, { text: "" }),
-      dates: initial?.dates ?? "",
+      startDate: initial?.startDate ?? undefined,
+      endDate: initial?.endDate ?? undefined,
       current: initial?.current ?? false,
       featuredOnHome: initial?.featuredOnHome ?? false,
       skillIds: initial?.CvExperienceSkill?.map((row) => row.skillId) ?? [],
@@ -196,16 +235,54 @@ export const ExperienceForm: FC<{
                   </FormItem>
                 )}
               />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="startDate"
+                  render={({ field }) => (
+                    <FormItem
+                      label={t("startDate")}
+                      inputId="experience-start-date"
+                    >
+                      <Input
+                        type="month"
+                        value={
+                          field.value
+                            ? new Date(field.value).toISOString().slice(0, 7)
+                            : ""
+                        }
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value
+                              ? new Date(e.target.value)
+                              : undefined,
+                          )
+                        }
+                      />
+                    </FormItem>
+                  )}
+                />
+                <EndDateInput control={form.control} label={t("endDate")} />
+              </div>
               <FormField
                 control={form.control}
-                name="dates"
+                name="current"
                 render={({ field }) => (
-                  <FormItem label={t("dates")} inputId="experience-dates">
-                    <Input
-                      placeholder="August 2023 – February 2025"
-                      {...field}
+                  <div className="mt-2 flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="experience-current"
+                      checked={field.value}
+                      onChange={field.onChange}
+                      className="h-4 w-4"
                     />
-                  </FormItem>
+                    <label
+                      htmlFor="experience-current"
+                      className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {t("current")}
+                    </label>
+                  </div>
                 )}
               />
             </div>

@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import { type Prisma } from "@prisma/client";
 
 import type { CvData } from "@/components/curriculum-vitae/types";
 import type CvPreview from "@/components/curriculum-vitae/cv-preview";
@@ -52,19 +53,23 @@ export const mockSoftSkill: CvData["softSkills"][number] = {
   updatedAt: new Date(),
 };
 
+export const mockCvHeader = {
+  id: "header-123",
+  userId: "user-123",
+  fullName: "Jane Doe",
+  degree: { default: "Software Engineer" } as Prisma.JsonValue,
+  photoUrl: null,
+  backgroundImageUrl: null,
+  heroSubtitle: { default: "Senior Software Engineer" } as Prisma.JsonValue,
+  heroTagline: { default: "Building things" } as Prisma.JsonValue,
+  heroSummary: null,
+  clientImageAlt: null,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
 export const mockCvPreviewData = {
-  header: {
-    id: "header-1",
-    userId: "user-1",
-    fullName: "Jane Doe",
-    degree: { default: "Software Engineer" },
-    photoUrl: null,
-    backgroundImageUrl: null,
-    heroSummary: null,
-    clientImageAlt: null,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
+  header: mockCvHeader,
   profile: {
     id: "profile-1",
     userId: "user-1",

@@ -1,6 +1,7 @@
 "use client";
 
 import type { FC } from "react";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
 import HeaderArticle from "@/components/shared/header-article";
@@ -36,11 +37,38 @@ const Testimonials: FC = () => {
             <blockquote className="text-foreground text-sm leading-relaxed italic">
               “{item.quote}”
             </blockquote>
-            <footer className="text-muted-foreground mt-4 text-sm">
-              <strong className="text-foreground font-semibold">
-                {item.author}
-              </strong>
-              {item.role ? ` · ${item.role}` : ""}
+            <footer className="mt-4 flex items-center gap-3 text-sm">
+              {item.avatarUrl ? (
+                <div className="border-border relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border shadow-sm">
+                  <Image
+                    src={item.avatarUrl}
+                    alt={item.author}
+                    fill
+                    className="object-cover"
+                    sizes="40px"
+                    unoptimized
+                  />
+                </div>
+              ) : (
+                <span className="bg-primary text-primary-foreground flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold shadow-sm">
+                  {item.author
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((w) => w[0])
+                    .join("")
+                    .toUpperCase()}
+                </span>
+              )}
+              <div className="flex flex-col">
+                <strong className="text-foreground font-semibold">
+                  {item.author}
+                </strong>
+                {item.role ? (
+                  <span className="text-muted-foreground text-xs">
+                    {item.role}
+                  </span>
+                ) : null}
+              </div>
             </footer>
           </li>
         ))}
