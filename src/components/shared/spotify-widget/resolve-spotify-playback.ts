@@ -1,10 +1,9 @@
-import type { NowPlayingResponse } from "@/utils/interfaces/spotify";
-import type { QueueResponse } from "@/utils/interfaces/spotify";
-import type { RecentlyPlayedResponse } from "@/utils/interfaces/spotify";
+import type { NowPlayingResponse, QueueResponse, RecentlyPlayedResponse } from "@/utils/interfaces/spotify";
 
 import {
   isActiveEpisodePlayback,
   isActiveTrackPlayback,
+  isExplicitActivePlayback,
   mapEpisodeNowPlaying,
   mapRecentlyPlayed,
   mapTrackNowPlaying,
@@ -15,13 +14,14 @@ import {
 } from "./playback-mappers";
 import type { SpotifyPlayback } from "./types";
 
-type NowPlayingData =
-  NowPlayingResponse | { error: { status: number } } | undefined;
-
+type NowPlayingData = NowPlayingResponse | { error: { status: number } } | undefined;
 type QueueData = QueueResponse | { error: { status: number } } | undefined;
+type RecentlyPlayedData = RecentlyPlayedResponse | { error: { status: number } } | undefined;
 
-type RecentlyPlayedData =
-  RecentlyPlayedResponse | { error: { status: number } } | undefined;
+// Helper to verify if the queue data is valid (exists and is not an error)
+function isValidQueue(data: QueueData): data is QueueResponse {
+  return data != null && !("error" in data);
+}
 
 export function resolveSpotifyPlayback(
   nowPlayingData: NowPlayingData,
@@ -31,45 +31,55 @@ export function resolveSpotifyPlayback(
 ): SpotifyPlayback | null {
   if (!nowPlayingData) return null;
 
+  let shouldTryRecentlyPlayed = shouldUseRecentlyPlayed;
+
   if (!("error" in nowPlayingData)) {
     const data = nowPlayingData;
 
-    if (isActiveTrackPlayback(data)) {
+    // If the active playback is explicit, we don't resolve anything directly,
+    // but allow falling into the "recently played" fallback.
+    if (isExplicitActivePlayback(data)) {
+      shouldTryRecentlyPlayed = true;
+    }
+    // Track playback is active
+    else if (isActiveTrackPlayback(data)) {
       const track =
         resolveTrackFromNowPlaying(data) ??
-        (queueData && !("error" in queueData)
-          ? resolveTrackFromQueue(queueData)
-          : null);
+        (isValidQueue(queueData) ? resolveTrackFromQueue(queueData) : null);
 
-      if (track && !track.explicit) {
+      if (!track) return null;
+
+      if (track.explicit) {
+        shouldTryRecentlyPlayed = true;
+      } else {
         return mapTrackNowPlaying(track, data);
       }
-
-      return null;
     }
-
-    if (isActiveEpisodePlayback(data)) {
+    // Episode playback is active
+    else if (isActiveEpisodePlayback(data)) {
       const episode =
         resolveEpisodeFromNowPlaying(data) ??
-        (queueData && !("error" in queueData)
-          ? resolveEpisodeFromQueue(queueData)
-          : null);
+        (isValidQueue(queueData) ? resolveEpisodeFromQueue(queueData) : null);
 
-      if (episode && !episode.explicit) {
+      if (!episode) return null;
+
+      if (episode.explicit) {
+        shouldTryRecentlyPlayed = true;
+      } else {
         return mapEpisodeNowPlaying(episode, data);
       }
-
-      return null;
     }
-  } else if (nowPlayingData.error.status !== 204) {
+  }
+  // If it's a different error than 204, we don't do anything
+  else if (nowPlayingData.error.status !== 204) {
     return null;
   }
 
-  if (!shouldUseRecentlyPlayed) return null;
+  // Si no debemos o no podemos usar la lista de recientes, terminamos
+  if (!shouldTryRecentlyPlayed) return null;
 
-  if (!recentlyPlayedData || "error" in recentlyPlayedData) {
-    return null;
-  }
+  // Fallback with the last song/episode played
+  if (!recentlyPlayedData || "error" in recentlyPlayedData) return null;
 
   return mapRecentlyPlayed(recentlyPlayedData);
 }

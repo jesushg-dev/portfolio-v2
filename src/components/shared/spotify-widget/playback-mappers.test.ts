@@ -16,6 +16,7 @@ import {
   isActiveTrackPlayback,
   isEpisode,
   isTrack,
+  isExplicitActivePlayback,
   mapEpisodeNowPlaying,
   mapRecentlyPlayed,
   mapTrackNowPlaying,
@@ -175,6 +176,17 @@ describe("now playing resolution helpers", () => {
         item: { ...mockTrack, explicit: true },
       }),
     ).toBeNull();
+  });
+
+  it("detects explicit active playback", () => {
+    expect(
+      isExplicitActivePlayback({
+        ...mockNowPlayingTrack,
+        item: { ...mockTrack, explicit: true },
+      }),
+    ).toBe(true);
+    expect(isExplicitActivePlayback(mockNowPlayingTrack)).toBe(false);
+    expect(isExplicitActivePlayback(mockNowPlayingIdle)).toBe(false);
   });
 });
 

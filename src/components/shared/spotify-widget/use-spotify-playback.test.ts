@@ -3,10 +3,12 @@ import { renderHook, waitFor } from "@testing-library/react";
 import {
   mockNowPlayingEpisodeNullItem,
   mockNowPlayingIdle,
+  mockExplicitTrack,
   mockNowPlayingTrack,
   mockQueueWithEpisode,
   mockQueueWithTrack,
   mockRecentlyPlayed,
+  mockRecentlyPlayedExplicit,
   mockTrack,
 } from "@/test-utils/fixtures/spotify-data";
 import { ETime } from "@/utils/constants/times";
@@ -37,6 +39,7 @@ interface QueryOptions {
 
 let nowPlayingOptions: QueryOptions | undefined;
 let queueOptions: QueryOptions | undefined;
+let recentlyPlayedOptions: QueryOptions | undefined;
 
 jest.mock("@/trpc/react", () => ({
   api: {
@@ -61,7 +64,10 @@ jest.mock("@/trpc/react", () => ({
         },
       },
       getRecentlyPlayed: {
-        useQuery: (): QueryResult => mockRecentlyPlayedQuery(),
+        useQuery: (_input: unknown, options: QueryOptions): QueryResult => {
+          recentlyPlayedOptions = options;
+          return mockRecentlyPlayedQuery();
+        },
       },
     },
   },
@@ -87,6 +93,7 @@ describe("useSpotifyPlayback", () => {
     jest.clearAllMocks();
     nowPlayingOptions = undefined;
     queueOptions = undefined;
+    recentlyPlayedOptions = undefined;
 
     mockNowPlayingQuery.mockReturnValue(
       mockQueryResult(mockNowPlayingTrack, { isLoading: true }),
@@ -210,18 +217,42 @@ describe("useSpotifyPlayback", () => {
     });
   });
 
-  it("returns null playback for explicit now playing tracks", async () => {
+  it("falls back to recently played when now playing track is explicit", async () => {
     mockNowPlayingQuery.mockReturnValue(
       mockQueryResult({
         ...mockNowPlayingTrack,
-        item: { ...mockTrack, explicit: true },
+        item: { ...mockExplicitTrack },
       }),
+    );
+    mockRecentlyPlayedQuery.mockReturnValue(
+      mockQueryResult(mockRecentlyPlayed),
+    );
+
+    const { result } = renderHook(() => useSpotifyPlayback());
+
+    await waitFor(() => {
+      expect(recentlyPlayedOptions?.enabled).toBe(true);
+      expect(result.current.playback?.source).toBe("recently_played");
+      expect(result.current.playback?.title).toBe("Get Lucky");
+    });
+  });
+
+  it("returns null when now playing and recently played are both explicit", async () => {
+    mockNowPlayingQuery.mockReturnValue(
+      mockQueryResult({
+        ...mockNowPlayingTrack,
+        item: { ...mockExplicitTrack },
+      }),
+    );
+    mockRecentlyPlayedQuery.mockReturnValue(
+      mockQueryResult(mockRecentlyPlayedExplicit),
     );
 
     const { result } = renderHook(() => useSpotifyPlayback());
 
     await waitFor(() => {
       expect(result.current.playback).toBeNull();
+      expect(result.current.error).toBeNull();
     });
   });
 

@@ -174,6 +174,20 @@ export function isActiveEpisodePlayback(data: NowPlayingResponse): boolean {
   return data.currently_playing_type === "episode" && data.is_playing;
 }
 
+export function isExplicitActivePlayback(data: NowPlayingResponse): boolean {
+  if (!data.is_playing) return false;
+
+  if (data.currently_playing_type === "track") {
+    return data.item !== null && isTrack(data.item) && data.item.explicit;
+  }
+
+  if (data.currently_playing_type === "episode") {
+    return data.item !== null && isEpisode(data.item) && data.item.explicit;
+  }
+
+  return false;
+}
+
 export function needsQueueFallback(data: NowPlayingResponse): boolean {
   if (!data.is_playing) return false;
 

@@ -14,6 +14,7 @@ import { getSpotifyQueryError } from "@/utils/services/spotify-scopes";
 import {
   isActiveEpisodePlayback,
   isActiveTrackPlayback,
+  isExplicitActivePlayback,
   needsQueueFallback,
   resolveNextQueuedTrack,
   trackToLyricsRequest,
@@ -131,11 +132,17 @@ export function useSpotifyPlayback() {
 
   const isNowPlayingIdle = isNowPlayingIdleResponse(nowPlayingQuery.data);
 
+  const isExplicitNowPlaying =
+    nowPlayingQuery.data !== undefined &&
+    !("error" in nowPlayingQuery.data) &&
+    isExplicitActivePlayback(nowPlayingQuery.data);
+
   const shouldUseRecentlyPlayed =
     nowPlayingQuery.data !== undefined &&
     !nowPlayingQuery.isLoading &&
     !nowPlayingQuery.isFetching &&
     (isNowPlayingIdle ||
+      isExplicitNowPlaying ||
       (!("error" in nowPlayingQuery.data) &&
         !isValidNowPlaying(nowPlayingQuery.data)));
 
@@ -186,7 +193,9 @@ export function useSpotifyPlayback() {
 
   const displayPlayback =
     playback ??
-    (nowPlayingQuery.isFetching || hasTransientFailure ? lastPlayback : null);
+    (nowPlayingQuery.isFetching || hasTransientFailure || isExplicitNowPlaying
+      ? lastPlayback
+      : null);
 
   const nextTrackLyrics =
     displayPlayback?.contentType === "track"
