@@ -54,11 +54,15 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
           : "bg-background-50/90 text-primaryText-900 hover:bg-background-50 top-0 shadow-sm backdrop-blur-lg backdrop-filter"
       }`}
     >
-      <ThemeSelector onChange={toogleThemeOpen} visible={isThemeMenuOpen} />
-      <nav className="border-background-200 rounded-sm px-2 py-3">
+      <ThemeSelector open={isThemeMenuOpen} onOpenChange={setIsThemeMenuOpen} />
+      <nav
+        aria-label={t("menu.mainNavigation")}
+        className="border-background-200 rounded-sm px-2 py-3"
+      >
         <div className="container mx-auto flex max-w-(--breakpoint-xl) flex-wrap items-center justify-between md:px-6 lg:px-8">
           <Link
             href="/"
+            aria-label={t("homeLogo")}
             className="group text-primary-700 transform text-2xl font-bold tracking-tighter transition duration-600 ease-in-out"
           >
             <span className="tracking-relaxed">
@@ -79,7 +83,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
           />
           {!useSolidHeader && (
             <div
-              id="mobile-menu-language-select"
+              id="mobile-menu"
               className={`${
                 isMenuOpen ? "bg-background-50 my-2 rounded-sm pb-4" : "hidden"
               } w-full items-center justify-between md:order-1 md:my-0 md:flex md:w-auto md:rounded-none md:bg-transparent md:pb-0`}

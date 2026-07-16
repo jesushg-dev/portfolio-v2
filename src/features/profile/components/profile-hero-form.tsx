@@ -274,7 +274,10 @@ export function ProfileHeroForm({
                   {fields.map((field, index) => (
                     <SortableItem key={field.id} value={field.id}>
                       <div className="border-border bg-card flex items-start gap-3 rounded-lg border p-4">
-                        <SortableItemHandle className="text-muted-foreground mt-2 shrink-0 cursor-grab">
+                        <SortableItemHandle
+                          aria-label={t("dragToReorder")}
+                          className="text-muted-foreground mt-2 shrink-0 cursor-grab"
+                        >
                           <GripVertical className="h-4 w-4" />
                         </SortableItemHandle>
                         <div className="min-w-0 flex-1">

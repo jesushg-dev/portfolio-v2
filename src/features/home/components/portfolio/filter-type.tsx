@@ -15,13 +15,14 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange }) => {
   const t = useTranslations("main.portfolio");
 
   return (
-    <div className="mb-12 flex w-full items-center justify-center">
+    <div className="mb-12 flex w-full justify-center px-2 sm:px-4">
       <Tab
         tabId="portfolio-tab"
         minimal
         currentTab={value}
         setCurrentTab={onChange}
-        className="flex items-center gap-4 overflow-x-auto"
+        ariaLabel={t("filters.ariaLabel")}
+        className="bg-muted/50 border-border inline-flex max-w-full snap-x snap-mandatory scrollbar-none items-center justify-center gap-1 overflow-x-auto overscroll-x-contain rounded-2xl border p-1 pb-1 [-ms-overflow-style:none] sm:gap-1.5 [&::-webkit-scrollbar]:hidden"
       >
         <TabItem icon={FaEye} title={t("filters.all")} description="" />
         <TabItem

@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   createContext,
   useContext,
@@ -115,6 +116,8 @@ export const MobileSidebar = ({
   ...props
 }: ComponentProps<"div">) => {
   const { open, setOpen } = useSidebar();
+  const t = useTranslations("global.header");
+
   return (
     <>
       <div
@@ -124,14 +127,21 @@ export const MobileSidebar = ({
         {...props}
       >
         <div className="z-20 flex w-full justify-end">
-          <Menu
-            className="text-foreground h-5 w-5 cursor-pointer"
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls="mobile-sidebar-panel"
+            aria-label={open ? t("closeMenu") : t("openMenu")}
             onClick={() => setOpen(!open)}
-          />
+            className="text-foreground inline-flex rounded-lg p-2"
+          >
+            <Menu className="h-5 w-5" aria-hidden />
+          </button>
         </div>
         <AnimatePresence>
           {open && (
             <motion.div
+              id="mobile-sidebar-panel"
               initial={{ x: "-100%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "-100%", opacity: 0 }}
@@ -140,16 +150,18 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "bg-background fixed inset-0 z-[100] flex h-full w-full flex-col justify-between p-10",
+                "bg-background fixed inset-0 z-100 flex h-full w-full flex-col justify-between p-10",
                 className,
               )}
             >
-              <div
-                className="text-foreground absolute top-10 right-10 z-50 cursor-pointer"
-                onClick={() => setOpen(!open)}
+              <button
+                type="button"
+                aria-label={t("closeMenu")}
+                onClick={() => setOpen(false)}
+                className="text-foreground absolute top-10 right-10 z-50 inline-flex rounded-lg p-2"
               >
-                <X className="h-6 w-6" />
-              </div>
+                <X className="h-6 w-6" aria-hidden />
+              </button>
               {children}
             </motion.div>
           )}
@@ -195,7 +207,7 @@ export const SidebarLink = ({
           opacity: animate ? (open ? 1 : 0) : 1,
         }}
         className={cn(
-          "!m-0 inline-block !p-0 text-sm font-medium whitespace-pre transition duration-150 group-hover/sidebar:translate-x-1",
+          "m-0! inline-block p-0! text-sm font-medium whitespace-pre transition duration-150 group-hover/sidebar:translate-x-1",
           link.active ? "text-primary" : "text-foreground",
         )}
       >

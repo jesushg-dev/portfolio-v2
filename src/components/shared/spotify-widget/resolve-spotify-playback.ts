@@ -1,4 +1,8 @@
-import type { NowPlayingResponse, QueueResponse, RecentlyPlayedResponse } from "@/utils/interfaces/spotify";
+import type {
+  NowPlayingResponse,
+  QueueResponse,
+  RecentlyPlayedResponse,
+} from "@/utils/interfaces/spotify";
 
 import {
   isActiveEpisodePlayback,
@@ -14,9 +18,11 @@ import {
 } from "./playback-mappers";
 import type { SpotifyPlayback } from "./types";
 
-type NowPlayingData = NowPlayingResponse | { error: { status: number } } | undefined;
+type NowPlayingData =
+  NowPlayingResponse | { error: { status: number } } | undefined;
 type QueueData = QueueResponse | { error: { status: number } } | undefined;
-type RecentlyPlayedData = RecentlyPlayedResponse | { error: { status: number } } | undefined;
+type RecentlyPlayedData =
+  RecentlyPlayedResponse | { error: { status: number } } | undefined;
 
 // Helper to verify if the queue data is valid (exists and is not an error)
 function isValidQueue(data: QueueData): data is QueueResponse {

@@ -100,11 +100,14 @@ const SkillsList: FC = () => {
               <SortableItem key={section.id} value={section.id} asChild>
                 <li className="bg-muted/40 flex items-start justify-between gap-3 rounded-lg px-4 py-3 shadow-sm">
                   <div className="flex min-w-0 flex-1 items-start gap-3">
-                    <SortableItemHandle className="text-muted-foreground hover:text-foreground mt-1 shrink-0">
+                    <SortableItemHandle
+                      aria-label={t("dragToReorder")}
+                      className="text-muted-foreground hover:text-foreground mt-1 shrink-0"
+                    >
                       <GripVertical className="size-4" />
                     </SortableItemHandle>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-medium tracking-wide text-gray-400 uppercase">
+                      <p className="text-muted-foreground text-[11px] font-medium tracking-wide uppercase">
                         {section.category}
                       </p>
                       <p className="text-foreground text-sm">

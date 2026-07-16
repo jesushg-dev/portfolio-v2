@@ -399,7 +399,10 @@ export const ExperienceForm: FC<{
                     <SortableItem key={field.id} value={field.id} asChild>
                       <div className="border-border/70 flex flex-col gap-3 border-t pt-4 first:border-t-0 first:pt-0">
                         <div className="flex items-start gap-2">
-                          <SortableItemHandle className="text-muted-foreground hover:text-foreground mt-8">
+                          <SortableItemHandle
+                            aria-label={t("dragToReorder")}
+                            className="text-muted-foreground hover:text-foreground mt-8"
+                          >
                             <GripVertical className="size-4" />
                           </SortableItemHandle>
                           <div className="flex-1">

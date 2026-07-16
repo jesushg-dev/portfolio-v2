@@ -87,8 +87,8 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                   href={websiteUrl}
                   target="_blank"
                   rel="noreferrer"
-                  title={urlName}
-                  aria-label={urlName}
+                  title={`${urlName}: ${title}`}
+                  aria-label={`${urlName}: ${title}`}
                   className={linkButtonClass}
                 >
                   <AiFillEye className="text-primary-600 h-4 w-4" />
@@ -99,8 +99,8 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                   href={githubUrl}
                   target="_blank"
                   rel="noreferrer"
-                  title={sourceName}
-                  aria-label={sourceName}
+                  title={`${sourceName}: ${title}`}
+                  aria-label={`${sourceName}: ${title}`}
                   className={linkButtonClass}
                 >
                   <AiFillGithub className="h-4 w-4" />
@@ -143,7 +143,8 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
               pathname: "/projects/[slug]",
               params: { slug },
             }}
-            className="text-primary hover:text-primary/80 mt-auto text-sm font-medium transition-colors"
+            aria-label={`${caseStudyLabel}: ${title}`}
+            className="text-primary-800 hover:text-primary-900 mt-auto text-sm font-medium transition-colors"
           >
             {caseStudyLabel} →
           </Link>

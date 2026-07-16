@@ -166,7 +166,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
     <>
       <article
         aria-hidden={isExpanded}
-        className="relative w-full overflow-hidden rounded-lg text-white"
+        className="relative w-full overflow-hidden rounded-md text-white"
         style={{ pointerEvents: isExpanded ? "none" : "auto" }}
       >
         <AnimatedGradient accentColor={accentColor} />
@@ -182,7 +182,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               }
             }}
             aria-label={t("spotify.fullscreen.expand")}
-            className="absolute inset-0 z-0 cursor-pointer rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+            className="absolute inset-0 z-0 cursor-pointer rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/30"
           />
 
           <div
@@ -193,14 +193,14 @@ const ExpandableSpotifyPlayerContent: FC = () => {
             <Image
               src={playback.imageUrl ?? "/images/spotify.png"}
               alt={playback.imageAlt}
-              width={64}
-              height={64}
-              className="size-16 rounded-lg object-cover shadow-lg"
+              width={88}
+              height={88}
+              className="size-22 rounded-[4px] object-cover shadow-lg"
             />
             {playback.isPlaying && <PlayingIndicator color={accentColor} />}
           </div>
 
-          <div className="relative z-10 min-w-0 flex-1">
+          <div className="relative z-10 flex min-w-0 flex-1 flex-col">
             {isRecentlyPlayed && (
               <RecentlyPlayedNotice
                 playedAt={playback.playedAt}
@@ -216,7 +216,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               rel="noopener noreferrer"
               title={playback.title}
               onClick={(event) => event.stopPropagation()}
-              className="relative z-10 mt-0.5 block truncate text-sm leading-tight font-bold text-white hover:underline"
+              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full truncate py-0.5 text-sm leading-tight font-bold text-white hover:underline"
               style={{ opacity: isExpanded ? 0 : 1 }}
             >
               {playback.title}
@@ -229,7 +229,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               rel="noopener noreferrer"
               title={playback.subtitle}
               onClick={(event) => event.stopPropagation()}
-              className="relative z-10 mt-0.5 block truncate text-xs text-white/60 hover:text-white/80 hover:underline"
+              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full truncate py-0.5 text-xs text-white/80 hover:text-white hover:underline"
               style={{ opacity: isExpanded ? 0 : 1 }}
             >
               {playback.subtitle}
@@ -237,7 +237,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
 
             {playback.source === "now_playing" && (
               <div
-                className="relative z-10"
+                className="relative z-10 mt-1 max-w-full"
                 onClick={(event) => event.stopPropagation()}
               >
                 <Player
@@ -462,25 +462,24 @@ const RecentlyPlayedNotice: FC<RecentlyPlayedNoticeProps> = ({
   const playedAtLabel = playedAt ? formatPlayedAt(playedAt, locale) : null;
 
   return (
-    <div className={compact ? "mb-1" : "mb-2 text-center"}>
-      <p
-        className={
-          compact
-            ? "text-[0.625rem] font-medium text-amber-300/90"
-            : "text-xs font-medium text-amber-300/90"
-        }
-      >
-        {t("spotify.notPlayingNow")}
-      </p>
-      <p
-        className={
-          compact ? "text-[0.625rem] text-white/55" : "text-xs text-white/60"
-        }
-      >
-        {t("spotify.lastPlayed")}
-        {playedAtLabel ? ` · ${playedAtLabel}` : ""}
-      </p>
-    </div>
+    <p
+      className={
+        compact
+          ? "mb-1 line-clamp-2 text-[0.625rem] leading-snug text-amber-200/90"
+          : "mb-2 text-center text-xs font-medium text-amber-300/90"
+      }
+    >
+      {compact ? (
+        <>
+          {t("spotify.notPlayingNow")}
+          {playedAtLabel
+            ? ` · ${t("spotify.lastPlayed")} ${playedAtLabel}`
+            : ` · ${t("spotify.lastPlayed")}`}
+        </>
+      ) : (
+        t("spotify.notPlayingNow")
+      )}
+    </p>
   );
 };
 

@@ -37,6 +37,7 @@ const Hero: FC = async () => {
   return (
     <section
       id="home"
+      aria-label="Home"
       className="bg-background relative flex min-h-screen w-full items-center overflow-hidden"
     >
       {/* Starry Background / Glow - Now SSR */}

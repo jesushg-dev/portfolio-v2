@@ -44,7 +44,7 @@ const Contact: FC = async () => {
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="border-border/50 bg-card/80 text-card-foreground grid overflow-hidden rounded-2xl border shadow-xl backdrop-blur-md md:grid-cols-[1.05fr_0.95fr]">
-          <aside className="relative flex flex-col justify-between gap-8 px-6 py-10 sm:px-10 md:py-12">
+          <div className="relative flex flex-col justify-between gap-8 px-6 py-10 sm:px-10 md:py-12">
             <div className="space-y-6">
               <HeaderArticle
                 title={t("title")}
@@ -64,6 +64,7 @@ const Contact: FC = async () => {
                         label={link.label}
                         icon={link.icon}
                         accent={link.accent}
+                        ariaLabel={t(`channels.${link.icon}`)}
                       />
                     </li>
                   ))}
@@ -79,6 +80,7 @@ const Contact: FC = async () => {
                   href={calendlyUrl}
                   target="_blank"
                   rel="noreferrer"
+                  aria-label={t("scheduleCallCalendlyAria")}
                   className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex w-fit rounded-md px-4 py-2 text-sm font-semibold transition-colors"
                 >
                   {t("scheduleCall")}
@@ -87,7 +89,7 @@ const Contact: FC = async () => {
             </div>
 
             <ContactIllustration />
-          </aside>
+          </div>
 
           <div className="border-border/40 bg-background/40 relative border-t px-6 py-10 sm:px-10 md:border-t-0 md:border-l md:py-12">
             <div

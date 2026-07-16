@@ -226,6 +226,7 @@ export const ApplicationsList: FC<ApplicationsListProps> = ({
                 variant="ghost"
                 size="icon"
                 type="button"
+                aria-label={t("delete")}
                 onClick={() => handleDelete(app.id)}
                 className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
               >

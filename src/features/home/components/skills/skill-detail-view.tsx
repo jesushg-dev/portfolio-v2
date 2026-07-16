@@ -188,7 +188,7 @@ export const SkillDetailView: FC<SkillDetailViewProps> = ({
             onClick={() => {
               window.location.reload();
             }}
-            className="pressable bg-primary-600 text-secondaryText-50 hover:bg-primary-700 focus:ring-primary-500 rounded-xl px-4 py-2.5 text-sm font-medium transition duration-300 focus:ring-2 focus:ring-offset-2 focus:outline-hidden"
+            className="pressable bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring rounded-xl px-4 py-2.5 text-sm font-medium transition duration-300 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden"
           >
             {t("modal.viewMoreDetails")}
           </button>
@@ -279,8 +279,8 @@ function ProjectList({
                 href={project.websiteUrl}
                 target="_blank"
                 rel="noreferrer"
-                title={viewProjectLabel}
-                aria-label={viewProjectLabel}
+                title={`${viewProjectLabel}: ${project.title}`}
+                aria-label={`${viewProjectLabel}: ${project.title}`}
                 className="text-primaryText-700 hover:bg-primary-50 hover:text-primary-600 bg-background-50 flex h-8 w-8 items-center justify-center rounded-lg transition"
               >
                 <AiFillEye className="h-4 w-4" />
@@ -291,8 +291,8 @@ function ProjectList({
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                title={viewSourceLabel}
-                aria-label={viewSourceLabel}
+                title={`${viewSourceLabel}: ${project.title}`}
+                aria-label={`${viewSourceLabel}: ${project.title}`}
                 className="text-primaryText-700 hover:bg-primary-50 hover:text-primary-600 bg-background-50 flex h-8 w-8 items-center justify-center rounded-lg transition"
               >
                 <AiFillGithub className="h-4 w-4" />

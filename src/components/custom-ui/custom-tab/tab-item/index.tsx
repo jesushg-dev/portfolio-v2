@@ -3,6 +3,7 @@ import type { FC } from "react";
 import type { IconType } from "react-icons/lib";
 import { motion } from "motion/react";
 import { useTabContext } from "@/hoc/tab-context-provider";
+import { cn } from "@/lib/utils";
 
 export interface TabItemProps {
   index?: number;
@@ -42,61 +43,74 @@ const TabItem: FC<TabItemProps> = ({
     useTabContext();
 
   const isActive = currentTab === index;
-  // determine text based if it is active and which variant is used
+  const tabPanelId = `${tabId}-panel-${index}`;
+  const tabButtonId = `${tabId}-tab-${index}`;
+
   const textClassName = useMemo(() => {
     if (isActive) {
-      return variant === "primary"
-        ? "text-secondaryText-50"
-        : "text-primary-500";
+      return variant === "primary" ? "text-primary-foreground" : "text-primary";
     }
-    return variant === "primary"
-      ? "text-primaryText-400"
-      : "text-primaryText-800";
+    return "text-muted-foreground";
   }, [isActive, variant]);
 
   return (
-    <div role="tablist">
-      <div className="relative" role="tab">
-        {isActive && (
-          <motion.div
-            layoutId={`background-tab${tabId}`}
-            className={`absolute inset-0 -z-10 rounded-xl shadow-md ${
-              variant === "primary" ? "bg-primary-600" : "bg-background-100"
-            }`}
-          />
+    <div className="relative isolate">
+      {isActive && (
+        <motion.div
+          layoutId={`background-tab${tabId}`}
+          className={cn(
+            "absolute inset-0 z-0 rounded-xl shadow-md",
+            variant === "primary" ? "bg-primary" : "bg-muted",
+          )}
+          aria-hidden
+        />
+      )}
+      <motion.button
+        type="button"
+        role="tab"
+        id={tabButtonId}
+        aria-controls={tabPanelId}
+        aria-selected={isActive}
+        tabIndex={isActive ? 0 : -1}
+        title={title}
+        animate={isActive ? "active" : "inactive"}
+        variants={variants}
+        initial="inactive"
+        whileHover="hover"
+        onClick={() => setCurrentTab(index)}
+        className={cn(
+          "relative z-10 min-h-11 shrink-0 cursor-pointer touch-manipulation rounded-xl px-3 py-2.5 text-left sm:min-h-0 sm:px-4 sm:py-2.5",
+          minimal ? "w-auto" : "w-full sm:p-4 md:p-5",
+          !isActive && "hover:bg-muted/60",
         )}
-        <motion.button
-          type="button"
-          title={title}
-          id={`tab-${index}`}
-          animate={isActive ? "active" : "inactive"}
-          variants={variants}
-          initial="inactive"
-          whileHover="hover"
-          onClick={() => setCurrentTab(index)}
-          className={`w-full cursor-pointer rounded-xl p-4 text-left md:p-5 ${isActive ? "" : "hover:bg-background-800/30"}`}
-        >
-          <span className={`flex items-center transition-all ${textClassName}`}>
-            <Icon
-              className={` ${minimal ? "mt-0" : "mt-2 h-6 w-6 shrink-0 md:h-7 md:w-7"}`}
-              width={16}
-              height={16}
-            />
-            <span className="ml-6 grow">
-              <span
-                className={`block font-semibold whitespace-nowrap ${minimal ? "" : "text-lg"} `}
-              >
-                {title}
-              </span>
-              {minimal ? null : (
-                <span className="text-primaryText-800 mt-1 hidden lg:block">
-                  {description}
-                </span>
+      >
+        <span className={cn("flex items-center transition-all", textClassName)}>
+          <Icon
+            className={cn(
+              "shrink-0",
+              minimal ? "size-4 sm:size-[1.125rem]" : "mt-2 size-6 md:size-7",
+            )}
+            width={16}
+            height={16}
+            aria-hidden
+          />
+          <span className={cn("grow", minimal ? "ml-2.5 sm:ml-3" : "ml-6")}>
+            <span
+              className={cn(
+                "block font-semibold whitespace-nowrap",
+                minimal ? "text-sm sm:text-base" : "text-lg",
               )}
+            >
+              {title}
             </span>
+            {minimal ? null : (
+              <span className="text-muted-foreground mt-1 hidden lg:block">
+                {description}
+              </span>
+            )}
           </span>
-        </motion.button>
-      </div>
+        </span>
+      </motion.button>
     </div>
   );
 };

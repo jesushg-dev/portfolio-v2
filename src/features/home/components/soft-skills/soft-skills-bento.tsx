@@ -87,7 +87,7 @@ const SoftSkillBentoCard: FC<SoftSkillBentoCardProps> = ({
 
   const cardContent = (
     <>
-      <div className="mb-2.5 flex items-center gap-3">
+      <div className="mb-2.5 flex items-start gap-3">
         <span
           className={cn(
             "bg-primary/10 text-primary flex shrink-0 items-center justify-center rounded-full",
@@ -101,7 +101,7 @@ const SoftSkillBentoCard: FC<SoftSkillBentoCardProps> = ({
         </span>
         <p
           className={cn(
-            "text-foreground font-semibold tracking-tight",
+            "text-foreground min-w-0 flex-1 leading-snug font-semibold tracking-tight wrap-break-word",
             featured ? "text-base sm:text-lg" : "text-sm",
           )}
         >

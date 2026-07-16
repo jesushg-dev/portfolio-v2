@@ -190,7 +190,7 @@ export const TimelineHorizontalPreview: FC = () => {
         <div className="flex justify-center lg:justify-start">
           <Link
             href="/timeline"
-            className="text-primary-600 hover:text-primary-700 inline-flex items-center gap-2 text-sm font-medium transition-colors"
+            className="text-primary-800 hover:text-primary-900 inline-flex items-center gap-2 text-sm font-medium transition-colors"
           >
             {t("viewAll")}
             <ArrowRight className="h-4 w-4" />

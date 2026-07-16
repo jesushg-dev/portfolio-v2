@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+import { cookies } from "next/headers";
 import "@/app/globals.css";
 
 import type { Metadata } from "next";
@@ -8,8 +10,8 @@ import ThemeContextProvider from "@/hoc/theme-context-provider";
 import clsx from "clsx";
 import { Inter, Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { defaultLocale, locales, type Locale } from "@/i18n/config";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -81,9 +83,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const lang = locales.includes(cookieLocale as Locale)
+    ? (cookieLocale as Locale)
+    : defaultLocale;
+
   return (
-    <html className={cn("h-full", "font-sans", geist.variable)}>
+    <html
+      lang={lang}
+      className={cn("h-full", "font-sans", geist.variable)}
+      suppressHydrationWarning
+    >
       <PreloadTheme />
       <body
         className={clsx(

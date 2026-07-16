@@ -2,6 +2,7 @@ import { createContext, useMemo, type ReactNode, useContext } from "react";
 
 interface ITabContext {
   tabId: string;
+  tabCount: number;
   minimal?: boolean;
   variant?: "primary" | "secondary";
   currentTab: number;
@@ -12,6 +13,7 @@ const TabContext = createContext<ITabContext | undefined>(undefined);
 
 interface ITabContextProviderProps {
   tabId: string;
+  tabCount: number;
   minimal: boolean;
   children: ReactNode;
   vertical: boolean;
@@ -22,6 +24,7 @@ interface ITabContextProviderProps {
 
 const TabContextProvider = ({
   tabId,
+  tabCount,
   variant,
   minimal,
   children,
@@ -30,8 +33,16 @@ const TabContextProvider = ({
   setCurrentTab,
 }: ITabContextProviderProps) => {
   const contextValue = useMemo(
-    () => ({ vertical, currentTab, setCurrentTab, minimal, variant, tabId }),
-    [currentTab, minimal, setCurrentTab, tabId, variant, vertical],
+    () => ({
+      vertical,
+      currentTab,
+      setCurrentTab,
+      minimal,
+      variant,
+      tabId,
+      tabCount,
+    }),
+    [currentTab, minimal, setCurrentTab, tabId, tabCount, variant, vertical],
   );
 
   return (

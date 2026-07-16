@@ -6,9 +6,9 @@ const SpotifyWidgetSkeleton: FC = () => {
   return (
     <article
       data-testid="spotify-widget-skeleton"
-      className="flex w-full items-center gap-3 overflow-hidden rounded-lg bg-[#191414] p-3"
+      className="flex w-full items-center gap-3 overflow-hidden rounded-md bg-[#191414] p-3"
     >
-      <Skeleton className="size-16 shrink-0 rounded-[4px] bg-white/10" />
+      <Skeleton className="size-[5.5rem] shrink-0 rounded-[4px] bg-white/10" />
       <div className="min-w-0 flex-1 space-y-2">
         <Skeleton className="h-4 w-4/5 rounded-full bg-white/10" />
         <Skeleton className="h-3 w-3/5 rounded-full bg-white/10" />

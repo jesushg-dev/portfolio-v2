@@ -468,7 +468,7 @@ export function Terminal({
             <div className="h-3 w-3 rounded-full bg-green-400 transition-colors hover:bg-green-500" />
           </div>
           <div className="flex-1 text-center">
-            <span className="truncate text-xs text-neutral-400">
+            <span className="truncate text-xs text-neutral-300">
               {username} — bash
             </span>
           </div>

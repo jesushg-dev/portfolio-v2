@@ -10,6 +10,7 @@ interface ProgressBarProps {
   readOnly?: boolean;
   onChange?: (value: number) => void;
   className?: string;
+  ariaLabel: string;
 }
 
 const ProgressBar: FC<ProgressBarProps> = ({
@@ -18,6 +19,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
   readOnly = false,
   onChange,
   className,
+  ariaLabel,
 }) => {
   const clamped = Math.min(100, Math.max(0, value));
 
@@ -33,6 +35,7 @@ const ProgressBar: FC<ProgressBarProps> = ({
           className,
         )}
         role="progressbar"
+        aria-label={ariaLabel}
         aria-valuenow={clamped}
         aria-valuemin={0}
         aria-valuemax={100}
@@ -50,7 +53,10 @@ const ProgressBar: FC<ProgressBarProps> = ({
 
   return (
     <div className={cn("group relative h-1 w-full", className)}>
-      <div className="absolute inset-0 overflow-hidden rounded-full bg-white/20">
+      <div
+        className="absolute inset-0 overflow-hidden rounded-full bg-white/20"
+        aria-hidden
+      >
         <div
           className="h-full rounded-full"
           style={{
@@ -66,11 +72,16 @@ const ProgressBar: FC<ProgressBarProps> = ({
         step={0.1}
         value={clamped}
         onChange={handleChange}
+        aria-label={ariaLabel}
+        aria-valuenow={clamped}
+        aria-valuemin={0}
+        aria-valuemax={100}
         className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
       />
       <div
         className="pointer-events-none absolute top-1/2 size-3 -translate-y-1/2 rounded-full bg-white opacity-0 shadow-md transition-opacity group-hover:opacity-100"
         style={{ left: `calc(${clamped}% - 6px)` }}
+        aria-hidden
       />
     </div>
   );

@@ -346,7 +346,10 @@ export function ConsoleForm({ languages }: ConsoleFormProps) {
                       <div className="border-border bg-card text-card-foreground rounded-lg border p-4">
                         <div className="mb-3 flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <SortableItemHandle className="text-muted-foreground hover:text-foreground">
+                            <SortableItemHandle
+                              aria-label={t("dragToReorder")}
+                              className="text-muted-foreground hover:text-foreground"
+                            >
                               <GripVertical className="size-4" />
                             </SortableItemHandle>
                             <span className="text-sm font-medium">

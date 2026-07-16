@@ -285,7 +285,7 @@ function ExperienceRow({
               void handleDelete();
             }}
             disabled={isDeleting}
-            className="h-8 w-8 text-gray-400 hover:bg-red-50 hover:text-red-500"
+            className="text-muted-foreground h-8 w-8 hover:bg-red-50 hover:text-red-500"
             aria-label={t("remove")}
           >
             <Trash2 className="h-4 w-4" />
@@ -295,7 +295,9 @@ function ExperienceRow({
             size="icon"
             type="button"
             onClick={() => setIsOpen((v) => !v)}
-            className="h-8 w-8 text-gray-400"
+            aria-expanded={isOpen}
+            aria-label={isOpen ? t("collapseEntry") : t("expandEntry")}
+            className="text-muted-foreground h-8 w-8"
           >
             {isOpen ? (
               <ChevronUp className="h-4 w-4" />
@@ -411,7 +413,8 @@ function ExperienceRow({
                     size="icon"
                     type="button"
                     onClick={() => removeResponsibility(resp.id)}
-                    className="mt-2 h-7 w-7 shrink-0 text-gray-400 hover:bg-red-50 hover:text-red-500"
+                    aria-label={t("removeResponsibility")}
+                    className="text-muted-foreground mt-2 h-7 w-7 shrink-0 hover:bg-red-50 hover:text-red-500"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>

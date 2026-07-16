@@ -22,12 +22,13 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange }) => {
   const t = useTranslations("certification");
 
   return (
-    <div className="mb-14 flex w-full items-center justify-center">
+    <div className="mb-14 flex w-full justify-center px-2 sm:px-4">
       <Tab
         minimal
         currentTab={value}
         setCurrentTab={onChange}
-        className="z-20 flex items-center gap-4 overflow-x-auto"
+        ariaLabel={t("types.filtersAriaLabel")}
+        className="bg-muted/50 border-border z-20 inline-flex max-w-full items-center justify-center gap-1 overflow-x-auto rounded-2xl border p-1"
       >
         <TabItem
           icon={HiOutlineEye}

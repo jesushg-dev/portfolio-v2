@@ -71,7 +71,7 @@ export default function HeroContent({ heroData, stats }: HeroContentProps) {
           <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
           <span className="bg-primary relative inline-flex h-2 w-2 rounded-full"></span>
         </span>
-        <span className="from-primary to-primary-600 bg-linear-to-r bg-clip-text font-semibold text-transparent">
+        <span className="text-primary font-semibold">
           {t("availableForOpportunities")}
         </span>
       </motion.div>
@@ -80,22 +80,18 @@ export default function HeroContent({ heroData, stats }: HeroContentProps) {
         <p className="text-muted-foreground mb-2 text-lg">{t("greeting")}</p>
         <h1 className="font-display text-foreground mb-3 text-4xl leading-tight font-bold sm:text-5xl lg:text-6xl">
           {firstName}{" "}
-          {lastName && (
-            <span className="from-primary to-primary-600 bg-linear-to-r bg-clip-text text-transparent">
-              {lastName}
-            </span>
-          )}
+          {lastName && <span className="text-primary">{lastName}</span>}
         </h1>
         {heroSubtitle && (
           <h2 className="font-display text-foreground mb-4 text-2xl font-semibold sm:text-3xl">
             {mainTitle}{" "}
             {highlightTitle && (
-              <span className="text-primary">{highlightTitle}</span>
+              <span className="text-primary-800">{highlightTitle}</span>
             )}
           </h2>
         )}
         {heroTagline && (
-          <p className="text-primary/80 mb-6 leading-relaxed font-medium">
+          <p className="text-foreground mb-6 leading-relaxed font-medium">
             {heroTagline}
           </p>
         )}
@@ -107,35 +103,35 @@ export default function HeroContent({ heroData, stats }: HeroContentProps) {
       </motion.div>
 
       {/* Stats Row */}
-      <motion.div
+      <motion.dl
         variants={item}
         className="border-border/50 mb-9 flex flex-wrap gap-x-10 gap-y-5 border-b pb-9"
       >
         <div>
-          <p className="font-display text-foreground text-3xl font-bold">
-            {stats.yearsExperience}+
-          </p>
-          <p className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+          <dt className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
             {t("yearsExperience")}
-          </p>
+          </dt>
+          <dd className="font-display text-foreground text-3xl font-bold">
+            {stats.yearsExperience}+
+          </dd>
         </div>
         <div>
-          <p className="font-display text-foreground text-3xl font-bold">
-            {stats.projectsCount}+
-          </p>
-          <p className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+          <dt className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
             {t("projectsDelivered")}
-          </p>
+          </dt>
+          <dd className="font-display text-foreground text-3xl font-bold">
+            {stats.projectsCount}+
+          </dd>
         </div>
         <div>
-          <p className="font-display text-foreground text-3xl font-bold">
-            {stats.certificationsCount}
-          </p>
-          <p className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+          <dt className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
             {t("certifications")}
-          </p>
+          </dt>
+          <dd className="font-display text-foreground text-3xl font-bold">
+            {stats.certificationsCount}
+          </dd>
         </div>
-      </motion.div>
+      </motion.dl>
 
       {/* Actions */}
       <motion.div variants={item} className="flex flex-wrap gap-4">
@@ -148,6 +144,7 @@ export default function HeroContent({ heroData, stats }: HeroContentProps) {
         </Link>
         <a
           href="#contact"
+          aria-label={t("scheduleCallAria")}
           className="border-border bg-card/50 text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-2 rounded-xl border px-6 py-3.5 font-semibold transition"
         >
           {t("scheduleCall")}

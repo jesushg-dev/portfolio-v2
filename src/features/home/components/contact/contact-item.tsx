@@ -31,9 +31,16 @@ interface ContactItemProps {
   label: string;
   icon: ContactIconKey;
   accent: string;
+  ariaLabel?: string;
 }
 
-const ContactItem: FC<ContactItemProps> = ({ href, label, icon, accent }) => {
+const ContactItem: FC<ContactItemProps> = ({
+  href,
+  label,
+  icon,
+  accent,
+  ariaLabel,
+}) => {
   const Icon = CONTACT_ICONS[icon];
 
   return (
@@ -41,7 +48,7 @@ const ContactItem: FC<ContactItemProps> = ({ href, label, icon, accent }) => {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={label}
+      aria-label={ariaLabel ?? label}
       className="border-border/60 bg-background/50 text-foreground group inline-flex min-w-20 flex-col items-center gap-1.5 rounded-xl border px-3 py-3 transition-all hover:-translate-y-0.5 hover:border-transparent hover:text-white hover:shadow-md"
       style={
         {

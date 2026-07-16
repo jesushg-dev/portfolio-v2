@@ -36,7 +36,7 @@ const SkillIcon: FC<SkillIconProps> = ({ image, title, className }) => {
       src={image}
       alt=""
       loader={siLoader}
-      className={cn("h-[17px] w-[17px] shrink-0", className)}
+      className={cn("size-5 shrink-0 sm:size-[17px]", className)}
       onError={() => setFailed(true)}
     />
   );

@@ -74,7 +74,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
 
   const description = isSearching ? (
     <span>
-      <span className="text-primary font-mono font-medium">
+      <span className="text-primary-800 font-mono font-medium">
         {t("terminal.matchCount", { count: visibleSkills.length })}
       </span>
       {t("terminal.searchFor", { query: search })}
@@ -94,7 +94,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
           !shouldReduceMotion && "animate-[riseIn_0.5s_ease_both]",
         )}
       >
-        <p className="text-primary mb-4 font-mono text-[13px]">
+        <p className="text-primary-800 mb-4 font-mono text-[13px]">
           {t("terminal.eyebrow")}
         </p>
         <h2 className="text-foreground mb-4 text-[clamp(30px,4vw,42px)] leading-[1.08] font-semibold tracking-[-0.015em]">
@@ -120,10 +120,10 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
           !shouldReduceMotion && "animate-[riseIn_0.55s_0.08s_ease_both]",
         )}
       >
-        <div className="border-border bg-muted flex flex-col flex-wrap items-stretch justify-between gap-3 border-b pr-2 sm:flex-row sm:items-center">
+        <div className="border-border bg-muted flex flex-col items-stretch justify-between gap-3 border-b sm:flex-row sm:items-center sm:pr-2">
           <div
             className={cn(
-              "flex items-stretch gap-0 overflow-x-auto px-2 pt-0.5 sm:px-0",
+              "flex w-full min-w-0 snap-x snap-mandatory scrollbar-none items-stretch gap-0 overflow-x-auto overscroll-x-contain px-1 pt-0.5 [-ms-overflow-style:none] sm:px-0 [&::-webkit-scrollbar]:hidden",
               isSearching && "pointer-events-none opacity-40",
             )}
           >
@@ -140,7 +140,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
                     setActiveCategory(category.id);
                   }}
                   className={cn(
-                    "relative flex shrink-0 items-center gap-2 border-b-2 px-4 pt-[15px] pb-[13px] text-sm whitespace-nowrap transition-colors duration-150",
+                    "relative flex min-h-11 shrink-0 touch-manipulation snap-start items-center gap-2 border-b-2 px-3 py-3 text-xs whitespace-nowrap transition-colors duration-150 sm:min-h-0 sm:px-4 sm:pt-[15px] sm:pb-[13px] sm:text-sm",
                     isActive && !shouldReduceMotion
                       ? "text-foreground border-transparent font-medium"
                       : isActive
@@ -182,8 +182,8 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
             })}
           </div>
 
-          <div className="border-border bg-background focus-within:border-primary mx-2 mb-2 flex min-w-[170px] flex-1 items-center gap-2 rounded-lg border px-3 py-2 transition-colors duration-150 sm:mx-0 sm:mb-0 sm:max-w-[220px] sm:flex-[0_1_220px]">
-            <span className="text-primary shrink-0 font-mono text-[13px]">
+          <div className="border-border bg-background focus-within:border-primary mx-2 mb-2 flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-lg border px-3 py-2.5 transition-colors duration-150 sm:mx-0 sm:mb-0 sm:min-h-0 sm:max-w-[220px] sm:flex-[0_1_220px] sm:py-2">
+            <span className="text-primary-800 shrink-0 font-mono text-[13px]">
               $
             </span>
             <input
@@ -221,10 +221,13 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
             initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
-            className="flex list-none flex-wrap gap-x-[26px] gap-y-4 px-6 py-5 pb-8 sm:px-7 sm:pb-[34px]"
+            className="flex list-none flex-wrap gap-x-3 gap-y-2 px-4 py-4 pb-6 sm:gap-x-[26px] sm:gap-y-4 sm:px-7 sm:py-5 sm:pb-[34px]"
           >
             {visibleSkills.map((skill: SkillType) => (
-              <li key={skill.id}>
+              <li
+                key={skill.id}
+                className="min-w-[calc(50%-0.375rem)] sm:min-w-0"
+              >
                 <SkillItem
                   image={skill.image}
                   title={skill.title}
@@ -240,7 +243,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
         <Link
           scroll
           href="/certificates"
-          className="text-primary group inline-flex items-center gap-1.5 text-sm font-medium no-underline"
+          className="text-primary-800 group inline-flex items-center gap-1.5 text-sm font-medium no-underline"
         >
           {t("modal.seeCertificates")}
           <ArrowRightIcon className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />

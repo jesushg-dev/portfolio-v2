@@ -1,8 +1,9 @@
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import { DocumentLang } from "@/components/document-lang";
 import { routing } from "@/i18n/routing";
 
 export function generateStaticParams() {
@@ -24,5 +25,10 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
 
-  return children;
+  return (
+    <>
+      <DocumentLang locale={locale} />
+      {children}
+    </>
+  );
 }

@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, type KeyboardEvent, type ReactNode } from "react";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
+import { useTabsKeyboard } from "@/hooks/use-tabs-keyboard";
 
 export interface SkillModalTab {
   id: string;
@@ -29,6 +31,7 @@ const contentTransition = {
 };
 
 export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
+  const t = useTranslations("main.skills.modal");
   const [activeId, setActiveId] = useState(() => tabs[0]?.id ?? "");
   const [direction, setDirection] = useState(0);
 
@@ -44,6 +47,19 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
       nextIndex > currentIndex ? 1 : nextIndex < currentIndex ? -1 : 0,
     );
     setActiveId(nextId);
+  };
+
+  const handleTabKeyDown = useTabsKeyboard(
+    tabs.length,
+    activeIndex >= 0 ? activeIndex : 0,
+    (index) => {
+      const tab = tabs[index];
+      if (tab) handleTabChange(tab.id);
+    },
+  );
+
+  const onTabListKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    handleTabKeyDown(event);
   };
 
   if (tabs.length === 1) {
@@ -66,17 +82,24 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
     <div className="mt-6">
       <div
         role="tablist"
+        aria-label={t("tabsAriaLabel")}
+        onKeyDown={onTabListKeyDown}
         className="bg-background-100/80 flex flex-wrap gap-1 rounded-xl p-1"
       >
         {tabs.map((tab) => {
           const isActive = activeTab.id === tab.id;
+          const tabId = `skill-modal-tab-${tab.id}`;
+          const panelId = `skill-modal-panel-${tab.id}`;
 
           return (
             <button
               key={tab.id}
               type="button"
               role="tab"
+              id={tabId}
+              aria-controls={panelId}
               aria-selected={isActive}
+              tabIndex={isActive ? 0 : -1}
               onClick={() => handleTabChange(tab.id)}
               className={cn(
                 "relative rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-200",
@@ -113,6 +136,8 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
       <motion.div
         key={activeTab.id}
         role="tabpanel"
+        id={`skill-modal-panel-${activeTab.id}`}
+        aria-labelledby={`skill-modal-tab-${activeTab.id}`}
         initial={{ opacity: 0, x: slideX }}
         animate={{ opacity: 1, x: 0 }}
         transition={contentTransition}

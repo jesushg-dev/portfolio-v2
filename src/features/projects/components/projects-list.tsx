@@ -218,6 +218,7 @@ export const ProjectsList: FC<ProjectsListProps> = ({
                 variant="ghost"
                 size="icon"
                 type="button"
+                aria-label={t("delete")}
                 onClick={() => handleDelete(project.id)}
                 className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
               >

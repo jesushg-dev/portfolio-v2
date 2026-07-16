@@ -127,7 +127,7 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
             type="button"
             onClick={handleFetchMore}
             disabled={isFetching ?? isLoading}
-            className="bg-primary-500 pressable text-secondaryText-50 hover:bg-primary-700 rounded-sm px-4 py-2 font-bold"
+            className="bg-primary pressable text-primary-foreground hover:bg-primary/90 rounded-sm px-4 py-2 font-bold"
           >
             {isFetching ? t("pagination.loading") : t("pagination.loadMore")}
           </button>

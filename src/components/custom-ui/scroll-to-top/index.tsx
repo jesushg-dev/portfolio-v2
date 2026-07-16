@@ -4,8 +4,10 @@ import type { FC, MouseEvent } from "react";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { BiArrowFromBottom } from "react-icons/bi";
+import { useTranslations } from "next-intl";
 
 const ScrollToTop: FC = () => {
+  const t = useTranslations("global.header");
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -38,9 +40,10 @@ const ScrollToTop: FC = () => {
       <button
         type="button"
         onClick={scrollToTop}
+        aria-label={t("scrollToTop")}
         className={clsx(
           isVisible ? "opacity-100" : "opacity-0",
-          "bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 inline-flex items-center rounded-full p-3 text-white shadow-xs transition-opacity focus:ring-2 focus:ring-offset-2 focus:outline-hidden",
+          "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex items-center rounded-full p-3 shadow-xs transition-opacity focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden",
         )}
       >
         <BiArrowFromBottom className="h-6 w-6" aria-hidden="true" />

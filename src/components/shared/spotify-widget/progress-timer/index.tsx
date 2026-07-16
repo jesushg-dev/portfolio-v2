@@ -31,21 +31,22 @@ const ProgressTimer: FC<IProgressTimer> = ({
           value={progressPercentage}
           accentColor={accentColor}
           readOnly
+          ariaLabel={t("spotify.progressLabel")}
         />
       </div>
       <div className="mt-1.5 flex w-full justify-between">
-        <p
-          title={t("spotify.hints.currentProgress")}
-          className="text-[11px] text-white/50 tabular-nums select-none"
+        <time
+          dateTime={`PT${Math.floor(currentMs / 1000)}S`}
+          className="text-[11px] text-white/80 tabular-nums select-none"
         >
           {convertMsToMmSs(currentMs)}
-        </p>
-        <p
-          title={t("spotify.hints.totalDuration")}
-          className="text-[11px] text-white/50 tabular-nums select-none"
+        </time>
+        <time
+          dateTime={`PT${Math.floor(durationMs / 1000)}S`}
+          className="text-[11px] text-white/80 tabular-nums select-none"
         >
           {convertMsToMmSs(durationMs)}
-        </p>
+        </time>
       </div>
     </div>
   );

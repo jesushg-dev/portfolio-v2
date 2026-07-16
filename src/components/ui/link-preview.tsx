@@ -115,9 +115,7 @@ export function LinkPreview({
               role="presentation"
               aria-hidden
               initial={
-                shouldReduceMotion
-                  ? false
-                  : { opacity: 0, scale: 0.96, y: 10 }
+                shouldReduceMotion ? false : { opacity: 0, scale: 0.96, y: 10 }
               }
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={

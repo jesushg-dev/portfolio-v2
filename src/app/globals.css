@@ -174,12 +174,12 @@
     --card-foreground: var(--color-primaryText-500);
     --popover: var(--color-background-50);
     --popover-foreground: var(--color-primaryText-500);
-    --primary: var(--color-primary-600);
-    --primary-foreground: var(--color-secondaryText-50);
+    --primary: var(--color-primary-800);
+    --primary-foreground: #ffffff;
     --secondary: var(--color-primaryLight-500);
     --secondary-foreground: var(--color-primaryText-500);
     --muted: var(--color-background-200);
-    --muted-foreground: var(--color-primaryText-100);
+    --muted-foreground: var(--color-primaryText-200);
     --accent: var(--color-secondary-100);
     --accent-foreground: var(--color-primaryText-500);
     --destructive: #dc2626;

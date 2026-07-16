@@ -233,6 +233,7 @@ export const ServicesList: FC<ServicesListProps> = ({
                 variant="ghost"
                 size="icon"
                 type="button"
+                aria-label={t("delete")}
                 onClick={() => handleDelete(service.id)}
                 className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
               >

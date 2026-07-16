@@ -195,6 +195,7 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
                 variant="ghost"
                 size="icon"
                 type="button"
+                aria-label={t("delete")}
                 onClick={() => handleDelete(item.id)}
                 className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
               >

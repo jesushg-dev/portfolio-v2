@@ -71,16 +71,24 @@ const About: FC = async () => {
           ) : null}
         </article>
 
-        <aside className="flex flex-col items-center gap-2">
-          <div className="border-background-200 text-primary-600 w-full border-b py-6 font-bold lg:hidden">
-            <h2 className="text-center">{t("timeline.title")}</h2>
+        <div
+          aria-labelledby="about-timeline-heading"
+          className="flex flex-col items-center gap-2"
+        >
+          <div className="border-background-200 w-full border-b py-6 font-bold lg:hidden">
+            <h2
+              id="about-timeline-heading"
+              className="text-foreground text-center"
+            >
+              {t("timeline.title")}
+            </h2>
           </div>
           <div className="w-full overflow-x-auto lg:pt-4">
             <div className="flex flex-col items-center gap-2">
               <TimelineHorizontalPreview />
             </div>
           </div>
-        </aside>
+        </div>
       </section>
     </div>
   );

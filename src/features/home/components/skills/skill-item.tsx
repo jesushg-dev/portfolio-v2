@@ -22,7 +22,7 @@ const SkillItem: FC<SkillItemProps> = ({ image, title, featured }) => {
       }}
       scroll={false}
       className={cn(
-        "group/item text-foreground inline-flex items-center gap-2 border-none bg-transparent p-0.5 text-sm transition-opacity duration-150",
+        "group/item text-foreground active:bg-muted/40 inline-flex min-h-11 w-full items-center gap-2.5 rounded-lg border-none bg-transparent px-2.5 py-2 text-sm transition-opacity duration-150 sm:min-h-0 sm:w-auto sm:gap-2 sm:p-0.5 sm:active:bg-transparent",
         featured ? "opacity-100" : "opacity-[0.68] hover:opacity-100",
       )}
       title={title}

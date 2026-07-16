@@ -1,10 +1,16 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import {
+  type KeyboardEvent,
+  type ReactNode,
+  useCallback,
+  useState,
+} from "react";
 import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { locales, type Locale } from "@/i18n/config";
+import { useTabsKeyboard } from "@/hooks/use-tabs-keyboard";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -79,29 +85,65 @@ function TabList({
   tabs,
   active,
   onSelect,
+  ariaLabel,
 }: {
   tabs: { key: string; label: string; flag: string }[];
   active: string;
   onSelect: (key: string) => void;
+  ariaLabel: string;
 }) {
+  const activeIndex = Math.max(
+    0,
+    tabs.findIndex((tab) => tab.key === active),
+  );
+
+  const handleTabChange = useCallback(
+    (index: number) => {
+      const tab = tabs[index];
+      if (tab) onSelect(tab.key);
+    },
+    [onSelect, tabs],
+  );
+
+  const onKeyDown = useTabsKeyboard(tabs.length, activeIndex, handleTabChange);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown(event);
+  };
+
   return (
-    <div className="border-border flex gap-0 overflow-x-auto border-b">
-      {tabs.map((tab) => (
-        <button
-          key={tab.key}
-          type="button"
-          onClick={() => onSelect(tab.key)}
-          className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-medium transition-colors ${
-            active === tab.key
-              ? "border-primary text-primary"
-              : "text-muted-foreground hover:text-foreground border-transparent"
-          }`}
-        >
-          <span>{tab.flag}</span>
-          <span className="hidden sm:inline">{tab.label}</span>
-          <span className="sm:hidden">{tab.key.toUpperCase()}</span>
-        </button>
-      ))}
+    <div
+      role="tablist"
+      aria-label={ariaLabel}
+      className="border-border flex gap-0 overflow-x-auto border-b"
+      onKeyDown={handleKeyDown}
+    >
+      {tabs.map((tab, index) => {
+        const selected = active === tab.key;
+        return (
+          <button
+            key={tab.key}
+            id={`localized-tab-${tab.key}`}
+            type="button"
+            role="tab"
+            aria-selected={selected}
+            tabIndex={selected ? 0 : -1}
+            onClick={() => onSelect(tab.key)}
+            className={`flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-medium transition-colors ${
+              selected
+                ? "border-primary text-primary"
+                : "text-muted-foreground hover:text-foreground border-transparent"
+            }`}
+          >
+            <span aria-hidden>{tab.flag}</span>
+            <span className="hidden sm:inline">{tab.label}</span>
+            <span className="sm:hidden">{tab.key.toUpperCase()}</span>
+            <span className="sr-only">
+              {selected ? `, ${index + 1} of ${tabs.length}` : ""}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -163,6 +205,7 @@ export function LocalizedField(props: LocalizedFieldProps) {
             tabs={tabs}
             active={resolvedActiveLocale}
             onSelect={(k) => setActiveLocale(k as Locale)}
+            ariaLabel={t("languageTabsAria")}
           />
         </div>
         <div className="p-3">
@@ -191,7 +234,7 @@ export function LocalizedField(props: LocalizedFieldProps) {
             />
           )}
           {resolvedActiveLocale === defaultLocale && (
-            <p className="text-muted-foreground/80 mt-1 text-[10px]">
+            <p className="text-muted-foreground mt-1 text-[10px]">
               {t("defaultFallbackHint")}
             </p>
           )}
@@ -240,6 +283,7 @@ export function LocalizedField(props: LocalizedFieldProps) {
             tabs={tabs}
             active={resolvedActiveLangId}
             onSelect={setActiveLangId}
+            ariaLabel={t("languageTabsAria")}
           />
           {/* Add language button */}
           {addableLanguages.length > 0 && (

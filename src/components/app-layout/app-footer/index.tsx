@@ -21,7 +21,7 @@ import type { ContactIconKey } from "@/utils/contact-links";
 import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
 
 const footerLinkClassName =
-  "text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors";
+  "text-primary-foreground hover:text-primary-foreground text-sm transition-colors";
 
 const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
   email: IoMail,
@@ -38,6 +38,7 @@ const PEOPLE_PLEDGE_URL = "https://people.pledge.party/";
 
 const Footer = async () => {
   const t = await getTranslations("global.footer");
+  const tHeader = await getTranslations("global.header");
   const year = new Date().getFullYear();
 
   const data = await api.contact.getPublic();
@@ -50,15 +51,15 @@ const Footer = async () => {
           <div className="space-y-3">
             <Link
               href="/"
-              aria-label="Jehg"
+              aria-label={tHeader("homeLogo")}
               className="group text-primary-foreground inline-flex items-baseline text-xl font-semibold tracking-tight"
             >
               Jehg
-              <span className="text-primary-foreground/70 group-hover:text-primary-foreground transition-colors">
+              <span className="text-primary-foreground transition-colors">
                 .
               </span>
             </Link>
-            <p className="text-primary-foreground/80 max-w-xs text-sm leading-relaxed">
+            <p className="text-primary-foreground max-w-xs text-sm leading-relaxed">
               {t("madeWith")}
               <Heart
                 aria-hidden
@@ -84,12 +85,12 @@ const Footer = async () => {
           </div>
 
           <nav aria-labelledby="footer-portfolio" className="space-y-2.5">
-            <h4
+            <h2
               id="footer-portfolio"
               className="text-primary-foreground text-sm font-semibold tracking-wide"
             >
               {t("titles.portfolio")}
-            </h4>
+            </h2>
             <ul className="space-y-1.5">
               <li>
                 <LinkPreview
@@ -125,9 +126,9 @@ const Footer = async () => {
           </nav>
 
           <div className="space-y-2.5">
-            <h4 className="text-primary-foreground text-sm font-semibold tracking-wide">
+            <h2 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.miscellaneous")}
-            </h4>
+            </h2>
             <div className="flex items-center gap-2">
               <LinkPreview
                 url="/register?next=/admin/cv"
@@ -141,16 +142,16 @@ const Footer = async () => {
                 {t("beta")}
               </span>
             </div>
-            <p className="text-primary-foreground/65 max-w-xs text-xs leading-relaxed">
+            <p className="text-primary-foreground max-w-xs text-xs leading-relaxed">
               {t("sections.miscellaneous.cvGeneratorHint")}
             </p>
           </div>
 
           <div className="space-y-2.5 overflow-hidden md:col-span-2 lg:col-span-1">
-            <h4 className="text-primary-foreground text-sm font-semibold tracking-wide">
+            <h2 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.NowPlaying")}
-            </h4>
-            <div className="border-primary-foreground/15 bg-primary-foreground/10 rounded-xl border p-2.5 shadow-sm backdrop-blur-sm">
+            </h2>
+            <div className="border-primary-foreground/15 bg-primary-foreground/10 rounded-lg border p-2 shadow-sm backdrop-blur-sm">
               <SpotifyWidget />
               <a
                 target="_blank"
@@ -158,7 +159,7 @@ const Footer = async () => {
                 className="mt-2 flex items-center justify-end gap-2 px-1"
                 href="https://developer.spotify.com/documentation/web-api"
               >
-                <span className="text-primary-foreground/70 text-xs">
+                <span className="text-primary-foreground text-xs">
                   {t("spotify.poweredBy")}
                 </span>
                 <Image
@@ -175,7 +176,7 @@ const Footer = async () => {
 
       <div className="border-primary-foreground/15 border-t">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p className="text-primary-foreground/70 text-xs">
+          <p className="text-primary-foreground text-xs">
             {t("title")}
             {year}
           </p>
@@ -187,14 +188,14 @@ const Footer = async () => {
                 <a
                   key={link.key}
                   href={link.href}
-                  aria-label={link.label}
+                  aria-label={t(`socialChannels.${link.icon}`)}
                   target={link.href.startsWith("http") ? "_blank" : undefined}
                   rel={
                     link.href.startsWith("http")
                       ? "noopener noreferrer"
                       : undefined
                   }
-                  className="text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground/40 inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
+                  className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
                 >
                   <Icon className="size-4" />
                 </a>

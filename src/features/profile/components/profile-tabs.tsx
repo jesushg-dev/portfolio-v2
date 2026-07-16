@@ -34,7 +34,10 @@ export const ProfileTabs = () => {
   ];
 
   return (
-    <div className="bg-muted/30 flex overflow-hidden rounded-t-xl">
+    <nav
+      aria-label={t("tabsNavAria")}
+      className="bg-muted/30 flex overflow-hidden rounded-t-xl"
+    >
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = tab.exact
@@ -57,6 +60,6 @@ export const ProfileTabs = () => {
           </Link>
         );
       })}
-    </div>
+    </nav>
   );
 };

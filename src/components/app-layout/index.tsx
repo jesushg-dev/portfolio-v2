@@ -14,10 +14,13 @@ const Layout: FC<ILayoutProps> = ({ children, headerAlwaysVisible }) => {
   return (
     <>
       <Header alwaysVisible={headerAlwaysVisible} />
-      <div className="flex min-h-screen flex-col justify-between">
+      <main
+        id="main-content"
+        className="flex min-h-screen flex-col justify-between"
+      >
         {children}
         <ScrollToTop />
-      </div>
+      </main>
       <Footer />
     </>
   );

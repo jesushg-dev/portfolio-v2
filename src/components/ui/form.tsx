@@ -5,6 +5,8 @@ import {
   forwardRef,
   type HTMLAttributes,
   useId,
+  useState,
+  useEffect,
   type ComponentRef,
   type ComponentPropsWithoutRef,
 } from "react";
@@ -70,6 +72,8 @@ const useFormField = () => {
     formItemId,
     formDescriptionId,
     formMessageId,
+    hasDescription: itemContext.hasDescription,
+    setHasDescription: itemContext.setHasDescription,
     ...fieldState,
   };
 };
@@ -78,6 +82,8 @@ const useFormField = () => {
 interface FormItemContextValue {
   id: string;
   useExplicitControlId: boolean;
+  hasDescription: boolean;
+  setHasDescription: (value: boolean) => void;
 }
 
 const FormItemContext = createContext<FormItemContextValue>(
@@ -91,8 +97,12 @@ const FormItem = forwardRef<
   const generatedId = useId();
   const useExplicitControlId = idProp !== undefined;
   const id = idProp ?? generatedId;
+  const [hasDescription, setHasDescription] = useState(false);
+
   return (
-    <FormItemContext.Provider value={{ id, useExplicitControlId }}>
+    <FormItemContext.Provider
+      value={{ id, useExplicitControlId, hasDescription, setHasDescription }}
+    >
       <div
         ref={ref}
         className={cn("space-y-2", className)}
@@ -126,15 +136,24 @@ const FormControl = forwardRef<
   ComponentRef<typeof Slot>,
   ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } =
-    useFormField();
+  const {
+    error,
+    formItemId,
+    formDescriptionId,
+    formMessageId,
+    hasDescription,
+  } = useFormField();
+
+  const describedBy =
+    [hasDescription ? formDescriptionId : null, error ? formMessageId : null]
+      .filter(Boolean)
+      .join(" ") || undefined;
+
   return (
     <Slot
       ref={ref}
       id={formItemId}
-      aria-describedby={
-        !error ? formDescriptionId : `${formDescriptionId} ${formMessageId}`
-      }
+      aria-describedby={describedBy}
       aria-invalid={!!error}
       {...props}
     />
@@ -146,15 +165,25 @@ FormControl.displayName = "FormControl";
 const FormDescription = forwardRef<
   HTMLParagraphElement,
   HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField();
+>(({ className, children, ...props }, ref) => {
+  const { formDescriptionId, setHasDescription } = useFormField();
+
+  useEffect(() => {
+    setHasDescription(true);
+    return () => setHasDescription(false);
+  }, [setHasDescription]);
+
+  if (!children) return null;
+
   return (
     <p
       ref={ref}
       id={formDescriptionId}
       className={cn("text-muted-foreground text-[0.8rem]", className)}
       {...props}
-    />
+    >
+      {children}
+    </p>
   );
 });
 FormDescription.displayName = "FormDescription";

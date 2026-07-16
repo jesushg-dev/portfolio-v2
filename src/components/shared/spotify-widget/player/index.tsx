@@ -87,21 +87,22 @@ const Player: FC<IPlayer> = ({
           value={crtProgressPercentage}
           accentColor={accentColor}
           onChange={handleSeek}
+          ariaLabel={t("spotify.progressLabel")}
         />
       </div>
       <div className="mt-1.5 flex w-full justify-between">
-        <p
-          title={t("spotify.hints.currentProgress")}
-          className="text-[11px] text-white/50 tabular-nums select-none"
+        <time
+          dateTime={`PT${Math.floor(crtProgress / 1000)}S`}
+          className="text-[11px] text-white/80 tabular-nums select-none"
         >
           {convertMsToMmSs(crtProgress)}
-        </p>
-        <p
-          title={t("spotify.hints.totalDuration")}
-          className="text-[11px] text-white/50 tabular-nums select-none"
+        </time>
+        <time
+          dateTime={`PT${Math.floor(duration * 1000)}S`}
+          className="text-[11px] text-white/80 tabular-nums select-none"
         >
           {convertMsToMmSs(duration * ETime.SECOND)}
-        </p>
+        </time>
       </div>
     </div>
   );

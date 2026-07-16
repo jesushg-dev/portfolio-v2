@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
@@ -8,6 +8,7 @@ import { Link } from "@/i18n/routing";
 
 import LocaleSegment from "@/components/admin/shared/locale-segment";
 import { localsDisplay, type Locale } from "@/i18n/config";
+import { useTabsKeyboard } from "@/hooks/use-tabs-keyboard";
 import { api } from "@/trpc/react";
 import CvPreview from "@/components/curriculum-vitae/cv-preview";
 import EditableCvLayout from "./editable-cv-layout";
@@ -29,6 +30,8 @@ const SECTION_LINKS = [
 ] as const;
 
 type EditorView = "edit" | "preview" | "import";
+
+const VIEW_TABS: EditorView[] = ["edit", "preview", "import"];
 
 const CvEditor: FC = () => {
   const t = useTranslations("admin.cv");
@@ -62,6 +65,19 @@ const CvEditor: FC = () => {
     data?.aboutMe?.aboutMe,
     previewLocale,
     defaultLocale,
+  );
+
+  const activeViewIndex = VIEW_TABS.indexOf(view);
+
+  const handleViewTabChange = useCallback((index: number) => {
+    const nextView = VIEW_TABS[index];
+    if (nextView) setView(nextView);
+  }, []);
+
+  const onViewTabsKeyDown = useTabsKeyboard(
+    VIEW_TABS.length,
+    activeViewIndex,
+    handleViewTabChange,
   );
 
   if (isLoading) {
@@ -101,12 +117,20 @@ const CvEditor: FC = () => {
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
 
-      <div className="bg-card/95 supports-[backdrop-filter]:bg-card/80 sticky top-0 z-10 mb-6 rounded-xl px-4 py-3 shadow-sm backdrop-blur">
+      <div className="bg-card/95 supports-backdrop-filter:bg-card/80 sticky top-0 z-10 mb-6 rounded-xl px-4 py-3 shadow-sm backdrop-blur">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="bg-muted/50 inline-flex rounded-lg p-0.5">
+          <div
+            role="tablist"
+            aria-label={t("viewTabsAria")}
+            className="bg-muted/50 inline-flex rounded-lg p-0.5"
+            onKeyDown={onViewTabsKeyDown}
+          >
             <button
               id="cv-editor-edit"
               type="button"
+              role="tab"
+              aria-selected={view === "edit"}
+              tabIndex={view === "edit" ? 0 : -1}
               onClick={() => setView("edit")}
               className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
                 view === "edit"
@@ -119,6 +143,9 @@ const CvEditor: FC = () => {
             <button
               id="cv-editor-preview"
               type="button"
+              role="tab"
+              aria-selected={view === "preview"}
+              tabIndex={view === "preview" ? 0 : -1}
               onClick={() => setView("preview")}
               className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
                 view === "preview"
@@ -131,6 +158,9 @@ const CvEditor: FC = () => {
             <button
               id="cv-editor-import"
               type="button"
+              role="tab"
+              aria-selected={view === "import"}
+              tabIndex={view === "import" ? 0 : -1}
               onClick={() => setView("import")}
               className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
                 view === "import"
@@ -157,7 +187,10 @@ const CvEditor: FC = () => {
         </div>
 
         {view === "edit" ? (
-          <nav className="mt-3 flex gap-1 overflow-x-auto pt-3">
+          <nav
+            aria-label={t("sectionNavAria")}
+            className="mt-3 flex gap-1 overflow-x-auto pt-3"
+          >
             {SECTION_LINKS.map((section) => {
               const label = t(`sections.${section.labelKey}`);
               return (

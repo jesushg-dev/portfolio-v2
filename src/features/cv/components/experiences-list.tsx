@@ -114,7 +114,10 @@ const ExperiencesList: FC<{
               <SortableItem key={exp.id} value={exp.id} asChild>
                 <li className="bg-muted/40 flex items-start justify-between gap-3 rounded-lg px-4 py-3 shadow-sm">
                   <div className="flex items-start gap-3">
-                    <SortableItemHandle className="text-muted-foreground hover:text-foreground mt-1 shrink-0">
+                    <SortableItemHandle
+                      aria-label={t("dragToReorder")}
+                      className="text-muted-foreground hover:text-foreground mt-1 shrink-0"
+                    >
                       <GripVertical className="size-4" />
                     </SortableItemHandle>
                     <div>

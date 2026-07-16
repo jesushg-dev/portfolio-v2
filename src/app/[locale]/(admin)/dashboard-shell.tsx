@@ -200,7 +200,10 @@ const DashboardShell: FC<IDashboardShellProps> = ({
               )}
             </div>
 
-            <div className="mt-8 flex flex-col gap-1">
+            <nav
+              aria-label={t("nav.sidebar")}
+              className="mt-8 flex flex-col gap-1"
+            >
               {topItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -215,17 +218,20 @@ const DashboardShell: FC<IDashboardShellProps> = ({
                   />
                 );
               })}
-            </div>
+            </nav>
 
             <div className="my-1">
               <div className="mb-1 flex h-6 items-end px-3">
                 {open && (
-                  <p className="text-muted-foreground/80 text-[10px] font-semibold tracking-widest uppercase">
+                  <p className="text-muted-foreground text-[10px] font-semibold tracking-widest uppercase">
                     {t("nav.portfolioGroup")}
                   </p>
                 )}
               </div>
-              <div className="flex flex-col gap-1">
+              <nav
+                aria-label={t("nav.portfolioGroup")}
+                className="flex flex-col gap-1"
+              >
                 {portfolioItems.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -240,7 +246,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
                     />
                   );
                 })}
-              </div>
+              </nav>
             </div>
           </div>
 
@@ -255,6 +261,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
             />
             <button
               type="button"
+              aria-label={t("signOut")}
               onClick={() => {
                 void onSignOut();
               }}
@@ -274,13 +281,16 @@ const DashboardShell: FC<IDashboardShellProps> = ({
       </Sidebar>
 
       <main className="flex min-w-0 flex-1 flex-col overflow-y-auto">
-        <header className="border-border/60 bg-background/75 supports-backdrop-filter:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block">
+        <header
+          aria-label={t("pageToolbar")}
+          className="border-border/60 bg-background/75 supports-backdrop-filter:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block"
+        >
           <div className="flex h-16 items-center justify-between px-4 md:px-6">
             <div className="flex items-center gap-3">
               <div>
-                <p className="text-foreground text-sm font-semibold">
+                <h1 className="text-foreground text-sm font-semibold">
                   {pageTitle}
-                </p>
+                </h1>
                 {pageSubtitle ? (
                   <p className="text-muted-foreground text-xs">
                     {pageSubtitle}
@@ -313,11 +323,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
           </div>
         </header>
 
-        <ThemeSelector
-          visible={themeMenuOpen}
-          onChange={() => setThemeMenuOpen(false)}
-          className="max-w-none justify-end px-4 pt-2 md:px-6"
-        />
+        <ThemeSelector open={themeMenuOpen} onOpenChange={setThemeMenuOpen} />
 
         <div className="flex w-full flex-1 flex-col p-4 md:p-6">{children}</div>
       </main>
