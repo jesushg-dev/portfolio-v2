@@ -1,18 +1,26 @@
 import type { FC } from "react";
+import { preload } from "react-dom";
 import { getLocale, getTranslations } from "next-intl/server";
 import { api } from "@/trpc/server";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
 
-const Hero: FC = async () => {
+interface HeroStats {
+  yearsExperience: number;
+  projectsCount: number;
+  certificationsCount: number;
+}
+
+interface HeroProps {
+  stats: HeroStats;
+}
+
+const Hero: FC<HeroProps> = async ({ stats }) => {
   const locale = await getLocale();
   const t = await getTranslations("main.heroMain");
 
-  const [heroData, stats] = await Promise.all([
-    api.portfolio.getHeroPublic({ locale }),
-    api.portfolio.getStatsPublic({ locale }),
-  ]);
+  const heroData = await api.portfolio.getHeroPublic({ locale });
 
   if (!heroData) {
     return <HeroEmpty />;
@@ -20,6 +28,9 @@ const Hero: FC = async () => {
 
   const fullName = heroData.fullName?.trim() ?? "";
   const photoUrl = heroData.photoUrl?.trim() ?? "";
+  if (photoUrl) {
+    preload(photoUrl, { as: "image", fetchPriority: "high" });
+  }
   const heroSubtitle = heroData.heroSubtitle?.trim() ?? "";
   const heroTagline = heroData.heroTagline?.trim() ?? "";
   const heroSummary = heroData.heroSummary?.trim() ?? "";

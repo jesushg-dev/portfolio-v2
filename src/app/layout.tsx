@@ -100,6 +100,14 @@ export default async function RootLayout({
       className={cn("h-full", "font-sans", geist.variable)}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link
+          rel="preconnect"
+          href="https://i.scdn.co"
+          crossOrigin="anonymous"
+        />
+      </head>
       <PreloadTheme />
       <body
         className={clsx(

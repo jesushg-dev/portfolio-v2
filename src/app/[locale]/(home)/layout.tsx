@@ -7,7 +7,7 @@ import type { Locale } from "next-intl";
 
 import Layout from "@/components/app-layout";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,

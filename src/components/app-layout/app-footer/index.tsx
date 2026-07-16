@@ -14,7 +14,7 @@ import type { IconType } from "react-icons";
 
 import { Link } from "@/i18n/routing";
 import { LinkPreview } from "@/components/ui/link-preview";
-import SpotifyWidget from "@/components/shared/spotify-widget";
+import SpotifyWidgetLazy from "@/components/shared/spotify-widget/spotify-widget-lazy";
 import { api } from "@/trpc/server";
 import { buildContactLinks } from "@/utils/contact-links";
 import type { ContactIconKey } from "@/utils/contact-links";
@@ -152,7 +152,7 @@ const Footer = async () => {
               {t("titles.NowPlaying")}
             </h2>
             <div className="border-primary-foreground/15 bg-primary-foreground/10 rounded-lg border p-2 shadow-sm backdrop-blur-sm">
-              <SpotifyWidget />
+              <SpotifyWidgetLazy />
               <a
                 target="_blank"
                 rel="noopener noreferrer"

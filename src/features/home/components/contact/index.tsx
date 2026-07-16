@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
 
-import ContactForm from "./contact-form";
+import ContactForm from "./contact-form-lazy";
 import ContactIllustration from "./contact-illustration";
 import ContactItem from "./contact-item";
 import { buildContactLinks } from "@/utils/contact-links";

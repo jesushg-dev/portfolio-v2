@@ -35,10 +35,8 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
   const [activeId, setActiveId] = useState(() => tabs[0]?.id ?? "");
   const [direction, setDirection] = useState(0);
 
-  if (tabs.length === 0) return null;
-
   const activeIndex = tabs.findIndex((tab) => tab.id === activeId);
-  const activeTab = tabs[activeIndex >= 0 ? activeIndex : 0] ?? tabs[0];
+  const resolvedActiveIndex = activeIndex >= 0 ? activeIndex : 0;
 
   const handleTabChange = (nextId: string) => {
     const nextIndex = tabs.findIndex((tab) => tab.id === nextId);
@@ -51,12 +49,16 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
 
   const handleTabKeyDown = useTabsKeyboard(
     tabs.length,
-    activeIndex >= 0 ? activeIndex : 0,
+    resolvedActiveIndex,
     (index) => {
       const tab = tabs[index];
       if (tab) handleTabChange(tab.id);
     },
   );
+
+  if (tabs.length === 0) return null;
+
+  const activeTab = tabs[resolvedActiveIndex] ?? tabs[0];
 
   const onTabListKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     handleTabKeyDown(event);

@@ -148,7 +148,17 @@ function StatCard({
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-const SocialProof: FC = () => {
+interface SocialProofStats {
+  yearsExperience: number;
+  projectsCount: number;
+  certificationsCount: number;
+}
+
+interface SocialProofProps {
+  stats: SocialProofStats;
+}
+
+const SocialProof: FC<SocialProofProps> = ({ stats: statsData }) => {
   const locale = useLocale();
   const t = useTranslations("main.socialProof");
 
@@ -157,8 +167,6 @@ const SocialProof: FC = () => {
 
   const hasTestimonials = !isLoading && items.length > 0;
   const showTestimonialsColumn = isLoading || hasTestimonials;
-
-  const { data: statsData } = api.portfolio.getStatsPublic.useQuery({ locale });
 
   const statMapping: Record<string, string | number> = {
     certifications: statsData?.certificationsCount ?? 0,

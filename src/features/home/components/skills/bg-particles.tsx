@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useCallback, useMemo } from "react";
-import { loadFull } from "tsparticles";
+import { loadSlim } from "@tsparticles/slim";
 import Particles, { ParticlesProvider } from "@tsparticles/react";
 import type { Engine, ISourceOptions } from "@tsparticles/engine";
 
@@ -21,7 +21,7 @@ function BgParticles() {
   const { theme } = useThemeContext();
 
   const particlesInit = useCallback(async (engine: Engine) => {
-    await loadFull(engine);
+    await loadSlim(engine as unknown as Parameters<typeof loadSlim>[0]);
   }, []);
 
   const skillParticles = useMemo(

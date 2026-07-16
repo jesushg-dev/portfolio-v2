@@ -41,9 +41,9 @@ const ProgressBar: FC<ProgressBarProps> = ({
         aria-valuemax={100}
       >
         <div
-          className="h-full rounded-full transition-[width] duration-1000 ease-linear"
+          className="h-full w-full origin-left rounded-full transition-transform duration-1000 ease-linear"
           style={{
-            width: `${clamped}%`,
+            transform: `scaleX(${clamped / 100})`,
             backgroundColor: accentColor,
           }}
         />
@@ -58,9 +58,9 @@ const ProgressBar: FC<ProgressBarProps> = ({
         aria-hidden
       >
         <div
-          className="h-full rounded-full"
+          className="h-full w-full origin-left rounded-full"
           style={{
-            width: `${clamped}%`,
+            transform: `scaleX(${clamped / 100})`,
             backgroundColor: accentColor,
           }}
         />
