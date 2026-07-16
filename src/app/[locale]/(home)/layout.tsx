@@ -11,6 +11,12 @@ import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 
 import Layout from "@/components/app-layout";
+import LcpImagePreload from "@/components/shared/lcp-image-preload";
+import { getHeroLcpImageUrl } from "@/features/home/components/hero-lcp-image";
+import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
+import type { Locale as AppLocale } from "@/i18n/config";
+import { getPathname } from "@/i18n/routing";
+import { buildSocialMetadata, SITE_URL } from "@/lib/seo/site";
 
 export const revalidate = 60;
 
@@ -25,18 +31,18 @@ export async function generateMetadata({
     namespace: "main",
   });
 
+  const title = t("meta.title");
+  const description = t("meta.description");
+  const pageUrl = new URL(
+    getPathname({ locale: locale as AppLocale, href: "/" }),
+    SITE_URL,
+  ).href;
+
   return {
-    title: t("meta.title"),
-    description: t("meta.description"),
+    title,
+    description,
     keywords: t("meta.keywords"),
-    openGraph: {
-      title: t("meta.title"),
-      description: t("meta.description"),
-    },
-    twitter: {
-      title: t("meta.title"),
-      description: t("meta.description"),
-    },
+    ...buildSocialMetadata({ title, description, url: pageUrl }),
   };
 }
 
@@ -52,6 +58,11 @@ export default async function RootLayout({
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
+  const heroData = await getCachedHeroPublic(locale as AppLocale);
+  const lcpPhotoUrl = heroData?.photoUrl?.trim()
+    ? getHeroLcpImageUrl(heroData.photoUrl.trim())
+    : null;
+
   const allMessages = await getMessages();
   const publicMessages = {
     main: allMessages.main,
@@ -60,6 +71,7 @@ export default async function RootLayout({
 
   return (
     <NextIntlClientProvider messages={publicMessages}>
+      {lcpPhotoUrl ? <LcpImagePreload href={lcpPhotoUrl} /> : null}
       <Layout>{children}</Layout>
       {modal}
     </NextIntlClientProvider>

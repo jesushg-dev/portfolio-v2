@@ -24,16 +24,6 @@ import { Toaster } from "@/components/ui/sonner";
 export const metadata: Metadata = {
   manifest: "/manifest.json",
   metadataBase: new URL("https://www.jesushg.com"),
-  alternates: {
-    canonical: "/",
-    languages: {
-      es: "https://www.jesushg.com/es",
-      en: "https://www.jesushg.com/en",
-      nl: "https://www.jesushg.com/nl",
-      "en-US": "https://www.jesushg.com/en",
-      "es-ES": "https://www.jesushg.com/es",
-    },
-  },
   icons: [
     {
       url: "/icon-192x192.png",
@@ -61,29 +51,6 @@ export const metadata: Metadata = {
       type: "image/png",
     },
   ],
-  openGraph: {
-    url: "https://www.jesushg.com",
-    type: "website",
-    images: [
-      {
-        url: "https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp",
-        width: 800,
-        height: 600,
-        alt: "A picture of my personal website",
-      },
-    ],
-  },
-  twitter: {
-    site: "@jesus_hg",
-    images: [
-      {
-        url: "https://res.cloudinary.com/js-media/image/upload/v1690307602/portfolio/portfolio-v2_kxkpvh.webp",
-        width: 800,
-        height: 600,
-        alt: "A picture of my personal website",
-      },
-    ],
-  },
 };
 
 export default async function RootLayout({

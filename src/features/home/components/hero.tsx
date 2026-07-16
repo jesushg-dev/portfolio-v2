@@ -1,8 +1,7 @@
 import type { FC } from "react";
-import { preload } from "react-dom";
 import { getLocale, getTranslations } from "next-intl/server";
-import { api } from "@/trpc/server";
-import { optimizeCloudinaryImageUrl } from "@/utils/tools/image";
+
+import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
@@ -18,10 +17,10 @@ interface HeroProps {
 }
 
 const Hero: FC<HeroProps> = async ({ stats }) => {
-  const locale = await getLocale();
+  const locale = (await getLocale());
   const t = await getTranslations("main.heroMain");
 
-  const heroData = await api.portfolio.getHeroPublic({ locale });
+  const heroData = await getCachedHeroPublic(locale);
 
   if (!heroData) {
     return <HeroEmpty />;
@@ -29,10 +28,6 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
 
   const fullName = heroData.fullName?.trim() ?? "";
   const photoUrl = heroData.photoUrl?.trim() ?? "";
-  const lcpPhotoUrl = photoUrl ? optimizeCloudinaryImageUrl(photoUrl, 384) : "";
-  if (lcpPhotoUrl) {
-    preload(lcpPhotoUrl, { as: "image", fetchPriority: "high" });
-  }
   const heroSubtitle = heroData.heroSubtitle?.trim() ?? "";
   const heroTagline = heroData.heroTagline?.trim() ?? "";
   const heroSummary = heroData.heroSummary?.trim() ?? "";
@@ -56,7 +51,7 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
       {/* Starry Background / Glow - Now SSR */}
       <div className="bg-background absolute inset-0 z-0 overflow-hidden">
         {/* Top central glow */}
-        <div className="bg-primary/20 absolute -top-[20%] left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-[100%] blur-[100px]" />
+        <div className="bg-primary/20 absolute top-[-20%] left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-[100%] blur-[100px]" />
       </div>
 
       <div className="z-10 mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-16 px-6 pt-32 pb-24 md:pt-40 md:pb-32 lg:flex-row">

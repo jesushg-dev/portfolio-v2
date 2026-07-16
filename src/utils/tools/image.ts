@@ -16,7 +16,7 @@ export const cloudinaryLoader = (props: ImageLoaderProps) => {
 export function optimizeCloudinaryImageUrl(
   url: string,
   width: number,
-  quality = 80,
+  quality: number | string = 80,
 ): string {
   if (!url.includes("res.cloudinary.com") || !url.includes("/upload/")) {
     return url;
@@ -26,9 +26,12 @@ export function optimizeCloudinaryImageUrl(
     return url;
   }
 
+  const qualityTransform =
+    typeof quality === "number" ? `q_${quality}` : `q_${quality}`;
+
   return url.replace(
     "/upload/",
-    `/upload/f_auto,q_${quality},w_${width},c_limit/`,
+    `/upload/f_auto,${qualityTransform},w_${width},c_limit/`,
   );
 }
 
