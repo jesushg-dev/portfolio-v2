@@ -12,6 +12,26 @@ export const cloudinaryLoader = (props: ImageLoaderProps) => {
   return `https://res.cloudinary.com/js-media/image/upload/w_${width}${qualityString},c_limit/v1642524352/portfolio/${src}`;
 };
 
+/** Injects delivery transforms into a full Cloudinary URL (for DB-stored absolute URLs). */
+export function optimizeCloudinaryImageUrl(
+  url: string,
+  width: number,
+  quality = 80,
+): string {
+  if (!url.includes("res.cloudinary.com") || !url.includes("/upload/")) {
+    return url;
+  }
+
+  if (/\/upload\/[^/]*w_\d+/.test(url)) {
+    return url;
+  }
+
+  return url.replace(
+    "/upload/",
+    `/upload/f_auto,q_${quality},w_${width},c_limit/`,
+  );
+}
+
 /** Pre-built Cloudinary URL for Server Components (cannot pass loader functions to Image). */
 export function buildCloudinaryUrl(
   src: string,

@@ -4,6 +4,9 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["lvh.me", "*.lvh.me"],
   serverExternalPackages: ["jszip"],
+  experimental: {
+    optimizePackageImports: ["lucide-react", "motion/react"],
+  },
   images: {
     remotePatterns: [
       {

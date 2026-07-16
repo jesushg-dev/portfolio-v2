@@ -156,17 +156,31 @@ interface SocialProofStats {
 
 interface SocialProofProps {
   stats: SocialProofStats;
+  testimonials?: {
+    id: string;
+    quote: string;
+    author: string;
+    role?: string | null;
+    avatarUrl?: string | null;
+  }[];
 }
 
-const SocialProof: FC<SocialProofProps> = ({ stats: statsData }) => {
+const SocialProof: FC<SocialProofProps> = ({
+  stats: statsData,
+  testimonials: testimonialsFromServer,
+}) => {
   const locale = useLocale();
   const t = useTranslations("main.socialProof");
 
-  const { data: items = [], isLoading } =
-    api.portfolio.getTestimonialsPublic.useQuery({ locale, limit: 3 });
+  const { data: itemsFromQuery = [], isLoading } =
+    api.portfolio.getTestimonialsPublic.useQuery(
+      { locale, limit: 3 },
+      { enabled: testimonialsFromServer === undefined },
+    );
 
-  const hasTestimonials = !isLoading && items.length > 0;
-  const showTestimonialsColumn = isLoading || hasTestimonials;
+  const items = testimonialsFromServer ?? itemsFromQuery;
+  const isTestimonialsLoading =
+    testimonialsFromServer === undefined && isLoading;
 
   const statMapping: Record<string, string | number> = {
     certifications: statsData?.certificationsCount ?? 0,
@@ -179,6 +193,9 @@ const SocialProof: FC<SocialProofProps> = ({ stats: statsData }) => {
     projects: "#projects",
     experience: "/curriculum-vitae",
   };
+
+  const hasTestimonials = !isTestimonialsLoading && items.length > 0;
+  const showTestimonialsColumn = isTestimonialsLoading || hasTestimonials;
 
   return (
     <section
@@ -212,7 +229,7 @@ const SocialProof: FC<SocialProofProps> = ({ stats: statsData }) => {
             </motion.div>
 
             <ul className="flex flex-col gap-4">
-              {isLoading ? (
+              {isTestimonialsLoading ? (
                 <>
                   <TestimonialSkeleton />
                   <TestimonialSkeleton />

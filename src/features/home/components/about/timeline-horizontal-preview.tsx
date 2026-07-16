@@ -3,7 +3,7 @@
 import type { FC } from "react";
 import { useRef } from "react";
 import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import {
   ArrowRight,
   BookOpen,
@@ -20,8 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { api } from "@/trpc/react";
-import { TimelineSkeleton } from "./timeline-skeleton";
+import type { TimelinePublicItem } from "@/features/timeline/lib/map-timeline-public";
 
 type TimelineCategory = "WORK" | "STUDY" | "COURSE";
 
@@ -130,23 +129,21 @@ const TimelineCard: FC<TimelineCardProps> = ({
   );
 };
 
-export const TimelineHorizontalPreview: FC = () => {
+interface TimelineHorizontalPreviewProps {
+  items: TimelinePublicItem[];
+}
+
+export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
+  items,
+}) => {
   const t = useTranslations("main.about.timeline");
-  const locale = useLocale();
   const scrollRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(scrollRef, { once: true, margin: "-60px" });
 
   const getCategoryLabel = (category: TimelineCategory) =>
     t(`categories.${category}` as "categories.WORK");
 
-  const { data: timelineData, isLoading } =
-    api.portfolio.getTimelinePublic.useQuery({
-      locale,
-      category: "WORK",
-      limit: 4,
-    });
-
-  const hasItems = Boolean(timelineData && timelineData.length > 0);
+  const hasItems = items.length > 0;
 
   return (
     <div className="w-full space-y-4">
@@ -154,9 +151,7 @@ export const TimelineHorizontalPreview: FC = () => {
         ref={scrollRef}
         className="themed-scrollbar w-full overflow-x-auto pb-4"
       >
-        {isLoading ? (
-          <TimelineSkeleton />
-        ) : hasItems ? (
+        {hasItems ? (
           <TooltipProvider delay={200}>
             <motion.ol
               id="timeline"
@@ -165,7 +160,7 @@ export const TimelineHorizontalPreview: FC = () => {
               animate={isInView ? "visible" : "hidden"}
               variants={listVariants}
             >
-              {timelineData?.map((item) => (
+              {items.map((item) => (
                 <TimelineCard
                   key={item.id}
                   date={item.date}

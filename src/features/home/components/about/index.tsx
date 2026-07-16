@@ -4,8 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import HeaderArticle from "@/components/shared/header-article";
 
 import { TimelineHorizontalPreview } from "./timeline-horizontal-preview";
-import AboutTerminal from "./about-terminal";
-import AboutTerminalEmpty from "./about-terminal-empty";
+import AboutTerminalLazy from "./about-terminal-lazy";
 
 import { resolveTenant } from "@/lib/tenant/resolve";
 import { api } from "@/trpc/server";
@@ -20,13 +19,20 @@ const About: FC = async () => {
 
   const tenant = await resolveTenant();
 
-  const [aboutData, terminalData] = await Promise.all([
+  const [aboutData, terminalData, timelineItems] = await Promise.all([
     tenant && isLocale(locale)
       ? api.portfolio.getAboutPublic({ locale })
       : Promise.resolve(null),
     tenant && isLocale(locale)
       ? api.terminal.getPublic({ locale })
       : Promise.resolve(null),
+    tenant && isLocale(locale)
+      ? api.portfolio.getTimelinePublic({
+          locale,
+          category: "WORK",
+          limit: 4,
+        })
+      : Promise.resolve([]),
   ]);
 
   const paragraphs = aboutData?.paragraphs ?? [];
@@ -63,11 +69,7 @@ const About: FC = async () => {
           ) : null}
 
           {showTerminalColumn ? (
-            terminalData ? (
-              <AboutTerminal data={terminalData} />
-            ) : (
-              <AboutTerminalEmpty />
-            )
+            <AboutTerminalLazy data={terminalData} />
           ) : null}
         </article>
 
@@ -85,7 +87,7 @@ const About: FC = async () => {
           </div>
           <div className="w-full overflow-x-auto lg:pt-4">
             <div className="flex flex-col items-center gap-2">
-              <TimelineHorizontalPreview />
+              <TimelineHorizontalPreview items={timelineItems} />
             </div>
           </div>
         </div>

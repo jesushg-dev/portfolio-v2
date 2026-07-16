@@ -35,7 +35,11 @@ const Contact: FC = async () => {
       />
       <div
         aria-hidden
-        className="bg-hero-contact absolute inset-0 -z-10 bg-cover bg-center opacity-25 mix-blend-luminosity"
+        className="absolute inset-0 -z-10 bg-cover bg-center opacity-25 mix-blend-luminosity"
+        style={{
+          backgroundImage:
+            'url("https://res.cloudinary.com/js-media/image/upload/f_auto,q_auto,w_800/v1642524508/portfolio/hero/3239480_nnfqfm.webp")',
+        }}
       />
       <div
         aria-hidden

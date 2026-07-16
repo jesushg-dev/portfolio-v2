@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { preload } from "react-dom";
 import { getLocale, getTranslations } from "next-intl/server";
 import { api } from "@/trpc/server";
+import { optimizeCloudinaryImageUrl } from "@/utils/tools/image";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
@@ -28,8 +29,9 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
 
   const fullName = heroData.fullName?.trim() ?? "";
   const photoUrl = heroData.photoUrl?.trim() ?? "";
-  if (photoUrl) {
-    preload(photoUrl, { as: "image", fetchPriority: "high" });
+  const lcpPhotoUrl = photoUrl ? optimizeCloudinaryImageUrl(photoUrl, 384) : "";
+  if (lcpPhotoUrl) {
+    preload(lcpPhotoUrl, { as: "image", fetchPriority: "high" });
   }
   const heroSubtitle = heroData.heroSubtitle?.trim() ?? "";
   const heroTagline = heroData.heroTagline?.trim() ?? "";

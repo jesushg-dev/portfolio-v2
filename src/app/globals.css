@@ -894,6 +894,33 @@
   background: #2c2d3349 !important;
 }
 
+@keyframes sectionHeaderRise {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility section-header-rise {
+  animation: sectionHeaderRise 0.45s ease-out both;
+}
+
+@utility hero-content-rise {
+  animation: sectionHeaderRise 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-header-rise,
+  .hero-content-rise {
+    animation: none;
+  }
+}
+
 @keyframes scrollDot {
   0% {
     opacity: 1;

@@ -4,18 +4,21 @@ import "@/app/globals.css";
 
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { TRPCReactProvider } from "@/trpc/react";
+import DeferredTrpcProvider from "@/components/shared/deferred-trpc-provider";
 import PreloadTheme from "@/hoc/preload-theme";
 import ThemeContextProvider from "@/hoc/theme-context-provider";
 import clsx from "clsx";
 import { Inter, Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { defaultLocale, locales, type Locale } from "@/i18n/config";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
@@ -102,11 +105,6 @@ export default async function RootLayout({
     >
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" />
-        <link
-          rel="preconnect"
-          href="https://i.scdn.co"
-          crossOrigin="anonymous"
-        />
       </head>
       <PreloadTheme />
       <body
@@ -116,11 +114,9 @@ export default async function RootLayout({
         )}
       >
         <NextIntlClientProvider>
-          <TRPCReactProvider>
-            <ThemeContextProvider>
-              <NuqsAdapter>{children}</NuqsAdapter>
-            </ThemeContextProvider>
-          </TRPCReactProvider>
+          <DeferredTrpcProvider>
+            <ThemeContextProvider>{children}</ThemeContextProvider>
+          </DeferredTrpcProvider>
         </NextIntlClientProvider>
         <Toaster />
       </body>

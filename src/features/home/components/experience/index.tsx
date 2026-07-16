@@ -4,7 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
-import { ExperienceAccordion } from "./experience-accordion";
+import ExperienceAccordionLazy from "./experience-accordion-lazy";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
@@ -35,7 +35,7 @@ const Experience: FC = async () => {
           subtitle=""
         />
 
-        <ExperienceAccordion
+        <ExperienceAccordionLazy
           experiences={experiences}
           leadershipTitle={t("leadershipTitle")}
           leadershipDescription={t("leadershipDescription")}

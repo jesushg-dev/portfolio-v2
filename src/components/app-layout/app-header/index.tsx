@@ -8,7 +8,7 @@ import { Link, usePathname } from "@/i18n/routing";
 
 import NavButton from "./nav-button";
 import ToolbarHeader from "./toolbar-header";
-import ThemeSelector from "./theme-selector";
+import ThemeSelectorLazy from "./theme-selector-lazy";
 import useIsOnTop from "@/hooks/use-is-on-top";
 
 interface IHeaderProps {
@@ -54,7 +54,10 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
           : "bg-background-50/90 text-primaryText-900 hover:bg-background-50 top-0 shadow-sm backdrop-blur-lg backdrop-filter"
       }`}
     >
-      <ThemeSelector open={isThemeMenuOpen} onOpenChange={setIsThemeMenuOpen} />
+      <ThemeSelectorLazy
+        open={isThemeMenuOpen}
+        onOpenChange={setIsThemeMenuOpen}
+      />
       <nav
         aria-label={t("menu.mainNavigation")}
         className="border-background-200 rounded-sm px-2 py-3"

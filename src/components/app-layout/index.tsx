@@ -3,7 +3,7 @@ import type { FC } from "react";
 
 import Footer from "./app-footer";
 import Header from "./app-header";
-import ScrollToTop from "../custom-ui/scroll-to-top";
+import ScrollToTopLazy from "../custom-ui/scroll-to-top-lazy";
 
 interface ILayoutProps {
   children: ReactNode;
@@ -19,7 +19,7 @@ const Layout: FC<ILayoutProps> = ({ children, headerAlwaysVisible }) => {
         className="flex min-h-screen flex-col justify-between"
       >
         {children}
-        <ScrollToTop />
+        <ScrollToTopLazy />
       </main>
       <Footer />
     </>

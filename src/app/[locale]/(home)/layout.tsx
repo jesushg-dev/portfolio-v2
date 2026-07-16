@@ -1,7 +1,12 @@
 import { type ReactNode } from "react";
 import "@/app/globals.css";
 
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server";
 import type { Metadata } from "next";
 import type { Locale } from "next-intl";
 
@@ -47,10 +52,16 @@ export default async function RootLayout({
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
+  const allMessages = await getMessages();
+  const publicMessages = {
+    main: allMessages.main,
+    global: allMessages.global,
+  };
+
   return (
-    <>
+    <NextIntlClientProvider messages={publicMessages}>
       <Layout>{children}</Layout>
       {modal}
-    </>
+    </NextIntlClientProvider>
   );
 }

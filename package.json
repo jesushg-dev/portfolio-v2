@@ -13,6 +13,7 @@
     "dev": "next dev --turbopack",
     "postinstall": "prisma generate",
     "build": "next build",
+    "analyze": "next build && node scripts/report-bundle-sizes.mjs",
     "start": "next start",
     "lint": "eslint .",
     "type": "tsc --noEmit",

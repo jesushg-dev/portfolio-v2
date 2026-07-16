@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import type { Locale } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { headers } from "next/headers";
-import { setRequestLocale } from "next-intl/server";
 
 import { auth } from "@/lib/auth";
 import { redirectToLogin } from "@/lib/auth-redirect";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import DashboardShell from "../dashboard-shell";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -27,12 +29,17 @@ export default async function AdminLayout({
   }
 
   const { user } = session;
+  const messages = await getMessages();
 
   return (
-    <TooltipProvider>
-      <DashboardShell userName={user.name ?? user.email} modal={modal}>
-        {children}
-      </DashboardShell>
-    </TooltipProvider>
+    <NextIntlClientProvider messages={messages}>
+      <NuqsAdapter>
+        <TooltipProvider>
+          <DashboardShell userName={user.name ?? user.email} modal={modal}>
+            {children}
+          </DashboardShell>
+        </TooltipProvider>
+      </NuqsAdapter>
+    </NextIntlClientProvider>
   );
 }

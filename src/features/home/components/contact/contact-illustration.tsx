@@ -13,7 +13,8 @@ const ContactIllustration: FC = () => {
         height={420}
         src={CONTACT_ART_SRC}
         alt=""
-        unoptimized
+        loading="lazy"
+        sizes="(min-width: 768px) 640px, 0px"
         className="h-auto w-full object-contain"
       />
     </div>

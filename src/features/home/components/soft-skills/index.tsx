@@ -4,7 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
-import SoftSkillsBento from "./soft-skills-bento";
+import SoftSkillsBentoLazy from "./soft-skills-bento-lazy";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
@@ -32,7 +32,7 @@ const SoftSkills: FC = async () => {
           subtitle={t("subtitle")}
           description={t("description")}
         />
-        <SoftSkillsBento items={items} />
+        <SoftSkillsBentoLazy items={items} />
       </section>
     </div>
   );

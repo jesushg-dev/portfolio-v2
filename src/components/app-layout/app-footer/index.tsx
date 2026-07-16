@@ -13,8 +13,8 @@ import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
 import type { IconType } from "react-icons";
 
 import { Link } from "@/i18n/routing";
-import { LinkPreview } from "@/components/ui/link-preview";
-import SpotifyWidgetLazy from "@/components/shared/spotify-widget/spotify-widget-lazy";
+import { LinkPreviewLazy } from "@/components/ui/link-preview-lazy";
+import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
 import { buildContactLinks } from "@/utils/contact-links";
 import type { ContactIconKey } from "@/utils/contact-links";
@@ -38,7 +38,6 @@ const PEOPLE_PLEDGE_URL = "https://people.pledge.party/";
 
 const Footer = async () => {
   const t = await getTranslations("global.footer");
-  const tHeader = await getTranslations("global.header");
   const year = new Date().getFullYear();
 
   const data = await api.contact.getPublic();
@@ -51,7 +50,7 @@ const Footer = async () => {
           <div className="space-y-3">
             <Link
               href="/"
-              aria-label={tHeader("homeLogo")}
+              aria-label={t("homeLogo")}
               className="group text-primary-foreground inline-flex items-baseline text-xl font-semibold tracking-tight"
             >
               Jehg
@@ -93,34 +92,34 @@ const Footer = async () => {
             </h2>
             <ul className="space-y-1.5">
               <li>
-                <LinkPreview
+                <LinkPreviewLazy
                   url="/certificates"
                   imageSrc={FOOTER_LINK_PREVIEWS.certificates}
                   imageAlt={t("sections.portfolio.certificates")}
                   className={footerLinkClassName}
                 >
                   {t("sections.portfolio.certificates")}
-                </LinkPreview>
+                </LinkPreviewLazy>
               </li>
               <li>
-                <LinkPreview
+                <LinkPreviewLazy
                   url="/curriculum-vitae"
                   imageSrc={FOOTER_LINK_PREVIEWS.curriculum}
                   imageAlt={t("sections.portfolio.curriculum")}
                   className={footerLinkClassName}
                 >
                   {t("sections.portfolio.curriculum")}
-                </LinkPreview>
+                </LinkPreviewLazy>
               </li>
               <li>
-                <LinkPreview
+                <LinkPreviewLazy
                   url="/timeline"
                   imageSrc={FOOTER_LINK_PREVIEWS.timeline}
                   imageAlt={t("sections.portfolio.timeline")}
                   className={footerLinkClassName}
                 >
                   {t("sections.portfolio.timeline")}
-                </LinkPreview>
+                </LinkPreviewLazy>
               </li>
             </ul>
           </nav>
@@ -130,14 +129,14 @@ const Footer = async () => {
               {t("titles.miscellaneous")}
             </h2>
             <div className="flex items-center gap-2">
-              <LinkPreview
+              <LinkPreviewLazy
                 url="/register?next=/admin/cv"
                 imageSrc={FOOTER_LINK_PREVIEWS.cvGenerator}
                 imageAlt={t("sections.miscellaneous.cvGenerator")}
                 className={footerLinkClassName}
               >
                 {t("sections.miscellaneous.cvGenerator")}
-              </LinkPreview>
+              </LinkPreviewLazy>
               <span className="bg-primary-foreground/15 text-primary-foreground rounded-md px-2 py-0.5 text-xs font-medium">
                 {t("beta")}
               </span>
@@ -152,7 +151,7 @@ const Footer = async () => {
               {t("titles.NowPlaying")}
             </h2>
             <div className="border-primary-foreground/15 bg-primary-foreground/10 rounded-lg border p-2 shadow-sm backdrop-blur-sm">
-              <SpotifyWidgetLazy />
+              <FooterSpotifySection />
               <a
                 target="_blank"
                 rel="noopener noreferrer"

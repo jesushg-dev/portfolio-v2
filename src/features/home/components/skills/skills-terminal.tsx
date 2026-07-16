@@ -4,12 +4,9 @@ import { useEffect, useMemo, useRef, useState, type FC } from "react";
 import { ArrowRightIcon } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
-import type { Locale } from "next-intl";
 
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
-import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
 import type { SkillType } from "@/utils/interfaces/types";
 import {
   countSkillsByCategory,
@@ -18,13 +15,12 @@ import {
   type SkillCategoryId,
 } from "./lib/skill-display";
 import SkillItem from "./skill-item";
-import { SkillsTerminalSkeleton } from "./skills-terminal-skeleton";
 
 interface SkillsTerminalProps {
-  locale: Locale;
+  initialSkills: SkillType[];
 }
 
-const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
+const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
   const t = useTranslations("main.skills");
   const shouldReduceMotion = useReducedMotion();
   const searchRef = useRef<HTMLInputElement>(null);
@@ -33,12 +29,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
     useState<SkillCategoryId>("frontend");
   const [search, setSearch] = useState("");
 
-  const { data, isLoading } = api.portfolio.getSkills.useQuery({
-    limit: LIMIT_PER_PAGE_BIG,
-    locale,
-  });
-
-  const skills = useMemo(() => data?.data ?? [], [data?.data]);
+  const skills = useMemo(() => initialSkills, [initialSkills]);
   const counts = useMemo(() => countSkillsByCategory(skills), [skills]);
   const isSearching = search.trim().length > 0;
 
@@ -209,9 +200,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
           </div>
         </div>
 
-        {isLoading ? (
-          <SkillsTerminalSkeleton />
-        ) : visibleSkills.length === 0 ? (
+        {visibleSkills.length === 0 ? (
           <p className="text-muted-foreground px-5 py-11 text-center text-sm">
             {t("terminal.noResults")}
           </p>

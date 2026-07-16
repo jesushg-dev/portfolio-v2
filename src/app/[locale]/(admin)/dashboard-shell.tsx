@@ -22,7 +22,7 @@ import {
 
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
-import ThemeSelector from "@/components/app-layout/app-header/theme-selector";
+import ThemeSelectorLazy from "@/components/app-layout/app-header/theme-selector-lazy";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 
 interface IDashboardShellProps {
@@ -323,7 +323,10 @@ const DashboardShell: FC<IDashboardShellProps> = ({
           </div>
         </header>
 
-        <ThemeSelector open={themeMenuOpen} onOpenChange={setThemeMenuOpen} />
+        <ThemeSelectorLazy
+          open={themeMenuOpen}
+          onOpenChange={setThemeMenuOpen}
+        />
 
         <div className="flex w-full flex-1 flex-col p-4 md:p-6">{children}</div>
       </main>
