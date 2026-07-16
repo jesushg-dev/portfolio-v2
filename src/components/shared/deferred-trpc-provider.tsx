@@ -2,61 +2,71 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 
+import { usePathname } from "@/i18n/routing";
 import { TRPCReactProvider } from "@/trpc/react";
 
 interface DeferredTrpcProviderProps {
   children: ReactNode;
 }
 
+function isAdminRoute(pathname: string): boolean {
+  return pathname === "/admin" || pathname.startsWith("/admin/");
+}
+
+function isHomeRoute(pathname: string): boolean {
+  return pathname === "/";
+}
+
 export default function DeferredTrpcProvider({
   children,
 }: DeferredTrpcProviderProps) {
-  const [isReady, setIsReady] = useState(false);
+  const pathname = usePathname();
+  const [isReady, setIsReady] = useState(() => isAdminRoute(pathname));
+
+  if (isAdminRoute(pathname) && !isReady) {
+    setIsReady(true);
+  }
+
+  if (
+    !isHomeRoute(pathname) &&
+    !isAdminRoute(pathname) &&
+    !isReady &&
+    typeof document !== "undefined" &&
+    document.readyState === "complete"
+  ) {
+    setIsReady(true);
+  }
 
   useEffect(() => {
-    let cancelled = false;
+    if (isAdminRoute(pathname) || isHomeRoute(pathname)) {
+      if (!isHomeRoute(pathname)) {
+        return;
+      }
 
-    const removeInteractionListeners = (onInteraction: () => void) => {
-      window.removeEventListener("scroll", onInteraction);
-      window.removeEventListener("pointerdown", onInteraction);
-      window.removeEventListener("keydown", onInteraction);
-    };
+      const onInteraction = () => setIsReady(true);
 
-    const activate = (onInteraction: () => void) => {
-      if (cancelled) return;
-      cancelled = true;
-      removeInteractionListeners(onInteraction);
-      setIsReady(true);
-    };
-
-    const onInteraction = () => activate(onInteraction);
-
-    window.addEventListener("scroll", onInteraction, { passive: true });
-    window.addEventListener("pointerdown", onInteraction);
-    window.addEventListener("keydown", onInteraction);
-
-    let idleId: number | undefined;
-    let timeoutId: number | undefined;
-
-    if (typeof window.requestIdleCallback === "function") {
-      idleId = window.requestIdleCallback(() => activate(onInteraction), {
-        timeout: 1200,
+      window.addEventListener("scroll", onInteraction, {
+        passive: true,
+        once: true,
       });
-    } else {
-      timeoutId = window.setTimeout(() => activate(onInteraction), 900);
+      window.addEventListener("pointerdown", onInteraction, { once: true });
+      window.addEventListener("keydown", onInteraction, { once: true });
+
+      return () => {
+        window.removeEventListener("scroll", onInteraction);
+        window.removeEventListener("pointerdown", onInteraction);
+        window.removeEventListener("keydown", onInteraction);
+      };
     }
 
-    return () => {
-      cancelled = true;
-      removeInteractionListeners(onInteraction);
-      if (idleId !== undefined) {
-        window.cancelIdleCallback(idleId);
-      }
-      if (timeoutId !== undefined) {
-        window.clearTimeout(timeoutId);
-      }
-    };
-  }, []);
+    if (document.readyState === "complete") {
+      return;
+    }
+
+    const onLoad = () => setIsReady(true);
+    window.addEventListener("load", onLoad, { once: true });
+    return () => window.removeEventListener("load", onLoad);
+  }, [pathname]);
 
   if (!isReady) {
     return children;

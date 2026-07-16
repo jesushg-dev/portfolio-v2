@@ -54,12 +54,9 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
         <div className="bg-primary/20 absolute top-[-20%] left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-[100%] blur-[100px]" />
       </div>
 
-      <div className="z-10 mx-auto flex w-full max-w-7xl flex-col-reverse items-center gap-16 px-6 pt-32 pb-24 md:pt-40 md:pb-32 lg:flex-row">
-        {/* Left Column - Content (Client Component for animations) */}
-        <HeroContent heroData={parsedHeroData} stats={stats} />
-
-        {/* Right Column - Photo (Client Component for animations) */}
+      <div className="z-10 mx-auto flex w-full max-w-7xl flex-col items-center gap-16 px-6 pt-32 pb-24 md:pt-40 md:pb-32 lg:flex-row-reverse lg:items-center">
         <HeroPhoto heroData={parsedHeroData} />
+        <HeroContent heroData={parsedHeroData} stats={stats} />
       </div>
 
       {/* Scroll Down Indicator - Now SSR */}
