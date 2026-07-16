@@ -40,6 +40,7 @@ const softSkillUpsertInput = z.object({
     message: "Invalid icon key",
   }),
   isVisible: z.boolean().default(true),
+  featured: z.boolean().default(false),
   order: z.number().int().nonnegative().default(0),
   translations: SoftSkillTranslationMapSchema,
 });
@@ -174,6 +175,7 @@ export const softSkillsAdminRouter = createTRPCRouter({
         data: {
           icon: input.icon,
           isVisible: input.isVisible,
+          featured: input.featured,
           order: input.order,
           title,
           description,

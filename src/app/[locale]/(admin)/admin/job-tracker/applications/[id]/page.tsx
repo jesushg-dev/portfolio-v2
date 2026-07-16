@@ -6,11 +6,16 @@ import { getApplicationDetailPageData } from "@/features/job-tracker/server/job-
 
 export default async function ApplicationDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; id: string }>;
+  searchParams: Promise<{ tab?: string }>;
 }) {
   const { locale, id } = await params;
+  const { tab } = await searchParams;
   setRequestLocale(locale as Locale);
+
+  const defaultTab = tab === "tailor" || tab === "details" ? tab : "timeline";
 
   const [t, application] = await Promise.all([
     getTranslations("admin.jobTracker"),
@@ -31,6 +36,7 @@ export default async function ApplicationDetailPage({
         <ApplicationDetailView
           application={application}
           locale={locale as Locale}
+          defaultTab={defaultTab}
         />
       </div>
     </div>

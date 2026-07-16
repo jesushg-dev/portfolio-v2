@@ -3,6 +3,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["lvh.me", "*.lvh.me"],
+  serverExternalPackages: ["jszip"],
   images: {
     remotePatterns: [
       {
@@ -16,6 +17,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "i.scdn.co",
+      },
+      {
+        protocol: "https",
+        hostname: "utfs.io",
       },
     ],
   },

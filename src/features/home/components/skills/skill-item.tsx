@@ -1,48 +1,42 @@
+"use client";
+
 import type { FC } from "react";
 
-import Image from "next/image";
-import { siLoader } from "@/utils/tools/image";
+import { Link } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
+import { skillSlugFromTitle } from "@/utils/tools/skill-slug";
+import SkillIcon from "./skill-icon";
 
-interface ISkillItemProps {
-  id: string;
+interface SkillItemProps {
   image: string;
   title: string;
-  description: string;
-  onClick?: () => void;
+  featured: boolean;
 }
 
-const SkillItem: FC<ISkillItemProps> = ({
-  id,
-  image,
-  title,
-  description,
-  onClick,
-}) => {
+const SkillItem: FC<SkillItemProps> = ({ image, title, featured }) => {
   return (
-    <div id={id} className="group flex h-full w-full">
-      <button
-        type="button"
-        title={title}
-        onClick={onClick}
-        className="flex grow cursor-pointer flex-col items-center gap-4 rounded-lg p-4 shadow-xs transition-transform hover:scale-110 hover:transform hover:shadow-lg"
+    <Link
+      href={{
+        pathname: "/skills/[slug]",
+        params: { slug: skillSlugFromTitle(title) },
+      }}
+      scroll={false}
+      className={cn(
+        "group/item text-foreground inline-flex items-center gap-2 border-none bg-transparent p-0.5 text-sm transition-opacity duration-150",
+        featured ? "opacity-100" : "opacity-[0.68] hover:opacity-100",
+      )}
+      title={title}
+    >
+      <SkillIcon image={image} title={title} />
+      <span
+        className={cn(
+          "text-foreground group-hover/item:text-primary group-hover/item:decoration-primary group-hover/item:underline group-hover/item:decoration-[1.5px] group-hover/item:underline-offset-4",
+          featured ? "font-medium" : "font-normal",
+        )}
       >
-        <span className="bg-background-100 relative block h-8 w-8 rounded-full">
-          <Image
-            width={32}
-            height={32}
-            src={image}
-            alt={title}
-            loader={siLoader}
-          />
-        </span>
-        <span className="text-primaryText-700 group-hover:text-primary-700 text-center text-xs leading-none font-bold">
-          {title}
-        </span>
-        <span className="text-primaryText-800 hidden text-center text-sm">
-          {description}
-        </span>
-      </button>
-    </div>
+        {title}
+      </span>
+    </Link>
   );
 };
 

@@ -10,11 +10,11 @@ import {
   FileText,
 } from "lucide-react";
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -77,7 +77,13 @@ export function ApplicationCard({
   ];
 
   return (
-    <Link href={`/admin/job-tracker/applications/${id}`} className="block">
+    <Link
+      href={{
+        pathname: "/admin/job-tracker/applications/[id]",
+        params: { id },
+      }}
+      className="block"
+    >
       <Card className="w-full cursor-pointer transition-shadow hover:shadow-md">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
@@ -166,20 +172,15 @@ export function ApplicationCard({
 
           {company.website && (
             <div className="pt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                render={
-                  <a
-                    href={company.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                }
+              <a
+                href={company.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className={buttonVariants({ variant: "outline", size: "sm" })}
               >
                 {t("viewCompany")}
-              </Button>
+              </a>
             </div>
           )}
         </CardContent>

@@ -136,7 +136,7 @@ const Footer = async () => {
             </p>
           </div>
 
-          <div className="space-y-2.5 md:col-span-2 lg:col-span-1">
+          <div className="space-y-2.5 overflow-hidden md:col-span-2 lg:col-span-1">
             <h4 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.NowPlaying")}
             </h4>

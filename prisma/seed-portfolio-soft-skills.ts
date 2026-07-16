@@ -6,6 +6,7 @@ import { toLocalizedText, type LocaleMap } from "./lib/localized-text-seed";
 interface SoftSkillItemSeed {
   icon: string;
   order: number;
+  featured?: boolean;
   title: LocaleMap;
   description: LocaleMap;
 }
@@ -60,6 +61,7 @@ export async function seedPortfolioSoftSkills(
         icon: item.icon,
         order: item.order,
         isVisible: true,
+        featured: item.featured ?? false,
         title: asJson(toLocalizedText(item.title)),
         description: asJson(toLocalizedText(item.description)),
       },

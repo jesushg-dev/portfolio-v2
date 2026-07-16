@@ -14,6 +14,7 @@ import { skillsAdminRouter } from "@/features/skills/server/skills-admin.router"
 import { softSkillsAdminRouter } from "@/features/soft-skills/server/soft-skills-admin.router";
 import { timelineAdminRouter } from "@/features/timeline/server/timeline-admin.router";
 import { jobTrackerAdminRouter } from "@/features/job-tracker/server/job-tracker-admin.router";
+import { resumeEngineAdminRouter } from "@/features/resume-engine/server/resume-engine-admin.router";
 
 export const appRouter = createTRPCRouter({
   portfolio: portfolioRouter,
@@ -31,6 +32,7 @@ export const appRouter = createTRPCRouter({
   spotifyAdmin: spotifyAdminRouter,
   contact: contactRouter,
   jobTrackerAdmin: jobTrackerAdminRouter,
+  resumeEngineAdmin: resumeEngineAdminRouter,
 });
 
 // export type definition of API

@@ -1,5 +1,4 @@
-﻿import type { Locale } from "next-intl";
-import { getLocale } from "next-intl/server";
+﻿import { getLocale } from "next-intl/server";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
@@ -39,7 +38,7 @@ export async function getAuthenticatedUserId(): Promise<string | null> {
 export async function requireAuthenticatedUserId(): Promise<string> {
   const userId = await getAuthenticatedUserId();
   if (!userId) {
-    const locale = (await getLocale()) as Locale;
+    const locale = await getLocale();
     return redirectToLogin(locale);
   }
   return userId;

@@ -69,6 +69,7 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
         id: z.string().optional(),
         icon: z.string().min(1, t("iconRequired")),
         isVisible: z.boolean(),
+        featured: z.boolean(),
         order: z.number().int().nonnegative(),
         translations: titleDescriptionTranslationMapSchema(
           primaryLang?.id,
@@ -213,6 +214,27 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
                 >
                   <div className="flex h-10 items-center">
                     <Switch
+                      id="soft-skill-visible"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="featured"
+              render={({ field }) => (
+                <FormItem
+                  label={t("featuredLabel")}
+                  description={t("featuredDescription")}
+                  inputId="soft-skill-featured"
+                >
+                  <div className="flex h-10 items-center">
+                    <Switch
+                      id="soft-skill-featured"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />

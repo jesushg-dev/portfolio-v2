@@ -88,11 +88,11 @@ export const PageDialogWrapper = ({
           className,
         )}
       >
-        <DialogHeader>
+        <DialogHeader className="shrink-0">
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        {children}
+        <div className="min-h-0 flex-1 overflow-y-auto pr-1">{children}</div>
       </DialogContent>
     </Dialog>
   );

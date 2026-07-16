@@ -9,6 +9,7 @@
     {
       "icon": "RiTeamLine",
       "order": 0,
+      "featured": true,
       "title": {
         "en": "Teamwork",
         "es": "Trabajo en equipo",
@@ -23,6 +24,7 @@
     {
       "icon": "RiShieldStarLine",
       "order": 1,
+      "featured": false,
       "title": {
         "en": "Problem Solving",
         "es": "Resolución de problemas",
@@ -37,6 +39,7 @@
     {
       "icon": "RiMedal2Line",
       "order": 2,
+      "featured": false,
       "title": {
         "en": "Goal-Oriented",
         "es": "Orientado a objetivos",
@@ -51,6 +54,7 @@
     {
       "icon": "RiSettingsLine",
       "order": 3,
+      "featured": false,
       "title": {
         "en": "Adaptability",
         "es": "Adaptabilidad",
@@ -65,6 +69,7 @@
     {
       "icon": "RiTimerFlashLine",
       "order": 4,
+      "featured": false,
       "title": {
         "en": "Time Management",
         "es": "Gestión del tiempo",
@@ -79,6 +84,7 @@
     {
       "icon": "RiHandHeartLine",
       "order": 5,
+      "featured": false,
       "title": {
         "en": "Leadership",
         "es": "Liderazgo",
@@ -93,6 +99,7 @@
     {
       "icon": "RiMapPinTimeLine",
       "order": 6,
+      "featured": false,
       "title": {
         "en": "Responsibility",
         "es": "Responsabilidad",
@@ -107,6 +114,7 @@
     {
       "icon": "RiDashboard3Line",
       "order": 7,
+      "featured": true,
       "title": {
         "en": "Commitment",
         "es": "Compromiso",

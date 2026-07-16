@@ -31,6 +31,7 @@ const skillUpsertInput = z.object({
   title: z.string().min(1),
   image: z.string().min(1),
   type: StackTypeSchema,
+  featured: z.boolean().default(false),
   translations: SkillTranslationMapSchema.default({}),
 });
 

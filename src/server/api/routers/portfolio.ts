@@ -607,6 +607,7 @@ export const portfolioRouter = createTRPCRouter({
         items: items.map((item) => ({
           id: item.id,
           icon: item.icon,
+          featured: item.featured,
           title: getLocalizedText(item.title, locale, defaultLocale),
           description: getLocalizedText(
             item.description,

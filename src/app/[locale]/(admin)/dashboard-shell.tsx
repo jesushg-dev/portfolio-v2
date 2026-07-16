@@ -27,6 +27,7 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 
 interface IDashboardShellProps {
   children: ReactNode;
+  modal?: ReactNode;
   userName: string;
 }
 
@@ -129,7 +130,11 @@ const LogoIcon = ({ userName }: { userName: string }) => {
   );
 };
 
-const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
+const DashboardShell: FC<IDashboardShellProps> = ({
+  children,
+  modal,
+  userName,
+}) => {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations("admin.shell");
@@ -316,6 +321,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({ children, userName }) => {
 
         <div className="flex w-full flex-1 flex-col p-4 md:p-6">{children}</div>
       </main>
+      {modal}
     </div>
   );
 };

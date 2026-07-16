@@ -12,7 +12,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { useQueryState, parseAsInteger } from "nuqs";
@@ -204,13 +204,19 @@ export const ApplicationsList: FC<ApplicationsListProps> = ({
           return (
             <div className="flex items-center gap-2">
               <Link
-                href={`/admin/job-tracker/applications/${app.id}`}
+                href={{
+                  pathname: "/admin/job-tracker/applications/[id]",
+                  params: { id: app.id },
+                }}
                 className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
                 <Eye className="h-3 w-3" /> {t("view")}
               </Link>
               <Link
-                href={`/admin/job-tracker/applications/${app.id}/edit`}
+                href={{
+                  pathname: "/admin/job-tracker/applications/[id]/edit",
+                  params: { id: app.id },
+                }}
                 className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
                 <Pencil className="h-3 w-3" /> {t("edit")}

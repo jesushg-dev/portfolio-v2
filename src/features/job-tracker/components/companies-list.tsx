@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Plus, Pencil, Trash2, Loader2, Globe, Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
 import { useQueryState, parseAsInteger } from "nuqs";
 
@@ -181,7 +181,10 @@ export const CompaniesList: FC<CompaniesListProps> = ({
           return (
             <div className="flex items-center gap-2">
               <Link
-                href={`/admin/job-tracker/companies/${company.id}/edit`}
+                href={{
+                  pathname: "/admin/job-tracker/companies/[id]/edit",
+                  params: { id: company.id },
+                }}
                 className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
               >
                 <Pencil className="h-3 w-3" /> {t("edit")}

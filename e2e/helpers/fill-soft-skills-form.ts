@@ -165,6 +165,21 @@ async function setVisibleSwitch(
   }
 }
 
+async function setFeaturedSwitch(
+  page: Page,
+  shouldBeFeatured: boolean,
+): Promise<void> {
+  const featuredSwitch = page
+    .locator("#soft-skill-featured")
+    .getByRole("switch");
+  const isChecked = await featuredSwitch.getAttribute("aria-checked");
+  const checked = isChecked === "true";
+
+  if (checked !== shouldBeFeatured) {
+    await featuredSwitch.click();
+  }
+}
+
 export async function fillSoftSkillsSectionFromFixture(
   page: Page,
   section: PortfolioSoftSkillsFixture["section"] = portfolioSoftSkills.section,
@@ -220,6 +235,7 @@ export async function fillSoftSkillItemForm(
   );
 
   await setVisibleSwitch(page, true);
+  await setFeaturedSwitch(page, item.featured ?? false);
   await page.locator("#soft-skill-order").fill(String(item.order));
 
   for (const locale of SOFT_SKILL_LOCALES) {

@@ -1,28 +1,34 @@
 "use client";
 
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Pencil } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ApplicationTimeline } from "@/features/job-tracker/components/application-timeline";
+import { ResumeTailorWorkflow } from "@/features/resume-engine/components/resume-tailor-workflow";
 import type { ApplicationDetail } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
 import { statusVariants } from "@/features/job-tracker/lib/constants";
 
+type ApplicationDetailTab = "timeline" | "details" | "tailor";
+
 interface ApplicationDetailViewProps {
   application: ApplicationDetail;
   locale: Locale;
+  defaultTab?: ApplicationDetailTab;
 }
 
 export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
   application,
   locale,
+  defaultTab = "timeline",
 }) => {
   const t = useTranslations("admin.jobTracker");
+  const [activeTab, setActiveTab] = useState<ApplicationDetailTab>(defaultTab);
 
   return (
     <div className="space-y-6">
@@ -36,23 +42,27 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
             {t(`status.${application.status}`)}
           </Badge>
         </div>
-        <Button
-          variant="outline"
-          render={
-            <Link
-              href={`/admin/job-tracker/applications/${application.id}/edit`}
-            />
-          }
+        <Link
+          href={{
+            pathname: "/admin/job-tracker/applications/[id]/edit",
+            params: { id: application.id },
+          }}
+          className={buttonVariants({ variant: "outline" })}
         >
           <Pencil className="mr-2 h-4 w-4" />
           {t("edit")}
-        </Button>
+        </Link>
       </div>
 
-      <Tabs defaultValue="timeline" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as ApplicationDetailTab)}
+        className="w-full"
+      >
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="timeline">{t("detail.timelineTab")}</TabsTrigger>
           <TabsTrigger value="details">{t("detail.detailsTab")}</TabsTrigger>
+          <TabsTrigger value="tailor">{t("detail.tailorTab")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="timeline" className="space-y-4">
@@ -113,6 +123,12 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
               </div>
             )}
           </div>
+        </TabsContent>
+
+        <TabsContent value="tailor" className="space-y-4">
+          {activeTab === "tailor" ? (
+            <ResumeTailorWorkflow applicationId={application.id} embedded />
+          ) : null}
         </TabsContent>
       </Tabs>
     </div>

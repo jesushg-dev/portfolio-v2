@@ -7,6 +7,7 @@ export type SoftSkillLocale = "es" | "en" | "nl";
 export interface PortfolioSoftSkillItemFixture {
   icon: string;
   order: number;
+  featured?: boolean;
   title: Record<SoftSkillLocale, string>;
   description: Record<SoftSkillLocale, string>;
 }

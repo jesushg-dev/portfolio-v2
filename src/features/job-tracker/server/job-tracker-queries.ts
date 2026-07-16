@@ -2,7 +2,10 @@ import { notFound } from "next/navigation";
 import type { Prisma } from "@prisma/client";
 
 import { db } from "@/server/db";
-import { assertNonEmptyUserId, requireAuthenticatedUserId } from "@/lib/admin/get-authenticated-user-id";
+import {
+  assertNonEmptyUserId,
+  requireAuthenticatedUserId,
+} from "@/lib/admin/get-authenticated-user-id";
 import type { DataTableParams } from "@/lib/admin/data-table-schemas";
 import { extractStringFilter } from "@/lib/admin/filter-utils";
 import {

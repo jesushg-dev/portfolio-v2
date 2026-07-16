@@ -4,7 +4,7 @@ import { useCallback, useState, useTransition, type FC } from "react";
 import { format } from "date-fns";
 import { CheckCircle, Circle, Clock, Edit, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
 
 import {
@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -114,17 +114,16 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
             </CardTitle>
             <CardDescription>{t("timeline.description")}</CardDescription>
           </div>
-          <Button
-            size="sm"
-            render={
-              <Link
-                href={`/admin/job-tracker/events/new?applicationId=${application.id}`}
-              />
-            }
+          <Link
+            href={{
+              pathname: "/admin/job-tracker/events/new",
+              query: { applicationId: application.id },
+            }}
+            className={buttonVariants({ size: "sm" })}
           >
             <Plus className="mr-2 h-4 w-4" />
             {t("timeline.addEvent")}
-          </Button>
+          </Link>
         </div>
       </CardHeader>
       <CardContent>

@@ -19,6 +19,7 @@ export interface SkillEditorDTO {
   title: string;
   image: string;
   type: Skill["type"];
+  featured: boolean;
   translations: SkillTranslationMap;
   projectCount: number;
   certificateCount: number;
@@ -52,6 +53,7 @@ export function mapSkillToEditorDto(
     title: skill.title ?? "",
     image: skill.image ?? "",
     type: skill.type,
+    featured: skill.featured,
     translations: mergeTranslationMap(
       languages,
       rows,
@@ -76,6 +78,7 @@ export function buildEmptySkillCreateDto(
     title: "",
     image: "",
     type: "FRONTEND",
+    featured: false,
     translations: buildEmptyTranslationMap(
       languages,
       emptySkillTranslationFields,

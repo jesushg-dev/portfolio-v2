@@ -1,0 +1,54 @@
+/// Original uploaded resume files (backup for re-parse). Structured CV data
+/// lives in Cv* models — this is metadata + import draft only.
+model CvSourceUpload {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String   @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  originalFileUrl String
+  uploadThingKey  String
+  fileName        String
+  mimeType        String
+
+  source          String   @default("upload") // "manual" | "upload"
+  detectedLocale  String?
+  parserVersion   String   @default("v1")
+  parsedAt        DateTime?
+  importStatus    String   @default("pending") // pending | preview | imported | failed
+  parseError      String?
+  parsedDraft     Json?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, createdAt])
+}
+
+/// Immutable tailored resume exports (DOCX) linked to job applications.
+model ResumeExport {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @db.ObjectId
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fileName           String
+  fileUrl            String
+  uploadThingKey     String
+  mimeType           String   @default("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+
+  sourceType         String   // "studio" | "upload"
+  sourceUploadId     String?  @db.ObjectId
+  tailoredFor        String?
+  jobDescription     String?
+  aiScore            Int?
+  aiProvider         String?
+  structuredSnapshot Json?
+
+  applicationId      String?  @db.ObjectId
+  application        Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([applicationId])
+}

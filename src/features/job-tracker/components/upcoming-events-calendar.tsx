@@ -3,7 +3,7 @@
 import { format, isToday, isTomorrow, isThisWeek } from "date-fns";
 import { Calendar, Clock, MapPin, Video, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 import {
   Card,
@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { eventTypeIcons } from "@/features/job-tracker/lib/constants";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
@@ -57,13 +57,13 @@ export function UpcomingEventsCalendar({
             </CardTitle>
             <CardDescription>{t("calendar.description")}</CardDescription>
           </div>
-          <Button
-            size="sm"
-            render={<Link href="/admin/job-tracker/events/new" />}
+          <Link
+            href="/admin/job-tracker/events/new"
+            className={buttonVariants({ size: "sm" })}
           >
             <Plus className="mr-2 h-4 w-4" />
             {t("calendar.add")}
-          </Button>
+          </Link>
         </div>
       </CardHeader>
       <CardContent>

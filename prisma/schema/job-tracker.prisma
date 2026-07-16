@@ -27,6 +27,8 @@ model Application {
   // cvFile embedded as a composite type
   cvFile      CvFile?
   
+  resumeExports ResumeExport[]
+  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   userId      String   @db.ObjectId

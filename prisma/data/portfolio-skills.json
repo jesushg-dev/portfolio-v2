@@ -20,7 +20,8 @@
         "description": "Objektorientierte Programmiersprache, unabhängig von der Hardwareplattform.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Java_(Programmiersprache)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Php",
@@ -43,7 +44,8 @@
         "description": "Allgemeine serverseitige Skriptsprache, die ursprünglich für die Webentwicklung zur Erstellung dynamischer Webseiten entwickelt wurde.",
         "urlWiki": "https://nl.wikipedia.org/wiki/PHP"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Csharp",
@@ -66,7 +68,8 @@
         "description": "Objektorientierte Programmiersprache, die von Microsoft als Teil seiner .NET-Initiative entwickelt wurde.",
         "urlWiki": "https://nl.wikipedia.org/wiki/C_Sharp"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Entity",
@@ -89,7 +92,8 @@
         "description": "Open-Source-Framework für die Entwicklung von Anwendungen auf der Grundlage des Repository-Musters und der objektorientierten Abbildung (ORM).",
         "urlWiki": "https://nl.wikipedia.org/wiki/Entity_Framework"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Dotnet",
@@ -112,7 +116,8 @@
         "description": "Open-Source-Software-Entwicklungsplattform zur Erstellung von Web-, Mobil- und Desktopanwendungen.",
         "urlWiki": "https://nl.wikipedia.org/wiki/.NET"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Swagger",
@@ -135,7 +140,8 @@
         "description": "Open-Source-Tool zum Entwerfen, Erstellen, Dokumentieren und Verwenden von RESTful-Webdiensten.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Swagger_(Software)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Nodejs",
@@ -158,7 +164,8 @@
         "description": "JavaScript-Laufzeitumgebung, die auf der JavaScript-Engine V8 von Chrome basiert.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Node.js"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Nestjs",
@@ -181,7 +188,8 @@
         "description": "Progressief Node.js-framework voor het bouwen van efficiënte en schaalbare server-side applicaties.",
         "urlWiki": "https://nestjs.com/"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Express",
@@ -204,7 +212,8 @@
         "description": "Node.js-Framework für Webanwendungen und REST-API. Es ist minimalistisch und flexibel und bietet einen soliden Satz von Funktionen für Web- und Mobile-Anwendungen.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Express.js"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Mysql",
@@ -227,7 +236,8 @@
         "description": "Relationales Datenbankmanagementsystem, Open-Source und plattformübergreifend, das hauptsächlich für die Webentwicklung verwendet wird.",
         "urlWiki": "https://nl.wikipedia.org/wiki/MySQL"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "SqlServer",
@@ -250,7 +260,8 @@
         "description": "Relationales Datenbankmanagementsystem, das von Microsoft als Teil seiner Microsoft SQL Server-Familie entwickelt wurde.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Microsoft_SQL_Server"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "MongoDb",
@@ -273,7 +284,8 @@
         "description": "Dokumentenorientierte, NoSQL- und Open-Source-Datenbank.",
         "urlWiki": "https://nl.wikipedia.org/wiki/MongoDB"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Firebase",
@@ -296,7 +308,8 @@
         "description": "Mobile und Web Application Development Platform, die 2011 von Firebase, Inc. entwickelt und 2014 von Google übernommen wurde.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Firebase"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Npm",
@@ -319,7 +332,8 @@
         "description": "Package Manager für die Programmiersprache JavaScript, das größte Ökosystem von Open-Source-Bibliotheken der Welt.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Npm_(Software)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Yarn",
@@ -342,7 +356,8 @@
         "description": "Package Manager für die Programmiersprache JavaScript, das größte Ökosystem von Open-Source-Bibliotheken der Welt.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Yarn_(Software)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Vite",
@@ -365,7 +380,8 @@
         "description": "Modernes Webentwicklungstooling, das ein schnelles und flüssiges Entwicklungserlebnis bietet.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Vite"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Git",
@@ -388,7 +404,8 @@
         "description": "Verteiltes Versionskontrollsystem, das entwickelt wurde, um alles von kleinen bis sehr großen Projekten mit Geschwindigkeit und Effizienz zu handhaben.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Git"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Github",
@@ -411,7 +428,8 @@
         "description": "Kollaborative Entwicklungsplattform zum Hosten von Projekten mit dem Git-Versionierungssystem.",
         "urlWiki": "https://nl.wikipedia.org/wiki/GitHub"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Bitbucket",
@@ -434,7 +452,8 @@
         "description": "Kollaborative Entwicklungsplattform zum Hosten von Projekten mit dem Git-Versionierungssystem.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Bitbucket"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Vscode",
@@ -457,7 +476,8 @@
         "description": "Source-Code-Editor, der von Microsoft für Windows, Linux und macOS entwickelt wurde. Er unterstützt Debugging, integrierte Versionskontrolle, Syntaxhervorhebung, intelligentes Code-Completion, Snippets und Code-Refactoring.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Visual_Studio_Code"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Postman",
@@ -480,7 +500,8 @@
         "description": "Kollaborative Entwicklungsplattform zum Hosten von Projekten mit dem Git-Versionierungssystem.",
         "urlWiki": "https://nl.wikipedia.org/wiki/GitHub"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "GraphQL",
@@ -503,7 +524,8 @@
         "description": "Abfragesprache für APIs und eine Laufzeitumgebung zur Erfüllung von Abfragen mit vorhandenen Daten.",
         "urlWiki": "https://nl.wikipedia.org/wiki/GraphQL"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Prisma",
@@ -526,7 +548,8 @@
         "description": "Prisma ist ein ORM (Object Relational Mapper), mit dem Sie mit relationalen Datenbanken wie MySQL oder PostgreSQL arbeiten können. Prisma ermöglicht es Ihnen, Ihr Datenbankschema zu definieren und Modelle und Resolver für GraphQL- oder REST-APIs zu generieren.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Prisma_(software)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Azure",
@@ -549,7 +572,8 @@
         "description": "Microsoft Cloud-Computing-Plattform. Es bietet eine Vielzahl von Cloud-Computing-Diensten, darunter Analyse, Cloud-Speicher, Datenbanken, Netzwerke, künstliche Intelligenz und Anwendungsentwicklung.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Microsoft_Azure"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Notion",
@@ -572,7 +596,8 @@
         "description": "Produktivitäts- und Kollaborationsplattform, die die Tools eines Wikis mit denen eines Notizbuchs kombiniert. Es ermöglicht das Erstellen von Webseiten und Arbeitsplatten sowie das Organisieren und Teilen von Informationen.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Notion_(software)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Html",
@@ -595,7 +620,8 @@
         "description": "Auszeichnungssprache zur Erstellung von Webseiten in einem Webbrowser.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Hypertext_Markup_Language"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Css",
@@ -618,7 +644,8 @@
         "description": "Stylesheet-Sprache, die zum Beschreiben der Präsentation eines in HTML geschriebenen Dokuments verwendet wird.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Cascading_Style_Sheets"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Javascript",
@@ -641,7 +668,8 @@
         "description": "Interpretierte Programmiersprache, Dialekt des ECMAScript-Standards. Es wird als objektorientierte, prototypbasierte, imperative, schwach typisierte und dynamische Sprache definiert.",
         "urlWiki": "https://nl.wikipedia.org/wiki/JavaScript"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Typescript",
@@ -664,7 +692,8 @@
         "description": "Superset von JavaScript, das von Microsoft entwickelt wurde und statische Typisierung und objektorientierte Klassen hinzufügt.",
         "urlWiki": "https://nl.wikipedia.org/wiki/TypeScript"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "React",
@@ -687,7 +716,8 @@
         "description": "Open-Source-JavaScript-Bibliothek, die entwickelt wurde, um Benutzeroberflächen zu erstellen, mit dem Ziel, die Entwicklung von Single-Page-Anwendungen zu erleichtern.",
         "urlWiki": "https://nl.wikipedia.org/wiki/React_(JavaScript-Bibliothek)"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Nextjs",
@@ -710,7 +740,8 @@
         "description": "Open-Source-JavaScript-Framework, das entwickelt wurde, um Single-Page-Webanwendungen mit React zu erstellen, die Funktionen wie serverseitiges Rendern und statische Site-Generierung für Webanwendungen auf React ermöglichen.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Next.js"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Redux",
@@ -733,7 +764,8 @@
         "description": "Open-Source-JavaScript-Bibliothek für die Entwicklung von Webanwendungen, die sich auf das Management von Anwendungsstatus konzentriert.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Redux_(JavaScript-Bibliothek)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Tailwind",
@@ -756,7 +788,8 @@
         "description": "Open-Source-CSS-Framework, mit dem Sie schnell benutzerdefinierte Benutzeroberflächen erstellen können.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Tailwind_CSS"
       }
-    ]
+    ],
+    "featured": true
   },
   {
     "key": "Material",
@@ -779,7 +812,8 @@
         "description": "React-Komponentenframework, das Material Design implementiert.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Material_UI"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Styled",
@@ -802,7 +836,8 @@
         "description": "JavaScript-Bibliothek für React und React Native, mit der Sie CSS-Stile in React-Komponenten verwenden können.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Styled_Components"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Sass",
@@ -825,7 +860,8 @@
         "description": "Kaskadierende Stylesheet-Sprache, die in CSS interpretiert oder kompiliert wird.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Sass_(Stylesheet-Sprache)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Bootstrap",
@@ -848,7 +884,8 @@
         "description": "Open-Source-Framework zum Entwickeln von Websites und Webanwendungen mit HTML, CSS und JavaScript.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Bootstrap_(Framework)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Apollo",
@@ -871,7 +908,8 @@
         "description": "Open-Source-Plattform zum Erstellen, Verwalten und Verbinden von Datenanwendungen.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Apollo_(Plattform)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "WebSockets",
@@ -894,7 +932,8 @@
         "description": "Bidirektionales Kommunikationsprotokoll, das die Kommunikation zwischen einem Client und einem Server über eine einzelne TCP-Verbindung ermöglicht.",
         "urlWiki": "https://nl.wikipedia.org/wiki/WebSocket"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "ReactNative",
@@ -917,7 +956,8 @@
         "description": "Open-Source-Framework zum Entwickeln von mobilen Anwendungen für Android und iOS mit React.",
         "urlWiki": "https://nl.wikipedia.org/wiki/React_Native"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Android",
@@ -940,7 +980,8 @@
         "description": "Mobiles Betriebssystem auf Linux-Kernelbasis, das von Google entwickelt und 2008 veröffentlicht wurde.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Android_(Betriebssystem)"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "Windforms",
@@ -963,7 +1004,8 @@
         "description": "Microsoft Framework zum Entwickeln von Desktopanwendungen mit der Programmiersprache C#.",
         "urlWiki": "https://nl.wikipedia.org/wiki/Windows_Forms"
       }
-    ]
+    ],
+    "featured": false
   },
   {
     "key": "DevExpress",
@@ -986,6 +1028,7 @@
         "description": "Softwarekomponenten-Suite zum Entwickeln von Desktop- und Webanwendungen mit der Programmiersprache C#.",
         "urlWiki": "https://nl.wikipedia.org/wiki/DevExpress"
       }
-    ]
+    ],
+    "featured": false
   }
 ]

@@ -14,6 +14,7 @@ import EditableCvLayout from "./editable-cv-layout";
 import { getLocalizedText } from "@/lib/i18n/localized";
 import { CvEditorSkeleton } from "@/features/cv/components/cv-editor-skeleton";
 import { CvPageFrame } from "@/features/cv/components/cv-page-frame";
+import { ResumeImportWorkflow } from "@/features/resume-engine/components/resume-import-workflow";
 
 const SECTION_LINKS = [
   { id: "header", labelKey: "cvHeader" as const },
@@ -27,7 +28,7 @@ const SECTION_LINKS = [
   { id: "additional", labelKey: "additionalInformation" as const },
 ] as const;
 
-type EditorView = "edit" | "preview";
+type EditorView = "edit" | "preview" | "import";
 
 const CvEditor: FC = () => {
   const t = useTranslations("admin.cv");
@@ -127,6 +128,18 @@ const CvEditor: FC = () => {
             >
               {t("preview")}
             </button>
+            <button
+              id="cv-editor-import"
+              type="button"
+              onClick={() => setView("import")}
+              className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
+                view === "import"
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {t("import")}
+            </button>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -176,6 +189,8 @@ const CvEditor: FC = () => {
             />
           </div>
         </CvPageFrame>
+      ) : view === "import" ? (
+        <ResumeImportWorkflow onImported={() => setView("edit")} />
       ) : (
         <CvPageFrame hint={t("editingBanner")}>
           <EditableCvLayout

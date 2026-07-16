@@ -20,6 +20,7 @@ export interface SoftSkillEditorDTO {
   id: string;
   icon: string;
   isVisible: boolean;
+  featured: boolean;
   order: number;
   translations: SoftSkillTranslationMap;
 }
@@ -38,6 +39,7 @@ export function mapSoftSkillToEditorDto(
     id: item.id,
     icon: item.icon,
     isVisible: item.isVisible,
+    featured: item.featured,
     order: item.order,
     translations: localizedFieldsToTranslationMap(
       item.title,
@@ -60,6 +62,7 @@ export function buildEmptySoftSkillCreateDto(
   return {
     icon: "",
     isVisible: true,
+    featured: false,
     order: 0,
     translations: buildEmptyTranslationMap(
       languages,

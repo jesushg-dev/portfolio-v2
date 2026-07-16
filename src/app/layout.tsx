@@ -1,7 +1,6 @@
 import "@/app/globals.css";
 
 import type { Metadata } from "next";
-import { locales } from "@/i18n/config";
 import { NextIntlClientProvider } from "next-intl";
 import { TRPCReactProvider } from "@/trpc/react";
 import PreloadTheme from "@/hoc/preload-theme";
@@ -16,10 +15,6 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const inter = Inter({ subsets: ["latin"] });
 import { Toaster } from "@/components/ui/sonner";
-
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
 
 export const metadata: Metadata = {
   manifest: "/manifest.json",

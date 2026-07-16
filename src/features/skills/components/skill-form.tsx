@@ -14,6 +14,7 @@ import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -55,6 +56,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
         title: z.string().min(1, t("titleRequired")),
         image: z.string().min(1, t("imageRequired")),
         type: StackTypeSchema,
+        featured: z.boolean(),
         translations: translationMapSchema(
           z.object({
             description: z.string(),
@@ -223,6 +225,26 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="featured"
+              render={({ field }) => (
+                <FormItem
+                  label={t("featuredLabel")}
+                  description={t("featuredDescription")}
+                  inputId="skill-featured"
+                >
+                  <div className="flex h-10 items-center">
+                    <Switch
+                      id="skill-featured"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </div>
+                </FormItem>
+              )}
+            />
           </FormSection>
         </FormContent>
         <FormActions

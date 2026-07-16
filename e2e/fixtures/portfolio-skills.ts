@@ -16,6 +16,7 @@ export interface PortfolioSkillSeed {
   title: string;
   type: string;
   image: string;
+  featured?: boolean;
   translations: {
     locale: "es" | "en" | "nl";
     description: string;

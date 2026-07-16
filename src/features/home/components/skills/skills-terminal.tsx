@@ -1,0 +1,253 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState, type FC } from "react";
+import { ArrowRightIcon } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { useTranslations } from "next-intl";
+import type { Locale } from "next-intl";
+
+import { Link } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
+import type { SkillType } from "@/utils/interfaces/types";
+import {
+  countSkillsByCategory,
+  filterSkillsByCategory,
+  SKILL_CATEGORIES,
+  type SkillCategoryId,
+} from "./lib/skill-display";
+import SkillItem from "./skill-item";
+import { SkillsTerminalSkeleton } from "./skills-terminal-skeleton";
+
+interface SkillsTerminalProps {
+  locale: Locale;
+}
+
+const SkillsTerminal: FC<SkillsTerminalProps> = ({ locale }) => {
+  const t = useTranslations("main.skills");
+  const shouldReduceMotion = useReducedMotion();
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const [activeCategory, setActiveCategory] =
+    useState<SkillCategoryId>("frontend");
+  const [search, setSearch] = useState("");
+
+  const { data, isLoading } = api.portfolio.getSkills.useQuery({
+    limit: LIMIT_PER_PAGE_BIG,
+    locale,
+  });
+
+  const skills = useMemo(() => data?.data ?? [], [data?.data]);
+  const counts = useMemo(() => countSkillsByCategory(skills), [skills]);
+  const isSearching = search.trim().length > 0;
+
+  const visibleSkills = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (query) {
+      return skills.filter((skill) =>
+        skill.title.toLowerCase().includes(query),
+      );
+    }
+    return filterSkillsByCategory(skills, activeCategory);
+  }, [activeCategory, search, skills]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "/" && document.activeElement !== searchRef.current) {
+        event.preventDefault();
+        searchRef.current?.focus();
+      }
+
+      if (
+        event.key === "Escape" &&
+        document.activeElement === searchRef.current
+      ) {
+        setSearch("");
+        searchRef.current?.blur();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const description = isSearching ? (
+    <span>
+      <span className="text-primary font-mono font-medium">
+        {t("terminal.matchCount", { count: visibleSkills.length })}
+      </span>
+      {t("terminal.searchFor", { query: search })}
+    </span>
+  ) : (
+    t(`tabs.${activeCategory}.description`)
+  );
+
+  return (
+    <div
+      id="skills"
+      className="relative z-10 mx-auto max-w-[980px] py-16 lg:py-20"
+    >
+      <header
+        className={cn(
+          "mb-9 max-w-[620px]",
+          !shouldReduceMotion && "animate-[riseIn_0.5s_ease_both]",
+        )}
+      >
+        <p className="text-primary mb-4 font-mono text-[13px]">
+          {t("terminal.eyebrow")}
+        </p>
+        <h2 className="text-foreground mb-4 text-[clamp(30px,4vw,42px)] leading-[1.08] font-semibold tracking-[-0.015em]">
+          {t("title")}
+        </h2>
+        <p className="text-muted-foreground mb-[18px] max-w-[460px] text-base leading-relaxed">
+          {t("description")}
+        </p>
+        <p className="text-muted-foreground font-mono text-[13px]">
+          {"{ "}
+          <b className="text-foreground font-medium">frontend</b>
+          {`: ${counts.frontend}, `}
+          <b className="text-foreground font-medium">backend</b>
+          {`: ${counts.backend}, `}
+          <b className="text-foreground font-medium">tools</b>
+          {`: ${counts.tools} }`}
+        </p>
+      </header>
+
+      <section
+        className={cn(
+          "bg-card/95 border-border overflow-hidden rounded-[14px] border backdrop-blur-md",
+          !shouldReduceMotion && "animate-[riseIn_0.55s_0.08s_ease_both]",
+        )}
+      >
+        <div className="border-border bg-muted flex flex-col flex-wrap items-stretch justify-between gap-3 border-b pr-2 sm:flex-row sm:items-center">
+          <div
+            className={cn(
+              "flex items-stretch gap-0 overflow-x-auto px-2 pt-0.5 sm:px-0",
+              isSearching && "pointer-events-none opacity-40",
+            )}
+          >
+            {SKILL_CATEGORIES.map((category) => {
+              const isActive = !isSearching && activeCategory === category.id;
+
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  data-cat={category.id}
+                  onClick={() => {
+                    setSearch("");
+                    setActiveCategory(category.id);
+                  }}
+                  className={cn(
+                    "relative flex shrink-0 items-center gap-2 border-b-2 px-4 pt-[15px] pb-[13px] text-sm whitespace-nowrap transition-colors duration-150",
+                    isActive && !shouldReduceMotion
+                      ? "text-foreground border-transparent font-medium"
+                      : isActive
+                        ? cn(
+                            "text-foreground font-medium",
+                            category.borderClass,
+                          )
+                        : "text-muted-foreground hover:text-foreground border-transparent font-normal",
+                  )}
+                >
+                  {isActive && !shouldReduceMotion ? (
+                    <motion.span
+                      layoutId="skills-terminal-tab"
+                      className={cn(
+                        "absolute right-0 bottom-[-2px] left-0 h-0.5 rounded-full",
+                        category.indicatorClass,
+                      )}
+                      transition={{
+                        type: "spring",
+                        bounce: 0.15,
+                        duration: 0.45,
+                      }}
+                    />
+                  ) : null}
+                  <span
+                    className={cn(
+                      "h-[7px] w-[7px] shrink-0 rounded-full opacity-45",
+                      isActive
+                        ? cn("opacity-100", category.dotClass)
+                        : "bg-current",
+                    )}
+                  />
+                  <span>{t(`tabs.${category.id}.title`)}</span>
+                  <span className="text-muted-foreground font-mono text-[11px]">
+                    {counts[category.id]}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="border-border bg-background focus-within:border-primary mx-2 mb-2 flex min-w-[170px] flex-1 items-center gap-2 rounded-lg border px-3 py-2 transition-colors duration-150 sm:mx-0 sm:mb-0 sm:max-w-[220px] sm:flex-[0_1_220px]">
+            <span className="text-primary shrink-0 font-mono text-[13px]">
+              $
+            </span>
+            <input
+              ref={searchRef}
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              type="text"
+              placeholder={t("terminal.searchPlaceholder")}
+              autoComplete="off"
+              aria-label={t("terminal.searchLabel")}
+              className="text-foreground placeholder:text-muted-foreground w-full border-none bg-transparent font-mono text-[13px] outline-none"
+            />
+            <span className="border-border text-muted-foreground shrink-0 rounded border px-1.5 py-px font-mono text-[10.5px]">
+              /
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-2.5 px-6 pt-4 pb-1 sm:px-6">
+          <p className="text-muted-foreground m-0 text-sm">{description}</p>
+          <div className="text-muted-foreground font-mono text-[11px]">
+            {t("terminal.coreLegend")}
+          </div>
+        </div>
+
+        {isLoading ? (
+          <SkillsTerminalSkeleton />
+        ) : visibleSkills.length === 0 ? (
+          <p className="text-muted-foreground px-5 py-11 text-center text-sm">
+            {t("terminal.noResults")}
+          </p>
+        ) : (
+          <motion.ul
+            key={isSearching ? `search-${search}` : activeCategory}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex list-none flex-wrap gap-x-[26px] gap-y-4 px-6 py-5 pb-8 sm:px-7 sm:pb-[34px]"
+          >
+            {visibleSkills.map((skill: SkillType) => (
+              <li key={skill.id}>
+                <SkillItem
+                  image={skill.image}
+                  title={skill.title}
+                  featured={skill.featured}
+                />
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </section>
+
+      <div className="mt-7">
+        <Link
+          scroll
+          href="/certificates"
+          className="text-primary group inline-flex items-center gap-1.5 text-sm font-medium no-underline"
+        >
+          {t("modal.seeCertificates")}
+          <ArrowRightIcon className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+export default SkillsTerminal;

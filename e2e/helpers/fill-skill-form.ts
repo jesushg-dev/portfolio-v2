@@ -82,6 +82,19 @@ async function selectSkillType(page: Page, type: string): Promise<void> {
   await clickSelectOption(page, "skill-type", `skill-type-option-${type}`);
 }
 
+async function setFeaturedSwitch(
+  page: Page,
+  shouldBeFeatured: boolean,
+): Promise<void> {
+  const featuredSwitch = page.locator("#skill-featured").getByRole("switch");
+  const isChecked = await featuredSwitch.getAttribute("aria-checked");
+  const checked = isChecked === "true";
+
+  if (checked !== shouldBeFeatured) {
+    await featuredSwitch.click();
+  }
+}
+
 export async function fillSkillForm(
   page: Page,
   skill: PortfolioSkillFixture,
@@ -113,6 +126,7 @@ export async function fillSkillForm(
   }
 
   await selectSkillType(page, skill.type);
+  await setFeaturedSwitch(page, skill.featured ?? false);
 
   const createResponse = page.waitForResponse(
     (response) =>

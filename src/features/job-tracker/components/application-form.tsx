@@ -29,6 +29,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { FileUpload } from "@/components/file-upload";
+import { useUploadThing } from "@/lib/uploadthing";
 import type { ApplicationStatus } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
 import {
@@ -71,6 +72,11 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
   const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvUploadUrl, setCvUploadUrl] = useState<string | null>(null);
+  const [cvUploadName, setCvUploadName] = useState<string | null>(null);
+
+  const { startUpload, isUploading: isCvUploading } =
+    useUploadThing("resumeImporter");
 
   const utils = api.useUtils();
   const createApplication = api.jobTrackerAdmin.createApplication.useMutation();
@@ -108,9 +114,20 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
         try {
           let cvFileObj = undefined;
           if (cvFile) {
+            let url = cvUploadUrl;
+            if (!url) {
+              const uploaded = await startUpload([cvFile]);
+              const file = uploaded?.[0];
+              if (!file) {
+                throw new Error(t("cvUploadFailed"));
+              }
+              url = file.ufsUrl ?? file.url;
+              setCvUploadUrl(url);
+              setCvUploadName(file.name);
+            }
             cvFileObj = {
-              name: cvFile.name,
-              url: URL.createObjectURL(cvFile),
+              name: cvUploadName ?? cvFile.name,
+              url,
               uploadedAt: new Date(),
             };
           }
@@ -162,9 +179,12 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
     [
       createApplication,
       cvFile,
+      cvUploadName,
+      cvUploadUrl,
       initialData,
       isEditMode,
       router,
+      startUpload,
       t,
       updateApplication,
       utils,
@@ -365,10 +385,17 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
               description={t("descriptions.cvUpload")}
             >
               <FileUpload
-                onFileSelect={setCvFile}
+                onFileSelect={(file) => {
+                  setCvFile(file);
+                  setCvUploadUrl(null);
+                  setCvUploadName(null);
+                }}
                 currentFile={
                   cvFile
-                    ? { name: cvFile.name, url: URL.createObjectURL(cvFile) }
+                    ? {
+                        name: cvFile.name,
+                        url: cvUploadUrl ?? "#",
+                      }
                     : "cvFile" in initialData && initialData.cvFile
                       ? {
                           name: initialData.cvFile.name,
@@ -376,14 +403,18 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
                         }
                       : undefined
                 }
-                onFileRemove={() => setCvFile(null)}
+                onFileRemove={() => {
+                  setCvFile(null);
+                  setCvUploadUrl(null);
+                  setCvUploadName(null);
+                }}
               />
             </FormItem>
           </FormSection>
         </FormContent>
 
         <FormActions
-          isPending={isPending}
+          isPending={isPending || isCvUploading}
           title={isEditMode ? t("actions.save") : t("actions.submit")}
           submitId="application-submit"
         >
