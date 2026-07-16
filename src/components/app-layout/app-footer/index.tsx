@@ -13,10 +13,15 @@ import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
 import type { IconType } from "react-icons";
 
 import { Link } from "@/i18n/routing";
+import { LinkPreview } from "@/components/ui/link-preview";
 import SpotifyWidget from "@/components/shared/spotify-widget";
 import { api } from "@/trpc/server";
 import { buildContactLinks } from "@/utils/contact-links";
 import type { ContactIconKey } from "@/utils/contact-links";
+import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
+
+const footerLinkClassName =
+  "text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors";
 
 const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
   email: IoMail,
@@ -87,28 +92,34 @@ const Footer = async () => {
             </h4>
             <ul className="space-y-1.5">
               <li>
-                <Link
-                  href="/certificates"
-                  className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
+                <LinkPreview
+                  url="/certificates"
+                  imageSrc={FOOTER_LINK_PREVIEWS.certificates}
+                  imageAlt={t("sections.portfolio.certificates")}
+                  className={footerLinkClassName}
                 >
                   {t("sections.portfolio.certificates")}
-                </Link>
+                </LinkPreview>
               </li>
               <li>
-                <Link
-                  href="/curriculum-vitae"
-                  className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
+                <LinkPreview
+                  url="/curriculum-vitae"
+                  imageSrc={FOOTER_LINK_PREVIEWS.curriculum}
+                  imageAlt={t("sections.portfolio.curriculum")}
+                  className={footerLinkClassName}
                 >
                   {t("sections.portfolio.curriculum")}
-                </Link>
+                </LinkPreview>
               </li>
               <li>
-                <Link
-                  href="/timeline"
-                  className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
+                <LinkPreview
+                  url="/timeline"
+                  imageSrc={FOOTER_LINK_PREVIEWS.timeline}
+                  imageAlt={t("sections.portfolio.timeline")}
+                  className={footerLinkClassName}
                 >
                   {t("sections.portfolio.timeline")}
-                </Link>
+                </LinkPreview>
               </li>
             </ul>
           </nav>
@@ -118,15 +129,14 @@ const Footer = async () => {
               {t("titles.miscellaneous")}
             </h4>
             <div className="flex items-center gap-2">
-              <Link
-                href={{
-                  pathname: "/register",
-                  query: { next: "/admin/cv" },
-                }}
-                className="text-primary-foreground/75 hover:text-primary-foreground text-sm transition-colors"
+              <LinkPreview
+                url="/register?next=/admin/cv"
+                imageSrc={FOOTER_LINK_PREVIEWS.cvGenerator}
+                imageAlt={t("sections.miscellaneous.cvGenerator")}
+                className={footerLinkClassName}
               >
                 {t("sections.miscellaneous.cvGenerator")}
-              </Link>
+              </LinkPreview>
               <span className="bg-primary-foreground/15 text-primary-foreground rounded-md px-2 py-0.5 text-xs font-medium">
                 {t("beta")}
               </span>
