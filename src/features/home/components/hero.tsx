@@ -17,7 +17,7 @@ interface HeroProps {
 }
 
 const Hero: FC<HeroProps> = async ({ stats }) => {
-  const locale = (await getLocale());
+  const locale = await getLocale();
   const t = await getTranslations("main.heroMain");
 
   const heroData = await getCachedHeroPublic(locale);

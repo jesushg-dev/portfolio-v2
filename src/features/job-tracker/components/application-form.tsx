@@ -36,6 +36,8 @@ import {
   type ApplicationCreateFormDTO,
   type ApplicationEditorDTO,
 } from "@/features/job-tracker/lib/application-editor-dto";
+import { CompanyCombobox } from "@/features/job-tracker/components/company-combobox";
+import { decodeNewCompanyName } from "@/features/job-tracker/lib/company-combobox";
 import type { CompanyEditorDTO } from "@/features/job-tracker/lib/company-editor-dto";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
 import { Form, FormControl, FormField } from "@/components/ui/form";
@@ -81,6 +83,16 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
   const utils = api.useUtils();
   const createApplication = api.jobTrackerAdmin.createApplication.useMutation();
   const updateApplication = api.jobTrackerAdmin.updateApplication.useMutation();
+  const createCompany = api.jobTrackerAdmin.createCompany.useMutation();
+
+  const statusItems = useMemo(
+    () =>
+      APPLICATION_STATUSES.map((status) => ({
+        value: status,
+        label: t(`status.${status}`),
+      })),
+    [t],
+  );
 
   const dateFnsLocale = getDateFnsLocale(locale);
 
@@ -112,6 +124,16 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
       startTransition(async () => {
         setServerError(null);
         try {
+          let companyId = data.companyId;
+          const newCompanyName = decodeNewCompanyName(companyId);
+          if (newCompanyName) {
+            const company = await createCompany.mutateAsync({
+              name: newCompanyName,
+            });
+            companyId = company.id;
+            await utils.jobTrackerAdmin.getCompanies.invalidate();
+          }
+
           let cvFileObj = undefined;
           if (cvFile) {
             let url = cvUploadUrl;
@@ -136,7 +158,7 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
             await updateApplication.mutateAsync({
               id: initialData.id,
               position: data.position,
-              companyId: data.companyId,
+              companyId,
               status: data.status,
               appliedDate: data.appliedDate,
               salary: data.salary ?? undefined,
@@ -148,7 +170,7 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
           } else {
             await createApplication.mutateAsync({
               position: data.position,
-              companyId: data.companyId,
+              companyId,
               status: data.status,
               appliedDate: data.appliedDate,
               salary: data.salary ?? undefined,
@@ -178,6 +200,7 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
     },
     [
       createApplication,
+      createCompany,
       cvFile,
       cvUploadName,
       cvUploadUrl,
@@ -225,22 +248,12 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
                     inputId="companyId"
                     required
                   >
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger id="companyId">
-                          <SelectValue
-                            placeholder={t("placeholders.company")}
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {companies.map((company) => (
-                          <SelectItem key={company.id} value={company.id}>
-                            {company.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <CompanyCombobox
+                      id="companyId"
+                      value={field.value}
+                      onChange={field.onChange}
+                      companies={companies}
+                    />
                   </FormItem>
                 )}
               />
@@ -272,16 +285,20 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
                     inputId="status"
                     required
                   >
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      items={statusItems}
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
                       <FormControl>
-                        <SelectTrigger id="status">
-                          <SelectValue />
+                        <SelectTrigger id="status" className="w-full">
+                          <SelectValue placeholder={t("fields.status")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {APPLICATION_STATUSES.map((value) => (
-                          <SelectItem key={value} value={value}>
-                            {t(`status.${value}`)}
+                        {APPLICATION_STATUSES.map((status) => (
+                          <SelectItem key={status} value={status}>
+                            {t(`status.${status}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>

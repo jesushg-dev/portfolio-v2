@@ -1,17 +1,10 @@
 "use client";
 
 import { format, isToday, isTomorrow, isThisWeek } from "date-fns";
-import { Calendar, Clock, MapPin, Video, Plus } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, Video } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { api } from "@/trpc/react";
@@ -19,22 +12,26 @@ import { eventTypeIcons } from "@/features/job-tracker/lib/constants";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
 import type { Locale } from "@/i18n/config";
 import type { EventType, UpcomingEvent } from "@/features/job-tracker/types";
+import { cn } from "@/lib/utils";
 
 interface UpcomingEventsCalendarProps {
   initialEvents: UpcomingEvent[];
   locale: Locale;
+  variant?: "default" | "sidebar";
 }
 
 export function UpcomingEventsCalendar({
   initialEvents,
   locale,
+  variant = "default",
 }: UpcomingEventsCalendarProps) {
   const t = useTranslations("admin.jobTracker");
   const dateFnsLocale = getDateFnsLocale(locale);
+  const isSidebar = variant === "sidebar";
 
   const { data: upcomingEvents = initialEvents } =
     api.jobTrackerAdmin.getUpcomingEvents.useQuery(
-      { limit: 5 },
+      { limit: isSidebar ? 4 : 5 },
       { placeholderData: initialEvents },
     );
 
@@ -47,82 +44,134 @@ export function UpcomingEventsCalendar({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              {t("calendar.title")}
-            </CardTitle>
-            <CardDescription>{t("calendar.description")}</CardDescription>
-          </div>
-          <Link
-            href="/admin/job-tracker/events/new"
-            className={buttonVariants({ size: "sm" })}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            {t("calendar.add")}
-          </Link>
+    <aside
+      className={cn(
+        "bg-card text-card-foreground border-border flex flex-col rounded-xl border shadow-sm",
+        isSidebar ? "xl:sticky xl:top-6" : "",
+      )}
+    >
+      <div
+        className={cn(
+          "border-border flex items-start justify-between gap-3 border-b",
+          isSidebar ? "p-4" : "p-6",
+        )}
+      >
+        <div>
+          <h2 className="flex items-center gap-2 text-sm font-semibold">
+            <Calendar className="text-primary size-4" aria-hidden />
+            {t("calendar.title")}
+          </h2>
+          {!isSidebar ? (
+            <p className="text-muted-foreground mt-1 text-xs">
+              {t("calendar.description")}
+            </p>
+          ) : null}
         </div>
-      </CardHeader>
-      <CardContent>
+        <Link
+          href="/admin/job-tracker/events/new"
+          className={buttonVariants({ size: "sm", variant: "outline" })}
+        >
+          <Plus className="size-4" aria-hidden />
+          {!isSidebar ? (
+            <span className="ml-1.5">{t("calendar.add")}</span>
+          ) : null}
+        </Link>
+      </div>
+
+      <div className={cn(isSidebar ? "p-3" : "p-6")}>
         {upcomingEvents.length === 0 ? (
-          <div className="text-muted-foreground py-8 text-center">
-            <Calendar className="mx-auto mb-4 h-12 w-12 opacity-50" />
+          <div className="text-muted-foreground py-8 text-center text-sm">
+            <Calendar className="mx-auto mb-3 size-8 opacity-40" aria-hidden />
             <p>{t("calendar.empty")}</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <ul
+            className={cn(
+              "space-y-2",
+              isSidebar && "max-h-[420px] overflow-y-auto",
+            )}
+          >
             {upcomingEvents.map((event) => (
-              <div
+              <EventRow
                 key={event.id}
-                className="hover:bg-muted/50 flex items-start gap-3 rounded-lg border p-3 transition-colors"
-              >
-                <div className="text-2xl">
-                  {eventTypeIcons[event.type as EventType]}
-                </div>
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-medium">{event.title}</h4>
-                    <Badge variant="outline" className="text-xs">
-                      {t(`eventType.${event.type as EventType}`)}
-                    </Badge>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    {event.application.company.name} -{" "}
-                    {event.application.position}
-                  </p>
-                  <div className="text-muted-foreground flex items-center gap-4 text-xs">
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {getEventTimeLabel(new Date(event.scheduledDate))}{" "}
-                      {format(new Date(event.scheduledDate), "HH:mm")}
-                    </div>
-                    {event.duration && (
-                      <span>
-                        {t("calendar.duration", { minutes: event.duration })}
-                      </span>
-                    )}
-                    {event.location && !event.isVirtual && (
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {event.location}
-                      </div>
-                    )}
-                    {event.isVirtual && (
-                      <div className="flex items-center gap-1">
-                        <Video className="h-3 w-3" />
-                        {t("calendar.virtual")}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+                event={event}
+                compact={isSidebar}
+                getEventTimeLabel={getEventTimeLabel}
+                t={t}
+              />
             ))}
-          </div>
+          </ul>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </aside>
+  );
+}
+
+function EventRow({
+  event,
+  compact,
+  getEventTimeLabel,
+  t,
+}: {
+  event: UpcomingEvent;
+  compact: boolean;
+  getEventTimeLabel: (date: Date) => string;
+  t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
+}) {
+  const scheduledDate = new Date(event.scheduledDate);
+
+  return (
+    <li>
+      <Link
+        href={{
+          pathname: "/admin/job-tracker/applications/[id]",
+          params: { id: event.application.id },
+        }}
+        className="hover:bg-muted/50 border-border block rounded-lg border p-3 transition-colors"
+      >
+        <div className="flex items-start gap-2.5">
+          <span className="text-lg leading-none" aria-hidden>
+            {eventTypeIcons[event.type as EventType]}
+          </span>
+          <div className="min-w-0 flex-1 space-y-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="truncate text-sm font-medium">
+                {event.title}
+              </span>
+              <Badge variant="outline" className="text-[10px]">
+                {t(`eventType.${event.type as EventType}`)}
+              </Badge>
+            </div>
+            <p className="text-muted-foreground line-clamp-2 text-xs">
+              {event.application.company.name}
+              {!compact ? ` · ${event.application.position}` : null}
+            </p>
+            <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]">
+              <span className="inline-flex items-center gap-1">
+                <Clock className="size-3" aria-hidden />
+                {getEventTimeLabel(scheduledDate)}{" "}
+                {format(scheduledDate, "HH:mm")}
+              </span>
+              {event.duration ? (
+                <span>
+                  {t("calendar.duration", { minutes: event.duration })}
+                </span>
+              ) : null}
+              {event.isVirtual ? (
+                <span className="inline-flex items-center gap-1">
+                  <Video className="size-3" aria-hidden />
+                  {t("calendar.virtual")}
+                </span>
+              ) : event.location ? (
+                <span className="inline-flex items-center gap-1">
+                  <MapPin className="size-3" aria-hidden />
+                  <span className="truncate">{event.location}</span>
+                </span>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </Link>
+    </li>
   );
 }

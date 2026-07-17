@@ -1046,7 +1046,7 @@
         },
         "placeholders": {
           "position": "Frontend Developer",
-          "company": "Select a company...",
+          "company": "Select or create a company...",
           "location": "Remote, Hybrid, etc...",
           "salary": "€50k - €60k",
           "description": "Job description...",
@@ -1064,6 +1064,13 @@
           "OFFER": "Offer Received",
           "REJECTED": "Rejected",
           "HIRED": "Hired"
+        },
+        "companyCombobox": {
+          "search": "Search or type a company name...",
+          "create": "Create \"{name}\"",
+          "empty": "No companies found",
+          "createFailed": "Could not create company",
+          "clearSearch": "Clear search"
         }
       },
       "jobTrackerCompany": {
@@ -1607,6 +1614,7 @@
       "newApplication": "New Application",
       "applicationsTab": "Applications",
       "companiesTab": "Companies",
+      "tabsNavAria": "Job tracker sections",
       "columnPosition": "Position",
       "columnCompany": "Company",
       "columnStatus": "Status",
@@ -1687,7 +1695,22 @@
         "location": "Location",
         "notes": "Notes",
         "cv": "CV used",
-        "tailorResume": "Tailor resume for this job"
+        "tailorResume": "Tailor resume for this job",
+        "breadcrumb": "Job Tracker / Applications",
+        "applied": "Applied",
+        "resumeOnFile": "Resume on file",
+        "editApplicationButton": "Edit application",
+        "timelineActivityHint": "Generated automatically from application activity — add your own with the button above.",
+        "noDescription": "No job description provided.",
+        "tabsNavAria": "Application sections"
+      },
+      "kanban": {
+        "description": "Drag cards between columns to update application status.",
+        "addApplication": "Add application",
+        "emptyColumn": "Drag a card here",
+        "dragCard": "Drag application",
+        "updating": "Updating status…",
+        "statusUpdateError": "Could not update application status"
       },
       "timeline": {
         "title": "Event Timeline",
@@ -1754,6 +1777,7 @@
       "tailorJdTooShort": "Job description is too short. Paste at least 20 characters.",
       "tailorNoStudioData": "No resume data in Resume Studio.",
       "tailorNoUpload": "Select or upload a DOCX resume first.",
+      "tailorUploadReady": "DOCX uploaded and ready to tailor.",
       "tailorCta": "Tailor resume",
       "tailoringTitle": "Tailoring your resume...",
       "tailoringDescription": "AI is adapting your experience and summary to match the job description.",
@@ -1764,6 +1788,22 @@
       "tailorBackToApplication": "Back to application",
       "tailorSuccess": "Resume tailored successfully",
       "tailorFailed": "Could not tailor resume",
+      "tailorAlreadyDone": "Already tailored for this application",
+      "tailorGeneratedOn": "Generated {date}",
+      "tailorViewResume": "View resume",
+      "tailorRegenerate": "Regenerate",
+      "tailorSuccessTitle": "Your resume now matches this job",
+      "tailorErrorRetry": "Retry",
+      "tailorErrorSwitchProvider": "Switch provider",
+      "tailorErrorUseManual": "Use manual mode",
+      "tailorTechnicalDetails": "Technical details",
+      "manualStepCopy": "Copy the prompt",
+      "manualStepPasteAi": "Paste it into your AI",
+      "manualStepPasteReply": "Paste the reply here",
+      "viewPrompt": "View prompt",
+      "toggleJobDescription": "Job description",
+      "aiModeTitle": "AI mode",
+      "aiModeManualShort": "Manual",
       "aiSettingsTitle": "AI processing",
       "aiSettingsLoading": "Loading AI settings...",
       "aiModeLabel": "Processing mode",

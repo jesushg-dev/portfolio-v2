@@ -1047,7 +1047,7 @@
         },
         "placeholders": {
           "position": "Frontend Developer",
-          "company": "Selecteer een bedrijf...",
+          "company": "Selecteer of maak een bedrijf...",
           "location": "Remote, Hybride, etc...",
           "salary": "€50k - €60k",
           "description": "Functieomschrijving...",
@@ -1065,6 +1065,13 @@
           "OFFER": "Aanbod Ontvangen",
           "REJECTED": "Afgewezen",
           "HIRED": "Aangenomen"
+        },
+        "companyCombobox": {
+          "search": "Zoek of typ een bedrijfsnaam...",
+          "create": "\"{name}\" aanmaken",
+          "empty": "Geen bedrijven gevonden",
+          "createFailed": "Bedrijf aanmaken mislukt",
+          "clearSearch": "Zoekopdracht wissen"
         }
       },
       "jobTrackerCompany": {
@@ -1608,6 +1615,7 @@
       "newApplication": "Nieuwe Sollicitatie",
       "applicationsTab": "Sollicitaties",
       "companiesTab": "Bedrijven",
+      "tabsNavAria": "Job tracker secties",
       "columnPosition": "Functie",
       "columnCompany": "Bedrijf",
       "columnStatus": "Status",
@@ -1688,7 +1696,22 @@
         "location": "Locatie",
         "notes": "Notities",
         "cv": "Gebruikt CV",
-        "tailorResume": "CV aanpassen voor deze vacature"
+        "tailorResume": "CV aanpassen voor deze vacature",
+        "breadcrumb": "Job Tracker / Sollicitaties",
+        "applied": "Gesolliciteerd",
+        "resumeOnFile": "CV in dossier",
+        "editApplicationButton": "Sollicitatie bewerken",
+        "timelineActivityHint": "Automatisch gegenereerd uit sollicitatieactiviteit — voeg je eigen toe met de knop hierboven.",
+        "noDescription": "Geen functieomschrijving beschikbaar.",
+        "tabsNavAria": "Sollicitatiesecties"
+      },
+      "kanban": {
+        "description": "Sleep kaarten tussen kolommen om de status bij te werken.",
+        "addApplication": "Sollicitatie toevoegen",
+        "emptyColumn": "Sleep een kaart hierheen",
+        "dragCard": "Sollicitatie slepen",
+        "updating": "Status bijwerken…",
+        "statusUpdateError": "Status bijwerken mislukt"
       },
       "timeline": {
         "title": "Evenementen Tijdlijn",
@@ -1755,6 +1778,7 @@
       "tailorJdTooShort": "Vacatureomschrijving is te kort. Plak minstens 20 tekens.",
       "tailorNoStudioData": "Geen CV-gegevens in Resume Studio.",
       "tailorNoUpload": "Selecteer of upload eerst een DOCX.",
+      "tailorUploadReady": "DOCX geüpload en klaar om aan te passen.",
       "tailorCta": "CV aanpassen",
       "tailoringTitle": "Je CV wordt aangepast...",
       "tailoringDescription": "AI past je ervaring en samenvatting aan op de vacature.",
@@ -1765,6 +1789,22 @@
       "tailorBackToApplication": "Terug naar sollicitatie",
       "tailorSuccess": "CV succesvol aangepast",
       "tailorFailed": "CV aanpassen mislukt",
+      "tailorAlreadyDone": "Al aangepast voor deze sollicitatie",
+      "tailorGeneratedOn": "Gegenereerd {date}",
+      "tailorViewResume": "CV bekijken",
+      "tailorRegenerate": "Opnieuw genereren",
+      "tailorSuccessTitle": "Je CV past nu bij deze vacature",
+      "tailorErrorRetry": "Opnieuw proberen",
+      "tailorErrorSwitchProvider": "Van provider wisselen",
+      "tailorErrorUseManual": "Handmatige modus gebruiken",
+      "tailorTechnicalDetails": "Technische details",
+      "manualStepCopy": "Kopieer de prompt",
+      "manualStepPasteAi": "Plak het in je AI",
+      "manualStepPasteReply": "Plak het antwoord hier",
+      "viewPrompt": "Prompt bekijken",
+      "toggleJobDescription": "Functieomschrijving",
+      "aiModeTitle": "AI-modus",
+      "aiModeManualShort": "Handmatig",
       "aiSettingsTitle": "AI-verwerking",
       "aiSettingsLoading": "AI-instellingen laden...",
       "aiModeLabel": "Verwerkingsmodus",

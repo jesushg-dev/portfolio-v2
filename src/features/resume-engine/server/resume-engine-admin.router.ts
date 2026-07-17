@@ -251,8 +251,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         ctx.db.cvSourceUpload.findMany({
           where: {
             userId: ctx.user.id,
-            importStatus: { in: ["preview", "imported"] },
-            parsedDraft: { not: null },
+            importStatus: { in: ["pending", "preview", "imported"] },
           },
           orderBy: { createdAt: "desc" },
           take: 10,

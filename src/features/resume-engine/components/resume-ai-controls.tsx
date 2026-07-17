@@ -31,6 +31,7 @@ interface ResumeAiControlsProps {
   providers: AiProviderOption[];
   defaultProvider: AiProviderName | null;
   hasAutoProviders: boolean;
+  layout?: "default" | "compact";
 }
 
 export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
@@ -41,29 +42,60 @@ export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
   providers,
   defaultProvider,
   hasAutoProviders,
+  layout = "default",
 }) => {
   const t = useTranslations("admin.resumeStudio");
 
   const effectiveProvider =
     provider ?? defaultProvider ?? providers[0]?.id ?? "";
 
+  const isCompact = layout === "compact";
+  const optionClassName = (active: boolean, disabled = false) =>
+    cn(
+      "rounded-md border text-left transition-colors",
+      isCompact
+        ? "flex flex-col gap-0.5 p-2.5"
+        : "border-input bg-background hover:bg-muted rounded-sm p-3",
+      active
+        ? isCompact
+          ? "border-primary bg-primary/5"
+          : "border-primary ring-ring ring-2"
+        : isCompact
+          ? "border-border bg-background hover:bg-muted/50"
+          : "border-input bg-background hover:bg-muted",
+      disabled && "cursor-not-allowed opacity-50",
+    );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <Label>{t("aiModeLabel")}</Label>
-        <div className="grid gap-2 sm:grid-cols-2">
+        {isCompact ? (
+          <p className="text-sm font-medium">{t("aiModeTitle")}</p>
+        ) : (
+          <Label>{t("aiModeLabel")}</Label>
+        )}
+        <div className="grid gap-2 sm:grid-cols-2 lg:max-w-3xl lg:grid-cols-2">
           <button
             type="button"
             disabled={!hasAutoProviders}
             onClick={() => onModeChange("auto")}
-            className={cn(
-              "border-input bg-background hover:bg-muted rounded-sm border p-3 text-left transition-colors",
-              mode === "auto" && "border-primary ring-ring ring-2",
-              !hasAutoProviders && "cursor-not-allowed opacity-50",
-            )}
+            className={optionClassName(mode === "auto", !hasAutoProviders)}
           >
-            <p className="text-sm font-medium">{t("aiModeAuto")}</p>
-            <p className="text-muted-foreground mt-1 text-xs">
+            <p
+              className={cn(
+                "font-medium",
+                isCompact ? "text-[13px]" : "text-sm",
+                mode === "auto" && isCompact && "text-primary",
+              )}
+            >
+              {t("aiModeAuto")}
+            </p>
+            <p
+              className={cn(
+                "text-muted-foreground leading-snug",
+                isCompact ? "text-xs" : "mt-1 text-xs",
+              )}
+            >
               {hasAutoProviders
                 ? t("aiModeAutoHint")
                 : t("aiModeAutoUnavailable")}
@@ -72,13 +104,23 @@ export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
           <button
             type="button"
             onClick={() => onModeChange("manual")}
-            className={cn(
-              "border-input bg-background hover:bg-muted rounded-sm border p-3 text-left transition-colors",
-              mode === "manual" && "border-primary ring-ring ring-2",
-            )}
+            className={optionClassName(mode === "manual")}
           >
-            <p className="text-sm font-medium">{t("aiModeManual")}</p>
-            <p className="text-muted-foreground mt-1 text-xs">
+            <p
+              className={cn(
+                "font-medium",
+                isCompact ? "text-[13px]" : "text-sm",
+                mode === "manual" && isCompact && "text-primary",
+              )}
+            >
+              {t("aiModeManualShort")}
+            </p>
+            <p
+              className={cn(
+                "text-muted-foreground leading-snug",
+                isCompact ? "text-xs" : "mt-1 text-xs",
+              )}
+            >
               {t("aiModeManualHint")}
             </p>
           </button>
@@ -87,7 +129,9 @@ export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
 
       {mode === "auto" && hasAutoProviders ? (
         <div className="flex flex-col gap-2">
-          <Label htmlFor="ai-provider">{t("aiProviderLabel")}</Label>
+          {!isCompact ? (
+            <Label htmlFor="ai-provider">{t("aiProviderLabel")}</Label>
+          ) : null}
           <Select
             value={effectiveProvider}
             onValueChange={(value) => {
@@ -101,13 +145,16 @@ export const ResumeAiControls: FC<ResumeAiControlsProps> = ({
               }
             }}
           >
-            <SelectTrigger id="ai-provider" className="w-full max-w-sm">
+            <SelectTrigger
+              id="ai-provider"
+              className={cn("w-full", !isCompact && "max-w-sm")}
+            >
               <SelectValue placeholder={t("aiProviderPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {providers.map((item) => (
                 <SelectItem key={item.id} value={item.id}>
-                  {item.label} ({item.model})
+                  {isCompact ? item.label : `${item.label} (${item.model})`}
                 </SelectItem>
               ))}
             </SelectContent>

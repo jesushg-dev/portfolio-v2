@@ -98,6 +98,24 @@ export const EventForm: FC<EventFormProps> = ({
     [t],
   );
 
+  const eventTypeItems = useMemo(
+    () =>
+      EVENT_TYPES.map((type) => ({
+        value: type,
+        label: t(`eventType.${type}`),
+      })),
+    [t],
+  );
+
+  const applicationItems = useMemo(
+    () =>
+      applications.map((app) => ({
+        value: app.id,
+        label: `${app.position} - ${app.company.name}`,
+      })),
+    [applications],
+  );
+
   type EventFormData = z.infer<typeof eventSchema>;
 
   const form = useForm<EventFormData>({
@@ -161,9 +179,16 @@ export const EventForm: FC<EventFormProps> = ({
                     inputId="event-application"
                     required
                   >
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      items={applicationItems}
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
                       <FormControl>
-                        <SelectTrigger id="event-application">
+                        <SelectTrigger
+                          id="event-application"
+                          className="w-full"
+                        >
                           <SelectValue
                             placeholder={t("placeholders.application")}
                           />
@@ -194,10 +219,14 @@ export const EventForm: FC<EventFormProps> = ({
                     inputId="event-type"
                     required
                   >
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      items={eventTypeItems}
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
                       <FormControl>
-                        <SelectTrigger id="event-type">
-                          <SelectValue />
+                        <SelectTrigger id="event-type" className="w-full">
+                          <SelectValue placeholder={t("fields.type")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>

@@ -1046,7 +1046,7 @@
         },
         "placeholders": {
           "position": "Desarrollador Frontend",
-          "company": "Selecciona una empresa...",
+          "company": "Selecciona o crea una empresa...",
           "location": "Remoto, Híbrido, etc...",
           "salary": "€50k - €60k",
           "description": "Descripción del puesto...",
@@ -1064,6 +1064,13 @@
           "OFFER": "Oferta Recibida",
           "REJECTED": "Rechazado",
           "HIRED": "Contratado"
+        },
+        "companyCombobox": {
+          "search": "Busca o escribe el nombre de una empresa...",
+          "create": "Crear \"{name}\"",
+          "empty": "No se encontraron empresas",
+          "createFailed": "No se pudo crear la empresa",
+          "clearSearch": "Limpiar búsqueda"
         }
       },
       "jobTrackerCompany": {
@@ -1607,6 +1614,7 @@
       "newApplication": "Nueva Postulación",
       "applicationsTab": "Postulaciones",
       "companiesTab": "Empresas",
+      "tabsNavAria": "Secciones del job tracker",
       "columnPosition": "Puesto",
       "columnCompany": "Empresa",
       "columnStatus": "Estado",
@@ -1687,7 +1695,22 @@
         "location": "Ubicación",
         "notes": "Notas",
         "cv": "CV utilizado",
-        "tailorResume": "Personalizar CV para este puesto"
+        "tailorResume": "Personalizar CV para este puesto",
+        "breadcrumb": "Job Tracker / Postulaciones",
+        "applied": "Postulado",
+        "resumeOnFile": "Currículum en archivo",
+        "editApplicationButton": "Editar postulación",
+        "timelineActivityHint": "Generado automáticamente a partir de la actividad — agrega el tuyo con el botón de arriba.",
+        "noDescription": "No hay descripción del puesto.",
+        "tabsNavAria": "Secciones de la postulación"
+      },
+      "kanban": {
+        "description": "Arrastra las tarjetas entre columnas para actualizar el estado.",
+        "addApplication": "Agregar postulación",
+        "emptyColumn": "Arrastra una tarjeta aquí",
+        "dragCard": "Arrastrar postulación",
+        "updating": "Actualizando estado…",
+        "statusUpdateError": "No se pudo actualizar el estado"
       },
       "timeline": {
         "title": "Timeline de Eventos",
@@ -1754,6 +1777,7 @@
       "tailorJdTooShort": "La descripción es muy corta. Pega al menos 20 caracteres.",
       "tailorNoStudioData": "No hay datos de currículum en Resume Studio.",
       "tailorNoUpload": "Selecciona o sube un DOCX primero.",
+      "tailorUploadReady": "DOCX subido y listo para personalizar.",
       "tailorCta": "Personalizar CV",
       "tailoringTitle": "Personalizando tu currículum...",
       "tailoringDescription": "La IA está adaptando tu experiencia y resumen al puesto.",
@@ -1764,6 +1788,22 @@
       "tailorBackToApplication": "Volver a la postulación",
       "tailorSuccess": "Currículum personalizado correctamente",
       "tailorFailed": "No se pudo personalizar el currículum",
+      "tailorAlreadyDone": "Ya personalizado para esta postulación",
+      "tailorGeneratedOn": "Generado {date}",
+      "tailorViewResume": "Ver currículum",
+      "tailorRegenerate": "Regenerar",
+      "tailorSuccessTitle": "Tu currículum ahora coincide con este puesto",
+      "tailorErrorRetry": "Reintentar",
+      "tailorErrorSwitchProvider": "Cambiar proveedor",
+      "tailorErrorUseManual": "Usar modo manual",
+      "tailorTechnicalDetails": "Detalles técnicos",
+      "manualStepCopy": "Copiar el prompt",
+      "manualStepPasteAi": "Pégalo en tu IA",
+      "manualStepPasteReply": "Pega la respuesta aquí",
+      "viewPrompt": "Ver prompt",
+      "toggleJobDescription": "Descripción del puesto",
+      "aiModeTitle": "Modo IA",
+      "aiModeManualShort": "Manual",
       "aiSettingsTitle": "Procesamiento con IA",
       "aiSettingsLoading": "Cargando configuración de IA...",
       "aiModeLabel": "Modo de procesamiento",
