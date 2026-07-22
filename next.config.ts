@@ -1,9 +1,32 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+const playwrightServerAssets = [
+  "./node_modules/playwright-core/browsers.json",
+  "./node_modules/playwright-core/lib/**",
+  "./node_modules/playwright-core/index.js",
+  "./node_modules/playwright-core/index.mjs",
+  "./node_modules/playwright-core/package.json",
+  "./node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/browsers.json",
+  "./node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/lib/**",
+  "./node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/index.js",
+  "./node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/index.mjs",
+  "./node_modules/.pnpm/playwright-core@*/node_modules/playwright-core/package.json",
+  "./node_modules/@sparticuz/chromium-min/**",
+  "./node_modules/.pnpm/@sparticuz+chromium-min@*/node_modules/@sparticuz/chromium-min/**",
+];
+
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["lvh.me", "*.lvh.me"],
-  serverExternalPackages: ["jszip"],
+  serverExternalPackages: [
+    "jszip",
+    "playwright-core",
+    "@sparticuz/chromium-min",
+  ],
+  outputFileTracingIncludes: {
+    "/api/trpc/*": playwrightServerAssets,
+    "/api/cv/pdf": playwrightServerAssets,
+  },
   experimental: {
     optimizePackageImports: ["lucide-react", "motion/react"],
   },

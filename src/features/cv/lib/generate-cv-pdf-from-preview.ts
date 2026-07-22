@@ -4,6 +4,7 @@ import type { Locale } from "@/i18n/config";
 import { TENANT_USERNAME_HEADER } from "@/lib/tenant/resolve";
 import { getServerBaseUrl } from "@/lib/url/get-base-url";
 import { CV_LETTER_WIDTH_PX } from "@/features/cv/lib/cv-letter-page";
+import { getChromiumPackUrl } from "@/features/cv/lib/chromium-pack-url";
 
 export interface GenerateCvPdfOptions {
   locale: Locale;
@@ -51,16 +52,34 @@ const PDF_RESET_CSS = `
   }
 `;
 
+async function launchPdfBrowser() {
+  const { chromium: playwright } = await import("playwright-core");
+  const isVercel = process.env.VERCEL === "1";
+
+  if (isVercel) {
+    const chromium = (await import("@sparticuz/chromium-min")).default;
+
+    return playwright.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(getChromiumPackUrl()),
+      headless: true,
+    });
+  }
+
+  return playwright.launch({
+    executablePath:
+      process.env.CHROME_LOCAL_PATH ?? playwright.executablePath(),
+    headless: true,
+  });
+}
+
 export async function generateCvPdfFromPreview(
   options: GenerateCvPdfOptions,
 ): Promise<Buffer> {
-  const { chromium } = await import("playwright");
   const baseUrl = (options.baseUrl ?? getServerBaseUrl()).replace(/\/$/, "");
   const targetUrl = `${baseUrl}${buildCvPreviewPath(options.locale)}`;
 
-  const browser = await chromium.launch({
-    headless: true,
-  });
+  const browser = await launchPdfBrowser();
 
   try {
     const context = await browser.newContext({
