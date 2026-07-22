@@ -7,7 +7,7 @@ import {
   buildTailoredFileName,
   generateDocxFromStructured,
 } from "@/features/resume-engine/lib/docx/generate-from-structured";
-import type { CvImportDraft } from "@/features/resume-engine/lib/cv-import-draft";
+import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import { uploadBufferToUploadThing } from "@/features/resume-engine/lib/upload-export-file";
 
 const DOCX_MIME =

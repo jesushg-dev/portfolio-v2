@@ -62,6 +62,15 @@ jest.mock("@/server/db", () => ({
   },
 }));
 
+jest.mock("@/lib/email/resend", () => ({
+  isResendConfigured: jest.fn(() => false),
+}));
+
+jest.mock("@/features/cv/components/cv-page-actions", () => ({
+  __esModule: true,
+  default: () => null,
+}));
+
 jest.mock("next/navigation", () => ({
   notFound: jest.fn(() => {
     throw new Error("NOT_FOUND");
@@ -147,10 +156,13 @@ describe("CvPageView", () => {
 
 describe("CvPage", () => {
   it("passes locale to CvPageView", async () => {
-    const ui = await CvPage({ params: Promise.resolve({ locale: "en" }) });
+    const ui = await CvPage({
+      params: Promise.resolve({ locale: "en" }),
+      searchParams: Promise.resolve({}),
+    });
 
     expect(ui.type).toBe(CvPageView);
-    expect(ui.props).toEqual({ locale: "en" });
+    expect(ui.props).toEqual({ locale: "en", pdfMode: false });
   });
 });
 

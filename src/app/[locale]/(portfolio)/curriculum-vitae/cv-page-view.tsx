@@ -1,20 +1,28 @@
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { FaDownload, FaHome } from "react-icons/fa";
 
-import { Link } from "@/i18n/routing";
 import CvPreview from "@/components/curriculum-vitae/cv-preview";
+import CvPageActions from "@/features/cv/components/cv-page-actions";
+import { cvPreviewFont } from "@/features/cv/lib/cv-preview-font";
 import { getLocalizedText } from "@/lib/i18n/localized";
+import { isResendConfigured } from "@/lib/email/resend";
 import { resolveTenant } from "@/lib/tenant/resolve";
 import { db } from "@/server/db";
 import type { Locale as AppLocale } from "@/i18n/config";
 
 interface CvPageViewProps {
   locale: string;
+  pdfMode?: boolean;
+  /** When true, PDF export uses US Letter pagination instead of one continuous page. */
+  paginatePdfPages?: boolean;
 }
 
-const CvPageView: FC<CvPageViewProps> = async ({ locale }) => {
+const CvPageView: FC<CvPageViewProps> = async ({
+  locale,
+  pdfMode = false,
+  paginatePdfPages = false,
+}) => {
   const t = await getTranslations("curriculum");
 
   const tenant = await resolveTenant();
@@ -82,32 +90,60 @@ const CvPageView: FC<CvPageViewProps> = async ({ locale }) => {
     currentLocale,
     defaultLocale,
   );
-  const cvDownloadHref = profile?.cvPdfUrl ?? null;
+  const downloadFileName = `CV - ${header?.fullName ?? profile?.username ?? "user"}.pdf`;
+  const paginateQuery = paginatePdfPages ? "&paginate=1" : "";
+  const cvDownloadHref = header
+    ? `/api/cv/pdf?locale=${currentLocale}${paginateQuery}`
+    : null;
+  const canSendByEmail = isResendConfigured() && Boolean(header);
+
+  if (pdfMode) {
+    return (
+      <div
+        id="cv-public-preview"
+        className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
+      >
+        <CvPreview
+          data={{
+            header,
+            profile,
+            contacts,
+            educations,
+            languages,
+            technicalSkills,
+            experiences,
+            softSkills,
+            additionalInformation,
+          }}
+          aboutMeText={aboutMeText}
+          currentLocale={currentLocale}
+          defaultLocale={defaultLocale}
+          pdfMode
+        />
+        <div className="bg-cv h-4" aria-hidden />
+      </div>
+    );
+  }
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-3xl pb-16 md:pb-24">
       <div className="-mt-2 pt-24 print:hidden">
-        <div className="md:max-w-letter mx-4 flex justify-between gap-2 md:mx-0">
-          <Link
-            href="/"
-            className="pressable border-primary-700 text-primary-700 hover:bg-primary-800 hover:text-secondaryText-100 flex items-center gap-2 rounded-lg border px-4 py-3 text-sm shadow-lg"
-          >
-            {t("actions.goBack")} <FaHome className="text-xs" />
-          </Link>
-
-          {cvDownloadHref ? (
-            <a
-              href={cvDownloadHref}
-              download={`CV - ${header?.fullName ?? profile?.username ?? "user"}.pdf`}
-              className="pressable bg-primary-700 text-secondaryText-100 hover:bg-primary-800 flex items-center gap-2 rounded-lg px-4 py-3 text-sm shadow-lg"
-            >
-              {t("actions.download")} <FaDownload className="text-xs" />
-            </a>
-          ) : null}
-        </div>
+        <CvPageActions
+          locale={currentLocale}
+          fullName={header?.fullName ?? profile?.username ?? "user"}
+          canSendByEmail={canSendByEmail}
+          downloadHref={cvDownloadHref}
+          downloadFileName={downloadFileName}
+          goBackLabel={t("actions.goBack")}
+          downloadLabel={t("actions.download")}
+          paginatePdfPages={paginatePdfPages}
+        />
       </div>
       <section className="page md:max-w-letter print:max-w-letter print:max-h-letter print:my-o my-6 mb-0 bg-gray-100 sm:mb-6 print:mx-0 print:overflow-hidden print:border-0 print:bg-white">
-        <div id="cv-public-preview" className="bg-white text-black">
+        <div
+          id="cv-public-preview"
+          className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
+        >
           <CvPreview
             data={{
               header,

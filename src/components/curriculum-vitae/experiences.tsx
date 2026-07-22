@@ -49,7 +49,6 @@ const Experiences: FC<IExperiencesProps> = ({
                       locale,
                       defaultLocale,
                     )}
-                    .
                   </li>
                 ))}
               </ul>

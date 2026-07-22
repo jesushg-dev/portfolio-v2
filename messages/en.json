@@ -77,7 +77,39 @@
       "goBack": "Go Back"
     },
     "telephone": "tel.",
-    "codedWith": "This CV was created using ReactJS."
+    "codedWith": "This CV was created using ReactJS.",
+    "pdfDelivery": {
+      "toggleSend": "Send by email",
+      "toggleClose": "Close",
+      "title": "Grab the PDF Resume for Reference",
+      "description": "Recruiters, submit your work email below and receive a downloadable PDF version of my resume for comprehensive reference.",
+      "footnote": "The PDF is generated from the latest CV data for {fullName}.",
+      "form": {
+        "email": {
+          "label": "Email address",
+          "placeholder": "Email address",
+          "errors": {
+            "required": "Email is required",
+            "pattern": "Enter a valid email address"
+          }
+        },
+        "submit": "Send",
+        "sending": "Sending…",
+        "success": "CV sent! Check your inbox for the PDF.",
+        "error": "Could not send the CV. Please try again later.",
+        "rateLimited": "Too many requests. Please try again later."
+      },
+      "email": {
+        "subject": "CV - {fullName}",
+        "bodyHtml": "Attached is the latest CV for {fullName}.",
+        "bodyText": "Attached is the latest CV for {fullName}."
+      },
+      "ownerNotification": {
+        "subject": "Someone requested {fullName}'s CV",
+        "bodyHtml": "A visitor requested the CV PDF at {recipientEmail}.",
+        "bodyText": "A visitor requested the CV PDF at {recipientEmail}."
+      }
+    }
   },
   "global": {
     "header": {
@@ -405,7 +437,14 @@
         "challenge": "The challenge",
         "approach": "Technical approach",
         "outcome": "Outcome",
-        "backToPortfolio": "Back to portfolio"
+        "introduction": "Introduction",
+        "backToPortfolio": "Back to portfolio",
+        "projectType": "Project type",
+        "category": "Category",
+        "stack": "Stack",
+        "nextProject": "Next project",
+        "visualTitle": "Matching, made intentional",
+        "visualSubtitle": "Every node is a connection — every line, a reason to build."
       },
       "private": {
         "title": "Private",

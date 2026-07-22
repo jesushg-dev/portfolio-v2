@@ -77,7 +77,39 @@
       "goBack": "Terug"
     },
     "telephone": "tel.",
-    "codedWith": "Deze CV is gemaakt met ReactJS."
+    "codedWith": "Deze CV is gemaakt met ReactJS.",
+    "pdfDelivery": {
+      "toggleSend": "Per e-mail versturen",
+      "toggleClose": "Sluiten",
+      "title": "Download het PDF-cv als referentie",
+      "description": "Recruiters, vul hieronder je zakelijke e-mail in en ontvang een downloadbare PDF-versie van mijn actuele cv.",
+      "footnote": "De PDF wordt gegenereerd op basis van de meest recente cv-gegevens van {fullName}.",
+      "form": {
+        "email": {
+          "label": "E-mailadres",
+          "placeholder": "E-mailadres",
+          "errors": {
+            "required": "E-mail is verplicht",
+            "pattern": "Voer een geldig e-mailadres in"
+          }
+        },
+        "submit": "Versturen",
+        "sending": "Verzenden…",
+        "success": "CV verzonden! Controleer je inbox voor de PDF.",
+        "error": "Het CV kon niet worden verzonden. Probeer het later opnieuw.",
+        "rateLimited": "Te veel verzoeken. Probeer het later opnieuw."
+      },
+      "email": {
+        "subject": "CV - {fullName}",
+        "bodyHtml": "In de bijlage vind je het meest recente cv van {fullName}.",
+        "bodyText": "In de bijlage vind je het meest recente cv van {fullName}."
+      },
+      "ownerNotification": {
+        "subject": "Iemand heeft het cv van {fullName} aangevraagd",
+        "bodyHtml": "Een bezoeker heeft het cv-PDF aangevraagd via {recipientEmail}.",
+        "bodyText": "Een bezoeker heeft het cv-PDF aangevraagd via {recipientEmail}."
+      }
+    }
   },
   "global": {
     "header": {
@@ -405,7 +437,14 @@
         "challenge": "De uitdaging",
         "approach": "Technische aanpak",
         "outcome": "Resultaat",
-        "backToPortfolio": "Terug naar portfolio"
+        "introduction": "Introductie",
+        "backToPortfolio": "Terug naar portfolio",
+        "projectType": "Projecttype",
+        "category": "Categorie",
+        "stack": "Stack",
+        "nextProject": "Volgend project",
+        "visualTitle": "Verbindingen met intentie",
+        "visualSubtitle": "Elke node is een schakel — elke lijn een reden om te bouwen."
       },
       "private": {
         "title": "Prive",

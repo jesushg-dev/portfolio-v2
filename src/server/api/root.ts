@@ -1,5 +1,6 @@
 import { portfolioRouter } from "@/server/api/routers/portfolio";
 import { cvRouter } from "@/features/cv/server/cv.router";
+import { cvPublicRouter } from "@/features/cv/server/cv-public.router";
 import { profileAdminRouter } from "@/features/profile/server/profile-admin.router";
 import { terminalRouter } from "@/features/terminal/server/terminal.router";
 import { contactRouter } from "@/server/api/routers/contact";
@@ -26,6 +27,7 @@ export const appRouter = createTRPCRouter({
   timelineAdmin: timelineAdminRouter,
   softSkillsAdmin: softSkillsAdminRouter,
   cv: cvRouter,
+  cvPublic: cvPublicRouter,
   profileAdmin: profileAdminRouter,
   terminal: terminalRouter,
   spotify: spotifyRouter,

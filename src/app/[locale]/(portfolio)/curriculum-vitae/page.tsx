@@ -14,11 +14,19 @@ interface ICvPageProps {
   params: Promise<{ locale: string }>;
 }
 
-export default async function CvPage({ params }: ICvPageProps) {
+interface ICvPageSearchProps extends ICvPageProps {
+  searchParams: Promise<{ pdf?: string }>;
+}
+
+export default async function CvPage({
+  params,
+  searchParams,
+}: ICvPageSearchProps) {
   const { locale } = await params;
+  const { pdf } = await searchParams;
   setRequestLocale(locale as Locale);
 
-  return <CvPageView locale={locale} />;
+  return <CvPageView locale={locale} pdfMode={pdf === "1"} />;
 }
 
 export async function generateMetadata({

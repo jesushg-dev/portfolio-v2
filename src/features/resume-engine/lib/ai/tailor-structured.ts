@@ -3,7 +3,7 @@ import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 
 import { env } from "@/env";
-import type { CvImportDraft } from "@/features/resume-engine/lib/cv-import-draft";
+import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import {
   CvTailorResultSchema,
   type CvTailorResult,

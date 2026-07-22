@@ -12,6 +12,7 @@ import type { Locale } from "next-intl";
 
 import Layout from "@/components/app-layout";
 import LcpImagePreload from "@/components/shared/lcp-image-preload";
+import DeferredTrpcProvider from "@/components/providers/deferred-trpc-provider";
 import { getHeroLcpImageUrl } from "@/features/home/components/hero-lcp-image";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import type { Locale as AppLocale } from "@/i18n/config";
@@ -70,10 +71,12 @@ export default async function RootLayout({
   };
 
   return (
-    <NextIntlClientProvider messages={publicMessages}>
-      {lcpPhotoUrl ? <LcpImagePreload href={lcpPhotoUrl} /> : null}
-      <Layout>{children}</Layout>
-      {modal}
-    </NextIntlClientProvider>
+    <DeferredTrpcProvider>
+      <NextIntlClientProvider messages={publicMessages}>
+        {lcpPhotoUrl ? <LcpImagePreload href={lcpPhotoUrl} /> : null}
+        <Layout>{children}</Layout>
+        {modal}
+      </NextIntlClientProvider>
+    </DeferredTrpcProvider>
   );
 }

@@ -1,6 +1,6 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 
-import type { CvImportDraft } from "@/features/resume-engine/lib/cv-import-draft";
+import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import {
   buildEmptyTranslationMap,
   type TranslationMap,

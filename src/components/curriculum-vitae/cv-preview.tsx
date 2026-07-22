@@ -39,6 +39,7 @@ interface ICvPreviewProps {
   aboutMeText: string | null;
   currentLocale: AppLocale;
   defaultLocale: AppLocale;
+  pdfMode?: boolean;
 }
 
 const CvPreview: FC<ICvPreviewProps> = ({
@@ -46,6 +47,7 @@ const CvPreview: FC<ICvPreviewProps> = ({
   aboutMeText,
   currentLocale,
   defaultLocale,
+  pdfMode = false,
 }) => {
   const t = useTranslations("curriculum");
 
@@ -57,7 +59,13 @@ const CvPreview: FC<ICvPreviewProps> = ({
         locale={currentLocale}
         defaultLocale={defaultLocale}
       />
-      <div className="grid grid-cols-1 p-5 pb-10 sm:grid-cols-9">
+      <div
+        className={
+          pdfMode
+            ? "grid grid-cols-1 px-5 pt-2 sm:grid-cols-9"
+            : "grid grid-cols-1 p-5 pb-10 sm:grid-cols-9"
+        }
+      >
         <div className="sm:col-span-3">
           <ContactMe
             contacts={data.contacts}

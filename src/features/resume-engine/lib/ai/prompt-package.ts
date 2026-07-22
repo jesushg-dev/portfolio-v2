@@ -1,5 +1,5 @@
-import type { CvImportDraft } from "@/features/resume-engine/lib/cv-import-draft";
-import type { CvImportTextSection } from "@/features/resume-engine/lib/cv-import-draft";
+import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
+import type { CvImportTextSection } from "@/features/cv/lib/cv-import-draft";
 import type { CvSection } from "@/lib/types";
 import { IMPORT_SYSTEM_PROMPT } from "@/features/resume-engine/lib/ai/import-prompt";
 import {

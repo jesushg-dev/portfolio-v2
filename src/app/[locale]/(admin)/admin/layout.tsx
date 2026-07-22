@@ -8,6 +8,7 @@ import { auth } from "@/lib/auth";
 import { redirectToLogin } from "@/lib/auth-redirect";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import DashboardShell from "../dashboard-shell";
+import TrpcProvider from "@/components/providers/trpc-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default async function AdminLayout({
@@ -32,14 +33,16 @@ export default async function AdminLayout({
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
-      <NuqsAdapter>
-        <TooltipProvider>
-          <DashboardShell userName={user.name ?? user.email} modal={modal}>
-            {children}
-          </DashboardShell>
-        </TooltipProvider>
-      </NuqsAdapter>
-    </NextIntlClientProvider>
+    <TrpcProvider>
+      <NextIntlClientProvider messages={messages}>
+        <NuqsAdapter>
+          <TooltipProvider>
+            <DashboardShell userName={user.name ?? user.email} modal={modal}>
+              {children}
+            </DashboardShell>
+          </TooltipProvider>
+        </NuqsAdapter>
+      </NextIntlClientProvider>
+    </TrpcProvider>
   );
 }

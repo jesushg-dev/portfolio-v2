@@ -1,7 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 
 import type { Locale } from "@/i18n/config";
-import type { CvImportDraft } from "@/features/resume-engine/lib/cv-import-draft";
+import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import { getLocalizedText } from "@/lib/i18n/localized";
 
 function formatExperienceDate(
@@ -16,9 +16,15 @@ function resolveLocale(value: string | undefined): Locale {
   return "en";
 }
 
+export interface LoadCvStructuredDraftOptions {
+  locale: Locale;
+  fallbackLocale?: Locale;
+}
+
 export async function loadCvStructuredDraft(
   db: PrismaClient,
   userId: string,
+  options?: LoadCvStructuredDraftOptions,
 ): Promise<CvImportDraft | null> {
   const [header, profile, experiences, education, skills, contacts, languages] =
     await Promise.all([
@@ -52,44 +58,56 @@ export async function loadCvStructuredDraft(
 
   if (!header) return null;
 
-  const detectedLocale = resolveLocale(profile?.defaultLocale);
+  const profileDefaultLocale = resolveLocale(profile?.defaultLocale);
+  const activeLocale = options?.locale ?? profileDefaultLocale;
+  const fallbackLocale = options?.fallbackLocale ?? profileDefaultLocale;
 
   const summary =
-    getLocalizedText(header.heroSummary, detectedLocale) ||
+    getLocalizedText(header.heroSummary, activeLocale, fallbackLocale) ||
     (await db.cvAboutMe
       .findUnique({ where: { userId } })
       .then((about) =>
-        about ? getLocalizedText(about.aboutMe, detectedLocale) : "",
+        about
+          ? getLocalizedText(about.aboutMe, activeLocale, fallbackLocale)
+          : "",
       )) ||
     undefined;
 
   return {
-    detectedLocale,
+    detectedLocale: activeLocale,
     header: {
       fullName: header.fullName,
-      degree: getLocalizedText(header.degree, detectedLocale) || undefined,
+      degree:
+        getLocalizedText(header.degree, activeLocale, fallbackLocale) ||
+        undefined,
       summary: summary !== "" ? summary : undefined,
     },
     experiences: experiences.map((exp, index) => ({
       id: exp.id || `exp-${index + 1}`,
       company: exp.company,
-      role: getLocalizedText(exp.role, detectedLocale),
+      role: getLocalizedText(exp.role, activeLocale, fallbackLocale),
       location: exp.location
-        ? getLocalizedText(exp.location, detectedLocale) || undefined
+        ? getLocalizedText(exp.location, activeLocale, fallbackLocale) ||
+          undefined
         : undefined,
       startDate: formatExperienceDate(exp.startDate),
       endDate: formatExperienceDate(exp.endDate),
       current: exp.current,
       responsibilities: exp.responsibilities.map((resp) =>
-        getLocalizedText(resp.text, detectedLocale),
+        getLocalizedText(resp.text, activeLocale, fallbackLocale),
       ),
     })),
     education: education.map((edu, index) => ({
       id: edu.id || `edu-${index + 1}`,
       institution: edu.institution,
-      degreeName: getLocalizedText(edu.degreeName, detectedLocale),
+      degreeName: getLocalizedText(
+        edu.degreeName,
+        activeLocale,
+        fallbackLocale,
+      ),
       location: edu.location
-        ? getLocalizedText(edu.location, detectedLocale) || undefined
+        ? getLocalizedText(edu.location, activeLocale, fallbackLocale) ||
+          undefined
         : undefined,
       startYear: edu.startYear ?? undefined,
       endYear: edu.endYear ?? undefined,
@@ -99,8 +117,8 @@ export async function loadCvStructuredDraft(
       items: skill.items,
     })),
     languages: languages.map((lang) => ({
-      name: getLocalizedText(lang.name, detectedLocale),
-      level: getLocalizedText(lang.level, detectedLocale),
+      name: getLocalizedText(lang.name, activeLocale, fallbackLocale),
+      level: getLocalizedText(lang.level, activeLocale, fallbackLocale),
     })),
     contacts: contacts.map((contact) => ({
       type: contact.type,

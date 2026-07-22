@@ -4,8 +4,8 @@ import type { PrismaClient } from "@prisma/client";
 import {
   CvImportDraftSchema,
   type CvImportDraft,
-} from "@/features/resume-engine/lib/cv-import-draft";
-import { loadCvStructuredDraft } from "@/features/resume-engine/lib/load-cv-structured-draft";
+} from "@/features/cv/lib/cv-import-draft";
+import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 
 export async function resolveTailorBaseDraft(
   db: PrismaClient,
@@ -14,7 +14,18 @@ export async function resolveTailorBaseDraft(
   uploadId?: string,
 ): Promise<{ draft: CvImportDraft; sourceUploadId?: string }> {
   if (sourceType === "studio") {
-    const draft = await loadCvStructuredDraft(db, userId);
+    const profile = await db.profile.findUnique({
+      where: { userId },
+      select: { defaultLocale: true },
+    });
+    const fallbackLocale =
+      profile?.defaultLocale === "es" || profile?.defaultLocale === "nl"
+        ? profile.defaultLocale
+        : "en";
+    const draft = await loadCvStructuredDraft(db, userId, {
+      locale: fallbackLocale,
+      fallbackLocale,
+    });
     if (!draft) {
       throw new TRPCError({
         code: "BAD_REQUEST",

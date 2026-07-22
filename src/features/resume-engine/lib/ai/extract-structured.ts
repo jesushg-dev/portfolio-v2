@@ -7,7 +7,7 @@ import {
   CvImportDraftSchema,
   type CvImportDraft,
   type CvImportTextSection,
-} from "@/features/resume-engine/lib/cv-import-draft";
+} from "@/features/cv/lib/cv-import-draft";
 import { IMPORT_SYSTEM_PROMPT } from "@/features/resume-engine/lib/ai/import-prompt";
 import { parseAiJsonResponse } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {

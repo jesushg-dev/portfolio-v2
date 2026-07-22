@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { CvImportDraftSchema } from "@/features/resume-engine/lib/cv-import-draft";
+import { CvImportDraftSchema } from "@/features/cv/lib/cv-import-draft";
 
 export const CvTailorResultSchema = z.object({
   draft: CvImportDraftSchema,

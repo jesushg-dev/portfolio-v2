@@ -16,7 +16,7 @@ import { api } from "@/trpc/react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@/i18n/routing";
-import type { CvImportDraft } from "@/features/resume-engine/lib/cv-import-draft";
+import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import {
   ResumeAiControls,
   type AiProcessingMode,

@@ -26,5 +26,10 @@ export default async function ProjectCaseStudyPage({
 
   if (!project) notFound();
 
-  return <ProjectCaseStudyView project={project} />;
+  const nextProject = await api.portfolio.getNextCaseStudyProject({
+    slug,
+    locale: activeLocale,
+  });
+
+  return <ProjectCaseStudyView project={project} nextProject={nextProject} />;
 }

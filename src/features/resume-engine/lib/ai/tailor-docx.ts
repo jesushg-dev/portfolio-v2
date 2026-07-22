@@ -18,7 +18,7 @@ import {
   buildDocxTailorUserPrompt,
   buildStudioDocxTailorUserPrompt,
 } from "@/features/resume-engine/lib/ai/prompt-package";
-import type { CvImportDraft } from "@/features/resume-engine/lib/cv-import-draft";
+import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import {
   CvDocxTailorResultSchema,
   type CvDocxTailorResult,

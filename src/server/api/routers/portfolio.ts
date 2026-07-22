@@ -767,4 +767,54 @@ export const portfolioRouter = createTRPCRouter({
         skills,
       };
     }),
+
+  getNextCaseStudyProject: publicProcedure
+    .input(
+      z.object({
+        slug: z.string().min(1),
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return null;
+
+      const appLanguage = await ctx.db.appLanguage.findUnique({
+        where: { code: input.locale },
+      });
+
+      const projects = await ctx.db.project.findMany({
+        where: {
+          userId: tenantUserId,
+          caseStudyEnabled: true,
+          slug: { not: null },
+        },
+        orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+        include: {
+          ProjectTranslation: {
+            where: { appLanguageId: appLanguage?.id },
+          },
+        },
+      });
+
+      const slugs = projects
+        .map((project) => {
+          const translation = project.ProjectTranslation[0];
+          if (!project.slug || !translation) return null;
+          return { slug: project.slug, title: translation.title };
+        })
+        .filter(
+          (project): project is { slug: string; title: string } =>
+            project !== null,
+        );
+
+      if (slugs.length < 2) return null;
+
+      const currentIndex = slugs.findIndex(
+        (project) => project.slug === input.slug,
+      );
+      if (currentIndex === -1) return null;
+
+      return slugs[(currentIndex + 1) % slugs.length] ?? null;
+    }),
 });

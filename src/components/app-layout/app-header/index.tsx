@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { Link, usePathname } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 
 import NavButton from "./nav-button";
 import ToolbarHeader from "./toolbar-header";
@@ -12,21 +12,15 @@ import ThemeSelectorLazy from "./theme-selector-lazy";
 import useIsOnTop from "@/hooks/use-is-on-top";
 
 interface IHeaderProps {
+  /** Solid sticky header — set by route-group layouts (portfolio, admin, etc.). */
   alwaysVisible?: boolean;
 }
 
 const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   const t = useTranslations("global.header");
-  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const isOnTop = useIsOnTop();
-  const path = String(pathname);
-  const useSolidHeader =
-    alwaysVisible ||
-    /\/(skills|habilidades|vaardigheden|timeline|linea-de-tiempo|tijdlijn)(\/|$)/.test(
-      path,
-    );
   const handleScroll = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -49,7 +43,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   return (
     <header
       className={`fixed right-0 left-0 z-40 w-full transition-all duration-700 print:hidden ${
-        isOnTop && !useSolidHeader
+        isOnTop && !alwaysVisible
           ? "text-primaryText-900 top-5 bg-transparent"
           : "bg-background-50/90 text-primaryText-900 hover:bg-background-50 top-0 shadow-sm backdrop-blur-lg backdrop-filter"
       }`}
@@ -84,7 +78,7 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
               toogleThemeOpen,
             }}
           />
-          {!useSolidHeader && (
+          {!alwaysVisible && (
             <div
               id="mobile-menu"
               className={`${

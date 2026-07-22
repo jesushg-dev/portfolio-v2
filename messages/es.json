@@ -77,7 +77,39 @@
       "goBack": "Regresar"
     },
     "telephone": "tel.",
-    "codedWith": "Este CV fue creado con ReactJS."
+    "codedWith": "Este CV fue creado con ReactJS.",
+    "pdfDelivery": {
+      "toggleSend": "Enviar por correo",
+      "toggleClose": "Cerrar",
+      "title": "Obtén el CV en PDF como referencia",
+      "description": "Reclutadores, ingresen su correo corporativo abajo y recibirán una versión PDF descargable de mi currículum actualizado.",
+      "footnote": "El PDF se genera con los datos más recientes del CV de {fullName}.",
+      "form": {
+        "email": {
+          "label": "Correo electrónico",
+          "placeholder": "Correo electrónico",
+          "errors": {
+            "required": "El correo es obligatorio",
+            "pattern": "Ingresa un correo válido"
+          }
+        },
+        "submit": "Enviar",
+        "sending": "Enviando…",
+        "success": "¡CV enviado! Revisa tu bandeja de entrada.",
+        "error": "No se pudo enviar el CV. Inténtalo más tarde.",
+        "rateLimited": "Demasiados intentos. Inténtalo más tarde."
+      },
+      "email": {
+        "subject": "CV - {fullName}",
+        "bodyHtml": "Adjunto encontrarás el CV actualizado de {fullName}.",
+        "bodyText": "Adjunto encontrarás el CV actualizado de {fullName}."
+      },
+      "ownerNotification": {
+        "subject": "Alguien solicitó el CV de {fullName}",
+        "bodyHtml": "Un visitante solicitó el PDF del CV a {recipientEmail}.",
+        "bodyText": "Un visitante solicitó el PDF del CV a {recipientEmail}."
+      }
+    }
   },
   "global": {
     "header": {
@@ -405,7 +437,14 @@
         "challenge": "El desafío",
         "approach": "Enfoque técnico",
         "outcome": "Resultado",
-        "backToPortfolio": "Volver al portafolio"
+        "introduction": "Introducción",
+        "backToPortfolio": "Volver al portafolio",
+        "projectType": "Tipo de proyecto",
+        "category": "Categoría",
+        "stack": "Stack",
+        "nextProject": "Siguiente proyecto",
+        "visualTitle": "Conexiones con intención",
+        "visualSubtitle": "Cada nodo es una pieza — cada línea, una razón para construir."
       },
       "private": {
         "title": "Privado",

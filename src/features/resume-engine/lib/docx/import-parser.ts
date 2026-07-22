@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import { XMLParser } from "fast-xml-parser";
 
-import type { CvImportTextSection } from "@/features/resume-engine/lib/cv-import-draft";
+import type { CvImportTextSection } from "@/features/cv/lib/cv-import-draft";
 import { coalesceXmlText, extractTextFromWt } from "@/lib/docx/xml-text";
 
 const HEADING_STYLES = new Set([

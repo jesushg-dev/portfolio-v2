@@ -4,7 +4,6 @@ import "@/app/globals.css";
 
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import DeferredTrpcProvider from "@/components/shared/deferred-trpc-provider";
 import PreloadTheme from "@/hoc/preload-theme";
 import ThemeContextProvider from "@/hoc/theme-context-provider";
 import clsx from "clsx";
@@ -81,9 +80,7 @@ export default async function RootLayout({
         )}
       >
         <NextIntlClientProvider>
-          <DeferredTrpcProvider>
-            <ThemeContextProvider>{children}</ThemeContextProvider>
-          </DeferredTrpcProvider>
+          <ThemeContextProvider>{children}</ThemeContextProvider>
         </NextIntlClientProvider>
         <Toaster />
       </body>

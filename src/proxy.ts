@@ -2,6 +2,10 @@ import createIntlMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { routing } from "./i18n/routing";
+import {
+  CV_PDF_MODE_HEADER,
+  TENANT_USERNAME_HEADER,
+} from "@/lib/tenant/headers";
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -15,8 +19,6 @@ const RESERVED_SUBDOMAINS = new Set([
 ]);
 
 const PRIMARY_DOMAIN = process.env.PRIMARY_DOMAIN ?? "jesushg.com";
-
-const TENANT_HEADER = "x-tenant-username";
 
 /**
  * Parses a tenant slug from the request host. Returns:
@@ -80,8 +82,12 @@ export default function middleware(req: NextRequest) {
   forwardRequestHeader(response, "pathname", req.nextUrl.pathname);
 
   if (parsed.type === "tenant") {
-    forwardRequestHeader(response, TENANT_HEADER, parsed.slug);
-    response.headers.set(TENANT_HEADER, parsed.slug);
+    forwardRequestHeader(response, TENANT_USERNAME_HEADER, parsed.slug);
+    response.headers.set(TENANT_USERNAME_HEADER, parsed.slug);
+  }
+
+  if (req.nextUrl.searchParams.get("pdf") === "1") {
+    forwardRequestHeader(response, CV_PDF_MODE_HEADER, "1");
   }
 
   return response;

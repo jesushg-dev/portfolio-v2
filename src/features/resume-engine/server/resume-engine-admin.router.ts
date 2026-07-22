@@ -5,10 +5,10 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   CvImportDraftSchema,
   PARSER_VERSION,
-} from "@/features/resume-engine/lib/cv-import-draft";
+} from "@/features/cv/lib/cv-import-draft";
 import { extractStructuredResume } from "@/features/resume-engine/lib/ai/extract-structured";
 import { persistCvImportDraft } from "@/features/resume-engine/lib/import-persist";
-import { loadCvStructuredDraft } from "@/features/resume-engine/lib/load-cv-structured-draft";
+import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { tailorDocxResume } from "@/features/resume-engine/lib/ai/tailor-docx";
 import { finalizeDocxTailorExport } from "@/features/resume-engine/lib/finalize-tailor-export";
 import {
@@ -16,7 +16,7 @@ import {
   fetchUploadDocxSections,
 } from "@/features/resume-engine/lib/fetch-upload-docx";
 import { resolveTailorBaseDraft } from "@/features/resume-engine/lib/resolve-tailor-base-draft";
-import { loadCvTemplateForTailor } from "@/features/resume-engine/lib/load-cv-template-docx";
+import { loadCvTemplateForTailor } from "@/features/cv/lib/load-cv-template-docx";
 import {
   buildDocxTailorPromptPackage,
   buildImportPromptPackage,
@@ -246,8 +246,20 @@ export const resumeEngineAdminRouter = createTRPCRouter({
   getTailorPageData: protectedProcedure
     .input(z.object({ applicationId: z.string().optional() }))
     .query(async ({ ctx, input }) => {
+      const profile = await ctx.db.profile.findUnique({
+        where: { userId: ctx.user.id },
+        select: { defaultLocale: true },
+      });
+      const fallbackLocale =
+        profile?.defaultLocale === "es" || profile?.defaultLocale === "nl"
+          ? profile.defaultLocale
+          : "en";
+
       const [studioDraft, uploads, application] = await Promise.all([
-        loadCvStructuredDraft(ctx.db, ctx.user.id),
+        loadCvStructuredDraft(ctx.db, ctx.user.id, {
+          locale: fallbackLocale,
+          fallbackLocale,
+        }),
         ctx.db.cvSourceUpload.findMany({
           where: {
             userId: ctx.user.id,
