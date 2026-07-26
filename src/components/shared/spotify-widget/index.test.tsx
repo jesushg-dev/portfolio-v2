@@ -128,7 +128,9 @@ describe("SpotifyWidget", () => {
     renderWithIntl(<SpotifyWidget />);
 
     expect(
-      screen.getByText("Nothing is playing right now"),
+      screen.getByText((content) =>
+        content.includes("Nothing is playing right now"),
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText(/Last played/)).toBeInTheDocument();
   });

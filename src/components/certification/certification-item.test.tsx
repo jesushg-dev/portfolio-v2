@@ -42,4 +42,23 @@ describe("CertificateItem", () => {
     const img = screen.getByRole("img");
     expect(img.getAttribute("src")).toContain("placeholder");
   });
+
+  it("uses custom image URL when provided", () => {
+    renderWithIntl(<CertificateItem {...baseCertificate} image="https://cdn.example.com/cert.png" />);
+    const img = screen.getByRole("img");
+    expect(img.getAttribute("src")).toBe("https://cdn.example.com/cert.png");
+  });
+
+  it("omits date, credential ID, and view button when optional fields are null/undefined", () => {
+    const minimalCert = {
+      ...baseCertificate,
+      url: "",
+      issuedDate: null,
+      idCredential: null,
+    };
+
+    renderWithIntl(<CertificateItem {...minimalCert} />);
+    expect(screen.queryByText("ABC-123")).toBeNull();
+  });
 });
+

@@ -151,4 +151,51 @@ describe("prefetchTrackLyrics", () => {
 
     expect(sessionStorage.getItem("spotify-lyrics-cache-v3")).toBeNull();
   });
+
+  it("generates cache key using artist, title, album, duration when contentId is missing", () => {
+    const requestNoId = {
+      contentId: "",
+      title: "Get Lucky",
+      artist: "Daft Punk",
+      album: "RAM",
+      durationMs: 240_000,
+    };
+    expect(buildLyricsCacheKey(requestNoId)).toBe("daft punk|get lucky|ram|240");
+  });
+
+  it("returns immediately without fetching if title or artist is missing", async () => {
+    await prefetchTrackLyrics({ ...request, title: "" });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("handles HTTP 500 error response and marks status as error", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: () => Promise.resolve({ error: "Server Error" }),
+    });
+
+    const { result } = renderHook(() =>
+      useTrackLyrics({ enabled: true, ...request })
+    );
+
+    await waitFor(() => {
+      expect(result.current.status).toBe("error");
+    });
+  });
+
+  it("handles response with empty plainLyrics", async () => {
+    mockFetch.mockResolvedValue(
+      lyricsResponse({ plainLyrics: "   ", syncedLyrics: null })
+    );
+
+    const { result } = renderHook(() =>
+      useTrackLyrics({ enabled: true, ...request })
+    );
+
+    await waitFor(() => {
+      expect(result.current.status).toBe("empty");
+    });
+  });
 });
+

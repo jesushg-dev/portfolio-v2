@@ -6,6 +6,7 @@ export default tseslint.config(
   {
     ignores: [
       ".next",
+      "coverage/**",
       "commitlint.config.js",
       "eslint.config.js",
       "postcss.config.mjs",
@@ -52,7 +53,7 @@ export default tseslint.config(
             {
               target: "./src/features/cv",
               from: "./src/features",
-              except: ["./cv", "./profile", "./terminal"],
+              except: ["./cv", "./profile", "./terminal", "./resume-engine"],
             },
             {
               target: "./src/features/projects",

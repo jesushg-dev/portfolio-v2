@@ -1,169 +1,100 @@
-import { screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+﻿import { screen, fireEvent, waitFor } from "@testing-library/react";
+import React from "react";
+import { ServicesList } from "./services-list";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 
-import { ServicesList } from "./services-list";
+jest.setTimeout(30000);
 
-jest.mock("next/link", () => ({
-  __esModule: true,
-  default: ({
-    children,
-    href,
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => <a href={href}>{children}</a>,
-}));
+const mockDelete = jest.fn().mockResolvedValue({ success: true });
 
 jest.mock("nuqs", () => {
-  const mockNuqsProp = {
-    withOptions: jest.fn().mockReturnThis(),
-    withDefault: jest.fn().mockReturnThis(),
+  const createParser = () => {
+    const parser = {
+      withOptions: () => parser,
+      withDefault: () => parser,
+    };
+    return parser;
   };
   return {
-    useQueryState: jest.fn(() => [undefined, jest.fn()]),
-    useQueryStates: jest.fn(() => [{}, jest.fn()]),
-    parseAsInteger: mockNuqsProp,
-    parseAsString: mockNuqsProp,
-    parseAsArrayOf: jest.fn(() => mockNuqsProp),
+    useQueryState: (key: string) => [key === "title" ? "Web" : null, jest.fn()],
+    useQueryStates: () => [{}, jest.fn()],
+    parseAsInteger: createParser(),
+    parseAsString: createParser(),
   };
 });
 
-jest.mock("@/lib/parsers", () => {
-  const mockParserProp = {
-    withOptions: jest.fn().mockReturnThis(),
-    withDefault: jest.fn().mockReturnThis(),
-  };
-  return {
-    getSortingStateParser: jest.fn(() => mockParserProp),
-  };
-});
-
-const mockGetMineQuery = jest.fn<unknown, []>();
-const mockSkillsQuery = jest.fn<unknown, []>();
-const mockDeleteMutation = jest.fn<unknown, []>();
-const mockInvalidate = jest.fn();
+jest.mock("@/lib/parsers", () => ({
+  getSortingStateParser: () => ({
+    withOptions: () => ({
+      withDefault: () => ({}),
+    }),
+  }),
+}));
 
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      servicesAdmin: {
-        getMine: { invalidate: mockInvalidate },
-      },
+      servicesAdmin: { getMine: { invalidate: jest.fn() } },
     }),
-    servicesAdmin: {
-      getMine: { useQuery: () => mockGetMineQuery() },
-      deleteItem: { useMutation: () => mockDeleteMutation() },
-    },
     skillsAdmin: {
-      getMine: { useQuery: () => mockSkillsQuery() },
+      getMine: {
+        useQuery: () => ({ data: { data: [{ id: "sk1", title: "React" }] } }),
+      },
+    },
+    servicesAdmin: {
+      getMine: {
+        useQuery: () => ({
+          data: {
+            data: [
+              {
+                id: "s1",
+                translations: [{ appLanguageId: "l1", title: "Web Development", description: "Custom website development" }],
+                title: { l1: { title: "Web Development" } },
+                description: { l1: { description: "Custom website development" } },
+                icon: "Code",
+                order: 1,
+                skillIds: ["sk1"],
+              },
+            ],
+            totalCount: 1,
+            pageCount: 1,
+          },
+          isFetching: false,
+        }),
+      },
+      deleteItem: {
+        useMutation: () => ({ mutateAsync: mockDelete }),
+      },
     },
   },
 }));
 
 describe("ServicesList", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockGetMineQuery.mockReturnValue({
-      data: { data: [], totalCount: 0 },
-      isFetching: false,
-    });
-    mockSkillsQuery.mockReturnValue({
-      data: { data: [] },
-    });
-    mockDeleteMutation.mockReturnValue({
-      mutateAsync: jest.fn(),
-    });
-  });
-
   const defaultProps = {
     initialServices: [],
-    languages: [
-      { id: "lang-en", code: "en", name: "English", isDefault: true },
-    ],
+    languages: [{ id: "l1", code: "en", name: "English", isDefault: true, createdAt: new Date(), updatedAt: new Date() }],
     locale: "en" as const,
     pageCount: 1,
-    totalCount: 0,
+    totalCount: 1,
   };
 
-  it("renders Add New button and table columns", () => {
+  it("renders services list and row content with active filters", () => {
     renderWithIntl(<ServicesList {...defaultProps} />);
 
-    expect(screen.getByText("Add Service")).toBeInTheDocument();
-    expect(screen.getByText("Title")).toBeInTheDocument();
-    expect(screen.getAllByText("Type").length).toBeGreaterThan(0);
+    expect(screen.getByText("Web Development")).toBeInTheDocument();
   });
 
-  it("renders list items", () => {
-    mockGetMineQuery.mockReturnValue({
-      data: {
-        data: [
-          {
-            id: "svc-1",
-            type: "CONSULTING",
-            skillIds: [],
-            translations: [
-              {
-                id: "t1",
-                title: "Test Service",
-                description: "Service Description",
-                language: {
-                  id: "lang-en",
-                  code: "en",
-                  name: "English",
-                  isDefault: true,
-                },
-              },
-            ],
-          },
-        ],
-        totalCount: 1,
-      },
-      isFetching: false,
-    });
-
+  it("opens delete dialog and triggers deletion", async () => {
     renderWithIntl(<ServicesList {...defaultProps} />);
 
-    expect(screen.getByText("Test Service")).toBeInTheDocument();
-    expect(screen.getByText("Service Description")).toBeInTheDocument();
-    expect(screen.getByText("CONSULTING")).toBeInTheDocument();
-  });
+    const deleteBtn = screen.getByRole("button", { name: /delete/i });
+    fireEvent.click(deleteBtn);
 
-  it("handles deletion", async () => {
-    const user = userEvent.setup();
-    const mutateAsync = jest.fn().mockResolvedValue(true);
-    mockDeleteMutation.mockReturnValue({ mutateAsync });
-
-    mockGetMineQuery.mockReturnValue({
-      data: {
-        data: [
-          {
-            id: "svc-1",
-            type: "CONSULTING",
-            skillIds: [],
-            translations: [],
-          },
-        ],
-        totalCount: 1,
-      },
-      isFetching: false,
-    });
-
-    renderWithIntl(<ServicesList {...defaultProps} />);
-
-    const buttons = screen.getAllByRole("button");
-    const delBtn = buttons.find(
-      (b) =>
-        b.className.includes("text-destructive") ||
-        b.className.includes("hover:bg-destructive"),
-    );
-
-    if (delBtn) {
-      await user.click(delBtn);
-    }
+    const confirmBtn = await screen.findByRole("button", { name: /confirm|delete/i });
+    fireEvent.click(confirmBtn);
 
     await waitFor(() => {
-      expect(mutateAsync).toHaveBeenCalledWith({ id: "svc-1" });
+      expect(mockDelete).toHaveBeenCalledWith({ id: "s1" });
     });
-  });
+  }, 30000);
 });

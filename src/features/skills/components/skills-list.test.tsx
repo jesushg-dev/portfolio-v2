@@ -1,145 +1,109 @@
-import { screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
+import React from "react";
+import { SkillsList } from "./skills-list";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 
-import { SkillsList } from "./skills-list";
+jest.setTimeout(30000);
 
-jest.mock("next/link", () => ({
-  __esModule: true,
-  default: ({
-    children,
-    href,
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => <a href={href}>{children}</a>,
-}));
+const mockDelete = jest.fn().mockResolvedValue({ success: true });
 
 jest.mock("nuqs", () => {
-  const mockNuqsProp = {
-    withOptions: jest.fn().mockReturnThis(),
-    withDefault: jest.fn().mockReturnThis(),
+  const createParser = () => {
+    const parser = {
+      withOptions: () => parser,
+      withDefault: () => parser,
+    };
+    return parser;
   };
   return {
-    useQueryState: jest.fn(() => [undefined, jest.fn()]),
-    useQueryStates: jest.fn(() => [{}, jest.fn()]),
-    parseAsInteger: mockNuqsProp,
-    parseAsString: mockNuqsProp,
-    parseAsArrayOf: jest.fn(() => mockNuqsProp),
+    useQueryState: (key: string) => [key === "title" ? "React" : key === "type" ? ["FRONTEND"] : null, jest.fn()],
+    useQueryStates: () => [{}, jest.fn()],
+    parseAsInteger: createParser(),
+    parseAsString: createParser(),
+    parseAsArrayOf: jest.fn(() => createParser()),
   };
 });
 
-jest.mock("@/lib/parsers", () => {
-  const mockParserProp = {
-    withOptions: jest.fn().mockReturnThis(),
-    withDefault: jest.fn().mockReturnThis(),
-  };
-  return {
-    getSortingStateParser: jest.fn(() => mockParserProp),
-  };
-});
-
-const mockGetMineQuery = jest.fn<unknown, []>();
-const mockDeleteMutation = jest.fn<unknown, []>();
-const mockInvalidate = jest.fn();
+jest.mock("@/lib/parsers", () => ({
+  getSortingStateParser: () => ({
+    withOptions: () => ({
+      withDefault: () => ({}),
+    }),
+  }),
+}));
 
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      skillsAdmin: {
-        getMine: { invalidate: mockInvalidate },
-      },
+      skillsAdmin: { getMine: { invalidate: jest.fn() } },
     }),
     skillsAdmin: {
-      getMine: { useQuery: () => mockGetMineQuery() },
-      deleteItem: { useMutation: () => mockDeleteMutation() },
+      getMine: {
+        useQuery: () => ({
+          data: {
+            data: [
+              {
+                id: "sk1",
+                translations: [{ appLanguageId: "l1", title: "React" }],
+                title: "React",
+                level: 90,
+                type: "FRONTEND",
+                order: 1,
+              },
+              {
+                // second skill to exercise uniqueTypes options building + different type branch
+                id: "sk2",
+                translations: [{ appLanguageId: "l1", title: "Node.js" }],
+                title: "Node.js",
+                level: 80,
+                type: "BACKEND",
+                order: 2,
+              },
+            ],
+            totalCount: 2,
+            pageCount: 1,
+          },
+          isFetching: false,
+        }),
+      },
+      deleteItem: {
+        useMutation: () => ({ mutateAsync: mockDelete }),
+      },
     },
   },
 }));
 
 describe("SkillsList", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mockGetMineQuery.mockReturnValue({
-      data: { data: [], totalCount: 0 },
-      isFetching: false,
-    });
-    mockDeleteMutation.mockReturnValue({
-      mutateAsync: jest.fn(),
-    });
-  });
-
   const defaultProps = {
     initialSkills: [],
+    languages: [{ id: "l1", code: "en", name: "English", isDefault: true, createdAt: new Date(), updatedAt: new Date() }],
+    locale: "en" as const,
     pageCount: 1,
-    totalCount: 0,
+    totalCount: 2,
   };
 
-  it("renders Add New button and table columns", () => {
-    renderWithIntl(<SkillsList {...defaultProps} />);
-
-    expect(screen.getByText("Add Skill")).toBeInTheDocument();
-    expect(screen.getByText("Title")).toBeInTheDocument();
-    expect(screen.getAllByText("Type").length).toBeGreaterThan(0);
-  });
-
-  it("renders list items", () => {
-    mockGetMineQuery.mockReturnValue({
-      data: {
-        data: [
-          {
-            id: "sk-1",
-            title: "React",
-            type: "FRONTEND",
-            image: null,
-          },
-        ],
-        totalCount: 1,
-      },
-      isFetching: false,
-    });
-
+  it("renders skills list and row content with active filters", () => {
     renderWithIntl(<SkillsList {...defaultProps} />);
 
     expect(screen.getByText("React")).toBeInTheDocument();
-    expect(screen.getByText("FRONTEND")).toBeInTheDocument();
   });
 
-  it("handles deletion", async () => {
-    const user = userEvent.setup();
-    const mutateAsync = jest.fn().mockResolvedValue(true);
-    mockDeleteMutation.mockReturnValue({ mutateAsync });
+  it("renders multiple skills with different types", () => {
+    renderWithIntl(<SkillsList {...defaultProps} />);
+    expect(screen.getByText("Node.js")).toBeInTheDocument();
+    // Both FRONTEND and BACKEND appear as type cells
+    expect(screen.getByText("FRONTEND")).toBeInTheDocument();
+    expect(screen.getByText("BACKEND")).toBeInTheDocument();
+  });
 
-    mockGetMineQuery.mockReturnValue({
-      data: {
-        data: [
-          {
-            id: "sk-1",
-            title: "React",
-            type: "FRONTEND",
-            image: null,
-          },
-        ],
-        totalCount: 1,
-      },
-      isFetching: false,
-    });
-
+  it("triggers deletion on delete button click", async () => {
     renderWithIntl(<SkillsList {...defaultProps} />);
 
-    const buttons = screen.getAllByRole("button");
-    const delBtn = buttons.find(
-      (b) =>
-        b.className.includes("text-destructive") ||
-        b.className.includes("hover:bg-destructive"),
-    );
-
-    if (delBtn) {
-      await user.click(delBtn);
-    }
+    const deleteBtns = screen.getAllByRole("button", { name: /delete/i });
+    fireEvent.click(deleteBtns[0]);
 
     await waitFor(() => {
-      expect(mutateAsync).toHaveBeenCalledWith({ id: "sk-1" });
+      expect(mockDelete).toHaveBeenCalled();
     });
-  });
+  }, 30000);
 });

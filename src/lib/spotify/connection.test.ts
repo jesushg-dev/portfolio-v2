@@ -52,6 +52,7 @@ import { encryptSecret } from "./crypto";
 import {
   clearSpotifyAccessTokenCache,
   getSpotifyAccessTokenForUser,
+  connectionToCredentials,
 } from "./connection";
 import { SpotifyTokenError } from "./oauth";
 
@@ -201,5 +202,171 @@ describe("getSpotifyAccessTokenForUser", () => {
     await getSpotifyAccessTokenForUser("user-1", { forceRefresh: true });
 
     expect(mockRefreshSpotifyAccessToken).toHaveBeenCalledTimes(2);
+  });
+});
+
+// ---- connectionToCredentials ----
+
+describe("connectionToCredentials", () => {
+  it("decrypts clientSecret and refreshToken from an encrypted connection", () => {
+    const connection = {
+      userId: "user-1",
+      clientId: "my-client-id",
+      clientSecretEnc: encryptSecret("my-secret"),
+      refreshTokenEnc: encryptSecret("my-refresh"),
+    };
+
+    const creds = connectionToCredentials(
+      connection as import("@prisma/client").SpotifyConnection,
+    );
+
+    expect(creds.clientId).toBe("my-client-id");
+    expect(creds.clientSecret).toBe("my-secret");
+    expect(creds.refreshToken).toBe("my-refresh");
+  });
+});
+
+// ---- clearSpotifyAccessTokenCache ----
+
+describe("clearSpotifyAccessTokenCache — scoped", () => {
+  beforeEach(() => {
+    clearSpotifyAccessTokenCache();
+    mockFindUnique.mockReset();
+    mockUpdate.mockReset();
+    mockRefreshSpotifyAccessToken.mockReset();
+    mockUpdate.mockResolvedValue(undefined);
+  });
+
+  it("clears the cache for a specific user so next call refreshes", async () => {
+    mockFindUnique.mockResolvedValue({
+      userId: "user-cache",
+      clientId: "client-id",
+      clientSecretEnc: encryptSecret("secret"),
+      refreshTokenEnc: encryptSecret("refresh"),
+    });
+    mockRefreshSpotifyAccessToken.mockResolvedValue({
+      access_token: "tok-1",
+      token_type: "Bearer",
+      scope: "user-read-currently-playing",
+      expires_in: 3600,
+    });
+
+    await getSpotifyAccessTokenForUser("user-cache");
+    clearSpotifyAccessTokenCache("user-cache");
+    await getSpotifyAccessTokenForUser("user-cache");
+    expect(mockRefreshSpotifyAccessToken).toHaveBeenCalledTimes(2);
+  });
+
+  it("clears entire cache when no userId is provided", async () => {
+    mockFindUnique.mockResolvedValue({
+      userId: "user-a",
+      clientId: "client-id",
+      clientSecretEnc: encryptSecret("secret"),
+      refreshTokenEnc: encryptSecret("refresh"),
+    });
+    mockRefreshSpotifyAccessToken.mockResolvedValue({
+      access_token: "tok-a",
+      token_type: "Bearer",
+      scope: "user-read-currently-playing",
+      expires_in: 3600,
+    });
+
+    await getSpotifyAccessTokenForUser("user-a");
+    clearSpotifyAccessTokenCache(); // no userId → clear all
+    await getSpotifyAccessTokenForUser("user-a");
+    expect(mockRefreshSpotifyAccessToken).toHaveBeenCalledTimes(2);
+  });
+});
+
+// ---- isPermanentRefreshFailure branches ----
+
+describe("getSpotifyAccessTokenForUser — permanent failure branches", () => {
+  beforeEach(() => {
+    clearSpotifyAccessTokenCache();
+    mockFindUnique.mockReset();
+    mockUpdate.mockReset();
+    mockRefreshSpotifyAccessToken.mockReset();
+    mockUpdate.mockResolvedValue(undefined);
+  });
+
+  it("marks lastRefreshErrorAt for status 401", async () => {
+    mockFindUnique.mockResolvedValue({
+      userId: "user-1",
+      clientId: "client-id",
+      clientSecretEnc: encryptSecret("secret"),
+      refreshTokenEnc: encryptSecret("refresh"),
+    });
+    mockRefreshSpotifyAccessToken.mockRejectedValue(
+      new SpotifyTokenError("unauthorized", 401),
+    );
+
+    await expect(getSpotifyAccessTokenForUser("user-1")).resolves.toBeNull();
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { lastRefreshErrorAt: expect.any(Date) as Date } }),
+    );
+  });
+
+  it("marks lastRefreshErrorAt for status 403", async () => {
+    mockFindUnique.mockResolvedValue({
+      userId: "user-1",
+      clientId: "client-id",
+      clientSecretEnc: encryptSecret("secret"),
+      refreshTokenEnc: encryptSecret("refresh"),
+    });
+    mockRefreshSpotifyAccessToken.mockRejectedValue(
+      new SpotifyTokenError("forbidden", 403),
+    );
+
+    await expect(getSpotifyAccessTokenForUser("user-1")).resolves.toBeNull();
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { lastRefreshErrorAt: expect.any(Date) as Date } }),
+    );
+  });
+
+  it("does NOT mark lastRefreshErrorAt for non-SpotifyTokenError", async () => {
+    mockFindUnique.mockResolvedValue({
+      userId: "user-1",
+      clientId: "client-id",
+      clientSecretEnc: encryptSecret("secret"),
+      refreshTokenEnc: encryptSecret("refresh"),
+    });
+    mockRefreshSpotifyAccessToken.mockRejectedValue(new Error("network error"));
+
+    await expect(getSpotifyAccessTokenForUser("user-1")).resolves.toBeNull();
+    expect(mockUpdate).not.toHaveBeenCalled();
+  });
+
+  it("returns null when no credentials found for user", async () => {
+    mockFindUnique.mockResolvedValue(null);
+
+    const result = await getSpotifyAccessTokenForUser("user-no-connection");
+    expect(result).toBeNull();
+    expect(mockRefreshSpotifyAccessToken).not.toHaveBeenCalled();
+  });
+
+  it("includes refresh_token in update when a new one is provided", async () => {
+    mockFindUnique.mockResolvedValue({
+      userId: "user-1",
+      clientId: "client-id",
+      clientSecretEnc: encryptSecret("secret"),
+      refreshTokenEnc: encryptSecret("refresh"),
+    });
+    mockRefreshSpotifyAccessToken.mockResolvedValue({
+      access_token: "new-access",
+      token_type: "Bearer",
+      scope: "user-read-currently-playing",
+      expires_in: 3600,
+      refresh_token: "new-refresh",
+    });
+
+    await expect(getSpotifyAccessTokenForUser("user-1")).resolves.toBe("new-access");
+    const expectedData: unknown = expect.objectContaining({
+      refreshTokenEnc: expect.any(String) as unknown,
+    });
+    expect(mockUpdate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expectedData,
+      }),
+    );
   });
 });

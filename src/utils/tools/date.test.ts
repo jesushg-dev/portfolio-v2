@@ -33,4 +33,25 @@ describe("formatExperienceDates", () => {
     const formattedEn = formatExperienceDates(startDate, null, true, "en");
     expect(formattedEn).toBe("September 2024 – Present");
   });
+
+  it("returns empty string when startDate is null or undefined", () => {
+    expect(formatExperienceDates(null, null, false, "en")).toBe("");
+    expect(formatExperienceDates(undefined, null, false, "en")).toBe("");
+  });
+
+  it("falls back to presentLabel.en when requested locale key is missing in presentLabel map", () => {
+    const startDate = new Date("2023-06-01T00:00:00.000Z");
+    // Locale is "es", but presentLabel only has "en" key → presentLabel["es"] is undefined → falls back to presentLabel.en
+    const result = formatExperienceDates(startDate, null, true, "es", {
+      en: "DefaultPresent",
+    });
+    expect(result).toContain("DefaultPresent");
+  });
+
+  it("uses current=false with endDate null path (shows Present label)", () => {
+    const startDate = new Date("2022-01-01T00:00:00.000Z");
+    // current is false but endDate is also null → treats as ongoing (no endDate)
+    const result = formatExperienceDates(startDate, null, false, "en");
+    expect(result).toContain("Present");
+  });
 });

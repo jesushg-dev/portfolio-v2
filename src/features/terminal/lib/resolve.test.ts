@@ -109,4 +109,41 @@ describe("resolveStepsForLocale", () => {
     expect(result.commands).toEqual(["pwd"]);
     expect(result.outputs[0]).toEqual(["/home"]);
   });
+
+  it("returns empty command string when translations array is empty", () => {
+    const stepsWithNoTranslations: TerminalStepResolved[] = [
+      { order: 0, translations: [] },
+    ];
+    const result = resolveStepsForLocale(stepsWithNoTranslations, "en");
+    expect(result.commands).toEqual([""]);
+    expect(result.outputs[0]).toEqual([]);
+  });
+
+  it("returns empty arrays for empty steps input", () => {
+    const result = resolveStepsForLocale([], "en");
+    expect(result.commands).toEqual([]);
+    expect(result.outputs).toEqual({});
+  });
+
+  it("skips defaultLocale lookup when defaultLocale equals locale", () => {
+    // When defaultLocale === locale, the branch `defaultLocale && defaultLocale !== locale`
+    // is false, so it falls through to translations[0].
+    const partialSteps: TerminalStepResolved[] = [
+      {
+        order: 0,
+        translations: [
+          {
+            appLanguageId: "lang-en",
+            languageCode: "en",
+            command: "echo hi",
+            output: "hi",
+          },
+        ],
+      },
+    ];
+    // locale and defaultLocale are both "nl" — no "nl" translation, falls to [0]
+    const result = resolveStepsForLocale(partialSteps, "nl", "nl");
+    expect(result.commands).toEqual(["echo hi"]);
+  });
 });
+

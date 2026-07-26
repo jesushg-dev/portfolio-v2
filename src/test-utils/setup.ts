@@ -178,3 +178,11 @@ jest.mock("@/lib/auth", () => ({
 jest.mock("@/lib/auth-redirect", () => ({
   redirectToLogin: jest.fn(),
 }));
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
+Element.prototype.scrollIntoView = jest.fn();
