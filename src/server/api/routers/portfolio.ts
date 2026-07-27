@@ -697,6 +697,7 @@ export const portfolioRouter = createTRPCRouter({
         role: item.role,
         quote: getLocalizedText(item.quote, locale, defaultLocale),
         avatarUrl: item.avatarUrl,
+        linkedInUrl: item.linkedInUrl,
       }));
     }),
 

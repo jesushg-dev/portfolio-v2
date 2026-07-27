@@ -1,57 +1,85 @@
 "use client";
 
 import type { FC } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
+import Autoplay from "embla-carousel-autoplay";
 import { api } from "@/trpc/react";
 import { QuoteIcon, ArrowRightIcon } from "lucide-react";
 
 import { Link } from "@/i18n/routing";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+import { cn } from "@/lib/utils";
 
 const statKeys = ["certifications", "projects", "experience"] as const;
 
-// ─── Skeleton ─────────────────────────────────────────────────────────────────
+type TestimonialItem = {
+  id: string;
+  quote: string;
+  author: string;
+  role?: string | null;
+  avatarUrl?: string | null;
+  linkedInUrl?: string | null;
+};
+
 function TestimonialSkeleton() {
   return (
-    <li className="border-border bg-card/50 rounded-xl border p-5">
+    <div className="border-border bg-card/50 rounded-xl border p-5">
       <Skeleton className="mb-3 h-3 w-3/4" />
+      <Skeleton className="mb-2 h-3 w-full" />
       <Skeleton className="mb-2 h-3 w-full" />
       <Skeleton className="mb-4 h-3 w-5/6" />
       <div className="flex items-center gap-2.5">
-        <Skeleton className="h-8 w-8 rounded-full" />
+        <Skeleton className="h-9 w-9 rounded-full" />
         <div className="flex flex-col gap-1.5">
           <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-2.5 w-16" />
+          <Skeleton className="h-2.5 w-32" />
         </div>
       </div>
-    </li>
+    </div>
   );
 }
 
-// ─── Testimonial card ─────────────────────────────────────────────────────────
+function AuthorName({
+  author,
+  linkedInUrl,
+}: {
+  author: string;
+  linkedInUrl?: string | null;
+}) {
+  if (!linkedInUrl) {
+    return <p className="text-foreground text-sm font-semibold">{author}</p>;
+  }
+
+  return (
+    <a
+      href={linkedInUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-foreground hover:text-primary text-sm font-semibold underline-offset-2 transition-colors hover:underline"
+    >
+      {author}
+    </a>
+  );
+}
+
 function TestimonialCard({
   quote,
   author,
   role,
   avatarUrl,
-  index,
-}: {
-  quote: string;
-  author: string;
-  role?: string | null;
-  avatarUrl?: string | null;
-  index: number;
-}) {
+  linkedInUrl,
+}: TestimonialItem) {
   return (
-    <motion.li
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.45, delay: 0.15 + index * 0.12 }}
-      className="border-border bg-card/50 relative rounded-xl border p-5 backdrop-blur-sm"
-    >
+    <div className="border-border bg-card/50 relative flex h-full w-full flex-col rounded-xl border p-5 backdrop-blur-sm">
       <QuoteIcon
         className="text-primary/20 absolute top-3 right-4 h-8 w-8"
         aria-hidden
@@ -82,19 +110,94 @@ function TestimonialCard({
           </span>
         )}
         <div>
-          <p className="text-foreground text-sm font-semibold">{author}</p>
-          {role && (
+          <AuthorName author={author} linkedInUrl={linkedInUrl} />
+          {role ? (
             <p className="text-muted-foreground text-xs leading-tight">
               {role}
             </p>
-          )}
+          ) : null}
         </div>
       </footer>
-    </motion.li>
+    </div>
   );
 }
 
-// ─── Stat card ────────────────────────────────────────────────────────────────
+function TestimonialsCarousel({ items }: { items: TestimonialItem[] }) {
+  const [api, setApi] = useState<CarouselApi>();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const autoplay = useRef(
+    Autoplay({
+      delay: 7000,
+      stopOnInteraction: true,
+      stopOnMouseEnter: true,
+    }),
+  );
+
+  const onSelect = useCallback(() => {
+    if (!api) return;
+    setSelectedIndex(api.selectedScrollSnap());
+  }, [api]);
+
+  useEffect(() => {
+    if (!api) return;
+
+    onSelect();
+    api.on("select", onSelect);
+    api.on("reInit", onSelect);
+
+    return () => {
+      api.off("select", onSelect);
+      api.off("reInit", onSelect);
+    };
+  }, [api, onSelect]);
+
+  if (items.length === 0) return null;
+
+  const showControls = items.length > 1;
+
+  return (
+    <div className="flex w-full flex-col gap-4">
+      <Carousel
+        setApi={setApi}
+        opts={{ align: "start", loop: showControls }}
+        plugins={showControls ? [autoplay.current] : undefined}
+        className="w-full"
+      >
+        <CarouselContent className="-ml-0">
+          {items.map((item) => (
+            <CarouselItem key={item.id} className="basis-full pl-0">
+              <TestimonialCard {...item} />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+
+        {showControls ? (
+          <div
+            className="mt-1 flex items-center justify-center gap-2"
+            aria-label="Testimonial slides"
+          >
+            {items.map((item, index) => (
+              <button
+                key={item.id}
+                type="button"
+                aria-label={`Go to testimonial ${index + 1}`}
+                aria-current={selectedIndex === index}
+                onClick={() => api?.scrollTo(index)}
+                className={cn(
+                  "h-2 rounded-full transition-all duration-300",
+                  selectedIndex === index
+                    ? "bg-primary w-6"
+                    : "bg-muted-foreground/30 w-2 hover:bg-muted-foreground/50",
+                )}
+              />
+            ))}
+          </div>
+        ) : null}
+      </Carousel>
+    </div>
+  );
+}
+
 function StatCard({
   value,
   label,
@@ -114,7 +217,7 @@ function StatCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, delay: 0.1 + index * 0.1 }}
-      className="bg-card text-card-foreground border-border group relative h-full overflow-hidden rounded-2xl border p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
+      className="bg-card text-card-foreground border-border group relative h-full w-full overflow-hidden rounded-2xl border p-6 text-center shadow-sm transition-shadow duration-300 hover:shadow-md"
     >
       <span
         aria-hidden
@@ -131,7 +234,7 @@ function StatCard({
 
   if (isHash) {
     return (
-      <a href={href} className="block">
+      <a href={href} className="block w-full">
         {content}
       </a>
     );
@@ -140,14 +243,13 @@ function StatCard({
   return (
     <Link
       href={href as React.ComponentProps<typeof Link>["href"]}
-      className="block"
+      className="block w-full"
     >
       {content}
     </Link>
   );
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
 interface SocialProofStats {
   yearsExperience: number;
   projectsCount: number;
@@ -156,13 +258,7 @@ interface SocialProofStats {
 
 interface SocialProofProps {
   stats: SocialProofStats;
-  testimonials?: {
-    id: string;
-    quote: string;
-    author: string;
-    role?: string | null;
-    avatarUrl?: string | null;
-  }[];
+  testimonials?: TestimonialItem[];
 }
 
 const SocialProof: FC<SocialProofProps> = ({
@@ -174,7 +270,7 @@ const SocialProof: FC<SocialProofProps> = ({
 
   const { data: itemsFromQuery = [], isLoading } =
     api.portfolio.getTestimonialsPublic.useQuery(
-      { locale, limit: 3 },
+      { locale, limit: 10 },
       { enabled: testimonialsFromServer === undefined },
     );
 
@@ -203,13 +299,13 @@ const SocialProof: FC<SocialProofProps> = ({
       className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
     >
       <div
-        className={`grid grid-cols-1 items-start gap-12 ${
-          showTestimonialsColumn ? "lg:grid-cols-2 lg:gap-20" : "lg:grid-cols-1"
-        }`}
+        className={cn(
+          "grid grid-cols-1 items-center gap-12",
+          showTestimonialsColumn ? "lg:grid-cols-2 lg:gap-20" : "lg:grid-cols-1",
+        )}
       >
-        {/* ── LEFT: Testimonials + CTA ───────────────────────────────── */}
-        {showTestimonialsColumn && (
-          <div className="flex flex-col gap-6">
+        {showTestimonialsColumn ? (
+          <div className="flex w-full min-w-0 flex-col gap-6">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -228,26 +324,11 @@ const SocialProof: FC<SocialProofProps> = ({
               </p>
             </motion.div>
 
-            <ul className="flex flex-col gap-4">
-              {isTestimonialsLoading ? (
-                <>
-                  <TestimonialSkeleton />
-                  <TestimonialSkeleton />
-                  <TestimonialSkeleton />
-                </>
-              ) : (
-                items.map((item, i) => (
-                  <TestimonialCard
-                    key={item.id}
-                    quote={item.quote}
-                    author={item.author}
-                    role={item.role}
-                    avatarUrl={item.avatarUrl}
-                    index={i}
-                  />
-                ))
-              )}
-            </ul>
+            {isTestimonialsLoading ? (
+              <TestimonialSkeleton />
+            ) : (
+              <TestimonialsCarousel items={items} />
+            )}
 
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -265,10 +346,9 @@ const SocialProof: FC<SocialProofProps> = ({
               </a>
             </motion.div>
           </div>
-        )}
+        ) : null}
 
-        {/* ── RIGHT (or full-width): Stats + CTA when no testimonials ── */}
-        <div className="flex flex-col gap-6">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center gap-6 text-center">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -279,7 +359,7 @@ const SocialProof: FC<SocialProofProps> = ({
             {t("statsLabel")}
           </motion.p>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
             {statKeys.map((key, i) => (
               <StatCard
                 key={key}
@@ -291,8 +371,7 @@ const SocialProof: FC<SocialProofProps> = ({
             ))}
           </div>
 
-          {/* CTA appears here too when no testimonials column */}
-          {!showTestimonialsColumn && (
+          {!showTestimonialsColumn ? (
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -308,14 +387,14 @@ const SocialProof: FC<SocialProofProps> = ({
                 <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
             </motion.div>
-          )}
+          ) : null}
 
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-muted-foreground text-xs leading-relaxed"
+            className="text-muted-foreground max-w-xs text-xs leading-relaxed"
           >
             {t("statsNote")}
           </motion.p>

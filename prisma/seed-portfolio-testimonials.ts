@@ -7,6 +7,7 @@ interface TestimonialSeed {
   author: string;
   role: string;
   avatarUrl?: string;
+  linkedInUrl?: string;
   quote: LocaleMap;
   order: number;
 }
@@ -31,6 +32,7 @@ export async function seedPortfolioTestimonials(
         author: item.author,
         role: item.role,
         avatarUrl: item.avatarUrl ?? null,
+        linkedInUrl: item.linkedInUrl ?? null,
         quote: toLocalizedText(item.quote) as unknown as Prisma.InputJsonValue,
         order: item.order,
         isVisible: true,
