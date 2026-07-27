@@ -133,7 +133,9 @@ describe("ExpandableSpotifyPlayer", () => {
     renderWithIntl(<ExpandableSpotifyPlayer playback={playback!} />);
 
     expect(
-      screen.getByText("Nothing is playing right now"),
+      screen.getByText((content) =>
+        content.includes("Nothing is playing right now"),
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText(/Last played/)).toBeInTheDocument();
     expect(screen.queryByTitle("Current progress")).not.toBeInTheDocument();

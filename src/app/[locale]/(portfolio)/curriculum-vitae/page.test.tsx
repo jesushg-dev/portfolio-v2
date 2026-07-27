@@ -63,7 +63,7 @@ jest.mock("@/server/db", () => ({
 }));
 
 jest.mock("@/lib/email/resend", () => ({
-  isResendConfigured: jest.fn(() => false),
+  canDeliverPortfolioCvEmail: jest.fn(() => Promise.resolve(false)),
 }));
 
 jest.mock("@/features/cv/components/cv-page-actions", () => ({

@@ -1,7 +1,7 @@
 import { buildContactLinks } from "./contact-links";
 
 describe("buildContactLinks", () => {
-  it("maps CV contacts into actionable links", () => {
+  it("maps email, github, linkedin, and whatsapp contacts", () => {
     const links = buildContactLinks([
       { type: "EMAIL", value: "hello@example.com", label: null },
       { type: "GITHUB", value: "jess232017", label: null },
@@ -37,5 +37,107 @@ describe("buildContactLinks", () => {
         }),
       ]),
     );
+  });
+
+  it("handles PHONE without WhatsApp hint as a regular phone link", () => {
+    const links = buildContactLinks([
+      { type: "PHONE", value: "+1-800-555-0100", label: null },
+    ]);
+    expect(links[0]).toMatchObject({
+      href: "tel:+18005550100",
+      label: "phone",
+      icon: "phone",
+      accent: "#34A853",
+    });
+  });
+
+  it("maps WEBSITE contact with normalizeUrl", () => {
+    const links = buildContactLinks([
+      { type: "WEBSITE", value: "mysite.com", label: null },
+    ]);
+    expect(links[0]).toMatchObject({
+      href: "https://mysite.com",
+      label: "website",
+      icon: "website",
+    });
+  });
+
+  it("passes through WEBSITE value when it already has https://", () => {
+    const links = buildContactLinks([
+      { type: "WEBSITE", value: "https://mysite.com", label: null },
+    ]);
+    expect(links[0]?.href).toBe("https://mysite.com");
+  });
+
+  it("maps LOCATION to a Google Maps search URL", () => {
+    const links = buildContactLinks([
+      { type: "LOCATION", value: "New York, NY", label: null },
+    ]);
+    expect(links[0]?.href).toContain("google.com/maps/search");
+    expect(links[0]?.href).toContain(encodeURIComponent("New York, NY"));
+    expect(links[0]?.icon).toBe("location");
+  });
+
+  it("maps CALENDLY contact", () => {
+    const links = buildContactLinks([
+      { type: "CALENDLY", value: "calendly.com/myuser", label: null },
+    ]);
+    expect(links[0]).toMatchObject({
+      href: "https://calendly.com/myuser",
+      label: "calendly",
+      icon: "calendly",
+    });
+  });
+
+  it("skips contacts with empty values", () => {
+    const links = buildContactLinks([
+      { type: "EMAIL", value: "   ", label: null },
+      { type: "GITHUB", value: "", label: null },
+    ]);
+    expect(links).toHaveLength(0);
+  });
+
+  it("handles EMAIL that already has mailto: prefix", () => {
+    const links = buildContactLinks([
+      { type: "EMAIL", value: "mailto:info@example.com", label: null },
+    ]);
+    expect(links[0]?.href).toBe("mailto:info@example.com");
+  });
+
+  it("uses a string label correctly in WhatsApp detection", () => {
+    // label is a plain string containing "whatsapp"
+    const links = buildContactLinks([
+      { type: "PHONE", value: "60123456789", label: "WhatsApp" },
+    ]);
+    expect(links[0]?.icon).toBe("whatsapp");
+  });
+
+  it("ignores unknown contact types without throwing", () => {
+    const links = buildContactLinks([
+      // @ts-expect-error testing unknown type
+      { type: "UNKNOWN_TYPE", value: "something", label: null },
+    ]);
+    expect(links).toHaveLength(0);
+  });
+
+  it("handles label as primitive non-string or object with non-string values", () => {
+    // label is a number -> labelText returns ""
+    const links1 = buildContactLinks([
+      { type: "PHONE", value: "12345", label: 123 },
+    ]);
+    expect(links1[0]?.icon).toBe("phone");
+
+    // label is an object with numeric values -> labelText returns ""
+    const links2 = buildContactLinks([
+      { type: "PHONE", value: "12345", label: { num: 456 } },
+    ]);
+    expect(links2[0]?.icon).toBe("phone");
+  });
+
+  it("normalizes URLs starting with mailto: or tel:", () => {
+    const links = buildContactLinks([
+      { type: "WEBSITE", value: "tel:+1234567890", label: null },
+    ]);
+    expect(links[0]?.href).toBe("tel:+1234567890");
   });
 });

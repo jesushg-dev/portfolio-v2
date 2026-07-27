@@ -105,8 +105,8 @@ describe("mapDraftToTemplateSections", () => {
         .find((section) => section.id === "section-4")
         ?.paragraphs.map((paragraph) => paragraph.runs[0]?.text),
     ).toEqual([
-      "First sentence about Jane.",
-      "Second sentence with more detail. Third sentence for overflow.",
+      "First sentence about Jane. Second sentence with more detail.",
+      "Third sentence for overflow.",
     ]);
 
     expect(

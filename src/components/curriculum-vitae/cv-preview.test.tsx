@@ -43,4 +43,18 @@ describe("CvPreview", () => {
     );
     expect(screen.getByText("Jane Doe")).toBeInTheDocument();
   });
+
+  it("renders with pdfMode styling when pdfMode is true", () => {
+    const { container } = renderWithIntl(
+      <CvPreview
+        data={mockCvPreviewData}
+        aboutMeText={null}
+        currentLocale="en"
+        defaultLocale="en"
+        pdfMode={true}
+      />,
+    );
+
+    expect(container.querySelector(".px-5.pt-2")).toBeInTheDocument();
+  });
 });

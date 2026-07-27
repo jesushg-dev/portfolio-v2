@@ -26,4 +26,37 @@ describe("Education", () => {
     );
     expect(screen.getByText("Education")).toBeInTheDocument();
   });
+
+  it("formats dates using startYear and endYear when dates prop is missing", () => {
+    const eduWithYears = {
+      ...mockEducation,
+      dates: null,
+      startYear: "2018",
+      endYear: "2022",
+      location: { default: "Madrid, Spain" },
+    };
+
+    renderWithIntl(
+      <Education educations={[eduWithYears]} locale="en" defaultLocale="en" />,
+    );
+
+    expect(screen.getByText("2018 - 2022")).toBeInTheDocument();
+    expect(screen.getByText(/Madrid, Spain/)).toBeInTheDocument();
+  });
+
+  it("omits dates and location when they are not provided", () => {
+    const minimalEdu = {
+      ...mockEducation,
+      dates: null,
+      startYear: null,
+      endYear: null,
+      location: null,
+    };
+
+    renderWithIntl(
+      <Education educations={[minimalEdu]} locale="en" defaultLocale="en" />,
+    );
+
+    expect(screen.getByText("Computer Science")).toBeInTheDocument();
+  });
 });

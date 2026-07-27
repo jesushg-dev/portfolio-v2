@@ -46,6 +46,12 @@ describe("formatTimelineDate", () => {
       ),
     ).toBe("2020 - 2021");
   });
+
+  it("returns just the start year when not current and no endDate", () => {
+    expect(
+      formatTimelineDate(new Date("2023-03-01T12:00:00.000Z"), null, false),
+    ).toBe("2023");
+  });
 });
 
 describe("mapTimelineItemToPublic", () => {
@@ -59,6 +65,26 @@ describe("mapTimelineItemToPublic", () => {
   it("falls back to default locale", () => {
     const item = mapTimelineItemToPublic(baseItem, "nl", "en");
     expect(item.title).toBe("Web Developer - Acme");
+  });
+
+  it("omits organization from title when organization is empty", () => {
+    const item = mapTimelineItemToPublic(
+      { ...baseItem, organization: "" },
+      "en",
+    );
+    // empty organization is falsy → title is returned without " - "
+    expect(item.title).toBe("Web Developer");
+  });
+
+  it("returns null endDate when item has no endDate", () => {
+    const item = mapTimelineItemToPublic({ ...baseItem, endDate: null }, "en");
+    expect(item.endDate).toBeNull();
+  });
+
+  it("formats endDate as ISO string when present", () => {
+    const endDate = new Date("2023-12-31T00:00:00.000Z");
+    const item = mapTimelineItemToPublic({ ...baseItem, endDate }, "en");
+    expect(item.endDate).toBe(endDate.toISOString());
   });
 });
 
@@ -77,6 +103,14 @@ describe("mapTimelineItemsToPublic", () => {
 
     expect(items).toHaveLength(2);
     expect(items.map((item) => item.id)).toEqual(["item-1", "item-2"]);
+  });
+
+  it("returns all items when no limit is provided", () => {
+    const items = mapTimelineItemsToPublic(
+      [baseItem, { ...baseItem, id: "item-2", order: 1 }],
+      "en",
+    );
+    expect(items).toHaveLength(2);
   });
 });
 
