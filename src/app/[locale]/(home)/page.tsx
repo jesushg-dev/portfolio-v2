@@ -87,18 +87,30 @@ function ContactFallback() {
   );
 }
 
-const About = dynamic(() => import("@/features/home/components/about"));
-const Skills = dynamic(() => import("@/features/home/components/skills"));
-const Contact = dynamic(() => import("@/features/home/components/contact"));
-const Portfolio = dynamic(() => import("@/features/home/components/portfolio"));
+const About = dynamic(() => import("@/features/home/components/about"), {
+  loading: () => <AboutFallback />,
+});
+const Skills = dynamic(() => import("@/features/home/components/skills"), {
+  loading: () => <SkillsFallback />,
+});
+const Contact = dynamic(() => import("@/features/home/components/contact"), {
+  loading: () => <ContactFallback />,
+});
+const Portfolio = dynamic(
+  () => import("@/features/home/components/portfolio"),
+  { loading: () => <PortfolioFallback /> },
+);
 const SocialProof = dynamic(
   () => import("@/features/home/components/social-proof"),
+  { loading: () => <SocialProofFallback /> },
 );
 const Experience = dynamic(
   () => import("@/features/home/components/experience"),
+  { loading: () => <ExperienceFallback /> },
 );
 const SoftSkills = dynamic(
   () => import("@/features/home/components/soft-skills"),
+  { loading: () => <SoftSkillsFallback /> },
 );
 
 export default async function Home() {

@@ -70,9 +70,9 @@ flowchart TB
 
 When Playwright generates the PDF, it does not render HTML in memory — it **navigates to the real web preview**.
 
-| Locale | URL visited by Chromium |
-|--------|-------------------------|
-| `en`   | `{baseUrl}/curriculum-vitae?pdf=1` |
+| Locale     | URL visited by Chromium                     |
+| ---------- | ------------------------------------------- |
+| `en`       | `{baseUrl}/curriculum-vitae?pdf=1`          |
 | `es`, `nl` | `{baseUrl}/{locale}/curriculum-vitae?pdf=1` |
 
 The `pdf=1` query param enables `pdfMode` in `CvPageView`, which renders only `#cv-public-preview` without UI chrome. Middleware (`src/proxy.ts`) propagates the `x-cv-pdf-mode: 1` header so the tenant resolves correctly.
@@ -104,11 +104,11 @@ The historical problem was storing a **fixed URL** (Cloudinary, Drive, admin set
 
 With `contentHash`:
 
-| Event | Result |
-|-------|--------|
-| CV unchanged | Same hash → serve cache |
-| CV edited | Different hash → regenerate and replace on UploadThing |
-| Manual URL (`contentHash = null`) | Served as-is (legacy; may become stale) |
+| Event                             | Result                                                 |
+| --------------------------------- | ------------------------------------------------------ |
+| CV unchanged                      | Same hash → serve cache                                |
+| CV edited                         | Different hash → regenerate and replace on UploadThing |
+| Manual URL (`contentHash = null`) | Served as-is (legacy; may become stale)                |
 
 ### Snapshot included in the hash
 
@@ -125,7 +125,7 @@ Everything that affects the PDF for a given locale is serialized:
 **File:** `src/features/cv/lib/compute-cv-pdf-content-hash.ts`
 
 ```ts
-SHA-256(JSON.stringify({ paginatePages, snapshot }))
+SHA - 256(JSON.stringify({ paginatePages, snapshot }));
 ```
 
 Tests: `src/features/cv/lib/compute-cv-pdf-content-hash.test.ts`
@@ -136,16 +136,16 @@ Tests: `src/features/cv/lib/compute-cv-pdf-content-hash.test.ts`
 
 **Schema:** `prisma/schema/main.prisma`
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `userId` | ObjectId | CV owner |
-| `locale` | string | `en`, `es`, `nl` |
-| `paginatePages` | boolean | `false` = continuous page; `true` = paginated US Letter |
-| `url` | string | Public PDF URL (UploadThing CDN) |
-| `contentHash` | string? | Content hash; `null` = legacy manual URL |
-| `storageKey` | string? | UploadThing key for deletion on regenerate |
-| `generatedAt` | DateTime? | Last automatic generation |
-| `label` | string? | Optional label (admin) |
+| Field           | Type      | Description                                             |
+| --------------- | --------- | ------------------------------------------------------- |
+| `userId`        | ObjectId  | CV owner                                                |
+| `locale`        | string    | `en`, `es`, `nl`                                        |
+| `paginatePages` | boolean   | `false` = continuous page; `true` = paginated US Letter |
+| `url`           | string    | Public PDF URL (UploadThing CDN)                        |
+| `contentHash`   | string?   | Content hash; `null` = legacy manual URL                |
+| `storageKey`    | string?   | UploadThing key for deletion on regenerate              |
+| `generatedAt`   | DateTime? | Last automatic generation                               |
+| `label`         | string?   | Optional label (admin)                                  |
 
 **Constraint:** `@@unique([userId, locale, paginatePages])`
 
@@ -166,19 +166,19 @@ pnpm prisma generate
 
 ### Production dependencies
 
-| Package | Purpose |
-|---------|---------|
-| `playwright-core@^1.61` | Headless browser API (no bundled Chromium) |
+| Package                       | Purpose                                         |
+| ----------------------------- | ----------------------------------------------- |
+| `playwright-core@^1.61`       | Headless browser API (no bundled Chromium)      |
 | `@sparticuz/chromium-min@149` | Serverless Chromium (~46 KB npm; remote binary) |
 
 `@playwright/test` lives in devDependencies for E2E only; it is not used in production.
 
 ### Chromium on Vercel vs local
 
-| Environment | Launch |
-|-------------|--------|
+| Environment             | Launch                                                              |
+| ----------------------- | ------------------------------------------------------------------- |
 | **Vercel** (`VERCEL=1`) | `@sparticuz/chromium-min` downloads the pack from GitHub at runtime |
-| **Local** | `playwright.executablePath()` or `CHROME_LOCAL_PATH` |
+| **Local**               | `playwright.executablePath()` or `CHROME_LOCAL_PATH`                |
 
 Default pack (`src/features/cv/lib/chromium-pack-url.ts`):
 
@@ -196,10 +196,10 @@ npx playwright install chromium
 
 ### PDF modes
 
-| `paginatePages` | Behavior |
-|-----------------|----------|
+| `paginatePages`   | Behavior                                                 |
+| ----------------- | -------------------------------------------------------- |
 | `false` (default) | Single continuous page; fixed width `CV_LETTER_WIDTH_PX` |
-| `true` | `Letter` format, US pagination |
+| `true`            | `Letter` format, US pagination                           |
 
 ---
 
@@ -213,11 +213,11 @@ POST /api/internal/cv/generate-pdf
 
 **File:** `src/app/api/internal/cv/generate-pdf/route.ts`
 
-| Config | Value |
-|--------|-------|
-| `runtime` | `nodejs` |
-| `maxDuration` | `60` |
-| Auth | `Authorization: Bearer {CV_PDF_GENERATOR_SECRET}` |
+| Config        | Value                                             |
+| ------------- | ------------------------------------------------- |
+| `runtime`     | `nodejs`                                          |
+| `maxDuration` | `60`                                              |
+| Auth          | `Authorization: Bearer {CV_PDF_GENERATOR_SECRET}` |
 
 ### HTTP client
 
@@ -229,10 +229,10 @@ Public routes call the internal function via `fetch`. They do not import Playwri
 
 **File:** `src/lib/url/get-base-url.ts`
 
-| Function | Use |
-|----------|-----|
-| `getServerBaseUrl()` | Public site URL (Playwright `page.goto`, auth) |
-| `getInternalServiceBaseUrl()` | Server-to-server calls to the internal API |
+| Function                      | Use                                            |
+| ----------------------------- | ---------------------------------------------- |
+| `getServerBaseUrl()`          | Public site URL (Playwright `page.goto`, auth) |
+| `getInternalServiceBaseUrl()` | Server-to-server calls to the internal API     |
 
 Outside Vercel, `getInternalServiceBaseUrl()` **always** uses `http://127.0.0.1:{PORT}`. This prevents `BETTER_AUTH_URL=https://jesushg.com` in `.env.local` from routing internal calls to production during `pnpm start`.
 
@@ -285,14 +285,14 @@ for (const r of ['api/trpc/[trpc]/route.js','api/internal/cv/generate-pdf/route.
 
 ## Environment variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `CV_PDF_GENERATOR_SECRET` | Yes (prod) | Secret ≥16 chars; Bearer auth for `/api/internal/cv/generate-pdf` |
-| `UPLOADTHING_TOKEN` | Yes (prod) | Upload and CDN cache |
-| `BETTER_AUTH_URL` | Recommended | Public site URL (Playwright navigates here) |
-| `CHROMIUM_PACK_URL` | No | Override Sparticuz pack tar URL |
-| `CHROME_LOCAL_PATH` | No | Explicit Chromium path in dev |
-| `VERCEL` | Auto | Set by Vercel; enables chromium-min |
+| Variable                  | Required    | Description                                                       |
+| ------------------------- | ----------- | ----------------------------------------------------------------- |
+| `CV_PDF_GENERATOR_SECRET` | Yes (prod)  | Secret ≥16 chars; Bearer auth for `/api/internal/cv/generate-pdf` |
+| `UPLOADTHING_TOKEN`       | Yes (prod)  | Upload and CDN cache                                              |
+| `BETTER_AUTH_URL`         | Recommended | Public site URL (Playwright navigates here)                       |
+| `CHROMIUM_PACK_URL`       | No          | Override Sparticuz pack tar URL                                   |
+| `CHROME_LOCAL_PATH`       | No          | Explicit Chromium path in dev                                     |
+| `VERCEL`                  | Auto        | Set by Vercel; enables chromium-min                               |
 
 ### Example `.env.local`
 
@@ -310,29 +310,29 @@ Configure the same variables in the Vercel project dashboard for production.
 
 ### HTTP routes
 
-| Route | Method | Playwright | Description |
-|-------|--------|------------|-------------|
-| `/api/cv/pdf` | GET | No | Public download; redirect to CDN or stream |
-| `/api/internal/cv/generate-pdf` | POST | Yes | Isolated generation (internal use only) |
+| Route                           | Method | Playwright | Description                                |
+| ------------------------------- | ------ | ---------- | ------------------------------------------ |
+| `/api/cv/pdf`                   | GET    | No         | Public download; redirect to CDN or stream |
+| `/api/internal/cv/generate-pdf` | POST   | Yes        | Isolated generation (internal use only)    |
 
 ### tRPC
 
-| Procedure | Router | Description |
-|-----------|--------|-------------|
-| `cvPublic.sendPdfByEmail` | `cv-public.router.ts` | Email with PDF attachment |
-| `cvPublic.getPdfDeliveryStatus` | `cv-public.router.ts` | `{ canSendByEmail, hasCvData }` |
-| `cv.regeneratePdfCache` | `cv.router.ts` | Force regeneration (authenticated admin) |
-| `cv.upsertPdfLink` | `cv.router.ts` | Manual URL; clears `contentHash` |
-| `cv.getPdfLinks` | `cv.router.ts` | List links per locale |
+| Procedure                       | Router                | Description                              |
+| ------------------------------- | --------------------- | ---------------------------------------- |
+| `cvPublic.sendPdfByEmail`       | `cv-public.router.ts` | Email with PDF attachment                |
+| `cvPublic.getPdfDeliveryStatus` | `cv-public.router.ts` | `{ canSendByEmail, hasCvData }`          |
+| `cv.regeneratePdfCache`         | `cv.router.ts`        | Force regeneration (authenticated admin) |
+| `cv.upsertPdfLink`              | `cv.router.ts`        | Manual URL; clears `contentHash`         |
+| `cv.getPdfLinks`                | `cv.router.ts`        | List links per locale                    |
 
 ### Rate limiting (email)
 
 **File:** `src/features/cv/lib/rate-limit-cv-email.ts`
 
-| Limit | Value |
-|-------|-------|
-| Per IP / hour / tenant | 3 |
-| Per recipient / day / tenant | 5 |
+| Limit                        | Value |
+| ---------------------------- | ----- |
+| Per IP / hour / tenant       | 3     |
+| Per recipient / day / tenant | 5     |
 
 Logs stored in `CvPdfEmailLog`.
 
@@ -428,7 +428,8 @@ await trpc.cv.regeneratePdfCache.mutate({
 ### Deploy checklist
 
 - [ ] `pnpm db:push` applied
-- [ ] `CV_PDF_GENERATOR_SECRET` set in Vercel
+- [ ] `CV_PDF_GENERATOR_SECRET` set in Vercel (≥ 16 characters)
+- [ ] `BETTER_AUTH_URL` set in Vercel (public HTTPS URL, e.g. `https://jesushg.com`)
 - [ ] `UPLOADTHING_TOKEN` set in Vercel
 - [ ] Build verifies 0 Playwright files in `/api/trpc/*`
 - [ ] Test download and email on preview deployment
@@ -437,10 +438,10 @@ await trpc.cv.regeneratePdfCache.mutate({
 
 ## Design decisions (reference)
 
-| Decision | Rejected alternative | Reason |
-|----------|---------------------|--------|
-| Playwright over web preview | Gotenberg / DOCX template | Fidelity with existing preview |
-| Content hash cache | Always regenerate | Cost/latency on Vercel |
-| `@sparticuz/chromium-min` | Full `@sparticuz/chromium` | Vercel 250 MB limit |
-| Dedicated internal function | Playwright in tRPC | Bundle size + tracing |
-| UploadThing CDN | Serve buffer from lambda | Fast redirect; Playwright off hot path |
+| Decision                    | Rejected alternative       | Reason                                 |
+| --------------------------- | -------------------------- | -------------------------------------- |
+| Playwright over web preview | Gotenberg / DOCX template  | Fidelity with existing preview         |
+| Content hash cache          | Always regenerate          | Cost/latency on Vercel                 |
+| `@sparticuz/chromium-min`   | Full `@sparticuz/chromium` | Vercel 250 MB limit                    |
+| Dedicated internal function | Playwright in tRPC         | Bundle size + tracing                  |
+| UploadThing CDN             | Serve buffer from lambda   | Fast redirect; Playwright off hot path |

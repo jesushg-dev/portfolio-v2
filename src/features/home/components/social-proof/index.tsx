@@ -187,7 +187,7 @@ function TestimonialsCarousel({ items }: { items: TestimonialItem[] }) {
                   "h-2 rounded-full transition-all duration-300",
                   selectedIndex === index
                     ? "bg-primary w-6"
-                    : "bg-muted-foreground/30 w-2 hover:bg-muted-foreground/50",
+                    : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-2",
                 )}
               />
             ))}
@@ -301,7 +301,9 @@ const SocialProof: FC<SocialProofProps> = ({
       <div
         className={cn(
           "grid grid-cols-1 items-center gap-12",
-          showTestimonialsColumn ? "lg:grid-cols-2 lg:gap-20" : "lg:grid-cols-1",
+          showTestimonialsColumn
+            ? "lg:grid-cols-2 lg:gap-20"
+            : "lg:grid-cols-1",
         )}
       >
         {showTestimonialsColumn ? (

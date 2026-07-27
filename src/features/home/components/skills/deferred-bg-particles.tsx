@@ -3,11 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
-import { LoadingFixed } from "@/components/shared/loading";
-
 const BgParticles = dynamic(() => import("./bg-particles"), {
   ssr: false,
-  loading: () => <LoadingFixed />,
 });
 
 export default function DeferredBgParticles() {

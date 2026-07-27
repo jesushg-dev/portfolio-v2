@@ -20,6 +20,9 @@ jobs:
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+      BETTER_AUTH_URL: http://localhost:3000
+      CV_PDF_GENERATOR_SECRET: ci-build-cv-pdf-generator-secret
+      UPLOADTHING_TOKEN: ci-build-uploadthing-token
     steps:
       - uses: actions/checkout@v5
 

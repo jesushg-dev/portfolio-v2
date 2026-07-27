@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { env } from "@/env";
 import { generateCvPdfFromPreview } from "@/features/cv/lib/generate-cv-pdf-from-preview";
 
 export const runtime = "nodejs";
@@ -15,7 +16,7 @@ const requestSchema = z.object({
 });
 
 function isAuthorized(request: Request): boolean {
-  const secret = process.env.CV_PDF_GENERATOR_SECRET;
+  const secret = env.CV_PDF_GENERATOR_SECRET;
   if (!secret) return false;
 
   const header = request.headers.get("authorization");

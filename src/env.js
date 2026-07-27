@@ -1,6 +1,13 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+/** Vars required when NODE_ENV=production (Vercel build + runtime). */
+const isProduction = process.env.NODE_ENV === "production";
+
+function requiredInProduction<T extends z.ZodType>(schema: T) {
+  return isProduction ? schema : schema.optional();
+}
+
 export const env = createEnv({
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
@@ -16,7 +23,7 @@ export const env = createEnv({
 
     // Better Auth
     BETTER_AUTH_SECRET: z.string().min(1),
-    BETTER_AUTH_URL: z.string().url().optional(),
+    BETTER_AUTH_URL: requiredInProduction(z.string().url()),
     RESEND_API_KEY: z.string().optional(),
     RESEND_EMAIL_DOMAIN: z.string().optional(),
 
@@ -29,8 +36,8 @@ export const env = createEnv({
     // Multi-tenant
     PRIMARY_DOMAIN: z.string().default("jesushg.com"),
 
-    // UploadThing (resume imports)
-    UPLOADTHING_TOKEN: z.string().optional(),
+    // UploadThing (CV PDF cache, resume imports, admin uploads)
+    UPLOADTHING_TOKEN: requiredInProduction(z.string().min(1)),
 
     // AI providers (resume import / tailor)
     DEFAULT_AI_PROVIDER: z
@@ -42,7 +49,7 @@ export const env = createEnv({
     DEEPSEEK_API_KEY: z.string().optional(),
 
     /// Shared secret for the isolated CV PDF generator function
-    CV_PDF_GENERATOR_SECRET: z.string().min(16).optional(),
+    CV_PDF_GENERATOR_SECRET: requiredInProduction(z.string().min(16)),
   },
 
   /**

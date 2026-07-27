@@ -607,6 +607,46 @@ import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 
 **Rule:** if a helper is not exclusive to one feature domain, it belongs in `@/lib`, not in `features/*/lib/`.
 
+## Production environment variables
+
+Env validation lives in `src/env.js` (`@t3-oss/env-nextjs`). **`next build` fails in production** if required vars are missing or invalid — do not bypass with `SKIP_ENV_VALIDATION` on Vercel.
+
+### Always required (every environment)
+
+| Variable             | Purpose                  |
+| -------------------- | ------------------------ |
+| `MONGODB_URI`        | Database                 |
+| `BETTER_AUTH_SECRET` | Session signing / crypto |
+
+### Required when `NODE_ENV=production` (Vercel deploy)
+
+These break core portfolio integrity if absent: auth URLs, CV PDF generation, and cached uploads.
+
+| Variable                  | Min / format    | Purpose                                                                 |
+| ------------------------- | --------------- | ----------------------------------------------------------------------- |
+| `BETTER_AUTH_URL`         | Valid HTTPS URL | Public site URL for auth, OAuth, Playwright CV preview                  |
+| `CV_PDF_GENERATOR_SECRET` | ≥ 16 chars      | Bearer secret between public routes and `/api/internal/cv/generate-pdf` |
+| `UPLOADTHING_TOKEN`       | Non-empty       | CV PDF CDN cache, resume/admin file uploads                             |
+
+Generate `CV_PDF_GENERATOR_SECRET` once (e.g. `openssl rand -base64 32`) and set the **same value** in Vercel for all environments that share the PDF pipeline.
+
+### Optional (feature-specific)
+
+| Variable                                    | When needed                   |
+| ------------------------------------------- | ----------------------------- |
+| `RESEND_API_KEY` + `RESEND_EMAIL_DOMAIN`    | Contact / transactional email |
+| `GOOGLE_*` / `GITHUB_*`                     | OAuth login providers         |
+| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc. | Resume tailor / AI import     |
+| `SPOTIFY_REDIRECT_URI`                      | Spotify integration override  |
+
+Local dev may omit production-only vars; set them in `.env.local` when testing CV PDF download/email end-to-end.
+
+### Agent checklist before shipping CV PDF or deploy fixes
+
+1. Confirm `src/env.js` marks new server secrets as `requiredInProduction(...)` when they gate production behavior.
+2. Use `env.*` from `@/env` in server code — not raw `process.env.*` — so validation stays centralized.
+3. Document new secrets in `docs/cv-pdf.md` deploy checklist when they affect PDF/auth/uploads.
+
 ## Admin multilanguage forms — `useLocalizedForm`
 
 For admin forms with a `translations` map and `GlobalLanguageSelector`, use the shared hook instead of duplicating `activeLangId` state and reset-on-`resourceId` logic.
