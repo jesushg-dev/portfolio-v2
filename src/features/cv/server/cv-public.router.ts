@@ -9,7 +9,7 @@ import {
   resend,
   resendFromEmail,
 } from "@/lib/email/resend";
-import { generateCvPdfFromPreview } from "@/features/cv/lib/generate-cv-pdf-from-preview";
+import { resolveCvPdfAsset } from "@/features/cv/lib/resolve-cv-pdf-asset";
 import {
   assertCvEmailRateLimit,
   getClientIpFromHeaders,
@@ -86,11 +86,25 @@ export const cvPublicRouter = createTRPCRouter({
         recipientEmail,
       );
 
-      const pdfBuffer = await generateCvPdfFromPreview({
+      const pdfAsset = await resolveCvPdfAsset(
+        ctx.tenant.userId,
+        ctx.tenant.username,
         locale,
-        tenantUsername: ctx.tenant.username,
-        paginatePages: input.paginatePages ?? false,
-      });
+        ctx.tenant.defaultLocale,
+        {
+          paginatePages: input.paginatePages ?? false,
+          includeBuffer: true,
+        },
+      );
+
+      if (!pdfAsset?.buffer) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to prepare CV PDF",
+        });
+      }
+
+      const pdfBuffer = pdfAsset.buffer;
 
       const t = await getTranslations({
         locale,

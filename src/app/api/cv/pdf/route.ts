@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { locales, type Locale } from "@/i18n/config";
-import { getCvPdfDownloadBuffer } from "@/features/cv/lib/get-cv-pdf-download";
+import { getCvPdfDownload } from "@/features/cv/lib/get-cv-pdf-download";
 import { resolveTenant } from "@/lib/tenant/resolve";
 
 export const runtime = "nodejs";
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
   const paginatePages = searchParams.get("paginate") === "1";
 
   try {
-    const result = await getCvPdfDownloadBuffer(
+    const result = await getCvPdfDownload(
       tenant.userId,
       tenant.username,
       locale,
@@ -34,7 +34,19 @@ export async function GET(request: Request) {
       { paginatePages },
     );
 
-    if (!result) {
+    if (!result?.buffer && !result?.url) {
+      return NextResponse.json({ error: "CV not found" }, { status: 404 });
+    }
+
+    if (result.url && result.fromCache) {
+      return NextResponse.redirect(result.url, 302);
+    }
+
+    if (result.url) {
+      return NextResponse.redirect(result.url, 302);
+    }
+
+    if (!result.buffer) {
       return NextResponse.json({ error: "CV not found" }, { status: 404 });
     }
 

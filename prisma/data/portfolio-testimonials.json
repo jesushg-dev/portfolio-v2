@@ -1,13 +1,24 @@
 [
   {
-    "author": "Engineering Manager",
-    "role": "Claro Nicaragua",
-    "avatarUrl": "https://github.com/jesushg-dev.png",
+    "author": "Danny Lopez",
+    "role": ".NET Developer · Ravn",
+    "avatarUrl": "https://res.cloudinary.com/js-media/image/upload/v1785093768/portfolio/recommendations/1690239286713_w0dklu.jpg",
     "order": 0,
     "quote": {
-      "es": "Jesús entregó un sistema crítico con alta trazabilidad y comunicación clara con stakeholders técnicos y de negocio.",
-      "en": "Jesús delivered a critical system with high traceability and clear communication with technical and business stakeholders.",
-      "nl": "Jesús leverde een kritisch systeem met hoge traceerbaarheid en duidelijke communicatie met technische en business stakeholders."
+      "es": "Trabajé con Jesús en Contollo, donde coordinaba el equipo técnico. Demostró sólidas capacidades full stack, cumplió de forma consistente con los plazos de entrega y abordó cada solución con una visión clara de escalabilidad. Destacó por su criterio técnico, autonomía y capacidad de resolver problemas complejos sin comprometer la calidad.",
+      "en": "I worked with Jesús at Contollo, where I coordinated the technical team. He demonstrated strong full-stack capabilities, consistently met delivery deadlines, and approached every solution with a clear focus on scalability. He stood out for his technical judgment, autonomy, and ability to solve complex problems without compromising quality.",
+      "nl": "Ik werkte met Jesús bij Contollo, waar ik het technische team coördineerde. Hij toonde sterke full-stack vaardigheden, haalde consequent deadlines en benaderde elke oplossing met een duidelijke focus op schaalbaarheid. Hij viel op door zijn technisch inzicht, autonomie en vermogen om complexe problemen op te lossen zonder concessies te doen aan kwaliteit."
+    }
+  },
+  {
+    "author": "Mauricio Arias",
+    "role": "Software Engineer · Capstone Logistics (Contollo)",
+    "avatarUrl": "https://res.cloudinary.com/js-media/image/upload/v1785093768/portfolio/recommendations/1773431697471_vmhc1z.jpg",
+    "order": 1,
+    "quote": {
+      "es": "Trabajé con Jesús en Contollo, principalmente en el proyecto PS-AI, donde implementamos flujos automatizados de extremo a extremo. Aportó de forma constante al equipo, aclarando dudas técnicas y apoyando la resolución de bloqueos en entregas complejas. Es un profesional confiable, colaborativo y orientado a resultados.",
+      "en": "I worked with Jesús at Contollo, primarily on the PS-AI project, where we implemented end-to-end automated flows. He consistently contributed to the team by clarifying technical questions and supporting the resolution of blockers on complex deliveries. He is a reliable, collaborative, and results-driven professional.",
+      "nl": "Ik werkte met Jesús bij Contollo, voornamelijk aan het PS-AI-project, waar we end-to-end geautomatiseerde flows implementeerden. Hij droeg consequent bij aan het team door technische vragen te verduidelijken en te helpen bij het oplossen van blokkades bij complexe opleveringen. Hij is een betrouwbare, collaboratieve en resultaatgerichte professional."
     }
   }
 ]

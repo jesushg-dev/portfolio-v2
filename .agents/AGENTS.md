@@ -575,6 +575,38 @@ When generating or modifying a Server Component page that renders a client form 
 3. **Prisma ↔ DTO mappers live in `features/{domain}/lib/*-editor-dto.ts`**, not in `server/*-editor.ts`. Page-specific DB + auth orchestration lives in `features/{domain}/server/*-queries.ts`. Do not split the same mapper across both files.
 4. List/table display must resolve text for the **active UI locale** (`getTitleDescriptionForLocale`, `getSoftSkillTranslationText`, etc.) — never hardcode `translations[0]`.
 
+## Feature boundaries & shared lib
+
+ESLint enforces **unidirectional imports** via `import/no-restricted-paths` in `eslint.config.js`. Features must not import from other features (except documented exceptions in the config).
+
+### ❌ NEVER re-export shared utilities from a feature folder
+
+Do not create thin wrapper files in `src/features/{domain}/lib/` that only re-export something from `@/lib`. Update call sites to import from `@/lib` directly and delete the wrapper.
+
+```tsx
+// ❌ WRONG — pointless indirection + cross-feature trap
+// src/features/resume-engine/lib/upload-export-file.ts
+export { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
+
+// ❌ WRONG — cv importing resume-engine (blocked by ESLint)
+import { uploadBufferToUploadThing } from "@/features/resume-engine/lib/upload-export-file";
+```
+
+### ✅ ALWAYS put cross-feature server utilities in `src/lib/`
+
+When two or more features need the same server helper (UploadThing uploads, URL helpers, etc.), add it under `src/lib/` and import from there.
+
+```tsx
+// ✅ CORRECT — single home in shared lib
+import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
+```
+
+| Shared utility              | Location                               | Used by                            |
+| --------------------------- | -------------------------------------- | ---------------------------------- |
+| `uploadBufferToUploadThing` | `src/lib/uploadthing/upload-buffer.ts` | CV PDF cache, resume-engine export |
+
+**Rule:** if a helper is not exclusive to one feature domain, it belongs in `@/lib`, not in `features/*/lib/`.
+
 ## Admin multilanguage forms — `useLocalizedForm`
 
 For admin forms with a `translations` map and `GlobalLanguageSelector`, use the shared hook instead of duplicating `activeLangId` state and reset-on-`resourceId` logic.

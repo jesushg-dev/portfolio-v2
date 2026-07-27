@@ -209,6 +209,7 @@
     {
       "key": "experience0",
       "company": "Imagemaker",
+      "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1769196300/origin/bio/crawled-organizations/imagemaker_logo_z26lj4.jpg",
       "role": {
         "es": "Senior Software Engineer",
         "en": "Senior Software Engineer",
@@ -257,6 +258,7 @@
     {
       "key": "experience1",
       "company": "Claro Nicaragua",
+      "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/w_36,dpr_2.0/v1600924980/origin/bio/organizations/claro_zjqxzc.png",
       "role": {
         "es": "Senior Software Engineer · Freelance",
         "en": "Senior Software Engineer · Freelance",
@@ -296,6 +298,7 @@
     {
       "key": "experience2",
       "company": "Contollo",
+      "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1780694684/origin/bio/crawled-organizations/686411370a48745f463c757b3ee1e18d_gowsgt.jpg",
       "role": {
         "es": "Senior Software Engineer & Líder de Equipo",
         "en": "Senior Software Engineer & Team Lead",

@@ -6,6 +6,7 @@ export default tseslint.config(
   {
     ignores: [
       ".next",
+      "coverage",
       "commitlint.config.js",
       "eslint.config.js",
       "postcss.config.mjs",

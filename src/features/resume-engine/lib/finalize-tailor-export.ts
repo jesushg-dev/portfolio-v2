@@ -8,7 +8,7 @@ import {
   generateDocxFromStructured,
 } from "@/features/resume-engine/lib/docx/generate-from-structured";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
-import { uploadBufferToUploadThing } from "@/features/resume-engine/lib/upload-export-file";
+import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 
 const DOCX_MIME =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document";

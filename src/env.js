@@ -40,6 +40,9 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string().optional(),
     GEMINI_API_KEY: z.string().optional(),
     DEEPSEEK_API_KEY: z.string().optional(),
+
+    /// Shared secret for the isolated CV PDF generator function
+    CV_PDF_GENERATOR_SECRET: z.string().min(16).optional(),
   },
 
   /**
@@ -75,6 +78,7 @@ export const env = createEnv({
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
+    CV_PDF_GENERATOR_SECRET: process.env.CV_PDF_GENERATOR_SECRET,
     NEXT_PUBLIC_PRIMARY_DOMAIN: process.env.NEXT_PUBLIC_PRIMARY_DOMAIN,
     NEXT_PUBLIC_DEV_DOMAIN: process.env.NEXT_PUBLIC_DEV_DOMAIN,
   },

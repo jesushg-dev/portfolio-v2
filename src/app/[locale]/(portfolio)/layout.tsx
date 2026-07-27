@@ -7,9 +7,7 @@ import type { Locale } from "next-intl";
 
 import Layout from "@/components/app-layout";
 import TrpcProvider from "@/components/providers/trpc-provider";
-import {
-  CV_PDF_MODE_HEADER,
-} from "@/lib/tenant/headers";
+import { CV_PDF_MODE_HEADER } from "@/lib/tenant/headers";
 
 export const dynamic = "force-dynamic";
 

@@ -132,19 +132,26 @@ model Profile {
 /// Stores a separate PDF download URL for each locale so users can have
 /// language-specific CV files (e.g., a Spanish CV and an English CV).
 model CvPdfLink {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String    @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// BCP-47 locale code, e.g. "en", "es", "nl"
-  locale    String
+  locale        String
   /// Direct URL to the PDF file
-  url       String
+  url           String
   /// Optional human-readable label, e.g. "Currículum en Español"
-  label     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  label         String?
+  /// Whether the PDF uses US Letter pagination or a single continuous page
+  paginatePages Boolean   @default(false)
+  /// SHA-256 of rendered CV content; null = manually managed URL (legacy)
+  contentHash   String?
+  /// UploadThing file key for replacing/deleting cached PDFs
+  storageKey    String?
+  generatedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  @@unique([userId, locale])
+  @@unique([userId, locale, paginatePages])
 }
 
 model CvPdfEmailLog {

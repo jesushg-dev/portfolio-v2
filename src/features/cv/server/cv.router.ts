@@ -12,6 +12,7 @@ import {
   textMapToLocalizedJson,
   type TextTranslationMap,
 } from "@/lib/i18n/localized-text-map";
+import { resolveCvPdfAsset } from "@/features/cv/lib/resolve-cv-pdf-asset";
 
 type CvDbClient = Pick<PrismaClient, "appLanguage">;
 
@@ -804,27 +805,114 @@ export const cvRouter = createTRPCRouter({
         locale: z.string().min(2).max(10),
         url: z.string().url("Must be a valid URL"),
         label: z.string().max(80).optional(),
+        paginatePages: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const paginatePages = input.paginatePages ?? false;
+
       return ctx.db.cvPdfLink.upsert({
-        where: { userId_locale: { userId: ctx.user.id, locale: input.locale } },
-        create: { userId: ctx.user.id, ...input },
-        update: { url: input.url, label: input.label },
+        where: {
+          userId_locale_paginatePages: {
+            userId: ctx.user.id,
+            locale: input.locale,
+            paginatePages,
+          },
+        },
+        create: {
+          userId: ctx.user.id,
+          locale: input.locale,
+          paginatePages,
+          url: input.url,
+          label: input.label,
+          contentHash: null,
+          storageKey: null,
+          generatedAt: null,
+        },
+        update: {
+          url: input.url,
+          label: input.label,
+          contentHash: null,
+          storageKey: null,
+          generatedAt: null,
+        },
       });
     }),
 
   /** Removes the PDF link for a given locale. Silently succeeds if not found. */
   deletePdfLink: protectedProcedure
-    .input(z.object({ locale: z.string() }))
+    .input(
+      z.object({
+        locale: z.string(),
+        paginatePages: z.boolean().optional(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
+      const paginatePages = input.paginatePages ?? false;
       const existing = await ctx.db.cvPdfLink.findUnique({
-        where: { userId_locale: { userId: ctx.user.id, locale: input.locale } },
+        where: {
+          userId_locale_paginatePages: {
+            userId: ctx.user.id,
+            locale: input.locale,
+            paginatePages,
+          },
+        },
       });
       if (!existing) return null;
       return ctx.db.cvPdfLink.delete({
-        where: { userId_locale: { userId: ctx.user.id, locale: input.locale } },
+        where: {
+          userId_locale_paginatePages: {
+            userId: ctx.user.id,
+            locale: input.locale,
+            paginatePages,
+          },
+        },
       });
+    }),
+
+  regeneratePdfCache: protectedProcedure
+    .input(
+      z.object({
+        locale: z.enum(["en", "es", "nl"]),
+        paginatePages: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const profile = await ctx.db.profile.findUnique({
+        where: { userId: ctx.user.id },
+        select: { username: true, defaultLocale: true },
+      });
+
+      if (!profile) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Profile not found",
+        });
+      }
+
+      const asset = await resolveCvPdfAsset(
+        ctx.user.id,
+        profile.username,
+        input.locale,
+        profile.defaultLocale as "en" | "es" | "nl",
+        {
+          paginatePages: input.paginatePages ?? false,
+          forceRegenerate: true,
+        },
+      );
+
+      if (!asset) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "CV data is not available",
+        });
+      }
+
+      return {
+        url: asset.url,
+        contentHash: asset.contentHash,
+        fromCache: asset.fromCache,
+      };
     }),
 
   // ---------- Bulk Reordering ----------

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import { Link } from "@/i18n/routing";
@@ -9,6 +10,7 @@ import { useTranslations } from "next-intl";
 interface ExperienceItem {
   id: string;
   company: string;
+  companyLogoUrl?: string | null;
   current: boolean;
   role: string;
   dates: string;
@@ -53,7 +55,19 @@ function Row({
         aria-controls={panelId}
         className="hover:bg-accent focus-visible:ring-ring flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg py-3 pr-2 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none"
       >
-        <span className="flex min-w-0 flex-wrap items-baseline gap-x-2">
+        <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+          {exp.companyLogoUrl ? (
+            <span className="border-border relative mr-1 inline-flex h-7 w-7 shrink-0 overflow-hidden rounded-md border bg-white">
+              <Image
+                src={exp.companyLogoUrl}
+                alt=""
+                fill
+                className="object-contain p-0.5"
+                sizes="28px"
+                unoptimized
+              />
+            </span>
+          ) : null}
           <span className="text-foreground font-semibold">{exp.role}</span>
           <span className="text-primary font-semibold whitespace-nowrap">
             @ {exp.company}

@@ -9,3 +9,12 @@ export function getServerBaseUrl(): string {
   }
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
+
+/** Base URL for same-origin internal API calls (never the public auth domain locally). */
+export function getInternalServiceBaseUrl(): string {
+  if (process.env.VERCEL === "1") {
+    return getServerBaseUrl();
+  }
+
+  return `http://127.0.0.1:${process.env.PORT ?? 3000}`;
+}

@@ -83,8 +83,7 @@ export function mapDraftToTemplateSections(
 
     if (heading.includes("header")) {
       const headerText =
-        (draft.header.degree?.trim() ??
-        draft.experiences[0]?.role?.trim()) ||
+        (draft.header.degree?.trim() ?? draft.experiences[0]?.role?.trim()) ||
         draft.header.fullName;
       return mapSectionParagraphs(section, [headerText]);
     }
