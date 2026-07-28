@@ -25,12 +25,14 @@ interface SpotifyConnectionStatusProps {
   status: ConnectionStatus;
   clientId: string | null;
   connectedAt: Date | null;
+  embedded?: boolean;
 }
 
 const SpotifyConnectionStatus: FC<SpotifyConnectionStatusProps> = ({
   status,
   clientId,
   connectedAt,
+  embedded = false,
 }) => {
   const t = useTranslations("admin.spotify");
   const utils = api.useUtils();
@@ -104,6 +106,88 @@ const SpotifyConnectionStatus: FC<SpotifyConnectionStatusProps> = ({
     });
   }, [disconnect, utils, t]);
 
+  const body = (
+    <>
+      {clientId ? (
+        <p className="text-muted-foreground text-sm">
+          {t("status.clientId", { id: clientId })}
+        </p>
+      ) : null}
+
+      {!embedded && (
+        <Alert>
+          <AlertDescription>{t("disconnectPolicy")}</AlertDescription>
+        </Alert>
+      )}
+
+      {actionError && (
+        <Alert variant="destructive">
+          <AlertDescription>{actionError}</AlertDescription>
+        </Alert>
+      )}
+
+      <div className="bg-muted/40 flex flex-col gap-3 rounded-lg border p-3">
+        {testResult ? (
+          <div className="flex items-center gap-2 text-sm">
+            <Music2 className="text-primary size-4 shrink-0" aria-hidden />
+            <span>{testResult}</span>
+          </div>
+        ) : null}
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={handleTest}
+          disabled={isPending || testNowPlaying.isFetching}
+        >
+          {(isPending || testNowPlaying.isFetching) && (
+            <Loader2 className="mr-2 size-4 animate-spin" aria-hidden />
+          )}
+          {isPending || testNowPlaying.isFetching
+            ? t("status.testing")
+            : t("status.test")}
+        </Button>
+      </div>
+
+      <Button
+        type="button"
+        variant="destructive"
+        size="sm"
+        onClick={handleDisconnect}
+        disabled={isPending || disconnect.isPending}
+      >
+        {disconnect.isPending
+          ? t("status.disconnecting")
+          : t("status.disconnect")}
+      </Button>
+    </>
+  );
+
+  if (embedded) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          {status === "refresh_error" ? (
+            <AlertTriangle className="text-destructive size-5" aria-hidden />
+          ) : (
+            <CheckCircle2 className="text-primary size-5" aria-hidden />
+          )}
+          <div>
+            <p className="text-sm font-semibold">{statusLabel}</p>
+            {connectedAt && (
+              <p className="text-muted-foreground text-xs">
+                {t("status.connectedAt", {
+                  date: connectedAt.toLocaleDateString(),
+                })}
+              </p>
+            )}
+          </div>
+        </div>
+        {body}
+      </div>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -123,57 +207,7 @@ const SpotifyConnectionStatus: FC<SpotifyConnectionStatusProps> = ({
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        {clientId ? (
-          <p className="text-muted-foreground text-sm">
-            {t("status.clientId", { id: clientId })}
-          </p>
-        ) : null}
-
-        <Alert>
-          <AlertDescription>{t("disconnectPolicy")}</AlertDescription>
-        </Alert>
-
-        {actionError && (
-          <Alert variant="destructive">
-            <AlertDescription>{actionError}</AlertDescription>
-          </Alert>
-        )}
-
-        <div className="bg-muted/40 flex flex-col gap-3 rounded-lg border p-3">
-          {testResult ? (
-            <div className="flex items-center gap-2 text-sm">
-              <Music2 className="text-primary size-4 shrink-0" aria-hidden />
-              <span>{testResult}</span>
-            </div>
-          ) : null}
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={handleTest}
-            disabled={isPending || testNowPlaying.isFetching}
-          >
-            {(isPending || testNowPlaying.isFetching) && (
-              <Loader2 className="mr-2 size-4 animate-spin" aria-hidden />
-            )}
-            {isPending || testNowPlaying.isFetching
-              ? t("status.testing")
-              : t("status.test")}
-          </Button>
-        </div>
-
-        <Button
-          type="button"
-          variant="destructive"
-          onClick={handleDisconnect}
-          disabled={isPending || disconnect.isPending}
-        >
-          {disconnect.isPending
-            ? t("status.disconnecting")
-            : t("status.disconnect")}
-        </Button>
-      </CardContent>
+      <CardContent className="flex flex-col gap-4">{body}</CardContent>
     </Card>
   );
 };

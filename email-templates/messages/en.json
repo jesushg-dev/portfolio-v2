@@ -1,0 +1,38 @@
+{
+  "cv-delivery": {
+    "preview": "Here is my CV — Jesús Hernández",
+    "tagline": "Senior Full Stack Developer & Tech Lead",
+    "greeting": "Hi {recipientName},",
+    "body1": "Thanks for reaching out through my portfolio. I've attached my most recent CV for you to take a look at.",
+    "highlight": "Senior Full Stack Developer with 6+ years across .NET Core, React/Next.js and TypeScript — currently leading e-commerce engineering on VTEX for Walmart Global Tech across Central America.",
+    "body2": "Happy to answer any questions or set up a call whenever works for you.",
+    "signOff": "Best regards,",
+    "name": "Jesús Hernández",
+    "role": "Senior Full Stack Developer",
+    "footer": "Sent automatically from the contact form at jehg.dev.",
+    "stats": {
+      "years": "Years experience",
+      "projects": "Projects delivered",
+      "certifications": "Certifications"
+    }
+  },
+  "contact-notification": {
+    "preview": "New message from {senderName} via jehg.dev",
+    "eyebrow": "New message · contact form",
+    "labelFrom": "From",
+    "labelEmail": "Email",
+    "labelReceived": "Received",
+    "labelMessage": "Message",
+    "replyButton": "Reply to {firstName}",
+    "footer": "Sent automatically from the contact form at jehg.dev."
+  },
+  "reset-password": {
+    "preview": "Reset your password",
+    "eyebrow": "Account Security · Password Reset",
+    "greeting": "Hi,",
+    "body1": "You requested to reset your password for your jehg.dev account.",
+    "button": "Reset Password",
+    "body2": "If you didn't request a password reset, you can safely ignore this email.",
+    "footer": "Security alert sent from jehg.dev."
+  }
+}

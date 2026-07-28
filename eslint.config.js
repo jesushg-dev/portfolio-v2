@@ -6,6 +6,7 @@ export default tseslint.config(
   {
     ignores: [
       ".next",
+      "email-templates/**",
       "coverage/**",
       "commitlint.config.js",
       "eslint.config.js",

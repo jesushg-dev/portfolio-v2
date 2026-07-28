@@ -15,6 +15,25 @@ const playwrightExcludeAssets = [
   "./node_modules/@sparticuz/chromium-min/**",
 ];
 
+/** Dev-only email template tooling; runtime uses compiled-templates.ts */
+const emailTemplatesDevAssets = [
+  "./email-templates/out/**",
+  "./email-templates/node_modules/**",
+  "./email-templates/publish-to-resend.ts",
+  "./email-templates/render.tsx",
+  "./email-templates/package.json",
+  "./email-templates/package-lock.json",
+  "./email-templates/tsconfig.json",
+  "./email-templates/messages/**",
+  "./email-templates/src/components/**",
+  "./email-templates/src/contact-notification-email.tsx",
+  "./email-templates/src/cv-delivery-email.tsx",
+  "./email-templates/src/reset-password-email.tsx",
+  "./email-templates/src/theme.ts",
+  "./email-templates/src/load-messages.ts",
+  "./email-templates/src/locale.ts",
+];
+
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["lvh.me", "*.lvh.me"],
   serverExternalPackages: [
@@ -26,8 +45,9 @@ const nextConfig: NextConfig = {
     "/api/internal/cv/generate-pdf": playwrightServerAssets,
   },
   outputFileTracingExcludes: {
-    "/api/trpc/*": playwrightExcludeAssets,
-    "/api/cv/pdf": playwrightExcludeAssets,
+    "/*": emailTemplatesDevAssets,
+    "/api/trpc/*": [...playwrightExcludeAssets, ...emailTemplatesDevAssets],
+    "/api/cv/pdf": [...playwrightExcludeAssets, ...emailTemplatesDevAssets],
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "motion/react"],

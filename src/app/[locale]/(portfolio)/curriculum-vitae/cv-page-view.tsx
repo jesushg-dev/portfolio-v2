@@ -6,7 +6,7 @@ import CvPreview from "@/components/curriculum-vitae/cv-preview";
 import CvPageActions from "@/features/cv/components/cv-page-actions";
 import { cvPreviewFont } from "@/features/cv/lib/cv-preview-font";
 import { getLocalizedText } from "@/lib/i18n/localized";
-import { isResendConfigured } from "@/lib/email/resend";
+import { canDeliverPortfolioCvEmail } from "@/lib/email/resend";
 import { resolveTenant } from "@/lib/tenant/resolve";
 import { db } from "@/server/db";
 import type { Locale as AppLocale } from "@/i18n/config";
@@ -95,7 +95,9 @@ const CvPageView: FC<CvPageViewProps> = async ({
   const cvDownloadHref = header
     ? `/api/cv/pdf?locale=${currentLocale}${paginateQuery}`
     : null;
-  const canSendByEmail = isResendConfigured() && Boolean(header);
+  const canSendByEmail =
+    Boolean(header) &&
+    (await canDeliverPortfolioCvEmail(userId, currentLocale));
 
   if (pdfMode) {
     return (
@@ -129,7 +131,6 @@ const CvPageView: FC<CvPageViewProps> = async ({
     <div className="mx-auto max-w-3xl pb-16 md:pb-24">
       <div className="-mt-2 pt-24 print:hidden">
         <CvPageActions
-          locale={currentLocale}
           fullName={header?.fullName ?? profile?.username ?? "user"}
           canSendByEmail={canSendByEmail}
           downloadHref={cvDownloadHref}

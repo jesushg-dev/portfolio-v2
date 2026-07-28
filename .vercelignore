@@ -1,0 +1,18 @@
+# email-templates: local dev package (preview + publish to Resend).
+# Production reads precompiled HTML from src/compiled-templates.ts only.
+email-templates/out
+email-templates/node_modules
+email-templates/package.json
+email-templates/package-lock.json
+email-templates/tsconfig.json
+email-templates/publish-to-resend.ts
+email-templates/render.tsx
+email-templates/messages
+email-templates/src/components
+email-templates/src/contact-notification-email.tsx
+email-templates/src/cv-delivery-email.tsx
+email-templates/src/reset-password-email.tsx
+email-templates/src/theme.ts
+email-templates/src/load-messages.ts
+email-templates/src/locale.ts
+email-templates/README.md

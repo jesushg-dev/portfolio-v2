@@ -1,0 +1,38 @@
+{
+  "cv-delivery": {
+    "preview": "Aquí está mi CV — Jesús Hernández",
+    "tagline": "Desarrollador Full Stack Senior & Tech Lead",
+    "greeting": "Hola {recipientName},",
+    "body1": "Gracias por comunicarte a través de mi portafolio. He adjuntado mi CV más reciente para que puedas revisarlo.",
+    "highlight": "Desarrollador Full Stack Senior con más de 6 años de experiencia en .NET Core, React/Next.js y TypeScript — actualmente liderando el equipo de ingeniería de e-commerce en VTEX para Walmart Global Tech en Centroamérica.",
+    "body2": "Con gusto respondo cualquier pregunta o coordinamos una llamada cuando te venga bien.",
+    "signOff": "Saludos,",
+    "name": "Jesús Hernández",
+    "role": "Desarrollador Full Stack Senior",
+    "footer": "Enviado automáticamente desde el formulario de contacto en jehg.dev.",
+    "stats": {
+      "years": "Años de experiencia",
+      "projects": "Proyectos entregados",
+      "certifications": "Certificaciones"
+    }
+  },
+  "contact-notification": {
+    "preview": "Nuevo mensaje de {senderName} vía jehg.dev",
+    "eyebrow": "Nuevo mensaje · formulario de contacto",
+    "labelFrom": "De",
+    "labelEmail": "Email",
+    "labelReceived": "Recibido",
+    "labelMessage": "Mensaje",
+    "replyButton": "Responder a {firstName}",
+    "footer": "Enviado automáticamente desde el formulario de contacto en jehg.dev."
+  },
+  "reset-password": {
+    "preview": "Restablece tu contraseña",
+    "eyebrow": "Seguridad de la cuenta · Restablecer contraseña",
+    "greeting": "Hola,",
+    "body1": "Solicitaste restablecer la contraseña de tu cuenta en jehg.dev.",
+    "button": "Restablecer contraseña",
+    "body2": "Si no solicitaste este cambio, puedes ignorar este correo de forma segura.",
+    "footer": "Alerta de seguridad enviada desde jehg.dev."
+  }
+}

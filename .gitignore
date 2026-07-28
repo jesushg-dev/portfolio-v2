@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -19,9 +19,11 @@
 
 # next.js
 /.next/
-/out/
+out/
 
-# production
+# email-templates (local previews & package deps)
+email-templates/out/
+email-templates/node_modules/
 /build
 
 # misc

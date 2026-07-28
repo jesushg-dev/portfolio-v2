@@ -28,10 +28,12 @@ import {
 
 interface SpotifyConnectFormProps {
   disabled?: boolean;
+  embedded?: boolean;
 }
 
 const SpotifyConnectForm: FC<SpotifyConnectFormProps> = ({
   disabled = false,
+  embedded = false,
 }) => {
   const t = useTranslations("admin.spotify");
   const locale = useLocale();
@@ -76,20 +78,16 @@ const SpotifyConnectForm: FC<SpotifyConnectFormProps> = ({
     [initiateConnect, locale, t],
   );
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("connect.title")}</CardTitle>
-        <CardDescription>{t("connect.description")}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-4 flex flex-col gap-3">
-          <Alert>
-            <AlertDescription>{t("connect.premiumNote")}</AlertDescription>
-          </Alert>
-          <Alert>
-            <AlertDescription>{t("connect.visitorNote")}</AlertDescription>
-          </Alert>
+  const formBody = (
+    <>
+      <div className="mb-4 flex flex-col gap-3">
+        <Alert>
+          <AlertDescription>{t("connect.premiumNote")}</AlertDescription>
+        </Alert>
+        <Alert>
+          <AlertDescription>{t("connect.visitorNote")}</AlertDescription>
+        </Alert>
+        {!embedded && (
           <a
             href="https://developer.spotify.com/dashboard"
             target="_blank"
@@ -99,59 +97,83 @@ const SpotifyConnectForm: FC<SpotifyConnectFormProps> = ({
             {t("connect.dashboardLink")}
             <ExternalLink className="size-3.5" aria-hidden />
           </a>
-        </div>
+        )}
+      </div>
 
-        <Form {...form}>
-          <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
-            <FormContent error={serverError}>
-              <FormSection>
-                <FormField
-                  control={form.control}
-                  name="clientId"
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("connect.clientId")}
-                      inputId="spotify-client-id"
-                    >
-                      <Input
-                        {...field}
-                        id="spotify-client-id"
-                        autoComplete="off"
-                        placeholder={t("connect.clientIdPlaceholder")}
-                        className="font-mono text-sm"
-                      />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="clientSecret"
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("connect.clientSecret")}
-                      inputId="spotify-client-secret"
-                    >
-                      <Input
-                        {...field}
-                        id="spotify-client-secret"
-                        type="password"
-                        autoComplete="off"
-                        placeholder={t("connect.clientSecretPlaceholder")}
-                        className="font-mono text-sm"
-                      />
-                    </FormItem>
-                  )}
-                />
-              </FormSection>
-            </FormContent>
-            <div className="mt-4">
-              <Button type="submit" disabled={disabled || isPending}>
-                {isPending ? t("connect.connecting") : t("connect.connect")}
-              </Button>
-            </div>
-          </FormRoot>
-        </Form>
-      </CardContent>
+      <Form {...form}>
+        <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
+          <FormContent error={serverError}>
+            <FormSection>
+              <FormField
+                control={form.control}
+                name="clientId"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("connect.clientId")}
+                    inputId="spotify-client-id"
+                  >
+                    <Input
+                      {...field}
+                      id="spotify-client-id"
+                      autoComplete="off"
+                      placeholder={t("connect.clientIdPlaceholder")}
+                      className="font-mono text-sm"
+                    />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="clientSecret"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("connect.clientSecret")}
+                    inputId="spotify-client-secret"
+                  >
+                    <Input
+                      {...field}
+                      id="spotify-client-secret"
+                      type="password"
+                      autoComplete="off"
+                      placeholder={t("connect.clientSecretPlaceholder")}
+                      className="font-mono text-sm"
+                    />
+                  </FormItem>
+                )}
+              />
+            </FormSection>
+          </FormContent>
+          <div className="mt-4">
+            <Button type="submit" disabled={disabled || isPending}>
+              {isPending ? t("connect.connecting") : t("connect.connect")}
+            </Button>
+          </div>
+        </FormRoot>
+      </Form>
+    </>
+  );
+
+  if (embedded) {
+    return (
+      <div className="space-y-2">
+        <div>
+          <h3 className="text-sm font-semibold">{t("connect.title")}</h3>
+          <p className="text-muted-foreground text-sm">
+            {t("connect.description")}
+          </p>
+        </div>
+        {formBody}
+      </div>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{t("connect.title")}</CardTitle>
+        <CardDescription>{t("connect.description")}</CardDescription>
+      </CardHeader>
+      <CardContent>{formBody}</CardContent>
     </Card>
   );
 };

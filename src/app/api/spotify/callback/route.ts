@@ -3,8 +3,13 @@ import { NextResponse, type NextRequest } from "next/server";
 import { env } from "@/env";
 import { decryptSecret, encryptSecret } from "@/lib/spotify/crypto";
 import { exchangeSpotifyAuthorizationCode } from "@/lib/spotify/oauth";
+import { getIntegrationProviderPath } from "@/features/integrations/lib/integration-paths";
 import { getDevLoopbackOrigin } from "@/lib/spotify/redirect-uri";
 import { db } from "@/server/db";
+
+function spotifyIntegrationPath(locale: string): string {
+  return getIntegrationProviderPath(locale, "spotify");
+}
 
 function adminRedirect(
   locale: string,
@@ -13,7 +18,7 @@ function adminRedirect(
   const search = new URLSearchParams(params);
   return NextResponse.redirect(
     new URL(
-      `/${locale}/admin/spotify?${search.toString()}`,
+      `${spotifyIntegrationPath(locale)}?${search.toString()}`,
       getRequestOrigin(),
     ),
   );
@@ -35,11 +40,11 @@ export async function GET(req: NextRequest) {
   const spotifyError = req.nextUrl.searchParams.get("error");
 
   if (spotifyError) {
-    return adminRedirect("en", { error: spotifyError });
+    return adminRedirect("en", { spotify_error: spotifyError });
   }
 
   if (!code || !state) {
-    return adminRedirect("en", { error: "missing_params" });
+    return adminRedirect("en", { spotify_error: "missing_params" });
   }
 
   const oauthState = await db.spotifyOAuthState.findUnique({
@@ -50,7 +55,7 @@ export async function GET(req: NextRequest) {
     await db.spotifyOAuthState
       .deleteMany({ where: { state } })
       .catch(() => undefined);
-    return adminRedirect("en", { error: "invalid_state" });
+    return adminRedirect("en", { spotify_error: "invalid_state" });
   }
 
   const locale = oauthState.locale;
@@ -66,7 +71,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (!token.refresh_token) {
-      return adminRedirect(locale, { error: "no_refresh_token" });
+      return adminRedirect(locale, { spotify_error: "no_refresh_token" });
     }
 
     await db.spotifyConnection.upsert({
@@ -90,12 +95,12 @@ export async function GET(req: NextRequest) {
 
     await db.spotifyOAuthState.delete({ where: { id: oauthState.id } });
 
-    return adminRedirect(locale, { connected: "1" });
+    return adminRedirect(locale, { spotify_connected: "1" });
   } catch (err) {
     console.error(err);
     await db.spotifyOAuthState
       .delete({ where: { id: oauthState.id } })
       .catch(() => undefined);
-    return adminRedirect(locale, { error: "exchange_failed" });
+    return adminRedirect(locale, { spotify_error: "exchange_failed" });
   }
 }

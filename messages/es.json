@@ -1,4 +1,124 @@
 {
+  "adminCredentials": {
+    "title": "Credenciales e Integraciones",
+    "subtitle": "Configura las llaves de API y opciones de integración independientes por usuario para Resend, Spotify, UploadThing y Modelos de IA.",
+    "providers": {
+      "resend": {
+        "name": "Resend (Correo)",
+        "description": "Envío de correos transaccionales y despliegue automático de plantillas."
+      },
+      "spotify": {
+        "name": "Spotify (Audio)",
+        "description": "Credenciales OAuth para el widget de reproducción actual."
+      },
+      "uploadthing": {
+        "name": "UploadThing (Almacenamiento)",
+        "description": "Credenciales personalizadas de carga de archivos para tu tenant."
+      },
+      "ai": {
+        "name": "Modelos de IA",
+        "description": "Claves de API para servicios Gemini, OpenAI y Anthropic."
+      }
+    },
+    "actions": {
+      "connect": "Conectar",
+      "disconnect": "Desconectar",
+      "disconnecting": "Desconectando…",
+      "disconnectSuccess": "Integración desconectada correctamente.",
+      "disconnectFailed": "No se pudo desconectar la integración.",
+      "update": "Actualizar credenciales",
+      "manage": "Administrar",
+      "cancel": "Cancelar"
+    },
+    "spotifyCallback": {
+      "connected": "Spotify conectado correctamente.",
+      "exchangeFailed": "No se pudo completar la autorización de Spotify. Inténtalo de nuevo.",
+      "invalidState": "La sesión de autorización expiró. Vuelve a iniciar desde esta página.",
+      "missingParams": "Spotify no devolvió los datos de autorización esperados.",
+      "noRefreshToken": "Spotify no devolvió un refresh token. Revoca el acceso en Spotify y reconecta.",
+      "accessDenied": "Denegaste el acceso a Spotify."
+    },
+    "summary": {
+      "domain": "Dominio",
+      "clientId": "Client ID",
+      "appId": "App ID",
+      "tokenSaved": "Credenciales guardadas",
+      "providers": "Proveedores activos",
+      "defaultProvider": "Proveedor por defecto"
+    },
+    "connected": {
+      "title": "Conectadas"
+    },
+    "available": {
+      "title": "Disponibles para conectar",
+      "description": "Añade más servicios para ampliar tu portfolio."
+    },
+    "empty": {
+      "title": "Aún no hay integraciones conectadas",
+      "description": "Elige un servicio abajo para conectar tu primera integración."
+    },
+    "status": {
+      "configured": "Configurado",
+      "notConfigured": "No configurado",
+      "syncing": "Sincronizando plantillas...",
+      "syncedCount": "{count} plantillas publicadas"
+    },
+    "resend": {
+      "title": "Credenciales de Correo Resend",
+      "description": "Configura tu API Key de Resend y tu dominio de correo para el envío automático y despliegue de plantillas.",
+      "apiKeyLabel": "Resend API Key",
+      "apiKeyPlaceholder": "re_123456789...",
+      "domainLabel": "Dominio de correo",
+      "domainPlaceholder": "tudominio.com",
+      "fromLabel": "Nombre / Remitente (Opcional)",
+      "fromPlaceholder": "Portfolio '<'no-reply@tudominio.com'>'",
+      "syncButton": "Sincronizar Plantillas Ahora",
+      "saveButton": "Guardar y Desplegar Plantillas",
+      "saveSuccess": "¡Credenciales de Resend guardadas y plantillas desplegadas con éxito!",
+      "syncSuccess": "¡Plantillas de Resend sincronizadas con éxito!"
+    },
+    "spotify": {
+      "title": "Credenciales de Conexión Spotify",
+      "description": "Configura tus credenciales de la App OAuth de Spotify para el widget de reproducción actual.",
+      "clientIdLabel": "Client ID",
+      "clientSecretLabel": "Client Secret",
+      "refreshTokenLabel": "Refresh Token",
+      "clientIdPlaceholder": "Spotify Client ID",
+      "clientSecretPlaceholder": "Spotify Client Secret",
+      "refreshTokenPlaceholder": "Spotify Refresh Token",
+      "saveButton": "Guardar Credenciales de Spotify",
+      "saveSuccess": "¡Credenciales de Spotify guardadas con éxito!"
+    },
+    "uploadthing": {
+      "title": "Credenciales de Almacenamiento UploadThing",
+      "description": "Configura credenciales personalizadas de UploadThing para carga de archivos.",
+      "tokenLabel": "Token Secreto",
+      "tokenPlaceholder": "UploadThing Secret Token",
+      "appIdLabel": "App ID (Opcional)",
+      "appIdPlaceholder": "UploadThing App ID",
+      "secretLabel": "Clave Secreta (Opcional)",
+      "secretPlaceholder": "UploadThing Secret Key",
+      "saveButton": "Guardar Credenciales de Almacenamiento",
+      "saveSuccess": "¡Credenciales de UploadThing guardadas con éxito!",
+      "requiredTitle": "Almacenamiento no conectado",
+      "requiredMessage": "Conecta UploadThing en Credenciales antes de subir archivos. La importación de CV, adjuntos del job tracker y la caché de PDF usan tu almacenamiento del tenant.",
+      "requiredConnectCta": "Conectar UploadThing en Credenciales"
+    },
+    "ai": {
+      "title": "Credenciales de Modelos de IA",
+      "description": "Configura claves de API para servicios LLM (Gemini, OpenAI, Anthropic).",
+      "geminiLabel": "API Key de Google Gemini",
+      "openaiLabel": "API Key de OpenAI",
+      "anthropicLabel": "API Key de Anthropic",
+      "geminiPlaceholder": "AIzaSy...",
+      "openaiPlaceholder": "sk-proj-...",
+      "anthropicPlaceholder": "sk-ant-...",
+      "defaultProviderLabel": "Proveedor de IA por Defecto",
+      "defaultProviderPlaceholder": "Seleccionar proveedor por defecto",
+      "saveButton": "Guardar Credenciales de IA",
+      "saveSuccess": "¡Credenciales de IA guardadas con éxito!"
+    }
+  },
   "certification": {
     "title": "Certificados",
     "subtitle": "Dominio en Diversas Habilidades",
@@ -474,6 +594,7 @@
       "subtitle": "Siempre estoy abierto a nuevas oportunidades. Si tienes un proyecto en mente o solo quieres saludar, escríbeme.",
       "divider": "o",
       "noChannels": "Usa el formulario para escribirme. Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
+      "noChannelsWithoutForm": "Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "form": {
         "helper": "Tu mensaje llega directo al correo de este portafolio.",
         "name": {
@@ -602,6 +723,7 @@
         "services": "Servicios",
         "certifications": "Certificaciones",
         "spotify": "Spotify",
+        "credentials": "Credenciales e Integraciones",
         "jobTracker": "Seguimiento laboral",
         "resumeStudio": "Resume Studio",
         "portfolioGroup": "Contenido del Portafolio",
@@ -1064,6 +1186,7 @@
           }
         },
         "cvUploadFailed": "No se pudo subir el archivo CV",
+        "uploadthingRequired": "Conecta UploadThing en Credenciales antes de subir un CV.",
         "sections": {
           "info": "Información Básica",
           "details": "Detalles Adicionales",
@@ -1796,6 +1919,7 @@
       "openCvEditor": "Abrir editor de CV",
       "importedContinueEditing": "Seguir editando el CV",
       "uploadFailed": "Error al subir",
+      "uploadCheckingStorage": "Comprobando almacenamiento…",
       "parseFailed": "No se pudo analizar el currículum",
       "parseSuccess": "Currículum analizado correctamente",
       "importFailed": "Error al importar",

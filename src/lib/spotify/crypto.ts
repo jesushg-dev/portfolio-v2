@@ -13,7 +13,8 @@ const ALGORITHM = "aes-256-gcm";
 const IV_LENGTH = 12;
 
 function getEncryptionKey(): Buffer {
-  const source = process.env.SPOTIFY_ENCRYPTION_KEY ?? env.BETTER_AUTH_SECRET;
+  const source =
+    process.env.INTEGRATION_ENCRYPTION_KEY ?? env.BETTER_AUTH_SECRET;
   return createHash("sha256").update(source).digest();
 }
 

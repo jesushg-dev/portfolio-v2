@@ -11,6 +11,7 @@ import { persistCvImportDraft } from "@/features/resume-engine/lib/import-persis
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { tailorDocxResume } from "@/features/resume-engine/lib/ai/tailor-docx";
 import { finalizeDocxTailorExport } from "@/features/resume-engine/lib/finalize-tailor-export";
+import { UploadThingNotConfiguredError } from "@/lib/uploadthing/tenant-uploadthing";
 import {
   fetchUploadDocxForTailor,
   fetchUploadDocxSections,
@@ -31,6 +32,22 @@ import {
   getDefaultAiProvider,
 } from "@/features/resume-engine/lib/ai/providers";
 import { CvDocxTailorResultSchema } from "@/features/resume-engine/lib/cv-docx-tailor-result";
+
+function rethrowTailorExportError(error: unknown): never {
+  if (error instanceof TRPCError) throw error;
+  if (error instanceof UploadThingNotConfiguredError) {
+    throw new TRPCError({
+      code: "PRECONDITION_FAILED",
+      message:
+        "UploadThing is not configured. Connect it in Admin → Credentials first.",
+    });
+  }
+
+  throw new TRPCError({
+    code: "INTERNAL_SERVER_ERROR",
+    message: error instanceof Error ? error.message : "Failed to tailor resume",
+  });
+}
 
 const registerUploadSchema = z.object({
   originalFileUrl: z.string().url(),
@@ -398,10 +415,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
             structuredSnapshot: upload.parsedDraft ?? undefined,
           });
         } catch (error) {
-          const message =
-            error instanceof Error ? error.message : "Failed to tailor resume";
-          if (error instanceof TRPCError) throw error;
-          throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message });
+          rethrowTailorExportError(error);
         }
       }
 
@@ -436,10 +450,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           structuredSnapshot: baseDraft,
         });
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "Failed to tailor resume";
-        if (error instanceof TRPCError) throw error;
-        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message });
+        rethrowTailorExportError(error);
       }
     }),
 

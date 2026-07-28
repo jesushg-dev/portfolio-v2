@@ -1,11 +1,16 @@
 import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { z, type ZodTypeAny } from "zod";
 
 /** Vars required when NODE_ENV=production (Vercel build + runtime). */
 const isProduction = process.env.NODE_ENV === "production";
 
-function requiredInProduction<T extends z.ZodType>(schema: T) {
+function requiredInProduction<T extends ZodTypeAny>(schema: T) {
   return isProduction ? schema : schema.optional();
+}
+
+function envOrDefault(value: string | undefined, defaultValue: string): string {
+  const trimmed = value?.trim();
+  return trimmed && trimmed.length > 0 ? trimmed : defaultValue;
 }
 
 export const env = createEnv({
@@ -15,7 +20,6 @@ export const env = createEnv({
    */
   server: {
     MONGODB_URI: z.string(),
-    SPOTIFY_REDIRECT_URI: z.string().url().optional(),
 
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -27,6 +31,11 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().optional(),
     RESEND_EMAIL_DOMAIN: z.string().optional(),
 
+    // Resend template IDs for system auth emails (run `cd email-templates && npm run publish:resend`)
+    RESEND_TEMPLATE_RESET_EN: z.string().optional(),
+    RESEND_TEMPLATE_RESET_ES: z.string().optional(),
+    RESEND_TEMPLATE_RESET_NL: z.string().optional(),
+
     // OAuth providers (optional - only needed if you want social login)
     GOOGLE_CLIENT_ID: z.string().optional(),
     GOOGLE_CLIENT_SECRET: z.string().optional(),
@@ -36,8 +45,8 @@ export const env = createEnv({
     // Multi-tenant
     PRIMARY_DOMAIN: z.string().default("jesushg.com"),
 
-    // UploadThing (CV PDF cache, resume imports, admin uploads)
-    UPLOADTHING_TOKEN: requiredInProduction(z.string().min(1)),
+    // UploadThing is configured per tenant in Admin → Credentials
+    UPLOADTHING_TOKEN: z.string().optional(),
 
     // AI providers (resume import / tailor)
     DEFAULT_AI_PROVIDER: z
@@ -69,16 +78,18 @@ export const env = createEnv({
   runtimeEnv: {
     MONGODB_URI: process.env.MONGODB_URI,
     NODE_ENV: process.env.NODE_ENV,
-    SPOTIFY_REDIRECT_URI: process.env.SPOTIFY_REDIRECT_URI,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_EMAIL_DOMAIN: process.env.RESEND_EMAIL_DOMAIN,
+    RESEND_TEMPLATE_RESET_EN: process.env.RESEND_TEMPLATE_RESET_EN,
+    RESEND_TEMPLATE_RESET_ES: process.env.RESEND_TEMPLATE_RESET_ES,
+    RESEND_TEMPLATE_RESET_NL: process.env.RESEND_TEMPLATE_RESET_NL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
-    PRIMARY_DOMAIN: process.env.PRIMARY_DOMAIN,
+    PRIMARY_DOMAIN: envOrDefault(process.env.PRIMARY_DOMAIN, "jesushg.com"),
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     DEFAULT_AI_PROVIDER: process.env.DEFAULT_AI_PROVIDER,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
@@ -86,14 +97,20 @@ export const env = createEnv({
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
     CV_PDF_GENERATOR_SECRET: process.env.CV_PDF_GENERATOR_SECRET,
-    NEXT_PUBLIC_PRIMARY_DOMAIN: process.env.NEXT_PUBLIC_PRIMARY_DOMAIN,
-    NEXT_PUBLIC_DEV_DOMAIN: process.env.NEXT_PUBLIC_DEV_DOMAIN,
+    NEXT_PUBLIC_PRIMARY_DOMAIN: envOrDefault(
+      process.env.NEXT_PUBLIC_PRIMARY_DOMAIN,
+      "jesushg.com",
+    ),
+    NEXT_PUBLIC_DEV_DOMAIN: envOrDefault(
+      process.env.NEXT_PUBLIC_DEV_DOMAIN,
+      "lvh.me:3000",
+    ),
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
    * useful for Docker builds.
    */
-  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
+  skipValidation: !process.env.SKIP_ENV_VALIDATION,
   /**
    * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
    * `SOME_VAR=''` will throw an error.

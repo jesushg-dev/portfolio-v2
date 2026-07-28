@@ -1,8 +1,9 @@
 import "server-only";
 
-import { UTApi } from "uploadthing/server";
-
-import { env } from "@/env";
+import {
+  requireTenantUploadThingClient,
+  type TenantUploadThingClient,
+} from "@/lib/uploadthing/tenant-uploadthing";
 
 interface UploadThingFileData {
   url: string;
@@ -38,16 +39,15 @@ function normalizeUploadResponse(
   return item.data;
 }
 
+/** Uploads a buffer using the tenant's UploadThing integration (no .env fallback). */
 export async function uploadBufferToUploadThing(
+  userId: string,
   buffer: Buffer,
   fileName: string,
   mimeType: string,
+  client?: TenantUploadThingClient,
 ): Promise<{ url: string; key: string }> {
-  if (!env.UPLOADTHING_TOKEN) {
-    throw new Error("UPLOADTHING_TOKEN is not configured.");
-  }
-
-  const utapi = new UTApi({ token: env.UPLOADTHING_TOKEN });
+  const { utapi } = client ?? (await requireTenantUploadThingClient(userId));
   const bytes = new Uint8Array(buffer);
   const file = new File([bytes], fileName, { type: mimeType });
   const response = (await utapi.uploadFiles(file)) as

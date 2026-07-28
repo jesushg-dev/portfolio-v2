@@ -228,6 +228,16 @@ export const pathnames = {
     es: "/panel/seguimiento-laboral/eventos/nuevo",
     nl: "/beheer/vacature-tracker/evenementen/nieuw",
   },
+  "/admin/credentials": {
+    en: "/admin/credentials",
+    es: "/panel/credenciales",
+    nl: "/beheer/inloggegevens",
+  },
+  "/admin/credentials/[provider]": {
+    en: "/admin/credentials/[provider]",
+    es: "/panel/credenciales/[provider]",
+    nl: "/beheer/inloggegevens/[provider]",
+  },
 } satisfies Pathnames<typeof locales>;
 
 export const defaultLocale: Locale = "en";

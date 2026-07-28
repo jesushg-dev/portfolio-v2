@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
@@ -21,14 +21,14 @@ import { cn } from "@/lib/utils";
 
 const statKeys = ["certifications", "projects", "experience"] as const;
 
-type TestimonialItem = {
+interface TestimonialItem {
   id: string;
   quote: string;
   author: string;
   role?: string | null;
   avatarUrl?: string | null;
   linkedInUrl?: string | null;
-};
+}
 
 function TestimonialSkeleton() {
   return (
@@ -125,12 +125,15 @@ function TestimonialCard({
 function TestimonialsCarousel({ items }: { items: TestimonialItem[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const autoplay = useRef(
-    Autoplay({
-      delay: 7000,
-      stopOnInteraction: true,
-      stopOnMouseEnter: true,
-    }),
+
+  const autoplayPlugin = useMemo(
+    () =>
+      Autoplay({
+        delay: 7000,
+        stopOnInteraction: true,
+        stopOnMouseEnter: true,
+      }),
+    [],
   );
 
   const onSelect = useCallback(() => {
@@ -141,7 +144,6 @@ function TestimonialsCarousel({ items }: { items: TestimonialItem[] }) {
   useEffect(() => {
     if (!api) return;
 
-    onSelect();
     api.on("select", onSelect);
     api.on("reInit", onSelect);
 
@@ -160,7 +162,7 @@ function TestimonialsCarousel({ items }: { items: TestimonialItem[] }) {
       <Carousel
         setApi={setApi}
         opts={{ align: "start", loop: showControls }}
-        plugins={showControls ? [autoplay.current] : undefined}
+        plugins={showControls ? [autoplayPlugin] : undefined}
         className="w-full"
       >
         <CarouselContent className="-ml-0">

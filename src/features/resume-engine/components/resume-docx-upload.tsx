@@ -6,7 +6,9 @@ import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 
 import { FileUpload, type FileUploadLabels } from "@/components/file-upload";
-import { useUploadThing } from "@/lib/uploadthing";
+import { UploadThingRequiredNotice } from "@/features/integrations/components/uploadthing-required-notice";
+import { fileToBase64 } from "@/lib/uploadthing/file-to-base64";
+import { api } from "@/trpc/react";
 
 export interface ResumeDocxUploadResult {
   url: string;
@@ -31,7 +33,9 @@ const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
     url: string;
   } | null>(null);
 
-  const { startUpload, isUploading } = useUploadThing("resumeImporter");
+  const configs = api.integrationsAdmin.getConfigs.useQuery();
+  const uploadFile = api.integrationsAdmin.uploadFile.useMutation();
+  const uploadEnabled = configs.data?.uploadthing.isConfigured ?? false;
 
   const labels: FileUploadLabels = {
     dropzoneTitle: t("fileUploadDropzoneTitle"),
@@ -53,24 +57,25 @@ const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
     (file: File) => {
       startTransition(async () => {
         try {
-          const uploaded = await startUpload([file]);
-          const result = uploaded?.[0];
-          if (!result) {
-            onError?.(t("uploadFailed"));
-            return;
-          }
+          const dataBase64 = await fileToBase64(file);
+          const uploaded = await uploadFile.mutateAsync({
+            fileName: file.name,
+            mimeType:
+              file.type ||
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            dataBase64,
+          });
 
-          const url = result.ufsUrl ?? result.url;
           const payload: ResumeDocxUploadResult = {
-            url,
-            key: result.key,
-            name: result.name,
+            url: uploaded.url,
+            key: uploaded.key,
+            name: file.name,
             mimeType:
               file.type ||
               "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           };
 
-          setCurrentFile({ name: payload.name, url });
+          setCurrentFile({ name: payload.name, url: payload.url });
           await onUploaded(payload);
         } catch (err) {
           const message =
@@ -79,10 +84,23 @@ const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
         }
       });
     },
-    [onError, onUploaded, startUpload, t],
+    [onError, onUploaded, t, uploadFile],
   );
 
-  if (isUploading || isPending) {
+  if (configs.isLoading) {
+    return (
+      <div className="text-muted-foreground flex items-center gap-2 py-8 text-sm">
+        <Loader2 className="text-primary size-4 animate-spin" />
+        {t("uploadCheckingStorage")}
+      </div>
+    );
+  }
+
+  if (!uploadEnabled) {
+    return <UploadThingRequiredNotice />;
+  }
+
+  if (isPending || uploadFile.isPending) {
     return (
       <div className="text-muted-foreground flex items-center gap-2 py-8 text-sm">
         <Loader2 className="text-primary size-4 animate-spin" />

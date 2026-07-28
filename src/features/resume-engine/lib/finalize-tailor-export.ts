@@ -59,6 +59,7 @@ async function persistResumeExport(
   },
 ) {
   const { url, key } = await uploadBufferToUploadThing(
+    userId,
     input.buffer,
     input.fileName,
     DOCX_MIME,

@@ -52,6 +52,7 @@ model User {
   SoftSkillsSection  SoftSkillsSection?
   SpotifyConnection  SpotifyConnection?
   Testimonial        Testimonial[]
+  TenantIntegration  TenantIntegration[]
 
   // Job Tracker
   Company            Company[]
@@ -712,3 +713,23 @@ model SpotifyOAuthState {
   expiresAt       DateTime
   createdAt       DateTime @default(now())
 }
+
+// ============================================================================
+// TENANT INTEGRATIONS (Multi-tenant credentials for Resend, Spotify, UploadThing, AI)
+// ============================================================================
+
+model TenantIntegration {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String    @db.ObjectId
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider       String    // "resend" | "spotify" | "uploadthing" | "gemini" | "openai" | "anthropic"
+  enabled        Boolean   @default(true)
+  credentialsEnc String    // AES-256-GCM encrypted JSON
+  lastSyncedAt   DateTime?
+  lastError      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([userId, provider])
+}
+

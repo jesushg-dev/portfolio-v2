@@ -23,6 +23,7 @@ const Contact: FC = async () => {
   const data = await api.contact.getPublic();
   const links = buildContactLinks(data.contacts);
   const calendlyUrl = getCalendlyUrl(data.contacts);
+  const showContactForm = data.emailFormEnabled;
 
   return (
     <section
@@ -47,7 +48,11 @@ const Contact: FC = async () => {
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="border-border/50 bg-card/80 text-card-foreground grid overflow-hidden rounded-2xl border shadow-xl backdrop-blur-md md:grid-cols-[1.05fr_0.95fr]">
+        <div
+          className={`border-border/50 bg-card/80 text-card-foreground grid overflow-hidden rounded-2xl border shadow-xl backdrop-blur-md ${
+            showContactForm ? "md:grid-cols-[1.05fr_0.95fr]" : "md:grid-cols-1"
+          }`}
+        >
           <div className="relative flex flex-col justify-between gap-8 px-6 py-10 sm:px-10 md:py-12">
             <div className="space-y-6">
               <HeaderArticle
@@ -75,7 +80,9 @@ const Contact: FC = async () => {
                 </ul>
               ) : (
                 <p className="text-muted-foreground text-sm">
-                  {t("noChannels")}
+                  {showContactForm
+                    ? t("noChannels")
+                    : t("noChannelsWithoutForm")}
                 </p>
               )}
 
@@ -95,13 +102,15 @@ const Contact: FC = async () => {
             <ContactIllustration />
           </div>
 
-          <div className="border-border/40 bg-background/40 relative border-t px-6 py-10 sm:px-10 md:border-t-0 md:border-l md:py-12">
-            <div
-              aria-hidden
-              className="from-primary/10 pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b to-transparent"
-            />
-            <ContactForm />
-          </div>
+          {showContactForm ? (
+            <div className="border-border/40 bg-background/40 relative border-t px-6 py-10 sm:px-10 md:border-t-0 md:border-l md:py-12">
+              <div
+                aria-hidden
+                className="from-primary/10 pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b to-transparent"
+              />
+              <ContactForm />
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

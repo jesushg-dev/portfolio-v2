@@ -29,7 +29,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { FileUpload } from "@/components/file-upload";
-import { useUploadThing } from "@/lib/uploadthing";
+import { UploadThingRequiredNotice } from "@/features/integrations/components/uploadthing-required-notice";
+import { fileToBase64 } from "@/lib/uploadthing/file-to-base64";
 import type { ApplicationStatus } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
 import {
@@ -77,8 +78,9 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
   const [cvUploadUrl, setCvUploadUrl] = useState<string | null>(null);
   const [cvUploadName, setCvUploadName] = useState<string | null>(null);
 
-  const { startUpload, isUploading: isCvUploading } =
-    useUploadThing("resumeImporter");
+  const configs = api.integrationsAdmin.getConfigs.useQuery();
+  const uploadFile = api.integrationsAdmin.uploadFile.useMutation();
+  const uploadEnabled = configs.data?.uploadthing.isConfigured ?? false;
 
   const utils = api.useUtils();
   const createApplication = api.jobTrackerAdmin.createApplication.useMutation();
@@ -136,16 +138,21 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
 
           let cvFileObj = undefined;
           if (cvFile) {
+            if (!uploadEnabled) {
+              throw new Error(t("uploadthingRequired"));
+            }
+
             let url = cvUploadUrl;
             if (!url) {
-              const uploaded = await startUpload([cvFile]);
-              const file = uploaded?.[0];
-              if (!file) {
-                throw new Error(t("cvUploadFailed"));
-              }
-              url = file.ufsUrl ?? file.url;
+              const dataBase64 = await fileToBase64(cvFile);
+              const uploaded = await uploadFile.mutateAsync({
+                fileName: cvFile.name,
+                mimeType: cvFile.type || "application/pdf",
+                dataBase64,
+              });
+              url = uploaded.url;
               setCvUploadUrl(url);
-              setCvUploadName(file.name);
+              setCvUploadName(cvFile.name);
             }
             cvFileObj = {
               name: cvUploadName ?? cvFile.name,
@@ -207,9 +214,10 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
       initialData,
       isEditMode,
       router,
-      startUpload,
       t,
       updateApplication,
+      uploadEnabled,
+      uploadFile,
       utils,
     ],
   );
@@ -401,37 +409,41 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
               inputId="cv"
               description={t("descriptions.cvUpload")}
             >
-              <FileUpload
-                onFileSelect={(file) => {
-                  setCvFile(file);
-                  setCvUploadUrl(null);
-                  setCvUploadName(null);
-                }}
-                currentFile={
-                  cvFile
-                    ? {
-                        name: cvFile.name,
-                        url: cvUploadUrl ?? "#",
-                      }
-                    : "cvFile" in initialData && initialData.cvFile
+              {!configs.isLoading && !uploadEnabled ? (
+                <UploadThingRequiredNotice />
+              ) : (
+                <FileUpload
+                  onFileSelect={(file) => {
+                    setCvFile(file);
+                    setCvUploadUrl(null);
+                    setCvUploadName(null);
+                  }}
+                  currentFile={
+                    cvFile
                       ? {
-                          name: initialData.cvFile.name,
-                          url: initialData.cvFile.url,
+                          name: cvFile.name,
+                          url: cvUploadUrl ?? "#",
                         }
-                      : undefined
-                }
-                onFileRemove={() => {
-                  setCvFile(null);
-                  setCvUploadUrl(null);
-                  setCvUploadName(null);
-                }}
-              />
+                      : "cvFile" in initialData && initialData.cvFile
+                        ? {
+                            name: initialData.cvFile.name,
+                            url: initialData.cvFile.url,
+                          }
+                        : undefined
+                  }
+                  onFileRemove={() => {
+                    setCvFile(null);
+                    setCvUploadUrl(null);
+                    setCvUploadName(null);
+                  }}
+                />
+              )}
             </FormItem>
           </FormSection>
         </FormContent>
 
         <FormActions
-          isPending={isPending || isCvUploading}
+          isPending={isPending || uploadFile.isPending}
           title={isEditMode ? t("actions.save") : t("actions.submit")}
           submitId="application-submit"
         >

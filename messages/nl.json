@@ -1,4 +1,124 @@
 {
+  "adminCredentials": {
+    "title": "Inloggegevens & Integraties",
+    "subtitle": "Configureer API-sleutels en integratie-instellingen per gebruiker voor Resend, Spotify, UploadThing en AI-modellen.",
+    "providers": {
+      "resend": {
+        "name": "Resend (E-mail)",
+        "description": "Transactionele e-mail en automatische sjabloonimplementatie."
+      },
+      "spotify": {
+        "name": "Spotify (Audio)",
+        "description": "OAuth-gegevens voor de Now Playing-widget."
+      },
+      "uploadthing": {
+        "name": "UploadThing (Opslag)",
+        "description": "Aangepaste uploadreferenties voor je tenant."
+      },
+      "ai": {
+        "name": "AI-modellen",
+        "description": "API-sleutels voor Gemini, OpenAI en Anthropic."
+      }
+    },
+    "actions": {
+      "connect": "Verbinden",
+      "disconnect": "Verbreken",
+      "disconnecting": "Verbinding verbreken…",
+      "disconnectSuccess": "Integratie succesvol verbroken.",
+      "disconnectFailed": "Integratie verbreken mislukt.",
+      "update": "Referenties bijwerken",
+      "manage": "Beheren",
+      "cancel": "Annuleren"
+    },
+    "spotifyCallback": {
+      "connected": "Spotify succesvol verbonden.",
+      "exchangeFailed": "Spotify-autorisatie kon niet worden voltooid. Probeer opnieuw.",
+      "invalidState": "Autorisatiesessie verlopen. Start opnieuw vanaf deze pagina.",
+      "missingParams": "Spotify heeft niet de verwachte autorisatiegegevens teruggestuurd.",
+      "noRefreshToken": "Spotify heeft geen refresh token teruggestuurd. Trek toegang in bij Spotify en verbind opnieuw.",
+      "accessDenied": "Je hebt toegang tot Spotify geweigerd."
+    },
+    "summary": {
+      "domain": "Domein",
+      "clientId": "Client ID",
+      "appId": "App ID",
+      "tokenSaved": "Referenties opgeslagen",
+      "providers": "Actieve providers",
+      "defaultProvider": "Standaard provider"
+    },
+    "connected": {
+      "title": "Verbonden"
+    },
+    "available": {
+      "title": "Beschikbaar om te verbinden",
+      "description": "Voeg meer diensten toe om je portfolio uit te breiden."
+    },
+    "empty": {
+      "title": "Nog geen integraties verbonden",
+      "description": "Kies hieronder een dienst om je eerste integratie te verbinden."
+    },
+    "status": {
+      "configured": "Geconfigureerd",
+      "notConfigured": "Niet geconfigureerd",
+      "syncing": "Sjablonen synchroniseren...",
+      "syncedCount": "{count} sjablonen gepubliceerd"
+    },
+    "resend": {
+      "title": "Resend E-mail inloggegevens",
+      "description": "Configureer je Resend API-sleutel en domein om e-mails te verzenden en sjablonen automatisch te synchroniseren.",
+      "apiKeyLabel": "Resend API-sleutel",
+      "apiKeyPlaceholder": "re_123456789...",
+      "domainLabel": "E-maildomein",
+      "domainPlaceholder": "joudomein.nl",
+      "fromLabel": "Afzender e-mail / naam (optioneel)",
+      "fromPlaceholder": "Portfolio '<'no-reply@joudomein.nl'>'",
+      "syncButton": "Sjablonen nu synchroniseren",
+      "saveButton": "Opslaan en sjablonen publiceren",
+      "saveSuccess": "Resend-inloggegevens opgeslagen en sjablonen succesvol gepubliceerd!",
+      "syncSuccess": "Resend-sjablonen succesvol gesynchroniseerd!"
+    },
+    "spotify": {
+      "title": "Spotify Verbindingsgegevens",
+      "description": "Configureer je Spotify OAuth App-inloggegevens voor de Now Playing-widget.",
+      "clientIdLabel": "Client ID",
+      "clientSecretLabel": "Client Secret",
+      "refreshTokenLabel": "Refresh Token",
+      "clientIdPlaceholder": "Spotify Client ID",
+      "clientSecretPlaceholder": "Spotify Client Secret",
+      "refreshTokenPlaceholder": "Spotify Refresh Token",
+      "saveButton": "Spotify-inloggegevens opslaan",
+      "saveSuccess": "Spotify-inloggegevens succesvol opgeslagen!"
+    },
+    "uploadthing": {
+      "title": "UploadThing Opslaggegevens",
+      "description": "Configureer aangepaste UploadThing-inloggegevens voor het uploaden van bestanden.",
+      "tokenLabel": "Geheime token",
+      "tokenPlaceholder": "UploadThing Secret Token",
+      "appIdLabel": "App ID (optioneel)",
+      "appIdPlaceholder": "UploadThing App ID",
+      "secretLabel": "Geheime sleutel (optioneel)",
+      "secretPlaceholder": "UploadThing Secret Key",
+      "saveButton": "Opslaggegevens opslaan",
+      "saveSuccess": "UploadThing-inloggegevens succesvol opgeslagen!",
+      "requiredTitle": "Bestandsopslag niet gekoppeld",
+      "requiredMessage": "Koppel UploadThing in Credentials voordat je bestanden uploadt. CV-import, job tracker-bijlagen en PDF-cache gebruiken je tenant-opslag.",
+      "requiredConnectCta": "UploadThing koppelen in Credentials"
+    },
+    "ai": {
+      "title": "AI-modellen inloggegevens",
+      "description": "Configureer API-sleutels voor LLM-diensten (Gemini, OpenAI, Anthropic).",
+      "geminiLabel": "Google Gemini API-sleutel",
+      "openaiLabel": "OpenAI API-sleutel",
+      "anthropicLabel": "Anthropic API-sleutel",
+      "geminiPlaceholder": "AIzaSy...",
+      "openaiPlaceholder": "sk-proj-...",
+      "anthropicPlaceholder": "sk-ant-...",
+      "defaultProviderLabel": "Standaard AI-provider",
+      "defaultProviderPlaceholder": "Selecteer standaard provider",
+      "saveButton": "AI-inloggegevens opslaan",
+      "saveSuccess": "AI-inloggegevens succesvol opgeslagen!"
+    }
+  },
   "certification": {
     "title": "Certificeringen",
     "subtitle": "Meester in Meerdere Vaardigheden",
@@ -474,6 +594,7 @@
       "subtitle": "Ik sta altijd open voor nieuwe kansen. Heb je een project in gedachten of wil je gewoon hallo zeggen? Stuur gerust een bericht.",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
+      "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "form": {
         "helper": "Je bericht gaat rechtstreeks naar de inbox van dit portfolio.",
         "name": {
@@ -602,6 +723,7 @@
         "services": "Diensten",
         "certifications": "Certificeringen",
         "spotify": "Spotify",
+        "credentials": "Inloggegevens & Integraties",
         "jobTracker": "Vacature tracker",
         "resumeStudio": "Resume Studio",
         "portfolioGroup": "Portfolio Inhoud",
@@ -1065,6 +1187,7 @@
           }
         },
         "cvUploadFailed": "CV-bestand uploaden mislukt",
+        "uploadthingRequired": "Koppel UploadThing in Credentials voordat je een CV uploadt.",
         "sections": {
           "info": "Basisinformatie",
           "details": "Aanvullende Details",
@@ -1797,6 +1920,7 @@
       "openCvEditor": "CV-editor openen",
       "importedContinueEditing": "Verder CV bewerken",
       "uploadFailed": "Upload mislukt",
+      "uploadCheckingStorage": "Opslag controleren…",
       "parseFailed": "CV kon niet worden geanalyseerd",
       "parseSuccess": "CV succesvol geanalyseerd",
       "importFailed": "Import mislukt",

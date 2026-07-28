@@ -5,18 +5,21 @@ import { nextCookies } from "better-auth/next-js";
 import { db } from "@/server/db";
 import { env } from "@/env";
 import {
-  isResendConfigured,
-  resend,
-  resendFromEmail,
+  getSystemEmailClient,
+  getSystemResetPasswordTemplateId,
 } from "@/lib/email/resend";
 import {
   detectLocaleFromResetUrl,
   getResetPasswordEmailCopy,
 } from "@/lib/auth-email";
 
-const productionBaseURL = `https://${env.PRIMARY_DOMAIN}`;
+const PRIMARY_DOMAIN = env.PRIMARY_DOMAIN ?? "jesushg.com";
 
-const devDomainHost = env.NEXT_PUBLIC_DEV_DOMAIN.replace(/^https?:\/\//, "");
+const productionBaseURL = `https://${PRIMARY_DOMAIN}`;
+
+const DEV_DOMAIN = env.NEXT_PUBLIC_DEV_DOMAIN ?? "lvh.me:3000";
+
+const devDomainHost = DEV_DOMAIN.replace(/^https?:\/\//, "");
 
 const betterAuthUrlHost = env.BETTER_AUTH_URL
   ? new URL(env.BETTER_AUTH_URL).host
@@ -27,9 +30,9 @@ const canonicalBaseURL =
   env.BETTER_AUTH_URL ??
   (env.NODE_ENV === "production"
     ? productionBaseURL
-    : env.NEXT_PUBLIC_DEV_DOMAIN.startsWith("http")
-      ? env.NEXT_PUBLIC_DEV_DOMAIN
-      : `http://${env.NEXT_PUBLIC_DEV_DOMAIN}`);
+    : DEV_DOMAIN.startsWith("http")
+      ? DEV_DOMAIN
+      : `http://${DEV_DOMAIN}`);
 
 /**
  * Resolve auth base URL per request so session cookies match the browser origin.
@@ -38,14 +41,14 @@ const canonicalBaseURL =
  */
 const baseURL = {
   allowedHosts: [
-    env.PRIMARY_DOMAIN,
-    `*.${env.PRIMARY_DOMAIN}`,
+    PRIMARY_DOMAIN,
+    `*.${PRIMARY_DOMAIN}`,
     "localhost:3000",
     "127.0.0.1:3000",
     devDomainHost,
     "*.lvh.me:3000",
     ...(betterAuthUrlHost ? [betterAuthUrlHost] : []),
-  ],
+  ].filter((host): host is string => Boolean(host)),
   fallback: env.BETTER_AUTH_URL ?? productionBaseURL,
 };
 
@@ -91,9 +94,15 @@ export const auth = betterAuth({
       console.log("[better-auth][reset-password] token:", data.token);
       console.log("[better-auth][reset-password] url:", data.url);
 
-      if (!isResendConfigured() || !resend || !resendFromEmail) {
+      const emailClient = getSystemEmailClient();
+
+      if (
+        !emailClient.isConfigured ||
+        !emailClient.resend ||
+        !emailClient.fromEmail
+      ) {
         console.warn(
-          "[better-auth][reset-password] RESEND_API_KEY or RESEND_EMAIL_DOMAIN missing, skipped email send.",
+          "[better-auth][reset-password] System email delivery is not configured, skipped email send.",
         );
         return;
       }
@@ -103,29 +112,43 @@ export const auth = betterAuth({
         `${canonicalBaseURL}/reset-password?token=${data.token ?? ""}`;
 
       const locale = detectLocaleFromResetUrl(resetUrl);
-      const copy = getResetPasswordEmailCopy(locale);
+      const resetTemplateId = getSystemResetPasswordTemplateId(locale);
 
-      await resend.emails.send({
-        from: resendFromEmail,
-        to,
-        subject: copy.subject,
-        html: `
-          <p>${copy.body}</p>
-          <p>
-            <a href="${resetUrl}" target="_blank" rel="noreferrer">
-              ${copy.link}
-            </a>
-          </p>
-          <p>${copy.ignore}</p>
-        `,
-      });
+      if (resetTemplateId) {
+        await emailClient.resend.emails.send({
+          from: emailClient.fromEmail,
+          to,
+          template: {
+            id: resetTemplateId,
+            variables: {
+              RESET_URL: resetUrl,
+            },
+          },
+        });
+      } else {
+        const copy = getResetPasswordEmailCopy(locale);
+        await emailClient.resend.emails.send({
+          from: emailClient.fromEmail,
+          to,
+          subject: copy.subject,
+          html: `
+            <p>${copy.body}</p>
+            <p>
+              <a href="${resetUrl}" target="_blank" rel="noreferrer">
+                ${copy.link}
+              </a>
+            </p>
+            <p>${copy.ignore}</p>
+          `,
+        });
+      }
     },
   },
   socialProviders,
   // The trustedOrigins covers tenant subdomains in production and lvh.me in dev.
   trustedOrigins: [
-    `https://${env.PRIMARY_DOMAIN}`,
-    `https://*.${env.PRIMARY_DOMAIN}`,
+    `https://${PRIMARY_DOMAIN}`,
+    `https://*.${PRIMARY_DOMAIN}`,
     "http://lvh.me:3000",
     "http://*.lvh.me:3000",
     "http://localhost:3000",

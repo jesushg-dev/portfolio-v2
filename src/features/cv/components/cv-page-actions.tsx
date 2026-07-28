@@ -5,7 +5,7 @@ import type { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { FaDownload, FaHome } from "react-icons/fa";
 import { Loader2, Mail, Send, X } from "lucide-react";
@@ -18,10 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
-import type { Locale } from "@/i18n/config";
 
 interface CvPageActionsProps {
-  locale: Locale;
   fullName: string;
   canSendByEmail: boolean;
   downloadHref: string | null;
@@ -48,7 +46,6 @@ function isRateLimitTrpcError(error: unknown): boolean {
 }
 
 export const CvPageActions: FC<CvPageActionsProps> = ({
-  locale,
   fullName,
   canSendByEmail,
   downloadHref,
@@ -57,6 +54,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
   downloadLabel,
   paginatePdfPages = false,
 }) => {
+  const locale = useLocale();
   const t = useTranslations("curriculum.pdfDelivery");
   const [emailOpen, setEmailOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -89,8 +87,8 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
       startTransition(async () => {
         try {
           await sendPdf.mutateAsync({
-            email: values.email,
             locale,
+            email: values.email,
             paginatePages: paginatePdfPages,
           });
           form.reset();
@@ -171,7 +169,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
                 opacity: { duration: 0.18, ease: "easeIn" },
               },
             }}
-            className="overflow-hidden"
+            className="-m-1 overflow-hidden p-1"
           >
             <section
               id="cv-email-panel"
@@ -188,7 +186,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
 
               <Form {...form}>
                 <FormRoot
-                  className="flex flex-col gap-3 sm:flex-row sm:items-end"
+                  className="flex flex-col gap-3 overflow-visible p-0.5 sm:flex-row sm:items-end"
                   onSubmit={form.handleSubmit(handleSubmit)}
                 >
                   <FormField
@@ -204,7 +202,12 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
                           {...field}
                           id="cv-pdf-email"
                           type="email"
+                          name="email"
                           autoComplete="email"
+                          inputMode="email"
+                          autoCapitalize="none"
+                          spellCheck={false}
+                          autoFocus
                           disabled={isSending}
                           placeholder={t("form.email.placeholder")}
                         />

@@ -1,4 +1,124 @@
 {
+  "adminCredentials": {
+    "title": "Credentials & Integrations",
+    "subtitle": "Configure per-tenant API keys and integration settings for Resend, Spotify, UploadThing, and AI Models.",
+    "providers": {
+      "resend": {
+        "name": "Resend (Email)",
+        "description": "Transactional email delivery and automatic template deployment."
+      },
+      "spotify": {
+        "name": "Spotify (Audio)",
+        "description": "OAuth credentials for the Now Playing widget."
+      },
+      "uploadthing": {
+        "name": "UploadThing (Storage)",
+        "description": "Custom file upload credentials for your tenant."
+      },
+      "ai": {
+        "name": "AI Models",
+        "description": "API keys for Gemini, OpenAI, and Anthropic services."
+      }
+    },
+    "actions": {
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "disconnecting": "Disconnecting…",
+      "disconnectSuccess": "Integration disconnected successfully.",
+      "disconnectFailed": "Failed to disconnect integration.",
+      "update": "Update credentials",
+      "manage": "Manage",
+      "cancel": "Cancel"
+    },
+    "spotifyCallback": {
+      "connected": "Spotify connected successfully.",
+      "exchangeFailed": "Could not complete Spotify authorization. Try again.",
+      "invalidState": "Authorization session expired. Start again from this page.",
+      "missingParams": "Spotify did not return the expected authorization data.",
+      "noRefreshToken": "Spotify did not return a refresh token. Revoke access in Spotify and reconnect.",
+      "accessDenied": "You denied access to Spotify."
+    },
+    "summary": {
+      "domain": "Domain",
+      "clientId": "Client ID",
+      "appId": "App ID",
+      "tokenSaved": "Credentials saved",
+      "providers": "Active providers",
+      "defaultProvider": "Default provider"
+    },
+    "connected": {
+      "title": "Connected"
+    },
+    "available": {
+      "title": "Available to connect",
+      "description": "Add more services to extend your portfolio."
+    },
+    "empty": {
+      "title": "No integrations connected yet",
+      "description": "Pick a service below to connect your first integration."
+    },
+    "status": {
+      "configured": "Configured",
+      "notConfigured": "Not Configured",
+      "syncing": "Syncing templates...",
+      "syncedCount": "{count} templates published"
+    },
+    "resend": {
+      "title": "Resend Email Credentials",
+      "description": "Configure your Resend API key and domain to send emails and auto-sync templates.",
+      "apiKeyLabel": "Resend API Key",
+      "apiKeyPlaceholder": "re_123456789...",
+      "domainLabel": "Email Domain",
+      "domainPlaceholder": "yourdomain.com",
+      "fromLabel": "From Email / Name (Optional)",
+      "fromPlaceholder": "Portfolio '<'no-reply@yourdomain.com'>'",
+      "syncButton": "Sync Templates Now",
+      "saveButton": "Save & Deploy Templates",
+      "saveSuccess": "Resend credentials saved and templates deployed successfully!",
+      "syncSuccess": "Resend templates synced successfully!"
+    },
+    "spotify": {
+      "title": "Spotify Connection Credentials",
+      "description": "Configure your Spotify OAuth App credentials for the Now Playing widget.",
+      "clientIdLabel": "Client ID",
+      "clientSecretLabel": "Client Secret",
+      "refreshTokenLabel": "Refresh Token",
+      "clientIdPlaceholder": "Spotify Client ID",
+      "clientSecretPlaceholder": "Spotify Client Secret",
+      "refreshTokenPlaceholder": "Spotify Refresh Token",
+      "saveButton": "Save Spotify Credentials",
+      "saveSuccess": "Spotify credentials saved successfully!"
+    },
+    "uploadthing": {
+      "title": "UploadThing Storage Credentials",
+      "description": "Configure custom UploadThing credentials for file uploads.",
+      "tokenLabel": "Secret Token",
+      "tokenPlaceholder": "UploadThing Secret Token",
+      "appIdLabel": "App ID (Optional)",
+      "appIdPlaceholder": "UploadThing App ID",
+      "secretLabel": "Secret Key (Optional)",
+      "secretPlaceholder": "UploadThing Secret Key",
+      "saveButton": "Save Storage Credentials",
+      "saveSuccess": "UploadThing credentials saved successfully!",
+      "requiredTitle": "File storage not connected",
+      "requiredMessage": "Connect UploadThing in Credentials before uploading files. Resume import, job tracker attachments, and CV PDF caching all use your tenant storage.",
+      "requiredConnectCta": "Connect UploadThing in Credentials"
+    },
+    "ai": {
+      "title": "AI Models Credentials",
+      "description": "Configure API keys for LLM services (Gemini, OpenAI, Anthropic).",
+      "geminiLabel": "Google Gemini API Key",
+      "openaiLabel": "OpenAI API Key",
+      "anthropicLabel": "Anthropic API Key",
+      "geminiPlaceholder": "AIzaSy...",
+      "openaiPlaceholder": "sk-proj-...",
+      "anthropicPlaceholder": "sk-ant-...",
+      "defaultProviderLabel": "Default AI Provider",
+      "defaultProviderPlaceholder": "Select default provider",
+      "saveButton": "Save AI Credentials",
+      "saveSuccess": "AI credentials saved successfully!"
+    }
+  },
   "certification": {
     "title": "Certificates",
     "subtitle": "Mastery in Diverse Skills",
@@ -474,6 +594,7 @@
       "subtitle": "I am always open to new opportunities. If you have a project in mind or just want to say hi, feel free to reach out.",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
+      "noChannelsWithoutForm": "Social links will appear here once they are added to the CV.",
       "form": {
         "helper": "Your message goes straight to this portfolio’s inbox.",
         "name": {
@@ -602,6 +723,7 @@
         "services": "Services",
         "certifications": "Certifications",
         "spotify": "Spotify",
+        "credentials": "Credentials & Integrations",
         "jobTracker": "Job Tracker",
         "resumeStudio": "Resume Studio",
         "portfolioGroup": "Portfolio Content",
@@ -1064,6 +1186,7 @@
           }
         },
         "cvUploadFailed": "Could not upload CV file",
+        "uploadthingRequired": "Connect UploadThing in Credentials before uploading a CV.",
         "sections": {
           "info": "Basic Information",
           "details": "Additional Details",
@@ -1796,6 +1919,7 @@
       "openCvEditor": "Open CV editor",
       "importedContinueEditing": "Continue editing CV",
       "uploadFailed": "Upload failed",
+      "uploadCheckingStorage": "Checking file storage…",
       "parseFailed": "Could not parse resume",
       "parseSuccess": "Resume parsed successfully",
       "importFailed": "Import failed",

@@ -16,8 +16,8 @@ import {
   Clock,
   Palette,
   Sparkles,
-  Music2,
   ClipboardList,
+  KeyRound,
 } from "lucide-react";
 
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
@@ -44,6 +44,7 @@ interface NavItem {
     | "services"
     | "certifications"
     | "spotify"
+    | "credentials"
     | "jobTracker"
     | "settings";
   icon: typeof LayoutDashboard;
@@ -96,7 +97,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: Award,
     group: "portfolio",
   },
-  { href: "/admin/spotify", labelKey: "spotify", icon: Music2 },
+  { href: "/admin/credentials", labelKey: "credentials", icon: KeyRound },
   // ── Config ─────────────────────────────────────────────
   { href: "/admin/settings", labelKey: "settings", icon: Settings },
 ];

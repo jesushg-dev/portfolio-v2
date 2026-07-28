@@ -1,13 +1,14 @@
 import "server-only";
 
-import { UTApi } from "uploadthing/server";
-
 import type { Locale } from "@/i18n/config";
 import { computeCvPdfContentHash } from "@/features/cv/lib/compute-cv-pdf-content-hash";
 import { requestCvPdfGeneration } from "@/features/cv/lib/request-cv-pdf-generation";
 import { loadCvPreviewSnapshot } from "@/features/cv/lib/load-cv-preview-snapshot";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
-import { env } from "@/env";
+import {
+  getTenantUploadThingClient,
+  isTenantUploadThingConfigured,
+} from "@/lib/uploadthing/tenant-uploadthing";
 import { db } from "@/server/db";
 
 function sanitizeFileName(value: string): string {
@@ -37,11 +38,16 @@ async function fetchPdfBuffer(url: string): Promise<Buffer> {
   return Buffer.from(await response.arrayBuffer());
 }
 
-async function deleteStoredPdf(storageKey: string | null | undefined) {
-  if (!storageKey || !env.UPLOADTHING_TOKEN) return;
+async function deleteStoredPdf(
+  userId: string,
+  storageKey: string | null | undefined,
+) {
+  if (!storageKey) return;
 
-  const utapi = new UTApi({ token: env.UPLOADTHING_TOKEN });
-  await utapi.deleteFiles(storageKey).catch(() => undefined);
+  const client = await getTenantUploadThingClient(userId);
+  if (!client) return;
+
+  await client.utapi.deleteFiles(storageKey).catch(() => undefined);
 }
 
 export async function resolveCvPdfAsset(
@@ -110,7 +116,18 @@ export async function resolveCvPdfAsset(
     paginatePages,
   });
 
-  if (!env.UPLOADTHING_TOKEN) {
+  if (!(await isTenantUploadThingConfigured(userId))) {
+    return {
+      url: null,
+      buffer,
+      fileName,
+      fromCache: false,
+      contentHash,
+    };
+  }
+
+  const storageClient = await getTenantUploadThingClient(userId);
+  if (!storageClient) {
     return {
       url: null,
       buffer,
@@ -121,12 +138,14 @@ export async function resolveCvPdfAsset(
   }
 
   const uploaded = await uploadBufferToUploadThing(
+    userId,
     buffer,
     fileName,
     "application/pdf",
+    storageClient,
   );
 
-  await deleteStoredPdf(cached?.storageKey);
+  await deleteStoredPdf(userId, cached?.storageKey);
 
   await db.cvPdfLink.upsert({
     where: {

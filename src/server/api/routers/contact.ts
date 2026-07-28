@@ -4,9 +4,10 @@ import { randomUUID } from "crypto";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
-  isResendConfigured,
-  resend,
-  resendFromEmail,
+  getPortfolioEmailClient,
+  getPortfolioContactTemplateId,
+  canDeliverPortfolioContactEmail,
+  type Locale,
 } from "@/lib/email/resend";
 
 const ContactMessageSchema = z.object({
@@ -15,22 +16,15 @@ const ContactMessageSchema = z.object({
   message: z.string().trim().min(10).max(2000),
 });
 
-function escapeHtml(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
 export const contactRouter = createTRPCRouter({
   getPublic: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.tenant) {
-      return { contacts: [], recipientReady: false };
+      return { contacts: [], recipientReady: false, emailFormEnabled: false };
     }
 
-    const [contacts, user] = await Promise.all([
+    const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
+
+    const [contacts, user, emailFormEnabled] = await Promise.all([
       ctx.db.cvContact.findMany({
         where: { userId: ctx.tenant.userId },
         orderBy: { order: "asc" },
@@ -40,12 +34,14 @@ export const contactRouter = createTRPCRouter({
         where: { id: ctx.tenant.userId },
         select: { email: true, name: true },
       }),
+      canDeliverPortfolioContactEmail(ctx.tenant.userId, ownerLocale),
     ]);
 
     return {
       contacts,
       displayName: user?.name ?? ctx.tenant.username,
       recipientReady: Boolean(user?.email),
+      emailFormEnabled,
     };
   }),
 
@@ -59,7 +55,13 @@ export const contactRouter = createTRPCRouter({
         });
       }
 
-      if (!isResendConfigured() || !resend || !resendFromEmail) {
+      const emailClient = await getPortfolioEmailClient(ctx.tenant.userId);
+
+      if (
+        !emailClient.isConfigured ||
+        !emailClient.resend ||
+        !emailClient.fromEmail
+      ) {
         throw new TRPCError({
           code: "PRECONDITION_FAILED",
           message: "Email delivery is not configured",
@@ -78,26 +80,40 @@ export const contactRouter = createTRPCRouter({
         });
       }
 
-      const safeName = escapeHtml(input.name);
-      const safeEmail = escapeHtml(input.email);
-      const safeMessage = escapeHtml(input.message).replaceAll("\n", "<br />");
+      // Use the owner's preferred locale for the notification
+      const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
 
-      const { error } = await resend.emails.send(
+      const contactTemplateId = await getPortfolioContactTemplateId(
+        ownerLocale,
+        ctx.tenant.userId,
+      );
+
+      if (!contactTemplateId) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: `Contact email template is not configured for locale "${ownerLocale}".`,
+        });
+      }
+
+      const sentAt = new Date().toLocaleString(ownerLocale, {
+        dateStyle: "medium",
+        timeStyle: "short",
+      });
+
+      const { error } = await emailClient.resend.emails.send(
         {
-          from: resendFromEmail,
+          from: emailClient.fromEmail,
           to: owner.email,
           replyTo: input.email,
-          subject: `New message from ${input.name}`,
-          html: `
-            <div style="font-family: ui-sans-serif, system-ui, sans-serif; line-height: 1.5;">
-              <h2 style="margin: 0 0 12px;">New portfolio contact message</h2>
-              <p style="margin: 0 0 8px;"><strong>From:</strong> ${safeName}</p>
-              <p style="margin: 0 0 16px;"><strong>Email:</strong> ${safeEmail}</p>
-              <p style="margin: 0 0 8px;"><strong>Message:</strong></p>
-              <p style="margin: 0; white-space: pre-wrap;">${safeMessage}</p>
-            </div>
-          `,
-          text: `New portfolio contact message\n\nFrom: ${input.name}\nEmail: ${input.email}\n\n${input.message}`,
+          template: {
+            id: contactTemplateId,
+            variables: {
+              SENDER_NAME: input.name,
+              SENDER_EMAIL: input.email,
+              MESSAGE: input.message,
+              SENT_AT: sentAt,
+            },
+          },
         },
         {
           idempotencyKey: `contact-message/${ctx.tenant.userId}/${randomUUID()}`,
@@ -111,6 +127,6 @@ export const contactRouter = createTRPCRouter({
         });
       }
 
-      return { ok: true as const };
+      return { ok: true };
     }),
 });

@@ -1,0 +1,38 @@
+{
+  "cv-delivery": {
+    "preview": "Hier is mijn cv — Jesús Hernández",
+    "tagline": "Senior Full Stack Ontwikkelaar & Tech Lead",
+    "greeting": "Hallo {recipientName},",
+    "body1": "Bedankt voor uw interesse via mijn portfolio. Hierbij vindt u mijn meest recente cv als bijlage.",
+    "highlight": "Senior Full Stack Ontwikkelaar met 6+ jaar ervaring in .NET Core, React/Next.js en TypeScript — momenteel verantwoordelijk voor e-commerce engineering op VTEX voor Walmart Global Tech in Centraal-Amerika.",
+    "body2": "Ik beantwoord graag al uw vragen of plan een gesprek in wanneer het u uitkomt.",
+    "signOff": "Met vriendelijke groet,",
+    "name": "Jesús Hernández",
+    "role": "Senior Full Stack Ontwikkelaar",
+    "footer": "Automatisch verzonden vanuit het contactformulier op jehg.dev.",
+    "stats": {
+      "years": "Jaar ervaring",
+      "projects": "Projecten opgeleverd",
+      "certifications": "Certificeringen"
+    }
+  },
+  "contact-notification": {
+    "preview": "Nieuw bericht van {senderName} via jehg.dev",
+    "eyebrow": "Nieuw bericht · contactformulier",
+    "labelFrom": "Van",
+    "labelEmail": "E-mail",
+    "labelReceived": "Ontvangen",
+    "labelMessage": "Bericht",
+    "replyButton": "Antwoord aan {firstName}",
+    "footer": "Automatisch verzonden vanuit het contactformulier op jehg.dev."
+  },
+  "reset-password": {
+    "preview": "Herstel je wachtwoord",
+    "eyebrow": "Accountbeveiliging · Wachtwoord herstellen",
+    "greeting": "Hallo,",
+    "body1": "Je hebt gevraagd om je wachtwoord voor je jehg.dev-account te herstellen.",
+    "button": "Wachtwoord herstellen",
+    "body2": "Als je dit niet hebt aangevraagd, kun je deze e-mail veilig negeren.",
+    "footer": "Beveiligingswaarschuwing verzonden vanaf jehg.dev."
+  }
+}
