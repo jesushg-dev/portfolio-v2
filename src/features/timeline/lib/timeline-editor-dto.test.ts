@@ -15,6 +15,7 @@ const languages: LanguageRef[] = [
 
 const mockTimelineItem: TimelineItem = {
   id: "item-1",
+  order: 0,
   organization: "Acme Corp",
   location: "New York",
   category: "WORK",
@@ -22,7 +23,7 @@ const mockTimelineItem: TimelineItem = {
   endDate: new Date("2022-06-30"),
   current: false,
   images: ["https://example.com/img1.jpg"],
-  portfolioId: "portfolio-1",
+  userId: "user-1",
   title: { default: "Engineer", translations: { es: "Ingeniero" } },
   description: {
     default: "Built stuff",

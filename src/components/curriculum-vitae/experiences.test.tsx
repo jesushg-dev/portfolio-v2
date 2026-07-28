@@ -4,7 +4,9 @@ import Experiences from "./experiences";
 
 describe("Experiences", () => {
   it("renders null when experiences array is empty", () => {
-    const { container } = render(<Experiences experiences={[]} locale="en" />);
+    const { container } = render(
+      <Experiences experiences={[]} locale="en" defaultLocale="en" />,
+    );
     expect(container.firstChild).toBeNull();
   });
 
@@ -39,6 +41,7 @@ describe("Experiences", () => {
           list as unknown as Parameters<typeof Experiences>[0]["experiences"]
         }
         locale="en"
+        defaultLocale="en"
       />,
     );
 

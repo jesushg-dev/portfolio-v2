@@ -31,8 +31,8 @@ describe("Education", () => {
     const eduWithYears = {
       ...mockEducation,
       dates: null,
-      startYear: "2018",
-      endYear: "2022",
+      startYear: 2018,
+      endYear: 2022,
       location: { default: "Madrid, Spain" },
     };
 

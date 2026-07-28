@@ -165,7 +165,7 @@ describe("getValidFilters", () => {
         field: "name",
         variant: "text",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(0);
   });
 
@@ -181,7 +181,7 @@ describe("getValidFilters", () => {
         field: "name",
         variant: "text",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(1);
   });
 
@@ -197,7 +197,7 @@ describe("getValidFilters", () => {
         field: "name",
         variant: "text",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(1);
   });
 
@@ -213,7 +213,7 @@ describe("getValidFilters", () => {
         field: "name",
         variant: "text",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(1);
   });
 
@@ -229,7 +229,7 @@ describe("getValidFilters", () => {
         field: "tags",
         variant: "multiSelect",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(1);
   });
 
@@ -245,7 +245,7 @@ describe("getValidFilters", () => {
         field: "tags",
         variant: "multiSelect",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(0);
   });
 
@@ -261,7 +261,7 @@ describe("getValidFilters", () => {
         field: "date",
         variant: "date",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(0);
   });
 
@@ -277,7 +277,7 @@ describe("getValidFilters", () => {
         field: "date",
         variant: "date",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(0);
   });
 
@@ -303,7 +303,7 @@ describe("getValidFilters", () => {
         field: "b",
         variant: "text",
       },
-    ]);
+    ] as unknown as Parameters<typeof getValidFilters>[0]);
     expect(result).toHaveLength(2);
   });
 

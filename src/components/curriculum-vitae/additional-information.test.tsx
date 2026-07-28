@@ -1,11 +1,15 @@
-﻿import { render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import React from "react";
 import AdditionalInformation from "./additional-information";
 
 describe("AdditionalInformation", () => {
   it("renders null when additionalInformation is empty array", () => {
     const { container } = render(
-      <AdditionalInformation additionalInformation={[]} locale="en" />,
+      <AdditionalInformation
+        additionalInformation={[]}
+        locale="en"
+        defaultLocale="en"
+      />,
     );
     expect(container.firstChild).toBeNull();
   });
@@ -18,7 +22,11 @@ describe("AdditionalInformation", () => {
 
     render(
       <AdditionalInformation
-        additionalInformation={items}
+        additionalInformation={
+          items as unknown as Parameters<
+            typeof AdditionalInformation
+          >[0]["additionalInformation"]
+        }
         locale="en"
         defaultLocale="en"
       />,

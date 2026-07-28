@@ -162,7 +162,11 @@ describe("CvPage", () => {
     });
 
     expect(ui.type).toBe(CvPageView);
-    expect(ui.props).toEqual({ locale: "en", pdfMode: false });
+    expect(ui.props).toEqual({
+      locale: "en",
+      pdfMode: false,
+      paginatePdfPages: false,
+    });
   });
 });
 

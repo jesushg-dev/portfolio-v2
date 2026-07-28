@@ -1,4 +1,4 @@
-﻿import type { PortfolioSoftSkill } from "@prisma/client";
+import type { PortfolioSoftSkill } from "@prisma/client";
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
   mapSoftSkillToEditorDto,
@@ -18,7 +18,7 @@ const mockSoftSkill: PortfolioSoftSkill = {
   isVisible: true,
   featured: false,
   order: 1,
-  portfolioId: "portfolio-1",
+  userId: "user-1",
   title: { default: "Teamwork", translations: { es: "Trabajo en equipo" } },
   description: {
     default: "Working well in a team",

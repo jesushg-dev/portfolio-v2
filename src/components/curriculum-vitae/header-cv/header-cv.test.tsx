@@ -23,13 +23,16 @@ describe("HeaderCV", () => {
   it("renders header degree and fullName when header data is provided", () => {
     render(
       <HeaderCV
-        header={{
-          fullName: "John Doe",
-          degree: { default: "Software Engineer" },
-          photoUrl: "https://example.com/john.jpg",
-          clientImageAlt: "Photo of John",
-        }}
+        header={
+          {
+            fullName: "John Doe",
+            degree: { default: "Software Engineer" },
+            photoUrl: "https://example.com/john.jpg",
+            clientImageAlt: "Photo of John",
+          } as unknown as Parameters<typeof HeaderCV>[0]["header"]
+        }
         locale="en"
+        defaultLocale="en"
       />,
     );
 
@@ -48,6 +51,7 @@ describe("HeaderCV", () => {
         }
         fallbackName="Jane Doe"
         locale="en"
+        defaultLocale="en"
       />,
     );
 
@@ -56,7 +60,9 @@ describe("HeaderCV", () => {
   });
 
   it("renders empty string when fullName and fallbackName are missing", () => {
-    const { container } = render(<HeaderCV header={null} locale="en" />);
+    const { container } = render(
+      <HeaderCV header={null} locale="en" defaultLocale="en" />,
+    );
 
     expect(container).toBeInTheDocument();
   });
@@ -70,6 +76,7 @@ describe("HeaderCV", () => {
           } as unknown as Parameters<typeof HeaderCV>[0]["header"]
         }
         locale="en"
+        defaultLocale="en"
       />,
     );
 

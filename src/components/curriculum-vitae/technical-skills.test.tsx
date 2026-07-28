@@ -1,4 +1,4 @@
-﻿import { render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import React from "react";
 import TechnicalSkills from "./technical-skills";
 
@@ -22,7 +22,15 @@ describe("TechnicalSkills", () => {
       },
     ];
 
-    render(<TechnicalSkills technicalSkills={skills} />);
+    render(
+      <TechnicalSkills
+        technicalSkills={
+          skills as unknown as Parameters<
+            typeof TechnicalSkills
+          >[0]["technicalSkills"]
+        }
+      />,
+    );
 
     expect(screen.getByText("React")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();

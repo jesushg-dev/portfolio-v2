@@ -45,8 +45,18 @@ describe("parsers", () => {
       const b = [{ id: "title", desc: true }];
       const c = [{ id: "title", desc: false }];
 
-      expect(parser.eq(a, b)).toBe(true);
-      expect(parser.eq(a, c)).toBe(false);
+      expect(
+        parser.eq(
+          a as unknown as Parameters<typeof parser.eq>[0],
+          b as unknown as Parameters<typeof parser.eq>[0],
+        ),
+      ).toBe(true);
+      expect(
+        parser.eq(
+          a as unknown as Parameters<typeof parser.eq>[0],
+          c as unknown as Parameters<typeof parser.eq>[0],
+        ),
+      ).toBe(false);
     });
   });
 
@@ -127,8 +137,18 @@ describe("parsers", () => {
         },
       ];
 
-      expect(parser.eq(f1, f2)).toBe(true);
-      expect(parser.eq(f1, f3)).toBe(false);
+      expect(
+        parser.eq(
+          f1 as unknown as Parameters<typeof parser.eq>[0],
+          f2 as unknown as Parameters<typeof parser.eq>[0],
+        ),
+      ).toBe(true);
+      expect(
+        parser.eq(
+          f1 as unknown as Parameters<typeof parser.eq>[0],
+          f3 as unknown as Parameters<typeof parser.eq>[0],
+        ),
+      ).toBe(false);
     });
   });
 });

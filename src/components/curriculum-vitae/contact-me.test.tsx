@@ -4,7 +4,9 @@ import ContactMe from "./contact-me";
 
 describe("ContactMe", () => {
   it("renders null when contacts array is empty", () => {
-    const { container } = render(<ContactMe contacts={[]} locale="en" />);
+    const { container } = render(
+      <ContactMe contacts={[]} locale="en" defaultLocale="en" />,
+    );
     expect(container.firstChild).toBeNull();
   });
 
@@ -66,6 +68,7 @@ describe("ContactMe", () => {
           contacts as unknown as Parameters<typeof ContactMe>[0]["contacts"]
         }
         locale="en"
+        defaultLocale="en"
       />,
     );
 

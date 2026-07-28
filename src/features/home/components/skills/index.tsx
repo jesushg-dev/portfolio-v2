@@ -21,10 +21,13 @@ async function Skills() {
 
   return (
     <div className="bg-background relative overflow-hidden">
-      <article className="relative mx-auto px-4 pb-10 lg:container lg:px-20 lg:pb-16">
+      <section
+        id="skills"
+        className="relative mx-auto px-4 pb-10 lg:container lg:px-20 lg:pb-16"
+      >
         <DeferredBgParticles />
         <SkillsTerminal initialSkills={skillsData.data} />
-      </article>
+      </section>
     </div>
   );
 }

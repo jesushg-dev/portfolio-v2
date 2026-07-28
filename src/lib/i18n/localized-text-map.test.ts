@@ -7,8 +7,8 @@ import {
 import type { LanguageRef } from "./editor-rows";
 
 const languages: LanguageRef[] = [
-  { id: "lang-en", code: "en", isDefault: true },
-  { id: "lang-es", code: "es", isDefault: false },
+  { id: "lang-en", code: "en" },
+  { id: "lang-es", code: "es" },
 ];
 
 describe("localized-text-map", () => {

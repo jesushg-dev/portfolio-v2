@@ -121,7 +121,7 @@ jest.mock("@/trpc/react", () => ({
 
 describe("TimelineList", () => {
   const defaultProps = {
-    initialTimeline: [],
+    initialItems: [],
     languages: [
       {
         id: "l1",
