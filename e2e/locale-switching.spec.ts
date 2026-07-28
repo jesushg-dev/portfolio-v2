@@ -27,7 +27,7 @@ test.describe("public locale switching", () => {
   test("skills backend tab shows stack technologies", async ({ page }) => {
     await page.goto("/");
     await page.locator("#skills").scrollIntoViewIfNeeded();
-    await page.getByRole("button", { name: "Backend", exact: true }).click();
+    await page.getByRole("button", { name: /Backend/i }).click();
     await expect(page.getByText("C#", { exact: true })).toBeVisible();
     await expect(
       page.getByText("Node.js", { exact: true }).first(),

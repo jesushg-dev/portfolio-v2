@@ -11,12 +11,14 @@ import {
 
 test.setTimeout(60 * 60 * 1000);
 
+import { getWorkerAuthFile } from "./helpers/auth-state";
+
 test.describe.configure({ mode: "serial" });
 
 test.describe("certifications create", () => {
   test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext({
-      storageState: "e2e/.auth/user.json",
+      storageState: getWorkerAuthFile(),
     });
     const page = await context.newPage();
     await cleanupUserCertifications(page);

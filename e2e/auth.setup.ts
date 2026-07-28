@@ -1,24 +1,42 @@
 import { test as setup, expect } from "@playwright/test";
 
-import { ensureOwnerAccount } from "./helpers/fill-register-form";
+import {
+  buildRegisterOwnerInput,
+  ensureOwnerAccount,
+} from "./helpers/fill-register-form";
 import {
   disconnectE2ePrisma,
   ensureAppLanguages,
 } from "./helpers/ensure-app-languages";
 
-const authFile = "e2e/.auth/user.json";
-
-setup("authenticate", async ({ page }) => {
+setup("authenticate workers", async ({ browser }) => {
+  setup.setTimeout(120_000);
   await ensureAppLanguages();
-  await ensureOwnerAccount(page);
 
-  await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 60_000 });
-  await expect(
-    page.getByRole("heading", {
-      name: /Welcome to your Portfolio Admin|Bienvenido a tu administrador de portafolio|Welkom in je Portfolio Admin/,
-    }),
-  ).toBeVisible();
+  const maxWorkers = Number.parseInt(
+    process.env.E2E_WORKERS ?? (process.env.CI ? "2" : "4"),
+    10,
+  );
 
-  await page.context().storageState({ path: authFile });
+  for (let i = 0; i < maxWorkers; i++) {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+
+    const input = buildRegisterOwnerInput(i);
+    await ensureOwnerAccount(page, input);
+
+    await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 60_000 });
+    await expect(page.locator("h1").first()).toBeVisible({ timeout: 30_000 });
+
+    const workerAuthFile = `e2e/.auth/user-worker-${i}.json`;
+    await page.context().storageState({ path: workerAuthFile });
+
+    if (i === 0) {
+      await page.context().storageState({ path: "e2e/.auth/user.json" });
+    }
+
+    await context.close();
+  }
+
   await disconnectE2ePrisma();
 });

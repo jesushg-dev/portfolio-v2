@@ -61,13 +61,31 @@ async function assertAuthMutationSucceeded(
   }
 }
 
-export function buildRegisterOwnerInput(): RegisterOwnerInput {
+export function buildRegisterOwnerInput(workerIndex = 0): RegisterOwnerInput {
   const { email, password } = requireE2eCredentials();
 
+  if (workerIndex === 0) {
+    return {
+      name: portfolioProfile.name,
+      username: portfolioProfile.username,
+      email,
+      password,
+    };
+  }
+
+  const atIndex = email.lastIndexOf("@");
+  const workerEmail =
+    atIndex !== -1
+      ? `${email.slice(0, atIndex)}-worker-${workerIndex}${email.slice(atIndex)}`
+      : `${email}-worker-${workerIndex}`;
+
+  const workerUsername = `${portfolioProfile.username}-w${workerIndex}`;
+  const workerName = `${portfolioProfile.name} (Worker ${workerIndex})`;
+
   return {
-    name: portfolioProfile.name,
-    username: portfolioProfile.username,
-    email,
+    name: workerName,
+    username: workerUsername,
+    email: workerEmail,
     password,
   };
 }
@@ -78,6 +96,10 @@ export async function signInOwner(
   password: string,
 ): Promise<boolean> {
   await page.goto("/login");
+  if (ADMIN_URL.test(page.url())) {
+    return true;
+  }
+
   await expect(
     page.getByRole("heading", { name: "Welcome back!" }),
   ).toBeVisible({ timeout: 15_000 });
@@ -116,9 +138,12 @@ export async function fillRegisterOwnerForm(
   input: RegisterOwnerInput = buildRegisterOwnerInput(),
 ): Promise<void> {
   await page.goto("/register?next=/admin");
+  if (ADMIN_URL.test(page.url())) {
+    return;
+  }
   await expect(
     page.getByRole("heading", {
-      name: /Create your portfolio|Crea tu portafolio|Maak je portfolio/i,
+      name: /Create your portfolio|Crea tu portafolio|Maak je portfolio|Build your CV|Construye tu CV|Bouw je CV/i,
     }),
   ).toBeVisible({ timeout: 15_000 });
 
@@ -127,31 +152,43 @@ export async function fillRegisterOwnerForm(
   await page.locator("#register-email").fill(input.email);
   await page.locator("#register-password").fill(input.password);
 
-  const signUpResponse = page.waitForResponse(
+  const signUpResponsePromise = page.waitForResponse(
     (response) =>
       response.url().includes("/api/auth/sign-up/email") &&
       response.request().method() === "POST",
     { timeout: 30_000 },
   );
-  const profileResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/trpc/cv.upsertProfile") &&
-      response.request().method() === "POST",
-    { timeout: 30_000 },
-  );
 
   await page.locator("#register-form-submit").click();
-  await assertAuthMutationSucceeded(await signUpResponse, "sign-up");
-  await assertAuthMutationSucceeded(await profileResponse, "upsertProfile");
+
+  try {
+    const signUpResponse = await signUpResponsePromise;
+    await assertAuthMutationSucceeded(signUpResponse, "sign-up");
+
+    const profileResponse = await page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/trpc/cv.upsertProfile") &&
+        response.request().method() === "POST",
+      { timeout: 30_000 },
+    );
+    await assertAuthMutationSucceeded(profileResponse, "upsertProfile");
+  } catch (error) {
+    const signedIn = await signInOwner(page, input.email, input.password).catch(
+      () => false,
+    );
+    if (signedIn) return;
+    throw error;
+  }
 
   await expect(page).toHaveURL(ADMIN_URL, { timeout: 60_000 });
 }
 
-export async function ensureOwnerAccount(page: Page): Promise<void> {
-  const { email, password } = requireE2eCredentials();
-
+export async function ensureOwnerAccount(
+  page: Page,
+  input: RegisterOwnerInput = buildRegisterOwnerInput(),
+): Promise<void> {
   try {
-    const signedIn = await signInOwner(page, email, password);
+    const signedIn = await signInOwner(page, input.email, input.password);
     if (signedIn) return;
   } catch (error) {
     if (
@@ -162,7 +199,7 @@ export async function ensureOwnerAccount(page: Page): Promise<void> {
     }
   }
 
-  await fillRegisterOwnerForm(page, buildRegisterOwnerInput());
+  await fillRegisterOwnerForm(page, input);
 }
 
 export { portfolioProfile };

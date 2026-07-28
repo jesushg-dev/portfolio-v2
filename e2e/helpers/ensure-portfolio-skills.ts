@@ -54,15 +54,25 @@ function buildSkillCreateInput(
   skill: PortfolioSkillFixture,
   langIds: Record<"es" | "en" | "nl", string>,
 ) {
+  const translations: Record<
+    string,
+    { description: string; urlWiki: string }
+  > = {};
+  for (const tr of skill.translations) {
+    const langId = langIds[tr.locale];
+    if (langId) {
+      translations[langId] = {
+        description: tr.description,
+        urlWiki: tr.urlWiki ?? "",
+      };
+    }
+  }
+
   return {
     title: skill.title,
     image: skill.image,
     type: skill.type,
-    translations: skill.translations.map((translation) => ({
-      appLanguageId: langIds[translation.locale],
-      description: translation.description,
-      urlWiki: translation.urlWiki,
-    })),
+    translations,
   };
 }
 

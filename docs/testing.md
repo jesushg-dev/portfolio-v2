@@ -262,7 +262,7 @@ End-to-end tests live in `e2e/` and use Playwright. Locally, Playwright starts `
 | `pnpm test:e2e:soft-skills:ui`        | Playwright UI mode for the soft skills project                                                                                              |
 | `pnpm test:e2e:ui`                    | Playwright UI for all projects                                                                                                              |
 
-Auth session is saved to `e2e/.auth/user.json` by `e2e/auth.setup.ts` (gitignored).
+Auth sessions are saved to `e2e/.auth/user-worker-{index}.json` (and fallback `e2e/.auth/user.json`) by `e2e/auth.setup.ts` (gitignored), allowing parallel multi-tenant worker isolation.
 
 ### Skills fixture
 

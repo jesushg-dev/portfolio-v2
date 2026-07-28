@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { getWorkerAuthFile } from "./helpers/auth-state";
 
 import { portfolioTimeline } from "./fixtures/portfolio-timeline";
 import {
@@ -16,7 +17,7 @@ test.describe.configure({ mode: "serial" });
 test.describe("timeline create", () => {
   test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext({
-      storageState: "e2e/.auth/user.json",
+      storageState: getWorkerAuthFile(),
     });
     const page = await context.newPage();
     await cleanupUserTimeline(page);

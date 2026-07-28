@@ -45,7 +45,7 @@ function resolveVercelBypassHeaders(): Record<string, string> | undefined {
 }
 
 export const e2eEnv = {
-  baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",
+  baseURL: process.env.E2E_BASE_URL ?? "http://127.0.0.1:3000",
   ownerEmail: process.env.OWNER_USER_EMAIL,
   ownerPassword: process.env.OWNER_USER_PASSWORD,
   vercelBypassHeaders: resolveVercelBypassHeaders(),

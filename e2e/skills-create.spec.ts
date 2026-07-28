@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { getWorkerAuthFile } from "./helpers/auth-state";
 
 import {
   cleanupUserSkills,
@@ -21,7 +22,7 @@ test.describe("skills create", () => {
     await ensureAppLanguages();
 
     const context = await browser.newContext({
-      storageState: "e2e/.auth/user.json",
+      storageState: getWorkerAuthFile(),
     });
     const page = await context.newPage();
     await cleanupUserSkills(page);

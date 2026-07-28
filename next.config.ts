@@ -35,7 +35,13 @@ const emailTemplatesDevAssets = [
 ];
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["lvh.me", "*.lvh.me"],
+  allowedDevOrigins: [
+    "127.0.0.1",
+    "localhost",
+    "*.localhost",
+    "lvh.me",
+    "*.lvh.me",
+  ],
   serverExternalPackages: [
     "jszip",
     "playwright-core",

@@ -75,10 +75,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
   );
 
   return (
-    <div
-      id="skills"
-      className="relative z-10 mx-auto max-w-[980px] py-16 lg:py-20"
-    >
+    <div className="relative z-10 mx-auto max-w-[980px] py-16 lg:py-20">
       <header
         className={cn(
           "mb-9 max-w-[620px]",

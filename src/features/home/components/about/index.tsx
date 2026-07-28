@@ -41,10 +41,7 @@ const About: FC = async () => {
 
   return (
     <div className="overflow-hidden">
-      <section
-        id="about"
-        className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20"
-      >
+      <section className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20">
         <HeaderArticle title={t("title")} description="" subtitle="" />
         <article
           className={

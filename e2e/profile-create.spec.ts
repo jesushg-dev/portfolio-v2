@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { getWorkerAuthFile } from "./helpers/auth-state";
 
 import { portfolioCv } from "./fixtures/portfolio-cv";
 import {
@@ -17,7 +18,7 @@ test.describe.configure({ mode: "serial" });
 test.describe("profile create", () => {
   test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext({
-      storageState: "e2e/.auth/user.json",
+      storageState: getWorkerAuthFile(),
     });
     const page = await context.newPage();
     await cleanupUserProfile(page);

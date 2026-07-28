@@ -31,11 +31,7 @@ function SkillsFallback() {
 
 function PortfolioFallback() {
   return (
-    <section
-      id="projects"
-      aria-hidden
-      className="mx-auto px-4 py-16 lg:container lg:px-20"
-    >
+    <section aria-hidden className="mx-auto px-4 py-16 lg:container lg:px-20">
       <Skeleton className="mb-8 h-10 w-64" />
       <PortfolioGridSkeleton count={3} />
     </section>
@@ -124,31 +120,59 @@ export default async function Home() {
     <>
       <Hero stats={stats} />
 
-      <ViewportSection fallback={<AboutFallback />} minHeight="36rem">
+      <ViewportSection
+        id="about"
+        fallback={<AboutFallback />}
+        minHeight="36rem"
+      >
         <About />
       </ViewportSection>
 
-      <ViewportSection fallback={<ExperienceFallback />} minHeight="28rem">
+      <ViewportSection
+        id="experience"
+        fallback={<ExperienceFallback />}
+        minHeight="28rem"
+      >
         <Experience />
       </ViewportSection>
 
-      <ViewportSection fallback={<SkillsFallback />} minHeight="32rem">
+      <ViewportSection
+        id="skills"
+        fallback={<SkillsFallback />}
+        minHeight="32rem"
+      >
         <Skills />
       </ViewportSection>
 
-      <ViewportSection fallback={<SoftSkillsFallback />} minHeight="28rem">
+      <ViewportSection
+        id="soft-skills"
+        fallback={<SoftSkillsFallback />}
+        minHeight="28rem"
+      >
         <SoftSkills />
       </ViewportSection>
 
-      <ViewportSection fallback={<PortfolioFallback />} minHeight="36rem">
+      <ViewportSection
+        id="projects"
+        fallback={<PortfolioFallback />}
+        minHeight="36rem"
+      >
         <Portfolio />
       </ViewportSection>
 
-      <ViewportSection fallback={<SocialProofFallback />} minHeight="32rem">
+      <ViewportSection
+        id="social-proof"
+        fallback={<SocialProofFallback />}
+        minHeight="32rem"
+      >
         <SocialProof stats={stats} testimonials={testimonials} />
       </ViewportSection>
 
-      <ViewportSection fallback={<ContactFallback />} minHeight="28rem">
+      <ViewportSection
+        id="contact"
+        fallback={<ContactFallback />}
+        minHeight="28rem"
+      >
         <Contact />
       </ViewportSection>
     </>

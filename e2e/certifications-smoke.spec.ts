@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { getWorkerAuthFile } from "./helpers/auth-state";
 
 import { ensurePortfolioSkills } from "./helpers/ensure-portfolio-skills";
 import {
@@ -13,7 +14,7 @@ test.describe("certifications smoke", () => {
 
   test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext({
-      storageState: "e2e/.auth/user.json",
+      storageState: getWorkerAuthFile(),
     });
     const page = await context.newPage();
     await cleanupUserCertifications(page);

@@ -1,8 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 import { e2eEnv } from "./e2e/env";
-
-const authFile = "e2e/.auth/user.json";
+import { getWorkerAuthFile } from "./e2e/helpers/auth-state";
 
 const isLocalTarget =
   e2eEnv.baseURL.startsWith("http://localhost") ||
@@ -12,12 +11,12 @@ const webServer = isLocalTarget
   ? process.env.CI
     ? {
         command: "pnpm build && pnpm start",
-        url: "http://localhost:3000",
+        url: "http://127.0.0.1:3000",
         timeout: 180_000,
       }
     : {
         command: "pnpm dev",
-        url: "http://localhost:3000",
+        url: "http://127.0.0.1:3000",
         reuseExistingServer: true,
         timeout: 120_000,
       }
@@ -25,10 +24,14 @@ const webServer = isLocalTarget
 
 export default defineConfig({
   testDir: "e2e",
-  fullyParallel: false,
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 1,
+  workers: process.env.E2E_WORKERS
+    ? Number.parseInt(process.env.E2E_WORKERS, 10)
+    : process.env.CI
+      ? 2
+      : 4,
   reporter: process.env.CI ? "github" : "list",
   timeout: 60_000,
   expect: {
@@ -51,113 +54,106 @@ export default defineConfig({
     },
     {
       name: "login",
-      testMatch: /login\.spec\.ts/,
+      testMatch: "**/login.spec.ts",
+      dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
       },
     },
     {
       name: "public-locale",
-      testMatch: /locale-switching\.spec\.ts/,
-      use: {
-        ...devices["Desktop Chrome"],
-      },
-    },
-    {
-      name: "smoke",
-      testMatch:
-        /(dashboard|register-smoke|skills-smoke|projects-smoke|certifications-smoke|cv-smoke|profile-smoke|timeline-smoke|soft-skills-smoke|locale-switching)\.spec\.ts/,
+      testMatch: "**/locale-switching.spec.ts",
       dependencies: ["setup"],
-      use: {
-        ...devices["Desktop Chrome"],
-        storageState: authFile,
-      },
-    },
-    {
-      name: "register",
-      testMatch: /register-create\.spec\.ts/,
-      timeout: 10 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
       },
     },
     {
       name: "skills",
-      testMatch: "**/skills-create.spec.ts",
+      testMatch: "**/skills-*.spec.ts",
       dependencies: ["setup"],
       timeout: 45 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: authFile,
+        storageState: getWorkerAuthFile(),
+      },
+    },
+    {
+      name: "services",
+      testMatch: "**/services-*.spec.ts",
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: getWorkerAuthFile(),
       },
     },
     {
       name: "projects",
-      testMatch: "**/projects-create.spec.ts",
+      testMatch: "**/projects-*.spec.ts",
       dependencies: ["setup"],
       timeout: 45 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: authFile,
+        storageState: getWorkerAuthFile(),
       },
     },
     {
       name: "certifications",
-      testMatch: "**/certifications-create.spec.ts",
+      testMatch: "**/certifications-*.spec.ts",
       dependencies: ["setup"],
       timeout: 60 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: authFile,
+        storageState: getWorkerAuthFile(),
       },
     },
     {
       name: "profile",
-      testMatch: "**/profile-create.spec.ts",
+      testMatch: "**/profile-*.spec.ts",
       dependencies: ["setup"],
       timeout: 30 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: authFile,
+        storageState: getWorkerAuthFile(),
       },
     },
     {
       name: "timeline",
-      testMatch: "**/timeline-create.spec.ts",
+      testMatch: "**/timeline-*.spec.ts",
       dependencies: ["setup"],
       timeout: 45 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: authFile,
+        storageState: getWorkerAuthFile(),
       },
     },
     {
       name: "soft-skills",
-      testMatch: "**/soft-skills-create.spec.ts",
+      testMatch: "**/soft-skills-*.spec.ts",
       dependencies: ["setup"],
       timeout: 30 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: authFile,
+        storageState: getWorkerAuthFile(),
       },
     },
     {
       name: "cv",
-      testMatch: "**/cv-create.spec.ts",
+      testMatch: "**/cv-*.spec.ts",
       dependencies: ["setup"],
       timeout: 60 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: authFile,
+        storageState: getWorkerAuthFile(),
       },
     },
     {
-      name: "pagination",
-      testMatch: "**/*-pagination.spec.ts",
+      name: "jobs",
+      testMatch: "**/job-*.spec.ts",
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: authFile,
+        storageState: getWorkerAuthFile(),
       },
     },
   ],

@@ -25,14 +25,11 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:e2e": "playwright test --project=login --project=public-locale --project=smoke",
+    "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug",
-    "test:e2e:report": "playwright show-report",
-    "test:e2e:full": "playwright test --project=register --project=setup --project=skills --project=projects --project=certifications --project=profile --project=timeline --project=soft-skills --project=cv",
-    "test:e2e:full:ui": "playwright test --project=register --project=setup --project=skills --project=projects --project=certifications --project=profile --project=timeline --project=soft-skills --project=cv --ui",
-    "test:e2e:full:headed": "playwright test --project=register --project=setup --project=skills --project=projects --project=certifications --project=profile --project=timeline --project=soft-skills --project=cv --headed"
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
