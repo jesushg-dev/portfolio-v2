@@ -149,11 +149,37 @@ export default defineConfig({
     },
     {
       name: "jobs",
-      testMatch: "**/job-*.spec.ts",
+      testMatch: "**/job*.spec.ts",
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
         storageState: getWorkerAuthFile(),
+      },
+    },
+    {
+      name: "credentials",
+      testMatch: "**/credentials.spec.ts",
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: getWorkerAuthFile(),
+      },
+    },
+    {
+      name: "dashboard",
+      testMatch: "**/dashboard.spec.ts",
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: getWorkerAuthFile(),
+      },
+    },
+    {
+      name: "register",
+      testMatch: "**/register-*.spec.ts",
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Chrome"],
       },
     },
   ],
