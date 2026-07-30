@@ -1,13 +1,15 @@
 "use client";
 
-import type { FC } from "react";
+import { useState, type FC } from "react";
 
 import Image from "next/image";
 import { AiFillGithub, AiFillEye } from "react-icons/ai";
+import { FolderCode } from "lucide-react";
 
 import { Link } from "@/i18n/routing";
-import { cloudinaryLoader, siLoader } from "@/utils/tools/image";
+import { cloudinaryLoader } from "@/utils/tools/image";
 import { type ProjectType } from "@/utils/interfaces/types";
+import SkillIcon from "@/features/home/components/skills/skill-icon";
 
 interface IPortfolioItemProps extends ProjectType {
   urlName: string;
@@ -42,21 +44,35 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   caseStudyLabel,
   kindLabels,
 }) => {
+  const [imageFailed, setImageFailed] = useState(false);
   const showGithub = !isPrivate && Boolean(githubUrl);
   const cardDescription = hook ?? description;
   const kindLabel = kind ? kindLabels[kind] : undefined;
+  const showImageFallback = imageFailed || !image?.trim();
 
   return (
     <article className="group/card bg-background-50 border-primary-100/60 mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-xl border shadow-sm transition-shadow duration-300 hover:shadow-lg">
       <div className="relative aspect-video overflow-hidden">
-        <Image
-          src={image}
-          loader={cloudinaryLoader}
-          alt={title}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 ease-out group-hover/card:scale-[1.03]"
-        />
+        {showImageFallback ? (
+          <div className="from-primary-500/15 via-background-100 to-primary-700/10 flex h-full w-full items-center justify-center bg-gradient-to-br p-4">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <FolderCode className="text-primary-600/70 h-10 w-10" />
+              <span className="text-primaryText-500 text-xs font-semibold tracking-wider uppercase">
+                {title}
+              </span>
+            </div>
+          </div>
+        ) : (
+          <Image
+            src={image}
+            loader={cloudinaryLoader}
+            alt={title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 ease-out group-hover/card:scale-[1.03]"
+            onError={() => setImageFailed(true)}
+          />
+        )}
 
         {kindLabel ? (
           <span className="bg-background/90 text-foreground absolute top-3 left-3 z-10 rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase shadow-md">
@@ -121,12 +137,9 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                 key={skill.title}
                 className="bg-background-100/80 border-primary-100/80 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1"
               >
-                <Image
-                  src={skill.image}
-                  loader={siLoader}
-                  alt=""
-                  width={14}
-                  height={14}
+                <SkillIcon
+                  image={skill.image}
+                  title={skill.title}
                   className="h-3.5 w-3.5"
                 />
                 <span className="text-primaryText-700 text-[11px] font-medium capitalize">

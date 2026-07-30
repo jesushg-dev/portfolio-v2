@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ArrowRight, ExternalLink, Square } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { AiFillGithub } from "react-icons/ai";
@@ -6,6 +5,8 @@ import { AiFillGithub } from "react-icons/ai";
 import CaseStudyReveal from "@/features/home/components/projects/case-study-reveal";
 import { Link } from "@/i18n/routing";
 import { buildCloudinaryUrl, resolveSkillImageUrl } from "@/utils/tools/image";
+import ProjectCoverImage from "./project-cover-image";
+import SkillIcon from "@/features/home/components/skills/skill-icon";
 
 interface ProjectCaseStudyViewProps {
   project: {
@@ -242,13 +243,14 @@ export default async function ProjectCaseStudyView({
         </div>
 
         <div className="case-study-load-img border-border relative mt-10 aspect-[21/9] overflow-hidden rounded-2xl border">
-          <Image
+          <ProjectCoverImage
             src={heroImageUrl}
             alt={project.title}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 1152px"
             priority
+            fallbackTitle={project.title}
           />
           <div className="hero-bg absolute inset-0 opacity-80 mix-blend-multiply" />
           <div className="case-study-grain absolute inset-0 opacity-20" />
@@ -332,12 +334,13 @@ export default async function ProjectCaseStudyView({
 
           <div className="absolute inset-0 flex items-center justify-center p-6">
             <div className="case-study-mockup-card border-border/60 relative aspect-video w-full max-w-3xl overflow-hidden rounded-2xl border shadow-2xl">
-              <Image
+              <ProjectCoverImage
                 src={coverImageUrl}
                 alt={project.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 90vw, 768px"
+                fallbackTitle={project.title}
               />
             </div>
           </div>
@@ -362,12 +365,10 @@ export default async function ProjectCaseStudyView({
                         key={skill.title}
                         className="case-study-mockup-card bg-card flex aspect-[9/18] flex-col items-center rounded-xl p-3 shadow-xl"
                       >
-                        <Image
-                          src={resolveSkillImageUrl(skill.image)}
-                          alt=""
-                          width={28}
-                          height={28}
-                          className="mt-4 mb-3 h-7 w-7 object-contain"
+                        <SkillIcon
+                          image={resolveSkillImageUrl(skill.image)}
+                          title={skill.title}
+                          className="mt-4 mb-3 h-7 w-7"
                         />
                         <p className="text-muted-foreground text-center text-[10px] leading-tight font-semibold">
                           {skill.title}
