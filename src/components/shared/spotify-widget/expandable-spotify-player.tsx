@@ -212,7 +212,10 @@ const ExpandableSpotifyPlayerContent: FC = () => {
                 height={88}
                 className="size-22 rounded-lg object-cover shadow-lg"
               />
-              {playback.isPlaying && <PlayingIndicator color={accentColor} />}
+              <PlayingIndicator
+                color={accentColor}
+                isPlaying={playback.isPlaying}
+              />
             </div>
           </ActionHint>
 

@@ -114,8 +114,8 @@ export function mapEpisodeNowPlaying(
 export function mapRecentlyPlayed(
   data: RecentlyPlayedResponse,
 ): SpotifyPlayback | null {
-  const history = data.items[0];
-  if (!history || history.track.explicit) return null;
+  const history = data.items.find((item) => item.track && !item.track.explicit);
+  if (!history) return null;
 
   const artists = resolveDisplayArtists(history.track);
 
@@ -175,14 +175,16 @@ export function isActiveEpisodePlayback(data: NowPlayingResponse): boolean {
 }
 
 export function isExplicitActivePlayback(data: NowPlayingResponse): boolean {
-  if (!data.is_playing) return false;
-
   if (data.currently_playing_type === "track") {
-    return data.item !== null && isTrack(data.item) && data.item.explicit;
+    return (
+      data.item !== null && isTrack(data.item) && Boolean(data.item.explicit)
+    );
   }
 
   if (data.currently_playing_type === "episode") {
-    return data.item !== null && isEpisode(data.item) && data.item.explicit;
+    return (
+      data.item !== null && isEpisode(data.item) && Boolean(data.item.explicit)
+    );
   }
 
   return false;

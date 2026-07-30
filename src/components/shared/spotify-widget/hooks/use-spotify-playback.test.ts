@@ -157,7 +157,7 @@ describe("useSpotifyPlayback", () => {
     expect(result.current.playback?.subtitle).toBe("Syntax FM");
   });
 
-  it("uses recently played when playback is idle", async () => {
+  it("resolves paused track from now playing when playback is paused", async () => {
     mockNowPlayingQuery.mockReturnValue(mockQueryResult(mockNowPlayingIdle));
     mockRecentlyPlayedQuery.mockReturnValue(
       mockQueryResult(mockRecentlyPlayed),
@@ -166,9 +166,9 @@ describe("useSpotifyPlayback", () => {
     const { result } = renderHook(() => useSpotifyPlayback());
 
     await waitFor(() => {
-      expect(result.current.playback?.source).toBe("recently_played");
+      expect(result.current.playback?.source).toBe("now_playing");
     });
-    expect(result.current.playback?.playedAt).toBe("2024-01-15T10:30:00.000Z");
+    expect(result.current.playback?.isPlaying).toBe(false);
   });
 
   it("uses recently played when now playing returns 204", async () => {
@@ -336,7 +336,7 @@ describe("useSpotifyPlayback", () => {
 
   it("does not fall back to recently played while now playing is refetching", () => {
     mockNowPlayingQuery.mockReturnValue(
-      mockQueryResult(mockNowPlayingIdle, { isFetching: true }),
+      mockQueryResult(undefined, { isFetching: true, isLoading: true }),
     );
     mockRecentlyPlayedQuery.mockReturnValue(
       mockQueryResult(mockRecentlyPlayed),

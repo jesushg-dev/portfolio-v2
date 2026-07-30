@@ -193,13 +193,13 @@ export function ActionHint({
                   }
                   style={{ transformOrigin: "bottom center" }}
                   className={cn(
-                    "bg-popover/95 text-popover-foreground border-border pointer-events-auto relative flex max-w-[min(22rem,calc(100vw-2rem))] items-center gap-2.5 rounded-xl border py-2.5 pr-10 pl-3.5 text-xs sm:text-sm leading-snug shadow-xl backdrop-blur-md",
+                    "bg-popover/95 text-popover-foreground border-border pointer-events-auto relative flex max-w-[min(22rem,calc(100vw-2rem))] items-center gap-2.5 rounded-xl border py-2.5 pr-10 pl-3.5 text-xs leading-snug shadow-xl backdrop-blur-md sm:text-sm",
                     bubbleClassName,
                   )}
                 >
                   {icon ?? (
                     <InfoIcon
-                      className="text-primary size-4.5 sm:size-4 shrink-0"
+                      className="text-primary size-4.5 shrink-0 sm:size-4"
                       strokeWidth={1.75}
                       aria-hidden
                     />
@@ -212,11 +212,11 @@ export function ActionHint({
                       event.stopPropagation();
                       dismiss();
                     }}
-                    className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute right-1.5 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded-lg transition-colors sm:size-6 focus-visible:outline-none focus-visible:ring-1"
+                    className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-1.5 flex size-7 -translate-y-1/2 items-center justify-center rounded-lg transition-colors focus-visible:ring-1 focus-visible:outline-none sm:size-6"
                   >
                     <XIcon className="size-4.5 sm:size-3.5" strokeWidth={2} />
                   </button>
-                  <span className="bg-popover border-border absolute top-full left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border-b border-r" />
+                  <span className="bg-popover border-border absolute top-full left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border-r border-b" />
                 </motion.div>
               </div>
             )}

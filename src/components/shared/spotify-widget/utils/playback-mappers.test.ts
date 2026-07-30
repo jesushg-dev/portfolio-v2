@@ -118,8 +118,17 @@ describe("mapRecentlyPlayed", () => {
     });
   });
 
-  it("returns null for explicit tracks", () => {
+  it("returns null for explicit tracks when all items are explicit", () => {
     expect(mapRecentlyPlayed(mockRecentlyPlayedExplicit)).toBeNull();
+  });
+
+  it("skips explicit items and maps the first non-explicit track in history", () => {
+    const historyWithExplicitFirst = {
+      ...mockRecentlyPlayed,
+      items: [...mockRecentlyPlayedExplicit.items, ...mockRecentlyPlayed.items],
+    };
+    const playback = mapRecentlyPlayed(historyWithExplicitFirst);
+    expect(playback?.contentId).toBe("track-1");
   });
 
   it("returns null when history is empty", () => {
