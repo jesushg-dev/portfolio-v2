@@ -3,20 +3,13 @@ import { getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
+import { Link } from "@/i18n/routing";
 
 import ContactForm from "./contact-form-lazy";
 import ContactIllustration from "./contact-illustration";
 import ContactItem from "./contact-item";
 import { buildContactLinks } from "@/utils/contact-links";
-
-function getCalendlyUrl(
-  contacts: Awaited<ReturnType<typeof api.contact.getPublic>>["contacts"],
-): string | null {
-  const calendly = contacts.find((contact) => contact.type === "CALENDLY");
-  if (!calendly?.value) return null;
-  const value = calendly.value.trim();
-  return /^https?:\/\//i.test(value) ? value : `https://${value}`;
-}
+import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 
 const Contact: FC = async () => {
   const t = await getTranslations("main.contact");
@@ -87,15 +80,13 @@ const Contact: FC = async () => {
               )}
 
               {calendlyUrl ? (
-                <a
-                  href={calendlyUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                <Link
+                  href={SCHEDULE_PATH}
                   aria-label={t("scheduleCallCalendlyAria")}
                   className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex w-fit rounded-md px-4 py-2 text-sm font-semibold transition-colors"
                 >
                   {t("scheduleCall")}
-                </a>
+                </Link>
               ) : null}
             </div>
 

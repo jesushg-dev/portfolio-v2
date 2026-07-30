@@ -644,7 +644,9 @@
         "subtitle": "Follow me on social media"
       },
       "scheduleCall": "Schedule a call",
-      "scheduleCallCalendlyAria": "Schedule a call on Calendly (opens in new tab)",
+      "scheduleCallCalendlyAria": "Schedule a call — opens scheduling calendar",
+      "schedulePageTitle": "Schedule a call",
+      "schedulePageBack": "Back to home",
       "channels": {
         "email": "Send email",
         "phone": "Call phone number",

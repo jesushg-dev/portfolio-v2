@@ -13,20 +13,29 @@ function isSkillInterceptRoute(pathname: string): boolean {
   return pathname.startsWith("/skills/");
 }
 
+function isHomeLandingRoute(pathname: string): boolean {
+  return pathname === "/";
+}
+
+function needsImmediateTrpc(pathname: string): boolean {
+  return isSkillInterceptRoute(pathname) || !isHomeLandingRoute(pathname);
+}
+
 /**
  * Defers tRPC on the home landing until first interaction so Hero/LCP stays lean.
- * Skill intercept modals (`@modal/(...)skills`) mount tRPC hooks immediately on `/skills/*`.
+ * Other routes under `(home)` (e.g. `/schedule`) mount the footer Spotify widget
+ * immediately and need tRPC on first paint. Skill intercept modals also need tRPC right away.
  */
 export default function DeferredTrpcProvider({
   children,
 }: DeferredTrpcProviderProps) {
   const pathname = usePathname();
-  const needsImmediateTrpc = isSkillInterceptRoute(pathname);
+  const needsTrpcNow = needsImmediateTrpc(pathname);
   const [deferredReady, setDeferredReady] = useState(false);
-  const isReady = needsImmediateTrpc || deferredReady;
+  const isReady = needsTrpcNow || deferredReady;
 
   useEffect(() => {
-    if (needsImmediateTrpc) {
+    if (needsTrpcNow) {
       return;
     }
 
@@ -41,7 +50,7 @@ export default function DeferredTrpcProvider({
       window.removeEventListener("pointerdown", enable);
       window.removeEventListener("keydown", enable);
     };
-  }, [needsImmediateTrpc]);
+  }, [needsTrpcNow]);
 
   if (!isReady) {
     return children;

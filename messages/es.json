@@ -644,7 +644,9 @@
         "subtitle": "Sígueme en mis redes sociales"
       },
       "scheduleCall": "Agendar una llamada",
-      "scheduleCallCalendlyAria": "Agendar una llamada en Calendly (se abre en una pestaña nueva)",
+      "scheduleCallCalendlyAria": "Agendar una llamada — abre el calendario de reservas",
+      "schedulePageTitle": "Agendar una llamada",
+      "schedulePageBack": "Volver al inicio",
       "channels": {
         "email": "Enviar correo electrónico",
         "phone": "Llamar por teléfono",

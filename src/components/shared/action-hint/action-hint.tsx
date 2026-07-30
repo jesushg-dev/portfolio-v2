@@ -12,6 +12,9 @@ import { InfoIcon, XIcon } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
+import { useBodyOverlayLocked } from "@/hooks/use-body-overlay-lock";
+import { usePathname } from "@/i18n/routing";
+import { isSchedulePath } from "@/utils/calendly-url";
 
 export const ACTION_HINT_STORAGE_KEY = "action-hint-seen";
 export const NOW_PLAYING_HINT_STORAGE_KEY = ACTION_HINT_STORAGE_KEY;
@@ -79,6 +82,8 @@ export function ActionHint({
     null,
   );
   const reduceMotion = useReducedMotion();
+  const pathname = usePathname();
+  const overlayLocked = useBodyOverlayLocked();
   const isMounted = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -100,7 +105,12 @@ export function ActionHint({
     return () => window.clearTimeout(timer);
   }, [delay, dismissed]);
 
-  const showHint = visible && !dismissed && !hidden;
+  const showHint =
+    visible &&
+    !dismissed &&
+    !hidden &&
+    !overlayLocked &&
+    !isSchedulePath(pathname);
 
   useEffect(() => {
     if (!showHint || !anchorRef.current) {

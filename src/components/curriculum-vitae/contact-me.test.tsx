@@ -2,6 +2,12 @@ import { render, screen } from "@testing-library/react";
 import React from "react";
 import ContactMe from "./contact-me";
 
+jest.mock("@/i18n/routing", () => ({
+  Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+}));
+
 describe("ContactMe", () => {
   it("renders null when contacts array is empty", () => {
     const { container } = render(
@@ -86,9 +92,10 @@ describe("ContactMe", () => {
     const calendlyLinks = screen.getAllByRole("link", {
       name: /calendly.com\/user/i,
     });
-    expect(calendlyLinks[0]).toHaveAttribute(
-      "href",
-      "https://calendly.com/user",
-    );
+    expect(calendlyLinks).toHaveLength(2);
+    for (const link of calendlyLinks) {
+      expect(link).toHaveAttribute("href", "/schedule");
+    }
+    expect(calendlyLinks[0]).not.toHaveAttribute("target");
   });
 });

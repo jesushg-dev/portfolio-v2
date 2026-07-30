@@ -18,6 +18,11 @@ export type Locale = (typeof locales)[number];
 
 export const pathnames = {
   "/": "/",
+  "/schedule": {
+    en: "/schedule",
+    es: "/agendar",
+    nl: "/plannen",
+  },
   "/about": {
     en: "/about",
     es: "/acerca",

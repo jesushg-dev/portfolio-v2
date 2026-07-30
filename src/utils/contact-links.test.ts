@@ -78,15 +78,13 @@ describe("buildContactLinks", () => {
     expect(links[0]?.icon).toBe("location");
   });
 
-  it("maps CALENDLY contact", () => {
+  it("ignores CALENDLY contacts in channel links", () => {
     const links = buildContactLinks([
       { type: "CALENDLY", value: "calendly.com/myuser", label: null },
+      { type: "EMAIL", value: "hello@example.com", label: null },
     ]);
-    expect(links[0]).toMatchObject({
-      href: "https://calendly.com/myuser",
-      label: "calendly",
-      icon: "calendly",
-    });
+    expect(links).toHaveLength(1);
+    expect(links[0]?.icon).toBe("email");
   });
 
   it("skips contacts with empty values", () => {

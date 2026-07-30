@@ -18,6 +18,7 @@ import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
 import { buildContactLinks } from "@/utils/contact-links";
 import type { ContactIconKey } from "@/utils/contact-links";
+import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
 
 const footerLinkClassName =
@@ -42,6 +43,7 @@ const Footer = async () => {
 
   const data = await api.contact.getPublic();
   const socialLinks = buildContactLinks(data.contacts);
+  const calendlyUrl = getCalendlyUrl(data.contacts);
 
   return (
     <footer className="bg-primary-800 text-primary-foreground relative z-10">
@@ -188,18 +190,23 @@ const Footer = async () => {
                   key={link.key}
                   href={link.href}
                   aria-label={t(`socialChannels.${link.icon}`)}
-                  target={link.href.startsWith("http") ? "_blank" : undefined}
-                  rel={
-                    link.href.startsWith("http")
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
                 >
                   <Icon className="size-4" />
                 </a>
               );
             })}
+            {calendlyUrl ? (
+              <Link
+                href={SCHEDULE_PATH}
+                aria-label={t("socialChannels.calendly")}
+                className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
+              >
+                <FaCalendarAlt className="size-4" />
+              </Link>
+            ) : null}
           </div>
         </div>
       </div>

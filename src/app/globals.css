@@ -1190,3 +1190,9 @@ video::-webkit-media-controls {
     Calibri, var(--font-cv-preview), "Segoe UI", "Helvetica Neue", Arial,
     sans-serif;
 }
+
+.calendly-inline-widget-dark,
+.calendly-inline-widget-dark iframe {
+  background: transparent !important;
+  color-scheme: dark;
+}

@@ -26,6 +26,7 @@ describe("useIOSDevice", () => {
     container.appendChild(element);
     document.body.appendChild(container);
 
+    container.scrollTo = jest.fn();
     const scrollToSpy = jest
       .spyOn(container, "scrollTo")
       .mockImplementation(() => undefined);

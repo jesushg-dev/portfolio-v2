@@ -644,7 +644,9 @@
         "subtitle": "Volg mij op mijn sociale netwerken"
       },
       "scheduleCall": "Plan een gesprek",
-      "scheduleCallCalendlyAria": "Plan een gesprek via Calendly (opent in een nieuw tabblad)",
+      "scheduleCallCalendlyAria": "Plan een gesprek — opent de planningskalender",
+      "schedulePageTitle": "Plan een gesprek",
+      "schedulePageBack": "Terug naar home",
       "channels": {
         "email": "E-mail sturen",
         "phone": "Bellen",

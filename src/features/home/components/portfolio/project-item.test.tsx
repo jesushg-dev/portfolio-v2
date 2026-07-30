@@ -5,7 +5,7 @@ import { renderWithIntl } from "@/test-utils/render-with-intl";
 
 import PortfolioItem from "./project-item";
 
-interface MockLinkProps extends ComponentPropsWithoutRef<"a"> {
+interface MockLinkProps extends Omit<ComponentPropsWithoutRef<"a">, "href"> {
   children?: ReactNode;
   href: string | { pathname?: string };
 }
@@ -38,7 +38,7 @@ describe("PortfolioItem", () => {
     privateDescription: "Private repo",
     caseStudyLabel: "Case Study",
     kindLabels: { PROFESSIONAL: "Professional" },
-  };
+  } as unknown as Parameters<typeof PortfolioItem>[0];
 
   it("renders title, description and skills", () => {
     renderWithIntl(<PortfolioItem {...defaultProps} />);

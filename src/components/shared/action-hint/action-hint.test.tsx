@@ -4,6 +4,10 @@ import { renderWithIntl } from "@/test-utils/render-with-intl";
 
 import { ActionHint } from "./action-hint";
 
+jest.mock("@/i18n/routing", () => ({
+  usePathname: () => "/",
+}));
+
 describe("ActionHint", () => {
   beforeEach(() => {
     window.localStorage.clear();
