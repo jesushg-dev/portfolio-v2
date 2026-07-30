@@ -6,9 +6,14 @@ jest.mock("next/cache", () => ({
   unstable_cache: (fn: (...args: unknown[]) => unknown) => fn,
 }));
 
-jest.mock("@/lib/lrclib", () => ({
-  resolveLrclibLyrics: jest.fn(),
-}));
+jest.mock("@/lib/lrclib", () => {
+  const actual =
+    jest.requireActual<typeof import("@/lib/lrclib")>("@/lib/lrclib");
+  return {
+    ...actual,
+    resolveLrclibLyrics: jest.fn(),
+  };
+});
 
 describe("buildLyricsServerCacheKey", () => {
   it("prefers spotify track id when available", () => {
@@ -55,6 +60,18 @@ describe("getCachedLrclibLyrics", () => {
 
     const res = await getCachedLrclibLyrics(baseParams);
     expect(res).toBeNull();
+  });
+
+  it("re-throws LRCLIB upstream errors", async () => {
+    const { LrclibUpstreamError } =
+      jest.requireActual<typeof import("@/lib/lrclib")>("@/lib/lrclib");
+    (resolveLrclibLyrics as jest.Mock).mockRejectedValueOnce(
+      new LrclibUpstreamError(408, "Request timed out"),
+    );
+
+    await expect(getCachedLrclibLyrics(baseParams)).rejects.toMatchObject({
+      status: 408,
+    });
   });
 
   it("re-throws non-LyricsNotFoundError exceptions", async () => {

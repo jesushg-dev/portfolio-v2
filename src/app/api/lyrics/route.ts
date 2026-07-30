@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { buildLyricsServerCacheKey } from "@/lib/lyrics-cache-key";
 import { getCachedLrclibLyrics } from "@/lib/cached-lrclib";
+import { LrclibUpstreamError } from "@/lib/lrclib";
 
 const LYRICS_CACHE_CONTROL =
   "public, s-maxage=604800, stale-while-revalidate=86400";
@@ -66,6 +67,21 @@ export async function GET(req: NextRequest) {
       headers: { "Cache-Control": LYRICS_CACHE_CONTROL },
     });
   } catch (err) {
+    if (err instanceof LrclibUpstreamError) {
+      console.error("[lyrics] LRCLIB upstream:", err.message);
+      return NextResponse.json(
+        {
+          error: err.message,
+          retryable: true,
+          upstreamStatus: err.status,
+        },
+        {
+          status: err.status === 408 ? 504 : 502,
+          headers: { "Cache-Control": "no-store" },
+        },
+      );
+    }
+
     console.error(err);
     return NextResponse.json(
       { error: "Error fetching lyrics" },

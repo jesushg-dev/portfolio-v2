@@ -10,7 +10,7 @@ import type {
 } from "../types/track-lyrics-types";
 import { buildLyricsServerCacheKey } from "@/lib/lyrics-cache-key";
 
-type LyricsStatus = "idle" | "loading" | "ready" | "empty" | "error";
+type LyricsStatus = "idle" | "loading" | "ready" | "empty" | "temporary";
 
 export type TrackLyrics = TrackLyricsPayload;
 
@@ -118,7 +118,7 @@ function setCacheEntry(key: string, entry: LyricsCacheEntry): void {
 }
 
 function isRecentMiss(entry: LyricsCacheEntry): boolean {
-  if (entry.status !== "empty" && entry.status !== "error") return false;
+  if (entry.status !== "empty" && entry.status !== "temporary") return false;
   return Date.now() - entry.cachedAt < BACKGROUND_MISS_RETRY_MS;
 }
 
@@ -195,7 +195,7 @@ export async function prefetchTrackLyrics(
       }
 
       if (!res.ok) {
-        setCacheEntry(key, { status: "error", cachedAt: Date.now() });
+        setCacheEntry(key, { status: "temporary", cachedAt: Date.now() });
         return;
       }
 
@@ -216,7 +216,7 @@ export async function prefetchTrackLyrics(
       });
     } catch (err) {
       console.error(err);
-      setCacheEntry(key, { status: "error", cachedAt: Date.now() });
+      setCacheEntry(key, { status: "temporary", cachedAt: Date.now() });
     } finally {
       inflight.delete(key);
     }

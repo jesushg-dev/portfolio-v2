@@ -20,7 +20,8 @@ interface LyricsCardProps {
   labels: {
     title: string;
     loading: string;
-    unavailable: string;
+    notFound: string;
+    temporarilyUnavailable: string;
     expand: string;
   };
   onExpand: () => void;
@@ -80,7 +81,11 @@ const LyricsCard: FC<LyricsCardProps> = ({
     (useSynced ? syncedLines.length > 0 : plainLines.length > 0);
 
   const isLoading = status === "loading" || status === "idle";
-  const isEmpty = status === "empty" || status === "error";
+  const isEmpty = status === "empty" || status === "temporary";
+  const emptyMessage =
+    status === "temporary"
+      ? labels.temporarilyUnavailable
+      : labels.notFound;
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -148,7 +153,7 @@ const LyricsCard: FC<LyricsCardProps> = ({
           <div className="flex h-full flex-col items-center justify-center gap-2 px-2 text-center">
             <MicOff className="size-6 text-white/40" aria-hidden />
             <p className="text-[0.75rem] leading-snug font-medium text-white/55">
-              {labels.unavailable}
+              {emptyMessage}
             </p>
           </div>
         )}

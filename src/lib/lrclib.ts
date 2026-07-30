@@ -1,4 +1,5 @@
 const LRCLIB_BASE = "https://lrclib.net";
+const LRCLIB_FETCH_TIMEOUT_MS = 12_000;
 const USER_AGENT =
   "portfolio-v2/0.1 (https://github.com; lyrics demo for Spotify widget)";
 
@@ -19,14 +20,72 @@ export interface LrclibLyricsResult {
   source: "lrclib";
 }
 
+export class LrclibUpstreamError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "LrclibUpstreamError";
+    this.status = status;
+  }
+}
+
+function isRetryableUpstreamStatus(status: number): boolean {
+  return status === 408 || status === 429 || status >= 500;
+}
+
 async function lrclibFetch(path: string): Promise<Response> {
-  return fetch(`${LRCLIB_BASE}${path}`, {
-    headers: {
-      "User-Agent": USER_AGENT,
-      Accept: "application/json",
-    },
-    cache: "no-store",
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(
+    () => controller.abort(),
+    LRCLIB_FETCH_TIMEOUT_MS,
+  );
+
+  try {
+    return await fetch(`${LRCLIB_BASE}${path}`, {
+      headers: {
+        "User-Agent": USER_AGENT,
+        Accept: "application/json",
+      },
+      cache: "no-store",
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new LrclibUpstreamError(
+        408,
+        "LRCLIB request timed out while searching external sources",
+      );
+    }
+
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function readLrclibResponse<T>(res: Response): Promise<T | null> {
+  if (res.status === 404) return null;
+
+  if (isRetryableUpstreamStatus(res.status)) {
+    let message = `LRCLIB upstream error (${res.status})`;
+    try {
+      const body = (await res.json()) as { message?: string };
+      if (body.message) message = body.message;
+    } catch {
+      // Ignore non-JSON error bodies.
+    }
+    throw new LrclibUpstreamError(res.status, message);
+  }
+
+  if (!res.ok) {
+    throw new LrclibUpstreamError(
+      res.status,
+      `LRCLIB unexpected response (${res.status})`,
+    );
+  }
+
+  return (await res.json()) as T;
 }
 
 export async function getLrclibBySignature(params: {
@@ -43,8 +102,7 @@ export async function getLrclibBySignature(params: {
   });
 
   const res = await lrclibFetch(`/api/get?${query.toString()}`);
-  if (!res.ok) return null;
-  return (await res.json()) as LrclibTrack;
+  return readLrclibResponse<LrclibTrack>(res);
 }
 
 export async function searchLrclib(params: {
@@ -57,8 +115,8 @@ export async function searchLrclib(params: {
   });
 
   const res = await lrclibFetch(`/api/search?${query.toString()}`);
-  if (!res.ok) return [];
-  return (await res.json()) as LrclibTrack[];
+  const data = await readLrclibResponse<LrclibTrack[]>(res);
+  return data ?? [];
 }
 
 function pickLyrics(

@@ -14,6 +14,6 @@ export interface TrackLyricsPayload {
 export type LyricsCacheEntry =
   | { status: "ready"; lyrics: TrackLyricsPayload }
   | { status: "empty"; cachedAt: number }
-  | { status: "error"; cachedAt: number };
+  | { status: "temporary"; cachedAt: number };
 
 export type LyricsPrefetchMode = "background" | "active";

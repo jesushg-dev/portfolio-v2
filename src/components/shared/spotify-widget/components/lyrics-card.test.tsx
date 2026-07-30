@@ -5,7 +5,8 @@ import LyricsCard from "./lyrics-card";
 const labels = {
   title: "LYRICS",
   loading: "Loading lyrics...",
-  unavailable: "Lyrics unavailable for this track",
+  notFound: "No lyrics for this track",
+  temporarilyUnavailable: "Lyrics aren't available right now",
   expand: "Expand lyrics",
 };
 
@@ -25,7 +26,7 @@ describe("LyricsCard component", () => {
     expect(screen.getByText("Loading lyrics...")).toBeInTheDocument();
   });
 
-  it("renders empty state when status is empty or error", () => {
+  it("renders not-found state when status is empty", () => {
     render(
       <LyricsCard
         accentColor="#1DB954"
@@ -37,8 +38,23 @@ describe("LyricsCard component", () => {
       />,
     );
 
+    expect(screen.getByText("No lyrics for this track")).toBeInTheDocument();
+  });
+
+  it("renders temporary-unavailable state when status is temporary", () => {
+    render(
+      <LyricsCard
+        accentColor="#1DB954"
+        height={200}
+        lyricsState={{ status: "temporary", lyrics: null }}
+        progressMs={0}
+        labels={labels}
+        onExpand={jest.fn()}
+      />,
+    );
+
     expect(
-      screen.getByText("Lyrics unavailable for this track"),
+      screen.getByText("Lyrics aren't available right now"),
     ).toBeInTheDocument();
   });
 

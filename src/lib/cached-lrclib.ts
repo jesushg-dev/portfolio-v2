@@ -1,6 +1,10 @@
 import { unstable_cache } from "next/cache";
 
-import { resolveLrclibLyrics, type LrclibLyricsResult } from "@/lib/lrclib";
+import {
+  resolveLrclibLyrics,
+  LrclibUpstreamError,
+  type LrclibLyricsResult,
+} from "@/lib/lrclib";
 
 const LYRICS_REVALIDATE_SECONDS = 60 * 60 * 24 * 7;
 
@@ -46,6 +50,10 @@ export async function getCachedLrclibLyrics(params: {
   } catch (err) {
     if (err instanceof LyricsNotFoundError) {
       return null;
+    }
+
+    if (err instanceof LrclibUpstreamError) {
+      throw err;
     }
 
     throw err;

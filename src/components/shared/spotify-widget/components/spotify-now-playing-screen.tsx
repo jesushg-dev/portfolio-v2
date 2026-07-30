@@ -184,7 +184,8 @@ const SpotifyNowPlayingScreen: FC<SpotifyNowPlayingScreenProps> = ({
               labels={{
                 title: t("spotify.lyrics"),
                 loading: t("spotify.lyricsLoading"),
-                unavailable: t("spotify.lyricsUnavailable"),
+                notFound: t("spotify.lyricsNotFound"),
+                temporarilyUnavailable: t("spotify.lyricsTemporarilyUnavailable"),
                 expand: t("spotify.lyricsExpand"),
               }}
               onExpand={() => presentSheet("lyrics")}

@@ -170,21 +170,24 @@ describe("prefetchTrackLyrics", () => {
     expect(mockFetch).not.toHaveBeenCalled();
   });
 
-  it("handles HTTP 500 error response and marks status as error", async () => {
-    mockFetch.mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: () => Promise.resolve({ error: "Server Error" }),
-    });
+  it.each([500, 502, 504])(
+    "marks upstream HTTP %i responses as temporarily unavailable",
+    async (status) => {
+      mockFetch.mockResolvedValue({
+        ok: false,
+        status,
+        json: () => Promise.resolve({ error: "Upstream failure" }),
+      });
 
-    const { result } = renderHook(() =>
-      useTrackLyrics({ enabled: true, ...request }),
-    );
+      const { result } = renderHook(() =>
+        useTrackLyrics({ enabled: true, ...request }),
+      );
 
-    await waitFor(() => {
-      expect(result.current.status).toBe("error");
-    });
-  });
+      await waitFor(() => {
+        expect(result.current.status).toBe("temporary");
+      });
+    },
+  );
 
   it("handles response with empty plainLyrics", async () => {
     mockFetch.mockResolvedValue(
