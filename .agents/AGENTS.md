@@ -1,5 +1,14 @@
 # Portfolio v2 — Agent Rules
 
+## English Language Requirement for Code & Documentation
+
+### ✅ ALWAYS write all code, comments, variable names, docstrings, and documentation in English
+
+- **Code & Comments**: All variable names, function signatures, interfaces, type definitions, component props, and inline code comments must be in English.
+- **Documentation**: All documentation files (`docs/*.md`, `README.md`, `.agents/**/*.md`) and commit messages must be written in English.
+
+---
+
 ## Theming System
 
 This project uses a **`data-theme` attribute system** for theming, NOT Tailwind's `dark:` variant.
@@ -410,6 +419,38 @@ If inline logic is worth testing (e.g. slug → tab index, date formatting), mov
 ### ❌ NEVER disable tests or skip type-checking in CI to make tests pass
 
 Fix mocks, types, and fixtures properly. Both `pnpm test` and `pnpm type` run in CI (`.github/workflows/test.yml`).
+
+## Feature-Based Architecture & Directory Layout
+
+This project follows a **Feature-Based Architecture**. All domain-specific business logic, UI components, queries, DTOs, and tRPC routers must be organized inside `src/features/{domain}/`.
+
+### ❌ NEVER mix domain logic in `src/components/` or `src/server/api/routers/`
+
+- Do NOT put domain-specific pages/modals/forms directly under `src/components/` (unless it is a generic shared layout like `app-layout` or primitive like `ui/`).
+- Do NOT place domain tRPC routers in `src/server/api/routers/` — place them in `src/features/{domain}/server/`.
+
+### Directory Structure per Feature (`src/features/{domain}/`)
+
+```
+src/features/{domain}/
+├── components/          # Feature-specific UI components (e.g., project-card.tsx, project-form.tsx)
+├── server/              # Server-side queries and tRPC routers
+│   ├── {domain}-queries.ts       # RSC data fetching, auth checks, and DTO mapping
+│   └── {domain}-admin.router.ts  # tRPC mutation & query router for admin procedures
+├── lib/                 # Feature DTOs, Zod schemas, and data mappers
+│   └── {domain}-editor-dto.ts    # DTO interfaces (e.g. ProjectEditorDTO) and mappers
+└── types/               # TypeScript interfaces specific to this domain (optional)
+```
+
+### Feature Boundary & Code Sharing Rules
+
+1. **Self-contained domain logic**: Keep schemas, mappers, queries, and components within their respective `src/features/{domain}/` folder.
+2. **No private cross-feature imports**: `features/projects/` MUST NOT import internal/private helper functions from `features/certifications/`. If code is shared across 2+ features, move it to `src/lib/` or `src/components/shared/`.
+3. **Thin App Router pages**: App Router pages in `src/app/` must remain thin orchestration layers. They fetch data via `{domain}-queries.ts` and render feature components from `@/features/{domain}/components/...`.
+4. **Shared vs Feature components**:
+   - `src/components/ui/`: Base primitives (Shadcn components like `Button`, `Input`, `Dialog`).
+   - `src/components/shared/`: Cross-feature UI widgets (`spotify-widget`, `ios-device`, `form-root`).
+   - `src/features/{domain}/components/`: Domain components tied strictly to that feature.
 
 ## tRPC admin routers — feature-based layout
 

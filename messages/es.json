@@ -343,7 +343,8 @@
           "currentProgress": "Progreso actual",
           "totalDuration": "Duración total",
           "localRange": "Cambiar progreso actual",
-          "disabledExteralRange": "Desactivado por motivos de privacidad"
+          "disabledExteralRange": "Desactivado por motivos de privacidad",
+          "tapArtwork": "Toca la carátula para ver más"
         },
         "poweredBy": "Desarrollado usando la API de "
       }

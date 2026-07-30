@@ -343,7 +343,8 @@
           "currentProgress": "Current progress",
           "totalDuration": "Total duration",
           "localRange": "Change current progress",
-          "disabledExteralRange": "Disabled due privacy reasons"
+          "disabledExteralRange": "Disabled due privacy reasons",
+          "tapArtwork": "Tap the artwork to see more"
         },
         "poweredBy": "Powered by"
       }

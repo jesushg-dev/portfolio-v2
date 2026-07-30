@@ -54,10 +54,8 @@ function buildSkillCreateInput(
   skill: PortfolioSkillFixture,
   langIds: Record<"es" | "en" | "nl", string>,
 ) {
-  const translations: Record<
-    string,
-    { description: string; urlWiki: string }
-  > = {};
+  const translations: Record<string, { description: string; urlWiki: string }> =
+    {};
   for (const tr of skill.translations) {
     const langId = langIds[tr.locale];
     if (langId) {

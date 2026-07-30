@@ -17,31 +17,40 @@ import { IoPause, IoPlay, IoVolumeMediumOutline } from "react-icons/io5";
 
 import { useOutsideClick } from "@/hooks/use-outside-click";
 
-import type { SpotifyPlayback } from "./types";
-import type { TrackLyricsRequest } from "./track-lyrics-types";
-import ProgressTimer from "./progress-timer";
-import Player from "./player";
-import PlayingIndicator from "./playing-indicator";
-import AnimatedGradient from "./animated-gradient";
-import IPhoneMockup from "./iphone-mockup";
-import SpotifyNowPlayingScreen from "./spotify-now-playing-screen";
-import { formatPlayedAt } from "./format-played-at";
-import { useAlbumColor } from "./use-album-color";
+import type { SpotifyPlayback } from "./types/types";
+import type { TrackLyricsRequest } from "./types/track-lyrics-types";
+import ProgressTimer from "./components/progress-timer";
+import Player from "./components/player";
+import PlayingIndicator from "./components/playing-indicator";
+import AnimatedGradient from "./components/animated-gradient";
+import {
+  IOSDeviceMockup,
+  IOSNavigationStack,
+  IOSScreen,
+} from "@/components/shared/ios-device";
+import SpotifyNowPlayingScreen from "./components/spotify-now-playing-screen";
+import SpotifyLyricsScreen from "./components/spotify-lyrics-screen";
+import { useAlbumColor } from "./hooks/use-album-color";
 import {
   captureExpandRects,
   getExpandedTargets,
   type ExpandRects,
-} from "./expand-rects";
-import { useDragToClose } from "./use-drag-to-close";
+} from "./utils/expand-rects";
+import { useDragToClose } from "./hooks/use-drag-to-close";
 import {
   SpotifyPlaybackProvider,
   useSpotifyPlaybackContext,
-} from "./spotify-playback-context";
+} from "./context/spotify-playback-context";
 import {
   SPOTIFY_BACKDROP_TRANSITION,
   SPOTIFY_LAYOUT_SPRING,
   SPOTIFY_PANEL_SPRING,
-} from "./animation";
+} from "./utils/animation";
+import {
+  persistNowPlayingHintDismissal,
+  ActionHint,
+} from "@/components/shared/action-hint";
+import RecentlyPlayedNotice from "./components/recently-played-notice";
 
 interface ExpandableSpotifyPlayerProps {
   playback: SpotifyPlayback;
@@ -147,6 +156,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
   const openExpanded = () => {
     resetDrag();
     setFlyComplete(false);
+    persistNowPlayingHintDismissal();
     const rects = captureExpandRects({
       cover: coverRef.current,
       title: titleRef.current,
@@ -185,20 +195,26 @@ const ExpandableSpotifyPlayerContent: FC = () => {
             className="absolute inset-0 z-0 cursor-pointer rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/30"
           />
 
-          <div
-            ref={coverRef}
-            className="pointer-events-none relative z-10 shrink-0"
-            style={{ opacity: isExpanded ? 0 : 1 }}
+          <ActionHint
+            hidden={isExpanded}
+            label={t("spotify.hints.tapArtwork")}
+            className="pointer-events-none z-10 shrink-0"
           >
-            <Image
-              src={playback.imageUrl ?? "/images/spotify.png"}
-              alt={playback.imageAlt}
-              width={88}
-              height={88}
-              className="size-22 rounded-[4px] object-cover shadow-lg"
-            />
-            {playback.isPlaying && <PlayingIndicator color={accentColor} />}
-          </div>
+            <div
+              ref={coverRef}
+              className="relative shrink-0"
+              style={{ opacity: isExpanded ? 0 : 1 }}
+            >
+              <Image
+                src={playback.imageUrl ?? "/images/spotify.png"}
+                alt={playback.imageAlt}
+                width={88}
+                height={88}
+                className="size-22 rounded-lg object-cover shadow-lg"
+              />
+              {playback.isPlaying && <PlayingIndicator color={accentColor} />}
+            </div>
+          </ActionHint>
 
           <div className="relative z-10 flex min-w-0 flex-1 flex-col">
             {isRecentlyPlayed && (
@@ -426,17 +442,24 @@ const ExpandableSpotifyPlayerContent: FC = () => {
                   transition={SPOTIFY_PANEL_SPRING}
                   className="relative z-101 will-change-transform"
                 >
-                  <IPhoneMockup screenRef={screenRef}>
-                    <SpotifyNowPlayingScreen
-                      accentColor={accentColor}
-                      locale={locale}
-                      flyComplete={flyComplete}
-                      coverSize={flyTargets?.cover.width}
-                      dragY={y}
-                      dragProps={dragProps}
-                      onClose={closeExpanded}
-                    />
-                  </IPhoneMockup>
+                  <IOSDeviceMockup screenRef={screenRef}>
+                    <IOSNavigationStack initialRoute="now-playing">
+                      <IOSScreen id="now-playing">
+                        <SpotifyNowPlayingScreen
+                          accentColor={accentColor}
+                          locale={locale}
+                          flyComplete={flyComplete}
+                          coverSize={flyTargets?.cover.width}
+                          dragY={y}
+                          dragProps={dragProps}
+                          onClose={closeExpanded}
+                        />
+                      </IOSScreen>
+                      <IOSScreen id="lyrics" presentation="sheet">
+                        <SpotifyLyricsScreen accentColor={accentColor} />
+                      </IOSScreen>
+                    </IOSNavigationStack>
+                  </IOSDeviceMockup>
                 </motion.div>
               </div>
             )}
@@ -444,42 +467,6 @@ const ExpandableSpotifyPlayerContent: FC = () => {
           document.body,
         )}
     </>
-  );
-};
-
-interface RecentlyPlayedNoticeProps {
-  playedAt?: string;
-  locale: string;
-  compact?: boolean;
-}
-
-const RecentlyPlayedNotice: FC<RecentlyPlayedNoticeProps> = ({
-  playedAt,
-  locale,
-  compact = false,
-}) => {
-  const t = useTranslations("global.footer");
-  const playedAtLabel = playedAt ? formatPlayedAt(playedAt, locale) : null;
-
-  return (
-    <p
-      className={
-        compact
-          ? "mb-1 line-clamp-2 text-[0.625rem] leading-snug text-amber-200/90"
-          : "mb-2 text-center text-xs font-medium text-amber-300/90"
-      }
-    >
-      {compact ? (
-        <>
-          {t("spotify.notPlayingNow")}
-          {playedAtLabel
-            ? ` · ${t("spotify.lastPlayed")} ${playedAtLabel}`
-            : ` · ${t("spotify.lastPlayed")}`}
-        </>
-      ) : (
-        t("spotify.notPlayingNow")
-      )}
-    </p>
   );
 };
 

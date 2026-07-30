@@ -343,7 +343,8 @@
           "currentProgress": "Huidige voortgang",
           "totalDuration": "Totale duur",
           "localRange": "Verander huidige voortgang",
-          "disabledExteralRange": "Uitgeschakeld vanwege privacyredenen"
+          "disabledExteralRange": "Uitgeschakeld vanwege privacyredenen",
+          "tapArtwork": "Tik op het artwork voor meer"
         },
         "poweredBy": "Ontwikkeld met behulp van de Spotify API"
       }

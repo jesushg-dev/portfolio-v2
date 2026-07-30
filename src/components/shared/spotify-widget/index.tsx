@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 import SpotifyWidgetSkeleton from "./spotify-widget-skeleton";
 import ExpandableSpotifyPlayer from "./expandable-spotify-player";
-import { useSpotifyPlayback } from "./use-spotify-playback";
+import { useSpotifyPlayback } from "./hooks/use-spotify-playback";
 
 const SpotifyWidget: FC = () => {
   const t = useTranslations("global.footer");

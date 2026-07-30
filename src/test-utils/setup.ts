@@ -157,6 +157,9 @@ jest.mock("motion/react", () => {
     AnimatePresence: ({ children }: PropsWithChildren) =>
       createElement("div", null, children),
     useMotionValue,
+    useSpring: (v: unknown) => v,
+    useTransform: (v: unknown) => v,
+    useReducedMotion: () => false,
     animate: jest.fn(
       (value: { set: (next: number) => void }, target: number) => {
         value.set(target);

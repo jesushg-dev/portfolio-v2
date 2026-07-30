@@ -17,7 +17,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   isActiveTrackPlayback,
   isTrack,
-} from "@/components/shared/spotify-widget/playback-mappers";
+} from "@/components/shared/spotify-widget/utils/playback-mappers";
 
 type ConnectionStatus = "connected" | "refresh_error";
 

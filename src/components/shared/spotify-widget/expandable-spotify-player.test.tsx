@@ -15,7 +15,7 @@ import {
   mapEpisodeNowPlaying,
   mapRecentlyPlayed,
   mapTrackNowPlaying,
-} from "./playback-mappers";
+} from "./utils/playback-mappers";
 
 jest.mock("react-use-audio-player", () => ({
   useAudioPlayer: () => ({
@@ -30,20 +30,27 @@ jest.mock("react-use-audio-player", () => ({
   }),
 }));
 
-jest.mock("./use-album-color", () => ({
+jest.mock("./hooks/use-album-color", () => ({
   useAlbumColor: () => "#1db954",
   SPOTIFY_PLAYER_BASE: "#191414",
   buildSpotifyAccentOverlay: (hex: string) => `${hex}66`,
   buildSpotifyFullscreenBg: (hex: string) => `fullscreen(${hex})`,
 }));
 
-jest.mock("./use-track-lyrics", () => ({
+jest.mock("./hooks/use-track-lyrics", () => ({
   useTrackLyrics: () => ({ status: "empty", lyrics: null }),
   prefetchTrackLyrics: jest.fn(() => Promise.resolve()),
 }));
 
-jest.mock("./use-prefetch-next-lyrics", () => ({
+jest.mock("./hooks/use-prefetch-next-lyrics", () => ({
   usePrefetchNextLyrics: jest.fn(),
+}));
+
+jest.mock("@/components/shared/action-hint", () => ({
+  persistNowPlayingHintDismissal: jest.fn(),
+  persistActionHintDismissal: jest.fn(),
+  ActionHint: ({ children }: { children: unknown }) => children,
+  NowPlayingHint: ({ children }: { children: unknown }) => children,
 }));
 
 function mockBoundingClientRect() {

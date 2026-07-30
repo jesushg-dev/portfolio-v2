@@ -6,9 +6,12 @@ import {
   mockRecentlyPlayed,
   mockTrack,
 } from "@/test-utils/fixtures/spotify-data";
-import { mapRecentlyPlayed, mapTrackNowPlaying } from "./playback-mappers";
-import type { SpotifyPlayback, SpotifyPlaybackError } from "./types";
-import type { TrackLyricsRequest } from "./track-lyrics-types";
+import {
+  mapRecentlyPlayed,
+  mapTrackNowPlaying,
+} from "./utils/playback-mappers";
+import type { SpotifyPlayback, SpotifyPlaybackError } from "./types/types";
+import type { TrackLyricsRequest } from "./types/track-lyrics-types";
 
 interface SpotifyPlaybackHookResult {
   playback: SpotifyPlayback | null;
@@ -26,7 +29,7 @@ const mockUseSpotifyPlayback = jest.fn((): SpotifyPlaybackHookResult => ({
   isFetchError: false,
 }));
 
-jest.mock("./use-spotify-playback", () => ({
+jest.mock("./hooks/use-spotify-playback", () => ({
   useSpotifyPlayback: (): SpotifyPlaybackHookResult => mockUseSpotifyPlayback(),
 }));
 
