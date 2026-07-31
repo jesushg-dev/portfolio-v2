@@ -263,22 +263,30 @@ interface SocialProofProps {
   testimonials?: TestimonialItem[];
 }
 
-const SocialProof: FC<SocialProofProps> = ({
-  stats: statsData,
-  testimonials: testimonialsFromServer,
-}) => {
+function SocialProofWithQuery({ stats }: { stats: SocialProofStats }) {
   const locale = useLocale();
+  const { data: items = [], isLoading } =
+    api.portfolio.getTestimonialsPublic.useQuery({ locale, limit: 10 });
+
+  return (
+    <SocialProofContent
+      stats={stats}
+      items={items}
+      isTestimonialsLoading={isLoading}
+    />
+  );
+}
+
+function SocialProofContent({
+  stats: statsData,
+  items,
+  isTestimonialsLoading,
+}: {
+  stats: SocialProofStats;
+  items: TestimonialItem[];
+  isTestimonialsLoading: boolean;
+}) {
   const t = useTranslations("main.socialProof");
-
-  const { data: itemsFromQuery = [], isLoading } =
-    api.portfolio.getTestimonialsPublic.useQuery(
-      { locale, limit: 10 },
-      { enabled: testimonialsFromServer === undefined },
-    );
-
-  const items = testimonialsFromServer ?? itemsFromQuery;
-  const isTestimonialsLoading =
-    testimonialsFromServer === undefined && isLoading;
 
   const statMapping: Record<string, string | number> = {
     certifications: statsData?.certificationsCount ?? 0,
@@ -406,6 +414,23 @@ const SocialProof: FC<SocialProofProps> = ({
       </div>
     </section>
   );
+}
+
+const SocialProof: FC<SocialProofProps> = ({
+  stats,
+  testimonials: testimonialsFromServer,
+}) => {
+  if (testimonialsFromServer !== undefined) {
+    return (
+      <SocialProofContent
+        stats={stats}
+        items={testimonialsFromServer}
+        isTestimonialsLoading={false}
+      />
+    );
+  }
+
+  return <SocialProofWithQuery stats={stats} />;
 };
 
 export default SocialProof;

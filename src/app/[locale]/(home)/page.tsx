@@ -156,6 +156,7 @@ export default async function Home() {
         id="projects"
         fallback={<PortfolioFallback />}
         minHeight="36rem"
+        requiresTrpc
       >
         <Portfolio />
       </ViewportSection>
@@ -172,6 +173,7 @@ export default async function Home() {
         id="contact"
         fallback={<ContactFallback />}
         minHeight="28rem"
+        requiresTrpc
       >
         <Contact />
       </ViewportSection>

@@ -1,12 +1,31 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useLayoutEffect,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 
 import { usePathname } from "@/i18n/routing";
 import { TRPCReactProvider } from "@/trpc/react";
 
 interface DeferredTrpcProviderProps {
   children: ReactNode;
+}
+
+interface TrpcDeferredContextValue {
+  isReady: boolean;
+}
+
+const TrpcDeferredContext = createContext<TrpcDeferredContextValue>({
+  isReady: true,
+});
+
+export function useTrpcDeferredReady(): boolean {
+  return useContext(TrpcDeferredContext).isReady;
 }
 
 function isSkillInterceptRoute(pathname: string): boolean {
@@ -34,8 +53,17 @@ export default function DeferredTrpcProvider({
   const [deferredReady, setDeferredReady] = useState(false);
   const isReady = needsTrpcNow || deferredReady;
 
+  useLayoutEffect(() => {
+    if (needsTrpcNow) return;
+
+    // Scroll restoration on reload does not fire a scroll event.
+    if (window.scrollY > 0) {
+      setDeferredReady(true);
+    }
+  }, [needsTrpcNow]);
+
   useEffect(() => {
-    if (needsTrpcNow) {
+    if (needsTrpcNow || deferredReady) {
       return;
     }
 
@@ -50,11 +78,17 @@ export default function DeferredTrpcProvider({
       window.removeEventListener("pointerdown", enable);
       window.removeEventListener("keydown", enable);
     };
-  }, [needsTrpcNow]);
+  }, [needsTrpcNow, deferredReady]);
 
-  if (!isReady) {
-    return children;
-  }
+  const content = isReady ? (
+    <TRPCReactProvider>{children}</TRPCReactProvider>
+  ) : (
+    children
+  );
 
-  return <TRPCReactProvider>{children}</TRPCReactProvider>;
+  return (
+    <TrpcDeferredContext.Provider value={{ isReady }}>
+      {content}
+    </TrpcDeferredContext.Provider>
+  );
 }

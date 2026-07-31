@@ -8,6 +8,8 @@ import {
   type ReactNode,
 } from "react";
 
+import { useTrpcDeferredReady } from "@/components/providers/deferred-trpc-provider";
+
 interface ViewportSectionProps {
   children: ReactNode;
   fallback: ReactNode;
@@ -16,6 +18,8 @@ interface ViewportSectionProps {
   rootMargin?: string;
   id?: string;
   className?: string;
+  /** When true, waits for deferred tRPC before mounting children. */
+  requiresTrpc?: boolean;
 }
 
 export default function ViewportSection({
@@ -25,9 +29,12 @@ export default function ViewportSection({
   rootMargin = "250px 0px",
   id,
   className,
+  requiresTrpc = false,
 }: ViewportSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const trpcReady = useTrpcDeferredReady();
+  const canMountChildren = isVisible && (!requiresTrpc || trpcReady);
 
   useEffect(() => {
     const element = containerRef.current;
@@ -53,9 +60,9 @@ export default function ViewportSection({
       ref={containerRef}
       id={id}
       className={className}
-      style={isVisible ? undefined : { minHeight }}
+      style={canMountChildren ? undefined : { minHeight }}
     >
-      {isVisible ? children : fallback}
+      {canMountChildren ? children : fallback}
     </div>
   );
 }

@@ -10,6 +10,7 @@ export default function FooterSpotifySection() {
       fallback={<SpotifyWidgetSkeleton />}
       minHeight="7.5rem"
       rootMargin="120px 0px"
+      requiresTrpc
     >
       <SpotifyWidgetLazy />
     </ViewportSection>
