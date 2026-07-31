@@ -55,15 +55,21 @@ import RecentlyPlayedNotice from "./components/recently-played-notice";
 interface ExpandableSpotifyPlayerProps {
   playback: SpotifyPlayback;
   nextTrackLyrics?: TrackLyricsRequest | null;
+  nextTrackPlayback?: SpotifyPlayback | null;
+  onTrackEndReached?: () => void;
 }
 
 const ExpandableSpotifyPlayer: FC<ExpandableSpotifyPlayerProps> = ({
   playback,
   nextTrackLyrics = null,
+  nextTrackPlayback = null,
+  onTrackEndReached,
 }) => (
   <SpotifyPlaybackProvider
     playback={playback}
     nextTrackLyrics={nextTrackLyrics}
+    nextTrackPlayback={nextTrackPlayback}
+    onTrackEndReached={onTrackEndReached}
   >
     <ExpandableSpotifyPlayerContent />
   </SpotifyPlaybackProvider>

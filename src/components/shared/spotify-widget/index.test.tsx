@@ -16,6 +16,7 @@ import type { TrackLyricsRequest } from "./types/track-lyrics-types";
 interface SpotifyPlaybackHookResult {
   playback: SpotifyPlayback | null;
   nextTrackLyrics: TrackLyricsRequest | null;
+  nextTrackPlayback: SpotifyPlayback | null;
   error: SpotifyPlaybackError | null;
   isLoading: boolean;
   isFetchError: boolean;
@@ -24,6 +25,7 @@ interface SpotifyPlaybackHookResult {
 const mockUseSpotifyPlayback = jest.fn((): SpotifyPlaybackHookResult => ({
   playback: null,
   nextTrackLyrics: null,
+  nextTrackPlayback: null,
   error: null,
   isLoading: false,
   isFetchError: false,
@@ -44,6 +46,7 @@ describe("SpotifyWidget", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
       nextTrackLyrics: null,
+      nextTrackPlayback: null,
       error: null,
       isLoading: true,
       isFetchError: false,
@@ -58,6 +61,7 @@ describe("SpotifyWidget", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
       nextTrackLyrics: null,
+      nextTrackPlayback: null,
       error: null,
       isLoading: false,
       isFetchError: true,
@@ -72,6 +76,7 @@ describe("SpotifyWidget", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
       nextTrackLyrics: null,
+      nextTrackPlayback: null,
       error: { status: 500, message: "Server error" },
       isLoading: false,
       isFetchError: false,
@@ -86,6 +91,7 @@ describe("SpotifyWidget", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: null,
       nextTrackLyrics: null,
+      nextTrackPlayback: null,
       error: null,
       isLoading: false,
       isFetchError: false,
@@ -100,6 +106,7 @@ describe("SpotifyWidget", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback: mapTrackNowPlaying(mockTrack, mockNowPlayingTrack),
       nextTrackLyrics: null,
+      nextTrackPlayback: null,
       error: null,
       isLoading: false,
       isFetchError: false,
@@ -123,6 +130,7 @@ describe("SpotifyWidget", () => {
     mockUseSpotifyPlayback.mockReturnValue({
       playback,
       nextTrackLyrics: null,
+      nextTrackPlayback: null,
       error: null,
       isLoading: false,
       isFetchError: false,

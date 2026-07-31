@@ -166,6 +166,20 @@ export function resolveEpisodeFromQueue(queue: QueueResponse): Episode | null {
   return queuedEpisode ?? null;
 }
 
+export function getTrackRemainingMs(data: NowPlayingResponse): number | null {
+  if (!data.item || !isTrack(data.item)) return null;
+
+  return data.item.duration_ms - (data.progress_ms ?? 0);
+}
+
+export function isTrackNearEnd(
+  data: NowPlayingResponse,
+  thresholdMs: number,
+): boolean {
+  const remaining = getTrackRemainingMs(data);
+  return remaining !== null && remaining <= thresholdMs;
+}
+
 export function isActiveTrackPlayback(data: NowPlayingResponse): boolean {
   return data.currently_playing_type === "track" && data.is_playing;
 }
@@ -231,6 +245,38 @@ export function trackToLyricsRequest(track: Track): TrackLyricsRequest {
     artist: track.artists[0]?.name ?? "",
     album: track.album.name,
     durationMs: track.duration_ms,
+  };
+}
+
+/** Maps a queued track as if it just started playing (optimistic advance). */
+export function mapQueuedTrackPlayback(
+  track: Track,
+  template: SpotifyPlayback,
+): SpotifyPlayback {
+  const artists = resolveDisplayArtists(track);
+
+  return {
+    contentId: track.id,
+    snapshotTimestamp: Date.now(),
+    contentType: "track",
+    source: "now_playing",
+    title: track.name,
+    subtitle: formatArtists(artists),
+    subtitleUrl: resolveSpotifyUrl(
+      track.artists[0]?.external_urls.spotify,
+      track.external_urls.spotify,
+    ),
+    primaryArtist: track.artists[0]?.name ?? artists[0] ?? "",
+    albumName: track.album.name,
+    durationMs: track.duration_ms,
+    progressMs: 0,
+    isPlaying: true,
+    contentUrl: resolveSpotifyUrl(track.external_urls.spotify),
+    imageUrl: track.album.images[0]?.url,
+    imageAlt: track.album.name,
+    previewUrl: track.preview_url,
+    context: template.context,
+    deviceType: template.deviceType,
   };
 }
 

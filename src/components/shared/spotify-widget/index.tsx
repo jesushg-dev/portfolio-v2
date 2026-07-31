@@ -12,7 +12,7 @@ import { useSpotifyPlayback } from "./hooks/use-spotify-playback";
 
 const SpotifyWidget: FC = () => {
   const t = useTranslations("global.footer");
-  const { playback, error, isLoading, isFetchError, nextTrackLyrics } =
+  const { playback, error, isLoading, isFetchError, nextTrackLyrics, nextTrackPlayback, onTrackEndReached } =
     useSpotifyPlayback();
 
   if (isLoading) {
@@ -35,6 +35,8 @@ const SpotifyWidget: FC = () => {
     <ExpandableSpotifyPlayer
       playback={playback}
       nextTrackLyrics={nextTrackLyrics}
+      nextTrackPlayback={nextTrackPlayback}
+      onTrackEndReached={onTrackEndReached}
     />
   );
 };

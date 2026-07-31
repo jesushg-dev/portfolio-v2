@@ -1,12 +1,17 @@
 import { screen } from "@testing-library/react";
+import { act } from "@testing-library/react";
 
 import {
   mockNowPlayingTrack,
   mockTrack,
 } from "@/test-utils/fixtures/spotify-data";
+import { ETime } from "@/utils/constants/times";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 
-import { mapTrackNowPlaying } from "../utils/playback-mappers";
+import {
+  mapQueuedTrackPlayback,
+  mapTrackNowPlaying,
+} from "../utils/playback-mappers";
 import {
   SpotifyPlaybackProvider,
   useSpotifyPlaybackContext,
@@ -21,11 +26,24 @@ jest.mock("../hooks/use-prefetch-next-lyrics", () => ({
 }));
 
 function ProgressReadout() {
-  const { liveProgressMs } = useSpotifyPlaybackContext();
-  return <span data-testid="progress">{liveProgressMs}</span>;
+  const { liveProgressMs, playback } = useSpotifyPlaybackContext();
+  return (
+    <>
+      <span data-testid="progress">{liveProgressMs}</span>
+      <span data-testid="title">{playback.title}</span>
+    </>
+  );
 }
 
 describe("SpotifyPlaybackProvider", () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it("resets live progress when contentId changes", () => {
     const firstTrack = mapTrackNowPlaying(mockTrack, {
       ...mockNowPlayingTrack,
@@ -56,5 +74,36 @@ describe("SpotifyPlaybackProvider", () => {
     );
 
     expect(screen.getByTestId("progress")).toHaveTextContent("4000");
+  });
+
+  it("advances optimistically to the next queued track when the current one finishes", () => {
+    const currentTrack = mapTrackNowPlaying(mockTrack, {
+      ...mockNowPlayingTrack,
+      progress_ms: 247_000,
+    });
+    const nextTrack = mapQueuedTrackPlayback(
+      { ...mockTrack, id: "track-next", name: "Next Track" },
+      currentTrack,
+    );
+
+    renderWithIntl(
+      <SpotifyPlaybackProvider
+        playback={currentTrack}
+        nextTrackPlayback={nextTrack}
+      >
+        <ProgressReadout />
+      </SpotifyPlaybackProvider>,
+    );
+
+    expect(screen.getByTestId("title")).toHaveTextContent("Get Lucky");
+
+    act(() => {
+      jest.advanceTimersByTime(2 * ETime.SECOND);
+    });
+
+    expect(screen.getByTestId("title")).toHaveTextContent("Next Track");
+    expect(Number(screen.getByTestId("progress").textContent)).toBeGreaterThanOrEqual(
+      0,
+    );
   });
 });

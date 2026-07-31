@@ -310,6 +310,24 @@ describe("useSpotifyPlayback", () => {
     expect(interval).toBe(5 * ETime.SECOND);
   });
 
+  it("uses a faster poll interval when a track is paused near the end", () => {
+    mockNowPlayingQuery.mockReturnValue(mockQueryResult(mockNowPlayingTrack));
+
+    renderHook(() => useSpotifyPlayback());
+
+    const interval = nowPlayingOptions?.refetchInterval?.({
+      state: {
+        data: {
+          ...mockNowPlayingTrack,
+          is_playing: false,
+          progress_ms: 247_500,
+        },
+      },
+    });
+
+    expect(interval).toBe(5 * ETime.SECOND);
+  });
+
   it("uses the default poll interval during regular playback", () => {
     mockNowPlayingQuery.mockReturnValue(mockQueryResult(mockNowPlayingTrack));
 
@@ -389,5 +407,7 @@ describe("useSpotifyPlayback", () => {
       album: "Random Access Memories",
       durationMs: 248_000,
     });
+    expect(result.current.nextTrackPlayback?.contentId).toBe("track-next");
+    expect(result.current.nextTrackPlayback?.title).toBe("Next Song");
   });
 });

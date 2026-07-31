@@ -1,7 +1,7 @@
 "use client";
 
 import { keepPreviousData } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "@/trpc/react";
 import { ETime } from "@/utils/constants/times";
@@ -15,6 +15,8 @@ import {
   isActiveEpisodePlayback,
   isActiveTrackPlayback,
   isExplicitActivePlayback,
+  isTrackNearEnd,
+  mapQueuedTrackPlayback,
   needsQueueFallback,
   resolveNextQueuedTrack,
   trackToLyricsRequest,
@@ -46,6 +48,11 @@ function getNowPlayingPollInterval(
   data: NowPlayingResponse | { error: { status: number } } | undefined,
 ): number {
   if (!data || "error" in data) return IDLE_POLL_MS;
+
+  if (!("error" in data) && isTrackNearEnd(data, SPOTIFY_NEAR_END_MS)) {
+    return FAST_POLL_MS;
+  }
+
   if (!isValidNowPlaying(data)) return IDLE_POLL_MS;
   if (!data.is_playing) return MEDIUM_POLL_MS;
 
@@ -54,22 +61,11 @@ function getNowPlayingPollInterval(
 
   if (durationMs === null) return MEDIUM_POLL_MS;
 
-  const remaining = durationMs - (data.progress_ms ?? 0);
-  if (remaining <= SPOTIFY_NEAR_END_MS) return FAST_POLL_MS;
-
   return ETime.HALF_MINUTE;
 }
 
 function isNearEndOfTrack(data: NowPlayingResponse): boolean {
-  if (!isActiveTrackPlayback(data)) return false;
-
-  const durationMs =
-    data.item && "duration_ms" in data.item ? data.item.duration_ms : null;
-
-  if (durationMs === null) return false;
-
-  const remaining = durationMs - (data.progress_ms ?? 0);
-  return remaining <= SPOTIFY_NEAR_END_MS;
+  return isTrackNearEnd(data, SPOTIFY_NEAR_END_MS);
 }
 
 function resolveNextTrackLyrics(
@@ -80,6 +76,20 @@ function resolveNextTrackLyrics(
 
   const nextTrack = resolveNextQueuedTrack(queueData, currentContentId);
   return nextTrack ? trackToLyricsRequest(nextTrack) : null;
+}
+
+function resolveNextTrackPlayback(
+  playback: SpotifyPlayback,
+  queueData: QueueResponse | { error: { status: number } } | undefined,
+): SpotifyPlayback | null {
+  if (playback.contentType !== "track" || playback.source !== "now_playing") {
+    return null;
+  }
+
+  if (!queueData || "error" in queueData) return null;
+
+  const nextTrack = resolveNextQueuedTrack(queueData, playback.contentId);
+  return nextTrack ? mapQueuedTrackPlayback(nextTrack, playback) : null;
 }
 
 export function useSpotifyPlayback() {
@@ -162,6 +172,11 @@ export function useSpotifyPlayback() {
     wasActivelyPlayingRef.current = isActivelyPlaying;
   }, [isActivelyPlaying, utils]);
 
+  const handleTrackEndReached = useCallback(() => {
+    void utils.spotify.getNowPlaying.invalidate();
+    void utils.spotify.getQueue.invalidate();
+  }, [utils]);
+
   const recentlyPlayedQuery = api.spotify.getRecentlyPlayed.useQuery(
     undefined,
     {
@@ -202,6 +217,11 @@ export function useSpotifyPlayback() {
       ? resolveNextTrackLyrics(queueQuery.data, displayPlayback.contentId)
       : null;
 
+  const nextTrackPlayback =
+    displayPlayback && displayPlayback.contentType === "track"
+      ? resolveNextTrackPlayback(displayPlayback, queueQuery.data)
+      : null;
+
   const error = ((): SpotifyPlaybackError | null => {
     if (!nowPlayingQuery.data) return null;
 
@@ -240,6 +260,8 @@ export function useSpotifyPlayback() {
   return {
     playback: displayPlayback,
     nextTrackLyrics,
+    nextTrackPlayback,
+    onTrackEndReached: handleTrackEndReached,
     error,
     isLoading,
     isFetchError:

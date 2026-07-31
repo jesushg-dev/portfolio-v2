@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  type ReactNode,
+} from "react";
 
 import type { SpotifyPlayback } from "../types/types";
 import type { TrackLyricsRequest } from "../types/track-lyrics-types";
@@ -21,55 +28,130 @@ const SpotifyPlaybackContext =
 interface SpotifyPlaybackProviderProps {
   playback: SpotifyPlayback;
   nextTrackLyrics?: TrackLyricsRequest | null;
+  nextTrackPlayback?: SpotifyPlayback | null;
+  onTrackEndReached?: () => void;
   children: ReactNode;
+}
+
+function resolveOptimisticPlayback(
+  playback: SpotifyPlayback,
+  nextTrackPlayback: SpotifyPlayback | null,
+  sourceLiveProgressMs: number,
+): SpotifyPlayback {
+  if (
+    playback.contentType !== "track" ||
+    playback.source !== "now_playing" ||
+    !nextTrackPlayback ||
+    sourceLiveProgressMs < playback.durationMs
+  ) {
+    return playback;
+  }
+
+  return nextTrackPlayback;
+}
+
+function useEffectivePlaybackState(
+  playback: SpotifyPlayback,
+  nextTrackPlayback: SpotifyPlayback | null,
+) {
+  const sourceLiveProgressMs = usePlaybackClock(
+    playback.contentId,
+    playback.progressMs,
+    playback.durationMs,
+    playback.source === "now_playing" && playback.isPlaying,
+  );
+
+  const effectivePlayback = useMemo(
+    () =>
+      resolveOptimisticPlayback(
+        playback,
+        nextTrackPlayback,
+        sourceLiveProgressMs,
+      ),
+    [playback, nextTrackPlayback, sourceLiveProgressMs],
+  );
+
+  const isOptimisticAdvance =
+    effectivePlayback.contentId !== playback.contentId;
+
+  const optimisticLiveProgressMs = usePlaybackClock(
+    effectivePlayback.contentId,
+    effectivePlayback.progressMs,
+    effectivePlayback.durationMs,
+    isOptimisticAdvance && effectivePlayback.isPlaying,
+  );
+
+  const liveProgressMs = isOptimisticAdvance
+    ? optimisticLiveProgressMs
+    : sourceLiveProgressMs;
+
+  return { effectivePlayback, liveProgressMs, sourceLiveProgressMs };
 }
 
 function PlaybackClockBridge({
   playback,
   nextTrackLyrics = null,
+  nextTrackPlayback = null,
+  onTrackEndReached,
   children,
 }: SpotifyPlaybackProviderProps) {
-  const isSpotifyPlaying =
-    playback.source === "now_playing" && playback.isPlaying;
+  const hasRequestedAdvanceRef = useRef(false);
 
-  const liveProgressMs = usePlaybackClock(
-    playback.contentId,
-    playback.progressMs,
-    playback.durationMs,
-    isSpotifyPlaying,
-  );
+  const { effectivePlayback, liveProgressMs, sourceLiveProgressMs } =
+    useEffectivePlaybackState(playback, nextTrackPlayback);
+
+  const isSpotifyPlaying =
+    effectivePlayback.source === "now_playing" && effectivePlayback.isPlaying;
 
   useEffect(() => {
-    if (playback.contentType !== "track") return;
+    hasRequestedAdvanceRef.current = false;
+  }, [playback.contentId]);
+
+  useEffect(() => {
+    if (
+      playback.contentType !== "track" ||
+      playback.source !== "now_playing" ||
+      sourceLiveProgressMs < playback.durationMs ||
+      hasRequestedAdvanceRef.current
+    ) {
+      return;
+    }
+
+    hasRequestedAdvanceRef.current = true;
+    onTrackEndReached?.();
+  }, [sourceLiveProgressMs, playback, onTrackEndReached]);
+
+  useEffect(() => {
+    if (effectivePlayback.contentType !== "track") return;
 
     void prefetchTrackLyrics({
-      contentId: playback.contentId,
-      title: playback.title,
-      artist: playback.primaryArtist,
-      album: playback.albumName,
-      durationMs: playback.durationMs,
+      contentId: effectivePlayback.contentId,
+      title: effectivePlayback.title,
+      artist: effectivePlayback.primaryArtist,
+      album: effectivePlayback.albumName,
+      durationMs: effectivePlayback.durationMs,
     });
   }, [
-    playback.contentId,
-    playback.contentType,
-    playback.title,
-    playback.primaryArtist,
-    playback.albumName,
-    playback.durationMs,
+    effectivePlayback.contentId,
+    effectivePlayback.contentType,
+    effectivePlayback.title,
+    effectivePlayback.primaryArtist,
+    effectivePlayback.albumName,
+    effectivePlayback.durationMs,
   ]);
 
   usePrefetchNextLyrics({
-    currentContentId: playback.contentId,
+    currentContentId: effectivePlayback.contentId,
     nextTrack: nextTrackLyrics,
     liveProgressMs,
-    durationMs: playback.durationMs,
+    durationMs: effectivePlayback.durationMs,
     isPlaying: isSpotifyPlaying,
   });
 
   return (
     <SpotifyPlaybackContext.Provider
       value={{
-        playback,
+        playback: effectivePlayback,
         liveProgressMs,
         isSpotifyPlaying,
         nextTrackLyrics,
@@ -83,10 +165,17 @@ function PlaybackClockBridge({
 export function SpotifyPlaybackProvider({
   playback,
   nextTrackLyrics = null,
+  nextTrackPlayback = null,
+  onTrackEndReached,
   children,
 }: SpotifyPlaybackProviderProps) {
   return (
-    <PlaybackClockBridge playback={playback} nextTrackLyrics={nextTrackLyrics}>
+    <PlaybackClockBridge
+      playback={playback}
+      nextTrackLyrics={nextTrackLyrics}
+      nextTrackPlayback={nextTrackPlayback}
+      onTrackEndReached={onTrackEndReached}
+    >
       {children}
     </PlaybackClockBridge>
   );

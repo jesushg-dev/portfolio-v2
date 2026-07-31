@@ -17,7 +17,9 @@ import {
   isEpisode,
   isTrack,
   isExplicitActivePlayback,
+  isTrackNearEnd,
   mapEpisodeNowPlaying,
+  mapQueuedTrackPlayback,
   mapRecentlyPlayed,
   mapTrackNowPlaying,
   needsQueueFallback,
@@ -26,6 +28,7 @@ import {
   resolveTrackFromNowPlaying,
   resolveTrackFromQueue,
 } from "./playback-mappers";
+import { SPOTIFY_NEAR_END_MS } from "./spotify-timing";
 
 describe("type guards", () => {
   it("identifies tracks and episodes", () => {
@@ -152,6 +155,47 @@ describe("queue resolution", () => {
         queue: [mockTrack],
       }),
     ).toBe(mockTrack);
+  });
+
+  it("maps queued track as optimistic now playing playback", () => {
+    const template = mapTrackNowPlaying(mockTrack, mockNowPlayingTrack);
+    const nextTrack = { ...mockTrack, id: "track-next", name: "Next Song" };
+    const playback = mapQueuedTrackPlayback(nextTrack, template);
+
+    expect(playback).toMatchObject({
+      contentId: "track-next",
+      title: "Next Song",
+      source: "now_playing",
+      progressMs: 0,
+      isPlaying: true,
+      context: template.context,
+      deviceType: template.deviceType,
+    });
+  });
+});
+
+describe("isTrackNearEnd", () => {
+  it("detects tracks near the end regardless of play state", () => {
+    expect(
+      isTrackNearEnd(
+        {
+          ...mockNowPlayingTrack,
+          progress_ms: 248_000 - SPOTIFY_NEAR_END_MS + 1_000,
+        },
+        SPOTIFY_NEAR_END_MS,
+      ),
+    ).toBe(true);
+
+    expect(
+      isTrackNearEnd(
+        {
+          ...mockNowPlayingTrack,
+          is_playing: false,
+          progress_ms: 247_500,
+        },
+        SPOTIFY_NEAR_END_MS,
+      ),
+    ).toBe(true);
   });
 });
 
