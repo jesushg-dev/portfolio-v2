@@ -30,21 +30,21 @@
     },
     {
       "type": "EMAIL",
-      "value": "mailto:jess232016@gmail.com",
+      "value": "mailto:jesus.hernandez@jesushg.com",
       "label": {
-        "es": "jess232016@gmail.com",
-        "en": "jess232016@gmail.com",
-        "nl": "jess232016@gmail.com"
+        "es": "jesus.hernandez@jesushg.com",
+        "en": "jesus.hernandez@jesushg.com",
+        "nl": "jesus.hernandez@jesushg.com"
       },
       "order": 1
     },
     {
       "type": "LINKEDIN",
-      "value": "https://www.linkedin.com/in/jesus-hernandez23",
+      "value": "https://www.linkedin.com/in/jesushg-dev",
       "label": {
-        "es": "linkedIn/jesus-hernandez23",
-        "en": "linkedIn/jesus-hernandez23",
-        "nl": "linkedIn/jesus-hernandez23"
+        "es": "linkedIn/jesushg-dev",
+        "en": "linkedIn/jesushg-dev",
+        "nl": "linkedIn/jesushg-dev"
       },
       "order": 2
     },
@@ -191,7 +191,13 @@
     },
     {
       "category": "TOOLS",
-      "items": ["Git", "Azure", "Docker", "GCP", "AWS"],
+      "items": [
+        "Git",
+        "Azure",
+        "Docker",
+        "GCP",
+        "AWS"
+      ],
       "order": 3
     }
   ],
@@ -205,7 +211,13 @@
         "en": "Senior Software Engineer",
         "nl": "Senior Software Engineer"
       },
-      "skillKeys": ["React", "Nextjs", "GraphQL", "Typescript", "Git"],
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "GraphQL",
+        "Typescript",
+        "Git"
+      ],
       "responsibilities": [
         {
           "text": {
@@ -383,7 +395,12 @@
         "en": "Mobile Application Developer",
         "nl": "Mobiele applicatieontwikkelaar"
       },
-      "skillKeys": ["ReactNative", "Typescript", "Android", "Javascript"],
+      "skillKeys": [
+        "ReactNative",
+        "Typescript",
+        "Android",
+        "Javascript"
+      ],
       "responsibilities": [
         {
           "text": {
@@ -415,7 +432,13 @@
         "en": "Frontend Developer and IT Technician",
         "nl": "Frontend ontwikkelaar en IT-technicus"
       },
-      "skillKeys": ["React", "Nextjs", "Javascript", "Css", "Typescript"],
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "Javascript",
+        "Css",
+        "Typescript"
+      ],
       "responsibilities": [
         {
           "text": {

@@ -663,15 +663,29 @@
       "title": "Get in touch",
       "title2": "Send a message",
       "eyebrow": "Contact",
-      "subtitle": "I am always open to new opportunities. If you have a project in mind or just want to say hi, feel free to reach out.",
+      "subtitle": "Have an idea, a project, or looking for a developer to join your team?\n\nI'd love to learn more about what you're building. Feel free to reach out, even just to say hi.",
+      "responseTime": "Reply within 24h",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
-      "noChannelsWithoutForm": "Social links will appear here once they are added to the CV.",
+      "noChannelsWithoutForm": "Social links will appear here once added to the CV.",
+      "globe": {
+        "ariaLabel": "Interactive map showing connection from {origin} to {destination}",
+        "yourLocation": "Your location",
+        "replay": "Replay connection",
+        "unroll": "Unroll to flat map",
+        "roll": "Roll to globe",
+        "reset": "Reset view",
+        "showGrid": "Show grid lines",
+        "showOcean": "Show ocean fill",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "options": "Map options"
+      },
       "form": {
-        "helper": "Your message goes straight to this portfolio’s inbox.",
+        "helper": "Tell me about your project or inquiry and I'll reply as soon as possible.",
         "name": {
           "label": "Name",
-          "placeholder": "Enter your name",
+          "placeholder": "John Doe",
           "success": "Name entered correctly",
           "errors": {
             "required": "Please enter your name",
@@ -681,7 +695,7 @@
         },
         "email": {
           "label": "Email",
-          "placeholder": "Enter your email",
+          "placeholder": "john@company.com",
           "success": "Email entered correctly",
           "errors": {
             "required": "Please enter your email",
@@ -692,7 +706,7 @@
         },
         "message": {
           "label": "Message",
-          "placeholder": "Leave your message here, I will answer you as soon as possible",
+          "placeholder": "Tell me about your project...",
           "success": "Message entered correctly",
           "errors": {
             "required": "Please enter your message",
@@ -714,8 +728,8 @@
         "title": "Social",
         "subtitle": "Follow me on social media"
       },
-      "scheduleCall": "Schedule a call",
-      "scheduleCallCalendlyAria": "Schedule a call — opens scheduling calendar",
+      "scheduleCall": "Schedule a video call",
+      "scheduleCallCalendlyAria": "Schedule a video call — opens scheduling calendar",
       "schedulePageTitle": "Schedule a call",
       "schedulePageBack": "Back to home",
       "channels": {

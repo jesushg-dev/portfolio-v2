@@ -28,6 +28,41 @@ Full standard: [`.agents/skills/A11Y.md`](skills/A11Y.md). Run `pnpm test:a11y` 
 
 ---
 
+## Iconography & Emojis — No Raw Emojis in Copy or Translations
+
+### ❌ NEVER use raw Unicode emojis in UI copy or i18n JSON files
+
+Do not hardcode Unicode emojis (e.g., ⚡, 📅, ☎️, ✉️, 🚀) into translation strings (`messages/*.json`) or JSX text nodes. Emojis look unpolished/AI-generated and render inconsistently across operating systems and browser engines (iOS vs. Windows vs. Android vs. Linux).
+
+```tsx
+// ❌ WRONG — raw emojis in copy or translation files
+"scheduleCall": "📅 Schedule a video call",
+"responseTime": "⚡ Usually responds in less than 24 hours."
+
+<button>📅 Schedule a call</button>
+```
+
+### ✅ ALWAYS use SVG icon libraries (`lucide-react` / `react-icons`) in JSX
+
+Place icon components from `lucide-react` or `react-icons` inside JSX alongside clean, icon-free translation text:
+
+```tsx
+// ✅ CORRECT — icon component in JSX with clean text
+import { Calendar, Zap } from "lucide-react";
+
+<div className="inline-flex items-center gap-1.5">
+  <Zap className="size-3.5 text-primary" />
+  <span>{t("responseTime")}</span>
+</div>
+
+<Link href="/schedule">
+  <Calendar className="size-4" />
+  <span>{t("scheduleCall")}</span>
+</Link>
+```
+
+---
+
 ## Theming System
 
 This project uses a **`data-theme` attribute system** for theming, NOT Tailwind's `dark:` variant.

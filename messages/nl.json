@@ -662,37 +662,50 @@
     "contact": {
       "title": "Neem contact op",
       "title2": "Stuur een bericht",
-      "eyebrow": "Contact",
-      "subtitle": "Ik sta altijd open voor nieuwe kansen. Heb je een project in gedachten of wil je gewoon hallo zeggen? Stuur gerust een bericht.",
+      "subtitle": "Heb je een idee, een project of zoek je een ontwikkelaar voor je team?\n\nIk hoor graag meer over wat je bouwt. Je kunt me ook gewoon een bericht sturen om hallo te zeggen.",
+      "responseTime": "Antwoord binnen 24u",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
+      "globe": {
+        "ariaLabel": "Interatieve kaart die de verbinding toont tussen {origin} en {destination}",
+        "yourLocation": "Jouw locatie",
+        "replay": "Verbinding opnieuw afspelen",
+        "unroll": "Uitvouwen naar platte kaart",
+        "roll": "Oprollen naar bol",
+        "reset": "Weergave herstellen",
+        "showGrid": "Rasterlijnen tonen",
+        "showOcean": "Oceaan tonen",
+        "zoomIn": "Inzoomen",
+        "zoomOut": "Uitzoomen",
+        "options": "Kaartopties"
+      },
       "form": {
-        "helper": "Je bericht gaat rechtstreeks naar de inbox van dit portfolio.",
+        "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",
         "name": {
           "label": "Naam",
-          "placeholder": "Voer je naam in",
+          "placeholder": "Jan Jansen",
           "success": "Naam correct ingevoerd",
           "errors": {
-            "required": "Voer je naam in",
-            "minLength": "De naam moet minimaal 3 tekens lang zijn",
-            "maxLength": "De naam mag maximaal 20 tekens lang zijn"
+            "required": "Naam is verplicht",
+            "minLength": "De naam moet minstens 2 tekens lang zijn",
+            "maxLength": "De naam mag maximaal 50 tekens lang zijn"
           }
         },
         "email": {
-          "label": "E-mail",
-          "placeholder": "Voer je e-mailadres in",
-          "success": "E-mail correct ingevoerd",
+          "label": "E-mailadres",
+          "placeholder": "jan@bedrijf.com",
+          "success": "E-mailadres correct ingevoerd",
           "errors": {
-            "required": "Voer je e-mailadres in",
-            "minLength": "De e-mail moet minimaal 3 tekens lang zijn",
-            "maxLength": "De e-mail mag maximaal 30 tekens lang zijn",
-            "pattern": "Voer een geldig e-mailadres in"
+            "required": "E-mailadres is verplicht",
+            "minLength": "Het e-mailadres moet minstens 5 tekens lang zijn",
+            "maxLength": "Het e-mailadres mag maximaal 50 tekens lang zijn",
+            "pattern": "E-mailadres is niet geldig"
           }
         },
         "message": {
           "label": "Bericht",
-          "placeholder": "Laat hier je bericht achter, ik zal zo snel mogelijk antwoorden",
+          "placeholder": "Vertel me over je project...",
           "success": "Bericht correct ingevoerd",
           "errors": {
             "required": "Voer je bericht in",
@@ -714,8 +727,8 @@
         "title": "Sociale netwerken",
         "subtitle": "Volg mij op mijn sociale netwerken"
       },
-      "scheduleCall": "Plan een gesprek",
-      "scheduleCallCalendlyAria": "Plan een gesprek — opent de planningskalender",
+      "scheduleCall": "Plan een videogesprek",
+      "scheduleCallCalendlyAria": "Plan een videogesprek — opent de planningskalender",
       "schedulePageTitle": "Plan een gesprek",
       "schedulePageBack": "Terug naar home",
       "channels": {

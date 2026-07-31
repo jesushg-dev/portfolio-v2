@@ -7,7 +7,7 @@ describe("buildContactLinks", () => {
       { type: "GITHUB", value: "jess232017", label: null },
       {
         type: "LINKEDIN",
-        value: "https://linkedin.com/in/jesus-hernandez23",
+        value: "https://linkedin.com/in/jesushg-dev",
         label: null,
       },
       { type: "PHONE", value: "+50586793204", label: { en: "WhatsApp" } },
@@ -26,7 +26,7 @@ describe("buildContactLinks", () => {
           icon: "github",
         }),
         expect.objectContaining({
-          href: "https://linkedin.com/in/jesus-hernandez23",
+          href: "https://linkedin.com/in/jesushg-dev",
           label: "linkedin",
           icon: "linkedin",
         }),

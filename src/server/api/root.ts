@@ -18,7 +18,10 @@ import { jobTrackerAdminRouter } from "@/features/job-tracker/server/job-tracker
 import { resumeEngineAdminRouter } from "@/features/resume-engine/server/resume-engine-admin.router";
 import { integrationsAdminRouter } from "@/features/integrations/server/integrations-admin.router";
 
+import { geoRouter } from "@/server/api/routers/geo";
+
 export const appRouter = createTRPCRouter({
+  geo: geoRouter,
   portfolio: portfolioRouter,
   appLanguagesAdmin: appLanguagesAdminRouter,
   projectsAdmin: projectsAdminRouter,

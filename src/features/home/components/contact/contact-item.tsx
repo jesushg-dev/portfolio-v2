@@ -1,6 +1,6 @@
 "use client";
 
-import type { FC, CSSProperties, MouseEvent } from "react";
+import type { FC, CSSProperties } from "react";
 import {
   FaCalendarAlt,
   FaGithub,
@@ -15,6 +15,7 @@ import type { IconType } from "react-icons";
 
 import { Link } from "@/i18n/routing";
 import type { ContactIconKey } from "@/utils/contact-links";
+import { cn } from "@/lib/utils";
 
 const CONTACT_ICONS: Record<ContactIconKey, IconType> = {
   email: FaRegEnvelope,
@@ -31,7 +32,7 @@ interface ContactItemProps {
   href: string;
   label: string;
   icon: ContactIconKey;
-  accent: string;
+  accent?: string;
   ariaLabel?: string;
 }
 
@@ -45,46 +46,28 @@ const ContactItem: FC<ContactItemProps> = ({
   const Icon = CONTACT_ICONS[icon];
   const isInternal = href.startsWith("/");
 
-  const className =
-    "border-border/60 bg-background/50 text-foreground group inline-flex min-w-20 cursor-pointer flex-col items-center gap-1.5 rounded-xl border px-3 py-3 transition-all hover:-translate-y-0.5 hover:border-transparent hover:text-white hover:shadow-md";
-
-  const content = (
-    <>
-      <Icon className="text-primary size-5 transition-colors group-hover:text-white" />
-      <span className="text-muted-foreground text-[0.7rem] font-medium tracking-wide capitalize group-hover:text-white/90">
-        {label}
-      </span>
-    </>
-  );
+  const effectiveAccent = accent && accent.length > 0 ? accent : "var(--primary)";
 
   const style = {
-    "--contact-accent": accent,
+    "--contact-accent": effectiveAccent,
   } as CSSProperties;
 
-  const onMouseEnter = (event: MouseEvent<HTMLElement>) => {
-    event.currentTarget.style.backgroundColor = accent;
-  };
+  const className = cn(
+    "group inline-flex items-center gap-2 rounded-lg border border-border/60 bg-card/60 px-3 py-1.5 text-xs font-medium text-card-foreground shadow-2xs transition-all",
+    "hover:border-transparent hover:bg-[var(--contact-accent)] hover:text-white hover:shadow-md active:scale-[0.98]"
+  );
 
-  const onMouseLeave = (event: MouseEvent<HTMLElement>) => {
-    event.currentTarget.style.backgroundColor = "";
-  };
-
-  if (isInternal) {
-    return (
-      <Link
-        href={href as "/schedule"}
-        aria-label={ariaLabel ?? label}
-        className={className}
-        style={style}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-      >
-        {content}
-      </Link>
-    );
-  }
-
-  return (
+  return isInternal ? (
+    <Link
+      href={href as "/schedule"}
+      aria-label={ariaLabel ?? label}
+      className={className}
+      style={style}
+    >
+      <Icon className="size-3.5 shrink-0 text-primary transition-all group-hover:scale-110 group-hover:text-white" />
+      <span className="truncate">{label}</span>
+    </Link>
+  ) : (
     <a
       href={href}
       target="_blank"
@@ -92,10 +75,9 @@ const ContactItem: FC<ContactItemProps> = ({
       aria-label={ariaLabel ?? label}
       className={className}
       style={style}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
     >
-      {content}
+      <Icon className="size-3.5 shrink-0 text-primary transition-all group-hover:scale-110 group-hover:text-white" />
+      <span className="truncate">{label}</span>
     </a>
   );
 };

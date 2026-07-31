@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
+import { Calendar, Zap } from "lucide-react";
 
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
@@ -60,7 +61,7 @@ const Contact: FC = async () => {
               />
 
               {links.length > 0 ? (
-                <ul className="flex flex-wrap gap-2.5">
+                <ul className="flex flex-wrap gap-2">
                   {links.map((link) => (
                     <li key={link.key}>
                       <ContactItem
@@ -85,9 +86,10 @@ const Contact: FC = async () => {
                 <Link
                   href={SCHEDULE_PATH}
                   aria-label={t("scheduleCallCalendlyAria")}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex w-fit rounded-md px-4 py-2 text-sm font-semibold transition-colors"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex w-fit items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  {t("scheduleCall")}
+                  <Calendar className="size-4 shrink-0" />
+                  <span>{t("scheduleCall")}</span>
                 </Link>
               ) : null}
             </div>
@@ -101,6 +103,10 @@ const Contact: FC = async () => {
                 aria-hidden
                 className="from-primary/10 pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b to-transparent"
               />
+              <div className="mb-2.5 inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-[0.75rem] font-medium text-primary backdrop-blur-xs">
+                <Zap className="size-3 shrink-0 fill-primary/20 text-primary" />
+                <span>{t("responseTime")}</span>
+              </div>
               <ContactForm />
             </div>
           ) : null}

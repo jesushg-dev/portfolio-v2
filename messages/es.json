@@ -663,15 +663,29 @@
       "title": "Contáctame",
       "title2": "Envía un mensaje",
       "eyebrow": "Contacto",
-      "subtitle": "Siempre estoy abierto a nuevas oportunidades. Si tienes un proyecto en mente o solo quieres saludar, escríbeme.",
+      "subtitle": "¿Tienes una idea, un proyecto o buscas un desarrollador para tu equipo?\n\nMe encantaría conocer más sobre lo que estás construyendo. También puedes escribirme si solo quieres saludar.",
+      "responseTime": "Respuesta en menos de 24 h",
       "divider": "o",
       "noChannels": "Usa el formulario para escribirme. Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "noChannelsWithoutForm": "Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
+      "globe": {
+        "ariaLabel": "Mapa interactivo mostrando la conexión entre {origin} y {destination}",
+        "yourLocation": "Tu ubicación",
+        "replay": "Repetir conexión",
+        "unroll": "Desenrollar mapa",
+        "roll": "Enrollar a globo",
+        "reset": "Restablecer vista",
+        "showGrid": "Mostrar rejilla",
+        "showOcean": "Mostrar océano",
+        "zoomIn": "Acercar",
+        "zoomOut": "Alejar",
+        "options": "Opciones del mapa"
+      },
       "form": {
-        "helper": "Tu mensaje llega directo al correo de este portafolio.",
+        "helper": "Cuéntame sobre tu proyecto o consulta y te responderé lo antes posible.",
         "name": {
           "label": "Nombre",
-          "placeholder": "Ingresa tu nombre",
+          "placeholder": "Jesús Hernández",
           "success": "Nombre ingresado correctamente",
           "errors": {
             "required": "El nombre es requerido",
@@ -681,7 +695,7 @@
         },
         "email": {
           "label": "Correo electrónico",
-          "placeholder": "Ingresa tu correo electrónico",
+          "placeholder": "correo@empresa.com",
           "success": "Correo electrónico ingresado correctamente",
           "errors": {
             "required": "El correo electrónico es requerido",
@@ -692,7 +706,7 @@
         },
         "message": {
           "label": "Mensaje",
-          "placeholder": "Ingresa tu mensaje aquí, te responderé lo más pronto posible",
+          "placeholder": "Cuéntame sobre tu proyecto...",
           "success": "Mensaje ingresado correctamente",
           "errors": {
             "required": "El mensaje es requerido",
@@ -714,8 +728,8 @@
         "title": "Redes sociales",
         "subtitle": "Sígueme en mis redes sociales"
       },
-      "scheduleCall": "Agendar una llamada",
-      "scheduleCallCalendlyAria": "Agendar una llamada — abre el calendario de reservas",
+      "scheduleCall": "Agenda una videollamada",
+      "scheduleCallCalendlyAria": "Agenda una videollamada — abre el calendario de reservas",
       "schedulePageTitle": "Agendar una llamada",
       "schedulePageBack": "Volver al inicio",
       "channels": {
