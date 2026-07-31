@@ -1,31 +1,90 @@
 import { cn } from "@/lib/utils";
 
-/** Shared chrome for header toolbar controls (locale, theme, menu). */
-export function toolbarControlStyles(
-  inverted: boolean,
-  options?: { active?: boolean; iconOnly?: boolean },
+/** Shared height for every header control (nav, locale, theme, menu). */
+export const headerControlHeight = "h-9 min-h-9 max-h-9";
+
+/** Shared label typography for nav links and locale text. */
+export const headerLabelTextStyles =
+  "text-xs font-medium leading-none tracking-normal text-foreground";
+
+interface ControlOptions {
+  active?: boolean;
+  iconOnly?: boolean;
+}
+
+/** Icon controls (theme, mobile menu): bordered, matches locale pill. */
+export function headerIconControlStyles(
+  inverted = false,
+  options?: ControlOptions,
 ) {
-  const { active = false, iconOnly = false } = options ?? {};
+  const { active = false } = options ?? {};
 
   return cn(
-    "inline-flex items-center justify-center text-sm font-medium transition-all duration-200 outline-none select-none",
+    headerControlHeight,
+    "inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full p-0",
+    "border backdrop-blur-md transition-all duration-200 outline-none select-none",
     "focus-visible:ring-2 focus-visible:ring-offset-0",
-    iconOnly
-      ? "size-9 min-h-9 min-w-9 shrink-0 rounded-full p-0"
-      : "h-9 min-h-9 max-h-9 rounded-full px-3.5",
     inverted
       ? cn(
-          "border border-white/15 bg-white/10 text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-md",
-          "hover:border-white/25 hover:bg-white/15",
+          "border-white/20 bg-transparent text-white hover:bg-white/10",
           "focus-visible:ring-white/25",
-          active && "border-white/30 bg-white/20",
-          "[&_svg]:text-white/75",
+          active && "border-white/30 bg-white/10",
         )
       : cn(
-          "border-border/55 bg-background/80 text-foreground shadow-sm backdrop-blur-md",
-          "hover:border-border hover:bg-accent/45",
+          "border-border/55 bg-transparent text-foreground hover:bg-accent/45",
           "focus-visible:ring-ring/35",
           active && "border-primary/25 bg-accent/55 text-primary",
         ),
   );
+}
+
+/** Pill controls (locale): transparent fill, bordered, same height as icons. */
+export function headerPillControlStyles(
+  inverted = false,
+  options?: ControlOptions,
+) {
+  const { active = false } = options ?? {};
+
+  return cn(
+    headerControlHeight,
+    headerLabelTextStyles,
+    "inline-flex w-auto cursor-pointer items-center rounded-full px-2.5",
+    "border backdrop-blur-md transition-all duration-200 outline-none select-none",
+    "focus-visible:ring-2 focus-visible:ring-offset-0",
+    inverted
+      ? cn(
+          "border-white/20 bg-transparent text-white hover:bg-white/10",
+          "focus-visible:ring-white/25",
+          active && "border-white/30 bg-white/10",
+        )
+      : cn(
+          "border-border/55 bg-transparent text-foreground hover:bg-accent/45",
+          "focus-visible:ring-ring/35",
+          active && "border-primary/25 bg-accent/55 text-primary",
+        ),
+  );
+}
+
+/** Center nav triggers: transparent, no border, same typography and height. */
+export function headerNavTriggerStyles(isActive = false) {
+  return cn(
+    headerControlHeight,
+    headerLabelTextStyles,
+    "inline-flex cursor-pointer items-center gap-0.5 rounded-full px-2.5 transition-colors outline-none select-none",
+    "focus-visible:ring-2 focus-visible:ring-ring/35 focus-visible:ring-offset-0",
+    isActive
+      ? "bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary"
+      : "bg-transparent hover:bg-accent/45 hover:text-foreground",
+  );
+}
+
+/** @deprecated Use headerIconControlStyles or headerPillControlStyles. */
+export function toolbarControlStyles(
+  inverted: boolean,
+  options?: ControlOptions,
+) {
+  const { iconOnly = false, active = false } = options ?? {};
+  return iconOnly
+    ? headerIconControlStyles(inverted, { active })
+    : headerPillControlStyles(inverted, { active });
 }

@@ -270,7 +270,72 @@
         }
       },
       "scrollToTop": "Naar boven scrollen",
-      "homeLogo": "Jehg, naar startpagina"
+      "homeLogo": "Jehg, naar startpagina",
+      "nav": {
+        "explore": "Ontdekken",
+        "comingSoon": "Binnenkort",
+        "contactCta": "Contact",
+        "scheduleCta": "Afspraak plannen",
+        "scheduleHint": "Gratis gesprek van 30 min · Geen verplichting",
+        "groups": {
+          "about": {
+            "label": "Over mij",
+            "eyebrow": "Over mij",
+            "headline": "Leer mijn achtergrond en aanpak kennen",
+            "description": "Een blik op mijn ervaring, technische vaardigheden en hoe ik met teams samenwerk."
+          },
+          "portfolio": {
+            "label": "Portfolio",
+            "eyebrow": "Portfolio",
+            "headline": "Projecten, certificeringen en carrière",
+            "description": "Bekijk mijn werk, credentials en professionele tijdlijn."
+          },
+          "process": {
+            "label": "Hoe ik werk",
+            "eyebrow": "Hoe ik werk",
+            "headline": "AI, kwaliteit en samenwerking in de praktijk",
+            "description": "Hoe ik AI-tools integreer en samenwerk met QA voor betrouwbare software."
+          }
+        },
+        "items": {
+          "about": {
+            "label": "Over mij",
+            "description": "Wie ik ben, mijn achtergrond en wat me drijft."
+          },
+          "experience": {
+            "label": "Ervaring",
+            "description": "Rollen, bedrijven en opvallende projecten."
+          },
+          "skills": {
+            "label": "Vaardigheden",
+            "description": "Tech stack, frameworks en tools."
+          },
+          "soft-skills": {
+            "label": "Soft skills",
+            "description": "Communicatie, leiderschap en teamwork."
+          },
+          "certificates": {
+            "label": "Certificaten",
+            "description": "Geverifieerde training en certificeringen."
+          },
+          "curriculum": {
+            "label": "Curriculum Vitae",
+            "description": "Volledig CV in webformaat."
+          },
+          "timeline": {
+            "label": "Tijdlijn",
+            "description": "Professionele en educatieve mijlpalen."
+          },
+          "ai-workflow": {
+            "label": "Hoe ik AI gebruik",
+            "description": "Mijn AI-workflow bij planning, ontwikkeling en QA."
+          },
+          "qa-collaboration": {
+            "label": "QA-samenwerking",
+            "description": "Hoe ik met kwaliteitsteams werk voor solide releases."
+          }
+        }
+      }
     },
     "footer": {
       "homeLogo": "Jehg, naar startpagina",

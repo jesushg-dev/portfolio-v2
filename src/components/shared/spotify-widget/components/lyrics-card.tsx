@@ -83,9 +83,7 @@ const LyricsCard: FC<LyricsCardProps> = ({
   const isLoading = status === "loading" || status === "idle";
   const isEmpty = status === "empty" || status === "temporary";
   const emptyMessage =
-    status === "temporary"
-      ? labels.temporarilyUnavailable
-      : labels.notFound;
+    status === "temporary" ? labels.temporarilyUnavailable : labels.notFound;
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);

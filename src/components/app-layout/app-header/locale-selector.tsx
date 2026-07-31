@@ -13,10 +13,12 @@ import {
 import { usePathname, useRouter } from "@/i18n/routing";
 import { appLocales, type Locale } from "@/i18n/config";
 import { cn } from "@/lib/utils";
-import { toolbarControlStyles } from "@/components/app-layout/app-header/toolbar-control-styles";
+import {
+  headerLabelTextStyles,
+  headerPillControlStyles,
+} from "@/components/app-layout/app-header/toolbar-control-styles";
 
 interface LocaleSelectorProps {
-  /** Light glass styling for the transparent hero header. */
   inverted?: boolean;
 }
 
@@ -87,15 +89,15 @@ const LocaleSelector: FC<LocaleSelectorProps> = ({ inverted = false }) => {
         aria-label={triggerAriaLabel}
         aria-busy={isPending}
         className={cn(
-          toolbarControlStyles(inverted),
-          "min-w-34 gap-1.5 border py-0! pr-2 pl-3 shadow-none",
-          "h-9! max-h-9! min-h-9! data-[size=default]:h-9! data-[size=default]:min-h-9!",
-          "leading-none [&>svg:last-child]:size-3.5",
+          headerPillControlStyles(inverted),
+          "gap-1 py-0! pr-1.5 pl-2",
+          "text-xs! data-[size=default]:h-9! data-[size=default]:min-h-9!",
+          "[&>svg:last-child]:size-3 [&>svg:last-child]:opacity-60",
           isPending && "opacity-70",
         )}
       >
-        <Globe className="size-3.5 shrink-0 opacity-90" aria-hidden />
-        <span lang={locale} className="min-w-0 flex-1 truncate tracking-tight">
+        <Globe aria-hidden className="size-3.5 shrink-0 opacity-80" />
+        <span lang={locale} className={headerLabelTextStyles}>
           {triggerLabel}
         </span>
         <SelectValue className="sr-only">{triggerLabel}</SelectValue>

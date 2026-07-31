@@ -270,7 +270,72 @@
         }
       },
       "scrollToTop": "Scroll to top",
-      "homeLogo": "Jehg, go to homepage"
+      "homeLogo": "Jehg, go to homepage",
+      "nav": {
+        "explore": "Explore",
+        "comingSoon": "Soon",
+        "contactCta": "Contact",
+        "scheduleCta": "Book a call",
+        "scheduleHint": "Free 30-minute call · No commitment",
+        "groups": {
+          "about": {
+            "label": "About me",
+            "eyebrow": "About me",
+            "headline": "Get to know my background and approach",
+            "description": "A look at my experience, technical skills, and how I collaborate with teams."
+          },
+          "portfolio": {
+            "label": "Portfolio",
+            "eyebrow": "Portfolio",
+            "headline": "Projects, certifications, and career path",
+            "description": "Browse my work, credentials, and professional timeline."
+          },
+          "process": {
+            "label": "How I work",
+            "eyebrow": "How I work",
+            "headline": "AI, quality, and collaboration in practice",
+            "description": "How I integrate AI tools and partner with QA to ship reliable software."
+          }
+        },
+        "items": {
+          "about": {
+            "label": "About me",
+            "description": "Who I am, my background, and what drives me."
+          },
+          "experience": {
+            "label": "Experience",
+            "description": "Roles, companies, and standout projects."
+          },
+          "skills": {
+            "label": "Skills",
+            "description": "Tech stack, frameworks, and tools."
+          },
+          "soft-skills": {
+            "label": "Soft skills",
+            "description": "Communication, leadership, and teamwork."
+          },
+          "certificates": {
+            "label": "Certificates",
+            "description": "Verified training and certifications."
+          },
+          "curriculum": {
+            "label": "Curriculum Vitae",
+            "description": "Full CV in web format."
+          },
+          "timeline": {
+            "label": "Timeline",
+            "description": "Professional and educational milestones."
+          },
+          "ai-workflow": {
+            "label": "How I use AI",
+            "description": "My AI workflow across planning, development, and QA."
+          },
+          "qa-collaboration": {
+            "label": "QA collaboration",
+            "description": "How I work with quality teams for solid releases."
+          }
+        }
+      }
     },
     "footer": {
       "homeLogo": "Jehg, go to homepage",

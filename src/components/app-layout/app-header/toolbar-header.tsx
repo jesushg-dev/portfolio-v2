@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { RiMenu3Line, RiCloseLine, RiPaintBrushLine } from "react-icons/ri";
 
 import LocaleSelector from "./locale-selector";
-import { toolbarControlStyles } from "./toolbar-control-styles";
+import { headerIconControlStyles } from "./toolbar-control-styles";
 import { cn } from "@/lib/utils";
 
 interface IToolbarHeaderProps {
@@ -26,17 +26,26 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
   const t = useTranslations("global.header");
 
   return (
-    <div className="flex flex-row-reverse items-center gap-1.5 md:order-2 md:flex-row">
+    <div className="flex items-center gap-1">
+      <button
+        type="button"
+        onClick={toogleThemeOpen}
+        aria-pressed={isThemeMenuOpen}
+        className={headerIconControlStyles(inverted, {
+          active: isThemeMenuOpen,
+        })}
+      >
+        <span className="sr-only">{t("openThemeMenu")}</span>
+        <RiPaintBrushLine aria-hidden="true" className="size-[1.15rem]" />
+      </button>
+      <LocaleSelector inverted={inverted} />
       <button
         type="button"
         onClick={toogleMainOpen}
         aria-expanded={isMenuOpen}
         className={cn(
-          toolbarControlStyles(inverted, {
-            active: isMenuOpen,
-            iconOnly: true,
-          }),
-          "md:hidden",
+          headerIconControlStyles(inverted, { active: isMenuOpen }),
+          "lg:hidden",
         )}
       >
         <span className="sr-only">
@@ -47,19 +56,6 @@ const ToolbarHeader: FC<IToolbarHeaderProps> = ({
         ) : (
           <RiMenu3Line aria-hidden="true" className="size-[1.15rem]" />
         )}
-      </button>
-      <LocaleSelector inverted={inverted} />
-      <button
-        type="button"
-        onClick={toogleThemeOpen}
-        aria-pressed={isThemeMenuOpen}
-        className={toolbarControlStyles(inverted, {
-          active: isThemeMenuOpen,
-          iconOnly: true,
-        })}
-      >
-        <span className="sr-only">{t("openThemeMenu")}</span>
-        <RiPaintBrushLine aria-hidden="true" className="size-[1.15rem]" />
       </button>
     </div>
   );

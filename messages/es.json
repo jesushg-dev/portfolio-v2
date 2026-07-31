@@ -270,7 +270,72 @@
         }
       },
       "scrollToTop": "Volver arriba",
-      "homeLogo": "Jehg, ir al inicio"
+      "homeLogo": "Jehg, ir al inicio",
+      "nav": {
+        "explore": "Explorar",
+        "comingSoon": "Pronto",
+        "contactCta": "Contacto",
+        "scheduleCta": "Agendar",
+        "scheduleHint": "Llamada gratis de 30 min · Sin compromiso",
+        "groups": {
+          "about": {
+            "label": "Sobre mí",
+            "eyebrow": "Sobre mí",
+            "headline": "Conoce mi trayectoria y enfoque",
+            "description": "Un vistazo a mi experiencia, habilidades técnicas y cómo trabajo con equipos."
+          },
+          "portfolio": {
+            "label": "Portafolio",
+            "eyebrow": "Portafolio",
+            "headline": "Proyectos, certificaciones y trayectoria",
+            "description": "Explora mi trabajo, credenciales y la línea de tiempo de mi carrera."
+          },
+          "process": {
+            "label": "Cómo trabajo",
+            "eyebrow": "Cómo trabajo",
+            "headline": "IA, calidad y colaboración en el día a día",
+            "description": "Cómo integro herramientas de IA y trabajo junto a QA para entregar software confiable."
+          }
+        },
+        "items": {
+          "about": {
+            "label": "Acerca de mí",
+            "description": "Quién soy, mi background y qué me motiva."
+          },
+          "experience": {
+            "label": "Experiencia",
+            "description": "Roles, empresas y proyectos destacados."
+          },
+          "skills": {
+            "label": "Habilidades",
+            "description": "Stack técnico, frameworks y herramientas."
+          },
+          "soft-skills": {
+            "label": "Habilidades blandas",
+            "description": "Comunicación, liderazgo y trabajo en equipo."
+          },
+          "certificates": {
+            "label": "Certificados",
+            "description": "Formación y certificaciones verificadas."
+          },
+          "curriculum": {
+            "label": "Curriculum Vitae",
+            "description": "CV completo en formato web."
+          },
+          "timeline": {
+            "label": "Línea de tiempo",
+            "description": "Hitos profesionales y educativos."
+          },
+          "ai-workflow": {
+            "label": "Cómo uso la IA",
+            "description": "Mi flujo con IA en planificación, desarrollo y QA."
+          },
+          "qa-collaboration": {
+            "label": "Colaboración con QA",
+            "description": "Cómo trabajo con equipos de calidad para releases sólidos."
+          }
+        }
+      }
     },
     "footer": {
       "homeLogo": "Jehg, ir al inicio",

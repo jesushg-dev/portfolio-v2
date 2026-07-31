@@ -83,6 +83,16 @@ export const pathnames = {
     es: "/privacidad",
     nl: "/privacy",
   },
+  "/how-i-use-ai": {
+    en: "/how-i-use-ai",
+    es: "/como-uso-ia",
+    nl: "/hoe-ik-ai-gebruik",
+  },
+  "/qa-collaboration": {
+    en: "/qa-collaboration",
+    es: "/colaboracion-qa",
+    nl: "/qa-samenwerking",
+  },
   "/login": {
     en: "/login",
     es: "/iniciar-sesion",
