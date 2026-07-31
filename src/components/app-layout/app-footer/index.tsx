@@ -22,7 +22,7 @@ import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
 
 const footerLinkClassName =
-  "text-primary-foreground hover:text-primary-foreground text-sm transition-colors";
+  "text-primary-foreground hover:text-primary-foreground inline-flex min-h-11 items-center py-2 text-sm transition-colors";
 
 const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
   email: IoMail,
@@ -42,7 +42,9 @@ const Footer = async () => {
   const year = new Date().getFullYear();
 
   const data = await api.contact.getPublic();
-  const socialLinks = buildContactLinks(data.contacts);
+  const socialLinks = buildContactLinks(data.contacts, {
+    excludePortfolioUrl: data.portfolioUrl ?? undefined,
+  });
   const calendlyUrl = getCalendlyUrl(data.contacts);
 
   return (
@@ -53,7 +55,7 @@ const Footer = async () => {
             <Link
               href="/"
               aria-label={t("homeLogo")}
-              className="group text-primary-foreground inline-flex items-baseline text-xl font-semibold tracking-tight"
+              className="group text-primary-foreground inline-flex min-h-11 items-center text-xl font-semibold tracking-tight"
             >
               Jehg
               <span className="text-primary-foreground transition-colors">
@@ -73,9 +75,9 @@ const Footer = async () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t("peoplePledge")}
-              className="inline-flex opacity-90 transition-opacity hover:opacity-100"
+              className="box-border inline-flex h-[44px] min-w-[44px] items-center justify-center rounded-sm px-3 opacity-90 transition-opacity hover:opacity-100"
             >
-              <Image
+              <img
                 src="/badges/people-pledge-seal.svg"
                 alt=""
                 width={88}
@@ -139,11 +141,11 @@ const Footer = async () => {
               >
                 {t("sections.miscellaneous.cvGenerator")}
               </LinkPreviewLazy>
-              <span className="bg-primary-foreground/15 text-primary-foreground rounded-md px-2 py-0.5 text-xs font-medium">
+              <span className="bg-primary-900 text-primary-foreground rounded-md px-2 py-0.5 text-sm font-medium">
                 {t("beta")}
               </span>
             </div>
-            <p className="text-primary-foreground max-w-xs text-xs leading-relaxed">
+            <p className="text-primary-foreground max-w-xs text-sm leading-relaxed">
               {t("sections.miscellaneous.cvGeneratorHint")}
             </p>
           </div>
@@ -152,15 +154,15 @@ const Footer = async () => {
             <h2 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.NowPlaying")}
             </h2>
-            <div className="border-primary-foreground/15 bg-primary-foreground/10 rounded-lg border p-2 shadow-sm backdrop-blur-sm">
+            <div className="border-primary-foreground/15 bg-primary-900/40 rounded-lg border p-2 shadow-sm backdrop-blur-sm">
               <FooterSpotifySection />
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 flex items-center justify-end gap-2 px-1"
+                className="mt-2 inline-flex min-h-11 items-center justify-end gap-2 px-1 py-2"
                 href="https://developer.spotify.com/documentation/web-api"
               >
-                <span className="text-primary-foreground text-xs">
+                <span className="text-primary-foreground text-sm">
                   {t("spotify.poweredBy")}
                 </span>
                 <Image
@@ -177,7 +179,7 @@ const Footer = async () => {
 
       <div className="border-primary-foreground/15 border-t">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <p className="text-primary-foreground text-xs">
+          <p className="text-primary-foreground text-sm">
             {t("title")}
             {year}
           </p>
@@ -192,7 +194,7 @@ const Footer = async () => {
                   aria-label={t(`socialChannels.${link.icon}`)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
+                  className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground inline-flex size-11 min-h-11 min-w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
                 >
                   <Icon className="size-4" />
                 </a>
@@ -202,7 +204,7 @@ const Footer = async () => {
               <Link
                 href={SCHEDULE_PATH}
                 aria-label={t("socialChannels.calendly")}
-                className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground inline-flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
+                className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground focus-visible:ring-primary-foreground inline-flex size-11 min-h-11 min-w-11 items-center justify-center rounded-lg transition-colors focus-visible:ring-2 focus-visible:outline-none"
               >
                 <FaCalendarAlt className="size-4" />
               </Link>

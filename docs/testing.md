@@ -9,7 +9,32 @@ pnpm test           # run once
 pnpm test:watch     # watch mode
 pnpm test:coverage  # with coverage report
 pnpm type     # also runs in CI alongside tests
+pnpm test:a11y  # Playwright + axe (WCAG AAA) on public routes
 ```
+
+## Accessibility audit (Shield / WCAG 2.2 AAA)
+
+Profile and rules: [`.agents/skills/A11Y.md`](../.agents/skills/A11Y.md).
+
+| Layer                   | Command             | What it catches                                                                                              |
+| ----------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Static (code)**       | `pnpm lint`         | jsx-a11y via `eslint-config-next/core-web-vitals` — labels, roles, alt text, keyboard handlers in JSX        |
+| **Automated (runtime)** | `pnpm test:a11y`    | `@axe-core/playwright` with WCAG AAA tags on `/`, `/login`, `/privacy`, `/certificates`, `/curriculum-vitae` |
+| **Shield house rules**  | same as above       | Sampled checks for **14px** min text and **44×44px** targets (not covered by axe alone)                      |
+| **Manual (required)**   | see checklist below | Tab order, screen reader, zoom 200%, color-only state, SPA focus                                             |
+
+`pnpm test:a11y` starts the dev server locally (or uses `E2E_BASE_URL`). Helpers live in `e2e/helpers/a11y-audit.ts`.
+
+**Manual checklist** (from A11Y §7 — automation cannot replace these):
+
+1. Tab through each flow without a mouse; no focus traps or dead ends.
+2. Trigger errors/success toasts and confirm they are announced (`aria-live` / Sonner).
+3. Zoom to 200% and reflow at 320px width — no loss of content or horizontal scroll on main flows.
+4. Simulate color blindness — state remains understandable without color alone.
+
+**CI:** a11y specs run with Playwright in the `e2e-smoke` job (`pnpm test:e2e`, project `a11y`).
+
+---
 
 CI runs on every push and pull request via [`.github/workflows/test.yml`](../.github/workflows/test.yml):
 

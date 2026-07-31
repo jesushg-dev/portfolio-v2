@@ -68,10 +68,10 @@ const AuthShowcasePanel: FC<AuthShowcasePanelProps> = ({
             {t("communityDescription")}
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <span className="bg-primary/10 text-primary rounded-md px-2 py-1 text-xs font-medium">
+            <span className="bg-primary/10 text-primary rounded-md px-2 py-1 text-sm font-medium">
               {t("badgePortfolio")}
             </span>
-            <span className="bg-primary/10 text-primary rounded-md px-2 py-1 text-xs font-medium">
+            <span className="bg-primary/10 text-primary rounded-md px-2 py-1 text-sm font-medium">
               {t("badgeCv")}
             </span>
           </div>
@@ -96,10 +96,10 @@ const AuthShowcasePanel: FC<AuthShowcasePanelProps> = ({
       />
 
       <div className="relative z-10 mb-2 flex flex-wrap items-center gap-2 p-4 md:p-8 md:pb-0">
-        <span className="text-foreground bg-background/60 rounded-md px-2 py-1 text-xs backdrop-blur-sm">
+        <span className="text-foreground bg-background/60 rounded-md px-2 py-1 text-sm backdrop-blur-sm">
           {t("badgePortfolio")}
         </span>
-        <span className="text-foreground bg-background/60 rounded-md px-2 py-1 text-xs backdrop-blur-sm">
+        <span className="text-foreground bg-background/60 rounded-md px-2 py-1 text-sm backdrop-blur-sm">
           {t("badgeAdmin")}
         </span>
       </div>
@@ -159,7 +159,7 @@ function AvatarStack({ label }: { label: string }) {
           />
         </motion.div>
       ))}
-      <span className="text-muted-foreground ml-3 text-xs">{label}</span>
+      <span className="text-muted-foreground ml-3 text-sm">{label}</span>
     </div>
   );
 }

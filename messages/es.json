@@ -2173,6 +2173,8 @@
   "legal": {
     "privacy": {
       "title": "Política de privacidad",
+      "metaTitle": "Política de privacidad",
+      "metaDescription": "Cómo tratamos tus datos, incluidas las credenciales de Spotify y su retención.",
       "subtitle": "Cómo tratamos tus datos",
       "updatedAt": "Última actualización: julio de 2026",
       "intro": "Esta plataforma de portafolios guarda solo los datos necesarios para ofrecer sus funciones. Esta página explica qué recopilamos cuando conectas Spotify y cómo puedes eliminarlo.",

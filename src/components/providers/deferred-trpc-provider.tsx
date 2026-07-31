@@ -3,8 +3,8 @@
 import {
   createContext,
   useContext,
-  useLayoutEffect,
   useEffect,
+  useSyncExternalStore,
   useState,
   type ReactNode,
 } from "react";
@@ -40,6 +40,18 @@ function needsImmediateTrpc(pathname: string): boolean {
   return isSkillInterceptRoute(pathname) || !isHomeLandingRoute(pathname);
 }
 
+const emptySubscribe = () => () => {
+  /* empty */
+};
+
+function getScrollRestoredSnapshot(): boolean {
+  return window.scrollY > 0;
+}
+
+function getScrollRestoredServerSnapshot(): boolean {
+  return false;
+}
+
 /**
  * Defers tRPC on the home landing until first interaction so Hero/LCP stays lean.
  * Other routes under `(home)` (e.g. `/schedule`) mount the footer Spotify widget
@@ -51,16 +63,13 @@ export default function DeferredTrpcProvider({
   const pathname = usePathname();
   const needsTrpcNow = needsImmediateTrpc(pathname);
   const [deferredReady, setDeferredReady] = useState(false);
-  const isReady = needsTrpcNow || deferredReady;
-
-  useLayoutEffect(() => {
-    if (needsTrpcNow) return;
-
-    // Scroll restoration on reload does not fire a scroll event.
-    if (window.scrollY > 0) {
-      setDeferredReady(true);
-    }
-  }, [needsTrpcNow]);
+  const scrollRestored = useSyncExternalStore(
+    emptySubscribe,
+    getScrollRestoredSnapshot,
+    getScrollRestoredServerSnapshot,
+  );
+  const isReady =
+    needsTrpcNow || deferredReady || (!needsTrpcNow && scrollRestored);
 
   useEffect(() => {
     if (needsTrpcNow || deferredReady) {

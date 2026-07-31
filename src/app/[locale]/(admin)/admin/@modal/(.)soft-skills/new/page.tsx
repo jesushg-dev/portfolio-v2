@@ -1,3 +1,4 @@
+export { generateMetadata } from "../../../soft-skills/new/metadata";
 import { getTranslations } from "next-intl/server";
 import { PageDialogWrapper } from "@/components/shared/page-container";
 import { SoftSkillForm } from "@/features/soft-skills/components/soft-skill-form";

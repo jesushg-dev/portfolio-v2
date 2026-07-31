@@ -69,17 +69,17 @@ const TabItem: FC<TabItemProps> = ({
         type="button"
         role="tab"
         id={tabButtonId}
-        aria-controls={tabPanelId}
+        {...(tabId ? { "aria-controls": tabPanelId } : {})}
         aria-selected={isActive}
         tabIndex={isActive ? 0 : -1}
         title={title}
-        animate={isActive ? "active" : "inactive"}
+        animate={minimal ? "active" : isActive ? "active" : "inactive"}
         variants={variants}
         initial="inactive"
         whileHover="hover"
         onClick={() => setCurrentTab(index)}
         className={cn(
-          "relative z-10 min-h-11 shrink-0 cursor-pointer touch-manipulation rounded-xl px-3 py-2.5 text-left sm:min-h-0 sm:px-4 sm:py-2.5",
+          "relative z-10 flex min-h-11 shrink-0 cursor-pointer touch-manipulation items-center rounded-xl px-3 py-3 text-left sm:px-4",
           minimal ? "w-auto" : "w-full sm:p-4 md:p-5",
           !isActive && "hover:bg-muted/60",
         )}

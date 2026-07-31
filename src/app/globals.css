@@ -123,7 +123,7 @@
   --static-color-github: #333333;
   --static-color-linkedin: #0a66c2;
   --static-color-whatsapp: #128c7e;
-  --static-color-cv: #164e98;
+  --static-color-cv: #0a3d7a;
 
   /* Map static colors to global variables */
   --color-email: var(--static-color-email);

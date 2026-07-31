@@ -3,6 +3,8 @@ import type { Locale } from "next-intl";
 import { Suspense } from "react";
 import { setRequestLocale } from "next-intl/server";
 
+export { generateMetadata } from "./metadata";
+
 import LoginForm from "@/features/auth/components/login-form";
 import { env } from "@/env";
 

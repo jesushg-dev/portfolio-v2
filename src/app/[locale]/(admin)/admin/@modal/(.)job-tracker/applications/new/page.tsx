@@ -1,3 +1,4 @@
+export { generateMetadata } from "../../../../job-tracker/applications/new/metadata";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 

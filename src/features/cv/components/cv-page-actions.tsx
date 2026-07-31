@@ -112,9 +112,9 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Link
           href="/"
-          className="pressable border-primary-700 text-primary-700 hover:bg-primary-800 hover:text-secondaryText-100 flex items-center gap-2 rounded-lg border px-4 py-3 text-sm shadow-lg"
+          className="pressable border-primary-800 text-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg border px-4 py-3 text-sm shadow-lg hover:text-white"
         >
-          {goBackLabel} <FaHome className="text-xs" aria-hidden />
+          {goBackLabel} <FaHome className="size-4" aria-hidden />
         </Link>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -122,9 +122,9 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
             <a
               href={downloadHref}
               download={downloadFileName}
-              className="pressable bg-primary-700 text-secondaryText-100 hover:bg-primary-800 flex items-center gap-2 rounded-lg px-4 py-3 text-sm shadow-lg"
+              className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg"
             >
-              {downloadLabel} <FaDownload className="text-xs" aria-hidden />
+              {downloadLabel} <FaDownload className="size-4" aria-hidden />
             </a>
           ) : null}
 
@@ -132,7 +132,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
             <Button
               type="button"
               variant={emailOpen ? "secondary" : "outline"}
-              className="pressable h-auto gap-2 rounded-lg px-4 py-3 text-sm shadow-lg"
+              className="pressable h-auto min-h-11 gap-2 rounded-lg px-4 py-3 text-sm shadow-lg"
               onClick={handleToggleEmail}
               aria-expanded={emailOpen}
               aria-controls="cv-email-panel"

@@ -1,3 +1,4 @@
+export { generateMetadata } from "./metadata";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 

@@ -90,10 +90,10 @@ const CvPreview: FC<ICvPreviewProps> = ({
         <div className="sm:col-span-5">
           {aboutMeText ? (
             <div className="mb-4">
-              <h5 className="text-cv text-blue mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+              <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
                 {t("header.aboutMe")}
               </h5>
-              <h3 className="text-xs">{aboutMeText}</h3>
+              <h3 className="text-sm text-[#1a1a1a]">{aboutMeText}</h3>
             </div>
           ) : null}
 

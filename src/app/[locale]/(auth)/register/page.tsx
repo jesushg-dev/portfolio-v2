@@ -3,6 +3,8 @@ import type { Locale } from "next-intl";
 import { Suspense } from "react";
 import { setRequestLocale } from "next-intl/server";
 
+export { generateMetadata } from "./metadata";
+
 import RegisterForm from "@/features/auth/components/register-form";
 
 interface IRegisterPageProps {

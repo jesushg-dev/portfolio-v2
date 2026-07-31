@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/routing";
 
+import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import LocaleSegment from "@/components/admin/shared/locale-segment";
 import { localsDisplay, type Locale } from "@/i18n/config";
 import { useTabsKeyboard } from "@/hooks/use-tabs-keyboard";
@@ -51,7 +52,7 @@ const CvEditor: FC = () => {
     return {
       profile: data.profile,
       header: data.header,
-      contacts: data.contacts,
+      contacts: resolveCvDisplayContacts(data.contacts, data.profile),
       educations: data.educations,
       languages: data.languages,
       technicalSkills: data.technicalSkills,

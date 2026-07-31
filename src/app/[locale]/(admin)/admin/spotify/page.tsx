@@ -1,3 +1,4 @@
+export { generateMetadata } from "./metadata";
 import type { FC } from "react";
 import { setRequestLocale } from "next-intl/server";
 import { redirect } from "next/navigation";

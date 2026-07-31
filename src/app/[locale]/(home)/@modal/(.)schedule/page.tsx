@@ -1,3 +1,5 @@
+export { generateMetadata } from "../../schedule/metadata";
+
 import { ScheduleModal } from "@/features/home/components/schedule/schedule-modal";
 import { getScheduleCalendlyUrl } from "@/features/home/components/schedule/get-schedule-calendly-url";
 

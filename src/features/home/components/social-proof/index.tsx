@@ -112,7 +112,7 @@ function TestimonialCard({
         <div>
           <AuthorName author={author} linkedInUrl={linkedInUrl} />
           {role ? (
-            <p className="text-muted-foreground text-xs leading-tight">
+            <p className="text-muted-foreground text-sm leading-tight">
               {role}
             </p>
           ) : null}
@@ -185,13 +185,17 @@ function TestimonialsCarousel({ items }: { items: TestimonialItem[] }) {
                 aria-label={`Go to testimonial ${index + 1}`}
                 aria-current={selectedIndex === index}
                 onClick={() => api?.scrollTo(index)}
-                className={cn(
-                  "h-2 rounded-full transition-all duration-300",
-                  selectedIndex === index
-                    ? "bg-primary w-6"
-                    : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-2",
-                )}
-              />
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full"
+              >
+                <span
+                  className={cn(
+                    "rounded-full transition-all duration-300",
+                    selectedIndex === index
+                      ? "bg-primary h-2 w-6"
+                      : "bg-muted-foreground/30 h-2 w-2",
+                  )}
+                />
+              </button>
             ))}
           </div>
         ) : null}
@@ -406,7 +410,7 @@ function SocialProofContent({
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-muted-foreground max-w-xs text-xs leading-relaxed"
+            className="text-muted-foreground max-w-xs text-sm leading-relaxed"
           >
             {t("statsNote")}
           </motion.p>

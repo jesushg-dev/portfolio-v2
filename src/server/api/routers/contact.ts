@@ -9,6 +9,7 @@ import {
   canDeliverPortfolioContactEmail,
   type Locale,
 } from "@/lib/email/resend";
+import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 
 const ContactMessageSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -24,11 +25,15 @@ export const contactRouter = createTRPCRouter({
 
     const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
 
-    const [contacts, user, emailFormEnabled] = await Promise.all([
+    const [contacts, profile, user, emailFormEnabled] = await Promise.all([
       ctx.db.cvContact.findMany({
         where: { userId: ctx.tenant.userId },
         orderBy: { order: "asc" },
         select: { type: true, value: true, label: true },
+      }),
+      ctx.db.profile.findUnique({
+        where: { userId: ctx.tenant.userId },
+        select: { username: true, isPrimary: true, customDomain: true },
       }),
       ctx.db.user.findUnique({
         where: { id: ctx.tenant.userId },
@@ -39,6 +44,7 @@ export const contactRouter = createTRPCRouter({
 
     return {
       contacts,
+      portfolioUrl: profile ? getTenantPublicUrl(profile) : null,
       displayName: user?.name ?? ctx.tenant.username,
       recipientReady: Boolean(user?.email),
       emailFormEnabled,

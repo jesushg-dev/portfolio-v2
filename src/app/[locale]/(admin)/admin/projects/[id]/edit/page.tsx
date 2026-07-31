@@ -1,3 +1,4 @@
+export { generateMetadata } from "./metadata";
 import { getTranslations } from "next-intl/server";
 
 import { ProjectForm } from "@/features/projects/components/project-form";

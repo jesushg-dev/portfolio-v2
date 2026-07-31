@@ -7,6 +7,7 @@ import CvPageActions from "@/features/cv/components/cv-page-actions";
 import { cvPreviewFont } from "@/features/cv/lib/cv-preview-font";
 import { getLocalizedText } from "@/lib/i18n/localized";
 import { canDeliverPortfolioCvEmail } from "@/lib/email/resend";
+import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import { resolveTenant } from "@/lib/tenant/resolve";
 import { db } from "@/server/db";
 import type { Locale as AppLocale } from "@/i18n/config";
@@ -78,6 +79,8 @@ const CvPageView: FC<CvPageViewProps> = async ({
     }),
   ]);
 
+  const displayContacts = resolveCvDisplayContacts(contacts, profile);
+
   if (!tenant.isPrimary && profile && !profile.isPublished) {
     notFound();
   }
@@ -109,7 +112,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
           data={{
             header,
             profile,
-            contacts,
+            contacts: displayContacts,
             educations,
             languages,
             technicalSkills,
@@ -149,7 +152,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
             data={{
               header,
               profile,
-              contacts,
+              contacts: displayContacts,
               educations,
               languages,
               technicalSkills,
@@ -162,7 +165,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
             defaultLocale={defaultLocale}
           />
           <div className="bg-cv p-4">
-            <p className="text-xs font-semibold text-white">{t("codedWith")}</p>
+            <p className="text-sm font-semibold text-white">{t("codedWith")}</p>
           </div>
         </div>
       </section>

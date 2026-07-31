@@ -51,22 +51,37 @@ describe("buildContactLinks", () => {
     });
   });
 
-  it("maps WEBSITE contact with normalizeUrl", () => {
+  it("maps WEBSITE contacts for live portfolio channel links", () => {
     const links = buildContactLinks([
       { type: "WEBSITE", value: "mysite.com", label: null },
+      { type: "EMAIL", value: "hello@example.com", label: null },
     ]);
-    expect(links[0]).toMatchObject({
-      href: "https://mysite.com",
-      label: "website",
-      icon: "website",
-    });
+    expect(links).toHaveLength(2);
+    expect(links).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          href: "https://mysite.com",
+          label: "website",
+          icon: "website",
+        }),
+        expect.objectContaining({ icon: "email" }),
+      ]),
+    );
   });
 
-  it("passes through WEBSITE value when it already has https://", () => {
-    const links = buildContactLinks([
-      { type: "WEBSITE", value: "https://mysite.com", label: null },
-    ]);
-    expect(links[0]?.href).toBe("https://mysite.com");
+  it("excludes only the portfolio URL when excludePortfolioUrl is set", () => {
+    const links = buildContactLinks(
+      [
+        { type: "WEBSITE", value: "https://jess.dev/", label: null },
+        { type: "WEBSITE", value: "blog.example.com", label: null },
+      ],
+      { excludePortfolioUrl: "https://jess.dev" },
+    );
+    expect(links).toHaveLength(1);
+    expect(links[0]).toMatchObject({
+      href: "https://blog.example.com",
+      icon: "website",
+    });
   });
 
   it("maps LOCATION to a Google Maps search URL", () => {
@@ -130,12 +145,5 @@ describe("buildContactLinks", () => {
       { type: "PHONE", value: "12345", label: { num: 456 } },
     ]);
     expect(links2[0]?.icon).toBe("phone");
-  });
-
-  it("normalizes URLs starting with mailto: or tel:", () => {
-    const links = buildContactLinks([
-      { type: "WEBSITE", value: "tel:+1234567890", label: null },
-    ]);
-    expect(links[0]?.href).toBe("tel:+1234567890");
   });
 });

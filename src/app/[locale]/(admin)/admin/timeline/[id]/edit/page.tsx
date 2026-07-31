@@ -1,3 +1,4 @@
+export { generateMetadata } from "./metadata";
 import { getTranslations } from "next-intl/server";
 import { TimelineItemForm } from "@/features/timeline/components/timeline-item-form";
 import { getTimelineEditPageData } from "@/features/timeline/server/timeline-queries";

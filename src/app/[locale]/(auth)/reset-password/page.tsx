@@ -3,6 +3,8 @@ import type { FC } from "react";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 
+export { generateMetadata } from "./metadata";
+
 import ResetPasswordForm from "@/features/auth/components/reset-password-form";
 
 interface IResetPasswordPageProps {

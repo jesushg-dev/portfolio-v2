@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
-import type { Locale } from "next-intl";
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { headers } from "next/headers";
+import type { Locale } from "next-intl";
 
 import { auth } from "@/lib/auth";
 import { redirectToLogin } from "@/lib/auth-redirect";
@@ -10,6 +11,15 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import DashboardShell from "../dashboard-shell";
 import TrpcProvider from "@/components/providers/trpc-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+
+export function generateMetadata(): Metadata {
+  return {
+    title: {
+      template: "%s · Admin",
+      default: "Admin",
+    },
+  };
+}
 
 export default async function AdminLayout({
   children,

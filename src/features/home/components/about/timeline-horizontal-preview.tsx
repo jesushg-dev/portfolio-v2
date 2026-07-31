@@ -73,11 +73,11 @@ const TimelineCard: FC<TimelineCardProps> = ({
   return (
     <motion.li
       variants={cardVariants}
-      className="flex w-[17.5rem] max-w-[17.5rem] min-w-[17.5rem] shrink-0 snap-center flex-col"
+      className="flex w-70 max-w-70 min-w-70 shrink-0 snap-center flex-col"
     >
       <div className="flex h-(--timeline-year-h) items-end justify-center px-1 pb-1">
         <time
-          className="text-primary-600/80 text-center text-[11px] font-medium tracking-wide tabular-nums"
+          className="text-primary-600/80 text-center text-sm font-medium tracking-wide tabular-nums"
           dateTime={dateTime}
         >
           {date}
@@ -89,7 +89,7 @@ const TimelineCard: FC<TimelineCardProps> = ({
           <TooltipTrigger
             type="button"
             aria-label={categoryLabel}
-            className="bg-background text-primary-600 hover:bg-primary-500/10 relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full transition-colors"
+            className="bg-background text-primary-600 hover:bg-primary-500/10 relative z-10 flex size-11 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full transition-colors"
           >
             <Icon className="size-3.5" aria-hidden />
           </TooltipTrigger>
@@ -185,7 +185,7 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
         <div className="flex justify-center lg:justify-start">
           <Link
             href="/timeline"
-            className="text-primary-800 hover:text-primary-900 inline-flex items-center gap-2 text-sm font-medium transition-colors"
+            className="text-primary-800 hover:text-primary-900 inline-flex min-h-11 items-center gap-2 py-2 text-sm font-medium transition-colors"
           >
             {t("viewAll")}
             <ArrowRight className="h-4 w-4" />

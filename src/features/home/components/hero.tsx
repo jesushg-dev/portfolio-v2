@@ -62,7 +62,7 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
       {/* Scroll Down Indicator - Now SSR */}
       <div className="absolute inset-x-0 bottom-8 mx-auto hidden flex-col items-center justify-center gap-2 lg:flex">
         <div className="scroll-indicator" />
-        <p className="text-muted-foreground text-xs">{t("scrollDown")}</p>
+        <p className="text-muted-foreground text-sm">{t("scrollDown")}</p>
       </div>
     </section>
   );

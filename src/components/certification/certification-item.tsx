@@ -45,18 +45,19 @@ const CertificateItem: FC<CertificateType> = ({
         </div>
 
         <div className="z-10 flex grow flex-col items-start justify-between gap-1">
-          <h5 className="text-primaryText-500 hover:text-primaryText-600 mb-0 md:font-semibold">
+          <h5 className="text-primaryText-700 hover:text-primaryText-800 mb-0 md:font-semibold">
             <a
               href={url ?? ""}
               title={t("seeCertificate")}
               target="_blank"
               rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center"
             >
               {title}
             </a>
           </h5>
 
-          <div className="text-primaryText-500 hover:text-primaryText-600 flex w-full items-center justify-between gap-2">
+          <div className="text-primaryText-700 hover:text-primaryText-800 flex w-full items-center justify-between gap-2">
             <div>
               <div className="flex items-center text-sm">
                 {issuedDate && (
@@ -80,7 +81,7 @@ const CertificateItem: FC<CertificateType> = ({
                   title={t("titles.idCredential")}
                 >
                   <MdOutlinePin />
-                  <p className="pl-2 text-xs">{idCredential}</p>
+                  <p className="pl-2 text-sm">{idCredential}</p>
                 </div>
               )}
             </div>
@@ -91,9 +92,9 @@ const CertificateItem: FC<CertificateType> = ({
                 title={t("seeCertificate")}
                 target="_blank"
                 rel="noreferrer"
-                className="pressable bg-primary-700 hover:bg-primary-800 rounded-md px-4 py-2 shadow-lg"
+                className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-4 py-2.5 shadow-lg"
               >
-                <span className="text-secondaryText-50 flex w-full items-center justify-center gap-2 text-center text-xs">
+                <span className="flex w-full items-center justify-center gap-2 text-center text-sm font-medium text-white">
                   <MdRemoveRedEye className="h-4 w-4" />
                   {t("seeCertificate")}
                 </span>

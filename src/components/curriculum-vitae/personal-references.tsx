@@ -19,13 +19,13 @@ const PersonalReferences: FC<IPersonalReferencesProps> = ({
 
   return (
     <>
-      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.personalReferences")}
       </h5>
 
       <div className="mb-2">
         {personalReferences.map((item) => (
-          <div className="flex text-xs" key={item.id}>
+          <div className="flex text-sm text-[#1a1a1a]" key={item.id}>
             <p className="mr-1">-</p>
             <p className="m-0">
               {item.name}

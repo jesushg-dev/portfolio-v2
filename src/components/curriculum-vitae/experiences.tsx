@@ -20,7 +20,7 @@ const Experiences: FC<IExperiencesProps> = ({
 
   return (
     <>
-      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.experience")}
       </h5>
 
@@ -36,12 +36,12 @@ const Experiences: FC<IExperiencesProps> = ({
         return (
           <div className="mb-4" key={experience.id}>
             <h3 className="text-sm font-bold">{role}</h3>
-            <h4 className="my-1 text-xs">
+            <h4 className="my-1 text-sm text-[#333333]">
               {experience.company}
               {dates ? ` · ${dates}` : ""}
             </h4>
             {experience.responsibilities.length > 0 ? (
-              <ul className="list-disc pl-8 text-xs">
+              <ul className="list-disc pl-8 text-sm text-[#1a1a1a]">
                 {experience.responsibilities.map((responsibility) => (
                   <li key={responsibility.id}>
                     {getLocalizedText(

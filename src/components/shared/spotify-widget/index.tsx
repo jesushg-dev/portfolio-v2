@@ -12,8 +12,15 @@ import { useSpotifyPlayback } from "./hooks/use-spotify-playback";
 
 const SpotifyWidget: FC = () => {
   const t = useTranslations("global.footer");
-  const { playback, error, isLoading, isFetchError, nextTrackLyrics, nextTrackPlayback, onTrackEndReached } =
-    useSpotifyPlayback();
+  const {
+    playback,
+    error,
+    isLoading,
+    isFetchError,
+    nextTrackLyrics,
+    nextTrackPlayback,
+    onTrackEndReached,
+  } = useSpotifyPlayback();
 
   if (isLoading) {
     return <SpotifyWidgetSkeleton />;

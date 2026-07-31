@@ -1,19 +1,12 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
+
+export { generateMetadata } from "./metadata";
 
 import type { Locale } from "@/i18n/config";
 import { IntegrationsPage } from "@/features/integrations/components/integrations-page";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
-}
-
-export async function generateMetadata({ params }: PageProps) {
-  const { locale } = await params;
-  setRequestLocale(locale as Locale);
-  const t = await getTranslations("adminCredentials");
-  return {
-    title: `${t("title")} | Admin`,
-  };
 }
 
 export default async function AdminCredentialsPage({ params }: PageProps) {

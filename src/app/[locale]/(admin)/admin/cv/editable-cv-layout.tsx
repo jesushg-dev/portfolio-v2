@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { FC, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { FaEdit } from "react-icons/fa";
@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CvContextProvider } from "@/hoc/cv-context-provider";
+import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import type { Locale as AppLocale } from "@/i18n/config";
 import { api } from "@/trpc/react";
 import { FollowerPointerCard } from "@/components/ui/following-pointer";
@@ -88,6 +89,10 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
   const t = useTranslations("admin.cv");
   const { data: languages = [] } = api.appLanguagesAdmin.getAll.useQuery();
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
+  const displayContacts = useMemo(
+    () => resolveCvDisplayContacts(data.contacts, data.profile),
+    [data.contacts, data.profile],
+  );
 
   const handleClose = (open: boolean) => {
     if (!open) setActiveSection(null);
@@ -142,11 +147,11 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               id="contacts"
               title={t("sections.contact")}
               onClick={() => setActiveSection("contacts")}
-              isEmpty={data.contacts.length === 0}
+              isEmpty={displayContacts.length === 0}
               t={t}
             >
               <ContactMe
-                contacts={data.contacts}
+                contacts={displayContacts}
                 locale={currentLocale}
                 defaultLocale={defaultLocale}
               />

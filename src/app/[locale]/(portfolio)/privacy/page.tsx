@@ -1,6 +1,8 @@
 import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 
+export { generateMetadata } from "./metadata";
+
 import HeaderArticle from "@/components/shared/header-article";
 import { type Locale as AppLocale, locales } from "@/i18n/config";
 

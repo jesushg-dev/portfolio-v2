@@ -1,3 +1,4 @@
+export { generateMetadata } from "./metadata";
 import { getTranslations } from "next-intl/server";
 import { SoftSkillForm } from "@/features/soft-skills/components/soft-skill-form";
 import { getSoftSkillCreatePageData } from "@/features/soft-skills/server/soft-skill-queries";

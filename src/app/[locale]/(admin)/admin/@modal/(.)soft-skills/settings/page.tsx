@@ -1,3 +1,4 @@
+export { generateMetadata } from "../../../soft-skills/settings/metadata";
 import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 

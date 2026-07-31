@@ -1,3 +1,4 @@
+export { generateMetadata } from "./metadata";
 import { getTranslations } from "next-intl/server";
 import { SkillForm } from "@/features/skills/components/skill-form";
 import { getSkillEditPageData } from "@/features/skills/server/skill-queries";

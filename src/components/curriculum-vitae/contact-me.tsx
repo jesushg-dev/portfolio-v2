@@ -52,38 +52,44 @@ const ContactMe: FC<IContactMeProps> = ({
 
   return (
     <>
-      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.contact")}
       </h5>
 
       <div className="mb-4">
-        <ul className="list-none text-xs">
+        <ul className="list-none text-sm leading-none">
           {contacts.map((contact) => {
             const Icon = ICONS[contact.type] ?? MdWeb;
             const label =
               getLocalizedText(contact.label, locale, defaultLocale) ||
               contact.value;
             const href = buildHref(contact.type, contact.value);
-            const className = "flex items-center gap-2";
+            const linkClassName =
+              "relative z-10 inline-flex min-h-11 items-center gap-1 py-0 text-[#1a1a1a] hover:underline";
+            const opensInNewTab =
+              !isInternalHref(href) &&
+              !href.startsWith("tel:") &&
+              !href.startsWith("mailto:");
 
             return (
-              <li key={contact.id}>
+              <li key={contact.id} className="relative -my-3.5">
                 {isInternalHref(href) ? (
                   <Link
                     href={href as typeof SCHEDULE_PATH}
-                    className={className}
+                    className={linkClassName}
                   >
-                    <Icon className="text-xs" />
+                    <Icon className="size-3 shrink-0" aria-hidden />
                     {label}
                   </Link>
                 ) : (
                   <a
-                    target="_blank"
-                    className={className}
-                    rel="noopener noreferrer"
+                    className={linkClassName}
                     href={href}
+                    {...(opensInNewTab
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
                   >
-                    <Icon className="text-xs" />
+                    <Icon className="size-3 shrink-0" aria-hidden />
                     {label}
                   </a>
                 )}

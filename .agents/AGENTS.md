@@ -1,5 +1,24 @@
 # Portfolio v2 — Agent Rules
 
+## Accessibility — Shield (WCAG 2.2 AAA)
+
+Full standard: [`.agents/skills/A11Y.md`](skills/A11Y.md). Run `pnpm test:a11y` to audit `/`, `/login`, `/privacy`.
+
+| Metric   | Shield (AAA)            |
+| -------- | ----------------------- |
+| Contrast | 7:1 text / 3:1 UI       |
+| Min text | 14px                    |
+| Targets  | 44×44px (48×48 advised) |
+
+- Reuse `@/components/ui/` (Radix/Shadcn) and `@/components/shared/form-root`.
+- Forms: `FormRoot` + `FormField` + `FormItem` with explicit labels.
+- Motion: `motion/react` + `prefers-reduced-motion`.
+- Theming: semantic tokens (`text-foreground`, `bg-card`) — no hardcoded neutrals.
+- Fix jsx-a11y ESLint violations; never disable rules.
+- **Page titles:** each route uses `metadata.ts` + `export { generateMetadata } from "./metadata"` in `page.tsx` (one `getTranslations` per file). Helper: `@/lib/seo/create-translated-metadata`. Admin/auth layouts apply title templates (`%s · Admin`, `%s · Jehg`).
+
+---
+
 ## English Language Requirement for Code & Documentation
 
 ### ✅ ALWAYS write all code, comments, variable names, docstrings, and documentation in English

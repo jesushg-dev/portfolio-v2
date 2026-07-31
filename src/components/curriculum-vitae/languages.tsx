@@ -19,18 +19,18 @@ const Languages: FC<ILanguagesProps> = ({
 
   return (
     <>
-      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.languages")}
       </h5>
 
       <div className="mb-4">
-        <ul className="list-none text-xs">
+        <ul className="list-none text-sm">
           {languages.map((language) => (
             <li className="mb-2" key={language.id}>
               <p className="text-sm font-bold">
                 {getLocalizedText(language.name, locale, defaultLocale)}
               </p>
-              <p className="my-1 text-xs">
+              <p className="my-1 text-sm text-[#333333]">
                 {getLocalizedText(language.level, locale, defaultLocale)}
               </p>
             </li>

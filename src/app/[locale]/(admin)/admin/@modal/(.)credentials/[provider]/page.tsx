@@ -1,3 +1,4 @@
+export { generateMetadata } from "../../../credentials/[provider]/metadata";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 

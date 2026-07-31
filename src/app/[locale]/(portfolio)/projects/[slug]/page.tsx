@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getLocale, setRequestLocale } from "next-intl/server";
 
+export { generateMetadata } from "./metadata";
+
 import ProjectCaseStudyView from "@/features/home/components/projects/project-case-study-view";
 import { type Locale, locales } from "@/i18n/config";
 import { api } from "@/trpc/server";

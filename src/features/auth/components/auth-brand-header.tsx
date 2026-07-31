@@ -7,7 +7,7 @@ const AuthBrandHeader: FC = () => {
   return (
     <Link
       href="/"
-      className="text-foreground inline-flex items-center gap-2 text-sm font-medium"
+      className="text-foreground inline-flex h-11 min-h-11 items-center gap-2 text-sm font-medium"
     >
       <Image
         alt="Jehg"

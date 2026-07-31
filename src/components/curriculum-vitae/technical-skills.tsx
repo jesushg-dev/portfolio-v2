@@ -29,7 +29,7 @@ const TechnicalSkills: FC<ITechnicalSkillsProps> = ({ technicalSkills }) => {
 
   return (
     <>
-      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.technicalSkills")}
       </h5>
       {technicalSkills.map((section) => (
@@ -44,7 +44,7 @@ const TechnicalSkills: FC<ITechnicalSkillsProps> = ({ technicalSkills }) => {
             )}
           </p>
 
-          <ul className="grid list-disc grid-cols-2 gap-1 pl-6 text-xs">
+          <ul className="grid list-disc grid-cols-2 gap-1 pl-6 text-sm text-[#1a1a1a]">
             {section.items.map((item) => (
               <li key={item}>
                 <p>{item}</p>

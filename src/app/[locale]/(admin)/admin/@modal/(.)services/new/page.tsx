@@ -1,3 +1,4 @@
+export { generateMetadata } from "../../../services/new/metadata";
 import { getTranslations } from "next-intl/server";
 import { PageDialogWrapper } from "@/components/shared/page-container";
 import { ServiceForm } from "@/features/services/components/service-form";

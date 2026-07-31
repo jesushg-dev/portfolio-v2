@@ -1,3 +1,4 @@
+export { generateMetadata } from "./metadata";
 import { getTranslations } from "next-intl/server";
 import { ServiceForm } from "@/features/services/components/service-form";
 import { getServiceCreatePageData } from "@/features/services/server/service-queries";

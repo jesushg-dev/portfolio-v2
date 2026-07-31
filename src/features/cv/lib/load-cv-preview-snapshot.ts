@@ -3,7 +3,9 @@ import "server-only";
 import type { PrismaClient } from "@prisma/client";
 
 import type { Locale } from "@/i18n/config";
+import { appendPortfolioWebsiteContact } from "@/lib/cv/append-portfolio-website-contact";
 import { getLocalizedText } from "@/lib/i18n/localized";
+import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 
 export interface CvPreviewSnapshot {
   header: {
@@ -74,6 +76,7 @@ export async function loadCvPreviewSnapshot(
   fallbackLocale: Locale,
 ): Promise<CvPreviewSnapshot | null> {
   const [
+    profile,
     header,
     aboutMe,
     contacts,
@@ -84,6 +87,10 @@ export async function loadCvPreviewSnapshot(
     softSkills,
     additionalInformation,
   ] = await Promise.all([
+    db.profile.findUnique({
+      where: { userId },
+      select: { username: true, isPrimary: true, customDomain: true },
+    }),
     db.cvHeader.findUnique({ where: { userId } }),
     db.cvAboutMe.findUnique({ where: { userId } }),
     db.cvContact.findMany({
@@ -142,12 +149,22 @@ export async function loadCvPreviewSnapshot(
       ),
     },
     aboutMeText: aboutMeText ?? null,
-    contacts: contacts.map((contact) => ({
-      type: contact.type,
-      value: contact.value,
-      label: getLocalizedText(contact.label, locale, fallbackLocale),
-      order: contact.order,
-    })),
+    contacts: profile
+      ? appendPortfolioWebsiteContact(
+          contacts.map((contact) => ({
+            type: contact.type,
+            value: contact.value,
+            label: getLocalizedText(contact.label, locale, fallbackLocale),
+            order: contact.order,
+          })),
+          getTenantPublicUrl(profile),
+        )
+      : contacts.map((contact) => ({
+          type: contact.type,
+          value: contact.value,
+          label: getLocalizedText(contact.label, locale, fallbackLocale),
+          order: contact.order,
+        })),
     educations: educations.map((education) => ({
       institution: education.institution,
       degreeName: getLocalizedText(

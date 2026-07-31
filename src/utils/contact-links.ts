@@ -1,5 +1,7 @@
 import type { CvContactType } from "@prisma/client";
 
+import { normalizeWebsiteUrl } from "@/lib/cv/append-portfolio-website-contact";
+
 export interface PublicContact {
   type: CvContactType;
   value: string;
@@ -43,8 +45,14 @@ function labelText(label: unknown): string {
   return "";
 }
 
+export interface BuildContactLinksOptions {
+  /** Omit the live portfolio URL from home/footer channels (still shown on CV). */
+  excludePortfolioUrl?: string;
+}
+
 export function buildContactLinks(
   contacts: readonly PublicContact[],
+  options?: BuildContactLinksOptions,
 ): ContactLink[] {
   const links: ContactLink[] = [];
 
@@ -94,15 +102,24 @@ export function buildContactLinks(
           accent: "#333333",
         });
         break;
-      case "WEBSITE":
+      case "WEBSITE": {
+        const href = normalizeUrl(value, "https://");
+        if (
+          options?.excludePortfolioUrl &&
+          normalizeWebsiteUrl(href) ===
+            normalizeWebsiteUrl(options.excludePortfolioUrl)
+        ) {
+          break;
+        }
         links.push({
           key: `website-${index}`,
-          href: normalizeUrl(value, "https://"),
+          href,
           label: "website",
           icon: "website",
           accent: "#6366F1",
         });
         break;
+      }
       case "LOCATION":
         links.push({
           key: `location-${index}`,

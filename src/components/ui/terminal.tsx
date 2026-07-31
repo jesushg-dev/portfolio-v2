@@ -457,7 +457,7 @@ export function Terminal({
   return (
     <div
       ref={containerRef}
-      className={cn("mx-auto w-full max-w-xl font-mono text-xs", className)}
+      className={cn("mx-auto w-full max-w-xl font-mono text-sm", className)}
     >
       <div className="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950 shadow-2xl">
         {/* Title Bar */}
@@ -468,7 +468,7 @@ export function Terminal({
             <div className="h-3 w-3 rounded-full bg-green-400 transition-colors hover:bg-green-500" />
           </div>
           <div className="flex-1 text-center">
-            <span className="truncate text-xs text-neutral-300">
+            <span className="truncate text-sm text-neutral-300">
               {username} — bash
             </span>
           </div>

@@ -218,7 +218,7 @@ export function useSpotifyPlayback() {
       : null;
 
   const nextTrackPlayback =
-    displayPlayback && displayPlayback.contentType === "track"
+    displayPlayback?.contentType === "track"
       ? resolveNextTrackPlayback(displayPlayback, queueQuery.data)
       : null;
 

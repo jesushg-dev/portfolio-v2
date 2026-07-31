@@ -1,3 +1,4 @@
+export { generateMetadata } from "./metadata";
 import { getTranslations } from "next-intl/server";
 import { CertificationForm } from "@/features/certifications/components/certification-form";
 import { getCertificationEditPageData } from "@/features/certifications/server/certification-queries";

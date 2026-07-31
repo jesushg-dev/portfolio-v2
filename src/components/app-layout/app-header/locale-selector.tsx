@@ -39,7 +39,7 @@ function LocaleMenuLabel({
         {nativeName}
       </span>
       {showLocalizedHint ? (
-        <span className="text-muted-foreground text-xs font-normal">
+        <span className="text-muted-foreground text-sm font-normal">
           {localizedName}
         </span>
       ) : null}
@@ -91,7 +91,7 @@ const LocaleSelector: FC<LocaleSelectorProps> = ({ inverted = false }) => {
         className={cn(
           headerPillControlStyles(inverted),
           "gap-1 py-0! pr-1.5 pl-2",
-          "text-xs! data-[size=default]:h-9! data-[size=default]:min-h-9!",
+          "text-sm! data-[size=default]:h-11! data-[size=default]:min-h-11!",
           "[&>svg:last-child]:size-3 [&>svg:last-child]:opacity-60",
           isPending && "opacity-70",
         )}
@@ -100,7 +100,9 @@ const LocaleSelector: FC<LocaleSelectorProps> = ({ inverted = false }) => {
         <span lang={locale} className={headerLabelTextStyles}>
           {triggerLabel}
         </span>
-        <SelectValue className="sr-only">{triggerLabel}</SelectValue>
+        <SelectValue aria-hidden className="pointer-events-none sr-only">
+          {triggerLabel}
+        </SelectValue>
       </SelectTrigger>
 
       <SelectContent

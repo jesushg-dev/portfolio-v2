@@ -14,7 +14,9 @@ import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 const Contact: FC = async () => {
   const t = await getTranslations("main.contact");
   const data = await api.contact.getPublic();
-  const links = buildContactLinks(data.contacts);
+  const links = buildContactLinks(data.contacts, {
+    excludePortfolioUrl: data.portfolioUrl ?? undefined,
+  });
   const calendlyUrl = getCalendlyUrl(data.contacts);
   const showContactForm = data.emailFormEnabled;
 

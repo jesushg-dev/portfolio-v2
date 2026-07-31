@@ -76,7 +76,7 @@ export default async function HeroContent({
 
       <dl className="border-border/50 mb-9 flex flex-wrap gap-x-10 gap-y-5 border-b pb-9">
         <div>
-          <dt className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+          <dt className="text-muted-foreground mt-1 text-sm tracking-wider uppercase">
             {t("yearsExperience")}
           </dt>
           <dd className="font-display text-foreground text-3xl font-bold">
@@ -84,7 +84,7 @@ export default async function HeroContent({
           </dd>
         </div>
         <div>
-          <dt className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+          <dt className="text-muted-foreground mt-1 text-sm tracking-wider uppercase">
             {t("projectsDelivered")}
           </dt>
           <dd className="font-display text-foreground text-3xl font-bold">
@@ -92,7 +92,7 @@ export default async function HeroContent({
           </dd>
         </div>
         <div>
-          <dt className="text-muted-foreground mt-1 text-xs tracking-wider uppercase">
+          <dt className="text-muted-foreground mt-1 text-sm tracking-wider uppercase">
             {t("certifications")}
           </dt>
           <dd className="font-display text-foreground text-3xl font-bold">

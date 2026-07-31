@@ -19,11 +19,11 @@ const AdditionalInformation: FC<IAdditionalInformationProps> = ({
 
   return (
     <>
-      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.additionalInformation")}
       </h5>
       <div className="mb-4">
-        <ul className="list-disc pl-8 text-xs">
+        <ul className="list-disc pl-8 text-sm text-[#1a1a1a]">
           {additionalInformation.map((entry) => (
             <li key={entry.id}>
               {getLocalizedText(entry.text, locale, defaultLocale)}.

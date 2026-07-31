@@ -2173,6 +2173,8 @@
   "legal": {
     "privacy": {
       "title": "Privacy Policy",
+      "metaTitle": "Privacy Policy",
+      "metaDescription": "How we handle your data, including Spotify integration credentials and retention.",
       "subtitle": "How we handle your data",
       "updatedAt": "Last updated: July 2026",
       "intro": "This portfolio platform stores only the data needed to provide its features. This page explains what we collect when you connect Spotify and how you can remove it.",

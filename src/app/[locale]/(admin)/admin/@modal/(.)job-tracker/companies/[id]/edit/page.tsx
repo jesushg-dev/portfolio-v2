@@ -1,3 +1,4 @@
+export { generateMetadata } from "../../../../../job-tracker/companies/[id]/edit/metadata";
 import { getTranslations } from "next-intl/server";
 
 import { PageDialogWrapper } from "@/components/shared/page-container";

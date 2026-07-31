@@ -240,7 +240,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                 {t("noAccount")}{" "}
                 <Link
                   href={registerHref}
-                  className="text-primary font-medium hover:underline"
+                  className="text-primary inline-flex min-h-11 items-center font-medium hover:underline"
                 >
                   {t("signUp")}
                 </Link>
@@ -248,7 +248,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
               <p>
                 <Link
                   href="/forgot-password"
-                  className="text-primary font-medium hover:underline"
+                  className="text-primary inline-flex min-h-11 items-center font-medium hover:underline"
                 >
                   {t("forgotPassword")}
                 </Link>

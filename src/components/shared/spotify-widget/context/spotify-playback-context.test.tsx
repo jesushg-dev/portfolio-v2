@@ -102,8 +102,8 @@ describe("SpotifyPlaybackProvider", () => {
     });
 
     expect(screen.getByTestId("title")).toHaveTextContent("Next Track");
-    expect(Number(screen.getByTestId("progress").textContent)).toBeGreaterThanOrEqual(
-      0,
-    );
+    expect(
+      Number(screen.getByTestId("progress").textContent),
+    ).toBeGreaterThanOrEqual(0);
   });
 });

@@ -2,13 +2,10 @@ import { type ReactNode } from "react";
 import "@/app/globals.css";
 
 import { NextIntlClientProvider } from "next-intl";
-import {
-  getMessages,
-  getTranslations,
-  setRequestLocale,
-} from "next-intl/server";
-import type { Metadata } from "next";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import type { Locale } from "next-intl";
+
+export { generateMetadata } from "./metadata";
 
 import Layout from "@/components/app-layout";
 import LcpImagePreload from "@/components/shared/lcp-image-preload";
@@ -16,36 +13,8 @@ import DeferredTrpcProvider from "@/components/providers/deferred-trpc-provider"
 import { getHeroLcpImageUrl } from "@/features/home/components/hero-lcp-image";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import type { Locale as AppLocale } from "@/i18n/config";
-import { getPathname } from "@/i18n/routing";
-import { buildSocialMetadata, SITE_URL } from "@/lib/seo/site";
 
 export const revalidate = 60;
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({
-    locale: locale as Locale,
-    namespace: "main",
-  });
-
-  const title = t("meta.title");
-  const description = t("meta.description");
-  const pageUrl = new URL(
-    getPathname({ locale: locale as AppLocale, href: "/" }),
-    SITE_URL,
-  ).href;
-
-  return {
-    title,
-    description,
-    keywords: t("meta.keywords"),
-    ...buildSocialMetadata({ title, description, url: pageUrl }),
-  };
-}
 
 export default async function RootLayout({
   children,

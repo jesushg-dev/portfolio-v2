@@ -19,7 +19,7 @@ const Education: FC<IEducationProps> = ({
 
   return (
     <>
-      <h5 className="text-blue text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
         {t("header.education")}
       </h5>
 
@@ -45,12 +45,14 @@ const Education: FC<IEducationProps> = ({
             <section className="mb-4" key={education.id}>
               <header>
                 <h5 className="text-sm font-bold">{degreeName}</h5>
-                <h6 className="text-xs">
+                <h6 className="text-sm text-[#333333]">
                   {education.institution}
                   {location ? ` | ${location}` : ""}
                 </h6>
               </header>
-              {dates ? <p className="my-1 text-xs">{dates}</p> : null}
+              {dates ? (
+                <p className="my-1 text-sm text-[#333333]">{dates}</p>
+              ) : null}
             </section>
           );
         })}
