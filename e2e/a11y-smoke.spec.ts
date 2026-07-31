@@ -13,6 +13,8 @@ const PUBLIC_ROUTES = [
   { path: "/privacy", name: "privacy" },
   { path: "/certificates", name: "certificates" },
   { path: "/curriculum-vitae", name: "curriculum-vitae" },
+  { path: "/how-i-use-ai", name: "how-i-use-ai" },
+  { path: "/qa-collaboration", name: "qa-collaboration" },
 ] as const;
 
 test.describe("accessibility — Shield (WCAG AAA)", () => {

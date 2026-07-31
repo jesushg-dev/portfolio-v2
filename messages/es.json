@@ -768,6 +768,341 @@
           "label": "Años de Experiencia"
         }
       }
+    },
+    "qaCollaboration": {
+      "metaTitle": "Colaboración con QA",
+      "metaDescription": "Cómo trabajo con equipos de QA: auto-revisión, planificación de pruebas, validación de bugs y preparación de releases en cada entrega.",
+      "nav": {
+        "label": "En esta página",
+        "why": "Por qué importa",
+        "process": "Cómo trabajo con QA",
+        "roles": "Dónde encajo",
+        "faq": "FAQ"
+      },
+      "hero": {
+        "eyebrow": "Calidad y QA",
+        "title": "Ingeniería con calidad primero, integrada en",
+        "titleHighlight": "cada release que entrego.",
+        "description": "Reviso, pruebo y valido mi propio código antes de que QA lo vea — y luego trabajo codo a codo con QA en planificación, ejecución y validación de bugs, para que los releases salgan con menos sorpresas y menos idas y vueltas.",
+        "primaryCta": "Ver cómo trabajo",
+        "secondaryCta": "Agendar una llamada",
+        "scrollHint": "Desplazarse a cómo trabajo con QA",
+        "terminal": {
+          "title": "test-runner",
+          "line1": "$ npm run test",
+          "line2": "✓ unit/auth.test.ts (18 passed)",
+          "line3": "✓ unit/orders.test.ts (24 passed)",
+          "line4": "✓ integration/checkout.test.ts (9 passed)",
+          "line5": "✓ integration/api.test.ts (15 passed)",
+          "line6": "Test Suites: 4 passed, 4 total",
+          "line7": "Tests: 66 passed, 66 total",
+          "line8": "Time: 3.42s",
+          "ready": "$ ready for QA handoff ✓",
+          "cursor": ""
+        }
+      },
+      "benefits": {
+        "eyebrow": "Por qué importa",
+        "title": "Qué significa esto para tu proyecto",
+        "items": {
+          "0": {
+            "title": "Menos bugs llegan a producción",
+            "description": "Reviso y pruebo mi código antes que QA, detectando problemas temprano en lugar de después de un release."
+          },
+          "1": {
+            "title": "QA tiene un verdadero aliado",
+            "description": "Apoyo la planificación, ejecución y validación de pruebas directamente con QA — no solo tickets lanzados por encima del muro."
+          },
+          "2": {
+            "title": "Tests que realmente cubren el código",
+            "description": "Tests unitarios e de integración en rutas críticas, escritos como parte del trabajo, no añadidos al final."
+          },
+          "3": {
+            "title": "Menos sorpresas en el release",
+            "description": "QA manual y regresión detectan lo que los tests automatizados no — antes del release, no durante."
+          },
+          "4": {
+            "title": "Claridad sobre qué está probado y qué es riesgo",
+            "description": "Sabes qué está cubierto, qué no, y qué necesita atención antes de publicar."
+          },
+          "5": {
+            "title": "Hábitos de calidad que escalan en equipo",
+            "description": "Prácticas que he llevado a equipos de hasta 6 personas, no solo a mi propio código."
+          }
+        }
+      },
+      "steps": {
+        "eyebrow": "Proceso",
+        "title": "Cómo trabajo con QA",
+        "items": {
+          "0": {
+            "title": "Auto-revisión antes del handoff",
+            "description": "Antes de que algo llegue a QA, reviso mi código y lo paso por tests unitarios e de integración."
+          },
+          "1": {
+            "title": "Apoyo en planificación de pruebas",
+            "description": "Ayudo a definir qué probar — flujos críticos, casos límite, áreas de riesgo — para que el tiempo de QA vaya a lo correcto primero."
+          },
+          "2": {
+            "title": "Handoff claro",
+            "description": "Bugs y features llegan a QA con contexto: qué cambió, qué revisar, cómo reproducir casos límite."
+          },
+          "3": {
+            "title": "Trabajo los tickets de QA, no solo los míos",
+            "description": "Tomo reportes de bugs, reproduzco y corrijo con QA en el loop — no semanas después en otro ciclo."
+          },
+          "4": {
+            "title": "Validación de bugs juntos",
+            "description": "Cuando hay un fix, lo valido con QA antes de marcarlo resuelto — no solo \"debería estar arreglado\"."
+          },
+          "5": {
+            "title": "Regresión y readiness de release",
+            "description": "Antes de un release, reviso qué cambió, qué está cubierto y qué sigue siendo riesgo — para que \"listo para publicar\" signifique algo."
+          }
+        }
+      },
+      "roles": {
+        "eyebrow": "Roles",
+        "title": "Dónde encajo en el proceso de QA",
+        "description": "Full-Stack Developer y Tech Lead, trabajando directamente con el ecosistema de QA — no evitándolo.",
+        "myRolesLabel": "Mis roles",
+        "myRoles": {
+          "0": "Full-Stack Developer",
+          "1": "Tech Lead"
+        },
+        "ecosystem": {
+          "0": "QA Engineer",
+          "1": "QA Automation Engineer",
+          "2": "Manual QA Tester",
+          "3": "Project Manager"
+        },
+        "testingLabel": "Testing que aporto",
+        "testing": {
+          "0": "Unit Testing",
+          "1": "Integration Testing"
+        }
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Preguntas que recibo sobre esto",
+        "items": {
+          "0": {
+            "question": "¿Revisar tu propio código reemplaza a QA?",
+            "answer": "No — lo complementa. Detectar lo obvio temprano deja que QA se enfoque en pruebas más profundas y casos límite."
+          },
+          "1": {
+            "question": "¿Trabajas con un equipo de QA existente o en lugar de uno?",
+            "answer": "Con ellos. Me integro en planificación, validación y readiness junto a QA — no soy sustituto del proceso de QA."
+          },
+          "2": {
+            "question": "¿Es solo revisión manual o también escribes tests automatizados?",
+            "answer": "Ambos. Tests unitarios e de integración en rutas críticas, más una pasada manual antes de que llegue a QA."
+          },
+          "3": {
+            "question": "¿Y si el equipo aún no tiene un proceso de QA claro?",
+            "answer": "Puedo ayudar a clarificar alcance, prioridades y pasos de reproducción — sin reemplazar el rol de QA, facilitando el handoff."
+          },
+          "4": {
+            "question": "¿La revisión extra no ralentiza los releases?",
+            "answer": "En la práctica ocurre lo contrario — menos bugs en QA o producción significa menos idas y vueltas, que es lo que suele retrasar un release."
+          }
+        }
+      },
+      "cta": {
+        "title": "¿Quieres que QA y dev trabajen de verdad juntos?",
+        "description": "Hablemos de tu proyecto, tu proceso de release y dónde puedo ayudar.",
+        "button": "Agendar una llamada"
+      }
+    },
+    "howIUseAi": {
+      "metaTitle": "Cómo uso la IA",
+      "metaDescription": "Cómo integro la IA en el desarrollo diario — desde descubrimiento y planificación hasta code review, QA, documentación y entrega.",
+      "nav": {
+        "label": "En esta página",
+        "why": "Por qué importa",
+        "workflow": "Cómo integro la IA",
+        "stack": "Herramientas",
+        "faq": "FAQ"
+      },
+      "hero": {
+        "eyebrow": "Ingeniería AI-native",
+        "title": "Ingeniería de software AI-native, integrada en",
+        "titleHighlight": "cada etapa que entrego.",
+        "description": "Diseño, construyo, pruebo y entrego software con IA en el día a día — desde investigación y planificación hasta code review y updates de entrega — manteniendo ownership, calidad y visibilidad en mis manos.",
+        "primaryCta": "Ver cómo trabajo",
+        "secondaryCta": "Agendar una llamada",
+        "scrollHint": "Desplazarse a la sección de flujo con IA",
+        "terminal": {
+          "title": "workflow"
+        },
+        "workflow": {
+          "title": "Mi flujo asistido por IA",
+          "live": "En vivo",
+          "steps": {
+            "0": "Descubrimiento",
+            "1": "Planificación",
+            "2": "Desarrollo",
+            "3": "QA y revisión",
+            "4": "Documentación",
+            "5": "Entrega y visibilidad"
+          }
+        }
+      },
+      "benefits": {
+        "eyebrow": "Por qué importa",
+        "title": "Qué significa esto para tu proyecto",
+        "items": {
+          "0": {
+            "title": "Entrega más rápida, mismos estándares",
+            "description": "La IA acelera investigación, boilerplate y testing — el criterio de ingeniería sigue siendo mío."
+          },
+          "1": {
+            "title": "Más que solo código",
+            "description": "Planificación, QA, documentación y visibilidad de entrega son parte de cómo trabajo — no afterthoughts."
+          },
+          "2": {
+            "title": "Visibilidad clara del progreso",
+            "description": "Updates regulares y honestos sobre progreso, blockers y próximos pasos — sin sorpresas al entregar."
+          },
+          "3": {
+            "title": "IA usada con responsabilidad",
+            "description": "Cada output asistido por IA pasa por mi revisión antes de publicarse. Sigo siendo responsable del resultado."
+          },
+          "4": {
+            "title": "Estimaciones realistas",
+            "description": "La planificación asistida por IA me ayuda a dimensionar el trabajo con precisión antes de comprometerme a un timeline."
+          },
+          "5": {
+            "title": "Calidad que se sostiene",
+            "description": "Testing y revisión asistidos por IA detectan problemas antes, sin reemplazar el criterio de ingeniería."
+          }
+        }
+      },
+      "steps": {
+        "eyebrow": "Proceso",
+        "title": "Cómo integro la IA en mi día a día",
+        "description": "Seis etapas, un flujo — la IA apoya cada una, el criterio guía todas. Haz clic en una etapa para verla en práctica.",
+        "inPractice": "En la práctica",
+        "items": {
+          "0": {
+            "title": "Descubrimiento e investigación",
+            "description": "Antes de escribir código, uso IA para avanzar más rápido en dominios, APIs y casos límite — y verifico todo contra la documentación real.",
+            "detail": "Pido a Claude o ChatGPT un primer pase rápido, pero no lo tomo al pie de la letra. Todo lo que voy a construir se valida contra la documentación oficial.",
+            "tools": "Herramientas: Claude, ChatGPT, Perplexity"
+          },
+          "1": {
+            "title": "Planificación y estimación",
+            "description": "La IA me ayuda a dividir trabajo, detectar riesgos y validar estimaciones — la decisión final sigue siendo mía.",
+            "detail": "Pego una descripción de feature y pido un desglose de tareas, luego lo ajusto según lo que sé del codebase. Es un borrador que edito, no un plan ciego.",
+            "tools": "Herramientas: Claude, ChatGPT"
+          },
+          "2": {
+            "title": "Desarrollo",
+            "description": "Trabajo con GitHub Copilot y Claude para boilerplate, refactors y explorar enfoques. Cada decisión de arquitectura es mía.",
+            "detail": "Copilot para completions inline. Para bloques mayores describo lo que necesito y reviso línea por línea. No publico código que no entiendo.",
+            "tools": "Herramientas: GitHub Copilot, Claude, Cursor"
+          },
+          "3": {
+            "title": "Code review y QA",
+            "description": "La IA está en mi pipeline y checks de PR — vulnerabilidades, code smells y bugs probables — antes de QA manual.",
+            "detail": "Checks de IA en CI y cada PR. Nada reemplaza mi revisión — triageo cada flag yo mismo.",
+            "tools": "Herramientas: Claude, GitHub Copilot, checks CI/CD"
+          },
+          "4": {
+            "title": "Documentación",
+            "description": "La IA convierte código y decisiones en docs, descripciones de PR y notas de onboarding más actuales.",
+            "detail": "PR descriptions y changelogs empiezan como borrador de IA basado en el diff. Edito por precisión, pero la documentación sí ocurre.",
+            "tools": "Herramientas: Claude, GitHub Copilot"
+          },
+          "5": {
+            "title": "Entrega y comunicación",
+            "description": "Status updates y resúmenes para clientes empiezan como borradores asistidos — edito y asumo todo antes de enviar.",
+            "detail": "Convierto tickets completados en resúmenes claros con IA, luego ajusto tono y contexto que solo yo tengo.",
+            "tools": "Herramientas: ChatGPT, Claude"
+          }
+        }
+      },
+      "toolkit": {
+        "eyebrow": "Stack",
+        "title": "Herramientas que llevo al flujo",
+        "description": "La mezcla cambia por proyecto. Toca una herramienta para ver para qué la uso.",
+        "footnote": "La elección de herramientas se adapta al stack y restricciones de cada proyecto.",
+        "items": {
+          "0": {
+            "id": "copilot",
+            "name": "GitHub Copilot",
+            "initials": "GH",
+            "description": "Completions inline mientras codifico, más checks automáticos en PR que detectan vulnerabilidades y code smells."
+          },
+          "1": {
+            "id": "claude",
+            "name": "Claude",
+            "initials": "Cl",
+            "description": "Planificación, refactors, documentación, updates para clientes y detección de edge cases en QA."
+          },
+          "2": {
+            "id": "chatgpt",
+            "name": "ChatGPT",
+            "initials": "Ch",
+            "description": "Investigación rápida y comparación de enfoques fuera de mi stack habitual."
+          },
+          "3": {
+            "id": "cursor",
+            "name": "Cursor",
+            "initials": "Cu",
+            "description": "Editor AI-native para cambios multi-archivo, explorar codebases y prototipar viabilidad antes de comprometerme."
+          },
+          "4": {
+            "id": "perplexity",
+            "name": "Perplexity",
+            "initials": "Pp",
+            "description": "Respuestas rápidas con fuentes cuando necesito verificar algo técnico."
+          },
+          "5": {
+            "id": "v0",
+            "name": "v0",
+            "initials": "v0",
+            "description": "Demos de UI rápidas para validar una idea antes de reconstruirla bien a mano."
+          },
+          "6": {
+            "id": "notion",
+            "name": "Notion AI",
+            "initials": "N",
+            "description": "Convertir notas de reuniones en docs de proyecto estructurados."
+          }
+        }
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Preguntas que recibo sobre esto",
+        "items": {
+          "0": {
+            "question": "¿Usar IA significa menos code review?",
+            "answer": "No — cada cambio asistido pasa por el mismo proceso de revisión. La IA acelera el borrador, no el estándar."
+          },
+          "1": {
+            "question": "¿Y si un cliente no quiere IA involucrada?",
+            "answer": "Está bien — adapto el alcance. La IA es cómo trabajo más rápido, no un requisito del proyecto."
+          },
+          "2": {
+            "question": "¿Dejas que la IA tome decisiones de arquitectura?",
+            "answer": "No. La uso para explorar opciones, pero arquitectura y dirección técnica siguen siendo mías."
+          },
+          "3": {
+            "question": "¿Cómo mantienes confiable el código asistido por IA?",
+            "answer": "Igual que cualquier código: testing, revisión y el mismo estándar sin importar cómo se escribió."
+          },
+          "4": {
+            "question": "¿Qué herramientas de IA usas realmente a diario?",
+            "answer": "Principalmente GitHub Copilot y Claude para código, y ChatGPT o Perplexity para investigación — la mezcla varía por proyecto."
+          }
+        }
+      },
+      "cta": {
+        "title": "¿Quieres construir algo AI-native?",
+        "description": "Hablemos de tu proyecto, tu stack y dónde la IA puede ayudar de verdad.",
+        "button": "Agendar una llamada"
+      }
     }
   },
   "admin": {

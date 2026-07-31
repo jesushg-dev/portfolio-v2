@@ -768,6 +768,341 @@
           "label": "Jaar Ervaring"
         }
       }
+    },
+    "qaCollaboration": {
+      "metaTitle": "QA-samenwerking",
+      "metaDescription": "Hoe ik met QA-teams werk — zelfreview, testplanning, bugvalidatie en release-readiness in elke release.",
+      "nav": {
+        "label": "Op deze pagina",
+        "why": "Waarom het telt",
+        "process": "Hoe ik met QA werk",
+        "roles": "Waar ik past",
+        "faq": "FAQ"
+      },
+      "hero": {
+        "eyebrow": "Kwaliteit & QA",
+        "title": "Quality-first engineering, ingebouwd in",
+        "titleHighlight": "elke release die ik uitrol.",
+        "description": "Ik review, test en valideer mijn eigen code voordat QA het ziet — en werk daarna side-by-side met QA aan testplanning, uitvoering en bugvalidatie, zodat releases met minder verrassingen en heen-en-weer live gaan.",
+        "primaryCta": "Zo werk ik",
+        "secondaryCta": "Plan een gesprek",
+        "scrollHint": "Scroll naar hoe ik met QA werk",
+        "terminal": {
+          "title": "test-runner",
+          "line1": "$ npm run test",
+          "line2": "✓ unit/auth.test.ts (18 passed)",
+          "line3": "✓ unit/orders.test.ts (24 passed)",
+          "line4": "✓ integration/checkout.test.ts (9 passed)",
+          "line5": "✓ integration/api.test.ts (15 passed)",
+          "line6": "Test Suites: 4 passed, 4 total",
+          "line7": "Tests: 66 passed, 66 total",
+          "line8": "Time: 3.42s",
+          "ready": "$ ready for QA handoff ✓",
+          "cursor": ""
+        }
+      },
+      "benefits": {
+        "eyebrow": "Waarom het telt",
+        "title": "Wat dit betekent voor jouw project",
+        "items": {
+          "0": {
+            "title": "Minder bugs in productie",
+            "description": "Ik review en test mijn code vóór QA, zodat problemen vroeg worden gevonden in plaats van na een release."
+          },
+          "1": {
+            "title": "QA krijgt een echte partner",
+            "description": "Ik ondersteun testplanning, uitvoering en bugvalidatie direct met QA — geen tickets over de muur."
+          },
+          "2": {
+            "title": "Tests die de code echt dekken",
+            "description": "Unit- en integratietests rond kritieke paden, geschreven als onderdeel van het werk."
+          },
+          "3": {
+            "title": "Minder verrassingen bij release",
+            "description": "Handmatige QA en regressie vangen op wat automatisering mist — vóór release, niet tijdens."
+          },
+          "4": {
+            "title": "Duidelijkheid over dekking en risico",
+            "description": "Je weet wat gedekt is, wat niet, en wat aandacht nodig heeft vóór livegang."
+          },
+          "5": {
+            "title": "Kwaliteitsgewoonten die schalen",
+            "description": "Praktijken die ik heb meegenomen naar teams tot 6 engineers, niet alleen mijn eigen code."
+          }
+        }
+      },
+      "steps": {
+        "eyebrow": "Proces",
+        "title": "Hoe ik met QA werk",
+        "items": {
+          "0": {
+            "title": "Zelfreview vóór overdracht",
+            "description": "Voordat iets QA bereikt, review ik mijn code en draai unit- en integratietests."
+          },
+          "1": {
+            "title": "Ondersteuning testplanning",
+            "description": "Ik help bepalen wat getest moet worden — kritieke flows, edge cases, risicogebieden."
+          },
+          "2": {
+            "title": "Duidelijke overdracht",
+            "description": "Bugs en features gaan naar QA met context: wat veranderde, wat te checken, hoe edge cases te reproduceren."
+          },
+          "3": {
+            "title": "QA-tickets oppakken, niet alleen de mijne",
+            "description": "Ik pak bugreports op, reproduceer en fix met QA in de loop."
+          },
+          "4": {
+            "title": "Bugvalidatie samen",
+            "description": "Na een fix valideer ik met QA vóór het als opgelost wordt gemarkeerd."
+          },
+          "5": {
+            "title": "Regressie & release-readiness",
+            "description": "Vóór release bekijk ik wat veranderde, wat gedekt is en wat nog risico is."
+          }
+        }
+      },
+      "roles": {
+        "eyebrow": "Rollen",
+        "title": "Waar ik pas in het QA-proces",
+        "description": "Full-Stack Developer en Tech Lead, direct naast het QA-ecosysteem — niet eromheen.",
+        "myRolesLabel": "Mijn rollen",
+        "myRoles": {
+          "0": "Full-Stack Developer",
+          "1": "Tech Lead"
+        },
+        "ecosystem": {
+          "0": "QA Engineer",
+          "1": "QA Automation Engineer",
+          "2": "Manual QA Tester",
+          "3": "Project Manager"
+        },
+        "testingLabel": "Testing die ik meebreng",
+        "testing": {
+          "0": "Unit Testing",
+          "1": "Integration Testing"
+        }
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Vragen die ik hierover krijg",
+        "items": {
+          "0": {
+            "question": "Vervangt zelfreview QA?",
+            "answer": "Nee — het vult aan. Vroege catches laten QA focussen op diepere tests en edge cases."
+          },
+          "1": {
+            "question": "Werk je met een bestaand QA-team of in plaats daarvan?",
+            "answer": "Met. Ik plug in op planning, validatie en release-readiness naast QA."
+          },
+          "2": {
+            "question": "Is dit alleen handmatige review of schrijf je ook tests?",
+            "answer": "Beide. Unit- en integratietests plus een handmatige pass vóór QA."
+          },
+          "3": {
+            "question": "Wat als er nog geen duidelijk QA-proces is?",
+            "answer": "Ik help scope, prioriteiten en repro-stappen verduidelijken zonder QA over te nemen."
+          },
+          "4": {
+            "question": "Vertraagt extra review releases?",
+            "answer": "In de praktijk juist niet — minder bugs betekent minder heen-en-weer, wat releases meestal vertraagt."
+          }
+        }
+      },
+      "cta": {
+        "title": "Wil je dat QA en dev echt samenwerken?",
+        "description": "Laten we praten over je project, releaseproces en waar ik kan helpen.",
+        "button": "Plan een gesprek"
+      }
+    },
+    "howIUseAi": {
+      "metaTitle": "Hoe ik AI gebruik",
+      "metaDescription": "Hoe ik AI integreer in dagelijks software engineering — van discovery tot code review, QA, documentatie en delivery.",
+      "nav": {
+        "label": "Op deze pagina",
+        "why": "Waarom het telt",
+        "workflow": "Hoe ik AI integreer",
+        "stack": "Tools",
+        "faq": "FAQ"
+      },
+      "hero": {
+        "eyebrow": "AI-native engineering",
+        "title": "AI-native software engineering, ingebouwd in",
+        "titleHighlight": "elke fase die ik oplever.",
+        "description": "Ik ontwerp, bouw, test en lever software met AI in mijn dagelijkse workflow — van research en planning tot code review en delivery-updates — met ownership, kwaliteit en zichtbaarheid in mijn handen.",
+        "primaryCta": "Zo werk ik",
+        "secondaryCta": "Plan een gesprek",
+        "scrollHint": "Scroll naar AI-workflowsectie",
+        "terminal": {
+          "title": "workflow"
+        },
+        "workflow": {
+          "title": "Mijn AI-ondersteunde workflow",
+          "live": "Live",
+          "steps": {
+            "0": "Discovery",
+            "1": "Planning",
+            "2": "Development",
+            "3": "QA & review",
+            "4": "Documentatie",
+            "5": "Delivery & zichtbaarheid"
+          }
+        }
+      },
+      "benefits": {
+        "eyebrow": "Waarom het telt",
+        "title": "Wat dit betekent voor jouw project",
+        "items": {
+          "0": {
+            "title": "Snellere delivery, zelfde standaard",
+            "description": "AI versnelt research, boilerplate en testing — het engineeringoordeel blijft van mij."
+          },
+          "1": {
+            "title": "Meer dan alleen code",
+            "description": "Planning, QA, documentatie en delivery-zichtbaarheid horen bij hoe ik werk."
+          },
+          "2": {
+            "title": "Duidelijke voortgang",
+            "description": "Regelmatige, eerlijke updates over voortgang, blockers en next steps."
+          },
+          "3": {
+            "title": "AI verantwoord gebruikt",
+            "description": "Elke AI-output gaat door mijn review vóór het live gaat. Ik blijf verantwoordelijk."
+          },
+          "4": {
+            "title": "Realistische schattingen",
+            "description": "AI-ondersteunde planning helpt me werk accuraat inschatten vóór ik een timeline beloof."
+          },
+          "5": {
+            "title": "Kwaliteit die standhoudt",
+            "description": "AI-ondersteunde tests en review vangen problemen eerder zonder oordeel te vervangen."
+          }
+        }
+      },
+      "steps": {
+        "eyebrow": "Proces",
+        "title": "Hoe ik AI in mijn dag integreer",
+        "description": "Zes fases, één workflow — AI ondersteunt elk onderdeel, oordeel stuurt alles. Klik een fase voor de praktijk.",
+        "inPractice": "In de praktijk",
+        "items": {
+          "0": {
+            "title": "Discovery & research",
+            "description": "Vóór code schrijf ik gebruik ik AI om sneller door onbekende domeinen en APIs te gaan — en verifieer alles tegen echte docs.",
+            "detail": "Claude of ChatGPT voor een snelle eerste pass, maar alles wat ik bouw check ik tegen officiële documentatie.",
+            "tools": "Tools: Claude, ChatGPT, Perplexity"
+          },
+          "1": {
+            "title": "Planning & schatting",
+            "description": "AI helpt werk opdelen, risico's vroeg signaleren en schattingen sanity-checken — het finale besluit is van mij.",
+            "detail": "Featurebeschrijving plakken, task breakdown krijgen, dan aanpassen aan wat ik van de codebase weet.",
+            "tools": "Tools: Claude, ChatGPT"
+          },
+          "2": {
+            "title": "Development",
+            "description": "Ik werk met GitHub Copilot en Claude voor boilerplate en refactors. Architectuurbeslissingen zijn van mij.",
+            "detail": "Copilot voor inline completions. Grotere stukken beschrijf ik en review regel voor regel. Geen code shippen die ik niet begrijp.",
+            "tools": "Tools: GitHub Copilot, Claude, Cursor"
+          },
+          "3": {
+            "title": "Code review & QA",
+            "description": "AI zit in mijn pipeline en PR-checks — vulnerabilities, code smells en waarschijnlijke bugs vóór handmatige QA.",
+            "detail": "AI-checks in CI en elke PR. Niets vervangt mijn review — ik triage elke flag zelf.",
+            "tools": "Tools: Claude, GitHub Copilot, CI/CD checks"
+          },
+          "4": {
+            "title": "Documentatie",
+            "description": "AI maakt van code en beslissingen docs, PR-beschrijvingen en onboarding-notities die actueel blijven.",
+            "detail": "PR descriptions en changelogs starten als AI-borrador op basis van diff. Ik edit voor nauwkeurigheid.",
+            "tools": "Tools: Claude, GitHub Copilot"
+          },
+          "5": {
+            "title": "Delivery & communicatie",
+            "description": "Statusupdates en client-samenvattingen starten als AI-borrador — ik edit en own alles vóór verzending.",
+            "detail": "Afgeronde tickets worden met AI omgezet in duidelijke samenvattingen, dan pas ik toon en context aan.",
+            "tools": "Tools: ChatGPT, Claude"
+          }
+        }
+      },
+      "toolkit": {
+        "eyebrow": "Stack",
+        "title": "Tools die ik in de workflow meeneem",
+        "description": "De mix wisselt per project. Tik een tool voor het echte gebruik.",
+        "footnote": "Toolkeuze past zich aan per stack en constraints.",
+        "items": {
+          "0": {
+            "id": "copilot",
+            "name": "GitHub Copilot",
+            "initials": "GH",
+            "description": "Inline completions tijdens coden plus automatische PR-checks voor vulnerabilities en code smells."
+          },
+          "1": {
+            "id": "claude",
+            "name": "Claude",
+            "initials": "Cl",
+            "description": "Planning, refactors, documentatie, client-updates en edge cases in QA."
+          },
+          "2": {
+            "id": "chatgpt",
+            "name": "ChatGPT",
+            "initials": "Ch",
+            "description": "Snelle research en vergelijken van aanpakken buiten mijn gebruikelijke stack."
+          },
+          "3": {
+            "id": "cursor",
+            "name": "Cursor",
+            "initials": "Cu",
+            "description": "AI-native editor voor multi-file changes, onbekende codebases en haalbaarheidsdemo's."
+          },
+          "4": {
+            "id": "perplexity",
+            "name": "Perplexity",
+            "initials": "Pp",
+            "description": "Snelle antwoorden met bronnen voor technische verificatie."
+          },
+          "5": {
+            "id": "v0",
+            "name": "v0",
+            "initials": "v0",
+            "description": "Snelle UI-demo's om een idee te valideren vóór proper bouwen."
+          },
+          "6": {
+            "id": "notion",
+            "name": "Notion AI",
+            "initials": "N",
+            "description": "Meetingnotities omzetten in gestructureerde projectdocs."
+          }
+        }
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Vragen die ik hierover krijg",
+        "items": {
+          "0": {
+            "question": "Betekent AI minder code review?",
+            "answer": "Nee — elke AI-ondersteunde wijziging doorloopt hetzelfde reviewproces. AI versnelt het eerste draft."
+          },
+          "1": {
+            "question": "Wat als een klant geen AI wil?",
+            "answer": "Prima — ik pas scope aan. AI is hoe ik sneller werk, geen projectvereiste."
+          },
+          "2": {
+            "question": "Laat je AI architectuurbeslissingen nemen?",
+            "answer": "Nee. Ik gebruik het om opties te verkennen, maar richting blijft van mij."
+          },
+          "3": {
+            "question": "Hoe houd je AI-code betrouwbaar?",
+            "answer": "Zoals elke code: testen, review en dezelfde lat, ongeacht hoe het geschreven is."
+          },
+          "4": {
+            "question": "Welke AI-tools gebruik je echt dagelijks?",
+            "answer": "Vooral GitHub Copilot en Claude voor code, ChatGPT of Perplexity voor research — mix wisselt per project."
+          }
+        }
+      },
+      "cta": {
+        "title": "Wil je iets AI-natives bouwen?",
+        "description": "Laten we praten over je project, stack en waar AI echt helpt.",
+        "button": "Plan een gesprek"
+      }
     }
   },
   "admin": {
@@ -1144,7 +1479,6 @@
         "optionalTranslation": "Optionele vertaling",
         "defaultRequired": "Waarde in standaardtaal is verplicht",
         "defaultFallbackHint": "Dit is je standaardtaal — deze wordt altijd als fallback getoond.",
-        "languageTabsAria": "Vertalingstalen",
         "languageTabsAria": "Vertalingstalen",
         "addLanguage": "Taal toevoegen",
         "languageAria": "Taal",

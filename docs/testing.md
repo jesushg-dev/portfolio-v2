@@ -16,12 +16,12 @@ pnpm test:a11y  # Playwright + axe (WCAG AAA) on public routes
 
 Profile and rules: [`.agents/skills/A11Y.md`](../.agents/skills/A11Y.md).
 
-| Layer                   | Command             | What it catches                                                                                              |
-| ----------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **Static (code)**       | `pnpm lint`         | jsx-a11y via `eslint-config-next/core-web-vitals` — labels, roles, alt text, keyboard handlers in JSX        |
-| **Automated (runtime)** | `pnpm test:a11y`    | `@axe-core/playwright` with WCAG AAA tags on `/`, `/login`, `/privacy`, `/certificates`, `/curriculum-vitae` |
-| **Shield house rules**  | same as above       | Sampled checks for **14px** min text and **44×44px** targets (not covered by axe alone)                      |
-| **Manual (required)**   | see checklist below | Tab order, screen reader, zoom 200%, color-only state, SPA focus                                             |
+| Layer                   | Command             | What it catches                                                                                                                                    |
+| ----------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Static (code)**       | `pnpm lint`         | jsx-a11y via `eslint-config-next/core-web-vitals` — labels, roles, alt text, keyboard handlers in JSX                                              |
+| **Automated (runtime)** | `pnpm test:a11y`    | `@axe-core/playwright` with WCAG AAA tags on `/`, `/login`, `/privacy`, `/certificates`, `/curriculum-vitae`, `/how-i-use-ai`, `/qa-collaboration` |
+| **Shield house rules**  | same as above       | Sampled checks for **14px** min text and **44×44px** targets (not covered by axe alone)                                                            |
+| **Manual (required)**   | see checklist below | Tab order, screen reader, zoom 200%, color-only state, SPA focus                                                                                   |
 
 `pnpm test:a11y` starts the dev server locally (or uses `E2E_BASE_URL`). Helpers live in `e2e/helpers/a11y-audit.ts`.
 

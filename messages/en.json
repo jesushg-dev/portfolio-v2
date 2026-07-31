@@ -768,6 +768,341 @@
           "label": "Years Experience"
         }
       }
+    },
+    "qaCollaboration": {
+      "metaTitle": "QA Collaboration",
+      "metaDescription": "How I work with QA teams — self-review, test planning, bug validation, and release readiness built into every release.",
+      "nav": {
+        "label": "On this page",
+        "why": "Why it matters",
+        "process": "How I work with QA",
+        "roles": "Where I fit in",
+        "faq": "FAQ"
+      },
+      "hero": {
+        "eyebrow": "Quality & QA",
+        "title": "Quality-first engineering, built into",
+        "titleHighlight": "every release I ship.",
+        "description": "I review, test, and validate my own code before QA ever sees it — then work side by side with QA on test planning, execution, and bug validation, so releases ship with fewer surprises and less back-and-forth.",
+        "primaryCta": "See how I work",
+        "secondaryCta": "Schedule a call",
+        "scrollHint": "Scroll to how I work with QA",
+        "terminal": {
+          "title": "test-runner",
+          "line1": "$ npm run test",
+          "line2": "✓ unit/auth.test.ts (18 passed)",
+          "line3": "✓ unit/orders.test.ts (24 passed)",
+          "line4": "✓ integration/checkout.test.ts (9 passed)",
+          "line5": "✓ integration/api.test.ts (15 passed)",
+          "line6": "Test Suites: 4 passed, 4 total",
+          "line7": "Tests: 66 passed, 66 total",
+          "line8": "Time: 3.42s",
+          "ready": "$ ready for QA handoff ✓",
+          "cursor": ""
+        }
+      },
+      "benefits": {
+        "eyebrow": "Why it matters",
+        "title": "What this means for your project",
+        "items": {
+          "0": {
+            "title": "Fewer bugs reach production",
+            "description": "I review and test my own code before QA does, catching issues early instead of after a release."
+          },
+          "1": {
+            "title": "QA gets a real partner",
+            "description": "I support test planning, execution, and bug validation directly with QA — not just tickets thrown over a wall."
+          },
+          "2": {
+            "title": "Tests that actually cover the code",
+            "description": "Unit and integration tests around critical paths, written as part of the work, not bolted on after."
+          },
+          "3": {
+            "title": "Fewer surprises at release",
+            "description": "Manual QA and regression testing catch what automated tests can't — before release, not during it."
+          },
+          "4": {
+            "title": "Clarity on what's tested and what's risky",
+            "description": "You know what's covered, what isn't, and what still needs attention before a release ships."
+          },
+          "5": {
+            "title": "Quality habits that scale to a team",
+            "description": "Practices I've carried into leading engineering teams of up to 6, not just my own code."
+          }
+        }
+      },
+      "steps": {
+        "eyebrow": "Process",
+        "title": "How I work with QA",
+        "items": {
+          "0": {
+            "title": "Self-review before handoff",
+            "description": "Before anything reaches QA, I review my own code and run it through unit and integration tests, so the obvious issues never leave my branch."
+          },
+          "1": {
+            "title": "Test planning support",
+            "description": "I help define what needs testing — critical flows, edge cases, risk areas — so QA's time goes to the right places first."
+          },
+          "2": {
+            "title": "Clear handoff",
+            "description": "Bugs and features go to QA with context: what changed, what to check, how to reproduce edge cases."
+          },
+          "3": {
+            "title": "Working QA's tickets, not just mine",
+            "description": "I pick up bug reports directly, reproduce issues, and fix them with QA in the loop — not weeks later in a separate cycle."
+          },
+          "4": {
+            "title": "Bug validation together",
+            "description": "Once a fix is in, I validate it with QA before it's marked resolved — not just \"should be fixed.\""
+          },
+          "5": {
+            "title": "Regression & release readiness",
+            "description": "Before a release, I help review what's changed, what's covered, and what's still a risk — so \"ready to ship\" actually means something."
+          }
+        }
+      },
+      "roles": {
+        "eyebrow": "Roles",
+        "title": "Where I fit in the QA process",
+        "description": "Full-Stack Developer and Tech Lead, working directly alongside the rest of the QA ecosystem — not around it.",
+        "myRolesLabel": "My roles",
+        "myRoles": {
+          "0": "Full-Stack Developer",
+          "1": "Tech Lead"
+        },
+        "ecosystem": {
+          "0": "QA Engineer",
+          "1": "QA Automation Engineer",
+          "2": "Manual QA Tester",
+          "3": "Project Manager"
+        },
+        "testingLabel": "Testing I bring",
+        "testing": {
+          "0": "Unit Testing",
+          "1": "Integration Testing"
+        }
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Questions I get about this",
+        "items": {
+          "0": {
+            "question": "Does reviewing your own code replace QA?",
+            "answer": "No — it complements it. Catching the obvious issues early means QA's time goes to deeper testing and edge cases, not restating what a careful pass would've caught."
+          },
+          "1": {
+            "question": "Do you work with an existing QA team, or instead of one?",
+            "answer": "With. I plug into test planning, bug validation, and release readiness alongside QA — I'm not a substitute for a QA process."
+          },
+          "2": {
+            "question": "Is this just manual review, or do you write automated tests too?",
+            "answer": "Both. Unit and integration tests around critical paths, plus a manual pass before anything reaches QA."
+          },
+          "3": {
+            "question": "What if the team doesn't have a clear QA process yet?",
+            "answer": "I can help make testing scope, priorities, and reproduction steps clearer as part of how I work — not by taking over QA's role, but by making the handoff easier."
+          },
+          "4": {
+            "question": "Doesn't extra review slow releases down?",
+            "answer": "The opposite, in practice — fewer bugs reaching QA or production means less back-and-forth, which is usually what actually slows a release down."
+          }
+        }
+      },
+      "cta": {
+        "title": "Want QA and dev to actually work together?",
+        "description": "Let's talk about your project, your release process, and where I can help.",
+        "button": "Schedule a call"
+      }
+    },
+    "howIUseAi": {
+      "metaTitle": "How I Use AI",
+      "metaDescription": "How I integrate AI into daily software engineering — from discovery and planning to code review, QA, documentation, and delivery.",
+      "nav": {
+        "label": "On this page",
+        "why": "Why it matters",
+        "workflow": "How I integrate AI",
+        "stack": "Tools",
+        "faq": "FAQ"
+      },
+      "hero": {
+        "eyebrow": "AI-native engineering",
+        "title": "AI-native software engineering, built into",
+        "titleHighlight": "every stage I ship.",
+        "description": "I design, build, test, and deliver software with AI woven into my day-to-day — from research and planning to code review and delivery updates — while ownership, quality, and visibility stay in my hands.",
+        "primaryCta": "See how I work",
+        "secondaryCta": "Schedule a call",
+        "scrollHint": "Scroll to AI workflow section",
+        "terminal": {
+          "title": "workflow"
+        },
+        "workflow": {
+          "title": "My AI-assisted workflow",
+          "live": "Live",
+          "steps": {
+            "0": "Discovery",
+            "1": "Planning",
+            "2": "Development",
+            "3": "QA & review",
+            "4": "Documentation",
+            "5": "Delivery & visibility"
+          }
+        }
+      },
+      "benefits": {
+        "eyebrow": "Why it matters",
+        "title": "What this means for your project",
+        "items": {
+          "0": {
+            "title": "Faster delivery, same standards",
+            "description": "AI speeds up research, boilerplate, and testing — the engineering judgment behind every decision stays mine."
+          },
+          "1": {
+            "title": "More than just code",
+            "description": "Planning, QA, documentation, and delivery visibility are part of how I work — not afterthoughts."
+          },
+          "2": {
+            "title": "Clear visibility into progress",
+            "description": "Regular, honest updates on progress, blockers, and what's next — no surprises at delivery."
+          },
+          "3": {
+            "title": "AI used responsibly",
+            "description": "Every AI-assisted output goes through my own review before it ships. I stay accountable for the outcome."
+          },
+          "4": {
+            "title": "Realistic estimates",
+            "description": "AI-assisted planning helps me scope work accurately before I commit to a timeline."
+          },
+          "5": {
+            "title": "Quality that holds up",
+            "description": "AI-assisted testing and review catch issues earlier, without replacing careful engineering judgment."
+          }
+        }
+      },
+      "steps": {
+        "eyebrow": "Process",
+        "title": "How I integrate AI into my day-to-day",
+        "description": "Six stages, one workflow — AI supports each of them, judgment drives all of them. Click a stage to see it in practice.",
+        "inPractice": "In practice",
+        "items": {
+          "0": {
+            "title": "Discovery & research",
+            "description": "Before writing code, I use AI to move faster through unfamiliar domains, APIs, edge cases, and prior art — then verify anything I'll actually rely on against the real documentation.",
+            "detail": "I'll ask Claude or ChatGPT for a fast first pass on a new API, library, or approach — but I don't take it at face value. Anything I'm going to build on gets checked against the real documentation before I write a line of code.",
+            "tools": "Tools: Claude, ChatGPT, Perplexity"
+          },
+          "1": {
+            "title": "Planning & estimation",
+            "description": "AI helps me break work into tickets, flag risks early, and sanity-check estimates against similar past work — I still make the final call.",
+            "detail": "I'll paste in a feature description and ask for a task breakdown, then adjust it against what I actually know about the codebase. It's a first draft I edit, not a plan I follow blindly.",
+            "tools": "Tools: Claude, ChatGPT"
+          },
+          "2": {
+            "title": "Development",
+            "description": "I pair with tools like GitHub Copilot and Claude for boilerplate, refactors, and exploring approaches. Every architectural decision is mine.",
+            "detail": "GitHub Copilot handles inline completions while I'm typing. For bigger chunks I describe what I need and review the output line by line before it goes in. I don't ship code I don't understand.",
+            "tools": "Tools: GitHub Copilot, Claude, Cursor"
+          },
+          "3": {
+            "title": "Code review & QA",
+            "description": "AI is wired into my pipeline and PR checks — flagging vulnerabilities, code smells, and likely bugs — so issues surface before manual QA and my own review even start.",
+            "detail": "I've got AI checks running in my CI pipeline and on every pull request. None of that replaces my own review — I triage every flag myself, since not everything it raises is worth acting on.",
+            "tools": "Tools: Claude, GitHub Copilot, CI/CD checks"
+          },
+          "4": {
+            "title": "Documentation",
+            "description": "AI turns code and decisions into docs, PR descriptions, and onboarding notes that are far more likely to stay current.",
+            "detail": "PR descriptions, changelogs, and README updates start as an AI-generated first pass based on my diff and commit messages. I edit for accuracy, but documentation actually happens instead of being skipped.",
+            "tools": "Tools: Claude, GitHub Copilot"
+          },
+          "5": {
+            "title": "Delivery & communication",
+            "description": "Status updates, changelogs, and client-facing summaries start as AI-assisted drafts — I edit and own everything before it goes out.",
+            "detail": "When it's time to report progress, I'll turn completed tickets into a clear, non-technical summary with AI, then edit the tone and add context only I have.",
+            "tools": "Tools: ChatGPT, Claude"
+          }
+        }
+      },
+      "toolkit": {
+        "eyebrow": "Stack",
+        "title": "Tools I bring into the workflow",
+        "description": "The mix changes per project. Tap a tool to see what it's actually for.",
+        "footnote": "Tool choice adapts to each project's stack and constraints.",
+        "items": {
+          "0": {
+            "id": "copilot",
+            "name": "GitHub Copilot",
+            "initials": "GH",
+            "description": "Inline completions while I'm actively coding, plus automated PR checks that flag vulnerabilities, code smells, and improvement suggestions before a human looks at the diff."
+          },
+          "1": {
+            "id": "claude",
+            "name": "Claude",
+            "initials": "Cl",
+            "description": "Planning, refactors, documentation, drafting client-facing updates, and flagging the edge cases in QA most likely to turn into real bugs."
+          },
+          "2": {
+            "id": "chatgpt",
+            "name": "ChatGPT",
+            "initials": "Ch",
+            "description": "Quick research and comparing approaches when I'm outside my usual stack."
+          },
+          "3": {
+            "id": "cursor",
+            "name": "Cursor",
+            "initials": "Cu",
+            "description": "AI-native editor for larger, multi-file changes, exploring unfamiliar codebases, and quickly prototyping a feasibility demo before I commit to an approach."
+          },
+          "4": {
+            "id": "perplexity",
+            "name": "Perplexity",
+            "initials": "Pp",
+            "description": "Fast, sourced answers when I need to verify something technical quickly."
+          },
+          "5": {
+            "id": "v0",
+            "name": "v0",
+            "initials": "v0",
+            "description": "Scaffolding quick UI demos to validate an idea before I rebuild it properly by hand."
+          },
+          "6": {
+            "id": "notion",
+            "name": "Notion AI",
+            "initials": "N",
+            "description": "Turning meeting notes and scattered thoughts into structured project docs."
+          }
+        }
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "title": "Questions I get about this",
+        "items": {
+          "0": {
+            "question": "Does using AI mean less code review?",
+            "answer": "No — every AI-assisted change goes through the same review process as anything else I write. AI speeds up the first draft, not the standard."
+          },
+          "1": {
+            "question": "What if a client doesn't want AI involved?",
+            "answer": "That's fine — I scope around it. AI is how I work faster, not a requirement for the project."
+          },
+          "2": {
+            "question": "Do you let AI make architecture decisions?",
+            "answer": "No. I use it to explore options and stress-test ideas, but architecture and technical direction stay mine."
+          },
+          "3": {
+            "question": "How do you keep AI-assisted code reliable?",
+            "answer": "The same way I keep any code reliable: testing, review, and holding it to the same bar regardless of how it was written."
+          },
+          "4": {
+            "question": "Which AI tools do you actually use day to day?",
+            "answer": "Mostly GitHub Copilot and Claude for coding, and ChatGPT or Perplexity for research — the mix shifts by project."
+          }
+        }
+      },
+      "cta": {
+        "title": "Want to build something AI-native?",
+        "description": "Let's talk about your project, your stack, and where AI can actually help.",
+        "button": "Schedule a call"
+      }
     }
   },
   "admin": {

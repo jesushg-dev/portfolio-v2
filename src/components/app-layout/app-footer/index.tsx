@@ -75,11 +75,12 @@ const Footer = async () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t("peoplePledge")}
-              className="box-border inline-flex h-[44px] min-w-[44px] items-center justify-center rounded-sm px-3 opacity-90 transition-opacity hover:opacity-100"
+              className="box-border inline-flex h-11 min-w-11 items-center justify-center rounded-sm px-3 opacity-90 transition-opacity hover:opacity-100"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/badges/people-pledge-seal.svg"
-                alt=""
+                alt={t("peoplePledge")}
                 width={88}
                 height={31}
                 className="h-8 w-auto"
