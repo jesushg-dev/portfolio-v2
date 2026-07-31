@@ -169,9 +169,44 @@ jest.mock("motion/react", () => {
   };
 });
 
-jest.mock("next-intl/server", () => ({
-  getTranslations: jest.fn(() => Promise.resolve((key: string) => key)),
-  setRequestLocale: jest.fn(),
+jest.mock("next-intl/server", () => {
+  const createMockTranslator = () => {
+    const t = (key: string) => key;
+    t.has = () => true;
+    t.raw = (key: string) => key;
+    t.rich = (key: string) => key;
+    t.markup = (key: string) => key;
+    return t;
+  };
+
+  return {
+    getTranslations: jest.fn(() => Promise.resolve(createMockTranslator())),
+    setRequestLocale: jest.fn(),
+  };
+});
+
+jest.mock("next-intl/routing", () => ({
+  defineRouting: (config: unknown) => config,
+}));
+
+jest.mock("next-intl/navigation", () => ({
+  createNavigation: () => ({
+    Link: ({ children, href, ...props }: PropsWithChildren<{ href: string }>) =>
+      createElement("a", { href, ...props }, children),
+    redirect: jest.fn(),
+    usePathname: jest.fn(() => "/"),
+    useRouter: jest.fn(() => ({
+      push: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+      back: jest.fn(),
+    })),
+    getPathname: jest.fn(({ href }: { href: string }) => href),
+  }),
+}));
+
+jest.mock("@t3-oss/env-nextjs", () => ({
+  createEnv: (opts: { runtimeEnv: Record<string, unknown> }) => opts.runtimeEnv,
 }));
 
 jest.mock("next/headers", () => ({

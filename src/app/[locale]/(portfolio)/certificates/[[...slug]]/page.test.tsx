@@ -2,18 +2,25 @@ import { render, screen } from "@testing-library/react";
 
 import CertificatesPage, { generateMetadata } from "./page";
 
-jest.mock("next-intl/server", () => ({
-  getTranslations: jest.fn(() =>
-    Promise.resolve((key: string) => {
-      const labels: Record<string, string> = {
-        title: "Certificates",
-        description: "Empowering projects",
-      };
-      return labels[key] ?? key;
-    }),
-  ),
-  setRequestLocale: jest.fn(),
-}));
+jest.mock("next-intl/server", () => {
+  const createMockTranslator = () => {
+    const labels: Record<string, string> = {
+      title: "Certificates",
+      description: "Empowering projects",
+    };
+    const t = (key: string) => labels[key] ?? key;
+    t.has = (key: string) => key in labels;
+    t.raw = (key: string) => labels[key] ?? key;
+    t.rich = (key: string) => labels[key] ?? key;
+    t.markup = (key: string) => labels[key] ?? key;
+    return t;
+  };
+
+  return {
+    getTranslations: jest.fn(() => Promise.resolve(createMockTranslator())),
+    setRequestLocale: jest.fn(),
+  };
+});
 
 jest.mock("@/components/certification/certification", () => ({
   __esModule: true,

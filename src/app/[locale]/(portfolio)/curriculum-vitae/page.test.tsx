@@ -13,22 +13,34 @@ jest.mock("@/i18n/routing", () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
     <a href={href}>{children}</a>
   ),
+  getPathname: jest.fn(({ href }: { href: string }) => href),
+  usePathname: jest.fn(() => "/"),
+  useRouter: jest.fn(() => ({ push: jest.fn(), replace: jest.fn() })),
+  redirect: jest.fn(),
+  routing: { locales: ["en", "es", "nl"], defaultLocale: "en" },
 }));
 
-jest.mock("next-intl/server", () => ({
-  getTranslations: jest.fn(() =>
-    Promise.resolve((key: string) => {
-      const labels: Record<string, string> = {
-        "actions.goBack": "Go Back",
-        "actions.download": "Download CV",
-        codedWith: "This CV was created using ReactJS.",
-        title: "Curriculum Vitae",
-      };
-      return labels[key] ?? key;
-    }),
-  ),
-  setRequestLocale: jest.fn(),
-}));
+jest.mock("next-intl/server", () => {
+  const createMockTranslator = () => {
+    const labels: Record<string, string> = {
+      "actions.goBack": "Go Back",
+      "actions.download": "Download CV",
+      codedWith: "This CV was created using ReactJS.",
+      title: "Curriculum Vitae",
+    };
+    const t = (key: string) => labels[key] ?? key;
+    t.has = (key: string) => key in labels;
+    t.raw = (key: string) => labels[key] ?? key;
+    t.rich = (key: string) => labels[key] ?? key;
+    t.markup = (key: string) => labels[key] ?? key;
+    return t;
+  };
+
+  return {
+    getTranslations: jest.fn(() => Promise.resolve(createMockTranslator())),
+    setRequestLocale: jest.fn(),
+  };
+});
 
 interface MockDb {
   profile: { findUnique: jest.Mock };
