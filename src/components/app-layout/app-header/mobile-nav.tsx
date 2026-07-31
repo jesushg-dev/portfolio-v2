@@ -8,10 +8,9 @@ import { MobileContactActions, MobileNavGroup } from "./nav-menu-parts";
 
 interface MobileNavProps {
   isOpen: boolean;
-  onNavigate?: () => void;
 }
 
-const MobileNav: FC<MobileNavProps> = ({ isOpen, onNavigate }) => {
+const MobileNav: FC<MobileNavProps> = ({ isOpen }) => {
   const [openGroup, setOpenGroup] = useState<
     (typeof NAV_GROUPS)[number]["id"] | null
   >("about");
@@ -30,10 +29,9 @@ const MobileNav: FC<MobileNavProps> = ({ isOpen, onNavigate }) => {
           groupId={group.id}
           isOpen={openGroup === group.id}
           onToggle={() => toggleGroup(group.id)}
-          onNavigate={onNavigate}
         />
       ))}
-      <MobileContactActions onNavigate={onNavigate} />
+      <MobileContactActions />
     </div>
   );
 };

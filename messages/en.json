@@ -348,6 +348,10 @@
           "certificates": "Certificates",
           "timeline": "Timeline"
         },
+        "process": {
+          "howIUseAi": "How I use AI",
+          "qaCollaboration": "QA collaboration"
+        },
         "miscellaneous": {
           "cvGenerator": "CV Generator",
           "cvGeneratorHint": "Create a free account to build and edit your own CV.",
@@ -356,6 +360,7 @@
       },
       "titles": {
         "portfolio": "Portfolio",
+        "process": "How I work",
         "miscellaneous": "Miscellaneous",
         "NowPlaying": "Now Playing"
       },

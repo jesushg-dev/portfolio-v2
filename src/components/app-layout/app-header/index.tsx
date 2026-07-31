@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { Link } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
@@ -21,14 +21,22 @@ interface IHeaderProps {
 
 const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   const t = useTranslations("global.header");
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState<
     (typeof NAV_GROUPS)[number]["id"] | null
   >(null);
+  const [prevPathname, setPrevPathname] = useState(pathname);
   const headerRef = useRef<HTMLElement>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isOnTop = useIsOnTop();
+
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setIsMenuOpen(false);
+    setActiveGroup(null);
+  }
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
@@ -59,6 +67,16 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   useEffect(() => {
     return () => clearCloseTimer();
   }, [clearCloseTimer]);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setIsMenuOpen(false);
+      setActiveGroup(null);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   useEffect(() => {
     const handlePointerDown = (event: MouseEvent) => {
@@ -135,13 +153,10 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
           </div>
 
           <div className="w-full lg:hidden">
-            <MobileNav isOpen={isMenuOpen} onNavigate={closeMenus} />
+            <MobileNav isOpen={isMenuOpen} />
           </div>
 
-          <DesktopMegaMenu
-            activeGroup={activeGroup}
-            onNavigate={() => setActiveGroup(null)}
-          />
+          <DesktopMegaMenu activeGroup={activeGroup} />
         </div>
       </nav>
     </header>

@@ -10,19 +10,16 @@ import { cn } from "@/lib/utils";
 
 import HeaderCtaBar from "./header-cta-bar";
 import { headerNavTriggerStyles } from "./toolbar-control-styles";
-import { NAV_GROUPS, type NavItem } from "./navigation-config";
-import { useSectionNavigation } from "./use-section-navigation";
+import { homeSectionHref, NAV_GROUPS, type NavItem } from "./navigation-config";
 
 interface NavItemCardProps {
   item: NavItem;
-  onNavigate?: () => void;
   compact?: boolean;
 }
 
-function NavItemCard({ item, onNavigate, compact = false }: NavItemCardProps) {
+function NavItemCard({ item, compact = false }: NavItemCardProps) {
   const t = useTranslations("global.header.nav.items");
   const tNav = useTranslations("global.header.nav");
-  const { navigateToSection } = useSectionNavigation();
   const Icon = item.icon;
   const label = (t as (key: string) => string)(`${item.id}.label`);
   const description = (t as (key: string) => string)(`${item.id}.description`);
@@ -84,13 +81,9 @@ function NavItemCard({ item, onNavigate, compact = false }: NavItemCardProps) {
 
   if (item.kind === "section") {
     return (
-      <button
-        type="button"
-        className={cardClassName}
-        onClick={() => navigateToSection(item.sectionId, onNavigate)}
-      >
+      <Link href={homeSectionHref(item.sectionId)} className={cardClassName}>
         {inner}
-      </button>
+      </Link>
     );
   }
 
@@ -99,7 +92,7 @@ function NavItemCard({ item, onNavigate, compact = false }: NavItemCardProps) {
   }
 
   return (
-    <Link href={item.href} className={cardClassName} onClick={onNavigate}>
+    <Link href={item.href} className={cardClassName}>
       {inner}
     </Link>
   );
@@ -107,13 +100,9 @@ function NavItemCard({ item, onNavigate, compact = false }: NavItemCardProps) {
 
 interface MegaMenuPanelProps {
   groupId: "about" | "portfolio" | "process";
-  onNavigate?: () => void;
 }
 
-export const MegaMenuPanel: FC<MegaMenuPanelProps> = ({
-  groupId,
-  onNavigate,
-}) => {
+export const MegaMenuPanel: FC<MegaMenuPanelProps> = ({ groupId }) => {
   const t = useTranslations("global.header.nav.groups");
   const tNav = useTranslations("global.header.nav");
   const group = NAV_GROUPS.find((entry) => entry.id === groupId);
@@ -144,13 +133,13 @@ export const MegaMenuPanel: FC<MegaMenuPanelProps> = ({
           </p>
           <div className={cn("grid grid-cols-1 gap-1", columnCount)}>
             {group.items.map((item) => (
-              <NavItemCard key={item.id} item={item} onNavigate={onNavigate} />
+              <NavItemCard key={item.id} item={item} />
             ))}
           </div>
         </div>
       </div>
 
-      <HeaderCtaBar onNavigate={onNavigate} className="mt-6" />
+      <HeaderCtaBar className="mt-6" />
     </>
   );
 };
@@ -159,14 +148,12 @@ interface MobileNavGroupProps {
   groupId: "about" | "portfolio" | "process";
   isOpen: boolean;
   onToggle: () => void;
-  onNavigate?: () => void;
 }
 
 export const MobileNavGroup: FC<MobileNavGroupProps> = ({
   groupId,
   isOpen,
   onToggle,
-  onNavigate,
 }) => {
   const t = useTranslations("global.header.nav.groups");
   const group = NAV_GROUPS.find((entry) => entry.id === groupId);
@@ -198,12 +185,7 @@ export const MobileNavGroup: FC<MobileNavGroupProps> = ({
         <div className="pb-3 pl-1">
           <div className="space-y-1">
             {group.items.map((item) => (
-              <NavItemCard
-                key={item.id}
-                item={item}
-                compact
-                onNavigate={onNavigate}
-              />
+              <NavItemCard key={item.id} item={item} compact />
             ))}
           </div>
         </div>
@@ -212,29 +194,20 @@ export const MobileNavGroup: FC<MobileNavGroupProps> = ({
   );
 };
 
-interface MobileContactActionsProps {
-  onNavigate?: () => void;
-}
-
-export const MobileContactActions: FC<MobileContactActionsProps> = ({
-  onNavigate,
-}) => {
+export const MobileContactActions: FC = () => {
   const t = useTranslations("global.header.nav");
-  const { navigateToSection } = useSectionNavigation();
 
   return (
     <div className="border-border/60 mt-2 space-y-2 border-t pt-4">
-      <button
-        type="button"
+      <Link
+        href={homeSectionHref("contact")}
         className="bg-primary/10 text-primary hover:bg-primary/15 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-colors"
-        onClick={() => navigateToSection("contact", onNavigate)}
       >
         <Mail aria-hidden className="size-4" />
         {t("contactCta")}
-      </button>
+      </Link>
       <Link
         href="/schedule"
-        onClick={onNavigate}
         className="border-border bg-background hover:bg-accent/40 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium transition-colors"
       >
         <Calendar aria-hidden className="size-4" />
@@ -282,20 +255,16 @@ export const DesktopNavTrigger: FC<DesktopNavTriggerProps> = ({
 
 interface DesktopMegaMenuProps {
   activeGroup: (typeof NAV_GROUPS)[number]["id"] | null;
-  onNavigate: () => void;
 }
 
-export const DesktopMegaMenu: FC<DesktopMegaMenuProps> = ({
-  activeGroup,
-  onNavigate,
-}) => {
+export const DesktopMegaMenu: FC<DesktopMegaMenuProps> = ({ activeGroup }) => {
   if (!activeGroup) return null;
 
   return (
     <div className="absolute inset-x-0 top-full z-50 hidden pt-3 lg:block">
       <div className="container mx-auto max-w-(--breakpoint-xl) px-2 md:px-6 lg:px-8">
         <NavMenuShell>
-          <MegaMenuPanel groupId={activeGroup} onNavigate={onNavigate} />
+          <MegaMenuPanel groupId={activeGroup} />
         </NavMenuShell>
       </div>
     </div>

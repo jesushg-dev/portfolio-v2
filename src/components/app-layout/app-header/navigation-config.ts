@@ -44,6 +44,10 @@ export interface NavRouteItem {
 
 export type NavItem = NavLinkItem | NavRouteItem;
 
+export function homeSectionHref(sectionId: NavSectionId) {
+  return { pathname: "/" as const, hash: `#${sectionId}` };
+}
+
 export interface NavGroup {
   id: "about" | "portfolio" | "process";
   icon: LucideIcon;

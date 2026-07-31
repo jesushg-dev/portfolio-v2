@@ -1,5 +1,6 @@
 import type { ProcessStep } from "../types";
 import { processSectionHeadingId } from "./process-page-styles";
+import { ProcessReveal, ProcessRevealItem } from "./process-reveal";
 import { ProcessSectionHeader } from "./process-section-header";
 
 interface ProcessStepsTimelineProps {
@@ -24,16 +25,22 @@ export function ProcessStepsTimeline({
       className="px-6 py-20"
     >
       <div className="mx-auto max-w-3xl">
-        <ProcessSectionHeader
-          sectionId={id}
-          eyebrow={eyebrow}
-          title={title}
-          description={description}
-        />
+        <ProcessReveal>
+          <ProcessSectionHeader
+            sectionId={id}
+            eyebrow={eyebrow}
+            title={title}
+            description={description}
+          />
+        </ProcessReveal>
 
         <ol className="border-primary/20 relative ml-4 space-y-10 border-l-2">
-          {steps.map((step) => (
-            <li key={step.number} className="relative ml-8">
+          {steps.map((step, index) => (
+            <ProcessRevealItem
+              key={step.number}
+              index={index}
+              className="relative ml-8"
+            >
               <span
                 aria-hidden
                 className="bg-primary text-primary-foreground absolute top-0 left-[-3.05rem] flex size-8 items-center justify-center rounded-full text-sm font-bold"
@@ -46,7 +53,7 @@ export function ProcessStepsTimeline({
               <p className="text-muted-foreground text-sm leading-relaxed">
                 {step.description}
               </p>
-            </li>
+            </ProcessRevealItem>
           ))}
         </ol>
       </div>

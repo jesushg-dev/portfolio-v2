@@ -12,6 +12,7 @@ import {
   processPanelId,
   processSectionHeadingId,
 } from "./process-page-styles";
+import { ProcessReveal, ProcessRevealStaggerItem } from "./process-reveal";
 import { ProcessSectionHeader } from "./process-section-header";
 
 interface ProcessStepsAccordionProps {
@@ -41,12 +42,14 @@ export function ProcessStepsAccordion({
       className="px-6 py-20"
     >
       <div className="mx-auto max-w-3xl">
-        <ProcessSectionHeader
-          sectionId={id}
-          eyebrow={eyebrow}
-          title={title}
-          description={description}
-        />
+        <ProcessReveal>
+          <ProcessSectionHeader
+            sectionId={id}
+            eyebrow={eyebrow}
+            title={title}
+            description={description}
+          />
+        </ProcessReveal>
 
         <div className="space-y-0">
           {steps.map((step, index) => {
@@ -56,7 +59,11 @@ export function ProcessStepsAccordion({
             const triggerId = `${panelId}-trigger`;
 
             return (
-              <div key={step.number} className={cn(!isLast && "pb-10")}>
+              <ProcessRevealStaggerItem
+                key={step.number}
+                index={index}
+                className={cn(!isLast && "pb-10")}
+              >
                 <div className="flex gap-6">
                   <div aria-hidden className="flex flex-col items-center">
                     <span className="bg-primary text-primary-foreground flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold">
@@ -121,7 +128,7 @@ export function ProcessStepsAccordion({
                     ) : null}
                   </div>
                 </div>
-              </div>
+              </ProcessRevealStaggerItem>
             );
           })}
         </div>

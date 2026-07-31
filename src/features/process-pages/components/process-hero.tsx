@@ -9,6 +9,7 @@ import {
   processInteractiveStyles,
   processTextLinkStyles,
 } from "./process-page-styles";
+import { ProcessReveal } from "./process-reveal";
 
 interface ProcessHeroProps {
   eyebrow: string;
@@ -36,49 +37,51 @@ export function ProcessHero({
       <div className="from-primary/5 via-background to-background absolute inset-0 -z-10 bg-linear-to-br" />
 
       <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
-        <div>
-          <p
-            className={cn(
-              processEyebrowStyles,
-              "mb-6 inline-flex items-center gap-2",
-            )}
-          >
-            <span aria-hidden className="bg-primary size-1.5 rounded-full" />
-            {eyebrow}
-          </p>
-
-          <h1 className="text-foreground mb-6 text-4xl leading-tight font-extrabold tracking-tight md:text-5xl">
-            {title} <span className="text-primary">{titleHighlight}</span>
-          </h1>
-
-          <p className="text-muted-foreground mb-8 max-w-xl text-lg leading-relaxed">
-            {description}
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <a
-              href={primaryAction.href}
+        <ProcessReveal>
+          <div>
+            <p
               className={cn(
-                processInteractiveStyles,
-                "bg-primary text-primary-foreground hover:bg-primary/90 gap-2",
+                processEyebrowStyles,
+                "mb-6 inline-flex items-center gap-2",
               )}
             >
-              {primaryAction.label}
-              <ArrowRight aria-hidden className="size-4" />
-            </a>
-            <Link
-              href={secondaryAction.href}
-              className={cn(
-                processInteractiveStyles,
-                "border-border text-foreground hover:bg-accent/50 border",
-              )}
-            >
-              {secondaryAction.label}
-            </Link>
+              <span aria-hidden className="bg-primary size-1.5 rounded-full" />
+              {eyebrow}
+            </p>
+
+            <h1 className="text-foreground mb-6 text-4xl leading-tight font-extrabold tracking-tight md:text-5xl">
+              {title} <span className="text-primary">{titleHighlight}</span>
+            </h1>
+
+            <p className="text-muted-foreground mb-8 max-w-xl text-lg leading-relaxed">
+              {description}
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <a
+                href={primaryAction.href}
+                className={cn(
+                  processInteractiveStyles,
+                  "bg-primary text-primary-foreground hover:bg-primary/90 gap-2",
+                )}
+              >
+                {primaryAction.label}
+                <ArrowRight aria-hidden className="size-4" />
+              </a>
+              <Link
+                href={secondaryAction.href}
+                className={cn(
+                  processInteractiveStyles,
+                  "border-border text-foreground hover:bg-accent/50 border",
+                )}
+              >
+                {secondaryAction.label}
+              </Link>
+            </div>
           </div>
-        </div>
+        </ProcessReveal>
 
-        {visual}
+        <ProcessReveal delay={0.12}>{visual}</ProcessReveal>
       </div>
 
       <div className="mt-6 hidden justify-center md:flex">

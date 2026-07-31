@@ -348,6 +348,10 @@
           "certificates": "Certificaten",
           "timeline": "Tijdlijn"
         },
+        "process": {
+          "howIUseAi": "Hoe ik AI gebruik",
+          "qaCollaboration": "QA-samenwerking"
+        },
         "miscellaneous": {
           "cvGenerator": "CV-generator",
           "cvGeneratorHint": "Maak een gratis account om je eigen CV te bouwen en te bewerken.",
@@ -356,6 +360,7 @@
       },
       "titles": {
         "portfolio": "Portfolio",
+        "process": "Hoe ik werk",
         "miscellaneous": "Diversen",
         "NowPlaying": "Nu aan het spelen"
       },

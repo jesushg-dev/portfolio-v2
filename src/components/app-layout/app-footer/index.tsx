@@ -22,7 +22,7 @@ import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
 
 const footerLinkClassName =
-  "text-primary-foreground hover:text-primary-foreground inline-flex min-h-11 items-center py-2 text-sm transition-colors";
+  "text-primary-foreground hover:text-primary-foreground inline-flex items-center py-2 text-sm transition-colors min-h-11 md:min-h-8 md:py-1";
 
 const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
   email: IoMail,
@@ -88,14 +88,14 @@ const Footer = async () => {
             </a>
           </div>
 
-          <nav aria-labelledby="footer-portfolio" className="space-y-2.5">
+          <nav aria-labelledby="footer-portfolio" className="space-y-2">
             <h2
               id="footer-portfolio"
               className="text-primary-foreground text-sm font-semibold tracking-wide"
             >
               {t("titles.portfolio")}
             </h2>
-            <ul className="space-y-1.5">
+            <ul className="flex flex-col gap-0.5">
               <li>
                 <LinkPreviewLazy
                   url="/certificates"
@@ -127,9 +127,25 @@ const Footer = async () => {
                 </LinkPreviewLazy>
               </li>
             </ul>
+
+            <h3 className="text-primary-foreground/75 pt-3 text-xs font-semibold tracking-wide">
+              {t("titles.process")}
+            </h3>
+            <ul className="flex flex-col gap-0.5">
+              <li>
+                <Link href="/how-i-use-ai" className={footerLinkClassName}>
+                  {t("sections.process.howIUseAi")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/qa-collaboration" className={footerLinkClassName}>
+                  {t("sections.process.qaCollaboration")}
+                </Link>
+              </li>
+            </ul>
           </nav>
 
-          <div className="space-y-2.5">
+          <div className="space-y-2">
             <h2 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.miscellaneous")}
             </h2>
@@ -151,7 +167,7 @@ const Footer = async () => {
             </p>
           </div>
 
-          <div className="space-y-2.5 overflow-hidden md:col-span-2 lg:col-span-1">
+          <div className="space-y-2 overflow-hidden md:col-span-2 lg:col-span-1">
             <h2 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.NowPlaying")}
             </h2>
