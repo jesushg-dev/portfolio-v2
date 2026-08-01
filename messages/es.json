@@ -275,68 +275,68 @@
         "explore": "Explorar",
         "comingSoon": "Pronto",
         "contactCta": "Contacto",
-        "scheduleCta": "Agendar",
-        "scheduleHint": "Llamada gratis de 30 min · Sin compromiso",
+        "scheduleCta": "Agendar entrevista",
+        "scheduleHint": "Reunión de 30 min · Contacto o entrevista profesional",
         "groups": {
           "about": {
             "label": "Sobre mí",
             "eyebrow": "Sobre mí",
-            "headline": "Conoce mi trayectoria y enfoque",
-            "description": "Un vistazo a mi experiencia, habilidades técnicas y cómo trabajo con equipos."
+            "headline": "Trayectoria y perfil técnico",
+            "description": "Perfil profesional, experiencia laboral y stack tecnológico principal."
           },
           "portfolio": {
             "label": "Portafolio",
             "eyebrow": "Portafolio",
-            "headline": "Proyectos, certificaciones y trayectoria",
-            "description": "Explora mi trabajo, credenciales y la línea de tiempo de mi carrera."
+            "headline": "Proyectos y credenciales",
+            "description": "Proyectos destacados, certificaciones y trayectoria profesional."
           },
           "process": {
             "label": "Cómo trabajo",
             "eyebrow": "Cómo trabajo",
-            "headline": "IA, calidad y colaboración en el día a día",
-            "description": "Cómo integro herramientas de IA y trabajo junto a QA para entregar software confiable."
+            "headline": "Metodología de trabajo",
+            "description": "Uso de IA en desarrollo, calidad de software y colaboración con equipos."
           }
         },
         "items": {
           "about": {
             "label": "Acerca de mí",
-            "description": "Quién soy, mi background y qué me motiva."
+            "description": "Resumen de perfil y filosofía de ingeniería."
           },
           "experience": {
             "label": "Experiencia",
-            "description": "Roles, empresas y proyectos destacados."
+            "description": "Historial laboral, proyectos y roles desempeñados."
           },
           "skills": {
             "label": "Habilidades",
-            "description": "Stack técnico, frameworks y herramientas."
+            "description": "Ecosistema .NET, C#, microservicios y Cloud."
           },
           "services": {
-            "label": "Servicios",
-            "description": "Soluciones de software, frontend, backend y móvil."
+            "label": "Especialidades técnicas",
+            "description": "Arquitectura de software, modernización y desarrollo."
           },
           "soft-skills": {
-            "label": "Habilidades blandas",
-            "description": "Comunicación, liderazgo y trabajo en equipo."
+            "label": "Liderazgo y competencias",
+            "description": "Dirección de equipos, mentoría y comunicación."
           },
           "certificates": {
             "label": "Certificados",
-            "description": "Formación y certificaciones verificadas."
+            "description": "Acreditaciones y certificaciones en tecnología."
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "CV completo en formato web."
+            "description": "CV profesional completo en formato web."
           },
           "timeline": {
             "label": "Línea de tiempo",
-            "description": "Hitos profesionales y educativos."
+            "description": "Hitos de carrera y evolución profesional."
           },
           "ai-workflow": {
             "label": "Cómo uso la IA",
-            "description": "Mi flujo con IA en planificación, desarrollo y QA."
+            "description": "Flujo de trabajo e integración de herramientas de IA."
           },
           "qa-collaboration": {
             "label": "Colaboración con QA",
-            "description": "Cómo trabajo con equipos de calidad para releases sólidos."
+            "description": "Prácticas de calidad, testing y despliegues."
           }
         }
       }
@@ -437,9 +437,9 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Desarrollador Fullstack",
-      "description": "Hola, Soy Jesús Hernández, desarrollador de software en React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Desarrollo ágil de software",
-      "keywords": "Jesús Hernández, Jesús, Hernández, Full Stack Developer, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Metodologia Agil"
+      "title": "Jesús Hernández | Senior Full Stack .NET Developer & Tech Lead",
+      "description": "Senior Full Stack Developer con 6+ años en .NET Core, React y SQL Server, con experiencia liderando equipos de ingeniería, modernizando sistemas legados y entregando software listo para producción en entornos de alto cumplimiento.",
+      "keywords": "Senior .NET Developer, Tech Lead, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Team Lead, Ingeniero de Software, Jesús Hernández, Senior Software Engineer"
     },
     "heroMain": {
       "viewCV": "Ver CV",
@@ -457,9 +457,9 @@
       }
     },
     "services": {
-      "title": "Mis Servicios",
-      "subtitle": "Especialización",
-      "description": "Combino pensamiento estratégico con tecnologías de vanguardia para ofrecer soluciones de software robustas, escalables y orientadas a resultados.",
+      "title": "Lo que construyo",
+      "subtitle": "Capacidades de ingeniería",
+      "description": "Una visión práctica de las áreas técnicas en las que he entregado resultados: desde sistemas web full-stack y plataformas financieras hasta apps móviles e infraestructura cloud.",
       "items": {
         "frontend": {
           "title": "Desarrollo Frontend & UI/UX",
@@ -520,10 +520,10 @@
       }
     },
     "skills": {
-      "title": "Áreas de especialización",
+      "title": "Stack Técnico",
       "subtitle": "Habilidades",
-      "description": "Tengo un conjunto de diversas habilidades, desarrolladas a través de mi educación y experiencias profesionales.",
-      "aux": "Busco constantemente aprender y mejorar mis habilidades, y siempre estoy abierto a nuevas oportunidades para desafiarme y crecer profesionalmente.",
+      "description": "Tecnologías que he puesto en producción en sistemas corporativos de escala, plataformas financieras y entornos de alto cumplimiento.",
+      "aux": "Cada tecnología listada aquí ha sido usada en proyectos reales, no solo tutoriales. La mayoría a escala, en producción y bajo presión.",
       "page": {
         "breadcrumbHome": "Inicio",
         "breadcrumbSkills": "Habilidades",
@@ -572,35 +572,35 @@
       "tabs": {
         "frontend": {
           "title": "Frontend",
-          "description": "Diseño web adaptable enfocado en la experiencia del usuario."
+          "description": "Aplicaciones React y Next.js en producción a escala, desde storefronts de e-commerce hasta dashboards internos y plataformas admin."
         },
         "backend": {
           "title": "Backend",
-          "description": "Desarrollo de API y servicios web, con énfasis en seguridad."
+          "description": "APIs REST y GraphQL en C#/.NET Core y Node.js, con autenticación, autorización y rendimiento como prioridades de primer nivel."
         },
         "mobile": {
           "title": "Móvil",
-          "description": "Desarrollo de apps para Android e iOS, orientado a la experiencia del usuario."
+          "description": "Apps React Native multiplataforma con soporte offline, autenticación biométrica y fiabilidad para operaciones de campo."
         },
         "database": {
           "title": "Base de Datos",
-          "description": "Desarrollo de bases de datos eficientes y seguras."
+          "description": "SQL Server, PostgreSQL y MongoDB en dashboards financieros, plataformas de servicios y sistemas de contenido multi-tenant."
         },
         "devops": {
           "title": "DevOps",
-          "description": "Construcción de pipelines CI/CD centrados en el rendimiento."
+          "description": "Pipelines CI/CD en Azure DevOps y GitHub Actions, con Docker, análisis de seguridad y paridad de entornos."
         },
         "tools": {
           "title": "Herramientas",
-          "description": "Uso de diversas herramientas de software para soluciones de calidad."
+          "description": "El kit de herramientas profesional del día a día que mantiene la entrega rápida, la calidad alta y los equipos alineados."
         }
       }
     },
     "soft-skills": {
-      "subtitle": "Habilidades",
-      "title": "Habilidades blandas",
-      "description": "Además de mis habilidades técnicas, también poseo una serie de habilidades blandas que me han ayudado a tener éxito en mi carrera",
-      "aux": "Creo que estas habilidades son tan importantes como la experticia técnica, y trabajo duro para desarrollarlas y mejorarlas constantemente. Tengo confianza en que mi sólida comunicación, resolución de problemas y habilidades de trabajo en equipo me hacen un activo valioso para cualquier equipo o proyecto."
+      "subtitle": "Liderazgo",
+      "title": "Liderazgo e Impacto",
+      "description": "Las habilidades técnicas importan. También importa cómo lideras, colaboras y haces que las cosas sucedan con equipos reales en proyectos reales.",
+      "aux": "Esto no son adjetivos escritos en un CV: es la forma en que he operado en cada rol."
     },
     "portfolio": {
       "subtitle": "Portafolio",
@@ -618,16 +618,16 @@
       },
       "caseStudy": {
         "challenge": "El desafío",
-        "approach": "Enfoque técnico",
-        "outcome": "Resultado",
-        "introduction": "Introducción",
+        "approach": "Arquitectura y enfoque",
+        "outcome": "Resultado e impacto",
+        "introduction": "Contexto",
         "backToPortfolio": "Volver al portafolio",
         "projectType": "Tipo de proyecto",
         "category": "Categoría",
         "stack": "Stack",
         "nextProject": "Siguiente proyecto",
         "visualTitle": "Conexiones con intención",
-        "visualSubtitle": "Cada nodo es una pieza — cada línea, una razón para construir."
+        "visualSubtitle": "Cada nodo es una pieza; cada línea, una razón para construir."
       },
       "private": {
         "title": "Privado",
@@ -651,10 +651,10 @@
       }
     },
     "contact": {
-      "title": "Contáctame",
+      "title": "Hablemos",
       "title2": "Envía un mensaje",
       "eyebrow": "Contacto",
-      "subtitle": "¿Tienes una idea, un proyecto o buscas un desarrollador para tu equipo?\n\nMe encantaría conocer más sobre lo que estás construyendo. También puedes escribirme si solo quieres saludar.",
+      "subtitle": "Si buscas un Senior Full Stack Developer o Tech Lead que pueda contribuir desde el primer día, liderar discusiones técnicas y entregar software confiable a escala, hablemos.\n\nTambién puedes escribirme solo para conectar.",
       "responseTime": "Respuesta en menos de 24 h",
       "divider": "o",
       "noChannels": "Usa el formulario para escribirme. Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
@@ -740,8 +740,8 @@
       "subtitle": "Empresas, roles e impacto medible",
       "viewAll": "Ver CV completo para el historial detallado",
       "showingRecent": "Mostrando los roles más recientes.",
-      "leadershipTitle": "Liderazgo y mentoría",
-      "leadershipDescription": "Liderazgo de equipos técnicos, coordinación de proveedores y mentoría de desarrolladores en ciclos de entrega complejos."
+      "leadershipTitle": "Liderazgo técnico en cada rol",
+      "leadershipDescription": "Desde liderar un equipo de 6 ingenieros en Contollo hasta arquitectar sistemas en Imagemaker y Walmart/VTEX, he tomado decisiones técnicas, mentorié desarrolladores y entregado resultados en cada nivel."
     },
     "impactStats": {
       "teamSize": {

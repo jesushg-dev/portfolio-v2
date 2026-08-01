@@ -275,68 +275,68 @@
         "explore": "Ontdekken",
         "comingSoon": "Binnenkort",
         "contactCta": "Contact",
-        "scheduleCta": "Afspraak plannen",
-        "scheduleHint": "Gratis gesprek van 30 min · Geen verplichting",
+        "scheduleCta": "Gesprek plannen",
+        "scheduleHint": "Gesprek van 30 min · Sollicitatie of kennismaking",
         "groups": {
           "about": {
             "label": "Over mij",
             "eyebrow": "Over mij",
-            "headline": "Leer mijn achtergrond en aanpak kennen",
-            "description": "Een blik op mijn ervaring, technische vaardigheden en hoe ik met teams samenwerk."
+            "headline": "Achtergrond & technisch profiel",
+            "description": "Professionele achtergrond, werkervaring en belangrijkste tech stack."
           },
           "portfolio": {
             "label": "Portfolio",
             "eyebrow": "Portfolio",
-            "headline": "Projecten, certificeringen en carrière",
-            "description": "Bekijk mijn werk, credentials en professionele tijdlijn."
+            "headline": "Projecten & referenties",
+            "description": "Uitgelichte projecten, certificeringen en carrièretijdlijn."
           },
           "process": {
             "label": "Hoe ik werk",
             "eyebrow": "Hoe ik werk",
-            "headline": "AI, kwaliteit en samenwerking in de praktijk",
-            "description": "Hoe ik AI-tools integreer en samenwerk met QA voor betrouwbare software."
+            "headline": "Werkmethodologie",
+            "description": "AI-gebruik bij ontwikkeling, softwarekwaliteit en teamsamenwerking."
           }
         },
         "items": {
           "about": {
             "label": "Over mij",
-            "description": "Wie ik ben, mijn achtergrond en wat me drijft."
+            "description": "Profielsamenvatting en engineering-filosofie."
           },
           "experience": {
             "label": "Ervaring",
-            "description": "Rollen, bedrijven en opvallende projecten."
+            "description": "Werkgeschiedenis, projecten en vervulde rollen."
           },
           "skills": {
             "label": "Vaardigheden",
-            "description": "Tech stack, frameworks en tools."
+            "description": ".NET-ecosysteem, C#, microservices en Cloud."
           },
           "services": {
-            "label": "Diensten",
-            "description": "Softwareoplossingen, frontend, backend en mobiel."
+            "label": "Technische specialismen",
+            "description": "Softwarearchitectuur, modernisering en ontwikkeling."
           },
           "soft-skills": {
-            "label": "Soft skills",
-            "description": "Communicatie, leiderschap en teamwork."
+            "label": "Leiderschap & competenties",
+            "description": "Teamleiderschap, mentorschap en communicatie."
           },
           "certificates": {
             "label": "Certificaten",
-            "description": "Geverifieerde training en certificeringen."
+            "description": "Technische referenties en certificeringen."
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "Volledig CV in webformaat."
+            "description": "Volledig professioneel CV in webformaat."
           },
           "timeline": {
             "label": "Tijdlijn",
-            "description": "Professionele en educatieve mijlpalen."
+            "description": "Carrièremijlpalen en professionele groei."
           },
           "ai-workflow": {
             "label": "Hoe ik AI gebruik",
-            "description": "Mijn AI-workflow bij planning, ontwikkeling en QA."
+            "description": "AI-toolintegratie en engineering-workflow."
           },
           "qa-collaboration": {
             "label": "QA-samenwerking",
-            "description": "Hoe ik met kwaliteitsteams werk voor solide releases."
+            "description": "Kwaliteitspraktijken, testen en releases."
           }
         }
       }
@@ -437,9 +437,9 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández - Full-Stack Ontwikkelaar",
-      "description": "Hallo, ik ben Jesús Hernández, een softwareontwikkelaar in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile softwareontwikkeling.",
-      "keywords": "Jesús Hernández, Jesús, Hernández, Full Stack Ontwikkelaar, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Agile methodologie"
+      "title": "Jesús Hernández | Senior Full Stack .NET Developer & Tech Lead",
+      "description": "Senior Full Stack Developer met 6+ jaar ervaring in .NET Core, React en SQL Server, ervaren in het leiden van engineeringteams, moderniseren van legacy systemen en leveren van productieklare software in veeleisende omgevingen.",
+      "keywords": "Senior .NET Developer, Tech Lead, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Team Lead, Software Engineer, Jesús Hernández, Senior Software Engineer"
     },
     "heroMain": {
       "viewCV": "Bekijk CV",
@@ -457,9 +457,9 @@
       }
     },
     "services": {
-      "title": "Mijn Diensten",
-      "subtitle": "Expertise",
-      "description": "Strategisch denken combineren met geavanceerde technologieën voor robuuste en schaalbare softwareoplossingen.",
+      "title": "Wat Ik Bouw",
+      "subtitle": "Engineering Capaciteiten",
+      "description": "Een praktisch overzicht van de technische domeinen waarin ik heb geleverd: van full-stack websystemen en financiële platforms tot mobiele apps en cloudinfrastructuur.",
       "items": {
         "frontend": {
           "title": "Frontend & UI/UX Ontwikkeling",
@@ -520,10 +520,10 @@
       }
     },
     "skills": {
-      "title": "Gebieden van expertise",
+      "title": "Technische Stack",
       "subtitle": "Vaardigheden",
-      "description": "Ik heb een diverse vaardigheden opgebouwd door mijn opleiding en professionele ervaringen.",
-      "aux": "Ik ben voortdurend op zoek naar mogelijkheden om te leren en mijn vaardigheden te verbeteren. Ik sta altijd open voor nieuwe uitdagingen en professionele groei.",
+      "description": "Technologieën die ik in productie heb ingezet bij enterprise systemen, financiële platforms en sterk gereguleerde omgevingen.",
+      "aux": "Elke hier vermelde technologie is gebruikt in echte projecten, niet alleen tutorials. De meeste op schaal, in productie, onder druk.",
       "page": {
         "breadcrumbHome": "Start",
         "breadcrumbSkills": "Vaardigheden",
@@ -572,35 +572,35 @@
       "tabs": {
         "frontend": {
           "title": "Frontend",
-          "description": "Responsief webontwerp met focus op gebruikerservaring."
+          "description": "React- en Next.js-applicaties in productie op schaal, van e-commerce storefronts tot interne dashboards en beheerplatforms."
         },
         "backend": {
           "title": "Backend",
-          "description": "Ontwikkeling van API's en webservices, met nadruk op beveiliging."
+          "description": "REST en GraphQL API's in C#/.NET Core en Node.js, met authenticatie, autorisatie en prestaties als hoogste prioriteit."
         },
         "mobile": {
           "title": "Mobiel",
-          "description": "Ontwikkeling van Android- en iOS-apps, gericht op gebruikerservaring."
+          "description": "Cross-platform React Native-apps met offline ondersteuning, biometrische authenticatie en betrouwbaarheid voor veldoperaties."
         },
         "database": {
-          "title": "Databases",
-          "description": "Ontwikkeling van efficiënte en beveiligde databases."
+          "title": "Database",
+          "description": "SQL Server, PostgreSQL en MongoDB in financiële dashboards, serviceplatformen en multi-tenant inhoudssystemen."
         },
         "devops": {
           "title": "DevOps",
-          "description": "Bouwen van op prestaties gerichte CI/CD-pijplijnen."
+          "description": "CI/CD-pijplijnen in Azure DevOps en GitHub Actions, met Docker, beveiligingsscanning en omgevingspariteit."
         },
         "tools": {
           "title": "Gereedschappen",
-          "description": "Gebruik van diverse softwaretools voor kwaliteitsoplossingen."
+          "description": "De dagelijkse professionele toolkit die levering snel houdt, kwaliteit hoog en teams op één lijn."
         }
       }
     },
     "soft-skills": {
-      "subtitle": "Vaardigheden",
-      "title": "Soft skills",
-      "description": "Naast mijn technische vaardigheden bezit ik ook een scala aan soft skills die mij hebben geholpen succesvol te zijn in mijn carrière.",
-      "aux": "Ik geloof dat deze vaardigheden net zo belangrijk zijn als technische expertise, en ik werk hard om ze voortdurend te ontwikkelen en te verbeteren. Ik ben ervan overtuigd dat mijn sterke communicatie, probleemoplossing en teamwork vaardigheden mij een waardevolle aanwinst maken voor elk team of project."
+      "subtitle": "Leiderschap",
+      "title": "Leiderschap & Impact",
+      "description": "Technische vaardigheden zijn belangrijk. Maar ook hoe je leidt, samenwerkt en dingen voor elkaar krijgt met echte teams in echte projecten.",
+      "aux": "Dit zijn geen bijvoeglijke naamwoorden op een CV: het is de manier waarop ik in elke rol heb gewerkt."
     },
     "portfolio": {
       "subtitle": "Portfolio",
@@ -618,16 +618,16 @@
       },
       "caseStudy": {
         "challenge": "De uitdaging",
-        "approach": "Technische aanpak",
-        "outcome": "Resultaat",
-        "introduction": "Introductie",
+        "approach": "Architectuur & aanpak",
+        "outcome": "Resultaat & impact",
+        "introduction": "Context",
         "backToPortfolio": "Terug naar portfolio",
         "projectType": "Projecttype",
         "category": "Categorie",
         "stack": "Stack",
         "nextProject": "Volgend project",
         "visualTitle": "Verbindingen met intentie",
-        "visualSubtitle": "Elke node is een schakel — elke lijn een reden om te bouwen."
+        "visualSubtitle": "Elke node is een schakel; elke lijn een reden om te bouwen."
       },
       "private": {
         "title": "Prive",
@@ -652,9 +652,9 @@
     },
     "contact": {
       "eyebrow": "Contact",
-      "title": "Neem contact op",
+      "title": "Laten we praten",
       "title2": "Stuur een bericht",
-      "subtitle": "Heb je een idee, een project of zoek je een ontwikkelaar voor je team?\n\nIk hoor graag meer over wat je bouwt. Je kunt me ook gewoon een bericht sturen om hallo te zeggen.",
+      "subtitle": "Als je op zoek bent naar een Senior Full Stack Developer of Tech Lead die vanaf dag één waarde toevoegt, technische discussies leidt en betrouwbare software op schaal levert, laten we praten.\n\nVoel je vrij om contact op te nemen.",
       "responseTime": "Antwoord binnen 24u",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
@@ -736,12 +736,12 @@
       }
     },
     "experience": {
-      "title": "Professionele ervaring",
+      "title": "Professionele Ervaring",
       "subtitle": "Bedrijven, rollen en meetbare impact",
       "viewAll": "Bekijk volledig CV voor de complete geschiedenis",
       "showingRecent": "Meest recente rollen weergegeven.",
-      "leadershipTitle": "Leiderschap & mentoring",
-      "leadershipDescription": "Technische teams leiden, leveranciers coördineren en developers begeleiden in complexe deliverycycli."
+      "leadershipTitle": "Technisch leiderschap in elke rol",
+      "leadershipDescription": "Van het leiden van een team van 6 ontwikkelaars bij Contollo tot het ontwerpen van systemen bij Imagemaker en Walmart/VTEX, ik heb technische beslissingen genomen, ontwikkelaars begeleid en resultaten geleverd."
     },
     "impactStats": {
       "teamSize": {

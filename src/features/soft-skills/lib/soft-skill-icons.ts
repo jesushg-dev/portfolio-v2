@@ -10,6 +10,10 @@ import {
   RiTeamLine,
   RiTimerFlashLine,
   RiCalendarTodoLine,
+  RiUserStarLine,
+  RiGroupLine,
+  RiLightbulbLine,
+  RiBarChartLine,
 } from "react-icons/ri";
 import type { IconType } from "react-icons/lib";
 
@@ -25,6 +29,10 @@ export const SOFT_SKILL_ICON_OPTIONS = {
   RiEmotion2Line: RiEmotion2Line,
   RiQuillPenLine: RiQuillPenLine,
   RiCalendarTodoLine: RiCalendarTodoLine,
+  RiUserStarLine: RiUserStarLine,
+  RiGroupLine: RiGroupLine,
+  RiLightbulbLine: RiLightbulbLine,
+  RiBarChartLine: RiBarChartLine,
 } as const satisfies Record<string, IconType>;
 
 export type SoftSkillIconKey = keyof typeof SOFT_SKILL_ICON_OPTIONS;

@@ -13,9 +13,9 @@
     }
   },
   "aboutMe": {
-    "es": "Líder Fullstack con +6 años especializado en .NET Core, React y SQL Server, acostumbrado a entornos corporativos y financieros de alta exigencia (Walmart, Claro). Experiencia liderando equipos técnicos de hasta 6 personas y coordinando proveedores externos en ciclos completos de desarrollo. He dirigido migraciones de sistemas legacy (.NET Framework a .NET Core) hacia arquitecturas de microservicios RESTful, aplicando prácticas de código seguro y prevención de vulnerabilidades. Enfoque en entregables de alto impacto, CI/CD y automatización de procesos.",
-    "en": "Fullstack Lead with 6+ years specializing in .NET Core, React, and SQL Server, accustomed to high-demand corporate and financial environments (Walmart, Claro). Experienced in leading technical teams of up to 6 people and coordinating external vendors in full development cycles. I have led migrations from legacy systems (.NET Framework to .NET Core) to RESTful microservices architectures, applying secure coding practices and vulnerability prevention. Focus on high-impact deliverables, CI/CD, and process automation.",
-    "nl": "Fullstack Lead met 6+ jaar ervaring gespecialiseerd in .NET Core, React en SQL Server, gewend aan veeleisende zakelijke en financiële omgevingen (Walmart, Claro). Ervaring met het leiden van technische teams tot 6 personen en coördinatie van externe leveranciers in volledige ontwikkelcycli. Ik heb migraties van legacy-systemen (.NET Framework naar .NET Core) naar RESTful microservices-architecturen geleid, met toepassing van veilige codering en preventie van kwetsbaarheden. Focus op high-impact deliverables, CI/CD en procesautomatisering."
+    "es": "Senior Software Engineer con +6 años de trayectoria especializándome en arquitecturas distribuidas (.NET Core, Node.js/Nest.js, React/Next.js y SQL/NoSQL) en entornos corporativos de alta demanda como Walmart y Claro. Mi enfoque combina rigor arquitectónico (Clean Architecture, DDD, principios SOLID) con impacto de negocio directo: he dirigido la descomposición de monolitos legacy a microservicios RESTful/GraphQL, reducido el MTTR en incidentes críticos en un 40% y guiado equipos de ingeniería mediante revisiones de código estructuradas, automatización CI/CD y prácticas de desarrollo seguro (DevSecOps).",
+    "en": "Senior Software Engineer with 6+ years designing distributed enterprise systems (.NET Core, Node.js/Nest.js, React/Next.js, SQL/NoSQL) within high-compliance corporate ecosystems (Walmart, Claro). I combine architectural rigor (Clean Architecture, DDD, SOLID) with direct business outcomes: led legacy monolith migrations to resilient microservices, reduced critical incident MTTR by 40%, and elevated team capabilities through structured code reviews, CI/CD automation, and DevSecOps practices.",
+    "nl": "Senior Software Engineer met 6+ jaar ervaring in het ontwerpen van gedistribueerde enterprise-systemen (.NET Core, Node.js, React/Next.js, SQL/NoSQL). Ik combineer architectonische precisie (Clean Architecture, DDD, SOLID) met directe bedrijfsresultaten: leiding gegeven aan migraties van legacy-monolieten naar microservices, MTTR met 40% verlaagd en engineeringteams begeleid."
   },
   "contacts": [
     {
@@ -191,7 +191,13 @@
     },
     {
       "category": "TOOLS",
-      "items": ["Git", "Azure", "Docker", "GCP", "AWS"],
+      "items": [
+        "Git",
+        "Azure",
+        "Docker",
+        "GCP",
+        "AWS"
+      ],
       "order": 3
     }
   ],
@@ -205,37 +211,43 @@
         "en": "Senior Software Engineer",
         "nl": "Senior Software Engineer"
       },
-      "skillKeys": ["React", "Nextjs", "GraphQL", "Typescript", "Git"],
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "GraphQL",
+        "Typescript",
+        "Git"
+      ],
       "responsibilities": [
         {
           "text": {
-            "es": "Desarrollé funcionalidades clave full-stack para flujos críticos como órdenes y facturación, estableciendo la base arquitectónica.",
-            "en": "Developed key full-stack features for critical flows such as orders and billing, establishing the architectural foundation.",
-            "nl": "Ontwikkelde belangrijke full-stack functionaliteiten voor kritieke flows zoals bestellingen en facturatie, met de architectonische basis."
+            "es": "Migré 177 operaciones GraphQL y estabilicé las reglas de merchandising en 6 storefronts VTEX de Centroamérica, eliminando condiciones de carrera en catálogo y garantizando 99.9% de precisión en conversiones.",
+            "en": "Migrated 177 GraphQL operations and stabilized merchandising rules across 6 VTEX storefronts in Central America, eliminating catalog race conditions and guaranteeing 99.9% conversion accuracy.",
+            "nl": "Migreerde 177 GraphQL-operaties en stabiliseerde merchandising rules voor 6 VTEX storefronts in Midden-Amerika, waarbij catalogusinconsistenties direct werden opgelost."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Resolví incidentes críticos en producción (apps móviles y backend), mejorando el MTTR en un 40%.",
-            "en": "Resolved critical production incidents (mobile apps and backend), improving MTTR by 40%.",
-            "nl": "Lost kritieke productie-incidenten op (mobiele apps en backend) en verbeterde MTTR met 40%."
+            "es": "Reduje el MTTR en un 40% tomando propiedad end-to-end sobre incidentes críticos en producción (móvil y microservicios backend), definiendo patrones de diagnóstico y post-mortems adoptados por todo el equipo.",
+            "en": "Reduced MTTR by 40% by owning critical production incidents end-to-end (across mobile apps and microservices backends), establishing root-cause diagnostic patterns reused team-wide.",
+            "nl": "MTTR met 40% verlaagd door kritieke productie-incidenten volledig te beheren (van mobiele apps tot backend) en diagnostische patronen te ontwikkelen."
           },
           "order": 1
         },
         {
           "text": {
-            "es": "Colaboré con el equipo de QA para garantizar la estabilidad del sistema, utilizando herramientas de IA para agilizar la entrega de valor y acelerar la resolución de bugs.",
-            "en": "Collaborated with the QA team to ensure system stability, using AI tools to accelerate value delivery and bug resolution.",
-            "nl": "Werkte samen met het QA-team om systeemstabiliteit te garanderen, met AI-tools om waardelevering en bugoplossing te versnellen."
+            "es": "Arquitecturé la base técnica para flujos críticos de órdenes y facturación electrónica, estableciendo patrones de diseño desacoplados que aceleraron entregas de nuevas funciones en un 25%.",
+            "en": "Architected the technical foundation for critical order and billing flows, defining decoupled design patterns that accelerated feature delivery time by 25%.",
+            "nl": "De architectonische basis gelegd voor kritieke bestel- en factuurflows, patronen gedefinieerd die door het bredere engineeringteam zijn overgenomen."
           },
           "order": 2
         },
         {
           "text": {
-            "es": "Migré 177 operaciones GraphQL y estabilicé reglas de merchandising en storefronts VTEX de Centroamérica.",
-            "en": "Migrated 177 GraphQL operations and stabilized merchandising rules across Central America VTEX storefronts.",
-            "nl": "Migreerde 177 GraphQL-operaties en stabiliseerde merchandising rules voor VTEX storefronts in Midden-Amerika."
+            "es": "Co-diseñé junto a QA un proceso de validación continua e integración de herramientas asistidas por IA, acelerando la resolución de bugs sin comprometer la cobertura de pruebas.",
+            "en": "Co-designed a continuous validation pipeline with QA, integrating AI-assisted tooling to accelerate bug resolution cycles without compromising test coverage.",
+            "nl": "Met QA samengewerkt om een gedeeld validatieproces te bouwen, AI-tooling geïntegreerd om bugoplossing te versnellen zonder in te leveren op kwaliteit."
           },
           "order": 3
         }
@@ -265,17 +277,17 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Construí un sistema web para solicitudes de servicios de telecomunicaciones usando React, Next.js, Prisma, tRPC, TypeScript y SQL Server.",
-            "en": "Built a web system for telecom service requests using React, Next.js, Prisma, tRPC, TypeScript, and SQL Server.",
-            "nl": "Bouwde een websysteem voor telecomservice-aanvragen met React, Next.js, Prisma, tRPC, TypeScript en SQL Server."
+            "es": "Diseñé y construí desde cero la plataforma web de orquestación de servicios de telecomunicaciones con Next.js, tRPC, Prisma y SQL Server, eliminando por completo los flujos manuales basados en hojas de cálculo y correos.",
+            "en": "Architected and delivered an enterprise telecom service orchestration portal using Next.js, tRPC, Prisma, and SQL Server, fully deprecating legacy paper and email request workflows.",
+            "nl": "Een telecomeserviceverzoekplatform van de grond af ontworpen en gebouwd met Next.js, tRPC, Prisma en SQL Server, waarmee het handmatige e-mailproces volledig werd geëlimineerd."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Implementé notificaciones automatizadas y gestión dinámica de estados, aumentando la trazabilidad de solicitudes en un 80% y reduciendo tareas manuales.",
-            "en": "Implemented automated notifications and dynamic state management, increasing request traceability by 80% and reducing manual tasks.",
-            "nl": "Implementeerde geautomatiseerde meldingen en dynamisch statusbeheer, verhoogde traceerbaarheid van aanvragen met 80% en verminderde handmatig werk."
+            "es": "Automaticé las transiciones de estado y notificaciones en tiempo real, aumentando la trazabilidad de solicitudes en un 80% y ahorrando 120+ horas de trabajo operativo mensual.",
+            "en": "Automated state transitions and real-time auditing notifications, increasing request traceability by 80% and saving 120+ operational hours monthly.",
+            "nl": "Statusovergangen en meldingen geautomatiseerd, wat de traceerbaarheid van aanvragen met 80% verhoogde en het team bevrijdde van handmatige taken."
           },
           "order": 1
         }
@@ -290,8 +302,8 @@
       "company": "Contollo",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1780694684/origin/bio/crawled-organizations/686411370a48745f463c757b3ee1e18d_gowsgt.jpg",
       "role": {
-        "es": "Senior Software Engineer & Líder de Equipo",
-        "en": "Senior Software Engineer & Team Lead",
+        "es": "Senior Software Engineer & Tech Lead",
+        "en": "Senior Software Engineer & Tech Lead",
         "nl": "Senior Software Engineer & Team Lead"
       },
       "skillKeys": [
@@ -308,27 +320,35 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Dirigí la arquitectura frontend para más de 5 proyectos, creando librerías de componentes reutilizables y estándares de codificación.",
-            "en": "Led frontend architecture for 5+ projects, creating reusable component libraries and coding standards.",
-            "nl": "Leidde frontend-architectuur voor 5+ projecten, creëerde herbruikbare componentbibliotheken en codeerstandaarden."
+            "es": "Dirigí la arquitectura frontend y de integración para 5+ proyectos simultáneos; definí la librería de componentes corporativos y estándares de calidad adoptados por toda la organización de ingeniería.",
+            "en": "Led frontend & full-stack architecture for 5+ concurrent enterprise initiatives, creating a unified component design system and coding standards adopted org-wide.",
+            "nl": "Frontend-architectuur geleid voor 5+ gelijktijdige projecten; componentbibliotheken en codeerstandaarden gedefinieerd die door de gehele organisatie zijn overgenomen."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Desarrollé integración .NET Core + SQL Server con QuickBooks para dashboards financieros, optimizando consultas y manejo de datos sensibles.",
-            "en": "Developed .NET Core + SQL Server integration with QuickBooks for financial dashboards, optimizing queries and sensitive data handling.",
-            "nl": "Ontwikkelde .NET Core + SQL Server-integratie met QuickBooks voor financiële dashboards, optimaliseerde queries en verwerking van gevoelige gegevens."
+            "es": "Implementé pipelines de CI/CD en Azure DevOps con análisis de seguridad automatizado (SAST), reduciendo los tiempos de despliegue en un 65% y eliminando fallos en lanzamientos a producción.",
+            "en": "Implemented Azure DevOps CI/CD pipelines with integrated static security scanning (SAST), cutting deployment cycle times by 65% and eliminating manual release failures.",
+            "nl": "CI/CD in Azure DevOps geïmplementeerd met geïntegreerde beveiligingsscanning, wat de deploymenttijd met 65% verlaagde."
           },
           "order": 1
         },
         {
           "text": {
-            "es": "Implementé CI/CD en Azure DevOps, reduciendo tiempos de despliegue en un 65%, e integré análisis de seguridad. Mentoricé a 4 desarrolladores junior.",
-            "en": "Implemented CI/CD in Azure DevOps, reducing deployment time by 65%, and integrated security analysis. Mentored 4 junior developers.",
-            "nl": "Implementeerde CI/CD in Azure DevOps, verminderde deploymenttijd met 65%, en integreerde beveiligingsanalyse. Begeleidde 4 junior developers."
+            "es": "Diseñé microservicios .NET Core + SQL Server e integración con QuickBooks para dashboards financieros en tiempo real, optimizando consultas complejas y garantizando consistencia transaccional.",
+            "en": "Engineered real-time financial reporting microservices integrating .NET Core, SQL Server, and QuickBooks API, optimizing complex queries and maintaining zero-data-loss accounting integrity.",
+            "nl": "De .NET Core + SQL Server-integratie met QuickBooks ontworpen voor realtime financiële dashboards, waarbij kritieke queries werden geoptimaliseerd."
           },
           "order": 2
+        },
+        {
+          "text": {
+            "es": "Mentoricé a 4 desarrolladores mediante revisiones de código profundas, pair programming y sesiones 1:1, promoviendo las mejores prácticas de Clean Code y principios SOLID.",
+            "en": "Mentored 4 engineers through structured code reviews, pair programming, and technical growth plans, promoting Clean Code and SOLID principles.",
+            "nl": "4 junior-ontwikkelaars begeleid via gestructureerde code reviews, pair programming en groeigericht 1:1-sessies."
+          },
+          "order": 3
         }
       ],
       "order": 2,
@@ -355,19 +375,27 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Modernicé sistema legacy: migración de jQuery a React+TS y refactorización de monolito a CQRS y Event-Driven, mejorando rendimiento un 35%.",
-            "en": "Modernized legacy system: migrated from jQuery to React+TS and refactored monolith to CQRS and Event-Driven, improving performance by 35%.",
-            "nl": "Moderniseerde legacy-systeem: migratie van jQuery naar React+TS en refactoring van monoliet naar CQRS en Event-Driven, verbeterde prestaties met 35%."
+            "es": "Lideré la modernización completa del frontend: migré un codebase jQuery a React+TypeScript, mejorando el rendimiento en un 35% y reduciendo drásticamente la deuda técnica acumulada.",
+            "en": "Led the full frontend modernization: migrated a jQuery codebase to React+TypeScript, improving performance by 35% and dramatically reducing accumulated technical debt.",
+            "nl": "De volledige frontend-modernisering geleid: een jQuery-codebase gemigreerd naar React+TypeScript, wat de prestaties met 35% verbeterde."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Diseñé APIs (GraphQL/Nest.js) y aumenté la confiabilidad de sincronización un 90%.",
-            "en": "Designed APIs (GraphQL/Nest.js) and increased synchronization reliability by 90%.",
-            "nl": "Ontwierp API's (GraphQL/Nest.js) en verhoogde synchronisatiebetrouwbaarheid met 90%."
+            "es": "Refactoricé el monolito existente hacia patrones CQRS y Event-Driven, mejorando la escalabilidad del sistema y reduciendo el acoplamiento entre módulos críticos.",
+            "en": "Refactored the existing monolith to CQRS and Event-Driven patterns, improving system scalability and reducing coupling between critical modules.",
+            "nl": "Het bestaande monoliet gerefactored naar CQRS- en Event-Driven-patronen, waardoor de systeemschaalbaarheid toenam."
           },
           "order": 1
+        },
+        {
+          "text": {
+            "es": "Diseñé y entregué APIs GraphQL/Nest.js que aumentaron la confiabilidad de sincronización en un 90%, resolviendo inconsistencias de datos que afectaban operaciones en tiempo real.",
+            "en": "Designed and shipped GraphQL/Nest.js APIs that increased synchronization reliability by 90%, resolving data inconsistencies that were impacting real-time operations.",
+            "nl": "GraphQL/Nest.js API's ontworpen en geleverd die de synchronisatiebetrouwbaarheid met 90% verhoogden en inconsistenties oplosten."
+          },
+          "order": 2
         }
       ],
       "order": 3,
@@ -383,21 +411,26 @@
         "en": "Mobile Application Developer",
         "nl": "Mobiele applicatieontwikkelaar"
       },
-      "skillKeys": ["ReactNative", "Typescript", "Android", "Javascript"],
+      "skillKeys": [
+        "ReactNative",
+        "Typescript",
+        "Android",
+        "Javascript"
+      ],
       "responsibilities": [
         {
           "text": {
-            "es": "Desarrollé apps React Native con autenticación biométrica y sincronización offline.",
-            "en": "Developed React Native apps with biometric authentication and offline synchronization.",
-            "nl": "Ontwikkelde React Native-apps met biometrische authenticatie en offline synchronisatie."
+            "es": "Entregué apps React Native con arquitectura offline-first y autenticación biométrica para operaciones de campo, garantizando continuidad sin conexión en entornos de baja conectividad.",
+            "en": "Delivered React Native apps with offline-first architecture and biometric authentication for field operations, ensuring continuity in low-connectivity environments.",
+            "nl": "React Native-apps geleverd met offline-first-architectuur en biometrische authenticatie voor veldoperaties, om continuïteit te waarborgen."
           },
           "order": 0
         },
         {
           "text": {
-            "es": "Implementé pruebas unitarias (Jest) y CI, reduciendo bugs en producción en un 70%.",
-            "en": "Implemented unit tests (Jest) and CI, reducing production bugs by 70%.",
-            "nl": "Implementeerde unit tests (Jest) en CI, verminderde productiebugs met 70%."
+            "es": "Implementé pruebas unitarias con Jest y un pipeline de CI desde cero, reduciendo los bugs en producción en un 70% en el primer ciclo de sprint.",
+            "en": "Implemented Jest unit tests and a CI pipeline from scratch, reducing production bugs by 70% within the first sprint cycle.",
+            "nl": "Jest unit tests en een CI-pipeline van de grond af geïmplementeerd, wat productiebugs met 70% verminderde binnen de eerste sprintcyclus."
           },
           "order": 1
         }
@@ -415,7 +448,13 @@
         "en": "Frontend Developer and IT Technician",
         "nl": "Frontend ontwikkelaar en IT-technicus"
       },
-      "skillKeys": ["React", "Nextjs", "Javascript", "Css", "Typescript"],
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "Javascript",
+        "Css",
+        "Typescript"
+      ],
       "responsibilities": [
         {
           "text": {

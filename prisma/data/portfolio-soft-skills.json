@@ -9,161 +9,161 @@
     {
       "icon": "RiTeamLine",
       "order": 0,
-      "featured": false,
+      "featured": true,
       "title": {
-        "en": "Teamwork",
-        "es": "Trabajo en equipo",
-        "nl": "Teamwork"
+        "en": "Technical Team Governance",
+        "es": "Gobernanza y Liderazgo Técnico",
+        "nl": "Technisch Teamleiderschap"
       },
       "description": {
-        "en": "I enjoy collaborating and learning from others.",
-        "es": "Disfruto colaborar y aprender de los demás.",
-        "nl": "Ik werk graag samen en leer van anderen."
+        "en": "Directed an engineering team of 6 developers, establishing technical roadmaps, architectural standards, and unblocking delivery across multiple enterprise releases.",
+        "es": "Dirigí a un equipo de 6 desarrolladores, definiendo la hoja de ruta técnica, estándares de arquitectura y eliminando bloqueos en entregas empresariales críticas.",
+        "nl": "Leidde een team van 6 ontwikkelaars, stelde technische roadmaps en architectuurnormen vast en deblokkeerde opleveringen."
       },
       "badge": {
-        "en": "Active Collaboration",
-        "es": "Colaboración Activa",
-        "nl": "Actieve Samenwerking"
+        "en": "6 Developers Led",
+        "es": "6 Desarrolladores Liderados",
+        "nl": "6 Ontwikkelaars Geleid"
+      }
+    },
+    {
+      "icon": "RiUserStarLine",
+      "order": 1,
+      "featured": false,
+      "title": {
+        "en": "Engineering Mentorship",
+        "es": "Mentoría e Impulso de Talento",
+        "nl": "Engineering Mentorschap"
+      },
+      "description": {
+        "en": "Mentored 4 engineers through rigorous code reviews, pair programming, and tailored technical growth plans that cut production defects by 40%.",
+        "es": "Mentoricé a 4 desarrolladores mediante revisiones de código estructuradas, pair programming y planes de crecimiento que redujeron errores en producción en un 40%.",
+        "nl": "Begeleidde 4 ontwikkelaars via gestructureerde code reviews en pair programming, wat productiebugs met 40% verminderde."
+      },
+      "badge": {
+        "en": "Code Reviews & 1:1s",
+        "es": "Code Reviews & 1:1",
+        "nl": "Code Reviews & 1:1"
+      }
+    },
+    {
+      "icon": "RiGroupLine",
+      "order": 2,
+      "featured": false,
+      "title": {
+        "en": "Cross-Functional System Design",
+        "es": "Diseño de Sistemas Interfuncional",
+        "nl": "Cross-functioneel Systeemontwerp"
+      },
+      "description": {
+        "en": "Partnered directly with Product Managers, QA, UX, and executive stakeholders to translate complex business demands into scalable architecture specs.",
+        "es": "Trabajé junto a Product Managers, QA, UX y stakeholders ejecutivos para traducir requerimientos de negocio complejos en especificaciones de arquitectura escalables.",
+        "nl": "Werkte direct samen met Product Managers, QA en stakeholders om complexe eisen te vertalen naar schaalbare architectuurspecificaties."
+      },
+      "badge": {
+        "en": "Product · QA · Design",
+        "es": "Producto · QA · Diseño",
+        "nl": "Product · QA · Design"
+      }
+    },
+    {
+      "icon": "RiLightbulbLine",
+      "order": 3,
+      "featured": false,
+      "title": {
+        "en": "Pragmatic Innovation",
+        "es": "Innovación Pragmática",
+        "nl": "Pragmatische Innovatie"
+      },
+      "description": {
+        "en": "Architected solutions that led the team to win two internal enterprise hackathons at Contollo, delivering production-ready prototypes under high pressure.",
+        "es": "Diseñé soluciones que llevaron al equipo a ganar dos hackathons internos en Contollo, entregando prototipos listos para producción bajo alta presión.",
+        "nl": "Ontwierp oplossingen die het team hielpen twee interne hackathons bij Contollo te winnen met productieklare prototypes."
+      },
+      "badge": {
+        "en": "2× Hackathon Winner",
+        "es": "2× Hackathon Ganado",
+        "nl": "2× Hackathon Gewonnen"
+      }
+    },
+    {
+      "icon": "RiBarChartLine",
+      "order": 4,
+      "featured": false,
+      "title": {
+        "en": "Business Impact & Value First",
+        "es": "Orientado a Valor e Impacto",
+        "nl": "Business Impact Eerst"
+      },
+      "description": {
+        "en": "Engineered maintainable software designed for long-term ROI, prioritizing system resilience, Clean Architecture, and measurable business outcomes.",
+        "es": "Priorizo software mantenible diseñado para un retorno de inversión a largo plazo, enfocándome en resiliencia de sistemas, Clean Architecture y resultados medibles.",
+        "nl": "Ontwikkelde onderhoudbare software ontworpen voor langetermijn-ROI, met focus op systeembetrouwbaarheid en Clean Architecture."
+      },
+      "badge": {
+        "en": "Business Impact First",
+        "es": "Impacto de Negocio Primero",
+        "nl": "Business Impact Eerst"
       }
     },
     {
       "icon": "RiShieldStarLine",
-      "order": 1,
+      "order": 5,
       "featured": false,
       "title": {
-        "en": "Problem Solving",
-        "es": "Resolución de problemas",
-        "nl": "Probleemoplossing"
+        "en": "Root-Cause Incident Leadership",
+        "es": "Gestión de Causa Raíz en Incidentes",
+        "nl": "Incidentenbeheer & Oorzaakanalyse"
       },
       "description": {
-        "en": "I am adept at finding effective solutions.",
-        "es": "Soy hábil encontrando soluciones efectivas.",
-        "nl": "Ik ben bedreven in het vinden van effectieve oplossingen."
+        "en": "Owned critical production outages end-to-end, conducted post-mortem root-cause analyses, and introduced permanent architectural fixes that lowered MTTR by 40%.",
+        "es": "Lideré incidentes críticos en producción end-to-end, ejecuté análisis de causa raíz y diseñé soluciones de arquitectura permanentes que redujeron el MTTR un 40%.",
+        "nl": "Beheerde kritieke incidenten end-to-end, voerde post-mortem oorzaakanalyses uit en verlaagde de MTTR met 40%."
       },
       "badge": {
-        "en": "Critical Thinking",
-        "es": "Pensamiento Crítico",
-        "nl": "Kritisch Denken"
-      }
-    },
-    {
-      "icon": "RiMedal2Line",
-      "order": 2,
-      "featured": false,
-      "title": {
-        "en": "Goal-Oriented",
-        "es": "Orientado a objetivos",
-        "nl": "Doelgericht"
-      },
-      "description": {
-        "en": "I set objectives and work hard to achieve them.",
-        "es": "Establezco objetivos y trabajo duro para lograrlos.",
-        "nl": "Ik stel doelen en werk hard om ze te bereiken."
-      },
-      "badge": {
-        "en": "Results Driven",
-        "es": "Enfoque en Resultados",
-        "nl": "Resultaatgericht"
-      }
-    },
-    {
-      "icon": "RiSettingsLine",
-      "order": 3,
-      "featured": false,
-      "title": {
-        "en": "Adaptability",
-        "es": "Adaptabilidad",
-        "nl": "Aanpassingsvermogen"
-      },
-      "description": {
-        "en": "I easily embrace new technologies and frameworks.",
-        "es": "Adopto fácilmente nuevas tecnologías y frameworks.",
-        "nl": "Ik omarm gemakkelijk nieuwe technologieën en frameworks."
-      },
-      "badge": {
-        "en": "Fast Learner",
-        "es": "Aprendizaje Rápido",
-        "nl": "Snel Lerend"
-      }
-    },
-    {
-      "icon": "RiTimerFlashLine",
-      "order": 4,
-      "featured": false,
-      "title": {
-        "en": "Time Management",
-        "es": "Gestión del tiempo",
-        "nl": "Tijdmanagement"
-      },
-      "description": {
-        "en": "I prioritize tasks and optimize efficiency.",
-        "es": "Priorizo tareas y optimizo la eficiencia.",
-        "nl": "Ik stel prioriteiten en optimaliseer efficiëntie."
-      },
-      "badge": {
-        "en": "Efficiency & Focus",
-        "es": "Priorización & Eficiencia",
-        "nl": "Efficiëntie & Focus"
+        "en": "Root Cause Analysis",
+        "es": "Análisis de Causa Raíz",
+        "nl": "Oorzaakanalyse"
       }
     },
     {
       "icon": "RiHandHeartLine",
-      "order": 5,
-      "featured": false,
-      "title": {
-        "en": "Leadership",
-        "es": "Liderazgo",
-        "nl": "Leiderschap"
-      },
-      "description": {
-        "en": "I take charge, assume responsibilities, and direct tasks.",
-        "es": "Tomo la iniciativa, asumo responsabilidades y dirijo tareas.",
-        "nl": "Ik neem de leiding, neem verantwoordelijkheid en stuur taken aan."
-      },
-      "badge": {
-        "en": "Initiative & Drive",
-        "es": "Iniciativa & Guiado",
-        "nl": "Initiatief & Sturing"
-      }
-    },
-    {
-      "icon": "RiMapPinTimeLine",
       "order": 6,
       "featured": false,
       "title": {
-        "en": "Responsibility",
-        "es": "Responsabilidad",
-        "nl": "Verantwoordelijkheid"
+        "en": "High-Trust Technical Culture",
+        "es": "Cultura de Confianza y Calidad",
+        "nl": "Hoge-Vertrouwen Cultuur"
       },
       "description": {
-        "en": "I take ownership and follow through on commitments.",
-        "es": "Asumo la responsabilidad y cumplo con los compromisos.",
-        "nl": "Ik neem eigenaarschap en kom afspraken na."
+        "en": "Fostered a blameless engineering culture focused on psychological safety, continuous learning, and transparent technical decision-making (ADRs).",
+        "es": "Fomenté una cultura de ingeniería sin culpa enfocada en seguridad psicológica, aprendizaje continuo y toma de decisiones técnicas transparente (ADRs).",
+        "nl": "Fostered een foutentolerante engineeringcultuur gericht op psychologische veiligheid en transparante besluitvorming."
       },
       "badge": {
-        "en": "Ownership & Trust",
-        "es": "Compromiso & Entrega",
-        "nl": "Eigenaarschap & Vertrouwen"
+        "en": "Psychological Safety",
+        "es": "Seguridad Psicológica",
+        "nl": "Psychologische Veiligheid"
       }
     },
     {
-      "icon": "RiDashboard3Line",
+      "icon": "RiTimerFlashLine",
       "order": 7,
       "featured": false,
       "title": {
-        "en": "Commitment",
-        "es": "Compromiso",
-        "nl": "Toewijding"
+        "en": "Continuous Improvement",
+        "es": "Mejora Continua",
+        "nl": "Continue Verbetering"
       },
       "description": {
-        "en": "I stay dedicated and deliver consistent results.",
-        "es": "Me mantengo dedicado y entrego resultados consistentes.",
-        "nl": "Ik blijf toegewijd en lever consistente resultaten."
+        "en": "Consistently drove adoption of better practices (code standards, performance reviews, tooling upgrades) across every team I've worked with.",
+        "es": "Impulsé constantemente la adopción de mejores prácticas (estándares de código, revisiones de rendimiento, herramientas) en cada equipo.",
+        "nl": "Stimuleerde consequent de adoptie van betere praktijken (codestandaarden, prestatiebeoordelingen, toolingupgrades) in elk team."
       },
       "badge": {
-        "en": "High Quality Output",
-        "es": "Calidad & Dedicación",
-        "nl": "Hoge Kwaliteit Output"
+        "en": "Always Leveling Up",
+        "es": "Siempre Mejorando",
+        "nl": "Altijd Verbeteren"
       }
     }
   ]

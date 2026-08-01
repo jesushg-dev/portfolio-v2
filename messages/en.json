@@ -275,68 +275,68 @@
         "explore": "Explore",
         "comingSoon": "Soon",
         "contactCta": "Contact",
-        "scheduleCta": "Book a call",
-        "scheduleHint": "Free 30-minute call · No commitment",
+        "scheduleCta": "Schedule interview",
+        "scheduleHint": "30-min meeting · Interview or professional intro",
         "groups": {
           "about": {
             "label": "About me",
             "eyebrow": "About me",
-            "headline": "Get to know my background and approach",
-            "description": "A look at my experience, technical skills, and how I collaborate with teams."
+            "headline": "Background & technical profile",
+            "description": "Professional background, work experience, and core tech stack."
           },
           "portfolio": {
             "label": "Portfolio",
             "eyebrow": "Portfolio",
-            "headline": "Projects, certifications, and career path",
-            "description": "Browse my work, credentials, and professional timeline."
+            "headline": "Projects & credentials",
+            "description": "Featured projects, certifications, and career path."
           },
           "process": {
             "label": "How I work",
             "eyebrow": "How I work",
-            "headline": "AI, quality, and collaboration in practice",
-            "description": "How I integrate AI tools and partner with QA to ship reliable software."
+            "headline": "Work methodology",
+            "description": "AI tooling in development, software quality, and team collaboration."
           }
         },
         "items": {
           "about": {
             "label": "About me",
-            "description": "Who I am, my background, and what drives me."
+            "description": "Profile summary and engineering philosophy."
           },
           "experience": {
             "label": "Experience",
-            "description": "Roles, companies, and standout projects."
+            "description": "Work history, key projects, and roles."
           },
           "skills": {
             "label": "Skills",
-            "description": "Tech stack, frameworks, and tools."
+            "description": ".NET ecosystem, C#, microservices, and Cloud."
           },
           "services": {
-            "label": "Services",
-            "description": "Software solutions, frontend, backend, and mobile."
+            "label": "Technical specialties",
+            "description": "Software architecture, modernization, and core development."
           },
           "soft-skills": {
-            "label": "Soft skills",
-            "description": "Communication, leadership, and teamwork."
+            "label": "Leadership & competencies",
+            "description": "Team leadership, mentorship, and communication."
           },
           "certificates": {
             "label": "Certificates",
-            "description": "Verified training and certifications."
+            "description": "Technical credentials and certifications."
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "Full CV in web format."
+            "description": "Full professional CV in web format."
           },
           "timeline": {
             "label": "Timeline",
-            "description": "Professional and educational milestones."
+            "description": "Career milestones and professional progression."
           },
           "ai-workflow": {
             "label": "How I use AI",
-            "description": "My AI workflow across planning, development, and QA."
+            "description": "AI tool integration and engineering workflow."
           },
           "qa-collaboration": {
             "label": "QA collaboration",
-            "description": "How I work with quality teams for solid releases."
+            "description": "Quality practices, testing, and release strategy."
           }
         }
       }
@@ -437,9 +437,9 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández - Full Stack Developer",
-      "description": "Hi, I'm Jesús Hernández, a Full-Stack Web Developer in React.js | Next.js | React Native | HTML 5 | CSS3 | Typescript | Responsive Design | C# | Asp.net Core | Git | Azure | SCRUM | Agile Methodology",
-      "keywords": "Jesus Hernandez, Jesus, Hernandez, Full Stack Developer, Full Stack, Developer, Web Developer, Web, Developer, React.js, React, Next.js, Next, React Native, React Native, HTML 5, HTML, CSS3, CSS, Typescript, Typescript, Responsive Design, Responsive, Design, C#, C, Asp.net Core, Asp.net, Core, Git, Git, Azure, Azure, SCRUM, SCRUM, Agile Methodology, Agile, Methodology"
+      "title": "Jesús Hernández | Senior Full Stack .NET Developer & Tech Lead",
+      "description": "Senior Full Stack Developer with 6+ years in .NET Core, React, and SQL Server, with experience leading engineering teams, modernizing legacy systems, and shipping production-ready software in high-compliance environments.",
+      "keywords": "Senior .NET Developer, Tech Lead, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Team Lead, Software Engineer, Jesús Hernández, Senior Software Engineer"
     },
     "heroMain": {
       "viewCV": "View CV",
@@ -457,9 +457,9 @@
       }
     },
     "services": {
-      "title": "My Services",
-      "subtitle": "Expertise",
-      "description": "Combining strategic thinking with cutting-edge technologies to deliver robust, scalable, and high-impact software solutions.",
+      "title": "What I Build",
+      "subtitle": "Engineering Capabilities",
+      "description": "A practical overview of technical areas I've delivered in: from full-stack web systems and financial platforms to mobile apps and cloud infrastructure.",
       "items": {
         "frontend": {
           "title": "Frontend & UI/UX Development",
@@ -520,10 +520,10 @@
       }
     },
     "skills": {
-      "title": "Areas of Expertise",
+      "title": "Technical Stack",
       "subtitle": "Skills",
-      "description": "I have a diverse skill set, developed through my education and professional experiences.",
-      "aux": "I am constantly seeking to learn and improve my skills, and I am always open to new opportunities to challenge myself and grow professionally.",
+      "description": "Technologies I've shipped in production across corporate-scale systems, financial platforms, and high-compliance environments.",
+      "aux": "Every technology listed here has been used in real-world projects, not just tutorials. Most at scale, in production, under pressure.",
       "page": {
         "breadcrumbHome": "Home",
         "breadcrumbSkills": "Skills",
@@ -572,35 +572,35 @@
       "tabs": {
         "frontend": {
           "title": "Frontend",
-          "description": "Responsive web design with user experience focus."
+          "description": "Production React & Next.js applications at scale, from e-commerce storefronts to internal dashboards and admin platforms."
         },
         "backend": {
           "title": "Backend",
-          "description": "API and web service development, emphasizing security."
+          "description": "REST and GraphQL APIs in C#/.NET Core and Node.js, with authentication, authorization, and performance as first-class concerns."
         },
         "mobile": {
           "title": "Mobile",
-          "description": "Android and iOS app development, user experience oriented."
+          "description": "Cross-platform React Native apps with offline support, biometric auth, and field-operations reliability."
         },
         "database": {
           "title": "Database",
-          "description": "Development of efficient and secure databases."
+          "description": "SQL Server, PostgreSQL, and MongoDB across financial dashboards, service platforms, and multi-tenant content systems."
         },
         "devops": {
           "title": "DevOps",
-          "description": "Building performance-centric CI/CD pipelines."
+          "description": "CI/CD pipelines in Azure DevOps and GitHub Actions, using Docker, security scanning, and environment parity."
         },
         "tools": {
           "title": "Tools",
-          "description": "Utilizing diverse software tools for quality solutions."
+          "description": "The day-to-day professional toolkit that keeps delivery fast, quality high, and teams aligned."
         }
       }
     },
     "soft-skills": {
-      "subtitle": "Skills",
-      "title": "Soft Skills",
-      "description": "In addition to my technical skills, I also possess a range of soft skills that have helped me succeed in my career",
-      "aux": "I believe that these skills are just as important as technical expertise, and I work hard to continually develop and improve them. I am confident that my strong communication, problem-solving, and teamwork skills make me a valuable asset to any team or project."
+      "subtitle": "Leadership",
+      "title": "Leadership & Impact",
+      "description": "Technical skills matter. So does how you lead, collaborate, and make things happen with real teams on real projects.",
+      "aux": "These aren't adjectives claimed on a resume: they represent how I operate across every role."
     },
     "portfolio": {
       "subtitle": "Portfolio",
@@ -618,16 +618,16 @@
       },
       "caseStudy": {
         "challenge": "The challenge",
-        "approach": "Technical approach",
-        "outcome": "Outcome",
-        "introduction": "Introduction",
+        "approach": "Architecture & approach",
+        "outcome": "Outcome & results",
+        "introduction": "Context",
         "backToPortfolio": "Back to portfolio",
         "projectType": "Project type",
         "category": "Category",
         "stack": "Stack",
         "nextProject": "Next project",
         "visualTitle": "Matching, made intentional",
-        "visualSubtitle": "Every node is a connection — every line, a reason to build."
+        "visualSubtitle": "Every node is a connection; every line, a reason to build."
       },
       "private": {
         "title": "Private",
@@ -651,10 +651,10 @@
       }
     },
     "contact": {
-      "title": "Get in touch",
+      "title": "Let's talk",
       "title2": "Send a message",
       "eyebrow": "Contact",
-      "subtitle": "Have an idea, a project, or looking for a developer to join your team?\n\nI'd love to learn more about what you're building. Feel free to reach out, even just to say hi.",
+      "subtitle": "If you're looking for a Senior Full Stack Developer or Tech Lead who can contribute from day one, lead technical discussions, and ship reliable software at scale, let's talk.\n\nFeel free to reach out even just to connect.",
       "responseTime": "Reply within 24h",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
@@ -740,8 +740,8 @@
       "subtitle": "Companies, roles, and measurable impact",
       "viewAll": "View full CV for complete history",
       "showingRecent": "Showing most recent roles.",
-      "leadershipTitle": "Leadership & mentorship",
-      "leadershipDescription": "Leading technical teams, coordinating vendors, and mentoring developers through complex delivery cycles."
+      "leadershipTitle": "Technical leadership across every role",
+      "leadershipDescription": "From leading a 6-person engineering team at Contollo to architecting systems at Imagemaker and Walmart/VTEX, I've owned technical decisions, mentored developers, and driven delivery at every level."
     },
     "impactStats": {
       "teamSize": {
