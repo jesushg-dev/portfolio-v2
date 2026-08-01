@@ -682,6 +682,7 @@
       },
       "form": {
         "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",
+        "alternativeContact": "Liever een afspraak? Plan een <schedule>videogesprek</schedule> of stuur een bericht op <linkedin>LinkedIn</linkedin>.",
         "name": {
           "label": "Naam",
           "placeholder": "Jan Jansen",

@@ -46,7 +46,8 @@ const ContactItem: FC<ContactItemProps> = ({
   const Icon = CONTACT_ICONS[icon];
   const isInternal = href.startsWith("/");
 
-  const effectiveAccent = accent && accent.length > 0 ? accent : "var(--primary)";
+  const effectiveAccent =
+    accent && accent.length > 0 ? accent : "var(--primary)";
 
   const style = {
     "--contact-accent": effectiveAccent,
@@ -54,7 +55,7 @@ const ContactItem: FC<ContactItemProps> = ({
 
   const className = cn(
     "group inline-flex items-center gap-2 rounded-lg border border-border/60 bg-card/60 px-3 py-1.5 text-xs font-medium text-card-foreground shadow-2xs transition-all",
-    "hover:border-transparent hover:bg-[var(--contact-accent)] hover:text-white hover:shadow-md active:scale-[0.98]"
+    "hover:border-transparent hover:bg-[var(--contact-accent)] hover:text-white hover:shadow-md active:scale-[0.98]",
   );
 
   return isInternal ? (
@@ -64,7 +65,7 @@ const ContactItem: FC<ContactItemProps> = ({
       className={className}
       style={style}
     >
-      <Icon className="size-3.5 shrink-0 text-primary transition-all group-hover:scale-110 group-hover:text-white" />
+      <Icon className="text-primary size-3.5 shrink-0 transition-all group-hover:scale-110 group-hover:text-white" />
       <span className="truncate">{label}</span>
     </Link>
   ) : (
@@ -76,7 +77,7 @@ const ContactItem: FC<ContactItemProps> = ({
       className={className}
       style={style}
     >
-      <Icon className="size-3.5 shrink-0 text-primary transition-all group-hover:scale-110 group-hover:text-white" />
+      <Icon className="text-primary size-3.5 shrink-0 transition-all group-hover:scale-110 group-hover:text-white" />
       <span className="truncate">{label}</span>
     </a>
   );

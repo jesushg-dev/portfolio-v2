@@ -15,7 +15,7 @@
     "build": "next build",
     "analyze": "next build && node scripts/report-bundle-sizes.mjs",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "type": "tsc --noEmit",
     "db:migrate": "npx prisma migrate dev --name user-entity --create-only && yarn prisma generate",
     "db:push": "node scripts/validate-mongodb-uri.mjs && npx prisma db push",

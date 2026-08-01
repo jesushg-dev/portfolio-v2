@@ -7,13 +7,12 @@ import ScrollToTopLazy from "../custom-ui/scroll-to-top-lazy";
 
 interface ILayoutProps {
   children: ReactNode;
-  headerAlwaysVisible?: boolean;
 }
 
-const Layout: FC<ILayoutProps> = ({ children, headerAlwaysVisible }) => {
+const Layout: FC<ILayoutProps> = ({ children }) => {
   return (
     <>
-      <Header alwaysVisible={headerAlwaysVisible} />
+      <Header />
       <main
         id="main-content"
         className="flex min-h-screen flex-col justify-between"

@@ -8,13 +8,15 @@ import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { motion } from "motion/react";
-import { Send } from "lucide-react";
+import { Send, Zap } from "lucide-react";
 
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
+import { Link } from "@/i18n/routing";
+import { SCHEDULE_PATH } from "@/utils/calendly-url";
 
 const ContactForm: FC = () => {
   const t = useTranslations("main.contact");
@@ -66,7 +68,12 @@ const ContactForm: FC = () => {
         className="text-card-foreground mx-auto box-border h-full w-full max-w-md min-w-0 flex-none flex-col justify-center gap-4 overflow-visible p-0"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="space-y-1 text-center md:text-left">
+        <div className="space-y-2 text-center md:text-left">
+          <div className="border-primary/25 bg-primary/10 text-primary inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[0.75rem] font-medium backdrop-blur-xs">
+            <Zap className="fill-primary/20 text-primary size-3 shrink-0" />
+            <span>{t("responseTime")}</span>
+          </div>
+
           <p className="text-foreground text-lg font-semibold tracking-tight">
             {t("title2")}
           </p>
@@ -83,7 +90,7 @@ const ContactForm: FC = () => {
                   {...field}
                   autoComplete="name"
                   placeholder={t("form.name.placeholder")}
-                  className="bg-background/70 h-11 px-4"
+                  className="bg-background/70 focus-visible:border-primary/50 focus-visible:ring-primary/20 h-11 px-4 transition-all"
                 />
               </FormItem>
             )}
@@ -99,7 +106,7 @@ const ContactForm: FC = () => {
                   type="email"
                   autoComplete="email"
                   placeholder={t("form.email.placeholder")}
-                  className="bg-background/70 h-11 px-4"
+                  className="bg-background/70 focus-visible:border-primary/50 focus-visible:ring-primary/20 h-11 px-4 transition-all"
                 />
               </FormItem>
             )}
@@ -115,9 +122,9 @@ const ContactForm: FC = () => {
               >
                 <Textarea
                   {...field}
-                  rows={5}
+                  rows={4}
                   placeholder={t("form.message.placeholder")}
-                  className="bg-background/70 min-h-32 px-4 py-3"
+                  className="bg-background/70 focus-visible:border-primary/50 focus-visible:ring-primary/20 min-h-28 px-4 py-3 transition-all"
                 />
               </FormItem>
             )}
@@ -133,7 +140,7 @@ const ContactForm: FC = () => {
           whileTap={{
             scale: isPending || sendMessage.isPending ? 1 : 0.98,
           }}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 pressable relative mt-1 box-border flex w-full max-w-full min-w-0 items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3.5 text-sm font-semibold tracking-[0.14em] uppercase shadow-lg transition-all disabled:opacity-60"
+          className="group from-primary via-primary/95 to-primary/90 hover:from-primary/95 hover:to-primary/85 text-primary-foreground pressable shadow-primary/20 relative box-border flex w-full max-w-full min-w-0 items-center justify-center gap-2 overflow-hidden rounded-xl bg-linear-to-b px-6 py-3.5 text-sm font-semibold tracking-[0.14em] uppercase shadow-md transition-all disabled:opacity-60"
         >
           {!(isPending || sendMessage.isPending) && (
             <span
@@ -160,10 +167,33 @@ const ContactForm: FC = () => {
               />
             </svg>
           ) : (
-            <Send className="size-4" />
+            <Send className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           )}
           {t("form.submit")}
         </motion.button>
+
+        <p className="text-muted-foreground/80 mt-3.5 text-center text-[0.75rem] leading-relaxed">
+          {t.rich("form.alternativeContact", {
+            schedule: (chunks) => (
+              <Link
+                href={SCHEDULE_PATH}
+                className="text-primary/90 hover:text-primary font-medium underline underline-offset-4 transition-colors"
+              >
+                {chunks}
+              </Link>
+            ),
+            linkedin: (chunks) => (
+              <a
+                href="https://www.linkedin.com/in/jesushg-dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary/90 hover:text-primary font-medium underline underline-offset-4 transition-colors"
+              >
+                {chunks}
+              </a>
+            ),
+          })}
+        </p>
       </FormRoot>
     </Form>
   );

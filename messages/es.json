@@ -683,6 +683,7 @@
       },
       "form": {
         "helper": "Cuéntame sobre tu proyecto o consulta y te responderé lo antes posible.",
+        "alternativeContact": "¿Prefieres una reunión? Agenda una <schedule>videollamada</schedule> o escríbeme por <linkedin>LinkedIn</linkedin>.",
         "name": {
           "label": "Nombre",
           "placeholder": "Jesús Hernández",

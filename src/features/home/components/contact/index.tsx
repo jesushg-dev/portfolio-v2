@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { getTranslations } from "next-intl/server";
-import { Calendar, Zap } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
@@ -9,6 +9,7 @@ import { Link } from "@/i18n/routing";
 import ContactForm from "./contact-form-lazy";
 import ContactIllustration from "./contact-illustration";
 import ContactItem from "./contact-item";
+import { ContactContainer } from "./contact-container";
 import { buildContactLinks } from "@/utils/contact-links";
 import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 
@@ -24,31 +25,26 @@ const Contact: FC = async () => {
   return (
     <section
       id="contact"
-      className="relative isolate w-full overflow-hidden py-16 sm:py-20 lg:py-24"
+      className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-24"
     >
+      {/* Background Texture Image */}
       <div
         aria-hidden
-        className="from-primary/20 via-card to-card absolute inset-0 -z-20 bg-linear-to-br"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-cover bg-center opacity-25 mix-blend-luminosity"
+        className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-65 contrast-110"
         style={{
           backgroundImage:
-            'url("https://res.cloudinary.com/js-media/image/upload/f_auto,q_auto,w_800/v1642524508/portfolio/hero/3239480_nnfqfm.webp")',
+            'url("https://res.cloudinary.com/js-media/image/upload/f_auto,q_auto,w_1200/v1642524508/portfolio/hero/3239480_nnfqfm.webp")',
         }}
       />
+
+      {/* Soft gradient edges overlay */}
       <div
         aria-hidden
-        className="from-card via-card/80 to-card/95 absolute inset-0 -z-10 bg-linear-to-t"
+        className="from-background/75 to-background/75 pointer-events-none absolute inset-0 bg-linear-to-b via-transparent"
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div
-          className={`border-border/50 bg-card/80 text-card-foreground grid overflow-hidden rounded-2xl border shadow-xl backdrop-blur-md ${
-            showContactForm ? "md:grid-cols-[1.05fr_0.95fr]" : "md:grid-cols-1"
-          }`}
-        >
+        <ContactContainer showContactForm={showContactForm}>
           <div className="relative flex flex-col justify-between gap-8 px-6 py-10 sm:px-10 md:py-12">
             <div className="space-y-6">
               <HeaderArticle
@@ -103,14 +99,10 @@ const Contact: FC = async () => {
                 aria-hidden
                 className="from-primary/10 pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b to-transparent"
               />
-              <div className="mb-2.5 inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-0.5 text-[0.75rem] font-medium text-primary backdrop-blur-xs">
-                <Zap className="size-3 shrink-0 fill-primary/20 text-primary" />
-                <span>{t("responseTime")}</span>
-              </div>
               <ContactForm />
             </div>
           ) : null}
-        </div>
+        </ContactContainer>
       </div>
     </section>
   );

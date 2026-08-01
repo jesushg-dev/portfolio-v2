@@ -683,6 +683,7 @@
       },
       "form": {
         "helper": "Tell me about your project or inquiry and I'll reply as soon as possible.",
+        "alternativeContact": "Prefer a meeting? Schedule a <schedule>video call</schedule> or reach out on <linkedin>LinkedIn</linkedin>.",
         "name": {
           "label": "Name",
           "placeholder": "John Doe",

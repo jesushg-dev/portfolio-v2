@@ -6,7 +6,12 @@ import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { feature } from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
-import type { FeatureCollection, Feature, Geometry, GeoJsonProperties } from "geojson";
+import type {
+  FeatureCollection,
+  Feature,
+  Geometry,
+  GeoJsonProperties,
+} from "geojson";
 import { useTranslations } from "next-intl";
 import {
   Globe,
@@ -39,12 +44,7 @@ interface LocationPoint {
 }
 
 type ConnectionPhase =
-  | "idle"
-  | "focusOrigin"
-  | "zoomingOut"
-  | "revealDestination"
-  | "line"
-  | "done";
+  "idle" | "focusOrigin" | "zoomingOut" | "revealDestination" | "line" | "done";
 
 interface GlobeMapProps {
   /** Where the camera starts, zoomed in close (visitor's location). */
@@ -82,7 +82,6 @@ const REVEAL_DESTINATION_HOLD_MS = 550;
 const LINE_DRAW_DURATION_MS = 1600;
 const ZOOM_IN_FACTOR = 4.5;
 const GLOBE_MODE_THRESHOLD = 0.7;
-const COMFORTABLE_VIEW_RADIUS = (Math.PI / 2) * 0.85;
 const BOUNDARY_SEGMENTS = 144;
 const FRAME_MARGIN_PX = 180;
 const MIN_ZOOM_OUT = 1;
@@ -144,9 +143,11 @@ function getGlobeBoundaryPath(
 
     const lat = Math.asin(Math.cos(lat0) * cosB);
     const lon =
-      lon0 +
-      Math.atan2(sinB * Math.cos(lat0), -Math.sin(lat0) * Math.sin(lat));
-    const projected = projectionFn([(lon * 180) / Math.PI, (lat * 180) / Math.PI]);
+      lon0 + Math.atan2(sinB * Math.cos(lat0), -Math.sin(lat0) * Math.sin(lat));
+    const projected = projectionFn([
+      (lon * 180) / Math.PI,
+      (lat * 180) / Math.PI,
+    ]);
 
     const denom = Math.max(Math.abs(cosB), Math.abs(sinB)) || 1;
     const rectX = centerX + (cosB / denom) * rectHalfW;
@@ -154,7 +155,11 @@ function getGlobeBoundaryPath(
 
     let x: number;
     let y: number;
-    if (projected && !Number.isNaN(projected[0]) && !Number.isNaN(projected[1])) {
+    if (
+      projected &&
+      !Number.isNaN(projected[0]) &&
+      !Number.isNaN(projected[1])
+    ) {
       x = projected[0] + (rectX - projected[0]) * alpha;
       y = projected[1] + (rectY - projected[1]) * alpha;
     } else {
@@ -218,7 +223,8 @@ export function GlobeMap({
   const [isDragging, setIsDragging] = useState(false);
   const [lastMouse, setLastMouse] = useState([0, 0]);
 
-  const [connectionPhase, setConnectionPhase] = useState<ConnectionPhase>("idle");
+  const [connectionPhase, setConnectionPhase] =
+    useState<ConnectionPhase>("idle");
   const [cameraZoom, setCameraZoom] = useState(1);
   const [lineProgress, setLineProgress] = useState(0);
   const [showGraticule, setShowGraticule] = useState(true);
@@ -254,7 +260,13 @@ export function GlobeMap({
             geometry: {
               type: "Polygon",
               coordinates: [
-                [[-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]],
+                [
+                  [-180, -90],
+                  [180, -90],
+                  [180, 90],
+                  [-180, 90],
+                  [-180, -90],
+                ],
               ],
             },
             properties: {},
@@ -298,7 +310,9 @@ export function GlobeMap({
   const handleWheel = (event: React.WheelEvent) => {
     event.preventDefault();
     const zoomFactor = event.deltaY < 0 ? 1.1 : 0.9;
-    setUserZoomMultiplier((prev) => Math.min(Math.max(prev * zoomFactor, 0.4), 18));
+    setUserZoomMultiplier((prev) =>
+      Math.min(Math.max(prev * zoomFactor, 0.4), 18),
+    );
   };
 
   const handleZoomIn = () => {
@@ -339,7 +353,12 @@ export function GlobeMap({
   useEffect(() => clearSequenceTimers, []);
 
   useEffect(() => {
-    if (!autoPlayConnection || worldData.length === 0 || hasAutoPlayedRef.current) return;
+    if (
+      !autoPlayConnection ||
+      worldData.length === 0 ||
+      hasAutoPlayedRef.current
+    )
+      return;
     hasAutoPlayedRef.current = true;
     playConnectionSequence();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -373,7 +392,10 @@ export function GlobeMap({
 
   useEffect(() => {
     if (connectionPhase !== "revealDestination") return;
-    const id = window.setTimeout(() => setConnectionPhase("line"), REVEAL_DESTINATION_HOLD_MS);
+    const id = window.setTimeout(
+      () => setConnectionPhase("line"),
+      REVEAL_DESTINATION_HOLD_MS,
+    );
     sequenceTimers.current.push(id);
     return () => window.clearTimeout(id);
   }, [connectionPhase]);
@@ -387,7 +409,8 @@ export function GlobeMap({
     const step = () => {
       const elapsed = Date.now() - startTime;
       const tProg = Math.min(elapsed / LINE_DRAW_DURATION_MS, 1);
-      const eased = tProg < 0.5 ? 2 * tProg * tProg : -1 + (4 - 2 * tProg) * tProg;
+      const eased =
+        tProg < 0.5 ? 2 * tProg * tProg : -1 + (4 - 2 * tProg) * tProg;
       setLineProgress(eased);
 
       if (tProg < 1) {
@@ -414,12 +437,16 @@ export function GlobeMap({
     const scale = d3.scaleLinear().domain([0, 1]).range([200, 120]);
     const baseRotate = d3.scaleLinear().domain([0, 1]).range([0, 0]);
 
-    const isSequenceActive = connectionPhase !== "idle" && connectionPhase !== "done";
+    const isSequenceActive =
+      connectionPhase !== "idle" && connectionPhase !== "done";
     const originRotation: [number, number] = [-origin.lon, -origin.lat];
     const followRotation = getFollowRotation(origin, destination);
     const zoomOutTarget = getZoomOutTarget(origin, destination);
     const panT = Math.min(
-      Math.max((ZOOM_IN_FACTOR - cameraZoom) / (ZOOM_IN_FACTOR - zoomOutTarget), 0),
+      Math.max(
+        (ZOOM_IN_FACTOR - cameraZoom) / (ZOOM_IN_FACTOR - zoomOutTarget),
+        0,
+      ),
       1,
     );
     const effectiveRotation: [number, number] = isSequenceActive
@@ -456,7 +483,7 @@ export function GlobeMap({
     const boundaryCenterX = width / 2 + translation[0];
     const boundaryCenterY = height / 2 + translation[1];
     const globeBoundaryD = getGlobeBoundaryPath(
-      projection as unknown as (p: [number, number]) => [number, number] | null,
+      projection,
       -currentRotate[0],
       -currentRotate[1],
       boundaryCenterX,
@@ -466,7 +493,11 @@ export function GlobeMap({
     );
 
     if (showOceanFill) {
-      svg.append("path").attr("d", globeBoundaryD).attr("fill", oceanColor).attr("stroke", "none");
+      svg
+        .append("path")
+        .attr("d", globeBoundaryD)
+        .attr("fill", oceanColor)
+        .attr("stroke", "none");
     }
 
     if (showGraticule) {
@@ -515,7 +546,8 @@ export function GlobeMap({
       .attr("opacity", 1.0)
       .style("visibility", function (d) {
         const pathData = d3.select(this).attr("d");
-        const hasValidPath = pathData && pathData.length > 0 && !pathData.includes("NaN");
+        const hasValidPath =
+          pathData && pathData.length > 0 && !pathData.includes("NaN");
         if (!hasValidPath) return "hidden";
         if (!cullBackHemisphere) return "visible";
         try {
@@ -534,8 +566,8 @@ export function GlobeMap({
       .attr("stroke-width", 1.5)
       .attr("opacity", 0.8);
 
-    const coordOrigin = projection([origin.lon, origin.lat]) as [number, number] | null;
-    const coordDestination = projection([destination.lon, destination.lat]) as [number, number] | null;
+    const coordOrigin = projection([origin.lon, origin.lat]);
+    const coordDestination = projection([destination.lon, destination.lat]);
 
     const showOrigin =
       connectionPhase !== "idle" &&
@@ -592,39 +624,27 @@ export function GlobeMap({
       } else {
         circle.attr("r", 6).attr("opacity", 1);
       }
-
-      if (label) {
-        // Label background badge for maximum contrast over map geometry
-        const textElem = group
-          .append("text")
-          .attr("x", coord[0])
-          .attr("y", coord[1] - 12)
-          .attr("text-anchor", "middle")
-          .attr("fill", "var(--foreground)")
-          .attr("font-size", 11)
-          .attr("font-weight", "600")
-          .attr("paint-order", "stroke")
-          .attr("stroke", "var(--card)")
-          .attr("stroke-width", 3)
-          .attr("stroke-linejoin", "round")
-          .text(label);
-      }
     };
 
     if (showOrigin && coordOrigin) {
-      drawMarker(coordOrigin, origin.label ?? fallbackLabel, hasPoppedOrigin);
+      drawMarker(coordOrigin, "", hasPoppedOrigin);
     }
     if (showDestination && coordDestination) {
-      drawMarker(coordDestination, destination.label ?? "Managua", hasPoppedDestination);
+      drawMarker(coordDestination, "", hasPoppedDestination);
     }
 
     if (showLine && coordOrigin && coordDestination) {
-      const currentX = coordOrigin[0] + (coordDestination[0] - coordOrigin[0]) * lineProgress;
-      const currentY = coordOrigin[1] + (coordDestination[1] - coordOrigin[1]) * lineProgress;
+      const currentX =
+        coordOrigin[0] + (coordDestination[0] - coordOrigin[0]) * lineProgress;
+      const currentY =
+        coordOrigin[1] + (coordDestination[1] - coordOrigin[1]) * lineProgress;
 
       svg
         .insert("path", ".location-marker")
-        .attr("d", `M${coordOrigin[0]},${coordOrigin[1]} L${currentX},${currentY}`)
+        .attr(
+          "d",
+          `M${coordOrigin[0]},${coordOrigin[1]} L${currentX},${currentY}`,
+        )
         .attr("fill", "none")
         .attr("stroke", accentColor)
         .attr("stroke-width", 2)
@@ -661,7 +681,8 @@ export function GlobeMap({
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const tProg = Math.min(elapsed / duration, 1);
-      const eased = tProg < 0.5 ? 2 * tProg * tProg : -1 + (4 - 2 * tProg) * tProg;
+      const eased =
+        tProg < 0.5 ? 2 * tProg * tProg : -1 + (4 - 2 * tProg) * tProg;
       setProgress([startProgress + (endProgress - startProgress) * eased]);
 
       if (tProg < 1) {
@@ -675,7 +696,7 @@ export function GlobeMap({
   };
 
   return (
-    <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl border border-border/50 bg-card/40 backdrop-blur-xs">
+    <div className="border-border/50 bg-card/40 relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl border backdrop-blur-xs">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
@@ -694,7 +715,7 @@ export function GlobeMap({
       />
 
       {/* Floating map controls toolbar */}
-      <div className="absolute bottom-2 right-2 flex items-center gap-1 z-10 bg-card/90 p-1 rounded-lg border border-border/60 backdrop-blur-md shadow-md">
+      <div className="bg-card/90 border-border/60 absolute right-2 bottom-2 z-10 flex items-center gap-1 rounded-lg border p-1 shadow-md backdrop-blur-md">
         <Button
           onClick={handleZoomIn}
           variant="ghost"
@@ -732,27 +753,34 @@ export function GlobeMap({
             }
           />
           <DropdownMenuContent align="end" className="w-52">
-            <DropdownMenuItem onClick={playConnectionSequence} className="cursor-pointer">
-              <RefreshCw className="mr-2 size-3.5 text-muted-foreground" />
+            <DropdownMenuItem
+              onClick={playConnectionSequence}
+              className="cursor-pointer"
+            >
+              <RefreshCw className="text-muted-foreground mr-2 size-3.5" />
               <span>{t("replay")}</span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={handleAnimate} disabled={isAnimating} className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={handleAnimate}
+              disabled={isAnimating}
+              className="cursor-pointer"
+            >
               {progress[0] === 0 ? (
                 <>
-                  <MapIcon className="mr-2 size-3.5 text-muted-foreground" />
+                  <MapIcon className="text-muted-foreground mr-2 size-3.5" />
                   <span>{t("unroll")}</span>
                 </>
               ) : (
                 <>
-                  <Globe className="mr-2 size-3.5 text-muted-foreground" />
+                  <Globe className="text-muted-foreground mr-2 size-3.5" />
                   <span>{t("roll")}</span>
                 </>
               )}
             </DropdownMenuItem>
 
             <DropdownMenuItem onClick={handleReset} className="cursor-pointer">
-              <RotateCcw className="mr-2 size-3.5 text-muted-foreground" />
+              <RotateCcw className="text-muted-foreground mr-2 size-3.5" />
               <span>{t("reset")}</span>
             </DropdownMenuItem>
 
@@ -763,7 +791,7 @@ export function GlobeMap({
               onCheckedChange={(checked) => setShowGraticule(Boolean(checked))}
               className="cursor-pointer"
             >
-              <Grid className="mr-2 size-3.5 text-muted-foreground" />
+              <Grid className="text-muted-foreground mr-2 size-3.5" />
               <span>{t("showGrid")}</span>
             </DropdownMenuCheckboxItem>
 
@@ -772,7 +800,7 @@ export function GlobeMap({
               onCheckedChange={(checked) => setShowOceanFill(Boolean(checked))}
               className="cursor-pointer"
             >
-              <Layers className="mr-2 size-3.5 text-muted-foreground" />
+              <Layers className="text-muted-foreground mr-2 size-3.5" />
               <span>{t("showOcean")}</span>
             </DropdownMenuCheckboxItem>
           </DropdownMenuContent>

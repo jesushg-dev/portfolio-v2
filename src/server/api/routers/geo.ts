@@ -30,7 +30,9 @@ export const geoRouter = createTRPCRouter({
           lat,
           lon,
           city: vercelCity ? decodeURIComponent(vercelCity) : undefined,
-          country: vercelCountry ? decodeURIComponent(vercelCountry) : undefined,
+          country: vercelCountry
+            ? decodeURIComponent(vercelCountry)
+            : undefined,
         };
       }
     }
@@ -41,7 +43,12 @@ export const geoRouter = createTRPCRouter({
     const ip = forwardedFor?.split(",")[0]?.trim() ?? realIp ?? "";
 
     // On local environment without IP, return null (handled by fallback UI/default origin)
-    if (!ip || ip === "127.0.0.1" || ip === "::1" || ip.startsWith("192.168.")) {
+    if (
+      !ip ||
+      ip === "127.0.0.1" ||
+      ip === "::1" ||
+      ip.startsWith("192.168.")
+    ) {
       return null;
     }
 
@@ -58,7 +65,11 @@ export const geoRouter = createTRPCRouter({
 
       const data = (await res.json()) as IpApiResponse;
 
-      if (data.status !== "success" || data.lat === undefined || data.lon === undefined) {
+      if (
+        data.status !== "success" ||
+        data.lat === undefined ||
+        data.lon === undefined
+      ) {
         return null;
       }
 

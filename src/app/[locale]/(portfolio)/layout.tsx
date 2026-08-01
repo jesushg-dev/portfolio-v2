@@ -29,7 +29,7 @@ export default async function RootLayout({
 
   return (
     <TrpcProvider>
-      <Layout headerAlwaysVisible>{children}</Layout>
+      <Layout>{children}</Layout>
     </TrpcProvider>
   );
 }

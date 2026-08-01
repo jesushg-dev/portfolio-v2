@@ -69,7 +69,9 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({
       ) : null}
     </div>
     {description ? (
-      <p className="text-muted-foreground mt-2 text-base whitespace-pre-line">{description}</p>
+      <p className="text-muted-foreground mt-2 text-base whitespace-pre-line">
+        {description}
+      </p>
     ) : null}
   </div>
 );

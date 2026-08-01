@@ -5,21 +5,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
 
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
 import { DesktopMegaMenu } from "./nav-menu-parts";
 import ToolbarHeader from "./toolbar-header";
 import ThemeSelectorLazy from "./theme-selector-lazy";
-import useIsOnTop from "@/hooks/use-is-on-top";
 import { NAV_GROUPS } from "./navigation-config";
 
-interface IHeaderProps {
-  /** Solid sticky header — set by route-group layouts (portfolio, admin, etc.). */
-  alwaysVisible?: boolean;
-}
-
-const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
+const Header: FC = () => {
   const t = useTranslations("global.header");
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,7 +25,6 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
   const [prevPathname, setPrevPathname] = useState(pathname);
   const headerRef = useRef<HTMLElement>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isOnTop = useIsOnTop();
 
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
@@ -97,16 +91,10 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
     };
   }, [closeMenus]);
 
-  const isTransparent = isOnTop && !alwaysVisible;
-
   return (
     <header
       ref={headerRef}
-      className={`fixed right-0 left-0 z-40 w-full transition-all duration-700 print:hidden ${
-        isTransparent
-          ? "text-primaryText-900 top-5 bg-transparent"
-          : "bg-background-50/90 text-primaryText-900 hover:bg-background-50 top-0 shadow-sm backdrop-blur-lg backdrop-filter"
-      }`}
+      className="fixed inset-x-0 top-3 z-50 px-3 transition-all duration-500 sm:px-6 lg:px-8 print:hidden"
       onMouseEnter={clearCloseTimer}
       onMouseLeave={scheduleMegaMenuClose}
     >
@@ -116,7 +104,10 @@ const Header: FC<IHeaderProps> = ({ alwaysVisible = false }) => {
       />
       <nav
         aria-label={t("menu.mainNavigation")}
-        className="relative px-4 py-3 sm:px-6 lg:px-8"
+        className={cn(
+          "relative mx-auto w-full max-w-5xl rounded-2xl px-4 py-1.5 transition-all duration-500 sm:px-6 sm:py-2",
+          "border-border/40 bg-card/40 border shadow-[0_8px_32px_0_rgba(0,0,0,0.14),inset_0_1px_1px_0_rgba(255,255,255,0.18)] backdrop-blur-xl backdrop-saturate-180",
+        )}
       >
         <div className="relative mx-auto w-full max-w-(--breakpoint-xl)">
           <div className="flex w-full items-center justify-between gap-3 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-6">
