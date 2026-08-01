@@ -89,7 +89,7 @@ const PortfolioGrid: FC = () => {
             initial="hidden"
             variants={container}
             animate={isInView ? "visible" : "hidden"}
-            className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
             {data?.pages.map((page, idx) => (
               <Fragment key={page.cursor ?? idx}>
@@ -97,7 +97,7 @@ const PortfolioGrid: FC = () => {
                   <motion.li
                     layout
                     key={project.id}
-                    className="flex justify-center"
+                    className="flex h-full w-full"
                     variants={item}
                     whileHover={{ y: -4 }}
                     transition={{ duration: 0.25 }}

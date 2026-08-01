@@ -10,6 +10,8 @@ import {
 export interface ServiceTranslationFields {
   title: string;
   description: string;
+  badge: string;
+  statsLabel: string;
 }
 
 export type ServiceTranslationMap = TranslationMap<ServiceTranslationFields>;
@@ -18,13 +20,22 @@ export interface ServiceEditorDTO {
   id: string;
   image: string;
   type: Service["type"];
+  icon: string;
+  statsValue: string;
+  featured: boolean;
+  order: number;
   skillIds: string[];
   translations: ServiceTranslationMap;
 }
 
 export type ServiceCreateFormDTO = Omit<ServiceEditorDTO, "id">;
 
-const emptyServiceTranslationFields = { title: "", description: "" };
+const emptyServiceTranslationFields: ServiceTranslationFields = {
+  title: "",
+  description: "",
+  badge: "",
+  statsLabel: "",
+};
 
 type ServiceWithRelations = Service & {
   ServiceTranslation: ServiceTranslation[];
@@ -40,12 +51,18 @@ export function mapServiceToEditorDto(
       appLanguageId: translation.appLanguageId,
       title: translation.title,
       description: translation.description,
+      badge: translation.badge ?? "",
+      statsLabel: translation.statsLabel ?? "",
     })) ?? [];
 
   return {
     id: service.id,
     image: service.image ?? "",
     type: service.type,
+    icon: service.icon ?? "code",
+    statsValue: service.statsValue ?? "",
+    featured: service.featured ?? false,
+    order: service.order ?? 0,
     skillIds: service.ServiceSkill?.map((entry) => entry.skillId) ?? [],
     translations: mergeTranslationMap(
       languages,
@@ -68,6 +85,10 @@ export function buildEmptyServiceCreateDto(
   return {
     image: "",
     type: "FRONTEND",
+    icon: "code",
+    statsValue: "",
+    featured: false,
+    order: 0,
     skillIds: [],
     translations: buildEmptyTranslationMap(
       languages,

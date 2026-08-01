@@ -310,6 +310,10 @@
             "label": "Vaardigheden",
             "description": "Tech stack, frameworks en tools."
           },
+          "services": {
+            "label": "Diensten",
+            "description": "Softwareoplossingen, frontend, backend en mobiel."
+          },
           "soft-skills": {
             "label": "Soft skills",
             "description": "Communicatie, leiderschap en teamwork."
@@ -452,6 +456,43 @@
         "description": "Voeg je profielfoto, achtergrond en introductie toe vanuit het beheerdersprofiel hero tabblad."
       }
     },
+    "services": {
+      "title": "Mijn Diensten",
+      "subtitle": "Expertise",
+      "description": "Strategisch denken combineren met geavanceerde technologieën voor robuuste en schaalbare softwareoplossingen.",
+      "items": {
+        "frontend": {
+          "title": "Frontend & UI/UX Ontwikkeling",
+          "description": "Ontwerp van prachtige, snelle en toegankelijke webinterfaces met WCAG 2.2 AAA-naleving, React, Next.js en Tailwind CSS.",
+          "stats": "100+ UI Components · WCAG 2.2 AAA"
+        },
+        "backend": {
+          "title": "Backend Ontwikkeling & APIs",
+          "description": "Robuuste microservices, REST & tRPC API's met Node.js, C# / .NET en schaalbare databases.",
+          "stats": "99.9% Uptime · SQL & NoSQL"
+        },
+        "mobile": {
+          "title": "Mobiele Ontwikkeling",
+          "description": "Snel en vloeiend mobiel applicatieontwerp met React Native voor iOS en Android.",
+          "stats": "Cross-Platform · iOS & Android"
+        },
+        "devops": {
+          "title": "Systemen & Cloud DevOps",
+          "description": "Linux serverbeheer, Docker-containerisatie, CI/CD geautomatiseerde pipelines en cloud-deployments.",
+          "stats": "Docker & Linux · CI/CD Automation"
+        },
+        "cybersecurity": {
+          "title": "Cybersecurity & Beveiligingsaudits",
+          "description": "Beveiligingsaudits, kwetsbaarheidsanalyse met Snyk, OWASP Top 10-naleving en pentesting.",
+          "stats": "OWASP Top 10 · Snyk Compliance"
+        },
+        "contact": {
+          "title": "Laten we samen bouwen",
+          "subtitle": "Heb je een project in gedachten?",
+          "cta": "Neem contact op"
+        }
+      }
+    },
     "timeline": {
       "title": "Mijn reis",
       "subtitle": "Een tijdlijn van werk, studie en groei",
@@ -556,6 +597,7 @@
       }
     },
     "soft-skills": {
+      "badge": "Kernvaardigheid",
       "subtitle": "Vaardigheden",
       "title": "Soft skills",
       "description": "Naast mijn technische vaardigheden bezit ik ook een scala aan soft skills die mij hebben geholpen succesvol te zijn in mijn carrière.",
@@ -614,7 +656,7 @@
     "portfolio": {
       "subtitle": "Portfolio",
       "title": "Beste projecten",
-      "description": "Ik ben trots op het werk dat ik heb voltooid gedurende mijn carrière.",
+      "description": "Een selectie van projecten die laten zien hoe ik ontwerp, bouw en echte problemen oplos met software.",
       "actions": {
         "view": "Bekijk project",
         "source": "Bekijk bron",

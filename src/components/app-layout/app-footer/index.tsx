@@ -49,7 +49,7 @@ const Footer = async () => {
 
   return (
     <footer className="bg-primary-800 text-primary-foreground relative z-10">
-      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 py-12 sm:px-6 lg:container lg:px-20 lg:py-16">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-[1.1fr_0.9fr_0.9fr_1.4fr] lg:gap-6">
           <div className="space-y-3">
             <Link
@@ -195,7 +195,7 @@ const Footer = async () => {
       </div>
 
       <div className="border-primary-foreground/15 border-t">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <div className="mx-auto flex w-full flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:container lg:px-20">
           <p className="text-primary-foreground text-sm">
             {t("title")}
             {year}

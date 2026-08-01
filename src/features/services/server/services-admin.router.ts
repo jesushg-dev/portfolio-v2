@@ -20,12 +20,18 @@ const ServiceTranslationMapSchema = z.record(
   z.object({
     title: z.string(),
     description: z.string(),
+    badge: z.string().default(""),
+    statsLabel: z.string().default(""),
   }),
 );
 
 const serviceUpsertInput = z.object({
-  image: z.string().min(1),
+  image: z.string().default(""),
   type: StackTypeSchema,
+  icon: z.string().default("code"),
+  statsValue: z.string().default(""),
+  featured: z.boolean().default(false),
+  order: z.number().default(0),
   skillIds: z.array(z.string()).default([]),
   translations: ServiceTranslationMapSchema.default({}),
 });
@@ -142,6 +148,8 @@ export const servicesAdminRouter = createTRPCRouter({
             data: {
               title: translation.title,
               description: translation.description,
+              badge: translation.badge,
+              statsLabel: translation.statsLabel,
             },
           });
         } else {

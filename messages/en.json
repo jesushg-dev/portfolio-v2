@@ -310,6 +310,10 @@
             "label": "Skills",
             "description": "Tech stack, frameworks, and tools."
           },
+          "services": {
+            "label": "Services",
+            "description": "Software solutions, frontend, backend, and mobile."
+          },
           "soft-skills": {
             "label": "Soft skills",
             "description": "Communication, leadership, and teamwork."
@@ -452,6 +456,43 @@
         "description": "Add your profile photo, background, and intro from the admin profile hero tab."
       }
     },
+    "services": {
+      "title": "My Services",
+      "subtitle": "Expertise",
+      "description": "Combining strategic thinking with cutting-edge technologies to deliver robust, scalable, and high-impact software solutions.",
+      "items": {
+        "frontend": {
+          "title": "Frontend & UI/UX Development",
+          "description": "Crafting stunning, performant, and fully accessible web interfaces built with WCAG 2.2 AAA compliance, React, Next.js, and Tailwind CSS.",
+          "stats": "100+ UI Components · WCAG 2.2 AAA"
+        },
+        "backend": {
+          "title": "Backend Development & APIs",
+          "description": "Building robust microservices, REST & tRPC APIs with Node.js, C# / .NET, and scalable SQL/NoSQL databases.",
+          "stats": "99.9% Uptime · SQL & NoSQL"
+        },
+        "mobile": {
+          "title": "Mobile Development",
+          "description": "Delivering smooth, modern cross-platform mobile apps using React Native for iOS and Android.",
+          "stats": "Cross-Platform · iOS & Android"
+        },
+        "devops": {
+          "title": "Systems & Cloud DevOps",
+          "description": "Linux server administration, Docker containerization, CI/CD pipeline automation, and cloud deployments.",
+          "stats": "Docker & Linux · CI/CD Automation"
+        },
+        "cybersecurity": {
+          "title": "Cybersecurity & Security Audits",
+          "description": "Security audits, vulnerability scanning with Snyk, OWASP Top 10 compliance, and penetration testing.",
+          "stats": "OWASP Top 10 · Snyk Compliance"
+        },
+        "contact": {
+          "title": "Let's build together",
+          "subtitle": "Have a project in mind?",
+          "cta": "Contact Me"
+        }
+      }
+    },
     "timeline": {
       "title": "My Journey",
       "subtitle": "A timeline of work, study, and growth",
@@ -556,6 +597,7 @@
       }
     },
     "soft-skills": {
+      "badge": "Core skill",
       "subtitle": "Skills",
       "title": "Soft Skills",
       "description": "In addition to my technical skills, I also possess a range of soft skills that have helped me succeed in my career",
@@ -614,7 +656,7 @@
     "portfolio": {
       "subtitle": "Portfolio",
       "title": "Best Projects",
-      "description": "I am proud of the work I have completed throughout my career.",
+      "description": "A selection of projects reflecting how I design, build, and solve real-world problems with software.",
       "actions": {
         "view": "View project",
         "source": "View source",

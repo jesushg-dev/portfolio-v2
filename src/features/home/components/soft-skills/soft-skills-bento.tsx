@@ -1,7 +1,8 @@
 "use client";
 
-import { createElement, useState, type FC, type MouseEvent } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { createElement, type FC } from "react";
+import { useTranslations } from "next-intl";
+import { motion, type Variants } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { resolveSoftSkillIcon } from "@/features/soft-skills/lib/soft-skill-icons";
@@ -18,47 +19,6 @@ interface SoftSkillsBentoProps {
   items: SoftSkillBentoItem[];
 }
 
-interface SoftSkillBentoCardProps {
-  featured: boolean;
-  icon: string;
-  title: string;
-  description: string;
-  index: number;
-  shouldReduceMotion: boolean | null;
-}
-
-function useWobble(enabled: boolean) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-
-  const handleMouseMove = (event: MouseEvent<HTMLElement>) => {
-    if (!enabled) return;
-
-    const { clientX, clientY } = event;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = (clientX - (rect.left + rect.width / 2)) / 20;
-    const y = (clientY - (rect.top + rect.height / 2)) / 20;
-    setMousePosition({ x, y });
-  };
-
-  const handleMouseEnter = () => {
-    if (enabled) setIsHovering(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-    setMousePosition({ x: 0, y: 0 });
-  };
-
-  return {
-    mousePosition,
-    isHovering,
-    handleMouseMove,
-    handleMouseEnter,
-    handleMouseLeave,
-  };
-}
-
 const SoftSkillBentoIcon: FC<{ icon: string; className?: string }> = ({
   icon,
   className,
@@ -68,168 +28,88 @@ const SoftSkillBentoIcon: FC<{ icon: string; className?: string }> = ({
     "aria-hidden": true,
   });
 
-const SoftSkillBentoCard: FC<SoftSkillBentoCardProps> = ({
-  featured,
-  icon,
-  title,
-  description,
-  index,
-  shouldReduceMotion,
-}) => {
-  const animationsEnabled = !shouldReduceMotion;
-  const {
-    mousePosition,
-    isHovering,
-    handleMouseMove,
-    handleMouseEnter,
-    handleMouseLeave,
-  } = useWobble(animationsEnabled);
-
-  const cardContent = (
-    <>
-      <div className="mb-2.5 flex items-start gap-3">
-        <span
-          className={cn(
-            "bg-primary/10 text-primary flex shrink-0 items-center justify-center rounded-full",
-            featured ? "h-10 w-10" : "h-9 w-9",
-          )}
-        >
-          <SoftSkillBentoIcon
-            icon={icon}
-            className={featured ? "h-5 w-5" : "h-4 w-4"}
-          />
-        </span>
-        <p
-          className={cn(
-            "text-foreground min-w-0 flex-1 leading-snug font-semibold tracking-tight wrap-break-word",
-            featured ? "text-base sm:text-lg" : "text-sm",
-          )}
-        >
-          {title}
-        </p>
-      </div>
-      <p
-        className={cn(
-          "text-muted-foreground leading-relaxed",
-          featured ? "text-sm sm:text-[0.9375rem]" : "text-sm",
-        )}
-      >
-        {description}
-      </p>
-    </>
-  );
-
-  const cardClassName = cn(
-    "bg-card text-card-foreground relative z-10 h-full rounded-2xl border p-5 transition-[border-color,box-shadow] duration-200 ease-out sm:p-6",
-    featured
-      ? "border-border/80 shadow-[6px_6px_0_0] shadow-primary/10 hover:shadow-[8px_8px_0_0] hover:shadow-primary/15"
-      : "border-border/70 shadow-sm hover:shadow-md",
-    "hover:border-primary/35",
-  );
-
-  if (!animationsEnabled) {
-    return (
-      <motion.div
-        initial={{ opacity: 1, y: 0 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className={cardClassName}
-      >
-        {cardContent}
-      </motion.div>
-    );
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{
-        type: "spring",
-        duration: 0.5,
-        bounce: 0.15,
-        delay: index * 0.06,
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transform: isHovering
-          ? `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0)`
-          : "translate3d(0px, 0px, 0)",
-        transition: "transform 0.1s ease-out",
-      }}
-      className="h-full"
-    >
-      <motion.div
-        style={{
-          transform: isHovering
-            ? `translate3d(${-mousePosition.x}px, ${-mousePosition.y}px, 0) scale3d(1.02, 1.02, 1)`
-            : "translate3d(0px, 0px, 0) scale3d(1, 1, 1)",
-          transition: "transform 0.1s ease-out",
-        }}
-        className={cardClassName}
-      >
-        {cardContent}
-      </motion.div>
-    </motion.div>
-  );
-};
-
 const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items }) => {
-  const shouldReduceMotion = useReducedMotion();
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const animationsEnabled = !shouldReduceMotion;
+  const t = useTranslations("main.soft-skills");
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4 },
+    },
+  };
 
   if (items.length === 0) return null;
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {items.map((item, index) => (
-          <div
+    <div className="w-full">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+      >
+        {items.map((item) => (
+          <motion.div
             key={item.id}
-            className={cn(
-              "relative h-full",
-              item.featured ? "col-span-2" : "col-span-1",
-            )}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
+            variants={itemVariants}
+            className="bg-gradient-to-br from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 hover:shadow-2xl hover:shadow-primary/10 group relative flex h-full min-h-[210px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 lg:p-7"
           >
-            {animationsEnabled ? (
-              <AnimatePresence>
-                {hoveredIndex === index && (
-                  <motion.span
-                    layoutId="soft-skill-hover-bg"
-                    className="bg-primary/8 border-primary/15 shadow-primary/10 pointer-events-none absolute inset-0 z-0 block rounded-2xl border shadow-[6px_6px_0_0]"
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: 1,
-                      transition: { duration: 0.15 },
-                    }}
-                    exit={{
-                      opacity: 0,
-                      transition: { duration: 0.15, delay: 0.05 },
-                    }}
-                  />
-                )}
-              </AnimatePresence>
-            ) : null}
+            {/* Background Ambient Glow */}
+            <div className="bg-primary/15 pointer-events-none absolute -bottom-10 -right-10 size-36 rounded-full blur-2xl transition-all duration-500 group-hover:scale-125 group-hover:bg-primary/25" />
 
-            <SoftSkillBentoCard
-              featured={item.featured}
-              icon={item.icon}
-              title={item.title}
-              description={item.description}
-              index={index}
-              shouldReduceMotion={shouldReduceMotion}
-            />
-          </div>
+            {/* Background Decorative Icon Watermark */}
+            <div className="text-primary pointer-events-none absolute -bottom-4 -right-4 size-28 opacity-[0.07] transition-all duration-500 group-hover:scale-110 group-hover:opacity-20">
+              <SoftSkillBentoIcon icon={item.icon} className="size-full" />
+            </div>
+
+            <div className="z-10 space-y-3">
+              <div className="flex items-center gap-3">
+                <span className="bg-primary/10 text-primary border-primary/20 flex shrink-0 size-11 items-center justify-center rounded-2xl border shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30">
+                  <SoftSkillBentoIcon
+                    icon={item.icon}
+                    className="size-5"
+                  />
+                </span>
+                <h3 className="text-foreground min-w-0 flex-1 leading-snug font-bold tracking-tight text-lg sm:text-xl group-hover:text-primary transition-colors wrap-break-word">
+                  {item.title}
+                </h3>
+              </div>
+              <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
+                {item.description}
+              </p>
+            </div>
+
+            {/* Bottom Accent Row */}
+            <div className="z-10 mt-5 flex items-center justify-between border-t border-border/50 pt-3">
+              <div className="flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-primary/60 group-hover:bg-primary group-hover:scale-125 transition-all duration-300" />
+                <span className="text-[11px] font-semibold text-muted-foreground group-hover:text-foreground transition-colors">
+                  {t("badge")}
+                </span>
+              </div>
+              <div className="bg-primary/10 text-primary size-6 rounded-full flex items-center justify-center text-[10px] font-bold group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                ✓
+              </div>
+            </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
+
 };
 
 export default SoftSkillsBento;

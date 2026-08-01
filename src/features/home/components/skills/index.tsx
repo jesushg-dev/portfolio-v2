@@ -20,8 +20,8 @@ async function Skills() {
     : { data: [] };
 
   return (
-    <div className="bg-background relative overflow-hidden">
-      <section className="relative mx-auto px-4 pb-10 lg:container lg:px-20 lg:pb-16">
+    <div className="bg-muted/50 relative w-full overflow-hidden">
+      <section id="skills" className="relative mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
         <DeferredBgParticles />
         <SkillsTerminal initialSkills={skillsData.data} />
       </section>

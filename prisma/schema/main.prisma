@@ -497,6 +497,10 @@ model Service {
   createdAt          DateTime             @default(now())
   image              String
   type               StackType
+  icon               String?              @default("code")
+  statsValue         String?              @default("")
+  featured           Boolean              @default(false)
+  order              Int                  @default(0)
   ServiceTranslation ServiceTranslation[]
   CertificateService CertificateService[]
   ServiceSkill       ServiceSkill[]
@@ -507,6 +511,8 @@ model ServiceTranslation {
   createdAt     DateTime    @default(now())
   title         String
   description   String
+  badge         String?     @default("")
+  statsLabel    String?     @default("")
   language      AppLanguage @relation(fields: [appLanguageId], references: [id])
   Service       Service?    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId     String?     @db.ObjectId

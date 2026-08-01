@@ -308,115 +308,117 @@ function SocialProofContent({
   const showTestimonialsColumn = isTestimonialsLoading || hasTestimonials;
 
   return (
-    <section
-      id="social-proof"
-      className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
-    >
-      <div
-        className={cn(
-          "grid grid-cols-1 items-center gap-12",
-          showTestimonialsColumn
-            ? "lg:grid-cols-2 lg:gap-20"
-            : "lg:grid-cols-1",
-        )}
+    <div className="bg-muted/50 relative w-full overflow-hidden">
+      <section
+        id="social-proof"
+        className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
       >
-        {showTestimonialsColumn ? (
-          <div className="flex w-full min-w-0 flex-col gap-6">
-            <motion.div
+        <div
+          className={cn(
+            "grid grid-cols-1 items-center gap-12",
+            showTestimonialsColumn
+              ? "lg:grid-cols-2 lg:gap-20"
+              : "lg:grid-cols-1",
+          )}
+        >
+          {showTestimonialsColumn ? (
+            <div className="flex w-full min-w-0 flex-col gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45 }}
+                className="flex flex-col gap-2"
+              >
+                <span className="text-primary text-sm font-semibold tracking-widest uppercase">
+                  {t("eyebrow")}
+                </span>
+                <h2 className="text-foreground text-3xl leading-tight font-extrabold tracking-tight lg:text-4xl">
+                  {t("title", { count: items.length })}
+                </h2>
+                <p className="text-muted-foreground mt-1 max-w-sm text-base leading-relaxed">
+                  {t("subtitle")}
+                </p>
+              </motion.div>
+
+              {isTestimonialsLoading ? (
+                <TestimonialSkeleton />
+              ) : (
+                <TestimonialsCarousel items={items} />
+              )}
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: 0.4 }}
+              >
+                <a
+                  href="#contact"
+                  id="hire-me-cta"
+                  className="bg-primary text-primary-foreground group inline-flex items-center gap-2.5 rounded-xl px-7 py-3.5 text-sm font-semibold shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg active:translate-y-0 active:shadow-md"
+                >
+                  {t("cta")}
+                  <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </motion.div>
+            </div>
+          ) : null}
+
+          <div className="mx-auto flex w-full max-w-md flex-col items-center gap-6 text-center">
+            <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.45 }}
-              className="flex flex-col gap-2"
+              className="text-muted-foreground text-sm font-medium tracking-widest uppercase"
             >
-              <span className="text-primary text-sm font-semibold tracking-widest uppercase">
-                {t("eyebrow")}
-              </span>
-              <h2 className="text-foreground text-3xl leading-tight font-extrabold tracking-tight lg:text-4xl">
-                {t("title", { count: items.length })}
-              </h2>
-              <p className="text-muted-foreground mt-1 max-w-sm text-base leading-relaxed">
-                {t("subtitle")}
-              </p>
-            </motion.div>
+              {t("statsLabel")}
+            </motion.p>
 
-            {isTestimonialsLoading ? (
-              <TestimonialSkeleton />
-            ) : (
-              <TestimonialsCarousel items={items} />
-            )}
+            <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
+              {statKeys.map((key, i) => (
+                <StatCard
+                  key={key}
+                  value={String(statMapping[key] ?? "0")}
+                  label={t(`stats.${key}.label`)}
+                  index={i}
+                  href={statLinks[key]}
+                />
+              ))}
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: 0.4 }}
-            >
-              <a
-                href="#contact"
-                id="hire-me-cta"
-                className="bg-primary text-primary-foreground group inline-flex items-center gap-2.5 rounded-xl px-7 py-3.5 text-sm font-semibold shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg active:translate-y-0 active:shadow-md"
+            {!showTestimonialsColumn ? (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: 0.4 }}
               >
-                {t("cta")}
-                <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
-            </motion.div>
-          </div>
-        ) : null}
+                <a
+                  href="#contact"
+                  id="hire-me-cta"
+                  className="bg-primary text-primary-foreground group inline-flex items-center gap-2.5 rounded-xl px-7 py-3.5 text-sm font-semibold shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg active:translate-y-0 active:shadow-md"
+                >
+                  {t("cta")}
+                  <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </motion.div>
+            ) : null}
 
-        <div className="mx-auto flex w-full max-w-md flex-col items-center gap-6 text-center">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.45 }}
-            className="text-muted-foreground text-sm font-medium tracking-widest uppercase"
-          >
-            {t("statsLabel")}
-          </motion.p>
-
-          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
-            {statKeys.map((key, i) => (
-              <StatCard
-                key={key}
-                value={String(statMapping[key] ?? "0")}
-                label={t(`stats.${key}.label`)}
-                index={i}
-                href={statLinks[key]}
-              />
-            ))}
-          </div>
-
-          {!showTestimonialsColumn ? (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="text-muted-foreground max-w-xs text-sm leading-relaxed"
             >
-              <a
-                href="#contact"
-                id="hire-me-cta"
-                className="bg-primary text-primary-foreground group inline-flex items-center gap-2.5 rounded-xl px-7 py-3.5 text-sm font-semibold shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-lg active:translate-y-0 active:shadow-md"
-              >
-                {t("cta")}
-                <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
-            </motion.div>
-          ) : null}
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-muted-foreground max-w-xs text-sm leading-relaxed"
-          >
-            {t("statsNote")}
-          </motion.p>
+              {t("statsNote")}
+            </motion.p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 

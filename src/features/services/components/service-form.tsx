@@ -32,7 +32,7 @@ import {
 import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
 import {
   resolvePrimaryLanguage,
-  titleDescriptionTranslationMapSchema,
+  translationMapSchema,
 } from "@/lib/i18n/localized-form";
 import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
 import {
@@ -60,15 +60,28 @@ export const ServiceForm: FC<ServiceFormProps> = ({
     [languages],
   );
 
+const serviceTranslationValueSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  badge: z.string().default(""),
+  statsLabel: z.string().default(""),
+});
+
   const serviceFormSchema = useMemo(
     () =>
       z.object({
         id: z.string().optional(),
-        image: z.string().min(1, t("imageRequired")),
+        image: z.string().default(""),
         type: StackTypeSchema,
-        skillIds: z.array(z.string()),
-        translations: titleDescriptionTranslationMapSchema(
+        icon: z.string().default("code"),
+        statsValue: z.string().default(""),
+        featured: z.boolean().default(false),
+        order: z.number().default(0),
+        skillIds: z.array(z.string()).default([]),
+        translations: translationMapSchema(
+          serviceTranslationValueSchema,
           primaryLang?.id,
+          "title",
           t("titleRequiredPrimary"),
         ),
       }),
@@ -91,16 +104,16 @@ export const ServiceForm: FC<ServiceFormProps> = ({
     type: s.type,
   }));
 
-  const form = useForm<TServiceForm>({
+  const form = useForm({
     resolver: zodResolver(serviceFormSchema),
-    defaultValues: initialData as TServiceForm,
+    defaultValues: initialData as never,
     mode: "onBlur",
   });
 
   const { activeLangId, setActiveLangId } = useLocalizedForm({
     languages,
     form,
-    buildDefaultValues: () => initialData as TServiceForm,
+    buildDefaultValues: () => initialData as never,
     resourceId: "id" in initialData ? initialData.id : undefined,
   });
 
@@ -180,11 +193,69 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.badge`}
+                    render={({ field }) => (
+                      <FormItem
+                        label="Badge / Category"
+                        inputId={`service-badge-${lang.code}`}
+                      >
+                        <Input placeholder="e.g. Frontend & UI/UX" {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.statsLabel`}
+                    render={({ field }) => (
+                      <FormItem
+                        label="Stats Label"
+                        inputId={`service-statsLabel-${lang.code}`}
+                      >
+                        <Input placeholder="e.g. UI Components" {...field} />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               );
             })}
 
             <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="icon"
+                render={({ field }) => (
+                  <FormItem label="Icon" inputId="service-icon">
+                    <Select onValueChange={field.onChange} value={field.value || "code"}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select icon" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {["code", "server", "smartphone", "terminal", "shield", "database", "zap", "globe", "layers"].map((iconName) => (
+                          <SelectItem key={iconName} value={iconName}>
+                            {iconName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="statsValue"
+                render={({ field }) => (
+                  <FormItem label="Stats Value" inputId="service-statsValue">
+                    <Input placeholder="e.g. 100+ or 99.9%" {...field} />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
               <FormField
                 control={form.control}
                 name="image"
@@ -216,6 +287,40 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="order"
+                render={({ field }) => (
+                  <FormItem label="Order" inputId="service-order">
+                    <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="pt-2">
+              <FormField
+                control={form.control}
+                name="featured"
+                render={({ field }) => (
+                  <FormItem label="Featured Hero Card (2-Columns in Bento Grid)" inputId="service-featured">
+                    <Select
+                      onValueChange={(val) => field.onChange(val === "true")}
+                      value={field.value ? "true" : "false"}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="false">Standard Card (1-Column)</SelectItem>
+                        <SelectItem value="true">Featured Hero Card (2-Columns)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
             </div>
           </FormSection>
 
@@ -233,7 +338,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                 >
                   <SkillPicker
                     availableSkills={availableSkills}
-                    selectedSkillIds={field.value}
+                    selectedSkillIds={field.value ?? []}
                     onChange={field.onChange}
                   />
                 </FormItem>

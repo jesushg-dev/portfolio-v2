@@ -310,6 +310,10 @@
             "label": "Habilidades",
             "description": "Stack técnico, frameworks y herramientas."
           },
+          "services": {
+            "label": "Servicios",
+            "description": "Soluciones de software, frontend, backend y móvil."
+          },
           "soft-skills": {
             "label": "Habilidades blandas",
             "description": "Comunicación, liderazgo y trabajo en equipo."
@@ -452,6 +456,43 @@
         "description": "Agrega tu foto de perfil, fondo y presentación desde la pestaña héroe del perfil de administrador."
       }
     },
+    "services": {
+      "title": "Mis Servicios",
+      "subtitle": "Especialización",
+      "description": "Combino pensamiento estratégico con tecnologías de vanguardia para ofrecer soluciones de software robustas, escalables y orientadas a resultados.",
+      "items": {
+        "frontend": {
+          "title": "Desarrollo Frontend & UI/UX",
+          "description": "Diseño y desarrollo de interfaces web espectaculares, de alto rendimiento y totalmente accesibles cumpliendo el estándar WCAG 2.2 AAA con React, Next.js y Tailwind CSS.",
+          "stats": "100+ Componentes UI · WCAG 2.2 AAA"
+        },
+        "backend": {
+          "title": "Desarrollo Backend & APIs",
+          "description": "Arquitectura de microservicios, APIs REST/tRPC y bases de datos escalables enfocadas en seguridad y alto rendimiento.",
+          "stats": "99.9% Disponibilidad · SQL & NoSQL"
+        },
+        "mobile": {
+          "title": "Desarrollo Móvil",
+          "description": "Aplicaciones móviles nativas y multiplataforma ágiles, modernas y fluidas con React Native para iOS y Android.",
+          "stats": "Multiplataforma · iOS & Android"
+        },
+        "devops": {
+          "title": "Sistemas & Cloud DevOps",
+          "description": "Administración de servidores Linux, contenedorización con Docker, integración continua CI/CD y despliegues en la nube.",
+          "stats": "Docker & Linux · CI/CD Automation"
+        },
+        "cybersecurity": {
+          "title": "Ciberseguridad & Auditorías",
+          "description": "Auditorías de seguridad, análisis de vulnerabilidades con Snyk, cumplimiento de estándares OWASP Top 10 y pruebas de penetración.",
+          "stats": "OWASP Top 10 · Snyk Compliance"
+        },
+        "contact": {
+          "title": "Hablemos de tu proyecto",
+          "subtitle": "¿Tienes una idea en mente?",
+          "cta": "Contáctame"
+        }
+      }
+    },
     "timeline": {
       "title": "Mi recorrido",
       "subtitle": "Una línea de tiempo de trabajo, estudio y crecimiento",
@@ -556,6 +597,7 @@
       }
     },
     "soft-skills": {
+      "badge": "Habilidad profesional",
       "subtitle": "Habilidades",
       "title": "Habilidades blandas",
       "description": "Además de mis habilidades técnicas, también poseo una serie de habilidades blandas que me han ayudado a tener éxito en mi carrera",
@@ -614,7 +656,7 @@
     "portfolio": {
       "subtitle": "Portafolio",
       "title": "Mejores proyectos",
-      "description": "Estoy orgulloso del trabajo que he realizado a lo largo de mi carrera.",
+      "description": "Una selección de proyectos que reflejan cómo diseño, desarrollo y resuelvo problemas reales con software.",
       "actions": {
         "view": "Ver proyecto",
         "source": "Ver código",

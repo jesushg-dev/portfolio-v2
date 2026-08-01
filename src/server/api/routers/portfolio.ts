@@ -530,6 +530,48 @@ export const portfolioRouter = createTRPCRouter({
       };
     }),
 
+  getServicesPublic: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return [];
+
+      const appLanguage = await ctx.db.appLanguage.findUnique({
+        where: { code: input.locale },
+      });
+
+      const services = await ctx.db.service.findMany({
+        where: { userId: tenantUserId },
+        include: {
+          ServiceTranslation: {
+            where: { appLanguageId: appLanguage?.id },
+          },
+        },
+        orderBy: [{ order: "asc" }, { createdAt: "asc" }],
+      });
+
+      return services.map((service) => {
+        const translation = service.ServiceTranslation[0];
+        return {
+          id: service.id,
+          type: service.type,
+          image: service.image,
+          icon: service.icon ?? "code",
+          statsValue: service.statsValue ?? "",
+          featured: service.featured ?? false,
+          order: service.order ?? 0,
+          title: translation?.title ?? "",
+          description: translation?.description ?? "",
+          badge: translation?.badge ?? "",
+          statsLabel: translation?.statsLabel ?? "",
+        };
+      });
+    }),
+
   getAboutPublic: publicProcedure
     .input(
       z.object({

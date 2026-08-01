@@ -40,8 +40,8 @@ const About: FC = async () => {
   const showTerminalColumn = Boolean(tenant && (hasTerminal || terminalData));
 
   return (
-    <div className="overflow-hidden">
-      <section className="mx-auto px-4 pb-4 lg:container lg:px-20 lg:pb-20">
+    <div className="bg-muted/50 relative w-full overflow-hidden">
+      <section id="about" className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
         <HeaderArticle title={t("title")} description="" subtitle="" />
         <article
           className={
@@ -52,7 +52,7 @@ const About: FC = async () => {
         >
           {paragraphs.length > 0 ? (
             <div
-              className={`space-y-4 ${showTerminalColumn ? "" : "mx-auto max-w-3xl"}`}
+              className={`space-y-4 ${showTerminalColumn ? "" : "mx-auto max-w-5xl"}`}
             >
               {paragraphs.map((paragraph) => (
                 <p

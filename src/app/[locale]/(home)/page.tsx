@@ -75,6 +75,21 @@ function SoftSkillsFallback() {
   );
 }
 
+function ServicesFallback() {
+  return (
+    <section aria-hidden className="mx-auto px-4 py-16 lg:container lg:px-20">
+      <Skeleton className="mx-auto mb-8 h-10 w-64" />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Skeleton className="h-72 rounded-3xl md:col-span-2" />
+        <Skeleton className="h-72 rounded-3xl" />
+        <Skeleton className="h-72 rounded-3xl" />
+        <Skeleton className="h-72 rounded-3xl" />
+        <Skeleton className="h-72 rounded-3xl" />
+      </div>
+    </section>
+  );
+}
+
 function ContactFallback() {
   return (
     <section aria-hidden className="mx-auto max-w-6xl px-4 py-16">
@@ -88,6 +103,9 @@ const About = dynamic(() => import("@/features/home/components/about"), {
 });
 const Skills = dynamic(() => import("@/features/home/components/skills"), {
   loading: () => <SkillsFallback />,
+});
+const Services = dynamic(() => import("@/features/home/components/services"), {
+  loading: () => <ServicesFallback />,
 });
 const Contact = dynamic(() => import("@/features/home/components/contact"), {
   loading: () => <ContactFallback />,
@@ -121,7 +139,6 @@ export default async function Home() {
       <Hero stats={stats} />
 
       <ViewportSection
-        id="about"
         fallback={<AboutFallback />}
         minHeight="36rem"
       >
@@ -129,7 +146,6 @@ export default async function Home() {
       </ViewportSection>
 
       <ViewportSection
-        id="experience"
         fallback={<ExperienceFallback />}
         minHeight="28rem"
       >
@@ -137,7 +153,6 @@ export default async function Home() {
       </ViewportSection>
 
       <ViewportSection
-        id="skills"
         fallback={<SkillsFallback />}
         minHeight="32rem"
       >
@@ -145,7 +160,14 @@ export default async function Home() {
       </ViewportSection>
 
       <ViewportSection
-        id="soft-skills"
+        fallback={<ServicesFallback />}
+        minHeight="32rem"
+        requiresTrpc
+      >
+        <Services />
+      </ViewportSection>
+
+      <ViewportSection
         fallback={<SoftSkillsFallback />}
         minHeight="28rem"
       >
@@ -153,7 +175,6 @@ export default async function Home() {
       </ViewportSection>
 
       <ViewportSection
-        id="projects"
         fallback={<PortfolioFallback />}
         minHeight="36rem"
         requiresTrpc
@@ -162,7 +183,6 @@ export default async function Home() {
       </ViewportSection>
 
       <ViewportSection
-        id="social-proof"
         fallback={<SocialProofFallback />}
         minHeight="32rem"
       >
@@ -170,7 +190,6 @@ export default async function Home() {
       </ViewportSection>
 
       <ViewportSection
-        id="contact"
         fallback={<ContactFallback />}
         minHeight="28rem"
         requiresTrpc

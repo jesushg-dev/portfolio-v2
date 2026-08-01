@@ -23,10 +23,11 @@ const Contact: FC = async () => {
   const showContactForm = data.emailFormEnabled;
 
   return (
-    <section
-      id="contact"
-      className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-24"
-    >
+    <div className="bg-background relative w-full border-t border-border/40">
+      <section
+        id="contact"
+        className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-24"
+      >
       {/* Background Texture Image */}
       <div
         aria-hidden
@@ -105,6 +106,7 @@ const Contact: FC = async () => {
         </ContactContainer>
       </div>
     </section>
+    </div>
   );
 };
 

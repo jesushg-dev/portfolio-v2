@@ -5,6 +5,7 @@ import { ArrowRightIcon } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 
+import HeaderArticle from "@/components/shared/header-article";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import type { SkillType } from "@/utils/interfaces/types";
@@ -75,32 +76,33 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
   );
 
   return (
-    <div className="relative z-10 mx-auto max-w-[980px] py-16 lg:py-20">
-      <header
-        className={cn(
-          "mb-9 max-w-[620px]",
-          !shouldReduceMotion && "animate-[riseIn_0.5s_ease_both]",
-        )}
-      >
-        <p className="text-primary-800 mb-4 font-mono text-[13px]">
-          {t("terminal.eyebrow")}
-        </p>
-        <h2 className="text-foreground mb-4 text-[clamp(30px,4vw,42px)] leading-[1.08] font-semibold tracking-[-0.015em]">
-          {t("title")}
-        </h2>
-        <p className="text-muted-foreground mb-[18px] max-w-[460px] text-base leading-relaxed">
-          {t("description")}
-        </p>
-        <p className="text-muted-foreground font-mono text-[13px]">
-          {"{ "}
-          <b className="text-foreground font-medium">frontend</b>
-          {`: ${counts.frontend}, `}
-          <b className="text-foreground font-medium">backend</b>
-          {`: ${counts.backend}, `}
-          <b className="text-foreground font-medium">tools</b>
-          {`: ${counts.tools} }`}
-        </p>
-      </header>
+    <div className="relative z-10 mx-auto w-full py-6">
+      <HeaderArticle
+        subtitle={t("terminal.eyebrow")}
+        title={t("title")}
+        description={t("description")}
+      />
+
+      <div className="-mt-8 mb-8 flex justify-center">
+        <div className="bg-card/80 border-border/70 text-muted-foreground shadow-2xs inline-flex flex-wrap items-center justify-center gap-1.5 rounded-full border px-4 py-1.5 font-mono text-xs sm:text-sm">
+          <span>{"{ "}</span>
+          <span>
+            <b className="text-foreground font-medium">frontend</b>
+            {`: ${counts.frontend}`}
+          </span>
+          <span className="text-muted-foreground/40">,</span>
+          <span>
+            <b className="text-foreground font-medium">backend</b>
+            {`: ${counts.backend}`}
+          </span>
+          <span className="text-muted-foreground/40">,</span>
+          <span>
+            <b className="text-foreground font-medium">tools</b>
+            {`: ${counts.tools}`}
+          </span>
+          <span>{" }"}</span>
+        </div>
+      </div>
 
       <section
         className={cn(
@@ -225,7 +227,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
         )}
       </section>
 
-      <div className="mt-7">
+      <div className="mt-7 flex justify-center">
         <Link
           scroll
           href="/certificates"

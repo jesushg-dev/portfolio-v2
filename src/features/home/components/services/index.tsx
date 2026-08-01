@@ -4,38 +4,35 @@ import { getLocale, getTranslations } from "next-intl/server";
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
-import SoftSkillsBentoLazy from "./soft-skills-bento-lazy";
+import { ServicesBento } from "./services-bento";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
 
-const SoftSkills: FC = async () => {
-  const t = await getTranslations("main.soft-skills");
+const Services: FC = async () => {
+  const t = await getTranslations("main.services");
   const locale = await getLocale();
 
-  const data = isLocale(locale)
-    ? await api.portfolio.getSoftSkillsPublic({ locale })
-    : null;
-
-  const items = data?.items ?? [];
-
-  if (items.length === 0) return null;
+  const services = isLocale(locale)
+    ? await api.portfolio.getServicesPublic({ locale })
+    : [];
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="bg-background relative w-full overflow-hidden">
       <section
-        id="soft-skills"
-        className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
+        id="services"
+        aria-label={t("title")}
+        className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
       >
         <HeaderArticle
           title={t("title")}
           subtitle={t("subtitle")}
           description={t("description")}
         />
-        <SoftSkillsBentoLazy items={items} />
+        <ServicesBento dbServices={services} />
       </section>
     </div>
   );
 };
 
-export default SoftSkills;
+export default Services;

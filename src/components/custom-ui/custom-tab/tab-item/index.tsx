@@ -20,7 +20,7 @@ const variants = {
     },
   },
   inactive: {
-    opacity: 0.7,
+    opacity: 0.75,
     transition: {
       duration: 0.3,
     },
@@ -48,10 +48,10 @@ const TabItem: FC<TabItemProps> = ({
 
   const textClassName = useMemo(() => {
     if (isActive) {
-      return variant === "primary" ? "text-primary-foreground" : "text-primary";
+      return "text-primary-foreground font-semibold";
     }
-    return "text-muted-foreground";
-  }, [isActive, variant]);
+    return "text-muted-foreground group-hover:text-foreground";
+  }, [isActive]);
 
   return (
     <div className="relative isolate">
@@ -59,8 +59,7 @@ const TabItem: FC<TabItemProps> = ({
         <motion.div
           layoutId={`background-tab${tabId}`}
           className={cn(
-            "absolute inset-0 z-0 rounded-xl shadow-md",
-            variant === "primary" ? "bg-primary" : "bg-muted",
+            "bg-primary absolute inset-0 z-0 rounded-full shadow-md",
           )}
           aria-hidden
         />
@@ -79,9 +78,9 @@ const TabItem: FC<TabItemProps> = ({
         whileHover="hover"
         onClick={() => setCurrentTab(index)}
         className={cn(
-          "relative z-10 flex min-h-11 shrink-0 cursor-pointer touch-manipulation items-center rounded-xl px-3 py-3 text-left sm:px-4",
+          "group relative z-10 flex min-h-10 shrink-0 cursor-pointer touch-manipulation items-center rounded-full px-4 py-2 text-left transition-all sm:px-5",
           minimal ? "w-auto" : "w-full sm:p-4 md:p-5",
-          !isActive && "hover:bg-muted/60",
+          !isActive && "hover:bg-accent/40",
         )}
       >
         <span className={cn("flex items-center transition-all", textClassName)}>
@@ -97,8 +96,8 @@ const TabItem: FC<TabItemProps> = ({
           <span className={cn("grow", minimal ? "ml-2.5 sm:ml-3" : "ml-6")}>
             <span
               className={cn(
-                "block font-semibold whitespace-nowrap",
-                minimal ? "text-sm sm:text-base" : "text-lg",
+                "block whitespace-nowrap",
+                minimal ? "text-sm" : "text-lg font-semibold",
               )}
             >
               {title}

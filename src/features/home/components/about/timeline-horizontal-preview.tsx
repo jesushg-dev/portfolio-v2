@@ -182,7 +182,7 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
       </div>
 
       {hasItems ? (
-        <div className="flex justify-center lg:justify-start">
+        <div className="flex justify-center">
           <Link
             href="/timeline"
             className="text-primary-800 hover:text-primary-900 inline-flex min-h-11 items-center gap-2 py-2 text-sm font-medium transition-colors"

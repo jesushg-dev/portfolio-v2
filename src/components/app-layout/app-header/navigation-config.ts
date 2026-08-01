@@ -7,6 +7,7 @@ import {
   FileText,
   HeartHandshake,
   Layers,
+  Server,
   Sparkles,
   User,
 } from "lucide-react";
@@ -23,6 +24,7 @@ export type NavSectionId =
   | "about"
   | "experience"
   | "skills"
+  | "services"
   | "soft-skills"
   | "portfolio"
   | "contact";
@@ -67,6 +69,7 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: Briefcase,
       },
       { kind: "section", id: "skills", sectionId: "skills", icon: Layers },
+      { kind: "section", id: "services", sectionId: "services", icon: Server },
       {
         kind: "section",
         id: "soft-skills",
