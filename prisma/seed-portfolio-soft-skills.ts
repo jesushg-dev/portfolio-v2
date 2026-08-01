@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
-import type { Prisma, PrismaClient, SoftSkillsMediaType } from "@prisma/client";
+import type { PrismaClient, SoftSkillsMediaType } from "@prisma/client";
 
-import { toLocalizedText, type LocaleMap } from "./lib/localized-text-seed";
+import type { LocaleMap } from "./lib/localized-text-seed";
 
 interface SoftSkillItemSeed {
   icon: string;
@@ -9,6 +9,7 @@ interface SoftSkillItemSeed {
   featured?: boolean;
   title: LocaleMap;
   description: LocaleMap;
+  badge?: LocaleMap;
 }
 
 interface PortfolioSoftSkillsSeed {
@@ -28,12 +29,6 @@ const portfolioSoftSkills = JSON.parse(
   ),
 ) as PortfolioSoftSkillsSeed;
 
-function asJson(
-  value: ReturnType<typeof toLocalizedText>,
-): Prisma.InputJsonValue {
-  return value as unknown as Prisma.InputJsonValue;
-}
-
 export async function seedPortfolioSoftSkills(
   prisma: PrismaClient,
   userId: string,
@@ -43,6 +38,8 @@ export async function seedPortfolioSoftSkills(
 
   await prisma.portfolioSoftSkill.deleteMany({ where: { userId } });
   await prisma.softSkillsSection.deleteMany({ where: { userId } });
+
+  const languages = await prisma.appLanguage.findMany();
 
   await prisma.softSkillsSection.create({
     data: {
@@ -62,8 +59,22 @@ export async function seedPortfolioSoftSkills(
         order: item.order,
         isVisible: true,
         featured: item.featured ?? false,
-        title: asJson(toLocalizedText(item.title)),
-        description: asJson(toLocalizedText(item.description)),
+        PortfolioSoftSkillTranslation: {
+          create: languages.map((lang) => ({
+            appLanguageId: lang.id,
+            title:
+              item.title[lang.code as keyof LocaleMap] ?? item.title.es ?? "",
+            description:
+              item.description[lang.code as keyof LocaleMap] ??
+              item.description.es ??
+              "",
+            badge: item.badge
+              ? (item.badge[lang.code as keyof LocaleMap] ??
+                item.badge.es ??
+                "")
+              : "",
+          })),
+        },
       },
     });
   }

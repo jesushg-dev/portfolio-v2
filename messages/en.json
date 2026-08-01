@@ -597,61 +597,10 @@
       }
     },
     "soft-skills": {
-      "badge": "Core skill",
       "subtitle": "Skills",
       "title": "Soft Skills",
       "description": "In addition to my technical skills, I also possess a range of soft skills that have helped me succeed in my career",
-      "aux": "I believe that these skills are just as important as technical expertise, and I work hard to continually develop and improve them. I am confident that my strong communication, problem-solving, and teamwork skills make me a valuable asset to any team or project.",
-      "skills": {
-        "teamwork": {
-          "title": "Teamwork",
-          "description": "I enjoy collaborating and learning from others."
-        },
-        "communication": {
-          "title": "Communication",
-          "description": "I excel at expressing ideas and actively listening."
-        },
-        "problemSolving": {
-          "title": "Problem Solving",
-          "description": "I am adept at finding effective solutions."
-        },
-        "goalOriented": {
-          "title": "Goal-Oriented",
-          "description": "I set objectives and work hard to achieve them."
-        },
-        "adaptability": {
-          "title": "Adaptability",
-          "description": "I easily embrace new technologies and frameworks."
-        },
-        "timeManagement": {
-          "title": "Time Management",
-          "description": "I prioritize tasks and optimize efficiency."
-        },
-        "creativity": {
-          "title": "Creativity",
-          "description": "I think innovatively and generate fresh ideas."
-        },
-        "leadership": {
-          "title": "Leadership",
-          "description": "I take charge, assume responsibilities, and direct tasks."
-        },
-        "organization": {
-          "title": "Organization",
-          "description": "I value order and maintain well-structured things."
-        },
-        "responsibility": {
-          "title": "Responsibility",
-          "description": "I am reliable and ensure tasks are completed."
-        },
-        "initiative": {
-          "title": "Initiative",
-          "description": "I actively seek new opportunities and enjoy taking the lead."
-        },
-        "commitment": {
-          "title": "Commitment",
-          "description": "I am dedicated to completing tasks and fulfilling responsibilities."
-        }
-      }
+      "aux": "I believe that these skills are just as important as technical expertise, and I work hard to continually develop and improve them. I am confident that my strong communication, problem-solving, and teamwork skills make me a valuable asset to any team or project."
     },
     "portfolio": {
       "subtitle": "Portfolio",

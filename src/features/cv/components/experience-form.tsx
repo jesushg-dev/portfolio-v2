@@ -38,12 +38,12 @@ import {
 import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
-} from "@/lib/i18n/localized-form";
-import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
-import {
-  localizedJsonToTextMap,
   TextTranslationMapSchema,
-} from "@/lib/i18n/localized-text-map";
+} from "@/lib/i18n/localized-form";
+import {
+  buildEmptyTranslationMap,
+  textTranslationMapFromRows,
+} from "@/lib/i18n/translation-map";
 import type { AppLanguage } from "@prisma/client";
 
 export const ResponsibilitySchema = z.object({
@@ -68,15 +68,25 @@ export type ExperienceInput = z.infer<typeof ExperienceSchema>;
 interface ExperienceInitial {
   id: string;
   company: string;
-  role: unknown;
-  location: unknown;
+  role?: unknown;
+  location?: unknown;
+  translations?: {
+    appLanguageId: string;
+    role: string;
+    location?: string | null;
+  }[];
   startDate?: Date | null;
   endDate?: Date | null;
   current?: boolean;
   featuredOnHome?: boolean;
   skills?: string | null;
   CvExperienceSkill?: { skillId: string }[];
-  responsibilities: { text: unknown; order: number }[];
+  responsibilities?: {
+    id?: string;
+    text?: unknown;
+    translations?: { appLanguageId: string; text: string }[];
+    order: number;
+  }[];
 }
 
 function EndDateInput({
@@ -163,11 +173,19 @@ export const ExperienceForm: FC<{
     resolver: zodResolver(formSchema),
     defaultValues: {
       company: initial?.company ?? "",
-      role: initial
-        ? localizedJsonToTextMap(initial.role, languages)
+      role: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.role,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
-      location: initial?.location
-        ? localizedJsonToTextMap(initial.location, languages)
+      location: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.location,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
       startDate: initial?.startDate ?? undefined,
       endDate: initial?.endDate ?? undefined,
@@ -178,7 +196,11 @@ export const ExperienceForm: FC<{
         initial?.responsibilities
           ?.sort((a, b) => a.order - b.order)
           .map((r, index) => ({
-            text: localizedJsonToTextMap(r.text, languages),
+            text: textTranslationMapFromRows(
+              languages,
+              r.translations,
+              (row) => row.text,
+            ),
             order: index,
           })) ?? [],
     },

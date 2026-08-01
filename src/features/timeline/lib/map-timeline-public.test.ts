@@ -1,23 +1,14 @@
-import type { TimelineItem } from "@prisma/client";
-
 import {
   formatTimelineDate,
   groupTimelineByYear,
   mapTimelineItemToPublic,
   mapTimelineItemsToPublic,
+  type TimelineItemWithTranslations,
 } from "./map-timeline-public";
 
-const baseItem: TimelineItem = {
+const baseItem: TimelineItemWithTranslations = {
   id: "item-1",
   userId: "user-1",
-  title: {
-    default: "Web Developer",
-    translations: { es: "Desarrollador Web" },
-  },
-  description: {
-    default: "Built web apps",
-    translations: { es: "Construí apps web" },
-  },
   category: "WORK",
   organization: "Acme",
   location: "Remote",
@@ -28,7 +19,30 @@ const baseItem: TimelineItem = {
   images: ["https://example.com/photo.jpg"],
   createdAt: new Date(),
   updatedAt: new Date(),
+  TimelineItemTranslation: [
+    {
+      id: "tt1",
+      timelineItemId: "item-1",
+      appLanguageId: "lang-en",
+      title: "Web Developer",
+      description: "Built web apps",
+      createdAt: new Date(),
+    },
+    {
+      id: "tt2",
+      timelineItemId: "item-1",
+      appLanguageId: "lang-es",
+      title: "Desarrollador Web",
+      description: "Construí apps web",
+      createdAt: new Date(),
+    },
+  ],
 };
+
+const languages = [
+  { id: "lang-en", code: "en" },
+  { id: "lang-es", code: "es" },
+];
 
 describe("formatTimelineDate", () => {
   it("formats current roles", () => {
@@ -56,14 +70,14 @@ describe("formatTimelineDate", () => {
 
 describe("mapTimelineItemToPublic", () => {
   it("resolves locale with fallback", () => {
-    const item = mapTimelineItemToPublic(baseItem, "es", "en");
+    const item = mapTimelineItemToPublic(baseItem, "es", languages);
     expect(item.title).toBe("Desarrollador Web - Acme");
     expect(item.description).toBe("Construí apps web");
     expect(item.images).toEqual(["https://example.com/photo.jpg"]);
   });
 
   it("falls back to default locale", () => {
-    const item = mapTimelineItemToPublic(baseItem, "nl", "en");
+    const item = mapTimelineItemToPublic(baseItem, "nl", languages);
     expect(item.title).toBe("Web Developer - Acme");
   });
 
@@ -71,19 +85,27 @@ describe("mapTimelineItemToPublic", () => {
     const item = mapTimelineItemToPublic(
       { ...baseItem, organization: "" },
       "en",
+      languages,
     );
-    // empty organization is falsy → title is returned without " - "
     expect(item.title).toBe("Web Developer");
   });
 
   it("returns null endDate when item has no endDate", () => {
-    const item = mapTimelineItemToPublic({ ...baseItem, endDate: null }, "en");
+    const item = mapTimelineItemToPublic(
+      { ...baseItem, endDate: null },
+      "en",
+      languages,
+    );
     expect(item.endDate).toBeNull();
   });
 
   it("formats endDate as ISO string when present", () => {
     const endDate = new Date("2023-12-31T00:00:00.000Z");
-    const item = mapTimelineItemToPublic({ ...baseItem, endDate }, "en");
+    const item = mapTimelineItemToPublic(
+      { ...baseItem, endDate },
+      "en",
+      languages,
+    );
     expect(item.endDate).toBe(endDate.toISOString());
   });
 });
@@ -97,7 +119,7 @@ describe("mapTimelineItemsToPublic", () => {
         { ...baseItem, id: "item-3", order: 2 },
       ],
       "en",
-      "en",
+      languages,
       2,
     );
 
@@ -109,6 +131,7 @@ describe("mapTimelineItemsToPublic", () => {
     const items = mapTimelineItemsToPublic(
       [baseItem, { ...baseItem, id: "item-2", order: 1 }],
       "en",
+      languages,
     );
     expect(items).toHaveLength(2);
   });
@@ -117,7 +140,7 @@ describe("mapTimelineItemsToPublic", () => {
 describe("groupTimelineByYear", () => {
   it("groups items by start year descending", () => {
     const groups = groupTimelineByYear([
-      mapTimelineItemToPublic(baseItem, "en"),
+      mapTimelineItemToPublic(baseItem, "en", languages),
       mapTimelineItemToPublic(
         {
           ...baseItem,
@@ -125,6 +148,7 @@ describe("groupTimelineByYear", () => {
           startDate: new Date("2020-06-01T12:00:00.000Z"),
         },
         "en",
+        languages,
       ),
     ]);
 

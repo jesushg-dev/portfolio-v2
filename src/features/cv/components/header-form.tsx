@@ -26,15 +26,15 @@ import {
   FormSection,
 } from "@/components/shared/form-root";
 import {
+  buildEmptyTranslationMap,
+  textTranslationMapFromRows,
+  type TextTranslationMap,
+} from "@/lib/i18n/translation-map";
+import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
-} from "@/lib/i18n/localized-form";
-import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
-import {
-  localizedJsonToTextMap,
   TextTranslationMapSchema,
-} from "@/lib/i18n/localized-text-map";
-import type { TextTranslationMap } from "@/lib/i18n/localized-text-map";
+} from "@/lib/i18n/localized-form";
 import { CvModalFormSkeleton } from "./cv-modal-form-skeleton";
 import type { AppLanguage } from "@prisma/client";
 
@@ -85,12 +85,20 @@ const HeaderForm: FC<{ languages: AppLanguage[] }> = ({ languages }) => {
     if (!data) return;
     form.reset({
       fullName: data.header?.fullName ?? "",
-      degree: data.header?.degree
-        ? localizedJsonToTextMap(data.header.degree, languages)
+      degree: data.header?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            data.header.translations,
+            (row) => row.degree,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
       photoUrl: data.header?.photoUrl ?? "",
-      clientImageAlt: data.header?.clientImageAlt
-        ? localizedJsonToTextMap(data.header.clientImageAlt, languages)
+      clientImageAlt: data.header?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            data.header.translations,
+            (row) => row.clientImageAlt,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
     });
   }, [data, form, languages]);
@@ -103,7 +111,7 @@ const HeaderForm: FC<{ languages: AppLanguage[] }> = ({ languages }) => {
             fullName: input.fullName,
             degree: input.degree,
             photoUrl: input.photoUrl ?? null,
-            clientImageAlt: input.clientImageAlt ?? null,
+            clientImageAlt: input.clientImageAlt ?? undefined,
           });
           await utils.cv.getMine.invalidate();
           toast.success(t("savedSuccess") || "Saved successfully!");

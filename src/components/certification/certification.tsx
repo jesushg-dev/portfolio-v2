@@ -89,20 +89,23 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
         animate="visible"
         className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3"
       >
-        {data?.pages.map((page, idx) => (
-          <Fragment key={page.cursor ?? idx}>
-            {page.data.map((certificate) => (
-              <motion.li
-                layout
-                key={certificate.id}
-                className="flex justify-center"
-                variants={item}
-              >
-                <CertificateItem key={certificate.id} {...certificate} />
-              </motion.li>
-            ))}
-          </Fragment>
-        ))}
+        {data?.pages.map((page, idx) => {
+          const certs = page.certificates ?? [];
+          return (
+            <Fragment key={page.cursor ?? idx}>
+              {certs.map((certificate) => (
+                <motion.li
+                  layout
+                  key={certificate.id}
+                  className="flex justify-center"
+                  variants={item}
+                >
+                  <CertificateItem key={certificate.id} {...certificate} />
+                </motion.li>
+              ))}
+            </Fragment>
+          );
+        })}
       </motion.ul>
 
       {isLoading && (
@@ -117,12 +120,12 @@ const Certification: FC<ICertificationProps> = ({ slug }) => {
       )}
 
       {/** if there's not data show no result */}
-      {data?.pages[0].data.length === 0 && !isLoading && !isFetching && (
-        <NoResult />
-      )}
+      {(data?.pages[0]?.certificates?.length ?? 0) === 0 &&
+        !isLoading &&
+        !isFetching && <NoResult />}
 
       <div className="mt-8 flex flex-col items-center justify-center gap-4">
-        {data?.pages[data.pages.length - 1].hasMore ? (
+        {data?.pages[data.pages.length - 1]?.cursor ? (
           <button
             type="button"
             onClick={handleFetchMore}

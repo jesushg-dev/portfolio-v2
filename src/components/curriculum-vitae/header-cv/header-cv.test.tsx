@@ -1,7 +1,33 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import React from "react";
 import HeaderCV from "./index";
 import ClientImage from "./client-image";
+import { render } from "@testing-library/react";
+import { renderWithIntl } from "@/test-utils/render-with-intl";
+import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
+import { mapCvDataToLocalized } from "../types";
+
+function getLocalizedHeader(header: any) {
+  if (!header) return null;
+  const mockData = {
+    ...mockCvPreviewData,
+    header: {
+      id: header.id ?? "header-123",
+      fullName: header.fullName ?? "",
+      photoUrl: header.photoUrl ?? null,
+      backgroundImageUrl: null,
+      translations: (header.translations ?? []).map((t: any) => ({
+        heroSubtitle: null,
+        heroTagline: null,
+        heroSummary: null,
+        degree: t.degree ?? "",
+        clientImageAlt: t.clientImageAlt ?? null,
+        appLanguageId: t.appLanguageId ?? "lang-en",
+      })),
+    },
+  };
+  return mapCvDataToLocalized(mockData as any, mockAppLanguages, "en").header;
+}
 
 describe("ClientImage", () => {
   it("renders an image with custom alt text", () => {
@@ -21,18 +47,21 @@ describe("ClientImage", () => {
 
 describe("HeaderCV", () => {
   it("renders header degree and fullName when header data is provided", () => {
-    render(
+    const rawHeader = {
+      fullName: "John Doe",
+      photoUrl: "https://example.com/john.jpg",
+      translations: [
+        {
+          appLanguageId: "lang-en",
+          degree: "Software Engineer",
+          clientImageAlt: "Photo of John",
+        },
+      ],
+    };
+
+    renderWithIntl(
       <HeaderCV
-        header={
-          {
-            fullName: "John Doe",
-            degree: { default: "Software Engineer" },
-            photoUrl: "https://example.com/john.jpg",
-            clientImageAlt: "Photo of John",
-          } as unknown as Parameters<typeof HeaderCV>[0]["header"]
-        }
-        locale="en"
-        defaultLocale="en"
+        header={getLocalizedHeader(rawHeader)}
       />,
     );
 
@@ -42,16 +71,19 @@ describe("HeaderCV", () => {
   });
 
   it("falls back to fallbackName when header fullName is missing", () => {
-    render(
+    const rawHeader = {
+      translations: [
+        {
+          appLanguageId: "lang-en",
+          degree: "Developer",
+        },
+      ],
+    };
+
+    renderWithIntl(
       <HeaderCV
-        header={
-          {
-            degree: "Developer",
-          } as unknown as Parameters<typeof HeaderCV>[0]["header"]
-        }
+        header={getLocalizedHeader(rawHeader)}
         fallbackName="Jane Doe"
-        locale="en"
-        defaultLocale="en"
       />,
     );
 
@@ -60,23 +92,19 @@ describe("HeaderCV", () => {
   });
 
   it("renders empty string when fullName and fallbackName are missing", () => {
-    const { container } = render(
-      <HeaderCV header={null} locale="en" defaultLocale="en" />,
-    );
+    const { container } = renderWithIntl(<HeaderCV header={null} />);
 
     expect(container).toBeInTheDocument();
   });
 
   it("omits photoUrl section when photoUrl is missing", () => {
-    render(
+    const rawHeader = {
+      fullName: "No Photo Person",
+    };
+
+    renderWithIntl(
       <HeaderCV
-        header={
-          {
-            fullName: "No Photo Person",
-          } as unknown as Parameters<typeof HeaderCV>[0]["header"]
-        }
-        locale="en"
-        defaultLocale="en"
+        header={getLocalizedHeader(rawHeader)}
       />,
     );
 

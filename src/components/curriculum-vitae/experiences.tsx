@@ -1,19 +1,56 @@
 import type { FC } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
-import { getLocalizedText } from "@/lib/i18n/localized";
 import { formatExperienceDates } from "@/utils/tools/date";
-import type { CvData, CvLocaleProps } from "./types";
+import type { LocalizedCvData } from "./types";
 
-interface IExperiencesProps extends CvLocaleProps {
-  experiences: CvData["experiences"];
+interface IExperiencesProps {
+  experiences: LocalizedCvData["experiences"];
 }
 
-const Experiences: FC<IExperiencesProps> = ({
-  experiences,
-  locale,
-  defaultLocale,
-}) => {
+function ResponsibilityItem({
+  responsibility,
+}: {
+  responsibility: LocalizedCvData["experiences"][number]["responsibilities"][number];
+}) {
+  return <li>{responsibility.text}</li>;
+}
+
+function ExperienceItem({
+  experience,
+}: {
+  experience: LocalizedCvData["experiences"][number];
+}) {
+  const locale = useLocale();
+  const dates = formatExperienceDates(
+    experience.startDate,
+    experience.endDate,
+    experience.current,
+    locale,
+  );
+
+  return (
+    <div className="mb-4">
+      <h3 className="text-sm font-bold">{experience.role}</h3>
+      <h4 className="my-1 text-sm text-[#333333]">
+        {experience.company}
+        {dates ? ` · ${dates}` : ""}
+      </h4>
+      {experience.responsibilities.length > 0 ? (
+        <ul className="list-disc pl-8 text-sm text-[#1a1a1a]">
+          {experience.responsibilities.map((responsibility) => (
+            <ResponsibilityItem
+              key={responsibility.id}
+              responsibility={responsibility}
+            />
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+const Experiences: FC<IExperiencesProps> = ({ experiences }) => {
   const t = useTranslations("curriculum");
 
   if (!experiences.length) return null;
@@ -24,38 +61,9 @@ const Experiences: FC<IExperiencesProps> = ({
         {t("header.experience")}
       </h5>
 
-      {experiences.map((experience) => {
-        const role = getLocalizedText(experience.role, locale, defaultLocale);
-        const dates = formatExperienceDates(
-          experience.startDate,
-          experience.endDate,
-          experience.current,
-          locale,
-        );
-
-        return (
-          <div className="mb-4" key={experience.id}>
-            <h3 className="text-sm font-bold">{role}</h3>
-            <h4 className="my-1 text-sm text-[#333333]">
-              {experience.company}
-              {dates ? ` · ${dates}` : ""}
-            </h4>
-            {experience.responsibilities.length > 0 ? (
-              <ul className="list-disc pl-8 text-sm text-[#1a1a1a]">
-                {experience.responsibilities.map((responsibility) => (
-                  <li key={responsibility.id}>
-                    {getLocalizedText(
-                      responsibility.text,
-                      locale,
-                      defaultLocale,
-                    )}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
-        );
-      })}
+      {experiences.map((experience) => (
+        <ExperienceItem key={experience.id} experience={experience} />
+      ))}
     </>
   );
 };

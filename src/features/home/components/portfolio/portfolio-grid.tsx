@@ -65,7 +65,7 @@ const PortfolioGrid: FC = () => {
     api.portfolio.getProjects.useInfiniteQuery(
       { limit, locale, type: type[crtValue] },
       {
-        getNextPageParam: (info) => info.cursor,
+        getNextPageParam: (info) => info.nextCursor,
       },
     );
 
@@ -89,15 +89,15 @@ const PortfolioGrid: FC = () => {
             initial="hidden"
             variants={container}
             animate={isInView ? "visible" : "hidden"}
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
           >
             {data?.pages.map((page, idx) => (
-              <Fragment key={page.cursor ?? idx}>
-                {page.data.map((project) => (
+              <Fragment key={page.nextCursor ?? idx}>
+                {page.projects.map((project) => (
                   <motion.li
                     layout
                     key={project.id}
-                    className="flex h-full w-full"
+                    className="flex justify-center"
                     variants={item}
                     whileHover={{ y: -4 }}
                     transition={{ duration: 0.25 }}
@@ -111,7 +111,7 @@ const PortfolioGrid: FC = () => {
         )}
 
         <div className="mt-8 flex flex-col items-center justify-center gap-4">
-          {data?.pages[data.pages.length - 1].hasMore ? (
+          {data?.pages[data.pages.length - 1]?.nextCursor ? (
             <button
               type="button"
               onClick={handleFetchMore}

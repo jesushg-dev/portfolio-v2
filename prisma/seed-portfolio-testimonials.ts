@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
-import type { Prisma, PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 
-import { toLocalizedText, type LocaleMap } from "./lib/localized-text-seed";
+import type { LocaleMap } from "./lib/localized-text-seed";
 
 interface TestimonialSeed {
   author: string;
@@ -11,6 +11,8 @@ interface TestimonialSeed {
   quote: LocaleMap;
   order: number;
 }
+
+type LocaleCode = "es" | "en" | "nl";
 
 const testimonials = JSON.parse(
   readFileSync(
@@ -25,6 +27,8 @@ export async function seedPortfolioTestimonials(
 ): Promise<void> {
   await prisma.testimonial.deleteMany({ where: { userId } });
 
+  const appLanguages = await prisma.appLanguage.findMany();
+
   for (const item of testimonials) {
     await prisma.testimonial.create({
       data: {
@@ -33,9 +37,14 @@ export async function seedPortfolioTestimonials(
         role: item.role,
         avatarUrl: item.avatarUrl ?? null,
         linkedInUrl: item.linkedInUrl ?? null,
-        quote: toLocalizedText(item.quote) as unknown as Prisma.InputJsonValue,
         order: item.order,
         isVisible: true,
+        TestimonialTranslation: {
+          create: appLanguages.map((lang) => ({
+            appLanguageId: lang.id,
+            quote: item.quote[lang.code as LocaleCode] ?? item.quote.es ?? "",
+          })),
+        },
       },
     });
   }

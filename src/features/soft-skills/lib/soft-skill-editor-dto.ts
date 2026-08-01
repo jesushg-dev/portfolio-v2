@@ -1,16 +1,20 @@
-import type { AppLanguage, PortfolioSoftSkill } from "@prisma/client";
+import type {
+  AppLanguage,
+  PortfolioSoftSkill,
+  PortfolioSoftSkillTranslation,
+} from "@prisma/client";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
   buildEmptyTranslationMap,
   type TranslationMap,
 } from "@/lib/i18n/translation-map";
-import { getLocalizedFieldForLocale } from "@/lib/i18n/localized-display";
-import { localizedFieldsToTranslationMap } from "@/lib/i18n/localized-persist";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 
 export interface SoftSkillTranslationFields {
   title: string;
   description: string;
+  badge: string;
 }
 
 export type SoftSkillTranslationMap =
@@ -27,30 +31,50 @@ export interface SoftSkillEditorDTO {
 
 export type SoftSkillCreateFormDTO = Omit<SoftSkillEditorDTO, "id">;
 
-const emptySoftSkillTranslationFields = { title: "", description: "" };
+const emptySoftSkillTranslationFields: SoftSkillTranslationFields = {
+  title: "",
+  description: "",
+  badge: "",
+};
 
 type SoftSkillLanguageRef = Pick<AppLanguage, "id" | "code">;
 
+export type SoftSkillWithTranslations = PortfolioSoftSkill & {
+  PortfolioSoftSkillTranslation?: PortfolioSoftSkillTranslation[];
+};
+
 export function mapSoftSkillToEditorDto(
-  item: PortfolioSoftSkill,
+  item: SoftSkillWithTranslations,
   languages: SoftSkillLanguageRef[],
 ): SoftSkillEditorDTO {
+  const translationsMap = item.PortfolioSoftSkillTranslation ?? [];
+
   return {
     id: item.id,
     icon: item.icon,
     isVisible: item.isVisible,
     featured: item.featured,
     order: item.order,
-    translations: localizedFieldsToTranslationMap(
-      item.title,
-      item.description,
-      languages,
+    translations: Object.fromEntries(
+      languages.map((language) => {
+        const found = translationsMap.find(
+          (t) => t.appLanguageId === language.id,
+        );
+        return [
+          language.id,
+          {
+            title: found?.title ?? "",
+            description: found?.description ?? "",
+            badge: found?.badge ?? "",
+          },
+        ];
+      }),
     ),
   };
 }
 
 export function mapSoftSkillsToEditorDto(
-  items: PortfolioSoftSkill[],
+  items: SoftSkillWithTranslations[],
   languages: SoftSkillLanguageRef[],
 ): SoftSkillEditorDTO[] {
   return items.map((item) => mapSoftSkillToEditorDto(item, languages));
@@ -75,12 +99,8 @@ export function getSoftSkillTranslationText(
   item: Pick<SoftSkillEditorDTO, "translations">,
   languages: LanguageRef[],
   localeCode: string,
-  field: "title" | "description",
+  field: "title" | "description" | "badge",
 ): string {
-  return getLocalizedFieldForLocale(
-    item.translations,
-    languages,
-    localeCode,
-    field,
-  );
+  const resolver = createLocalizedFieldResolver(languages, localeCode);
+  return resolver(item.translations, field);
 }

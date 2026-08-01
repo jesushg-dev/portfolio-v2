@@ -1,13 +1,11 @@
-import "server-only";
-
 import type { PrismaClient } from "@prisma/client";
 
 import type { Locale } from "@/i18n/config";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
+import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
+import { loadCvTemplateForTailor } from "@/features/cv/lib/load-cv-template-docx";
+import { mapDraftToTemplateSections } from "@/features/cv/lib/map-draft-to-template-sections";
 import { rebuildDocx } from "@/lib/docx/rebuilder";
-import { getLocalizedText } from "@/lib/i18n/localized";
-import { mapDraftToTemplateSections } from "./map-draft-to-template-sections";
-import { loadCvStructuredDraft } from "./load-cv-structured-draft";
-import { loadCvTemplateForTailor } from "./load-cv-template-docx";
 
 export async function generateCvDocxFromDb(
   db: PrismaClient,
@@ -15,20 +13,23 @@ export async function generateCvDocxFromDb(
   locale: Locale,
   fallbackLocale: Locale,
 ): Promise<{ buffer: Buffer; fileName: string } | null> {
-  const [draft, template, softSkills] = await Promise.all([
+  const [appLanguages, draft, template, softSkills] = await Promise.all([
+    db.appLanguage.findMany({ orderBy: { code: "asc" } }),
     loadCvStructuredDraft(db, userId, { locale, fallbackLocale }),
     loadCvTemplateForTailor(),
     db.cvSoftSkill.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
   ]);
 
   if (!draft) return null;
 
+  const field = createLocalizedFieldResolver(appLanguages, locale);
   const softSkillTexts = softSkills
-    .map((skill) => getLocalizedText(skill.name, locale, fallbackLocale))
-    .filter((text) => text.trim().length > 0);
+    .map((skill) => field(skill.translations, "name"))
+    .filter((text: string) => text.trim().length > 0);
 
   const adaptedSections = mapDraftToTemplateSections(
     template.parsed.sections,
@@ -44,8 +45,7 @@ export async function generateCvDocxFromDb(
   );
 
   const sanitizedName = draft.header.fullName.replace(/[^\w.-]+/g, "_");
-  return {
-    buffer,
-    fileName: `CV-${sanitizedName}.docx`,
-  };
+  const fileName = `CV_${sanitizedName}_${locale}.docx`;
+
+  return { buffer, fileName };
 }

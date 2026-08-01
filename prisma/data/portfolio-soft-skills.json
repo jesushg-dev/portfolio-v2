@@ -19,6 +19,11 @@
         "en": "I enjoy collaborating and learning from others.",
         "es": "Disfruto colaborar y aprender de los demás.",
         "nl": "Ik werk graag samen en leer van anderen."
+      },
+      "badge": {
+        "en": "Active Collaboration",
+        "es": "Colaboración Activa",
+        "nl": "Actieve Samenwerking"
       }
     },
     {
@@ -34,6 +39,11 @@
         "en": "I am adept at finding effective solutions.",
         "es": "Soy hábil encontrando soluciones efectivas.",
         "nl": "Ik ben bedreven in het vinden van effectieve oplossingen."
+      },
+      "badge": {
+        "en": "Critical Thinking",
+        "es": "Pensamiento Crítico",
+        "nl": "Kritisch Denken"
       }
     },
     {
@@ -49,6 +59,11 @@
         "en": "I set objectives and work hard to achieve them.",
         "es": "Establezco objetivos y trabajo duro para lograrlos.",
         "nl": "Ik stel doelen en werk hard om ze te bereiken."
+      },
+      "badge": {
+        "en": "Results Driven",
+        "es": "Enfoque en Resultados",
+        "nl": "Resultaatgericht"
       }
     },
     {
@@ -64,6 +79,11 @@
         "en": "I easily embrace new technologies and frameworks.",
         "es": "Adopto fácilmente nuevas tecnologías y frameworks.",
         "nl": "Ik omarm gemakkelijk nieuwe technologieën en frameworks."
+      },
+      "badge": {
+        "en": "Fast Learner",
+        "es": "Aprendizaje Rápido",
+        "nl": "Snel Lerend"
       }
     },
     {
@@ -79,6 +99,11 @@
         "en": "I prioritize tasks and optimize efficiency.",
         "es": "Priorizo tareas y optimizo la eficiencia.",
         "nl": "Ik stel prioriteiten en optimaliseer efficiëntie."
+      },
+      "badge": {
+        "en": "Efficiency & Focus",
+        "es": "Priorización & Eficiencia",
+        "nl": "Efficiëntie & Focus"
       }
     },
     {
@@ -94,6 +119,11 @@
         "en": "I take charge, assume responsibilities, and direct tasks.",
         "es": "Tomo la iniciativa, asumo responsabilidades y dirijo tareas.",
         "nl": "Ik neem de leiding, neem verantwoordelijkheid en stuur taken aan."
+      },
+      "badge": {
+        "en": "Initiative & Drive",
+        "es": "Iniciativa & Guiado",
+        "nl": "Initiatief & Sturing"
       }
     },
     {
@@ -109,6 +139,11 @@
         "en": "I take ownership and follow through on commitments.",
         "es": "Asumo la responsabilidad y cumplo con los compromisos.",
         "nl": "Ik neem eigenaarschap en kom afspraken na."
+      },
+      "badge": {
+        "en": "Ownership & Trust",
+        "es": "Compromiso & Entrega",
+        "nl": "Eigenaarschap & Vertrouwen"
       }
     },
     {
@@ -124,6 +159,11 @@
         "en": "I stay dedicated and deliver consistent results.",
         "es": "Me mantengo dedicado y entrego resultados consistentes.",
         "nl": "Ik blijf toegewijd en lever consistente resultaten."
+      },
+      "badge": {
+        "en": "High Quality Output",
+        "es": "Calidad & Dedicación",
+        "nl": "Hoge Kwaliteit Output"
       }
     }
   ]

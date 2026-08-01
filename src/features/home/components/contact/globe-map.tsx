@@ -451,9 +451,9 @@ export function GlobeMap({
     );
     const effectiveRotation: [number, number] = isSequenceActive
       ? [
-        originRotation[0] + (followRotation[0] - originRotation[0]) * panT,
-        originRotation[1] + (followRotation[1] - originRotation[1]) * panT,
-      ]
+          originRotation[0] + (followRotation[0] - originRotation[0]) * panT,
+          originRotation[1] + (followRotation[1] - originRotation[1]) * panT,
+        ]
       : [rotation[0], rotation[1]];
 
     const effectiveScale = scale(alpha) * cameraZoom * userZoomMultiplier;

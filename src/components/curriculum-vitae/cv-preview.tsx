@@ -10,43 +10,17 @@ import Experience from "@/components/curriculum-vitae/experiences";
 import SoftSkills from "@/components/curriculum-vitae/soft-skills";
 import AdditionalInformation from "@/components/curriculum-vitae/additional-information";
 import { CvContextProvider } from "@/hoc/cv-context-provider";
-import type { Locale as AppLocale } from "@/i18n/config";
-
-import type { CvData } from "./types";
-import type {
-  CvHeader,
-  Profile,
-  CvContact,
-  CvEducation,
-  CvLanguage,
-  CvTechnicalSkill,
-  CvSoftSkill,
-  CvAdditionalInfo,
-} from "@prisma/client";
+import type { LocalizedCvData } from "./types";
 
 interface ICvPreviewProps {
-  data: {
-    header: CvHeader | null;
-    profile: Profile | null;
-    contacts: CvContact[];
-    educations: CvEducation[];
-    languages: CvLanguage[];
-    technicalSkills: CvTechnicalSkill[];
-    experiences: CvData["experiences"];
-    softSkills: CvSoftSkill[];
-    additionalInformation: CvAdditionalInfo[];
-  };
+  data: LocalizedCvData;
   aboutMeText: string | null;
-  currentLocale: AppLocale;
-  defaultLocale: AppLocale;
   pdfMode?: boolean;
 }
 
 const CvPreview: FC<ICvPreviewProps> = ({
   data,
   aboutMeText,
-  currentLocale,
-  defaultLocale,
   pdfMode = false,
 }) => {
   const t = useTranslations("curriculum");
@@ -56,8 +30,6 @@ const CvPreview: FC<ICvPreviewProps> = ({
       <HeaderCv
         header={data.header}
         fallbackName={data.profile?.displayName ?? null}
-        locale={currentLocale}
-        defaultLocale={defaultLocale}
       />
       <div
         className={
@@ -67,21 +39,9 @@ const CvPreview: FC<ICvPreviewProps> = ({
         }
       >
         <div className="sm:col-span-3">
-          <ContactMe
-            contacts={data.contacts}
-            locale={currentLocale}
-            defaultLocale={defaultLocale}
-          />
-          <Education
-            educations={data.educations}
-            locale={currentLocale}
-            defaultLocale={defaultLocale}
-          />
-          <Languages
-            languages={data.languages}
-            locale={currentLocale}
-            defaultLocale={defaultLocale}
-          />
+          <ContactMe contacts={data.contacts} />
+          <Education educations={data.educations} />
+          <Languages languages={data.languages} />
           <TechnicalSkills technicalSkills={data.technicalSkills} />
         </div>
         <div className="col-span-1 hidden w-full justify-center sm:flex">
@@ -97,20 +57,10 @@ const CvPreview: FC<ICvPreviewProps> = ({
             </div>
           ) : null}
 
-          <Experience
-            experiences={data.experiences}
-            locale={currentLocale}
-            defaultLocale={defaultLocale}
-          />
-          <SoftSkills
-            softSkills={data.softSkills}
-            locale={currentLocale}
-            defaultLocale={defaultLocale}
-          />
+          <Experience experiences={data.experiences} />
+          <SoftSkills softSkills={data.softSkills} />
           <AdditionalInformation
             additionalInformation={data.additionalInformation}
-            locale={currentLocale}
-            defaultLocale={defaultLocale}
           />
         </div>
       </div>

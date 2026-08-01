@@ -13,7 +13,7 @@ const CvPage: FC<ICvPageProps> = async ({ params }) => {
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
-  return <CvEditor />;
+  return <CvEditor defaultLocale={(locale as Locale) || "en"} />;
 };
 
 export default CvPage;

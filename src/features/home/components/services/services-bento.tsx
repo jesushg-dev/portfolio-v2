@@ -88,12 +88,14 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
               key={service.id}
               variants={itemVariants}
               className={cn(
-                "bg-gradient-to-br from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 lg:p-7",
-                isFeatured ? "sm:col-span-2 lg:col-span-2" : "sm:col-span-1 lg:col-span-1",
+                "from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group hover:shadow-primary/5 relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl lg:p-7",
+                isFeatured
+                  ? "sm:col-span-2 lg:col-span-2"
+                  : "sm:col-span-1 lg:col-span-1",
               )}
             >
               {/* Background Glow */}
-              <div className="bg-primary/10 pointer-events-none absolute -bottom-10 -right-10 size-36 rounded-full blur-2xl transition-all duration-500 group-hover:scale-125 group-hover:bg-primary/20" />
+              <div className="bg-primary/10 group-hover:bg-primary/20 pointer-events-none absolute -right-10 -bottom-10 size-36 rounded-full blur-2xl transition-all duration-500 group-hover:scale-125" />
 
               <div className="z-10 max-w-lg space-y-2">
                 {service.badge ? (
@@ -105,13 +107,13 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
                 <h3 className="text-foreground text-xl font-bold tracking-tight md:text-2xl">
                   {service.title}
                 </h3>
-                <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm line-clamp-3">
+                <p className="text-muted-foreground line-clamp-3 text-xs leading-relaxed sm:text-sm">
                   {service.description}
                 </p>
               </div>
 
               {service.statsValue || service.statsLabel ? (
-                <div className="z-10 mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+                <div className="border-border/50 z-10 mt-4 flex items-center justify-between border-t pt-3">
                   <div>
                     {service.statsValue ? (
                       <p className="text-primary text-lg font-extrabold md:text-xl">
@@ -119,7 +121,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
                       </p>
                     ) : null}
                     {service.statsLabel ? (
-                      <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
+                      <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
                         {service.statsLabel}
                       </p>
                     ) : null}
@@ -133,14 +135,18 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
         {/* Enhanced Contact Us Card */}
         <motion.div
           variants={itemVariants}
-          className="bg-gradient-to-br from-card via-card to-primary/15 text-card-foreground border-border/80 hover:border-primary/80 group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/15 sm:col-span-2 lg:col-span-2 lg:p-7"
+          className="from-card via-card to-primary/15 text-card-foreground border-border/80 hover:border-primary/80 group hover:shadow-primary/15 relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl sm:col-span-2 lg:col-span-2 lg:p-7"
         >
           {/* Ambient Glow */}
-          <div className="bg-primary/20 pointer-events-none absolute -top-16 -right-16 size-48 rounded-full blur-3xl transition-all duration-500 group-hover:scale-125 group-hover:bg-primary/30" />
+          <div className="bg-primary/20 group-hover:bg-primary/30 pointer-events-none absolute -top-16 -right-16 size-48 rounded-full blur-3xl transition-all duration-500 group-hover:scale-125" />
 
           {/* Decorative Message Bubble Illustration */}
-          <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 opacity-15 transition-all duration-500 group-hover:opacity-30 group-hover:scale-110">
-            <svg className="size-36 text-primary" viewBox="0 0 100 100" fill="none">
+          <div className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 opacity-15 transition-all duration-500 group-hover:scale-110 group-hover:opacity-30">
+            <svg
+              className="text-primary size-36"
+              viewBox="0 0 100 100"
+              fill="none"
+            >
               <path
                 d="M20 30C20 24.4772 24.4772 20 30 20H70C75.5228 20 80 24.4772 80 30V60C80 65.5228 75.5228 70 70 70H45L30 80V70H30C24.4772 70 20 65.5228 20 60V30Z"
                 stroke="currentColor"
@@ -153,22 +159,25 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
             </svg>
           </div>
 
-          <Link href="#contact" className="z-10 flex h-full flex-col justify-between">
+          <Link
+            href="#contact"
+            className="z-10 flex h-full flex-col justify-between"
+          >
             <div className="space-y-2">
               <div className="bg-primary/10 text-primary border-primary/20 inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide">
                 <Zap className="size-3.5" />
                 <span>{t("items.contact.subtitle")}</span>
               </div>
-              <h3 className="text-foreground text-2xl font-extrabold tracking-tight group-hover:text-primary transition-colors md:text-3xl max-w-sm">
+              <h3 className="text-foreground group-hover:text-primary max-w-sm text-2xl font-extrabold tracking-tight transition-colors md:text-3xl">
                 {t("items.contact.title")}
               </h3>
             </div>
 
-            <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-4">
-              <span className="text-foreground text-lg font-bold sm:text-xl group-hover:text-primary transition-colors">
+            <div className="border-border/60 mt-6 flex items-center justify-between border-t pt-4">
+              <span className="text-foreground group-hover:text-primary text-lg font-bold transition-colors sm:text-xl">
                 {t("items.contact.cta")}
               </span>
-              <div className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-full shadow-md transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:shadow-primary/30">
+              <div className="bg-primary text-primary-foreground group-hover:bg-primary group-hover:shadow-primary/30 flex size-10 items-center justify-center rounded-full shadow-md transition-all duration-300 group-hover:scale-110">
                 <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1" />
               </div>
             </div>
@@ -206,7 +215,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
       {/* 1. Primary Feature Card: Frontend & UI/UX (Spans 2 columns) */}
       <motion.div
         variants={itemVariants}
-        className="bg-gradient-to-br from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 sm:col-span-2 lg:col-span-2 lg:p-7"
+        className="from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group hover:shadow-primary/5 relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl sm:col-span-2 lg:col-span-2 lg:p-7"
       >
         <div className="z-10 max-w-lg space-y-2">
           <div className="bg-primary/10 text-primary border-primary/20 inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide">
@@ -216,17 +225,17 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
           <h3 className="text-foreground text-xl font-bold tracking-tight md:text-2xl">
             {frontend.title}
           </h3>
-          <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm line-clamp-3">
+          <p className="text-muted-foreground line-clamp-3 text-xs leading-relaxed sm:text-sm">
             {frontend.description}
           </p>
         </div>
 
-        <div className="z-10 mt-4 flex flex-wrap items-center gap-4 border-t border-border/50 pt-3">
+        <div className="border-border/50 z-10 mt-4 flex flex-wrap items-center gap-4 border-t pt-3">
           <div>
             <p className="text-primary text-lg font-extrabold md:text-xl">
               100+
             </p>
-            <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
+            <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
               UI Components
             </p>
           </div>
@@ -235,7 +244,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
             <p className="text-primary text-lg font-extrabold md:text-xl">
               WCAG 2.2 AAA
             </p>
-            <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
+            <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
               Accessibility
             </p>
           </div>
@@ -245,7 +254,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
       {/* 2. Backend Architecture & APIs Card */}
       <motion.div
         variants={itemVariants}
-        className="bg-gradient-to-br from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 sm:col-span-1 lg:col-span-1 lg:p-7"
+        className="from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group hover:shadow-primary/5 relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl sm:col-span-1 lg:col-span-1 lg:p-7"
       >
         <div className="z-10 space-y-2">
           <div className="bg-primary/10 text-primary border-primary/20 inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide">
@@ -255,15 +264,15 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
           <h3 className="text-foreground text-lg font-bold tracking-tight md:text-xl">
             {backend.title}
           </h3>
-          <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3">
+          <p className="text-muted-foreground line-clamp-3 text-xs leading-relaxed">
             {backend.description}
           </p>
         </div>
 
-        <div className="z-10 mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+        <div className="border-border/50 z-10 mt-4 flex items-center justify-between border-t pt-3">
           <div>
             <p className="text-primary text-lg font-extrabold">99.9%</p>
-            <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
+            <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
               Uptime
             </p>
           </div>
@@ -274,7 +283,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
       {/* 3. Mobile Development Card */}
       <motion.div
         variants={itemVariants}
-        className="bg-gradient-to-br from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 sm:col-span-1 lg:col-span-1 lg:p-7"
+        className="from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group hover:shadow-primary/5 relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl sm:col-span-1 lg:col-span-1 lg:p-7"
       >
         <div className="z-10 space-y-2">
           <div className="bg-primary/10 text-primary border-primary/20 inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide">
@@ -284,15 +293,17 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
           <h3 className="text-foreground text-lg font-bold tracking-tight md:text-xl">
             {mobile.title}
           </h3>
-          <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3">
+          <p className="text-muted-foreground line-clamp-3 text-xs leading-relaxed">
             {mobile.description}
           </p>
         </div>
 
-        <div className="z-10 mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+        <div className="border-border/50 z-10 mt-4 flex items-center justify-between border-t pt-3">
           <div>
-            <p className="text-primary text-lg font-extrabold">Cross-Platform</p>
-            <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
+            <p className="text-primary text-lg font-extrabold">
+              Cross-Platform
+            </p>
+            <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
               iOS & Android
             </p>
           </div>
@@ -303,7 +314,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
       {/* 4. DevOps & Cloud Card */}
       <motion.div
         variants={itemVariants}
-        className="bg-gradient-to-br from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 sm:col-span-1 lg:col-span-1 lg:p-7"
+        className="from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group hover:shadow-primary/5 relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl sm:col-span-1 lg:col-span-1 lg:p-7"
       >
         <div className="z-10 space-y-2">
           <div className="bg-primary/10 text-primary border-primary/20 inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide">
@@ -313,15 +324,17 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
           <h3 className="text-foreground text-lg font-bold tracking-tight md:text-xl">
             {devops.title}
           </h3>
-          <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3">
+          <p className="text-muted-foreground line-clamp-3 text-xs leading-relaxed">
             {devops.description}
           </p>
         </div>
 
-        <div className="z-10 mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+        <div className="border-border/50 z-10 mt-4 flex items-center justify-between border-t pt-3">
           <div>
-            <p className="text-primary text-lg font-extrabold">Docker & CI/CD</p>
-            <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
+            <p className="text-primary text-lg font-extrabold">
+              Docker & CI/CD
+            </p>
+            <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
               Linux Pipelines
             </p>
           </div>
@@ -332,7 +345,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
       {/* 5. Cybersecurity & Quality QA Card */}
       <motion.div
         variants={itemVariants}
-        className="bg-gradient-to-br from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 sm:col-span-1 lg:col-span-1 lg:p-7"
+        className="from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 group hover:shadow-primary/5 relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl sm:col-span-1 lg:col-span-1 lg:p-7"
       >
         <div className="z-10 space-y-2">
           <div className="bg-primary/10 text-primary border-primary/20 inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide">
@@ -342,15 +355,15 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
           <h3 className="text-foreground text-lg font-bold tracking-tight md:text-xl">
             {cybersecurity.title}
           </h3>
-          <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3">
+          <p className="text-muted-foreground line-clamp-3 text-xs leading-relaxed">
             {cybersecurity.description}
           </p>
         </div>
 
-        <div className="z-10 mt-4 flex items-center justify-between border-t border-border/50 pt-3">
+        <div className="border-border/50 z-10 mt-4 flex items-center justify-between border-t pt-3">
           <div>
             <p className="text-primary text-lg font-extrabold">OWASP & Snyk</p>
-            <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider">
+            <p className="text-muted-foreground text-[10px] font-semibold tracking-wider uppercase">
               Security Audits
             </p>
           </div>
@@ -361,14 +374,18 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
       {/* 6. Enhanced Contact Us Card */}
       <motion.div
         variants={itemVariants}
-        className="bg-gradient-to-br from-card via-card to-primary/15 text-card-foreground border-border/80 hover:border-primary/80 group relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/15 sm:col-span-2 lg:col-span-2 lg:p-7"
+        className="from-card via-card to-primary/15 text-card-foreground border-border/80 hover:border-primary/80 group hover:shadow-primary/15 relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl sm:col-span-2 lg:col-span-2 lg:p-7"
       >
         {/* Ambient Glow */}
-        <div className="bg-primary/20 pointer-events-none absolute -top-16 -right-16 size-48 rounded-full blur-3xl transition-all duration-500 group-hover:scale-125 group-hover:bg-primary/30" />
+        <div className="bg-primary/20 group-hover:bg-primary/30 pointer-events-none absolute -top-16 -right-16 size-48 rounded-full blur-3xl transition-all duration-500 group-hover:scale-125" />
 
         {/* Decorative Message Bubble Illustration */}
-        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 opacity-15 transition-all duration-500 group-hover:opacity-30 group-hover:scale-110">
-          <svg className="size-36 text-primary" viewBox="0 0 100 100" fill="none">
+        <div className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 opacity-15 transition-all duration-500 group-hover:scale-110 group-hover:opacity-30">
+          <svg
+            className="text-primary size-36"
+            viewBox="0 0 100 100"
+            fill="none"
+          >
             <path
               d="M20 30C20 24.4772 24.4772 20 30 20H70C75.5228 20 80 24.4772 80 30V60C80 65.5228 75.5228 70 70 70H45L30 80V70H30C24.4772 70 20 65.5228 20 60V30Z"
               stroke="currentColor"
@@ -381,22 +398,25 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
           </svg>
         </div>
 
-        <Link href="#contact" className="z-10 flex h-full flex-col justify-between">
+        <Link
+          href="#contact"
+          className="z-10 flex h-full flex-col justify-between"
+        >
           <div className="space-y-2">
             <div className="bg-primary/10 text-primary border-primary/20 inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide">
               <Zap className="size-3.5" />
               <span>{t("items.contact.subtitle")}</span>
             </div>
-            <h3 className="text-foreground text-2xl font-extrabold tracking-tight group-hover:text-primary transition-colors md:text-3xl max-w-sm">
+            <h3 className="text-foreground group-hover:text-primary max-w-sm text-2xl font-extrabold tracking-tight transition-colors md:text-3xl">
               {t("items.contact.title")}
             </h3>
           </div>
 
-          <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-4">
-            <span className="text-foreground text-lg font-bold sm:text-xl group-hover:text-primary transition-colors">
+          <div className="border-border/60 mt-6 flex items-center justify-between border-t pt-4">
+            <span className="text-foreground group-hover:text-primary text-lg font-bold transition-colors sm:text-xl">
               {t("items.contact.cta")}
             </span>
-            <div className="bg-primary text-primary-foreground flex size-10 items-center justify-center rounded-full shadow-md transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:shadow-primary/30">
+            <div className="bg-primary text-primary-foreground group-hover:bg-primary group-hover:shadow-primary/30 flex size-10 items-center justify-center rounded-full shadow-md transition-all duration-300 group-hover:scale-110">
               <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1" />
             </div>
           </div>

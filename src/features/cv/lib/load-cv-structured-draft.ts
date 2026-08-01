@@ -2,7 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 
 import type { Locale } from "@/i18n/config";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 
 function formatExperienceDate(
   date: Date | null | undefined,
@@ -26,100 +26,117 @@ export async function loadCvStructuredDraft(
   userId: string,
   options?: LoadCvStructuredDraftOptions,
 ): Promise<CvImportDraft | null> {
-  const [header, profile, experiences, education, skills, contacts, languages] =
-    await Promise.all([
-      db.cvHeader.findUnique({ where: { userId } }),
-      db.profile.findUnique({
-        where: { userId },
-        select: { defaultLocale: true },
-      }),
-      db.cvExperience.findMany({
-        where: { userId },
-        include: { responsibilities: { orderBy: { order: "asc" } } },
-        orderBy: { order: "asc" },
-      }),
-      db.cvEducation.findMany({
-        where: { userId },
-        orderBy: { order: "asc" },
-      }),
-      db.cvTechnicalSkill.findMany({
-        where: { userId },
-        orderBy: { order: "asc" },
-      }),
-      db.cvContact.findMany({
-        where: { userId },
-        orderBy: { order: "asc" },
-      }),
-      db.cvLanguage.findMany({
-        where: { userId },
-        orderBy: { order: "asc" },
-      }),
-    ]);
+  const [
+    appLanguages,
+    header,
+    profile,
+    experiences,
+    education,
+    skills,
+    contacts,
+    languages,
+  ] = await Promise.all([
+    db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+    db.cvHeader.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
+    db.profile.findUnique({
+      where: { userId },
+      select: { defaultLocale: true },
+    }),
+    db.cvExperience.findMany({
+      where: { userId },
+      include: {
+        translations: true,
+        responsibilities: {
+          include: { translations: true },
+          orderBy: { order: "asc" },
+        },
+      },
+      orderBy: { order: "asc" },
+    }),
+    db.cvEducation.findMany({
+      where: { userId },
+      include: { translations: true },
+      orderBy: { order: "asc" },
+    }),
+    db.cvTechnicalSkill.findMany({
+      where: { userId },
+      orderBy: { order: "asc" },
+    }),
+    db.cvContact.findMany({
+      where: { userId },
+      orderBy: { order: "asc" },
+    }),
+    db.cvLanguage.findMany({
+      where: { userId },
+      include: { translations: true },
+      orderBy: { order: "asc" },
+    }),
+  ]);
 
   if (!header) return null;
 
   const profileDefaultLocale = resolveLocale(profile?.defaultLocale);
   const activeLocale = options?.locale ?? profileDefaultLocale;
-  const fallbackLocale = options?.fallbackLocale ?? profileDefaultLocale;
+  const field = createLocalizedFieldResolver(appLanguages, activeLocale);
+  const headerT = field.for(header.translations);
 
   const summary =
-    getLocalizedText(header.heroSummary, activeLocale, fallbackLocale) ||
+    headerT("heroSummary") ||
     (await db.cvAboutMe
-      .findUnique({ where: { userId } })
-      .then((about) =>
-        about
-          ? getLocalizedText(about.aboutMe, activeLocale, fallbackLocale)
-          : "",
-      )) ||
+      .findUnique({
+        where: { userId },
+        include: { translations: true },
+      })
+      .then((about) => (about ? field(about.translations, "aboutMe") : ""))) ||
     undefined;
 
   return {
     detectedLocale: activeLocale,
     header: {
       fullName: header.fullName,
-      degree:
-        getLocalizedText(header.degree, activeLocale, fallbackLocale) ||
-        undefined,
+      degree: headerT("degree") || undefined,
       summary: summary !== "" ? summary : undefined,
     },
-    experiences: experiences.map((exp, index) => ({
-      id: exp.id || `exp-${index + 1}`,
-      company: exp.company,
-      role: getLocalizedText(exp.role, activeLocale, fallbackLocale),
-      location: exp.location
-        ? getLocalizedText(exp.location, activeLocale, fallbackLocale) ||
-          undefined
-        : undefined,
-      startDate: formatExperienceDate(exp.startDate),
-      endDate: formatExperienceDate(exp.endDate),
-      current: exp.current,
-      responsibilities: exp.responsibilities.map((resp) =>
-        getLocalizedText(resp.text, activeLocale, fallbackLocale),
-      ),
-    })),
-    education: education.map((edu, index) => ({
-      id: edu.id || `edu-${index + 1}`,
-      institution: edu.institution,
-      degreeName: getLocalizedText(
-        edu.degreeName,
-        activeLocale,
-        fallbackLocale,
-      ),
-      location: edu.location
-        ? getLocalizedText(edu.location, activeLocale, fallbackLocale) ||
-          undefined
-        : undefined,
-      startYear: edu.startYear ?? undefined,
-      endYear: edu.endYear ?? undefined,
-    })),
+    experiences: experiences.map((exp, index) => {
+      const expT = field.for(exp.translations);
+      return {
+        id: exp.id || `exp-${index + 1}`,
+        company: exp.company,
+        role: expT("role"),
+        location: expT("location") || undefined,
+        startDate: formatExperienceDate(exp.startDate),
+        endDate: formatExperienceDate(exp.endDate),
+        current: exp.current,
+        responsibilities: exp.responsibilities.map((resp) =>
+          field(resp.translations, "text"),
+        ),
+      };
+    }),
+    education: education.map((edu, index) => {
+      const eduT = field.for(edu.translations);
+      return {
+        id: edu.id || `edu-${index + 1}`,
+        institution: edu.institution,
+        degreeName: eduT("degreeName"),
+        location: eduT("location") || undefined,
+        startYear: edu.startYear ?? undefined,
+        endYear: edu.endYear ?? undefined,
+      };
+    }),
     skills: skills.map((skill) => ({
       category: skill.category,
       items: skill.items,
     })),
-    languages: languages.map((lang) => ({
-      name: getLocalizedText(lang.name, activeLocale, fallbackLocale),
-      level: getLocalizedText(lang.level, activeLocale, fallbackLocale),
-    })),
+    languages: languages.map((lang) => {
+      const langT = field.for(lang.translations);
+      return {
+        name: langT("name"),
+        level: langT("level"),
+      };
+    }),
     contacts: contacts.map((contact) => ({
       type: contact.type,
       value: contact.value,

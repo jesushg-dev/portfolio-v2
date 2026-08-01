@@ -1,4 +1,3 @@
-import type { TimelineItem } from "@prisma/client";
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
   mapTimelineToEditorDto,
@@ -6,6 +5,7 @@ import {
   mapTimelineToFormDto,
   buildEmptyTimelineCreateDto,
   getTimelineTranslationText,
+  type TimelineItemWithTranslations,
 } from "./timeline-editor-dto";
 
 const languages: LanguageRef[] = [
@@ -13,7 +13,7 @@ const languages: LanguageRef[] = [
   { id: "lang-es", code: "es" },
 ];
 
-const mockTimelineItem: TimelineItem = {
+const mockTimelineItem: TimelineItemWithTranslations = {
   id: "item-1",
   order: 0,
   organization: "Acme Corp",
@@ -24,13 +24,26 @@ const mockTimelineItem: TimelineItem = {
   current: false,
   images: ["https://example.com/img1.jpg"],
   userId: "user-1",
-  title: { default: "Engineer", translations: { es: "Ingeniero" } },
-  description: {
-    default: "Built stuff",
-    translations: { es: "Construi cosas" },
-  },
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2022-06-30"),
+  TimelineItemTranslation: [
+    {
+      id: "tt1",
+      timelineItemId: "item-1",
+      appLanguageId: "lang-en",
+      title: "Engineer",
+      description: "Built stuff",
+      createdAt: new Date("2020-01-01"),
+    },
+    {
+      id: "tt2",
+      timelineItemId: "item-1",
+      appLanguageId: "lang-es",
+      title: "Ingeniero",
+      description: "Construi cosas",
+      createdAt: new Date("2020-01-01"),
+    },
+  ],
 };
 
 describe("mapTimelineToEditorDto", () => {
@@ -53,7 +66,7 @@ describe("mapTimelineToEditorDto", () => {
       images: ["valid.jpg", 123, null, "also-valid.jpg"],
     };
     const dto = mapTimelineToEditorDto(
-      item as unknown as TimelineItem,
+      item as unknown as TimelineItemWithTranslations,
       languages,
     );
     expect(dto.images).toEqual(["valid.jpg", "also-valid.jpg"]);
@@ -62,7 +75,7 @@ describe("mapTimelineToEditorDto", () => {
   it("returns empty images array when images is not an array", () => {
     const item = { ...mockTimelineItem, images: null };
     const dto = mapTimelineToEditorDto(
-      item as unknown as TimelineItem,
+      item as unknown as TimelineItemWithTranslations,
       languages,
     );
     expect(dto.images).toEqual([]);

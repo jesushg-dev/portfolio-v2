@@ -1,17 +1,22 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { getLocalizedText } from "@/lib/i18n/localized";
-import type { CvData, CvLocaleProps } from "./types";
+import type { LocalizedCvData } from "./types";
 
-interface IAdditionalInformationProps extends CvLocaleProps {
-  additionalInformation: CvData["additionalInformation"];
+interface IAdditionalInformationProps {
+  additionalInformation: LocalizedCvData["additionalInformation"];
+}
+
+function AdditionalItem({
+  entry,
+}: {
+  entry: LocalizedCvData["additionalInformation"][number];
+}) {
+  return <li>{entry.text}.</li>;
 }
 
 const AdditionalInformation: FC<IAdditionalInformationProps> = ({
   additionalInformation,
-  locale,
-  defaultLocale,
 }) => {
   const t = useTranslations("curriculum");
 
@@ -25,9 +30,7 @@ const AdditionalInformation: FC<IAdditionalInformationProps> = ({
       <div className="mb-4">
         <ul className="list-disc pl-8 text-sm text-[#1a1a1a]">
           {additionalInformation.map((entry) => (
-            <li key={entry.id}>
-              {getLocalizedText(entry.text, locale, defaultLocale)}.
-            </li>
+            <AdditionalItem key={entry.id} entry={entry} />
           ))}
         </ul>
       </div>

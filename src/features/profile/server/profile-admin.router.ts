@@ -6,11 +6,6 @@ import type { Prisma } from "@prisma/client";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import type { db } from "@/server/db";
 import {
-  languageMapToTextMap,
-  optionalTextMapToLocalizedJson,
-  textMapToLocalizedJson,
-} from "@/lib/i18n/localized-text-map";
-import {
   buildEmptyTranslationMap,
   translationMapEntries,
 } from "@/lib/i18n/translation-map";
@@ -64,23 +59,39 @@ export async function getProfileHeroEditorDto(
 ): Promise<ProfileHeroEditorDTO> {
   const [languages, header, aboutMe, heroTitles] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    db.cvHeader.findUnique({ where: { userId } }),
-    db.cvAboutMe.findUnique({ where: { userId } }),
+    db.cvHeader.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
+    db.cvAboutMe.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
     getHeroTitlesEditorDto(db, userId),
   ]);
 
   const emptyTextMap = buildEmptyTranslationMap(languages, { text: "" });
 
+  const heroSummaryTranslations = Object.fromEntries(
+    languages.map((l) => {
+      const trans = header?.translations.find((t) => t.appLanguageId === l.id);
+      return [l.id, { text: trans?.heroSummary ?? "" }];
+    }),
+  );
+
+  const aboutMeTranslations = Object.fromEntries(
+    languages.map((l) => {
+      const trans = aboutMe?.translations.find((t) => t.appLanguageId === l.id);
+      return [l.id, { text: trans?.aboutMe ?? "" }];
+    }),
+  );
+
   return {
     fullName: header?.fullName ?? "",
     photoUrl: header?.photoUrl ?? "",
     backgroundImageUrl: header?.backgroundImageUrl ?? "",
-    heroSummaryTranslations: header?.heroSummary
-      ? languageMapToTextMap(header.heroSummary, languages)
-      : emptyTextMap,
-    aboutMeTranslations: aboutMe?.aboutMe
-      ? languageMapToTextMap(aboutMe.aboutMe, languages)
-      : emptyTextMap,
+    heroSummaryTranslations,
+    aboutMeTranslations,
     titles:
       heroTitles.titles.length > 0
         ? heroTitles.titles
@@ -100,52 +111,70 @@ export async function upsertProfileHeroFromMaps(
 ): Promise<ProfileHeroEditorDTO> {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
-  const existingHeader = await db.cvHeader.findUnique({
-    where: { userId },
-  });
-  const degreeValue = (existingHeader?.degree ?? {
-    default: "",
-  }) as Prisma.InputJsonValue;
-
-  const heroSummary = textMapToLocalizedJson(
-    input.heroSummaryTranslations,
-    languages,
-  );
-  const aboutMePayload = textMapToLocalizedJson(
-    input.aboutMeTranslations,
-    languages,
-  );
-
-  await db.cvHeader.upsert({
+  const header = await db.cvHeader.upsert({
     where: { userId },
     create: {
       userId,
       fullName: input.fullName,
-      degree: degreeValue,
       photoUrl: input.photoUrl || null,
       backgroundImageUrl: input.backgroundImageUrl || null,
-      heroSummary: (heroSummary ?? undefined) as
-        Prisma.InputJsonValue | undefined,
-      clientImageAlt: existingHeader?.clientImageAlt ?? undefined,
     },
     update: {
       fullName: input.fullName,
       photoUrl: input.photoUrl || null,
       backgroundImageUrl: input.backgroundImageUrl || null,
-      heroSummary: (heroSummary ?? undefined) as
-        Prisma.InputJsonValue | undefined,
     },
   });
 
-  if (aboutMePayload?.default) {
-    await db.cvAboutMe.upsert({
-      where: { userId },
-      create: {
-        userId,
-        aboutMe: aboutMePayload as Prisma.InputJsonValue,
-      },
-      update: { aboutMe: aboutMePayload as Prisma.InputJsonValue },
+  for (const lang of languages) {
+    const heroSummaryText = input.heroSummaryTranslations[lang.id]?.text ?? "";
+    const existingTrans = await db.cvHeaderTranslation.findFirst({
+      where: { cvHeaderId: header.id, appLanguageId: lang.id },
     });
+
+    if (existingTrans) {
+      await db.cvHeaderTranslation.update({
+        where: { id: existingTrans.id },
+        data: { heroSummary: heroSummaryText || null },
+      });
+    } else {
+      await db.cvHeaderTranslation.create({
+        data: {
+          cvHeaderId: header.id,
+          appLanguageId: lang.id,
+          degree: "",
+          heroSummary: heroSummaryText || null,
+        },
+      });
+    }
+  }
+
+  const about = await db.cvAboutMe.upsert({
+    where: { userId },
+    create: { userId },
+    update: {},
+  });
+
+  for (const lang of languages) {
+    const aboutMeText = input.aboutMeTranslations[lang.id]?.text ?? "";
+    const existingAboutTrans = await db.cvAboutMeTranslation.findFirst({
+      where: { cvAboutMeId: about.id, appLanguageId: lang.id },
+    });
+
+    if (existingAboutTrans) {
+      await db.cvAboutMeTranslation.update({
+        where: { id: existingAboutTrans.id },
+        data: { aboutMe: aboutMeText },
+      });
+    } else {
+      await db.cvAboutMeTranslation.create({
+        data: {
+          cvAboutMeId: about.id,
+          appLanguageId: lang.id,
+          aboutMe: aboutMeText,
+        },
+      });
+    }
   }
 
   await db.$transaction(async (tx) => {
@@ -177,12 +206,8 @@ export async function upsertProfileHeroFromMaps(
 }
 
 export const profileAdminRouter = createTRPCRouter({
-  getHeroMine: protectedProcedure.query(async ({ ctx }) => {
+  getHeroEditor: protectedProcedure.query(async ({ ctx }) => {
     return getProfileHeroEditorDto(ctx.db, ctx.user.id);
-  }),
-
-  getHeroTitlesMine: protectedProcedure.query(async ({ ctx }) => {
-    return getHeroTitlesEditorDto(ctx.db, ctx.user.id);
   }),
 
   upsertHero: protectedProcedure
@@ -191,7 +216,7 @@ export const profileAdminRouter = createTRPCRouter({
       return upsertProfileHeroFromMaps(ctx.db, ctx.user.id, input);
     }),
 
-  upsertHeroTitles: protectedProcedure
+  upsertHeroTitlesOnly: protectedProcedure
     .input(HeroTitlesUpsertSchema)
     .mutation(async ({ ctx, input }) => {
       await ctx.db.$transaction(async (tx) => {
@@ -230,60 +255,55 @@ export const profileAdminRouter = createTRPCRouter({
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
-      const existing = await ctx.db.cvHeader.findUnique({
-        where: { userId: ctx.user.id },
-      });
 
-      const degreeValue = (existing?.degree ?? {
-        default: "",
-      }) as Prisma.InputJsonValue;
-
-      const heroSummary =
-        input.heroSummary === null
-          ? null
-          : optionalTextMapToLocalizedJson(
-              input.heroSummary ?? undefined,
-              languages,
-            );
-      const clientImageAlt =
-        input.clientImageAlt === null
-          ? null
-          : optionalTextMapToLocalizedJson(
-              input.clientImageAlt ?? undefined,
-              languages,
-            );
-
-      return ctx.db.cvHeader.upsert({
+      const header = await ctx.db.cvHeader.upsert({
         where: { userId: ctx.user.id },
         create: {
           userId: ctx.user.id,
           fullName: input.fullName,
-          degree: degreeValue,
           photoUrl: input.photoUrl ?? null,
           backgroundImageUrl: input.backgroundImageUrl ?? null,
-          heroSummary: (heroSummary ?? undefined) as
-            Prisma.InputJsonValue | undefined,
-          clientImageAlt: (clientImageAlt ?? undefined) as
-            Prisma.InputJsonValue | undefined,
         },
         update: {
           fullName: input.fullName,
           photoUrl: input.photoUrl ?? null,
           backgroundImageUrl: input.backgroundImageUrl ?? null,
-          ...(input.heroSummary !== undefined
-            ? {
-                heroSummary: (heroSummary ?? undefined) as
-                  Prisma.InputJsonValue | undefined,
-              }
-            : {}),
-          ...(input.clientImageAlt !== undefined
-            ? {
-                clientImageAlt: (clientImageAlt ?? undefined) as
-                  Prisma.InputJsonValue | undefined,
-              }
-            : {}),
         },
       });
+
+      for (const lang of languages) {
+        const heroSummaryText = input.heroSummary?.[lang.id]?.text;
+        const clientImageAltText = input.clientImageAlt?.[lang.id]?.text;
+        const existingTrans = await ctx.db.cvHeaderTranslation.findFirst({
+          where: { cvHeaderId: header.id, appLanguageId: lang.id },
+        });
+
+        if (existingTrans) {
+          await ctx.db.cvHeaderTranslation.update({
+            where: { id: existingTrans.id },
+            data: {
+              ...(heroSummaryText !== undefined
+                ? { heroSummary: heroSummaryText || null }
+                : {}),
+              ...(clientImageAltText !== undefined
+                ? { clientImageAlt: clientImageAltText || null }
+                : {}),
+            },
+          });
+        } else {
+          await ctx.db.cvHeaderTranslation.create({
+            data: {
+              cvHeaderId: header.id,
+              appLanguageId: lang.id,
+              degree: "",
+              heroSummary: heroSummaryText ?? null,
+              clientImageAlt: clientImageAltText ?? null,
+            },
+          });
+        }
+      }
+
+      return header;
     }),
 });
 
@@ -294,6 +314,4 @@ export {
   mapHeroTitlesToResolved,
   resolveHeroTitlesForLocale,
   splitAboutParagraphs,
-  localizedFromLanguageMap,
-  languageMapFromLocalized,
 } from "@/features/profile/server/hero-titles";

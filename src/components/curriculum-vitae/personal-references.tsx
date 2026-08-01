@@ -1,17 +1,31 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { getLocalizedText } from "@/lib/i18n/localized";
-import type { CvData, CvLocaleProps } from "./types";
+import type { LocalizedCvData } from "./types";
 
-interface IPersonalReferencesProps extends CvLocaleProps {
-  personalReferences: CvData["personalReferences"];
+interface IPersonalReferencesProps {
+  personalReferences: LocalizedCvData["personalReferences"];
+}
+
+function PersonalReferenceItem({
+  item,
+}: {
+  item: LocalizedCvData["personalReferences"][number];
+}) {
+  return (
+    <div className="flex text-sm text-[#1a1a1a]">
+      <p className="mr-1">-</p>
+      <p className="m-0">
+        {item.name}
+        {item.role ? ` - ${item.role}` : ""}
+        {item.contact ? ` - ${item.contact}` : ""}
+      </p>
+    </div>
+  );
 }
 
 const PersonalReferences: FC<IPersonalReferencesProps> = ({
   personalReferences,
-  locale,
-  defaultLocale,
 }) => {
   const t = useTranslations("curriculum");
 
@@ -25,16 +39,7 @@ const PersonalReferences: FC<IPersonalReferencesProps> = ({
 
       <div className="mb-2">
         {personalReferences.map((item) => (
-          <div className="flex text-sm text-[#1a1a1a]" key={item.id}>
-            <p className="mr-1">-</p>
-            <p className="m-0">
-              {item.name}
-              {item.role
-                ? ` - ${getLocalizedText(item.role, locale, defaultLocale)}`
-                : ""}
-              {item.contact ? ` - ${item.contact}` : ""}
-            </p>
-          </div>
+          <PersonalReferenceItem key={item.id} item={item} />
         ))}
       </div>
     </>

@@ -5,6 +5,12 @@ export type TranslationMap<T extends Record<keyof T, string>> = Record<
   T
 >;
 
+export interface TextTranslationFields {
+  text: string;
+}
+
+export type TextTranslationMap = TranslationMap<TextTranslationFields>;
+
 export type TranslationRow<T extends Record<keyof T, string>> = {
   appLanguageId: string;
 } & T;
@@ -60,4 +66,21 @@ export function translationMapEntries<T extends Record<keyof T, string>>(
     appLanguageId,
     ...fields,
   }));
+}
+
+export function textTranslationMapFromRows<
+  TRow extends { appLanguageId: string },
+>(
+  languages: LanguageRef[],
+  rows: TRow[] | undefined,
+  pickText: (row: TRow) => string | null | undefined,
+): TextTranslationMap {
+  return mergeTranslationMap(
+    languages,
+    rows?.map((row) => ({
+      appLanguageId: row.appLanguageId,
+      text: pickText(row) ?? "",
+    })),
+    { text: "" },
+  );
 }

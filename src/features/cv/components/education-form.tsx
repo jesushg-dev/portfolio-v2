@@ -24,11 +24,11 @@ import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
 } from "@/lib/i18n/localized-form";
-import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
 import {
-  localizedJsonToTextMap,
-  TextTranslationMapSchema,
-} from "@/lib/i18n/localized-text-map";
+  buildEmptyTranslationMap,
+  textTranslationMapFromRows,
+} from "@/lib/i18n/translation-map";
+import { TextTranslationMapSchema } from "@/lib/i18n/localized-form";
 import type { AppLanguage } from "@prisma/client";
 
 export const EducationSchema = z.object({
@@ -48,9 +48,15 @@ export const EducationForm: FC<{
   initial?: {
     id: string;
     institution: string;
-    degreeName: unknown;
-    location: unknown;
-    description: unknown;
+    degreeName?: unknown;
+    location?: unknown;
+    description?: unknown;
+    translations?: {
+      appLanguageId: string;
+      degreeName: string;
+      location?: string | null;
+      description?: string | null;
+    }[];
     startYear?: number | null;
     endYear?: number | null;
     dates?: string | null;
@@ -90,14 +96,26 @@ export const EducationForm: FC<{
     resolver: zodResolver(formSchema),
     defaultValues: {
       institution: initial?.institution ?? "",
-      degreeName: initial
-        ? localizedJsonToTextMap(initial.degreeName, languages)
+      degreeName: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.degreeName,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
-      location: initial?.location
-        ? localizedJsonToTextMap(initial.location, languages)
+      location: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.location,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
-      description: initial?.description
-        ? localizedJsonToTextMap(initial.description, languages)
+      description: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.description,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
       startYear: initial?.startYear ?? undefined,
       endYear: initial?.endYear ?? undefined,

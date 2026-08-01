@@ -122,12 +122,6 @@ export async function getHeroTitlesForLocale(
   );
 }
 
-export {
-  isLocale,
-  languageMapFromLocalized,
-  localizedFromLanguageMap,
-} from "@/lib/i18n/localized-json";
-
 export function splitAboutParagraphs(text: string): string[] {
   const trimmed = text.trim();
   if (!trimmed) return [];

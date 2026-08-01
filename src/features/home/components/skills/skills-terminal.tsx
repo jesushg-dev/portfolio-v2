@@ -84,7 +84,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
       />
 
       <div className="-mt-8 mb-8 flex justify-center">
-        <div className="bg-card/80 border-border/70 text-muted-foreground shadow-2xs inline-flex flex-wrap items-center justify-center gap-1.5 rounded-full border px-4 py-1.5 font-mono text-xs sm:text-sm">
+        <div className="bg-card/80 border-border/70 text-muted-foreground inline-flex flex-wrap items-center justify-center gap-1.5 rounded-full border px-4 py-1.5 font-mono text-xs shadow-2xs sm:text-sm">
           <span>{"{ "}</span>
           <span>
             <b className="text-foreground font-medium">frontend</b>

@@ -23,8 +23,10 @@ import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
 } from "@/lib/i18n/localized-form";
-import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
-import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
+import {
+  buildEmptyTranslationMap,
+  textTranslationMapFromRows,
+} from "@/lib/i18n/translation-map";
 import type { AppLanguage } from "@prisma/client";
 
 export const LanguageSchema = z.object({
@@ -36,7 +38,12 @@ export type LanguageInput = z.infer<typeof LanguageSchema>;
 
 export const LanguageForm: FC<{
   languages: AppLanguage[];
-  initial?: { id: string; name: unknown; level: unknown };
+  initial?: {
+    id: string;
+    name?: unknown;
+    level?: unknown;
+    translations?: { appLanguageId: string; name: string; level: string }[];
+  };
   onSuccess: () => void;
   onCancel: () => void;
 }> = ({ languages, initial, onSuccess, onCancel }) => {
@@ -66,11 +73,19 @@ export const LanguageForm: FC<{
   const form = useForm<LanguageInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: initial
-        ? localizedJsonToTextMap(initial.name, languages)
+      name: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.name,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
-      level: initial
-        ? localizedJsonToTextMap(initial.level, languages)
+      level: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.level,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
     },
   });

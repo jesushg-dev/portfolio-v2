@@ -23,8 +23,10 @@ import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
 } from "@/lib/i18n/localized-form";
-import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
-import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
+import {
+  buildEmptyTranslationMap,
+  textTranslationMapFromRows,
+} from "@/lib/i18n/translation-map";
 import type { AppLanguage } from "@prisma/client";
 
 export const SoftSkillSchema = z.object({
@@ -35,7 +37,11 @@ export type SoftSkillInput = z.infer<typeof SoftSkillSchema>;
 
 export const SoftSkillForm: FC<{
   languages: AppLanguage[];
-  initial?: { id: string; name: unknown };
+  initial?: {
+    id: string;
+    name?: unknown;
+    translations?: { appLanguageId: string; name: string }[];
+  };
   onSuccess: () => void;
   onCancel: () => void;
 }> = ({ languages, initial, onSuccess, onCancel }) => {
@@ -64,8 +70,12 @@ export const SoftSkillForm: FC<{
   const form = useForm<SoftSkillInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: initial
-        ? localizedJsonToTextMap(initial.name, languages)
+      name: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.name,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
     },
   });

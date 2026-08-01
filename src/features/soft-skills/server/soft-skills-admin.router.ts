@@ -2,13 +2,6 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { extractStringFilter } from "@/lib/admin/filter-utils";
-import {
-  buildLocalizedJsonTitleMongoMatch,
-  mongoUserIdFilter,
-  queryPaginatedIdsWithMongoMatch,
-  reorderByIds,
-  type MongoSort,
-} from "@/lib/admin/mongodb-localized-json-query";
 import { type PrismaClient, type Prisma } from "@prisma/client";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -21,8 +14,7 @@ import {
   mapSoftSkillToEditorDto,
   mapSoftSkillsToEditorDto,
 } from "@/features/soft-skills/lib/soft-skill-editor-dto";
-import { resolvePrimaryLanguage } from "@/lib/i18n/localized-form";
-import { translationMapToLocalizedFields } from "@/lib/i18n/localized-persist";
+import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 
 const SoftSkillsMediaTypeSchema = z.enum(["VIDEO", "IMAGE"]);
@@ -32,6 +24,10 @@ const SoftSkillTranslationMapSchema = z.record(
   z.object({
     title: z.string(),
     description: z.string(),
+    badge: z
+      .string()
+      .optional()
+      .transform((val) => val ?? ""),
   }),
 );
 
@@ -93,52 +89,24 @@ export const softSkillsAdminRouter = createTRPCRouter({
       };
 
       const titleVal = extractStringFilter(input.filters, "title");
+      if (titleVal) {
+        where.PortfolioSoftSkillTranslation = {
+          some: {
+            title: { contains: titleVal, mode: "insensitive" },
+          },
+        };
+      }
 
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
 
-      if (titleVal) {
-        const mongoMatch: Record<string, unknown> = {
-          userId: mongoUserIdFilter(ctx.user.id),
-          ...buildLocalizedJsonTitleMongoMatch("title", titleVal),
-        };
-
-        const sortField = input.sort?.[0];
-        let mongoSort: MongoSort = { order: 1, createdAt: 1 };
-        if (sortField?.id === "order") {
-          const dir: 1 | -1 = sortField.desc ? -1 : 1;
-          mongoSort = { order: dir, createdAt: dir };
-        }
-
-        const { ids, totalCount } = await queryPaginatedIdsWithMongoMatch({
-          delegate: ctx.db.portfolioSoftSkill,
-          match: mongoMatch,
-          sort: mongoSort,
-          skip,
-          take,
-        });
-
-        const items =
-          ids.length > 0
-            ? reorderByIds(
-                await ctx.db.portfolioSoftSkill.findMany({
-                  where: { id: { in: ids } },
-                }),
-                ids,
-              )
-            : [];
-
-        return {
-          data: mapSoftSkillsToEditorDto(items, languages),
-          pageCount: take ? Math.ceil(totalCount / take) : 1,
-          totalCount,
-        };
-      }
-
       const [items, totalCount] = await Promise.all([
         ctx.db.portfolioSoftSkill.findMany({
           where,
+          include: {
+            PortfolioSoftSkillTranslation: true,
+          },
           orderBy,
           skip,
           take,
@@ -160,26 +128,26 @@ export const softSkillsAdminRouter = createTRPCRouter({
   createItem: protectedProcedure
     .input(softSkillUpsertInput)
     .mutation(async ({ ctx, input }) => {
+      const { translations, ...data } = input;
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
-      const primaryLanguage = resolvePrimaryLanguage(languages);
-      const primaryCode = primaryLanguage?.code ?? "en";
-      const { title, description } = translationMapToLocalizedFields(
-        input.translations,
-        languages,
-        primaryCode,
-      );
 
       const created = await ctx.db.portfolioSoftSkill.create({
         data: {
-          icon: input.icon,
-          isVisible: input.isVisible,
-          featured: input.featured,
-          order: input.order,
-          title,
-          description,
+          ...data,
           userId: ctx.user.id,
+          PortfolioSoftSkillTranslation: {
+            create: translationMapEntries(translations).map((translation) => ({
+              appLanguageId: translation.appLanguageId,
+              title: translation.title,
+              description: translation.description,
+              badge: translation.badge ?? "",
+            })),
+          },
+        },
+        include: {
+          PortfolioSoftSkillTranslation: true,
         },
       });
 
@@ -198,27 +166,54 @@ export const softSkillsAdminRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
+      await ctx.db.portfolioSoftSkill.update({
+        where: { id },
+        data,
+      });
+
+      for (const translation of translationMapEntries(translations)) {
+        const existingTrans =
+          await ctx.db.portfolioSoftSkillTranslation.findFirst({
+            where: {
+              portfolioSoftSkillId: id,
+              appLanguageId: translation.appLanguageId,
+            },
+          });
+
+        if (existingTrans) {
+          await ctx.db.portfolioSoftSkillTranslation.update({
+            where: { id: existingTrans.id },
+            data: {
+              title: translation.title,
+              description: translation.description,
+              badge: translation.badge ?? "",
+            },
+          });
+        } else {
+          await ctx.db.portfolioSoftSkillTranslation.create({
+            data: {
+              portfolioSoftSkillId: id,
+              appLanguageId: translation.appLanguageId,
+              title: translation.title,
+              description: translation.description,
+              badge: translation.badge ?? "",
+            },
+          });
+        }
+      }
+
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
-      const primaryLanguage = resolvePrimaryLanguage(languages);
-      const primaryCode = primaryLanguage?.code ?? "en";
-      const { title, description } = translationMapToLocalizedFields(
-        translations,
-        languages,
-        primaryCode,
-      );
 
-      const updated = await ctx.db.portfolioSoftSkill.update({
+      const updated = await ctx.db.portfolioSoftSkill.findUnique({
         where: { id },
-        data: {
-          ...data,
-          title,
-          description,
+        include: {
+          PortfolioSoftSkillTranslation: true,
         },
       });
 
-      return mapSoftSkillToEditorDto(updated, languages);
+      return mapSoftSkillToEditorDto(updated!, languages);
     }),
 
   deleteItem: protectedProcedure
@@ -231,6 +226,10 @@ export const softSkillsAdminRouter = createTRPCRouter({
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
+
+      await ctx.db.portfolioSoftSkillTranslation.deleteMany({
+        where: { portfolioSoftSkillId: input.id },
+      });
 
       return ctx.db.portfolioSoftSkill.delete({ where: { id: input.id } });
     }),
@@ -256,41 +255,4 @@ export const softSkillsAdminRouter = createTRPCRouter({
         },
       });
     }),
-
-  reorderItems: protectedProcedure
-    .input(z.object({ orderedIds: z.array(z.string()) }))
-    .mutation(async ({ ctx, input }) => {
-      const items = await ctx.db.portfolioSoftSkill.findMany({
-        where: { userId: ctx.user.id },
-      });
-
-      const ownedIds = new Set(items.map((item) => item.id));
-      if (
-        input.orderedIds.length !== items.length ||
-        input.orderedIds.some((id) => !ownedIds.has(id))
-      ) {
-        throw new TRPCError({ code: "BAD_REQUEST" });
-      }
-
-      await ctx.db.$transaction(
-        input.orderedIds.map((id, index) =>
-          ctx.db.portfolioSoftSkill.update({
-            where: { id },
-            data: { order: index },
-          }),
-        ),
-      );
-
-      return { success: true };
-    }),
-
-  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
-    const items = await ctx.db.portfolioSoftSkill.findMany({
-      where: { userId: ctx.user.id },
-      select: { id: true },
-    });
-    const ids = items.map((i) => i.id);
-    if (ids.length === 0) return { count: 0 };
-    return ctx.db.portfolioSoftSkill.deleteMany({ where: { id: { in: ids } } });
-  }),
 });

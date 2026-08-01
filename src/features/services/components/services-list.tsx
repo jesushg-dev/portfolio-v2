@@ -10,7 +10,7 @@ import { api, type RouterOutputs } from "@/trpc/react";
 import { toast } from "sonner";
 import type { Locale } from "@/i18n/config";
 import type { AppLanguage } from "@prisma/client";
-import { getTitleDescriptionForLocale } from "@/lib/i18n/localized-display";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
@@ -125,17 +125,12 @@ export const ServicesList: FC<ServicesListProps> = ({
     return map;
   }, [rawSkills]);
 
-  const columns = useMemo<ColumnDef<ServiceRow>[]>(
-    () => [
+  const columns = useMemo<ColumnDef<ServiceRow>[]>(() => {
+    const field = createLocalizedFieldResolver(languages, locale);
+    return [
       {
         id: "title",
-        accessorFn: (row) =>
-          getTitleDescriptionForLocale(
-            row.translations,
-            languages,
-            locale,
-            "title",
-          ),
+        accessorFn: (row) => field(row.translations, "title"),
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnTitle")} />
         ),
@@ -147,20 +142,9 @@ export const ServicesList: FC<ServicesListProps> = ({
         enableSorting: false,
         enableColumnFilter: true,
         cell: ({ row }) => {
-          const title =
-            getTitleDescriptionForLocale(
-              row.original.translations,
-              languages,
-              locale,
-              "title",
-            ) || t("untitled");
-          const description =
-            getTitleDescriptionForLocale(
-              row.original.translations,
-              languages,
-              locale,
-              "description",
-            ) || t("noTranslation");
+          const tService = field.for(row.original.translations);
+          const title = tService("title") || t("untitled");
+          const description = tService("description") || t("noTranslation");
 
           return (
             <div className="space-y-0.5">
@@ -247,9 +231,8 @@ export const ServicesList: FC<ServicesListProps> = ({
           );
         },
       },
-    ],
-    [deletingId, handleDelete, isPending, languages, locale, skillsById, t],
-  );
+    ];
+  }, [deletingId, handleDelete, isPending, languages, locale, skillsById, t]);
 
   const { table } = useDataTable({
     data: services,

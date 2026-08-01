@@ -1,7 +1,5 @@
 import { readFileSync } from "node:fs";
-import type { Prisma, PrismaClient, TimelineCategory } from "@prisma/client";
-
-import { toLocalizedText } from "./lib/localized-text-seed";
+import type { PrismaClient, TimelineCategory } from "@prisma/client";
 
 type LocaleCode = "es" | "en" | "nl";
 type LocaleMap = Partial<Record<LocaleCode, string>>;
@@ -30,12 +28,6 @@ const portfolioTimeline = JSON.parse(
   ),
 ) as PortfolioTimelineSeed;
 
-function asJson(
-  value: ReturnType<typeof toLocalizedText>,
-): Prisma.InputJsonValue {
-  return value as unknown as Prisma.InputJsonValue;
-}
-
 export async function seedPortfolioTimeline(
   prisma: PrismaClient,
   userId: string,
@@ -45,12 +37,12 @@ export async function seedPortfolioTimeline(
 
   await prisma.timelineItem.deleteMany({ where: { userId } });
 
+  const languages = await prisma.appLanguage.findMany();
+
   for (const item of data.items) {
     await prisma.timelineItem.create({
       data: {
         userId,
-        title: asJson(toLocalizedText(item.title)),
-        description: asJson(toLocalizedText(item.description)),
         category: item.category,
         organization: item.organization,
         location: item.location ?? null,
@@ -58,6 +50,16 @@ export async function seedPortfolioTimeline(
         endDate: item.endDate ? new Date(item.endDate) : null,
         current: item.current,
         images: item.images ?? [],
+        TimelineItemTranslation: {
+          create: languages.map((lang) => ({
+            appLanguageId: lang.id,
+            title: item.title[lang.code as LocaleCode] ?? item.title.es ?? "",
+            description:
+              item.description[lang.code as LocaleCode] ??
+              item.description.es ??
+              "",
+          })),
+        },
       },
     });
   }

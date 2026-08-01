@@ -8,7 +8,7 @@ const baseSnapshot: CvPreviewSnapshot = {
     photoUrl: null,
     backgroundImageUrl: null,
     heroSummary: "Backend engineer",
-    clientImageAlt: null,
+    clientImageAlt: "",
   },
   aboutMeText: "About me",
   contacts: [],
@@ -35,7 +35,7 @@ describe("computeCvPdfContentHash", () => {
       {
         ...baseSnapshot,
         header: {
-          ...baseSnapshot.header!,
+          ...baseSnapshot.header,
           fullName: "John Doe",
         },
       },

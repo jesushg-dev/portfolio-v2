@@ -5,12 +5,13 @@ import { notFound } from "next/navigation";
 import CvPreview from "@/components/curriculum-vitae/cv-preview";
 import CvPageActions from "@/features/cv/components/cv-page-actions";
 import { cvPreviewFont } from "@/features/cv/lib/cv-preview-font";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { canDeliverPortfolioCvEmail } from "@/lib/email/resend";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import { resolveTenant } from "@/lib/tenant/resolve";
 import { db } from "@/server/db";
 import type { Locale as AppLocale } from "@/i18n/config";
+import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 
 interface CvPageViewProps {
   locale: string;
@@ -31,6 +32,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
 
   const userId = tenant.userId;
   const [
+    appLanguages,
     profile,
     header,
     aboutMe,
@@ -41,20 +43,31 @@ const CvPageView: FC<CvPageViewProps> = async ({
     experiences,
     softSkills,
     additionalInformation,
+    personalReferences,
   ] = await Promise.all([
+    db.appLanguage.findMany(),
     db.profile.findUnique({ where: { userId } }),
-    db.cvHeader.findUnique({ where: { userId } }),
-    db.cvAboutMe.findUnique({ where: { userId } }),
+    db.cvHeader.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
+    db.cvAboutMe.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
     db.cvContact.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     db.cvEducation.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     db.cvLanguage.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     db.cvTechnicalSkill.findMany({
@@ -64,17 +77,28 @@ const CvPageView: FC<CvPageViewProps> = async ({
     db.cvExperience.findMany({
       where: { userId },
       include: {
-        responsibilities: { orderBy: { order: "asc" } },
+        translations: true,
+        responsibilities: {
+          include: { translations: true },
+          orderBy: { order: "asc" },
+        },
         CvExperienceSkill: { include: { skill: true } },
       },
       orderBy: { order: "asc" },
     }),
     db.cvSoftSkill.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     db.cvAdditionalInfo.findMany({
       where: { userId },
+      include: { translations: true },
+      orderBy: { order: "asc" },
+    }),
+    db.cvPersonalReference.findMany({
+      where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
   ]);
@@ -85,14 +109,15 @@ const CvPageView: FC<CvPageViewProps> = async ({
     notFound();
   }
 
-  const currentLocale = locale as AppLocale;
-  const defaultLocale = tenant.defaultLocale;
+  const defaultLocale = tenant.defaultLocale || "en";
+  const currentLocale = (locale as AppLocale) || defaultLocale;
 
-  const aboutMeText = getLocalizedText(
-    aboutMe?.aboutMe,
-    currentLocale,
-    defaultLocale,
-  );
+  const appLanguageRefs = appLanguages.map(({ id, code }) => ({ id, code }));
+
+  const field = createLocalizedFieldResolver(appLanguages, currentLocale);
+  const aboutMeText =
+    field(header?.translations, "heroSummary") ||
+    (aboutMe ? field(aboutMe.translations, "aboutMe") : null);
   const downloadFileName = `CV - ${header?.fullName ?? profile?.username ?? "user"}.pdf`;
   const paginateQuery = paginatePdfPages ? "&paginate=1" : "";
   const cvDownloadHref = header
@@ -102,6 +127,24 @@ const CvPageView: FC<CvPageViewProps> = async ({
     Boolean(header) &&
     (await canDeliverPortfolioCvEmail(userId, currentLocale));
 
+  const localizedData = mapCvDataToLocalized(
+    {
+      header,
+      profile,
+      contacts: displayContacts,
+      educations,
+      languages,
+      technicalSkills,
+      experiences,
+      softSkills,
+      additionalInformation,
+      personalReferences,
+      aboutMe,
+    },
+    appLanguageRefs,
+    currentLocale,
+  );
+
   if (pdfMode) {
     return (
       <div
@@ -109,20 +152,8 @@ const CvPageView: FC<CvPageViewProps> = async ({
         className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
       >
         <CvPreview
-          data={{
-            header,
-            profile,
-            contacts: displayContacts,
-            educations,
-            languages,
-            technicalSkills,
-            experiences,
-            softSkills,
-            additionalInformation,
-          }}
+          data={localizedData}
           aboutMeText={aboutMeText}
-          currentLocale={currentLocale}
-          defaultLocale={defaultLocale}
           pdfMode
         />
         <div className="bg-cv h-4" aria-hidden />
@@ -149,20 +180,8 @@ const CvPageView: FC<CvPageViewProps> = async ({
           className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
         >
           <CvPreview
-            data={{
-              header,
-              profile,
-              contacts: displayContacts,
-              educations,
-              languages,
-              technicalSkills,
-              experiences,
-              softSkills,
-              additionalInformation,
-            }}
+            data={localizedData}
             aboutMeText={aboutMeText}
-            currentLocale={currentLocale}
-            defaultLocale={defaultLocale}
           />
           <div className="bg-cv p-4">
             <p className="text-sm font-semibold text-white">{t("codedWith")}</p>

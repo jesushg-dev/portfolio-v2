@@ -5,12 +5,11 @@ import type { CvContactType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/routing";
-import { getLocalizedText } from "@/lib/i18n/localized";
 import { SCHEDULE_PATH } from "@/utils/calendly-url";
-import type { CvData, CvLocaleProps } from "./types";
+import type { LocalizedCvData } from "./types";
 
-interface IContactMeProps extends CvLocaleProps {
-  contacts: CvData["contacts"];
+interface IContactMeProps {
+  contacts: LocalizedCvData["contacts"];
 }
 
 const ICONS: Record<CvContactType, typeof MdWeb> = {
@@ -41,11 +40,41 @@ const buildHref = (type: CvContactType, value: string) => {
 
 const isInternalHref = (href: string) => href.startsWith("/");
 
-const ContactMe: FC<IContactMeProps> = ({
-  contacts,
-  locale,
-  defaultLocale,
-}) => {
+function ContactItem({ contact }: { contact: LocalizedCvData["contacts"][number] }) {
+  const Icon = ICONS[contact.type] ?? MdWeb;
+  const label = contact.label || contact.value;
+  const href = buildHref(contact.type, contact.value);
+  const linkClassName =
+    "relative z-10 inline-flex min-h-11 items-center gap-1 py-0 text-[#1a1a1a] hover:underline";
+  const opensInNewTab =
+    !isInternalHref(href) &&
+    !href.startsWith("tel:") &&
+    !href.startsWith("mailto:");
+
+  return (
+    <li className="relative -my-3.5">
+      {isInternalHref(href) ? (
+        <Link href={href as typeof SCHEDULE_PATH} className={linkClassName}>
+          <Icon className="size-3 shrink-0" aria-hidden />
+          {label}
+        </Link>
+      ) : (
+        <a
+          className={linkClassName}
+          href={href}
+          {...(opensInNewTab
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
+        >
+          <Icon className="size-3 shrink-0" aria-hidden />
+          {label}
+        </a>
+      )}
+    </li>
+  );
+}
+
+const ContactMe: FC<IContactMeProps> = ({ contacts }) => {
   const t = useTranslations("curriculum");
 
   if (!contacts.length) return null;
@@ -58,44 +87,9 @@ const ContactMe: FC<IContactMeProps> = ({
 
       <div className="mb-4">
         <ul className="list-none text-sm leading-none">
-          {contacts.map((contact) => {
-            const Icon = ICONS[contact.type] ?? MdWeb;
-            const label =
-              getLocalizedText(contact.label, locale, defaultLocale) ||
-              contact.value;
-            const href = buildHref(contact.type, contact.value);
-            const linkClassName =
-              "relative z-10 inline-flex min-h-11 items-center gap-1 py-0 text-[#1a1a1a] hover:underline";
-            const opensInNewTab =
-              !isInternalHref(href) &&
-              !href.startsWith("tel:") &&
-              !href.startsWith("mailto:");
-
-            return (
-              <li key={contact.id} className="relative -my-3.5">
-                {isInternalHref(href) ? (
-                  <Link
-                    href={href as typeof SCHEDULE_PATH}
-                    className={linkClassName}
-                  >
-                    <Icon className="size-3 shrink-0" aria-hidden />
-                    {label}
-                  </Link>
-                ) : (
-                  <a
-                    className={linkClassName}
-                    href={href}
-                    {...(opensInNewTab
-                      ? { target: "_blank", rel: "noopener noreferrer" }
-                      : {})}
-                  >
-                    <Icon className="size-3 shrink-0" aria-hidden />
-                    {label}
-                  </a>
-                )}
-              </li>
-            );
-          })}
+          {contacts.map((contact) => (
+            <ContactItem key={contact.id} contact={contact} />
+          ))}
         </ul>
       </div>
     </>

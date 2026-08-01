@@ -1,7 +1,12 @@
-import type { TimelineCategory, TimelineItem } from "@prisma/client";
+import type {
+  AppLanguage,
+  TimelineCategory,
+  TimelineItem,
+  TimelineItemTranslation,
+} from "@prisma/client";
 
 import { type Locale } from "@/i18n/config";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 
 export interface TimelinePublicItem {
   id: string;
@@ -18,6 +23,16 @@ export interface TimelinePublicItem {
   images: string[];
   order: number;
 }
+
+export type TimelineItemWithTranslations = TimelineItem & {
+  TimelineItemTranslation?: TimelineItemTranslation[];
+};
+
+const DEFAULT_LANGUAGES: Pick<AppLanguage, "id" | "code">[] = [
+  { id: "lang-en", code: "en" },
+  { id: "lang-es", code: "es" },
+  { id: "lang-nl", code: "nl" },
+];
 
 export function formatTimelineDate(
   startDate: Date,
@@ -38,12 +53,15 @@ export function formatTimelineDate(
 }
 
 export function mapTimelineItemToPublic(
-  item: TimelineItem,
+  item: TimelineItemWithTranslations,
   locale: Locale,
-  defaultLocale?: Locale,
+  languages: Pick<AppLanguage, "id" | "code">[] = DEFAULT_LANGUAGES,
 ): TimelinePublicItem {
-  const title = getLocalizedText(item.title, locale, defaultLocale);
-  const description = getLocalizedText(item.description, locale, defaultLocale);
+  const translations = item.TimelineItemTranslation ?? [];
+  const field = createLocalizedFieldResolver(languages, locale);
+  const t = field.for(translations);
+  const title = t("title");
+  const description = t("description");
 
   return {
     id: item.id,
@@ -67,13 +85,13 @@ export function mapTimelineItemToPublic(
 }
 
 export function mapTimelineItemsToPublic(
-  items: TimelineItem[],
+  items: TimelineItemWithTranslations[],
   locale: Locale,
-  defaultLocale?: Locale,
+  languages: Pick<AppLanguage, "id" | "code">[] = DEFAULT_LANGUAGES,
   limit?: number,
 ): TimelinePublicItem[] {
   const mapped = items.map((item) =>
-    mapTimelineItemToPublic(item, locale, defaultLocale),
+    mapTimelineItemToPublic(item, locale, languages),
   );
 
   if (limit === undefined) {

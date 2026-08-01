@@ -1,57 +1,175 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import type { Prisma, PrismaClient } from "@prisma/client";
+import type { AppLanguage, PrismaClient } from "@prisma/client";
 
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import {
-  optionalTextMapToLocalizedJson,
-  textMapToLocalizedJson,
-  type TextTranslationMap,
-} from "@/lib/i18n/localized-text-map";
+import { TextTranslationMapSchema } from "@/lib/i18n/localized-form";
+import type { TextTranslationMap } from "@/lib/i18n/translation-map";
 import { resolveCvPdfAsset } from "@/features/cv/lib/resolve-cv-pdf-asset";
 
 type CvDbClient = Pick<PrismaClient, "appLanguage">;
 
-async function persistRequiredTextMap(
-  db: CvDbClient,
-  map: TextTranslationMap,
-): Promise<Prisma.InputJsonValue> {
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
-  const localized = textMapToLocalizedJson(map, languages);
-  if (!localized) {
-    throw new Error("Primary language text is required");
+async function getAppLanguages(db: CvDbClient): Promise<AppLanguage[]> {
+  return db.appLanguage.findMany({ orderBy: { code: "asc" } });
+}
+
+async function upsertEducationTranslations(
+  db: PrismaClient,
+  languages: AppLanguage[],
+  educationId: string,
+  degreeName: TextTranslationMap,
+  location?: TextTranslationMap,
+  description?: TextTranslationMap,
+) {
+  for (const lang of languages) {
+    const data = {
+      degreeName: degreeName[lang.id]?.text ?? "",
+      location: location?.[lang.id]?.text ?? null,
+      description: description?.[lang.id]?.text ?? null,
+    };
+    const existing = await db.cvEducationTranslation.findFirst({
+      where: { cvEducationId: educationId, appLanguageId: lang.id },
+    });
+
+    if (existing) {
+      await db.cvEducationTranslation.update({
+        where: { id: existing.id },
+        data,
+      });
+      continue;
+    }
+
+    await db.cvEducationTranslation.create({
+      data: {
+        cvEducationId: educationId,
+        appLanguageId: lang.id,
+        ...data,
+      },
+    });
   }
-  return localized as Prisma.InputJsonValue;
 }
 
-async function persistOptionalTextMap(
-  db: CvDbClient,
-  map: TextTranslationMap | undefined,
-): Promise<Prisma.InputJsonValue | undefined> {
-  if (!map) return undefined;
-  const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
-  return optionalTextMapToLocalizedJson(map, languages) as
-    Prisma.InputJsonValue | undefined;
+async function upsertLanguageTranslations(
+  db: PrismaClient,
+  languages: AppLanguage[],
+  languageId: string,
+  name: TextTranslationMap,
+  level: TextTranslationMap,
+) {
+  for (const lang of languages) {
+    const data = {
+      name: name[lang.id]?.text ?? "",
+      level: level[lang.id]?.text ?? "",
+    };
+    const existing = await db.cvLanguageTranslation.findFirst({
+      where: { cvLanguageId: languageId, appLanguageId: lang.id },
+    });
+
+    if (existing) {
+      await db.cvLanguageTranslation.update({
+        where: { id: existing.id },
+        data,
+      });
+      continue;
+    }
+
+    await db.cvLanguageTranslation.create({
+      data: {
+        cvLanguageId: languageId,
+        appLanguageId: lang.id,
+        ...data,
+      },
+    });
+  }
 }
 
-async function persistNullableTextMap(
-  db: CvDbClient,
-  map: TextTranslationMap | null | undefined,
-): Promise<Prisma.InputJsonValue | null | undefined> {
-  if (map === null) return null;
-  return persistOptionalTextMap(db, map ?? undefined);
+async function upsertExperienceTranslations(
+  db: PrismaClient,
+  languages: AppLanguage[],
+  experienceId: string,
+  role: TextTranslationMap,
+  location?: TextTranslationMap,
+) {
+  for (const lang of languages) {
+    const data = {
+      role: role[lang.id]?.text ?? "",
+      location: location?.[lang.id]?.text ?? null,
+    };
+    const existing = await db.cvExperienceTranslation.findFirst({
+      where: { cvExperienceId: experienceId, appLanguageId: lang.id },
+    });
+
+    if (existing) {
+      await db.cvExperienceTranslation.update({
+        where: { id: existing.id },
+        data,
+      });
+      continue;
+    }
+
+    await db.cvExperienceTranslation.create({
+      data: {
+        cvExperienceId: experienceId,
+        appLanguageId: lang.id,
+        ...data,
+      },
+    });
+  }
 }
 
-const CvTextTranslationMapSchema = z.record(
-  z.string(),
-  z.object({
-    text: z.string(),
-  }),
-);
+function buildEducationTranslationCreates(
+  languages: AppLanguage[],
+  degreeName: TextTranslationMap,
+  location?: TextTranslationMap,
+  description?: TextTranslationMap,
+) {
+  return languages.map((lang) => ({
+    appLanguageId: lang.id,
+    degreeName: degreeName[lang.id]?.text ?? "",
+    location: location?.[lang.id]?.text ?? null,
+    description: description?.[lang.id]?.text ?? null,
+  }));
+}
+
+function buildLanguageTranslationCreates(
+  languages: AppLanguage[],
+  name: TextTranslationMap,
+  level: TextTranslationMap,
+) {
+  return languages.map((lang) => ({
+    appLanguageId: lang.id,
+    name: name[lang.id]?.text ?? "",
+    level: level[lang.id]?.text ?? "",
+  }));
+}
+
+function buildExperienceTranslationCreates(
+  languages: AppLanguage[],
+  role: TextTranslationMap,
+  location?: TextTranslationMap,
+) {
+  return languages.map((lang) => ({
+    appLanguageId: lang.id,
+    role: role[lang.id]?.text ?? "",
+    location: location?.[lang.id]?.text ?? null,
+  }));
+}
+
+function buildResponsibilityTranslationCreates(
+  languages: AppLanguage[],
+  text: TextTranslationMap,
+) {
+  return languages.map((lang) => ({
+    appLanguageId: lang.id,
+    text: text[lang.id]?.text ?? "",
+  }));
+}
+
+const CvTextTranslationMapSchema = TextTranslationMapSchema;
 
 const CvContactType = z.enum([
   "EMAIL",
@@ -95,18 +213,27 @@ const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
     personalReferences,
   ] = await Promise.all([
     ctx.db.profile.findUnique({ where: { userId } }),
-    ctx.db.cvHeader.findUnique({ where: { userId } }),
-    ctx.db.cvAboutMe.findUnique({ where: { userId } }),
+    ctx.db.cvHeader.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
+    ctx.db.cvAboutMe.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
     ctx.db.cvContact.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     ctx.db.cvEducation.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     ctx.db.cvLanguage.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     ctx.db.cvTechnicalSkill.findMany({
@@ -116,21 +243,28 @@ const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
     ctx.db.cvExperience.findMany({
       where: { userId },
       include: {
-        responsibilities: { orderBy: { order: "asc" } },
+        translations: true,
+        responsibilities: {
+          include: { translations: true },
+          orderBy: { order: "asc" },
+        },
         CvExperienceSkill: { include: { skill: true } },
       },
       orderBy: { order: "asc" },
     }),
     ctx.db.cvSoftSkill.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     ctx.db.cvAdditionalInfo.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     ctx.db.cvPersonalReference.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
   ]);
@@ -173,74 +307,105 @@ export const cvRouter = createTRPCRouter({
       z.object({
         fullName: z.string().min(1),
         degree: CvTextTranslationMapSchema.optional(),
-        photoUrl: z.string().url().nullable().optional(),
-        backgroundImageUrl: z.string().url().nullable().optional(),
-        heroSummary: CvTextTranslationMapSchema.nullable().optional(),
-        clientImageAlt: CvTextTranslationMapSchema.nullable().optional(),
+        photoUrl: z.string().nullable().optional(),
+        backgroundImageUrl: z.string().nullable().optional(),
+        heroSummary: CvTextTranslationMapSchema.optional(),
+        clientImageAlt: CvTextTranslationMapSchema.optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const existing = await ctx.db.cvHeader.findUnique({
-        where: { userId: ctx.user.id },
-      });
-
-      const persistedDegree = input.degree
-        ? await persistRequiredTextMap(ctx.db, input.degree)
-        : undefined;
-
-      const degreeValue = persistedDegree ??
-        (existing?.degree as Prisma.InputJsonValue) ?? { default: "" };
-
-      const heroSummaryValue = await persistNullableTextMap(
-        ctx.db,
-        input.heroSummary,
-      );
-      const clientImageAltValue = await persistNullableTextMap(
-        ctx.db,
-        input.clientImageAlt,
-      );
-
-      return ctx.db.cvHeader.upsert({
+      const languages = await ctx.db.appLanguage.findMany();
+      const header = await ctx.db.cvHeader.upsert({
         where: { userId: ctx.user.id },
         create: {
           userId: ctx.user.id,
           fullName: input.fullName,
-          degree: degreeValue,
           photoUrl: input.photoUrl ?? null,
           backgroundImageUrl: input.backgroundImageUrl ?? null,
-          heroSummary: heroSummaryValue,
-          clientImageAlt: clientImageAltValue,
         },
         update: {
           fullName: input.fullName,
-          ...(persistedDegree ? { degree: persistedDegree } : {}),
           photoUrl: input.photoUrl ?? null,
           ...(input.backgroundImageUrl !== undefined
             ? { backgroundImageUrl: input.backgroundImageUrl }
             : {}),
-          ...(input.heroSummary !== undefined
-            ? { heroSummary: heroSummaryValue }
-            : {}),
-          ...(input.clientImageAlt !== undefined
-            ? { clientImageAlt: clientImageAltValue }
-            : {}),
         },
       });
+
+      for (const lang of languages) {
+        const degreeText = input.degree
+          ? (input.degree[lang.id]?.text ?? "")
+          : "";
+        const summaryText = input.heroSummary
+          ? (input.heroSummary[lang.id]?.text ?? null)
+          : null;
+        const altText = input.clientImageAlt
+          ? (input.clientImageAlt[lang.id]?.text ?? null)
+          : null;
+
+        const existing = await ctx.db.cvHeaderTranslation.findFirst({
+          where: { cvHeaderId: header.id, appLanguageId: lang.id },
+        });
+
+        if (existing) {
+          await ctx.db.cvHeaderTranslation.update({
+            where: { id: existing.id },
+            data: {
+              ...(degreeText ? { degree: degreeText } : {}),
+              ...(summaryText !== null ? { heroSummary: summaryText } : {}),
+              ...(altText !== null ? { clientImageAlt: altText } : {}),
+            },
+          });
+        } else {
+          await ctx.db.cvHeaderTranslation.create({
+            data: {
+              cvHeaderId: header.id,
+              appLanguageId: lang.id,
+              degree: degreeText,
+              heroSummary: summaryText,
+              clientImageAlt: altText,
+            },
+          });
+        }
+      }
+
+      return header;
     }),
 
   // ---------- About me ----------
   upsertAboutMe: protectedProcedure
     .input(z.object({ aboutMe: CvTextTranslationMapSchema }))
     .mutation(async ({ ctx, input }) => {
-      const aboutMe = await persistRequiredTextMap(ctx.db, input.aboutMe);
-      return ctx.db.cvAboutMe.upsert({
+      const languages = await ctx.db.appLanguage.findMany();
+      const about = await ctx.db.cvAboutMe.upsert({
         where: { userId: ctx.user.id },
-        create: {
-          userId: ctx.user.id,
-          aboutMe,
-        },
-        update: { aboutMe },
+        create: { userId: ctx.user.id },
+        update: {},
       });
+
+      for (const lang of languages) {
+        const aboutMeText = input.aboutMe[lang.id]?.text ?? "";
+        const existing = await ctx.db.cvAboutMeTranslation.findFirst({
+          where: { cvAboutMeId: about.id, appLanguageId: lang.id },
+        });
+
+        if (existing) {
+          await ctx.db.cvAboutMeTranslation.update({
+            where: { id: existing.id },
+            data: { aboutMe: aboutMeText },
+          });
+        } else {
+          await ctx.db.cvAboutMeTranslation.create({
+            data: {
+              cvAboutMeId: about.id,
+              appLanguageId: lang.id,
+              aboutMe: aboutMeText,
+            },
+          });
+        }
+      }
+
+      return about;
     }),
 
   // ---------- Contacts ----------
@@ -255,13 +420,23 @@ export const cvRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { label, ...rest } = input;
-      return ctx.db.cvContact.create({
+      const languages = await getAppLanguages(ctx.db);
+      const contact = await ctx.db.cvContact.create({
         data: {
           ...rest,
-          label: await persistOptionalTextMap(ctx.db, label),
           userId: ctx.user.id,
+          translations: label
+            ? {
+                create: languages.map((lang) => ({
+                  appLanguageId: lang.id,
+                  label: label[lang.id]?.text ?? "",
+                })),
+              }
+            : undefined,
         },
+        include: { translations: true },
       });
+      return contact;
     }),
   updateContact: protectedProcedure
     .input(
@@ -279,12 +454,37 @@ export const cvRouter = createTRPCRouter({
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      return ctx.db.cvContact.update({
+
+      const languages = await getAppLanguages(ctx.db);
+      await ctx.db.cvContact.update({ where: { id }, data });
+
+      if (label) {
+        for (const lang of languages) {
+          const labelText = label[lang.id]?.text ?? "";
+          const existing = await ctx.db.cvContactTranslation.findFirst({
+            where: { cvContactId: id, appLanguageId: lang.id },
+          });
+
+          if (existing) {
+            await ctx.db.cvContactTranslation.update({
+              where: { id: existing.id },
+              data: { label: labelText },
+            });
+          } else {
+            await ctx.db.cvContactTranslation.create({
+              data: {
+                cvContactId: id,
+                appLanguageId: lang.id,
+                label: labelText,
+              },
+            });
+          }
+        }
+      }
+
+      return ctx.db.cvContact.findUniqueOrThrow({
         where: { id },
-        data: {
-          ...data,
-          label: await persistOptionalTextMap(ctx.db, label),
-        },
+        include: { translations: true },
       });
     }),
   deleteContact: protectedProcedure
@@ -315,14 +515,22 @@ export const cvRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { degreeName, location, description, ...rest } = input;
+      const languages = await getAppLanguages(ctx.db);
+
       return ctx.db.cvEducation.create({
         data: {
           ...rest,
-          degreeName: await persistRequiredTextMap(ctx.db, degreeName),
-          location: await persistOptionalTextMap(ctx.db, location),
-          description: await persistOptionalTextMap(ctx.db, description),
           userId: ctx.user.id,
+          translations: {
+            create: buildEducationTranslationCreates(
+              languages,
+              degreeName,
+              location,
+              description,
+            ),
+          },
         },
+        include: { translations: true },
       });
     }),
   updateEducation: protectedProcedure
@@ -345,14 +553,21 @@ export const cvRouter = createTRPCRouter({
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      return ctx.db.cvEducation.update({
+
+      const languages = await getAppLanguages(ctx.db);
+      await ctx.db.cvEducation.update({ where: { id }, data });
+      await upsertEducationTranslations(
+        ctx.db,
+        languages,
+        id,
+        degreeName,
+        location,
+        description,
+      );
+
+      return ctx.db.cvEducation.findUniqueOrThrow({
         where: { id },
-        data: {
-          ...data,
-          degreeName: await persistRequiredTextMap(ctx.db, degreeName),
-          location: await persistOptionalTextMap(ctx.db, location),
-          description: await persistOptionalTextMap(ctx.db, description),
-        },
+        include: { translations: true },
       });
     }),
   deleteEducation: protectedProcedure
@@ -378,13 +593,17 @@ export const cvRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { name, level, ...rest } = input;
+      const languages = await getAppLanguages(ctx.db);
+
       return ctx.db.cvLanguage.create({
         data: {
           ...rest,
-          name: await persistRequiredTextMap(ctx.db, name),
-          level: await persistRequiredTextMap(ctx.db, level),
           userId: ctx.user.id,
+          translations: {
+            create: buildLanguageTranslationCreates(languages, name, level),
+          },
         },
+        include: { translations: true },
       });
     }),
   updateLanguage: protectedProcedure
@@ -402,13 +621,14 @@ export const cvRouter = createTRPCRouter({
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      return ctx.db.cvLanguage.update({
+
+      const languages = await getAppLanguages(ctx.db);
+      await ctx.db.cvLanguage.update({ where: { id }, data });
+      await upsertLanguageTranslations(ctx.db, languages, id, name, level);
+
+      return ctx.db.cvLanguage.findUniqueOrThrow({
         where: { id },
-        data: {
-          ...data,
-          name: await persistRequiredTextMap(ctx.db, name),
-          level: await persistRequiredTextMap(ctx.db, level),
-        },
+        include: { translations: true },
       });
     }),
   deleteLanguage: protectedProcedure
@@ -493,32 +713,39 @@ export const cvRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { responsibilities, role, location, skillIds, ...rest } = input;
-      const persistedResponsibilities = await Promise.all(
-        responsibilities.map(async (r) => ({
-          order: r.order,
-          text: await persistRequiredTextMap(ctx.db, r.text),
-        })),
-      );
+      const languages = await getAppLanguages(ctx.db);
+
       return ctx.db.cvExperience.create({
         data: {
           ...rest,
-          skills: null,
-          role: await persistRequiredTextMap(ctx.db, role),
-          location: await persistOptionalTextMap(ctx.db, location),
           userId: ctx.user.id,
+          translations: {
+            create: buildExperienceTranslationCreates(
+              languages,
+              role,
+              location,
+            ),
+          },
           CvExperienceSkill: skillIds.length
             ? { createMany: { data: skillIds.map((skillId) => ({ skillId })) } }
             : undefined,
-          responsibilities: persistedResponsibilities.length
+          responsibilities: responsibilities.length
             ? {
-                createMany: {
-                  data: persistedResponsibilities,
-                },
+                create: responsibilities.map((responsibility) => ({
+                  order: responsibility.order,
+                  translations: {
+                    create: buildResponsibilityTranslationCreates(
+                      languages,
+                      responsibility.text,
+                    ),
+                  },
+                })),
               }
             : undefined,
         },
         include: {
-          responsibilities: true,
+          translations: true,
+          responsibilities: { include: { translations: true } },
           CvExperienceSkill: { include: { skill: true } },
         },
       });
@@ -552,13 +779,9 @@ export const cvRouter = createTRPCRouter({
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      const persistedResponsibilities = await Promise.all(
-        responsibilities.map(async (r) => ({
-          order: r.order,
-          text: await persistRequiredTextMap(ctx.db, r.text),
-        })),
-      );
-      // Replace responsibilities atomically (within MongoDB constraints).
+
+      const languages = await getAppLanguages(ctx.db);
+
       await ctx.db.cvResponsibility.deleteMany({
         where: { experienceId: id },
       });
@@ -570,23 +793,35 @@ export const cvRouter = createTRPCRouter({
           data: skillIds.map((skillId) => ({ experienceId: id, skillId })),
         });
       }
-      return ctx.db.cvExperience.update({
+
+      await ctx.db.cvExperience.update({ where: { id }, data });
+      await upsertExperienceTranslations(ctx.db, languages, id, role, location);
+
+      if (responsibilities.length > 0) {
+        for (const responsibility of responsibilities) {
+          await ctx.db.cvResponsibility.create({
+            data: {
+              experienceId: id,
+              order: responsibility.order,
+              translations: {
+                create: buildResponsibilityTranslationCreates(
+                  languages,
+                  responsibility.text,
+                ),
+              },
+            },
+          });
+        }
+      }
+
+      return ctx.db.cvExperience.findUniqueOrThrow({
         where: { id },
-        data: {
-          ...data,
-          skills: null,
-          role: await persistRequiredTextMap(ctx.db, role),
-          location: await persistOptionalTextMap(ctx.db, location),
-          responsibilities: persistedResponsibilities.length
-            ? {
-                createMany: {
-                  data: persistedResponsibilities,
-                },
-              }
-            : undefined,
-        },
         include: {
-          responsibilities: true,
+          translations: true,
+          responsibilities: {
+            include: { translations: true },
+            orderBy: { order: "asc" },
+          },
           CvExperienceSkill: { include: { skill: true } },
         },
       });
@@ -646,12 +881,20 @@ export const cvRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { name, ...rest } = input;
+      const languages = await getAppLanguages(ctx.db);
+
       return ctx.db.cvSoftSkill.create({
         data: {
           ...rest,
-          name: await persistRequiredTextMap(ctx.db, name),
           userId: ctx.user.id,
+          translations: {
+            create: languages.map((lang) => ({
+              appLanguageId: lang.id,
+              name: name[lang.id]?.text ?? "",
+            })),
+          },
         },
+        include: { translations: true },
       });
     }),
   updateSoftSkill: protectedProcedure
@@ -668,9 +911,35 @@ export const cvRouter = createTRPCRouter({
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      return ctx.db.cvSoftSkill.update({
+
+      const languages = await getAppLanguages(ctx.db);
+      await ctx.db.cvSoftSkill.update({ where: { id }, data: rest });
+
+      for (const lang of languages) {
+        const nameText = name[lang.id]?.text ?? "";
+        const existing = await ctx.db.cvSoftSkillTranslation.findFirst({
+          where: { cvSoftSkillId: id, appLanguageId: lang.id },
+        });
+
+        if (existing) {
+          await ctx.db.cvSoftSkillTranslation.update({
+            where: { id: existing.id },
+            data: { name: nameText },
+          });
+        } else {
+          await ctx.db.cvSoftSkillTranslation.create({
+            data: {
+              cvSoftSkillId: id,
+              appLanguageId: lang.id,
+              name: nameText,
+            },
+          });
+        }
+      }
+
+      return ctx.db.cvSoftSkill.findUniqueOrThrow({
         where: { id },
-        data: { ...rest, name: await persistRequiredTextMap(ctx.db, name) },
+        include: { translations: true },
       });
     }),
   deleteSoftSkill: protectedProcedure
@@ -695,12 +964,20 @@ export const cvRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { text, ...rest } = input;
+      const languages = await getAppLanguages(ctx.db);
+
       return ctx.db.cvAdditionalInfo.create({
         data: {
           ...rest,
-          text: await persistRequiredTextMap(ctx.db, text),
           userId: ctx.user.id,
+          translations: {
+            create: languages.map((lang) => ({
+              appLanguageId: lang.id,
+              text: text[lang.id]?.text ?? "",
+            })),
+          },
         },
+        include: { translations: true },
       });
     }),
   updateAdditionalInfo: protectedProcedure
@@ -719,9 +996,35 @@ export const cvRouter = createTRPCRouter({
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      return ctx.db.cvAdditionalInfo.update({
+
+      const languages = await getAppLanguages(ctx.db);
+      await ctx.db.cvAdditionalInfo.update({ where: { id }, data: rest });
+
+      for (const lang of languages) {
+        const infoText = text[lang.id]?.text ?? "";
+        const existing = await ctx.db.cvAdditionalInfoTranslation.findFirst({
+          where: { cvAdditionalInfoId: id, appLanguageId: lang.id },
+        });
+
+        if (existing) {
+          await ctx.db.cvAdditionalInfoTranslation.update({
+            where: { id: existing.id },
+            data: { text: infoText },
+          });
+        } else {
+          await ctx.db.cvAdditionalInfoTranslation.create({
+            data: {
+              cvAdditionalInfoId: id,
+              appLanguageId: lang.id,
+              text: infoText,
+            },
+          });
+        }
+      }
+
+      return ctx.db.cvAdditionalInfo.findUniqueOrThrow({
         where: { id },
-        data: { ...rest, text: await persistRequiredTextMap(ctx.db, text) },
+        include: { translations: true },
       });
     }),
   deleteAdditionalInfo: protectedProcedure

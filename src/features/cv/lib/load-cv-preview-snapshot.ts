@@ -1,33 +1,36 @@
-import "server-only";
-
 import type { PrismaClient } from "@prisma/client";
 
 import type { Locale } from "@/i18n/config";
-import { appendPortfolioWebsiteContact } from "@/lib/cv/append-portfolio-website-contact";
-import { getLocalizedText } from "@/lib/i18n/localized";
 import { getTenantPublicUrl } from "@/lib/tenant/public-url";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
+import { appendPortfolioWebsiteContact } from "@/lib/cv/append-portfolio-website-contact";
 
-export interface CvPreviewSnapshot {
+function formatExperienceDate(date: Date | null): string {
+  if (!date) return "";
+  return date.toISOString().slice(0, 7);
+}
+
+export interface CvPreviewSnapshotData {
   header: {
     fullName: string;
-    degree: string | null;
+    degree: string;
     photoUrl: string | null;
     backgroundImageUrl: string | null;
-    heroSummary: string | null;
-    clientImageAlt: string | null;
-  } | null;
+    heroSummary: string;
+    clientImageAlt: string;
+  };
   aboutMeText: string | null;
   contacts: {
     type: string;
     value: string;
-    label: string | null;
+    label: string;
     order: number;
   }[];
   educations: {
     institution: string;
     degreeName: string;
-    location: string | null;
-    description: string | null;
+    location: string;
+    description: string;
     startYear: number | null;
     endYear: number | null;
     dates: string | null;
@@ -46,12 +49,15 @@ export interface CvPreviewSnapshot {
   experiences: {
     company: string;
     role: string;
-    location: string | null;
-    startDate: string | null;
-    endDate: string | null;
+    location: string;
+    startDate: string;
+    endDate: string;
     current: boolean;
     order: number;
-    responsibilities: { text: string; order: number }[];
+    responsibilities: {
+      text: string;
+      order: number;
+    }[];
     skillNames: string[];
   }[];
   softSkills: {
@@ -64,18 +70,15 @@ export interface CvPreviewSnapshot {
   }[];
 }
 
-function formatExperienceDate(date: Date | null | undefined): string | null {
-  if (!date) return null;
-  return date.toISOString().slice(0, 10);
-}
+export type CvPreviewSnapshot = CvPreviewSnapshotData;
 
 export async function loadCvPreviewSnapshot(
   db: PrismaClient,
   userId: string,
   locale: Locale,
-  fallbackLocale: Locale,
-): Promise<CvPreviewSnapshot | null> {
+): Promise<CvPreviewSnapshotData | null> {
   const [
+    appLanguages,
     profile,
     header,
     aboutMe,
@@ -87,22 +90,32 @@ export async function loadCvPreviewSnapshot(
     softSkills,
     additionalInformation,
   ] = await Promise.all([
+    db.appLanguage.findMany({ orderBy: { code: "asc" } }),
     db.profile.findUnique({
       where: { userId },
       select: { username: true, isPrimary: true, customDomain: true },
     }),
-    db.cvHeader.findUnique({ where: { userId } }),
-    db.cvAboutMe.findUnique({ where: { userId } }),
+    db.cvHeader.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
+    db.cvAboutMe.findUnique({
+      where: { userId },
+      include: { translations: true },
+    }),
     db.cvContact.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     db.cvEducation.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     db.cvLanguage.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     db.cvTechnicalSkill.findMany({
@@ -112,41 +125,44 @@ export async function loadCvPreviewSnapshot(
     db.cvExperience.findMany({
       where: { userId },
       include: {
-        responsibilities: { orderBy: { order: "asc" } },
+        translations: true,
+        responsibilities: {
+          include: { translations: true },
+          orderBy: { order: "asc" },
+        },
         CvExperienceSkill: { include: { skill: true } },
       },
       orderBy: { order: "asc" },
     }),
     db.cvSoftSkill.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
     db.cvAdditionalInfo.findMany({
       where: { userId },
+      include: { translations: true },
       orderBy: { order: "asc" },
     }),
   ]);
 
   if (!header) return null;
 
+  const field = createLocalizedFieldResolver(appLanguages, locale);
+  const headerT = field.for(header.translations);
+
   const aboutMeText =
-    getLocalizedText(header.heroSummary, locale, fallbackLocale) ||
-    (aboutMe
-      ? getLocalizedText(aboutMe.aboutMe, locale, fallbackLocale)
-      : null);
+    headerT("heroSummary") ||
+    (aboutMe ? field(aboutMe.translations, "aboutMe") : null);
 
   return {
     header: {
       fullName: header.fullName,
-      degree: getLocalizedText(header.degree, locale, fallbackLocale),
+      degree: headerT("degree"),
       photoUrl: header.photoUrl,
       backgroundImageUrl: header.backgroundImageUrl,
-      heroSummary: getLocalizedText(header.heroSummary, locale, fallbackLocale),
-      clientImageAlt: getLocalizedText(
-        header.clientImageAlt,
-        locale,
-        fallbackLocale,
-      ),
+      heroSummary: headerT("heroSummary"),
+      clientImageAlt: headerT("clientImageAlt"),
     },
     aboutMeText: aboutMeText ?? null,
     contacts: profile
@@ -154,7 +170,7 @@ export async function loadCvPreviewSnapshot(
           contacts.map((contact) => ({
             type: contact.type,
             value: contact.value,
-            label: getLocalizedText(contact.label, locale, fallbackLocale),
+            label: field(contact.translations, "label"),
             order: contact.order,
           })),
           getTenantPublicUrl(profile),
@@ -162,59 +178,60 @@ export async function loadCvPreviewSnapshot(
       : contacts.map((contact) => ({
           type: contact.type,
           value: contact.value,
-          label: getLocalizedText(contact.label, locale, fallbackLocale),
+          label: field(contact.translations, "label"),
           order: contact.order,
         })),
-    educations: educations.map((education) => ({
-      institution: education.institution,
-      degreeName: getLocalizedText(
-        education.degreeName,
-        locale,
-        fallbackLocale,
-      ),
-      location: getLocalizedText(education.location, locale, fallbackLocale),
-      description: getLocalizedText(
-        education.description,
-        locale,
-        fallbackLocale,
-      ),
-      startYear: education.startYear,
-      endYear: education.endYear,
-      dates: education.dates,
-      order: education.order,
-    })),
-    languages: languages.map((language) => ({
-      name: getLocalizedText(language.name, locale, fallbackLocale),
-      level: getLocalizedText(language.level, locale, fallbackLocale),
-      order: language.order,
-    })),
+    educations: educations.map((education) => {
+      const eduT = field.for(education.translations);
+      return {
+        institution: education.institution,
+        degreeName: eduT("degreeName"),
+        location: eduT("location"),
+        description: eduT("description"),
+        startYear: education.startYear,
+        endYear: education.endYear,
+        dates: education.dates,
+        order: education.order,
+      };
+    }),
+    languages: languages.map((language) => {
+      const langT = field.for(language.translations);
+      return {
+        name: langT("name"),
+        level: langT("level"),
+        order: language.order,
+      };
+    }),
     technicalSkills: technicalSkills.map((skill) => ({
       category: skill.category,
       items: [...skill.items].sort(),
       order: skill.order,
     })),
-    experiences: experiences.map((experience) => ({
-      company: experience.company,
-      role: getLocalizedText(experience.role, locale, fallbackLocale),
-      location: getLocalizedText(experience.location, locale, fallbackLocale),
-      startDate: formatExperienceDate(experience.startDate),
-      endDate: formatExperienceDate(experience.endDate),
-      current: experience.current,
-      order: experience.order,
-      responsibilities: experience.responsibilities.map((responsibility) => ({
-        text: getLocalizedText(responsibility.text, locale, fallbackLocale),
-        order: responsibility.order,
-      })),
-      skillNames: experience.CvExperienceSkill.map((item) => item.skill.title)
-        .slice()
-        .sort(),
-    })),
+    experiences: experiences.map((experience) => {
+      const expT = field.for(experience.translations);
+      return {
+        company: experience.company,
+        role: expT("role"),
+        location: expT("location"),
+        startDate: formatExperienceDate(experience.startDate),
+        endDate: formatExperienceDate(experience.endDate),
+        current: experience.current,
+        order: experience.order,
+        responsibilities: experience.responsibilities.map((responsibility) => ({
+          text: field(responsibility.translations, "text"),
+          order: responsibility.order,
+        })),
+        skillNames: experience.CvExperienceSkill.map((item) => item.skill.title)
+          .slice()
+          .sort(),
+      };
+    }),
     softSkills: softSkills.map((skill) => ({
-      name: getLocalizedText(skill.name, locale, fallbackLocale),
+      name: field(skill.translations, "name"),
       order: skill.order,
     })),
     additionalInformation: additionalInformation.map((info) => ({
-      text: getLocalizedText(info.text, locale, fallbackLocale),
+      text: field(info.translations, "text"),
       order: info.order,
     })),
   };

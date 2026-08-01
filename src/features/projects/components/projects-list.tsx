@@ -9,7 +9,7 @@ import { api, type RouterOutputs } from "@/trpc/react";
 import { toast } from "sonner";
 import type { Locale } from "@/i18n/config";
 import type { AppLanguage } from "@prisma/client";
-import { getTitleDescriptionForLocale } from "@/lib/i18n/localized-display";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
@@ -115,18 +115,13 @@ export const ProjectsList: FC<ProjectsListProps> = ({
     return map;
   }, [rawSkills]);
 
-  const columns = useMemo<ColumnDef<ProjectRow>[]>(
-    () => [
+  const columns = useMemo<ColumnDef<ProjectRow>[]>(() => {
+    const field = createLocalizedFieldResolver(languages, locale);
+    return [
       {
         id: "title",
         enableSorting: false,
-        accessorFn: (row) =>
-          getTitleDescriptionForLocale(
-            row.translations,
-            languages,
-            locale,
-            "title",
-          ),
+        accessorFn: (row) => field(row.translations, "title"),
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnTitle")} />
         ),
@@ -137,20 +132,9 @@ export const ProjectsList: FC<ProjectsListProps> = ({
         },
         enableColumnFilter: true,
         cell: ({ row }) => {
-          const title =
-            getTitleDescriptionForLocale(
-              row.original.translations,
-              languages,
-              locale,
-              "title",
-            ) || t("untitled");
-          const description =
-            getTitleDescriptionForLocale(
-              row.original.translations,
-              languages,
-              locale,
-              "description",
-            ) || t("noTranslation");
+          const tProject = field.for(row.original.translations);
+          const title = tProject("title") || t("untitled");
+          const description = tProject("description") || t("noTranslation");
           return (
             <div className="space-y-0.5">
               <p className="text-foreground font-medium">{title}</p>
@@ -232,9 +216,8 @@ export const ProjectsList: FC<ProjectsListProps> = ({
           );
         },
       },
-    ],
-    [deletingId, handleDelete, isPending, languages, locale, skillsById, t],
-  );
+    ];
+  }, [deletingId, handleDelete, isPending, languages, locale, skillsById, t]);
 
   const { table } = useDataTable({
     data: projects,

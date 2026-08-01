@@ -1,34 +1,55 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import React from "react";
 import AdditionalInformation from "./additional-information";
+import { renderWithIntl } from "@/test-utils/render-with-intl";
+import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
+import { mapCvDataToLocalized } from "./types";
+
+function getLocalizedAdditional(list: any[]) {
+  const mockData = {
+    ...mockCvPreviewData,
+    additionalInformation: list.map((item) => ({
+      ...item,
+      order: item.order ?? 0,
+      translations: item.translations.map((t: any) => ({
+        appLanguageId: t.appLanguageId ?? "lang-en",
+        text: t.text ?? "",
+      })),
+    })),
+  };
+  return mapCvDataToLocalized(mockData, mockAppLanguages, "en").additionalInformation;
+}
 
 describe("AdditionalInformation", () => {
   it("renders null when additionalInformation is empty array", () => {
-    const { container } = render(
-      <AdditionalInformation
-        additionalInformation={[]}
-        locale="en"
-        defaultLocale="en"
-      />,
+    const { container } = renderWithIntl(
+      <AdditionalInformation additionalInformation={[]} />,
     );
     expect(container.firstChild).toBeNull();
   });
 
   it("renders additional information list when items are provided", () => {
     const items = [
-      { id: "1", text: { default: "Certified Kubernetes Administrator" } },
-      { id: "2", text: "Speaker at TechConf 2023" },
+      {
+        id: "1",
+        translations: [
+          {
+            appLanguageId: "lang-en",
+            text: "Certified Kubernetes Administrator",
+          },
+        ],
+      },
+      {
+        id: "2",
+        translations: [
+          { appLanguageId: "lang-en", text: "Speaker at TechConf 2023" },
+        ],
+      },
     ];
 
-    render(
+    renderWithIntl(
       <AdditionalInformation
-        additionalInformation={
-          items as unknown as Parameters<
-            typeof AdditionalInformation
-          >[0]["additionalInformation"]
-        }
-        locale="en"
-        defaultLocale="en"
+        additionalInformation={getLocalizedAdditional(items)}
       />,
     );
 

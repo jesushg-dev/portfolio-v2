@@ -597,61 +597,10 @@
       }
     },
     "soft-skills": {
-      "badge": "Habilidad profesional",
       "subtitle": "Habilidades",
       "title": "Habilidades blandas",
       "description": "Además de mis habilidades técnicas, también poseo una serie de habilidades blandas que me han ayudado a tener éxito en mi carrera",
-      "aux": "Creo que estas habilidades son tan importantes como la experticia técnica, y trabajo duro para desarrollarlas y mejorarlas constantemente. Tengo confianza en que mi sólida comunicación, resolución de problemas y habilidades de trabajo en equipo me hacen un activo valioso para cualquier equipo o proyecto.",
-      "skills": {
-        "teamwork": {
-          "title": "Trabajo en equipo",
-          "description": "Disfruto colaborar y aprender de los demás."
-        },
-        "communication": {
-          "title": "Comunicación",
-          "description": "Destaco en expresar ideas y escuchar activamente."
-        },
-        "problemSolving": {
-          "title": "Resolución de problemas",
-          "description": "Me desenvuelvo encontrando soluciones efectivas."
-        },
-        "goalOriented": {
-          "title": "Orientado a metas",
-          "description": "Establezco objetivos y trabajo arduamente para alcanzarlos."
-        },
-        "adaptability": {
-          "title": "Adaptabilidad",
-          "description": "Acepto fácilmente nuevas tecnologías y marcos de trabajo."
-        },
-        "timeManagement": {
-          "title": "Gestión del tiempo",
-          "description": "Priorizo tareas y optimizo la eficiencia."
-        },
-        "creativity": {
-          "title": "Creatividad",
-          "description": "Pienso de forma innovadora y genero ideas frescas."
-        },
-        "leadership": {
-          "title": "Liderazgo",
-          "description": "Tomo el mando, asumo responsabilidades y dirijo tareas."
-        },
-        "organization": {
-          "title": "Organización",
-          "description": "Valoro el orden y mantengo las cosas bien estructuradas."
-        },
-        "responsibility": {
-          "title": "Responsabilidad",
-          "description": "Soy confiable y me aseguro de completar las tareas."
-        },
-        "initiative": {
-          "title": "Iniciativa",
-          "description": "Busco activamente nuevas oportunidades y disfruto asumiendo el liderazgo."
-        },
-        "commitment": {
-          "title": "Compromiso",
-          "description": "Estoy dedicado a completar tareas y cumplir responsabilidades."
-        }
-      }
+      "aux": "Creo que estas habilidades son tan importantes como la experticia técnica, y trabajo duro para desarrollarlas y mejorarlas constantemente. Tengo confianza en que mi sólida comunicación, resolución de problemas y habilidades de trabajo en equipo me hacen un activo valioso para cualquier equipo o proyecto."
     },
     "portfolio": {
       "subtitle": "Portafolio",

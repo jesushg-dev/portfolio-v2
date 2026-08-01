@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CvContextProvider } from "@/hoc/cv-context-provider";
+import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import type { Locale as AppLocale } from "@/i18n/config";
 import { api } from "@/trpc/react";
@@ -39,16 +40,6 @@ import AdditionalList from "@/features/cv/components/additional-list";
 import SoftSkillsList from "@/features/cv/components/soft-skills-list";
 
 import type { CvData } from "@/components/curriculum-vitae/types";
-import type {
-  CvHeader,
-  Profile,
-  CvContact,
-  CvEducation,
-  CvLanguage,
-  CvTechnicalSkill,
-  CvSoftSkill,
-  CvAdditionalInfo,
-} from "@prisma/client";
 
 type SectionType =
   | "header"
@@ -64,17 +55,7 @@ type SectionType =
 type CvTranslator = ReturnType<typeof useTranslations<"admin.cv">>;
 
 interface ICvEditableLayoutProps {
-  data: {
-    header: CvHeader | null;
-    profile: Profile | null;
-    contacts: CvContact[];
-    educations: CvEducation[];
-    languages: CvLanguage[];
-    technicalSkills: CvTechnicalSkill[];
-    experiences: CvData["experiences"];
-    softSkills: CvSoftSkill[];
-    additionalInformation: CvAdditionalInfo[];
-  };
+  data: CvData;
   aboutMeText: string | null;
   currentLocale: AppLocale;
   defaultLocale: AppLocale;
@@ -88,11 +69,26 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
 }) => {
   const t = useTranslations("admin.cv");
   const { data: languages = [] } = api.appLanguagesAdmin.getAll.useQuery();
+  const appLanguages = useMemo(
+    () => languages.map(({ id, code }) => ({ id, code })),
+    [languages],
+  );
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
   const displayContacts = useMemo(
     () => resolveCvDisplayContacts(data.contacts, data.profile),
     [data.contacts, data.profile],
   );
+
+  const localizedData = useMemo(() => {
+    return mapCvDataToLocalized(
+      {
+        ...data,
+        contacts: displayContacts,
+      },
+      appLanguages,
+      currentLocale,
+    );
+  }, [data, displayContacts, appLanguages, currentLocale]);
 
   const handleClose = (open: boolean) => {
     if (!open) setActiveSection(null);
@@ -134,10 +130,8 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
           t={t}
         >
           <HeaderCv
-            header={data.header}
-            fallbackName={data.profile?.displayName ?? null}
-            locale={currentLocale}
-            defaultLocale={defaultLocale}
+            header={localizedData.header}
+            fallbackName={data.profile?.displayName ?? undefined}
           />
         </EditableSection>
 
@@ -150,11 +144,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               isEmpty={displayContacts.length === 0}
               t={t}
             >
-              <ContactMe
-                contacts={displayContacts}
-                locale={currentLocale}
-                defaultLocale={defaultLocale}
-              />
+              <ContactMe contacts={localizedData.contacts} />
             </EditableSection>
 
             <EditableSection
@@ -164,11 +154,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               isEmpty={data.educations.length === 0}
               t={t}
             >
-              <Education
-                educations={data.educations}
-                locale={currentLocale}
-                defaultLocale={defaultLocale}
-              />
+              <Education educations={localizedData.educations} />
             </EditableSection>
 
             <EditableSection
@@ -178,11 +164,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               isEmpty={data.languages.length === 0}
               t={t}
             >
-              <Languages
-                languages={data.languages}
-                locale={currentLocale}
-                defaultLocale={defaultLocale}
-              />
+              <Languages languages={localizedData.languages} />
             </EditableSection>
 
             <EditableSection
@@ -192,7 +174,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               isEmpty={data.technicalSkills.length === 0}
               t={t}
             >
-              <TechnicalSkills technicalSkills={data.technicalSkills} />
+              <TechnicalSkills technicalSkills={localizedData.technicalSkills} />
             </EditableSection>
           </div>
 
@@ -223,11 +205,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               isEmpty={data.experiences.length === 0}
               t={t}
             >
-              <Experience
-                experiences={data.experiences}
-                locale={currentLocale}
-                defaultLocale={defaultLocale}
-              />
+              <Experience experiences={localizedData.experiences} />
             </EditableSection>
 
             <EditableSection
@@ -237,11 +215,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               isEmpty={data.softSkills.length === 0}
               t={t}
             >
-              <SoftSkills
-                softSkills={data.softSkills}
-                locale={currentLocale}
-                defaultLocale={defaultLocale}
-              />
+              <SoftSkills softSkills={localizedData.softSkills} />
             </EditableSection>
 
             <EditableSection
@@ -252,9 +226,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               t={t}
             >
               <AdditionalInformation
-                additionalInformation={data.additionalInformation}
-                locale={currentLocale}
-                defaultLocale={defaultLocale}
+                additionalInformation={localizedData.additionalInformation}
               />
             </EditableSection>
           </div>

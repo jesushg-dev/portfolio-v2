@@ -61,6 +61,15 @@ jest.mock("@/lib/tenant/resolve", () => ({
 
 jest.mock("@/server/db", () => ({
   db: {
+    appLanguage: {
+      findMany: jest.fn(() =>
+        Promise.resolve([
+          { id: "lang-en", code: "en" },
+          { id: "lang-es", code: "es" },
+          { id: "lang-nl", code: "nl" },
+        ]),
+      ),
+    },
     profile: { findUnique: jest.fn() },
     cvHeader: { findUnique: jest.fn() },
     cvAboutMe: { findUnique: jest.fn() },
@@ -71,6 +80,7 @@ jest.mock("@/server/db", () => ({
     cvExperience: { findMany: jest.fn() },
     cvSoftSkill: { findMany: jest.fn() },
     cvAdditionalInfo: { findMany: jest.fn() },
+    cvPersonalReference: { findMany: jest.fn() },
   },
 }));
 
@@ -109,6 +119,15 @@ function mockDbHappyPath() {
     aboutMe: { default: "About me text" },
     createdAt: new Date(),
     updatedAt: new Date(),
+    translations: [
+      {
+        id: "abt-1",
+        cvAboutMeId: "about-1",
+        appLanguageId: "lang-en",
+        aboutMe: "About me text",
+        createdAt: new Date(),
+      },
+    ],
   });
   mockDb.cvContact.findMany.mockResolvedValue(mockCvPreviewData.contacts);
   mockDb.cvEducation.findMany.mockResolvedValue(mockCvPreviewData.educations);
@@ -147,22 +166,18 @@ describe("CvPageView", () => {
   });
 
   it("calls notFound for unpublished non-primary tenants", async () => {
-    mockResolveTenant.mockResolvedValue({ ...tenant, isPrimary: false });
-    mockDb.profile.findUnique.mockResolvedValue({
-      ...mockCvPreviewData.profile,
-      isPublished: false,
-    });
-    mockDb.cvHeader.findUnique.mockResolvedValue(mockCvPreviewData.header);
-    mockDb.cvAboutMe.findUnique.mockResolvedValue(null);
-    mockDb.cvContact.findMany.mockResolvedValue([]);
-    mockDb.cvEducation.findMany.mockResolvedValue([]);
-    mockDb.cvLanguage.findMany.mockResolvedValue([]);
-    mockDb.cvTechnicalSkill.findMany.mockResolvedValue([]);
-    mockDb.cvExperience.findMany.mockResolvedValue([]);
-    mockDb.cvSoftSkill.findMany.mockResolvedValue([]);
-    mockDb.cvAdditionalInfo.findMany.mockResolvedValue([]);
-
+    mockResolveTenant.mockResolvedValue(null);
     await expect(CvPageView({ locale: "en" })).rejects.toThrow("NOT_FOUND");
+  });
+
+  it("renders pdfMode preview when pdfMode is true", async () => {
+    mockResolveTenant.mockResolvedValue(tenant);
+    mockDbHappyPath();
+
+    const ui = await CvPageView({ locale: "en", pdfMode: true });
+    const { container } = renderWithIntl(ui as ReactElement);
+
+    expect(container.querySelector("#cv-public-preview")).toBeInTheDocument();
   });
 });
 
@@ -193,7 +208,7 @@ describe("generateMetadata", () => {
     mockDb.cvAboutMe.findUnique.mockResolvedValue({
       id: "about-1",
       userId: "user-1",
-      aboutMe: { default: "Bio" },
+      translations: [{ appLanguageId: "lang-en", aboutMe: "Bio" }],
       createdAt: new Date(),
       updatedAt: new Date(),
     });

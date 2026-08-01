@@ -1,10 +1,10 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import type { CvData } from "./types";
+import type { LocalizedCvData } from "./types";
 
 const SECTION_LABEL_KEY: Record<
-  CvData["technicalSkills"][number]["category"],
+  LocalizedCvData["technicalSkills"][number]["category"],
   string
 > = {
   FRONTEND: "header.skills.frontEnd",
@@ -19,7 +19,7 @@ const SECTION_LABEL_KEY: Record<
 };
 
 interface ITechnicalSkillsProps {
-  technicalSkills: CvData["technicalSkills"];
+  technicalSkills: LocalizedCvData["technicalSkills"];
 }
 
 const TechnicalSkills: FC<ITechnicalSkillsProps> = ({ technicalSkills }) => {

@@ -597,61 +597,10 @@
       }
     },
     "soft-skills": {
-      "badge": "Kernvaardigheid",
       "subtitle": "Vaardigheden",
       "title": "Soft skills",
       "description": "Naast mijn technische vaardigheden bezit ik ook een scala aan soft skills die mij hebben geholpen succesvol te zijn in mijn carrière.",
-      "aux": "Ik geloof dat deze vaardigheden net zo belangrijk zijn als technische expertise, en ik werk hard om ze voortdurend te ontwikkelen en te verbeteren. Ik ben ervan overtuigd dat mijn sterke communicatie, probleemoplossing en teamwork vaardigheden mij een waardevolle aanwinst maken voor elk team of project.",
-      "skills": {
-        "teamwork": {
-          "title": "Samenwerken",
-          "description": "Ik geniet ervan om samen te werken en te leren van anderen."
-        },
-        "communication": {
-          "title": "Communicatie",
-          "description": "Ik ben goed in het uiten van ideeën en actief luisteren."
-        },
-        "problemSolving": {
-          "title": "Probleemoplossend vermogen",
-          "description": "Ik gedij bij het vinden van effectieve oplossingen."
-        },
-        "goalOriented": {
-          "title": "Doelgericht",
-          "description": "Ik stel doelstellingen en werk hard om ze te bereiken."
-        },
-        "adaptability": {
-          "title": "Aanpassingsvermogen",
-          "description": "Ik omarm gemakkelijk nieuwe technologieën en frameworks."
-        },
-        "timeManagement": {
-          "title": "Tijdmanagement",
-          "description": "Ik geef prioriteit aan taken en optimaliseer efficiëntie."
-        },
-        "creativity": {
-          "title": "Creativiteit",
-          "description": "Ik denk innovatief en genereer nieuwe ideeën."
-        },
-        "leadership": {
-          "title": "Leiderschap",
-          "description": "Ik neem de leiding, neem verantwoordelijkheid en stuur taken aan."
-        },
-        "organization": {
-          "title": "Organisatie",
-          "description": "Ik hecht waarde aan ordelijkheid en houd dingen goed gestructureerd."
-        },
-        "responsibility": {
-          "title": "Verantwoordelijkheid",
-          "description": "Ik ben betrouwbaar en zorg voor het voltooien van taken."
-        },
-        "initiative": {
-          "title": "Initiatief",
-          "description": "Ik zoek actief naar nieuwe kansen en neem graag het voortouw."
-        },
-        "commitment": {
-          "title": "Toewijding",
-          "description": "Ik ben toegewijd aan het voltooien van taken en het nakomen van verantwoordelijkheden."
-        }
-      }
+      "aux": "Ik geloof dat deze vaardigheden net zo belangrijk zijn als technische expertise, en ik werk hard om ze voortdurend te ontwikkelen en te verbeteren. Ik ben ervan overtuigd dat mijn sterke communicatie, probleemoplossing en teamwork vaardigheden mij een waardevolle aanwinst maken voor elk team of project."
     },
     "portfolio": {
       "subtitle": "Portfolio",
@@ -702,6 +651,7 @@
       }
     },
     "contact": {
+      "eyebrow": "Contact",
       "title": "Neem contact op",
       "title2": "Stuur een bericht",
       "subtitle": "Heb je een idee, een project of zoek je een ontwikkelaar voor je team?\n\nIk hoor graag meer over wat je bouwt. Je kunt me ook gewoon een bericht sturen om hallo te zeggen.",

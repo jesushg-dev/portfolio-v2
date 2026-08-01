@@ -39,8 +39,7 @@ const TabItem: FC<TabItemProps> = ({
   title,
   description,
 }) => {
-  const { currentTab, setCurrentTab, minimal, variant, tabId } =
-    useTabContext();
+  const { currentTab, setCurrentTab, minimal, tabId } = useTabContext();
 
   const isActive = currentTab === index;
   const tabPanelId = `${tabId}-panel-${index}`;

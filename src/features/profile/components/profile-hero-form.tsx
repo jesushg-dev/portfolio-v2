@@ -146,7 +146,7 @@ export function ProfileHeroForm({
             titles: titlesPayload,
           });
 
-          await utils.profileAdmin.getHeroMine.invalidate();
+          await utils.profileAdmin.getHeroEditor.invalidate();
         } catch (err) {
           setServerError(err instanceof Error ? err.message : t("saveFailed"));
         }

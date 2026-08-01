@@ -58,12 +58,7 @@ export async function resolveCvPdfAsset(
   options?: ResolveCvPdfAssetOptions,
 ): Promise<ResolvedCvPdfAsset | null> {
   const paginatePages = options?.paginatePages ?? false;
-  const snapshot = await loadCvPreviewSnapshot(
-    db,
-    userId,
-    locale,
-    fallbackLocale,
-  );
+  const snapshot = await loadCvPreviewSnapshot(db, userId, locale);
 
   if (!snapshot?.header) return null;
 

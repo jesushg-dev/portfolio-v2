@@ -1,10 +1,10 @@
-import type { PortfolioSoftSkill } from "@prisma/client";
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
   mapSoftSkillToEditorDto,
   mapSoftSkillsToEditorDto,
   buildEmptySoftSkillCreateDto,
   getSoftSkillTranslationText,
+  type SoftSkillWithTranslations,
 } from "./soft-skill-editor-dto";
 
 const languages: LanguageRef[] = [
@@ -12,20 +12,35 @@ const languages: LanguageRef[] = [
   { id: "lang-es", code: "es" },
 ];
 
-const mockSoftSkill: PortfolioSoftSkill = {
+const mockSoftSkill: SoftSkillWithTranslations = {
   id: "skill-1",
   icon: "star",
   isVisible: true,
   featured: false,
   order: 1,
   userId: "user-1",
-  title: { default: "Teamwork", translations: { es: "Trabajo en equipo" } },
-  description: {
-    default: "Working well in a team",
-    translations: { es: "Trabajar bien en equipo" },
-  },
   createdAt: new Date("2024-01-01"),
   updatedAt: new Date("2024-01-01"),
+  PortfolioSoftSkillTranslation: [
+    {
+      id: "t1",
+      portfolioSoftSkillId: "skill-1",
+      appLanguageId: "lang-en",
+      title: "Teamwork",
+      description: "Working well in a team",
+      badge: "Active Collaboration",
+      createdAt: new Date("2024-01-01"),
+    },
+    {
+      id: "t2",
+      portfolioSoftSkillId: "skill-1",
+      appLanguageId: "lang-es",
+      title: "Trabajo en equipo",
+      description: "Trabajar bien en equipo",
+      badge: "Colaboración Activa",
+      createdAt: new Date("2024-01-01"),
+    },
+  ],
 };
 
 describe("mapSoftSkillToEditorDto", () => {
@@ -62,8 +77,16 @@ describe("buildEmptySoftSkillCreateDto", () => {
     expect(dto.isVisible).toBe(true);
     expect(dto.featured).toBe(false);
     expect(dto.order).toBe(0);
-    expect(dto.translations["lang-en"]).toEqual({ title: "", description: "" });
-    expect(dto.translations["lang-es"]).toEqual({ title: "", description: "" });
+    expect(dto.translations["lang-en"]).toEqual({
+      title: "",
+      description: "",
+      badge: "",
+    });
+    expect(dto.translations["lang-es"]).toEqual({
+      title: "",
+      description: "",
+      badge: "",
+    });
   });
 });
 

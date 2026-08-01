@@ -1,4 +1,4 @@
-import type { TextTranslationMap } from "@/lib/i18n/localized-text-map";
+import type { TextTranslationMap } from "@/lib/i18n/translation-map";
 
 export interface ProfileHeroTitleEditorDTO {
   order: number;

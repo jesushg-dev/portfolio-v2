@@ -5,22 +5,13 @@ import {
   extractArrayFilter,
   extractStringFilter,
 } from "@/lib/admin/filter-utils";
-import {
-  buildLocalizedJsonTitleMongoMatch,
-  escapeMongoRegex,
-  mongoUserIdFilter,
-  queryPaginatedIdsWithMongoMatch,
-  reorderByIds,
-  type MongoSort,
-} from "@/lib/admin/mongodb-localized-json-query";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
   mapTimelinesToEditorDto,
   mapTimelineToEditorDto,
 } from "@/features/timeline/lib/timeline-editor-dto";
-import { resolvePrimaryLanguage } from "@/lib/i18n/localized-form";
-import { translationMapToLocalizedFields } from "@/lib/i18n/localized-persist";
+import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 import type { Prisma, TimelineCategory } from "@prisma/client";
 
@@ -86,68 +77,24 @@ export const timelineAdminRouter = createTRPCRouter({
       }
 
       const titleVal = extractStringFilter(input.filters, "title");
+      if (titleVal) {
+        where.TimelineItemTranslation = {
+          some: {
+            title: { contains: titleVal, mode: "insensitive" },
+          },
+        };
+      }
 
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
 
-      if (titleVal) {
-        const mongoMatch: Record<string, unknown> = {
-          userId: mongoUserIdFilter(ctx.user.id),
-        };
-        if (orgVal) {
-          mongoMatch.organization = {
-            $regex: escapeMongoRegex(orgVal),
-            $options: "i",
-          };
-        }
-        if (categoryVals && categoryVals.length > 0) {
-          mongoMatch.category = { $in: categoryVals };
-        }
-        Object.assign(
-          mongoMatch,
-          buildLocalizedJsonTitleMongoMatch("title", titleVal),
-        );
-
-        const sortField = input.sort?.[0];
-        let mongoSort: MongoSort = { startDate: -1, createdAt: -1 };
-        if (sortField) {
-          const dir: 1 | -1 = sortField.desc ? -1 : 1;
-          if (sortField.id === "category") mongoSort = { category: dir };
-          else if (sortField.id === "startDate") mongoSort = { startDate: dir };
-          else if (sortField.id === "organization") {
-            mongoSort = { organization: dir };
-          }
-        }
-
-        const { ids, totalCount } = await queryPaginatedIdsWithMongoMatch({
-          delegate: ctx.db.timelineItem,
-          match: mongoMatch,
-          sort: mongoSort,
-          skip,
-          take,
-        });
-
-        const items =
-          ids.length > 0
-            ? reorderByIds(
-                await ctx.db.timelineItem.findMany({
-                  where: { id: { in: ids } },
-                }),
-                ids,
-              )
-            : [];
-
-        return {
-          data: mapTimelinesToEditorDto(items, languages),
-          pageCount: take ? Math.ceil(totalCount / take) : 1,
-          totalCount,
-        };
-      }
-
       const [items, totalCount] = await Promise.all([
         ctx.db.timelineItem.findMany({
           where,
+          include: {
+            TimelineItemTranslation: true,
+          },
           orderBy,
           skip,
           take,
@@ -165,25 +112,26 @@ export const timelineAdminRouter = createTRPCRouter({
   createItem: protectedProcedure
     .input(timelineUpsertInput)
     .mutation(async ({ ctx, input }) => {
+      const { translations, images, ...rest } = input;
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },
       });
-      const primaryLanguage = resolvePrimaryLanguage(languages);
-      const primaryCode = primaryLanguage?.code ?? "en";
-      const { translations, images, ...rest } = input;
-      const { title, description } = translationMapToLocalizedFields(
-        translations,
-        languages,
-        primaryCode,
-      );
 
       const created = await ctx.db.timelineItem.create({
         data: {
           ...rest,
-          title,
-          description,
           images: images ?? [],
           userId: ctx.user.id,
+          TimelineItemTranslation: {
+            create: translationMapEntries(translations).map((translation) => ({
+              appLanguageId: translation.appLanguageId,
+              title: translation.title,
+              description: translation.description,
+            })),
+          },
+        },
+        include: {
+          TimelineItemTranslation: true,
         },
       });
 
@@ -200,28 +148,54 @@ export const timelineAdminRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      const languages = await ctx.db.appLanguage.findMany({
-        orderBy: { code: "asc" },
-      });
-      const primaryLanguage = resolvePrimaryLanguage(languages);
-      const primaryCode = primaryLanguage?.code ?? "en";
-      const { title, description } = translationMapToLocalizedFields(
-        translations,
-        languages,
-        primaryCode,
-      );
-
-      const updated = await ctx.db.timelineItem.update({
+      await ctx.db.timelineItem.update({
         where: { id },
         data: {
           ...data,
-          title,
-          description,
           ...(images !== undefined ? { images } : {}),
         },
       });
 
-      return mapTimelineToEditorDto(updated, languages);
+      for (const translation of translationMapEntries(translations)) {
+        const existingTrans = await ctx.db.timelineItemTranslation.findFirst({
+          where: {
+            timelineItemId: id,
+            appLanguageId: translation.appLanguageId,
+          },
+        });
+
+        if (existingTrans) {
+          await ctx.db.timelineItemTranslation.update({
+            where: { id: existingTrans.id },
+            data: {
+              title: translation.title,
+              description: translation.description,
+            },
+          });
+        } else {
+          await ctx.db.timelineItemTranslation.create({
+            data: {
+              timelineItemId: id,
+              appLanguageId: translation.appLanguageId,
+              title: translation.title,
+              description: translation.description,
+            },
+          });
+        }
+      }
+
+      const languages = await ctx.db.appLanguage.findMany({
+        orderBy: { code: "asc" },
+      });
+
+      const updated = await ctx.db.timelineItem.findUnique({
+        where: { id },
+        include: {
+          TimelineItemTranslation: true,
+        },
+      });
+
+      return mapTimelineToEditorDto(updated!, languages);
     }),
 
   deleteItem: protectedProcedure
@@ -235,8 +209,13 @@ export const timelineAdminRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
+      await ctx.db.timelineItemTranslation.deleteMany({
+        where: { timelineItemId: input.id },
+      });
+
       return ctx.db.timelineItem.delete({ where: { id: input.id } });
     }),
+
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     const items = await ctx.db.timelineItem.findMany({
       where: { userId: ctx.user.id },
@@ -244,6 +223,9 @@ export const timelineAdminRouter = createTRPCRouter({
     });
     const ids = items.map((i) => i.id);
     if (ids.length === 0) return { count: 0 };
+    await ctx.db.timelineItemTranslation.deleteMany({
+      where: { timelineItemId: { in: ids } },
+    });
     return ctx.db.timelineItem.deleteMany({ where: { id: { in: ids } } });
   }),
 });

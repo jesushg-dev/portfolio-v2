@@ -1,23 +1,16 @@
 import type { FC } from "react";
-
-import { getLocalizedText } from "@/lib/i18n/localized";
-import type { CvData, CvLocaleProps } from "../types";
+import type { LocalizedCvData } from "../types";
 import ClientImage from "./client-image";
 
-interface IHeaderCvProps extends CvLocaleProps {
-  header: CvData["header"];
+interface IHeaderCvProps {
+  header?: LocalizedCvData["header"];
   fallbackName?: string | null;
 }
 
-const HeaderCV: FC<IHeaderCvProps> = ({
-  header,
-  fallbackName,
-  locale,
-  defaultLocale,
-}) => {
+const HeaderCV: FC<IHeaderCvProps> = ({ header, fallbackName }) => {
   const fullName = header?.fullName ?? fallbackName ?? "";
-  const degree = getLocalizedText(header?.degree, locale, defaultLocale);
-  const alt = getLocalizedText(header?.clientImageAlt, locale, defaultLocale);
+  const degree = header?.degree ?? "";
+  const alt = header?.clientImageAlt ?? fullName;
 
   return (
     <div className="bg-cv flex flex-row items-center justify-between border-b-2 px-8 py-4 text-white">

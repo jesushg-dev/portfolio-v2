@@ -60,12 +60,12 @@ export const ServiceForm: FC<ServiceFormProps> = ({
     [languages],
   );
 
-const serviceTranslationValueSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  badge: z.string().default(""),
-  statsLabel: z.string().default(""),
-});
+  const serviceTranslationValueSchema = z.object({
+    title: z.string(),
+    description: z.string(),
+    badge: z.string().default(""),
+    statsLabel: z.string().default(""),
+  });
 
   const serviceFormSchema = useMemo(
     () =>
@@ -85,7 +85,7 @@ const serviceTranslationValueSchema = z.object({
           t("titleRequiredPrimary"),
         ),
       }),
-    [primaryLang?.id, t],
+    [primaryLang?.id, t, serviceTranslationValueSchema],
   );
 
   type TServiceForm = z.infer<typeof serviceFormSchema>;
@@ -227,14 +227,27 @@ const serviceTranslationValueSchema = z.object({
                 name="icon"
                 render={({ field }) => (
                   <FormItem label="Icon" inputId="service-icon">
-                    <Select onValueChange={field.onChange} value={field.value || "code"}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value ?? "code"}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select icon" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {["code", "server", "smartphone", "terminal", "shield", "database", "zap", "globe", "layers"].map((iconName) => (
+                        {[
+                          "code",
+                          "server",
+                          "smartphone",
+                          "terminal",
+                          "shield",
+                          "database",
+                          "zap",
+                          "globe",
+                          "layers",
+                        ].map((iconName) => (
                           <SelectItem key={iconName} value={iconName}>
                             {iconName}
                           </SelectItem>
@@ -292,7 +305,11 @@ const serviceTranslationValueSchema = z.object({
                 name="order"
                 render={({ field }) => (
                   <FormItem label="Order" inputId="service-order">
-                    <Input type="number" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                    <Input
+                      type="number"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormItem>
                 )}
               />
@@ -303,7 +320,10 @@ const serviceTranslationValueSchema = z.object({
                 control={form.control}
                 name="featured"
                 render={({ field }) => (
-                  <FormItem label="Featured Hero Card (2-Columns in Bento Grid)" inputId="service-featured">
+                  <FormItem
+                    label="Featured Hero Card (2-Columns in Bento Grid)"
+                    inputId="service-featured"
+                  >
                     <Select
                       onValueChange={(val) => field.onChange(val === "true")}
                       value={field.value ? "true" : "false"}
@@ -314,8 +334,12 @@ const serviceTranslationValueSchema = z.object({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="false">Standard Card (1-Column)</SelectItem>
-                        <SelectItem value="true">Featured Hero Card (2-Columns)</SelectItem>
+                        <SelectItem value="false">
+                          Standard Card (1-Column)
+                        </SelectItem>
+                        <SelectItem value="true">
+                          Featured Hero Card (2-Columns)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>

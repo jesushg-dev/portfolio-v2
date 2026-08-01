@@ -1,18 +1,17 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { getLocalizedText } from "@/lib/i18n/localized";
-import type { CvData, CvLocaleProps } from "./types";
+import type { LocalizedCvData } from "./types";
 
-interface ISoftSkillsProps extends CvLocaleProps {
-  softSkills: CvData["softSkills"];
+interface ISoftSkillsProps {
+  softSkills: LocalizedCvData["softSkills"];
 }
 
-const SoftSkills: FC<ISoftSkillsProps> = ({
-  softSkills,
-  locale,
-  defaultLocale,
-}) => {
+function SoftSkillItem({ skill }: { skill: LocalizedCvData["softSkills"][number] }) {
+  return <li>{skill.name}.</li>;
+}
+
+const SoftSkills: FC<ISoftSkillsProps> = ({ softSkills }) => {
   const t = useTranslations("curriculum");
 
   if (!softSkills.length) return null;
@@ -26,9 +25,7 @@ const SoftSkills: FC<ISoftSkillsProps> = ({
       <div className="mb-4">
         <ul className="list-disc pl-8 text-sm text-[#1a1a1a]">
           {softSkills.map((skill) => (
-            <li key={skill.id}>
-              {getLocalizedText(skill.name, locale, defaultLocale)}.
-            </li>
+            <SoftSkillItem key={skill.id} skill={skill} />
           ))}
         </ul>
       </div>

@@ -1,5 +1,17 @@
 # Portfolio v2 — Agent Rules
 
+## Type Checking & Linting — Leave to the User
+
+### ❌ NEVER run `pnpm run type`, `tsc`, `pnpm run lint`, or `eslint` automatically
+
+These commands are expensive in tokens and time. The user runs them manually when needed.
+
+- Do NOT run type checks or lint commands after making changes.
+- Do NOT run them "just to verify" — trust the code you write.
+- If the user explicitly asks you to run them, you may do so once.
+
+---
+
 ## Accessibility — Shield (WCAG 2.2 AAA)
 
 Full standard: [`.agents/skills/A11Y.md`](skills/A11Y.md). Run `pnpm test:a11y` to audit `/`, `/login`, `/privacy`.
@@ -532,7 +544,10 @@ async function persistRequiredTextMap(db, map) {
   /* ... */
 }
 
-// ❌ WRONG — cv-localized-persist.ts imported only by cv.router.ts
+// ✅ CORRECT — persist helpers live in cv.router.ts
+async function upsertEducationTranslations(db, languages, educationId, ...) {
+  /* ... */
+}
 ```
 
 ## Admin forms — DTOs, queries, and direct mutations
@@ -599,7 +614,7 @@ const [t, { initialData, languages }] = await Promise.all([
 ]);
 ```
 
-4. **No wrapper helpers** — call `buildEmptyTranslationMap` / `mergeTranslationMap` directly; do not add `createEmptyTitleDescriptionTranslationMap`, `createEmptyTextTranslationMap`, `mergeProjectTranslationMap`, or `getAppLanguages` indirection layers. Use `db.appLanguage.findMany({ orderBy: { code: "asc" } })` inline in queries and routers. Keep `localized-text-map.ts` only for Prisma JSON ↔ text-map conversions (`localizedJsonToTextMap`, `textMapToLocalizedJson`), not empty-map factories.
+4. **No wrapper helpers** — call `buildEmptyTranslationMap` / `mergeTranslationMap` directly; do not add `createEmptyTitleDescriptionTranslationMap`, `createEmptyTextTranslationMap`, `mergeProjectTranslationMap`, or `getAppLanguages` indirection layers. Use `db.appLanguage.findMany({ orderBy: { code: "asc" } })` inline in queries and routers.
 
 5. **Form submits values directly** — coerce optional fields with `?? undefined` (not `=== "" ? undefined`), and dates inline in `onSubmit` when tRPC expects `Date`:
 
@@ -628,12 +643,12 @@ When the form shape differs from the list/API DTO (date strings, `{ url }[]` ima
 
 Do not mix form/editor concerns with list display in one module.
 
-| Module                              | Purpose                                                                                                   |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `src/lib/i18n/editor-rows.ts`       | `LanguageRef` — shared app-language reference type                                                        |
-| `src/lib/i18n/translation-map.ts`   | `TranslationMap`, `mergeTranslationMap`, `buildEmptyTranslationMap` — form/editor translation maps        |
-| `src/lib/i18n/localized-display.ts` | `getTitleDescriptionForLocale`, `getLocalizedFieldForLocale` — resolve text for active UI locale in lists |
-| `src/lib/i18n/localized-form.ts`    | Zod map schemas (`translationMapSchema`) and completeness for admin forms                                 |
+| Module                              | Purpose                                                                                                                          |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `src/lib/i18n/editor-rows.ts`       | `LanguageRef` — shared app-language reference type                                                                               |
+| `src/lib/i18n/translation-map.ts`   | `TranslationMap`, `mergeTranslationMap`, `buildEmptyTranslationMap` — form/editor translation maps                               |
+| `src/lib/i18n/localized-display.ts` | `getTitleDescriptionForLocale`, `createLocalizedFieldResolver` — resolve text for active UI locale |
+| `src/lib/i18n/localized-form.ts`    | Zod map schemas (`translationMapSchema`) and completeness for admin forms                                                        |
 
 ## Admin create/edit pages — server-built `initialData`
 
@@ -758,3 +773,134 @@ For admin forms with a `translations` map and `GlobalLanguageSelector`, use the 
 4. Optional: pass `completenessFields` and `copyFields` to wire `statusByLangId` and `copyFieldsFromPrimary` on `GlobalLanguageSelector`.
 5. Do **not** put the hook inside a feature folder — it is cross-feature admin infrastructure. Forms with a different shape (e.g. `profile-hero-form`, per-locale record maps) keep their own logic.
 6. Never import `features/*/server/*` from `"use client"` files; `initialData` arrives from Server Component pages only.
+
+---
+
+## Relational Translations Architecture — No JSON translation fields
+
+All translation data in this project uses **relational `*Translation` models** linked via `AppLanguage`. The old `Json` field pattern (`{ default: "...", translations: { en: "...", es: "..." } }`) has been fully migrated away and **must never be re-introduced**.
+
+### ❌ NEVER use JSON fields for translatable text
+
+```prisma
+// ❌ WRONG — legacy Json translation shape
+model CvHeader {
+  degree    Json?  // { default: "Engineer", translations: { en: "...", es: "..." } }
+}
+```
+
+```typescript
+// ❌ WRONG — reading legacy Json shape in code
+const degree = (header as any).degree?.default ?? header.degree;
+const rawValue = typeof field === "string" ? field : (field as any)[locale];
+```
+
+### ✅ ALWAYS use relational `*Translation` models
+
+Every translatable field must live in a dedicated `*Translation` model with an `AppLanguage` relation:
+
+```prisma
+// ✅ CORRECT — relational translation
+model CvHeaderTranslation {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  appLanguageId   String      @db.ObjectId
+  appLanguage     AppLanguage @relation(fields: [appLanguageId], references: [id])
+  degree          String?
+  clientImageAlt  String?
+  cvHeaderId      String      @db.ObjectId
+  cvHeader        CvHeader    @relation(fields: [cvHeaderId], references: [id])
+}
+```
+
+### Migration pattern
+
+When adding a new translatable field:
+
+1. Create a `*Translation` model (never add a `Json` field to the parent).
+2. Add a `translations  *Translation[]` relation to the parent model.
+3. Always `include: { translations: true }` when querying the parent.
+4. Resolve using a field resolver created with `createLocalizedFieldResolver(languages, locale)` (or `useLocalizedField(translations)` on client CV components).
+
+### Test fixtures — always use the relational shape
+
+Test fixtures must use `translations: [{ appLanguageId: "en", field: "value" }]`, never the legacy object shape:
+
+```typescript
+// ❌ WRONG — legacy Json fixture shape in tests
+{ id: "1", text: { default: "Value" } }
+{ id: "1", label: "Value" }
+
+// ✅ CORRECT — relational shape
+{ id: "1", translations: [{ appLanguageId: "en", text: "Value" }] }
+```
+
+---
+
+## Locale Resolution — Server-Side Only
+
+Selecting the correct translation for a given locale **must happen on the server** (in tRPC routers, RSC pages, or `*-queries.ts` server functions). Client components must **never** perform locale selection logic themselves.
+
+### Prefer `createLocalizedFieldResolver` when resolving many fields
+
+When a server mapper (or CV preview) resolves many fields for the same locale, bind once instead of repeating `languages` + `locale` on every call:
+
+```typescript
+const field = createLocalizedFieldResolver(appLanguages, locale);
+const expT = field.for(experience.translations);
+
+return {
+  role: expT("role"), // typed — only valid translation keys
+  location: expT("location") || undefined,
+};
+```
+
+CV display components use `CvLocaleProvider` + `useLocalizedField(translations)` so they call `t("role")` with autocomplete (same idea as `useTranslations` → `t("key")`), without prop-drilling `appLanguages`.
+
+### ❌ NEVER resolve locale in client components
+
+```typescript
+// ❌ WRONG — client picks the locale from a raw translation array
+const role =
+  experience.translations.find((t) => t.locale === currentLocale)?.role ??
+  experience.translations.find((t) => t.locale === "en")?.role ??
+  "";
+
+// ❌ WRONG — legacy pattern surviving in a "use client" file
+const degree =
+  typeof header.degree === "string" ? header.degree : header.degree?.[locale];
+```
+
+### ✅ ALWAYS resolve locale in the server layer, send a scalar to the client
+
+tRPC routers and server queries must resolve the translation and return a plain `string` (not a translation array or a Json blob):
+
+```typescript
+// ✅ CORRECT — server resolves locale, sends scalar
+// In a tRPC router or *-queries.ts:
+const appLanguage = await ctx.db.appLanguage.findUnique({
+  where: { code: input.locale },
+});
+const translation =
+  experience.translations.find((t) => t.appLanguageId === appLanguage?.id) ??
+  experience.translations[0];
+
+return {
+  id: experience.id,
+  company: experience.company,
+  role: translation?.role ?? "", // ← scalar string, not array
+  responsibilities: experience.responsibilities.map((r) => ({
+    id: r.id,
+    text:
+      r.translations.find((t) => t.appLanguageId === appLanguage?.id)?.text ??
+      "",
+  })),
+};
+```
+
+### Permitted exceptions (must be documented in code)
+
+The only acceptable case for client-side locale resolution is a **purely presentational** component that receives `translations[]` and `locale` as explicit props for performance reasons (e.g., switching preview locale without a network round-trip). This exception **must**:
+
+1. Be commented with `// locale resolution on client: [reason]`.
+2. Use `createLocalizedFieldResolver` from `@/lib/i18n/localized-display` — never use client hooks or context providers.
+3. Have the resolution hidden inside the component, not spread across multiple files.

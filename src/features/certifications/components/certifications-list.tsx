@@ -10,7 +10,7 @@ import { api, type RouterOutputs } from "@/trpc/react";
 import { toast } from "sonner";
 import type { Locale } from "@/i18n/config";
 import type { AppLanguage } from "@prisma/client";
-import { getLocalizedFieldForLocale } from "@/lib/i18n/localized-display";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
@@ -129,17 +129,12 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     return map;
   }, [rawSkills]);
 
-  const columns = useMemo<ColumnDef<CertificationRow>[]>(
-    () => [
+  const columns = useMemo<ColumnDef<CertificationRow>[]>(() => {
+    const field = createLocalizedFieldResolver(languages, locale);
+    return [
       {
         id: "title",
-        accessorFn: (row) =>
-          getLocalizedFieldForLocale(
-            row.translations,
-            languages,
-            locale,
-            "title",
-          ),
+        accessorFn: (row) => field(row.translations, "title"),
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnTitle")} />
         ),
@@ -152,12 +147,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
         enableColumnFilter: false,
         cell: ({ row }) => (
           <p className="text-foreground font-medium">
-            {getLocalizedFieldForLocale(
-              row.original.translations,
-              languages,
-              locale,
-              "title",
-            ) || t("untitled")}
+            {field(row.original.translations, "title") || t("untitled")}
           </p>
         ),
       },
@@ -242,9 +232,8 @@ export const CertificationsList: FC<CertificationsListProps> = ({
           );
         },
       },
-    ],
-    [deletingId, handleDelete, isPending, languages, locale, skillsById, t],
-  );
+    ];
+  }, [deletingId, handleDelete, isPending, languages, locale, skillsById, t]);
 
   const { table } = useDataTable({
     data: certifications,

@@ -1,18 +1,38 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { getLocalizedText } from "@/lib/i18n/localized";
-import type { CvData, CvLocaleProps } from "./types";
+import type { LocalizedCvData } from "./types";
 
-interface IEducationProps extends CvLocaleProps {
-  educations: CvData["educations"];
+interface IEducationProps {
+  educations: LocalizedCvData["educations"];
 }
 
-const Education: FC<IEducationProps> = ({
-  educations,
-  locale,
-  defaultLocale,
-}) => {
+function EducationItem({
+  education,
+}: {
+  education: LocalizedCvData["educations"][number];
+}) {
+  const dates =
+    education.dates ??
+    (education.startYear || education.endYear
+      ? `${education.startYear ?? ""} - ${education.endYear ?? ""}`
+      : "");
+
+  return (
+    <section className="mb-4">
+      <header>
+        <h5 className="text-sm font-bold">{education.degreeName}</h5>
+        <h6 className="text-sm text-[#333333]">
+          {education.institution}
+          {education.location ? ` | ${education.location}` : ""}
+        </h6>
+      </header>
+      {dates ? <p className="my-1 text-sm text-[#333333]">{dates}</p> : null}
+    </section>
+  );
+}
+
+const Education: FC<IEducationProps> = ({ educations }) => {
   const t = useTranslations("curriculum");
 
   if (!educations.length) return null;
@@ -24,38 +44,9 @@ const Education: FC<IEducationProps> = ({
       </h5>
 
       <div className="mb-4">
-        {educations.map((education) => {
-          const degreeName = getLocalizedText(
-            education.degreeName,
-            locale,
-            defaultLocale,
-          );
-          const location = getLocalizedText(
-            education.location,
-            locale,
-            defaultLocale,
-          );
-          const dates =
-            education.dates ??
-            (education.startYear || education.endYear
-              ? `${education.startYear ?? ""} - ${education.endYear ?? ""}`
-              : "");
-
-          return (
-            <section className="mb-4" key={education.id}>
-              <header>
-                <h5 className="text-sm font-bold">{degreeName}</h5>
-                <h6 className="text-sm text-[#333333]">
-                  {education.institution}
-                  {location ? ` | ${location}` : ""}
-                </h6>
-              </header>
-              {dates ? (
-                <p className="my-1 text-sm text-[#333333]">{dates}</p>
-              ) : null}
-            </section>
-          );
-        })}
+        {educations.map((education) => (
+          <EducationItem key={education.id} education={education} />
+        ))}
       </div>
     </>
   );

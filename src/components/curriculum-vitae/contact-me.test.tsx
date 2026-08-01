@@ -1,6 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import React from "react";
 import ContactMe from "./contact-me";
+import { renderWithIntl } from "@/test-utils/render-with-intl";
+import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
+import { mapCvDataToLocalized } from "./types";
 
 jest.mock("@/i18n/routing", () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
@@ -8,11 +11,24 @@ jest.mock("@/i18n/routing", () => ({
   ),
 }));
 
+function getLocalizedContacts(list: any[]) {
+  const mockData = {
+    ...mockCvPreviewData,
+    contacts: list.map((contact) => ({
+      ...contact,
+      order: contact.order ?? 0,
+      translations: (contact.translations ?? []).map((t: any) => ({
+        appLanguageId: t.appLanguageId ?? "lang-en",
+        label: t.label ?? "",
+      })),
+    })),
+  };
+  return mapCvDataToLocalized(mockData, mockAppLanguages, "en").contacts;
+}
+
 describe("ContactMe", () => {
   it("renders null when contacts array is empty", () => {
-    const { container } = render(
-      <ContactMe contacts={[]} locale="en" defaultLocale="en" />,
-    );
+    const { container } = renderWithIntl(<ContactMe contacts={[]} />);
     expect(container.firstChild).toBeNull();
   });
 
@@ -22,59 +38,55 @@ describe("ContactMe", () => {
         id: "c1",
         type: "EMAIL" as const,
         value: "test@example.com",
-        label: { default: "Email Me" },
+        translations: [{ appLanguageId: "lang-en", label: "Email Me" }],
       },
       {
         id: "c2",
         type: "EMAIL" as const,
         value: "mailto:direct@example.com",
-        label: null,
+        translations: [],
       },
       {
         id: "c3",
         type: "PHONE" as const,
         value: "+1 800 555 0199",
-        label: null,
+        translations: [],
       },
       {
         id: "c4",
         type: "PHONE" as const,
         value: "tel:+18005550199",
-        label: null,
+        translations: [],
       },
       {
         id: "c5",
         type: "CALENDLY" as const,
         value: "calendly.com/user",
-        label: null,
+        translations: [],
       },
       {
         id: "c6",
         type: "CALENDLY" as const,
         value: "https://calendly.com/user",
-        label: null,
+        translations: [],
       },
       {
         id: "c7",
         type: "LINKEDIN" as const,
         value: "https://linkedin.com/in/user",
-        label: null,
+        translations: [],
       },
       {
         id: "c8",
         type: "OTHER" as const,
         value: "https://myblog.com",
-        label: null,
+        translations: [],
       },
     ];
 
-    render(
+    renderWithIntl(
       <ContactMe
-        contacts={
-          contacts as unknown as Parameters<typeof ContactMe>[0]["contacts"]
-        }
-        locale="en"
-        defaultLocale="en"
+        contacts={getLocalizedContacts(contacts)}
       />,
     );
 

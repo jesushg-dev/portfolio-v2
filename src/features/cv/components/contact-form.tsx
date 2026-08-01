@@ -26,11 +26,11 @@ import {
   FormRoot,
   FormSection,
 } from "@/components/shared/form-root";
-import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
 import {
-  localizedJsonToTextMap,
-  TextTranslationMapSchema,
-} from "@/lib/i18n/localized-text-map";
+  buildEmptyTranslationMap,
+  textTranslationMapFromRows,
+} from "@/lib/i18n/translation-map";
+import { TextTranslationMapSchema } from "@/lib/i18n/localized-form";
 import type { AppLanguage } from "@prisma/client";
 
 export const TYPES = [
@@ -58,7 +58,8 @@ export const ContactForm: FC<{
     id: string;
     type: (typeof TYPES)[number];
     value: string;
-    label: unknown;
+    label?: unknown;
+    translations?: { appLanguageId: string; label: string }[];
   };
   onSuccess: () => void;
   onCancel: () => void;
@@ -76,8 +77,12 @@ export const ContactForm: FC<{
     defaultValues: {
       type: initial?.type ?? "EMAIL",
       value: initial?.value ?? "",
-      label: initial?.label
-        ? localizedJsonToTextMap(initial.label, languages)
+      label: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.label,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
     },
   });

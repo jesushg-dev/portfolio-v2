@@ -8,7 +8,7 @@ const mockUseInfiniteQuery = jest.fn<
   {
     data?: {
       pages: {
-        data: unknown[];
+        certificates: unknown[];
         cursor: string | null;
         hasMore: boolean;
       }[];
@@ -75,7 +75,9 @@ describe("Certification", () => {
   it("renders certificate items from query data", () => {
     mockUseInfiniteQuery.mockReturnValue({
       data: {
-        pages: [{ data: [certificate], cursor: "cert-1", hasMore: false }],
+        pages: [
+          { certificates: [certificate], cursor: "cert-1", hasMore: false },
+        ],
       },
       isLoading: false,
       isFetching: false,
@@ -87,7 +89,7 @@ describe("Certification", () => {
 
   it("shows no result when data is empty", () => {
     mockUseInfiniteQuery.mockReturnValue({
-      data: { pages: [{ data: [], cursor: null, hasMore: false }] },
+      data: { pages: [{ certificates: [], cursor: null, hasMore: false }] },
       isLoading: false,
       isFetching: false,
       fetchNextPage: jest.fn(),
@@ -100,7 +102,9 @@ describe("Certification", () => {
     const fetchNextPage = jest.fn();
     mockUseInfiniteQuery.mockReturnValue({
       data: {
-        pages: [{ data: [certificate], cursor: "cert-1", hasMore: true }],
+        pages: [
+          { certificates: [certificate], cursor: "cert-1", hasMore: true },
+        ],
       },
       isLoading: false,
       isFetching: false,

@@ -1,17 +1,21 @@
 import { screen } from "@testing-library/react";
 
 import CvPreview from "./cv-preview";
-import { mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
+import {
+  mockAppLanguages,
+  mockCvPreviewData,
+} from "@/test-utils/fixtures/cv-data";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
+import { mapCvDataToLocalized } from "./types";
+
+const localizedData = mapCvDataToLocalized(mockCvPreviewData, mockAppLanguages, "en");
 
 describe("CvPreview", () => {
   it("renders about me section when aboutMeText is provided", () => {
     renderWithIntl(
       <CvPreview
-        data={mockCvPreviewData}
+        data={localizedData}
         aboutMeText="Passionate developer with 5 years of experience."
-        currentLocale="en"
-        defaultLocale="en"
       />,
     );
     expect(screen.getByText("About Me")).toBeInTheDocument();
@@ -23,10 +27,8 @@ describe("CvPreview", () => {
   it("does not render about me section when aboutMeText is null", () => {
     renderWithIntl(
       <CvPreview
-        data={mockCvPreviewData}
+        data={localizedData}
         aboutMeText={null}
-        currentLocale="en"
-        defaultLocale="en"
       />,
     );
     expect(screen.queryByText("About Me")).not.toBeInTheDocument();
@@ -35,10 +37,8 @@ describe("CvPreview", () => {
   it("renders header with profile name", () => {
     renderWithIntl(
       <CvPreview
-        data={mockCvPreviewData}
+        data={localizedData}
         aboutMeText={null}
-        currentLocale="en"
-        defaultLocale="en"
       />,
     );
     expect(screen.getByText("Jane Doe")).toBeInTheDocument();
@@ -47,10 +47,8 @@ describe("CvPreview", () => {
   it("renders with pdfMode styling when pdfMode is true", () => {
     const { container } = renderWithIntl(
       <CvPreview
-        data={mockCvPreviewData}
+        data={localizedData}
         aboutMeText={null}
-        currentLocale="en"
-        defaultLocale="en"
         pdfMode={true}
       />,
     );

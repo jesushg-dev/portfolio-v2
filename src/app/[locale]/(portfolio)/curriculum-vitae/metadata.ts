@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "next-intl";
 
-import { type Locale as AppLocale } from "@/i18n/config";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { buildLocaleAlternates } from "@/lib/seo/alternates";
 import { buildSocialMetadata } from "@/lib/seo/site";
 import { resolveTenant } from "@/lib/tenant/resolve";
@@ -26,20 +25,21 @@ export async function generateMetadata({
   let description = "";
 
   if (tenant) {
-    const [header, aboutMe] = await Promise.all([
+    const [appLanguages, header, aboutMe] = await Promise.all([
+      db.appLanguage.findMany(),
       db.cvHeader.findUnique({ where: { userId: tenant.userId } }),
-      db.cvAboutMe.findUnique({ where: { userId: tenant.userId } }),
+      db.cvAboutMe.findUnique({
+        where: { userId: tenant.userId },
+        include: { translations: true },
+      }),
     ]);
 
     if (header?.fullName) {
       title = `${header.fullName} - Curriculum Vitae`;
     }
 
-    description = getLocalizedText(
-      aboutMe?.aboutMe,
-      locale as AppLocale,
-      tenant.defaultLocale,
-    );
+    const field = createLocalizedFieldResolver(appLanguages, locale);
+    description = field(aboutMe?.translations, "aboutMe");
   }
 
   const alternates = buildLocaleAlternates(appLocale, "/curriculum-vitae");

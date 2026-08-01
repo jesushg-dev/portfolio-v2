@@ -6,14 +6,14 @@ import { useTranslations } from "next-intl";
 
 import { Link } from "@/i18n/routing";
 
-import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import LocaleSegment from "@/components/admin/shared/locale-segment";
 import { localsDisplay, type Locale } from "@/i18n/config";
 import { useTabsKeyboard } from "@/hooks/use-tabs-keyboard";
 import { api } from "@/trpc/react";
 import CvPreview from "@/components/curriculum-vitae/cv-preview";
 import EditableCvLayout from "./editable-cv-layout";
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { CvEditorSkeleton } from "@/features/cv/components/cv-editor-skeleton";
 import { CvPageFrame } from "@/features/cv/components/cv-page-frame";
 import { ResumeImportWorkflow } from "@/features/resume-engine/components/resume-import-workflow";
@@ -34,39 +34,46 @@ type EditorView = "edit" | "preview" | "import";
 
 const VIEW_TABS: EditorView[] = ["edit", "preview", "import"];
 
-const CvEditor: FC = () => {
+export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
   const t = useTranslations("admin.cv");
-  const { data, isLoading, isError } = api.cv.getMine.useQuery();
-  const defaultLocale = (data?.profile?.defaultLocale as Locale) ?? "en";
   const [view, setView] = useState<EditorView>("edit");
-  const [previewLocaleOverride, setPreviewLocaleOverride] =
-    useState<Locale | null>(null);
+  const [previewLocale, setPreviewLocale] = useState<Locale>(defaultLocale);
 
-  const previewLocale =
-    previewLocaleOverride ??
-    (data?.profile?.defaultLocale as Locale) ??
-    defaultLocale;
+  const { data, isLoading, isError } = api.cv.getMine.useQuery();
+  const { data: languages = [] } = api.appLanguagesAdmin.getAll.useQuery();
 
   const previewData = useMemo(() => {
     if (!data) return null;
     return {
       profile: data.profile,
       header: data.header,
-      contacts: resolveCvDisplayContacts(data.contacts, data.profile),
+      contacts: data.contacts,
       educations: data.educations,
       languages: data.languages,
       technicalSkills: data.technicalSkills,
       experiences: data.experiences,
       softSkills: data.softSkills,
       additionalInformation: data.additionalInformation,
+      aboutMe: data.aboutMe,
+      personalReferences: data.personalReferences,
     };
   }, [data]);
 
-  const aboutMePreview = getLocalizedText(
-    data?.aboutMe?.aboutMe,
-    previewLocale,
-    defaultLocale,
+  const field = useMemo(
+    () => createLocalizedFieldResolver(languages, previewLocale),
+    [languages, previewLocale],
   );
+
+  const aboutMePreview = field(data?.aboutMe?.translations, "aboutMe");
+
+  const localizedPreviewData = useMemo(() => {
+    if (!previewData) return null;
+    return mapCvDataToLocalized(
+      previewData,
+      languages.map(({ id, code }) => ({ id, code })),
+      previewLocale,
+    );
+  }, [previewData, languages, previewLocale]);
 
   const activeViewIndex = VIEW_TABS.indexOf(view);
 
@@ -181,7 +188,7 @@ const CvEditor: FC = () => {
               id="cv-preview-locale-tabs"
               buttonIdPrefix="cv-preview-locale"
               value={previewLocale}
-              onChange={setPreviewLocaleOverride}
+              onChange={setPreviewLocale}
               defaultLocale={defaultLocale}
             />
           </div>
@@ -216,10 +223,8 @@ const CvEditor: FC = () => {
         >
           <div id="cv-admin-preview">
             <CvPreview
-              data={previewData}
+              data={localizedPreviewData!}
               aboutMeText={aboutMePreview}
-              currentLocale={previewLocale}
-              defaultLocale={defaultLocale}
             />
           </div>
         </CvPageFrame>

@@ -1,12 +1,15 @@
-import type { AppLanguage, TimelineItem } from "@prisma/client";
+import type {
+  AppLanguage,
+  TimelineItem,
+  TimelineItemTranslation,
+} from "@prisma/client";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
   buildEmptyTranslationMap,
   type TranslationMap,
 } from "@/lib/i18n/translation-map";
-import { getTitleDescriptionForLocale } from "@/lib/i18n/localized-display";
-import { localizedFieldsToTranslationMap } from "@/lib/i18n/localized-persist";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 
 export interface TimelineTranslationFields {
   title: string;
@@ -45,6 +48,10 @@ const emptyTimelineTranslationFields = { title: "", description: "" };
 
 type TimelineLanguageRef = Pick<AppLanguage, "id" | "code">;
 
+export type TimelineItemWithTranslations = TimelineItem & {
+  TimelineItemTranslation?: TimelineItemTranslation[];
+};
+
 function formatDateInput(value: Date | string | null | undefined): string {
   if (!value) return "";
   if (value instanceof Date) {
@@ -54,12 +61,14 @@ function formatDateInput(value: Date | string | null | undefined): string {
 }
 
 export function mapTimelineToEditorDto(
-  item: TimelineItem,
+  item: TimelineItemWithTranslations,
   languages: TimelineLanguageRef[],
 ): TimelineEditorDTO {
   const images = Array.isArray(item.images)
     ? item.images.filter((url): url is string => typeof url === "string")
     : [];
+
+  const translationsMap = item.TimelineItemTranslation ?? [];
 
   return {
     id: item.id,
@@ -70,16 +79,25 @@ export function mapTimelineToEditorDto(
     endDate: item.endDate,
     current: item.current,
     images,
-    translations: localizedFieldsToTranslationMap(
-      item.title,
-      item.description,
-      languages,
+    translations: Object.fromEntries(
+      languages.map((language) => {
+        const found = translationsMap.find(
+          (t) => t.appLanguageId === language.id,
+        );
+        return [
+          language.id,
+          {
+            title: found?.title ?? "",
+            description: found?.description ?? "",
+          },
+        ];
+      }),
     ),
   };
 }
 
 export function mapTimelinesToEditorDto(
-  items: TimelineItem[],
+  items: TimelineItemWithTranslations[],
   languages: TimelineLanguageRef[],
 ): TimelineEditorDTO[] {
   return items.map((item) => mapTimelineToEditorDto(item, languages));
@@ -126,10 +144,6 @@ export function getTimelineTranslationText(
   localeCode: string,
   field: "title" | "description",
 ): string {
-  return getTitleDescriptionForLocale(
-    item.translations,
-    languages,
-    localeCode,
-    field,
-  );
+  const resolver = createLocalizedFieldResolver(languages, localeCode);
+  return resolver(item.translations, field);
 }

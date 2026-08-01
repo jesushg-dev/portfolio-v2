@@ -2,7 +2,6 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import { locales, type Locale } from "@/i18n/config";
-import { buildLocalizedText } from "@/lib/i18n/localized";
 
 const DATA_DIR = join(process.cwd(), "prisma", "data");
 
@@ -66,8 +65,6 @@ describe("seed localized content completeness", () => {
             missing.push(`${entry.path} missing ${locale}`);
           }
         }
-
-        expect(() => buildLocalizedText(entry.map, "en")).not.toThrow();
       }
     }
 

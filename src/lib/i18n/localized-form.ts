@@ -2,12 +2,13 @@ import { z } from "zod";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
+  type TextTranslationMap,
   type TranslationMap,
   translationMapEntries,
 } from "@/lib/i18n/translation-map";
 
 export type { LanguageRef };
-export type { TranslationMap };
+export type { TextTranslationMap, TranslationMap };
 
 export type TranslationCompleteness = "empty" | "partial" | "complete";
 
@@ -117,6 +118,11 @@ export function textTranslationMapSchema(
     message,
   );
 }
+
+export const TextTranslationMapSchema = z.record(
+  z.string(),
+  textTranslationValueSchema,
+);
 
 export function translationEntriesFromMap<T extends Record<string, string>>(
   map: TranslationMap<T>,

@@ -1,7 +1,5 @@
 import { readFileSync } from "node:fs";
-import type { Prisma, PrismaClient } from "@prisma/client";
-
-import { toLocalizedText } from "./lib/localized-text-seed";
+import type { PrismaClient } from "@prisma/client";
 
 type LocaleCode = "es" | "en" | "nl";
 type LocaleMap = Partial<Record<LocaleCode, string>>;
@@ -30,12 +28,6 @@ const portfolioHome = JSON.parse(
   readFileSync(new URL("./data/portfolio-home.json", import.meta.url), "utf8"),
 ) as PortfolioHomeSeed;
 
-function asJson(
-  value: ReturnType<typeof toLocalizedText>,
-): Prisma.InputJsonValue {
-  return value as unknown as Prisma.InputJsonValue;
-}
-
 export async function seedPortfolioHome(
   prisma: PrismaClient,
   userId: string,
@@ -48,11 +40,38 @@ export async function seedPortfolioHome(
     where: { userId },
     data: {
       backgroundImageUrl: data.backgroundImageUrl,
-      heroSubtitle: asJson(toLocalizedText(data.heroSubtitle)),
-      heroTagline: asJson(toLocalizedText(data.heroTagline)),
-      heroSummary: asJson(toLocalizedText(data.heroSummary)),
     },
   });
+
+  const header = await prisma.cvHeader.findUnique({ where: { userId } });
+  if (header) {
+    for (const code of LOCALE_CODES) {
+      const appLanguageId = langIds[code];
+      if (appLanguageId) {
+        await prisma.cvHeaderTranslation.upsert({
+          where: {
+            cvHeaderId_appLanguageId: {
+              cvHeaderId: header.id,
+              appLanguageId,
+            },
+          },
+          create: {
+            cvHeaderId: header.id,
+            appLanguageId,
+            degree: "",
+            heroSubtitle: data.heroSubtitle[code] ?? data.heroSubtitle.es ?? "",
+            heroTagline: data.heroTagline[code] ?? data.heroTagline.es ?? "",
+            heroSummary: data.heroSummary[code] ?? data.heroSummary.es ?? "",
+          },
+          update: {
+            heroSubtitle: data.heroSubtitle[code] ?? data.heroSubtitle.es ?? "",
+            heroTagline: data.heroTagline[code] ?? data.heroTagline.es ?? "",
+            heroSummary: data.heroSummary[code] ?? data.heroSummary.es ?? "",
+          },
+        });
+      }
+    }
+  }
 
   // Remove old titles if they existed
   await prisma.cvHeroTitle.deleteMany({ where: { userId } });
@@ -76,8 +95,8 @@ export async function seedPortfolioHome(
     where: { terminalId: terminal.id },
   });
   for (const [index, step] of data.terminal.steps.entries()) {
-    const commandDefault = toLocalizedText(step.command).default;
-    const outputDefault = toLocalizedText(step.output).default;
+    const commandDefault = step.command.es ?? "";
+    const outputDefault = step.output.es ?? "";
 
     await prisma.cvTerminalStep.create({
       data: {

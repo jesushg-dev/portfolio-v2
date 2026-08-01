@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { getLocalizedText } from "@/lib/i18n/localized";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import {
   DEFAULT_SOFT_SKILLS_POSTER_URL,
   DEFAULT_SOFT_SKILLS_VIDEO_URL,
@@ -60,7 +60,6 @@ export const portfolioRouter = createTRPCRouter({
         },
       });
 
-      // get certifications with translations (scoped to tenant when present)
       const baseWhere = {
         ...(type ? { type: { hasSome: type } } : {}),
         ...(tenantUserId ? { userId: tenantUserId } : {}),
@@ -80,7 +79,6 @@ export const portfolioRouter = createTRPCRouter({
         cursor: cursor ? { id: cursor } : undefined,
       });
 
-      // first CertificationTranslation data should be at the same level as Certification object
       const dataWithTranslation = data.map((certification) => {
         const { CertificationTranslation, ...rest } = certification;
 
@@ -89,131 +87,175 @@ export const portfolioRouter = createTRPCRouter({
 
       const lastCursor = data[data.length - 1]?.id ?? null;
 
-      // check if there are more certificates to fetch (also tenant-scoped)
-      const hasMore = await ctx.db.certification.count({
-        take: limit,
-        skip: lastCursor ? 1 : 0,
-        cursor: lastCursor ? { id: lastCursor } : undefined,
-        where: baseWhere,
-      });
-
       return {
-        hasMore: hasMore >= 1,
+        certificates: dataWithTranslation,
         cursor: lastCursor,
-        data: dataWithTranslation,
       };
     }),
+
   getProjects: publicProcedure
     .input(
       z.object({
-        limit: z.number(),
+        limit: z.number().int().positive().max(50).optional().default(10),
         cursor: z.string().nullish(),
-        keyword: z.string().optional(),
-        type: StackType.optional(),
         locale: LanguageCode.optional().default("en"),
+        type: StackType.optional(),
       }),
     )
     .query(async ({ input, ctx }) => {
-      const { limit, locale, cursor, type } = input;
+      const { limit, cursor, locale, type } = input;
       const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return { projects: [], nextCursor: null };
 
-      // get language selected
       const appLanguage = await ctx.db.appLanguage.findUnique({
-        where: {
-          code: locale,
-        },
+        where: { code: locale },
       });
 
-      const projectWhere = {
-        ...(type ? { type } : {}),
-        ...(tenantUserId ? { userId: tenantUserId } : {}),
-      };
-
-      // get projects with skills and translations (tenant-scoped when present)
-      const data = await ctx.db.project.findMany({
+      const projects = await ctx.db.project.findMany({
+        where: {
+          userId: tenantUserId,
+          type,
+        },
+        take: limit + 1,
+        skip: cursor ? 1 : 0,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: [{ order: "asc" }, { createdAt: "desc" }],
         include: {
           ProjectTranslation: {
-            where: {
-              appLanguageId: appLanguage?.id,
-            },
+            where: { appLanguageId: appLanguage?.id },
           },
           ProjectSkill: {
             include: {
               Skill: {
                 include: {
                   SkillTranslation: {
-                    where: {
-                      appLanguageId: appLanguage?.id,
-                    },
+                    where: { appLanguageId: appLanguage?.id },
                   },
                 },
               },
             },
           },
         },
-        take: limit,
-        skip: cursor ? 1 : 0,
-        where: projectWhere,
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: [{ order: "asc" }, { createdAt: "desc" }],
       });
 
-      // first ProjectTranslation data should be at the same level as Project object
-      const dataWithTranslation = data.map((project) => {
-        const { ProjectTranslation, ProjectSkill, ...rest } = project;
+      let nextCursor: typeof cursor = null;
+      if (projects.length > limit) {
+        const nextItem = projects.pop();
+        nextCursor = nextItem?.id ?? null;
+      }
 
-        const skills = ProjectSkill.map(({ Skill }) => {
-          const { SkillTranslation, ...val } = Skill;
-          return mergeTranslation(val, SkillTranslation[0]);
+      const formatted = projects.map((project) => {
+        const translation = project.ProjectTranslation[0];
+        const skills = project.ProjectSkill.map(({ Skill }) => {
+          const { SkillTranslation, ...rest } = Skill;
+          return mergeTranslation(rest, SkillTranslation[0]);
         });
 
-        return mergeTranslation({ skills, ...rest }, ProjectTranslation[0]);
-      });
-
-      const lastCursor = data[data.length - 1]?.id ?? null;
-
-      // check if there are more projects to fetch (tenant-scoped)
-      const hasMore = await ctx.db.project.count({
-        take: limit,
-        skip: lastCursor ? 1 : 0,
-        where: projectWhere,
-        cursor: lastCursor ? { id: lastCursor } : undefined,
+        return {
+          id: project.id,
+          title: translation?.title ?? "",
+          description: translation?.description ?? "",
+          image: project.image,
+          type: project.type,
+          githubUrl: project.githubUrl,
+          websiteUrl: project.websiteUrl,
+          isPrivate: project.isPrivate,
+          order: project.order,
+          kind: project.kind,
+          slug: project.slug,
+          caseStudyEnabled: project.caseStudyEnabled,
+          hook: translation?.hook ?? null,
+          skills,
+        };
       });
 
       return {
-        hasMore: hasMore >= 1,
-        cursor: lastCursor,
-        data: dataWithTranslation,
+        projects: formatted,
+        nextCursor,
       };
     }),
+
+  getFeaturedProjects: publicProcedure
+    .input(
+      z.object({
+        locale: LanguageCode.optional().default("en"),
+        limit: z.number().int().positive().max(10).optional().default(6),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return [];
+
+      const appLanguage = await ctx.db.appLanguage.findUnique({
+        where: { code: input.locale },
+      });
+
+      const projects = await ctx.db.project.findMany({
+        where: { userId: tenantUserId },
+        take: input.limit,
+        orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+        include: {
+          ProjectTranslation: {
+            where: { appLanguageId: appLanguage?.id },
+          },
+          ProjectSkill: {
+            include: {
+              Skill: {
+                include: {
+                  SkillTranslation: {
+                    where: { appLanguageId: appLanguage?.id },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return projects.map((project) => {
+        const translation = project.ProjectTranslation[0];
+        const skills = project.ProjectSkill.map(({ Skill }) => {
+          const { SkillTranslation, ...rest } = Skill;
+          return mergeTranslation(rest, SkillTranslation[0]);
+        });
+
+        return {
+          id: project.id,
+          title: translation?.title ?? "",
+          description: translation?.description ?? "",
+          image: project.image,
+          type: project.type,
+          githubUrl: project.githubUrl,
+          websiteUrl: project.websiteUrl,
+          isPrivate: project.isPrivate,
+          order: project.order,
+          kind: project.kind,
+          slug: project.slug,
+          caseStudyEnabled: project.caseStudyEnabled,
+          skills,
+        };
+      });
+    }),
+
   getSkills: publicProcedure
     .input(
       z.object({
-        limit: z.number(),
-        cursor: z.string().nullish(),
-        keyword: z.string().optional(),
-        type: z.array(StackType).optional(),
         locale: LanguageCode.optional().default("en"),
       }),
     )
     .query(async ({ input, ctx }) => {
-      const { limit, type, locale, cursor } = input;
       const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return [];
 
-      // get language selected
       const appLanguage = await ctx.db.appLanguage.findUnique({
         where: {
-          code: locale,
+          code: input.locale,
         },
       });
 
-      const skillWhere = {
-        ...(type ? { type: { in: type } } : {}),
-        ...(tenantUserId ? { userId: tenantUserId } : {}),
-      };
-
-      // get skills with translations (tenant-scoped when present)
       const data = await ctx.db.skill.findMany({
+        where: { userId: tenantUserId },
+        orderBy: { createdAt: "asc" },
         include: {
           SkillTranslation: {
             where: {
@@ -221,81 +263,73 @@ export const portfolioRouter = createTRPCRouter({
             },
           },
         },
-        take: limit,
-        skip: cursor ? 1 : 0,
-        where: skillWhere,
-        cursor: cursor ? { id: cursor } : undefined,
       });
 
-      // first SkillTranslation data should be at the same level as Skill object
-      const dataWithTranslation = data.map((skill) => {
+      return data.map((skill) => {
         const { SkillTranslation, ...rest } = skill;
-
         return mergeTranslation(rest, SkillTranslation[0]);
       });
-
-      const lastCursor = data[data.length - 1]?.id ?? null;
-
-      // check if there are more skills to fetch (tenant-scoped)
-      const hasMore = await ctx.db.skill.count({
-        take: limit,
-        skip: lastCursor ? 1 : 0,
-        where: skillWhere,
-        cursor: lastCursor ? { id: lastCursor } : undefined,
-      });
-
-      return {
-        hasMore: hasMore >= 1,
-        cursor: lastCursor,
-        data: dataWithTranslation,
-      };
     }),
-  getSkillDetail: publicProcedure
+
+  getSkillBySlug: publicProcedure
     .input(
       z.object({
-        /** URL segment: title slug (e.g. `next-js`) or legacy ObjectId. */
         slug: z.string().min(1),
         locale: LanguageCode.optional().default("en"),
       }),
     )
     .query(async ({ input, ctx }) => {
       const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) return null;
 
       const appLanguage = await ctx.db.appLanguage.findUnique({
         where: { code: input.locale },
       });
 
-      const skillInclude = {
-        SkillTranslation: {
-          where: { appLanguageId: appLanguage?.id },
+      const isObjId = looksLikeSkillObjectId(input.slug);
+      let skill = await ctx.db.skill.findFirst({
+        where: {
+          userId: tenantUserId,
+          ...(isObjId
+            ? { OR: [{ id: input.slug }, { title: input.slug }] }
+            : { title: { contains: input.slug, mode: "insensitive" } }),
         },
-        CertificateSkill: {
-          include: {
-            Certification: {
-              include: {
-                CertificationTranslation: {
-                  where: { appLanguageId: appLanguage?.id },
+        include: {
+          SkillTranslation: {
+            where: { appLanguageId: appLanguage?.id },
+          },
+          CertificateSkill: {
+            include: {
+              Certification: {
+                include: {
+                  CertificationTranslation: {
+                    where: { appLanguageId: appLanguage?.id },
+                  },
                 },
               },
             },
           },
-        },
-        CvExperienceSkill: {
-          include: { experience: true as const },
-        },
-        ProjectSkill: {
-          include: {
-            Project: {
-              include: {
-                ProjectTranslation: {
-                  where: { appLanguageId: appLanguage?.id },
-                },
-                ProjectSkill: {
-                  include: {
-                    Skill: {
-                      include: {
-                        SkillTranslation: {
-                          where: { appLanguageId: appLanguage?.id },
+          CvExperienceSkill: {
+            include: {
+              experience: {
+                include: { translations: true },
+              },
+            },
+          },
+          ProjectSkill: {
+            include: {
+              Project: {
+                include: {
+                  ProjectTranslation: {
+                    where: { appLanguageId: appLanguage?.id },
+                  },
+                  ProjectSkill: {
+                    include: {
+                      Skill: {
+                        include: {
+                          SkillTranslation: {
+                            where: { appLanguageId: appLanguage?.id },
+                          },
                         },
                       },
                     },
@@ -305,30 +339,74 @@ export const portfolioRouter = createTRPCRouter({
             },
           },
         },
-      };
+      });
 
-      const tenantWhere = tenantUserId ? { userId: tenantUserId } : {};
-
-      let skill = looksLikeSkillObjectId(input.slug)
-        ? await ctx.db.skill.findFirst({
-            where: { id: input.slug, ...tenantWhere },
-            include: skillInclude,
-          })
-        : null;
-
-      if (!skill) {
-        const candidates = await ctx.db.skill.findMany({
-          where: tenantWhere,
-          include: skillInclude,
+      if (!skill && !isObjId) {
+        const allSkills = await ctx.db.skill.findMany({
+          where: { userId: tenantUserId },
+          select: { id: true, title: true },
         });
-        skill =
-          candidates.find(
-            (row) => skillSlugFromTitle(row.title) === input.slug,
-          ) ?? null;
+
+        const matched = allSkills.find(
+          (s) => skillSlugFromTitle(s.title) === input.slug.toLowerCase(),
+        );
+
+        if (matched) {
+          skill = await ctx.db.skill.findFirst({
+            where: { id: matched.id },
+            include: {
+              SkillTranslation: {
+                where: { appLanguageId: appLanguage?.id },
+              },
+              CertificateSkill: {
+                include: {
+                  Certification: {
+                    include: {
+                      CertificationTranslation: {
+                        where: { appLanguageId: appLanguage?.id },
+                      },
+                    },
+                  },
+                },
+              },
+              CvExperienceSkill: {
+                include: {
+                  experience: {
+                    include: { translations: true },
+                  },
+                },
+              },
+              ProjectSkill: {
+                include: {
+                  Project: {
+                    include: {
+                      ProjectTranslation: {
+                        where: { appLanguageId: appLanguage?.id },
+                      },
+                      ProjectSkill: {
+                        include: {
+                          Skill: {
+                            include: {
+                              SkillTranslation: {
+                                where: { appLanguageId: appLanguage?.id },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
       }
 
       if (!skill) return null;
 
+      const languages = await ctx.db.appLanguage.findMany();
+      const field = createLocalizedFieldResolver(languages, input.locale);
       const {
         SkillTranslation,
         CertificateSkill,
@@ -345,7 +423,7 @@ export const portfolioRouter = createTRPCRouter({
       const experiences = CvExperienceSkill.map(({ experience }) => ({
         id: experience.id,
         company: experience.company,
-        role: getLocalizedText(experience.role, input.locale),
+        role: field(experience.translations, "role"),
         dates: formatExperienceDates(
           experience.startDate,
           experience.endDate,
@@ -377,6 +455,7 @@ export const portfolioRouter = createTRPCRouter({
         projects,
       };
     }),
+
   getTimelinePublic: publicProcedure
     .input(
       z.object({
@@ -392,7 +471,7 @@ export const portfolioRouter = createTRPCRouter({
         return [];
       }
 
-      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
+      const languages = await ctx.db.appLanguage.findMany();
       const locale = input.locale;
 
       const timelineItems = await ctx.db.timelineItem.findMany({
@@ -400,13 +479,14 @@ export const portfolioRouter = createTRPCRouter({
           userId: tenantUserId,
           ...(input.category ? { category: input.category } : {}),
         },
+        include: { TimelineItemTranslation: true },
         orderBy: [{ startDate: "asc" }, { createdAt: "asc" }],
       });
 
       return mapTimelineItemsToPublic(
         timelineItems,
         locale,
-        defaultLocale,
+        languages,
         input.limit,
       );
     }),
@@ -424,15 +504,16 @@ export const portfolioRouter = createTRPCRouter({
         return [];
       }
 
-      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
+      const languages = await ctx.db.appLanguage.findMany();
       const locale = input.locale;
 
       const timelineItems = await ctx.db.timelineItem.findMany({
         where: { userId: tenantUserId },
+        include: { TimelineItemTranslation: true },
         orderBy: [{ startDate: "asc" }, { createdAt: "asc" }],
       });
 
-      return mapTimelineItemsToPublic(timelineItems, locale, defaultLocale).map(
+      return mapTimelineItemsToPublic(timelineItems, locale, languages).map(
         (item) => ({
           id: item.id,
           title: item.title,
@@ -453,8 +534,10 @@ export const portfolioRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return null;
 
+      const languages = await ctx.db.appLanguage.findMany();
       const header = await ctx.db.cvHeader.findUnique({
         where: { userId: tenantUserId },
+        include: { translations: true },
       });
 
       if (!header) return null;
@@ -464,33 +547,19 @@ export const portfolioRouter = createTRPCRouter({
         select: { displayName: true },
       });
 
-      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
       const locale = input.locale;
+      const t = createLocalizedFieldResolver(languages, locale).for(
+        header.translations ?? [],
+      );
 
       return {
         fullName: profile?.displayName?.trim() ?? header.fullName,
         photoUrl: header.photoUrl,
         backgroundImageUrl: header.backgroundImageUrl,
-        heroSubtitle: getLocalizedText(
-          header.heroSubtitle,
-          locale,
-          defaultLocale,
-        ),
-        heroTagline: getLocalizedText(
-          header.heroTagline,
-          locale,
-          defaultLocale,
-        ),
-        heroSummary: getLocalizedText(
-          header.heroSummary,
-          locale,
-          defaultLocale,
-        ),
-        imageAlt: getLocalizedText(
-          header.clientImageAlt,
-          locale,
-          defaultLocale,
-        ),
+        heroSubtitle: t("heroSubtitle"),
+        heroTagline: t("heroTagline"),
+        heroSummary: t("heroSummary"),
+        imageAlt: t("clientImageAlt"),
       };
     }),
 
@@ -556,14 +625,15 @@ export const portfolioRouter = createTRPCRouter({
 
       return services.map((service) => {
         const translation = service.ServiceTranslation[0];
+
         return {
           id: service.id,
-          type: service.type,
           image: service.image,
-          icon: service.icon ?? "code",
-          statsValue: service.statsValue ?? "",
-          featured: service.featured ?? false,
-          order: service.order ?? 0,
+          type: service.type,
+          icon: service.icon ?? undefined,
+          statsValue: service.statsValue ?? undefined,
+          featured: service.featured,
+          order: service.order,
           title: translation?.title ?? "",
           description: translation?.description ?? "",
           badge: translation?.badge ?? "",
@@ -582,21 +652,22 @@ export const portfolioRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return null;
 
-      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
-      const locale = input.locale;
+      const languages = await ctx.db.appLanguage.findMany();
 
       const [aboutMe, terminal] = await Promise.all([
-        ctx.db.cvAboutMe.findUnique({ where: { userId: tenantUserId } }),
+        ctx.db.cvAboutMe.findUnique({
+          where: { userId: tenantUserId },
+          include: { translations: true },
+        }),
         ctx.db.cvTerminal.findUnique({
           where: { userId: tenantUserId },
           include: { steps: true },
         }),
       ]);
 
-      const aboutText = getLocalizedText(
-        aboutMe?.aboutMe,
-        locale,
-        defaultLocale,
+      const aboutText = createLocalizedFieldResolver(languages, input.locale)(
+        aboutMe?.translations ?? [],
+        "aboutMe",
       );
 
       return {
@@ -626,8 +697,9 @@ export const portfolioRouter = createTRPCRouter({
         };
       }
 
-      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
+      const languages = await ctx.db.appLanguage.findMany();
       const locale = input.locale;
+      const field = createLocalizedFieldResolver(languages, locale);
 
       const [section, items] = await Promise.all([
         ctx.db.softSkillsSection.findUnique({
@@ -635,6 +707,7 @@ export const portfolioRouter = createTRPCRouter({
         }),
         ctx.db.portfolioSoftSkill.findMany({
           where: { userId: tenantUserId, isVisible: true },
+          include: { PortfolioSoftSkillTranslation: true },
           orderBy: [{ order: "asc" }, { createdAt: "asc" }],
         }),
       ]);
@@ -646,17 +719,17 @@ export const portfolioRouter = createTRPCRouter({
           posterUrl: section?.posterUrl ?? DEFAULT_SOFT_SKILLS_POSTER_URL,
           imageUrl: section?.imageUrl ?? null,
         },
-        items: items.map((item) => ({
-          id: item.id,
-          icon: item.icon,
-          featured: item.featured,
-          title: getLocalizedText(item.title, locale, defaultLocale),
-          description: getLocalizedText(
-            item.description,
-            locale,
-            defaultLocale,
-          ),
-        })),
+        items: items.map((item) => {
+          const t = field.for(item.PortfolioSoftSkillTranslation);
+          return {
+            id: item.id,
+            icon: item.icon,
+            featured: item.featured,
+            title: t("title"),
+            description: t("description"),
+            badge: t("badge"),
+          };
+        }),
       };
     }),
 
@@ -671,15 +744,18 @@ export const portfolioRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return [];
 
-      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
+      const languages = await ctx.db.appLanguage.findMany();
       const locale = input.locale;
+      const field = createLocalizedFieldResolver(languages, locale);
 
-      // Prefer explicitly featured experiences; fall back to order-based limit
-      // so existing accounts without the flag set still work.
       let experiences = await ctx.db.cvExperience.findMany({
         where: { userId: tenantUserId, featuredOnHome: true },
         include: {
-          responsibilities: { orderBy: { order: "asc" } },
+          translations: true,
+          responsibilities: {
+            include: { translations: true },
+            orderBy: { order: "asc" },
+          },
         },
         orderBy: [{ order: "asc" }, { startDate: "desc" }],
       });
@@ -688,29 +764,39 @@ export const portfolioRouter = createTRPCRouter({
         experiences = await ctx.db.cvExperience.findMany({
           where: { userId: tenantUserId },
           include: {
-            responsibilities: { orderBy: { order: "asc" } },
+            translations: true,
+            responsibilities: {
+              include: { translations: true },
+              orderBy: { order: "asc" },
+            },
           },
           orderBy: [{ order: "asc" }, { startDate: "desc" }],
           take: input.limit,
         });
       }
 
-      return experiences.map((experience) => ({
-        id: experience.id,
-        company: experience.company,
-        companyLogoUrl: experience.companyLogoUrl,
-        current: experience.current,
-        role: getLocalizedText(experience.role, locale, defaultLocale),
-        dates: formatExperienceDates(
-          experience.startDate,
-          experience.endDate,
-          experience.current,
-          locale,
-        ),
-        responsibilities: experience.responsibilities.map((responsibility) =>
-          getLocalizedText(responsibility.text, locale, defaultLocale),
-        ),
-      }));
+      return experiences.map((experience) => {
+        const expT = field.for(experience.translations);
+        return {
+          id: experience.id,
+          company: experience.company,
+          companyLogoUrl: experience.companyLogoUrl,
+          startDate: experience.startDate,
+          endDate: experience.endDate,
+          current: experience.current,
+          dates: formatExperienceDates(
+            experience.startDate,
+            experience.endDate,
+            experience.current,
+            locale,
+          ),
+          role: expT("role"),
+          location: expT("location"),
+          responsibilities: experience.responsibilities.map((responsibility) =>
+            field(responsibility.translations, "text"),
+          ),
+        };
+      });
     }),
 
   getTestimonialsPublic: publicProcedure
@@ -724,11 +810,13 @@ export const portfolioRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return [];
 
-      const defaultLocale = ctx.tenant?.defaultLocale ?? "en";
+      const languages = await ctx.db.appLanguage.findMany();
       const locale = input.locale;
+      const field = createLocalizedFieldResolver(languages, locale);
 
       const items = await ctx.db.testimonial.findMany({
         where: { userId: tenantUserId, isVisible: true },
+        include: { TestimonialTranslation: true },
         orderBy: [{ order: "asc" }, { createdAt: "asc" }],
         take: input.limit,
       });
@@ -737,7 +825,7 @@ export const portfolioRouter = createTRPCRouter({
         id: item.id,
         author: item.author,
         role: item.role,
-        quote: getLocalizedText(item.quote, locale, defaultLocale),
+        quote: field(item.TestimonialTranslation, "quote"),
         avatarUrl: item.avatarUrl,
         linkedInUrl: item.linkedInUrl,
       }));
@@ -858,6 +946,7 @@ export const portfolioRouter = createTRPCRouter({
       );
       if (currentIndex === -1) return null;
 
-      return slugs[(currentIndex + 1) % slugs.length] ?? null;
+      const nextIndex = (currentIndex + 1) % slugs.length;
+      return slugs[nextIndex];
     }),
 });

@@ -170,25 +170,35 @@ model CvPdfEmailLog {
 }
 
 // ============================================================================
-// CV MODELS (per-user, multi-locale via Json LocalizedText)
-// LocalizedText shape:
-//   { default: string, translations?: { en?: string, es?: string, nl?: string } }
+// CV MODELS (per-user, multi-locale via relational *Translation models)
 // ============================================================================
 
 model CvHeader {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String   @unique @db.ObjectId
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String                @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String                @unique @db.ObjectId
+  user               User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   fullName           String
-  degree             Json
   photoUrl           String?
   backgroundImageUrl String?
-  heroSubtitle       Json?
-  heroTagline        Json?
-  heroSummary        Json?
-  clientImageAlt     Json?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  translations       CvHeaderTranslation[]
+}
+
+model CvHeaderTranslation {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime    @default(now())
+  degree         String
+  heroSubtitle   String?
+  heroTagline    String?
+  heroSummary    String?
+  clientImageAlt String?
+  language       AppLanguage @relation(fields: [appLanguageId], references: [id])
+  CvHeader       CvHeader?   @relation(fields: [cvHeaderId], references: [id], onDelete: Cascade)
+  cvHeaderId     String?     @db.ObjectId
+  appLanguageId  String      @db.ObjectId
+
+  @@unique([cvHeaderId, appLanguageId])
 }
 
 /// Rotating professional titles shown in the portfolio hero typewriter.
@@ -218,12 +228,24 @@ model CvHeroTitleTranslation {
 }
 
 model CvAboutMe {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @unique @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  aboutMe   Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String                 @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                 @unique @db.ObjectId
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  translations CvAboutMeTranslation[]
+}
+
+model CvAboutMeTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  aboutMe       String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  CvAboutMe     CvAboutMe?  @relation(fields: [cvAboutMeId], references: [id], onDelete: Cascade)
+  cvAboutMeId   String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+
+  @@unique([cvAboutMeId, appLanguageId])
 }
 
 /// Configurable terminal sequence for the portfolio About section.
@@ -266,42 +288,78 @@ model CvTerminalStepTranslation {
 }
 
 model CvContact {
-  id        String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String        @db.ObjectId
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      CvContactType
-  value     String
-  label     Json?
-  order     Int           @default(0)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id           String                 @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                 @db.ObjectId
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         CvContactType
+  value        String
+  order        Int                    @default(0)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  translations CvContactTranslation[]
+}
+
+model CvContactTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  label         String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  CvContact     CvContact?  @relation(fields: [cvContactId], references: [id], onDelete: Cascade)
+  cvContactId   String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+
+  @@unique([cvContactId, appLanguageId])
 }
 
 model CvEducation {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @db.ObjectId
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  institution String
-  degreeName  Json
-  location    Json?
-  description Json?
-  startYear   Int?
-  endYear     Int?
-  dates       String?
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                   @db.ObjectId
+  user         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution  String
+  startYear    Int?
+  endYear      Int?
+  dates        String?
+  order        Int                      @default(0)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  translations CvEducationTranslation[]
+}
+
+model CvEducationTranslation {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime     @default(now())
+  degreeName    String
+  location      String?
+  description   String?
+  language      AppLanguage  @relation(fields: [appLanguageId], references: [id])
+  CvEducation   CvEducation? @relation(fields: [cvEducationId], references: [id], onDelete: Cascade)
+  cvEducationId String?      @db.ObjectId
+  appLanguageId String       @db.ObjectId
+
+  @@unique([cvEducationId, appLanguageId])
 }
 
 model CvLanguage {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name      Json
-  level     Json
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String                  @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                  @db.ObjectId
+  user         User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order        Int                     @default(0)
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  translations CvLanguageTranslation[]
+}
+
+model CvLanguageTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  name          String
+  level         String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  CvLanguage    CvLanguage? @relation(fields: [cvLanguageId], references: [id], onDelete: Cascade)
+  cvLanguageId  String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+
+  @@unique([cvLanguageId, appLanguageId])
 }
 
 model CvTechnicalSkill {
@@ -316,32 +374,56 @@ model CvTechnicalSkill {
 }
 
 model CvExperience {
-  id                String              @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String              @db.ObjectId
-  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String                    @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String                    @db.ObjectId
+  user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   company           String
   companyLogoUrl    String?
-  role              Json
-  location          Json?
   startDate         DateTime?
   endDate           DateTime?
-  current           Boolean             @default(false)
-  featuredOnHome    Boolean             @default(false)
+  current           Boolean                   @default(false)
+  featuredOnHome    Boolean                   @default(false)
   skills            String?
-  order             Int                 @default(0)
+  order             Int                       @default(0)
   responsibilities  CvResponsibility[]
   CvExperienceSkill CvExperienceSkill[]
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  translations      CvExperienceTranslation[]
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+}
+
+model CvExperienceTranslation {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime      @default(now())
+  role           String
+  location       String?
+  language       AppLanguage   @relation(fields: [appLanguageId], references: [id])
+  CvExperience   CvExperience? @relation(fields: [cvExperienceId], references: [id], onDelete: Cascade)
+  cvExperienceId String?       @db.ObjectId
+  appLanguageId  String        @db.ObjectId
+
+  @@unique([cvExperienceId, appLanguageId])
 }
 
 model CvResponsibility {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  experienceId String       @db.ObjectId
-  experience   CvExperience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
-  text         Json
-  order        Int          @default(0)
-  createdAt    DateTime     @default(now())
+  id           String                        @id @default(auto()) @map("_id") @db.ObjectId
+  experienceId String                        @db.ObjectId
+  experience   CvExperience                  @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  order        Int                           @default(0)
+  createdAt    DateTime                      @default(now())
+  translations CvResponsibilityTranslation[]
+}
+
+model CvResponsibilityTranslation {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime          @default(now())
+  text               String
+  language           AppLanguage       @relation(fields: [appLanguageId], references: [id])
+  CvResponsibility   CvResponsibility? @relation(fields: [cvResponsibilityId], references: [id], onDelete: Cascade)
+  cvResponsibilityId String?           @db.ObjectId
+  appLanguageId      String            @db.ObjectId
+
+  @@unique([cvResponsibilityId, appLanguageId])
 }
 
 model CvExperienceSkill {
@@ -356,35 +438,71 @@ model CvExperienceSkill {
 }
 
 model CvSoftSkill {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name      Json
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                   @db.ObjectId
+  user         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order        Int                      @default(0)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  translations CvSoftSkillTranslation[]
+}
+
+model CvSoftSkillTranslation {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime     @default(now())
+  name          String
+  language      AppLanguage  @relation(fields: [appLanguageId], references: [id])
+  CvSoftSkill   CvSoftSkill? @relation(fields: [cvSoftSkillId], references: [id], onDelete: Cascade)
+  cvSoftSkillId String?      @db.ObjectId
+  appLanguageId String       @db.ObjectId
+
+  @@unique([cvSoftSkillId, appLanguageId])
 }
 
 model CvAdditionalInfo {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  text      Json
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String                        @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                        @db.ObjectId
+  user         User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order        Int                           @default(0)
+  createdAt    DateTime                      @default(now())
+  updatedAt    DateTime                      @updatedAt
+  translations CvAdditionalInfoTranslation[]
+}
+
+model CvAdditionalInfoTranslation {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime          @default(now())
+  text               String
+  language           AppLanguage       @relation(fields: [appLanguageId], references: [id])
+  CvAdditionalInfo   CvAdditionalInfo? @relation(fields: [cvAdditionalInfoId], references: [id], onDelete: Cascade)
+  cvAdditionalInfoId String?           @db.ObjectId
+  appLanguageId      String            @db.ObjectId
+
+  @@unique([cvAdditionalInfoId, appLanguageId])
 }
 
 model CvPersonalReference {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name      String
-  role      Json?
-  contact   String?
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String                           @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                           @db.ObjectId
+  user         User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  contact      String?
+  order        Int                              @default(0)
+  createdAt    DateTime                         @default(now())
+  updatedAt    DateTime                         @updatedAt
+  translations CvPersonalReferenceTranslation[]
+}
+
+model CvPersonalReferenceTranslation {
+  id                    String               @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt             DateTime             @default(now())
+  role                  String
+  language              AppLanguage          @relation(fields: [appLanguageId], references: [id])
+  CvPersonalReference   CvPersonalReference? @relation(fields: [cvPersonalReferenceId], references: [id], onDelete: Cascade)
+  cvPersonalReferenceId String?              @db.ObjectId
+  appLanguageId         String               @db.ObjectId
+
+  @@unique([cvPersonalReferenceId, appLanguageId])
 }
 
 enum CvContactType {
@@ -415,15 +533,28 @@ enum CvSkillCategory {
 // ============================================================================
 
 model AppLanguage {
-  id                        String                      @id @default(auto()) @map("_id") @db.ObjectId
-  code                      String                      @unique
-  name                      String
-  SkillTranslation          SkillTranslation[]
-  ProjectTranslation        ProjectTranslation[]
-  ServiceTranslation        ServiceTranslation[]
-  CertificationTranslation  CertificationTranslation[]
-  CvTerminalStepTranslation CvTerminalStepTranslation[]
-  CvHeroTitleTranslation    CvHeroTitleTranslation[]
+  id                            String                          @id @default(auto()) @map("_id") @db.ObjectId
+  code                          String                          @unique
+  name                          String
+  SkillTranslation              SkillTranslation[]
+  ProjectTranslation            ProjectTranslation[]
+  ServiceTranslation            ServiceTranslation[]
+  CertificationTranslation      CertificationTranslation[]
+  CvTerminalStepTranslation     CvTerminalStepTranslation[]
+  CvHeroTitleTranslation        CvHeroTitleTranslation[]
+  PortfolioSoftSkillTranslation PortfolioSoftSkillTranslation[]
+  TimelineItemTranslation       TimelineItemTranslation[]
+  TestimonialTranslation        TestimonialTranslation[]
+  CvHeaderTranslation           CvHeaderTranslation[]
+  CvAboutMeTranslation          CvAboutMeTranslation[]
+  CvEducationTranslation        CvEducationTranslation[]
+  CvExperienceTranslation       CvExperienceTranslation[]
+  CvResponsibilityTranslation   CvResponsibilityTranslation[]
+  CvLanguageTranslation         CvLanguageTranslation[]
+  CvSoftSkillTranslation        CvSoftSkillTranslation[]
+  CvAdditionalInfoTranslation   CvAdditionalInfoTranslation[]
+  CvPersonalReferenceTranslation CvPersonalReferenceTranslation[]
+  CvContactTranslation          CvContactTranslation[]
 }
 
 enum ProjectKind {
@@ -476,18 +607,30 @@ model ProjectTranslation {
 }
 
 model Testimonial {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  author    String
-  role      String
-  quote     Json
-  avatarUrl String?
-  linkedInUrl String?
-  order     Int      @default(0)
-  isVisible Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String                   @db.ObjectId
+  user                   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  author                 String
+  role                   String
+  avatarUrl              String?
+  linkedInUrl            String?
+  order                  Int                      @default(0)
+  isVisible              Boolean                  @default(true)
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  TestimonialTranslation TestimonialTranslation[]
+}
+
+model TestimonialTranslation {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime     @default(now())
+  quote         String
+  language      AppLanguage  @relation(fields: [appLanguageId], references: [id])
+  Testimonial   Testimonial? @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+  testimonialId String?      @db.ObjectId
+  appLanguageId String       @db.ObjectId
+
+  @@unique([testimonialId, appLanguageId])
 }
 
 model Service {
@@ -634,21 +777,33 @@ enum StackType {
 }
 
 model TimelineItem {
-  id           String           @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String           @db.ObjectId
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title        Json
-  description  Json
-  category     TimelineCategory
-  organization String
-  location     String?
-  startDate    DateTime
-  endDate      DateTime?
-  current      Boolean          @default(false)
-  order        Int              @default(0)
-  images       String[]         @default([])
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                  String                    @db.ObjectId
+  user                    User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category                TimelineCategory
+  organization            String
+  location                String?
+  startDate               DateTime
+  endDate                 DateTime?
+  current                 Boolean                   @default(false)
+  order                   Int                       @default(0)
+  images                  String[]                  @default([])
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  TimelineItemTranslation TimelineItemTranslation[]
+}
+
+model TimelineItemTranslation {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime      @default(now())
+  title          String
+  description    String
+  language       AppLanguage   @relation(fields: [appLanguageId], references: [id])
+  TimelineItem   TimelineItem? @relation(fields: [timelineItemId], references: [id], onDelete: Cascade)
+  timelineItemId String?       @db.ObjectId
+  appLanguageId  String        @db.ObjectId
+
+  @@unique([timelineItemId, appLanguageId])
 }
 
 enum TimelineCategory {
@@ -663,19 +818,32 @@ enum SoftSkillsMediaType {
 }
 
 model PortfolioSoftSkill {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @db.ObjectId
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  icon        String
-  title       Json
-  description Json
-  isVisible   Boolean  @default(true)
-  featured    Boolean  @default(false)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                            String                          @id @default(auto()) @map("_id") @db.ObjectId
+  userId                        String                          @db.ObjectId
+  user                          User                            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  icon                          String
+  isVisible                     Boolean                         @default(true)
+  featured                      Boolean                         @default(false)
+  order                         Int                             @default(0)
+  createdAt                     DateTime                        @default(now())
+  updatedAt                     DateTime                        @updatedAt
+  PortfolioSoftSkillTranslation PortfolioSoftSkillTranslation[]
 
   @@index([userId, order])
+}
+
+model PortfolioSoftSkillTranslation {
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt            DateTime            @default(now())
+  title                String
+  description          String
+  badge                String?             @default("")
+  language             AppLanguage         @relation(fields: [appLanguageId], references: [id])
+  PortfolioSoftSkill   PortfolioSoftSkill? @relation(fields: [portfolioSoftSkillId], references: [id], onDelete: Cascade)
+  portfolioSoftSkillId String?             @db.ObjectId
+  appLanguageId        String              @db.ObjectId
+
+  @@unique([portfolioSoftSkillId, appLanguageId])
 }
 
 model SoftSkillsSection {

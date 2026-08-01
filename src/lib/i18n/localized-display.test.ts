@@ -1,7 +1,7 @@
 import {
   getRowTextForLocale,
-  getLocalizedFieldForLocale,
   getTitleDescriptionForLocale,
+  createLocalizedFieldResolver,
 } from "./localized-display";
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 
@@ -62,21 +62,18 @@ describe("getRowTextForLocale (map input)", () => {
   });
 });
 
-// --- getLocalizedFieldForLocale ---
+// --- createLocalizedFieldResolver (direct call) ---
 
-describe("getLocalizedFieldForLocale", () => {
+describe("createLocalizedFieldResolver (direct call)", () => {
   const translations = [
     { appLanguageId: "lang-en", title: "Title EN", description: "Desc EN" },
     { appLanguageId: "lang-es", title: "Título ES", description: "Desc ES" },
   ];
 
   it("returns the correct field for the requested locale", () => {
-    expect(
-      getLocalizedFieldForLocale(translations, languages, "es", "title"),
-    ).toBe("Título ES");
-    expect(
-      getLocalizedFieldForLocale(translations, languages, "es", "description"),
-    ).toBe("Desc ES");
+    const resolve = createLocalizedFieldResolver(languages, "es");
+    expect(resolve(translations, "title")).toBe("Título ES");
+    expect(resolve(translations, "description")).toBe("Desc ES");
   });
 
   it("falls back to English when locale field is empty", () => {
@@ -88,15 +85,13 @@ describe("getLocalizedFieldForLocale", () => {
       },
       { appLanguageId: "lang-es", title: "", description: "" },
     ];
-    expect(getLocalizedFieldForLocale(rows, languages, "es", "title")).toBe(
-      "English fallback",
-    );
+    const resolve = createLocalizedFieldResolver(languages, "es");
+    expect(resolve(rows, "title")).toBe("English fallback");
   });
 
   it("returns empty string when no language is found", () => {
-    expect(getLocalizedFieldForLocale(translations, [], "en", "title")).toBe(
-      "",
-    );
+    const resolve = createLocalizedFieldResolver([], "en");
+    expect(resolve(translations, "title")).toBe("");
   });
 
   it("falls back to first non-empty when locale and English are both empty", () => {
@@ -108,9 +103,8 @@ describe("getLocalizedFieldForLocale", () => {
         description: "NL desc",
       },
     ];
-    expect(getLocalizedFieldForLocale(rows, languages, "es", "title")).toBe(
-      "Dutch title",
-    );
+    const resolve = createLocalizedFieldResolver(languages, "es");
+    expect(resolve(rows, "title")).toBe("Dutch title");
   });
 
   it("returns empty string when all fields are empty", () => {
@@ -118,7 +112,8 @@ describe("getLocalizedFieldForLocale", () => {
       { appLanguageId: "lang-en", title: "", description: "" },
       { appLanguageId: "lang-es", title: "", description: "" },
     ];
-    expect(getLocalizedFieldForLocale(rows, languages, "es", "title")).toBe("");
+    const resolve = createLocalizedFieldResolver(languages, "es");
+    expect(resolve(rows, "title")).toBe("");
   });
 
   it("accepts a TranslationMap input", () => {
@@ -126,9 +121,8 @@ describe("getLocalizedFieldForLocale", () => {
       "lang-en": { title: "Map EN", description: "Desc EN" },
       "lang-es": { title: "Map ES", description: "Desc ES" },
     };
-    expect(getLocalizedFieldForLocale(map, languages, "en", "title")).toBe(
-      "Map EN",
-    );
+    const resolve = createLocalizedFieldResolver(languages, "en");
+    expect(resolve(map, "title")).toBe("Map EN");
   });
 });
 
@@ -180,7 +174,46 @@ describe("getTitleDescriptionForLocale", () => {
       { appLanguageId: "lang-es", title: "", description: "" },
     ];
     expect(
-      getLocalizedFieldForLocale(fieldRows, nonEnLanguages, "es", "title"),
+      createLocalizedFieldResolver(nonEnLanguages, "es")(fieldRows, "title"),
     ).toBe("Titre FR");
+  });
+});
+
+describe("createLocalizedFieldResolver", () => {
+  const translations = [
+    { appLanguageId: "lang-en", role: "Engineer", location: "Madrid" },
+    { appLanguageId: "lang-es", role: "Ingeniero", location: "Madrid" },
+  ];
+
+  it("resolves with bound languages + locale", () => {
+    const field = createLocalizedFieldResolver(languages, "es");
+    expect(field(translations, "role")).toBe("Ingeniero");
+  });
+
+  it("supports flat t(field) via .for(translations)", () => {
+    const field = createLocalizedFieldResolver(languages, "es");
+    const t = field.for(translations);
+    expect(t("role")).toBe("Ingeniero");
+    expect(t("location")).toBe("Madrid");
+  });
+
+  it("infers TranslationMap field keys", () => {
+    const field = createLocalizedFieldResolver(languages, "en");
+    const map = {
+      "lang-en": { title: "Hello", description: "World" },
+      "lang-es": { title: "Hola", description: "Mundo" },
+    };
+    const t = field.for(map);
+    expect(t("title")).toBe("Hello");
+    expect(t("description")).toBe("World");
+  });
+
+  it("falls back to English when locale field is empty", () => {
+    const field = createLocalizedFieldResolver(languages, "nl");
+    const t = field.for([
+      { appLanguageId: "lang-en", role: "Engineer" },
+      { appLanguageId: "lang-nl", role: "" },
+    ]);
+    expect(t("role")).toBe("Engineer");
   });
 });

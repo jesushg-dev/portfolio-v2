@@ -1,18 +1,22 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { getLocalizedText } from "@/lib/i18n/localized";
-import type { CvData, CvLocaleProps } from "./types";
+import type { LocalizedCvData } from "./types";
 
-interface ILanguagesProps extends CvLocaleProps {
-  languages: CvData["languages"];
+interface ILanguagesProps {
+  languages: LocalizedCvData["languages"];
 }
 
-const Languages: FC<ILanguagesProps> = ({
-  languages,
-  locale,
-  defaultLocale,
-}) => {
+function LanguageItem({ language }: { language: LocalizedCvData["languages"][number] }) {
+  return (
+    <li className="mb-2">
+      <p className="text-sm font-bold">{language.name}</p>
+      <p className="my-1 text-sm text-[#333333]">{language.level}</p>
+    </li>
+  );
+}
+
+const Languages: FC<ILanguagesProps> = ({ languages }) => {
   const t = useTranslations("curriculum");
 
   if (!languages.length) return null;
@@ -26,14 +30,7 @@ const Languages: FC<ILanguagesProps> = ({
       <div className="mb-4">
         <ul className="list-none text-sm">
           {languages.map((language) => (
-            <li className="mb-2" key={language.id}>
-              <p className="text-sm font-bold">
-                {getLocalizedText(language.name, locale, defaultLocale)}
-              </p>
-              <p className="my-1 text-sm text-[#333333]">
-                {getLocalizedText(language.level, locale, defaultLocale)}
-              </p>
-            </li>
+            <LanguageItem key={language.id} language={language} />
           ))}
         </ul>
       </div>

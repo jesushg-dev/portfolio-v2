@@ -1,28 +1,6 @@
-import type { Prisma, PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
-import {
-  buildEmptyTranslationMap,
-  type TranslationMap,
-} from "@/lib/i18n/translation-map";
-import {
-  optionalTextMapToLocalizedJson,
-  textMapToLocalizedJson,
-} from "@/lib/i18n/localized-text-map";
-
-function buildImportTextMap(
-  languages: { id: string; code: string }[],
-  localeCode: string,
-  text: string,
-): TranslationMap<{ text: string }> {
-  const map = buildEmptyTranslationMap(languages, { text: "" });
-  const target =
-    languages.find((lang) => lang.code === localeCode) ?? languages[0];
-  if (target) {
-    map[target.id] = { text };
-  }
-  return map;
-}
 
 function parseExperienceDate(value?: string): Date | undefined {
   if (!value) return undefined;
@@ -41,47 +19,69 @@ export async function persistCvImportDraft(
 ): Promise<void> {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
   const locale = draft.detectedLocale;
+  const appLang = languages.find((l) => l.code === locale) ?? languages[0];
 
-  const degreeMap = draft.header.degree
-    ? buildImportTextMap(languages, locale, draft.header.degree)
-    : buildEmptyTranslationMap(languages, { text: "" });
-  const degreeJson = textMapToLocalizedJson(degreeMap, languages);
-
-  const heroSummaryMap = draft.header.summary
-    ? buildImportTextMap(languages, locale, draft.header.summary)
-    : undefined;
-  const heroSummaryJson = heroSummaryMap
-    ? (optionalTextMapToLocalizedJson(heroSummaryMap, languages) as
-        Prisma.InputJsonValue | undefined)
-    : undefined;
-
-  await db.cvHeader.upsert({
+  const header = await db.cvHeader.upsert({
     where: { userId },
     create: {
       userId,
       fullName: draft.header.fullName,
-      degree: degreeJson as Prisma.InputJsonValue,
-      heroSummary: heroSummaryJson ?? undefined,
     },
     update: {
       fullName: draft.header.fullName,
-      degree: degreeJson as Prisma.InputJsonValue,
-      ...(heroSummaryJson ? { heroSummary: heroSummaryJson } : {}),
     },
   });
 
-  if (draft.header.summary) {
-    const aboutMap = buildImportTextMap(
-      languages,
-      locale,
-      draft.header.summary,
-    );
-    const aboutJson = textMapToLocalizedJson(aboutMap, languages);
-    await db.cvAboutMe.upsert({
-      where: { userId },
-      create: { userId, aboutMe: aboutJson as Prisma.InputJsonValue },
-      update: { aboutMe: aboutJson as Prisma.InputJsonValue },
+  if (appLang) {
+    const existingHeaderTrans = await db.cvHeaderTranslation.findFirst({
+      where: { cvHeaderId: header.id, appLanguageId: appLang.id },
     });
+    if (existingHeaderTrans) {
+      await db.cvHeaderTranslation.update({
+        where: { id: existingHeaderTrans.id },
+        data: {
+          degree: draft.header.degree ?? "",
+          heroSummary: draft.header.summary ?? null,
+        },
+      });
+    } else {
+      await db.cvHeaderTranslation.create({
+        data: {
+          cvHeaderId: header.id,
+          appLanguageId: appLang.id,
+          degree: draft.header.degree ?? "",
+          heroSummary: draft.header.summary ?? null,
+        },
+      });
+    }
+  }
+
+  if (draft.header.summary) {
+    const about = await db.cvAboutMe.upsert({
+      where: { userId },
+      create: { userId },
+      update: {},
+    });
+
+    if (appLang) {
+      const existingAboutTrans = await db.cvAboutMeTranslation.findFirst({
+        where: { cvAboutMeId: about.id, appLanguageId: appLang.id },
+      });
+      if (existingAboutTrans) {
+        await db.cvAboutMeTranslation.update({
+          where: { id: existingAboutTrans.id },
+          data: { aboutMe: draft.header.summary },
+        });
+      } else {
+        await db.cvAboutMeTranslation.create({
+          data: {
+            cvAboutMeId: about.id,
+            appLanguageId: appLang.id,
+            aboutMe: draft.header.summary,
+          },
+        });
+      }
+    }
   }
 
   const existingContacts = await db.cvContact.count({ where: { userId } });
@@ -98,48 +98,45 @@ export async function persistCvImportDraft(
 
   const existingEducation = await db.cvEducation.count({ where: { userId } });
   for (const [index, edu] of draft.education.entries()) {
-    const degreeNameMap = buildImportTextMap(languages, locale, edu.degreeName);
-    const locationMap = edu.location
-      ? buildImportTextMap(languages, locale, edu.location)
-      : undefined;
-
     await db.cvEducation.create({
       data: {
         userId,
         institution: edu.institution,
-        degreeName: textMapToLocalizedJson(
-          degreeNameMap,
-          languages,
-        ) as Prisma.InputJsonValue,
-        location: locationMap
-          ? (optionalTextMapToLocalizedJson(
-              locationMap,
-              languages,
-            ) as Prisma.InputJsonValue)
-          : undefined,
         startYear: edu.startYear,
         endYear: edu.endYear,
         order: existingEducation + index,
+        translations: appLang
+          ? {
+              create: [
+                {
+                  appLanguageId: appLang.id,
+                  degreeName: edu.degreeName,
+                  location: edu.location ?? null,
+                },
+              ],
+            }
+          : undefined,
       },
     });
   }
 
   const existingLanguages = await db.cvLanguage.count({ where: { userId } });
   for (const [index, lang] of draft.languages.entries()) {
-    const nameMap = buildImportTextMap(languages, locale, lang.name);
-    const levelMap = buildImportTextMap(languages, locale, lang.level);
     await db.cvLanguage.create({
       data: {
         userId,
-        name: textMapToLocalizedJson(
-          nameMap,
-          languages,
-        ) as Prisma.InputJsonValue,
-        level: textMapToLocalizedJson(
-          levelMap,
-          languages,
-        ) as Prisma.InputJsonValue,
         order: existingLanguages + index,
+        translations: appLang
+          ? {
+              create: [
+                {
+                  appLanguageId: appLang.id,
+                  name: lang.name,
+                  level: lang.level,
+                },
+              ],
+            }
+          : undefined,
       },
     });
   }
@@ -160,40 +157,40 @@ export async function persistCvImportDraft(
     where: { userId },
   });
   for (const [index, exp] of draft.experiences.entries()) {
-    const roleMap = buildImportTextMap(languages, locale, exp.role);
-    const locationMap = exp.location
-      ? buildImportTextMap(languages, locale, exp.location)
-      : undefined;
-
-    const responsibilities = exp.responsibilities.map((text, respIndex) => ({
-      order: respIndex,
-      text: textMapToLocalizedJson(
-        buildImportTextMap(languages, locale, text),
-        languages,
-      ) as Prisma.InputJsonValue,
-    }));
-
     await db.cvExperience.create({
       data: {
         userId,
         company: exp.company,
-        role: textMapToLocalizedJson(
-          roleMap,
-          languages,
-        ) as Prisma.InputJsonValue,
-        location: locationMap
-          ? (optionalTextMapToLocalizedJson(
-              locationMap,
-              languages,
-            ) as Prisma.InputJsonValue)
-          : undefined,
         startDate: parseExperienceDate(exp.startDate),
         endDate: parseExperienceDate(exp.endDate),
         current: exp.current ?? false,
         order: existingExperiences + index,
-        responsibilities: responsibilities.length
-          ? { createMany: { data: responsibilities } }
+        translations: appLang
+          ? {
+              create: [
+                {
+                  appLanguageId: appLang.id,
+                  role: exp.role,
+                  location: exp.location ?? null,
+                },
+              ],
+            }
           : undefined,
+        responsibilities: {
+          create: exp.responsibilities.map((text, respIndex) => ({
+            order: respIndex,
+            translations: appLang
+              ? {
+                  create: [
+                    {
+                      appLanguageId: appLang.id,
+                      text,
+                    },
+                  ],
+                }
+              : undefined,
+          })),
+        },
       },
     });
   }

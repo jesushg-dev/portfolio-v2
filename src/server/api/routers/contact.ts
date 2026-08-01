@@ -10,6 +10,7 @@ import {
   type Locale,
 } from "@/lib/email/resend";
 import { getTenantPublicUrl } from "@/lib/tenant/public-url";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 
 const ContactMessageSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -25,11 +26,12 @@ export const contactRouter = createTRPCRouter({
 
     const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
 
-    const [contacts, profile, user, emailFormEnabled] = await Promise.all([
+    const [appLanguages, rawContacts, profile, user, emailFormEnabled] = await Promise.all([
+      ctx.db.appLanguage.findMany(),
       ctx.db.cvContact.findMany({
         where: { userId: ctx.tenant.userId },
+        include: { translations: true },
         orderBy: { order: "asc" },
-        select: { type: true, value: true, label: true },
       }),
       ctx.db.profile.findUnique({
         where: { userId: ctx.tenant.userId },
@@ -41,6 +43,14 @@ export const contactRouter = createTRPCRouter({
       }),
       canDeliverPortfolioContactEmail(ctx.tenant.userId, ownerLocale),
     ]);
+
+    const field = createLocalizedFieldResolver(appLanguages, ownerLocale);
+
+    const contacts = rawContacts.map((contact) => ({
+      type: contact.type,
+      value: contact.value,
+      label: field(contact.translations, "label"),
+    }));
 
     return {
       contacts,

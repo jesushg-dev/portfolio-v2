@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useOptimistic, useCallback, useTransition } from "react";
+import {
+  useState,
+  useOptimistic,
+  useCallback,
+  useTransition,
+  useMemo,
+} from "react";
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
@@ -12,7 +18,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+import type { AppLanguage } from "@prisma/client";
 import { api } from "@/trpc/react";
+import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import FormStatus from "@/components/admin/shared/form-status";
 import CvAddButton from "@/components/admin/shared/cv-add-button";
 import CvListItemActions from "@/components/admin/shared/cv-list-item-actions";
@@ -24,10 +32,7 @@ import {
 } from "@/components/ui/sortable";
 import { GripVertical } from "lucide-react";
 import type { Locale } from "@/i18n/config";
-import type { AppLanguage } from "@prisma/client";
-import { getRowTextForLocale } from "@/lib/i18n/localized-display";
 import { formatExperienceDates } from "@/utils/tools/date";
-import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
 import { ExperienceForm } from "./experience-form";
 import { CvListSkeleton } from "./cv-list-skeleton";
 
@@ -36,6 +41,11 @@ const ExperiencesList: FC<{
   displayLocale: Locale;
 }> = ({ languages, displayLocale }) => {
   const t = useTranslations("admin.forms.experience");
+
+  const field = useMemo(
+    () => createLocalizedFieldResolver(languages, displayLocale),
+    [languages, displayLocale],
+  );
 
   const { data, isLoading } = api.cv.getMine.useQuery();
   const utils = api.useUtils();
@@ -122,11 +132,7 @@ const ExperiencesList: FC<{
                     </SortableItemHandle>
                     <div>
                       <p className="text-foreground text-sm font-medium">
-                        {getRowTextForLocale(
-                          localizedJsonToTextMap(exp.role, languages),
-                          languages,
-                          displayLocale,
-                        )}
+                        {field(exp.translations, "role")}
                       </p>
                       <p className="text-muted-foreground text-xs">
                         {exp.company} ·{" "}

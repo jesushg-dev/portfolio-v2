@@ -29,9 +29,11 @@ import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
 } from "@/lib/i18n/localized-form";
-import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
-import { localizedJsonToTextMap } from "@/lib/i18n/localized-text-map";
-import type { TextTranslationMap } from "@/lib/i18n/localized-text-map";
+import {
+  buildEmptyTranslationMap,
+  textTranslationMapFromRows,
+  type TextTranslationMap,
+} from "@/lib/i18n/translation-map";
 import { CvModalFormSkeleton } from "./cv-modal-form-skeleton";
 import type { AppLanguage } from "@prisma/client";
 
@@ -72,8 +74,12 @@ const AboutForm: FC<{ languages: AppLanguage[] }> = ({ languages }) => {
   useEffect(() => {
     if (!data) return;
     form.reset({
-      aboutMe: data.aboutMe?.aboutMe
-        ? localizedJsonToTextMap(data.aboutMe.aboutMe, languages)
+      aboutMe: data.aboutMe?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            data.aboutMe.translations,
+            (row) => row.aboutMe,
+          )
         : buildEmptyTranslationMap(languages, { text: "" }),
     });
   }, [data, form, languages]);
