@@ -3,26 +3,61 @@ import React from "react";
 import Experiences from "./experiences";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
-import { mapCvDataToLocalized } from "./types";
+import { mapCvDataToLocalized, type CvData } from "./types";
 
-function getLocalizedExp(list: any[]) {
+interface ExperienceSeed {
+  id: string;
+  company: string;
+  companyLogoUrl?: string | null;
+  order?: number;
+  startDate: Date | null;
+  endDate: Date | null;
+  current: boolean;
+  translations: {
+    appLanguageId?: string;
+    role?: string;
+    location?: string | null;
+  }[];
+  responsibilities?: {
+    id: string;
+    order?: number;
+    translations: {
+      appLanguageId?: string;
+      text?: string;
+    }[];
+  }[];
+}
+
+function getLocalizedExp(list: ExperienceSeed[]) {
   const mockData = {
     ...mockCvPreviewData,
-    experiences: list.map((exp) => ({
-      ...exp,
+    experiences: list.map((exp, index) => ({
+      id: exp.id,
+      company: exp.company,
       companyLogoUrl: exp.companyLogoUrl ?? null,
-      order: exp.order ?? 0,
-      translations: exp.translations.map((t: any) => ({
-        location: null,
-        ...t,
+      order: exp.order ?? index,
+      startDate: exp.startDate,
+      endDate: exp.endDate,
+      current: exp.current,
+      translations: exp.translations.map((translation) => ({
+        appLanguageId: translation.appLanguageId ?? "lang-en",
+        role: translation.role ?? "",
+        location: translation.location ?? null,
       })),
-      responsibilities: (exp.responsibilities ?? []).map((r: any) => ({
-        order: r.order ?? 0,
-        ...r,
-      })),
+      responsibilities: (exp.responsibilities ?? []).map(
+        (responsibility, respIndex) => ({
+          id: responsibility.id,
+          order: responsibility.order ?? respIndex,
+          translations: responsibility.translations.map((translation) => ({
+            appLanguageId: translation.appLanguageId ?? "lang-en",
+            text: translation.text ?? "",
+          })),
+        }),
+      ),
       CvExperienceSkill: [],
     })),
-  };
+  } satisfies CvData;
+
   return mapCvDataToLocalized(mockData, mockAppLanguages, "en").experiences;
 }
 

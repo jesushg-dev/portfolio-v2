@@ -142,6 +142,21 @@ const Footer = async () => {
                   {t("sections.process.qaCollaboration")}
                 </Link>
               </li>
+              <li>
+                <Link href="/uses" className={footerLinkClassName}>
+                  {t("sections.process.uses")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/now" className={footerLinkClassName}>
+                  {t("sections.process.now")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/colophon" className={footerLinkClassName}>
+                  {t("sections.process.colophon")}
+                </Link>
+              </li>
             </ul>
           </nav>
 

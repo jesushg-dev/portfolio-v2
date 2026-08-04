@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { isValidElement, type ReactElement, type ReactNode } from "react";
 
 import {
   Tooltip,
@@ -29,7 +29,11 @@ export const Hint = ({
   return (
     <TooltipProvider delay={50}>
       <Tooltip open={open} onOpenChange={onOpenChange}>
-        <TooltipTrigger>{children}</TooltipTrigger>
+        {isValidElement(children) ? (
+          <TooltipTrigger render={children as ReactElement} />
+        ) : (
+          <TooltipTrigger>{children}</TooltipTrigger>
+        )}
         <TooltipContent
           side={side}
           align={align}

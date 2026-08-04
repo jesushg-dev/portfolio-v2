@@ -18,12 +18,19 @@ import {
   Sparkles,
   ClipboardList,
   KeyRound,
+  MonitorSmartphone,
+  Radio,
 } from "lucide-react";
 
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 import ThemeSelectorLazy from "@/components/app-layout/app-header/theme-selector-lazy";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import {
+  Sidebar,
+  SidebarBody,
+  SidebarLink,
+  SidebarPinToggle,
+} from "@/components/ui/sidebar";
 
 interface IDashboardShellProps {
   children: ReactNode;
@@ -46,9 +53,11 @@ interface NavItem {
     | "spotify"
     | "credentials"
     | "jobTracker"
-    | "settings";
+    | "settings"
+    | "uses"
+    | "now";
   icon: typeof LayoutDashboard;
-  group?: "portfolio";
+  group?: "portfolio" | "pages";
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -97,6 +106,18 @@ const NAV_ITEMS: NavItem[] = [
     icon: Award,
     group: "portfolio",
   },
+  {
+    href: "/admin/uses",
+    labelKey: "uses",
+    icon: MonitorSmartphone,
+    group: "pages",
+  },
+  {
+    href: "/admin/now",
+    labelKey: "now",
+    icon: Radio,
+    group: "pages",
+  },
   { href: "/admin/credentials", labelKey: "credentials", icon: KeyRound },
   // ── Config ─────────────────────────────────────────────
   { href: "/admin/settings", labelKey: "settings", icon: Settings },
@@ -139,7 +160,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations("admin.shell");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
 
   const onSignOut = async () => {
@@ -183,6 +204,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
   }, [normalizedPathname, t]);
 
   const portfolioItems = NAV_ITEMS.filter((i) => i.group === "portfolio");
+  const pagesItems = NAV_ITEMS.filter((i) => i.group === "pages");
   const topItems = NAV_ITEMS.filter(
     (i) => !i.group && i.labelKey !== "settings",
   );
@@ -193,12 +215,13 @@ const DashboardShell: FC<IDashboardShellProps> = ({
       <Sidebar open={open} setOpen={setOpen}>
         <SidebarBody className="justify-between gap-4">
           <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
-            <div className="flex h-12 items-center">
+            <div className="flex h-12 items-center justify-between gap-1">
               {open ? (
                 <Logo userName={userName} title={t("title")} />
               ) : (
                 <LogoIcon userName={userName} />
               )}
+              <SidebarPinToggle />
             </div>
 
             <nav
@@ -234,6 +257,35 @@ const DashboardShell: FC<IDashboardShellProps> = ({
                 className="flex flex-col gap-1"
               >
                 {portfolioItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <SidebarLink
+                      key={item.labelKey}
+                      link={{
+                        label: t(`nav.${item.labelKey}`),
+                        href: item.href,
+                        icon: <Icon className="h-5 w-5 shrink-0" />,
+                        active: isActive(item),
+                      }}
+                    />
+                  );
+                })}
+              </nav>
+            </div>
+
+            <div className="my-1">
+              <div className="mb-1 flex h-6 items-end px-3">
+                {open && (
+                  <p className="text-muted-foreground text-[10px] font-semibold tracking-widest uppercase">
+                    {t("nav.pagesGroup")}
+                  </p>
+                )}
+              </div>
+              <nav
+                aria-label={t("nav.pagesGroup")}
+                className="flex flex-col gap-1"
+              >
+                {pagesItems.map((item) => {
                   const Icon = item.icon;
                   return (
                     <SidebarLink

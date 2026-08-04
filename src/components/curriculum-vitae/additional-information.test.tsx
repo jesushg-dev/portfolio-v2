@@ -3,21 +3,32 @@ import React from "react";
 import AdditionalInformation from "./additional-information";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
-import { mapCvDataToLocalized } from "./types";
+import { mapCvDataToLocalized, type CvData } from "./types";
 
-function getLocalizedAdditional(list: any[]) {
+interface AdditionalSeed {
+  id?: string;
+  order?: number;
+  translations: {
+    appLanguageId?: string;
+    text?: string;
+  }[];
+}
+
+function getLocalizedAdditional(list: AdditionalSeed[]) {
   const mockData = {
     ...mockCvPreviewData,
-    additionalInformation: list.map((item) => ({
-      ...item,
+    additionalInformation: list.map((item, index) => ({
+      id: item.id ?? `additional-${index}`,
       order: item.order ?? 0,
-      translations: item.translations.map((t: any) => ({
-        appLanguageId: t.appLanguageId ?? "lang-en",
-        text: t.text ?? "",
+      translations: item.translations.map((translation) => ({
+        appLanguageId: translation.appLanguageId ?? "lang-en",
+        text: translation.text ?? "",
       })),
     })),
-  };
-  return mapCvDataToLocalized(mockData, mockAppLanguages, "en").additionalInformation;
+  } satisfies CvData;
+
+  return mapCvDataToLocalized(mockData, mockAppLanguages, "en")
+    .additionalInformation;
 }
 
 describe("AdditionalInformation", () => {

@@ -5,9 +5,20 @@ import ClientImage from "./client-image";
 import { render } from "@testing-library/react";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
-import { mapCvDataToLocalized } from "../types";
+import { mapCvDataToLocalized, type CvData } from "../types";
 
-function getLocalizedHeader(header: any) {
+interface HeaderSeed {
+  id?: string;
+  fullName?: string;
+  photoUrl?: string | null;
+  translations?: {
+    appLanguageId?: string;
+    degree?: string;
+    clientImageAlt?: string | null;
+  }[];
+}
+
+function getLocalizedHeader(header: HeaderSeed | null) {
   if (!header) return null;
   const mockData = {
     ...mockCvPreviewData,
@@ -16,17 +27,18 @@ function getLocalizedHeader(header: any) {
       fullName: header.fullName ?? "",
       photoUrl: header.photoUrl ?? null,
       backgroundImageUrl: null,
-      translations: (header.translations ?? []).map((t: any) => ({
+      translations: (header.translations ?? []).map((translation) => ({
         heroSubtitle: null,
         heroTagline: null,
         heroSummary: null,
-        degree: t.degree ?? "",
-        clientImageAlt: t.clientImageAlt ?? null,
-        appLanguageId: t.appLanguageId ?? "lang-en",
+        degree: translation.degree ?? "",
+        clientImageAlt: translation.clientImageAlt ?? null,
+        appLanguageId: translation.appLanguageId ?? "lang-en",
       })),
     },
-  };
-  return mapCvDataToLocalized(mockData as any, mockAppLanguages, "en").header;
+  } satisfies CvData;
+
+  return mapCvDataToLocalized(mockData, mockAppLanguages, "en").header;
 }
 
 describe("ClientImage", () => {

@@ -14,6 +14,8 @@ import { certificationsAdminRouter } from "@/features/certifications/server/cert
 import { skillsAdminRouter } from "@/features/skills/server/skills-admin.router";
 import { softSkillsAdminRouter } from "@/features/soft-skills/server/soft-skills-admin.router";
 import { timelineAdminRouter } from "@/features/timeline/server/timeline-admin.router";
+import { usesAdminRouter } from "@/features/uses/server/uses-admin.router";
+import { nowAdminRouter } from "@/features/now/server/now-admin.router";
 import { jobTrackerAdminRouter } from "@/features/job-tracker/server/job-tracker-admin.router";
 import { resumeEngineAdminRouter } from "@/features/resume-engine/server/resume-engine-admin.router";
 import { integrationsAdminRouter } from "@/features/integrations/server/integrations-admin.router";
@@ -30,6 +32,8 @@ export const appRouter = createTRPCRouter({
   skillsAdmin: skillsAdminRouter,
   timelineAdmin: timelineAdminRouter,
   softSkillsAdmin: softSkillsAdminRouter,
+  usesAdmin: usesAdminRouter,
+  nowAdmin: nowAdminRouter,
   cv: cvRouter,
   cvPublic: cvPublicRouter,
   profileAdmin: profileAdminRouter,

@@ -40,7 +40,11 @@ const buildHref = (type: CvContactType, value: string) => {
 
 const isInternalHref = (href: string) => href.startsWith("/");
 
-function ContactItem({ contact }: { contact: LocalizedCvData["contacts"][number] }) {
+function ContactItem({
+  contact,
+}: {
+  contact: LocalizedCvData["contacts"][number];
+}) {
   const Icon = ICONS[contact.type] ?? MdWeb;
   const label = contact.label || contact.value;
   const href = buildHref(contact.type, contact.value);

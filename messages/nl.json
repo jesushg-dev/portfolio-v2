@@ -337,6 +337,18 @@
           "qa-collaboration": {
             "label": "QA-samenwerking",
             "description": "Kwaliteitspraktijken, testen en releases."
+          },
+          "uses": {
+            "label": "Uses",
+            "description": "Hardware, software en tools die ik elke dag gebruik."
+          },
+          "now": {
+            "label": "Now",
+            "description": "Waar ik me nu op focus, wat ik lees en wat ik ship."
+          },
+          "colophon": {
+            "label": "Colofon",
+            "description": "Hoe deze site is gebouwd — stack, typografie, kleuren en voetafdruk."
           }
         }
       }
@@ -354,7 +366,10 @@
         },
         "process": {
           "howIUseAi": "Hoe ik AI gebruik",
-          "qaCollaboration": "QA-samenwerking"
+          "qaCollaboration": "QA-samenwerking",
+          "uses": "Uses",
+          "now": "Now",
+          "colophon": "Colofon"
         },
         "miscellaneous": {
           "cvGenerator": "CV-generator",
@@ -1114,6 +1129,174 @@
         "description": "Laten we praten over je project, stack en waar AI echt helpt.",
         "button": "Plan een gesprek"
       }
+    },
+    "uses": {
+      "metaTitle": "Uses",
+      "metaDescription": "De hardware, software en tools die ik elke dag gebruik — van mijn bureau tot de browsertabs die nooit dichtgaan.",
+      "hero": {
+        "eyebrow": "// uses",
+        "title": "Wat zit er in mijn",
+        "titleHighlight": "setup?",
+        "description": "De hardware, software en tools die ik elke dag gebruik — van mijn bureau tot de browsertabs die nooit dichtgaan.",
+        "tabsLabel": "Filter uses",
+        "tabs": {
+          "all": "Alles",
+          "everyday": "Dagelijks",
+          "software": "Software",
+          "browser": "Browser",
+          "coding": "Coding"
+        },
+        "workspaceCaption": "Werkplek-setup",
+        "workspaceAlt": "Foto van het bureau"
+      },
+      "everyday": {
+        "title": "Dagelijks",
+        "coffee": {
+          "title": "Koffie",
+          "description": "De echte dependency achter elke deploy — klik maar",
+          "celebrate": "Het is koffietijd!",
+          "aria": "Koffie, klik voor een verrassing"
+        }
+      },
+      "software": {
+        "title": "Software",
+        "note": "Ik gebruik soms nog de <arc>Arc-browser</arc>, omdat Helium <drm>nog geen DRM-content ondersteunt</drm>."
+      },
+      "browser": {
+        "title": "Browserextensies",
+        "intro": "Ik gebruik de <helium>Helium-browser</helium> samen met deze extensies:"
+      },
+      "coding": {
+        "title": "Coding",
+        "intro": "Ik gebruik <vscode>Visual Studio Code</vscode> als primaire editor, met het <theme>Pace Theme</theme> en het <font>MonoLisa</font>-lettertype met ligatures en cursief.",
+        "previewCaption": "Voorbeeld van VS Code-configuratie",
+        "previewLightAlt": "Voorbeeld van VS Code met licht thema",
+        "previewDarkAlt": "Voorbeeld van VS Code met donker thema"
+      },
+      "note": {
+        "before": "Zelf een setup bouwen? Bekijk",
+        "linkLabel": "uses.tech",
+        "after": "voor setups van andere developers."
+      }
+    },
+    "now": {
+      "metaTitle": "Now",
+      "metaDescription": "Een snapshot van waar ik me op focus, wat ik lees en wat ik ship — bijgewerkt wanneer ik eraan denk.",
+      "hero": {
+        "eyebrow": "// now",
+        "title": "Wat doe ik",
+        "titleHighlight": "nu?",
+        "description": "Een snapshot van waar ik me op focus, wat ik lees en wat ik ship — bijgewerkt wanneer ik eraan denk."
+      },
+      "list": {
+        "localTimeLabel": "Lokale tijd",
+        "readingLabel": "Nu aan het lezen",
+        "reading": {
+          "book": "The Pragmatic Programmer"
+        },
+        "focusesLabel": "Ook in beweging",
+        "ideas": {
+          "label": "Ideeën",
+          "body": "Ideeën verzamelen om deze site nog beter te maken"
+        },
+        "leading": {
+          "label": "Team",
+          "body": "Een klein team leiden en mentoren waar ik kan"
+        },
+        "automating": {
+          "label": "Portfolio",
+          "body": "De saaie delen van dit portfolio automatiseren zodat het (grotendeels) up-to-date blijft"
+        },
+        "oss": {
+          "label": "Open source",
+          "body": "Knutselen aan open-sourceprojecten wanneer ik tijd heb"
+        }
+      },
+      "note": {
+        "before": "Dit is een now page — als je een eigen site hebt,",
+        "linkLabel": "moet je er ook een maken",
+        "after": "."
+      },
+      "activity": {
+        "title": "Activiteit",
+        "lastStatus": "Laatste status",
+        "lastPlayed": "Laatst afgespeeld",
+        "nowPlaying": "Nu aan het spelen",
+        "reading": "Aan het lezen",
+        "lastWatched": "Laatst gekeken",
+        "latestPhotos": "Laatste foto's",
+        "latestGithub": "Laatste GitHub-activiteit",
+        "contributions": "GitHub-bijdragen",
+        "reply": "Reageren",
+        "less": "Minder",
+        "more": "Meer",
+        "statusBody": "Eindelijk mijn CI/CD-pipeline end-to-end geautomatiseerd — kleine win, grote opluchting.",
+        "statusRelative": "4 uur geleden",
+        "githubBody": "Een pull request geopend in <repo></repo>",
+        "githubRelative": "2 dagen geleden",
+        "contributionsTotal": "{total} bijdragen in het afgelopen jaar",
+        "photosAlt": "Plaatsaanduidingen voor recente foto's",
+        "spotifyIdleTitle": "Nu niets",
+        "spotifyIdleSubtitle": "Kom later terug"
+      }
+    },
+    "colophon": {
+      "metaTitle": "Colofon",
+      "metaDescription": "De stack, typografie, kleuren en voetafdruk achter jesushg.com.",
+      "hero": {
+        "eyebrow": "Colofon",
+        "title": "Hoe deze site is gebouwd",
+        "description": "De stack, de typografie, de kleuren en de voetafdruk achter deze site."
+      },
+      "stack": {
+        "title": "Tech-stack",
+        "body": "Deze site is gebouwd met <nextjs>Next.js</nextjs>, <tailwind>Tailwind CSS</tailwind>, <prisma>Prisma</prisma> en <mongodb>MongoDB</mongodb>, en gehost op <vercel>Vercel</vercel>.",
+        "marks": {
+          "nextjs": "▲ Next.js",
+          "tailwind": "Tailwind",
+          "prisma": "Prisma",
+          "mongodb": "MongoDB",
+          "vercel": "Vercel"
+        }
+      },
+      "typography": {
+        "title": "Typografie",
+        "body": "Inter draagt de hele site — koppen, bodytekst, alles.",
+        "weights": {
+          "regular": "Regular",
+          "medium": "Medium",
+          "semibold": "Semibold",
+          "bold": "Bold"
+        }
+      },
+      "colors": {
+        "title": "Ontwerp & kleuren",
+        "body": "Kleuren draaien op Tailwind CSS custom properties, geschakeld via een <code>data-theme</code>-attribuut — drie paletten (Main, Orange, Christmas), elk met een lichte en donkere variant, zes in totaal.",
+        "currentBadge": "actueel"
+      },
+      "palettes": {
+        "orangeLight": "Orange · Light",
+        "mainLight": "Main · Light",
+        "mainDark": "Main · Dark",
+        "orangeDark": "Orange · Dark",
+        "christmasLight": "Christmas · Light",
+        "christmasDark": "Christmas · Dark"
+      },
+      "logo": {
+        "title": "Logo",
+        "body": "Zelf ontworpen. Dit is een tijdelijk merkteken met de initialen, tot het definitieve logobestand klaar is.",
+        "lightAlt": "JH-merk op een lichte achtergrond",
+        "darkAlt": "JH-merk op een donkere achtergrond"
+      },
+      "carbon": {
+        "title": "Koolstofvoetafdruk",
+        "body": "Deze site produceert minder dan <strong>0.234g CO₂</strong> bij een eerste bezoek (0.018g bij terugkeer), volgens <beacon>Digital Beacon</beacon> — score B — en <carbon>Website Carbon</carbon> — score A+.",
+        "badge": {
+          "co2": "{grams}g CO₂/weergave",
+          "brand": "Website Carbon",
+          "cleaner": "Beoordeling A+ op Website Carbon"
+        }
+      }
     }
   },
   "admin": {
@@ -1142,9 +1325,14 @@
         "jobTracker": "Vacature tracker",
         "resumeStudio": "Resume Studio",
         "portfolioGroup": "Portfolio Inhoud",
+        "pagesGroup": "Pagina's",
+        "uses": "Uses",
+        "now": "Now",
         "sidebar": "Admin-navigatie"
       },
-      "pageToolbar": "Paginakop"
+      "pageToolbar": "Paginakop",
+      "pinSidebar": "Zijbalk open houden",
+      "unpinSidebar": "Zijbalk inklappen bij hover"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -1859,6 +2047,93 @@
         "imageRequired": "Afbeelding-URL is verplicht",
         "featuredLabel": "Uitgelicht in stack",
         "featuredDescription": "Uitgelichte skills zijn helderder in de home-terminal en benadrukken je primaire stack."
+      },
+      "usesItem": {
+        "sectionBasics": "Basis",
+        "sectionCopy": "Teksten",
+        "href": "Link-URL",
+        "hrefRequired": "Link is verplicht",
+        "image": "Afbeeldingspad",
+        "order": "Volgorde",
+        "title": "Titel",
+        "titleRequired": "Titel is verplicht voor de primaire taal",
+        "description": "Beschrijving",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "create": "Aanmaken",
+        "saving": "Opslaan…",
+        "createdSuccess": "Item aangemaakt",
+        "updatedSuccess": "Item bijgewerkt",
+        "createFailed": "Kon item niet aanmaken",
+        "updateFailed": "Kon item niet bijwerken"
+      },
+      "usesSettings": {
+        "sectionMedia": "Paginamedia",
+        "workspaceImage": "Werkruimte / bureaufoto",
+        "codingPreviewLight": "Codevoorbeeld (licht)",
+        "codingPreviewDark": "Codevoorbeeld (donker)",
+        "sectionCopy": "Sectieteksten",
+        "sectionCopyHint": "Optionele intros. Leeg = verborgen. Gebruik [label](url) voor links.",
+        "codingIntro": "Code-intro",
+        "browserIntro": "Browser-intro",
+        "sectionClarifications": "Toelichtingen",
+        "sectionClarificationsHint": "Gestippelde notities onder Software. Optioneel; [label](url) voor links.",
+        "clarificationLabel": "Notitie {index}",
+        "clarificationBody": "Tekst",
+        "addClarification": "Toelichting toevoegen",
+        "removeClarification": "Verwijderen",
+        "optionalMarkdownHint": "Optioneel. Markdown-links: [label](https://…)",
+        "save": "Instellingen opslaan",
+        "saving": "Opslaan…",
+        "updatedSuccess": "Instellingen opgeslagen",
+        "updateFailed": "Kon instellingen niet opslaan"
+      },
+      "nowSettings": {
+        "sectionGeneral": "Algemeen",
+        "sectionReading": "Lezen",
+        "sectionWatched": "Laatst bekeken",
+        "sectionGithub": "GitHub-activiteit",
+        "sectionPhotos": "Foto's",
+        "sectionCopy": "Gelokaliseerde teksten",
+        "sectionStatusCopy": "Statustekst",
+        "sectionGithubCopy": "GitHub-tekst",
+        "timezone": "Tijdzone",
+        "githubUsername": "GitHub-gebruikersnaam",
+        "statusEmoji": "Statusemoji",
+        "readingTitle": "Boektitel",
+        "readingAuthors": "Auteurs",
+        "readingProgress": "Voortgang (%)",
+        "watchedTitle": "Titel",
+        "watchedRating": "Beoordeling (0–5)",
+        "githubRepo": "Repo-label",
+        "githubHref": "Repo-URL",
+        "photoUrls": "Foto-URL's",
+        "photoUrlsHint": "Eén URL per regel",
+        "statusBody": "Statustekst",
+        "statusBodyRequired": "Statustekst is verplicht voor de primaire taal",
+        "statusRelative": "Relatieve status tijd",
+        "githubBody": "GitHub-activiteitstekst",
+        "githubRelative": "Relatieve GitHub-tijd",
+        "save": "Opslaan",
+        "saving": "Opslaan…",
+        "updatedSuccess": "Now-instellingen opgeslagen",
+        "updateFailed": "Kon Now-instellingen niet opslaan"
+      },
+      "nowFocus": {
+        "sectionBasics": "Basis",
+        "sectionCopy": "Teksten",
+        "order": "Volgorde",
+        "label": "Label",
+        "labelRequired": "Label is verplicht voor de primaire taal",
+        "body": "Tekst",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "create": "Aanmaken",
+        "saving": "Opslaan…",
+        "createdSuccess": "Focus aangemaakt",
+        "updatedSuccess": "Focus bijgewerkt",
+        "createFailed": "Kon focus niet aanmaken",
+        "updateFailed": "Kon focus niet bijwerken"
       }
     },
     "errors": {
@@ -2416,6 +2691,52 @@
       "fileUploading": "Bestand uploaden...",
       "tailorUploadNeedsDraft": "Deze upload heeft eerst gestructureerde data nodig. Voltooi de import-JSON-stap hieronder.",
       "tailorUploadImportStep": "Stap 1 — Import-JSON voor deze upload"
+    },
+    "uses": {
+      "title": "Uses",
+      "subtitle": "Beheer dagelijkse gear, software, extensies en media.",
+      "tabsLabel": "Uses-secties",
+      "tabs": {
+        "everyday": "Dagelijks",
+        "software": "Software",
+        "browser": "Browser",
+        "settings": "Instellingen"
+      },
+      "addNew": "Item toevoegen",
+      "createDescription": "Voeg een item toe aan je Uses-inventaris.",
+      "editTitle": "Item bewerken",
+      "editDescription": "Werk dit Uses-item bij.",
+      "count": "{count} items",
+      "searchTitle": "Zoek titel",
+      "deletedSuccess": "Item verwijderd.",
+      "deleteFailed": "Kon item niet verwijderen.",
+      "columns": {
+        "order": "Volgorde",
+        "title": "Titel",
+        "href": "Link"
+      }
+    },
+    "now": {
+      "title": "Now",
+      "subtitle": "Beheer de Now-snapshot, activiteit en focuspunten.",
+      "tabsLabel": "Now-secties",
+      "tabs": {
+        "snapshot": "Snapshot",
+        "activity": "Activiteit",
+        "github": "GitHub",
+        "focuses": "Focus"
+      },
+      "sections": {
+        "snapshotHint": "Tijdzone, emoji en de live statusregel.",
+        "activityHint": "Lezen, laatst bekeken en fotostrook.",
+        "githubHint": "Contributiegebruikersnaam en activiteitstekst.",
+        "focusesHint": "Kaarten in het “ook bezig”-mozaïek."
+      },
+      "focusesTitle": "Focuspunten",
+      "addFocus": "Focus toevoegen",
+      "editFocus": "Focus bewerken",
+      "focusDeleted": "Focus verwijderd.",
+      "focusDeleteFailed": "Kon focus niet verwijderen."
     }
   },
   "auth": {

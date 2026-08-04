@@ -7,7 +7,11 @@ interface ISoftSkillsProps {
   softSkills: LocalizedCvData["softSkills"];
 }
 
-function SoftSkillItem({ skill }: { skill: LocalizedCvData["softSkills"][number] }) {
+function SoftSkillItem({
+  skill,
+}: {
+  skill: LocalizedCvData["softSkills"][number];
+}) {
   return <li>{skill.name}.</li>;
 }
 

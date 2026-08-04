@@ -50,9 +50,9 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   const showImageFallback = imageFailed || !image?.trim();
 
   return (
-    <article className="group/card border-border/60 bg-card text-card-foreground flex h-full w-full flex-col overflow-hidden rounded-2xl border shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-xl">
+    <article className="group/card border-border/60 bg-card text-card-foreground hover:border-primary/30 flex h-full w-full flex-col overflow-hidden rounded-2xl border shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl">
       {/* Image container with clean treatment & gradient overlay */}
-      <div className="border-border/40 relative aspect-video overflow-hidden border-b bg-muted/40">
+      <div className="border-border/40 bg-muted/40 relative aspect-video overflow-hidden border-b">
         {showImageFallback ? (
           <div className="from-primary/15 via-background to-primary/10 flex h-full w-full items-center justify-center bg-linear-to-br p-4">
             <div className="flex flex-col items-center gap-2 text-center">
@@ -76,7 +76,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
             {/* Subtle uniform lighting & gradient overlay */}
             <div
               aria-hidden
-              className="from-black/40 via-transparent to-transparent pointer-events-none absolute inset-0 bg-linear-to-t opacity-50 transition-opacity group-hover/card:opacity-30"
+              className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-50 transition-opacity group-hover/card:opacity-30"
             />
           </>
         )}
@@ -115,7 +115,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                   aria-label={`${urlName}: ${title}`}
                   className={linkButtonClass}
                 >
-                  <AiFillEye className="size-4 text-primary" />
+                  <AiFillEye className="text-primary size-4" />
                 </a>
               ) : null}
               {showGithub && githubUrl ? (
@@ -136,8 +136,8 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
 
         {/* Business Impact Metric / Hook */}
         {hook ? (
-          <div className="inline-flex w-full items-start gap-1.5 rounded-lg border border-primary/25 bg-primary/10 px-2.5 py-1.5 text-[0.725rem] font-semibold text-primary">
-            <Zap className="size-3.5 mt-0.5 shrink-0 fill-primary/20 text-primary" />
+          <div className="border-primary/25 bg-primary/10 text-primary inline-flex w-full items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-[0.725rem] font-semibold">
+            <Zap className="fill-primary/20 text-primary mt-0.5 size-3.5 shrink-0" />
             <span className="line-clamp-2 leading-tight">{hook}</span>
           </div>
         ) : null}
@@ -151,7 +151,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
             {skills.map((skill) => (
               <li
                 key={skill.title}
-                className="bg-muted/50 border-border/50 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium text-foreground"
+                className="bg-muted/50 border-border/50 text-foreground inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium"
               >
                 <SkillIcon
                   image={skill.image}
@@ -172,7 +172,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
               params: { slug },
             }}
             aria-label={`${caseStudyLabel}: ${title}`}
-            className="group/cta text-primary hover:text-primary/80 inline-flex items-center gap-1 mt-auto pt-2 text-[0.9rem] font-semibold transition-colors"
+            className="group/cta text-primary hover:text-primary/80 mt-auto inline-flex items-center gap-1 pt-2 text-[0.9rem] font-semibold transition-colors"
           >
             <span>{caseStudyLabel}</span>
             <ArrowUpRight className="size-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />

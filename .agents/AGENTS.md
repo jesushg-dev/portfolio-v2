@@ -643,12 +643,12 @@ When the form shape differs from the list/API DTO (date strings, `{ url }[]` ima
 
 Do not mix form/editor concerns with list display in one module.
 
-| Module                              | Purpose                                                                                                                          |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `src/lib/i18n/editor-rows.ts`       | `LanguageRef` — shared app-language reference type                                                                               |
-| `src/lib/i18n/translation-map.ts`   | `TranslationMap`, `mergeTranslationMap`, `buildEmptyTranslationMap` — form/editor translation maps                               |
+| Module                              | Purpose                                                                                            |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `src/lib/i18n/editor-rows.ts`       | `LanguageRef` — shared app-language reference type                                                 |
+| `src/lib/i18n/translation-map.ts`   | `TranslationMap`, `mergeTranslationMap`, `buildEmptyTranslationMap` — form/editor translation maps |
 | `src/lib/i18n/localized-display.ts` | `getTitleDescriptionForLocale`, `createLocalizedFieldResolver` — resolve text for active UI locale |
-| `src/lib/i18n/localized-form.ts`    | Zod map schemas (`translationMapSchema`) and completeness for admin forms                                                        |
+| `src/lib/i18n/localized-form.ts`    | Zod map schemas (`translationMapSchema`) and completeness for admin forms                          |
 
 ## Admin create/edit pages — server-built `initialData`
 

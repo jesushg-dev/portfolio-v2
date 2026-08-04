@@ -66,6 +66,9 @@ export const PUBLIC_SITEMAP_PATHS = [
   "/certificates/softskills",
   "/timeline",
   "/privacy",
+  "/uses",
+  "/now",
+  "/colophon",
 ] as const satisfies readonly StaticHref[];
 
 export const PUBLIC_SITEMAP_PRIORITIES: Partial<
@@ -76,6 +79,9 @@ export const PUBLIC_SITEMAP_PRIORITIES: Partial<
   "/certificates": 0.8,
   "/timeline": 0.7,
   "/schedule": 0.6,
+  "/uses": 0.6,
+  "/now": 0.6,
+  "/colophon": 0.4,
   "/privacy": 0.3,
 };
 
@@ -90,5 +96,8 @@ export const PUBLIC_SITEMAP_CHANGE_FREQUENCY: Partial<
   "/certificates": "monthly",
   "/timeline": "monthly",
   "/schedule": "monthly",
+  "/uses": "monthly",
+  "/now": "weekly",
+  "/colophon": "yearly",
   "/privacy": "yearly",
 };

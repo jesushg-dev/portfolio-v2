@@ -7,6 +7,9 @@ import {
   FileText,
   HeartHandshake,
   Layers,
+  MonitorSmartphone,
+  Radio,
+  ScrollText,
   Server,
   Sparkles,
   User,
@@ -17,7 +20,10 @@ export type StaticNavPath =
   | "/curriculum-vitae"
   | "/timeline"
   | "/how-i-use-ai"
-  | "/qa-collaboration";
+  | "/qa-collaboration"
+  | "/uses"
+  | "/now"
+  | "/colophon";
 
 export type NavSectionId =
   | "home"
@@ -112,6 +118,24 @@ export const NAV_GROUPS: NavGroup[] = [
         id: "qa-collaboration",
         href: "/qa-collaboration",
         icon: HeartHandshake,
+      },
+      {
+        kind: "route",
+        id: "uses",
+        href: "/uses",
+        icon: MonitorSmartphone,
+      },
+      {
+        kind: "route",
+        id: "now",
+        href: "/now",
+        icon: Radio,
+      },
+      {
+        kind: "route",
+        id: "colophon",
+        href: "/colophon",
+        icon: ScrollText,
       },
     ],
   },

@@ -93,6 +93,21 @@ export const pathnames = {
     es: "/colaboracion-qa",
     nl: "/qa-samenwerking",
   },
+  "/uses": {
+    en: "/uses",
+    es: "/uses",
+    nl: "/uses",
+  },
+  "/now": {
+    en: "/now",
+    es: "/now",
+    nl: "/now",
+  },
+  "/colophon": {
+    en: "/colophon",
+    es: "/colofon",
+    nl: "/colofon",
+  },
   "/login": {
     en: "/login",
     es: "/iniciar-sesion",
@@ -157,6 +172,16 @@ export const pathnames = {
     en: "/admin/certifications",
     es: "/panel/certificaciones",
     nl: "/beheer/certificeringen",
+  },
+  "/admin/uses": {
+    en: "/admin/uses",
+    es: "/panel/uses",
+    nl: "/beheer/uses",
+  },
+  "/admin/now": {
+    en: "/admin/now",
+    es: "/panel/now",
+    nl: "/beheer/now",
   },
   "/admin/spotify": {
     en: "/admin/spotify",

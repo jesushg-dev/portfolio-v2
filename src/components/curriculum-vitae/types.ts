@@ -95,14 +95,16 @@ export function mapCvDataToLocalized(
 ): LocalizedCvData {
   const resolver = createLocalizedFieldResolver(appLanguages, locale);
 
-  const header = data.header ? {
-    id: data.header.id,
-    fullName: data.header.fullName,
-    photoUrl: data.header.photoUrl,
-    backgroundImageUrl: data.header.backgroundImageUrl,
-    degree: resolver(data.header.translations, "degree"),
-    clientImageAlt: resolver(data.header.translations, "clientImageAlt"),
-  } : null;
+  const header = data.header
+    ? {
+        id: data.header.id,
+        fullName: data.header.fullName,
+        photoUrl: data.header.photoUrl,
+        backgroundImageUrl: data.header.backgroundImageUrl,
+        degree: resolver(data.header.translations, "degree"),
+        clientImageAlt: resolver(data.header.translations, "clientImageAlt"),
+      }
+    : null;
 
   const contacts = data.contacts.map((contact) => ({
     id: contact.id,
@@ -177,10 +179,12 @@ export function mapCvDataToLocalized(
 
   return {
     header,
-    profile: data.profile ? {
-      displayName: data.profile.displayName,
-      username: data.profile.username,
-    } : null,
+    profile: data.profile
+      ? {
+          displayName: data.profile.displayName,
+          username: data.profile.username,
+        }
+      : null,
     contacts,
     educations,
     languages,

@@ -3,7 +3,7 @@ import React from "react";
 import ContactMe from "./contact-me";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
-import { mapCvDataToLocalized } from "./types";
+import { mapCvDataToLocalized, type CvData } from "./types";
 
 jest.mock("@/i18n/routing", () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
@@ -11,18 +11,32 @@ jest.mock("@/i18n/routing", () => ({
   ),
 }));
 
-function getLocalizedContacts(list: any[]) {
+interface ContactSeed {
+  id: string;
+  type: CvData["contacts"][number]["type"];
+  value: string;
+  order?: number;
+  translations?: {
+    appLanguageId?: string;
+    label?: string;
+  }[];
+}
+
+function getLocalizedContacts(list: ContactSeed[]) {
   const mockData = {
     ...mockCvPreviewData,
     contacts: list.map((contact) => ({
-      ...contact,
+      id: contact.id,
+      type: contact.type,
+      value: contact.value,
       order: contact.order ?? 0,
-      translations: (contact.translations ?? []).map((t: any) => ({
-        appLanguageId: t.appLanguageId ?? "lang-en",
-        label: t.label ?? "",
+      translations: (contact.translations ?? []).map((translation) => ({
+        appLanguageId: translation.appLanguageId ?? "lang-en",
+        label: translation.label ?? "",
       })),
     })),
-  };
+  } satisfies CvData;
+
   return mapCvDataToLocalized(mockData, mockAppLanguages, "en").contacts;
 }
 
