@@ -58,14 +58,13 @@ interface ICvEditableLayoutProps {
   data: CvData;
   aboutMeText: string | null;
   currentLocale: AppLocale;
-  defaultLocale: AppLocale;
+  defaultLocale?: AppLocale;
 }
 
 const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
   data,
   aboutMeText,
   currentLocale,
-  defaultLocale,
 }) => {
   const t = useTranslations("admin.cv");
   const { data: languages = [] } = api.appLanguagesAdmin.getAll.useQuery();
@@ -174,7 +173,9 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               isEmpty={data.technicalSkills.length === 0}
               t={t}
             >
-              <TechnicalSkills technicalSkills={localizedData.technicalSkills} />
+              <TechnicalSkills
+                technicalSkills={localizedData.technicalSkills}
+              />
             </EditableSection>
           </div>
 

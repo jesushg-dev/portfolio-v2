@@ -21,6 +21,7 @@ const ApplicationStatusSchema = z.enum([
   "APPLIED",
   "INTERVIEW",
   "OFFER",
+  "GHOSTED",
   "REJECTED",
   "HIRED",
 ]);

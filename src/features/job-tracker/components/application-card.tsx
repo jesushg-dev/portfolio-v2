@@ -72,6 +72,7 @@ export function ApplicationCard({
     "APPLIED",
     "INTERVIEW",
     "OFFER",
+    "GHOSTED",
     "REJECTED",
     "HIRED",
   ];

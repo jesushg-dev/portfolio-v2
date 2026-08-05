@@ -151,11 +151,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
         id="cv-public-preview"
         className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
       >
-        <CvPreview
-          data={localizedData}
-          aboutMeText={aboutMeText}
-          pdfMode
-        />
+        <CvPreview data={localizedData} aboutMeText={aboutMeText} pdfMode />
         <div className="bg-cv h-4" aria-hidden />
       </div>
     );
@@ -179,10 +175,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
           id="cv-public-preview"
           className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
         >
-          <CvPreview
-            data={localizedData}
-            aboutMeText={aboutMeText}
-          />
+          <CvPreview data={localizedData} aboutMeText={aboutMeText} />
           <div className="bg-cv p-4">
             <p className="text-sm font-semibold text-white">{t("codedWith")}</p>
           </div>

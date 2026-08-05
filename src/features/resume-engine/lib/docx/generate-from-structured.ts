@@ -1,6 +1,7 @@
 import JSZip from "jszip";
 
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
+import type { Locale } from "@/i18n/config";
 
 function escapeXml(text: string): string {
   return text
@@ -30,15 +31,64 @@ function formatDateRange(
   start?: string,
   end?: string,
   current?: boolean,
+  locale: Locale = "en",
 ): string {
+  const presentByLocale: Record<Locale, string> = {
+    en: "Present",
+    es: "Presente",
+    nl: "Heden",
+  };
   if (!start && !end) return "";
-  if (current) return `${start ?? ""} – Present`.trim();
+  if (current) return `${start ?? ""} – ${presentByLocale[locale]}`.trim();
   if (start && end) return `${start} – ${end}`;
   return start ?? end ?? "";
 }
 
+function getSectionLabels(locale: Locale) {
+  const labelsByLocale: Record<
+    Locale,
+    {
+      summary: string;
+      experience: string;
+      education: string;
+      skills: string;
+      languages: string;
+      certifications: string;
+    }
+  > = {
+    en: {
+      summary: "Summary",
+      experience: "Experience",
+      education: "Education",
+      skills: "Skills",
+      languages: "Languages",
+      certifications: "Certifications",
+    },
+    es: {
+      summary: "Resumen",
+      experience: "Experiencia",
+      education: "Educación",
+      skills: "Habilidades",
+      languages: "Idiomas",
+      certifications: "Certificaciones",
+    },
+    nl: {
+      summary: "Samenvatting",
+      experience: "Ervaring",
+      education: "Opleiding",
+      skills: "Vaardigheden",
+      languages: "Talen",
+      certifications: "Certificeringen",
+    },
+  };
+
+  return labelsByLocale[locale];
+}
+
 function buildDocumentBody(draft: CvImportDraft): string {
   const parts: string[] = [];
+  const locale = draft.detectedLocale;
+  const labels = getSectionLabels(locale);
 
   parts.push(paragraph(draft.header.fullName, "title"));
   if (draft.header.degree) {
@@ -51,14 +101,19 @@ function buildDocumentBody(draft: CvImportDraft): string {
   }
 
   if (draft.header.summary) {
-    parts.push(paragraph("Summary", "heading"));
+    parts.push(paragraph(labels.summary, "heading"));
     parts.push(paragraph(draft.header.summary, "body"));
   }
 
   if (draft.experiences.length > 0) {
-    parts.push(paragraph("Experience", "heading"));
+    parts.push(paragraph(labels.experience, "heading"));
     for (const exp of draft.experiences) {
-      const dateLine = formatDateRange(exp.startDate, exp.endDate, exp.current);
+      const dateLine = formatDateRange(
+        exp.startDate,
+        exp.endDate,
+        exp.current,
+        locale,
+      );
       const header = [exp.role, exp.company, dateLine, exp.location]
         .filter(Boolean)
         .join(" — ");
@@ -70,7 +125,7 @@ function buildDocumentBody(draft: CvImportDraft): string {
   }
 
   if (draft.education.length > 0) {
-    parts.push(paragraph("Education", "heading"));
+    parts.push(paragraph(labels.education, "heading"));
     for (const edu of draft.education) {
       const years =
         edu.startYear || edu.endYear
@@ -84,7 +139,7 @@ function buildDocumentBody(draft: CvImportDraft): string {
   }
 
   if (draft.skills.length > 0) {
-    parts.push(paragraph("Skills", "heading"));
+    parts.push(paragraph(labels.skills, "heading"));
     for (const group of draft.skills) {
       parts.push(
         paragraph(`${group.category}: ${group.items.join(", ")}`, "body"),
@@ -93,7 +148,7 @@ function buildDocumentBody(draft: CvImportDraft): string {
   }
 
   if (draft.languages.length > 0) {
-    parts.push(paragraph("Languages", "heading"));
+    parts.push(paragraph(labels.languages, "heading"));
     const langLine = draft.languages
       .map((lang) => `${lang.name} (${lang.level})`)
       .join(" • ");
@@ -101,7 +156,7 @@ function buildDocumentBody(draft: CvImportDraft): string {
   }
 
   if (draft.certifications.length > 0) {
-    parts.push(paragraph("Certifications", "heading"));
+    parts.push(paragraph(labels.certifications, "heading"));
     for (const cert of draft.certifications) {
       const line = [cert.title, cert.issuer, cert.year?.toString()]
         .filter(Boolean)
@@ -166,9 +221,4 @@ export async function generateDocxFromStructured(
   zip.folder("word")?.file("styles.xml", STYLES);
 
   return zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
-}
-
-export function buildTailoredFileName(baseName: string): string {
-  const sanitized = baseName.replace(/\.docx$/i, "").replace(/[^\w.-]+/g, "_");
-  return `${sanitized}_tailored.docx`;
 }

@@ -2,22 +2,38 @@ import { screen } from "@testing-library/react";
 import React from "react";
 import AdditionalInformation from "./additional-information";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
-import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
+import {
+  mockAppLanguages,
+  mockCvPreviewData,
+} from "@/test-utils/fixtures/cv-data";
 import { mapCvDataToLocalized } from "./types";
 
-function getLocalizedAdditional(list: any[]) {
+interface RawTranslation {
+  appLanguageId?: string;
+  text?: string;
+}
+
+interface RawAdditionalItem {
+  id?: string;
+  order?: number;
+  translations: RawTranslation[];
+}
+
+function getLocalizedAdditional(list: RawAdditionalItem[]) {
   const mockData = {
     ...mockCvPreviewData,
     additionalInformation: list.map((item) => ({
       ...item,
+      id: item.id ?? "1",
       order: item.order ?? 0,
-      translations: item.translations.map((t: any) => ({
+      translations: item.translations.map((t) => ({
         appLanguageId: t.appLanguageId ?? "lang-en",
         text: t.text ?? "",
       })),
     })),
   };
-  return mapCvDataToLocalized(mockData, mockAppLanguages, "en").additionalInformation;
+  return mapCvDataToLocalized(mockData, mockAppLanguages, "en")
+    .additionalInformation;
 }
 
 describe("AdditionalInformation", () => {

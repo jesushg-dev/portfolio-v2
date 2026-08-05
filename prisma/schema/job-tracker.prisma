@@ -18,7 +18,7 @@ model Application {
   description String?
   companyId   String   @db.ObjectId
   company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  status      String   // "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED" | "HIRED"
+  status      String   // "APPLIED" | "INTERVIEW" | "OFFER" | "GHOSTED" | "REJECTED" | "HIRED"
   appliedDate DateTime
   notes       String?
   salary      String?

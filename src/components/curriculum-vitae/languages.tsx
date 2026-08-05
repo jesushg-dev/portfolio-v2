@@ -7,7 +7,11 @@ interface ILanguagesProps {
   languages: LocalizedCvData["languages"];
 }
 
-function LanguageItem({ language }: { language: LocalizedCvData["languages"][number] }) {
+function LanguageItem({
+  language,
+}: {
+  language: LocalizedCvData["languages"][number];
+}) {
   return (
     <li className="mb-2">
       <p className="text-sm font-bold">{language.name}</p>

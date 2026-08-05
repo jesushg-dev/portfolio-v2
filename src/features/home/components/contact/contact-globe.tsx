@@ -1,21 +1,23 @@
 "use client";
 
-import { useVisitorLocation } from "@/hooks/use-visitor-location";
+// TODO: Re-enable visitor IP geolocation lookup once IP service is 100% stable.
+// import { useVisitorLocation } from "@/hooks/use-visitor-location";
 import GlobeMapLazy from "./globe-map-lazy";
 
-/** Your location — portfolio owner. */
+/** Portfolio owner location — Managua, Nicaragua. */
 const MY_LOCATION = {
   lat: 12.1364,
   lon: -86.2514,
-  label: "Managua",
+  label: "Managua, Nicaragua",
 };
 
 /**
- * Renders the globe that connects the visitor's detected location to
- * Managua (portfolio owner). Falls back to Managua as the origin when
- * geolocation is unavailable.
+ * Renders the globe focused directly on Managua, Nicaragua.
+ * Geolocation visitor lookup is temporarily commented out.
  */
 export function ContactGlobe() {
+  /*
+  // TODO: Restore dynamic visitor location connection arc.
   const { location, status } = useVisitorLocation();
 
   const origin =
@@ -36,11 +38,12 @@ export function ContactGlobe() {
   const finalOrigin = isSameCity
     ? { lat: 14.0818, lon: -87.2068, label: "Tegucigalpa" }
     : origin;
+  */
 
   return (
     <GlobeMapLazy
-      origin={finalOrigin}
-      destination={destination}
+      origin={MY_LOCATION}
+      destination={MY_LOCATION}
       autoPlayConnection
     />
   );

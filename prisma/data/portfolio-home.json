@@ -1,14 +1,14 @@
 {
   "backgroundImageUrl": "https://res.cloudinary.com/js-media/image/upload/f_auto/q_auto/v1642524508/portfolio/hero/3233453_brzqcm.webp",
   "heroSubtitle": {
-    "es": "Senior Software Engineer & Tech Lead",
-    "en": "Senior Software Engineer & Tech Lead",
-    "nl": "Senior Software Engineer & Tech Lead"
+    "es": "Senior Software Engineer",
+    "en": "Senior Software Engineer",
+    "nl": "Senior Software Engineer"
   },
   "heroTagline": {
-    "es": "Arquitectura de software empresarial, modernización de sistemas de alta disponibilidad y liderazgo de equipos de ingeniería de alto rendimiento.",
-    "en": "Architecting scalable enterprise platforms, modernizing high-availability systems, and leading high-performing engineering teams.",
-    "nl": "Architectuur van schaalbare enterprise-systemen, modernisering van hoogbeschikbare toepassingen en leidinggeven aan engineering teams."
+    "es": "Arquitectura de software empresarial, modernización de sistemas de alta disponibilidad y entregas de ingeniería de alto rendimiento.",
+    "en": "Architecting scalable enterprise platforms, modernizing high-availability systems, and delivering high-impact engineering solutions.",
+    "nl": "Architectuur van schaalbare enterprise-systemen, modernisering van hoogbeschikbare toepassingen en het leveren van hoogwaardige softwareoplossingen."
   },
   "heroSummary": {
     "es": "+6 años diseñando y escalando soluciones de software en entornos corporativos y altamente regulados (Walmart, Claro, Imagemaker). Especializado en evolución de monolitos a microservicios resilientes, automatización CI/CD y gobernanza técnica para entregas seguras en producción.",
@@ -51,9 +51,9 @@
           "nl": "cat ~/profile.json"
         },
         "output": {
-          "es": "{\n  \"nombre\": \"Jesús Enmanuel Hernández González\",\n  \"rol\": \"Senior Software Engineer & Tech Lead\",\n  \"especialidad\": \"Arquitectura de Software y Sistemas Distribuidos\",\n  \"idiomas\": {\n    \"español\": \"Nativo\",\n    \"inglés\": \"B2+\",\n    \"holandés\": \"A1\"\n  }\n}",
-          "en": "{\n  \"name\": \"Jesús Enmanuel Hernández González\",\n  \"role\": \"Senior Software Engineer & Tech Lead\",\n  \"specialty\": \"Software Architecture & Distributed Systems\",\n  \"languages\": {\n    \"spanish\": \"Native\",\n    \"english\": \"B2+\",\n    \"dutch\": \"A1\"\n  }\n}",
-          "nl": "{\n  \"naam\": \"Jesús Enmanuel Hernández González\",\n  \"rol\": \"Senior Software Engineer & Tech Lead\",\n  \"specialiteit\": \"Software Architectuur & Gedistribueerde Systemen\",\n  \"talen\": {\n    \"spaans\": \"Moedertaal\",\n    \"engels\": \"B2+\",\n    \"nederlands\": \"A1\"\n  }\n}"
+          "es": "{\n  \"nombre\": \"Jesús Enmanuel Hernández González\",\n  \"rol\": \"Senior Software Engineer\",\n  \"especialidad\": \"Arquitectura de Software y Sistemas Distribuidos\",\n  \"idiomas\": {\n    \"español\": \"Nativo\",\n    \"inglés\": \"B2+\",\n    \"holandés\": \"A1\"\n  }\n}",
+          "en": "{\n  \"name\": \"Jesús Enmanuel Hernández González\",\n  \"role\": \"Senior Software Engineer\",\n  \"specialty\": \"Software Architecture & Distributed Systems\",\n  \"languages\": {\n    \"spanish\": \"Native\",\n    \"english\": \"B2+\",\n    \"dutch\": \"A1\"\n  }\n}",
+          "nl": "{\n  \"naam\": \"Jesús Enmanuel Hernández González\",\n  \"rol\": \"Senior Software Engineer\",\n  \"specialiteit\": \"Software Architectuur & Gedistribueerde Systemen\",\n  \"talen\": {\n    \"spaans\": \"Moedertaal\",\n    \"engels\": \"B2+\",\n    \"nederlands\": \"A1\"\n  }\n}"
         }
       }
     ]

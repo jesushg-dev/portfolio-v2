@@ -16,6 +16,7 @@ const AdaptedSectionSchema = z.object({
 });
 
 export const CvDocxTailorResultSchema = z.object({
+  detectedLocale: z.enum(["en", "es", "nl"]),
   sections: z.array(AdaptedSectionSchema),
   aiScore: z.number().min(0).max(100),
   matchNotes: z.string().optional(),

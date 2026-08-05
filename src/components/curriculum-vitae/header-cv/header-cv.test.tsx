@@ -4,10 +4,26 @@ import HeaderCV from "./index";
 import ClientImage from "./client-image";
 import { render } from "@testing-library/react";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
-import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
+import {
+  mockAppLanguages,
+  mockCvPreviewData,
+} from "@/test-utils/fixtures/cv-data";
 import { mapCvDataToLocalized } from "../types";
 
-function getLocalizedHeader(header: any) {
+interface RawHeaderTranslation {
+  appLanguageId?: string;
+  degree?: string;
+  clientImageAlt?: string | null;
+}
+
+interface RawHeader {
+  id?: string;
+  fullName?: string;
+  photoUrl?: string | null;
+  translations?: RawHeaderTranslation[];
+}
+
+function getLocalizedHeader(header: RawHeader | null) {
   if (!header) return null;
   const mockData = {
     ...mockCvPreviewData,
@@ -16,7 +32,7 @@ function getLocalizedHeader(header: any) {
       fullName: header.fullName ?? "",
       photoUrl: header.photoUrl ?? null,
       backgroundImageUrl: null,
-      translations: (header.translations ?? []).map((t: any) => ({
+      translations: (header.translations ?? []).map((t) => ({
         heroSubtitle: null,
         heroTagline: null,
         heroSummary: null,
@@ -26,7 +42,7 @@ function getLocalizedHeader(header: any) {
       })),
     },
   };
-  return mapCvDataToLocalized(mockData as any, mockAppLanguages, "en").header;
+  return mapCvDataToLocalized(mockData, mockAppLanguages, "en").header;
 }
 
 describe("ClientImage", () => {
@@ -59,11 +75,7 @@ describe("HeaderCV", () => {
       ],
     };
 
-    renderWithIntl(
-      <HeaderCV
-        header={getLocalizedHeader(rawHeader)}
-      />,
-    );
+    renderWithIntl(<HeaderCV header={getLocalizedHeader(rawHeader)} />);
 
     expect(screen.getByText("Software Engineer")).toBeInTheDocument();
     expect(screen.getByText("John Doe")).toBeInTheDocument();
@@ -102,11 +114,7 @@ describe("HeaderCV", () => {
       fullName: "No Photo Person",
     };
 
-    renderWithIntl(
-      <HeaderCV
-        header={getLocalizedHeader(rawHeader)}
-      />,
-    );
+    renderWithIntl(<HeaderCV header={getLocalizedHeader(rawHeader)} />);
 
     expect(screen.queryByRole("img")).toBeNull();
   });

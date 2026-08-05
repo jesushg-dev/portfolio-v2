@@ -1,19 +1,29 @@
 "use client";
 
-import { useState, type FC } from "react";
+import { useCallback, useState, useTransition, type FC } from "react";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
-import { Clock, FileText, Pencil, Sparkles } from "lucide-react";
-import { Link } from "@/i18n/routing";
+import {
+  Clock,
+  FileText,
+  Loader2,
+  Pencil,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
+import { toast } from "sonner";
+import { Link, useRouter } from "@/i18n/routing";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { ApplicationTimeline } from "@/features/job-tracker/components/application-timeline";
 import { ResumeTailorWorkflow } from "@/features/resume-engine/components/resume-tailor-workflow";
 import type { ApplicationDetail } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
 import { statusVariants } from "@/features/job-tracker/lib/constants";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
+import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
 type ApplicationDetailTab = "details" | "timeline" | "tailor";
@@ -39,8 +49,31 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
   defaultTab = "details",
 }) => {
   const t = useTranslations("admin.jobTracker");
+  const router = useRouter();
+  const utils = api.useUtils();
   const [activeTab, setActiveTab] = useState<ApplicationDetailTab>(defaultTab);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const dateFnsLocale = getDateFnsLocale(locale);
+  const deleteApplication = api.jobTrackerAdmin.deleteApplication.useMutation();
+
+  const handleDelete = useCallback(() => {
+    startTransition(async () => {
+      try {
+        await deleteApplication.mutateAsync({ id: application.id });
+        toast.success(t("deleteApplicationSuccess"));
+        await Promise.all([
+          utils.jobTrackerAdmin.getApplications.invalidate(),
+          utils.jobTrackerAdmin.getDashboardStats.invalidate(),
+        ]);
+        router.push("/admin/job-tracker");
+      } catch {
+        toast.error(t("deleteApplicationError"));
+      } finally {
+        setIsConfirmOpen(false);
+      }
+    });
+  }, [application.id, deleteApplication, router, t, utils]);
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-6">
@@ -103,6 +136,10 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
           <ApplicationMetadataBar
             application={application}
             dateFnsLocale={dateFnsLocale}
+            isConfirmOpen={isConfirmOpen}
+            isDeleting={isPending}
+            onConfirmOpenChange={setIsConfirmOpen}
+            onDelete={handleDelete}
             t={t}
           />
 
@@ -174,10 +211,18 @@ function ApplicationJobDescription({
 function ApplicationMetadataBar({
   application,
   dateFnsLocale,
+  isConfirmOpen,
+  isDeleting,
+  onConfirmOpenChange,
+  onDelete,
   t,
 }: {
   application: ApplicationDetail;
   dateFnsLocale: ReturnType<typeof getDateFnsLocale>;
+  isConfirmOpen: boolean;
+  isDeleting: boolean;
+  onConfirmOpenChange: (open: boolean) => void;
+  onDelete: () => void;
   t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
 }) {
   const appliedLabel = format(new Date(application.appliedDate), "PP", {
@@ -217,16 +262,45 @@ function ApplicationMetadataBar({
         ) : null}
       </dl>
 
-      <Link
-        href={{
-          pathname: "/admin/job-tracker/applications/[id]/edit",
-          params: { id: application.id },
-        }}
-        className={buttonVariants({ variant: "outline", size: "sm" })}
-      >
-        <Pencil className="mr-1.5 size-3.5" aria-hidden />
-        {t("detail.editApplicationButton")}
-      </Link>
+      <div className="flex flex-wrap items-center gap-2">
+        <Link
+          href={{
+            pathname: "/admin/job-tracker/applications/[id]/edit",
+            params: { id: application.id },
+          }}
+          className={buttonVariants({ variant: "outline", size: "sm" })}
+        >
+          <Pencil className="mr-1.5 size-3.5" aria-hidden />
+          {t("detail.editApplicationButton")}
+        </Link>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={isDeleting}
+          onClick={() => onConfirmOpenChange(true)}
+          className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
+        >
+          {isDeleting ? (
+            <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+          ) : (
+            <Trash2 className="mr-1.5 size-3.5" aria-hidden />
+          )}
+          {t("detail.deleteApplicationButton")}
+        </Button>
+      </div>
+
+      <ConfirmDialog
+        open={isConfirmOpen}
+        onOpenChange={onConfirmOpenChange}
+        title={t("detail.deleteApplicationButton")}
+        description={t("detail.deleteApplicationConfirm")}
+        cancelLabel={t("detail.deleteCancel")}
+        confirmLabel={t("detail.deleteConfirmAction")}
+        confirmVariant="destructive"
+        isPending={isDeleting}
+        onConfirm={onDelete}
+      />
     </div>
   );
 }

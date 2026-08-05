@@ -1,7 +1,7 @@
 {
   "cv-delivery": {
     "preview": "Here is my CV — Jesús Hernández",
-    "tagline": "Senior Full Stack Developer & Tech Lead",
+    "tagline": "Senior Full Stack Developer",
     "greeting": "Hi {recipientName},",
     "body1": "Thanks for reaching out through my portfolio. I've attached my most recent CV for you to take a look at.",
     "highlight": "Senior Full Stack Developer with 6+ years across .NET Core, React/Next.js and TypeScript — currently leading e-commerce engineering on VTEX for Walmart Global Tech across Central America.",

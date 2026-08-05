@@ -1,13 +1,18 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
+import type { Locale } from "@/i18n/config";
 
 import { parseDocx } from "@/lib/docx/parser";
 import { rebuildDocx } from "@/lib/docx/rebuilder";
 import type { AdaptedSection } from "@/lib/types";
+import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
 import {
-  buildTailoredFileName,
-  generateDocxFromStructured,
-} from "@/features/resume-engine/lib/docx/generate-from-structured";
-import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
+  buildAtsCvFileName,
+  inferCvRoleTrack,
+} from "@/features/resume-engine/lib/build-ats-cv-file-name";
+import {
+  CvImportDraftSchema,
+  type CvImportDraft,
+} from "@/features/cv/lib/cv-import-draft";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 
 const DOCX_MIME =
@@ -23,7 +28,7 @@ interface FinalizeTailorExportInput {
   jobDescription: string;
   applicationId?: string;
   tailoredFor?: string;
-  baseFileName?: string;
+  targetLocale?: Locale;
 }
 
 interface FinalizeDocxTailorExportInput {
@@ -37,8 +42,35 @@ interface FinalizeDocxTailorExportInput {
   jobDescription: string;
   applicationId?: string;
   tailoredFor?: string;
-  baseFileName: string;
   structuredSnapshot?: unknown;
+  targetLocale?: Locale;
+}
+
+function fullNameFromSnapshot(snapshot: unknown): string | null {
+  const parsed = CvImportDraftSchema.safeParse(snapshot);
+  if (!parsed.success) return null;
+  const name = parsed.data.header.fullName.trim();
+  return name.length > 0 ? name : null;
+}
+
+async function resolveExportFullName(
+  db: PrismaClient,
+  userId: string,
+  snapshot?: unknown,
+  draft?: CvImportDraft,
+): Promise<string> {
+  const fromDraft = draft?.header.fullName.trim();
+  if (fromDraft) return fromDraft;
+
+  const fromSnapshot = fullNameFromSnapshot(snapshot);
+  if (fromSnapshot) return fromSnapshot;
+
+  const header = await db.cvHeader.findFirst({
+    where: { userId },
+    select: { fullName: true },
+  });
+  const fromHeader = header?.fullName.trim();
+  return fromHeader && fromHeader.length > 0 ? fromHeader : "Candidate";
 }
 
 async function persistResumeExport(
@@ -46,7 +78,8 @@ async function persistResumeExport(
   userId: string,
   input: {
     buffer: Buffer;
-    fileName: string;
+    fullName: string;
+    locale: Locale;
     aiScore?: number | null;
     matchNotes?: string | null;
     aiProvider: string;
@@ -58,13 +91,6 @@ async function persistResumeExport(
     structuredSnapshot?: unknown;
   },
 ) {
-  const { url, key } = await uploadBufferToUploadThing(
-    userId,
-    input.buffer,
-    input.fileName,
-    DOCX_MIME,
-  );
-
   let application: {
     id: string;
     position: string;
@@ -78,6 +104,26 @@ async function persistResumeExport(
     });
   }
 
+  const roleTrack = inferCvRoleTrack(
+    [application?.position, input.tailoredFor, input.jobDescription]
+      .filter(Boolean)
+      .join(" "),
+  );
+
+  const fileName = buildAtsCvFileName({
+    fullName: input.fullName,
+    roleTrack,
+    company: application?.company.name,
+    locale: input.locale,
+  });
+
+  const { url, key } = await uploadBufferToUploadThing(
+    userId,
+    input.buffer,
+    fileName,
+    DOCX_MIME,
+  );
+
   const tailoredFor =
     input.tailoredFor ??
     (application
@@ -87,7 +133,7 @@ async function persistResumeExport(
   const resumeExport = await db.resumeExport.create({
     data: {
       userId,
-      fileName: input.fileName,
+      fileName,
       fileUrl: url,
       uploadThingKey: key,
       mimeType: DOCX_MIME,
@@ -108,7 +154,7 @@ async function persistResumeExport(
       where: { id: application.id },
       data: {
         cvFile: {
-          name: input.fileName,
+          name: fileName,
           url,
           uploadedAt: new Date(),
         },
@@ -132,14 +178,18 @@ export async function finalizeTailorExport(
   input: FinalizeTailorExportInput,
 ) {
   const buffer = await generateDocxFromStructured(input.draft);
-  const baseName =
-    input.baseFileName ??
-    `${input.draft.header.fullName.replace(/\s+/g, "_")}_resume.docx`;
-  const fileName = buildTailoredFileName(baseName);
+  const fullName = await resolveExportFullName(
+    db,
+    userId,
+    input.draft,
+    input.draft,
+  );
+  const locale = input.targetLocale ?? input.draft.detectedLocale ?? "en";
 
   return persistResumeExport(db, userId, {
     buffer,
-    fileName,
+    fullName,
+    locale,
     aiScore: input.aiScore,
     matchNotes: input.matchNotes,
     aiProvider: input.aiProvider,
@@ -158,17 +208,24 @@ export async function finalizeDocxTailorExport(
   userId: string,
   input: FinalizeDocxTailorExportInput,
 ) {
+  const locale = input.targetLocale ?? "en";
   const buffer = await rebuildDocx(
     input.parsed.zipFiles,
     input.parsed.rawXml,
     input.parsed.sections,
     input.adaptedSections,
+    locale,
   );
-  const fileName = buildTailoredFileName(input.baseFileName);
+  const fullName = await resolveExportFullName(
+    db,
+    userId,
+    input.structuredSnapshot,
+  );
 
   return persistResumeExport(db, userId, {
     buffer,
-    fileName,
+    fullName,
+    locale,
     aiScore: input.aiScore,
     matchNotes: input.matchNotes,
     aiProvider: input.aiProvider,

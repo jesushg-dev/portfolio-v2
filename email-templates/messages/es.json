@@ -1,7 +1,7 @@
 {
   "cv-delivery": {
     "preview": "Aquí está mi CV — Jesús Hernández",
-    "tagline": "Desarrollador Full Stack Senior & Tech Lead",
+    "tagline": "Desarrollador Full Stack Senior",
     "greeting": "Hola {recipientName},",
     "body1": "Gracias por comunicarte a través de mi portafolio. He adjuntado mi CV más reciente para que puedas revisarlo.",
     "highlight": "Desarrollador Full Stack Senior con más de 6 años de experiencia en .NET Core, React/Next.js y TypeScript — actualmente liderando el equipo de ingeniería de e-commerce en VTEX para Walmart Global Tech en Centroamérica.",

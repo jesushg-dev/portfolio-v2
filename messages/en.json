@@ -437,9 +437,9 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Senior Full Stack .NET Developer & Tech Lead",
-      "description": "Senior Full Stack Developer with 6+ years in .NET Core, React, and SQL Server, with experience leading engineering teams, modernizing legacy systems, and shipping production-ready software in high-compliance environments.",
-      "keywords": "Senior .NET Developer, Tech Lead, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Team Lead, Software Engineer, Jesús Hernández, Senior Software Engineer"
+      "title": "Jesús Hernández | Senior Full Stack .NET Developer",
+      "description": "Senior Full Stack Developer with 6+ years in .NET Core, React, and SQL Server, modernizing legacy systems and shipping production-ready software in high-compliance environments.",
+      "keywords": "Senior .NET Developer, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Software Engineer, Jesús Hernández, Senior Software Engineer"
     },
     "heroMain": {
       "viewCV": "View CV",
@@ -654,7 +654,7 @@
       "title": "Let's talk",
       "title2": "Send a message",
       "eyebrow": "Contact",
-      "subtitle": "If you're looking for a Senior Full Stack Developer or Tech Lead who can contribute from day one, lead technical discussions, and ship reliable software at scale, let's talk.\n\nFeel free to reach out even just to connect.",
+      "subtitle": "If you're looking for a Senior Full Stack Developer who can contribute from day one, take part in technical discussions, and ship reliable software at scale, let's talk.\n\nFeel free to reach out even just to connect.",
       "responseTime": "Reply within 24h",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
@@ -746,7 +746,7 @@
     "impactStats": {
       "teamSize": {
         "value": "6",
-        "label": "Developers led"
+        "label": "Engineers mentored"
       },
       "graphqlOps": {
         "value": "177",
@@ -875,11 +875,11 @@
       "roles": {
         "eyebrow": "Roles",
         "title": "Where I fit in the QA process",
-        "description": "Full-Stack Developer and Tech Lead, working directly alongside the rest of the QA ecosystem — not around it.",
+        "description": "Full-Stack Developer and Software Architect, working directly alongside the rest of the QA ecosystem — not around it.",
         "myRolesLabel": "My roles",
         "myRoles": {
           "0": "Full-Stack Developer",
-          "1": "Tech Lead"
+          "1": "Software Architect"
         },
         "ecosystem": {
           "0": "QA Engineer",
@@ -1639,6 +1639,7 @@
           "APPLIED": "Applied",
           "INTERVIEW": "In Interview",
           "OFFER": "Offer Received",
+          "GHOSTED": "Ghosted",
           "REJECTED": "Rejected",
           "HIRED": "Hired"
         },
@@ -2228,6 +2229,7 @@
         "APPLIED": "Applied",
         "INTERVIEW": "In Interview",
         "OFFER": "Offer Received",
+        "GHOSTED": "Ghosted",
         "REJECTED": "Rejected",
         "HIRED": "Hired"
       },
@@ -2277,6 +2279,10 @@
         "applied": "Applied",
         "resumeOnFile": "Resume on file",
         "editApplicationButton": "Edit application",
+        "deleteApplicationButton": "Delete application",
+        "deleteApplicationConfirm": "Delete this application? This cannot be undone.",
+        "deleteCancel": "Cancel",
+        "deleteConfirmAction": "Delete",
         "timelineActivityHint": "Generated automatically from application activity — add your own with the button above.",
         "noDescription": "No job description provided.",
         "tabsNavAria": "Application sections"

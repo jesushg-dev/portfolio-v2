@@ -437,9 +437,9 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Senior Full Stack .NET Developer & Tech Lead",
-      "description": "Senior Full Stack Developer met 6+ jaar ervaring in .NET Core, React en SQL Server, ervaren in het leiden van engineeringteams, moderniseren van legacy systemen en leveren van productieklare software in veeleisende omgevingen.",
-      "keywords": "Senior .NET Developer, Tech Lead, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Team Lead, Software Engineer, Jesús Hernández, Senior Software Engineer"
+      "title": "Jesús Hernández | Senior Full Stack .NET Developer",
+      "description": "Senior Full Stack Developer met 6+ jaar ervaring in .NET Core, React en SQL Server, moderniseren van legacy systemen en leveren van productieklare software in veeleisende omgevingen.",
+      "keywords": "Senior .NET Developer, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Software Engineer, Jesús Hernández, Senior Software Engineer"
     },
     "heroMain": {
       "viewCV": "Bekijk CV",
@@ -654,7 +654,7 @@
       "eyebrow": "Contact",
       "title": "Laten we praten",
       "title2": "Stuur een bericht",
-      "subtitle": "Als je op zoek bent naar een Senior Full Stack Developer of Tech Lead die vanaf dag één waarde toevoegt, technische discussies leidt en betrouwbare software op schaal levert, laten we praten.\n\nVoel je vrij om contact op te nemen.",
+      "subtitle": "Als je op zoek bent naar een Senior Full Stack Developer die vanaf dag één waarde toevoegt en betrouwbare software op schaal levert, laten we praten.\n\nVoel je vrij om contact op te nemen.",
       "responseTime": "Antwoord binnen 24u",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
@@ -746,7 +746,7 @@
     "impactStats": {
       "teamSize": {
         "value": "6",
-        "label": "Ontwikkelaars geleid"
+        "label": "Ontwikkelaars begeleid"
       },
       "graphqlOps": {
         "value": "177",
@@ -875,11 +875,11 @@
       "roles": {
         "eyebrow": "Rollen",
         "title": "Waar ik pas in het QA-proces",
-        "description": "Full-Stack Developer en Tech Lead, direct naast het QA-ecosysteem — niet eromheen.",
+        "description": "Full-Stack Developer en Software Architect, direct naast het QA-ecosysteem — niet eromheen.",
         "myRolesLabel": "Mijn rollen",
         "myRoles": {
           "0": "Full-Stack Developer",
-          "1": "Tech Lead"
+          "1": "Software Architect"
         },
         "ecosystem": {
           "0": "QA Engineer",
@@ -1639,6 +1639,7 @@
           "APPLIED": "Gesolliciteerd",
           "INTERVIEW": "In Interview",
           "OFFER": "Aanbod Ontvangen",
+          "GHOSTED": "Geen reactie",
           "REJECTED": "Afgewezen",
           "HIRED": "Aangenomen"
         },
@@ -2228,6 +2229,7 @@
         "APPLIED": "Gesolliciteerd",
         "INTERVIEW": "In Interview",
         "OFFER": "Aanbod Ontvangen",
+        "GHOSTED": "Geen reactie",
         "REJECTED": "Afgewezen",
         "HIRED": "Aangenomen"
       },
@@ -2277,6 +2279,10 @@
         "applied": "Gesolliciteerd",
         "resumeOnFile": "CV in dossier",
         "editApplicationButton": "Sollicitatie bewerken",
+        "deleteApplicationButton": "Sollicitatie verwijderen",
+        "deleteApplicationConfirm": "Deze sollicitatie verwijderen? Dit kan niet ongedaan worden gemaakt.",
+        "deleteCancel": "Annuleren",
+        "deleteConfirmAction": "Verwijderen",
         "timelineActivityHint": "Automatisch gegenereerd uit sollicitatieactiviteit — voeg je eigen toe met de knop hierboven.",
         "noDescription": "Geen functieomschrijving beschikbaar.",
         "tabsNavAria": "Sollicitatiesecties"

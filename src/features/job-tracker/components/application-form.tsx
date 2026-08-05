@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/routing";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -54,6 +54,7 @@ const APPLICATION_STATUSES = [
   "APPLIED",
   "INTERVIEW",
   "OFFER",
+  "GHOSTED",
   "REJECTED",
   "HIRED",
 ] as const satisfies readonly ApplicationStatus[];
@@ -161,40 +162,43 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
             };
           }
 
+          const payload = {
+            position: data.position,
+            companyId,
+            status: data.status,
+            appliedDate: data.appliedDate,
+            salary: data.salary ?? undefined,
+            location: data.location ?? undefined,
+            notes: data.notes ?? undefined,
+            description: data.description ?? undefined,
+            cvFile: cvFileObj,
+          };
+
+          let createdId: string | null = null;
           if (isEditMode) {
             await updateApplication.mutateAsync({
               id: initialData.id,
-              position: data.position,
-              companyId,
-              status: data.status,
-              appliedDate: data.appliedDate,
-              salary: data.salary ?? undefined,
-              location: data.location ?? undefined,
-              notes: data.notes ?? undefined,
-              description: data.description ?? undefined,
-              cvFile: cvFileObj,
+              ...payload,
             });
           } else {
-            await createApplication.mutateAsync({
-              position: data.position,
-              companyId,
-              status: data.status,
-              appliedDate: data.appliedDate,
-              salary: data.salary ?? undefined,
-              location: data.location ?? undefined,
-              notes: data.notes ?? undefined,
-              description: data.description ?? undefined,
-              cvFile: cvFileObj,
-            });
+            const created = await createApplication.mutateAsync(payload);
+            createdId = created.id;
           }
 
           toast.success(t("toast.success.title"), {
             description: t("toast.success.description"),
           });
-
           await utils.jobTrackerAdmin.getApplications.invalidate();
           await utils.jobTrackerAdmin.getDashboardStats.invalidate();
-          router.back();
+
+          if (createdId) {
+            router.push({
+              pathname: "/admin/job-tracker/applications/[id]",
+              params: { id: createdId },
+            });
+          } else {
+            router.back();
+          }
         } catch (err) {
           setServerError(
             err instanceof Error ? err.message : t("toast.error.description"),

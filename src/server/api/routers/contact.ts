@@ -26,23 +26,24 @@ export const contactRouter = createTRPCRouter({
 
     const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
 
-    const [appLanguages, rawContacts, profile, user, emailFormEnabled] = await Promise.all([
-      ctx.db.appLanguage.findMany(),
-      ctx.db.cvContact.findMany({
-        where: { userId: ctx.tenant.userId },
-        include: { translations: true },
-        orderBy: { order: "asc" },
-      }),
-      ctx.db.profile.findUnique({
-        where: { userId: ctx.tenant.userId },
-        select: { username: true, isPrimary: true, customDomain: true },
-      }),
-      ctx.db.user.findUnique({
-        where: { id: ctx.tenant.userId },
-        select: { email: true, name: true },
-      }),
-      canDeliverPortfolioContactEmail(ctx.tenant.userId, ownerLocale),
-    ]);
+    const [appLanguages, rawContacts, profile, user, emailFormEnabled] =
+      await Promise.all([
+        ctx.db.appLanguage.findMany(),
+        ctx.db.cvContact.findMany({
+          where: { userId: ctx.tenant.userId },
+          include: { translations: true },
+          orderBy: { order: "asc" },
+        }),
+        ctx.db.profile.findUnique({
+          where: { userId: ctx.tenant.userId },
+          select: { username: true, isPrimary: true, customDomain: true },
+        }),
+        ctx.db.user.findUnique({
+          where: { id: ctx.tenant.userId },
+          select: { email: true, name: true },
+        }),
+        canDeliverPortfolioContactEmail(ctx.tenant.userId, ownerLocale),
+      ]);
 
     const field = createLocalizedFieldResolver(appLanguages, ownerLocale);
 

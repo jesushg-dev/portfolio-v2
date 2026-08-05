@@ -175,7 +175,7 @@ function TestimonialsCarousel({ items }: { items: TestimonialItem[] }) {
 
         {showControls ? (
           <div
-            className="mt-1 flex items-center justify-center gap-2"
+            className="mt-3 flex items-center justify-center gap-1.5"
             aria-label="Testimonial slides"
           >
             {items.map((item, index) => (
@@ -185,14 +185,14 @@ function TestimonialsCarousel({ items }: { items: TestimonialItem[] }) {
                 aria-label={`Go to testimonial ${index + 1}`}
                 aria-current={selectedIndex === index}
                 onClick={() => api?.scrollTo(index)}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full"
+                className="focus-visible:ring-ring inline-flex h-9 items-center justify-center rounded-full px-1 transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:outline-hidden"
               >
                 <span
                   className={cn(
                     "rounded-full transition-all duration-300",
                     selectedIndex === index
                       ? "bg-primary h-2 w-6"
-                      : "bg-muted-foreground/30 h-2 w-2",
+                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50 h-2 w-2",
                   )}
                 />
               </button>

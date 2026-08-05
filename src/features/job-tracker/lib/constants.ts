@@ -7,6 +7,7 @@ export const statusVariants: Record<
   APPLIED: "outline",
   INTERVIEW: "default",
   OFFER: "secondary",
+  GHOSTED: "secondary",
   REJECTED: "destructive",
   HIRED: "default",
 };
@@ -15,6 +16,7 @@ export const KANBAN_COLUMNS: ApplicationStatus[] = [
   "APPLIED",
   "INTERVIEW",
   "OFFER",
+  "GHOSTED",
   "HIRED",
   "REJECTED",
 ];
@@ -37,6 +39,11 @@ export const kanbanColumnStyles: Record<
     dot: "bg-emerald-500",
     accent: "border-l-emerald-500",
     avatar: "bg-emerald-500/15 text-emerald-700",
+  },
+  GHOSTED: {
+    dot: "bg-muted-foreground",
+    accent: "border-l-muted-foreground",
+    avatar: "bg-muted text-muted-foreground",
   },
   HIRED: {
     dot: "bg-emerald-600",

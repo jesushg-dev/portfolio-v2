@@ -28,6 +28,13 @@ const HEADING_STYLES = new Set([
   "1", // some CVs use numeric style IDs
 ]);
 
+/** Job-role / document title styles — adaptable by AI, but exempt from length budget. */
+export const DOCX_TITLE_STYLES = new Set(["Ttulo", "Title", "CustomTitle"]);
+
+export function isDocxTitleStyle(style: string): boolean {
+  return DOCX_TITLE_STYLES.has(style);
+}
+
 // Styles whose paragraph text should be sent to the AI for adaptation
 const ADAPTABLE_STYLES = new Set([
   // Bullet points / achievement lists
@@ -37,10 +44,8 @@ const ADAPTABLE_STYLES = new Set([
   "BulletList",
   "Listprrafo",
   "list-paragraph",
-  // Title / job role headline
-  "Ttulo",
-  "Title",
-  "CustomTitle",
+  // Title / job role headline (adapted by AI; no per-run budget)
+  ...DOCX_TITLE_STYLES,
 ]);
 
 // Special adaptable style that may contain both fixed data (company/date) and

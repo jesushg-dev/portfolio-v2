@@ -12,6 +12,7 @@ export async function resolveTailorBaseDraft(
   userId: string,
   sourceType: "studio" | "upload",
   uploadId?: string,
+  preferredLocale?: "en" | "es" | "nl",
 ): Promise<{ draft: CvImportDraft; sourceUploadId?: string }> {
   if (sourceType === "studio") {
     const profile = await db.profile.findUnique({
@@ -19,9 +20,10 @@ export async function resolveTailorBaseDraft(
       select: { defaultLocale: true },
     });
     const fallbackLocale =
-      profile?.defaultLocale === "es" || profile?.defaultLocale === "nl"
+      preferredLocale ??
+      (profile?.defaultLocale === "es" || profile?.defaultLocale === "nl"
         ? profile.defaultLocale
-        : "en";
+        : "en");
     const draft = await loadCvStructuredDraft(db, userId, {
       locale: fallbackLocale,
       fallbackLocale,

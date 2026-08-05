@@ -9,25 +9,26 @@ import {
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 import { mapCvDataToLocalized } from "./types";
 
-function getLocalizedEdu(edu: typeof mockEducation, locale: "en" | "es" = "en") {
+function getLocalizedEdu(
+  edu: typeof mockEducation,
+  locale: "en" | "es" = "en",
+) {
   return mapCvDataToLocalized(
     { ...mockCvPreviewData, educations: [edu] },
     mockAppLanguages,
-    locale
+    locale,
   ).educations[0];
 }
 
 describe("Education", () => {
   it("renders nothing when educations array is empty", () => {
-    const { container } = renderWithIntl(
-      <Education educations={[]} />,
-    );
+    const { container } = renderWithIntl(<Education educations={[]} />);
     expect(container).toBeEmptyDOMElement();
   });
 
   it("renders localized degree name for the current locale", () => {
     renderWithIntl(
-      <Education educations={[getLocalizedEdu(mockEducation, "es")]} />
+      <Education educations={[getLocalizedEdu(mockEducation, "es")]} />,
     );
     expect(screen.getByText("Ciencias de la Computación")).toBeInTheDocument();
     expect(screen.getByText(/Test University/)).toBeInTheDocument();

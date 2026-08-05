@@ -2,21 +2,58 @@ import { screen } from "@testing-library/react";
 import React from "react";
 import Experiences from "./experiences";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
-import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
+import {
+  mockAppLanguages,
+  mockCvPreviewData,
+} from "@/test-utils/fixtures/cv-data";
 import { mapCvDataToLocalized } from "./types";
 
-function getLocalizedExp(list: any[]) {
+interface RawExpTranslation {
+  appLanguageId?: string;
+  role?: string;
+  location?: string | null;
+}
+
+interface RawResponsibilityTranslation {
+  appLanguageId?: string;
+  text?: string;
+}
+
+interface RawResponsibility {
+  id?: string;
+  order?: number;
+  translations: RawResponsibilityTranslation[];
+}
+
+interface RawExperienceItem {
+  id?: string;
+  company?: string;
+  companyLogoUrl?: string | null;
+  startDate?: Date;
+  endDate?: Date | null;
+  current?: boolean;
+  order?: number;
+  translations: RawExpTranslation[];
+  responsibilities?: RawResponsibility[];
+}
+
+function getLocalizedExp(list: RawExperienceItem[]) {
   const mockData = {
     ...mockCvPreviewData,
     experiences: list.map((exp) => ({
       ...exp,
+      id: exp.id ?? "1",
+      company: exp.company ?? "Company",
+      startDate: exp.startDate ?? new Date(),
+      endDate: exp.endDate ?? null,
+      current: exp.current ?? false,
       companyLogoUrl: exp.companyLogoUrl ?? null,
       order: exp.order ?? 0,
-      translations: exp.translations.map((t: any) => ({
+      translations: exp.translations.map((t) => ({
         location: null,
         ...t,
       })),
-      responsibilities: (exp.responsibilities ?? []).map((r: any) => ({
+      responsibilities: (exp.responsibilities ?? []).map((r) => ({
         order: r.order ?? 0,
         ...r,
       })),
@@ -69,11 +106,7 @@ describe("Experiences", () => {
       },
     ];
 
-    renderWithIntl(
-      <Experiences
-        experiences={getLocalizedExp(list)}
-      />,
-    );
+    renderWithIntl(<Experiences experiences={getLocalizedExp(list)} />);
 
     expect(screen.getByText("Senior Developer")).toBeInTheDocument();
     expect(screen.getByText("Built REST APIs")).toBeInTheDocument();

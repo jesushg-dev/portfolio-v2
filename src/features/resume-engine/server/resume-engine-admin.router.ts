@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { locales } from "@/i18n/config";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -59,6 +60,41 @@ const registerUploadSchema = z.object({
 const aiProviderSchema = z
   .enum(["claude", "openai", "deepseek", "gemini"])
   .optional();
+
+const localeSchema = z.enum(locales);
+
+function detectLocaleFromJobDescription(input: string): "en" | "es" | "nl" {
+  const value = input.toLowerCase();
+  const spanishHints = [
+    "responsabilidades",
+    "requisitos",
+    "experiencia",
+    "desarrollador",
+    "años",
+    "puesto",
+  ];
+  const dutchHints = [
+    "ervaring",
+    "vereisten",
+    "ontwikkelaar",
+    "functie",
+    "opleiding",
+    "vaardigheden",
+  ];
+
+  const esScore = spanishHints.reduce(
+    (acc, hint) => acc + (value.includes(hint) ? 1 : 0),
+    0,
+  );
+  const nlScore = dutchHints.reduce(
+    (acc, hint) => acc + (value.includes(hint) ? 1 : 0),
+    0,
+  );
+
+  if (esScore > nlScore && esScore > 0) return "es";
+  if (nlScore > esScore && nlScore > 0) return "nl";
+  return "en";
+}
 
 export const resumeEngineAdminRouter = createTRPCRouter({
   getAiSettings: protectedProcedure.query(() => {
@@ -373,11 +409,14 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         jobDescription: z.string().min(20),
         applicationId: z.string().optional(),
         provider: aiProviderSchema,
+        targetLocale: localeSchema.optional(),
         tailoredFor: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const jobDescription = input.jobDescription.trim();
+      const preferredLocale =
+        input.targetLocale ?? detectLocaleFromJobDescription(jobDescription);
 
       if (input.sourceType === "upload") {
         if (!input.uploadId) {
@@ -411,8 +450,8 @@ export const resumeEngineAdminRouter = createTRPCRouter({
             jobDescription,
             applicationId: input.applicationId,
             tailoredFor: input.tailoredFor,
-            baseFileName: upload.fileName,
             structuredSnapshot: upload.parsedDraft ?? undefined,
+            targetLocale: result.detectedLocale ?? input.targetLocale,
           });
         } catch (error) {
           rethrowTailorExportError(error);
@@ -424,10 +463,11 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         ctx.user.id,
         input.sourceType,
         input.uploadId,
+        preferredLocale,
       );
 
       try {
-        const { parsed, fileName } = await loadCvTemplateForTailor();
+        const { parsed } = await loadCvTemplateForTailor();
 
         const { result, provider } = await tailorDocxResume(
           parsed.sections,
@@ -446,8 +486,11 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           jobDescription,
           applicationId: input.applicationId,
           tailoredFor: input.tailoredFor,
-          baseFileName: fileName,
           structuredSnapshot: baseDraft,
+          targetLocale:
+            result.detectedLocale ??
+            input.targetLocale ??
+            baseDraft.detectedLocale,
         });
       } catch (error) {
         rethrowTailorExportError(error);
@@ -462,11 +505,14 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         jobDescription: z.string().min(20),
         applicationId: z.string().optional(),
         rawJson: z.string().min(2),
+        targetLocale: localeSchema.optional(),
         tailoredFor: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const jobDescription = input.jobDescription.trim();
+      const preferredLocale =
+        input.targetLocale ?? detectLocaleFromJobDescription(jobDescription);
 
       if (input.sourceType === "upload") {
         if (!input.uploadId) {
@@ -505,8 +551,8 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           jobDescription,
           applicationId: input.applicationId,
           tailoredFor: input.tailoredFor,
-          baseFileName: upload.fileName,
           structuredSnapshot: upload.parsedDraft ?? undefined,
+          targetLocale: result.detectedLocale ?? input.targetLocale,
         });
       }
 
@@ -515,9 +561,10 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         ctx.user.id,
         input.sourceType,
         input.uploadId,
+        preferredLocale,
       );
 
-      const { parsed, fileName } = await loadCvTemplateForTailor();
+      const { parsed } = await loadCvTemplateForTailor();
 
       let result;
       try {
@@ -541,8 +588,11 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         jobDescription,
         applicationId: input.applicationId,
         tailoredFor: input.tailoredFor,
-        baseFileName: fileName,
         structuredSnapshot: baseDraft,
+        targetLocale:
+          result.detectedLocale ??
+          input.targetLocale ??
+          baseDraft.detectedLocale,
       });
     }),
 });

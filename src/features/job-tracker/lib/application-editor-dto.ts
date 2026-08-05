@@ -3,7 +3,7 @@ import type { CompanyEditorDTO } from "@/features/job-tracker/lib/company-editor
 import { mapCompanyToEditorDto } from "@/features/job-tracker/lib/company-editor-dto";
 
 export type ApplicationStatus =
-  "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED" | "HIRED";
+  "APPLIED" | "INTERVIEW" | "OFFER" | "GHOSTED" | "REJECTED" | "HIRED";
 
 export interface ApplicationCvFileDTO {
   name: string;

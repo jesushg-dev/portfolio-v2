@@ -2,7 +2,10 @@ import { screen } from "@testing-library/react";
 import React from "react";
 import ContactMe from "./contact-me";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
-import { mockAppLanguages, mockCvPreviewData } from "@/test-utils/fixtures/cv-data";
+import {
+  mockAppLanguages,
+  mockCvPreviewData,
+} from "@/test-utils/fixtures/cv-data";
 import { mapCvDataToLocalized } from "./types";
 
 jest.mock("@/i18n/routing", () => ({
@@ -11,13 +14,29 @@ jest.mock("@/i18n/routing", () => ({
   ),
 }));
 
-function getLocalizedContacts(list: any[]) {
+interface RawContactTranslation {
+  appLanguageId?: string;
+  label?: string;
+}
+
+interface RawContactItem {
+  id?: string;
+  type?: "EMAIL" | "PHONE" | "CALENDLY" | "LINKEDIN" | "OTHER";
+  value?: string;
+  order?: number;
+  translations?: RawContactTranslation[];
+}
+
+function getLocalizedContacts(list: RawContactItem[]) {
   const mockData = {
     ...mockCvPreviewData,
     contacts: list.map((contact) => ({
       ...contact,
+      id: contact.id ?? "1",
+      type: contact.type ?? "OTHER",
+      value: contact.value ?? "",
       order: contact.order ?? 0,
-      translations: (contact.translations ?? []).map((t: any) => ({
+      translations: (contact.translations ?? []).map((t) => ({
         appLanguageId: t.appLanguageId ?? "lang-en",
         label: t.label ?? "",
       })),
@@ -84,11 +103,7 @@ describe("ContactMe", () => {
       },
     ];
 
-    renderWithIntl(
-      <ContactMe
-        contacts={getLocalizedContacts(contacts)}
-      />,
-    );
+    renderWithIntl(<ContactMe contacts={getLocalizedContacts(contacts)} />);
 
     expect(screen.getByRole("link", { name: /Email Me/ })).toHaveAttribute(
       "href",
