@@ -3,7 +3,7 @@ import {
   buildSpotifyAccentOverlay,
   buildSpotifyFullscreenBg,
   SPOTIFY_PLAYER_BASE,
-  useAlbumColor,
+  useAlbumPalette,
 } from "./use-album-color";
 
 describe("buildSpotifyAccentOverlay", () => {
@@ -35,10 +35,10 @@ describe("buildSpotifyFullscreenBg", () => {
   });
 });
 
-describe("useAlbumColor hook", () => {
+describe("useAlbumPalette hook", () => {
   it("returns fallback color when imageUrl is undefined", () => {
-    const { result } = renderHook(() => useAlbumColor(undefined));
-    expect(result.current).toBe("#191414");
+    const { result } = renderHook(() => useAlbumPalette(undefined));
+    expect(result.current.vibrant).toBe("#191414");
   });
 
   it("returns extracted color when image loads successfully", async () => {
@@ -77,26 +77,26 @@ describe("useAlbumColor hook", () => {
     global.Image = MockImage as unknown as typeof globalThis.Image;
 
     const { result } = renderHook(() =>
-      useAlbumColor("https://example.com/cover.jpg"),
+      useAlbumPalette("https://example.com/cover.jpg"),
     );
 
     await act(async () => {
       await new Promise((r) => setTimeout(r, 50));
     });
 
-    expect(result.current).toBeDefined();
+    expect(result.current.vibrant).toBeDefined();
 
     global.Image = originalImage;
     jest.restoreAllMocks();
   });
 
   it("returns fallback color on image load error", async () => {
-    const { result } = renderHook(() => useAlbumColor("invalid-url.jpg"));
+    const { result } = renderHook(() => useAlbumPalette("invalid-url.jpg"));
 
     await act(async () => {
       await new Promise((r) => setTimeout(r, 50));
     });
 
-    expect(result.current).toBe("#191414");
+    expect(result.current.vibrant).toBe("#191414");
   });
 });

@@ -30,7 +30,7 @@ import {
 } from "@/components/shared/ios-device";
 import SpotifyNowPlayingScreen from "./components/spotify-now-playing-screen";
 import SpotifyLyricsScreen from "./components/spotify-lyrics-screen";
-import { useAlbumColor } from "./hooks/use-album-color";
+import { useAlbumPalette } from "./hooks/use-album-color";
 import {
   captureExpandRects,
   getExpandedTargets,
@@ -100,7 +100,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
   const screenRef = useRef<HTMLDivElement>(null);
   const expandedRef = useRef<HTMLDivElement>(null);
 
-  const accentColor = useAlbumColor(playback.imageUrl);
+  const { vibrant: accentColor } = useAlbumPalette(playback.imageUrl);
   const hasPreview = Boolean(playback.previewUrl);
   const isRecentlyPlayed = playback.source === "recently_played";
 
