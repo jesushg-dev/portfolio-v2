@@ -1,6 +1,12 @@
 "use client";
 
-import type { ColumnSort, Table } from "@tanstack/react-table";
+import type {
+  ColumnSort,
+  ReactTable,
+  RowData,
+  SortingState,
+} from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import {
   ArrowDownUp,
   ChevronsUpDown,
@@ -52,26 +58,86 @@ import {
 const SORT_SHORTCUT_KEY = "s";
 const REMOVE_SORT_SHORTCUTS = ["backspace", "delete"];
 
-interface DataTableSortListProps<TData> extends ComponentProps<
+interface DataTableSortListProps<TData extends RowData> extends ComponentProps<
   typeof PopoverContent
 > {
-  table: Table<TData>;
+  table: ReactTable<AppTableFeatures, TData>;
   disabled?: boolean;
 }
 
-export function DataTableSortList<TData>({
+export function DataTableSortList<TData extends RowData>({
   table,
   disabled,
   className,
   ...props
 }: DataTableSortListProps<TData>) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    function onKeyDown(event: globalThis.KeyboardEvent) {
+      if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement ||
+        (event.target instanceof HTMLElement &&
+          event.target.contentEditable === "true")
+      ) {
+        return;
+      }
+
+      if (
+        event.key.toLowerCase() === SORT_SHORTCUT_KEY &&
+        (event.ctrlKey || event.metaKey) &&
+        event.shiftKey
+      ) {
+        event.preventDefault();
+        setOpen((prev) => !prev);
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  return (
+    <table.Subscribe selector={(state) => state.sorting}>
+      {(sorting) => (
+        <DataTableSortListContent
+          table={table}
+          sorting={sorting}
+          open={open}
+          onOpenChange={setOpen}
+          disabled={disabled}
+          className={className}
+          {...props}
+        />
+      )}
+    </table.Subscribe>
+  );
+}
+
+interface DataTableSortListContentProps<
+  TData extends RowData,
+> extends ComponentProps<typeof PopoverContent> {
+  table: ReactTable<AppTableFeatures, TData>;
+  sorting: SortingState;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  disabled?: boolean;
+}
+
+function DataTableSortListContent<TData extends RowData>({
+  table,
+  sorting,
+  open,
+  onOpenChange,
+  disabled,
+  className,
+  ...props
+}: DataTableSortListContentProps<TData>) {
   const id = useId();
   const labelId = useId();
   const descriptionId = useId();
-  const [open, setOpen] = useState(false);
   const addButtonRef = useRef<HTMLButtonElement>(null);
-
-  const sorting = table.getState().sorting;
   const onSortingChange = table.setSorting;
 
   const { columnLabels, columns } = useMemo(() => {
@@ -132,31 +198,6 @@ export function DataTableSortList<TData>({
     [onSortingChange, table.initialState.sorting],
   );
 
-  useEffect(() => {
-    function onKeyDown(event: globalThis.KeyboardEvent) {
-      if (
-        event.target instanceof HTMLInputElement ||
-        event.target instanceof HTMLTextAreaElement ||
-        (event.target instanceof HTMLElement &&
-          event.target.contentEditable === "true")
-      ) {
-        return;
-      }
-
-      if (
-        event.key.toLowerCase() === SORT_SHORTCUT_KEY &&
-        (event.ctrlKey || event.metaKey) &&
-        event.shiftKey
-      ) {
-        event.preventDefault();
-        setOpen((prev) => !prev);
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
-
   const onTriggerKeyDown = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>) => {
       if (
@@ -176,7 +217,7 @@ export function DataTableSortList<TData>({
       onValueChange={onSortingChange}
       getItemValue={(item) => item.id}
     >
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={onOpenChange}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"

@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Loader2, Pencil, Trash2, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -119,7 +120,7 @@ export const SkillsList: FC<SkillsListProps> = ({
     [skills],
   );
 
-  const columns = useMemo<ColumnDef<SkillRow>[]>(
+  const columns = useMemo<ColumnDef<AppTableFeatures, SkillRow>[]>(
     () => [
       {
         id: "select",

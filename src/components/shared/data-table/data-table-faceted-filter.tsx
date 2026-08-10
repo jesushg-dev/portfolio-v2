@@ -1,6 +1,7 @@
 "use client";
 
-import type { Column } from "@tanstack/react-table";
+import type { Column, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Check, PlusCircle, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,17 +20,17 @@ import Popover, {
 } from "@/components/shared/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import type { Option } from "@/types/data-table";
+import type { AppColumnOption } from "@/lib/app-table-features";
 import { useCallback, useMemo, useState, type MouseEvent } from "react";
 
-interface DataTableFacetedFilterProps<TData, TValue> {
-  column?: Column<TData, TValue>;
+interface DataTableFacetedFilterProps<TData extends RowData, TValue> {
+  column?: Column<AppTableFeatures, TData, TValue>;
   title?: string;
-  options: Option[];
+  options: AppColumnOption[];
   multiple?: boolean;
 }
 
-export function DataTableFacetedFilter<TData, TValue>({
+export function DataTableFacetedFilter<TData extends RowData, TValue>({
   column,
   title,
   options,
@@ -44,7 +45,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   );
 
   const onItemSelect = useCallback(
-    (option: Option, isSelected: boolean) => {
+    (option: AppColumnOption, isSelected: boolean) => {
       if (!column) return;
 
       if (multiple) {

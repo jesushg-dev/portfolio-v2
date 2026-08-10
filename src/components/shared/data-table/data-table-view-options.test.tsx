@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
-import type { Table, Column } from "@tanstack/react-table";
+import type { Column, ReactTable, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
+import { createMockSubscribe } from "@/test-utils/mock-table-subscribe";
 import { DataTableViewOptions } from "./data-table-view-options";
 
 function makeMockColumn(id: string, isVisible = true) {
@@ -14,16 +16,19 @@ function makeMockColumn(id: string, isVisible = true) {
     columnDef: {
       meta: { label: `Column ${id}` },
     },
-  } as unknown as Column<unknown>;
+  } as unknown as Column<AppTableFeatures, RowData>;
 }
 
 describe("DataTableViewOptions", () => {
   it("renders toggle columns button and column items", () => {
     const col1 = makeMockColumn("name");
     const col2 = makeMockColumn("email", false);
+    const tableState = { columnVisibility: {} };
     const table = {
       getAllColumns: () => [col1, col2],
-    } as unknown as Table<unknown>;
+      state: tableState,
+      Subscribe: createMockSubscribe(tableState),
+    } as unknown as ReactTable<AppTableFeatures, RowData>;
 
     render(<DataTableViewOptions table={table} />);
 

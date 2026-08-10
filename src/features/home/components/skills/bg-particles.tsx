@@ -21,7 +21,7 @@ function BgParticles() {
   const { theme } = useThemeContext();
 
   const particlesInit = useCallback(async (engine: Engine) => {
-    await loadSlim(engine as unknown as Parameters<typeof loadSlim>[0]);
+    await loadSlim(engine);
   }, []);
 
   const skillParticles = useMemo(

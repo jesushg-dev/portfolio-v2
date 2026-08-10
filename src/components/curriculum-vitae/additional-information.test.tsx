@@ -6,7 +6,7 @@ import {
   mockAppLanguages,
   mockCvPreviewData,
 } from "@/test-utils/fixtures/cv-data";
-import { mapCvDataToLocalized } from "./types";
+import { mapCvDataToLocalized, type CvData } from "./types";
 
 interface RawTranslation {
   appLanguageId?: string;
@@ -32,8 +32,11 @@ function getLocalizedAdditional(list: RawAdditionalItem[]) {
       })),
     })),
   };
-  return mapCvDataToLocalized(mockData, mockAppLanguages, "en")
-    .additionalInformation;
+  return mapCvDataToLocalized(
+    mockData as unknown as CvData,
+    mockAppLanguages,
+    "en",
+  ).additionalInformation;
 }
 
 describe("AdditionalInformation", () => {

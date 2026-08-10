@@ -1,6 +1,12 @@
 "use client";
 
-import type { Column, Table } from "@tanstack/react-table";
+import type {
+  Column,
+  ColumnFiltersState,
+  ReactTable,
+  RowData,
+} from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { X } from "lucide-react";
 import { DataTableDateFilter } from "@/components/shared/data-table/data-table-date-filter";
 import { DataTableFacetedFilter } from "@/components/shared/data-table/data-table-faceted-filter";
@@ -11,18 +17,18 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { type ComponentProps, useCallback, useMemo } from "react";
 
-interface DataTableToolbarProps<TData> extends ComponentProps<"div"> {
-  table: Table<TData>;
+interface DataTableToolbarProps<
+  TData extends RowData,
+> extends ComponentProps<"div"> {
+  table: ReactTable<AppTableFeatures, TData>;
 }
 
-export function DataTableToolbar<TData>({
+export function DataTableToolbar<TData extends RowData>({
   table,
   children,
   className,
   ...props
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0;
-
   const columns = useMemo(
     () => table.getAllColumns().filter((column) => column.getCanFilter()),
     [table],
@@ -42,23 +48,15 @@ export function DataTableToolbar<TData>({
       )}
       {...props}
     >
-      <div className="flex flex-1 flex-wrap items-center gap-2">
-        {columns.map((column) => (
-          <DataTableToolbarFilter key={column.id} column={column} />
-        ))}
-        {isFiltered && (
-          <Button
-            data-testid="reset-filters-btn"
-            aria-label="Reset filters"
-            variant="outline"
-            className="border-dashed"
-            onClick={onReset}
-          >
-            <X />
-            Reset
-          </Button>
+      <table.Subscribe selector={(state) => state.columnFilters}>
+        {(columnFilters) => (
+          <DataTableToolbarFilters
+            columnFilters={columnFilters}
+            columns={columns}
+            onReset={onReset}
+          />
         )}
-      </div>
+      </table.Subscribe>
       <div className="flex items-center gap-2">
         {children}
         <DataTableViewOptions table={table} />
@@ -66,11 +64,46 @@ export function DataTableToolbar<TData>({
     </div>
   );
 }
-interface DataTableToolbarFilterProps<TData> {
-  column: Column<TData>;
+
+interface DataTableToolbarFiltersProps<TData extends RowData> {
+  columnFilters: ColumnFiltersState;
+  columns: Column<AppTableFeatures, TData>[];
+  onReset: () => void;
 }
 
-function DataTableToolbarFilter<TData>({
+function DataTableToolbarFilters<TData extends RowData>({
+  columnFilters,
+  columns,
+  onReset,
+}: DataTableToolbarFiltersProps<TData>) {
+  const isFiltered = columnFilters.length > 0;
+
+  return (
+    <div className="flex flex-1 flex-wrap items-center gap-2">
+      {columns.map((column) => (
+        <DataTableToolbarFilter key={column.id} column={column} />
+      ))}
+      {isFiltered && (
+        <Button
+          data-testid="reset-filters-btn"
+          aria-label="Reset filters"
+          variant="outline"
+          className="border-dashed"
+          onClick={onReset}
+        >
+          <X />
+          Reset
+        </Button>
+      )}
+    </div>
+  );
+}
+
+interface DataTableToolbarFilterProps<TData extends RowData> {
+  column: Column<AppTableFeatures, TData>;
+}
+
+function DataTableToolbarFilter<TData extends RowData>({
   column,
 }: DataTableToolbarFilterProps<TData>) {
   {

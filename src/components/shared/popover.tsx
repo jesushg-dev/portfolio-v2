@@ -4,9 +4,10 @@ import {
   cloneElement,
   forwardRef,
   isValidElement,
+  useCallback,
   useLayoutEffect,
 } from "react";
-import type { ButtonHTMLAttributes, FC, HTMLProps, ReactNode } from "react";
+import type { ButtonHTMLAttributes, HTMLProps, ReactNode } from "react";
 import {
   FloatingFocusManager,
   FloatingPortal,
@@ -19,15 +20,22 @@ import PopoverContextProvider, {
   usePopoverContext,
 } from "./popover-context-provider";
 
-interface IPopoverProps extends PopoverOptions {
+export interface PopoverProps extends PopoverOptions {
   children: ReactNode;
 }
 
-const Popover: FC<IPopoverProps> = ({ children, ...restOptions }) => {
+export default function Popover({
+  children,
+  modal = false,
+  ...restOptions
+}: PopoverProps) {
+  // This can also accept `initialOpen`, `onOpenChange`, `placement`, `modal`
   return (
-    <PopoverContextProvider {...restOptions}>{children}</PopoverContextProvider>
+    <PopoverContextProvider modal={modal} {...restOptions}>
+      {children}
+    </PopoverContextProvider>
   );
-};
+}
 
 interface PopoverTriggerProps {
   children: ReactNode;
@@ -39,7 +47,11 @@ export const PopoverTrigger = forwardRef<
   HTMLProps<HTMLElement> & PopoverTriggerProps
 >(function PopoverTrigger({ children, asChild = false, ...props }, propRef) {
   const context = usePopoverContext();
-  const ref = useMergeRefs([context.refs.setReference, propRef]);
+  const setReference = useCallback(
+    (node: HTMLElement | null) => context.refs.setReference(node),
+    [context.refs],
+  );
+  const ref = useMergeRefs([setReference, propRef]);
 
   // `asChild` allows the user to pass any element as the anchor
   if (asChild && isValidElement(children)) {
@@ -75,7 +87,11 @@ interface IPopoverContentProps extends HTMLProps<HTMLDivElement> {
 export const PopoverContent = forwardRef<HTMLDivElement, IPopoverContentProps>(
   function PopoverContent({ style, portalId, ...props }, propRef) {
     const { context: floatingContext, ...context } = usePopoverContext();
-    const ref = useMergeRefs([context.refs.setFloating, propRef]);
+    const setFloating = useCallback(
+      (node: HTMLDivElement | null) => context.refs.setFloating(node),
+      [context.refs],
+    );
+    const ref = useMergeRefs([setFloating, propRef]);
 
     if (!floatingContext.open) return null;
 
@@ -152,5 +168,3 @@ export const PopoverClose = forwardRef<
     />
   );
 });
-
-export default Popover;

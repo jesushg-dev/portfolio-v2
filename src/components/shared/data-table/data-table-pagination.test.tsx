@@ -1,6 +1,8 @@
-﻿import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
-import type { Table } from "@tanstack/react-table";
+import type { ReactTable, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
+import { createMockSubscribe } from "@/test-utils/mock-table-subscribe";
 import { DataTablePagination } from "./data-table-pagination";
 
 function makeMockTable(opts?: {
@@ -17,17 +19,20 @@ function makeMockTable(opts?: {
   const nextPage = jest.fn();
   const setPageSize = jest.fn();
 
+  const tableState = {
+    pagination: {
+      pageIndex: opts?.pageIndex ?? 1,
+      pageSize: opts?.pageSize ?? 10,
+    },
+    rowSelection: {},
+  };
+
   const table = {
     getFilteredSelectedRowModel: () => ({
       rows: new Array(opts?.selectedRows ?? 2),
     }),
     getFilteredRowModel: () => ({ rows: new Array(opts?.totalRows ?? 10) }),
-    getState: () => ({
-      pagination: {
-        pageIndex: opts?.pageIndex ?? 1,
-        pageSize: opts?.pageSize ?? 10,
-      },
-    }),
+    state: tableState,
     getPageCount: () => opts?.pageCount ?? 5,
     getCanPreviousPage: () => opts?.canPrevious ?? true,
     getCanNextPage: () => opts?.canNext ?? true,
@@ -35,7 +40,8 @@ function makeMockTable(opts?: {
     previousPage,
     nextPage,
     setPageSize,
-  } as unknown as Table<unknown>;
+    Subscribe: createMockSubscribe(tableState),
+  } as unknown as ReactTable<AppTableFeatures, RowData>;
 
   return { table, setPageIndex, previousPage, nextPage, setPageSize };
 }

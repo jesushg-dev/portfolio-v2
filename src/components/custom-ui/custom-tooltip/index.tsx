@@ -2,6 +2,7 @@
 import {
   useState,
   useMemo,
+  useCallback,
   createContext,
   useContext,
   type ReactNode,
@@ -117,7 +118,8 @@ export const TooltipTrigger = forwardRef<
   HTMLProps<HTMLElement> & { asChild?: boolean }
 >(function TooltipTrigger({ children, asChild = false, ...props }, propRef) {
   const context = useTooltipContext();
-  const ref = useMergeRefs([context.refs.setReference, propRef]);
+  const setReference = useCallback((node: HTMLElement | null) => context.refs.setReference(node), [context.refs]);
+  const ref = useMergeRefs([setReference, propRef]);
 
   // `asChild` allows the user to pass any element as the anchor
   if (asChild && isValidElement(children)) {
@@ -149,7 +151,8 @@ export const TooltipContent = forwardRef<
   HTMLProps<HTMLDivElement>
 >(function TooltipContent(props, propRef) {
   const context = useTooltipContext();
-  const ref = useMergeRefs([context.refs.setFloating, propRef]);
+  const setFloating = useCallback((node: HTMLDivElement | null) => context.refs.setFloating(node), [context.refs]);
+  const ref = useMergeRefs([setFloating, propRef]);
 
   if (!context.open) return null;
 

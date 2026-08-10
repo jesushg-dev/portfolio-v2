@@ -1,6 +1,7 @@
-﻿import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
-import type { Column } from "@tanstack/react-table";
+import type { Column, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { DataTableColumnHeader } from "./data-table-column-header";
 
 function makeMockColumn(
@@ -15,7 +16,7 @@ function makeMockColumn(
     getIsVisible: () => true,
     toggleSorting: jest.fn(),
     toggleVisibility: jest.fn(),
-  } as unknown as Column<unknown, unknown>;
+  } as unknown as Column<AppTableFeatures, RowData, unknown>;
 }
 
 describe("DataTableColumnHeader", () => {

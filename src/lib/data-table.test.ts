@@ -4,13 +4,14 @@ import {
   getValidFilters,
   getColumnPinningStyle,
 } from "./data-table";
-import type { FilterVariant } from "@/types/data-table";
-import type { Column } from "@tanstack/react-table";
+import type { AppFilterVariant } from "@/lib/app-table-features";
+import type { Column, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 
 function makeMockColumn(opts: {
-  pinned?: false | "left" | "right";
-  isLastLeft?: boolean;
-  isFirstRight?: boolean;
+  pinned?: false | "start" | "end";
+  isLastStart?: boolean;
+  isFirstEnd?: boolean;
   start?: number;
   after?: number;
   size?: number;
@@ -18,13 +19,13 @@ function makeMockColumn(opts: {
   return {
     getIsPinned: () => opts.pinned ?? false,
     getIsLastColumn: (side: string) =>
-      side === "left" && (opts.isLastLeft ?? false),
+      side === "start" && (opts.isLastStart ?? false),
     getIsFirstColumn: (side: string) =>
-      side === "right" && (opts.isFirstRight ?? false),
+      side === "end" && (opts.isFirstEnd ?? false),
     getStart: () => opts.start ?? 0,
     getAfter: () => opts.after ?? 0,
     getSize: () => opts.size ?? 150,
-  } as unknown as Column<unknown>;
+  } as unknown as Column<AppTableFeatures, RowData>;
 }
 
 describe("getColumnPinningStyle", () => {
@@ -42,7 +43,7 @@ describe("getColumnPinningStyle", () => {
   });
 
   it("returns left pinned style with left offset and zIndex", () => {
-    const col = makeMockColumn({ pinned: "left", start: 40, size: 100 });
+    const col = makeMockColumn({ pinned: "start", start: 40, size: 100 });
     const style = getColumnPinningStyle({ column: col });
 
     expect(style.position).toBe("sticky");
@@ -51,25 +52,25 @@ describe("getColumnPinningStyle", () => {
     expect(style.zIndex).toBe(1);
   });
 
-  it("returns left pinned style with border shadow on last left column", () => {
-    const col = makeMockColumn({ pinned: "left", isLastLeft: true, start: 80 });
+  it("returns start pinned style with border shadow on last start column", () => {
+    const col = makeMockColumn({ pinned: "start", isLastStart: true, start: 80 });
     const style = getColumnPinningStyle({ column: col, withBorder: true });
 
     expect(style.boxShadow).toBe("-4px 0 4px -4px var(--border) inset");
   });
 
   it("returns right pinned style with right offset", () => {
-    const col = makeMockColumn({ pinned: "right", after: 50 });
+    const col = makeMockColumn({ pinned: "end", after: 50 });
     const style = getColumnPinningStyle({ column: col });
 
     expect(style.position).toBe("sticky");
     expect(style.right).toBe("50px");
   });
 
-  it("returns right pinned style with border shadow on first right column", () => {
+  it("returns end pinned style with border shadow on first end column", () => {
     const col = makeMockColumn({
-      pinned: "right",
-      isFirstRight: true,
+      pinned: "end",
+      isFirstEnd: true,
       after: 0,
     });
     const style = getColumnPinningStyle({ column: col, withBorder: true });
@@ -77,8 +78,8 @@ describe("getColumnPinningStyle", () => {
     expect(style.boxShadow).toBe("4px 0 4px -4px var(--border) inset");
   });
 
-  it("returns undefined boxShadow when withBorder is true but column is neither last-left nor first-right", () => {
-    const col = makeMockColumn({ pinned: "left", isLastLeft: false });
+  it("returns undefined boxShadow when withBorder is true but column is neither last-start nor first-end", () => {
+    const col = makeMockColumn({ pinned: "start", isLastStart: false });
     const style = getColumnPinningStyle({ column: col, withBorder: true });
 
     expect(style.boxShadow).toBeUndefined();
@@ -88,7 +89,7 @@ describe("getColumnPinningStyle", () => {
 // We cannot import getColumnPinningStyle directly without mocking @tanstack/react-table,
 // so we focus on the pure functions that are safe to call in jsdom.
 
-const allVariants: FilterVariant[] = [
+const allVariants: AppFilterVariant[] = [
   "text",
   "number",
   "range",
@@ -127,7 +128,7 @@ describe("getFilterOperators", () => {
 
   it("falls back to textOperators for unknown variants", () => {
     // Force an unknown variant to exercise the ?? fallback branch
-    const ops = getFilterOperators("unknown" as FilterVariant);
+    const ops = getFilterOperators("unknown" as AppFilterVariant);
     expect(ops).toEqual(getFilterOperators("text"));
   });
 });

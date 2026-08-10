@@ -126,17 +126,28 @@ jest.mock("next/image", () => ({
 }));
 
 jest.mock("motion/react", () => {
+  const componentCache = new Map<
+    string,
+    React.ComponentType<PropsWithChildren<Record<string, unknown>>>
+  >();
+
   const motion = new Proxy(
     {},
     {
-      get:
-        (_target, prop: string) =>
-        ({ children, ...props }: PropsWithChildren<Record<string, unknown>>) =>
-          createElement(
+      get: (_target, prop: string) => {
+        if (!componentCache.has(prop)) {
+          componentCache.set(
             prop,
-            mockOmitKeys(props, mockMotionPropKeys),
-            children,
-          ),
+            ({ children, ...props }: PropsWithChildren<Record<string, unknown>>) =>
+              createElement(
+                prop,
+                mockOmitKeys(props, mockMotionPropKeys),
+                children,
+              ),
+          );
+        }
+        return componentCache.get(prop)!;
+      },
     },
   );
 

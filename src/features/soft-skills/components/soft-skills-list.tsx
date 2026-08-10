@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Loader2, Plus, Pencil, Trash2, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -101,7 +102,7 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
     [deleteItem, t, utils],
   );
 
-  const columns = useMemo<ColumnDef<SoftSkillRow>[]>(
+  const columns = useMemo<ColumnDef<AppTableFeatures, SoftSkillRow>[]>(
     () => [
       {
         accessorKey: "icon",

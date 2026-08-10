@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Loader2, ArrowUpDown, Plus, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -172,7 +173,7 @@ export const TimelineList: FC<TimelineListProps> = ({
 
   const timelineItems = useMemo(() => items.filter(isTimelineItemRow), [items]);
 
-  const columns = useMemo<ColumnDef<TimelineItemRow>[]>(
+  const columns = useMemo<ColumnDef<AppTableFeatures, TimelineItemRow>[]>(
     () => [
       {
         accessorKey: "title",

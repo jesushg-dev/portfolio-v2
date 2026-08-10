@@ -1,15 +1,27 @@
 "use client";
 
 import {
+  useCallback,
   useEffect,
-  useRef,
   useState,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import { createPortal } from "react-dom";
+
 import { InfoIcon, XIcon } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+  motion,
+  useReducedMotion,
+  AnimatePresence,
+} from "motion/react";
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+  arrow,
+} from "@floating-ui/react";
 
 import { cn } from "@/lib/utils";
 import { useBodyOverlayLocked } from "@/hooks/use-body-overlay-lock";
@@ -75,20 +87,11 @@ export function ActionHint({
   className,
   bubbleClassName,
 }: ActionHintProps) {
-  const anchorRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(() => delay === 0);
   const [sessionDismissed, setSessionDismissed] = useState(false);
-  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(
-    null,
-  );
   const reduceMotion = useReducedMotion();
   const pathname = usePathname();
   const overlayLocked = useBodyOverlayLocked();
-  const isMounted = useSyncExternalStore(
-    () => () => undefined,
-    () => true,
-    () => false,
-  );
 
   const storedDismissed = useSyncExternalStore(
     subscribeToHintStorage,
@@ -101,8 +104,10 @@ export function ActionHint({
   useEffect(() => {
     if (dismissed) return;
 
-    const timer = window.setTimeout(() => setVisible(true), delay);
-    return () => window.clearTimeout(timer);
+    if (delay > 0) {
+      const timer = window.setTimeout(() => setVisible(true), delay);
+      return () => window.clearTimeout(timer);
+    }
   }, [delay, dismissed]);
 
   const showHint =
@@ -112,30 +117,48 @@ export function ActionHint({
     !overlayLocked &&
     !isSchedulePath(pathname);
 
-  useEffect(() => {
-    if (!showHint || !anchorRef.current) {
-      const frame = requestAnimationFrame(() => setTooltipPos(null));
-      return () => cancelAnimationFrame(frame);
-    }
+  const [arrowElement, setArrowElement] = useState<HTMLSpanElement | null>(null);
 
-    const updatePosition = () => {
-      const rect = anchorRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      setTooltipPos({
-        x: rect.left + rect.width / 2,
-        y: rect.top,
-      });
-    };
+  const { refs, floatingStyles, placement, middlewareData } = useFloating({
+    open: showHint,
+    placement: "top",
+    strategy: "fixed",
+    whileElementsMounted: (reference, floating, update) =>
+      autoUpdate(reference, floating, update, {
+        elementResize: typeof ResizeObserver !== "undefined",
+      }),
+    middleware: [
+      offset(14),
+      flip({ padding: 12 }),
+      shift({ padding: 12 }),
+      arrow({ element: arrowElement, padding: 8 }),
+    ],
+  });
 
-    const frame = requestAnimationFrame(updatePosition);
-    window.addEventListener("scroll", updatePosition, true);
-    window.addEventListener("resize", updatePosition);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updatePosition, true);
-      window.removeEventListener("resize", updatePosition);
-    };
-  }, [showHint]);
+  const setReferenceNode = useCallback(
+    (node: HTMLElement | null) => {
+      refs.setReference(node);
+    },
+    [refs],
+  );
+
+  const setFloatingNode = useCallback(
+    (node: HTMLDivElement | null) => {
+      refs.setFloating(node);
+    },
+    [refs],
+  );
+
+  const side = placement.split("-")[0];
+  const arrowX = middlewareData.arrow?.x;
+  const arrowY = middlewareData.arrow?.y;
+
+  const arrowSideClasses: Record<string, string> = {
+    top: "-bottom-1 border-r border-b",
+    bottom: "-top-1 border-l border-t",
+    left: "-right-1 border-t border-r",
+    right: "-left-1 border-b border-l",
+  };
 
   function dismiss() {
     setVisible(false);
@@ -148,7 +171,7 @@ export function ActionHint({
   return (
     <>
       <div
-        ref={anchorRef}
+        ref={setReferenceNode}
         className={cn("relative", className)}
         onClickCapture={dismiss}
       >
@@ -175,67 +198,65 @@ export function ActionHint({
         )}
       </div>
 
-      {isMounted &&
-        createPortal(
-          <AnimatePresence>
-            {showHint && tooltipPos && (
-              <div
-                className="pointer-events-none fixed z-9999"
-                style={{
-                  left: tooltipPos.x,
-                  top: tooltipPos.y,
-                  transform: "translate(-50%, calc(-100% - 14px))",
-                }}
+      <AnimatePresence>
+        {showHint && (
+          <div
+            ref={setFloatingNode}
+            className="z-9999"
+            style={floatingStyles}
+            onClickCapture={dismiss}
+          >
+            <motion.div
+              onClick={dismiss}
+              initial={{ opacity: 0, scale: 0.92, y: side === "top" ? 6 : -6 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: side === "top" ? 6 : -6 }}
+              transition={
+                reduceMotion
+                  ? { duration: 0.2 }
+                  : { type: "spring", stiffness: 420, damping: 28 }
+              }
+              className={cn(
+                "bg-popover/95 text-popover-foreground border-border pointer-events-auto relative flex max-w-[min(22rem,calc(100vw-2rem))] items-center gap-2.5 rounded-xl border py-2.5 pr-10 pl-3.5 text-xs leading-snug shadow-xl backdrop-blur-md sm:text-sm",
+                bubbleClassName,
+              )}
+            >
+              {icon ?? (
+                <InfoIcon
+                  className="text-primary size-4.5 shrink-0 sm:size-4"
+                  strokeWidth={1.75}
+                  aria-hidden
+                />
+              )}
+              <span className="pr-1 font-medium">{label}</span>
+              <button
+                type="button"
+                aria-label="Dismiss hint"
+                onClick={dismiss}
+                onPointerDown={dismiss}
+                className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-1.5 flex size-7 -translate-y-1/2 items-center justify-center rounded-lg transition-colors focus-visible:ring-1 focus-visible:outline-none sm:size-6"
               >
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.92, y: 6 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{
-                    opacity: 0,
-                    scale: 0.94,
-                    y: 4,
-                    transition: { duration: 0.18, ease: "easeOut" },
-                  }}
-                  transition={
-                    reduceMotion
-                      ? { duration: 0.2 }
-                      : { type: "spring", stiffness: 420, damping: 28 }
-                  }
-                  style={{ transformOrigin: "bottom center" }}
-                  className={cn(
-                    "bg-popover/95 text-popover-foreground border-border pointer-events-auto relative flex max-w-[min(22rem,calc(100vw-2rem))] items-center gap-2.5 rounded-xl border py-2.5 pr-10 pl-3.5 text-xs leading-snug shadow-xl backdrop-blur-md sm:text-sm",
-                    bubbleClassName,
-                  )}
-                >
-                  {icon ?? (
-                    <InfoIcon
-                      className="text-primary size-4.5 shrink-0 sm:size-4"
-                      strokeWidth={1.75}
-                      aria-hidden
-                    />
-                  )}
-                  <span className="pr-1 font-medium">{label}</span>
-                  <button
-                    type="button"
-                    aria-label="Dismiss hint"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      dismiss();
-                    }}
-                    className="text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-1.5 flex size-7 -translate-y-1/2 items-center justify-center rounded-lg transition-colors focus-visible:ring-1 focus-visible:outline-none sm:size-6"
-                  >
-                    <XIcon className="size-4.5 sm:size-3.5" strokeWidth={2} />
-                  </button>
-                  <span className="bg-popover border-border absolute top-full left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 border-r border-b" />
-                </motion.div>
-              </div>
-            )}
-          </AnimatePresence>,
-          document.body,
+                <XIcon className="size-4.5 sm:size-3.5" strokeWidth={2} />
+              </button>
+              <span
+                ref={setArrowElement}
+                className={cn(
+                  "bg-popover border-border absolute size-2.5 rotate-45",
+                  arrowSideClasses[side] ?? "-bottom-1 border-r border-b",
+                )}
+                style={{
+                  left: arrowX != null ? `${arrowX}px` : undefined,
+                  top: arrowY != null ? `${arrowY}px` : undefined,
+                }}
+              />
+            </motion.div>
+          </div>
         )}
+      </AnimatePresence>
     </>
   );
 }
 
 export const NowPlayingHint = ActionHint;
 export default ActionHint;
+

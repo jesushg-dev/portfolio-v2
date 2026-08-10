@@ -1,6 +1,7 @@
+import type { ColumnDef } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { renderHook, act } from "@testing-library/react";
 import { useState } from "react";
-import type { ColumnDef } from "@tanstack/react-table";
 
 jest.mock("nuqs", () => {
   const createParser = () => {
@@ -48,7 +49,7 @@ interface TestData {
   category: string;
 }
 
-const mockColumns: ColumnDef<TestData>[] = [
+const mockColumns: ColumnDef<AppTableFeatures, TestData>[] = [
   {
     id: "id",
     accessorKey: "id",
@@ -86,7 +87,7 @@ describe("useDataTable hook", () => {
     );
 
     expect(result.current.table).toBeDefined();
-    expect(result.current.table.getState().pagination.pageSize).toBe(5);
+    expect(result.current.table.state.pagination.pageSize).toBe(5);
   });
 
   it("handles pagination changes via callback function and direct value", () => {
@@ -101,12 +102,12 @@ describe("useDataTable hook", () => {
     act(() => {
       result.current.table.setPageIndex(1);
     });
-    expect(result.current.table.getState().pagination.pageIndex).toBe(1);
+    expect(result.current.table.state.pagination.pageIndex).toBe(1);
 
     act(() => {
       result.current.table.setPageSize(20);
     });
-    expect(result.current.table.getState().pagination.pageSize).toBe(20);
+    expect(result.current.table.state.pagination.pageSize).toBe(20);
   });
 
   it("handles sorting changes via function and direct value", () => {
@@ -121,7 +122,7 @@ describe("useDataTable hook", () => {
     act(() => {
       result.current.table.setSorting([{ id: "name", desc: true }]);
     });
-    expect(result.current.table.getState().sorting).toEqual([
+    expect(result.current.table.state.sorting).toEqual([
       { id: "name", desc: true },
     ]);
   });
@@ -140,14 +141,14 @@ describe("useDataTable hook", () => {
         { id: "name", value: "search term" },
       ]);
     });
-    expect(result.current.table.getState().columnFilters).toEqual([
+    expect(result.current.table.state.columnFilters).toEqual([
       { id: "name", value: "search term" },
     ]);
 
     act(() => {
       result.current.table.resetColumnFilters();
     });
-    expect(result.current.table.getState().columnFilters).toEqual([]);
+    expect(result.current.table.state.columnFilters).toEqual([]);
   });
 
   it("supports enableAdvancedFilter mode without auto column filter parsers", () => {

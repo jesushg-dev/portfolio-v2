@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -129,7 +130,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     return map;
   }, [rawSkills]);
 
-  const columns = useMemo<ColumnDef<CertificationRow>[]>(() => {
+  const columns = useMemo<ColumnDef<AppTableFeatures, CertificationRow>[]>(() => {
     const field = createLocalizedFieldResolver(languages, locale);
     return [
       {

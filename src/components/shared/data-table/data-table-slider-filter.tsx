@@ -1,6 +1,7 @@
 "use client";
 
-import type { Column } from "@tanstack/react-table";
+import type { Column, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { PlusCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,26 +38,26 @@ function getIsValidRange(value: unknown): value is RangeValue {
 }
 
 function parseValuesAsNumbers(value: unknown): RangeValue | undefined {
-  if (
-    Array.isArray(value) &&
-    value.length === 2 &&
-    value.every(
-      (v) =>
-        (typeof v === "string" || typeof v === "number") && !Number.isNaN(v),
-    )
-  ) {
-    return [Number(value[0]), Number(value[1])];
+  if (getIsValidRange(value)) {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    const parsed = value.map((v) => Number(v)).filter((v) => !Number.isNaN(v));
+    if (parsed.length === 2) {
+      return [parsed[0], parsed[1]];
+    }
   }
 
   return undefined;
 }
 
-interface DataTableSliderFilterProps<TData> {
-  column: Column<TData, unknown>;
+interface DataTableSliderFilterProps<TData extends RowData> {
+  column: Column<AppTableFeatures, TData, unknown>;
   title?: string;
 }
 
-export function DataTableSliderFilter<TData>({
+export function DataTableSliderFilter<TData extends RowData>({
   column,
   title,
 }: DataTableSliderFilterProps<TData>) {

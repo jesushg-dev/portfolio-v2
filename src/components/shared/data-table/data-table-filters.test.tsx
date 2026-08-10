@@ -1,6 +1,7 @@
-﻿import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
-import type { Column } from "@tanstack/react-table";
+import type { Column, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { DataTableDateFilter } from "./data-table-date-filter";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { DataTableSliderFilter } from "./data-table-slider-filter";
@@ -25,7 +26,7 @@ function makeMockColumn(initialValue: unknown = undefined) {
         defaultRange: [0, 50],
       },
     },
-  } as unknown as Column<unknown, unknown>;
+  } as unknown as Column<AppTableFeatures, RowData, unknown>;
 }
 
 describe("DataTableFacetedFilter", () => {

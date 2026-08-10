@@ -1,55 +1,21 @@
 import type { ColumnSort, Row, RowData } from "@tanstack/react-table";
-import type { DataTableConfig } from "@/config/data-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import type { FilterItemSchema } from "@/lib/parsers";
-import { type ComponentProps, type ComponentType } from "react";
 
-declare module "@tanstack/react-table" {
-  interface TableMeta<TData extends RowData> {
-    _typeData?: TData;
-    queryKeys?: QueryKeys;
-  }
+export type { DataTableConfig } from "@/config/data-table";export type FilterOperator = import("@/config/data-table").DataTableConfig["operators"][number];
+export type JoinOperator = import("@/config/data-table").DataTableConfig["joinOperators"][number];
 
-  interface ColumnMeta<TData extends RowData, TValue> {
-    _typeData?: TData;
-    _typeValue?: TValue;
-    label?: string;
-    placeholder?: string;
-    variant?: FilterVariant;
-    options?: Option[];
-    range?: [number, number];
-    unit?: string;
-    icon?: ComponentType<ComponentProps<"svg">>;
-  }
-}
-
-export interface QueryKeys {
-  page: string;
-  perPage: string;
-  sort: string;
-  filters: string;
-  joinOperator: string;
-}
-
-export interface Option {
-  label: string;
-  value: string;
-  count?: number;
-  icon?: ComponentType<ComponentProps<"svg">>;
-}
-
-export type FilterOperator = DataTableConfig["operators"][number];
-export type FilterVariant = DataTableConfig["filterVariants"][number];
-export type JoinOperator = DataTableConfig["joinOperators"][number];
-
-export interface ExtendedColumnSort<TData> extends Omit<ColumnSort, "id"> {
+export interface ExtendedColumnSort<TData extends RowData>
+  extends Omit<ColumnSort, "id"> {
   id: Extract<keyof TData, string>;
 }
 
-export interface ExtendedColumnFilter<TData> extends FilterItemSchema {
+export interface ExtendedColumnFilter<TData extends RowData>
+  extends FilterItemSchema {
   id: Extract<keyof TData, string>;
 }
 
-export interface DataTableRowAction<TData> {
-  row: Row<TData>;
+export interface DataTableRowAction<TData extends RowData> {
+  row: Row<AppTableFeatures, TData>;
   variant: "update" | "delete";
 }

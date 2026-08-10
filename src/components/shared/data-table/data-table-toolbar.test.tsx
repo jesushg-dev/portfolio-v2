@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
-import type { Table, Column } from "@tanstack/react-table";
+import type { Column, ReactTable, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
+import { createMockSubscribe } from "@/test-utils/mock-table-subscribe";
 import { DataTableToolbar } from "./data-table-toolbar";
 
 function makeMockColumn(
@@ -24,18 +26,23 @@ function makeMockColumn(
         ...extraMeta,
       },
     },
-  } as unknown as Column<unknown>;
+  } as unknown as Column<AppTableFeatures, RowData>;
 }
 
-function makeMockTable(columns: Column<unknown>[], isFiltered = false) {
+function makeMockTable(
+  columns: Column<AppTableFeatures, RowData>[],
+  isFiltered = false,
+) {
   const resetColumnFilters = jest.fn();
+  const tableState = {
+    columnFilters: isFiltered ? [{ id: "col1", value: "test" }] : [],
+  };
   const table = {
-    getState: () => ({
-      columnFilters: isFiltered ? [{ id: "col1", value: "test" }] : [],
-    }),
+    state: tableState,
     getAllColumns: () => columns,
     resetColumnFilters,
-  } as unknown as Table<unknown>;
+    Subscribe: createMockSubscribe(tableState),
+  } as unknown as ReactTable<AppTableFeatures, RowData>;
 
   return { table, resetColumnFilters };
 }

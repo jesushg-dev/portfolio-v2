@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Plus, Pencil, Trash2, Loader2, Globe, Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
@@ -111,7 +112,7 @@ export const CompaniesList: FC<CompaniesListProps> = ({
     [deleteCompany, t, utils],
   );
 
-  const columns = useMemo<ColumnDef<CompanyRow>[]>(
+  const columns = useMemo<ColumnDef<AppTableFeatures, CompanyRow>[]>(
     () => [
       {
         id: "name",

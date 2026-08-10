@@ -8,7 +8,9 @@ interface IHeaderCvProps {
 }
 
 const HeaderCV: FC<IHeaderCvProps> = ({ header, fallbackName }) => {
-  const fullName = header?.fullName ?? fallbackName ?? "";
+  const rawName = header?.fullName;
+  const fullName =
+    rawName != null && rawName.length > 0 ? rawName : (fallbackName ?? "");
   const degree = header?.degree ?? "";
   const alt = header?.clientImageAlt ?? fullName;
 

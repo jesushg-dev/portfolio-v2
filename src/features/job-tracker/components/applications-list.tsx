@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import {
   Plus,
   Pencil,
@@ -122,7 +123,7 @@ export const ApplicationsList: FC<ApplicationsListProps> = ({
 
   const dateFnsLocale = getDateFnsLocale(locale);
 
-  const columns = useMemo<ColumnDef<ApplicationRow>[]>(
+  const columns = useMemo<ColumnDef<AppTableFeatures, ApplicationRow>[]>(
     () => [
       {
         id: "position",

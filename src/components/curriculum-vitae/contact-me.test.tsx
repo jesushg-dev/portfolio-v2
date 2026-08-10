@@ -6,7 +6,7 @@ import {
   mockAppLanguages,
   mockCvPreviewData,
 } from "@/test-utils/fixtures/cv-data";
-import { mapCvDataToLocalized } from "./types";
+import { mapCvDataToLocalized, type CvData } from "./types";
 
 jest.mock("@/i18n/routing", () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: string }) => (
@@ -42,7 +42,11 @@ function getLocalizedContacts(list: RawContactItem[]) {
       })),
     })),
   };
-  return mapCvDataToLocalized(mockData, mockAppLanguages, "en").contacts;
+  return mapCvDataToLocalized(
+    mockData as unknown as CvData,
+    mockAppLanguages,
+    "en",
+  ).contacts;
 }
 
 describe("ContactMe", () => {

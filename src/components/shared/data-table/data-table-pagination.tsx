@@ -1,5 +1,10 @@
 import type { ComponentProps } from "react";
-import type { Table } from "@tanstack/react-table";
+import type {
+  PaginationState,
+  ReactTable,
+  RowData,
+} from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import {
   ChevronLeft,
   ChevronRight,
@@ -18,17 +23,54 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
-interface DataTablePaginationProps<TData> extends ComponentProps<"div"> {
-  table: Table<TData>;
+interface DataTablePaginationProps<
+  TData extends RowData,
+> extends ComponentProps<"div"> {
+  table: ReactTable<AppTableFeatures, TData>;
   pageSizeOptions?: number[];
 }
 
-export function DataTablePagination<TData>({
+export function DataTablePagination<TData extends RowData>({
   table,
   pageSizeOptions = [10, 20, 30, 40, 50],
   className,
   ...props
 }: DataTablePaginationProps<TData>) {
+  return (
+    <table.Subscribe
+      selector={(state) => ({
+        pagination: state.pagination,
+        rowSelection: state.rowSelection,
+      })}
+    >
+      {({ pagination }) => (
+        <DataTablePaginationContent
+          table={table}
+          pagination={pagination}
+          pageSizeOptions={pageSizeOptions}
+          className={className}
+          {...props}
+        />
+      )}
+    </table.Subscribe>
+  );
+}
+
+interface DataTablePaginationContentProps<
+  TData extends RowData,
+> extends ComponentProps<"div"> {
+  table: ReactTable<AppTableFeatures, TData>;
+  pagination: PaginationState;
+  pageSizeOptions: number[];
+}
+
+function DataTablePaginationContent<TData extends RowData>({
+  table,
+  pagination,
+  pageSizeOptions,
+  className,
+  ...props
+}: DataTablePaginationContentProps<TData>) {
   return (
     <div
       className={cn(
@@ -45,13 +87,13 @@ export function DataTablePagination<TData>({
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium whitespace-nowrap">Rows per page</p>
           <Select
-            value={`${table.getState().pagination.pageSize}`}
+            value={`${pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
             }}
           >
             <SelectTrigger className="h-8 w-18 data-size:h-8">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
+              <SelectValue placeholder={pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
               <SelectGroup>
@@ -65,8 +107,7 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex items-center justify-center text-sm font-medium">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
+          Page {pagination.pageIndex + 1} of {table.getPageCount()}
         </div>
         <div className="flex items-center space-x-2">
           <Button

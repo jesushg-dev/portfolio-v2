@@ -1,6 +1,7 @@
 "use client";
 
-import type { Table } from "@tanstack/react-table";
+import type { Column, ReactTable, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,14 +19,14 @@ import Popover, {
 import { cn } from "@/lib/utils";
 import { type ComponentProps, useMemo } from "react";
 
-interface DataTableViewOptionsProps<TData> extends ComponentProps<
-  typeof PopoverContent
-> {
-  table: Table<TData>;
+interface DataTableViewOptionsProps<
+  TData extends RowData,
+> extends ComponentProps<typeof PopoverContent> {
+  table: ReactTable<AppTableFeatures, TData>;
   disabled?: boolean;
 }
 
-export function DataTableViewOptions<TData>({
+export function DataTableViewOptions<TData extends RowData>({
   table,
   disabled,
   className,
@@ -58,29 +59,42 @@ export function DataTableViewOptions<TData>({
         </Button>
       </PopoverTrigger>
       <PopoverContent className={cn("w-44 p-0", className)} {...props}>
-        <Command>
-          <CommandInput placeholder="Search columns..." />
-          <CommandList>
-            <CommandEmpty>No columns found.</CommandEmpty>
-            <CommandGroup>
-              {columns.map((column) => (
-                <CommandItem
-                  key={column.id}
-                  data-testid={`toggle-column-${column.id}`}
-                  data-checked={column.getIsVisible()}
-                  onSelect={() =>
-                    column.toggleVisibility(!column.getIsVisible())
-                  }
-                >
-                  <span className="truncate">
-                    {column.columnDef.meta?.label ?? column.id}
-                  </span>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
+        <table.Subscribe selector={(state) => state.columnVisibility}>
+          {() => (
+            <Command>
+              <CommandInput placeholder="Search columns..." />
+              <CommandList>
+                <CommandEmpty>No columns found.</CommandEmpty>
+                <CommandGroup>
+                  {columns.map((column) => (
+                    <DataTableViewOptionItem key={column.id} column={column} />
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          )}
+        </table.Subscribe>
       </PopoverContent>
     </Popover>
+  );
+}
+
+interface DataTableViewOptionItemProps<TData extends RowData> {
+  column: Column<AppTableFeatures, TData>;
+}
+
+function DataTableViewOptionItem<TData extends RowData>({
+  column,
+}: DataTableViewOptionItemProps<TData>) {
+  return (
+    <CommandItem
+      data-testid={`toggle-column-${column.id}`}
+      data-checked={column.getIsVisible()}
+      onSelect={() => column.toggleVisibility(!column.getIsVisible())}
+    >
+      <span className="truncate">
+        {column.columnDef.meta?.label ?? column.id}
+      </span>
+    </CommandItem>
   );
 }

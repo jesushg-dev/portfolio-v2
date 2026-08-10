@@ -15,4 +15,11 @@ const config = {
   },
 };
 
-export default createJestConfig(config);
+export default async function createCustomJestConfig() {
+  const makeConfig = createJestConfig(config);
+  const finalConfig = await makeConfig();
+  finalConfig.transformIgnorePatterns = [
+    "/node_modules/(?!(@tanstack/react-table|@tanstack/table-core|@tanstack/react-store|@tanstack/store)/)",
+  ];
+  return finalConfig;
+}

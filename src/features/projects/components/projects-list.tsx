@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -115,7 +116,7 @@ export const ProjectsList: FC<ProjectsListProps> = ({
     return map;
   }, [rawSkills]);
 
-  const columns = useMemo<ColumnDef<ProjectRow>[]>(() => {
+  const columns = useMemo<ColumnDef<AppTableFeatures, ProjectRow>[]>(() => {
     const field = createLocalizedFieldResolver(languages, locale);
     return [
       {

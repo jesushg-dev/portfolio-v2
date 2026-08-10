@@ -2,22 +2,17 @@
 import {
   type ColumnDef,
   type ColumnFiltersState,
-  getCoreRowModel,
-  getFacetedMinMaxValues,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   type PaginationState,
   type RowSelectionState,
   type SortingState,
   type TableOptions,
   type TableState,
   type Updater,
-  useReactTable,
-  type VisibilityState,
+  useTable,
+  type ColumnVisibilityState,
+  type RowData,
 } from "@tanstack/react-table";
+import { appTableFeatures, type AppTableFeatures } from "@/lib/app-table-features";
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -29,7 +24,8 @@ import {
 } from "nuqs";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import { getSortingStateParser } from "@/lib/parsers";
-import type { ExtendedColumnSort, QueryKeys } from "@/types/data-table";
+import type { AppTableQueryKeys } from "@/lib/app-table-features";
+import type { ExtendedColumnSort } from "@/types/data-table";
 import {
   useCallback,
   useMemo,
@@ -46,7 +42,9 @@ const ARRAY_SEPARATOR = ",";
 const DEBOUNCE_MS = 300;
 const THROTTLE_MS = 50;
 
-function getColumnFilterId<TData>(column: ColumnDef<TData, unknown>): string {
+function getColumnFilterId<TData extends RowData>(
+  column: ColumnDef<AppTableFeatures, TData, unknown>,
+): string {
   if (column.id) return column.id;
   if ("accessorKey" in column) {
     const accessorKey = column.accessorKey;
@@ -55,15 +53,16 @@ function getColumnFilterId<TData>(column: ColumnDef<TData, unknown>): string {
   return "";
 }
 
-interface UseDataTableProps<TData> extends Omit<
-  TableOptions<TData>,
-  "state" | "pageCount" | "getCoreRowModel"
-> {
+interface UseDataTableProps<TData extends RowData>
+  extends Omit<
+    TableOptions<AppTableFeatures, TData>,
+    "state" | "pageCount" | "features"
+  > {
   rowCount: number;
-  initialState?: Omit<Partial<TableState>, "sorting"> & {
+  initialState?: Omit<Partial<TableState<AppTableFeatures>>, "sorting"> & {
     sorting?: ExtendedColumnSort<TData>[];
   };
-  queryKeys?: Partial<QueryKeys>;
+  queryKeys?: Partial<AppTableQueryKeys>;
   history?: "push" | "replace";
   debounceMs?: number;
   throttleMs?: number;
@@ -74,7 +73,9 @@ interface UseDataTableProps<TData> extends Omit<
   startTransition?: TransitionStartFunction;
 }
 
-export function useDataTable<TData>(props: UseDataTableProps<TData>) {
+export function useDataTable<TData extends RowData>(
+  props: UseDataTableProps<TData>,
+) {
   "use no memo";
 
   const {
@@ -124,9 +125,8 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>(
     initialState?.rowSelection ?? {},
   );
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    initialState?.columnVisibility ?? {},
-  );
+  const [columnVisibility, setColumnVisibility] =
+    useState<ColumnVisibilityState>(initialState?.columnVisibility ?? {});
 
   const [page, setPage] = useQueryState(
     pageKey,
@@ -282,8 +282,9 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     [debouncedSetFilterValues, filterableColumns, enableAdvancedFilter],
   );
 
-  // eslint-disable-next-line react-hooks/incompatible-library -- This API returns functions that cannot be memoized safely
-  const table = useReactTable({
+   
+  const table = useTable({
+    features: appTableFeatures,
     ...tableProps,
     columns,
     initialState,
@@ -305,13 +306,6 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     onSortingChange,
     onColumnFiltersChange,
     onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues(),
     manualPagination: tableProps.manualPagination ?? true,
     manualSorting: tableProps.manualSorting ?? true,
     manualFiltering: tableProps.manualFiltering ?? true,

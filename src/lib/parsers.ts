@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { dataTableConfig } from "@/config/data-table";
 
+import type { RowData } from "@tanstack/react-table";
 import type {
   ExtendedColumnFilter,
   ExtendedColumnSort,
@@ -13,7 +14,7 @@ const sortingItemSchema = z.object({
   desc: z.boolean(),
 });
 
-export const getSortingStateParser = <TData>(
+export const getSortingStateParser = <TData extends RowData>(
   columnIds?: string[] | Set<string>,
 ) => {
   const validKeys = columnIds
@@ -59,7 +60,7 @@ const filterItemSchema = z.object({
 
 export type FilterItemSchema = z.infer<typeof filterItemSchema>;
 
-export const getFiltersStateParser = <TData>(
+export const getFiltersStateParser = <TData extends RowData>(
   columnIds?: string[] | Set<string>,
 ) => {
   const validKeys = columnIds

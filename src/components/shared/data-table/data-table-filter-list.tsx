@@ -1,6 +1,7 @@
 "use client";
 
-import type { Column, ColumnMeta, Table } from "@tanstack/react-table";
+import type { Column, ReactTable, RowData } from "@tanstack/react-table";
+import type { AppColumnMeta, AppTableFeatures } from "@/lib/app-table-features";
 import {
   CalendarIcon,
   Check,
@@ -77,17 +78,17 @@ const THROTTLE_MS = 50;
 const FILTER_SHORTCUT_KEY = "f";
 const REMOVE_FILTER_SHORTCUTS = ["backspace", "delete"];
 
-interface DataTableFilterListProps<TData> extends ComponentProps<
-  typeof PopoverContent
-> {
-  table: Table<TData>;
+interface DataTableFilterListProps<
+  TData extends RowData,
+> extends ComponentProps<typeof PopoverContent> {
+  table: ReactTable<AppTableFeatures, TData>;
   debounceMs?: number;
   throttleMs?: number;
   shallow?: boolean;
   disabled?: boolean;
 }
 
-export function DataTableFilterList<TData>({
+export function DataTableFilterList<TData extends RowData>({
   table,
   debounceMs = DEBOUNCE_MS,
   throttleMs = THROTTLE_MS,
@@ -328,13 +329,13 @@ export function DataTableFilterList<TData>({
   );
 }
 
-interface DataTableFilterItemProps<TData> {
+interface DataTableFilterItemProps<TData extends RowData> {
   filter: ExtendedColumnFilter<TData>;
   index: number;
   filterItemId: string;
   joinOperator: JoinOperator;
   setJoinOperator: (value: JoinOperator) => void;
-  columns: Column<TData>[];
+  columns: Column<AppTableFeatures, TData>[];
   onFilterUpdate: (
     filterId: string,
     updates: Partial<Omit<ExtendedColumnFilter<TData>, "filterId">>,
@@ -342,7 +343,7 @@ interface DataTableFilterItemProps<TData> {
   onFilterRemove: (filterId: string) => void;
 }
 
-function DataTableFilterItem<TData>({
+function DataTableFilterItem<TData extends RowData>({
   filter,
   index,
   filterItemId,
@@ -562,7 +563,7 @@ function DataTableFilterItem<TData>({
   );
 }
 
-function onFilterInputRender<TData>({
+function onFilterInputRender<TData extends RowData>({
   filter,
   inputId,
   column,
@@ -573,8 +574,8 @@ function onFilterInputRender<TData>({
 }: {
   filter: ExtendedColumnFilter<TData>;
   inputId: string;
-  column: Column<TData>;
-  columnMeta?: ColumnMeta<TData, unknown>;
+  column: Column<AppTableFeatures, TData>;
+  columnMeta?: AppColumnMeta;
   onFilterUpdate: (
     filterId: string,
     updates: Partial<Omit<ExtendedColumnFilter<TData>, "filterId">>,

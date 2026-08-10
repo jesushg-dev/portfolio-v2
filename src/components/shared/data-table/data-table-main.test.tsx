@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
-import type { Table } from "@tanstack/react-table";
+import type { ReactTable, RowData } from "@tanstack/react-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { DataTable } from "./data-table";
+import { createMockSubscribe } from "@/test-utils/mock-table-subscribe";
 
 function makeMockTable(opts?: {
   headers?: {
@@ -66,6 +68,21 @@ function makeMockTable(opts?: {
   }));
 
   return {
+    FlexRender: ({
+      header,
+      cell,
+    }: {
+      header?: (typeof headerGroup.headers)[number];
+      cell?: ReturnType<(typeof mockRows)[number]["getVisibleCells"]>[number];
+    }) => {
+      if (header) {
+        return header.isPlaceholder ? null : header.column.columnDef.header();
+      }
+      if (cell) {
+        return cell.column.columnDef.cell();
+      }
+      return null;
+    },
     getHeaderGroups: () => [headerGroup],
     getRowModel: () => ({ rows: mockRows }),
     getAllColumns: () => headers.map((h) => ({ id: h.id })),
@@ -73,11 +90,15 @@ function makeMockTable(opts?: {
       rows: new Array(opts?.selectedRowsCount ?? 1),
     }),
     getFilteredRowModel: () => ({ rows: mockRows }),
-    getState: () => ({ pagination: { pageIndex: 0, pageSize: 10 } }),
+    state: { pagination: { pageIndex: 0, pageSize: 10 } },
     getPageCount: () => 1,
     getCanPreviousPage: () => false,
     getCanNextPage: () => false,
-  } as unknown as Table<unknown>;
+    Subscribe: createMockSubscribe({
+      pagination: { pageIndex: 0, pageSize: 10 },
+      rowSelection: {},
+    }),
+  } as unknown as ReactTable<AppTableFeatures, RowData>;
 }
 
 describe("DataTable component", () => {

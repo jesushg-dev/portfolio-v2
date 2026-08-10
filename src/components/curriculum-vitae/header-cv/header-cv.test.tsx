@@ -8,7 +8,7 @@ import {
   mockAppLanguages,
   mockCvPreviewData,
 } from "@/test-utils/fixtures/cv-data";
-import { mapCvDataToLocalized } from "../types";
+import { mapCvDataToLocalized, type CvData } from "../types";
 
 interface RawHeaderTranslation {
   appLanguageId?: string;
@@ -42,7 +42,11 @@ function getLocalizedHeader(header: RawHeader | null) {
       })),
     },
   };
-  return mapCvDataToLocalized(mockData, mockAppLanguages, "en").header;
+  return mapCvDataToLocalized(
+    mockData as unknown as CvData,
+    mockAppLanguages,
+    "en",
+  ).header;
 }
 
 describe("ClientImage", () => {

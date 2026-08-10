@@ -3,9 +3,10 @@
 import { useState, type FC } from "react";
 import Image from "next/image";
 import { AiFillGithub, AiFillEye } from "react-icons/ai";
-import { ArrowUpRight, FolderCode, Zap } from "lucide-react";
+import { FolderCode, Zap } from "lucide-react";
+// import { ArrowUpRight } from "lucide-react";
+// import { Link } from "@/i18n/routing";
 
-import { Link } from "@/i18n/routing";
 import { cloudinaryLoader } from "@/utils/tools/image";
 import { type ProjectType } from "@/utils/interfaces/types";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
@@ -164,7 +165,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
           </ul>
         ) : null}
 
-        {/* CTA Case Study Link with arrow animation */}
+        {/* CTA Case Study Link with arrow animation (Disabled until case study feature is complete)
         {caseStudyEnabled && slug ? (
           <Link
             href={{
@@ -178,6 +179,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
             <ArrowUpRight className="size-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
           </Link>
         ) : null}
+        */}
       </div>
     </article>
   );

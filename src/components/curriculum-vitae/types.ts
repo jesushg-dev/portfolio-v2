@@ -169,7 +169,7 @@ export function mapCvDataToLocalized(
     text: resolver(ai.translations, "text"),
   }));
 
-  const personalReferences = data.personalReferences.map((pr) => ({
+  const personalReferences = (data.personalReferences ?? []).map((pr) => ({
     id: pr.id,
     name: pr.name,
     contact: pr.contact,
