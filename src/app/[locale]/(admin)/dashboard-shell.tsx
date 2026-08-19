@@ -23,6 +23,7 @@ import {
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 import ThemeSelectorLazy from "@/components/app-layout/app-header/theme-selector-lazy";
+import LocaleSelector from "@/components/app-layout/app-header/locale-selector";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 
 interface IDashboardShellProps {
@@ -301,6 +302,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
             </div>
 
             <div className="flex items-center gap-3 pl-4">
+              <LocaleSelector />
               <button
                 type="button"
                 aria-label={t("toggleThemeAria")}

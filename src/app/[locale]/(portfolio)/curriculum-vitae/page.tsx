@@ -1,5 +1,3 @@
-import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
 
 export { generateMetadata } from "./metadata";
 
@@ -21,7 +19,6 @@ export default async function CvPage({
 }: ICvPageSearchProps) {
   const { locale } = await params;
   const { pdf, paginate, design } = await searchParams;
-  setRequestLocale(locale as Locale);
 
   return (
     <CvPageView

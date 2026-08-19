@@ -1,7 +1,7 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Building2, Plus } from "lucide-react";
 
 import { DashboardStats } from "@/features/job-tracker/components/dashboard-stats";
@@ -22,7 +22,6 @@ interface Props {
 
 const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
   const [{ locale }, search] = await Promise.all([params, searchParams]);
-  setRequestLocale(locale as Locale);
 
   const page = typeof search.page === "string" ? parseInt(search.page) || 1 : 1;
   const perPage =

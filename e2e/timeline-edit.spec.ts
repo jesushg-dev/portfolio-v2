@@ -59,7 +59,8 @@ test.describe("timeline edit and data integrity", () => {
     await expect(orgInput).toHaveValue(tempTimelineItem.organization);
 
     const updatedOrg = `${tempTimelineItem.organization} (Updated)`;
-    await orgInput.fill(updatedOrg);
+    await orgInput.clear();
+    await orgInput.pressSequentially(updatedOrg, { delay: 10 });
     await orgInput.press("Tab");
 
     const updateResponse = page.waitForResponse(
@@ -69,7 +70,9 @@ test.describe("timeline edit and data integrity", () => {
       { timeout: 30_000 },
     );
 
-    await page.locator("#timeline-form-submit").click();
+    const submitBtn = page.locator("#timeline-form-submit");
+    await expect(submitBtn).toBeEnabled({ timeout: 5_000 });
+    await submitBtn.click();
     await updateResponse;
 
     // 4. Verify updated organization in list

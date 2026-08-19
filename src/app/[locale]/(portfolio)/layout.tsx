@@ -2,8 +2,6 @@ import { type ReactNode } from "react";
 import "@/app/globals.css";
 
 import { headers } from "next/headers";
-import { setRequestLocale } from "next-intl/server";
-import type { Locale } from "next-intl";
 
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
@@ -15,14 +13,9 @@ export const dynamic = "force-dynamic";
 
 export default async function RootLayout({
   children,
-  params,
 }: {
   children: ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  setRequestLocale(locale as Locale);
-
   const isPdfMode = (await headers()).get(CV_PDF_MODE_HEADER) === "1";
 
   if (isPdfMode) {

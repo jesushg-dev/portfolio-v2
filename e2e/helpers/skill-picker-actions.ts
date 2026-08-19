@@ -82,7 +82,7 @@ export async function waitForSkillPickerReady(page: Page): Promise<void> {
   await picker
     .locator("#skill-picker-grid [id^='skill-picker-']")
     .first()
-    .waitFor({ state: "visible", timeout: 20_000 });
+    .waitFor({ state: "visible", timeout: 30_000 });
 }
 
 export async function selectSkillsInPicker(

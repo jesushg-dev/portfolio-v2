@@ -1,23 +1,10 @@
-import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 
 export { generateMetadata } from "./metadata";
 
 import HeaderArticle from "@/components/shared/header-article";
-import { type Locale as AppLocale, locales } from "@/i18n/config";
 
-interface PrivacyPageProps {
-  params: Promise<{ locale: AppLocale }>;
-}
-
-const isLocale = (value: string): value is AppLocale =>
-  (locales as readonly string[]).includes(value);
-
-export default async function PrivacyPage({ params }: PrivacyPageProps) {
-  const { locale } = await params;
-  if (!isLocale(locale)) return null;
-
-  setRequestLocale(locale);
+export default async function PrivacyPage() {
   const t = await getTranslations("legal.privacy");
 
   return (

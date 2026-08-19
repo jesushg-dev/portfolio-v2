@@ -1,7 +1,7 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { SoftSkillsList } from "@/features/soft-skills/components/soft-skills-list";
 import { getUserSoftSkillsWithLanguages } from "@/features/soft-skills/server/soft-skill-queries";
@@ -13,7 +13,6 @@ interface Props {
 
 const SoftSkillsAdminPage: FC<Props> = async ({ params, searchParams }) => {
   const [{ locale }, search] = await Promise.all([params, searchParams]);
-  setRequestLocale(locale as Locale);
 
   const page = typeof search.page === "string" ? parseInt(search.page) || 1 : 1;
   const perPage =

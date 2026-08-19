@@ -1,7 +1,6 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
 import type { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
 
 import CvEditor from "./cv-editor";
 
@@ -11,7 +10,6 @@ interface ICvPageProps {
 
 const CvPage: FC<ICvPageProps> = async ({ params }) => {
   const { locale } = await params;
-  setRequestLocale(locale as Locale);
 
   return <CvEditor defaultLocale={(locale as Locale) || "en"} />;
 };

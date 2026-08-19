@@ -2,8 +2,7 @@ import { type ReactNode } from "react";
 import "@/app/globals.css";
 
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
-import type { Locale } from "next-intl";
+import { getMessages } from "next-intl/server";
 
 export { generateMetadata } from "./metadata";
 
@@ -26,7 +25,6 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  setRequestLocale(locale as Locale);
 
   const heroData = await getCachedHeroPublic(locale as AppLocale);
   const lcpPhotoUrl = heroData?.photoUrl?.trim()

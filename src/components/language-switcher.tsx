@@ -1,14 +1,13 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import {
-  defaultLocale,
   type Locale,
   locales,
   localsDisplay,
 } from "@/i18n/config";
-import { useState, useRef, type KeyboardEvent, type RefObject } from "react";
+import { usePathname, useRouter } from "@/i18n/routing";
+import { useState, useRef, useTransition, type KeyboardEvent, type RefObject } from "react";
 import { useClickAway } from "@/hooks/use-click-away";
 
 export default function LanguageSwitcher() {
@@ -16,6 +15,7 @@ export default function LanguageSwitcher() {
   const router = useRouter();
   const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -23,17 +23,10 @@ export default function LanguageSwitcher() {
 
   const switchLocale = (newLocale: Locale) => {
     if (newLocale === locale) return;
-
-    const segments = pathname.split("/");
-
-    const currentPath =
-      locale === defaultLocale ? pathname : (segments.slice(2).join("/") ?? "");
-
-    const newPath = `/${newLocale}${currentPath ? `/${currentPath}` : ""}`;
-
-    const finalPath = newPath.replace(/\/+/g, "/");
-
-    router.push(finalPath);
+    startTransition(() => {
+      // @ts-expect-error - Next-Intl typing for dynamic routes returned by usePathname
+      router.replace(pathname, { locale: newLocale });
+    });
     setIsOpen(false);
   };
 
@@ -96,15 +89,15 @@ export default function LanguageSwitcher() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         onKeyDown={handleTriggerKeyDown}
-        className="flex items-center gap-2 rounded-md bg-gray-100 px-4 py-2 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"
+        disabled={isPending}
+        className="flex items-center gap-2 rounded-md bg-gray-100 px-4 py-2 hover:bg-gray-200 disabled:opacity-60 dark:bg-gray-800 dark:hover:bg-gray-700"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
         {localsDisplay[locale]}
         <svg
-          className={`h-4 w-4 transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""
+            }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

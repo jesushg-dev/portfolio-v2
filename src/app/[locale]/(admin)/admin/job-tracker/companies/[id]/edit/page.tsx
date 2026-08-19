@@ -1,6 +1,5 @@
 export { generateMetadata } from "./metadata";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import type { Locale } from "@/i18n/config";
+import { getTranslations } from "next-intl/server";
 
 import { CompanyForm } from "@/features/job-tracker/components/company-form";
 import { getCompanyEditPageData } from "@/features/job-tracker/server/job-tracker-queries";
@@ -8,10 +7,9 @@ import { getCompanyEditPageData } from "@/features/job-tracker/server/job-tracke
 export default async function EditCompanyPage({
   params,
 }: {
-  params: Promise<{ locale: string; id: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const { locale, id } = await params;
-  setRequestLocale(locale as Locale);
+  const { id } = await params;
 
   const [t, pageData] = await Promise.all([
     getTranslations("admin.jobTracker"),

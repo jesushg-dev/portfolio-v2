@@ -1,7 +1,6 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
-import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { Award, Briefcase, Code, Settings } from "lucide-react";
 
@@ -16,14 +15,7 @@ import {
 } from "@/components/ui/card";
 import { db } from "@/server/db";
 
-interface IDashboardPageProps {
-  params: Promise<{ locale: string }>;
-}
-
-const DashboardPage: FC<IDashboardPageProps> = async ({ params }) => {
-  const { locale } = await params;
-  setRequestLocale(locale as Locale);
-
+const DashboardPage: FC = async () => {
   const t = await getTranslations("admin.dashboard");
 
   const session = await auth.api.getSession({ headers: await headers() });

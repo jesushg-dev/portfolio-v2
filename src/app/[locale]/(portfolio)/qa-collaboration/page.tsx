@@ -6,8 +6,7 @@ import {
   Target,
   Users,
 } from "lucide-react";
-import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { ProcessBenefitsGrid } from "@/features/process-pages/components/process-benefits-grid";
 import { ProcessClosingCta } from "@/features/process-pages/components/process-closing-cta";
@@ -21,24 +20,10 @@ import {
   ProcessTerminalPanel,
   ProcessTestRunnerOutput,
 } from "@/features/process-pages/components/process-terminal-panel";
-import { type Locale as AppLocale, locales } from "@/i18n/config";
 
 export { generateMetadata } from "./metadata";
 
-interface QaCollaborationRouteProps {
-  params: Promise<{ locale: AppLocale }>;
-}
-
-const isLocale = (value: string): value is AppLocale =>
-  (locales as readonly string[]).includes(value);
-
-export default async function QaCollaborationPage({
-  params,
-}: QaCollaborationRouteProps) {
-  const { locale } = await params;
-  if (!isLocale(locale)) notFound();
-
-  setRequestLocale(locale);
+export default async function QaCollaborationPage() {
   const t = await getTranslations("main.qaCollaboration");
 
   return (

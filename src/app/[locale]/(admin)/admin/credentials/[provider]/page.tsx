@@ -1,20 +1,18 @@
 export { generateMetadata } from "./metadata";
 import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
-import type { Locale } from "@/i18n/config";
 import { IntegrationModalPanel } from "@/features/integrations/components/integration-modal-panel";
 import { isIntegrationProvider } from "@/features/integrations/lib/integration-paths";
 
 interface IntegrationProviderPageProps {
-  params: Promise<{ locale: string; provider: string }>;
+  params: Promise<{ provider: string }>;
 }
 
 export default async function IntegrationProviderPage({
   params,
 }: IntegrationProviderPageProps) {
-  const { locale, provider } = await params;
-  setRequestLocale(locale as Locale);
+  const { provider } = await params;
 
   if (!isIntegrationProvider(provider)) {
     notFound();

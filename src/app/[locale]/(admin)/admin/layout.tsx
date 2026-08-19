@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages } from "next-intl/server";
 import { headers } from "next/headers";
-import type { Locale } from "next-intl";
+
+import type { Locale } from "@/i18n/config";
 
 import { auth } from "@/lib/auth";
 import { redirectToLogin } from "@/lib/auth-redirect";
@@ -31,7 +32,6 @@ export default async function AdminLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  setRequestLocale(locale as Locale);
 
   const session = await auth.api.getSession({ headers: await headers() });
   const userId = session?.user?.id;

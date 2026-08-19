@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
-import type { Locale } from "next-intl";
+import type { Locale } from "@/i18n/config";
 
 import { getSkillDetailCached } from "@/features/home/components/skills/get-skill-detail";
 import { SkillDetailPageView } from "@/features/home/components/skills/skill-detail-page-view";
@@ -20,7 +19,6 @@ export default async function SkillDetailPage({
   params,
 }: SkillDetailPageProps) {
   const { locale, slug } = await params;
-  setRequestLocale(locale);
 
   const detail = await getSkillDetailCached(slug, locale);
   if (!detail) notFound();

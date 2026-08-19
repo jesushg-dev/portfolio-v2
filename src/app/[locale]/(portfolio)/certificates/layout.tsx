@@ -1,8 +1,7 @@
 import { type ReactNode } from "react";
 import "@/app/globals.css";
 
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import type { Locale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
 
@@ -10,13 +9,9 @@ export const dynamic = "force-dynamic";
 
 export default async function RootLayout({
   children,
-  params,
 }: {
   children: ReactNode;
-  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
-  setRequestLocale(locale as Locale);
   const t = await getTranslations("certification");
 
   return (

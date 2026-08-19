@@ -1,7 +1,7 @@
 import createIntlMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 
-import { routing } from "./i18n/routing";
+import { routing } from "./i18n/routing-config";
 import {
   CV_PDF_MODE_HEADER,
   TENANT_USERNAME_HEADER,

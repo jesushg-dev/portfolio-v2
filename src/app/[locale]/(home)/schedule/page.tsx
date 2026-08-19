@@ -1,4 +1,3 @@
-import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "next-intl";
 
 export { generateMetadata } from "./metadata";
@@ -13,7 +12,6 @@ export default async function Page({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  setRequestLocale(locale as Locale);
 
   const calendlyUrl = await getScheduleCalendlyUrl();
   if (!calendlyUrl) {

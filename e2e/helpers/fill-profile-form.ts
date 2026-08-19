@@ -283,7 +283,11 @@ export async function fillProfileConsoleFromFixture(
 }
 
 export async function getHeroTitlesMine(page: Page): Promise<HeroTitlesMine> {
-  return trpcQuery<HeroTitlesMine>(page, "profileAdmin.getHeroTitlesMine");
+  const editor = await trpcQuery<{ titles: HeroTitlesMine["titles"] }>(
+    page,
+    "profileAdmin.getHeroEditor",
+  );
+  return { titles: editor.titles };
 }
 
 export async function getTerminalMine(

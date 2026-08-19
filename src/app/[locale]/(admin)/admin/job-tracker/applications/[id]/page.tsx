@@ -1,5 +1,4 @@
 export { generateMetadata } from "./metadata";
-import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 
 import { ApplicationDetailView } from "@/features/job-tracker/components/application-detail-view";
@@ -16,7 +15,6 @@ export default async function ApplicationDetailPage({
 }) {
   const { locale, id } = await params;
   const { tab } = await searchParams;
-  setRequestLocale(locale as Locale);
 
   const defaultTab: ApplicationDetailTab =
     tab === "tailor" || tab === "timeline" || tab === "details"

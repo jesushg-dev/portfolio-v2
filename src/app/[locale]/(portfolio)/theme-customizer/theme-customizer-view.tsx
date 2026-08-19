@@ -2,7 +2,7 @@
 
 import { type FC, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import {
   ArrowLeft,
   Save,
@@ -326,7 +326,7 @@ const ThemeCustomizerView: FC = () => {
                   className={cn(
                     "border-border flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border text-sm font-semibold transition-all",
                     !baseIsDark &&
-                      "border-primary bg-primary/5 ring-primary/20 ring-1",
+                    "border-primary bg-primary/5 ring-primary/20 ring-1",
                   )}
                 >
                   <Sun className="size-4 text-orange-500" />
@@ -338,7 +338,7 @@ const ThemeCustomizerView: FC = () => {
                   className={cn(
                     "border-border flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border text-sm font-semibold transition-all",
                     baseIsDark &&
-                      "border-primary bg-primary/5 ring-primary/20 ring-1",
+                    "border-primary bg-primary/5 ring-primary/20 ring-1",
                   )}
                 >
                   <Moon className="size-4 text-blue-400" />

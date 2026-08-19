@@ -1,9 +1,9 @@
 "use client";
 
 import { use } from "react";
-import { useRouter } from "next/navigation";
 
 import SkillModal from "@/features/home/components/skills/skill-modal";
+import { useRouter } from "@/i18n/routing";
 
 interface SkillModalRouteProps {
   params: Promise<{

@@ -21,10 +21,9 @@ describe("SkillsPage", () => {
   });
 
   it("renders page title, subtitle, and list component", async () => {
-    const params = Promise.resolve({ locale: "en" });
     const searchParams = Promise.resolve({});
 
-    const Page = await SkillsPage({ params, searchParams });
+    const Page = await SkillsPage({ searchParams });
     render(Page as React.ReactElement);
 
     expect(screen.getByText("title")).toBeInTheDocument();
@@ -33,10 +32,9 @@ describe("SkillsPage", () => {
   });
 
   it("parses page and perPage from searchParams", async () => {
-    const params = Promise.resolve({ locale: "en" });
     const searchParams = Promise.resolve({ page: "2", perPage: "20" });
 
-    const Page = await SkillsPage({ params, searchParams });
+    const Page = await SkillsPage({ searchParams });
     render(Page as React.ReactElement);
 
     expect(getUserSkillsWithLanguages).toHaveBeenCalledWith({

@@ -1,5 +1,4 @@
 import type { FC } from "react";
-import { setRequestLocale } from "next-intl/server";
 
 import type { Locale } from "next-intl";
 
@@ -16,8 +15,7 @@ interface ICvPageProps {
 }
 
 const CvPage: FC<ICvPageProps> = async ({ params }) => {
-  const { locale, slug } = await params;
-  setRequestLocale(locale);
+  const { slug } = await params;
 
   return <Certification slug={slug} />;
 };

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
@@ -24,7 +23,6 @@ export default async function TimelinePage({ params }: TimelinePageProps) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  setRequestLocale(locale);
   const t = await getTranslations("main.timeline");
 
   const items = await api.portfolio.getTimelinePublic({ locale });

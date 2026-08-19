@@ -1,6 +1,5 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
-import { setRequestLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
 
 import type { Locale } from "@/i18n/config";
@@ -17,7 +16,6 @@ const SpotifyAdminPage: FC<ISpotifyAdminPageProps> = async ({
   searchParams,
 }) => {
   const { locale } = await params;
-  setRequestLocale(locale as Locale);
 
   const sp = await searchParams;
   const query = new URLSearchParams();

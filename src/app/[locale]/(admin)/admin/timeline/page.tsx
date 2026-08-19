@@ -1,6 +1,6 @@
 export { generateMetadata } from "./metadata";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { TimelineList } from "@/features/timeline/components/timeline-list";
 import { getUserTimelineWithLanguages } from "@/features/timeline/server/timeline-queries";
@@ -12,7 +12,6 @@ interface Props {
 
 export default async function TimelinePage({ params, searchParams }: Props) {
   const [{ locale }, search] = await Promise.all([params, searchParams]);
-  setRequestLocale(locale as Locale);
 
   const page = typeof search.page === "string" ? parseInt(search.page) || 1 : 1;
   const perPage =

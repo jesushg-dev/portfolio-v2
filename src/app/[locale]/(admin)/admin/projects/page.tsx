@@ -1,7 +1,7 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { ProjectsList } from "@/features/projects/components/projects-list";
 import { getUserProjectsWithLanguages } from "@/features/projects/server/project-queries";
@@ -13,7 +13,6 @@ interface Props {
 
 const ProjectsPage: FC<Props> = async ({ params, searchParams }) => {
   const [{ locale }, search] = await Promise.all([params, searchParams]);
-  setRequestLocale(locale as Locale);
 
   const page = typeof search.page === "string" ? parseInt(search.page) || 1 : 1;
   const perPage =

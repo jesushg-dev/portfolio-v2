@@ -30,10 +30,11 @@ test.describe("jobs application CRUD and integrity", () => {
     await positionInput.fill(testPosition);
 
     // 4. Select Company via Combobox
-    const companyCombobox = page.locator('button[role="combobox"]').first();
+    const dialog = page.locator('[data-slot="dialog-portal"]');
+    const companyCombobox = dialog.locator('button[role="combobox"]').first();
     await companyCombobox.click();
 
-    const firstCompanyItem = page
+    const firstCompanyItem = dialog
       .locator('[data-slot="command-item"], [role="option"]')
       .first();
     if (
@@ -41,11 +42,11 @@ test.describe("jobs application CRUD and integrity", () => {
     ) {
       await firstCompanyItem.click();
     } else {
-      const commandInput = page
+      const commandInput = dialog
         .locator('input[placeholder*="empresa"], input[placeholder*="company"]')
         .first();
       await commandInput.fill(`E2E Tech Corp ${uniqueId}`);
-      const createItem = page.locator('[data-slot="command-item"]').first();
+      const createItem = dialog.locator('[data-slot="command-item"]').first();
       await createItem.click();
     }
 

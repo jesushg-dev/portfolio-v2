@@ -6,8 +6,7 @@ import {
   Target,
   Zap,
 } from "lucide-react";
-import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { ProcessBenefitsGrid } from "@/features/process-pages/components/process-benefits-grid";
 import { ProcessClosingCta } from "@/features/process-pages/components/process-closing-cta";
@@ -19,22 +18,10 @@ import { ProcessPageShell } from "@/features/process-pages/components/process-se
 import { ProcessStepsAccordion } from "@/features/process-pages/components/process-steps-accordion";
 import { ProcessToolkitSection } from "@/features/process-pages/components/process-toolkit-section";
 import { ProcessTerminalPanel } from "@/features/process-pages/components/process-terminal-panel";
-import { type Locale as AppLocale, locales } from "@/i18n/config";
 
 export { generateMetadata } from "./metadata";
 
-interface HowIUseAiRouteProps {
-  params: Promise<{ locale: AppLocale }>;
-}
-
-const isLocale = (value: string): value is AppLocale =>
-  (locales as readonly string[]).includes(value);
-
-export default async function HowIUseAiPage({ params }: HowIUseAiRouteProps) {
-  const { locale } = await params;
-  if (!isLocale(locale)) notFound();
-
-  setRequestLocale(locale);
+export default async function HowIUseAiPage() {
   const t = await getTranslations("main.howIUseAi");
 
   return (

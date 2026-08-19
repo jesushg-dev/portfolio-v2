@@ -1,5 +1,5 @@
 export { generateMetadata } from "./metadata";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/config";
 
 import { EventForm } from "@/features/job-tracker/components/event-form";
@@ -13,7 +13,6 @@ export default async function NewEventPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const [{ locale }, search] = await Promise.all([params, searchParams]);
-  setRequestLocale(locale as Locale);
 
   const applicationId =
     typeof search.applicationId === "string" ? search.applicationId : undefined;
