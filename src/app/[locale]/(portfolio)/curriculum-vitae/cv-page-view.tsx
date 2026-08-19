@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import CvPreview from "@/components/curriculum-vitae/cv-preview";
+import CvAtsPreview from "@/components/curriculum-vitae/cv-ats-preview";
 import CvPageActions from "@/features/cv/components/cv-page-actions";
 import { cvPreviewFont } from "@/features/cv/lib/cv-preview-font";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
@@ -12,19 +13,29 @@ import { resolveTenant } from "@/lib/tenant/resolve";
 import { db } from "@/server/db";
 import type { Locale as AppLocale } from "@/i18n/config";
 import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
+import {
+  isValidCvDesign,
+  DEFAULT_CV_DESIGN,
+  type CvDesignId,
+} from "@/features/cv/lib/cv-design";
 
 interface CvPageViewProps {
   locale: string;
   pdfMode?: boolean;
   /** When true, PDF export uses US Letter pagination instead of one continuous page. */
   paginatePdfPages?: boolean;
+  design?: string;
 }
 
 const CvPageView: FC<CvPageViewProps> = async ({
   locale,
   pdfMode = false,
   paginatePdfPages = false,
+  design: designParam,
 }) => {
+  const design: CvDesignId = isValidCvDesign(designParam)
+    ? designParam
+    : DEFAULT_CV_DESIGN;
   const t = await getTranslations("curriculum");
 
   const tenant = await resolveTenant();
@@ -120,8 +131,12 @@ const CvPageView: FC<CvPageViewProps> = async ({
     (aboutMe ? field(aboutMe.translations, "aboutMe") : null);
   const downloadFileName = `CV - ${header?.fullName ?? profile?.username ?? "user"}.pdf`;
   const paginateQuery = paginatePdfPages ? "&paginate=1" : "";
+  const designQuery = design !== DEFAULT_CV_DESIGN ? `&design=${design}` : "";
   const cvDownloadHref = header
-    ? `/api/cv/pdf?locale=${currentLocale}${paginateQuery}`
+    ? `/api/cv/pdf?locale=${currentLocale}${paginateQuery}${designQuery}`
+    : null;
+  const docxDownloadHref = header
+    ? `/api/cv/docx?locale=${currentLocale}`
     : null;
   const canSendByEmail =
     Boolean(header) &&
@@ -145,14 +160,20 @@ const CvPageView: FC<CvPageViewProps> = async ({
     currentLocale,
   );
 
+  const PreviewComponent = design === "ats" ? CvAtsPreview : CvPreview;
+
   if (pdfMode) {
     return (
       <div
         id="cv-public-preview"
         className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
       >
-        <CvPreview data={localizedData} aboutMeText={aboutMeText} pdfMode />
-        <div className="bg-cv h-4" aria-hidden />
+        <PreviewComponent
+          data={localizedData}
+          aboutMeText={aboutMeText}
+          pdfMode
+        />
+        {design !== "ats" ? <div className="bg-cv h-4" aria-hidden /> : null}
       </div>
     );
   }
@@ -164,10 +185,12 @@ const CvPageView: FC<CvPageViewProps> = async ({
           fullName={header?.fullName ?? profile?.username ?? "user"}
           canSendByEmail={canSendByEmail}
           downloadHref={cvDownloadHref}
+          docxDownloadHref={docxDownloadHref}
           downloadFileName={downloadFileName}
           goBackLabel={t("actions.goBack")}
           downloadLabel={t("actions.download")}
           paginatePdfPages={paginatePdfPages}
+          design={design}
         />
       </div>
       <section className="page md:max-w-letter print:max-w-letter print:max-h-letter print:my-o my-6 mb-0 bg-gray-100 sm:mb-6 print:mx-0 print:overflow-hidden print:border-0 print:bg-white">
@@ -175,10 +198,14 @@ const CvPageView: FC<CvPageViewProps> = async ({
           id="cv-public-preview"
           className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
         >
-          <CvPreview data={localizedData} aboutMeText={aboutMeText} />
-          <div className="bg-cv p-4">
-            <p className="text-sm font-semibold text-white">{t("codedWith")}</p>
-          </div>
+          <PreviewComponent data={localizedData} aboutMeText={aboutMeText} />
+          {design !== "ats" ? (
+            <div className="bg-cv p-4">
+              <p className="text-sm font-semibold text-white">
+                {t("codedWith")}
+              </p>
+            </div>
+          ) : null}
         </div>
       </section>
     </div>

@@ -8,10 +8,11 @@ export async function getCvPdfDownload(
   username: string,
   locale: Locale,
   fallbackLocale: Locale,
-  options?: { paginatePages?: boolean },
+  options?: { paginatePages?: boolean; design?: string },
 ) {
   return resolveCvPdfAsset(userId, username, locale, fallbackLocale, {
     paginatePages: options?.paginatePages ?? false,
     includeBuffer: true,
+    design: options?.design,
   });
 }

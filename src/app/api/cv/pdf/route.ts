@@ -24,6 +24,7 @@ export async function GET(request: Request) {
     ? localeParam
     : tenant.defaultLocale;
   const paginatePages = searchParams.get("paginate") === "1";
+  const design = searchParams.get("design") ?? undefined;
 
   try {
     const result = await getCvPdfDownload(
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
       tenant.username,
       locale,
       tenant.defaultLocale,
-      { paginatePages },
+      { paginatePages, design },
     );
 
     if (!result?.buffer && !result?.url) {

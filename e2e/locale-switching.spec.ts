@@ -16,7 +16,7 @@ test.describe("public locale switching", () => {
 
       const snapshot = localeSnapshots[locale];
       await expect(
-        page.getByRole("button", { name: snapshot.navHome, exact: true }),
+        page.getByRole("button", { name: snapshot.navAbout, exact: true }),
       ).toBeVisible();
 
       await page.locator("#about").scrollIntoViewIfNeeded();

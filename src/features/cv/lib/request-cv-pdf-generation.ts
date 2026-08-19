@@ -11,6 +11,7 @@ const requestSchema = z.object({
   tenantUsername: z.string().optional(),
   baseUrl: z.string().url().optional(),
   paginatePages: z.boolean().optional(),
+  design: z.string().optional(),
 });
 
 export interface CvPdfGenerationRequest {
@@ -18,6 +19,7 @@ export interface CvPdfGenerationRequest {
   tenantUsername?: string;
   baseUrl?: string;
   paginatePages?: boolean;
+  design?: string;
 }
 
 export async function requestCvPdfGeneration(
@@ -35,6 +37,7 @@ export async function requestCvPdfGeneration(
     tenantUsername: options.tenantUsername,
     baseUrl: options.baseUrl,
     paginatePages: options.paginatePages,
+    design: options.design,
   });
 
   const response = await fetch(

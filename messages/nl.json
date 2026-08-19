@@ -193,8 +193,16 @@
     },
     "actions": {
       "download": "CV downloaden",
+      "downloadDocx": "DOCX downloaden",
       "print": "CV afdrukken",
       "goBack": "Terug"
+    },
+    "designs": {
+      "default": "Visueel",
+      "ats": "ATS-Friendly"
+    },
+    "ats": {
+      "present": "Heden"
     },
     "telephone": "tel.",
     "codedWith": "Deze CV is gemaakt met ReactJS.",

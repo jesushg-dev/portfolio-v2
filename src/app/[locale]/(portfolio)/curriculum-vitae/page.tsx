@@ -12,7 +12,7 @@ interface ICvPageProps {
 }
 
 interface ICvPageSearchProps extends ICvPageProps {
-  searchParams: Promise<{ pdf?: string; paginate?: string }>;
+  searchParams: Promise<{ pdf?: string; paginate?: string; design?: string }>;
 }
 
 export default async function CvPage({
@@ -20,7 +20,7 @@ export default async function CvPage({
   searchParams,
 }: ICvPageSearchProps) {
   const { locale } = await params;
-  const { pdf, paginate } = await searchParams;
+  const { pdf, paginate, design } = await searchParams;
   setRequestLocale(locale as Locale);
 
   return (
@@ -28,6 +28,7 @@ export default async function CvPage({
       locale={locale}
       pdfMode={pdf === "1"}
       paginatePdfPages={paginate === "1"}
+      design={design}
     />
   );
 }

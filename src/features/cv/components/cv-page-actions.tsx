@@ -7,10 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { FaDownload, FaHome } from "react-icons/fa";
+import { FaDownload, FaFileWord, FaHome } from "react-icons/fa";
 import { Loader2, Mail, Send, X } from "lucide-react";
 import { TRPCClientError } from "@trpc/client";
 import { AnimatePresence, motion } from "motion/react";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 
 import { Link } from "@/i18n/routing";
 import { Form, FormField } from "@/components/ui/form";
@@ -18,15 +19,22 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
+import {
+  CV_DESIGNS,
+  cvDesignRegistry,
+  type CvDesignId,
+} from "@/features/cv/lib/cv-design";
 
 interface CvPageActionsProps {
   fullName: string;
   canSendByEmail: boolean;
   downloadHref: string | null;
+  docxDownloadHref: string | null;
   downloadFileName: string;
   goBackLabel: string;
   downloadLabel: string;
   paginatePdfPages?: boolean;
+  design?: CvDesignId;
 }
 
 function getTrpcErrorCode(data: unknown): string | null {
@@ -49,26 +57,34 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
   fullName,
   canSendByEmail,
   downloadHref,
+  docxDownloadHref,
   downloadFileName,
   goBackLabel,
   downloadLabel,
   paginatePdfPages = false,
+  design: serverDesign = "default",
 }) => {
   const locale = useLocale();
-  const t = useTranslations("curriculum.pdfDelivery");
+  const t = useTranslations("curriculum");
+  const tPdf = useTranslations("curriculum.pdfDelivery");
   const [emailOpen, setEmailOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const sendPdf = api.cvPublic.sendPdfByEmail.useMutation();
+
+  const [design, setDesign] = useQueryState(
+    "design",
+    parseAsStringLiteral(CV_DESIGNS).withDefault(serverDesign),
+  );
 
   const emailSchema = useMemo(
     () =>
       z.object({
         email: z
           .string()
-          .min(1, t("form.email.errors.required"))
-          .email(t("form.email.errors.pattern")),
+          .min(1, tPdf("form.email.errors.required"))
+          .email(tPdf("form.email.errors.pattern")),
       }),
-    [t],
+    [tPdf],
   );
 
   type EmailInput = z.infer<typeof emailSchema>;
@@ -93,16 +109,16 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
           });
           form.reset();
           setEmailOpen(false);
-          toast.success(t("form.success"));
+          toast.success(tPdf("form.success"));
         } catch (error) {
           const message = isRateLimitTrpcError(error)
-            ? t("form.rateLimited")
-            : t("form.error");
+            ? tPdf("form.rateLimited")
+            : tPdf("form.error");
           toast.error(message);
         }
       });
     },
-    [form, locale, paginatePdfPages, sendPdf, t],
+    [form, locale, paginatePdfPages, sendPdf, tPdf],
   );
 
   const isSending = isPending || sendPdf.isPending;
@@ -118,6 +134,25 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
         </Link>
 
         <div className="flex flex-wrap items-center gap-2">
+          <div className="border-border inline-flex overflow-hidden rounded-lg border shadow-sm">
+            {cvDesignRegistry.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                onClick={() => {
+                  void setDesign(entry.id);
+                }}
+                className={`pressable min-h-11 px-4 py-2 text-sm font-medium transition-colors ${
+                  design === entry.id
+                    ? "bg-primary-800 text-white"
+                    : "bg-card text-foreground hover:bg-muted"
+                }`}
+              >
+                {t(`designs.${entry.id}`)}
+              </button>
+            ))}
+          </div>
+
           {downloadHref ? (
             <a
               href={downloadHref}
@@ -125,6 +160,17 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
               className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg"
             >
               {downloadLabel} <FaDownload className="size-4" aria-hidden />
+            </a>
+          ) : null}
+
+          {docxDownloadHref ? (
+            <a
+              href={docxDownloadHref}
+              download={downloadFileName.replace(/\.pdf$/i, ".docx")}
+              className="pressable border-primary-800 text-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium shadow-lg hover:text-white"
+            >
+              {t("actions.downloadDocx")}{" "}
+              <FaFileWord className="size-4" aria-hidden />
             </a>
           ) : null}
 
@@ -142,7 +188,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
               ) : (
                 <Mail className="size-4" aria-hidden />
               )}
-              {emailOpen ? t("toggleClose") : t("toggleSend")}
+              {emailOpen ? tPdf("toggleClose") : tPdf("toggleSend")}
             </Button>
           ) : null}
         </div>
@@ -177,10 +223,10 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
             >
               <div className="mb-4">
                 <h2 className="text-foreground text-base font-semibold">
-                  {t("title")}
+                  {tPdf("title")}
                 </h2>
                 <p className="text-muted-foreground mt-1 text-sm">
-                  {t("description")}
+                  {tPdf("description")}
                 </p>
               </div>
 
@@ -194,7 +240,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
                     name="email"
                     render={({ field }) => (
                       <FormItem
-                        label={t("form.email.label")}
+                        label={tPdf("form.email.label")}
                         inputId="cv-pdf-email"
                         className="flex-1"
                       >
@@ -209,7 +255,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
                           spellCheck={false}
                           autoFocus
                           disabled={isSending}
-                          placeholder={t("form.email.placeholder")}
+                          placeholder={tPdf("form.email.placeholder")}
                         />
                       </FormItem>
                     )}
@@ -226,13 +272,13 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
                     ) : (
                       <Send className="size-4" aria-hidden />
                     )}
-                    {isSending ? t("form.sending") : t("form.submit")}
+                    {isSending ? tPdf("form.sending") : tPdf("form.submit")}
                   </Button>
                 </FormRoot>
               </Form>
 
               <p className="text-muted-foreground mt-3 text-xs">
-                {t("footnote", { fullName })}
+                {tPdf("footnote", { fullName })}
               </p>
             </section>
           </motion.div>

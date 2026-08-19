@@ -128,7 +128,7 @@ const Footer = async () => {
               </li>
             </ul>
 
-            <h3 className="text-primary-foreground pt-3 text-sm font-semibold tracking-wide">
+            <h3 className="text-primary-foreground pt-3 text-base font-semibold tracking-wide">
               {t("titles.process")}
             </h3>
             <ul className="flex flex-col gap-0.5">

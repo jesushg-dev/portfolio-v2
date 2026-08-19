@@ -193,8 +193,16 @@
     },
     "actions": {
       "download": "Download CV",
+      "downloadDocx": "Download DOCX",
       "print": "Print CV",
       "goBack": "Go Back"
+    },
+    "designs": {
+      "default": "Visual",
+      "ats": "ATS-Friendly"
+    },
+    "ats": {
+      "present": "Present"
     },
     "telephone": "tel.",
     "codedWith": "This CV was created using ReactJS.",

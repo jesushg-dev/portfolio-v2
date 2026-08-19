@@ -3,23 +3,23 @@ import type { Locale } from "../../src/i18n/config";
 export const localeSnapshots: Record<
   Locale,
   {
-    navHome: string;
+    navAbout: string;
     aboutSnippet: string;
     skillsTabBackend: string;
   }
 > = {
   en: {
-    navHome: "Home",
+    navAbout: "About",
     aboutSnippet: "Fullstack Lead",
     skillsTabBackend: "Backend",
   },
   es: {
-    navHome: "Inicio",
+    navAbout: "Sobre mí",
     aboutSnippet: "Líder Fullstack",
     skillsTabBackend: "Backend",
   },
   nl: {
-    navHome: "Start",
+    navAbout: "Over mij",
     aboutSnippet: "Fullstack Lead",
     skillsTabBackend: "Backend",
   },

@@ -11,12 +11,17 @@ export interface GenerateCvPdfOptions {
   tenantUsername?: string;
   baseUrl?: string;
   paginatePages?: boolean;
+  design?: string;
 }
 
-function buildCvPreviewPath(locale: Locale, paginatePages?: boolean): string {
+function buildCvPreviewPath(
+  locale: Locale,
+  paginatePages?: boolean,
+  design?: string,
+): string {
   const paginateQuery = paginatePages ? "&paginate=1" : "";
-  // Always include the locale segment so Playwright renders the same language as the visitor.
-  return `/${locale}/curriculum-vitae?pdf=1${paginateQuery}`;
+  const designQuery = design && design !== "default" ? `&design=${design}` : "";
+  return `/${locale}/curriculum-vitae?pdf=1${paginateQuery}${designQuery}`;
 }
 
 const PDF_RESET_CSS = `
@@ -77,7 +82,7 @@ export async function generateCvPdfFromPreview(
   options: GenerateCvPdfOptions,
 ): Promise<Buffer> {
   const baseUrl = (options.baseUrl ?? getServerBaseUrl()).replace(/\/$/, "");
-  const targetUrl = `${baseUrl}${buildCvPreviewPath(options.locale, options.paginatePages)}`;
+  const targetUrl = `${baseUrl}${buildCvPreviewPath(options.locale, options.paginatePages, options.design)}`;
 
   const browser = await launchPdfBrowser();
 

@@ -155,14 +155,18 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ open, onOpenChange }) => {
   } = useThemeContext();
   const t = useTranslations("global.header");
 
-  const [customColors, setCustomColors] = useState<{ accent: string; surface: string; isDark: boolean } | null>(null);
+  const [customColors, setCustomColors] = useState<{
+    accent: string;
+    surface: string;
+    isDark: boolean;
+  } | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const primary = window.localStorage.getItem("custom-theme-primary");
     const background = window.localStorage.getItem("custom-theme-background");
     const isDark = window.localStorage.getItem("color-mode") === "dark";
-    
+
     const timer = setTimeout(() => {
       if (primary && background) {
         setCustomColors({ accent: primary, surface: background, isDark });
@@ -267,7 +271,7 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ open, onOpenChange }) => {
             <Link
               href={{ pathname: "/theme-customizer" }}
               onClick={() => onOpenChange(false)}
-              className="text-muted-foreground hover:text-primary text-xs underline py-1.5 px-3 transition-colors focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none"
+              className="text-muted-foreground hover:text-primary focus-visible:ring-ring px-3 py-1.5 text-xs underline transition-colors focus-visible:ring-2 focus-visible:outline-none"
             >
               {isCustomActive
                 ? t("themeDialog.editCustom")

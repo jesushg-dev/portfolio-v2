@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --spacing-11: 2.75rem;
+
   /* Shadcn semantic color bridge (uses this project's theme scales) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);

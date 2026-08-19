@@ -193,8 +193,16 @@
     },
     "actions": {
       "download": "Descargar CV",
+      "downloadDocx": "Descargar DOCX",
       "print": "Imprimir CV",
       "goBack": "Regresar"
+    },
+    "designs": {
+      "default": "Visual",
+      "ats": "ATS-Friendly"
+    },
+    "ats": {
+      "present": "Presente"
     },
     "telephone": "tel.",
     "codedWith": "Este CV fue creado con ReactJS.",

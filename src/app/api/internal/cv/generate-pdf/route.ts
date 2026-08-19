@@ -13,6 +13,7 @@ const requestSchema = z.object({
   tenantUsername: z.string().optional(),
   baseUrl: z.string().url().optional(),
   paginatePages: z.boolean().optional(),
+  design: z.string().optional(),
 });
 
 function isAuthorized(request: Request): boolean {

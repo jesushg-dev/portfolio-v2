@@ -5,6 +5,8 @@ import { headers } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "next-intl";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 import Layout from "@/components/app-layout";
 import TrpcProvider from "@/components/providers/trpc-provider";
 import { CV_PDF_MODE_HEADER } from "@/lib/tenant/headers";
@@ -29,7 +31,9 @@ export default async function RootLayout({
 
   return (
     <TrpcProvider>
-      <Layout>{children}</Layout>
+      <NuqsAdapter>
+        <Layout>{children}</Layout>
+      </NuqsAdapter>
     </TrpcProvider>
   );
 }

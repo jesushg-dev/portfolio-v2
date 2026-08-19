@@ -19,6 +19,7 @@ export interface ResolveCvPdfAssetOptions {
   paginatePages?: boolean;
   forceRegenerate?: boolean;
   includeBuffer?: boolean;
+  design?: string;
 }
 
 export interface ResolvedCvPdfAsset {
@@ -109,6 +110,7 @@ export async function resolveCvPdfAsset(
     locale,
     tenantUsername: username,
     paginatePages,
+    design: options?.design,
   });
 
   if (!(await isTenantUploadThingConfigured(userId))) {
