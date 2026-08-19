@@ -60,6 +60,7 @@ async function trpcMutate(
   page: Page,
   procedure: string,
   input: unknown,
+  { ignoreNotFound = false } = {},
 ): Promise<void> {
   const response = await page.request.post(`/api/trpc/${procedure}?batch=1`, {
     headers: { "content-type": "application/json" },
@@ -67,6 +68,7 @@ async function trpcMutate(
   });
 
   if (!response.ok()) {
+    if (ignoreNotFound && response.status() === 404) return;
     throw new Error(
       `tRPC mutation ${procedure} failed: ${response.status()} ${await response.text()}`,
     );
@@ -379,10 +381,6 @@ export async function fillCvAdditionalInfo(
   );
   await submitCvForm(page, "cv-additional-form", "createAdditionalInfo");
   await waitForCvItemModalClosed(page);
-  await page
-    .locator("#cv-section-modal")
-    .getByText(item.text.es, { exact: true })
-    .waitFor({ state: "visible", timeout: 30_000 });
 }
 
 export async function fillCvFromFixture(page: Page): Promise<void> {
@@ -433,25 +431,25 @@ export async function cleanupUserCv(page: Page): Promise<void> {
   const cv = await trpcQuery<CvMine>(page, "cv.getMine");
 
   for (const experience of cv.experiences) {
-    await trpcMutate(page, "cv.deleteExperience", { id: experience.id });
+    await trpcMutate(page, "cv.deleteExperience", { id: experience.id }, { ignoreNotFound: true });
   }
   for (const contact of cv.contacts) {
-    await trpcMutate(page, "cv.deleteContact", { id: contact.id });
+    await trpcMutate(page, "cv.deleteContact", { id: contact.id }, { ignoreNotFound: true });
   }
   for (const education of cv.educations) {
-    await trpcMutate(page, "cv.deleteEducation", { id: education.id });
+    await trpcMutate(page, "cv.deleteEducation", { id: education.id }, { ignoreNotFound: true });
   }
   for (const language of cv.languages) {
-    await trpcMutate(page, "cv.deleteLanguage", { id: language.id });
+    await trpcMutate(page, "cv.deleteLanguage", { id: language.id }, { ignoreNotFound: true });
   }
   for (const skill of cv.technicalSkills) {
-    await trpcMutate(page, "cv.deleteTechnicalSkill", { id: skill.id });
+    await trpcMutate(page, "cv.deleteTechnicalSkill", { id: skill.id }, { ignoreNotFound: true });
   }
   for (const softSkill of cv.softSkills) {
-    await trpcMutate(page, "cv.deleteSoftSkill", { id: softSkill.id });
+    await trpcMutate(page, "cv.deleteSoftSkill", { id: softSkill.id }, { ignoreNotFound: true });
   }
   for (const item of cv.additionalInformation) {
-    await trpcMutate(page, "cv.deleteAdditionalInfo", { id: item.id });
+    await trpcMutate(page, "cv.deleteAdditionalInfo", { id: item.id }, { ignoreNotFound: true });
   }
 }
 

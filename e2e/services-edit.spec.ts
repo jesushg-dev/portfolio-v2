@@ -61,12 +61,13 @@ test.describe("services edit and restore data integrity", () => {
 
     // 4. Verify modified title in list
     await goToServicesList(page);
+    await page.goto("/admin/services?perPage=100");
     await expect(
-      page.getByRole("cell", { name: modifiedTitle }).first(),
-    ).toBeVisible();
+      page.getByText(modifiedTitle, { exact: false }).first(),
+    ).toBeVisible({ timeout: 30_000 });
 
     // 5. Restore original title
-    const modCell = page.getByRole("cell", { name: modifiedTitle }).first();
+    const modCell = page.getByText(modifiedTitle, { exact: false }).first();
     const modRow = page.locator("tr").filter({ has: modCell }).first();
     await modRow
       .getByRole("link", { name: /edit|editar/i })

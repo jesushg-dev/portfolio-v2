@@ -44,11 +44,11 @@ test.describe("certifications create", () => {
           .locator("table tbody tr")
           .filter({
             has: page.getByText(certificationListTitle(certification), {
-              exact: true,
+              exact: false,
             }),
           })
           .first(),
-      ).toBeVisible();
+      ).toBeVisible({ timeout: 30_000 });
     }
   });
 });

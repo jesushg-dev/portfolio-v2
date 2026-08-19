@@ -1,7 +1,7 @@
 "use client";
 
 import { type FC, useMemo, useCallback, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

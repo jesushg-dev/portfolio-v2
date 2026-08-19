@@ -26,6 +26,31 @@ test.describe("cv create", () => {
     await ensurePortfolioSkills(page);
     await page.goto("/admin");
     await fillCvFromFixture(page);
+    await expect
+      .poll(
+        async () => {
+          const current = await getCvMine(page);
+          return {
+            contacts: current.contacts.length,
+            educations: current.educations.length,
+            languages: current.languages.length,
+            technicalSkills: current.technicalSkills.length,
+            experiences: current.experiences.length,
+            softSkills: current.softSkills.length,
+            additionalInformation: current.additionalInformation.length,
+          };
+        },
+        { timeout: 60_000 },
+      )
+      .toEqual({
+        contacts: portfolioCv.contacts.length,
+        educations: portfolioCv.education.length,
+        languages: portfolioCv.languages.length,
+        technicalSkills: portfolioCv.technicalSkills.length,
+        experiences: portfolioCv.experiences.length,
+        softSkills: portfolioCv.softSkills.length,
+        additionalInformation: portfolioCv.additionalInformation.length,
+      });
 
     const cv = await getCvMine(page);
 

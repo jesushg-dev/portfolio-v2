@@ -59,12 +59,25 @@ async function waitForSkillSaveToFinish(page: Page): Promise<void> {
       waitUntil: "domcontentloaded",
     });
   } catch {
-    // If router.back() didn't trigger, navigate manually
+    // If router.back() didn't trigger, dismiss any open dialog and navigate
+  }
+
+  // Dismiss any dialog overlay that may block interaction
+  const overlay = page.locator('[data-slot="dialog-overlay"]');
+  if (await overlay.isVisible({ timeout: 500 }).catch(() => false)) {
+    await page.keyboard.press("Escape");
+    await overlay.waitFor({ state: "hidden", timeout: 5_000 }).catch(() => {
+      /* empty */
+    });
   }
 
   // Ensure we're on the skills list
-  if (/\/new\/?$/.test(page.url()) || !/\/admin\/skills(\?|$)/.test(page.url())) {
-    await goToSkillsList(page);
+  if (
+    /\/new\/?$/.test(page.url()) ||
+    !/\/admin\/skills(\?|$)/.test(page.url())
+  ) {
+    await page.goto("/admin/skills");
+    await page.waitForURL(/\/admin\/skills(\?|$)/, { timeout: 15_000 });
   }
 
   await page

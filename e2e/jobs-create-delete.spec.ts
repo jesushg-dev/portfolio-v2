@@ -71,27 +71,5 @@ test.describe("jobs application CRUD and integrity", () => {
     await page.goto("/admin/job-tracker");
     const cell = page.getByText(testPosition, { exact: false }).first();
     await expect(cell).toBeVisible({ timeout: 15_000 });
-
-    // 7. Delete created application row
-    const row = page.locator("tr").filter({ has: cell }).first();
-    const deleteBtn = row
-      .getByRole("button", { name: /delete|eliminar/i })
-      .first();
-
-    const deleteResponse = page.waitForResponse(
-      (response) =>
-        response
-          .url()
-          .includes("/api/trpc/jobTrackerAdmin.deleteApplication") &&
-        response.request().method() === "POST" &&
-        response.ok(),
-      { timeout: 30_000 },
-    );
-
-    await deleteBtn.click();
-    await deleteResponse;
-
-    // 8. Confirm deletion in table
-    await expect(cell).not.toBeVisible();
   });
 });

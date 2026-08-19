@@ -40,18 +40,20 @@ test.describe("soft skills create", () => {
     const items = response.data;
     expect(items.length).toBeGreaterThanOrEqual(portfolioSoftSkills.items.length);
 
-    const teamwork = items.find((row) =>
-      softSkillHasTranslationTitle(row, "Teamwork"),
+    const firstFixture = portfolioSoftSkills.items[0];
+    const firstItem = items.find((row) =>
+      softSkillHasTranslationTitle(row, firstFixture.title.en),
     );
-    expect(teamwork).toBeDefined();
-    expect(teamwork?.icon).toBe("RiTeamLine");
-    expect(teamwork?.order).toBe(0);
+    expect(firstItem).toBeDefined();
+    expect(firstItem?.icon).toBe(firstFixture.icon);
+    expect(firstItem?.order).toBe(firstFixture.order);
 
-    const leadership = items.find((row) =>
-      softSkillHasTranslationTitle(row, "Leadership"),
+    const secondFixture = portfolioSoftSkills.items[1];
+    const secondItem = items.find((row) =>
+      softSkillHasTranslationTitle(row, secondFixture.title.en),
     );
-    expect(leadership).toBeDefined();
-    expect(leadership?.icon).toBe("RiHandHeartLine");
+    expect(secondItem).toBeDefined();
+    expect(secondItem?.icon).toBe(secondFixture.icon);
 
     const orders = items.map((row) => row.order);
     expect(orders).toEqual([...orders].sort((a, b) => a - b));

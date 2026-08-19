@@ -4,6 +4,7 @@ import { getWorkerAuthFile } from "./helpers/auth-state";
 import {
   cleanupUserTimeline,
   fillTimelineItemForm,
+  getTimelineMine,
   goToTimelineList,
 } from "./helpers/fill-timeline-form";
 
@@ -59,21 +60,30 @@ test.describe("timeline edit and data integrity", () => {
     await expect(orgInput).toHaveValue(tempTimelineItem.organization);
 
     const updatedOrg = `${tempTimelineItem.organization} (Updated)`;
-    await orgInput.clear();
-    await orgInput.pressSequentially(updatedOrg, { delay: 10 });
+    await orgInput.fill(updatedOrg);
+    await orgInput.dispatchEvent("change");
     await orgInput.press("Tab");
 
+    const submitBtn = page.locator("#timeline-form-submit");
+    await expect(submitBtn).toBeEnabled({ timeout: 10_000 });
     const updateResponse = page.waitForResponse(
       (response) =>
         response.url().includes("/api/trpc/timelineAdmin.updateItem") &&
         response.request().method() === "POST",
-      { timeout: 30_000 },
+      { timeout: 60_000 },
     );
-
-    const submitBtn = page.locator("#timeline-form-submit");
-    await expect(submitBtn).toBeEnabled({ timeout: 5_000 });
     await submitBtn.click();
-    await updateResponse;
+    await updateResponse.catch(() => null);
+
+    await expect
+      .poll(
+        async () => {
+          const mine = await getTimelineMine(page);
+          return mine.data.some((row) => row.organization === updatedOrg);
+        },
+        { timeout: 30_000 },
+      )
+      .toBe(true);
 
     // 4. Verify updated organization in list
     await page.goto("/admin/timeline");

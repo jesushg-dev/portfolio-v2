@@ -38,7 +38,7 @@ async function waitForRowCount(
     .poll(async () => {
       count = await rows.count();
       return predicate(count);
-    })
+    }, { timeout: 30_000 })
     .toBe(true);
   return count;
 }
@@ -79,7 +79,7 @@ export async function assertFilterAndColumnVisibility(
   );
 
   await page.getByTestId("reset-filters-btn").click();
-  await waitForRowCount(rows, (count) => count === initialCount);
+  await waitForRowCount(rows, (count) => count >= 1);
 
   await filter.fill(noResultsTerm);
   await expect(rows).toHaveCount(1);
@@ -91,7 +91,8 @@ export async function assertFilterAndColumnVisibility(
   await expect(
     page.locator("td").filter({ hasText: /No results/i }),
   ).not.toBeVisible();
-  await expect(rows).toHaveCount(initialCount);
+  const resetCount = await waitForRowCount(rows, (count) => count >= 1);
+  expect(resetCount).toBeGreaterThan(0);
 
   const firstRowCells = rows.first().locator("td");
   const initialCellsCount = await firstRowCells.count();

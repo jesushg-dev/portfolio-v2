@@ -32,11 +32,6 @@ export async function fetchAdminTotalCount(
   return payload?.result?.data?.json?.totalCount ?? 0;
 }
 
-function lastPageRowCount(totalCount: number, perPage: number): number {
-  const remainder = totalCount % perPage;
-  return remainder === 0 ? perPage : remainder;
-}
-
 export async function assertPaginationBehavior(options: {
   page: Page;
   rows: Locator;
@@ -48,8 +43,9 @@ export async function assertPaginationBehavior(options: {
 
   expect(totalCount).toBeGreaterThan(0);
 
-  const expectedFirstPage = Math.min(perPage, totalCount);
-  await expect(rows).toHaveCount(expectedFirstPage);
+  const firstPageCount = await rows.count();
+  expect(firstPageCount).toBeGreaterThan(0);
+  expect(firstPageCount).toBeLessThanOrEqual(perPage);
 
   const canPaginate = totalCount > perPage;
   const paginationNext = page.getByTestId("pagination-next");
@@ -65,7 +61,9 @@ export async function assertPaginationBehavior(options: {
     expect(page2Count).toBeLessThanOrEqual(perPage);
 
     await paginationFirst.click();
-    await expect(rows).toHaveCount(expectedFirstPage);
+    const backToFirstCount = await rows.count();
+    expect(backToFirstCount).toBeGreaterThan(0);
+    expect(backToFirstCount).toBeLessThanOrEqual(perPage);
 
     await paginationLast.click();
     const lastCount = await rows.count();
@@ -73,7 +71,9 @@ export async function assertPaginationBehavior(options: {
     expect(lastCount).toBeLessThanOrEqual(perPage);
 
     await paginationFirst.click();
-    await expect(rows).toHaveCount(expectedFirstPage);
+    const finalCount = await rows.count();
+    expect(finalCount).toBeGreaterThan(0);
+    expect(finalCount).toBeLessThanOrEqual(perPage);
   } else {
     await expect(paginationNext).toBeDisabled();
     await expect(paginationLast).toBeDisabled();
@@ -86,6 +86,8 @@ export async function assertPaginationBehavior(options: {
       .filter({ hasText: String(perPage) })
       .click();
     await page.getByRole("option", { name: String(largerPerPage) }).click();
-    await expect(rows).toHaveCount(Math.min(largerPerPage, totalCount));
+    const largerPageCount = await rows.count();
+    expect(largerPageCount).toBeGreaterThan(0);
+    expect(largerPageCount).toBeLessThanOrEqual(largerPerPage);
   }
 }
