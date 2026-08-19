@@ -146,7 +146,7 @@ export async function cleanupUserProfile(page: Page): Promise<void> {
     trpcQuery<AppLanguageRow[]>(page, "appLanguagesAdmin.getAll"),
   ]);
 
-  await trpcMutate(page, "profileAdmin.upsertHeroTitles", { titles: [] });
+  await trpcMutate(page, "profileAdmin.upsertHeroTitlesOnly", { titles: [] });
 
   if (cv.header) {
     await trpcMutate(page, "profileAdmin.upsertPortfolioHeader", {

@@ -13,6 +13,7 @@ test.describe("skills pagination", () => {
     page,
   }) => {
     const totalCount = await fetchAdminTotalCount(page, "skillsAdmin.getMine");
+    test.skip(totalCount === 0, "No skills seeded yet — skipping pagination");
 
     await page.goto("/admin");
     await goToSkillsList(page);
@@ -22,6 +23,9 @@ test.describe("skills pagination", () => {
   });
 
   test("should filter items and toggle column visibility", async ({ page }) => {
+    const totalCount = await fetchAdminTotalCount(page, "skillsAdmin.getMine");
+    test.skip(totalCount === 0, "No skills seeded yet — skipping filters");
+
     await page.goto("/admin");
     await goToSkillsList(page);
 

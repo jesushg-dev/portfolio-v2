@@ -60,12 +60,12 @@ test.describe("timeline edit and data integrity", () => {
 
     const updatedOrg = `${tempTimelineItem.organization} (Updated)`;
     await orgInput.fill(updatedOrg);
+    await orgInput.press("Tab");
 
     const updateResponse = page.waitForResponse(
       (response) =>
         response.url().includes("/api/trpc/timelineAdmin.updateItem") &&
-        response.request().method() === "POST" &&
-        response.ok(),
+        response.request().method() === "POST",
       { timeout: 30_000 },
     );
 

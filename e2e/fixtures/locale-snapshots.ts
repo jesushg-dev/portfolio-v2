@@ -9,7 +9,7 @@ export const localeSnapshots: Record<
   }
 > = {
   en: {
-    navAbout: "About",
+    navAbout: "About me",
     aboutSnippet: "Fullstack Lead",
     skillsTabBackend: "Backend",
   },

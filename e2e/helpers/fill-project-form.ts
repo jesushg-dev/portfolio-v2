@@ -146,7 +146,9 @@ export async function fillProjectForm(
   await page.getByRole("option", { name: project.type, exact: true }).click();
 
   if (project.isPrivate) {
-    const privacySwitch = page.getByRole("switch");
+    const privacySwitch = page.getByRole("switch", {
+      name: /Private Project/i,
+    });
     const isChecked = await privacySwitch.getAttribute("aria-checked");
     if (isChecked !== "true") {
       await privacySwitch.click();

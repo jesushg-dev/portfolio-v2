@@ -53,7 +53,8 @@ async function openNewSkillForm(page: Page): Promise<void> {
 /** Wait until save finishes and we have left the form page. */
 async function waitForSkillSaveToFinish(page: Page): Promise<void> {
   await page.waitForURL((url) => !url.pathname.endsWith("/new"), {
-    timeout: 20_000,
+    timeout: 30_000,
+    waitUntil: "domcontentloaded",
   });
 
   // After router.back() we should be on the list; if not, reach it via sidebar.

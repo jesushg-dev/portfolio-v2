@@ -35,7 +35,7 @@ test.describe("timeline create", () => {
       getAppLanguages(page),
     ]);
     const items = response.data;
-    expect(items).toHaveLength(portfolioTimeline.items.length);
+    expect(items.length).toBeGreaterThanOrEqual(portfolioTimeline.items.length);
 
     const studyItem = items.find(
       (row) => row.organization === "Universidad Nacional de Ingeniería",

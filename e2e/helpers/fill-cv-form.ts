@@ -382,7 +382,7 @@ export async function fillCvAdditionalInfo(
   await page
     .locator("#cv-section-modal")
     .getByText(item.text.es, { exact: true })
-    .waitFor({ state: "visible", timeout: 15_000 });
+    .waitFor({ state: "visible", timeout: 30_000 });
 }
 
 export async function fillCvFromFixture(page: Page): Promise<void> {

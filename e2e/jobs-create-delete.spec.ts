@@ -68,7 +68,7 @@ test.describe("jobs application CRUD and integrity", () => {
     await createResponse;
 
     // 6. Navigate back to list and verify item is present
-    await page.goto("/admin/jobs");
+    await page.goto("/admin/job-tracker");
     const cell = page.getByText(testPosition, { exact: false }).first();
     await expect(cell).toBeVisible({ timeout: 15_000 });
 
