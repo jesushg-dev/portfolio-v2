@@ -130,7 +130,9 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     return map;
   }, [rawSkills]);
 
-  const columns = useMemo<ColumnDef<AppTableFeatures, CertificationRow>[]>(() => {
+  const columns = useMemo<
+    ColumnDef<AppTableFeatures, CertificationRow>[]
+  >(() => {
     const field = createLocalizedFieldResolver(languages, locale);
     return [
       {

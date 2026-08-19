@@ -267,7 +267,12 @@
           "main": "Klassiek blauw",
           "orange": "Zonsondergang oranje",
           "christmas": "Feestdagen"
-        }
+        },
+        "customTheme": "Aangepast thema",
+        "customThemeActive": "Aangepast thema (Actief)",
+        "resetCustomTheme": "Thema resetten",
+        "createCustom": "Aangepast thema maken",
+        "editCustom": "Kleuren aanpassen"
       },
       "scrollToTop": "Naar boven scrollen",
       "homeLogo": "Jehg, naar startpagina",
@@ -2729,6 +2734,39 @@
         "unknown": "Er is een onbekende fout opgetreden"
       },
       "title": "Bedrijf bewerken"
+    }
+  },
+  "themeCustomizer": {
+    "metaTitle": "Thematool",
+    "metaDescription": "Maak je eigen thema voor de portfolio. Kies aangepaste accent-, achtergrond- en kaartkleuren.",
+    "title": "Thematool",
+    "subtitle": "Kies basisstijlen, accenten en achtergronden en bekijk de wijzigingen in realtime.",
+    "presets": "Thema-presets",
+    "baseStyle": "Basisstijl",
+    "light": "Licht thema",
+    "dark": "Donker thema",
+    "primaryAccent": "Primaire accentkleur",
+    "secondaryAccent": "Secundaire accentkleur",
+    "background": "Achtergrond van de pagina",
+    "card": "Achtergrond van kaarten en pop-overs",
+    "text": "Tekstkleur",
+    "border": "Randen en scheidingslijnen",
+    "actions": {
+      "save": "Thema opslaan en toepassen",
+      "reset": "Thema resetten",
+      "cancel": "Annuleren",
+      "success": "Aangepast thema opgeslagen en toegepast!"
+    },
+    "preview": {
+      "title": "Interactieve live voorvertoning",
+      "desc": "Bekijk hoe je kleuren eruitzien op daadwerkelijke interface-elementen.",
+      "cardTitle": "Voorbeeld projectkaart",
+      "cardDesc": "Dit is hoe een projectkaart wordt weergegeven met je aangepaste kleuren.",
+      "tag1": "Next.js",
+      "tag2": "TypeScript",
+      "btn1": "Primaire actie",
+      "btn2": "Secundair",
+      "terminalTitle": "terminal-runner"
     }
   }
 }

@@ -192,7 +192,7 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
           await utils.jobTrackerAdmin.getDashboardStats.invalidate();
 
           if (createdId) {
-            router.push({
+            router.replace({
               pathname: "/admin/job-tracker/applications/[id]",
               params: { id: createdId },
             });

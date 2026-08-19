@@ -15,6 +15,7 @@ const PUBLIC_ROUTES = [
   { path: "/curriculum-vitae", name: "curriculum-vitae" },
   { path: "/how-i-use-ai", name: "how-i-use-ai" },
   { path: "/qa-collaboration", name: "qa-collaboration" },
+  { path: "/theme-customizer", name: "theme-customizer" },
 ] as const;
 
 test.describe("accessibility — Shield (WCAG AAA)", () => {
@@ -22,6 +23,7 @@ test.describe("accessibility — Shield (WCAG AAA)", () => {
     test(`${route.name} (${route.path})`, async ({ page }) => {
       await page.goto(route.path);
       await page.waitForLoadState("networkidle");
+      await page.waitForTimeout(1000);
 
       const axeResults = await runAxeAudit(page);
       const axeSummary = summarizeAxeViolations(axeResults.violations);

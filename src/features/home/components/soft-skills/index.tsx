@@ -23,10 +23,7 @@ const SoftSkills: FC = async () => {
 
   return (
     <div className="relative w-full overflow-hidden">
-      <section
-        id="soft-skills"
-        className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
-      >
+      <section className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20">
         <HeaderArticle
           title={t("title")}
           subtitle={t("subtitle")}

@@ -93,6 +93,11 @@ export const pathnames = {
     es: "/colaboracion-qa",
     nl: "/qa-samenwerking",
   },
+  "/theme-customizer": {
+    en: "/theme-customizer",
+    es: "/personalizar-tema",
+    nl: "/thematool",
+  },
   "/login": {
     en: "/login",
     es: "/iniciar-sesion",

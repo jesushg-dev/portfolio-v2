@@ -120,4 +120,57 @@ describe("mapDraftToTemplateSections", () => {
         ?.runs[0]?.text,
     ).toBe("Team leadership");
   });
+
+  it("dynamically maps and prioritizes technical skills according to job description relevance", () => {
+    const techTemplateSections: CvSection[] = [
+      {
+        id: "section-7",
+        heading: "TECHNICAL SKILLS",
+        paragraphs: [
+          {
+            id: "section-7-para-0",
+            style: "TableParagraph",
+            xmlIndex: 6,
+            runs: [{ id: "section-7-para-0-run-0", text: "Old tech 1" }],
+          },
+          {
+            id: "section-7-para-1",
+            style: "TableParagraph",
+            xmlIndex: 7,
+            runs: [{ id: "section-7-para-1-run-0", text: "Old tech 2" }],
+          },
+          {
+            id: "section-7-para-2",
+            style: "TableParagraph",
+            xmlIndex: 8,
+            runs: [{ id: "section-7-para-2-run-0", text: "Old tech 3" }],
+          },
+        ],
+      },
+    ];
+
+    const draftWithSkills: CvImportDraft = {
+      ...draft,
+      skills: [
+        { category: "FRONTEND", items: ["HTML", "React", "CSS"] },
+        { category: "BACKEND", items: ["C# / .NET Core", "Python"] },
+      ],
+    };
+
+    const jobDescription =
+      "We are seeking a C# / .NET Core and React developer.";
+
+    const adapted = mapDraftToTemplateSections(
+      techTemplateSections,
+      draftWithSkills,
+      [],
+      jobDescription,
+    );
+
+    const mappedTechSkills = adapted
+      .find((section) => section.id === "section-7")
+      ?.paragraphs.map((p) => p.runs[0]?.text);
+
+    expect(mappedTechSkills).toEqual(["React", "C# / .NET Core", "HTML"]);
+  });
 });

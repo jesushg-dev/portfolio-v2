@@ -9,11 +9,7 @@ import {
 } from "react";
 
 import { InfoIcon, XIcon } from "lucide-react";
-import {
-  motion,
-  useReducedMotion,
-  AnimatePresence,
-} from "motion/react";
+import { motion, useReducedMotion, AnimatePresence } from "motion/react";
 import {
   useFloating,
   autoUpdate,
@@ -117,7 +113,9 @@ export function ActionHint({
     !overlayLocked &&
     !isSchedulePath(pathname);
 
-  const [arrowElement, setArrowElement] = useState<HTMLSpanElement | null>(null);
+  const [arrowElement, setArrowElement] = useState<HTMLSpanElement | null>(
+    null,
+  );
 
   const { refs, floatingStyles, placement, middlewareData } = useFloating({
     open: showHint,
@@ -259,4 +257,3 @@ export function ActionHint({
 
 export const NowPlayingHint = ActionHint;
 export default ActionHint;
-

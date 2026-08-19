@@ -12,7 +12,10 @@ import {
   type ColumnVisibilityState,
   type RowData,
 } from "@tanstack/react-table";
-import { appTableFeatures, type AppTableFeatures } from "@/lib/app-table-features";
+import {
+  appTableFeatures,
+  type AppTableFeatures,
+} from "@/lib/app-table-features";
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -53,11 +56,10 @@ function getColumnFilterId<TData extends RowData>(
   return "";
 }
 
-interface UseDataTableProps<TData extends RowData>
-  extends Omit<
-    TableOptions<AppTableFeatures, TData>,
-    "state" | "pageCount" | "features"
-  > {
+interface UseDataTableProps<TData extends RowData> extends Omit<
+  TableOptions<AppTableFeatures, TData>,
+  "state" | "pageCount" | "features"
+> {
   rowCount: number;
   initialState?: Omit<Partial<TableState<AppTableFeatures>>, "sorting"> & {
     sorting?: ExtendedColumnSort<TData>[];
@@ -282,7 +284,6 @@ export function useDataTable<TData extends RowData>(
     [debouncedSetFilterValues, filterableColumns, enableAdvancedFilter],
   );
 
-   
   const table = useTable({
     features: appTableFeatures,
     ...tableProps,

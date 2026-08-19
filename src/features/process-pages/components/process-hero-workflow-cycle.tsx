@@ -35,7 +35,7 @@ export function ProcessHeroWorkflowCycle({
 
   return (
     <>
-      <p className="mb-5 text-sm font-semibold tracking-widest text-slate-500 uppercase">
+      <p className="mb-5 text-sm font-semibold tracking-widest text-slate-400 uppercase">
         {title}
       </p>
       <ol className="space-y-4" aria-label={title}>
@@ -50,10 +50,10 @@ export function ProcessHeroWorkflowCycle({
                 className={cn(
                   "flex size-6 shrink-0 items-center justify-center rounded-full text-sm font-bold",
                   isComplete && "bg-orange-500/20 text-orange-400",
-                  isActive && "bg-orange-500 text-white",
+                  isActive && "bg-orange-500 text-black",
                   !isComplete &&
                     !isActive &&
-                    "border border-slate-700 text-slate-500",
+                    "border border-slate-700 text-slate-400",
                 )}
               >
                 {isComplete ? (
@@ -65,7 +65,7 @@ export function ProcessHeroWorkflowCycle({
               <span
                 className={cn(
                   "text-sm",
-                  isActive ? "font-medium text-white" : "text-slate-400",
+                  isActive ? "font-medium text-white" : "text-slate-300",
                 )}
               >
                 {step.label}

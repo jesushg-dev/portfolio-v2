@@ -17,6 +17,22 @@ const PreloadTheme = () => {
         
         localStorage.setItem("theme", theme);
         localStorage.setItem("color-mode", isDark ? "dark" : "light");
+
+        if (localStorage.getItem("custom-theme-active") === "true") {
+          let root = document.documentElement;
+          let p = localStorage.getItem("custom-theme-primary");
+          let s = localStorage.getItem("custom-theme-secondary");
+          let bg = localStorage.getItem("custom-theme-background");
+          let cd = localStorage.getItem("custom-theme-card");
+          let fg = localStorage.getItem("custom-theme-foreground");
+          let bd = localStorage.getItem("custom-theme-border");
+          if (p) root.style.setProperty("--primary", p);
+          if (s) root.style.setProperty("--secondary", s);
+          if (bg) root.style.setProperty("--background", bg);
+          if (cd) root.style.setProperty("--card", cd);
+          if (fg) root.style.setProperty("--foreground", fg);
+          if (bd) root.style.setProperty("--border", bd);
+        }
       })();`}
     </Script>
   );

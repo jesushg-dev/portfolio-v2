@@ -267,7 +267,12 @@
           "main": "Classic blue",
           "orange": "Sunset orange",
           "christmas": "Holiday"
-        }
+        },
+        "customTheme": "Custom Theme",
+        "customThemeActive": "Custom Theme (Active)",
+        "resetCustomTheme": "Reset custom theme",
+        "createCustom": "Create custom theme",
+        "editCustom": "Edit custom colors"
       },
       "scrollToTop": "Scroll to top",
       "homeLogo": "Jehg, go to homepage",
@@ -2729,6 +2734,39 @@
         "cancel": "Cancel"
       },
       "title": "Edit Company"
+    }
+  },
+  "themeCustomizer": {
+    "metaTitle": "Theme Customizer",
+    "metaDescription": "Create your own theme for the portfolio. Select custom accent, background, and card colors.",
+    "title": "Theme Customizer",
+    "subtitle": "Select base, accents, backgrounds, and see changes in real-time.",
+    "presets": "Theme Presets",
+    "baseStyle": "Base Style",
+    "light": "Light Theme",
+    "dark": "Dark Theme",
+    "primaryAccent": "Primary Accent Color",
+    "secondaryAccent": "Secondary Accent Color",
+    "background": "Main Page Background",
+    "card": "Card & Popover Background",
+    "text": "Text Color",
+    "border": "Borders & Dividers",
+    "actions": {
+      "save": "Save & Apply Theme",
+      "reset": "Reset custom theme",
+      "cancel": "Cancel",
+      "success": "Custom theme saved and applied!"
+    },
+    "preview": {
+      "title": "Live Interactive Preview",
+      "desc": "Check how your colors look on actual interface components.",
+      "cardTitle": "Sample Project Card",
+      "cardDesc": "This is how a project card displays with your custom colors.",
+      "tag1": "Next.js",
+      "tag2": "TypeScript",
+      "btn1": "Primary Action",
+      "btn2": "Secondary",
+      "terminalTitle": "terminal-runner"
     }
   }
 }

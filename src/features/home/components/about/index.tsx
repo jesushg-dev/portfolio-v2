@@ -41,10 +41,7 @@ const About: FC = async () => {
 
   return (
     <div className="bg-muted/50 relative w-full overflow-hidden">
-      <section
-        id="about"
-        className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
-      >
+      <section className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
         <HeaderArticle title={t("title")} description="" subtitle="" />
         <article
           className={

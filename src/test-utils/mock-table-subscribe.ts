@@ -11,8 +11,6 @@ export function createMockSubscribe<TState>(state: TState) {
     children,
   }: MockSubscribeProps<TState, TSelected>) {
     const selected = selector(state);
-    return typeof children === "function"
-      ? children(selected)
-      : children;
+    return typeof children === "function" ? children(selected) : children;
   };
 }

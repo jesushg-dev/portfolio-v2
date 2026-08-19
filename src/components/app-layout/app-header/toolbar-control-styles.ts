@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /** Shared height for every header control (nav, locale, theme, menu). */
-export const headerControlHeight = "h-9 min-h-9 max-h-9";
+export const headerControlHeight = "h-11 min-h-11 max-h-11";
 
 /** Shared label typography for nav links and locale text. */
 export const headerLabelTextStyles =
@@ -21,7 +21,7 @@ export function headerIconControlStyles(
 
   return cn(
     headerControlHeight,
-    "inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full p-0",
+    "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full p-0",
     "border backdrop-blur-md transition-all duration-200 outline-none select-none",
     "focus-visible:ring-2 focus-visible:ring-offset-0",
     inverted

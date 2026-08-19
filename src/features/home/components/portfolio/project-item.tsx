@@ -32,16 +32,13 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   websiteUrl,
   description,
   hook,
-  slug,
   kind,
-  caseStudyEnabled,
   isPrivate = false,
   urlName,
   sourceName,
   privateName,
   privateDescription,
   canSeeDemo,
-  caseStudyLabel,
   kindLabels,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);

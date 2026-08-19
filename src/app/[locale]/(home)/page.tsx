@@ -138,19 +138,32 @@ export default async function Home() {
     <>
       <Hero stats={stats} />
 
-      <ViewportSection fallback={<AboutFallback />} minHeight="36rem">
+      <ViewportSection
+        id="about"
+        fallback={<AboutFallback />}
+        minHeight="36rem"
+      >
         <About />
       </ViewportSection>
 
-      <ViewportSection fallback={<ExperienceFallback />} minHeight="28rem">
+      <ViewportSection
+        id="experience"
+        fallback={<ExperienceFallback />}
+        minHeight="28rem"
+      >
         <Experience />
       </ViewportSection>
 
-      <ViewportSection fallback={<SkillsFallback />} minHeight="32rem">
+      <ViewportSection
+        id="skills"
+        fallback={<SkillsFallback />}
+        minHeight="32rem"
+      >
         <Skills locale={locale} />
       </ViewportSection>
 
       <ViewportSection
+        id="services"
         fallback={<ServicesFallback />}
         minHeight="32rem"
         requiresTrpc
@@ -158,7 +171,11 @@ export default async function Home() {
         <Services />
       </ViewportSection>
 
-      <ViewportSection fallback={<SoftSkillsFallback />} minHeight="28rem">
+      <ViewportSection
+        id="soft-skills"
+        fallback={<SoftSkillsFallback />}
+        minHeight="28rem"
+      >
         <SoftSkills />
       </ViewportSection>
 
@@ -175,6 +192,7 @@ export default async function Home() {
       </ViewportSection>
 
       <ViewportSection
+        id="contact"
         fallback={<ContactFallback />}
         minHeight="28rem"
         requiresTrpc

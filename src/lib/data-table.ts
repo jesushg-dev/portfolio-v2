@@ -2,10 +2,7 @@ import type { AppTableFeatures } from "@/lib/app-table-features";
 import type { Column, RowData } from "@tanstack/react-table";
 import { dataTableConfig } from "@/config/data-table";
 import type { AppFilterVariant } from "@/lib/app-table-features";
-import type {
-  ExtendedColumnFilter,
-  FilterOperator,
-} from "@/types/data-table";
+import type { ExtendedColumnFilter, FilterOperator } from "@/types/data-table";
 import { type CSSProperties } from "react";
 
 export function getColumnPinningStyle<TData extends RowData>({

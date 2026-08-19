@@ -20,7 +20,6 @@ const Services: FC = async () => {
   return (
     <div className="bg-background relative w-full overflow-hidden">
       <section
-        id="services"
         aria-label={t("title")}
         className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
       >

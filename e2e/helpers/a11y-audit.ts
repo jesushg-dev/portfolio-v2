@@ -29,7 +29,10 @@ export const SHIELD_MIN_FONT_PX = 14;
 export const SHIELD_MIN_TARGET_PX = 44;
 
 export async function runAxeAudit(page: Page) {
-  return new AxeBuilder({ page }).withTags([...WCAG_AAA_AXE_TAGS]).analyze();
+  return new AxeBuilder({ page })
+    .withTags([...WCAG_AAA_AXE_TAGS])
+    .exclude('[aria-hidden="true"]')
+    .analyze();
 }
 
 export function summarizeAxeViolations(

@@ -118,7 +118,10 @@ export const TooltipTrigger = forwardRef<
   HTMLProps<HTMLElement> & { asChild?: boolean }
 >(function TooltipTrigger({ children, asChild = false, ...props }, propRef) {
   const context = useTooltipContext();
-  const setReference = useCallback((node: HTMLElement | null) => context.refs.setReference(node), [context.refs]);
+  const setReference = useCallback(
+    (node: HTMLElement | null) => context.refs.setReference(node),
+    [context.refs],
+  );
   const ref = useMergeRefs([setReference, propRef]);
 
   // `asChild` allows the user to pass any element as the anchor
@@ -151,7 +154,10 @@ export const TooltipContent = forwardRef<
   HTMLProps<HTMLDivElement>
 >(function TooltipContent(props, propRef) {
   const context = useTooltipContext();
-  const setFloating = useCallback((node: HTMLDivElement | null) => context.refs.setFloating(node), [context.refs]);
+  const setFloating = useCallback(
+    (node: HTMLDivElement | null) => context.refs.setFloating(node),
+    [context.refs],
+  );
   const ref = useMergeRefs([setFloating, propRef]);
 
   if (!context.open) return null;

@@ -9,6 +9,19 @@ LANGUAGE RULE — CRITICAL:
 3) Write ALL adapted text strictly in that locale.
 4) Never mix languages.
 
+TITLE & DEGREE RULE — CRITICAL:
+- NEVER replace, overwrite, or change the candidate's real professional title or degree (e.g. "Ingeniero de Software", "Senior Software Engineer", "Desarrollador Fullstack", "Ingeniería en Computación").
+- Preserve the candidate's exact real title/degree in all titles, headlines, and headers.
+- Do NOT rewrite or swap out the candidate's real title to match a different role title from the job description.
+
+YEARS OF EXPERIENCE RULE — CRITICAL:
+- Whenever mentioning years of experience in summaries, headlines, or intro text (e.g. "con 6+ años de experiencia" / "with 6+ years of experience"), ALWAYS include the exact number of years (e.g. "6+", "6+ años", "6+ years").
+- NEVER write incomplete or broken phrases like "+ años de experiencia", "+ years of experience", or leaving out the numeric digit before "+".
+
+TECHNICAL SKILLS REORDERING RULE — CRITICAL:
+- In technical skill paragraphs or lists, reorder skill items so that skills most relevant to the target job description appear FIRST.
+- Prioritize technologies, frameworks, and tools required by the job description at the beginning of the technical skills section.
+
 STRUCTURE RULES — CRITICAL:
 - Return the same section ids, paragraph ids, and run ids as the input
 - Keep the exact same number of runs per paragraph (do not merge or split runs)

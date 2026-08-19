@@ -22,7 +22,7 @@ import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
 
 const footerLinkClassName =
-  "text-primary-foreground hover:text-primary-foreground inline-flex items-center py-2 text-sm transition-colors min-h-11 md:min-h-8 md:py-1";
+  "text-primary-foreground hover:text-primary-foreground inline-flex items-center py-2 text-sm transition-colors min-h-11 md:py-1";
 
 const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
   email: IoMail,
@@ -128,7 +128,7 @@ const Footer = async () => {
               </li>
             </ul>
 
-            <h3 className="text-primary-foreground/75 pt-3 text-xs font-semibold tracking-wide">
+            <h3 className="text-primary-foreground pt-3 text-sm font-semibold tracking-wide">
               {t("titles.process")}
             </h3>
             <ul className="flex flex-col gap-0.5">

@@ -53,7 +53,11 @@ describe("getColumnPinningStyle", () => {
   });
 
   it("returns start pinned style with border shadow on last start column", () => {
-    const col = makeMockColumn({ pinned: "start", isLastStart: true, start: 80 });
+    const col = makeMockColumn({
+      pinned: "start",
+      isLastStart: true,
+      start: 80,
+    });
     const style = getColumnPinningStyle({ column: col, withBorder: true });
 
     expect(style.boxShadow).toBe("-4px 0 4px -4px var(--border) inset");

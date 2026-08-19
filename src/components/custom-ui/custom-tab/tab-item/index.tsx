@@ -77,7 +77,7 @@ const TabItem: FC<TabItemProps> = ({
         whileHover="hover"
         onClick={() => setCurrentTab(index)}
         className={cn(
-          "group relative z-10 flex min-h-10 shrink-0 cursor-pointer touch-manipulation items-center rounded-full px-4 py-2 text-left transition-all sm:px-5",
+          "group relative z-10 flex min-h-11 shrink-0 cursor-pointer touch-manipulation items-center rounded-full px-4 py-2 text-left transition-all sm:px-5",
           minimal ? "w-auto" : "w-full sm:p-4 md:p-5",
           !isActive && "hover:bg-accent/40",
         )}

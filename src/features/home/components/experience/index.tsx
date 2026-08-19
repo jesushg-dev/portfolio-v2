@@ -25,10 +25,7 @@ const Experience: FC = async () => {
 
   return (
     <div className="bg-background relative w-full overflow-hidden">
-      <section
-        id="experience"
-        className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
-      >
+      <section className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20">
         <HeaderArticle
           title={t("title")}
           description={t("subtitle")}

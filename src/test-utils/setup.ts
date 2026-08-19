@@ -138,7 +138,10 @@ jest.mock("motion/react", () => {
         if (!componentCache.has(prop)) {
           componentCache.set(
             prop,
-            ({ children, ...props }: PropsWithChildren<Record<string, unknown>>) =>
+            ({
+              children,
+              ...props
+            }: PropsWithChildren<Record<string, unknown>>) =>
               createElement(
                 prop,
                 mockOmitKeys(props, mockMotionPropKeys),

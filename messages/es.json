@@ -267,7 +267,12 @@
           "main": "Azul clásico",
           "orange": "Naranja atardecer",
           "christmas": "Navidad"
-        }
+        },
+        "customTheme": "Tema Personalizado",
+        "customThemeActive": "Tema Personalizado (Activo)",
+        "resetCustomTheme": "Restablecer tema",
+        "createCustom": "Crear tema personalizado",
+        "editCustom": "Editar colores"
       },
       "scrollToTop": "Volver arriba",
       "homeLogo": "Jehg, ir al inicio",
@@ -2729,6 +2734,39 @@
         "unknown": "Ocurrió un error desconocido"
       },
       "title": "Editar Empresa"
+    }
+  },
+  "themeCustomizer": {
+    "metaTitle": "Personalizador de Temas",
+    "metaDescription": "Crea tu propio tema para el portafolio. Selecciona colores personalizados de acento, fondo y tarjetas.",
+    "title": "Personalizador de Temas",
+    "subtitle": "Selecciona estilos base, acentos, fondos y mira los cambios en tiempo real.",
+    "presets": "Plantillas de Temas",
+    "baseStyle": "Estilo Base",
+    "light": "Tema Claro",
+    "dark": "Tema Oscuro",
+    "primaryAccent": "Color de Acento Primario",
+    "secondaryAccent": "Color de Acento Secundario",
+    "background": "Fondo de la Página",
+    "card": "Fondo de Tarjetas y Popovers",
+    "text": "Color del Texto",
+    "border": "Bordes y Divisores",
+    "actions": {
+      "save": "Guardar y Aplicar Tema",
+      "reset": "Restablecer tema",
+      "cancel": "Cancelar",
+      "success": "¡Tema personalizado guardado y aplicado!"
+    },
+    "preview": {
+      "title": "Vista Previa Interactiva",
+      "desc": "Mira cómo lucen tus colores en componentes reales de la interfaz.",
+      "cardTitle": "Tarjeta de Proyecto de Muestra",
+      "cardDesc": "Así es como se visualiza una tarjeta de proyecto con tus colores personalizados.",
+      "tag1": "Next.js",
+      "tag2": "TypeScript",
+      "btn1": "Acción Primaria",
+      "btn2": "Secundario",
+      "terminalTitle": "ejecutor-terminal"
     }
   }
 }

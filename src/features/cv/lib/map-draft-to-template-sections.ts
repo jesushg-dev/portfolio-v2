@@ -53,6 +53,39 @@ function collectExperienceBullets(draft: CvImportDraft): string[] {
   );
 }
 
+export function collectTechnicalSkillItems(
+  draft: CvImportDraft,
+  jobDescription?: string,
+): string[] {
+  const allItems = draft.skills.flatMap((group) =>
+    group.items.map((item) => item.trim()).filter((item) => item.length > 0),
+  );
+
+  if (!jobDescription || jobDescription.trim().length === 0) {
+    return allItems;
+  }
+
+  const jdLower = jobDescription.toLowerCase();
+
+  const scored = allItems.map((item, originalIndex) => {
+    const itemLower = item.toLowerCase();
+    let score = 0;
+    if (jdLower.includes(itemLower)) {
+      score = 2;
+    } else {
+      const words = itemLower.split(/[\s/.,-]+/).filter((w) => w.length > 1);
+      if (words.some((word) => jdLower.includes(word))) {
+        score = 1;
+      }
+    }
+    return { item, score, originalIndex };
+  });
+
+  scored.sort((a, b) => b.score - a.score || a.originalIndex - b.originalIndex);
+
+  return scored.map((entry) => entry.item);
+}
+
 function mapSectionParagraphs(
   section: CvSection,
   texts: string[],
@@ -69,6 +102,7 @@ export function mapDraftToTemplateSections(
   templateSections: CvSection[],
   draft: CvImportDraft,
   softSkillTexts: string[],
+  jobDescription?: string,
 ): AdaptedSection[] {
   const aboutChunks = splitTextIntoChunks(
     draft.header.summary ?? "",
@@ -77,6 +111,7 @@ export function mapDraftToTemplateSections(
     )?.paragraphs.length ?? 1,
   );
   const experienceBullets = collectExperienceBullets(draft);
+  const technicalSkillItems = collectTechnicalSkillItems(draft, jobDescription);
 
   return templateSections.map((section) => {
     const heading = normalizeHeading(section.heading);
@@ -104,6 +139,18 @@ export function mapDraftToTemplateSections(
         (_, index) => softSkillTexts[index] ?? "",
       );
       return mapSectionParagraphs(section, texts);
+    }
+
+    if (
+      heading.includes("technical") ||
+      (heading.includes("skills") && !heading.includes("soft"))
+    ) {
+      if (technicalSkillItems.length > 0) {
+        const texts = section.paragraphs.map(
+          (_, index) => technicalSkillItems[index] ?? "",
+        );
+        return mapSectionParagraphs(section, texts);
+      }
     }
 
     return {

@@ -1,8 +1,9 @@
 "use client";
 
-import type { FC } from "react";
+import { type FC, useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { RiCheckLine, RiMoonLine, RiSunLine } from "react-icons/ri";
+import { Link } from "@/i18n/routing";
 
 import {
   Dialog,
@@ -41,14 +42,14 @@ const THEME_GROUPS: ThemeGroupConfig[] = [
     light: {
       theme: ETheme.MAIN_LIGHT,
       isDark: false,
-      accent: "#1e40af",
+      accent: "#3c8eff",
       surface: "#f8fafc",
     },
     dark: {
       theme: ETheme.MAIN_DARK,
       isDark: true,
       accent: "#3c8eff",
-      surface: "#262626",
+      surface: "#0d0d0d",
     },
   },
   {
@@ -56,14 +57,14 @@ const THEME_GROUPS: ThemeGroupConfig[] = [
     light: {
       theme: ETheme.ORANGE_LIGHT,
       isDark: false,
-      accent: "#ff8c0e",
-      surface: "#fff7ed",
+      accent: "#ff7a00",
+      surface: "#fafaf9",
     },
     dark: {
       theme: ETheme.ORANGE_DARK,
       isDark: true,
-      accent: "#ff850d",
-      surface: "#1a1208",
+      accent: "#ff7a00",
+      surface: "#0c0a09",
     },
   },
   {
@@ -71,14 +72,14 @@ const THEME_GROUPS: ThemeGroupConfig[] = [
     light: {
       theme: ETheme.CHRISTMAS_LIGHT,
       isDark: false,
-      accent: "#9b2c2c",
-      surface: "#fff5f5",
+      accent: "#e11d48",
+      surface: "#fdf2f8",
     },
     dark: {
       theme: ETheme.CHRISTMAS_DARK,
       isDark: true,
-      accent: "#fc8181",
-      surface: "#1a0f0f",
+      accent: "#e11d48",
+      surface: "#0f0507",
     },
   },
 ];
@@ -145,8 +146,33 @@ const ThemeChoice: FC<ThemeChoiceProps> = ({
 );
 
 const ThemeSelector: FC<IThemeSelectorProps> = ({ open, onOpenChange }) => {
-  const { theme, setTheme } = useThemeContext();
+  const {
+    theme,
+    setTheme,
+    isCustomActive,
+    clearCustomTheme,
+    activateCustomTheme,
+  } = useThemeContext();
   const t = useTranslations("global.header");
+
+  const [customColors, setCustomColors] = useState<{ accent: string; surface: string; isDark: boolean } | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const primary = window.localStorage.getItem("custom-theme-primary");
+    const background = window.localStorage.getItem("custom-theme-background");
+    const isDark = window.localStorage.getItem("color-mode") === "dark";
+    
+    const timer = setTimeout(() => {
+      if (primary && background) {
+        setCustomColors({ accent: primary, surface: background, isDark });
+      } else {
+        setCustomColors(null);
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [open, isCustomActive]);
 
   const handleSelect = (option: ThemeOptionConfig) => {
     setTheme(option.theme, option.isDark);
@@ -176,7 +202,7 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ open, onOpenChange }) => {
                     groupLabel={groupLabel}
                     modeLabel={t("themeDialog.light")}
                     selectedLabel={t("themeSelected")}
-                    isSelected={theme === group.light.theme}
+                    isSelected={!isCustomActive && theme === group.light.theme}
                     onSelect={() => handleSelect(group.light)}
                   />
                   <ThemeChoice
@@ -184,13 +210,70 @@ const ThemeSelector: FC<IThemeSelectorProps> = ({ open, onOpenChange }) => {
                     groupLabel={groupLabel}
                     modeLabel={t("themeDialog.dark")}
                     selectedLabel={t("themeSelected")}
-                    isSelected={theme === group.dark.theme}
+                    isSelected={!isCustomActive && theme === group.dark.theme}
                     onSelect={() => handleSelect(group.dark)}
                   />
                 </div>
               </section>
             );
           })}
+
+          {customColors && (
+            <section aria-label={t("themeDialog.customTheme")}>
+              <div className="mb-2 flex items-center justify-between">
+                <h3 className="text-foreground text-sm font-semibold">
+                  {t("themeDialog.customTheme")}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    clearCustomTheme();
+                    setCustomColors(null);
+                    onOpenChange(false);
+                  }}
+                  className="text-destructive hover:bg-destructive/10 cursor-pointer rounded-lg px-2 py-1 text-xs font-semibold transition-colors"
+                >
+                  {t("themeDialog.resetCustomTheme")}
+                </button>
+              </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <ThemeChoice
+                  option={{
+                    theme: ETheme.MAIN_LIGHT,
+                    isDark: customColors.isDark,
+                    accent: customColors.accent,
+                    surface: customColors.surface,
+                  }}
+                  groupLabel={t("themeDialog.customTheme")}
+                  modeLabel={
+                    customColors.isDark
+                      ? t("themeDialog.dark")
+                      : t("themeDialog.light")
+                  }
+                  selectedLabel={t("themeSelected")}
+                  isSelected={isCustomActive}
+                  onSelect={() => {
+                    activateCustomTheme();
+                    onOpenChange(false);
+                  }}
+                />
+              </div>
+            </section>
+          )}
+        </div>
+
+        <div className="border-border flex flex-col gap-2 border-t pt-4">
+          <div className="flex justify-center">
+            <Link
+              href={{ pathname: "/theme-customizer" }}
+              onClick={() => onOpenChange(false)}
+              className="text-muted-foreground hover:text-primary text-xs underline py-1.5 px-3 transition-colors focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none"
+            >
+              {isCustomActive
+                ? t("themeDialog.editCustom")
+                : t("themeDialog.createCustom")}
+            </Link>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
