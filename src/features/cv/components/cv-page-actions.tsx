@@ -7,11 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { FaDownload, FaFileWord, FaHome } from "react-icons/fa";
+import { FaDownload, FaHome } from "react-icons/fa";
 import { Loader2, Mail, Send, X } from "lucide-react";
 import { TRPCClientError } from "@trpc/client";
 import { AnimatePresence, motion } from "motion/react";
-import { parseAsStringLiteral, useQueryState } from "nuqs";
 
 import { Link } from "@/i18n/routing";
 import { Form, FormField } from "@/components/ui/form";
@@ -19,22 +18,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
-import {
-  CV_DESIGNS,
-  cvDesignRegistry,
-  type CvDesignId,
-} from "@/features/cv/lib/cv-design";
 
 interface CvPageActionsProps {
   fullName: string;
   canSendByEmail: boolean;
   downloadHref: string | null;
-  docxDownloadHref: string | null;
   downloadFileName: string;
   goBackLabel: string;
   downloadLabel: string;
   paginatePdfPages?: boolean;
-  design?: CvDesignId;
 }
 
 function getTrpcErrorCode(data: unknown): string | null {
@@ -57,24 +49,16 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
   fullName,
   canSendByEmail,
   downloadHref,
-  docxDownloadHref,
   downloadFileName,
   goBackLabel,
   downloadLabel,
   paginatePdfPages = false,
-  design: serverDesign = "default",
 }) => {
   const locale = useLocale();
-  const t = useTranslations("curriculum");
   const tPdf = useTranslations("curriculum.pdfDelivery");
   const [emailOpen, setEmailOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const sendPdf = api.cvPublic.sendPdfByEmail.useMutation();
-
-  const [design, setDesign] = useQueryState(
-    "design",
-    parseAsStringLiteral(CV_DESIGNS).withDefault(serverDesign),
-  );
 
   const emailSchema = useMemo(
     () =>
@@ -134,25 +118,6 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
         </Link>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="border-border inline-flex overflow-hidden rounded-lg border shadow-sm">
-            {cvDesignRegistry.map((entry) => (
-              <button
-                key={entry.id}
-                type="button"
-                onClick={() => {
-                  void setDesign(entry.id);
-                }}
-                className={`pressable min-h-11 px-4 py-2 text-sm font-medium transition-colors ${
-                  design === entry.id
-                    ? "bg-primary-800 text-white"
-                    : "bg-card text-foreground hover:bg-muted"
-                }`}
-              >
-                {t(`designs.${entry.id}`)}
-              </button>
-            ))}
-          </div>
-
           {downloadHref ? (
             <a
               href={downloadHref}
@@ -160,17 +125,6 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
               className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg"
             >
               {downloadLabel} <FaDownload className="size-4" aria-hidden />
-            </a>
-          ) : null}
-
-          {docxDownloadHref ? (
-            <a
-              href={docxDownloadHref}
-              download={downloadFileName.replace(/\.pdf$/i, ".docx")}
-              className="pressable border-primary-800 text-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium shadow-lg hover:text-white"
-            >
-              {t("actions.downloadDocx")}{" "}
-              <FaFileWord className="size-4" aria-hidden />
             </a>
           ) : null}
 

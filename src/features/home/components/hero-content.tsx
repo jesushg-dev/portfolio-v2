@@ -1,4 +1,4 @@
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/routing";
@@ -107,7 +107,7 @@ export default async function HeroContent({
           className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold transition"
         >
           {t("viewCV")}
-          <Download className="h-4 w-4" />
+          <ArrowRight className="h-4 w-4" />
         </Link>
         <a
           href="#contact"

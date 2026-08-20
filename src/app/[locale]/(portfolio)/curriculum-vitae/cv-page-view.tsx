@@ -135,9 +135,6 @@ const CvPageView: FC<CvPageViewProps> = async ({
   const cvDownloadHref = header
     ? `/api/cv/pdf?locale=${currentLocale}${paginateQuery}${designQuery}`
     : null;
-  const docxDownloadHref = header
-    ? `/api/cv/docx?locale=${currentLocale}`
-    : null;
   const canSendByEmail =
     Boolean(header) &&
     (await canDeliverPortfolioCvEmail(userId, currentLocale));
@@ -185,12 +182,10 @@ const CvPageView: FC<CvPageViewProps> = async ({
           fullName={header?.fullName ?? profile?.username ?? "user"}
           canSendByEmail={canSendByEmail}
           downloadHref={cvDownloadHref}
-          docxDownloadHref={docxDownloadHref}
           downloadFileName={downloadFileName}
           goBackLabel={t("actions.goBack")}
           downloadLabel={t("actions.download")}
           paginatePdfPages={paginatePdfPages}
-          design={design}
         />
       </div>
       <section className="page md:max-w-letter print:max-w-letter print:max-h-letter print:my-o my-6 mb-0 bg-gray-100 sm:mb-6 print:mx-0 print:overflow-hidden print:border-0 print:bg-white">
