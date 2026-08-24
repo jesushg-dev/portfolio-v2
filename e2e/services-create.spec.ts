@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-import { getWorkerAuthFile } from "./helpers/auth-state";
+import { expect, test } from "./authenticated-test";
 
 import {
   deleteServiceByTitle,
@@ -8,8 +7,6 @@ import {
 } from "./helpers/fill-service-form";
 
 test.describe("services create and cleanup", () => {
-  test.use({ storageState: getWorkerAuthFile() });
-
   const tempService = {
     title: "E2E Temp Custom Service",
     description: "Temporary service created during automated test run",

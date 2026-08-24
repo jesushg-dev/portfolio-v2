@@ -1,9 +1,7 @@
-import { expect, test } from "@playwright/test";
-import { getWorkerAuthFile } from "./helpers/auth-state";
+import { expect, test } from "./authenticated-test";
+import { selectOrCreateCompany } from "./helpers/select-company";
 
 test.describe("jobs application CRUD and integrity", () => {
-  test.use({ storageState: getWorkerAuthFile() });
-
   const uniqueId = Date.now();
   const testPosition = `E2E Senior Fullstack ${uniqueId}`;
 
@@ -29,26 +27,7 @@ test.describe("jobs application CRUD and integrity", () => {
     const positionInput = page.locator("#position");
     await positionInput.fill(testPosition);
 
-    // 4. Select Company via Combobox
-    const dialog = page.locator('[data-slot="dialog-portal"]');
-    const companyCombobox = dialog.locator('button[role="combobox"]').first();
-    await companyCombobox.click();
-
-    const firstCompanyItem = dialog
-      .locator('[data-slot="command-item"], [role="option"]')
-      .first();
-    if (
-      await firstCompanyItem.isVisible({ timeout: 3000 }).catch(() => false)
-    ) {
-      await firstCompanyItem.click();
-    } else {
-      const commandInput = dialog
-        .locator('input[placeholder*="empresa"], input[placeholder*="company"]')
-        .first();
-      await commandInput.fill(`E2E Tech Corp ${uniqueId}`);
-      const createItem = dialog.locator('[data-slot="command-item"]').first();
-      await createItem.click();
-    }
+    await selectOrCreateCompany(page, `E2E Tech Corp ${uniqueId}`);
 
     // 5. Submit form and capture created id from response
     let createdId = "";
@@ -84,6 +63,10 @@ test.describe("jobs application CRUD and integrity", () => {
 
     await page.locator('button[type="submit"]').first().click();
     await createResponse;
+    await page.waitForURL(
+      (url) => !url.pathname.includes("/applications/new"),
+      { timeout: 20_000 },
+    );
 
     // 6. Navigate back to list and verify Kanban card presence
     await page.goto("/admin/job-tracker");

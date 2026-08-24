@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-import { getWorkerAuthFile } from "./helpers/auth-state";
+import { expect, test } from "./authenticated-test";
 
 import {
   deleteServiceByTitle,
@@ -8,8 +7,6 @@ import {
 } from "./helpers/fill-service-form";
 
 test.describe("services edit and restore data integrity", () => {
-  test.use({ storageState: getWorkerAuthFile() });
-
   const uniqueId = Date.now();
   const testService = {
     title: `E2E Service ${uniqueId}`,

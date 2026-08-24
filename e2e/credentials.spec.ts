@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "./authenticated-test";
 
 test.describe("Admin Credentials & Integrations", () => {
   test("renders integration cards in a grid", async ({ page }) => {

@@ -31,8 +31,21 @@ function skillsNavLink(page: Page) {
     .first();
 }
 
+/** Dismiss a form/dialog overlay that would intercept sidebar clicks. */
+async function dismissDialogOverlay(page: Page): Promise<void> {
+  const overlay = page.locator('[data-slot="dialog-overlay"]');
+  if (await overlay.isVisible({ timeout: 500 }).catch(() => false)) {
+    await page.keyboard.press("Escape");
+    await overlay.waitFor({ state: "hidden", timeout: 5_000 }).catch(() => {
+      /* empty */
+    });
+  }
+}
+
 /** Navigate to the skills list the way a user would — via the admin sidebar. */
 export async function goToSkillsList(page: Page): Promise<void> {
+  await dismissDialogOverlay(page);
+
   if (/\/admin\/skills(\?|$)/.test(page.url())) {
     return;
   }
@@ -52,7 +65,6 @@ async function openNewSkillForm(page: Page): Promise<void> {
 
 /** Wait until save finishes and we have left the form page. */
 async function waitForSkillSaveToFinish(page: Page): Promise<void> {
-  // Give the app a moment to navigate via router.back()
   try {
     await page.waitForURL((url) => !url.pathname.endsWith("/new"), {
       timeout: 5_000,
@@ -62,16 +74,8 @@ async function waitForSkillSaveToFinish(page: Page): Promise<void> {
     // If router.back() didn't trigger, dismiss any open dialog and navigate
   }
 
-  // Dismiss any dialog overlay that may block interaction
-  const overlay = page.locator('[data-slot="dialog-overlay"]');
-  if (await overlay.isVisible({ timeout: 500 }).catch(() => false)) {
-    await page.keyboard.press("Escape");
-    await overlay.waitFor({ state: "hidden", timeout: 5_000 }).catch(() => {
-      /* empty */
-    });
-  }
+  await dismissDialogOverlay(page);
 
-  // Ensure we're on the skills list
   if (
     /\/new\/?$/.test(page.url()) ||
     !/\/admin\/skills(\?|$)/.test(page.url())
@@ -158,11 +162,10 @@ export async function fillSkillForm(
   await page.locator("#skill-form-submit").click();
 
   await assertCreateSkillSucceeded(await createResponse);
+  await waitForSkillSaveToFinish(page);
 
   if (verifyInList) {
     await expectSkillListContains(page, skill.title);
-  } else {
-    await waitForSkillSaveToFinish(page);
   }
 }
 

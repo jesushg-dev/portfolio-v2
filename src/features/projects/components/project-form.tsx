@@ -297,6 +297,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                     description={t("privateProjectDescription")}
                   >
                     <Switch
+                      id="project-private"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
@@ -385,6 +386,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 render={({ field }) => (
                   <FormCheckboxItem label="Case study enabled">
                     <Switch
+                      id="project-case-study"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />

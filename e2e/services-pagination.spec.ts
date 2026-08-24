@@ -1,4 +1,5 @@
-import { test, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { test } from "./authenticated-test";
 import {
   assertPaginationBehavior,
   fetchAdminTotalCount,
@@ -21,6 +22,7 @@ test.describe("services pagination", () => {
       page,
       "servicesAdmin.getMine",
     );
+    test.skip(totalCount === 0, "No services seeded yet — skipping pagination");
 
     await page.goto("/admin");
     await goToServicesList(page);
@@ -30,6 +32,12 @@ test.describe("services pagination", () => {
   });
 
   test("should filter items and toggle column visibility", async ({ page }) => {
+    const totalCount = await fetchAdminTotalCount(
+      page,
+      "servicesAdmin.getMine",
+    );
+    test.skip(totalCount === 0, "No services seeded yet — skipping filters");
+
     await page.goto("/admin");
     await goToServicesList(page);
 

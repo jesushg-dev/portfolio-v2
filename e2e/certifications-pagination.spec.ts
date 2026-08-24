@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "./authenticated-test";
 import { goToCertificationsList } from "./helpers/fill-certification-form";
 import {
   assertPaginationBehavior,

@@ -11,7 +11,24 @@ export interface RegisterOwnerInput {
   password: string;
 }
 
-const ADMIN_URL = /\/(admin|panel|beheer)\/?$/;
+/** True when the URL *pathname* is the admin dashboard (not `?next=/admin`). */
+export function isAdminPath(url: URL | string): boolean {
+  const pathname =
+    typeof url === "string" ? new URL(url).pathname : url.pathname;
+  return /\/(admin|panel|beheer)\/?$/.test(pathname);
+}
+
+export async function expectAdminDashboard(
+  page: Page,
+  timeout = 60_000,
+): Promise<void> {
+  await expect(page).toHaveURL((url) => isAdminPath(url), { timeout });
+  await expect(
+    page.getByRole("heading", {
+      name: /Welcome to your Portfolio Admin|Bienvenido a tu administrador de portafolio|Welkom in je Portfolio Admin/,
+    }),
+  ).toBeVisible({ timeout: Math.min(timeout, 30_000) });
+}
 
 async function parseSignInResponse(response: Response): Promise<void> {
   const text = await response.text().catch(() => "");
@@ -61,32 +78,33 @@ async function assertAuthMutationSucceeded(
   }
 }
 
-export function buildRegisterOwnerInput(workerIndex = 0): RegisterOwnerInput {
+export function buildOwnerAccountInput(): RegisterOwnerInput {
   const { email, password } = requireE2eCredentials();
+  return {
+    name: portfolioProfile.name,
+    username: portfolioProfile.username,
+    email,
+    password,
+  };
+}
 
-  if (workerIndex === 0) {
-    return {
-      name: portfolioProfile.name,
-      username: portfolioProfile.username,
-      email,
-      password,
-    };
-  }
-
-  const atIndex = email.lastIndexOf("@");
+/**
+ * Worker accounts are always distinct from the seeded owner so mutating
+ * admin tests cannot wipe the public portfolio that locale tests read.
+ */
+export function buildRegisterOwnerInput(workerIndex = 0): RegisterOwnerInput {
+  const owner = buildOwnerAccountInput();
+  const atIndex = owner.email.lastIndexOf("@");
   const workerEmail =
     atIndex !== -1
-      ? `${email.slice(0, atIndex)}-worker-${workerIndex}${email.slice(atIndex)}`
-      : `${email}-worker-${workerIndex}`;
-
-  const workerUsername = `${portfolioProfile.username}-w${workerIndex}`;
-  const workerName = `${portfolioProfile.name} (Worker ${workerIndex})`;
+      ? `${owner.email.slice(0, atIndex)}-e2e-${workerIndex}${owner.email.slice(atIndex)}`
+      : `${owner.email}-e2e-${workerIndex}`;
 
   return {
-    name: workerName,
-    username: workerUsername,
+    name: `${owner.name} (E2E ${workerIndex})`,
+    username: `${portfolioProfile.username}-e2e${workerIndex}`,
     email: workerEmail,
-    password,
+    password: owner.password,
   };
 }
 
@@ -96,8 +114,12 @@ export async function signInOwner(
   password: string,
 ): Promise<boolean> {
   await page.goto("/login");
-  if (ADMIN_URL.test(page.url())) {
-    return true;
+  if (isAdminPath(page.url())) {
+    const cookies = await page.context().cookies();
+    if (cookies.length > 0) {
+      return true;
+    }
+    await page.goto("/login", { waitUntil: "domcontentloaded" });
   }
 
   await expect(
@@ -123,7 +145,7 @@ export async function signInOwner(
   }
 
   try {
-    await expect(page).toHaveURL(ADMIN_URL, { timeout: 30_000 });
+    await expectAdminDashboard(page, 30_000);
     return true;
   } catch {
     throw new Error(
@@ -135,10 +157,10 @@ export async function signInOwner(
 
 export async function fillRegisterOwnerForm(
   page: Page,
-  input: RegisterOwnerInput = buildRegisterOwnerInput(),
+  input: RegisterOwnerInput = buildOwnerAccountInput(),
 ): Promise<void> {
   await page.goto("/register?next=/admin");
-  if (ADMIN_URL.test(page.url())) {
+  if (isAdminPath(page.url())) {
     return;
   }
   await expect(
@@ -180,12 +202,12 @@ export async function fillRegisterOwnerForm(
     throw error;
   }
 
-  await expect(page).toHaveURL(ADMIN_URL, { timeout: 60_000 });
+  await expectAdminDashboard(page);
 }
 
 export async function ensureOwnerAccount(
   page: Page,
-  input: RegisterOwnerInput = buildRegisterOwnerInput(),
+  input: RegisterOwnerInput = buildOwnerAccountInput(),
 ): Promise<void> {
   try {
     const signedIn = await signInOwner(page, input.email, input.password);

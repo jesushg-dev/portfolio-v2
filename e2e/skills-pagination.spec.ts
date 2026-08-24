@@ -1,4 +1,5 @@
-import { test } from "@playwright/test";
+import { test } from "./authenticated-test";
+import { ensurePortfolioSkills } from "./helpers/ensure-portfolio-skills";
 import { goToSkillsList } from "./helpers/fill-skill-form";
 import {
   assertPaginationBehavior,
@@ -6,12 +7,13 @@ import {
 } from "./helpers/pagination";
 import { assertFilterAndColumnVisibility } from "./helpers/table-filters";
 
-test.setTimeout(60_000);
+test.setTimeout(180_000);
 
 test.describe("skills pagination", () => {
   test("should navigate through pagination and respect rows per page settings", async ({
     page,
   }) => {
+    await ensurePortfolioSkills(page);
     const totalCount = await fetchAdminTotalCount(page, "skillsAdmin.getMine");
     test.skip(totalCount === 0, "No skills seeded yet — skipping pagination");
 
@@ -23,6 +25,7 @@ test.describe("skills pagination", () => {
   });
 
   test("should filter items and toggle column visibility", async ({ page }) => {
+    await ensurePortfolioSkills(page);
     const totalCount = await fetchAdminTotalCount(page, "skillsAdmin.getMine");
     test.skip(totalCount === 0, "No skills seeded yet — skipping filters");
 

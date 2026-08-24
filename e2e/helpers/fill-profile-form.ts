@@ -304,6 +304,9 @@ export async function fillProfileHeroSmoke(
   await goToProfileHero(page);
 
   await selectProfileLocale(page, "profile-hero", "en");
+  await page
+    .locator("#profile-hero-full-name")
+    .fill(portfolioCv.header.fullName);
   await page.locator("#profile-hero-title-0-en").fill(title.en);
   await page.locator("#profile-hero-summary-en").fill(heroSummary.en);
 

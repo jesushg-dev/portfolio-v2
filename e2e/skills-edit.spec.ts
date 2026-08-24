@@ -1,11 +1,8 @@
-import { expect, test } from "@playwright/test";
-import { getWorkerAuthFile } from "./helpers/auth-state";
+import { expect, test } from "./authenticated-test";
 
 import { cleanupUserSkills, fillSkillForm } from "./helpers/fill-skill-form";
 
 test.describe("skills edit and data integrity", () => {
-  test.use({ storageState: getWorkerAuthFile() });
-
   const uniqueId = Date.now();
   const uniqueTitle = `E2E Skill ${uniqueId}`;
   const tempSkill = {

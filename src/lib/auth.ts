@@ -152,6 +152,7 @@ export const auth = betterAuth({
     "http://lvh.me:3000",
     "http://*.lvh.me:3000",
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
   ],
   session: {
     expiresIn: 60 * 60 * 24 * 7,

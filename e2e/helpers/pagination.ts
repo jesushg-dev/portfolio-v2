@@ -1,5 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+import { ensureAdminOrigin } from "./admin-origin";
+
 interface TrpcResponse {
   result?: {
     data?: {
@@ -20,6 +22,7 @@ export async function fetchAdminTotalCount(
   page: Page,
   procedure: string,
 ): Promise<number> {
+  await ensureAdminOrigin(page);
   const response = await page.request.get(trpcGetInput(procedure, {}));
   if (!response.ok()) {
     throw new Error(`tRPC query failed: ${response.status()}`);

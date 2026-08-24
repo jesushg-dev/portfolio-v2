@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "./authenticated-test";
 
 import { ensurePortfolioSkills } from "./helpers/ensure-portfolio-skills";
 import {

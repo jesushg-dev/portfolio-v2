@@ -26,11 +26,23 @@ test.describe("public locale switching", () => {
 
   test("skills backend tab shows stack technologies", async ({ page }) => {
     await page.goto("/");
-    await page.locator("#skills").scrollIntoViewIfNeeded();
-    await page.getByRole("button", { name: /Backend/i }).click();
-    await expect(page.getByText("C#", { exact: true }).first()).toBeVisible();
+    const skills = page.locator("#skills");
+    await skills.scrollIntoViewIfNeeded();
+
+    const backendTab = skills.getByRole("button", { name: /^Backend/i });
+    await expect(backendTab).toBeVisible();
+
+    // Tabs hydrate after ViewportSection mounts; retry the click until the
+    // backend list actually replaces the default frontend skills.
+    await expect(async () => {
+      await backendTab.click();
+      await expect(
+        skills.getByRole("link", { name: "C#" }).first(),
+      ).toBeVisible({ timeout: 3_000 });
+    }).toPass({ timeout: 15_000 });
+
     await expect(
-      page.getByText("Node.js", { exact: true }).first(),
+      skills.getByRole("link", { name: "Node.js" }).first(),
     ).toBeVisible();
   });
 });

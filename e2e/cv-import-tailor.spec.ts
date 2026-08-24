@@ -1,9 +1,6 @@
-import { expect, test } from "@playwright/test";
-import { getWorkerAuthFile } from "./helpers/auth-state";
+import { expect, test } from "./authenticated-test";
 
 test.describe("CV Engine and Resume Import integration", () => {
-  test.use({ storageState: getWorkerAuthFile() });
-
   test("loads CV editor, toggles preview and import tabs, and verifies import workflow", async ({
     page,
   }) => {

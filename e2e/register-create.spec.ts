@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 
 import {
-  buildRegisterOwnerInput,
+  buildOwnerAccountInput,
+  expectAdminDashboard,
   fillRegisterOwnerForm,
   portfolioProfile,
   signInOwner,
@@ -11,7 +12,7 @@ test.describe("register create", () => {
   test("registers the owner account through the UI from the shared fixture", async ({
     page,
   }) => {
-    const input = buildRegisterOwnerInput();
+    const input = buildOwnerAccountInput();
     const alreadyRegistered = await signInOwner(
       page,
       input.email,
@@ -22,8 +23,7 @@ test.describe("register create", () => {
       await fillRegisterOwnerForm(page, input);
     }
 
-    await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 60_000 });
-    await expect(page.locator("h1").first()).toBeVisible({ timeout: 30_000 });
+    await expectAdminDashboard(page);
 
     expect(input.name).toBe(portfolioProfile.name);
     expect(input.username).toBe(portfolioProfile.username);

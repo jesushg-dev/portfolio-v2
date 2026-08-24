@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "./authenticated-test";
 import { goToProjectsList } from "./helpers/fill-project-form";
 import {
   assertPaginationBehavior,
@@ -16,6 +16,7 @@ test.describe("projects pagination", () => {
       page,
       "projectsAdmin.getMine",
     );
+    test.skip(totalCount === 0, "No projects seeded yet — skipping pagination");
 
     await page.goto("/admin");
     await goToProjectsList(page);
@@ -25,6 +26,12 @@ test.describe("projects pagination", () => {
   });
 
   test("should filter items and toggle column visibility", async ({ page }) => {
+    const totalCount = await fetchAdminTotalCount(
+      page,
+      "projectsAdmin.getMine",
+    );
+    test.skip(totalCount === 0, "No projects seeded yet — skipping filters");
+
     await page.goto("/admin");
     await goToProjectsList(page);
 

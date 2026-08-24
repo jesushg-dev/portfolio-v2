@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-import { getWorkerAuthFile } from "./helpers/auth-state";
+import { expect, test } from "./authenticated-test";
 
 import {
   cleanupUserTimeline,
@@ -9,8 +8,6 @@ import {
 } from "./helpers/fill-timeline-form";
 
 test.describe("timeline edit and data integrity", () => {
-  test.use({ storageState: getWorkerAuthFile() });
-
   const uniqueId = Date.now();
   const tempTimelineItem = {
     key: `e2e-timeline-${uniqueId}`,
@@ -54,6 +51,11 @@ test.describe("timeline edit and data integrity", () => {
       .first()
       .click();
     await page.waitForURL(/\/admin\/timeline\/.*\/edit/, { timeout: 15_000 });
+
+    const titleInput = page.locator("#timeline-title-en");
+    await expect(titleInput).toHaveValue(tempTimelineItem.title.en, {
+      timeout: 15_000,
+    });
 
     // 3. Edit organization and submit
     const orgInput = page.locator("#timeline-organization");

@@ -1,4 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { test } from "./authenticated-test";
+import { expectAdminDashboard } from "./helpers/fill-register-form";
 
 test.describe("dashboard", () => {
   test("loads the admin dashboard with an authenticated session", async ({
@@ -6,11 +7,6 @@ test.describe("dashboard", () => {
   }) => {
     await page.goto("/admin");
 
-    await expect(page).toHaveURL(/\/admin\/?$/);
-    await expect(
-      page.getByRole("heading", {
-        name: /Welcome to your Portfolio Admin|Bienvenido a tu administrador de portafolio|Welkom in je Portfolio Admin/,
-      }),
-    ).toBeVisible();
+    await expectAdminDashboard(page);
   });
 });

@@ -1,5 +1,5 @@
-import { test, expect } from "@playwright/test";
-
+import { expect, test } from "./authenticated-test";
+import { getWorkerAuthFile } from "./helpers/auth-state";
 import { ensurePortfolioSkills } from "./helpers/ensure-portfolio-skills";
 import {
   certificationListTitle,
@@ -10,8 +10,6 @@ import {
 } from "./helpers/fill-certification-form";
 
 test.setTimeout(60 * 60 * 1000);
-
-import { getWorkerAuthFile } from "./helpers/auth-state";
 
 test.describe.configure({ mode: "serial" });
 

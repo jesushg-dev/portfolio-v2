@@ -31,6 +31,7 @@ export async function getTimelineEditPageData(id: string) {
   const item = timelineItemDelegate
     ? await timelineItemDelegate.findUnique({
         where: { id, userId },
+        include: { TimelineItemTranslation: true },
       })
     : null;
 
@@ -100,6 +101,7 @@ export async function getUserTimelineWithLanguages(params: DataTableParams) {
       orderBy,
       skip,
       take,
+      include: { TimelineItemTranslation: true },
     }),
     timelineItemDelegate.count({ where }),
   ]);

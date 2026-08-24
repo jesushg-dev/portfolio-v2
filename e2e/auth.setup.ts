@@ -3,6 +3,7 @@ import { test as setup, expect } from "@playwright/test";
 import {
   buildRegisterOwnerInput,
   ensureOwnerAccount,
+  expectAdminDashboard,
 } from "./helpers/fill-register-form";
 import {
   disconnectE2ePrisma,
@@ -25,8 +26,15 @@ setup("authenticate workers", async ({ browser }) => {
     const input = buildRegisterOwnerInput(i);
     await ensureOwnerAccount(page, input);
 
-    await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 60_000 });
-    await expect(page.locator("h1").first()).toBeVisible({ timeout: 30_000 });
+    await expectAdminDashboard(page);
+
+    const cookies = await page.context().cookies();
+    if (cookies.length === 0) {
+      throw new Error(
+        `Worker ${i} reached /admin but the browser stored no cookies. ` +
+          "Session cookies must be captured for storageState (check BETTER_AUTH_URL vs E2E_BASE_URL).",
+      );
+    }
 
     const workerAuthFile = `e2e/.auth/user-worker-${i}.json`;
     await page.context().storageState({ path: workerAuthFile });

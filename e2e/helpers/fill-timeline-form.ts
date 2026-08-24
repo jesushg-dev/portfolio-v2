@@ -1,5 +1,6 @@
 import type { Page, Response } from "@playwright/test";
 
+import { ensureAdminOrigin } from "./admin-origin";
 import {
   portfolioTimeline,
   type PortfolioTimelineItemFixture,
@@ -55,6 +56,7 @@ export function extractLocalizedText(
 }
 
 export async function getAppLanguages(page: Page): Promise<AppLanguageRow[]> {
+  await ensureAdminOrigin(page);
   const response = await page.request.get(
     trpcGetInput("appLanguagesAdmin.getAll"),
   );
@@ -249,6 +251,7 @@ export async function getTimelineMine(page: Page): Promise<{
   pageCount: number;
   totalCount: number;
 }> {
+  await ensureAdminOrigin(page);
   const response = await page.request.get(
     trpcGetInput("timelineAdmin.getMine"),
   );
@@ -277,6 +280,7 @@ export async function getTimelineMine(page: Page): Promise<{
 }
 
 export async function cleanupUserTimeline(page: Page): Promise<void> {
+  await ensureAdminOrigin(page);
   const deleteResponse = await page.request.post(
     `/api/trpc/timelineAdmin.deleteAll?batch=1`,
     {

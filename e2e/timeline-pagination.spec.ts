@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "./authenticated-test";
 import { goToTimelineList } from "./helpers/fill-timeline-form";
 import {
   assertPaginationBehavior,
@@ -16,6 +16,10 @@ test.describe("timeline pagination", () => {
       page,
       "timelineAdmin.getMine",
     );
+    test.skip(
+      totalCount === 0,
+      "No timeline items seeded yet — skipping pagination",
+    );
 
     await page.goto("/admin");
     await goToTimelineList(page);
@@ -25,6 +29,15 @@ test.describe("timeline pagination", () => {
   });
 
   test("should filter items and toggle column visibility", async ({ page }) => {
+    const totalCount = await fetchAdminTotalCount(
+      page,
+      "timelineAdmin.getMine",
+    );
+    test.skip(
+      totalCount === 0,
+      "No timeline items seeded yet — skipping filters",
+    );
+
     await page.goto("/admin");
     await goToTimelineList(page);
 

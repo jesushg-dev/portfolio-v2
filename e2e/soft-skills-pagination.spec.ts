@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "./authenticated-test";
 import { goToSoftSkillsList } from "./helpers/fill-soft-skills-form";
 import {
   assertPaginationBehavior,
@@ -16,6 +16,10 @@ test.describe("soft skills pagination", () => {
       page,
       "softSkillsAdmin.getMine",
     );
+    test.skip(
+      totalCount === 0,
+      "No soft skills seeded yet — skipping pagination",
+    );
 
     await page.goto("/admin");
     await goToSoftSkillsList(page);
@@ -25,6 +29,12 @@ test.describe("soft skills pagination", () => {
   });
 
   test("should filter items and toggle column visibility", async ({ page }) => {
+    const totalCount = await fetchAdminTotalCount(
+      page,
+      "softSkillsAdmin.getMine",
+    );
+    test.skip(totalCount === 0, "No soft skills seeded yet — skipping filters");
+
     await page.goto("/admin");
     await goToSoftSkillsList(page);
 

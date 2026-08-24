@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 
+import { ensureAdminOrigin } from "./admin-origin";
 import {
   portfolioSkills,
   type PortfolioSkillFixture,
@@ -78,6 +79,7 @@ type SkillsResponse = { data: SkillRow[] } | SkillRow[];
 
 /** Creates any missing fixture skills via tRPC (does not delete existing skills). */
 export async function ensurePortfolioSkills(page: Page): Promise<void> {
+  await ensureAdminOrigin(page);
   const response = await executeTrpcQuery<SkillsResponse>(
     page,
     "skillsAdmin.getMine",

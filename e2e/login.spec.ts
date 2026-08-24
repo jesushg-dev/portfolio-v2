@@ -1,13 +1,18 @@
 import { test, expect } from "@playwright/test";
 
 import { requireE2eCredentials } from "./env";
-import { ensureOwnerAccount, signInOwner } from "./helpers/fill-register-form";
+import {
+  buildOwnerAccountInput,
+  ensureOwnerAccount,
+  expectAdminDashboard,
+  signInOwner,
+} from "./helpers/fill-register-form";
 
 test.describe("login", () => {
   test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await ensureOwnerAccount(page);
+    await ensureOwnerAccount(page, buildOwnerAccountInput());
     await context.close();
   });
 
@@ -18,7 +23,6 @@ test.describe("login", () => {
 
     await signInOwner(page, email, password);
 
-    await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 60_000 });
-    await expect(page.locator("h1").first()).toBeVisible({ timeout: 30_000 });
+    await expectAdminDashboard(page);
   });
 });
