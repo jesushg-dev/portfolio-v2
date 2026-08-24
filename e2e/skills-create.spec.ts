@@ -18,11 +18,11 @@ test.setTimeout(45 * 60 * 1000);
 test.describe.configure({ mode: "serial" });
 
 test.describe("skills create", () => {
-  test.beforeAll(async ({ browser }) => {
+  test.beforeAll(async ({ browser }, testInfo) => {
     await ensureAppLanguages();
 
     const context = await browser.newContext({
-      storageState: getWorkerAuthFile(),
+      storageState: getWorkerAuthFile(testInfo.workerIndex),
     });
     const page = await context.newPage();
     await cleanupUserSkills(page);

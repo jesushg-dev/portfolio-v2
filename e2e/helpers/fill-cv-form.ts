@@ -16,6 +16,7 @@ import {
   portfolioSkills,
   type PortfolioSkillFixture,
 } from "../fixtures/portfolio-skills";
+import { ensureAdminOrigin } from "./admin-origin";
 import { selectSkillsInPicker } from "./skill-picker-actions";
 import { clickSelectOption } from "./select-option";
 
@@ -43,6 +44,7 @@ function trpcGetInput(procedure: string, input: unknown = {}): string {
 }
 
 async function trpcQuery<T>(page: Page, procedure: string): Promise<T> {
+  await ensureAdminOrigin(page);
   const response = await page.request.get(trpcGetInput(procedure));
   if (!response.ok()) {
     throw new Error(
@@ -62,6 +64,7 @@ async function trpcMutate(
   input: unknown,
   { ignoreNotFound = false } = {},
 ): Promise<void> {
+  await ensureAdminOrigin(page);
   const response = await page.request.post(`/api/trpc/${procedure}?batch=1`, {
     headers: { "content-type": "application/json" },
     data: { "0": { json: input } },
@@ -155,29 +158,69 @@ async function submitCvForm(
   const modal = await activeCvModal(page);
   const submitId = `${formId}-submit`;
 
-  const responsePromise = page.waitForResponse(
-    (response) => {
-      if (response.request().method() !== "POST") return false;
-      if (!response.url().includes("/api/trpc")) return false;
-      if (response.url().includes(`cv.${mutation}`)) return response.ok();
-      const body = response.request().postData() ?? "";
-      return body.includes(mutation) && response.ok();
-    },
-    { timeout: 30_000 },
-  );
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" &&
+        res.url().includes(`/api/trpc/cv.${mutation}`),
+      { timeout: 30_000 },
+    ),
+    modal.locator(`#${submitId}`).click(),
+  ]);
 
-  await modal.locator(`#${submitId}`).click();
+  const text = await response.text().catch(() => "");
+  if (!response.ok()) {
+    throw new Error(`cv.${mutation} failed: ${response.status()} ${text}`);
+  }
 
-  await responsePromise;
+  if (!text.trim()) return;
+
+  try {
+    const payload = JSON.parse(text) as [
+      { error?: { json?: { message?: string } } },
+    ];
+    const message = payload[0]?.error?.json?.message;
+    if (message) {
+      throw new Error(`cv.${mutation} failed: ${message}`);
+    }
+  } catch (error) {
+    if (error instanceof SyntaxError) return;
+    throw error;
+  }
+}
+
+async function ensureCvItemAddReady(
+  page: Page,
+  sectionId: string,
+  addButtonId: string,
+): Promise<void> {
+  const addButton = page.locator(`#${addButtonId}`);
+  if (await addButton.isVisible()) return;
+
+  const sectionModal = page.locator("#cv-section-modal");
+  if (await sectionModal.isVisible()) {
+    await page.locator("#cv-section-modal-close").click();
+    await sectionModal.waitFor({ state: "hidden", timeout: 15_000 });
+  }
+
+  await openCvSection(page, sectionId);
+  await addButton.waitFor({ state: "visible", timeout: 15_000 });
 }
 
 async function openCvItemModal(page: Page, addButtonId: string): Promise<void> {
-  await page.locator(`#${addButtonId}`).click();
-  await page.locator("#cv-item-modal").waitFor({ state: "visible" });
+  const addButton = page.locator(`#${addButtonId}`);
+  await addButton.waitFor({ state: "visible", timeout: 15_000 });
+  await addButton.scrollIntoViewIfNeeded();
+  await addButton.click();
+  await page
+    .locator("#cv-item-modal")
+    .waitFor({ state: "visible", timeout: 15_000 });
 }
 
 async function waitForCvItemModalClosed(page: Page): Promise<void> {
-  await page.locator("#cv-item-modal").waitFor({ state: "hidden" });
+  await page
+    .locator("#cv-item-modal")
+    .waitFor({ state: "hidden", timeout: 30_000 });
 }
 
 export function contactListLabel(contact: PortfolioCvContactFixture): string {
@@ -227,6 +270,7 @@ export async function fillCvContact(
   page: Page,
   contact: PortfolioCvContactFixture,
 ): Promise<void> {
+  await ensureCvItemAddReady(page, "contacts", "cv-contacts-add");
   await openCvItemModal(page, "cv-contacts-add");
   await clickSelectOption(
     page,
@@ -248,6 +292,7 @@ export async function fillCvEducation(
   page: Page,
   education: PortfolioCvEducationFixture,
 ): Promise<void> {
+  await ensureCvItemAddReady(page, "education", "cv-education-add");
   await openCvItemModal(page, "cv-education-add");
   await page.locator("#education-institution").fill(education.institution);
   await fillLocalizedField(
@@ -275,6 +320,7 @@ export async function fillCvLanguage(
   page: Page,
   language: PortfolioCvLanguageFixture,
 ): Promise<void> {
+  await ensureCvItemAddReady(page, "languages", "cv-languages-add");
   await openCvItemModal(page, "cv-languages-add");
   await fillLocalizedField(
     page,
@@ -296,6 +342,7 @@ export async function fillCvTechnicalSkill(
   page: Page,
   skill: PortfolioCvTechnicalSkillFixture,
 ): Promise<void> {
+  await ensureCvItemAddReady(page, "skills", "cv-skills-add");
   await openCvItemModal(page, "cv-skills-add");
   await clickSelectOption(
     page,
@@ -311,6 +358,7 @@ export async function fillCvExperience(
   page: Page,
   experience: PortfolioCvExperienceFixture,
 ): Promise<void> {
+  await ensureCvItemAddReady(page, "experience", "cv-experience-add");
   await openCvItemModal(page, "cv-experience-add");
   await page.locator("#experience-company").fill(experience.company);
   // Format date as YYYY-MM for type="month" input
@@ -357,6 +405,7 @@ export async function fillCvSoftSkill(
   page: Page,
   softSkill: PortfolioCvSoftSkillFixture,
 ): Promise<void> {
+  await ensureCvItemAddReady(page, "soft-skills", "cv-soft-skills-add");
   await openCvItemModal(page, "cv-soft-skills-add");
   await fillLocalizedField(
     page,
@@ -372,6 +421,7 @@ export async function fillCvAdditionalInfo(
   page: Page,
   item: PortfolioCvFixture["additionalInformation"][number],
 ): Promise<void> {
+  await ensureCvItemAddReady(page, "additional", "cv-additional-add");
   await openCvItemModal(page, "cv-additional-add");
   await fillLocalizedField(
     page,
@@ -428,28 +478,74 @@ export async function fillCvFromFixture(page: Page): Promise<void> {
 }
 
 export async function cleanupUserCv(page: Page): Promise<void> {
-  const cv = await trpcQuery<CvMine>(page, "cv.getMine");
+  for (let pass = 0; pass < 3; pass += 1) {
+    const cv = await trpcQuery<CvMine>(page, "cv.getMine");
+    const remaining =
+      cv.contacts.length +
+      cv.educations.length +
+      cv.languages.length +
+      cv.technicalSkills.length +
+      cv.experiences.length +
+      cv.softSkills.length +
+      cv.additionalInformation.length;
+    if (remaining === 0) return;
 
-  for (const experience of cv.experiences) {
-    await trpcMutate(page, "cv.deleteExperience", { id: experience.id }, { ignoreNotFound: true });
-  }
-  for (const contact of cv.contacts) {
-    await trpcMutate(page, "cv.deleteContact", { id: contact.id }, { ignoreNotFound: true });
-  }
-  for (const education of cv.educations) {
-    await trpcMutate(page, "cv.deleteEducation", { id: education.id }, { ignoreNotFound: true });
-  }
-  for (const language of cv.languages) {
-    await trpcMutate(page, "cv.deleteLanguage", { id: language.id }, { ignoreNotFound: true });
-  }
-  for (const skill of cv.technicalSkills) {
-    await trpcMutate(page, "cv.deleteTechnicalSkill", { id: skill.id }, { ignoreNotFound: true });
-  }
-  for (const softSkill of cv.softSkills) {
-    await trpcMutate(page, "cv.deleteSoftSkill", { id: softSkill.id }, { ignoreNotFound: true });
-  }
-  for (const item of cv.additionalInformation) {
-    await trpcMutate(page, "cv.deleteAdditionalInfo", { id: item.id }, { ignoreNotFound: true });
+    for (const experience of cv.experiences) {
+      await trpcMutate(
+        page,
+        "cv.deleteExperience",
+        { id: experience.id },
+        { ignoreNotFound: true },
+      );
+    }
+    for (const contact of cv.contacts) {
+      await trpcMutate(
+        page,
+        "cv.deleteContact",
+        { id: contact.id },
+        { ignoreNotFound: true },
+      );
+    }
+    for (const education of cv.educations) {
+      await trpcMutate(
+        page,
+        "cv.deleteEducation",
+        { id: education.id },
+        { ignoreNotFound: true },
+      );
+    }
+    for (const language of cv.languages) {
+      await trpcMutate(
+        page,
+        "cv.deleteLanguage",
+        { id: language.id },
+        { ignoreNotFound: true },
+      );
+    }
+    for (const skill of cv.technicalSkills) {
+      await trpcMutate(
+        page,
+        "cv.deleteTechnicalSkill",
+        { id: skill.id },
+        { ignoreNotFound: true },
+      );
+    }
+    for (const softSkill of cv.softSkills) {
+      await trpcMutate(
+        page,
+        "cv.deleteSoftSkill",
+        { id: softSkill.id },
+        { ignoreNotFound: true },
+      );
+    }
+    for (const item of cv.additionalInformation) {
+      await trpcMutate(
+        page,
+        "cv.deleteAdditionalInfo",
+        { id: item.id },
+        { ignoreNotFound: true },
+      );
+    }
   }
 }
 

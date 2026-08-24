@@ -59,7 +59,10 @@ export function cvPreviewRoot(page: Page, rootId: CvPreviewRootId): Locator {
   return page.locator(`#${rootId}`);
 }
 
-export async function openAdminCvPreview(page: Page): Promise<void> {
+export async function openAdminCvPreview(
+  page: Page,
+  locale?: CvPreviewLocale,
+): Promise<void> {
   const sectionModal = page.locator("#cv-section-modal");
   if (await sectionModal.isVisible()) {
     await page.locator("#cv-section-modal-close").click();
@@ -70,6 +73,10 @@ export async function openAdminCvPreview(page: Page): Promise<void> {
   await page
     .locator("#cv-admin-preview")
     .waitFor({ state: "visible", timeout: 30_000 });
+
+  if (locale) {
+    await switchAdminPreviewLocale(page, locale);
+  }
 }
 
 export async function switchAdminPreviewLocale(
@@ -103,7 +110,9 @@ export async function expectCvPreviewContent(
     root.getByText(portfolioCv.header.fullName, { exact: true }),
   ).toBeVisible();
   await expect(
-    root.getByText(localizedText(portfolioCv.header.degree, locale), {
+    root.getByRole("heading", {
+      level: 1,
+      name: localizedText(portfolioCv.header.degree, locale),
       exact: true,
     }),
   ).toBeVisible();

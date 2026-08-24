@@ -225,6 +225,7 @@ export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
             <CvPreview
               data={localizedPreviewData!}
               aboutMeText={aboutMePreview}
+              locale={previewLocale}
             />
           </div>
         </CvPageFrame>

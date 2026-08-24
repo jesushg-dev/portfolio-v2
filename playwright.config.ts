@@ -1,7 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
 import { e2eEnv } from "./e2e/env";
-import { getWorkerAuthFile } from "./e2e/helpers/auth-state";
 
 const isLocalTarget =
   e2eEnv.baseURL.startsWith("http://localhost") ||
@@ -32,7 +31,9 @@ export default defineConfig({
     : process.env.CI
       ? 2
       : 4,
-  reporter: process.env.CI ? "github" : "list",
+  reporter: process.env.CI
+    ? [["github"], ["html", { open: "never" }]]
+    : "list",
   timeout: 60_000,
   expect: {
     timeout: 15_000,
@@ -82,7 +83,6 @@ export default defineConfig({
       timeout: 45 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -91,7 +91,6 @@ export default defineConfig({
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -101,7 +100,6 @@ export default defineConfig({
       timeout: 45 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -111,7 +109,6 @@ export default defineConfig({
       timeout: 60 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -121,7 +118,6 @@ export default defineConfig({
       timeout: 30 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -131,7 +127,6 @@ export default defineConfig({
       timeout: 45 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -141,7 +136,6 @@ export default defineConfig({
       timeout: 30 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -151,7 +145,6 @@ export default defineConfig({
       timeout: 60 * 60 * 1000,
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -160,7 +153,6 @@ export default defineConfig({
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -169,7 +161,6 @@ export default defineConfig({
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {
@@ -178,7 +169,6 @@ export default defineConfig({
       dependencies: ["setup"],
       use: {
         ...devices["Desktop Chrome"],
-        storageState: getWorkerAuthFile(),
       },
     },
     {

@@ -10,18 +10,21 @@ import Experience from "@/components/curriculum-vitae/experiences";
 import SoftSkills from "@/components/curriculum-vitae/soft-skills";
 import AdditionalInformation from "@/components/curriculum-vitae/additional-information";
 import { CvContextProvider } from "@/hoc/cv-context-provider";
+import type { Locale } from "@/i18n/config";
 import type { LocalizedCvData } from "./types";
 
 interface ICvPreviewProps {
   data: LocalizedCvData;
   aboutMeText: string | null;
   pdfMode?: boolean;
+  locale?: Locale;
 }
 
 const CvPreview: FC<ICvPreviewProps> = ({
   data,
   aboutMeText,
   pdfMode = false,
+  locale,
 }) => {
   const t = useTranslations("curriculum");
 
@@ -57,7 +60,7 @@ const CvPreview: FC<ICvPreviewProps> = ({
             </div>
           ) : null}
 
-          <Experience experiences={data.experiences} />
+          <Experience experiences={data.experiences} locale={locale} />
           <SoftSkills softSkills={data.softSkills} />
           <AdditionalInformation
             additionalInformation={data.additionalInformation}

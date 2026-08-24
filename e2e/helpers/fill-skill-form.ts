@@ -1,6 +1,7 @@
 import type { Page, Response } from "@playwright/test";
 
 import { clickSelectOption } from "./select-option";
+import { dismissDialogOverlay } from "./dismiss-dialog-overlay";
 
 import {
   portfolioSkills,
@@ -29,17 +30,6 @@ function skillsNavLink(page: Page) {
     .locator('a[href*="/admin/skills"]')
     .filter({ hasNot: page.locator('[href*="/new"], [href*="/edit"]') })
     .first();
-}
-
-/** Dismiss a form/dialog overlay that would intercept sidebar clicks. */
-async function dismissDialogOverlay(page: Page): Promise<void> {
-  const overlay = page.locator('[data-slot="dialog-overlay"]');
-  if (await overlay.isVisible({ timeout: 500 }).catch(() => false)) {
-    await page.keyboard.press("Escape");
-    await overlay.waitFor({ state: "hidden", timeout: 5_000 }).catch(() => {
-      /* empty */
-    });
-  }
 }
 
 /** Navigate to the skills list the way a user would — via the admin sidebar. */

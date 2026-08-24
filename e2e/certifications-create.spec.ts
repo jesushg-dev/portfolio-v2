@@ -1,5 +1,9 @@
 import { expect, test } from "./authenticated-test";
 import { getWorkerAuthFile } from "./helpers/auth-state";
+import {
+  expectTitlesAcrossAdminPages,
+  openAdminPagedList,
+} from "./helpers/admin-paged-list";
 import { ensurePortfolioSkills } from "./helpers/ensure-portfolio-skills";
 import {
   certificationListTitle,
@@ -8,15 +12,16 @@ import {
   goToCertificationsList,
   portfolioCertifications,
 } from "./helpers/fill-certification-form";
+import { fetchAdminTotalCount } from "./helpers/pagination";
 
 test.setTimeout(60 * 60 * 1000);
 
 test.describe.configure({ mode: "serial" });
 
 test.describe("certifications create", () => {
-  test.beforeAll(async ({ browser }) => {
+  test.beforeAll(async ({ browser }, testInfo) => {
     const context = await browser.newContext({
-      storageState: getWorkerAuthFile(),
+      storageState: getWorkerAuthFile(testInfo.workerIndex),
     });
     const page = await context.newPage();
     await cleanupUserCertifications(page);
@@ -34,19 +39,22 @@ test.describe("certifications create", () => {
       await fillCertificationForm(page, certification, { verifyInList: false });
     }
 
-    await goToCertificationsList(page);
-    await page.goto("/admin/certifications?perPage=100");
-    for (const certification of portfolioCertifications) {
-      await expect(
-        page
-          .locator("table tbody tr")
-          .filter({
-            has: page.getByText(certificationListTitle(certification), {
-              exact: false,
-            }),
-          })
-          .first(),
-      ).toBeVisible({ timeout: 30_000 });
-    }
+    await openAdminPagedList(
+      page,
+      "/admin/certifications",
+      "certifications-add",
+    );
+    await expect
+      .poll(
+        () => fetchAdminTotalCount(page, "certificationsAdmin.getMine"),
+        { timeout: 30_000 },
+      )
+      .toBe(portfolioCertifications.length);
+    await expectTitlesAcrossAdminPages(
+      page,
+      portfolioCertifications.map((certification) =>
+        certificationListTitle(certification),
+      ),
+    );
   });
 });

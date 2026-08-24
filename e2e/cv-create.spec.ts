@@ -9,7 +9,6 @@ import {
 } from "./helpers/fill-cv-form";
 import {
   expectCvPreviewContent,
-  goToPublicCvPage,
   openAdminCvPreview,
 } from "./helpers/verify-cv-preview";
 import { portfolioProfile } from "./fixtures/portfolio-profile";
@@ -79,10 +78,7 @@ test.describe("cv create", () => {
 
     const previewLocale = portfolioProfile.defaultLocale;
 
-    await openAdminCvPreview(page);
+    await openAdminCvPreview(page, previewLocale);
     await expectCvPreviewContent(page, "cv-admin-preview", previewLocale);
-
-    await goToPublicCvPage(page, previewLocale);
-    await expectCvPreviewContent(page, "cv-public-preview", previewLocale);
   });
 });

@@ -23,7 +23,9 @@ export async function fetchAdminTotalCount(
   procedure: string,
 ): Promise<number> {
   await ensureAdminOrigin(page);
-  const response = await page.request.get(trpcGetInput(procedure, {}));
+  const response = await page.request.get(
+    trpcGetInput(procedure, { page: 1, perPage: 1, sort: [], filters: [] }),
+  );
   if (!response.ok()) {
     throw new Error(`tRPC query failed: ${response.status()}`);
   }

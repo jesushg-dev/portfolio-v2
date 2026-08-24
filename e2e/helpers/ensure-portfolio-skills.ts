@@ -20,8 +20,12 @@ function trpcGetInput(procedure: string, input: unknown = {}): string {
   )}`;
 }
 
-async function executeTrpcQuery<T>(page: Page, procedure: string): Promise<T> {
-  const response = await page.request.get(trpcGetInput(procedure));
+async function executeTrpcQuery<T>(
+  page: Page,
+  procedure: string,
+  input: unknown = {},
+): Promise<T> {
+  const response = await page.request.get(trpcGetInput(procedure, input));
   if (!response.ok()) {
     throw new Error(
       `tRPC query ${procedure} failed: ${response.status()} ${await response.text()}`,
@@ -34,6 +38,14 @@ async function executeTrpcQuery<T>(page: Page, procedure: string): Promise<T> {
   return payload[0]?.result?.data?.json as T;
 }
 
+function isSkillTitleConflict(body: string): boolean {
+  return (
+    body.includes("CONFLICT") ||
+    body.includes("already have a skill titled") ||
+    body.includes("Skill_userId_title_key")
+  );
+}
+
 async function trpcMutate(
   page: Page,
   procedure: string,
@@ -44,11 +56,14 @@ async function trpcMutate(
     data: { "0": { json: input } },
   });
 
-  if (!response.ok()) {
-    throw new Error(
-      `tRPC mutation ${procedure} failed: ${response.status()} ${await response.text()}`,
-    );
-  }
+  if (response.ok()) return;
+
+  const text = await response.text().catch(() => "");
+  if (isSkillTitleConflict(text)) return;
+
+  throw new Error(
+    `tRPC mutation ${procedure} failed: ${response.status()} ${text}`.trim(),
+  );
 }
 
 function buildSkillCreateInput(
@@ -75,17 +90,45 @@ function buildSkillCreateInput(
   };
 }
 
-type SkillsResponse = { data: SkillRow[] } | SkillRow[];
+interface SkillsPage {
+  data: SkillRow[];
+  totalCount?: number;
+}
+
+async function listMySkillTitles(page: Page): Promise<Set<string>> {
+  const titles = new Set<string>();
+  const perPage = 100;
+  let pageNumber = 1;
+
+  for (;;) {
+    const response = await executeTrpcQuery<SkillsPage>(
+      page,
+      "skillsAdmin.getMine",
+      { page: pageNumber, perPage, sort: [], filters: [] },
+    );
+    const rows = response.data ?? [];
+    for (const row of rows) {
+      if (row.title) titles.add(row.title);
+    }
+
+    const totalCount = response.totalCount ?? rows.length;
+    if (
+      rows.length === 0 ||
+      titles.size >= totalCount ||
+      rows.length < perPage
+    ) {
+      break;
+    }
+    pageNumber += 1;
+  }
+
+  return titles;
+}
 
 /** Creates any missing fixture skills via tRPC (does not delete existing skills). */
 export async function ensurePortfolioSkills(page: Page): Promise<void> {
   await ensureAdminOrigin(page);
-  const response = await executeTrpcQuery<SkillsResponse>(
-    page,
-    "skillsAdmin.getMine",
-  );
-  const existing = Array.isArray(response) ? response : response.data;
-  const existingTitles = new Set(existing.map((skill) => skill.title));
+  const existingTitles = await listMySkillTitles(page);
 
   const missing = portfolioSkills.filter(
     (skill) => !existingTitles.has(skill.title),

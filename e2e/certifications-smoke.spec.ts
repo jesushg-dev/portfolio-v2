@@ -12,9 +12,9 @@ import {
 test.describe("certifications smoke", () => {
   test.setTimeout(90_000);
 
-  test.beforeAll(async ({ browser }) => {
+  test.beforeAll(async ({ browser }, testInfo) => {
     const context = await browser.newContext({
-      storageState: getWorkerAuthFile(),
+      storageState: getWorkerAuthFile(testInfo.workerIndex),
     });
     const page = await context.newPage();
     await cleanupUserCertifications(page);

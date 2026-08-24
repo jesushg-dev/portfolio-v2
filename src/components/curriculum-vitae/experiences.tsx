@@ -2,10 +2,13 @@ import type { FC } from "react";
 import { useTranslations, useLocale } from "next-intl";
 
 import { formatExperienceDates } from "@/utils/tools/date";
+import type { Locale } from "@/i18n/config";
 import type { LocalizedCvData } from "./types";
 
 interface IExperiencesProps {
   experiences: LocalizedCvData["experiences"];
+  /** Preview language; defaults to the route locale. */
+  locale?: Locale;
 }
 
 function ResponsibilityItem({
@@ -18,10 +21,11 @@ function ResponsibilityItem({
 
 function ExperienceItem({
   experience,
+  locale,
 }: {
   experience: LocalizedCvData["experiences"][number];
+  locale: Locale;
 }) {
-  const locale = useLocale();
   const dates = formatExperienceDates(
     experience.startDate,
     experience.endDate,
@@ -50,8 +54,10 @@ function ExperienceItem({
   );
 }
 
-const Experiences: FC<IExperiencesProps> = ({ experiences }) => {
+const Experiences: FC<IExperiencesProps> = ({ experiences, locale }) => {
   const t = useTranslations("curriculum");
+  const routeLocale = useLocale();
+  const dateLocale = locale ?? routeLocale;
 
   if (!experiences.length) return null;
 
@@ -62,7 +68,11 @@ const Experiences: FC<IExperiencesProps> = ({ experiences }) => {
       </h5>
 
       {experiences.map((experience) => (
-        <ExperienceItem key={experience.id} experience={experience} />
+        <ExperienceItem
+          key={experience.id}
+          experience={experience}
+          locale={dateLocale}
+        />
       ))}
     </>
   );

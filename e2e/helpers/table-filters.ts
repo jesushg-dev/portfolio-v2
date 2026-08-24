@@ -35,10 +35,13 @@ async function waitForRowCount(
 ): Promise<number> {
   let count = 0;
   await expect
-    .poll(async () => {
-      count = await rows.count();
-      return predicate(count);
-    }, { timeout: 30_000 })
+    .poll(
+      async () => {
+        count = await rows.count();
+        return predicate(count);
+      },
+      { timeout: 30_000 },
+    )
     .toBe(true);
   return count;
 }
@@ -88,9 +91,16 @@ export async function assertFilterAndColumnVisibility(
   ).toBeVisible();
 
   await page.getByTestId("reset-filters-btn").click();
-  await expect(
-    page.locator("td").filter({ hasText: /No results/i }),
-  ).not.toBeVisible();
+  await filter.fill("");
+  await expect
+    .poll(
+      async () => {
+        const noResults = page.locator("td").filter({ hasText: /No results/i });
+        return (await noResults.isVisible()) ? "empty" : "rows";
+      },
+      { timeout: 30_000 },
+    )
+    .toBe("rows");
   const resetCount = await waitForRowCount(rows, (count) => count >= 1);
   expect(resetCount).toBeGreaterThan(0);
 

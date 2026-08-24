@@ -8,6 +8,13 @@ import {
   portfolioSkills,
   type PortfolioSkillFixture,
 } from "../fixtures/portfolio-skills";
+import {
+  ensureAdminOrigin,
+  gotoAdminPath,
+  isAdminCollectionListUrl,
+  waitForAdminListAfterSave,
+} from "./admin-origin";
+import { openAdminPagedList } from "./admin-paged-list";
 import { selectSkillsInPicker } from "./skill-picker-actions";
 
 const PROJECT_LOCALES = ["es", "en", "nl"] as const;
@@ -62,25 +69,22 @@ async function assertCreateProjectSucceeded(response: Response): Promise<void> {
   }
 }
 
-function projectsNavLink(page: Page) {
-  return page
-    .locator('a[href*="/admin/projects"]')
-    .filter({ hasNot: page.locator('[href*="/new"], [href*="/edit"]') })
-    .first();
-}
-
 /** Navigate to the projects list via the admin sidebar. */
 export async function goToProjectsList(page: Page): Promise<void> {
-  const addButton = page.locator("#projects-add");
-  if (await addButton.isVisible()) {
+  // Locale title fields for inactive tabs stay `hidden`; lang buttons are always visible.
+  const formOpen = await page.locator("#project-lang-es").isVisible();
+  if (
+    isAdminCollectionListUrl(page, "projects") &&
+    !formOpen &&
+    (await page.locator("#projects-add").isVisible())
+  ) {
     return;
   }
 
-  const navLink = projectsNavLink(page);
-  await navLink.waitFor({ state: "visible", timeout: 15_000 });
-  await navLink.click();
-  await page.waitForURL(/\/admin\/projects(\?|$)/, { timeout: 20_000 });
-  await addButton.waitFor({ state: "visible", timeout: 15_000 });
+  await gotoAdminPath(page, "/admin/projects");
+  await page
+    .locator("#projects-add")
+    .waitFor({ state: "visible", timeout: 15_000 });
 }
 
 async function openNewProjectForm(page: Page): Promise<void> {
@@ -92,19 +96,42 @@ async function openNewProjectForm(page: Page): Promise<void> {
   await addButton.click();
 
   await page.waitForURL(/\/admin\/projects\/new\/?$/, { timeout: 20_000 });
+  // Primary locale is `en`; `#project-title-es` exists but is hidden until its tab is active.
+  await page.locator("#project-lang-es").waitFor({
+    state: "visible",
+    timeout: 20_000,
+  });
+}
+
+async function enablePrivateProjectIfNeeded(page: Page): Promise<void> {
+  const privacy = page.locator("#project-private");
+  await privacy.waitFor({ state: "attached", timeout: 15_000 });
+  await privacy.evaluate((element) => {
+    const switchRoot =
+      element.closest('[data-slot="switch"]') ??
+      element.parentElement?.querySelector('[data-slot="switch"]') ??
+      element;
+    const input =
+      switchRoot instanceof HTMLInputElement
+        ? switchRoot
+        : element instanceof HTMLInputElement
+          ? element
+          : null;
+    if (input) {
+      if (!input.checked) input.click();
+      return;
+    }
+    const checked =
+      switchRoot.getAttribute("aria-checked") === "true" ||
+      switchRoot.hasAttribute("data-checked");
+    if (!checked) {
+      (switchRoot as HTMLElement).click();
+    }
+  });
 }
 
 async function waitForProjectSaveToFinish(page: Page): Promise<void> {
-  await page.waitForURL((url) => !url.pathname.endsWith("/new"), {
-    timeout: 30_000,
-  });
-
-  const addButton = page.locator("#projects-add");
-  if (!(await addButton.isVisible())) {
-    await goToProjectsList(page);
-  }
-
-  await addButton.waitFor({ state: "visible", timeout: 15_000 });
+  await waitForAdminListAfterSave(page, "projects", "projects-add");
 }
 
 async function selectProjectSkills(
@@ -144,13 +171,15 @@ export async function fillProjectForm(
 
   await page.locator("#project-type").click();
   await page.getByRole("option", { name: project.type, exact: true }).click();
+  await page
+    .locator('[data-slot="select-content"]')
+    .waitFor({ state: "hidden", timeout: 5_000 })
+    .catch(() => {
+      /* already closed */
+    });
 
   if (project.isPrivate) {
-    const privacySwitch = page.locator("#project-private");
-    const isChecked = await privacySwitch.getAttribute("aria-checked");
-    if (isChecked !== "true") {
-      await privacySwitch.click();
-    }
+    await enablePrivateProjectIfNeeded(page);
   }
 
   if (isValidUrl(project.githubUrl)) {
@@ -165,16 +194,17 @@ export async function fillProjectForm(
     await selectProjectSkills(page, project.skillKeys);
   }
 
-  const createResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/trpc/projectsAdmin.createItem") &&
-      response.request().method() === "POST",
-    { timeout: 30_000 },
-  );
+  const [createResponse] = await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/trpc/projectsAdmin.createItem") &&
+        response.request().method() === "POST",
+      { timeout: 30_000 },
+    ),
+    page.locator('form button[type="submit"]').first().click(),
+  ]);
 
-  await page.getByRole("button", { name: /create|crear|aanmaken/i }).click();
-
-  await assertCreateProjectSucceeded(await createResponse);
+  await assertCreateProjectSucceeded(createResponse);
 
   if (verifyInList) {
     await expectProjectListContains(page, projectListTitle(project));
@@ -190,20 +220,6 @@ function projectListRow(page: Page, title: string) {
     .first();
 }
 
-async function ensureProjectsListPerPage(
-  page: Page,
-  perPage: number,
-): Promise<void> {
-  if (page.url().includes(`perPage=${perPage}`)) return;
-
-  const listUrl = `/admin/projects?perPage=${perPage}`;
-  try {
-    await page.goto(listUrl, { waitUntil: "domcontentloaded" });
-  } catch {
-    await page.waitForURL(/\/admin\/projects/, { timeout: 15_000 });
-  }
-}
-
 export async function expectProjectListContains(
   page: Page,
   title: string,
@@ -215,11 +231,12 @@ export async function expectProjectListContains(
     return;
   }
 
-  await ensureProjectsListPerPage(page, 100);
+  await openAdminPagedList(page, "/admin/projects", "projects-add");
   await row.waitFor({ timeout: 15_000 });
 }
 
 export async function cleanupUserProjects(page: Page): Promise<void> {
+  await ensureAdminOrigin(page);
   const deleteResponse = await page.request.post(
     `/api/trpc/projectsAdmin.deleteAll?batch=1`,
     {

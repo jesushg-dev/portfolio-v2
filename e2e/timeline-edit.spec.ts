@@ -1,5 +1,6 @@
 import { expect, test } from "./authenticated-test";
 
+import { gotoAdminPath } from "./helpers/admin-origin";
 import {
   cleanupUserTimeline,
   fillTimelineItemForm,
@@ -88,7 +89,7 @@ test.describe("timeline edit and data integrity", () => {
       .toBe(true);
 
     // 4. Verify updated organization in list
-    await page.goto("/admin/timeline");
+    await gotoAdminPath(page, "/admin/timeline");
     await expect(page.getByText(updatedOrg).first()).toBeVisible();
 
     // 5. Cleanup

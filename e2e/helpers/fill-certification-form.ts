@@ -6,6 +6,13 @@ import {
 } from "../fixtures/portfolio-certifications";
 import { portfolioSkills } from "../fixtures/portfolio-skills";
 import { matchCertificationSkillKeys } from "../../prisma/lib/match-certification-skills";
+import {
+  ensureAdminOrigin,
+  gotoAdminPath,
+  isAdminCollectionListUrl,
+  waitForAdminListAfterSave,
+} from "./admin-origin";
+import { openAdminPagedList } from "./admin-paged-list";
 import { selectSkillsInPicker } from "./skill-picker-actions";
 
 const CERT_LOCALES = ["es", "en", "nl"] as const;
@@ -75,24 +82,21 @@ async function assertCreateCertificationSucceeded(
   }
 }
 
-function certificationsNavLink(page: Page) {
-  return page
-    .locator('a[href*="/admin/certifications"]')
-    .filter({ hasNot: page.locator('[href*="/new"], [href*="/edit"]') })
-    .first();
-}
-
 export async function goToCertificationsList(page: Page): Promise<void> {
-  const addButton = page.locator("#certifications-add");
-  if (await addButton.isVisible()) {
+  // Locale title fields for inactive tabs stay `hidden`; lang buttons are always visible.
+  const formOpen = await page.locator("#certification-lang-es").isVisible();
+  if (
+    isAdminCollectionListUrl(page, "certifications") &&
+    !formOpen &&
+    (await page.locator("#certifications-add").isVisible())
+  ) {
     return;
   }
 
-  const navLink = certificationsNavLink(page);
-  await navLink.waitFor({ state: "visible", timeout: 15_000 });
-  await navLink.click();
-  await page.waitForURL(/\/admin\/certifications(\?|$)/, { timeout: 20_000 });
-  await addButton.waitFor({ state: "visible", timeout: 15_000 });
+  await gotoAdminPath(page, "/admin/certifications");
+  await page
+    .locator("#certifications-add")
+    .waitFor({ state: "visible", timeout: 15_000 });
 }
 
 async function openNewCertificationForm(page: Page): Promise<void> {
@@ -106,19 +110,15 @@ async function openNewCertificationForm(page: Page): Promise<void> {
   await page.waitForURL(/\/admin\/certifications\/new\/?$/, {
     timeout: 20_000,
   });
+  // Primary locale is `en`; ES title input exists but stays hidden until its tab is active.
+  await page.locator("#certification-lang-es").waitFor({
+    state: "visible",
+    timeout: 20_000,
+  });
 }
 
 async function waitForCertificationSaveToFinish(page: Page): Promise<void> {
-  await page.waitForURL((url) => !url.pathname.endsWith("/new"), {
-    timeout: 30_000,
-  });
-
-  const addButton = page.locator("#certifications-add");
-  if (!(await addButton.isVisible())) {
-    await goToCertificationsList(page);
-  }
-
-  await addButton.waitFor({ state: "visible", timeout: 15_000 });
+  await waitForAdminListAfterSave(page, "certifications", "certifications-add");
 }
 
 async function selectCertificationType(
@@ -178,16 +178,17 @@ export async function fillCertificationForm(
     skillsByKey,
   );
 
-  const createResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/trpc/certificationsAdmin.createItem") &&
-      response.request().method() === "POST",
-    { timeout: 30_000 },
-  );
+  const [createResponse] = await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/trpc/certificationsAdmin.createItem") &&
+        response.request().method() === "POST",
+      { timeout: 30_000 },
+    ),
+    page.locator('form button[type="submit"]').first().click(),
+  ]);
 
-  await page.getByRole("button", { name: /create|crear|aanmaken/i }).click();
-
-  await assertCreateCertificationSucceeded(await createResponse);
+  await assertCreateCertificationSucceeded(createResponse);
 
   if (verifyInList) {
     await expectCertificationListContains(
@@ -206,21 +207,6 @@ function certificationListRow(page: Page, title: string) {
     .first();
 }
 
-async function ensureCertificationsListPerPage(
-  page: Page,
-  perPage: number,
-): Promise<void> {
-  if (page.url().includes(`perPage=${perPage}`)) return;
-
-  const listUrl = `/admin/certifications?perPage=${perPage}`;
-  try {
-    await page.goto(listUrl, { waitUntil: "domcontentloaded" });
-  } catch {
-    // Next.js client navigation can abort a redundant goto to the same route.
-    await page.waitForURL(/\/admin\/certifications/, { timeout: 15_000 });
-  }
-}
-
 export async function expectCertificationListContains(
   page: Page,
   title: string,
@@ -232,11 +218,12 @@ export async function expectCertificationListContains(
     return;
   }
 
-  await ensureCertificationsListPerPage(page, 100);
+  await openAdminPagedList(page, "/admin/certifications", "certifications-add");
   await row.waitFor({ timeout: 15_000 });
 }
 
 export async function cleanupUserCertifications(page: Page): Promise<void> {
+  await ensureAdminOrigin(page);
   const deleteResponse = await page.request.post(
     `/api/trpc/certificationsAdmin.deleteAll?batch=1`,
     {

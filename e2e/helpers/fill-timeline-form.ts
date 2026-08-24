@@ -1,6 +1,11 @@
-import type { Page, Response } from "@playwright/test";
+import { expect, type Page, type Response } from "@playwright/test";
 
-import { ensureAdminOrigin } from "./admin-origin";
+import {
+  ensureAdminOrigin,
+  gotoAdminPath,
+  isAdminCollectionListUrl,
+  waitForAdminListAfterSave,
+} from "./admin-origin";
 import {
   portfolioTimeline,
   type PortfolioTimelineItemFixture,
@@ -76,24 +81,20 @@ export function timelineListTitle(item: PortfolioTimelineItemFixture): string {
   return item.title.en;
 }
 
-function timelineNavLink(page: Page) {
-  return page
-    .locator('a[href*="/admin/timeline"]')
-    .filter({ hasNot: page.locator('[href*="/new"], [href*="/edit"]') })
-    .first();
-}
-
 export async function goToTimelineList(page: Page): Promise<void> {
-  const addButton = page.locator("#timeline-add");
-  if (await addButton.isVisible()) {
+  const formOpen = await page.locator("#timeline-lang-es").isVisible();
+  if (
+    isAdminCollectionListUrl(page, "timeline") &&
+    !formOpen &&
+    (await page.locator("#timeline-add").isVisible())
+  ) {
     return;
   }
 
-  const navLink = timelineNavLink(page);
-  await navLink.waitFor({ state: "visible", timeout: 15_000 });
-  await navLink.click();
-  await page.waitForURL(/\/admin\/timeline(\?|$)/, { timeout: 20_000 });
-  await addButton.waitFor({ state: "visible", timeout: 15_000 });
+  await gotoAdminPath(page, "/admin/timeline");
+  await page
+    .locator("#timeline-add")
+    .waitFor({ state: "visible", timeout: 15_000 });
 }
 
 async function openNewTimelineForm(page: Page): Promise<void> {
@@ -105,19 +106,14 @@ async function openNewTimelineForm(page: Page): Promise<void> {
   await addButton.click();
 
   await page.waitForURL(/\/admin\/timeline\/new\/?$/, { timeout: 20_000 });
+  await page.locator("#timeline-lang-es").waitFor({
+    state: "visible",
+    timeout: 20_000,
+  });
 }
 
 async function waitForTimelineSaveToFinish(page: Page): Promise<void> {
-  await page.waitForURL((url) => !url.pathname.endsWith("/new"), {
-    timeout: 30_000,
-  });
-
-  const addButton = page.locator("#timeline-add");
-  if (!(await addButton.isVisible())) {
-    await goToTimelineList(page);
-  }
-
-  await addButton.waitFor({ state: "visible", timeout: 15_000 });
+  await waitForAdminListAfterSave(page, "timeline", "timeline-add");
 }
 
 async function assertCreateTimelineSucceeded(
@@ -195,15 +191,16 @@ export async function fillTimelineItemForm(
     await page.locator("#timeline-end-date").fill(item.endDate);
   }
 
-  const createResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/trpc/timelineAdmin.createItem") &&
-      response.request().method() === "POST",
-    { timeout: 30_000 },
-  );
-
-  await page.locator("#timeline-form-submit").click();
-  await assertCreateTimelineSucceeded(await createResponse);
+  const [createResponse] = await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/trpc/timelineAdmin.createItem") &&
+        response.request().method() === "POST",
+      { timeout: 30_000 },
+    ),
+    page.locator("#timeline-form-submit").click(),
+  ]);
+  await assertCreateTimelineSucceeded(createResponse);
 
   if (verifyInList) {
     await expectTimelineListContains(page, timelineListTitle(item));
@@ -253,7 +250,12 @@ export async function getTimelineMine(page: Page): Promise<{
 }> {
   await ensureAdminOrigin(page);
   const response = await page.request.get(
-    trpcGetInput("timelineAdmin.getMine"),
+    trpcGetInput("timelineAdmin.getMine", {
+      page: 1,
+      perPage: 100,
+      sort: [],
+      filters: [],
+    }),
   );
   if (!response.ok()) {
     throw new Error(
@@ -284,6 +286,7 @@ export async function cleanupUserTimeline(page: Page): Promise<void> {
   const deleteResponse = await page.request.post(
     `/api/trpc/timelineAdmin.deleteAll?batch=1`,
     {
+      headers: { "content-type": "application/json" },
       data: {
         "0": { json: null },
       },
@@ -295,4 +298,10 @@ export async function cleanupUserTimeline(page: Page): Promise<void> {
       `Failed to cleanup cleanupUserTimeline: ${deleteResponse.status()} ${await deleteResponse.text()}`,
     );
   }
+
+  await expect
+    .poll(async () => (await getTimelineMine(page)).totalCount, {
+      timeout: 15_000,
+    })
+    .toBe(0);
 }
