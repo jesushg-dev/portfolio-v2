@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -304,8 +304,8 @@ export const EventForm: FC<EventFormProps> = ({
                             >
                               {field.value
                                 ? format(field.value, "PPP HH:mm", {
-                                    locale: dateFnsLocale,
-                                  })
+                                  locale: dateFnsLocale,
+                                })
                                 : t("placeholders.date")}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>

@@ -677,7 +677,10 @@
         "category": "Categorie",
         "stack": "Stack",
         "nextProject": "Volgend project",
+        "techDecisions": "Technische beslissingen",
         "timeline": "Projecttijdlijn",
+        "beforeAfter": "Voor en na",
+        "gallery": "Galerij",
         "demo": "Live demo",
         "visualTitle": "Verbindingen met intentie",
         "visualSubtitle": "Elke node is een schakel; elke lijn een reden om te bouwen."

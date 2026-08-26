@@ -2,7 +2,7 @@
 import type { AppLanguage } from "@prisma/client";
 
 import { type FC, useTransition, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -261,10 +261,10 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                                   return checked
                                     ? field.onChange([...field.value, item])
                                     : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== item,
-                                        ),
-                                      );
+                                      field.value?.filter(
+                                        (value) => value !== item,
+                                      ),
+                                    );
                                 }}
                               />
                             </FormCheckboxItem>

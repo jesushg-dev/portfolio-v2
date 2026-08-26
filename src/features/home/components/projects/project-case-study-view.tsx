@@ -7,6 +7,11 @@ import { Link } from "@/i18n/routing";
 import { buildCloudinaryUrl, resolveSkillImageUrl } from "@/utils/tools/image";
 import ProjectCoverImage from "./project-cover-image";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
+import { MetricsBar } from "./case-study/metrics-bar";
+import { ProjectTimeline } from "./case-study/project-timeline";
+import { ProjectGallery } from "./case-study/project-gallery";
+import { BeforeAfterSlider } from "./case-study/before-after-slider";
+import { TestimonialCard } from "./case-study/testimonial-card";
 
 interface ProjectCaseStudyViewProps {
   project: {
@@ -18,6 +23,7 @@ interface ProjectCaseStudyViewProps {
     challenge: string | null;
     approach: string | null;
     outcome: string | null;
+    techDecisions: string | null;
     githubUrl: string | null;
     websiteUrl: string | null;
     isPrivate: boolean;
@@ -27,6 +33,15 @@ interface ProjectCaseStudyViewProps {
       title: string;
       image: string;
     }[];
+    metrics: { label: string; value: string; icon?: string }[] | null;
+    gallery: string[];
+    timeline: { title: string; description?: string; date?: string }[] | null;
+    beforeAfter: { before: string; after: string; beforeLabel?: string; afterLabel?: string } | null;
+    demoUrl: string | null;
+    testimonial: string | null;
+    testimonialAuthor: string | null;
+    testimonialRole: string | null;
+    testimonialAvatar: string | null;
   };
   nextProject?: {
     slug: string;
@@ -347,6 +362,12 @@ export default async function ProjectCaseStudyView({
         </div>
       </CaseStudyReveal>
 
+      {project.metrics && project.metrics.length > 0 && (
+        <CaseStudyReveal className="mx-auto mt-12 max-w-6xl px-4 md:px-10">
+          <MetricsBar metrics={project.metrics} />
+        </CaseStudyReveal>
+      )}
+
       <section id="work" className="border-border bg-muted/40 mt-20 border-t">
         <div className="mx-auto max-w-3xl space-y-20 px-4 py-20 md:px-10">
           {contentSections.map((section) => (
@@ -408,6 +429,73 @@ export default async function ProjectCaseStudyView({
               ) : null}
             </div>
           ))}
+
+          {project.techDecisions && (
+            <CaseStudySection
+              title={t("caseStudy.techDecisions")}
+              content={project.techDecisions}
+              bordered
+            />
+          )}
+
+          {project.timeline && project.timeline.length > 0 && (
+            <CaseStudyReveal className="border-border border-t pt-10">
+              <h2 className="text-foreground mb-6 text-2xl font-semibold">
+                {t("caseStudy.timeline")}
+              </h2>
+              <ProjectTimeline phases={project.timeline} />
+            </CaseStudyReveal>
+          )}
+
+          {project.beforeAfter && (
+            <CaseStudyReveal className="border-border border-t pt-10">
+              <h2 className="text-foreground mb-6 text-2xl font-semibold">
+                {t("caseStudy.beforeAfter")}
+              </h2>
+              <BeforeAfterSlider
+                beforeImage={buildCloudinaryUrl(project.beforeAfter.before, 1200)}
+                afterImage={buildCloudinaryUrl(project.beforeAfter.after, 1200)}
+                beforeLabel={project.beforeAfter.beforeLabel}
+                afterLabel={project.beforeAfter.afterLabel}
+              />
+            </CaseStudyReveal>
+          )}
+
+          {project.gallery.length > 0 && (
+            <CaseStudyReveal className="border-border border-t pt-10">
+              <h2 className="text-foreground mb-6 text-2xl font-semibold">
+                {t("caseStudy.gallery")}
+              </h2>
+              <ProjectGallery images={project.gallery} projectTitle={project.title} />
+            </CaseStudyReveal>
+          )}
+
+          {project.demoUrl && (
+            <CaseStudyReveal className="border-border border-t pt-10">
+              <h2 className="text-foreground mb-6 text-2xl font-semibold">
+                {t("caseStudy.demo")}
+              </h2>
+              <div className="aspect-video overflow-hidden rounded-xl border">
+                <iframe
+                  src={project.demoUrl}
+                  title={`${project.title} demo`}
+                  className="h-full w-full"
+                  sandbox="allow-scripts allow-same-origin"
+                />
+              </div>
+            </CaseStudyReveal>
+          )}
+
+          {project.testimonial && project.testimonialAuthor && (
+            <CaseStudyReveal className="border-border border-t pt-10">
+              <TestimonialCard
+                quote={project.testimonial}
+                author={project.testimonialAuthor}
+                role={project.testimonialRole ?? undefined}
+                avatarUrl={project.testimonialAvatar ?? undefined}
+              />
+            </CaseStudyReveal>
+          )}
         </div>
       </section>
 

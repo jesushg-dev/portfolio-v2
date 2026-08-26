@@ -588,6 +588,15 @@ model Project {
   kind               ProjectKind          @default(PERSONAL)
   slug               String?
   caseStudyEnabled   Boolean              @default(false)
+  gallery            String[]             @default([])
+  metrics            Json?
+  timeline           Json?
+  beforeAfter        Json?
+  demoUrl            String?
+  testimonial        String?
+  testimonialAuthor  String?
+  testimonialRole    String?
+  testimonialAvatar  String?
   ProjectSkill       ProjectSkill[]
   ProjectTranslation ProjectTranslation[]
   CertificateProject CertificateProject[]
@@ -611,6 +620,7 @@ model ProjectTranslation {
   challenge     String?
   approach      String?
   outcome       String?
+  techDecisions String?
   language      AppLanguage @relation(fields: [appLanguageId], references: [id])
   Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   appLanguageId String      @db.ObjectId

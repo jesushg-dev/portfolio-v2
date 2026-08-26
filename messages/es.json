@@ -677,7 +677,10 @@
         "category": "Categoría",
         "stack": "Stack",
         "nextProject": "Siguiente proyecto",
+        "techDecisions": "Decisiones técnicas",
         "timeline": "Línea de tiempo del proyecto",
+        "beforeAfter": "Antes y después",
+        "gallery": "Galería",
         "demo": "Demo en vivo",
         "visualTitle": "Conexiones con intención",
         "visualSubtitle": "Cada nodo es una pieza; cada línea, una razón para construir."

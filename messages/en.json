@@ -677,7 +677,10 @@
         "category": "Category",
         "stack": "Stack",
         "nextProject": "Next project",
+        "techDecisions": "Technical decisions",
         "timeline": "Project timeline",
+        "beforeAfter": "Before & after",
+        "gallery": "Gallery",
         "demo": "Live demo",
         "visualTitle": "Matching, made intentional",
         "visualSubtitle": "Every node is a connection; every line, a reason to build."

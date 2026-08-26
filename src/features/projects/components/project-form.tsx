@@ -2,7 +2,7 @@
 import type { AppLanguage } from "@prisma/client";
 
 import { type FC, useTransition, useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -76,6 +76,38 @@ export const ProjectForm: FC<ProjectFormProps> = ({
         kind: z.enum(["PROFESSIONAL", "PERSONAL", "LEARNING"]),
         slug: z.string().optional(),
         caseStudyEnabled: z.boolean(),
+        gallery: z.array(z.string()),
+        metrics: z
+          .array(
+            z.object({
+              label: z.string(),
+              value: z.string(),
+              icon: z.string().optional(),
+            }),
+          )
+          .nullable(),
+        timeline: z
+          .array(
+            z.object({
+              title: z.string(),
+              description: z.string().optional(),
+              date: z.string().optional(),
+            }),
+          )
+          .nullable(),
+        beforeAfter: z
+          .object({
+            before: z.string(),
+            after: z.string(),
+            beforeLabel: z.string().optional(),
+            afterLabel: z.string().optional(),
+          })
+          .nullable(),
+        demoUrl: z.string(),
+        testimonial: z.string(),
+        testimonialAuthor: z.string(),
+        testimonialRole: z.string(),
+        testimonialAvatar: z.string(),
         translations: translationMapSchema(
           z.object({
             title: z.string(),
@@ -84,6 +116,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
             challenge: z.string(),
             approach: z.string(),
             outcome: z.string(),
+            techDecisions: z.string(),
           }),
           primaryLang?.id,
           "title",
@@ -109,7 +142,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
     type: skill.type,
   }));
 
-  const form = useForm<TProjectForm>({
+  const form = useForm<TProjectForm, unknown, TProjectForm>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: initialData as TProjectForm,
     mode: "onBlur",
@@ -117,7 +150,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
 
   const { activeLangId, setActiveLangId } = useLocalizedForm({
     languages,
-    form,
+    form: form as unknown as Parameters<typeof useLocalizedForm>[0]["form"],
     buildDefaultValues: () => initialData as TProjectForm,
     resourceId: "id" in initialData ? initialData.id : undefined,
   });
@@ -246,6 +279,18 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                       <FormItem
                         label="Outcome"
                         inputId={`project-outcome-${lang.code}`}
+                      >
+                        <Textarea rows={3} {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`translations.${lang.id}.techDecisions`}
+                    render={({ field }) => (
+                      <FormItem
+                        label="Technical Decisions"
+                        inputId={`project-tech-decisions-${lang.code}`}
                       >
                         <Textarea rows={3} {...field} />
                       </FormItem>
@@ -416,6 +461,92 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                 </FormItem>
               )}
             />
+          </FormSection>
+
+          <FormSection title="Case Study Extras" className="mt-4 border-t pt-4">
+            <FormField
+              control={form.control}
+              name="gallery"
+              render={({ field }) => (
+                <FormItem
+                  label="Gallery (Cloudinary IDs, comma-separated)"
+                  inputId="project-gallery"
+                >
+                  <Input
+                    value={field.value.join(", ")}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value
+                          .split(",")
+                          .map((s) => s.trim())
+                          .filter(Boolean),
+                      )
+                    }
+                  />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="demoUrl"
+              render={({ field }) => (
+                <FormItem label="Demo URL (iframe)" inputId="project-demo-url">
+                  <Input placeholder="https://..." {...field} />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="testimonial"
+                render={({ field }) => (
+                  <FormItem
+                    label="Testimonial quote"
+                    inputId="project-testimonial"
+                  >
+                    <Textarea rows={2} {...field} />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="testimonialAuthor"
+                render={({ field }) => (
+                  <FormItem
+                    label="Testimonial author"
+                    inputId="project-testimonial-author"
+                  >
+                    <Input {...field} />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="testimonialRole"
+                render={({ field }) => (
+                  <FormItem
+                    label="Author role"
+                    inputId="project-testimonial-role"
+                  >
+                    <Input {...field} />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="testimonialAvatar"
+                render={({ field }) => (
+                  <FormItem
+                    label="Author avatar URL"
+                    inputId="project-testimonial-avatar"
+                  >
+                    <Input {...field} />
+                  </FormItem>
+                )}
+              />
+            </div>
           </FormSection>
         </FormContent>
         <FormActions

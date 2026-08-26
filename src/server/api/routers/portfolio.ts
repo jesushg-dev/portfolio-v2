@@ -895,7 +895,17 @@ export const portfolioRouter = createTRPCRouter({
         challenge: translation.challenge,
         approach: translation.approach,
         outcome: translation.outcome,
+        techDecisions: translation.techDecisions ?? null,
         skills,
+        metrics: (project.metrics as { label: string; value: string; icon?: string }[] | null) ?? null,
+        gallery: project.gallery ?? [],
+        timeline: (project.timeline as { title: string; description?: string; date?: string }[] | null) ?? null,
+        beforeAfter: (project.beforeAfter as { before: string; after: string; beforeLabel?: string; afterLabel?: string } | null) ?? null,
+        demoUrl: project.demoUrl ?? null,
+        testimonial: project.testimonial ?? null,
+        testimonialAuthor: project.testimonialAuthor ?? null,
+        testimonialRole: project.testimonialRole ?? null,
+        testimonialAvatar: project.testimonialAvatar ?? null,
       };
     }),
 

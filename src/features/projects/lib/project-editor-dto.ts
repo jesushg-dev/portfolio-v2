@@ -14,6 +14,7 @@ export interface ProjectTranslationFields {
   challenge: string;
   approach: string;
   outcome: string;
+  techDecisions: string;
 }
 
 export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields>;
@@ -30,6 +31,15 @@ export interface ProjectEditorDTO {
   kind: Project["kind"];
   slug: string;
   caseStudyEnabled: boolean;
+  gallery: string[];
+  metrics: { label: string; value: string; icon?: string }[] | null;
+  timeline: { title: string; description?: string; date?: string }[] | null;
+  beforeAfter: { before: string; after: string; beforeLabel?: string; afterLabel?: string } | null;
+  demoUrl: string;
+  testimonial: string;
+  testimonialAuthor: string;
+  testimonialRole: string;
+  testimonialAvatar: string;
   translations: ProjectTranslationMap;
 }
 
@@ -42,6 +52,7 @@ const emptyProjectTranslationFields = {
   challenge: "",
   approach: "",
   outcome: "",
+  techDecisions: "",
 };
 
 type ProjectWithRelations = Project & {
@@ -62,6 +73,7 @@ export function mapProjectToEditorDto(
       challenge: translation.challenge ?? "",
       approach: translation.approach ?? "",
       outcome: translation.outcome ?? "",
+      techDecisions: translation.techDecisions ?? "",
     })) ?? [];
 
   return {
@@ -76,6 +88,15 @@ export function mapProjectToEditorDto(
     kind: project.kind ?? "PERSONAL",
     slug: project.slug ?? "",
     caseStudyEnabled: project.caseStudyEnabled ?? false,
+    gallery: project.gallery ?? [],
+    metrics: (project.metrics as ProjectEditorDTO["metrics"]) ?? null,
+    timeline: (project.timeline as ProjectEditorDTO["timeline"]) ?? null,
+    beforeAfter: (project.beforeAfter as ProjectEditorDTO["beforeAfter"]) ?? null,
+    demoUrl: project.demoUrl ?? "",
+    testimonial: project.testimonial ?? "",
+    testimonialAuthor: project.testimonialAuthor ?? "",
+    testimonialRole: project.testimonialRole ?? "",
+    testimonialAvatar: project.testimonialAvatar ?? "",
     translations: mergeTranslationMap(
       languages,
       rows,
@@ -105,6 +126,15 @@ export function buildEmptyProjectCreateDto(
     kind: "PERSONAL",
     slug: "",
     caseStudyEnabled: false,
+    gallery: [],
+    metrics: null,
+    timeline: null,
+    beforeAfter: null,
+    demoUrl: "",
+    testimonial: "",
+    testimonialAuthor: "",
+    testimonialRole: "",
+    testimonialAvatar: "",
     translations: buildEmptyTranslationMap(
       languages,
       emptyProjectTranslationFields,

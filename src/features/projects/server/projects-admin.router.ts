@@ -25,6 +25,7 @@ const ProjectTranslationMapSchema = z.record(
     challenge: z.string().default(""),
     approach: z.string().default(""),
     outcome: z.string().default(""),
+    techDecisions: z.string().default(""),
   }),
 );
 
@@ -39,6 +40,24 @@ const projectUpsertInput = z.object({
   kind: z.enum(["PROFESSIONAL", "PERSONAL", "LEARNING"]).default("PERSONAL"),
   slug: z.string().optional(),
   caseStudyEnabled: z.boolean().default(false),
+  gallery: z.array(z.string()).default([]),
+  metrics: z
+    .array(z.object({ label: z.string(), value: z.string(), icon: z.string().optional() }))
+    .nullable()
+    .default(null),
+  timeline: z
+    .array(z.object({ title: z.string(), description: z.string().optional(), date: z.string().optional() }))
+    .nullable()
+    .default(null),
+  beforeAfter: z
+    .object({ before: z.string(), after: z.string(), beforeLabel: z.string().optional(), afterLabel: z.string().optional() })
+    .nullable()
+    .default(null),
+  demoUrl: z.string().optional(),
+  testimonial: z.string().optional(),
+  testimonialAuthor: z.string().optional(),
+  testimonialRole: z.string().optional(),
+  testimonialAvatar: z.string().optional(),
   translations: ProjectTranslationMapSchema.default({}),
 });
 
@@ -159,6 +178,7 @@ export const projectsAdminRouter = createTRPCRouter({
               challenge: translation.challenge ?? null,
               approach: translation.approach ?? null,
               outcome: translation.outcome ?? null,
+              techDecisions: translation.techDecisions ?? null,
             },
           });
         } else {
