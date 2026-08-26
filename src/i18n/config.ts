@@ -303,6 +303,46 @@ export const pathnames = {
     es: "/panel/credenciales/[provider]",
     nl: "/beheer/inloggegevens/[provider]",
   },
+  "/blog": {
+    en: "/blog",
+    es: "/blog",
+    nl: "/blog",
+  },
+  "/blog/series": {
+    en: "/blog/series",
+    es: "/blog/series",
+    nl: "/blog/series",
+  },
+  "/blog/series/[series]": {
+    en: "/blog/series/[series]",
+    es: "/blog/series/[series]",
+    nl: "/blog/series/[series]",
+  },
+  "/blog/[slug]": {
+    en: "/blog/[slug]",
+    es: "/blog/[slug]",
+    nl: "/blog/[slug]",
+  },
+  "/blog/tag/[tag]": {
+    en: "/blog/tag/[tag]",
+    es: "/blog/tag/[tag]",
+    nl: "/blog/tag/[tag]",
+  },
+  "/admin/blog": {
+    en: "/admin/blog",
+    es: "/panel/blog",
+    nl: "/beheer/blog",
+  },
+  "/admin/blog/new": {
+    en: "/admin/blog/new",
+    es: "/panel/blog/nuevo",
+    nl: "/beheer/blog/nieuw",
+  },
+  "/admin/blog/[id]/edit": {
+    en: "/admin/blog/[id]/edit",
+    es: "/panel/blog/[id]/editar",
+    nl: "/beheer/blog/[id]/bewerken",
+  },
 } satisfies Pathnames<typeof locales>;
 
 export const defaultLocale: Locale = "en";

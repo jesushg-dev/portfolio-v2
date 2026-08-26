@@ -1,3 +1,5 @@
+import { blogAdminRouter } from "@/features/blog/server/blog-admin.router";
+import { blogPublicRouter } from "@/features/blog/server/blog-public.router";
 import { portfolioRouter } from "@/server/api/routers/portfolio";
 import { cvRouter } from "@/features/cv/server/cv.router";
 import { cvPublicRouter } from "@/features/cv/server/cv-public.router";
@@ -24,6 +26,8 @@ import { geoRouter } from "@/server/api/routers/geo";
 
 export const appRouter = createTRPCRouter({
   geo: geoRouter,
+  blog: blogPublicRouter,
+  blogAdmin: blogAdminRouter,
   portfolio: portfolioRouter,
   appLanguagesAdmin: appLanguagesAdminRouter,
   projectsAdmin: projectsAdminRouter,

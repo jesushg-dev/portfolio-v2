@@ -43,6 +43,7 @@ model User {
   CvHeroTitle         CvHeroTitle[]
 
   // Per-user portfolio (existing models become tenant-scoped)
+  BlogPost           BlogPost[]
   Project            Project[]
   Skill              Skill[]
   Service            Service[]
@@ -564,6 +565,7 @@ model AppLanguage {
   UsesClarificationTranslation  UsesClarificationTranslation[]
   NowSettingsTranslation        NowSettingsTranslation[]
   NowFocusTranslation           NowFocusTranslation[]
+  BlogPostTranslation           BlogPostTranslation[]
 }
 
 enum ProjectKind {
@@ -1062,5 +1064,48 @@ model TenantIntegration {
   updatedAt      DateTime  @updatedAt
 
   @@unique([userId, provider])
+}
+
+// ============================================================================
+// BLOG (per-user, multi-locale)
+// ============================================================================
+
+model BlogPost {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String             @db.ObjectId
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug        String
+  coverImage  String?
+  tags        String[]           @default([])
+  seriesName  String?
+  seriesOrder Int?
+  status      BlogPostStatus     @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  translations BlogPostTranslation[]
+
+  @@unique([userId, slug])
+  @@index([userId, status])
+  @@index([userId, seriesName, seriesOrder])
+}
+
+model BlogPostTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  postId        String      @db.ObjectId
+  post          BlogPost    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  appLanguageId String      @db.ObjectId
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  title         String
+  excerpt       String?
+  content       String      @default("")
+
+  @@unique([postId, appLanguageId])
+}
+
+enum BlogPostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
