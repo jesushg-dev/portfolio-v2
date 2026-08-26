@@ -7,17 +7,25 @@ import {
   FileText,
   HeartHandshake,
   Layers,
+  MonitorSmartphone,
+  Radio,
+  ScrollText,
   Server,
   Sparkles,
   User,
 } from "lucide-react";
+
+import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 
 export type StaticNavPath =
   | "/certificates"
   | "/curriculum-vitae"
   | "/timeline"
   | "/how-i-use-ai"
-  | "/qa-collaboration";
+  | "/qa-collaboration"
+  | "/uses"
+  | "/now"
+  | "/colophon";
 
 export type NavSectionId =
   | "home"
@@ -112,6 +120,27 @@ export const NAV_GROUPS: NavGroup[] = [
         id: "qa-collaboration",
         href: "/qa-collaboration",
         icon: HeartHandshake,
+      },
+      {
+        kind: "route",
+        id: "uses",
+        href: "/uses",
+        icon: MonitorSmartphone,
+        comingSoon: !PUBLIC_PAGE_LIVE.uses,
+      },
+      {
+        kind: "route",
+        id: "now",
+        href: "/now",
+        icon: Radio,
+        comingSoon: !PUBLIC_PAGE_LIVE.now,
+      },
+      {
+        kind: "route",
+        id: "colophon",
+        href: "/colophon",
+        icon: ScrollText,
+        comingSoon: !PUBLIC_PAGE_LIVE.colophon,
       },
     ],
   },

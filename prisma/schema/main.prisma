@@ -53,6 +53,10 @@ model User {
   SpotifyConnection  SpotifyConnection?
   Testimonial        Testimonial[]
   TenantIntegration  TenantIntegration[]
+  UsesItem           UsesItem[]
+  UsesSettings       UsesSettings?
+  NowSettings        NowSettings?
+  NowFocus           NowFocus[]
 
   // Job Tracker
   Company            Company[]
@@ -555,6 +559,11 @@ model AppLanguage {
   CvAdditionalInfoTranslation   CvAdditionalInfoTranslation[]
   CvPersonalReferenceTranslation CvPersonalReferenceTranslation[]
   CvContactTranslation          CvContactTranslation[]
+  UsesItemTranslation           UsesItemTranslation[]
+  UsesSettingsTranslation       UsesSettingsTranslation[]
+  UsesClarificationTranslation  UsesClarificationTranslation[]
+  NowSettingsTranslation        NowSettingsTranslation[]
+  NowFocusTranslation           NowFocusTranslation[]
 }
 
 enum ProjectKind {
@@ -856,6 +865,154 @@ model SoftSkillsSection {
   imageUrl  String?
   createdAt DateTime            @default(now())
   updatedAt DateTime            @updatedAt
+}
+
+// ============================================================================
+// USES PAGE (inventory + media settings)
+// ============================================================================
+
+enum UsesItemType {
+  EVERYDAY
+  SOFTWARE
+  BROWSER
+}
+
+model UsesItem {
+  id                  String                @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String                @db.ObjectId
+  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type                UsesItemType
+  href                String
+  image               String?
+  order               Int                   @default(0)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  UsesItemTranslation UsesItemTranslation[]
+}
+
+model UsesItemTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  title         String
+  description   String?
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  UsesItem      UsesItem?   @relation(fields: [usesItemId], references: [id], onDelete: Cascade)
+  usesItemId    String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+
+  @@unique([usesItemId, appLanguageId])
+}
+
+model UsesSettings {
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  userId                  String                    @unique @db.ObjectId
+  user                    User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceImage          String?
+  codingPreviewLight      String?
+  codingPreviewDark       String?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  UsesSettingsTranslation UsesSettingsTranslation[]
+  UsesClarification       UsesClarification[]
+}
+
+model UsesSettingsTranslation {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime      @default(now())
+  codingIntro    String        @default("")
+  browserIntro   String        @default("")
+  language       AppLanguage   @relation(fields: [appLanguageId], references: [id])
+  UsesSettings   UsesSettings? @relation(fields: [usesSettingsId], references: [id], onDelete: Cascade)
+  usesSettingsId String?       @db.ObjectId
+  appLanguageId  String        @db.ObjectId
+
+  @@unique([usesSettingsId, appLanguageId])
+}
+
+model UsesClarification {
+  id                         String                         @id @default(auto()) @map("_id") @db.ObjectId
+  usesSettingsId             String                         @db.ObjectId
+  UsesSettings               UsesSettings                   @relation(fields: [usesSettingsId], references: [id], onDelete: Cascade)
+  order                      Int                            @default(0)
+  createdAt                  DateTime                       @default(now())
+  updatedAt                  DateTime                       @updatedAt
+  UsesClarificationTranslation UsesClarificationTranslation[]
+
+  @@index([usesSettingsId, order])
+}
+
+model UsesClarificationTranslation {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime          @default(now())
+  body               String
+  language           AppLanguage       @relation(fields: [appLanguageId], references: [id])
+  UsesClarification  UsesClarification? @relation(fields: [usesClarificationId], references: [id], onDelete: Cascade)
+  usesClarificationId String?          @db.ObjectId
+  appLanguageId      String            @db.ObjectId
+
+  @@unique([usesClarificationId, appLanguageId])
+}
+
+// ============================================================================
+// NOW PAGE (snapshot settings + focuses)
+// ============================================================================
+
+model NowSettings {
+  id                     String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String                   @unique @db.ObjectId
+  user                   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  timezone               String                   @default("America/Mexico_City")
+  githubUsername         String?
+  statusEmoji            String                   @default("🚀")
+  readingTitle           String?
+  readingAuthors         String?
+  readingProgress        Int                      @default(0)
+  watchedTitle           String?
+  watchedRating          Int                      @default(0)
+  githubRepo             String?
+  githubHref             String?
+  photoUrls              String[]                 @default([])
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  NowSettingsTranslation NowSettingsTranslation[]
+}
+
+model NowSettingsTranslation {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime     @default(now())
+  statusBody    String
+  statusRelative String
+  githubBody    String
+  githubRelative String
+  language      AppLanguage  @relation(fields: [appLanguageId], references: [id])
+  NowSettings   NowSettings? @relation(fields: [nowSettingsId], references: [id], onDelete: Cascade)
+  nowSettingsId String?      @db.ObjectId
+  appLanguageId String       @db.ObjectId
+
+  @@unique([nowSettingsId, appLanguageId])
+}
+
+model NowFocus {
+  id                  String                @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String                @db.ObjectId
+  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order               Int                   @default(0)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  NowFocusTranslation NowFocusTranslation[]
+}
+
+model NowFocusTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  label         String
+  body          String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  NowFocus      NowFocus?   @relation(fields: [nowFocusId], references: [id], onDelete: Cascade)
+  nowFocusId    String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+
+  @@unique([nowFocusId, appLanguageId])
 }
 
 // ============================================================================

@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 import {
   buildLocalizedSitemapEntry,
+  INDEXABLE_SITEMAP_PATHS,
   PUBLIC_SITEMAP_CHANGE_FREQUENCY,
-  PUBLIC_SITEMAP_PATHS,
   PUBLIC_SITEMAP_PRIORITIES,
 } from "@/lib/seo/build-sitemap";
 import { db } from "@/server/db";
@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     select: { userId: true, updatedAt: true },
   });
 
-  const staticEntries = PUBLIC_SITEMAP_PATHS.map((pathname) =>
+  const staticEntries = INDEXABLE_SITEMAP_PATHS.map((pathname) =>
     buildLocalizedSitemapEntry(pathname, {
       priority: PUBLIC_SITEMAP_PRIORITIES[pathname],
       changeFrequency: PUBLIC_SITEMAP_CHANGE_FREQUENCY[pathname],

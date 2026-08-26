@@ -98,6 +98,21 @@ export const pathnames = {
     es: "/personalizar-tema",
     nl: "/thematool",
   },
+  "/uses": {
+    en: "/uses",
+    es: "/uses",
+    nl: "/uses",
+  },
+  "/now": {
+    en: "/now",
+    es: "/now",
+    nl: "/now",
+  },
+  "/colophon": {
+    en: "/colophon",
+    es: "/colofon",
+    nl: "/colofon",
+  },
   "/login": {
     en: "/login",
     es: "/iniciar-sesion",
@@ -162,6 +177,36 @@ export const pathnames = {
     en: "/admin/certifications",
     es: "/panel/certificaciones",
     nl: "/beheer/certificeringen",
+  },
+  "/admin/uses": {
+    en: "/admin/uses",
+    es: "/panel/uses",
+    nl: "/beheer/uses",
+  },
+  "/admin/uses/new": {
+    en: "/admin/uses/new",
+    es: "/panel/uses/nuevo",
+    nl: "/beheer/uses/nieuw",
+  },
+  "/admin/uses/[id]/edit": {
+    en: "/admin/uses/[id]/edit",
+    es: "/panel/uses/[id]/editar",
+    nl: "/beheer/uses/[id]/bewerken",
+  },
+  "/admin/now": {
+    en: "/admin/now",
+    es: "/panel/now",
+    nl: "/beheer/now",
+  },
+  "/admin/now/focuses/new": {
+    en: "/admin/now/focuses/new",
+    es: "/panel/now/focuses/nuevo",
+    nl: "/beheer/now/focuses/nieuw",
+  },
+  "/admin/now/focuses/[id]/edit": {
+    en: "/admin/now/focuses/[id]/edit",
+    es: "/panel/now/focuses/[id]/editar",
+    nl: "/beheer/now/focuses/[id]/bewerken",
   },
   "/admin/spotify": {
     en: "/admin/spotify",

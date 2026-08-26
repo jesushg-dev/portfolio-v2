@@ -350,6 +350,18 @@
           "qa-collaboration": {
             "label": "Colaboración con QA",
             "description": "Prácticas de calidad, testing y despliegues."
+          },
+          "uses": {
+            "label": "Uses",
+            "description": "Hardware, software y herramientas que uso cada día."
+          },
+          "now": {
+            "label": "Now",
+            "description": "En qué estoy enfocado, leyendo y entregando ahora mismo."
+          },
+          "colophon": {
+            "label": "Colofón",
+            "description": "Cómo está hecho este sitio: stack, tipografía, colores y huella."
           }
         }
       }
@@ -367,7 +379,10 @@
         },
         "process": {
           "howIUseAi": "Cómo uso la IA",
-          "qaCollaboration": "Colaboración con QA"
+          "qaCollaboration": "Colaboración con QA",
+          "uses": "Uses",
+          "now": "Now",
+          "colophon": "Colofón"
         },
         "miscellaneous": {
           "cvGenerator": "Generador de CV",
@@ -1127,6 +1142,174 @@
         "description": "Hablemos de tu proyecto, tu stack y dónde la IA puede ayudar de verdad.",
         "button": "Agendar una llamada"
       }
+    },
+    "uses": {
+      "metaTitle": "Uses",
+      "metaDescription": "El hardware, software y herramientas que uso cada día — del escritorio a las pestañas del navegador que nunca cierro.",
+      "hero": {
+        "eyebrow": "// uses",
+        "title": "¿Qué hay en mi",
+        "titleHighlight": "setup?",
+        "description": "El hardware, software y herramientas que uso cada día — del escritorio a las pestañas del navegador que nunca cierro.",
+        "tabsLabel": "Filtrar uses",
+        "tabs": {
+          "all": "Todo",
+          "everyday": "Día a día",
+          "software": "Software",
+          "browser": "Navegador",
+          "coding": "Código"
+        },
+        "workspaceCaption": "Espacio de trabajo",
+        "workspaceAlt": "Foto del escritorio"
+      },
+      "everyday": {
+        "title": "Día a día",
+        "coffee": {
+          "title": "Café",
+          "description": "La dependencia real detrás de cada deploy — anímate, haz clic",
+          "celebrate": "¡Es hora del café!",
+          "aria": "Café, haz clic para una sorpresa"
+        }
+      },
+      "software": {
+        "title": "Software",
+        "note": "Aún uso el <arc>navegador Arc</arc> a veces, porque Helium <drm>aún no soporta contenido DRM</drm>."
+      },
+      "browser": {
+        "title": "Extensiones del navegador",
+        "intro": "Uso el <helium>navegador Helium</helium> junto con estas extensiones:"
+      },
+      "coding": {
+        "title": "Código",
+        "intro": "Uso <vscode>Visual Studio Code</vscode> como editor principal, con el <theme>tema Pace</theme> y la fuente <font>MonoLisa</font> con ligaduras e itálicas.",
+        "previewCaption": "Vista previa de la configuración de VS Code",
+        "previewLightAlt": "Vista previa de VS Code con tema claro",
+        "previewDarkAlt": "Vista previa de VS Code con tema oscuro"
+      },
+      "note": {
+        "before": "¿Armas el tuyo? Mira",
+        "linkLabel": "uses.tech",
+        "after": "para setups de otros developers."
+      }
+    },
+    "now": {
+      "metaTitle": "Now",
+      "metaDescription": "Una captura de en qué estoy enfocado, leyendo y entregando en este momento — actualizada cuando me acuerdo.",
+      "hero": {
+        "eyebrow": "// now",
+        "title": "¿Qué estoy haciendo",
+        "titleHighlight": "ahora mismo?",
+        "description": "Una captura de en qué estoy enfocado, leyendo y entregando en este momento — actualizada cuando me acuerdo."
+      },
+      "list": {
+        "localTimeLabel": "Hora local",
+        "readingLabel": "Leyendo ahora",
+        "reading": {
+          "book": "The Pragmatic Programmer"
+        },
+        "focusesLabel": "También en marcha",
+        "ideas": {
+          "label": "Ideas",
+          "body": "Reuniendo ideas para hacer este sitio aún mejor"
+        },
+        "leading": {
+          "label": "Equipo",
+          "body": "Liderando un equipo pequeño y mentorando donde puedo"
+        },
+        "automating": {
+          "label": "Portafolio",
+          "body": "Automatizando las partes aburridas de este portafolio para que (casi) se mantenga al día"
+        },
+        "oss": {
+          "label": "Open source",
+          "body": "Jugando con proyectos open-source cuando encuentro tiempo"
+        }
+      },
+      "note": {
+        "before": "Esta es una now page — si tienes tu propio sitio,",
+        "linkLabel": "tú también deberías hacer una",
+        "after": "."
+      },
+      "activity": {
+        "title": "Actividad",
+        "lastStatus": "Último estado",
+        "lastPlayed": "Última reproducción",
+        "nowPlaying": "Reproduciendo",
+        "reading": "Leyendo",
+        "lastWatched": "Último visto",
+        "latestPhotos": "Últimas fotos",
+        "latestGithub": "Última actividad en GitHub",
+        "contributions": "Contribuciones en GitHub",
+        "reply": "Responder",
+        "less": "Menos",
+        "more": "Más",
+        "statusBody": "Por fin automaticé mi pipeline de CI/CD de punta a punta — pequeña victoria, gran alivio.",
+        "statusRelative": "hace 4 horas",
+        "githubBody": "Abrí un pull request en <repo></repo>",
+        "githubRelative": "hace 2 días",
+        "contributionsTotal": "{total} contribuciones en el último año",
+        "photosAlt": "Marcadores de fotos recientes",
+        "spotifyIdleTitle": "Nada por ahora",
+        "spotifyIdleSubtitle": "Vuelve más tarde"
+      }
+    },
+    "colophon": {
+      "metaTitle": "Colofón",
+      "metaDescription": "El stack, la tipografía, los colores y la huella detrás de jesushg.com.",
+      "hero": {
+        "eyebrow": "Colofón",
+        "title": "Cómo está hecho este sitio",
+        "description": "El stack, la tipografía, los colores y la huella detrás de este sitio."
+      },
+      "stack": {
+        "title": "Stack tecnológico",
+        "body": "Este sitio está construido con <nextjs>Next.js</nextjs>, <tailwind>Tailwind CSS</tailwind>, <prisma>Prisma</prisma> y <mongodb>MongoDB</mongodb>, y está alojado en <vercel>Vercel</vercel>.",
+        "marks": {
+          "nextjs": "▲ Next.js",
+          "tailwind": "Tailwind",
+          "prisma": "Prisma",
+          "mongodb": "MongoDB",
+          "vercel": "Vercel"
+        }
+      },
+      "typography": {
+        "title": "Tipografía",
+        "body": "Inter sostiene todo el sitio: títulos, cuerpo de texto, todo.",
+        "weights": {
+          "regular": "Regular",
+          "medium": "Medium",
+          "semibold": "Semibold",
+          "bold": "Bold"
+        }
+      },
+      "colors": {
+        "title": "Diseño y colores",
+        "body": "Los colores viven en custom properties de Tailwind CSS y se cambian con un atributo <code>data-theme</code>: tres paletas (Main, Orange, Christmas), cada una con variante clara y oscura — seis en total.",
+        "currentBadge": "actual"
+      },
+      "palettes": {
+        "orangeLight": "Orange · Light",
+        "mainLight": "Main · Light",
+        "mainDark": "Main · Dark",
+        "orangeDark": "Orange · Dark",
+        "christmasLight": "Christmas · Light",
+        "christmasDark": "Christmas · Dark"
+      },
+      "logo": {
+        "title": "Logo",
+        "body": "Diseñado por mí. Esta es una marca provisional con las iniciales, hasta que el archivo final esté listo.",
+        "lightAlt": "Marca JH sobre fondo claro",
+        "darkAlt": "Marca JH sobre fondo oscuro"
+      },
+      "carbon": {
+        "title": "Huella de carbono",
+        "body": "Este sitio produce menos de <strong>0.234g de CO₂</strong> en una primera visita (0.018g en visitas de retorno), según <beacon>Digital Beacon</beacon> — calificación B — y <carbon>Website Carbon</carbon> — calificación A+.",
+        "badge": {
+          "co2": "{grams}g de CO₂/vista",
+          "brand": "Website Carbon",
+          "cleaner": "Calificación A+ en Website Carbon"
+        }
+      }
     }
   },
   "admin": {
@@ -1155,9 +1338,14 @@
         "jobTracker": "Seguimiento laboral",
         "resumeStudio": "Resume Studio",
         "portfolioGroup": "Contenido del Portafolio",
+        "pagesGroup": "Páginas",
+        "uses": "Uses",
+        "now": "Now",
         "sidebar": "Navegación de administración"
       },
-      "pageToolbar": "Encabezado de página"
+      "pageToolbar": "Encabezado de página",
+      "pinSidebar": "Mantener sidebar abierto",
+      "unpinSidebar": "Colapsar sidebar al pasar el mouse"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -1873,6 +2061,93 @@
         "imageRequired": "La URL de imagen es obligatoria",
         "featuredLabel": "Destacada en el stack",
         "featuredDescription": "Las skills destacadas se ven más brillantes en el terminal de inicio y resaltan tu stack principal."
+      },
+      "usesItem": {
+        "sectionBasics": "Básicos",
+        "sectionCopy": "Textos",
+        "href": "URL del enlace",
+        "hrefRequired": "El enlace es obligatorio",
+        "image": "Ruta de imagen",
+        "order": "Orden",
+        "title": "Título",
+        "titleRequired": "El título es obligatorio en el idioma principal",
+        "description": "Descripción",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "create": "Crear",
+        "saving": "Guardando…",
+        "createdSuccess": "Ítem creado",
+        "updatedSuccess": "Ítem actualizado",
+        "createFailed": "No se pudo crear el ítem",
+        "updateFailed": "No se pudo actualizar el ítem"
+      },
+      "usesSettings": {
+        "sectionMedia": "Media de la página",
+        "workspaceImage": "Imagen del escritorio",
+        "codingPreviewLight": "Vista previa de código (claro)",
+        "codingPreviewDark": "Vista previa de código (oscuro)",
+        "sectionCopy": "Textos de sección",
+        "sectionCopyHint": "Intros opcionales. Vacío = oculto. Usa [texto](url) para enlaces.",
+        "codingIntro": "Intro de código",
+        "browserIntro": "Intro de navegador",
+        "sectionClarifications": "Aclaraciones",
+        "sectionClarificationsHint": "Notas con borde punteado bajo Software. Opcionales; [texto](url) para enlaces.",
+        "clarificationLabel": "Nota {index}",
+        "clarificationBody": "Cuerpo",
+        "addClarification": "Agregar aclaración",
+        "removeClarification": "Quitar",
+        "optionalMarkdownHint": "Opcional. Enlaces markdown: [texto](https://…)",
+        "save": "Guardar ajustes",
+        "saving": "Guardando…",
+        "updatedSuccess": "Ajustes guardados",
+        "updateFailed": "No se pudieron guardar los ajustes"
+      },
+      "nowSettings": {
+        "sectionGeneral": "General",
+        "sectionReading": "Lectura",
+        "sectionWatched": "Último visto",
+        "sectionGithub": "Actividad de GitHub",
+        "sectionPhotos": "Fotos",
+        "sectionCopy": "Textos localizados",
+        "sectionStatusCopy": "Texto de estado",
+        "sectionGithubCopy": "Texto de GitHub",
+        "timezone": "Zona horaria",
+        "githubUsername": "Usuario de GitHub",
+        "statusEmoji": "Emoji de estado",
+        "readingTitle": "Título del libro",
+        "readingAuthors": "Autores",
+        "readingProgress": "Progreso (%)",
+        "watchedTitle": "Título",
+        "watchedRating": "Calificación (0–5)",
+        "githubRepo": "Etiqueta del repo",
+        "githubHref": "URL del repo",
+        "photoUrls": "URLs de fotos",
+        "photoUrlsHint": "Una URL por línea",
+        "statusBody": "Texto de estado",
+        "statusBodyRequired": "El texto de estado es obligatorio en el idioma principal",
+        "statusRelative": "Tiempo relativo del estado",
+        "githubBody": "Texto de actividad de GitHub",
+        "githubRelative": "Tiempo relativo de GitHub",
+        "save": "Guardar",
+        "saving": "Guardando…",
+        "updatedSuccess": "Ajustes de Now guardados",
+        "updateFailed": "No se pudieron guardar los ajustes de Now"
+      },
+      "nowFocus": {
+        "sectionBasics": "Básicos",
+        "sectionCopy": "Textos",
+        "order": "Orden",
+        "label": "Etiqueta",
+        "labelRequired": "La etiqueta es obligatoria en el idioma principal",
+        "body": "Cuerpo",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "create": "Crear",
+        "saving": "Guardando…",
+        "createdSuccess": "Foco creado",
+        "updatedSuccess": "Foco actualizado",
+        "createFailed": "No se pudo crear el foco",
+        "updateFailed": "No se pudo actualizar el foco"
       }
     },
     "errors": {
@@ -2435,6 +2710,52 @@
       "fileUploading": "Subiendo archivo...",
       "tailorUploadNeedsDraft": "Esta subida necesita datos estructurados primero. Completa el paso de importación JSON abajo.",
       "tailorUploadImportStep": "Paso 1 — JSON de importación para esta subida"
+    },
+    "uses": {
+      "title": "Uses",
+      "subtitle": "Gestiona equipo diario, software, extensiones y media.",
+      "tabsLabel": "Secciones Uses",
+      "tabs": {
+        "everyday": "Día a día",
+        "software": "Software",
+        "browser": "Navegador",
+        "settings": "Ajustes"
+      },
+      "addNew": "Agregar ítem",
+      "createDescription": "Agrega un ítem al inventario Uses.",
+      "editTitle": "Editar ítem",
+      "editDescription": "Actualiza este ítem.",
+      "count": "{count} items",
+      "searchTitle": "Buscar título",
+      "deletedSuccess": "Ítem eliminado.",
+      "deleteFailed": "No se pudo eliminar.",
+      "columns": {
+        "order": "Orden",
+        "title": "Título",
+        "href": "Enlace"
+      }
+    },
+    "now": {
+      "title": "Now",
+      "subtitle": "Gestiona el snapshot, la actividad y los focos de Now.",
+      "tabsLabel": "Secciones Now",
+      "tabs": {
+        "snapshot": "Snapshot",
+        "activity": "Actividad",
+        "github": "GitHub",
+        "focuses": "Focos"
+      },
+      "sections": {
+        "snapshotHint": "Zona horaria, emoji y la línea de estado en vivo.",
+        "activityHint": "Lectura, última vista y franja de fotos.",
+        "githubHint": "Usuario de contribuciones y el blurb de actividad.",
+        "focusesHint": "Tarjetas del mosaico “también en marcha”."
+      },
+      "focusesTitle": "Focos",
+      "addFocus": "Agregar foco",
+      "editFocus": "Editar foco",
+      "focusDeleted": "Foco eliminado.",
+      "focusDeleteFailed": "No se pudo eliminar el foco."
     }
   },
   "auth": {

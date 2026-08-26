@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 
-import { gotoAdminPath } from "./admin-origin";
+import { gotoAdminPath, urlMatchesAdminTarget } from "./admin-origin";
 
 /** Largest page size offered by the admin data-table pagination control. */
 export const ADMIN_TABLE_MAX_PAGE_SIZE = 50;
@@ -11,14 +11,6 @@ function isPagedListUrl(url: URL, listPath: string, perPage: number): boolean {
     pathname.endsWith(listPath) &&
     url.searchParams.get("perPage") === String(perPage)
   );
-}
-
-function pageUrl(page: Page): URL | null {
-  try {
-    return new URL(page.url());
-  } catch {
-    return null;
-  }
 }
 
 /**
@@ -33,9 +25,8 @@ export async function openAdminPagedList(
 ): Promise<void> {
   const listUrl = `${listPath}?perPage=${perPage}`;
   const matches = (url: URL) => isPagedListUrl(url, listPath, perPage);
-  const current = pageUrl(page);
 
-  if (!current || !matches(current)) {
+  if (!urlMatchesAdminTarget(page.url(), listUrl)) {
     await gotoAdminPath(page, listUrl);
   }
 

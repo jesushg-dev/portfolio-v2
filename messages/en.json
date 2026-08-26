@@ -350,6 +350,18 @@
           "qa-collaboration": {
             "label": "QA collaboration",
             "description": "Quality practices, testing, and release strategy."
+          },
+          "uses": {
+            "label": "Uses",
+            "description": "Hardware, software, and tools I use every day."
+          },
+          "now": {
+            "label": "Now",
+            "description": "What I'm focused on, reading, and shipping right now."
+          },
+          "colophon": {
+            "label": "Colophon",
+            "description": "How this site is built — stack, type, colors, and footprint."
           }
         }
       }
@@ -367,7 +379,10 @@
         },
         "process": {
           "howIUseAi": "How I use AI",
-          "qaCollaboration": "QA collaboration"
+          "qaCollaboration": "QA collaboration",
+          "uses": "Uses",
+          "now": "Now",
+          "colophon": "Colophon"
         },
         "miscellaneous": {
           "cvGenerator": "CV Generator",
@@ -1127,6 +1142,174 @@
         "description": "Let's talk about your project, your stack, and where AI can actually help.",
         "button": "Schedule a call"
       }
+    },
+    "uses": {
+      "metaTitle": "Uses",
+      "metaDescription": "The hardware, software, and tools I reach for every day — from my desk setup to the browser tabs I never close.",
+      "hero": {
+        "eyebrow": "// uses",
+        "title": "What's in my",
+        "titleHighlight": "setup?",
+        "description": "The hardware, software, and tools I reach for every day — from my desk setup to the browser tabs I never close.",
+        "tabsLabel": "Filter uses",
+        "tabs": {
+          "all": "All",
+          "everyday": "Everyday",
+          "software": "Software",
+          "browser": "Browser",
+          "coding": "Coding"
+        },
+        "workspaceCaption": "Workspace setup",
+        "workspaceAlt": "Desk workspace photo"
+      },
+      "everyday": {
+        "title": "Everyday",
+        "coffee": {
+          "title": "Coffee",
+          "description": "The real dependency behind every deploy — go on, click it",
+          "celebrate": "It's coffee time!",
+          "aria": "Coffee, click for a surprise"
+        }
+      },
+      "software": {
+        "title": "Software",
+        "note": "I still use the <arc>Arc browser</arc> sometimes, because Helium <drm>does not support DRM content</drm> yet."
+      },
+      "browser": {
+        "title": "Browser Extensions",
+        "intro": "I use the <helium>Helium browser</helium> along with the following extensions:"
+      },
+      "coding": {
+        "title": "Coding",
+        "intro": "I use <vscode>Visual Studio Code</vscode> as my primary editor, along with the <theme>Pace Theme</theme> and the <font>MonoLisa</font> font with ligatures and italics enabled.",
+        "previewCaption": "Preview of VS Code configuration",
+        "previewLightAlt": "Preview of VS Code configuration with light theme",
+        "previewDarkAlt": "Preview of VS Code configuration with dark theme"
+      },
+      "note": {
+        "before": "Building your own? Browse",
+        "linkLabel": "uses.tech",
+        "after": "for other developers' setups."
+      }
+    },
+    "now": {
+      "metaTitle": "Now",
+      "metaDescription": "A snapshot of what I'm focused on, reading, and shipping at the moment — updated whenever I remember to.",
+      "hero": {
+        "eyebrow": "// now",
+        "title": "What am I doing",
+        "titleHighlight": "right now?",
+        "description": "A snapshot of what I'm focused on, reading, and shipping at the moment — updated whenever I remember to."
+      },
+      "list": {
+        "localTimeLabel": "Local time",
+        "readingLabel": "Currently reading",
+        "reading": {
+          "book": "The Pragmatic Programmer"
+        },
+        "focusesLabel": "Also in motion",
+        "ideas": {
+          "label": "Ideas",
+          "body": "Collecting ideas to make this site even better"
+        },
+        "leading": {
+          "label": "Team",
+          "body": "Leading a small team and mentoring where I can"
+        },
+        "automating": {
+          "label": "Portfolio",
+          "body": "Automating the boring parts of this portfolio so it (mostly) stays up to date"
+        },
+        "oss": {
+          "label": "Open source",
+          "body": "Tinkering with open-source projects when I find the time"
+        }
+      },
+      "note": {
+        "before": "This is a now page — if you have your own site,",
+        "linkLabel": "you should make one too",
+        "after": "."
+      },
+      "activity": {
+        "title": "Activity",
+        "lastStatus": "Last Status",
+        "lastPlayed": "Last Played",
+        "nowPlaying": "Now Playing",
+        "reading": "Reading",
+        "lastWatched": "Last Watched",
+        "latestPhotos": "Latest Photos",
+        "latestGithub": "Latest GitHub Activity",
+        "contributions": "GitHub Contributions",
+        "reply": "Reply",
+        "less": "Less",
+        "more": "More",
+        "statusBody": "Finally automated my CI/CD pipeline end-to-end — small win, big relief.",
+        "statusRelative": "4 hours ago",
+        "githubBody": "Opened a pull request in <repo></repo>",
+        "githubRelative": "2 days ago",
+        "contributionsTotal": "{total} contributions in the last year",
+        "photosAlt": "Latest photo placeholders",
+        "spotifyIdleTitle": "Nothing right now",
+        "spotifyIdleSubtitle": "Check back later"
+      }
+    },
+    "colophon": {
+      "metaTitle": "Colophon",
+      "metaDescription": "The stack, type, colors, and footprint behind jesushg.com.",
+      "hero": {
+        "eyebrow": "Colophon",
+        "title": "How this site is built",
+        "description": "The stack, the type, the colors, and the footprint behind this site."
+      },
+      "stack": {
+        "title": "Tech Stack",
+        "body": "This site is built using <nextjs>Next.js</nextjs>, <tailwind>Tailwind CSS</tailwind>, <prisma>Prisma</prisma>, and <mongodb>MongoDB</mongodb>, and it's hosted on <vercel>Vercel</vercel>.",
+        "marks": {
+          "nextjs": "▲ Next.js",
+          "tailwind": "Tailwind",
+          "prisma": "Prisma",
+          "mongodb": "MongoDB",
+          "vercel": "Vercel"
+        }
+      },
+      "typography": {
+        "title": "Typography",
+        "body": "Inter carries the whole site — headings, body copy, everything.",
+        "weights": {
+          "regular": "Regular",
+          "medium": "Medium",
+          "semibold": "Semibold",
+          "bold": "Bold"
+        }
+      },
+      "colors": {
+        "title": "Design & Colors",
+        "body": "Colors run on Tailwind CSS custom properties, switched through a <code>data-theme</code> attribute — three palettes (Main, Orange, Christmas), each with a light and dark variant, six in total.",
+        "currentBadge": "current"
+      },
+      "palettes": {
+        "orangeLight": "Orange · Light",
+        "mainLight": "Main · Light",
+        "mainDark": "Main · Dark",
+        "orangeDark": "Orange · Dark",
+        "christmasLight": "Christmas · Light",
+        "christmasDark": "Christmas · Dark"
+      },
+      "logo": {
+        "title": "Logo",
+        "body": "Self-designed. This is a placeholder mark built around the initials, standing in until the final logo file is ready.",
+        "lightAlt": "JH mark on a light background",
+        "darkAlt": "JH mark on a dark background"
+      },
+      "carbon": {
+        "title": "Carbon Footprint",
+        "body": "This site produces less than <strong>0.234g of CO₂</strong> on a first visit (0.018g on return visits), according to <beacon>Digital Beacon</beacon> — rated B — and <carbon>Website Carbon</carbon> — rated A+.",
+        "badge": {
+          "co2": "{grams}g of CO₂/view",
+          "brand": "Website Carbon",
+          "cleaner": "Rated A+ on Website Carbon"
+        }
+      }
     }
   },
   "admin": {
@@ -1155,9 +1338,14 @@
         "jobTracker": "Job Tracker",
         "resumeStudio": "Resume Studio",
         "portfolioGroup": "Portfolio Content",
+        "pagesGroup": "Pages",
+        "uses": "Uses",
+        "now": "Now",
         "sidebar": "Admin navigation"
       },
-      "pageToolbar": "Page header"
+      "pageToolbar": "Page header",
+      "pinSidebar": "Keep sidebar open",
+      "unpinSidebar": "Collapse sidebar on hover"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -1850,6 +2038,93 @@
         "savedSuccess": "Section background saved",
         "saveFailed": "Failed to save section background"
       },
+      "usesItem": {
+        "sectionBasics": "Basics",
+        "sectionCopy": "Copy",
+        "href": "Link URL",
+        "hrefRequired": "Link is required",
+        "image": "Image path",
+        "order": "Order",
+        "title": "Title",
+        "titleRequired": "Title is required for the primary language",
+        "description": "Description",
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create",
+        "saving": "Saving…",
+        "createdSuccess": "Item created",
+        "updatedSuccess": "Item updated",
+        "createFailed": "Could not create item",
+        "updateFailed": "Could not update item"
+      },
+      "usesSettings": {
+        "sectionMedia": "Page media",
+        "workspaceImage": "Workspace / desk image",
+        "codingPreviewLight": "Coding preview (light)",
+        "codingPreviewDark": "Coding preview (dark)",
+        "sectionCopy": "Section copy",
+        "sectionCopyHint": "Optional intros. Leave blank to hide. Use [label](url) for links.",
+        "codingIntro": "Coding intro",
+        "browserIntro": "Browser intro",
+        "sectionClarifications": "Clarifications",
+        "sectionClarificationsHint": "Dashed notes under Software. Optional; use [label](url) for links.",
+        "clarificationLabel": "Note {index}",
+        "clarificationBody": "Body",
+        "addClarification": "Add clarification",
+        "removeClarification": "Remove",
+        "optionalMarkdownHint": "Optional. Markdown links: [label](https://…)",
+        "save": "Save settings",
+        "saving": "Saving…",
+        "updatedSuccess": "Settings saved",
+        "updateFailed": "Could not save settings"
+      },
+      "nowSettings": {
+        "sectionGeneral": "General",
+        "sectionReading": "Reading",
+        "sectionWatched": "Last watched",
+        "sectionGithub": "GitHub activity",
+        "sectionPhotos": "Photos",
+        "sectionCopy": "Localized copy",
+        "sectionStatusCopy": "Status copy",
+        "sectionGithubCopy": "GitHub copy",
+        "timezone": "Timezone",
+        "githubUsername": "GitHub username",
+        "statusEmoji": "Status emoji",
+        "readingTitle": "Book title",
+        "readingAuthors": "Authors",
+        "readingProgress": "Progress (%)",
+        "watchedTitle": "Title",
+        "watchedRating": "Rating (0–5)",
+        "githubRepo": "Repo label",
+        "githubHref": "Repo URL",
+        "photoUrls": "Photo URLs",
+        "photoUrlsHint": "One URL per line",
+        "statusBody": "Status body",
+        "statusBodyRequired": "Status body is required for the primary language",
+        "statusRelative": "Status relative time",
+        "githubBody": "GitHub activity body",
+        "githubRelative": "GitHub relative time",
+        "save": "Save",
+        "saving": "Saving…",
+        "updatedSuccess": "Now settings saved",
+        "updateFailed": "Could not save Now settings"
+      },
+      "nowFocus": {
+        "sectionBasics": "Basics",
+        "sectionCopy": "Copy",
+        "order": "Order",
+        "label": "Label",
+        "labelRequired": "Label is required for the primary language",
+        "body": "Body",
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create",
+        "saving": "Saving…",
+        "createdSuccess": "Focus created",
+        "updatedSuccess": "Focus updated",
+        "createFailed": "Could not create focus",
+        "updateFailed": "Could not update focus"
+      },
       "portfolioSkill": {
         "generalSection": "General Information",
         "title": "Title",
@@ -1979,6 +2254,52 @@
       "columnLocation": "Location",
       "delete": "Delete",
       "deleting": "Deleting..."
+    },
+    "uses": {
+      "title": "Uses",
+      "subtitle": "Manage everyday gear, software, browser extensions, and page media.",
+      "tabsLabel": "Uses sections",
+      "tabs": {
+        "everyday": "Everyday",
+        "software": "Software",
+        "browser": "Browser",
+        "settings": "Settings"
+      },
+      "addNew": "Add item",
+      "createDescription": "Add a new item to your Uses inventory.",
+      "editTitle": "Edit item",
+      "editDescription": "Update this Uses inventory item.",
+      "count": "{count} items",
+      "searchTitle": "Search title",
+      "deletedSuccess": "Item deleted.",
+      "deleteFailed": "Could not delete item.",
+      "columns": {
+        "order": "Order",
+        "title": "Title",
+        "href": "Link"
+      }
+    },
+    "now": {
+      "title": "Now",
+      "subtitle": "Manage your Now page snapshot, activity, and focuses.",
+      "tabsLabel": "Now sections",
+      "tabs": {
+        "snapshot": "Snapshot",
+        "activity": "Activity",
+        "github": "GitHub",
+        "focuses": "Focuses"
+      },
+      "sections": {
+        "snapshotHint": "Timezone, emoji, and the live status line on the page.",
+        "activityHint": "Reading, last watched, and photo strip.",
+        "githubHint": "Contribution username and latest activity blurb.",
+        "focusesHint": "Cards shown in the “also in progress” mosaic."
+      },
+      "focusesTitle": "Focuses",
+      "addFocus": "Add focus",
+      "editFocus": "Edit focus",
+      "focusDeleted": "Focus deleted.",
+      "focusDeleteFailed": "Could not delete focus."
     },
     "projects": {
       "title": "Projects",

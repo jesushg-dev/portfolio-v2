@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { defaultLocale, locales } from "@/i18n/config";
 import { getPathname } from "@/i18n/routing";
+import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 import { SITE_URL } from "@/lib/seo/site";
 
 type StaticHref = Parameters<typeof getPathname>[0]["href"];
@@ -66,7 +67,22 @@ export const PUBLIC_SITEMAP_PATHS = [
   "/certificates/softskills",
   "/timeline",
   "/privacy",
+  "/uses",
+  "/now",
+  "/colophon",
 ] as const satisfies readonly StaticHref[];
+
+const SITEMAP_LIVE_FLAGS: Partial<
+  Record<(typeof PUBLIC_SITEMAP_PATHS)[number], boolean>
+> = {
+  "/uses": PUBLIC_PAGE_LIVE.uses,
+  "/now": PUBLIC_PAGE_LIVE.now,
+  "/colophon": PUBLIC_PAGE_LIVE.colophon,
+};
+
+export const INDEXABLE_SITEMAP_PATHS = PUBLIC_SITEMAP_PATHS.filter(
+  (pathname) => SITEMAP_LIVE_FLAGS[pathname] !== false,
+);
 
 export const PUBLIC_SITEMAP_PRIORITIES: Partial<
   Record<(typeof PUBLIC_SITEMAP_PATHS)[number], number>
@@ -76,6 +92,9 @@ export const PUBLIC_SITEMAP_PRIORITIES: Partial<
   "/certificates": 0.8,
   "/timeline": 0.7,
   "/schedule": 0.6,
+  "/uses": 0.6,
+  "/now": 0.6,
+  "/colophon": 0.4,
   "/privacy": 0.3,
 };
 
@@ -90,5 +109,8 @@ export const PUBLIC_SITEMAP_CHANGE_FREQUENCY: Partial<
   "/certificates": "monthly",
   "/timeline": "monthly",
   "/schedule": "monthly",
+  "/uses": "monthly",
+  "/now": "weekly",
+  "/colophon": "yearly",
   "/privacy": "yearly",
 };

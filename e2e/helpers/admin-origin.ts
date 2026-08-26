@@ -24,10 +24,30 @@ export function isAdminCollectionListUrl(
   );
 }
 
-function pathMatchesTarget(pathname: string, path: string): boolean {
-  const target = (path.split("?")[0] ?? path).replace(/\/$/, "") || "/";
-  const current = pathname.replace(/\/$/, "") || "/";
-  return current === target || current.endsWith(target);
+/** True when the page is already on `path` (pathname + any query params in `path`). */
+export function urlMatchesAdminTarget(pageUrl: string, path: string): boolean {
+  let current: URL;
+  try {
+    current = new URL(pageUrl);
+  } catch {
+    return false;
+  }
+
+  const target = new URL(path, "http://127.0.0.1");
+  const currentPath = current.pathname.replace(/\/$/, "") || "/";
+  const targetPath = target.pathname.replace(/\/$/, "") || "/";
+
+  if (currentPath !== targetPath && !currentPath.endsWith(targetPath)) {
+    return false;
+  }
+
+  for (const [key, value] of target.searchParams.entries()) {
+    if (current.searchParams.get(key) !== value) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /** SameSite=Lax session cookies are not sent by `page.request` until the origin is visited. */
@@ -46,7 +66,7 @@ export async function ensureAdminOrigin(page: Page): Promise<void> {
 export async function gotoAdminPath(page: Page, path: string): Promise<void> {
   await dismissDialogOverlay(page);
 
-  if (pathMatchesTarget(adminPathname(page), path)) {
+  if (urlMatchesAdminTarget(page.url(), path)) {
     return;
   }
 
@@ -64,7 +84,7 @@ export async function gotoAdminPath(page: Page, path: string): Promise<void> {
       }
 
       // Concurrent client navigation may already have landed on the target.
-      if (pathMatchesTarget(adminPathname(page), path)) {
+      if (urlMatchesAdminTarget(page.url(), path)) {
         return;
       }
 
@@ -72,7 +92,7 @@ export async function gotoAdminPath(page: Page, path: string): Promise<void> {
     }
   }
 
-  if (pathMatchesTarget(adminPathname(page), path)) {
+  if (urlMatchesAdminTarget(page.url(), path)) {
     return;
   }
 

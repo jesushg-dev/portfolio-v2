@@ -16,6 +16,7 @@ import { Link } from "@/i18n/routing";
 import { LinkPreviewLazy } from "@/components/ui/link-preview-lazy";
 import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
+import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 import { buildContactLinks } from "@/utils/contact-links";
 import type { ContactIconKey } from "@/utils/contact-links";
 import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
@@ -36,6 +37,37 @@ const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
 };
 
 const PEOPLE_PLEDGE_URL = "https://people.pledge.party/";
+
+function FooterPreviewLink({
+  href,
+  label,
+  soonLabel,
+  live,
+}: {
+  href: "/uses" | "/now" | "/colophon";
+  label: string;
+  soonLabel: string;
+  live: boolean;
+}) {
+  if (!live) {
+    return (
+      <span
+        className={`${footerLinkClassName} cursor-default gap-2 opacity-80`}
+      >
+        {label}
+        <span className="bg-primary-900 text-primary-foreground rounded-md px-2 py-0.5 text-sm font-medium">
+          {soonLabel}
+        </span>
+      </span>
+    );
+  }
+
+  return (
+    <Link href={href} className={footerLinkClassName}>
+      {label}
+    </Link>
+  );
+}
 
 const Footer = async () => {
   const t = await getTranslations("global.footer");
@@ -141,6 +173,30 @@ const Footer = async () => {
                 <Link href="/qa-collaboration" className={footerLinkClassName}>
                   {t("sections.process.qaCollaboration")}
                 </Link>
+              </li>
+              <li>
+                <FooterPreviewLink
+                  href="/uses"
+                  label={t("sections.process.uses")}
+                  soonLabel={t("soon")}
+                  live={PUBLIC_PAGE_LIVE.uses}
+                />
+              </li>
+              <li>
+                <FooterPreviewLink
+                  href="/now"
+                  label={t("sections.process.now")}
+                  soonLabel={t("soon")}
+                  live={PUBLIC_PAGE_LIVE.now}
+                />
+              </li>
+              <li>
+                <FooterPreviewLink
+                  href="/colophon"
+                  label={t("sections.process.colophon")}
+                  soonLabel={t("soon")}
+                  live={PUBLIC_PAGE_LIVE.colophon}
+                />
               </li>
             </ul>
           </nav>

@@ -1,0 +1,89 @@
+{
+  "settings": {
+    "timezone": "America/Mexico_City",
+    "githubUsername": "jesushg",
+    "statusEmoji": "🚀",
+    "readingTitle": "The Pragmatic Programmer",
+    "readingAuthors": "David Thomas & Andrew Hunt",
+    "readingProgress": 62,
+    "watchedTitle": "The Social Dilemma",
+    "watchedRating": 4,
+    "githubRepo": "jesushg/portfolio",
+    "githubHref": "https://github.com/jesushg",
+    "photoUrls": [],
+    "statusBody": {
+      "en": "Finally automated my CI/CD pipeline end-to-end — small win, big relief.",
+      "es": "Por fin automaticé mi pipeline de CI/CD de punta a punta — pequeña victoria, gran alivio.",
+      "nl": "Eindelijk mijn CI/CD-pipeline end-to-end geautomatiseerd — kleine win, grote opluchting."
+    },
+    "statusRelative": {
+      "en": "4 hours ago",
+      "es": "hace 4 horas",
+      "nl": "4 uur geleden"
+    },
+    "githubBody": {
+      "en": "Opened a pull request in",
+      "es": "Abrí un pull request en",
+      "nl": "Een pull request geopend in"
+    },
+    "githubRelative": {
+      "en": "2 days ago",
+      "es": "hace 2 días",
+      "nl": "2 dagen geleden"
+    }
+  },
+  "focuses": [
+    {
+      "order": 0,
+      "label": {
+        "en": "Ideas",
+        "es": "Ideas",
+        "nl": "Ideeën"
+      },
+      "body": {
+        "en": "Collecting ideas to make this site even better",
+        "es": "Reuniendo ideas para hacer este sitio aún mejor",
+        "nl": "Ideeën verzamelen om deze site nog beter te maken"
+      }
+    },
+    {
+      "order": 1,
+      "label": {
+        "en": "Team",
+        "es": "Equipo",
+        "nl": "Team"
+      },
+      "body": {
+        "en": "Leading a small team and mentoring where I can",
+        "es": "Liderando un equipo pequeño y mentorando donde puedo",
+        "nl": "Een klein team leiden en mentoren waar ik kan"
+      }
+    },
+    {
+      "order": 2,
+      "label": {
+        "en": "Portfolio",
+        "es": "Portafolio",
+        "nl": "Portfolio"
+      },
+      "body": {
+        "en": "Automating the boring parts of this portfolio so it (mostly) stays up to date",
+        "es": "Automatizando las partes aburridas de este portafolio para que (casi) se mantenga al día",
+        "nl": "De saaie delen van dit portfolio automatiseren zodat het (grotendeels) up-to-date blijft"
+      }
+    },
+    {
+      "order": 3,
+      "label": {
+        "en": "Open source",
+        "es": "Open source",
+        "nl": "Open source"
+      },
+      "body": {
+        "en": "Tinkering with open-source projects when I find the time",
+        "es": "Jugando con proyectos open-source cuando encuentro tiempo",
+        "nl": "Knutselen aan open-sourceprojecten wanneer ik tijd heb"
+      }
+    }
+  ]
+}

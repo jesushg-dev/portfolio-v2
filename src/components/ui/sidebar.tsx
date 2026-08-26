@@ -3,12 +3,15 @@
 import { cn } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
 import { AnimatePresence, motion } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Hint } from "@/components/hint";
 import {
   createContext,
+  useCallback,
   useContext,
   useState,
+  useSyncExternalStore,
   type ComponentProps,
   type Dispatch,
   type SetStateAction,
@@ -18,10 +21,39 @@ import {
 
 type LinkProps = ComponentProps<typeof Link>;
 
+const PIN_STORAGE_KEY = "admin-sidebar-pinned";
+const pinListeners = new Set<() => void>();
+
+function subscribePinned(onStoreChange: () => void) {
+  pinListeners.add(onStoreChange);
+  return () => {
+    pinListeners.delete(onStoreChange);
+  };
+}
+
+function getPinnedSnapshot() {
+  try {
+    // Default pinned; only unpinned if user explicitly chose "0".
+    return localStorage.getItem(PIN_STORAGE_KEY) !== "0";
+  } catch {
+    return true;
+  }
+}
+
+function getPinnedServerSnapshot() {
+  return true;
+}
+
+function emitPinnedChange() {
+  for (const listener of pinListeners) listener();
+}
+
 interface SidebarContextProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   animate: boolean;
+  pinned: boolean;
+  setPinned: (pinned: boolean) => void;
 }
 
 const SidebarContext = createContext<SidebarContextProps | undefined>(
@@ -47,13 +79,33 @@ export const SidebarProvider = ({
   setOpen?: Dispatch<SetStateAction<boolean>>;
   animate?: boolean;
 }) => {
-  const [openState, setOpenState] = useState(false);
+  const [openState, setOpenState] = useState(true);
+  const pinned = useSyncExternalStore(
+    subscribePinned,
+    getPinnedSnapshot,
+    getPinnedServerSnapshot,
+  );
 
   const open = openProp ?? openState;
   const setOpen = setOpenProp ?? setOpenState;
 
+  const setPinned = useCallback(
+    (next: boolean) => {
+      try {
+        localStorage.setItem(PIN_STORAGE_KEY, next ? "1" : "0");
+      } catch {
+        // ignore storage access errors
+      }
+      emitPinnedChange();
+      if (next) setOpen(true);
+    },
+    [setOpen],
+  );
+
   return (
-    <SidebarContext.Provider value={{ open, setOpen, animate }}>
+    <SidebarContext.Provider
+      value={{ open, setOpen, animate, pinned, setPinned }}
+    >
       {children}
     </SidebarContext.Provider>
   );
@@ -91,7 +143,7 @@ export const DesktopSidebar = ({
   children,
   ...props
 }: ComponentProps<typeof motion.div>) => {
-  const { open, setOpen, animate } = useSidebar();
+  const { open, setOpen, animate, pinned } = useSidebar();
   return (
     <motion.div
       className={cn(
@@ -99,14 +151,45 @@ export const DesktopSidebar = ({
         className,
       )}
       animate={{
-        width: animate ? (open ? "256px" : "70px") : "256px",
+        width: animate ? (open || pinned ? "256px" : "70px") : "256px",
       }}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={() => {
+        if (!pinned) setOpen(true);
+      }}
+      onMouseLeave={() => {
+        if (!pinned) setOpen(false);
+      }}
       {...props}
     >
       {children}
     </motion.div>
+  );
+};
+
+export const SidebarPinToggle = ({ className }: { className?: string }) => {
+  const { open, pinned, setPinned } = useSidebar();
+  const t = useTranslations("admin.shell");
+  const Icon = pinned ? PanelLeftClose : PanelLeftOpen;
+  const label = pinned ? t("unpinSidebar") : t("pinSidebar");
+
+  if (!open && !pinned) return null;
+
+  return (
+    <Hint label={label} side="bottom" align="end">
+      <button
+        type="button"
+        aria-pressed={pinned}
+        aria-label={label}
+        onClick={() => setPinned(!pinned)}
+        className={cn(
+          "text-muted-foreground hover:bg-muted hover:text-foreground hidden size-8 shrink-0 items-center justify-center rounded-lg transition-colors md:inline-flex",
+          pinned && "bg-primary/10 text-primary",
+          className,
+        )}
+      >
+        <Icon className="size-4" aria-hidden />
+      </button>
+    </Hint>
   );
 };
 
@@ -185,7 +268,8 @@ export const SidebarLink = ({
   className?: string;
   props?: LinkProps;
 }) => {
-  const { open, animate } = useSidebar();
+  const { open, animate, pinned } = useSidebar();
+  const showLabel = !animate || open || pinned;
   return (
     <Link
       href={link.href}
@@ -203,8 +287,8 @@ export const SidebarLink = ({
       </div>
       <motion.span
         animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
+          display: showLabel ? "inline-block" : "none",
+          opacity: showLabel ? 1 : 0,
         }}
         className={cn(
           "m-0! inline-block p-0! text-sm font-medium whitespace-pre transition duration-150 group-hover/sidebar:translate-x-1",
