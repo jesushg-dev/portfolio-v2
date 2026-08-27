@@ -334,7 +334,7 @@ const EditableSection: FC<{
       onClick={onClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        "group relative -m-2 scroll-mt-32 rounded-xl border border-transparent p-2 transition-colors hover:border-cv/40 hover:bg-black/3",
+        "group hover:border-cv/40 relative -m-2 scroll-mt-32 rounded-xl border border-transparent p-2 transition-colors hover:bg-black/3",
         canHoverEdit ? "cursor-none" : "cursor-pointer",
       )}
     >
@@ -342,7 +342,7 @@ const EditableSection: FC<{
         className={cn(
           "absolute top-2 right-2 z-10 transition-opacity",
           canHoverEdit
-            ? "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+            ? "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100"
             : "opacity-100",
         )}
       >
@@ -366,7 +366,7 @@ const EditableSection: FC<{
       {isEmpty ? (
         <div
           id={`cv-section-${id}-empty`}
-          className="border-cv/30 bg-cv/4 text-[#333333] hover:border-cv/50 hover:bg-cv/8 hover:text-cv flex h-24 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors"
+          className="border-cv/30 bg-cv/4 hover:border-cv/50 hover:bg-cv/8 hover:text-cv flex h-24 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed text-[#333333] transition-colors"
         >
           <p className="text-sm font-medium">
             {t("empty")} {title}
@@ -383,9 +383,7 @@ const EditableSection: FC<{
     return section;
   }
 
-  return (
-    <FollowerPointerCard title={editLabel}>{section}</FollowerPointerCard>
-  );
+  return <FollowerPointerCard title={editLabel}>{section}</FollowerPointerCard>;
 };
 
 export default EditableCvLayout;

@@ -12,9 +12,7 @@ export interface CvParagraph {
 
 /** Paragraphs skipped by the AI tailor but still written on rebuild (dates, company lines). */
 export type LockedParagraphKind =
-  | "experience-meta"
-  | "experience-role"
-  | "education-dates";
+  "experience-meta" | "experience-role" | "education-dates";
 
 export interface LockedParagraph {
   kind: LockedParagraphKind;

@@ -46,6 +46,7 @@ export const integrationsAdminRouter = createTRPCRouter({
         ),
         emailDomain: resendConfig?.emailDomain ?? "",
         fromEmail: resendConfig?.fromEmail ?? "",
+        emailSignatureHtml: resendConfig?.emailSignatureHtml ?? "",
         maskedApiKey: maskSecret(resendConfig?.apiKey),
         syncedTemplatesCount: Object.keys(resendConfig?.templates ?? {}).length,
         lastSyncedAt: resendIntegration?.lastSyncedAt ?? null,
@@ -91,9 +92,10 @@ export const integrationsAdminRouter = createTRPCRouter({
   saveResend: protectedProcedure
     .input(
       z.object({
-        apiKey: z.string().trim().min(1),
-        emailDomain: z.string().trim().min(1),
+        apiKey: z.string().trim().optional(),
+        emailDomain: z.string().trim().optional(),
         fromEmail: z.string().trim().optional(),
+        emailSignatureHtml: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -104,14 +106,38 @@ export const integrationsAdminRouter = createTRPCRouter({
         emailDomain: "",
       };
 
+      const nextApiKey = input.apiKey?.trim() ?? current.apiKey;
+      const nextDomain = input.emailDomain?.trim() ?? current.emailDomain;
+
+      if (!nextApiKey || !nextDomain) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Resend API key and email domain are required.",
+        });
+      }
+
+      const credentialsChanged =
+        nextApiKey !== current.apiKey || nextDomain !== current.emailDomain;
+
       const updatedConfig: ResendIntegrationConfig = {
         ...current,
-        apiKey: input.apiKey,
-        emailDomain: input.emailDomain,
-        fromEmail: input.fromEmail ?? undefined,
+        apiKey: nextApiKey,
+        emailDomain: nextDomain,
+        fromEmail: input.fromEmail?.trim() ?? current.fromEmail,
+        emailSignatureHtml:
+          input.emailSignatureHtml !== undefined
+            ? input.emailSignatureHtml.trim() || undefined
+            : current.emailSignatureHtml,
       };
 
       await saveTenantIntegrationConfig(userId, "resend", updatedConfig);
+
+      if (!credentialsChanged && current.templates) {
+        return {
+          ok: true as const,
+          syncedCount: Object.keys(current.templates).length,
+        };
+      }
 
       try {
         const syncedTemplates = await syncResendTemplatesForTenant(

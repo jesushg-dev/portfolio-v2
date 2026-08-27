@@ -1,7 +1,9 @@
 import JSZip from "jszip";
 
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
+import { groupConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
 import type { Locale } from "@/i18n/config";
+import { formatExperienceDates } from "@/utils/tools/date";
 
 function escapeXml(text: string): string {
   return text
@@ -107,19 +109,54 @@ function buildDocumentBody(draft: CvImportDraft): string {
 
   if (draft.experiences.length > 0) {
     parts.push(paragraph(labels.experience, "heading"));
-    for (const exp of draft.experiences) {
-      const dateLine = formatDateRange(
-        exp.startDate,
-        exp.endDate,
-        exp.current,
+    const groups = groupConsecutiveExperiencesByCompany(draft.experiences);
+
+    for (const group of groups) {
+      if (group.roles.length === 1) {
+        const exp = group.roles[0];
+        const dateLine = formatDateRange(
+          exp.startDate,
+          exp.endDate,
+          exp.current,
+          locale,
+        );
+        const header = [exp.role, exp.company, dateLine, exp.location]
+          .filter(Boolean)
+          .join(" — ");
+        parts.push(paragraph(header, "body"));
+        for (const resp of exp.responsibilities) {
+          if (resp.trim()) parts.push(bullet(resp));
+        }
+        continue;
+      }
+
+      const overallDates = formatExperienceDates(
+        group.overallStart,
+        group.overallEnd,
+        group.overallCurrent,
         locale,
       );
-      const header = [exp.role, exp.company, dateLine, exp.location]
-        .filter(Boolean)
-        .join(" — ");
-      parts.push(paragraph(header, "body"));
-      for (const resp of exp.responsibilities) {
-        if (resp.trim()) parts.push(bullet(resp));
+      parts.push(
+        paragraph(
+          [group.company, overallDates].filter(Boolean).join(" — "),
+          "body",
+        ),
+      );
+
+      for (const exp of group.roles) {
+        const dateLine = formatDateRange(
+          exp.startDate,
+          exp.endDate,
+          exp.current,
+          locale,
+        );
+        const roleHeader = [exp.role, dateLine, exp.location]
+          .filter(Boolean)
+          .join(" — ");
+        parts.push(paragraph(roleHeader, "body"));
+        for (const resp of exp.responsibilities) {
+          if (resp.trim()) parts.push(bullet(resp));
+        }
       }
     }
   }

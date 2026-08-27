@@ -132,6 +132,180 @@ describe("syncLockedParagraphsFromDraft", () => {
     );
   });
 
+  it("omits company on consecutive same-company experience meta lines", () => {
+    const locked: LockedParagraph[] = [
+      {
+        kind: "experience-role",
+        paragraph: {
+          id: "locked-role-0",
+          style: "",
+          xmlIndex: 10,
+          runs: [{ id: "locked-role-0-run-0", text: "Lead" }],
+        },
+      },
+      {
+        kind: "experience-meta",
+        paragraph: {
+          id: "locked-meta-0",
+          style: "Textoindependiente",
+          xmlIndex: 11,
+          runs: [
+            {
+              id: "locked-meta-0-run-0",
+              text: "Contollo · Remote · November 2024 – March 2025",
+            },
+          ],
+        },
+      },
+      {
+        kind: "experience-role",
+        paragraph: {
+          id: "locked-role-1",
+          style: "",
+          xmlIndex: 12,
+          runs: [{ id: "locked-role-1-run-0", text: "Senior" }],
+        },
+      },
+      {
+        kind: "experience-meta",
+        paragraph: {
+          id: "locked-meta-1",
+          style: "Textoindependiente",
+          xmlIndex: 13,
+          runs: [
+            {
+              id: "locked-meta-1-run-0",
+              text: "Contollo · Remote · August 2023 – November 2024",
+            },
+          ],
+        },
+      },
+    ];
+
+    const adapted = syncLockedParagraphsFromDraft(
+      locked,
+      {
+        ...draft,
+        experiences: [
+          {
+            id: "exp-lead",
+            company: "Contollo",
+            role: "Development Team Lead",
+            location: "Remote",
+            startDate: "2024-11",
+            endDate: "2025-03",
+            current: false,
+            responsibilities: [],
+            atsResponsibilities: [],
+          },
+          {
+            id: "exp-sse",
+            company: "Contollo",
+            role: "Senior Software Engineer",
+            location: "Remote",
+            startDate: "2023-08",
+            endDate: "2024-11",
+            current: false,
+            responsibilities: [],
+            atsResponsibilities: [],
+          },
+        ],
+      },
+      "en",
+    );
+
+    expect(adapted.map((paragraph) => paragraph.runs[0]?.text)).toEqual([
+      "Development Team Lead",
+      "Contollo · Remote · November 2024 – March 2025",
+      "Senior Software Engineer",
+      "Remote · August 2023 – November 2024",
+    ]);
+  });
+
+  it("keeps company when same employer is not consecutive", () => {
+    const locked: LockedParagraph[] = [
+      {
+        kind: "experience-meta",
+        paragraph: {
+          id: "locked-meta-0",
+          style: "Textoindependiente",
+          xmlIndex: 11,
+          runs: [
+            { id: "r0", text: "Contollo · Remote · January 2024 – June 2024" },
+          ],
+        },
+      },
+      {
+        kind: "experience-meta",
+        paragraph: {
+          id: "locked-meta-1",
+          style: "Textoindependiente",
+          xmlIndex: 12,
+          runs: [
+            { id: "r1", text: "Ready · Remote · July 2024 – December 2024" },
+          ],
+        },
+      },
+      {
+        kind: "experience-meta",
+        paragraph: {
+          id: "locked-meta-2",
+          style: "Textoindependiente",
+          xmlIndex: 13,
+          runs: [
+            { id: "r2", text: "Contollo · Remote · January 2025 – Present" },
+          ],
+        },
+      },
+    ];
+
+    const adapted = syncLockedParagraphsFromDraft(
+      locked,
+      {
+        ...draft,
+        experiences: [
+          {
+            id: "a1",
+            company: "Contollo",
+            role: "Engineer",
+            location: "Remote",
+            startDate: "2024-01",
+            endDate: "2024-06",
+            responsibilities: [],
+            atsResponsibilities: [],
+          },
+          {
+            id: "b",
+            company: "Ready",
+            role: "Engineer",
+            location: "Remote",
+            startDate: "2024-07",
+            endDate: "2024-12",
+            responsibilities: [],
+            atsResponsibilities: [],
+          },
+          {
+            id: "a2",
+            company: "Contollo",
+            role: "Lead",
+            location: "Remote",
+            startDate: "2025-01",
+            current: true,
+            responsibilities: [],
+            atsResponsibilities: [],
+          },
+        ],
+      },
+      "en",
+    );
+
+    expect(adapted.map((paragraph) => paragraph.runs[0]?.text)).toEqual([
+      "Contollo · Remote · January 2024 – June 2024",
+      "Ready · Remote · July 2024 – December 2024",
+      "Contollo · Remote · January 2025 – Present",
+    ]);
+  });
+
   it("merges locked paragraphs into rebuild section lists", () => {
     const sections = withLockedMetaSection([], lockedFixture);
     const adapted = withLockedMetaAdaptations(
@@ -140,7 +314,9 @@ describe("syncLockedParagraphsFromDraft", () => {
     );
 
     expect(sections[0]?.paragraphs).toHaveLength(3);
-    expect(adapted[0]?.paragraphs[1]?.runs[0]?.text).toContain("Agosto de 2024");
+    expect(adapted[0]?.paragraphs[1]?.runs[0]?.text).toContain(
+      "Agosto de 2024",
+    );
     expect(adapted[0]?.paragraphs[1]?.runs[0]?.text).toContain("Presente");
   });
 });

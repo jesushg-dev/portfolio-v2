@@ -71,7 +71,10 @@
       "domainLabel": "Email Domain",
       "domainPlaceholder": "yourdomain.com",
       "fromLabel": "From Email / Name (Optional)",
-      "fromPlaceholder": "Portfolio '<'no-reply@yourdomain.com'>'",
+      "fromPlaceholder": "Portfolio <no-reply@yourdomain.com>",
+      "signatureLabel": "HTML email signature (optional)",
+      "signatureHint": "Pasted below the body of application emails (e.g. Send CV). Leave empty to skip.",
+      "signaturePlaceholder": "<table>...</table>",
       "syncButton": "Sync Templates Now",
       "saveButton": "Save & Deploy Templates",
       "saveSuccess": "Resend credentials saved and templates deployed successfully!",
@@ -1858,6 +1861,33 @@
           "createFailed": "Could not create company",
           "clearSearch": "Clear search"
         },
+        "import": {
+          "placeholders": {
+            "url": "https://www.linkedin.com/jobs/view/…"
+          },
+          "actions": {
+            "show": "Fill from LinkedIn link",
+            "import": "Import",
+            "importing": "Importing…",
+            "cancel": "Cancel"
+          },
+          "toast": {
+            "success": {
+              "title": "Listing imported",
+              "description": "Review the fields before saving."
+            },
+            "error": {
+              "title": "Could not import"
+            }
+          },
+          "errors": {
+            "IMPORT_INVALID_URL": "That doesn't look like a valid URL.",
+            "IMPORT_UNSUPPORTED_HOST": "Only LinkedIn job and post links are supported.",
+            "IMPORT_LOGIN_WALL": "LinkedIn blocked the page. Paste the description manually.",
+            "IMPORT_EMPTY_CONTENT": "No job text was found on that page. Paste the description manually.",
+            "IMPORT_FETCH_FAILED": "Could not read the link. Try again or paste the description manually."
+          }
+        },
         "descriptionHint": "Optional. Paste the job posting to reuse it when tailoring a resume.",
         "notesHint": "Private reminders - not shared with employers."
       },
@@ -2628,7 +2658,41 @@
         "deleteConfirmAction": "Delete",
         "timelineActivityHint": "Generated automatically from application activity — add your own with the button above.",
         "noDescription": "No job description provided.",
+        "showFullDescription": "Show full description",
+        "hideFullDescription": "Show less",
+        "notProvided": "—",
         "tabsNavAria": "Application sections"
+      },
+      "email": {
+        "title": "Send CV by email",
+        "openButton": "Send CV",
+        "description": "AI drafts the recipient, subject, and a short body from the job description. Review, then send the tailored DOCX with Resend.",
+        "draft": "Draft with AI",
+        "redraft": "Regenerate draft",
+        "draftHint": "Generate a draft to fill recipient, subject, and body — you can edit everything before sending.",
+        "draftSuccess": "Email draft ready",
+        "draftError": "Could not draft the email",
+        "send": "Send CV",
+        "sendSuccess": "CV email sent",
+        "sendError": "Could not send the email",
+        "sendMissingFields": "Add recipient, subject, and body before sending",
+        "toLabel": "To",
+        "recipientLabel": "Recipient name",
+        "recipientPlaceholder": "Carol",
+        "subjectLabel": "Subject",
+        "bodyLabel": "Body",
+        "attachment": "Attachment: {name}",
+        "attachmentLabel": "Attachment",
+        "attachmentOverride": "Custom file: {name}",
+        "replaceAttachment": "Replace file",
+        "useTailoredCv": "Use tailored CV",
+        "attachmentReplaced": "Attachment updated",
+        "attachmentUploadError": "Could not upload the file",
+        "attachmentInvalidType": "Only .doc, .docx, or .pdf files are allowed",
+        "attachmentTooLarge": "File must be 8 MB or smaller",
+        "needCv": "Tailor a CV for this application first, or upload a .docx/.pdf to attach.",
+        "noAi": "No AI provider is configured. Add an API key to draft the email.",
+        "noResend": "Configure Resend in Integrations to send from your domain."
       },
       "kanban": {
         "description": "Drag cards between columns to update application status.",
@@ -2718,6 +2782,9 @@
       "tailorAlreadyDone": "Already tailored for this application",
       "tailorGeneratedOn": "Generated {date}",
       "tailorViewResume": "View resume",
+      "tailorPreviewTitle": "Resume preview",
+      "tailorPreviewOpen": "Show preview",
+      "tailorPreviewClose": "Hide preview",
       "tailorRegenerate": "Regenerate",
       "tailorSuccessTitle": "Your resume now matches this job",
       "tailorErrorRetry": "Retry",

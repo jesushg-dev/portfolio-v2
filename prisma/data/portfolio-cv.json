@@ -215,13 +215,7 @@
         "en": "Walmart Global Tech client: large-scale e-commerce platform with millions of digital interactions. Cross-functional work with engineering, product, QA, backend, frontend, and business.",
         "nl": "Klant Walmart Global Tech: grootschalig e-commerceplatform met miljoenen digitale interacties. Cross-functionele samenwerking met engineering, product, QA, backend, frontend en business."
       },
-      "skillKeys": [
-        "React",
-        "Nextjs",
-        "GraphQL",
-        "Typescript",
-        "Git"
-      ],
+      "skillKeys": ["React", "Nextjs", "GraphQL", "Typescript", "Git"],
       "responsibilities": [
         {
           "text": {
@@ -354,14 +348,7 @@
         "en": "Software consultancy: led a development team delivering solutions for international clients under tight timelines.",
         "nl": "Softwareconsultancy: leidde een developmentteam dat oplossingen leverde voor internationale klanten onder strakke deadlines."
       },
-      "skillKeys": [
-        "React",
-        "Nextjs",
-        "Dotnet",
-        "Azure",
-        "Typescript",
-        "Git"
-      ],
+      "skillKeys": ["React", "Nextjs", "Dotnet", "Azure", "Typescript", "Git"],
       "responsibilities": [
         {
           "text": {

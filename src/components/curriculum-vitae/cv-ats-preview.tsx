@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
+import { groupConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
 import type { LocalizedCvData } from "./types";
 
 interface CvAtsPreviewProps {
@@ -8,6 +9,8 @@ interface CvAtsPreviewProps {
   aboutMeText: string | null;
   pdfMode?: boolean;
 }
+
+type CvExperience = LocalizedCvData["experiences"][number];
 
 function formatExperienceDateRange(
   startDate: Date | null,
@@ -24,6 +27,50 @@ function formatExperienceDateRange(
   const start = startDate ? fmt(startDate) : "";
   const end = current ? presentLabel : endDate ? fmt(endDate) : "";
   return [start, end].filter(Boolean).join(" – ");
+}
+
+function AtsRoleBlock({
+  exp,
+  presentLabel,
+  includeRoleDates,
+}: {
+  exp: CvExperience;
+  presentLabel: string;
+  includeRoleDates: boolean;
+}) {
+  const roleDates = includeRoleDates
+    ? formatExperienceDateRange(
+        exp.startDate,
+        exp.endDate,
+        exp.current,
+        presentLabel,
+      )
+    : "";
+
+  return (
+    <div className="mt-1">
+      <p className="text-xs font-semibold italic">
+        {exp.role}
+        {roleDates ? ` — ${roleDates}` : ""}
+        {exp.location ? ` — ${exp.location}` : ""}
+      </p>
+      {exp.responsibilities.length > 0 ? (
+        <ul className="mt-1 list-disc space-y-1 pl-5">
+          {exp.responsibilities.map((r) => (
+            <li key={r.id} className="text-xs leading-relaxed">
+              {r.text}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      {exp.skills.length > 0 ? (
+        <p className="mt-1 text-xs">
+          <span className="font-bold">Stack: </span>
+          {exp.skills.join(", ")}
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
 function AtsSection({
@@ -61,8 +108,12 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
   const fullName =
     data.header?.fullName ?? data.profile?.displayName ?? "Unknown";
   const degree = data.header?.degree ?? "";
+  const presentLabel = t("ats.present");
 
   const contactLine = data.contacts.map((c) => c.value).join("   |   ");
+  const experienceGroups = groupConsecutiveExperiencesByCompany(
+    data.experiences,
+  );
 
   return (
     <div className="mx-auto max-w-3xl bg-white px-10 py-8 font-serif text-neutral-900">
@@ -82,47 +133,56 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
         </AtsSection>
       ) : null}
 
-      {data.experiences.length > 0 ? (
+      {experienceGroups.length > 0 ? (
         <AtsSection title={t("header.experience")}>
           <div className="space-y-4">
-            {data.experiences.map((exp) => (
-              <div key={exp.id}>
-                <div className="flex items-baseline justify-between gap-4">
-                  <h3 className="text-xs font-bold tracking-tight text-blue-800 uppercase">
-                    {exp.company}
-                  </h3>
-                  <span className="text-xs font-semibold whitespace-nowrap">
-                    {formatExperienceDateRange(
-                      exp.startDate,
-                      exp.endDate,
-                      exp.current,
-                      t("ats.present"),
-                    )}
-                  </span>
-                </div>
-                <div className="mt-1">
-                  <p className="text-xs font-semibold italic">
-                    {exp.role}
-                    {exp.location ? ` — ${exp.location}` : ""}
-                  </p>
-                  {exp.responsibilities.length > 0 ? (
-                    <ul className="mt-1 list-disc space-y-1 pl-5">
-                      {exp.responsibilities.map((r) => (
-                        <li key={r.id} className="text-xs leading-relaxed">
-                          {r.text}
-                        </li>
+            {experienceGroups.map((group) => {
+              const overallDates = formatExperienceDateRange(
+                group.overallStart,
+                group.overallEnd,
+                group.overallCurrent,
+                presentLabel,
+              );
+              const single = group.roles.length === 1 ? group.roles[0] : null;
+
+              return (
+                <div key={`${group.company}-${group.roles[0]?.id ?? "group"}`}>
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="text-xs font-bold tracking-tight text-blue-800 uppercase">
+                      {group.company}
+                    </h3>
+                    <span className="text-xs font-semibold whitespace-nowrap">
+                      {single
+                        ? formatExperienceDateRange(
+                            single.startDate,
+                            single.endDate,
+                            single.current,
+                            presentLabel,
+                          )
+                        : overallDates}
+                    </span>
+                  </div>
+                  {single ? (
+                    <AtsRoleBlock
+                      exp={single}
+                      presentLabel={presentLabel}
+                      includeRoleDates={false}
+                    />
+                  ) : (
+                    <div className="space-y-2">
+                      {group.roles.map((exp) => (
+                        <AtsRoleBlock
+                          key={exp.id}
+                          exp={exp}
+                          presentLabel={presentLabel}
+                          includeRoleDates
+                        />
                       ))}
-                    </ul>
-                  ) : null}
-                  {exp.skills.length > 0 ? (
-                    <p className="mt-1 text-xs">
-                      <span className="font-bold">Stack: </span>
-                      {exp.skills.join(", ")}
-                    </p>
-                  ) : null}
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </AtsSection>
       ) : null}

@@ -15,7 +15,8 @@ import { cn } from "@/lib/utils";
 interface ManualAiPanelProps {
   promptPackage: AiPromptPackage | null | undefined;
   isLoadingPrompt: boolean;
-  onLoadPrompt: () => void;
+  /** Load (or reuse) the prompt package. Return the package when loading for copy/view. */
+  onLoadPrompt: () => Promise<AiPromptPackage | null | undefined>;
   rawJson: string;
   onRawJsonChange: (value: string) => void;
   onSubmit: () => void;
@@ -42,26 +43,52 @@ export const ManualAiPanel: FC<ManualAiPanelProps> = ({
   const t = useTranslations("admin.resumeStudio");
   const [copied, setCopied] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
+  const [isEnsuringPrompt, setIsEnsuringPrompt] = useState(false);
 
-  const handleCopyPrompt = useCallback(async () => {
-    if (!promptPackage?.combinedPrompt) return;
+  const copyText = useCallback(
+    async (text: string) => {
+      try {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        toast.success(t("aiPromptCopied"));
+        window.setTimeout(() => setCopied(false), 2000);
+      } catch {
+        toast.error(t("aiPromptCopyFailed"));
+      }
+    },
+    [t],
+  );
+
+  const ensurePrompt = useCallback(async () => {
+    if (promptPackage?.combinedPrompt) return promptPackage;
+    setIsEnsuringPrompt(true);
     try {
-      await navigator.clipboard.writeText(promptPackage.combinedPrompt);
-      setCopied(true);
-      toast.success(t("aiPromptCopied"));
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error(t("aiPromptCopyFailed"));
+      return (await onLoadPrompt()) ?? null;
+    } finally {
+      setIsEnsuringPrompt(false);
     }
-  }, [promptPackage, t]);
+  }, [onLoadPrompt, promptPackage]);
 
   const handleCopyPromptClick = useCallback(() => {
-    void handleCopyPrompt();
-  }, [handleCopyPrompt]);
+    void (async () => {
+      const loaded = await ensurePrompt();
+      const text = loaded?.combinedPrompt;
+      if (!text) return;
+      await copyText(text);
+    })();
+  }, [copyText, ensurePrompt]);
 
   const handleTogglePrompt = useCallback(() => {
-    setPromptOpen((open) => !open);
-  }, []);
+    void (async () => {
+      const nextOpen = !promptOpen;
+      setPromptOpen(nextOpen);
+      if (nextOpen && !promptPackage) {
+        await ensurePrompt();
+      }
+    })();
+  }, [ensurePrompt, promptOpen, promptPackage]);
+
+  const isBusy = isLoadingPrompt || isEnsuringPrompt;
 
   if (variant === "compact") {
     return (
@@ -76,10 +103,12 @@ export const ManualAiPanel: FC<ManualAiPanelProps> = ({
                   type="button"
                   variant="outline"
                   size="sm"
-                  disabled={!canLoadPrompt || isLoadingPrompt || !promptPackage}
+                  disabled={!canLoadPrompt || isBusy}
                   onClick={handleCopyPromptClick}
                 >
-                  {copied ? (
+                  {isBusy ? (
+                    <Loader2 className="mr-1.5 size-3.5 animate-spin" />
+                  ) : copied ? (
                     <Check className="mr-1.5 size-3.5" />
                   ) : (
                     <Copy className="mr-1.5 size-3.5" />
@@ -91,11 +120,8 @@ export const ManualAiPanel: FC<ManualAiPanelProps> = ({
                   variant="link"
                   size="sm"
                   className="text-primary h-auto px-0 text-xs"
-                  disabled={!canLoadPrompt || isLoadingPrompt}
-                  onClick={() => {
-                    if (!promptPackage) onLoadPrompt();
-                    handleTogglePrompt();
-                  }}
+                  disabled={!canLoadPrompt || isBusy}
+                  onClick={handleTogglePrompt}
                 >
                   {t("viewPrompt")}
                   <ChevronDown
@@ -107,20 +133,6 @@ export const ManualAiPanel: FC<ManualAiPanelProps> = ({
                   />
                 </Button>
               </div>
-              {!promptPackage ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  disabled={!canLoadPrompt || isLoadingPrompt}
-                  onClick={onLoadPrompt}
-                >
-                  {isLoadingPrompt ? (
-                    <Loader2 className="mr-1.5 size-3.5 animate-spin" />
-                  ) : null}
-                  {t("aiLoadPrompt")}
-                </Button>
-              ) : null}
               {promptOpen && promptPackage ? (
                 <div className="bg-muted/50 text-muted-foreground rounded-md p-2.5 font-mono text-xs whitespace-pre-wrap">
                   {promptPackage.combinedPrompt}
@@ -190,29 +202,18 @@ export const ManualAiPanel: FC<ManualAiPanelProps> = ({
             type="button"
             variant="outline"
             size="sm"
-            disabled={!canLoadPrompt || isLoadingPrompt}
-            onClick={onLoadPrompt}
+            disabled={!canLoadPrompt || isBusy}
+            onClick={handleCopyPromptClick}
           >
-            {isLoadingPrompt ? (
+            {isBusy ? (
               <Loader2 className="mr-2 size-4 animate-spin" />
-            ) : null}
-            {t("aiLoadPrompt")}
+            ) : copied ? (
+              <Check className="mr-2 size-4" />
+            ) : (
+              <Copy className="mr-2 size-4" />
+            )}
+            {t("aiCopyPrompt")}
           </Button>
-          {promptPackage ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleCopyPromptClick}
-            >
-              {copied ? (
-                <Check className="mr-2 size-4" />
-              ) : (
-                <Copy className="mr-2 size-4" />
-              )}
-              {t("aiCopyPrompt")}
-            </Button>
-          ) : null}
         </div>
         {promptPackage ? (
           <Textarea

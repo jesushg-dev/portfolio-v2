@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import { createHash } from "node:crypto";
 
 import { assertNonEmptyUserId } from "@/lib/admin/get-authenticated-user-id";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -16,6 +17,14 @@ import {
   mapCompaniesToEditorDto,
   mapCompanyToEditorDto,
 } from "@/features/job-tracker/lib/company-editor-dto";
+import { ImportFromUrlError } from "@/features/job-tracker/lib/import-from-url-errors";
+import { importJobFromUrl } from "@/features/job-tracker/lib/import-job-from-url";
+import { draftApplicationEmailWithAi } from "@/features/job-tracker/lib/ai/run-draft-application-email";
+import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
+import { getPortfolioEmailClient } from "@/lib/email/resend";
+import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
+import { formatZodParseError } from "@/features/resume-engine/lib/ai/parse-json-response";
+import { getDefaultAiProvider } from "@/features/resume-engine/lib/ai/providers";
 
 const ApplicationStatusSchema = z.enum([
   "APPLIED",
@@ -318,6 +327,32 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       });
     }),
 
+  importFromUrl: protectedProcedure
+    .input(
+      z.object({
+        url: z.string().trim().min(1).max(2000),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      try {
+        return await importJobFromUrl(input.url);
+      } catch (error) {
+        if (error instanceof ImportFromUrlError) {
+          throw new TRPCError({
+            code:
+              error.code === "IMPORT_FETCH_FAILED"
+                ? "BAD_GATEWAY"
+                : "BAD_REQUEST",
+            message: error.code,
+          });
+        }
+        throw new TRPCError({
+          code: "BAD_GATEWAY",
+          message: "IMPORT_FETCH_FAILED",
+        });
+      }
+    }),
+
   createApplication: protectedProcedure
     .input(
       z.object({
@@ -440,4 +475,273 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         where: { id: input.id, userId: ctx.user.id },
       });
     }),
+
+  draftApplicationEmail: protectedProcedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+        provider: z.enum(["claude", "openai", "deepseek", "gemini"]).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const application = await ctx.db.application.findFirst({
+        where: { id: input.applicationId, userId: ctx.user.id },
+        include: { company: true },
+      });
+      if (!application) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Application not found",
+        });
+      }
+
+      const draftCv = await loadCvStructuredDraft(ctx.db, ctx.user.id, {
+        locale: "es",
+        fallbackLocale: "en",
+      });
+
+      const contacts = draftCv?.contacts ?? [];
+      const contactValue = (type: string) =>
+        contacts.find((c) => c.type === type)?.value?.trim() ?? null;
+
+      try {
+        const fromCv = draftCv?.header.fullName?.trim();
+        const { draft, provider } = await draftApplicationEmailWithAi(
+          {
+            position: application.position,
+            companyName: application.company.name,
+            companyEmail: application.company.email,
+            jobDescription: application.description ?? "",
+            candidate: {
+              fullName: fromCv ?? ctx.user.name ?? "Candidato",
+              degree: draftCv?.header.degree,
+              summary: draftCv?.header.summary,
+              email: contactValue("EMAIL"),
+              phone: contactValue("PHONE"),
+              linkedin: contactValue("LINKEDIN"),
+            },
+          },
+          input.provider,
+        );
+
+        if (draft.applyToEmail && !application.company.email?.trim()) {
+          await ctx.db.company.update({
+            where: { id: application.companyId },
+            data: { email: draft.applyToEmail },
+          });
+        }
+
+        return {
+          ...draft,
+          provider,
+          hasCvFile: Boolean(application.cvFile?.url),
+          cvFileName: application.cvFile?.name ?? null,
+          canSendEmail: (await getPortfolioEmailClient(ctx.user.id))
+            .isConfigured,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: formatZodParseError(error),
+        });
+      }
+    }),
+
+  sendApplicationEmail: protectedProcedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+        toEmail: z.string().trim().email().max(120),
+        subject: z.string().trim().min(1).max(200),
+        body: z.string().trim().min(1).max(8000),
+        recipientName: z.string().trim().max(120).optional(),
+        /** Optional override; when set, this file is attached instead of application.cvFile. */
+        attachmentUrl: z.string().url().optional(),
+        attachmentName: z.string().trim().min(1).max(200).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const application = await ctx.db.application.findFirst({
+        where: { id: input.applicationId, userId: ctx.user.id },
+        include: { company: true },
+      });
+      if (!application) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Application not found",
+        });
+      }
+
+      const overrideUrl = input.attachmentUrl?.trim();
+      const attachmentUrl = overrideUrl ?? application.cvFile?.url;
+      if (!attachmentUrl) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message:
+            "Attach a CV file or tailor one for this application before sending.",
+        });
+      }
+
+      const emailClient = await getPortfolioEmailClient(ctx.user.id);
+      if (
+        !emailClient.isConfigured ||
+        !emailClient.resend ||
+        !emailClient.fromEmail
+      ) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Resend is not configured for this portfolio.",
+        });
+      }
+
+      const draftCv = await loadCvStructuredDraft(ctx.db, ctx.user.id, {
+        locale: "es",
+        fallbackLocale: "en",
+      });
+      const replyTo = parseReplyToAddress(
+        draftCv?.contacts.find((c) => c.type === "EMAIL")?.value,
+        draftCv?.header.fullName ?? ctx.user.name,
+      );
+
+      const fileResponse = await fetch(attachmentUrl, {
+        cache: "no-store",
+      });
+      if (!fileResponse.ok) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not download the CV attachment.",
+        });
+      }
+      const fileBuffer = Buffer.from(await fileResponse.arrayBuffer());
+      const filename =
+        input.attachmentName?.trim() ??
+        application.cvFile?.name?.trim() ??
+        `CV-${(draftCv?.header.fullName ?? "candidate").replace(/\s+/g, "-")}.docx`;
+
+      const toEmail = input.toEmail.toLowerCase();
+      const bodyText = input.body;
+      const resendConfig = await getTenantIntegrationConfig(
+        ctx.user.id,
+        "resend",
+      );
+      const bodyHtml = buildApplicationEmailHtml(
+        bodyText,
+        resendConfig?.emailSignatureHtml,
+      );
+
+      const idempotencyKey = `app-cv-email/${application.id}/${createHash(
+        "sha256",
+      )
+        .update(`${toEmail}|${input.subject}|${bodyText}|${attachmentUrl}`)
+        .digest("hex")
+        .slice(0, 24)}`;
+
+      const { data, error } = await emailClient.resend.emails.send(
+        {
+          from: emailClient.fromEmail,
+          to: toEmail,
+          ...(replyTo ? { replyTo } : {}),
+          subject: input.subject,
+          text: bodyText,
+          html: bodyHtml,
+          attachments: [
+            {
+              filename,
+              content: fileBuffer,
+            },
+          ],
+        },
+        { idempotencyKey },
+      );
+
+      if (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: error.message || "Failed to send email",
+        });
+      }
+
+      await ctx.db.applicationEvent.create({
+        data: {
+          applicationId: application.id,
+          userId: ctx.user.id,
+          type: "FOLLOW_UP",
+          title: `CV emailed to ${toEmail}`,
+          description: input.recipientName
+            ? `Sent CV to ${input.recipientName} <${toEmail}> (${filename})`
+            : `Sent CV to ${toEmail} (${filename})`,
+          scheduledDate: new Date(),
+          completed: true,
+          completedAt: new Date(),
+          outcome: "NEUTRAL",
+          notes: input.subject,
+        },
+      });
+
+      if (!application.company.email?.trim()) {
+        await ctx.db.company.update({
+          where: { id: application.companyId },
+          data: { email: toEmail },
+        });
+      }
+
+      return { emailId: data?.id ?? null };
+    }),
+
+  getApplicationEmailCapabilities: protectedProcedure.query(async ({ ctx }) => {
+    const emailClient = await getPortfolioEmailClient(ctx.user.id);
+    const defaultProvider = getDefaultAiProvider();
+    return {
+      canSendEmail: emailClient.isConfigured,
+      hasAiProvider: Boolean(defaultProvider),
+      defaultProvider: defaultProvider,
+    };
+  }),
 });
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function buildApplicationEmailHtml(
+  bodyText: string,
+  signatureHtml?: string | null,
+): string {
+  const paragraphs = bodyText
+    .split(/\n/)
+    .map(
+      (line) =>
+        `<p style="margin:0 0 12px 0; font-family:Arial,sans-serif; font-size:14px; color:#111;">${escapeHtml(line) || "&nbsp;"}</p>`,
+    )
+    .join("");
+
+  const signature = signatureHtml?.trim();
+  if (!signature) return paragraphs;
+
+  return `${paragraphs}<div style="margin-top:28px;">${signature}</div>`;
+}
+
+/** Resend accepts `email@x.com` or `Name <email@x.com>` only. */
+function parseReplyToAddress(
+  raw: string | null | undefined,
+  displayName?: string | null,
+): string | undefined {
+  if (!raw?.trim()) return undefined;
+
+  const trimmed = raw.trim().replace(/^mailto:/i, "");
+  const angleMatch = /<([^>]+)>/.exec(trimmed);
+  const candidate = (angleMatch?.[1] ?? trimmed).trim();
+  const emailMatch = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.exec(
+    candidate,
+  );
+  if (!emailMatch) return undefined;
+
+  const email = emailMatch[0].toLowerCase();
+  const name = displayName?.trim().replace(/[<>]/g, "");
+  if (name) return `${name} <${email}>`;
+  return email;
+}

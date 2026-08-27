@@ -12,6 +12,8 @@ export interface ResendIntegrationConfig {
   apiKey: string;
   emailDomain: string;
   fromEmail?: string;
+  /** Optional HTML email signature appended to outbound application emails. */
+  emailSignatureHtml?: string;
   /** Maps template names (e.g. cv-delivery-en) to Resend Template UUIDs */
   templates?: Record<string, string>;
 }

@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import {
   AlertTriangle,
   CheckCircle2,
-  ChevronDown,
   Download,
   FileText,
   Loader2,
@@ -21,6 +20,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { OfficeDocumentPreview } from "@/components/shared/office-document-preview";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import {
@@ -44,12 +44,15 @@ interface ResumeTailorWorkflowProps {
   applicationId?: string;
   embedded?: boolean;
   existingCvFile?: ExistingCvFile;
+  /** When true, Office preview starts expanded (detail split view). */
+  previewDefaultOpen?: boolean;
 }
 
 export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   applicationId,
   embedded = false,
   existingCvFile,
+  previewDefaultOpen = false,
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [step, setStep] = useState<Step>("configure");
@@ -63,7 +66,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   const [mode, setMode] = useState<AiProcessingMode>("auto");
   const [provider, setProvider] = useState<AiProviderName | null>(null);
   const [manualTailorJson, setManualTailorJson] = useState("");
-  const [jdExpanded, setJdExpanded] = useState(false);
   const [showTailorForm, setShowTailorForm] = useState(() => !existingCvFile);
   const [isPending, startTransition] = useTransition();
 
@@ -114,11 +116,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
         .filter(Boolean) ?? [],
     [matchNotes],
   );
-
-  const jdPreview =
-    effectiveJobDescription.length > 160
-      ? `${effectiveJobDescription.slice(0, 160).trim()}…`
-      : effectiveJobDescription;
 
   const handleTailorAuto = useCallback(() => {
     if (effectiveJobDescription.length < 20) {
@@ -244,12 +241,13 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     [registerUpload, t],
   );
 
-  const handleLoadTailorPrompt = useCallback(() => {
+  const handleLoadTailorPrompt = useCallback(async () => {
     if (effectiveJobDescription.length < 20) {
       setError(t("tailorJdTooShort"));
-      return;
+      return null;
     }
-    void tailorPrompt.refetch();
+    const result = await tailorPrompt.refetch();
+    return result.data ?? null;
   }, [effectiveJobDescription.length, t, tailorPrompt]);
 
   const handleResetTailor = useCallback(() => {
@@ -282,23 +280,36 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               }).format(new Date(existingCvFile.uploadedAt)),
             })}
           </p>
-          <div className="mt-2.5 flex flex-wrap gap-2">
-            <a
-              href={existingCvFile.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonVariants({ size: "sm", variant: "outline" })}
-            >
-              {t("tailorViewResume")}
-            </a>
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={handleResetTailor}
-            >
-              {t("tailorRegenerate")}
-            </Button>
+          <div className="mt-2.5">
+            <OfficeDocumentPreview
+              fileUrl={existingCvFile.url}
+              title={t("tailorPreviewTitle")}
+              openLabel={t("tailorPreviewOpen")}
+              closeLabel={t("tailorPreviewClose")}
+              defaultOpen={previewDefaultOpen}
+              leadingActions={
+                <a
+                  href={existingCvFile.url}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonVariants({ size: "sm", variant: "outline" })}
+                >
+                  <Download className="mr-1.5 size-3.5" aria-hidden />
+                  {t("tailorDownload")}
+                </a>
+              }
+              trailingActions={
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleResetTailor}
+                >
+                  {t("tailorRegenerate")}
+                </Button>
+              }
+            />
           </div>
         </div>
       </div>
@@ -411,67 +422,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     </div>
   );
 
-  const renderJobDescriptionField = (compact: boolean) => {
-    if (compact && applicationDescription && !jobDescription) {
-      return (
-        <div className="border-border mt-6 border-t pt-6">
-          <Button
-            type="button"
-            variant="link"
-            className="text-primary h-auto px-0 text-sm"
-            onClick={() => setJdExpanded((open) => !open)}
-          >
-            {t("toggleJobDescription")}
-            <ChevronDown
-              className={cn(
-                "ml-0.5 size-4 transition-transform",
-                jdExpanded && "rotate-180",
-              )}
-              aria-hidden
-            />
-          </Button>
-          {!jdExpanded ? (
-            <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-              {jdPreview}
-            </p>
-          ) : (
-            <Textarea
-              value={jobDescription || applicationDescription}
-              onChange={(e) => setJobDescription(e.target.value)}
-              placeholder={t("tailorJdPlaceholder")}
-              rows={10}
-              className="mt-3 w-full resize-y text-sm"
-            />
-          )}
-        </div>
-      );
-    }
-
-    return (
-      <div className={compact ? "mt-5" : undefined}>
-        {!compact ? (
-          <CardTitle className="mb-3 flex items-center gap-2 text-lg">
-            <Sparkles className="h-5 w-5" />
-            {t("tailorJdTitle")}
-          </CardTitle>
-        ) : (
-          <p className="mb-2 text-sm font-medium">{t("tailorJdTitle")}</p>
-        )}
-        <Textarea
-          value={
-            jobDescription.length > 0
-              ? jobDescription
-              : (application?.description ?? "")
-          }
-          onChange={(e) => setJobDescription(e.target.value)}
-          placeholder={t("tailorJdPlaceholder")}
-          rows={compact ? 6 : 10}
-          className="resize-y"
-        />
-      </div>
-    );
-  };
-
   const renderErrorPanel = () =>
     error ? (
       <div
@@ -565,24 +515,36 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
                 {matchNotes}
               </p>
             ) : null}
-            <div className="mt-2.5 flex flex-wrap gap-2">
-              <a
-                href={downloadUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buttonVariants({ size: "sm" })}
-              >
-                <Download className="mr-1.5 size-3.5" aria-hidden />
-                {t("tailorDownload")}
-              </a>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleResetTailor}
-              >
-                {t("tailorRegenerate")}
-              </Button>
+            <div className="mt-2.5">
+              <OfficeDocumentPreview
+                fileUrl={downloadUrl}
+                title={t("tailorPreviewTitle")}
+                openLabel={t("tailorPreviewOpen")}
+                closeLabel={t("tailorPreviewClose")}
+                defaultOpen={previewDefaultOpen}
+                leadingActions={
+                  <a
+                    href={downloadUrl}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonVariants({ size: "sm" })}
+                  >
+                    <Download className="mr-1.5 size-3.5" aria-hidden />
+                    {t("tailorDownload")}
+                  </a>
+                }
+                trailingActions={
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleResetTailor}
+                  >
+                    {t("tailorRegenerate")}
+                  </Button>
+                }
+              />
             </div>
           </div>
         </div>
@@ -668,7 +630,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       </Button>
 
       {renderErrorPanel()}
-      {compact ? renderJobDescriptionField(true) : null}
     </>
   );
 
@@ -684,14 +645,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   if (embedded) {
     return (
       <div className="w-full">
-        <div className="mb-5 flex items-center gap-2">
-          <Sparkles className="text-primary size-5" aria-hidden />
-          <h2 className="text-base font-semibold">{t("tailorPageTitle")}</h2>
-        </div>
-        <p className="text-muted-foreground mb-5 text-sm">
-          {t("tailorPageDescription")}
-        </p>
-
         {step === "tailoring" ? (
           <div className="flex flex-col items-center gap-3 py-8">
             <Loader2 className="text-primary size-8 animate-spin" />
@@ -705,7 +658,12 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
         ) : showExistingBanner ? (
           renderExistingBanner()
         ) : (
-          renderConfigureForm(true)
+          <>
+            <p className="text-muted-foreground mb-4 text-sm">
+              {t("tailorPageDescription")}
+            </p>
+            {renderConfigureForm(true)}
+          </>
         )}
       </div>
     );
@@ -856,36 +814,48 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
             {matchNotes && (
               <p className="text-muted-foreground text-sm">{matchNotes}</p>
             )}
-            <div className="flex flex-wrap gap-3">
-              <a
-                href={downloadUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={buttonVariants()}
-              >
-                <Download className="mr-2 h-4 w-4" />
-                {t("tailorDownload")}
-              </a>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleResetTailor}
-              >
-                <Upload className="mr-2 h-4 w-4" />
-                {t("tailorAgain")}
-              </Button>
-              {applicationId && !embedded && (
-                <Link
-                  href={{
-                    pathname: "/admin/job-tracker/applications/[id]",
-                    params: { id: applicationId },
-                  }}
-                  className={buttonVariants({ variant: "outline" })}
+            <OfficeDocumentPreview
+              fileUrl={downloadUrl}
+              title={t("tailorPreviewTitle")}
+              openLabel={t("tailorPreviewOpen")}
+              closeLabel={t("tailorPreviewClose")}
+              defaultOpen={previewDefaultOpen}
+              leadingActions={
+                <a
+                  href={downloadUrl}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={buttonVariants()}
                 >
-                  {t("tailorBackToApplication")}
-                </Link>
-              )}
-            </div>
+                  <Download className="mr-2 h-4 w-4" />
+                  {t("tailorDownload")}
+                </a>
+              }
+              trailingActions={
+                <>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleResetTailor}
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    {t("tailorAgain")}
+                  </Button>
+                  {applicationId && !embedded ? (
+                    <Link
+                      href={{
+                        pathname: "/admin/job-tracker/applications/[id]",
+                        params: { id: applicationId },
+                      }}
+                      className={buttonVariants({ variant: "outline" })}
+                    >
+                      {t("tailorBackToApplication")}
+                    </Link>
+                  ) : null}
+                </>
+              }
+            />
           </CardContent>
         </Card>
       )}

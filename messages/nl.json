@@ -71,7 +71,10 @@
       "domainLabel": "E-maildomein",
       "domainPlaceholder": "joudomein.nl",
       "fromLabel": "Afzender e-mail / naam (optioneel)",
-      "fromPlaceholder": "Portfolio '<'no-reply@joudomein.nl'>'",
+      "fromPlaceholder": "Portfolio <no-reply@joudomein.nl>",
+      "signatureLabel": "HTML e-mailhandtekening (optioneel)",
+      "signatureHint": "Wordt onder de tekst geplakt bij CV-mails. Laat leeg om over te slaan.",
+      "signaturePlaceholder": "<table>...</table>",
       "syncButton": "Sjablonen nu synchroniseren",
       "saveButton": "Opslaan en sjablonen publiceren",
       "saveSuccess": "Resend-inloggegevens opgeslagen en sjablonen succesvol gepubliceerd!",
@@ -1858,6 +1861,33 @@
           "createFailed": "Bedrijf aanmaken mislukt",
           "clearSearch": "Zoekopdracht wissen"
         },
+        "import": {
+          "placeholders": {
+            "url": "https://www.linkedin.com/jobs/view/…"
+          },
+          "actions": {
+            "show": "Invullen via LinkedIn-link",
+            "import": "Importeren",
+            "importing": "Bezig met importeren…",
+            "cancel": "Annuleren"
+          },
+          "toast": {
+            "success": {
+              "title": "Vacature geïmporteerd",
+              "description": "Controleer de velden voordat je opslaat."
+            },
+            "error": {
+              "title": "Importeren mislukt"
+            }
+          },
+          "errors": {
+            "IMPORT_INVALID_URL": "Dat lijkt geen geldige URL.",
+            "IMPORT_UNSUPPORTED_HOST": "Alleen LinkedIn-vacatures en -posts worden ondersteund.",
+            "IMPORT_LOGIN_WALL": "LinkedIn heeft de pagina geblokkeerd. Plak de beschrijving handmatig.",
+            "IMPORT_EMPTY_CONTENT": "Er is geen vacaturetekst gevonden. Plak de beschrijving handmatig.",
+            "IMPORT_FETCH_FAILED": "De link kon niet worden gelezen. Probeer opnieuw of plak de beschrijving handmatig."
+          }
+        },
         "descriptionHint": "Optioneel. Plak de vacaturetekst om later je CV toe te spitsen.",
         "notesHint": "Privénotities - niet gedeeld met werkgevers."
       },
@@ -2582,7 +2612,41 @@
         "deleteConfirmAction": "Verwijderen",
         "timelineActivityHint": "Automatisch gegenereerd uit sollicitatieactiviteit — voeg je eigen toe met de knop hierboven.",
         "noDescription": "Geen functieomschrijving beschikbaar.",
+        "showFullDescription": "Volledige omschrijving tonen",
+        "hideFullDescription": "Minder tonen",
+        "notProvided": "—",
         "tabsNavAria": "Sollicitatiesecties"
+      },
+      "email": {
+        "title": "CV per e-mail versturen",
+        "openButton": "CV versturen",
+        "description": "AI stelt ontvanger, onderwerp en een korte tekst op uit de vacaturetekst. Controleer en verstuur de op maat gemaakte DOCX via Resend.",
+        "draft": "Concept met AI",
+        "redraft": "Concept opnieuw genereren",
+        "draftHint": "Genereer een concept voor ontvanger, onderwerp en tekst — je kunt alles bewerken vóór het verzenden.",
+        "draftSuccess": "E-mailconcept klaar",
+        "draftError": "Kon het concept niet maken",
+        "send": "CV versturen",
+        "sendSuccess": "E-mail verzonden",
+        "sendError": "Kon de e-mail niet versturen",
+        "sendMissingFields": "Vul ontvanger, onderwerp en tekst in vóór het verzenden",
+        "toLabel": "Aan",
+        "recipientLabel": "Naam ontvanger",
+        "recipientPlaceholder": "Carol",
+        "subjectLabel": "Onderwerp",
+        "bodyLabel": "Bericht",
+        "attachment": "Bijlage: {name}",
+        "attachmentLabel": "Bijlage",
+        "attachmentOverride": "Aangepast bestand: {name}",
+        "replaceAttachment": "Bestand vervangen",
+        "useTailoredCv": "Op maat gemaakt CV gebruiken",
+        "attachmentReplaced": "Bijlage bijgewerkt",
+        "attachmentUploadError": "Kon het bestand niet uploaden",
+        "attachmentInvalidType": "Alleen .doc, .docx of .pdf bestanden zijn toegestaan",
+        "attachmentTooLarge": "Bestand mag maximaal 8 MB zijn",
+        "needCv": "Maak eerst een CV op maat, of upload een .docx/.pdf om bij te voegen.",
+        "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een concept te maken.",
+        "noResend": "Configureer Resend in Integraties om vanaf je domein te versturen."
       },
       "kanban": {
         "description": "Sleep kaarten tussen kolommen om de status bij te werken.",
@@ -2672,6 +2736,9 @@
       "tailorAlreadyDone": "Al aangepast voor deze sollicitatie",
       "tailorGeneratedOn": "Gegenereerd {date}",
       "tailorViewResume": "CV bekijken",
+      "tailorPreviewTitle": "CV-voorbeeld",
+      "tailorPreviewOpen": "Voorbeeld tonen",
+      "tailorPreviewClose": "Voorbeeld verbergen",
       "tailorRegenerate": "Opnieuw genereren",
       "tailorSuccessTitle": "Je CV past nu bij deze vacature",
       "tailorErrorRetry": "Opnieuw proberen",

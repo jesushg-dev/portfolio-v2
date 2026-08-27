@@ -346,7 +346,7 @@ src/
 │   ├── api/
 │   │   ├── cv/pdf/route.ts              # Public download
 │   │   └── internal/cv/generate-pdf/route.ts  # Isolated Playwright
-│   └── [locale]/(portfolio)/curriculum-vitae/
+│   └── [locale]/(home)/curriculum-vitae/
 │       ├── page.tsx                     # ?pdf=1 → pdfMode
 │       └── cv-page-view.tsx             # Preview + actions
 ├── features/cv/

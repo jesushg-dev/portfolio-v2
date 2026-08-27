@@ -1,5 +1,6 @@
 import type { Locale } from "@/i18n/config";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
+import { areSameCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
 import type {
   AdaptedParagraph,
   AdaptedSection,
@@ -50,11 +51,20 @@ function buildExperienceMetaLine(
   location: string | undefined,
   dateLine: string,
   previousText: string,
+  omitCompany: boolean,
 ): string {
   const parts = previousText
     .split("·")
     .map((part) => part.trim())
     .filter(Boolean);
+
+  if (omitCompany) {
+    const locationOnly = location?.trim() ?? "";
+    if (locationOnly) {
+      return `${locationOnly} · ${dateLine}`;
+    }
+    return dateLine;
+  }
 
   // Preserve client annotations in company when draft company is a short match,
   // e.g. template "Imagemaker (Client: Walmart…)" + draft "Imagemaker".
@@ -105,6 +115,10 @@ export function syncLockedParagraphsFromDraft(
 
     if (locked.kind === "experience-meta") {
       const experience = draft.experiences[experienceIndex];
+      const previousExperience =
+        experienceIndex > 0
+          ? draft.experiences[experienceIndex - 1]
+          : undefined;
       experienceIndex += 1;
       if (!experience) continue;
 
@@ -116,6 +130,11 @@ export function syncLockedParagraphsFromDraft(
       );
       if (!dateLine) continue;
 
+      const omitCompany = Boolean(
+        previousExperience &&
+        areSameCompany(previousExperience.company, experience.company),
+      );
+
       adapted.push(
         adaptParagraphText(
           locked.paragraph,
@@ -124,6 +143,7 @@ export function syncLockedParagraphsFromDraft(
             experience.location,
             dateLine,
             previousText,
+            omitCompany,
           ),
         ),
       );

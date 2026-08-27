@@ -93,7 +93,7 @@ export function isExperienceRoleLine(text: string): boolean {
   const trimmed = text.trim();
   if (trimmed.length < 3 || trimmed.length > 120) return false;
   if (trimmed.includes("·")) return false;
-  return trimmed.includes('|');
+  return trimmed.includes("|");
 }
 
 /**
@@ -250,13 +250,7 @@ export async function parseDocx(buffer: Buffer): Promise<{
           }
           lockedParagraphs.push({
             kind: "experience-meta",
-            paragraph: buildParagraph(
-              "locked",
-              lockedIdx++,
-              i,
-              style,
-              runs,
-            ),
+            paragraph: buildParagraph("locked", lockedIdx++, i, style, runs),
           });
         } else if (isEducationDateLine(trimmed)) {
           pendingRole = null;

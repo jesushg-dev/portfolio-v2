@@ -226,10 +226,7 @@ export async function finalizeDocxTailorExport(
       locale,
     );
     sections = withLockedMetaSection(sections, input.parsed.lockedParagraphs);
-    adaptedSections = withLockedMetaAdaptations(
-      adaptedSections,
-      lockedAdapted,
-    );
+    adaptedSections = withLockedMetaAdaptations(adaptedSections, lockedAdapted);
   }
 
   const buffer = await rebuildDocx(

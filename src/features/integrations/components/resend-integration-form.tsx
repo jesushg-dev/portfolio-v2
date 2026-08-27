@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { api, type RouterOutputs } from "@/trpc/react";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
   FormActions,
@@ -23,6 +24,7 @@ const resendFormSchema = z.object({
   apiKey: z.string(),
   emailDomain: z.string(),
   fromEmail: z.string(),
+  emailSignatureHtml: z.string(),
 });
 
 type ResendFormValues = z.infer<typeof resendFormSchema>;
@@ -72,21 +74,35 @@ export function ResendIntegrationForm({
 
   const form = useForm<ResendFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { apiKey: "", emailDomain: "", fromEmail: "" },
+    defaultValues: {
+      apiKey: "",
+      emailDomain: status.emailDomain,
+      fromEmail: status.fromEmail,
+      emailSignatureHtml: status.emailSignatureHtml,
+    },
   });
+
+  useEffect(() => {
+    form.reset({
+      apiKey: "",
+      emailDomain: status.emailDomain,
+      fromEmail: status.fromEmail,
+      emailSignatureHtml: status.emailSignatureHtml,
+    });
+  }, [form, status]);
 
   const handleSubmit = useCallback(
     (values: ResendFormValues) => {
       startTransition(async () => {
         try {
           const res = await saveResend.mutateAsync({
-            apiKey: values.apiKey,
-            emailDomain: values.emailDomain,
-            fromEmail: values.fromEmail || undefined,
+            apiKey: values.apiKey.trim() || undefined,
+            emailDomain: values.emailDomain.trim() || undefined,
+            fromEmail: values.fromEmail.trim() || undefined,
+            emailSignatureHtml: values.emailSignatureHtml,
           });
 
           await utils.integrationsAdmin.getConfigs.invalidate();
-          form.reset({ apiKey: "", emailDomain: "", fromEmail: "" });
           toast.success(
             t("resend.saveSuccess") + ` (${res.syncedCount} templates)`,
           );
@@ -100,7 +116,7 @@ export function ResendIntegrationForm({
         }
       });
     },
-    [saveResend, utils, t, form, onSuccess],
+    [saveResend, utils, t, onSuccess],
   );
 
   return (
@@ -151,11 +167,7 @@ export function ResendIntegrationForm({
                     {...field}
                     id="resend-domain"
                     type="text"
-                    placeholder={
-                      status.emailDomain !== ""
-                        ? status.emailDomain
-                        : t("resend.domainPlaceholder")
-                    }
+                    placeholder={t("resend.domainPlaceholder")}
                   />
                 </FormItem>
               )}
@@ -170,11 +182,26 @@ export function ResendIntegrationForm({
                     {...field}
                     id="resend-from"
                     type="text"
-                    placeholder={
-                      status.fromEmail !== ""
-                        ? status.fromEmail
-                        : t("resend.fromPlaceholder")
-                    }
+                    placeholder={t("resend.fromPlaceholder")}
+                  />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="emailSignatureHtml"
+              render={({ field }) => (
+                <FormItem
+                  label={t("resend.signatureLabel")}
+                  description={t("resend.signatureHint")}
+                >
+                  <Textarea
+                    {...field}
+                    id="resend-signature"
+                    rows={8}
+                    className="font-mono text-xs"
+                    placeholder={t("resend.signaturePlaceholder")}
                   />
                 </FormItem>
               )}

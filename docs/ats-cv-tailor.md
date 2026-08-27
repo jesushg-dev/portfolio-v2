@@ -89,10 +89,10 @@ Resume Studio / import (feeds studio content) lives under admin CV:
 
 ## Source modes
 
-| Mode | Base DOCX | Content facts |
-|------|-----------|---------------|
+| Mode     | Base DOCX                                                                            | Content facts                                                       |
+| -------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
 | `studio` | `src/features/resume-engine/assets/cv-template.docx` via `loadCvTemplateForTailor()` | CMS draft from `resolveTailorBaseDraft()` / `loadCvStructuredDraft` |
-| `upload` | File at `CvSourceUpload.originalFileUrl` via `fetchUploadDocxForTailor()` | Existing DOCX text adapted in place |
+| `upload` | File at `CvSourceUpload.originalFileUrl` via `fetchUploadDocxForTailor()`            | Existing DOCX text adapted in place                                 |
 
 Both paths end in the same finalize: `finalizeDocxTailorExport` → `rebuildDocx` → persist.
 
@@ -104,84 +104,84 @@ Both paths end in the same finalize: `finalizeDocxTailorExport` → `rebuildDocx
 
 ### UI
 
-| Path | Role |
-|------|------|
-| `src/features/resume-engine/components/resume-tailor-workflow.tsx` | Main wizard (configure → running → done) |
-| `src/features/resume-engine/components/resume-ai-controls.tsx` | Auto / manual + provider picker |
-| `src/features/resume-engine/components/manual-ai-panel.tsx` | Prompt + JSON paste for manual mode |
-| `src/features/resume-engine/components/resume-docx-upload.tsx` | Upload DOCX for upload-source mode |
-| `src/features/resume-engine/components/resume-import-workflow.tsx` | Import into Resume Studio |
-| `src/features/job-tracker/components/application-detail-view.tsx` | Hosts tailor tab; shows `cvFile` |
-| `src/features/job-tracker/components/application-card.tsx` | Shows attached CV name on cards |
+| Path                                                                    | Role                                               |
+| ----------------------------------------------------------------------- | -------------------------------------------------- |
+| `src/features/resume-engine/components/resume-tailor-workflow.tsx`      | Main wizard (configure → running → done)           |
+| `src/features/resume-engine/components/resume-ai-controls.tsx`          | Auto / manual + provider picker                    |
+| `src/features/resume-engine/components/manual-ai-panel.tsx`             | Prompt + JSON paste for manual mode                |
+| `src/features/resume-engine/components/resume-docx-upload.tsx`          | Upload DOCX for upload-source mode                 |
+| `src/features/resume-engine/components/resume-import-workflow.tsx`      | Import into Resume Studio                          |
+| `src/features/job-tracker/components/application-detail-view.tsx`       | Hosts tailor tab; shows `cvFile`                   |
+| `src/features/job-tracker/components/application-card.tsx`              | Shows attached CV name on cards                    |
 | `src/app/[locale]/(admin)/admin/job-tracker/applications/[id]/page.tsx` | Application page (`tab=tailor\|timeline\|details`) |
-| `src/app/[locale]/(admin)/admin/cv/cv-editor.tsx` | Resume Studio / import |
+| `src/app/[locale]/(admin)/admin/cv/cv-editor.tsx`                       | Resume Studio / import                             |
 
 ### tRPC / server
 
-| Path | Role |
-|------|------|
+| Path                                                              | Role                                                                                              |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `src/features/resume-engine/server/resume-engine-admin.router.ts` | `getTailorPageData`, `getTailorPrompt`, `tailorResume`, `tailorResumeManual`, `registerUpload`, … |
-| `src/features/job-tracker/server/job-tracker-admin.router.ts` | Application CRUD (optional `cvFile`) |
-| `src/features/job-tracker/server/job-tracker-queries.ts` | Application detail data |
-| `src/server/api/root.ts` | Registers `resumeEngineAdmin`, `jobTrackerAdmin` |
+| `src/features/job-tracker/server/job-tracker-admin.router.ts`     | Application CRUD (optional `cvFile`)                                                              |
+| `src/features/job-tracker/server/job-tracker-queries.ts`          | Application detail data                                                                           |
+| `src/server/api/root.ts`                                          | Registers `resumeEngineAdmin`, `jobTrackerAdmin`                                                  |
 
 ### AI
 
-| Path | Role |
-|------|------|
-| `src/features/resume-engine/lib/ai/docx-tailor-prompt.ts` | DOCX / studio / shrink system prompts |
-| `src/features/resume-engine/lib/ai/prompt-package.ts` | Builds system + user prompt packages |
-| `src/features/resume-engine/lib/ai/tailor-docx.ts` | Provider call, shrink loop, `tailorDocxResume` |
-| `src/features/resume-engine/lib/ai/providers.ts` | Available providers, models, `resolveAiProvider` |
-| `src/features/resume-engine/lib/ai/provider-types.ts` | Provider name types |
-| `src/features/resume-engine/lib/ai/parse-json-response.ts` | Strip fences / parse AI JSON |
-| `src/features/resume-engine/lib/ai/shrink-result.ts` | Shrink-pass Zod schema |
-| `src/features/resume-engine/lib/cv-docx-tailor-result.ts` | `CvDocxTailorResult` Zod schema |
-| `src/features/resume-engine/lib/ai/tailor-prompt.ts` | Legacy structured-draft prompt (not live router) |
-| `src/features/resume-engine/lib/ai/tailor-structured.ts` | Legacy structured tailor (not live router) |
-| `src/features/resume-engine/lib/ai/import-prompt.ts` | Import extract prompt |
-| `src/features/resume-engine/lib/ai/extract-structured.ts` | AI import parse |
+| Path                                                       | Role                                             |
+| ---------------------------------------------------------- | ------------------------------------------------ |
+| `src/features/resume-engine/lib/ai/docx-tailor-prompt.ts`  | DOCX / studio / shrink system prompts            |
+| `src/features/resume-engine/lib/ai/prompt-package.ts`      | Builds system + user prompt packages             |
+| `src/features/resume-engine/lib/ai/tailor-docx.ts`         | Provider call, shrink loop, `tailorDocxResume`   |
+| `src/features/resume-engine/lib/ai/providers.ts`           | Available providers, models, `resolveAiProvider` |
+| `src/features/resume-engine/lib/ai/provider-types.ts`      | Provider name types                              |
+| `src/features/resume-engine/lib/ai/parse-json-response.ts` | Strip fences / parse AI JSON                     |
+| `src/features/resume-engine/lib/ai/shrink-result.ts`       | Shrink-pass Zod schema                           |
+| `src/features/resume-engine/lib/cv-docx-tailor-result.ts`  | `CvDocxTailorResult` Zod schema                  |
+| `src/features/resume-engine/lib/ai/tailor-prompt.ts`       | Legacy structured-draft prompt (not live router) |
+| `src/features/resume-engine/lib/ai/tailor-structured.ts`   | Legacy structured tailor (not live router)       |
+| `src/features/resume-engine/lib/ai/import-prompt.ts`       | Import extract prompt                            |
+| `src/features/resume-engine/lib/ai/extract-structured.ts`  | AI import parse                                  |
 
 ### DOCX parse / rebuild / template
 
-| Path | Role |
-|------|------|
-| `src/lib/docx/parser.ts` | `parseDocx` → sections, raw XML, zip |
-| `src/lib/docx/rebuilder.ts` | `rebuildDocx` — write adapted run text back into `document.xml` |
-| `src/lib/types.ts` | `CvSection`, `AdaptedSection`, etc. |
-| `src/features/resume-engine/assets/cv-template.docx` | Studio tailor template |
-| `src/features/cv/lib/load-cv-template-docx.ts` | Load + parse template |
-| `src/features/resume-engine/lib/fetch-upload-docx.ts` | Fetch + parse uploaded DOCX |
-| `src/features/resume-engine/lib/resolve-tailor-base-draft.ts` | Resolve CMS or upload draft |
+| Path                                                              | Role                                                                     |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `src/lib/docx/parser.ts`                                          | `parseDocx` → sections, raw XML, zip                                     |
+| `src/lib/docx/rebuilder.ts`                                       | `rebuildDocx` — write adapted run text back into `document.xml`          |
+| `src/lib/types.ts`                                                | `CvSection`, `AdaptedSection`, etc.                                      |
+| `src/features/resume-engine/assets/cv-template.docx`              | Studio tailor template                                                   |
+| `src/features/cv/lib/load-cv-template-docx.ts`                    | Load + parse template                                                    |
+| `src/features/resume-engine/lib/fetch-upload-docx.ts`             | Fetch + parse uploaded DOCX                                              |
+| `src/features/resume-engine/lib/resolve-tailor-base-draft.ts`     | Resolve CMS or upload draft                                              |
 | `src/features/resume-engine/lib/docx/generate-from-structured.ts` | Generate DOCX from structured draft (public DOCX / unused finalize path) |
-| `src/features/resume-engine/lib/docx/import-parser.ts` | Import-oriented parse |
+| `src/features/resume-engine/lib/docx/import-parser.ts`            | Import-oriented parse                                                    |
 
 ### Finalize, filename, upload
 
-| Path | Role |
-|------|------|
-| `src/features/resume-engine/lib/finalize-tailor-export.ts` | `finalizeDocxTailorExport`, `persistResumeExport`, unused `finalizeTailorExport` |
-| `src/features/resume-engine/lib/build-ats-cv-file-name.ts` | ATS filename helpers |
-| `src/lib/uploadthing/upload-buffer.ts` | `uploadBufferToUploadThing` |
-| `src/lib/uploadthing/tenant-uploadthing.ts` | Per-tenant UT client / config |
-| `src/app/api/uploadthing/route.ts` | UploadThing HTTP handler |
-| `src/app/api/uploadthing/core.ts` | File router (incl. resume importer) |
-| `src/features/integrations/server/integrations-admin.router.ts` | `uploadFile` used by DOCX upload UI |
+| Path                                                            | Role                                                                             |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `src/features/resume-engine/lib/finalize-tailor-export.ts`      | `finalizeDocxTailorExport`, `persistResumeExport`, unused `finalizeTailorExport` |
+| `src/features/resume-engine/lib/build-ats-cv-file-name.ts`      | ATS filename helpers                                                             |
+| `src/lib/uploadthing/upload-buffer.ts`                          | `uploadBufferToUploadThing`                                                      |
+| `src/lib/uploadthing/tenant-uploadthing.ts`                     | Per-tenant UT client / config                                                    |
+| `src/app/api/uploadthing/route.ts`                              | UploadThing HTTP handler                                                         |
+| `src/app/api/uploadthing/core.ts`                               | File router (incl. resume importer)                                              |
+| `src/features/integrations/server/integrations-admin.router.ts` | `uploadFile` used by DOCX upload UI                                              |
 
 ### Prisma
 
-| Path | Role |
-|------|------|
-| `prisma/schema/resume-engine.prisma` | `CvSourceUpload`, `ResumeExport` |
-| `prisma/schema/job-tracker.prisma` | `Application`, embedded `CvFile`, `resumeExports` |
-| `src/features/job-tracker/lib/application-editor-dto.ts` | Maps `cvFile` for UI |
+| Path                                                     | Role                                              |
+| -------------------------------------------------------- | ------------------------------------------------- |
+| `prisma/schema/resume-engine.prisma`                     | `CvSourceUpload`, `ResumeExport`                  |
+| `prisma/schema/job-tracker.prisma`                       | `Application`, embedded `CvFile`, `resumeExports` |
+| `src/features/job-tracker/lib/application-editor-dto.ts` | Maps `cvFile` for UI                              |
 
 ### Related public routes (not ATS tailor)
 
-| Path | Role |
-|------|------|
-| `src/app/api/cv/docx/route.ts` | Public portfolio DOCX |
-| `src/app/api/cv/pdf/route.ts` | Public portfolio PDF — see `docs/cv-pdf.md` |
+| Path                           | Role                                        |
+| ------------------------------ | ------------------------------------------- |
+| `src/app/api/cv/docx/route.ts` | Public portfolio DOCX                       |
+| `src/app/api/cv/pdf/route.ts`  | Public portfolio PDF — see `docs/cv-pdf.md` |
 
 ---
 
@@ -189,31 +189,31 @@ Both paths end in the same finalize: `finalizeDocxTailorExport` → `rebuildDocx
 
 ### Router (`resume-engine-admin.router.ts`)
 
-| Procedure | What it does |
-|-----------|----------------|
-| `getTailorPageData` | Studio preview, recent uploads, application JD/company for the wizard |
-| `getTailorPrompt` | Builds copyable prompt package for manual mode |
-| `tailorResume` | Auto AI → `finalizeDocxTailorExport` |
-| `tailorResumeManual` | Parse pasted `CvDocxTailorResult` JSON → same finalize |
-| `registerUpload` | Persists `CvSourceUpload` after client upload |
+| Procedure            | What it does                                                          |
+| -------------------- | --------------------------------------------------------------------- |
+| `getTailorPageData`  | Studio preview, recent uploads, application JD/company for the wizard |
+| `getTailorPrompt`    | Builds copyable prompt package for manual mode                        |
+| `tailorResume`       | Auto AI → `finalizeDocxTailorExport`                                  |
+| `tailorResumeManual` | Parse pasted `CvDocxTailorResult` JSON → same finalize                |
+| `registerUpload`     | Persists `CvSourceUpload` after client upload                         |
 
 Locale helper in the same file: `detectLocaleFromJobDescription` (heuristic `en` / `es` / `nl` from JD keywords).
 
 ### Pipeline helpers
 
-| Function | File | Role |
-|----------|------|------|
-| `tailorDocxResume` | `lib/ai/tailor-docx.ts` | Call provider; shrink overflows; hard-truncate to run budgets |
-| `buildDocxTailorPromptPackage` / `buildStudioDocxTailorPromptPackage` | `lib/ai/prompt-package.ts` | System + user prompts with per-run `budget` |
-| `parseDocx` | `src/lib/docx/parser.ts` | Extract adaptable sections |
-| `rebuildDocx` | `src/lib/docx/rebuilder.ts` | Apply adapted texts; localize static headings; return `Buffer` |
-| `loadCvTemplateForTailor` | `src/features/cv/lib/load-cv-template-docx.ts` | Read template asset |
-| `fetchUploadDocxForTailor` | `lib/fetch-upload-docx.ts` | Download + parse upload |
-| `resolveTailorBaseDraft` | `lib/resolve-tailor-base-draft.ts` | CMS draft for studio path |
-| `finalizeDocxTailorExport` | `lib/finalize-tailor-export.ts` | Rebuild → persist |
-| `persistResumeExport` | same | Filename → UploadThing → DB |
-| `buildAtsCvFileName` / `inferCvRoleTrack` / `atsPersonNameFromFullName` | `lib/build-ats-cv-file-name.ts` | Export naming |
-| `uploadBufferToUploadThing` | `src/lib/uploadthing/upload-buffer.ts` | Tenant UT upload |
+| Function                                                                | File                                           | Role                                                           |
+| ----------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------- |
+| `tailorDocxResume`                                                      | `lib/ai/tailor-docx.ts`                        | Call provider; shrink overflows; hard-truncate to run budgets  |
+| `buildDocxTailorPromptPackage` / `buildStudioDocxTailorPromptPackage`   | `lib/ai/prompt-package.ts`                     | System + user prompts with per-run `budget`                    |
+| `parseDocx`                                                             | `src/lib/docx/parser.ts`                       | Extract adaptable sections                                     |
+| `rebuildDocx`                                                           | `src/lib/docx/rebuilder.ts`                    | Apply adapted texts; localize static headings; return `Buffer` |
+| `loadCvTemplateForTailor`                                               | `src/features/cv/lib/load-cv-template-docx.ts` | Read template asset                                            |
+| `fetchUploadDocxForTailor`                                              | `lib/fetch-upload-docx.ts`                     | Download + parse upload                                        |
+| `resolveTailorBaseDraft`                                                | `lib/resolve-tailor-base-draft.ts`             | CMS draft for studio path                                      |
+| `finalizeDocxTailorExport`                                              | `lib/finalize-tailor-export.ts`                | Rebuild → persist                                              |
+| `persistResumeExport`                                                   | same                                           | Filename → UploadThing → DB                                    |
+| `buildAtsCvFileName` / `inferCvRoleTrack` / `atsPersonNameFromFullName` | `lib/build-ats-cv-file-name.ts`                | Export naming                                                  |
+| `uploadBufferToUploadThing`                                             | `src/lib/uploadthing/upload-buffer.ts`         | Tenant UT upload                                               |
 
 ---
 
@@ -221,16 +221,16 @@ Locale helper in the same file: `detectLocaleFromJobDescription` (heuristic `en`
 
 ### `tailorResume` / `tailorResumeManual` input
 
-| Field | Type | Notes |
-|-------|------|--------|
-| `sourceType` | `"studio" \| "upload"` | Required |
-| `uploadId` | `string?` | Required when `sourceType === "upload"` |
-| `jobDescription` | `string` (min 20) | Trimmed; UI may fall back to `Application.description` |
-| `applicationId` | `string?` | Links export + updates `cvFile` |
-| `provider` | `claude \| openai \| deepseek \| gemini` | Auto mode |
-| `targetLocale` | `en \| es \| nl` | Optional |
-| `tailoredFor` | `string?` | Label; else `"{position} @ {company}"` |
-| `rawJson` | `string` | Manual mode only |
+| Field            | Type                                     | Notes                                                  |
+| ---------------- | ---------------------------------------- | ------------------------------------------------------ |
+| `sourceType`     | `"studio" \| "upload"`                   | Required                                               |
+| `uploadId`       | `string?`                                | Required when `sourceType === "upload"`                |
+| `jobDescription` | `string` (min 20)                        | Trimmed; UI may fall back to `Application.description` |
+| `applicationId`  | `string?`                                | Links export + updates `cvFile`                        |
+| `provider`       | `claude \| openai \| deepseek \| gemini` | Auto mode                                              |
+| `targetLocale`   | `en \| es \| nl`                         | Optional                                               |
+| `tailoredFor`    | `string?`                                | Label; else `"{position} @ {company}"`                 |
+| `rawJson`        | `string`                                 | Manual mode only                                       |
 
 ### AI result (`CvDocxTailorResult`)
 
@@ -275,11 +275,11 @@ Implemented in `src/features/resume-engine/lib/build-ats-cv-file-name.ts`.
 
 **Examples**
 
-| Case | Filename |
-|------|----------|
-| Tailored for Nisum (ES) | `Jesus Hernandez - Fullstack Developer - Nisum - ES.docx` |
-| Backend + company | `Jesus Hernandez - Backend Developer - Imagemaker - ES.docx` |
-| No company | `Jesus Hernandez - Fullstack Developer - EN.docx` |
+| Case                    | Filename                                                     |
+| ----------------------- | ------------------------------------------------------------ |
+| Tailored for Nisum (ES) | `Jesus Hernandez - Fullstack Developer - Nisum - ES.docx`    |
+| Backend + company       | `Jesus Hernandez - Backend Developer - Imagemaker - ES.docx` |
+| No company              | `Jesus Hernandez - Fullstack Developer - EN.docx`            |
 
 **Rules**
 
@@ -315,25 +315,25 @@ Original uploaded DOCX metadata + optional `parsedDraft` for import/studio.
 
 Configured via `src/env.ts` / credentials:
 
-| Variable / source | Use |
-|-------------------|-----|
-| `ANTHROPIC_API_KEY` | Claude |
-| `OPENAI_API_KEY` | OpenAI |
-| `DEEPSEEK_API_KEY` | DeepSeek (`https://api.deepseek.com`) |
-| `GEMINI_API_KEY` | Gemini |
-| `DEFAULT_AI_PROVIDER` | Optional default |
-| UploadThing | **Tenant** Admin → Credentials (`uploadthing` integration). Export upload does not rely on a global env fallback. |
+| Variable / source     | Use                                                                                                               |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `ANTHROPIC_API_KEY`   | Claude                                                                                                            |
+| `OPENAI_API_KEY`      | OpenAI                                                                                                            |
+| `DEEPSEEK_API_KEY`    | DeepSeek (`https://api.deepseek.com`)                                                                             |
+| `GEMINI_API_KEY`      | Gemini                                                                                                            |
+| `DEFAULT_AI_PROVIDER` | Optional default                                                                                                  |
+| UploadThing           | **Tenant** Admin → Credentials (`uploadthing` integration). Export upload does not rely on a global env fallback. |
 
 If no AI keys are available, auto mode is unavailable; **manual JSON** still works (`aiProvider: "manual"`).
 
 Models (`AI_PROVIDER_MODELS` in `providers.ts`):
 
-| Provider | Model |
-|----------|--------|
-| claude | `claude-sonnet-4-5` |
-| openai | `gpt-4o` |
-| deepseek | `deepseek-chat` |
-| gemini | `gemini-2.0-flash` |
+| Provider | Model               |
+| -------- | ------------------- |
+| claude   | `claude-sonnet-4-5` |
+| openai   | `gpt-4o`            |
+| deepseek | `deepseek-chat`     |
+| gemini   | `gemini-3.6-flash`  |
 
 Packages: `@anthropic-ai/sdk`, `openai`, `@google/genai`, `uploadthing`, `@uploadthing/react`.
 
@@ -345,12 +345,12 @@ Company–location–date lines (e.g. `Imagemaker · Remote · August 2025 – P
 
 On finalize (studio / any path with a structured draft snapshot), those **locked** paragraphs are synced from the CMS draft before `rebuildDocx`:
 
-| Path | Role |
-|------|------|
-| `src/lib/docx/parser.ts` | Collects `lockedParagraphs` (`experience-meta`, `experience-role`, `education-dates`) |
-| `src/features/resume-engine/lib/sync-locked-paragraphs-from-draft.ts` | Builds updated texts from draft experiences/education |
-| `src/features/resume-engine/lib/finalize-tailor-export.ts` | Merges locked adaptations into rebuild |
-| `src/features/cv/lib/generate-cv-docx-from-db.ts` | Same sync for portfolio DOCX-from-DB |
+| Path                                                                  | Role                                                                                  |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `src/lib/docx/parser.ts`                                              | Collects `lockedParagraphs` (`experience-meta`, `experience-role`, `education-dates`) |
+| `src/features/resume-engine/lib/sync-locked-paragraphs-from-draft.ts` | Builds updated texts from draft experiences/education                                 |
+| `src/features/resume-engine/lib/finalize-tailor-export.ts`            | Merges locked adaptations into rebuild                                                |
+| `src/features/cv/lib/generate-cv-docx-from-db.ts`                     | Same sync for portfolio DOCX-from-DB                                                  |
 
 Experience meta format: `{company} · {location} · {formatted dates}` (preserves client annotations when the draft company is a prefix of the template company). Role lines like `Full-time | …` keep the employment-type prefix and take the draft role.
 
@@ -369,14 +369,14 @@ Prompt packages include per-run `budget` so the model knows length limits up fro
 
 ## Tests
 
-| Path | Coverage |
-|------|----------|
-| `src/features/resume-engine/lib/build-ats-cv-file-name.test.ts` | Name stripping, ATS filename, role-track inference |
-| `src/features/resume-engine/lib/sync-locked-paragraphs-from-draft.test.ts` | CMS date/company/role sync into locked lines |
-| `src/lib/docx/docx.test.ts` | Parse / rebuild round-trip; template locked paragraphs |
-| `src/lib/docx/xml-text.test.ts` | XML text helpers |
-| `src/features/resume-engine/components/resume-import-workflow.test.tsx` | Import UI |
-| `e2e/cv-import-tailor.spec.ts` | Light admin CV import/preview smoke (not full tailor → UT → `cvFile` E2E) |
+| Path                                                                       | Coverage                                                                  |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `src/features/resume-engine/lib/build-ats-cv-file-name.test.ts`            | Name stripping, ATS filename, role-track inference                        |
+| `src/features/resume-engine/lib/sync-locked-paragraphs-from-draft.test.ts` | CMS date/company/role sync into locked lines                              |
+| `src/lib/docx/docx.test.ts`                                                | Parse / rebuild round-trip; template locked paragraphs                    |
+| `src/lib/docx/xml-text.test.ts`                                            | XML text helpers                                                          |
+| `src/features/resume-engine/components/resume-import-workflow.test.tsx`    | Import UI                                                                 |
+| `e2e/cv-import-tailor.spec.ts`                                             | Light admin CV import/preview smoke (not full tailor → UT → `cvFile` E2E) |
 
 ---
 

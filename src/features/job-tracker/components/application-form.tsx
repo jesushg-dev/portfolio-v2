@@ -6,7 +6,14 @@ import { getPathname, useRouter } from "@/i18n/routing";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { CalendarIcon, MapPin, DollarSign, Briefcase } from "lucide-react";
+import {
+  CalendarIcon,
+  Link2,
+  LoaderCircle,
+  MapPin,
+  DollarSign,
+  Briefcase,
+} from "lucide-react";
 import { format } from "date-fns";
 import { z } from "zod";
 
@@ -35,7 +42,11 @@ import {
   type ApplicationEditorDTO,
 } from "@/features/job-tracker/lib/application-editor-dto";
 import { CompanyCombobox } from "@/features/job-tracker/components/company-combobox";
-import { decodeNewCompanyName } from "@/features/job-tracker/lib/company-combobox";
+import {
+  decodeNewCompanyName,
+  matchCompanyByName,
+} from "@/features/job-tracker/lib/company-combobox";
+import { isImportFromUrlErrorCode } from "@/features/job-tracker/lib/import-from-url-errors";
 import type { CompanyEditorDTO } from "@/features/job-tracker/lib/company-editor-dto";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
 import { Form, FormControl, FormField } from "@/components/ui/form";
@@ -76,11 +87,14 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [importUrl, setImportUrl] = useState("");
+  const [showUrlImport, setShowUrlImport] = useState(false);
 
   const utils = api.useUtils();
   const createApplication = api.jobTrackerAdmin.createApplication.useMutation();
   const updateApplication = api.jobTrackerAdmin.updateApplication.useMutation();
   const createCompany = api.jobTrackerAdmin.createCompany.useMutation();
+  const importFromUrl = api.jobTrackerAdmin.importFromUrl.useMutation();
 
   const statusItems = useMemo(
     () =>
@@ -115,6 +129,48 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
     defaultValues: initialData as ApplicationFormData,
     mode: "onBlur",
   });
+
+  const handleImportFromUrl = useCallback(async () => {
+    const url = importUrl.trim();
+    if (!url || importFromUrl.isPending) return;
+
+    try {
+      const listing = await importFromUrl.mutateAsync({ url });
+      if (listing.position) {
+        form.setValue("position", listing.position, {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+      }
+      if (listing.location) {
+        form.setValue("location", listing.location, { shouldDirty: true });
+      }
+      if (listing.description) {
+        form.setValue("description", listing.description, {
+          shouldDirty: true,
+        });
+      }
+      const companyId = listing.companyName
+        ? matchCompanyByName(listing.companyName, companies)
+        : null;
+      if (companyId) {
+        form.setValue("companyId", companyId, {
+          shouldDirty: true,
+          shouldValidate: true,
+        });
+      }
+      toast.success(t("import.toast.success.title"), {
+        description: t("import.toast.success.description"),
+      });
+    } catch (err) {
+      const code = err instanceof Error ? err.message : "";
+      toast.error(t("import.toast.error.title"), {
+        description: isImportFromUrlErrorCode(code)
+          ? t(`import.errors.${code}`)
+          : t("import.errors.IMPORT_FETCH_FAILED"),
+      });
+    }
+  }, [companies, form, importFromUrl, importUrl, t]);
 
   const handleSubmit = useCallback(
     (data: ApplicationFormData) => {
@@ -204,6 +260,68 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
             title={isModal ? undefined : t("sections.info")}
             className={isModal ? "space-y-4" : undefined}
           >
+            {showUrlImport ? (
+              <div className="flex items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <Input
+                    id="importUrl"
+                    type="text"
+                    inputMode="url"
+                    value={importUrl}
+                    onChange={(event) => setImportUrl(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        void handleImportFromUrl();
+                      }
+                    }}
+                    placeholder={t("import.placeholders.url")}
+                    icon={<Link2 className="h-4 w-4" />}
+                    autoComplete="url"
+                    autoFocus
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={
+                    !importUrl.trim() || importFromUrl.isPending || isPending
+                  }
+                  onClick={() => void handleImportFromUrl()}
+                >
+                  {importFromUrl.isPending
+                    ? t("import.actions.importing")
+                    : t("import.actions.import")}
+                  {importFromUrl.isPending ? (
+                    <LoaderCircle className="ml-2 h-4 w-4 animate-spin" />
+                  ) : null}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground"
+                  disabled={importFromUrl.isPending}
+                  onClick={() => {
+                    setShowUrlImport(false);
+                    setImportUrl("");
+                  }}
+                >
+                  {t("import.actions.cancel")}
+                </Button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 text-xs transition-colors"
+                onClick={() => setShowUrlImport(true)}
+              >
+                <Link2 className="size-3.5" aria-hidden />
+                {t("import.actions.show")}
+              </button>
+            )}
+
             <div
               className={cn(
                 "grid grid-cols-1",
@@ -252,9 +370,7 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
             <div
               className={cn(
                 "grid grid-cols-1",
-                isModal
-                  ? "gap-3 sm:grid-cols-2"
-                  : "gap-4 md:grid-cols-2",
+                isModal ? "gap-3 sm:grid-cols-2" : "gap-4 md:grid-cols-2",
               )}
             >
               <FormField

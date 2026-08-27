@@ -106,7 +106,7 @@ src/components/curriculum-vitae/
   education.tsx
   education.test.tsx
 
-src/app/[locale]/(portfolio)/curriculum-vitae/
+src/app/[locale]/(home)/curriculum-vitae/
   page.tsx
   page.test.tsx
 ```
@@ -114,7 +114,7 @@ src/app/[locale]/(portfolio)/curriculum-vitae/
 **Why this approach:**
 
 - Moving or deleting code keeps tests in sync automatically.
-- App Router paths with route groups (`(portfolio)`) and catch-all segments (`[[...slug]]`) are awkward to mirror elsewhere.
+- App Router paths with route groups (`(home)`) and catch-all segments `[[...slug]]` are awkward to mirror elsewhere.
 - Tests are easy to find when editing a file.
 
 ### Shared infrastructure in `src/test-utils/`
@@ -234,9 +234,9 @@ Keep page tests to a few **smoke cases** (happy path, `notFound`, `generateMetad
 - [ ] Pure logic extracted when component tests would be too heavy
 - [ ] Both `pnpm test` and `pnpm type` pass before pushing
 
-## Current coverage (portfolio)
+## Current coverage (public site)
 
-The first test suite targets the public portfolio routes under `src/app/[locale]/(portfolio)`:
+The first test suite targets the public routes under `src/app/[locale]/(home)`:
 
 - **Utilities:** `getLocalizedText`, certificate tab resolution, date formatting
 - **CV components:** `education`, `languages`, `soft-skills`, `cv-preview`

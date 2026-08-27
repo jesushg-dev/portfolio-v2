@@ -71,7 +71,10 @@
       "domainLabel": "Dominio de correo",
       "domainPlaceholder": "tudominio.com",
       "fromLabel": "Nombre / Remitente (Opcional)",
-      "fromPlaceholder": "Portfolio '<'no-reply@tudominio.com'>'",
+      "fromPlaceholder": "Portfolio <no-reply@tudominio.com>",
+      "signatureLabel": "Firma HTML del correo (opcional)",
+      "signatureHint": "Se pega debajo del cuerpo al enviar CV. Déjalo vacío para no usarla.",
+      "signaturePlaceholder": "<table>...</table>",
       "syncButton": "Sincronizar Plantillas Ahora",
       "saveButton": "Guardar y Desplegar Plantillas",
       "saveSuccess": "¡Credenciales de Resend guardadas y plantillas desplegadas con éxito!",
@@ -1858,6 +1861,33 @@
           "createFailed": "No se pudo crear la empresa",
           "clearSearch": "Limpiar búsqueda"
         },
+        "import": {
+          "placeholders": {
+            "url": "https://www.linkedin.com/jobs/view/…"
+          },
+          "actions": {
+            "show": "Rellenar desde enlace de LinkedIn",
+            "import": "Importar",
+            "importing": "Importando…",
+            "cancel": "Cancelar"
+          },
+          "toast": {
+            "success": {
+              "title": "Oferta importada",
+              "description": "Revisa los campos antes de guardar."
+            },
+            "error": {
+              "title": "No se pudo importar"
+            }
+          },
+          "errors": {
+            "IMPORT_INVALID_URL": "Eso no parece una URL válida.",
+            "IMPORT_UNSUPPORTED_HOST": "Solo se admiten enlaces de jobs o posts de LinkedIn.",
+            "IMPORT_LOGIN_WALL": "LinkedIn bloqueó la página. Pega la descripción a mano.",
+            "IMPORT_EMPTY_CONTENT": "No se encontró el texto de la oferta. Pega la descripción a mano.",
+            "IMPORT_FETCH_FAILED": "No se pudo leer el enlace. Inténtalo de nuevo o pega la descripción a mano."
+          }
+        },
         "descriptionHint": "Opcional. Pega la oferta para reutilizarla al adaptar el CV.",
         "notesHint": "Recordatorios privados - no se comparten con empleadores."
       },
@@ -2582,7 +2612,41 @@
         "deleteConfirmAction": "Eliminar",
         "timelineActivityHint": "Generado automáticamente a partir de la actividad — agrega el tuyo con el botón de arriba.",
         "noDescription": "No hay descripción del puesto.",
+        "showFullDescription": "Ver descripción completa",
+        "hideFullDescription": "Ver menos",
+        "notProvided": "—",
         "tabsNavAria": "Secciones de la postulación"
+      },
+      "email": {
+        "title": "Enviar CV por correo",
+        "openButton": "Enviar CV",
+        "description": "La IA propone el destinatario, asunto y un cuerpo breve a partir de la descripción del puesto. Revísalo y envía el DOCX personalizado con Resend.",
+        "draft": "Borrador con IA",
+        "redraft": "Regenerar borrador",
+        "draftHint": "Genera un borrador para rellenar destinatario, asunto y cuerpo — puedes editarlo todo antes de enviar.",
+        "draftSuccess": "Borrador listo",
+        "draftError": "No se pudo generar el borrador",
+        "send": "Enviar CV",
+        "sendSuccess": "Correo enviado",
+        "sendError": "No se pudo enviar el correo",
+        "sendMissingFields": "Completa destinatario, asunto y cuerpo antes de enviar",
+        "toLabel": "Para",
+        "recipientLabel": "Nombre del destinatario",
+        "recipientPlaceholder": "Carol",
+        "subjectLabel": "Asunto",
+        "bodyLabel": "Cuerpo",
+        "attachment": "Adjunto: {name}",
+        "attachmentLabel": "Adjunto",
+        "attachmentOverride": "Archivo personalizado: {name}",
+        "replaceAttachment": "Reemplazar archivo",
+        "useTailoredCv": "Usar CV generado",
+        "attachmentReplaced": "Adjunto actualizado",
+        "attachmentUploadError": "No se pudo subir el archivo",
+        "attachmentInvalidType": "Solo se permiten archivos .doc, .docx o .pdf",
+        "attachmentTooLarge": "El archivo debe pesar 8 MB o menos",
+        "needCv": "Primero personaliza un CV para esta postulación, o sube un .docx/.pdf para adjuntar.",
+        "noAi": "No hay proveedor de IA configurado. Añade una API key para generar el borrador.",
+        "noResend": "Configura Resend en Integraciones para enviar desde tu dominio."
       },
       "kanban": {
         "description": "Arrastra las tarjetas entre columnas para actualizar el estado.",
@@ -2672,6 +2736,9 @@
       "tailorAlreadyDone": "Ya personalizado para esta postulación",
       "tailorGeneratedOn": "Generado {date}",
       "tailorViewResume": "Ver currículum",
+      "tailorPreviewTitle": "Vista previa del currículum",
+      "tailorPreviewOpen": "Ver vista previa",
+      "tailorPreviewClose": "Ocultar vista previa",
       "tailorRegenerate": "Regenerar",
       "tailorSuccessTitle": "Tu currículum ahora coincide con este puesto",
       "tailorErrorRetry": "Reintentar",

@@ -451,7 +451,7 @@ src/lib/i18n/
 
 ### ❌ NEVER mirror the entire `src/` tree under a top-level `tests/` folder
 
-A parallel `tests/components/...` structure drifts out of sync, especially with App Router route groups `(portfolio)` and catch-all segments `[[...slug]]`. Keep unit tests co-located; centralize only shared infrastructure.
+A parallel `tests/components/...` structure drifts out of sync, especially with App Router route groups `(home)` and catch-all segments `[[...slug]]`. Keep unit tests co-located; centralize only shared infrastructure.
 
 ### Shared test infrastructure lives in `src/test-utils/`
 

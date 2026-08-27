@@ -280,7 +280,10 @@ describe("docx parser + rebuilder regressions", () => {
     ).toContain("·");
     expect(
       experienceMeta.some((item) =>
-        item.paragraph.runs.map((r) => r.text).join("").includes("2024"),
+        item.paragraph.runs
+          .map((r) => r.text)
+          .join("")
+          .includes("2024"),
       ),
     ).toBe(true);
   });
