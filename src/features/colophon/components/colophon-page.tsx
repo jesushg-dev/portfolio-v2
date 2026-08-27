@@ -5,11 +5,7 @@ import { ProcessReveal } from "@/features/process-pages/components/process-revea
 import { cn } from "@/lib/utils";
 import type { ETheme } from "@/utils/constants/theme";
 
-import {
-  COLOPHON_PALETTES,
-  COLOPHON_STACK,
-  COLOPHON_WEIGHTS,
-} from "../data";
+import { COLOPHON_PALETTES, COLOPHON_STACK, COLOPHON_WEIGHTS } from "../data";
 import { ColophonCarbonBadge } from "./colophon-carbon-badge";
 import {
   colophonContainerClassName,
@@ -146,7 +142,7 @@ export function ColophonPage({ labels }: ColophonPageProps) {
             {labels.colorsBody}
           </p>
 
-          <div className="border-border divide-border overflow-hidden rounded-lg border divide-y">
+          <div className="border-border divide-border divide-y overflow-hidden rounded-lg border">
             <div className="px-4 pt-3 pb-1.5 sm:px-5">
               <div className="flex">
                 {labels.shadeLabels.map((shade) => (

@@ -13,13 +13,17 @@ export function stripForAtsFileName(value: string): string {
 }
 
 /**
- * "Jesús Hernández Gómez" → "Jesus Hernandez" (first + first surname).
+ * Given name + paternal surname for LatAm-style names.
+ * "Jesús Enmanuel Hernández González" → "Jesus Hernandez"
+ * "Jesús Hernández Gómez" → "Jesus Hernandez"
  */
 export function atsPersonNameFromFullName(fullName: string): string {
   const parts = stripForAtsFileName(fullName).split(" ").filter(Boolean);
   if (parts.length === 0) return "Candidate";
   if (parts.length === 1) return parts[0];
-  return `${parts[0]} ${parts[1]}`;
+  if (parts.length === 2) return `${parts[0]} ${parts[1]}`;
+  // 3+: first given name + paternal surname (second-to-last token)
+  return `${parts[0]} ${parts[parts.length - 2]}`;
 }
 
 /**
@@ -45,8 +49,13 @@ export function inferCvRoleTrack(text: string): CvRoleTrack {
   return "Fullstack";
 }
 
+function roleTrackLabel(roleTrack: CvRoleTrack): string {
+  return `${roleTrack} Developer`;
+}
+
 /**
- * Jesus Hernandez - CV - Backend - Imagemaker - ES.docx
+ * Jesus Hernandez - Fullstack Developer - Nisum - ES.docx
+ * Without company: Jesus Hernandez - Fullstack Developer - ES.docx
  */
 export function buildAtsCvFileName(input: {
   fullName: string;
@@ -55,8 +64,13 @@ export function buildAtsCvFileName(input: {
   locale: string;
 }): string {
   const name = atsPersonNameFromFullName(input.fullName);
-  const company = stripForAtsFileName(input.company ?? "") || "General";
+  const role = roleTrackLabel(input.roleTrack);
+  const company = stripForAtsFileName(input.company ?? "");
   const locale = stripForAtsFileName(input.locale).toUpperCase() || "EN";
 
-  return `${name} - CV - ${input.roleTrack} - ${company} - ${locale}.docx`;
+  const parts = [name, role];
+  if (company) parts.push(company);
+  parts.push(locale);
+
+  return `${parts.join(" - ")}.docx`;
 }

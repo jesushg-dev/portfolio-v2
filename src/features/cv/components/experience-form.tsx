@@ -49,12 +49,14 @@ import type { AppLanguage } from "@prisma/client";
 export const ResponsibilitySchema = z.object({
   text: z.record(z.string(), z.object({ text: z.string() })),
   order: z.number().int().nonnegative(),
+  atsOnly: z.boolean(),
 });
 
 export const ExperienceSchema = z.object({
   company: z.string().min(1),
   role: z.record(z.string(), z.object({ text: z.string() })),
   location: TextTranslationMapSchema.optional(),
+  companyBlurb: TextTranslationMapSchema.optional(),
   startDate: z.date().optional(),
   endDate: z.date().optional(),
   current: z.boolean(),
@@ -74,6 +76,7 @@ interface ExperienceInitial {
     appLanguageId: string;
     role: string;
     location?: string | null;
+    companyBlurb?: string | null;
   }[];
   startDate?: Date | null;
   endDate?: Date | null;
@@ -84,6 +87,7 @@ interface ExperienceInitial {
   responsibilities?: {
     id?: string;
     text?: unknown;
+    atsOnly?: boolean;
     translations?: { appLanguageId: string; text: string }[];
     order: number;
   }[];
@@ -151,6 +155,7 @@ export const ExperienceForm: FC<{
         company: z.string().min(1),
         role: textTranslationMapSchema(primaryLang?.id, t("role")),
         location: TextTranslationMapSchema.optional(),
+        companyBlurb: TextTranslationMapSchema.optional(),
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean(),
@@ -163,6 +168,7 @@ export const ExperienceForm: FC<{
               t("responsibility", { n: 1 }),
             ),
             order: z.number().int().nonnegative(),
+            atsOnly: z.boolean(),
           }),
         ),
       }),
@@ -187,6 +193,13 @@ export const ExperienceForm: FC<{
             (row) => row.location,
           )
         : buildEmptyTranslationMap(languages, { text: "" }),
+      companyBlurb: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.companyBlurb,
+          )
+        : buildEmptyTranslationMap(languages, { text: "" }),
       startDate: initial?.startDate ?? undefined,
       endDate: initial?.endDate ?? undefined,
       current: initial?.current ?? false,
@@ -202,6 +215,7 @@ export const ExperienceForm: FC<{
               (row) => row.text,
             ),
             order: index,
+            atsOnly: r.atsOnly ?? false,
           })) ?? [],
     },
   });
@@ -344,6 +358,23 @@ export const ExperienceForm: FC<{
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name={`companyBlurb.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("companyBlurb")}
+                        inputId={`experience-company-blurb-${lang.code}`}
+                        description={t("companyBlurbDescription")}
+                      >
+                        <Textarea
+                          {...field}
+                          rows={2}
+                          placeholder={t("companyBlurbPlaceholder")}
+                        />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               );
             })}
@@ -453,6 +484,24 @@ export const ExperienceForm: FC<{
                                 </div>
                               );
                             })}
+                            <FormField
+                              control={form.control}
+                              name={`responsibilities.${idx}.atsOnly`}
+                              render={({ field: atsField }) => (
+                                <FormCheckboxItem
+                                  label={t("atsOnly")}
+                                  description={t("atsOnlyDescription")}
+                                >
+                                  <Checkbox
+                                    id={`experience-responsibility-ats-${idx}`}
+                                    checked={atsField.value}
+                                    onCheckedChange={(checked) =>
+                                      atsField.onChange(checked === true)
+                                    }
+                                  />
+                                </FormCheckboxItem>
+                              )}
+                            />
                           </div>
                           <Button
                             variant="ghost"
@@ -478,6 +527,7 @@ export const ExperienceForm: FC<{
                 append({
                   text: buildEmptyTranslationMap(languages, { text: "" }),
                   order: fields.length,
+                  atsOnly: false,
                 })
               }
               className="mt-4"

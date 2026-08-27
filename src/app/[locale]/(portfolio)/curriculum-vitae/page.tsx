@@ -1,4 +1,3 @@
-
 export { generateMetadata } from "./metadata";
 
 import CvPageView from "./cv-page-view";

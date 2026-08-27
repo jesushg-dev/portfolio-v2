@@ -39,10 +39,12 @@ export function mapLocalizedCvToDraft(
       company: exp.company,
       role: exp.role,
       location: exp.location ?? undefined,
+      companyBlurb: exp.companyBlurb,
       startDate: formatDate(exp.startDate),
       endDate: formatDate(exp.endDate),
       current: exp.current ?? undefined,
       responsibilities: exp.responsibilities.map((r) => r.text),
+      atsResponsibilities: [],
     })),
     education: data.educations.map((edu) => ({
       id: edu.id,

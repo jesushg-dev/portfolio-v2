@@ -21,10 +21,15 @@ export const CvImportExperienceDraftSchema = z.object({
   company: z.string().min(1),
   role: z.string().min(1),
   location: z.string().optional(),
+  /** Short factual company/context blurb for ATS tailor (not printed on the CV). */
+  companyBlurb: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   current: z.boolean().optional(),
+  /** Bullets shown on the public/printed CV. */
   responsibilities: z.array(z.string()),
+  /** Complementary bullets hidden from the doc; available to the ATS tailor bank. */
+  atsResponsibilities: z.array(z.string()).default([]),
 });
 
 export const CvImportEducationDraftSchema = z.object({
@@ -34,6 +39,8 @@ export const CvImportEducationDraftSchema = z.object({
   location: z.string().optional(),
   startYear: z.number().int().optional(),
   endYear: z.number().int().optional(),
+  /** Free-form range from CMS, e.g. "2017 – 2024" (used when years are absent). */
+  dates: z.string().optional(),
 });
 
 export const CvImportSkillDraftSchema = z.object({

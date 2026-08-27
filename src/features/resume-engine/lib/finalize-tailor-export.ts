@@ -14,6 +14,11 @@ import {
   type CvImportDraft,
 } from "@/features/cv/lib/cv-import-draft";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
+import {
+  syncLockedParagraphsFromDraft,
+  withLockedMetaAdaptations,
+  withLockedMetaSection,
+} from "@/features/resume-engine/lib/sync-locked-paragraphs-from-draft";
 
 const DOCX_MIME =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -202,18 +207,36 @@ export async function finalizeTailorExport(
   });
 }
 
-/** Upload path: rebuild original DOCX preserving layout, styles, and tables. */
+/** Upload/studio path: rebuild original DOCX preserving layout, styles, and tables. */
 export async function finalizeDocxTailorExport(
   db: PrismaClient,
   userId: string,
   input: FinalizeDocxTailorExportInput,
 ) {
   const locale = input.targetLocale ?? "en";
+  const draft = CvImportDraftSchema.safeParse(input.structuredSnapshot);
+
+  let sections = input.parsed.sections;
+  let adaptedSections: AdaptedSection[] = input.adaptedSections;
+
+  if (draft.success && input.parsed.lockedParagraphs.length > 0) {
+    const lockedAdapted = syncLockedParagraphsFromDraft(
+      input.parsed.lockedParagraphs,
+      draft.data,
+      locale,
+    );
+    sections = withLockedMetaSection(sections, input.parsed.lockedParagraphs);
+    adaptedSections = withLockedMetaAdaptations(
+      adaptedSections,
+      lockedAdapted,
+    );
+  }
+
   const buffer = await rebuildDocx(
     input.parsed.zipFiles,
     input.parsed.rawXml,
-    input.parsed.sections,
-    input.adaptedSections,
+    sections,
+    adaptedSections,
     locale,
   );
   const fullName = await resolveExportFullName(

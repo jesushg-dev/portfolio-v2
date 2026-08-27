@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/routing";
+import { getPathname, useRouter } from "@/i18n/routing";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -28,9 +28,6 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { FileUpload } from "@/components/file-upload";
-import { UploadThingRequiredNotice } from "@/features/integrations/components/uploadthing-required-notice";
-import { fileToBase64 } from "@/lib/uploadthing/file-to-base64";
 import type { ApplicationStatus } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
 import {
@@ -63,25 +60,22 @@ interface ApplicationFormProps {
   initialData: ApplicationEditorDTO | ApplicationCreateFormDTO;
   companies: CompanyEditorDTO[];
   locale: Locale;
+  /** Modal uses a denser layout; page keeps more breathing room. */
+  variant?: "page" | "modal";
 }
 
 export const ApplicationForm: FC<ApplicationFormProps> = ({
   initialData,
   companies,
   locale,
+  variant = "page",
 }) => {
+  const isModal = variant === "modal";
   const isEditMode = "id" in initialData;
   const t = useTranslations("admin.forms.jobTrackerApplication");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [cvFile, setCvFile] = useState<File | null>(null);
-  const [cvUploadUrl, setCvUploadUrl] = useState<string | null>(null);
-  const [cvUploadName, setCvUploadName] = useState<string | null>(null);
-
-  const configs = api.integrationsAdmin.getConfigs.useQuery();
-  const uploadFile = api.integrationsAdmin.uploadFile.useMutation();
-  const uploadEnabled = configs.data?.uploadthing.isConfigured ?? false;
 
   const utils = api.useUtils();
   const createApplication = api.jobTrackerAdmin.createApplication.useMutation();
@@ -137,31 +131,6 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
             await utils.jobTrackerAdmin.getCompanies.invalidate();
           }
 
-          let cvFileObj = undefined;
-          if (cvFile) {
-            if (!uploadEnabled) {
-              throw new Error(t("uploadthingRequired"));
-            }
-
-            let url = cvUploadUrl;
-            if (!url) {
-              const dataBase64 = await fileToBase64(cvFile);
-              const uploaded = await uploadFile.mutateAsync({
-                fileName: cvFile.name,
-                mimeType: cvFile.type || "application/pdf",
-                dataBase64,
-              });
-              url = uploaded.url;
-              setCvUploadUrl(url);
-              setCvUploadName(cvFile.name);
-            }
-            cvFileObj = {
-              name: cvUploadName ?? cvFile.name,
-              url,
-              uploadedAt: new Date(),
-            };
-          }
-
           const payload = {
             position: data.position,
             companyId,
@@ -171,34 +140,39 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
             location: data.location ?? undefined,
             notes: data.notes ?? undefined,
             description: data.description ?? undefined,
-            cvFile: cvFileObj,
           };
 
-          let createdId: string | null = null;
           if (isEditMode) {
             await updateApplication.mutateAsync({
               id: initialData.id,
               ...payload,
             });
-          } else {
-            const created = await createApplication.mutateAsync(payload);
-            createdId = created.id;
+            toast.success(t("toast.success.title"), {
+              description: t("toast.success.description"),
+            });
+            await utils.jobTrackerAdmin.getApplications.invalidate();
+            await utils.jobTrackerAdmin.getDashboardStats.invalidate();
+            router.back();
+            return;
           }
 
+          const created = await createApplication.mutateAsync(payload);
           toast.success(t("toast.success.title"), {
             description: t("toast.success.description"),
           });
           await utils.jobTrackerAdmin.getApplications.invalidate();
           await utils.jobTrackerAdmin.getDashboardStats.invalidate();
 
-          if (createdId) {
-            router.replace({
-              pathname: "/admin/job-tracker/applications/[id]",
-              params: { id: createdId },
-            });
-          } else {
-            router.back();
-          }
+          // Hard navigation clears the intercepting create modal.
+          window.location.assign(
+            getPathname({
+              locale,
+              href: {
+                pathname: "/admin/job-tracker/applications/[id]",
+                params: { id: created.id },
+              },
+            }),
+          );
         } catch (err) {
           setServerError(
             err instanceof Error ? err.message : t("toast.error.description"),
@@ -212,16 +186,12 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
     [
       createApplication,
       createCompany,
-      cvFile,
-      cvUploadName,
-      cvUploadUrl,
       initialData,
       isEditMode,
+      locale,
       router,
       t,
       updateApplication,
-      uploadEnabled,
-      uploadFile,
       utils,
     ],
   );
@@ -230,8 +200,16 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
     <Form {...form}>
       <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
         <FormContent error={serverError ? new Error(serverError) : null}>
-          <FormSection title={t("sections.info")}>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormSection
+            title={isModal ? undefined : t("sections.info")}
+            className={isModal ? "space-y-4" : undefined}
+          >
+            <div
+              className={cn(
+                "grid grid-cols-1",
+                isModal ? "gap-3 sm:grid-cols-2" : "gap-4 md:grid-cols-2",
+              )}
+            >
               <FormField
                 control={form.control}
                 name="position"
@@ -271,23 +249,14 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem label={t("fields.description")} inputId="description">
-                  <Textarea
-                    id="description"
-                    className="min-h-[100px]"
-                    {...field}
-                  />
-                </FormItem>
+            <div
+              className={cn(
+                "grid grid-cols-1",
+                isModal
+                  ? "gap-3 sm:grid-cols-2"
+                  : "gap-4 md:grid-cols-2",
               )}
-            />
-          </FormSection>
-
-          <FormSection title={t("sections.details")}>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            >
               <FormField
                 control={form.control}
                 name="status"
@@ -336,16 +305,18 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
                               id="appliedDate"
                               variant="outline"
                               className={cn(
-                                "w-full pl-3 text-left font-normal",
+                                "w-full min-w-0 justify-between pl-3 text-left font-normal",
                                 !field.value && "text-muted-foreground",
                               )}
                             >
-                              {field.value
-                                ? format(field.value, "PPP", {
-                                    locale: dateFnsLocale,
-                                  })
-                                : t("placeholders.date")}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              <span className="truncate">
+                                {field.value
+                                  ? format(field.value, isModal ? "P" : "PP", {
+                                      locale: dateFnsLocale,
+                                    })
+                                  : t("placeholders.date")}
+                              </span>
+                              <CalendarIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         }
@@ -395,59 +366,62 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
                 )}
               />
             </div>
+          </FormSection>
+
+          <FormSection
+            title={isModal ? undefined : t("sections.details")}
+            className={isModal ? "space-y-4" : undefined}
+          >
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem
+                  label={t("fields.description")}
+                  inputId="description"
+                  description={t("descriptions.description")}
+                >
+                  <Textarea
+                    id="description"
+                    rows={isModal ? 4 : 8}
+                    className={cn(
+                      "resize-y",
+                      isModal ? "min-h-20" : "min-h-40",
+                    )}
+                    placeholder={t("placeholders.description")}
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
               name="notes"
               render={({ field }) => (
-                <FormItem label={t("fields.notes")} inputId="notes">
-                  <Textarea id="notes" className="min-h-[100px]" {...field} />
+                <FormItem
+                  label={t("fields.notes")}
+                  inputId="notes"
+                  description={t("descriptions.notes")}
+                >
+                  <Textarea
+                    id="notes"
+                    rows={isModal ? 2 : 4}
+                    className={cn(
+                      "resize-y",
+                      isModal ? "min-h-14" : "min-h-28",
+                    )}
+                    placeholder={t("placeholders.notes")}
+                    {...field}
+                  />
                 </FormItem>
               )}
             />
           </FormSection>
-
-          <FormSection title={t("sections.documents")}>
-            <FormItem
-              label={t("fields.cv")}
-              inputId="cv"
-              description={t("descriptions.cvUpload")}
-            >
-              {!configs.isLoading && !uploadEnabled ? (
-                <UploadThingRequiredNotice />
-              ) : (
-                <FileUpload
-                  onFileSelect={(file) => {
-                    setCvFile(file);
-                    setCvUploadUrl(null);
-                    setCvUploadName(null);
-                  }}
-                  currentFile={
-                    cvFile
-                      ? {
-                          name: cvFile.name,
-                          url: cvUploadUrl ?? "#",
-                        }
-                      : "cvFile" in initialData && initialData.cvFile
-                        ? {
-                            name: initialData.cvFile.name,
-                            url: initialData.cvFile.url,
-                          }
-                        : undefined
-                  }
-                  onFileRemove={() => {
-                    setCvFile(null);
-                    setCvUploadUrl(null);
-                    setCvUploadName(null);
-                  }}
-                />
-              )}
-            </FormItem>
-          </FormSection>
         </FormContent>
 
         <FormActions
-          isPending={isPending || uploadFile.isPending}
+          isPending={isPending}
           title={isEditMode ? t("actions.save") : t("actions.submit")}
           submitId="application-submit"
         >

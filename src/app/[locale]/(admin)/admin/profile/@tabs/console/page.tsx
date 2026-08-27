@@ -6,7 +6,6 @@ import { db } from "@/server/db";
 import { ConsoleForm } from "@/features/profile/components/console-form";
 
 const ConsolePage: FC = async () => {
-
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
   return <ConsoleForm languages={languages} />;

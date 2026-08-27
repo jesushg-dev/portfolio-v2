@@ -16,7 +16,10 @@ test.describe("certifications pagination", () => {
       page,
       "certificationsAdmin.getMine",
     );
-    test.skip(totalCount === 0, "No certifications seeded yet — skipping pagination");
+    test.skip(
+      totalCount === 0,
+      "No certifications seeded yet — skipping pagination",
+    );
 
     await page.goto("/admin");
     await goToCertificationsList(page);
@@ -30,7 +33,10 @@ test.describe("certifications pagination", () => {
       page,
       "certificationsAdmin.getMine",
     );
-    test.skip(totalCount === 0, "No certifications seeded yet — skipping filters");
+    test.skip(
+      totalCount === 0,
+      "No certifications seeded yet — skipping filters",
+    );
 
     await page.goto("/admin");
     await goToCertificationsList(page);

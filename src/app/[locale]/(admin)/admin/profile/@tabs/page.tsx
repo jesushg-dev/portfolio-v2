@@ -7,7 +7,6 @@ import { ProfileHeroForm } from "@/features/profile/components/profile-hero-form
 import { getProfileHeroEditorDto } from "@/features/profile/server/profile-admin.router";
 
 const ProfilePage: FC = async () => {
-
   const session = await auth.api.getSession({ headers: await headers() });
   const userId = session!.user.id;
 

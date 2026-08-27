@@ -94,6 +94,8 @@ Your job:
 - Return adapted text only for template section/paragraph/run ids
 - Do not add or remove paragraphs or runs
 - If structured data has more bullets than template slots, prioritize the most relevant ones for the job
+- Prefer document "responsibilities" first; use "atsResponsibilities" as a complementary bank when they better match the JD (still truthful, never invent)
+- Use each experience's "companyBlurb" only as factual context (industry / product / domain) — do not paste it verbatim unless it fits a bullet slot naturally
 - If structured data has fewer bullets, adapt the existing template slots with the best available content
 - The "budget" for each run always comes from the DOCX TEMPLATE, never from
   the length of the matching CMS content — the template defines the physical

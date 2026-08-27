@@ -31,9 +31,7 @@ export default defineConfig({
     : process.env.CI
       ? 2
       : 4,
-  reporter: process.env.CI
-    ? [["github"], ["html", { open: "never" }]]
-    : "list",
+  reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   timeout: 60_000,
   expect: {
     timeout: 15_000,

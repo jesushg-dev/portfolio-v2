@@ -10,6 +10,17 @@ export interface CvParagraph {
   xmlIndex: number;
 }
 
+/** Paragraphs skipped by the AI tailor but still written on rebuild (dates, company lines). */
+export type LockedParagraphKind =
+  | "experience-meta"
+  | "experience-role"
+  | "education-dates";
+
+export interface LockedParagraph {
+  kind: LockedParagraphKind;
+  paragraph: CvParagraph;
+}
+
 export interface CvSection {
   id: string;
   heading: string;

@@ -1654,7 +1654,12 @@
         "dragToReorder": "Drag to reorder",
         "addLabel": "Add",
         "featuredOnHome": "Show on homepage",
-        "featuredOnHomeDescription": "This experience will appear in the Home section"
+        "featuredOnHomeDescription": "This experience will appear in the Home section",
+        "companyBlurb": "Company / context blurb (ATS)",
+        "companyBlurbDescription": "Short factual note about the company or what you worked on. Used by ATS tailor — not shown on the printed CV.",
+        "companyBlurbPlaceholder": "e.g. Telecom B2C · digital service requests",
+        "atsOnly": "ATS only (hide on CV)",
+        "atsOnlyDescription": "Keeps this bullet out of the public/printed CV but available when tailoring for a job."
       },
       "softSkill": {
         "label": "Soft skill",
@@ -1820,15 +1825,17 @@
           "cv": "CV/Resume"
         },
         "descriptions": {
-          "cvUpload": "Upload your CV (PDF, max 5MB)"
+          "cvUpload": "Upload your CV (PDF, max 5MB)",
+          "description": "Optional. Paste the job posting to reuse it when tailoring a resume.",
+          "notes": "Private reminders - not shared with employers."
         },
         "placeholders": {
           "position": "Frontend Developer",
           "company": "Select or create a company...",
           "location": "Remote, Hybrid, etc...",
           "salary": "€50k - €60k",
-          "description": "Job description...",
-          "notes": "Personal notes...",
+          "description": "Paste the job description…",
+          "notes": "e.g. referred by Alex, follow up Friday…",
           "date": "Select a date"
         },
         "actions": {
@@ -1850,7 +1857,9 @@
           "empty": "No companies found",
           "createFailed": "Could not create company",
           "clearSearch": "Clear search"
-        }
+        },
+        "descriptionHint": "Optional. Paste the job posting to reuse it when tailoring a resume.",
+        "notesHint": "Private reminders - not shared with employers."
       },
       "jobTrackerCompany": {
         "validation": {

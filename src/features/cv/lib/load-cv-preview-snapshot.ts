@@ -217,10 +217,12 @@ export async function loadCvPreviewSnapshot(
         endDate: formatExperienceDate(experience.endDate),
         current: experience.current,
         order: experience.order,
-        responsibilities: experience.responsibilities.map((responsibility) => ({
-          text: field(responsibility.translations, "text"),
-          order: responsibility.order,
-        })),
+        responsibilities: experience.responsibilities
+          .filter((responsibility) => !responsibility.atsOnly)
+          .map((responsibility) => ({
+            text: field(responsibility.translations, "text"),
+            order: responsibility.order,
+          })),
         skillNames: experience.CvExperienceSkill.map((item) => item.skill.title)
           .slice()
           .sort(),

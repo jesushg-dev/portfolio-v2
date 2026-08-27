@@ -45,10 +45,9 @@ test.describe("certifications create", () => {
       "certifications-add",
     );
     await expect
-      .poll(
-        () => fetchAdminTotalCount(page, "certificationsAdmin.getMine"),
-        { timeout: 30_000 },
-      )
+      .poll(() => fetchAdminTotalCount(page, "certificationsAdmin.getMine"), {
+        timeout: 30_000,
+      })
       .toBe(portfolioCertifications.length);
     await expectTitlesAcrossAdminPages(
       page,

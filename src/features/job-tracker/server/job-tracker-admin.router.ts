@@ -329,7 +329,6 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         location: z.string().optional(),
         notes: z.string().optional(),
         description: z.string().optional(),
-        cvFile: cvFileSchema.optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

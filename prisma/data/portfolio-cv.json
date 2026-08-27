@@ -205,39 +205,77 @@
         "en": "Senior Software Engineer",
         "nl": "Senior Software Engineer"
       },
-      "skillKeys": ["React", "Nextjs", "GraphQL", "Typescript", "Git"],
+      "location": {
+        "es": "Remoto · San José, Costa Rica",
+        "en": "Remote · San José, Costa Rica",
+        "nl": "Remote · San José, Costa Rica"
+      },
+      "companyBlurb": {
+        "es": "Cliente Walmart Global Tech: plataforma e-commerce de gran escala con millones de interacciones digitales. Colaboración transversal con desarrollo, producto, QA, backend, frontend y negocio.",
+        "en": "Walmart Global Tech client: large-scale e-commerce platform with millions of digital interactions. Cross-functional work with engineering, product, QA, backend, frontend, and business.",
+        "nl": "Klant Walmart Global Tech: grootschalig e-commerceplatform met miljoenen digitale interacties. Cross-functionele samenwerking met engineering, product, QA, backend, frontend en business."
+      },
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "GraphQL",
+        "Typescript",
+        "Git"
+      ],
       "responsibilities": [
         {
           "text": {
-            "es": "Migré 177 operaciones GraphQL y estabilicé las reglas de merchandising en 6 storefronts VTEX de Centroamérica, eliminando condiciones de carrera en catálogo y garantizando 99.9% de precisión en conversiones.",
-            "en": "Migrated 177 GraphQL operations and stabilized merchandising rules across 6 VTEX storefronts in Central America, eliminating catalog race conditions and guaranteeing 99.9% conversion accuracy.",
-            "nl": "Migreerde 177 GraphQL-operaties en stabiliseerde merchandising rules voor 6 VTEX storefronts in Midden-Amerika, waarbij catalogusinconsistenties direct werden opgelost."
+            "es": "Diseñé e implementé funcionalidades críticas en React, Flutter y VTEX para flujos de búsqueda, catálogo, checkout, órdenes, cuenta y facturación; creé proyectos nuevos con estándares, estructura modular y onboarding dentro del ecosistema Walmart.",
+            "en": "Designed and shipped critical React, Flutter, and VTEX features for search, catalog, checkout, orders, account, and billing; greenfielded projects with standards, modular structure, and onboarding inside Walmart’s ecosystem.",
+            "nl": "Kritieke React-, Flutter- en VTEX-features ontworpen en geleverd voor zoeken, catalogus, checkout, orders, account en facturatie; nieuwe projecten opgezet met standaarden en modulaire structuur binnen het Walmart-ecosysteem."
           },
-          "order": 0
+          "order": 0,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Reduje el MTTR en un 40% tomando propiedad end-to-end sobre incidentes críticos en producción (móvil y microservicios backend), definiendo patrones de diagnóstico y post-mortems adoptados por todo el equipo.",
-            "en": "Reduced MTTR by 40% by owning critical production incidents end-to-end (across mobile apps and microservices backends), establishing root-cause diagnostic patterns reused team-wide.",
-            "nl": "MTTR met 40% verlaagd door kritieke productie-incidenten volledig te beheren (van mobiele apps tot backend) en diagnostische patronen te ontwikkelen."
+            "es": "Lideré spikes técnicos y decisiones de arquitectura que redujeron el retrabajo ~25%, acelerando iniciativas estratégicas.",
+            "en": "Led technical spikes and architecture decisions that cut rework by ~25%, accelerating strategic initiatives.",
+            "nl": "Technische spikes en architectuurbeslissingen geleid die herwerk met ~25% verminderden en strategische initiatieven versnelden."
           },
-          "order": 1
+          "order": 1,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Arquitecturé la base técnica para flujos críticos de órdenes y facturación electrónica, estableciendo patrones de diseño desacoplados que aceleraron entregas de nuevas funciones en un 25%.",
-            "en": "Architected the technical foundation for critical order and billing flows, defining decoupled design patterns that accelerated feature delivery time by 25%.",
-            "nl": "De architectonische basis gelegd voor kritieke bestel- en factuurflows, patronen gedefinieerd die door het bredere engineeringteam zijn overgenomen."
+            "es": "Fortalecí calidad con E2E Playwright (cobertura de flujos críticos +30 pp), unit tests (+15 pp coverage) y validación funcional en releases de alto impacto; bajé regresiones de 7 a 4 días.",
+            "en": "Raised quality with Playwright E2E (critical-flow coverage +30 pp), unit tests (+15 pp coverage), and functional validation on high-impact releases; cut regression cycles from 7 to 4 days.",
+            "nl": "Kwaliteit versterkt met Playwright E2E (kritieke flows +30 pp), unit tests (+15 pp coverage) en functionele validatie bij high-impact releases; regressies van 7 naar 4 dagen."
           },
-          "order": 2
+          "order": 2,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Co-diseñé junto a QA un proceso de validación continua e integración de herramientas asistidas por IA, acelerando la resolución de bugs sin comprometer la cobertura de pruebas.",
-            "en": "Co-designed a continuous validation pipeline with QA, integrating AI-assisted tooling to accelerate bug resolution cycles without compromising test coverage.",
-            "nl": "Met QA samengewerkt om een gedeeld validatieproces te bouwen, AI-tooling geïntegreerd om bugoplossing te versnellen zonder in te leveren op kwaliteit."
+            "es": "Resolví incidentes críticos en producción (mobile y backend) en checkout, órdenes y cuenta; mejoré MTTR ~40% con foco en negocio y prevención de recurrencias.",
+            "en": "Owned critical production incidents (mobile and backend) across checkout, orders, and account; improved MTTR ~40% with business communication and recurrence prevention.",
+            "nl": "Kritieke productie-incidenten (mobile en backend) opgelost in checkout, orders en account; MTTR ~40% verbeterd met businesscommunicatie en preventie."
           },
-          "order": 3
+          "order": 3,
+          "atsOnly": false
+        },
+        {
+          "text": {
+            "es": "Diseñé e implementé funcionalidades críticas en React, Flutter y VTEX para flujos como búsqueda, catálogo, checkout, órdenes, cuenta y facturación. Además, creé nuevos proyectos desde cero definiendo estándares de buenas prácticas, estructura modular y procesos de onboarding eficiente, asegurando su integración dentro del ecosistema interno de Walmart y la correcta interacción con procesos y servicios existentes.",
+            "en": "Designed and implemented critical React, Flutter, and VTEX capabilities across search, catalog, checkout, orders, account, and billing. Also greenfielded projects with best-practice standards, modular structure, and efficient onboarding, ensuring integration with Walmart’s internal ecosystem and existing services.",
+            "nl": "Kritieke React-, Flutter- en VTEX-functionaliteit geïmplementeerd voor zoeken, catalogus, checkout, orders, account en facturatie. Ook nieuwe projecten vanaf nul met standaarden, modulaire structuur en efficiënte onboarding, geïntegreerd in het interne Walmart-ecosysteem."
+          },
+          "order": 4,
+          "atsOnly": true
+        },
+        {
+          "text": {
+            "es": "Impulsé mejoras de mantenibilidad con prácticas de código limpio, manejo de errores, estándares y revisiones, elevando la calidad técnica y la productividad del equipo.",
+            "en": "Drove maintainability improvements via clean code, error handling, standards, and reviews — raising technical quality and team productivity.",
+            "nl": "Onderhoudbaarheid verbeterd via clean code, error handling, standaarden en reviews — hogere technische kwaliteit en teamproductiviteit."
+          },
+          "order": 5,
+          "atsOnly": true
         }
       ],
       "order": 0,
@@ -250,9 +288,19 @@
       "company": "Claro Nicaragua",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/w_36,dpr_2.0/v1600924980/origin/bio/organizations/claro_zjqxzc.png",
       "role": {
-        "es": "Senior Software Engineer · Freelance",
-        "en": "Senior Software Engineer · Freelance",
-        "nl": "Senior Software Engineer · Freelance"
+        "es": "Software Engineer",
+        "en": "Software Engineer",
+        "nl": "Software Engineer"
+      },
+      "location": {
+        "es": "Remoto · Managua, Nicaragua",
+        "en": "Remote · Managua, Nicaragua",
+        "nl": "Remote · Managua, Nicaragua"
+      },
+      "companyBlurb": {
+        "es": "Operador telecom: plataforma web de orquestación de servicios que reemplazó flujos manuales (hojas de cálculo y correo).",
+        "en": "Telecom operator: web orchestration platform for service requests that replaced spreadsheet/email workflows.",
+        "nl": "Telecomoperator: weborchestratieplatform voor serviceaanvragen dat spreadsheet-/e-mailflows verving."
       },
       "skillKeys": [
         "React",
@@ -265,19 +313,21 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Diseñé y construí desde cero la plataforma web de orquestación de servicios de telecomunicaciones con Next.js, tRPC, Prisma y SQL Server, eliminando por completo los flujos manuales basados en hojas de cálculo y correos.",
-            "en": "Architected and delivered an enterprise telecom service orchestration portal using Next.js, tRPC, Prisma, and SQL Server, fully deprecating legacy paper and email request workflows.",
-            "nl": "Een telecomeserviceverzoekplatform van de grond af ontworpen en gebouwd met Next.js, tRPC, Prisma en SQL Server, waarmee het handmatige e-mailproces volledig werd geëlimineerd."
+            "es": "Diseñé y construí desde cero la plataforma web de orquestación de servicios de telecomunicaciones con Next.js, tRPC, Prisma y SQL Server, eliminando flujos manuales basados en hojas de cálculo y correos.",
+            "en": "Designed and built from scratch a telecom service orchestration web platform with Next.js, tRPC, Prisma, and SQL Server, eliminating spreadsheet/email workflows.",
+            "nl": "Telecom-serviceorchestatieplatform vanaf nul gebouwd met Next.js, tRPC, Prisma en SQL Server, waarmee handmatige spreadsheet-/e-mailflows verdwenen."
           },
-          "order": 0
+          "order": 0,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Automaticé las transiciones de estado y notificaciones en tiempo real, aumentando la trazabilidad de solicitudes en un 80% y ahorrando 120+ horas de trabajo operativo mensual.",
-            "en": "Automated state transitions and real-time auditing notifications, increasing request traceability by 80% and saving 120+ operational hours monthly.",
-            "nl": "Statusovergangen en meldingen geautomatiseerd, wat de traceerbaarheid van aanvragen met 80% verhoogde en het team bevrijdde van handmatige taken."
+            "es": "Automaticé transiciones de estado y notificaciones en tiempo real, aumentando la trazabilidad de solicitudes ~80% y ahorrando 120+ horas operativas al mes.",
+            "en": "Automated state transitions and real-time notifications, increasing request traceability ~80% and saving 120+ operational hours monthly.",
+            "nl": "Statusovergangen en realtime notificaties geautomatiseerd; traceerbaarheid ~80% hoger en 120+ operationele uren per maand bespaard."
           },
-          "order": 1
+          "order": 1,
+          "atsOnly": false
         }
       ],
       "order": 1,
@@ -286,13 +336,102 @@
       "endDate": "2025-08-01T00:00:00.000Z"
     },
     {
+      "key": "experience2-lead",
+      "company": "Contollo",
+      "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1780694684/origin/bio/crawled-organizations/686411370a48745f463c757b3ee1e18d_gowsgt.jpg",
+      "role": {
+        "es": "Development Team Lead",
+        "en": "Development Team Lead",
+        "nl": "Development Team Lead"
+      },
+      "location": {
+        "es": "Remoto · Texas, Estados Unidos",
+        "en": "Remote · Texas, United States",
+        "nl": "Remote · Texas, United States"
+      },
+      "companyBlurb": {
+        "es": "Consultora de software: liderazgo de equipo de desarrollo entregando soluciones a clientes internacionales bajo presión de plazos.",
+        "en": "Software consultancy: led a development team delivering solutions for international clients under tight timelines.",
+        "nl": "Softwareconsultancy: leidde een developmentteam dat oplossingen leverde voor internationale klanten onder strakke deadlines."
+      },
+      "skillKeys": [
+        "React",
+        "Nextjs",
+        "Dotnet",
+        "Azure",
+        "Typescript",
+        "Git"
+      ],
+      "responsibilities": [
+        {
+          "text": {
+            "es": "Guié y apoyé a desarrolladores junior con buenas prácticas y estándares, fortaleciendo la capacidad técnica del equipo.",
+            "en": "Guided and coached junior developers with best practices and standards, strengthening the team’s technical capability.",
+            "nl": "Junior developers begeleid met best practices en standaarden, waardoor de technische capaciteit van het team toenam."
+          },
+          "order": 0,
+          "atsOnly": false
+        },
+        {
+          "text": {
+            "es": "Coordine desarrollo, diseño y producto para alinear entregas en proyectos concurrentes.",
+            "en": "Coordinated engineering, design, and product to align delivery across concurrent projects.",
+            "nl": "Engineering, design en product gecoördineerd om leveringen over gelijktijdige projecten uit te lijnen."
+          },
+          "order": 1,
+          "atsOnly": false
+        },
+        {
+          "text": {
+            "es": "Impulsé CI/CD, pruebas automatizadas y monitoreo para mejorar la eficiencia del equipo.",
+            "en": "Drove CI/CD, automated testing, and monitoring to improve team efficiency.",
+            "nl": "CI/CD, geautomatiseerde tests en monitoring ingevoerd om teamefficiëntie te verhogen."
+          },
+          "order": 2,
+          "atsOnly": false
+        },
+        {
+          "text": {
+            "es": "Desarrollé soluciones innovadoras en entornos de alta presión, contribuyendo a que la empresa ganara dos hackathons.",
+            "en": "Built innovative solutions under high pressure, contributing to the company winning two hackathons.",
+            "nl": "Innovatieve oplossingen gebouwd onder hoge druk; bijgedragen aan het winnen van twee hackathons."
+          },
+          "order": 3,
+          "atsOnly": true
+        },
+        {
+          "text": {
+            "es": "Aseguré que las soluciones fueran intuitivas, accesibles y alineadas con las necesidades del negocio.",
+            "en": "Ensured solutions were intuitive, accessible, and aligned with business needs.",
+            "nl": "Zorgde dat oplossingen intuïtief, toegankelijk en business-aligned waren."
+          },
+          "order": 4,
+          "atsOnly": true
+        }
+      ],
+      "order": 2,
+      "featuredOnHome": true,
+      "startDate": "2024-11-01T00:00:00.000Z",
+      "endDate": "2025-03-01T00:00:00.000Z"
+    },
+    {
       "key": "experience2",
       "company": "Contollo",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1780694684/origin/bio/crawled-organizations/686411370a48745f463c757b3ee1e18d_gowsgt.jpg",
       "role": {
-        "es": "Senior Software Engineer & Tech Lead",
-        "en": "Senior Software Engineer & Tech Lead",
-        "nl": "Senior Software Engineer & Team Lead"
+        "es": "Senior Software Engineer",
+        "en": "Senior Software Engineer",
+        "nl": "Senior Software Engineer"
+      },
+      "location": {
+        "es": "Remoto · Texas, Estados Unidos",
+        "en": "Remote · Texas, United States",
+        "nl": "Remote · Texas, United States"
+      },
+      "companyBlurb": {
+        "es": "Consultora de software: desarrollo full-stack (C#/Nest.js + Angular/React/Next.js) e integraciones empresariales para clientes internacionales.",
+        "en": "Software consultancy: full-stack delivery (C#/Nest.js + Angular/React/Next.js) and enterprise integrations for international clients.",
+        "nl": "Softwareconsultancy: full-stack delivery (C#/Nest.js + Angular/React/Next.js) en enterprise-integraties voor internationale klanten."
       },
       "skillKeys": [
         "React",
@@ -308,41 +447,54 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Dirigí la arquitectura frontend y de integración para 5+ proyectos simultáneos; definí la librería de componentes corporativos y estándares de calidad adoptados por toda la organización de ingeniería.",
-            "en": "Led frontend & full-stack architecture for 5+ concurrent enterprise initiatives, creating a unified component design system and coding standards adopted org-wide.",
-            "nl": "Frontend-architectuur geleid voor 5+ gelijktijdige projecten; componentbibliotheken en codeerstandaarden gedefinieerd die door de gehele organisatie zijn overgenomen."
+            "es": "Desarrollé aplicaciones backend (C# / Nest.js) y frontend (Angular / React/Next.js) con soluciones robustas y dinámicas.",
+            "en": "Built backend apps (C# / Nest.js) and frontend (Angular / React/Next.js) with robust, dynamic solutions.",
+            "nl": "Backend-apps (C# / Nest.js) en frontend (Angular / React/Next.js) gebouwd met robuuste, dynamische oplossingen."
           },
-          "order": 0
+          "order": 0,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Implementé pipelines de CI/CD en Azure DevOps con análisis de seguridad automatizado (SAST), reduciendo los tiempos de despliegue en un 65% y eliminando fallos en lanzamientos a producción.",
-            "en": "Implemented Azure DevOps CI/CD pipelines with integrated static security scanning (SAST), cutting deployment cycle times by 65% and eliminating manual release failures.",
-            "nl": "CI/CD in Azure DevOps geïmplementeerd met geïntegreerde beveiligingsscanning, wat de deploymenttijd met 65% verlaagde."
+            "es": "Creé y mantuve APIs/servicios seguros que mejoraron la conectividad con QuickBooks y DevExpress Report Manager, optimizando flujos de datos.",
+            "en": "Created and maintained secure APIs/services improving connectivity with QuickBooks and DevExpress Report Manager, optimizing data flows.",
+            "nl": "Veilige API’s/services gebouwd en onderhouden die connectiviteit met QuickBooks en DevExpress Report Manager verbeterden."
           },
-          "order": 1
+          "order": 1,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Diseñé microservicios .NET Core + SQL Server e integración con QuickBooks para dashboards financieros en tiempo real, optimizando consultas complejas y garantizando consistencia transaccional.",
-            "en": "Engineered real-time financial reporting microservices integrating .NET Core, SQL Server, and QuickBooks API, optimizing complex queries and maintaining zero-data-loss accounting integrity.",
-            "nl": "De .NET Core + SQL Server-integratie met QuickBooks ontworpen voor realtime financiële dashboards, waarbij kritieke queries werden geoptimaliseerd."
+            "es": "Colaboré con equipos internacionales para entregar soluciones personalizadas a clientes extranjeros.",
+            "en": "Collaborated with international teams to deliver tailored solutions for foreign clients.",
+            "nl": "Samengewerkt met internationale teams om maatwerkoplossingen voor buitenlandse klanten te leveren."
           },
-          "order": 2
+          "order": 2,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Mentoricé a 4 desarrolladores mediante revisiones de código profundas, pair programming y sesiones 1:1, promoviendo las mejores prácticas de Clean Code y principios SOLID.",
-            "en": "Mentored 4 engineers through structured code reviews, pair programming, and technical growth plans, promoting Clean Code and SOLID principles.",
-            "nl": "4 junior-ontwikkelaars begeleid via gestructureerde code reviews, pair programming en groeigericht 1:1-sessies."
+            "es": "Implementé metodologías Scrum asegurando entregas ágiles y de alta calidad.",
+            "en": "Applied Scrum practices to ensure agile, high-quality delivery.",
+            "nl": "Scrum-praktijken toegepast voor agile leveringen van hoge kwaliteit."
           },
-          "order": 3
+          "order": 3,
+          "atsOnly": true
+        },
+        {
+          "text": {
+            "es": "Dirigí la arquitectura frontend y de integración para 5+ proyectos; definí librería de componentes y estándares adoptados por la organización.",
+            "en": "Led frontend & integration architecture for 5+ projects; defined component library and standards adopted org-wide.",
+            "nl": "Frontend- & integratiearchitectuur geleid voor 5+ projecten; componentbibliotheek en standaarden org-breed overgenomen."
+          },
+          "order": 4,
+          "atsOnly": true
         }
       ],
-      "order": 2,
+      "order": 3,
       "featuredOnHome": true,
       "startDate": "2023-08-01T00:00:00.000Z",
-      "endDate": "2025-03-01T00:00:00.000Z"
+      "endDate": "2024-11-01T00:00:00.000Z"
     },
     {
       "key": "experience4",
@@ -351,6 +503,16 @@
         "es": "Desarrollador Full Stack",
         "en": "Full Stack Developer",
         "nl": "Full Stack Ontwikkelaar"
+      },
+      "location": {
+        "es": "Remoto · Managua, Nicaragua",
+        "en": "Remote · Managua, Nicaragua",
+        "nl": "Remote · Managua, Nicaragua"
+      },
+      "companyBlurb": {
+        "es": "Producto digital multi-usuario: web/móvil con integración a proveedores externos y modernización de frontend legacy.",
+        "en": "Multi-user digital product: web/mobile with external vendor integrations and legacy frontend modernization.",
+        "nl": "Digitaal multi-user product: web/mobile met externe vendor-integraties en modernisering van legacy frontend."
       },
       "skillKeys": [
         "Nextjs",
@@ -363,30 +525,60 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Lideré la modernización completa del frontend: migré un codebase jQuery a React+TypeScript, mejorando el rendimiento en un 35% y reduciendo drásticamente la deuda técnica acumulada.",
-            "en": "Led the full frontend modernization: migrated a jQuery codebase to React+TypeScript, improving performance by 35% and dramatically reducing accumulated technical debt.",
-            "nl": "De volledige frontend-modernisering geleid: een jQuery-codebase gemigreerd naar React+TypeScript, wat de prestaties met 35% verbeterde."
+            "es": "Lideré la modernización del frontend: migré jQuery a React+TypeScript, mejorando rendimiento ~35% y reduciendo deuda técnica.",
+            "en": "Led frontend modernization: migrated jQuery to React+TypeScript, improving performance ~35% and reducing technical debt.",
+            "nl": "Frontend-modernisering geleid: jQuery gemigreerd naar React+TypeScript (~35% betere performance, minder technische schuld)."
           },
-          "order": 0
+          "order": 0,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Refactoricé el monolito existente hacia patrones CQRS y Event-Driven, mejorando la escalabilidad del sistema y reduciendo el acoplamiento entre módulos críticos.",
-            "en": "Refactored the existing monolith to CQRS and Event-Driven patterns, improving system scalability and reducing coupling between critical modules.",
-            "nl": "Het bestaande monoliet gerefactored naar CQRS- en Event-Driven-patronen, waardoor de systeemschaalbaarheid toenam."
+            "es": "Refactoricé hacia CQRS y event-driven, mejorando escalabilidad y reduciendo acoplamiento entre módulos críticos.",
+            "en": "Refactored toward CQRS and event-driven patterns, improving scalability and reducing coupling across critical modules.",
+            "nl": "Gerefactored naar CQRS en event-driven patronen; betere schaalbaarheid en minder koppeling tussen kritieke modules."
           },
-          "order": 1
+          "order": 1,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Diseñé y entregué APIs GraphQL/Nest.js que aumentaron la confiabilidad de sincronización en un 90%, resolviendo inconsistencias de datos que afectaban operaciones en tiempo real.",
-            "en": "Designed and shipped GraphQL/Nest.js APIs that increased synchronization reliability by 90%, resolving data inconsistencies that were impacting real-time operations.",
-            "nl": "GraphQL/Nest.js API's ontworpen en geleverd die de synchronisatiebetrouwbaarheid met 90% verhoogden en inconsistenties oplosten."
+            "es": "Diseñé APIs GraphQL/Nest.js que aumentaron la confiabilidad de sincronización ~90%.",
+            "en": "Designed GraphQL/Nest.js APIs that increased sync reliability ~90%.",
+            "nl": "GraphQL/Nest.js API’s ontworpen die synchronisatiebetrouwbaarheid ~90% verhoogden."
           },
-          "order": 2
+          "order": 2,
+          "atsOnly": false
+        },
+        {
+          "text": {
+            "es": "Colaboré con stakeholders de negocio y backend para interfaces web/móvil alineadas a objetivos del proyecto.",
+            "en": "Partnered with business stakeholders and backend to deliver web/mobile UIs aligned to project goals.",
+            "nl": "Samengewerkt met businessstakeholders en backend voor web/mobile UI’s in lijn met projectdoelen."
+          },
+          "order": 3,
+          "atsOnly": true
+        },
+        {
+          "text": {
+            "es": "Integré datos y procesos de proveedores externos en los sistemas existentes.",
+            "en": "Integrated external vendor data and processes into existing systems.",
+            "nl": "Externe vendor-data en -processen geïntegreerd in bestaande systemen."
+          },
+          "order": 4,
+          "atsOnly": true
+        },
+        {
+          "text": {
+            "es": "Presenté avances a product owners destacando funcionalidad, usabilidad y rendimiento.",
+            "en": "Presented progress to product owners highlighting functionality, usability, and performance.",
+            "nl": "Voortgang gepresenteerd aan product owners met focus op functionaliteit, usability en performance."
+          },
+          "order": 5,
+          "atsOnly": true
         }
       ],
-      "order": 3,
+      "order": 4,
       "featuredOnHome": true,
       "startDate": "2022-06-01T00:00:00.000Z",
       "endDate": "2023-07-01T00:00:00.000Z"
@@ -399,26 +591,65 @@
         "en": "Mobile Application Developer",
         "nl": "Mobiele applicatieontwikkelaar"
       },
+      "location": {
+        "es": "Híbrido · San José, Costa Rica",
+        "en": "Hybrid · San José, Costa Rica",
+        "nl": "Hybrid · San José, Costa Rica"
+      },
+      "companyBlurb": {
+        "es": "Producto móvil: apps React Native con UX definido por diseño y entrega en Scrum.",
+        "en": "Mobile product: React Native apps with design-driven UX delivered in Scrum.",
+        "nl": "Mobiel product: React Native-apps met design-gedreven UX, geleverd in Scrum."
+      },
       "skillKeys": ["ReactNative", "Typescript", "Android", "Javascript"],
       "responsibilities": [
         {
           "text": {
-            "es": "Entregué apps React Native con arquitectura offline-first y autenticación biométrica para operaciones de campo, garantizando continuidad sin conexión en entornos de baja conectividad.",
-            "en": "Delivered React Native apps with offline-first architecture and biometric authentication for field operations, ensuring continuity in low-connectivity environments.",
-            "nl": "React Native-apps geleverd met offline-first-architectuur en biometrische authenticatie voor veldoperaties, om continuïteit te waarborgen."
+            "es": "Entregué apps React Native con arquitectura offline-first y autenticación biométrica para operaciones de campo.",
+            "en": "Delivered React Native apps with offline-first architecture and biometric authentication for field operations.",
+            "nl": "React Native-apps geleverd met offline-first-architectuur en biometrische authenticatie voor veldoperaties."
           },
-          "order": 0
+          "order": 0,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Implementé pruebas unitarias con Jest y un pipeline de CI desde cero, reduciendo los bugs en producción en un 70% en el primer ciclo de sprint.",
-            "en": "Implemented Jest unit tests and a CI pipeline from scratch, reducing production bugs by 70% within the first sprint cycle.",
-            "nl": "Jest unit tests en een CI-pipeline van de grond af geïmplementeerd, wat productiebugs met 70% verminderde binnen de eerste sprintcyclus."
+            "es": "Implementé pruebas unitarias (Jest) y CI, reduciendo bugs en producción ~70%.",
+            "en": "Implemented Jest unit tests and CI, reducing production bugs ~70%.",
+            "nl": "Jest unit tests en CI geïmplementeerd; productiebugs ~70% lager."
           },
-          "order": 1
+          "order": 1,
+          "atsOnly": false
+        },
+        {
+          "text": {
+            "es": "Creé UI a partir de specs de UX, garantizando una experiencia atractiva y funcional.",
+            "en": "Built UI from UX specs, ensuring an attractive and functional experience.",
+            "nl": "UI gebouwd op basis van UX-specs voor een aantrekkelijke, functionele ervaring."
+          },
+          "order": 2,
+          "atsOnly": true
+        },
+        {
+          "text": {
+            "es": "Participé en Scrum implementando historias de usuario según plazos del proyecto.",
+            "en": "Worked in Scrum implementing user stories to project deadlines.",
+            "nl": "In Scrum user stories geïmplementeerd volgens projectdeadlines."
+          },
+          "order": 3,
+          "atsOnly": true
+        },
+        {
+          "text": {
+            "es": "Apoyé QA y backend con pruebas, code reviews y resolución de problemas.",
+            "en": "Supported QA and backend with testing, code reviews, and issue resolution.",
+            "nl": "QA en backend ondersteund met tests, code reviews en probleemoplossing."
+          },
+          "order": 4,
+          "atsOnly": true
         }
       ],
-      "order": 4,
+      "order": 5,
       "featuredOnHome": false,
       "startDate": "2022-02-01T00:00:00.000Z",
       "endDate": "2022-05-01T00:00:00.000Z"
@@ -431,26 +662,47 @@
         "en": "Frontend Developer and IT Technician",
         "nl": "Frontend ontwikkelaar en IT-technicus"
       },
+      "location": {
+        "es": "Presencial · Managua, Nicaragua",
+        "en": "On-site · Managua, Nicaragua",
+        "nl": "On-site · Managua, Nicaragua"
+      },
+      "companyBlurb": {
+        "es": "Organización sin fines de lucro: sitio institucional, soporte de TI y formación básica en informática.",
+        "en": "Nonprofit organization: institutional website, IT support, and foundational computer education.",
+        "nl": "Non-profitorganisatie: institutionele website, IT-support en basale computeropleiding."
+      },
       "skillKeys": ["React", "Nextjs", "Javascript", "Css", "Typescript"],
       "responsibilities": [
         {
           "text": {
-            "es": "Desarrollé y mantuve sitio web institucional con React/Next.js, modernizando CSS con BEM/SASS.",
-            "en": "Developed and maintained institutional website with React/Next.js, modernizing CSS with BEM/SASS.",
-            "nl": "Ontwikkelde en onderhield institutionele website met React/Next.js, moderniseerde CSS met BEM/SASS."
+            "es": "Desarrollé, desplegué y mantuve el sitio web institucional con React/Next.js, modernizando CSS (BEM/SASS) y enfocándome en UX.",
+            "en": "Built, deployed, and maintained the institutional website with React/Next.js, modernizing CSS (BEM/SASS) with a UX focus.",
+            "nl": "Institutionele website gebouwd, gedeployed en onderhouden met React/Next.js; CSS gemoderniseerd (BEM/SASS) met UX-focus."
           },
-          "order": 0
+          "order": 0,
+          "atsOnly": false
         },
         {
           "text": {
-            "es": "Brindé soporte técnico integral y enseñé informática a estudiantes de primaria, fomentando el interés por la tecnología.",
-            "en": "Provided comprehensive technical support and taught computer science to elementary students, fostering interest in technology.",
-            "nl": "Bood uitgebreide technische ondersteuning en gaf informatica aan basisschoolleerlingen, stimuleerde interesse in technologie."
+            "es": "Brindé soporte técnico (equipos/software) resolviendo incidencias y minimizando downtime.",
+            "en": "Provided IT support (hardware/software), resolving issues and minimizing downtime.",
+            "nl": "IT-support (hardware/software) geboden; issues opgelost en downtime geminimaliseerd."
           },
-          "order": 1
+          "order": 1,
+          "atsOnly": false
+        },
+        {
+          "text": {
+            "es": "Enseñé informática a estudiantes de primaria, fomentando habilidades tecnológicas básicas y curiosidad digital.",
+            "en": "Taught computer basics to elementary students, building foundational tech skills and digital curiosity.",
+            "nl": "Informatica gegeven aan basisschoolleerlingen; basisvaardigheden en digitale nieuwsgierigheid gestimuleerd."
+          },
+          "order": 2,
+          "atsOnly": true
         }
       ],
-      "order": 5,
+      "order": 6,
       "featuredOnHome": false,
       "startDate": "2019-11-01T00:00:00.000Z",
       "endDate": "2021-12-01T00:00:00.000Z"

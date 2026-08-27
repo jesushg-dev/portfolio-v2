@@ -1654,7 +1654,12 @@
         "dragToReorder": "Arrastra para reordenar",
         "addLabel": "Añadir",
         "featuredOnHome": "Mostrar en inicio",
-        "featuredOnHomeDescription": "Esta experiencia aparecerá en la sección de inicio"
+        "featuredOnHomeDescription": "Esta experiencia aparecerá en la sección de inicio",
+        "companyBlurb": "Descripción de la empresa / contexto (ATS)",
+        "companyBlurbDescription": "Nota breve y factual sobre la empresa o en qué trabajaste. La usa el ATS tailor — no se muestra en el CV impreso.",
+        "companyBlurbPlaceholder": "p. ej. Telecom B2C · solicitudes de servicios digitales",
+        "atsOnly": "Solo ATS (ocultar en el CV)",
+        "atsOnlyDescription": "No aparece en el CV público/impreso, pero sí al adaptar el CV a una oferta."
       },
       "softSkill": {
         "label": "Habilidad blanda",
@@ -1820,15 +1825,17 @@
           "cv": "CV/Currículum"
         },
         "descriptions": {
-          "cvUpload": "Sube tu CV (PDF, máx 5MB)"
+          "cvUpload": "Sube tu CV (PDF, máx. 5MB)",
+          "description": "Opcional. Pega la oferta para reutilizarla al adaptar el CV.",
+          "notes": "Recordatorios privados - no se comparten con empleadores."
         },
         "placeholders": {
           "position": "Desarrollador Frontend",
           "company": "Selecciona o crea una empresa...",
-          "location": "Remoto, Híbrido, etc...",
+          "location": "Remoto, híbrido, etc...",
           "salary": "€50k - €60k",
-          "description": "Descripción del puesto...",
-          "notes": "Notas personales...",
+          "description": "Pega la descripción del puesto…",
+          "notes": "p. ej. referido por Alex, seguimiento el viernes…",
           "date": "Selecciona una fecha"
         },
         "actions": {
@@ -1850,7 +1857,9 @@
           "empty": "No se encontraron empresas",
           "createFailed": "No se pudo crear la empresa",
           "clearSearch": "Limpiar búsqueda"
-        }
+        },
+        "descriptionHint": "Opcional. Pega la oferta para reutilizarla al adaptar el CV.",
+        "notesHint": "Recordatorios privados - no se comparten con empleadores."
       },
       "jobTrackerCompany": {
         "validation": {

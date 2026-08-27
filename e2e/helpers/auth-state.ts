@@ -7,8 +7,7 @@ import path from "node:path";
  */
 export function getWorkerAuthFile(workerIndex?: number): string {
   const index =
-    workerIndex ??
-    Number.parseInt(process.env.TEST_WORKER_INDEX ?? "0", 10);
+    workerIndex ?? Number.parseInt(process.env.TEST_WORKER_INDEX ?? "0", 10);
 
   const workerAuthFile = path.join(
     process.cwd(),

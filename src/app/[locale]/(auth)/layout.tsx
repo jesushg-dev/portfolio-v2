@@ -18,7 +18,6 @@ interface IAuthLayoutProps {
 }
 
 const AuthLayout: FC<IAuthLayoutProps> = ({ children }) => {
-
   return (
     <TrpcProvider>
       <AuthShell>{children}</AuthShell>

@@ -18,10 +18,14 @@ interface ExperienceSeed {
   startDate?: string;
   endDate?: string;
   role: LocaleMap;
+  location?: LocaleMap;
+  companyBlurb?: LocaleMap;
   skillKeys: string[];
   responsibilities: {
     text: LocaleMap;
     order: number;
+    /** Hidden from printed CV; available to ATS tailor. */
+    atsOnly?: boolean;
   }[];
   order: number;
   featuredOnHome?: boolean;
@@ -234,6 +238,12 @@ export async function seedPortfolioCv(
           create: appLanguages.map((lang) => ({
             appLanguageId: lang.id,
             role: getTranslationValue(experience.role, lang.code),
+            location: experience.location
+              ? getTranslationValue(experience.location, lang.code)
+              : null,
+            companyBlurb: experience.companyBlurb
+              ? getTranslationValue(experience.companyBlurb, lang.code)
+              : null,
           })),
         },
       },
@@ -244,6 +254,7 @@ export async function seedPortfolioCv(
         data: {
           experienceId: createdExperience.id,
           order: resp.order,
+          atsOnly: resp.atsOnly ?? false,
           translations: {
             create: appLanguages.map((lang) => ({
               appLanguageId: lang.id,

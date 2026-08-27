@@ -40,7 +40,7 @@ export function ColophonCarbonBadge({
       whileHover={shouldReduceMotion ? undefined : { y: -2 }}
     >
       <span
-        className="inline-flex overflow-hidden rounded-[0.35em] text-[15px] leading-[1.15] shadow-sm transition-shadow duration-300 group-hover:shadow-md font-[system-ui,-apple-system,BlinkMacSystemFont,sans-serif]"
+        className="inline-flex overflow-hidden rounded-[0.35em] font-[system-ui,-apple-system,BlinkMacSystemFont,sans-serif] text-[15px] leading-[1.15] shadow-sm transition-shadow duration-300 group-hover:shadow-md"
         style={
           {
             "--wcb-ink": "#0e11a8",
@@ -78,7 +78,7 @@ export function ColophonCarbonBadge({
 
       <span
         className={cn(
-          "text-[15px] leading-[1.15] font-[system-ui,-apple-system,BlinkMacSystemFont,sans-serif]",
+          "font-[system-ui,-apple-system,BlinkMacSystemFont,sans-serif] text-[15px] leading-[1.15]",
           isDark ? "text-white" : "text-[#0e11a8]",
         )}
       >

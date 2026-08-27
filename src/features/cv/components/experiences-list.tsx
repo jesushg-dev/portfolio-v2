@@ -144,7 +144,18 @@ const ExperiencesList: FC<{
                         )}
                       </p>
                       <p className="mt-1 text-xs text-gray-400">
-                        {exp.responsibilities.length} responsibilities
+                        {
+                          exp.responsibilities.filter((item) => !item.atsOnly)
+                            .length
+                        }{" "}
+                        on CV
+                        {exp.responsibilities.some((item) => item.atsOnly)
+                          ? ` · ${
+                              exp.responsibilities.filter(
+                                (item) => item.atsOnly,
+                              ).length
+                            } ATS-only`
+                          : ""}
                       </p>
                     </div>
                   </div>

@@ -21,11 +21,13 @@ export default async function NewApplicationModal({
     <PageDialogWrapper
       title={t("createApplication")}
       description={t("createApplicationDescription")}
+      className="sm:max-w-3xl"
     >
       <ApplicationForm
         initialData={initialData}
         companies={companies}
         locale={locale as Locale}
+        variant="modal"
       />
     </PageDialogWrapper>
   );

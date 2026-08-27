@@ -1,13 +1,15 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import {
-  type Locale,
-  locales,
-  localsDisplay,
-} from "@/i18n/config";
+import { type Locale, locales, localsDisplay } from "@/i18n/config";
 import { usePathname, useRouter } from "@/i18n/routing";
-import { useState, useRef, useTransition, type KeyboardEvent, type RefObject } from "react";
+import {
+  useState,
+  useRef,
+  useTransition,
+  type KeyboardEvent,
+  type RefObject,
+} from "react";
 import { useClickAway } from "@/hooks/use-click-away";
 
 export default function LanguageSwitcher() {
@@ -96,8 +98,9 @@ export default function LanguageSwitcher() {
       >
         {localsDisplay[locale]}
         <svg
-          className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""
-            }`}
+          className={`h-4 w-4 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

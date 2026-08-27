@@ -5,6 +5,11 @@ import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { loadCvTemplateForTailor } from "@/features/cv/lib/load-cv-template-docx";
 import { mapDraftToTemplateSections } from "@/features/cv/lib/map-draft-to-template-sections";
+import {
+  syncLockedParagraphsFromDraft,
+  withLockedMetaAdaptations,
+  withLockedMetaSection,
+} from "@/features/resume-engine/lib/sync-locked-paragraphs-from-draft";
 import { rebuildDocx } from "@/lib/docx/rebuilder";
 
 export async function generateCvDocxFromDb(
@@ -37,11 +42,21 @@ export async function generateCvDocxFromDb(
     softSkillTexts,
   );
 
+  const lockedAdapted = syncLockedParagraphsFromDraft(
+    template.parsed.lockedParagraphs,
+    draft,
+    locale,
+  );
+
   const buffer = await rebuildDocx(
     template.parsed.zipFiles,
     template.parsed.rawXml,
-    template.parsed.sections,
-    adaptedSections,
+    withLockedMetaSection(
+      template.parsed.sections,
+      template.parsed.lockedParagraphs,
+    ),
+    withLockedMetaAdaptations(adaptedSections, lockedAdapted),
+    locale,
   );
 
   const sanitizedName = draft.header.fullName.replace(/[^\w.-]+/g, "_");

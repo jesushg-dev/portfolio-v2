@@ -27,11 +27,12 @@ export default async function NewApplicationPage({
           {t("createApplicationDescription")}
         </p>
       </div>
-      <div className="mx-auto w-full max-w-3xl">
+      <div className="mx-auto w-full max-w-4xl">
         <ApplicationForm
           initialData={initialData}
           companies={companies}
           locale={locale as Locale}
+          variant="page"
         />
       </div>
     </div>

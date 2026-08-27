@@ -93,11 +93,15 @@ async function upsertExperienceTranslations(
   experienceId: string,
   role: TextTranslationMap,
   location?: TextTranslationMap,
+  companyBlurb?: TextTranslationMap,
 ) {
   for (const lang of languages) {
     const data = {
       role: role[lang.id]?.text ?? "",
       location: location?.[lang.id]?.text ?? null,
+      companyBlurb: companyBlurb?.[lang.id]?.text?.trim()
+        ? companyBlurb[lang.id].text
+        : null,
     };
     const existing = await db.cvExperienceTranslation.findFirst({
       where: { cvExperienceId: experienceId, appLanguageId: lang.id },
@@ -151,11 +155,15 @@ function buildExperienceTranslationCreates(
   languages: AppLanguage[],
   role: TextTranslationMap,
   location?: TextTranslationMap,
+  companyBlurb?: TextTranslationMap,
 ) {
   return languages.map((lang) => ({
     appLanguageId: lang.id,
     role: role[lang.id]?.text ?? "",
     location: location?.[lang.id]?.text ?? null,
+    companyBlurb: companyBlurb?.[lang.id]?.text?.trim()
+      ? companyBlurb[lang.id].text
+      : null,
   }));
 }
 
@@ -695,6 +703,7 @@ export const cvRouter = createTRPCRouter({
         company: z.string().min(1),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
+        companyBlurb: CvTextTranslationMapSchema.optional(),
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean().default(false),
@@ -706,13 +715,21 @@ export const cvRouter = createTRPCRouter({
             z.object({
               text: CvTextTranslationMapSchema,
               order: z.number().int().nonnegative().default(0),
+              atsOnly: z.boolean().default(false),
             }),
           )
           .default([]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { responsibilities, role, location, skillIds, ...rest } = input;
+      const {
+        responsibilities,
+        role,
+        location,
+        companyBlurb,
+        skillIds,
+        ...rest
+      } = input;
       const languages = await getAppLanguages(ctx.db);
 
       return ctx.db.cvExperience.create({
@@ -724,6 +741,7 @@ export const cvRouter = createTRPCRouter({
               languages,
               role,
               location,
+              companyBlurb,
             ),
           },
           CvExperienceSkill: skillIds.length
@@ -733,6 +751,7 @@ export const cvRouter = createTRPCRouter({
             ? {
                 create: responsibilities.map((responsibility) => ({
                   order: responsibility.order,
+                  atsOnly: responsibility.atsOnly,
                   translations: {
                     create: buildResponsibilityTranslationCreates(
                       languages,
@@ -757,6 +776,7 @@ export const cvRouter = createTRPCRouter({
         company: z.string().min(1),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
+        companyBlurb: CvTextTranslationMapSchema.optional(),
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean().default(false),
@@ -768,13 +788,22 @@ export const cvRouter = createTRPCRouter({
             z.object({
               text: CvTextTranslationMapSchema,
               order: z.number().int().nonnegative().default(0),
+              atsOnly: z.boolean().default(false),
             }),
           )
           .default([]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, responsibilities, role, location, skillIds, ...data } = input;
+      const {
+        id,
+        responsibilities,
+        role,
+        location,
+        companyBlurb,
+        skillIds,
+        ...data
+      } = input;
       const existing = await ctx.db.cvExperience.findUnique({ where: { id } });
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
@@ -795,7 +824,14 @@ export const cvRouter = createTRPCRouter({
       }
 
       await ctx.db.cvExperience.update({ where: { id }, data });
-      await upsertExperienceTranslations(ctx.db, languages, id, role, location);
+      await upsertExperienceTranslations(
+        ctx.db,
+        languages,
+        id,
+        role,
+        location,
+        companyBlurb,
+      );
 
       if (responsibilities.length > 0) {
         for (const responsibility of responsibilities) {
@@ -803,6 +839,7 @@ export const cvRouter = createTRPCRouter({
             data: {
               experienceId: id,
               order: responsibility.order,
+              atsOnly: responsibility.atsOnly,
               translations: {
                 create: buildResponsibilityTranslationCreates(
                   languages,

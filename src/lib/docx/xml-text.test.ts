@@ -41,7 +41,11 @@ describe("extractTextFromWt", () => {
     ).toBe("part1part2");
   });
 
-  it("handles mixed types and invalid item types", () => {
-    expect(extractTextFromWt(["str", { "#text": 42 }, 99, null])).toBe("str42");
+  it("handles mixed types including digit-only w:t nodes coerced to numbers", () => {
+    // fast-xml-parser turns <w:t>2024</w:t> into the number 2024
+    expect(extractTextFromWt(["str", { "#text": 42 }, 99, null])).toBe(
+      "str4299",
+    );
+    expect(extractTextFromWt(["202", 4])).toBe("2024");
   });
 });

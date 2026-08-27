@@ -266,5 +266,22 @@ describe("docx parser + rebuilder regressions", () => {
       0,
     );
     expect(totalParagraphs).toBeGreaterThan(0);
+
+    const experienceMeta = parsed.lockedParagraphs.filter(
+      (item) => item.kind === "experience-meta",
+    );
+    const educationDates = parsed.lockedParagraphs.filter(
+      (item) => item.kind === "education-dates",
+    );
+    expect(experienceMeta.length).toBeGreaterThanOrEqual(5);
+    expect(educationDates.length).toBeGreaterThanOrEqual(2);
+    expect(
+      experienceMeta[0]?.paragraph.runs.map((r) => r.text).join(""),
+    ).toContain("·");
+    expect(
+      experienceMeta.some((item) =>
+        item.paragraph.runs.map((r) => r.text).join("").includes("2024"),
+      ),
+    ).toBe(true);
   });
 });

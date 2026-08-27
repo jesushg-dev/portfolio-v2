@@ -15,6 +15,7 @@ import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useDataTable } from "@/hooks/use-data-table";
+import type { AppTableFeatures } from "@/lib/app-table-features";
 import { getSortingStateParser } from "@/lib/parsers";
 import type { FilterItemSchema } from "@/lib/parsers";
 import { api, type RouterOutputs } from "@/trpc/react";
@@ -100,7 +101,7 @@ export const UsesItemsList: FC<UsesItemsListProps> = ({
     [deleteItem, utils, t],
   );
 
-  const columns = useMemo<ColumnDef<UsesItemRow>[]>(
+  const columns = useMemo<ColumnDef<AppTableFeatures, UsesItemRow>[]>(
     () => [
       {
         accessorKey: "order",

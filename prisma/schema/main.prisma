@@ -401,6 +401,8 @@ model CvExperienceTranslation {
   createdAt      DateTime      @default(now())
   role           String
   location       String?
+  /// Short factual blurb for ATS tailor context (industry / product / what you worked on). Not printed on the public CV by default.
+  companyBlurb   String?
   language       AppLanguage   @relation(fields: [appLanguageId], references: [id])
   CvExperience   CvExperience? @relation(fields: [cvExperienceId], references: [id], onDelete: Cascade)
   cvExperienceId String?       @db.ObjectId
@@ -414,6 +416,8 @@ model CvResponsibility {
   experienceId String                        @db.ObjectId
   experience   CvExperience                  @relation(fields: [experienceId], references: [id], onDelete: Cascade)
   order        Int                           @default(0)
+  /// When true, bullet is hidden from the printed/public CV but available as an ATS tailor bank.
+  atsOnly      Boolean                       @default(false)
   createdAt    DateTime                      @default(now())
   translations CvResponsibilityTranslation[]
 }

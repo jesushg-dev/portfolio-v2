@@ -80,6 +80,7 @@ const draft: CvImportDraft = {
       company: "Acme",
       role: "Developer",
       responsibilities: ["Built APIs.", "Led migrations."],
+      atsResponsibilities: [],
     },
   ],
   education: [],

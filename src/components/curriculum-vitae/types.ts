@@ -62,6 +62,7 @@ export interface LocalizedCvData {
     order: number;
     role: string;
     location: string;
+    companyBlurb?: string;
     responsibilities: {
       id: string;
       order: number;
@@ -149,11 +150,14 @@ export function mapCvDataToLocalized(
     order: exp.order,
     role: resolver(exp.translations, "role"),
     location: resolver(exp.translations, "location") ?? "",
-    responsibilities: exp.responsibilities.map((resp) => ({
-      id: resp.id,
-      order: resp.order,
-      text: resolver(resp.translations, "text"),
-    })),
+    companyBlurb: resolver(exp.translations, "companyBlurb") || undefined,
+    responsibilities: exp.responsibilities
+      .filter((resp) => !resp.atsOnly)
+      .map((resp) => ({
+        id: resp.id,
+        order: resp.order,
+        text: resolver(resp.translations, "text"),
+      })),
     skills: exp.CvExperienceSkill.map((s) => s.skill.title),
   }));
 

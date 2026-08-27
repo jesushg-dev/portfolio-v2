@@ -31,17 +31,20 @@ export default async function ColophonRoute({ params }: ColophonRouteProps) {
   const t = await getTranslations("main.colophon");
 
   const externalLink =
-    (href: string, title: string) => (chunks: ReactNode) => (
-      <a
-        href={href}
-        title={title}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={colophonLinkClassName}
-      >
-        {chunks}
-      </a>
-    );
+    (href: string, title: string) =>
+    function ColophonExternalLink(chunks: ReactNode) {
+      return (
+        <a
+          href={href}
+          title={title}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={colophonLinkClassName}
+        >
+          {chunks}
+        </a>
+      );
+    };
 
   return (
     <ProcessPageShell>
@@ -89,7 +92,18 @@ export default async function ColophonRoute({ params }: ColophonRouteProps) {
             [ETheme.CHRISTMAS_LIGHT]: t("palettes.christmasLight"),
             [ETheme.CHRISTMAS_DARK]: t("palettes.christmasDark"),
           },
-          shadeLabels: ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"],
+          shadeLabels: [
+            "50",
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "600",
+            "700",
+            "800",
+            "900",
+          ],
           logoTitle: t("logo.title"),
           logoBody: t("logo.body"),
           logoLightAlt: t("logo.lightAlt"),
@@ -97,7 +111,9 @@ export default async function ColophonRoute({ params }: ColophonRouteProps) {
           carbonTitle: t("carbon.title"),
           carbonBody: t.rich("carbon.body", {
             strong: (chunks) => (
-              <strong className="text-foreground font-semibold">{chunks}</strong>
+              <strong className="text-foreground font-semibold">
+                {chunks}
+              </strong>
             ),
             beacon: externalLink(COLOPHON_CARBON.beaconHref, "Digital Beacon"),
             carbon: externalLink(COLOPHON_CARBON.carbonHref, "Website Carbon"),

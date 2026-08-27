@@ -1654,7 +1654,12 @@
         "dragToReorder": "Sleep om te herordenen",
         "addLabel": "Toevoegen",
         "featuredOnHome": "Tonen op startpagina",
-        "featuredOnHomeDescription": "Deze ervaring verschijnt in de startpagina sectie"
+        "featuredOnHomeDescription": "Deze ervaring verschijnt in de startpagina sectie",
+        "companyBlurb": "Bedrijfs-/contextbeschrijving (ATS)",
+        "companyBlurbDescription": "Korte feitelijke notitie over het bedrijf of waar je aan werkte. Voor ATS tailor — niet op het geprinte CV.",
+        "companyBlurbPlaceholder": "bijv. Telecom B2C · digitale serviceaanvragen",
+        "atsOnly": "Alleen ATS (verberg op CV)",
+        "atsOnlyDescription": "Verschijnt niet op het openbare/geprinte CV, wel bij het afstemmen op een vacature."
       },
       "softSkill": {
         "label": "Soft skill",
@@ -1820,15 +1825,17 @@
           "cv": "CV"
         },
         "descriptions": {
-          "cvUpload": "Upload uw CV (PDF, max 5MB)"
+          "cvUpload": "Upload je CV (PDF, max 5MB)",
+          "description": "Optioneel. Plak de vacaturetekst om later je CV toe te spitsen.",
+          "notes": "Privénotities - niet gedeeld met werkgevers."
         },
         "placeholders": {
           "position": "Frontend Developer",
           "company": "Selecteer of maak een bedrijf...",
-          "location": "Remote, Hybride, etc...",
+          "location": "Remote, hybrid, etc...",
           "salary": "€50k - €60k",
-          "description": "Functieomschrijving...",
-          "notes": "Persoonlijke notities...",
+          "description": "Plak de functieomschrijving…",
+          "notes": "bijv. via Alex, follow-up vrijdag…",
           "date": "Selecteer een datum"
         },
         "actions": {
@@ -1850,7 +1857,9 @@
           "empty": "Geen bedrijven gevonden",
           "createFailed": "Bedrijf aanmaken mislukt",
           "clearSearch": "Zoekopdracht wissen"
-        }
+        },
+        "descriptionHint": "Optioneel. Plak de vacaturetekst om later je CV toe te spitsen.",
+        "notesHint": "Privénotities - niet gedeeld met werkgevers."
       },
       "jobTrackerCompany": {
         "validation": {
