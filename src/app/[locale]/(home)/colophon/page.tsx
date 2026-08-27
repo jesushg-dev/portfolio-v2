@@ -30,8 +30,7 @@ export default async function ColophonRoute({ params }: ColophonRouteProps) {
   setRequestLocale(locale);
   const t = await getTranslations("main.colophon");
 
-  const externalLink =
-    (href: string, title: string) =>
+  const externalLink = (href: string, title: string) =>
     function ColophonExternalLink(chunks: ReactNode) {
       return (
         <a
