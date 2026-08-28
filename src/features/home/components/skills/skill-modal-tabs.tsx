@@ -1,16 +1,22 @@
 "use client";
 
-import { useState, type KeyboardEvent, type ReactNode } from "react";
-import { motion } from "motion/react";
+import { useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
+import {
+  HiOutlineAcademicCap,
+  HiOutlineBriefcase,
+  HiOutlineCode,
+} from "react-icons/hi";
+import type { IconType } from "react-icons/lib";
 
-import { cn } from "@/lib/utils";
-import { useTabsKeyboard } from "@/hooks/use-tabs-keyboard";
+import Tab from "@/components/custom-ui/custom-tab";
+import TabItem from "@/components/custom-ui/custom-tab/tab-item";
 
 export interface SkillModalTab {
   id: string;
   label: string;
   count: number;
+  hint: string;
   content: ReactNode;
 }
 
@@ -18,146 +24,55 @@ interface SkillModalTabsProps {
   tabs: SkillModalTab[];
 }
 
-const pillTransition = {
-  type: "tween" as const,
-  duration: 0.28,
-  ease: [0.4, 0, 0.2, 1] as const,
-};
-
-const contentTransition = {
-  type: "tween" as const,
-  duration: 0.22,
-  ease: [0.4, 0, 0.2, 1] as const,
+const TAB_ICONS: Record<string, IconType> = {
+  certificates: HiOutlineAcademicCap,
+  experiences: HiOutlineBriefcase,
+  projects: HiOutlineCode,
 };
 
 export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
   const t = useTranslations("main.skills.modal");
-  const [activeId, setActiveId] = useState(() => tabs[0]?.id ?? "");
-  const [direction, setDirection] = useState(0);
-
-  const activeIndex = tabs.findIndex((tab) => tab.id === activeId);
-  const resolvedActiveIndex = activeIndex >= 0 ? activeIndex : 0;
-
-  const handleTabChange = (nextId: string) => {
-    const nextIndex = tabs.findIndex((tab) => tab.id === nextId);
-    const currentIndex = tabs.findIndex((tab) => tab.id === activeId);
-    setDirection(
-      nextIndex > currentIndex ? 1 : nextIndex < currentIndex ? -1 : 0,
-    );
-    setActiveId(nextId);
-  };
-
-  const handleTabKeyDown = useTabsKeyboard(
-    tabs.length,
-    resolvedActiveIndex,
-    (index) => {
-      const tab = tabs[index];
-      if (tab) handleTabChange(tab.id);
-    },
-  );
+  const [currentTab, setCurrentTab] = useState(0);
 
   if (tabs.length === 0) return null;
 
-  const activeTab = tabs[resolvedActiveIndex] ?? tabs[0];
-
-  const onTabListKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    handleTabKeyDown(event);
-  };
-
-  if (tabs.length === 1) {
-    const tab = tabs[0];
-    if (!tab) return null;
-
-    return (
-      <div className="mt-6">
-        <SectionLabel label={tab.label} count={tab.count} />
-        <div className="themed-scrollbar mt-3 max-h-52 overflow-y-auto pr-1">
-          {tab.content}
-        </div>
-      </div>
-    );
-  }
-
-  const slideX = direction * 24;
+  const activeTab = tabs[currentTab] ?? tabs[0];
+  const panelId = `skill-modal-panel-${activeTab?.id ?? "0"}`;
 
   return (
-    <div className="mt-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
+      <Tab
+        tabId="skill-modal"
+        minimal
+        currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
+        ariaLabel={t("tabsAriaLabel")}
+        className="bg-muted/50 border-border z-20 inline-flex w-full max-w-full shrink-0 items-center justify-center gap-1 overflow-x-auto overflow-y-hidden rounded-2xl border p-1"
+      >
+        {tabs.map((tab) => (
+          <TabItem
+            key={tab.id}
+            icon={TAB_ICONS[tab.id] ?? HiOutlineCode}
+            title={`${tab.label} (${tab.count})`}
+            description=""
+          />
+        ))}
+      </Tab>
+
+      {activeTab ? (
+        <p className="text-muted-foreground shrink-0 text-xs leading-snug">
+          {activeTab.hint}
+        </p>
+      ) : null}
+
       <div
-        role="tablist"
-        aria-label={t("tabsAriaLabel")}
-        onKeyDown={onTabListKeyDown}
-        className="bg-background-100/80 flex flex-wrap gap-1 rounded-xl p-1"
-      >
-        {tabs.map((tab) => {
-          const isActive = activeTab.id === tab.id;
-          const tabId = `skill-modal-tab-${tab.id}`;
-          const panelId = `skill-modal-panel-${tab.id}`;
-
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              role="tab"
-              id={tabId}
-              aria-controls={panelId}
-              aria-selected={isActive}
-              tabIndex={isActive ? 0 : -1}
-              onClick={() => handleTabChange(tab.id)}
-              className={cn(
-                "relative rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-200",
-                isActive
-                  ? "text-primary-600"
-                  : "text-primaryText-700 hover:text-primaryText-500",
-              )}
-            >
-              {isActive ? (
-                <motion.span
-                  layoutId="skill-modal-tab-pill"
-                  className="bg-background-50 absolute inset-0 rounded-lg shadow-sm"
-                  transition={{ layout: pillTransition }}
-                />
-              ) : null}
-              <span className="relative z-10 flex items-center gap-1.5 whitespace-nowrap">
-                {tab.label}
-                <span
-                  className={cn(
-                    "rounded-full px-1.5 py-0.5 text-[10px] leading-none transition-colors duration-200",
-                    isActive
-                      ? "bg-primary-100 text-primary-700"
-                      : "bg-background-50 text-primaryText-700",
-                  )}
-                >
-                  {tab.count}
-                </span>
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      <motion.div
-        key={activeTab.id}
         role="tabpanel"
-        id={`skill-modal-panel-${activeTab.id}`}
-        aria-labelledby={`skill-modal-tab-${activeTab.id}`}
-        initial={{ opacity: 0, x: slideX }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={contentTransition}
-        className="themed-scrollbar mt-3 max-h-52 overflow-y-auto pr-1"
+        id={panelId}
+        aria-labelledby={`skill-modal-tab-${currentTab}`}
+        className="themed-scrollbar min-h-0 flex-1 overflow-y-auto pr-1"
       >
-        {activeTab.content}
-      </motion.div>
+        {activeTab?.content}
+      </div>
     </div>
-  );
-}
-
-function SectionLabel({ label, count }: { label: string; count: number }) {
-  return (
-    <h3 className="bg-background-100/80 inline-flex items-center gap-1.5 rounded-xl px-3 py-2">
-      <span className="text-primary-600 text-xs font-semibold">{label}</span>
-      <span className="bg-primary-100 text-primary-700 rounded-full px-1.5 py-0.5 text-[10px] leading-none">
-        {count}
-      </span>
-    </h3>
   );
 }

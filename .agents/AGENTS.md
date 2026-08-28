@@ -202,6 +202,40 @@ When building a card or panel, set **both** background and foreground on the con
 </div>
 ```
 
+## Button-as-link — use `buttonVariants`, not `<Button asChild>`
+
+Our `Button` is built on Base UI and always applies `role="button"`, which overrides the semantic link role on `<a>` elements.
+
+### ❌ NEVER wrap links with `<Button asChild>` or `<Button render={<a />} nativeButton={false} />`
+
+```tsx
+// ❌ WRONG — link loses native semantics
+<Button asChild variant="outline">
+  <Link href="/skills/react">View skill</Link>
+</Button>
+```
+
+### ✅ ALWAYS use `buttonVariants` on the link element
+
+With `next-intl` routing, apply `buttonVariants` to `Link` from `@/i18n/routing`. For external URLs, use a plain `<a>`.
+
+```tsx
+// ✅ CORRECT — link keeps native semantics, looks like a button
+import { buttonVariants } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
+
+<Link
+  href="/admin/cv"
+  className={buttonVariants({ variant: "outline", size: "sm" })}
+>
+  Open CV editor
+</Link>;
+```
+
+Use `<Button>` only for real actions (`type="button"`, `type="submit"`, or `onClick`).
+
+---
+
 ## Animation Libraries
 
 This project has migrated to the official `motion` package.

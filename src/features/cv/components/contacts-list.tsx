@@ -5,12 +5,8 @@ import type { FC } from "react";
 
 import { useTranslations } from "next-intl";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import { FormDialogContent } from "@/components/shared/form-dialog-content";
 
 import { api } from "@/trpc/react";
 import FormStatus from "@/components/admin/shared/form-status";
@@ -143,18 +139,16 @@ const ContactsList: FC<{
           }
         }}
       >
-        <DialogContent
+        <FormDialogContent
           id="cv-item-modal"
           closeButtonId="cv-item-modal-close"
-          className="max-h-[90vh] w-full overflow-y-auto sm:max-w-4xl"
+          title={
+            editingId
+              ? t("edit") || "Edit Contact"
+              : t("create") || "Add Contact"
+          }
+          className="sm:max-w-4xl"
         >
-          <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
-            <DialogTitle>
-              {editingId
-                ? t("edit") || "Edit Contact"
-                : t("create") || "Add Contact"}
-            </DialogTitle>
-          </DialogHeader>
           {(editingId ?? creating) && (
             <ContactForm
               languages={languages}
@@ -173,7 +167,7 @@ const ContactsList: FC<{
               }}
             />
           )}
-        </DialogContent>
+        </FormDialogContent>
       </Dialog>
 
       {!editingId && !creating ? (

@@ -10,14 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogFooter } from "@/components/ui/dialog";
+import { FormDialogContent } from "@/components/shared/form-dialog-content";
 import { useRouter } from "@/i18n/routing";
 import { fileToBase64 } from "@/lib/uploadthing/file-to-base64";
 
@@ -196,13 +190,43 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[min(90vh,720px)] flex-col gap-0 overflow-hidden sm:max-w-xl">
-        <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
-        </DialogHeader>
-
-        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto py-4">
+      <FormDialogContent
+        title={t("title")}
+        description={t("description")}
+        className="sm:max-w-xl"
+        footer={
+          <DialogFooter className="gap-2 border-0 bg-transparent p-0 sm:justify-between">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={!canDraft || draftMutation.isPending}
+              onClick={handleDraft}
+            >
+              {draftMutation.isPending ? (
+                <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+              ) : (
+                <Sparkles className="mr-1.5 size-3.5" aria-hidden />
+              )}
+              {drafted ? t("redraft") : t("draft")}
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              disabled={!canSend || sendMutation.isPending}
+              onClick={handleSend}
+            >
+              {sendMutation.isPending ? (
+                <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+              ) : (
+                <Send className="mr-1.5 size-3.5" aria-hidden />
+              )}
+              {t("send")}
+            </Button>
+          </DialogFooter>
+        }
+      >
+        <div className="space-y-3">
           {!capabilities.data?.hasAiProvider ? (
             <p className="text-muted-foreground text-sm">{t("noAi")}</p>
           ) : null}
@@ -316,37 +340,7 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
             <p className="text-muted-foreground text-sm">{t("draftHint")}</p>
           )}
         </div>
-
-        <DialogFooter className="border-border gap-2 border-t pt-4 sm:justify-between">
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={!canDraft || draftMutation.isPending}
-            onClick={handleDraft}
-          >
-            {draftMutation.isPending ? (
-              <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
-            ) : (
-              <Sparkles className="mr-1.5 size-3.5" aria-hidden />
-            )}
-            {drafted ? t("redraft") : t("draft")}
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            disabled={!canSend || sendMutation.isPending}
-            onClick={handleSend}
-          >
-            {sendMutation.isPending ? (
-              <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
-            ) : (
-              <Send className="mr-1.5 size-3.5" aria-hidden />
-            )}
-            {t("send")}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+      </FormDialogContent>
     </Dialog>
   );
 };

@@ -59,13 +59,8 @@ export const FormContent = ({
   className,
   error,
 }: FormContentProps) => (
-  <div className="flex-1 overflow-auto">
-    <div
-      className={cn(
-        "flex flex-1 flex-col justify-between gap-4 overflow-hidden px-1",
-        className,
-      )}
-    >
+  <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+    <div className={cn("flex flex-col gap-4 px-1 pb-4", className)}>
       <FormError error={error} />
       {children}
     </div>
@@ -281,7 +276,12 @@ export const FormActions = ({
   submitId,
 }: FormActionsProps) => (
   <div
-    className={cn("mt-4 flex w-full items-center justify-end gap-2", className)}
+    className={cn(
+      "border-border bg-background shrink-0 border-t px-1 pt-4",
+      "pb-[max(1rem,env(safe-area-inset-bottom))]",
+      "flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end",
+      className,
+    )}
   >
     {children}
     <Button

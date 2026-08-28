@@ -578,6 +578,7 @@
         "tabsAriaLabel": "Secciones del detalle de habilidad",
         "readMore": "Leer más",
         "viewMoreDetails": "Ver más detalle",
+        "viewFullPage": "Ver página completa",
         "seeCertificates": "Ver certificados",
         "certificates": "Certificaciones",
         "experiences": "Experiencia profesional",
@@ -589,6 +590,7 @@
         "viewProject": "Ver proyecto",
         "viewSource": "Ver código fuente",
         "noRelatedContent": "Aún no hay certificaciones, experiencia o proyectos vinculados.",
+        "emptyTab": "Aún no hay nada aquí para esta habilidad.",
         "loadError": "No se pudieron cargar los detalles. Intenta de nuevo."
       },
       "terminal": {
@@ -2653,6 +2655,7 @@
         "addApplication": "Agregar postulación",
         "emptyColumn": "Arrastra una tarjeta aquí",
         "dragCard": "Arrastrar postulación",
+        "moveToColumn": "Mover a columna",
         "updating": "Actualizando estado…",
         "statusUpdateError": "No se pudo actualizar el estado"
       },

@@ -5,12 +5,8 @@ import type { FC, KeyboardEvent, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { FaEdit } from "react-icons/fa";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import { FormDialogContent } from "@/components/shared/form-dialog-content";
 import { CvContextProvider } from "@/hoc/cv-context-provider";
 import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
@@ -249,59 +245,54 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
       </CvContextProvider>
 
       <Dialog open={activeSection !== null} onOpenChange={handleClose}>
-        <DialogContent
+        <FormDialogContent
           id="cv-section-modal"
           closeButtonId="cv-section-modal-close"
-          className="max-h-[85vh] w-full overflow-y-auto sm:max-w-5xl"
+          title={activeSection ? getModalTitle(activeSection) : ""}
+          className="sm:max-w-5xl"
+          bodyScroll={
+            activeSection != null &&
+            activeSection !== "header" &&
+            activeSection !== "about"
+          }
         >
-          <DialogHeader className="border-border flex flex-row items-center justify-between border-b pb-3">
-            <DialogTitle className="text-lg">
-              {activeSection ? getModalTitle(activeSection) : ""}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="mt-4">
-            {activeSection === "header" && <HeaderForm languages={languages} />}
-            {activeSection === "contacts" && (
-              <ContactsList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "education" && (
-              <EducationsList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "languages" && (
-              <LanguagesList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "skills" && <SkillsList />}
-            {activeSection === "about" && <AboutForm languages={languages} />}
-            {activeSection === "experience" && (
-              <ExperiencesList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "soft-skills" && (
-              <SoftSkillsList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "additional" && (
-              <AdditionalList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-          </div>
-        </DialogContent>
+          {activeSection === "header" && <HeaderForm languages={languages} />}
+          {activeSection === "contacts" && (
+            <ContactsList languages={languages} displayLocale={currentLocale} />
+          )}
+          {activeSection === "education" && (
+            <EducationsList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "languages" && (
+            <LanguagesList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "skills" && <SkillsList />}
+          {activeSection === "about" && <AboutForm languages={languages} />}
+          {activeSection === "experience" && (
+            <ExperiencesList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "soft-skills" && (
+            <SoftSkillsList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "additional" && (
+            <AdditionalList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+        </FormDialogContent>
       </Dialog>
     </div>
   );

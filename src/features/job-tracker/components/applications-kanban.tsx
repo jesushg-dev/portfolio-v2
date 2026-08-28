@@ -17,6 +17,13 @@ import {
   KanbanOverlay,
 } from "@/components/ui/kanban";
 import { buttonVariants } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CelebrationAnimation } from "@/components/celebration-animation";
 import type { ApplicationStatus } from "@/features/job-tracker/types";
 import {
@@ -185,7 +192,7 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
                   >
                     <div className="flex items-start gap-2 p-3">
                       <KanbanItemHandle
-                        className="text-muted-foreground hover:text-foreground mt-0.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+                        className="text-muted-foreground hover:text-foreground mt-0.5 shrink-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100"
                         aria-label={t("kanban.dragCard")}
                       >
                         <GripVertical className="size-4" aria-hidden />
@@ -220,6 +227,34 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
                           </div>
                         </div>
                       </Link>
+                    </div>
+
+                    <div
+                      className="border-border/70 bg-muted/20 border-t px-3 py-2 md:hidden"
+                      onPointerDown={(event) => event.stopPropagation()}
+                    >
+                      <Select
+                        value={application.status}
+                        onValueChange={(nextStatus) => {
+                          if (nextStatus === application.status) return;
+                          persistStatusChange(application.id, nextStatus!);
+                        }}
+                      >
+                        <SelectTrigger
+                          size="sm"
+                          aria-label={t("kanban.moveToColumn")}
+                          className="bg-background h-8 w-full text-xs"
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {KANBAN_COLUMNS.map((columnStatus) => (
+                            <SelectItem key={columnStatus} value={columnStatus}>
+                              {t(`status.${columnStatus}`)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </KanbanItem>
                 ))}

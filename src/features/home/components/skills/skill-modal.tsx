@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import Modal, { CloseModal } from "@/components/custom-ui/custom-modal";
 
 import { SkillDetailView } from "./skill-detail-view";
+import { SKILL_MODAL_SIZE_CLASS } from "./skill-modal.constants";
 
 interface SkillModalProps {
   skillSlug: string;
@@ -19,9 +20,9 @@ const SkillModal: FC<SkillModalProps> = ({ skillSlug, onClose }) => {
   return (
     <Modal
       onClickBackdrop={onClose}
-      className="border-0 md:max-h-[min(90vh,40rem)] md:w-11/12 md:overflow-hidden lg:max-w-2xl"
+      className={`${SKILL_MODAL_SIZE_CLASS} flex w-full flex-col overflow-hidden border-0 md:w-11/12 lg:max-w-2xl`}
     >
-      <motion.section className="relative flex max-h-[min(90vh,40rem)] flex-col px-6 py-6 sm:px-8">
+      <motion.section className="relative flex h-full min-h-0 flex-col overflow-hidden px-6 pt-6 pb-4 sm:px-8">
         <CloseModal onClick={onClose} title={t("modal.close")} />
         <SkillDetailView skillSlug={skillSlug} compact />
       </motion.section>

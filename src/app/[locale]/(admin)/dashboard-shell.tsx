@@ -214,7 +214,22 @@ const DashboardShell: FC<IDashboardShellProps> = ({
   return (
     <div className="bg-background text-foreground flex h-screen w-full flex-col overflow-hidden md:flex-row">
       <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-4">
+        <SidebarBody
+          className="justify-between gap-4"
+          mobileActions={
+            <>
+              <LocaleSelector />
+              <button
+                type="button"
+                aria-label={t("toggleThemeAria")}
+                onClick={() => setThemeMenuOpen((prev) => !prev)}
+                className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground shrink-0 rounded-lg border p-2"
+              >
+                <Palette className="h-4 w-4" />
+              </button>
+            </>
+          }
+        >
           <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
             <div className="flex h-12 items-center justify-between gap-1">
               {open ? (

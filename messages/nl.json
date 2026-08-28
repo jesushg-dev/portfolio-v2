@@ -578,6 +578,7 @@
         "tabsAriaLabel": "Secties van vaardigheidsdetails",
         "readMore": "Lees meer",
         "viewMoreDetails": "Meer details bekijken",
+        "viewFullPage": "Volledige pagina bekijken",
         "seeCertificates": "Bekijk certificaten",
         "certificates": "Certificeringen",
         "experiences": "Professionele ervaring",
@@ -589,6 +590,7 @@
         "viewProject": "Bekijk project",
         "viewSource": "Bekijk broncode",
         "noRelatedContent": "Nog geen gekoppelde certificeringen, ervaring of projecten.",
+        "emptyTab": "Nog niets hier voor deze vaardigheid.",
         "loadError": "Details konden niet worden geladen. Probeer het opnieuw."
       },
       "terminal": {
@@ -2653,6 +2655,7 @@
         "addApplication": "Sollicitatie toevoegen",
         "emptyColumn": "Sleep een kaart hierheen",
         "dragCard": "Sollicitatie slepen",
+        "moveToColumn": "Verplaats naar kolom",
         "updating": "Status bijwerken…",
         "statusUpdateError": "Status bijwerken mislukt"
       },

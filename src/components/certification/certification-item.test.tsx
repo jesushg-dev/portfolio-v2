@@ -20,11 +20,10 @@ const baseCertificate = {
 } satisfies CertificateType;
 
 describe("CertificateItem", () => {
-  it("renders title, company and credential id", () => {
+  it("renders title in image alt and company", () => {
     renderWithIntl(<CertificateItem {...baseCertificate} />);
-    expect(screen.getByText("React Advanced")).toBeInTheDocument();
+    expect(screen.getByAltText("React Advanced")).toBeInTheDocument();
     expect(screen.getByText("Test Academy")).toBeInTheDocument();
-    expect(screen.getByText("ABC-123")).toBeInTheDocument();
   });
 
   it("renders external link to certificate", () => {
@@ -54,7 +53,7 @@ describe("CertificateItem", () => {
     expect(img.getAttribute("src")).toBe("https://cdn.example.com/cert.png");
   });
 
-  it("omits date, credential ID, and view button when optional fields are null/undefined", () => {
+  it("omits date and view button when optional fields are null/undefined", () => {
     const minimalCert = {
       ...baseCertificate,
       url: "",

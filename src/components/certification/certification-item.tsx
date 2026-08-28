@@ -1,15 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useTranslations } from "next-intl";
-import {
-  MdCalendarMonth,
-  MdSchool,
-  MdOutlinePin,
-  MdRemoveRedEye,
-} from "react-icons/md";
+import { useLocale, useTranslations } from "next-intl";
+import { MdCalendarMonth, MdRemoveRedEye, MdSchool } from "react-icons/md";
 import type { FC } from "react";
 
+import { buttonVariants } from "@/components/ui/button";
 import type { CertificateType } from "@/utils/interfaces/types";
 import { formatIssuedDate } from "./format-issued-date";
 
@@ -19,91 +15,79 @@ const CertificateItem: FC<CertificateType> = ({
   issuedDate,
   url = "",
   company,
-  idCredential,
 }) => {
+  const locale = useLocale();
   const t = useTranslations("certification");
-  const issuedDateText = formatIssuedDate(issuedDate);
+  const issuedDateText = formatIssuedDate(issuedDate, locale);
+  const certificateUrl = url?.trim() ?? "";
 
   return (
-    <div className="group relative h-full w-full pb-1 transition-all lg:group-hover/list:opacity-50">
-      <div className="lg:group-hover:bg-background-600/50 absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-4 lg:block lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg" />
-
-      <article className="flex h-full w-full flex-col gap-3">
-        <div className="relative max-h-[12.5rem] min-h-[12.5rem] w-full overflow-hidden rounded-[0.625rem] bg-white">
-          <a href={url ?? ""} target="_blank" rel="noopener noreferrer">
+    <article className="border-border/60 bg-card text-card-foreground flex h-full w-full flex-col overflow-hidden rounded-xl border shadow-xs transition-shadow hover:shadow-md">
+      <div className="border-border/40 bg-background relative flex h-44 items-center justify-center overflow-hidden border-b p-4 sm:h-48 md:h-52">
+        {certificateUrl ? (
+          <a
+            href={certificateUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative flex h-full w-full items-center justify-center"
+            aria-label={`${title} — ${t("seeCertificate")}`}
+          >
             <Image
               src={
                 image ??
                 "https://res.cloudinary.com/js-media/image/upload/v1691171515/portfolio/certificates/placeholder_tovcyh.webp"
               }
-              width={352}
-              height={264}
+              width={400}
+              height={300}
               alt={title}
-              className="h-full w-full object-cover transition-all duration-500 group-hover:scale-110"
+              className="max-h-full max-w-full object-contain"
             />
           </a>
+        ) : (
+          <Image
+            src={
+              image ??
+              "https://res.cloudinary.com/js-media/image/upload/v1691171515/portfolio/certificates/placeholder_tovcyh.webp"
+            }
+            width={400}
+            height={300}
+            alt={title}
+            className="max-h-full max-w-full object-contain"
+          />
+        )}
+      </div>
+
+      <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-sm">
+          {issuedDate ? (
+            <span className="flex items-center gap-1.5">
+              <MdCalendarMonth className="size-3.5 shrink-0" aria-hidden />
+              <span>{issuedDateText}</span>
+            </span>
+          ) : null}
+          <span className="flex min-w-0 items-center gap-1.5">
+            <MdSchool className="size-3.5 shrink-0" aria-hidden />
+            <span className="truncate">{company}</span>
+          </span>
         </div>
 
-        <div className="z-10 flex grow flex-col items-start justify-between gap-1">
-          <h5 className="text-primaryText-700 hover:text-primaryText-800 mb-0 md:font-semibold">
-            <a
-              href={url ?? ""}
-              title={t("seeCertificate")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center"
-            >
-              {title}
-            </a>
-          </h5>
-
-          <div className="text-primaryText-700 hover:text-primaryText-800 flex w-full items-center justify-between gap-2">
-            <div>
-              <div className="flex items-center text-sm">
-                {issuedDate && (
-                  <div className="flex items-center" title={t("titles.date")}>
-                    <MdCalendarMonth />
-                    <p className="pl-2">{issuedDateText}</p>
-                  </div>
-                )}
-                <div
-                  className="flex items-center pl-5"
-                  title={t("titles.institution")}
-                >
-                  <MdSchool />
-                  <p className="pl-2">{company}</p>
-                </div>
-              </div>
-
-              {idCredential && (
-                <div
-                  className="flex items-center"
-                  title={t("titles.idCredential")}
-                >
-                  <MdOutlinePin />
-                  <p className="pl-2 text-sm">{idCredential}</p>
-                </div>
-              )}
-            </div>
-
-            {url && (
-              <a
-                href={url}
-                title={t("seeCertificate")}
-                target="_blank"
-                rel="noreferrer"
-                className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-4 py-2.5 shadow-lg"
-              >
-                <span className="flex w-full items-center justify-center gap-2 text-center text-sm font-medium text-white">
-                  <MdRemoveRedEye className="h-4 w-4" />
-                  {t("seeCertificate")}
-                </span>
-              </a>
-            )}
-          </div>
-        </div>
-      </article>
-    </div>
+        {certificateUrl ? (
+          <a
+            href={certificateUrl}
+            target="_blank"
+            rel="noreferrer"
+            className={buttonVariants({
+              size: "sm",
+              variant: "outline",
+              className: "shrink-0",
+            })}
+          >
+            <MdRemoveRedEye className="size-3.5" aria-hidden />
+            {t("seeCertificate")}
+          </a>
+        ) : null}
+      </div>
+    </article>
   );
 };
 

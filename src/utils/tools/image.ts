@@ -44,6 +44,39 @@ export function buildCloudinaryUrl(
   return cloudinaryLoader({ src, width, quality });
 }
 
+export function isAbsoluteOrLocalImagePath(src: string): boolean {
+  const trimmed = src.trim();
+  return (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("/")
+  );
+}
+
+/** Cloudinary public id vs absolute/local path — both are valid for next/image. */
+export function isRenderableProjectImage(
+  src: string | null | undefined,
+): boolean {
+  const trimmed = src?.trim() ?? "";
+  if (!trimmed) return false;
+  if (isAbsoluteOrLocalImagePath(trimmed)) {
+    if (trimmed.startsWith("/")) return true;
+    try {
+      new URL(trimmed);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function getProjectImageLoader(
+  src: string,
+): typeof cloudinaryLoader | undefined {
+  return isAbsoluteOrLocalImagePath(src) ? undefined : cloudinaryLoader;
+}
+
 export const siLoader = ({ src }: ImageLoaderProps) => {
   return `https://cdn.simpleicons.org/${src}`;
 };

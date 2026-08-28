@@ -32,7 +32,7 @@ const Modal: FC<IModalProps> = ({ children, onClickBackdrop, className }) => {
           onKeyUp={onClickBackdrop}
         />
         <div
-          className={`selection: border-background-100 bg-background-50 z-50 h-full max-h-screen w-full overflow-y-auto border shadow-lg md:h-auto md:w-3/5 md:rounded-lg lg:w-2/5${className}`}
+          className={`selection: border-background-100 bg-background-50 z-50 flex h-full max-h-screen w-full flex-col overflow-hidden border shadow-lg md:w-3/5 md:rounded-lg lg:w-2/5 ${className ?? ""}`}
         >
           {children}
         </div>

@@ -5,7 +5,7 @@
 export const PUBLIC_PAGE_LIVE = {
   uses: false,
   now: false,
-  colophon: false,
+  colophon: true,
 } as const;
 
 export type PublicPreviewPageId = keyof typeof PUBLIC_PAGE_LIVE;

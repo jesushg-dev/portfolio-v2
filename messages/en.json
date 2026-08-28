@@ -578,6 +578,7 @@
         "tabsAriaLabel": "Skill detail sections",
         "readMore": "Read more",
         "viewMoreDetails": "View more details",
+        "viewFullPage": "View full page",
         "seeCertificates": "See certificates",
         "certificates": "Certifications",
         "experiences": "Professional experience",
@@ -589,6 +590,7 @@
         "viewProject": "View project",
         "viewSource": "View source code",
         "noRelatedContent": "No linked certifications, experience, or projects yet.",
+        "emptyTab": "Nothing here yet for this skill.",
         "loadError": "Could not load skill details. Please try again."
       },
       "terminal": {
@@ -2699,6 +2701,7 @@
         "addApplication": "Add application",
         "emptyColumn": "Drag a card here",
         "dragCard": "Drag application",
+        "moveToColumn": "Move to column",
         "updating": "Updating status…",
         "statusUpdateError": "Could not update application status"
       },

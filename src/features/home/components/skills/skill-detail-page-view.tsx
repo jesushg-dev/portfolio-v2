@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { MdCalendarMonth, MdOpenInNew, MdWorkOutline } from "react-icons/md";
+import { MdOpenInNew } from "react-icons/md";
 
 import { resolveSkillImageUrl } from "@/utils/tools/image";
 import CertificateItem from "@/components/certification/certification-item";
 import PortfolioItem from "@/features/home/components/portfolio/project-item";
+import { SkillExperienceList } from "@/features/home/components/skills/skill-experience-list";
 import { Link } from "@/i18n/routing";
 import type { SkillDetailType } from "@/utils/interfaces/types";
 
@@ -115,28 +116,7 @@ export async function SkillDetailPageView({
                   {t("page.experiencesDescription", { skill: skillName })}
                 </p>
               </div>
-              <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                {detail.experiences.map((experience) => (
-                  <li
-                    key={experience.id}
-                    className="bg-background-100/80 rounded-xl px-4 py-3.5"
-                  >
-                    <p className="text-primaryText-500 text-sm font-semibold md:text-base">
-                      {experience.role}
-                    </p>
-                    <p className="text-primaryText-700 mt-1 flex items-center gap-1.5 text-sm">
-                      <MdWorkOutline className="h-4 w-4 shrink-0" />
-                      {experience.company}
-                    </p>
-                    {experience.dates ? (
-                      <p className="text-primaryText-700 mt-1.5 flex items-center gap-1.5 text-xs">
-                        <MdCalendarMonth className="h-3.5 w-3.5 shrink-0" />
-                        {experience.dates}
-                      </p>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
+              <SkillExperienceList experiences={detail.experiences} />
             </section>
           ) : null}
 
@@ -156,7 +136,7 @@ export async function SkillDetailPageView({
                   {t("page.certificatesDescription", { skill: skillName })}
                 </p>
               </div>
-              <ul className="group/list grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
                 {detail.certificates.map((certificate) => (
                   <li key={certificate.id} className="flex">
                     <CertificateItem {...certificate} />
@@ -182,7 +162,7 @@ export async function SkillDetailPageView({
                   {t("page.projectsDescription", { skill: skillName })}
                 </p>
               </div>
-              <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
                 {detail.projects.map((project) => (
                   <li key={project.id} className="flex justify-center">
                     <PortfolioItem

@@ -423,6 +423,7 @@ export const portfolioRouter = createTRPCRouter({
       const experiences = CvExperienceSkill.map(({ experience }) => ({
         id: experience.id,
         company: experience.company,
+        companyLogoUrl: experience.companyLogoUrl,
         role: field(experience.translations, "role"),
         dates: formatExperienceDates(
           experience.startDate,
