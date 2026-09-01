@@ -645,6 +645,7 @@
       "loadMore": "Load more",
       "loading": "Loading...",
       "tableOfContents": "Table of contents",
+      "chapterOf": "Chapter {current} of {total}",
       "series": "Series",
       "previousInSeries": "Previous in series",
       "nextInSeries": "Next in series",

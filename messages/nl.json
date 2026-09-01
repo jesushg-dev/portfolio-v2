@@ -645,6 +645,7 @@
       "loadMore": "Meer laden",
       "loading": "Laden...",
       "tableOfContents": "Inhoudsopgave",
+      "chapterOf": "Hoofdstuk {current} van {total}",
       "series": "Serie",
       "previousInSeries": "Vorige in serie",
       "nextInSeries": "Volgende in serie",
