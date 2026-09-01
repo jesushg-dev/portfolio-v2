@@ -278,6 +278,11 @@ export const pathnames = {
     es: "/panel/seguimiento-laboral/postulaciones/[id]/editar",
     nl: "/beheer/vacature-tracker/sollicitaties/[id]/bewerken",
   },
+  "/admin/job-tracker/applications/[id]/events/[eventId]": {
+    en: "/admin/job-tracker/applications/[id]/events/[eventId]",
+    es: "/panel/seguimiento-laboral/postulaciones/[id]/eventos/[eventId]",
+    nl: "/beheer/vacature-tracker/sollicitaties/[id]/evenementen/[eventId]",
+  },
   "/admin/job-tracker/companies/new": {
     en: "/admin/job-tracker/companies/new",
     es: "/panel/seguimiento-laboral/empresas/nuevo",

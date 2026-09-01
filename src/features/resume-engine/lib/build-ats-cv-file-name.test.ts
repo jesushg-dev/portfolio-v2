@@ -43,6 +43,16 @@ describe("buildAtsCvFileName", () => {
         locale: "en",
       }),
     ).toBe("Jesus Hernandez - Fullstack Developer - EN.docx");
+
+    expect(
+      buildAtsCvFileName({
+        fullName: "Jesús Enmanuel Hernández González",
+        roleTrack: "Fullstack",
+        company: "Nisum",
+        locale: "es",
+        extension: "pdf",
+      }),
+    ).toBe("Jesus Hernandez - Fullstack Developer - Nisum - ES.pdf");
   });
 
   it("infers role track from job text", () => {

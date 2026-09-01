@@ -18,6 +18,7 @@ import { usesAdminRouter } from "@/features/uses/server/uses-admin.router";
 import { nowAdminRouter } from "@/features/now/server/now-admin.router";
 import { jobTrackerAdminRouter } from "@/features/job-tracker/server/job-tracker-admin.router";
 import { resumeEngineAdminRouter } from "@/features/resume-engine/server/resume-engine-admin.router";
+import { interviewPrepAdminRouter } from "@/features/resume-engine/server/interview-prep-admin.router";
 import { integrationsAdminRouter } from "@/features/integrations/server/integrations-admin.router";
 
 import { geoRouter } from "@/server/api/routers/geo";
@@ -43,6 +44,7 @@ export const appRouter = createTRPCRouter({
   contact: contactRouter,
   jobTrackerAdmin: jobTrackerAdminRouter,
   resumeEngineAdmin: resumeEngineAdminRouter,
+  interviewPrepAdmin: interviewPrepAdminRouter,
   integrationsAdmin: integrationsAdminRouter,
 });
 

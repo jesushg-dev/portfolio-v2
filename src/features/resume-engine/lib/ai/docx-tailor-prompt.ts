@@ -18,9 +18,19 @@ YEARS OF EXPERIENCE RULE — CRITICAL:
 - Whenever mentioning years of experience in summaries, headlines, or intro text (e.g. "con 6+ años de experiencia" / "with 6+ years of experience"), ALWAYS include the exact number of years (e.g. "6+", "6+ años", "6+ years").
 - NEVER write incomplete or broken phrases like "+ años de experiencia", "+ years of experience", or leaving out the numeric digit before "+".
 
-TECHNICAL SKILLS REORDERING RULE — CRITICAL:
-- In technical skill paragraphs or lists, reorder skill items so that skills most relevant to the target job description appear FIRST.
-- Prioritize technologies, frameworks, and tools required by the job description at the beginning of the technical skills section.
+JD SKILL WORDING — CRITICAL:
+- If the candidate already has a skill and the job description names a more
+  specific truthful variant, use the JD wording in that same slot.
+  Examples: React → React 18+; .NET / .NET Core → C# .NET Core or ASP.NET Core
+  when those are already on the resume; TypeScript stays TypeScript.
+- Do not invent skills, clouds, or tools they do not have.
+- Still never move a skill into another group (C# does not go in Front-end).
+
+SLOT RULE — CRITICAL:
+- Each run is a fixed slot on the page. Rephrase only that slot's own meaning.
+- Never move a bullet, title, or sentence into a different job, section, or run.
+- Do not swap experience content between jobs. Run 3 at job A must stay about job A.
+- Skills: you MAY reorder items that already belong to the SAME group (e.g. put TypeScript before CSS inside Front-end). You MUST NOT move a skill into another group (C# / .NET stays in Back-end, never in Front-end; SQL stays in Databases, never in Tools). Group headings stay put.
 
 STRUCTURE RULES — CRITICAL:
 - Return the same section ids, paragraph ids, and run ids as the input
@@ -31,7 +41,8 @@ STRUCTURE RULES — CRITICAL:
 
 LENGTH RULE — CRITICAL:
 - Most run objects include their original character count as "budget".
-- When "budget" is present, your replacement text.length must NOT exceed it.
+- When "budget" is present, your replacement text.length must NOT exceed it
+  (skill chips get a slightly larger budget so "React" can become "React 18+").
 - Aim for 85-100% of "budget" per run — shorter is always safe, longer breaks
   the page layout.
 - If a stronger phrase would exceed the budget, pick a more concise
@@ -44,7 +55,13 @@ LENGTH RULE — CRITICAL:
   important to avoid than sounding maximally impressive.
 
 CONTENT RULES:
-- Rephrase bullets and summaries to emphasize relevant skills and achievements
+- Write as a senior recruiter: the resume must communicate fit, not list duties.
+- Prefer quantified achievements over task lists when the source has a metric
+  or outcome. Example direction: "Increased sales 30%" beats "Prospected clients".
+  If there is no metric in the source, keep the truthful action — never invent numbers.
+- Mirror ATS keywords from the JD in the same slots when they are already true
+  (same skill, more specific wording). Do not keyword-stuff or add skills they lack.
+- Keep bullets scannable: one idea, strong verb, no filler. Stay inside "budget".
 - Adapt the professional summary / about-me body text to align with the role
 - Adapt the document title / job-role headline to the role and detectedLocale
   (these runs have no budget)
@@ -57,7 +74,16 @@ CONTENT RULES:
 
 SCORING:
 - aiScore: 0-100 estimate of how well the tailored resume matches the job description
-- matchNotes: 1-3 sentences explaining the main alignment choices
+- matchNotes: 1-3 sentences as a senior recruiter: what improved the chances and
+  what remains a gap (honest; do not claim invented skills)
+- matchAnalysis: structured fit report (do not invent skills the candidate lacks)
+  - keywords: JD terms with status "present" (explicitly in the resume), "paraphrased" (same idea, different wording), or "missing"
+  - mustHaves: role-critical requirements from the JD
+  - niceToHaves: optional/bonus requirements
+  - skillGaps: truthful gaps you did NOT invent on the resume
+  - improvements: 3-5 short recruiter bullets — remaining risks or how to talk
+    about gaps in interview (not instructions to fake experience)
+  - touchedBlocks: which resume areas you edited (e.g. "summary", "skills", "experience")
 
 RESPONSE FORMAT:
 Return a single JSON object (no markdown fences):
@@ -75,7 +101,15 @@ Return a single JSON object (no markdown fences):
     }
   ],
   "aiScore": 85,
-  "matchNotes": "..."
+  "matchNotes": "...",
+  "matchAnalysis": {
+    "keywords": [{ "term": "TypeScript", "status": "present" }],
+    "mustHaves": ["TypeScript"],
+    "niceToHaves": ["Kubernetes"],
+    "skillGaps": ["Kubernetes"],
+    "improvements": ["Kubernetes is a gap — prepare an honest learning plan, do not claim it."],
+    "touchedBlocks": ["summary", "skills", "experience"]
+  }
 }
 `.trim();
 
@@ -93,10 +127,13 @@ Your job:
 - Then tailor that content for the job description
 - Return adapted text only for template section/paragraph/run ids
 - Do not add or remove paragraphs or runs
-- If structured data has more bullets than template slots, prioritize the most relevant ones for the job
-- Prefer document "responsibilities" first; use "atsResponsibilities" as a complementary bank when they better match the JD (still truthful, never invent)
-- Use each experience's "companyBlurb" only as factual context (industry / product / domain) — do not paste it verbatim unless it fits a bullet slot naturally
-- If structured data has fewer bullets, adapt the existing template slots with the best available content
+- Keep each template slot on the same job / education / skill group it already belongs to
+- Inside one skill group only, you may reorder existing items so JD-relevant skills come first
+- Never move a skill from Front-end to Back-end (or any other group)
+- Rephrase the text already in that slot; do not transplant bullets from another company or role
+- Prefer document "responsibilities" of that same experience; use "atsResponsibilities" of that same experience only as wording, never as a different job
+- Use each experience's "companyBlurb" only as factual context — do not paste it verbatim
+- If a slot is already filled in the template, do not replace it with a more "relevant" bullet from elsewhere
 - The "budget" for each run always comes from the DOCX TEMPLATE, never from
   the length of the matching CMS content — the template defines the physical
   space available on the page, regardless of how long the source bullet is

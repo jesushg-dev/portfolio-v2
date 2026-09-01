@@ -23,11 +23,13 @@ model Application {
   notes       String?
   salary      String?
   location    String?
+  ghostNudgeSnoozedUntil DateTime?
   
   // cvFile embedded as a composite type
   cvFile      CvFile?
-  
+
   resumeExports ResumeExport[]
+  interviewPrepQuestions InterviewPrepQuestion[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -64,6 +66,8 @@ model ApplicationEvent {
   updatedAt     DateTime @updatedAt
   userId        String   @db.ObjectId
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  interviewPrepQuestions InterviewPrepQuestion[]
 }
 
 model Document {
@@ -76,4 +80,33 @@ model Document {
   uploadedAt    DateTime @default(now())
   userId        String   @db.ObjectId
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model InterviewPrepQuestion {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  applicationId  String   @db.ObjectId
+  application    Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  eventId        String   @db.ObjectId
+  event          ApplicationEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  category       String
+  question       String
+  whyTheyAsk     String
+  modelAnswer    String
+  talkingPoints  String[]
+  evidenceFromCv String[]
+  avoid          String[]
+  locale         String
+  provider       String
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([eventId, createdAt])
+  @@index([applicationId])
+  @@index([userId, createdAt])
 }

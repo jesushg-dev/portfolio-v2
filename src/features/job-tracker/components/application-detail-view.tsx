@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useTransition, type FC } from "react";
+import { useCallback, useRef, useState, useTransition, type FC } from "react";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import {
@@ -15,9 +15,16 @@ import {
 import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/routing";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ButtonGroup } from "@/components/ui/button-group";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import ScrollToTop from "@/components/custom-ui/scroll-to-top";
 import { ApplicationTimeline } from "@/features/job-tracker/components/application-timeline";
 import { ApplicationEmailDialog } from "@/features/job-tracker/components/application-email-panel";
 import { ResumeTailorWorkflow } from "@/features/resume-engine/components/resume-tailor-workflow";
@@ -64,6 +71,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const rightPanelRef = useRef<HTMLDivElement>(null);
   const dateFnsLocale = getDateFnsLocale(locale);
   const deleteApplication = api.jobTrackerAdmin.deleteApplication.useMutation();
 
@@ -112,7 +120,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <ButtonGroup aria-label={t("detail.actionsGroup")}>
           <Button
             type="button"
             variant="outline"
@@ -122,23 +130,28 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
             <Mail className="mr-1.5 size-3.5" aria-hidden />
             {t("email.openButton")}
           </Button>
-          <Link
-            href={{
-              pathname: "/admin/job-tracker/applications/[id]/edit",
-              params: { id: application.id },
-            }}
-            className={buttonVariants({ variant: "outline", size: "sm" })}
+          <Button
+            variant="outline"
+            size="sm"
+            render={
+              <Link
+                href={{
+                  pathname: "/admin/job-tracker/applications/[id]/edit",
+                  params: { id: application.id },
+                }}
+              />
+            }
           >
             <Pencil className="mr-1.5 size-3.5" aria-hidden />
             {t("detail.editApplicationButton")}
-          </Link>
+          </Button>
           <Button
             type="button"
             variant="outline"
             size="sm"
             disabled={isPending}
             onClick={() => setIsConfirmOpen(true)}
-            className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
+            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
           >
             {isPending ? (
               <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
@@ -147,120 +160,138 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
             )}
             {t("detail.deleteApplicationButton")}
           </Button>
-        </div>
+        </ButtonGroup>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
-        <section className="border-border bg-card space-y-5 rounded-xl border p-5 shadow-sm">
-          <dl className="grid gap-4 sm:grid-cols-2">
-            <DetailField label={t("detail.applied")} value={appliedLabel} />
-            <DetailField
-              label={t("detail.location")}
-              value={application.location.trim() || t("detail.notProvided")}
-            />
-            <DetailField
-              label={t("detail.salary")}
-              value={application.salary.trim() || t("detail.notProvided")}
-            />
-            <div className="min-w-0">
-              <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                {t("detail.cv")}
-              </dt>
-              <dd className="text-foreground mt-1 text-sm">
-                {application.cvFile ? (
-                  <a
-                    href={application.cvFile.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
-                  >
-                    <FileText className="size-3.5 shrink-0" aria-hidden />
-                    <span className="truncate">{application.cvFile.name}</span>
-                  </a>
-                ) : (
-                  t("detail.notProvided")
-                )}
-              </dd>
-            </div>
-          </dl>
+      <ResizablePanelGroup
+        orientation="horizontal"
+        className="min-h-[36rem] lg:h-[calc(100dvh-8.5rem)]"
+      >
+        <ResizablePanel defaultSize="42%" minSize="30%" className="min-w-0">
+          <section className="border-border bg-card h-full space-y-5 overflow-y-auto rounded-xl border p-5 shadow-sm">
+            <dl className="grid gap-4 sm:grid-cols-2">
+              <DetailField label={t("detail.applied")} value={appliedLabel} />
+              <DetailField
+                label={t("detail.location")}
+                value={application.location.trim() || t("detail.notProvided")}
+              />
+              <DetailField
+                label={t("detail.salary")}
+                value={application.salary.trim() || t("detail.notProvided")}
+              />
+              <div className="min-w-0">
+                <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+                  {t("detail.cv")}
+                </dt>
+                <dd className="text-foreground mt-1 text-sm">
+                  {application.cvFile ? (
+                    <a
+                      href={application.cvFile.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
+                    >
+                      <FileText className="size-3.5 shrink-0" aria-hidden />
+                      <span className="truncate">
+                        {application.cvFile.name}
+                      </span>
+                    </a>
+                  ) : (
+                    t("detail.notProvided")
+                  )}
+                </dd>
+              </div>
+            </dl>
 
-          {application.notes.trim() ? (
+            {application.notes.trim() ? (
+              <div className="border-border border-t pt-5">
+                <h2 className="text-foreground mb-2 text-sm font-semibold">
+                  {t("detail.notes")}
+                </h2>
+                <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
+                  {application.notes}
+                </p>
+              </div>
+            ) : null}
+
             <div className="border-border border-t pt-5">
-              <h2 className="text-foreground mb-2 text-sm font-semibold">
-                {t("detail.notes")}
-              </h2>
-              <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
-                {application.notes}
-              </p>
+              <header className="mb-3 flex items-center gap-2">
+                <FileText
+                  className="text-muted-foreground size-4"
+                  aria-hidden
+                />
+                <h2 className="text-sm font-semibold">
+                  {t("detail.jobDescription")}
+                </h2>
+              </header>
+              <CollapsibleJobDescription
+                description={application.description}
+                emptyLabel={t("detail.noDescription")}
+                showMoreLabel={t("detail.showFullDescription")}
+                showLessLabel={t("detail.hideFullDescription")}
+              />
             </div>
-          ) : null}
+          </section>
+        </ResizablePanel>
 
-          <div className="border-border border-t pt-5">
-            <header className="mb-3 flex items-center gap-2">
-              <FileText className="text-muted-foreground size-4" aria-hidden />
-              <h2 className="text-sm font-semibold">
-                {t("detail.jobDescription")}
-              </h2>
-            </header>
-            <CollapsibleJobDescription
-              description={application.description}
-              emptyLabel={t("detail.noDescription")}
-              showMoreLabel={t("detail.showFullDescription")}
-              showLessLabel={t("detail.hideFullDescription")}
-            />
-          </div>
-        </section>
+        <ResizableHandle withHandle className="mx-1" />
 
-        <section className="border-border bg-card flex flex-col overflow-hidden rounded-xl border shadow-sm lg:sticky lg:top-20 lg:max-h-[calc(100dvh-5.5rem)]">
-          <nav
-            aria-label={t("detail.tabsNavAria")}
-            className="bg-muted/40 border-border shrink-0 border-b"
-            role="tablist"
-          >
-            <div className="flex">
+        <ResizablePanel defaultSize="58%" minSize="36%" className="min-w-0">
+          <section className="border-border bg-card flex h-full flex-col overflow-hidden rounded-xl border shadow-sm">
+            <nav
+              aria-label={t("detail.tabsNavAria")}
+              className="bg-muted/30 flex shrink-0 overflow-hidden rounded-t-xl"
+            >
               {RIGHT_TABS.map(({ id, icon: Icon, labelKey }) => {
                 const isActive = rightTab === id;
                 return (
                   <button
                     key={id}
                     type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    onClick={() => setRightTab(id)}
+                    aria-pressed={isActive}
                     className={cn(
-                      "flex flex-1 items-center justify-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors",
+                      "flex flex-1 items-center justify-center gap-2 border-b-2 px-5 py-3.5 text-sm font-medium transition-colors",
                       isActive
                         ? "border-primary text-primary bg-card"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted/60 border-transparent",
                     )}
+                    onClick={() => setRightTab(id)}
                   >
-                    <Icon className="size-4" aria-hidden />
+                    <Icon className="h-4 w-4" aria-hidden />
                     {t(labelKey)}
                   </button>
                 );
               })}
-            </div>
-          </nav>
+            </nav>
 
-          <div role="tabpanel" className="min-h-0 flex-1 overflow-y-auto p-5">
-            {rightTab === "timeline" ? (
-              <ApplicationTimeline
-                application={application}
-                locale={locale}
-                variant="embedded"
-                activityHint={t("detail.timelineActivityHint")}
-              />
-            ) : (
-              <ResumeTailorWorkflow
-                applicationId={application.id}
-                embedded
-                existingCvFile={application.cvFile}
-                previewDefaultOpen
-              />
-            )}
-          </div>
-        </section>
-      </div>
+            <div className="relative min-h-0 flex-1">
+              <div
+                ref={rightPanelRef}
+                role="tabpanel"
+                className="h-full overflow-y-auto p-5"
+              >
+                {rightTab === "timeline" ? (
+                  <ApplicationTimeline
+                    application={application}
+                    locale={locale}
+                    variant="embedded"
+                    activityHint={t("detail.timelineActivityHint")}
+                  />
+                ) : (
+                  <ResumeTailorWorkflow
+                    applicationId={application.id}
+                    embedded
+                    existingCvFile={application.cvFile}
+                  />
+                )}
+              </div>
+              <div className="pointer-events-none absolute right-3 bottom-3 z-20">
+                <ScrollToTop containerRef={rightPanelRef} />
+              </div>
+            </div>
+          </section>
+        </ResizablePanel>
+      </ResizablePanelGroup>
 
       <ApplicationEmailDialog
         open={isEmailOpen}

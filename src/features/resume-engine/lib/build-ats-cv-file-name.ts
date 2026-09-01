@@ -62,15 +62,17 @@ export function buildAtsCvFileName(input: {
   roleTrack: CvRoleTrack;
   company?: string | null;
   locale: string;
+  extension?: "docx" | "pdf";
 }): string {
   const name = atsPersonNameFromFullName(input.fullName);
   const role = roleTrackLabel(input.roleTrack);
   const company = stripForAtsFileName(input.company ?? "");
   const locale = stripForAtsFileName(input.locale).toUpperCase() || "EN";
+  const extension = input.extension ?? "docx";
 
   const parts = [name, role];
   if (company) parts.push(company);
   parts.push(locale);
 
-  return `${parts.join(" - ")}.docx`;
+  return `${parts.join(" - ")}.${extension}`;
 }

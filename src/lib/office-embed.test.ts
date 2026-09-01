@@ -23,4 +23,9 @@ describe("buildOfficeEmbedUrl", () => {
     expect(buildOfficeEmbedUrl("http://example.com/cv.docx")).toBeNull();
     expect(buildOfficeEmbedUrl("not-a-url")).toBeNull();
   });
+
+  it("does not embed PDFs in the Office viewer", () => {
+    const fileUrl = "https://0x95s0sprv.ufs.sh/f/example.pdf";
+    expect(buildOfficeEmbedUrl(fileUrl)).toBeNull();
+  });
 });

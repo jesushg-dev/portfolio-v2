@@ -278,6 +278,20 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
           </div>
         </AtsSection>
       ) : null}
+
+      {(data.certifications ?? []).length > 0 ? (
+        <AtsSection title={t("header.certifications")}>
+          <div className="space-y-1">
+            {(data.certifications ?? []).map((cert) => (
+              <p key={cert.id} className="text-xs">
+                <span className="font-bold">{cert.title}</span>
+                {cert.issuer ? ` — ${cert.issuer}` : ""}
+                {cert.year ? ` (${cert.year})` : ""}
+              </p>
+            ))}
+          </div>
+        </AtsSection>
+      ) : null}
     </div>
   );
 };

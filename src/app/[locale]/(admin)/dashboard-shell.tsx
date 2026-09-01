@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC, ReactNode, ComponentProps } from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   LayoutDashboard,
@@ -26,6 +26,7 @@ import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 import ThemeSelectorLazy from "@/components/app-layout/app-header/theme-selector-lazy";
 import LocaleSelector from "@/components/app-layout/app-header/locale-selector";
+import ScrollToTop from "@/components/custom-ui/scroll-to-top";
 import {
   Sidebar,
   SidebarBody,
@@ -163,6 +164,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
   const t = useTranslations("admin.shell");
   const [open, setOpen] = useState(true);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
 
   const onSignOut = async () => {
     await authClient.signOut();
@@ -349,57 +351,67 @@ const DashboardShell: FC<IDashboardShellProps> = ({
         </SidebarBody>
       </Sidebar>
 
-      <main className="flex min-w-0 flex-1 flex-col overflow-y-auto">
-        <header
-          aria-label={t("pageToolbar")}
-          className="border-border/60 bg-background/75 supports-backdrop-filter:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block"
+      <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
+        <main
+          ref={mainRef}
+          className="flex min-w-0 flex-1 flex-col overflow-y-auto"
         >
-          <div className="flex h-16 items-center justify-between px-4 md:px-6">
-            <div className="flex items-center gap-3">
-              <div>
-                <h1 className="text-foreground text-sm font-semibold">
-                  {pageTitle}
-                </h1>
-                {pageSubtitle ? (
-                  <p className="text-muted-foreground text-xs">
-                    {pageSubtitle}
+          <header
+            aria-label={t("pageToolbar")}
+            className="border-border/60 bg-background/75 supports-backdrop-filter:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block"
+          >
+            <div className="flex h-16 items-center justify-between px-4 md:px-6">
+              <div className="flex items-center gap-3">
+                <div>
+                  <h1 className="text-foreground text-sm font-semibold">
+                    {pageTitle}
+                  </h1>
+                  {pageSubtitle ? (
+                    <p className="text-muted-foreground text-xs">
+                      {pageSubtitle}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 pl-4">
+                <LocaleSelector />
+                <button
+                  type="button"
+                  aria-label={t("toggleThemeAria")}
+                  onClick={() => setThemeMenuOpen((prev) => !prev)}
+                  className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg border p-2"
+                >
+                  <Palette className="h-4 w-4" />
+                </button>
+                <div className="hidden text-right md:block">
+                  <p className="text-foreground text-sm font-medium">
+                    {userName}
                   </p>
-                ) : null}
+                  <p className="text-muted-foreground text-xs">
+                    {t("portfolioManager")}
+                  </p>
+                </div>
+                <div className="bg-primary text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
               </div>
             </div>
+          </header>
 
-            <div className="flex items-center gap-3 pl-4">
-              <LocaleSelector />
-              <button
-                type="button"
-                aria-label={t("toggleThemeAria")}
-                onClick={() => setThemeMenuOpen((prev) => !prev)}
-                className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg border p-2"
-              >
-                <Palette className="h-4 w-4" />
-              </button>
-              <div className="hidden text-right md:block">
-                <p className="text-foreground text-sm font-medium">
-                  {userName}
-                </p>
-                <p className="text-muted-foreground text-xs">
-                  {t("portfolioManager")}
-                </p>
-              </div>
-              <div className="bg-primary text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold">
-                {userName.charAt(0).toUpperCase()}
-              </div>
-            </div>
+          <ThemeSelectorLazy
+            open={themeMenuOpen}
+            onOpenChange={setThemeMenuOpen}
+          />
+
+          <div className="flex w-full flex-1 flex-col p-4 md:p-6">
+            {children}
           </div>
-        </header>
-
-        <ThemeSelectorLazy
-          open={themeMenuOpen}
-          onOpenChange={setThemeMenuOpen}
-        />
-
-        <div className="flex w-full flex-1 flex-col p-4 md:p-6">{children}</div>
-      </main>
+        </main>
+        <div className="pointer-events-none absolute right-4 bottom-4 z-40">
+          <ScrollToTop containerRef={mainRef} />
+        </div>
+      </div>
       {modal}
     </div>
   );

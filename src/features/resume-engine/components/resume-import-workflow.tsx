@@ -199,6 +199,7 @@ export const ResumeImportWorkflow: FC<{
         <CardContent className="space-y-4">
           {(step === "upload" || step === "manual") && (
             <ResumeDocxUpload
+              allowPdf
               resetKey={uploadId ?? step}
               onUploaded={handleUploadComplete}
               onError={(message) => {

@@ -13,6 +13,7 @@ import {
   mapApplicationToDetailDto,
   mapApplicationToEditorDto,
   mapApplicationsToListDto,
+  applicationListInclude,
   type ApplicationStatus,
 } from "@/features/job-tracker/lib/application-editor-dto";
 import { buildEmptyEventCreateDto } from "@/features/job-tracker/lib/event-editor-dto";
@@ -207,7 +208,7 @@ export async function getApplicationsListData(params: DataTableParams) {
   const [applications, totalCount] = await Promise.all([
     db.application.findMany({
       where,
-      include: { company: true },
+      include: applicationListInclude,
       orderBy,
       skip,
       take,
@@ -316,6 +317,16 @@ export async function getApplicationDetailPageData(id: string) {
   return mapApplicationToDetailDto(application);
 }
 
+export async function getEventPrepPageData(
+  applicationId: string,
+  eventId: string,
+) {
+  const application = await getApplicationDetailPageData(applicationId);
+  const event = application.events.find((item) => item.id === eventId);
+  if (!event) notFound();
+  return { application, event };
+}
+
 export function getCompanyCreatePageData() {
   return {
     initialData: buildEmptyCompanyCreateDto(),
@@ -340,7 +351,7 @@ export async function getEventCreatePageData(applicationId?: string) {
   const userId = await requireAuthenticatedUserId();
   const applications = await db.application.findMany({
     where: { userId },
-    include: { company: true },
+    include: applicationListInclude,
     orderBy: { appliedDate: "desc" },
   });
 

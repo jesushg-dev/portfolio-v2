@@ -26,6 +26,7 @@ import {
   CvDocxTailorResultSchema,
   type CvDocxTailorResult,
 } from "@/features/resume-engine/lib/cv-docx-tailor-result";
+import { skillAlignedBudget } from "@/features/resume-engine/lib/ai/skill-chip-budget";
 import {
   ShrinkResultSchema,
   type ShrinkResult,
@@ -230,7 +231,7 @@ function collectBudgets(sections: CvSection[]): Map<string, number> {
     for (const paragraph of section.paragraphs) {
       if (isDocxTitleStyle(paragraph.style)) continue;
       for (const run of paragraph.runs) {
-        budgets.set(run.id, run.text.length);
+        budgets.set(run.id, skillAlignedBudget(run.text));
       }
     }
   }

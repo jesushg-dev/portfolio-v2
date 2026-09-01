@@ -87,6 +87,12 @@ export interface LocalizedCvData {
     order: number;
     role: string;
   }[];
+  certifications: {
+    id: string;
+    title: string;
+    issuer?: string;
+    year?: number;
+  }[];
 }
 
 export function mapCvDataToLocalized(
@@ -197,5 +203,6 @@ export function mapCvDataToLocalized(
     softSkills,
     additionalInformation,
     personalReferences,
+    certifications: [],
   };
 }

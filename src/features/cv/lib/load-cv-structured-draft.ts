@@ -35,6 +35,7 @@ export async function loadCvStructuredDraft(
     skills,
     contacts,
     languages,
+    certifications,
   ] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
     db.cvHeader.findUnique({
@@ -73,6 +74,11 @@ export async function loadCvStructuredDraft(
       where: { userId },
       include: { translations: true },
       orderBy: { order: "asc" },
+    }),
+    db.certification.findMany({
+      where: { userId },
+      include: { CertificationTranslation: true },
+      orderBy: { issuedDate: "desc" },
     }),
   ]);
 
@@ -150,6 +156,21 @@ export async function loadCvStructuredDraft(
       type: contact.type,
       value: contact.value,
     })),
-    certifications: [],
+    certifications: certifications.map((cert) => {
+      const translation = cert.CertificationTranslation.find(
+        (row) =>
+          appLanguages.find((lang) => lang.id === row.appLanguageId)?.code ===
+          activeLocale,
+      );
+      const fallback = cert.CertificationTranslation[0];
+      return {
+        title:
+          [translation?.title, fallback?.title].find((value) =>
+            Boolean(value?.trim()),
+          ) ?? cert.company,
+        issuer: cert.company.trim() ? cert.company : undefined,
+        year: cert.issuedDate ?? undefined,
+      };
+    }),
   };
 }

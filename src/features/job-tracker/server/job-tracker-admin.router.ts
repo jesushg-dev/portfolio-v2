@@ -11,12 +11,14 @@ import {
   mapApplicationToDetailDto,
   mapApplicationToEditorDto,
   mapApplicationsToListDto,
+  applicationListInclude,
   type ApplicationStatus,
 } from "@/features/job-tracker/lib/application-editor-dto";
 import {
   mapCompaniesToEditorDto,
   mapCompanyToEditorDto,
 } from "@/features/job-tracker/lib/company-editor-dto";
+import { ghostNudgeSnoozeUntil } from "@/features/job-tracker/lib/stale-application";
 import { ImportFromUrlError } from "@/features/job-tracker/lib/import-from-url-errors";
 import { importJobFromUrl } from "@/features/job-tracker/lib/import-job-from-url";
 import { draftApplicationEmailWithAi } from "@/features/job-tracker/lib/ai/run-draft-application-email";
@@ -147,7 +149,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       const [applications, totalCount] = await Promise.all([
         ctx.db.application.findMany({
           where,
-          include: { company: true },
+          include: applicationListInclude,
           orderBy,
           skip,
           take,
@@ -403,6 +405,42 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       return mapApplicationToEditorDto(application);
     }),
 
+  updateApplicationStatuses: protectedProcedure
+    .input(
+      z.object({
+        ids: z.array(z.string()).min(1).max(50),
+        status: ApplicationStatusSchema,
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.application.updateMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        data: {
+          status: input.status,
+          ...(input.status === "GHOSTED"
+            ? { ghostNudgeSnoozedUntil: null }
+            : {}),
+        },
+      });
+      return { count: result.count };
+    }),
+
+  snoozeGhostNudge: protectedProcedure
+    .input(
+      z.object({
+        ids: z.array(z.string()).min(1).max(50),
+        days: z.number().int().min(1).max(90).default(7),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const snoozedUntil = ghostNudgeSnoozeUntil(input.days);
+      const result = await ctx.db.application.updateMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        data: { ghostNudgeSnoozedUntil: snoozedUntil },
+      });
+      return { count: result.count, snoozedUntil };
+    }),
+
   deleteApplication: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -421,7 +459,12 @@ export const jobTrackerAdminRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const application = await ctx.db.application.update({
         where: { id: input.id, userId: ctx.user.id },
-        data: { status: input.status },
+        data: {
+          status: input.status,
+          ...(input.status === "GHOSTED"
+            ? { ghostNudgeSnoozedUntil: null }
+            : {}),
+        },
       });
       return mapApplicationToEditorDto(application);
     }),

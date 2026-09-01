@@ -20,11 +20,15 @@ export interface ResumeDocxUploadResult {
 interface ResumeDocxUploadInnerProps {
   onUploaded: (file: ResumeDocxUploadResult) => void | Promise<void>;
   onError?: (message: string) => void;
+  allowPdf?: boolean;
+  preferPdf?: boolean;
 }
 
 const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
   onUploaded,
   onError,
+  allowPdf = false,
+  preferPdf = false,
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [isPending, startTransition] = useTransition();
@@ -36,11 +40,16 @@ const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
   const configs = api.integrationsAdmin.getConfigs.useQuery();
   const uploadFile = api.integrationsAdmin.uploadFile.useMutation();
   const uploadEnabled = configs.data?.uploadthing.isConfigured ?? false;
+  const accept = preferPdf
+    ? ".pdf,.docx"
+    : allowPdf
+      ? ".doc,.docx,.pdf"
+      : ".doc,.docx";
 
   const labels: FileUploadLabels = {
     dropzoneTitle: t("fileUploadDropzoneTitle"),
     dropzoneHint: t("fileUploadDropzoneHint", {
-      accept: ".doc,.docx",
+      accept,
       maxSize: 8,
     }),
     view: t("fileUploadView"),
@@ -48,7 +57,7 @@ const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
     fileTooLargeDescription: t("fileUploadTooLargeHint", { maxSize: 8 }),
     invalidTypeTitle: t("fileUploadInvalidType"),
     invalidTypeDescription: t("fileUploadInvalidTypeHint", {
-      accept: ".doc,.docx",
+      accept,
     }),
     selectedTitle: t("fileUploadSelected"),
   };
@@ -62,7 +71,9 @@ const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
             fileName: file.name,
             mimeType:
               file.type ||
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              (file.name.toLowerCase().endsWith(".pdf")
+                ? "application/pdf"
+                : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
             dataBase64,
           });
 
@@ -72,7 +83,9 @@ const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
             name: file.name,
             mimeType:
               file.type ||
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              (file.name.toLowerCase().endsWith(".pdf")
+                ? "application/pdf"
+                : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
           };
 
           setCurrentFile({ name: payload.name, url: payload.url });
@@ -111,7 +124,7 @@ const ResumeDocxUploadInner: FC<ResumeDocxUploadInnerProps> = ({
 
   return (
     <FileUpload
-      accept=".doc,.docx"
+      accept={accept}
       maxSize={8}
       labels={labels}
       showSelectionToast={false}
@@ -126,16 +139,22 @@ interface ResumeDocxUploadProps {
   onUploaded: (file: ResumeDocxUploadResult) => void | Promise<void>;
   onError?: (message: string) => void;
   resetKey?: string | number;
+  allowPdf?: boolean;
+  preferPdf?: boolean;
 }
 
 export const ResumeDocxUpload: FC<ResumeDocxUploadProps> = ({
   onUploaded,
   onError,
   resetKey = "default",
+  allowPdf = false,
+  preferPdf = false,
 }) => (
   <ResumeDocxUploadInner
     key={resetKey}
     onUploaded={onUploaded}
     onError={onError}
+    allowPdf={allowPdf}
+    preferPdf={preferPdf}
   />
 );

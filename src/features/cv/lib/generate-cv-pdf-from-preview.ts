@@ -1,5 +1,6 @@
 import "server-only";
 
+import type { Browser } from "playwright-core";
 import type { Locale } from "@/i18n/config";
 import { TENANT_USERNAME_HEADER } from "@/lib/tenant/resolve";
 import { getServerBaseUrl } from "@/lib/url/get-base-url";
@@ -57,7 +58,7 @@ const PDF_RESET_CSS = `
   }
 `;
 
-async function launchPdfBrowser() {
+export async function launchPdfBrowser(): Promise<Browser> {
   const { chromium: playwright } = await import("playwright-core");
   const isVercel = process.env.VERCEL === "1";
 

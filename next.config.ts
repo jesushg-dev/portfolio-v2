@@ -44,6 +44,7 @@ const nextConfig: NextConfig = {
   ],
   serverExternalPackages: [
     "jszip",
+    "docx-preview",
     "playwright-core",
     "@sparticuz/chromium-min",
   ],

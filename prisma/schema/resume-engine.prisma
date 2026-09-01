@@ -42,6 +42,12 @@ model ResumeExport {
   aiScore            Int?
   aiProvider         String?
   structuredSnapshot Json?
+  matchAnalysis      Json?
+  pitchSubject       String?
+  pitchBody          String?
+  pdfFileName        String?
+  pdfFileUrl         String?
+  pdfUploadThingKey  String?
 
   applicationId      String?  @db.ObjectId
   application        Application? @relation(fields: [applicationId], references: [id], onDelete: SetNull)

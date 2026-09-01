@@ -63,6 +63,7 @@ model User {
   Application        Application[]
   ApplicationEvent   ApplicationEvent[]
   Document           Document[]
+  InterviewPrepQuestion InterviewPrepQuestion[]
 
   // Resume Engine
   CvSourceUpload     CvSourceUpload[]

@@ -56,12 +56,3 @@ export const kanbanColumnStyles: Record<
     avatar: "bg-destructive/15 text-destructive",
   },
 };
-
-export const eventTypeIcons: Record<string, string> = {
-  INTERVIEW: "👥",
-  TECHNICAL_TEST: "💻",
-  QUESTIONNAIRE: "📝",
-  PHONE_CALL: "📞",
-  MEETING: "🤝",
-  FOLLOW_UP: "📋",
-};

@@ -8,8 +8,9 @@ import { Link } from "@/i18n/routing";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { api } from "@/trpc/react";
-import { eventTypeIcons } from "@/features/job-tracker/lib/constants";
+import { EventTypeIcon } from "@/features/job-tracker/lib/event-type-icons";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
+import { eventPrepHref } from "@/features/job-tracker/lib/event-prep-href";
 import type { Locale } from "@/i18n/config";
 import type { EventType, UpcomingEvent } from "@/features/job-tracker/types";
 import { cn } from "@/lib/utils";
@@ -123,16 +124,14 @@ function EventRow({
   return (
     <li>
       <Link
-        href={{
-          pathname: "/admin/job-tracker/applications/[id]",
-          params: { id: event.application.id },
-        }}
+        href={eventPrepHref(event.application.id, event.id)}
         className="hover:bg-muted/50 border-border block rounded-lg border p-3 transition-colors"
       >
         <div className="flex items-start gap-2.5">
-          <span className="text-lg leading-none" aria-hidden>
-            {eventTypeIcons[event.type as EventType]}
-          </span>
+          <EventTypeIcon
+            type={event.type}
+            className="text-muted-foreground mt-0.5 size-4 shrink-0"
+          />
           <div className="min-w-0 flex-1 space-y-1">
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="truncate text-sm font-medium">

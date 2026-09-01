@@ -2,6 +2,7 @@ import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import type { CvImportTextSection } from "@/features/cv/lib/cv-import-draft";
 import type { CvSection } from "@/lib/types";
 import { isDocxTitleStyle } from "@/lib/docx/parser";
+import { skillAlignedBudget } from "@/features/resume-engine/lib/ai/skill-chip-budget";
 import { IMPORT_SYSTEM_PROMPT } from "@/features/resume-engine/lib/ai/import-prompt";
 import {
   DOCX_TAILOR_SYSTEM_PROMPT,
@@ -70,7 +71,9 @@ function withBudgets(sections: CvSection[]) {
       return {
         ...paragraph,
         runs: paragraph.runs.map((run) =>
-          skipBudget ? { ...run } : { ...run, budget: run.text.length },
+          skipBudget
+            ? { ...run }
+            : { ...run, budget: skillAlignedBudget(run.text) },
         ),
       };
     }),

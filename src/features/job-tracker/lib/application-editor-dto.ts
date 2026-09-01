@@ -1,6 +1,7 @@
 import type { Application, ApplicationEvent, Company } from "@prisma/client";
 import type { CompanyEditorDTO } from "@/features/job-tracker/lib/company-editor-dto";
 import { mapCompanyToEditorDto } from "@/features/job-tracker/lib/company-editor-dto";
+import { computeLastActivityAt } from "@/features/job-tracker/lib/stale-application";
 
 export type ApplicationStatus =
   "APPLIED" | "INTERVIEW" | "OFFER" | "GHOSTED" | "REJECTED" | "HIRED";
@@ -28,6 +29,9 @@ export type ApplicationCreateFormDTO = Omit<ApplicationEditorDTO, "id">;
 
 export interface ApplicationListRowDTO extends ApplicationEditorDTO {
   company: CompanyEditorDTO;
+  updatedAt: Date;
+  lastActivityAt: Date;
+  ghostNudgeSnoozedUntil: Date | null;
 }
 
 export interface ApplicationDetailDTO extends ApplicationListRowDTO {
@@ -36,11 +40,19 @@ export interface ApplicationDetailDTO extends ApplicationListRowDTO {
 
 type ApplicationWithCompany = Application & {
   company: Company;
+  events?: Pick<ApplicationEvent, "scheduledDate" | "completedAt">[];
 };
 
 type ApplicationWithCompanyAndEvents = ApplicationWithCompany & {
   events: ApplicationEvent[];
 };
+
+export const applicationListInclude = {
+  company: true,
+  events: {
+    select: { scheduledDate: true, completedAt: true },
+  },
+} as const;
 
 export function mapApplicationToEditorDto(
   application: Application,
@@ -71,6 +83,12 @@ export function mapApplicationToListDto(
   return {
     ...mapApplicationToEditorDto(application),
     company: mapCompanyToEditorDto(application.company),
+    updatedAt: application.updatedAt,
+    lastActivityAt: computeLastActivityAt(
+      application.appliedDate,
+      application.events ?? [],
+    ),
+    ghostNudgeSnoozedUntil: application.ghostNudgeSnoozedUntil ?? null,
   };
 }
 

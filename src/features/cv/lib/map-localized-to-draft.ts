@@ -66,6 +66,10 @@ export function mapLocalizedCvToDraft(
       type: CONTACT_TYPE_MAP[c.type] ?? "OTHER",
       value: c.value,
     })),
-    certifications: [],
+    certifications: (data.certifications ?? []).map((cert) => ({
+      title: cert.title,
+      issuer: cert.issuer,
+      year: cert.year,
+    })),
   };
 }

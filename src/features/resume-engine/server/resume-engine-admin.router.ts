@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import { locales } from "@/i18n/config";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -11,14 +12,21 @@ import { extractStructuredResume } from "@/features/resume-engine/lib/ai/extract
 import { persistCvImportDraft } from "@/features/resume-engine/lib/import-persist";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { tailorDocxResume } from "@/features/resume-engine/lib/ai/tailor-docx";
-import { finalizeDocxTailorExport } from "@/features/resume-engine/lib/finalize-tailor-export";
+import {
+  finalizeDocxTailorExport,
+  finalizeUploadTailorExport,
+} from "@/features/resume-engine/lib/finalize-tailor-export";
 import { UploadThingNotConfiguredError } from "@/lib/uploadthing/tenant-uploadthing";
 import {
-  fetchUploadDocxForTailor,
+  fetchUploadForTailor,
   fetchUploadDocxSections,
 } from "@/features/resume-engine/lib/fetch-upload-docx";
 import { resolveTailorBaseDraft } from "@/features/resume-engine/lib/resolve-tailor-base-draft";
-import { loadCvTemplateForTailor } from "@/features/cv/lib/load-cv-template-docx";
+import {
+  loadCvTemplateForTailor,
+  loadCvTemplatePdfBuffer,
+} from "@/features/cv/lib/load-cv-template-docx";
+import { parsePdfForTailor } from "@/features/resume-engine/lib/pdf/parse-pdf-for-tailor";
 import {
   buildDocxTailorPromptPackage,
   buildImportPromptPackage,
@@ -33,6 +41,13 @@ import {
   getDefaultAiProvider,
 } from "@/features/resume-engine/lib/ai/providers";
 import { CvDocxTailorResultSchema } from "@/features/resume-engine/lib/cv-docx-tailor-result";
+import { classifyPolishedResumeFile } from "@/features/resume-engine/lib/classify-polished-resume";
+import { isPdfUpload } from "@/features/resume-engine/lib/parse-pdf-for-import";
+import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
+import { generateCvPdfFromSnapshot } from "@/features/resume-engine/lib/generate-cv-pdf-from-snapshot";
+import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
+import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
+import type { AiProviderName } from "@/features/resume-engine/lib/ai/provider-types";
 
 function rethrowTailorExportError(error: unknown): never {
   if (error instanceof TRPCError) throw error;
@@ -47,6 +62,62 @@ function rethrowTailorExportError(error: unknown): never {
   throw new TRPCError({
     code: "INTERNAL_SERVER_ERROR",
     message: error instanceof Error ? error.message : "Failed to tailor resume",
+  });
+}
+
+async function tailorStudioPdfSidecar(
+  jobDescription: string,
+  provider: AiProviderName | null | undefined,
+  baseDraft?: CvImportDraft | null,
+) {
+  const parsedPdf = await parsePdfForTailor(await loadCvTemplatePdfBuffer());
+  const { result } = await tailorDocxResume(
+    parsedPdf.sections,
+    jobDescription,
+    provider ?? undefined,
+    baseDraft ?? undefined,
+  );
+  return {
+    parsedPdf,
+    pdfAdaptedSections: result.sections,
+  };
+}
+
+async function ensureStyledPdf(
+  db: PrismaClient,
+  resumeExport: Prisma.ResumeExportGetPayload<object>,
+): Promise<{ url: string; fileName: string }> {
+  if (resumeExport.pdfFileUrl) {
+    return {
+      url: resumeExport.pdfFileUrl,
+      fileName: resumeExport.pdfFileName ?? resumeExport.fileName,
+    };
+  }
+
+  if (isPdfUpload(resumeExport.fileName, resumeExport.mimeType)) {
+    const pdfFileName = resumeExport.pdfFileName ?? resumeExport.fileName;
+    const pdfFileUrl = resumeExport.pdfFileUrl ?? resumeExport.fileUrl;
+    const pdfUploadThingKey =
+      resumeExport.pdfUploadThingKey ?? resumeExport.uploadThingKey;
+
+    if (!resumeExport.pdfFileUrl) {
+      await db.resumeExport.update({
+        where: { id: resumeExport.id },
+        data: {
+          pdfFileName,
+          pdfFileUrl,
+          pdfUploadThingKey,
+        },
+      });
+    }
+
+    return { url: pdfFileUrl, fileName: pdfFileName };
+  }
+
+  throw new TRPCError({
+    code: "PRECONDITION_FAILED",
+    message:
+      "No styled PDF on this export. Tailor again so cv-template.pdf is rebuilt in place.",
   });
 }
 
@@ -308,32 +379,55 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           ? profile.defaultLocale
           : "en";
 
-      const [studioDraft, uploads, application] = await Promise.all([
-        loadCvStructuredDraft(ctx.db, ctx.user.id, {
-          locale: fallbackLocale,
-          fallbackLocale,
-        }),
-        ctx.db.cvSourceUpload.findMany({
-          where: {
-            userId: ctx.user.id,
-            importStatus: { in: ["pending", "preview", "imported"] },
-          },
-          orderBy: { createdAt: "desc" },
-          take: 10,
-          select: {
-            id: true,
-            fileName: true,
-            importStatus: true,
-            createdAt: true,
-          },
-        }),
-        input.applicationId
-          ? ctx.db.application.findFirst({
-              where: { id: input.applicationId, userId: ctx.user.id },
-              include: { company: true },
-            })
-          : Promise.resolve(null),
-      ]);
+      const [studioDraft, uploads, application, latestExport] =
+        await Promise.all([
+          loadCvStructuredDraft(ctx.db, ctx.user.id, {
+            locale: fallbackLocale,
+            fallbackLocale,
+          }),
+          ctx.db.cvSourceUpload.findMany({
+            where: {
+              userId: ctx.user.id,
+              importStatus: { in: ["pending", "preview", "imported"] },
+            },
+            orderBy: { createdAt: "desc" },
+            take: 10,
+            select: {
+              id: true,
+              fileName: true,
+              importStatus: true,
+              createdAt: true,
+            },
+          }),
+          input.applicationId
+            ? ctx.db.application.findFirst({
+                where: { id: input.applicationId, userId: ctx.user.id },
+                include: { company: true },
+              })
+            : Promise.resolve(null),
+          input.applicationId
+            ? ctx.db.resumeExport.findFirst({
+                where: {
+                  applicationId: input.applicationId,
+                  userId: ctx.user.id,
+                },
+                orderBy: { createdAt: "desc" },
+                select: {
+                  id: true,
+                  fileUrl: true,
+                  fileName: true,
+                  mimeType: true,
+                  pdfFileUrl: true,
+                  pdfFileName: true,
+                  structuredSnapshot: true,
+                  matchAnalysis: true,
+                  aiScore: true,
+                  pitchSubject: true,
+                  pitchBody: true,
+                },
+              })
+            : Promise.resolve(null),
+        ]);
 
       return {
         hasStudioData: Boolean(studioDraft),
@@ -352,6 +446,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
               description: application.description ?? "",
             }
           : null,
+        latestExport,
       };
     }),
 
@@ -372,7 +467,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           });
         }
 
-        const { parsed } = await fetchUploadDocxForTailor(
+        const { parsed } = await fetchUploadForTailor(
           ctx.db,
           input.uploadId,
           ctx.user.id,
@@ -427,30 +522,25 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         }
 
         try {
-          const { upload, parsed } = await fetchUploadDocxForTailor(
+          const source = await fetchUploadForTailor(
             ctx.db,
             input.uploadId,
             ctx.user.id,
           );
 
           const { result, provider } = await tailorDocxResume(
-            parsed.sections,
+            source.parsed.sections,
             jobDescription,
             input.provider,
           );
 
-          return finalizeDocxTailorExport(ctx.db, ctx.user.id, {
-            parsed,
-            adaptedSections: result.sections,
-            aiScore: result.aiScore,
-            matchNotes: result.matchNotes,
+          return finalizeUploadTailorExport(ctx.db, ctx.user.id, {
+            source,
+            result,
             aiProvider: provider,
-            sourceType: "upload",
-            sourceUploadId: upload.id,
             jobDescription,
             applicationId: input.applicationId,
             tailoredFor: input.tailoredFor,
-            structuredSnapshot: upload.parsedDraft ?? undefined,
             targetLocale: result.detectedLocale ?? input.targetLocale,
           });
         } catch (error) {
@@ -476,17 +566,34 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           baseDraft,
         );
 
+        let parsedPdf;
+        let pdfAdaptedSections;
+        try {
+          const sidecar = await tailorStudioPdfSidecar(
+            jobDescription,
+            input.provider,
+            baseDraft,
+          );
+          parsedPdf = sidecar.parsedPdf;
+          pdfAdaptedSections = sidecar.pdfAdaptedSections;
+        } catch (error) {
+          console.error("studio PDF tailor failed", error);
+        }
+
         return finalizeDocxTailorExport(ctx.db, ctx.user.id, {
           parsed,
           adaptedSections: result.sections,
           aiScore: result.aiScore,
           matchNotes: result.matchNotes,
+          matchAnalysis: result.matchAnalysis,
           aiProvider: provider,
           sourceType: "studio",
           jobDescription,
           applicationId: input.applicationId,
           tailoredFor: input.tailoredFor,
           structuredSnapshot: baseDraft,
+          parsedPdf,
+          pdfAdaptedSections,
           targetLocale:
             result.detectedLocale ??
             input.targetLocale ??
@@ -522,7 +629,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           });
         }
 
-        const { upload, parsed } = await fetchUploadDocxForTailor(
+        const source = await fetchUploadForTailor(
           ctx.db,
           input.uploadId,
           ctx.user.id,
@@ -540,18 +647,13 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           });
         }
 
-        return finalizeDocxTailorExport(ctx.db, ctx.user.id, {
-          parsed,
-          adaptedSections: result.sections,
-          aiScore: result.aiScore,
-          matchNotes: result.matchNotes,
+        return finalizeUploadTailorExport(ctx.db, ctx.user.id, {
+          source,
+          result,
           aiProvider: "manual",
-          sourceType: "upload",
-          sourceUploadId: upload.id,
           jobDescription,
           applicationId: input.applicationId,
           tailoredFor: input.tailoredFor,
-          structuredSnapshot: upload.parsedDraft ?? undefined,
           targetLocale: result.detectedLocale ?? input.targetLocale,
         });
       }
@@ -583,6 +685,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         adaptedSections: result.sections,
         aiScore: result.aiScore,
         matchNotes: result.matchNotes,
+        matchAnalysis: result.matchAnalysis,
         aiProvider: "manual",
         sourceType: "studio",
         jobDescription,
@@ -594,5 +697,189 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           input.targetLocale ??
           baseDraft.detectedLocale,
       });
+    }),
+
+  exportTailoredVariant: protectedProcedure
+    .input(
+      z.object({
+        exportId: z.string(),
+        variant: z.enum(["docx", "pdf", "ats-docx", "ats-pdf"]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const resumeExport = await ctx.db.resumeExport.findFirst({
+        where: { id: input.exportId, userId: ctx.user.id },
+      });
+      if (!resumeExport) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const stem = resumeExport.fileName.replace(/\.(docx|pdf)$/i, "");
+      const docxMime =
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+      if (input.variant === "docx") {
+        return { url: resumeExport.fileUrl, fileName: resumeExport.fileName };
+      }
+
+      if (input.variant === "pdf") {
+        if (resumeExport.pdfFileUrl) {
+          return {
+            url: resumeExport.pdfFileUrl,
+            fileName: resumeExport.pdfFileName ?? resumeExport.fileName,
+          };
+        }
+        if (isPdfUpload(resumeExport.fileName, resumeExport.mimeType)) {
+          return {
+            url: resumeExport.fileUrl,
+            fileName: resumeExport.fileName,
+          };
+        }
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message:
+            "No styled PDF on this export. Tailor again so cv-template.pdf is rebuilt in place.",
+        });
+      }
+
+      const parsed = CvImportDraftSchema.safeParse(
+        resumeExport.structuredSnapshot,
+      );
+      if (!parsed.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No ATS snapshot is available for this export.",
+        });
+      }
+
+      try {
+        if (input.variant === "ats-docx") {
+          const buffer = await generateDocxFromStructured(parsed.data);
+          const fileName = `${stem} - ATS.docx`;
+          const uploaded = await uploadBufferToUploadThing(
+            ctx.user.id,
+            buffer,
+            fileName,
+            docxMime,
+          );
+          return { url: uploaded.url, fileName };
+        }
+
+        const buffer = await generateCvPdfFromSnapshot(
+          parsed.data,
+          parsed.data.detectedLocale,
+        );
+        const fileName = `${stem} - ATS.pdf`;
+        const uploaded = await uploadBufferToUploadThing(
+          ctx.user.id,
+          buffer,
+          fileName,
+          "application/pdf",
+        );
+        return { url: uploaded.url, fileName };
+      } catch (error) {
+        rethrowTailorExportError(error);
+      }
+    }),
+
+  generateTailoredPdf: protectedProcedure
+    .input(z.object({ exportId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const resumeExport = await ctx.db.resumeExport.findFirst({
+        where: { id: input.exportId, userId: ctx.user.id },
+      });
+      if (!resumeExport) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const pdf = await ensureStyledPdf(ctx.db, resumeExport);
+      return { pdfDownloadUrl: pdf.url, pdfFileName: pdf.fileName };
+    }),
+
+  replacePolishedResume: protectedProcedure
+    .input(
+      z.object({
+        exportId: z.string().optional(),
+        applicationId: z.string().optional(),
+        originalFileUrl: z.string().url(),
+        uploadThingKey: z.string().min(1),
+        fileName: z.string().min(1),
+        mimeType: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const kind = classifyPolishedResumeFile(input.fileName, input.mimeType);
+
+      let resumeExport = input.exportId
+        ? await ctx.db.resumeExport.findFirst({
+            where: { id: input.exportId, userId: ctx.user.id },
+          })
+        : null;
+
+      if (!resumeExport && input.applicationId) {
+        resumeExport = await ctx.db.resumeExport.findFirst({
+          where: {
+            applicationId: input.applicationId,
+            userId: ctx.user.id,
+          },
+          orderBy: { createdAt: "desc" },
+        });
+      }
+
+      if (!resumeExport) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No tailored resume found to replace. Generate one first.",
+        });
+      }
+
+      const pdfFileName =
+        kind === "pdf"
+          ? input.fileName
+          : resumeExport.fileName.replace(/\.docx$/i, ".pdf");
+
+      const updated = await ctx.db.resumeExport.update({
+        where: { id: resumeExport.id },
+        data:
+          kind === "pdf"
+            ? {
+                pdfFileName,
+                pdfFileUrl: input.originalFileUrl,
+                pdfUploadThingKey: input.uploadThingKey,
+              }
+            : {
+                fileName: resumeExport.fileName.endsWith(".docx")
+                  ? resumeExport.fileName
+                  : `${resumeExport.fileName.replace(/\.[^.]+$/, "")}.docx`,
+                fileUrl: input.originalFileUrl,
+                uploadThingKey: input.uploadThingKey,
+                mimeType: input.mimeType,
+                pdfFileName: null,
+                pdfFileUrl: null,
+                pdfUploadThingKey: null,
+              },
+      });
+
+      if (updated.applicationId) {
+        await ctx.db.application.update({
+          where: { id: updated.applicationId },
+          data: {
+            cvFile: {
+              name: kind === "pdf" ? pdfFileName : updated.fileName,
+              url: kind === "pdf" ? input.originalFileUrl : updated.fileUrl,
+              uploadedAt: new Date(),
+            },
+          },
+        });
+      }
+
+      return {
+        exportId: updated.id,
+        downloadUrl: updated.fileUrl,
+        fileName: updated.fileName,
+        pdfDownloadUrl: updated.pdfFileUrl,
+        pdfFileName: updated.pdfFileName,
+        kind,
+      };
     }),
 });

@@ -1,12 +1,11 @@
 "use client";
 
-import type { FC } from "react";
-import { useCallback, useMemo, useState, useTransition } from "react";
+import type { FC, ReactNode } from "react";
+import { useCallback, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import {
   AlertTriangle,
   CheckCircle2,
-  Download,
   FileText,
   Loader2,
   RefreshCw,
@@ -20,7 +19,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { OfficeDocumentPreview } from "@/components/shared/office-document-preview";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import {
@@ -30,6 +28,11 @@ import {
 import { ManualAiPanel } from "@/features/resume-engine/components/manual-ai-panel";
 import { ResumeDocxUpload } from "@/features/resume-engine/components/resume-docx-upload";
 import type { AiProviderName } from "@/features/resume-engine/lib/ai/provider-types";
+import { ResumeTailorPreviewPanel } from "@/features/resume-engine/components/resume-tailor-preview-panel";
+import {
+  parseMatchAnalysis,
+  type CvMatchAnalysis,
+} from "@/features/resume-engine/lib/cv-match-analysis";
 
 type SourceType = "studio" | "upload";
 type Step = "configure" | "tailoring" | "done";
@@ -44,15 +47,12 @@ interface ResumeTailorWorkflowProps {
   applicationId?: string;
   embedded?: boolean;
   existingCvFile?: ExistingCvFile;
-  /** When true, Office preview starts expanded (detail split view). */
-  previewDefaultOpen?: boolean;
 }
 
 export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   applicationId,
   embedded = false,
   existingCvFile,
-  previewDefaultOpen = false,
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [step, setStep] = useState<Step>("configure");
@@ -60,13 +60,21 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   const [uploadId, setUploadId] = useState<string | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [exportId, setExportId] = useState<string | null>(null);
   const [aiScore, setAiScore] = useState<number | null>(null);
   const [matchNotes, setMatchNotes] = useState<string | null>(null);
+  const [matchAnalysis, setMatchAnalysis] = useState<CvMatchAnalysis | null>(
+    null,
+  );
+  const [structuredSnapshot, setStructuredSnapshot] = useState<unknown>(null);
+  const [pdfDownloadUrl, setPdfDownloadUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<AiProcessingMode>("auto");
   const [provider, setProvider] = useState<AiProviderName | null>(null);
   const [manualTailorJson, setManualTailorJson] = useState("");
   const [showTailorForm, setShowTailorForm] = useState(() => !existingCvFile);
+  const [showReplaceFile, setShowReplaceFile] = useState(false);
+  const [appliedExportId, setAppliedExportId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const aiSettings = api.resumeEngineAdmin.getAiSettings.useQuery();
@@ -89,8 +97,12 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   const tailorResume = api.resumeEngineAdmin.tailorResume.useMutation();
   const tailorResumeManual =
     api.resumeEngineAdmin.tailorResumeManual.useMutation();
+  const replacePolishedResume =
+    api.resumeEngineAdmin.replacePolishedResume.useMutation();
+  const utils = api.useUtils();
 
   const application = pageData.data?.application;
+  const latestExport = pageData.data?.latestExport;
   const hasStudioData = pageData.data?.hasStudioData ?? false;
   const uploads = pageData.data?.uploads ?? [];
   const hasAutoProviders = aiSettings.data?.hasAutoProviders ?? false;
@@ -108,13 +120,39 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     aiSettings.data && !hasAutoProviders ? "manual" : mode;
   const effectiveProvider = provider ?? defaultProvider;
 
-  const matchNoteItems = useMemo(
-    () =>
-      matchNotes
-        ?.split(/\n+/)
-        .map((line) => line.replace(/^[-•*]\s*/, "").trim())
-        .filter(Boolean) ?? [],
-    [matchNotes],
+  if (!showTailorForm && latestExport && appliedExportId !== latestExport.id) {
+    const analysis = parseMatchAnalysis(latestExport.matchAnalysis);
+    setAppliedExportId(latestExport.id);
+    setExportId(latestExport.id);
+    setDownloadUrl(latestExport.fileUrl);
+    setPdfDownloadUrl(latestExport.pdfFileUrl ?? null);
+    setStructuredSnapshot(latestExport.structuredSnapshot ?? null);
+    setAiScore(latestExport.aiScore ?? null);
+    setMatchNotes(analysis?.notes ?? null);
+    setMatchAnalysis(analysis);
+    setStep("done");
+  }
+
+  const applyTailorResult = useCallback(
+    (result: {
+      downloadUrl: string;
+      exportId?: string;
+      aiScore: number | null;
+      matchNotes?: string | null;
+      matchAnalysis?: unknown;
+      structuredSnapshot?: unknown;
+      pdfDownloadUrl?: string | null;
+    }) => {
+      setDownloadUrl(result.downloadUrl);
+      setExportId(result.exportId ?? null);
+      setAiScore(result.aiScore);
+      setMatchNotes(result.matchNotes ?? null);
+      setMatchAnalysis(parseMatchAnalysis(result.matchAnalysis));
+      setStructuredSnapshot(result.structuredSnapshot ?? null);
+      setPdfDownloadUrl(result.pdfDownloadUrl ?? null);
+      if (result.exportId) setAppliedExportId(result.exportId);
+    },
+    [],
   );
 
   const handleTailorAuto = useCallback(() => {
@@ -142,9 +180,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           applicationId,
           provider: effectiveProvider ?? undefined,
         });
-        setDownloadUrl(result.downloadUrl);
-        setAiScore(result.aiScore);
-        setMatchNotes(result.matchNotes ?? null);
+        applyTailorResult(result);
         setStep("done");
         toast.success(t("tailorSuccess"));
       } catch (err) {
@@ -161,6 +197,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     hasStudioData,
     sourceType,
     tailorResume,
+    applyTailorResult,
     t,
     uploadId,
   ]);
@@ -190,9 +227,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           applicationId,
           rawJson: manualTailorJson,
         });
-        setDownloadUrl(result.downloadUrl);
-        setAiScore(result.aiScore);
-        setMatchNotes(result.matchNotes ?? null);
+        applyTailorResult(result);
         setStep("done");
         toast.success(t("tailorSuccess"));
       } catch (err) {
@@ -209,15 +244,13 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     manualTailorJson,
     sourceType,
     tailorResumeManual,
+    applyTailorResult,
     t,
     uploadId,
   ]);
 
   const handleUploadComplete = useCallback(
-    (files: { url: string; key: string; name: string }[]) => {
-      const file = files[0];
-      if (!file) return;
-
+    (file: { url: string; key: string; name: string; mimeType?: string }) => {
       startTransition(async () => {
         setError(null);
         try {
@@ -226,7 +259,11 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
             uploadThingKey: file.key,
             fileName: file.name,
             mimeType:
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              file.mimeType && file.mimeType.length > 0
+                ? file.mimeType
+                : file.name.toLowerCase().endsWith(".pdf")
+                  ? "application/pdf"
+                  : "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           });
           setUploadId(registered.id);
           toast.success(t("tailorUploadReady"));
@@ -250,11 +287,131 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     return result.data ?? null;
   }, [effectiveJobDescription.length, t, tailorPrompt]);
 
+  const handlePolishedUpload = useCallback(
+    (file: { url: string; key: string; name: string; mimeType: string }) => {
+      startTransition(async () => {
+        try {
+          const result = await replacePolishedResume.mutateAsync({
+            exportId: exportId ?? undefined,
+            applicationId,
+            originalFileUrl: file.url,
+            uploadThingKey: file.key,
+            fileName: file.name,
+            mimeType: file.mimeType,
+          });
+          setExportId(result.exportId);
+          setDownloadUrl(result.downloadUrl);
+          setPdfDownloadUrl(result.pdfDownloadUrl ?? null);
+          setShowReplaceFile(false);
+          toast.success(
+            result.kind === "pdf"
+              ? t("polishPdfSuccess")
+              : t("polishDocxSuccess"),
+          );
+          void utils.resumeEngineAdmin.getTailorPageData.invalidate();
+          if (applicationId) {
+            void utils.jobTrackerAdmin.getApplicationById.invalidate({
+              id: applicationId,
+            });
+          }
+        } catch (err) {
+          const message =
+            err instanceof Error ? err.message : t("polishUploadFailed");
+          toast.error(t("polishUploadFailed"), { description: message });
+        }
+      });
+    },
+    [
+      applicationId,
+      exportId,
+      replacePolishedResume,
+      t,
+      utils.jobTrackerAdmin.getApplicationById,
+      utils.resumeEngineAdmin.getTailorPageData,
+    ],
+  );
+
+  const renderPolishUpload = () => {
+    if (!exportId && !applicationId) return null;
+    if (!showReplaceFile) {
+      return (
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          onClick={() => setShowReplaceFile(true)}
+        >
+          <Upload className="size-3.5" aria-hidden />
+          {t("polishReplaceCta")}
+        </Button>
+      );
+    }
+    return (
+      <div className="rounded-md border p-3">
+        <div className="mb-2 flex items-start justify-between gap-2">
+          <p className="text-xs font-medium">{t("polishUploadTitle")}</p>
+          <Button
+            type="button"
+            size="sm"
+            variant="ghost"
+            className="h-auto px-0 text-xs"
+            onClick={() => setShowReplaceFile(false)}
+          >
+            {t("polishReplaceCancel")}
+          </Button>
+        </div>
+        <p className="text-muted-foreground mb-3 text-xs">
+          {t("polishUploadHint")}
+        </p>
+        <ResumeDocxUpload
+          allowPdf
+          preferPdf
+          resetKey={downloadUrl ?? exportId ?? "polish"}
+          onUploaded={handlePolishedUpload}
+          onError={(message) => {
+            toast.error(t("polishUploadFailed"), { description: message });
+          }}
+        />
+      </div>
+    );
+  };
+
+  const previewFileUrl = downloadUrl ?? existingCvFile?.url ?? "";
+
+  const renderPreviewPanel = (actions?: ReactNode) => (
+    <ResumeTailorPreviewPanel
+      fileUrl={previewFileUrl}
+      fileName={latestExport?.fileName ?? existingCvFile?.name}
+      mimeType={latestExport?.mimeType}
+      structuredSnapshot={structuredSnapshot}
+      downloadUrl={downloadUrl}
+      pdfDownloadUrl={pdfDownloadUrl}
+      aiScore={aiScore}
+      matchNotes={matchNotes}
+      matchAnalysis={matchAnalysis}
+      actions={
+        <>
+          {actions}
+          {!showReplaceFile ? renderPolishUpload() : null}
+        </>
+      }
+      belowToolbar={showReplaceFile ? renderPolishUpload() : null}
+    />
+  );
+
+  const renderTailorExtras = (actions?: ReactNode) => (
+    <div className="mt-3">{renderPreviewPanel(actions)}</div>
+  );
+
   const handleResetTailor = useCallback(() => {
     setStep("configure");
     setDownloadUrl(null);
+    setExportId(null);
     setAiScore(null);
     setMatchNotes(null);
+    setMatchAnalysis(null);
+    setStructuredSnapshot(null);
+    setPdfDownloadUrl(null);
     setManualTailorJson("");
     setError(null);
     setShowTailorForm(true);
@@ -265,53 +422,36 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
 
   const renderExistingBanner = () =>
     existingCvFile ? (
-      <div className="border-primary/30 bg-primary/5 flex gap-2.5 rounded-lg border p-4">
-        <CheckCircle2
-          className="text-primary mt-0.5 size-[18px] shrink-0"
-          aria-hidden
-        />
-        <div className="min-w-0 flex-1 text-[13px]">
-          <p className="text-primary font-medium">{t("tailorAlreadyDone")}</p>
-          <p className="text-muted-foreground mt-1">
-            {t("tailorGeneratedOn", {
-              date: new Intl.DateTimeFormat(undefined, {
-                month: "short",
-                day: "numeric",
-              }).format(new Date(existingCvFile.uploadedAt)),
-            })}
-          </p>
-          <div className="mt-2.5">
-            <OfficeDocumentPreview
-              fileUrl={existingCvFile.url}
-              title={t("tailorPreviewTitle")}
-              openLabel={t("tailorPreviewOpen")}
-              closeLabel={t("tailorPreviewClose")}
-              defaultOpen={previewDefaultOpen}
-              leadingActions={
-                <a
-                  href={existingCvFile.url}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={buttonVariants({ size: "sm", variant: "outline" })}
-                >
-                  <Download className="mr-1.5 size-3.5" aria-hidden />
-                  {t("tailorDownload")}
-                </a>
-              }
-              trailingActions={
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={handleResetTailor}
-                >
-                  {t("tailorRegenerate")}
-                </Button>
-              }
-            />
+      <div className="space-y-3">
+        <div className="flex items-start gap-2.5">
+          <CheckCircle2
+            className="text-primary mt-0.5 size-4.5 shrink-0"
+            aria-hidden
+          />
+          <div className="min-w-0 flex-1">
+            <p className="text-primary text-sm font-medium">
+              {t("tailorAlreadyDone")}
+            </p>
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              {t("tailorGeneratedOn", {
+                date: new Intl.DateTimeFormat(undefined, {
+                  month: "short",
+                  day: "numeric",
+                }).format(new Date(existingCvFile.uploadedAt)),
+              })}
+            </p>
           </div>
         </div>
+        {renderTailorExtras(
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={handleResetTailor}
+          >
+            {t("tailorRegenerate")}
+          </Button>,
+        )}
       </div>
     ) : null;
 
@@ -402,15 +542,10 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           ) : null}
 
           <ResumeDocxUpload
+            allowPdf
             resetKey={uploadId ?? "new"}
             onUploaded={(file) => {
-              void handleUploadComplete([
-                {
-                  url: file.url,
-                  key: file.key,
-                  name: file.name,
-                },
-              ]);
+              void handleUploadComplete(file);
             }}
             onError={(message) => {
               setError(message);
@@ -489,65 +624,17 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
 
   const renderSuccessPanel = () =>
     step === "done" && downloadUrl ? (
-      <div className="border-primary/30 bg-primary/5 mt-4 rounded-lg border p-3.5">
-        <div className="flex gap-2">
-          <CheckCircle2
-            className="text-primary mt-0.5 size-[18px] shrink-0"
-            aria-hidden
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-primary text-[13px] font-medium">
-              {t("tailorSuccessTitle")}
-            </p>
-            {aiScore !== null ? (
-              <p className="text-muted-foreground mt-1 text-xs">
-                {t("tailorScore", { score: Math.round(aiScore) })}
-              </p>
-            ) : null}
-            {matchNoteItems.length > 0 ? (
-              <ul className="text-muted-foreground mt-1.5 list-disc space-y-0.5 pl-4 text-xs">
-                {matchNoteItems.map((note) => (
-                  <li key={note}>{note}</li>
-                ))}
-              </ul>
-            ) : matchNotes ? (
-              <p className="text-muted-foreground mt-1.5 text-xs">
-                {matchNotes}
-              </p>
-            ) : null}
-            <div className="mt-2.5">
-              <OfficeDocumentPreview
-                fileUrl={downloadUrl}
-                title={t("tailorPreviewTitle")}
-                openLabel={t("tailorPreviewOpen")}
-                closeLabel={t("tailorPreviewClose")}
-                defaultOpen={previewDefaultOpen}
-                leadingActions={
-                  <a
-                    href={downloadUrl}
-                    download
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={buttonVariants({ size: "sm" })}
-                  >
-                    <Download className="mr-1.5 size-3.5" aria-hidden />
-                    {t("tailorDownload")}
-                  </a>
-                }
-                trailingActions={
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleResetTailor}
-                  >
-                    {t("tailorRegenerate")}
-                  </Button>
-                }
-              />
-            </div>
-          </div>
-        </div>
+      <div className="mt-4">
+        {renderTailorExtras(
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleResetTailor}
+          >
+            {t("tailorRegenerate")}
+          </Button>,
+        )}
       </div>
     ) : null;
 
@@ -806,56 +893,33 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            {aiScore !== null && (
-              <p className="text-sm">
-                {t("tailorScore", { score: Math.round(aiScore) })}
-              </p>
-            )}
-            {matchNotes && (
-              <p className="text-muted-foreground text-sm">{matchNotes}</p>
-            )}
-            <OfficeDocumentPreview
-              fileUrl={downloadUrl}
-              title={t("tailorPreviewTitle")}
-              openLabel={t("tailorPreviewOpen")}
-              closeLabel={t("tailorPreviewClose")}
-              defaultOpen={previewDefaultOpen}
-              leadingActions={
-                <a
-                  href={downloadUrl}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={buttonVariants()}
+            {renderTailorExtras(
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResetTailor}
                 >
-                  <Download className="mr-2 h-4 w-4" />
-                  {t("tailorDownload")}
-                </a>
-              }
-              trailingActions={
-                <>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleResetTailor}
+                  <Upload className="mr-1.5 size-3.5" aria-hidden />
+                  {t("tailorAgain")}
+                </Button>
+                {applicationId && !embedded ? (
+                  <Link
+                    href={{
+                      pathname: "/admin/job-tracker/applications/[id]",
+                      params: { id: applicationId },
+                    }}
+                    className={buttonVariants({
+                      variant: "outline",
+                      size: "sm",
+                    })}
                   >
-                    <Upload className="mr-2 h-4 w-4" />
-                    {t("tailorAgain")}
-                  </Button>
-                  {applicationId && !embedded ? (
-                    <Link
-                      href={{
-                        pathname: "/admin/job-tracker/applications/[id]",
-                        params: { id: applicationId },
-                      }}
-                      className={buttonVariants({ variant: "outline" })}
-                    >
-                      {t("tailorBackToApplication")}
-                    </Link>
-                  ) : null}
-                </>
-              }
-            />
+                    {t("tailorBackToApplication")}
+                  </Link>
+                ) : null}
+              </>,
+            )}
           </CardContent>
         </Card>
       )}
