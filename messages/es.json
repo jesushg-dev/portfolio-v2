@@ -209,6 +209,11 @@
     },
     "telephone": "tel.",
     "codedWith": "Este CV fue creado con ReactJS.",
+    "unpublished": {
+      "title": "El CV aún no es público",
+      "description": "Este currículum sigue en borrador. Puedes seguir viendo el resto del portafolio.",
+      "backHome": "Volver al inicio"
+    },
     "pdfDelivery": {
       "toggleSend": "Enviar por correo",
       "toggleClose": "Cerrar",
@@ -488,35 +493,10 @@
       }
     },
     "services": {
-      "title": "Lo que construyo",
-      "subtitle": "Capacidades de ingeniería",
-      "description": "Una visión práctica de las áreas técnicas en las que he entregado resultados: desde sistemas web full-stack y plataformas financieras hasta apps móviles e infraestructura cloud.",
+      "title": "Servicios",
+      "subtitle": "",
+      "description": "",
       "items": {
-        "frontend": {
-          "title": "Desarrollo Frontend & UI/UX",
-          "description": "Diseño y desarrollo de interfaces web espectaculares, de alto rendimiento y totalmente accesibles cumpliendo el estándar WCAG 2.2 AAA con React, Next.js y Tailwind CSS.",
-          "stats": "100+ Componentes UI · WCAG 2.2 AAA"
-        },
-        "backend": {
-          "title": "Desarrollo Backend & APIs",
-          "description": "Arquitectura de microservicios, APIs REST/tRPC y bases de datos escalables enfocadas en seguridad y alto rendimiento.",
-          "stats": "99.9% Disponibilidad · SQL & NoSQL"
-        },
-        "mobile": {
-          "title": "Desarrollo Móvil",
-          "description": "Aplicaciones móviles nativas y multiplataforma ágiles, modernas y fluidas con React Native para iOS y Android.",
-          "stats": "Multiplataforma · iOS & Android"
-        },
-        "devops": {
-          "title": "Sistemas & Cloud DevOps",
-          "description": "Administración de servidores Linux, contenedorización con Docker, integración continua CI/CD y despliegues en la nube.",
-          "stats": "Docker & Linux · CI/CD Automation"
-        },
-        "cybersecurity": {
-          "title": "Ciberseguridad & Auditorías",
-          "description": "Auditorías de seguridad, análisis de vulnerabilidades con Snyk, cumplimiento de estándares OWASP Top 10 y pruebas de penetración.",
-          "stats": "OWASP Top 10 · Snyk Compliance"
-        },
         "contact": {
           "title": "Hablemos de tu proyecto",
           "subtitle": "¿Tienes una idea en mente?",
@@ -687,7 +667,7 @@
       "title": "Hablemos",
       "title2": "Envía un mensaje",
       "eyebrow": "Contacto",
-      "subtitle": "Si buscas un Senior Full Stack Developer que pueda contribuir desde el primer día, aportar en discusiones técnicas y entregar software confiable a escala, hablemos.\n\nTambién puedes escribirme solo para conectar.",
+      "subtitle": "Usa el formulario o los canales de abajo.",
       "responseTime": "Respuesta en menos de 24 h",
       "divider": "o",
       "noChannels": "Usa el formulario para escribirme. Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
@@ -772,9 +752,7 @@
       "title": "Experiencia Profesional",
       "subtitle": "Empresas, roles e impacto medible",
       "viewAll": "Ver CV completo para el historial detallado",
-      "showingRecent": "Mostrando los roles más recientes.",
-      "leadershipTitle": "Liderazgo técnico en cada rol",
-      "leadershipDescription": "Desde liderar un equipo de 6 ingenieros en Contollo hasta arquitectar sistemas en Imagemaker y Walmart/VTEX, he tomado decisiones técnicas, mentorié desarrolladores y entregado resultados en cada nivel."
+      "showingRecent": "Mostrando los roles más recientes."
     },
     "impactStats": {
       "teamSize": {
@@ -1439,6 +1417,9 @@
       "defaultLocale": "Idioma por defecto",
       "defaultLocaleHint": "Idioma del CV cuando no hay traducción disponible.",
       "cvPdfUrl": "URL del PDF del CV (opcional)",
+      "mapLocation": "Ubicación en el mapa",
+      "mapLocationHint": "Ciudad que aparece en el globo de Hablemos. Quien visita se conecta a este punto si se puede detectar su ubicación.",
+      "mapLocationPlaceholder": "Ámsterdam, Países Bajos",
       "publish": "Publicar mi CV",
       "saved": "Ajustes guardados.",
       "saveFailed": "No se pudieron guardar los ajustes",
@@ -1447,7 +1428,10 @@
       "pdfSectionTitle": "CV en PDF (multiidioma)",
       "pdfSectionDescription": "Proporciona enlaces PDF separados para cada idioma. Cuando los visitantes vean tu portafolio en un idioma específico, descargarán el PDF correspondiente.",
       "pdfLinkPlaceholder": "https://ejemplo.com/cv-{locale}.pdf",
-      "usernameValidation": "Usa letras minúsculas, números y guiones"
+      "usernameValidation": "Usa letras minúsculas, números y guiones",
+      "credentialsTitle": "Credenciales e integraciones",
+      "credentialsDescription": "Conecta Spotify, correo, subida de archivos e IA para este portafolio. Si ya las configuraste, siguen aquí.",
+      "credentialsCta": "Gestionar integraciones"
     },
     "spotify": {
       "title": "Spotify",
@@ -1548,6 +1532,7 @@
       "contact": {
         "type": "Tipo",
         "value": "Valor",
+        "locationValueHint": "Ciudad del globo de Hablemos si no configuraste Ubicación en Ajustes (ej. Ámsterdam, Países Bajos).",
         "labelOptional": "Etiqueta (opcional)",
         "labelHint": "Texto junto al contacto (ej. «Escríbeme» o tu usuario).",
         "add": "+ Añadir contacto",

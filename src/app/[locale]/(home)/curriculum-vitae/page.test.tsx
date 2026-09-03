@@ -27,6 +27,10 @@ jest.mock("next-intl/server", () => {
       "actions.download": "Download CV",
       codedWith: "This CV was created using ReactJS.",
       title: "Curriculum Vitae",
+      "unpublished.title": "CV isn’t public yet",
+      "unpublished.description":
+        "This résumé is still a draft. You can keep browsing the rest of the portfolio.",
+      "unpublished.backHome": "Back to home",
     };
     const t = (key: string) => labels[key] ?? key;
     t.has = (key: string) => key in labels;
@@ -108,6 +112,7 @@ const tenant = {
   username: "janedoe",
   defaultLocale: "en" as const,
   isPrimary: true,
+  isPublished: true,
 };
 
 function mockDbHappyPath() {
@@ -165,9 +170,21 @@ describe("CvPageView", () => {
     expect(mockNotFound).toHaveBeenCalled();
   });
 
-  it("calls notFound for unpublished non-primary tenants", async () => {
-    mockResolveTenant.mockResolvedValue(null);
-    await expect(CvPageView({ locale: "en" })).rejects.toThrow("NOT_FOUND");
+  it("shows an unpublished state instead of 404 for draft tenants", async () => {
+    mockResolveTenant.mockResolvedValue({
+      ...tenant,
+      isPrimary: false,
+      isPublished: false,
+    });
+
+    const ui = await CvPageView({ locale: "en" });
+    renderWithIntl(ui as ReactElement);
+
+    expect(
+      screen.getByRole("heading", { name: /public yet/i }),
+    ).toBeInTheDocument();
+    expect(mockNotFound).not.toHaveBeenCalled();
+    expect(mockDb.cvHeader.findUnique).not.toHaveBeenCalled();
   });
 
   it("renders pdfMode preview when pdfMode is true", async () => {

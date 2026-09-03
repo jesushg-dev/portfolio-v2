@@ -127,6 +127,10 @@ model Profile {
   /// when a domain is actually set.
   customDomain  String?
   cvPdfUrl      String?
+  /// City or place shown on the Let's Talk map (geocoded on save).
+  mapLocationLabel String?
+  mapLatitude      Float?
+  mapLongitude     Float?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

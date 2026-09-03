@@ -17,7 +17,6 @@ import {
   Palette,
   Sparkles,
   ClipboardList,
-  KeyRound,
   MonitorSmartphone,
   Radio,
 } from "lucide-react";
@@ -53,7 +52,6 @@ interface NavItem {
     | "services"
     | "certifications"
     | "spotify"
-    | "credentials"
     | "jobTracker"
     | "settings"
     | "uses"
@@ -120,7 +118,6 @@ const NAV_ITEMS: NavItem[] = [
     icon: Radio,
     group: "pages",
   },
-  { href: "/admin/credentials", labelKey: "credentials", icon: KeyRound },
   // ── Config ─────────────────────────────────────────────
   { href: "/admin/settings", labelKey: "settings", icon: Settings },
 ];
@@ -184,10 +181,20 @@ const DashboardShell: FC<IDashboardShellProps> = ({
     if (item.href === "/admin") {
       return isAdminOverview(normalizedPathname);
     }
+    if (item.labelKey === "settings") {
+      return (
+        normalizedPathname.startsWith("/admin/settings") ||
+        normalizedPathname.startsWith("/admin/credentials")
+      );
+    }
     return normalizedPathname.startsWith(item.href);
   };
 
   const pageTitle = useMemo(() => {
+    if (normalizedPathname.startsWith("/admin/credentials")) {
+      return t("nav.credentials");
+    }
+
     const matched = [...NAV_ITEMS]
       .sort((a, b) => b.href.length - a.href.length)
       .find((item) => {
@@ -217,7 +224,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
     <div className="bg-background text-foreground flex h-screen w-full flex-col overflow-hidden md:flex-row">
       <Sidebar open={open} setOpen={setOpen}>
         <SidebarBody
-          className="justify-between gap-4"
+          className="h-full min-h-0 justify-between gap-4"
           mobileActions={
             <>
               <LocaleSelector />
@@ -232,20 +239,17 @@ const DashboardShell: FC<IDashboardShellProps> = ({
             </>
           }
         >
-          <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
-            <div className="flex h-12 items-center justify-between gap-1">
-              {open ? (
-                <Logo userName={userName} title={t("title")} />
-              ) : (
-                <LogoIcon userName={userName} />
-              )}
-              <SidebarPinToggle />
-            </div>
+          <div className="flex h-12 shrink-0 items-center justify-between gap-1">
+            {open ? (
+              <Logo userName={userName} title={t("title")} />
+            ) : (
+              <LogoIcon userName={userName} />
+            )}
+            <SidebarPinToggle />
+          </div>
 
-            <nav
-              aria-label={t("nav.sidebar")}
-              className="mt-8 flex flex-col gap-1"
-            >
+          <div className="mt-4 flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto">
+            <nav aria-label={t("nav.sidebar")} className="flex flex-col gap-1">
               {topItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -321,7 +325,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex shrink-0 flex-col gap-1 border-t pt-3">
             <SidebarLink
               link={{
                 label: t("nav.settings"),

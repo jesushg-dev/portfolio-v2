@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { locales, type Locale } from "@/i18n/config";
 import { getCvPdfDownload } from "@/features/cv/lib/get-cv-pdf-download";
 import { resolveTenant } from "@/lib/tenant/resolve";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,7 +15,7 @@ function isLocale(value: string | null): value is Locale {
 
 export async function GET(request: Request) {
   const tenant = await resolveTenant();
-  if (!tenant) {
+  if (!tenant || !isPublicCvVisible(tenant)) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 

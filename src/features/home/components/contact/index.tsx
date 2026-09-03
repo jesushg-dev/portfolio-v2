@@ -88,7 +88,7 @@ const Contact: FC = async () => {
                 ) : null}
               </div>
 
-              <ContactIllustration />
+              <ContactIllustration location={data.mapLocation} />
             </div>
 
             {showContactForm ? (

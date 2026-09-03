@@ -6,6 +6,7 @@ import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { buildLocaleAlternates } from "@/lib/seo/alternates";
 import { buildSocialMetadata } from "@/lib/seo/site";
 import { resolveTenant } from "@/lib/tenant/resolve";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { db } from "@/server/db";
 
 export async function generateMetadata({
@@ -23,6 +24,14 @@ export async function generateMetadata({
   const tenant = await resolveTenant();
   let title = t("title");
   let description = "";
+
+  if (tenant && !isPublicCvVisible(tenant)) {
+    return {
+      title: t("unpublished.title"),
+      description: t("unpublished.description"),
+      robots: { index: false, follow: true },
+    };
+  }
 
   if (tenant) {
     const [appLanguages, header, aboutMe] = await Promise.all([

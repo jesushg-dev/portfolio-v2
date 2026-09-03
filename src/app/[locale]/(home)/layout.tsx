@@ -9,12 +9,15 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 export { generateMetadata } from "./metadata";
 
 import Layout from "@/components/app-layout";
+import { PublicCvVisibleProvider } from "@/components/app-layout/public-cv-visible";
 import LcpImagePreload from "@/components/shared/lcp-image-preload";
 import DeferredTrpcProvider from "@/components/providers/deferred-trpc-provider";
 import { getHeroLcpImageUrl } from "@/features/home/components/hero-lcp-image";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import type { Locale as AppLocale } from "@/i18n/config";
 import { CV_PDF_MODE_HEADER } from "@/lib/tenant/headers";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
+import { resolveTenant } from "@/lib/tenant/resolve";
 
 export const revalidate = 60;
 
@@ -42,6 +45,7 @@ export default async function SiteLayout({
   const lcpPhotoUrl = heroData?.photoUrl?.trim()
     ? getHeroLcpImageUrl(heroData.photoUrl.trim())
     : null;
+  const cvPublic = isPublicCvVisible(await resolveTenant());
 
   const allMessages = await getMessages();
   const publicMessages = {
@@ -58,7 +62,9 @@ export default async function SiteLayout({
       <NextIntlClientProvider messages={publicMessages}>
         <NuqsAdapter>
           {lcpPhotoUrl ? <LcpImagePreload href={lcpPhotoUrl} /> : null}
-          <Layout>{children}</Layout>
+          <PublicCvVisibleProvider visible={cvPublic}>
+            <Layout cvPublic={cvPublic}>{children}</Layout>
+          </PublicCvVisibleProvider>
           {modal}
         </NuqsAdapter>
       </NextIntlClientProvider>

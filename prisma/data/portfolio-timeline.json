@@ -136,7 +136,8 @@
       "organization": "Imagemaker",
       "location": "Remote",
       "startDate": "2025-08-01",
-      "current": true,
+      "endDate": "2026-08-01",
+      "current": false,
       "images": []
     },
     {

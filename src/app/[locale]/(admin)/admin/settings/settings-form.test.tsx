@@ -62,6 +62,7 @@ describe("SettingsForm", () => {
         defaultLocale: "en",
         isPublished: true,
         cvPdfUrl: "",
+        mapLocationLabel: "",
       });
       expect(mockInvalidate).toHaveBeenCalled();
       expect(screen.getByText("Settings saved.")).toBeInTheDocument();

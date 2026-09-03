@@ -10,6 +10,8 @@ import {
 import { TextTranslationMapSchema } from "@/lib/i18n/localized-form";
 import type { TextTranslationMap } from "@/lib/i18n/translation-map";
 import { resolveCvPdfAsset } from "@/features/cv/lib/resolve-cv-pdf-asset";
+import { normalizeEmploymentDates } from "@/utils/tools/date";
+import { geocodePlace } from "@/lib/geo/geocode-place";
 
 type CvDbClient = Pick<PrismaClient, "appLanguage">;
 
@@ -731,10 +733,12 @@ export const cvRouter = createTRPCRouter({
         ...rest
       } = input;
       const languages = await getAppLanguages(ctx.db);
+      const dates = normalizeEmploymentDates(rest);
 
       return ctx.db.cvExperience.create({
         data: {
           ...rest,
+          ...dates,
           userId: ctx.user.id,
           translations: {
             create: buildExperienceTranslationCreates(
@@ -823,7 +827,13 @@ export const cvRouter = createTRPCRouter({
         });
       }
 
-      await ctx.db.cvExperience.update({ where: { id }, data });
+      await ctx.db.cvExperience.update({
+        where: { id },
+        data: {
+          ...data,
+          ...normalizeEmploymentDates(data),
+        },
+      });
       await upsertExperienceTranslations(
         ctx.db,
         languages,
@@ -1089,6 +1099,7 @@ export const cvRouter = createTRPCRouter({
         defaultLocale: z.enum(["en", "es", "nl"]),
         isPublished: z.boolean().default(false),
         cvPdfUrl: z.string().url().nullable().optional(),
+        mapLocationLabel: z.string().max(160).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -1103,6 +1114,18 @@ export const cvRouter = createTRPCRouter({
         });
       }
 
+      const trimmedMapLocation = input.mapLocationLabel?.trim();
+      const mapLocationLabel = trimmedMapLocation ? trimmedMapLocation : null;
+      const geocoded = mapLocationLabel
+        ? await geocodePlace(mapLocationLabel)
+        : null;
+
+      const mapFields = {
+        mapLocationLabel,
+        mapLatitude: geocoded?.lat ?? null,
+        mapLongitude: geocoded?.lon ?? null,
+      };
+
       // Omit customDomain on create so MongoDB does not store an explicit null
       // under a legacy unique index (only one null was allowed).
       return ctx.db.profile.upsert({
@@ -1113,6 +1136,7 @@ export const cvRouter = createTRPCRouter({
           displayName: input.displayName,
           defaultLocale: input.defaultLocale,
           isPublished: input.isPublished,
+          ...mapFields,
           ...(input.cvPdfUrl !== undefined ? { cvPdfUrl: input.cvPdfUrl } : {}),
         },
         update: {
@@ -1120,6 +1144,7 @@ export const cvRouter = createTRPCRouter({
           displayName: input.displayName,
           defaultLocale: input.defaultLocale,
           isPublished: input.isPublished,
+          ...mapFields,
           ...(input.cvPdfUrl !== undefined ? { cvPdfUrl: input.cvPdfUrl } : {}),
         },
       });

@@ -10,7 +10,13 @@ import { cn } from "@/lib/utils";
 
 import HeaderCtaBar from "./header-cta-bar";
 import { headerNavTriggerStyles } from "./toolbar-control-styles";
-import { homeSectionHref, NAV_GROUPS, type NavItem } from "./navigation-config";
+import {
+  homeSectionHref,
+  NAV_GROUPS,
+  navGroupsForPublicSite,
+  type NavItem,
+} from "./navigation-config";
+import { usePublicCvVisible } from "../public-cv-visible";
 
 interface NavItemCardProps {
   item: NavItem;
@@ -105,7 +111,10 @@ interface MegaMenuPanelProps {
 export const MegaMenuPanel: FC<MegaMenuPanelProps> = ({ groupId }) => {
   const t = useTranslations("global.header.nav.groups");
   const tNav = useTranslations("global.header.nav");
-  const group = NAV_GROUPS.find((entry) => entry.id === groupId);
+  const cvPublic = usePublicCvVisible();
+  const group = navGroupsForPublicSite(cvPublic).find(
+    (entry) => entry.id === groupId,
+  );
 
   if (!group) return null;
 
@@ -156,7 +165,10 @@ export const MobileNavGroup: FC<MobileNavGroupProps> = ({
   onToggle,
 }) => {
   const t = useTranslations("global.header.nav.groups");
-  const group = NAV_GROUPS.find((entry) => entry.id === groupId);
+  const cvPublic = usePublicCvVisible();
+  const group = navGroupsForPublicSite(cvPublic).find(
+    (entry) => entry.id === groupId,
+  );
   const Icon = group?.icon;
 
   if (!group) return null;

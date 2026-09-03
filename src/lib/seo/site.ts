@@ -15,6 +15,7 @@ interface SocialMetadataInput {
   url: string;
   imageUrl?: string;
   imageAlt?: string;
+  siteName?: string;
 }
 
 export function buildSocialMetadata({
@@ -23,6 +24,7 @@ export function buildSocialMetadata({
   url,
   imageUrl = DEFAULT_OG_IMAGE,
   imageAlt,
+  siteName = SITE_NAME,
 }: SocialMetadataInput): Pick<Metadata, "openGraph" | "twitter"> {
   const alt = imageAlt ?? title;
 
@@ -31,7 +33,7 @@ export function buildSocialMetadata({
       title,
       description,
       url,
-      siteName: SITE_NAME,
+      siteName,
       type: "website",
       images: [{ url: imageUrl, alt }],
     },

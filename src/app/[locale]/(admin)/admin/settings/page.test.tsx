@@ -26,6 +26,12 @@ jest.mock("./pdf-links-form", () => ({
   default: () => <div data-testid="pdf-links-form" />,
 }));
 
+jest.mock("./settings-integrations-card", () => ({
+  SettingsIntegrationsCard: () => (
+    <div data-testid="settings-integrations-card" />
+  ),
+}));
+
 describe("SettingsPage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -64,6 +70,9 @@ describe("SettingsPage", () => {
     expect(screen.getByText("title")).toBeInTheDocument();
     expect(screen.getByText("subtitle")).toBeInTheDocument();
     expect(screen.getByTestId("settings-form")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("settings-integrations-card"),
+    ).toBeInTheDocument();
     expect(screen.getByTestId("pdf-links-form")).toBeInTheDocument();
   });
 });

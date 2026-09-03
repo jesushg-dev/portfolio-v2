@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { locales, type Locale } from "@/i18n/config";
 import { resolveTenant } from "@/lib/tenant/resolve";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { db } from "@/server/db";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
@@ -18,7 +19,7 @@ function isLocale(value: string | null): value is Locale {
 
 export async function GET(request: Request) {
   const tenant = await resolveTenant();
-  if (!tenant) {
+  if (!tenant || !isPublicCvVisible(tenant)) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 

@@ -209,6 +209,11 @@
     },
     "telephone": "tel.",
     "codedWith": "This CV was created using ReactJS.",
+    "unpublished": {
+      "title": "CV isn’t public yet",
+      "description": "This résumé is still a draft. You can keep browsing the rest of the portfolio.",
+      "backHome": "Back to home"
+    },
     "pdfDelivery": {
       "toggleSend": "Send by email",
       "toggleClose": "Close",
@@ -488,35 +493,10 @@
       }
     },
     "services": {
-      "title": "What I Build",
-      "subtitle": "Engineering Capabilities",
-      "description": "A practical overview of technical areas I've delivered in: from full-stack web systems and financial platforms to mobile apps and cloud infrastructure.",
+      "title": "Services",
+      "subtitle": "",
+      "description": "",
       "items": {
-        "frontend": {
-          "title": "Frontend & UI/UX Development",
-          "description": "Crafting stunning, performant, and fully accessible web interfaces built with WCAG 2.2 AAA compliance, React, Next.js, and Tailwind CSS.",
-          "stats": "100+ UI Components · WCAG 2.2 AAA"
-        },
-        "backend": {
-          "title": "Backend Development & APIs",
-          "description": "Building robust microservices, REST & tRPC APIs with Node.js, C# / .NET, and scalable SQL/NoSQL databases.",
-          "stats": "99.9% Uptime · SQL & NoSQL"
-        },
-        "mobile": {
-          "title": "Mobile Development",
-          "description": "Delivering smooth, modern cross-platform mobile apps using React Native for iOS and Android.",
-          "stats": "Cross-Platform · iOS & Android"
-        },
-        "devops": {
-          "title": "Systems & Cloud DevOps",
-          "description": "Linux server administration, Docker containerization, CI/CD pipeline automation, and cloud deployments.",
-          "stats": "Docker & Linux · CI/CD Automation"
-        },
-        "cybersecurity": {
-          "title": "Cybersecurity & Security Audits",
-          "description": "Security audits, vulnerability scanning with Snyk, OWASP Top 10 compliance, and penetration testing.",
-          "stats": "OWASP Top 10 · Snyk Compliance"
-        },
         "contact": {
           "title": "Let's build together",
           "subtitle": "Have a project in mind?",
@@ -687,7 +667,7 @@
       "title": "Let's talk",
       "title2": "Send a message",
       "eyebrow": "Contact",
-      "subtitle": "If you're looking for a Senior Full Stack Developer who can contribute from day one, take part in technical discussions, and ship reliable software at scale, let's talk.\n\nFeel free to reach out even just to connect.",
+      "subtitle": "Use the form or the channels below.",
       "responseTime": "Reply within 24h",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
@@ -772,9 +752,7 @@
       "title": "Professional Experience",
       "subtitle": "Companies, roles, and measurable impact",
       "viewAll": "View full CV for complete history",
-      "showingRecent": "Showing most recent roles.",
-      "leadershipTitle": "Technical leadership across every role",
-      "leadershipDescription": "From leading a 6-person engineering team at Contollo to architecting systems at Imagemaker and Walmart/VTEX, I've owned technical decisions, mentored developers, and driven delivery at every level."
+      "showingRecent": "Showing most recent roles."
     },
     "impactStats": {
       "teamSize": {
@@ -1439,6 +1417,9 @@
       "defaultLocale": "Default language",
       "defaultLocaleHint": "The language your CV defaults to when no translation is available.",
       "cvPdfUrl": "CV PDF URL (optional)",
+      "mapLocation": "Map location",
+      "mapLocationHint": "City shown on the Let's Talk globe. Visitors connect to this point when their location can be detected.",
+      "mapLocationPlaceholder": "Amsterdam, Netherlands",
       "publish": "Publish my CV publicly",
       "saved": "Settings saved.",
       "saveFailed": "Could not save settings",
@@ -1447,7 +1428,10 @@
       "pdfSectionTitle": "PDF Resumes (Multi-language)",
       "pdfSectionDescription": "Provide separate PDF links for each language. When visitors view your portfolio in a specific language, they will download the corresponding PDF.",
       "pdfLinkPlaceholder": "https://example.com/resume-{locale}.pdf",
-      "usernameValidation": "Use lowercase letters, numbers and dashes"
+      "usernameValidation": "Use lowercase letters, numbers and dashes",
+      "credentialsTitle": "Credentials & Integrations",
+      "credentialsDescription": "Connect Spotify, email, file uploads, and AI for this portfolio. Saved connections stay available here.",
+      "credentialsCta": "Manage integrations"
     },
     "spotify": {
       "title": "Spotify",
@@ -1548,6 +1532,7 @@
       "contact": {
         "type": "Type",
         "value": "Value",
+        "locationValueHint": "City used on the Let's Talk map if you have not set Map location in Settings (e.g. Amsterdam, Netherlands).",
         "labelOptional": "Label (optional)",
         "labelHint": "What to display next to the contact (e.g. 'Email me' or your handle).",
         "add": "+ Add contact",

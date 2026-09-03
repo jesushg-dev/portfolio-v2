@@ -34,6 +34,7 @@ interface ISettingsFormProps {
     defaultLocale: "en" | "es" | "nl";
     isPublished: boolean;
     cvPdfUrl?: string;
+    mapLocationLabel?: string;
   };
 }
 
@@ -57,6 +58,7 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
         defaultLocale: z.enum(["en", "es", "nl"]),
         isPublished: z.boolean(),
         cvPdfUrl: z.string().url().or(z.literal("")).optional(),
+        mapLocationLabel: z.string().max(160).optional(),
       }),
     [t],
   );
@@ -65,7 +67,11 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
 
   const form = useForm<SettingsInput>({
     resolver: zodResolver(settingsSchema),
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+      cvPdfUrl: defaultValues.cvPdfUrl ?? "",
+      mapLocationLabel: defaultValues.mapLocationLabel ?? "",
+    },
   });
 
   const onSubmit = useCallback(
@@ -80,6 +86,7 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
             defaultLocale: data.defaultLocale,
             isPublished: data.isPublished,
             cvPdfUrl: data.cvPdfUrl ?? null,
+            mapLocationLabel: data.mapLocationLabel ?? "",
           });
           await utils.cv.getMine.invalidate();
           setSuccess(true);
@@ -154,6 +161,20 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
             render={({ field }) => (
               <FormItem label={t("cvPdfUrl")} inputId="settings-cv-pdf-url">
                 <Input type="url" {...field} />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="mapLocationLabel"
+            render={({ field }) => (
+              <FormItem
+                label={t("mapLocation")}
+                description={t("mapLocationHint")}
+                inputId="settings-map-location"
+              >
+                <Input placeholder={t("mapLocationPlaceholder")} {...field} />
               </FormItem>
             )}
           />

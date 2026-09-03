@@ -2,6 +2,8 @@ import type { FC } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
+import { resolveTenant } from "@/lib/tenant/resolve";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
@@ -25,6 +27,8 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
   if (!heroData) {
     return <HeroEmpty />;
   }
+
+  const showCvLink = isPublicCvVisible(await resolveTenant());
 
   const fullName = heroData.fullName?.trim() ?? "";
   const photoUrl = heroData.photoUrl?.trim() ?? "";
@@ -56,7 +60,11 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
 
       <div className="z-10 mx-auto flex w-full flex-col items-center gap-16 px-4 pt-32 pb-24 sm:px-6 md:pt-40 md:pb-32 lg:container lg:flex-row-reverse lg:items-center lg:px-20">
         <HeroPhoto heroData={parsedHeroData} />
-        <HeroContent heroData={parsedHeroData} stats={stats} />
+        <HeroContent
+          heroData={parsedHeroData}
+          stats={stats}
+          showCvLink={showCvLink}
+        />
       </div>
 
       {/* Scroll Down Indicator - Now SSR */}

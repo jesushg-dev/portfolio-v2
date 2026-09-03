@@ -48,9 +48,9 @@ type ConnectionPhase =
 
 interface GlobeMapProps {
   /** Where the camera starts, zoomed in close (visitor's location). */
-  origin?: LocationPoint;
+  origin: LocationPoint;
   /** Where the connecting line travels to (portfolio owner's location). */
-  destination?: LocationPoint;
+  destination: LocationPoint;
   /** Auto-run the reveal sequence once world data has loaded. */
   autoPlayConnection?: boolean;
   /** Accent color for markers and the connecting line. Default uses theme primary token. */
@@ -60,17 +60,6 @@ interface GlobeMapProps {
   /** Fill color for land / continents. Default uses theme muted token. */
   landColor?: string;
 }
-
-const DEFAULT_ORIGIN: LocationPoint = {
-  lat: 12.1364,
-  lon: -86.2514,
-  label: "Managua",
-};
-const DEFAULT_DESTINATION: LocationPoint = {
-  lat: 45.5017,
-  lon: -73.5673,
-  label: "Montréal",
-};
 
 const DEFAULT_ACCENT_COLOR = "var(--primary)";
 const DEFAULT_OCEAN_COLOR = "var(--card)";
@@ -205,13 +194,13 @@ function getZoomOutTarget(
 }
 
 export function GlobeMap({
-  origin = DEFAULT_ORIGIN,
-  destination = DEFAULT_DESTINATION,
+  origin,
+  destination,
   autoPlayConnection = true,
   accentColor = DEFAULT_ACCENT_COLOR,
   oceanColor = DEFAULT_OCEAN_COLOR,
   landColor = DEFAULT_LAND_COLOR,
-}: GlobeMapProps = {}) {
+}: GlobeMapProps) {
   const t = useTranslations("main.contact.globe");
   const svgRef = useRef<SVGSVGElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useTransition, type FC } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
@@ -86,6 +86,7 @@ export const ContactForm: FC<{
         : buildEmptyTranslationMap(languages, { text: "" }),
     },
   });
+  const contactType = useWatch({ control: form.control, name: "type" });
 
   const handleSubmit = useCallback(
     (input: ContactInput) => {
@@ -154,8 +155,23 @@ export const ContactForm: FC<{
               control={form.control}
               name="value"
               render={({ field }) => (
-                <FormItem label={t("value")} inputId="cv-contact-value">
-                  <Input placeholder="name@example.com" {...field} />
+                <FormItem
+                  label={t("value")}
+                  inputId="cv-contact-value"
+                  description={
+                    contactType === "LOCATION"
+                      ? t("locationValueHint")
+                      : undefined
+                  }
+                >
+                  <Input
+                    placeholder={
+                      contactType === "LOCATION"
+                        ? "Amsterdam, Netherlands"
+                        : "name@example.com"
+                    }
+                    {...field}
+                  />
                 </FormItem>
               )}
             />

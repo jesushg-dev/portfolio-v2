@@ -57,6 +57,16 @@
         "nl": "Gesprek plannen"
       },
       "order": 3
+    },
+    {
+      "type": "LOCATION",
+      "value": "Managua, Nicaragua",
+      "label": {
+        "es": "Managua, Nicaragua",
+        "en": "Managua, Nicaragua",
+        "nl": "Managua, Nicaragua"
+      },
+      "order": 4
     }
   ],
   "education": [
@@ -275,7 +285,7 @@
       "order": 0,
       "featuredOnHome": true,
       "startDate": "2025-08-01T00:00:00.000Z",
-      "endDate": null
+      "endDate": "2026-08-01T00:00:00.000Z"
     },
     {
       "key": "experience1",

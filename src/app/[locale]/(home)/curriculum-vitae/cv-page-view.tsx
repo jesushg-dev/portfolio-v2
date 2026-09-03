@@ -18,6 +18,8 @@ import {
   DEFAULT_CV_DESIGN,
   type CvDesignId,
 } from "@/features/cv/lib/cv-design";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
+import CvUnpublished from "./cv-unpublished";
 
 interface CvPageViewProps {
   locale: string;
@@ -40,6 +42,17 @@ const CvPageView: FC<CvPageViewProps> = async ({
 
   const tenant = await resolveTenant();
   if (!tenant) notFound();
+
+  if (!isPublicCvVisible(tenant)) {
+    if (pdfMode) notFound();
+    return (
+      <CvUnpublished
+        title={t("unpublished.title")}
+        description={t("unpublished.description")}
+        backHome={t("unpublished.backHome")}
+      />
+    );
+  }
 
   const userId = tenant.userId;
   const [
@@ -115,10 +128,6 @@ const CvPageView: FC<CvPageViewProps> = async ({
   ]);
 
   const displayContacts = resolveCvDisplayContacts(contacts, profile);
-
-  if (!tenant.isPrimary && profile && !profile.isPublished) {
-    notFound();
-  }
 
   const defaultLocale = tenant.defaultLocale || "en";
   const currentLocale = (locale as AppLocale) || defaultLocale;

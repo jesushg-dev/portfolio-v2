@@ -19,11 +19,13 @@ interface HeroData {
 interface HeroContentProps {
   heroData: HeroData;
   stats: Stats;
+  showCvLink?: boolean;
 }
 
 export default async function HeroContent({
   heroData,
   stats,
+  showCvLink = true,
 }: HeroContentProps) {
   const t = await getTranslations("main.heroMain");
   const { fullName, heroSubtitle, heroTagline, heroSummary } = heroData;
@@ -102,13 +104,15 @@ export default async function HeroContent({
       </dl>
 
       <div className="flex flex-wrap gap-4">
-        <Link
-          href="/curriculum-vitae"
-          className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold transition"
-        >
-          {t("viewCV")}
-          <ArrowRight className="h-4 w-4" />
-        </Link>
+        {showCvLink ? (
+          <Link
+            href="/curriculum-vitae"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold transition"
+          >
+            {t("viewCV")}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        ) : null}
         <a
           href="#contact"
           aria-label={t("scheduleCallAria")}

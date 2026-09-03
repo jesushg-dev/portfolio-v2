@@ -53,6 +53,9 @@ export const portfolioRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const { limit, cursor, type, locale } = input;
       const tenantUserId = ctx.tenant?.userId ?? null;
+      if (!tenantUserId) {
+        return { certificates: [], cursor: null };
+      }
 
       const appLanguage = await ctx.db.appLanguage.findUnique({
         where: {
@@ -61,8 +64,8 @@ export const portfolioRouter = createTRPCRouter({
       });
 
       const baseWhere = {
+        userId: tenantUserId,
         ...(type ? { type: { hasSome: type } } : {}),
-        ...(tenantUserId ? { userId: tenantUserId } : {}),
       };
 
       const data = await ctx.db.certification.findMany({

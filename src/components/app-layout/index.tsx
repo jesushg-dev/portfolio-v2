@@ -7,9 +7,10 @@ import ScrollToTopLazy from "../custom-ui/scroll-to-top-lazy";
 
 interface ILayoutProps {
   children: ReactNode;
+  cvPublic?: boolean;
 }
 
-const Layout: FC<ILayoutProps> = ({ children }) => {
+const Layout: FC<ILayoutProps> = ({ children, cvPublic = true }) => {
   return (
     <>
       <Header />
@@ -20,7 +21,7 @@ const Layout: FC<ILayoutProps> = ({ children }) => {
         {children}
         <ScrollToTopLazy />
       </main>
-      <Footer />
+      <Footer cvPublic={cvPublic} />
     </>
   );
 };

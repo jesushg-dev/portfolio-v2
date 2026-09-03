@@ -9,6 +9,7 @@ import { redirectToLogin } from "@/lib/auth-redirect";
 import { db } from "@/server/db";
 import SettingsForm from "./settings-form";
 import PdfLinksForm from "./pdf-links-form";
+import { SettingsIntegrationsCard } from "./settings-integrations-card";
 
 interface ISettingsPageProps {
   params: Promise<{ locale: string }>;
@@ -58,8 +59,10 @@ const SettingsPage: FC<ISettingsPageProps> = async ({ params }) => {
               (profile?.defaultLocale as "en" | "es" | "nl") ?? "en",
             isPublished: profile?.isPublished ?? false,
             cvPdfUrl: profile?.cvPdfUrl ?? "",
+            mapLocationLabel: profile?.mapLocationLabel ?? "",
           }}
         />
+        <SettingsIntegrationsCard />
         <PdfLinksForm initialLinks={pdfLinksRecord} />
       </div>
     </div>

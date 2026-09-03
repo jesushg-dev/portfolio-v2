@@ -51,9 +51,7 @@ function FooterPreviewLink({
 }) {
   if (!live) {
     return (
-      <span
-        className={`${footerLinkClassName} cursor-default gap-2 opacity-80`}
-      >
+      <span className={`${footerLinkClassName} cursor-default gap-2`}>
         {label}
         <span className="bg-primary-900 text-primary-foreground rounded-md px-2 py-0.5 text-sm font-medium">
           {soonLabel}
@@ -69,7 +67,7 @@ function FooterPreviewLink({
   );
 }
 
-const Footer = async () => {
+const Footer = async ({ cvPublic = true }: { cvPublic?: boolean }) => {
   const t = await getTranslations("global.footer");
   const year = new Date().getFullYear();
 
@@ -138,16 +136,18 @@ const Footer = async () => {
                   {t("sections.portfolio.certificates")}
                 </LinkPreviewLazy>
               </li>
-              <li>
-                <LinkPreviewLazy
-                  url="/curriculum-vitae"
-                  imageSrc={FOOTER_LINK_PREVIEWS.curriculum}
-                  imageAlt={t("sections.portfolio.curriculum")}
-                  className={footerLinkClassName}
-                >
-                  {t("sections.portfolio.curriculum")}
-                </LinkPreviewLazy>
-              </li>
+              {cvPublic ? (
+                <li>
+                  <LinkPreviewLazy
+                    url="/curriculum-vitae"
+                    imageSrc={FOOTER_LINK_PREVIEWS.curriculum}
+                    imageAlt={t("sections.portfolio.curriculum")}
+                    className={footerLinkClassName}
+                  >
+                    {t("sections.portfolio.curriculum")}
+                  </LinkPreviewLazy>
+                </li>
+              ) : null}
               <li>
                 <LinkPreviewLazy
                   url="/timeline"

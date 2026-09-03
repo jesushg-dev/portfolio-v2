@@ -209,6 +209,11 @@
     },
     "telephone": "tel.",
     "codedWith": "Deze CV is gemaakt met ReactJS.",
+    "unpublished": {
+      "title": "CV is nog niet openbaar",
+      "description": "Dit cv is nog een concept. Je kunt de rest van het portfolio wel bekijken.",
+      "backHome": "Terug naar home"
+    },
     "pdfDelivery": {
       "toggleSend": "Per e-mail versturen",
       "toggleClose": "Sluiten",
@@ -488,35 +493,10 @@
       }
     },
     "services": {
-      "title": "Wat Ik Bouw",
-      "subtitle": "Engineering Capaciteiten",
-      "description": "Een praktisch overzicht van de technische domeinen waarin ik heb geleverd: van full-stack websystemen en financiële platforms tot mobiele apps en cloudinfrastructuur.",
+      "title": "Diensten",
+      "subtitle": "",
+      "description": "",
       "items": {
-        "frontend": {
-          "title": "Frontend & UI/UX Ontwikkeling",
-          "description": "Ontwerp van prachtige, snelle en toegankelijke webinterfaces met WCAG 2.2 AAA-naleving, React, Next.js en Tailwind CSS.",
-          "stats": "100+ UI Components · WCAG 2.2 AAA"
-        },
-        "backend": {
-          "title": "Backend Ontwikkeling & APIs",
-          "description": "Robuuste microservices, REST & tRPC API's met Node.js, C# / .NET en schaalbare databases.",
-          "stats": "99.9% Uptime · SQL & NoSQL"
-        },
-        "mobile": {
-          "title": "Mobiele Ontwikkeling",
-          "description": "Snel en vloeiend mobiel applicatieontwerp met React Native voor iOS en Android.",
-          "stats": "Cross-Platform · iOS & Android"
-        },
-        "devops": {
-          "title": "Systemen & Cloud DevOps",
-          "description": "Linux serverbeheer, Docker-containerisatie, CI/CD geautomatiseerde pipelines en cloud-deployments.",
-          "stats": "Docker & Linux · CI/CD Automation"
-        },
-        "cybersecurity": {
-          "title": "Cybersecurity & Beveiligingsaudits",
-          "description": "Beveiligingsaudits, kwetsbaarheidsanalyse met Snyk, OWASP Top 10-naleving en pentesting.",
-          "stats": "OWASP Top 10 · Snyk Compliance"
-        },
         "contact": {
           "title": "Laten we samen bouwen",
           "subtitle": "Heb je een project in gedachten?",
@@ -687,7 +667,7 @@
       "eyebrow": "Contact",
       "title": "Laten we praten",
       "title2": "Stuur een bericht",
-      "subtitle": "Als je op zoek bent naar een Senior Full Stack Developer die vanaf dag één waarde toevoegt en betrouwbare software op schaal levert, laten we praten.\n\nVoel je vrij om contact op te nemen.",
+      "subtitle": "Gebruik het formulier of de kanalen hieronder.",
       "responseTime": "Antwoord binnen 24u",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
@@ -772,9 +752,7 @@
       "title": "Professionele Ervaring",
       "subtitle": "Bedrijven, rollen en meetbare impact",
       "viewAll": "Bekijk volledig CV voor de complete geschiedenis",
-      "showingRecent": "Meest recente rollen weergegeven.",
-      "leadershipTitle": "Technisch leiderschap in elke rol",
-      "leadershipDescription": "Van het leiden van een team van 6 ontwikkelaars bij Contollo tot het ontwerpen van systemen bij Imagemaker en Walmart/VTEX, ik heb technische beslissingen genomen, ontwikkelaars begeleid en resultaten geleverd."
+      "showingRecent": "Meest recente rollen weergegeven."
     },
     "impactStats": {
       "teamSize": {
@@ -1439,6 +1417,9 @@
       "defaultLocale": "Standaardtaal",
       "defaultLocaleHint": "De taal van je CV wanneer geen vertaling beschikbaar is.",
       "cvPdfUrl": "CV PDF URL (optioneel)",
+      "mapLocation": "Kaartlocatie",
+      "mapLocationHint": "Stad op de Let's talk-globe. Bezoekers verbinden naar dit punt als hun locatie bekend is.",
+      "mapLocationPlaceholder": "Amsterdam, Nederland",
       "publish": "Publiceer mijn CV",
       "saved": "Instellingen opgeslagen.",
       "saveFailed": "Instellingen konden niet worden opgeslagen",
@@ -1447,7 +1428,10 @@
       "pdfSectionTitle": "PDF CV's (meertalig)",
       "pdfSectionDescription": "Geef aparte PDF-links voor elke taal. Wanneer bezoekers je portfolio in een specifieke taal bekijken, downloaden ze de bijbehorende PDF.",
       "pdfLinkPlaceholder": "https://voorbeeld.nl/cv-{locale}.pdf",
-      "usernameValidation": "Gebruik kleine letters, cijfers en streepjes"
+      "usernameValidation": "Gebruik kleine letters, cijfers en streepjes",
+      "credentialsTitle": "Inloggegevens & integraties",
+      "credentialsDescription": "Koppel Spotify, e-mail, uploads en AI voor dit portfolio. Bestaande koppelingen blijven hier beschikbaar.",
+      "credentialsCta": "Integraties beheren"
     },
     "spotify": {
       "title": "Spotify",
@@ -1548,6 +1532,7 @@
       "contact": {
         "type": "Soort",
         "value": "Waarde",
+        "locationValueHint": "Stad op de Let's talk-globe als je geen kaartlocatie in Instellingen hebt gezet (bijv. Amsterdam, Nederland).",
         "labelOptional": "Label (optioneel)",
         "labelHint": "Tekst naast het contact.",
         "add": "+ Contact toevoegen",

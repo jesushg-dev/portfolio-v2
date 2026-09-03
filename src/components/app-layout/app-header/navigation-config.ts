@@ -145,3 +145,13 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
 ];
+
+export function navGroupsForPublicSite(cvPublic: boolean): NavGroup[] {
+  if (cvPublic) return NAV_GROUPS;
+  return NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter(
+      (item) => !(item.kind === "route" && item.href === "/curriculum-vitae"),
+    ),
+  }));
+}

@@ -14,6 +14,7 @@ import {
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 import type { Prisma, TimelineCategory } from "@prisma/client";
+import { normalizeEmploymentDates } from "@/utils/tools/date";
 
 const TimelineCategorySchema = z.enum(["WORK", "STUDY", "COURSE"]);
 
@@ -120,6 +121,7 @@ export const timelineAdminRouter = createTRPCRouter({
       const created = await ctx.db.timelineItem.create({
         data: {
           ...rest,
+          ...normalizeEmploymentDates(rest),
           images: images ?? [],
           userId: ctx.user.id,
           TimelineItemTranslation: {
@@ -152,6 +154,7 @@ export const timelineAdminRouter = createTRPCRouter({
         where: { id },
         data: {
           ...data,
+          ...normalizeEmploymentDates(data),
           ...(images !== undefined ? { images } : {}),
         },
       });

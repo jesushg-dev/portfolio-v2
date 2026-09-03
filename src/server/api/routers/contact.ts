@@ -11,6 +11,10 @@ import {
 } from "@/lib/email/resend";
 import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
+import {
+  locationQueryFromContacts,
+  resolveOwnerMapLocation,
+} from "@/lib/geo/geocode-place";
 
 const ContactMessageSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -21,7 +25,12 @@ const ContactMessageSchema = z.object({
 export const contactRouter = createTRPCRouter({
   getPublic: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.tenant) {
-      return { contacts: [], recipientReady: false, emailFormEnabled: false };
+      return {
+        contacts: [],
+        recipientReady: false,
+        emailFormEnabled: false,
+        mapLocation: null,
+      };
     }
 
     const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
@@ -36,7 +45,14 @@ export const contactRouter = createTRPCRouter({
         }),
         ctx.db.profile.findUnique({
           where: { userId: ctx.tenant.userId },
-          select: { username: true, isPrimary: true, customDomain: true },
+          select: {
+            username: true,
+            isPrimary: true,
+            customDomain: true,
+            mapLocationLabel: true,
+            mapLatitude: true,
+            mapLongitude: true,
+          },
         }),
         ctx.db.user.findUnique({
           where: { id: ctx.tenant.userId },
@@ -53,12 +69,21 @@ export const contactRouter = createTRPCRouter({
       label: field(contact.translations, "label"),
     }));
 
+    const locationQuery = locationQueryFromContacts(contacts);
+    const mapLocation = await resolveOwnerMapLocation({
+      mapLatitude: profile?.mapLatitude,
+      mapLongitude: profile?.mapLongitude,
+      mapLocationLabel: profile?.mapLocationLabel,
+      contactQuery: locationQuery,
+    });
+
     return {
       contacts,
       portfolioUrl: profile ? getTenantPublicUrl(profile) : null,
       displayName: user?.name ?? ctx.tenant.username,
       recipientReady: Boolean(user?.email),
       emailFormEnabled,
+      mapLocation,
     };
   }),
 
