@@ -11,6 +11,7 @@ import { QuoteIcon, ArrowRightIcon } from "lucide-react";
 
 import { Link } from "@/i18n/routing";
 import { Skeleton } from "@/components/ui/skeleton";
+import { usePublicCvVisible } from "@/components/app-layout/public-cv-visible";
 import {
   Carousel,
   CarouselContent,
@@ -291,6 +292,7 @@ function SocialProofContent({
   isTestimonialsLoading: boolean;
 }) {
   const t = useTranslations("main.socialProof");
+  const cvPublic = usePublicCvVisible();
 
   const statMapping: Record<string, string | number> = {
     certifications: statsData?.certificationsCount ?? 0,
@@ -301,7 +303,7 @@ function SocialProofContent({
   const statLinks: Record<string, string> = {
     certifications: "/certificates",
     projects: "#projects",
-    experience: "/curriculum-vitae",
+    experience: cvPublic ? "/curriculum-vitae" : "#experience",
   };
 
   const hasTestimonials = !isTestimonialsLoading && items.length > 0;

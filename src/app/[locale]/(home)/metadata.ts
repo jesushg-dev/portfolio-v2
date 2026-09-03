@@ -48,7 +48,7 @@ export async function generateMetadata({
     const hero = await getCachedHeroPublic(appLocale);
     const fullName = hero?.fullName?.trim();
     const ownerName =
-      (fullName ? fullName : undefined) ??
+      (fullName && fullName.length > 0 ? fullName : undefined) ??
       tenant?.username ??
       hostSlug ??
       siteName;
@@ -56,8 +56,8 @@ export async function generateMetadata({
     const summary = hero?.heroSummary?.trim();
     const tagline = hero?.heroTagline?.trim();
     description =
-      (summary ? summary : undefined) ??
-      (tagline ? tagline : undefined) ??
+      (summary && summary.length > 0 ? summary : undefined) ??
+      (tagline && tagline.length > 0 ? tagline : undefined) ??
       description;
     keywords = undefined;
     siteName = ownerName;

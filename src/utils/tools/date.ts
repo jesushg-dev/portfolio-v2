@@ -1,5 +1,16 @@
 import type { Locale } from "@/i18n/config";
 
+/** Keep `current` and `endDate` mutually exclusive when persisting employment dates. */
+export function normalizeEmploymentDates(input: {
+  current: boolean;
+  endDate?: Date | null;
+}): { current: boolean; endDate: Date | null } {
+  if (input.current) {
+    return { current: true, endDate: null };
+  }
+  return { current: false, endDate: input.endDate ?? null };
+}
+
 /**
  * Formats experience dates into a locale-aware string.
  * Example: "May 2022 - Present" or "May 2022 - Aug 2023"
@@ -33,9 +44,13 @@ export function formatExperienceDates(
 
   const startFormatted = capitalize(startStr);
 
-  if (current || !endDate) {
+  if (current) {
     const present = presentLabel[locale] ?? presentLabel.en;
     return `${startFormatted} – ${present}`;
+  }
+
+  if (!endDate) {
+    return startFormatted;
   }
 
   const endStr = formatter.format(endDate);

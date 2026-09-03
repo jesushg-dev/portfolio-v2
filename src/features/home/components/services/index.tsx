@@ -17,6 +17,8 @@ const Services: FC = async () => {
     ? await api.portfolio.getServicesPublic({ locale })
     : [];
 
+  if (services.length === 0) return null;
+
   return (
     <div className="bg-background relative w-full overflow-hidden">
       <section

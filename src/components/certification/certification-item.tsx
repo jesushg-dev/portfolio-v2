@@ -6,6 +6,7 @@ import { MdCalendarMonth, MdRemoveRedEye, MdSchool } from "react-icons/md";
 import type { FC } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import type { CertificateType } from "@/utils/interfaces/types";
 import { formatIssuedDate } from "./format-issued-date";
 
@@ -76,11 +77,10 @@ const CertificateItem: FC<CertificateType> = ({
             href={certificateUrl}
             target="_blank"
             rel="noreferrer"
-            className={buttonVariants({
-              size: "sm",
-              variant: "outline",
-              className: "shrink-0",
-            })}
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "h-11 min-h-11 shrink-0 gap-2 px-4 text-sm",
+            )}
           >
             <MdRemoveRedEye className="size-3.5" aria-hidden />
             {t("seeCertificate")}

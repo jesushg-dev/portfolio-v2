@@ -1,4 +1,4 @@
-import { formatExperienceDates } from "./date";
+import { formatExperienceDates, normalizeEmploymentDates } from "./date";
 
 describe("formatExperienceDates", () => {
   it("formats dates in UTC to prevent timezone offsets shifting the month back", () => {
@@ -48,10 +48,21 @@ describe("formatExperienceDates", () => {
     expect(result).toContain("DefaultPresent");
   });
 
-  it("uses current=false with endDate null path (shows Present label)", () => {
+  it("does not treat a missing end date as Present when current is false", () => {
     const startDate = new Date("2022-01-01T00:00:00.000Z");
-    // current is false but endDate is also null → treats as ongoing (no endDate)
     const result = formatExperienceDates(startDate, null, false, "en");
-    expect(result).toContain("Present");
+    expect(result).toBe("January 2022");
+    expect(result).not.toContain("Present");
+  });
+});
+
+describe("normalizeEmploymentDates", () => {
+  it("clears endDate when current is true", () => {
+    expect(
+      normalizeEmploymentDates({
+        current: true,
+        endDate: new Date("2026-08-01T00:00:00.000Z"),
+      }),
+    ).toEqual({ current: true, endDate: null });
   });
 });

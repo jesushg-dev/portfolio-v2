@@ -34,8 +34,6 @@ export function ProcessHero({
 }: ProcessHeroProps) {
   return (
     <section id="hero" className="relative overflow-hidden px-6 py-16 md:py-24">
-      <div className="from-primary/5 via-background to-background absolute inset-0 -z-10 bg-linear-to-br" />
-
       <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
         <ProcessReveal>
           <div>
@@ -45,15 +43,18 @@ export function ProcessHero({
                 "mb-6 inline-flex items-center gap-2",
               )}
             >
-              <span aria-hidden className="bg-primary size-1.5 rounded-full" />
+              <span
+                aria-hidden
+                className="bg-primary-900 size-1.5 rounded-full"
+              />
               {eyebrow}
             </p>
 
             <h1 className="text-foreground mb-6 text-4xl leading-tight font-extrabold tracking-tight md:text-5xl">
-              {title} <span className="text-primary">{titleHighlight}</span>
+              {title} <span className="text-primary-900">{titleHighlight}</span>
             </h1>
 
-            <p className="text-muted-foreground mb-8 max-w-xl text-lg leading-relaxed">
+            <p className="text-foreground mb-8 max-w-xl text-lg leading-relaxed">
               {description}
             </p>
 
@@ -62,7 +63,7 @@ export function ProcessHero({
                 href={primaryAction.href}
                 className={cn(
                   processInteractiveStyles,
-                  "bg-primary text-primary-foreground hover:bg-primary/90 gap-2",
+                  "bg-primary-900 text-primary-foreground hover:bg-primary-900/90 gap-2",
                 )}
               >
                 {primaryAction.label}
@@ -72,7 +73,7 @@ export function ProcessHero({
                 href={secondaryAction.href}
                 className={cn(
                   processInteractiveStyles,
-                  "border-border text-foreground hover:bg-accent/50 border",
+                  "border-border bg-background text-foreground hover:bg-muted border",
                 )}
               >
                 {secondaryAction.label}
@@ -89,7 +90,7 @@ export function ProcessHero({
           href={primaryAction.href}
           className={cn(
             processTextLinkStyles,
-            "text-muted-foreground hover:text-primary min-w-11 rounded-full px-3",
+            "text-foreground hover:text-primary-900 min-w-11 rounded-full px-3",
           )}
         >
           <span className="sr-only">{scrollHint}</span>

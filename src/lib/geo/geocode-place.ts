@@ -44,8 +44,8 @@ export async function resolveOwnerMapLocation(input: {
   const mapLabel = input.mapLocationLabel?.trim();
   const contactLabel = input.contactQuery?.trim();
   const query =
-    (mapLabel ? mapLabel : undefined) ??
-    (contactLabel ? contactLabel : undefined);
+    (mapLabel && mapLabel.length > 0 ? mapLabel : undefined) ??
+    (contactLabel && contactLabel.length > 0 ? contactLabel : undefined);
 
   if (
     typeof lat === "number" &&

@@ -21,9 +21,8 @@ const PUBLIC_ROUTES = [
 test.describe("accessibility — Shield (WCAG AAA)", () => {
   for (const route of PUBLIC_ROUTES) {
     test(`${route.name} (${route.path})`, async ({ page }) => {
-      await page.goto(route.path);
-      await page.waitForLoadState("networkidle");
-      await page.waitForTimeout(1000);
+      await page.goto(route.path, { waitUntil: "load" });
+      await page.evaluate(() => document.fonts.ready);
 
       const axeResults = await runAxeAudit(page);
       const axeSummary = summarizeAxeViolations(axeResults.violations);

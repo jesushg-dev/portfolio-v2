@@ -19,10 +19,6 @@ const Experience: FC = async () => {
 
   if (experiences.length === 0) return null;
 
-  const hasLeadership = experiences.some((e) =>
-    /lead|líder|lider/i.test(e.role),
-  );
-
   return (
     <div className="bg-background relative w-full overflow-hidden">
       <section className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20">
@@ -34,9 +30,6 @@ const Experience: FC = async () => {
 
         <ExperienceAccordionLazy
           experiences={experiences}
-          leadershipTitle={t("leadershipTitle")}
-          leadershipDescription={t("leadershipDescription")}
-          hasLeadership={hasLeadership}
           viewAllLabel={t("viewAll")}
         />
       </section>

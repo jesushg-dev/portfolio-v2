@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import type { FC } from "react";
 import type { IconType } from "react-icons/lib";
 import { motion } from "motion/react";
@@ -20,7 +19,7 @@ const variants = {
     },
   },
   inactive: {
-    opacity: 0.75,
+    opacity: 1,
     transition: {
       duration: 0.3,
     },
@@ -45,12 +44,9 @@ const TabItem: FC<TabItemProps> = ({
   const tabPanelId = `${tabId}-panel-${index}`;
   const tabButtonId = `${tabId}-tab-${index}`;
 
-  const textClassName = useMemo(() => {
-    if (isActive) {
-      return "text-primary-foreground font-semibold";
-    }
-    return "text-muted-foreground group-hover:text-foreground";
-  }, [isActive]);
+  const textClassName = isActive
+    ? "text-foreground font-semibold"
+    : "text-foreground";
 
   return (
     <div className="relative isolate">
@@ -58,7 +54,7 @@ const TabItem: FC<TabItemProps> = ({
         <motion.div
           layoutId={`background-tab${tabId}`}
           className={cn(
-            "bg-primary absolute inset-0 z-0 rounded-full shadow-md",
+            "bg-background ring-border absolute inset-0 z-0 rounded-full shadow-md ring-1",
           )}
           aria-hidden
         />
@@ -71,15 +67,17 @@ const TabItem: FC<TabItemProps> = ({
         aria-selected={isActive}
         tabIndex={isActive ? 0 : -1}
         title={title}
-        animate={minimal ? "active" : isActive ? "active" : "inactive"}
+        animate={isActive ? "active" : "inactive"}
         variants={variants}
-        initial="inactive"
+        initial={isActive ? "active" : "inactive"}
         whileHover="hover"
         onClick={() => setCurrentTab(index)}
         className={cn(
           "group relative z-10 flex min-h-11 shrink-0 cursor-pointer touch-manipulation items-center rounded-full px-4 py-2 text-left transition-all sm:px-5",
           minimal ? "w-auto" : "w-full sm:p-4 md:p-5",
-          !isActive && "hover:bg-accent/40",
+          isActive
+            ? "bg-background text-foreground shadow-sm"
+            : "hover:bg-accent/40",
         )}
       >
         <span className={cn("flex items-center transition-all", textClassName)}>

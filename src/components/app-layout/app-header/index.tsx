@@ -114,13 +114,10 @@ const Header: FC = () => {
             <Link
               href="/"
               aria-label={t("homeLogo")}
-              className="group text-primary-700 z-10 inline-flex h-11 min-h-11 shrink-0 items-center text-2xl leading-none font-bold tracking-tighter transition duration-600 ease-in-out"
+              className="text-foreground z-10 inline-flex h-11 min-h-11 shrink-0 items-center text-2xl leading-none font-bold tracking-tighter transition duration-600 ease-in-out"
             >
               <span className="tracking-relaxed">
-                Jehg{" "}
-                <span className="tracking-relaxed text-secondaryText-500 group-hover:text-primary-500">
-                  .
-                </span>
+                Jehg <span className="text-foreground tracking-relaxed">.</span>
               </span>
             </Link>
 

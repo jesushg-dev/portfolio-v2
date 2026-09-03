@@ -59,27 +59,49 @@ export async function assertFilterAndColumnVisibility(
     noResultsTerm = "NonExistentFilterXYZ123",
   } = options;
 
+  await expect(page.getByTestId(filterTestId)).toBeVisible();
   await expect(rows.first()).toBeVisible();
-  const initialCount = await rows.count();
-  expect(initialCount).toBeGreaterThan(0);
+
+  await expect
+    .poll(async () => rows.first().locator("td").count(), { timeout: 30_000 })
+    .toBeGreaterThan(2);
 
   const searchCell = rows.first().locator("td").nth(searchCellIndex);
-  const cellText = (await searchCell.innerText()).trim();
-  expect(cellText.length).toBeGreaterThan(0);
+  let existingTerm = "";
+  await expect
+    .poll(
+      async () => {
+        try {
+          const cellText = (
+            await searchCell.innerText({ timeout: 1_000 })
+          ).trim();
+          const firstLine = cellText.split("\n")[0]?.trim() ?? "";
+          if (!firstLine || /^untitled$/i.test(firstLine)) return "";
+          const term = pickSearchTerm(firstLine);
+          if (!term) return "";
+          existingTerm = term;
+          return term;
+        } catch {
+          return "";
+        }
+      },
+      { timeout: 30_000 },
+    )
+    .not.toBe("");
+  expect(existingTerm.length).toBeGreaterThan(0);
 
-  const existingTerm = pickSearchTerm(cellText);
+  const initialCount = await rows.count();
+  expect(initialCount).toBeGreaterThan(0);
   const filter = page.getByTestId(filterTestId);
 
   await filter.fill(existingTerm);
-  const filteredCount = await waitForRowCount(
-    rows,
-    (count) => count >= 1 && count <= initialCount,
-  );
-  expect(filteredCount).toBeGreaterThanOrEqual(1);
-  expect(filteredCount).toBeLessThanOrEqual(initialCount);
   await expect(rows.first()).toContainText(
     new RegExp(escapeRegex(existingTerm), "i"),
+    { timeout: 30_000 },
   );
+  const filteredCount = await rows.count();
+  expect(filteredCount).toBeGreaterThanOrEqual(1);
+  expect(filteredCount).toBeLessThanOrEqual(initialCount);
 
   await page.getByTestId("reset-filters-btn").click();
   await waitForRowCount(rows, (count) => count >= 1);

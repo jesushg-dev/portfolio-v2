@@ -1115,7 +1115,10 @@ export const cvRouter = createTRPCRouter({
       }
 
       const trimmedMapLocation = input.mapLocationLabel?.trim();
-      const mapLocationLabel = trimmedMapLocation ? trimmedMapLocation : null;
+      const mapLocationLabel =
+        trimmedMapLocation && trimmedMapLocation.length > 0
+          ? trimmedMapLocation
+          : null;
       const geocoded = mapLocationLabel
         ? await geocodePlace(mapLocationLabel)
         : null;

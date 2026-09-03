@@ -48,8 +48,8 @@ export default async function HowIUseAiPage() {
           <ProcessTerminalPanel
             title={t("hero.terminal.title")}
             badge={
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-400">
-                <span className="size-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-200">
+                <span className="size-1.5 rounded-full bg-emerald-200 motion-safe:animate-pulse" />
                 {t("hero.workflow.live")}
               </span>
             }

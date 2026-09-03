@@ -2,6 +2,12 @@ import { defineConfig, devices } from "@playwright/test";
 
 import { e2eEnv } from "./e2e/env";
 
+const lifecycle = process.env.npm_lifecycle_event ?? "";
+const isE2eFull = process.env.E2E_FULL === "1" || lifecycle === "test:e2e:full";
+const cliTargetsCreate = process.argv.some((arg) =>
+  /(?:^|[\\/])[\w.-]*create[\w.-]*\.spec\.ts$/.test(arg),
+);
+
 const isLocalTarget =
   e2eEnv.baseURL.startsWith("http://localhost") ||
   e2eEnv.baseURL.startsWith("http://127.0.0.1");
@@ -23,6 +29,11 @@ const webServer = isLocalTarget
 
 export default defineConfig({
   testDir: "e2e",
+  ...(isE2eFull || cliTargetsCreate
+    ? {}
+    : {
+        testIgnore: /(?:^|[\\/])[\w-]+-create(?:-delete)?\.spec\.ts$/,
+      }),
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

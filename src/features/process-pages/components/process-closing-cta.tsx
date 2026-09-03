@@ -121,7 +121,7 @@ export function ProcessClosingCta({
             href="/schedule"
             className={cn(
               processInteractiveStyles,
-              "bg-primary text-primary-foreground hover:bg-primary/90 relative",
+              "bg-primary-900 text-primary-foreground hover:bg-primary-900/90 relative",
             )}
           >
             {ctaLabel}

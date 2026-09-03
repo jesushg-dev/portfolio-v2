@@ -1,6 +1,9 @@
 import { expect, test } from "./authenticated-test";
 
-import { gotoAdminPath } from "./helpers/admin-origin";
+import {
+  gotoAdminPath,
+  waitForAdminListAfterSave,
+} from "./helpers/admin-origin";
 import {
   cleanupUserTimeline,
   fillTimelineItemForm,
@@ -9,38 +12,39 @@ import {
 } from "./helpers/fill-timeline-form";
 
 test.describe("timeline edit and data integrity", () => {
-  const uniqueId = Date.now();
-  const tempTimelineItem = {
-    key: `e2e-timeline-${uniqueId}`,
-    category: "WORK" as const,
-    organization: `Acme Corp ${uniqueId}`,
-    location: "Madrid, Spain",
-    startDate: "2021-01-01",
-    endDate: "",
-    current: true,
-    title: {
-      en: `Senior Engineer ${uniqueId}`,
-      es: `Ingeniero Senior ${uniqueId}`,
-      nl: `Senior Engineer ${uniqueId}`,
-    },
-    description: {
-      en: "Leading web team",
-      es: "Liderando equipo web",
-      nl: "Leidinggevende webteam",
-    },
-  };
+  test.beforeEach(async ({ page }) => {
+    await cleanupUserTimeline(page);
+  });
 
   test("creates a timeline item, edits organization, verifies saved state, and cleans up", async ({
     page,
   }) => {
-    // 0. Go to admin base first so sidebar is loaded
+    const uniqueId = Date.now();
+    const tempTimelineItem = {
+      key: `e2e-timeline-${uniqueId}`,
+      category: "WORK" as const,
+      organization: `Acme Corp ${uniqueId}`,
+      location: "Madrid, Spain",
+      startDate: "2021-01-01",
+      endDate: "",
+      current: true,
+      title: {
+        en: `Senior Engineer ${uniqueId}`,
+        es: `Ingeniero Senior ${uniqueId}`,
+        nl: `Senior Engineer ${uniqueId}`,
+      },
+      description: {
+        en: "Leading web team",
+        es: "Liderando equipo web",
+        nl: "Leidinggevende webteam",
+      },
+    };
+
     await page.goto("/admin");
 
-    // 1. Create item
     await fillTimelineItemForm(page, tempTimelineItem);
     await goToTimelineList(page);
 
-    // 2. Open edit form
     const cell = page
       .getByText(tempTimelineItem.title.en, { exact: true })
       .first();
@@ -58,25 +62,47 @@ test.describe("timeline edit and data integrity", () => {
       timeout: 15_000,
     });
 
-    // 3. Edit organization and submit
     const orgInput = page.locator("#timeline-organization");
     await expect(orgInput).toHaveValue(tempTimelineItem.organization);
 
     const updatedOrg = `${tempTimelineItem.organization} (Updated)`;
     await orgInput.fill(updatedOrg);
-    await orgInput.dispatchEvent("change");
-    await orgInput.press("Tab");
+    await expect(orgInput).toHaveValue(updatedOrg);
 
     const submitBtn = page.locator("#timeline-form-submit");
     await expect(submitBtn).toBeEnabled({ timeout: 10_000 });
-    const updateResponse = page.waitForResponse(
-      (response) =>
-        response.url().includes("/api/trpc/timelineAdmin.updateItem") &&
-        response.request().method() === "POST",
-      { timeout: 60_000 },
-    );
-    await submitBtn.click();
-    await updateResponse.catch(() => null);
+    const [updateResponse] = await Promise.all([
+      page.waitForResponse(
+        (response) =>
+          response.url().includes("/api/trpc/timelineAdmin.updateItem") &&
+          response.request().method() === "POST",
+        { timeout: 60_000 },
+      ),
+      submitBtn.click(),
+    ]);
+
+    if (!updateResponse.ok()) {
+      throw new Error(
+        `updateItem failed: ${updateResponse.status()} ${await updateResponse.text()}`,
+      );
+    }
+
+    const updateBody = await updateResponse.text().catch(() => "");
+    if (updateBody.trim()) {
+      try {
+        const payload = JSON.parse(updateBody) as [
+          { error?: { json?: { message?: string } } },
+        ];
+        const message = payload[0]?.error?.json?.message;
+        if (message) {
+          throw new Error(`updateItem mutation failed: ${message}`);
+        }
+      } catch (error) {
+        if (!(error instanceof SyntaxError)) throw error;
+      }
+    }
+
+    await waitForAdminListAfterSave(page, "timeline", "timeline-add");
 
     await expect
       .poll(
@@ -88,11 +114,7 @@ test.describe("timeline edit and data integrity", () => {
       )
       .toBe(true);
 
-    // 4. Verify updated organization in list
     await gotoAdminPath(page, "/admin/timeline");
     await expect(page.getByText(updatedOrg).first()).toBeVisible();
-
-    // 5. Cleanup
-    await cleanupUserTimeline(page);
   });
 });

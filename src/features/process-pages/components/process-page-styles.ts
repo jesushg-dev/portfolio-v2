@@ -8,7 +8,7 @@ export const processTextLinkStyles =
   "inline-flex min-h-11 cursor-pointer items-center text-sm font-semibold transition-colors focus-visible:ring-ring/35 focus-visible:ring-2 focus-visible:outline-none";
 
 export const processEyebrowStyles =
-  "text-primary text-sm font-semibold tracking-widest uppercase";
+  "text-primary-900 text-sm font-semibold tracking-widest uppercase";
 
 export function processSectionHeadingId(sectionId: string) {
   return `${sectionId}-heading`;
@@ -17,7 +17,7 @@ export function processSectionHeadingId(sectionId: string) {
 export const processDarkBandClass =
   "bg-slate-950 text-slate-100 ring-1 ring-white/10";
 
-export const processDarkBandMutedTextClass = "text-slate-300";
+export const processDarkBandMutedTextClass = "text-slate-200";
 
 export function processPanelId(sectionId: string, index: number) {
   return `${sectionId}-panel-${index}`;

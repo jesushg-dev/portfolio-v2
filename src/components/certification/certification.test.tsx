@@ -84,7 +84,8 @@ describe("Certification", () => {
       fetchNextPage: jest.fn(),
     });
     renderWithIntl(<Certification slug={undefined as never} />);
-    expect(screen.getByText("TypeScript Mastery")).toBeInTheDocument();
+    expect(screen.getByAltText("TypeScript Mastery")).toBeInTheDocument();
+    expect(screen.getByText("Academy")).toBeInTheDocument();
   });
 
   it("shows no result when data is empty", () => {

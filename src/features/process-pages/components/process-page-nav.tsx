@@ -69,9 +69,7 @@ export function ProcessPageNav({ items, label }: ProcessPageNavProps) {
           : "pointer-events-none opacity-0",
       )}
     >
-      <p className={cn(processEyebrowStyles, "text-muted-foreground mb-4")}>
-        {label}
-      </p>
+      <p className={cn(processEyebrowStyles, "mb-4")}>{label}</p>
       <ul className="space-y-1">
         {items.map((item) => {
           const isActive = activeId === item.id;
@@ -84,8 +82,8 @@ export function ProcessPageNav({ items, label }: ProcessPageNavProps) {
                   processTextLinkStyles,
                   "block min-h-11 justify-start rounded-none border-l-2 py-2 pl-4",
                   isActive
-                    ? "border-primary text-primary font-semibold"
-                    : "text-muted-foreground hover:text-primary border-border",
+                    ? "border-primary-900 text-primary-900 font-semibold"
+                    : "text-foreground hover:text-primary-900 border-border",
                 )}
               >
                 {item.label}

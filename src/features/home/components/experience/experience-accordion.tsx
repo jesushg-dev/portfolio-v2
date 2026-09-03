@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { usePublicCvVisible } from "@/components/app-layout/public-cv-visible";
 
 interface ExperienceItem {
   id: string;
@@ -120,22 +121,14 @@ function Row({
 
 interface Props {
   experiences: ExperienceItem[];
-  leadershipTitle: string;
-  leadershipDescription: string;
-  hasLeadership: boolean;
   viewAllLabel: string;
 }
 
-export function ExperienceAccordion({
-  experiences,
-  leadershipTitle,
-  leadershipDescription,
-  hasLeadership,
-  viewAllLabel,
-}: Props) {
+export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
   const [openIndex, setOpenIndex] = useState(0);
   const t = useTranslations("main.experience");
   const showingRecentLabel = t("showingRecent");
+  const showCvLink = usePublicCvVisible();
 
   return (
     <div className="flex flex-col gap-6">
@@ -152,27 +145,17 @@ export function ExperienceAccordion({
         ))}
       </div>
 
-      {/* Leadership callout */}
-      {hasLeadership && (
-        <div className="border-primary/30 bg-primary/5 rounded-xl border p-5">
-          <p className="text-primary text-sm font-semibold">
-            {leadershipTitle}
-          </p>
-          <p className="text-muted-foreground mt-1 text-sm">
-            {leadershipDescription}
-          </p>
-        </div>
-      )}
-
       {/* Full CV link */}
       <div className="flex flex-col items-center justify-center gap-2 text-center">
         <p className="text-muted-foreground text-sm">{showingRecentLabel}</p>
-        <Link
-          href="/curriculum-vitae"
-          className="text-primary hover:text-primary/80 text-sm font-semibold transition-colors"
-        >
-          {viewAllLabel} →
-        </Link>
+        {showCvLink ? (
+          <Link
+            href="/curriculum-vitae"
+            className="text-primary hover:text-primary/80 text-sm font-semibold transition-colors"
+          >
+            {viewAllLabel} →
+          </Link>
+        ) : null}
       </div>
     </div>
   );

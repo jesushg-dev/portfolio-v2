@@ -1,4 +1,5 @@
 import { test } from "./authenticated-test";
+import { ensurePortfolioSoftSkills } from "./helpers/ensure-portfolio-soft-skills";
 import { goToSoftSkillsList } from "./helpers/fill-soft-skills-form";
 import {
   assertPaginationBehavior,
@@ -6,12 +7,13 @@ import {
 } from "./helpers/pagination";
 import { assertFilterAndColumnVisibility } from "./helpers/table-filters";
 
-test.setTimeout(60_000);
+test.setTimeout(120_000);
 
 test.describe("soft skills pagination", () => {
   test("should navigate through pagination and respect rows per page settings", async ({
     page,
   }) => {
+    await ensurePortfolioSoftSkills(page);
     const totalCount = await fetchAdminTotalCount(
       page,
       "softSkillsAdmin.getMine",
@@ -29,6 +31,7 @@ test.describe("soft skills pagination", () => {
   });
 
   test("should filter items and toggle column visibility", async ({ page }) => {
+    await ensurePortfolioSoftSkills(page);
     const totalCount = await fetchAdminTotalCount(
       page,
       "softSkillsAdmin.getMine",

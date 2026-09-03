@@ -38,7 +38,7 @@ describe("locationQueryFromContacts", () => {
 describe("geocodePlace", () => {
   it("does not call Nominatim when the value is already coordinates", async () => {
     const fetchMock = jest.fn();
-    global.fetch = fetchMock as unknown as typeof fetch;
+    global.fetch = fetchMock;
     await expect(geocodePlace("12.1, -86.2")).resolves.toEqual({
       lat: 12.1,
       lon: -86.2,
