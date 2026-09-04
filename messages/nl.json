@@ -683,7 +683,10 @@
         "showOcean": "Oceaan tonen",
         "zoomIn": "Inzoomen",
         "zoomOut": "Uitzoomen",
-        "options": "Kaartopties"
+        "options": "Kaartopties",
+        "basedIn": "Ik ben gevestigd in {place}.",
+        "nearbyFromVisitor": "Ik kom uit {place}, heel dicht bij je huidige locatie, volgens je IP-adres.",
+        "distanceFromVisitor": "Ik kom uit {place}, ongeveer <km>{distance}</km> van je huidige locatie, volgens je IP-adres."
       },
       "form": {
         "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",

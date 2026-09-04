@@ -75,6 +75,8 @@ const BOUNDARY_SEGMENTS = 144;
 const FRAME_MARGIN_PX = 180;
 const MIN_ZOOM_OUT = 1;
 const MAX_ZOOM_OUT = 3.2;
+const FLIGHT_EXTRA_LIFT_RATIO = 0.1;
+const FLIGHT_EXTRA_LIFT_MAX_PX = 28;
 
 export interface InterpolatedProjection extends d3.GeoProjection {
   alpha(): number;
@@ -171,6 +173,118 @@ function getFollowRotation(
   );
   const [midLon, midLat] = interpolate(0.5);
   return [-midLon, -midLat];
+}
+
+function isValidProjected(
+  point: [number, number] | null,
+): point is [number, number] {
+  return (
+    point != null &&
+    Number.isFinite(point[0]) &&
+    Number.isFinite(point[1]) &&
+    !Number.isNaN(point[0]) &&
+    !Number.isNaN(point[1])
+  );
+}
+
+function quadraticThrough(
+  start: [number, number],
+  through: [number, number],
+  end: [number, number],
+): [number, number] {
+  return [
+    2 * through[0] - (start[0] + end[0]) / 2,
+    2 * through[1] - (start[1] + end[1]) / 2,
+  ];
+}
+
+function quadraticSegment(
+  start: [number, number],
+  control: [number, number],
+  end: [number, number],
+  t: number,
+): string {
+  const progress = Math.min(Math.max(t, 0), 1);
+  if (progress <= 0) return "";
+
+  const rest = 1 - progress;
+  const controlPrime: [number, number] = [
+    rest * start[0] + progress * control[0],
+    rest * start[1] + progress * control[1],
+  ];
+  const tip: [number, number] = [
+    rest * rest * start[0] +
+      2 * rest * progress * control[0] +
+      progress * progress * end[0],
+    rest * rest * start[1] +
+      2 * rest * progress * control[1] +
+      progress * progress * end[1],
+  ];
+
+  return `M${start[0]},${start[1]} Q${controlPrime[0]},${controlPrime[1]} ${tip[0]},${tip[1]}`;
+}
+
+function flightPathD(
+  origin: LocationPoint,
+  destination: LocationPoint,
+  project: (point: [number, number]) => [number, number] | null,
+  lineProgress: number,
+  globeFactor: number,
+  isVisible: (lon: number, lat: number) => boolean,
+): string {
+  const start = project([origin.lon, origin.lat]);
+  const end = project([destination.lon, destination.lat]);
+  if (!isValidProjected(start) || !isValidProjected(end)) return "";
+
+  const interpolate = d3.geoInterpolate(
+    [origin.lon, origin.lat],
+    [destination.lon, destination.lat],
+  );
+  const [midLon, midLat] = interpolate(0.5);
+  const geoMid = isVisible(midLon, midLat) ? project([midLon, midLat]) : null;
+
+  const chordMid: [number, number] = [
+    (start[0] + end[0]) / 2,
+    (start[1] + end[1]) / 2,
+  ];
+  const through: [number, number] = isValidProjected(geoMid)
+    ? [
+        chordMid[0] + (geoMid[0] - chordMid[0]) * globeFactor,
+        chordMid[1] + (geoMid[1] - chordMid[1]) * globeFactor,
+      ]
+    : chordMid;
+
+  const dx = end[0] - start[0];
+  const dy = end[1] - start[1];
+  const chord = Math.hypot(dx, dy) || 1;
+  const geoLiftX = through[0] - chordMid[0];
+  const geoLiftY = through[1] - chordMid[1];
+  const geoLift = Math.hypot(geoLiftX, geoLiftY);
+
+  let liftX: number;
+  let liftY: number;
+  if (geoLift > 2) {
+    liftX = geoLiftX / geoLift;
+    liftY = geoLiftY / geoLift;
+  } else {
+    liftX = -dy / chord;
+    liftY = dx / chord;
+    if (liftY > 0) {
+      liftX = -liftX;
+      liftY = -liftY;
+    }
+  }
+
+  const extra =
+    Math.min(chord * FLIGHT_EXTRA_LIFT_RATIO, FLIGHT_EXTRA_LIFT_MAX_PX) *
+    globeFactor;
+  const peaked: [number, number] = [
+    through[0] + liftX * extra,
+    through[1] + liftY * extra,
+  ];
+  const control = quadraticThrough(start, peaked, end);
+
+  return quadraticSegment(start, control, end, lineProgress);
 }
 
 function getZoomOutTarget(
@@ -558,39 +672,71 @@ export function GlobeMap({
     const coordOrigin = projection([origin.lon, origin.lat]);
     const coordDestination = projection([destination.lon, destination.lat]);
 
+    const distinctOrigin =
+      origin.lat !== destination.lat || origin.lon !== destination.lon;
     const showOrigin =
+      distinctOrigin &&
       connectionPhase !== "idle" &&
       !!coordOrigin &&
       isFrontFacing(origin.lon, origin.lat);
     const showDestination =
       (connectionPhase === "revealDestination" ||
         connectionPhase === "line" ||
-        connectionPhase === "done") &&
+        connectionPhase === "done" ||
+        !distinctOrigin) &&
       !!coordDestination &&
       isFrontFacing(destination.lon, destination.lat);
     const showLine =
+      distinctOrigin &&
       (connectionPhase === "line" || connectionPhase === "done") &&
       !!coordOrigin &&
       !!coordDestination &&
       isFrontFacing(origin.lon, origin.lat) &&
       isFrontFacing(destination.lon, destination.lat);
 
-    const drawMarker = (
-      coord: [number, number],
-      label: string | undefined,
-      hasPopped: React.MutableRefObject<boolean>,
+    const drawHalo = (
+      group: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
+      x: number,
+      y: number,
     ) => {
-      const group = svg.append("g").attr("class", "location-marker");
-
-      // Outer glowing ring for high Mapbox-like contrast
       group
         .append("circle")
-        .attr("cx", coord[0])
-        .attr("cy", coord[1])
+        .attr("cx", x)
+        .attr("cy", y)
         .attr("r", 9)
         .attr("fill", accentColor)
         .attr("opacity", 0.3)
         .attr("class", "animate-pulse");
+    };
+
+    const drawLabel = (
+      group: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
+      x: number,
+      y: number,
+      text: string,
+    ) => {
+      if (!text) return;
+      group
+        .append("text")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("text-anchor", "middle")
+        .attr("fill", "var(--foreground)")
+        .attr("stroke", "var(--background)")
+        .attr("stroke-width", 4)
+        .attr("paint-order", "stroke")
+        .attr("font-size", 11)
+        .attr("font-weight", 600)
+        .text(text);
+    };
+
+    const drawDotMarker = (
+      coord: [number, number],
+      label: string,
+      hasPopped: React.MutableRefObject<boolean>,
+    ) => {
+      const group = svg.append("g").attr("class", "location-marker");
+      drawHalo(group, coord[0], coord[1]);
 
       const circle = group
         .append("circle")
@@ -613,32 +759,79 @@ export function GlobeMap({
       } else {
         circle.attr("r", 6).attr("opacity", 1);
       }
+
+      drawLabel(group, coord[0], coord[1] - 16, label);
+    };
+
+    const drawPinMarker = (
+      coord: [number, number],
+      label: string,
+      hasPopped: React.MutableRefObject<boolean>,
+    ) => {
+      const group = svg.append("g").attr("class", "location-marker");
+      drawHalo(group, coord[0], coord[1]);
+
+      const pin = group
+        .append("g")
+        .attr("transform", `translate(${coord[0]},${coord[1]})`);
+
+      const path = pin
+        .append("path")
+        .attr(
+          "d",
+          "M0,0 C-1,-10 -9,-16 -9,-24 A9,9 0 1,1 9,-24 C9,-16 1,-10 0,0 Z",
+        )
+        .attr("fill", accentColor)
+        .attr("stroke", "var(--background)")
+        .attr("stroke-width", 1.5);
+
+      pin
+        .append("circle")
+        .attr("cx", 0)
+        .attr("cy", -24)
+        .attr("r", 3.5)
+        .attr("fill", "var(--background)");
+
+      if (!hasPopped.current) {
+        path.attr("opacity", 0).transition().duration(380).attr("opacity", 1);
+        hasPopped.current = true;
+      }
+
+      drawLabel(group, coord[0], coord[1] - 38, label);
     };
 
     if (showOrigin && coordOrigin) {
-      drawMarker(coordOrigin, "", hasPoppedOrigin);
+      drawPinMarker(coordOrigin, origin.label ?? "", hasPoppedOrigin);
     }
     if (showDestination && coordDestination) {
-      drawMarker(coordDestination, "", hasPoppedDestination);
+      drawDotMarker(
+        coordDestination,
+        destination.label ?? "",
+        hasPoppedDestination,
+      );
     }
 
     if (showLine && coordOrigin && coordDestination) {
-      const currentX =
-        coordOrigin[0] + (coordDestination[0] - coordOrigin[0]) * lineProgress;
-      const currentY =
-        coordOrigin[1] + (coordDestination[1] - coordOrigin[1]) * lineProgress;
+      const flightPath = flightPathD(
+        origin,
+        destination,
+        projection,
+        lineProgress,
+        1 - tProg,
+        isFrontFacing,
+      );
 
-      svg
-        .insert("path", ".location-marker")
-        .attr(
-          "d",
-          `M${coordOrigin[0]},${coordOrigin[1]} L${currentX},${currentY}`,
-        )
-        .attr("fill", "none")
-        .attr("stroke", accentColor)
-        .attr("stroke-width", 2)
-        .attr("stroke-linecap", "round")
-        .attr("stroke-dasharray", "6,5");
+      if (flightPath) {
+        svg
+          .insert("path", ".location-marker")
+          .attr("d", flightPath)
+          .attr("fill", "none")
+          .attr("stroke", accentColor)
+          .attr("stroke-width", 2)
+          .attr("stroke-linecap", "round")
+          .attr("stroke-linejoin", "round")
+          .attr("stroke-dasharray", "6,5");
+      }
     }
   }, [
     worldData,
@@ -657,6 +850,7 @@ export function GlobeMap({
     showGraticule,
     showOceanFill,
     fallbackLabel,
+    t,
   ]);
 
   const handleAnimate = () => {

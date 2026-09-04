@@ -683,7 +683,10 @@
         "showOcean": "Show ocean fill",
         "zoomIn": "Zoom in",
         "zoomOut": "Zoom out",
-        "options": "Map options"
+        "options": "Map options",
+        "basedIn": "I'm based in {place}.",
+        "nearbyFromVisitor": "I'm from {place}, very close to your current location, according to your IP address.",
+        "distanceFromVisitor": "I'm from {place}, roughly <km>{distance}</km> away from your current location, according to your IP address."
       },
       "form": {
         "helper": "Tell me about your project or inquiry and I'll reply as soon as possible.",

@@ -683,7 +683,10 @@
         "showOcean": "Mostrar océano",
         "zoomIn": "Acercar",
         "zoomOut": "Alejar",
-        "options": "Opciones del mapa"
+        "options": "Opciones del mapa",
+        "basedIn": "Estoy en {place}.",
+        "nearbyFromVisitor": "Soy de {place}, muy cerca de tu ubicación actual, según tu dirección IP.",
+        "distanceFromVisitor": "Soy de {place}, a unos <km>{distance}</km> de tu ubicación actual, según tu dirección IP."
       },
       "form": {
         "helper": "Cuéntame sobre tu proyecto o consulta y te responderé lo antes posible.",
