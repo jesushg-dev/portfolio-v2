@@ -53,6 +53,9 @@ export const env = createEnv({
 
     /// Shared secret for the isolated CV PDF generator function
     CV_PDF_GENERATOR_SECRET: requiredInProduction(z.string().min(16)),
+
+    /// Optional dedicated key for tenant integration secrets (falls back to BETTER_AUTH_SECRET)
+    INTEGRATION_ENCRYPTION_KEY: z.string().min(16).optional(),
   },
 
   /**
@@ -89,6 +92,7 @@ export const env = createEnv({
     PRIMARY_DOMAIN: envOrDefault(process.env.PRIMARY_DOMAIN, "jesushg.com"),
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     CV_PDF_GENERATOR_SECRET: process.env.CV_PDF_GENERATOR_SECRET,
+    INTEGRATION_ENCRYPTION_KEY: process.env.INTEGRATION_ENCRYPTION_KEY,
     NEXT_PUBLIC_PRIMARY_DOMAIN: envOrDefault(
       process.env.NEXT_PUBLIC_PRIMARY_DOMAIN,
       "jesushg.com",
