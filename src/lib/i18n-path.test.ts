@@ -14,6 +14,14 @@ describe("i18n-path", () => {
     expect(localizedToInternalPath("/nl/beheer", "nl")).toBe("/admin");
     expect(localizedToInternalPath("/es/iniciar-sesion", "es")).toBe("/login");
     expect(localizedToInternalPath("/nl/inloggen", "nl")).toBe("/login");
+    expect(localizedToInternalPath("/es/panel/paginas-de-proceso", "es")).toBe(
+      "/admin/process-pages",
+    );
+    expect(localizedToInternalPath("/nl/beheer/procespaginas", "nl")).toBe(
+      "/admin/process-pages",
+    );
+    expect(localizedToInternalPath("/es/estadisticas", "es")).toBe("/stats");
+    expect(localizedToInternalPath("/nl/statistieken", "nl")).toBe("/stats");
   });
 
   it("handles string pathnames mapping like '/'", () => {
