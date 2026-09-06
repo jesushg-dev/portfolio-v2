@@ -291,7 +291,7 @@
         "editCustom": "Kleuren aanpassen"
       },
       "scrollToTop": "Naar boven scrollen",
-      "homeLogo": "Jehg, naar startpagina",
+      "homeLogo": "{brand}, naar startpagina",
       "nav": {
         "explore": "Ontdekken",
         "comingSoon": "Binnenkort",
@@ -367,6 +367,10 @@
             "label": "Now",
             "description": "Waar ik me nu op focus, wat ik lees en wat ik ship."
           },
+          "stats": {
+            "label": "Stats",
+            "description": "Anonieme bezoekersstats en portfolio-highlights."
+          },
           "colophon": {
             "label": "Colofon",
             "description": "Hoe deze site is gebouwd — stack, typografie, kleuren en voetafdruk."
@@ -375,7 +379,7 @@
       }
     },
     "footer": {
-      "homeLogo": "Jehg, naar startpagina",
+      "homeLogo": "{brand}, naar startpagina",
       "title": "Alle Rechten Voorbehouden © ",
       "madeWith": "Gemaakt met ",
       "by": " door ",
@@ -390,6 +394,7 @@
           "qaCollaboration": "QA-samenwerking",
           "uses": "Uses",
           "now": "Now",
+          "stats": "Stats",
           "colophon": "Colofon"
         },
         "miscellaneous": {
@@ -1296,6 +1301,31 @@
           "cleaner": "Beoordeling A+ op Website Carbon"
         }
       }
+    },
+    "stats": {
+      "metaTitle": "Stats",
+      "metaDescription": "Anonieme bezoekersstats en portfolio-highlights — geen cookies, unieke ID's of IP-adressen.",
+      "eyebrow": "Publieke stats",
+      "title": "Hoe deze site wordt gebruikt",
+      "description": "First-party audience measurement zonder cookies, plus een snapshot van het portfolio. Geen unieke bezoekers, geen tracking op andere sites.",
+      "highlightsTitle": "Highlights",
+      "kpis": {
+        "pageviews": "Pageviews (30 dagen)",
+        "visits": "Bezoeken (30 dagen)",
+        "countries": "Landen",
+        "projects": "Projecten",
+        "certifications": "Certificeringen",
+        "years": "Jaren ervaring"
+      },
+      "countriesTitle": "Waar bezoeken vandaan komen",
+      "pagesTitle": "Meest bekeken pagina's",
+      "windowHint": "Laatste 30 dagen. Alleen op landniveau.",
+      "pageviewsCount": "{count, plural, one {# weergave} other {# weergaven}}",
+      "unknownCountry": "Onbekend",
+      "emptyTraffic": "Nog geen publieke bezoeken geregistreerd.",
+      "servicesTitle": "Actieve diensten",
+      "emptyServices": "Er zijn nu geen actieve diensten.",
+      "privacyNote": "De meting is anoniem en uitgelegd in het <link>privacybeleid</link>."
     }
   },
   "admin": {
@@ -1327,6 +1357,7 @@
         "pagesGroup": "Pagina's",
         "uses": "Uses",
         "now": "Now",
+        "processPages": "Procespagina's",
         "sidebar": "Admin-navigatie"
       },
       "pageToolbar": "Paginakop",
@@ -1337,7 +1368,7 @@
       "title": "Dashboard",
       "subtitle": "Welkom terug! Beheer je publieke portfolio hier.",
       "welcomeTitle": "Welkom in je Portfolio Admin",
-      "welcomeSubtitle": "Beheer al je portfolio-inhoud op een plek. Wissel tussen talen om vertaalde content te beheren.",
+      "welcomeSubtitle": "Verkeer, sollicitatiepipeline en welke diensten live zijn — niet alleen contenttellingen.",
       "noProfile": "Profiel nog niet ingesteld",
       "noProfileHint": "Ga naar <link>Instellingen</link> om je publieke profiel aan te maken.",
       "publicUrl": "Publieke URL",
@@ -1348,6 +1379,49 @@
       "editCv": "Bewerk je <cv>CV</cv>",
       "publishInSettings": "Publiceer je portfolio in <link>Instellingen</link>",
       "manage": "Beheren",
+      "traffic": {
+        "title": "Bezoekers",
+        "subtitle": "Anonieme pageviews van de afgelopen 30 dagen. Geen cookies, IP's of unieke ID's.",
+        "viewPublic": "Open publieke stats",
+        "pageviews": "Pageviews",
+        "visits": "Bezoeken",
+        "countries": "Landen",
+        "topPage": "Top pagina",
+        "emptyValue": "—",
+        "pageviewsCount": "{count, plural, one {# weergave} other {# weergaven}}",
+        "countriesTitle": "Waar ze vandaan komen",
+        "pagesTitle": "Wat ze bekeken",
+        "referrersTitle": "Verwijzers",
+        "referrersHint": "Alleen hostnames. Directe bezoeken worden weggelaten.",
+        "empty": "Nog geen bezoekersdata. Publieke pagina's tellen vanaf het eerste anonieme bezoek.",
+        "emptyReferrers": "Geen externe verwijzers in dit venster.",
+        "unknownCountry": "Onbekend"
+      },
+      "jobs": {
+        "title": "Vacature-tracker",
+        "subtitle": "{applications, plural, one {# sollicitatie} other {# sollicitaties}} bij {companies, plural, one {# bedrijf} other {# bedrijven}}",
+        "openTracker": "Open tracker",
+        "applied": "Gesolliciteerd",
+        "inProgress": "Interview",
+        "offers": "Aanbiedingen",
+        "ghosted": "Ghosted",
+        "rejected": "Afgewezen",
+        "hired": "Aangenomen",
+        "upcoming": "Aankomende events",
+        "upcomingHint": "Volgende interviews, tests en follow-ups.",
+        "noUpcoming": "Niets gepland."
+      },
+      "services": {
+        "title": "Diensten",
+        "subtitle": "Welke aanbiedingen zichtbaar zijn op de publieke site.",
+        "empty": "Nog geen diensten.",
+        "active": "Actief",
+        "inactive": "Inactief",
+        "featured": "Uitgelicht"
+      },
+      "inventory": {
+        "title": "Contentoverzicht"
+      },
       "stats": {
         "certificates": {
           "title": "Certificaten",
@@ -1409,7 +1483,8 @@
         "contact": "Contact",
         "technicalSkills": "Technische vaardigheden",
         "personalSkills": "Persoonlijke vaardigheden",
-        "additionalInformation": "Aanvullende informatie"
+        "additionalInformation": "Aanvullende informatie",
+        "personalReferences": "Persoonlijke referenties"
       }
     },
     "settings": {
@@ -1417,9 +1492,16 @@
       "subtitle": "Publieke URL, standaardtaal en zichtbaarheid.",
       "username": "Gebruikersnaam (subdomein)",
       "displayName": "Weergavenaam",
+      "brandSectionTitle": "Logo & initialen",
+      "brandSectionDescription": "Zichtbaar in de openbare header en footer. Gebruik bij voorkeur een logo-afbeelding; anders korte initialen of een tekstmerk.",
+      "logoInitials": "Initialen / tekstlogo",
+      "logoInitialsHint": "Kort merk wanneer er geen afbeelding is (bijv. Jehg). Laat leeg om initialen uit de weergavenaam af te leiden.",
+      "logoInitialsPlaceholder": "Jehg",
+      "logoImageUrl": "Logo-afbeelding-URL (optioneel)",
+      "logoImageUrlHint": "Indien ingesteld, vervangt deze afbeelding het tekstmerk in de header en footer.",
+      "logoImageUrlPlaceholder": "https://cdn.voorbeeld.nl/logo.svg",
       "defaultLocale": "Standaardtaal",
       "defaultLocaleHint": "De taal van je CV wanneer geen vertaling beschikbaar is.",
-      "cvPdfUrl": "CV PDF URL (optioneel)",
       "mapLocation": "Kaartlocatie",
       "mapLocationHint": "Stad op de Let's talk-globe. Bezoekers verbinden naar dit punt als hun locatie bekend is.",
       "mapLocationPlaceholder": "Amsterdam, Nederland",
@@ -1434,7 +1516,76 @@
       "usernameValidation": "Gebruik kleine letters, cijfers en streepjes",
       "credentialsTitle": "Inloggegevens & integraties",
       "credentialsDescription": "Koppel Spotify, e-mail, uploads en AI voor dit portfolio. Bestaande koppelingen blijven hier beschikbaar.",
-      "credentialsCta": "Integraties beheren"
+      "credentialsCta": "Integraties beheren",
+      "security": {
+        "title": "Beveiliging",
+        "description": "Bescherm je account met een tweede factor en passkeys. Tweestapsverificatie is optioneel; met passkeys log je in zonder wachtwoord.",
+        "twoFactor": {
+          "title": "Tweestapsverificatie",
+          "description": "Vraag bij elke wachtwoordlogin een code uit je authenticator-app (of je e-mail).",
+          "statusOn": "Aan",
+          "statusOff": "Uit",
+          "enable": "2FA inschakelen",
+          "disable": "2FA uitschakelen",
+          "regenerateBackup": "Nieuwe back-upcodes",
+          "needsPassword": "Stel eerst een wachtwoord in voor dit account voordat je tweestapsverificatie inschakelt.",
+          "confirmPassword": "Bevestig je wachtwoord",
+          "confirmPasswordHint": {
+            "enable": "We hebben je wachtwoord nodig om het authenticator-geheim te genereren.",
+            "disable": "Als je 2FA uitschakelt, worden je authenticator en back-upcodes verwijderd.",
+            "backup": "Nieuwe codes vervangen de oude direct."
+          },
+          "confirm": {
+            "enable": "Doorgaan",
+            "disable": "Uitschakelen",
+            "backup": "Codes genereren"
+          },
+          "qrLabel": "QR-code voor je authenticator-app",
+          "scanHint": "Scan deze QR-code met Google Authenticator, 1Password of een andere TOTP-app en voer daarna de 6-cijferige code in.",
+          "manualKey": "Kun je niet scannen? Voer deze sleutel handmatig in:",
+          "codeLabel": "Code uit de app",
+          "verifyAndEnable": "Verifiëren en inschakelen",
+          "savedCodes": "Ik heb mijn back-upcodes opgeslagen",
+          "working": "Bezig...",
+          "cancel": "Annuleren",
+          "enabled": "Tweestapsverificatie staat aan. Bij je volgende login vragen we om een code.",
+          "disabled": "Tweestapsverificatie staat uit.",
+          "errorGeneric": "Er ging iets mis. Controleer je wachtwoord en probeer het opnieuw.",
+          "errorCode": "Die code klopt niet. Wacht op de volgende en probeer het opnieuw."
+        },
+        "backupCodes": {
+          "title": "Back-upcodes",
+          "description": "Bewaar deze op een veilige plek. Elke code laat je één keer inloggen als je geen toegang hebt tot je authenticator en e-mail.",
+          "copy": "Kopiëren",
+          "copied": "Gekopieerd",
+          "download": ".txt downloaden"
+        },
+        "passkeys": {
+          "title": "Passkeys",
+          "description": "Log in met Face ID, Touch ID, Windows Hello of een beveiligingssleutel. Passkeys zijn phishingbestendig en slaan de 2FA-stap over.",
+          "loading": "Passkeys laden...",
+          "empty": "Nog geen passkeys.",
+          "unnamed": "Naamloze passkey",
+          "meta": "{kind} · toegevoegd op {date}",
+          "kindSynced": "Gesynchroniseerde passkey",
+          "kindDevice": "Apparaatgebonden passkey",
+          "nameLabel": "Naam van de passkey",
+          "namePlaceholder": "bijv. MacBook Touch ID",
+          "add": "Passkey toevoegen",
+          "working": "Wachten op je apparaat...",
+          "added": "Passkey toegevoegd.",
+          "deleted": "Passkey verwijderd.",
+          "confirmDelete": "Deze passkey verwijderen? Je kunt er dan niet meer mee inloggen.",
+          "rename": "{name} hernoemen",
+          "delete": "{name} verwijderen",
+          "save": "Opslaan",
+          "cancel": "Annuleren",
+          "errorLoad": "Je passkeys konden niet worden geladen.",
+          "errorAdd": "De passkey kon niet worden toegevoegd.",
+          "errorDelete": "De passkey kon niet worden verwijderd.",
+          "errorRename": "De passkey kon niet worden hernoemd."
+        }
+      }
     },
     "spotify": {
       "title": "Spotify",
@@ -1684,6 +1835,28 @@
         "create": "Toevoegen",
         "dragToReorder": "Sleep om te herordenen"
       },
+      "personalReference": {
+        "details": "Referentiegegevens",
+        "name": "Naam",
+        "nameRequired": "Naam is verplicht",
+        "contact": "Contact",
+        "contactHint": "Telefoon, e-mail of ander contact (optioneel).",
+        "contactPlaceholder": "bijv. (+505) 8679-3204",
+        "role": "Rol / relatie",
+        "rolePlaceholder": "bijv. Ontwikkelaar, Manager",
+        "add": "+ Persoonlijke referentie toevoegen",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon referentie niet opslaan",
+        "deleteFailed": "Kon referentie niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen",
+        "dragToReorder": "Sleep om te herordenen"
+      },
       "localized": {
         "requiredDefault": "Verplicht in standaardtaal",
         "optionalTranslation": "Optionele vertaling",
@@ -1757,7 +1930,9 @@
         "createFailed": "Dienst aanmaken mislukt",
         "imageRequired": "Afbeelding is verplicht",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
-        "atLeastOneLanguage": "Minstens één taal is verplicht"
+        "atLeastOneLanguage": "Minstens één taal is verplicht",
+        "isActive": "Actief op de publieke site",
+        "isActiveHint": "Inactieve diensten blijven in admin maar verdwijnen van de homepage en publieke stats."
       },
       "certification": {
         "generalSection": "Algemene informatie",
@@ -2148,6 +2323,19 @@
         "addClarification": "Toelichting toevoegen",
         "removeClarification": "Verwijderen",
         "optionalMarkdownHint": "Optioneel. Markdown-links: [label](https://…)",
+        "sectionWorkspaceTags": "Workspace-tags",
+        "sectionWorkspaceTagsHint": "Klik op de foto om een pin te plaatsen en kies het item in het venster. Op de publieke pagina toont hover de naam; klik scrolt naar die kaart.",
+        "selectItem": "Item kiezen",
+        "selectItemDescription": "Kies het product waar deze pin naar wijst.",
+        "selectItemPlaceholder": "Selecteer een product",
+        "searchItem": "Items zoeken…",
+        "noMatchingItems": "Geen overeenkomsten",
+        "groupEveryday": "Everyday",
+        "groupSoftware": "Software",
+        "deleteTag": "Pin verwijderen",
+        "noImageHint": "Voeg hierboven een pad voor de workspace-afbeelding toe om tags te plaatsen.",
+        "emptyTags": "Nog geen tags. Klik op de afbeelding om er een toe te voegen.",
+        "untitledItem": "Naamloos",
         "save": "Instellingen opslaan",
         "saving": "Opslaan…",
         "updatedSuccess": "Instellingen opgeslagen",
@@ -2199,6 +2387,115 @@
         "updatedSuccess": "Focus bijgewerkt",
         "createFailed": "Kon focus niet aanmaken",
         "updateFailed": "Kon focus niet bijwerken"
+      },
+      "processPage": {
+        "sectionBasics": "Basis",
+        "sectionCopy": "Teksten",
+        "sectionPageNav": "Navigatie op de pagina",
+        "sectionHeroTerminal": "Hero-terminal",
+        "sectionBenefits": "Voordelen",
+        "sectionSteps": "Stappen",
+        "sectionToolkit": "Toolkit",
+        "sectionRoles": "Rollen",
+        "sectionFaq": "FAQ",
+        "template": "Sjabloon",
+        "templateHint": "Kies de layout. Wijzigen op een nieuwe pagina reset sectie-inhoud.",
+        "templateWorkflow": "Workflow (Hoe ik AI gebruik)",
+        "templateQa": "QA-samenwerking",
+        "slug": "Slug",
+        "slugHint": "Kleine letters, kebab-case. Gereserveerde paden zijn geblokkeerd.",
+        "navIcon": "Nav-icoon",
+        "order": "Volgorde",
+        "isPublished": "Gepubliceerd",
+        "isPublishedHint": "Niet-gepubliceerde pagina's geven 404 op de publieke site.",
+        "showInNav": "Tonen in header en footer",
+        "showInNavHint": "Onafhankelijk van publiceren. Een publieke pagina kan buiten het menu blijven.",
+        "menuTitle": "Menutitel",
+        "menuTitleRequired": "Menutitel is verplicht voor de primaire taal",
+        "navDescription": "Nav-beschrijving",
+        "navDescriptionHint": "Korte regel onder de titel in het Explore-menu van de header.",
+        "pageNavLabel": "Label in-page navigatie",
+        "metaTitle": "SEO-titel",
+        "metaDescription": "SEO-beschrijving",
+        "heroEyebrow": "Hero-eyebrow",
+        "heroTitle": "Hero-titel",
+        "heroTitleHighlight": "Hero-titel highlight",
+        "heroDescription": "Hero-beschrijving",
+        "heroPrimaryCta": "Primaire CTA",
+        "heroSecondaryCta": "Secundaire CTA",
+        "heroScrollHint": "Scrollhint",
+        "ctaTitle": "Afsluitende CTA-titel",
+        "ctaDescription": "Afsluitende CTA-beschrijving",
+        "ctaButton": "Afsluitende CTA-knop",
+        "navId": "Anker-id",
+        "navLabel": "Label",
+        "addNavItem": "Nav-item toevoegen",
+        "primaryHref": "Href van primaire CTA",
+        "secondaryHref": "Href van secundaire CTA",
+        "terminalTitle": "Terminallabel",
+        "workflowTitle": "Cyclustitel",
+        "workflowLive": "Live-label",
+        "workflowSteps": "Cyclusstappen",
+        "cursorLabel": "Cursorlabel",
+        "testRunnerLines": "Test runner-regels",
+        "onePerLine": "Eén item per regel",
+        "eyebrow": "Eyebrow",
+        "sectionTitle": "Sectietitel",
+        "title": "Titel",
+        "description": "Beschrijving",
+        "icon": "Icoon",
+        "benefitItem": "Voordeel {index}",
+        "addBenefit": "Voordeel toevoegen",
+        "inPracticeLabel": "In de praktijk-label",
+        "stepItem": "Stap {index}",
+        "stepNumber": "Nummer",
+        "stepDetail": "Detail",
+        "stepTools": "Tools",
+        "addStep": "Stap toevoegen",
+        "toolkitFootnote": "Voetnoot",
+        "toolItem": "Tool {index}",
+        "toolName": "Naam",
+        "toolInitials": "Initialen",
+        "addTool": "Tool toevoegen",
+        "myRolesLabel": "Label mijn rollen",
+        "myRoles": "Mijn rollen",
+        "ecosystemRoles": "Ecosysteemrollen",
+        "testingLabel": "Testing-label",
+        "testingTags": "Testing-tags",
+        "faqItem": "FAQ {index}",
+        "question": "Vraag",
+        "answer": "Antwoord",
+        "addFaq": "FAQ toevoegen",
+        "remove": "Verwijderen",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "create": "Aanmaken",
+        "saving": "Opslaan…",
+        "createdSuccess": "Procespagina aangemaakt",
+        "updatedSuccess": "Procespagina bijgewerkt",
+        "createFailed": "Kon procespagina niet aanmaken",
+        "updateFailed": "Kon procespagina niet bijwerken",
+        "designerHint": "Sleep widgets naar het canvas en klik om ze in te vullen.",
+        "widgetPalette": "Widgets",
+        "pageSettings": "Pagina-instellingen",
+        "emptyCanvas": "Sleep hier een widget naartoe, of klik + in het palet.",
+        "dragToReorder": "Sleep om te herschikken",
+        "removeWidget": "Widget verwijderen",
+        "visualNone": "Geen visual",
+        "visualWorkflow": "Workflow-cyclus",
+        "visualTestRunner": "Test runner",
+        "addChip": "Toevoegen",
+        "widgets": {
+          "nav": "Navigatie op de pagina",
+          "hero": "Hero",
+          "benefits": "Voordelengrid",
+          "stepsAccordion": "Stappen-accordion",
+          "stepsTimeline": "Stappen-tijdlijn",
+          "toolkit": "Toolkit",
+          "roles": "Rollen",
+          "faq": "FAQ",
+          "closingCta": "Afsluitende CTA"
+        }
       }
     },
     "errors": {
@@ -2356,6 +2653,9 @@
       "cancel": "Annuleren",
       "columnTitle": "Titel",
       "columnType": "Soort",
+      "columnActive": "Status",
+      "active": "Actief",
+      "inactive": "Inactief",
       "columnSkills": "Vaardigheden",
       "columnActions": "Acties",
       "columnCompany": "Bedrijf",
@@ -2522,7 +2822,12 @@
       "editItem": "Item bewerken",
       "addItem": "Item toevoegen",
       "deleteSuccess": "Succesvol verwijderd",
-      "close": "Sluiten"
+      "close": "Sluiten",
+      "exportSeedJson": "Exporteren",
+      "exportSeedJsonHint": "Exporteer de huidige databaserecords als prisma/data seed-JSON",
+      "exportSeedJsonError": "Seed-JSON exporteren is mislukt",
+      "exportSeedZipHint": "Download een ZIP met alle prisma/data seed-JSON-bestanden",
+      "exportSeedZipError": "Seed-ZIP exporteren is mislukt"
     },
     "jobTracker": {
       "title": "Job Tracker",
@@ -2597,6 +2902,11 @@
         "description": "Geplande interviews en tests",
         "add": "Toevoegen",
         "empty": "U heeft geen geplande evenementen",
+        "expand": "Alles tonen",
+        "collapse": "Minder tonen",
+        "expandAria": "Meer aankomende evenementen tonen",
+        "collapseAria": "Alleen het eerstvolgende evenement tonen",
+        "moreCount": "{count, plural, one {# evenement extra} other {# evenementen extra}}",
         "today": "Vandaag",
         "tomorrow": "Morgen",
         "virtual": "Virtueel",
@@ -2720,6 +3030,26 @@
         "needCv": "Maak eerst een CV op maat, of upload een .docx/.pdf om bij te voegen.",
         "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een concept te maken.",
         "noResend": "Configureer Resend in Integraties om vanaf je domein te versturen."
+      },
+      "coverLetter": {
+        "title": "Motivatiebrief",
+        "openButton": "Motivatiebrief",
+        "description": "AI schrijft een formele motivatiebrief op maat van deze vacature met je CV, bedrijfscontext en notities. Bewerk, kopieer of bewaar hem.",
+        "draft": "Concept met AI",
+        "redraft": "Opnieuw genereren",
+        "draftHint": "Genereer een briefconcept vanuit deze sollicitatie — je kunt alles bewerken vóór het opslaan.",
+        "draftSuccess": "Briefconcept klaar",
+        "draftError": "Kon de brief niet maken",
+        "save": "Opslaan",
+        "saveSuccess": "Brief opgeslagen",
+        "saveError": "Kon de brief niet opslaan",
+        "saveMissingFields": "Vul onderwerp en tekst in vóór het opslaan",
+        "copy": "Kopiëren",
+        "copySuccess": "Gekopieerd naar klembord",
+        "copyError": "Kon niet kopiëren",
+        "subjectLabel": "Onderwerp / titel",
+        "bodyLabel": "Brief",
+        "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een brief te maken."
       },
       "kanban": {
         "description": "Sleep kaarten tussen kolommen om de status bij te werken.",
@@ -2890,6 +3220,10 @@
         "paraphrased": "geparafraseerd",
         "missing": "ontbreekt"
       },
+      "atsCheckerTitle": "ATS-checker",
+      "atsCheckerScore": "Match {score}%",
+      "atsCheckerGaps": "Gaps t.o.v. deze vacature",
+      "atsCheckerNoCriticalGaps": "Geen kritieke skill-gaps gemeld",
       "tailorAtsPreview": "ATS-voorbeeld",
       "tailorPreviewMenu": "Voorbeeld",
       "tailorPreviewWord": "Word (DOCX)",
@@ -2968,6 +3302,33 @@
       "editFocus": "Focus bewerken",
       "focusDeleted": "Focus verwijderd.",
       "focusDeleteFailed": "Kon focus niet verwijderen."
+    },
+    "processPages": {
+      "title": "Procespagina's",
+      "subtitle": "Bouw procespagina's met herbruikbare widgets.",
+      "addNew": "Pagina toevoegen",
+      "createDescription": "Sleep widgets naar het canvas en vul de teksten in.",
+      "editTitle": "Procespagina bewerken",
+      "editDescription": "Voeg widgets toe, herschik ze en vul ze in. Wissel van taal in de designer.",
+      "count": "{count} pagina's",
+      "searchTitle": "Zoek titel",
+      "searchSlug": "Zoek slug",
+      "deletedSuccess": "Pagina verwijderd.",
+      "deleteFailed": "Kon pagina niet verwijderen.",
+      "toggleFailed": "Kon pagina niet bijwerken.",
+      "templates": {
+        "workflow": "Workflow",
+        "qa": "QA"
+      },
+      "columns": {
+        "order": "Volgorde",
+        "title": "Titel",
+        "slug": "Slug",
+        "template": "Sjabloon",
+        "published": "Gepubliceerd",
+        "inNav": "In nav",
+        "widgets": "Widgets"
+      }
     }
   },
   "auth": {
@@ -3006,7 +3367,39 @@
       "signInGithub": "Inloggen met GitHub",
       "connectingGoogle": "Verbinden met Google",
       "connectingGithub": "Verbinden met GitHub",
-      "errorSignIn": "Inloggen mislukt"
+      "errorSignIn": "Inloggen mislukt",
+      "signInPasskey": "Inloggen met een passkey",
+      "connectingPasskey": "Wachten op je passkey...",
+      "errorPasskey": "Inloggen met je passkey is mislukt"
+    },
+    "twoFactor": {
+      "title": "Bevestig dat jij het bent",
+      "metaDescription": "Voer je tweestapscode in om het inloggen af te ronden.",
+      "description": {
+        "totp": "Voer de 6-cijferige code uit je authenticator-app in.",
+        "otp": "We e-mailen een 6-cijferige code naar het adres van je account.",
+        "backup": "Voer een van je eenmalige back-upcodes in. Elke code werkt één keer."
+      },
+      "methodLabel": "Verificatiemethode",
+      "method": {
+        "totp": "Authenticator",
+        "otp": "E-mailcode",
+        "backup": "Back-upcode"
+      },
+      "codeLabel": "Verificatiecode",
+      "codePlaceholder": "123456",
+      "backupLabel": "Back-upcode",
+      "backupPlaceholder": "xxxxx-xxxxx",
+      "sendCode": "Stuur me een code",
+      "sending": "Versturen...",
+      "resend": "Nieuwe code versturen",
+      "codeSent": "Code verstuurd. Controleer je inbox — de code verloopt na 5 minuten.",
+      "verify": "Verifiëren",
+      "verifying": "Verifiëren...",
+      "errorVerify": "Die code is ongeldig of verlopen.",
+      "errorSend": "De code kon niet worden verstuurd. Probeer het over een minuut opnieuw.",
+      "backToSignIn": "Verkeerd account?",
+      "signIn": "Terug naar inloggen"
     },
     "register": {
       "titlePortfolio": "Maak je portfolio",
@@ -3072,10 +3465,10 @@
     "privacy": {
       "title": "Privacybeleid",
       "metaTitle": "Privacybeleid",
-      "metaDescription": "Hoe wij met je gegevens omgaan, inclusief Spotify-koppeling en bewaartermijnen.",
+      "metaDescription": "Hoe wij met je gegevens omgaan, inclusief anonieme audience measurement en Spotify-credentials.",
       "subtitle": "Hoe wij met je gegevens omgaan",
-      "updatedAt": "Laatst bijgewerkt: juli 2026",
-      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt uit wat we verzamelen wanneer je Spotify koppelt en hoe je dat kunt verwijderen.",
+      "updatedAt": "Laatst bijgewerkt: september 2026",
+      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt anonieme audience measurement op publieke pagina's uit, en wat we verzamelen als je Spotify koppelt.",
       "spotify": {
         "title": "Spotify-integratie",
         "intro": "Als je Spotify koppelt in het adminpaneel, slaan we de credentials van je eigen Spotify Developer-app op zodat de Now Playing-widget je afspeelstatus op je openbare portfolio kan tonen.",
@@ -3087,6 +3480,19 @@
         "purpose": "We gebruiken deze gegevens alleen om namens jou Spotify-afspeelinformatie op te vragen voor bezoekers van je portfolio. We verkopen of delen ze niet met derden.",
         "disconnect": "Je kunt Spotify op elk moment ontkoppelen via Admin → Spotify. Bij ontkoppeling verwijderen we je Spotify-tokens en app-credentials direct uit onze database.",
         "retention": "Als je ontkoppelt of ons vraagt te stoppen met het verwerken van je Spotify-gegevens, verwijderen we die zonder onredelijke vertraging en uiterlijk binnen vijf dagen, conform de Spotify-developervoorwaarden."
+      },
+      "analytics": {
+        "title": "Audience measurement",
+        "intro": "Publieke pagina's sturen een kleine first-party beacon zodat de eigenaar bij benadering verkeer kan zien. Dit is geen advertising of cross-site tracking, en er worden geen cookies gezet.",
+        "storedTitle": "Wat we opslaan",
+        "storedPageviews": "Dagelijkse totalen van pageviews en sessiebezoeken, gegroepeerd op pad, land en referrer-hostname",
+        "notStoredTitle": "Wat we niet opslaan",
+        "notStoredIp": "IP-adressen",
+        "notStoredId": "Cookies, fingerprints of unieke bezoekers-ID's",
+        "notStoredCity": "Locatie op stadsniveau (alleen land, via het hostingplatform)",
+        "purpose": "We gebruiken deze aggregaten alleen voor de publieke /statistieken-pagina en het portfolio-admin. Data wordt niet verkocht of gedeeld met analytics-leveranciers.",
+        "optOut": "Als je browser Do Not Track of Global Privacy Control stuurt, slaan we de meting volledig over.",
+        "retention": "Aggregaten ouder dan 13 maanden worden verwijderd."
       }
     }
   },

@@ -29,12 +29,59 @@ const emailTemplatesDevAssets = [
   "./email-templates/src/contact-notification-email.tsx",
   "./email-templates/src/cv-delivery-email.tsx",
   "./email-templates/src/reset-password-email.tsx",
+  "./email-templates/src/two-factor-otp-email.tsx",
   "./email-templates/src/theme.ts",
   "./email-templates/src/load-messages.ts",
   "./email-templates/src/locale.ts",
 ];
 
+const isProduction = process.env.NODE_ENV === "production";
+
+/**
+ * Baseline hardening headers. `script-src`/`style-src` are intentionally not
+ * restricted yet (Next inline runtime + third-party embeds need nonces first);
+ * the CSP below only locks framing, plugins, base URI and form targets.
+ */
+const securityHeaders: { key: string; value: string }[] = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: [
+      "camera=()",
+      "microphone=()",
+      "geolocation=()",
+      "payment=()",
+      "usb=()",
+      "publickey-credentials-get=(self)",
+      "publickey-credentials-create=(self)",
+    ].join(", "),
+  },
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "frame-ancestors 'self'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "object-src 'none'",
+      ...(isProduction ? ["upgrade-insecure-requests"] : []),
+    ].join("; "),
+  },
+  ...(isProduction
+    ? [
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=63072000; includeSubDomains; preload",
+        },
+      ]
+    : []),
+];
+
 const nextConfig: NextConfig = {
+  headers() {
+    return Promise.resolve([{ source: "/(.*)", headers: securityHeaders }]);
+  },
   allowedDevOrigins: [
     "127.0.0.1",
     "localhost",

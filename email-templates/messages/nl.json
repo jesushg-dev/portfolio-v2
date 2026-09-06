@@ -34,5 +34,14 @@
     "button": "Wachtwoord herstellen",
     "body2": "Als je dit niet hebt aangevraagd, kun je deze e-mail veilig negeren.",
     "footer": "Beveiligingswaarschuwing verzonden vanaf jehg.dev."
+  },
+  "two-factor-otp": {
+    "preview": "Je inlogcode",
+    "eyebrow": "Accountbeveiliging · Tweestapsverificatie",
+    "greeting": "Hallo,",
+    "body1": "Gebruik deze code om het inloggen bij je jehg.dev-account af te ronden:",
+    "expires": "De code verloopt na 5 minuten en is eenmalig te gebruiken.",
+    "body2": "Heb je niet geprobeerd in te loggen? Wijzig dan meteen je wachtwoord — iemand anders kent het.",
+    "footer": "Beveiligingswaarschuwing verzonden vanaf jehg.dev."
   }
 }

@@ -3,13 +3,17 @@ import { hashPassword } from "better-auth/crypto";
 import type { PrismaClient } from "@prisma/client";
 
 import { requireOwnerCredentials } from "./lib/seed-env";
+import {
+  CREDENTIAL_ACCOUNT_ISSUER,
+  CREDENTIAL_PROVIDER_ID,
+} from "../src/lib/auth-account-issuer";
 
 export interface PortfolioProfileSeed {
   name: string;
   username: string;
   displayName: string;
+  logoInitials?: string;
   defaultLocale: "es" | "en" | "nl";
-  cvPdfUrl: string;
   photoUrl: string;
 }
 
@@ -19,8 +23,6 @@ const portfolioProfile = JSON.parse(
     "utf8",
   ),
 ) as PortfolioProfileSeed;
-
-const CREDENTIAL_PROVIDER_ID = "credential";
 
 export interface SeedPortfolioUserResult {
   userId: string;
@@ -56,17 +58,17 @@ export async function seedPortfolioUser(
       isPublished: true,
       username: data.username,
       defaultLocale: data.defaultLocale,
-      cvPdfUrl: data.cvPdfUrl,
       displayName: data.displayName,
+      logoInitials: data.logoInitials ?? null,
     },
     create: {
       userId: owner.id,
       username: data.username,
       displayName: data.displayName,
+      logoInitials: data.logoInitials ?? null,
       defaultLocale: data.defaultLocale,
       isPrimary: true,
       isPublished: true,
-      cvPdfUrl: data.cvPdfUrl,
     },
   });
 
@@ -81,13 +83,18 @@ export async function seedPortfolioUser(
   if (existingAccount) {
     await prisma.account.update({
       where: { id: existingAccount.id },
-      data: { password: hashedPassword, accountId: owner.id },
+      data: {
+        password: hashedPassword,
+        accountId: owner.id,
+        issuer: CREDENTIAL_ACCOUNT_ISSUER,
+      },
     });
   } else {
     await prisma.account.create({
       data: {
         userId: owner.id,
         providerId: CREDENTIAL_PROVIDER_ID,
+        issuer: CREDENTIAL_ACCOUNT_ISSUER,
         accountId: owner.id,
         password: hashedPassword,
       },

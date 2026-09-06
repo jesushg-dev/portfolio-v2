@@ -71,6 +71,14 @@ export default defineConfig({
       },
     },
     {
+      name: "two-factor",
+      testMatch: "**/two-factor.spec.ts",
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Chrome"],
+      },
+    },
+    {
       name: "public-locale",
       testMatch: "**/locale-switching.spec.ts",
       dependencies: ["setup"],

@@ -1,6 +1,23 @@
 packages:
   - "."
 
+# Dependency overrides (pnpm ignores npm-style `overrides` in package.json).
+overrides:
+  "@types/react": "19.2.18"
+  "@types/react-dom": "19.2.7"
+  # Transitive advisories (pnpm audit). None of these packages are used directly:
+  # mysql2 (better-auth optional driver), effect/valibot (@hookform/resolvers
+  # optional peers), deepmerge-ts (@prisma/config).
+  mysql2: ">=3.23.1"
+  effect: ">=3.20.0"
+  valibot: ">=1.4.2"
+  deepmerge-ts: ">=8.0.0"
+  # nwsapi 2.2.25+ (jsdom's selector engine) recurses forever on `:modal` /
+  # `:fullscreen` because matchesNative() calls jsdom's Element.matches, which is
+  # nwsapi again. @floating-ui probes `:modal`, so any floating test hangs ~250s.
+  # Re-checked 2.2.27 (2026-08-30) — still hangs. Keep pinned until upstream or jsdom fixes it.
+  nwsapi: "2.2.24"
+
 allowBuilds:
   "@parcel/watcher": true
   "@prisma/client": true

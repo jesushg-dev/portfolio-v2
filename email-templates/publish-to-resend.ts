@@ -3,6 +3,7 @@ import { render } from "@react-email/render";
 import CvDeliveryEmail from "./src/cv-delivery-email";
 import ContactNotificationEmail from "./src/contact-notification-email";
 import ResetPasswordEmail from "./src/reset-password-email";
+import TwoFactorOtpEmail from "./src/two-factor-otp-email";
 import type { Locale } from "./src/load-messages";
 import { links } from "./src/theme";
 
@@ -76,6 +77,12 @@ const resetPasswordSubjects: Record<Locale, string> = {
   en: "Reset your password — jehg.dev",
   es: "Restablece tu contraseña — jehg.dev",
   nl: "Herstel je wachtwoord — jehg.dev",
+};
+
+const twoFactorOtpSubjects: Record<Locale, string> = {
+  en: "{{{OTP_CODE}}} is your sign-in code — jehg.dev",
+  es: "{{{OTP_CODE}}} es tu código de inicio de sesión — jehg.dev",
+  nl: "{{{OTP_CODE}}} is je inlogcode — jehg.dev",
 };
 
 async function main() {
@@ -167,6 +174,27 @@ async function main() {
       envVar: `RESEND_TEMPLATE_RESET_${locale.toUpperCase()}`,
       name: `reset-password-${locale}`,
       id: resetId,
+    });
+
+    console.log(`[${locale.toUpperCase()}] Two-factor OTP`);
+
+    const otpHtml = await render(
+      await TwoFactorOtpEmail({ otpCode: "{{{OTP_CODE}}}", locale }),
+      { pretty: false },
+    );
+
+    const otpId = await upsertTemplate({
+      name: `two-factor-otp-${locale}`,
+      from: `Portfolio Security <${links.email}>`,
+      subject: twoFactorOtpSubjects[locale],
+      html: otpHtml,
+      variables: [{ key: "OTP_CODE", type: "string", fallbackValue: "000000" }],
+    });
+
+    results.push({
+      envVar: `RESEND_TEMPLATE_TWO_FACTOR_${locale.toUpperCase()}`,
+      name: `two-factor-otp-${locale}`,
+      id: otpId,
     });
   }
 

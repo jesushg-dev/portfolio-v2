@@ -35,6 +35,9 @@ export const env = createEnv({
     RESEND_TEMPLATE_RESET_EN: z.string().optional(),
     RESEND_TEMPLATE_RESET_ES: z.string().optional(),
     RESEND_TEMPLATE_RESET_NL: z.string().optional(),
+    RESEND_TEMPLATE_TWO_FACTOR_EN: z.string().optional(),
+    RESEND_TEMPLATE_TWO_FACTOR_ES: z.string().optional(),
+    RESEND_TEMPLATE_TWO_FACTOR_NL: z.string().optional(),
 
     // OAuth providers (optional - only needed if you want social login)
     GOOGLE_CLIENT_ID: z.string().optional(),
@@ -85,6 +88,9 @@ export const env = createEnv({
     RESEND_TEMPLATE_RESET_EN: process.env.RESEND_TEMPLATE_RESET_EN,
     RESEND_TEMPLATE_RESET_ES: process.env.RESEND_TEMPLATE_RESET_ES,
     RESEND_TEMPLATE_RESET_NL: process.env.RESEND_TEMPLATE_RESET_NL,
+    RESEND_TEMPLATE_TWO_FACTOR_EN: process.env.RESEND_TEMPLATE_TWO_FACTOR_EN,
+    RESEND_TEMPLATE_TWO_FACTOR_ES: process.env.RESEND_TEMPLATE_TWO_FACTOR_ES,
+    RESEND_TEMPLATE_TWO_FACTOR_NL: process.env.RESEND_TEMPLATE_TWO_FACTOR_NL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
@@ -110,7 +116,7 @@ export const env = createEnv({
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
    * useful for Docker builds.
    */
-  skipValidation: !process.env.SKIP_ENV_VALIDATION,
+  skipValidation: Boolean(process.env.SKIP_ENV_VALIDATION),
   /**
    * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
    * `SOME_VAR=''` will throw an error.

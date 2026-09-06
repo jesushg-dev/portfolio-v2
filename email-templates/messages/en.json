@@ -34,5 +34,14 @@
     "button": "Reset Password",
     "body2": "If you didn't request a password reset, you can safely ignore this email.",
     "footer": "Security alert sent from jehg.dev."
+  },
+  "two-factor-otp": {
+    "preview": "Your sign-in code",
+    "eyebrow": "Account Security · Two-factor sign-in",
+    "greeting": "Hi,",
+    "body1": "Use this code to finish signing in to your jehg.dev account:",
+    "expires": "It expires in 5 minutes and can only be used once.",
+    "body2": "If you didn't try to sign in, change your password right away — someone else knows it.",
+    "footer": "Security alert sent from jehg.dev."
   }
 }

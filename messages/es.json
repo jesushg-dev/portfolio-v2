@@ -291,7 +291,7 @@
         "editCustom": "Editar colores"
       },
       "scrollToTop": "Volver arriba",
-      "homeLogo": "Jehg, ir al inicio",
+      "homeLogo": "{brand}, ir al inicio",
       "nav": {
         "explore": "Explorar",
         "comingSoon": "Pronto",
@@ -367,6 +367,10 @@
             "label": "Now",
             "description": "En qué estoy enfocado, leyendo y entregando ahora mismo."
           },
+          "stats": {
+            "label": "Estadísticas",
+            "description": "Visitas anónimas y highlights del portafolio."
+          },
           "colophon": {
             "label": "Colofón",
             "description": "Cómo está hecho este sitio: stack, tipografía, colores y huella."
@@ -375,7 +379,7 @@
       }
     },
     "footer": {
-      "homeLogo": "Jehg, ir al inicio",
+      "homeLogo": "{brand}, ir al inicio",
       "title": "Todos los Derechos Reservados © ",
       "madeWith": "Hecho con ",
       "by": " por ",
@@ -390,6 +394,7 @@
           "qaCollaboration": "Colaboración con QA",
           "uses": "Uses",
           "now": "Now",
+          "stats": "Estadísticas",
           "colophon": "Colofón"
         },
         "miscellaneous": {
@@ -1296,6 +1301,31 @@
           "cleaner": "Calificación A+ en Website Carbon"
         }
       }
+    },
+    "stats": {
+      "metaTitle": "Estadísticas",
+      "metaDescription": "Visitas anónimas y highlights del portafolio — sin cookies, IDs únicos ni direcciones IP.",
+      "eyebrow": "Stats públicas",
+      "title": "Cómo se usa este sitio",
+      "description": "Medición de audiencia first-party, sin cookies, más un snapshot del portafolio. Sin visitantes únicos ni tracking en otros sitios.",
+      "highlightsTitle": "Highlights",
+      "kpis": {
+        "pageviews": "Pageviews (30 días)",
+        "visits": "Visitas (30 días)",
+        "countries": "Países",
+        "projects": "Proyectos",
+        "certifications": "Certificaciones",
+        "years": "Años de experiencia"
+      },
+      "countriesTitle": "De dónde vienen las visitas",
+      "pagesTitle": "Páginas más vistas",
+      "windowHint": "Últimos 30 días. Solo a nivel de país.",
+      "pageviewsCount": "{count, plural, one {# vista} other {# vistas}}",
+      "unknownCountry": "Desconocido",
+      "emptyTraffic": "Aún no hay visitas públicas registradas.",
+      "servicesTitle": "Servicios activos",
+      "emptyServices": "No hay servicios activos ahora.",
+      "privacyNote": "La medición es anónima y está explicada en la <link>política de privacidad</link>."
     }
   },
   "admin": {
@@ -1327,6 +1357,7 @@
         "pagesGroup": "Páginas",
         "uses": "Uses",
         "now": "Now",
+        "processPages": "Páginas de proceso",
         "sidebar": "Navegación de administración"
       },
       "pageToolbar": "Encabezado de página",
@@ -1337,7 +1368,7 @@
       "title": "Dashboard",
       "subtitle": "¡Bienvenido! Gestiona tu portafolio público desde aquí.",
       "welcomeTitle": "Bienvenido a tu administrador de portafolio",
-      "welcomeSubtitle": "Gestiona todo el contenido de tu portafolio en un solo lugar. Cambia entre idiomas para administrar contenido traducido.",
+      "welcomeSubtitle": "Tráfico, pipeline de postulaciones y qué servicios están activos — no solo conteos de contenido.",
       "noProfile": "Perfil no configurado",
       "noProfileHint": "Ve a <link>Configuración</link> para crear tu perfil público.",
       "publicUrl": "URL pública",
@@ -1348,6 +1379,49 @@
       "editCv": "Edita tu <cv>CV</cv>",
       "publishInSettings": "Publica tu portafolio en <link>Configuración</link>",
       "manage": "Gestionar",
+      "traffic": {
+        "title": "Visitantes",
+        "subtitle": "Pageviews anónimos de los últimos 30 días. Sin cookies, IPs ni IDs únicos.",
+        "viewPublic": "Ver stats públicas",
+        "pageviews": "Pageviews",
+        "visits": "Visitas",
+        "countries": "Países",
+        "topPage": "Página top",
+        "emptyValue": "—",
+        "pageviewsCount": "{count, plural, one {# vista} other {# vistas}}",
+        "countriesTitle": "De dónde te visitan",
+        "pagesTitle": "Qué vieron",
+        "referrersTitle": "Referencias",
+        "referrersHint": "Solo hostnames. Las visitas directas se omiten.",
+        "empty": "Aún no hay datos de visitantes. Las páginas públicas empiezan a contar tras la primera visita anónima.",
+        "emptyReferrers": "No hay referencias externas en esta ventana.",
+        "unknownCountry": "Desconocido"
+      },
+      "jobs": {
+        "title": "Seguimiento laboral",
+        "subtitle": "{applications, plural, one {# postulación} other {# postulaciones}} en {companies, plural, one {# empresa} other {# empresas}}",
+        "openTracker": "Abrir seguimiento",
+        "applied": "Aplicado",
+        "inProgress": "Entrevista",
+        "offers": "Ofertas",
+        "ghosted": "Ghosted",
+        "rejected": "Rechazado",
+        "hired": "Contratado",
+        "upcoming": "Próximos eventos",
+        "upcomingHint": "Siguientes entrevistas, pruebas y seguimientos.",
+        "noUpcoming": "Nada programado."
+      },
+      "services": {
+        "title": "Servicios",
+        "subtitle": "Qué ofertas están visibles en el sitio público.",
+        "empty": "Aún no hay servicios.",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "featured": "Destacado"
+      },
+      "inventory": {
+        "title": "Inventario de contenido"
+      },
       "stats": {
         "certificates": {
           "title": "Certificados",
@@ -1409,7 +1483,8 @@
         "contact": "Contacto",
         "technicalSkills": "Habilidades técnicas",
         "personalSkills": "Habilidades personales",
-        "additionalInformation": "Información adicional"
+        "additionalInformation": "Información adicional",
+        "personalReferences": "Referencias personales"
       }
     },
     "settings": {
@@ -1417,9 +1492,16 @@
       "subtitle": "URL pública, idioma por defecto y visibilidad.",
       "username": "Usuario (subdominio)",
       "displayName": "Nombre para mostrar",
+      "brandSectionTitle": "Logo e iniciales",
+      "brandSectionDescription": "Se muestra en el encabezado y el pie públicos. Usa una imagen de logo si la tienes; si no, iniciales o una marca de texto corta.",
+      "logoInitials": "Iniciales / logo de texto",
+      "logoInitialsHint": "Marca corta cuando no hay imagen (p. ej. Jehg). Déjalo vacío para derivar iniciales del nombre para mostrar.",
+      "logoInitialsPlaceholder": "Jehg",
+      "logoImageUrl": "URL del logo (opcional)",
+      "logoImageUrlHint": "Si está definida, esta imagen reemplaza la marca de texto en el encabezado y el pie.",
+      "logoImageUrlPlaceholder": "https://cdn.ejemplo.com/logo.svg",
       "defaultLocale": "Idioma por defecto",
       "defaultLocaleHint": "Idioma del CV cuando no hay traducción disponible.",
-      "cvPdfUrl": "URL del PDF del CV (opcional)",
       "mapLocation": "Ubicación en el mapa",
       "mapLocationHint": "Ciudad que aparece en el globo de Hablemos. Quien visita se conecta a este punto si se puede detectar su ubicación.",
       "mapLocationPlaceholder": "Ámsterdam, Países Bajos",
@@ -1434,7 +1516,76 @@
       "usernameValidation": "Usa letras minúsculas, números y guiones",
       "credentialsTitle": "Credenciales e integraciones",
       "credentialsDescription": "Conecta Spotify, correo, subida de archivos e IA para este portafolio. Si ya las configuraste, siguen aquí.",
-      "credentialsCta": "Gestionar integraciones"
+      "credentialsCta": "Gestionar integraciones",
+      "security": {
+        "title": "Seguridad",
+        "description": "Protege tu cuenta con un segundo factor y passkeys. La verificación en dos pasos es opcional; las passkeys te permiten entrar sin contraseña.",
+        "twoFactor": {
+          "title": "Verificación en dos pasos",
+          "description": "Pide un código de tu app autenticadora (o de tu correo) en cada inicio de sesión con contraseña.",
+          "statusOn": "Activada",
+          "statusOff": "Desactivada",
+          "enable": "Activar 2FA",
+          "disable": "Desactivar 2FA",
+          "regenerateBackup": "Nuevos códigos de respaldo",
+          "needsPassword": "Configura una contraseña para esta cuenta antes de activar la verificación en dos pasos.",
+          "confirmPassword": "Confirma tu contraseña",
+          "confirmPasswordHint": {
+            "enable": "Necesitamos tu contraseña para generar el secreto de la autenticadora.",
+            "disable": "Al desactivar 2FA se eliminan tu autenticadora y tus códigos de respaldo.",
+            "backup": "Los códigos nuevos reemplazan a los anteriores de inmediato."
+          },
+          "confirm": {
+            "enable": "Continuar",
+            "disable": "Desactivar",
+            "backup": "Generar códigos"
+          },
+          "qrLabel": "Código QR para tu app autenticadora",
+          "scanHint": "Escanea este código QR con Google Authenticator, 1Password o cualquier app TOTP y luego ingresa el código de 6 dígitos que muestra.",
+          "manualKey": "¿No puedes escanear? Ingresa esta clave manualmente:",
+          "codeLabel": "Código de la app",
+          "verifyAndEnable": "Verificar y activar",
+          "savedCodes": "Ya guardé mis códigos de respaldo",
+          "working": "Procesando...",
+          "cancel": "Cancelar",
+          "enabled": "La verificación en dos pasos está activada. Te pediremos un código en tu próximo inicio de sesión.",
+          "disabled": "La verificación en dos pasos está desactivada.",
+          "errorGeneric": "Algo salió mal. Revisa tu contraseña e intenta de nuevo.",
+          "errorCode": "Ese código no coincide. Espera el siguiente e intenta de nuevo."
+        },
+        "backupCodes": {
+          "title": "Códigos de respaldo",
+          "description": "Guárdalos en un lugar seguro. Cada código sirve para entrar una vez si pierdes acceso a tu autenticadora y a tu correo.",
+          "copy": "Copiar",
+          "copied": "Copiados",
+          "download": "Descargar .txt"
+        },
+        "passkeys": {
+          "title": "Passkeys",
+          "description": "Inicia sesión con Face ID, Touch ID, Windows Hello o una llave de seguridad. Las passkeys resisten el phishing y omiten el paso de 2FA.",
+          "loading": "Cargando passkeys...",
+          "empty": "Aún no tienes passkeys.",
+          "unnamed": "Passkey sin nombre",
+          "meta": "{kind} · agregada el {date}",
+          "kindSynced": "Passkey sincronizada",
+          "kindDevice": "Passkey de este dispositivo",
+          "nameLabel": "Nombre de la passkey",
+          "namePlaceholder": "p. ej. MacBook Touch ID",
+          "add": "Agregar passkey",
+          "working": "Esperando tu dispositivo...",
+          "added": "Passkey agregada.",
+          "deleted": "Passkey eliminada.",
+          "confirmDelete": "¿Eliminar esta passkey? Ya no podrás iniciar sesión con ella.",
+          "rename": "Renombrar {name}",
+          "delete": "Eliminar {name}",
+          "save": "Guardar",
+          "cancel": "Cancelar",
+          "errorLoad": "No se pudieron cargar tus passkeys.",
+          "errorAdd": "No se pudo agregar la passkey.",
+          "errorDelete": "No se pudo eliminar la passkey.",
+          "errorRename": "No se pudo renombrar la passkey."
+        }
+      }
     },
     "spotify": {
       "title": "Spotify",
@@ -1684,6 +1835,28 @@
         "create": "Añadir",
         "dragToReorder": "Arrastra para reordenar"
       },
+      "personalReference": {
+        "details": "Datos de la referencia",
+        "name": "Nombre",
+        "nameRequired": "El nombre es obligatorio",
+        "contact": "Contacto",
+        "contactHint": "Teléfono, correo u otro contacto (opcional).",
+        "contactPlaceholder": "ej. (+505) 8679-3204",
+        "role": "Rol / relación",
+        "rolePlaceholder": "ej. Desarrollador, Gerente",
+        "add": "+ Añadir referencia personal",
+        "save": "Guardar",
+        "saving": "Guardando...",
+        "cancel": "Cancelar",
+        "loading": "Cargando...",
+        "saveFailed": "Error al guardar",
+        "deleteFailed": "Error al eliminar",
+        "savedSuccess": "Guardado con éxito",
+        "deleteSuccess": "Eliminado con éxito",
+        "edit": "Editar",
+        "create": "Añadir",
+        "dragToReorder": "Arrastra para reordenar"
+      },
       "localized": {
         "requiredDefault": "Obligatorio en el idioma por defecto",
         "optionalTranslation": "Traducción opcional",
@@ -1757,7 +1930,9 @@
         "createFailed": "No se pudo crear el servicio",
         "imageRequired": "La imagen es obligatoria",
         "titleRequiredPrimary": "El título es obligatorio en el idioma principal",
-        "atLeastOneLanguage": "Se requiere al menos un idioma"
+        "atLeastOneLanguage": "Se requiere al menos un idioma",
+        "isActive": "Activo en el sitio público",
+        "isActiveHint": "Los servicios inactivos siguen en el admin pero se ocultan en la home y en las stats públicas."
       },
       "certification": {
         "generalSection": "Información general",
@@ -2148,6 +2323,19 @@
         "addClarification": "Agregar aclaración",
         "removeClarification": "Quitar",
         "optionalMarkdownHint": "Opcional. Enlaces markdown: [texto](https://…)",
+        "sectionWorkspaceTags": "Etiquetas del escritorio",
+        "sectionWorkspaceTagsHint": "Haz click en la foto para soltar un pin y elige el item en el modal. En la página pública, el hover muestra el nombre y el click lleva a esa tarjeta.",
+        "selectItem": "Elegir item",
+        "selectItemDescription": "Elige el producto al que apunta este pin.",
+        "selectItemPlaceholder": "Selecciona un producto",
+        "searchItem": "Buscar items…",
+        "noMatchingItems": "No hay coincidencias",
+        "groupEveryday": "Everyday",
+        "groupSoftware": "Software",
+        "deleteTag": "Quitar pin",
+        "noImageHint": "Añade la ruta de la imagen de escritorio arriba para colocar etiquetas.",
+        "emptyTags": "Aún no hay etiquetas. Haz click en la imagen para añadir una.",
+        "untitledItem": "Sin título",
         "save": "Guardar ajustes",
         "saving": "Guardando…",
         "updatedSuccess": "Ajustes guardados",
@@ -2199,6 +2387,115 @@
         "updatedSuccess": "Foco actualizado",
         "createFailed": "No se pudo crear el foco",
         "updateFailed": "No se pudo actualizar el foco"
+      },
+      "processPage": {
+        "sectionBasics": "Básicos",
+        "sectionCopy": "Textos",
+        "sectionPageNav": "Navegación en la página",
+        "sectionHeroTerminal": "Terminal del hero",
+        "sectionBenefits": "Beneficios",
+        "sectionSteps": "Pasos",
+        "sectionToolkit": "Herramientas",
+        "sectionRoles": "Roles",
+        "sectionFaq": "FAQ",
+        "template": "Plantilla",
+        "templateHint": "Elige el layout. Cambiarla en una página nueva reinicia el contenido de secciones.",
+        "templateWorkflow": "Flujo (Cómo uso IA)",
+        "templateQa": "Colaboración QA",
+        "slug": "Slug",
+        "slugHint": "Kebab-case en minúsculas. Las rutas reservadas están bloqueadas.",
+        "navIcon": "Icono de navegación",
+        "order": "Orden",
+        "isPublished": "Publicada",
+        "isPublishedHint": "Las páginas no publicadas dan 404 en el sitio público.",
+        "showInNav": "Mostrar en header y footer",
+        "showInNavHint": "Independiente de publicar. Una página publicada puede no aparecer en el menú.",
+        "menuTitle": "Título de menú",
+        "menuTitleRequired": "El título de menú es obligatorio en el idioma principal",
+        "navDescription": "Descripción de menú",
+        "navDescriptionHint": "Línea corta bajo el título en el menú Explorar del header.",
+        "pageNavLabel": "Etiqueta de navegación interna",
+        "metaTitle": "Título SEO",
+        "metaDescription": "Descripción SEO",
+        "heroEyebrow": "Eyebrow del hero",
+        "heroTitle": "Título del hero",
+        "heroTitleHighlight": "Resalte del título",
+        "heroDescription": "Descripción del hero",
+        "heroPrimaryCta": "CTA principal",
+        "heroSecondaryCta": "CTA secundario",
+        "heroScrollHint": "Indicación de scroll",
+        "ctaTitle": "Título del CTA final",
+        "ctaDescription": "Descripción del CTA final",
+        "ctaButton": "Botón del CTA final",
+        "navId": "Id de ancla",
+        "navLabel": "Etiqueta",
+        "addNavItem": "Agregar ítem de nav",
+        "primaryHref": "Href del CTA principal",
+        "secondaryHref": "Href del CTA secundario",
+        "terminalTitle": "Título del terminal",
+        "workflowTitle": "Título del ciclo",
+        "workflowLive": "Etiqueta en vivo",
+        "workflowSteps": "Pasos del ciclo",
+        "cursorLabel": "Etiqueta del cursor",
+        "testRunnerLines": "Líneas del test runner",
+        "onePerLine": "Un ítem por línea",
+        "eyebrow": "Eyebrow",
+        "sectionTitle": "Título de sección",
+        "title": "Título",
+        "description": "Descripción",
+        "icon": "Icono",
+        "benefitItem": "Beneficio {index}",
+        "addBenefit": "Agregar beneficio",
+        "inPracticeLabel": "Etiqueta en la práctica",
+        "stepItem": "Paso {index}",
+        "stepNumber": "Número",
+        "stepDetail": "Detalle",
+        "stepTools": "Herramientas",
+        "addStep": "Agregar paso",
+        "toolkitFootnote": "Nota al pie",
+        "toolItem": "Herramienta {index}",
+        "toolName": "Nombre",
+        "toolInitials": "Iniciales",
+        "addTool": "Agregar herramienta",
+        "myRolesLabel": "Etiqueta de mis roles",
+        "myRoles": "Mis roles",
+        "ecosystemRoles": "Roles del ecosistema",
+        "testingLabel": "Etiqueta de testing",
+        "testingTags": "Tags de testing",
+        "faqItem": "FAQ {index}",
+        "question": "Pregunta",
+        "answer": "Respuesta",
+        "addFaq": "Agregar FAQ",
+        "remove": "Quitar",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "create": "Crear",
+        "saving": "Guardando…",
+        "createdSuccess": "Página de proceso creada",
+        "updatedSuccess": "Página de proceso actualizada",
+        "createFailed": "No se pudo crear la página",
+        "updateFailed": "No se pudo actualizar la página",
+        "designerHint": "Arrastra widgets al lienzo y haz clic para completarlos.",
+        "widgetPalette": "Widgets",
+        "pageSettings": "Ajustes de la página",
+        "emptyCanvas": "Suelta un widget aquí, o pulsa + en la paleta.",
+        "dragToReorder": "Arrastra para reordenar",
+        "removeWidget": "Quitar widget",
+        "visualNone": "Sin visual",
+        "visualWorkflow": "Ciclo de flujo",
+        "visualTestRunner": "Test runner",
+        "addChip": "Añadir",
+        "widgets": {
+          "nav": "Navegación interna",
+          "hero": "Hero",
+          "benefits": "Grid de beneficios",
+          "stepsAccordion": "Pasos en acordeón",
+          "stepsTimeline": "Pasos en timeline",
+          "toolkit": "Herramientas",
+          "roles": "Roles",
+          "faq": "FAQ",
+          "closingCta": "CTA de cierre"
+        }
       }
     },
     "errors": {
@@ -2362,6 +2659,9 @@
       "deleteFailed": "No se pudo eliminar el servicio",
       "columnTitle": "Título",
       "columnType": "Tipo",
+      "columnActive": "Estado",
+      "active": "Activo",
+      "inactive": "Inactivo",
       "columnSkills": "Habilidades",
       "columnActions": "Acciones",
       "columnCompany": "Empresa",
@@ -2522,7 +2822,12 @@
       "editItem": "Editar elemento",
       "addItem": "Añadir elemento",
       "deleteSuccess": "Eliminado con éxito",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "exportSeedJson": "Exportar",
+      "exportSeedJsonHint": "Exporta los registros actuales de la base de datos como JSON de prisma/data",
+      "exportSeedJsonError": "No se pudo exportar el JSON de seed",
+      "exportSeedZipHint": "Descarga un ZIP con todos los JSON de seed de prisma/data",
+      "exportSeedZipError": "No se pudo exportar el ZIP de seed"
     },
     "jobTracker": {
       "title": "Job Tracker",
@@ -2597,6 +2902,11 @@
         "description": "Entrevistas y pruebas programadas",
         "add": "Agregar",
         "empty": "No tienes eventos programados",
+        "expand": "Ver todos",
+        "collapse": "Ver menos",
+        "expandAria": "Mostrar más eventos próximos",
+        "collapseAria": "Mostrar solo el próximo evento",
+        "moreCount": "{count, plural, one {# evento más} other {# eventos más}}",
         "today": "Hoy",
         "tomorrow": "Mañana",
         "virtual": "Virtual",
@@ -2720,6 +3030,26 @@
         "needCv": "Primero personaliza un CV para esta postulación, o sube un .docx/.pdf para adjuntar.",
         "noAi": "No hay proveedor de IA configurado. Añade una API key para generar el borrador.",
         "noResend": "Configura Resend en Integraciones para enviar desde tu dominio."
+      },
+      "coverLetter": {
+        "title": "Carta de presentación",
+        "openButton": "Carta",
+        "description": "La IA redacta una carta formal adaptada a esta oferta usando tu CV, el contexto de la empresa y tus notas. Edítala, cópiala o guárdala.",
+        "draft": "Borrador con IA",
+        "redraft": "Regenerar",
+        "draftHint": "Genera un borrador de carta a partir de esta postulación — puedes editarlo todo antes de guardar.",
+        "draftSuccess": "Borrador de carta listo",
+        "draftError": "No se pudo generar la carta",
+        "save": "Guardar",
+        "saveSuccess": "Carta guardada",
+        "saveError": "No se pudo guardar la carta",
+        "saveMissingFields": "Añade asunto y cuerpo antes de guardar",
+        "copy": "Copiar",
+        "copySuccess": "Copiado al portapapeles",
+        "copyError": "No se pudo copiar",
+        "subjectLabel": "Asunto / título",
+        "bodyLabel": "Carta",
+        "noAi": "No hay proveedor de IA configurado. Añade una API key para generar la carta."
       },
       "kanban": {
         "description": "Arrastra las tarjetas entre columnas para actualizar el estado.",
@@ -2890,6 +3220,10 @@
         "paraphrased": "parafraseado",
         "missing": "ausente"
       },
+      "atsCheckerTitle": "Checker ATS",
+      "atsCheckerScore": "Ajuste {score}%",
+      "atsCheckerGaps": "Brechas vs esta oferta",
+      "atsCheckerNoCriticalGaps": "Sin brechas críticas señaladas",
       "tailorAtsPreview": "Vista previa ATS",
       "tailorPreviewMenu": "Vista previa",
       "tailorPreviewWord": "Word (DOCX)",
@@ -2968,6 +3302,33 @@
       "editFocus": "Editar foco",
       "focusDeleted": "Foco eliminado.",
       "focusDeleteFailed": "No se pudo eliminar el foco."
+    },
+    "processPages": {
+      "title": "Páginas de proceso",
+      "subtitle": "Arma páginas de proceso con widgets reutilizables.",
+      "addNew": "Agregar página",
+      "createDescription": "Arrastra widgets al lienzo y completa los textos.",
+      "editTitle": "Editar página de proceso",
+      "editDescription": "Añade, reordena y completa widgets. Cambia el idioma en el diseñador.",
+      "count": "{count} páginas",
+      "searchTitle": "Buscar título",
+      "searchSlug": "Buscar slug",
+      "deletedSuccess": "Página eliminada.",
+      "deleteFailed": "No se pudo eliminar la página.",
+      "toggleFailed": "No se pudo actualizar la página.",
+      "templates": {
+        "workflow": "Flujo",
+        "qa": "QA"
+      },
+      "columns": {
+        "order": "Orden",
+        "title": "Título",
+        "slug": "Slug",
+        "template": "Plantilla",
+        "published": "Publicada",
+        "inNav": "En nav",
+        "widgets": "Widgets"
+      }
     }
   },
   "auth": {
@@ -3006,7 +3367,39 @@
       "signInGithub": "Iniciar sesión con GitHub",
       "connectingGoogle": "Conectando con Google",
       "connectingGithub": "Conectando con GitHub",
-      "errorSignIn": "No se pudo iniciar sesión"
+      "errorSignIn": "No se pudo iniciar sesión",
+      "signInPasskey": "Iniciar sesión con passkey",
+      "connectingPasskey": "Esperando tu passkey...",
+      "errorPasskey": "No se pudo iniciar sesión con tu passkey"
+    },
+    "twoFactor": {
+      "title": "Confirma que eres tú",
+      "metaDescription": "Ingresa tu código de verificación en dos pasos para terminar de iniciar sesión.",
+      "description": {
+        "totp": "Ingresa el código de 6 dígitos de tu app autenticadora.",
+        "otp": "Te enviaremos un código de 6 dígitos al correo de tu cuenta.",
+        "backup": "Ingresa uno de tus códigos de respaldo de un solo uso. Cada código sirve una vez."
+      },
+      "methodLabel": "Método de verificación",
+      "method": {
+        "totp": "Autenticadora",
+        "otp": "Código por correo",
+        "backup": "Código de respaldo"
+      },
+      "codeLabel": "Código de verificación",
+      "codePlaceholder": "123456",
+      "backupLabel": "Código de respaldo",
+      "backupPlaceholder": "xxxxx-xxxxx",
+      "sendCode": "Enviarme un código",
+      "sending": "Enviando...",
+      "resend": "Enviar un código nuevo",
+      "codeSent": "Código enviado. Revisa tu correo: caduca en 5 minutos.",
+      "verify": "Verificar",
+      "verifying": "Verificando...",
+      "errorVerify": "Ese código no es válido o ya caducó.",
+      "errorSend": "No se pudo enviar el código. Intenta de nuevo en un minuto.",
+      "backToSignIn": "¿Cuenta equivocada?",
+      "signIn": "Volver a iniciar sesión"
     },
     "register": {
       "titlePortfolio": "Crea tu portafolio",
@@ -3072,10 +3465,10 @@
     "privacy": {
       "title": "Política de privacidad",
       "metaTitle": "Política de privacidad",
-      "metaDescription": "Cómo tratamos tus datos, incluidas las credenciales de Spotify y su retención.",
+      "metaDescription": "Cómo tratamos tus datos, incluida la medición anónima de audiencia y las credenciales de Spotify.",
       "subtitle": "Cómo tratamos tus datos",
-      "updatedAt": "Última actualización: julio de 2026",
-      "intro": "Esta plataforma de portafolios guarda solo los datos necesarios para ofrecer sus funciones. Esta página explica qué recopilamos cuando conectas Spotify y cómo puedes eliminarlo.",
+      "updatedAt": "Última actualización: septiembre de 2026",
+      "intro": "Esta plataforma de portafolios guarda solo los datos necesarios para ofrecer sus funciones. Esta página explica la medición anónima de audiencia en páginas públicas y qué recopilamos si conectas Spotify.",
       "spotify": {
         "title": "Integración con Spotify",
         "intro": "Si conectas Spotify en el panel de administración, guardamos las credenciales de tu propia app de Spotify Developer para que el widget Now Playing muestre tu reproducción en tu portafolio público.",
@@ -3087,6 +3480,19 @@
         "purpose": "Usamos estos datos solo para solicitar información de reproducción a Spotify en tu nombre para los visitantes de tu portafolio. No los vendemos ni los compartimos con terceros.",
         "disconnect": "Puedes desconectar Spotify en cualquier momento desde Admin → Spotify. Al desconectar, borramos de inmediato tus tokens y credenciales de Spotify de nuestra base de datos.",
         "retention": "Si te desconectas o nos pides dejar de procesar tus datos de Spotify, los eliminamos sin demora indebida y como máximo en cinco días, conforme a los términos de desarrollador de Spotify."
+      },
+      "analytics": {
+        "title": "Medición de audiencia",
+        "intro": "Las páginas públicas envían un beacon first-party pequeño para que el dueño vea tráfico aproximado. No es publicidad ni tracking entre sitios, y no guarda cookies.",
+        "storedTitle": "Qué guardamos",
+        "storedPageviews": "Totales diarios de pageviews y visitas de sesión, agrupados por ruta, país y hostname de referencia",
+        "notStoredTitle": "Qué no guardamos",
+        "notStoredIp": "Direcciones IP",
+        "notStoredId": "Cookies, huellas digitales ni identificadores únicos de visitante",
+        "notStoredCity": "Ubicación a nivel de ciudad (solo país, desde la plataforma de hosting)",
+        "purpose": "Usamos estos agregados solo para mostrar stats en /estadisticas y en el admin del portafolio. No se venden ni se comparten con proveedores de analítica.",
+        "optOut": "Si tu navegador envía Do Not Track o Global Privacy Control, omitimos la medición por completo.",
+        "retention": "Los agregados de más de 13 meses se eliminan."
       }
     }
   },
