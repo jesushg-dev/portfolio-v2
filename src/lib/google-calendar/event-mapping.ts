@@ -133,13 +133,14 @@ export function mapGoogleEventToLocalPatch(remote: GoogleCalendarRemoteEvent): {
   }
 
   if (remote.location !== undefined) {
-    const location = remote.location?.trim() || null;
+    const trimmed = remote.location?.trim();
+    const location = trimmed && trimmed.length > 0 ? trimmed : null;
     if (location && !/^https?:\/\//i.test(location)) {
       patch.location = location;
     } else if (!location) {
       patch.location = null;
-    } else if (!patch.meetingLink) {
-      patch.meetingLink = location;
+    } else {
+      patch.meetingLink ??= location;
     }
   }
 

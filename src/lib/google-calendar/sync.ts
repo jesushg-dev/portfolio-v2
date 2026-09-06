@@ -8,9 +8,7 @@ import {
   insertGoogleCalendarEvent,
   patchGoogleCalendarEvent,
 } from "./api";
-import {
-  getGoogleCalendarConnectionForUser,
-} from "./connection";
+import { getGoogleCalendarConnectionForUser } from "./connection";
 import {
   buildGoogleCalendarEventBody,
   mapGoogleEventToLocalPatch,
