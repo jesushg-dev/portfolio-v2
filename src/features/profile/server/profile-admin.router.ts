@@ -36,6 +36,7 @@ const ProfileHeroUpsertSchema = z.object({
   photoUrl: z.string().url().or(z.literal("")),
   backgroundImageUrl: z.string().url().or(z.literal("")),
   heroSummaryTranslations: HeroTitleTranslationMapSchema,
+  clientImageAltTranslations: HeroTitleTranslationMapSchema,
   aboutMeTranslations: HeroTitleTranslationMapSchema,
   titles: z.array(
     z.object({
@@ -79,6 +80,13 @@ export async function getProfileHeroEditorDto(
     }),
   );
 
+  const clientImageAltTranslations = Object.fromEntries(
+    languages.map((l) => {
+      const trans = header?.translations.find((t) => t.appLanguageId === l.id);
+      return [l.id, { text: trans?.clientImageAlt ?? "" }];
+    }),
+  );
+
   const aboutMeTranslations = Object.fromEntries(
     languages.map((l) => {
       const trans = aboutMe?.translations.find((t) => t.appLanguageId === l.id);
@@ -91,6 +99,7 @@ export async function getProfileHeroEditorDto(
     photoUrl: header?.photoUrl ?? "",
     backgroundImageUrl: header?.backgroundImageUrl ?? "",
     heroSummaryTranslations,
+    clientImageAltTranslations,
     aboutMeTranslations,
     titles:
       heroTitles.titles.length > 0
@@ -128,6 +137,8 @@ export async function upsertProfileHeroFromMaps(
 
   for (const lang of languages) {
     const heroSummaryText = input.heroSummaryTranslations[lang.id]?.text ?? "";
+    const clientImageAltText =
+      input.clientImageAltTranslations[lang.id]?.text ?? "";
     const existingTrans = await db.cvHeaderTranslation.findFirst({
       where: { cvHeaderId: header.id, appLanguageId: lang.id },
     });
@@ -135,7 +146,10 @@ export async function upsertProfileHeroFromMaps(
     if (existingTrans) {
       await db.cvHeaderTranslation.update({
         where: { id: existingTrans.id },
-        data: { heroSummary: heroSummaryText || null },
+        data: {
+          heroSummary: heroSummaryText || null,
+          clientImageAlt: clientImageAltText || null,
+        },
       });
     } else {
       await db.cvHeaderTranslation.create({
@@ -144,6 +158,7 @@ export async function upsertProfileHeroFromMaps(
           appLanguageId: lang.id,
           degree: "",
           heroSummary: heroSummaryText || null,
+          clientImageAlt: clientImageAltText || null,
         },
       });
     }

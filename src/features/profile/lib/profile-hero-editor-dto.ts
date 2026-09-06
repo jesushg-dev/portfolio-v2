@@ -10,6 +10,7 @@ export interface ProfileHeroEditorDTO {
   photoUrl: string;
   backgroundImageUrl: string;
   heroSummaryTranslations: TextTranslationMap;
+  clientImageAltTranslations: TextTranslationMap;
   aboutMeTranslations: TextTranslationMap;
   titles: ProfileHeroTitleEditorDTO[];
 }
