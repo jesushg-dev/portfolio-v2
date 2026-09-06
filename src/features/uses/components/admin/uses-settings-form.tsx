@@ -4,7 +4,7 @@ import type { AppLanguage } from "@prisma/client";
 import { type FC, useCallback, useMemo, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -26,17 +26,21 @@ import { GlobalLanguageSelector } from "@/components/admin/shared/global-languag
 import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
 import {
   buildEmptyUsesClarificationDto,
+  type UsesItemEditorDTO,
   type UsesSettingsEditorDTO,
 } from "@/features/uses/lib/uses-editor-dto";
+import { UsesWorkspaceTagEditor } from "@/features/uses/components/admin/uses-workspace-tag-editor";
 
 interface UsesSettingsFormProps {
   languages: AppLanguage[];
   initialData: UsesSettingsEditorDTO;
+  taggableItems: UsesItemEditorDTO[];
 }
 
 export const UsesSettingsForm: FC<UsesSettingsFormProps> = ({
   initialData,
   languages,
+  taggableItems,
 }) => {
   const t = useTranslations("admin.forms.usesSettings");
   const router = useRouter();
@@ -67,6 +71,15 @@ export const UsesSettingsForm: FC<UsesSettingsFormProps> = ({
             ),
           }),
         ),
+        workspaceTags: z.array(
+          z.object({
+            id: z.string().optional(),
+            usesItemId: z.string(),
+            xPercent: z.number(),
+            yPercent: z.number(),
+            order: z.number().int().nonnegative(),
+          }),
+        ),
       }),
     [],
   );
@@ -93,17 +106,39 @@ export const UsesSettingsForm: FC<UsesSettingsFormProps> = ({
     name: "clarifications",
   });
 
+  const {
+    fields: tagFields,
+    append: appendTag,
+    remove: removeTag,
+    update: updateTag,
+  } = useFieldArray({
+    control: form.control,
+    name: "workspaceTags",
+  });
+
+  const workspaceImage = useWatch({
+    control: form.control,
+    name: "workspaceImage",
+  });
+
   const onSubmit = useCallback(
     (values: FormValues) => {
       startTransition(async () => {
         try {
-          await upsert.mutateAsync({
+          const saved = await upsert.mutateAsync({
             ...values,
             clarifications: values.clarifications.map((item, index) => ({
               ...item,
               order: index,
             })),
+            workspaceTags: values.workspaceTags
+              .filter((tag) => tag.usesItemId.trim().length > 0)
+              .map((tag, index) => ({
+                ...tag,
+                order: index,
+              })),
           });
+          form.reset(saved);
           await utils.usesAdmin.getSettings.invalidate();
           toast.success(t("updatedSuccess"));
           router.refresh();
@@ -112,7 +147,7 @@ export const UsesSettingsForm: FC<UsesSettingsFormProps> = ({
         }
       });
     },
-    [upsert, utils, router, t],
+    [form, upsert, utils, router, t],
   );
 
   const isSaving = upsert.isPending || isPending;
@@ -169,6 +204,27 @@ export const UsesSettingsForm: FC<UsesSettingsFormProps> = ({
                 )}
               />
             </div>
+          </FormSection>
+
+          <FormSection
+            title={t("sectionWorkspaceTags")}
+            description={t("sectionWorkspaceTagsHint")}
+          >
+            <UsesWorkspaceTagEditor
+              imageSrc={workspaceImage}
+              tags={tagFields.map((field, index) => ({
+                clientId: field.id,
+                usesItemId: field.usesItemId,
+                xPercent: field.xPercent,
+                yPercent: field.yPercent,
+                order: field.order ?? index,
+              }))}
+              items={taggableItems}
+              activeLangId={activeLangId}
+              onAdd={(tag) => appendTag(tag)}
+              onUpdate={(index, tag) => updateTag(index, tag)}
+              onRemove={(index) => removeTag(index)}
+            />
           </FormSection>
 
           {languages.map((lang) => (
@@ -277,11 +333,10 @@ export const UsesSettingsForm: FC<UsesSettingsFormProps> = ({
             </div>
           </FormSection>
         </FormContent>
-        <FormActions>
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? t("saving") : t("save")}
-          </Button>
-        </FormActions>
+        <FormActions
+          isPending={isSaving}
+          title={isSaving ? t("saving") : t("save")}
+        />
       </FormRoot>
     </Form>
   );

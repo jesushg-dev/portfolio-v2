@@ -4,6 +4,7 @@ import { processSectionHeadingId } from "@/features/process-pages/components/pro
 import { ProcessReveal } from "@/features/process-pages/components/process-reveal";
 
 import type { UsesEverydayItem } from "../data";
+import { usesItemAnchorId } from "../lib/uses-item-anchor";
 import { UsesCoffeeCard } from "./uses-coffee-card";
 import { UsesLinkedCard } from "./uses-linked-card";
 import { usesContainerClassName, usesSectionClassName } from "./uses-layout";
@@ -45,7 +46,11 @@ export function UsesEverydaySection({
 
         <ul className="grid list-none grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {items.map((item, index) => (
-            <li key={item.id}>
+            <li
+              key={item.id}
+              id={usesItemAnchorId(item.id)}
+              className="target:ring-primary target:ring-offset-background scroll-mt-24 rounded-lg target:ring-2 target:ring-offset-2"
+            >
               <UsesLinkedCard
                 href={item.href}
                 title={item.title}

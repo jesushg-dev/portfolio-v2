@@ -7,12 +7,17 @@ import { cn } from "@/lib/utils";
 
 import { USES_WORKSPACE_IMAGE_FALLBACK } from "../data";
 import { usesContainerClassName } from "./uses-layout";
+import {
+  UsesWorkspaceHotspots,
+  type UsesWorkspacePublicTag,
+} from "./uses-workspace-hotspots";
 
 interface UsesWorkspaceProps {
   show: boolean;
   caption: string;
   alt: string;
   imageSrc?: string | null;
+  tags?: UsesWorkspacePublicTag[];
 }
 
 export function UsesWorkspace({
@@ -20,6 +25,7 @@ export function UsesWorkspace({
   caption,
   alt,
   imageSrc,
+  tags = [],
 }: UsesWorkspaceProps) {
   const shouldReduceMotion = useReducedMotion();
   const src = imageSrc ?? USES_WORKSPACE_IMAGE_FALLBACK;
@@ -53,6 +59,7 @@ export function UsesWorkspace({
               sizes="(max-width: 1440px) 100vw, 1440px"
               className="object-cover object-center select-none"
             />
+            <UsesWorkspaceHotspots tags={tags} />
           </div>
           <figcaption className="text-muted-foreground text-center text-xs">
             {caption}
