@@ -72,12 +72,20 @@ flowchart TB
 
 When Playwright generates the PDF, it does not render HTML in memory — it **navigates to the real web preview**.
 
-| Locale     | URL visited by Chromium                     |
-| ---------- | ------------------------------------------- |
-| `en`       | `{baseUrl}/curriculum-vitae?pdf=1`          |
-| `es`, `nl` | `{baseUrl}/{locale}/curriculum-vitae?pdf=1` |
+| Locale | URL visited by Chromium |
+| --- | --- |
+| `en`, `es`, `nl` | `{getServerBaseUrl()}/{locale}/curriculum-vitae?pdf=1` |
 
-The `pdf=1` query param enables `pdfMode` in `CvPageView`, which renders only `#cv-public-preview` without UI chrome. Middleware (`src/proxy.ts`) propagates the `x-cv-pdf-mode: 1` header so the tenant resolves correctly.
+`getServerBaseUrl()` comes from `BETTER_AUTH_URL` / `VERCEL_URL` / localhost — **not** from the JSON body. The internal route does not accept `baseUrl` (SSRF).
+
+The `pdf=1` query param enables `pdfMode` in `CvPageView` (preview only, no chrome). Middleware (`src/proxy.ts`) sets `x-cv-pdf-mode: 1` for document requests.
+
+On apex/preview hosts without a tenant subdomain, Chromium also sends:
+
+- `x-tenant-username: {slug}`
+- `x-cv-pdf-tenant-proof: HMAC-SHA256(slug, CV_PDF_GENERATOR_SECRET)`
+
+`resolveTenant` honors the username header **only** when that HMAC matches. Collect and public tRPC never take an unsigned username header.
 
 Playwright injects reset CSS (`PDF_RESET_CSS` in `generate-cv-pdf-from-preview.ts`) and calculates content height before calling `page.pdf()`.
 

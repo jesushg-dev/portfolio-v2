@@ -1,140 +1,177 @@
-# My Portfolio
+# Portfolio (jesushg.com)
 
-This project is a portfolio of my experiences, skills, and projects. It is built with Next.js 13 and next-intl.
+Multi-tenant portfolio and CV platform. Each user gets a public site at `{username}.jesushg.com`, plus an admin CMS, Job Tracker, and ATS resume tools.
 
-## Table of Contents
+**Stack:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, next-intl (en / es / nl), tRPC, Prisma 6 on MongoDB, Better Auth 1.7 (passkeys + 2FA).
+
+> The historical changelog still mentions Next.js 15 / React 18; this repo is on Next.js 16.3 and React 19. Package manager is **pnpm** (`packageManager` in `package.json`).
+
+## Table of contents
 
 - [Features](#features)
-- [How to Use](#how-to-use)
-- [Installation](#installation)
-- [Multi-tenancy & Subdomains](#multi-tenancy--subdomains)
-- [Skills Used](#skills-used)
+- [Documentation](#documentation)
+- [Getting started](#getting-started)
+- [Multi-tenancy & subdomains](#multi-tenancy--subdomains)
+- [Environment](#environment)
+- [Scripts](#scripts)
 - [Contributing](#contributing)
 - [License](#license)
-- [Contact](#contact)
 
 ## Features
 
-- Showcase my skills and experience in React, Next.js, and TypeScript by highlighting specific projects and technologies.
-- Utilize next-intl for internationalization support.
-- Ensure responsiveness and compatibility with all devices.
+**Public site**
 
-## How to Use
+- Localized home, skills, projects, certifications, timeline, services, CV, privacy, theme customizer, and optional `/stats`
+- Spotify Now Playing (tenant OAuth), contact form + globe, Calendly schedule
+- CV PDF / DOCX download and email delivery
 
-To use this project, clone the repository and follow these steps:
+**Admin (`/admin`)**
+
+- Profile, CV editor (including personal references), skills, projects, certifications, timeline, soft skills, services
+- Now / Uses / process pages, Job Tracker, Resume Engine (import, ATS tailor, interview prep)
+- Credentials (Resend, Spotify, Google Calendar, UploadThing, AI), security (2FA / passkeys), seed JSON export
+- Analytics overview (pageviews, countries, referrers)
+
+**Platform**
+
+- Subdomain tenants, per-tenant API keys (no shared Resend/AI/UploadThing/Spotify fallback)
+- Playwright e2e, Jest unit tests, axe a11y smoke
+
+## Documentation
+
+Full catalog: [`docs/README.md`](./docs/README.md).
+
+| Doc | Topic |
+| --- | --- |
+| [`docs/architecture.md`](./docs/architecture.md) | Request flow, features, data |
+| [`docs/security.md`](./docs/security.md) | Auth, tenant isolation, headers, residual risk |
+| [`docs/auth-security.md`](./docs/auth-security.md) | Better Auth 1.7, 2FA, passkeys, rate limits |
+| [`docs/tenant-credentials.md`](./docs/tenant-credentials.md) | BYOK integrations |
+| [`docs/admin-cms.md`](./docs/admin-cms.md) | Admin resources and publish flags |
+| [`docs/analytics.md`](./docs/analytics.md) | Pageview collection and `/stats` |
+| [`docs/testing.md`](./docs/testing.md) | Jest, Playwright, CI |
+| [`.env.example`](./.env.example) | Environment variables |
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 22+ (see CI) and [pnpm](https://pnpm.io) 10
+- MongoDB (local or Atlas). The URI **must** include a database name in the path.
 
 ### Installation
 
-1. Install project dependencies:
+```bash
+git clone <repository-url>
+cd portfolio-v2
+cp .env.example .env.local
+# Fill MONGODB_URI, BETTER_AUTH_SECRET, OWNER_USER_EMAIL, OWNER_USER_PASSWORD
+pnpm install
+pnpm db:push
+pnpm db:seed
+pnpm dev
+```
 
-### Running the Project
+Open [http://lvh.me:3000](http://lvh.me:3000) (recommended) or [http://localhost:3000](http://localhost:3000).
 
-2. Start the development server:
-3. The project will be available at [http://localhost:3000](http://localhost:3000).
+`pnpm db:push` runs `scripts/validate-mongodb-uri.mjs` first so a URI without a database name fails fast.
 
-## Multi-tenancy & Subdomains
+## Multi-tenancy & subdomains
 
-This project is a multi-tenant SaaS where each user gets their own portfolio + CV at `{username}.jesushg.com`. Tenant resolution lives in `src/proxy.ts` and runs before `next-intl` middleware. The apex domain (`jesushg.com`) is reserved for the primary owner (the `Profile` row marked `isPrimary: true`); reserved subdomains (`www`, `dashboard`, `app`, `admin`, `api`, `auth`) bypass tenant resolution.
+Each tenant is a `Profile` (`username`, `isPrimary`, `isPublished`). Resolution lives in `src/lib/tenant/` and runs from the request **Host**. The apex domain (`jesushg.com`) is the primary owner (`isPrimary: true`). Reserved subdomains (`www`, `dashboard`, `app`, `admin`, `api`, `auth`) never map to a profile.
+
+Third-party APIs (Resend, UploadThing, Spotify, Google Calendar, AI) use **each tenant’s own keys** via Admin → Credentials. Details: [`docs/tenant-credentials.md`](./docs/tenant-credentials.md).
 
 ### Local development with subdomains
 
-Browsers do not resolve random `*.localhost` hosts on every OS, and editing `/etc/hosts` per tenant is painful. Use [`lvh.me`](https://lvh.me) instead — it's a public DNS entry whose wildcard `*.lvh.me` always resolves to `127.0.0.1`. No setup needed.
+Browsers do not resolve random `*.localhost` hosts on every OS. Use [`lvh.me`](https://lvh.me) — `*.lvh.me` resolves to `127.0.0.1`.
 
-Examples while running `pnpm dev`:
+Examples while `pnpm dev` is running:
 
-- `http://lvh.me:3000` → apex (primary owner CV).
-- `http://jesus.lvh.me:3000` → owner CV via the `jesus` subdomain (same data as apex).
-- `http://alice.lvh.me:3000` → tenant `alice` (404 if `Profile.username = "alice"` does not exist or is unpublished).
-- `http://dashboard.lvh.me:3000/dashboard` → reserved subdomain serving the admin panel.
+- `http://lvh.me:3000` → apex (primary owner)
+- `http://jesus.lvh.me:3000` → owner CV via the `jesus` subdomain
+- `http://alice.lvh.me:3000` → tenant `alice` (empty/404 if that username is missing)
+- `http://dashboard.lvh.me:3000/admin` → reserved host; still the same app (auth required for `/admin`)
 
-The middleware also accepts `*.localhost` (Chrome/Edge resolve it; Safari does not), but `lvh.me` is the recommended option.
+Chrome/Edge also resolve `*.localhost`; Safari does not. `lvh.me` is the supported option.
 
-Make sure your `.env` includes:
+`.env.local` should include:
 
 ```
 PRIMARY_DOMAIN=jesushg.com
 NEXT_PUBLIC_PRIMARY_DOMAIN=jesushg.com
-NEXT_PUBLIC_DEV_DOMAIN=lvh.me
+NEXT_PUBLIC_DEV_DOMAIN=lvh.me:3000
 BETTER_AUTH_URL=http://lvh.me:3000
 ```
 
-Better Auth is configured with `crossSubDomainCookies` so that a session set on `lvh.me` is visible from any `*.lvh.me` subdomain. The same applies to `jesushg.com` in production.
+Better Auth `trustedOrigins` includes `https://*.jesushg.com` in production. Cross-subdomain cookies are enabled only in production.
 
 ### Production: wildcard DNS + TLS
 
-To support `{username}.jesushg.com` in production:
+1. **DNS**: wildcard record for `*.jesushg.com` to your host (Vercel: `cname.vercel-dns.com`).
+2. **Vercel**: add `jesushg.com` and `*.jesushg.com`. Wildcard certificates need Vercel Pro+.
+3. **Better Auth**: `BETTER_AUTH_URL=https://jesushg.com` and matching `PRIMARY_DOMAIN`.
+4. **Custom domains** (`Profile.customDomain`) are stored but request routing is not implemented yet.
 
-1. **DNS**: at your DNS provider (Cloudflare, Route53, Namecheap, …) add a wildcard `CNAME` (or `A`/`ALIAS`) record:
-
-   ```
-   *.jesushg.com    CNAME    cname.vercel-dns.com.
-   ```
-
-   (or whatever your hosting provider documents; for Vercel it's `cname.vercel-dns.com`).
-
-2. **Vercel**: in the project settings → _Domains_, add both `jesushg.com` and `*.jesushg.com`. Vercel will auto-provision Let's Encrypt wildcard certificates — this is supported only on the Pro plan and above.
-
-3. **Better Auth**: set `BETTER_AUTH_URL=https://jesushg.com` and make sure the value of `PRIMARY_DOMAIN` matches. The `trustedOrigins` config in `src/lib/auth.ts` already includes `https://*.jesushg.com`.
-
-4. **Custom domains per tenant** (`Profile.customDomain`) are stored in the schema but their request handling is out of scope for the initial release; reserve them for a follow-up.
-
-### Reserved subdomains
-
-`www`, `dashboard`, `app`, `admin`, `api`, and `auth` are treated as _non-tenant_ subdomains (see `RESERVED_SUBDOMAINS` in `src/proxy.ts` and `src/lib/tenant/resolve.ts`). They never resolve to a `Profile`, even if a user registers a matching `username`. Sign-up validation in `cv.upsertProfile` rejects these names.
+Sign-up rejects reserved usernames (same list as `RESERVED_SUBDOMAINS`).
 
 ### Seeding the primary owner
-
-Add owner credentials to `.env.local` (same values used by Playwright e2e):
 
 ```
 OWNER_USER_EMAIL=your-email@example.com
 OWNER_USER_PASSWORD=your-secure-password
 ```
 
-After running `prisma db push`, run:
+After `pnpm db:push`:
 
 ```
-pnpm prisma db seed
+pnpm db:seed
 ```
 
-`prisma/seed.ts` seeds languages, the primary owner, portfolio content, and CV via shared JSON fixtures:
+`prisma/seed.ts` is idempotent: languages, primary user/profile, and portfolio JSON fixtures (`prisma/data/*.json`). List-style CV sections are wiped and recreated; header/about are upserted. The same `OWNER_USER_*` values are used by Playwright.
 
-1. `seedPortfolioUser` (`prisma/seed-portfolio-user.ts`) creates/updates the primary `User` + `Profile` + credential `Account` using `OWNER_USER_EMAIL` and `OWNER_USER_PASSWORD` from `.env.local`.
-2. `seedPortfolioSkills`, projects, certifications, and inline services each receive `userId` at creation time — no retroactive `updateMany`.
-3. `seedPortfolioCv` (`prisma/seed-portfolio-cv.ts`) loads CV sections from `prisma/data/portfolio-cv.json`, including `CvExperienceSkill` links via `skillKeys`.
+## Environment
 
-Profile metadata (name, username, display name) lives in `prisma/data/portfolio-profile.json`. The same `OWNER_USER_*` credentials are used by Playwright e2e login.
+Copy [`.env.example`](./.env.example). Schema: `src/env.ts`.
 
-The seed is idempotent: re-running it `upsert`s the user/profile/header/about-me and `deleteMany`+`create`s the list-style CV sections (contacts, education, languages, technical skills, experiences, soft skills, additional info, personal references).
+| Variable | Role |
+| --- | --- |
+| `MONGODB_URI` | Prisma MongoDB URI **with database name** |
+| `BETTER_AUTH_SECRET` | Auth signing + default integration encryption fallback |
+| `BETTER_AUTH_URL` | Canonical origin (emails, PDF base URL) |
+| `RESEND_*` | **System** mail only (password reset, 2FA OTP) |
+| `PRIMARY_DOMAIN` / `NEXT_PUBLIC_*` | Tenant host parsing |
+| `CV_PDF_GENERATOR_SECRET` | Required in production for `/api/internal/cv/generate-pdf` |
+| `INTEGRATION_ENCRYPTION_KEY` | Optional AES key for tenant secrets (else `BETTER_AUTH_SECRET`) |
+| `GOOGLE_*` / `GITHUB_*` | Optional social login |
 
-## Skills Used
+Portfolio Resend, Spotify, Google Calendar, UploadThing, and AI keys are **not** platform env vars.
 
-The following skills and libraries were utilized in creating this project:
+## Scripts
 
-- React: A JavaScript library for building user interfaces.
-- Next.js: A framework for server-rendered React applications.
-- TypeScript: A statically typed superset of JavaScript that compiles to plain JavaScript.
-- next-intl: A localization and internationalization library for Next.js.
+| Script | Purpose |
+| --- | --- |
+| `pnpm dev` | Next.js dev (Turbopack) |
+| `pnpm build` / `pnpm start` | Production server |
+| `pnpm lint` / `pnpm type` | ESLint + `tsc --noEmit` |
+| `pnpm test` | Jest |
+| `pnpm test:e2e` | Playwright smoke |
+| `pnpm test:e2e:full` | Full create suites |
+| `pnpm test:a11y` | axe on public routes |
+| `pnpm db:push` | Prisma schema → MongoDB |
+| `pnpm db:seed` | Idempotent seed |
+| `pnpm db:auth-audit` / `pnpm db:auth-backfill` | Better Auth 1.7 account identity |
 
-Additional libraries used for specific functionality include:
-
-- MongoDB with Mongoose: A NoSQL database and object modeling tool for Node.js.
-- Prisma: A modern database toolkit for TypeScript and Node.js.
-- trpc: A TypeScript-first framework for building scalable and type-safe APIs.
-- motion/react: A library for creating fluid and interactive animations in React applications.
+See [`docs/testing.md`](./docs/testing.md) for CI secrets and Playwright projects (`pnpm exec playwright test --project skills`).
 
 ## Contributing
 
-Contributions are welcome! If you want to contribute to this project, please follow these guidelines:
-
-- Open an issue to discuss proposed changes or new features.
-- Fork the repository and create a new branch for your contribution.
-- Make your changes and submit a pull request.
+Open an issue first for large changes. Use a feature branch and a pull request. Keep tests co-located (`*.test.ts` next to source). Do not commit `.env` files or secrets.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+[MIT](LICENSE) — Copyright (c) 2026 Jesus Hernandez.
 
 ## Contact
 
-If you have any questions or comments, please feel free to contact me at [email protected]
+Use the contact form on [jesushg.com](https://jesushg.com) (Let's Talk).

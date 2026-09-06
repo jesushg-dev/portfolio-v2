@@ -3,7 +3,7 @@
 This document outlines the architecture, component API, hooks, and usage examples for the **iOS Device & Navigation System** located in `src/components/shared/ios-device/`.
 
 > [!NOTE]
-> For a step-by-step guide on building interactive Mini Apps (Spotify pattern) within the iOS emulator, see [mini-apps-guide.md](file:///c:/Users/User/Desktop/portfolio-v2/docs/mini-apps-guide.md).
+> For a step-by-step guide on building interactive Mini Apps (Spotify pattern) within the iOS emulator, see [mini-apps-guide.md](./mini-apps-guide.md).
 
 ---
 
