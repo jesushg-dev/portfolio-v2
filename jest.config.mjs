@@ -13,6 +13,13 @@ const config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
+  collectCoverageFrom: [
+    "src/**/*.{ts,tsx}",
+    "!src/**/*.test.{ts,tsx}",
+    "!src/test-utils/**",
+    "!src/components/ui/**",
+  ],
+  coveragePathIgnorePatterns: ["/node_modules/", "<rootDir>/src/components/ui/"],
 };
 
 export default async function createCustomJestConfig() {

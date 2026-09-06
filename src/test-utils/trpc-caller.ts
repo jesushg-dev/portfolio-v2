@@ -1,0 +1,68 @@
+import type { AnyRouter } from "@trpc/server";
+
+import type { ResolvedTenant } from "@/lib/tenant/resolve";
+import {
+  createCallerFactory,
+  type createTRPCContext,
+} from "@/server/api/trpc";
+
+export type TrpcTestContext = Awaited<ReturnType<typeof createTRPCContext>>;
+
+export const MOCK_OWNER_USER = {
+  id: "user-1",
+  email: "owner@example.com",
+  name: "Owner",
+  emailVerified: false,
+  createdAt: new Date("2020-01-01T00:00:00.000Z"),
+  updatedAt: new Date("2020-01-01T00:00:00.000Z"),
+  image: null,
+};
+
+export const mockOwnerTenant: ResolvedTenant = {
+  userId: MOCK_OWNER_USER.id,
+  username: "owner",
+  defaultLocale: "en",
+  isPrimary: true,
+  isPublished: true,
+  displayName: "Owner",
+  logoInitials: "OW",
+  logoImageUrl: null,
+};
+
+export function createTrpcTestContext(options: {
+  db: unknown;
+  user?: TrpcTestContext["user"] | null;
+  tenant?: ResolvedTenant | null;
+  headers?: Headers;
+}): TrpcTestContext {
+  const user = options.user === undefined ? MOCK_OWNER_USER : options.user;
+
+  return {
+    db: options.db as TrpcTestContext["db"],
+    session: user
+      ? ({
+          user,
+          session: {
+            id: "sess-1",
+            userId: user.id,
+            expiresAt: new Date("2099-01-01T00:00:00.000Z"),
+            createdAt: new Date("2020-01-01T00:00:00.000Z"),
+            updatedAt: new Date("2020-01-01T00:00:00.000Z"),
+            token: "test-token",
+            ipAddress: "127.0.0.1",
+            userAgent: "jest",
+          },
+        } as TrpcTestContext["session"])
+      : null,
+    user,
+    tenant: options.tenant === undefined ? mockOwnerTenant : options.tenant,
+    headers: options.headers ?? new Headers(),
+  };
+}
+
+export function createRouterCaller<TRouter extends AnyRouter>(
+  router: TRouter,
+  ctx: TrpcTestContext,
+) {
+  return createCallerFactory(router)(ctx);
+}
