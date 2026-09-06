@@ -17,13 +17,17 @@ import { LinkPreviewLazy } from "@/components/ui/link-preview-lazy";
 import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
 import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
+import { processPageHref } from "@/lib/process-pages/process-page-href";
+import type { ProcessNavPage } from "@/lib/process-pages/process-nav-page";
+import type { SiteBrand } from "@/lib/site-brand/site-brand";
+import SiteBrandMark from "@/components/app-layout/site-brand-mark";
 import { buildContactLinks } from "@/utils/contact-links";
 import type { ContactIconKey } from "@/utils/contact-links";
 import { getCalendlyUrl, SCHEDULE_PATH } from "@/utils/calendly-url";
 import { FOOTER_LINK_PREVIEWS } from "./footer-link-previews";
 
 const footerLinkClassName =
-  "text-primary-foreground hover:text-primary-foreground inline-flex items-center py-2 text-sm transition-colors min-h-11 md:py-1";
+  "text-primary-foreground hover:text-primary-foreground inline-flex min-h-11 min-w-11 items-center py-2 text-sm transition-colors md:py-1";
 
 const FOOTER_ICONS: Record<ContactIconKey, IconType> = {
   email: IoMail,
@@ -44,7 +48,7 @@ function FooterPreviewLink({
   soonLabel,
   live,
 }: {
-  href: "/uses" | "/now" | "/colophon";
+  href: "/uses" | "/now" | "/colophon" | "/stats";
   label: string;
   soonLabel: string;
   live: boolean;
@@ -67,7 +71,15 @@ function FooterPreviewLink({
   );
 }
 
-const Footer = async ({ cvPublic = true }: { cvPublic?: boolean }) => {
+const Footer = async ({
+  cvPublic = true,
+  processNavPages = [],
+  siteBrand,
+}: {
+  cvPublic?: boolean;
+  processNavPages?: ProcessNavPage[];
+  siteBrand: SiteBrand;
+}) => {
   const t = await getTranslations("global.footer");
   const year = new Date().getFullYear();
 
@@ -84,13 +96,13 @@ const Footer = async ({ cvPublic = true }: { cvPublic?: boolean }) => {
           <div className="space-y-3">
             <Link
               href="/"
-              aria-label={t("homeLogo")}
+              aria-label={t("homeLogo", { brand: siteBrand.label })}
               className="group text-primary-foreground inline-flex min-h-11 items-center text-xl font-semibold tracking-tight"
             >
-              Jehg
-              <span className="text-primary-foreground transition-colors">
-                .
-              </span>
+              <SiteBrandMark
+                brand={siteBrand}
+                dotClassName="text-primary-foreground"
+              />
             </Link>
             <p className="text-primary-foreground max-w-xs text-sm leading-relaxed">
               {t("madeWith")}
@@ -118,62 +130,91 @@ const Footer = async ({ cvPublic = true }: { cvPublic?: boolean }) => {
             </a>
           </div>
 
-          <nav aria-labelledby="footer-portfolio" className="space-y-2">
-            <h2
-              id="footer-portfolio"
-              className="text-primary-foreground text-sm font-semibold tracking-wide"
-            >
-              {t("titles.portfolio")}
-            </h2>
-            <ul className="flex flex-col gap-0.5">
-              <li>
-                <LinkPreviewLazy
-                  url="/certificates"
-                  imageSrc={FOOTER_LINK_PREVIEWS.certificates}
-                  imageAlt={t("sections.portfolio.certificates")}
-                  className={footerLinkClassName}
-                >
-                  {t("sections.portfolio.certificates")}
-                </LinkPreviewLazy>
-              </li>
-              {cvPublic ? (
+          <div className="space-y-6">
+            <nav aria-labelledby="footer-portfolio" className="space-y-2">
+              <h2
+                id="footer-portfolio"
+                className="text-primary-foreground text-sm font-semibold tracking-wide"
+              >
+                {t("titles.portfolio")}
+              </h2>
+              <ul className="flex flex-col gap-0.5">
                 <li>
                   <LinkPreviewLazy
-                    url="/curriculum-vitae"
-                    imageSrc={FOOTER_LINK_PREVIEWS.curriculum}
-                    imageAlt={t("sections.portfolio.curriculum")}
+                    url="/certificates"
+                    imageSrc={FOOTER_LINK_PREVIEWS.certificates}
+                    imageAlt={t("sections.portfolio.certificates")}
                     className={footerLinkClassName}
                   >
-                    {t("sections.portfolio.curriculum")}
+                    {t("sections.portfolio.certificates")}
                   </LinkPreviewLazy>
                 </li>
-              ) : null}
-              <li>
+                {cvPublic ? (
+                  <li>
+                    <LinkPreviewLazy
+                      url="/curriculum-vitae"
+                      imageSrc={FOOTER_LINK_PREVIEWS.curriculum}
+                      imageAlt={t("sections.portfolio.curriculum")}
+                      className={footerLinkClassName}
+                    >
+                      {t("sections.portfolio.curriculum")}
+                    </LinkPreviewLazy>
+                  </li>
+                ) : null}
+                <li>
+                  <LinkPreviewLazy
+                    url="/timeline"
+                    imageSrc={FOOTER_LINK_PREVIEWS.timeline}
+                    imageAlt={t("sections.portfolio.timeline")}
+                    className={footerLinkClassName}
+                  >
+                    {t("sections.portfolio.timeline")}
+                  </LinkPreviewLazy>
+                </li>
+              </ul>
+            </nav>
+
+            <div className="space-y-2">
+              <h2 className="text-primary-foreground text-sm font-semibold tracking-wide">
+                {t("titles.miscellaneous")}
+              </h2>
+              <div className="flex items-center gap-2">
                 <LinkPreviewLazy
-                  url="/timeline"
-                  imageSrc={FOOTER_LINK_PREVIEWS.timeline}
-                  imageAlt={t("sections.portfolio.timeline")}
+                  url="/register?next=/admin/cv"
+                  imageSrc={FOOTER_LINK_PREVIEWS.cvGenerator}
+                  imageAlt={t("sections.miscellaneous.cvGenerator")}
                   className={footerLinkClassName}
                 >
-                  {t("sections.portfolio.timeline")}
+                  {t("sections.miscellaneous.cvGenerator")}
                 </LinkPreviewLazy>
-              </li>
-            </ul>
+                <span className="bg-primary-900 text-primary-foreground rounded-md px-2 py-0.5 text-sm font-medium">
+                  {t("beta")}
+                </span>
+              </div>
+              <p className="text-primary-foreground max-w-xs text-sm leading-relaxed">
+                {t("sections.miscellaneous.cvGeneratorHint")}
+              </p>
+            </div>
+          </div>
 
-            <h3 className="text-primary-foreground pt-3 text-base font-semibold tracking-wide">
+          <nav aria-labelledby="footer-process" className="space-y-2">
+            <h2
+              id="footer-process"
+              className="text-primary-foreground text-sm font-semibold tracking-wide"
+            >
               {t("titles.process")}
-            </h3>
+            </h2>
             <ul className="flex flex-col gap-0.5">
-              <li>
-                <Link href="/how-i-use-ai" className={footerLinkClassName}>
-                  {t("sections.process.howIUseAi")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/qa-collaboration" className={footerLinkClassName}>
-                  {t("sections.process.qaCollaboration")}
-                </Link>
-              </li>
+              {processNavPages.map((page) => (
+                <li key={page.id}>
+                  <Link
+                    href={processPageHref(page.slug)}
+                    className={footerLinkClassName}
+                  >
+                    {page.menuTitle.trim() || page.slug}
+                  </Link>
+                </li>
+              ))}
               <li>
                 <FooterPreviewLink
                   href="/uses"
@@ -192,6 +233,14 @@ const Footer = async ({ cvPublic = true }: { cvPublic?: boolean }) => {
               </li>
               <li>
                 <FooterPreviewLink
+                  href="/stats"
+                  label={t("sections.process.stats")}
+                  soonLabel={t("soon")}
+                  live={PUBLIC_PAGE_LIVE.stats}
+                />
+              </li>
+              <li>
+                <FooterPreviewLink
                   href="/colophon"
                   label={t("sections.process.colophon")}
                   soonLabel={t("soon")}
@@ -201,29 +250,7 @@ const Footer = async ({ cvPublic = true }: { cvPublic?: boolean }) => {
             </ul>
           </nav>
 
-          <div className="space-y-2">
-            <h2 className="text-primary-foreground text-sm font-semibold tracking-wide">
-              {t("titles.miscellaneous")}
-            </h2>
-            <div className="flex items-center gap-2">
-              <LinkPreviewLazy
-                url="/register?next=/admin/cv"
-                imageSrc={FOOTER_LINK_PREVIEWS.cvGenerator}
-                imageAlt={t("sections.miscellaneous.cvGenerator")}
-                className={footerLinkClassName}
-              >
-                {t("sections.miscellaneous.cvGenerator")}
-              </LinkPreviewLazy>
-              <span className="bg-primary-900 text-primary-foreground rounded-md px-2 py-0.5 text-sm font-medium">
-                {t("beta")}
-              </span>
-            </div>
-            <p className="text-primary-foreground max-w-xs text-sm leading-relaxed">
-              {t("sections.miscellaneous.cvGeneratorHint")}
-            </p>
-          </div>
-
-          <div className="space-y-2 overflow-hidden md:col-span-2 lg:col-span-1">
+          <div className="space-y-2 overflow-hidden">
             <h2 className="text-primary-foreground text-sm font-semibold tracking-wide">
               {t("titles.NowPlaying")}
             </h2>

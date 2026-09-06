@@ -1,11 +1,11 @@
 import type { LucideIcon } from "lucide-react";
 import {
   Award,
+  BarChart3,
   Bot,
   Briefcase,
   Calendar,
   FileText,
-  HeartHandshake,
   Layers,
   MonitorSmartphone,
   Radio,
@@ -15,17 +15,18 @@ import {
   User,
 } from "lucide-react";
 
+import { resolveProcessPageIcon } from "@/lib/process-pages/process-page-icons";
+import type { ProcessNavPage } from "@/lib/process-pages/process-nav-page";
 import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 
 export type StaticNavPath =
   | "/certificates"
   | "/curriculum-vitae"
   | "/timeline"
-  | "/how-i-use-ai"
-  | "/qa-collaboration"
   | "/uses"
   | "/now"
-  | "/colophon";
+  | "/colophon"
+  | "/stats";
 
 export type NavSectionId =
   | "home"
@@ -52,7 +53,16 @@ export interface NavRouteItem {
   comingSoon?: boolean;
 }
 
-export type NavItem = NavLinkItem | NavRouteItem;
+export interface NavProcessItem {
+  kind: "process";
+  id: string;
+  slug: string;
+  icon: LucideIcon;
+  label: string;
+  description: string;
+}
+
+export type NavItem = NavLinkItem | NavRouteItem | NavProcessItem;
 
 export function homeSectionHref(sectionId: NavSectionId) {
   return { pathname: "/" as const, hash: `#${sectionId}` };
@@ -63,6 +73,37 @@ export interface NavGroup {
   icon: LucideIcon;
   items: NavItem[];
 }
+
+const PROCESS_STATIC_ITEMS: NavItem[] = [
+  {
+    kind: "route",
+    id: "uses",
+    href: "/uses",
+    icon: MonitorSmartphone,
+    comingSoon: !PUBLIC_PAGE_LIVE.uses,
+  },
+  {
+    kind: "route",
+    id: "now",
+    href: "/now",
+    icon: Radio,
+    comingSoon: !PUBLIC_PAGE_LIVE.now,
+  },
+  {
+    kind: "route",
+    id: "stats",
+    href: "/stats",
+    icon: BarChart3,
+    comingSoon: !PUBLIC_PAGE_LIVE.stats,
+  },
+  {
+    kind: "route",
+    id: "colophon",
+    href: "/colophon",
+    icon: ScrollText,
+    comingSoon: !PUBLIC_PAGE_LIVE.colophon,
+  },
+];
 
 export const NAV_GROUPS: NavGroup[] = [
   {
@@ -108,47 +149,38 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     id: "process",
     icon: Bot,
-    items: [
-      {
-        kind: "route",
-        id: "ai-workflow",
-        href: "/how-i-use-ai",
-        icon: Bot,
-      },
-      {
-        kind: "route",
-        id: "qa-collaboration",
-        href: "/qa-collaboration",
-        icon: HeartHandshake,
-      },
-      {
-        kind: "route",
-        id: "uses",
-        href: "/uses",
-        icon: MonitorSmartphone,
-        comingSoon: !PUBLIC_PAGE_LIVE.uses,
-      },
-      {
-        kind: "route",
-        id: "now",
-        href: "/now",
-        icon: Radio,
-        comingSoon: !PUBLIC_PAGE_LIVE.now,
-      },
-      {
-        kind: "route",
-        id: "colophon",
-        href: "/colophon",
-        icon: ScrollText,
-        comingSoon: !PUBLIC_PAGE_LIVE.colophon,
-      },
-    ],
+    items: PROCESS_STATIC_ITEMS,
   },
 ];
 
-export function navGroupsForPublicSite(cvPublic: boolean): NavGroup[] {
-  if (cvPublic) return NAV_GROUPS;
-  return NAV_GROUPS.map((group) => ({
+export function processPagesToNavItems(
+  pages: ProcessNavPage[],
+): NavProcessItem[] {
+  return pages.map((page) => ({
+    kind: "process",
+    id: page.id,
+    slug: page.slug,
+    icon: resolveProcessPageIcon(page.navIcon),
+    label: page.menuTitle.trim() || page.slug,
+    description: page.navDescription.trim(),
+  }));
+}
+
+export function navGroupsForPublicSite(
+  cvPublic: boolean,
+  processPages: ProcessNavPage[] = [],
+): NavGroup[] {
+  const processItems: NavItem[] = [
+    ...processPagesToNavItems(processPages),
+    ...PROCESS_STATIC_ITEMS,
+  ];
+
+  const groups = NAV_GROUPS.map((group) =>
+    group.id === "process" ? { ...group, items: processItems } : group,
+  );
+
+  if (cvPublic) return groups;
+  return groups.map((group) => ({
     ...group,
     items: group.items.filter(
       (item) => !(item.kind === "route" && item.href === "/curriculum-vitae"),

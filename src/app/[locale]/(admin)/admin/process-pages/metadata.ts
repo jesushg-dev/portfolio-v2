@@ -10,11 +10,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({
     locale: locale as Locale,
-    namespace: "main.howIUseAi",
+    namespace: "admin.processPages",
   });
-
-  return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
-  };
+  return { title: t("title") };
 }

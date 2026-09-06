@@ -4,6 +4,8 @@ import type { FC, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Calendar, ChevronDown, ChevronRight, Mail } from "lucide-react";
 
+import { LEGACY_PROCESS_NAV_ITEM_IDS } from "@/lib/process-pages/process-nav-page";
+import { processPageHref } from "@/lib/process-pages/process-page-href";
 import { Link } from "@/i18n/routing";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -16,7 +18,24 @@ import {
   navGroupsForPublicSite,
   type NavItem,
 } from "./navigation-config";
+import { useProcessNavPages } from "../process-nav-pages";
 import { usePublicCvVisible } from "../public-cv-visible";
+
+function processItemDescription(
+  stored: string,
+  slug: string,
+  t: ReturnType<typeof useTranslations>,
+): string | null {
+  if (stored) return stored;
+  const legacyId = LEGACY_PROCESS_NAV_ITEM_IDS[slug];
+  if (!legacyId) return null;
+  const key = `${legacyId}.description`;
+  const lookup = t as unknown as {
+    has: (key: string) => boolean;
+    (key: string): string;
+  };
+  return lookup.has(key) ? lookup(key) : null;
+}
 
 interface NavItemCardProps {
   item: NavItem;
@@ -27,8 +46,14 @@ function NavItemCard({ item, compact = false }: NavItemCardProps) {
   const t = useTranslations("global.header.nav.items");
   const tNav = useTranslations("global.header.nav");
   const Icon = item.icon;
-  const label = (t as (key: string) => string)(`${item.id}.label`);
-  const description = (t as (key: string) => string)(`${item.id}.description`);
+  const label =
+    item.kind === "process"
+      ? item.label
+      : (t as (key: string) => string)(`${item.id}.label`);
+  const description =
+    item.kind === "process"
+      ? processItemDescription(item.description, item.slug, t)
+      : (t as (key: string) => string)(`${item.id}.description`);
   const comingSoon = item.kind === "route" && item.comingSoon;
 
   const cardClassName = cn(
@@ -64,7 +89,7 @@ function NavItemCard({ item, compact = false }: NavItemCardProps) {
             </Badge>
           ) : null}
         </span>
-        {!compact ? (
+        {!compact && description ? (
           <span className="text-muted-foreground mt-1.5 block text-xs leading-relaxed">
             {description}
           </span>
@@ -97,6 +122,14 @@ function NavItemCard({ item, compact = false }: NavItemCardProps) {
     return <div className={cardClassName}>{inner}</div>;
   }
 
+  if (item.kind === "process") {
+    return (
+      <Link href={processPageHref(item.slug)} className={cardClassName}>
+        {inner}
+      </Link>
+    );
+  }
+
   return (
     <Link href={item.href} className={cardClassName}>
       {inner}
@@ -112,7 +145,8 @@ export const MegaMenuPanel: FC<MegaMenuPanelProps> = ({ groupId }) => {
   const t = useTranslations("global.header.nav.groups");
   const tNav = useTranslations("global.header.nav");
   const cvPublic = usePublicCvVisible();
-  const group = navGroupsForPublicSite(cvPublic).find(
+  const processPages = useProcessNavPages();
+  const group = navGroupsForPublicSite(cvPublic, processPages).find(
     (entry) => entry.id === groupId,
   );
 
@@ -166,7 +200,8 @@ export const MobileNavGroup: FC<MobileNavGroupProps> = ({
 }) => {
   const t = useTranslations("global.header.nav.groups");
   const cvPublic = usePublicCvVisible();
-  const group = navGroupsForPublicSite(cvPublic).find(
+  const processPages = useProcessNavPages();
+  const group = navGroupsForPublicSite(cvPublic, processPages).find(
     (entry) => entry.id === groupId,
   );
   const Icon = group?.icon;

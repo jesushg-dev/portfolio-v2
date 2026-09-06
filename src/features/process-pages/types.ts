@@ -38,5 +38,5 @@ export interface ProcessHeroAction {
 
 export interface ProcessScheduleAction {
   label: string;
-  href: "/schedule";
+  href: string;
 }

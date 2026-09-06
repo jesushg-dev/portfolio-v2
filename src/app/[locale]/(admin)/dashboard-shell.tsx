@@ -19,6 +19,7 @@ import {
   ClipboardList,
   MonitorSmartphone,
   Radio,
+  Workflow,
 } from "lucide-react";
 
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
@@ -55,7 +56,8 @@ interface NavItem {
     | "jobTracker"
     | "settings"
     | "uses"
-    | "now";
+    | "now"
+    | "processPages";
   icon: typeof LayoutDashboard;
   group?: "portfolio" | "pages";
 }
@@ -116,6 +118,12 @@ const NAV_ITEMS: NavItem[] = [
     href: "/admin/now",
     labelKey: "now",
     icon: Radio,
+    group: "pages",
+  },
+  {
+    href: "/admin/process-pages",
+    labelKey: "processPages",
+    icon: Workflow,
     group: "pages",
   },
   // ── Config ─────────────────────────────────────────────
