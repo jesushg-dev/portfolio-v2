@@ -67,22 +67,21 @@ const cvSubjects: Record<Locale, string> = {
 
 // Contact notification subjects per locale
 const contactSubjects: Record<Locale, string> = {
-  en: "New message from {{{SENDER_NAME}}} via jehg.dev",
-  es: "Nuevo mensaje de {{{SENDER_NAME}}} vía jehg.dev",
-  nl: "Nuevo mensaje de {{{SENDER_NAME}}} vía jehg.dev",
+  en: "New message from {{{SENDER_NAME}}} via jesushg.com",
+  es: "Nuevo mensaje de {{{SENDER_NAME}}} vía jesushg.com",
+  nl: "Nuevo mensaje de {{{SENDER_NAME}}} vía jesushg.com",
 };
 
-// Reset password subjects per locale
 const resetPasswordSubjects: Record<Locale, string> = {
-  en: "Reset your password — jehg.dev",
-  es: "Restablece tu contraseña — jehg.dev",
-  nl: "Herstel je wachtwoord — jehg.dev",
+  en: "Reset your password — jesushg.com",
+  es: "Restablece tu contraseña — jesushg.com",
+  nl: "Herstel je wachtwoord — jesushg.com",
 };
 
 const twoFactorOtpSubjects: Record<Locale, string> = {
-  en: "{{{OTP_CODE}}} is your sign-in code — jehg.dev",
-  es: "{{{OTP_CODE}}} es tu código de inicio de sesión — jehg.dev",
-  nl: "{{{OTP_CODE}}} is je inlogcode — jehg.dev",
+  en: "{{{OTP_CODE}}} is your sign-in code — jesushg.com",
+  es: "{{{OTP_CODE}}} es tu código de inicio de sesión — jesushg.com",
+  nl: "{{{OTP_CODE}}} is je inlogcode — jesushg.com",
 };
 
 async function main() {
@@ -166,7 +165,7 @@ async function main() {
       subject: resetPasswordSubjects[locale],
       html: resetHtml,
       variables: [
-        { key: "RESET_URL", type: "string", fallbackValue: "https://jehg.dev" },
+        { key: "RESET_URL", type: "string", fallbackValue: "https://jesushg.com" },
       ],
     });
 

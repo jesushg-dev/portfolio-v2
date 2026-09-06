@@ -9,7 +9,7 @@
     "signOff": "Saludos,",
     "name": "Jesús Hernández",
     "role": "Desarrollador Full Stack Senior",
-    "footer": "Enviado automáticamente desde el formulario de contacto en jehg.dev.",
+    "footer": "Enviado automáticamente desde el formulario de contacto en jesushg.com.",
     "stats": {
       "years": "Años de experiencia",
       "projects": "Proyectos entregados",
@@ -17,31 +17,31 @@
     }
   },
   "contact-notification": {
-    "preview": "Nuevo mensaje de {senderName} vía jehg.dev",
+    "preview": "Nuevo mensaje de {senderName} vía jesushg.com",
     "eyebrow": "Nuevo mensaje · formulario de contacto",
     "labelFrom": "De",
     "labelEmail": "Email",
     "labelReceived": "Recibido",
     "labelMessage": "Mensaje",
     "replyButton": "Responder a {firstName}",
-    "footer": "Enviado automáticamente desde el formulario de contacto en jehg.dev."
+    "footer": "Enviado automáticamente desde el formulario de contacto en jesushg.com."
   },
   "reset-password": {
     "preview": "Restablece tu contraseña",
     "eyebrow": "Seguridad de la cuenta · Restablecer contraseña",
     "greeting": "Hola,",
-    "body1": "Solicitaste restablecer la contraseña de tu cuenta en jehg.dev.",
+    "body1": "Solicitaste restablecer la contraseña de tu cuenta en jesushg.com.",
     "button": "Restablecer contraseña",
     "body2": "Si no solicitaste este cambio, puedes ignorar este correo de forma segura.",
-    "footer": "Alerta de seguridad enviada desde jehg.dev."
+    "footer": "Alerta de seguridad enviada desde jesushg.com."
   },
   "two-factor-otp": {
     "preview": "Tu código de inicio de sesión",
     "eyebrow": "Seguridad de la cuenta · Verificación en dos pasos",
     "greeting": "Hola,",
-    "body1": "Usa este código para terminar de iniciar sesión en tu cuenta de jehg.dev:",
+    "body1": "Usa este código para terminar de iniciar sesión en tu cuenta de jesushg.com:",
     "expires": "Caduca en 5 minutos y solo se puede usar una vez.",
     "body2": "Si no intentaste iniciar sesión, cambia tu contraseña de inmediato: alguien más la conoce.",
-    "footer": "Alerta de seguridad enviada desde jehg.dev."
+    "footer": "Alerta de seguridad enviada desde jesushg.com."
   }
 }

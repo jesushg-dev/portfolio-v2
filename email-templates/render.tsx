@@ -31,7 +31,7 @@ async function main() {
     const contactHtmlPreview = await render(
       await ContactNotificationEmail({
         senderName: "hello world",
-        senderEmail: "[email protected]",
+        senderEmail: "visitor@example.com",
         message:
           "Hola amigo, quisiera un nuevo servicio y tengo una nueva idea donde me puedes colaborar.",
         sentAt: "Jul 22, 2026, 3:41 PM",
@@ -59,7 +59,7 @@ async function main() {
     // 3. Reset Password
     const resetHtmlPreview = await render(
       await ResetPasswordEmail({
-        resetUrl: "https://jehg.dev/reset-password?token=example",
+        resetUrl: "https://jesushg.com/reset-password?token=example",
         locale,
       }),
       { pretty: true },

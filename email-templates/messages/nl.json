@@ -9,7 +9,7 @@
     "signOff": "Met vriendelijke groet,",
     "name": "Jesús Hernández",
     "role": "Senior Full Stack Ontwikkelaar",
-    "footer": "Automatisch verzonden vanuit het contactformulier op jehg.dev.",
+    "footer": "Automatisch verzonden vanuit het contactformulier op jesushg.com.",
     "stats": {
       "years": "Jaar ervaring",
       "projects": "Projecten opgeleverd",
@@ -17,31 +17,31 @@
     }
   },
   "contact-notification": {
-    "preview": "Nieuw bericht van {senderName} via jehg.dev",
+    "preview": "Nieuw bericht van {senderName} via jesushg.com",
     "eyebrow": "Nieuw bericht · contactformulier",
     "labelFrom": "Van",
     "labelEmail": "E-mail",
     "labelReceived": "Ontvangen",
     "labelMessage": "Bericht",
     "replyButton": "Antwoord aan {firstName}",
-    "footer": "Automatisch verzonden vanuit het contactformulier op jehg.dev."
+    "footer": "Automatisch verzonden vanuit het contactformulier op jesushg.com."
   },
   "reset-password": {
     "preview": "Herstel je wachtwoord",
     "eyebrow": "Accountbeveiliging · Wachtwoord herstellen",
     "greeting": "Hallo,",
-    "body1": "Je hebt gevraagd om je wachtwoord voor je jehg.dev-account te herstellen.",
+    "body1": "Je hebt gevraagd om je wachtwoord voor je jesushg.com-account te herstellen.",
     "button": "Wachtwoord herstellen",
     "body2": "Als je dit niet hebt aangevraagd, kun je deze e-mail veilig negeren.",
-    "footer": "Beveiligingswaarschuwing verzonden vanaf jehg.dev."
+    "footer": "Beveiligingswaarschuwing verzonden vanaf jesushg.com."
   },
   "two-factor-otp": {
     "preview": "Je inlogcode",
     "eyebrow": "Accountbeveiliging · Tweestapsverificatie",
     "greeting": "Hallo,",
-    "body1": "Gebruik deze code om het inloggen bij je jehg.dev-account af te ronden:",
+    "body1": "Gebruik deze code om het inloggen bij je jesushg.com-account af te ronden:",
     "expires": "De code verloopt na 5 minuten en is eenmalig te gebruiken.",
     "body2": "Heb je niet geprobeerd in te loggen? Wijzig dan meteen je wachtwoord — iemand anders kent het.",
-    "footer": "Beveiligingswaarschuwing verzonden vanaf jehg.dev."
+    "footer": "Beveiligingswaarschuwing verzonden vanaf jesushg.com."
   }
 }
