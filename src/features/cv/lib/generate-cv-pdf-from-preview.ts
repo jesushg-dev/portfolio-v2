@@ -2,7 +2,12 @@ import "server-only";
 
 import type { Browser } from "playwright-core";
 import type { Locale } from "@/i18n/config";
-import { TENANT_USERNAME_HEADER } from "@/lib/tenant/resolve";
+import { env } from "@/env";
+import {
+  CV_PDF_TENANT_PROOF_HEADER,
+  TENANT_USERNAME_HEADER,
+} from "@/lib/tenant/headers";
+import { createPdfTenantProof } from "@/lib/tenant/resolve-identity";
 import { getServerBaseUrl } from "@/lib/url/get-base-url";
 import { CV_LETTER_WIDTH_PX } from "@/features/cv/lib/cv-letter-page";
 import { getChromiumPackUrl } from "@/features/cv/lib/chromium-pack-url";
@@ -10,7 +15,6 @@ import { getChromiumPackUrl } from "@/features/cv/lib/chromium-pack-url";
 export interface GenerateCvPdfOptions {
   locale: Locale;
   tenantUsername?: string;
-  baseUrl?: string;
   paginatePages?: boolean;
   design?: string;
 }
@@ -21,7 +25,10 @@ function buildCvPreviewPath(
   design?: string,
 ): string {
   const paginateQuery = paginatePages ? "&paginate=1" : "";
-  const designQuery = design && design !== "default" ? `&design=${design}` : "";
+  const designQuery =
+    design && design !== "default"
+      ? `&design=${encodeURIComponent(design)}`
+      : "";
   return `/${locale}/curriculum-vitae?pdf=1${paginateQuery}${designQuery}`;
 }
 
@@ -79,10 +86,23 @@ export async function launchPdfBrowser(): Promise<Browser> {
   });
 }
 
+function pdfPreviewHeaders(
+  tenantUsername: string | undefined,
+): Record<string, string> | undefined {
+  const username = tenantUsername?.trim();
+  const secret = env.CV_PDF_GENERATOR_SECRET;
+  if (!username || !secret) return undefined;
+
+  return {
+    [TENANT_USERNAME_HEADER]: username,
+    [CV_PDF_TENANT_PROOF_HEADER]: createPdfTenantProof(username, secret),
+  };
+}
+
 export async function generateCvPdfFromPreview(
   options: GenerateCvPdfOptions,
 ): Promise<Buffer> {
-  const baseUrl = (options.baseUrl ?? getServerBaseUrl()).replace(/\/$/, "");
+  const baseUrl = getServerBaseUrl().replace(/\/$/, "");
   const targetUrl = `${baseUrl}${buildCvPreviewPath(options.locale, options.paginatePages, options.design)}`;
 
   const browser = await launchPdfBrowser();
@@ -93,9 +113,7 @@ export async function generateCvPdfFromPreview(
         width: CV_LETTER_WIDTH_PX,
         height: 800,
       },
-      extraHTTPHeaders: options.tenantUsername
-        ? { [TENANT_USERNAME_HEADER]: options.tenantUsername }
-        : undefined,
+      extraHTTPHeaders: pdfPreviewHeaders(options.tenantUsername),
     });
     const page = await context.newPage();
 

@@ -10,10 +10,19 @@ export const maxDuration = 60;
 
 const requestSchema = z.object({
   locale: z.enum(["en", "es", "nl"]),
-  tenantUsername: z.string().optional(),
-  baseUrl: z.string().url().optional(),
+  tenantUsername: z
+    .string()
+    .trim()
+    .max(64)
+    .regex(/^[a-z0-9-]+$/i)
+    .optional(),
   paginatePages: z.boolean().optional(),
-  design: z.string().optional(),
+  design: z
+    .string()
+    .trim()
+    .max(32)
+    .regex(/^[a-z0-9_-]+$/i)
+    .optional(),
 });
 
 function isAuthorized(request: Request): boolean {

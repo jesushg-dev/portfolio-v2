@@ -24,6 +24,7 @@ import {
   FormContent,
   FormItem,
   FormRoot,
+  FormSection,
 } from "@/components/shared/form-root";
 import FormStatus from "@/components/admin/shared/form-status";
 
@@ -31,9 +32,10 @@ interface ISettingsFormProps {
   defaultValues: {
     username: string;
     displayName?: string;
+    logoInitials?: string;
+    logoImageUrl?: string;
     defaultLocale: "en" | "es" | "nl";
     isPublished: boolean;
-    cvPdfUrl?: string;
     mapLocationLabel?: string;
   };
 }
@@ -55,9 +57,10 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
           .max(40)
           .regex(/^[a-z0-9-]+$/, t("usernameValidation")),
         displayName: z.string().min(1).optional(),
+        logoInitials: z.string().max(8).optional(),
+        logoImageUrl: z.string().url().or(z.literal("")).optional(),
         defaultLocale: z.enum(["en", "es", "nl"]),
         isPublished: z.boolean(),
-        cvPdfUrl: z.string().url().or(z.literal("")).optional(),
         mapLocationLabel: z.string().max(160).optional(),
       }),
     [t],
@@ -69,7 +72,8 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
     resolver: zodResolver(settingsSchema),
     defaultValues: {
       ...defaultValues,
-      cvPdfUrl: defaultValues.cvPdfUrl ?? "",
+      logoInitials: defaultValues.logoInitials ?? "",
+      logoImageUrl: defaultValues.logoImageUrl ?? "",
       mapLocationLabel: defaultValues.mapLocationLabel ?? "",
     },
   });
@@ -83,9 +87,10 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
           await upsertProfile.mutateAsync({
             username: data.username,
             displayName: data.displayName,
+            logoInitials: data.logoInitials ?? "",
+            logoImageUrl: data.logoImageUrl ?? "",
             defaultLocale: data.defaultLocale,
             isPublished: data.isPublished,
-            cvPdfUrl: data.cvPdfUrl ?? null,
             mapLocationLabel: data.mapLocationLabel ?? "",
           });
           await utils.cv.getMine.invalidate();
@@ -130,6 +135,47 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
             )}
           />
 
+          <FormSection
+            title={t("brandSectionTitle")}
+            description={t("brandSectionDescription")}
+          >
+            <FormField
+              control={form.control}
+              name="logoInitials"
+              render={({ field }) => (
+                <FormItem
+                  label={t("logoInitials")}
+                  description={t("logoInitialsHint")}
+                  inputId="settings-logo-initials"
+                >
+                  <Input
+                    maxLength={8}
+                    placeholder={t("logoInitialsPlaceholder")}
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="logoImageUrl"
+              render={({ field }) => (
+                <FormItem
+                  label={t("logoImageUrl")}
+                  description={t("logoImageUrlHint")}
+                  inputId="settings-logo-image-url"
+                >
+                  <Input
+                    type="url"
+                    placeholder={t("logoImageUrlPlaceholder")}
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
+          </FormSection>
+
           <FormField
             control={form.control}
             name="defaultLocale"
@@ -151,16 +197,6 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
                     <SelectItem value="nl">Nederlands</SelectItem>
                   </SelectContent>
                 </Select>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="cvPdfUrl"
-            render={({ field }) => (
-              <FormItem label={t("cvPdfUrl")} inputId="settings-cv-pdf-url">
-                <Input type="url" {...field} />
               </FormItem>
             )}
           />
