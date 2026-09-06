@@ -15,8 +15,8 @@ export interface PortfolioProfileFixture {
   name: string;
   username: string;
   displayName: string;
+  logoInitials?: string;
   defaultLocale: "es" | "en" | "nl";
-  cvPdfUrl: string;
   photoUrl: string;
 }
 
