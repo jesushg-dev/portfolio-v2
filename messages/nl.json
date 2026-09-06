@@ -1,7 +1,7 @@
 {
   "adminCredentials": {
     "title": "Inloggegevens & Integraties",
-    "subtitle": "Configureer API-sleutels en integratie-instellingen per gebruiker voor Resend, Spotify, UploadThing en AI-modellen.",
+    "subtitle": "Configureer API-sleutels en integratie-instellingen per gebruiker voor Resend, Spotify, Google Calendar, UploadThing en AI-modellen.",
     "providers": {
       "resend": {
         "name": "Resend (E-mail)",
@@ -10,6 +10,10 @@
       "spotify": {
         "name": "Spotify (Audio)",
         "description": "OAuth-gegevens voor de Now Playing-widget."
+      },
+      "google-calendar": {
+        "name": "Google Calendar",
+        "description": "Synchroniseer job tracker-interviews en follow-ups met je Google Agenda."
       },
       "uploadthing": {
         "name": "UploadThing (Opslag)",
@@ -37,6 +41,14 @@
       "missingParams": "Spotify heeft niet de verwachte autorisatiegegevens teruggestuurd.",
       "noRefreshToken": "Spotify heeft geen refresh token teruggestuurd. Trek toegang in bij Spotify en verbind opnieuw.",
       "accessDenied": "Je hebt toegang tot Spotify geweigerd."
+    },
+    "googleCalendarCallback": {
+      "connected": "Google Calendar succesvol verbonden.",
+      "exchangeFailed": "Google Calendar-autorisatie kon niet worden voltooid. Probeer opnieuw.",
+      "invalidState": "Autorisatiesessie verlopen. Start opnieuw vanaf deze pagina.",
+      "missingParams": "Google heeft niet de verwachte autorisatiegegevens teruggestuurd.",
+      "noRefreshToken": "Google heeft geen refresh token teruggestuurd. Trek toegang in bij Google en verbind opnieuw.",
+      "accessDenied": "Je hebt toegang tot Google Calendar geweigerd."
     },
     "summary": {
       "domain": "Domein",
@@ -1642,6 +1654,46 @@
         "disconnectFailed": "Spotify kon niet worden ontkoppeld"
       }
     },
+    "googleCalendar": {
+      "title": "Google Calendar",
+      "subtitle": "Synchroniseer job tracker-events met je eigen Google Calendar OAuth-client.",
+      "storagePolicy": "Je Google OAuth client secret en refresh token worden versleuteld opgeslagen alleen voor jouw account — hetzelfde patroon als Spotify.",
+      "disconnectPolicy": "Ontkoppelen verwijdert je Calendar-tokens uit onze database. Events die al in Google Calendar staan blijven staan.",
+      "privacyNote": "Zie ons <link>privacybeleid</link> voor welke agenda-gegevens we opslaan en waarom.",
+      "redirectUriLabel": "Geautoriseerde redirect-URI (voeg toe in Google Cloud Console)",
+      "redirectUriHint": "APIs & Services → Credentials → je OAuth-client → Authorized redirect URIs",
+      "scopesTitle": "Gevraagde machtigingen",
+      "scopes": {
+        "calendarEvents": "Events op je agenda's maken, bijwerken en verwijderen"
+      },
+      "connect": {
+        "title": "Koppel je Google Calendar-app",
+        "description": "Maak een OAuth-client in je Google Cloud-project, schakel de Calendar API in en plak hier Client ID en Secret.",
+        "byoNote": "Gebruik je eigen Google Cloud OAuth-gegevens — niet de site-login Google-app. Schakel Google Calendar API in op dat project.",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "clientIdPlaceholder": "Plak je Client ID",
+        "clientSecretPlaceholder": "Plak je Client Secret",
+        "dashboardLink": "Open Google Cloud Credentials",
+        "connect": "Verbinden met Google",
+        "connecting": "Doorsturen naar Google…",
+        "validationError": "Voer een geldige Client ID en Client Secret van je Google Cloud OAuth-client in."
+      },
+      "status": {
+        "connected": "Verbonden met Google Calendar",
+        "disconnected": "Niet verbonden",
+        "refreshError": "Kon je Google Calendar-verbinding niet vernieuwen",
+        "connectedAt": "Verbonden op {date}",
+        "clientId": "Client ID: {id}",
+        "disconnect": "Google Calendar ontkoppelen",
+        "disconnecting": "Ontkoppelen…",
+        "reconnect": "Google Calendar opnieuw koppelen"
+      },
+      "actions": {
+        "connectFailed": "Google Calendar-autorisatie kon niet worden gestart",
+        "disconnectFailed": "Google Calendar kon niet worden ontkoppeld"
+      }
+    },
     "forms": {
       "saved": "Opgeslagen.",
       "order": "Volgorde",
@@ -2900,6 +2952,8 @@
       "calendar": {
         "title": "Aankomende Evenementen",
         "description": "Geplande interviews en tests",
+        "googleSyncActive": "Gesynchroniseerd met Google Calendar",
+        "googleSyncError": "Google Calendar-sync moet opnieuw worden gekoppeld",
         "add": "Toevoegen",
         "empty": "U heeft geen geplande evenementen",
         "expand": "Alles tonen",
@@ -3033,8 +3087,12 @@
       },
       "coverLetter": {
         "title": "Motivatiebrief",
+        "sectionTitle": "Motivatiebrief",
+        "optionalHint": "Optioneel — alleen als de vacature erom vraagt.",
         "openButton": "Motivatiebrief",
-        "description": "AI schrijft een formele motivatiebrief op maat van deze vacature met je CV, bedrijfscontext en notities. Bewerk, kopieer of bewaar hem.",
+        "openOptional": "Toevoegen indien nodig",
+        "editButton": "Bewerken",
+        "description": "AI schrijft een formele motivatiebrief op maat van deze vacature met je CV, bedrijfscontext en notities. Sla over tenzij de werkgever erom vraagt.",
         "draft": "Concept met AI",
         "redraft": "Opnieuw genereren",
         "draftHint": "Genereer een briefconcept vanuit deze sollicitatie — je kunt alles bewerken vóór het opslaan.",

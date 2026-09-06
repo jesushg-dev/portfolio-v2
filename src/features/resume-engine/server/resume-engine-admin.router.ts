@@ -32,6 +32,8 @@ import {
   buildImportPromptPackage,
   buildStudioDocxTailorPromptPackage,
 } from "@/features/resume-engine/lib/ai/prompt-package";
+import { loadTailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
+import type { TailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
 import {
   formatZodParseError,
   parseAiJsonResponse,
@@ -39,7 +41,9 @@ import {
 import {
   getAvailableAiProviders,
   getDefaultAiProvider,
+  loadTenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
+import type { TenantAiCredentials } from "@/features/resume-engine/lib/ai/providers";
 import { CvDocxTailorResultSchema } from "@/features/resume-engine/lib/cv-docx-tailor-result";
 import { classifyPolishedResumeFile } from "@/features/resume-engine/lib/classify-polished-resume";
 import { isPdfUpload } from "@/features/resume-engine/lib/parse-pdf-for-import";
@@ -67,15 +71,19 @@ function rethrowTailorExportError(error: unknown): never {
 
 async function tailorStudioPdfSidecar(
   jobDescription: string,
+  credentials: TenantAiCredentials,
   provider: AiProviderName | null | undefined,
   baseDraft?: CvImportDraft | null,
+  jobContext?: TailorJobContext | null,
 ) {
   const parsedPdf = await parsePdfForTailor(await loadCvTemplatePdfBuffer());
   const { result } = await tailorDocxResume(
     parsedPdf.sections,
     jobDescription,
+    credentials,
     provider ?? undefined,
     baseDraft ?? undefined,
+    jobContext,
   );
   return {
     parsedPdf,
@@ -168,11 +176,12 @@ function detectLocaleFromJobDescription(input: string): "en" | "es" | "nl" {
 }
 
 export const resumeEngineAdminRouter = createTRPCRouter({
-  getAiSettings: protectedProcedure.query(() => {
-    const providers = getAvailableAiProviders();
+  getAiSettings: protectedProcedure.query(async ({ ctx }) => {
+    const credentials = await loadTenantAiCredentials(ctx.user.id);
+    const providers = getAvailableAiProviders(credentials);
     return {
       providers,
-      defaultProvider: getDefaultAiProvider(),
+      defaultProvider: getDefaultAiProvider(credentials),
       hasAutoProviders: providers.length > 0,
     };
   }),
@@ -261,8 +270,10 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           ctx.user.id,
         );
 
+        const credentials = await loadTenantAiCredentials(ctx.user.id);
         const { draft, provider } = await extractStructuredResume(
           sections,
+          credentials,
           input.provider,
         );
 
@@ -443,7 +454,11 @@ export const resumeEngineAdminRouter = createTRPCRouter({
               id: application.id,
               position: application.position,
               companyName: application.company.name,
+              companyDescription: application.company.description ?? "",
               description: application.description ?? "",
+              location: application.location ?? "",
+              salary: application.salary ?? "",
+              notes: application.notes ?? "",
             }
           : null,
         latestExport,
@@ -455,10 +470,17 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       z.object({
         sourceType: z.enum(["studio", "upload"]),
         uploadId: z.string().optional(),
+        applicationId: z.string().optional(),
         jobDescription: z.string().min(20),
       }),
     )
     .query(async ({ ctx, input }) => {
+      const jobContext = await loadTailorJobContext(
+        ctx.db,
+        ctx.user.id,
+        input.applicationId,
+      );
+
       if (input.sourceType === "upload") {
         if (!input.uploadId) {
           throw new TRPCError({
@@ -476,6 +498,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         return buildDocxTailorPromptPackage(
           parsed.sections,
           input.jobDescription.trim(),
+          jobContext,
         );
       }
 
@@ -493,6 +516,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         parsed.sections,
         draft,
         input.jobDescription.trim(),
+        jobContext,
       );
     }),
 
@@ -512,6 +536,12 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       const jobDescription = input.jobDescription.trim();
       const preferredLocale =
         input.targetLocale ?? detectLocaleFromJobDescription(jobDescription);
+      const jobContext = await loadTailorJobContext(
+        ctx.db,
+        ctx.user.id,
+        input.applicationId,
+        preferredLocale,
+      );
 
       if (input.sourceType === "upload") {
         if (!input.uploadId) {
@@ -528,10 +558,14 @@ export const resumeEngineAdminRouter = createTRPCRouter({
             ctx.user.id,
           );
 
+          const credentials = await loadTenantAiCredentials(ctx.user.id);
           const { result, provider } = await tailorDocxResume(
             source.parsed.sections,
             jobDescription,
+            credentials,
             input.provider,
+            undefined,
+            jobContext,
           );
 
           return finalizeUploadTailorExport(ctx.db, ctx.user.id, {
@@ -559,11 +593,14 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       try {
         const { parsed } = await loadCvTemplateForTailor();
 
+        const credentials = await loadTenantAiCredentials(ctx.user.id);
         const { result, provider } = await tailorDocxResume(
           parsed.sections,
           jobDescription,
+          credentials,
           input.provider,
           baseDraft,
+          jobContext,
         );
 
         let parsedPdf;
@@ -571,8 +608,10 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         try {
           const sidecar = await tailorStudioPdfSidecar(
             jobDescription,
+            credentials,
             input.provider,
             baseDraft,
+            jobContext,
           );
           parsedPdf = sidecar.parsedPdf;
           pdfAdaptedSections = sidecar.pdfAdaptedSections;

@@ -10,6 +10,7 @@ import {
 import {
   getAvailableAiProviders,
   getDefaultAiProvider,
+  loadTenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
 import { generateInterviewPrepPack } from "@/features/resume-engine/lib/ai/generate-interview-prep";
 import { buildInterviewPrepPromptPackage } from "@/features/resume-engine/lib/ai/interview-prep-prompt-package";
@@ -57,11 +58,12 @@ function mapQuestion(row: {
 }
 
 export const interviewPrepAdminRouter = createTRPCRouter({
-  getAiSettings: protectedProcedure.query(() => {
-    const providers = getAvailableAiProviders();
+  getAiSettings: protectedProcedure.query(async ({ ctx }) => {
+    const credentials = await loadTenantAiCredentials(ctx.user.id);
+    const providers = getAvailableAiProviders(credentials);
     return {
       providers,
-      defaultProvider: getDefaultAiProvider(),
+      defaultProvider: getDefaultAiProvider(credentials),
       hasAutoProviders: providers.length > 0,
     };
   }),
@@ -191,6 +193,7 @@ export const interviewPrepAdminRouter = createTRPCRouter({
             orderBy: { createdAt: "asc" },
           });
 
+      const credentials = await loadTenantAiCredentials(ctx.user.id);
       const { result, provider } = await generateInterviewPrepPack(
         context.draft,
         context.jobDescription,
@@ -203,6 +206,7 @@ export const interviewPrepAdminRouter = createTRPCRouter({
           eventNotes: context.event.notes,
           existingQuestions: existing.map((row) => row.question),
         },
+        credentials,
         input.provider,
       );
 

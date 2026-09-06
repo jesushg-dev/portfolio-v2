@@ -1,7 +1,7 @@
 {
   "adminCredentials": {
     "title": "Credentials & Integrations",
-    "subtitle": "Configure per-tenant API keys and integration settings for Resend, Spotify, UploadThing, and AI Models.",
+    "subtitle": "Configure per-tenant API keys and integration settings for Resend, Spotify, Google Calendar, UploadThing, and AI Models.",
     "providers": {
       "resend": {
         "name": "Resend (Email)",
@@ -10,6 +10,10 @@
       "spotify": {
         "name": "Spotify (Audio)",
         "description": "OAuth credentials for the Now Playing widget."
+      },
+      "google-calendar": {
+        "name": "Google Calendar",
+        "description": "Sync job tracker interviews and follow-ups with your Google Calendar."
       },
       "uploadthing": {
         "name": "UploadThing (Storage)",
@@ -37,6 +41,14 @@
       "missingParams": "Spotify did not return the expected authorization data.",
       "noRefreshToken": "Spotify did not return a refresh token. Revoke access in Spotify and reconnect.",
       "accessDenied": "You denied access to Spotify."
+    },
+    "googleCalendarCallback": {
+      "connected": "Google Calendar connected successfully.",
+      "exchangeFailed": "Could not complete Google Calendar authorization. Try again.",
+      "invalidState": "Authorization session expired. Start again from this page.",
+      "missingParams": "Google did not return the expected authorization data.",
+      "noRefreshToken": "Google did not return a refresh token. Revoke access in Google Account settings and reconnect.",
+      "accessDenied": "You denied access to Google Calendar."
     },
     "summary": {
       "domain": "Domain",
@@ -1642,6 +1654,46 @@
         "disconnectFailed": "Could not disconnect Spotify"
       }
     },
+    "googleCalendar": {
+      "title": "Google Calendar",
+      "subtitle": "Sync job tracker events with your own Google Calendar OAuth client.",
+      "storagePolicy": "Your Google OAuth client secret and refresh token are encrypted and stored only for your account — the same pattern as Spotify.",
+      "disconnectPolicy": "Disconnecting deletes your Calendar tokens from our database. It does not remove events already created in Google Calendar.",
+      "privacyNote": "See our <link>privacy policy</link> for what calendar data we store and why.",
+      "redirectUriLabel": "Authorized redirect URI (add this in Google Cloud Console)",
+      "redirectUriHint": "APIs & Services → Credentials → your OAuth client → Authorized redirect URIs",
+      "scopesTitle": "Permissions requested",
+      "scopes": {
+        "calendarEvents": "Create, update, and delete events on your calendars"
+      },
+      "connect": {
+        "title": "Connect your Google Calendar app",
+        "description": "Create an OAuth client in your Google Cloud project, enable the Calendar API, then paste the Client ID and Secret here.",
+        "byoNote": "Use your own Google Cloud OAuth credentials — not the site login Google app. Enable the Google Calendar API on that project.",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "clientIdPlaceholder": "Paste your Client ID",
+        "clientSecretPlaceholder": "Paste your Client Secret",
+        "dashboardLink": "Open Google Cloud Credentials",
+        "connect": "Connect with Google",
+        "connecting": "Redirecting to Google…",
+        "validationError": "Enter a valid Client ID and Client Secret from your Google Cloud OAuth client."
+      },
+      "status": {
+        "connected": "Connected to Google Calendar",
+        "disconnected": "Not connected",
+        "refreshError": "Could not refresh your Google Calendar connection",
+        "connectedAt": "Connected on {date}",
+        "clientId": "Client ID: {id}",
+        "disconnect": "Disconnect Google Calendar",
+        "disconnecting": "Disconnecting…",
+        "reconnect": "Reconnect Google Calendar"
+      },
+      "actions": {
+        "connectFailed": "Could not start Google Calendar authorization",
+        "disconnectFailed": "Could not disconnect Google Calendar"
+      }
+    },
     "forms": {
       "saved": "Saved.",
       "order": "Order",
@@ -2973,6 +3025,8 @@
       "calendar": {
         "title": "Upcoming Events",
         "description": "Scheduled interviews and tests",
+        "googleSyncActive": "Synced with Google Calendar",
+        "googleSyncError": "Google Calendar sync needs reconnect",
         "add": "Add",
         "empty": "You have no scheduled events",
         "expand": "Show all",
@@ -3106,8 +3160,12 @@
       },
       "coverLetter": {
         "title": "Cover letter",
+        "sectionTitle": "Cover letter",
+        "optionalHint": "Optional — only if the posting asks for one.",
         "openButton": "Cover letter",
-        "description": "AI drafts a formal cover letter tailored to this job posting using your CV, company context, and notes. Edit, copy, or save it for later.",
+        "openOptional": "Add if needed",
+        "editButton": "Edit",
+        "description": "AI drafts a formal cover letter tailored to this job posting using your CV, company context, and notes. Skip this unless the employer asks for one.",
         "draft": "Draft with AI",
         "redraft": "Regenerate",
         "draftHint": "Generate a cover letter draft from this application — you can edit everything before saving.",

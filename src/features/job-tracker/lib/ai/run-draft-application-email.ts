@@ -2,7 +2,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 
-import { env } from "@/env";
 import {
   ApplicationEmailDraftSchema,
   buildApplicationEmailSystemPrompt,
@@ -14,18 +13,23 @@ import {
 import { parseAiJsonResponse } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
   AI_PROVIDER_MODELS,
+  requireTenantAiApiKey,
   resolveAiProvider,
   type AiProviderName,
+  type TenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
 
 async function completeJson(
   system: string,
   user: string,
+  credentials: TenantAiCredentials,
   provider: AiProviderName,
 ): Promise<unknown> {
   switch (provider) {
     case "claude": {
-      const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+      const client = new Anthropic({
+        apiKey: requireTenantAiApiKey(credentials, "claude"),
+      });
       const response = await client.messages.create({
         model: AI_PROVIDER_MODELS.claude,
         max_tokens: 2048,
@@ -39,8 +43,10 @@ async function completeJson(
     case "openai":
     case "deepseek": {
       const client = new OpenAI({
-        apiKey:
-          provider === "deepseek" ? env.DEEPSEEK_API_KEY : env.OPENAI_API_KEY,
+        apiKey: requireTenantAiApiKey(
+          credentials,
+          provider === "deepseek" ? "deepseek" : "openai",
+        ),
         ...(provider === "deepseek"
           ? { baseURL: "https://api.deepseek.com" }
           : {}),
@@ -56,7 +62,9 @@ async function completeJson(
       return parseAiJsonResponse(response.choices[0]?.message?.content ?? "{}");
     }
     case "gemini": {
-      const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY! });
+      const client = new GoogleGenAI({
+        apiKey: requireTenantAiApiKey(credentials, "gemini"),
+      });
       const response = await client.models.generateContent({
         model: AI_PROVIDER_MODELS.gemini,
         contents: [
@@ -78,12 +86,14 @@ async function completeJson(
 
 export async function draftApplicationEmailWithAi(
   input: DraftApplicationEmailInput,
+  credentials: TenantAiCredentials,
   providerName?: string,
 ): Promise<{ draft: ApplicationEmailDraft; provider: AiProviderName }> {
-  const provider = resolveAiProvider(providerName);
+  const provider = resolveAiProvider(credentials, providerName);
   const raw = await completeJson(
     buildApplicationEmailSystemPrompt(),
     buildApplicationEmailUserPrompt(input),
+    credentials,
     provider,
   );
   const parsed = ApplicationEmailDraftSchema.parse(raw);

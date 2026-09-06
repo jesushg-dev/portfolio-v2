@@ -2,7 +2,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 
-import { env } from "@/env";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import type { CvMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
 import { buildInterviewPrepSystemPrompt } from "@/features/resume-engine/lib/ai/interview-prep-prompt";
@@ -13,8 +12,10 @@ import {
 import { parseAiJsonResponse } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
   AI_PROVIDER_MODELS,
+  requireTenantAiApiKey,
   resolveAiProvider,
   type AiProviderName,
+  type TenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
 import {
   InterviewPrepResultSchema,
@@ -26,14 +27,17 @@ const MAX_TOKENS = 8192;
 async function completeJson(
   systemPrompt: string,
   userPrompt: string,
+  credentials: TenantAiCredentials,
   providerName?: string,
 ): Promise<{ result: InterviewPrepResult; provider: AiProviderName }> {
-  const provider = resolveAiProvider(providerName);
+  const provider = resolveAiProvider(credentials, providerName);
   let result: InterviewPrepResult;
 
   switch (provider) {
     case "claude": {
-      const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+      const client = new Anthropic({
+        apiKey: requireTenantAiApiKey(credentials, "claude"),
+      });
       const response = await client.messages.create({
         model: AI_PROVIDER_MODELS.claude,
         max_tokens: MAX_TOKENS,
@@ -49,7 +53,10 @@ async function completeJson(
     case "deepseek": {
       const isDeepseek = provider === "deepseek";
       const client = new OpenAI({
-        apiKey: isDeepseek ? env.DEEPSEEK_API_KEY : env.OPENAI_API_KEY,
+        apiKey: requireTenantAiApiKey(
+          credentials,
+          isDeepseek ? "deepseek" : "openai",
+        ),
         ...(isDeepseek ? { baseURL: "https://api.deepseek.com" } : {}),
       });
       const response = await client.chat.completions.create({
@@ -68,7 +75,9 @@ async function completeJson(
       break;
     }
     case "gemini": {
-      const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY! });
+      const client = new GoogleGenAI({
+        apiKey: requireTenantAiApiKey(credentials, "gemini"),
+      });
       const response = await client.models.generateContent({
         model: AI_PROVIDER_MODELS.gemini,
         contents: [
@@ -98,6 +107,7 @@ export async function generateInterviewPrepPack(
   jobDescription: string,
   matchAnalysis: CvMatchAnalysis | null,
   meta: InterviewPrepPromptMeta,
+  credentials: TenantAiCredentials,
   providerName?: string,
 ): Promise<{ result: InterviewPrepResult; provider: AiProviderName }> {
   const append = Boolean(meta.existingQuestions?.length);
@@ -108,5 +118,5 @@ export async function generateInterviewPrepPack(
     matchAnalysis,
     meta,
   );
-  return completeJson(systemPrompt, userPrompt, providerName);
+  return completeJson(systemPrompt, userPrompt, credentials, providerName);
 }

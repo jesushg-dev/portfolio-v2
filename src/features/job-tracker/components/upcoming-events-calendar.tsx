@@ -1,12 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { format, isToday, isTomorrow, isThisWeek } from "date-fns";
-import { Calendar, Clock, MapPin, Plus, Video } from "lucide-react";
+import {
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  MapPin,
+  Plus,
+  Video,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { EventTypeIcon } from "@/features/job-tracker/lib/event-type-icons";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
@@ -14,6 +23,26 @@ import { eventPrepHref } from "@/features/job-tracker/lib/event-prep-href";
 import type { Locale } from "@/i18n/config";
 import type { EventType, UpcomingEvent } from "@/features/job-tracker/types";
 import { cn } from "@/lib/utils";
+
+const UPCOMING_EVENTS_QUERY_LIMIT = 20;
+
+function GoogleCalendarSyncHint() {
+  const t = useTranslations("admin.jobTracker");
+  const statusQuery = api.jobTrackerAdmin.getGoogleCalendarSyncStatus.useQuery(
+    undefined,
+    { staleTime: 60_000 },
+  );
+
+  if (!statusQuery.data?.connected) return null;
+
+  return (
+    <p className="text-muted-foreground mt-1 text-xs">
+      {statusQuery.data.status === "refresh_error"
+        ? t("calendar.googleSyncError")
+        : t("calendar.googleSyncActive")}
+    </p>
+  );
+}
 
 interface UpcomingEventsCalendarProps {
   initialEvents: UpcomingEvent[];
@@ -29,12 +58,16 @@ export function UpcomingEventsCalendar({
   const t = useTranslations("admin.jobTracker");
   const dateFnsLocale = getDateFnsLocale(locale);
   const isSidebar = variant === "sidebar";
+  const [expanded, setExpanded] = useState(false);
 
   const { data: upcomingEvents = initialEvents } =
     api.jobTrackerAdmin.getUpcomingEvents.useQuery(
-      { limit: isSidebar ? 4 : 5 },
+      { limit: UPCOMING_EVENTS_QUERY_LIMIT },
       { placeholderData: initialEvents },
     );
+
+  const visibleEvents = expanded ? upcomingEvents : upcomingEvents.slice(0, 1);
+  const hiddenCount = Math.max(upcomingEvents.length - 1, 0);
 
   const getEventTimeLabel = (date: Date) => {
     if (isToday(date)) return t("calendar.today");
@@ -48,13 +81,13 @@ export function UpcomingEventsCalendar({
     <aside
       className={cn(
         "bg-card text-card-foreground border-border flex flex-col rounded-xl border shadow-sm",
-        isSidebar ? "xl:sticky xl:top-6" : "",
+        expanded && "max-lg:max-h-[min(70dvh,32rem)] lg:h-[calc(100dvh-13rem)]",
       )}
     >
       <div
         className={cn(
           "border-border flex items-start justify-between gap-3 border-b",
-          isSidebar ? "p-4" : "p-6",
+          isSidebar ? "p-3" : "p-6",
         )}
       >
         <div>
@@ -67,32 +100,66 @@ export function UpcomingEventsCalendar({
               {t("calendar.description")}
             </p>
           ) : null}
+          <GoogleCalendarSyncHint />
         </div>
-        <Link
-          href="/admin/job-tracker/events/new"
-          className={buttonVariants({ size: "sm", variant: "outline" })}
-        >
-          <Plus className="size-4" aria-hidden />
-          {!isSidebar ? (
-            <span className="ml-1.5">{t("calendar.add")}</span>
-          ) : null}
-        </Link>
+        <div className="flex shrink-0 items-center gap-1">
+          <Button
+            type="button"
+            size="sm"
+            variant="ghost"
+            aria-expanded={expanded}
+            aria-label={
+              expanded ? t("calendar.collapseAria") : t("calendar.expandAria")
+            }
+            onClick={() => setExpanded((current) => !current)}
+          >
+            {expanded ? (
+              <ChevronUp className="size-4" aria-hidden />
+            ) : (
+              <ChevronDown className="size-4" aria-hidden />
+            )}
+            <span className="ml-1 hidden sm:inline">
+              {expanded ? t("calendar.collapse") : t("calendar.expand")}
+            </span>
+          </Button>
+          <Link
+            href="/admin/job-tracker/events/new"
+            className={buttonVariants({ size: "sm", variant: "outline" })}
+          >
+            <Plus className="size-4" aria-hidden />
+            {!isSidebar ? (
+              <span className="ml-1.5">{t("calendar.add")}</span>
+            ) : null}
+          </Link>
+        </div>
       </div>
 
-      <div className={cn(isSidebar ? "p-3" : "p-6")}>
+      <div
+        className={cn(
+          "min-h-0 flex-1",
+          isSidebar ? "p-3" : "p-6",
+          expanded && "overflow-y-auto",
+        )}
+      >
         {upcomingEvents.length === 0 ? (
-          <div className="text-muted-foreground py-8 text-center text-sm">
-            <Calendar className="mx-auto mb-3 size-8 opacity-40" aria-hidden />
+          <div
+            className={cn(
+              "text-muted-foreground text-center text-sm",
+              expanded ? "py-8" : "py-3",
+            )}
+          >
+            <Calendar
+              className={cn(
+                "mx-auto mb-2 opacity-40",
+                expanded ? "size-8" : "size-6",
+              )}
+              aria-hidden
+            />
             <p>{t("calendar.empty")}</p>
           </div>
         ) : (
-          <ul
-            className={cn(
-              "space-y-2",
-              isSidebar && "max-h-[420px] overflow-y-auto",
-            )}
-          >
-            {upcomingEvents.map((event) => (
+          <ul className="space-y-2">
+            {visibleEvents.map((event) => (
               <EventRow
                 key={event.id}
                 event={event}
@@ -103,6 +170,11 @@ export function UpcomingEventsCalendar({
             ))}
           </ul>
         )}
+        {!expanded && hiddenCount > 0 ? (
+          <p className="text-muted-foreground mt-2 text-center text-[11px]">
+            {t("calendar.moreCount", { count: hiddenCount })}
+          </p>
+        ) : null}
       </div>
     </aside>
   );

@@ -23,14 +23,18 @@ import {
   mapCompanyToEditorDto,
   type CompanyEditorDTO,
 } from "@/features/job-tracker/lib/company-editor-dto";
+import { pullLinkedUpcomingEventsFromGoogle } from "@/lib/google-calendar/sync";
 
-const UPCOMING_EVENTS_LIMIT = 5;
+const UPCOMING_EVENTS_LIMIT = 20;
 
 export interface DashboardStatsDTO {
   totalApplications: number;
   totalCompanies: number;
+  applied: number;
   inProgress: number;
   offers: number;
+  ghosted: number;
+  rejected: number;
   hired: number;
 }
 
@@ -150,8 +154,11 @@ export async function getDashboardStatsData(): Promise<DashboardStatsDTO> {
   return {
     totalApplications,
     totalCompanies,
+    applied: countByStatus("APPLIED"),
     inProgress: countByStatus("INTERVIEW"),
     offers: countByStatus("OFFER"),
+    ghosted: countByStatus("GHOSTED"),
+    rejected: countByStatus("REJECTED"),
     hired: countByStatus("HIRED"),
   };
 }
@@ -176,22 +183,41 @@ export async function getUpcomingEventsData(
     take: limit,
   });
 
-  return events.map((event) => ({
-    id: event.id,
-    type: event.type,
-    title: event.title,
-    description: event.description,
-    scheduledDate: event.scheduledDate,
-    duration: event.duration,
-    location: event.location,
-    isVirtual: event.isVirtual,
-    meetingLink: event.meetingLink,
-    application: {
-      id: event.application.id,
-      position: event.application.position,
-      company: { name: event.application.company.name },
-    },
-  }));
+  const pulled = await pullLinkedUpcomingEventsFromGoogle(
+    userId,
+    events.map((event) => ({
+      id: event.id,
+      title: event.title,
+      googleEventId: event.googleEventId,
+      googleEtag: event.googleEtag,
+      scheduledDate: event.scheduledDate,
+      duration: event.duration,
+      location: event.location,
+      meetingLink: event.meetingLink,
+    })),
+  );
+
+  const pulledById = new Map(pulled.map((event) => [event.id, event]));
+
+  return events.map((event) => {
+    const synced = pulledById.get(event.id);
+    return {
+      id: event.id,
+      type: event.type,
+      title: synced?.title ?? event.title,
+      description: event.description,
+      scheduledDate: synced?.scheduledDate ?? event.scheduledDate,
+      duration: synced?.duration ?? event.duration,
+      location: synced?.location ?? event.location,
+      isVirtual: event.isVirtual,
+      meetingLink: synced?.meetingLink ?? event.meetingLink,
+      application: {
+        id: event.application.id,
+        position: event.application.position,
+        company: { name: event.application.company.name },
+      },
+    };
+  });
 }
 
 export async function getApplicationsListData(params: DataTableParams) {
@@ -252,15 +278,13 @@ export async function getCompaniesListData(params: DataTableParams) {
 }
 
 export async function getJobTrackerPageData(params: DataTableParams) {
-  const [stats, upcomingEvents, applications, companies] = await Promise.all([
-    getDashboardStatsData(),
+  const [upcomingEvents, applications, companies] = await Promise.all([
     getUpcomingEventsData(),
     getApplicationsListData(params),
     getCompaniesListData(params),
   ]);
 
   return {
-    stats,
     upcomingEvents,
     applications,
     companies,

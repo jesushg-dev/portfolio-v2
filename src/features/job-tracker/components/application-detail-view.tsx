@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import {
   Clock,
+  FilePenLine,
   FileText,
   Loader2,
   Mail,
@@ -27,6 +28,7 @@ import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import ScrollToTop from "@/components/custom-ui/scroll-to-top";
 import { ApplicationTimeline } from "@/features/job-tracker/components/application-timeline";
 import { ApplicationEmailDialog } from "@/features/job-tracker/components/application-email-panel";
+import { ApplicationCoverLetterDialog } from "@/features/job-tracker/components/application-cover-letter-panel";
 import { ResumeTailorWorkflow } from "@/features/resume-engine/components/resume-tailor-workflow";
 import type { ApplicationDetail } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
@@ -70,6 +72,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
   );
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
+  const [isCoverLetterOpen, setIsCoverLetterOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const dateFnsLocale = getDateFnsLocale(locale);
@@ -215,6 +218,43 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
             ) : null}
 
             <div className="border-border border-t pt-5">
+              <header className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <h2 className="text-foreground text-sm font-semibold">
+                    {t("coverLetter.sectionTitle")}
+                  </h2>
+                  <p className="text-muted-foreground text-xs">
+                    {t("coverLetter.optionalHint")}
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="text-primary h-auto shrink-0 px-0"
+                  onClick={() => setIsCoverLetterOpen(true)}
+                >
+                  <FilePenLine className="mr-1.5 size-3.5" aria-hidden />
+                  {application.coverLetterBody.trim()
+                    ? t("coverLetter.editButton")
+                    : t("coverLetter.openOptional")}
+                </Button>
+              </header>
+              {application.coverLetterBody.trim() ? (
+                <div className="space-y-1.5">
+                  {application.coverLetterSubject.trim() ? (
+                    <p className="text-foreground text-sm font-medium">
+                      {application.coverLetterSubject}
+                    </p>
+                  ) : null}
+                  <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed whitespace-pre-wrap">
+                    {application.coverLetterBody}
+                  </p>
+                </div>
+              ) : null}
+            </div>
+
+            <div className="border-border border-t pt-5">
               <header className="mb-3 flex items-center gap-2">
                 <FileText
                   className="text-muted-foreground size-4"
@@ -299,6 +339,14 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
         applicationId={application.id}
         hasCvFile={Boolean(application.cvFile?.url)}
         cvFileName={application.cvFile?.name}
+      />
+
+      <ApplicationCoverLetterDialog
+        open={isCoverLetterOpen}
+        onOpenChange={setIsCoverLetterOpen}
+        applicationId={application.id}
+        initialSubject={application.coverLetterSubject}
+        initialBody={application.coverLetterBody}
       />
 
       <ConfirmDialog

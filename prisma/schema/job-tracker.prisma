@@ -23,6 +23,8 @@ model Application {
   notes       String?
   salary      String?
   location    String?
+  coverLetterSubject String?
+  coverLetterBody    String?
   ghostNudgeSnoozedUntil DateTime?
   
   // cvFile embedded as a composite type
@@ -62,6 +64,10 @@ model ApplicationEvent {
   completed     Boolean  @default(false)
   completedAt   DateTime?
   outcome       String?  // "POSITIVE" | "NEGATIVE" | "NEUTRAL"
+  /// Google Calendar event id when synced (BYO OAuth connection).
+  googleEventId   String?
+  googleEtag      String?
+  googleSyncedAt  DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   userId        String   @db.ObjectId

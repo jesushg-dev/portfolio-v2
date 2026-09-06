@@ -2,7 +2,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 
-import { env } from "@/env";
 import type { CvSection } from "@/lib/types";
 import { isDocxTitleStyle } from "@/lib/docx/parser";
 import {
@@ -12,8 +11,10 @@ import {
 import { parseAiJsonResponse } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
   AI_PROVIDER_MODELS,
+  requireTenantAiApiKey,
   resolveAiProvider,
   type AiProviderName,
+  type TenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
 import {
   buildDocxTailorUserPrompt,
@@ -21,6 +22,7 @@ import {
   buildShrinkPromptPackage,
   type ShrinkFragment,
 } from "@/features/resume-engine/lib/ai/prompt-package";
+import type { TailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import {
   CvDocxTailorResultSchema,
@@ -35,15 +37,22 @@ import {
 async function tailorDocxWithClaude(
   sections: CvSection[],
   jobDescription: string,
+  apiKey: string,
   draft?: CvImportDraft,
+  jobContext?: TailorJobContext | null,
 ): Promise<CvDocxTailorResult> {
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const client = new Anthropic({ apiKey });
   const systemPrompt = draft
     ? STUDIO_DOCX_TAILOR_SYSTEM_PROMPT
     : DOCX_TAILOR_SYSTEM_PROMPT;
   const userPrompt = draft
-    ? buildStudioDocxTailorUserPrompt(sections, draft, jobDescription)
-    : buildDocxTailorUserPrompt(sections, jobDescription);
+    ? buildStudioDocxTailorUserPrompt(
+        sections,
+        draft,
+        jobDescription,
+        jobContext,
+      )
+    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext);
 
   const response = await client.messages.create({
     model: AI_PROVIDER_MODELS.claude,
@@ -65,21 +74,27 @@ async function tailorDocxWithClaude(
 async function tailorDocxWithOpenAI(
   sections: CvSection[],
   jobDescription: string,
+  apiKey: string,
   draft?: CvImportDraft,
   baseURL?: string,
-  apiKey?: string,
   model = AI_PROVIDER_MODELS.openai,
+  jobContext?: TailorJobContext | null,
 ): Promise<CvDocxTailorResult> {
   const client = new OpenAI({
-    apiKey: apiKey ?? env.OPENAI_API_KEY,
+    apiKey,
     ...(baseURL ? { baseURL } : {}),
   });
   const systemPrompt = draft
     ? STUDIO_DOCX_TAILOR_SYSTEM_PROMPT
     : DOCX_TAILOR_SYSTEM_PROMPT;
   const userPrompt = draft
-    ? buildStudioDocxTailorUserPrompt(sections, draft, jobDescription)
-    : buildDocxTailorUserPrompt(sections, jobDescription);
+    ? buildStudioDocxTailorUserPrompt(
+        sections,
+        draft,
+        jobDescription,
+        jobContext,
+      )
+    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext);
 
   const response = await client.chat.completions.create({
     model,
@@ -100,15 +115,22 @@ async function tailorDocxWithOpenAI(
 async function tailorDocxWithGemini(
   sections: CvSection[],
   jobDescription: string,
+  apiKey: string,
   draft?: CvImportDraft,
+  jobContext?: TailorJobContext | null,
 ): Promise<CvDocxTailorResult> {
-  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY! });
+  const client = new GoogleGenAI({ apiKey });
   const systemPrompt = draft
     ? STUDIO_DOCX_TAILOR_SYSTEM_PROMPT
     : DOCX_TAILOR_SYSTEM_PROMPT;
   const userPrompt = draft
-    ? buildStudioDocxTailorUserPrompt(sections, draft, jobDescription)
-    : buildDocxTailorUserPrompt(sections, jobDescription);
+    ? buildStudioDocxTailorUserPrompt(
+        sections,
+        draft,
+        jobDescription,
+        jobContext,
+      )
+    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext);
 
   const response = await client.models.generateContent({
     model: AI_PROVIDER_MODELS.gemini,
@@ -133,8 +155,9 @@ async function tailorDocxWithGemini(
 
 async function shrinkWithClaude(
   fragments: ShrinkFragment[],
+  apiKey: string,
 ): Promise<ShrinkResult> {
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const client = new Anthropic({ apiKey });
   const { systemPrompt, userPrompt } = buildShrinkPromptPackage(fragments);
 
   const response = await client.messages.create({
@@ -152,12 +175,12 @@ async function shrinkWithClaude(
 
 async function shrinkWithOpenAI(
   fragments: ShrinkFragment[],
+  apiKey: string,
   baseURL?: string,
-  apiKey?: string,
   model = AI_PROVIDER_MODELS.openai,
 ): Promise<ShrinkResult> {
   const client = new OpenAI({
-    apiKey: apiKey ?? env.OPENAI_API_KEY,
+    apiKey,
     ...(baseURL ? { baseURL } : {}),
   });
   const { systemPrompt, userPrompt } = buildShrinkPromptPackage(fragments);
@@ -178,8 +201,9 @@ async function shrinkWithOpenAI(
 
 async function shrinkWithGemini(
   fragments: ShrinkFragment[],
+  apiKey: string,
 ): Promise<ShrinkResult> {
-  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY! });
+  const client = new GoogleGenAI({ apiKey });
   const { systemPrompt, userPrompt } = buildShrinkPromptPackage(fragments);
 
   const response = await client.models.generateContent({
@@ -198,23 +222,33 @@ async function shrinkWithGemini(
 }
 
 async function shrinkOverflowingRuns(
+  credentials: TenantAiCredentials,
   provider: AiProviderName,
   fragments: ShrinkFragment[],
 ): Promise<ShrinkResult> {
   switch (provider) {
     case "claude":
-      return shrinkWithClaude(fragments);
+      return shrinkWithClaude(
+        fragments,
+        requireTenantAiApiKey(credentials, "claude"),
+      );
     case "openai":
-      return shrinkWithOpenAI(fragments);
+      return shrinkWithOpenAI(
+        fragments,
+        requireTenantAiApiKey(credentials, "openai"),
+      );
     case "deepseek":
       return shrinkWithOpenAI(
         fragments,
+        requireTenantAiApiKey(credentials, "deepseek"),
         "https://api.deepseek.com",
-        env.DEEPSEEK_API_KEY,
         AI_PROVIDER_MODELS.deepseek,
       );
     case "gemini":
-      return shrinkWithGemini(fragments);
+      return shrinkWithGemini(
+        fragments,
+        requireTenantAiApiKey(credentials, "gemini"),
+      );
     default: {
       const exhaustiveCheck: never = provider;
       throw new Error(`Unknown AI provider: ${String(exhaustiveCheck)}`);
@@ -315,35 +349,58 @@ function forceWithinBudget(
 export async function tailorDocxResume(
   sections: CvSection[],
   jobDescription: string,
+  credentials: TenantAiCredentials,
   providerName?: string,
   draft?: CvImportDraft,
+  jobContext?: TailorJobContext | null,
 ): Promise<{ result: CvDocxTailorResult; provider: AiProviderName }> {
   if (sections.length === 0) {
     throw new Error("No adaptable sections found in the DOCX.");
   }
 
-  const provider = resolveAiProvider(providerName);
+  const provider = resolveAiProvider(credentials, providerName);
 
   let result: CvDocxTailorResult;
   switch (provider) {
     case "claude":
-      result = await tailorDocxWithClaude(sections, jobDescription, draft);
+      result = await tailorDocxWithClaude(
+        sections,
+        jobDescription,
+        requireTenantAiApiKey(credentials, "claude"),
+        draft,
+        jobContext,
+      );
       break;
     case "openai":
-      result = await tailorDocxWithOpenAI(sections, jobDescription, draft);
+      result = await tailorDocxWithOpenAI(
+        sections,
+        jobDescription,
+        requireTenantAiApiKey(credentials, "openai"),
+        draft,
+        undefined,
+        AI_PROVIDER_MODELS.openai,
+        jobContext,
+      );
       break;
     case "deepseek":
       result = await tailorDocxWithOpenAI(
         sections,
         jobDescription,
+        requireTenantAiApiKey(credentials, "deepseek"),
         draft,
         "https://api.deepseek.com",
-        env.DEEPSEEK_API_KEY,
         AI_PROVIDER_MODELS.deepseek,
+        jobContext,
       );
       break;
     case "gemini":
-      result = await tailorDocxWithGemini(sections, jobDescription, draft);
+      result = await tailorDocxWithGemini(
+        sections,
+        jobDescription,
+        requireTenantAiApiKey(credentials, "gemini"),
+        draft,
+        jobContext,
+      );
       break;
     default: {
       const exhaustiveCheck: never = provider;
@@ -356,7 +413,11 @@ export async function tailorDocxResume(
     if (overflows.length === 0) break;
 
     try {
-      const shrink = await shrinkOverflowingRuns(provider, overflows);
+      const shrink = await shrinkOverflowingRuns(
+        credentials,
+        provider,
+        overflows,
+      );
       result = applyShrinkResult(result, shrink);
     } catch {
       break;

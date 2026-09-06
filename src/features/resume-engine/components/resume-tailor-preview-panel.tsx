@@ -18,6 +18,7 @@ import {
 import { isPdfResumeFile } from "@/features/resume-engine/lib/parse-pdf-for-import";
 import { TailoredAtsPreview } from "@/features/resume-engine/components/tailored-ats-preview";
 import { ResumeMatchChecklist } from "@/features/resume-engine/components/resume-match-checklist";
+import { ResumeAtsCheckerSummary } from "@/features/resume-engine/components/resume-ats-checker-summary";
 import type { CvMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
 
 type PreviewMode = "word" | "pdf" | "ats" | "match";
@@ -105,11 +106,13 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
         matchAnalysis.notes)),
   );
 
-  const defaultMode: PreviewMode = exportIsPdf
-    ? "pdf"
-    : hasWord
-      ? "word"
-      : "ats";
+  const defaultMode: PreviewMode = hasMatch
+    ? "match"
+    : exportIsPdf
+      ? "pdf"
+      : hasWord
+        ? "word"
+        : "ats";
   const previewSource = `${exportIsPdf ? "pdf" : "doc"}:${primaryUrl ?? ""}`;
   const [userMode, setUserMode] = useState<PreviewMode | null>(null);
   const [modeSource, setModeSource] = useState(previewSource);
@@ -136,9 +139,9 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       ? t("tailorPreviewPdf")
       : mode === "ats"
         ? t("tailorPreviewAts")
-        : mode === "match"
-          ? t("tailorPreviewMatch")
-          : t("tailorPreviewWord");
+                  : mode === "match"
+                    ? t("atsCheckerTitle")
+                    : t("tailorPreviewWord");
 
   return (
     <div className="flex flex-col gap-3">
@@ -176,7 +179,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
               disabled={!hasMatch}
               onClick={() => setUserMode("match")}
             >
-              {t("tailorPreviewMatch")}
+              {t("atsCheckerTitle")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -191,8 +194,8 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
           >
             <ChartColumn className="size-3.5" aria-hidden />
             {aiScore != null
-              ? t("tailorMatchButtonScore", { score: Math.round(aiScore) })
-              : t("tailorMatchButton")}
+              ? t("atsCheckerScore", { score: Math.round(aiScore) })
+              : t("atsCheckerTitle")}
           </Button>
         ) : null}
 
@@ -235,6 +238,14 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       </div>
 
       {belowToolbar}
+
+      {hasMatch ? (
+        <ResumeAtsCheckerSummary
+          aiScore={aiScore}
+          matchNotes={matchNotes}
+          matchAnalysis={matchAnalysis}
+        />
+      ) : null}
 
       {mode === "word" && wordUrl ? (
         <OfficeDocumentPreview

@@ -22,17 +22,12 @@ import type { IntegrationCatalogItem } from "../lib/integration-catalog";
 
 type IntegrationConfigs = RouterOutputs["integrationsAdmin"]["getConfigs"];
 
-interface IntegrationCardProps {
-  catalogItem: IntegrationCatalogItem;
-  configs: IntegrationConfigs;
-}
-
 function ConnectedDetails({
   provider,
   configs,
   t,
 }: {
-  provider: IntegrationProvider;
+  provider: Exclude<IntegrationProvider, "spotify" | "google-calendar">;
   configs: IntegrationConfigs;
   t: ReturnType<typeof useTranslations<"adminCredentials">>;
 }) {
@@ -105,15 +100,23 @@ function ConnectedDetails({
         </ul>
       );
     }
-    default:
-      return null;
+    default: {
+      const _exhaustive: never = provider;
+      return _exhaustive;
+    }
   }
 }
 
 export function IntegrationCard({
   catalogItem,
   configs,
-}: IntegrationCardProps) {
+}: {
+  catalogItem: {
+    id: Exclude<IntegrationProvider, "spotify" | "google-calendar">;
+    icon: IntegrationCatalogItem["icon"];
+  };
+  configs: IntegrationConfigs;
+}) {
   const t = useTranslations("adminCredentials");
   const utils = api.useUtils();
   const [isPending, startTransition] = useTransition();

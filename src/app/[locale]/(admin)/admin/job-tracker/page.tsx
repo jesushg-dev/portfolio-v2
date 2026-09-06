@@ -4,7 +4,6 @@ import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { Building2, Plus } from "lucide-react";
 
-import { DashboardStats } from "@/features/job-tracker/components/dashboard-stats";
 import { UpcomingEventsCalendar } from "@/features/job-tracker/components/upcoming-events-calendar";
 import { JobTrackerTabs } from "@/features/job-tracker/components/job-tracker-tabs";
 import {
@@ -52,44 +51,34 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
   ]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t("title")}
-          </h1>
-          <p className="text-muted-foreground mt-1 max-w-xl text-sm">
-            {t("pageDescription")}
-          </p>
+    <div>
+      <div className="mb-6 flex flex-col gap-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">
+              {t("title")}
+            </h1>
+            <p className="text-muted-foreground mt-1 max-w-xl text-sm">
+              {t("pageDescription")}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href="/admin/job-tracker/applications/new"
+              className={buttonVariants()}
+            >
+              <Plus className="mr-1.5 size-4" aria-hidden />
+              {t("newApplication")}
+            </Link>
+            <Link
+              href="/admin/job-tracker/companies/new"
+              className={cn(buttonVariants({ variant: "outline" }))}
+            >
+              <Building2 className="mr-1.5 size-4" aria-hidden />
+              {t("newCompany")}
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href="/admin/job-tracker/applications/new"
-            className={buttonVariants()}
-          >
-            <Plus className="mr-1.5 size-4" aria-hidden />
-            {t("newApplication")}
-          </Link>
-          <Link
-            href="/admin/job-tracker/companies/new"
-            className={cn(buttonVariants({ variant: "outline" }))}
-          >
-            <Building2 className="mr-1.5 size-4" aria-hidden />
-            {t("newCompany")}
-          </Link>
-        </div>
-      </div>
-
-      <DashboardStats initialStats={pageData.stats} />
-
-      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
-        <JobTrackerTabs
-          initialApplications={pageData.applications.data}
-          applicationsTotalCount={pageData.applications.totalCount}
-          initialCompanies={companiesData.data}
-          companiesPageCount={companiesData.pageCount}
-          companiesTotalCount={companiesData.totalCount}
-        />
 
         <UpcomingEventsCalendar
           initialEvents={pageData.upcomingEvents}
@@ -97,6 +86,14 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
           variant="sidebar"
         />
       </div>
+
+      <JobTrackerTabs
+        initialApplications={pageData.applications.data}
+        applicationsTotalCount={pageData.applications.totalCount}
+        initialCompanies={companiesData.data}
+        companiesPageCount={companiesData.pageCount}
+        companiesTotalCount={companiesData.totalCount}
+      />
     </div>
   );
 };

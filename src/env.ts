@@ -51,15 +51,6 @@ export const env = createEnv({
     // UploadThing is configured per tenant in Admin → Credentials
     UPLOADTHING_TOKEN: z.string().optional(),
 
-    // AI providers (resume import / tailor)
-    DEFAULT_AI_PROVIDER: z
-      .enum(["claude", "openai", "deepseek", "gemini"])
-      .optional(),
-    ANTHROPIC_API_KEY: z.string().optional(),
-    OPENAI_API_KEY: z.string().optional(),
-    GEMINI_API_KEY: z.string().optional(),
-    DEEPSEEK_API_KEY: z.string().optional(),
-
     /// Shared secret for the isolated CV PDF generator function
     CV_PDF_GENERATOR_SECRET: requiredInProduction(z.string().min(16)),
   },
@@ -97,11 +88,6 @@ export const env = createEnv({
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
     PRIMARY_DOMAIN: envOrDefault(process.env.PRIMARY_DOMAIN, "jesushg.com"),
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
-    DEFAULT_AI_PROVIDER: process.env.DEFAULT_AI_PROVIDER,
-    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
-    DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
     CV_PDF_GENERATOR_SECRET: process.env.CV_PDF_GENERATOR_SECRET,
     NEXT_PUBLIC_PRIMARY_DOMAIN: envOrDefault(
       process.env.NEXT_PUBLIC_PRIMARY_DOMAIN,

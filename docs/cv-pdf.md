@@ -1,6 +1,8 @@
 # CV PDF — Technical Guide
 
-This document describes how CV PDF generation, caching, and delivery work in the multi-tenant portfolio. The design goals are:
+This document describes how CV PDF generation, caching, and delivery work in the multi-tenant portfolio. UploadThing and portfolio CV email use **each tenant’s own credentials** (Admin → Credentials), not platform env keys — see [`tenant-credentials.md`](./tenant-credentials.md).
+
+The design goals are:
 
 1. **Visual fidelity** — the PDF must match the web preview (`/curriculum-vitae`), not an external Word template.
 2. **Smart caching** — do not regenerate on every request; invalidate automatically when CV content changes.

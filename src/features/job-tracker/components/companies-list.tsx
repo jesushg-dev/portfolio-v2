@@ -234,7 +234,7 @@ export const CompaniesList: FC<CompaniesListProps> = ({
   });
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="relative flex h-full min-h-0 flex-col overflow-auto">
       <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>

@@ -1,7 +1,7 @@
 {
   "adminCredentials": {
     "title": "Credenciales e Integraciones",
-    "subtitle": "Configura las llaves de API y opciones de integración independientes por usuario para Resend, Spotify, UploadThing y Modelos de IA.",
+    "subtitle": "Configura las llaves de API y opciones de integración independientes por usuario para Resend, Spotify, Google Calendar, UploadThing y Modelos de IA.",
     "providers": {
       "resend": {
         "name": "Resend (Correo)",
@@ -10,6 +10,10 @@
       "spotify": {
         "name": "Spotify (Audio)",
         "description": "Credenciales OAuth para el widget de reproducción actual."
+      },
+      "google-calendar": {
+        "name": "Google Calendar",
+        "description": "Sincroniza entrevistas y seguimientos del job tracker con tu Google Calendar."
       },
       "uploadthing": {
         "name": "UploadThing (Almacenamiento)",
@@ -37,6 +41,14 @@
       "missingParams": "Spotify no devolvió los datos de autorización esperados.",
       "noRefreshToken": "Spotify no devolvió un refresh token. Revoca el acceso en Spotify y reconecta.",
       "accessDenied": "Denegaste el acceso a Spotify."
+    },
+    "googleCalendarCallback": {
+      "connected": "Google Calendar conectado correctamente.",
+      "exchangeFailed": "No se pudo completar la autorización de Google Calendar. Inténtalo de nuevo.",
+      "invalidState": "La sesión de autorización expiró. Vuelve a iniciar desde esta página.",
+      "missingParams": "Google no devolvió los datos de autorización esperados.",
+      "noRefreshToken": "Google no devolvió un refresh token. Revoca el acceso en la cuenta de Google y reconecta.",
+      "accessDenied": "Denegaste el acceso a Google Calendar."
     },
     "summary": {
       "domain": "Dominio",
@@ -1642,6 +1654,46 @@
         "disconnectFailed": "No se pudo desconectar Spotify"
       }
     },
+    "googleCalendar": {
+      "title": "Google Calendar",
+      "subtitle": "Sincroniza eventos del job tracker con tu propio cliente OAuth de Google Calendar.",
+      "storagePolicy": "El secret de tu cliente OAuth de Google y el refresh token se cifran y guardan solo para tu cuenta — el mismo patrón que Spotify.",
+      "disconnectPolicy": "Al desconectar borramos tus tokens de Calendar. No elimina eventos ya creados en Google Calendar.",
+      "privacyNote": "Consulta nuestra <link>política de privacidad</link> para ver qué datos de calendario guardamos y por qué.",
+      "redirectUriLabel": "URI de redirección autorizada (añádela en Google Cloud Console)",
+      "redirectUriHint": "APIs y servicios → Credenciales → tu cliente OAuth → URIs de redirección autorizados",
+      "scopesTitle": "Permisos solicitados",
+      "scopes": {
+        "calendarEvents": "Crear, actualizar y eliminar eventos en tus calendarios"
+      },
+      "connect": {
+        "title": "Conecta tu app de Google Calendar",
+        "description": "Crea un cliente OAuth en tu proyecto de Google Cloud, habilita la API de Calendar y pega aquí el Client ID y el Secret.",
+        "byoNote": "Usa tus propias credenciales OAuth de Google Cloud — no la app de login del sitio. Habilita Google Calendar API en ese proyecto.",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "clientIdPlaceholder": "Pega tu Client ID",
+        "clientSecretPlaceholder": "Pega tu Client Secret",
+        "dashboardLink": "Abrir credenciales de Google Cloud",
+        "connect": "Conectar con Google",
+        "connecting": "Redirigiendo a Google…",
+        "validationError": "Ingresa un Client ID y Client Secret válidos de tu cliente OAuth de Google Cloud."
+      },
+      "status": {
+        "connected": "Conectado a Google Calendar",
+        "disconnected": "Sin conectar",
+        "refreshError": "No se pudo renovar tu conexión con Google Calendar",
+        "connectedAt": "Conectado el {date}",
+        "clientId": "Client ID: {id}",
+        "disconnect": "Desconectar Google Calendar",
+        "disconnecting": "Desconectando…",
+        "reconnect": "Reconectar Google Calendar"
+      },
+      "actions": {
+        "connectFailed": "No se pudo iniciar la autorización de Google Calendar",
+        "disconnectFailed": "No se pudo desconectar Google Calendar"
+      }
+    },
     "forms": {
       "saved": "Guardado.",
       "order": "Orden",
@@ -2900,6 +2952,8 @@
       "calendar": {
         "title": "Próximos Eventos",
         "description": "Entrevistas y pruebas programadas",
+        "googleSyncActive": "Sincronizado con Google Calendar",
+        "googleSyncError": "La sync de Google Calendar necesita reconectar",
         "add": "Agregar",
         "empty": "No tienes eventos programados",
         "expand": "Ver todos",
@@ -3033,8 +3087,12 @@
       },
       "coverLetter": {
         "title": "Carta de presentación",
+        "sectionTitle": "Carta de presentación",
+        "optionalHint": "Opcional — solo si la oferta la pide.",
         "openButton": "Carta",
-        "description": "La IA redacta una carta formal adaptada a esta oferta usando tu CV, el contexto de la empresa y tus notas. Edítala, cópiala o guárdala.",
+        "openOptional": "Añadir si hace falta",
+        "editButton": "Editar",
+        "description": "La IA redacta una carta formal adaptada a esta oferta usando tu CV, el contexto de la empresa y tus notas. Omítela si el empleador no la pide.",
         "draft": "Borrador con IA",
         "redraft": "Regenerar",
         "draftHint": "Genera un borrador de carta a partir de esta postulación — puedes editarlo todo antes de guardar.",

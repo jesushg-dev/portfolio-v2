@@ -6,8 +6,6 @@ import {
   encryptJsonSecret,
 } from "@/lib/crypto/secret-encryption";
 
-export type IntegrationProvider = "resend" | "spotify" | "uploadthing" | "ai";
-
 export interface ResendIntegrationConfig {
   apiKey: string;
   emailDomain: string;
@@ -34,6 +32,8 @@ export interface AiIntegrationConfig {
   geminiApiKey?: string;
   openaiApiKey?: string;
   anthropicApiKey?: string;
+  /** Optional; not exposed in the Credentials form yet. */
+  deepseekApiKey?: string;
   defaultProvider?: "gemini" | "openai" | "anthropic";
 }
 
@@ -44,8 +44,17 @@ export interface IntegrationConfigMap {
   ai: AiIntegrationConfig;
 }
 
+export type TenantIntegrationProvider = keyof IntegrationConfigMap;
+
+/** Catalog providers including OAuth-only integrations (e.g. Google Calendar). */
+export type IntegrationProvider =
+  | TenantIntegrationProvider
+  | "google-calendar";
+
 /** Reads and decrypts a tenant's integration configuration for a specific provider. */
-export async function getTenantIntegrationConfig<P extends IntegrationProvider>(
+export async function getTenantIntegrationConfig<
+  P extends TenantIntegrationProvider,
+>(
   userId: string,
   provider: P,
 ): Promise<IntegrationConfigMap[P] | null> {
@@ -67,7 +76,7 @@ export async function getTenantIntegrationConfig<P extends IntegrationProvider>(
 
 /** Saves and encrypts a tenant's integration configuration for a provider. */
 export async function saveTenantIntegrationConfig<
-  P extends IntegrationProvider,
+  P extends TenantIntegrationProvider,
 >(
   userId: string,
   provider: P,
@@ -103,7 +112,7 @@ export async function saveTenantIntegrationConfig<
 /** Updates errors or metadata for a tenant integration. */
 export async function updateTenantIntegrationStatus(
   userId: string,
-  provider: IntegrationProvider,
+  provider: TenantIntegrationProvider,
   status: { lastError?: string | null; lastSyncedAt?: Date },
 ): Promise<void> {
   await db.tenantIntegration.update({
@@ -125,7 +134,7 @@ export async function updateTenantIntegrationStatus(
 /** Deletes/disables a tenant integration. */
 export async function deleteTenantIntegration(
   userId: string,
-  provider: IntegrationProvider,
+  provider: TenantIntegrationProvider,
 ): Promise<void> {
   await db.tenantIntegration.deleteMany({
     where: {

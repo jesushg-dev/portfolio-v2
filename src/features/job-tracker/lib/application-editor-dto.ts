@@ -36,6 +36,8 @@ export interface ApplicationListRowDTO extends ApplicationEditorDTO {
 
 export interface ApplicationDetailDTO extends ApplicationListRowDTO {
   events: ApplicationEvent[];
+  coverLetterSubject: string;
+  coverLetterBody: string;
 }
 
 type ApplicationWithCompany = Application & {
@@ -104,6 +106,8 @@ export function mapApplicationToDetailDto(
   return {
     ...mapApplicationToListDto(application),
     events: application.events,
+    coverLetterSubject: application.coverLetterSubject ?? "",
+    coverLetterBody: application.coverLetterBody ?? "",
   };
 }
 

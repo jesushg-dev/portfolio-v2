@@ -7,15 +7,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import { INTEGRATION_CATALOG } from "../lib/integration-catalog";
 import { AvailableIntegrationCard } from "./available-integration-card";
+import { GoogleCalendarIntegrationCard } from "./google-calendar-integration-card";
 import { IntegrationCard } from "./integration-card";
 import { SpotifyIntegrationCard } from "./spotify-integration-card";
 
+type CatalogId = (typeof INTEGRATION_CATALOG)[number]["id"];
+type Configs = RouterOutputs["integrationsAdmin"]["getConfigs"];
+
 function isProviderConnected(
-  provider: (typeof INTEGRATION_CATALOG)[number]["id"],
-  configs: RouterOutputs["integrationsAdmin"]["getConfigs"],
+  provider: CatalogId,
+  configs: Configs,
   isSpotifyConnected: boolean,
+  isGoogleCalendarConnected: boolean,
 ): boolean {
   if (provider === "spotify") return isSpotifyConnected;
+  if (provider === "google-calendar") return isGoogleCalendarConnected;
   return configs[provider].isConfigured;
 }
 
@@ -24,8 +30,10 @@ export function IntegrationsPage() {
   const { data: configs, isLoading } =
     api.integrationsAdmin.getConfigs.useQuery();
   const spotifyStatus = api.spotifyAdmin.getConnectionStatus.useQuery();
+  const gcalStatus = api.googleCalendarAdmin.getConnectionStatus.useQuery();
 
-  const isLoadingAll = isLoading || spotifyStatus.isLoading;
+  const isLoadingAll =
+    isLoading || spotifyStatus.isLoading || gcalStatus.isLoading;
 
   if (isLoadingAll || !configs) {
     return (
@@ -45,13 +53,26 @@ export function IntegrationsPage() {
 
   const isSpotifyConnected =
     spotifyStatus.data != null && spotifyStatus.data.status !== "disconnected";
+  const isGoogleCalendarConnected =
+    gcalStatus.data != null && gcalStatus.data.status !== "disconnected";
 
   const connectedCatalog = INTEGRATION_CATALOG.filter((item) =>
-    isProviderConnected(item.id, configs, isSpotifyConnected),
+    isProviderConnected(
+      item.id,
+      configs,
+      isSpotifyConnected,
+      isGoogleCalendarConnected,
+    ),
   );
 
   const availableCatalog = INTEGRATION_CATALOG.filter(
-    (item) => !isProviderConnected(item.id, configs, isSpotifyConnected),
+    (item) =>
+      !isProviderConnected(
+        item.id,
+        configs,
+        isSpotifyConnected,
+        isGoogleCalendarConnected,
+      ),
   );
 
   return (
@@ -69,17 +90,31 @@ export function IntegrationsPage() {
             {t("connected.title")}
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
-            {connectedCatalog.map((catalogItem) =>
-              catalogItem.id === "spotify" ? (
-                <SpotifyIntegrationCard key={catalogItem.id} />
-              ) : (
-                <IntegrationCard
-                  key={catalogItem.id}
-                  catalogItem={catalogItem}
-                  configs={configs}
-                />
-              ),
-            )}
+            {connectedCatalog.map((catalogItem) => {
+              if (catalogItem.id === "spotify") {
+                return <SpotifyIntegrationCard key={catalogItem.id} />;
+              }
+              if (catalogItem.id === "google-calendar") {
+                return <GoogleCalendarIntegrationCard key={catalogItem.id} />;
+              }
+              if (
+                catalogItem.id === "resend" ||
+                catalogItem.id === "uploadthing" ||
+                catalogItem.id === "ai"
+              ) {
+                return (
+                  <IntegrationCard
+                    key={catalogItem.id}
+                    catalogItem={{
+                      id: catalogItem.id,
+                      icon: catalogItem.icon,
+                    }}
+                    configs={configs}
+                  />
+                );
+              }
+              return null;
+            })}
           </div>
         </section>
       ) : (

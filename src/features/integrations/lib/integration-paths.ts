@@ -6,6 +6,7 @@ export const INTEGRATION_PROVIDERS = [
   "spotify",
   "uploadthing",
   "ai",
+  "google-calendar",
 ] as const satisfies readonly IntegrationProvider[];
 
 export function isIntegrationProvider(
