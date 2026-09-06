@@ -171,10 +171,11 @@ export const auth = betterAuth({
       const to = data.user?.email;
       if (!to) return;
 
-      // Keep logs available for local debugging.
-      console.log("[better-auth][reset-password] email:", to);
-      console.log("[better-auth][reset-password] token:", data.token);
-      console.log("[better-auth][reset-password] url:", data.url);
+      if (!IS_PRODUCTION) {
+        console.log("[better-auth][reset-password] email:", to);
+        console.log("[better-auth][reset-password] token:", data.token);
+        console.log("[better-auth][reset-password] url:", data.url);
+      }
 
       const emailClient = getSystemEmailClient();
 

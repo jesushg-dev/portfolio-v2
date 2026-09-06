@@ -1,26 +1,17 @@
 import "server-only";
 
-import { createHash } from "node:crypto";
-
 import { TRPCError } from "@trpc/server";
 import type { PrismaClient } from "@prisma/client";
 
+import {
+  getClientIpFromHeaders,
+  hashClientIp,
+} from "@/lib/http/client-ip";
+
+export { getClientIpFromHeaders, hashClientIp };
+
 const IP_HOURLY_LIMIT = 3;
 const RECIPIENT_DAILY_LIMIT = 5;
-
-export function hashClientIp(ip: string): string {
-  return createHash("sha256").update(ip).digest("hex").slice(0, 32);
-}
-
-export function getClientIpFromHeaders(headers: Headers): string {
-  const forwarded = headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = forwarded.split(",")[0]?.trim();
-    if (first) return first;
-  }
-
-  return headers.get("x-real-ip")?.trim() ?? "unknown";
-}
 
 export async function assertCvEmailRateLimit(
   db: PrismaClient,

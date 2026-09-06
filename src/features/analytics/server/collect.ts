@@ -11,7 +11,13 @@ import {
   utcDay,
 } from "@/features/analytics/lib/utc-day";
 import { auth } from "@/lib/auth";
-import { resolveTenant } from "@/lib/tenant/resolve";
+import { getClientIpFromHeaders, hashClientIp } from "@/lib/http/client-ip";
+import { consumeFixedWindowLimit } from "@/lib/rate-limit/consume-fixed-window";
+import {
+  getPrimaryDomain,
+  requestHostFromHeaders,
+} from "@/lib/tenant/parse-host";
+import { resolveTenantIdentity } from "@/lib/tenant/resolve-identity";
 import { db } from "@/server/db";
 
 export const collectPayloadSchema = z.object({
@@ -89,11 +95,31 @@ export async function handleAnalyticsCollect(
     if (!parsed.success) return emptyResponse();
 
     const headers = request.headers;
-    const tenant = await resolveTenant();
-    if (!tenant) return emptyResponse();
+    const identity = resolveTenantIdentity({
+      host: requestHostFromHeaders(headers),
+      primaryDomain: getPrimaryDomain(),
+    });
+
+    const profile =
+      identity.type === "slug"
+        ? await db.profile.findUnique({ where: { username: identity.slug } })
+        : await db.profile.findFirst({ where: { isPrimary: true } });
+    if (!profile) return emptyResponse();
+
+    const ipHash = hashClientIp(getClientIpFromHeaders(headers));
+    try {
+      const allowed = await consumeFixedWindowLimit(db, {
+        key: `analytics-collect:${ipHash}`,
+        windowMs: 60_000,
+        max: 60,
+      });
+      if (!allowed) return emptyResponse();
+    } catch {
+      // Fail open: a RateLimit write error must not drop legitimate pageviews.
+    }
 
     const session = await auth.api.getSession({ headers });
-    const isOwner = session?.user?.id === tenant.userId;
+    const isOwner = session?.user?.id === profile.userId;
     const analyticsPath = toAnalyticsPath(parsed.data.path);
 
     if (
@@ -112,7 +138,7 @@ export async function handleAnalyticsCollect(
       headers.get("x-forwarded-host") ?? headers.get("host") ?? undefined;
 
     await incrementDailyStat({
-      userId: tenant.userId,
+      userId: profile.userId,
       date: utcDay(),
       path: analyticsPath,
       country: normalizeCountryCode(headers.get("x-vercel-ip-country")),
@@ -120,7 +146,7 @@ export async function handleAnalyticsCollect(
       isNewVisit: parsed.data.isNewVisit,
     });
 
-    void maybePruneOldStats(tenant.userId);
+    void maybePruneOldStats(profile.userId);
 
     return emptyResponse();
   } catch {

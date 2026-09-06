@@ -41,6 +41,17 @@ Rollback: `db.Account.updateMany({}, { $unset: { issuer: "" } })` and drop the
 Login, passkey and two-factor endpoints are rate limited with database storage
 (`RateLimit` collection) so limits are shared across serverless instances.
 
+App routes that are not Better Auth also use the same collection with an `app:`
+key prefix (`src/lib/rate-limit/consume-fixed-window.ts`): contact form and
+analytics collect. See [`security.md`](./security.md).
+
+Password-reset tokens and 2FA OTP codes are written to stdout **only when
+`NODE_ENV !== production`**.
+
+Tenant identity on API routes is the request **Host**, not a client
+`x-tenant-username` header. PDF generation may send that header with an HMAC
+proof; details in [`security.md`](./security.md) and [`cv-pdf.md`](./cv-pdf.md).
+
 ## Breached-password check
 
 In production, sign-up and password reset reject passwords found in the
