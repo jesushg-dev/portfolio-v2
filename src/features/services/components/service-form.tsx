@@ -14,6 +14,7 @@ import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -76,6 +77,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         icon: z.string().default("code"),
         statsValue: z.string().default(""),
         featured: z.boolean().default(false),
+        isActive: z.boolean().default(true),
         order: z.number().default(0),
         skillIds: z.array(z.string()).default([]),
         translations: translationMapSchema(
@@ -310,6 +312,28 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="pt-2">
+              <FormField
+                control={form.control}
+                name="isActive"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("isActive")}
+                    description={t("isActiveHint")}
+                    inputId="service-active"
+                  >
+                    <div className="flex h-10 items-center">
+                      <Switch
+                        id="service-active"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
                   </FormItem>
                 )}
               />

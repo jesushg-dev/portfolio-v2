@@ -618,7 +618,7 @@ export const portfolioRouter = createTRPCRouter({
       });
 
       const services = await ctx.db.service.findMany({
-        where: { userId: tenantUserId },
+        where: { userId: tenantUserId, isActive: true },
         include: {
           ServiceTranslation: {
             where: { appLanguageId: appLanguage?.id },

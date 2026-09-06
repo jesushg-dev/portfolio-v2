@@ -23,6 +23,7 @@ export interface ServiceEditorDTO {
   icon: string;
   statsValue: string;
   featured: boolean;
+  isActive: boolean;
   order: number;
   skillIds: string[];
   translations: ServiceTranslationMap;
@@ -62,6 +63,7 @@ export function mapServiceToEditorDto(
     icon: service.icon ?? "code",
     statsValue: service.statsValue ?? "",
     featured: service.featured ?? false,
+    isActive: service.isActive ?? true,
     order: service.order ?? 0,
     skillIds: service.ServiceSkill?.map((entry) => entry.skillId) ?? [],
     translations: mergeTranslationMap(
@@ -88,6 +90,7 @@ export function buildEmptyServiceCreateDto(
     icon: "code",
     statsValue: "",
     featured: false,
+    isActive: true,
     order: 0,
     skillIds: [],
     translations: buildEmptyTranslationMap(
