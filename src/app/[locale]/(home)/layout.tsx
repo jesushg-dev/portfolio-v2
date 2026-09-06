@@ -9,15 +9,19 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 export { generateMetadata } from "./metadata";
 
 import Layout from "@/components/app-layout";
+import { PageViewBeacon } from "@/features/analytics/components/page-view-beacon";
 import { PublicCvVisibleProvider } from "@/components/app-layout/public-cv-visible";
+import { ProcessNavPagesProvider } from "@/components/app-layout/process-nav-pages";
 import LcpImagePreload from "@/components/shared/lcp-image-preload";
 import DeferredTrpcProvider from "@/components/providers/deferred-trpc-provider";
 import { getHeroLcpImageUrl } from "@/features/home/components/hero-lcp-image";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
-import type { Locale as AppLocale } from "@/i18n/config";
+import { getCachedSiteBrand } from "@/lib/site-brand/get-cached-site-brand";
+import { locales, type Locale as AppLocale } from "@/i18n/config";
 import { CV_PDF_MODE_HEADER } from "@/lib/tenant/headers";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { resolveTenant } from "@/lib/tenant/resolve";
+import { api } from "@/trpc/server";
 
 export const revalidate = 60;
 
@@ -41,11 +45,18 @@ export default async function SiteLayout({
     return children;
   }
 
-  const heroData = await getCachedHeroPublic(locale as AppLocale);
+  const activeLocale = locales.includes(locale as AppLocale)
+    ? (locale as AppLocale)
+    : "en";
+  const heroData = await getCachedHeroPublic(activeLocale);
   const lcpPhotoUrl = heroData?.photoUrl?.trim()
     ? getHeroLcpImageUrl(heroData.photoUrl.trim())
     : null;
   const cvPublic = isPublicCvVisible(await resolveTenant());
+  const siteBrand = await getCachedSiteBrand();
+  const processNavPages = await api.processPages.listForNav({
+    locale: activeLocale,
+  });
 
   const allMessages = await getMessages();
   const publicMessages = {
@@ -63,7 +74,16 @@ export default async function SiteLayout({
         <NuqsAdapter>
           {lcpPhotoUrl ? <LcpImagePreload href={lcpPhotoUrl} /> : null}
           <PublicCvVisibleProvider visible={cvPublic}>
-            <Layout cvPublic={cvPublic}>{children}</Layout>
+            <ProcessNavPagesProvider pages={processNavPages}>
+              <Layout
+                cvPublic={cvPublic}
+                processNavPages={processNavPages}
+                siteBrand={siteBrand}
+              >
+                <PageViewBeacon />
+                {children}
+              </Layout>
+            </ProcessNavPagesProvider>
           </PublicCvVisibleProvider>
           {modal}
         </NuqsAdapter>

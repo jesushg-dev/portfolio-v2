@@ -61,6 +61,7 @@ jest.mock("@/trpc/react", () => ({
                 },
                 icon: "Code",
                 order: 1,
+                isActive: true,
                 skillIds: ["sk1"],
               },
             ],

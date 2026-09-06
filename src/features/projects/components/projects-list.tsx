@@ -15,6 +15,7 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { useQueryState, parseAsInteger } from "nuqs";
@@ -238,14 +239,17 @@ export const ProjectsList: FC<ProjectsListProps> = ({
       <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
-          <Link
-            id="projects-add"
-            href="/admin/projects/new"
-            className={buttonVariants()}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            {t("addNew")}
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <ExportSeedJsonButton entity="projects" />
+            <Link
+              id="projects-add"
+              href="/admin/projects/new"
+              className={buttonVariants()}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              {t("addNew")}
+            </Link>
+          </div>
         </DataTableToolbar>
       </DataTable>
     </div>
