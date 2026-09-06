@@ -47,7 +47,7 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         ariaLabel={t("tabsAriaLabel")}
-        className="bg-muted/50 border-border z-20 inline-flex w-full max-w-full shrink-0 items-center justify-center gap-1 overflow-x-auto overflow-y-hidden rounded-2xl border p-1"
+        className="bg-muted/50 border-border z-20 inline-flex w-full max-w-full shrink-0 items-center justify-center gap-1 rounded-2xl border p-1"
       >
         {tabs.map((tab) => (
           <TabItem

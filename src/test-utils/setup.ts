@@ -17,7 +17,9 @@ const mockMotionPropKeys = new Set([
   "custom",
   "drag",
   "dragConstraints",
+  "dragControls",
   "dragElastic",
+  "dragListener",
   "dragMomentum",
   "exit",
   "initial",
@@ -171,9 +173,21 @@ jest.mock("motion/react", () => {
     AnimatePresence: ({ children }: PropsWithChildren) =>
       createElement("div", null, children),
     useMotionValue,
+    useMotionTemplate: (strings: TemplateStringsArray, ...values: unknown[]) =>
+      strings.reduce((result, part, index) => {
+        const value = values[index];
+        const rendered =
+          value && typeof value === "object" && "get" in value
+            ? (value as { get: () => unknown }).get()
+            : (value ?? "");
+        return `${result}${part}${String(rendered)}`;
+      }, ""),
     useSpring: (v: unknown) => v,
     useTransform: (v: unknown) => v,
     useReducedMotion: () => false,
+    useDragControls: () => ({
+      start: jest.fn(),
+    }),
     animate: jest.fn(
       (value: { set: (next: number) => void }, target: number) => {
         value.set(target);
