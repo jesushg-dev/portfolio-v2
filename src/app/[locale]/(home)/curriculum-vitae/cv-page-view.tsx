@@ -7,6 +7,7 @@ import CvAtsPreview from "@/components/curriculum-vitae/cv-ats-preview";
 import CvPageActions from "@/features/cv/components/cv-page-actions";
 import { cvPreviewFont } from "@/features/cv/lib/cv-preview-font";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
+import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-preview-text";
 import { canDeliverPortfolioCvEmail } from "@/lib/email/resend";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import { resolveTenant } from "@/lib/tenant/resolve";
@@ -135,9 +136,10 @@ const CvPageView: FC<CvPageViewProps> = async ({
   const appLanguageRefs = appLanguages.map(({ id, code }) => ({ id, code }));
 
   const field = createLocalizedFieldResolver(appLanguages, currentLocale);
-  const aboutMeText =
-    field(header?.translations, "heroSummary") ||
-    (aboutMe ? field(aboutMe.translations, "aboutMe") : null);
+  const aboutMeText = resolveCvAboutPreviewText(
+    field(header?.translations, "heroSummary"),
+    aboutMe ? field(aboutMe.translations, "aboutMe") : null,
+  );
   const downloadFileName = `CV - ${header?.fullName ?? profile?.username ?? "user"}.pdf`;
   const paginateQuery = paginatePdfPages ? "&paginate=1" : "";
   const designQuery = design !== DEFAULT_CV_DESIGN ? `&design=${design}` : "";

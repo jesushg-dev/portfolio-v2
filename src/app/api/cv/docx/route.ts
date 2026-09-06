@@ -5,6 +5,7 @@ import { resolveTenant } from "@/lib/tenant/resolve";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { db } from "@/server/db";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
+import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-preview-text";
 import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import { mapLocalizedCvToDraft } from "@/features/cv/lib/map-localized-to-draft";
@@ -130,9 +131,10 @@ export async function GET(request: Request) {
       locale,
     );
 
-    const aboutMeText =
-      field(header.translations, "heroSummary") ||
-      (aboutMe ? field(aboutMe.translations, "aboutMe") : null);
+    const aboutMeText = resolveCvAboutPreviewText(
+      field(header.translations, "heroSummary"),
+      aboutMe ? field(aboutMe.translations, "aboutMe") : null,
+    );
 
     const draft = mapLocalizedCvToDraft(localizedData, aboutMeText, locale);
     const buffer = await generateDocxFromStructured(draft);

@@ -12,6 +12,7 @@ import type { TextTranslationMap } from "@/lib/i18n/translation-map";
 import { resolveCvPdfAsset } from "@/features/cv/lib/resolve-cv-pdf-asset";
 import { normalizeEmploymentDates } from "@/utils/tools/date";
 import { geocodePlace } from "@/lib/geo/geocode-place";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 
 type CvDbClient = Pick<PrismaClient, "appLanguage">;
 
@@ -300,7 +301,7 @@ export const cvRouter = createTRPCRouter({
    * Used by the public CV page renderer.
    */
   getPublic: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.tenant) return null;
+    if (!ctx.tenant || !isPublicCvVisible(ctx.tenant)) return null;
     return getFullCvForUser(ctx, ctx.tenant.userId);
   }),
 
@@ -1086,6 +1087,103 @@ export const cvRouter = createTRPCRouter({
       return ctx.db.cvAdditionalInfo.delete({ where: { id: input.id } });
     }),
 
+  // ---------- Personal references ----------
+  createPersonalReference: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        contact: z.string().nullable().optional(),
+        role: CvTextTranslationMapSchema,
+        order: z.number().int().nonnegative().default(0),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { role, contact, ...rest } = input;
+      const languages = await getAppLanguages(ctx.db);
+
+      return ctx.db.cvPersonalReference.create({
+        data: {
+          ...rest,
+          contact: contact?.trim() ? contact.trim() : null,
+          userId: ctx.user.id,
+          translations: {
+            create: languages.map((lang) => ({
+              appLanguageId: lang.id,
+              role: role[lang.id]?.text ?? "",
+            })),
+          },
+        },
+        include: { translations: true },
+      });
+    }),
+  updatePersonalReference: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(1),
+        contact: z.string().nullable().optional(),
+        role: CvTextTranslationMapSchema,
+        order: z.number().int().nonnegative().default(0),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, role, contact, ...rest } = input;
+      const existing = await ctx.db.cvPersonalReference.findUnique({
+        where: { id },
+      });
+      if (existing?.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const languages = await getAppLanguages(ctx.db);
+      await ctx.db.cvPersonalReference.update({
+        where: { id },
+        data: {
+          ...rest,
+          contact: contact?.trim() ? contact.trim() : null,
+        },
+      });
+
+      for (const lang of languages) {
+        const roleText = role[lang.id]?.text ?? "";
+        const existingTranslation =
+          await ctx.db.cvPersonalReferenceTranslation.findFirst({
+            where: { cvPersonalReferenceId: id, appLanguageId: lang.id },
+          });
+
+        if (existingTranslation) {
+          await ctx.db.cvPersonalReferenceTranslation.update({
+            where: { id: existingTranslation.id },
+            data: { role: roleText },
+          });
+        } else {
+          await ctx.db.cvPersonalReferenceTranslation.create({
+            data: {
+              cvPersonalReferenceId: id,
+              appLanguageId: lang.id,
+              role: roleText,
+            },
+          });
+        }
+      }
+
+      return ctx.db.cvPersonalReference.findUniqueOrThrow({
+        where: { id },
+        include: { translations: true },
+      });
+    }),
+  deletePersonalReference: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.cvPersonalReference.findUnique({
+        where: { id: input.id },
+      });
+      if (existing?.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+      return ctx.db.cvPersonalReference.delete({ where: { id: input.id } });
+    }),
+
   // ---------- Profile / settings ----------
   upsertProfile: protectedProcedure
     .input(
@@ -1096,9 +1194,10 @@ export const cvRouter = createTRPCRouter({
           .max(40)
           .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and dashes"),
         displayName: z.string().min(1).optional(),
+        logoInitials: z.string().max(8).optional(),
+        logoImageUrl: z.string().url().or(z.literal("")).optional(),
         defaultLocale: z.enum(["en", "es", "nl"]),
         isPublished: z.boolean().default(false),
-        cvPdfUrl: z.string().url().nullable().optional(),
         mapLocationLabel: z.string().max(160).optional(),
       }),
     )
@@ -1129,6 +1228,23 @@ export const cvRouter = createTRPCRouter({
         mapLongitude: geocoded?.lon ?? null,
       };
 
+      const logoFields = {
+        ...(input.logoInitials !== undefined
+          ? {
+              logoInitials: input.logoInitials.trim()
+                ? input.logoInitials.trim()
+                : null,
+            }
+          : {}),
+        ...(input.logoImageUrl !== undefined
+          ? {
+              logoImageUrl: input.logoImageUrl.trim()
+                ? input.logoImageUrl.trim()
+                : null,
+            }
+          : {}),
+      };
+
       // Omit customDomain on create so MongoDB does not store an explicit null
       // under a legacy unique index (only one null was allowed).
       return ctx.db.profile.upsert({
@@ -1137,18 +1253,18 @@ export const cvRouter = createTRPCRouter({
           userId: ctx.user.id,
           username: input.username,
           displayName: input.displayName,
+          ...logoFields,
           defaultLocale: input.defaultLocale,
           isPublished: input.isPublished,
           ...mapFields,
-          ...(input.cvPdfUrl !== undefined ? { cvPdfUrl: input.cvPdfUrl } : {}),
         },
         update: {
           username: input.username,
           displayName: input.displayName,
+          ...logoFields,
           defaultLocale: input.defaultLocale,
           isPublished: input.isPublished,
           ...mapFields,
-          ...(input.cvPdfUrl !== undefined ? { cvPdfUrl: input.cvPdfUrl } : {}),
         },
       });
     }),
@@ -1390,6 +1506,22 @@ export const cvRouter = createTRPCRouter({
       await ctx.db.$transaction(
         input.map((item) =>
           ctx.db.cvAdditionalInfo.update({
+            where: { id: item.id, userId: ctx.user.id },
+            data: { order: item.order },
+          }),
+        ),
+      );
+    }),
+  reorderPersonalReferences: protectedProcedure
+    .input(
+      z.array(
+        z.object({ id: z.string(), order: z.number().int().nonnegative() }),
+      ),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.$transaction(
+        input.map((item) =>
+          ctx.db.cvPersonalReference.update({
             where: { id: item.id, userId: ctx.user.id },
             data: { order: item.order },
           }),

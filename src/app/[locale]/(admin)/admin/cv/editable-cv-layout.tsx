@@ -25,6 +25,7 @@ import TechnicalSkills from "@/components/curriculum-vitae/technical-skills";
 import Experience from "@/components/curriculum-vitae/experiences";
 import SoftSkills from "@/components/curriculum-vitae/soft-skills";
 import AdditionalInformation from "@/components/curriculum-vitae/additional-information";
+import PersonalReferences from "@/components/curriculum-vitae/personal-references";
 
 // Form Components
 import AboutForm from "@/features/cv/components/about-form";
@@ -36,6 +37,7 @@ import LanguagesList from "@/features/cv/components/languages-list";
 import SkillsList from "@/features/cv/components/skills-list";
 import AdditionalList from "@/features/cv/components/additional-list";
 import SoftSkillsList from "@/features/cv/components/soft-skills-list";
+import PersonalReferencesList from "@/features/cv/components/personal-references-list";
 
 import type { CvData } from "@/components/curriculum-vitae/types";
 
@@ -50,7 +52,8 @@ type SectionType =
   | "about"
   | "experience"
   | "soft-skills"
-  | "additional";
+  | "additional"
+  | "personal-references";
 
 type CvTranslator = ReturnType<typeof useTranslations<"admin.cv">>;
 
@@ -114,8 +117,12 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
         return t("sections.personalSkills");
       case "additional":
         return t("sections.additionalInformation");
-      default:
-        return "";
+      case "personal-references":
+        return t("sections.personalReferences");
+      default: {
+        const _exhaustive: never = section;
+        return _exhaustive;
+      }
     }
   };
 
@@ -240,6 +247,19 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
                 additionalInformation={localizedData.additionalInformation}
               />
             </EditableSection>
+
+            <EditableSection
+              id="personal-references"
+              title={t("sections.personalReferences")}
+              onClick={() => setActiveSection("personal-references")}
+              isEmpty={data.personalReferences.length === 0}
+              t={t}
+              canHoverEdit={canHoverEdit}
+            >
+              <PersonalReferences
+                personalReferences={localizedData.personalReferences}
+              />
+            </EditableSection>
           </div>
         </div>
       </CvContextProvider>
@@ -288,6 +308,12 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
           )}
           {activeSection === "additional" && (
             <AdditionalList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "personal-references" && (
+            <PersonalReferencesList
               languages={languages}
               displayLocale={currentLocale}
             />

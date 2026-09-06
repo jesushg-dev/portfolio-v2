@@ -4,6 +4,7 @@ import type { Locale } from "@/i18n/config";
 import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { appendPortfolioWebsiteContact } from "@/lib/cv/append-portfolio-website-contact";
+import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-preview-text";
 
 function formatExperienceDate(date: Date | null): string {
   if (!date) return "";
@@ -151,9 +152,10 @@ export async function loadCvPreviewSnapshot(
   const field = createLocalizedFieldResolver(appLanguages, locale);
   const headerT = field.for(header.translations);
 
-  const aboutMeText =
-    headerT("heroSummary") ||
-    (aboutMe ? field(aboutMe.translations, "aboutMe") : null);
+  const aboutMeText = resolveCvAboutPreviewText(
+    headerT("heroSummary"),
+    aboutMe ? field(aboutMe.translations, "aboutMe") : null,
+  );
 
   return {
     header: {
