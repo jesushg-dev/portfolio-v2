@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import {
   useCallback,
   useMemo,
@@ -279,7 +279,7 @@ export function UsesWorkspaceTagEditor({
       >
         {item.image ? (
           <span className="relative size-8 shrink-0 overflow-hidden rounded-md">
-            <Image
+            <MediaImage
               src={item.image}
               alt=""
               fill
@@ -305,7 +305,7 @@ export function UsesWorkspaceTagEditor({
           className="relative aspect-video w-full cursor-crosshair overflow-hidden rounded-xl"
         >
           <div className="pointer-events-none absolute inset-0">
-            <Image
+            <MediaImage
               src={imageSrc.trim()}
               alt=""
               fill

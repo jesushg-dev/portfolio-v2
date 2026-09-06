@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 
 import type { SiteBrand } from "@/lib/site-brand/site-brand";
 import { cn } from "@/lib/utils";
@@ -18,12 +18,11 @@ const SiteBrandMark: FC<SiteBrandMarkProps> = ({
 }) => {
   if (brand.mode === "image") {
     return (
-      <Image
+      <MediaImage
         src={brand.imageUrl}
         alt=""
         width={112}
         height={32}
-        unoptimized
         className={cn("h-7 w-auto max-w-28 object-contain", className)}
       />
     );

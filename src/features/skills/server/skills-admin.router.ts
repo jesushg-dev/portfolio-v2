@@ -16,6 +16,7 @@ import {
   mapSkillsToEditorDto,
 } from "@/features/skills/lib/skill-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
+import { isAbsoluteOrLocalImagePath } from "@/utils/tools/image";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 import type { Prisma, StackType } from "@prisma/client";
 
@@ -29,7 +30,7 @@ const SkillTranslationMapSchema = z.record(
 
 const skillUpsertInput = z.object({
   title: z.string().min(1),
-  image: z.string().min(1),
+  image: z.string().min(1).refine(isAbsoluteOrLocalImagePath),
   type: StackTypeSchema,
   featured: z.boolean().default(false),
   translations: SkillTranslationMapSchema.default({}),

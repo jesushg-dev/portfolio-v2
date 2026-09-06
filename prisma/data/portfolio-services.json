@@ -6,7 +6,7 @@
     "statsValue": "100+",
     "featured": true,
     "order": 1,
-    "image": "frontend",
+    "image": "",
     "translations": [
       {
         "locale": "es",
@@ -38,7 +38,7 @@
     "statsValue": "99.9%",
     "featured": false,
     "order": 2,
-    "image": "backend",
+    "image": "",
     "translations": [
       {
         "locale": "es",
@@ -70,7 +70,7 @@
     "statsValue": "Cross-Platform",
     "featured": false,
     "order": 3,
-    "image": "mobile",
+    "image": "",
     "translations": [
       {
         "locale": "es",
@@ -102,7 +102,7 @@
     "statsValue": "Docker & CI/CD",
     "featured": false,
     "order": 4,
-    "image": "sysadmin",
+    "image": "",
     "translations": [
       {
         "locale": "es",
@@ -134,7 +134,7 @@
     "statsValue": "OWASP & Snyk",
     "featured": false,
     "order": 5,
-    "image": "cybersecurity",
+    "image": "",
     "translations": [
       {
         "locale": "es",

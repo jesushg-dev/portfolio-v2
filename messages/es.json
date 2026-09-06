@@ -1960,6 +1960,7 @@
         "updateFailed": "No se pudo actualizar el proyecto",
         "createFailed": "No se pudo crear el proyecto",
         "imageRequired": "La imagen es obligatoria",
+        "imageUrlInvalid": "Introduce una URL de imagen o una ruta local válida",
         "titleRequiredPrimary": "El título es obligatorio en el idioma principal",
         "atLeastOneLanguage": "Se requiere al menos un idioma"
       },
@@ -2337,6 +2338,7 @@
         "createFailed": "No se pudo crear la habilidad",
         "titleRequired": "El título es obligatorio",
         "imageRequired": "La URL de imagen es obligatoria",
+        "imageUrlInvalid": "Introduce una URL de imagen o una ruta local válida",
         "featuredLabel": "Destacada en el stack",
         "featuredDescription": "Las skills destacadas se ven más brillantes en el terminal de inicio y resaltan tu stack principal."
       },

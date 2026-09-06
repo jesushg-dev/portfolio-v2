@@ -1960,6 +1960,7 @@
         "updateFailed": "Project bijwerken mislukt",
         "createFailed": "Project aanmaken mislukt",
         "imageRequired": "Afbeelding is verplicht",
+        "imageUrlInvalid": "Voer een geldige afbeelding-URL of lokaal pad in",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
         "atLeastOneLanguage": "Minstens één taal is verplicht"
       },
@@ -2337,6 +2338,7 @@
         "createFailed": "Vaardigheid aanmaken mislukt",
         "titleRequired": "Titel is verplicht",
         "imageRequired": "Afbeelding-URL is verplicht",
+        "imageUrlInvalid": "Voer een geldige afbeelding-URL of lokaal pad in",
         "featuredLabel": "Uitgelicht in stack",
         "featuredDescription": "Uitgelichte skills zijn helderder in de home-terminal en benadrukken je primaire stack."
       },

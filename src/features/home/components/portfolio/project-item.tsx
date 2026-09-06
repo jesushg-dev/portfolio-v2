@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, type FC } from "react";
-import Image from "next/image";
 import { AiFillGithub, AiFillEye } from "react-icons/ai";
 import { FolderCode, Zap } from "lucide-react";
 // import { ArrowUpRight } from "lucide-react";
 // import { Link } from "@/i18n/routing";
 
-import { cloudinaryLoader } from "@/utils/tools/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { type ProjectType } from "@/utils/interfaces/types";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
 
@@ -62,9 +61,8 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
           </div>
         ) : (
           <>
-            <Image
+            <MediaImage
               src={image}
-              loader={cloudinaryLoader}
               alt={title}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"

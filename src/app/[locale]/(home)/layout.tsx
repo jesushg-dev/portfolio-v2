@@ -14,7 +14,6 @@ import { PublicCvVisibleProvider } from "@/components/app-layout/public-cv-visib
 import { ProcessNavPagesProvider } from "@/components/app-layout/process-nav-pages";
 import LcpImagePreload from "@/components/shared/lcp-image-preload";
 import DeferredTrpcProvider from "@/components/providers/deferred-trpc-provider";
-import { getHeroLcpImageUrl } from "@/features/home/components/hero-lcp-image";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import { getCachedSiteBrand } from "@/lib/site-brand/get-cached-site-brand";
 import { locales, type Locale as AppLocale } from "@/i18n/config";
@@ -49,9 +48,7 @@ export default async function SiteLayout({
     ? (locale as AppLocale)
     : "en";
   const heroData = await getCachedHeroPublic(activeLocale);
-  const lcpPhotoUrl = heroData?.photoUrl?.trim()
-    ? getHeroLcpImageUrl(heroData.photoUrl.trim())
-    : null;
+  const lcpPhotoUrl = heroData?.photoUrl?.trim() || null;
   const cvPublic = isPublicCvVisible(await resolveTenant());
   const siteBrand = await getCachedSiteBrand();
   const processNavPages = await api.processPages.listForNav({

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
@@ -51,7 +51,7 @@ export function UsesWorkspace({
           transition={{ duration: 0.45, ease: [0.16, 0.8, 0.3, 1] }}
         >
           <div className="relative aspect-video w-full overflow-hidden rounded-xl">
-            <Image
+            <MediaImage
               src={src}
               alt={alt}
               fill

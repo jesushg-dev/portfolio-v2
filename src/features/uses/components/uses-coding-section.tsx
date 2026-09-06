@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import type { ReactNode } from "react";
 import { Code2 } from "lucide-react";
 
@@ -62,14 +62,14 @@ export function UsesCodingSection({
         <ProcessReveal delay={0.1}>
           <figure>
             <div className="relative aspect-[8/5] overflow-hidden rounded-xl">
-              <Image
+              <MediaImage
                 src={lightSrc}
                 alt={previewLightAlt}
                 fill
                 sizes="(max-width: 1440px) 100vw, 1440px"
                 className="object-cover opacity-100 transition select-none dark:opacity-0"
               />
-              <Image
+              <MediaImage
                 src={darkSrc}
                 alt={previewDarkAlt}
                 fill

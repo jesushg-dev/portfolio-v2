@@ -1960,6 +1960,7 @@
         "updateFailed": "Failed to update project",
         "createFailed": "Failed to create project",
         "imageRequired": "Image is required",
+        "imageUrlInvalid": "Enter a valid image URL or local path",
         "titleRequiredPrimary": "Title is required for the primary language",
         "atLeastOneLanguage": "At least one language is required"
       },
@@ -2546,6 +2547,7 @@
         "createFailed": "Failed to create skill",
         "titleRequired": "Title is required",
         "imageRequired": "Image URL is required",
+        "imageUrlInvalid": "Enter a valid image URL or local path",
         "featuredLabel": "Featured in stack",
         "featuredDescription": "Featured skills appear brighter in the home terminal and highlight your primary stack."
       }

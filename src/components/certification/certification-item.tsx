@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { MdCalendarMonth, MdRemoveRedEye, MdSchool } from "react-icons/md";
 import type { FC } from "react";
 
+import { MediaImage } from "@/components/shared/media-image";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { CertificateType } from "@/utils/interfaces/types";
@@ -33,7 +33,7 @@ const CertificateItem: FC<CertificateType> = ({
             className="relative flex h-full w-full items-center justify-center"
             aria-label={`${title} — ${t("seeCertificate")}`}
           >
-            <Image
+            <MediaImage
               src={
                 image ??
                 "https://res.cloudinary.com/js-media/image/upload/v1691171515/portfolio/certificates/placeholder_tovcyh.webp"
@@ -45,7 +45,7 @@ const CertificateItem: FC<CertificateType> = ({
             />
           </a>
         ) : (
-          <Image
+          <MediaImage
             src={
               image ??
               "https://res.cloudinary.com/js-media/image/upload/v1691171515/portfolio/certificates/placeholder_tovcyh.webp"

@@ -4,7 +4,6 @@ import { AiFillGithub } from "react-icons/ai";
 
 import CaseStudyReveal from "@/features/home/components/projects/case-study-reveal";
 import { Link } from "@/i18n/routing";
-import { buildCloudinaryUrl, resolveSkillImageUrl } from "@/utils/tools/image";
 import ProjectCoverImage from "./project-cover-image";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
 
@@ -169,8 +168,8 @@ export default async function ProjectCaseStudyView({
 }: ProjectCaseStudyViewProps) {
   const t = await getTranslations("main.portfolio");
 
-  const heroImageUrl = buildCloudinaryUrl(project.image, 1400);
-  const coverImageUrl = buildCloudinaryUrl(project.image, 1600);
+  const heroImageUrl = project.image;
+  const coverImageUrl = project.image;
   const summary = project.hook ?? project.description;
 
   const filterKey = project.type.toLowerCase() as
@@ -366,11 +365,11 @@ export default async function ProjectCaseStudyView({
                         className="case-study-mockup-card bg-card flex aspect-[9/18] flex-col items-center rounded-xl p-3 shadow-xl"
                       >
                         <SkillIcon
-                          image={resolveSkillImageUrl(skill.image)}
+                          image={skill.image}
                           title={skill.title}
                           className="mt-4 mb-3 h-7 w-7"
                         />
-                        <p className="text-muted-foreground text-center text-[10px] leading-tight font-semibold">
+                        <p className="text-muted-foreground text-center text-[0.625rem] leading-tight font-semibold">
                           {skill.title}
                         </p>
                         <div className="mt-auto mb-2 w-full space-y-1.5">

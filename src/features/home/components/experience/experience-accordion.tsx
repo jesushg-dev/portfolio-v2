@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 import { Link } from "@/i18n/routing";
@@ -59,13 +59,12 @@ function Row({
         <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
           {exp.companyLogoUrl ? (
             <span className="border-border relative mr-1 inline-flex h-7 w-7 shrink-0 overflow-hidden rounded-md border bg-white">
-              <Image
+              <MediaImage
                 src={exp.companyLogoUrl}
                 alt=""
                 fill
                 className="object-contain p-0.5"
                 sizes="28px"
-                unoptimized
               />
             </span>
           ) : null}

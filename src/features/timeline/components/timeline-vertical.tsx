@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 
 import { Timeline } from "@/components/ui/timeline";
 import type { TimelinePublicItem } from "@/features/timeline/lib/map-timeline-public";
@@ -34,13 +34,12 @@ function TimelineEntryContent({ item }: { item: TimelinePublicItem }) {
               key={image}
               className="bg-background-100 relative aspect-video overflow-hidden rounded-lg"
             >
-              <Image
+              <MediaImage
                 src={image}
                 alt=""
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 320px"
-                unoptimized
               />
             </div>
           ))}

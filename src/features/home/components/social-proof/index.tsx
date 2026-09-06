@@ -2,7 +2,7 @@
 
 import type { FC } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import Autoplay from "embla-carousel-autoplay";
@@ -91,13 +91,12 @@ function TestimonialCard({
       <footer className="mt-4 flex items-center gap-2.5">
         {avatarUrl ? (
           <div className="border-border relative flex h-9 w-9 shrink-0 overflow-hidden rounded-full border shadow-sm">
-            <Image
+            <MediaImage
               src={avatarUrl}
               alt={author}
               fill
               className="object-cover"
               sizes="36px"
-              unoptimized
             />
           </div>
         ) : (
