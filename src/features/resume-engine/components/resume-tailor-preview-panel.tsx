@@ -139,9 +139,9 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       ? t("tailorPreviewPdf")
       : mode === "ats"
         ? t("tailorPreviewAts")
-                  : mode === "match"
-                    ? t("atsCheckerTitle")
-                    : t("tailorPreviewWord");
+        : mode === "match"
+          ? t("atsCheckerTitle")
+          : t("tailorPreviewWord");
 
   return (
     <div className="flex flex-col gap-3">

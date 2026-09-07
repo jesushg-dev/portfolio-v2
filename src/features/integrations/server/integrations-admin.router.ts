@@ -286,9 +286,7 @@ export const integrationsAdminRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-      const current =
-        (await getTenantIntegrationConfig(userId, "ai")) ??
-        ({});
+      const current = (await getTenantIntegrationConfig(userId, "ai")) ?? {};
 
       const config: AiIntegrationConfig = {
         geminiApiKey: input.geminiApiKey?.trim()

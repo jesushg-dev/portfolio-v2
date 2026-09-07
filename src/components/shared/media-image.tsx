@@ -15,11 +15,5 @@ export function MediaImage({ src, unoptimized, ...props }: MediaImageProps) {
 
   const remote = classifyMediaSrc(src) === "remote-url";
 
-  return (
-    <Image
-      {...props}
-      src={src}
-      unoptimized={unoptimized ?? remote}
-    />
-  );
+  return <Image {...props} src={src} unoptimized={unoptimized ?? remote} />;
 }

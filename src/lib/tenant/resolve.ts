@@ -18,11 +18,7 @@ import {
 } from "@/lib/tenant/parse-host";
 import { resolveTenantIdentity } from "@/lib/tenant/resolve-identity";
 
-export {
-  TENANT_DEFAULT_LOCALE_HEADER,
-  TENANT_HEADER,
-  TENANT_USERNAME_HEADER,
-};
+export { TENANT_DEFAULT_LOCALE_HEADER, TENANT_HEADER, TENANT_USERNAME_HEADER };
 
 export { RESERVED_SUBDOMAINS, parseTenantSlug } from "@/lib/tenant/parse-host";
 

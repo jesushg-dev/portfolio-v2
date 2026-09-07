@@ -3,10 +3,7 @@ import "server-only";
 import { TRPCError } from "@trpc/server";
 import type { PrismaClient } from "@prisma/client";
 
-import {
-  getClientIpFromHeaders,
-  hashClientIp,
-} from "@/lib/http/client-ip";
+import { getClientIpFromHeaders, hashClientIp } from "@/lib/http/client-ip";
 
 export { getClientIpFromHeaders, hashClientIp };
 

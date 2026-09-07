@@ -28,7 +28,10 @@ import { loadTailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job
 import { getPortfolioEmailClient } from "@/lib/email/resend";
 import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
 import { formatZodParseError } from "@/features/resume-engine/lib/ai/parse-json-response";
-import { getDefaultAiProvider, loadTenantAiCredentials } from "@/features/resume-engine/lib/ai/providers";
+import {
+  getDefaultAiProvider,
+  loadTenantAiCredentials,
+} from "@/features/resume-engine/lib/ai/providers";
 import {
   deleteApplicationEventFromGoogleCalendar,
   pullLinkedUpcomingEventsFromGoogle,

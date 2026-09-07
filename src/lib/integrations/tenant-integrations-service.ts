@@ -47,17 +47,12 @@ export interface IntegrationConfigMap {
 export type TenantIntegrationProvider = keyof IntegrationConfigMap;
 
 /** Catalog providers including OAuth-only integrations (e.g. Google Calendar). */
-export type IntegrationProvider =
-  | TenantIntegrationProvider
-  | "google-calendar";
+export type IntegrationProvider = TenantIntegrationProvider | "google-calendar";
 
 /** Reads and decrypts a tenant's integration configuration for a specific provider. */
 export async function getTenantIntegrationConfig<
   P extends TenantIntegrationProvider,
->(
-  userId: string,
-  provider: P,
-): Promise<IntegrationConfigMap[P] | null> {
+>(userId: string, provider: P): Promise<IntegrationConfigMap[P] | null> {
   const integration = await db.tenantIntegration.findUnique({
     where: {
       userId_provider: {

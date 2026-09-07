@@ -75,10 +75,7 @@ export const ResumeAtsCheckerSummary: FC<ResumeAtsCheckerSummaryProps> = ({
             {t("atsCheckerGaps")}
           </p>
           <p className="text-muted-foreground text-sm">
-            {[
-              ...skillGaps,
-              ...missingKeywords.map((item) => item.term),
-            ]
+            {[...skillGaps, ...missingKeywords.map((item) => item.term)]
               .filter((value, index, all) => all.indexOf(value) === index)
               .join(" · ")}
           </p>

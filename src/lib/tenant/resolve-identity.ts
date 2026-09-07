@@ -3,8 +3,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { parseTenantSlug } from "@/lib/tenant/parse-host";
 
 export type TenantIdentity =
-  | { type: "slug"; slug: string }
-  | { type: "primary" };
+  { type: "slug"; slug: string } | { type: "primary" };
 
 export function createPdfTenantProof(username: string, secret: string): string {
   return createHmac("sha256", secret).update(username).digest("hex");

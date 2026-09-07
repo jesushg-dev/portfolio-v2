@@ -1,8 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import {
-  isPrivateOrLocalIpv4,
-  isValidIpv4,
-} from "@/lib/http/client-ip";
+import { isPrivateOrLocalIpv4, isValidIpv4 } from "@/lib/http/client-ip";
 
 interface IpApiResponse {
   status: string;
