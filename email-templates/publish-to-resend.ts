@@ -165,7 +165,11 @@ async function main() {
       subject: resetPasswordSubjects[locale],
       html: resetHtml,
       variables: [
-        { key: "RESET_URL", type: "string", fallbackValue: "https://jesushg.com" },
+        {
+          key: "RESET_URL",
+          type: "string",
+          fallbackValue: "https://jesushg.com",
+        },
       ],
     });
 
