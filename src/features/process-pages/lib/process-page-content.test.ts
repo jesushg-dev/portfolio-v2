@@ -3,6 +3,10 @@ import {
   parseProcessPageContent,
   processHeroWidgetSchema,
   createEmptyWidget,
+  PROCESS_PAGE_WIDGET_TYPES,
+  flattenProcessPageCopy,
+  hydrateProcessPageContent,
+  emptyProcessPageContent,
 } from "./process-page-content";
 
 describe("processPageSlugSchema", () => {
@@ -153,6 +157,40 @@ describe("hero secondaryHref", () => {
     if (hero.type === "hero") {
       expect(hero.secondaryHref).toBe("/schedule");
     }
+  });
+
+  it("builds an empty widget for every type", () => {
+    for (const type of PROCESS_PAGE_WIDGET_TYPES) {
+      const widget = createEmptyWidget(type, `id-${type}`);
+      expect(widget.type).toBe(type);
+      expect(widget.id).toBe(`id-${type}`);
+    }
+  });
+
+  it("hydrates and flattens copy from hero, nav, and CTA widgets", () => {
+    const content = emptyProcessPageContent();
+    content.sections.push(
+      createEmptyWidget("nav", "nav"),
+      createEmptyWidget("hero", "hero"),
+      createEmptyWidget("closingCta", "cta"),
+    );
+    const hydrated = hydrateProcessPageContent(content, {
+      pageNavLabel: "On this page",
+      heroEyebrow: "Process",
+      heroTitle: "How I work",
+      heroTitleHighlight: "AI",
+      heroDescription: "Details",
+      heroPrimaryCta: "Start",
+      heroSecondaryCta: "Book",
+      heroScrollHint: "Scroll",
+      ctaTitle: "Let's talk",
+      ctaDescription: "Schedule",
+      ctaButton: "Book",
+    });
+    const copy = flattenProcessPageCopy(hydrated);
+    expect(copy.pageNavLabel).toBe("On this page");
+    expect(copy.heroTitle).toBe("How I work");
+    expect(copy.ctaButton).toBe("Book");
   });
 
   it("defaults secondaryHref when parsing stored v2 content without it", () => {

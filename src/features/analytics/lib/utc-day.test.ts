@@ -1,8 +1,4 @@
-import {
-  analyticsRetentionCutoff,
-  utcDay,
-  utcDaysAgo,
-} from "./utc-day";
+import { analyticsRetentionCutoff, utcDay, utcDaysAgo } from "./utc-day";
 
 describe("utcDay", () => {
   it("strips the time to UTC midnight", () => {

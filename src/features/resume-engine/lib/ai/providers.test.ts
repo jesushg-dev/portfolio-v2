@@ -37,8 +37,6 @@ describe("tenant AI credentials", () => {
 
   it("rejects when the tenant has no AI keys", () => {
     const credentials = credentialsFromAiConfig(null);
-    expect(() => resolveAiProvider(credentials)).toThrow(
-      /Admin → Credentials/,
-    );
+    expect(() => resolveAiProvider(credentials)).toThrow(/Admin → Credentials/);
   });
 });

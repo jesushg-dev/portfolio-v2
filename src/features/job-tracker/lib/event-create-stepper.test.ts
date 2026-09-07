@@ -1,3 +1,7 @@
+jest.mock("@stepperize/react", () => ({
+  defineStepper: () => ({}),
+}));
+
 import {
   EVENT_TYPES,
   TYPE_DEFAULTS,
