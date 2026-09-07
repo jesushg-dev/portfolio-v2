@@ -60,7 +60,9 @@ describe("now-queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(requireAuthenticatedUserId).mockResolvedValue("user-1");
-    jest.spyOn(db.appLanguage, "findMany").mockResolvedValue(languages as never);
+    jest
+      .spyOn(db.appLanguage, "findMany")
+      .mockResolvedValue(languages as never);
   });
 
   it("creates settings when missing and returns focuses", async () => {

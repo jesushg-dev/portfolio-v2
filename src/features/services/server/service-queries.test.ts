@@ -54,7 +54,9 @@ describe("service-queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(requireAuthenticatedUserId).mockResolvedValue("user-1");
-    jest.spyOn(db.appLanguage, "findMany").mockResolvedValue(languages as never);
+    jest
+      .spyOn(db.appLanguage, "findMany")
+      .mockResolvedValue(languages as never);
   });
 
   it("returns an empty create DTO", async () => {

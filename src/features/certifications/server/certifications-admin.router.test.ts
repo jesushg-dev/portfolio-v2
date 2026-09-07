@@ -39,17 +39,18 @@ function createDb() {
       update: jest.fn(),
     },
     appLanguage: { findMany: jest.fn().mockResolvedValue(languages) },
-    $transaction: jest.fn(async (fn: (tx: unknown) => unknown) =>
-      await fn({
-        certificateSkill: { deleteMany: jest.fn() },
-        certificateProject: { deleteMany: jest.fn() },
-        certificateService: { deleteMany: jest.fn() },
-        certificationTranslation: { deleteMany: jest.fn() },
-        certification: {
-          delete: jest.fn().mockResolvedValue(row),
-          deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
-        },
-      }),
+    $transaction: jest.fn(
+      async (fn: (tx: unknown) => unknown) =>
+        await fn({
+          certificateSkill: { deleteMany: jest.fn() },
+          certificateProject: { deleteMany: jest.fn() },
+          certificateService: { deleteMany: jest.fn() },
+          certificationTranslation: { deleteMany: jest.fn() },
+          certification: {
+            delete: jest.fn().mockResolvedValue(row),
+            deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
+          },
+        }),
     ),
   };
 }

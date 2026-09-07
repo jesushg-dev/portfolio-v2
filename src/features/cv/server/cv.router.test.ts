@@ -32,6 +32,7 @@ function ownedCrud(id: string, extra: Record<string, unknown> = {}) {
     create: jest.fn().mockResolvedValue(row),
     update: jest.fn().mockResolvedValue(row),
     delete: jest.fn().mockResolvedValue(row),
+    deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
     upsert: jest.fn().mockResolvedValue(row),
   };
 }
@@ -53,6 +54,9 @@ function emptyCvDb() {
     cvHeaderTranslation: translationTable(),
     cvAboutMe: ownedCrud("about-1"),
     cvAboutMeTranslation: translationTable(),
+    cvHeroTitle: ownedCrud("hero-1"),
+    cvHeroTitleTranslation: translationTable(),
+    cvTerminal: ownedCrud("term-1"),
     cvContact: ownedCrud("c1", { type: "EMAIL", value: "a@b.com" }),
     cvEducation: ownedCrud("edu-1", { institution: "UNI" }),
     cvEducationTranslation: translationTable(),
@@ -63,13 +67,16 @@ function emptyCvDb() {
       items: ["React"],
     }),
     cvExperience: ownedCrud("exp-1", { company: "Acme" }),
-    cvExperienceTranslation: translationTable(),
+    cvExperienceTranslation: {
+      ...translationTable(),
+      deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
+    },
     cvExperienceSkill: {
-      deleteMany: jest.fn(),
+      deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
       createMany: jest.fn(),
     },
     cvResponsibility: {
-      deleteMany: jest.fn(),
+      deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
       create: jest.fn(),
     },
     cvSoftSkill: ownedCrud("soft-1"),
@@ -87,8 +94,30 @@ function emptyCvDb() {
       findUnique: jest.fn().mockResolvedValue({ id: "pdf-1" }),
       upsert: jest.fn().mockResolvedValue({ locale: "en" }),
       delete: jest.fn().mockResolvedValue({ id: "pdf-1" }),
+      deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
     },
     $transaction: jest.fn(async (ops: unknown) => {
+      if (typeof ops === "function") {
+        const txObj = {
+          cvResponsibility: { deleteMany: jest.fn() },
+          cvExperienceSkill: { deleteMany: jest.fn() },
+          cvExperienceTranslation: { deleteMany: jest.fn() },
+          cvExperience: { deleteMany: jest.fn() },
+          cvContact: { deleteMany: jest.fn() },
+          cvEducation: { deleteMany: jest.fn() },
+          cvLanguage: { deleteMany: jest.fn() },
+          cvTechnicalSkill: { deleteMany: jest.fn() },
+          cvSoftSkill: { deleteMany: jest.fn() },
+          cvAdditionalInfo: { deleteMany: jest.fn() },
+          cvPersonalReference: { deleteMany: jest.fn() },
+          cvHeader: { deleteMany: jest.fn() },
+          cvAboutMe: { deleteMany: jest.fn() },
+          cvHeroTitle: { deleteMany: jest.fn() },
+          cvTerminal: { deleteMany: jest.fn() },
+          cvPdfLink: { deleteMany: jest.fn() },
+        };
+        return (ops as (tx: typeof txObj) => Promise<unknown>)(txObj);
+      }
       if (Array.isArray(ops)) return Promise.all(ops);
       return undefined;
     }),
@@ -355,6 +384,13 @@ describe("cvRouter", () => {
     await caller.reorderSoftSkills([{ id: "soft-1", order: 0 }]);
     await caller.reorderAdditionalInfo([{ id: "add-1", order: 0 }]);
     await caller.reorderPersonalReferences([{ id: "ref-1", order: 0 }]);
+    expect(db.$transaction).toHaveBeenCalled();
+  });
+
+  it("deletes all CV sections in a transaction", async () => {
+    const db = emptyCvDb();
+    const caller = createRouterCaller(cvRouter, createTrpcTestContext({ db }));
+    await caller.deleteAll();
     expect(db.$transaction).toHaveBeenCalled();
   });
 });

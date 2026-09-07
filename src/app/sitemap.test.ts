@@ -40,12 +40,16 @@ describe("sitemap", () => {
       { slug: "eleven", createdAt: new Date("2026-01-02") },
       { slug: "  ", createdAt: new Date("2026-01-02") },
     ] as never);
-    jest.spyOn(db.skill, "findMany").mockResolvedValue([
-      { title: "Next.js", createdAt: new Date("2026-01-03") },
-    ] as never);
-    jest.spyOn(db.processPage, "findMany").mockResolvedValue([
-      { slug: "how-i-use-ai", updatedAt: new Date("2026-01-04") },
-    ] as never);
+    jest
+      .spyOn(db.skill, "findMany")
+      .mockResolvedValue([
+        { title: "Next.js", createdAt: new Date("2026-01-03") },
+      ] as never);
+    jest
+      .spyOn(db.processPage, "findMany")
+      .mockResolvedValue([
+        { slug: "how-i-use-ai", updatedAt: new Date("2026-01-04") },
+      ] as never);
 
     const entries = await sitemap();
     const urls = entries.map((entry) => entry.url).join(" ");

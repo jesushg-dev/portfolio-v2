@@ -916,6 +916,12 @@ export const cvRouter = createTRPCRouter({
       await ctx.db.cvResponsibility.deleteMany({
         where: { experienceId: input.id },
       });
+      await ctx.db.cvExperienceSkill.deleteMany({
+        where: { experienceId: input.id },
+      });
+      await ctx.db.cvExperienceTranslation.deleteMany({
+        where: { cvExperienceId: input.id },
+      });
       return ctx.db.cvExperience.delete({ where: { id: input.id } });
     }),
 
@@ -1528,4 +1534,46 @@ export const cvRouter = createTRPCRouter({
         ),
       );
     }),
+
+  /**
+   * Deletes all CV sections and entities for the currently authenticated user.
+   */
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
+    const userId = ctx.user.id;
+    const experiences = await ctx.db.cvExperience.findMany({
+      where: { userId },
+      select: { id: true },
+    });
+    const expIds = experiences.map((e) => e.id);
+
+    return ctx.db.$transaction(async (tx) => {
+      if (expIds.length > 0) {
+        await tx.cvResponsibility.deleteMany({
+          where: { experienceId: { in: expIds } },
+        });
+        await tx.cvExperienceSkill.deleteMany({
+          where: { experienceId: { in: expIds } },
+        });
+        await tx.cvExperienceTranslation.deleteMany({
+          where: { cvExperienceId: { in: expIds } },
+        });
+        await tx.cvExperience.deleteMany({
+          where: { id: { in: expIds } },
+        });
+      }
+
+      await tx.cvContact.deleteMany({ where: { userId } });
+      await tx.cvEducation.deleteMany({ where: { userId } });
+      await tx.cvLanguage.deleteMany({ where: { userId } });
+      await tx.cvTechnicalSkill.deleteMany({ where: { userId } });
+      await tx.cvSoftSkill.deleteMany({ where: { userId } });
+      await tx.cvAdditionalInfo.deleteMany({ where: { userId } });
+      await tx.cvPersonalReference.deleteMany({ where: { userId } });
+      await tx.cvHeader.deleteMany({ where: { userId } });
+      await tx.cvAboutMe.deleteMany({ where: { userId } });
+      await tx.cvHeroTitle.deleteMany({ where: { userId } });
+      await tx.cvTerminal.deleteMany({ where: { userId } });
+      await tx.cvPdfLink.deleteMany({ where: { userId } });
+    });
+  }),
 });
