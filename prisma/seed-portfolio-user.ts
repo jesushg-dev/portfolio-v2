@@ -3,10 +3,7 @@ import { hashPassword } from "better-auth/crypto";
 import type { PrismaClient } from "@prisma/client";
 
 import { requireOwnerCredentials } from "./lib/seed-env";
-import {
-  CREDENTIAL_ACCOUNT_ISSUER,
-  CREDENTIAL_PROVIDER_ID,
-} from "../src/lib/auth-account-issuer";
+import { CREDENTIAL_PROVIDER_ID } from "../src/lib/auth-account-issuer";
 
 export interface PortfolioProfileSeed {
   name: string;
@@ -86,7 +83,6 @@ export async function seedPortfolioUser(
       data: {
         password: hashedPassword,
         accountId: owner.id,
-        issuer: CREDENTIAL_ACCOUNT_ISSUER,
       },
     });
   } else {
@@ -94,7 +90,6 @@ export async function seedPortfolioUser(
       data: {
         userId: owner.id,
         providerId: CREDENTIAL_PROVIDER_ID,
-        issuer: CREDENTIAL_ACCOUNT_ISSUER,
         accountId: owner.id,
         password: hashedPassword,
       },

@@ -86,10 +86,7 @@
         "outcome": "Een snelle en toegankelijke wiki die mijn API-integratievaardigheden aantoont."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Bootstrap"
-    ],
+    "skillKeys": ["React", "Bootstrap"],
     "order": 90,
     "kind": "LEARNING"
   },
@@ -117,11 +114,7 @@
         "description": "Webapplicatie waarmee je een softwaretest voor ontwikkelaars kunt doen."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Tailwind",
-      "Typescript"
-    ],
+    "skillKeys": ["React", "Tailwind", "Typescript"],
     "order": 91,
     "kind": "LEARNING"
   },
@@ -161,11 +154,7 @@
         "outcome": "Succesvolle lancering van het digitale kanaal met 99,9% voorraadnauwkeurigheid en 35% snellere responstijden vergeleken met het oude systeem."
       }
     ],
-    "skillKeys": [
-      "Nextjs",
-      "Tailwind",
-      "Typescript"
-    ],
+    "skillKeys": ["Nextjs", "Tailwind", "Typescript"],
     "order": 0,
     "kind": "PROFESSIONAL",
     "caseStudyEnabled": true
@@ -206,11 +195,7 @@
         "outcome": "70% van de handmatige taken geëlimineerd, volledige traceerbaarheid van bestellingen gerealiseerd en direct geadopteerd door het team."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Tailwind",
-      "Typescript"
-    ],
+    "skillKeys": ["React", "Tailwind", "Typescript"],
     "order": 1,
     "kind": "PROFESSIONAL",
     "caseStudyEnabled": true
@@ -239,14 +224,7 @@
         "description": "Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur."
       }
     ],
-    "skillKeys": [
-      "Html",
-      "Css",
-      "Javascript",
-      "Sass",
-      "Bootstrap",
-      "Firebase"
-    ],
+    "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"],
     "order": 10,
     "kind": "PERSONAL"
   },
@@ -274,10 +252,7 @@
         "description": "Webapplicatie om de resultaten van de Nicaraguaanse loterij te raadplegen."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Bootstrap"
-    ],
+    "skillKeys": ["React", "Bootstrap"],
     "order": 92,
     "kind": "LEARNING"
   },
@@ -305,10 +280,7 @@
         "description": "Rest Api voor de mobiele applicatie Lucky App."
       }
     ],
-    "skillKeys": [
-      "Nodejs",
-      "Mysql"
-    ],
+    "skillKeys": ["Nodejs", "Mysql"],
     "order": 15,
     "kind": "LEARNING"
   },
@@ -336,11 +308,7 @@
         "description": "Mobiele Android-toepassing voor de controle van reparatiediensten voor technologische apparaten."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android",
-      "Php"
-    ],
+    "skillKeys": ["Java", "Android", "Php"],
     "order": 3,
     "kind": "PROFESSIONAL"
   },
@@ -368,10 +336,7 @@
         "description": "REST API voor het beheer van reparatieservices voor technologische apparaten."
       }
     ],
-    "skillKeys": [
-      "Php",
-      "Mysql"
-    ],
+    "skillKeys": ["Php", "Mysql"],
     "order": 4,
     "kind": "PROFESSIONAL"
   },
@@ -399,12 +364,7 @@
         "description": "Inventaris- en verkoopcontrolesysteem voor een kledingwinkel."
       }
     ],
-    "skillKeys": [
-      "Csharp",
-      "SqlServer",
-      "Windforms",
-      "DevExpress"
-    ],
+    "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"],
     "order": 5,
     "kind": "PROFESSIONAL"
   },
@@ -432,11 +392,7 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android",
-      "Mysql"
-    ],
+    "skillKeys": ["Java", "Android", "Mysql"],
     "order": 6,
     "kind": "PROFESSIONAL"
   },
@@ -464,12 +420,7 @@
         "description": "Webtoepassing voor online aankoop van producten."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Redux",
-      "Material",
-      "Sass"
-    ],
+    "skillKeys": ["React", "Redux", "Material", "Sass"],
     "order": 7,
     "kind": "PROFESSIONAL"
   },
@@ -497,12 +448,7 @@
         "description": "Beheerder van een online winkel."
       }
     ],
-    "skillKeys": [
-      "React",
-      "Redux",
-      "Material",
-      "Sass"
-    ],
+    "skillKeys": ["React", "Redux", "Material", "Sass"],
     "order": 8,
     "kind": "PROFESSIONAL"
   },
@@ -542,13 +488,7 @@
         "outcome": "45% snellere responstijden op kritieke endpoints en een enterprise .NET-backend blauwdruk gerealiseerd."
       }
     ],
-    "skillKeys": [
-      "Csharp",
-      "SqlServer",
-      "Entity",
-      "Dotnet",
-      "Swagger"
-    ],
+    "skillKeys": ["Csharp", "SqlServer", "Entity", "Dotnet", "Swagger"],
     "order": 9,
     "kind": "PROFESSIONAL"
   },
@@ -576,12 +516,7 @@
         "description": "Mobiele Android-toepassing voor de controle van het elektriciteitsverbruik."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android",
-      "Mysql",
-      "Nodejs"
-    ],
+    "skillKeys": ["Java", "Android", "Mysql", "Nodejs"],
     "order": 11,
     "kind": "PERSONAL"
   },
@@ -609,10 +544,7 @@
         "description": "Rest Api voor de mobiele toepassing Kwh Monitor."
       }
     ],
-    "skillKeys": [
-      "Nodejs",
-      "Mysql"
-    ],
+    "skillKeys": ["Nodejs", "Mysql"],
     "order": 12,
     "kind": "PERSONAL"
   },
@@ -640,10 +572,7 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android"
-    ],
+    "skillKeys": ["Java", "Android"],
     "order": 13,
     "kind": "PERSONAL"
   },
@@ -671,10 +600,7 @@
         "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
       }
     ],
-    "skillKeys": [
-      "Java",
-      "Android"
-    ],
+    "skillKeys": ["Java", "Android"],
     "order": 14,
     "kind": "PERSONAL"
   }

@@ -23,12 +23,12 @@ Ghosted applications can be snoozed (`ghostNudgeSnoozedUntil`) so the dashboard 
 
 ## UI
 
-| Route                                  | Role                                          |
-| -------------------------------------- | --------------------------------------------- |
-| `/admin/job-tracker`                   | Board / list, companies, upcoming events      |
-| `/admin/job-tracker/applications/new`  | Create (modal + page)                         |
+| Route | Role |
+| --- | --- |
+| `/admin/job-tracker` | Board / list, companies, upcoming events |
+| `/admin/job-tracker/applications/new` | Create (modal + page) |
 | `/admin/job-tracker/applications/[id]` | Detail tabs: details, timeline, tailor, email |
-| `/admin/job-tracker/companies/...`     | Company CRUD                                  |
+| `/admin/job-tracker/companies/...` | Company CRUD |
 
 LinkedIn (and similar) URLs can be imported via `importJobFromUrl` — host allowlist + bounded redirects (`src/features/job-tracker/lib/fetch-linkedin-page.ts`). Failures map to `ImportFromUrlError` codes, not raw upstream HTML.
 

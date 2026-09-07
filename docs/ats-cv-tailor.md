@@ -315,10 +315,10 @@ Original uploaded DOCX metadata + optional `parsedDraft` for import/studio.
 
 AI keys are **per-tenant** (Admin → Credentials → AI). There is no shared platform AI fallback — see [`tenant-credentials.md`](./tenant-credentials.md).
 
-| Source                                                                        | Use                                                                                                   |
-| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Tenant `ai` integration (`anthropicApiKey` / `openaiApiKey` / `geminiApiKey`) | Claude / OpenAI / Gemini for import, tailor, interview prep                                           |
-| UploadThing                                                                   | **Tenant** Admin → Credentials (`uploadthing`). Export upload does not rely on a global env fallback. |
+| Source | Use |
+| --- | --- |
+| Tenant `ai` integration (`anthropicApiKey` / `openaiApiKey` / `geminiApiKey`) | Claude / OpenAI / Gemini for import, tailor, interview prep |
+| UploadThing | **Tenant** Admin → Credentials (`uploadthing`). Export upload does not rely on a global env fallback. |
 
 If the tenant has no AI keys, auto mode is unavailable; **manual JSON** still works (`aiProvider: "manual"`).
 

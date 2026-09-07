@@ -8,16 +8,16 @@ Platform `.env` keys are reserved for **system** concerns (auth email, database,
 
 ## System vs tenant
 
-| Concern                                                     | Source                                                    | Fallback                                                  |
-| ----------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------- |
-| Password reset / email 2FA OTP                              | `.env` `RESEND_*` + system template IDs                   | None — auth email simply does not send                    |
-| Portfolio contact form                                      | Tenant Resend (`TenantIntegration` `resend`)              | **None**                                                  |
-| Public CV PDF-by-email                                      | Tenant Resend                                             | **None**                                                  |
-| Job Tracker outbound email                                  | Tenant Resend                                             | **None**                                                  |
-| UploadThing (CV PDF cache, resume export, attachments)      | Tenant UploadThing                                        | **None**                                                  |
-| Spotify Now Playing widget                                  | Tenant Spotify OAuth (`SpotifyConnection`)                | **None**                                                  |
-| Job Tracker ↔ Google Calendar                               | Tenant Google Calendar OAuth (`GoogleCalendarConnection`) | **None** — never `GOOGLE_CLIENT_*` (those are login-only) |
-| Resume import / ATS tailor / interview prep / job drafts AI | Tenant AI (`TenantIntegration` `ai`)                      | **None** (manual JSON mode still works)                   |
+| Concern | Source | Fallback |
+| --- | --- | --- |
+| Password reset / email 2FA OTP | `.env` `RESEND_*` + system template IDs | None — auth email simply does not send |
+| Portfolio contact form | Tenant Resend (`TenantIntegration` `resend`) | **None** |
+| Public CV PDF-by-email | Tenant Resend | **None** |
+| Job Tracker outbound email | Tenant Resend | **None** |
+| UploadThing (CV PDF cache, resume export, attachments) | Tenant UploadThing | **None** |
+| Spotify Now Playing widget | Tenant Spotify OAuth (`SpotifyConnection`) | **None** |
+| Job Tracker ↔ Google Calendar | Tenant Google Calendar OAuth (`GoogleCalendarConnection`) | **None** — never `GOOGLE_CLIENT_*` (those are login-only) |
+| Resume import / ATS tailor / interview prep / job drafts AI | Tenant AI (`TenantIntegration` `ai`) | **None** (manual JSON mode still works) |
 
 `.env.example` documents the same split: system Resend is auth-only; portfolio email, Spotify, UploadThing, and AI are per-tenant.
 
@@ -27,12 +27,12 @@ Platform `.env` keys are reserved for **system** concerns (auth email, database,
 
 UI: `src/features/integrations/components/` → page at `src/app/[locale]/(admin)/admin/credentials/`.
 
-| Provider        | Admin UI                                              | Runtime storage                                  | Resolver                                |
-| --------------- | ----------------------------------------------------- | ------------------------------------------------ | --------------------------------------- |
-| Resend          | Form → `integrationsAdmin.saveResend`                 | `TenantIntegration` (`provider: "resend"`)       | `getPortfolioEmailClient()`             |
-| UploadThing     | Form → `integrationsAdmin.saveUploadThing`            | `TenantIntegration` (`provider: "uploadthing"`)  | `getTenantUploadThingClient()`          |
-| AI              | Form → `integrationsAdmin.saveAi`                     | `TenantIntegration` (`provider: "ai"`)           | `loadTenantAiCredentials()`             |
-| Spotify         | OAuth connect → `spotifyAdmin.initiateConnect`        | `SpotifyConnection` (+ encrypted secrets)        | `getSpotifyCredentialsForUser()`        |
+| Provider | Admin UI | Runtime storage | Resolver |
+| --- | --- | --- | --- |
+| Resend | Form → `integrationsAdmin.saveResend` | `TenantIntegration` (`provider: "resend"`) | `getPortfolioEmailClient()` |
+| UploadThing | Form → `integrationsAdmin.saveUploadThing` | `TenantIntegration` (`provider: "uploadthing"`) | `getTenantUploadThingClient()` |
+| AI | Form → `integrationsAdmin.saveAi` | `TenantIntegration` (`provider: "ai"`) | `loadTenantAiCredentials()` |
+| Spotify | OAuth connect → `spotifyAdmin.initiateConnect` | `SpotifyConnection` (+ encrypted secrets) | `getSpotifyCredentialsForUser()` |
 | Google Calendar | OAuth connect → `googleCalendarAdmin.initiateConnect` | `GoogleCalendarConnection` (+ encrypted secrets) | `getGoogleCalendarCredentialsForUser()` |
 
 Catalog: `src/features/integrations/lib/integration-catalog.ts` (`resend` \| `spotify` \| `google-calendar` \| `uploadthing` \| `ai`).
@@ -142,14 +142,14 @@ Flow:
 
 ## Quick checklist
 
-| Symptom                                       | Check                                                                                    |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Contact / CV email fails                      | Admin → Credentials → Resend connected; templates synced (`syncedTemplatesCount` > 0)    |
-| “UploadThing is not configured”               | Admin → Credentials → UploadThing                                                        |
-| Now Playing empty / refresh error             | Admin → Credentials → Spotify reconnect                                                  |
+| Symptom | Check |
+| --- | --- |
+| Contact / CV email fails | Admin → Credentials → Resend connected; templates synced (`syncedTemplatesCount` > 0) |
+| “UploadThing is not configured” | Admin → Credentials → UploadThing |
+| Now Playing empty / refresh error | Admin → Credentials → Spotify reconnect |
 | Job Tracker events missing in Google Calendar | Admin → Credentials → Google Calendar connected; event was not created already completed |
-| ATS tailor “No AI provider configured”        | Admin → Credentials → AI (or use manual JSON mode)                                       |
-| Auth reset mail fails                         | Platform `RESEND_API_KEY` / `RESEND_EMAIL_DOMAIN` / `RESEND_TEMPLATE_RESET_*`            |
+| ATS tailor “No AI provider configured” | Admin → Credentials → AI (or use manual JSON mode) |
+| Auth reset mail fails | Platform `RESEND_API_KEY` / `RESEND_EMAIL_DOMAIN` / `RESEND_TEMPLATE_RESET_*` |
 
 ---
 
@@ -157,15 +157,15 @@ Flow:
 
 These are **not** silent API-key fallbacks for tenant product features, but they still bill (or consume quota on) the platform owner as more tenants use the SaaS:
 
-| Cost                                                  | Who pays                  | Notes                                                                                                                                                                                                                                                              |
-| ----------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **System Resend** (password reset + 2FA OTP)          | Platform `.env`           | Every tenant’s auth emails. Low volume usually; scales with sign-ups / forgotten passwords. Portfolio contact/CV mail is already tenant-only.                                                                                                                      |
-| **Cloudinary `js-media`**                             | Platform Cloudinary cloud | Owner seed/UI assets that still point at `res.cloudinary.com/js-media` (hero, project covers, contact GIF). Runtime no longer maps public ids or injects transforms. Tenant media must be stored as their own absolute URLs (UploadThing, their Cloudinary, etc.). |
-| **Vercel** (serverless, Playwright CV PDF, bandwidth) | Platform                  | All tenants share your deployment. PDF generation is the heavy path.                                                                                                                                                                                               |
-| **MongoDB Atlas**                                     | Platform                  | One cluster for all tenants.                                                                                                                                                                                                                                       |
-| **Google / GitHub OAuth apps**                        | Platform app quotas       | Shared login apps if enabled — usually free-tier, abuse/quota risk not $ per call.                                                                                                                                                                                 |
-| **lrclib.net** (lyrics)                               | Free public API           | Rate limits, not your invoice.                                                                                                                                                                                                                                     |
-| **Nominatim / ip-api** (geocode / visitor geo)        | Free public APIs          | Rate limits / ToS — not metered keys.                                                                                                                                                                                                                              |
+| Cost | Who pays | Notes |
+| --- | --- | --- |
+| **System Resend** (password reset + 2FA OTP) | Platform `.env` | Every tenant’s auth emails. Low volume usually; scales with sign-ups / forgotten passwords. Portfolio contact/CV mail is already tenant-only. |
+| **Cloudinary `js-media`** | Platform Cloudinary cloud | Owner seed/UI assets that still point at `res.cloudinary.com/js-media` (hero, project covers, contact GIF). Runtime no longer maps public ids or injects transforms. Tenant media must be stored as their own absolute URLs (UploadThing, their Cloudinary, etc.). |
+| **Vercel** (serverless, Playwright CV PDF, bandwidth) | Platform | All tenants share your deployment. PDF generation is the heavy path. |
+| **MongoDB Atlas** | Platform | One cluster for all tenants. |
+| **Google / GitHub OAuth apps** | Platform app quotas | Shared login apps if enabled — usually free-tier, abuse/quota risk not $ per call. |
+| **lrclib.net** (lyrics) | Free public API | Rate limits, not your invoice. |
+| **Nominatim / ip-api** (geocode / visitor geo) | Free public APIs | Rate limits / ToS — not metered keys. |
 
 **Already safe (tenant BYOK, no platform fallback):** AI, portfolio Resend, UploadThing, Spotify OAuth, Google Calendar OAuth.
 

@@ -8,13 +8,13 @@ Each accepted beacon upserts `AnalyticsDailyStat` (`prisma/schema/analytics.pris
 
 `(userId, UTC date, path, country, referrerHost)`
 
-| Field                  | Source                                                                                                               |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `userId`               | Tenant from **Host** (apex → primary owner). Username headers are not trusted.                                       |
-| `path`                 | Client pathname, normalized by `toAnalyticsPath` (locale stripped, max 180 chars). Admin/auth/API paths are dropped. |
-| `country`              | `x-vercel-ip-country` (ISO-2) or `XX`                                                                                |
-| `referrerHost`         | Hostname from `document.referrer`, or `direct`                                                                       |
-| `pageviews` / `visits` | +1 pageview always; +1 visit when the client sends `isNewVisit` (sessionStorage flag)                                |
+| Field | Source |
+| --- | --- |
+| `userId` | Tenant from **Host** (apex → primary owner). Username headers are not trusted. |
+| `path` | Client pathname, normalized by `toAnalyticsPath` (locale stripped, max 180 chars). Admin/auth/API paths are dropped. |
+| `country` | `x-vercel-ip-country` (ISO-2) or `XX` |
+| `referrerHost` | Hostname from `document.referrer`, or `direct` |
+| `pageviews` / `visits` | +1 pageview always; +1 visit when the client sends `isNewVisit` (sessionStorage flag) |
 
 Retention: ~2% of writes prune rows older than the cutoff in `utcDay.ts`.
 
@@ -40,13 +40,13 @@ Owners viewing their own site are skipped server-side (`session.user.id === tena
 - Payload capped (`path` 500, `referrer` 2000). Invalid JSON → 204.
 - Endpoint always returns **204** (no body) so it cannot be used as an oracle.
 
-`isNewVisit` is still client-supplied: it can inflate _visits_ for that IP’s window, not pageviews of other tenants. Treat visits as directional, not audit-grade.
+`isNewVisit` is still client-supplied: it can inflate *visits* for that IP’s window, not pageviews of other tenants. Treat visits as directional, not audit-grade.
 
 ## Surfaces
 
-| Surface         | Data                                                              |
-| --------------- | ----------------------------------------------------------------- |
-| Public `/stats` | Aggregates without referrer hosts, if `PUBLIC_PAGE_LIVE.stats`    |
+| Surface | Data |
+| --- | --- |
+| Public `/stats` | Aggregates without referrer hosts, if `PUBLIC_PAGE_LIVE.stats` |
 | Admin dashboard | Full summary including referrers, session-scoped to `ctx.user.id` |
 
 tRPC: `analytics.getPublicSummary`, `analyticsAdmin.*`.

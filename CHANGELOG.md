@@ -9,13 +9,6 @@ See [README](./README.md) and [docs/README.md](./docs/README.md).
 
 ## Unreleased
 
-### Tests
-
-- Expanded Jest unit and tRPC integration coverage for admin/public routers,
-  query modules, analytics helpers, CV import, and ATS preview HTML.
-- Coverage collection now targets the logic layer (`lib` / `server` / `hooks`)
-  instead of pages and shadcn UI.
-
 ### Docs
 
 - Replaced the stale README (Next.js 13 / Mongoose) with the current stack, pnpm

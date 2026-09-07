@@ -6,12 +6,12 @@ CMS-backed and static public routes besides the classic portfolio sections (home
 
 `src/lib/public-preview-pages.ts` — `PUBLIC_PAGE_LIVE`:
 
-| Key        | Route       | Default in repo             |
-| ---------- | ----------- | --------------------------- |
-| `uses`     | `/uses`     | `false` (404 until flipped) |
-| `now`      | `/now`      | `false`                     |
-| `colophon` | `/colophon` | `true`                      |
-| `stats`    | `/stats`    | `true`                      |
+| Key | Route | Default in repo |
+| --- | --- | --- |
+| `uses` | `/uses` | `false` (404 until flipped) |
+| `now` | `/now` | `false` |
+| `colophon` | `/colophon` | `true` |
+| `stats` | `/stats` | `true` |
 
 Metadata generators call the same helper so unpublished flags do not leak titles in the index. Flip a flag to `true` when the page is ready in production.
 
@@ -55,11 +55,11 @@ Seed/export entity `processPages` → `portfolio-process-pages.json`.
 
 ## Other public routes (always on)
 
-| Route                                                 | Notes                                                                            |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `/` home                                              | Hero, about, skills, projects, services, contact                                 |
-| `/curriculum-vitae`                                   | Gated by `isPublicCvVisible`                                                     |
-| `/certificates`, `/projects/[slug]`, `/skills/[slug]` | CMS lists + intercepting skill modal                                             |
-| `/schedule` (localized `/agendar`, `/plannen`)        | Calendly embed                                                                   |
-| `/theme-customizer`                                   | Live theme playground                                                            |
-| `/privacy`                                            | Legal copy; keep analytics section aligned with [`analytics.md`](./analytics.md) |
+| Route | Notes |
+| --- | --- |
+| `/` home | Hero, about, skills, projects, services, contact |
+| `/curriculum-vitae` | Gated by `isPublicCvVisible` |
+| `/certificates`, `/projects/[slug]`, `/skills/[slug]` | CMS lists + intercepting skill modal |
+| `/schedule` (localized `/agendar`, `/plannen`) | Calendly embed |
+| `/theme-customizer` | Live theme playground |
+| `/privacy` | Legal copy; keep analytics section aligned with [`analytics.md`](./analytics.md) |

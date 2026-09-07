@@ -234,20 +234,6 @@ Keep page tests to a few **smoke cases** (happy path, `notFound`, `generateMetad
 - [ ] Pure logic extracted when component tests would be too heavy
 - [ ] Both `pnpm test` and `pnpm type` pass before pushing
 
-## Coverage
-
-`pnpm test:coverage` collects from the **logic layer**, not from pages, forms, or `src/components/ui`:
-
-- `src/lib`, `src/hooks`, `src/utils`, `src/server`
-- `src/features/**/lib` and `src/features/**/server`
-- `src/proxy.ts`, `src/app/sitemap.ts`, `src/app/api/**`
-
-OAuth callbacks, Better Auth wiring, DOCX/PDF binary pipelines, and tenant Resend/Spotify publishers are excluded — those need live credentials or fixture binaries, not jsdom.
-
-tRPC integration tests use `src/test-utils/trpc-caller.ts` with a mocked Prisma `db`. Co-locate `*.test.ts` next to the router or query module.
-
-UI pages and large client widgets stay on Playwright (`pnpm test:e2e`) rather than inflating the Jest denominator.
-
 ## Current coverage (public site)
 
 The first test suite targets the public routes under `src/app/[locale]/(home)`:
@@ -274,12 +260,12 @@ End-to-end tests live in `e2e/` and use Playwright. Locally, Playwright starts `
 
 ### Commands
 
-| Command              | What runs                                        |
-| -------------------- | ------------------------------------------------ |
-| `pnpm test:e2e`      | Smoke (create specs ignored unless `E2E_FULL=1`) |
-| `pnpm test:e2e:full` | Full suites including `*-create.spec.ts`         |
-| `pnpm test:e2e:ui`   | Playwright UI for all projects                   |
-| `pnpm test:a11y`     | axe project `a11y`                               |
+| Command | What runs |
+| --- | --- |
+| `pnpm test:e2e` | Smoke (create specs ignored unless `E2E_FULL=1`) |
+| `pnpm test:e2e:full` | Full suites including `*-create.spec.ts` |
+| `pnpm test:e2e:ui` | Playwright UI for all projects |
+| `pnpm test:a11y` | axe project `a11y` |
 
 There are **no** `package.json` aliases like `test:e2e:skills`. Run a project with:
 

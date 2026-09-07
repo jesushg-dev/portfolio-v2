@@ -2,10 +2,10 @@
 
 Two pipelines share the same React Email sources in `email-templates/`:
 
-| Audience                 | Templates                         | Credentials                                                    |
-| ------------------------ | --------------------------------- | -------------------------------------------------------------- |
-| **System** (Better Auth) | Reset password, 2FA OTP           | Platform `.env` `RESEND_*`                                     |
-| **Tenant** (portfolio)   | CV delivery, contact notification | Tenant Resend API + published template IDs on encrypted config |
+| Audience | Templates | Credentials |
+| --- | --- | --- |
+| **System** (Better Auth) | Reset password, 2FA OTP | Platform `.env` `RESEND_*` |
+| **Tenant** (portfolio) | CV delivery, contact notification | Tenant Resend API + published template IDs on encrypted config |
 
 Locales: en / es / nl. Copy: `email-templates/messages/*.json`.
 

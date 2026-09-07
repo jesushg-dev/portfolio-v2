@@ -96,9 +96,6 @@ model Account {
   id                    String    @id @default(auto()) @map("_id") @db.ObjectId
   accountId             String
   providerId            String
-  /// Better Auth 1.7 identity namespace ("local:credential", "local:oauth:<provider>").
-  /// Existing rows are backfilled by `pnpm db:auth-backfill` before `db:push`.
-  issuer                String
   userId                String    @db.ObjectId
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
@@ -111,7 +108,6 @@ model Account {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
-  @@unique([issuer, accountId])
   @@index([userId])
 }
 
