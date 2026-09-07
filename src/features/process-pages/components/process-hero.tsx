@@ -77,7 +77,9 @@ export function ProcessHero({
                 <ArrowRight aria-hidden className="size-4" />
               </a>
               <Link
-                href={secondaryAction.href}
+                href={
+                  secondaryAction.href as Parameters<typeof Link>[0]["href"]
+                }
                 className={cn(
                   processInteractiveStyles,
                   "border-border bg-background text-foreground hover:bg-muted border",

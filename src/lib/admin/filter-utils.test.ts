@@ -136,20 +136,25 @@ describe("extractArrayFilter", () => {
 });
 
 describe("appendWhereAnd", () => {
+  interface WhereClause {
+    title?: string;
+    AND?: WhereClause | WhereClause[];
+  }
+
   it("creates AND when none exists", () => {
-    const where: { title?: string; AND?: unknown } = { title: "a" };
+    const where: WhereClause = { title: "a" };
     appendWhereAnd(where, { title: "b" });
     expect(where.AND).toEqual([{ title: "b" }]);
   });
 
   it("wraps an existing single AND", () => {
-    const where: { AND?: unknown } = { AND: { title: "a" } };
+    const where: WhereClause = { AND: { title: "a" } };
     appendWhereAnd(where, { title: "b" });
     expect(where.AND).toEqual([{ title: "a" }, { title: "b" }]);
   });
 
   it("appends to an existing AND array", () => {
-    const where: { AND?: unknown } = { AND: [{ title: "a" }] };
+    const where: WhereClause = { AND: [{ title: "a" }] };
     appendWhereAnd(where, { title: "b" });
     expect(where.AND).toEqual([{ title: "a" }, { title: "b" }]);
   });

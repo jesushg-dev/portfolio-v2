@@ -8,6 +8,7 @@ export const MOCK_OWNER_USER = {
   email: "owner@example.com",
   name: "Owner",
   emailVerified: false,
+  twoFactorEnabled: false,
   createdAt: new Date("2020-01-01T00:00:00.000Z"),
   updatedAt: new Date("2020-01-01T00:00:00.000Z"),
   image: null,

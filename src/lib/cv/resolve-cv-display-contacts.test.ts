@@ -2,6 +2,7 @@ jest.mock("@/env", () => ({
   env: { PRIMARY_DOMAIN: "jesushg.com" },
 }));
 
+import type { CvContactType } from "@prisma/client";
 import { resolveCvDisplayContacts } from "./resolve-cv-display-contacts";
 
 describe("resolveCvDisplayContacts", () => {
@@ -12,7 +13,10 @@ describe("resolveCvDisplayContacts", () => {
   });
 
   it("appends the portfolio website for a tenant profile", () => {
-    const contacts = resolveCvDisplayContacts([], {
+    const inputContacts: { type: CvContactType; value: string }[] = [
+      { type: "EMAIL", value: "test@example.com" },
+    ];
+    const contacts = resolveCvDisplayContacts(inputContacts, {
       username: "ada",
       isPrimary: false,
       customDomain: null,

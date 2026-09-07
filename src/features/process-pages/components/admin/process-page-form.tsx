@@ -143,7 +143,7 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
           "menuTitle",
           t("menuTitleRequired"),
         ),
-        contentByLanguage: z.record(z.string(), z.unknown()),
+        contentByLanguage: z.record(z.string(), z.custom<ProcessPageContent>()),
       }),
     [primaryLang?.id, t],
   );
@@ -156,14 +156,14 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: initialData as FormValues,
+    defaultValues: initialData,
     mode: "onBlur",
   });
 
   const { activeLangId, setActiveLangId, statusByLangId } = useLocalizedForm({
     languages,
     form,
-    buildDefaultValues: () => initialData as FormValues,
+    buildDefaultValues: () => initialData,
     resourceId: initialData.id,
     completenessFields: ["menuTitle"],
   });

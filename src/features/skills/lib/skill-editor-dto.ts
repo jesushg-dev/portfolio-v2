@@ -32,7 +32,7 @@ export type SkillCreateFormDTO = Omit<
 
 const emptySkillTranslationFields = { description: "", urlWiki: "" };
 
-type SkillWithRelations = Skill & {
+export type SkillWithRelations = Skill & {
   SkillTranslation: SkillTranslation[];
   _count?: { ProjectSkill: number; CertificateSkill: number };
 };

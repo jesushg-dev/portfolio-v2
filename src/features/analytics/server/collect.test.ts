@@ -56,7 +56,7 @@ describe("handleAnalyticsCollect", () => {
     jest.spyOn(db.profile, "findFirst").mockResolvedValue(profile as never);
     jest.spyOn(db.profile, "findUnique").mockResolvedValue(profile as never);
     jest.mocked(consumeFixedWindowLimit).mockResolvedValue(true);
-    (auth.api.getSession as jest.Mock).mockResolvedValue(null);
+    (auth.api.getSession as unknown as jest.Mock).mockResolvedValue(null);
     jest.spyOn(db.analyticsDailyStat, "upsert").mockResolvedValue({} as never);
     jest.spyOn(Math, "random").mockReturnValue(0.9);
   });
@@ -95,7 +95,7 @@ describe("handleAnalyticsCollect", () => {
   });
 
   it("skips owner sessions", async () => {
-    (auth.api.getSession as jest.Mock).mockResolvedValue({
+    (auth.api.getSession as unknown as jest.Mock).mockResolvedValue({
       user: { id: "user-1" },
     });
     const upsertSpy = jest.spyOn(db.analyticsDailyStat, "upsert");
@@ -129,19 +129,23 @@ describe("handleAnalyticsCollect", () => {
   });
 
   it("falls back to update when upsert throws", async () => {
-    jest.spyOn(db.analyticsDailyStat, "upsert").mockRejectedValue(
-      new Error("race"),
-    );
-    const updateSpy = jest.spyOn(db.analyticsDailyStat, "update").mockResolvedValue({} as never);
+    jest
+      .spyOn(db.analyticsDailyStat, "upsert")
+      .mockRejectedValue(new Error("race"));
+    const updateSpy = jest
+      .spyOn(db.analyticsDailyStat, "update")
+      .mockResolvedValue({} as never);
     await handleAnalyticsCollect(collectRequest({ path: "/" }));
     expect(updateSpy).toHaveBeenCalled();
   });
 
   it("prunes old stats on the rare path", async () => {
     jest.spyOn(Math, "random").mockReturnValue(0.01);
-    const deleteSpy = jest.spyOn(db.analyticsDailyStat, "deleteMany").mockResolvedValue({
-      count: 2,
-    });
+    const deleteSpy = jest
+      .spyOn(db.analyticsDailyStat, "deleteMany")
+      .mockResolvedValue({
+        count: 2,
+      });
     await handleAnalyticsCollect(collectRequest({ path: "/" }));
     expect(deleteSpy).toHaveBeenCalled();
   });

@@ -1,10 +1,9 @@
-import type { Skill } from "@prisma/client";
-
 import {
   buildEmptySkillCreateDto,
   mapSkillToEditorDto,
   mapSkillToPickerRow,
   mapSkillsToEditorDto,
+  type SkillWithRelations,
 } from "./skill-editor-dto";
 
 const languages = [
@@ -28,19 +27,11 @@ const skill = {
       appLanguageId: "lang-en",
       description: "UI library",
       urlWiki: "https://react.dev",
+      createdAt: new Date(),
     },
   ],
   _count: { ProjectSkill: 2, CertificateSkill: 1 },
-} as unknown as Skill & {
-  SkillTranslation: {
-    id: string;
-    skillId: string;
-    appLanguageId: string;
-    description: string;
-    urlWiki: string;
-  }[];
-  _count: { ProjectSkill: number; CertificateSkill: number };
-};
+} as unknown as SkillWithRelations;
 
 describe("skill editor dto", () => {
   it("maps translations and counts", () => {

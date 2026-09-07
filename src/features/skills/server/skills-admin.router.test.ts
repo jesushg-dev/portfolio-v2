@@ -38,18 +38,19 @@ function createDb(overrides: Record<string, unknown> = {}) {
     appLanguage: {
       findMany: jest.fn().mockResolvedValue(languages),
     },
-    $transaction: jest.fn(async (fn: (tx: unknown) => unknown) =>
-      await fn({
-        projectSkill: { deleteMany: jest.fn() },
-        certificateSkill: { deleteMany: jest.fn() },
-        serviceSkill: { deleteMany: jest.fn() },
-        cvExperienceSkill: { deleteMany: jest.fn() },
-        skillTranslation: { deleteMany: jest.fn() },
-        skill: {
-          delete: jest.fn().mockResolvedValue(skillRow),
-          deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
-        },
-      }),
+    $transaction: jest.fn(
+      async (fn: (tx: unknown) => unknown) =>
+        await fn({
+          projectSkill: { deleteMany: jest.fn() },
+          certificateSkill: { deleteMany: jest.fn() },
+          serviceSkill: { deleteMany: jest.fn() },
+          cvExperienceSkill: { deleteMany: jest.fn() },
+          skillTranslation: { deleteMany: jest.fn() },
+          skill: {
+            delete: jest.fn().mockResolvedValue(skillRow),
+            deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
+          },
+        }),
     ),
     ...overrides,
   };
