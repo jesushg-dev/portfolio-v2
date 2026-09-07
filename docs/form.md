@@ -4,11 +4,11 @@ Admin create/edit dialogs share layout primitives so lists stay consistent and P
 
 ## Building blocks
 
-| Module | Role |
-| --- | --- |
-| `src/components/shared/form-root.tsx` | `FormRoot` / `FormContent` / compact `FormItem` (label + description + control + message) |
-| `src/components/shared/form-dialog-content.tsx` | Modal chrome for intercepting `@modal` routes |
-| Feature `*-form.tsx` | Fields, zod schema, tRPC mutation |
+| Module                                          | Role                                                                                      |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `src/components/shared/form-root.tsx`           | `FormRoot` / `FormContent` / compact `FormItem` (label + description + control + message) |
+| `src/components/shared/form-dialog-content.tsx` | Modal chrome for intercepting `@modal` routes                                             |
+| Feature `*-form.tsx`                            | Fields, zod schema, tRPC mutation                                                         |
 
 Pattern:
 

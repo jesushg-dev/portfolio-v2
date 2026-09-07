@@ -6,18 +6,18 @@ Dashboard shell: `dashboard-shell.tsx` (sidebar). Intercepting routes under `adm
 
 ## Resources
 
-| Sidebar | Path | Feature folder | Notes |
-| --- | --- | --- | --- |
-| Overview | `/admin` | analytics + job stats | Session-scoped |
-| Profile | `/admin/profile` | `profile`, `terminal` | Hero, about, console steps |
-| CV | `/admin/cv` | `cv` | Header, contacts, education, languages, skills, experience, soft skills, additional, **personal references** |
-| Skills / projects / certs / timeline / services / soft skills | `/admin/<name>` | matching feature | List + `#<resource>-add` IDs for e2e |
-| Process pages | `/admin/process-pages` | `process-pages` | Templates WORKFLOW / QA |
-| Now / Uses | `/admin/now`, `/admin/uses` | `now`, `uses` | Public routes still gated by `PUBLIC_PAGE_LIVE` |
-| Job Tracker | `/admin/job-tracker` | `job-tracker` | [`job-tracker.md`](./job-tracker.md) |
-| Credentials | `/admin/credentials` | `integrations` | [`tenant-credentials.md`](./tenant-credentials.md) |
-| Settings | `/admin/settings` | auth + profile publish | 2FA, passkeys, `isPublished`, site brand |
-| Spotify (legacy path) | `/admin/spotify` | often redirects at credentials | Prefer Credentials → Spotify |
+| Sidebar                                                       | Path                        | Feature folder                 | Notes                                                                                                        |
+| ------------------------------------------------------------- | --------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| Overview                                                      | `/admin`                    | analytics + job stats          | Session-scoped                                                                                               |
+| Profile                                                       | `/admin/profile`            | `profile`, `terminal`          | Hero, about, console steps                                                                                   |
+| CV                                                            | `/admin/cv`                 | `cv`                           | Header, contacts, education, languages, skills, experience, soft skills, additional, **personal references** |
+| Skills / projects / certs / timeline / services / soft skills | `/admin/<name>`             | matching feature               | List + `#<resource>-add` IDs for e2e                                                                         |
+| Process pages                                                 | `/admin/process-pages`      | `process-pages`                | Templates WORKFLOW / QA                                                                                      |
+| Now / Uses                                                    | `/admin/now`, `/admin/uses` | `now`, `uses`                  | Public routes still gated by `PUBLIC_PAGE_LIVE`                                                              |
+| Job Tracker                                                   | `/admin/job-tracker`        | `job-tracker`                  | [`job-tracker.md`](./job-tracker.md)                                                                         |
+| Credentials                                                   | `/admin/credentials`        | `integrations`                 | [`tenant-credentials.md`](./tenant-credentials.md)                                                           |
+| Settings                                                      | `/admin/settings`           | auth + profile publish         | 2FA, passkeys, `isPublished`, site brand                                                                     |
+| Spotify (legacy path)                                         | `/admin/spotify`            | often redirects at credentials | Prefer Credentials → Spotify                                                                                 |
 
 Stable form IDs (`#skill-*`, `#cv-*`, `#timeline-*`, …) are required for Playwright. Do not rename without updating `e2e/helpers/`.
 

@@ -41,16 +41,16 @@ flowchart LR
 
 Code lives under `src/features/<name>/` (UI, lib, server routers). App Router pages in `src/app/[locale]/` stay thin.
 
-| Area | Public | Admin |
-| --- | --- | --- |
-| Profile / hero / about | `(home)` | `/admin/profile` |
-| Skills, projects, certs, timeline, services, soft skills | matching routes | `/admin/<resource>` |
-| CV | `/curriculum-vitae`, `/api/cv/pdf`, `/api/cv/docx` | `/admin/cv` |
-| Process pages | `/process/...` | `/admin/process-pages` |
-| Now / Uses / colophon / stats | gated by `PUBLIC_PAGE_LIVE` | `/admin/now`, `/admin/uses` |
-| Job Tracker + Resume Engine | — | `/admin/job-tracker`, resume workflows |
-| Integrations | Spotify widget, contact mail | `/admin/credentials` |
-| Analytics | beacon + `/stats` | dashboard cards |
+| Area                                                     | Public                                             | Admin                                  |
+| -------------------------------------------------------- | -------------------------------------------------- | -------------------------------------- |
+| Profile / hero / about                                   | `(home)`                                           | `/admin/profile`                       |
+| Skills, projects, certs, timeline, services, soft skills | matching routes                                    | `/admin/<resource>`                    |
+| CV                                                       | `/curriculum-vitae`, `/api/cv/pdf`, `/api/cv/docx` | `/admin/cv`                            |
+| Process pages                                            | `/process/...`                                     | `/admin/process-pages`                 |
+| Now / Uses / colophon / stats                            | gated by `PUBLIC_PAGE_LIVE`                        | `/admin/now`, `/admin/uses`            |
+| Job Tracker + Resume Engine                              | —                                                  | `/admin/job-tracker`, resume workflows |
+| Integrations                                             | Spotify widget, contact mail                       | `/admin/credentials`                   |
+| Analytics                                                | beacon + `/stats`                                  | dashboard cards                        |
 
 tRPC assembly: `src/server/api/root.ts`. Context (`src/server/api/trpc.ts`) always loads session + tenant.
 

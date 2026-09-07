@@ -6,11 +6,11 @@ Stored CMS media must already be a **local path** (`/…`) or an **absolute `htt
 
 `src/utils/tools/image.ts`:
 
-| `classifyMediaSrc` | Meaning |
-| --- | --- |
-| `local` | starts with `/` |
-| `remote-url` | valid `http://` or `https://` URL |
-| `empty` | blank, invalid URL, or shorthand id (`portf-1_bkhwxr`, `react`, …) |
+| `classifyMediaSrc` | Meaning                                                            |
+| ------------------ | ------------------------------------------------------------------ |
+| `local`            | starts with `/`                                                    |
+| `remote-url`       | valid `http://` or `https://` URL                                  |
+| `empty`            | blank, invalid URL, or shorthand id (`portf-1_bkhwxr`, `react`, …) |
 
 `isRenderableProjectImage` / `isAbsoluteOrLocalImagePath` gate cards so a leftover public id does not render a broken `next/image`.
 
