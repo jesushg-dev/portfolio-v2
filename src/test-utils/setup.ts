@@ -10,6 +10,24 @@ if (typeof global.TextDecoder === "undefined") {
   global.TextDecoder = TextDecoder;
 }
 
+if (typeof globalThis.Response === "undefined") {
+  globalThis.Response = class PolyfillResponse {
+    status: number;
+    headers: Headers;
+    constructor(
+      _body?: unknown,
+      init?: { status?: number; headers?: HeadersInit },
+    ) {
+      this.status = init?.status ?? 200;
+      this.headers = new Headers(init?.headers);
+    }
+
+    json(): Promise<unknown> {
+      return Promise.resolve(null);
+    }
+  } as unknown as typeof Response;
+}
+
 import enMessages from "../../messages/en.json";
 
 const mockMotionPropKeys = new Set([

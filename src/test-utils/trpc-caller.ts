@@ -1,10 +1,5 @@
-import type { AnyRouter } from "@trpc/server";
-
 import type { ResolvedTenant } from "@/lib/tenant/resolve";
-import {
-  createCallerFactory,
-  type createTRPCContext,
-} from "@/server/api/trpc";
+import type { createTRPCContext } from "@/server/api/trpc";
 
 export type TrpcTestContext = Awaited<ReturnType<typeof createTRPCContext>>;
 
@@ -60,9 +55,10 @@ export function createTrpcTestContext(options: {
   };
 }
 
-export function createRouterCaller<TRouter extends AnyRouter>(
-  router: TRouter,
-  ctx: TrpcTestContext,
-) {
-  return createCallerFactory(router)(ctx);
+export function createRouterCaller<
+  TRouter extends {
+    createCaller: (ctx: TrpcTestContext) => unknown;
+  },
+>(router: TRouter, ctx: TrpcTestContext): ReturnType<TRouter["createCaller"]> {
+  return router.createCaller(ctx) as ReturnType<TRouter["createCaller"]>;
 }
