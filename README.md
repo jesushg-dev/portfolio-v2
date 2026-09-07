@@ -41,16 +41,16 @@ Multi-tenant portfolio and CV platform. Each user gets a public site at `{userna
 
 Full catalog: [`docs/README.md`](./docs/README.md).
 
-| Doc | Topic |
-| --- | --- |
-| [`docs/architecture.md`](./docs/architecture.md) | Request flow, features, data |
-| [`docs/security.md`](./docs/security.md) | Auth, tenant isolation, headers, residual risk |
-| [`docs/auth-security.md`](./docs/auth-security.md) | Better Auth 1.7, 2FA, passkeys, rate limits |
-| [`docs/tenant-credentials.md`](./docs/tenant-credentials.md) | BYOK integrations |
-| [`docs/admin-cms.md`](./docs/admin-cms.md) | Admin resources and publish flags |
-| [`docs/analytics.md`](./docs/analytics.md) | Pageview collection and `/stats` |
-| [`docs/testing.md`](./docs/testing.md) | Jest, Playwright, CI |
-| [`.env.example`](./.env.example) | Environment variables |
+| Doc                                                          | Topic                                          |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| [`docs/architecture.md`](./docs/architecture.md)             | Request flow, features, data                   |
+| [`docs/security.md`](./docs/security.md)                     | Auth, tenant isolation, headers, residual risk |
+| [`docs/auth-security.md`](./docs/auth-security.md)           | Better Auth 1.7, 2FA, passkeys, rate limits    |
+| [`docs/tenant-credentials.md`](./docs/tenant-credentials.md) | BYOK integrations                              |
+| [`docs/admin-cms.md`](./docs/admin-cms.md)                   | Admin resources and publish flags              |
+| [`docs/analytics.md`](./docs/analytics.md)                   | Pageview collection and `/stats`               |
+| [`docs/testing.md`](./docs/testing.md)                       | Jest, Playwright, CI                           |
+| [`.env.example`](./.env.example)                             | Environment variables                          |
 
 ## Getting started
 
@@ -134,32 +134,32 @@ pnpm db:seed
 
 Copy [`.env.example`](./.env.example). Schema: `src/env.ts`.
 
-| Variable | Role |
-| --- | --- |
-| `MONGODB_URI` | Prisma MongoDB URI **with database name** |
-| `BETTER_AUTH_SECRET` | Auth signing + default integration encryption fallback |
-| `BETTER_AUTH_URL` | Canonical origin (emails, PDF base URL) |
-| `RESEND_*` | **System** mail only (password reset, 2FA OTP) |
-| `PRIMARY_DOMAIN` / `NEXT_PUBLIC_*` | Tenant host parsing |
-| `CV_PDF_GENERATOR_SECRET` | Required in production for `/api/internal/cv/generate-pdf` |
-| `INTEGRATION_ENCRYPTION_KEY` | Optional AES key for tenant secrets (else `BETTER_AUTH_SECRET`) |
-| `GOOGLE_*` / `GITHUB_*` | Optional social login |
+| Variable                           | Role                                                            |
+| ---------------------------------- | --------------------------------------------------------------- |
+| `MONGODB_URI`                      | Prisma MongoDB URI **with database name**                       |
+| `BETTER_AUTH_SECRET`               | Auth signing + default integration encryption fallback          |
+| `BETTER_AUTH_URL`                  | Canonical origin (emails, PDF base URL)                         |
+| `RESEND_*`                         | **System** mail only (password reset, 2FA OTP)                  |
+| `PRIMARY_DOMAIN` / `NEXT_PUBLIC_*` | Tenant host parsing                                             |
+| `CV_PDF_GENERATOR_SECRET`          | Required in production for `/api/internal/cv/generate-pdf`      |
+| `INTEGRATION_ENCRYPTION_KEY`       | Optional AES key for tenant secrets (else `BETTER_AUTH_SECRET`) |
+| `GOOGLE_*` / `GITHUB_*`            | Optional social login                                           |
 
 Portfolio Resend, Spotify, Google Calendar, UploadThing, and AI keys are **not** platform env vars.
 
 ## Scripts
 
-| Script | Purpose |
-| --- | --- |
-| `pnpm dev` | Next.js dev (Turbopack) |
-| `pnpm build` / `pnpm start` | Production server |
-| `pnpm lint` / `pnpm type` | ESLint + `tsc --noEmit` |
-| `pnpm test` | Jest |
-| `pnpm test:e2e` | Playwright smoke |
-| `pnpm test:e2e:full` | Full create suites |
-| `pnpm test:a11y` | axe on public routes |
-| `pnpm db:push` | Prisma schema → MongoDB |
-| `pnpm db:seed` | Idempotent seed |
+| Script                                         | Purpose                          |
+| ---------------------------------------------- | -------------------------------- |
+| `pnpm dev`                                     | Next.js dev (Turbopack)          |
+| `pnpm build` / `pnpm start`                    | Production server                |
+| `pnpm lint` / `pnpm type`                      | ESLint + `tsc --noEmit`          |
+| `pnpm test`                                    | Jest                             |
+| `pnpm test:e2e`                                | Playwright smoke                 |
+| `pnpm test:e2e:full`                           | Full create suites               |
+| `pnpm test:a11y`                               | axe on public routes             |
+| `pnpm db:push`                                 | Prisma schema → MongoDB          |
+| `pnpm db:seed`                                 | Idempotent seed                  |
 | `pnpm db:auth-audit` / `pnpm db:auth-backfill` | Better Auth 1.7 account identity |
 
 See [`docs/testing.md`](./docs/testing.md) for CI secrets and Playwright projects (`pnpm exec playwright test --project skills`).

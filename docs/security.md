@@ -6,14 +6,14 @@ Related: [`auth-security.md`](./auth-security.md), [`tenant-credentials.md`](./t
 
 ## Trust boundaries
 
-| Boundary | Rule |
-| --- | --- |
-| Tenant | Derived from **Host** (`parseTenantSlug`). Apex is the primary `Profile` only. |
-| Admin / tRPC mutations | `protectedProcedure` + `ctx.user.id` (never another user’s id from the client). |
-| Public CV | `isPublicCvVisible`: primary owner always; other tenants only if `isPublished`. |
-| Tenant secrets | AES-256-GCM at rest. Prefer `INTEGRATION_ENCRYPTION_KEY`; else `BETTER_AUTH_SECRET`. |
-| System vs product APIs | Platform `.env` Resend is auth-only. Portfolio mail/AI/storage/Spotify/Calendar are BYOK. |
-| Internal PDF | `Authorization: Bearer CV_PDF_GENERATOR_SECRET`. Chromium `baseUrl` is `getServerBaseUrl()`, not request JSON. |
+| Boundary               | Rule                                                                                                           |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Tenant                 | Derived from **Host** (`parseTenantSlug`). Apex is the primary `Profile` only.                                 |
+| Admin / tRPC mutations | `protectedProcedure` + `ctx.user.id` (never another user’s id from the client).                                |
+| Public CV              | `isPublicCvVisible`: primary owner always; other tenants only if `isPublished`.                                |
+| Tenant secrets         | AES-256-GCM at rest. Prefer `INTEGRATION_ENCRYPTION_KEY`; else `BETTER_AUTH_SECRET`.                           |
+| System vs product APIs | Platform `.env` Resend is auth-only. Portfolio mail/AI/storage/Spotify/Calendar are BYOK.                      |
+| Internal PDF           | `Authorization: Bearer CV_PDF_GENERATOR_SECRET`. Chromium `baseUrl` is `getServerBaseUrl()`, not request JSON. |
 
 `x-tenant-username` on `/api/*` is **not** set by middleware. Collect and tRPC must not treat that header as identity. PDF generation may send it **together with** `x-cv-pdf-tenant-proof` (HMAC-SHA256 of the username with `CV_PDF_GENERATOR_SECRET`) so preview hosts without tenant DNS still render the right CV.
 
@@ -38,12 +38,12 @@ CSP does **not** yet lock `script-src` / `style-src` (Next inline runtime + embe
 
 ## Rate limits (app)
 
-| Path | Limit |
-| --- | --- |
-| Better Auth sign-in / reset / 2FA | See `src/lib/auth.ts` `rateLimit.customRules` |
-| `POST /api/analytics/collect` | 60 / minute / IP |
-| `contact.sendMessage` | 5 / hour / IP / tenant |
-| `cvPublic.sendPdfByEmail` | 3 / hour / IP and 5 / day / recipient (`CvPdfEmailLog`) |
+| Path                              | Limit                                                   |
+| --------------------------------- | ------------------------------------------------------- |
+| Better Auth sign-in / reset / 2FA | See `src/lib/auth.ts` `rateLimit.customRules`           |
+| `POST /api/analytics/collect`     | 60 / minute / IP                                        |
+| `contact.sendMessage`             | 5 / hour / IP / tenant                                  |
+| `cvPublic.sendPdfByEmail`         | 3 / hour / IP and 5 / day / recipient (`CvPdfEmailLog`) |
 
 ## Uploads and outbound fetch
 

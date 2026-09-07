@@ -10,17 +10,17 @@ Order (see `prisma/seed.ts`): languages → primary user/profile (`seed-portfoli
 
 Idempotent: user/profile/header upsert; list sections typically `deleteMany` + `create` for that `userId`.
 
-| Fixture | Typical seeder |
-| --- | --- |
-| `portfolio-profile.json` | `seed-portfolio-user.ts` |
-| `portfolio-home.json` | hero / terminal |
-| `portfolio-cv.json` | `seed-portfolio-cv.ts` (includes `skillKeys`, personal references) |
-| `portfolio-skills.json` | skills |
-| `portfolio-projects.json` | projects |
-| `portfolio-certifications.json` | certifications |
-| `portfolio-timeline.json` | `seed-portfolio-timeline.ts` |
-| `portfolio-soft-skills.json` | `seed-portfolio-soft-skills.ts` |
-| `portfolio-now.json` / `portfolio-uses.json` / `portfolio-process-pages.json` | matching seeders when present |
+| Fixture                                                                       | Typical seeder                                                     |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `portfolio-profile.json`                                                      | `seed-portfolio-user.ts`                                           |
+| `portfolio-home.json`                                                         | hero / terminal                                                    |
+| `portfolio-cv.json`                                                           | `seed-portfolio-cv.ts` (includes `skillKeys`, personal references) |
+| `portfolio-skills.json`                                                       | skills                                                             |
+| `portfolio-projects.json`                                                     | projects                                                           |
+| `portfolio-certifications.json`                                               | certifications                                                     |
+| `portfolio-timeline.json`                                                     | `seed-portfolio-timeline.ts`                                       |
+| `portfolio-soft-skills.json`                                                  | `seed-portfolio-soft-skills.ts`                                    |
+| `portfolio-now.json` / `portfolio-uses.json` / `portfolio-process-pages.json` | matching seeders when present                                      |
 
 Locale maps in those files must include `en`, `es`, `nl` (`localized-completeness.test.ts`).
 

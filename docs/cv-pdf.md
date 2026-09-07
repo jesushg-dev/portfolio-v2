@@ -72,8 +72,8 @@ flowchart TB
 
 When Playwright generates the PDF, it does not render HTML in memory — it **navigates to the real web preview**.
 
-| Locale | URL visited by Chromium |
-| --- | --- |
+| Locale           | URL visited by Chromium                                |
+| ---------------- | ------------------------------------------------------ |
 | `en`, `es`, `nl` | `{getServerBaseUrl()}/{locale}/curriculum-vitae?pdf=1` |
 
 `getServerBaseUrl()` comes from `BETTER_AUTH_URL` / `VERCEL_URL` / localhost — **not** from the JSON body. The internal route does not accept `baseUrl` (SSRF).
