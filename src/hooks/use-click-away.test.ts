@@ -14,7 +14,9 @@ describe("useClickAway", () => {
     renderHook(() => useClickAway(ref, handler));
 
     act(() => {
-      document.body.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+      document.body.dispatchEvent(
+        new MouseEvent("mousedown", { bubbles: true }),
+      );
     });
     expect(handler).toHaveBeenCalledTimes(1);
 

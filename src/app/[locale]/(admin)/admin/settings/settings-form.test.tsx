@@ -71,8 +71,7 @@ describe("SettingsForm", () => {
         mapLocationLabel: "",
       });
       const firstCallArgs = mockUpsertProfile.mock.calls[0] as
-        | [Record<string, unknown>]
-        | undefined;
+        [Record<string, unknown>] | undefined;
       expect(firstCallArgs?.[0]).not.toHaveProperty("cvPdfUrl");
       expect(mockInvalidate).toHaveBeenCalled();
       expect(screen.getByText("Settings saved.")).toBeInTheDocument();

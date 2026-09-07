@@ -34,7 +34,9 @@ describe("useLocalStorage", () => {
   });
 
   it("falls back when stored JSON is invalid", () => {
-    const spy = jest.spyOn(console, "error").mockImplementation(() => {});
+    const spy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
     window.localStorage.setItem("bad", "{");
     const { result } = renderHook(() => useLocalStorage("bad", "ok"));
     expect(result.current[0]).toBe("ok");

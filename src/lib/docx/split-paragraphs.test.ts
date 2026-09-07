@@ -4,7 +4,7 @@ import {
 } from "./split-paragraphs";
 
 const xml =
-  "<w:body><w:p w:rsidR=\"1\"><w:r><w:t>Hello</w:t></w:r></w:p><w:p><w:r><w:t>World</w:t></w:r></w:p></w:body>";
+  '<w:body><w:p w:rsidR="1"><w:r><w:t>Hello</w:t></w:r></w:p><w:p><w:r><w:t>World</w:t></w:r></w:p></w:body>';
 
 describe("splitIntoParagraphs", () => {
   it("keeps separators around paragraph blocks", () => {

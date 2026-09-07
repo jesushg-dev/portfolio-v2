@@ -1,6 +1,9 @@
-import { act, renderHook } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 
-import { useBodyOverlayLock, useBodyOverlayLocked } from "./use-body-overlay-lock";
+import {
+  useBodyOverlayLock,
+  useBodyOverlayLocked,
+} from "./use-body-overlay-lock";
 
 describe("useBodyOverlayLock", () => {
   afterEach(() => {

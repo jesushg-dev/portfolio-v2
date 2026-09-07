@@ -5,7 +5,11 @@ function mockDb(existing: { count: number; lastRequest: bigint } | null) {
     rateLimit: {
       findUnique: jest.fn().mockResolvedValue(
         existing
-          ? { key: "app:test", count: existing.count, lastRequest: existing.lastRequest }
+          ? {
+              key: "app:test",
+              count: existing.count,
+              lastRequest: existing.lastRequest,
+            }
           : null,
       ),
       upsert: jest.fn().mockResolvedValue({}),

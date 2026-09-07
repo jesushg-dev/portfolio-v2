@@ -15,7 +15,9 @@ describe("StackTypeSchema", () => {
 
 describe("optionalUrl", () => {
   it("keeps a valid URL", () => {
-    expect(optionalUrl.parse("https://example.com")).toBe("https://example.com");
+    expect(optionalUrl.parse("https://example.com")).toBe(
+      "https://example.com",
+    );
   });
 
   it("turns an empty string into undefined", () => {

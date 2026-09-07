@@ -15,8 +15,8 @@ describe("safeInternalPath", () => {
 
 describe("buildLocalizedCallbackUrl", () => {
   it("joins origin and the localized pathname", () => {
-    expect(buildLocalizedCallbackUrl("en", "/admin", "https://jesushg.com")).toBe(
-      "https://jesushg.com/admin",
-    );
+    expect(
+      buildLocalizedCallbackUrl("en", "/admin", "https://jesushg.com"),
+    ).toBe("https://jesushg.com/admin");
   });
 });
