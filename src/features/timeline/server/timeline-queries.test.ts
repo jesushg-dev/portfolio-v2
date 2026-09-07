@@ -54,7 +54,7 @@ describe("timeline-queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(requireAuthenticatedUserId).mockResolvedValue("user-1");
-    jest.mocked(db.appLanguage.findMany).mockResolvedValue(languages as never);
+    jest.spyOn(db.appLanguage, "findMany").mockResolvedValue(languages as never);
   });
 
   it("returns an empty create DTO", async () => {
@@ -63,9 +63,9 @@ describe("timeline-queries", () => {
   });
 
   it("loads and lists timeline items", async () => {
-    jest.mocked(db.timelineItem.findUnique).mockResolvedValue(item as never);
-    jest.mocked(db.timelineItem.findMany).mockResolvedValue([item] as never);
-    jest.mocked(db.timelineItem.count).mockResolvedValue(1);
+    jest.spyOn(db.timelineItem, "findUnique").mockResolvedValue(item as never);
+    jest.spyOn(db.timelineItem, "findMany").mockResolvedValue([item] as never);
+    jest.spyOn(db.timelineItem, "count").mockResolvedValue(1);
 
     const editor = await getTimelineEditPageData("item-1");
     expect(editor.formDto.organization).toBe("Acme Corp");
@@ -95,7 +95,7 @@ describe("timeline-queries", () => {
   });
 
   it("throws when the item is missing", async () => {
-    jest.mocked(db.timelineItem.findUnique).mockResolvedValue(null);
+    jest.spyOn(db.timelineItem, "findUnique").mockResolvedValue(null);
     await expect(getTimelineEditPageData("missing")).rejects.toThrow(
       "NEXT_NOT_FOUND",
     );

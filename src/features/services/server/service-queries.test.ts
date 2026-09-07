@@ -54,7 +54,7 @@ describe("service-queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(requireAuthenticatedUserId).mockResolvedValue("user-1");
-    jest.mocked(db.appLanguage.findMany).mockResolvedValue(languages as never);
+    jest.spyOn(db.appLanguage, "findMany").mockResolvedValue(languages as never);
   });
 
   it("returns an empty create DTO", async () => {
@@ -63,9 +63,9 @@ describe("service-queries", () => {
   });
 
   it("loads and lists services", async () => {
-    jest.mocked(db.service.findUnique).mockResolvedValue(service as never);
-    jest.mocked(db.service.findMany).mockResolvedValue([service] as never);
-    jest.mocked(db.service.count).mockResolvedValue(1);
+    jest.spyOn(db.service, "findUnique").mockResolvedValue(service as never);
+    jest.spyOn(db.service, "findMany").mockResolvedValue([service] as never);
+    jest.spyOn(db.service, "count").mockResolvedValue(1);
 
     const editor = await getServiceEditPageData("sv-1");
     expect(editor.editorDto.translations["lang-en"]?.title).toBe("Web apps");
@@ -95,7 +95,7 @@ describe("service-queries", () => {
   });
 
   it("throws when the service is missing", async () => {
-    jest.mocked(db.service.findUnique).mockResolvedValue(null);
+    jest.spyOn(db.service, "findUnique").mockResolvedValue(null);
     await expect(getServiceEditPageData("missing")).rejects.toThrow(
       "NEXT_NOT_FOUND",
     );

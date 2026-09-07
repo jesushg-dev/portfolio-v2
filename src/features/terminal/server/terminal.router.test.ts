@@ -69,7 +69,7 @@ describe("terminalRouter", () => {
     const db = {
       cvTerminal: { findUnique: jest.fn().mockResolvedValue(terminal) },
       $transaction: jest.fn(async (fn: (client: typeof tx) => unknown) =>
-        fn(tx),
+        await fn(tx),
       ),
     };
     const caller = createRouterCaller(

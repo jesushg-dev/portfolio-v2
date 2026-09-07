@@ -59,13 +59,13 @@ describe("uses-queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(requireAuthenticatedUserId).mockResolvedValue("user-1");
-    jest.mocked(db.appLanguage.findMany).mockResolvedValue(languages as never);
+    jest.spyOn(db.appLanguage, "findMany").mockResolvedValue(languages as never);
   });
 
   it("returns create, edit, and list data", async () => {
-    jest.mocked(db.usesItem.findUnique).mockResolvedValue(item as never);
-    jest.mocked(db.usesItem.findMany).mockResolvedValue([item] as never);
-    jest.mocked(db.usesItem.count).mockResolvedValue(1);
+    jest.spyOn(db.usesItem, "findUnique").mockResolvedValue(item as never);
+    jest.spyOn(db.usesItem, "findMany").mockResolvedValue([item] as never);
+    jest.spyOn(db.usesItem, "count").mockResolvedValue(1);
 
     const created = await getUsesItemCreatePageData("SOFTWARE");
     expect(created.initialData.type).toBe("SOFTWARE");
@@ -84,15 +84,15 @@ describe("uses-queries", () => {
   });
 
   it("creates settings when missing", async () => {
-    jest.mocked(db.usesSettings.findUnique).mockResolvedValue(null);
-    jest.mocked(db.usesSettings.create).mockResolvedValue(settings as never);
-    jest.mocked(db.usesItem.findMany).mockResolvedValue([] as never);
+    jest.spyOn(db.usesSettings, "findUnique").mockResolvedValue(null);
+    jest.spyOn(db.usesSettings, "create").mockResolvedValue(settings as never);
+    jest.spyOn(db.usesItem, "findMany").mockResolvedValue([] as never);
     const page = await getUsesSettingsPageData();
     expect(page.settings.id).toBe("set-1");
   });
 
   it("throws when the item is missing", async () => {
-    jest.mocked(db.usesItem.findUnique).mockResolvedValue(null);
+    jest.spyOn(db.usesItem, "findUnique").mockResolvedValue(null);
     await expect(getUsesItemEditPageData("missing")).rejects.toThrow(
       "NEXT_NOT_FOUND",
     );

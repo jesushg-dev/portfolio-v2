@@ -60,13 +60,13 @@ describe("now-queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(requireAuthenticatedUserId).mockResolvedValue("user-1");
-    jest.mocked(db.appLanguage.findMany).mockResolvedValue(languages as never);
+    jest.spyOn(db.appLanguage, "findMany").mockResolvedValue(languages as never);
   });
 
   it("creates settings when missing and returns focuses", async () => {
-    jest.mocked(db.nowSettings.findUnique).mockResolvedValue(null);
-    jest.mocked(db.nowSettings.create).mockResolvedValue(settings as never);
-    jest.mocked(db.nowFocus.findMany).mockResolvedValue([focus] as never);
+    jest.spyOn(db.nowSettings, "findUnique").mockResolvedValue(null);
+    jest.spyOn(db.nowSettings, "create").mockResolvedValue(settings as never);
+    jest.spyOn(db.nowFocus, "findMany").mockResolvedValue([focus] as never);
 
     const page = await getNowAdminPageData();
     expect(page.settings.timezone).toBe("UTC");
@@ -74,7 +74,7 @@ describe("now-queries", () => {
   });
 
   it("returns a focus create DTO and edit DTO", async () => {
-    jest.mocked(db.nowFocus.findUnique).mockResolvedValue(focus as never);
+    jest.spyOn(db.nowFocus, "findUnique").mockResolvedValue(focus as never);
     const created = await getNowFocusCreatePageData();
     expect(created.initialData.order).toBe(0);
 
@@ -83,7 +83,7 @@ describe("now-queries", () => {
   });
 
   it("throws when the focus is missing", async () => {
-    jest.mocked(db.nowFocus.findUnique).mockResolvedValue(null);
+    jest.spyOn(db.nowFocus, "findUnique").mockResolvedValue(null);
     await expect(getNowFocusEditPageData("missing")).rejects.toThrow(
       "NEXT_NOT_FOUND",
     );

@@ -40,7 +40,7 @@ function createDb() {
     },
     appLanguage: { findMany: jest.fn().mockResolvedValue(languages) },
     $transaction: jest.fn(async (fn: (tx: unknown) => unknown) =>
-      fn({
+      await fn({
         certificateSkill: { deleteMany: jest.fn() },
         certificateProject: { deleteMany: jest.fn() },
         certificateService: { deleteMany: jest.fn() },

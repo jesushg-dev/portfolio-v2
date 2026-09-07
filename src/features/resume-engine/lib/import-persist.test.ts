@@ -99,7 +99,7 @@ describe("persistCvImportDraft", () => {
     expect(db.cvTechnicalSkill.create).toHaveBeenCalled();
     expect(db.cvExperience.create).toHaveBeenCalled();
     expect(db.certification.create).toHaveBeenCalledWith(
-      expect.objectContaining({
+      expect.objectContaining<Record<string, unknown>>({
         data: expect.objectContaining({ company: "Amazon" }),
       }),
     );

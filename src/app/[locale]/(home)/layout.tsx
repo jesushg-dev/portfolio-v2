@@ -48,7 +48,7 @@ export default async function SiteLayout({
     ? (locale as AppLocale)
     : "en";
   const heroData = await getCachedHeroPublic(activeLocale);
-  const lcpPhotoUrl = heroData?.photoUrl?.trim() || null;
+  const lcpPhotoUrl = heroData?.photoUrl?.trim() ?? null;
   const cvPublic = isPublicCvVisible(await resolveTenant());
   const siteBrand = await getCachedSiteBrand();
   const processNavPages = await api.processPages.listForNav({

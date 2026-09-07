@@ -31,7 +31,6 @@ import { interviewPrepAdminRouter } from "./interview-prep-admin.router";
 import {
   createRouterCaller,
   createTrpcTestContext,
-  MOCK_OWNER_USER,
 } from "@/test-utils/trpc-caller";
 
 describe("interviewPrepAdminRouter", () => {

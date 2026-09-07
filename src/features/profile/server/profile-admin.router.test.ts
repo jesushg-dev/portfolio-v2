@@ -61,7 +61,9 @@ function createDb() {
       deleteMany: jest.fn(),
       create: jest.fn(),
     },
-    $transaction: jest.fn(async (fn: (client: typeof tx) => unknown) => fn(tx)),
+    $transaction: jest.fn(async (fn: (client: typeof tx) => unknown) =>
+      await fn(tx),
+    ),
   };
 }
 

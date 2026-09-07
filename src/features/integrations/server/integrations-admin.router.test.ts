@@ -62,17 +62,17 @@ describe("integrationsAdminRouter", () => {
   it("masks secrets when Resend is configured", async () => {
     jest
       .mocked(getTenantIntegrationConfig)
-      .mockImplementation(async (_id, provider) => {
+      .mockImplementation((_id, provider) => {
         if (provider === "resend") {
-          return {
+          return Promise.resolve({
             apiKey: "re_abcdefghijklmnop",
             emailDomain: "jesushg.com",
             fromEmail: "hi@jesushg.com",
             emailSignatureHtml: "<p>Hi</p>",
             templates: { "cv-delivery-en": "tmpl-1" },
-          };
+          } as never);
         }
-        return null;
+        return Promise.resolve(null);
       });
     const caller = createRouterCaller(
       integrationsAdminRouter,

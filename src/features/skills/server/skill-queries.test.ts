@@ -49,7 +49,7 @@ describe("skill-queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(requireAuthenticatedUserId).mockResolvedValue("user-1");
-    jest.mocked(db.appLanguage.findMany).mockResolvedValue(languages as never);
+    jest.spyOn(db.appLanguage, "findMany").mockResolvedValue(languages as never);
   });
 
   it("returns an empty create DTO", async () => {
@@ -59,9 +59,9 @@ describe("skill-queries", () => {
   });
 
   it("loads an editor DTO and lists skills with filters", async () => {
-    jest.mocked(db.skill.findUnique).mockResolvedValue(skill as never);
-    jest.mocked(db.skill.findMany).mockResolvedValue([skill] as never);
-    jest.mocked(db.skill.count).mockResolvedValue(1);
+    jest.spyOn(db.skill, "findUnique").mockResolvedValue(skill as never);
+    jest.spyOn(db.skill, "findMany").mockResolvedValue([skill] as never);
+    jest.spyOn(db.skill, "count").mockResolvedValue(1);
 
     const editor = await getSkillEditPageData("sk-1");
     expect(editor.editorDto.title).toBe("React");
@@ -92,7 +92,7 @@ describe("skill-queries", () => {
   });
 
   it("throws when the skill is missing", async () => {
-    jest.mocked(db.skill.findUnique).mockResolvedValue(null);
+    jest.spyOn(db.skill, "findUnique").mockResolvedValue(null);
     await expect(getSkillEditPageData("missing")).rejects.toThrow(
       "NEXT_NOT_FOUND",
     );

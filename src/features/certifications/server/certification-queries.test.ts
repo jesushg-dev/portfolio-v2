@@ -45,7 +45,7 @@ describe("certification-queries", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.mocked(requireAuthenticatedUserId).mockResolvedValue("user-1");
-    jest.mocked(db.appLanguage.findMany).mockResolvedValue(languages as never);
+    jest.spyOn(db.appLanguage, "findMany").mockResolvedValue(languages as never);
   });
 
   it("returns an empty create DTO", async () => {
@@ -55,12 +55,12 @@ describe("certification-queries", () => {
 
   it("loads and lists certifications", async () => {
     jest
-      .mocked(db.certification.findUnique)
+      .spyOn(db.certification, "findUnique")
       .mockResolvedValue(certification as never);
     jest
-      .mocked(db.certification.findMany)
+      .spyOn(db.certification, "findMany")
       .mockResolvedValue([certification] as never);
-    jest.mocked(db.certification.count).mockResolvedValue(1);
+    jest.spyOn(db.certification, "count").mockResolvedValue(1);
 
     const editor = await getCertificationEditPageData("cert-1");
     expect(editor.editorDto.company).toBe("AWS");
@@ -90,7 +90,7 @@ describe("certification-queries", () => {
   });
 
   it("throws when the certification is missing", async () => {
-    jest.mocked(db.certification.findUnique).mockResolvedValue(null);
+    jest.spyOn(db.certification, "findUnique").mockResolvedValue(null);
     await expect(getCertificationEditPageData("missing")).rejects.toThrow(
       "NEXT_NOT_FOUND",
     );

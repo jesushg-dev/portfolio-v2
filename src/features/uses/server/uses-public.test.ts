@@ -34,7 +34,7 @@ describe("getUsesPageData", () => {
       logoInitials: "AL",
       logoImageUrl: null,
     });
-    jest.mocked(db.usesSettings.findUnique).mockResolvedValue({
+    jest.spyOn(db.usesSettings, "findUnique").mockResolvedValue({
       workspaceImage: "https://cdn.example/desk.png",
       codingPreviewLight: null,
       codingPreviewDark: null,
@@ -72,7 +72,7 @@ describe("getUsesPageData", () => {
         },
       ],
     } as never);
-    jest.mocked(db.usesItem.findMany).mockResolvedValue([
+    jest.spyOn(db.usesItem, "findMany").mockResolvedValue([
       {
         id: "sw-1",
         type: "SOFTWARE",

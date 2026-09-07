@@ -24,27 +24,28 @@ import { db } from "@/server/db";
 
 describe("sitemap", () => {
   it("returns only static entries when there is no primary profile", async () => {
-    (db.profile.findFirst as jest.Mock).mockResolvedValue(null);
+    jest.spyOn(db.profile, "findFirst").mockResolvedValue(null);
+    const findProjectsSpy = jest.spyOn(db.project, "findMany");
     const entries = await sitemap();
     expect(entries.length).toBeGreaterThan(0);
-    expect(db.project.findMany).not.toHaveBeenCalled();
+    expect(findProjectsSpy).not.toHaveBeenCalled();
   });
 
   it("adds project, skill, and process page URLs", async () => {
-    (db.profile.findFirst as jest.Mock).mockResolvedValue({
+    jest.spyOn(db.profile, "findFirst").mockResolvedValue({
       userId: "user-1",
       updatedAt: new Date("2026-01-01"),
-    });
-    (db.project.findMany as jest.Mock).mockResolvedValue([
+    } as never);
+    jest.spyOn(db.project, "findMany").mockResolvedValue([
       { slug: "eleven", createdAt: new Date("2026-01-02") },
       { slug: "  ", createdAt: new Date("2026-01-02") },
-    ]);
-    (db.skill.findMany as jest.Mock).mockResolvedValue([
+    ] as never);
+    jest.spyOn(db.skill, "findMany").mockResolvedValue([
       { title: "Next.js", createdAt: new Date("2026-01-03") },
-    ]);
-    (db.processPage.findMany as jest.Mock).mockResolvedValue([
+    ] as never);
+    jest.spyOn(db.processPage, "findMany").mockResolvedValue([
       { slug: "how-i-use-ai", updatedAt: new Date("2026-01-04") },
-    ]);
+    ] as never);
 
     const entries = await sitemap();
     const urls = entries.map((entry) => entry.url).join(" ");

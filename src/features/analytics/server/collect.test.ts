@@ -45,7 +45,7 @@ function collectRequest(
   });
 
   return {
-    json: async () => body,
+    json: () => Promise.resolve(body),
     headers: headerBag,
   } as unknown as Request;
 }
@@ -53,11 +53,11 @@ function collectRequest(
 describe("handleAnalyticsCollect", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (db.profile.findFirst as jest.Mock).mockResolvedValue(profile);
-    (db.profile.findUnique as jest.Mock).mockResolvedValue(profile);
-    (consumeFixedWindowLimit as jest.Mock).mockResolvedValue(true);
+    jest.spyOn(db.profile, "findFirst").mockResolvedValue(profile as never);
+    jest.spyOn(db.profile, "findUnique").mockResolvedValue(profile as never);
+    jest.mocked(consumeFixedWindowLimit).mockResolvedValue(true);
     (auth.api.getSession as jest.Mock).mockResolvedValue(null);
-    (db.analyticsDailyStat.upsert as jest.Mock).mockResolvedValue({});
+    jest.spyOn(db.analyticsDailyStat, "upsert").mockResolvedValue({} as never);
     jest.spyOn(Math, "random").mockReturnValue(0.9);
   });
 
@@ -66,43 +66,48 @@ describe("handleAnalyticsCollect", () => {
   });
 
   it("returns 204 for invalid JSON payloads", async () => {
+    const upsertSpy = jest.spyOn(db.analyticsDailyStat, "upsert");
     const response = await handleAnalyticsCollect(
       collectRequest({ path: 123 }),
     );
     expect(response.status).toBe(204);
-    expect(db.analyticsDailyStat.upsert).not.toHaveBeenCalled();
+    expect(upsertSpy).not.toHaveBeenCalled();
   });
 
   it("returns 204 when no tenant profile exists", async () => {
-    (db.profile.findFirst as jest.Mock).mockResolvedValue(null);
+    jest.spyOn(db.profile, "findFirst").mockResolvedValue(null);
+    const upsertSpy = jest.spyOn(db.analyticsDailyStat, "upsert");
     const response = await handleAnalyticsCollect(
       collectRequest({ path: "/" }),
     );
     expect(response.status).toBe(204);
-    expect(db.analyticsDailyStat.upsert).not.toHaveBeenCalled();
+    expect(upsertSpy).not.toHaveBeenCalled();
   });
 
   it("returns 204 when the rate limit is exceeded", async () => {
-    (consumeFixedWindowLimit as jest.Mock).mockResolvedValue(false);
+    jest.mocked(consumeFixedWindowLimit).mockResolvedValue(false);
+    const upsertSpy = jest.spyOn(db.analyticsDailyStat, "upsert");
     const response = await handleAnalyticsCollect(
       collectRequest({ path: "/" }),
     );
     expect(response.status).toBe(204);
-    expect(db.analyticsDailyStat.upsert).not.toHaveBeenCalled();
+    expect(upsertSpy).not.toHaveBeenCalled();
   });
 
   it("skips owner sessions", async () => {
     (auth.api.getSession as jest.Mock).mockResolvedValue({
       user: { id: "user-1" },
     });
+    const upsertSpy = jest.spyOn(db.analyticsDailyStat, "upsert");
     const response = await handleAnalyticsCollect(
       collectRequest({ path: "/" }),
     );
     expect(response.status).toBe(204);
-    expect(db.analyticsDailyStat.upsert).not.toHaveBeenCalled();
+    expect(upsertSpy).not.toHaveBeenCalled();
   });
 
   it("increments pageviews for a public visit", async () => {
+    const upsertSpy = jest.spyOn(db.analyticsDailyStat, "upsert");
     const response = await handleAnalyticsCollect(
       collectRequest(
         { path: "/en/curriculum-vitae", isNewVisit: true, referrer: "" },
@@ -110,8 +115,8 @@ describe("handleAnalyticsCollect", () => {
       ),
     );
     expect(response.status).toBe(204);
-    expect(db.analyticsDailyStat.upsert).toHaveBeenCalledWith(
-      expect.objectContaining({
+    expect(upsertSpy).toHaveBeenCalledWith(
+      expect.objectContaining<Record<string, unknown>>({
         create: expect.objectContaining({
           userId: "user-1",
           path: "/curriculum-vitae",
@@ -124,26 +129,27 @@ describe("handleAnalyticsCollect", () => {
   });
 
   it("falls back to update when upsert throws", async () => {
-    (db.analyticsDailyStat.upsert as jest.Mock).mockRejectedValue(
+    jest.spyOn(db.analyticsDailyStat, "upsert").mockRejectedValue(
       new Error("race"),
     );
-    (db.analyticsDailyStat.update as jest.Mock).mockResolvedValue({});
+    const updateSpy = jest.spyOn(db.analyticsDailyStat, "update").mockResolvedValue({} as never);
     await handleAnalyticsCollect(collectRequest({ path: "/" }));
-    expect(db.analyticsDailyStat.update).toHaveBeenCalled();
+    expect(updateSpy).toHaveBeenCalled();
   });
 
   it("prunes old stats on the rare path", async () => {
     jest.spyOn(Math, "random").mockReturnValue(0.01);
-    (db.analyticsDailyStat.deleteMany as jest.Mock).mockResolvedValue({
+    const deleteSpy = jest.spyOn(db.analyticsDailyStat, "deleteMany").mockResolvedValue({
       count: 2,
     });
     await handleAnalyticsCollect(collectRequest({ path: "/" }));
-    expect(db.analyticsDailyStat.deleteMany).toHaveBeenCalled();
+    expect(deleteSpy).toHaveBeenCalled();
   });
 
   it("fails open when rate-limit storage errors", async () => {
-    (consumeFixedWindowLimit as jest.Mock).mockRejectedValue(new Error("db"));
+    jest.mocked(consumeFixedWindowLimit).mockRejectedValue(new Error("db"));
+    const upsertSpy = jest.spyOn(db.analyticsDailyStat, "upsert");
     await handleAnalyticsCollect(collectRequest({ path: "/" }));
-    expect(db.analyticsDailyStat.upsert).toHaveBeenCalled();
+    expect(upsertSpy).toHaveBeenCalled();
   });
 });

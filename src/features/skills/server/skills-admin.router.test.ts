@@ -39,7 +39,7 @@ function createDb(overrides: Record<string, unknown> = {}) {
       findMany: jest.fn().mockResolvedValue(languages),
     },
     $transaction: jest.fn(async (fn: (tx: unknown) => unknown) =>
-      fn({
+      await fn({
         projectSkill: { deleteMany: jest.fn() },
         certificateSkill: { deleteMany: jest.fn() },
         serviceSkill: { deleteMany: jest.fn() },
