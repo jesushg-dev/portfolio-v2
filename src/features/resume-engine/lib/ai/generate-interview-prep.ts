@@ -111,7 +111,11 @@ export async function generateInterviewPrepPack(
   providerName?: string,
 ): Promise<{ result: InterviewPrepResult; provider: AiProviderName }> {
   const append = Boolean(meta.existingQuestions?.length);
-  const systemPrompt = buildInterviewPrepSystemPrompt(meta.eventType, append);
+  const systemPrompt = buildInterviewPrepSystemPrompt(
+    meta.eventType,
+    append,
+    meta.focusTools ?? [],
+  );
   const userPrompt = buildInterviewPrepUserPrompt(
     draft,
     jobDescription,

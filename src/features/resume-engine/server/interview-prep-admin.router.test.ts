@@ -120,5 +120,130 @@ describe("interviewPrepAdminRouter", () => {
     expect(page.companyName).toBe("Acme");
     expect(page.hasJobDescription).toBe(true);
     expect(page.questions[0]?.question).toBe("Why this role?");
+    expect(page.suggestedTools).toContain("React");
+  });
+
+  it("passes focusTools to getInterviewPrepPrompt", async () => {
+    const { resolveInterviewPrepContext } =
+      await import("@/features/resume-engine/lib/resolve-interview-prep-context");
+    const { buildInterviewPrepPromptPackage } =
+      await import("@/features/resume-engine/lib/ai/interview-prep-prompt-package");
+
+    jest.mocked(resolveInterviewPrepContext).mockResolvedValue({
+      applicationId: "app-1",
+      position: "Dev",
+      companyName: "Acme",
+      jobDescription: "React role",
+      draft: {} as never,
+      matchAnalysis: null,
+      source: "export",
+      event: { id: "ev-1", type: "INTERVIEW", title: "Tech", notes: null },
+    });
+
+    jest.mocked(buildInterviewPrepPromptPackage).mockReturnValue({
+      systemPrompt: "system",
+      userPrompt: "user",
+      combinedPrompt: "system\n\nuser",
+    });
+
+    const caller = createRouterCaller(
+      interviewPrepAdminRouter,
+      createTrpcTestContext({ db: {} }),
+    );
+
+    const prompt = await caller.getInterviewPrepPrompt({
+      applicationId: "app-1",
+      eventId: "ev-1",
+      focusTools: ["React", "PostgreSQL"],
+    });
+
+    expect(prompt.systemPrompt).toBe("system");
+    expect(prompt.userPrompt).toBe("user");
+    expect(buildInterviewPrepPromptPackage).toHaveBeenCalledWith(
+      expect.anything(),
+      "React role",
+      null,
+      expect.objectContaining({
+        focusTools: ["React", "PostgreSQL"],
+      }),
+    );
+  });
+
+  it("passes focusTools to generateInterviewPrep auto generator", async () => {
+    const { resolveInterviewPrepContext } =
+      await import("@/features/resume-engine/lib/resolve-interview-prep-context");
+    const { generateInterviewPrepPack } =
+      await import("@/features/resume-engine/lib/ai/generate-interview-prep");
+    const { persistInterviewPrepQuestions } =
+      await import("@/features/resume-engine/lib/persist-interview-prep");
+
+    jest.mocked(resolveInterviewPrepContext).mockResolvedValue({
+      applicationId: "app-1",
+      position: "Dev",
+      companyName: "Acme",
+      jobDescription: "React role",
+      draft: {} as never,
+      matchAnalysis: null,
+      source: "export",
+      event: { id: "ev-1", type: "INTERVIEW", title: "Tech", notes: null },
+    });
+
+    jest.mocked(generateInterviewPrepPack).mockResolvedValue({
+      provider: "gemini",
+      result: {
+        detectedLocale: "en",
+        questions: [
+          {
+            category: "technical",
+            question: "How do you optimize React render cycles?",
+            whyTheyAsk: "Testing depth",
+            modelAnswer: "Use memo and profiling.",
+            talkingPoints: ["memo", "profiler"],
+            evidenceFromCv: [],
+            avoid: [],
+          },
+        ],
+      },
+    });
+
+    jest.mocked(persistInterviewPrepQuestions).mockResolvedValue([
+      {
+        id: "q-tool",
+        eventId: "ev-1",
+        category: "technical",
+        question: "How do you optimize React render cycles?",
+        whyTheyAsk: "Testing depth",
+        modelAnswer: "Use memo and profiling.",
+        talkingPoints: ["memo", "profiler"],
+        evidenceFromCv: [],
+        avoid: [],
+        createdAt: new Date("2026-01-01"),
+      },
+    ]);
+
+    const caller = createRouterCaller(
+      interviewPrepAdminRouter,
+      createTrpcTestContext({ db: {} }),
+    );
+
+    const result = await caller.generateInterviewPrep({
+      applicationId: "app-1",
+      eventId: "ev-1",
+      replace: true,
+      focusTools: ["React"],
+    });
+
+    expect(generateInterviewPrepPack).toHaveBeenCalledWith(
+      expect.anything(),
+      "React role",
+      null,
+      expect.objectContaining({
+        focusTools: ["React"],
+      }),
+      expect.anything(),
+      undefined,
+    );
+    expect(result.questions).toHaveLength(1);
+    expect(result.questions[0]?.question).toContain("React");
   });
 });

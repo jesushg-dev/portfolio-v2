@@ -14,6 +14,7 @@ import {
   Plus,
   RefreshCw,
   Shuffle,
+  Wrench,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -34,8 +35,10 @@ interface InterviewPrepPracticeProps {
   eventId: string;
   questions: InterviewPrepStoredQuestion[];
   eventType: InterviewPrepEventType;
+  suggestedTools?: string[];
   onRegenerate?: () => void;
   onGenerateMore?: () => void;
+  onGenerateForTool?: (tool: string) => void;
   isGeneratingMore?: boolean;
 }
 
@@ -59,12 +62,13 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
   eventId,
   questions,
   eventType,
+  suggestedTools = [],
   onRegenerate,
   onGenerateMore,
+  onGenerateForTool,
   isGeneratingMore,
 }) => {
   const t = useTranslations("admin.jobTracker.interviewPrep");
-  const tTracker = useTranslations("admin.jobTracker");
   const [orderRest, setOrderRest] = useState<string[]>(() =>
     questions
       .filter((question) => question.category !== "hire")
@@ -189,7 +193,7 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
         <div className="min-w-0 text-[13px]">
           <p className="font-medium">
             {t("alreadyDoneForType", {
-              type: tTracker(`eventType.${eventType}`),
+              type: t(`eventType.${eventType}`),
               count: questions.length,
             })}
           </p>
@@ -254,6 +258,38 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
         </ButtonGroup>
       </div>
 
+      {onGenerateForTool && suggestedTools.length > 0 ? (
+        <div className="border-border bg-card text-card-foreground rounded-lg border p-3.5 sm:p-4">
+          <div className="text-foreground flex items-center gap-1.5 text-xs font-semibold">
+            <Wrench className="text-primary size-3.5" aria-hidden />
+            <span>{t("toolDeepDive")}</span>
+          </div>
+          <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+            {t("focusToolsHint")}
+          </p>
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
+            {suggestedTools.map((tool) => (
+              <Button
+                key={tool}
+                type="button"
+                size="sm"
+                variant="outline"
+                className="h-7 text-xs"
+                disabled={isGeneratingMore}
+                onClick={() => onGenerateForTool(tool)}
+              >
+                {isGeneratingMore ? (
+                  <Loader2 className="mr-1 size-3 animate-spin" />
+                ) : (
+                  <Plus className="mr-1 size-3" aria-hidden />
+                )}
+                {t("generateForTool", { tool })}
+              </Button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       {technicalQuestions.length > 0 ? (
         <div className="space-y-2">
           <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
@@ -273,7 +309,7 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
                 total: drillOrdered.length,
               })}
             </p>
-            <CategoryBadge category={current.category} />
+            <CategoryBadge category={current.category} t={t} />
           </div>
 
           <p className="text-[15px] leading-snug font-medium sm:text-base">
@@ -430,8 +466,13 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
   );
 };
 
-function CategoryBadge({ category }: { category: InterviewPrepCategory }) {
-  const t = useTranslations("admin.jobTracker.interviewPrep");
+function CategoryBadge({
+  category,
+  t,
+}: {
+  category: InterviewPrepCategory;
+  t: ReturnType<typeof useTranslations<"admin.jobTracker.interviewPrep">>;
+}) {
   return (
     <span className="bg-muted text-muted-foreground shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
       {t(`category.${category}`)}

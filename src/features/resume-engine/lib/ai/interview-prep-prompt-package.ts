@@ -14,6 +14,7 @@ export interface InterviewPrepPromptMeta {
   eventTitle: string;
   eventNotes?: string | null;
   existingQuestions?: string[];
+  focusTools?: string[];
 }
 
 export function buildInterviewPrepUserPrompt(
@@ -33,11 +34,18 @@ export function buildInterviewPrepUserPrompt(
     ? `\nEVENT NOTES:\n${meta.eventNotes.trim()}\n`
     : "";
 
+  const tools =
+    meta.focusTools && meta.focusTools.length > 0
+      ? `\nFOCUS TOOLS / DEEP DIVE TECHNOLOGIES:\n${meta.focusTools
+          .map((t) => `- ${t}`)
+          .join("\n")}\n`
+      : "";
+
   return `ROLE: ${meta.position}
 COMPANY: ${meta.companyName}
 EVENT TYPE: ${meta.eventType}
 EVENT TITLE: ${meta.eventTitle}
-${notes}${existing}
+${notes}${tools}${existing}
 STRUCTURED RESUME:
 ${JSON.stringify(draft, null, 2)}
 
@@ -60,7 +68,11 @@ export function buildInterviewPrepPromptPackage(
   meta: InterviewPrepPromptMeta,
 ): AiPromptPackage {
   const append = Boolean(meta.existingQuestions?.length);
-  const systemPrompt = buildInterviewPrepSystemPrompt(meta.eventType, append);
+  const systemPrompt = buildInterviewPrepSystemPrompt(
+    meta.eventType,
+    append,
+    meta.focusTools ?? [],
+  );
   const userPrompt = buildInterviewPrepUserPrompt(
     draft,
     jobDescription,

@@ -12,10 +12,16 @@ const EVENT_FOCUS: Record<InterviewPrepEventType, string> = {
 export function buildInterviewPrepSystemPrompt(
   eventType: InterviewPrepEventType,
   append: boolean,
+  focusTools: string[] = [],
 ): string {
   const countRule = append
     ? `Return 4-6 NEW questions only. Do not repeat or paraphrase EXISTING QUESTIONS from the user message. Do NOT add another "hire" question.`
     : EVENT_FOCUS[eventType];
+
+  const toolsRule =
+    focusTools.length > 0
+      ? `\n- TOOL-SPECIFIC DEEP DIVE: The candidate has requested a deep dive into the following tool(s)/technology(ies): ${focusTools.join(", ")}. Formulate deep, realistic technical scenarios (e.g., performance tuning, production debugging, concurrency/locking, architectural trade-offs, failure recovery, or real-world system design) directly relevant to how those tools are used in this job description. Set their category to "technical" or "role". Avoid basic syntax or textbook definition trivia.`
+      : "";
 
   return `
 You create a private interview-prep pack for a job seeker, tailored to one scheduled hiring event.
@@ -33,7 +39,7 @@ RULES:
 - Closing: include questions the candidate should ask about the role, team, and hardest problems — not "what is the salary" as the only ask.
 - Ground every answer in evidenceFromCv (role, company, or bullet). If a topic is a skill gap, coach an honest framing — do not claim the missing skill.
 - talkingPoints: 3-5 short bullets the candidate can glance at.
-- avoid: phrases or claims that would oversell or contradict the resume.
+- avoid: phrases or claims that would oversell or contradict the resume.${toolsRule}
 
 RESPONSE FORMAT:
 Return a single JSON object (no markdown fences):

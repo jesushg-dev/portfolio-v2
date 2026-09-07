@@ -22,6 +22,9 @@ import {
 } from "@/features/resume-engine/lib/interview-prep-result";
 import { InterviewPrepCategorySchema } from "@/features/resume-engine/lib/interview-prep-result";
 
+import { extractJobTools } from "@/features/resume-engine/lib/extract-job-tools";
+import { parseMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
+
 const aiProviderSchema = z
   .enum(["claude", "openai", "deepseek", "gemini"])
   .optional();
@@ -99,6 +102,7 @@ export const interviewPrepAdminRouter = createTRPCRouter({
           select: {
             structuredSnapshot: true,
             jobDescription: true,
+            matchAnalysis: true,
           },
         }),
         ctx.db.interviewPrepQuestion.findMany({
@@ -114,16 +118,29 @@ export const interviewPrepAdminRouter = createTRPCRouter({
         ? CvImportDraftSchema.safeParse(latestExport.structuredSnapshot)
         : null;
 
-      const jdLength = Math.max(
-        application.description?.trim().length ?? 0,
-        latestExport?.jobDescription?.trim().length ?? 0,
-      );
+      const exportJd = latestExport?.jobDescription?.trim();
+      const appJd = application.description?.trim();
+      const jd = exportJd && exportJd.length > 0 ? exportJd : (appJd ?? "");
+
+      const snapshotSkills = snapshot?.success
+        ? snapshot.data.skills.flatMap((s) => s.items)
+        : [];
+      const matchKeywords = latestExport?.matchAnalysis
+        ? (parseMatchAnalysis(latestExport.matchAnalysis)?.keywords ?? []).map(
+            (k) => k.term,
+          )
+        : [];
+
+      const suggestedTools = extractJobTools(jd, snapshotSkills, matchKeywords);
+
+      const jdLength = jd.length;
 
       return {
         position: application.position,
         companyName: application.company.name,
         hasJobDescription: jdLength >= 20,
         hasTailoredSnapshot: Boolean(snapshot?.success),
+        suggestedTools,
         event: {
           id: event.id,
           type: InterviewPrepEventTypeSchema.catch("INTERVIEW").parse(
@@ -138,7 +155,12 @@ export const interviewPrepAdminRouter = createTRPCRouter({
     }),
 
   getInterviewPrepPrompt: protectedProcedure
-    .input(eventIdInput.extend({ append: z.boolean().optional() }))
+    .input(
+      eventIdInput.extend({
+        append: z.boolean().optional(),
+        focusTools: z.array(z.string()).optional(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const context = await resolveInterviewPrepContext(
         ctx.db,
@@ -166,6 +188,7 @@ export const interviewPrepAdminRouter = createTRPCRouter({
           eventTitle: context.event.title,
           eventNotes: context.event.notes,
           existingQuestions: existing.map((row) => row.question),
+          focusTools: input.focusTools,
         },
       );
     }),
@@ -175,6 +198,7 @@ export const interviewPrepAdminRouter = createTRPCRouter({
       eventIdInput.extend({
         provider: aiProviderSchema,
         replace: z.boolean(),
+        focusTools: z.array(z.string()).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -205,6 +229,7 @@ export const interviewPrepAdminRouter = createTRPCRouter({
           eventTitle: context.event.title,
           eventNotes: context.event.notes,
           existingQuestions: existing.map((row) => row.question),
+          focusTools: input.focusTools,
         },
         credentials,
         input.provider,
