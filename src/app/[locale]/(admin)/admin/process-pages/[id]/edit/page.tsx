@@ -1,7 +1,7 @@
 export { generateMetadata } from "../../metadata";
 import { getTranslations } from "next-intl/server";
 
-import { ProcessPageFormLazy } from "@/features/process-pages/components/admin/process-page-form-lazy";
+import { ProcessPageForm } from "@/features/process-pages/components/admin/process-page-form";
 import { getProcessPageEditPageData } from "@/features/process-pages/server/process-pages-queries";
 
 interface Props {
@@ -18,7 +18,7 @@ export default async function EditProcessPagePage({ params }: Props) {
   return (
     <div className="w-full">
       <span className="sr-only">{t("editDescription")}</span>
-      <ProcessPageFormLazy initialData={editorDto} languages={languages} />
+      <ProcessPageForm initialData={editorDto} languages={languages} />
     </div>
   );
 }

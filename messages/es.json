@@ -2443,6 +2443,8 @@
         "updateFailed": "No se pudo actualizar el foco"
       },
       "processPage": {
+        "addNew": "Agregar página",
+        "editTitle": "Editar página de proceso",
         "sectionBasics": "Básicos",
         "sectionCopy": "Textos",
         "sectionPageNav": "Navegación en la página",

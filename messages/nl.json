@@ -2443,6 +2443,8 @@
         "updateFailed": "Kon focus niet bijwerken"
       },
       "processPage": {
+        "addNew": "Pagina toevoegen",
+        "editTitle": "Procespagina bewerken",
         "sectionBasics": "Basis",
         "sectionCopy": "Teksten",
         "sectionPageNav": "Navigatie op de pagina",

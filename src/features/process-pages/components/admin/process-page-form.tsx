@@ -102,7 +102,6 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
 }) => {
   const isEditMode = Boolean(initialData.id);
   const t = useTranslations("admin.forms.processPage");
-  const tPages = useTranslations("admin.processPages");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const primaryLang = resolvePrimaryLanguage(languages);
@@ -305,7 +304,7 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
         <header className="border-border bg-background/90 sticky top-0 z-20 flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3 backdrop-blur">
           <div>
             <p className="text-sm font-semibold">
-              {isEditMode ? tPages("editTitle") : tPages("addNew")}
+              {isEditMode ? t("editTitle") : t("addNew")}
             </p>
             <p className="text-muted-foreground text-xs">{t("designerHint")}</p>
           </div>
@@ -359,13 +358,14 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
               sections={sections}
               emptyLabel={t("emptyCanvas")}
               onRemove={removeWidget}
+              t={t}
             />
 
             <aside className="border-border overflow-y-auto border-l p-4">
               <p className="text-muted-foreground mb-3 text-xs font-semibold tracking-widest uppercase">
                 {t("pageSettings")}
               </p>
-              <DesignerSidebar activeLangId={activeLangId} />
+              <DesignerSidebar activeLangId={activeLangId} t={t} />
             </aside>
           </div>
           <DragOverlay>
@@ -382,6 +382,10 @@ export const ProcessPageForm: FC<ProcessPageFormProps> = ({
     </Form>
   );
 };
+
+type ProcessPageFormTranslation = ReturnType<
+  typeof useTranslations<"admin.forms.processPage">
+>;
 
 function PaletteItem({
   type,
@@ -430,13 +434,14 @@ function DesignerCanvas({
   sections,
   emptyLabel,
   onRemove,
+  t,
 }: {
   langId: string;
   sections: ProcessPageWidget[];
   emptyLabel: string;
   onRemove: (id: string) => void;
+  t: ProcessPageFormTranslation;
 }) {
-  const t = useTranslations("admin.forms.processPage");
   const { setNodeRef, isOver } = useDroppable({ id: "canvas" });
 
   return (
@@ -466,6 +471,7 @@ function DesignerCanvas({
               index={index}
               label={t(`widgets.${section.type}`)}
               onRemove={() => onRemove(section.id)}
+              t={t}
             />
           ))}
         </SortableContext>
@@ -480,14 +486,15 @@ function CanvasWidgetFrame({
   index,
   label,
   onRemove,
+  t,
 }: {
   section: ProcessPageWidget;
   langId: string;
   index: number;
   label: string;
   onRemove: () => void;
+  t: ProcessPageFormTranslation;
 }) {
-  const t = useTranslations("admin.forms.processPage");
   const {
     attributes,
     listeners,
@@ -540,8 +547,13 @@ function CanvasWidgetFrame({
   );
 }
 
-function DesignerSidebar({ activeLangId }: { activeLangId: string }) {
-  const t = useTranslations("admin.forms.processPage");
+function DesignerSidebar({
+  activeLangId,
+  t,
+}: {
+  activeLangId: string;
+  t: ProcessPageFormTranslation;
+}) {
   const { control } = useFormContext<ProcessPageFormValues>();
 
   return (
