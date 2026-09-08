@@ -65,6 +65,58 @@ const PDF_RESET_CSS = `
   }
 `;
 
+import fs from "node:fs";
+
+function findSystemChromiumExecutable(): string | undefined {
+  if (
+    process.env.CHROME_LOCAL_PATH &&
+    fs.existsSync(process.env.CHROME_LOCAL_PATH)
+  ) {
+    return process.env.CHROME_LOCAL_PATH;
+  }
+
+  const isWindows = process.platform === "win32";
+  const isMac = process.platform === "darwin";
+  const isLinux = process.platform === "linux";
+
+  const localAppData = process.env.LOCALAPPDATA ?? "";
+  const programFiles = process.env.ProgramFiles ?? "C:\\Program Files";
+  const programFilesX86 =
+    process.env["ProgramFiles(x86)"] ?? "C:\\Program Files (x86)";
+
+  const candidates: string[] = [];
+
+  if (isWindows) {
+    candidates.push(
+      `${programFiles}\\Google\\Chrome\\Application\\chrome.exe`,
+      `${programFilesX86}\\Google\\Chrome\\Application\\chrome.exe`,
+      `${localAppData}\\Google\\Chrome\\Application\\chrome.exe`,
+      `${programFiles}\\Microsoft\\Edge\\Application\\msedge.exe`,
+      `${programFilesX86}\\Microsoft\\Edge\\Application\\msedge.exe`,
+      `${localAppData}\\Microsoft\\Edge\\Application\\msedge.exe`,
+      `${programFiles}\\BraveSoftware\\Brave-Browser\\Application\\brave.exe`,
+    );
+  } else if (isMac) {
+    candidates.push(
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+      "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
+      "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    );
+  } else if (isLinux) {
+    candidates.push(
+      "/usr/bin/google-chrome",
+      "/usr/bin/google-chrome-stable",
+      "/usr/bin/chromium",
+      "/usr/bin/chromium-browser",
+      "/usr/bin/microsoft-edge",
+      "/snap/bin/chromium",
+    );
+  }
+
+  return candidates.find((filePath) => fs.existsSync(filePath));
+}
+
 export async function launchPdfBrowser(): Promise<Browser> {
   const { chromium: playwright } = await import("playwright-core");
   const isVercel = process.env.VERCEL === "1";
@@ -79,11 +131,44 @@ export async function launchPdfBrowser(): Promise<Browser> {
     });
   }
 
-  return playwright.launch({
-    executablePath:
-      process.env.CHROME_LOCAL_PATH ?? playwright.executablePath(),
-    headless: true,
-  });
+  if (
+    process.env.CHROME_LOCAL_PATH &&
+    fs.existsSync(process.env.CHROME_LOCAL_PATH)
+  ) {
+    return playwright.launch({
+      executablePath: process.env.CHROME_LOCAL_PATH,
+      headless: true,
+    });
+  }
+
+  const playwrightDefaultPath = playwright.executablePath();
+  if (fs.existsSync(playwrightDefaultPath)) {
+    return playwright.launch({
+      executablePath: playwrightDefaultPath,
+      headless: true,
+    });
+  }
+
+  const systemPath = findSystemChromiumExecutable();
+  if (systemPath) {
+    return playwright.launch({
+      executablePath: systemPath,
+      headless: true,
+    });
+  }
+
+  try {
+    return await playwright.launch({ channel: "chrome", headless: true });
+  } catch {
+    try {
+      return await playwright.launch({ channel: "msedge", headless: true });
+    } catch {
+      return await playwright.launch({
+        executablePath: playwrightDefaultPath,
+        headless: true,
+      });
+    }
+  }
 }
 
 function pdfPreviewHeaders(

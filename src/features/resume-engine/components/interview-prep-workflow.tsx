@@ -131,8 +131,19 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
           setShowGenerator(false);
           await invalidate();
         } catch (err) {
-          const message = err instanceof Error ? err.message : t("failed");
+          const rawMessage = err instanceof Error ? err.message : "";
+          const isApiKeyError =
+            rawMessage.includes("API key not valid") ||
+            rawMessage.includes("API_KEY_INVALID") ||
+            rawMessage.includes("API key");
+          const message = isApiKeyError
+            ? t("aiKeyInvalid")
+            : rawMessage || t("failed");
           toast.error(t("failed"), { description: message });
+          if (isApiKeyError) {
+            setMode("manual");
+            setShowGenerator(true);
+          }
         }
       });
     },
@@ -414,10 +425,19 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
 
       {hasQuestions ? (
         <InterviewPrepPractice
+          applicationId={applicationId}
           eventId={eventId}
           questions={questions}
           eventType={selectedEvent?.type ?? "INTERVIEW"}
           suggestedTools={suggestedTools}
+          onOpenGenerator={
+            generatorOpen
+              ? undefined
+              : () => {
+                  setReplaceOnBuild(false);
+                  setShowGenerator(true);
+                }
+          }
           onRegenerate={
             generatorOpen
               ? undefined

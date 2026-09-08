@@ -32,9 +32,8 @@ export interface AiIntegrationConfig {
   geminiApiKey?: string;
   openaiApiKey?: string;
   anthropicApiKey?: string;
-  /** Optional; not exposed in the Credentials form yet. */
   deepseekApiKey?: string;
-  defaultProvider?: "gemini" | "openai" | "anthropic";
+  defaultProvider?: "gemini" | "openai" | "anthropic" | "deepseek";
 }
 
 export interface IntegrationConfigMap {

@@ -6,6 +6,9 @@ jest.mock("@/features/resume-engine/lib/ai/providers", () => ({
 jest.mock("@/features/resume-engine/lib/ai/generate-interview-prep", () => ({
   generateInterviewPrepPack: jest.fn(),
 }));
+jest.mock("@/features/resume-engine/lib/ai/evaluate-interview-answer", () => ({
+  evaluateInterviewAnswer: jest.fn(),
+}));
 jest.mock(
   "@/features/resume-engine/lib/ai/interview-prep-prompt-package",
   () => ({
@@ -245,5 +248,44 @@ describe("interviewPrepAdminRouter", () => {
     );
     expect(result.questions).toHaveLength(1);
     expect(result.questions[0]?.question).toContain("React");
+  });
+
+  it("evaluates candidate answer via evaluateAnswer procedure", async () => {
+    const { evaluateInterviewAnswer } =
+      await import("@/features/resume-engine/lib/ai/evaluate-interview-answer");
+
+    jest.mocked(evaluateInterviewAnswer).mockResolvedValue({
+      provider: "gemini",
+      result: {
+        score: 9,
+        verdict: "Great structured answer",
+        strengths: ["Clear STAR examples", "Specific technical details"],
+        improvements: ["Mention performance metrics"],
+      },
+    });
+
+    const caller = createRouterCaller(
+      interviewPrepAdminRouter,
+      createTrpcTestContext({ db: {} }),
+    );
+
+    const response = await caller.evaluateAnswer({
+      questionId: "q-1",
+      question: "Why this role?",
+      whyTheyAsk: "Fit",
+      modelAnswer: "Because of my experience",
+      userAnswer: "I have 5 years building Next.js apps with tests.",
+    });
+
+    expect(evaluateInterviewAnswer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        question: "Why this role?",
+        userAnswer: "I have 5 years building Next.js apps with tests.",
+      }),
+      expect.anything(),
+      undefined,
+    );
+    expect(response.evaluation.score).toBe(9);
+    expect(response.evaluation.verdict).toBe("Great structured answer");
   });
 });

@@ -36,7 +36,7 @@ export function createTrpcTestContext(options: {
   return {
     db: options.db as TrpcTestContext["db"],
     session: user
-      ? ({
+      ? {
           user,
           session: {
             id: "sess-1",
@@ -48,7 +48,7 @@ export function createTrpcTestContext(options: {
             ipAddress: "127.0.0.1",
             userAgent: "jest",
           },
-        })
+        }
       : null,
     user,
     tenant: options.tenant === undefined ? mockOwnerTenant : options.tenant,

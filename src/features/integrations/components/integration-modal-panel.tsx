@@ -19,6 +19,9 @@ import { UploadThingIntegrationForm } from "./uploadthing-integration-form";
 import { AiIntegrationForm } from "./ai-integration-form";
 import { GoogleCalendarIntegrationGuide } from "./google-calendar-integration-guide";
 import { SpotifyIntegrationGuide } from "./spotify-integration-guide";
+import { ResendIntegrationGuide } from "./resend-integration-guide";
+import { UploadThingIntegrationGuide } from "./uploadthing-integration-guide";
+import { AiIntegrationGuide } from "./ai-integration-guide";
 
 interface IntegrationModalPanelProps {
   provider: IntegrationProvider;
@@ -203,27 +206,36 @@ function TenantIntegrationModalContent({
   switch (provider) {
     case "resend":
       return (
-        <ResendIntegrationForm
-          status={configs.resend}
-          onSuccess={onClose}
-          onCancel={onClose}
-        />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+          <ResendIntegrationForm
+            status={configs.resend}
+            onSuccess={onClose}
+            onCancel={onClose}
+          />
+          <ResendIntegrationGuide />
+        </div>
       );
     case "uploadthing":
       return (
-        <UploadThingIntegrationForm
-          status={configs.uploadthing}
-          onSuccess={onClose}
-          onCancel={onClose}
-        />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+          <UploadThingIntegrationForm
+            status={configs.uploadthing}
+            onSuccess={onClose}
+            onCancel={onClose}
+          />
+          <UploadThingIntegrationGuide />
+        </div>
       );
     case "ai":
       return (
-        <AiIntegrationForm
-          status={configs.ai}
-          onSuccess={onClose}
-          onCancel={onClose}
-        />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+          <AiIntegrationForm
+            status={configs.ai}
+            onSuccess={onClose}
+            onCancel={onClose}
+          />
+          <AiIntegrationGuide />
+        </div>
       );
     default: {
       const _exhaustive: never = provider;

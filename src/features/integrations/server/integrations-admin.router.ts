@@ -75,15 +75,18 @@ export const integrationsAdminRouter = createTRPCRouter({
         isConfigured: Boolean(
           aiConfig?.geminiApiKey ??
           aiConfig?.openaiApiKey ??
-          aiConfig?.anthropicApiKey,
+          aiConfig?.anthropicApiKey ??
+          aiConfig?.deepseekApiKey,
         ),
         hasGemini: Boolean(aiConfig?.geminiApiKey),
         hasOpenAi: Boolean(aiConfig?.openaiApiKey),
         hasAnthropic: Boolean(aiConfig?.anthropicApiKey),
+        hasDeepSeek: Boolean(aiConfig?.deepseekApiKey),
         defaultProvider: aiConfig?.defaultProvider ?? "gemini",
         maskedGeminiApiKey: maskSecret(aiConfig?.geminiApiKey),
         maskedOpenAiApiKey: maskSecret(aiConfig?.openaiApiKey),
         maskedAnthropicApiKey: maskSecret(aiConfig?.anthropicApiKey),
+        maskedDeepseekApiKey: maskSecret(aiConfig?.deepseekApiKey),
       },
     };
   }),
@@ -272,15 +275,16 @@ export const integrationsAdminRouter = createTRPCRouter({
       }
     }),
 
-  /** Saves AI model credentials (Gemini, OpenAI, Anthropic). Empty fields keep current keys. */
+  /** Saves AI model credentials (Gemini, OpenAI, Anthropic, DeepSeek). Empty fields keep current keys. */
   saveAi: protectedProcedure
     .input(
       z.object({
         geminiApiKey: z.string().trim().optional(),
         openaiApiKey: z.string().trim().optional(),
         anthropicApiKey: z.string().trim().optional(),
+        deepseekApiKey: z.string().trim().optional(),
         defaultProvider: z
-          .enum(["gemini", "openai", "anthropic"])
+          .enum(["gemini", "openai", "anthropic", "deepseek"])
           .default("gemini"),
       }),
     )
@@ -298,7 +302,9 @@ export const integrationsAdminRouter = createTRPCRouter({
         anthropicApiKey: input.anthropicApiKey?.trim()
           ? input.anthropicApiKey.trim()
           : current.anthropicApiKey,
-        deepseekApiKey: current.deepseekApiKey,
+        deepseekApiKey: input.deepseekApiKey?.trim()
+          ? input.deepseekApiKey.trim()
+          : current.deepseekApiKey,
         defaultProvider: input.defaultProvider,
       };
 

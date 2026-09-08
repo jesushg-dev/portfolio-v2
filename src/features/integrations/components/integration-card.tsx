@@ -79,6 +79,7 @@ function ConnectedDetails({
         status.hasGemini && "Gemini",
         status.hasOpenAi && "OpenAI",
         status.hasAnthropic && "Anthropic",
+        status.hasDeepSeek && "DeepSeek",
       ].filter(Boolean);
 
       if (providers.length === 0) return null;
@@ -111,10 +112,7 @@ export function IntegrationCard({
   catalogItem,
   configs,
 }: {
-  catalogItem: {
-    id: Exclude<IntegrationProvider, "spotify" | "google-calendar">;
-    icon: IntegrationCatalogItem["icon"];
-  };
+  catalogItem: IntegrationCatalogItem;
   configs: IntegrationConfigs;
 }) {
   const t = useTranslations("adminCredentials");
@@ -125,12 +123,17 @@ export function IntegrationCard({
     api.integrationsAdmin.deleteIntegration.useMutation();
   const syncTemplates = api.integrationsAdmin.syncResendTemplates.useMutation();
 
-  const { id: provider, icon: Icon } = catalogItem;
+  const { id: provider, icon: Icon, accentClass, badgeClass } = catalogItem;
 
   const handleDisconnect = useCallback(() => {
     startTransition(async () => {
       try {
-        await deleteIntegration.mutateAsync({ provider });
+        await deleteIntegration.mutateAsync({
+          provider: provider as Exclude<
+            IntegrationProvider,
+            "spotify" | "google-calendar"
+          >,
+        });
         await utils.integrationsAdmin.getConfigs.invalidate();
         toast.success(t("actions.disconnectSuccess"));
       } catch (err) {
@@ -158,76 +161,103 @@ export function IntegrationCard({
   }, [syncTemplates, utils, t]);
 
   const details = (
-    <ConnectedDetails provider={provider} configs={configs} t={t} />
+    <ConnectedDetails
+      provider={
+        provider as Exclude<IntegrationProvider, "spotify" | "google-calendar">
+      }
+      configs={configs}
+      t={t}
+    />
   );
 
   return (
-    <Card data-integration={provider}>
+    <Card
+      data-integration={provider}
+      className="border-border group flex flex-col justify-between transition-all duration-200 hover:shadow-sm"
+    >
       <CardHeader>
         <div className="flex items-start justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="bg-muted flex h-10 w-10 shrink-0 items-center justify-center rounded-lg">
-              <Icon className="text-foreground h-5 w-5" aria-hidden />
+          <div className="flex items-start gap-3.5">
+            <div
+              className={`flex size-11 shrink-0 items-center justify-center rounded-xl border ${accentClass} transition-transform group-hover:scale-105`}
+            >
+              <Icon className="size-5.5" aria-hidden />
             </div>
             <div className="space-y-1">
-              <CardTitle className="text-base">
-                {t(`providers.${provider}.name`)}
-              </CardTitle>
-              <CardDescription>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-base font-semibold">
+                  {t(`providers.${provider}.name`)}
+                </CardTitle>
+                <Badge
+                  variant="outline"
+                  className={`gap-1 text-[0.6875rem] font-medium ${badgeClass}`}
+                >
+                  <CheckCircle2 className="size-3" />
+                  {t("status.configured")}
+                </Badge>
+              </div>
+              <CardDescription className="text-xs leading-relaxed sm:text-sm">
                 {t(`providers.${provider}.description`)}
               </CardDescription>
             </div>
           </div>
-
-          <Badge
-            variant="secondary"
-            className="shrink-0 bg-emerald-500/10 text-emerald-600"
-          >
-            <CheckCircle2 className="mr-1 h-3 w-3" />
-            {t("status.configured")}
-          </Badge>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
-        {details}
+      <CardContent className="space-y-4 pt-0">
+        {details && (
+          <div className="bg-muted/40 border-border/80 rounded-lg border p-3">
+            {details}
+          </div>
+        )}
 
-        <div className="flex flex-wrap gap-2">
-          {provider === "resend" && (
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t pt-3">
+          <span className="text-muted-foreground bg-muted/50 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium">
+            {t(`tags.${provider}`)}
+          </span>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {provider === "resend" && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleSyncTemplates}
+                disabled={isPending}
+                className="gap-1.5 text-xs"
+              >
+                <RefreshCw
+                  className={`size-3.5 ${isPending ? "animate-spin" : ""}`}
+                />
+                {t("resend.syncButton")}
+              </Button>
+            )}
+            <Link
+              href={{
+                pathname: "/admin/credentials/[provider]",
+                params: { provider },
+              }}
+              className={buttonVariants({
+                variant: "outline",
+                size: "sm",
+                className: "text-xs",
+              })}
+            >
+              {t("actions.update")}
+            </Link>
             <Button
               type="button"
-              variant="outline"
+              variant="destructive"
               size="sm"
-              onClick={handleSyncTemplates}
-              disabled={isPending}
-              className="gap-1.5"
+              onClick={handleDisconnect}
+              disabled={isPending || deleteIntegration.isPending}
+              className="text-xs"
             >
-              <RefreshCw
-                className={`h-3.5 w-3.5 ${isPending ? "animate-spin" : ""}`}
-              />
-              {t("resend.syncButton")}
+              {deleteIntegration.isPending
+                ? t("actions.disconnecting")
+                : t("actions.disconnect")}
             </Button>
-          )}
-          <Link
-            href={{
-              pathname: "/admin/credentials/[provider]",
-              params: { provider },
-            }}
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            {t("actions.update")}
-          </Link>
-          <Button
-            type="button"
-            variant="destructive"
-            size="sm"
-            onClick={handleDisconnect}
-            disabled={isPending || deleteIntegration.isPending}
-          >
-            {deleteIntegration.isPending
-              ? t("actions.disconnecting")
-              : t("actions.disconnect")}
-          </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

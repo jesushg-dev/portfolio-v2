@@ -49,6 +49,8 @@ function mapConfigDefaultProvider(
       return "openai";
     case "gemini":
       return "gemini";
+    case "deepseek":
+      return "deepseek";
     case undefined:
       return null;
     default: {

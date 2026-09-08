@@ -52,18 +52,85 @@
     },
     "summary": {
       "domain": "Dominio",
-      "clientId": "Client ID",
-      "appId": "App ID",
+      "clientId": "ID de cliente",
+      "appId": "ID de la app",
       "tokenSaved": "Credenciales guardadas",
       "providers": "Proveedores activos",
       "defaultProvider": "Proveedor por defecto"
+    },
+    "filters": {
+      "all": "Todos los servicios",
+      "connected": "Conectados",
+      "available": "Disponibles"
+    },
+    "securityNotice": "Las credenciales y claves de API están cifradas en reposo con aislamiento por tenant (AES-256).",
+    "backToIntegrations": "Volver a Integraciones",
+    "tags": {
+      "resend": "Correos transaccionales y entrega de CV",
+      "spotify": "Widget Now Playing y Top Canciones",
+      "google-calendar": "Sincronización de entrevistas en calendario",
+      "uploadthing": "CDN de archivos y almacenamiento de PDF",
+      "ai": "Motor de CV, ATS y preparación de entrevistas"
+    },
+    "guides": {
+      "title": "Guía de Configuración",
+      "howToGet": "Cómo obtener tus credenciales",
+      "openConsole": "Abrir panel de {provider}",
+      "copyUri": "Copiar URI",
+      "copied": "Copiado al portapapeles",
+      "resend": {
+        "title": "Cómo obtener credenciales de Resend",
+        "step1": "Inicia sesión en tu cuenta de Resend (resend.com).",
+        "step2": "Ve a API Keys y haz clic en \"Create API Key\" (con permiso de envío o Full Access).",
+        "step3": "En Domains, añade y verifica tu dominio personalizado (o usa onboarding@resend.dev para pruebas iniciales).",
+        "step4": "Pega tu API Key (re_...) y tu correo remitente en el formulario.",
+        "dashboardLink": "Abrir API Keys en Resend",
+        "domainsLink": "Abrir Dominios en Resend"
+      },
+      "uploadthing": {
+        "title": "Cómo obtener credenciales de UploadThing",
+        "step1": "Inicia sesión en tu panel de UploadThing (uploadthing.com).",
+        "step2": "Selecciona tu aplicación o haz clic en \"Create App\".",
+        "step3": "Ve a la sección API Keys en el menú lateral para copiar tu UPLOADTHING_TOKEN.",
+        "step4": "Pega el token secreto (inicia con eyJ...) en el campo de la izquierda.",
+        "dashboardLink": "Abrir panel de UploadThing"
+      },
+      "ai": {
+        "title": "Cómo obtener claves de API de IA",
+        "step1": "Elige tus proveedores de IA preferidos entre Google Gemini, DeepSeek, OpenAI o Anthropic.",
+        "step2": "Google Gemini (Recomendado): Obtén una clave gratis o de pago en Google AI Studio para ATS y simulacros de entrevista.",
+        "step3": "DeepSeek: Genera una clave secreta (sk-...) en la plataforma DeepSeek Open Platform.",
+        "step4": "OpenAI: Genera una clave secreta (sk-proj-...) en el panel de OpenAI Platform.",
+        "step5": "Anthropic: Crea una clave de API (sk-ant-...) en la consola de Anthropic para modelos Claude.",
+        "geminiLink": "Obtener API Key de Gemini",
+        "deepseekLink": "Obtener API Key de DeepSeek",
+        "openaiLink": "Obtener API Key de OpenAI",
+        "anthropicLink": "Obtener API Key de Anthropic"
+      },
+      "spotify": {
+        "title": "Cómo configurar Spotify OAuth",
+        "step1": "Inicia sesión en el Spotify Developer Dashboard.",
+        "step2": "Haz clic en \"Create App\", ingresa el nombre de la app y selecciona Web API.",
+        "step3": "En App Settings, agrega la Redirect URI mostrada abajo a la lista de Redirect URIs.",
+        "step4": "Copia tu Client ID y Client Secret, y pégalos aquí para conectar.",
+        "dashboardLink": "Abrir Spotify Developer Dashboard"
+      },
+      "googleCalendar": {
+        "title": "Cómo configurar Google Calendar OAuth",
+        "step1": "Abre Google Cloud Console > APIs y Servicios > Credenciales.",
+        "step2": "Crea un ID de cliente OAuth 2.0 (Tipo de aplicación: Aplicación web).",
+        "step3": "Agrega la URI de redireccionamiento autorizada exacta mostrada abajo.",
+        "step4": "Habilita la Google Calendar API en APIs y Servicios > Biblioteca.",
+        "step5": "Copia tu Client ID y Client Secret en el formulario.",
+        "dashboardLink": "Abrir Google Cloud Console"
+      }
     },
     "connected": {
       "title": "Conectadas"
     },
     "available": {
       "title": "Disponibles para conectar",
-      "description": "Añade más servicios para ampliar tu portfolio."
+      "description": "Agrega más servicios para potenciar tu portafolio."
     },
     "empty": {
       "title": "Aún no hay integraciones conectadas",
@@ -121,11 +188,13 @@
     },
     "ai": {
       "title": "Credenciales de Modelos de IA",
-      "description": "Configura claves de API para servicios LLM (Gemini, OpenAI, Anthropic).",
+      "description": "Configura claves de API para servicios LLM (Gemini, DeepSeek, OpenAI, Anthropic).",
       "geminiLabel": "API Key de Google Gemini",
+      "deepseekLabel": "API Key de DeepSeek",
       "openaiLabel": "API Key de OpenAI",
       "anthropicLabel": "API Key de Anthropic",
       "geminiPlaceholder": "AIzaSy...",
+      "deepseekPlaceholder": "sk-...",
       "openaiPlaceholder": "sk-proj-...",
       "anthropicPlaceholder": "sk-ant-...",
       "defaultProviderLabel": "Proveedor de IA por Defecto",
@@ -229,6 +298,7 @@
     "pdfDelivery": {
       "toggleSend": "Enviar por correo",
       "toggleClose": "Cerrar",
+      "generating": "Generando PDF…",
       "title": "Obtén el CV en PDF como referencia",
       "description": "Reclutadores, ingresen su correo corporativo abajo y recibirán una versión PDF descargable de mi currículum actualizado.",
       "footnote": "El PDF se genera con los datos más recientes del CV de {fullName}.",
@@ -1502,6 +1572,18 @@
     "settings": {
       "title": "Ajustes",
       "subtitle": "URL pública, idioma por defecto y visibilidad.",
+      "tabGeneral": "General y Marca",
+      "tabSecurity": "Seguridad e Integraciones",
+      "brandPreviewTitle": "Vista previa de marca",
+      "brandPreviewDescription": "Previsualización en tiempo real de tu logo o marca de texto.",
+      "identitySectionTitle": "Perfil y Subdominio",
+      "identitySectionDescription": "Identidad pública y enlace para tu portafolio.",
+      "visibilitySectionTitle": "Visibilidad del portafolio",
+      "visibilitySectionDescription": "Controla si tu CV y portafolio están accesibles públicamente en línea.",
+      "statusPublic": "Público y Activo",
+      "statusDraft": "Oculto / Borrador",
+      "viewPublicSite": "Ver sitio público",
+      "subdomainPrefix": "jesushg.com/cv/",
       "username": "Usuario (subdominio)",
       "displayName": "Nombre para mostrar",
       "brandSectionTitle": "Logo e iniciales",
@@ -1522,9 +1604,6 @@
       "saveFailed": "No se pudieron guardar los ajustes",
       "save": "Guardar ajustes",
       "saving": "Guardando...",
-      "pdfSectionTitle": "CV en PDF (multiidioma)",
-      "pdfSectionDescription": "Proporciona enlaces PDF separados para cada idioma. Cuando los visitantes vean tu portafolio en un idioma específico, descargarán el PDF correspondiente.",
-      "pdfLinkPlaceholder": "https://ejemplo.com/cv-{locale}.pdf",
       "usernameValidation": "Usa letras minúsculas, números y guiones",
       "credentialsTitle": "Credenciales e integraciones",
       "credentialsDescription": "Conecta Spotify, correo, subida de archivos e IA para este portafolio. Si ya las configuraste, siguen aquí.",
@@ -3073,7 +3152,41 @@
           "closing": "Cierre",
           "technical": "Técnica",
           "screening": "Screening"
-        }
+        },
+        "flipToAnswer": "Voltear para ver respuesta",
+        "flipToQuestion": "Voltear a la pregunta",
+        "tapToFlip": "Toca la tarjeta o presiona Espacio para voltear",
+        "voiceStart": "Grabar respuesta",
+        "voiceListening": "Escuchando... habla ahora",
+        "voiceStop": "Detener grabación",
+        "voiceUnsupported": "Reconocimiento de voz no soportado en este navegador",
+        "voiceClear": "Limpiar texto",
+        "evaluateAi": "Evaluar con IA",
+        "evaluatingAi": "Evaluando respuesta...",
+        "aiFeedback": "Evaluación de la IA",
+        "aiScore": "Puntaje: {score}/10",
+        "aiStrengths": "Puntos fuertes",
+        "aiImprovements": "Áreas de mejora",
+        "aiVerdict": "Veredicto",
+        "cardFront": "Pregunta",
+        "cardBack": "Respuesta",
+        "swipeHint": "Desliza para navegar",
+        "voiceErrorNotAllowed": "Permiso de micrófono denegado. Permite el acceso al micrófono en tu navegador.",
+        "voiceErrorAudioCapture": "No se encontró ningún micrófono o está en uso por otra aplicación.",
+        "voiceErrorNetwork": "Error de red con el servicio de reconocimiento de voz.",
+        "voiceErrorUnknown": "Ocurrió un error con el reconocimiento de voz.",
+        "addManualQuestion": "Añadir pregunta manual",
+        "addManualQuestionTitle": "Crear pregunta manual",
+        "addManualQuestionDesc": "Añade una pregunta personalizada a tu sesión de práctica.",
+        "questionLabel": "Pregunta",
+        "categoryLabel": "Categoría",
+        "modelAnswerLabel": "Respuesta modelo",
+        "whyTheyAskLabel": "¿Por qué la preguntan? (Opcional)",
+        "talkingPointsLabel": "Puntos clave (uno por línea)",
+        "saveQuestion": "Guardar pregunta",
+        "questionSaved": "Pregunta añadida",
+        "aiKeyInvalid": "La clave de API de IA no es válida o no está activa. Puedes usar el modo Manual para generar con ChatGPT/Claude o crear preguntas manualmente.",
+        "openGenerator": "Generador AI / Manual"
       },
       "email": {
         "title": "Enviar CV por correo",

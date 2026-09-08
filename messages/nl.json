@@ -52,17 +52,84 @@
     },
     "summary": {
       "domain": "Domein",
-      "clientId": "Client ID",
-      "appId": "App ID",
-      "tokenSaved": "Referenties opgeslagen",
+      "clientId": "Client-ID",
+      "appId": "App-ID",
+      "tokenSaved": "Inloggegevens opgeslagen",
       "providers": "Actieve providers",
-      "defaultProvider": "Standaard provider"
+      "defaultProvider": "Standaardprovider"
+    },
+    "filters": {
+      "all": "Alle diensten",
+      "connected": "Verbonden",
+      "available": "Beschikbaar"
+    },
+    "securityNotice": "Inloggegevens en API-sleutels zijn versleuteld in rust met isolatie per tenant (AES-256).",
+    "backToIntegrations": "Terug naar integraties",
+    "tags": {
+      "resend": "Transactionele e-mails & CV-levering",
+      "spotify": "Now Playing widget & topnummers",
+      "google-calendar": "Gesprekken & agendasynchronisatie",
+      "uploadthing": "Bestandsopslag & CV PDF-CDN",
+      "ai": "CV-engine, ATS & voorbereiding op interviews"
+    },
+    "guides": {
+      "title": "Installatiehandleiding",
+      "howToGet": "Hoe je inloggegevens kunt verkrijgen",
+      "openConsole": "Open {provider}-dashboard",
+      "copyUri": "Kopieer URI",
+      "copied": "Gekopieerd naar klembord",
+      "resend": {
+        "title": "Hoe je Resend-inloggegevens verkrijgt",
+        "step1": "Log in op je Resend-account op resend.com.",
+        "step2": "Ga naar API Keys en klik op \"Create API Key\" (met verzend- of volledige toegang).",
+        "step3": "Verifieer in Domains je verzenddomein (of gebruik onboarding@resend.dev voor testen).",
+        "step4": "Plak je API-sleutel (re_...) en afzenderadres aan de linkerkant.",
+        "dashboardLink": "Open Resend API-sleutels",
+        "domainsLink": "Open Resend Domeinen"
+      },
+      "uploadthing": {
+        "title": "Hoe je UploadThing-inloggegevens verkrijgt",
+        "step1": "Log in op het UploadThing-dashboard op uploadthing.com.",
+        "step2": "Selecteer je applicatie of klik op \"Create App\".",
+        "step3": "Ga naar API Keys in de zijbalk om je UPLOADTHING_TOKEN te bekijken.",
+        "step4": "Kopieer en plak de geheime token (begint met eyJ...) in het veld links.",
+        "dashboardLink": "Open UploadThing-dashboard"
+      },
+      "ai": {
+        "title": "Hoe je AI API-sleutels verkrijgt",
+        "step1": "Kies je gewenste LLM-provider(s) uit Google Gemini, DeepSeek, OpenAI of Anthropic.",
+        "step2": "Google Gemini (Aanbevolen): Verkrijg een gratis/betaalde sleutel in Google AI Studio voor ATS en interviews.",
+        "step3": "DeepSeek: Genereer een API-sleutel (sk-...) in het DeepSeek Open Platform.",
+        "step4": "OpenAI: Genereer een geheime API-sleutel (sk-proj-...) in het OpenAI-platform.",
+        "step5": "Anthropic: Maak een API-sleutel (sk-ant-...) in de Anthropic-console voor Claude-modellen.",
+        "geminiLink": "Verkrijg Gemini API-sleutel",
+        "deepseekLink": "Verkrijg DeepSeek API-sleutel",
+        "openaiLink": "Verkrijg OpenAI API-sleutel",
+        "anthropicLink": "Verkrijg Anthropic API-sleutel"
+      },
+      "spotify": {
+        "title": "Hoe je Spotify OAuth configureert",
+        "step1": "Log in op het Spotify Developer Dashboard.",
+        "step2": "Klik op \"Create App\", vul app-details in en kies Web API.",
+        "step3": "Voeg in App Settings de onderstaande Redirect URI toe aan je Redirect URIs.",
+        "step4": "Kopieer je Client ID en Client Secret en plak ze hier om te koppelen.",
+        "dashboardLink": "Open Spotify Developer Dashboard"
+      },
+      "googleCalendar": {
+        "title": "Hoe je Google Calendar OAuth configureert",
+        "step1": "Open Google Cloud Console > APIs & Services > Credentials.",
+        "step2": "Maak een OAuth 2.0 Client-ID aan (Applicatietype: Webapplicatie).",
+        "step3": "Voeg de onderstaande geautoriseerde Redirect URI toe.",
+        "step4": "Schakel de Google Calendar API in via APIs & Services > Library.",
+        "step5": "Kopieer je Client ID en Client Secret naar het formulier.",
+        "dashboardLink": "Open Google Cloud Console"
+      }
     },
     "connected": {
       "title": "Verbonden"
     },
     "available": {
-      "title": "Beschikbaar om te verbinden",
+      "title": "Beschikbaar om te koppelen",
       "description": "Voeg meer diensten toe om je portfolio uit te breiden."
     },
     "empty": {
@@ -121,11 +188,13 @@
     },
     "ai": {
       "title": "AI-modellen inloggegevens",
-      "description": "Configureer API-sleutels voor LLM-diensten (Gemini, OpenAI, Anthropic).",
+      "description": "Configureer API-sleutels voor LLM-diensten (Gemini, DeepSeek, OpenAI, Anthropic).",
       "geminiLabel": "Google Gemini API-sleutel",
+      "deepseekLabel": "DeepSeek API-sleutel",
       "openaiLabel": "OpenAI API-sleutel",
       "anthropicLabel": "Anthropic API-sleutel",
       "geminiPlaceholder": "AIzaSy...",
+      "deepseekPlaceholder": "sk-...",
       "openaiPlaceholder": "sk-proj-...",
       "anthropicPlaceholder": "sk-ant-...",
       "defaultProviderLabel": "Standaard AI-provider",
@@ -227,9 +296,10 @@
       "backHome": "Terug naar home"
     },
     "pdfDelivery": {
-      "toggleSend": "Per e-mail versturen",
+      "toggleSend": "Verstuur via e-mail",
       "toggleClose": "Sluiten",
-      "title": "Download het PDF-cv als referentie",
+      "generating": "PDF genereren…",
+      "title": "Download het PDF-CV ter referentie",
       "description": "Recruiters, vul hieronder je zakelijke e-mail in en ontvang een downloadbare PDF-versie van mijn actuele cv.",
       "footnote": "De PDF wordt gegenereerd op basis van de meest recente cv-gegevens van {fullName}.",
       "form": {
@@ -1502,6 +1572,18 @@
     "settings": {
       "title": "Instellingen",
       "subtitle": "Publieke URL, standaardtaal en zichtbaarheid.",
+      "tabGeneral": "Algemeen & Merk",
+      "tabSecurity": "Beveiliging & Integraties",
+      "brandPreviewTitle": "Live merkvoorbeeld",
+      "brandPreviewDescription": "Realtime voorbeeld van je logo of tekstmerk in headers.",
+      "identitySectionTitle": "Profiel & Subdomein",
+      "identitySectionDescription": "Openbare identiteit en link voor je portfolio.",
+      "visibilitySectionTitle": "Zichtbaarheid portfolio",
+      "visibilitySectionDescription": "Bepaal of je CV en portfolio online openbaar toegankelijk zijn.",
+      "statusPublic": "Live & Openbaar",
+      "statusDraft": "Verborgen / Concept",
+      "viewPublicSite": "Bekijk openbare site",
+      "subdomainPrefix": "jesushg.com/cv/",
       "username": "Gebruikersnaam (subdomein)",
       "displayName": "Weergavenaam",
       "brandSectionTitle": "Logo & initialen",
@@ -1522,9 +1604,6 @@
       "saveFailed": "Instellingen konden niet worden opgeslagen",
       "save": "Instellingen opslaan",
       "saving": "Opslaan...",
-      "pdfSectionTitle": "PDF CV's (meertalig)",
-      "pdfSectionDescription": "Geef aparte PDF-links voor elke taal. Wanneer bezoekers je portfolio in een specifieke taal bekijken, downloaden ze de bijbehorende PDF.",
-      "pdfLinkPlaceholder": "https://voorbeeld.nl/cv-{locale}.pdf",
       "usernameValidation": "Gebruik kleine letters, cijfers en streepjes",
       "credentialsTitle": "Inloggegevens & integraties",
       "credentialsDescription": "Koppel Spotify, e-mail, uploads en AI voor dit portfolio. Bestaande koppelingen blijven hier beschikbaar.",
@@ -3073,7 +3152,41 @@
           "closing": "Afsluiting",
           "technical": "Technisch",
           "screening": "Screening"
-        }
+        },
+        "flipToAnswer": "Omdraaien voor antwoord",
+        "flipToQuestion": "Omdraaien naar vraag",
+        "tapToFlip": "Tik op de kaart of druk op Spatie om om te draaien",
+        "voiceStart": "Antwoord opnemen",
+        "voiceListening": "Luisteren... spreek nu",
+        "voiceStop": "Stop opname",
+        "voiceUnsupported": "Spraakherkenning niet ondersteund in deze browser",
+        "voiceClear": "Tekst wissen",
+        "evaluateAi": "Beoordelen met AI",
+        "evaluatingAi": "Antwoord beoordelen...",
+        "aiFeedback": "AI-beoordeling",
+        "aiScore": "Score: {score}/10",
+        "aiStrengths": "Sterke punten",
+        "aiImprovements": "Verbeterpunten",
+        "aiVerdict": "Oordeel",
+        "cardFront": "Vraag",
+        "cardBack": "Antwoord",
+        "swipeHint": "Veeg om te navigeren",
+        "voiceErrorNotAllowed": "Microfoontoestemming geweigerd. Schakel dit in via uw browserinstellingen.",
+        "voiceErrorAudioCapture": "Er is geen microfoon gevonden of deze is in gebruik door een andere applicatie.",
+        "voiceErrorNetwork": "Netwerkfout met de spraakherkenningsdienst.",
+        "voiceErrorUnknown": "Er is een fout opgetreden bij spraakherkenning.",
+        "addManualQuestion": "Handmatige vraag toevoegen",
+        "addManualQuestionTitle": "Handmatige vraag maken",
+        "addManualQuestionDesc": "Voeg een aangepaste vraag toe aan uw oefensessie.",
+        "questionLabel": "Vraag",
+        "categoryLabel": "Categorie",
+        "modelAnswerLabel": "Modelantwoord",
+        "whyTheyAskLabel": "Waarom ze dit vragen (Optioneel)",
+        "talkingPointsLabel": "Kernpunten (één per regel)",
+        "saveQuestion": "Vraag opslaan",
+        "questionSaved": "Vraag toegevoegd",
+        "aiKeyInvalid": "De AI API-sleutel is ongeldig of inactief. U kunt de handmatige modus gebruiken om te genereren met ChatGPT/Claude of handmatig vragen toe te voegen.",
+        "openGenerator": "AI / Handmatige generator"
       },
       "email": {
         "title": "CV per e-mail versturen",

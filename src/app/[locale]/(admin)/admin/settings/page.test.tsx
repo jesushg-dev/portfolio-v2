@@ -10,9 +10,6 @@ jest.mock("@/server/db", () => ({
     profile: {
       findUnique: jest.fn(),
     },
-    cvPdfLink: {
-      findMany: jest.fn(),
-    },
     account: {
       findFirst: jest.fn(),
     },
@@ -31,11 +28,6 @@ jest.mock("@/features/auth/components/security/security-settings-card", () => ({
 jest.mock("./settings-form", () => ({
   __esModule: true,
   default: () => <div data-testid="settings-form" />,
-}));
-
-jest.mock("./pdf-links-form", () => ({
-  __esModule: true,
-  default: () => <div data-testid="pdf-links-form" />,
 }));
 
 jest.mock("./settings-integrations-card", () => ({
@@ -71,10 +63,6 @@ describe("SettingsPage", () => {
       isPublished: true,
     });
 
-    (db.cvPdfLink.findMany as jest.Mock).mockResolvedValue([
-      { locale: "en", url: "url-en" },
-    ]);
-
     const params = Promise.resolve({ locale: "en" });
     const Page = await SettingsPage({ params });
     render(Page as React.ReactElement);
@@ -85,7 +73,6 @@ describe("SettingsPage", () => {
     expect(
       screen.getByTestId("settings-integrations-card"),
     ).toBeInTheDocument();
-    expect(screen.getByTestId("pdf-links-form")).toBeInTheDocument();
     expect(screen.getByTestId("security-settings-card")).toBeInTheDocument();
     expect(mockSecurityCard).toHaveBeenCalledWith({
       twoFactorEnabled: true,
@@ -98,7 +85,6 @@ describe("SettingsPage", () => {
       user: { id: "user-1", name: "John Doe" },
     });
     (db.profile.findUnique as jest.Mock).mockResolvedValue(null);
-    (db.cvPdfLink.findMany as jest.Mock).mockResolvedValue([]);
     (db.account.findFirst as jest.Mock).mockResolvedValue(null);
 
     const Page = await SettingsPage({

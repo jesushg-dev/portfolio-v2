@@ -13,6 +13,7 @@ import {
   loadTenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
 import { generateInterviewPrepPack } from "@/features/resume-engine/lib/ai/generate-interview-prep";
+import { evaluateInterviewAnswer } from "@/features/resume-engine/lib/ai/evaluate-interview-answer";
 import { buildInterviewPrepPromptPackage } from "@/features/resume-engine/lib/ai/interview-prep-prompt-package";
 import { resolveInterviewPrepContext } from "@/features/resume-engine/lib/resolve-interview-prep-context";
 import { persistInterviewPrepQuestions } from "@/features/resume-engine/lib/persist-interview-prep";
@@ -284,5 +285,75 @@ export const interviewPrepAdminRouter = createTRPCRouter({
       });
 
       return { questions };
+    }),
+
+  createManualQuestion: protectedProcedure
+    .input(
+      eventIdInput.extend({
+        category: InterviewPrepCategorySchema.default("role"),
+        question: z.string().min(3),
+        whyTheyAsk: z.string().default(""),
+        modelAnswer: z.string().min(3),
+        talkingPoints: z.array(z.string()).default([]),
+        evidenceFromCv: z.array(z.string()).default([]),
+        avoid: z.array(z.string()).default([]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const application = await ctx.db.application.findFirst({
+        where: { id: input.applicationId, userId: ctx.user.id },
+      });
+      if (!application) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Application not found",
+        });
+      }
+
+      const created = await ctx.db.interviewPrepQuestion.create({
+        data: {
+          userId: ctx.user.id,
+          applicationId: input.applicationId,
+          eventId: input.eventId,
+          category: input.category,
+          question: input.question,
+          whyTheyAsk: input.whyTheyAsk,
+          modelAnswer: input.modelAnswer,
+          talkingPoints: input.talkingPoints,
+          evidenceFromCv: input.evidenceFromCv,
+          avoid: input.avoid,
+        },
+      });
+
+      return { question: mapQuestion(created) };
+    }),
+
+  evaluateAnswer: protectedProcedure
+    .input(
+      z.object({
+        questionId: z.string(),
+        question: z.string(),
+        whyTheyAsk: z.string(),
+        modelAnswer: z.string(),
+        userAnswer: z.string().min(3),
+        talkingPoints: z.array(z.string()).optional(),
+        provider: aiProviderSchema,
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const credentials = await loadTenantAiCredentials(ctx.user.id);
+      const { result, provider } = await evaluateInterviewAnswer(
+        {
+          question: input.question,
+          whyTheyAsk: input.whyTheyAsk,
+          modelAnswer: input.modelAnswer,
+          userAnswer: input.userAnswer,
+          talkingPoints: input.talkingPoints,
+        },
+        credentials,
+        input.provider,
+      );
+
+      return { evaluation: result, provider };
     }),
 });

@@ -19,6 +19,10 @@ import {
   DEFAULT_CV_DESIGN,
   type CvDesignId,
 } from "@/features/cv/lib/cv-design";
+import {
+  buildAtsCvFileName,
+  inferCvRoleTrack,
+} from "@/lib/cv/build-ats-cv-file-name";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import CvUnpublished from "./cv-unpublished";
 
@@ -140,7 +144,12 @@ const CvPageView: FC<CvPageViewProps> = async ({
     field(header?.translations, "heroSummary"),
     aboutMe ? field(aboutMe.translations, "aboutMe") : null,
   );
-  const downloadFileName = `CV - ${header?.fullName ?? profile?.username ?? "user"}.pdf`;
+  const downloadFileName = buildAtsCvFileName({
+    fullName: header?.fullName ?? profile?.username ?? "user",
+    roleTrack: inferCvRoleTrack(field(header?.translations, "degree") || ""),
+    locale: currentLocale,
+    extension: "pdf",
+  });
   const paginateQuery = paginatePdfPages ? "&paginate=1" : "";
   const designQuery = design !== DEFAULT_CV_DESIGN ? `&design=${design}` : "";
   const cvDownloadHref = header
