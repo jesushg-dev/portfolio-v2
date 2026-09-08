@@ -1608,6 +1608,10 @@
       "credentialsTitle": "Inloggegevens & integraties",
       "credentialsDescription": "Koppel Spotify, e-mail, uploads en AI voor dit portfolio. Bestaande koppelingen blijven hier beschikbaar.",
       "credentialsCta": "Integraties beheren",
+      "pdfSectionTitle": "PDF Resumes (Meertalig)",
+      "pdfSectionDescription": "Geef directe PDF-downloadlinks per taal op. Bezoekers die je cv in een specifieke taal downloaden, ontvangen het bijbehorende bestand.",
+      "pdfLinkPlaceholder": "https://example.com/resume-{locale}.pdf",
+      "testLink": "Test link",
       "security": {
         "title": "Beveiliging",
         "description": "Bescherm je account met een tweede factor en passkeys. Tweestapsverificatie is optioneel; met passkeys log je in zonder wachtwoord.",

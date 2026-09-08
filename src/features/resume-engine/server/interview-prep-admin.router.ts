@@ -297,6 +297,7 @@ export const interviewPrepAdminRouter = createTRPCRouter({
         talkingPoints: z.array(z.string()).default([]),
         evidenceFromCv: z.array(z.string()).default([]),
         avoid: z.array(z.string()).default([]),
+        locale: z.string().default("es"),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -322,6 +323,8 @@ export const interviewPrepAdminRouter = createTRPCRouter({
           talkingPoints: input.talkingPoints,
           evidenceFromCv: input.evidenceFromCv,
           avoid: input.avoid,
+          locale: input.locale,
+          provider: "manual",
         },
       });
 

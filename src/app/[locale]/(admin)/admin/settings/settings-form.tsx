@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 import {
-  AtSign,
   CheckCircle2,
   ExternalLink,
   Eye,
@@ -191,15 +190,7 @@ const SettingsForm: FC<ISettingsFormProps> = ({ defaultValues }) => {
                   <FormItem
                     label={t("username")}
                     inputId="settings-username"
-                    description={
-                      <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                        <AtSign className="size-3" aria-hidden />
-                        {t("subdomainPrefix")}
-                        <span className="text-foreground font-medium">
-                          {currentUsername}
-                        </span>
-                      </span>
-                    }
+                    description={`${t("subdomainPrefix")}${currentUsername}`}
                   >
                     <Input {...field} />
                   </FormItem>

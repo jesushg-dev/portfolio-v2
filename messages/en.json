@@ -1608,6 +1608,10 @@
       "credentialsTitle": "Credentials & Integrations",
       "credentialsDescription": "Connect Spotify, email, file uploads, and AI for this portfolio. Saved connections stay available here.",
       "credentialsCta": "Manage integrations",
+      "pdfSectionTitle": "PDF Resumes (Multi-language)",
+      "pdfSectionDescription": "Provide direct PDF download links per language. Visitors downloading your CV in a specific language will receive the corresponding file.",
+      "pdfLinkPlaceholder": "https://example.com/resume-{locale}.pdf",
+      "testLink": "Test link",
       "security": {
         "title": "Security",
         "description": "Protect your account with a second factor and passkeys. Two-factor authentication is optional; passkeys sign you in without a password.",

@@ -1608,6 +1608,10 @@
       "credentialsTitle": "Credenciales e integraciones",
       "credentialsDescription": "Conecta Spotify, correo, subida de archivos e IA para este portafolio. Si ya las configuraste, siguen aquí.",
       "credentialsCta": "Gestionar integraciones",
+      "pdfSectionTitle": "Currículums en PDF (Multiidioma)",
+      "pdfSectionDescription": "Proporciona enlaces de descarga directa de PDF por idioma. Los visitantes que descarguen tu CV en un idioma específico recibirán el archivo correspondiente.",
+      "pdfLinkPlaceholder": "https://example.com/curriculum-{locale}.pdf",
+      "testLink": "Probar enlace",
       "security": {
         "title": "Seguridad",
         "description": "Protege tu cuenta con un segundo factor y passkeys. La verificación en dos pasos es opcional; las passkeys te permiten entrar sin contraseña.",

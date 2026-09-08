@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useTransition, type FC } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Loader2, Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -47,6 +47,7 @@ export const InterviewPrepManualQuestionDialog: FC<
   InterviewPrepManualQuestionDialogProps
 > = ({ applicationId, eventId, onQuestionCreated }) => {
   const t = useTranslations("admin.jobTracker.interviewPrep");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [questionText, setQuestionText] = useState("");
   const [category, setCategory] = useState<InterviewPrepCategory>("role");
@@ -84,6 +85,7 @@ export const InterviewPrepManualQuestionDialog: FC<
           modelAnswer: modelAnswer.trim(),
           whyTheyAsk: whyTheyAsk.trim(),
           talkingPoints,
+          locale,
         });
 
         await utils.interviewPrepAdmin.getInterviewPrepPageData.invalidate({
@@ -108,6 +110,7 @@ export const InterviewPrepManualQuestionDialog: FC<
     category,
     createMutation,
     eventId,
+    locale,
     modelAnswer,
     onQuestionCreated,
     questionText,

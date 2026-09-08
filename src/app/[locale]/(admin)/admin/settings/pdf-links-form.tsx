@@ -12,7 +12,6 @@ import { api } from "@/trpc/react";
 import { locales, localsDisplay } from "@/i18n/config";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
   FormActions,
@@ -135,14 +134,7 @@ const PdfLinksForm: FC<PdfLinksFormProps> = ({ initialLinks }) => {
                         name={`links.${locale}`}
                         render={({ field }) => (
                           <FormItem
-                            label={
-                              <span className="flex items-center gap-2">
-                                <Badge variant="outline" className="text-xs">
-                                  {locale.toUpperCase()}
-                                </Badge>
-                                <span>{localsDisplay[locale]}</span>
-                              </span>
-                            }
+                            label={`${localsDisplay[locale]} (${locale.toUpperCase()})`}
                             inputId={`settings-pdf-${locale}`}
                           >
                             <div className="relative">
