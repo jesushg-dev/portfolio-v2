@@ -1,15 +1,12 @@
 /**
- * Shared design tokens for the jehg.dev transactional emails.
- * Pulled directly from the real jehg.dev brand (royal blue + white,
- * the same blue used across the site nav, buttons and the "Jehg" wordmark)
- * instead of an invented theme, so these emails feel like a natural
- * extension of the portfolio and of the signature Jesús already uses.
+ * Shared design tokens for jesushg.com transactional emails.
+ * Royal blue + white, aligned with the site nav and Jehg wordmark.
  */
 export const theme = {
   colors: {
-    pageBackground: "#F2F5FC", // soft blue-tinted grey, sits behind the card
+    pageBackground: "#F2F5FC",
     cardBackground: "#FFFFFF",
-    brand: "#2E5AEB", // the jehg.dev royal blue — wordmark, links, buttons, banner
+    brand: "#2E5AEB",
     brandDark: "#1E44C7",
     textPrimary: "#111827",
     textSecondary: "#4B5563",
@@ -25,14 +22,13 @@ export const theme = {
 };
 
 export const links = {
-  portfolio: "https://jehg.dev",
+  portfolio: "https://jesushg.com",
   linkedin: "https://linkedin.com/in/jesushg-dev",
   website: "https://www.jesushg.com",
-  github: "https://github.com/REPLACE_ME", // no la tenía en la firma, poné la real
-  email: "[email protected]", // reemplazá por tu correo real de contacto
-  phone: "tel:+505REPLACE_ME", // reemplazá por tu número real
+  github: "https://github.com/jesushg",
+  email: "jesus.hernandez@jesushg.com",
+  phone: "tel:+50586793204",
   location: "Masaya, Nicaragua",
-  // Apuntá esto a la misma foto que ya usás en el hero de jehg.dev
-  // (mejor que recortar un screenshot: misma calidad, un solo lugar para actualizarla)
-  avatarUrl: "https://jehg.dev/images/profile.jpg",
+  avatarUrl:
+    "https://res.cloudinary.com/js-media/image/upload/f_auto,q_auto/v1/portfolio/carnet/s6ipqdnq2farzggipn78",
 };

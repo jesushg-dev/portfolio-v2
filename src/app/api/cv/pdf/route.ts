@@ -36,26 +36,24 @@ export async function GET(request: Request) {
       { paginatePages, design },
     );
 
-    if (!result?.buffer && !result?.url) {
+    const buffer =
+      result?.buffer ??
+      (result?.url
+        ? await fetch(result.url, { cache: "no-store" })
+            .then((r) => r.arrayBuffer())
+            .then((b) => Buffer.from(b))
+        : null);
+
+    if (!buffer || !result?.fileName) {
       return NextResponse.json({ error: "CV not found" }, { status: 404 });
     }
 
-    if (result.url && result.fromCache) {
-      return NextResponse.redirect(result.url, 302);
-    }
+    const encodedFileName = encodeURIComponent(result.fileName);
 
-    if (result.url) {
-      return NextResponse.redirect(result.url, 302);
-    }
-
-    if (!result.buffer) {
-      return NextResponse.json({ error: "CV not found" }, { status: 404 });
-    }
-
-    return new NextResponse(new Uint8Array(result.buffer), {
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${result.fileName}"`,
+        "Content-Disposition": `inline; filename="${result.fileName}"; filename*=UTF-8''${encodedFileName}`,
         "Cache-Control": "no-store",
       },
     });

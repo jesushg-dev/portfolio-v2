@@ -1,8 +1,7 @@
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { getTranslations } from "next-intl/server";
 import { MdOpenInNew } from "react-icons/md";
 
-import { resolveSkillImageUrl } from "@/utils/tools/image";
 import CertificateItem from "@/components/certification/certification-item";
 import PortfolioItem from "@/features/home/components/portfolio/project-item";
 import { SkillExperienceList } from "@/features/home/components/skills/skill-experience-list";
@@ -54,12 +53,11 @@ export async function SkillDetailPageView({
       <header className="border-background-100 mb-14 border-b pb-10 md:mb-16 md:pb-12">
         <div className="mb-5 flex flex-col items-center gap-4 md:flex-row md:items-start">
           <div className="bg-background-100 relative flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl shadow-md">
-            <Image
+            <MediaImage
               alt=""
               width={40}
               height={40}
-              src={resolveSkillImageUrl(detail.image)}
-              unoptimized
+              src={detail.image}
               className="h-10 w-10 object-contain"
               priority
             />

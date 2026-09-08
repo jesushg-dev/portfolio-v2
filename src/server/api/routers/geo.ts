@@ -1,4 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { isPrivateOrLocalIpv4, isValidIpv4 } from "@/lib/http/client-ip";
 
 interface IpApiResponse {
   status: string;
@@ -17,14 +18,9 @@ const DEV_VISITOR_NETHERLANDS = {
 };
 
 function isLocalIp(ip: string): boolean {
-  return (
-    !ip ||
-    ip === "127.0.0.1" ||
-    ip === "::1" ||
-    ip.startsWith("192.168.") ||
-    ip.startsWith("10.") ||
-    ip.startsWith("172.16.")
-  );
+  if (ip === "::1") return true;
+  if (!isValidIpv4(ip)) return true;
+  return isPrivateOrLocalIpv4(ip);
 }
 
 export const geoRouter = createTRPCRouter({
@@ -62,7 +58,7 @@ export const geoRouter = createTRPCRouter({
     const realIp = ctx.headers.get("x-real-ip");
     const ip = forwardedFor?.split(",")[0]?.trim() ?? realIp ?? "";
 
-    if (isLocalIp(ip)) {
+    if (!isValidIpv4(ip) || isLocalIp(ip)) {
       if (process.env.NODE_ENV !== "production") {
         return DEV_VISITOR_NETHERLANDS;
       }
@@ -71,7 +67,7 @@ export const geoRouter = createTRPCRouter({
 
     try {
       const res = await fetch(
-        `http://ip-api.com/json/${ip}?fields=status,country,city,lat,lon`,
+        `https://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,country,city,lat,lon`,
         {
           signal: AbortSignal.timeout(4000),
           cache: "no-store",

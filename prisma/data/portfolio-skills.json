@@ -3,7 +3,7 @@
     "key": "Java",
     "title": "Java",
     "type": "BACKEND",
-    "image": "apachenetbeanside",
+    "image": "https://cdn.simpleicons.org/apachenetbeanside",
     "translations": [
       {
         "locale": "es",
@@ -27,7 +27,7 @@
     "key": "Php",
     "title": "PHP",
     "type": "BACKEND",
-    "image": "php",
+    "image": "https://cdn.simpleicons.org/php",
     "translations": [
       {
         "locale": "es",
@@ -51,7 +51,7 @@
     "key": "Csharp",
     "title": "C#",
     "type": "BACKEND",
-    "image": "csharp",
+    "image": "https://cdn.simpleicons.org/csharp",
     "translations": [
       {
         "locale": "es",
@@ -75,7 +75,7 @@
     "key": "Entity",
     "title": "Entity Framework",
     "type": "BACKEND",
-    "image": "dotnet",
+    "image": "https://cdn.simpleicons.org/dotnet",
     "translations": [
       {
         "locale": "es",
@@ -99,7 +99,7 @@
     "key": "Dotnet",
     "title": ".NET",
     "type": "BACKEND",
-    "image": "dotnet",
+    "image": "https://cdn.simpleicons.org/dotnet",
     "translations": [
       {
         "locale": "es",
@@ -123,7 +123,7 @@
     "key": "Swagger",
     "title": "Swagger",
     "type": "BACKEND",
-    "image": "swagger",
+    "image": "https://cdn.simpleicons.org/swagger",
     "translations": [
       {
         "locale": "es",
@@ -147,7 +147,7 @@
     "key": "Nodejs",
     "title": "Node.js",
     "type": "BACKEND",
-    "image": "nodedotjs",
+    "image": "https://cdn.simpleicons.org/nodedotjs",
     "translations": [
       {
         "locale": "es",
@@ -171,7 +171,7 @@
     "key": "Nestjs",
     "title": "Nest.js",
     "type": "BACKEND",
-    "image": "nestjs",
+    "image": "https://cdn.simpleicons.org/nestjs",
     "translations": [
       {
         "locale": "es",
@@ -195,7 +195,7 @@
     "key": "Express",
     "title": "Express",
     "type": "BACKEND",
-    "image": "express",
+    "image": "https://cdn.simpleicons.org/express",
     "translations": [
       {
         "locale": "es",
@@ -219,7 +219,7 @@
     "key": "Mysql",
     "title": "MySQL",
     "type": "BACKEND",
-    "image": "mysql",
+    "image": "https://cdn.simpleicons.org/mysql",
     "translations": [
       {
         "locale": "es",
@@ -243,7 +243,7 @@
     "key": "SqlServer",
     "title": "SQL Server",
     "type": "BACKEND",
-    "image": "microsoftsqlserver",
+    "image": "https://cdn.simpleicons.org/microsoftsqlserver",
     "translations": [
       {
         "locale": "es",
@@ -267,7 +267,7 @@
     "key": "MongoDb",
     "title": "MongoDB",
     "type": "BACKEND",
-    "image": "mongodb",
+    "image": "https://cdn.simpleicons.org/mongodb",
     "translations": [
       {
         "locale": "es",
@@ -291,7 +291,7 @@
     "key": "Firebase",
     "title": "Firebase",
     "type": "BACKEND",
-    "image": "firebase",
+    "image": "https://cdn.simpleicons.org/firebase",
     "translations": [
       {
         "locale": "es",
@@ -315,7 +315,7 @@
     "key": "Npm",
     "title": "NPM",
     "type": "TOOLS",
-    "image": "npm",
+    "image": "https://cdn.simpleicons.org/npm",
     "translations": [
       {
         "locale": "es",
@@ -339,7 +339,7 @@
     "key": "Yarn",
     "title": "Yarn",
     "type": "TOOLS",
-    "image": "yarn",
+    "image": "https://cdn.simpleicons.org/yarn",
     "translations": [
       {
         "locale": "es",
@@ -363,7 +363,7 @@
     "key": "Vite",
     "title": "Vite",
     "type": "TOOLS",
-    "image": "vite",
+    "image": "https://cdn.simpleicons.org/vite",
     "translations": [
       {
         "locale": "es",
@@ -387,7 +387,7 @@
     "key": "Git",
     "title": "Git",
     "type": "TOOLS",
-    "image": "git",
+    "image": "https://cdn.simpleicons.org/git",
     "translations": [
       {
         "locale": "es",
@@ -411,7 +411,7 @@
     "key": "Github",
     "title": "Github",
     "type": "TOOLS",
-    "image": "github",
+    "image": "https://cdn.simpleicons.org/github",
     "translations": [
       {
         "locale": "es",
@@ -435,7 +435,7 @@
     "key": "Bitbucket",
     "title": "Bitbucket",
     "type": "TOOLS",
-    "image": "bitbucket",
+    "image": "https://cdn.simpleicons.org/bitbucket",
     "translations": [
       {
         "locale": "es",
@@ -459,7 +459,7 @@
     "key": "Vscode",
     "title": "VS Code",
     "type": "TOOLS",
-    "image": "visualstudiocode",
+    "image": "https://cdn.simpleicons.org/visualstudiocode",
     "translations": [
       {
         "locale": "es",
@@ -483,7 +483,7 @@
     "key": "Postman",
     "title": "Postman",
     "type": "TOOLS",
-    "image": "postman",
+    "image": "https://cdn.simpleicons.org/postman",
     "translations": [
       {
         "locale": "es",
@@ -507,7 +507,7 @@
     "key": "GraphQL",
     "title": "GraphQL",
     "type": "BACKEND",
-    "image": "graphql",
+    "image": "https://cdn.simpleicons.org/graphql",
     "translations": [
       {
         "locale": "es",
@@ -531,7 +531,7 @@
     "key": "Prisma",
     "title": "Prisma",
     "type": "BACKEND",
-    "image": "prisma",
+    "image": "https://cdn.simpleicons.org/prisma",
     "translations": [
       {
         "locale": "es",
@@ -555,7 +555,7 @@
     "key": "Azure",
     "title": "Azure",
     "type": "TOOLS",
-    "image": "microsoftazure",
+    "image": "https://cdn.simpleicons.org/microsoftazure",
     "translations": [
       {
         "locale": "es",
@@ -579,7 +579,7 @@
     "key": "Notion",
     "title": "Notion",
     "type": "TOOLS",
-    "image": "notion",
+    "image": "https://cdn.simpleicons.org/notion",
     "translations": [
       {
         "locale": "es",
@@ -603,7 +603,7 @@
     "key": "Html",
     "title": "HTML5",
     "type": "FRONTEND",
-    "image": "html5",
+    "image": "https://cdn.simpleicons.org/html5",
     "translations": [
       {
         "locale": "es",
@@ -627,7 +627,7 @@
     "key": "Css",
     "title": "CSS3",
     "type": "FRONTEND",
-    "image": "css",
+    "image": "https://cdn.simpleicons.org/css",
     "translations": [
       {
         "locale": "es",
@@ -651,7 +651,7 @@
     "key": "Javascript",
     "title": "JavaScript",
     "type": "FRONTEND",
-    "image": "javascript",
+    "image": "https://cdn.simpleicons.org/javascript",
     "translations": [
       {
         "locale": "es",
@@ -675,7 +675,7 @@
     "key": "Typescript",
     "title": "TypeScript",
     "type": "FRONTEND",
-    "image": "typescript",
+    "image": "https://cdn.simpleicons.org/typescript",
     "translations": [
       {
         "locale": "es",
@@ -699,7 +699,7 @@
     "key": "React",
     "title": "React",
     "type": "FRONTEND",
-    "image": "react",
+    "image": "https://cdn.simpleicons.org/react",
     "translations": [
       {
         "locale": "es",
@@ -723,7 +723,7 @@
     "key": "Nextjs",
     "title": "Next.js",
     "type": "FRONTEND",
-    "image": "nextdotjs",
+    "image": "https://cdn.simpleicons.org/nextdotjs",
     "translations": [
       {
         "locale": "es",
@@ -747,7 +747,7 @@
     "key": "Redux",
     "title": "Redux",
     "type": "FRONTEND",
-    "image": "redux",
+    "image": "https://cdn.simpleicons.org/redux",
     "translations": [
       {
         "locale": "es",
@@ -771,7 +771,7 @@
     "key": "Tailwind",
     "title": "Tailwind CSS",
     "type": "FRONTEND",
-    "image": "tailwindcss",
+    "image": "https://cdn.simpleicons.org/tailwindcss",
     "translations": [
       {
         "locale": "es",
@@ -795,7 +795,7 @@
     "key": "Material",
     "title": "Material UI",
     "type": "FRONTEND",
-    "image": "mui",
+    "image": "https://cdn.simpleicons.org/mui",
     "translations": [
       {
         "locale": "es",
@@ -819,7 +819,7 @@
     "key": "Styled",
     "title": "Styled Components",
     "type": "FRONTEND",
-    "image": "styledcomponents",
+    "image": "https://cdn.simpleicons.org/styledcomponents",
     "translations": [
       {
         "locale": "es",
@@ -843,7 +843,7 @@
     "key": "Sass",
     "title": "Sass",
     "type": "FRONTEND",
-    "image": "sass",
+    "image": "https://cdn.simpleicons.org/sass",
     "translations": [
       {
         "locale": "es",
@@ -867,7 +867,7 @@
     "key": "Bootstrap",
     "title": "Bootstrap",
     "type": "FRONTEND",
-    "image": "bootstrap",
+    "image": "https://cdn.simpleicons.org/bootstrap",
     "translations": [
       {
         "locale": "es",
@@ -891,7 +891,7 @@
     "key": "Apollo",
     "title": "Apollo GraphQL",
     "type": "FRONTEND",
-    "image": "apollographql",
+    "image": "https://cdn.simpleicons.org/apollographql",
     "translations": [
       {
         "locale": "es",
@@ -915,7 +915,7 @@
     "key": "WebSockets",
     "title": "WebSockets",
     "type": "FRONTEND",
-    "image": "socketdotio",
+    "image": "https://cdn.simpleicons.org/socketdotio",
     "translations": [
       {
         "locale": "es",
@@ -939,7 +939,7 @@
     "key": "ReactNative",
     "title": "React Native",
     "type": "MOBILE",
-    "image": "react",
+    "image": "https://cdn.simpleicons.org/react",
     "translations": [
       {
         "locale": "es",
@@ -963,7 +963,7 @@
     "key": "Android",
     "title": "Android",
     "type": "MOBILE",
-    "image": "android",
+    "image": "https://cdn.simpleicons.org/android",
     "translations": [
       {
         "locale": "es",
@@ -987,7 +987,7 @@
     "key": "Windforms",
     "title": "WinForms",
     "type": "DESKTOP",
-    "image": "windowsxp",
+    "image": "https://cdn.simpleicons.org/windowsxp",
     "translations": [
       {
         "locale": "es",
@@ -1011,7 +1011,7 @@
     "key": "DevExpress",
     "title": "DevExpress",
     "type": "TOOLS",
-    "image": "devexpress",
+    "image": "https://cdn.simpleicons.org/devexpress",
     "translations": [
       {
         "locale": "es",

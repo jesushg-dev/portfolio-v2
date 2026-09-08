@@ -113,6 +113,9 @@ const tenant = {
   defaultLocale: "en" as const,
   isPrimary: true,
   isPublished: true,
+  displayName: "Jane Doe",
+  logoInitials: null,
+  logoImageUrl: null,
 };
 
 function mockDbHappyPath() {

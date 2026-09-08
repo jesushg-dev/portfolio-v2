@@ -1,13 +1,10 @@
 "use client";
 
 import { useState, type FC, type ReactNode } from "react";
-import Image from "next/image";
 
+import { MediaImage } from "@/components/shared/media-image";
 import { cn } from "@/lib/utils";
-import {
-  getProjectImageLoader,
-  isRenderableProjectImage,
-} from "@/utils/tools/image";
+import { isRenderableProjectImage } from "@/utils/tools/image";
 
 interface ProjectThumbnailProps {
   image: string | null | undefined;
@@ -43,12 +40,11 @@ export const ProjectThumbnail: FC<ProjectThumbnailProps> = ({
   }
 
   return (
-    <Image
+    <MediaImage
       src={trimmed}
       alt={title}
       width={size}
       height={size}
-      loader={getProjectImageLoader(trimmed)}
       className={cn("shrink-0 rounded-md object-cover", className)}
       style={{ width: size, height: size }}
       onError={() => setFailed(true)}

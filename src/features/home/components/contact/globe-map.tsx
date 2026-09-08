@@ -831,6 +831,203 @@ export function GlobeMap({
           .attr("stroke-linecap", "round")
           .attr("stroke-linejoin", "round")
           .attr("stroke-dasharray", "6,5");
+
+        if (connectionPhase === "done") {
+          let defs = svg.select<SVGDefsElement>("defs");
+          if (defs.empty()) {
+            defs = svg.append("defs");
+          }
+          if (defs.select("#packet-glow").empty()) {
+            const filter = defs
+              .append("filter")
+              .attr("id", "packet-glow")
+              .attr("x", "-50%")
+              .attr("y", "-50%")
+              .attr("width", "200%")
+              .attr("height", "200%");
+            filter
+              .append("feGaussianBlur")
+              .attr("stdDeviation", "2.5")
+              .attr("result", "coloredBlur");
+            const merge = filter.append("feMerge");
+            merge.append("feMergeNode").attr("in", "coloredBlur");
+            merge.append("feMergeNode").attr("in", "SourceGraphic");
+          }
+
+          const packetGroup = svg
+            .insert("g", ".location-marker")
+            .attr("class", "packet-transmission");
+
+          // Ping ripple at destination (Managua) upon request packet arrival
+          const destRipple = packetGroup
+            .append("circle")
+            .attr("cx", coordDestination[0])
+            .attr("cy", coordDestination[1])
+            .attr("fill", "none")
+            .attr("stroke", accentColor)
+            .attr("stroke-width", 1.5)
+            .attr("opacity", 0);
+
+          destRipple
+            .append("animate")
+            .attr("attributeName", "r")
+            .attr("values", "4;4;24;26;4")
+            .attr("keyTimes", "0;0.38;0.52;0.56;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          destRipple
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0;0.85;0;0")
+            .attr("keyTimes", "0;0.38;0.41;0.54;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Ping ripple at origin (Visitor) upon return packet arrival
+          const originRipple = packetGroup
+            .append("circle")
+            .attr("cx", coordOrigin[0])
+            .attr("cy", coordOrigin[1])
+            .attr("fill", "none")
+            .attr("stroke", accentColor)
+            .attr("stroke-width", 1.5)
+            .attr("opacity", 0);
+
+          originRipple
+            .append("animate")
+            .attr("attributeName", "r")
+            .attr("values", "4;4;24;26;4")
+            .attr("keyTimes", "0;0.86;0.97;0.99;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          originRipple
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0;0.85;0;0")
+            .attr("keyTimes", "0;0.86;0.89;0.98;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Forward Trail Particle (faint trail behind forward packet)
+          const fwdTrail = packetGroup.append("g");
+          fwdTrail
+            .append("circle")
+            .attr("r", 2.2)
+            .attr("fill", accentColor)
+            .attr("opacity", 0.5)
+            .attr("filter", "url(#packet-glow)");
+
+          fwdTrail
+            .append("animateMotion")
+            .attr("path", flightPath)
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite")
+            .attr("keyPoints", "0;0.97;0.97;0.97;0")
+            .attr("keyTimes", "0;0.41;0.41;0.98;1")
+            .attr("calcMode", "linear");
+
+          fwdTrail
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0.6;0.6;0;0;0")
+            .attr("keyTimes", "0;0.05;0.37;0.41;0.98;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Forward Main Packet (Origin -> Destination)
+          const fwdPacket = packetGroup.append("g");
+          fwdPacket
+            .append("circle")
+            .attr("r", 5)
+            .attr("fill", accentColor)
+            .attr("opacity", 0.45)
+            .attr("filter", "url(#packet-glow)");
+
+          fwdPacket
+            .append("circle")
+            .attr("r", 2.8)
+            .attr("fill", "#ffffff")
+            .attr("stroke", accentColor)
+            .attr("stroke-width", 1.2);
+
+          fwdPacket
+            .append("animateMotion")
+            .attr("path", flightPath)
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite")
+            .attr("keyPoints", "0;1;1;1;0")
+            .attr("keyTimes", "0;0.40;0.40;0.98;1")
+            .attr("calcMode", "linear");
+
+          fwdPacket
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;1;1;0;0;0")
+            .attr("keyTimes", "0;0.04;0.36;0.40;0.98;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Return Trail Particle (faint trail behind return packet)
+          const retTrail = packetGroup.append("g");
+          retTrail
+            .append("circle")
+            .attr("r", 2.2)
+            .attr("fill", accentColor)
+            .attr("opacity", 0.5)
+            .attr("filter", "url(#packet-glow)");
+
+          retTrail
+            .append("animateMotion")
+            .attr("path", flightPath)
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite")
+            .attr("keyPoints", "1;1;0.03;0.03;1")
+            .attr("keyTimes", "0;0.49;0.89;0.98;1")
+            .attr("calcMode", "linear");
+
+          retTrail
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0;0.6;0.6;0;0")
+            .attr("keyTimes", "0;0.49;0.53;0.85;0.89;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Return Main Packet (Destination -> Origin)
+          const retPacket = packetGroup.append("g");
+          retPacket
+            .append("circle")
+            .attr("r", 5)
+            .attr("fill", accentColor)
+            .attr("opacity", 0.45)
+            .attr("filter", "url(#packet-glow)");
+
+          retPacket
+            .append("circle")
+            .attr("r", 2.8)
+            .attr("fill", "#ffffff")
+            .attr("stroke", accentColor)
+            .attr("stroke-width", 1.2);
+
+          retPacket
+            .append("animateMotion")
+            .attr("path", flightPath)
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite")
+            .attr("keyPoints", "1;1;0;0;1")
+            .attr("keyTimes", "0;0.48;0.88;0.98;1")
+            .attr("calcMode", "linear");
+
+          retPacket
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0;1;1;0;0")
+            .attr("keyTimes", "0;0.48;0.52;0.84;0.88;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+        }
       }
     }
   }, [

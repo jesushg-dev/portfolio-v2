@@ -37,6 +37,7 @@ import {
   type SkillEditorDTO,
 } from "@/features/skills/lib/skill-editor-dto";
 import { StackTypeSchema } from "@/features/portfolio/server/portfolio-admin-shared";
+import { isAbsoluteOrLocalImagePath } from "@/utils/tools/image";
 
 interface SkillFormProps {
   languages: AppLanguage[];
@@ -54,7 +55,10 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
       z.object({
         id: z.string().optional(),
         title: z.string().min(1, t("titleRequired")),
-        image: z.string().min(1, t("imageRequired")),
+        image: z
+          .string()
+          .min(1, t("imageRequired"))
+          .refine(isAbsoluteOrLocalImagePath, t("imageUrlInvalid")),
         type: StackTypeSchema,
         featured: z.boolean(),
         translations: translationMapSchema(

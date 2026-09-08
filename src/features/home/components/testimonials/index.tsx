@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { useLocale, useTranslations } from "next-intl";
 
 import HeaderArticle from "@/components/shared/header-article";
@@ -40,13 +40,12 @@ const Testimonials: FC = () => {
             <footer className="mt-4 flex items-center gap-3 text-sm">
               {item.avatarUrl ? (
                 <div className="border-border relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border shadow-sm">
-                  <Image
+                  <MediaImage
                     src={item.avatarUrl}
                     alt={item.author}
                     fill
                     className="object-cover"
                     sizes="40px"
-                    unoptimized
                   />
                 </div>
               ) : (

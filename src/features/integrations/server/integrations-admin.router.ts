@@ -75,15 +75,18 @@ export const integrationsAdminRouter = createTRPCRouter({
         isConfigured: Boolean(
           aiConfig?.geminiApiKey ??
           aiConfig?.openaiApiKey ??
-          aiConfig?.anthropicApiKey,
+          aiConfig?.anthropicApiKey ??
+          aiConfig?.deepseekApiKey,
         ),
         hasGemini: Boolean(aiConfig?.geminiApiKey),
         hasOpenAi: Boolean(aiConfig?.openaiApiKey),
         hasAnthropic: Boolean(aiConfig?.anthropicApiKey),
+        hasDeepSeek: Boolean(aiConfig?.deepseekApiKey),
         defaultProvider: aiConfig?.defaultProvider ?? "gemini",
         maskedGeminiApiKey: maskSecret(aiConfig?.geminiApiKey),
         maskedOpenAiApiKey: maskSecret(aiConfig?.openaiApiKey),
         maskedAnthropicApiKey: maskSecret(aiConfig?.anthropicApiKey),
+        maskedDeepseekApiKey: maskSecret(aiConfig?.deepseekApiKey),
       },
     };
   }),
@@ -272,27 +275,50 @@ export const integrationsAdminRouter = createTRPCRouter({
       }
     }),
 
-  /** Saves AI model credentials (Gemini, OpenAI, Anthropic). */
+  /** Saves AI model credentials (Gemini, OpenAI, Anthropic, DeepSeek). Empty fields keep current keys. */
   saveAi: protectedProcedure
     .input(
       z.object({
         geminiApiKey: z.string().trim().optional(),
         openaiApiKey: z.string().trim().optional(),
         anthropicApiKey: z.string().trim().optional(),
+        deepseekApiKey: z.string().trim().optional(),
         defaultProvider: z
-          .enum(["gemini", "openai", "anthropic"])
+          .enum(["gemini", "openai", "anthropic", "deepseek"])
           .default("gemini"),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
+      const current = (await getTenantIntegrationConfig(userId, "ai")) ?? {};
 
       const config: AiIntegrationConfig = {
-        geminiApiKey: input.geminiApiKey ?? undefined,
-        openaiApiKey: input.openaiApiKey ?? undefined,
-        anthropicApiKey: input.anthropicApiKey ?? undefined,
+        geminiApiKey: input.geminiApiKey?.trim()
+          ? input.geminiApiKey.trim()
+          : current.geminiApiKey,
+        openaiApiKey: input.openaiApiKey?.trim()
+          ? input.openaiApiKey.trim()
+          : current.openaiApiKey,
+        anthropicApiKey: input.anthropicApiKey?.trim()
+          ? input.anthropicApiKey.trim()
+          : current.anthropicApiKey,
+        deepseekApiKey: input.deepseekApiKey?.trim()
+          ? input.deepseekApiKey.trim()
+          : current.deepseekApiKey,
         defaultProvider: input.defaultProvider,
       };
+
+      if (
+        !config.geminiApiKey &&
+        !config.openaiApiKey &&
+        !config.anthropicApiKey &&
+        !config.deepseekApiKey
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "At least one AI API key is required.",
+        });
+      }
 
       await saveTenantIntegrationConfig(userId, "ai", config);
       return { ok: true as const };

@@ -1,7 +1,7 @@
 {
   "adminCredentials": {
     "title": "Credentials & Integrations",
-    "subtitle": "Configure per-tenant API keys and integration settings for Resend, Spotify, UploadThing, and AI Models.",
+    "subtitle": "Configure per-tenant API keys and integration settings for Resend, Spotify, Google Calendar, UploadThing, and AI Models.",
     "providers": {
       "resend": {
         "name": "Resend (Email)",
@@ -10,6 +10,10 @@
       "spotify": {
         "name": "Spotify (Audio)",
         "description": "OAuth credentials for the Now Playing widget."
+      },
+      "google-calendar": {
+        "name": "Google Calendar",
+        "description": "Sync job tracker interviews and follow-ups with your Google Calendar."
       },
       "uploadthing": {
         "name": "UploadThing (Storage)",
@@ -38,6 +42,14 @@
       "noRefreshToken": "Spotify did not return a refresh token. Revoke access in Spotify and reconnect.",
       "accessDenied": "You denied access to Spotify."
     },
+    "googleCalendarCallback": {
+      "connected": "Google Calendar connected successfully.",
+      "exchangeFailed": "Could not complete Google Calendar authorization. Try again.",
+      "invalidState": "Authorization session expired. Start again from this page.",
+      "missingParams": "Google did not return the expected authorization data.",
+      "noRefreshToken": "Google did not return a refresh token. Revoke access in Google Account settings and reconnect.",
+      "accessDenied": "You denied access to Google Calendar."
+    },
     "summary": {
       "domain": "Domain",
       "clientId": "Client ID",
@@ -45,6 +57,73 @@
       "tokenSaved": "Credentials saved",
       "providers": "Active providers",
       "defaultProvider": "Default provider"
+    },
+    "filters": {
+      "all": "All services",
+      "connected": "Connected",
+      "available": "Available"
+    },
+    "securityNotice": "Credentials and API keys are encrypted at rest with per-tenant isolation (AES-256).",
+    "backToIntegrations": "Back to Integrations",
+    "tags": {
+      "resend": "Transactional Emails & CV Delivery",
+      "spotify": "Now Playing Widget & Top Tracks",
+      "google-calendar": "Interviews & Calendar Sync",
+      "uploadthing": "File & PDF Storage CDN",
+      "ai": "Resume Engine, ATS & Flashcards"
+    },
+    "guides": {
+      "title": "Setup Guide",
+      "howToGet": "How to get your credentials",
+      "openConsole": "Open {provider} Dashboard",
+      "copyUri": "Copy URI",
+      "copied": "Copied to clipboard",
+      "resend": {
+        "title": "How to get Resend credentials",
+        "step1": "Sign in to your Resend account at resend.com.",
+        "step2": "Navigate to API Keys and click \"Create API Key\" (select Sending or Full Access).",
+        "step3": "In Domains, verify your sending domain (or use onboarding@resend.dev for testing).",
+        "step4": "Paste your API key (re_...) and sender email on the left.",
+        "dashboardLink": "Open Resend API Keys",
+        "domainsLink": "Open Resend Domains"
+      },
+      "uploadthing": {
+        "title": "How to get UploadThing credentials",
+        "step1": "Log in to your UploadThing dashboard at uploadthing.com.",
+        "step2": "Select your application or click \"Create App\".",
+        "step3": "Go to API Keys in the sidebar to view your UPLOADTHING_TOKEN.",
+        "step4": "Copy and paste the secret token (starts with eyJ...) into the field on the left.",
+        "dashboardLink": "Open UploadThing Dashboard"
+      },
+      "ai": {
+        "title": "How to get AI API keys",
+        "step1": "Choose your preferred LLM provider(s) from Google Gemini, DeepSeek, OpenAI, or Anthropic.",
+        "step2": "Google Gemini (Recommended): Get a free/pay-as-you-go key from Google AI Studio for fast ATS resume scoring & interview prep.",
+        "step3": "DeepSeek: Generate an API key (sk-...) in the DeepSeek Open Platform console.",
+        "step4": "OpenAI: Generate a secret API key (sk-proj-...) in the OpenAI Platform dashboard.",
+        "step5": "Anthropic: Create an API key (sk-ant-...) in the Anthropic Console for Claude models.",
+        "geminiLink": "Get Gemini API Key",
+        "deepseekLink": "Get DeepSeek API Key",
+        "openaiLink": "Get OpenAI API Key",
+        "anthropicLink": "Get Anthropic API Key"
+      },
+      "spotify": {
+        "title": "How to configure Spotify OAuth",
+        "step1": "Sign in to the Spotify Developer Dashboard.",
+        "step2": "Click \"Create App\", enter an app name, and select Web API.",
+        "step3": "In App Settings, add the exact Redirect URI shown below.",
+        "step4": "Copy your Client ID and Client Secret, then paste them to connect.",
+        "dashboardLink": "Open Spotify Developer Dashboard"
+      },
+      "googleCalendar": {
+        "title": "How to configure Google Calendar OAuth",
+        "step1": "Open Google Cloud Console > APIs & Services > Credentials.",
+        "step2": "Create an OAuth 2.0 Client ID (Application type: Web application).",
+        "step3": "Add the exact Authorized Redirect URI shown below.",
+        "step4": "Enable the Google Calendar API in APIs & Services > Library.",
+        "step5": "Copy your Client ID and Client Secret into the form.",
+        "dashboardLink": "Open Google Cloud Console"
+      }
     },
     "connected": {
       "title": "Connected"
@@ -109,11 +188,13 @@
     },
     "ai": {
       "title": "AI Models Credentials",
-      "description": "Configure API keys for LLM services (Gemini, OpenAI, Anthropic).",
+      "description": "Configure API keys for LLM services (Gemini, DeepSeek, OpenAI, Anthropic).",
       "geminiLabel": "Google Gemini API Key",
+      "deepseekLabel": "DeepSeek API Key",
       "openaiLabel": "OpenAI API Key",
       "anthropicLabel": "Anthropic API Key",
       "geminiPlaceholder": "AIzaSy...",
+      "deepseekPlaceholder": "sk-...",
       "openaiPlaceholder": "sk-proj-...",
       "anthropicPlaceholder": "sk-ant-...",
       "defaultProviderLabel": "Default AI Provider",
@@ -217,6 +298,7 @@
     "pdfDelivery": {
       "toggleSend": "Send by email",
       "toggleClose": "Close",
+      "generating": "Generating PDF…",
       "title": "Grab the PDF Resume for Reference",
       "description": "Recruiters, submit your work email below and receive a downloadable PDF version of my resume for comprehensive reference.",
       "footnote": "The PDF is generated from the latest CV data for {fullName}.",
@@ -291,7 +373,7 @@
         "editCustom": "Edit custom colors"
       },
       "scrollToTop": "Scroll to top",
-      "homeLogo": "Jehg, go to homepage",
+      "homeLogo": "{brand}, go to homepage",
       "nav": {
         "explore": "Explore",
         "comingSoon": "Soon",
@@ -367,6 +449,10 @@
             "label": "Now",
             "description": "What I'm focused on, reading, and shipping right now."
           },
+          "stats": {
+            "label": "Stats",
+            "description": "Anonymous visitor stats and portfolio highlights."
+          },
           "colophon": {
             "label": "Colophon",
             "description": "How this site is built — stack, type, colors, and footprint."
@@ -375,7 +461,7 @@
       }
     },
     "footer": {
-      "homeLogo": "Jehg, go to homepage",
+      "homeLogo": "{brand}, go to homepage",
       "title": "All rights reserved © ",
       "madeWith": "Made with ",
       "by": " by ",
@@ -390,6 +476,7 @@
           "qaCollaboration": "QA collaboration",
           "uses": "Uses",
           "now": "Now",
+          "stats": "Stats",
           "colophon": "Colophon"
         },
         "miscellaneous": {
@@ -1296,6 +1383,31 @@
           "cleaner": "Rated A+ on Website Carbon"
         }
       }
+    },
+    "stats": {
+      "metaTitle": "Stats",
+      "metaDescription": "Anonymous visitor stats and portfolio highlights — no cookies, unique IDs, or IP addresses.",
+      "eyebrow": "Public stats",
+      "title": "How this site is used",
+      "description": "Cookieless, first-party audience measurement plus a snapshot of the portfolio. No unique visitors, no tracking across other sites.",
+      "highlightsTitle": "Highlights",
+      "kpis": {
+        "pageviews": "Pageviews (30 days)",
+        "visits": "Visits (30 days)",
+        "countries": "Countries",
+        "projects": "Projects",
+        "certifications": "Certifications",
+        "years": "Years of experience"
+      },
+      "countriesTitle": "Where visits come from",
+      "pagesTitle": "Most viewed pages",
+      "windowHint": "Last 30 days. Country-level only.",
+      "pageviewsCount": "{count, plural, one {# view} other {# views}}",
+      "unknownCountry": "Unknown",
+      "emptyTraffic": "No public visits recorded yet.",
+      "servicesTitle": "Active services",
+      "emptyServices": "No active services right now.",
+      "privacyNote": "Measurement is anonymous and explained in the <link>privacy policy</link>."
     }
   },
   "admin": {
@@ -1327,6 +1439,7 @@
         "pagesGroup": "Pages",
         "uses": "Uses",
         "now": "Now",
+        "processPages": "Process pages",
         "sidebar": "Admin navigation"
       },
       "pageToolbar": "Page header",
@@ -1337,7 +1450,7 @@
       "title": "Dashboard",
       "subtitle": "Welcome back! Manage your public portfolio from here.",
       "welcomeTitle": "Welcome to your Portfolio Admin",
-      "welcomeSubtitle": "Manage all your portfolio content in one place. Switch between languages to manage translated content.",
+      "welcomeSubtitle": "Traffic, job pipeline, and which services are live — not just content counts.",
       "noProfile": "Profile not set up yet",
       "noProfileHint": "Go to <link>Settings</link> to create your public profile.",
       "publicUrl": "Public URL",
@@ -1348,6 +1461,49 @@
       "editCv": "Edit your <cv>CV</cv>",
       "publishInSettings": "Publish your portfolio in <link>Settings</link>",
       "manage": "Manage",
+      "traffic": {
+        "title": "Visitors",
+        "subtitle": "Anonymous pageviews from the last 30 days. No cookies, IPs, or unique IDs.",
+        "viewPublic": "Open public stats",
+        "pageviews": "Pageviews",
+        "visits": "Visits",
+        "countries": "Countries",
+        "topPage": "Top page",
+        "emptyValue": "—",
+        "pageviewsCount": "{count, plural, one {# view} other {# views}}",
+        "countriesTitle": "Where they visit from",
+        "pagesTitle": "What they viewed",
+        "referrersTitle": "Referrers",
+        "referrersHint": "Hostnames only. Direct visits are omitted.",
+        "empty": "No visitor data yet. Public pages start counting after the first anonymous visit.",
+        "emptyReferrers": "No external referrers in this window.",
+        "unknownCountry": "Unknown"
+      },
+      "jobs": {
+        "title": "Job tracker",
+        "subtitle": "{applications, plural, one {# application} other {# applications}} across {companies, plural, one {# company} other {# companies}}",
+        "openTracker": "Open job tracker",
+        "applied": "Applied",
+        "inProgress": "Interview",
+        "offers": "Offers",
+        "ghosted": "Ghosted",
+        "rejected": "Rejected",
+        "hired": "Hired",
+        "upcoming": "Upcoming events",
+        "upcomingHint": "Next interviews, tests, and follow-ups.",
+        "noUpcoming": "Nothing scheduled."
+      },
+      "services": {
+        "title": "Services",
+        "subtitle": "Which offerings are visible on the public site.",
+        "empty": "No services yet.",
+        "active": "Active",
+        "inactive": "Inactive",
+        "featured": "Featured"
+      },
+      "inventory": {
+        "title": "Content inventory"
+      },
       "stats": {
         "certificates": {
           "title": "Certificates",
@@ -1409,17 +1565,37 @@
         "contact": "Contact Me",
         "technicalSkills": "Technical Skills",
         "personalSkills": "Soft Skills",
-        "additionalInformation": "Additional Information"
+        "additionalInformation": "Additional Information",
+        "personalReferences": "Personal References"
       }
     },
     "settings": {
       "title": "Settings",
       "subtitle": "Public URL, default language and visibility.",
+      "tabGeneral": "General & Brand",
+      "tabSecurity": "Security & Integrations",
+      "brandPreviewTitle": "Live Brand Preview",
+      "brandPreviewDescription": "Real-time preview of your brand logo or text mark in headers.",
+      "identitySectionTitle": "Profile & Subdomain",
+      "identitySectionDescription": "Public identity and URL handle for your portfolio.",
+      "visibilitySectionTitle": "Portfolio Visibility",
+      "visibilitySectionDescription": "Control whether your CV and portfolio are publicly accessible online.",
+      "statusPublic": "Live & Public",
+      "statusDraft": "Hidden / Draft",
+      "viewPublicSite": "View public site",
+      "subdomainPrefix": "jesushg.com/cv/",
       "username": "Username (subdomain)",
       "displayName": "Display name",
+      "brandSectionTitle": "Logo & initials",
+      "brandSectionDescription": "Shown in the public header and footer. Prefer a logo image when you have one; otherwise use short initials or a text mark.",
+      "logoInitials": "Initials / text logo",
+      "logoInitialsHint": "Short mark when no image is set (e.g. Jehg). Leave empty to derive initials from the display name.",
+      "logoInitialsPlaceholder": "Jehg",
+      "logoImageUrl": "Logo image URL (optional)",
+      "logoImageUrlHint": "When set, this image replaces the text mark in the header and footer.",
+      "logoImageUrlPlaceholder": "https://cdn.example.com/logo.svg",
       "defaultLocale": "Default language",
       "defaultLocaleHint": "The language your CV defaults to when no translation is available.",
-      "cvPdfUrl": "CV PDF URL (optional)",
       "mapLocation": "Map location",
       "mapLocationHint": "City shown on the Let's Talk globe. Visitors connect to this point when their location can be detected.",
       "mapLocationPlaceholder": "Amsterdam, Netherlands",
@@ -1428,13 +1604,83 @@
       "saveFailed": "Could not save settings",
       "save": "Save settings",
       "saving": "Saving...",
-      "pdfSectionTitle": "PDF Resumes (Multi-language)",
-      "pdfSectionDescription": "Provide separate PDF links for each language. When visitors view your portfolio in a specific language, they will download the corresponding PDF.",
-      "pdfLinkPlaceholder": "https://example.com/resume-{locale}.pdf",
       "usernameValidation": "Use lowercase letters, numbers and dashes",
       "credentialsTitle": "Credentials & Integrations",
       "credentialsDescription": "Connect Spotify, email, file uploads, and AI for this portfolio. Saved connections stay available here.",
-      "credentialsCta": "Manage integrations"
+      "credentialsCta": "Manage integrations",
+      "pdfSectionTitle": "PDF Resumes (Multi-language)",
+      "pdfSectionDescription": "Provide direct PDF download links per language. Visitors downloading your CV in a specific language will receive the corresponding file.",
+      "pdfLinkPlaceholder": "https://example.com/resume-{locale}.pdf",
+      "testLink": "Test link",
+      "security": {
+        "title": "Security",
+        "description": "Protect your account with a second factor and passkeys. Two-factor authentication is optional; passkeys sign you in without a password.",
+        "twoFactor": {
+          "title": "Two-factor authentication",
+          "description": "Ask for a code from your authenticator app (or your email) on every password sign-in.",
+          "statusOn": "On",
+          "statusOff": "Off",
+          "enable": "Enable 2FA",
+          "disable": "Disable 2FA",
+          "regenerateBackup": "New backup codes",
+          "needsPassword": "Set a password for this account before enabling two-factor authentication.",
+          "confirmPassword": "Confirm your password",
+          "confirmPasswordHint": {
+            "enable": "We need your password to generate the authenticator secret.",
+            "disable": "Disabling 2FA removes your authenticator and backup codes.",
+            "backup": "New codes replace the old ones immediately."
+          },
+          "confirm": {
+            "enable": "Continue",
+            "disable": "Disable",
+            "backup": "Generate codes"
+          },
+          "qrLabel": "QR code for your authenticator app",
+          "scanHint": "Scan this QR code with Google Authenticator, 1Password or any TOTP app, then enter the 6-digit code it shows.",
+          "manualKey": "Can't scan? Enter this key manually:",
+          "codeLabel": "Code from the app",
+          "verifyAndEnable": "Verify and enable",
+          "savedCodes": "I've saved my backup codes",
+          "working": "Working...",
+          "cancel": "Cancel",
+          "enabled": "Two-factor authentication is on. You'll be asked for a code on your next sign-in.",
+          "disabled": "Two-factor authentication is off.",
+          "errorGeneric": "Something went wrong. Check your password and try again.",
+          "errorCode": "That code didn't match. Wait for the next one and try again."
+        },
+        "backupCodes": {
+          "title": "Backup codes",
+          "description": "Store these somewhere safe. Each code signs you in once if you lose access to your authenticator and email.",
+          "copy": "Copy",
+          "copied": "Copied",
+          "download": "Download .txt"
+        },
+        "passkeys": {
+          "title": "Passkeys",
+          "description": "Sign in with Face ID, Touch ID, Windows Hello or a security key. Passkeys are phishing-resistant and skip the 2FA step.",
+          "loading": "Loading passkeys...",
+          "empty": "No passkeys yet.",
+          "unnamed": "Unnamed passkey",
+          "meta": "{kind} · added {date}",
+          "kindSynced": "Synced passkey",
+          "kindDevice": "Device-bound passkey",
+          "nameLabel": "Passkey name",
+          "namePlaceholder": "e.g. MacBook Touch ID",
+          "add": "Add passkey",
+          "working": "Waiting for your device...",
+          "added": "Passkey added.",
+          "deleted": "Passkey removed.",
+          "confirmDelete": "Remove this passkey? You won't be able to sign in with it anymore.",
+          "rename": "Rename {name}",
+          "delete": "Remove {name}",
+          "save": "Save",
+          "cancel": "Cancel",
+          "errorLoad": "Could not load your passkeys.",
+          "errorAdd": "Could not add the passkey.",
+          "errorDelete": "Could not remove the passkey.",
+          "errorRename": "Could not rename the passkey."
+        }
+      }
     },
     "spotify": {
       "title": "Spotify",
@@ -1489,6 +1735,46 @@
       "actions": {
         "connectFailed": "Could not start Spotify authorization",
         "disconnectFailed": "Could not disconnect Spotify"
+      }
+    },
+    "googleCalendar": {
+      "title": "Google Calendar",
+      "subtitle": "Sync job tracker events with your own Google Calendar OAuth client.",
+      "storagePolicy": "Your Google OAuth client secret and refresh token are encrypted and stored only for your account — the same pattern as Spotify.",
+      "disconnectPolicy": "Disconnecting deletes your Calendar tokens from our database. It does not remove events already created in Google Calendar.",
+      "privacyNote": "See our <link>privacy policy</link> for what calendar data we store and why.",
+      "redirectUriLabel": "Authorized redirect URI (add this in Google Cloud Console)",
+      "redirectUriHint": "APIs & Services → Credentials → your OAuth client → Authorized redirect URIs",
+      "scopesTitle": "Permissions requested",
+      "scopes": {
+        "calendarEvents": "Create, update, and delete events on your calendars"
+      },
+      "connect": {
+        "title": "Connect your Google Calendar app",
+        "description": "Create an OAuth client in your Google Cloud project, enable the Calendar API, then paste the Client ID and Secret here.",
+        "byoNote": "Use your own Google Cloud OAuth credentials — not the site login Google app. Enable the Google Calendar API on that project.",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "clientIdPlaceholder": "Paste your Client ID",
+        "clientSecretPlaceholder": "Paste your Client Secret",
+        "dashboardLink": "Open Google Cloud Credentials",
+        "connect": "Connect with Google",
+        "connecting": "Redirecting to Google…",
+        "validationError": "Enter a valid Client ID and Client Secret from your Google Cloud OAuth client."
+      },
+      "status": {
+        "connected": "Connected to Google Calendar",
+        "disconnected": "Not connected",
+        "refreshError": "Could not refresh your Google Calendar connection",
+        "connectedAt": "Connected on {date}",
+        "clientId": "Client ID: {id}",
+        "disconnect": "Disconnect Google Calendar",
+        "disconnecting": "Disconnecting…",
+        "reconnect": "Reconnect Google Calendar"
+      },
+      "actions": {
+        "connectFailed": "Could not start Google Calendar authorization",
+        "disconnectFailed": "Could not disconnect Google Calendar"
       }
     },
     "forms": {
@@ -1684,6 +1970,28 @@
         "create": "Add",
         "dragToReorder": "Drag to reorder"
       },
+      "personalReference": {
+        "details": "Reference details",
+        "name": "Name",
+        "nameRequired": "Name is required",
+        "contact": "Contact",
+        "contactHint": "Phone, email, or other contact info (optional).",
+        "contactPlaceholder": "e.g. (+505) 8679-3204",
+        "role": "Role / relationship",
+        "rolePlaceholder": "e.g. Developer, Manager",
+        "add": "+ Add personal reference",
+        "save": "Save",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "loading": "Loading...",
+        "saveFailed": "Save failed",
+        "deleteFailed": "Delete failed",
+        "savedSuccess": "Saved successfully",
+        "deleteSuccess": "Deleted successfully",
+        "edit": "Edit",
+        "create": "Add",
+        "dragToReorder": "Drag to reorder"
+      },
       "localized": {
         "requiredDefault": "Required in default language",
         "optionalTranslation": "Optional translation",
@@ -1735,6 +2043,7 @@
         "updateFailed": "Failed to update project",
         "createFailed": "Failed to create project",
         "imageRequired": "Image is required",
+        "imageUrlInvalid": "Enter a valid image URL or local path",
         "titleRequiredPrimary": "Title is required for the primary language",
         "atLeastOneLanguage": "At least one language is required"
       },
@@ -1757,7 +2066,9 @@
         "createFailed": "Failed to create service",
         "imageRequired": "Image is required",
         "titleRequiredPrimary": "Title is required for the primary language",
-        "atLeastOneLanguage": "At least one language is required"
+        "atLeastOneLanguage": "At least one language is required",
+        "isActive": "Active on the public site",
+        "isActiveHint": "Inactive services stay in admin but are hidden from the homepage and public stats."
       },
       "certification": {
         "generalSection": "General Information",
@@ -2124,6 +2435,19 @@
         "addClarification": "Add clarification",
         "removeClarification": "Remove",
         "optionalMarkdownHint": "Optional. Markdown links: [label](https://…)",
+        "sectionWorkspaceTags": "Workspace tags",
+        "sectionWorkspaceTagsHint": "Click the photo to drop a pin, then pick the item in the dialog. Hover on the public page shows the name; click scrolls to that card.",
+        "selectItem": "Choose item",
+        "selectItemDescription": "Choose the product this pin points to.",
+        "selectItemPlaceholder": "Select a product",
+        "searchItem": "Search items…",
+        "noMatchingItems": "No matching items",
+        "groupEveryday": "Everyday",
+        "groupSoftware": "Software",
+        "deleteTag": "Remove pin",
+        "noImageHint": "Add a workspace image path above to place tags.",
+        "emptyTags": "No tags yet. Click the image to add one.",
+        "untitledItem": "Untitled",
         "save": "Save settings",
         "saving": "Saving…",
         "updatedSuccess": "Settings saved",
@@ -2176,6 +2500,117 @@
         "createFailed": "Could not create focus",
         "updateFailed": "Could not update focus"
       },
+      "processPage": {
+        "addNew": "Add page",
+        "editTitle": "Edit process page",
+        "sectionBasics": "Basics",
+        "sectionCopy": "Copy",
+        "sectionPageNav": "In-page nav",
+        "sectionHeroTerminal": "Hero terminal",
+        "sectionBenefits": "Benefits",
+        "sectionSteps": "Steps",
+        "sectionToolkit": "Toolkit",
+        "sectionRoles": "Roles",
+        "sectionFaq": "FAQ",
+        "template": "Template",
+        "templateHint": "Choose the layout. Changing this on a new page resets section content.",
+        "templateWorkflow": "Workflow (How I use AI)",
+        "templateQa": "QA collaboration",
+        "slug": "Slug",
+        "slugHint": "Lowercase kebab-case. Reserved site paths are blocked.",
+        "navIcon": "Nav icon",
+        "order": "Order",
+        "isPublished": "Published",
+        "isPublishedHint": "Unpublished pages return 404 on the public site.",
+        "showInNav": "Show in header and footer",
+        "showInNavHint": "Independent of publish. Hidden pages can still be public if published.",
+        "menuTitle": "Menu title",
+        "menuTitleRequired": "Menu title is required for the primary language",
+        "navDescription": "Nav description",
+        "navDescriptionHint": "Short line under the title in the header Explore menu.",
+        "pageNavLabel": "In-page nav label",
+        "metaTitle": "SEO title",
+        "metaDescription": "SEO description",
+        "heroEyebrow": "Hero eyebrow",
+        "heroTitle": "Hero title",
+        "heroTitleHighlight": "Hero title highlight",
+        "heroDescription": "Hero description",
+        "heroPrimaryCta": "Primary CTA",
+        "heroSecondaryCta": "Secondary CTA",
+        "heroScrollHint": "Scroll hint",
+        "ctaTitle": "Closing CTA title",
+        "ctaDescription": "Closing CTA description",
+        "ctaButton": "Closing CTA button",
+        "navId": "Anchor id",
+        "navLabel": "Label",
+        "addNavItem": "Add nav item",
+        "primaryHref": "Primary CTA href",
+        "secondaryHref": "Secondary CTA href",
+        "terminalTitle": "Terminal title",
+        "workflowTitle": "Cycle title",
+        "workflowLive": "Live label",
+        "workflowSteps": "Cycle steps",
+        "cursorLabel": "Cursor label",
+        "testRunnerLines": "Test runner lines",
+        "onePerLine": "One item per line",
+        "eyebrow": "Eyebrow",
+        "sectionTitle": "Section title",
+        "title": "Title",
+        "description": "Description",
+        "icon": "Icon",
+        "benefitItem": "Benefit {index}",
+        "addBenefit": "Add benefit",
+        "inPracticeLabel": "In practice label",
+        "stepItem": "Step {index}",
+        "stepNumber": "Number",
+        "stepDetail": "Detail",
+        "stepTools": "Tools",
+        "addStep": "Add step",
+        "toolkitFootnote": "Footnote",
+        "toolItem": "Tool {index}",
+        "toolName": "Name",
+        "toolInitials": "Initials",
+        "addTool": "Add tool",
+        "myRolesLabel": "My roles label",
+        "myRoles": "My roles",
+        "ecosystemRoles": "Ecosystem roles",
+        "testingLabel": "Testing label",
+        "testingTags": "Testing tags",
+        "faqItem": "FAQ {index}",
+        "question": "Question",
+        "answer": "Answer",
+        "addFaq": "Add FAQ",
+        "remove": "Remove",
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create",
+        "saving": "Saving…",
+        "createdSuccess": "Process page created",
+        "updatedSuccess": "Process page updated",
+        "createFailed": "Could not create process page",
+        "updateFailed": "Could not update process page",
+        "designerHint": "Drag widgets onto the canvas, then click to fill them in.",
+        "widgetPalette": "Widgets",
+        "pageSettings": "Page settings",
+        "emptyCanvas": "Drop a widget here, or click + in the palette.",
+        "dragToReorder": "Drag to reorder",
+        "removeWidget": "Remove widget",
+        "visualNone": "No visual",
+        "visualWorkflow": "Workflow cycle",
+        "visualTestRunner": "Test runner",
+        "addChip": "Add",
+        "widgets": {
+          "nav": "In-page nav",
+          "hero": "Hero",
+          "benefits": "Benefits grid",
+          "stepsAccordion": "Steps accordion",
+          "stepsTimeline": "Steps timeline",
+          "toolkit": "Toolkit",
+          "roles": "Roles",
+          "faq": "FAQ",
+          "closingCta": "Closing CTA"
+        }
+      },
       "portfolioSkill": {
         "generalSection": "General Information",
         "title": "Title",
@@ -2197,6 +2632,7 @@
         "createFailed": "Failed to create skill",
         "titleRequired": "Title is required",
         "imageRequired": "Image URL is required",
+        "imageUrlInvalid": "Enter a valid image URL or local path",
         "featuredLabel": "Featured in stack",
         "featuredDescription": "Featured skills appear brighter in the home terminal and highlight your primary stack."
       }
@@ -2352,6 +2788,33 @@
       "focusDeleted": "Focus deleted.",
       "focusDeleteFailed": "Could not delete focus."
     },
+    "processPages": {
+      "title": "Process pages",
+      "subtitle": "Compose process pages from reusable widgets.",
+      "addNew": "Add page",
+      "createDescription": "Drag widgets onto the canvas and fill in the copy.",
+      "editTitle": "Edit process page",
+      "editDescription": "Add, reorder, and fill widgets. Switch languages in the designer.",
+      "count": "{count} pages",
+      "searchTitle": "Search title",
+      "searchSlug": "Search slug",
+      "deletedSuccess": "Page deleted.",
+      "deleteFailed": "Could not delete page.",
+      "toggleFailed": "Could not update page.",
+      "templates": {
+        "workflow": "Workflow",
+        "qa": "QA"
+      },
+      "columns": {
+        "order": "Order",
+        "title": "Title",
+        "slug": "Slug",
+        "template": "Template",
+        "published": "Published",
+        "inNav": "In nav",
+        "widgets": "Widgets"
+      }
+    },
     "projects": {
       "title": "Projects",
       "subtitle": "Showcase your work.",
@@ -2408,6 +2871,9 @@
       "deleteFailed": "Failed to delete service",
       "columnTitle": "Title",
       "columnType": "Type",
+      "columnActive": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
       "columnSkills": "Skills",
       "columnActions": "Actions",
       "columnCompany": "Company",
@@ -2568,7 +3034,12 @@
       "editItem": "Edit Item",
       "addItem": "Add Item",
       "deleteSuccess": "Deleted successfully",
-      "close": "Close"
+      "close": "Close",
+      "exportSeedJson": "Export",
+      "exportSeedJsonHint": "Export the current database records as prisma/data seed JSON",
+      "exportSeedJsonError": "Could not export seed JSON",
+      "exportSeedZipHint": "Download a ZIP of all prisma/data seed JSON files",
+      "exportSeedZipError": "Could not export seed ZIP"
     },
     "jobTracker": {
       "title": "Job Tracker",
@@ -2641,8 +3112,15 @@
       "calendar": {
         "title": "Upcoming Events",
         "description": "Scheduled interviews and tests",
+        "googleSyncActive": "Synced with Google Calendar",
+        "googleSyncError": "Google Calendar sync needs reconnect",
         "add": "Add",
         "empty": "You have no scheduled events",
+        "expand": "Show all",
+        "collapse": "Show less",
+        "expandAria": "Show more upcoming events",
+        "collapseAria": "Show only the next event",
+        "moreCount": "{count, plural, one {# more event} other {# more events}}",
         "today": "Today",
         "tomorrow": "Tomorrow",
         "virtual": "Virtual",
@@ -2681,12 +3159,29 @@
         "pageTitle": "Interview prep",
         "breadcrumb": "Job Tracker / Application",
         "hint": "Start with why they should hire you. Then practice the rest out loud: 3-part intro, STAR, company research from the JD, and questions to ask.",
+        "aiSettingsLoading": "Loading AI settings...",
+        "eventType": {
+          "INTERVIEW": "Interview",
+          "TECHNICAL_TEST": "Technical Test",
+          "QUESTIONNAIRE": "Questionnaire",
+          "PHONE_CALL": "Phone Call",
+          "MEETING": "Meeting",
+          "FOLLOW_UP": "Follow-up"
+        },
         "cta": "Build prep pack",
         "regenerate": "Rebuild",
         "generateMore": "Generate more",
         "moreSuccess": "Added more questions",
         "cancelRegenerate": "Cancel",
         "alreadyDoneForType": "{count} questions for {type}",
+        "focusToolsLabel": "Focus on specific tools & technologies (optional)",
+        "focusToolsHint": "Select detected tools from the job posting or add custom ones for deep-dive technical questions.",
+        "addCustomTool": "Add tool",
+        "customToolPlaceholder": "e.g. Docker, PostgreSQL...",
+        "generateForTool": "Add questions for {tool}",
+        "toolDeepDive": "Tool Deep Dive",
+        "selectedToolsCount": "{count} selected",
+        "clearSelectedTools": "Clear selection",
         "eventHint": "Questions are generated for a {type}.",
         "usingTailored": "Using the latest tailored CV snapshot.",
         "usingStudio": "No tailored snapshot yet — using Resume Studio.",
@@ -2734,7 +3229,41 @@
           "closing": "Closing",
           "technical": "Technical",
           "screening": "Screening"
-        }
+        },
+        "flipToAnswer": "Flip to answer",
+        "flipToQuestion": "Flip to question",
+        "tapToFlip": "Tap card or press Space to flip",
+        "voiceStart": "Record answer",
+        "voiceListening": "Listening... speak now",
+        "voiceStop": "Stop recording",
+        "voiceUnsupported": "Voice input not supported in this browser",
+        "voiceClear": "Clear text",
+        "evaluateAi": "Evaluate with AI",
+        "evaluatingAi": "Evaluating answer...",
+        "aiFeedback": "AI Feedback",
+        "aiScore": "Score: {score}/10",
+        "aiStrengths": "Strengths",
+        "aiImprovements": "Areas to improve",
+        "aiVerdict": "Verdict",
+        "cardFront": "Question",
+        "cardBack": "Answer",
+        "swipeHint": "Swipe to navigate",
+        "voiceErrorNotAllowed": "Microphone permission denied. Please allow microphone access in your browser.",
+        "voiceErrorAudioCapture": "No microphone was found or it is in use by another application.",
+        "voiceErrorNetwork": "Network error with the speech recognition service.",
+        "voiceErrorUnknown": "An error occurred with speech recognition.",
+        "addManualQuestion": "Add manual question",
+        "addManualQuestionTitle": "Create manual question",
+        "addManualQuestionDesc": "Add a custom question to your practice session.",
+        "questionLabel": "Question",
+        "categoryLabel": "Category",
+        "modelAnswerLabel": "Model answer",
+        "whyTheyAskLabel": "Why they ask (Optional)",
+        "talkingPointsLabel": "Talking points (one per line)",
+        "saveQuestion": "Save question",
+        "questionSaved": "Question added",
+        "aiKeyInvalid": "The AI API key is invalid or inactive. You can use Manual mode to generate with ChatGPT/Claude or create questions manually.",
+        "openGenerator": "AI / Manual Generator"
       },
       "email": {
         "title": "Send CV by email",
@@ -2766,6 +3295,30 @@
         "needCv": "Tailor a CV for this application first, or upload a .docx/.pdf to attach.",
         "noAi": "No AI provider is configured. Add an API key to draft the email.",
         "noResend": "Configure Resend in Integrations to send from your domain."
+      },
+      "coverLetter": {
+        "title": "Cover letter",
+        "sectionTitle": "Cover letter",
+        "optionalHint": "Optional — only if the posting asks for one.",
+        "openButton": "Cover letter",
+        "openOptional": "Add if needed",
+        "editButton": "Edit",
+        "description": "AI drafts a formal cover letter tailored to this job posting using your CV, company context, and notes. Skip this unless the employer asks for one.",
+        "draft": "Draft with AI",
+        "redraft": "Regenerate",
+        "draftHint": "Generate a cover letter draft from this application — you can edit everything before saving.",
+        "draftSuccess": "Cover letter draft ready",
+        "draftError": "Could not draft the cover letter",
+        "save": "Save",
+        "saveSuccess": "Cover letter saved",
+        "saveError": "Could not save the cover letter",
+        "saveMissingFields": "Add a subject and body before saving",
+        "copy": "Copy",
+        "copySuccess": "Copied to clipboard",
+        "copyError": "Could not copy",
+        "subjectLabel": "Subject / title",
+        "bodyLabel": "Letter",
+        "noAi": "No AI provider is configured. Add an API key to draft the cover letter."
       },
       "kanban": {
         "description": "Drag cards between columns to update application status.",
@@ -2936,6 +3489,10 @@
         "paraphrased": "paraphrased",
         "missing": "missing"
       },
+      "atsCheckerTitle": "ATS checker",
+      "atsCheckerScore": "Match {score}%",
+      "atsCheckerGaps": "Gaps vs this job",
+      "atsCheckerNoCriticalGaps": "No critical skill gaps called out",
       "tailorAtsPreview": "ATS preview",
       "tailorPreviewMenu": "Preview",
       "tailorPreviewWord": "Word (DOCX)",
@@ -3006,7 +3563,39 @@
       "signInGithub": "Sign in with GitHub",
       "connectingGoogle": "Connecting with Google",
       "connectingGithub": "Connecting with GitHub",
-      "errorSignIn": "Could not sign in"
+      "errorSignIn": "Could not sign in",
+      "signInPasskey": "Sign in with a passkey",
+      "connectingPasskey": "Waiting for your passkey...",
+      "errorPasskey": "Could not sign in with your passkey"
+    },
+    "twoFactor": {
+      "title": "Confirm it's you",
+      "metaDescription": "Enter your two-factor code to finish signing in.",
+      "description": {
+        "totp": "Enter the 6-digit code from your authenticator app.",
+        "otp": "We'll email a 6-digit code to the address on your account.",
+        "backup": "Enter one of your single-use backup codes. Each code works once."
+      },
+      "methodLabel": "Verification method",
+      "method": {
+        "totp": "Authenticator",
+        "otp": "Email code",
+        "backup": "Backup code"
+      },
+      "codeLabel": "Verification code",
+      "codePlaceholder": "123456",
+      "backupLabel": "Backup code",
+      "backupPlaceholder": "xxxxx-xxxxx",
+      "sendCode": "Email me a code",
+      "sending": "Sending...",
+      "resend": "Send a new code",
+      "codeSent": "Code sent. Check your inbox — it expires in 5 minutes.",
+      "verify": "Verify",
+      "verifying": "Verifying...",
+      "errorVerify": "That code is invalid or has expired.",
+      "errorSend": "Could not send the code. Try again in a minute.",
+      "backToSignIn": "Wrong account?",
+      "signIn": "Back to sign in"
     },
     "register": {
       "titlePortfolio": "Create your portfolio",
@@ -3072,10 +3661,10 @@
     "privacy": {
       "title": "Privacy Policy",
       "metaTitle": "Privacy Policy",
-      "metaDescription": "How we handle your data, including Spotify integration credentials and retention.",
+      "metaDescription": "How we handle your data, including anonymous audience measurement and Spotify credentials.",
       "subtitle": "How we handle your data",
-      "updatedAt": "Last updated: July 2026",
-      "intro": "This portfolio platform stores only the data needed to provide its features. This page explains what we collect when you connect Spotify and how you can remove it.",
+      "updatedAt": "Last updated: September 2026",
+      "intro": "This portfolio platform stores only the data needed to provide its features. This page explains anonymous audience measurement on public pages and what we collect if you connect Spotify.",
       "spotify": {
         "title": "Spotify integration",
         "intro": "If you connect Spotify in the admin panel, we store credentials for your own Spotify developer app so the Now Playing widget can show playback on your public portfolio.",
@@ -3087,6 +3676,19 @@
         "purpose": "We use this data only to request Spotify playback information on your behalf for visitors to your portfolio. We do not sell or share it with third parties.",
         "disconnect": "You can disconnect Spotify at any time from Admin → Spotify. Disconnecting deletes your Spotify tokens and app credentials from our database immediately.",
         "retention": "If you disconnect or ask us to stop processing your Spotify data, we delete it without undue delay and within five days at most, in line with Spotify's developer terms."
+      },
+      "analytics": {
+        "title": "Audience measurement",
+        "intro": "Public pages send a small first-party beacon so the owner can see approximate traffic. This is not advertising or cross-site tracking, and it does not set cookies.",
+        "storedTitle": "What we store",
+        "storedPageviews": "Daily totals of pageviews and session visits, grouped by page path, country, and referrer hostname",
+        "notStoredTitle": "What we do not store",
+        "notStoredIp": "IP addresses",
+        "notStoredId": "Cookies, fingerprints, or unique visitor identifiers",
+        "notStoredCity": "City-level location (country only, from the hosting platform)",
+        "purpose": "We use these aggregates only to show stats on the public /stats page and in the portfolio admin. Data is not sold or shared with analytics vendors.",
+        "optOut": "If your browser sends Do Not Track or Global Privacy Control, we skip the measurement entirely.",
+        "retention": "Aggregates older than 13 months are deleted."
       }
     }
   },

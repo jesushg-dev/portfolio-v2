@@ -6,6 +6,7 @@ export const PUBLIC_PAGE_LIVE = {
   uses: false,
   now: false,
   colophon: true,
+  stats: true,
 } as const;
 
 export type PublicPreviewPageId = keyof typeof PUBLIC_PAGE_LIVE;

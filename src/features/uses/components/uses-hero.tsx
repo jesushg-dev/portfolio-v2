@@ -5,6 +5,7 @@ import { ProcessReveal } from "@/features/process-pages/components/process-revea
 import { cn } from "@/lib/utils";
 
 import { UsesWorkspace } from "./uses-workspace";
+import type { UsesWorkspacePublicTag } from "./uses-workspace-hotspots";
 
 interface UsesHeroProps {
   eyebrow: string;
@@ -14,6 +15,7 @@ interface UsesHeroProps {
   workspaceCaption: string;
   workspaceAlt: string;
   workspaceImage?: string | null;
+  workspaceTags?: UsesWorkspacePublicTag[];
   showWorkspace: boolean;
   filter: ReactNode;
 }
@@ -26,6 +28,7 @@ export function UsesHero({
   workspaceCaption,
   workspaceAlt,
   workspaceImage,
+  workspaceTags = [],
   showWorkspace,
   filter,
 }: UsesHeroProps) {
@@ -65,6 +68,7 @@ export function UsesHero({
         caption={workspaceCaption}
         alt={workspaceAlt}
         imageSrc={workspaceImage}
+        tags={workspaceTags}
       />
     </header>
   );

@@ -16,12 +16,12 @@ pnpm test:a11y  # Playwright + axe (WCAG AAA) on public routes
 
 Profile and rules: [`.agents/skills/A11Y.md`](../.agents/skills/A11Y.md).
 
-| Layer                   | Command             | What it catches                                                                                                                                    |
-| ----------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Static (code)**       | `pnpm lint`         | jsx-a11y via `eslint-config-next/core-web-vitals` — labels, roles, alt text, keyboard handlers in JSX                                              |
-| **Automated (runtime)** | `pnpm test:a11y`    | `@axe-core/playwright` with WCAG AAA tags on `/`, `/login`, `/privacy`, `/certificates`, `/curriculum-vitae`, `/how-i-use-ai`, `/qa-collaboration` |
-| **Shield house rules**  | same as above       | Sampled checks for **14px** min text and **44×44px** targets (not covered by axe alone)                                                            |
-| **Manual (required)**   | see checklist below | Tab order, screen reader, zoom 200%, color-only state, SPA focus                                                                                   |
+| Layer                   | Command             | What it catches                                                                                                                                                    |
+| ----------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Static (code)**       | `pnpm lint`         | jsx-a11y via `eslint-config-next/core-web-vitals` — labels, roles, alt text, keyboard handlers in JSX                                                              |
+| **Automated (runtime)** | `pnpm test:a11y`    | `@axe-core/playwright` with WCAG AAA tags on `/`, `/login`, `/privacy`, `/certificates`, `/curriculum-vitae`, `/process/how-i-use-ai`, `/process/qa-collaboration` |
+| **Shield house rules**  | same as above       | Sampled checks for **14px** min text and **44×44px** targets (not covered by axe alone)                                                                            |
+| **Manual (required)**   | see checklist below | Tab order, screen reader, zoom 200%, color-only state, SPA focus                                                                                                   |
 
 `pnpm test:a11y` starts the dev server locally (or uses `E2E_BASE_URL`). Helpers live in `e2e/helpers/a11y-audit.ts`.
 
@@ -234,6 +234,20 @@ Keep page tests to a few **smoke cases** (happy path, `notFound`, `generateMetad
 - [ ] Pure logic extracted when component tests would be too heavy
 - [ ] Both `pnpm test` and `pnpm type` pass before pushing
 
+## Coverage
+
+`pnpm test:coverage` collects from the **logic layer**, not from pages, forms, or `src/components/ui`:
+
+- `src/lib`, `src/hooks`, `src/utils`, `src/server`
+- `src/features/**/lib` and `src/features/**/server`
+- `src/proxy.ts`, `src/app/sitemap.ts`, `src/app/api/**`
+
+OAuth callbacks, Better Auth wiring, DOCX/PDF binary pipelines, and tenant Resend/Spotify publishers are excluded — those need live credentials or fixture binaries, not jsdom.
+
+tRPC integration tests use `src/test-utils/trpc-caller.ts` with a mocked Prisma `db`. Co-locate `*.test.ts` next to the router or query module.
+
+UI pages and large client widgets stay on Playwright (`pnpm test:e2e`) rather than inflating the Jest denominator.
+
 ## Current coverage (public site)
 
 The first test suite targets the public routes under `src/app/[locale]/(home)`:
@@ -260,32 +274,24 @@ End-to-end tests live in `e2e/` and use Playwright. Locally, Playwright starts `
 
 ### Commands
 
-| Script                                | What runs                                                                                                                                   |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm test:e2e`                       | **Smoke** — login, dashboard, one skill, project, certification, CV contact, profile hero, timeline entry, and soft skill                   |
-| `pnpm test:e2e:full`                  | **Full suites** — register + auth setup + all serial create projects (skills, projects, certifications, profile, timeline, soft-skills, cv) |
-| `pnpm test:e2e:skills`                | Full **skills** suite — serial 42-skill create (`skills-create`)                                                                            |
-| `pnpm test:e2e:skills:headed`         | Same as above with a visible browser (~3 min warm / longer on cold)                                                                         |
-| `pnpm test:e2e:skills:ui`             | Playwright UI mode for the skills project                                                                                                   |
-| `pnpm test:e2e:projects`              | Full **projects** suite — serial 19-project create (`projects-create`)                                                                      |
-| `pnpm test:e2e:projects:headed`       | Projects suite with visible browser                                                                                                         |
-| `pnpm test:e2e:projects:ui`           | Playwright UI mode for the projects project                                                                                                 |
-| `pnpm test:e2e:certifications`        | Full **certifications** suite — serial 49-cert create                                                                                       |
-| `pnpm test:e2e:certifications:headed` | Certifications suite with visible browser                                                                                                   |
-| `pnpm test:e2e:certifications:ui`     | Playwright UI mode for the certifications project                                                                                           |
-| `pnpm test:e2e:cv`                    | Full **CV** suite — serial rebuild from `portfolio-cv.json` (`cv-create`)                                                                   |
-| `pnpm test:e2e:cv:headed`             | CV suite with visible browser                                                                                                               |
-| `pnpm test:e2e:cv:ui`                 | Playwright UI mode for the CV project                                                                                                       |
-| `pnpm test:e2e:profile`               | Full **profile** suite — hero + console from `portfolio-home.json` (`profile-create`)                                                       |
-| `pnpm test:e2e:profile:headed`        | Profile suite with visible browser                                                                                                          |
-| `pnpm test:e2e:profile:ui`            | Playwright UI mode for the profile project                                                                                                  |
-| `pnpm test:e2e:timeline`              | Full **timeline** suite — serial 9-entry create from `portfolio-timeline.json`                                                              |
-| `pnpm test:e2e:timeline:headed`       | Timeline suite with visible browser                                                                                                         |
-| `pnpm test:e2e:timeline:ui`           | Playwright UI mode for the timeline project                                                                                                 |
-| `pnpm test:e2e:soft-skills`           | Full **soft skills** suite — section + 8 items from `portfolio-soft-skills.json`                                                            |
-| `pnpm test:e2e:soft-skills:headed`    | Soft skills suite with visible browser                                                                                                      |
-| `pnpm test:e2e:soft-skills:ui`        | Playwright UI mode for the soft skills project                                                                                              |
-| `pnpm test:e2e:ui`                    | Playwright UI for all projects                                                                                                              |
+| Command              | What runs                                        |
+| -------------------- | ------------------------------------------------ |
+| `pnpm test:e2e`      | Smoke (create specs ignored unless `E2E_FULL=1`) |
+| `pnpm test:e2e:full` | Full suites including `*-create.spec.ts`         |
+| `pnpm test:e2e:ui`   | Playwright UI for all projects                   |
+| `pnpm test:a11y`     | axe project `a11y`                               |
+
+There are **no** `package.json` aliases like `test:e2e:skills`. Run a project with:
+
+```bash
+pnpm exec playwright test --project skills
+pnpm exec playwright test --project two-factor --headed
+pnpm exec playwright test --ui --project cv
+```
+
+Projects in `playwright.config.ts`: `setup`, `login`, `two-factor`, `public-locale`, `a11y`, `skills`, `services`, `projects`, `certifications`, `profile`, `timeline`, `soft-skills`, `cv`, `jobs`, `credentials`, `dashboard`, `register`.
+
+Create suites (`skills-create`, `projects-create`, …) only run with `pnpm test:e2e:full`, `E2E_FULL=1`, or by passing the spec path on the CLI.
 
 Auth sessions are saved to `e2e/.auth/user-worker-{index}.json` (and fallback `e2e/.auth/user.json`) by `e2e/auth.setup.ts` (gitignored), allowing parallel multi-tenant worker isolation.
 
@@ -303,7 +309,7 @@ Portfolio skills for seed and E2E share one source of truth:
 ### Smoke vs full skills suite
 
 - **`skills-smoke.spec.ts`** — creates **one** skill; fast enough for CI smoke (`pnpm test:e2e`).
-- **`skills-create.spec.ts`** — **serial** run that creates all **42** skills through the UI; use `pnpm test:e2e:skills` locally or in a dedicated job. Expect a few minutes on a warm dev server; longer on cold start.
+- **`skills-create.spec.ts`** — **serial** run that creates all **42** skills through the UI; use `pnpm exec playwright test --project skills` locally or in a dedicated job. Expect a few minutes on a warm dev server; longer on cold start.
 
 ### Projects fixture
 
@@ -317,7 +323,7 @@ Portfolio projects for seed and E2E share one source of truth:
 ### Smoke vs full projects suite
 
 - **`projects-smoke.spec.ts`** — creates **one** project; included in `pnpm test:e2e` smoke.
-- **`projects-create.spec.ts`** — **serial** run that creates all **19** projects through the UI; use `pnpm test:e2e:projects`. Skills are ensured via API in `beforeAll`, not the 42-skill UI suite.
+- **`projects-create.spec.ts`** — **serial** run that creates all **19** projects through the UI; use `pnpm exec playwright test --project projects`. Skills are ensured via API in `beforeAll`, not the 42-skill UI suite.
 
 ### Certifications fixture
 
@@ -331,7 +337,7 @@ Portfolio certifications for seed and E2E share one source of truth:
 ### Smoke vs full certifications suite
 
 - **`certifications-smoke.spec.ts`** — creates **one** certification; included in `pnpm test:e2e` smoke.
-- **`certifications-create.spec.ts`** — **serial** run that creates all **49** certifications; use `pnpm test:e2e:certifications`.
+- **`certifications-create.spec.ts`** — **serial** run that creates all **49** certifications; use `pnpm exec playwright test --project certifications`.
 
 ### Owner / register fixture
 
@@ -346,7 +352,7 @@ The primary portfolio user is shared between seed and e2e:
 ### Smoke vs full register suite
 
 - **`register-smoke.spec.ts`** — ensures owner exists (sign-in or register UI); included in `pnpm test:e2e` smoke.
-- **`register-create.spec.ts`** — explicit register flow from the shared fixture; use `pnpm test:e2e:register`.
+- **`register-create.spec.ts`** — explicit register flow from the shared fixture; use `pnpm exec playwright test --project register`.
 
 ### Profile fixture
 
@@ -361,7 +367,7 @@ Portfolio home/profile content for seed and E2E share one source of truth:
 ### Smoke vs full profile suite
 
 - **`profile-smoke.spec.ts`** — saves **one** hero title + summary; included in `pnpm test:e2e` smoke.
-- **`profile-create.spec.ts`** — **serial** run that fills hero (6 titles, 3 locales) and console (3 steps); use `pnpm test:e2e:profile`.
+- **`profile-create.spec.ts`** — **serial** run that fills hero (6 titles, 3 locales) and console (3 steps); use `pnpm exec playwright test --project profile`.
 
 ### Timeline fixture
 
@@ -376,7 +382,7 @@ Timeline entries for seed and E2E share one source of truth:
 ### Smoke vs full timeline suite
 
 - **`timeline-smoke.spec.ts`** — creates **one** timeline entry; included in `pnpm test:e2e` smoke.
-- **`timeline-create.spec.ts`** — **serial** run that creates all **9** entries through the UI; use `pnpm test:e2e:timeline`.
+- **`timeline-create.spec.ts`** — **serial** run that creates all **9** entries through the UI; use `pnpm exec playwright test --project timeline`.
 
 ### Soft skills fixture
 
@@ -391,7 +397,7 @@ Portfolio soft skills for seed and E2E share one source of truth:
 ### Smoke vs full soft skills suite
 
 - **`soft-skills-smoke.spec.ts`** — creates **one** soft skill; included in `pnpm test:e2e` smoke.
-- **`soft-skills-create.spec.ts`** — **serial** run that saves section settings and creates all **8** items through the UI; use `pnpm test:e2e:soft-skills`.
+- **`soft-skills-create.spec.ts`** — **serial** run that saves section settings and creates all **8** items through the UI; use `pnpm exec playwright test --project soft-skills`.
 
 ### CV fixture
 
@@ -404,12 +410,12 @@ Portfolio CV for seed and E2E share one source of truth:
 
 `e2e/helpers/verify-cv-preview.ts` asserts the rendered CV after save: admin **Preview** tab (`#cv-admin-preview`) and the public page at `/curriculum-vitae` (`#cv-public-preview`), using fixture strings for the owner’s `defaultLocale` from `portfolio-profile.json`.
 
-Personal references in the fixture are seed-only (no admin UI yet) and are not part of the E2E create flow.
+Personal references are edited in the admin CV UI (`personal-references-list.tsx`) and are included in `prisma/data/portfolio-cv.json`. The serial CV e2e create flow may still skip them; seed + unit tests cover the data path.
 
 ### Smoke vs full CV suite
 
 - **`cv-smoke.spec.ts`** — creates **one** contact; included in `pnpm test:e2e` smoke.
-- **`cv-create.spec.ts`** — **serial** run that rebuilds the full CV through the UI, then checks admin preview and the public `/curriculum-vitae` page; use `pnpm test:e2e:cv`.
+- **`cv-create.spec.ts`** — **serial** run that rebuilds the full CV through the UI, then checks admin preview and the public `/curriculum-vitae` page; use `pnpm exec playwright test --project cv`.
 
 ### Owner user and CV fixture
 

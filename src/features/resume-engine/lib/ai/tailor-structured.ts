@@ -2,7 +2,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 
-import { env } from "@/env";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import {
   CvTailorResultSchema,
@@ -12,16 +11,21 @@ import { TAILOR_SYSTEM_PROMPT } from "@/features/resume-engine/lib/ai/tailor-pro
 import { parseAiJsonResponse } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
   AI_PROVIDER_MODELS,
+  requireTenantAiApiKey,
   resolveAiProvider,
   type AiProviderName,
+  type TenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
 import { buildTailorUserPrompt } from "@/features/resume-engine/lib/ai/prompt-package";
+import type { TailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
 
 async function tailorWithClaude(
   draft: CvImportDraft,
   jobDescription: string,
+  apiKey: string,
+  jobContext?: TailorJobContext | null,
 ): Promise<CvTailorResult> {
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const client = new Anthropic({ apiKey });
   const response = await client.messages.create({
     model: AI_PROVIDER_MODELS.claude,
     max_tokens: 8192,
@@ -29,7 +33,7 @@ async function tailorWithClaude(
     messages: [
       {
         role: "user",
-        content: buildTailorUserPrompt(draft, jobDescription),
+        content: buildTailorUserPrompt(draft, jobDescription, jobContext),
       },
     ],
   });
@@ -42,12 +46,13 @@ async function tailorWithClaude(
 async function tailorWithOpenAI(
   draft: CvImportDraft,
   jobDescription: string,
+  apiKey: string,
   baseURL?: string,
-  apiKey?: string,
   model = AI_PROVIDER_MODELS.openai,
+  jobContext?: TailorJobContext | null,
 ): Promise<CvTailorResult> {
   const client = new OpenAI({
-    apiKey: apiKey ?? env.OPENAI_API_KEY,
+    apiKey,
     ...(baseURL ? { baseURL } : {}),
   });
   const response = await client.chat.completions.create({
@@ -57,7 +62,7 @@ async function tailorWithOpenAI(
       { role: "system", content: TAILOR_SYSTEM_PROMPT },
       {
         role: "user",
-        content: buildTailorUserPrompt(draft, jobDescription),
+        content: buildTailorUserPrompt(draft, jobDescription, jobContext),
       },
     ],
   });
@@ -69,8 +74,10 @@ async function tailorWithOpenAI(
 async function tailorWithGemini(
   draft: CvImportDraft,
   jobDescription: string,
+  apiKey: string,
+  jobContext?: TailorJobContext | null,
 ): Promise<CvTailorResult> {
-  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY! });
+  const client = new GoogleGenAI({ apiKey });
   const response = await client.models.generateContent({
     model: AI_PROVIDER_MODELS.gemini,
     contents: [
@@ -78,7 +85,7 @@ async function tailorWithGemini(
         role: "user",
         parts: [
           {
-            text: `${TAILOR_SYSTEM_PROMPT}\n\n${buildTailorUserPrompt(draft, jobDescription)}`,
+            text: `${TAILOR_SYSTEM_PROMPT}\n\n${buildTailorUserPrompt(draft, jobDescription, jobContext)}`,
           },
         ],
       },
@@ -95,29 +102,49 @@ async function tailorWithGemini(
 export async function tailorStructuredResume(
   draft: CvImportDraft,
   jobDescription: string,
+  credentials: TenantAiCredentials,
   providerName?: string,
+  jobContext?: TailorJobContext | null,
 ): Promise<{ result: CvTailorResult; provider: AiProviderName }> {
-  const provider = resolveAiProvider(providerName);
+  const provider = resolveAiProvider(credentials, providerName);
 
   let result: CvTailorResult;
   switch (provider) {
     case "claude":
-      result = await tailorWithClaude(draft, jobDescription);
+      result = await tailorWithClaude(
+        draft,
+        jobDescription,
+        requireTenantAiApiKey(credentials, "claude"),
+        jobContext,
+      );
       break;
     case "openai":
-      result = await tailorWithOpenAI(draft, jobDescription);
+      result = await tailorWithOpenAI(
+        draft,
+        jobDescription,
+        requireTenantAiApiKey(credentials, "openai"),
+        undefined,
+        AI_PROVIDER_MODELS.openai,
+        jobContext,
+      );
       break;
     case "deepseek":
       result = await tailorWithOpenAI(
         draft,
         jobDescription,
+        requireTenantAiApiKey(credentials, "deepseek"),
         "https://api.deepseek.com",
-        env.DEEPSEEK_API_KEY,
         AI_PROVIDER_MODELS.deepseek,
+        jobContext,
       );
       break;
     case "gemini":
-      result = await tailorWithGemini(draft, jobDescription);
+      result = await tailorWithGemini(
+        draft,
+        jobDescription,
+        requireTenantAiApiKey(credentials, "gemini"),
+        jobContext,
+      );
       break;
     default: {
       const exhaustiveCheck: never = provider;

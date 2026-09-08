@@ -12,7 +12,7 @@ export interface ResetPasswordEmailProps {
 }
 
 export default async function ResetPasswordEmail({
-  resetUrl = "https://jehg.dev/reset-password?token=example",
+  resetUrl = "https://jesushg.com/reset-password?token=example",
   locale = "en",
 }: ResetPasswordEmailProps) {
   const messages = await loadMessages(locale);
@@ -86,6 +86,6 @@ export default async function ResetPasswordEmail({
 }
 
 ResetPasswordEmail.PreviewProps = {
-  resetUrl: "https://jehg.dev/reset-password?token=example",
+  resetUrl: "https://jesushg.com/reset-password?token=example",
   locale: "en" as Locale,
 };

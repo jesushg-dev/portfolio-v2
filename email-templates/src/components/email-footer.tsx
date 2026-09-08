@@ -3,8 +3,7 @@ import { theme, links } from "../theme";
 import { icons } from "./icons";
 
 /**
- * Standard footer, identical structure across every jehg.dev transactional
- * email — only `note` and `year` change per email.
+ * Standard footer across transactional emails — only `note` and `year` change.
  *
  * `year` must be passed explicitly — the template HTML is rendered ONCE at
  * publish time, so `new Date()` inside the component would freeze the year
@@ -80,7 +79,7 @@ export function EmailFooter({ note, year }: { note: string; year: number }) {
                   fontWeight: 600,
                 }}
               >
-                jehg.dev
+                jesushg.com
               </Link>
             </td>
           </tr>

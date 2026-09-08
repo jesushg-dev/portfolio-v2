@@ -155,6 +155,8 @@ To provide a smooth experience without exceeding Spotify rate limits:
 3. Auto-scrolls the active lyric line into view as `progressMs` updates.
 4. Caches lyric responses in an LRU memory map (`idle` | `loading` | `success` | `error`).
 
+Client fetch goes to **`GET /api/lyrics`** (`src/app/api/lyrics/route.ts`), which looks up [lrclib.net](https://lrclib.net) with a server cache. Query params: `artist`, `title` (required), optional `album`, `spotifyId`, `duration`. Missing lyrics → 404; upstream errors → 502/504. There is no dedicated app rate limit on this route (see [`security.md`](./security.md)).
+
 ### Next Track Prefetching (`usePrefetchNextLyrics`)
 
 - When remaining track time is $\le 12$ seconds (`SPOTIFY_NEAR_END_MS`), the hook queries `getQueue` for the next upcoming track and prefetches its lyrics in the background.

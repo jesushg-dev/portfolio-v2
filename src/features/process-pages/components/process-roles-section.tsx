@@ -3,6 +3,7 @@ import { ProcessReveal } from "./process-reveal";
 import { ProcessSectionHeader } from "./process-section-header";
 
 interface ProcessRolesSectionProps {
+  id?: string;
   eyebrow: string;
   title: string;
   description: string;
@@ -14,6 +15,7 @@ interface ProcessRolesSectionProps {
 }
 
 export function ProcessRolesSection({
+  id = "roles",
   eyebrow,
   title,
   description,
@@ -25,14 +27,14 @@ export function ProcessRolesSection({
 }: ProcessRolesSectionProps) {
   return (
     <section
-      id="roles"
-      aria-labelledby={processSectionHeadingId("roles")}
+      id={id}
+      aria-labelledby={processSectionHeadingId(id)}
       className="bg-muted/50 px-6 py-20"
     >
       <div className="mx-auto max-w-4xl text-center">
         <ProcessReveal>
           <ProcessSectionHeader
-            sectionId="roles"
+            sectionId={id}
             eyebrow={eyebrow}
             title={title}
             description={description}

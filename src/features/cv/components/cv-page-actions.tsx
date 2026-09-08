@@ -78,6 +78,16 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
     defaultValues: { email: "" },
   });
 
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadClick = useCallback(() => {
+    setIsDownloading(true);
+    const timer = setTimeout(() => {
+      setIsDownloading(false);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleToggleEmail = useCallback(() => {
     setEmailOpen((open) => !open);
   }, []);
@@ -121,10 +131,19 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
           {downloadHref ? (
             <a
               href={downloadHref}
+              target="_blank"
+              rel="noopener noreferrer"
               download={downloadFileName}
-              className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg"
+              onClick={handleDownloadClick}
+              className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg disabled:opacity-75"
+              aria-busy={isDownloading}
             >
-              {downloadLabel} <FaDownload className="size-4" aria-hidden />
+              <span>{isDownloading ? tPdf("generating") : downloadLabel}</span>
+              {isDownloading ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <FaDownload className="size-4" aria-hidden />
+              )}
             </a>
           ) : null}
 

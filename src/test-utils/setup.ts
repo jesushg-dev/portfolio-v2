@@ -10,6 +10,24 @@ if (typeof global.TextDecoder === "undefined") {
   global.TextDecoder = TextDecoder;
 }
 
+if (typeof globalThis.Response === "undefined") {
+  globalThis.Response = class PolyfillResponse {
+    status: number;
+    headers: Headers;
+    constructor(
+      _body?: unknown,
+      init?: { status?: number; headers?: HeadersInit },
+    ) {
+      this.status = init?.status ?? 200;
+      this.headers = new Headers(init?.headers);
+    }
+
+    json(): Promise<unknown> {
+      return Promise.resolve(null);
+    }
+  } as unknown as typeof Response;
+}
+
 import enMessages from "../../messages/en.json";
 
 const mockMotionPropKeys = new Set([
@@ -17,7 +35,9 @@ const mockMotionPropKeys = new Set([
   "custom",
   "drag",
   "dragConstraints",
+  "dragControls",
   "dragElastic",
+  "dragListener",
   "dragMomentum",
   "exit",
   "initial",
@@ -171,9 +191,21 @@ jest.mock("motion/react", () => {
     AnimatePresence: ({ children }: PropsWithChildren) =>
       createElement("div", null, children),
     useMotionValue,
+    useMotionTemplate: (strings: TemplateStringsArray, ...values: unknown[]) =>
+      strings.reduce((result, part, index) => {
+        const value = values[index];
+        const rendered =
+          value && typeof value === "object" && "get" in value
+            ? (value as { get: () => unknown }).get()
+            : (value ?? "");
+        return `${result}${part}${String(rendered)}`;
+      }, ""),
     useSpring: (v: unknown) => v,
     useTransform: (v: unknown) => v,
     useReducedMotion: () => false,
+    useDragControls: () => ({
+      start: jest.fn(),
+    }),
     animate: jest.fn(
       (value: { set: (next: number) => void }, target: number) => {
         value.set(target);

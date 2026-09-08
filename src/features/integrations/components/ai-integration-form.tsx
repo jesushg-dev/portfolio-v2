@@ -30,7 +30,8 @@ const aiFormSchema = z.object({
   geminiApiKey: z.string(),
   openaiApiKey: z.string(),
   anthropicApiKey: z.string(),
-  defaultProvider: z.enum(["gemini", "openai", "anthropic"]),
+  deepseekApiKey: z.string(),
+  defaultProvider: z.enum(["gemini", "openai", "anthropic", "deepseek"]),
 });
 
 type AiFormValues = z.infer<typeof aiFormSchema>;
@@ -58,6 +59,7 @@ export function AiIntegrationForm({
       geminiApiKey: "",
       openaiApiKey: "",
       anthropicApiKey: "",
+      deepseekApiKey: "",
       defaultProvider: status.defaultProvider ?? "gemini",
     },
   });
@@ -70,6 +72,7 @@ export function AiIntegrationForm({
             geminiApiKey: values.geminiApiKey || undefined,
             openaiApiKey: values.openaiApiKey || undefined,
             anthropicApiKey: values.anthropicApiKey || undefined,
+            deepseekApiKey: values.deepseekApiKey || undefined,
             defaultProvider: values.defaultProvider,
           });
 
@@ -78,6 +81,7 @@ export function AiIntegrationForm({
             geminiApiKey: "",
             openaiApiKey: "",
             anthropicApiKey: "",
+            deepseekApiKey: "",
             defaultProvider: values.defaultProvider,
           });
           toast.success(t("ai.saveSuccess"));
@@ -158,6 +162,25 @@ export function AiIntegrationForm({
 
             <FormField
               control={form.control}
+              name="deepseekApiKey"
+              render={({ field }) => (
+                <FormItem label={t("ai.deepseekLabel")}>
+                  <Input
+                    {...field}
+                    id="ai-deepseek-key"
+                    type="password"
+                    placeholder={
+                      status.maskedDeepseekApiKey !== ""
+                        ? status.maskedDeepseekApiKey
+                        : t("ai.deepseekPlaceholder")
+                    }
+                  />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="defaultProvider"
               render={({ field }) => (
                 <FormItem label={t("ai.defaultProviderLabel")}>
@@ -173,6 +196,7 @@ export function AiIntegrationForm({
                       <SelectItem value="anthropic">
                         Anthropic (Claude)
                       </SelectItem>
+                      <SelectItem value="deepseek">DeepSeek</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>

@@ -20,9 +20,10 @@ describe("Tab & TabItem components", () => {
       </Tab>,
     );
 
-    expect(
-      screen.getByRole("tablist", { name: "Main tabs" }),
-    ).toBeInTheDocument();
+    const tablist = screen.getByRole("tablist", { name: "Main tabs" });
+    expect(tablist).toBeInTheDocument();
+    expect(tablist.className).toContain("overflow-visible");
+    expect(tablist.className).not.toContain("overflow-x-auto");
     const tab1 = screen.getByRole("tab", { name: /Tab 1/ });
     const tab2 = screen.getByRole("tab", { name: /Tab 2/ });
 
@@ -47,6 +48,42 @@ describe("Tab & TabItem components", () => {
 
     expect(screen.getByText("Min Tab 1")).toBeInTheDocument();
     expect(screen.queryByText("Desc 1")).toBeNull();
+  });
+
+  it("stacks the icon above the label on minimal tabs", () => {
+    render(
+      <Tab ariaLabel="Stacked tabs" currentTab={0} minimal>
+        <TabItem icon={DummyIcon} title="All" description="" />
+      </Tab>,
+    );
+
+    const tab = screen.getByRole("tab", { name: /All/ });
+    expect(tab.className).toContain("flex-col");
+    expect(tab.firstElementChild?.className).toContain("flex-col");
+  });
+
+  it("gives minimal tab items a mobile min-width on the measured wrapper", () => {
+    render(
+      <Tab ariaLabel="Sized tabs" currentTab={0} minimal>
+        <TabItem icon={DummyIcon} title="All" description="" />
+      </Tab>,
+    );
+
+    const tab = screen.getByRole("tab", { name: /All/ });
+    expect(tab.parentElement?.className).toContain("min-w-18");
+    expect(tab.parentElement?.className).toContain("sm:min-w-0");
+    expect(tab.className).toContain("w-full");
+  });
+
+  it("keeps non-minimal tabs in a horizontal row", () => {
+    render(
+      <Tab ariaLabel="Full tabs" currentTab={0}>
+        <TabItem icon={DummyIcon} title="Overview" description="Details" />
+      </Tab>,
+    );
+
+    const tab = screen.getByRole("tab", { name: /Overview/ });
+    expect(tab.className).not.toContain("flex-col");
   });
 
   it("throws error when invalid children are passed", () => {

@@ -17,6 +17,7 @@ import {
   logCvEmailRequest,
 } from "@/features/cv/lib/rate-limit-cv-email";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 
 function sanitizeFileName(value: string): string {
   return value.replace(/[^\w.-]+/g, "_");
@@ -27,6 +28,9 @@ type Locale = z.infer<typeof localeSchema>;
 
 export const cvPublicRouter = createTRPCRouter({
   getPdfDeliveryStatus: tenantProcedure.query(async ({ ctx }) => {
+    if (!isPublicCvVisible(ctx.tenant)) {
+      return { canSendByEmail: false, hasCvData: false };
+    }
     const [draft, canSendByEmail] = await Promise.all([
       loadCvStructuredDraft(ctx.db, ctx.tenant.userId, {
         locale: ctx.tenant.defaultLocale,
@@ -53,6 +57,13 @@ export const cvPublicRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      if (!isPublicCvVisible(ctx.tenant)) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "CV is not available",
+        });
+      }
+
       const emailClient = await getPortfolioEmailClient(ctx.tenant.userId);
 
       if (

@@ -5,6 +5,7 @@ import { useState, type ReactNode } from "react";
 
 import { UsesHero } from "./uses-hero";
 import UsesFilterTabs, { USES_FILTER } from "./uses-filter-tabs";
+import type { UsesWorkspacePublicTag } from "./uses-workspace-hotspots";
 
 interface UsesViewProps {
   hero: {
@@ -16,6 +17,7 @@ interface UsesViewProps {
     workspaceCaption: string;
     workspaceAlt: string;
     workspaceImage?: string | null;
+    workspaceTags?: UsesWorkspacePublicTag[];
   };
   tabLabels: {
     all: string;
@@ -74,6 +76,7 @@ export function UsesView({
         workspaceCaption={hero.workspaceCaption}
         workspaceAlt={hero.workspaceAlt}
         workspaceImage={hero.workspaceImage}
+        workspaceTags={hero.workspaceTags}
         showWorkspace={showWorkspace}
         filter={
           <UsesFilterTabs

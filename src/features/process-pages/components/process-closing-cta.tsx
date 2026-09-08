@@ -21,12 +21,14 @@ import {
 import { ProcessReveal } from "./process-reveal";
 
 interface ProcessClosingCtaProps {
+  id?: string;
   title: string;
   description: string;
   ctaLabel: string;
 }
 
 export function ProcessClosingCta({
+  id = "contact",
   title,
   description,
   ctaLabel,
@@ -69,8 +71,8 @@ export function ProcessClosingCta({
 
   return (
     <section
-      id="contact"
-      aria-labelledby={processSectionHeadingId("contact")}
+      id={id}
+      aria-labelledby={processSectionHeadingId(id)}
       className="px-6 pb-24"
     >
       <ProcessReveal className="mx-auto max-w-4xl">
@@ -104,7 +106,7 @@ export function ProcessClosingCta({
           )}
 
           <h2
-            id={processSectionHeadingId("contact")}
+            id={processSectionHeadingId(id)}
             className="relative mb-4 text-3xl font-extrabold md:text-4xl"
           >
             {title}

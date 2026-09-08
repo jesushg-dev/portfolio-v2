@@ -12,6 +12,7 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -236,14 +237,17 @@ export const SkillsList: FC<SkillsListProps> = ({
       <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
-          <Link
-            id="skills-add"
-            href="/admin/skills/new"
-            className={buttonVariants()}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            {t("addNew")}
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <ExportSeedJsonButton entity="skills" />
+            <Link
+              id="skills-add"
+              href="/admin/skills/new"
+              className={buttonVariants()}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              {t("addNew")}
+            </Link>
+          </div>
         </DataTableToolbar>
       </DataTable>
     </div>

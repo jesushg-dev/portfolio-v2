@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { AlertTriangle } from "lucide-react";
 
 import { api, type RouterOutputs } from "@/trpc/react";
 import { Form, FormField } from "@/components/ui/form";
@@ -124,8 +125,9 @@ export function ResendIntegrationForm({
       <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
         <FormContent>
           {status.lastError && (
-            <div className="border-destructive/30 bg-destructive/10 text-destructive mb-4 rounded-md border p-3 text-sm">
-              ⚠️ {status.lastError}
+            <div className="border-destructive/30 bg-destructive/10 text-destructive mb-4 flex items-center gap-2 rounded-md border p-3 text-sm">
+              <AlertTriangle className="size-4 shrink-0" aria-hidden />
+              <span>{status.lastError}</span>
             </div>
           )}
 

@@ -5,7 +5,6 @@ import { Search, Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Input } from "@/components/ui/input";
-import { resolveSkillImageUrl } from "@/utils/tools/image";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -92,7 +91,7 @@ export function SkillPicker({
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={resolveSkillImageUrl(s.image)}
+              src={s.image}
               alt=""
               className="h-3.5 w-3.5 object-contain"
               loading="lazy"
@@ -127,7 +126,7 @@ export function SkillPicker({
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={resolveSkillImageUrl(s.image)}
+                src={s.image}
                 alt=""
                 className="h-3.5 w-3.5 object-contain"
                 loading="lazy"
@@ -199,7 +198,7 @@ export function SkillPicker({
               {/* Skill image */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={resolveSkillImageUrl(skill.image)}
+                src={skill.image}
                 alt={skill.title}
                 className="h-8 w-8 object-contain"
                 loading="lazy"
@@ -211,7 +210,7 @@ export function SkillPicker({
               <span className="text-foreground line-clamp-2 text-xs leading-tight font-medium">
                 {skill.title}
               </span>
-              <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px]">
+              <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[0.625rem]">
                 {skill.type}
               </span>
             </button>

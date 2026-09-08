@@ -22,11 +22,23 @@ import { ghostNudgeSnoozeUntil } from "@/features/job-tracker/lib/stale-applicat
 import { ImportFromUrlError } from "@/features/job-tracker/lib/import-from-url-errors";
 import { importJobFromUrl } from "@/features/job-tracker/lib/import-job-from-url";
 import { draftApplicationEmailWithAi } from "@/features/job-tracker/lib/ai/run-draft-application-email";
+import { draftApplicationCoverLetterWithAi } from "@/features/job-tracker/lib/ai/run-draft-application-cover-letter";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
+import { loadTailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
 import { getPortfolioEmailClient } from "@/lib/email/resend";
 import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
 import { formatZodParseError } from "@/features/resume-engine/lib/ai/parse-json-response";
-import { getDefaultAiProvider } from "@/features/resume-engine/lib/ai/providers";
+import {
+  getDefaultAiProvider,
+  loadTenantAiCredentials,
+} from "@/features/resume-engine/lib/ai/providers";
+import {
+  deleteApplicationEventFromGoogleCalendar,
+  pullLinkedUpcomingEventsFromGoogle,
+  pushApplicationEventToGoogleCalendar,
+  updateApplicationEventOnGoogleCalendar,
+} from "@/lib/google-calendar/sync";
+import { getGoogleCalendarConnectionForUser } from "@/lib/google-calendar/connection";
 
 const ApplicationStatusSchema = z.enum([
   "APPLIED",
@@ -233,8 +245,11 @@ export const jobTrackerAdminRouter = createTRPCRouter({
     return {
       totalApplications,
       totalCompanies,
+      applied: countByStatus("APPLIED"),
       inProgress: countByStatus("INTERVIEW"),
       offers: countByStatus("OFFER"),
+      ghosted: countByStatus("GHOSTED"),
+      rejected: countByStatus("REJECTED"),
       hired: countByStatus("HIRED"),
     };
   }),
@@ -257,23 +272,55 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         take: input.limit,
       });
 
-      return events.map((event) => ({
-        id: event.id,
-        type: event.type,
-        title: event.title,
-        description: event.description,
-        scheduledDate: event.scheduledDate,
-        duration: event.duration,
-        location: event.location,
-        isVirtual: event.isVirtual,
-        meetingLink: event.meetingLink,
-        application: {
-          id: event.application.id,
-          position: event.application.position,
-          company: { name: event.application.company.name },
-        },
-      }));
+      const pulled = await pullLinkedUpcomingEventsFromGoogle(
+        ctx.user.id,
+        events.map((event) => ({
+          id: event.id,
+          title: event.title,
+          googleEventId: event.googleEventId,
+          googleEtag: event.googleEtag,
+          scheduledDate: event.scheduledDate,
+          duration: event.duration,
+          location: event.location,
+          meetingLink: event.meetingLink,
+        })),
+      );
+
+      const pulledById = new Map(pulled.map((event) => [event.id, event]));
+
+      return events.map((event) => {
+        const synced = pulledById.get(event.id);
+        return {
+          id: event.id,
+          type: event.type,
+          title: synced?.title ?? event.title,
+          description: event.description,
+          scheduledDate: synced?.scheduledDate ?? event.scheduledDate,
+          duration: synced?.duration ?? event.duration,
+          location: synced?.location ?? event.location,
+          isVirtual: event.isVirtual,
+          meetingLink: synced?.meetingLink ?? event.meetingLink,
+          application: {
+            id: event.application.id,
+            position: event.application.position,
+            company: { name: event.application.company.name },
+          },
+        };
+      });
     }),
+
+  getGoogleCalendarSyncStatus: protectedProcedure.query(async ({ ctx }) => {
+    const connection = await getGoogleCalendarConnectionForUser(ctx.user.id);
+    if (!connection) {
+      return { connected: false as const };
+    }
+    return {
+      connected: true as const,
+      status: connection.lastRefreshErrorAt
+        ? ("refresh_error" as const)
+        : ("connected" as const),
+    };
+  }),
 
   createCompany: protectedProcedure
     .input(
@@ -484,13 +531,31 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.applicationEvent.create({
+      const event = await ctx.db.applicationEvent.create({
         data: {
           ...input,
           meetingLink: input.meetingLink === "" ? undefined : input.meetingLink,
           userId: ctx.user.id,
         },
+        include: {
+          application: { include: { company: true } },
+        },
       });
+
+      await pushApplicationEventToGoogleCalendar(ctx.user.id, {
+        id: event.id,
+        title: event.title,
+        description: event.description,
+        scheduledDate: event.scheduledDate,
+        duration: event.duration,
+        location: event.location,
+        meetingLink: event.meetingLink,
+        companyName: event.application.company.name,
+        position: event.application.position,
+        completed: event.completed,
+      });
+
+      return event;
     }),
 
   updateEvent: protectedProcedure
@@ -501,19 +566,79 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         completedAt: z.date().optional(),
         outcome: z.enum(["POSITIVE", "NEGATIVE", "NEUTRAL"]).optional(),
         notes: z.string().optional(),
+        title: z.string().min(1).optional(),
+        description: z.string().optional(),
+        scheduledDate: z.date().optional(),
+        duration: z.number().int().positive().optional(),
+        location: z.string().optional(),
+        isVirtual: z.boolean().optional(),
+        meetingLink: z.string().url().optional().or(z.literal("")),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, ...data } = input;
-      return ctx.db.applicationEvent.update({
+      const { id, meetingLink, ...rest } = input;
+      const data = {
+        ...rest,
+        ...(meetingLink !== undefined
+          ? { meetingLink: meetingLink === "" ? null : meetingLink }
+          : {}),
+      };
+
+      const event = await ctx.db.applicationEvent.update({
         where: { id, userId: ctx.user.id },
         data,
+        include: {
+          application: { include: { company: true } },
+        },
       });
+
+      const agendaChanged =
+        input.title !== undefined ||
+        input.description !== undefined ||
+        input.scheduledDate !== undefined ||
+        input.duration !== undefined ||
+        input.location !== undefined ||
+        input.isVirtual !== undefined ||
+        input.meetingLink !== undefined;
+
+      if (agendaChanged && event.googleEventId) {
+        await updateApplicationEventOnGoogleCalendar(ctx.user.id, {
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          scheduledDate: event.scheduledDate,
+          duration: event.duration,
+          location: event.location,
+          meetingLink: event.meetingLink,
+          companyName: event.application.company.name,
+          position: event.application.position,
+          googleEventId: event.googleEventId,
+        });
+      }
+
+      return event;
     }),
 
   deleteEvent: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.applicationEvent.findFirst({
+        where: { id: input.id, userId: ctx.user.id },
+        select: { id: true, googleEventId: true },
+      });
+
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Event not found",
+        });
+      }
+
+      await deleteApplicationEventFromGoogleCalendar(
+        ctx.user.id,
+        existing.googleEventId,
+      );
+
       return ctx.db.applicationEvent.delete({
         where: { id: input.id, userId: ctx.user.id },
       });
@@ -542,6 +667,12 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         locale: "es",
         fallbackLocale: "en",
       });
+      const jobContext = await loadTailorJobContext(
+        ctx.db,
+        ctx.user.id,
+        application.id,
+        "es",
+      );
 
       const contacts = draftCv?.contacts ?? [];
       const contactValue = (type: string) =>
@@ -549,11 +680,16 @@ export const jobTrackerAdminRouter = createTRPCRouter({
 
       try {
         const fromCv = draftCv?.header.fullName?.trim();
+        const credentials = await loadTenantAiCredentials(ctx.user.id);
         const { draft, provider } = await draftApplicationEmailWithAi(
           {
             position: application.position,
             companyName: application.company.name,
             companyEmail: application.company.email,
+            companyDescription: application.company.description,
+            location: application.location,
+            salary: application.salary,
+            notes: application.notes,
             jobDescription: application.description ?? "",
             candidate: {
               fullName: fromCv ?? ctx.user.name ?? "Candidato",
@@ -562,8 +698,10 @@ export const jobTrackerAdminRouter = createTRPCRouter({
               email: contactValue("EMAIL"),
               phone: contactValue("PHONE"),
               linkedin: contactValue("LINKEDIN"),
+              softSkills: jobContext?.softSkills,
             },
           },
+          credentials,
           input.provider,
         );
 
@@ -588,6 +726,129 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           message: formatZodParseError(error),
         });
       }
+    }),
+
+  draftApplicationCoverLetter: protectedProcedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+        provider: z.enum(["claude", "openai", "deepseek", "gemini"]).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const application = await ctx.db.application.findFirst({
+        where: { id: input.applicationId, userId: ctx.user.id },
+        include: { company: true },
+      });
+      if (!application) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Application not found",
+        });
+      }
+
+      const draftCv = await loadCvStructuredDraft(ctx.db, ctx.user.id, {
+        locale: "es",
+        fallbackLocale: "en",
+      });
+      const jobContext = await loadTailorJobContext(
+        ctx.db,
+        ctx.user.id,
+        application.id,
+        "es",
+      );
+
+      const contacts = draftCv?.contacts ?? [];
+      const contactValue = (type: string) =>
+        contacts.find((c) => c.type === type)?.value?.trim() ?? null;
+
+      const highlights =
+        draftCv?.experiences
+          .flatMap((exp) => exp.responsibilities.slice(0, 2))
+          .filter((text) => text.trim().length > 0)
+          .slice(0, 6) ?? [];
+
+      try {
+        const fromCv = draftCv?.header.fullName?.trim();
+        const credentials = await loadTenantAiCredentials(ctx.user.id);
+        const { draft, provider } = await draftApplicationCoverLetterWithAi(
+          {
+            position: application.position,
+            companyName: application.company.name,
+            companyDescription: application.company.description,
+            location: application.location,
+            salary: application.salary,
+            notes: application.notes,
+            jobDescription: application.description ?? "",
+            candidate: {
+              fullName: fromCv ?? ctx.user.name ?? "Candidato",
+              degree: draftCv?.header.degree,
+              summary: draftCv?.header.summary,
+              email: contactValue("EMAIL"),
+              phone: contactValue("PHONE"),
+              linkedin: contactValue("LINKEDIN"),
+              softSkills: jobContext?.softSkills,
+              highlights,
+            },
+          },
+          credentials,
+          input.provider,
+        );
+
+        const updated = await ctx.db.application.update({
+          where: { id: application.id },
+          data: {
+            coverLetterSubject: draft.subject,
+            coverLetterBody: draft.body,
+          },
+        });
+
+        return {
+          subject: updated.coverLetterSubject ?? draft.subject,
+          body: updated.coverLetterBody ?? draft.body,
+          notes: draft.notes ?? null,
+          provider,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: formatZodParseError(error),
+        });
+      }
+    }),
+
+  saveApplicationCoverLetter: protectedProcedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+        subject: z.string().trim().min(1).max(200),
+        body: z.string().trim().min(1).max(12000),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const application = await ctx.db.application.findFirst({
+        where: { id: input.applicationId, userId: ctx.user.id },
+        select: { id: true },
+      });
+      if (!application) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Application not found",
+        });
+      }
+
+      const updated = await ctx.db.application.update({
+        where: { id: application.id },
+        data: {
+          coverLetterSubject: input.subject,
+          coverLetterBody: input.body,
+        },
+      });
+
+      return {
+        subject: updated.coverLetterSubject ?? input.subject,
+        body: updated.coverLetterBody ?? input.body,
+      };
     }),
 
   sendApplicationEmail: protectedProcedure
@@ -733,7 +994,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
 
   getApplicationEmailCapabilities: protectedProcedure.query(async ({ ctx }) => {
     const emailClient = await getPortfolioEmailClient(ctx.user.id);
-    const defaultProvider = getDefaultAiProvider();
+    const credentials = await loadTenantAiCredentials(ctx.user.id);
+    const defaultProvider = getDefaultAiProvider(credentials);
     return {
       canSendEmail: emailClient.isConfigured,
       hasAiProvider: Boolean(defaultProvider),

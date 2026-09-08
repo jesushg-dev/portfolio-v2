@@ -72,6 +72,7 @@ export default async function UsesPage({ params }: UsesRouteProps) {
           workspaceCaption: t("hero.workspaceCaption"),
           workspaceAlt: t("hero.workspaceAlt"),
           workspaceImage: data.settings.workspaceImage,
+          workspaceTags: data.settings.workspaceTags,
         }}
         tabLabels={{
           all: t("hero.tabs.all"),

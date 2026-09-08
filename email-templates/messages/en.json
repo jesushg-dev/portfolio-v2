@@ -9,7 +9,7 @@
     "signOff": "Best regards,",
     "name": "Jesús Hernández",
     "role": "Senior Full Stack Developer",
-    "footer": "Sent automatically from the contact form at jehg.dev.",
+    "footer": "Sent automatically from the contact form at jesushg.com.",
     "stats": {
       "years": "Years experience",
       "projects": "Projects delivered",
@@ -17,22 +17,31 @@
     }
   },
   "contact-notification": {
-    "preview": "New message from {senderName} via jehg.dev",
+    "preview": "New message from {senderName} via jesushg.com",
     "eyebrow": "New message · contact form",
     "labelFrom": "From",
     "labelEmail": "Email",
     "labelReceived": "Received",
     "labelMessage": "Message",
     "replyButton": "Reply to {firstName}",
-    "footer": "Sent automatically from the contact form at jehg.dev."
+    "footer": "Sent automatically from the contact form at jesushg.com."
   },
   "reset-password": {
     "preview": "Reset your password",
     "eyebrow": "Account Security · Password Reset",
     "greeting": "Hi,",
-    "body1": "You requested to reset your password for your jehg.dev account.",
+    "body1": "You requested to reset your password for your jesushg.com account.",
     "button": "Reset Password",
     "body2": "If you didn't request a password reset, you can safely ignore this email.",
-    "footer": "Security alert sent from jehg.dev."
+    "footer": "Security alert sent from jesushg.com."
+  },
+  "two-factor-otp": {
+    "preview": "Your sign-in code",
+    "eyebrow": "Account Security · Two-factor sign-in",
+    "greeting": "Hi,",
+    "body1": "Use this code to finish signing in to your jesushg.com account:",
+    "expires": "It expires in 5 minutes and can only be used once.",
+    "body2": "If you didn't try to sign in, change your password right away — someone else knows it.",
+    "footer": "Security alert sent from jesushg.com."
   }
 }

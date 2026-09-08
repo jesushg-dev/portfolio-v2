@@ -35,6 +35,9 @@ export const env = createEnv({
     RESEND_TEMPLATE_RESET_EN: z.string().optional(),
     RESEND_TEMPLATE_RESET_ES: z.string().optional(),
     RESEND_TEMPLATE_RESET_NL: z.string().optional(),
+    RESEND_TEMPLATE_TWO_FACTOR_EN: z.string().optional(),
+    RESEND_TEMPLATE_TWO_FACTOR_ES: z.string().optional(),
+    RESEND_TEMPLATE_TWO_FACTOR_NL: z.string().optional(),
 
     // OAuth providers (optional - only needed if you want social login)
     GOOGLE_CLIENT_ID: z.string().optional(),
@@ -48,17 +51,11 @@ export const env = createEnv({
     // UploadThing is configured per tenant in Admin → Credentials
     UPLOADTHING_TOKEN: z.string().optional(),
 
-    // AI providers (resume import / tailor)
-    DEFAULT_AI_PROVIDER: z
-      .enum(["claude", "openai", "deepseek", "gemini"])
-      .optional(),
-    ANTHROPIC_API_KEY: z.string().optional(),
-    OPENAI_API_KEY: z.string().optional(),
-    GEMINI_API_KEY: z.string().optional(),
-    DEEPSEEK_API_KEY: z.string().optional(),
-
     /// Shared secret for the isolated CV PDF generator function
     CV_PDF_GENERATOR_SECRET: requiredInProduction(z.string().min(16)),
+
+    /// Optional dedicated key for tenant integration secrets (falls back to BETTER_AUTH_SECRET)
+    INTEGRATION_ENCRYPTION_KEY: z.string().min(16).optional(),
   },
 
   /**
@@ -85,18 +82,17 @@ export const env = createEnv({
     RESEND_TEMPLATE_RESET_EN: process.env.RESEND_TEMPLATE_RESET_EN,
     RESEND_TEMPLATE_RESET_ES: process.env.RESEND_TEMPLATE_RESET_ES,
     RESEND_TEMPLATE_RESET_NL: process.env.RESEND_TEMPLATE_RESET_NL,
+    RESEND_TEMPLATE_TWO_FACTOR_EN: process.env.RESEND_TEMPLATE_TWO_FACTOR_EN,
+    RESEND_TEMPLATE_TWO_FACTOR_ES: process.env.RESEND_TEMPLATE_TWO_FACTOR_ES,
+    RESEND_TEMPLATE_TWO_FACTOR_NL: process.env.RESEND_TEMPLATE_TWO_FACTOR_NL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
     PRIMARY_DOMAIN: envOrDefault(process.env.PRIMARY_DOMAIN, "jesushg.com"),
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
-    DEFAULT_AI_PROVIDER: process.env.DEFAULT_AI_PROVIDER,
-    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
-    DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
     CV_PDF_GENERATOR_SECRET: process.env.CV_PDF_GENERATOR_SECRET,
+    INTEGRATION_ENCRYPTION_KEY: process.env.INTEGRATION_ENCRYPTION_KEY,
     NEXT_PUBLIC_PRIMARY_DOMAIN: envOrDefault(
       process.env.NEXT_PUBLIC_PRIMARY_DOMAIN,
       "jesushg.com",
@@ -110,7 +106,7 @@ export const env = createEnv({
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
    * useful for Docker builds.
    */
-  skipValidation: !process.env.SKIP_ENV_VALIDATION,
+  skipValidation: Boolean(process.env.SKIP_ENV_VALIDATION),
   /**
    * Makes it so that empty strings are treated as undefined. `SOME_VAR: z.string()` and
    * `SOME_VAR=''` will throw an error.

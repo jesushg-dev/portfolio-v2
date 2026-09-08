@@ -1,5 +1,5 @@
 import { Book, Film, ImageIcon, Zap } from "lucide-react";
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import type { ReactNode } from "react";
 import { FaGithub } from "react-icons/fa";
 
@@ -178,7 +178,7 @@ export function NowActivity({
                       key={url}
                       className="relative aspect-square overflow-hidden rounded-lg"
                     >
-                      <Image
+                      <MediaImage
                         src={url}
                         alt=""
                         fill

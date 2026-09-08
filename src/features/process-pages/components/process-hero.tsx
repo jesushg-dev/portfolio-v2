@@ -19,7 +19,8 @@ interface ProcessHeroProps {
   primaryAction: ProcessHeroAction;
   secondaryAction: ProcessScheduleAction;
   scrollHint: string;
-  visual: React.ReactNode;
+  visual?: React.ReactNode;
+  id?: string;
 }
 
 export function ProcessHero({
@@ -31,10 +32,16 @@ export function ProcessHero({
   secondaryAction,
   scrollHint,
   visual,
+  id = "hero",
 }: ProcessHeroProps) {
   return (
-    <section id="hero" className="relative overflow-hidden px-6 py-16 md:py-24">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
+    <section id={id} className="relative overflow-hidden px-6 py-16 md:py-24">
+      <div
+        className={cn(
+          "mx-auto grid max-w-6xl items-center gap-12",
+          visual ? "md:grid-cols-2" : "",
+        )}
+      >
         <ProcessReveal>
           <div>
             <p
@@ -70,7 +77,9 @@ export function ProcessHero({
                 <ArrowRight aria-hidden className="size-4" />
               </a>
               <Link
-                href={secondaryAction.href}
+                href={
+                  secondaryAction.href as Parameters<typeof Link>[0]["href"]
+                }
                 className={cn(
                   processInteractiveStyles,
                   "border-border bg-background text-foreground hover:bg-muted border",
@@ -82,7 +91,7 @@ export function ProcessHero({
           </div>
         </ProcessReveal>
 
-        <ProcessReveal delay={0.12}>{visual}</ProcessReveal>
+        {visual ? <ProcessReveal delay={0.12}>{visual}</ProcessReveal> : null}
       </div>
 
       <div className="mt-6 hidden justify-center md:flex">

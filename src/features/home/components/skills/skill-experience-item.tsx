@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { Building2 } from "lucide-react";
 
 interface SkillExperienceItemProps {
@@ -32,13 +32,12 @@ export function SkillExperienceItem({
         className={`bg-muted/50 relative flex ${logoSize} shrink-0 items-center justify-center overflow-hidden rounded-xl`}
       >
         {logoUrl ? (
-          <Image
+          <MediaImage
             src={logoUrl}
             alt=""
             width={compact ? 40 : 56}
             height={compact ? 40 : 56}
             className="max-h-[70%] max-w-[70%] object-contain"
-            unoptimized
           />
         ) : (
           <Building2

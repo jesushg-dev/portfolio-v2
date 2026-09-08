@@ -1,7 +1,7 @@
 [
   {
     "key": "Portfolio",
-    "image": "portf-1_bkhwxr",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/portf-1_bkhwxr",
     "type": "FRONTEND",
     "githubUrl": "https://github.com/jess232017/portfolio-v2",
     "websiteUrl": "",
@@ -50,7 +50,7 @@
   },
   {
     "key": "RickAndMorty",
-    "image": "Rick_and_morty_dn7xnz",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/Rick_and_morty_dn7xnz",
     "type": "FRONTEND",
     "githubUrl": "https://github.com/jess232017/rick-and-morty",
     "websiteUrl": "https://rick-and-morty-virid.vercel.app/",
@@ -92,7 +92,7 @@
   },
   {
     "key": "SoftSkillsQuiz",
-    "image": "soft-skill-quiz_rqnzmm",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/soft-skill-quiz_rqnzmm",
     "type": "FRONTEND",
     "githubUrl": "https://github.com/jess232017/SoftSkill-Quiz",
     "websiteUrl": "https://soft-skill-quiz.vercel.app/",
@@ -120,7 +120,7 @@
   },
   {
     "key": "MusaEcommerce",
-    "image": "musa-client_blxhyy",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/musa-client_blxhyy",
     "type": "FRONTEND",
     "githubUrl": "musa-client_blxhyy",
     "websiteUrl": "",
@@ -161,7 +161,7 @@
   },
   {
     "key": "MusaAdmin",
-    "image": "musa-admin_oufeum",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/musa-admin_oufeum",
     "type": "FRONTEND",
     "githubUrl": "musa-admin_oufeum",
     "websiteUrl": "",
@@ -202,7 +202,7 @@
   },
   {
     "key": "Covid19",
-    "image": "portf-2_crm7bn",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/portf-2_crm7bn",
     "type": "FRONTEND",
     "githubUrl": "https://github.com/jess232017/SensorTemperatura",
     "websiteUrl": "https://stc-uni.netlify.app/",
@@ -230,7 +230,7 @@
   },
   {
     "key": "Lotty",
-    "image": "loto-nic_mtnoh7",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/loto-nic_mtnoh7",
     "type": "FRONTEND",
     "githubUrl": "https://github.com/jess232017/Loto-Nicaragua",
     "websiteUrl": "https://loto-nicaragua.vercel.app/",
@@ -258,7 +258,7 @@
   },
   {
     "key": "LottyApi",
-    "image": "api-rest_u56jdu",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_u56jdu",
     "type": "BACKEND",
     "githubUrl": "https://github.com/jess232017/Loto-Api",
     "websiteUrl": "",
@@ -286,7 +286,7 @@
   },
   {
     "key": "TechService",
-    "image": "Tech_Service_xjuilx",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/Tech_Service_xjuilx",
     "type": "MOBILE",
     "githubUrl": "https://github.com/jess232017/TechService",
     "websiteUrl": "",
@@ -314,7 +314,7 @@
   },
   {
     "key": "TechServiceApi",
-    "image": "api-rest_szxffg",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_szxffg",
     "type": "BACKEND",
     "githubUrl": "https://github.com/jess232017/Api_TechService",
     "websiteUrl": "",
@@ -342,7 +342,7 @@
   },
   {
     "key": "PosInventory",
-    "image": "portf-5_f1z3la",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/portf-5_f1z3la",
     "type": "DESKTOP",
     "githubUrl": "https://github.com/jess232017/Control-Inventario-y-Ventas",
     "websiteUrl": "",
@@ -370,7 +370,7 @@
   },
   {
     "key": "FoodDelivery",
-    "image": "port-6_avknde",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-6_avknde",
     "type": "MOBILE",
     "githubUrl": "https://github.com/jess232017/Food-Service",
     "websiteUrl": "",
@@ -398,7 +398,7 @@
   },
   {
     "key": "Ecommerce",
-    "image": "port-7png_jclbvc",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-7png_jclbvc",
     "type": "FRONTEND",
     "githubUrl": "https://github.com/jess232017/Tienda-AdminMUI",
     "websiteUrl": "",
@@ -426,7 +426,7 @@
   },
   {
     "key": "EcommerceAdmin",
-    "image": "port-8_njbkie",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-8_njbkie",
     "type": "FRONTEND",
     "githubUrl": "https://github.com/jess232017/Tienda-Admin",
     "websiteUrl": "https://tiendajs-admin.netlify.app/",
@@ -454,7 +454,7 @@
   },
   {
     "key": "EcommerceApi",
-    "image": "api-rest_yaux6m",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_yaux6m",
     "type": "BACKEND",
     "githubUrl": "-",
     "websiteUrl": "",
@@ -494,7 +494,7 @@
   },
   {
     "key": "KwhMonitor",
-    "image": "port-9_lw4apk",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-9_lw4apk",
     "type": "MOBILE",
     "githubUrl": "https://github.com/jess232017/Gestor-de-Consumo-Eletrico",
     "websiteUrl": "",
@@ -522,7 +522,7 @@
   },
   {
     "key": "KwhMonitorApi",
-    "image": "api-rest_u56jdu",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_u56jdu",
     "type": "BACKEND",
     "githubUrl": "https://github.com/jess232017/Consultar-Consumo-API",
     "websiteUrl": "",
@@ -550,7 +550,7 @@
   },
   {
     "key": "LuckyApp",
-    "image": "port-10_f80urb",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-10_f80urb",
     "type": "MOBILE",
     "githubUrl": "https://github.com/jess232017/Rifa-App",
     "websiteUrl": "",
@@ -578,7 +578,7 @@
   },
   {
     "key": "YourFarm",
-    "image": "port-11_cng5re",
+    "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-11_cng5re",
     "type": "MOBILE",
     "githubUrl": "https://github.com/jess232017/Tu-Finca",
     "websiteUrl": "",

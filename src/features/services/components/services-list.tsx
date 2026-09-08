@@ -16,6 +16,7 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { useQueryState, parseAsInteger } from "nuqs";
@@ -176,6 +177,19 @@ export const ServicesList: FC<ServicesListProps> = ({
         ),
       },
       {
+        id: "isActive",
+        accessorFn: (row) => (row.isActive ? "1" : "0"),
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} label={t("columnActive")} />
+        ),
+        enableSorting: false,
+        cell: ({ row }) => (
+          <span className="text-muted-foreground text-xs">
+            {row.original.isActive ? t("active") : t("inactive")}
+          </span>
+        ),
+      },
+      {
         id: "skills",
         accessorFn: (row) =>
           row.skillIds
@@ -253,10 +267,13 @@ export const ServicesList: FC<ServicesListProps> = ({
       <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table}>
-          <Link href="/admin/services/new" className={buttonVariants()}>
-            <Plus className="mr-2 h-4 w-4" />
-            {t("addNew")}
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <ExportSeedJsonButton entity="services" />
+            <Link href="/admin/services/new" className={buttonVariants()}>
+              <Plus className="mr-2 h-4 w-4" />
+              {t("addNew")}
+            </Link>
+          </div>
         </DataTableToolbar>
       </DataTable>
     </div>

@@ -16,6 +16,10 @@ export interface DraftApplicationEmailInput {
   position: string;
   companyName: string;
   companyEmail?: string | null;
+  companyDescription?: string | null;
+  location?: string | null;
+  salary?: string | null;
+  notes?: string | null;
   jobDescription: string;
   candidate: {
     fullName: string;
@@ -24,6 +28,7 @@ export interface DraftApplicationEmailInput {
     email?: string | null;
     phone?: string | null;
     linkedin?: string | null;
+    softSkills?: string[];
   };
 }
 
@@ -64,6 +69,10 @@ export function buildApplicationEmailUserPrompt(
 POSITION: ${input.position}
 COMPANY: ${input.companyName}
 COMPANY_EMAIL_HINT: ${orNone(input.companyEmail)}
+COMPANY_DESCRIPTION: ${orNone(input.companyDescription)}
+LOCATION: ${orNone(input.location)}
+SALARY: ${orNone(input.salary)}
+APPLICATION_NOTES: ${orNone(input.notes)}
 EMAILS_FOUND_IN_JD: ${emailsInJd.length > 0 ? emailsInJd.join(", ") : "(none)"}
 
 CANDIDATE:
@@ -73,6 +82,7 @@ CANDIDATE:
 - email: ${orNone(candidate.email)}
 - phone: ${orNone(candidate.phone)}
 - linkedin: ${orNone(candidate.linkedin)}
+- softSkills: ${(candidate.softSkills?.filter((s) => s.trim()).join(", ") ?? "") || "(none)"}
 
 JOB DESCRIPTION:
 ${jobDescription.length > 0 ? jobDescription : "(empty)"}

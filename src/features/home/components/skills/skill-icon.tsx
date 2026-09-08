@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, type FC } from "react";
-import Image from "next/image";
 
+import { MediaImage } from "@/components/shared/media-image";
 import { cn } from "@/lib/utils";
-import { siLoader } from "@/utils/tools/image";
+import { isRenderableProjectImage } from "@/utils/tools/image";
 import { getSkillBadgeColor, getSkillInitials } from "./lib/skill-display";
 
 interface SkillIconProps {
@@ -15,7 +15,8 @@ interface SkillIconProps {
 
 const SkillIcon: FC<SkillIconProps> = ({ image, title, className }) => {
   const [failed, setFailed] = useState(false);
-  const showFallback = failed || !image.trim();
+  const trimmed = image.trim();
+  const showFallback = failed || !isRenderableProjectImage(trimmed);
 
   if (showFallback) {
     return (
@@ -30,13 +31,12 @@ const SkillIcon: FC<SkillIconProps> = ({ image, title, className }) => {
   }
 
   return (
-    <Image
+    <MediaImage
       width={17}
       height={17}
-      src={image}
+      src={trimmed}
       alt=""
-      loader={siLoader}
-      className={cn("size-5 shrink-0 sm:size-[17px]", className)}
+      className={cn("size-5 shrink-0 sm:size-4.25", className)}
       onError={() => setFailed(true)}
     />
   );

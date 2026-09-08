@@ -9,6 +9,8 @@ import {
   canDeliverPortfolioContactEmail,
   type Locale,
 } from "@/lib/email/resend";
+import { getClientIpFromHeaders, hashClientIp } from "@/lib/http/client-ip";
+import { consumeFixedWindowLimit } from "@/lib/rate-limit/consume-fixed-window";
 import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import {
@@ -107,6 +109,18 @@ export const contactRouter = createTRPCRouter({
         throw new TRPCError({
           code: "PRECONDITION_FAILED",
           message: "Email delivery is not configured",
+        });
+      }
+
+      const allowed = await consumeFixedWindowLimit(ctx.db, {
+        key: `contact:${ctx.tenant.userId}:${hashClientIp(getClientIpFromHeaders(ctx.headers))}`,
+        windowMs: 60 * 60 * 1000,
+        max: 5,
+      });
+      if (!allowed) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Contact form rate limit exceeded",
         });
       }
 

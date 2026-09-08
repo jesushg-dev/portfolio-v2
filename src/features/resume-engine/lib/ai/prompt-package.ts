@@ -10,6 +10,19 @@ import {
   SHRINK_SYSTEM_PROMPT,
 } from "@/features/resume-engine/lib/ai/docx-tailor-prompt";
 import { TAILOR_SYSTEM_PROMPT } from "@/features/resume-engine/lib/ai/tailor-prompt";
+import {
+  formatTailorJobContext,
+  type TailorJobContext,
+} from "@/features/resume-engine/lib/ai/tailor-job-context";
+
+function appendJobContext(
+  prompt: string,
+  jobContext?: TailorJobContext | null,
+): string {
+  const block = formatTailorJobContext(jobContext);
+  if (!block) return prompt;
+  return `${prompt}\n\n${block}`;
+}
 
 export interface AiPromptPackage {
   systemPrompt: string;
@@ -42,15 +55,20 @@ export function buildImportPromptPackage(
 export function buildTailorUserPrompt(
   draft: CvImportDraft,
   jobDescription: string,
+  jobContext?: TailorJobContext | null,
 ): string {
-  return `STRUCTURED RESUME:\n${JSON.stringify(draft, null, 2)}\n\nJOB DESCRIPTION:\n${jobDescription}\n\nReturn only the JSON object.`;
+  return appendJobContext(
+    `STRUCTURED RESUME:\n${JSON.stringify(draft, null, 2)}\n\nJOB DESCRIPTION:\n${jobDescription}\n\nReturn only the JSON object.`,
+    jobContext,
+  );
 }
 
 export function buildTailorPromptPackage(
   draft: CvImportDraft,
   jobDescription: string,
+  jobContext?: TailorJobContext | null,
 ): AiPromptPackage {
-  const userPrompt = buildTailorUserPrompt(draft, jobDescription);
+  const userPrompt = buildTailorUserPrompt(draft, jobDescription, jobContext);
   return {
     systemPrompt: TAILOR_SYSTEM_PROMPT,
     userPrompt,
@@ -83,15 +101,24 @@ function withBudgets(sections: CvSection[]) {
 export function buildDocxTailorUserPrompt(
   sections: CvSection[],
   jobDescription: string,
+  jobContext?: TailorJobContext | null,
 ): string {
-  return `ADAPTABLE SECTIONS:\n${JSON.stringify(withBudgets(sections), null, 2)}\n\nJOB DESCRIPTION:\n${jobDescription}\n\nReturn only the JSON object.`;
+  return appendJobContext(
+    `ADAPTABLE SECTIONS:\n${JSON.stringify(withBudgets(sections), null, 2)}\n\nJOB DESCRIPTION:\n${jobDescription}\n\nReturn only the JSON object.`,
+    jobContext,
+  );
 }
 
 export function buildDocxTailorPromptPackage(
   sections: CvSection[],
   jobDescription: string,
+  jobContext?: TailorJobContext | null,
 ): AiPromptPackage {
-  const userPrompt = buildDocxTailorUserPrompt(sections, jobDescription);
+  const userPrompt = buildDocxTailorUserPrompt(
+    sections,
+    jobDescription,
+    jobContext,
+  );
   return {
     systemPrompt: DOCX_TAILOR_SYSTEM_PROMPT,
     userPrompt,
@@ -103,8 +130,10 @@ export function buildStudioDocxTailorUserPrompt(
   sections: CvSection[],
   draft: CvImportDraft,
   jobDescription: string,
+  jobContext?: TailorJobContext | null,
 ): string {
-  return `DOCX TEMPLATE SECTIONS (preserve ids, paragraph ids, run ids, and run counts — only change text; "budget" is each run's max character length when present — title/headline runs have no budget):
+  return appendJobContext(
+    `DOCX TEMPLATE SECTIONS (preserve ids, paragraph ids, run ids, and run counts — only change text; "budget" is each run's max character length when present — title/headline runs have no budget):
 ${JSON.stringify(withBudgets(sections), null, 2)}
 
 STRUCTURED RESUME DATA (factual source from CMS — map into template paragraphs):
@@ -113,18 +142,22 @@ ${JSON.stringify(draft, null, 2)}
 JOB DESCRIPTION:
 ${jobDescription}
 
-Return only the JSON object.`;
+Return only the JSON object.`,
+    jobContext,
+  );
 }
 
 export function buildStudioDocxTailorPromptPackage(
   sections: CvSection[],
   draft: CvImportDraft,
   jobDescription: string,
+  jobContext?: TailorJobContext | null,
 ): AiPromptPackage {
   const userPrompt = buildStudioDocxTailorUserPrompt(
     sections,
     draft,
     jobDescription,
+    jobContext,
   );
   return {
     systemPrompt: STUDIO_DOCX_TAILOR_SYSTEM_PROMPT,

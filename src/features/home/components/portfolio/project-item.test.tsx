@@ -30,7 +30,7 @@ describe("PortfolioItem", () => {
     image: "https://example.com/project.png",
     description: "An awesome project description",
     type: "Web",
-    skills: [{ title: "React", image: "react.png" }],
+    skills: [{ title: "React", image: "https://cdn.simpleicons.org/react" }],
     urlName: "View Website",
     sourceName: "View Source",
     canSeeDemo: "Can see demo",

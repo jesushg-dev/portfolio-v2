@@ -2,7 +2,7 @@
 
 import type { FC } from "react";
 import { useRef } from "react";
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { useTranslations } from "next-intl";
 import {
   ArrowRight,
@@ -107,13 +107,12 @@ const TimelineCard: FC<TimelineCardProps> = ({
       <article className="space-y-2 px-1 pt-1">
         {image ? (
           <div className="bg-muted relative mb-1 h-20 w-full overflow-hidden rounded-lg">
-            <Image
+            <MediaImage
               src={image}
               alt=""
               fill
               className="object-cover"
               sizes="280px"
-              unoptimized
             />
           </div>
         ) : null}

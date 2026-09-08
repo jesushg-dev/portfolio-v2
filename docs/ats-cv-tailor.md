@@ -313,18 +313,14 @@ Original uploaded DOCX metadata + optional `parsedDraft` for import/studio.
 
 ## AI providers & env
 
-Configured via `src/env.ts` / credentials:
+AI keys are **per-tenant** (Admin → Credentials → AI). There is no shared platform AI fallback — see [`tenant-credentials.md`](./tenant-credentials.md).
 
-| Variable / source     | Use                                                                                                               |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `ANTHROPIC_API_KEY`   | Claude                                                                                                            |
-| `OPENAI_API_KEY`      | OpenAI                                                                                                            |
-| `DEEPSEEK_API_KEY`    | DeepSeek (`https://api.deepseek.com`)                                                                             |
-| `GEMINI_API_KEY`      | Gemini                                                                                                            |
-| `DEFAULT_AI_PROVIDER` | Optional default                                                                                                  |
-| UploadThing           | **Tenant** Admin → Credentials (`uploadthing` integration). Export upload does not rely on a global env fallback. |
+| Source                                                                        | Use                                                                                                   |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Tenant `ai` integration (`anthropicApiKey` / `openaiApiKey` / `geminiApiKey`) | Claude / OpenAI / Gemini for import, tailor, interview prep                                           |
+| UploadThing                                                                   | **Tenant** Admin → Credentials (`uploadthing`). Export upload does not rely on a global env fallback. |
 
-If no AI keys are available, auto mode is unavailable; **manual JSON** still works (`aiProvider: "manual"`).
+If the tenant has no AI keys, auto mode is unavailable; **manual JSON** still works (`aiProvider: "manual"`).
 
 Models (`AI_PROVIDER_MODELS` in `providers.ts`):
 
@@ -394,7 +390,7 @@ Prompt packages include per-run `budget` so the model knows length limits up fro
 ## Quick debug checklist
 
 1. Confirm UploadThing tenant credentials are connected (Admin → Credentials).
-2. Confirm at least one AI key for auto mode, or use manual JSON.
+2. Confirm tenant AI keys in Admin → Credentials → AI for auto mode, or use manual JSON.
 3. Studio: ensure Resume Studio / CMS draft has `header.fullName` (drives filename).
 4. Upload: ensure `registerUpload` created a `CvSourceUpload` and `uploadId` is passed.
 5. Filename wrong? Check `build-ats-cv-file-name.ts` + full name resolution in `finalize-tailor-export.ts`.

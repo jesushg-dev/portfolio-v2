@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { ApplicationsKanban } from "@/features/job-tracker/components/applications-kanban";
 import { CompaniesList } from "@/features/job-tracker/components/companies-list";
-import type { RouterOutputs } from "@/trpc/react";
+import { api, type RouterOutputs } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
 type ApplicationRow =
@@ -42,9 +42,26 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
 }) => {
   const t = useTranslations("admin.jobTracker");
   const [activeTab, setActiveTab] = useState<JobTrackerTab>("applications");
+  const { data: stats } = api.jobTrackerAdmin.getDashboardStats.useQuery(
+    undefined,
+    {
+      placeholderData: {
+        totalApplications: applicationsTotalCount,
+        totalCompanies: companiesTotalCount,
+        applied: 0,
+        inProgress: 0,
+        offers: 0,
+        ghosted: 0,
+        rejected: 0,
+        hired: 0,
+      },
+    },
+  );
+  const applicationsCount = stats?.totalApplications ?? applicationsTotalCount;
+  const companiesCount = stats?.totalCompanies ?? companiesTotalCount;
 
   return (
-    <div className="border-border bg-card flex min-h-[560px] flex-col overflow-hidden rounded-xl border shadow-sm">
+    <div className="border-border bg-card sticky top-0 z-20 flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden rounded-xl border shadow-sm md:top-16 md:h-[calc(100dvh-4rem)]">
       <nav
         aria-label={t("tabsNavAria")}
         className="bg-muted/30 flex shrink-0 overflow-x-auto"
@@ -52,6 +69,8 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
       >
         {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => {
           const isActive = activeTab === id;
+          const count =
+            id === "applications" ? applicationsCount : companiesCount;
           return (
             <button
               key={id}
@@ -68,12 +87,16 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
             >
               <Icon className="size-4" aria-hidden />
               {t(labelKey)}
+              <span className="tabular-nums">({count})</span>
             </button>
           );
         })}
       </nav>
 
-      <div className="min-h-0 flex-1 p-6" role="tabpanel">
+      <div
+        className="min-h-0 flex-1 overflow-hidden p-4 md:p-6"
+        role="tabpanel"
+      >
         {activeTab === "applications" ? (
           <ApplicationsKanban
             initialApplications={initialApplications}

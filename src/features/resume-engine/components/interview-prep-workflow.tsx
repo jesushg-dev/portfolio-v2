@@ -2,11 +2,12 @@
 
 import { useCallback, useState, useTransition, type FC } from "react";
 import { useTranslations } from "next-intl";
-import { Loader2, Sparkles } from "lucide-react";
+import { Check, Loader2, Plus, Sparkles, Wrench, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   ResumeAiControls,
   type AiProcessingMode,
@@ -25,13 +26,13 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
   eventId,
 }) => {
   const t = useTranslations("admin.jobTracker.interviewPrep");
-  const tTracker = useTranslations("admin.jobTracker");
-  const tStudio = useTranslations("admin.resumeStudio");
   const [mode, setMode] = useState<AiProcessingMode>("auto");
   const [provider, setProvider] = useState<AiProviderName | null>(null);
   const [manualJson, setManualJson] = useState("");
   const [showGenerator, setShowGenerator] = useState(false);
   const [replaceOnBuild, setReplaceOnBuild] = useState(true);
+  const [selectedTools, setSelectedTools] = useState<string[]>([]);
+  const [customToolInput, setCustomToolInput] = useState("");
   const [isPending, startTransition] = useTransition();
 
   const aiSettings = api.interviewPrepAdmin.getAiSettings.useQuery();
@@ -44,6 +45,7 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
       applicationId,
       eventId,
       append: !replaceOnBuild,
+      focusTools: selectedTools.length > 0 ? selectedTools : undefined,
     },
     { enabled: false },
   );
@@ -63,6 +65,7 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
   const canBuild = pageData.data?.hasJobDescription ?? false;
   const questions = pageData.data?.questions ?? [];
   const hasQuestions = questions.length > 0;
+  const suggestedTools = pageData.data?.suggestedTools ?? [];
 
   const invalidate = useCallback(async () => {
     await utils.interviewPrepAdmin.getInterviewPrepPageData.invalidate({
@@ -74,6 +77,29 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
     eventId,
     utils.interviewPrepAdmin.getInterviewPrepPageData,
   ]);
+
+  const handleToggleTool = useCallback((tool: string) => {
+    setSelectedTools((previous) =>
+      previous.includes(tool)
+        ? previous.filter((item) => item !== tool)
+        : [...previous, tool],
+    );
+  }, []);
+
+  const handleAddCustomTool = useCallback(() => {
+    const trimmed = customToolInput.trim();
+    if (!trimmed) return;
+    setSelectedTools((previous) =>
+      previous.some((item) => item.toLowerCase() === trimmed.toLowerCase())
+        ? previous
+        : [...previous, trimmed],
+    );
+    setCustomToolInput("");
+  }, [customToolInput]);
+
+  const handleClearSelectedTools = useCallback(() => {
+    setSelectedTools([]);
+  }, []);
 
   const handleLoadPrompt = useCallback(async () => {
     if (!eventId) return null;
@@ -88,8 +114,10 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
   }, [eventId, promptQuery, t]);
 
   const runAuto = useCallback(
-    (replace: boolean) => {
+    (replace: boolean, overrideTools?: string[]) => {
       if (!eventId) return;
+      const toolsToUse =
+        overrideTools ?? (selectedTools.length > 0 ? selectedTools : undefined);
       startTransition(async () => {
         try {
           await generateAuto.mutateAsync({
@@ -97,17 +125,37 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
             eventId,
             provider: effectiveProvider ?? undefined,
             replace,
+            focusTools: toolsToUse,
           });
           toast.success(replace ? t("success") : t("moreSuccess"));
           setShowGenerator(false);
           await invalidate();
         } catch (err) {
-          const message = err instanceof Error ? err.message : t("failed");
+          const rawMessage = err instanceof Error ? err.message : "";
+          const isApiKeyError =
+            rawMessage.includes("API key not valid") ||
+            rawMessage.includes("API_KEY_INVALID") ||
+            rawMessage.includes("API key");
+          const message = isApiKeyError
+            ? t("aiKeyInvalid")
+            : rawMessage || t("failed");
           toast.error(t("failed"), { description: message });
+          if (isApiKeyError) {
+            setMode("manual");
+            setShowGenerator(true);
+          }
         }
       });
     },
-    [applicationId, effectiveProvider, eventId, generateAuto, invalidate, t],
+    [
+      applicationId,
+      effectiveProvider,
+      eventId,
+      generateAuto,
+      invalidate,
+      selectedTools,
+      t,
+    ],
   );
 
   const handleBuildManual = useCallback(() => {
@@ -156,11 +204,18 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
     runAuto(false);
   }, [hasAutoProviders, runAuto]);
 
+  const handleGenerateForTool = useCallback(
+    (tool: string) => {
+      runAuto(false, [tool]);
+    },
+    [runAuto],
+  );
+
   if (pageData.isLoading || aiSettings.isLoading) {
     return (
       <div className="text-muted-foreground flex items-center gap-2 text-sm">
         <Loader2 className="size-4 animate-spin" />
-        {tStudio("aiSettingsLoading")}
+        {t("aiSettingsLoading")}
       </div>
     );
   }
@@ -172,7 +227,7 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
       {selectedEvent ? (
         <p className="text-muted-foreground text-xs">
           {t("eventHint", {
-            type: tTracker(`eventType.${selectedEvent.type}`),
+            type: t(`eventType.${selectedEvent.type}`),
           })}
         </p>
       ) : null}
@@ -204,6 +259,113 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
             hasAutoProviders={hasAutoProviders}
             layout="compact"
           />
+
+          <div className="border-border bg-card text-card-foreground rounded-lg border p-3.5 sm:p-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <label
+                htmlFor="custom-tool-input"
+                className="text-foreground flex items-center gap-1.5 text-xs font-semibold"
+              >
+                <Wrench className="text-primary size-3.5" aria-hidden />
+                {t("focusToolsLabel")}
+              </label>
+              {selectedTools.length > 0 ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground text-xs">
+                    {t("selectedToolsCount", { count: selectedTools.length })}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 px-1.5 text-xs"
+                    onClick={handleClearSelectedTools}
+                  >
+                    {t("clearSelectedTools")}
+                  </Button>
+                </div>
+              ) : null}
+            </div>
+            <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+              {t("focusToolsHint")}
+            </p>
+
+            {suggestedTools.length > 0 ? (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {suggestedTools.map((tool) => {
+                  const isSelected = selectedTools.includes(tool);
+                  return (
+                    <button
+                      key={tool}
+                      type="button"
+                      onClick={() => handleToggleTool(tool)}
+                      className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors ${
+                        isSelected
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-foreground hover:bg-muted"
+                      }`}
+                      aria-pressed={isSelected}
+                    >
+                      {isSelected ? (
+                        <Check className="size-3" aria-hidden />
+                      ) : null}
+                      {tool}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
+
+            {selectedTools.some((tool) => !suggestedTools.includes(tool)) ? (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {selectedTools
+                  .filter((tool) => !suggestedTools.includes(tool))
+                  .map((customTool) => (
+                    <span
+                      key={customTool}
+                      className="border-primary bg-primary text-primary-foreground inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs font-medium"
+                    >
+                      {customTool}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleTool(customTool)}
+                        className="hover:opacity-80"
+                        aria-label={`Remove ${customTool}`}
+                      >
+                        <X className="size-3" aria-hidden />
+                      </button>
+                    </span>
+                  ))}
+              </div>
+            ) : null}
+
+            <div className="mt-3 flex max-w-sm items-center gap-2">
+              <Input
+                id="custom-tool-input"
+                value={customToolInput}
+                onChange={(event) => setCustomToolInput(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    handleAddCustomTool();
+                  }
+                }}
+                placeholder={t("customToolPlaceholder")}
+                className="h-8 text-xs"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 shrink-0 text-xs"
+                onClick={handleAddCustomTool}
+                disabled={!customToolInput.trim()}
+              >
+                <Plus className="mr-1 size-3.5" aria-hidden />
+                {t("addCustomTool")}
+              </Button>
+            </div>
+          </div>
 
           {effectiveMode === "manual" ? (
             <ManualAiPanel
@@ -263,9 +425,19 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
 
       {hasQuestions ? (
         <InterviewPrepPractice
+          applicationId={applicationId}
           eventId={eventId}
           questions={questions}
           eventType={selectedEvent?.type ?? "INTERVIEW"}
+          suggestedTools={suggestedTools}
+          onOpenGenerator={
+            generatorOpen
+              ? undefined
+              : () => {
+                  setReplaceOnBuild(false);
+                  setShowGenerator(true);
+                }
+          }
           onRegenerate={
             generatorOpen
               ? undefined
@@ -275,6 +447,11 @@ export const InterviewPrepWorkflow: FC<InterviewPrepWorkflowProps> = ({
                 }
           }
           onGenerateMore={generatorOpen ? undefined : handleGenerateMore}
+          onGenerateForTool={
+            generatorOpen || !hasAutoProviders
+              ? undefined
+              : handleGenerateForTool
+          }
           isGeneratingMore={isPending && !showGenerator}
         />
       ) : null}

@@ -39,6 +39,34 @@ export default async function PrivacyPage() {
             <p>{t("spotify.disconnect")}</p>
             <p>{t("spotify.retention")}</p>
           </section>
+
+          <section className="space-y-3">
+            <h2 className="text-foreground text-lg font-semibold">
+              {t("analytics.title")}
+            </h2>
+            <p>{t("analytics.intro")}</p>
+            <div>
+              <h3 className="text-foreground mb-2 font-medium">
+                {t("analytics.storedTitle")}
+              </h3>
+              <ul className="list-inside list-disc space-y-1">
+                <li>{t("analytics.storedPageviews")}</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-foreground mb-2 font-medium">
+                {t("analytics.notStoredTitle")}
+              </h3>
+              <ul className="list-inside list-disc space-y-1">
+                <li>{t("analytics.notStoredIp")}</li>
+                <li>{t("analytics.notStoredId")}</li>
+                <li>{t("analytics.notStoredCity")}</li>
+              </ul>
+            </div>
+            <p>{t("analytics.purpose")}</p>
+            <p>{t("analytics.optOut")}</p>
+            <p>{t("analytics.retention")}</p>
+          </section>
         </div>
       </div>
     </section>

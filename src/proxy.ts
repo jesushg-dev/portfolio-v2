@@ -2,6 +2,7 @@ import createIntlMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { routing } from "./i18n/routing-config";
+import { matchLegacyProcessPageRedirect } from "@/features/process-pages/lib/legacy-process-page-redirects";
 import {
   CV_PDF_MODE_HEADER,
   TENANT_USERNAME_HEADER,
@@ -32,6 +33,15 @@ const forwardRequestHeader = (
 };
 
 export default function middleware(req: NextRequest) {
+  const legacyProcessPath = matchLegacyProcessPageRedirect(
+    req.nextUrl.pathname,
+  );
+  if (legacyProcessPath) {
+    const url = req.nextUrl.clone();
+    url.pathname = legacyProcessPath;
+    return NextResponse.redirect(url, 301);
+  }
+
   const tenantSlug = parseTenantSlug(
     req.headers.get("host"),
     getPrimaryDomain(),

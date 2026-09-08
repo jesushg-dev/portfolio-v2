@@ -8,6 +8,7 @@ import {
   optionalUrl,
   StackTypeSchema,
 } from "@/lib/admin/portfolio-schemas";
+import { isAbsoluteOrLocalImagePath } from "@/utils/tools/image";
 import {
   mapProjectToEditorDto,
   mapProjectsToEditorDto,
@@ -29,7 +30,7 @@ const ProjectTranslationMapSchema = z.record(
 );
 
 const projectUpsertInput = z.object({
-  image: z.string().min(1),
+  image: z.string().min(1).refine(isAbsoluteOrLocalImagePath),
   type: StackTypeSchema,
   githubUrl: optionalUrl,
   websiteUrl: optionalUrl,

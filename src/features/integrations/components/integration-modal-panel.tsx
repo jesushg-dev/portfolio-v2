@@ -9,13 +9,19 @@ import { api } from "@/trpc/react";
 import type { IntegrationProvider } from "@/lib/integrations/tenant-integrations-service";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import GoogleCalendarConnectForm from "@/features/google-calendar-connect/components/google-calendar-connect-form";
+import GoogleCalendarConnectionStatus from "@/features/google-calendar-connect/components/google-calendar-connection-status";
 import SpotifyConnectForm from "@/features/spotify-connect/components/spotify-connect-form";
 import SpotifyConnectionStatus from "@/features/spotify-connect/components/spotify-connection-status";
 
 import { ResendIntegrationForm } from "./resend-integration-form";
 import { UploadThingIntegrationForm } from "./uploadthing-integration-form";
 import { AiIntegrationForm } from "./ai-integration-form";
+import { GoogleCalendarIntegrationGuide } from "./google-calendar-integration-guide";
 import { SpotifyIntegrationGuide } from "./spotify-integration-guide";
+import { ResendIntegrationGuide } from "./resend-integration-guide";
+import { UploadThingIntegrationGuide } from "./uploadthing-integration-guide";
+import { AiIntegrationGuide } from "./ai-integration-guide";
 
 interface IntegrationModalPanelProps {
   provider: IntegrationProvider;
@@ -50,6 +56,46 @@ function SpotifyCallbackAlert() {
     return errorKey
       ? t(`spotifyCallback.${errorKey}`)
       : t("spotifyCallback.exchangeFailed");
+  }, [searchParams, t]);
+
+  if (!message) return null;
+
+  return (
+    <Alert>
+      <AlertDescription>{message}</AlertDescription>
+    </Alert>
+  );
+}
+
+function GoogleCalendarCallbackAlert() {
+  const t = useTranslations("adminCredentials");
+  const searchParams = useSearchParams();
+
+  const message = useMemo(() => {
+    if (searchParams.get("gcal_connected") === "1") {
+      return t("googleCalendarCallback.connected");
+    }
+
+    const error = searchParams.get("gcal_error");
+    if (!error) return null;
+
+    const errorKey = {
+      access_denied: "accessDenied",
+      exchange_failed: "exchangeFailed",
+      invalid_state: "invalidState",
+      missing_params: "missingParams",
+      no_refresh_token: "noRefreshToken",
+    }[error] as
+      | "accessDenied"
+      | "exchangeFailed"
+      | "invalidState"
+      | "missingParams"
+      | "noRefreshToken"
+      | undefined;
+
+    return errorKey
+      ? t(`googleCalendarCallback.${errorKey}`)
+      : t("googleCalendarCallback.exchangeFailed");
   }, [searchParams, t]);
 
   if (!message) return null;
@@ -102,11 +148,52 @@ function SpotifyModalContent() {
   );
 }
 
+function GoogleCalendarModalContent() {
+  const statusQuery = api.googleCalendarAdmin.getConnectionStatus.useQuery();
+
+  if (statusQuery.isLoading) {
+    return <Skeleton className="h-48 w-full rounded-lg" />;
+  }
+
+  const connection = statusQuery.data;
+  const isConnected =
+    connection != null && connection.status !== "disconnected";
+  const showConnectForm =
+    !connection ||
+    connection.status === "disconnected" ||
+    connection.status === "refresh_error";
+
+  return (
+    <div className="space-y-6">
+      <Suspense fallback={null}>
+        <GoogleCalendarCallbackAlert />
+      </Suspense>
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(240px,320px)] lg:items-start">
+        <div className="flex flex-col gap-6">
+          {isConnected && connection && (
+            <GoogleCalendarConnectionStatus
+              embedded
+              status={connection.status}
+              clientId={connection.clientId}
+              connectedAt={connection.connectedAt}
+            />
+          )}
+
+          {showConnectForm && <GoogleCalendarConnectForm embedded />}
+        </div>
+
+        {showConnectForm && <GoogleCalendarIntegrationGuide />}
+      </div>
+    </div>
+  );
+}
+
 function TenantIntegrationModalContent({
   provider,
   onClose,
 }: {
-  provider: Exclude<IntegrationProvider, "spotify">;
+  provider: Exclude<IntegrationProvider, "spotify" | "google-calendar">;
   onClose: () => void;
 }) {
   const { data: configs, isLoading } =
@@ -119,30 +206,41 @@ function TenantIntegrationModalContent({
   switch (provider) {
     case "resend":
       return (
-        <ResendIntegrationForm
-          status={configs.resend}
-          onSuccess={onClose}
-          onCancel={onClose}
-        />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+          <ResendIntegrationForm
+            status={configs.resend}
+            onSuccess={onClose}
+            onCancel={onClose}
+          />
+          <ResendIntegrationGuide />
+        </div>
       );
     case "uploadthing":
       return (
-        <UploadThingIntegrationForm
-          status={configs.uploadthing}
-          onSuccess={onClose}
-          onCancel={onClose}
-        />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+          <UploadThingIntegrationForm
+            status={configs.uploadthing}
+            onSuccess={onClose}
+            onCancel={onClose}
+          />
+          <UploadThingIntegrationGuide />
+        </div>
       );
     case "ai":
       return (
-        <AiIntegrationForm
-          status={configs.ai}
-          onSuccess={onClose}
-          onCancel={onClose}
-        />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+          <AiIntegrationForm
+            status={configs.ai}
+            onSuccess={onClose}
+            onCancel={onClose}
+          />
+          <AiIntegrationGuide />
+        </div>
       );
-    default:
-      return null;
+    default: {
+      const _exhaustive: never = provider;
+      return _exhaustive;
+    }
   }
 }
 
@@ -157,6 +255,10 @@ export function IntegrationModalPanel({
 
   if (provider === "spotify") {
     return <SpotifyModalContent />;
+  }
+
+  if (provider === "google-calendar") {
+    return <GoogleCalendarModalContent />;
   }
 
   return (

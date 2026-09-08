@@ -6,7 +6,7 @@ export interface Stat {
   label: string;
 }
 
-/** Mirrors the "6+ / 19+ / 49" stat row from the jehg.dev hero — same real numbers.
+/** Mirrors the "6+ / 19+ / 49" stat row from the jesushg.com hero — same real numbers.
  *  If `stats` is empty or not provided, the section is not rendered at all. */
 export function StatsStrip({ stats }: { stats?: Stat[] }) {
   if (!stats || stats.length === 0) return null;

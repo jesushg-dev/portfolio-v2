@@ -73,6 +73,11 @@ export const pathnames = {
     es: "/proyectos/[slug]",
     nl: "/projecten/[slug]",
   },
+  "/process/[slug]": {
+    en: "/process/[slug]",
+    es: "/proceso/[slug]",
+    nl: "/proces/[slug]",
+  },
   "/timeline": {
     en: "/timeline",
     es: "/linea-de-tiempo",
@@ -82,16 +87,6 @@ export const pathnames = {
     en: "/privacy",
     es: "/privacidad",
     nl: "/privacy",
-  },
-  "/how-i-use-ai": {
-    en: "/how-i-use-ai",
-    es: "/como-uso-ia",
-    nl: "/hoe-ik-ai-gebruik",
-  },
-  "/qa-collaboration": {
-    en: "/qa-collaboration",
-    es: "/colaboracion-qa",
-    nl: "/qa-samenwerking",
   },
   "/theme-customizer": {
     en: "/theme-customizer",
@@ -113,6 +108,11 @@ export const pathnames = {
     es: "/colofon",
     nl: "/colofon",
   },
+  "/stats": {
+    en: "/stats",
+    es: "/estadisticas",
+    nl: "/statistieken",
+  },
   "/login": {
     en: "/login",
     es: "/iniciar-sesion",
@@ -132,6 +132,11 @@ export const pathnames = {
     en: "/reset-password",
     es: "/restablecer-contrasena",
     nl: "/wachtwoord-herstellen",
+  },
+  "/two-factor": {
+    en: "/two-factor",
+    es: "/verificacion-en-dos-pasos",
+    nl: "/tweestapsverificatie",
   },
   "/admin": {
     en: "/admin",
@@ -207,6 +212,21 @@ export const pathnames = {
     en: "/admin/now/focuses/[id]/edit",
     es: "/panel/now/focuses/[id]/editar",
     nl: "/beheer/now/focuses/[id]/bewerken",
+  },
+  "/admin/process-pages": {
+    en: "/admin/process-pages",
+    es: "/panel/paginas-de-proceso",
+    nl: "/beheer/procespaginas",
+  },
+  "/admin/process-pages/new": {
+    en: "/admin/process-pages/new",
+    es: "/panel/paginas-de-proceso/nuevo",
+    nl: "/beheer/procespaginas/nieuw",
+  },
+  "/admin/process-pages/[id]/edit": {
+    en: "/admin/process-pages/[id]/edit",
+    es: "/panel/paginas-de-proceso/[id]/editar",
+    nl: "/beheer/procespaginas/[id]/bewerken",
   },
   "/admin/spotify": {
     en: "/admin/spotify",

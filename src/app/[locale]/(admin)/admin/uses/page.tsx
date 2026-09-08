@@ -4,6 +4,7 @@ import type { Locale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { UsesAdminPanel } from "@/features/uses/components/admin/uses-admin-panel";
+import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import {
   getUserUsesItemsWithLanguages,
   getUsesSettingsPageData,
@@ -55,9 +56,14 @@ const UsesAdminPage: FC<Props> = async ({ params, searchParams }) => {
 
   return (
     <div className="flex h-full flex-col gap-6">
-      <div className="shrink-0">
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
+      <div className="flex shrink-0 items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {t("title")}
+          </h1>
+          <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
+        </div>
+        <ExportSeedJsonButton entity="uses" />
       </div>
       <UsesAdminPanel
         initialTab={initialTab}
@@ -80,6 +86,7 @@ const UsesAdminPage: FC<Props> = async ({ params, searchParams }) => {
         }}
         settings={settingsPage.settings}
         languages={settingsPage.languages}
+        taggableItems={settingsPage.taggableItems}
       />
     </div>
   );

@@ -85,6 +85,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     {
       sourceType,
       uploadId: uploadId ?? undefined,
+      applicationId,
       jobDescription:
         jobDescription.trim().length > 0
           ? jobDescription.trim()

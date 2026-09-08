@@ -30,6 +30,7 @@ import {
 import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
+  TextTranslationMapSchema,
 } from "@/lib/i18n/localized-form";
 import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
 import type { ProfileHeroEditorDTO } from "@/features/profile/lib/profile-hero-editor-dto";
@@ -61,6 +62,7 @@ export function ProfileHeroForm({
           primaryLang?.id,
           t("heroSummaryLabel"),
         ),
+        clientImageAltTranslations: TextTranslationMapSchema,
         aboutMeTranslations: textTranslationMapSchema(
           primaryLang?.id,
           t("aboutMeTitle"),
@@ -92,6 +94,7 @@ export function ProfileHeroForm({
       photoUrl: initialData.photoUrl,
       backgroundImageUrl: initialData.backgroundImageUrl,
       heroSummaryTranslations: initialData.heroSummaryTranslations,
+      clientImageAltTranslations: initialData.clientImageAltTranslations,
       aboutMeTranslations: initialData.aboutMeTranslations,
       titles:
         initialData.titles.length > 0
@@ -120,6 +123,12 @@ export function ProfileHeroForm({
 
   const photoUrlValue = useWatch({ control: form.control, name: "photoUrl" });
   const fullNameValue = useWatch({ control: form.control, name: "fullName" });
+  const clientImageAltTranslations = useWatch({
+    control: form.control,
+    name: "clientImageAltTranslations",
+  });
+  const clientImageAltValue =
+    clientImageAltTranslations?.[activeLangId]?.text ?? "";
 
   const handleSubmit = useCallback(
     (values: ProfileHeroFormValues) => {
@@ -142,6 +151,7 @@ export function ProfileHeroForm({
             photoUrl: values.photoUrl,
             backgroundImageUrl: values.backgroundImageUrl,
             heroSummaryTranslations: values.heroSummaryTranslations,
+            clientImageAltTranslations: values.clientImageAltTranslations,
             aboutMeTranslations: values.aboutMeTranslations,
             titles: titlesPayload,
           });
@@ -188,7 +198,7 @@ export function ProfileHeroForm({
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={photoUrlValue}
-                    alt={fullNameValue}
+                    alt={clientImageAltValue.trim() || fullNameValue}
                     className="border-background h-24 w-24 rounded-full border-4 object-cover shadow-sm"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "";
@@ -256,6 +266,36 @@ export function ProfileHeroForm({
                 />
               </div>
             </div>
+
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "mt-4 block" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`clientImageAltTranslations.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("altTextLabel")}
+                        inputId={`profile-hero-photo-alt-${lang.code}`}
+                        description={t("altTextHint")}
+                      >
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={t("altTextPlaceholder")}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
           </FormSection>
 
           <FormSection

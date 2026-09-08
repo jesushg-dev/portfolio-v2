@@ -1,20 +1,33 @@
 "use client";
 
-import { useCallback, useMemo, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import type { FC, SVGProps } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { KeyRound } from "lucide-react";
 
-import { authClient } from "@/lib/auth-client";
+import {
+  authClient,
+  isTwoFactorRedirect,
+  supportsPasskeyAutofill,
+} from "@/lib/auth-client";
 import {
   buildLocalizedCallbackUrl,
   safeInternalPath,
   type AppHref,
 } from "@/lib/auth-routing";
-import { Link } from "@/i18n/routing";
+import { hardNavigate } from "@/lib/hard-navigate";
+import { serializeTwoFactorMethods } from "@/features/auth/lib/two-factor-methods";
+import { Link, useRouter } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -37,6 +50,7 @@ interface LoginFormProps {
 const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
   const t = useTranslations("auth.login");
   const locale = useLocale();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = useMemo(
     () => safeInternalPath(searchParams.get("next")),
@@ -48,6 +62,8 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
   const [socialLoading, setSocialLoading] = useState<
     "github" | "google" | null
   >(null);
+  const [passkeyLoading, setPasskeyLoading] = useState(false);
+  const [passkeyAutofill, setPasskeyAutofill] = useState(false);
 
   const LoginSchema = useMemo(
     () =>
@@ -73,11 +89,25 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
     [locale, redirectTo],
   );
 
+  const goToTwoFactor = useCallback(
+    (methods: string[] | undefined) => {
+      const serialized = serializeTwoFactorMethods(methods);
+      router.push({
+        pathname: "/two-factor",
+        query: {
+          next: redirectTo,
+          ...(serialized ? { methods: serialized } : {}),
+        },
+      });
+    },
+    [redirectTo, router],
+  );
+
   const onSubmit = useCallback(
     (data: LoginInput) => {
       startTransition(async () => {
         setServerError(null);
-        const { error } = await authClient.signIn.email({
+        const { data: result, error } = await authClient.signIn.email({
           email: data.email,
           password: data.password,
           callbackURL,
@@ -86,12 +116,49 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
           setServerError(error.message ?? t("errorSignIn"));
           return;
         }
+        if (isTwoFactorRedirect(result)) {
+          goToTwoFactor(result.twoFactorMethods);
+          return;
+        }
         // Full navigation so the session cookie set by the auth API is sent on the next request.
-        window.location.assign(callbackURL);
+        hardNavigate(callbackURL);
       });
+    },
+    [callbackURL, goToTwoFactor, t],
+  );
+
+  const handlePasskeySignIn = useCallback(
+    async (autoFill = false) => {
+      if (!autoFill) {
+        setServerError(null);
+        setPasskeyLoading(true);
+      }
+      const { error } = await authClient.signIn.passkey({ autoFill });
+      if (error) {
+        // Conditional UI is cancelled silently when the user types instead.
+        if (!autoFill) {
+          setServerError(error.message ?? t("errorPasskey"));
+          setPasskeyLoading(false);
+        }
+        return;
+      }
+      hardNavigate(callbackURL);
     },
     [callbackURL, t],
   );
+
+  // Passkey conditional UI: offer saved passkeys in the email field's autofill.
+  useEffect(() => {
+    let cancelled = false;
+    void supportsPasskeyAutofill().then((supported) => {
+      if (cancelled || !supported) return;
+      setPasskeyAutofill(true);
+      void handlePasskeySignIn(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [handlePasskeySignIn]);
 
   const handleSocialSignIn = useCallback(
     async (provider: "github" | "google") => {
@@ -148,7 +215,9 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                   <FormItem label={t("email")} inputId="login-email">
                     <Input
                       type="email"
-                      autoComplete="email"
+                      autoComplete={
+                        passkeyAutofill ? "username webauthn" : "email"
+                      }
                       placeholder={t("emailPlaceholder")}
                       className={fieldInputClassName}
                       {...field}
@@ -177,22 +246,33 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
 
             <Button
               type="submit"
-              disabled={isPending || !!socialLoading}
+              disabled={isPending || !!socialLoading || passkeyLoading}
               className="mt-2 h-11 w-full rounded-xl text-sm font-medium"
             >
               {isPending ? t("submitting") : t("submit")}
             </Button>
 
+            <div className="mt-6 flex items-center">
+              <div className="bg-border h-px flex-1" />
+              <span className="text-muted-foreground px-4 text-sm">
+                {t("or")}
+              </span>
+              <div className="bg-border h-px flex-1" />
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isPending || !!socialLoading || passkeyLoading}
+              onClick={() => void handlePasskeySignIn(false)}
+              className="mt-4 h-11 w-full rounded-xl text-sm font-medium"
+            >
+              <KeyRound aria-hidden className="size-4" />
+              {passkeyLoading ? t("connectingPasskey") : t("signInPasskey")}
+            </Button>
+
             {hasSocialProviders ? (
               <>
-                <div className="mt-6 flex items-center">
-                  <div className="bg-border h-px flex-1" />
-                  <span className="text-muted-foreground px-4 text-sm">
-                    {t("or")}
-                  </span>
-                  <div className="bg-border h-px flex-1" />
-                </div>
-
                 <div
                   className={cn(
                     "mt-4 grid grid-cols-1 gap-4",
@@ -203,7 +283,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                     <Button
                       type="button"
                       variant="outline"
-                      disabled={!!socialLoading}
+                      disabled={!!socialLoading || passkeyLoading}
                       onClick={() => void handleSocialSignIn("google")}
                       className="w-full rounded-xl py-6"
                       aria-label={
@@ -219,7 +299,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                     <Button
                       type="button"
                       variant="outline"
-                      disabled={!!socialLoading}
+                      disabled={!!socialLoading || passkeyLoading}
                       onClick={() => void handleSocialSignIn("github")}
                       className="w-full rounded-xl py-6"
                       aria-label={

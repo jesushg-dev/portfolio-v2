@@ -131,6 +131,18 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
   );
   const hiddenCount = applications.length - visibleApplications.length;
 
+  const statusCounts = useMemo(() => {
+    const counts = Object.fromEntries(
+      KANBAN_COLUMNS.map((status) => [status, 0]),
+    ) as Record<ApplicationStatus, number>;
+
+    for (const application of applications) {
+      counts[application.status] += 1;
+    }
+
+    return counts;
+  }, [applications]);
+
   const serverColumns = useMemo(
     () => buildKanbanColumns(visibleApplications),
     [visibleApplications],
@@ -270,8 +282,8 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
   }, [columns]);
 
   return (
-    <div className="flex h-full min-h-[420px] flex-col gap-3">
-      <div className="flex flex-col gap-2">
+    <div className="flex h-full min-h-0 flex-col gap-3">
+      <div className="flex shrink-0 flex-col gap-2">
         <ButtonGroup
           aria-label={t("kanban.statusFilterAria")}
           className="flex-wrap"
@@ -287,7 +299,7 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
                 aria-pressed={selected}
                 onClick={() => toggleStatusFilter(status)}
               >
-                {t(`status.${status}`)}
+                {t(`status.${status}`)} ({statusCounts[status]})
               </Button>
             );
           })}
@@ -359,155 +371,162 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
         ) : null}
       </div>
 
-      <Kanban
-        value={columns}
-        onValueChange={handleValueChange}
-        onDragEnd={handleDragEnd}
-        getItemValue={(item) => item.id}
-        orientation="horizontal"
-      >
-        <KanbanBoard className="min-h-[380px] flex-1 gap-4 overflow-x-auto pb-1">
-          {KANBAN_COLUMNS.map((status) => (
-            <KanbanColumn
-              key={status}
-              value={status}
-              className="bg-muted/25 border-border w-[272px] shrink-0 gap-3 rounded-xl border p-3"
-            >
-              <KanbanColumnHeader
-                label={t(`status.${status}`)}
-                count={columns[status].length}
-                dotClassName={kanbanColumnStyles[status].dot}
-              />
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <Kanban
+          value={columns}
+          onValueChange={handleValueChange}
+          onDragEnd={handleDragEnd}
+          getItemValue={(item) => item.id}
+          orientation="horizontal"
+        >
+          <KanbanBoard className="h-full min-h-0 flex-1 gap-4 overflow-x-auto overflow-y-hidden pb-1">
+            {KANBAN_COLUMNS.map((status) => (
+              <KanbanColumn
+                key={status}
+                value={status}
+                className="bg-muted/25 border-border h-full min-h-0 w-[272px] shrink-0 gap-3 overflow-hidden rounded-xl border p-3"
+              >
+                <KanbanColumnHeader
+                  label={t(`status.${status}`)}
+                  count={columns[status].length}
+                  dotClassName={kanbanColumnStyles[status].dot}
+                />
 
-              <div className="flex min-h-[200px] flex-1 flex-col gap-2">
-                {columns[status].map((application) => (
-                  <KanbanItem
-                    key={application.id}
-                    value={application.id}
+                <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
+                  {columns[status].map((application) => (
+                    <KanbanItem
+                      key={application.id}
+                      value={application.id}
+                      className={cn(
+                        "group bg-card text-card-foreground border-border overflow-hidden rounded-lg border border-l-[3px] shadow-sm",
+                        kanbanColumnStyles[status].accent,
+                      )}
+                    >
+                      <div className="flex items-start gap-2 p-3">
+                        <KanbanItemHandle
+                          className="text-muted-foreground hover:text-foreground mt-0.5 shrink-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100"
+                          aria-label={t("kanban.dragCard")}
+                        >
+                          <GripVertical className="size-4" aria-hidden />
+                        </KanbanItemHandle>
+
+                        <Link
+                          href={{
+                            pathname: "/admin/job-tracker/applications/[id]",
+                            params: { id: application.id },
+                          }}
+                          className="min-w-0 flex-1 space-y-1.5"
+                        >
+                          <div className="flex items-start gap-2">
+                            <span
+                              className={cn(
+                                "flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold",
+                                kanbanColumnStyles[status].avatar,
+                              )}
+                            >
+                              {getCompanyInitial(application.company.name)}
+                            </span>
+                            <div className="min-w-0">
+                              <p className="text-foreground line-clamp-2 text-sm leading-snug font-medium">
+                                {application.position}
+                              </p>
+                              <p className="text-muted-foreground mt-1 truncate text-xs">
+                                {application.company.name}
+                                {application.salary
+                                  ? ` · ${application.salary}`
+                                  : null}
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+                      </div>
+
+                      <div
+                        className="border-border/70 bg-muted/20 border-t px-3 py-2 md:hidden"
+                        onPointerDown={(event) => event.stopPropagation()}
+                      >
+                        <Select
+                          value={application.status}
+                          onValueChange={(nextStatus) => {
+                            if (nextStatus === application.status) return;
+                            persistStatusChange(application.id, nextStatus!);
+                          }}
+                        >
+                          <SelectTrigger
+                            size="sm"
+                            aria-label={t("kanban.moveToColumn")}
+                            className="bg-background h-8 w-full text-xs"
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {KANBAN_COLUMNS.map((columnStatus) => (
+                              <SelectItem
+                                key={columnStatus}
+                                value={columnStatus}
+                              >
+                                {t(`status.${columnStatus}`)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </KanbanItem>
+                  ))}
+
+                  {columns[status].length === 0 ? (
+                    <div className="border-border/70 text-muted-foreground flex flex-1 items-center justify-center rounded-lg border border-dashed px-3 py-6 text-center text-xs">
+                      {t("kanban.emptyColumn")}
+                    </div>
+                  ) : null}
+                </div>
+
+                {status === "APPLIED" ? (
+                  <Link
+                    href="/admin/job-tracker/applications/new"
                     className={cn(
-                      "group bg-card text-card-foreground border-border overflow-hidden rounded-lg border border-l-[3px] shadow-sm",
-                      kanbanColumnStyles[status].accent,
+                      buttonVariants({ variant: "ghost", size: "sm" }),
+                      "text-muted-foreground hover:text-foreground w-full border border-dashed",
                     )}
                   >
-                    <div className="flex items-start gap-2 p-3">
-                      <KanbanItemHandle
-                        className="text-muted-foreground hover:text-foreground mt-0.5 shrink-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100"
-                        aria-label={t("kanban.dragCard")}
-                      >
-                        <GripVertical className="size-4" aria-hidden />
-                      </KanbanItemHandle>
-
-                      <Link
-                        href={{
-                          pathname: "/admin/job-tracker/applications/[id]",
-                          params: { id: application.id },
-                        }}
-                        className="min-w-0 flex-1 space-y-1.5"
-                      >
-                        <div className="flex items-start gap-2">
-                          <span
-                            className={cn(
-                              "flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold",
-                              kanbanColumnStyles[status].avatar,
-                            )}
-                          >
-                            {getCompanyInitial(application.company.name)}
-                          </span>
-                          <div className="min-w-0">
-                            <p className="text-foreground line-clamp-2 text-sm leading-snug font-medium">
-                              {application.position}
-                            </p>
-                            <p className="text-muted-foreground mt-1 truncate text-xs">
-                              {application.company.name}
-                              {application.salary
-                                ? ` · ${application.salary}`
-                                : null}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-
-                    <div
-                      className="border-border/70 bg-muted/20 border-t px-3 py-2 md:hidden"
-                      onPointerDown={(event) => event.stopPropagation()}
-                    >
-                      <Select
-                        value={application.status}
-                        onValueChange={(nextStatus) => {
-                          if (nextStatus === application.status) return;
-                          persistStatusChange(application.id, nextStatus!);
-                        }}
-                      >
-                        <SelectTrigger
-                          size="sm"
-                          aria-label={t("kanban.moveToColumn")}
-                          className="bg-background h-8 w-full text-xs"
-                        >
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {KANBAN_COLUMNS.map((columnStatus) => (
-                            <SelectItem key={columnStatus} value={columnStatus}>
-                              {t(`status.${columnStatus}`)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </KanbanItem>
-                ))}
-
-                {columns[status].length === 0 ? (
-                  <div className="border-border/70 text-muted-foreground flex flex-1 items-center justify-center rounded-lg border border-dashed px-3 py-6 text-center text-xs">
-                    {t("kanban.emptyColumn")}
-                  </div>
+                    <Plus className="mr-1.5 size-4" aria-hidden />
+                    {t("kanban.addApplication")}
+                  </Link>
                 ) : null}
-              </div>
+              </KanbanColumn>
+            ))}
+          </KanbanBoard>
 
-              {status === "APPLIED" ? (
-                <Link
-                  href="/admin/job-tracker/applications/new"
+          <KanbanOverlay>
+            {({ value }) => {
+              const application = activeApplication.get(String(value));
+              if (!application) return null;
+
+              const status = KANBAN_COLUMNS.find((columnStatus) =>
+                columns[columnStatus].some(
+                  (item) => item.id === application.id,
+                ),
+              );
+
+              return (
+                <div
                   className={cn(
-                    buttonVariants({ variant: "ghost", size: "sm" }),
-                    "text-muted-foreground hover:text-foreground w-full border border-dashed",
+                    "bg-card text-card-foreground w-72 overflow-hidden rounded-lg border border-l-[3px] p-3 shadow-lg",
+                    status
+                      ? kanbanColumnStyles[status].accent
+                      : "border-l-primary",
                   )}
                 >
-                  <Plus className="mr-1.5 size-4" aria-hidden />
-                  {t("kanban.addApplication")}
-                </Link>
-              ) : null}
-            </KanbanColumn>
-          ))}
-        </KanbanBoard>
-
-        <KanbanOverlay>
-          {({ value }) => {
-            const application = activeApplication.get(String(value));
-            if (!application) return null;
-
-            const status = KANBAN_COLUMNS.find((columnStatus) =>
-              columns[columnStatus].some((item) => item.id === application.id),
-            );
-
-            return (
-              <div
-                className={cn(
-                  "bg-card text-card-foreground w-72 overflow-hidden rounded-lg border border-l-[3px] p-3 shadow-lg",
-                  status
-                    ? kanbanColumnStyles[status].accent
-                    : "border-l-primary",
-                )}
-              >
-                <p className="text-sm font-medium">{application.position}</p>
-                <p className="text-muted-foreground mt-1 text-xs">
-                  {application.company.name}
-                </p>
-              </div>
-            );
-          }}
-        </KanbanOverlay>
-      </Kanban>
+                  <p className="text-sm font-medium">{application.position}</p>
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    {application.company.name}
+                  </p>
+                </div>
+              );
+            }}
+          </KanbanOverlay>
+        </Kanban>
+      </div>
 
       {isPending ? (
         <p className="text-muted-foreground text-xs">{t("kanban.updating")}</p>

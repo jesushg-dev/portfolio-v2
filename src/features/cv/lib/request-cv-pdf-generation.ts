@@ -8,16 +8,24 @@ import { getInternalServiceBaseUrl } from "@/lib/url/get-base-url";
 
 const requestSchema = z.object({
   locale: z.enum(["en", "es", "nl"]),
-  tenantUsername: z.string().optional(),
-  baseUrl: z.string().url().optional(),
+  tenantUsername: z
+    .string()
+    .trim()
+    .max(64)
+    .regex(/^[a-z0-9-]+$/i)
+    .optional(),
   paginatePages: z.boolean().optional(),
-  design: z.string().optional(),
+  design: z
+    .string()
+    .trim()
+    .max(32)
+    .regex(/^[a-z0-9_-]+$/i)
+    .optional(),
 });
 
 export interface CvPdfGenerationRequest {
   locale: Locale;
   tenantUsername?: string;
-  baseUrl?: string;
   paginatePages?: boolean;
   design?: string;
 }
@@ -35,7 +43,6 @@ export async function requestCvPdfGeneration(
   const payload = requestSchema.parse({
     locale: options.locale,
     tenantUsername: options.tenantUsername,
-    baseUrl: options.baseUrl,
     paginatePages: options.paginatePages,
     design: options.design,
   });

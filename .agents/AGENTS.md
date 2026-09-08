@@ -776,12 +776,12 @@ Generate `CV_PDF_GENERATOR_SECRET` once (e.g. `openssl rand -base64 32`) and set
 
 ### Optional (feature-specific)
 
-| Variable                                    | When needed                   |
-| ------------------------------------------- | ----------------------------- |
-| `RESEND_API_KEY` + `RESEND_EMAIL_DOMAIN`    | Contact / transactional email |
-| `GOOGLE_*` / `GITHUB_*`                     | OAuth login providers         |
-| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc. | Resume tailor / AI import     |
-| `SPOTIFY_REDIRECT_URI`                      | Spotify integration override  |
+| Variable                                   | When needed                                                        |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| `RESEND_API_KEY` + `RESEND_EMAIL_DOMAIN`   | Auth email (password reset / 2FA OTP) only                         |
+| `GOOGLE_*` / `GITHUB_*`                    | OAuth login providers                                              |
+| Tenant AI / Resend / UploadThing / Spotify | Admin → Credentials (per tenant; see `docs/tenant-credentials.md`) |
+| `SPOTIFY_REDIRECT_URI`                     | Spotify integration override                                       |
 
 Local dev may omit production-only vars; set them in `.env.local` when testing CV PDF download/email end-to-end.
 

@@ -31,9 +31,10 @@ describe("SettingsForm", () => {
     defaultValues: {
       username: "testuser",
       displayName: "Test User",
+      logoInitials: "TU",
+      logoImageUrl: "",
       defaultLocale: "en" as const,
       isPublished: true,
-      cvPdfUrl: "",
     },
   };
 
@@ -44,6 +45,10 @@ describe("SettingsForm", () => {
       "testuser",
     );
     expect(screen.getByLabelText("Display name")).toHaveValue("Test User");
+    expect(screen.getByLabelText("Initials / text logo")).toHaveValue("TU");
+    expect(
+      screen.queryByLabelText("CV PDF URL (optional)"),
+    ).not.toBeInTheDocument();
   });
 
   it("handles successful submission", async () => {
@@ -59,11 +64,15 @@ describe("SettingsForm", () => {
       expect(mockUpsertProfile).toHaveBeenCalledWith({
         username: "testuser",
         displayName: "Test User",
+        logoInitials: "TU",
+        logoImageUrl: "",
         defaultLocale: "en",
         isPublished: true,
-        cvPdfUrl: "",
         mapLocationLabel: "",
       });
+      const firstCallArgs = mockUpsertProfile.mock.calls[0] as
+        [Record<string, unknown>] | undefined;
+      expect(firstCallArgs?.[0]).not.toHaveProperty("cvPdfUrl");
       expect(mockInvalidate).toHaveBeenCalled();
       expect(screen.getByText("Settings saved.")).toBeInTheDocument();
     });

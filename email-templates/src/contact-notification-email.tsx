@@ -83,7 +83,7 @@ function InfoRow({
 
 export default async function ContactNotificationEmail({
   senderName = "hello world",
-  senderEmail = "[email protected]",
+  senderEmail = "visitor@example.com",
   message = "Hola amigo, quisiera un nuevo servicio y tengo una nueva idea donde me puedes colaborar.",
   sentAt = new Date().toLocaleString("en-US", {
     dateStyle: "medium",
@@ -187,7 +187,7 @@ export default async function ContactNotificationEmail({
 
       <Section style={{ padding: "22px 32px 8px" }}>
         <Button
-          href={`mailto:${senderEmail}?subject=${encodeURIComponent("Re: your message on jehg.dev")}`}
+          href={`mailto:${senderEmail}?subject=${encodeURIComponent("Re: your message on jesushg.com")}`}
           style={{
             backgroundColor: theme.colors.brand,
             color: "#FFFFFF",
@@ -211,7 +211,7 @@ export default async function ContactNotificationEmail({
 
 ContactNotificationEmail.PreviewProps = {
   senderName: "hello world",
-  senderEmail: "[email protected]",
+  senderEmail: "visitor@example.com",
   message:
     "Hola amigo, quisiera un nuevo servicio y tengo una nueva idea donde me puedes colaborar.",
   sentAt: "Jul 22, 2026, 3:41 PM",

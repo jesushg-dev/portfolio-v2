@@ -1,41 +1,43 @@
 "use client";
 
-import { useCallback, useMemo, useState, type FC } from "react";
-import { useTranslations } from "next-intl";
+import { useCallback, useEffect, useMemo, useState, type FC } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { motion, type PanInfo } from "motion/react";
 import {
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Copy,
-  Eye,
-  EyeOff,
-  Lightbulb,
   Loader2,
   Plus,
   RefreshCw,
   Shuffle,
+  Sparkles,
+  Wrench,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
-import { Textarea } from "@/components/ui/textarea";
-import { InterviewPrepTechnicalQuestionnaire } from "@/features/resume-engine/components/interview-prep-technical-questionnaire";
+import {
+  InterviewPrepFlashcard,
+  type PracticeRating,
+} from "@/features/resume-engine/components/interview-prep-flashcard";
+import { InterviewPrepManualQuestionDialog } from "@/features/resume-engine/components/interview-prep-manual-question-dialog";
 import type {
-  InterviewPrepCategory,
   InterviewPrepEventType,
   InterviewPrepStoredQuestion,
 } from "@/features/resume-engine/lib/interview-prep-result";
 import { prioritizeHireQuestions } from "@/features/resume-engine/lib/interview-prep-result";
 
-type PracticeRating = "again" | "ok" | "solid";
-
 interface InterviewPrepPracticeProps {
+  applicationId: string;
   eventId: string;
   questions: InterviewPrepStoredQuestion[];
   eventType: InterviewPrepEventType;
+  suggestedTools?: string[];
+  onOpenGenerator?: () => void;
   onRegenerate?: () => void;
   onGenerateMore?: () => void;
+  onGenerateForTool?: (tool: string) => void;
   isGeneratingMore?: boolean;
 }
 
@@ -56,27 +58,26 @@ function loadRatings(eventId: string): Record<string, PracticeRating> {
 }
 
 export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
+  applicationId,
   eventId,
   questions,
   eventType,
+  suggestedTools = [],
+  onOpenGenerator,
   onRegenerate,
   onGenerateMore,
+  onGenerateForTool,
   isGeneratingMore,
 }) => {
   const t = useTranslations("admin.jobTracker.interviewPrep");
-  const tTracker = useTranslations("admin.jobTracker");
+  const locale = useLocale();
   const [orderRest, setOrderRest] = useState<string[]>(() =>
     questions
       .filter((question) => question.category !== "hire")
       .map((question) => question.id),
   );
   const [index, setIndex] = useState(0);
-  const [answerUi, setAnswerUi] = useState({
-    questionId: "",
-    draft: "",
-    showHints: false,
-    showAnswer: false,
-  });
+  const [isFlipped, setIsFlipped] = useState(false);
   const [ratingsEventId, setRatingsEventId] = useState(eventId);
   const [ratings, setRatings] = useState<Record<string, PracticeRating>>(() =>
     loadRatings(eventId),
@@ -108,26 +109,15 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
     .filter((question): question is InterviewPrepStoredQuestion =>
       Boolean(question),
     );
-  const drillOrdered = ordered.filter(
-    (question) => question.category !== "technical",
-  );
-  const technicalQuestions = questions.filter(
-    (question) => question.category === "technical",
-  );
+
   const safeIndex =
-    drillOrdered.length === 0 ? 0 : Math.min(index, drillOrdered.length - 1);
-  const current = drillOrdered[safeIndex] ?? null;
-  const currentId = current?.id ?? "";
-  if (answerUi.questionId !== currentId) {
-    setAnswerUi({
-      questionId: currentId,
-      draft: "",
-      showHints: false,
-      showAnswer: false,
-    });
-  }
-  const { draft, showHints, showAnswer } = answerUi;
+    ordered.length === 0 ? 0 : Math.min(index, ordered.length - 1);
+  const current = ordered[safeIndex] ?? null;
+
   const ratedCount = ordered.filter((question) => ratings[question.id]).length;
+  const solidCount = ordered.filter(
+    (question) => ratings[question.id] === "solid",
+  ).length;
 
   const persistRating = useCallback(
     (questionId: string, rating: PracticeRating) => {
@@ -147,10 +137,30 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
     [eventId],
   );
 
-  const goTo = (nextIndex: number) => {
-    if (drillOrdered.length === 0) return;
-    setIndex(Math.max(0, Math.min(nextIndex, drillOrdered.length - 1)));
-  };
+  const goTo = useCallback(
+    (nextIndex: number) => {
+      if (ordered.length === 0) return;
+      setIsFlipped(false);
+      setIndex(Math.max(0, Math.min(nextIndex, ordered.length - 1)));
+    },
+    [ordered.length],
+  );
+
+  const handleNext = useCallback(() => {
+    if (safeIndex < ordered.length - 1) {
+      goTo(safeIndex + 1);
+    }
+  }, [goTo, safeIndex, ordered.length]);
+
+  const handlePrev = useCallback(() => {
+    if (safeIndex > 0) {
+      goTo(safeIndex - 1);
+    }
+  }, [goTo, safeIndex]);
+
+  const handleFlipToggle = useCallback(() => {
+    setIsFlipped((prev) => !prev);
+  }, []);
 
   const handleShuffle = useCallback(() => {
     const nextRest = questions
@@ -162,6 +172,7 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
     }
     setOrderRest(nextRest);
     setIndex(0);
+    setIsFlipped(false);
   }, [questions]);
 
   const handleCopyAll = useCallback(async () => {
@@ -179,22 +190,74 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
     }
   }, [questions, t]);
 
+  // Keyboard navigation shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Don't intercept when user is typing in a textarea or input
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === "textarea" || activeTag === "input") return;
+
+      if (event.code === "Space" || event.key === " ") {
+        event.preventDefault();
+        handleFlipToggle();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        handleNext();
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        handlePrev();
+      } else if (event.key === "1" && current) {
+        persistRating(current.id, "again");
+      } else if (event.key === "2" && current) {
+        persistRating(current.id, "ok");
+      } else if (event.key === "3" && current) {
+        persistRating(current.id, "solid");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [current, handleFlipToggle, handleNext, handlePrev, persistRating]);
+
+  // Swipe drag handler for mobile touch screens
+  const handleDragEnd = (
+    _event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo,
+  ) => {
+    const swipeThreshold = 50;
+    if (info.offset.x < -swipeThreshold) {
+      handleNext();
+    } else if (info.offset.x > swipeThreshold) {
+      handlePrev();
+    }
+  };
+
+  const speechLang =
+    locale === "es" ? "es-ES" : locale === "nl" ? "nl-NL" : "en-US";
   const lastCreated = questions[questions.length - 1]?.createdAt;
 
-  if (!current && technicalQuestions.length === 0) return null;
+  if (!current) return null;
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="border-border flex flex-wrap items-start justify-between gap-3 rounded-lg border p-4">
-        <div className="min-w-0 text-[13px]">
-          <p className="font-medium">
+    <div className="flex flex-col gap-4 pb-4">
+      {/* Top Header & Actions */}
+      <div className="border-border bg-card text-card-foreground flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4 shadow-xs">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold">
             {t("alreadyDoneForType", {
-              type: tTracker(`eventType.${eventType}`),
+              type: t(`eventType.${eventType}`),
               count: questions.length,
             })}
           </p>
-          <p className="text-muted-foreground mt-1 text-xs">
-            {t("practiceRated", { rated: ratedCount, total: ordered.length })}
+          <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-2 text-xs">
+            <span>
+              {t("practiceRated", { rated: ratedCount, total: ordered.length })}
+            </span>
+            {solidCount > 0 ? (
+              <span className="font-medium text-emerald-600 dark:text-emerald-400">
+                · {solidCount} {t("practiceRateSolid").toLowerCase()}
+              </span>
+            ) : null}
             {lastCreated
               ? ` · ${t("generatedOn", {
                   date: new Intl.DateTimeFormat(undefined, {
@@ -203,13 +266,31 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
                   }).format(new Date(lastCreated)),
                 })}`
               : ""}
-          </p>
+          </div>
         </div>
-        <ButtonGroup aria-label={t("practiceActions")}>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <InterviewPrepManualQuestionDialog
+            applicationId={applicationId}
+            eventId={eventId}
+          />
+          {onOpenGenerator ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="min-h-11 text-xs font-medium sm:h-9"
+              onClick={onOpenGenerator}
+            >
+              <Sparkles className="mr-1.5 size-3.5 text-amber-500" />
+              {t("openGenerator")}
+            </Button>
+          ) : null}
           <Button
             type="button"
             size="sm"
             variant="outline"
+            className="min-h-11 text-xs font-medium sm:h-9"
             onClick={handleShuffle}
           >
             <Shuffle className="mr-1.5 size-3.5" aria-hidden />
@@ -219,6 +300,7 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
             type="button"
             size="sm"
             variant="outline"
+            className="min-h-11 text-xs font-medium sm:h-9"
             onClick={() => void handleCopyAll()}
           >
             <Copy className="mr-1.5 size-3.5" aria-hidden />
@@ -229,6 +311,7 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
               type="button"
               size="sm"
               variant="outline"
+              className="min-h-11 text-xs font-medium sm:h-9"
               disabled={isGeneratingMore}
               onClick={onGenerateMore}
             >
@@ -245,209 +328,126 @@ export const InterviewPrepPractice: FC<InterviewPrepPracticeProps> = ({
               type="button"
               size="sm"
               variant="outline"
+              className="min-h-11 text-xs font-medium sm:h-9"
               onClick={onRegenerate}
             >
               <RefreshCw className="mr-1.5 size-3.5" aria-hidden />
               {t("regenerate")}
             </Button>
           ) : null}
-        </ButtonGroup>
+        </div>
       </div>
 
-      {technicalQuestions.length > 0 ? (
-        <div className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            {t("practiceTechnical")}
+      {/* Tool Deep Dive Panel */}
+      {onGenerateForTool && suggestedTools.length > 0 ? (
+        <div className="border-border bg-card text-card-foreground rounded-xl border p-3.5 sm:p-4">
+          <div className="text-foreground flex items-center gap-1.5 text-xs font-semibold">
+            <Wrench className="text-primary size-3.5" aria-hidden />
+            <span>{t("toolDeepDive")}</span>
+          </div>
+          <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+            {t("focusToolsHint")}
           </p>
-          <InterviewPrepTechnicalQuestionnaire questions={technicalQuestions} />
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
+            {suggestedTools.map((tool) => (
+              <Button
+                key={tool}
+                type="button"
+                size="sm"
+                variant="outline"
+                className="min-h-11 text-xs sm:h-7"
+                disabled={isGeneratingMore}
+                onClick={() => onGenerateForTool(tool)}
+              >
+                {isGeneratingMore ? (
+                  <Loader2 className="mr-1 size-3 animate-spin" />
+                ) : (
+                  <Plus className="mr-1 size-3" aria-hidden />
+                )}
+                {t("generateForTool", { tool })}
+              </Button>
+            ))}
+          </div>
         </div>
       ) : null}
 
+      {/* Main Flashcard Drill Section */}
       {current ? (
-        <div className="border-border rounded-xl border p-4 sm:p-5">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-              {t("practiceDrill")} ·{" "}
-              {t("practiceProgress", {
-                current: safeIndex + 1,
-                total: drillOrdered.length,
-              })}
-            </p>
-            <CategoryBadge category={current.category} />
+        <div className="flex flex-col gap-3">
+          {/* Progress Bar */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-xs font-medium">
+              <span className="text-muted-foreground flex items-center gap-1.5">
+                <Sparkles className="text-primary size-3.5" />
+                {t("practiceDrill")}
+              </span>
+              <span className="text-muted-foreground">
+                {t("practiceProgress", {
+                  current: safeIndex + 1,
+                  total: ordered.length,
+                })}
+              </span>
+            </div>
+            <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
+              <div
+                className="bg-primary h-full transition-all duration-300"
+                style={{
+                  width: `${((safeIndex + 1) / ordered.length) * 100}%`,
+                }}
+              />
+            </div>
           </div>
 
-          <p className="text-[15px] leading-snug font-medium sm:text-base">
-            {current.question}
-          </p>
-          <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
-            {current.whyTheyAsk}
-          </p>
-
-          {current.talkingPoints.length > 0 ? (
-            <div className="mt-4">
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                className="h-8 px-2"
-                onClick={() =>
-                  setAnswerUi((currentUi) => ({
-                    ...currentUi,
-                    showHints: !currentUi.showHints,
-                  }))
-                }
-              >
-                <Lightbulb className="mr-1.5 size-3.5" aria-hidden />
-                {showHints ? t("practiceHideHints") : t("practiceShowHints")}
-              </Button>
-              {showHints ? (
-                <ul className="text-muted-foreground mt-2 list-disc space-y-1 pl-5 text-sm">
-                  {current.talkingPoints.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          ) : null}
-
-          <label className="mt-4 block">
-            <span className="text-xs font-medium">
-              {t("practiceYourAnswer")}
-            </span>
-            <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
-              {t("practiceSpeakHint")}
-            </p>
-            <Textarea
-              value={draft}
-              onChange={(event) =>
-                setAnswerUi((currentUi) => ({
-                  ...currentUi,
-                  draft: event.target.value,
-                }))
-              }
-              placeholder={t("practiceYourAnswerPlaceholder")}
-              className="mt-1.5 min-h-28"
+          {/* Swipeable Flashcard Container */}
+          <motion.div
+            key={current.id}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={handleDragEnd}
+            className="cursor-grab touch-pan-y active:cursor-grabbing"
+          >
+            <InterviewPrepFlashcard
+              question={current}
+              rating={ratings[current.id]}
+              onRate={(rating) => persistRating(current.id, rating)}
+              isFlipped={isFlipped}
+              onFlipToggle={handleFlipToggle}
+              index={safeIndex}
+              total={ordered.length}
+              lang={speechLang}
             />
-          </label>
+          </motion.div>
 
-          <div className="mt-3">
-            <Button
-              type="button"
-              variant={showAnswer ? "outline" : "default"}
-              size="sm"
-              onClick={() =>
-                setAnswerUi((currentUi) => ({
-                  ...currentUi,
-                  showAnswer: !currentUi.showAnswer,
-                }))
-              }
-            >
-              {showAnswer ? (
-                <EyeOff className="mr-1.5 size-3.5" aria-hidden />
-              ) : (
-                <Eye className="mr-1.5 size-3.5" aria-hidden />
-              )}
-              {showAnswer ? t("practiceHideAnswer") : t("practiceReveal")}
-            </Button>
-          </div>
-
-          {showAnswer ? (
-            <div className="border-border mt-4 space-y-3 border-t pt-4 text-sm">
-              <div>
-                <p className="mb-1 text-xs font-medium">{t("modelAnswer")}</p>
-                <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                  {current.modelAnswer}
-                </p>
-              </div>
-              {current.evidenceFromCv.length > 0 ? (
-                <BulletSection
-                  label={t("evidence")}
-                  items={current.evidenceFromCv}
-                />
-              ) : null}
-              {current.avoid.length > 0 ? (
-                <BulletSection label={t("avoid")} items={current.avoid} />
-              ) : null}
-
-              <div>
-                <p className="mb-2 text-xs font-medium">{t("practiceRate")}</p>
-                <ButtonGroup aria-label={t("practiceRate")}>
-                  {(
-                    [
-                      ["again", t("practiceRateAgain")],
-                      ["ok", t("practiceRateOk")],
-                      ["solid", t("practiceRateSolid")],
-                    ] as const
-                  ).map(([value, label]) => {
-                    const selected = ratings[current.id] === value;
-                    return (
-                      <Button
-                        key={value}
-                        type="button"
-                        size="sm"
-                        variant={selected ? "default" : "outline"}
-                        onClick={() => persistRating(current.id, value)}
-                      >
-                        {value === "solid" && selected ? (
-                          <CheckCircle2
-                            className="mr-1.5 size-3.5"
-                            aria-hidden
-                          />
-                        ) : null}
-                        {label}
-                      </Button>
-                    );
-                  })}
-                </ButtonGroup>
-              </div>
-            </div>
-          ) : null}
-
-          <ButtonGroup aria-label={t("practiceActions")} className="mt-5">
+          {/* Navigation Bar (Inline below flashcard for all screen sizes) */}
+          <div className="flex items-center justify-between gap-2 pt-2">
             <Button
               type="button"
               variant="outline"
               size="sm"
               disabled={safeIndex === 0}
-              onClick={() => goTo(safeIndex - 1)}
+              onClick={handlePrev}
             >
               <ChevronLeft className="mr-1 size-4" aria-hidden />
-              {t("practicePrev")}
+              <span>{t("practicePrev")}</span>
             </Button>
+
+            <span className="text-muted-foreground text-center text-xs">
+              {t("tapToFlip")}
+            </span>
+
             <Button
               type="button"
               size="sm"
-              disabled={safeIndex >= drillOrdered.length - 1}
-              onClick={() => goTo(safeIndex + 1)}
+              disabled={safeIndex >= ordered.length - 1}
+              onClick={handleNext}
             >
-              {t("practiceNext")}
+              <span>{t("practiceNext")}</span>
               <ChevronRight className="ml-1 size-4" aria-hidden />
             </Button>
-          </ButtonGroup>
+          </div>
         </div>
       ) : null}
     </div>
   );
 };
-
-function CategoryBadge({ category }: { category: InterviewPrepCategory }) {
-  const t = useTranslations("admin.jobTracker.interviewPrep");
-  return (
-    <span className="bg-muted text-muted-foreground shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
-      {t(`category.${category}`)}
-    </span>
-  );
-}
-
-function BulletSection({ label, items }: { label: string; items: string[] }) {
-  return (
-    <div>
-      <p className="mb-1 text-xs font-medium">{label}</p>
-      <ul className="text-muted-foreground list-disc space-y-0.5 pl-4 text-sm">
-        {items.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}

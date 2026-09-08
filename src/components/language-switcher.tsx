@@ -3,13 +3,7 @@
 import { useLocale } from "next-intl";
 import { type Locale, locales, localsDisplay } from "@/i18n/config";
 import { usePathname, useRouter } from "@/i18n/routing";
-import {
-  useState,
-  useRef,
-  useTransition,
-  type KeyboardEvent,
-  type RefObject,
-} from "react";
+import { useState, useRef, useTransition, type KeyboardEvent } from "react";
 import { useClickAway } from "@/hooks/use-click-away";
 
 export default function LanguageSwitcher() {
@@ -21,7 +15,7 @@ export default function LanguageSwitcher() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  useClickAway(dropdownRef as RefObject<HTMLElement>, () => setIsOpen(false));
+  useClickAway(dropdownRef, () => setIsOpen(false));
 
   const switchLocale = (newLocale: Locale) => {
     if (newLocale === locale) return;

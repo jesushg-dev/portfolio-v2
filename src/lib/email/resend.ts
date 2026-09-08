@@ -87,6 +87,21 @@ export function getSystemResetPasswordTemplateId(
   return SYSTEM_RESET_TEMPLATE_IDS[locale] ?? SYSTEM_RESET_TEMPLATE_IDS.en;
 }
 
+const SYSTEM_TWO_FACTOR_TEMPLATE_IDS: Record<Locale, string | undefined> = {
+  en: env.RESEND_TEMPLATE_TWO_FACTOR_EN,
+  es: env.RESEND_TEMPLATE_TWO_FACTOR_ES,
+  nl: env.RESEND_TEMPLATE_TWO_FACTOR_NL,
+};
+
+/** Two-factor email OTP template from .env only (system auth emails). */
+export function getSystemTwoFactorOtpTemplateId(
+  locale: Locale,
+): string | undefined {
+  return (
+    SYSTEM_TWO_FACTOR_TEMPLATE_IDS[locale] ?? SYSTEM_TWO_FACTOR_TEMPLATE_IDS.en
+  );
+}
+
 /** CV delivery template from tenant integration only. */
 export async function getPortfolioCvTemplateId(
   locale: Locale,
