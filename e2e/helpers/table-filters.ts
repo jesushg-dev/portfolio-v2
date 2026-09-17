@@ -59,14 +59,20 @@ export async function assertFilterAndColumnVisibility(
     noResultsTerm = "NonExistentFilterXYZ123",
   } = options;
 
+  const dataRows = rows.filter({
+    has: page.locator("td:nth-child(3)"),
+  });
+
   await expect(page.getByTestId(filterTestId)).toBeVisible();
-  await expect(rows.first()).toBeVisible();
+  await expect(dataRows.first()).toBeVisible({ timeout: 30_000 });
 
   await expect
-    .poll(async () => rows.first().locator("td").count(), { timeout: 30_000 })
+    .poll(async () => dataRows.first().locator("td").count(), {
+      timeout: 30_000,
+    })
     .toBeGreaterThan(2);
 
-  const searchCell = rows.first().locator("td").nth(searchCellIndex);
+  const searchCell = dataRows.first().locator("td").nth(searchCellIndex);
   let existingTerm = "";
   await expect
     .poll(
@@ -90,21 +96,21 @@ export async function assertFilterAndColumnVisibility(
     .not.toBe("");
   expect(existingTerm.length).toBeGreaterThan(0);
 
-  const initialCount = await rows.count();
+  const initialCount = await dataRows.count();
   expect(initialCount).toBeGreaterThan(0);
   const filter = page.getByTestId(filterTestId);
 
   await filter.fill(existingTerm);
-  await expect(rows.first()).toContainText(
+  await expect(dataRows.first()).toContainText(
     new RegExp(escapeRegex(existingTerm), "i"),
     { timeout: 30_000 },
   );
-  const filteredCount = await rows.count();
+  const filteredCount = await dataRows.count();
   expect(filteredCount).toBeGreaterThanOrEqual(1);
   expect(filteredCount).toBeLessThanOrEqual(initialCount);
 
   await page.getByTestId("reset-filters-btn").click();
-  await waitForRowCount(rows, (count) => count >= 1);
+  await waitForRowCount(dataRows, (count) => count >= 1);
 
   await filter.fill(noResultsTerm);
   await expect(rows).toHaveCount(1);
@@ -123,24 +129,28 @@ export async function assertFilterAndColumnVisibility(
       { timeout: 30_000 },
     )
     .toBe("rows");
-  const resetCount = await waitForRowCount(rows, (count) => count >= 1);
+  const resetCount = await waitForRowCount(dataRows, (count) => count >= 1);
   expect(resetCount).toBeGreaterThan(0);
 
-  const firstRowCells = rows.first().locator("td");
+  const firstRowCells = dataRows.first().locator("td");
   const initialCellsCount = await firstRowCells.count();
   expect(initialCellsCount).toBeGreaterThan(2);
 
   let hiddenColumnPattern: RegExp | undefined;
   if (hiddenColumnCellIndex !== undefined) {
     const hiddenCellText = (
-      await rows.first().locator("td").nth(hiddenColumnCellIndex).innerText()
+      await dataRows
+        .first()
+        .locator("td")
+        .nth(hiddenColumnCellIndex)
+        .innerText()
     ).trim();
     expect(hiddenCellText.length).toBeGreaterThan(0);
     hiddenColumnPattern = new RegExp(escapeRegex(hiddenCellText), "i");
   }
 
   const hiddenCell = () =>
-    rows
+    dataRows
       .first()
       .locator("td")
       .nth(hiddenColumnCellIndex ?? 0);
