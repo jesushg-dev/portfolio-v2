@@ -1,0 +1,60 @@
+---
+description: Accessibility standards (WCAG 2.2 AAA), button-as-link conventions, and icon usage
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Accessibility & UI Standards (Shield / WCAG 2.2 AAA)
+
+### 1. Contrast & Targets
+- Contrast: 7:1 for normal text, 3:1 for UI controls and graphical objects.
+- Min text size: 14px (0.875rem).
+- Touch target sizes: Minimum 44×44px (48×48px recommended).
+
+### 2. Button as Link — Use `buttonVariants`, NEVER `<Button asChild>`
+
+Our Base UI Button applies `role="button"`, which strips native link semantics.
+
+```tsx
+// ❌ WRONG
+<Button asChild variant="outline">
+  <Link href="/admin/cv">Open CV editor</Link>
+</Button>
+
+// ✅ CORRECT
+import { buttonVariants } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
+
+<Link
+  href="/admin/cv"
+  className={buttonVariants({ variant: "outline", size: "sm" })}
+>
+  Open CV editor
+</Link>
+```
+
+### 3. Iconography & Emojis — No Raw Unicode Emojis in Copy or Translations
+
+```tsx
+// ❌ WRONG — raw emojis in copy or translation files
+"scheduleCall": "📅 Schedule a video call"
+<button>⚡ Quick action</button>
+
+// ✅ CORRECT — Lucide / React Icons in JSX
+import { Calendar, Zap } from "lucide-react";
+
+<div className="inline-flex items-center gap-1.5">
+  <Zap className="size-3.5 text-primary" />
+  <span>{t("quickAction")}</span>
+</div>
+```
+
+### 4. Animations — Use `motion/react`, NEVER `framer-motion`
+
+```tsx
+// ❌ WRONG
+import { motion } from "framer-motion";
+
+// ✅ CORRECT
+import { motion } from "motion/react";
+```

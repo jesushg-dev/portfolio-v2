@@ -51,6 +51,7 @@ jobs:
       BETTER_AUTH_URL: http://localhost:3000
       OWNER_USER_EMAIL: ${{ secrets.OWNER_USER_EMAIL }}
       OWNER_USER_PASSWORD: ${{ secrets.OWNER_USER_PASSWORD }}
+      CV_PDF_GENERATOR_SECRET: ${{ secrets.CV_PDF_GENERATOR_SECRET }}
     steps:
       - uses: actions/checkout@v5
 

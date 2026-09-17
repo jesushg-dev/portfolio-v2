@@ -52,6 +52,7 @@ Store secrets under **Settings → Environments → Preview** (not only at repos
 | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `MONGODB_URI`                              | Connection string to the **non-production** database. Must include the DB name in the path: `...mongodb.net/portfolio_e2e?...` (see troubleshooting below) |
 | `BETTER_AUTH_SECRET`                       | Auth secret for CI builds and e2e                                                                                                                          |
+| `CV_PDF_GENERATOR_SECRET`                  | Shared secret for CV PDF generation (min 16 chars). Required in production/CI builds by `src/env.ts`                                                       |
 | `OWNER_USER_EMAIL` / `OWNER_USER_PASSWORD` | Same credentials used by `pnpm db:seed` and Playwright login                                                                                               |
 | `VERCEL_TOKEN`                             | Vercel API token for `wait-for-vercel-preview`                                                                                                             |
 | `VERCEL_AUTOMATION_BYPASS_SECRET`          | Optional — only if Preview deployments use Vercel Deployment Protection                                                                                    |

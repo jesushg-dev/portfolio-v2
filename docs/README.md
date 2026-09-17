@@ -42,4 +42,12 @@ Start here if you are onboarding or looking for a topic. The [root README](../RE
 | [ios-device.md](./ios-device.md)           | iPhone mockup + navigation stack      |
 | [mini-apps-guide.md](./mini-apps-guide.md) | Building a mini-app inside the mockup |
 
+## AI Agents & Coding Guidelines
+
+| Config / Doc                                          | What it covers                                                                                     |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| [`.agents/AGENTS.md`](../.agents/AGENTS.md)           | Universal agent rules (Shield a11y, data-theme, i18n, form architecture, mutations, strict typing) |
+| [`.cursor/rules/`](../.cursor/rules/)                 | Cursor IDE modular rule definitions (`.mdc`)                                                       |
+| [`.agents/skills/A11Y.md`](../.agents/skills/A11Y.md) | Shield WCAG 2.2 AAA standard and accessibility audit guidelines                                    |
+
 Environment variables: [`.env.example`](../.env.example) and `src/env.ts`.

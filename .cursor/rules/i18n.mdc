@@ -1,0 +1,37 @@
+---
+description: i18n rules - Exactly one useTranslations / getTranslations call per file, correct declaration order
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# i18n Rules (`next-intl`)
+
+### ❌ NEVER call `useTranslations` or `getTranslations` more than once per file
+
+Multiple calls in the same file break i18n editor plugins and type checkers.
+
+```tsx
+// ❌ WRONG — multiple namespaces in one file
+const t = useTranslations("admin.forms.additional");
+const tActions = useTranslations("admin.actions"); // ❌ Breaks tooling
+```
+
+### ✅ ALWAYS use exactly ONE translation call per file
+
+Each namespace must be self-contained — duplicate keys in json if necessary rather than importing multiple namespaces.
+
+### Component Order Rule in Same File
+
+Declare the parent component that calls `useTranslations` **before** any child component in the same file that receives `t` as a prop:
+
+```tsx
+// ✅ CORRECT — Parent hook caller is declared first
+export function Banner() {
+  const t = useTranslations("admin.nudge");
+  return <LocaleRow t={t} />;
+}
+
+function LocaleRow({ t }: { t: ReturnType<typeof useTranslations<"admin.nudge">> }) {
+  return <span>{t("saved")}</span>;
+}
+```

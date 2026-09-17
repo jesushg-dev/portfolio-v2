@@ -1,0 +1,48 @@
+---
+description: Theming rules - Use data-theme and semantic tokens, NEVER dark: variants
+globs: src/**/*.{ts,tsx,css}
+alwaysApply: false
+---
+
+# Theming System
+
+This project uses a **`data-theme` attribute system** on the root element, NOT Tailwind's `dark:` variant.
+
+### ❌ NEVER use `dark:` classes in `src/` or `src/components/ui/`
+
+```tsx
+// ❌ WRONG — dark: will NEVER activate in this project
+className="bg-background dark:bg-input/30 dark:hover:bg-input/50"
+
+// ✅ CORRECT — semantic tokens update automatically with data-theme
+className="bg-background"
+```
+
+### Why
+
+The available themes are: `main-light`, `main-dark`, `orange-light`, `orange-dark`, `christmas-light`, `christmas-dark`.
+They are applied as `data-theme="..."` on the root element.
+
+Semantic tokens like `bg-primary`, `text-foreground`, `bg-card`, `border-border`, `text-muted-foreground` automatically adapt to whatever theme is active.
+
+### Common Semantic Tokens
+
+| Tailwind class | CSS Variable | Description |
+|---|---|---|
+| `bg-background` / `text-foreground` | `--background` / `--foreground` | Main page surface & text |
+| `bg-card` / `text-card-foreground` | `--card` / `--card-foreground` | Card containers & card text |
+| `bg-muted` / `text-muted-foreground` | `--muted` / `--muted-foreground` | Secondary/muted elements |
+| `border-border` / `border-input` | `--border` / `--input` | Borders & form inputs |
+| `bg-primary` / `text-primary-foreground` | `--primary` / `--primary-foreground` | Primary action buttons |
+
+### Container Rule: Surfaces & Text Inheritance
+
+Always set **both** background and foreground on containers/cards:
+
+```tsx
+// ✅ CORRECT
+<div className="bg-card text-card-foreground rounded-sm p-6">
+  <h2 className="text-foreground font-bold">Title</h2>
+  <p className="text-muted-foreground">Description</p>
+</div>
+```

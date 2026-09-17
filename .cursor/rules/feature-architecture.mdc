@@ -1,0 +1,27 @@
+---
+description: Feature-based architecture rules, domain directory structure, and tRPC router colocation
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Feature-Based Architecture
+
+All domain-specific business logic, UI components, queries, DTOs, and tRPC routers must be organized inside `src/features/{domain}/`.
+
+### Directory Structure per Feature (`src/features/{domain}/`)
+
+```
+src/features/{domain}/
+├── components/               # Feature-specific UI components (e.g., project-card.tsx)
+├── server/                   # Server-side queries and tRPC routers
+│   ├── {domain}-queries.ts   # RSC data fetching and DTO mapping
+│   └── {domain}-admin.router.ts # tRPC mutation & query router for admin procedures
+├── lib/                      # Feature DTOs, Zod schemas, and data mappers
+└── types/                    # Domain-specific TypeScript types
+```
+
+### Boundary & Code Sharing Rules
+
+1. **No private cross-feature imports**: `features/projects/` MUST NOT import private internal helpers from `features/certifications/`. Shared code belongs in `src/lib/` or `src/components/shared/`.
+2. **Thin App Router pages**: App Router pages in `src/app/` are thin orchestrators. They fetch data via `{domain}-queries.ts` and render feature components.
+3. **Router-only helpers**: If helper functions/schemas are only used by one tRPC router, keep them in that router file. Do not split into separate files unless shared across multiple routers.

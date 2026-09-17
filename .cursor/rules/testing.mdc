@@ -1,0 +1,17 @@
+---
+description: Unit testing standards - Co-location, Jest, Testing Library, renderWithIntl
+globs: **/*.{test,spec}.{ts,tsx}
+alwaysApply: false
+---
+
+# Unit Testing Standards
+
+### 1. File Placement — Co-locate Tests
+- Place `*.test.ts` / `*.test.tsx` directly next to the code they test.
+- ❌ NEVER mirror the entire `src/` tree under a top-level `tests/` folder.
+
+### 2. Internationalization in Tests
+- For components that use `next-intl` (`useTranslations`), use `renderWithIntl()` from `@/test-utils/render-with-intl`.
+
+### 3. Pure Logic Extraction
+- If complex logic is embedded in a component (e.g., date formatting, slug manipulation), extract it to a sibling `.ts` file and test it directly.
