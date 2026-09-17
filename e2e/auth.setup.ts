@@ -8,11 +8,15 @@ import {
 import {
   disconnectE2ePrisma,
   ensureAppLanguages,
+  syncE2eWorkerPassword,
 } from "./helpers/ensure-app-languages";
 
 setup("authenticate workers", async ({ browser }) => {
   setup.setTimeout(120_000);
   await ensureAppLanguages();
+
+  const ownerInput = buildRegisterOwnerInput(0);
+  await syncE2eWorkerPassword(ownerInput.password);
 
   const maxWorkers = Number.parseInt(
     process.env.E2E_WORKERS ?? (process.env.CI ? "2" : "4"),
