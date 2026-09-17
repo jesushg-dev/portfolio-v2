@@ -30,7 +30,7 @@ Ghosted applications can be snoozed (`ghostNudgeSnoozedUntil`) so the dashboard 
 | `/admin/job-tracker/applications/[id]` | Detail tabs: details, timeline, tailor, email |
 | `/admin/job-tracker/companies/...`     | Company CRUD                                  |
 
-LinkedIn (and similar) URLs can be imported via `importJobFromUrl` — host allowlist + bounded redirects (`src/features/job-tracker/lib/fetch-linkedin-page.ts`). Failures map to `ImportFromUrlError` codes, not raw upstream HTML.
+LinkedIn, BambooHR, and Get on Board job URLs can be imported via `importJobFromUrl` — host allowlist + bounded redirects (`src/features/job-tracker/lib/fetch-linkedin-page.ts`, `src/features/job-tracker/lib/bamboohr-url.ts`, `src/features/job-tracker/lib/getonbrd-url.ts`). Failures map to `ImportFromUrlError` codes, not raw upstream HTML.
 
 ## Email and AI drafts
 

@@ -2164,10 +2164,10 @@
         },
         "import": {
           "placeholders": {
-            "url": "https://www.linkedin.com/jobs/view/…"
+            "url": "https://linkedin.com/..., bamboohr.com/careers/..., getonbrd.com/jobs/..."
           },
           "actions": {
-            "show": "Rellenar desde enlace de LinkedIn",
+            "show": "Rellenar desde enlace (LinkedIn, BambooHR, Get on Board)",
             "import": "Importar",
             "importing": "Importando…",
             "cancel": "Cancelar"
@@ -2183,8 +2183,8 @@
           },
           "errors": {
             "IMPORT_INVALID_URL": "Eso no parece una URL válida.",
-            "IMPORT_UNSUPPORTED_HOST": "Solo se admiten enlaces de jobs o posts de LinkedIn.",
-            "IMPORT_LOGIN_WALL": "LinkedIn bloqueó la página. Pega la descripción a mano.",
+            "IMPORT_UNSUPPORTED_HOST": "Solo se admiten enlaces de LinkedIn, BambooHR y Get on Board.",
+            "IMPORT_LOGIN_WALL": "La página requiere inicio de sesión o está bloqueada. Pega la descripción a mano.",
             "IMPORT_EMPTY_CONTENT": "No se encontró el texto de la oferta. Pega la descripción a mano.",
             "IMPORT_FETCH_FAILED": "No se pudo leer el enlace. Inténtalo de nuevo o pega la descripción a mano."
           }

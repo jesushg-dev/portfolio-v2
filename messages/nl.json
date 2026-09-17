@@ -2164,10 +2164,10 @@
         },
         "import": {
           "placeholders": {
-            "url": "https://www.linkedin.com/jobs/view/…"
+            "url": "https://linkedin.com/..., bamboohr.com/careers/..., getonbrd.com/jobs/..."
           },
           "actions": {
-            "show": "Invullen via LinkedIn-link",
+            "show": "Invullen via link (LinkedIn, BambooHR, Get on Board)",
             "import": "Importeren",
             "importing": "Bezig met importeren…",
             "cancel": "Annuleren"
@@ -2183,9 +2183,9 @@
           },
           "errors": {
             "IMPORT_INVALID_URL": "Dat lijkt geen geldige URL.",
-            "IMPORT_UNSUPPORTED_HOST": "Alleen LinkedIn-vacatures en -posts worden ondersteund.",
-            "IMPORT_LOGIN_WALL": "LinkedIn heeft de pagina geblokkeerd. Plak de beschrijving handmatig.",
-            "IMPORT_EMPTY_CONTENT": "Er is geen vacaturetekst gevonden. Plak de beschrijving handmatig.",
+            "IMPORT_UNSUPPORTED_HOST": "Alleen vacaturelinks van LinkedIn, BambooHR en Get on Board worden ondersteund.",
+            "IMPORT_LOGIN_WALL": "De pagina vereist inloggen of is geblokkeerd. Plak de beschrijving handmatig.",
+            "IMPORT_EMPTY_CONTENT": "Geen vacaturetekst gevonden. Plak de beschrijving handmatig.",
             "IMPORT_FETCH_FAILED": "De link kon niet worden gelezen. Probeer opnieuw of plak de beschrijving handmatig."
           }
         },
