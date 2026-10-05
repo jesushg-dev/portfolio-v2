@@ -26,10 +26,7 @@ export async function syncE2eWorkerPassword(password: string): Promise<void> {
   const hashedPassword = await hashPassword(password);
   const e2eUsers = await prisma.user.findMany({
     where: {
-      OR: [
-        { email: { contains: "-e2e-" } },
-        { email: { contains: "-e2e" } },
-      ],
+      OR: [{ email: { contains: "-e2e-" } }, { email: { contains: "-e2e" } }],
     },
     select: { id: true },
   });

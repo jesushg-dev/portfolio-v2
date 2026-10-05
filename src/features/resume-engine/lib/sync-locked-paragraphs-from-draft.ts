@@ -1,6 +1,9 @@
 import type { Locale } from "@/i18n/config";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
-import { areSameCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
+import {
+  parseExperienceDate,
+  unifyConsecutiveExperiencesByCompany,
+} from "@/lib/cv/group-consecutive-experiences-by-company";
 import type {
   AdaptedParagraph,
   AdaptedSection,
@@ -11,13 +14,6 @@ import type {
 import { formatExperienceDates } from "@/utils/tools/date";
 
 export const LOCKED_META_SECTION_ID = "__locked_meta__";
-
-function parseYearMonth(value?: string): Date | null {
-  if (!value) return null;
-  const match = /^(\d{4})-(\d{2})(?:-\d{2})?$/.exec(value.trim());
-  if (!match) return null;
-  return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, 1));
-}
 
 function formatEducationDates(
   startYear?: number,
@@ -51,20 +47,11 @@ function buildExperienceMetaLine(
   location: string | undefined,
   dateLine: string,
   previousText: string,
-  omitCompany: boolean,
 ): string {
   const parts = previousText
     .split("·")
     .map((part) => part.trim())
     .filter(Boolean);
-
-  if (omitCompany) {
-    const locationOnly = location?.trim() ?? "";
-    if (locationOnly) {
-      return `${locationOnly} · ${dateLine}`;
-    }
-    return dateLine;
-  }
 
   // Preserve client annotations in company when draft company is a short match,
   // e.g. template "Imagemaker (Client: Walmart…)" + draft "Imagemaker".
@@ -78,7 +65,23 @@ function buildExperienceMetaLine(
     companyOut = previousCompany;
   }
 
-  const locationOut = ((location?.trim() ?? parts[1]) || "").trim();
+  let locationOut = ((location?.trim() ?? parts[1]) || "").trim();
+
+  // If the location has both mode and geography, e.g. "Remote · Texas, United States",
+  // and the full line would overflow ~58 chars, compact to the workplace mode ("Remote")
+  // to preserve single-line layout matching the template.
+  if (locationOut.includes("·")) {
+    const subParts = locationOut
+      .split("·")
+      .map((p) => p.trim())
+      .filter(Boolean);
+    const mode = subParts[0];
+    const fullCandidate = `${companyOut} · ${locationOut} · ${dateLine}`;
+    if (fullCandidate.length > 58 && mode) {
+      locationOut = mode;
+    }
+  }
+
   if (locationOut) {
     return `${companyOut} · ${locationOut} · ${dateLine}`;
   }
@@ -100,12 +103,14 @@ function buildExperienceRoleLine(
 /**
  * Build adapted locked paragraphs (dates / company / role) from the CMS draft.
  * Order matches template locked lines in document order.
+ * Consecutive stints at the same company are unified, and redundant slots are emptied for pruning.
  */
 export function syncLockedParagraphsFromDraft(
   lockedParagraphs: LockedParagraph[],
   draft: CvImportDraft,
   locale: Locale,
 ): AdaptedParagraph[] {
+  const experiences = unifyConsecutiveExperiencesByCompany(draft.experiences);
   let experienceIndex = 0;
   let educationIndex = 0;
   const adapted: AdaptedParagraph[] = [];
@@ -113,27 +118,40 @@ export function syncLockedParagraphsFromDraft(
   for (const locked of lockedParagraphs) {
     const previousText = locked.paragraph.runs.map((run) => run.text).join("");
 
+    if (locked.kind === "experience-role") {
+      const experience = experiences[experienceIndex];
+      // Role line appears immediately before its meta line; same experience index.
+      if (!experience?.role) {
+        adapted.push(adaptParagraphText(locked.paragraph, ""));
+        continue;
+      }
+      adapted.push(
+        adaptParagraphText(
+          locked.paragraph,
+          buildExperienceRoleLine(experience.role, previousText),
+        ),
+      );
+      continue;
+    }
+
     if (locked.kind === "experience-meta") {
-      const experience = draft.experiences[experienceIndex];
-      const previousExperience =
-        experienceIndex > 0
-          ? draft.experiences[experienceIndex - 1]
-          : undefined;
+      const experience = experiences[experienceIndex];
       experienceIndex += 1;
-      if (!experience) continue;
+      if (!experience) {
+        adapted.push(adaptParagraphText(locked.paragraph, ""));
+        continue;
+      }
 
       const dateLine = formatExperienceDates(
-        parseYearMonth(experience.startDate),
-        parseYearMonth(experience.endDate),
+        parseExperienceDate(experience.startDate),
+        parseExperienceDate(experience.endDate),
         Boolean(experience.current),
         locale,
       );
-      if (!dateLine) continue;
-
-      const omitCompany = Boolean(
-        previousExperience &&
-        areSameCompany(previousExperience.company, experience.company),
-      );
+      if (!dateLine) {
+        adapted.push(adaptParagraphText(locked.paragraph, ""));
+        continue;
+      }
 
       adapted.push(
         adaptParagraphText(
@@ -143,21 +161,7 @@ export function syncLockedParagraphsFromDraft(
             experience.location,
             dateLine,
             previousText,
-            omitCompany,
           ),
-        ),
-      );
-      continue;
-    }
-
-    if (locked.kind === "experience-role") {
-      const experience = draft.experiences[experienceIndex];
-      // Role line appears immediately before its meta line; same experience index.
-      if (!experience?.role) continue;
-      adapted.push(
-        adaptParagraphText(
-          locked.paragraph,
-          buildExperienceRoleLine(experience.role, previousText),
         ),
       );
       continue;

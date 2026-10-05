@@ -6,6 +6,7 @@ import {
   type CvImportDraft,
 } from "@/features/cv/lib/cv-import-draft";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
+import { unifyConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
 
 export async function resolveTailorBaseDraft(
   db: PrismaClient,
@@ -61,8 +62,14 @@ export async function resolveTailorBaseDraft(
     });
   }
 
+  const parsedDraft = CvImportDraftSchema.parse(upload.parsedDraft);
   return {
-    draft: CvImportDraftSchema.parse(upload.parsedDraft),
+    draft: {
+      ...parsedDraft,
+      experiences: unifyConsecutiveExperiencesByCompany(
+        parsedDraft.experiences,
+      ),
+    },
     sourceUploadId: upload.id,
   };
 }

@@ -1,7 +1,10 @@
 import JSZip from "jszip";
 
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
-import { groupConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
+import {
+  parseExperienceDate,
+  unifyConsecutiveExperiencesByCompany,
+} from "@/lib/cv/group-consecutive-experiences-by-company";
 import type { Locale } from "@/i18n/config";
 import { formatExperienceDates } from "@/utils/tools/date";
 
@@ -13,11 +16,15 @@ function escapeXml(text: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function paragraph(text: string, style?: "title" | "heading" | "body"): string {
-  const styleMap = {
+type ParagraphStyle = "title" | "heading" | "body" | "company" | "subrole";
+
+function paragraph(text: string, style?: ParagraphStyle): string {
+  const styleMap: Record<ParagraphStyle, string> = {
     title: "Title",
     heading: "Heading2",
     body: "Normal",
+    company: "CompanyGroup",
+    subrole: "SubRole",
   };
   const styleXml = style
     ? `<w:pPr><w:pStyle w:val="${styleMap[style]}"/></w:pPr>`
@@ -25,25 +32,8 @@ function paragraph(text: string, style?: "title" | "heading" | "body"): string {
   return `<w:p>${styleXml}<w:r><w:t xml:space="preserve">${escapeXml(text)}</w:t></w:r></w:p>`;
 }
 
-function bullet(text: string): string {
-  return `<w:p><w:r><w:t xml:space="preserve">• ${escapeXml(text)}</w:t></w:r></w:p>`;
-}
-
-function formatDateRange(
-  start?: string,
-  end?: string,
-  current?: boolean,
-  locale: Locale = "en",
-): string {
-  const presentByLocale: Record<Locale, string> = {
-    en: "Present",
-    es: "Presente",
-    nl: "Heden",
-  };
-  if (!start && !end) return "";
-  if (current) return `${start ?? ""} – ${presentByLocale[locale]}`.trim();
-  if (start && end) return `${start} – ${end}`;
-  return start ?? end ?? "";
+function bullet(text: string, indent = 360): string {
+  return `<w:p><w:pPr><w:ind w:left="${indent}"/></w:pPr><w:r><w:t xml:space="preserve">• ${escapeXml(text)}</w:t></w:r></w:p>`;
 }
 
 function getSectionLabels(locale: Locale) {
@@ -109,54 +99,21 @@ function buildDocumentBody(draft: CvImportDraft): string {
 
   if (draft.experiences.length > 0) {
     parts.push(paragraph(labels.experience, "heading"));
-    const groups = groupConsecutiveExperiencesByCompany(draft.experiences);
+    const experiences = unifyConsecutiveExperiencesByCompany(draft.experiences);
 
-    for (const group of groups) {
-      if (group.roles.length === 1) {
-        const exp = group.roles[0];
-        const dateLine = formatDateRange(
-          exp.startDate,
-          exp.endDate,
-          exp.current,
-          locale,
-        );
-        const header = [exp.role, exp.company, dateLine, exp.location]
-          .filter(Boolean)
-          .join(" — ");
-        parts.push(paragraph(header, "body"));
-        for (const resp of exp.responsibilities) {
-          if (resp.trim()) parts.push(bullet(resp));
-        }
-        continue;
-      }
-
-      const overallDates = formatExperienceDates(
-        group.overallStart,
-        group.overallEnd,
-        group.overallCurrent,
+    for (const exp of experiences) {
+      const dateLine = formatExperienceDates(
+        parseExperienceDate(exp.startDate),
+        parseExperienceDate(exp.endDate),
+        Boolean(exp.current),
         locale,
       );
-      parts.push(
-        paragraph(
-          [group.company, overallDates].filter(Boolean).join(" — "),
-          "body",
-        ),
-      );
-
-      for (const exp of group.roles) {
-        const dateLine = formatDateRange(
-          exp.startDate,
-          exp.endDate,
-          exp.current,
-          locale,
-        );
-        const roleHeader = [exp.role, dateLine, exp.location]
-          .filter(Boolean)
-          .join(" — ");
-        parts.push(paragraph(roleHeader, "body"));
-        for (const resp of exp.responsibilities) {
-          if (resp.trim()) parts.push(bullet(resp));
-        }
+      const header = [exp.role, exp.company, dateLine, exp.location]
+        .filter(Boolean)
+        .join(" — ");
+      parts.push(paragraph(header, "company"));
+      for (const resp of exp.responsibilities) {
+        if (resp.trim()) parts.push(bullet(resp, 360));
       }
     }
   }
@@ -239,6 +196,16 @@ const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
   <w:style w:type="paragraph" w:styleId="Heading2">
     <w:name w:val="Heading 2"/>
     <w:rPr><w:b/><w:sz w:val="24"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="CompanyGroup">
+    <w:name w:val="Company Group"/>
+    <w:pPr><w:spacing w:before="120" w:after="40"/></w:pPr>
+    <w:rPr><w:b/><w:sz w:val="22"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="SubRole">
+    <w:name w:val="Sub Role"/>
+    <w:pPr><w:ind w:left="360"/><w:spacing w:before="40" w:after="20"/></w:pPr>
+    <w:rPr><w:i/></w:rPr>
   </w:style>
 </w:styles>`;
 

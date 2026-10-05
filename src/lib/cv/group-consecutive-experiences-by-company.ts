@@ -107,3 +107,70 @@ export function groupConsecutiveExperiencesByCompany<
 
   return groups;
 }
+
+function toYearMonth(date: Date | null | undefined): string | undefined {
+  if (!date) return undefined;
+  return date.toISOString().slice(0, 7);
+}
+
+export function unifyConsecutiveExperiencesByCompany<
+  T extends ExperienceCompanyFields & {
+    id: string;
+    role: string;
+    location?: string | null;
+    companyBlurb?: string | null;
+    responsibilities: string[];
+    atsResponsibilities?: string[];
+  },
+>(experiences: T[]): T[] {
+  const unified: T[] = [];
+
+  for (const experience of experiences) {
+    const previous = unified[unified.length - 1];
+    if (previous && areSameCompany(previous.company, experience.company)) {
+      const roles = [previous, experience];
+      const overall = computeOverallDates(roles);
+
+      previous.startDate =
+        toYearMonth(overall.overallStart) ?? previous.startDate;
+      previous.endDate = overall.overallCurrent
+        ? undefined
+        : (toYearMonth(overall.overallEnd) ?? previous.endDate);
+      previous.current = overall.overallCurrent;
+
+      for (const resp of experience.responsibilities) {
+        if (!previous.responsibilities.includes(resp)) {
+          previous.responsibilities.push(resp);
+        }
+      }
+
+      if (experience.atsResponsibilities) {
+        previous.atsResponsibilities ??= [];
+        for (const resp of experience.atsResponsibilities) {
+          if (!previous.atsResponsibilities.includes(resp)) {
+            previous.atsResponsibilities.push(resp);
+          }
+        }
+      }
+
+      if (!previous.location && experience.location) {
+        previous.location = experience.location;
+      }
+      if (!previous.companyBlurb && experience.companyBlurb) {
+        previous.companyBlurb = experience.companyBlurb;
+      }
+
+      continue;
+    }
+
+    unified.push({
+      ...experience,
+      responsibilities: [...experience.responsibilities],
+      atsResponsibilities: experience.atsResponsibilities
+        ? [...experience.atsResponsibilities]
+        : [],
+    });
+  }
+
+  return unified;
+}

@@ -39,6 +39,16 @@ STRUCTURE RULES — CRITICAL:
 - Preserve leading/trailing spaces inside each run when they exist in the source
 - Empty runs must stay empty
 
+EMPTY-SLOT RULE — CRITICAL:
+- If a bullet paragraph slot is not needed (e.g. you merged two experience
+  roles into fewer bullets, or a section needs fewer items than the template
+  provides), set ALL runs of that paragraph to "" (empty string).
+- The document builder will automatically remove that paragraph from the
+  output — the slot simply disappears, no blank line is left behind.
+- This means you are NOT forced to fill every slot. If a company needs 2
+  bullets but the template has 4 slots, return 2 filled + 2 fully-empty slots.
+- Never invent filler text just to avoid leaving a slot empty.
+
 LENGTH RULE — CRITICAL:
 - Most run objects include their original character count as "budget".
 - When "budget" is present, your replacement text.length must NOT exceed it
@@ -128,6 +138,7 @@ Your job:
 - Return adapted text only for template section/paragraph/run ids
 - Do not add or remove paragraphs or runs
 - Keep each template slot on the same job / education / skill group it already belongs to
+- When multiple consecutive stints at the same company are unified in the structured resume data (e.g. Lead and Senior Engineer at the same employer), map all unified responsibilities into the primary job slot and set any redundant template role/meta slots or excess bullet slots to empty strings ("")
 - Inside one skill group only, you may reorder existing items so JD-relevant skills come first
 - Never move a skill from Front-end to Back-end (or any other group)
 - Rephrase the text already in that slot; do not transplant bullets from another company or role

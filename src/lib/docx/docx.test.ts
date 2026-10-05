@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { parseDocx } from "./parser";
-import { rebuildDocx } from "./rebuilder";
+import { isAllEmpty, rebuildDocx } from "./rebuilder";
 import type { AdaptedSection } from "@/lib/types";
 
 const W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
@@ -286,5 +286,121 @@ describe("docx parser + rebuilder regressions", () => {
           .includes("2024"),
       ),
     ).toBe(true);
+  });
+});
+
+describe("isAllEmpty", () => {
+  it("returns true for an empty array", () => {
+    expect(isAllEmpty([])).toBe(true);
+  });
+
+  it("returns true when all texts are blank or whitespace", () => {
+    expect(isAllEmpty(["", "", ""])).toBe(true);
+    expect(isAllEmpty(["  ", "\t"])).toBe(true);
+  });
+
+  it("returns false when at least one text has content", () => {
+    expect(isAllEmpty(["", "Built scalable APIs."])).toBe(false);
+    expect(isAllEmpty(["text"])).toBe(false);
+  });
+});
+
+describe("rebuildDocx — empty-slot pruning", () => {
+  it("removes bullet paragraphs whose every adapted run is empty", async () => {
+    const buffer = await buildMinimalDocx(`
+      <w:p>
+        <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
+        <w:r><w:t>Experience</w:t></w:r>
+      </w:p>
+      <w:p>
+        <w:pPr><w:pStyle w:val="ListParagraph"/></w:pPr>
+        <w:r><w:t>Bullet one — filled</w:t></w:r>
+      </w:p>
+      <w:p>
+        <w:pPr><w:pStyle w:val="ListParagraph"/></w:pPr>
+        <w:r><w:t>Bullet two — will be emptied</w:t></w:r>
+      </w:p>
+      <w:p>
+        <w:pPr><w:pStyle w:val="ListParagraph"/></w:pPr>
+        <w:r><w:t>Bullet three — filled</w:t></w:r>
+      </w:p>
+    `);
+
+    const parsed = await parseDocx(buffer);
+    const section = parsed.sections[0];
+    expect(section?.paragraphs).toHaveLength(3);
+    if (!section) return;
+
+    // Adapt: para-0 and para-2 filled, para-1 intentionally left empty
+    const adapted: AdaptedSection[] = [
+      {
+        id: section.id,
+        paragraphs: section.paragraphs.map((para, idx) => ({
+          id: para.id,
+          runs: para.runs.map((run) => ({
+            id: run.id,
+            text: idx === 1 ? "" : run.text,
+          })),
+        })),
+      },
+    ];
+
+    const xml = await rebuildAndReadXml(parsed, adapted);
+
+    // The filled bullets must be present
+    expect(xml).toContain("Bullet one — filled");
+    expect(xml).toContain("Bullet three — filled");
+    // The empty slot must be completely removed
+    expect(xml).not.toContain("Bullet two — will be emptied");
+
+    // Exactly 2 ListParagraph nodes should survive
+    const listParaMatches = [
+      ...xml.matchAll(
+        /<w:p>\s*<w:pPr><w:pStyle w:val="ListParagraph\"\/>\s*<\/w:pPr>[\s\S]*?<\/w:p>/g,
+      ),
+    ];
+    expect(listParaMatches).toHaveLength(2);
+  });
+
+  it("keeps untouched paragraphs even when other slots are pruned", async () => {
+    const buffer = await buildMinimalDocx(`
+      <w:p>
+        <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
+        <w:r><w:t>Skills</w:t></w:r>
+      </w:p>
+      <w:p>
+        <w:pPr><w:pStyle w:val="ListParagraph"/></w:pPr>
+        <w:r><w:t>TypeScript</w:t></w:r>
+      </w:p>
+      <w:p>
+        <w:pPr><w:pStyle w:val="ListParagraph"/></w:pPr>
+        <w:r><w:t>React</w:t></w:r>
+      </w:p>
+    `);
+
+    const parsed = await parseDocx(buffer);
+    const section = parsed.sections[0];
+    if (!section) return;
+
+    // Only adapt the first bullet; leave second untouched (no entry in adaptedSections)
+    const adapted: AdaptedSection[] = [
+      {
+        id: section.id,
+        paragraphs: [
+          {
+            id: section.paragraphs[0].id,
+            runs: [{ id: section.paragraphs[0].runs[0].id, text: "" }],
+          },
+          // para[1] intentionally absent — rebuilder should keep original text
+        ],
+      },
+    ];
+
+    const xml = await rebuildAndReadXml(parsed, adapted);
+
+    // First slot was emptied → removed
+    expect(xml).not.toContain("TypeScript");
+    // Second slot was not adapted → kept with original text
+    expect(xml).toContain("React");
   });
 });

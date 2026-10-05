@@ -20,17 +20,13 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({
   subClassName = "",
   showIcon = false,
   titleClassName = "text-foreground",
-  subtitleClassName = "text-foreground block text-lg font-semibold",
+  subtitleClassName = "text-primary block text-lg font-semibold",
   descriptionClassName = "text-foreground/90 mt-2 text-base whitespace-pre-line",
 }) => (
   <div
     className={`section-header-rise relative mx-auto my-14 flex flex-col items-center justify-center gap-2 text-center ${className} ${subClassName}`}
   >
-    {subtitle ? (
-      <span className={subtitleClassName}>
-        {subtitle}
-      </span>
-    ) : null}
+    {subtitle ? <span className={subtitleClassName}>{subtitle}</span> : null}
     <div className="relative">
       <h2
         className={`text-3xl font-bold sm:text-4xl md:text-[40px] ${titleClassName}`}
@@ -72,11 +68,7 @@ const HeaderArticle: FC<IHeaderArticleProps> = ({
         </div>
       ) : null}
     </div>
-    {description ? (
-      <p className={descriptionClassName}>
-        {description}
-      </p>
-    ) : null}
+    {description ? <p className={descriptionClassName}>{description}</p> : null}
   </div>
 );
 

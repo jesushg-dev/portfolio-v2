@@ -16,6 +16,7 @@ import JSZip from "jszip";
 import type { Locale } from "@/i18n/config";
 
 import type { AdaptedSection, CvSection } from "@/lib/types";
+import { isExperienceRoleLine } from "./parser";
 import { splitIntoParagraphs } from "./split-paragraphs";
 
 /**
@@ -281,6 +282,37 @@ function replaceStaticHeadings(paraXml: string, locale?: Locale): string {
   );
 }
 
+/**
+ * Returns true when every adapted run text for a paragraph is empty/whitespace.
+ * Used to decide whether to suppress the entire `<w:p>` node.
+ */
+export function isAllEmpty(adaptedTexts: string[]): boolean {
+  return (
+    adaptedTexts.length === 0 || adaptedTexts.every((t) => t.trim() === "")
+  );
+}
+
+function alignExperienceRoleParagraph(paraXml: string, text: string): string {
+  if (!isExperienceRoleLine(text)) return paraXml;
+
+  // If paragraph already has left indentation, leave it as is
+  if (/<w:ind[^>]*\bw:left="/.test(paraXml)) {
+    return paraXml;
+  }
+
+  // If paragraph has an existing <w:ind />, add w:left="141"
+  if (/<w:ind\b[^>]*\/>/.test(paraXml)) {
+    return paraXml.replace(/<w:ind\b([^>]*)\/>/, '<w:ind w:left="141"$1/>');
+  }
+
+  // If paragraph has <w:pPr> without <w:ind>, inject <w:ind w:left="141"/>
+  if (paraXml.includes('<w:pPr>')) {
+    return paraXml.replace("<w:pPr>", '<w:pPr><w:ind w:left="141"/>');
+  }
+
+  return paraXml;
+}
+
 export async function rebuildDocx(
   zipFiles: JSZip,
   rawXml: string,
@@ -313,11 +345,25 @@ export async function rebuildDocx(
     }
 
     const xmlIndex = paragraphCount++;
-    const adaptedTexts = adaptedByXmlIndex.get(xmlIndex);
-    if (!adaptedTexts || adaptedTexts.length === 0) {
+
+    if (!adaptedByXmlIndex.has(xmlIndex)) {
+      // Not touched by AI — apply heading localization only.
       return replaceStaticHeadings(part, locale);
     }
-    return replaceStaticHeadings(replaceWtNodes(part, adaptedTexts), locale);
+
+    const adaptedTexts = adaptedByXmlIndex.get(xmlIndex)!;
+
+    // When every run text is empty the AI deliberately left this slot unused.
+    // Remove the entire paragraph from the output so bullet counts are dynamic.
+    if (isAllEmpty(adaptedTexts)) {
+      return "";
+    }
+
+    const replaced = replaceStaticHeadings(
+      replaceWtNodes(part, adaptedTexts),
+      locale,
+    );
+    return alignExperienceRoleParagraph(replaced, adaptedTexts.join(" "));
   });
 
   const newXml = newParts.join("");

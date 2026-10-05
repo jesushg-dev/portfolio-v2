@@ -53,8 +53,7 @@ export async function importJobFromUrl(
   }
 
   if (isAllowedBambooHrHost(hostname)) {
-    const fetchText =
-      (fetchHtml) ?? fetchBambooHrText;
+    const fetchText = fetchHtml ?? fetchBambooHrText;
     const parsed = parseBambooHrUrl(rawUrl);
 
     let detailRaw = "";
@@ -85,8 +84,7 @@ export async function importJobFromUrl(
   }
 
   if (isAllowedGetOnBrdHost(hostname)) {
-    const fetchText =
-      (fetchHtml) ?? fetchGetOnBrdHtml;
+    const fetchText = fetchHtml ?? fetchGetOnBrdHtml;
     const parsed = parseGetOnBrdUrl(rawUrl);
     const html = await fetchText(parsed.href);
     const listing = parseGetOnBrdPage(html);
@@ -98,8 +96,7 @@ export async function importJobFromUrl(
     return listing;
   }
 
-  const fetchLinkedin =
-    (fetchHtml) ?? fetchLinkedInHtml;
+  const fetchLinkedin = fetchHtml ?? fetchLinkedInHtml;
   const parsed = parseLinkedInUrl(rawUrl);
   const html = await fetchLinkedin(parsed.href);
   let listing = parseLinkedInPage(html, parsed.sourceType);
