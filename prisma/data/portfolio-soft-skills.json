@@ -5,6 +5,44 @@
     "posterUrl": "https://res.cloudinary.com/js-media/image/upload/v1642524508/portfolio/hero/1947484_ehwya0.webp",
     "imageUrl": null
   },
+  "metrics": [
+    {
+      "value": "6",
+      "order": 0,
+      "label": {
+        "en": "developers led",
+        "es": "desarrolladores guiados",
+        "nl": "ontwikkelaars geleid"
+      }
+    },
+    {
+      "value": "4",
+      "order": 1,
+      "label": {
+        "en": "engineers mentored",
+        "es": "ingenieros mentoreados",
+        "nl": "ingenieurs gecoacht"
+      }
+    },
+    {
+      "value": "40%",
+      "order": 2,
+      "label": {
+        "en": "fewer production defects",
+        "es": "menos defectos en producción",
+        "nl": "minder productiedefecten"
+      }
+    },
+    {
+      "value": "40%",
+      "order": 3,
+      "label": {
+        "en": "lower MTTR",
+        "es": "menor MTTR",
+        "nl": "lagere MTTR"
+      }
+    }
+  ],
   "items": [
     {
       "icon": "RiTeamLine",

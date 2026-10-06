@@ -71,23 +71,26 @@ describe("formatTimelineDate", () => {
 describe("mapTimelineItemToPublic", () => {
   it("resolves locale with fallback", () => {
     const item = mapTimelineItemToPublic(baseItem, "es", languages);
-    expect(item.title).toBe("Desarrollador Web - Acme");
+    expect(item.title).toBe("Desarrollador Web");
+    expect(item.organization).toBe("Acme");
     expect(item.description).toBe("Construí apps web");
     expect(item.images).toEqual(["https://example.com/photo.jpg"]);
   });
 
   it("falls back to default locale", () => {
     const item = mapTimelineItemToPublic(baseItem, "nl", languages);
-    expect(item.title).toBe("Web Developer - Acme");
+    expect(item.title).toBe("Web Developer");
+    expect(item.organization).toBe("Acme");
   });
 
-  it("omits organization from title when organization is empty", () => {
+  it("retains title when organization is empty", () => {
     const item = mapTimelineItemToPublic(
       { ...baseItem, organization: "" },
       "en",
       languages,
     );
     expect(item.title).toBe("Web Developer");
+    expect(item.organization).toBe("");
   });
 
   it("returns null endDate when item has no endDate", () => {

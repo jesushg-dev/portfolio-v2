@@ -11,7 +11,7 @@ const AboutTerminal = dynamic(() => import("./about-terminal"), {
   loading: () => (
     <div
       aria-hidden
-      className="bg-background-100/80 h-[min(24rem,70vh)] w-full animate-pulse rounded-xl"
+      className="bg-muted/60 h-[min(24rem,70vh)] w-full animate-pulse rounded-2xl"
     />
   ),
 });

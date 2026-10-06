@@ -27,6 +27,7 @@ interface ExperienceSeed {
     /** Hidden from printed CV; available to ATS tailor. */
     atsOnly?: boolean;
   }[];
+  metrics?: Record<string, string[]>;
   order: number;
   featuredOnHome?: boolean;
 }
@@ -231,7 +232,7 @@ export async function seedPortfolioCv(
         startDate: experience.startDate ? new Date(experience.startDate) : null,
         endDate: experience.endDate ? new Date(experience.endDate) : null,
         current: !experience.endDate,
-        skills: null,
+        skills: experience.metrics ? JSON.stringify(experience.metrics) : null,
         featuredOnHome: experience.featuredOnHome ?? false,
         order: experience.order,
         translations: {

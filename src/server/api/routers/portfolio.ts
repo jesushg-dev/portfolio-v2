@@ -613,22 +613,20 @@ export const portfolioRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return [];
 
-      const appLanguage = await ctx.db.appLanguage.findUnique({
-        where: { code: input.locale },
-      });
+      const languages = await ctx.db.appLanguage.findMany();
+      const locale = input.locale;
+      const field = createLocalizedFieldResolver(languages, locale);
 
       const services = await ctx.db.service.findMany({
         where: { userId: tenantUserId, isActive: true },
         include: {
-          ServiceTranslation: {
-            where: { appLanguageId: appLanguage?.id },
-          },
+          ServiceTranslation: true,
         },
         orderBy: [{ order: "asc" }, { createdAt: "asc" }],
       });
 
       return services.map((service) => {
-        const translation = service.ServiceTranslation[0];
+        const t = field.for(service.ServiceTranslation);
 
         return {
           id: service.id,
@@ -638,10 +636,10 @@ export const portfolioRouter = createTRPCRouter({
           statsValue: service.statsValue ?? undefined,
           featured: service.featured,
           order: service.order,
-          title: translation?.title ?? "",
-          description: translation?.description ?? "",
-          badge: translation?.badge ?? "",
-          statsLabel: translation?.statsLabel ?? "",
+          title: t("title"),
+          description: t("description"),
+          badge: t("badge"),
+          statsLabel: t("statsLabel"),
         };
       });
     }),
@@ -708,6 +706,12 @@ export const portfolioRouter = createTRPCRouter({
       const [section, items] = await Promise.all([
         ctx.db.softSkillsSection.findUnique({
           where: { userId: tenantUserId },
+          include: {
+            metrics: {
+              include: { SoftSkillsMetricTranslation: true },
+              orderBy: { order: "asc" },
+            },
+          },
         }),
         ctx.db.portfolioSoftSkill.findMany({
           where: { userId: tenantUserId, isVisible: true },
@@ -716,6 +720,23 @@ export const portfolioRouter = createTRPCRouter({
         }),
       ]);
 
+      const mappedItems = items.map((item) => {
+        const t = field.for(item.PortfolioSoftSkillTranslation);
+        return {
+          id: item.id,
+          icon: item.icon,
+          featured: item.featured,
+          title: t("title"),
+          description: t("description"),
+          badge: t("badge"),
+        };
+      });
+
+      const sectionMetrics = (section?.metrics ?? []).map((m) => ({
+        value: m.value,
+        label: field(m.SoftSkillsMetricTranslation, "label"),
+      }));
+
       return {
         section: {
           mediaType: section?.mediaType ?? "VIDEO",
@@ -723,17 +744,8 @@ export const portfolioRouter = createTRPCRouter({
           posterUrl: section?.posterUrl ?? DEFAULT_SOFT_SKILLS_POSTER_URL,
           imageUrl: section?.imageUrl ?? null,
         },
-        items: items.map((item) => {
-          const t = field.for(item.PortfolioSoftSkillTranslation);
-          return {
-            id: item.id,
-            icon: item.icon,
-            featured: item.featured,
-            title: t("title"),
-            description: t("description"),
-            badge: t("badge"),
-          };
-        }),
+        metrics: sectionMetrics,
+        items: mappedItems,
       };
     }),
 
@@ -756,6 +768,9 @@ export const portfolioRouter = createTRPCRouter({
         where: { userId: tenantUserId, featuredOnHome: true },
         include: {
           translations: true,
+          CvExperienceSkill: {
+            include: { skill: { select: { title: true } } },
+          },
           responsibilities: {
             include: { translations: true },
             orderBy: { order: "asc" },
@@ -769,6 +784,9 @@ export const portfolioRouter = createTRPCRouter({
           where: { userId: tenantUserId },
           include: {
             translations: true,
+            CvExperienceSkill: {
+              include: { skill: { select: { title: true } } },
+            },
             responsibilities: {
               include: { translations: true },
               orderBy: { order: "asc" },
@@ -781,6 +799,27 @@ export const portfolioRouter = createTRPCRouter({
 
       return experiences.map((experience) => {
         const expT = field.for(experience.translations);
+        const relatedSkillTitles =
+          experience.CvExperienceSkill?.map((s) => s.skill.title) ?? [];
+
+        const parsedMetrics = (() => {
+          if (!experience.skills) return [];
+          try {
+            const parsed = JSON.parse(experience.skills) as unknown;
+            if (Array.isArray(parsed)) return parsed as string[];
+            if (typeof parsed === "object" && parsed !== null) {
+              const obj = parsed as Record<string, string[]>;
+              return obj[locale] ?? obj.es ?? obj.en ?? [];
+            }
+          } catch {
+            return experience.skills
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean);
+          }
+          return [];
+        })();
+
         return {
           id: experience.id,
           company: experience.company,
@@ -796,6 +835,8 @@ export const portfolioRouter = createTRPCRouter({
           ),
           role: expT("role"),
           location: expT("location"),
+          metrics: parsedMetrics,
+          skills: relatedSkillTitles,
           responsibilities: experience.responsibilities.map((responsibility) =>
             field(responsibility.translations, "text"),
           ),

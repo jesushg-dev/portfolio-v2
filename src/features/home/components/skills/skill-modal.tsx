@@ -20,9 +20,9 @@ const SkillModal: FC<SkillModalProps> = ({ skillSlug, onClose }) => {
   return (
     <Modal
       onClickBackdrop={onClose}
-      className={`${SKILL_MODAL_SIZE_CLASS} flex w-full flex-col overflow-hidden border-0 md:w-11/12 lg:max-w-2xl`}
+      className={`${SKILL_MODAL_SIZE_CLASS} border-border/40 bg-card flex flex-col overflow-hidden rounded-2xl border shadow-2xl`}
     >
-      <motion.section className="relative flex h-full min-h-0 flex-col overflow-hidden px-6 pt-6 pb-4 sm:px-8">
+      <motion.section className="relative flex min-h-0 flex-col overflow-hidden px-6 pt-6 pb-4 sm:px-7">
         <CloseModal onClick={onClose} title={t("modal.close")} />
         <SkillDetailView skillSlug={skillSlug} compact />
       </motion.section>

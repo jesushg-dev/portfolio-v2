@@ -20,12 +20,12 @@ const Experience: FC = async () => {
   if (experiences.length === 0) return null;
 
   return (
-    <div className="bg-background relative w-full overflow-hidden">
-      <section className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20">
+    <div className="bg-muted/40 border-border/20 relative w-full overflow-hidden border-y">
+      <section className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
         <HeaderArticle
           title={t("title")}
-          description={t("subtitle")}
-          subtitle=""
+          subtitle={t("subtitle")}
+          className="mb-12 sm:mb-14"
         />
 
         <ExperienceAccordionLazy

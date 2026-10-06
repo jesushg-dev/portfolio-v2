@@ -182,12 +182,12 @@ const ExpandableSpotifyPlayerContent: FC = () => {
     <>
       <article
         aria-hidden={isExpanded}
-        className="relative w-full overflow-hidden rounded-md text-white"
+        className="relative w-full overflow-hidden rounded-xl text-white"
         style={{ pointerEvents: isExpanded ? "none" : "auto" }}
       >
         <AnimatedGradient accentColor={accentColor} />
 
-        <div className="relative flex items-center gap-3 p-3">
+        <div className="relative flex items-center gap-3.5 p-3.5 sm:p-4">
           <button
             type="button"
             onClick={openExpanded}
@@ -198,7 +198,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               }
             }}
             aria-label={t("spotify.fullscreen.expand")}
-            className="absolute inset-0 z-0 cursor-pointer rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+            className="absolute inset-0 z-0 cursor-pointer rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-white/30"
           />
 
           <ActionHint
@@ -214,9 +214,9 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               <Image
                 src={playback.imageUrl ?? "/images/spotify.png"}
                 alt={playback.imageAlt}
-                width={88}
-                height={88}
-                className="size-22 rounded-lg object-cover shadow-lg"
+                width={96}
+                height={96}
+                className="size-20 rounded-xl object-cover shadow-lg sm:size-24"
               />
               <PlayingIndicator
                 color={accentColor}
@@ -241,7 +241,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               rel="noopener noreferrer"
               title={playback.title}
               onClick={(event) => event.stopPropagation()}
-              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full truncate py-0.5 text-sm leading-tight font-bold text-white hover:underline"
+              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full truncate py-0.5 text-sm leading-tight font-bold text-white hover:underline sm:text-base"
               style={{ opacity: isExpanded ? 0 : 1 }}
             >
               {playback.title}
@@ -254,7 +254,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               rel="noopener noreferrer"
               title={playback.subtitle}
               onClick={(event) => event.stopPropagation()}
-              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full truncate py-0.5 text-xs text-white/80 hover:text-white hover:underline"
+              className="relative z-10 mt-0.5 block min-h-5 w-full max-w-full truncate py-0.5 text-xs text-white/85 hover:text-white hover:underline sm:text-sm"
               style={{ opacity: isExpanded ? 0 : 1 }}
             >
               {playback.subtitle}

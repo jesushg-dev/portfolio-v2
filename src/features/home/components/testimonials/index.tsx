@@ -32,14 +32,14 @@ const Testimonials: FC = () => {
         {items.map((item) => (
           <li
             key={item.id}
-            className="bg-card text-card-foreground border-border rounded-xl border p-5 shadow-sm"
+            className="bg-card text-card-foreground border-border/30 rounded-xl border p-5 shadow-sm"
           >
             <blockquote className="text-foreground text-sm leading-relaxed italic">
               “{item.quote}”
             </blockquote>
             <footer className="mt-4 flex items-center gap-3 text-sm">
               {item.avatarUrl ? (
-                <div className="border-border relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border shadow-sm">
+                <div className="border-border/30 relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border shadow-sm">
                   <MediaImage
                     src={item.avatarUrl}
                     alt={item.author}

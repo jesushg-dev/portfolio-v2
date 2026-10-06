@@ -110,6 +110,11 @@ export interface SoftSkillsSeedRecord {
     posterUrl: string | null;
     imageUrl: string | null;
   };
+  metrics?: {
+    value: string;
+    order: number;
+    label: LocaleMap;
+  }[];
   items: {
     icon: string;
     order: number;

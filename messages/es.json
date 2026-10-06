@@ -580,13 +580,13 @@
       }
     },
     "services": {
-      "title": "Servicios",
-      "subtitle": "",
-      "description": "",
+      "title": "Servicios & Especialidades",
+      "subtitle": "Servicios",
+      "description": "De la interfaz a la infraestructura: un desarrollador cubriendo todo el stack de extremo a extremo.",
       "items": {
         "contact": {
-          "title": "Hablemos de tu proyecto",
-          "subtitle": "¿Tienes una idea en mente?",
+          "title": "Construyamos juntos",
+          "subtitle": "¿Tienes un proyecto en mente?",
           "cta": "Contáctame"
         }
       }
@@ -665,6 +665,8 @@
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Buscar tecnologías",
         "noResults": "Sin coincidencias en el stack actual.",
+        "noMatch": "grep: sin coincidencias para \"{query}\"",
+        "featured": "Destacado",
         "coreLegend": "más brillante = stack destacado",
         "matchCount": "{count, plural, =1 {# coincidencia} other {# coincidencias}}",
         "searchFor": " para \"{query}\""
@@ -761,6 +763,7 @@
       "noChannelsWithoutForm": "Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "globe": {
         "ariaLabel": "Mapa interactivo mostrando la conexión entre {origin} y {destination}",
+        "localTime": "Hora local",
         "yourLocation": "Tu ubicación",
         "replay": "Repetir conexión",
         "unroll": "Desenrollar mapa",
@@ -842,7 +845,10 @@
       "title": "Experiencia Profesional",
       "subtitle": "Empresas, roles e impacto medible",
       "viewAll": "Ver CV completo para el historial detallado",
-      "showingRecent": "Mostrando los roles más recientes."
+      "showingRecent": "Mostrando los roles más recientes.",
+      "promotion": "Ascenso interno",
+      "previousRole": "Puesto anterior",
+      "rolesCount": "{count} puestos"
     },
     "impactStats": {
       "teamSize": {

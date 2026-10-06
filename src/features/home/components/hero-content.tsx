@@ -30,96 +30,94 @@ export default async function HeroContent({
   const t = await getTranslations("main.heroMain");
   const { fullName, heroSubtitle, heroTagline, heroSummary } = heroData;
 
-  const parts = heroSubtitle.split("&");
-  const mainTitle = parts[0]?.trim() || heroSubtitle;
-  const highlightTitle = parts[1] ? `& ${parts[1].trim()}` : "";
-
   const nameParts = fullName.split(" ");
   const firstName = nameParts.slice(0, -1).join(" ") || fullName;
   const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
 
   return (
-    <div className="hero-content-rise flex flex-1 flex-col text-left">
-      <div className="border-primary/30 bg-primary/10 mb-7 inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium">
-        <span className="relative flex h-2 w-2">
-          <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
-          <span className="bg-primary relative inline-flex h-2 w-2 rounded-full"></span>
-        </span>
-        <span className="text-primary font-semibold">
-          {t("availableForOpportunities")}
-        </span>
+    <div className="flex flex-1 flex-col text-left">
+      {/* Availability badge */}
+      <div className="border-primary/25 bg-primary/10 text-primary mb-6 inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold">
+        <i
+          className="a-dot bg-primary size-2 rounded-full"
+          aria-hidden="true"
+        />
+        <span>{t("availableForOpportunities")}</span>
       </div>
 
       <div>
-        <p className="text-muted-foreground mb-2 text-lg">{t("greeting")}</p>
-        <h1 className="font-display text-foreground mb-3 text-4xl leading-tight font-bold sm:text-5xl lg:text-6xl">
+        <p className="text-muted-foreground text-base sm:text-lg">
+          {t("greeting")}
+        </p>
+        <h1 className="text-foreground mt-1 text-5xl leading-[1.02] font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
           {firstName}{" "}
-          {lastName && <span className="text-primary">{lastName}</span>}
+          {lastName ? <span className="text-primary">{lastName}</span> : null}
         </h1>
-        {heroSubtitle && (
-          <h2 className="font-display text-foreground mb-4 text-2xl font-semibold sm:text-3xl">
-            {mainTitle}{" "}
-            {highlightTitle && (
-              <span className="text-primary-800">{highlightTitle}</span>
-            )}
+        {heroSubtitle ? (
+          <h2 className="text-foreground mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
+            {heroSubtitle}
           </h2>
-        )}
-        {heroTagline && (
-          <p className="text-foreground mb-6 leading-relaxed font-medium">
+        ) : null}
+        {heroTagline ? (
+          <p className="text-foreground mt-5 max-w-2xl text-base leading-relaxed font-medium sm:text-lg sm:leading-8">
             {heroTagline}
           </p>
-        )}
-        {heroSummary && (
-          <p className="text-muted-foreground mb-9 max-w-xl leading-relaxed">
+        ) : null}
+        {heroSummary ? (
+          <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-relaxed sm:text-base sm:leading-8">
             {heroSummary}
           </p>
-        )}
+        ) : null}
       </div>
 
-      <dl className="border-border/50 mb-9 flex flex-wrap gap-x-10 gap-y-5 border-b pb-9">
-        <div>
-          <dt className="text-muted-foreground mt-1 text-sm tracking-wider uppercase">
-            {t("yearsExperience")}
-          </dt>
-          <dd className="font-display text-foreground text-3xl font-bold">
+      {/* 3-Column Stats Card */}
+      <dl className="border-border/80 bg-card divide-border/80 mt-8 grid w-full max-w-2xl grid-cols-3 divide-x rounded-2xl border shadow-xs sm:rounded-3xl">
+        <div className="p-4 sm:p-5">
+          <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
             {stats.yearsExperience}+
           </dd>
-        </div>
-        <div>
-          <dt className="text-muted-foreground mt-1 text-sm tracking-wider uppercase">
-            {t("projectsDelivered")}
+          <dt className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
+            {t("yearsExperience")}
           </dt>
-          <dd className="font-display text-foreground text-3xl font-bold">
+        </div>
+        <div className="p-4 sm:p-5">
+          <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
             {stats.projectsCount}+
           </dd>
-        </div>
-        <div>
-          <dt className="text-muted-foreground mt-1 text-sm tracking-wider uppercase">
-            {t("certifications")}
+          <dt className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
+            {t("projectsDelivered")}
           </dt>
-          <dd className="font-display text-foreground text-3xl font-bold">
+        </div>
+        <div className="p-4 sm:p-5">
+          <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
             {stats.certificationsCount}
           </dd>
+          <dt className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
+            {t("certifications")}
+          </dt>
         </div>
       </dl>
 
-      <div className="flex flex-wrap gap-4">
+      {/* Action Buttons */}
+      <div className="mt-8 flex flex-wrap items-center gap-3">
         {showCvLink ? (
           <Link
             href="/curriculum-vitae"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3.5 font-semibold transition"
+            className="group bg-primary text-primary-foreground hover:bg-primary/95 inline-flex items-center gap-3 rounded-full py-2 pr-2 pl-7 font-bold shadow-sm transition"
           >
             {t("viewCV")}
-            <ArrowRight className="h-4 w-4" />
+            <span className="bg-primary-foreground text-primary flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-0.5">
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </span>
           </Link>
         ) : null}
         <a
           href="#contact"
           aria-label={t("scheduleCallAria")}
-          className="border-border bg-card/50 text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-2 rounded-xl border px-6 py-3.5 font-semibold transition"
+          className="border-border/80 bg-card text-foreground hover:border-primary hover:text-primary inline-flex items-center gap-3 rounded-full border px-7 py-3.5 font-bold shadow-xs transition"
         >
           {t("scheduleCall")}
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="size-4" aria-hidden="true" />
         </a>
       </div>
     </div>

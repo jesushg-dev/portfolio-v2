@@ -340,12 +340,32 @@ export function useTabIndicatorDrag({
     void animate(height, rect.height, SPRING);
   }, [height, shouldReduceMotion, store, vertical, width, x, y]);
 
+  const pointerUpCleanupRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    return () => {
+      pointerUpCleanupRef.current?.();
+    };
+  }, []);
+
+  const endDragOrLift = useCallback(() => {
+    isDraggingRef.current = false;
+    const generation = liftGenerationRef.current;
+    snapToNearest();
+    void applyLift(false).then(() => {
+      if (generation !== liftGenerationRef.current) return;
+      if (isDraggingRef.current) return;
+      setIsDragging(false);
+    });
+  }, [applyLift, snapToNearest]);
+
   const onActivePointerDown = useCallback(
     (event: ReactPointerEvent<HTMLElement>) => {
       if (event.button !== 0) return;
 
       event.preventDefault();
       liftGenerationRef.current += 1;
+      const generation = liftGenerationRef.current;
       isDraggingRef.current = true;
       setIsDragging(true);
       x.stop();
@@ -356,9 +376,36 @@ export function useTabIndicatorDrag({
       scaleY.stop();
       glow.stop();
       void applyLift(true);
+
+      pointerUpCleanupRef.current?.();
+      const handlePointerUp = () => {
+        window.removeEventListener("pointerup", handlePointerUp);
+        window.removeEventListener("pointercancel", handlePointerUp);
+        pointerUpCleanupRef.current = null;
+        if (generation !== liftGenerationRef.current) return;
+        endDragOrLift();
+      };
+      pointerUpCleanupRef.current = () => {
+        window.removeEventListener("pointerup", handlePointerUp);
+        window.removeEventListener("pointercancel", handlePointerUp);
+      };
+      window.addEventListener("pointerup", handlePointerUp);
+      window.addEventListener("pointercancel", handlePointerUp);
+
       dragControls.start(event);
     },
-    [applyLift, dragControls, glow, height, scaleX, scaleY, width, x, y],
+    [
+      applyLift,
+      dragControls,
+      endDragOrLift,
+      glow,
+      height,
+      scaleX,
+      scaleY,
+      width,
+      x,
+      y,
+    ],
   );
 
   return {
@@ -382,14 +429,7 @@ export function useTabIndicatorDrag({
         void applyLift(true);
       },
       onDragEnd: () => {
-        isDraggingRef.current = false;
-        const generation = liftGenerationRef.current;
-        snapToNearest();
-        void applyLift(false).then(() => {
-          if (generation !== liftGenerationRef.current) return;
-          if (isDraggingRef.current) return;
-          setIsDragging(false);
-        });
+        endDragOrLift();
       },
     },
   };

@@ -65,7 +65,7 @@ export function mapTimelineItemToPublic(
 
   return {
     id: item.id,
-    title: item.organization ? `${title} - ${item.organization}` : title,
+    title,
     description,
     organization: item.organization,
     location: item.location,

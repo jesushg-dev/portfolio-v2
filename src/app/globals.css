@@ -97,15 +97,15 @@
   --color-secondaryText-800: #b3b3b3;
   --color-secondaryText-900: #a6a6a6;
 
-  --color-divider-50: #bdbdbd;
-  --color-divider-100: #9e9e9e;
-  --color-divider-200: #757575;
-  --color-divider-300: #616161;
-  --color-divider-400: #424242;
-  --color-divider-500: #212121;
-  --color-divider-600: #1e1e1e;
-  --color-divider-700: #171717;
-  --color-divider-800: #0f0f0f;
+  --color-divider-50: #e2e8f0;
+  --color-divider-100: #cbd5e1;
+  --color-divider-200: #94a3b8;
+  --color-divider-300: #64748b;
+  --color-divider-400: #475569;
+  --color-divider-500: #334155;
+  --color-divider-600: #1e293b;
+  --color-divider-700: #0f172a;
+  --color-divider-800: #020617;
   --color-divider-900: #000000;
 
   --color-background-50: #ffffff;
@@ -268,15 +268,15 @@
     --color-secondaryText-800: #b3b3b3;
     --color-secondaryText-900: #a6a6a6;
 
-    --color-divider-50: #bdbdbd;
-    --color-divider-100: #9e9e9e;
-    --color-divider-200: #757575;
-    --color-divider-300: #616161;
-    --color-divider-400: #424242;
-    --color-divider-500: #212121;
-    --color-divider-600: #1e1e1e;
-    --color-divider-700: #171717;
-    --color-divider-800: #0f0f0f;
+    --color-divider-50: #e2e8f0;
+    --color-divider-100: #cbd5e1;
+    --color-divider-200: #94a3b8;
+    --color-divider-300: #64748b;
+    --color-divider-400: #475569;
+    --color-divider-500: #334155;
+    --color-divider-600: #1e293b;
+    --color-divider-700: #0f172a;
+    --color-divider-800: #020617;
     --color-divider-900: #000000;
 
     --color-background-50: #ffffff;
@@ -360,15 +360,15 @@
     --color-secondaryText-800: #5a5a5a;
     --color-secondaryText-900: #404040;
 
-    --color-divider-50: #979797;
-    --color-divider-100: #7e7e7e;
-    --color-divider-200: #656565;
-    --color-divider-300: #4c4c4c;
-    --color-divider-400: #333333;
-    --color-divider-500: #1a1a1a;
-    --color-divider-600: #101010;
-    --color-divider-700: #060606;
-    --color-divider-800: #000000;
+    --color-divider-50: #64748b;
+    --color-divider-100: #475569;
+    --color-divider-200: #334155;
+    --color-divider-300: #1e293b;
+    --color-divider-400: #172033;
+    --color-divider-500: #0f172a;
+    --color-divider-600: #090d16;
+    --color-divider-700: #05070c;
+    --color-divider-800: #020306;
     --color-divider-900: #000000;
 
     --color-background-50: #141414;
@@ -452,15 +452,15 @@
     --color-secondaryText-800: #b3b3b3;
     --color-secondaryText-900: #a6a6a6;
 
-    --color-divider-50: #bdbdbd;
-    --color-divider-100: #9e9e9e;
-    --color-divider-200: #757575;
-    --color-divider-300: #616161;
-    --color-divider-400: #424242;
-    --color-divider-500: #212121;
-    --color-divider-600: #1e1e1e;
-    --color-divider-700: #171717;
-    --color-divider-800: #0f0f0f;
+    --color-divider-50: #e2e8f0;
+    --color-divider-100: #cbd5e1;
+    --color-divider-200: #94a3b8;
+    --color-divider-300: #64748b;
+    --color-divider-400: #475569;
+    --color-divider-500: #334155;
+    --color-divider-600: #1e293b;
+    --color-divider-700: #0f172a;
+    --color-divider-800: #020617;
     --color-divider-900: #000000;
 
     --color-background-50: #ffffff;
@@ -544,15 +544,15 @@
     --color-secondaryText-800: #5a5a5a;
     --color-secondaryText-900: #404040;
 
-    --color-divider-50: #979797;
-    --color-divider-100: #7e7e7e;
-    --color-divider-200: #656565;
-    --color-divider-300: #4c4c4c;
-    --color-divider-400: #333333;
-    --color-divider-500: #1a1a1a;
-    --color-divider-600: #101010;
-    --color-divider-700: #060606;
-    --color-divider-800: #000000;
+    --color-divider-50: #64748b;
+    --color-divider-100: #475569;
+    --color-divider-200: #334155;
+    --color-divider-300: #1e293b;
+    --color-divider-400: #172033;
+    --color-divider-500: #0f172a;
+    --color-divider-600: #090d16;
+    --color-divider-700: #05070c;
+    --color-divider-800: #020306;
     --color-divider-900: #000000;
 
     --color-background-50: #141414;
@@ -635,15 +635,15 @@
     --color-secondaryText-800: #2e7d32;
     --color-secondaryText-900: #1b5e20;
 
-    --color-divider-50: #bdbdbd;
-    --color-divider-100: #9e9e9e;
-    --color-divider-200: #757575;
-    --color-divider-300: #616161;
-    --color-divider-400: #424242;
-    --color-divider-500: #212121;
-    --color-divider-600: #1e1e1e;
-    --color-divider-700: #171717;
-    --color-divider-800: #0f0f0f;
+    --color-divider-50: #e2e8f0;
+    --color-divider-100: #cbd5e1;
+    --color-divider-200: #94a3b8;
+    --color-divider-300: #64748b;
+    --color-divider-400: #475569;
+    --color-divider-500: #334155;
+    --color-divider-600: #1e293b;
+    --color-divider-700: #0f172a;
+    --color-divider-800: #020617;
     --color-divider-900: #000000;
 
     --color-background-50: #ffffff;
@@ -1177,12 +1177,206 @@ video::-webkit-media-controls {
   .case-study-badge-spin,
   .case-study-float-1,
   .case-study-float-2,
-  .case-study-float-3 {
+  .case-study-float-3,
+  .a-ring,
+  .a-blink,
+  .a-float,
+  .a-travel,
+  .a-sweep,
+  .bento-pop,
+  .bento-bar {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
     stroke-dashoffset: 0 !important;
+  }
+}
+
+/* ========== Bento Micro-Animations (Untitled-1.html) ========== */
+@keyframes bento-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--primary) 22%, transparent);
+  }
+}
+
+@keyframes bento-blink {
+  0%,
+  70%,
+  100% {
+    border-color: color-mix(in srgb, var(--border) 40%, transparent);
+    background-color: var(--card);
+  }
+  15%,
+  50% {
+    border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+    background-color: color-mix(in srgb, var(--primary) 8.5%, var(--card));
+  }
+}
+
+@keyframes bento-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes bento-travel {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  92% {
+    left: 100%;
+    opacity: 1;
+  }
+  97%,
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes bento-sweep {
+  0% {
+    top: -20%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 105%;
+    opacity: 0;
+  }
+}
+
+.a-ring {
+  animation: bento-ring 2.4s ease-in-out infinite;
+}
+
+.a-blink {
+  animation: bento-blink 4.5s ease-in-out infinite;
+}
+
+.a-float {
+  animation: bento-float 5s ease-in-out infinite;
+}
+
+.a-travel {
+  animation: bento-travel 4.5s ease-in-out infinite;
+}
+
+.a-sweep {
+  animation: bento-sweep 3s linear infinite;
+}
+
+@keyframes bento-pop {
+  0%,
+  60%,
+  100% {
+    background-color: color-mix(in srgb, var(--primary) 15%, var(--card));
+  }
+  20%,
+  40% {
+    background-color: var(--primary);
+  }
+}
+
+@keyframes bento-bar-grow {
+  from {
+    transform: scaleY(0.2);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.bento-pop {
+  animation: bento-pop 4s ease-in-out infinite;
+}
+
+.bento-bar {
+  transform-origin: bottom;
+  animation: bento-bar-grow 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.b-card-glow {
+  background-image: radial-gradient(
+    circle 360px at var(--x, 100%) var(--y, 100%),
+    color-mix(in srgb, var(--primary) 12%, transparent),
+    transparent 70%
+  );
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes slow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dot-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes wheel-scroll {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.a-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.a-spin {
+  animation: slow-spin 40s linear infinite;
+}
+
+.a-dot {
+  animation: dot-pulse 1.8s ease-in-out infinite;
+}
+
+.a-wheel {
+  animation: wheel-scroll 1.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a-float,
+  .a-spin,
+  .a-dot,
+  .a-wheel {
+    animation: none !important;
   }
 }
 

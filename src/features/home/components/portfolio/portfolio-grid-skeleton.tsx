@@ -8,23 +8,26 @@ interface PortfolioGridSkeletonProps {
 
 function PortfolioCardSkeleton() {
   return (
-    <div className="bg-background-50 mx-auto w-full max-w-sm overflow-hidden rounded-xl shadow-sm">
+    <div className="bg-card border-border/80 w-full overflow-hidden rounded-3xl border shadow-xs">
       <Skeleton className="aspect-video w-full rounded-none" />
-      <div className="space-y-3 p-5">
+      <div className="space-y-4 p-6">
         <div className="flex items-start justify-between gap-3">
-          <Skeleton className="h-5 w-2/3" />
+          <Skeleton className="h-6 w-2/3 rounded-md" />
           <div className="flex gap-1.5">
-            <Skeleton className="h-8 w-8 rounded-lg" />
-            <Skeleton className="h-8 w-8 rounded-lg" />
+            <Skeleton className="size-9 rounded-xl" />
+            <Skeleton className="size-9 rounded-xl" />
           </div>
         </div>
-        <div className="flex flex-wrap gap-1.5">
-          <Skeleton className="h-6 w-16 rounded-full" />
-          <Skeleton className="h-6 w-20 rounded-full" />
-          <Skeleton className="h-6 w-14 rounded-full" />
+        <Skeleton className="h-10 w-full rounded-2xl" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full rounded-md" />
+          <Skeleton className="h-4 w-4/5 rounded-md" />
         </div>
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-4/5" />
+        <div className="flex flex-wrap gap-2 pt-2">
+          <Skeleton className="h-7 w-20 rounded-xl" />
+          <Skeleton className="h-7 w-24 rounded-xl" />
+          <Skeleton className="h-7 w-18 rounded-xl" />
+        </div>
       </div>
     </div>
   );
@@ -34,7 +37,7 @@ export const PortfolioGridSkeleton: FC<PortfolioGridSkeletonProps> = ({
   count = 6,
 }) => {
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+    <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: count }, (_, index) => (
         <li key={index} className="flex justify-center">
           <PortfolioCardSkeleton />

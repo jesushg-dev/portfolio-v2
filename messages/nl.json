@@ -580,9 +580,9 @@
       }
     },
     "services": {
-      "title": "Diensten",
-      "subtitle": "",
-      "description": "",
+      "title": "Diensten & Expertise",
+      "subtitle": "Diensten",
+      "description": "Van interface tot infrastructuur: één ontwikkelaar die de hele stack end-to-end beheert.",
       "items": {
         "contact": {
           "title": "Laten we samen bouwen",
@@ -665,6 +665,8 @@
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Zoek technologieën",
         "noResults": "Geen match in de huidige stack.",
+        "noMatch": "grep: geen resultaten voor \"{query}\"",
+        "featured": "Uitgelicht",
         "coreLegend": "helderder = uitgelichte stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
         "searchFor": " voor \"{query}\""
@@ -761,6 +763,7 @@
       "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "globe": {
         "ariaLabel": "Interatieve kaart die de verbinding toont tussen {origin} en {destination}",
+        "localTime": "Lokale tijd",
         "yourLocation": "Jouw locatie",
         "replay": "Verbinding opnieuw afspelen",
         "unroll": "Uitvouwen naar platte kaart",
@@ -842,7 +845,10 @@
       "title": "Professionele Ervaring",
       "subtitle": "Bedrijven, rollen en meetbare impact",
       "viewAll": "Bekijk volledig CV voor de complete geschiedenis",
-      "showingRecent": "Meest recente rollen weergegeven."
+      "showingRecent": "Meest recente rollen weergegeven.",
+      "promotion": "Interne promotie",
+      "previousRole": "Vorige functie",
+      "rolesCount": "{count} functies"
     },
     "impactStats": {
       "teamSize": {

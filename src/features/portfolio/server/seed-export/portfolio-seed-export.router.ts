@@ -116,7 +116,7 @@ export const portfolioSeedExportRouter = createTRPCRouter({
   }),
 
   softSkills: protectedProcedure.query(async ({ ctx }) => {
-    const [section, items, languages] = await Promise.all([
+    const [section, items, languages, metrics] = await Promise.all([
       ctx.db.softSkillsSection.findUnique({
         where: { userId: ctx.user.id },
       }),
@@ -126,10 +126,15 @@ export const portfolioSeedExportRouter = createTRPCRouter({
         orderBy: { order: "asc" },
       }),
       ctx.db.appLanguage.findMany({ orderBy: { code: "asc" } }),
+      ctx.db.softSkillsMetric.findMany({
+        where: { section: { userId: ctx.user.id } },
+        include: { SoftSkillsMetricTranslation: true },
+        orderBy: { order: "asc" },
+      }),
     ]);
     return payload(
       SEED_EXPORT_FILENAMES.softSkills,
-      serializeSoftSkills(section, items, languages),
+      serializeSoftSkills(section, items, languages, metrics),
     );
   }),
 
@@ -207,6 +212,7 @@ export const portfolioSeedExportRouter = createTRPCRouter({
       timelineItems,
       softSkillsSection,
       softSkillItems,
+      softSkillsMetrics,
       usesSettings,
       usesItems,
       nowSettings,
@@ -248,6 +254,11 @@ export const portfolioSeedExportRouter = createTRPCRouter({
       ctx.db.portfolioSoftSkill.findMany({
         where: { userId },
         include: { PortfolioSoftSkillTranslation: true },
+        orderBy: { order: "asc" },
+      }),
+      ctx.db.softSkillsMetric.findMany({
+        where: { section: { userId } },
+        include: { SoftSkillsMetricTranslation: true },
         orderBy: { order: "asc" },
       }),
       ctx.db.usesSettings.findUnique({
@@ -300,6 +311,7 @@ export const portfolioSeedExportRouter = createTRPCRouter({
         softSkillsSection,
         softSkillItems,
         languages,
+        softSkillsMetrics,
       ),
       uses: serializeUses(usesSettings, usesItems, languages),
       now: serializeNow(nowSettings, nowFocuses, languages),

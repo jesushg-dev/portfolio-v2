@@ -1,7 +1,6 @@
 import type { FC } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
 import { type Locale, locales } from "@/i18n/config";
 import { ServicesBento } from "./services-bento";
@@ -20,16 +19,22 @@ const Services: FC = async () => {
   if (services.length === 0) return null;
 
   return (
-    <div className="bg-background relative w-full overflow-hidden">
+    <div className="bg-muted/40 border-border/20 relative w-full border-y">
       <section
         aria-label={t("title")}
         className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
       >
-        <HeaderArticle
-          title={t("title")}
-          subtitle={t("subtitle")}
-          description={t("description")}
-        />
+        <div className="mx-auto mb-12 max-w-2xl text-center lg:mb-14">
+          <p className="text-primary text-base font-semibold tracking-wide sm:text-lg">
+            {t("subtitle")}
+          </p>
+          <h2 className="text-foreground mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
+            {t("title")}
+          </h2>
+          <p className="text-muted-foreground mt-4 text-base leading-relaxed sm:text-lg">
+            {t("description")}
+          </p>
+        </div>
         <ServicesBento dbServices={services} />
       </section>
     </div>

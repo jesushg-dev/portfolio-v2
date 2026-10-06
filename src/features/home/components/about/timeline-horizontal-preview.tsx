@@ -1,7 +1,6 @@
 "use client";
 
 import type { FC } from "react";
-import { useRef } from "react";
 import { MediaImage } from "@/components/shared/media-image";
 import { useTranslations } from "next-intl";
 import {
@@ -11,7 +10,7 @@ import {
   GraduationCap,
   type LucideIcon,
 } from "lucide-react";
-import { motion, useInView, type Variants } from "motion/react";
+import { motion, useReducedMotion, type Variants } from "motion/react";
 
 import { Link } from "@/i18n/routing";
 import {
@@ -33,6 +32,7 @@ const CATEGORY_ICONS: Record<TimelineCategory, LucideIcon> = {
 interface TimelineCardProps {
   date: string;
   title: string;
+  organization?: string;
   description: string;
   dateTime: string;
   category: TimelineCategory;
@@ -41,72 +41,71 @@ interface TimelineCardProps {
 }
 
 const listVariants: Variants = {
-  hidden: {},
+  hidden: { opacity: 0 },
   visible: {
+    opacity: 1,
     transition: {
-      delayChildren: 0.05,
-      staggerChildren: 0.06,
+      staggerChildren: 0.1,
     },
   },
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 14 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.28, ease: "easeOut" },
+    transition: { duration: 0.35, ease: "easeOut" },
   },
 };
 
 const TimelineCard: FC<TimelineCardProps> = ({
   date,
   title,
+  organization,
   description,
   dateTime,
   category,
   categoryLabel,
   image,
 }) => {
-  const Icon = CATEGORY_ICONS[category];
+  const Icon = CATEGORY_ICONS[category] ?? Briefcase;
+  const orgTrimmed = organization?.trim();
 
   return (
     <motion.li
       variants={cardVariants}
-      className="flex w-70 max-w-70 min-w-70 shrink-0 snap-center flex-col"
+      className="group relative flex flex-col items-center text-center"
     >
-      <div className="flex h-(--timeline-year-h) items-end justify-center px-1 pb-1">
-        <time
-          className="text-primary-600/80 text-center text-sm font-medium tracking-wide tabular-nums"
-          dateTime={dateTime}
+      {/* Date */}
+      <time
+        className="text-primary text-sm font-semibold tracking-wide tabular-nums"
+        dateTime={dateTime}
+      >
+        {date}
+      </time>
+
+      {/* Node Circle */}
+      <Tooltip>
+        <TooltipTrigger
+          type="button"
+          aria-label={categoryLabel}
+          className="border-primary/20 bg-card text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/20 relative z-10 mt-3 flex size-10 items-center justify-center rounded-full border shadow-xs transition-all duration-300 group-hover:scale-105 group-hover:shadow-md"
         >
-          {date}
-        </time>
-      </div>
+          <Icon className="size-4" aria-hidden="true" />
+        </TooltipTrigger>
+        <TooltipContent side="top" sideOffset={6}>
+          {categoryLabel}
+        </TooltipContent>
+      </Tooltip>
 
-      <div className="relative flex h-(--timeline-dot-row-h) items-center justify-center">
-        <Tooltip>
-          <TooltipTrigger
-            type="button"
-            aria-label={categoryLabel}
-            className="bg-background text-primary-600 hover:bg-primary-500/10 relative z-10 flex size-11 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full transition-colors"
-          >
-            <Icon className="size-3.5" aria-hidden />
-          </TooltipTrigger>
-          <TooltipContent side="top" sideOffset={6}>
-            {categoryLabel}
-          </TooltipContent>
-        </Tooltip>
-      </div>
+      {/* Vertical Stem */}
+      <span className="bg-primary/20 h-4 w-px shrink-0" aria-hidden="true" />
 
-      <div
-        className="bg-primary-500/25 mx-auto h-4 w-px shrink-0"
-        aria-hidden
-      />
-
-      <article className="space-y-2 px-1 pt-1">
+      {/* Content */}
+      <div className="mt-3 flex w-full flex-col items-center">
         {image ? (
-          <div className="bg-muted relative mb-1 h-20 w-full overflow-hidden rounded-lg">
+          <div className="bg-muted border-border/20 relative mb-3 h-20 w-full overflow-hidden rounded-xl border">
             <MediaImage
               src={image}
               alt=""
@@ -117,13 +116,16 @@ const TimelineCard: FC<TimelineCardProps> = ({
           </div>
         ) : null}
 
-        <h3 className="text-primaryText-200 line-clamp-2 text-[15px] leading-snug font-semibold">
+        <h3 className="text-foreground text-[15px] leading-snug font-semibold">
           {title}
+          {orgTrimmed ? (
+            <span className="text-primary font-medium"> · {orgTrimmed}</span>
+          ) : null}
         </h3>
-        <p className="text-primaryText-800 line-clamp-3 text-sm leading-relaxed">
+        <p className="text-muted-foreground mt-2 line-clamp-4 text-sm leading-relaxed">
           {description}
         </p>
-      </article>
+      </div>
     </motion.li>
   );
 };
@@ -136,8 +138,7 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
   items,
 }) => {
   const t = useTranslations("main.about.timeline");
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(scrollRef, { once: true, margin: "-60px" });
+  const shouldReduceMotion = useReducedMotion();
 
   const getCategoryLabel = (category: TimelineCategory) =>
     t(`categories.${category}` as "categories.WORK");
@@ -145,49 +146,49 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
   const hasItems = items.length > 0;
 
   return (
-    <div className="w-full space-y-4">
-      <div
-        ref={scrollRef}
-        className="themed-scrollbar w-full overflow-x-auto pb-4"
-      >
-        {hasItems ? (
-          <TooltipProvider delay={200}>
-            <motion.ol
-              id="timeline"
-              className="timeline-horizontal-rail relative flex w-max min-w-full snap-x snap-mandatory gap-7 px-3"
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              variants={listVariants}
-            >
-              {items.map((item) => (
-                <TimelineCard
-                  key={item.id}
-                  date={item.date}
-                  title={item.title}
-                  description={item.description}
-                  dateTime={item.dateTime}
-                  category={item.category}
-                  categoryLabel={getCategoryLabel(item.category)}
-                  image={item.images[0]}
-                />
-              ))}
-            </motion.ol>
-          </TooltipProvider>
-        ) : (
-          <p className="text-primaryText-800 text-center text-sm">
-            {t("empty")}
-          </p>
-        )}
-      </div>
+    <div className="w-full space-y-10">
+      {hasItems ? (
+        <TooltipProvider delay={200}>
+          <motion.ol
+            id="timeline"
+            className="lg:before:border-primary/20 relative grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:before:absolute lg:before:inset-x-[12.5%] lg:before:top-[3.25rem] lg:before:border-t lg:before:border-dashed"
+            initial={shouldReduceMotion ? false : "hidden"}
+            whileInView={shouldReduceMotion ? undefined : "visible"}
+            viewport={{ once: true, margin: "-60px" }}
+            variants={listVariants}
+          >
+            {items.map((item) => (
+              <TimelineCard
+                key={item.id}
+                date={item.date}
+                title={item.title}
+                organization={item.organization}
+                description={item.description}
+                dateTime={item.dateTime}
+                category={item.category}
+                categoryLabel={getCategoryLabel(item.category)}
+                image={item.images?.[0]}
+              />
+            ))}
+          </motion.ol>
+        </TooltipProvider>
+      ) : (
+        <p className="text-muted-foreground text-center text-sm">
+          {t("empty")}
+        </p>
+      )}
 
       {hasItems ? (
         <div className="flex justify-center">
           <Link
             href="/timeline"
-            className="text-primary-800 hover:text-primary-900 inline-flex min-h-11 items-center gap-2 py-2 text-sm font-medium transition-colors"
+            className="group text-primary hover:text-primary/80 inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold transition-colors"
           >
-            {t("viewAll")}
-            <ArrowRight className="h-4 w-4" />
+            <span>{t("viewAll")}</span>
+            <ArrowRight
+              className="size-4 transition-transform group-hover:translate-x-1"
+              aria-hidden="true"
+            />
           </Link>
         </div>
       ) : null}

@@ -13,9 +13,9 @@
     }
   },
   "aboutMe": {
-    "es": "Senior Software Engineer con +6 años de trayectoria especializándome en arquitecturas distribuidas (.NET Core, Node.js/Nest.js, React/Next.js y SQL/NoSQL) en entornos corporativos de alta demanda como Walmart y Claro. Mi enfoque combina rigor arquitectónico (Clean Architecture, DDD, principios SOLID) con impacto de negocio directo: he dirigido la descomposición de monolitos legacy a microservicios RESTful/GraphQL, reducido el MTTR en incidentes críticos en un 40% y guiado equipos de ingeniería mediante revisiones de código estructuradas, automatización CI/CD y prácticas de desarrollo seguro (DevSecOps).",
-    "en": "Senior Software Engineer with 6+ years designing distributed enterprise systems (.NET Core, Node.js/Nest.js, React/Next.js, SQL/NoSQL) within high-compliance corporate ecosystems (Walmart, Claro). I combine architectural rigor (Clean Architecture, DDD, SOLID) with direct business outcomes: led legacy monolith migrations to resilient microservices, reduced critical incident MTTR by 40%, and elevated team capabilities through structured code reviews, CI/CD automation, and DevSecOps practices.",
-    "nl": "Senior Software Engineer met 6+ jaar ervaring in het ontwerpen van gedistribueerde enterprise-systemen (.NET Core, Node.js, React/Next.js, SQL/NoSQL). Ik combineer architectonische precisie (Clean Architecture, DDD, SOLID) met directe bedrijfsresultaten: leiding gegeven aan migraties van legacy-monolieten naar microservices, MTTR met 40% verlaagd en engineeringteams begeleid."
+    "es": "Senior Software Engineer con +6 años de trayectoria especializándome en arquitecturas distribuidas (.NET Core, Node.js/Nest.js, React/Next.js y SQL/NoSQL) en entornos corporativos de alta demanda como Walmart y Claro. Mi enfoque combina rigor arquitectónico (Clean Architecture, DDD, principios SOLID) con impacto de negocio directo: he dirigido la descomposición de monolitos legacy a microservicios RESTful/GraphQL, **reducido el MTTR en incidentes críticos en un 40%** y guiado equipos de ingeniería mediante revisiones de código estructuradas, automatización CI/CD y prácticas de desarrollo seguro (DevSecOps).",
+    "en": "Senior Software Engineer with 6+ years designing distributed enterprise systems (.NET Core, Node.js/Nest.js, React/Next.js, SQL/NoSQL) within high-compliance corporate ecosystems (Walmart, Claro). I combine architectural rigor (Clean Architecture, DDD, SOLID) with direct business outcomes: led legacy monolith migrations to resilient microservices, **reduced critical incident MTTR by 40%**, and elevated team capabilities through structured code reviews, CI/CD automation, and DevSecOps practices.",
+    "nl": "Senior Software Engineer met 6+ jaar ervaring in het ontwerpen van gedistribueerde enterprise-systemen (.NET Core, Node.js, React/Next.js, SQL/NoSQL). Ik combineer architectonische precisie (Clean Architecture, DDD, SOLID) met directe bedrijfsresultaten: leiding gegeven aan migraties van legacy-monolieten naar microservices, **MTTR met 40% verlaagd** en engineeringteams begeleid."
   },
   "contacts": [
     {
@@ -225,6 +225,19 @@
         "en": "Walmart Global Tech client: large-scale e-commerce platform with millions of digital interactions. Cross-functional work with engineering, product, QA, backend, frontend, and business.",
         "nl": "Klant Walmart Global Tech: grootschalig e-commerceplatform met miljoenen digitale interacties. Cross-functionele samenwerking met engineering, product, QA, backend, frontend en business."
       },
+      "metrics": {
+        "es": [
+          "~25% menos retrabajo",
+          "Regresión 7 → 4 días",
+          "~40% mejor MTTR"
+        ],
+        "en": ["~25% less rework", "Regression 7 → 4 days", "~40% better MTTR"],
+        "nl": [
+          "~25% minder herwerk",
+          "Regressie 7 → 4 dagen",
+          "~40% betere MTTR"
+        ]
+      },
       "skillKeys": ["React", "Nextjs", "GraphQL", "Typescript", "Git"],
       "responsibilities": [
         {
@@ -306,6 +319,19 @@
         "en": "Telecom operator: web orchestration platform for service requests that replaced spreadsheet/email workflows.",
         "nl": "Telecomoperator: weborchestratieplatform voor serviceaanvragen dat spreadsheet-/e-mailflows verving."
       },
+      "metrics": {
+        "es": [
+          "~80% trazabilidad",
+          "120+ horas ahorradas/mes",
+          "Automatización total"
+        ],
+        "en": ["~80% traceability", "120+ hours saved/mo", "Full automation"],
+        "nl": [
+          "~80% traceerbaarheid",
+          "120+ uur bespaard/mnd",
+          "Volledige automatisering"
+        ]
+      },
       "skillKeys": [
         "React",
         "Nextjs",
@@ -357,6 +383,19 @@
         "es": "Consultora de software: liderazgo de equipo de desarrollo entregando soluciones a clientes internacionales bajo presión de plazos.",
         "en": "Software consultancy: led a development team delivering solutions for international clients under tight timelines.",
         "nl": "Softwareconsultancy: leidde een developmentteam dat oplossingen leverde voor internationale klanten onder strakke deadlines."
+      },
+      "metrics": {
+        "es": [
+          "2 Hackathons ganados",
+          "5+ proyectos dirigidos",
+          "CI/CD empresarial"
+        ],
+        "en": ["2 Hackathons won", "5+ projects led", "Enterprise CI/CD"],
+        "nl": [
+          "2 Hackathons gewonnen",
+          "5+ projecten geleid",
+          "Enterprise CI/CD"
+        ]
       },
       "skillKeys": ["React", "Nextjs", "Dotnet", "Azure", "Typescript", "Git"],
       "responsibilities": [
@@ -429,6 +468,19 @@
         "es": "Consultora de software: desarrollo full-stack (C#/Nest.js + Angular/React/Next.js) e integraciones empresariales para clientes internacionales.",
         "en": "Software consultancy: full-stack delivery (C#/Nest.js + Angular/React/Next.js) and enterprise integrations for international clients.",
         "nl": "Softwareconsultancy: full-stack delivery (C#/Nest.js + Angular/React/Next.js) en enterprise-integraties voor internationale klanten."
+      },
+      "metrics": {
+        "es": [
+          "2 Hackathons ganados",
+          "5+ proyectos dirigidos",
+          "CI/CD empresarial"
+        ],
+        "en": ["2 Hackathons won", "5+ projects led", "Enterprise CI/CD"],
+        "nl": [
+          "2 Hackathons gewonnen",
+          "5+ projecten geleid",
+          "Enterprise CI/CD"
+        ]
       },
       "skillKeys": [
         "React",
@@ -510,6 +562,23 @@
         "es": "Producto digital multi-usuario: web/móvil con integración a proveedores externos y modernización de frontend legacy.",
         "en": "Multi-user digital product: web/mobile with external vendor integrations and legacy frontend modernization.",
         "nl": "Digitaal multi-user product: web/mobile met externe vendor-integraties en modernisering van legacy frontend."
+      },
+      "metrics": {
+        "es": [
+          "~35% mejor rendimiento",
+          "~90% confiabilidad sync",
+          "Arquitectura CQRS"
+        ],
+        "en": [
+          "~35% performance boost",
+          "~90% sync reliability",
+          "CQRS Architecture"
+        ],
+        "nl": [
+          "~35% betere prestaties",
+          "~90% sync-betrouwbaarheid",
+          "CQRS Architectuur"
+        ]
       },
       "skillKeys": [
         "Nextjs",
@@ -597,6 +666,15 @@
         "es": "Producto móvil: apps React Native con UX definido por diseño y entrega en Scrum.",
         "en": "Mobile product: React Native apps with design-driven UX delivered in Scrum.",
         "nl": "Mobiel product: React Native-apps met design-gedreven UX, geleverd in Scrum."
+      },
+      "metrics": {
+        "es": [
+          "~70% menos bugs en prod",
+          "Sincronización offline-first",
+          "Auth biométrica"
+        ],
+        "en": ["~70% fewer prod bugs", "Offline-first sync", "Biometric auth"],
+        "nl": ["~70% minder bugs", "Offline-first sync", "Biometrische auth"]
       },
       "skillKeys": ["ReactNative", "Typescript", "Android", "Javascript"],
       "responsibilities": [

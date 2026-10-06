@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
+import { cn } from "@/lib/utils";
 
 import { TimelineHorizontalPreview } from "./timeline-horizontal-preview";
 import AboutTerminalLazy from "./about-terminal-lazy";
@@ -12,6 +13,38 @@ import { type Locale, locales } from "@/i18n/config";
 
 const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
+
+function formatAboutParagraph(paragraph: string): React.ReactNode {
+  const regex = /(?:\*\*|<b>|<strong>)(.*?)(?:\*\*|<\/b>|<\/strong>)/g;
+
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(paragraph)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(paragraph.slice(lastIndex, match.index));
+    }
+
+    const content = match[1];
+    parts.push(
+      <strong
+        key={`${match.index}-${content}`}
+        className="text-primary font-bold"
+      >
+        {content}
+      </strong>,
+    );
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < paragraph.length) {
+    parts.push(paragraph.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : paragraph;
+}
 
 const About: FC = async () => {
   const t = await getTranslations("main.about");
@@ -40,26 +73,30 @@ const About: FC = async () => {
   const showTerminalColumn = Boolean(tenant && (hasTerminal || terminalData));
 
   return (
-    <div className="bg-muted/50 relative w-full overflow-hidden">
+    <div className="relative w-full overflow-hidden">
       <section className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
-        <HeaderArticle title={t("title")} description="" subtitle="" />
+        <HeaderArticle
+          title={t("title")}
+          subtitle={t("subtitle")}
+          className="mb-12 sm:mb-14"
+        />
+
         <article
-          className={
+          className={cn(
+            "grid items-center gap-10 lg:gap-14",
             showTerminalColumn
-              ? "grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-16 lg:pb-8"
-              : "grid grid-cols-1 gap-4 lg:pb-8"
-          }
+              ? "lg:grid-cols-[1fr_1.1fr]"
+              : "mx-auto max-w-4xl",
+          )}
         >
           {paragraphs.length > 0 ? (
-            <div
-              className={`space-y-4 ${showTerminalColumn ? "" : "mx-auto max-w-5xl"}`}
-            >
+            <div className="space-y-4">
               {paragraphs.map((paragraph) => (
                 <p
                   key={paragraph}
-                  className="text-primaryText-500 text-center text-base lg:text-start"
+                  className="text-muted-foreground text-center text-base leading-relaxed sm:text-lg sm:leading-8 lg:text-start"
                 >
-                  {paragraph}
+                  {formatAboutParagraph(paragraph)}
                 </p>
               ))}
             </div>
@@ -70,24 +107,11 @@ const About: FC = async () => {
           ) : null}
         </article>
 
-        <div
-          aria-labelledby="about-timeline-heading"
-          className="flex flex-col items-center gap-2"
-        >
-          <div className="border-background-200 w-full border-b py-6 font-bold lg:hidden">
-            <h2
-              id="about-timeline-heading"
-              className="text-foreground text-center"
-            >
-              {t("timeline.title")}
-            </h2>
+        {timelineItems.length > 0 ? (
+          <div className="mt-16 sm:mt-20">
+            <TimelineHorizontalPreview items={timelineItems} />
           </div>
-          <div className="w-full overflow-x-auto lg:pt-4">
-            <div className="flex flex-col items-center gap-2">
-              <TimelineHorizontalPreview items={timelineItems} />
-            </div>
-          </div>
-        </div>
+        ) : null}
       </section>
     </div>
   );

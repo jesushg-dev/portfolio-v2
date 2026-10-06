@@ -89,7 +89,7 @@ const PortfolioGrid: FC = () => {
             initial="hidden"
             variants={container}
             animate={isInView ? "visible" : "hidden"}
-            className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
+            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
           >
             {data?.pages.map((page, idx) => (
               <Fragment key={page.nextCursor ?? idx}>
@@ -110,13 +110,13 @@ const PortfolioGrid: FC = () => {
           </motion.ul>
         )}
 
-        <div className="mt-8 flex flex-col items-center justify-center gap-4">
+        <div className="mt-10 flex flex-col items-center justify-center gap-4">
           {data?.pages[data.pages.length - 1]?.nextCursor ? (
             <button
               type="button"
               onClick={handleFetchMore}
               disabled={isFetching ?? isLoading}
-              className="bg-primary pressable text-primary-foreground hover:bg-primary/90 rounded-sm px-4 py-2 font-bold"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 pressable inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-bold shadow-md transition-all hover:shadow-lg active:scale-95 disabled:opacity-60"
             >
               {isFetching ? t("pagination.loading") : t("pagination.loadMore")}
             </button>

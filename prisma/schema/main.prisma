@@ -629,6 +629,7 @@ model AppLanguage {
   NowSettingsTranslation         NowSettingsTranslation[]
   NowFocusTranslation            NowFocusTranslation[]
   ProcessPageTranslation         ProcessPageTranslation[]
+  SoftSkillsMetricTranslation    SoftSkillsMetricTranslation[]
 }
 
 enum ProjectKind {
@@ -929,8 +930,35 @@ model SoftSkillsSection {
   videoUrl  String?
   posterUrl String?
   imageUrl  String?
+  metrics   SoftSkillsMetric[]
   createdAt DateTime            @default(now())
   updatedAt DateTime            @updatedAt
+}
+
+model SoftSkillsMetric {
+  id                          String                        @id @default(auto()) @map("_id") @db.ObjectId
+  sectionId                   String                        @db.ObjectId
+  section                     SoftSkillsSection             @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  value                       String
+  order                       Int                           @default(0)
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime                      @updatedAt
+  SoftSkillsMetricTranslation SoftSkillsMetricTranslation[]
+
+  @@index([sectionId, order])
+}
+
+model SoftSkillsMetricTranslation {
+  id            String           @id @default(auto()) @map("_id") @db.ObjectId
+  metricId      String           @db.ObjectId
+  metric        SoftSkillsMetric @relation(fields: [metricId], references: [id], onDelete: Cascade)
+  appLanguageId String           @db.ObjectId
+  language      AppLanguage      @relation(fields: [appLanguageId], references: [id])
+  label         String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@unique([metricId, appLanguageId])
 }
 
 // ============================================================================

@@ -3,6 +3,12 @@ import type { PrismaClient, SoftSkillsMediaType } from "@prisma/client";
 
 import type { LocaleMap } from "./lib/localized-text-seed";
 
+interface SoftSkillMetricSeed {
+  value: string;
+  order: number;
+  label: LocaleMap;
+}
+
 interface SoftSkillItemSeed {
   icon: string;
   order: number;
@@ -19,6 +25,7 @@ interface PortfolioSoftSkillsSeed {
     posterUrl: string | null;
     imageUrl: string | null;
   };
+  metrics?: SoftSkillMetricSeed[];
   items: SoftSkillItemSeed[];
 }
 
@@ -34,14 +41,19 @@ export async function seedPortfolioSoftSkills(
   userId: string,
 ): Promise<void> {
   const data = portfolioSoftSkills;
-  console.log("[seed-portfolio-soft-skills] seeding section + items...");
+  console.log(
+    "[seed-portfolio-soft-skills] seeding section + metrics + items...",
+  );
 
   await prisma.portfolioSoftSkill.deleteMany({ where: { userId } });
+  await prisma.softSkillsMetric.deleteMany({
+    where: { section: { userId } },
+  });
   await prisma.softSkillsSection.deleteMany({ where: { userId } });
 
   const languages = await prisma.appLanguage.findMany();
 
-  await prisma.softSkillsSection.create({
+  const section = await prisma.softSkillsSection.create({
     data: {
       userId,
       mediaType: data.section.mediaType,
@@ -50,6 +62,27 @@ export async function seedPortfolioSoftSkills(
       imageUrl: data.section.imageUrl,
     },
   });
+
+  if (data.metrics && data.metrics.length > 0) {
+    for (const metric of data.metrics) {
+      await prisma.softSkillsMetric.create({
+        data: {
+          sectionId: section.id,
+          value: metric.value,
+          order: metric.order,
+          SoftSkillsMetricTranslation: {
+            create: languages.map((lang) => ({
+              appLanguageId: lang.id,
+              label:
+                metric.label[lang.code as keyof LocaleMap] ??
+                metric.label.es ??
+                "",
+            })),
+          },
+        },
+      });
+    }
+  }
 
   for (const item of data.items) {
     await prisma.portfolioSoftSkill.create({

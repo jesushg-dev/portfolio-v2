@@ -306,7 +306,7 @@ function alignExperienceRoleParagraph(paraXml: string, text: string): string {
   }
 
   // If paragraph has <w:pPr> without <w:ind>, inject <w:ind w:left="141"/>
-  if (paraXml.includes('<w:pPr>')) {
+  if (paraXml.includes("<w:pPr>")) {
     return paraXml.replace("<w:pPr>", '<w:pPr><w:ind w:left="141"/>');
   }
 

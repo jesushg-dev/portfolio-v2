@@ -41,9 +41,20 @@ const Contact: FC = async () => {
           className="from-background/75 to-background/75 pointer-events-none absolute inset-0 bg-linear-to-b via-transparent"
         />
 
-        <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        {/* Ambient background glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-30"
+          style={{
+            background:
+              "radial-gradient(50% 70% at 15% 15%, color-mix(in srgb, var(--primary) 20%, transparent), transparent), radial-gradient(45% 60% at 90% 85%, color-mix(in srgb, var(--primary) 15%, transparent), transparent)",
+          }}
+        />
+
+        <div className="relative mx-auto w-full px-4 sm:px-6 lg:container lg:px-20">
           <ContactContainer showContactForm={showContactForm}>
-            <div className="relative flex flex-col justify-between gap-8 px-6 py-10 sm:px-10 md:py-12">
+            {/* Left Column: Direct channels, schedule CTA, interactive globe map */}
+            <div className="relative flex flex-col justify-between gap-8 p-8 md:p-12">
               <div className="space-y-6">
                 <HeaderArticle
                   title={t("title")}
@@ -55,7 +66,7 @@ const Contact: FC = async () => {
                 />
 
                 {links.length > 0 ? (
-                  <ul className="flex flex-wrap gap-2">
+                  <ul className="flex flex-wrap gap-2.5">
                     {links.map((link) => (
                       <li key={link.key}>
                         <ContactItem
@@ -80,10 +91,12 @@ const Contact: FC = async () => {
                   <Link
                     href={SCHEDULE_PATH}
                     aria-label={t("scheduleCallCalendlyAria")}
-                    className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex w-fit items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    className="group/btn bg-primary text-primary-foreground hover:bg-primary/90 inline-flex w-fit items-center gap-3 rounded-full py-2 pr-2 pl-7 font-bold shadow-md transition-all hover:shadow-lg active:scale-95"
                   >
-                    <Calendar className="size-4 shrink-0" />
                     <span>{t("scheduleCall")}</span>
+                    <span className="bg-primary-foreground text-primary flex size-10 items-center justify-center rounded-full shadow-xs transition-transform group-hover/btn:scale-105">
+                      <Calendar className="size-4.5" />
+                    </span>
                   </Link>
                 ) : null}
               </div>
@@ -91,8 +104,9 @@ const Contact: FC = async () => {
               <ContactIllustration location={data.mapLocation} />
             </div>
 
+            {/* Right Column: Contact form */}
             {showContactForm ? (
-              <div className="border-border/40 bg-background/40 relative border-t px-6 py-10 sm:px-10 md:border-t-0 md:border-l md:py-12">
+              <div className="border-border/80 bg-muted/20 relative border-t p-8 md:p-12 lg:border-t-0 lg:border-l">
                 <div
                   aria-hidden
                   className="from-primary/10 pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b to-transparent"

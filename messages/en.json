@@ -580,9 +580,9 @@
       }
     },
     "services": {
-      "title": "Services",
-      "subtitle": "",
-      "description": "",
+      "title": "Services & Expertise",
+      "subtitle": "Services",
+      "description": "From the interface to the infrastructure: one developer covering the whole stack, end to end.",
       "items": {
         "contact": {
           "title": "Let's build together",
@@ -665,6 +665,8 @@
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Search technologies",
         "noResults": "No match in the current stack.",
+        "noMatch": "grep: no match for \"{query}\"",
+        "featured": "Featured",
         "coreLegend": "brighter = featured stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
         "searchFor": " for \"{query}\""
@@ -761,6 +763,7 @@
       "noChannelsWithoutForm": "Social links will appear here once added to the CV.",
       "globe": {
         "ariaLabel": "Interactive map showing connection from {origin} to {destination}",
+        "localTime": "Local time",
         "yourLocation": "Your location",
         "replay": "Replay connection",
         "unroll": "Unroll to flat map",
@@ -842,7 +845,10 @@
       "title": "Professional Experience",
       "subtitle": "Companies, roles, and measurable impact",
       "viewAll": "View full CV for complete history",
-      "showingRecent": "Showing most recent roles."
+      "showingRecent": "Showing most recent roles.",
+      "promotion": "Promotion",
+      "previousRole": "Previous position",
+      "rolesCount": "{count} roles"
     },
     "impactStats": {
       "teamSize": {

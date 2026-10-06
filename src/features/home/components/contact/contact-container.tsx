@@ -33,14 +33,14 @@ export const ContactContainer: FC<ContactContainerProps> = ({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`group/card border-border/50 bg-card/75 text-card-foreground relative grid overflow-hidden rounded-2xl border shadow-xl backdrop-blur-sm transition-all duration-300 ${
-        showContactForm ? "md:grid-cols-[1.05fr_0.95fr]" : "md:grid-cols-1"
+      className={`group/card border-border/80 bg-card/80 text-card-foreground relative grid overflow-hidden rounded-3xl border shadow-2xl backdrop-blur-md transition-all duration-300 ${
+        showContactForm ? "lg:grid-cols-[1.1fr_1fr]" : "grid-cols-1"
       }`}
     >
-      {/* Spotlight Cursor Glow (Linear / Stripe / Vercel style) */}
+      {/* Spotlight Cursor Glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-px rounded-2xl transition-opacity duration-500"
+        className="pointer-events-none absolute -inset-px rounded-3xl transition-opacity duration-500"
         style={{
           opacity: isHovered ? 0.08 : 0,
           background: `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, var(--primary) 0%, transparent 75%)`,
@@ -50,7 +50,7 @@ export const ContactContainer: FC<ContactContainerProps> = ({
       {/* Subtle border shine following cursor */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-500"
+        className="pointer-events-none absolute inset-0 rounded-3xl transition-opacity duration-500"
         style={{
           opacity: isHovered ? 0.25 : 0,
           background: `radial-gradient(350px circle at ${mousePosition.x}px ${mousePosition.y}px, var(--primary), transparent 80%)`,

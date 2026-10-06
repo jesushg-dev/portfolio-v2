@@ -155,6 +155,14 @@ export interface SoftSkillsSectionExportRow {
   imageUrl: string | null;
 }
 
+export interface SoftSkillsMetricExportRow {
+  value: string;
+  order: number;
+  SoftSkillsMetricTranslation: (TranslationRow & {
+    label: string;
+  })[];
+}
+
 export interface UsesItemExportRow {
   type: UsesItemType;
   href: string;
@@ -604,9 +612,10 @@ export function serializeSoftSkills(
   section: SoftSkillsSectionExportRow | null,
   items: SoftSkillExportRow[],
   languages: LanguageRef[],
+  metrics?: SoftSkillsMetricExportRow[],
 ): SoftSkillsSeedRecord {
   const sorted = [...items].sort((left, right) => left.order - right.order);
-  return {
+  const record: SoftSkillsSeedRecord = {
     section: {
       mediaType: section?.mediaType ?? "VIDEO",
       videoUrl: section?.videoUrl ?? null,
@@ -619,7 +628,7 @@ export function serializeSoftSkills(
         languages,
         (row) => row.badge,
       );
-      const record: SoftSkillsSeedRecord["items"][number] = {
+      const itemRecord: SoftSkillsSeedRecord["items"][number] = {
         icon: item.icon,
         order: item.order,
         featured: item.featured,
@@ -639,11 +648,28 @@ export function serializeSoftSkills(
         ),
       };
       if (Object.keys(badge).length > 0) {
-        record.badge = badge;
+        itemRecord.badge = badge;
       }
-      return record;
+      return itemRecord;
     }),
   };
+
+  if (metrics && metrics.length > 0) {
+    const sortedMetrics = [...metrics].sort((a, b) => a.order - b.order);
+    record.metrics = sortedMetrics.map((m) => ({
+      value: m.value,
+      order: m.order,
+      label: localeMapFromRows(
+        m.SoftSkillsMetricTranslation,
+        languages,
+        (row) => row.label,
+        undefined,
+        { includeEmpty: true },
+      ),
+    }));
+  }
+
+  return record;
 }
 
 const USES_TYPE_ORDER: UsesItemType[] = ["EVERYDAY", "SOFTWARE", "BROWSER"];

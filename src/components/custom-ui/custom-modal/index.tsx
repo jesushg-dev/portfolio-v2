@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode, type FC } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { RiCloseCircleFill } from "react-icons/ri";
+import { cn } from "@/lib/utils";
 
 interface IModalProps {
   className?: string;
@@ -19,7 +20,7 @@ const Modal: FC<IModalProps> = ({ children, onClickBackdrop, className }) => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-100 flex flex-col items-center justify-center overflow-hidden"
+        className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -27,12 +28,16 @@ const Modal: FC<IModalProps> = ({ children, onClickBackdrop, className }) => {
         <div
           role="button"
           tabIndex={-1}
-          className="bg-background-900 absolute inset-0 opacity-60"
+          aria-label="Close dialog backdrop"
+          className="bg-background/80 fixed inset-0 backdrop-blur-xs transition-opacity"
           onClick={onClickBackdrop}
           onKeyUp={onClickBackdrop}
         />
         <div
-          className={`selection: border-background-100 bg-background-50 z-50 flex h-full max-h-screen w-full flex-col overflow-hidden border shadow-lg md:w-3/5 md:rounded-lg lg:w-2/5 ${className ?? ""}`}
+          className={cn(
+            "bg-card text-card-foreground border-border/40 relative z-50 flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border shadow-2xl transition-all sm:max-w-xl",
+            className,
+          )}
         >
           {children}
         </div>
@@ -60,9 +65,12 @@ const CloseModal: FC<ICloseModalProps> = ({
       aria-label={title}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
-      className={`pressable text-primaryText-500 absolute top-3 right-3 p-2 ${className}`}
+      className={cn(
+        "text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-3.5 right-3.5 z-20 flex size-8 cursor-pointer items-center justify-center rounded-full transition-colors focus-visible:ring-2 focus-visible:outline-none",
+        className,
+      )}
     >
-      <RiCloseCircleFill className={`h-7 w-7 ${classIcon}`} />
+      <RiCloseCircleFill className={cn("size-6", classIcon)} />
     </motion.button>
   );
 };

@@ -1,9 +1,11 @@
 "use client";
 
 import { createElement, type FC } from "react";
-import { motion, type Variants } from "motion/react";
+import { motion, type Variants, useReducedMotion } from "motion/react";
+import { useTranslations } from "next-intl";
 
 import { resolveSoftSkillIcon } from "@/features/soft-skills/lib/soft-skill-icons";
+import { cn } from "@/lib/utils";
 
 export interface SoftSkillBentoItem {
   id: string;
@@ -14,8 +16,14 @@ export interface SoftSkillBentoItem {
   featured: boolean;
 }
 
+export interface SoftSkillMetric {
+  value: string;
+  label?: string;
+}
+
 interface SoftSkillsBentoProps {
   items: SoftSkillBentoItem[];
+  metrics?: SoftSkillMetric[];
 }
 
 const SoftSkillBentoIcon: FC<{ icon: string; className?: string }> = ({
@@ -27,7 +35,10 @@ const SoftSkillBentoIcon: FC<{ icon: string; className?: string }> = ({
     "aria-hidden": true,
   });
 
-const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items }) => {
+const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items, metrics }) => {
+  const t = useTranslations("main.soft-skills");
+  const shouldReduceMotion = useReducedMotion();
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -39,70 +50,110 @@ const SoftSkillsBento: FC<SoftSkillsBentoProps> = ({ items }) => {
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
-      transition: { duration: 0.4 },
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+  };
+
+  const headerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
     },
   };
 
   if (items.length === 0) return null;
 
   return (
-    <div className="w-full">
-      <motion.div
+    <div className="grid w-full items-start gap-12 lg:grid-cols-[5fr_7fr] lg:gap-14">
+      {/* Sticky Left Column: Eyebrow, Title, Narrative & Impact Metrics */}
+      <div className="lg:sticky lg:top-28 lg:self-start">
+        <motion.div
+          variants={headerVariants}
+          initial={shouldReduceMotion ? false : "hidden"}
+          whileInView={shouldReduceMotion ? undefined : "visible"}
+          viewport={{ once: true, margin: "-80px" }}
+        >
+          <p className="text-primary text-base font-semibold tracking-wide sm:text-lg">
+            {t("subtitle")}
+          </p>
+          <h2 className="text-foreground mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+            {t("title")}
+          </h2>
+          <p className="text-muted-foreground mt-4 max-w-md text-base leading-relaxed sm:text-lg">
+            {t("description")}
+          </p>
+
+          {/* Quantifiable Impact Metrics from DB */}
+          {metrics && metrics.length > 0 ? (
+            <dl className="border-border mt-10 grid grid-cols-2 border-t">
+              {metrics.map((m, idx) => {
+                const isLeftCol = idx % 2 === 0;
+                const isNotLastRow =
+                  idx < metrics.length - (metrics.length % 2 === 0 ? 2 : 1);
+
+                return (
+                  <div
+                    key={m.label ?? idx}
+                    className={cn(
+                      "py-6",
+                      isLeftCol ? "border-border border-r pr-4" : "pl-6",
+                      isNotLastRow ? "border-border border-b" : "",
+                    )}
+                  >
+                    <dt className="text-primary font-display text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
+                      {m.value}
+                    </dt>
+                    <dd className="text-muted-foreground mt-1 text-sm font-medium">
+                      {m.label}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          ) : null}
+        </motion.div>
+      </div>
+
+      {/* Right Column: Interactive Leadership & Soft Skills Timeline */}
+      <motion.ol
         variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+        initial={shouldReduceMotion ? false : "hidden"}
+        whileInView={shouldReduceMotion ? undefined : "visible"}
+        viewport={{ once: true, margin: "-80px" }}
+        className="before:bg-border/20 relative space-y-2.5 before:absolute before:top-[2.375rem] before:bottom-[2.375rem] before:left-[2.375rem] before:w-px before:-translate-x-1/2 sm:before:top-[2.625rem] sm:before:bottom-[2.625rem] sm:before:left-[2.625rem]"
       >
         {items.map((item) => (
-          <motion.div
+          <motion.li
             key={item.id}
             variants={itemVariants}
-            className="from-card via-card to-primary/[0.04] text-card-foreground border-border/80 hover:border-primary/60 hover:shadow-primary/10 group relative flex h-full min-h-[210px] flex-col justify-between overflow-hidden rounded-3xl border bg-gradient-to-br p-6 transition-all duration-300 hover:shadow-2xl lg:p-7"
+            className="group hover:bg-card/90 relative flex gap-4.5 rounded-3xl p-4 transition-all duration-300 hover:shadow-[0_14px_34px_-20px_rgba(30,64,175,0.25)] sm:p-5"
           >
-            {/* Background Ambient Glow */}
-            <div className="bg-primary/15 group-hover:bg-primary/25 pointer-events-none absolute -right-10 -bottom-10 size-36 rounded-full blur-2xl transition-all duration-500 group-hover:scale-125" />
+            {/* Icon Tile */}
+            <span className="border-primary/15 bg-primary/8 text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30 relative z-10 flex size-11 shrink-0 items-center justify-center rounded-2xl border shadow-xs transition-all duration-300 group-hover:shadow-md">
+              <SoftSkillBentoIcon icon={item.icon} className="size-5" />
+            </span>
 
-            {/* Background Decorative Icon Watermark */}
-            <div className="text-primary pointer-events-none absolute -right-4 -bottom-4 size-28 opacity-[0.07] transition-all duration-500 group-hover:scale-110 group-hover:opacity-20">
-              <SoftSkillBentoIcon icon={item.icon} className="size-full" />
-            </div>
-
-            <div className="z-10 space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="bg-primary/10 text-primary border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30 flex size-11 shrink-0 items-center justify-center rounded-2xl border shadow-sm transition-all duration-300 group-hover:scale-110">
-                  <SoftSkillBentoIcon icon={item.icon} className="size-5" />
-                </span>
-                <h3 className="text-foreground group-hover:text-primary min-w-0 flex-1 text-lg leading-snug font-bold tracking-tight wrap-break-word transition-colors sm:text-xl">
-                  {item.title}
-                </h3>
-              </div>
-              <p className="text-muted-foreground text-xs leading-relaxed sm:text-sm">
+            {/* Content & Badge */}
+            <div className="min-w-0 flex-1">
+              <h3 className="text-foreground group-hover:text-primary text-lg font-bold tracking-tight transition-colors">
+                {item.title}
+              </h3>
+              <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed sm:text-base">
                 {item.description}
               </p>
+              {item.badge ? (
+                <span className="bg-primary/10 text-primary group-hover:bg-primary/15 mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-xs font-bold transition-colors">
+                  {item.badge}
+                </span>
+              ) : null}
             </div>
-
-            {/* Bottom Accent Row with DB-driven Badge */}
-            {item.badge ? (
-              <div className="border-border/50 z-10 mt-5 flex items-center justify-between border-t pt-3">
-                <div className="flex items-center gap-2">
-                  <span className="bg-primary/60 group-hover:bg-primary size-1.5 rounded-full transition-all duration-300 group-hover:scale-125" />
-                  <span className="text-muted-foreground group-hover:text-foreground text-[11px] font-semibold transition-colors">
-                    {item.badge}
-                  </span>
-                </div>
-                <div className="bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground flex size-6 items-center justify-center rounded-full text-[10px] font-bold transition-all duration-300">
-                  ✓
-                </div>
-              </div>
-            ) : null}
-          </motion.div>
+          </motion.li>
         ))}
-      </motion.div>
+      </motion.ol>
     </div>
   );
 };

@@ -15,6 +15,12 @@ function TimelineEntryContent({ item }: { item: TimelinePublicItem }) {
       <div>
         <p className="text-primaryText-200 text-lg font-semibold">
           {item.title}
+          {item.organization ? (
+            <span className="text-primaryText-800 font-normal">
+              {" "}
+              · {item.organization}
+            </span>
+          ) : null}
         </p>
         {item.location ? (
           <p className="text-primaryText-800 text-sm">{item.location}</p>

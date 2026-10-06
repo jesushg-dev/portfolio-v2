@@ -44,6 +44,7 @@ import {
   type ServiceExportRow,
   type SkillExportRow,
   type SoftSkillExportRow,
+  type SoftSkillsMetricExportRow,
   type SoftSkillsSectionExportRow,
   type TimelineExportRow,
   type UsesItemExportRow,
@@ -160,9 +161,20 @@ function hydrateTimeline(seeds: TimelineItemSeedRecord[]): TimelineExportRow[] {
 function hydrateSoftSkills(): {
   section: SoftSkillsSectionExportRow;
   items: SoftSkillExportRow[];
+  metrics: SoftSkillsMetricExportRow[];
 } {
   return {
     section: softSkillsCatalog.section,
+    metrics: (softSkillsCatalog.metrics ?? []).map((metric) => ({
+      value: metric.value,
+      order: metric.order,
+      SoftSkillsMetricTranslation: (["en", "es", "nl"] as const).map(
+        (locale) => ({
+          appLanguageId: locale,
+          label: metric.label[locale] ?? "",
+        }),
+      ),
+    })),
     items: softSkillsCatalog.items.map((item) => ({
       icon: item.icon,
       featured: item.featured ?? false,
@@ -363,7 +375,12 @@ describe("seed export serializers", () => {
   it("round-trips soft-skills section and items", () => {
     const hydrated = hydrateSoftSkills();
     expect(
-      serializeSoftSkills(hydrated.section, hydrated.items, languages),
+      serializeSoftSkills(
+        hydrated.section,
+        hydrated.items,
+        languages,
+        hydrated.metrics,
+      ),
     ).toEqual(softSkillsCatalog);
   });
 
@@ -516,6 +533,7 @@ describe("seed export zip", () => {
         hydratedSoftSkills.section,
         hydratedSoftSkills.items,
         languages,
+        hydratedSoftSkills.metrics,
       ),
       uses: serializeUses(hydratedUses.settings, hydratedUses.items, languages),
       now: serializeNow(hydratedNow.settings, hydratedNow.focuses, languages),
