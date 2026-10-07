@@ -79,7 +79,8 @@ const SKILL_COLORS: Record<string, string> = {
   Microservices: "#475569",
 };
 
-export type SkillCategoryId = "frontend" | "backend" | "tools";
+export type SkillCategoryId =
+  "architecture" | "backend" | "data" | "frontend" | "quality";
 
 export const SKILL_CATEGORIES: {
   id: SkillCategoryId;
@@ -97,14 +98,28 @@ export const SKILL_CATEGORIES: {
   },
   {
     id: "backend",
-    types: ["BACKEND", "DEVOPS", "CYBERSECURITY"],
+    types: ["BACKEND"],
     dotClass: "bg-primary",
     indicatorClass: "bg-primary",
     borderClass: "border-primary",
   },
   {
-    id: "tools",
-    types: ["TOOLS"],
+    id: "architecture",
+    types: ["ARCHITECTURE"],
+    dotClass: "bg-primary",
+    indicatorClass: "bg-primary",
+    borderClass: "border-primary",
+  },
+  {
+    id: "data",
+    types: ["DATA"],
+    dotClass: "bg-primary",
+    indicatorClass: "bg-primary",
+    borderClass: "border-primary",
+  },
+  {
+    id: "quality",
+    types: ["QUALITY_DELIVERY", "DEVOPS", "TOOLS", "CYBERSECURITY"],
     dotClass: "bg-primary",
     indicatorClass: "bg-primary",
     borderClass: "border-primary",
@@ -144,7 +159,10 @@ export function countSkillsByCategory(
       ).length;
       return counts;
     },
-    { frontend: 0, backend: 0, tools: 0 } as Record<SkillCategoryId, number>,
+    { architecture: 0, backend: 0, data: 0, frontend: 0, quality: 0 } as Record<
+      SkillCategoryId,
+      number
+    >,
   );
 }
 

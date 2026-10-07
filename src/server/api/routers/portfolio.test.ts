@@ -95,6 +95,7 @@ describe("portfolioRouter", () => {
       projectsCount: 0,
       certificationsCount: 0,
       yearsExperience: 0,
+      engineersMentored: 0,
     });
   });
 
@@ -176,8 +177,9 @@ describe("portfolioRouter", () => {
     expect(hero?.heroSummary).toBe("Builder");
 
     const stats = await caller.getStatsPublic({ locale: "en" });
-    expect(stats.projectsCount).toBe(3);
+    expect(stats.projectsCount).toBe(19);
     expect(stats.certificationsCount).toBe(8);
+    expect(stats.engineersMentored).toBe(6);
     expect(stats.yearsExperience).toBeGreaterThanOrEqual(5);
   });
 

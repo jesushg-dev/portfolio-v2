@@ -28,7 +28,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const [activeCategory, setActiveCategory] =
-    useState<SkillCategoryId>("frontend");
+    useState<SkillCategoryId>("architecture");
   const [search, setSearch] = useState("");
 
   const skills = useMemo(() => initialSkills, [initialSkills]);
@@ -99,33 +99,6 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
         description={t("description")}
       />
 
-      <div className="-mt-8 mb-10 flex justify-center">
-        <p className="bg-card border-border/30 text-muted-foreground inline-flex flex-wrap items-center justify-center gap-1.5 rounded-full border px-5 py-2 font-mono text-xs shadow-2xs sm:text-sm">
-          <span>{"{ "}</span>
-          <span>
-            <b className="text-foreground font-semibold">
-              {t("tabs.frontend.title").toLowerCase()}
-            </b>
-            {`: ${counts.frontend}`}
-          </span>
-          <span className="text-muted-foreground/40">,</span>
-          <span>
-            <b className="text-foreground font-semibold">
-              {t("tabs.backend.title").toLowerCase()}
-            </b>
-            {`: ${counts.backend}`}
-          </span>
-          <span className="text-muted-foreground/40">,</span>
-          <span>
-            <b className="text-foreground font-semibold">
-              {t("tabs.tools.title").toLowerCase()}
-            </b>
-            {`: ${counts.tools}`}
-          </span>
-          <span>{" }"}</span>
-        </p>
-      </div>
-
       <div className="bg-card border-border/30 hover:border-primary/30 relative overflow-hidden rounded-3xl border shadow-xs transition-all duration-300">
         {/* Terminal Chrome Bar */}
         <div className="border-border/30 bg-muted/20 flex flex-wrap items-center justify-between gap-3 border-b px-5 py-3">
@@ -143,7 +116,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
               aria-hidden="true"
             />
             <span className="text-muted-foreground ml-2 font-mono text-xs">
-              stack.json
+              expertise.json
             </span>
           </div>
 

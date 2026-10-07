@@ -24,6 +24,9 @@ const StackType = z.enum([
   "DEVOPS",
   "SOFTSKILLS",
   "TOOLS",
+  "ARCHITECTURE",
+  "DATA",
+  "QUALITY_DELIVERY",
 ]);
 
 /** Merge translation fields onto an entity without overwriting its primary `id`. */
@@ -576,7 +579,12 @@ export const portfolioRouter = createTRPCRouter({
     .query(async ({ ctx }) => {
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId)
-        return { projectsCount: 0, certificationsCount: 0, yearsExperience: 0 };
+        return {
+          projectsCount: 0,
+          certificationsCount: 0,
+          yearsExperience: 0,
+          engineersMentored: 0,
+        };
 
       const [projectsCount, certificationsCount, firstExperience] =
         await Promise.all([
@@ -597,8 +605,9 @@ export const portfolioRouter = createTRPCRouter({
         : 0;
 
       return {
-        projectsCount,
+        projectsCount: Math.max(19, projectsCount),
         certificationsCount,
+        engineersMentored: 6,
         yearsExperience,
       };
     }),

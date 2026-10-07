@@ -10,6 +10,9 @@ export const StackTypeSchema = z.enum([
   "DEVOPS",
   "SOFTSKILLS",
   "TOOLS",
+  "ARCHITECTURE",
+  "DATA",
+  "QUALITY_DELIVERY",
 ]);
 
 export const optionalUrl = z

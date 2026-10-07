@@ -55,7 +55,14 @@ const ICON_MAP: Record<
 
 function getVisualType(
   service: ServiceItem,
-): "frontend" | "backend" | "mobile" | "devops" | "security" | "default" {
+):
+  | "frontend"
+  | "backend"
+  | "mobile"
+  | "devops"
+  | "security"
+  | "architecture"
+  | "default" {
   const type = (service.type ?? "").toUpperCase();
   const icon = (service.icon ?? "").toLowerCase();
 
@@ -66,6 +73,7 @@ function getVisualType(
     return "mobile";
   if (type.includes("DEVOPS") || type.includes("TOOLS") || icon === "terminal")
     return "devops";
+  if (type.includes("ARCHITECTURE") || icon === "layers") return "architecture";
   if (
     type.includes("CYBERSECURITY") ||
     type.includes("SECURITY") ||
@@ -182,15 +190,21 @@ function BackendVisual({ service }: { service: ServiceItem }) {
 }
 
 /* Micro-visual 3: Mobile floating smartphone mockups */
-function MobileVisual({ service }: { service: ServiceItem }) {
+function MobileVisual() {
   return (
     <div className="flex items-end justify-center gap-3">
-      <div className="a-float border-foreground/70 bg-card h-36 w-20 rounded-[1.3rem] border-4 p-1.5 shadow-sm">
-        <div className="bg-primary h-5 rounded-lg" />
+      {/* iOS Device */}
+      <div className="a-float border-foreground/70 bg-card relative h-36 w-20 overflow-hidden rounded-[1.3rem] border-4 p-1.5 shadow-sm">
+        {/* Notch */}
+        <div className="bg-foreground/70 absolute top-[2px] left-1/2 z-10 h-2 w-8 -translate-x-1/2 rounded-[4px]" />
+
+        <div className="bg-primary mt-2 h-5 rounded-lg" />
         <div className="bg-primary/15 mt-2 h-8 rounded-lg" />
         <div className="bg-muted/80 mt-1.5 h-2 w-3/4 rounded" />
         <div className="bg-muted/80 mt-1.5 h-2 w-1/2 rounded" />
       </div>
+
+      {/* Android Device */}
       <div
         style={{ animationDelay: "-2.5s" }}
         className="a-float border-foreground/70 bg-card -mb-6 h-36 w-20 rounded-[1.3rem] border-4 p-1.5 shadow-sm"
@@ -198,13 +212,7 @@ function MobileVisual({ service }: { service: ServiceItem }) {
         <div className="bg-primary/15 h-12 rounded-lg" />
         <div className="bg-muted/80 mt-2 h-2 w-full rounded" />
         <div className="bg-muted/80 mt-1.5 h-2 w-2/3 rounded" />
-        <div className="bg-primary mt-2 h-5 rounded-lg">
-          {service.statsValue ? (
-            <span className="text-primary-foreground block text-center text-[9px] font-bold">
-              {service.statsValue}
-            </span>
-          ) : null}
-        </div>
+        <div className="bg-primary mt-2 h-5 rounded-lg" />
       </div>
     </div>
   );
@@ -249,7 +257,40 @@ function DevOpsVisual({ service }: { service: ServiceItem }) {
   );
 }
 
-/* Micro-visual 5: Cybersecurity shield & verification tags */
+/* Micro-visual 5: System Architecture */
+function ArchitectureVisual() {
+  return (
+    <div className="relative flex h-full w-full items-center justify-center">
+      <div className="relative flex items-center justify-center">
+        {/* Core node */}
+        <div className="bg-card border-border z-10 rounded-xl border-2 p-2 shadow-lg">
+          <Layers className="text-primary size-8" strokeWidth={1.5} />
+        </div>
+
+        {/* Orbiting nodes/services */}
+        <div className="border-primary/20 absolute size-24 animate-[spin_8s_linear_infinite] rounded-full border" />
+        <div className="border-primary/10 absolute size-32 animate-[spin_12s_linear_infinite_reverse] rounded-full border" />
+
+        {/* Satellite 1 */}
+        <div className="bg-card border-border absolute -top-12 -left-6 rounded-lg border p-1.5 shadow-sm">
+          <Database className="size-4 text-emerald-500" />
+        </div>
+
+        {/* Satellite 2 */}
+        <div className="bg-card border-border absolute -right-8 -bottom-10 rounded-lg border p-1.5 shadow-sm">
+          <Server className="size-4 text-blue-500" />
+        </div>
+
+        {/* Satellite 3 */}
+        <div className="bg-card border-border absolute top-4 -right-12 rounded-lg border p-1.5 shadow-sm">
+          <Globe className="size-4 text-purple-500" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Micro-visual 6: Cybersecurity shield & verification tags */
 function SecurityVisual({ service }: { service: ServiceItem }) {
   const badge1 = service.statsValue;
   const badge2 = service.statsLabel;
@@ -336,6 +377,8 @@ function getVisualContainerClasses(type: string): string {
       return cn(base, "items-end justify-center pt-6 px-4");
     case "security":
       return cn(base, "items-center justify-center p-0");
+    case "architecture":
+      return cn(base, "items-center justify-center p-4 overflow-visible");
     case "devops":
       return cn(base, "items-center justify-center px-4 sm:px-6");
     case "backend":
@@ -413,8 +456,9 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
                 <FrontendVisual service={service} />
               )}
               {visualType === "backend" && <BackendVisual service={service} />}
-              {visualType === "mobile" && <MobileVisual service={service} />}
+              {visualType === "mobile" && <MobileVisual />}
               {visualType === "devops" && <DevOpsVisual service={service} />}
+              {visualType === "architecture" && <ArchitectureVisual />}
               {visualType === "security" && (
                 <SecurityVisual service={service} />
               )}

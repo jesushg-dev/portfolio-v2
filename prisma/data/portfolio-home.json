@@ -6,14 +6,9 @@
     "nl": "Senior Software Engineer"
   },
   "heroTagline": {
-    "es": "Arquitectura de software empresarial, modernización de sistemas de alta disponibilidad y entregas de ingeniería de alto rendimiento.",
-    "en": "Architecting scalable enterprise platforms, modernizing high-availability systems, and delivering high-impact engineering solutions.",
-    "nl": "Architectuur van schaalbare enterprise-systemen, modernisering van hoogbeschikbare toepassingen en het leveren van hoogwaardige softwareoplossingen."
-  },
-  "heroSummary": {
-    "es": "+6 años diseñando y escalando soluciones de software en entornos corporativos y altamente regulados (Walmart, Claro, Imagemaker). Especializado en evolución de monolitos a microservicios resilientes, automatización CI/CD y gobernanza técnica para entregas seguras en producción.",
-    "en": "6+ years designing and scaling enterprise software across high-compliance environments (Walmart, Claro, Imagemaker). Proven track record modernizing monolithic systems into resilient microservices, automating CI/CD release pipelines, and driving technical governance.",
-    "nl": "6+ jaar ervaring in het ontwerpen en schalen van enterprise software in veeleisende omgevingen (Walmart, Claro, Imagemaker). Ervaring met het moderniseren van monolithische systemen naar microservices en CI/CD-automatisering."
+    "es": "Más de 6 años construyendo sistemas empresariales escalables, modernizando plataformas legacy y liderando equipos de ingeniería en comercio electrónico, telecomunicaciones y entornos corporativos, con experiencia en Walmart y Claro.",
+    "en": "6+ years building scalable enterprise systems, modernizing legacy platforms, and leading engineering teams across e-commerce, telecommunications, and enterprise environments, with experience at Walmart and Claro.",
+    "nl": "6+ jaar ervaring in het bouwen van schaalbare enterprise systemen, het moderniseren van legacy platformen en het leiden van engineering teams in e-commerce, telecommunicatie en enterprise omgevingen, met ervaring bij Walmart en Claro."
   },
   "terminal": {
     "username": "Jesus-Macbook",
@@ -51,9 +46,9 @@
           "nl": "cat ~/profile.json"
         },
         "output": {
-          "es": "{\n  \"nombre\": \"Jesús Enmanuel Hernández González\",\n  \"rol\": \"Senior Software Engineer\",\n  \"especialidad\": \"Arquitectura de Software y Sistemas Distribuidos\",\n  \"idiomas\": {\n    \"español\": \"Nativo\",\n    \"inglés\": \"B2+\",\n    \"holandés\": \"A1\"\n  }\n}",
-          "en": "{\n  \"name\": \"Jesús Enmanuel Hernández González\",\n  \"role\": \"Senior Software Engineer\",\n  \"specialty\": \"Software Architecture & Distributed Systems\",\n  \"languages\": {\n    \"spanish\": \"Native\",\n    \"english\": \"B2+\",\n    \"dutch\": \"A1\"\n  }\n}",
-          "nl": "{\n  \"naam\": \"Jesús Enmanuel Hernández González\",\n  \"rol\": \"Senior Software Engineer\",\n  \"specialiteit\": \"Software Architectuur & Gedistribueerde Systemen\",\n  \"talen\": {\n    \"spaans\": \"Moedertaal\",\n    \"engels\": \"B2+\",\n    \"nederlands\": \"A1\"\n  }\n}"
+          "es": "{\n  \"nombre\": \"Jesús Hernández\",\n  \"enfoque\": \"Sistemas Distribuidos y Escalabilidad\",\n  \"logros_clave\": [\n    \"Reducción del MTTR crítico en 40% mediante análisis de causa raíz y prevención de recurrencias.\",\n    \"Reducción de retrabajo en 25% estableciendo gobernanza técnica.\",\n    \"Liderazgo de equipos de hasta 6 ingenieros en todo el SDLC.\"\n  ],\n  \"idiomas\": {\n    \"español\": \"Nativo\",\n    \"inglés\": \"B2+\"\n  }\n}",
+          "en": "{\n  \"name\": \"Jesús Hernández\",\n  \"focus\": \"Distributed Systems & Scalability\",\n  \"key_achievements\": [\n    \"Reduced critical incident MTTR by 40% through root-cause analysis and recurrence prevention.\",\n    \"Cut rework by 25% by establishing technical governance.\",\n    \"Led teams of up to 6 engineers across end-to-end SDLC.\"\n  ],\n  \"languages\": {\n    \"spanish\": \"Native\",\n    \"english\": \"B2+\"\n  }\n}",
+          "nl": "{\n  \"naam\": \"Jesús Hernández\",\n  \"focus\": \"Gedistribueerde Systemen & Schaalbaarheid\",\n  \"belangrijkste_prestaties\": [\n    \"MTTR van kritieke incidenten met 40% verminderd door root-cause analyse en preventie.\",\n    \"25% minder herbewerking door technische governance.\",\n    \"Leiden van teams tot 6 engineers over de volledige SDLC.\"\n  ],\n  \"talen\": {\n    \"spaans\": \"Moedertaal\",\n    \"engels\": \"B2+\"\n  }\n}"
         }
       }
     ]

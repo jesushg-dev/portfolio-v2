@@ -45,7 +45,7 @@
       "Prisma",
       "MongoDb"
     ],
-    "order": 2,
+    "order": 5,
     "kind": "PERSONAL"
   },
   {
@@ -87,7 +87,7 @@
       }
     ],
     "skillKeys": ["React", "Bootstrap"],
-    "order": 90,
+    "order": 6,
     "kind": "LEARNING"
   },
   {
@@ -115,7 +115,7 @@
       }
     ],
     "skillKeys": ["React", "Tailwind", "Typescript"],
-    "order": 91,
+    "order": 7,
     "kind": "LEARNING"
   },
   {
@@ -155,7 +155,7 @@
       }
     ],
     "skillKeys": ["Nextjs", "Tailwind", "Typescript"],
-    "order": 0,
+    "order": 3,
     "kind": "PROFESSIONAL",
     "caseStudyEnabled": true
   },
@@ -196,7 +196,7 @@
       }
     ],
     "skillKeys": ["React", "Tailwind", "Typescript"],
-    "order": 1,
+    "order": 4,
     "kind": "PROFESSIONAL",
     "caseStudyEnabled": true
   },
@@ -225,7 +225,7 @@
       }
     ],
     "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"],
-    "order": 10,
+    "order": 8,
     "kind": "PERSONAL"
   },
   {
@@ -253,7 +253,7 @@
       }
     ],
     "skillKeys": ["React", "Bootstrap"],
-    "order": 92,
+    "order": 9,
     "kind": "LEARNING"
   },
   {
@@ -281,7 +281,7 @@
       }
     ],
     "skillKeys": ["Nodejs", "Mysql"],
-    "order": 15,
+    "order": 10,
     "kind": "LEARNING"
   },
   {
@@ -309,7 +309,7 @@
       }
     ],
     "skillKeys": ["Java", "Android", "Php"],
-    "order": 3,
+    "order": 11,
     "kind": "PROFESSIONAL"
   },
   {
@@ -337,7 +337,7 @@
       }
     ],
     "skillKeys": ["Php", "Mysql"],
-    "order": 4,
+    "order": 12,
     "kind": "PROFESSIONAL"
   },
   {
@@ -365,7 +365,7 @@
       }
     ],
     "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"],
-    "order": 5,
+    "order": 13,
     "kind": "PROFESSIONAL"
   },
   {
@@ -393,7 +393,7 @@
       }
     ],
     "skillKeys": ["Java", "Android", "Mysql"],
-    "order": 6,
+    "order": 14,
     "kind": "PROFESSIONAL"
   },
   {
@@ -421,7 +421,7 @@
       }
     ],
     "skillKeys": ["React", "Redux", "Material", "Sass"],
-    "order": 7,
+    "order": 15,
     "kind": "PROFESSIONAL"
   },
   {
@@ -449,7 +449,7 @@
       }
     ],
     "skillKeys": ["React", "Redux", "Material", "Sass"],
-    "order": 8,
+    "order": 16,
     "kind": "PROFESSIONAL"
   },
   {
@@ -489,7 +489,7 @@
       }
     ],
     "skillKeys": ["Csharp", "SqlServer", "Entity", "Dotnet", "Swagger"],
-    "order": 9,
+    "order": 2,
     "kind": "PROFESSIONAL"
   },
   {
@@ -517,7 +517,7 @@
       }
     ],
     "skillKeys": ["Java", "Android", "Mysql", "Nodejs"],
-    "order": 11,
+    "order": 17,
     "kind": "PERSONAL"
   },
   {
@@ -545,7 +545,7 @@
       }
     ],
     "skillKeys": ["Nodejs", "Mysql"],
-    "order": 12,
+    "order": 18,
     "kind": "PERSONAL"
   },
   {
@@ -573,7 +573,7 @@
       }
     ],
     "skillKeys": ["Java", "Android"],
-    "order": 13,
+    "order": 19,
     "kind": "PERSONAL"
   },
   {
@@ -601,7 +601,7 @@
       }
     ],
     "skillKeys": ["Java", "Android"],
-    "order": 14,
+    "order": 20,
     "kind": "PERSONAL"
   }
 ]

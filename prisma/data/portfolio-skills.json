@@ -74,7 +74,7 @@
   {
     "key": "Entity",
     "title": "Entity Framework",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/dotnet",
     "translations": [
       {
@@ -165,7 +165,7 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/Node.js"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Nestjs",
@@ -218,7 +218,7 @@
   {
     "key": "Mysql",
     "title": "MySQL",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/mysql",
     "translations": [
       {
@@ -242,7 +242,7 @@
   {
     "key": "SqlServer",
     "title": "SQL Server",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/microsoftsqlserver",
     "translations": [
       {
@@ -261,12 +261,12 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/Microsoft_SQL_Server"
       }
     ],
-    "featured": false
+    "featured": true
   },
   {
     "key": "MongoDb",
     "title": "MongoDB",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/mongodb",
     "translations": [
       {
@@ -285,7 +285,7 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/MongoDB"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Firebase",
@@ -314,7 +314,7 @@
   {
     "key": "Npm",
     "title": "NPM",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/npm",
     "translations": [
       {
@@ -338,7 +338,7 @@
   {
     "key": "Yarn",
     "title": "Yarn",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/yarn",
     "translations": [
       {
@@ -362,7 +362,7 @@
   {
     "key": "Vite",
     "title": "Vite",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/vite",
     "translations": [
       {
@@ -386,7 +386,7 @@
   {
     "key": "Git",
     "title": "Git",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/git",
     "translations": [
       {
@@ -410,7 +410,7 @@
   {
     "key": "Github",
     "title": "Github",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/github",
     "translations": [
       {
@@ -429,12 +429,12 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/GitHub"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Bitbucket",
     "title": "Bitbucket",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/bitbucket",
     "translations": [
       {
@@ -458,7 +458,7 @@
   {
     "key": "Vscode",
     "title": "VS Code",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/visualstudiocode",
     "translations": [
       {
@@ -482,7 +482,7 @@
   {
     "key": "Postman",
     "title": "Postman",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/postman",
     "translations": [
       {
@@ -506,7 +506,7 @@
   {
     "key": "GraphQL",
     "title": "GraphQL",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/graphql",
     "translations": [
       {
@@ -525,12 +525,12 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/GraphQL"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Prisma",
     "title": "Prisma",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/prisma",
     "translations": [
       {
@@ -554,7 +554,7 @@
   {
     "key": "Azure",
     "title": "Azure",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/microsoftazure",
     "translations": [
       {
@@ -578,7 +578,7 @@
   {
     "key": "Notion",
     "title": "Notion",
-    "type": "TOOLS",
+    "type": "QUALITY_DELIVERY",
     "image": "https://cdn.simpleicons.org/notion",
     "translations": [
       {
@@ -669,7 +669,7 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/JavaScript"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Typescript",
@@ -789,7 +789,7 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/Tailwind_CSS"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Material",
@@ -890,7 +890,7 @@
   {
     "key": "Apollo",
     "title": "Apollo GraphQL",
-    "type": "FRONTEND",
+    "type": "BACKEND",
     "image": "https://cdn.simpleicons.org/apollographql",
     "translations": [
       {
@@ -914,7 +914,7 @@
   {
     "key": "WebSockets",
     "title": "WebSockets",
-    "type": "FRONTEND",
+    "type": "BACKEND",
     "image": "https://cdn.simpleicons.org/socketdotio",
     "translations": [
       {
@@ -938,7 +938,7 @@
   {
     "key": "ReactNative",
     "title": "React Native",
-    "type": "MOBILE",
+    "type": "FRONTEND",
     "image": "https://cdn.simpleicons.org/react",
     "translations": [
       {
@@ -962,7 +962,7 @@
   {
     "key": "Android",
     "title": "Android",
-    "type": "MOBILE",
+    "type": "FRONTEND",
     "image": "https://cdn.simpleicons.org/android",
     "translations": [
       {
@@ -1010,7 +1010,7 @@
   {
     "key": "DevExpress",
     "title": "DevExpress",
-    "type": "TOOLS",
+    "type": "QUALITY_DELIVERY",
     "image": "https://cdn.simpleicons.org/devexpress",
     "translations": [
       {
@@ -1030,5 +1030,144 @@
       }
     ],
     "featured": false
+  },
+  {
+    "key": "Docker",
+    "title": "Docker",
+    "type": "DEVOPS",
+    "image": "https://cdn.simpleicons.org/docker",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Plataforma de software para construir, probar y desplegar aplicaciones rápidamente como contenedores portátiles y autosuficientes.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Docker_(software)"
+      },
+      {
+        "locale": "en",
+        "description": "Software platform for building, testing, and deploying applications quickly as portable, self-sufficient containers.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Docker_(software)"
+      },
+      {
+        "locale": "nl",
+        "description": "Softwareplatform voor het bouwen, testen en implementeren van applicaties als draagbare, zelfvoorzienende containers.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Docker_(software)"
+      }
+    ],
+    "featured": true
+  },
+  {
+    "key": "DDD",
+    "title": "Domain-Driven Design",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/blueprint",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Enfoque de desarrollo de software con modelos complejos centrados en el dominio.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio"
+      },
+      {
+        "locale": "en",
+        "description": "Software development approach based on complex domain-centric models.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Domain-driven_design"
+      },
+      {
+        "locale": "nl",
+        "description": "Software-ontwikkelingsaanpak gebaseerd op complexe domeingerichte modellen.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Domain-driven_design"
+      }
+    ]
+  },
+  {
+    "key": "CleanArchitecture",
+    "title": "Clean Architecture",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/cleanarchitecture",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Patrón arquitectónico que separa responsabilidades y mejora mantenibilidad.",
+        "urlWiki": ""
+      },
+      {
+        "locale": "en",
+        "description": "Architectural pattern that separates concerns and improves maintainability.",
+        "urlWiki": ""
+      },
+      {
+        "locale": "nl",
+        "description": "Architectuurpatroon dat zorgen scheidt en onderhoudbaarheid verbetert.",
+        "urlWiki": ""
+      }
+    ]
+  },
+  {
+    "key": "Microservices",
+    "title": "Microservices",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/microservices",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Arquitectura que estructura aplicaciones como una colección de servicios débilmente acoplados.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Microservicios"
+      },
+      {
+        "locale": "en",
+        "description": "Architecture that structures an application as a collection of loosely coupled services.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Microservices"
+      },
+      {
+        "locale": "nl",
+        "description": "Architectuur die een applicatie structureert als een verzameling losgekoppelde services.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Microservices"
+      }
+    ]
+  },
+  {
+    "key": "EventDriven",
+    "title": "Event-Driven",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/apachekafka",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Arquitectura de software que promueve la producción, detección y consumo de eventos.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Arquitectura_dirigida_por_eventos"
+      },
+      {
+        "locale": "en",
+        "description": "Software architecture paradigm promoting the production, detection, and consumption of events.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Event-driven_architecture"
+      },
+      {
+        "locale": "nl",
+        "description": "Softwarearchitectuur die de productie, detectie en consumptie van gebeurtenissen bevordert.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Event-driven_architecture"
+      }
+    ]
+  },
+  {
+    "key": "SystemDesign",
+    "title": "System Design",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/diagramsdotnet",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Diseño de la arquitectura, componentes, interfaces y datos de un sistema.",
+        "urlWiki": ""
+      },
+      {
+        "locale": "en",
+        "description": "Process of defining the architecture, components, modules, interfaces, and data for a system.",
+        "urlWiki": ""
+      },
+      {
+        "locale": "nl",
+        "description": "Proces van het definiëren van architectuur, componenten, interfaces en gegevens voor een systeem.",
+        "urlWiki": ""
+      }
+    ]
   }
 ]

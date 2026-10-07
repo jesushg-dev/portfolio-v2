@@ -13,9 +13,9 @@
     }
   },
   "aboutMe": {
-    "es": "Senior Software Engineer con +6 años de trayectoria especializándome en arquitecturas distribuidas (.NET Core, Node.js/Nest.js, React/Next.js y SQL/NoSQL) en entornos corporativos de alta demanda como Walmart y Claro. Mi enfoque combina rigor arquitectónico (Clean Architecture, DDD, principios SOLID) con impacto de negocio directo: he dirigido la descomposición de monolitos legacy a microservicios RESTful/GraphQL, **reducido el MTTR en incidentes críticos en un 40%** y guiado equipos de ingeniería mediante revisiones de código estructuradas, automatización CI/CD y prácticas de desarrollo seguro (DevSecOps).",
-    "en": "Senior Software Engineer with 6+ years designing distributed enterprise systems (.NET Core, Node.js/Nest.js, React/Next.js, SQL/NoSQL) within high-compliance corporate ecosystems (Walmart, Claro). I combine architectural rigor (Clean Architecture, DDD, SOLID) with direct business outcomes: led legacy monolith migrations to resilient microservices, **reduced critical incident MTTR by 40%**, and elevated team capabilities through structured code reviews, CI/CD automation, and DevSecOps practices.",
-    "nl": "Senior Software Engineer met 6+ jaar ervaring in het ontwerpen van gedistribueerde enterprise-systemen (.NET Core, Node.js, React/Next.js, SQL/NoSQL). Ik combineer architectonische precisie (Clean Architecture, DDD, SOLID) met directe bedrijfsresultaten: leiding gegeven aan migraties van legacy-monolieten naar microservices, **MTTR met 40% verlaagd** en engineeringteams begeleid."
+    "es": "Senior Software Engineer diseñando y evolucionando sistemas de software en comercio electrónico, telecomunicaciones y plataformas enterprise. Combino el rigor arquitectónico con resultados de negocio medibles — desde modernizar sistemas legacy y mejorar la fiabilidad hasta establecer prácticas de ingeniería que ayudan a los equipos a entregar de forma segura a escala.\n\nMi trabajo abarca sistemas distribuidos, diseño de sistemas, fiabilidad y liderazgo técnico.",
+    "en": "Senior Software Engineer designing and evolving software systems across e-commerce, telecommunications, and enterprise platforms. I combine architectural rigor with measurable business outcomes — from modernizing legacy systems and improving reliability to establishing engineering practices that help teams deliver safely at scale.\n\nMy work spans distributed systems, system design, reliability, and technical leadership.",
+    "nl": "Senior Software Engineer ontwerpt en evolueren van softwaresystemen in e-commerce, telecommunicatie en enterprise platformen. Ik combineer architectonische striktheid met meetbare bedrijfsresultaten — van het moderniseren van legacy systemen en het verbeteren van betrouwbaarheid tot het opzetten van engineering praktijken die teams helpen veilig op schaal te leveren.\n\nMijn werk omvat gedistribueerde systemen, systeemontwerp, betrouwbaarheid en technisch leiderschap."
   },
   "contacts": [
     {
@@ -142,19 +142,6 @@
         "nl": "Professionele beheersing"
       },
       "order": 1
-    },
-    {
-      "name": {
-        "es": "Holandés",
-        "en": "Dutch",
-        "nl": "Nederlands"
-      },
-      "level": {
-        "es": "Básico",
-        "en": "Basic proficiency",
-        "nl": "Basisbeheersing"
-      },
-      "order": 2
     }
   ],
   "technicalSkills": [
@@ -208,7 +195,7 @@
   "experiences": [
     {
       "key": "experience0",
-      "company": "Imagemaker",
+      "company": "Walmart (via Imagemaker)",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1769196300/origin/bio/crawled-organizations/imagemaker_logo_z26lj4.jpg",
       "role": {
         "es": "Senior Software Engineer",
@@ -242,57 +229,39 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Diseñé e implementé funcionalidades críticas en React, Flutter y VTEX para flujos de búsqueda, catálogo, checkout, órdenes, cuenta y facturación; creé proyectos nuevos con estándares, estructura modular y onboarding dentro del ecosistema Walmart.",
-            "en": "Designed and shipped critical React, Flutter, and VTEX features for search, catalog, checkout, orders, account, and billing; greenfielded projects with standards, modular structure, and onboarding inside Walmart’s ecosystem.",
-            "nl": "Kritieke React-, Flutter- en VTEX-features ontworpen en geleverd voor zoeken, catalogus, checkout, orders, account en facturatie; nieuwe projecten opgezet met standaarden en modulaire structuur binnen het Walmart-ecosysteem."
+            "es": "Desarrollé funcionalidades críticas en React, Flutter y VTEX para checkout, búsqueda y facturación, estableciendo estándares modulares y rutas de onboarding en el ecosistema de Walmart.",
+            "en": "Engineered critical React, Flutter, and VTEX features across checkout, search, and billing, establishing modular standards and onboarding paths for Walmart’s ecosystem.",
+            "nl": "Kritieke React, Flutter en VTEX features ontwikkeld voor checkout, zoeken en facturatie, waarbij modulaire standaarden en onboardingpaden zijn vastgelegd."
           },
           "order": 0,
           "atsOnly": false
         },
         {
           "text": {
-            "es": "Lideré spikes técnicos y decisiones de arquitectura que redujeron el retrabajo ~25%, acelerando iniciativas estratégicas.",
-            "en": "Led technical spikes and architecture decisions that cut rework by ~25%, accelerating strategic initiatives.",
-            "nl": "Technische spikes en architectuurbeslissingen geleid die herwerk met ~25% verminderden en strategische initiatieven versnelden."
+            "es": "Lideré spikes de arquitectura y decisiones de diseño de sistemas que redujeron el retrabajo en un ~25% y aceleraron iniciativas estratégicas.",
+            "en": "Led architecture spikes and system design decisions that reduced rework by ~25% and accelerated strategic enterprise initiatives.",
+            "nl": "Leidde architectuurspikes en systeemontwerpbeslissingen die rework met ~25% verminderden en strategische initiatieven versnelden."
           },
           "order": 1,
           "atsOnly": false
         },
         {
           "text": {
-            "es": "Fortalecí calidad con E2E Playwright (cobertura de flujos críticos +30 pp), unit tests (+15 pp coverage) y validación funcional en releases de alto impacto; bajé regresiones de 7 a 4 días.",
-            "en": "Raised quality with Playwright E2E (critical-flow coverage +30 pp), unit tests (+15 pp coverage), and functional validation on high-impact releases; cut regression cycles from 7 to 4 days.",
-            "nl": "Kwaliteit versterkt met Playwright E2E (kritieke flows +30 pp), unit tests (+15 pp coverage) en functionele validatie bij high-impact releases; regressies van 7 naar 4 dagen."
+            "es": "Reduje los ciclos de regresión de 7 a 4 días implementando pruebas E2E con Playwright (+30% cobertura) y pruebas unitarias (+15% cobertura).",
+            "en": "Cut release regression cycles from 7 to 4 days by implementing Playwright E2E testing (+30% coverage) and unit tests (+15% coverage).",
+            "nl": "Regressiecycli van 7 naar 4 dagen teruggebracht door Playwright E2E (+30% dekking) en unit tests (+15% dekking) te implementeren."
           },
           "order": 2,
           "atsOnly": false
         },
         {
           "text": {
-            "es": "Resolví incidentes críticos en producción (mobile y backend) en checkout, órdenes y cuenta; mejoré MTTR ~40% con foco en negocio y prevención de recurrencias.",
-            "en": "Owned critical production incidents (mobile and backend) across checkout, orders, and account; improved MTTR ~40% with business communication and recurrence prevention.",
-            "nl": "Kritieke productie-incidenten (mobile en backend) opgelost in checkout, orders en account; MTTR ~40% verbeterd met businesscommunicatie en preventie."
+            "es": "Resolví incidentes críticos de producción en sistemas móviles y backend, mejorando el MTTR en un ~40% mediante análisis rápido de causa raíz y prevención.",
+            "en": "Owned critical production incidents across mobile and backend systems, improving MTTR by ~40% through rapid root-cause analysis and recurrence prevention.",
+            "nl": "Kritieke productie-incidenten in mobiele en backend-systemen opgelost, waardoor MTTR met ~40% verbeterde door snelle root-cause analyse."
           },
           "order": 3,
           "atsOnly": false
-        },
-        {
-          "text": {
-            "es": "Diseñé e implementé funcionalidades críticas en React, Flutter y VTEX para flujos como búsqueda, catálogo, checkout, órdenes, cuenta y facturación. Además, creé nuevos proyectos desde cero definiendo estándares de buenas prácticas, estructura modular y procesos de onboarding eficiente, asegurando su integración dentro del ecosistema interno de Walmart y la correcta interacción con procesos y servicios existentes.",
-            "en": "Designed and implemented critical React, Flutter, and VTEX capabilities across search, catalog, checkout, orders, account, and billing. Also greenfielded projects with best-practice standards, modular structure, and efficient onboarding, ensuring integration with Walmart’s internal ecosystem and existing services.",
-            "nl": "Kritieke React-, Flutter- en VTEX-functionaliteit geïmplementeerd voor zoeken, catalogus, checkout, orders, account en facturatie. Ook nieuwe projecten vanaf nul met standaarden, modulaire structuur en efficiënte onboarding, geïntegreerd in het interne Walmart-ecosysteem."
-          },
-          "order": 4,
-          "atsOnly": true
-        },
-        {
-          "text": {
-            "es": "Impulsé mejoras de mantenibilidad con prácticas de código limpio, manejo de errores, estándares y revisiones, elevando la calidad técnica y la productividad del equipo.",
-            "en": "Drove maintainability improvements via clean code, error handling, standards, and reviews — raising technical quality and team productivity.",
-            "nl": "Onderhoudbaarheid verbeterd via clean code, error handling, standaarden en reviews — hogere technische kwaliteit en teamproductiviteit."
-          },
-          "order": 5,
-          "atsOnly": true
         }
       ],
       "order": 0,
@@ -305,9 +274,9 @@
       "company": "Claro Nicaragua",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/w_36,dpr_2.0/v1600924980/origin/bio/organizations/claro_zjqxzc.png",
       "role": {
-        "es": "Software Engineer",
-        "en": "Software Engineer",
-        "nl": "Software Engineer"
+        "es": "Full Stack Engineer · Medio tiempo",
+        "en": "Full Stack Engineer · Part-time",
+        "nl": "Full Stack Engineer · Parttime"
       },
       "location": {
         "es": "Remoto · Managua, Nicaragua",
@@ -343,18 +312,18 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Diseñé y construí desde cero la plataforma web de orquestación de servicios de telecomunicaciones con Next.js, tRPC, Prisma y SQL Server, eliminando flujos manuales basados en hojas de cálculo y correos.",
-            "en": "Designed and built from scratch a telecom service orchestration web platform with Next.js, tRPC, Prisma, and SQL Server, eliminating spreadsheet/email workflows.",
-            "nl": "Telecom-serviceorchestatieplatform vanaf nul gebouwd met Next.js, tRPC, Prisma en SQL Server, waarmee handmatige spreadsheet-/e-mailflows verdwenen."
+            "es": "Diseñé y entregué desde cero una plataforma de orquestación de servicios usando Next.js, tRPC, Prisma y SQL Server, reemplazando flujos de hojas de cálculo.",
+            "en": "Architected and delivered a telecom service orchestration platform from scratch using Next.js, tRPC, Prisma, and SQL Server, deprecating legacy spreadsheet workflows.",
+            "nl": "Telecom service-orkestratieplatform vanaf nul ontworpen en opgeleverd met Next.js, tRPC, Prisma en SQL Server, ter vervanging van spreadsheetflows."
           },
           "order": 0,
           "atsOnly": false
         },
         {
           "text": {
-            "es": "Automaticé transiciones de estado y notificaciones en tiempo real, aumentando la trazabilidad de solicitudes ~80% y ahorrando 120+ horas operativas al mes.",
-            "en": "Automated state transitions and real-time notifications, increasing request traceability ~80% and saving 120+ operational hours monthly.",
-            "nl": "Statusovergangen en realtime notificaties geautomatiseerd; traceerbaarheid ~80% hoger en 120+ operationele uren per maand bespaard."
+            "es": "Automaticé transiciones de estado y notificaciones en tiempo real, aumentando la trazabilidad en un ~80% y ahorrando 120+ horas operativas mensuales.",
+            "en": "Automated state transitions and real-time notifications, increasing request traceability by ~80% and saving 120+ operational hours monthly.",
+            "nl": "Statusovergangen en realtime meldingen geautomatiseerd, traceerbaarheid met ~80% verhoogd en maandelijks 120+ uur bespaard."
           },
           "order": 1,
           "atsOnly": false
@@ -401,27 +370,27 @@
       "responsibilities": [
         {
           "text": {
-            "es": "Guié y apoyé a desarrolladores junior con buenas prácticas y estándares, fortaleciendo la capacidad técnica del equipo.",
-            "en": "Guided and coached junior developers with best practices and standards, strengthening the team’s technical capability.",
-            "nl": "Junior developers begeleid met best practices en standaarden, waardoor de technische capaciteit van het team toenam."
+            "es": "Dirigí equipos de ingeniería, diseño y producto para alinear la entrega transversal en 5+ proyectos corporativos simultáneos.",
+            "en": "Directed engineering, design, and product teams to align cross-functional delivery across 5+ concurrent enterprise projects.",
+            "nl": "Engineering-, design- en productteams aangestuurd om de cross-functionele oplevering over 5+ gelijktijdige projecten af te stemmen."
           },
           "order": 0,
           "atsOnly": false
         },
         {
           "text": {
-            "es": "Coordine desarrollo, diseño y producto para alinear entregas en proyectos concurrentes.",
-            "en": "Coordinated engineering, design, and product to align delivery across concurrent projects.",
-            "nl": "Engineering, design en product gecoördineerd om leveringen over gelijktijdige projecten uit te lijnen."
+            "es": "Establecí pipelines CI/CD, estándares de code review y mentoricé a 4+ desarrolladores, impulsando un aumento del 40% en velocidad y ganando 2 hackathons.",
+            "en": "Established CI/CD pipelines, code review standards, and mentored 4+ developers, driving a 40% velocity increase and securing 2 internal hackathon wins.",
+            "nl": "CI/CD-pipelines en code review standaarden opgezet, 4+ developers begeleid, wat leidde tot 40% meer snelheid en 2 hackathonoverwinningen."
           },
           "order": 1,
           "atsOnly": false
         },
         {
           "text": {
-            "es": "Impulsé CI/CD, pruebas automatizadas y monitoreo para mejorar la eficiencia del equipo.",
-            "en": "Drove CI/CD, automated testing, and monitoring to improve team efficiency.",
-            "nl": "CI/CD, geautomatiseerde tests en monitoring ingevoerd om teamefficiëntie te verhogen."
+            "es": "Diseñé la arquitectura frontend e integraciones, definiendo una librería de componentes y estándares adoptados en toda la organización.",
+            "en": "Architected frontend systems and integrations, defining a component library and development standards adopted organization-wide.",
+            "nl": "Frontend-systemen en integraties ontworpen, inclusief een componentenbibliotheek en standaarden die organisatiebreed zijn overgenomen."
           },
           "order": 2,
           "atsOnly": false
@@ -849,6 +818,47 @@
         "nl": "Ontwikkelaar"
       },
       "order": 2
+    }
+  ],
+  "skills": [
+    {
+      "category": "Core Engineering",
+      "items": ["C#", ".NET", "Node.js", "NestJS", "TypeScript"],
+      "order": 0
+    },
+    {
+      "category": "Frontend",
+      "items": ["React", "Next.js", "TypeScript", "Tailwind", "Redux"],
+      "order": 1
+    },
+    {
+      "category": "Architecture",
+      "items": [
+        "Microservices",
+        "REST",
+        "GraphQL",
+        "DDD",
+        "Clean Architecture",
+        "SOLID"
+      ],
+      "order": 2
+    },
+    {
+      "category": "Data",
+      "items": [
+        "SQL Server",
+        "PostgreSQL",
+        "MySQL",
+        "MongoDB",
+        "Prisma",
+        "Entity Framework"
+      ],
+      "order": 3
+    },
+    {
+      "category": "DevOps & Quality",
+      "items": ["Docker", "CI/CD", "Playwright", "Unit Testing", "Snyk"],
+      "order": 4
     }
   ]
 }

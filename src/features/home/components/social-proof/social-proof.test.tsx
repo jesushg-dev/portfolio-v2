@@ -7,7 +7,7 @@ jest.mock("next-intl", () => ({
       eyebrow: "Trusted by developers",
       title: "What senior developers say about me",
       subtitle: "Colleagues who have seen my work up close.",
-      yearsExperience: "Years experience",
+      yearsExperience: "Years of experience",
       projectsCount: "Projects delivered",
       certificationsCount: "Certifications",
       hireMe: "Hire me",
@@ -66,6 +66,7 @@ describe("SocialProof Component", () => {
     yearsExperience: 6,
     projectsCount: 19,
     certificationsCount: 49,
+    engineersMentored: 6,
   };
 
   it("renders testimonials quote and Bento stats correctly", () => {
@@ -75,8 +76,7 @@ describe("SocialProof Component", () => {
       screen.getByText("What senior developers say about me"),
     ).toBeInTheDocument();
     expect(screen.getByText(/Mauricio Arias/i)).toBeInTheDocument();
-    expect(screen.getByText(/49/i)).toBeInTheDocument();
-    expect(screen.getByText(/19+/i)).toBeInTheDocument();
-    expect(screen.getByText(/6+/i)).toBeInTheDocument();
+    expect(screen.getByText(/19\+/i)).toBeInTheDocument();
+    expect(screen.getByText(/6\+/i)).toBeInTheDocument();
   });
 });

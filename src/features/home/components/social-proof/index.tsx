@@ -25,6 +25,7 @@ interface SocialProofStats {
   yearsExperience: number;
   projectsCount: number;
   certificationsCount: number;
+  engineersMentored: number;
 }
 
 interface SocialProofProps {
@@ -302,19 +303,18 @@ function SocialProofContent({
 
           {/* Right Column: 3 Bento Stat Cards */}
           <div className="flex flex-col justify-between gap-3.5 sm:gap-4 md:col-span-5">
-            {/* Stat Card 1: Certifications */}
-            <Link
-              href="/certificates"
+            {/* Stat Card 1: Mentored */}
+            <div
               onPointerMove={handlePointerMove}
               onPointerLeave={handlePointerLeave}
-              className="b-card-glow group border-border/80 bg-card hover:border-primary/40 relative flex cursor-pointer items-center justify-between gap-4 rounded-2xl border p-4 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-5"
+              className="b-card-glow group border-border/80 bg-card hover:border-primary/40 relative flex items-center justify-between gap-4 rounded-2xl border p-4 shadow-2xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-5"
             >
               <div>
                 <p className="text-primary font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-                  {statsData?.certificationsCount ?? 49}
+                  {statsData.engineersMentored}
                 </p>
                 <p className="text-muted-foreground mt-0.5 text-xs font-medium sm:text-sm">
-                  {t("stats.certifications.label")}
+                  {t("stats.engineersMentored.label")}
                 </p>
               </div>
 
@@ -331,7 +331,7 @@ function SocialProofContent({
                   />
                 ))}
               </div>
-            </Link>
+            </div>
 
             {/* Stat Card 2: Projects */}
             <a
@@ -374,7 +374,7 @@ function SocialProofContent({
               </div>
             </a>
 
-            {/* Stat Card 3: Years Experience */}
+            {/* Stat Card 3: Years of Experience */}
             <Link
               href={
                 cvPublic

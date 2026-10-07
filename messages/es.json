@@ -560,7 +560,7 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Senior Full Stack .NET Developer",
+      "title": "Jesús Hernández | Senior Software Engineer",
       "description": "Senior Full Stack Developer con 6+ años en .NET Core, React y SQL Server, modernizando sistemas legados y entregando software listo para producción en entornos de alto cumplimiento.",
       "keywords": "Senior .NET Developer, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Ingeniero de Software, Jesús Hernández, Senior Software Engineer"
     },
@@ -570,6 +570,7 @@
       "scrollDown": "Desplázate hacia abajo",
       "yearsExperience": "Años de experiencia",
       "projectsDelivered": "Proyectos entregados",
+      "engineersLed": "Ingenieros liderados",
       "certifications": "Certificaciones",
       "availableForOpportunities": "Disponible para nuevas oportunidades",
       "scheduleCall": "Agendar una llamada",
@@ -580,9 +581,9 @@
       }
     },
     "services": {
-      "title": "Servicios & Especialidades",
+      "title": "Experiencia en Ingeniería",
       "subtitle": "Servicios",
-      "description": "De la interfaz a la infraestructura: un desarrollador cubriendo todo el stack de extremo a extremo.",
+      "description": "Áreas donde diseño, construyo y lidero software de producción.",
       "items": {
         "contact": {
           "title": "Construyamos juntos",
@@ -599,8 +600,8 @@
       "metaDescription": "Explora mi trayectoria profesional y académica a lo largo del tiempo."
     },
     "about": {
-      "title": "Acerca de mí",
-      "subtitle": "Breve resumen",
+      "title": "Enfoque de Ingeniería",
+      "subtitle": "Cómo desarrollo",
       "terminalEmpty": {
         "title": "Terminal no configurada",
         "description": "Añade una secuencia de terminal animada desde la pestaña Terminal del perfil en el admin."
@@ -672,29 +673,25 @@
         "searchFor": " para \"{query}\""
       },
       "tabs": {
-        "frontend": {
-          "title": "Frontend",
-          "description": "Aplicaciones React y Next.js en producción a escala, desde storefronts de e-commerce hasta dashboards internos y plataformas admin."
+        "architecture": {
+          "title": "Arquitectura",
+          "description": "Diseño de sistemas, sistemas distribuidos, DDD y bases estructurales para plataformas escalables."
         },
         "backend": {
           "title": "Backend",
-          "description": "APIs REST y GraphQL en C#/.NET Core y Node.js, con autenticación, autorización y rendimiento como prioridades de primer nivel."
+          "description": "APIs REST y GraphQL en C#/.NET Core y Node.js, con el rendimiento como prioridad principal."
         },
-        "mobile": {
-          "title": "Móvil",
-          "description": "Apps React Native multiplataforma con soporte offline, autenticación biométrica y fiabilidad para operaciones de campo."
+        "data": {
+          "title": "Data",
+          "description": "Bases de datos SQL y NoSQL, ORMs y modelado de datos para aplicaciones de alto rendimiento."
         },
-        "database": {
-          "title": "Base de Datos",
-          "description": "SQL Server, PostgreSQL y MongoDB en dashboards financieros, plataformas de servicios y sistemas de contenido multi-tenant."
+        "frontend": {
+          "title": "Frontend",
+          "description": "Aplicaciones React y Next.js en producción a escala, desde storefronts hasta dashboards internos."
         },
-        "devops": {
-          "title": "DevOps",
-          "description": "Pipelines CI/CD en Azure DevOps y GitHub Actions, con Docker, análisis de seguridad y paridad de entornos."
-        },
-        "tools": {
-          "title": "Herramientas",
-          "description": "El kit de herramientas profesional del día a día que mantiene la entrega rápida, la calidad alta y los equipos alineados."
+        "quality": {
+          "title": "Calidad y Entrega",
+          "description": "Pipelines CI/CD, contenedores Docker, pruebas automatizadas y escaneo de seguridad para entregas fiables."
         }
       }
     },
@@ -706,8 +703,8 @@
     },
     "portfolio": {
       "subtitle": "Portafolio",
-      "title": "Mejores proyectos",
-      "description": "Una selección de proyectos que reflejan cómo diseño, desarrollo y resuelvo problemas reales con software.",
+      "title": "Trabajos de Ingeniería Seleccionados",
+      "description": "Una selección de sistemas e iniciativas de ingeniería donde resolví problemas técnicos, mejoré las entregas y creé impacto medible en el negocio.",
       "actions": {
         "view": "Ver proyecto",
         "source": "Ver código",
@@ -876,14 +873,14 @@
       "statsLabel": "En números",
       "statsNote": "Números acumulados en compromisos profesionales.",
       "stats": {
-        "certifications": {
-          "label": "Certificaciones"
-        },
         "projects": {
           "label": "Proyectos"
         },
         "experience": {
           "label": "Años de Experiencia"
+        },
+        "engineersMentored": {
+          "label": "Ingenieros liderados"
         }
       }
     },

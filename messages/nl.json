@@ -560,7 +560,7 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Senior Full Stack .NET Developer",
+      "title": "Jesús Hernández | Senior Software Engineer",
       "description": "Senior Full Stack Developer met 6+ jaar ervaring in .NET Core, React en SQL Server, moderniseren van legacy systemen en leveren van productieklare software in veeleisende omgevingen.",
       "keywords": "Senior .NET Developer, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Software Engineer, Jesús Hernández, Senior Software Engineer"
     },
@@ -570,6 +570,7 @@
       "scrollDown": "Scrol naar beneden",
       "yearsExperience": "Jaren ervaring",
       "projectsDelivered": "Projecten opgeleverd",
+      "engineersLed": "Engineers geleid",
       "certifications": "Certificeringen",
       "availableForOpportunities": "Beschikbaar voor nieuwe kansen",
       "scheduleCall": "Plan een gesprek",
@@ -580,9 +581,9 @@
       }
     },
     "services": {
-      "title": "Diensten & Expertise",
+      "title": "Engineering Expertise",
       "subtitle": "Diensten",
-      "description": "Van interface tot infrastructuur: één ontwikkelaar die de hele stack end-to-end beheert.",
+      "description": "Gebieden waar ik productiesoftware ontwerp, bouw en leid.",
       "items": {
         "contact": {
           "title": "Laten we samen bouwen",
@@ -599,8 +600,8 @@
       "metaDescription": "Ontdek mijn professionele en academische reis door de tijd."
     },
     "about": {
-      "title": "Over mij",
-      "subtitle": "Een beknopt overzicht",
+      "title": "Engineering Aanpak",
+      "subtitle": "Hoe ik ontwikkel",
       "terminalEmpty": {
         "title": "Terminal niet geconfigureerd",
         "description": "Voeg een geanimeerde terminalreeks toe via het Terminal-tabblad in het adminprofiel."
@@ -672,29 +673,25 @@
         "searchFor": " voor \"{query}\""
       },
       "tabs": {
-        "frontend": {
-          "title": "Frontend",
-          "description": "React- en Next.js-applicaties in productie op schaal, van e-commerce storefronts tot interne dashboards en beheerplatforms."
+        "architecture": {
+          "title": "Architectuur",
+          "description": "Systeemontwerp, gedistribueerde systemen, DDD en architectonische fundamenten voor schaalbare platformen."
         },
         "backend": {
           "title": "Backend",
-          "description": "REST en GraphQL API's in C#/.NET Core en Node.js, met authenticatie, autorisatie en prestaties als hoogste prioriteit."
+          "description": "REST en GraphQL API's in C#/.NET Core en Node.js, met prestaties als hoogste prioriteit."
         },
-        "mobile": {
-          "title": "Mobiel",
-          "description": "Cross-platform React Native-apps met offline ondersteuning, biometrische authenticatie en betrouwbaarheid voor veldoperaties."
+        "data": {
+          "title": "Data",
+          "description": "SQL en NoSQL databases, ORM's en datamodellering voor krachtige applicaties."
         },
-        "database": {
-          "title": "Database",
-          "description": "SQL Server, PostgreSQL en MongoDB in financiële dashboards, serviceplatformen en multi-tenant inhoudssystemen."
+        "frontend": {
+          "title": "Frontend",
+          "description": "React- en Next.js-applicaties in productie op schaal, van e-commerce storefronts tot interne dashboards."
         },
-        "devops": {
-          "title": "DevOps",
-          "description": "CI/CD-pijplijnen in Azure DevOps en GitHub Actions, met Docker, beveiligingsscanning en omgevingspariteit."
-        },
-        "tools": {
-          "title": "Gereedschappen",
-          "description": "De dagelijkse professionele toolkit die levering snel houdt, kwaliteit hoog en teams op één lijn."
+        "quality": {
+          "title": "Kwaliteit & Levering",
+          "description": "CI/CD-pipelines, Docker containerisatie, geautomatiseerd testen en veiligheidsscans voor betrouwbare levering."
         }
       }
     },
@@ -706,8 +703,8 @@
     },
     "portfolio": {
       "subtitle": "Portfolio",
-      "title": "Beste projecten",
-      "description": "Een selectie van projecten die laten zien hoe ik ontwerp, bouw en echte problemen oplos met software.",
+      "title": "Geselecteerd Engineering Werk",
+      "description": "Een selectie van systemen en engineering initiatieven waar ik technische problemen oploste, oplevering verbeterde en meetbare business impact creëerde.",
       "actions": {
         "view": "Bekijk project",
         "source": "Bekijk bron",
@@ -876,14 +873,14 @@
       "statsLabel": "In cijfers",
       "statsNote": "Cijfers verzameld over professionele betrokkenheden.",
       "stats": {
-        "certifications": {
-          "label": "Certificeringen"
-        },
         "projects": {
           "label": "Projecten"
         },
         "experience": {
           "label": "Jaar Ervaring"
+        },
+        "engineersMentored": {
+          "label": "Engineers geleid"
         }
       }
     },

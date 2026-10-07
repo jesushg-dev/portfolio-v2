@@ -55,11 +55,11 @@ describe("ExperienceAccordion", () => {
     expect(
       screen.getAllByText("Senior Software Engineer")[0],
     ).toBeInTheDocument();
-    expect(screen.getByText("@ Walmart")).toBeInTheDocument();
+    expect(screen.getByText("· Walmart")).toBeInTheDocument();
     expect(screen.getAllByText("2024 - Present")[0]).toBeInTheDocument();
 
     expect(screen.getByText("Development Team Lead")).toBeInTheDocument();
-    expect(screen.getByText("@ Contollo")).toBeInTheDocument();
+    expect(screen.getAllByText("· Contollo")[0]).toBeInTheDocument();
   });
 
   it("groups consecutive roles at the same company under a single promotion card", () => {
@@ -70,9 +70,9 @@ describe("ExperienceAccordion", () => {
       />,
     );
 
-    // Shows the promoted role as main card title with @ Contollo and promotion badge
+    // Shows the promoted role as main card title with · Contollo and promotion badge
     expect(screen.getByText("Development Team Lead")).toBeInTheDocument();
-    expect(screen.getByText("@ Contollo")).toBeInTheDocument();
+    expect(screen.getByText("· Contollo")).toBeInTheDocument();
     expect(screen.getByText("Promotion")).toBeInTheDocument();
   });
 

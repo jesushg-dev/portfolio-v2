@@ -191,7 +191,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
                           </span>
                           <span className="mt-0.5 flex flex-wrap items-center gap-2">
                             <span className="text-primary text-[15px] font-semibold">
-                              @ {group.company}
+                              · {group.company}
                             </span>
                             {isMultiRole ? (
                               <span className="border-primary/25 bg-primary/10 text-primary inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold">

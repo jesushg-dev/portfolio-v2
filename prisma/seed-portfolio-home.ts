@@ -59,14 +59,16 @@ export async function seedPortfolioHome(
             cvHeaderId: header.id,
             appLanguageId,
             degree: "",
-            heroSubtitle: data.heroSubtitle[code] ?? data.heroSubtitle.es ?? "",
-            heroTagline: data.heroTagline[code] ?? data.heroTagline.es ?? "",
-            heroSummary: data.heroSummary[code] ?? data.heroSummary.es ?? "",
+            heroSubtitle:
+              data.heroSubtitle?.[code] ?? data.heroSubtitle?.es ?? "",
+            heroTagline: data.heroTagline?.[code] ?? data.heroTagline?.es ?? "",
+            heroSummary: data.heroSummary?.[code] ?? data.heroSummary?.es ?? "",
           },
           update: {
-            heroSubtitle: data.heroSubtitle[code] ?? data.heroSubtitle.es ?? "",
-            heroTagline: data.heroTagline[code] ?? data.heroTagline.es ?? "",
-            heroSummary: data.heroSummary[code] ?? data.heroSummary.es ?? "",
+            heroSubtitle:
+              data.heroSubtitle?.[code] ?? data.heroSubtitle?.es ?? "",
+            heroTagline: data.heroTagline?.[code] ?? data.heroTagline?.es ?? "",
+            heroSummary: data.heroSummary?.[code] ?? data.heroSummary?.es ?? "",
           },
         });
       }

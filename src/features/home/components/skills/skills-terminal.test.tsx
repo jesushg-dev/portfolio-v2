@@ -54,6 +54,19 @@ jest.mock("@/components/shared/header-article", () => ({
 
 const mockSkills: SkillType[] = [
   {
+    id: "0",
+    userId: "user-1",
+    title: "System Design",
+    type: "ARCHITECTURE",
+    featured: true,
+    image: "/icons/arch.svg",
+    createdAt: new Date(),
+    description: "System Design",
+    appLanguageId: "lang-1",
+    skillId: "0",
+    urlWiki: "https://example.com",
+  },
+  {
     id: "1",
     userId: "user-1",
     title: "React",
@@ -113,12 +126,11 @@ describe("SkillsTerminal", () => {
 
     // Header & summary badge
     expect(screen.getByTestId("header-article")).toBeInTheDocument();
-    expect(screen.getByText("stack.json")).toBeInTheDocument();
-    expect(screen.getByText("React")).toBeInTheDocument();
-    expect(screen.getByText("Tailwind CSS")).toBeInTheDocument();
+    expect(screen.getByText("expertise.json")).toBeInTheDocument();
+    expect(screen.getByText("System Design")).toBeInTheDocument();
 
-    // Node.js is backend, so not visible under frontend tab
-    expect(screen.queryByText("Node.js")).not.toBeInTheDocument();
+    // React is frontend, so not visible under architecture tab initially
+    expect(screen.queryByText("React")).not.toBeInTheDocument();
   });
 
   it("switches category tab when clicked", () => {

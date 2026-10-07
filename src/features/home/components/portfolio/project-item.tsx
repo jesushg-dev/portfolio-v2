@@ -155,7 +155,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
           </div>
         ) : null}
 
-        <p className="text-muted-foreground mt-3 line-clamp-3 text-sm leading-relaxed">
+        <p className="text-muted-foreground mt-3 text-sm leading-relaxed whitespace-pre-line">
           {description}
         </p>
 

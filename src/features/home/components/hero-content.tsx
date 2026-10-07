@@ -90,10 +90,10 @@ export default async function HeroContent({
         </div>
         <div className="p-4 sm:p-5">
           <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-            {stats.certificationsCount}
+            6
           </dd>
           <dt className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
-            {t("certifications")}
+            {t("engineersLed")}
           </dt>
         </div>
       </dl>

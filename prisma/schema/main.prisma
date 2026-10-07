@@ -850,6 +850,9 @@ enum StackType {
   DEVOPS
   SOFTSKILLS
   TOOLS
+  ARCHITECTURE
+  DATA
+  QUALITY_DELIVERY
 }
 
 model TimelineItem {
