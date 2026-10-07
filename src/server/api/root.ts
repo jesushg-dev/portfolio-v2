@@ -23,7 +23,7 @@ import { jobTrackerAdminRouter } from "@/features/job-tracker/server/job-tracker
 import { resumeEngineAdminRouter } from "@/features/resume-engine/server/resume-engine-admin.router";
 import { interviewPrepAdminRouter } from "@/features/resume-engine/server/interview-prep-admin.router";
 import { integrationsAdminRouter } from "@/features/integrations/server/integrations-admin.router";
-import { portfolioSeedExportRouter } from "@/features/portfolio/server/seed-export/portfolio-seed-export.router";
+import { seedExportRouter } from "@/features/data-export/server/seed-export/seed-export.router";
 
 import { analyticsRouter } from "@/features/analytics/server/analytics.router";
 import { analyticsAdminRouter } from "@/features/analytics/server/analytics-admin.router";
@@ -57,7 +57,7 @@ export const appRouter = createTRPCRouter({
   resumeEngineAdmin: resumeEngineAdminRouter,
   interviewPrepAdmin: interviewPrepAdminRouter,
   integrationsAdmin: integrationsAdminRouter,
-  portfolioSeedExport: portfolioSeedExportRouter,
+  seedExport: seedExportRouter,
 });
 
 // export type definition of API

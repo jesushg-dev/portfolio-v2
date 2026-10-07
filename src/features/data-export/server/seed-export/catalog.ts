@@ -1,6 +1,7 @@
 import type {
   ProcessPageTemplate,
   ProjectKind,
+  ProjectStatus,
   SoftSkillsMediaType,
   StackType,
   TimelineCategory,
@@ -18,6 +19,7 @@ import timelineJson from "../../../../../prisma/data/portfolio-timeline.json";
 import usesJson from "../../../../../prisma/data/portfolio-uses.json";
 
 import type { ProcessPageContent } from "@/features/process-pages/lib/process-page-content";
+import type { CaseStudyContentDTO } from "@/features/projects/lib/case-study";
 
 import type { LocaleMap, SeedLocale } from "./locales";
 
@@ -45,6 +47,10 @@ export interface ProjectSeedRecord {
   kind?: ProjectKind;
   slug?: string;
   caseStudyEnabled?: boolean;
+  status?: ProjectStatus;
+  startedAt?: string;
+  endedAt?: string;
+  teamSize?: number;
   translations: {
     locale: SeedLocale;
     title: string;
@@ -53,6 +59,7 @@ export interface ProjectSeedRecord {
     challenge?: string;
     approach?: string;
     outcome?: string;
+    caseStudy?: CaseStudyContentDTO;
   }[];
   skillKeys: string[];
 }

@@ -5,7 +5,7 @@ import {
   SEED_EXPORT_FILENAMES,
   type SeedExportEntity,
 } from "@/lib/seed-export/entities";
-import { stringifySeedJson } from "@/features/portfolio/server/seed-export/serialize";
+import { stringifySeedJson } from "@/features/data-export/server/seed-export/serialize";
 
 export interface SeedJsonFile {
   fileName: string;

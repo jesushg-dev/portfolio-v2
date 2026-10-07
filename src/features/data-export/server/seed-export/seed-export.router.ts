@@ -16,17 +16,17 @@ import {
   serializeTimeline,
   serializeUses,
   stringifySeedJson,
-} from "@/features/portfolio/server/seed-export/serialize";
+} from "@/features/data-export/server/seed-export/serialize";
 import {
   seedJsonFilesFromData,
   zipSeedJsonFiles,
-} from "@/features/portfolio/server/seed-export/zip";
+} from "@/features/data-export/server/seed-export/zip";
 
 function payload(fileName: string, data: unknown) {
   return { fileName, json: stringifySeedJson(data) };
 }
 
-export const portfolioSeedExportRouter = createTRPCRouter({
+export const seedExportRouter = createTRPCRouter({
   skills: protectedProcedure.query(async ({ ctx }) => {
     const [skills, languages] = await Promise.all([
       ctx.db.skill.findMany({

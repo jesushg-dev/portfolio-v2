@@ -2,6 +2,7 @@ import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import type {
   ProcessPageTemplate,
   ProjectKind,
+  ProjectStatus,
   SoftSkillsMediaType,
   StackType,
   TimelineCategory,
@@ -12,6 +13,11 @@ import {
   parseProcessPageContent,
   type ProcessPageContent,
 } from "@/features/process-pages/lib/process-page-content";
+import {
+  caseStudyRowToDto,
+  isCaseStudyEmpty,
+  type CaseStudyContentRow,
+} from "@/features/projects/lib/case-study";
 
 import {
   certificationsCatalog,
@@ -85,6 +91,10 @@ export interface ProjectExportRow {
   kind: ProjectKind;
   slug: string | null;
   caseStudyEnabled: boolean;
+  status: ProjectStatus | null;
+  startedAt: Date | string | null;
+  endedAt: Date | string | null;
+  teamSize: number | null;
   ProjectTranslation: (TranslationRow & {
     title: string;
     description: string;
@@ -92,6 +102,7 @@ export interface ProjectExportRow {
     challenge: string | null;
     approach: string | null;
     outcome: string | null;
+    caseStudy?: CaseStudyContentRow | null;
   })[];
   ProjectSkill: { Skill: { title: string } }[];
 }
@@ -272,8 +283,10 @@ export function serializeSkills(
 ): SkillSeedRecord[] {
   const keyByTitle = buildSkillKeyByTitle(skills);
   const records = skills.map((skill) => {
+    const key = keyByTitle.get(skill.title) ?? toPascalKey(skill.title);
+    const catalogRecord = skillsCatalog.find((item) => item.key === key);
     const record: SkillSeedRecord = {
-      key: keyByTitle.get(skill.title) ?? toPascalKey(skill.title),
+      key,
       title: skill.title,
       type: skill.type,
       image: skill.image,
@@ -286,7 +299,9 @@ export function serializeSkills(
           urlWiki: row.urlWiki,
         }),
       ),
-      featured: skill.featured,
+      ...(catalogRecord?.featured !== undefined || skill.featured
+        ? { featured: skill.featured }
+        : {}),
     };
     return record;
   });
@@ -362,15 +377,25 @@ export function serializeProjects(
       isPrivate: project.isPrivate,
       slug,
       ...(project.caseStudyEnabled ? { caseStudyEnabled: true } : {}),
+      ...(project.status ? { status: project.status } : {}),
+      ...(project.startedAt
+        ? { startedAt: toDateOnly(project.startedAt) }
+        : {}),
+      ...(project.endedAt ? { endedAt: toDateOnly(project.endedAt) } : {}),
+      ...(project.teamSize !== null ? { teamSize: project.teamSize } : {}),
       translations: translationArray(
         project.ProjectTranslation,
         languages,
-        (row, locale) => ({
-          locale,
-          title: row.title,
-          description: row.description,
-          ...optionalCaseStudyFields(row),
-        }),
+        (row, locale) => {
+          const caseStudy = caseStudyRowToDto(row.caseStudy);
+          return {
+            locale,
+            title: row.title,
+            description: row.description,
+            ...optionalCaseStudyFields(row),
+            ...(isCaseStudyEmpty(caseStudy) ? {} : { caseStudy }),
+          };
+        },
       ),
       skillKeys: project.ProjectSkill.map(
         (join) =>

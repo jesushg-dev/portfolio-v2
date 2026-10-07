@@ -87,6 +87,10 @@ function hydrateProjects(seeds: ProjectSeedRecord[]): ProjectExportRow[] {
     kind: seed.kind ?? "PERSONAL",
     slug: seed.slug ?? slugFromKey(seed.key),
     caseStudyEnabled: seed.caseStudyEnabled ?? false,
+    status: seed.status ?? null,
+    startedAt: seed.startedAt ?? null,
+    endedAt: seed.endedAt ?? null,
+    teamSize: seed.teamSize ?? null,
     ProjectTranslation: seed.translations.map((translation) => ({
       appLanguageId: translation.locale,
       title: translation.title,
@@ -95,6 +99,7 @@ function hydrateProjects(seeds: ProjectSeedRecord[]): ProjectExportRow[] {
       challenge: translation.challenge ?? null,
       approach: translation.approach ?? null,
       outcome: translation.outcome ?? null,
+      caseStudy: translation.caseStudy ?? null,
     })),
     ProjectSkill: seed.skillKeys.map((key) => ({
       Skill: { title: skillTitleByKey(key) },

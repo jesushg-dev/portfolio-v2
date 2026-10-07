@@ -10,7 +10,7 @@ const mockFetchAllZip = jest.fn();
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      portfolioSeedExport: {
+      seedExport: {
         skills: { fetch: mockFetchSkills },
         allZip: { fetch: mockFetchAllZip },
       },
