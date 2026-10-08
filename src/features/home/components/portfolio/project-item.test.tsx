@@ -7,12 +7,18 @@ import PortfolioItem from "./project-item";
 
 interface MockLinkProps extends Omit<ComponentPropsWithoutRef<"a">, "href"> {
   children?: ReactNode;
-  href: string | { pathname?: string };
+  href: string | { pathname?: string; params?: Record<string, string> };
 }
 
 jest.mock("@/i18n/routing", () => ({
   Link: ({ children, href, ...props }: MockLinkProps) => {
-    const targetHref = typeof href === "string" ? href : (href.pathname ?? "#");
+    const targetHref =
+      typeof href === "string"
+        ? href
+        : Object.entries(href.params ?? {}).reduce(
+            (path, [key, value]) => path.replace(`[${key}]`, value),
+            href.pathname ?? "#",
+          );
     return (
       <a href={targetHref} {...props}>
         {children}
@@ -57,6 +63,39 @@ describe("PortfolioItem", () => {
     fireEvent.error(img);
 
     expect(screen.queryByAltText("Awesome Project")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Awesome Project")).toHaveLength(2);
+    expect(screen.getByText("Awesome Project")).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-mock="frontend"]'),
+    ).toBeInTheDocument();
+  });
+
+  it("shows a modern case study button for enabled projects", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        slug="awesome-project"
+        caseStudyEnabled
+      />,
+    );
+
+    const caseStudyLink = screen.getByRole("link", {
+      name: "Case Study: Awesome Project",
+    });
+    expect(caseStudyLink).toHaveAttribute("href", "/projects/awesome-project");
+    expect(caseStudyLink).toHaveClass("text-primary");
+  });
+
+  it("does not show the case study button when it is disabled", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        slug="awesome-project"
+        caseStudyEnabled={false}
+      />,
+    );
+
+    expect(
+      screen.queryByRole("link", { name: "Case Study: Awesome Project" }),
+    ).not.toBeInTheDocument();
   });
 });

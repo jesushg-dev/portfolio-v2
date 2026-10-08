@@ -1,6 +1,12 @@
 import type { FC } from "react";
 import { memo } from "react";
-import { FaEye, FaDesktop, FaDatabase, FaMobile } from "react-icons/fa";
+import {
+  FaEye,
+  FaDesktop,
+  FaDatabase,
+  FaMobile,
+  FaLaptop,
+} from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
 import Tab from "@/components/custom-ui/custom-tab";
@@ -36,6 +42,7 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange }) => {
           description=""
         />
         <TabItem icon={FaMobile} title={t("filters.mobile")} description="" />
+        <TabItem icon={FaLaptop} title={t("filters.desktop")} description="" />
       </Tab>
     </div>
   );

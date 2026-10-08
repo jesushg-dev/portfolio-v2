@@ -13,6 +13,11 @@ import {
   mapProjectToEditorDto,
   mapProjectsToEditorDto,
 } from "@/features/projects/lib/project-editor-dto";
+import {
+  buildEmptyCaseStudy,
+  CaseStudyContentSchema,
+  caseStudyDtoToWrite,
+} from "@/features/projects/lib/case-study";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 import { type Prisma, type StackType } from "@prisma/client";
@@ -26,6 +31,7 @@ const ProjectTranslationMapSchema = z.record(
     challenge: z.string().default(""),
     approach: z.string().default(""),
     outcome: z.string().default(""),
+    caseStudy: CaseStudyContentSchema.default(buildEmptyCaseStudy),
   }),
 );
 
@@ -118,7 +124,15 @@ export const projectsAdminRouter = createTRPCRouter({
           ...rest,
           userId: ctx.user.id,
           ProjectTranslation: translationRows.length
-            ? { createMany: { data: translationRows } }
+            ? {
+                createMany: {
+                  data: translationRows.map((translation) => ({
+                    ...translation,
+                    caseStudy:
+                      caseStudyDtoToWrite(translation.caseStudy) ?? undefined,
+                  })),
+                },
+              }
             : undefined,
           ProjectSkill: skillIds.length
             ? { createMany: { data: skillIds.map((skillId) => ({ skillId })) } }
@@ -127,7 +141,10 @@ export const projectsAdminRouter = createTRPCRouter({
         include: { ProjectTranslation: true, ProjectSkill: true },
       });
 
-      return mapProjectToEditorDto(created, languages);
+      return mapProjectToEditorDto(
+        created,
+        languages,
+      );
     }),
 
   updateItem: protectedProcedure
@@ -160,11 +177,18 @@ export const projectsAdminRouter = createTRPCRouter({
               challenge: translation.challenge ?? null,
               approach: translation.approach ?? null,
               outcome: translation.outcome ?? null,
+              caseStudy:
+                caseStudyDtoToWrite(translation.caseStudy) ?? undefined,
             },
           });
         } else {
           await ctx.db.projectTranslation.create({
-            data: { projectId: id, ...translation },
+            data: {
+              projectId: id,
+              ...translation,
+              caseStudy:
+                caseStudyDtoToWrite(translation.caseStudy) ?? undefined,
+            },
           });
         }
       }

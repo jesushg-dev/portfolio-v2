@@ -1,0 +1,42 @@
+{
+  "key": "MusaEcommerce",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/musa-client_blxhyy",
+  "type": "FRONTEND",
+  "githubUrl": "musa-client_blxhyy",
+  "websiteUrl": "",
+  "isPrivate": true,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Musa Ecommerce",
+      "description": "Plataforma B2C e-commerce para productos perecederos con control de inventario en tiempo real.",
+      "hook": "99.9% precisión de stock · -35% latencia de respuesta",
+      "challenge": "El negocio requería un canal digital de alta disponibilidad capaz de gestionar inventario de alta rotación (perecederos), reglas por categoría y procesos de pago rápidos sin sobrecargar la infraestructura.",
+      "approach": "Diseñé la arquitectura frontend con Next.js, TypeScript y Tailwind CSS, integrando microservicios internos GraphQL/Nest.js. Implementé optimizaciones de renderizado y validaciones estrictas en el cliente.",
+      "outcome": "Lanzamiento exitoso del canal digital con 99.9% de precisión en sincronización de stock y una reducción del 35% en tiempos de respuesta frente al sistema heredado."
+    },
+    {
+      "locale": "en",
+      "title": "Musa Ecommerce",
+      "description": "B2C e-commerce platform for perishable goods with real-time inventory control.",
+      "hook": "99.9% inventory sync accuracy · 35% latency reduction",
+      "challenge": "The business required a high-availability digital channel to handle fast-rotating perishable inventory, category-based rules, and frictionless checkout flows under high traffic.",
+      "approach": "Architected the frontend using Next.js, TypeScript, and Tailwind CSS, integrating internal GraphQL/Nest.js microservices. Implemented client-side performance optimizations and strict data validation.",
+      "outcome": "Successful launch of the online channel with 99.9% inventory sync accuracy and a 35% reduction in response latencies compared to the legacy system."
+    },
+    {
+      "locale": "nl",
+      "title": "Musa Ecommerce",
+      "description": "B2C e-commerceplatform voor bederfelijke goederen met realtime voorraadbeheer.",
+      "hook": "99,9% voorraadnauwkeurigheid · 35% snellere responstijd",
+      "challenge": "Het bedrijf had een hoog-beschikbaar digitaal kanaal nodig voor snel roterende voorraad, categorie-regels en snelle checkout-processen.",
+      "approach": "Frontend-architectuur ontworpen met Next.js, TypeScript en Tailwind CSS, geïntegreerd met interne GraphQL/Nest.js microservices. Prestatie-optimalisaties en strikte validaties geïmplementeerd.",
+      "outcome": "Succesvolle lancering van het digitale kanaal met 99,9% voorraadnauwkeurigheid en 35% snellere responstijden vergeleken met het oude systeem."
+    }
+  ],
+  "skillKeys": ["Nextjs", "Tailwind", "Typescript"],
+  "order": 3,
+  "kind": "PROFESSIONAL",
+  "caseStudyEnabled": true,
+  "slug": "musa-ecommerce"
+}

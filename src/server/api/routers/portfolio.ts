@@ -7,6 +7,7 @@ import {
 } from "@/features/soft-skills/lib/soft-skills-media";
 import { splitAboutParagraphs } from "@/features/profile/server/hero-titles";
 import { mapTimelineItemsToPublic } from "@/features/timeline/lib/map-timeline-public";
+import { caseStudyRowToDto } from "@/features/projects/lib/case-study";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import {
   looksLikeSkillObjectId,
@@ -943,12 +944,17 @@ export const portfolioRouter = createTRPCRouter({
         githubUrl: project.githubUrl,
         websiteUrl: project.websiteUrl,
         isPrivate: project.isPrivate,
+        status: project.status,
+        startedAt: project.startedAt,
+        endedAt: project.endedAt,
+        teamSize: project.teamSize,
         title: translation.title,
         description: translation.description,
         hook: translation.hook,
         challenge: translation.challenge,
         approach: translation.approach,
         outcome: translation.outcome,
+        caseStudy: caseStudyRowToDto(translation.caseStudy ?? null),
         skills,
       };
     }),
@@ -986,21 +992,42 @@ export const portfolioRouter = createTRPCRouter({
         .map((project) => {
           const translation = project.ProjectTranslation[0];
           if (!project.slug || !translation) return null;
-          return { slug: project.slug, title: translation.title };
+          return {
+            slug: project.slug,
+            title: translation.title,
+            image: project.image,
+            summary: translation.hook ?? translation.description,
+            nextProjectSlug: translation.caseStudy?.nextProjectSlug ?? null,
+          };
         })
         .filter(
-          (project): project is { slug: string; title: string } =>
-            project !== null,
+          (
+            project,
+          ): project is {
+            slug: string;
+            title: string;
+            image: string;
+            summary: string;
+            nextProjectSlug: string | null;
+          } => project !== null,
         );
-
-      if (slugs.length < 2) return null;
 
       const currentIndex = slugs.findIndex(
         (project) => project.slug === input.slug,
       );
       if (currentIndex === -1) return null;
 
-      const nextIndex = (currentIndex + 1) % slugs.length;
-      return slugs[nextIndex];
+      const currentProject = slugs[currentIndex];
+      if (!currentProject) return null;
+
+      if (currentProject.nextProjectSlug) {
+        const nextProject = slugs.find(
+          (project) => project.slug === currentProject.nextProjectSlug,
+        );
+        return nextProject ? { ...nextProject, image: "" } : null;
+      }
+
+      if (slugs.length < 2) return null;
+      return slugs[(currentIndex + 1) % slugs.length] ?? null;
     }),
 });

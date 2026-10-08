@@ -23,7 +23,7 @@ const Contact: FC = async () => {
   const showContactForm = data.emailFormEnabled;
 
   return (
-    <div className="bg-background border-border/40 relative w-full border-t">
+    <div className="bg-card border-border/40 relative w-full border-t">
       <section className="relative w-full overflow-hidden py-16 sm:py-20 lg:py-24">
         {/* Background Texture Image */}
         <div
@@ -38,7 +38,7 @@ const Contact: FC = async () => {
         {/* Soft gradient edges overlay */}
         <div
           aria-hidden
-          className="from-background/75 to-background/75 pointer-events-none absolute inset-0 bg-linear-to-b via-transparent"
+          className="from-card/75 to-card/75 pointer-events-none absolute inset-0 bg-linear-to-b via-transparent"
         />
 
         {/* Ambient background glow */}

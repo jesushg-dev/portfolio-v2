@@ -1,0 +1,29 @@
+{
+  "key": "Lotty",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/loto-nic_mtnoh7",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jess232017/Loto-Nicaragua",
+  "websiteUrl": "https://loto-nicaragua.vercel.app/",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Lotty",
+      "description": "Aplicación web para consultar los resultados de la loto de Nicaragua."
+    },
+    {
+      "locale": "en",
+      "title": "Lotty",
+      "description": "Web application to consult the results of the Nicaraguan lottery."
+    },
+    {
+      "locale": "nl",
+      "title": "Lotty",
+      "description": "Webapplicatie om de resultaten van de Nicaraguaanse loterij te raadplegen."
+    }
+  ],
+  "skillKeys": ["React", "Bootstrap"],
+  "order": 9,
+  "kind": "LEARNING",
+  "slug": "lotty"
+}

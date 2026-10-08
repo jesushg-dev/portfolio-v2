@@ -638,6 +638,57 @@ enum ProjectKind {
   LEARNING
 }
 
+enum ProjectStatus {
+  IN_PRODUCTION
+  MAINTENANCE
+  ARCHIVED
+}
+
+type CaseStudyItem {
+  key       String
+  title     String
+  summary   String?
+  body      String?
+  value     String?
+  icon      String?
+  tags      String[]
+  note      String?
+}
+
+type CaseStudyFact {
+  key   String
+  label String
+  value String
+}
+
+type CaseStudySection {
+  key           String
+  kind          String
+  eyebrow       String?
+  title         String
+  lead          String?
+  code          String?
+  codeLabel     String?
+  items         CaseStudyItem[]
+  footnoteTitle   String?
+  footnotes       String[]
+  footnoteVariant String?
+}
+
+type CaseStudyContent {
+  chips           String[]
+  facts           CaseStudyFact[]
+  stack           String[]
+  nextProjectSlug String?
+  context         String?
+  roleTitle       String?
+  roleIntro       String?
+  tldr            CaseStudyItem[]
+  responsibilities CaseStudyItem[]
+  constraints     String[]
+  sections        CaseStudySection[]
+}
+
 model Project {
   id                 String               @id @default(auto()) @map("_id") @db.ObjectId
   userId             String?              @db.ObjectId
@@ -652,6 +703,10 @@ model Project {
   kind               ProjectKind          @default(PERSONAL)
   slug               String?
   caseStudyEnabled   Boolean              @default(false)
+  status             ProjectStatus?
+  startedAt          DateTime?
+  endedAt            DateTime?
+  teamSize           Int?
   ProjectSkill       ProjectSkill[]
   ProjectTranslation ProjectTranslation[]
   CertificateProject CertificateProject[]
@@ -675,10 +730,13 @@ model ProjectTranslation {
   challenge     String?
   approach      String?
   outcome       String?
+  caseStudy     CaseStudyContent?
   language      AppLanguage @relation(fields: [appLanguageId], references: [id])
-  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   appLanguageId String      @db.ObjectId
-  projectId     String?     @db.ObjectId
+  projectId     String      @db.ObjectId
+
+  @@unique([projectId, appLanguageId])
 }
 
 model Testimonial {

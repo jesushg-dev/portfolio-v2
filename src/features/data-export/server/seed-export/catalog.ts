@@ -11,7 +11,53 @@ import type {
 import certificationsJson from "../../../../../prisma/data/portfolio-certifications.json";
 import nowJson from "../../../../../prisma/data/portfolio-now.json";
 import processPagesJson from "../../../../../prisma/data/portfolio-process-pages.json";
-import projectsJson from "../../../../../prisma/data/portfolio-projects.json";
+import covid19 from "../../../../../prisma/data/projects/covid19.json";
+import ecommerceAdmin from "../../../../../prisma/data/projects/ecommerce-admin.json";
+import ecommerceApi from "../../../../../prisma/data/projects/ecommerce-api.json";
+import ecommerce from "../../../../../prisma/data/projects/ecommerce.json";
+import foodDelivery from "../../../../../prisma/data/projects/food-delivery.json";
+import kwhMonitorApi from "../../../../../prisma/data/projects/kwh-monitor-api.json";
+import kwhMonitor from "../../../../../prisma/data/projects/kwh-monitor.json";
+import lottyApi from "../../../../../prisma/data/projects/lotty-api.json";
+import lotty from "../../../../../prisma/data/projects/lotty.json";
+import luckyApp from "../../../../../prisma/data/projects/lucky-app.json";
+import musaAdmin from "../../../../../prisma/data/projects/musa-admin.json";
+import musaEcommerce from "../../../../../prisma/data/projects/musa-ecommerce.json";
+import portfolio from "../../../../../prisma/data/projects/portfolio.json";
+import posInventory from "../../../../../prisma/data/projects/pos-inventory.json";
+import requestAdmin from "../../../../../prisma/data/projects/request-admin.json";
+import rickAndMorty from "../../../../../prisma/data/projects/rick-and-morty.json";
+import softSkillsQuiz from "../../../../../prisma/data/projects/soft-skills-quiz.json";
+import techServiceApi from "../../../../../prisma/data/projects/tech-service-api.json";
+import techService from "../../../../../prisma/data/projects/tech-service.json";
+import yourFarm from "../../../../../prisma/data/projects/your-farm.json";
+
+const projectsJson = [
+  portfolio,
+  musaEcommerce,
+  musaAdmin,
+  ecommerceApi,
+  ecommerce,
+  ecommerceAdmin,
+  foodDelivery,
+  kwhMonitor,
+  kwhMonitorApi,
+  lotty,
+  lottyApi,
+  luckyApp,
+  posInventory,
+  requestAdmin,
+  rickAndMorty,
+  softSkillsQuiz,
+  techService,
+  techServiceApi,
+  yourFarm,
+  covid19,
+].sort(
+  (a, b) =>
+    ((a as { order?: number }).order ?? 999) -
+    ((b as { order?: number }).order ?? 999),
+);
 import servicesJson from "../../../../../prisma/data/portfolio-services.json";
 import skillsJson from "../../../../../prisma/data/portfolio-skills.json";
 import softSkillsJson from "../../../../../prisma/data/portfolio-soft-skills.json";

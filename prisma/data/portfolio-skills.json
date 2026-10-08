@@ -1169,5 +1169,125 @@
         "urlWiki": ""
       }
     ]
+  },
+  {
+    "key": "Postgresql",
+    "title": "PostgreSQL",
+    "type": "DATA",
+    "image": "https://cdn.simpleicons.org/postgresql",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Sistema de gestión de bases de datos relacional orientado a objetos y de código abierto.",
+        "urlWiki": "https://es.wikipedia.org/wiki/PostgreSQL"
+      },
+      {
+        "locale": "en",
+        "description": "Powerful, open source object-relational database system.",
+        "urlWiki": "https://en.wikipedia.org/wiki/PostgreSQL"
+      },
+      {
+        "locale": "nl",
+        "description": "Krachtig, open-source object-relationeel databasesysteem.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/PostgreSQL"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "Jest",
+    "title": "Jest",
+    "type": "QUALITY_DELIVERY",
+    "image": "https://cdn.simpleicons.org/jest",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework de pruebas en JavaScript con enfoque en la simplicidad y proyectos de React.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Jest_(software)"
+      },
+      {
+        "locale": "en",
+        "description": "Delightful JavaScript Testing Framework with a focus on simplicity.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Jest_(software)"
+      },
+      {
+        "locale": "nl",
+        "description": "JavaScript-testframework ontworpen met de nadruk op eenvoud.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Jest_(software)"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "Cypress",
+    "title": "Cypress",
+    "type": "QUALITY_DELIVERY",
+    "image": "https://cdn.simpleicons.org/cypress",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Herramienta de pruebas de frontend de extremo a extremo construida para la web moderna.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Cypress_(software)"
+      },
+      {
+        "locale": "en",
+        "description": "Next generation front end testing tool built for the modern web.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Cypress_(software)"
+      },
+      {
+        "locale": "nl",
+        "description": "Next-generation front-end testtool gebouwd voor het moderne web.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Cypress_(software)"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "Trpc",
+    "title": "tRPC",
+    "type": "BACKEND",
+    "image": "https://cdn.simpleicons.org/trpc",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Herramienta para crear APIs con seguridad de tipos de extremo a extremo sin esquemas ni generación de código.",
+        "urlWiki": "https://trpc.io"
+      },
+      {
+        "locale": "en",
+        "description": "End-to-end typesafe APIs made easy without schemas or code generation.",
+        "urlWiki": "https://trpc.io"
+      },
+      {
+        "locale": "nl",
+        "description": "End-to-end typesafe API's zonder schema's of codegeneratie.",
+        "urlWiki": "https://trpc.io"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "Playwright",
+    "title": "Playwright",
+    "type": "QUALITY_DELIVERY",
+    "image": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/playwright/playwright-original.svg",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework de automatización y pruebas de extremo a extremo confiables para navegadores modernos.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Playwright_(software)"
+      },
+      {
+        "locale": "en",
+        "description": "Fast and reliable end-to-end testing and automation for modern web apps across browsers.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Playwright_(software)"
+      },
+      {
+        "locale": "nl",
+        "description": "Snelle en betrouwbare end-to-end testen en automatisering voor moderne webapps.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Playwright_(software)"
+      }
+    ],
+    "featured": false
   }
 ]

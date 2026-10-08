@@ -1,0 +1,29 @@
+{
+  "key": "PosInventory",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/portf-5_f1z3la",
+  "type": "DESKTOP",
+  "githubUrl": "https://github.com/jess232017/Control-Inventario-y-Ventas",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Control de Inventario y Ventas",
+      "description": "Sistema de control de inventario y ventas para una tienda de ropa."
+    },
+    {
+      "locale": "en",
+      "title": "Inventory and Sales Control",
+      "description": "Inventory and sales control system for a clothing store."
+    },
+    {
+      "locale": "nl",
+      "title": "Inventar- und Verkaufskontrolle",
+      "description": "Inventaris- en verkoopcontrolesysteem voor een kledingwinkel."
+    }
+  ],
+  "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"],
+  "order": 13,
+  "kind": "PROFESSIONAL",
+  "slug": "pos-inventory"
+}

@@ -75,6 +75,37 @@ import { Calendar, Zap } from "lucide-react";
 
 ---
 
+## Skill & Technology Icons — Canonical Component: SkillIcon
+
+### ❌ NEVER create ad-hoc skill badges, hand-rolled letters, or hardcoded maps (like `TECH_MARKS`)
+
+Do not invent custom initial badges or parallel maps for skill/technology logos. This leads to visual inconsistency and code redundancy.
+
+```tsx
+// ❌ WRONG — hardcoding initials and custom tile colors
+const TECH_MARKS = { React: { mark: "R", color: "#61dafb" } };
+<span style={{ color: mark.color }}>{mark.mark}</span>;
+```
+
+### ✅ ALWAYS use `SkillIcon` as the single source of truth for all skills and tools
+
+Import `SkillIcon` from `@/features/home/components/skills/skill-icon`. It handles image rendering, image validation, and elegant badge fallbacks (`initials` + semantic badge colors from `@/features/home/components/skills/lib/skill-display`) when images are not available.
+
+```tsx
+// ✅ CORRECT — single source of truth across projects, terminal, and case studies
+import SkillIcon from "@/features/home/components/skills/skill-icon";
+
+<SkillIcon
+  image={skill.image}
+  title={skill.title}
+  tile
+  size="sm"
+  className="size-6 rounded-lg text-xs"
+/>;
+```
+
+---
+
 ## Theming System
 
 This project uses a **`data-theme` attribute system** for theming, NOT Tailwind's `dark:` variant.
@@ -938,3 +969,27 @@ The only acceptable case for client-side locale resolution is a **purely present
 1. Be commented with `// locale resolution on client: [reason]`.
 2. Use `createLocalizedFieldResolver` from `@/lib/i18n/localized-display` — never use client hooks or context providers.
 3. Have the resolution hidden inside the component, not spread across multiple files.
+
+---
+
+## Translation Models Architecture (Prisma & Seed Strictness)
+
+### ✅ ALWAYS enforce strict normalized relational translation models
+
+Every translatable model (`*Translation`) in `prisma/schema/main.prisma` MUST strictly satisfy:
+
+1. **Required Foreign Keys**:
+   - `<parentId> String @db.ObjectId` (MUST be required `String`, NEVER optional `String?`).
+   - `Parent Parent @relation(fields: [<parentId>], references: [id], onDelete: Cascade)` (MUST be required `Parent`, NEVER `Parent?`).
+   - `appLanguageId String @db.ObjectId` (MUST be required `String`).
+   - `language AppLanguage @relation(fields: [appLanguageId], references: [id])`.
+2. **Compound Unique Constraint**:
+   - `@@unique([<parentId>, appLanguageId])` MUST be present on EVERY `*Translation` model.
+   - Guarantees exactly ONE translation row per locale per entity.
+   - Enables atomic `prisma.*Translation.upsert({ where: { parentId_appLanguageId: ... } })` operations without race conditions.
+3. **Embedded Types Inherit Locale**:
+   - Composite types (such as `CaseStudyContent` in MongoDB) embedded inside a `*Translation` row inherit the `appLanguageId` of the parent translation row.
+4. **Modular Project Files (`prisma/data/projects/<slug>.json`)**:
+   - Projects live in individual files under `prisma/data/projects/<slug>.json` (1 file per project as a single object).
+   - Monolithic `portfolio-projects.json` is obsolete and forbidden.
+   - Clear separation: Card metadata (`title`, short `description`, `skills`, distinct metric `hook`) vs. Case Study content (`sections`, `architecture`, `decisions`). Do NOT repeat the card description word-for-word in `context`.

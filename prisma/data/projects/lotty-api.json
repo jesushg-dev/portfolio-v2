@@ -1,0 +1,29 @@
+{
+  "key": "LottyApi",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_u56jdu",
+  "type": "BACKEND",
+  "githubUrl": "https://github.com/jess232017/Loto-Api",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Lotty Api",
+      "description": "Api Rest para la aplicación móvil Lucky App."
+    },
+    {
+      "locale": "en",
+      "title": "Lotty Api",
+      "description": "Rest Api for the mobile application Lucky App."
+    },
+    {
+      "locale": "nl",
+      "title": "Lotty Api",
+      "description": "Rest Api voor de mobiele applicatie Lucky App."
+    }
+  ],
+  "skillKeys": ["Nodejs", "Mysql"],
+  "order": 10,
+  "kind": "LEARNING",
+  "slug": "lotty-api"
+}

@@ -50,7 +50,7 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
     <section
       id="top"
       aria-label="Home"
-      className="bg-background relative flex min-h-screen w-full items-center overflow-hidden"
+      className="bg-card relative flex min-h-screen w-full items-center overflow-hidden"
     >
       {/* Top radial gradient light effect */}
       <div

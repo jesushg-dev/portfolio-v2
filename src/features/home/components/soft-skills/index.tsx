@@ -21,7 +21,7 @@ const SoftSkills: FC = async () => {
   if (items.length === 0) return null;
 
   return (
-    <div className="relative w-full">
+    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
       <section
         id="leadership"
         className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"

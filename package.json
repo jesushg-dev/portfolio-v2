@@ -21,6 +21,7 @@
     "db:push": "node scripts/validate-mongodb-uri.mjs && npx prisma db push",
     "db:generate": "prisma generate",
     "db:seed": "npx prisma db seed",
+    "db:seed:projects": "npx tsx prisma/seed-portfolio-projects.ts",
     "db:auth-audit": "npx tsx prisma/scripts/audit-account-identity.ts",
     "db:auth-backfill": "npx tsx prisma/scripts/backfill-account-issuer.ts",
     "prettier": "prettier --write .",

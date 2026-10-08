@@ -149,7 +149,7 @@ function SocialProofContent({
   };
 
   return (
-    <div className="bg-muted/40 border-border/60 relative w-full border-y">
+    <div className="bg-card relative w-full overflow-hidden">
       <section
         id="testimonials"
         aria-label={t("title", { count: items.length })}

@@ -19,7 +19,7 @@ const Services: FC = async () => {
   if (services.length === 0) return null;
 
   return (
-    <div className="bg-muted/40 border-border/20 relative w-full border-y">
+    <div className="bg-card relative w-full overflow-hidden">
       <section
         aria-label={t("title")}
         className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"

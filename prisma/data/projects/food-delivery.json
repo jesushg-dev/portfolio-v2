@@ -1,0 +1,29 @@
+{
+  "key": "FoodDelivery",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-6_avknde",
+  "type": "MOBILE",
+  "githubUrl": "https://github.com/jess232017/Food-Service",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Food Service",
+      "description": "Aplicación móvil Android para el control de pedidos de comida."
+    },
+    {
+      "locale": "en",
+      "title": "Food Service",
+      "description": "Android mobile application for the control of food orders."
+    },
+    {
+      "locale": "nl",
+      "title": "Food Service",
+      "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+    }
+  ],
+  "skillKeys": ["Java", "Android", "Mysql"],
+  "order": 14,
+  "kind": "PROFESSIONAL",
+  "slug": "food-delivery"
+}
