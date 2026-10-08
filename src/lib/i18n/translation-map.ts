@@ -1,9 +1,6 @@
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 
-export type TranslationMap<T extends Record<keyof T, string>> = Record<
-  string,
-  T
->;
+export type TranslationMap<T extends object> = Record<string, T>;
 
 export interface TextTranslationFields {
   text: string;
@@ -11,11 +8,11 @@ export interface TextTranslationFields {
 
 export type TextTranslationMap = TranslationMap<TextTranslationFields>;
 
-export type TranslationRow<T extends Record<keyof T, string>> = {
+export type TranslationRow<T extends object> = {
   appLanguageId: string;
 } & T;
 
-export function buildEmptyTranslationMap<T extends Record<keyof T, string>>(
+export function buildEmptyTranslationMap<T extends object>(
   languages: LanguageRef[],
   emptyFields: T,
 ): TranslationMap<T> {
@@ -24,7 +21,7 @@ export function buildEmptyTranslationMap<T extends Record<keyof T, string>>(
   );
 }
 
-export function translationRowsToMap<T extends Record<keyof T, string>>(
+export function translationRowsToMap<T extends object>(
   rows: TranslationRow<T>[],
 ): TranslationMap<T> {
   return Object.fromEntries(
@@ -32,7 +29,7 @@ export function translationRowsToMap<T extends Record<keyof T, string>>(
   ) as unknown as TranslationMap<T>;
 }
 
-export function translationMapToRows<T extends Record<keyof T, string>>(
+export function translationMapToRows<T extends object>(
   map: TranslationMap<T>,
   languages: LanguageRef[],
 ): TranslationRow<T>[] {
@@ -42,7 +39,7 @@ export function translationMapToRows<T extends Record<keyof T, string>>(
   }));
 }
 
-export function mergeTranslationMap<T extends Record<keyof T, string>>(
+export function mergeTranslationMap<T extends object>(
   languages: LanguageRef[],
   source: TranslationMap<T> | TranslationRow<T>[] | undefined | null,
   emptyFields: T,
@@ -59,7 +56,7 @@ export function mergeTranslationMap<T extends Record<keyof T, string>>(
   );
 }
 
-export function translationMapEntries<T extends Record<keyof T, string>>(
+export function translationMapEntries<T extends object>(
   map: TranslationMap<T>,
 ): TranslationRow<T>[] {
   return Object.entries(map).map(([appLanguageId, fields]) => ({

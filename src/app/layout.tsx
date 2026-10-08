@@ -76,7 +76,7 @@ export default async function RootLayout({
       <body
         className={clsx(
           inter.className,
-          "bg-background-200 text-foreground flex min-h-screen flex-col justify-between overflow-x-hidden scroll-smooth",
+          "bg-card text-foreground flex min-h-screen flex-col justify-between overflow-x-hidden scroll-smooth",
         )}
       >
         <NextIntlClientProvider>

@@ -73,7 +73,7 @@ const About: FC = async () => {
   const showTerminalColumn = Boolean(tenant && (hasTerminal || terminalData));
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
       <section className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
         <HeaderArticle
           title={t("title")}

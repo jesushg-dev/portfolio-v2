@@ -1,0 +1,2704 @@
+{
+  "key": "Portfolio",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/portf-1_bkhwxr",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jesushg-dev/portfolio-v2",
+  "websiteUrl": "https://www.jesushg.com/",
+  "isPrivate": false,
+  "slug": "portfolio",
+  "caseStudyEnabled": true,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Portfolio v2",
+      "description": "Plataforma de portafolio profesional multi-tenant con i18n, panel de administración y motor de CV en producción.",
+      "hook": "LCP < 1.8s · 100% WCAG AAA · Multi-tenant sin CMS de terceros",
+      "challenge": "Diseñar una arquitectura web moderna capaz de soportar internacionalización (3 idiomas), tematización dinámica basada en tokens semánticos (data-theme) sin clases dark:, gestión CMS en tiempo real mediante tRPC y cumplimiento estricto de accesibilidad WCAG 2.2 AAA sin comprometer la latencia.",
+      "approach": "Implementé una arquitectura basada en características (src/features/) con Next.js App Router, TypeScript estricto, Prisma + MongoDB para flexibilidad de esquema y tRPC para seguridad de tipos end-to-end. La UI utiliza únicamente tokens semánticos y componentes Shadcn adaptados.",
+      "outcome": "LCP en producción < 1.8s, accesibilidad WCAG 2.2 AAA auditada al 100% y una plataforma autoadministrable completa que elimina la dependencia y costos de CMS de terceros.",
+      "caseStudy": {
+        "chips": ["Personal", "Full-stack", "En producción"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mi rol",
+            "value": "Arquitecto y desarrollador en solitario"
+          },
+          {
+            "key": "project-type",
+            "label": "Tipo de proyecto",
+            "value": "Plataforma full-stack"
+          },
+          {
+            "key": "category",
+            "label": "Categoría",
+            "value": "Personal"
+          },
+          {
+            "key": "timeline",
+            "label": "Cronología",
+            "value": "Nov 2022 – Sep 2026 · 240 commits"
+          }
+        ],
+        "nextProjectSlug": "musa-admin",
+        "context": "Una sola implementación sirve a muchos inquilinos: un subdominio resuelve un perfil y el dominio raíz al propietario principal. Cada inquilino administra su propio contenido, idiomas, CV e integraciones desde /admin, eliminando la dependencia y costos de un CMS de terceros.",
+        "roleTitle": "Arquitecto y desarrollador en solitario",
+        "roleIntro": "Proyecto personal de un solo autor, así que asumí cada capa, desde el alcance del producto hasta la producción.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Una sola implementación que sirve a muchos portafolios: cada subdominio es un inquilino con su propio CMS de administración, motor de CV, Job Tracker e integraciones, en 3 idiomas.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Arquitecto y desarrollador en solitario. Diseñé el modelo de datos, el modelo de seguridad y el pipeline de entrega, y construí cada módulo.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "LCP por debajo de 1.8 s, WCAG 2.2 AAA auditado al 100% y sin CMS de terceros, con 3,007 cadenas de interfaz por idioma mantenidas en paridad por CI.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "product-scope",
+            "title": "Alcance del producto",
+            "summary": "",
+            "body": "Decidí qué hace la plataforma: portafolio público, CMS de administración, Job Tracker, analítica y páginas de proceso.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture-data-model",
+            "title": "Arquitectura y modelo de datos",
+            "summary": "",
+            "body": "Módulos basados en funciones, tenancy basada en Host y un esquema Prisma de 84 modelos dividido en cuatro archivos.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security-auth",
+            "title": "Seguridad y autenticación",
+            "summary": "",
+            "body": "Passkeys, 2FA, límites de tasa, credenciales cifradas por inquilino y un modelo de seguridad escrito con sus riesgos residuales.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "design-system-frontend",
+            "title": "Sistema de diseño y frontend",
+            "summary": "",
+            "body": "IU con Next.js App Router sobre tokens semánticos, 6 temas más un tema personalizado, y WCAG 2.2 AAA como requisito.",
+            "value": "",
+            "icon": "pal",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cv-resume-engine",
+            "title": "Motor de CV y Resume Engine",
+            "summary": "",
+            "body": "CV web, exportación en PDF y DOCX en caché, importación de currículum, CV adaptados a ATS y preparación para entrevistas.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "quality-delivery",
+            "title": "Calidad y entrega",
+            "summary": "",
+            "body": "CI con lint, tipos, pruebas unitarias y E2E en compilación local y en cada vista previa de Vercel, además de ejecuciones completas nocturnas.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "3 locales, traducidos en la IU y en la base de datos",
+          "Tematización mediante tokens data-theme, sin clases dark:",
+          "CMS de administración en tiempo real con seguridad de tipos de extremo a extremo",
+          "WCAG 2.2 AAA sin sacrificar velocidad",
+          "Muchos inquilinos en una sola implementación, cada uno aislado",
+          "Sin dependencia de un CMS de terceros"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Estrategia",
+            "title": "Decisiones y estrategia",
+            "lead": "Las decisiones técnicas clave que tomé, con las alternativas que ponderé y el equilibrio que acepté.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "feature-based-architecture",
+                "title": "Arquitectura basada en funciones",
+                "summary": "Agrupa el código por dominio en src/features/<name>/ y mantén las páginas del App Router simples.",
+                "body": "Cada uno de los 22 módulos (CV, Job Tracker, Resume Engine, Spotify, analytics…) posee su IU, lib y routers tRPC, de modo que un módulo puede cambiar sin afectar a los demás.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Carpetas por capas (componentes / hooks / servicios)"
+                ],
+                "note": "El código compartido necesita límites deliberados a medida que crecen los módulos."
+              },
+              {
+                "key": "tenant-from-host",
+                "title": "La identidad del inquilino viene del Host",
+                "summary": "Resuelve el inquilino desde el Host de la solicitud e ignora los encabezados de inquilino enviados por el cliente.",
+                "body": "La identidad no puede falsificarse: un subdominio mapea a un perfil y el dominio raíz al propietario principal. Los datos públicos usan procedimientos con alcance por inquilino y las mutaciones usan el id del usuario de la sesión.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "ID del inquilino en la ruta de la URL",
+                  "ID del inquilino en un encabezado del cliente o un token"
+                ],
+                "note": "Los hosts de vista previa sin DNS del inquilino necesitan una prueba HMAC para la generación de PDF, y los dominios personalizados se almacenan pero aún no se enrutan."
+              },
+              {
+                "key": "translations-as-collections",
+                "title": "Traducciones como colecciones",
+                "summary": "Da a cada entidad traducible una colección *Translation vinculada a una fila AppLanguage.",
+                "body": "Agregar un idioma es un dato y no un cambio de esquema, y el administrador puede mostrar la completitud por idioma (vacía, parcial, completa). 25 entidades comparten el mismo patrón.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Una columna por idioma",
+                  "Un mapa JSON incrustado en cada documento"
+                ],
+                "note": "Más colecciones y relaciones por entidad, y la completitud debe reforzarse con pruebas y auditorías de semillas."
+              },
+              {
+                "key": "mongodb-through-prisma",
+                "title": "MongoDB a través de Prisma",
+                "summary": "Usa MongoDB con Prisma, dividido en cuatro archivos de esquema y sincronizado con db:push.",
+                "body": "El contenido por inquilino varía en forma, así que la flexibilidad del esquema acelera la iteración mientras Prisma mantiene cada consulta tipada.",
+                "value": "",
+                "icon": "",
+                "tags": ["PostgreSQL con migraciones SQL"],
+                "note": "La integridad se mueve a la aplicación. Por ejemplo, customDomain no es @unique porque los índices únicos de MongoDB permiten un único null, así que la unicidad se verifica en código."
+              },
+              {
+                "key": "authorization-in-trpc",
+                "title": "La autorización vive en el procedimiento tRPC",
+                "summary": "Usa publicProcedure y tenantProcedure para visitantes y protectedProcedure para la administración, con sesión e inquilino siempre en el contexto.",
+                "body": "El tipo de procedimiento indica quién puede llamarlo, y las mutaciones toman ctx.user.id, así que un cliente nunca puede actuar como otro usuario. Los tipos fluyen desde la base de datos hasta la IU de administración.",
+                "value": "",
+                "icon": "",
+                "tags": ["Controladores de rutas REST", "GraphQL"],
+                "note": "Está estrechamente acoplado a TypeScript y es menos conveniente para consumidores de API de terceros."
+              },
+              {
+                "key": "bring-your-own-keys",
+                "title": "Claves propias por inquilino",
+                "summary": "Cada inquilino conecta sus propias credenciales de Resend, UploadThing, IA, Spotify y Google Calendar, sin respaldo a claves de la plataforma.",
+                "body": "La facturación, las cuotas y la residencia de datos permanecen con el inquilino, y un inquilino nunca puede gastar la cuota de otro. Los secretos se cifran en reposo con AES-256-GCM.",
+                "value": "",
+                "icon": "",
+                "tags": ["Claves compartidas de la API de la plataforma"],
+                "note": "Más configuración por inquilino. Las funciones quedan desactivadas hasta conectarlas, y la IA tiene un modo JSON manual."
+              },
+              {
+                "key": "semantic-tokens-data-theme",
+                "title": "Tokens semánticos activados por data-theme",
+                "summary": "Estila los componentes solo con tokens semánticos y cambia temas completos mediante un atributo data-theme.",
+                "body": "6 temas (3 paletas, claro y oscuro) más un tema personalizado definido por el usuario provienen de una sola capa de tokens, sin clases dark: en los componentes.",
+                "value": "",
+                "icon": "",
+                "tags": ["Variantes dark: de Tailwind en cada elemento"],
+                "note": "Requiere disciplina de tokens: cada componente nuevo debe usar tokens."
+              },
+              {
+                "key": "isolated-pdf-generation",
+                "title": "Generación aislada de PDF",
+                "summary": "Ejecuta Playwright y Chromium en una función serverless dedicada y guarda PDFs por hash de contenido.",
+                "body": "El PDF coincide exactamente con la vista previa web, se mantiene dentro del límite de paquete de Vercel y solo se regenera cuando cambia el contenido del CV.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Una exportación de plantilla de Word",
+                  "Incluir Chromium en cada ruta"
+                ],
+                "note": "Un endpoint interno adicional para operar, protegido con un secreto bearer."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Cómo se integra",
+            "title": "Arquitectura y enfoque",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "edge",
+                "title": "Edge · src/proxy.ts",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "enrutamiento next-intl",
+                  "slug del inquilino desde Host",
+                  "redirecciones heredadas"
+                ],
+                "note": "cabecera locale + tenant"
+              },
+              {
+                "key": "app-router",
+                "title": "App Router · [locale]",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["(inicio) público", "(admin) /admin", "/api/*"],
+                "note": "resolveTenant(Host)"
+              },
+              {
+                "key": "trpc",
+                "title": "tRPC · appRouter",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "publicProcedure",
+                  "tenantProcedure",
+                  "protectedProcedure"
+                ],
+                "note": "ctx: sesión + inquilino"
+              },
+              {
+                "key": "feature-modules",
+                "title": "Módulos de funcionalidad · src/features/",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["22 módulos", "UI", "lib", "routers de servidor"],
+                "note": "Cliente de Prisma"
+              },
+              {
+                "key": "data",
+                "title": "Datos",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["Prisma", "MongoDB", "84 modelos"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "TypeScript estricto en cada capa · Better Auth para sesiones · serverless de Vercel"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Modelado de datos",
+            "title": "Modelo de datos e i18n en la base de datos",
+            "lead": "El contenido se modela como datos. Cada entidad traducible tiene una colección *Translation vinculada a un AppLanguage, y la página del caso de estudio lee sus campos traducidos desde ProjectTranslation, protegidos por caseStudyEnabled.",
+            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  hook          String?\n  challenge     String?\n  approach      String?\n  outcome       String?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
+            "codeLabel": "prisma/schema/main.prisma (fragmento)",
+            "items": [
+              {
+                "key": "one-row-per-language",
+                "title": "Una fila por entidad por idioma",
+                "summary": "",
+                "body": "Un nuevo idioma es una fila AppLanguage más sus traducciones. Sin columnas por locale ni cambio de esquema. Los helpers compartidos viven en src/lib/i18n.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "completeness-is-data",
+                "title": "La completitud es dato",
+                "summary": "",
+                "body": "Cada traducción informa si está vacía, parcial o completa, así que el administrador muestra exactamente qué falta en cada idioma.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "seeds-checked-in-ci",
+                "title": "Las semillas se verifican en CI",
+                "summary": "",
+                "body": "El JSON base debe incluir en, es y nl, verificado por una prueba de completitud y un script de auditoría. Los mensajes de la IU también se prueban por paridad.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "integrity-in-app",
+                "title": "Integridad donde Mongo no puede aplicarla",
+                "summary": "",
+                "body": "Reglas que los índices de MongoDB no pueden expresar, como dominios personalizados únicos, se aplican en código y se documentan.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model-numbers",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Modelo de datos en números",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "models",
+                "title": "Modelos de Prisma",
+                "summary": "",
+                "body": "",
+                "value": "84",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "translation-models",
+                "title": "Modelos de traducción",
+                "summary": "",
+                "body": "",
+                "value": "25",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "ui-strings",
+                "title": "Cadenas de IU, comprobadas por paridad",
+                "summary": "",
+                "body": "",
+                "value": "3 × 3,007",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "schema-files",
+                "title": "Archivos de esquema",
+                "summary": "",
+                "body": "",
+                "value": "4",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Qué ofrece",
+            "title": "Plataforma y capacidades",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "public-portfolio",
+                "title": "Portafolio público",
+                "summary": "",
+                "body": "Inicio, habilidades, proyectos con estudios de caso, certificaciones, línea de tiempo, servicios y habilidades blandas, todo editable desde el administrador.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "admin-cms",
+                "title": "CMS de administración",
+                "summary": "",
+                "body": "Gestión de contenido en tiempo real por inquilino en /admin, con estado de traducción por idioma.",
+                "value": "",
+                "icon": "db",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cv-engine",
+                "title": "Motor de CV",
+                "summary": "",
+                "body": "CV web, descargas PDF y DOCX en caché, y PDF por correo con límites de velocidad.",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "job-tracker",
+                "title": "Job Tracker",
+                "summary": "",
+                "body": "Un CRM para solicitudes: empresas, estados, eventos, documentos y sincronización con Google Calendar.",
+                "value": "",
+                "icon": "search",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "resume-engine",
+                "title": "Resume Engine",
+                "summary": "",
+                "body": "Importación de currículum, adaptación ATS que conserva el diseño y preparación para entrevistas, usando el proveedor de IA de cada inquilino.",
+                "value": "",
+                "icon": "bolt",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "three-languages",
+                "title": "3 idiomas",
+                "summary": "",
+                "body": "Inglés, español y neerlandés, con rutas traducidas como /schedule, /agendar y /plannen.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "first-party-analytics",
+                "title": "Analítica propia",
+                "summary": "",
+                "body": "Estadísticas de vistas de página sin rastreador de terceros. Respeta Do Not Track y Global Privacy Control.",
+                "value": "",
+                "icon": "gauge",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "integrations",
+                "title": "Integraciones",
+                "summary": "",
+                "body": "Widget Now Playing de Spotify y formulario de contacto por correo, conectados por inquilino.",
+                "value": "",
+                "icon": "music",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "process-pages",
+                "title": "Páginas de proceso",
+                "summary": "",
+                "body": "Cómo uso IA y cómo colaboro con QA, además de las páginas Now, Uses y Colophon.",
+                "value": "",
+                "icon": "users",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "security",
+            "kind": "TABLE",
+            "eyebrow": "Confianza y seguridad",
+            "title": "Modelo de seguridad",
+            "lead": "Un modelo de defensa en profundidad con límites de confianza explícitos, documentado para poder revisarse. La propia documentación dice que es una checklist y no una garantía.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-identity",
+                "title": "Identidad del inquilino",
+                "summary": "",
+                "body": "Se deriva del encabezado Host. Un encabezado de inquilino enviado por el cliente se ignora, excepto para la generación de PDF con una prueba HMAC-SHA256.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authorization",
+                "title": "Autorización",
+                "summary": "",
+                "body": "Las mutaciones de administración usan protectedProcedure y el id del usuario de la sesión. El cliente nunca envía el id de otro usuario.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authentication",
+                "title": "Autenticación",
+                "summary": "",
+                "body": "Better Auth con passkeys (verificación del usuario requerida), TOTP, OTP por correo y códigos de respaldo, comprobaciones de Have I Been Pwned en producción y límites de tasa respaldados por la base de datos.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "secrets",
+                "title": "Secretos",
+                "summary": "",
+                "body": "Las claves API del inquilino se cifran en reposo con AES-256-GCM, sin respaldo a claves de la plataforma.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "http-hardening",
+                "title": "Endurecimiento HTTP",
+                "summary": "",
+                "body": "nosniff, frame-ancestors, política estricta de referrer, Permissions-Policy restrictiva y HSTS (2 años, preload) en producción.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "abuse-controls",
+                "title": "Controles ante abusos",
+                "summary": "",
+                "body": "Límites por IP y por inquilino: beacon de analítica 60 por minuto, formulario de contacto 5 por hora, CV por correo 3 por hora. Las cargas se limitan y las solicitudes salientes usan listas permitidas.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "privacy",
+                "title": "Privacidad",
+                "summary": "",
+                "body": "Solo analítica de primera parte. Respeta DNT y Global Privacy Control y omite bots y al propietario del sitio.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Limitaciones conocidas, documentadas a propósito",
+            "footnotes": [
+              "CSP parcial: script-src aún no está bloqueado, porque el runtime de Next.js y los embeds necesitan nonces.",
+              "El optimizador de imágenes acepta cualquier host HTTPS (necesario para las URLs de imágenes del inquilino), lo que podría abusarse como proxy de fetch.",
+              "Los dominios personalizados se almacenan pero aún no se enrutan, así que el DNS no debería apuntar a la app hasta que eso llegue."
+            ],
+            "footnoteVariant": "warning"
+          },
+          {
+            "key": "quality",
+            "kind": "STEPS",
+            "eyebrow": "Calidad de ingeniería",
+            "title": "Gates de calidad y pruebas",
+            "lead": "Se ejecutan verificaciones en cada push y pull request, para que las regresiones en tipos, comportamiento, traducciones o accesibilidad bloqueen el merge.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lint-types",
+                "title": "Lint y tipos",
+                "summary": "",
+                "body": "ESLint con jsx-a11y y TypeScript estricto.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-build",
+                "title": "Pruebas unitarias y compilación",
+                "summary": "",
+                "body": "Jest y Testing Library en 280 archivos de pruebas, incluidas pruebas de paridad de claves en en/es/nl y completitud de semillas, seguido por una compilación de producción.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-smoke",
+                "title": "Smoke E2E",
+                "summary": "",
+                "body": "Playwright contra una compilación local con una base de datos e2e aislada.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "preview-e2e",
+                "title": "E2E de vista previa",
+                "summary": "",
+                "body": "En pull requests, el mismo conjunto de pruebas se ejecuta contra la URL de vista previa de Vercel.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "accessibility-audit",
+                "title": "Auditoría de accesibilidad",
+                "summary": "",
+                "body": "axe-core con etiquetas WCAG AAA en rutas públicas, comprobaciones internas para texto mínimo de 14 px y objetivos de 44×44 px, y una checklist manual para teclado, lector de pantalla y zoom del 200%.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "nightly-e2e",
+                "title": "E2E completo nocturno",
+                "summary": "",
+                "body": "35 especificaciones de Playwright, con las suites largas ejecutándose nocturnamente o bajo demanda.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "design-system",
+            "kind": "SWATCHES",
+            "eyebrow": "Apariencia",
+            "title": "Sistema de diseño y tematización",
+            "lead": "La tematización es una capa de tokens, no un conjunto de variantes dark:. Los componentes consumen tokens semánticos, así que cambiar el tema es un único cambio de atributo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "primary-50",
+                "title": "primary-50",
+                "summary": "",
+                "body": "",
+                "value": "#eff7ff",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-100",
+                "title": "primary-100",
+                "summary": "",
+                "body": "",
+                "value": "#dbeafe",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-300",
+                "title": "primary-300",
+                "summary": "",
+                "body": "",
+                "value": "#93c5fd",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-500",
+                "title": "primary-500",
+                "summary": "",
+                "body": "",
+                "value": "#3b82f6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-700",
+                "title": "primary-700",
+                "summary": "",
+                "body": "",
+                "value": "#1d4ed8",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-800",
+                "title": "primary-800",
+                "summary": "",
+                "body": "",
+                "value": "#1e40af",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-900",
+                "title": "primary-900",
+                "summary": "",
+                "body": "",
+                "value": "#1e3a8a",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Principios",
+            "footnotes": [
+              "Los componentes usan solo tokens semánticos, nunca valores de paleta sin procesar",
+              "No hay clases dark:: un atributo data-theme intercambia todo el conjunto de tokens (3 paletas, claro y oscuro)",
+              "Un pequeño script de precarga restaura el tema y el modo de color guardados",
+              "Componentes Shadcn adaptados a la capa de tokens",
+              "Los visitantes pueden construir un tema personalizado: primario, secundario, fondo, tarjeta, primer plano y borde"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "METRICS",
+            "eyebrow": "Resultados",
+            "title": "Resultado y logros",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lcp",
+                "title": "LCP en producción",
+                "summary": "",
+                "body": "",
+                "value": "< 1.8 s",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "wcag",
+                "title": "WCAG 2.2 AAA auditado",
+                "summary": "",
+                "body": "",
+                "value": "100%",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "i18n-parity",
+                "title": "Cadenas de IU en paridad (en · es · nl)",
+                "summary": "",
+                "body": "",
+                "value": "3 × 3,007",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "no-cms",
+                "title": "CMS de terceros",
+                "summary": "",
+                "body": "",
+                "value": "0",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "scope",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Alcance de la base de código",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "feature-count",
+                "title": "Módulos de funcionalidad",
+                "summary": "",
+                "body": "",
+                "value": "22",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "source-files",
+                "title": "Archivos fuente TS / TSX",
+                "summary": "",
+                "body": "",
+                "value": "1,200+",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-tests",
+                "title": "Archivos de pruebas unitarias",
+                "summary": "",
+                "body": "",
+                "value": "280",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "Especificaciones E2E",
+                "summary": "",
+                "body": "",
+                "value": "35",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "Portfolio v2",
+      "description": "Multi-tenant professional portfolio platform with i18n, admin panel, and CV engine in production.",
+      "hook": "LCP < 1.8s · 100% WCAG AAA · Multi-tenant with zero third-party CMS",
+      "challenge": "Design a modern web architecture supporting multi-language i18n (3 locales), dynamic data-theme system without dark: classes, real-time tRPC admin CMS, and WCAG 2.2 AAA accessibility compliance without sacrificing speed.",
+      "approach": "Implemented a Feature-Based Architecture (src/features/) with Next.js App Router, strict TypeScript, Prisma + MongoDB for schema flexibility, and tRPC for end-to-end type safety. UI components strictly enforce semantic design tokens.",
+      "outcome": "Production LCP < 1.8s, 100% audited WCAG 2.2 AAA accessibility, and a self-managed platform completely eliminating third-party CMS overhead.",
+      "caseStudy": {
+        "chips": ["Personal", "Full-stack", "In production"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "My role",
+            "value": "Solo architect & developer"
+          },
+          {
+            "key": "project-type",
+            "label": "Project type",
+            "value": "Full-stack platform"
+          },
+          {
+            "key": "category",
+            "label": "Category",
+            "value": "Personal"
+          },
+          {
+            "key": "timeline",
+            "label": "Timeline",
+            "value": "Nov 2022 – Sep 2026 · 240 commits"
+          }
+        ],
+        "nextProjectSlug": "musa-admin",
+        "context": "One deployment serves many tenants: a subdomain resolves to a profile and the apex domain to the primary owner. Each tenant manages their own content, languages, CV and integrations from /admin, eliminating third-party CMS lock-in and costs.",
+        "roleTitle": "Solo architect & developer",
+        "roleIntro": "Personal project with a single author, so I owned every layer, from product scope to production.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "One deployment that serves many portfolios: each subdomain is a tenant with its own admin CMS, CV engine, Job Tracker and integrations, in 3 languages.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Solo architect and developer. I designed the data model, the security model and the delivery pipeline, and built every module.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "LCP under 1.8 s, 100% audited WCAG 2.2 AAA and no third-party CMS, with 3,007 UI strings per language kept in parity by CI.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "product-scope",
+            "title": "Product scope",
+            "summary": "",
+            "body": "Decided what the platform does: public portfolio, admin CMS, Job Tracker, analytics and process pages.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture-data-model",
+            "title": "Architecture & data model",
+            "summary": "",
+            "body": "Feature-based modules, Host-based tenancy and an 84-model Prisma schema split across four files.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security-auth",
+            "title": "Security & authentication",
+            "summary": "",
+            "body": "Passkeys, 2FA, rate limits, encrypted per-tenant credentials and a written security model with its residual risks.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "design-system-frontend",
+            "title": "Design system & frontend",
+            "summary": "",
+            "body": "Next.js App Router UI on semantic tokens, 6 themes plus a custom theme, and WCAG 2.2 AAA as a requirement.",
+            "value": "",
+            "icon": "pal",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cv-resume-engine",
+            "title": "CV engine & Resume Engine",
+            "summary": "",
+            "body": "Web CV, cached PDF and DOCX export, résumé import, ATS-tailored CVs and interview prep.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "quality-delivery",
+            "title": "Quality & delivery",
+            "summary": "",
+            "body": "CI with lint, types, unit tests and E2E on a local build and every Vercel preview, plus nightly full runs.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "3 locales, translated in the UI and in the database",
+          "Theming through data-theme tokens, with no dark: classes",
+          "Real-time admin CMS with end-to-end type safety",
+          "WCAG 2.2 AAA without sacrificing speed",
+          "Many tenants on one deployment, each isolated",
+          "No dependency on a third-party CMS"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Strategy",
+            "title": "Decisions & strategy",
+            "lead": "The key technical calls I made, with the alternatives I weighed and the trade-off I accepted.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "feature-based-architecture",
+                "title": "Feature-based architecture",
+                "summary": "Group code by domain in src/features/<name>/ and keep App Router pages thin.",
+                "body": "Each of the 22 modules (CV, Job Tracker, Resume Engine, Spotify, analytics…) owns its UI, lib and tRPC routers, so one feature can change without touching the others.",
+                "value": "",
+                "icon": "",
+                "tags": ["Layer-based folders (components / hooks / services)"],
+                "note": "Shared code needs deliberate boundaries as modules grow."
+              },
+              {
+                "key": "tenant-from-host",
+                "title": "Tenant identity comes from the Host",
+                "summary": "Resolve the tenant from the request Host and ignore tenant headers sent by the client.",
+                "body": "Identity can't be spoofed: a subdomain maps to a profile and the apex to the primary owner. Public data uses tenant-scoped procedures and mutations use the session's user id.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Tenant id in the URL path",
+                  "Tenant id in a client header or token"
+                ],
+                "note": "Preview hosts without tenant DNS need an HMAC proof for PDF generation, and custom domains are stored but not routed yet."
+              },
+              {
+                "key": "translations-as-collections",
+                "title": "Translations as collections",
+                "summary": "Give every translatable entity a *Translation collection linked to an AppLanguage row.",
+                "body": "Adding a language is data, not a schema change, and the admin can show per-language completeness (empty, partial, complete). 25 entities share the same pattern.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "One column per locale",
+                  "A JSON map embedded in each document"
+                ],
+                "note": "More collections and relations per entity, and completeness has to be enforced with tests and seed audits."
+              },
+              {
+                "key": "mongodb-through-prisma",
+                "title": "MongoDB through Prisma",
+                "summary": "Use MongoDB with Prisma, split across four schema files and synced with db:push.",
+                "body": "Per-tenant content varies in shape, so schema flexibility speeds iteration while Prisma keeps every query typed.",
+                "value": "",
+                "icon": "",
+                "tags": ["PostgreSQL with SQL migrations"],
+                "note": "Integrity moves into the app. For example, customDomain isn't @unique because MongoDB unique indexes allow a single null, so uniqueness is checked in code."
+              },
+              {
+                "key": "authorization-in-trpc",
+                "title": "Authorization lives in the tRPC procedure",
+                "summary": "Use publicProcedure and tenantProcedure for visitors and protectedProcedure for the admin, with session and tenant always in context.",
+                "body": "The procedure type states who may call it, and mutations take ctx.user.id, so a client can never act as another user. Types flow from the database to the admin UI.",
+                "value": "",
+                "icon": "",
+                "tags": ["REST route handlers", "GraphQL"],
+                "note": "Tightly coupled to TypeScript and less convenient for third-party API consumers."
+              },
+              {
+                "key": "bring-your-own-keys",
+                "title": "Bring-your-own keys per tenant",
+                "summary": "Each tenant connects their own Resend, UploadThing, AI, Spotify and Google Calendar credentials, with no fallback to platform keys.",
+                "body": "Billing, quotas and data residency stay with the tenant, and one tenant can never spend another's quota. Secrets are encrypted at rest with AES-256-GCM.",
+                "value": "",
+                "icon": "",
+                "tags": ["Shared platform API keys"],
+                "note": "More setup per tenant. Features stay off until connected, and AI has a manual JSON mode."
+              },
+              {
+                "key": "semantic-tokens-data-theme",
+                "title": "Semantic tokens switched by data-theme",
+                "summary": "Style components with semantic tokens only and swap whole themes through a data-theme attribute.",
+                "body": "6 themes (3 palettes, light and dark) plus a user-defined custom theme come from one token layer, with no dark: classes in components.",
+                "value": "",
+                "icon": "",
+                "tags": ["Tailwind dark: variants on every element"],
+                "note": "Requires token discipline: every new component must use tokens."
+              },
+              {
+                "key": "isolated-pdf-generation",
+                "title": "Isolated PDF generation",
+                "summary": "Run Playwright and Chromium in one dedicated serverless function and cache PDFs by content hash.",
+                "body": "The PDF matches the web preview exactly, stays under Vercel's bundle limit, and only regenerates when the CV content changes.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "A Word-template export",
+                  "Bundling Chromium into every route"
+                ],
+                "note": "One extra internal endpoint to operate, protected with a bearer secret."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "How it fits together",
+            "title": "Architecture & approach",
+            "lead": "A Next.js 16 App Router app on Vercel. Middleware resolves the locale and the tenant, route groups separate public pages from the admin, and tRPC sits in front of Prisma with the session and tenant always in context.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "edge",
+                "title": "Edge · src/proxy.ts",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "next-intl routing",
+                  "Tenant slug from Host",
+                  "Legacy redirects"
+                ],
+                "note": "locale + tenant header"
+              },
+              {
+                "key": "app-router",
+                "title": "App Router · [locale]",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["(home) public", "(admin) /admin", "/api/*"],
+                "note": "resolveTenant(Host)"
+              },
+              {
+                "key": "trpc",
+                "title": "tRPC · appRouter",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "publicProcedure",
+                  "tenantProcedure",
+                  "protectedProcedure"
+                ],
+                "note": "ctx: session + tenant"
+              },
+              {
+                "key": "feature-modules",
+                "title": "Feature modules · src/features/",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["22 modules", "UI", "lib", "server routers"],
+                "note": "Prisma client"
+              },
+              {
+                "key": "data",
+                "title": "Data",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["Prisma", "MongoDB", "84 models"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "Strict TypeScript across every layer · Better Auth for sessions · Vercel serverless"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Data modeling",
+            "title": "Data model & i18n in the database",
+            "lead": "Content is modeled as data. Every translatable entity has a *Translation collection linked to an AppLanguage, and the case-study page reads four translated fields (hook, challenge, approach, outcome) from ProjectTranslation, gated by caseStudyEnabled.",
+            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  hook          String?\n  challenge     String?\n  approach      String?\n  outcome       String?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
+            "codeLabel": "prisma/schema/main.prisma (trimmed)",
+            "items": [
+              {
+                "key": "one-row-per-language",
+                "title": "One row per entity per language",
+                "summary": "",
+                "body": "A new language is an AppLanguage row plus translations. No per-locale columns and no schema change. Shared helpers live in src/lib/i18n.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "completeness-is-data",
+                "title": "Completeness is data",
+                "summary": "",
+                "body": "Each translation reports empty, partial or complete, so the admin shows exactly what is missing in every language.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "seeds-checked-in-ci",
+                "title": "Seeds are checked in CI",
+                "summary": "",
+                "body": "Seed JSON must include en, es and nl, enforced by a completeness test and an audit script. UI messages are parity-tested too.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "integrity-in-app",
+                "title": "Integrity where Mongo cannot enforce it",
+                "summary": "",
+                "body": "Rules that MongoDB indexes can't express, like unique custom domains, are enforced in application code and documented.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model-numbers",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Data model in numbers",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "models",
+                "title": "Prisma models",
+                "summary": "",
+                "body": "",
+                "value": "84",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "translation-models",
+                "title": "Translation models",
+                "summary": "",
+                "body": "",
+                "value": "25",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "ui-strings",
+                "title": "UI strings, parity-tested",
+                "summary": "",
+                "body": "",
+                "value": "3 × 3,007",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "schema-files",
+                "title": "Schema files",
+                "summary": "",
+                "body": "",
+                "value": "4",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "What it does",
+            "title": "Platform & capabilities",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "public-portfolio",
+                "title": "Public portfolio",
+                "summary": "",
+                "body": "Home, skills, projects with case studies, certifications, timeline, services and soft skills, all editable from the admin.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "admin-cms",
+                "title": "Admin CMS",
+                "summary": "",
+                "body": "Real-time content management per tenant under /admin, with per-language translation status.",
+                "value": "",
+                "icon": "db",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cv-engine",
+                "title": "CV engine",
+                "summary": "",
+                "body": "Web CV, cached PDF and DOCX downloads, and PDF by email with rate limits.",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "job-tracker",
+                "title": "Job Tracker",
+                "summary": "",
+                "body": "A CRM for applications: companies, statuses, events, documents and Google Calendar sync.",
+                "value": "",
+                "icon": "search",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "resume-engine",
+                "title": "Resume Engine",
+                "summary": "",
+                "body": "Résumé import, layout-preserving ATS tailoring and interview prep, using each tenant's own AI provider.",
+                "value": "",
+                "icon": "bolt",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "three-languages",
+                "title": "3 languages",
+                "summary": "",
+                "body": "English, Spanish and Dutch, with translated paths such as /schedule, /agendar and /plannen.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "first-party-analytics",
+                "title": "First-party analytics",
+                "summary": "",
+                "body": "Pageview stats with no third-party tracker. It respects Do Not Track and Global Privacy Control.",
+                "value": "",
+                "icon": "gauge",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "integrations",
+                "title": "Integrations",
+                "summary": "",
+                "body": "Spotify now-playing widget and a contact form by email, connected per tenant.",
+                "value": "",
+                "icon": "music",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "process-pages",
+                "title": "Process pages",
+                "summary": "",
+                "body": "How I use AI and how I collaborate with QA, plus Now, Uses and Colophon pages.",
+                "value": "",
+                "icon": "users",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "security",
+            "kind": "TABLE",
+            "eyebrow": "Trust & safety",
+            "title": "Security model",
+            "lead": "A defense-in-depth model with explicit trust boundaries, written down so it can be reviewed. The docs themselves say it is a checklist and not a guarantee.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-identity",
+                "title": "Tenant identity",
+                "summary": "",
+                "body": "Derived from the Host header. A client-sent tenant header is ignored, except for PDF generation with an HMAC-SHA256 proof.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authorization",
+                "title": "Authorization",
+                "summary": "",
+                "body": "Admin mutations use protectedProcedure and the session's user id. The client never sends another user's id.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authentication",
+                "title": "Authentication",
+                "summary": "",
+                "body": "Better Auth with passkeys (user verification required), TOTP, email OTP and backup codes, Have I Been Pwned checks in production, and database-backed rate limits.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "secrets",
+                "title": "Secrets",
+                "summary": "",
+                "body": "Tenant API keys are encrypted at rest with AES-256-GCM, with no fallback to platform keys.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "http-hardening",
+                "title": "HTTP hardening",
+                "summary": "",
+                "body": "nosniff, frame-ancestors, strict referrer policy, a restrictive Permissions-Policy and HSTS (2 years, preload) in production.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "abuse-controls",
+                "title": "Abuse controls",
+                "summary": "",
+                "body": "Per-IP and per-tenant limits: analytics beacon 60 per minute, contact form 5 per hour, CV by email 3 per hour. Uploads are capped and outbound fetches use allowlists.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "privacy",
+                "title": "Privacy",
+                "summary": "",
+                "body": "First-party analytics only. It honors DNT and Global Privacy Control and skips bots and the site owner.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Known limitations, documented on purpose",
+            "footnotes": [
+              "Partial CSP: script-src is not locked down yet, because the Next.js runtime and embeds need nonces.",
+              "The image optimizer accepts any HTTPS host (needed for tenant image URLs), which could be abused as a fetch proxy.",
+              "Custom domains are stored but not routed yet, so DNS should not point at the app until that ships."
+            ],
+            "footnoteVariant": "warning"
+          },
+          {
+            "key": "quality",
+            "kind": "STEPS",
+            "eyebrow": "Engineering quality",
+            "title": "Quality gates & testing",
+            "lead": "Checks run on every push and pull request, so regressions in types, behavior, translations or accessibility block the merge.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lint-types",
+                "title": "Lint & types",
+                "summary": "",
+                "body": "ESLint with jsx-a11y and strict TypeScript.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-build",
+                "title": "Unit tests & build",
+                "summary": "",
+                "body": "Jest and Testing Library across 280 test files, including en/es/nl key parity and seed completeness, followed by a production build.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-smoke",
+                "title": "E2E smoke",
+                "summary": "",
+                "body": "Playwright against a local build with an isolated e2e database.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "preview-e2e",
+                "title": "Preview E2E",
+                "summary": "",
+                "body": "On pull requests, the same smoke suite runs against the Vercel Preview URL.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "accessibility-audit",
+                "title": "Accessibility audit",
+                "summary": "",
+                "body": "axe-core with WCAG AAA tags on public routes, house checks for 14 px minimum text and 44×44 px targets, and a manual checklist for keyboard, screen reader and 200% zoom.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "nightly-e2e",
+                "title": "Nightly full E2E",
+                "summary": "",
+                "body": "35 Playwright specs, with the long suites running nightly or on demand.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "design-system",
+            "kind": "SWATCHES",
+            "eyebrow": "Look & feel",
+            "title": "Design system & theming",
+            "lead": "Theming is a token layer, not a set of dark: variants. Components consume semantic tokens, so a theme swap is a single attribute change.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "primary-50",
+                "title": "primary-50",
+                "summary": "",
+                "body": "",
+                "value": "#eff7ff",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-100",
+                "title": "primary-100",
+                "summary": "",
+                "body": "",
+                "value": "#dbeafe",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-300",
+                "title": "primary-300",
+                "summary": "",
+                "body": "",
+                "value": "#93c5fd",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-500",
+                "title": "primary-500",
+                "summary": "",
+                "body": "",
+                "value": "#3b82f6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-700",
+                "title": "primary-700",
+                "summary": "",
+                "body": "",
+                "value": "#1d4ed8",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-800",
+                "title": "primary-800",
+                "summary": "",
+                "body": "",
+                "value": "#1e40af",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-900",
+                "title": "primary-900",
+                "summary": "",
+                "body": "",
+                "value": "#1e3a8a",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Principles",
+            "footnotes": [
+              "Components use semantic tokens only, never raw palette values",
+              "No dark: classes: a data-theme attribute swaps the whole token set",
+              "A small preload script restores the saved theme and color mode",
+              "Shadcn components adapted to the token layer",
+              "Visitors can build a custom theme: primary, secondary, background, card, foreground and border"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "METRICS",
+            "eyebrow": "Results",
+            "title": "Outcome & results",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lcp",
+                "title": "Production LCP",
+                "summary": "",
+                "body": "",
+                "value": "< 1.8s",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "wcag",
+                "title": "WCAG 2.2 AAA audited",
+                "summary": "",
+                "body": "",
+                "value": "100%",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "i18n-parity",
+                "title": "UI strings in parity (en · es · nl)",
+                "summary": "",
+                "body": "",
+                "value": "3 × 3,007",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "no-cms",
+                "title": "Third-party CMS",
+                "summary": "",
+                "body": "",
+                "value": "0",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "scope",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Scope of the codebase",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "feature-count",
+                "title": "Feature modules",
+                "summary": "",
+                "body": "",
+                "value": "22",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "source-files",
+                "title": "TS / TSX source files",
+                "summary": "",
+                "body": "",
+                "value": "1,200+",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-tests",
+                "title": "Unit-test files",
+                "summary": "",
+                "body": "",
+                "value": "280",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "E2E specs",
+                "summary": "",
+                "body": "",
+                "value": "35",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "Portfolio v2",
+      "description": "Multi-tenant professioneel portfolioplatform met i18n, beheerpaneel en CV-engine in productie.",
+      "hook": "LCP < 1.8s · 100% WCAG AAA · Multi-tenant zonder third-party CMS",
+      "challenge": "Ontwerpen van een moderne webarchitectuur die meertalige i18n (3 talen), dynamische thema's zonder dark: classes, realtime tRPC admin CMS en WCAG 2.2 AAA-toegankelijkheid ondersteunt zonder snelheid te verliezen.",
+      "approach": "Feature-Based Architecture (src/features/) geïmplementeerd met Next.js App Router, strikte TypeScript, Prisma + MongoDB voor schemaflexibiliteit en tRPC voor end-to-end typeveiligheid.",
+      "outcome": "Productie LCP < 1,8s, 100% geauditeerde WCAG 2.2 AAA-toegankelijkheid en een volledig zelfbeheerd platform zonder afhankelijkheid van externe CMS-diensten.",
+      "caseStudy": {
+        "chips": ["Persoonlijk", "Full-stack", "In productie"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mijn rol",
+            "value": "Solo architect en ontwikkelaar"
+          },
+          {
+            "key": "project-type",
+            "label": "Projecttype",
+            "value": "Full-stackplatform"
+          },
+          {
+            "key": "category",
+            "label": "Categorie",
+            "value": "Persoonlijk"
+          },
+          {
+            "key": "timeline",
+            "label": "Tijdlijn",
+            "value": "Nov 2022 – sep 2026 · 240 commits"
+          }
+        ],
+        "nextProjectSlug": "musa-admin",
+        "context": "Eén deployment dient vele tenants: een subdomein verwijst naar een profiel en het apex-domein naar de primaire eigenaar. Elke tenant beheert zijn eigen content, talen, CV en integraties via /admin, waardoor afhankelijkheid van externe CMS-kosten wegvalt.",
+        "roleTitle": "Solo architect en ontwikkelaar",
+        "roleIntro": "Persoonlijk project met één auteur, dus ik bezat elke laag, van productscope tot productie.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Eén deployment die vele portfolio's bedient: elk subdomein is een tenant met eigen admin-CMS, CV-engine, Job Tracker en integraties, in 3 talen.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Solo architect en ontwikkelaar. Ik ontwierp het datamodel, het beveiligingsmodel en de delivery pipeline en bouwde elke module.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "LCP onder 1,8 s, 100% geauditeerde WCAG 2.2 AAA en geen externe CMS, met 3.007 UI-teksten per taal die door CI in pariteit worden gehouden.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "product-scope",
+            "title": "Productscope",
+            "summary": "",
+            "body": "Ik bepaalde wat het platform doet: openbaar portfolio, admin-CMS, Job Tracker, analytics en procespagina's.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture-data-model",
+            "title": "Architectuur & datamodel",
+            "summary": "",
+            "body": "Feature-gebaseerde modules, host-gebaseerde tenancy en een Prisma-schema met 84 modellen verspreid over vier bestanden.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security-auth",
+            "title": "Veiligheid & authenticatie",
+            "summary": "",
+            "body": "Passkeys, 2FA, rate limits, versleutelde per-tenant credentials en een geschreven beveiligingsmodel met de resterende risico's.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "design-system-frontend",
+            "title": "Design system & frontend",
+            "summary": "",
+            "body": "Next.js App Router-UI op semantische tokens, 6 thema's plus een aangepast thema, en WCAG 2.2 AAA als vereiste.",
+            "value": "",
+            "icon": "pal",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cv-resume-engine",
+            "title": "CV-engine & Resume Engine",
+            "summary": "",
+            "body": "Web-CV, gecachte PDF- en DOCX-export, import van cv's, ATS-aangepaste CV's en interviewvoorbereiding.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "quality-delivery",
+            "title": "Kwaliteit & delivery",
+            "summary": "",
+            "body": "CI met lint, types, unit tests en E2E op een lokale build en elke Vercel-preview, plus nachtelijke volledige runs.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "3 locales, vertaald in de UI en in de database",
+          "Theming via data-theme-tokens, zonder dark: classes",
+          "Realtime admin-CMS met end-to-end typeveiligheid",
+          "WCAG 2.2 AAA zonder de snelheid op te offeren",
+          "Veel tenants op één deployment, elk geïsoleerd",
+          "Geen afhankelijkheid van een externe CMS"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Strategie",
+            "title": "Beslissingen & strategie",
+            "lead": "De belangrijkste technische keuzes die ik maakte, met de alternatieven die ik afwoog en de trade-off die ik accepteerde.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "feature-based-architecture",
+                "title": "Architectuur op basis van features",
+                "summary": "Groep code per domein in src/features/<name>/ en houd App Router-pagina's dun.",
+                "body": "Elk van de 22 modules (CV, Job Tracker, Resume Engine, Spotify, analytics…) heeft zijn eigen UI, lib en tRPC-routers, zodat één feature kan wijzigen zonder de anderen aan te raken.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Mapstructuur per laag (components / hooks / services)"
+                ],
+                "note": "Gedeelde code heeft bewuste grenzen nodig naarmate modules groeien."
+              },
+              {
+                "key": "tenant-from-host",
+                "title": "Tenant-identiteit komt van de Host",
+                "summary": "Los de tenant op vanuit de Host van het verzoek en negeer tenant-headers die door de client worden verzonden.",
+                "body": "Identiteit kan niet worden gespoofed: een subdomein wijst naar een profiel en het apex-domein naar de primaire eigenaar. Openbare data gebruikt tenant-scoped procedures en mutaties gebruiken het user id van de sessie.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Tenant-id in het URL-pad",
+                  "Tenant-id in een client-header of token"
+                ],
+                "note": "Preview-hosts zonder tenant-DNS hebben een HMAC-proof nodig voor PDF-generatie, en aangepaste domeinen worden opgeslagen maar nog niet gerouteerd."
+              },
+              {
+                "key": "translations-as-collections",
+                "title": "Vertalingen als collecties",
+                "summary": "Geef elk vertaalbaar item een *Translation-collectie gekoppeld aan een AppLanguage-record.",
+                "body": "Een taal toevoegen is data, geen schemawijziging, en de admin kan de volledigheid per taal tonen (leeg, gedeeltelijk, compleet). 25 entiteiten delen hetzelfde patroon.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Eén kolom per locale",
+                  "Een JSON-map ingebed in elk document"
+                ],
+                "note": "Meer collecties en relaties per entiteit, en volledigheid moet worden afgedwongen met tests en seed-audits."
+              },
+              {
+                "key": "mongodb-through-prisma",
+                "title": "MongoDB via Prisma",
+                "summary": "Gebruik MongoDB met Prisma, opgesplitst over vier schema-bestanden en gesynchroniseerd met db:push.",
+                "body": "De inhoud per tenant verschilt in vorm, dus schemaflexibiliteit versnelt iteratie terwijl Prisma elke query getypeerd houdt.",
+                "value": "",
+                "icon": "",
+                "tags": ["PostgreSQL met SQL-migraties"],
+                "note": "Integriteit verschuift naar de app. Bijvoorbeeld, customDomain is niet @unique omdat MongoDB unieke indexen één null toestaat; daarom wordt uniciteit in code gecontroleerd."
+              },
+              {
+                "key": "authorization-in-trpc",
+                "title": "Autorisatie zit in de tRPC-procedure",
+                "summary": "Gebruik publicProcedure en tenantProcedure voor bezoekers en protectedProcedure voor de admin, met sessie en tenant altijd in de context.",
+                "body": "Het procedure-type bepaalt wie het mag aanroepen, en mutaties nemen ctx.user.id op, zodat een client nooit als een andere gebruiker kan handelen. Types stromen van de database naar de admin-UI.",
+                "value": "",
+                "icon": "",
+                "tags": ["REST-routehandlers", "GraphQL"],
+                "note": "Sterk gekoppeld aan TypeScript en minder handig voor API-consumenten van derden."
+              },
+              {
+                "key": "bring-your-own-keys",
+                "title": "Eigen sleutels per tenant",
+                "summary": "Elke tenant koppelt zijn eigen Resend-, UploadThing-, AI-, Spotify- en Google Calendar-credentials, zonder fallback naar platformsleutels.",
+                "body": "Facturering, quota en data residency blijven bij de tenant, en één tenant kan nooit het quota van een andere consumeren. Secrets zijn versleuteld in rust met AES-256-GCM.",
+                "value": "",
+                "icon": "",
+                "tags": ["Gedeelde platform-API-sleutels"],
+                "note": "Meer setup per tenant. Functies blijven uit totdat ze zijn gekoppeld, en AI heeft een handmatige JSON-modus."
+              },
+              {
+                "key": "semantic-tokens-data-theme",
+                "title": "Semantische tokens via data-theme",
+                "summary": "Style componenten uitsluitend met semantische tokens en wissel hele thema's via een data-theme-attribuut.",
+                "body": "6 thema's (3 paletten, licht en donker) plus een door de gebruiker gedefinieerd aangepast thema komen uit één tokenlaag, zonder dark: classes in componenten.",
+                "value": "",
+                "icon": "",
+                "tags": ["Tailwind dark:-varianten op elk element"],
+                "note": "Vereist token-discipline: elke nieuwe component moet tokens gebruiken."
+              },
+              {
+                "key": "isolated-pdf-generation",
+                "title": "Geïsoleerde PDF-generatie",
+                "summary": "Voer Playwright en Chromium uit in één speciale serverless-functie en cache PDFs op basis van inhoudshash.",
+                "body": "De PDF komt exact overeen met de webpreview, blijft onder de bundelgrens van Vercel en wordt alleen opnieuw gegenereerd als de CV-inhoud verandert.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Een Word-sjabloon-export",
+                  "Chromium in elke route bundelen"
+                ],
+                "note": "Extra interne endpoint om te bedienen, beveiligd met een bearer secret."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Hoe het samenwerkt",
+            "title": "Architectuur & aanpak",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "edge",
+                "title": "Edge · src/proxy.ts",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "next-intl routing",
+                  "Tenant-slug vanuit Host",
+                  "Legacy redirects"
+                ],
+                "note": "locale + tenant-header"
+              },
+              {
+                "key": "app-router",
+                "title": "App Router · [locale]",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["(home) public", "(admin) /admin", "/api/*"],
+                "note": "resolveTenant(Host)"
+              },
+              {
+                "key": "trpc",
+                "title": "tRPC · appRouter",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "publicProcedure",
+                  "tenantProcedure",
+                  "protectedProcedure"
+                ],
+                "note": "ctx: session + tenant"
+              },
+              {
+                "key": "feature-modules",
+                "title": "Feature modules · src/features/",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["22 modules", "UI", "lib", "server routers"],
+                "note": "Prisma client"
+              },
+              {
+                "key": "data",
+                "title": "Data",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["Prisma", "MongoDB", "84 models"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "Strict TypeScript in elke laag · Better Auth voor sessies · Vercel serverless"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Datamodellering",
+            "title": "Datamodel & i18n in de database",
+            "lead": "Content wordt als data gemodelleerd. Elk vertaalbaar item heeft een *Translation-collectie gekoppeld aan een AppLanguage, en de case-study-pagina leest de vertaalde velden uit ProjectTranslation, geblokkeerd door caseStudyEnabled.",
+            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  hook          String?\n  challenge     String?\n  approach      String?\n  outcome       String?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
+            "codeLabel": "prisma/schema/main.prisma (uittreksel)",
+            "items": [
+              {
+                "key": "one-row-per-language",
+                "title": "Één rij per entiteit per taal",
+                "summary": "",
+                "body": "Een nieuwe taal is een AppLanguage-record plus vertalingen. Geen per-locale kolommen en geen schemawijziging. Gedeelde helpers bevinden zich in src/lib/i18n.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "completeness-is-data",
+                "title": "Volledigheid is data",
+                "summary": "",
+                "body": "Elke vertaling rapporteert leeg, gedeeltelijk of compleet, zodat de admin precies ziet wat in elke taal ontbreekt.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "seeds-checked-in-ci",
+                "title": "Seeds worden gecontroleerd in CI",
+                "summary": "",
+                "body": "Seed JSON moet en, es en nl bevatten, afgedwongen door een volledigheidstest en audit-script. UI-berichten worden ook in pariteit getest.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "integrity-in-app",
+                "title": "Integriteit waar Mongo dit niet kan afdwingen",
+                "summary": "",
+                "body": "Regels die MongoDB-indexen niet kunnen uitdrukken, zoals unieke custom domains, worden afgedwongen in de applicatiecode en gedocumenteerd.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model-numbers",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Datamodel in cijfers",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "models",
+                "title": "Prisma-modellen",
+                "summary": "",
+                "body": "",
+                "value": "84",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "translation-models",
+                "title": "Vertaalmodellen",
+                "summary": "",
+                "body": "",
+                "value": "25",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "ui-strings",
+                "title": "UI-teksten, pariteit getest",
+                "summary": "",
+                "body": "",
+                "value": "3 × 3,007",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "schema-files",
+                "title": "Schema-bestanden",
+                "summary": "",
+                "body": "",
+                "value": "4",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Wat het doet",
+            "title": "Platform & mogelijkheden",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "public-portfolio",
+                "title": "Openbaar portfolio",
+                "summary": "",
+                "body": "Home, skills, projecten met case studies, certificaten, tijdlijn, diensten en soft skills, alles bewerkbaar vanuit de admin.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "admin-cms",
+                "title": "Admin-CMS",
+                "summary": "",
+                "body": "Realtime contentbeheer per tenant onder /admin, met status per taal.",
+                "value": "",
+                "icon": "db",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cv-engine",
+                "title": "CV-engine",
+                "summary": "",
+                "body": "Web-CV, gecachte PDF- en DOCX-downloads en PDF per e-mail met rate limits.",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "job-tracker",
+                "title": "Job Tracker",
+                "summary": "",
+                "body": "Een CRM voor sollicitaties: bedrijven, statussen, gebeurtenissen, documenten en Google Calendar-synchronisatie.",
+                "value": "",
+                "icon": "search",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "resume-engine",
+                "title": "Resume Engine",
+                "summary": "",
+                "body": "CV-import, lay-outbehoudende ATS-aanpassing en interviewvoorbereiding, met de eigen AI-provider van elke tenant.",
+                "value": "",
+                "icon": "bolt",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "three-languages",
+                "title": "3 talen",
+                "summary": "",
+                "body": "Engels, Spaans en Nederlands, met vertaalde routes zoals /schedule, /agendar en /plannen.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "first-party-analytics",
+                "title": "Eigen analytics",
+                "summary": "",
+                "body": "Paginaweergave-statistieken zonder externe tracker. Er wordt respect getoond voor Do Not Track en Global Privacy Control.",
+                "value": "",
+                "icon": "gauge",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "integrations",
+                "title": "Integraties",
+                "summary": "",
+                "body": "Spotify now-playing-widget en een contactformulier per e-mail, gekoppeld per tenant.",
+                "value": "",
+                "icon": "music",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "process-pages",
+                "title": "Procespagina's",
+                "summary": "",
+                "body": "Hoe ik AI gebruik en hoe ik samenwerk met QA, plus de pagina's Now, Uses en Colophon.",
+                "value": "",
+                "icon": "users",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "security",
+            "kind": "TABLE",
+            "eyebrow": "Vertrouwen en veiligheid",
+            "title": "Beveiligingsmodel",
+            "lead": "Een defense-in-depth-model met expliciete vertrouwensgrenzen, opgeschreven zodat het kan worden beoordeeld. De docs zeggen zelf dat het een checklist is en geen garantie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-identity",
+                "title": "Tenant-identiteit",
+                "summary": "",
+                "body": "Afgeleid van de Host-header. Een client-gezonden tenant-header wordt genegeerd, behalve voor PDF-generatie met een HMAC-SHA256-proof.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authorization",
+                "title": "Autorisatie",
+                "summary": "",
+                "body": "Admin-mutaties gebruiken protectedProcedure en het user id van de sessie. De client stuurt nooit het id van een andere gebruiker.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authentication",
+                "title": "Authenticatie",
+                "summary": "",
+                "body": "Better Auth met passkeys (gebruikersverificatie vereist), TOTP, e-mail OTP en back-upcodes, Have I Been Pwned-controles in productie en database-backed rate limits.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "secrets",
+                "title": "Secrets",
+                "summary": "",
+                "body": "Tenant-API-sleutels zijn versleuteld in rust met AES-256-GCM, zonder fallback naar platformsleutels.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "http-hardening",
+                "title": "HTTP-hardening",
+                "summary": "",
+                "body": "nosniff, frame-ancestors, strict referrer policy, een restrictieve Permissions-Policy en HSTS (2 jaar, preload) in productie.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "abuse-controls",
+                "title": "Misbruikbeheersing",
+                "summary": "",
+                "body": "Per-IP en per-tenant limieten: analytics beacon 60 per minuut, contactformulier 5 per uur, CV per e-mail 3 per uur. Uploads zijn beperkt en uitgaande fetches gebruiken allowlists.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "privacy",
+                "title": "Privacy",
+                "summary": "",
+                "body": "Alleen first-party analytics. Het respecteert DNT en Global Privacy Control en slaat bots en de site-eigenaar over.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Bekende beperkingen, uitdrukkelijk gedocumenteerd",
+            "footnotes": [
+              "Gedeeltelijke CSP: script-src is nog niet strak afgeschermd, omdat de Next.js-runtime en embeds extra uitzonderingen vereisen.",
+              "De image optimizer accepteert elk HTTPS-host (nodig voor tenant-image-URL's), wat als fetch-proxy misbruikt kan worden.",
+              "Aangepaste domeinen worden opgeslagen maar nog niet gerouteerd, dus DNS mag nog niet naar de app wijzen totdat dat is gelanceerd."
+            ],
+            "footnoteVariant": "warning"
+          },
+          {
+            "key": "quality",
+            "kind": "STEPS",
+            "eyebrow": "Engineeringkwaliteit",
+            "title": "Kwaliteitscontroles & testen",
+            "lead": "Controles draaien bij elke push en pull request, zodat regressies in types, gedrag, vertalingen of toegankelijkheid de merge blokkeren.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lint-types",
+                "title": "Lint & types",
+                "summary": "",
+                "body": "ESLint met jsx-a11y en strikte TypeScript.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-build",
+                "title": "Unit tests & build",
+                "summary": "",
+                "body": "Jest en Testing Library voor 280 testbestanden, inclusief en/es/nl-sleutelpariteit en seed-volledigheid, gevolgd door een productiebuild.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-smoke",
+                "title": "E2E smoke",
+                "summary": "",
+                "body": "Playwright tegen een lokale build met een geïsoleerde e2e-database.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "preview-e2e",
+                "title": "Preview E2E",
+                "summary": "",
+                "body": "Op pull requests draait dezelfde smoke-suite tegen de Vercel Preview-URL.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "accessibility-audit",
+                "title": "Toegankelijkheidsaudit",
+                "summary": "",
+                "body": "axe-core met WCAG AAA-tags op openbare routes, huischecks voor minimale tekstgrootte van 14 px en 44×44 px doelgebieden, en een handmatige checklist voor toetsenbord, screen reader en 200% zoom.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "nightly-e2e",
+                "title": "Nightly volledige E2E",
+                "summary": "",
+                "body": "35 Playwright-specs, met de lange suites 's nachts of op aanvraag.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "design-system",
+            "kind": "SWATCHES",
+            "eyebrow": "Vormgeving",
+            "title": "Designsysteem & theming",
+            "lead": "Theming is een tokenlaag, geen set dark: varianten. Componenten gebruiken semantische tokens, zodat een thema-wissel één attribuutwijziging is.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "primary-50",
+                "title": "primary-50",
+                "summary": "",
+                "body": "",
+                "value": "#eff7ff",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-100",
+                "title": "primary-100",
+                "summary": "",
+                "body": "",
+                "value": "#dbeafe",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-300",
+                "title": "primary-300",
+                "summary": "",
+                "body": "",
+                "value": "#93c5fd",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-500",
+                "title": "primary-500",
+                "summary": "",
+                "body": "",
+                "value": "#3b82f6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-700",
+                "title": "primary-700",
+                "summary": "",
+                "body": "",
+                "value": "#1d4ed8",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-800",
+                "title": "primary-800",
+                "summary": "",
+                "body": "",
+                "value": "#1e40af",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-900",
+                "title": "primary-900",
+                "summary": "",
+                "body": "",
+                "value": "#1e3a8a",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Principes",
+            "footnotes": [
+              "Componenten gebruiken uitsluitend semantische tokens, nooit ruwe palettewaarden",
+              "Geen dark:-klassen: een data-theme-attribuut verwisselt de hele tokenset (3 paletten, licht en donker)",
+              "Een klein preload-script herstelt het opgeslagen thema en kleurmodus",
+              "Shadcn-componenten aangepast aan de tokenlaag",
+              "Bezoekers kunnen een aangepast thema bouwen: primary, secondary, background, card, foreground en border"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "METRICS",
+            "eyebrow": "Resultaten",
+            "title": "Uitkomst & resultaten",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lcp",
+                "title": "Productie-LCP",
+                "summary": "",
+                "body": "",
+                "value": "< 1.8s",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "wcag",
+                "title": "WCAG 2.2 AAA geaudit",
+                "summary": "",
+                "body": "",
+                "value": "100%",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "i18n-parity",
+                "title": "UI-teksten in pariteit (en · es · nl)",
+                "summary": "",
+                "body": "",
+                "value": "3 × 3,007",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "no-cms",
+                "title": "Externe CMS",
+                "summary": "",
+                "body": "",
+                "value": "0",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "scope",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Scope van de codebase",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "feature-count",
+                "title": "Functiemodules",
+                "summary": "",
+                "body": "",
+                "value": "22",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "source-files",
+                "title": "TS / TSX-bronbestanden",
+                "summary": "",
+                "body": "",
+                "value": "1,200+",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-tests",
+                "title": "Unit-testbestanden",
+                "summary": "",
+                "body": "",
+                "value": "280",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "E2E-specs",
+                "summary": "",
+                "body": "",
+                "value": "35",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ],
+  "skillKeys": [
+    "React",
+    "Nextjs",
+    "Tailwind",
+    "Typescript",
+    "Prisma",
+    "MongoDb",
+    "Trpc",
+    "Playwright"
+  ],
+  "order": 5,
+  "kind": "PERSONAL",
+  "status": "IN_PRODUCTION",
+  "startedAt": "2022-11-26",
+  "teamSize": 1
+}

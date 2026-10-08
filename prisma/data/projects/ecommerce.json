@@ -1,0 +1,29 @@
+{
+  "key": "Ecommerce",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-7png_jclbvc",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jess232017/Tienda-AdminMUI",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tienda Cliente",
+      "description": "Aplicación web para la compra de productos en línea."
+    },
+    {
+      "locale": "en",
+      "title": "Store Client",
+      "description": "Web application for online product purchase."
+    },
+    {
+      "locale": "nl",
+      "title": "Store Client",
+      "description": "Webtoepassing voor online aankoop van producten."
+    }
+  ],
+  "skillKeys": ["React", "Redux", "Material", "Sass"],
+  "order": 15,
+  "kind": "PROFESSIONAL",
+  "slug": "ecommerce"
+}

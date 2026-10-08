@@ -1,0 +1,42 @@
+{
+  "key": "MusaAdmin",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/musa-admin_oufeum",
+  "type": "FRONTEND",
+  "githubUrl": "musa-admin_oufeum",
+  "websiteUrl": "",
+  "isPrivate": true,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Musa Admin",
+      "description": "Panel administrativo de operaciones, catálogo y pedidos en tiempo real.",
+      "hook": "-70% tareas manuales · Trazabilidad completa de pedidos",
+      "challenge": "El equipo de operaciones gestionaba pedidos e inventario de forma manual con hojas de cálculo y scripts aislados, lo que generaba errores humanos y retrasos en despachos.",
+      "approach": "Desarrollé una SPA administrativa en React + TypeScript con control de acceso basado en roles (RBAC), formularios dinámicos, gestión de estados complejos y métricas operativas en tiempo real.",
+      "outcome": "Eliminación del 70% de tareas manuales repetitivas, trazabilidad total de pedidos desde la recepción hasta la entrega y adopción completa por el equipo operativo."
+    },
+    {
+      "locale": "en",
+      "title": "Musa Admin",
+      "description": "Real-time operations, catalog, and order management admin portal.",
+      "hook": "-70% repetitive manual tasks · End-to-end order traceability",
+      "challenge": "The operations team managed inventory and order fulfillment manually via spreadsheets and one-off scripts, leading to operational bottlenecks and shipping errors.",
+      "approach": "Developed an administrative SPA using React + TypeScript featuring role-based access control (RBAC), dynamic form validation, complex state management, and live fulfillment tracking.",
+      "outcome": "Eliminated 70% of repetitive manual tasks, established full order traceability from receipt to dispatch, and achieved 100% team adoption."
+    },
+    {
+      "locale": "nl",
+      "title": "Musa Admin",
+      "description": "Realtime beheerportaal voor operaties, catalogus en bestellingen.",
+      "hook": "-70% handmatige taken · Volledige ordertracering",
+      "challenge": "Het operationele team beheerde voorraad en bestellingen handmatig via spreadsheets, wat leidde tot menselijke fouten en vertragingen.",
+      "approach": "Een administratieve SPA ontwikkeld met React + TypeScript, voorzien van rolgebaseerde toegang (RBAC), dynamische formulieren en realtime fulfillment tracking.",
+      "outcome": "70% van de handmatige taken geëlimineerd, volledige traceerbaarheid van bestellingen gerealiseerd en direct geadopteerd door het team."
+    }
+  ],
+  "skillKeys": ["React", "Tailwind", "Typescript"],
+  "order": 4,
+  "kind": "PROFESSIONAL",
+  "caseStudyEnabled": true,
+  "slug": "musa-admin"
+}

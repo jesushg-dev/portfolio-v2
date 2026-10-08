@@ -1,0 +1,29 @@
+{
+  "key": "KwhMonitorApi",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_u56jdu",
+  "type": "BACKEND",
+  "githubUrl": "https://github.com/jess232017/Consultar-Consumo-API",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Kwh Monitor Api",
+      "description": "Api Rest para la aplicación móvil Kwh Monitor."
+    },
+    {
+      "locale": "en",
+      "title": "Kwh Monitor Api",
+      "description": "Rest Api for the mobile application Kwh Monitor."
+    },
+    {
+      "locale": "nl",
+      "title": "Kwh Monitor Api",
+      "description": "Rest Api voor de mobiele toepassing Kwh Monitor."
+    }
+  ],
+  "skillKeys": ["Nodejs", "Mysql"],
+  "order": 18,
+  "kind": "PERSONAL",
+  "slug": "kwh-monitor-api"
+}

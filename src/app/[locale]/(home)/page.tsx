@@ -9,61 +9,69 @@ import { PortfolioGridSkeleton } from "@/features/home/components/portfolio/port
 
 function AboutFallback() {
   return (
-    <section
-      aria-hidden
-      className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
-    >
-      <Skeleton className="mx-auto mb-12 h-10 w-64" />
-      <div className="grid gap-10 lg:grid-cols-2">
-        <Skeleton className="h-64 w-full rounded-2xl" />
-        <Skeleton className="h-64 w-full rounded-2xl" />
-      </div>
-      <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        <Skeleton className="h-44 w-full rounded-2xl" />
-        <Skeleton className="h-44 w-full rounded-2xl" />
-        <Skeleton className="h-44 w-full rounded-2xl" />
-        <Skeleton className="h-44 w-full rounded-2xl" />
-      </div>
-    </section>
+    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
+      <section
+        aria-hidden
+        className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
+      >
+        <Skeleton className="mx-auto mb-12 h-10 w-64" />
+        <div className="grid gap-10 lg:grid-cols-2">
+          <Skeleton className="h-64 w-full rounded-2xl" />
+          <Skeleton className="h-64 w-full rounded-2xl" />
+        </div>
+        <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <Skeleton className="h-44 w-full rounded-2xl" />
+          <Skeleton className="h-44 w-full rounded-2xl" />
+          <Skeleton className="h-44 w-full rounded-2xl" />
+          <Skeleton className="h-44 w-full rounded-2xl" />
+        </div>
+      </section>
+    </div>
   );
 }
 
 function SkillsFallback() {
   return (
-    <section aria-hidden className="mx-auto px-4 py-16 lg:container lg:px-20">
-      <Skeleton className="mx-auto mb-8 h-10 w-48" />
-      <Skeleton className="h-72 w-full rounded-2xl" />
-    </section>
+    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
+      <section aria-hidden className="mx-auto px-4 py-16 lg:container lg:px-20">
+        <Skeleton className="mx-auto mb-8 h-10 w-48" />
+        <Skeleton className="h-72 w-full rounded-2xl" />
+      </section>
+    </div>
   );
 }
 
 function PortfolioFallback() {
   return (
-    <section aria-hidden className="mx-auto px-4 py-16 lg:container lg:px-20">
-      <Skeleton className="mb-8 h-10 w-64" />
-      <PortfolioGridSkeleton count={3} />
-    </section>
+    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
+      <section aria-hidden className="mx-auto px-4 py-16 lg:container lg:px-20">
+        <Skeleton className="mb-8 h-10 w-64" />
+        <PortfolioGridSkeleton count={3} />
+      </section>
+    </div>
   );
 }
 
 function SocialProofFallback() {
   return (
-    <section
-      aria-hidden
-      className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
-    >
-      <Skeleton className="mb-6 h-8 w-72" />
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <Skeleton className="h-64 w-full rounded-xl" />
-        <Skeleton className="h-64 w-full rounded-xl" />
-      </div>
-    </section>
+    <div className="bg-card relative w-full overflow-hidden">
+      <section
+        aria-hidden
+        className="mx-auto px-4 py-16 lg:container lg:px-20 lg:py-20"
+      >
+        <Skeleton className="mb-6 h-8 w-72" />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <Skeleton className="h-64 w-full rounded-xl" />
+          <Skeleton className="h-64 w-full rounded-xl" />
+        </div>
+      </section>
+    </div>
   );
 }
 
 function ExperienceFallback() {
   return (
-    <div className="bg-muted/40 border-border/20 relative w-full overflow-hidden border-y">
+    <div className="bg-card relative w-full overflow-hidden">
       <section
         aria-hidden
         className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
@@ -89,56 +97,62 @@ function ExperienceFallback() {
 
 function SoftSkillsFallback() {
   return (
-    <section
-      aria-hidden
-      className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
-    >
-      <div className="grid w-full gap-12 lg:grid-cols-[5fr_7fr] lg:gap-14">
-        <div className="space-y-4">
-          <Skeleton className="h-6 w-28 rounded-md" />
-          <Skeleton className="h-10 w-64 rounded-lg" />
-          <Skeleton className="h-16 w-full max-w-md rounded-lg" />
-          <div className="mt-10 grid grid-cols-2 gap-4 border-t pt-6">
-            <Skeleton className="h-16 w-full rounded-lg" />
-            <Skeleton className="h-16 w-full rounded-lg" />
-            <Skeleton className="h-16 w-full rounded-lg" />
-            <Skeleton className="h-16 w-full rounded-lg" />
+    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
+      <section
+        aria-hidden
+        className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"
+      >
+        <div className="grid w-full gap-12 lg:grid-cols-[5fr_7fr] lg:gap-14">
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-28 rounded-md" />
+            <Skeleton className="h-10 w-64 rounded-lg" />
+            <Skeleton className="h-16 w-full max-w-md rounded-lg" />
+            <div className="mt-10 grid grid-cols-2 gap-4 border-t pt-6">
+              <Skeleton className="h-16 w-full rounded-lg" />
+              <Skeleton className="h-16 w-full rounded-lg" />
+              <Skeleton className="h-16 w-full rounded-lg" />
+              <Skeleton className="h-16 w-full rounded-lg" />
+            </div>
+          </div>
+          <div className="space-y-3">
+            <Skeleton className="h-24 w-full rounded-3xl" />
+            <Skeleton className="h-24 w-full rounded-3xl" />
+            <Skeleton className="h-24 w-full rounded-3xl" />
+            <Skeleton className="h-24 w-full rounded-3xl" />
           </div>
         </div>
-        <div className="space-y-3">
-          <Skeleton className="h-24 w-full rounded-3xl" />
-          <Skeleton className="h-24 w-full rounded-3xl" />
-          <Skeleton className="h-24 w-full rounded-3xl" />
-          <Skeleton className="h-24 w-full rounded-3xl" />
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 
 function ServicesFallback() {
   return (
-    <section aria-hidden className="mx-auto px-4 py-16 lg:container lg:px-20">
-      <Skeleton className="mx-auto mb-8 h-10 w-64" />
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Skeleton className="h-72 rounded-3xl md:col-span-2" />
-        <Skeleton className="h-72 rounded-3xl" />
-        <Skeleton className="h-72 rounded-3xl" />
-        <Skeleton className="h-72 rounded-3xl" />
-        <Skeleton className="h-72 rounded-3xl" />
-      </div>
-    </section>
+    <div className="bg-card relative w-full overflow-hidden">
+      <section aria-hidden className="mx-auto px-4 py-16 lg:container lg:px-20">
+        <Skeleton className="mx-auto mb-8 h-10 w-64" />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Skeleton className="h-72 rounded-3xl md:col-span-2" />
+          <Skeleton className="h-72 rounded-3xl" />
+          <Skeleton className="h-72 rounded-3xl" />
+          <Skeleton className="h-72 rounded-3xl" />
+          <Skeleton className="h-72 rounded-3xl" />
+        </div>
+      </section>
+    </div>
   );
 }
 
 function ContactFallback() {
   return (
-    <section
-      aria-hidden
-      className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-24"
-    >
-      <Skeleton className="h-96 w-full rounded-3xl" />
-    </section>
+    <div className="bg-card border-border/40 relative w-full border-t">
+      <section
+        aria-hidden
+        className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-24"
+      >
+        <Skeleton className="h-96 w-full rounded-3xl" />
+      </section>
+    </div>
   );
 }
 

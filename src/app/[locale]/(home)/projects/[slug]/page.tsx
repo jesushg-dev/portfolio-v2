@@ -4,29 +4,33 @@ import { getLocale } from "next-intl/server";
 export { generateMetadata } from "./metadata";
 
 import ProjectCaseStudyView from "@/features/home/components/projects/project-case-study-view";
+import { locales, type Locale } from "@/i18n/config";
 import { api } from "@/trpc/server";
 
 interface ProjectCaseStudyPageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: Locale; slug: string }>;
 }
 
 export default async function ProjectCaseStudyPage({
   params,
 }: ProjectCaseStudyPageProps) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  const activeLocale = locales.includes(locale)
+    ? locale
+    : ((await getLocale()));
 
-  const activeLocale = await getLocale();
-  const project = await api.portfolio.getProjectBySlug({
-    slug,
-    locale: activeLocale,
-  });
+  const [project, nextProject] = await Promise.all([
+    api.portfolio.getProjectBySlug({
+      slug,
+      locale: activeLocale,
+    }),
+    api.portfolio.getNextCaseStudyProject({
+      slug,
+      locale: activeLocale,
+    }),
+  ]);
 
   if (!project) notFound();
-
-  const nextProject = await api.portfolio.getNextCaseStudyProject({
-    slug,
-    locale: activeLocale,
-  });
 
   return <ProjectCaseStudyView project={project} nextProject={nextProject} />;
 }

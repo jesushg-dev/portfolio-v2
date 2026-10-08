@@ -1,0 +1,29 @@
+{
+  "key": "EcommerceAdmin",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-8_njbkie",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jess232017/Tienda-Admin",
+  "websiteUrl": "https://tiendajs-admin.netlify.app/",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tienda Admin",
+      "description": "Administrador de una tienda online."
+    },
+    {
+      "locale": "en",
+      "title": "Store Admin",
+      "description": "Administrator of an online store."
+    },
+    {
+      "locale": "nl",
+      "title": "Store Admin",
+      "description": "Beheerder van een online winkel."
+    }
+  ],
+  "skillKeys": ["React", "Redux", "Material", "Sass"],
+  "order": 16,
+  "kind": "PROFESSIONAL",
+  "slug": "ecommerce-admin"
+}

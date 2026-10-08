@@ -1,0 +1,29 @@
+{
+  "key": "TechService",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/Tech_Service_xjuilx",
+  "type": "MOBILE",
+  "githubUrl": "https://github.com/jess232017/TechService",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tech Service",
+      "description": "Aplicación móvil Android para el control de servicios de reparación brindados a dispositivos tecnológicos."
+    },
+    {
+      "locale": "en",
+      "title": "Tech Service",
+      "description": "Android mobile application for the control of repair services provided to technological devices."
+    },
+    {
+      "locale": "nl",
+      "title": "Tech Service",
+      "description": "Mobiele Android-toepassing voor de controle van reparatiediensten voor technologische apparaten."
+    }
+  ],
+  "skillKeys": ["Java", "Android", "Php"],
+  "order": 11,
+  "kind": "PROFESSIONAL",
+  "slug": "tech-service"
+}

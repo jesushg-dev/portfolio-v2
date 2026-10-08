@@ -1,0 +1,2458 @@
+{
+  "key": "RequestAdmin",
+  "slug": "request-admin",
+  "image": "",
+  "type": "FRONTEND",
+  "kind": "PERSONAL",
+  "githubUrl": "https://github.com/jesushg-dev/request-admin",
+  "websiteUrl": "https://request-admin.vercel.app",
+  "isPrivate": false,
+  "caseStudyEnabled": true,
+  "order": 6,
+  "skillKeys": [
+    "Nextjs",
+    "React",
+    "Typescript",
+    "Prisma",
+    "SqlServer",
+    "Postgresql",
+    "Tailwind",
+    "Cypress",
+    "Jest"
+  ],
+  "translations": [
+    {
+      "locale": "en",
+      "title": "Request Admin: multi-tenant request management platform",
+      "description": "A platform where telecom organizations manage service requests end to end: who sees what, how a request moves, who is assigned and whether it is resolved on time.",
+      "hook": "Several organizations on one system · Custom workflows · SLA compliance · 14 reports",
+      "challenge": "A telecommunications operation handles service requests from many teams and organizations. People need to know who is responsible, which step a request is in and whether it is within its SLA, while each organization's data stays completely separate.",
+      "approach": "I implemented database-level multi-tenancy using ZenStack access policies across 105 models, a visual DAG workflow designer with cycle detection in React Flow, a dual-engine schema compiler for SQL Server and PostgreSQL, and end-to-end typed server actions.",
+      "outcome": "Deployed on Vercel with 262 commits, 299 unit test cases, 75 Cypress E2E specs across 15 suites, and automated English/Spanish parity for 4,159 UI strings.",
+      "caseStudy": {
+        "chips": [
+          "Full stack",
+          "Multi-tenant",
+          "Workflows",
+          "In production"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "My role",
+            "value": "Architect and Lead Developer"
+          },
+          {
+            "key": "domain",
+            "label": "Domain",
+            "value": "Telecommunications service requests"
+          },
+          {
+            "key": "period",
+            "label": "Period",
+            "value": "Nov 2024 – Dec 2025 · 262 commits"
+          },
+          {
+            "key": "databases",
+            "label": "Databases",
+            "value": "SQL Server (dev) · PostgreSQL (prod)"
+          },
+          {
+            "key": "deployment",
+            "label": "Deployment",
+            "value": "Vercel · request-admin.vercel.app"
+          }
+        ],
+        "nextProjectSlug": "portfolio",
+        "context": "A unified enterprise platform for managing telecom service requests. Multiple organizations share one deployment with strict data isolation, configurable state workflows, an interactive DAG process editor, 14 reports, chat, and a secure data room module.",
+        "roleTitle": "Architect and Lead Developer",
+        "roleIntro": "I designed and implemented the data model, database-level security policies, workflow engine, reporting pipelines, and testing suites.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "A multi-tenant request management platform with visual workflows, SLAs, reports, chat and virtual data rooms.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Architect and Lead Developer: designed the 123-model schema, ZenStack policies, DAG editor, reports, and CI test suites.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Data separation enforced at the database layer across 105 models, dual SQL Server/Postgres compilation, and 374 automated tests.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "data-separation",
+            "title": "Database-level multi-tenancy",
+            "summary": "",
+            "body": "Wrote reusable ZenStack @@allow access policies across 105 models, ensuring organizations only read and mutate their own data.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "permissions",
+            "title": "Granular RBAC and area scoping",
+            "summary": "",
+            "body": "Designed 90 permission keys across 20 functional domains with global vs. departmental area scoping.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "request-lifecycle",
+            "title": "Transactional request lifecycle",
+            "summary": "",
+            "body": "Built atomic all-or-nothing saves for requests, leaf category validations, requirement checks, and immutable change logs.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "workflow-editor",
+            "title": "Visual DAG process editor",
+            "summary": "",
+            "body": "Implemented a React Flow canvas with 13 step types, cycle detection, simulation mode, and execution logs.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "reports",
+            "title": "Reporting and export engine",
+            "summary": "",
+            "body": "Built 14 analytical reports (volumes, trends, SLA compliance, resolution times) with streamed PDF and Excel exports.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "quality",
+            "title": "Quality and cross-engine testing",
+            "summary": "",
+            "body": "Configured 299 Jest unit tests, 75 Cypress E2E specs, and schema compilers for SQL Server and PostgreSQL.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Data separation must be enforced at the database engine level, not screen by screen.",
+          "Development runs on SQL Server while production runs on PostgreSQL (Vercel), requiring automated schema compilation.",
+          "External API routes (/api/*) skip session middleware for API keys, requiring per-route credential verification.",
+          "Requests can only be categorized under leaf nodes at the deepest hierarchy level.",
+          "Requests reaching a terminal status cannot be moved forward by transitions.",
+          "Tests run locally and pre-push; GitHub CI enforces automated translation parity across 4,159 strings."
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Strategy",
+            "title": "Key architectural decisions",
+            "lead": "The core technical choices that shape security, database isolation, process modeling, and multi-tenant performance.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-isolation-database-level",
+                "title": "Data separation as a database engine rule",
+                "summary": "Defined access policies in ZenStack base models rather than relying on manual WHERE filters in each query.",
+                "body": "A base model inherited by 105 entities specifies that users only read or write records belonging to active tenant memberships. A missing filter in presentation code cannot leak tenant data.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Manual WHERE clause filtering in each handler",
+                  "Native PostgreSQL Row-Level Security (RLS)",
+                  "Separate database per tenant"
+                ],
+                "note": "Requires running zenstack generate during the build process, which we automated in package scripts."
+              },
+              {
+                "key": "enforced-queries-session-context",
+                "title": "Contextual server actions bound to tenant identity",
+                "summary": "Database client wrapper attaches authenticated user credentials and active tenant ID automatically.",
+                "body": "All server code reads data through a contextual wrapper that binds the active tenant. A middleware validates organization membership before route rendering, creating two independent defense barriers.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Passing tenantId from frontend request headers",
+                  "Unrestricted global database client in server actions"
+                ],
+                "note": "Guarantees zero horizontal privilege escalation across tenant boundaries."
+              },
+              {
+                "key": "dual-database-compilation",
+                "title": "One schema compiled to dual SQL dialects",
+                "summary": "SQL Server for local development and PostgreSQL for production deployment on Vercel.",
+                "body": "The domain model is defined once in .zmodel files. A cross-platform script (copy-schema.js) transforms types and connection providers before running migrations or generation for each environment.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Running local PostgreSQL in Docker containers",
+                  "Hand-crafting separate Prisma schema files per database"
+                ],
+                "note": "Vercel migrations require direct connection strings to bypass connection pooling proxies."
+              },
+              {
+                "key": "directed-acyclic-graph-workflow-editor",
+                "title": "Visual process editor with DAG validation",
+                "summary": "Separated simple request status transitions from complex multi-step automated processes.",
+                "body": "Status flows follow a state machine, while complex business processes run on a React Flow DAG canvas with cycle detection, dead-end alerts, timers, approvals, and sub-processes with dedicated execution logs.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Third-party workflow SaaS (Camunda / Temporal)",
+                  "Hardcoded static status columns"
+                ],
+                "note": "Long-running workflow execution records are isolated from day-to-day request CRUD operations."
+              },
+              {
+                "key": "granular-rbac-with-area-scoping",
+                "title": "Role-based access with departmental area boundaries",
+                "summary": "Granular access control scoped either across the entire tenant or restricted to specific teams.",
+                "body": "Users inherit permissions from assigned roles and area memberships. A permission check functions globally or within a specific department, allowing team leads to manage their queue without seeing peers.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Single admin/user boolean flag",
+                  "Tenant-wide roles without departmental scoping"
+                ],
+                "note": "Organized into 90 permission keys across 20 functional product modules."
+              },
+              {
+                "key": "realtime-pubsub-via-ably",
+                "title": "Managed pub/sub via Ably over custom WebSocket servers",
+                "summary": "Offloaded live request chat, typing indicators, and status updates to Ably channels.",
+                "body": "Using a managed pub/sub infrastructure eliminates the need to run stateful WebSocket instances on serverless compute, while providing fallback delivery via Twilio SMS and transactional email.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Self-hosted Socket.io instances on standalone VM",
+                  "HTTP short polling with 5-second intervals"
+                ],
+                "note": "Requires managing secure ephemeral token exchange endpoints for client connections."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "System Design",
+            "title": "Architecture & layers",
+            "lead": "Five decoupled layers, from the edge middleware down to database persistence.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "edge-middleware",
+                "title": "Edge & Routing · middleware.ts",
+                "summary": "",
+                "body": "Passes public assets, verifies session tokens, routes users without organizations to onboarding, and blocks unauthorized tenant access before server rendering.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "better-auth session",
+                  "tenant routing",
+                  "redirect validation"
+                ],
+                "note": "Edge runtime"
+              },
+              {
+                "key": "presentation",
+                "title": "Presentation · Next.js 16 & React 19",
+                "summary": "",
+                "body": "Tailwind CSS v4 with OKLCH tokens, Radix UI headless primitives, @xyflow/react canvas, and English/Spanish i18n across 4,159 localized keys.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Tailwind v4",
+                  "React Flow",
+                  "next-intl",
+                  "Radix UI"
+                ],
+                "note": "Client & Server components"
+              },
+              {
+                "key": "application-logic",
+                "title": "Application Logic · Server Actions & Hooks",
+                "summary": "",
+                "body": "Domain-partitioned server actions for transactional business logic, complemented by typed TanStack Query hooks generated by ZenStack.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Server Actions",
+                  "TanStack Query v5",
+                  "TypeScript"
+                ],
+                "note": "Typed contracts"
+              },
+              {
+                "key": "realtime",
+                "title": "Realtime & Notifications · Ably & Twilio",
+                "summary": "",
+                "body": "Ably channels power live request messages, typing indicators, and notifications, with SMS delivery via Twilio and transactional email triggers.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Ably",
+                  "Twilio",
+                  "Resend / SMTP"
+                ],
+                "note": "Pub/Sub infrastructure"
+              },
+              {
+                "key": "persistence",
+                "title": "Persistence & Policies · ZenStack & Prisma",
+                "summary": "",
+                "body": "123 data models across 12 schema files. ZenStack policy engine compiles access rules down to Prisma client queries against SQL Server and PostgreSQL.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "ZenStack",
+                  "Prisma",
+                  "SQL Server",
+                  "PostgreSQL"
+                ],
+                "note": "105 isolated models"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "End-to-end strict TypeScript · better-auth session storage · Vercel serverless deployment"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Data Architecture",
+            "title": "Database modeling & ZenStack access policies",
+            "lead": "Tenant isolation is defined once in an abstract model and inherited across 105 entities, guaranteeing that database queries cannot cross organization boundaries.",
+            "code": "abstract model TenantScoped {\n  tenantId String\n  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction)\n\n  // Allow read access for authenticated users in active tenant membership\n  @@allow('read', tenant.userTenants?[user.id == auth().id && isActive == true])\n\n  // Allow create access for authenticated users in active tenant membership\n  @@allow('create', tenant.userTenants?[user.id == auth().id && isActive == true])\n}\n\nmodel Request extends TenantScoped, Auditable {\n  id                   String   @id @default(uuid())\n  slug                 Int      @default(autoincrement())\n  issueSubject         String   @db.VarChar(255)\n  description          String?  @db.VarChar(5000)\n  isDraft              Boolean  @default(true)\n  closedAt             DateTime?\n  formSubmission       FormSubmission[]\n  complianceTrackings  RequirementComplianceTracking[]\n  requestAssignments   RequestAssignment[]\n  changeLog            RequestChangeLog[]\n  requestDatarooms     RequestDataroom[]\n  executionModelInstance ExecutionModelInstance?\n}",
+            "codeLabel": "zmodel/abstract.zmodel & zmodel/request.zmodel (fragment)",
+            "items": [
+              {
+                "key": "policy-inheritance",
+                "title": "Single-source tenant policy inheritance",
+                "summary": "",
+                "body": "105 models inherit from TenantScoped, applying @@allow access rules automatically without duplicating tenant checks across schemas.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "atomic-transactions",
+                "title": "Atomic multi-entity request saves",
+                "summary": "",
+                "body": "Creating a request, category bindings, compliance checks, data rooms, and workflow instances executes in a single all-or-nothing transaction.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "leaf-category-validation",
+                "title": "Enforced leaf-only categorization",
+                "summary": "",
+                "body": "Requests must be assigned to leaf categories at the deepest level of the organizational hierarchy, preventing ambiguous classification.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dual-dialect-generation",
+                "title": "Cross-dialect schema transformation",
+                "summary": "",
+                "body": "Prebuild scripts compile ZenStack definitions into valid PostgreSQL and SQL Server Prisma schemas, mapping engine-specific types cleanly.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Capabilities",
+            "title": "Platform features & modules",
+            "lead": "Comprehensive service management modules confirmed directly in source code.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "request-workflows",
+                "title": "Configurable request workflows",
+                "summary": "",
+                "body": "Organizations define custom statuses, justification requirements, escalation timers, and SLA progress bars.",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "process-editor",
+                "title": "Visual DAG process editor",
+                "summary": "",
+                "body": "React Flow canvas with 13 step types: tasks, approvals, conditions, loops, timers, notifications, and simulation mode.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "reports-engine",
+                "title": "Reporting & analytics engine",
+                "summary": "",
+                "body": "14 operational reports covering volume trends, SLA compliance, and resolution times with streamed PDF and Excel exports.",
+                "value": "",
+                "icon": "gauge",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "form-designer",
+                "title": "Dynamic form designer",
+                "summary": "",
+                "body": "11 field types (inputs, dates, dropdowns, layout elements) bound to request categories for structured data collection.",
+                "value": "",
+                "icon": "db",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "chat-and-alerts",
+                "title": "Real-time chat & notifications",
+                "summary": "",
+                "body": "Live message threads with typing indicators, Ably presence, Twilio SMS alerts, and email notifications.",
+                "value": "",
+                "icon": "bolt",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "virtual-datarooms",
+                "title": "Virtual data rooms & documents",
+                "summary": "",
+                "body": "Versioned document storage, data room folders with tenant branding, email-verified links, and viewer audit logs.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "api-access",
+                "title": "API keys & authentication",
+                "summary": "",
+                "body": "API keys with daily rate limits, OpenAPI definitions, two-factor authentication, SSO, and magic-link sign-in.",
+                "value": "",
+                "icon": "term",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "security",
+            "kind": "TABLE",
+            "eyebrow": "Trust & Security",
+            "title": "Security & trust model",
+            "lead": "A defense-in-depth model enforcing multi-tenant isolation, granular access control, and comprehensive auditability.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-isolation",
+                "title": "Database-level tenant boundaries",
+                "summary": "",
+                "body": "ZenStack @@allow policies restrict queries to the caller's active tenant. An omitted filter in application code cannot leak cross-tenant records.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authentication",
+                "title": "Multi-factor authentication & sessions",
+                "summary": "",
+                "body": "better-auth with two-factor authentication (TOTP), magic links, email one-time codes, SSO, and database-backed session validation.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "granular-rbac",
+                "title": "Granular RBAC with area delegation",
+                "summary": "",
+                "body": "90 permission keys across 20 groups with global vs. departmental area scoping, allowing departmental leads to manage local queues safely.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "api-rate-limits",
+                "title": "API key rate limits & expiration",
+                "summary": "",
+                "body": "Programmatic API keys capped at 1,000 requests per day with configurable expiration (1 to 365 days) and OpenAPI contract validation.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "audit-logging",
+                "title": "Immutable audit trail",
+                "summary": "",
+                "body": "Every request create and edit records actor IDs, timestamps, and field changes in RequestChangeLog within the same atomic save.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dataroom-protection",
+                "title": "Protected data rooms & shared links",
+                "summary": "",
+                "body": "Shared document links require optional email verification before viewing, recording full viewer activity and accepted agreements.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Known limitations, documented by design",
+            "footnotes": [
+              "External API routes (/api/*) bypass session middleware to support API key authentication; access checks are verified per route handler.",
+              "Vercel PostgreSQL production migrations require direct connection strings to bypass connection pooling proxies.",
+              "Automated CI on GitHub is currently scoped to translation parity; comprehensive unit and E2E suites run in local and pre-push hooks."
+            ],
+            "footnoteVariant": "warning"
+          },
+          {
+            "key": "quality",
+            "kind": "STEPS",
+            "eyebrow": "Engineering Quality",
+            "title": "Quality gates & testing strategy",
+            "lead": "Multi-layered verification across types, unit tests, end-to-end flows, and bilingual string parity.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "type-and-lint",
+                "title": "TypeScript strict mode & ESLint",
+                "summary": "",
+                "body": "Strict TypeScript checks across all server actions, components, and schema hooks, combined with ESLint rules.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "i18n-parity",
+                "title": "Bilingual string parity gate",
+                "summary": "",
+                "body": "Automated i18n-check CLI script validating key parity, missing keys, and invalid tokens across 4,159 English and Spanish strings.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-tests",
+                "title": "Jest unit test suite",
+                "summary": "",
+                "body": "299 unit test cases across 34 test files testing server actions, validation logic, category hierarchies, and auth flows.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "Cypress end-to-end validation",
+                "summary": "",
+                "body": "75 E2E test cases in 15 spec files verifying sign-in, request workflows, form builders, and data room permissions.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dual-schema-compiler",
+                "title": "Dual-engine schema validation",
+                "summary": "",
+                "body": "Prebuild scripts compile and validate schema definitions for both local SQL Server and Vercel PostgreSQL targets.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "design-system",
+            "kind": "SWATCHES",
+            "eyebrow": "Look & feel",
+            "title": "Design system & brand theming",
+            "lead": "Built on Tailwind CSS v4 with OKLCH semantic tokens, Radix UI primitives, and customizable brand theming per organization.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "primary-50",
+                "title": "primary-50",
+                "summary": "",
+                "body": "",
+                "value": "#fff1f2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-100",
+                "title": "primary-100",
+                "summary": "",
+                "body": "",
+                "value": "#ffe4e6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-300",
+                "title": "primary-300",
+                "summary": "",
+                "body": "",
+                "value": "#fda4af",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-500",
+                "title": "primary-500",
+                "summary": "",
+                "body": "",
+                "value": "#f43f5e",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-700",
+                "title": "primary-700",
+                "summary": "",
+                "body": "",
+                "value": "#be123c",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-800",
+                "title": "primary-800",
+                "summary": "",
+                "body": "",
+                "value": "#9f1239",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-900",
+                "title": "primary-900",
+                "summary": "",
+                "body": "",
+                "value": "#881337",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Principles",
+            "footnotes": [
+              "Tailwind CSS v4 token layer using modern OKLCH color spaces",
+              "Radix UI headless primitives ensuring full keyboard and accessibility compliance",
+              "Dual light and dark mode support with smooth semantic transitions",
+              "Per-tenant brand styling: custom primary and secondary colors configured on the Tenant model",
+              "High-density data layouts optimized for operations and tabular request triage"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "METRICS",
+            "eyebrow": "Results",
+            "title": "Outcome & results",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "isolated-models",
+                "title": "Models with DB-level tenant isolation",
+                "summary": "",
+                "body": "",
+                "value": "105",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-cases",
+                "title": "Jest unit test cases",
+                "summary": "",
+                "body": "",
+                "value": "299",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cypress-cases",
+                "title": "Cypress E2E test cases",
+                "summary": "",
+                "body": "",
+                "value": "75",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "sql-dialects",
+                "title": "Supported SQL database engines",
+                "summary": "",
+                "body": "",
+                "value": "2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "scope",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Scope of the codebase",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "models-total",
+                "title": "Prisma data models",
+                "summary": "",
+                "body": "",
+                "value": "123",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "commits-total",
+                "title": "Git commits across 13 months",
+                "summary": "",
+                "body": "",
+                "value": "262",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-files",
+                "title": "Unit test files",
+                "summary": "",
+                "body": "",
+                "value": "34",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "Cypress E2E specs",
+                "summary": "",
+                "body": "",
+                "value": "15",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "es",
+      "title": "Request Admin: plataforma multi-tenant de gestión de solicitudes",
+      "description": "Plataforma integral donde organizaciones de telecomunicaciones gestionan solicitudes de servicio de extremo a extremo: visibilidad, transiciones, asignaciones y cumplimiento de SLA.",
+      "hook": "Múltiples organizaciones en un solo sistema · Workflows personalizados · Cumplimiento de SLA · 14 reportes",
+      "challenge": "Una operación de telecomunicaciones maneja solicitudes de servicio de múltiples equipos y organizaciones. Se requiere control riguroso de responsabilidades, estados y SLAs, garantizando que los datos de cada organización permanezcan estrictamente aislados.",
+      "approach": "Implementé aislamiento multi-tenant a nivel de base de datos con políticas de ZenStack en 105 modelos, un diseñador visual de flujos DAG con detección de ciclos en React Flow, un compilador de esquemas dual para SQL Server y PostgreSQL, y server actions con tipos end-to-end.",
+      "outcome": "Desplegado en Vercel con 262 commits, 299 pruebas unitarias, 75 pruebas E2E en Cypress sobre 15 suites, y paridad automatizada en inglés y español para 4,159 cadenas de interfaz.",
+      "caseStudy": {
+        "chips": [
+          "Full stack",
+          "Multi-tenant",
+          "Workflows",
+          "En producción"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mi rol",
+            "value": "Arquitecto y Desarrollador Principal"
+          },
+          {
+            "key": "domain",
+            "label": "Dominio",
+            "value": "Gestión de solicitudes en telecomunicaciones"
+          },
+          {
+            "key": "period",
+            "label": "Período",
+            "value": "Nov 2024 – Dic 2025 · 262 commits"
+          },
+          {
+            "key": "databases",
+            "label": "Bases de datos",
+            "value": "SQL Server (dev) · PostgreSQL (prod)"
+          },
+          {
+            "key": "deployment",
+            "label": "Despliegue",
+            "value": "Vercel · request-admin.vercel.app"
+          }
+        ],
+        "nextProjectSlug": "portfolio",
+        "context": "Plataforma empresarial unificada para la gestión de solicitudes en telecomunicaciones. Múltiples organizaciones comparten una sola instancia con aislamiento estricto de datos, flujos de estados configurables, editor interactivo de procesos DAG, 14 reportes, chat y salas de datos seguras.",
+        "roleTitle": "Arquitecto y Desarrollador Principal",
+        "roleIntro": "Diseñé e implementé el modelo de datos, las políticas de seguridad en base de datos, el motor de workflows, los pipelines de reportes y las suites de pruebas.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Plataforma multi-tenant de gestión de solicitudes con workflows visuales, SLAs, reportes, chat y salas de datos virtuales.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Arquitecto y Desarrollador Principal: diseñé el esquema de 123 modelos, políticas ZenStack, editor DAG, reportes y CI.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Aislamiento de datos a nivel de motor en 105 modelos, compilación dual SQL Server/Postgres y 374 pruebas automatizadas.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "data-separation",
+            "title": "Multi-tenancy a nivel de base de datos",
+            "summary": "",
+            "body": "Escribí políticas de acceso reutilizables @@allow en ZenStack para 105 modelos, asegurando que cada organización solo lea y modifique sus datos.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "permissions",
+            "title": "RBAC granular y alcance por áreas",
+            "summary": "",
+            "body": "Diseñé 90 permisos en 20 dominios funcionales con alcance global frente a delegación departamental por áreas.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "request-lifecycle",
+            "title": "Ciclo de vida transaccional",
+            "summary": "",
+            "body": "Construí guardado atómico todo o nada para solicitudes, validación de categorías hoja, requisitos y registro inmutable de auditoría.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "workflow-editor",
+            "title": "Editor visual de procesos DAG",
+            "summary": "",
+            "body": "Implementé un lienzo en React Flow con 13 tipos de nodos, detección de ciclos, modo de simulación e historial de ejecuciones.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "reports",
+            "title": "Motor de reportes y exportación",
+            "summary": "",
+            "body": "Construí 14 reportes analíticos (volúmenes, tendencias, cumplimiento de SLA, tiempos de resolución) con exportación streaming a PDF y Excel.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "quality",
+            "title": "Calidad y pruebas entre motores",
+            "summary": "",
+            "body": "Configuré 299 pruebas unitarias en Jest, 75 casos E2E en Cypress y compiladores de esquemas para SQL Server y PostgreSQL.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "La separación de datos debe garantizarse en el motor de base de datos, no pantalla por pantalla.",
+          "El desarrollo local corre sobre SQL Server y producción sobre PostgreSQL (Vercel), requiriendo compilación automatizada de esquemas.",
+          "Las rutas de API externas (/api/*) omiten el middleware de sesión para soportar API keys, exigiendo verificación en cada manejador.",
+          "Las solicitudes solo pueden categorizarse en nodos hoja en el nivel más específico de la jerarquía.",
+          "Las solicitudes que alcanzan un estado final no pueden avanzar mediante transiciones.",
+          "Las pruebas se ejecutan localmente y pre-push; el CI de GitHub verifica paridad de traducciones sobre 4,159 cadenas."
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Estrategia",
+            "title": "Decisiones técnicas clave",
+            "lead": "Las elecciones de arquitectura que definen seguridad, aislamiento en base de datos, modelado de procesos y rendimiento multi-tenant.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-isolation-database-level",
+                "title": "Separación de datos como regla del motor de BD",
+                "summary": "Definición de políticas de acceso en modelos base de ZenStack en lugar de filtros manuales WHERE en cada consulta.",
+                "body": "Un modelo base heredado por 105 entidades especifica que los usuarios solo leen o escriben registros pertenecientes a membresías activas del inquilino. Un filtro olvidado en la interfaz no puede filtrar datos.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Filtrado manual con cláusulas WHERE en cada consulta",
+                  "Row-Level Security (RLS) nativo de PostgreSQL",
+                  "Base de datos separada por cada inquilino"
+                ],
+                "note": "Requiere ejecutar zenstack generate durante la compilación, automatizado en los scripts del proyecto."
+              },
+              {
+                "key": "enforced-queries-session-context",
+                "title": "Server actions contextuales ligados al inquilino",
+                "summary": "El wrapper del cliente de base de datos adjunta credenciales del usuario e ID del inquilino automáticamente.",
+                "body": "Todo el código de servidor consulta datos a través de un wrapper contextual que enlaza al inquilino activo. Un middleware valida membresías antes del renderizado, creando dos barreras defensivas independientes.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Envío de tenantId desde encabezados HTTP del cliente",
+                  "Cliente global de base de datos sin restricciones en server actions"
+                ],
+                "note": "Garantiza cero escalada horizontal de privilegios entre inquilinos."
+              },
+              {
+                "key": "dual-database-compilation",
+                "title": "Un esquema compilado a dos dialectos SQL",
+                "summary": "SQL Server para desarrollo local y PostgreSQL para despliegue en producción en Vercel.",
+                "body": "El modelo de dominio se escribe una sola vez en archivos .zmodel. Un script multiplataforma (copy-schema.js) transforma tipos y proveedores de conexión antes de ejecutar migraciones o generación en cada entorno.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Ejecución de PostgreSQL local en contenedores Docker",
+                  "Mantenimiento manual de archivos de esquema Prisma independientes"
+                ],
+                "note": "Las migraciones en Vercel requieren cadenas de conexión directa para eludir proxies de pooling."
+              },
+              {
+                "key": "directed-acyclic-graph-workflow-editor",
+                "title": "Editor visual de procesos con validación DAG",
+                "summary": "Separación entre transiciones simples de solicitudes y procesos complejos automatizados de múltiples pasos.",
+                "body": "Los estados siguen una máquina de estados finita, mientras que procesos extensos corren sobre un lienzo DAG en React Flow con detección de ciclos, alertas de callejones sin salida, timers, aprobaciones e historial de ejecuciones.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "SaaS de flujos de trabajo de terceros (Camunda / Temporal)",
+                  "Columnas estáticas de estado cableadas en código"
+                ],
+                "note": "Las ejecuciones de procesos de larga duración están aisladas de las operaciones CRUD cotidianas."
+              },
+              {
+                "key": "granular-rbac-with-area-scoping",
+                "title": "Control de acceso RBAC con límites departamentales",
+                "summary": "Permisos granulares con alcance en todo el inquilino o restringidos a equipos específicos.",
+                "body": "Los usuarios heredan permisos de roles asignados y áreas a las que pertenecen. La misma verificación funciona globalmente o para un departamento puntual, permitiendo a líderes gestionar su área sin ver pares.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Bandera booleana única admin/usuario",
+                  "Roles a nivel de inquilino sin segmentación por área"
+                ],
+                "note": "Organizado en 90 permisos a través de 20 módulos funcionales del producto."
+              },
+              {
+                "key": "realtime-pubsub-via-ably",
+                "title": "Pub/sub gestionado con Ably sobre WebSockets propios",
+                "summary": "Canales en tiempo real para chat en solicitudes, presencia y notificaciones delegados a Ably.",
+                "body": "Usar infraestructura gestionada de pub/sub elimina la necesidad de mantener instancias de WebSocket con estado en arquitecturas serverless, ofreciendo entrega de respaldo vía SMS con Twilio y correo transaccional.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Instancias autohospedadas de Socket.io en servidor dedicado",
+                  "Sondeo HTTP corto con intervalos de 5 segundos"
+                ],
+                "note": "Requiere gestionar endpoints seguros de intercambio de tokens para clientes del navegador."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Diseño del sistema",
+            "title": "Arquitectura y capas",
+            "lead": "Cinco capas desacopladas, desde el middleware perimetral hasta la persistencia en base de datos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "edge-middleware",
+                "title": "Edge y enrutamiento · middleware.ts",
+                "summary": "",
+                "body": "Permite activos públicos, valida tokens de sesión, redirige usuarios sin organización hacia onboarding y bloquea accesos no autorizados antes del renderizado.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "sesión better-auth",
+                  "enrutamiento de inquilinos",
+                  "validación de redirecciones"
+                ],
+                "note": "Entorno Edge"
+              },
+              {
+                "key": "presentation",
+                "title": "Presentación · Next.js 16 y React 19",
+                "summary": "",
+                "body": "Tailwind CSS v4 con tokens OKLCH, primitivas accesibles de Radix UI, lienzo @xyflow/react e internacionalización en inglés y español para 4,159 cadenas.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Tailwind v4",
+                  "React Flow",
+                  "next-intl",
+                  "Radix UI"
+                ],
+                "note": "Componentes Cliente y Servidor"
+              },
+              {
+                "key": "application-logic",
+                "title": "Lógica de aplicación · Server Actions y Hooks",
+                "summary": "",
+                "body": "Server actions organizadas por dominio para lógica transaccional, complementadas con hooks tipados de TanStack Query generados por ZenStack.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Server Actions",
+                  "TanStack Query v5",
+                  "TypeScript"
+                ],
+                "note": "Contratos tipados"
+              },
+              {
+                "key": "realtime",
+                "title": "Tiempo real y alertas · Ably y Twilio",
+                "summary": "",
+                "body": "Canales de Ably alimentan mensajería en vivo, indicadores de escritura y alertas en la app, con respaldo de SMS vía Twilio y correos transaccionales.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Ably",
+                  "Twilio",
+                  "Resend / SMTP"
+                ],
+                "note": "Infraestructura Pub/Sub"
+              },
+              {
+                "key": "persistence",
+                "title": "Persistencia y políticas · ZenStack y Prisma",
+                "summary": "",
+                "body": "123 modelos de datos en 12 esquemas. El motor ZenStack compila reglas de acceso hacia consultas Prisma sobre SQL Server y PostgreSQL.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "ZenStack",
+                  "Prisma",
+                  "SQL Server",
+                  "PostgreSQL"
+                ],
+                "note": "105 modelos aislados"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "TypeScript estricto de extremo a extremo · almacenamiento de sesiones en better-auth · despliegue serverless en Vercel"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Arquitectura de datos",
+            "title": "Modelado de datos y políticas de acceso en ZenStack",
+            "lead": "El aislamiento entre inquilinos se declara una sola vez en un modelo abstracto y es heredado por 105 entidades, garantizando que ninguna consulta cruce límites organizacionales.",
+            "code": "abstract model TenantScoped {\n  tenantId String\n  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction)\n\n  // Allow read access for authenticated users in active tenant membership\n  @@allow('read', tenant.userTenants?[user.id == auth().id && isActive == true])\n\n  // Allow create access for authenticated users in active tenant membership\n  @@allow('create', tenant.userTenants?[user.id == auth().id && isActive == true])\n}\n\nmodel Request extends TenantScoped, Auditable {\n  id                   String   @id @default(uuid())\n  slug                 Int      @default(autoincrement())\n  issueSubject         String   @db.VarChar(255)\n  description          String?  @db.VarChar(5000)\n  isDraft              Boolean  @default(true)\n  closedAt             DateTime?\n  formSubmission       FormSubmission[]\n  complianceTrackings  RequirementComplianceTracking[]\n  requestAssignments   RequestAssignment[]\n  changeLog            RequestChangeLog[]\n  requestDatarooms     RequestDataroom[]\n  executionModelInstance ExecutionModelInstance?\n}",
+            "codeLabel": "zmodel/abstract.zmodel y zmodel/request.zmodel (fragmento)",
+            "items": [
+              {
+                "key": "policy-inheritance",
+                "title": "Herencia de políticas desde un modelo único",
+                "summary": "",
+                "body": "105 modelos heredan de TenantScoped, aplicando reglas @@allow automáticamente sin duplicar comprobaciones de inquilinos en cada tabla.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "atomic-transactions",
+                "title": "Guardado atómico en transacción única",
+                "summary": "",
+                "body": "Crear una solicitud, vincular categorías, comprobaciones de cumplimiento, salas de datos e instancias de workflow se ejecuta en una sola transacción.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "leaf-category-validation",
+                "title": "Categorización forzada en nodos hoja",
+                "summary": "",
+                "body": "Las solicitudes deben asociarse a categorías hoja en el nivel más específico de la jerarquía, evitando clasificaciones ambiguas.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dual-dialect-generation",
+                "title": "Compilación entre dialectos SQL",
+                "summary": "",
+                "body": "Scripts de precompilación convierten definiciones ZenStack en esquemas Prisma válidos para PostgreSQL y SQL Server sin edición manual.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Capacidades",
+            "title": "Módulos y capacidades de la plataforma",
+            "lead": "Capacidades completas de gestión de servicios confirmadas directamente en el código fuente.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "request-workflows",
+                "title": "Workflows de solicitudes configurables",
+                "summary": "",
+                "body": "Cada organización define estados, requerimientos de justificación, tiempos de escalación y barras de progreso de SLA.",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "process-editor",
+                "title": "Editor visual de procesos DAG",
+                "summary": "",
+                "body": "Lienzo en React Flow con 13 tipos de nodos: tareas, aprobaciones, condiciones, bucles, timers, notificaciones y modo de simulación.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "reports-engine",
+                "title": "Motor de analítica y reportes",
+                "summary": "",
+                "body": "14 reportes operativos que analizan tendencias de volumen, cumplimiento de SLA y tiempos de resolución con exportación a PDF y Excel.",
+                "value": "",
+                "icon": "gauge",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "form-designer",
+                "title": "Diseñador de formularios dinámicos",
+                "summary": "",
+                "body": "11 tipos de campos (entradas, fechas, selectores, diseño) vinculados a categorías de solicitudes para captura estructurada.",
+                "value": "",
+                "icon": "db",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "chat-and-alerts",
+                "title": "Chat en vivo y notificaciones",
+                "summary": "",
+                "body": "Hilos de mensajes en tiempo real con presencia, alertas SMS a través de Twilio y notificaciones por correo.",
+                "value": "",
+                "icon": "bolt",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "virtual-datarooms",
+                "title": "Salas de datos y documentos",
+                "summary": "",
+                "body": "Almacenamiento versionado de documentos, carpetas con branding del inquilino, enlaces verificados por email y logs de visitas.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "api-access",
+                "title": "Claves API y autenticación",
+                "summary": "",
+                "body": "Claves API con cuotas diarias, especificación OpenAPI, autenticación de dos factores, SSO y acceso con enlaces mágicos.",
+                "value": "",
+                "icon": "term",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "security",
+            "kind": "TABLE",
+            "eyebrow": "Confianza y seguridad",
+            "title": "Modelo de seguridad y confianza",
+            "lead": "Un modelo de defensa en profundidad que asegura aislamiento multi-tenant, control de acceso granular y auditoría total.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-isolation",
+                "title": "Límites de inquilinos en base de datos",
+                "summary": "",
+                "body": "Políticas @@allow de ZenStack restringen consultas al inquilino activo. Un filtro omitido en la interfaz no puede filtrar registros ajenos.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authentication",
+                "title": "Autenticación multifactor y sesiones",
+                "summary": "",
+                "body": "better-auth con 2FA (TOTP), enlaces mágicos, códigos OTP por correo, SSO y sesiones validadas contra la base de datos.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "granular-rbac",
+                "title": "RBAC granular con delegación por áreas",
+                "summary": "",
+                "body": "90 permisos en 20 grupos con alcance global frente a departamental, permitiendo a líderes gestionar sus bandejas con total seguridad.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "api-rate-limits",
+                "title": "Límites de tasa y expiración de API keys",
+                "summary": "",
+                "body": "Claves API programáticas con límite de 1,000 peticiones diarias, expiración configurable (1 a 365 días) y OpenAPI.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "audit-logging",
+                "title": "Pistas de auditoría inmutables",
+                "summary": "",
+                "body": "Cada creación y edición registra usuario, marca temporal y cambios en RequestChangeLog dentro del mismo guardado atómico.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dataroom-protection",
+                "title": "Salas de datos y enlaces protegidos",
+                "summary": "",
+                "body": "Los enlaces a documentos compartidos admiten verificación por correo antes de abrirse, registrando accesos y acuerdos aceptados.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Limitaciones conocidas, documentadas a propósito",
+            "footnotes": [
+              "Las rutas de API (/api/*) omiten el middleware de sesión para soportar autenticación por API key; el acceso se valida en cada controlador.",
+              "Las migraciones de PostgreSQL en producción requieren cadenas de conexión directa para evitar proxies de connection pooling.",
+              "El CI automatizado en GitHub valida actualmente paridad de traducciones; las suites unitarias y E2E se ejecutan localmente y pre-push."
+            ],
+            "footnoteVariant": "warning"
+          },
+          {
+            "key": "quality",
+            "kind": "STEPS",
+            "eyebrow": "Calidad de ingeniería",
+            "title": "Gates de calidad y pruebas",
+            "lead": "Verificación multicapa que abarca comprobación estática de tipos, pruebas unitarias, flujos E2E y paridad de idiomas.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "type-and-lint",
+                "title": "TypeScript estricto y ESLint",
+                "summary": "",
+                "body": "Verificaciones estrictas de tipos en todas las server actions, componentes e interfaces generadas, combinadas con ESLint.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "i18n-parity",
+                "title": "Control de paridad bilingüe",
+                "summary": "",
+                "body": "Script i18n-check automatizado que audita paridad de claves, faltantes y tokens inválidos en 4,159 cadenas en inglés y español.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-tests",
+                "title": "Suite de pruebas unitarias en Jest",
+                "summary": "",
+                "body": "299 casos de prueba en 34 archivos validando server actions, reglas de negocio, jerarquías de categorías y flujos de autenticación.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "Validación de extremo a extremo en Cypress",
+                "summary": "",
+                "body": "75 casos de prueba E2E en 15 especificaciones verificando login, workflows de solicitudes, constructor de formularios y permisos.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dual-schema-compiler",
+                "title": "Validación de esquemas entre motores",
+                "summary": "",
+                "body": "Scripts de precompilación generan y validan definiciones de esquema para SQL Server local y PostgreSQL en Vercel.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "design-system",
+            "kind": "SWATCHES",
+            "eyebrow": "Apariencia y diseño",
+            "title": "Sistema de diseño y tematización",
+            "lead": "Construido sobre Tailwind CSS v4 con tokens semánticos en OKLCH, componentes de Radix UI y personalización de marca por organización.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "primary-50",
+                "title": "primary-50",
+                "summary": "",
+                "body": "",
+                "value": "#fff1f2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-100",
+                "title": "primary-100",
+                "summary": "",
+                "body": "",
+                "value": "#ffe4e6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-300",
+                "title": "primary-300",
+                "summary": "",
+                "body": "",
+                "value": "#fda4af",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-500",
+                "title": "primary-500",
+                "summary": "",
+                "body": "",
+                "value": "#f43f5e",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-700",
+                "title": "primary-700",
+                "summary": "",
+                "body": "",
+                "value": "#be123c",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-800",
+                "title": "primary-800",
+                "summary": "",
+                "body": "",
+                "value": "#9f1239",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-900",
+                "title": "primary-900",
+                "summary": "",
+                "body": "",
+                "value": "#881337",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Principios",
+            "footnotes": [
+              "Capa de tokens en Tailwind CSS v4 aprovechando espacios cromáticos modernos OKLCH",
+              "Primitivas accesibles de Radix UI garantizando navegación por teclado y cumplimiento de accesibilidad",
+              "Soporte para modo claro y oscuro con transiciones semánticas suaves",
+              "Tematización por inquilino: colores primario y secundario configurables en el modelo Tenant",
+              "Diseño de alta densidad optimizado para operaciones y clasificación tabular de solicitudes"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "METRICS",
+            "eyebrow": "Resultados",
+            "title": "Resultados e impacto",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "isolated-models",
+                "title": "Modelos con aislamiento multi-tenant en BD",
+                "summary": "",
+                "body": "",
+                "value": "105",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-cases",
+                "title": "Casos de prueba unitaria en Jest",
+                "summary": "",
+                "body": "",
+                "value": "299",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cypress-cases",
+                "title": "Casos de prueba E2E en Cypress",
+                "summary": "",
+                "body": "",
+                "value": "75",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "sql-dialects",
+                "title": "Motores de base de datos SQL compatibles",
+                "summary": "",
+                "body": "",
+                "value": "2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "scope",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Alcance del código",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "models-total",
+                "title": "Modelos de datos Prisma",
+                "summary": "",
+                "body": "",
+                "value": "123",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "commits-total",
+                "title": "Commits de Git a lo largo de 13 meses",
+                "summary": "",
+                "body": "",
+                "value": "262",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-files",
+                "title": "Archivos de pruebas unitarias",
+                "summary": "",
+                "body": "",
+                "value": "34",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "Especificaciones E2E en Cypress",
+                "summary": "",
+                "body": "",
+                "value": "15",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "Request Admin: multi-tenant platform voor serviceverzoeken",
+      "description": "Een platform waar telecomorganisaties serviceverzoeken end-to-end beheren: wie wat ziet, statusovergangen, toewijzingen en tijdige afhandeling binnen SLA's.",
+      "hook": "Meerdere organisaties op één systeem · Aangepaste workflows · SLA-naleving · 14 rapporten",
+      "challenge": "Een telecommunicatie-operatie verwerkt serviceverzoeken van meerdere teams en organisaties. Betrokkenen moeten weten wie verantwoordelijk is en wat de SLA-status is, terwijl organisatiegegevens strikt gescheiden blijven.",
+      "approach": "Ik implementeerde multi-tenancy op database-niveau via ZenStack-toegangsregels over 105 modellen, een visuele DAG-procesontwerper in React Flow, een dual-engine schemacompiler voor SQL Server en PostgreSQL, en getypeerde server actions.",
+      "outcome": "Geïmplementeerd op Vercel na 262 commits, met 299 Jest-unittests, 75 Cypress E2E-tests in 15 suites, en geautomatiseerde pariteit voor 4.159 interface-teksten in Engels en Spaans.",
+      "caseStudy": {
+        "chips": [
+          "Full stack",
+          "Multi-tenant",
+          "Workflows",
+          "In productie"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mijn rol",
+            "value": "Architect en Hoofdontwikkelaar"
+          },
+          {
+            "key": "domain",
+            "label": "Domein",
+            "value": "Serviceverzoeken telecommunicatie"
+          },
+          {
+            "key": "period",
+            "label": "Periode",
+            "value": "Nov 2024 – Dec 2025 · 262 commits"
+          },
+          {
+            "key": "databases",
+            "label": "Databases",
+            "value": "SQL Server (dev) · PostgreSQL (prod)"
+          },
+          {
+            "key": "deployment",
+            "label": "Implementatie",
+            "value": "Vercel · request-admin.vercel.app"
+          }
+        ],
+        "nextProjectSlug": "portfolio",
+        "context": "Een uniform enterprise-platform voor het beheer van serviceverzoeken in telecom. Meerdere organisaties delen één installatie met strikte gegevensscheiding, configureerbare statusworkflows, een interactieve DAG-proceseditor, 14 rapporten, chat en datarooms.",
+        "roleTitle": "Architect en Hoofdontwikkelaar",
+        "roleIntro": "Ik ontwierp en bouwde het datamodel, de beveiligingsregels op database-niveau, de workflow-engine, de rapportage-pipelines en de testsuites.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Een multi-tenant platform voor serviceverzoeken met visuele workflows, SLA's, rapportages, chat en virtuele datarooms.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Architect en Hoofdontwikkelaar: datamodel met 123 modellen, ZenStack-beleid, DAG-editor, rapporten en testsuites.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Gegevensscheiding afgedwongen in de database over 105 modellen, dubbele SQL Server/Postgres-compilatie en 374 geautomatiseerde tests.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "data-separation",
+            "title": "Gegevensscheiding op database-niveau",
+            "summary": "",
+            "body": "Schreef herbruikbare ZenStack @@allow-toegangsregels over 105 modellen, zodat organisaties uitsluitend eigen gegevens kunnen lezen en muteren.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "permissions",
+            "title": "Granulaire RBAC en afdelingsgebieden",
+            "summary": "",
+            "body": "Ontwierp 90 permissies over 20 functionele domeinen met globale versus afdelingsgerichte toewijzingen.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "request-lifecycle",
+            "title": "Transactionele verzoekencyclus",
+            "summary": "",
+            "body": "Bouwde atomaire opslag voor verzoeken, validatie van bladcategorieën, vereisten en onveranderlijke audit-wijzigingslogboeken.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "workflow-editor",
+            "title": "Visuele DAG-proceseditor",
+            "summary": "",
+            "body": "Implementeerde een React Flow-canvas met 13 staptypen, cyclusdetectie, simulatiemodus en uitvoeringsgeschiedenis.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "reports",
+            "title": "Rapportage- en export-engine",
+            "summary": "",
+            "body": "Bouwde 14 operationele rapporten (volumes, trends, SLA-naleving, oplostijden) met gestreamde PDF- en Excel-exports.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "quality",
+            "title": "Kwaliteit en cross-engine testen",
+            "summary": "",
+            "body": "Configureerde 299 Jest-unittests, 75 Cypress E2E-gevallen en schemacompilers voor SQL Server en PostgreSQL.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Gegevensscheiding moet worden afgedwongen in de database-engine, niet scherm voor scherm.",
+          "Lokale ontwikkeling draait op SQL Server en productie op PostgreSQL (Vercel), wat geautomatiseerde schemacompilatie vereist.",
+          "Externe API-routes (/api/*) omzeilen sessie-middleware voor API-sleutels, wat verificatie per handler vereist.",
+          "Verzoeken kunnen alleen worden ingedeeld in bladcategorieën op het diepste niveau van de hiërarchie.",
+          "Verzoeken met een definitieve status kunnen niet verder worden verplaatst via transities.",
+          "Tests draaien lokaal en pre-push; GitHub CI controleert vertaalpariteit over 4.159 interface-teksten."
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Strategie",
+            "title": "Belangrijke architectuurbeslissingen",
+            "lead": "De technische keuzes die beveiliging, database-isolatie, procesmodellering en multi-tenant prestaties bepalen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-isolation-database-level",
+                "title": "Gegevensscheiding als database-regel",
+                "summary": "Toegangsregels gedefinieerd in ZenStack-basismodellen in plaats van handmatige WHERE-filters in elke query.",
+                "body": "Een basismodel overgenomen door 105 entiteiten bepaalt dat gebruikers alleen records lezen of schrijven van actieve lidmaatschappen. Een vergeten filter in de interface kan nooit gegevens lekken.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Handmatige WHERE-clausule filters in elke query",
+                  "Inheemse PostgreSQL Row-Level Security (RLS)",
+                  "Aparte database per organisatie"
+                ],
+                "note": "Vereist het uitvoeren van zenstack generate tijdens de build, wat geautomatiseerd is in pakketscripts."
+              },
+              {
+                "key": "enforced-queries-session-context",
+                "title": "Contextuele server actions gekoppeld aan tenant-identiteit",
+                "summary": "Database-client wrapper voegt geauthenticeerde gebruikersgegevens en actieve tenant-ID automatisch toe.",
+                "body": "Alle servercode leest gegevens via een contextuele wrapper die de actieve tenant bindt. Middleware valideert organisatielidmaatschap voorafgaand aan rendering, wat twee onafhankelijke barrières creëert.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Doorgeven van tenantId via HTTP-headers vanaf de frontend",
+                  "Onbeperkte globale database-client in server actions"
+                ],
+                "note": "Garandeert nul horizontale privilege-escalatie over tenantgrenzen."
+              },
+              {
+                "key": "dual-database-compilation",
+                "title": "Eén schema gecompileerd naar dubbele SQL-dialecten",
+                "summary": "SQL Server voor lokale ontwikkeling en PostgreSQL voor productie op Vercel.",
+                "body": "Het domeinmodel wordt eenmalig gedefinieerd in .zmodel-bestanden. Een platformonafhankelijk script (copy-schema.js) transformeert typen en providers vóór migraties of generatie per omgeving.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Lokale PostgreSQL draaien in Docker-containers",
+                  "Handmatig onderhouden van aparte Prisma-schemabestanden"
+                ],
+                "note": "Vercel-migraties vereisen directe verbindingsstrings om pooling-proxy's te omzeilen."
+              },
+              {
+                "key": "directed-acyclic-graph-workflow-editor",
+                "title": "Visuele proceseditor met DAG-validatie",
+                "summary": "Scheiding tussen eenvoudige statusovergangen en complexe geautomatiseerde processen met meerdere stappen.",
+                "body": "Statusstromen volgen een statusmachine, terwijl complexe bedrijfsprocessen draaien op een React Flow DAG-canvas met cyclusdetectie, timers, goedkeuringen en speciale uitvoeringslogboeken.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Externe workflow SaaS-oplossingen (Camunda / Temporal)",
+                  "Vastgelegde statische statuskolommen in code"
+                ],
+                "note": "Langlopende procesuitvoeringen zijn geïsoleerd van dagelijkse verzoek-CRUD-operaties."
+              },
+              {
+                "key": "granular-rbac-with-area-scoping",
+                "title": "RBAC-toegangsbeheer met afdelingsgrenzen",
+                "summary": "Granulaire toegangscontrole met globale reikwijdte of beperkt tot specifieke teams.",
+                "body": "Gebruikers erven permissies van toegewezen rollen en afdelingsgebieden. Dezelfde controle werkt globaal of binnen één afdeling, waardoor teamleiders hun wachtrij veilig beheren zonder collega's te zien.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Enkele admin/gebruiker boolean vlag",
+                  "Tenant-brede rollen zonder afdelingssegmentatie"
+                ],
+                "note": "Georganiseerd in 90 permissies over 20 functionele productmodules."
+              },
+              {
+                "key": "realtime-pubsub-via-ably",
+                "title": "Beheerde pub/sub via Ably over eigen WebSocket-servers",
+                "summary": "Realtime verzoekchat, aanwezigheidsindicatoren en meldingen uitbesteed aan Ably-kanalen.",
+                "body": "Beheerde pub/sub-infrastructuur elimineert de noodzaak om stateful WebSocket-instances te beheren in serverless architecturen, met fallback-levering via Twilio SMS en transactionele e-mail.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Zelf-gehoste Socket.io-instances op een VPS",
+                  "Korte HTTP-polling met intervallen van 5 seconden"
+                ],
+                "note": "Vereist het beheer van veilige token-uitwisselingsendpoints voor browserclients."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Systeemontwerp",
+            "title": "Architectuur en lagen",
+            "lead": "Vijf ontkoppelde lagen, van edge-middleware tot database-persistentie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "edge-middleware",
+                "title": "Edge en routering · middleware.ts",
+                "summary": "",
+                "body": "Laat publieke bestanden door, verifieert sessietokens, leidt gebruikers zonder organisatie naar onboarding en blokkeert ongeoorloofde toegang vóór server-rendering.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "better-auth sessie",
+                  "tenant-routering",
+                  "omleidingsvalidatie"
+                ],
+                "note": "Edge-omgeving"
+              },
+              {
+                "key": "presentation",
+                "title": "Presentatie · Next.js 16 en React 19",
+                "summary": "",
+                "body": "Tailwind CSS v4 met OKLCH-tokens, Radix UI-primitieven, @xyflow/react canvas en tweetalige ondersteuning voor 4.159 gelokaliseerde teksten.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Tailwind v4",
+                  "React Flow",
+                  "next-intl",
+                  "Radix UI"
+                ],
+                "note": "Client- en Servercomponenten"
+              },
+              {
+                "key": "application-logic",
+                "title": "Applicatielogica · Server Actions en Hooks",
+                "summary": "",
+                "body": "Domeingestuurde server actions voor transactionele bedrijfslogica, aangevuld met getypeerde TanStack Query-hooks gegenereerd door ZenStack.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Server Actions",
+                  "TanStack Query v5",
+                  "TypeScript"
+                ],
+                "note": "Getypeerde contracten"
+              },
+              {
+                "key": "realtime",
+                "title": "Realtime en meldingen · Ably en Twilio",
+                "summary": "",
+                "body": "Ably-kanalen verzorgen live berichten, type-indicatoren en meldingen, met sms-bezorging via Twilio en transactionele e-mail.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Ably",
+                  "Twilio",
+                  "Resend / SMTP"
+                ],
+                "note": "Pub/Sub infrastructuur"
+              },
+              {
+                "key": "persistence",
+                "title": "Persistentie en beleid · ZenStack en Prisma",
+                "summary": "",
+                "body": "123 datamodellen over 12 schemabestanden. ZenStack compileert toegangsregels naar Prisma-queries op SQL Server en PostgreSQL.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "ZenStack",
+                  "Prisma",
+                  "SQL Server",
+                  "PostgreSQL"
+                ],
+                "note": "105 geïsoleerde modellen"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "End-to-end strikte TypeScript · better-auth sessieopslag · serverless implementatie op Vercel"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Data-architectuur",
+            "title": "Datamodellering en ZenStack-toegangsregels",
+            "lead": "Organisatie-isolatie wordt eenmalig gedefinieerd in een abstract model en overgenomen door 105 entiteiten, zodat queries nooit organisatiegrenzen overschrijden.",
+            "code": "abstract model TenantScoped {\n  tenantId String\n  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction)\n\n  // Allow read access for authenticated users in active tenant membership\n  @@allow('read', tenant.userTenants?[user.id == auth().id && isActive == true])\n\n  // Allow create access for authenticated users in active tenant membership\n  @@allow('create', tenant.userTenants?[user.id == auth().id && isActive == true])\n}\n\nmodel Request extends TenantScoped, Auditable {\n  id                   String   @id @default(uuid())\n  slug                 Int      @default(autoincrement())\n  issueSubject         String   @db.VarChar(255)\n  description          String?  @db.VarChar(5000)\n  isDraft              Boolean  @default(true)\n  closedAt             DateTime?\n  formSubmission       FormSubmission[]\n  complianceTrackings  RequirementComplianceTracking[]\n  requestAssignments   RequestAssignment[]\n  changeLog            RequestChangeLog[]\n  requestDatarooms     RequestDataroom[]\n  executionModelInstance ExecutionModelInstance?\n}",
+            "codeLabel": "zmodel/abstract.zmodel en zmodel/request.zmodel (fragment)",
+            "items": [
+              {
+                "key": "policy-inheritance",
+                "title": "Beleidsovername vanuit één abstract model",
+                "summary": "",
+                "body": "105 modellen erven van TenantScoped, waardoor @@allow-toegangsregels automatisch worden toegepast zonder duplicatie.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "atomic-transactions",
+                "title": "Atomaire opslag in één transactie",
+                "summary": "",
+                "body": "Aanmaken van verzoeken, categoriekoppelingen, vereiste-controles, datarooms en workflow-instanties gebeurt in één enkele transactie.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "leaf-category-validation",
+                "title": "Verplichte indeling in bladcategorieën",
+                "summary": "",
+                "body": "Verzoeken moeten worden toegewezen aan bladcategorieën op het diepste niveau van de hiërarchie om dubbelzinnigheid te voorkomen.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dual-dialect-generation",
+                "title": "Schematransformatie tussen SQL-dialecten",
+                "summary": "",
+                "body": "Prebuild-scripts compileren ZenStack-definities automatisch naar geldige PostgreSQL- en SQL Server Prisma-schema's.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Mogelijkheden",
+            "title": "Platformfunctionaliteiten en modules",
+            "lead": "Volledige servicemanagement-functionaliteiten direct geverifieerd in de broncode.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "request-workflows",
+                "title": "Configureerbare statusworkflows",
+                "summary": "",
+                "body": "Organisaties definiëren statussen, verantwoordingsvereisten, escalatietimers en visuele SLA-voortgangsbalken.",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "process-editor",
+                "title": "Visuele DAG-proceseditor",
+                "summary": "",
+                "body": "React Flow-canvas met 13 knooppunttypen: taken, goedkeuringen, voorwaarden, lussen, timers, meldingen en simulatie.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "reports-engine",
+                "title": "Rapportage- en analyse-engine",
+                "summary": "",
+                "body": "14 operationele rapporten die volumetrends, SLA-naleving en oplostijden analyseren met gestreamde PDF- en Excel-exports.",
+                "value": "",
+                "icon": "gauge",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "form-designer",
+                "title": "Dynamische formulierontwerper",
+                "summary": "",
+                "body": "11 veldtypen (invoer, datums, selecties, lay-out) gekoppeld aan verzoekcategorieën voor gestructureerde gegevensinvoer.",
+                "value": "",
+                "icon": "db",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "chat-and-alerts",
+                "title": "Realtime chat en meldingen",
+                "summary": "",
+                "body": "Live berichtuitwisseling met type-indicatoren, aanwezigheidsstatus, sms-waarschuwingen via Twilio en e-mailnotificaties.",
+                "value": "",
+                "icon": "bolt",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "virtual-datarooms",
+                "title": "Virtuele datarooms en documenten",
+                "summary": "",
+                "body": "Versiebeheer voor documenten, mappen met tenant-branding, links geverifieerd via e-mail en bezoekerslogboeken.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "api-access",
+                "title": "API-sleutels en authenticatie",
+                "summary": "",
+                "body": "API-sleutels met dagelijkse limieten, OpenAPI-beschrijvingen, tweefactorauthenticatie, SSO en aanmelden via magische links.",
+                "value": "",
+                "icon": "term",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "security",
+            "kind": "TABLE",
+            "eyebrow": "Vertrouwen en beveiliging",
+            "title": "Beveiligings- en vertrouwensmodel",
+            "lead": "Een diepgaand verdedigingsmodel dat multi-tenant isolatie, granulaire toegangscontrole en volledige auditeerbaarheid waarborgt.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "tenant-isolation",
+                "title": "Database-grenzen per organisatie",
+                "summary": "",
+                "body": "ZenStack @@allow-regels beperken queries tot de actieve organisatie van de beller. Een vergeten filter kan nooit records lekken.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "authentication",
+                "title": "Multifactor-authenticatie en sessies",
+                "summary": "",
+                "body": "better-auth met 2FA (TOTP), magische links, eenmalige e-mailcodes, SSO en sessies gevalideerd in de database.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "granular-rbac",
+                "title": "Granulaire RBAC met afdelingsdelegatie",
+                "summary": "",
+                "body": "90 permissies over 20 groepen met globale en afdelingsgerichte toewijzingen voor veilige wachtrijdelegatie.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "api-rate-limits",
+                "title": "API-sleutellimieten en vervaldatum",
+                "summary": "",
+                "body": "Programmatische API-sleutels gelimiteerd op 1.000 verzoeken per dag met instelbare vervaldatum (1 tot 365 dagen) en OpenAPI.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "audit-logging",
+                "title": "Onveranderlijke auditlogboeken",
+                "summary": "",
+                "body": "Elk aangemaakt en bewerkt verzoek legt gebruiker, tijdstempel en veldwijzigingen vast in RequestChangeLog binnen dezelfde opslag.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dataroom-protection",
+                "title": "Beveiligde datarooms en gedeelde links",
+                "summary": "",
+                "body": "Gedeelde documentlinks ondersteunen e-mailverificatie vóór inzage, met registratie van alle activiteiten en voorwaarden.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Bekende beperkingen, bewust gedocumenteerd",
+            "footnotes": [
+              "Externe API-routes (/api/*) omzeilen sessie-middleware voor API-sleutelauthenticatie; toegang wordt per handler gevalideerd.",
+              "Vercel PostgreSQL-productiemigraties vereisen directe verbindingsstrings om pooling-proxy's te omzeilen.",
+              "Geautomatiseerde CI op GitHub controleert momenteel vertaalpariteit; unittests en E2E-suites draaien lokaal en pre-push."
+            ],
+            "footnoteVariant": "warning"
+          },
+          {
+            "key": "quality",
+            "kind": "STEPS",
+            "eyebrow": "Kwaliteit en testen",
+            "title": "Kwaliteitscontroles en teststrategie",
+            "lead": "Meerlaagse verificatie met statische typecontroles, unittests, end-to-end flows en tweetalige tekstenpariteit.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "type-and-lint",
+                "title": "Strikte TypeScript en ESLint",
+                "summary": "",
+                "body": "Strikte TypeScript-controles over alle server actions, componenten en gegenereerde hooks, gecombineerd met ESLint-regels.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "i18n-parity",
+                "title": "Controle op tweetalige tekstpariteit",
+                "summary": "",
+                "body": "Geautomatiseerd i18n-check script dat ontbrekende sleutels en ongeldige tokens controleert in 4.159 teksten in Engels en Spaans.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-tests",
+                "title": "Jest-unittestsuite",
+                "summary": "",
+                "body": "299 unittests in 34 bestanden die server actions, bedrijfsregels, categoriehiërarchieën en authenticatie controleren.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "Cypress end-to-end validatie",
+                "summary": "",
+                "body": "75 E2E-tests in 15 specificaties die inloggen, verzoekworkflows, formulierbouwers en dataroom-machtigingen testen.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "dual-schema-compiler",
+                "title": "Schemavalidatie tussen database-engines",
+                "summary": "",
+                "body": "Prebuild-scripts genereren en valideren schemadefinities voor zowel lokale SQL Server als Vercel PostgreSQL.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "design-system",
+            "kind": "SWATCHES",
+            "eyebrow": "Look & feel",
+            "title": "Design system en thematisering",
+            "lead": "Gebouwd op Tailwind CSS v4 met OKLCH semantische tokens, Radix UI-primitieven en aanpasbare branding per organisatie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "primary-50",
+                "title": "primary-50",
+                "summary": "",
+                "body": "",
+                "value": "#fff1f2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-100",
+                "title": "primary-100",
+                "summary": "",
+                "body": "",
+                "value": "#ffe4e6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-300",
+                "title": "primary-300",
+                "summary": "",
+                "body": "",
+                "value": "#fda4af",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-500",
+                "title": "primary-500",
+                "summary": "",
+                "body": "",
+                "value": "#f43f5e",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-700",
+                "title": "primary-700",
+                "summary": "",
+                "body": "",
+                "value": "#be123c",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-800",
+                "title": "primary-800",
+                "summary": "",
+                "body": "",
+                "value": "#9f1239",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "primary-900",
+                "title": "primary-900",
+                "summary": "",
+                "body": "",
+                "value": "#881337",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "Principes",
+            "footnotes": [
+              "Tailwind CSS v4 tokenlaag met moderne OKLCH-kleurruimtes",
+              "Radix UI-primitieven die volledige toetsenbord- en toegankelijkheidsnaleving waarborgen",
+              "Ondersteuning voor lichte en donkere modus met vloeiende semantische overgangen",
+              "Branding per organisatie: primaire en secundaire kleuren geconfigureerd in het Tenant-model",
+              "Lay-outs met hoge informatiedichtheid geoptimaliseerd voor operationeel verzoekenbeheer"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "METRICS",
+            "eyebrow": "Resultaten",
+            "title": "Resultaten en impact",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "isolated-models",
+                "title": "Modellen met DB-niveau tenant-isolatie",
+                "summary": "",
+                "body": "",
+                "value": "105",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-cases",
+                "title": "Jest-unittestgevallen",
+                "summary": "",
+                "body": "",
+                "value": "299",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cypress-cases",
+                "title": "Cypress E2E-testgevallen",
+                "summary": "",
+                "body": "",
+                "value": "75",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "sql-dialects",
+                "title": "Ondersteunde SQL-database-engines",
+                "summary": "",
+                "body": "",
+                "value": "2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "scope",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Omvang van de codebase",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "models-total",
+                "title": "Prisma-datamodellen",
+                "summary": "",
+                "body": "",
+                "value": "123",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "commits-total",
+                "title": "Git-commits over 13 maanden",
+                "summary": "",
+                "body": "",
+                "value": "262",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "unit-files",
+                "title": "Unittestbestanden",
+                "summary": "",
+                "body": "",
+                "value": "34",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "e2e-specs",
+                "title": "Cypress E2E-specificaties",
+                "summary": "",
+                "body": "",
+                "value": "15",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ]
+}

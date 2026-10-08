@@ -1,15 +1,25 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const fixturePath = join(
+const projectsDir = join(
   dirname(fileURLToPath(import.meta.url)),
-  "../../prisma/data/portfolio-projects.json",
+  "../../prisma/data/projects",
 );
 
-const portfolioProjects = JSON.parse(
-  readFileSync(fixturePath, "utf8"),
-) as PortfolioProjectSeed[];
+const portfolioProjects = readdirSync(projectsDir)
+  .filter((file) => file.endsWith(".json"))
+  .map(
+    (file) =>
+      JSON.parse(
+        readFileSync(join(projectsDir, file), "utf8"),
+      ) as PortfolioProjectSeed,
+  )
+  .sort(
+    (a, b) =>
+      ((a as { order?: number }).order ?? 999) -
+      ((b as { order?: number }).order ?? 999),
+  );
 
 export interface PortfolioProjectSeed {
   key: string;

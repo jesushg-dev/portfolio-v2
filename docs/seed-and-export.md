@@ -16,7 +16,7 @@ Idempotent: user/profile/header upsert; list sections typically `deleteMany` + `
 | `portfolio-home.json`                                                         | hero / terminal                                                    |
 | `portfolio-cv.json`                                                           | `seed-portfolio-cv.ts` (includes `skillKeys`, personal references) |
 | `portfolio-skills.json`                                                       | skills                                                             |
-| `portfolio-projects.json`                                                     | projects                                                           |
+| `projects/*.json` (modular, 1 file per project)                               | `seed-portfolio-projects.ts` (or `pnpm db:seed:projects`)          |
 | `portfolio-certifications.json`                                               | certifications                                                     |
 | `portfolio-timeline.json`                                                     | `seed-portfolio-timeline.ts`                                       |
 | `portfolio-soft-skills.json`                                                  | `seed-portfolio-soft-skills.ts`                                    |

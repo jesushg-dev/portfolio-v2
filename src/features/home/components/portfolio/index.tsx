@@ -10,7 +10,7 @@ const Portfolio: FC = async () => {
   await getLocale();
 
   return (
-    <div className="bg-background relative w-full overflow-hidden">
+    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
       <section
         id="portfolio"
         className="mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20"

@@ -10,7 +10,7 @@ export default async function Skills({ locale }: SkillsProps) {
   const skillsData = await api.portfolio.getSkills({ locale });
 
   return (
-    <div className="bg-muted/50 relative w-full overflow-hidden">
+    <div className="bg-muted border-border/40 relative w-full overflow-hidden border-y">
       <section className="relative mx-auto px-4 py-16 sm:px-6 lg:container lg:px-20 lg:py-20">
         <SkillsTerminal initialSkills={skillsData} />
       </section>

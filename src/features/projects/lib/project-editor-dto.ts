@@ -6,6 +6,11 @@ import {
   mergeTranslationMap,
   type TranslationMap,
 } from "@/lib/i18n/translation-map";
+import {
+  buildEmptyCaseStudy,
+  caseStudyRowToDto,
+  type CaseStudyContentDTO,
+} from "./case-study";
 
 export interface ProjectTranslationFields {
   title: string;
@@ -16,7 +21,9 @@ export interface ProjectTranslationFields {
   outcome: string;
 }
 
-export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields>;
+export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields> & Record<string, ProjectTranslationFields & {
+    caseStudy: CaseStudyContentDTO;
+  }>;
 
 export interface ProjectEditorDTO {
   id: string;
@@ -30,6 +37,10 @@ export interface ProjectEditorDTO {
   kind: Project["kind"];
   slug: string;
   caseStudyEnabled: boolean;
+  status: Project["status"];
+  startedAt: string;
+  endedAt: string;
+  teamSize: number | null;
   translations: ProjectTranslationMap;
 }
 
@@ -42,6 +53,7 @@ const emptyProjectTranslationFields = {
   challenge: "",
   approach: "",
   outcome: "",
+  caseStudy: buildEmptyCaseStudy(),
 };
 
 type ProjectWithRelations = Project & {
@@ -62,6 +74,7 @@ export function mapProjectToEditorDto(
       challenge: translation.challenge ?? "",
       approach: translation.approach ?? "",
       outcome: translation.outcome ?? "",
+      caseStudy: caseStudyRowToDto(translation.caseStudy ?? null),
     })) ?? [];
 
   return {
@@ -76,6 +89,12 @@ export function mapProjectToEditorDto(
     kind: project.kind ?? "PERSONAL",
     slug: project.slug ?? "",
     caseStudyEnabled: project.caseStudyEnabled ?? false,
+    status: project.status ?? "IN_PRODUCTION",
+    startedAt: project.startedAt
+      ? project.startedAt.toISOString().slice(0, 10)
+      : "",
+    endedAt: project.endedAt ? project.endedAt.toISOString().slice(0, 10) : "",
+    teamSize: project.teamSize ?? null,
     translations: mergeTranslationMap(
       languages,
       rows,
@@ -105,6 +124,10 @@ export function buildEmptyProjectCreateDto(
     kind: "PERSONAL",
     slug: "",
     caseStudyEnabled: false,
+    status: "IN_PRODUCTION",
+    startedAt: "",
+    endedAt: "",
+    teamSize: null,
     translations: buildEmptyTranslationMap(
       languages,
       emptyProjectTranslationFields,

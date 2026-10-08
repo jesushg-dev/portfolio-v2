@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Selected Engineering Work</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Inter", "system-ui", "sans-serif"] },
+          },
+        },
+      };
+    </script>
+
+    <!-- Mismos tokens que el resto del portafolio (b-card, tile, chips, eyebrow) -->
+    <style type="text/tailwindcss">
+      @layer components {
+        .sec-eyebrow {
+          @apply text-lg font-semibold text-blue-800 dark:text-indigo-300;
+        }
+        .sec-title {
+          @apply mt-2 text-4xl font-extrabold tracking-tight md:text-5xl;
+        }
+        .sec-sub {
+          @apply mt-4 text-lg text-slate-600 dark:text-slate-400;
+        }
+        .ic {
+          @apply h-5 w-5;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.8;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+        .b-card {
+          @apply relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white transition duration-300 hover:border-blue-300 hover:shadow-[0_14px_34px_-18px_rgba(30,64,175,.4)] dark:border-slate-800 dark:bg-slate-900;
+          background-image: radial-gradient(
+            circle 360px at var(--x, 100%) var(--y, 100%),
+            rgba(99, 102, 241, 0.13),
+            transparent 70%
+          );
+        }
+        .seg-btn {
+          @apply flex items-center gap-2 rounded-full px-5 py-2.5 font-semibold text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white;
+        }
+        /* --- piezas nuevas de la tarjeta --- */
+        .p-badge {
+          @apply absolute top-4 rounded-full px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow;
+        }
+        .p-result {
+          @apply inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1.5 text-[13px] leading-none font-semibold text-blue-800 dark:bg-indigo-500/15 dark:text-indigo-300;
+        }
+        .p-tech {
+          @apply flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 py-1 pr-2.5 pl-1 text-[13px] font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300;
+        }
+        .p-cta {
+          @apply inline-flex items-center gap-2 font-bold text-blue-800 dark:text-indigo-300;
+        }
+        .p-icobtn {
+          @apply relative z-10 flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 transition hover:border-blue-800 hover:text-blue-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300;
+        }
+      }
+      .dark .b-card {
+        background-image: radial-gradient(
+          circle 360px at var(--x, 100%) var(--y, 100%),
+          rgba(129, 140, 248, 0.18),
+          transparent 70%
+        );
+      }
+      .seg-btn[aria-pressed="true"] {
+        background: #fff;
+        color: #1e40af;
+        box-shadow:
+          0 1px 3px rgba(15, 23, 42, 0.12),
+          0 0 0 1px #e2e8f0;
+      }
+      .dark .seg-btn[aria-pressed="true"] {
+        background: #1e293b;
+        color: #a5b4fc;
+        box-shadow: 0 0 0 1px #334155;
+      }
+      .proj .cover {
+        transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .proj:hover .cover {
+        transform: scale(1.04);
+      }
+      .proj:hover .cta-arrow {
+        transform: translate(2px, -2px);
+      }
+      .cta-arrow {
+        transition: transform 0.2s;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+      }
+      .fade {
+        animation: fade 0.35s ease both;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .fade {
+          animation: none;
+        }
+        .proj .cover,
+        .cta-arrow {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-[#f8f9fc] font-sans text-slate-900 dark:bg-slate-950 dark:text-slate-100"
+  >
+    <svg width="0" height="0" class="absolute" aria-hidden="true">
+      <symbol id="i-eye" viewBox="0 0 24 24">
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+        <circle cx="12" cy="12" r="3" />
+      </symbol>
+      <symbol id="i-mon" viewBox="0 0 24 24">
+        <rect width="20" height="14" x="2" y="3" rx="2" />
+        <path d="M8 21h8M12 17v4" />
+      </symbol>
+      <symbol id="i-db" viewBox="0 0 24 24">
+        <ellipse cx="12" cy="5" rx="9" ry="3" />
+        <path d="M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0" />
+      </symbol>
+      <symbol id="i-mob" viewBox="0 0 24 24">
+        <rect width="14" height="20" x="5" y="2" rx="2" />
+        <path d="M12 18h.01" />
+      </symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24">
+        <path d="M13 2 3 14h9l-1 8 10-12h-9z" />
+      </symbol>
+      <symbol id="i-gh" viewBox="0 0 24 24">
+        <path
+          d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"
+        />
+        <path d="M9 18c-4.51 2-5-2-7-2" />
+      </symbol>
+      <symbol id="i-up" viewBox="0 0 24 24">
+        <path d="M7 17 17 7M8 7h9v9" />
+      </symbol>
+    </svg>
+
+    <section id="projects" class="mx-auto max-w-6xl px-5 py-20">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="sec-eyebrow">Portfolio</p>
+        <h2 class="sec-title">Selected Engineering Work</h2>
+        <p class="sec-sub">
+          A selection of systems and engineering initiatives where I solved
+          technical problems, improved delivery, and created measurable business
+          impact.
+        </p>
+      </div>
+
+      <div class="mt-10 flex justify-center">
+        <div
+          id="seg"
+          role="group"
+          aria-label="Filter projects"
+          class="flex flex-wrap justify-center gap-1 rounded-full border border-slate-200 bg-slate-100/70 p-1.5 dark:border-slate-800 dark:bg-slate-900"
+        ></div>
+      </div>
+
+      <!-- DEMO (no va en tu app): oculta las imágenes para ver cada mockup -->
+      <label
+        class="mt-8 flex items-center justify-end gap-2 text-sm text-slate-500"
+        ><input id="demo" type="checkbox" class="h-4 w-4 accent-blue-800" />
+        Demo: ocultar imágenes y ver los mockups por defecto</label
+      >
+      <ul
+        id="grid"
+        class="mt-4 grid items-stretch gap-6 md:grid-cols-2 lg:grid-cols-3"
+      ></ul>
+    </section>
+
+    <script>
+      (() => {
+        const $ = (s) => document.querySelector(s);
+        addEventListener("pointermove", (e) => {
+          const c = e.target.closest?.(".b-card");
+          if (!c) return;
+          const r = c.getBoundingClientRect();
+          c.style.setProperty("--x", e.clientX - r.left + "px");
+          c.style.setProperty("--y", e.clientY - r.top + "px");
+        });
+        addEventListener("pointerout", (e) => {
+          const c = e.target.closest?.(".b-card");
+          if (c && !c.contains(e.relatedTarget)) {
+            c.style.removeProperty("--x");
+            c.style.removeProperty("--y");
+          }
+        });
+
+        /* ============================================================================
+                   Mapeo con tus datos (Project / ProjectTranslation):
+                     kind          -> badge superior izquierdo        isPrivate -> badge PRIVATE y oculta GitHub
+                     hook          -> fila de resultados (se parte por "·" en chips)
+                     description   -> texto                           skills    -> chips de tecnología (máx. 4 + "+N")
+                     caseStudyEnabled + slug -> "Read case study" y tarjeta clicable
+                     githubUrl     -> botón de GitHub (solo si no es privado)
+                   ============================================================================ */
+        const BASE =
+          "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/";
+        const P = [
+          {
+            n: "Store API (.NET Core)",
+            kind: "CLIENT WORK",
+            type: "Backend",
+            gh: "https://github.com/",
+            hook: "-45% latency on critical endpoints · Clean architecture",
+            d: "Enterprise REST API in ASP.NET Core and SQL Server with clean architecture and Swagger.",
+            tech: ["C#", "SQL Server", "Entity Framework", ".NET", "Swagger"],
+            img: BASE + "api-rest_yaux6m",
+          },
+          {
+            n: "Musa Ecommerce",
+            kind: "CLIENT WORK",
+            type: "Frontend",
+            priv: true,
+            cs: "musa-ecommerce",
+            hook: "99.9% inventory sync accuracy · 35% latency reduction",
+            d: "B2C e-commerce platform for perishable goods with real-time inventory control.",
+            tech: ["Next.Js", "Tailwind CSS", "TypeScript"],
+            img: BASE + "musa-client_blxhyy",
+          },
+          {
+            n: "Musa Admin",
+            kind: "CLIENT WORK",
+            type: "Frontend",
+            priv: true,
+            cs: "musa-admin",
+            hook: "-70% repetitive manual tasks · End-to-end order traceability",
+            d: "Real-time operations, catalog, and order management admin portal.",
+            tech: ["React", "Tailwind CSS", "TypeScript"],
+            img: BASE + "musa-admin_oufeum",
+          },
+          {
+            n: "Portfolio v2",
+            kind: "PERSONAL",
+            type: "Frontend",
+            gh: "https://github.com/jesushg-dev/portfolio-v2",
+            cs: "portfolio",
+            hook: "High-performance multi-tenant platform built with domain-driven feature architecture.",
+            d: "Multi-tenant professional portfolio platform with i18n, admin panel, and CV engine in production.",
+            tech: [
+              "React",
+              "Next.Js",
+              "Tailwind CSS",
+              "TypeScript",
+              "Prisma",
+              "MongoDB",
+            ],
+            img: BASE + "portf-1_bkhwxr",
+          },
+          {
+            n: "Rick and Morty | Wiki",
+            kind: "LEARNING",
+            type: "Frontend",
+            gh: "https://github.com/jesushg-dev/rick-and-morty",
+            cs: "rick-and-morty",
+            hook: "An episode guide built with React, Apollo Client and Redux Toolkit.",
+            d: "Web application to browse Rick and Morty episodes and their characters.",
+            tech: ["React", "GraphQL", "Apollo", "Redux"],
+            img: BASE + "Rick_and_morty_dn7xnz",
+          },
+          {
+            n: "Soft Skills Quiz",
+            kind: "LEARNING",
+            type: "Frontend",
+            gh: "https://github.com/",
+            d: "Web application that allows you to take a test of soft skills for developers.",
+            tech: ["React", "Tailwind CSS", "TypeScript"],
+          },
+          {
+            n: "Tech Service",
+            kind: "CLIENT WORK",
+            type: "Mobile",
+            gh: "https://github.com/",
+            d: "Android mobile application for the control of repair services provided to technological devices.",
+            tech: ["Java", "Android", "PHP"],
+          },
+          {
+            n: "Inventory and Sales Control",
+            kind: "CLIENT WORK",
+            type: "Desktop",
+            gh: "https://github.com/",
+            d: "Inventory and sales control system for a clothing store.",
+            tech: ["C#", "SQL Server", "WinForms", "DevExpress"],
+          },
+          {
+            n: "Kwh Monitor Api",
+            kind: "PERSONAL",
+            type: "Backend",
+            d: "Rest Api for the mobile application Kwh Monitor.",
+            tech: ["Node.js", "MySQL"],
+          },
+        ];
+        const TECH = {
+          "C#": ["C#", "#7e57c2"],
+          "SQL Server": ["Sq", "#cc2927"],
+          "Entity Framework": ["EF", "#512bd4"],
+          ".NET": [".N", "#512bd4"],
+          Swagger: ["Sw", "#1f9d55"],
+          "Next.Js": ["N", "#111827"],
+          "Tailwind CSS": ["Tw", "#06b6d4"],
+          TypeScript: ["TS", "#3178c6"],
+          React: ["Re", "#0ea5c4"],
+          Prisma: ["Pr", "#0c344b"],
+          MongoDB: ["Mg", "#47a248"],
+          GraphQL: ["GQ", "#e535ab"],
+          Apollo: ["Ap", "#311c87"],
+          Redux: ["Rx", "#764abc"],
+          Java: ["Jv", "#e11d2e"],
+          Android: ["An", "#1f9d55"],
+          PHP: ["Ph", "#6366f1"],
+          "Node.js": ["No", "#1f9d55"],
+          MySQL: ["My", "#00758f"],
+          WinForms: ["Wf", "#5b9a68"],
+          DevExpress: ["Dx", "#ff7200"],
+        };
+        const I = (n) =>
+          `<svg class="ic" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+
+        /* ===== Mockups por defecto (solo Tailwind): se muestran si el proyecto no tiene imagen o si falla al cargar.
+                   Elige según `type` (StackType). Cambia el nombre de la clave si tus valores son FRONTEND/BACKEND/MOBILE/DESKTOP. ===== */
+        const slug = (s) =>
+          s
+            .toLowerCase()
+            .replace(/\|.*$/, "")
+            .replace(/\(.*?\)/g, "")
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+        const BG =
+          "absolute inset-0 flex justify-center bg-gradient-to-br from-indigo-100 via-slate-100 to-slate-200 dark:from-slate-800 dark:via-slate-900 dark:to-slate-950";
+        const bar = (w, c = "bg-slate-200 dark:bg-slate-700") =>
+          `<i class="block h-1.5 ${w} rounded ${c}"></i>`;
+        const MOCK = {
+          Frontend: (p) => `<div data-mock="frontend" class="${BG} px-6 pt-6">
+<div class="flex h-full w-full flex-col overflow-hidden rounded-t-xl border border-b-0 border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900">
+<div class="flex items-center gap-1.5 border-b border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-800"><i class="h-2 w-2 rounded-full bg-red-300"></i><i class="h-2 w-2 rounded-full bg-amber-300"></i><i class="h-2 w-2 rounded-full bg-emerald-300"></i><span class="ml-2 flex-1 truncate rounded-md bg-white px-2 py-0.5 text-[9px] text-slate-400 dark:bg-slate-900">${slug(p.n)}.app</span></div>
+<div class="flex flex-1 flex-col gap-2.5 p-3">
+<div class="flex items-center justify-between"><i class="block h-2.5 w-10 rounded bg-blue-800"></i><span class="flex gap-1.5">${bar("w-7").repeat(3)}</span></div>
+<div class="rounded-lg bg-indigo-50 p-3 dark:bg-indigo-500/10"><i class="block h-2.5 w-2/3 rounded bg-blue-800/80"></i><i class="mt-1.5 block h-1.5 w-1/2 rounded bg-slate-300 dark:bg-slate-600"></i><i class="mt-2.5 block h-4 w-16 rounded-md bg-blue-800"></i></div>
+<div class="grid grid-cols-3 gap-2">${'<i class="block h-9 rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800"></i>'.repeat(3)}</div>
+</div></div></div>`,
+          Backend: (p) => `<div data-mock="backend" class="${BG} px-5 pt-5">
+<div class="flex h-full w-full flex-col overflow-hidden rounded-t-xl border border-b-0 border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900">
+<div class="flex items-center justify-between bg-slate-900 px-3 py-2"><span class="flex items-center gap-1.5 text-[10px] font-bold text-white"><i class="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-400 font-mono text-[8px] not-italic text-slate-900">{}</i>swagger</span><span class="rounded border border-emerald-400 px-1.5 py-0.5 text-[8px] font-bold text-emerald-300">Authorize</span></div>
+<div class="flex items-center gap-1.5 px-3 pt-2.5"><b class="truncate text-[11px] text-slate-800 dark:text-slate-100">${p.n.replace(/\s*\|.*$/, "")}</b><span class="rounded bg-slate-200 px-1 text-[8px] font-bold text-slate-600 dark:bg-slate-700 dark:text-slate-300">v1</span><span class="rounded bg-emerald-500 px-1 text-[8px] font-bold text-white">OAS 3.0</span></div>
+<ul class="flex flex-col gap-1.5 p-3 font-mono text-[9px] text-slate-700 dark:text-slate-300">
+<li class="flex items-center gap-2 rounded border border-sky-300 bg-sky-50 px-2 py-1 dark:border-sky-500/40 dark:bg-sky-500/10"><b class="w-9 rounded bg-sky-500 py-0.5 text-center text-white">GET</b>/api/orders</li>
+<li class="flex items-center gap-2 rounded border border-emerald-300 bg-emerald-50 px-2 py-1 dark:border-emerald-500/40 dark:bg-emerald-500/10"><b class="w-9 rounded bg-emerald-500 py-0.5 text-center text-white">POST</b>/api/orders</li>
+<li class="flex items-center gap-2 rounded border border-amber-300 bg-amber-50 px-2 py-1 dark:border-amber-500/40 dark:bg-amber-500/10"><b class="w-9 rounded bg-amber-500 py-0.5 text-center text-white">PUT</b>/api/orders/{id}</li>
+<li class="flex items-center gap-2 rounded border border-red-300 bg-red-50 px-2 py-1 dark:border-red-500/40 dark:bg-red-500/10"><b class="w-9 rounded bg-red-500 py-0.5 text-center text-white">DEL</b>/api/orders/{id}</li>
+</ul></div></div>`,
+          Mobile: (
+            p,
+          ) => `<div data-mock="mobile" class="${BG} items-end gap-4 px-6 pt-6">
+<div class="h-[78%] w-[27%] max-w-[104px] rounded-t-[1.3rem] border-[3px] border-b-0 border-slate-800 bg-white p-1.5 shadow-xl dark:border-slate-600 dark:bg-slate-900"><i class="mx-auto mb-1.5 block h-1 w-6 rounded-full bg-slate-300 dark:bg-slate-600"></i><i class="block h-12 rounded-lg bg-indigo-100 dark:bg-indigo-500/20"></i><div class="mt-2 space-y-1.5">${bar("w-full")}${bar("w-3/4")}${bar("w-1/2")}</div><i class="mt-2.5 block h-4 rounded-md bg-blue-800"></i></div>
+<div class="h-[92%] w-[30%] max-w-[116px] rounded-t-[1.4rem] border-[3px] border-b-0 border-slate-800 bg-white p-1.5 shadow-xl dark:border-slate-600 dark:bg-slate-900"><i class="mx-auto mb-1.5 block h-1 w-7 rounded-full bg-slate-300 dark:bg-slate-600"></i><div class="flex items-center justify-between rounded-lg bg-blue-800 px-2 py-1.5"><i class="block h-1.5 w-8 rounded bg-white/80"></i><i class="block h-2 w-2 rounded-full bg-white/80"></i></div><div class="mt-2 space-y-1.5">${'<div class="flex items-center gap-1.5 rounded-lg border border-slate-200 p-1.5 dark:border-slate-700"><i class="block h-4 w-4 shrink-0 rounded-md bg-indigo-200 dark:bg-indigo-500/30"></i><span class="flex-1 space-y-1">' + bar("w-full") + bar("w-2/3") + "</span></div>".repeat(1)}${'<div class="flex items-center gap-1.5 rounded-lg border border-slate-200 p-1.5 dark:border-slate-700"><i class="block h-4 w-4 shrink-0 rounded-md bg-indigo-200 dark:bg-indigo-500/30"></i><span class="flex-1 space-y-1">' + bar("w-full") + bar("w-1/2") + "</span></div>".repeat(2)}</div></div>
+<div class="h-[70%] w-[24%] max-w-[92px] rounded-t-[1.2rem] border-[3px] border-b-0 border-slate-800 bg-white p-1.5 shadow-xl dark:border-slate-600 dark:bg-slate-900"><i class="mx-auto mb-1.5 block h-1 w-5 rounded-full bg-slate-300 dark:bg-slate-600"></i><i class="block h-9 rounded-lg bg-slate-100 dark:bg-slate-800"></i><div class="mt-2 grid grid-cols-2 gap-1.5">${'<i class="block h-6 rounded-md bg-indigo-100 dark:bg-indigo-500/20"></i>'.repeat(4)}</div></div></div>`,
+          Desktop: (p) => `<div data-mock="desktop" class="${BG} px-6 pt-6">
+<div class="flex h-full w-full flex-col overflow-hidden rounded-t-lg border border-b-0 border-slate-300 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900">
+<div class="flex items-center justify-between bg-slate-200 px-2.5 py-1.5 dark:bg-slate-800"><span class="truncate text-[9px] font-semibold text-slate-600 dark:text-slate-300">${p.n}</span><span class="flex gap-1">${'<i class="block h-2 w-3 rounded-sm bg-slate-400 dark:bg-slate-600"></i>'.repeat(3)}</span></div>
+<div class="flex flex-1">
+<aside class="w-1/4 space-y-1.5 bg-slate-800 p-2 dark:bg-slate-950">${'<i class="block h-2 rounded bg-slate-600"></i>'.repeat(4)}<i class="block h-2 rounded bg-blue-500"></i></aside>
+<div class="flex-1 p-2.5"><div class="flex items-center justify-between"><i class="block h-2 w-14 rounded bg-slate-300 dark:bg-slate-600"></i><i class="block h-3.5 w-10 rounded bg-blue-800"></i></div>
+<div class="mt-2 overflow-hidden rounded border border-slate-200 dark:border-slate-700"><div class="grid grid-cols-4 gap-2 bg-slate-100 p-1.5 dark:bg-slate-800">${bar("w-full", "bg-slate-400 dark:bg-slate-500").repeat(4)}</div>${'<div class="grid grid-cols-4 gap-2 border-t border-slate-200 p-1.5 dark:border-slate-700">' + bar("w-full") + bar("w-3/4") + bar("w-1/2") + bar("w-2/3") + "</div>"}${'<div class="grid grid-cols-4 gap-2 border-t border-slate-200 bg-slate-50 p-1.5 dark:border-slate-700 dark:bg-slate-800/50">' + bar("w-full") + bar("w-2/3") + bar("w-3/4") + bar("w-1/2") + "</div>"}${'<div class="grid grid-cols-4 gap-2 border-t border-slate-200 p-1.5 dark:border-slate-700">' + bar("w-3/4") + bar("w-full") + bar("w-1/2") + bar("w-2/3") + "</div>"}</div></div>
+</div></div></div>`,
+        };
+        const mockup = (p) => (MOCK[p.type] || MOCK.Frontend)(p);
+
+        const MAXTECH = 4;
+
+        const mono = (t) => {
+          const m = TECH[t] || [t[0], "#475569"];
+          return `<span class="flex h-6 w-6 items-center justify-center rounded-md text-[10px] font-extrabold" style="background:${m[1]}1f;color:${m[1]}">${m[0]}</span>`;
+        };
+        function results(hook) {
+          if (!hook) return "";
+          const parts = hook
+            .split("·")
+            .map((s) => s.trim())
+            .filter(Boolean);
+          if (parts.length > 1)
+            return `<ul class="mt-4 flex flex-wrap gap-2" aria-label="Key results">${parts.map((x, i) => `<li class="p-result">${i === 0 ? '<svg class="ic !h-3.5 !w-3.5 shrink-0" aria-hidden="true"><use href="#i-bolt"/></svg>' : ""}${x}</li>`).join("")}</ul>`;
+          return `<p class="mt-4 flex gap-2 text-[15px] font-semibold leading-snug text-blue-800 dark:text-indigo-300"><svg class="ic mt-0.5 !h-4 !w-4 shrink-0" aria-hidden="true"><use href="#i-bolt"/></svg><span class="line-clamp-2">${hook}</span></p>`;
+        }
+        function techRow(list) {
+          const shown = list.slice(0, MAXTECH),
+            rest = list.slice(MAXTECH);
+          return `<ul class="mt-auto flex flex-wrap gap-2 pt-5" aria-label="Technologies">${shown.map((t) => `<li class="p-tech">${mono(t)}${t}</li>`).join("")}${rest.length ? `<li class="p-tech !pl-2.5 text-slate-500" title="${rest.join(", ")}">+${rest.length}</li>` : ""}</ul>`;
+        }
+        function footer(p) {
+          const gh = !p.priv && p.gh;
+          if (!p.cs && !gh) return "";
+          const left = p.cs
+            ? `<a href="/projects/${p.cs}" class="p-cta after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2 focus-visible:after:ring-blue-800">Read case study<span class="cta-arrow" aria-hidden="true">${I("up")}</span></a>`
+            : `<a href="${p.gh}" class="p-cta relative z-10 !font-semibold !text-slate-700 hover:!text-blue-800 dark:!text-slate-300">${I("gh")}View source</a>`;
+          const right =
+            p.cs && gh
+              ? `<a href="${p.gh}" class="p-icobtn" aria-label="${p.n} on GitHub">${I("gh")}</a>`
+              : "";
+          return `<div class="mt-5 flex items-center justify-between gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">${left}${right}</div>`;
+        }
+        function card(p, i) {
+          const showImg = p.img && !noImg;
+          return `<li class="proj b-card fade flex flex-col" style="animation-delay:${i * 50}ms">
+  <div class="relative aspect-video overflow-hidden border-b border-slate-200 dark:border-slate-800">
+    <div class="cover absolute inset-0" aria-hidden="true">${mockup(p)}</div>
+    ${showImg ? `<img class="cover absolute inset-0 h-full w-full object-cover" src="${p.img}" alt="${p.n} preview" loading="lazy" onerror="this.remove()">` : ""}
+    <span class="p-badge left-4 bg-white text-slate-700">${p.kind}</span>${p.priv ? '<span class="p-badge right-4 bg-blue-800 text-white">Private</span>' : ""}
+  </div>
+  <div class="flex flex-1 flex-col p-6">
+    <h3 class="text-xl font-bold tracking-tight">${p.n}</h3>
+    ${results(p.hook)}
+    <p class="mt-4 line-clamp-3 leading-7 text-slate-600 dark:text-slate-400">${p.d}</p>
+    ${techRow(p.tech)}
+    ${footer(p)}
+  </div></li>`;
+        }
+
+        const CATS = {
+          All: "eye",
+          Frontend: "mon",
+          Backend: "db",
+          Mobile: "mob",
+        };
+        const cats = Object.keys(CATS).filter(
+          (c) => c === "All" || P.some((p) => p.type === c),
+        );
+        let cat = "All",
+          noImg = false;
+        const count = (c) =>
+          c === "All" ? P.length : P.filter((p) => p.type === c).length;
+        $("#seg").innerHTML = cats
+          .map(
+            (c) =>
+              `<button class="seg-btn" aria-pressed="${c === cat}" data-c="${c}">${I(CATS[c])}${c}<span class="text-xs opacity-60">${count(c)}</span></button>`,
+          )
+          .join("");
+        function draw() {
+          $("#grid").innerHTML = P.filter(
+            (p) => cat === "All" || p.type === cat,
+          )
+            .map(card)
+            .join("");
+        }
+        $("#seg").onclick = (e) => {
+          const b = e.target.closest("button");
+          if (!b) return;
+          cat = b.dataset.c;
+          document
+            .querySelectorAll(".seg-btn")
+            .forEach((x) => x.setAttribute("aria-pressed", x === b));
+          draw();
+        };
+        $("#demo").onchange = (e) => {
+          noImg = e.target.checked;
+          draw();
+        };
+        draw();
+      })();
+    </script>
+  </body>
+</html>

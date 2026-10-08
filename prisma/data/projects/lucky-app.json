@@ -1,0 +1,29 @@
+{
+  "key": "LuckyApp",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-10_f80urb",
+  "type": "MOBILE",
+  "githubUrl": "https://github.com/jess232017/Rifa-App",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Lucky App",
+      "description": "Aplicación móvil Android para el control de pedidos de comida."
+    },
+    {
+      "locale": "en",
+      "title": "Lucky App",
+      "description": "Android mobile application for the control of food orders."
+    },
+    {
+      "locale": "nl",
+      "title": "Lucky App",
+      "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+    }
+  ],
+  "skillKeys": ["Java", "Android"],
+  "order": 19,
+  "kind": "PERSONAL",
+  "slug": "lucky-app"
+}

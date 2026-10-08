@@ -1,0 +1,29 @@
+{
+  "key": "TechServiceApi",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_szxffg",
+  "type": "BACKEND",
+  "githubUrl": "https://github.com/jess232017/Api_TechService",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tech Service API",
+      "description": "API REST para el control de servicios de reparación brindados a dispositivos tecnológicos."
+    },
+    {
+      "locale": "en",
+      "title": "Tech Service API",
+      "description": "REST API for the control of repair services provided to technological devices."
+    },
+    {
+      "locale": "nl",
+      "title": "Tech Service API",
+      "description": "REST API voor het beheer van reparatieservices voor technologische apparaten."
+    }
+  ],
+  "skillKeys": ["Php", "Mysql"],
+  "order": 12,
+  "kind": "PROFESSIONAL",
+  "slug": "tech-service-api"
+}
