@@ -268,10 +268,12 @@ describe("ProjectCaseStudyView", () => {
       screen.getByText("locale + tenant header"),
     );
 
-    const previewCard =
-      container.querySelector<HTMLElement>("[data-case-study-preview]");
-    const factsCard =
-      container.querySelector<HTMLElement>("[data-case-study-facts]");
+    const previewCard = container.querySelector<HTMLElement>(
+      "[data-case-study-preview]",
+    );
+    const factsCard = container.querySelector<HTMLElement>(
+      "[data-case-study-facts]",
+    );
     expect(previewCard).toBeInTheDocument();
     expect(factsCard).toBeInTheDocument();
     expect(previewCard?.parentElement).toBe(factsCard?.parentElement);

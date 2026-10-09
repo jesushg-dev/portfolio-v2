@@ -824,6 +824,13 @@
         "mobile": "Mobile",
         "desktop": "Desktop",
         "ariaLabel": "Portfolio project categories"
+      },
+      "emptyState": {
+        "title": "No projects in this category",
+        "description": "There are currently no public projects categorized as {category}. You can explore other portfolio categories.",
+        "allTitle": "No projects available",
+        "allDescription": "New projects and case studies will be added soon.",
+        "reset": "View all projects"
       }
     },
     "contact": {
@@ -2178,7 +2185,8 @@
       "jobTrackerApplication": {
         "validation": {
           "positionRequired": "Position is required",
-          "companyRequired": "Select a company"
+          "companyRequired": "Select a company",
+          "urlInvalid": "Invalid URL"
         },
         "toast": {
           "success": {
@@ -2204,6 +2212,7 @@
           "appliedDate": "Applied Date",
           "location": "Location",
           "salary": "Salary",
+          "jobUrl": "Job posting link",
           "description": "Description",
           "notes": "Notes",
           "cv": "CV/Resume"
@@ -2218,6 +2227,7 @@
           "company": "Select or create a company...",
           "location": "Remote, Hybrid, etc...",
           "salary": "€50k - €60k",
+          "jobUrl": "https://linkedin.com/jobs/view/...",
           "description": "Paste the job description…",
           "notes": "e.g. referred by Alex, follow up Friday…",
           "date": "Select a date"
@@ -2298,12 +2308,16 @@
           "name": "Name",
           "website": "Website",
           "email": "Email",
+          "linkedinUrl": "LinkedIn profile",
+          "companyLocation": "Headquarters / Location",
           "description": "Description"
         },
         "placeholders": {
           "name": "Acme Corp",
           "email": "contact@company.com",
           "website": "https://company.com",
+          "linkedinUrl": "https://linkedin.com/company/...",
+          "companyLocation": "San Francisco, CA / Remote",
           "description": "Company description..."
         },
         "actions": {
@@ -3233,6 +3247,10 @@
         "showFullDescription": "Show full description",
         "hideFullDescription": "Show less",
         "notProvided": "—",
+        "viewJobPosting": "View original posting",
+        "jobUrl": "Job posting link",
+        "companyInfo": "Company Information",
+        "editCompany": "Edit company",
         "tabsNavAria": "Application sections"
       },
       "interviewPrep": {
@@ -3398,7 +3416,13 @@
         "copyError": "Could not copy",
         "subjectLabel": "Subject / title",
         "bodyLabel": "Letter",
-        "noAi": "No AI provider is configured. Add an API key to draft the cover letter."
+        "noAi": "No AI provider is configured. Add an API key to draft the cover letter.",
+        "aiFailedFallback": "The model could not generate the letter. Manual mode is now enabled.",
+        "writeManually": "Write manually",
+        "aiOptions": "AI options",
+        "applyResponse": "Apply to letter",
+        "responseApplied": "AI response applied to cover letter",
+        "parseError": "Could not extract subject or letter from the response."
       },
       "kanban": {
         "description": "Drag cards between columns to update application status.",
@@ -3567,7 +3591,8 @@
       "matchStatus": {
         "present": "on the resume",
         "paraphrased": "paraphrased",
-        "missing": "missing"
+        "missing": "missing",
+        "adjacent": "adjacent skill"
       },
       "atsCheckerTitle": "ATS checker",
       "atsCheckerScore": "Match {score}%",

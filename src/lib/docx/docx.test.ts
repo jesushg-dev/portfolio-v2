@@ -119,8 +119,10 @@ describe("docx parser + rebuilder regressions", () => {
     const joined = para.runs.map((r) => r.text).join("");
     expect(joined).toBe("Built apps to React+TS and Node.js");
 
+    expect(para.runs).toHaveLength(1);
+
     const adapted = buildAdaptedSections(parsed, {
-      [para.id]: ["Built apps ", "to ", "React+TS ", "and ", "Node.js"],
+      [para.id]: ["Built apps to React+TS and Node.js"],
     });
     const xml = await rebuildAndReadXml(parsed, adapted);
     const listParaMatch = LIST_PARAGRAPH_PATTERN.exec(xml);

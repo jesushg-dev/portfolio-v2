@@ -116,6 +116,11 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
         appliedDate: z.date(),
         salary: z.string().optional(),
         location: z.string().optional(),
+        jobUrl: z
+          .string()
+          .url(t("validation.urlInvalid"))
+          .optional()
+          .or(z.literal("")),
         notes: z.string().optional(),
         description: z.string().optional(),
       }),
@@ -136,6 +141,10 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
 
     try {
       const listing = await importFromUrl.mutateAsync({ url });
+      form.setValue("jobUrl", url, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
       if (listing.position) {
         form.setValue("position", listing.position, {
           shouldDirty: true,
@@ -194,6 +203,7 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
             appliedDate: data.appliedDate,
             salary: data.salary ?? undefined,
             location: data.location ?? undefined,
+            jobUrl: data.jobUrl ?? undefined,
             notes: data.notes ?? undefined,
             description: data.description ?? undefined,
           };
@@ -482,6 +492,22 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="jobUrl"
+              render={({ field }) => (
+                <FormItem label={t("fields.jobUrl")} inputId="jobUrl">
+                  <Input
+                    id="jobUrl"
+                    type="url"
+                    placeholder={t("placeholders.jobUrl")}
+                    icon={<Link2 className="h-4 w-4" />}
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
           </FormSection>
 
           <FormSection

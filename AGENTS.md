@@ -15,3 +15,7 @@ Do not use CSS / `className` / `style` sizes in `px` (`w-[72px]`, `7px`, `style=
 JS numbers from `getBoundingClientRect` (and similar) may stay in CSS pixels. Design constants that feed layout must be rem (Tailwind-aligned when possible) and converted to px from the root font size at use time.
 
 Applies to new and touched code — do not mass-rewrite historical `px`.
+
+# Forbidden: inline helper render functions inside components
+
+Do not create `const renderFoo = () => ...` or nested component functions inside component bodies. Decompose into standalone top-level components or dedicated files with explicit typed props.

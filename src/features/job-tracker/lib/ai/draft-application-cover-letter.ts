@@ -88,3 +88,15 @@ JOB DESCRIPTION:
 ${jobDescription.length > 0 ? jobDescription : "(empty)"}
 `.trim();
 }
+
+export function buildApplicationCoverLetterPromptPackage(
+  input: DraftApplicationCoverLetterInput,
+): { systemPrompt: string; userPrompt: string; combinedPrompt: string } {
+  const systemPrompt = buildApplicationCoverLetterSystemPrompt();
+  const userPrompt = buildApplicationCoverLetterUserPrompt(input);
+  return {
+    systemPrompt,
+    userPrompt,
+    combinedPrompt: `SYSTEM:\n${systemPrompt}\n\n---\n\nUSER:\n${userPrompt}`,
+  };
+}

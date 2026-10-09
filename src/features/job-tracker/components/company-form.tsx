@@ -6,7 +6,8 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Building2, Globe, Mail } from "lucide-react";
+import { Building2, Globe, Mail, MapPin } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -55,6 +56,12 @@ export const CompanyForm: FC<CompanyFormProps> = ({ initialData }) => {
           .url(t("validation.urlInvalid"))
           .optional()
           .or(z.literal("")),
+        linkedinUrl: z
+          .string()
+          .url(t("validation.urlInvalid"))
+          .optional()
+          .or(z.literal("")),
+        location: z.string().optional(),
         description: z.string().optional(),
       }),
     [t],
@@ -79,6 +86,8 @@ export const CompanyForm: FC<CompanyFormProps> = ({ initialData }) => {
               name: data.name,
               email: data.email ?? undefined,
               website: data.website ?? undefined,
+              linkedinUrl: data.linkedinUrl ?? undefined,
+              location: data.location ?? undefined,
               description: data.description ?? undefined,
             });
           } else {
@@ -86,6 +95,8 @@ export const CompanyForm: FC<CompanyFormProps> = ({ initialData }) => {
               name: data.name,
               email: data.email ?? undefined,
               website: data.website ?? undefined,
+              linkedinUrl: data.linkedinUrl ?? undefined,
+              location: data.location ?? undefined,
               description: data.description ?? undefined,
             });
           }
@@ -160,6 +171,44 @@ export const CompanyForm: FC<CompanyFormProps> = ({ initialData }) => {
                     type="url"
                     placeholder={t("placeholders.website")}
                     icon={<Globe className="h-4 w-4" />}
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="linkedinUrl"
+              render={({ field }) => (
+                <FormItem
+                  label={t("fields.linkedinUrl")}
+                  inputId="company-linkedin"
+                >
+                  <Input
+                    id="company-linkedin"
+                    type="url"
+                    placeholder={t("placeholders.linkedinUrl")}
+                    icon={<FaLinkedin className="size-4" />}
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem
+                  label={t("fields.companyLocation")}
+                  inputId="company-location"
+                >
+                  <Input
+                    id="company-location"
+                    type="text"
+                    placeholder={t("placeholders.companyLocation")}
+                    icon={<MapPin className="h-4 w-4" />}
                     {...field}
                   />
                 </FormItem>

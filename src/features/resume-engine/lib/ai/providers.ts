@@ -20,7 +20,7 @@ export const AI_PROVIDER_MODELS: Record<AiProviderName, string> = {
   claude: "claude-sonnet-4-5",
   openai: "gpt-4o",
   deepseek: "deepseek-chat",
-  gemini: "gemini-3.6-flash",
+  gemini: "gemini-3.8-flash",
 };
 
 export interface AiProviderOption {

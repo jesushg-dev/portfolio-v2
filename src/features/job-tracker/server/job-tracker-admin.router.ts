@@ -22,6 +22,7 @@ import { ghostNudgeSnoozeUntil } from "@/features/job-tracker/lib/stale-applicat
 import { ImportFromUrlError } from "@/features/job-tracker/lib/import-from-url-errors";
 import { importJobFromUrl } from "@/features/job-tracker/lib/import-job-from-url";
 import { draftApplicationEmailWithAi } from "@/features/job-tracker/lib/ai/run-draft-application-email";
+import { buildApplicationCoverLetterPromptPackage } from "@/features/job-tracker/lib/ai/draft-application-cover-letter";
 import { draftApplicationCoverLetterWithAi } from "@/features/job-tracker/lib/ai/run-draft-application-cover-letter";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { loadTailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
@@ -29,6 +30,7 @@ import { getPortfolioEmailClient } from "@/lib/email/resend";
 import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
 import { formatZodParseError } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
+  getAvailableAiProviders,
   getDefaultAiProvider,
   loadTenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
@@ -328,6 +330,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         name: z.string().min(1),
         email: z.string().email().optional().or(z.literal("")),
         website: z.string().url().optional().or(z.literal("")),
+        linkedinUrl: z.string().url().optional().or(z.literal("")),
+        location: z.string().optional(),
         description: z.string().optional(),
       }),
     )
@@ -337,6 +341,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           name: input.name,
           email: input.email === "" ? undefined : input.email,
           website: input.website === "" ? undefined : input.website,
+          linkedinUrl: input.linkedinUrl === "" ? undefined : input.linkedinUrl,
+          location: input.location ?? undefined,
           description: input.description ?? undefined,
           userId: ctx.user.id,
         },
@@ -351,6 +357,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         name: z.string().min(1).optional(),
         email: z.string().email().optional().or(z.literal("")),
         website: z.string().url().optional().or(z.literal("")),
+        linkedinUrl: z.string().url().optional().or(z.literal("")),
+        location: z.string().optional(),
         description: z.string().optional(),
       }),
     )
@@ -362,6 +370,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           name: data.name,
           email: data.email === "" ? undefined : data.email,
           website: data.website === "" ? undefined : data.website,
+          linkedinUrl: data.linkedinUrl === "" ? undefined : data.linkedinUrl,
+          location: data.location ?? undefined,
           description: data.description ?? undefined,
         },
       });
@@ -411,6 +421,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         appliedDate: z.date(),
         salary: z.string().optional(),
         location: z.string().optional(),
+        jobUrl: z.string().url().optional().or(z.literal("")),
         notes: z.string().optional(),
         description: z.string().optional(),
       }),
@@ -419,6 +430,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       const application = await ctx.db.application.create({
         data: {
           ...input,
+          jobUrl: input.jobUrl === "" ? undefined : input.jobUrl,
           userId: ctx.user.id,
         },
       });
@@ -435,6 +447,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         appliedDate: z.date().optional(),
         salary: z.string().optional(),
         location: z.string().optional(),
+        jobUrl: z.string().url().optional().or(z.literal("")),
         notes: z.string().optional(),
         description: z.string().optional(),
         cvFile: cvFileSchema.optional().nullable(),
@@ -446,6 +459,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         where: { id, userId: ctx.user.id },
         data: {
           ...data,
+          jobUrl: data.jobUrl === "" ? undefined : data.jobUrl,
           cvFile: cvFile === null ? undefined : cvFile,
         },
       });
@@ -817,6 +831,63 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }
     }),
 
+  getApplicationCoverLetterPrompt: protectedProcedure
+    .input(z.object({ applicationId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const application = await ctx.db.application.findFirst({
+        where: { id: input.applicationId, userId: ctx.user.id },
+        include: { company: true },
+      });
+      if (!application) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Application not found",
+        });
+      }
+
+      const draftCv = await loadCvStructuredDraft(ctx.db, ctx.user.id, {
+        locale: "es",
+        fallbackLocale: "en",
+      });
+      const jobContext = await loadTailorJobContext(
+        ctx.db,
+        ctx.user.id,
+        application.id,
+        "es",
+      );
+
+      const contacts = draftCv?.contacts ?? [];
+      const contactValue = (type: string) =>
+        contacts.find((c) => c.type === type)?.value?.trim() ?? null;
+
+      const highlights =
+        draftCv?.experiences
+          .flatMap((exp) => exp.responsibilities.slice(0, 2))
+          .filter((text) => text.trim().length > 0)
+          .slice(0, 6) ?? [];
+
+      const fromCv = draftCv?.header.fullName?.trim();
+      return buildApplicationCoverLetterPromptPackage({
+        position: application.position,
+        companyName: application.company.name,
+        companyDescription: application.company.description,
+        location: application.location,
+        salary: application.salary,
+        notes: application.notes,
+        jobDescription: application.description ?? "",
+        candidate: {
+          fullName: fromCv ?? ctx.user.name ?? "Candidato",
+          degree: draftCv?.header.degree,
+          summary: draftCv?.header.summary,
+          email: contactValue("EMAIL"),
+          phone: contactValue("PHONE"),
+          linkedin: contactValue("LINKEDIN"),
+          softSkills: jobContext?.softSkills,
+          highlights,
+        },
+      });
+    }),
+
   saveApplicationCoverLetter: protectedProcedure
     .input(
       z.object({
@@ -995,11 +1066,13 @@ export const jobTrackerAdminRouter = createTRPCRouter({
   getApplicationEmailCapabilities: protectedProcedure.query(async ({ ctx }) => {
     const emailClient = await getPortfolioEmailClient(ctx.user.id);
     const credentials = await loadTenantAiCredentials(ctx.user.id);
+    const providers = getAvailableAiProviders(credentials);
     const defaultProvider = getDefaultAiProvider(credentials);
     return {
       canSendEmail: emailClient.isConfigured,
-      hasAiProvider: Boolean(defaultProvider),
-      defaultProvider: defaultProvider,
+      hasAiProvider: providers.length > 0,
+      defaultProvider,
+      providers,
     };
   }),
 });

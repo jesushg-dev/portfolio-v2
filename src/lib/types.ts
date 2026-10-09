@@ -1,6 +1,8 @@
 export interface CvRun {
   id: string;
   text: string;
+  budget?: number;
+  locked?: boolean;
 }
 
 export interface CvParagraph {
@@ -8,6 +10,7 @@ export interface CvParagraph {
   runs: CvRun[];
   style: string;
   xmlIndex: number;
+  locked?: boolean;
 }
 
 /** Paragraphs skipped by the AI tailor but still written on rebuild (dates, company lines). */

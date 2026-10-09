@@ -1,22 +1,34 @@
 "use client";
 
-import { useCallback, useRef, useState, useTransition, type FC } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+  type FC,
+} from "react";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import {
+  Building2,
   Clock,
+  ExternalLink,
   FilePenLine,
   FileText,
+  Globe,
   Loader2,
   Mail,
+  MapPin,
   Pencil,
   Sparkles,
   Trash2,
 } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/routing";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
@@ -34,6 +46,7 @@ import type { ApplicationDetail } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
 import { statusVariants } from "@/features/job-tracker/lib/constants";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
+import { isSuggestedGhost } from "@/features/job-tracker/lib/stale-application";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
@@ -46,15 +59,6 @@ interface ApplicationDetailViewProps {
   defaultTab?: "details" | RightPanelTab;
 }
 
-const RIGHT_TABS: {
-  id: RightPanelTab;
-  icon: FC<{ className?: string }>;
-  labelKey: "detail.timelineTab" | "detail.tailorTab";
-}[] = [
-  { id: "timeline", icon: Clock, labelKey: "detail.timelineTab" },
-  { id: "tailor", icon: Sparkles, labelKey: "detail.tailorTab" },
-];
-
 const DESCRIPTION_COLLAPSE_CHARS = 480;
 
 export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
@@ -65,11 +69,34 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
   const t = useTranslations("admin.jobTracker");
   const router = useRouter();
   const utils = api.useUtils();
-  const [rightTab, setRightTab] = useState<RightPanelTab>(
-    defaultTab === "tailor" || defaultTab === "timeline"
-      ? defaultTab
-      : "timeline",
-  );
+
+  const hasGeneratedCv = Boolean(application.cvFile?.url);
+  const hasPendingEvents = application.events.some((e) => !e.completed);
+  const hasAlerts = isSuggestedGhost(application) || hasPendingEvents;
+  const shouldPrioritizeTailor = !hasAlerts && !hasGeneratedCv;
+
+  const rightTabs = useMemo(() => {
+    const timelineTabItem = {
+      id: "timeline" as const,
+      icon: Clock,
+      labelKey: "detail.timelineTab" as const,
+    };
+    const tailorTabItem = {
+      id: "tailor" as const,
+      icon: Sparkles,
+      labelKey: "detail.tailorTab" as const,
+    };
+    return shouldPrioritizeTailor
+      ? [tailorTabItem, timelineTabItem]
+      : [timelineTabItem, tailorTabItem];
+  }, [shouldPrioritizeTailor]);
+
+  const [rightTab, setRightTab] = useState<RightPanelTab>(() => {
+    if (defaultTab === "tailor" || defaultTab === "timeline") {
+      return defaultTab;
+    }
+    return shouldPrioritizeTailor ? "tailor" : "timeline";
+  });
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
   const [isCoverLetterOpen, setIsCoverLetterOpen] = useState(false);
@@ -124,6 +151,17 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
         </div>
 
         <ButtonGroup aria-label={t("detail.actionsGroup")}>
+          {application.jobUrl ? (
+            <a
+              href={application.jobUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <ExternalLink className="mr-1.5 size-3.5" aria-hidden />
+              {t("detail.viewJobPosting")}
+            </a>
+          ) : null}
           <Button
             type="button"
             variant="outline"
@@ -204,7 +242,101 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
                   )}
                 </dd>
               </div>
+              {application.jobUrl ? (
+                <div className="min-w-0 sm:col-span-2">
+                  <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+                    {t("detail.jobUrl")}
+                  </dt>
+                  <dd className="text-foreground mt-1 text-sm">
+                    <a
+                      href={application.jobUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
+                    >
+                      <ExternalLink className="size-3.5 shrink-0" aria-hidden />
+                      <span className="truncate">{application.jobUrl}</span>
+                    </a>
+                  </dd>
+                </div>
+              ) : null}
             </dl>
+
+            <div className="border-border border-t pt-5">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Building2
+                    className="text-muted-foreground size-4"
+                    aria-hidden
+                  />
+                  <h2 className="text-sm font-semibold">
+                    {t("detail.companyInfo")}
+                  </h2>
+                </div>
+                <Link
+                  href={{
+                    pathname: "/admin/job-tracker/companies/[id]/edit",
+                    params: { id: application.company.id },
+                  }}
+                  className="text-muted-foreground hover:text-foreground text-xs transition-colors"
+                >
+                  {t("detail.editCompany")}
+                </Link>
+              </div>
+              <div className="bg-muted/40 space-y-2 rounded-lg p-3.5 text-sm">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-foreground font-medium">
+                    {application.company.name}
+                  </span>
+                  <div className="flex items-center gap-3 text-xs">
+                    {application.company.website ? (
+                      <a
+                        href={application.company.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary inline-flex items-center gap-1 hover:underline"
+                      >
+                        <Globe className="size-3" aria-hidden />
+                        {t("websiteLink")}
+                      </a>
+                    ) : null}
+                    {application.company.linkedinUrl ? (
+                      <a
+                        href={application.company.linkedinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary inline-flex items-center gap-1 hover:underline"
+                      >
+                        <FaLinkedin className="size-3" aria-hidden />
+                        LinkedIn
+                      </a>
+                    ) : null}
+                  </div>
+                </div>
+                {application.company.location ? (
+                  <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+                    <MapPin className="size-3 shrink-0" aria-hidden />
+                    <span>{application.company.location}</span>
+                  </div>
+                ) : null}
+                {application.company.email ? (
+                  <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+                    <Mail className="size-3 shrink-0" aria-hidden />
+                    <a
+                      href={`mailto:${application.company.email}`}
+                      className="hover:underline"
+                    >
+                      {application.company.email}
+                    </a>
+                  </div>
+                ) : null}
+                {application.company.description ? (
+                  <p className="text-muted-foreground text-xs leading-relaxed">
+                    {application.company.description}
+                  </p>
+                ) : null}
+              </div>
+            </div>
 
             {application.notes.trim() ? (
               <div className="border-border border-t pt-5">
@@ -282,7 +414,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
               aria-label={t("detail.tabsNavAria")}
               className="bg-muted/30 flex shrink-0 overflow-hidden rounded-t-xl"
             >
-              {RIGHT_TABS.map(({ id, icon: Icon, labelKey }) => {
+              {rightTabs.map(({ id, icon: Icon, labelKey }) => {
                 const isActive = rightTab === id;
                 return (
                   <button
@@ -297,7 +429,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
                     )}
                     onClick={() => setRightTab(id)}
                   >
-                    <Icon className="h-4 w-4" aria-hidden />
+                    <Icon className="size-4" aria-hidden />
                     {t(labelKey)}
                   </button>
                 );

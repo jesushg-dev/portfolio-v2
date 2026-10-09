@@ -99,8 +99,8 @@ function FrontendVisual({ service }: { service: ServiceItem }) {
     : null;
 
   return (
-    <div className="border-border/30 bg-card w-full max-w-sm rounded-xl border shadow-xs">
-      <div className="border-border/20 flex items-center gap-1.5 border-b px-3 py-2">
+    <div className="border-border/60 bg-card w-full max-w-sm rounded-xl border shadow-xs">
+      <div className="border-border/40 flex items-center gap-1.5 border-b px-3 py-2">
         <span className="bg-border/60 size-2 rounded-full" aria-hidden="true" />
         <span className="bg-border/60 size-2 rounded-full" aria-hidden="true" />
         <span className="bg-border/60 size-2 rounded-full" aria-hidden="true" />
@@ -174,7 +174,7 @@ function BackendVisual({ service }: { service: ServiceItem }) {
         <div
           key={log.path}
           style={log.delay ? { animationDelay: log.delay } : undefined}
-          className="a-blink border-border/30 bg-card flex items-center justify-between rounded-lg border px-3 py-1.5 shadow-2xs"
+          className="a-blink border-border/60 bg-card flex items-center justify-between rounded-lg border px-3 py-1.5 shadow-2xs"
         >
           <span>
             <b className="font-bold text-emerald-600">{log.code}</b>{" "}
@@ -234,21 +234,21 @@ function DevOpsVisual({ service }: { service: ServiceItem }) {
       </div>
 
       <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
-        <span className="border-border/30 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
+        <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Code2 className="size-4" aria-hidden="true" />
         </span>
         Build
       </div>
 
       <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
-        <span className="border-border/30 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
+        <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Check className="size-4" aria-hidden="true" />
         </span>
         {stage2 ?? "Test"}
       </div>
 
       <div className="text-muted-foreground relative flex flex-col items-center gap-2 text-[11px] font-semibold">
-        <span className="border-border/30 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
+        <span className="border-border/60 bg-card text-primary flex size-10 items-center justify-center rounded-full border shadow-2xs">
           <Terminal className="size-4" aria-hidden="true" />
         </span>
         {stage3 ?? "Deploy"}
@@ -311,17 +311,17 @@ function SecurityVisual({ service }: { service: ServiceItem }) {
         aria-hidden="true"
       />
       {badge3 ? (
-        <span className="border-border/30 bg-card absolute top-4 left-4 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute top-4 left-4 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
           {badge3}
         </span>
       ) : null}
       {badge2 ? (
-        <span className="border-border/30 bg-card absolute top-10 right-4 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute top-10 right-4 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
           {badge2}
         </span>
       ) : null}
       {badge1 ? (
-        <span className="border-border/30 bg-card absolute bottom-3 left-6 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
+        <span className="border-border/60 bg-card absolute bottom-3 left-6 rounded-md border px-2 py-1 text-[11px] font-bold text-emerald-600 shadow-2xs">
           {badge1}
         </span>
       ) : null}
@@ -371,7 +371,7 @@ function DefaultVisual({
 
 function getVisualContainerClasses(type: string): string {
   const base =
-    "border-border/20 bg-muted/20 relative mb-6 flex h-44 overflow-hidden rounded-2xl border";
+    "border-border/50 bg-muted/25 relative mb-6 flex h-44 overflow-hidden rounded-2xl border";
   switch (type) {
     case "mobile":
       return cn(base, "items-end justify-center pt-6 px-4");
@@ -446,7 +446,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
             className={cn(
-              "b-card-glow group border-border/30 bg-card hover:border-primary/30 relative flex flex-col justify-between overflow-hidden rounded-[2rem] border p-6 transition-all duration-300 hover:shadow-xl",
+              "b-card-glow group border-border bg-card hover:border-primary/50 relative flex flex-col justify-between overflow-hidden rounded-[2rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-xl",
               colSpanClass,
             )}
           >

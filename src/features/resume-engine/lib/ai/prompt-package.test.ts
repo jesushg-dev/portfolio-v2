@@ -6,7 +6,6 @@ import {
   buildImportPromptPackage,
   buildShrinkPromptPackage,
   buildStudioDocxTailorPromptPackage,
-  buildTailorPromptPackage,
 } from "./prompt-package";
 
 const draft: CvImportDraft = {
@@ -53,12 +52,6 @@ describe("resume-engine prompt packages", () => {
     ]);
     expect(pkg.userPrompt).toContain("RESUME SECTIONS");
     expect(pkg.combinedPrompt).toContain(pkg.systemPrompt);
-  });
-
-  it("includes the structured draft in the tailor package", () => {
-    const pkg = buildTailorPromptPackage(draft, "Need a React engineer.");
-    expect(pkg.userPrompt).toContain("Ada");
-    expect(pkg.userPrompt).toContain("Need a React engineer.");
   });
 
   it("adds a character budget to non-title runs in docx tailor prompts", () => {

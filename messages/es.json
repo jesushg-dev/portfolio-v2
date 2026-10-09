@@ -824,6 +824,13 @@
         "mobile": "Móvil",
         "desktop": "Escritorio",
         "ariaLabel": "Categorías de proyectos del portafolio"
+      },
+      "emptyState": {
+        "title": "No hay proyectos en esta categoría",
+        "description": "Actualmente no hay proyectos públicos categorizados como {category}. Puedes explorar las demás categorías del portafolio.",
+        "allTitle": "No hay proyectos disponibles",
+        "allDescription": "Pronto se publicarán nuevos proyectos y casos de estudio.",
+        "reset": "Ver todos los proyectos"
       }
     },
     "contact": {
@@ -2178,7 +2185,8 @@
       "jobTrackerApplication": {
         "validation": {
           "positionRequired": "El puesto es obligatorio",
-          "companyRequired": "Selecciona una empresa"
+          "companyRequired": "Selecciona una empresa",
+          "urlInvalid": "URL inválida"
         },
         "toast": {
           "success": {
@@ -2204,6 +2212,7 @@
           "appliedDate": "Fecha de Postulación",
           "location": "Ubicación",
           "salary": "Salario",
+          "jobUrl": "Enlace de la vacante",
           "description": "Descripción",
           "notes": "Notas",
           "cv": "CV/Currículum"
@@ -2218,6 +2227,7 @@
           "company": "Selecciona o crea una empresa...",
           "location": "Remoto, híbrido, etc...",
           "salary": "€50k - €60k",
+          "jobUrl": "https://linkedin.com/jobs/view/...",
           "description": "Pega la descripción del puesto…",
           "notes": "p. ej. referido por Alex, seguimiento el viernes…",
           "date": "Selecciona una fecha"
@@ -2298,12 +2308,16 @@
           "name": "Nombre",
           "website": "Sitio Web",
           "email": "Correo Electrónico",
+          "linkedinUrl": "Perfil de LinkedIn",
+          "companyLocation": "Sede / Ubicación",
           "description": "Descripción"
         },
         "placeholders": {
           "name": "Acme Corp",
           "email": "contacto@empresa.com",
           "website": "https://empresa.com",
+          "linkedinUrl": "https://linkedin.com/company/...",
+          "companyLocation": "Madrid, España / Remoto",
           "description": "Descripción de la empresa..."
         },
         "actions": {
@@ -3160,6 +3174,10 @@
         "showFullDescription": "Ver descripción completa",
         "hideFullDescription": "Ver menos",
         "notProvided": "—",
+        "viewJobPosting": "Ver vacante original",
+        "jobUrl": "Enlace de la vacante",
+        "companyInfo": "Información de la empresa",
+        "editCompany": "Editar empresa",
         "tabsNavAria": "Secciones de la postulación"
       },
       "interviewPrep": {
@@ -3325,7 +3343,13 @@
         "copyError": "No se pudo copiar",
         "subjectLabel": "Asunto / título",
         "bodyLabel": "Carta",
-        "noAi": "No hay proveedor de IA configurado. Añade una API key para generar la carta."
+        "noAi": "No hay proveedor de IA configurado. Añade una API key para generar la carta.",
+        "aiFailedFallback": "El modelo no pudo generar la carta. Se ha habilitado el modo manual.",
+        "writeManually": "Escribir manual",
+        "aiOptions": "Opciones de IA",
+        "applyResponse": "Cargar en la carta",
+        "responseApplied": "Respuesta aplicada a la carta",
+        "parseError": "No se pudo extraer el asunto o la carta de la respuesta ingresada."
       },
       "kanban": {
         "description": "Arrastra las tarjetas entre columnas para actualizar el estado.",
@@ -3494,7 +3518,8 @@
       "matchStatus": {
         "present": "en el CV",
         "paraphrased": "parafraseado",
-        "missing": "ausente"
+        "missing": "ausente",
+        "adjacent": "habilidad adyacente"
       },
       "atsCheckerTitle": "Checker ATS",
       "atsCheckerScore": "Ajuste {score}%",

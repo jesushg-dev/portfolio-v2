@@ -25,6 +25,7 @@ interface IPortfolioItemProps extends ProjectType {
   privateDescription: string;
   caseStudyLabel: string;
   kindLabels: Record<string, string>;
+  priority?: boolean;
 }
 
 const MAX_TECH = 4;
@@ -52,6 +53,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   kindLabels,
   caseStudyEnabled,
   slug,
+  priority = false,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
   const showGithub = !isPrivate && Boolean(githubUrl);
@@ -95,12 +97,15 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
         backgroundImage:
           "radial-gradient(circle 22.5rem at var(--x, 100%) var(--y, 100%), color-mix(in srgb, var(--primary) 12%, transparent), transparent 70%)",
       }}
-      className="group/card border-border/80 bg-card text-card-foreground hover:border-primary/40 relative flex h-full w-full flex-col overflow-hidden rounded-4xl border shadow-xs transition-all duration-300 hover:shadow-xl"
+      className="group/card border-border bg-card text-card-foreground hover:border-primary/50 relative flex h-full w-full flex-col overflow-hidden rounded-[2rem] border shadow-xs transition-all duration-300 hover:shadow-xl"
     >
       {/* Cover Media container */}
-      <div className="border-border/60 relative aspect-video overflow-hidden border-b">
+      <div className="border-border relative aspect-video overflow-hidden border-b">
         {showImageFallback ? (
-          <div className="absolute inset-0" aria-hidden="true">
+          <div
+            className="absolute inset-0 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover/card:scale-105"
+            aria-hidden="true"
+          >
             <ProjectCoverMockup type={type} title={title} slug={slug} />
           </div>
         ) : (
@@ -108,15 +113,16 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
             src={image}
             alt={title}
             fill
+            priority={priority}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover/card:scale-105"
             onError={() => setImageFailed(true)}
           />
         )}
 
         {/* Top Badges */}
         {kindLabel ? (
-          <span className="border-border/40 bg-card/90 text-foreground absolute top-4 left-4 z-10 rounded-full border px-3.5 py-1.5 text-xs font-bold tracking-wider uppercase shadow-xs backdrop-blur-md">
+          <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 absolute top-4 left-4 z-10 rounded-full border px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs ring-1 backdrop-blur-md">
             {kindLabel}
           </span>
         ) : null}
@@ -124,7 +130,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
         {isPrivate ? (
           <span
             title={websiteUrl ? canSeeDemo : privateDescription}
-            className="bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3.5 py-1.5 text-xs font-bold tracking-wider uppercase shadow-xs"
+            className="bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs"
           >
             {privateName}
           </span>
@@ -207,11 +213,11 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
                 params: { slug },
               }}
               aria-label={`${caseStudyLabel}: ${title}`}
-              className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-4xl focus-visible:after:ring-2"
+              className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2"
             >
               <span>{caseStudyLabel}</span>
               <ArrowUpRight
-                className="size-4 transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
+                className="size-4 transition-transform duration-200 group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5"
                 aria-hidden="true"
               />
             </Link>

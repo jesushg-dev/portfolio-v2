@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import type { AppTableFeatures } from "@/lib/app-table-features";
 import { Plus, Pencil, Trash2, Loader2, Globe, Mail } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
@@ -127,7 +128,14 @@ export const CompaniesList: FC<CompaniesListProps> = ({
         },
         enableColumnFilter: true,
         cell: ({ row }) => (
-          <p className="text-foreground font-medium">{row.original.name}</p>
+          <div>
+            <p className="text-foreground font-medium">{row.original.name}</p>
+            {row.original.location ? (
+              <p className="text-muted-foreground text-xs">
+                {row.original.location}
+              </p>
+            ) : null}
+          </div>
         ),
       },
       {
@@ -158,20 +166,39 @@ export const CompaniesList: FC<CompaniesListProps> = ({
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnWebsite")} />
         ),
-        cell: ({ row }) =>
-          row.original.website ? (
-            <a
-              href={row.original.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary flex items-center gap-1 text-sm hover:underline"
-            >
-              <Globe className="h-3 w-3" />
-              {t("websiteLink")}
-            </a>
-          ) : (
-            <span className="text-muted-foreground text-sm">-</span>
-          ),
+        cell: ({ row }) => {
+          const hasWebsite = Boolean(row.original.website);
+          const hasLinkedin = Boolean(row.original.linkedinUrl);
+          if (!hasWebsite && !hasLinkedin) {
+            return <span className="text-muted-foreground text-sm">-</span>;
+          }
+          return (
+            <div className="flex flex-wrap items-center gap-3">
+              {hasWebsite ? (
+                <a
+                  href={row.original.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary flex items-center gap-1 text-sm hover:underline"
+                >
+                  <Globe className="h-3 w-3" />
+                  {t("websiteLink")}
+                </a>
+              ) : null}
+              {hasLinkedin ? (
+                <a
+                  href={row.original.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary flex items-center gap-1 text-sm hover:underline"
+                >
+                  <FaLinkedin className="size-3" />
+                  LinkedIn
+                </a>
+              ) : null}
+            </div>
+          );
+        },
       },
       {
         id: "actions",

@@ -106,13 +106,16 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
         matchAnalysis.notes)),
   );
 
-  const defaultMode: PreviewMode = hasMatch
-    ? "match"
-    : exportIsPdf
+  const defaultMode: PreviewMode =
+    exportIsPdf && hasPdf
       ? "pdf"
       : hasWord
         ? "word"
-        : "ats";
+        : hasPdf
+          ? "pdf"
+          : hasMatch
+            ? "match"
+            : "ats";
   const previewSource = `${exportIsPdf ? "pdf" : "doc"}:${primaryUrl ?? ""}`;
   const [userMode, setUserMode] = useState<PreviewMode | null>(null);
   const [modeSource, setModeSource] = useState(previewSource);
@@ -190,7 +193,18 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
             size="sm"
             variant={mode === "match" ? "default" : "outline"}
             aria-pressed={mode === "match"}
-            onClick={() => setUserMode("match")}
+            onClick={() =>
+              setUserMode((prev) => {
+                const current = prev ?? defaultMode;
+                return current === "match"
+                  ? hasWord
+                    ? "word"
+                    : hasPdf
+                      ? "pdf"
+                      : "ats"
+                  : "match";
+              })
+            }
           >
             <ChartColumn className="size-3.5" aria-hidden />
             {aiScore != null

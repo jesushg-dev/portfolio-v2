@@ -72,9 +72,7 @@ export function FormDialogContent({
       </div>
 
       {footer ? (
-        <div className="border-border bg-background shrink-0 border-t pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          {footer}
-        </div>
+        <div className="border-border shrink-0 border-t pt-4">{footer}</div>
       ) : null}
     </DialogContent>
   );

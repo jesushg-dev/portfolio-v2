@@ -21,9 +21,13 @@ export interface ProjectTranslationFields {
   outcome: string;
 }
 
-export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields> & Record<string, ProjectTranslationFields & {
-    caseStudy: CaseStudyContentDTO;
-  }>;
+export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields> &
+  Record<
+    string,
+    ProjectTranslationFields & {
+      caseStudy: CaseStudyContentDTO;
+    }
+  >;
 
 export interface ProjectEditorDTO {
   id: string;

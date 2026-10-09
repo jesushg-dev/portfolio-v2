@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogFooter } from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import { FormDialogContent } from "@/components/shared/form-dialog-content";
 import { useRouter } from "@/i18n/routing";
 import { fileToBase64 } from "@/lib/uploadthing/file-to-base64";
@@ -195,7 +195,7 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
         description={t("description")}
         className="sm:max-w-xl"
         footer={
-          <DialogFooter className="gap-2 border-0 bg-transparent p-0 sm:justify-between">
+          <div className="flex w-full flex-wrap items-center justify-between gap-2">
             <Button
               type="button"
               size="sm"
@@ -223,7 +223,7 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
               )}
               {t("send")}
             </Button>
-          </DialogFooter>
+          </div>
         }
       >
         <div className="space-y-3">
