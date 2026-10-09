@@ -287,6 +287,49 @@ import { motion, AnimatePresence } from "motion/react";
 
 When generating components (like Aceternity UI), automatically fix the imports to use `motion/react`.
 
+## Component Architecture — No Helper Render Functions Inside Components
+
+### ❌ NEVER define inline render helper functions or component functions inside component bodies
+
+Do not create `const renderFoo = () => ...`, `const renderHeader = () => ...`, `const renderItem = (item) => ...`, or declare subcomponents inside a parent component's body.
+This is a severe anti-pattern in React:
+
+- It creates nested closures that re-instantiate on every render cycle.
+- It causes unexpected unmounting / remounting of child trees, breaking internal state, focus, transitions, and DOM reconciliation.
+- It balloons components into monolithic, untestable files.
+
+```tsx
+// ❌ WRONG — inline render functions inside component body
+export const MyWorkflow = () => {
+  const [data, setData] = useState(...);
+
+  const renderUploadPanel = () => (
+    <div>...</div>
+  );
+
+  return <div>{renderUploadPanel()}</div>;
+};
+```
+
+### ✅ ALWAYS decompose into standalone top-level components or separate files
+
+Extract every sub-view, section, or complex fragment into its own standalone component (either exported from a dedicated file in `@/features/{domain}/components/` or defined at top-level outside the parent) and pass data via explicit typed props:
+
+```tsx
+// ✅ CORRECT — standalone components with explicit props
+export const MyWorkflow = () => {
+  const [data, setData] = useState(...);
+
+  return (
+    <div>
+      <UploadPanel data={data} onUpload={...} />
+    </div>
+  );
+};
+```
+
+---
+
 ## Forms Architecture
 
 This project uses a unified form architecture based on Shadcn UI and a custom `form-root.tsx` wrapper to enforce consistency, accessibility, and DRY principles.

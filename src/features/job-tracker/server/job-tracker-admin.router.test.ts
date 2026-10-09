@@ -39,6 +39,8 @@ const company = {
   name: "Acme",
   email: "jobs@acme.com",
   website: "https://acme.com",
+  linkedinUrl: "https://linkedin.com/company/acme",
+  location: "Remote",
   description: "Widgets",
   userId: MOCK_OWNER_USER.id,
   createdAt: new Date(),
@@ -90,9 +92,13 @@ describe("jobTrackerAdminRouter", () => {
       name: "Acme",
       email: "jobs@acme.com",
       website: "https://acme.com",
+      linkedinUrl: "https://linkedin.com/company/acme",
+      location: "Remote",
       description: "Widgets",
     });
     expect(created.id).toBe("co-1");
+    expect(created.linkedinUrl).toBe("https://linkedin.com/company/acme");
+    expect(created.location).toBe("Remote");
   });
 
   it("throws when an application is missing", async () => {
@@ -119,6 +125,7 @@ describe("jobTrackerAdminRouter", () => {
       appliedDate: new Date("2026-01-01"),
       salary: "100k",
       location: "Remote",
+      jobUrl: "https://example.com/job/1",
       notes: "",
       cvFile: null,
       userId: MOCK_OWNER_USER.id,
@@ -145,8 +152,10 @@ describe("jobTrackerAdminRouter", () => {
       appliedDate: new Date("2026-01-01"),
       salary: "100k",
       location: "Remote",
+      jobUrl: "https://example.com/job/1",
     });
     expect(created.position).toBe("Engineer");
+    expect(created.jobUrl).toBe("https://example.com/job/1");
 
     await caller.updateApplication({
       id: "app-1",

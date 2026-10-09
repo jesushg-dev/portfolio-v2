@@ -42,11 +42,58 @@ function adaptParagraphText(
   };
 }
 
+const WORKPLACE_MODE_TRANSLATIONS: Record<Locale, Record<string, string>> = {
+  en: {
+    remoto: "Remote",
+    remote: "Remote",
+    hibrido: "Hybrid",
+    híbrido: "Hybrid",
+    hybrid: "Hybrid",
+    presencial: "On-site",
+    "on-site": "On-site",
+    onsite: "On-site",
+  },
+  es: {
+    remoto: "Remoto",
+    remote: "Remoto",
+    hibrido: "Híbrido",
+    híbrido: "Híbrido",
+    hybrid: "Híbrido",
+    presencial: "Presencial",
+    "on-site": "Presencial",
+    onsite: "Presencial",
+  },
+  nl: {
+    remoto: "Remote",
+    remote: "Remote",
+    hibrido: "Hybride",
+    híbrido: "Hybride",
+    hybrid: "Hybride",
+    presencial: "Op locatie",
+    "on-site": "Op locatie",
+    onsite: "Op locatie",
+  },
+};
+
+function translateWorkplaceModes(location: string, locale: Locale): string {
+  const dict = WORKPLACE_MODE_TRANSLATIONS[locale];
+  if (!dict) return location;
+  return location
+    .split("·")
+    .map((part) => {
+      const trimmed = part.trim();
+      const mapped = dict[trimmed.toLowerCase()];
+      return mapped ?? trimmed;
+    })
+    .join(" · ");
+}
+
 function buildExperienceMetaLine(
   company: string,
   location: string | undefined,
   dateLine: string,
   previousText: string,
+  locale: Locale,
 ): string {
   const parts = previousText
     .split("·")
@@ -66,6 +113,9 @@ function buildExperienceMetaLine(
   }
 
   let locationOut = ((location?.trim() ?? parts[1]) || "").trim();
+  if (locationOut) {
+    locationOut = translateWorkplaceModes(locationOut, locale);
+  }
 
   // If the location has both mode and geography, e.g. "Remote · Texas, United States",
   // and the full line would overflow ~58 chars, compact to the workplace mode ("Remote")
@@ -161,6 +211,7 @@ export function syncLockedParagraphsFromDraft(
             experience.location,
             dateLine,
             previousText,
+            locale,
           ),
         ),
       );

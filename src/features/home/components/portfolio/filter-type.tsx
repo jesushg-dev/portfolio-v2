@@ -28,7 +28,7 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange }) => {
         currentTab={value}
         setCurrentTab={onChange}
         ariaLabel={t("filters.ariaLabel")}
-        className="bg-card border-border/30 text-card-foreground inline-flex max-w-full items-center justify-center gap-1 rounded-full border p-1.5 shadow-xs sm:gap-1.5"
+        className="bg-muted/60 border-border text-foreground inline-flex max-w-full items-center justify-center gap-1 rounded-full border p-1.5 shadow-xs sm:gap-1.5"
       >
         <TabItem icon={FaEye} title={t("filters.all")} description="" />
         <TabItem

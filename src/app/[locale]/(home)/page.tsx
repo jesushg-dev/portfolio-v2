@@ -252,6 +252,7 @@ export default async function Home() {
       <ViewportSection
         fallback={<PortfolioFallback />}
         minHeight="36rem"
+        rootMargin="800px 0px"
         requiresTrpc
       >
         <Portfolio />

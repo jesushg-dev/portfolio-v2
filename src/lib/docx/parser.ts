@@ -23,6 +23,7 @@ import type {
 import { parseParagraphFragment } from "./parse-paragraph-fragment";
 import { extractParagraphXmlParts } from "./split-paragraphs";
 import { coalesceXmlText, extractTextFromWt } from "./xml-text";
+import { normalizeDocumentXml } from "./normalize-runs";
 
 // Styles that mark a top-level section heading (add CV-specific style names here)
 const HEADING_STYLES = new Set([
@@ -117,9 +118,15 @@ function buildParagraph(
   xmlIndex: number,
   style: string,
   runs: CvRun[],
+  paragraphMap?: Map<string, string>,
+  paraXmlPart?: string,
 ): CvParagraph {
+  const pId = `${idPrefix}-para-${paraIdx}`;
+  if (paragraphMap && paraXmlPart) {
+    paragraphMap.set(pId, paraXmlPart);
+  }
   return {
-    id: `${idPrefix}-para-${paraIdx}`,
+    id: pId,
     runs: runs.map((r, ri) => ({
       ...r,
       id: `${idPrefix}-para-${paraIdx}-run-${ri}`,
@@ -176,6 +183,7 @@ export async function parseDocx(buffer: Buffer): Promise<{
   lockedParagraphs: LockedParagraph[];
   rawXml: string;
   zipFiles: JSZip;
+  paragraphMap: Map<string, string>;
 }> {
   // 1. Unzip
   const zip = await JSZip.loadAsync(buffer);
@@ -183,15 +191,17 @@ export async function parseDocx(buffer: Buffer): Promise<{
   if (!docXmlFile)
     throw new Error("Invalid .docx: word/document.xml not found");
 
-  const rawXml = await docXmlFile.async("string");
+  const originalXml = await docXmlFile.async("string");
+  const { normalizedXml } = normalizeDocumentXml(originalXml);
 
   // Walk every <w:p> in document order (including paragraphs inside layout tables).
   // Indices must match rebuildDocx paragraphCount 1:1.
-  const paraXmlParts = extractParagraphXmlParts(rawXml);
+  const paraXmlParts = extractParagraphXmlParts(normalizedXml);
 
   // Build sections from adaptable paragraphs
   const sections: CvSection[] = [];
   const lockedParagraphs: LockedParagraph[] = [];
+  const paragraphMap = new Map<string, string>();
   let currentSection: CvSection | null = null;
   let sectionIdx = 0;
   let paraIdx = 0;
@@ -244,19 +254,37 @@ export async function parseDocx(buffer: Buffer): Promise<{
                 pendingRole.xmlIndex,
                 pendingRole.style,
                 pendingRole.runs,
+                paragraphMap,
+                paraXmlParts[pendingRole.xmlIndex],
               ),
             });
             pendingRole = null;
           }
           lockedParagraphs.push({
             kind: "experience-meta",
-            paragraph: buildParagraph("locked", lockedIdx++, i, style, runs),
+            paragraph: buildParagraph(
+              "locked",
+              lockedIdx++,
+              i,
+              style,
+              runs,
+              paragraphMap,
+              paraXmlParts[i],
+            ),
           });
         } else if (isEducationDateLine(trimmed)) {
           pendingRole = null;
           lockedParagraphs.push({
             kind: "education-dates",
-            paragraph: buildParagraph("locked", lockedIdx++, i, style, runs),
+            paragraph: buildParagraph(
+              "locked",
+              lockedIdx++,
+              i,
+              style,
+              runs,
+              paragraphMap,
+              paraXmlParts[i],
+            ),
           });
         }
         continue;
@@ -278,6 +306,8 @@ export async function parseDocx(buffer: Buffer): Promise<{
         i,
         style,
         runs,
+        paragraphMap,
+        paraXmlParts[i],
       );
       currentSection.paragraphs.push(paragraph);
       paraIdx++;
@@ -297,19 +327,37 @@ export async function parseDocx(buffer: Buffer): Promise<{
               pendingRole.xmlIndex,
               pendingRole.style,
               pendingRole.runs,
+              paragraphMap,
+              paraXmlParts[pendingRole.xmlIndex],
             ),
           });
           pendingRole = null;
         }
         lockedParagraphs.push({
           kind: "experience-meta",
-          paragraph: buildParagraph("locked", lockedIdx++, i, style, runs),
+          paragraph: buildParagraph(
+            "locked",
+            lockedIdx++,
+            i,
+            style,
+            runs,
+            paragraphMap,
+            paraXmlParts[i],
+          ),
         });
       } else if (isEducationDateLine(trimmed)) {
         pendingRole = null;
         lockedParagraphs.push({
           kind: "education-dates",
-          paragraph: buildParagraph("locked", lockedIdx++, i, style, runs),
+          paragraph: buildParagraph(
+            "locked",
+            lockedIdx++,
+            i,
+            style,
+            runs,
+            paragraphMap,
+            paraXmlParts[i],
+          ),
         });
       } else {
         pendingRole = null;
@@ -323,7 +371,8 @@ export async function parseDocx(buffer: Buffer): Promise<{
   return {
     sections: nonEmpty,
     lockedParagraphs,
-    rawXml,
+    rawXml: normalizedXml,
     zipFiles: zip,
+    paragraphMap,
   };
 }

@@ -2,18 +2,17 @@ import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import type { CvImportTextSection } from "@/features/cv/lib/cv-import-draft";
 import type { CvSection } from "@/lib/types";
 import { isDocxTitleStyle } from "@/lib/docx/parser";
-import { skillAlignedBudget } from "@/features/resume-engine/lib/ai/skill-chip-budget";
 import { IMPORT_SYSTEM_PROMPT } from "@/features/resume-engine/lib/ai/import-prompt";
 import {
   DOCX_TAILOR_SYSTEM_PROMPT,
   STUDIO_DOCX_TAILOR_SYSTEM_PROMPT,
   SHRINK_SYSTEM_PROMPT,
 } from "@/features/resume-engine/lib/ai/docx-tailor-prompt";
-import { TAILOR_SYSTEM_PROMPT } from "@/features/resume-engine/lib/ai/tailor-prompt";
 import {
   formatTailorJobContext,
   type TailorJobContext,
 } from "@/features/resume-engine/lib/ai/tailor-job-context";
+import { formatJobDescriptionForPrompt } from "@/features/resume-engine/lib/ai/clean-job-description";
 
 function appendJobContext(
   prompt: string,
@@ -28,6 +27,14 @@ export interface AiPromptPackage {
   systemPrompt: string;
   userPrompt: string;
   combinedPrompt: string;
+}
+
+export interface TailorPromptPayloadOptions {
+  targetLocale?: string;
+  uiLocale?: string;
+  yearsOfExperience?: number;
+  primary?: string;
+  lowPriority?: string[];
 }
 
 export function buildCombinedPrompt(
@@ -52,59 +59,78 @@ export function buildImportPromptPackage(
   };
 }
 
-export function buildTailorUserPrompt(
-  draft: CvImportDraft,
-  jobDescription: string,
-  jobContext?: TailorJobContext | null,
-): string {
-  return appendJobContext(
-    `STRUCTURED RESUME:\n${JSON.stringify(draft, null, 2)}\n\nJOB DESCRIPTION:\n${jobDescription}\n\nReturn only the JSON object.`,
-    jobContext,
-  );
-}
-
-export function buildTailorPromptPackage(
-  draft: CvImportDraft,
-  jobDescription: string,
-  jobContext?: TailorJobContext | null,
-): AiPromptPackage {
-  const userPrompt = buildTailorUserPrompt(draft, jobDescription, jobContext);
-  return {
-    systemPrompt: TAILOR_SYSTEM_PROMPT,
-    userPrompt,
-    combinedPrompt: buildCombinedPrompt(TAILOR_SYSTEM_PROMPT, userPrompt),
-  };
-}
-
 /**
- * Stamps each run with a "budget" equal to its original character count so
- * the model gets a concrete limit instead of a vague "be concise".
- * Title / job-role headline paragraphs are exempt — no budget field.
+ * Stamps each run with a "budget" equal to the joined original length of its paragraph.
+ * Title / headline paragraphs get ceil(1.2 * original length).
+ * Locked paragraphs and runs are omitted from the LLM payload.
  */
-function withBudgets(sections: CvSection[]) {
-  return sections.map((section) => ({
-    ...section,
-    paragraphs: section.paragraphs.map((paragraph) => {
-      const skipBudget = isDocxTitleStyle(paragraph.style);
-      return {
-        ...paragraph,
-        runs: paragraph.runs.map((run) =>
-          skipBudget
-            ? { ...run }
-            : { ...run, budget: skillAlignedBudget(run.text) },
-        ),
-      };
-    }),
-  }));
+export function withBudgets(sections: CvSection[]) {
+  return sections
+    .map((section) => ({
+      id: section.id,
+      heading: section.heading,
+      paragraphs: section.paragraphs
+        .filter((paragraph) => !paragraph.locked)
+        .map((paragraph) => {
+          const isHeadline = isDocxTitleStyle(paragraph.style);
+          const paraLength = paragraph.runs.reduce(
+            (sum, r) => sum + r.text.length,
+            0,
+          );
+          const paraBudget = isHeadline
+            ? Math.ceil(1.2 * paraLength)
+            : paraLength;
+
+          return {
+            id: paragraph.id,
+            style: paragraph.style,
+            runs: paragraph.runs
+              .filter((run) => !run.locked)
+              .map((run) => {
+                const runBudget =
+                  paragraph.runs.length === 1
+                    ? paraBudget
+                    : isHeadline
+                      ? Math.ceil(1.2 * run.text.length)
+                      : run.text.length;
+                return {
+                  id: run.id,
+                  text: run.text,
+                  budget: runBudget,
+                };
+              }),
+          };
+        })
+        .filter((paragraph) => paragraph.runs.length > 0),
+    }))
+    .filter((section) => section.paragraphs.length > 0);
+}
+
+function formatOptionsBlock(options?: TailorPromptPayloadOptions): string {
+  if (!options) return "";
+  const filtered: Record<string, unknown> = {};
+  if (options.targetLocale) filtered.targetLocale = options.targetLocale;
+  if (options.uiLocale) filtered.uiLocale = options.uiLocale;
+  if (options.yearsOfExperience !== undefined)
+    filtered.yearsOfExperience = options.yearsOfExperience;
+  if (options.primary) filtered.primary = options.primary;
+  if (options.lowPriority && options.lowPriority.length > 0)
+    filtered.lowPriority = options.lowPriority;
+
+  if (Object.keys(filtered).length === 0) return "";
+  return `OPTIONS:\n${JSON.stringify(filtered, null, 2)}\n\n`;
 }
 
 export function buildDocxTailorUserPrompt(
   sections: CvSection[],
   jobDescription: string,
   jobContext?: TailorJobContext | null,
+  options?: TailorPromptPayloadOptions,
 ): string {
+  const optionsBlock = formatOptionsBlock(options);
+  const formattedJd = formatJobDescriptionForPrompt(jobDescription);
   return appendJobContext(
-    `ADAPTABLE SECTIONS:\n${JSON.stringify(withBudgets(sections), null, 2)}\n\nJOB DESCRIPTION:\n${jobDescription}\n\nReturn only the JSON object.`,
+    `${optionsBlock}ADAPTABLE SECTIONS:\n${JSON.stringify(withBudgets(sections), null, 2)}\n\n${formattedJd}\n\nReturn only the JSON object.`,
     jobContext,
   );
 }
@@ -113,11 +139,13 @@ export function buildDocxTailorPromptPackage(
   sections: CvSection[],
   jobDescription: string,
   jobContext?: TailorJobContext | null,
+  options?: TailorPromptPayloadOptions,
 ): AiPromptPackage {
   const userPrompt = buildDocxTailorUserPrompt(
     sections,
     jobDescription,
     jobContext,
+    options,
   );
   return {
     systemPrompt: DOCX_TAILOR_SYSTEM_PROMPT,
@@ -131,18 +159,12 @@ export function buildStudioDocxTailorUserPrompt(
   draft: CvImportDraft,
   jobDescription: string,
   jobContext?: TailorJobContext | null,
+  options?: TailorPromptPayloadOptions,
 ): string {
+  const optionsBlock = formatOptionsBlock(options);
+  const formattedJd = formatJobDescriptionForPrompt(jobDescription);
   return appendJobContext(
-    `DOCX TEMPLATE SECTIONS (preserve ids, paragraph ids, run ids, and run counts — only change text; "budget" is each run's max character length when present — title/headline runs have no budget):
-${JSON.stringify(withBudgets(sections), null, 2)}
-
-STRUCTURED RESUME DATA (factual source from CMS — map into template paragraphs):
-${JSON.stringify(draft, null, 2)}
-
-JOB DESCRIPTION:
-${jobDescription}
-
-Return only the JSON object.`,
+    `${optionsBlock}DOCX TEMPLATE SECTIONS (preserve ids, paragraph ids, run ids; only change text of runs that change; "budget" is character limit):\n${JSON.stringify(withBudgets(sections), null, 2)}\n\nSTRUCTURED RESUME DATA (factual source from CMS — map into template paragraphs):\n${JSON.stringify(draft, null, 2)}\n\n${formattedJd}\n\nReturn only the JSON object.`,
     jobContext,
   );
 }
@@ -152,12 +174,14 @@ export function buildStudioDocxTailorPromptPackage(
   draft: CvImportDraft,
   jobDescription: string,
   jobContext?: TailorJobContext | null,
+  options?: TailorPromptPayloadOptions,
 ): AiPromptPackage {
   const userPrompt = buildStudioDocxTailorUserPrompt(
     sections,
     draft,
     jobDescription,
     jobContext,
+    options,
   );
   return {
     systemPrompt: STUDIO_DOCX_TAILOR_SYSTEM_PROMPT,
@@ -173,16 +197,36 @@ export interface ShrinkFragment {
   id: string;
   text: string;
   budget: number;
+  currentLength?: number;
+  role?: "summary" | "bullet" | "headline" | "other";
 }
 
-export function buildShrinkUserPrompt(fragments: ShrinkFragment[]): string {
-  return `FRAGMENTS TO SHORTEN:\n${JSON.stringify(fragments, null, 2)}\n\nReturn only the JSON object.`;
+export interface ShrinkContext {
+  mustHaves?: string[];
+  keywords?: { term: string }[];
+}
+
+export function buildShrinkUserPrompt(
+  fragments: ShrinkFragment[],
+  context?: ShrinkContext,
+): string {
+  const payload: Record<string, unknown> = {
+    fragments,
+  };
+  if (context?.mustHaves && context.mustHaves.length > 0) {
+    payload.mustHaves = context.mustHaves;
+  }
+  if (context?.keywords && context.keywords.length > 0) {
+    payload.keywords = context.keywords.map((k) => k.term);
+  }
+  return `FRAGMENTS TO SHORTEN:\n${JSON.stringify(payload, null, 2)}\n\nReturn only the JSON object.`;
 }
 
 export function buildShrinkPromptPackage(
   fragments: ShrinkFragment[],
+  context?: ShrinkContext,
 ): AiPromptPackage {
-  const userPrompt = buildShrinkUserPrompt(fragments);
+  const userPrompt = buildShrinkUserPrompt(fragments, context);
   return {
     systemPrompt: SHRINK_SYSTEM_PROMPT,
     userPrompt,

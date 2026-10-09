@@ -2,7 +2,9 @@ import { z } from "zod";
 
 export const CvMatchKeywordSchema = z.object({
   term: z.string().min(1),
-  status: z.enum(["present", "paraphrased", "missing"]).default("present"),
+  status: z
+    .enum(["present", "paraphrased", "adjacent", "missing"])
+    .default("present"),
 });
 
 export const CvMatchAnalysisSchema = z.object({

@@ -27,7 +27,7 @@ function FrontendMockup({
   return (
     <div
       data-mock="frontend"
-      className="from-primary/10 via-muted to-muted/80 absolute inset-0 flex justify-center bg-linear-to-br p-5 pt-5"
+      className="from-primary/10 via-muted to-muted/80 absolute inset-0 flex justify-center bg-linear-to-br px-6 pt-14"
     >
       <div className="border-border bg-card flex h-full w-full flex-col overflow-hidden rounded-t-xl border border-b-0 shadow-lg">
         {/* Browser Top Bar */}
@@ -74,7 +74,7 @@ function BackendMockup({ title }: { title: string }) {
   return (
     <div
       data-mock="backend"
-      className="from-primary/10 via-muted to-muted/80 absolute inset-0 flex justify-center bg-linear-to-br p-5 pt-5"
+      className="from-primary/10 via-muted to-muted/80 absolute inset-0 flex justify-center bg-linear-to-br px-5 pt-14"
     >
       <div className="border-border bg-card flex h-full w-full flex-col overflow-hidden rounded-t-xl border border-b-0 shadow-lg">
         {/* Swagger dark bar */}
@@ -140,7 +140,7 @@ function MobileMockup({ title }: { title: string }) {
     <div
       data-mock="mobile"
       aria-label={title}
-      className="from-primary/10 via-muted to-muted/80 absolute inset-0 flex items-end justify-center gap-3 bg-linear-to-br px-6 pt-5"
+      className="from-primary/10 via-muted to-muted/80 absolute inset-0 flex items-end justify-center gap-3 bg-linear-to-br px-6 pt-14"
     >
       {/* Device 1 */}
       <div className="border-border bg-card h-[78%] w-[27%] max-w-26 rounded-t-2xl border-2 border-b-0 p-1.5 shadow-lg">
@@ -198,7 +198,7 @@ function DesktopMockup({ title }: { title: string }) {
   return (
     <div
       data-mock="desktop"
-      className="from-primary/10 via-muted to-muted/80 absolute inset-0 flex justify-center bg-linear-to-br p-5 pt-5"
+      className="from-primary/10 via-muted to-muted/80 absolute inset-0 flex justify-center bg-linear-to-br px-6 pt-14"
     >
       <div className="border-border bg-card flex h-full w-full flex-col overflow-hidden rounded-t-lg border border-b-0 shadow-lg">
         {/* Title bar */}

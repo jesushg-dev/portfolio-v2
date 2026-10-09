@@ -3,7 +3,10 @@ import type { Locale } from "@/i18n/config";
 
 import { parseDocx } from "@/lib/docx/parser";
 import { rebuildDocx } from "@/lib/docx/rebuilder";
-import type { CvDocxTailorResult } from "@/features/resume-engine/lib/cv-docx-tailor-result";
+import {
+  applyEditsToSections,
+  type CvDocxTailorResult,
+} from "@/features/resume-engine/lib/cv-docx-tailor-result";
 import type { UploadTailorSource } from "@/features/resume-engine/lib/fetch-upload-docx";
 import type { ParsedPdfForTailor } from "@/features/resume-engine/lib/pdf/parse-pdf-for-tailor";
 import { rebuildPdfInPlace } from "@/features/resume-engine/lib/pdf/rebuild-pdf-in-place";
@@ -429,8 +432,12 @@ export async function finalizeUploadTailorExport(
     targetLocale?: Locale;
   },
 ) {
+  const adaptedSections = applyEditsToSections(
+    input.result.edits,
+    input.source.parsed.sections,
+  );
   const shared = {
-    adaptedSections: input.result.sections,
+    adaptedSections,
     aiScore: input.result.aiScore,
     matchNotes: input.result.matchNotes,
     matchAnalysis: input.result.matchAnalysis,

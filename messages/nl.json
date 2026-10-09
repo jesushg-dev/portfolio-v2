@@ -824,6 +824,13 @@
         "mobile": "Mobiel",
         "desktop": "Bureaublad",
         "ariaLabel": "Portfolio projectcategorieën"
+      },
+      "emptyState": {
+        "title": "Geen projecten in deze categorie",
+        "description": "Er zijn momenteel geen openbare projecten gecategoriseerd als {category}. Je kunt andere categorieën verkennen.",
+        "allTitle": "Geen projecten beschikbaar",
+        "allDescription": "Binnenkort worden nieuwe projecten en casestudies toegevoegd.",
+        "reset": "Alle projecten bekijken"
       }
     },
     "contact": {
@@ -2178,7 +2185,8 @@
       "jobTrackerApplication": {
         "validation": {
           "positionRequired": "Functie is verplicht",
-          "companyRequired": "Selecteer een bedrijf"
+          "companyRequired": "Selecteer een bedrijf",
+          "urlInvalid": "Ongeldige URL"
         },
         "toast": {
           "success": {
@@ -2204,6 +2212,7 @@
           "appliedDate": "Sollicitatiedatum",
           "location": "Locatie",
           "salary": "Salaris",
+          "jobUrl": "Vacaturelink",
           "description": "Beschrijving",
           "notes": "Notities",
           "cv": "CV"
@@ -2218,6 +2227,7 @@
           "company": "Selecteer of maak een bedrijf...",
           "location": "Remote, hybrid, etc...",
           "salary": "€50k - €60k",
+          "jobUrl": "https://linkedin.com/jobs/view/...",
           "description": "Plak de functieomschrijving…",
           "notes": "bijv. via Alex, follow-up vrijdag…",
           "date": "Selecteer een datum"
@@ -2298,12 +2308,16 @@
           "name": "Naam",
           "website": "Website",
           "email": "E-mail",
+          "linkedinUrl": "LinkedIn-profiel",
+          "companyLocation": "Hoofdkantoor / Locatie",
           "description": "Beschrijving"
         },
         "placeholders": {
           "name": "Acme Corp",
           "email": "contact@bedrijf.com",
           "website": "https://bedrijf.com",
+          "linkedinUrl": "https://linkedin.com/company/...",
+          "companyLocation": "Amsterdam, Nederland / Remote",
           "description": "Bedrijfsbeschrijving..."
         },
         "actions": {
@@ -3160,6 +3174,10 @@
         "showFullDescription": "Volledige omschrijving tonen",
         "hideFullDescription": "Minder tonen",
         "notProvided": "—",
+        "viewJobPosting": "Originele vacature bekijken",
+        "jobUrl": "Vacaturelink",
+        "companyInfo": "Bedrijfsinformatie",
+        "editCompany": "Bedrijf bewerken",
         "tabsNavAria": "Sollicitatiesecties"
       },
       "interviewPrep": {
@@ -3325,7 +3343,13 @@
         "copyError": "Kon niet kopiëren",
         "subjectLabel": "Onderwerp / titel",
         "bodyLabel": "Brief",
-        "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een brief te maken."
+        "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een brief te maken.",
+        "aiFailedFallback": "Het model kon de brief niet genereren. Handmatige modus is nu ingeschakeld.",
+        "writeManually": "Handmatig schrijven",
+        "aiOptions": "AI-opties",
+        "applyResponse": "Toepassen op brief",
+        "responseApplied": "AI-antwoord toegepast op motivatiebrief",
+        "parseError": "Kon het onderwerp of de brief niet uit het antwoord halen."
       },
       "kanban": {
         "description": "Sleep kaarten tussen kolommen om de status bij te werken.",
@@ -3494,7 +3518,8 @@
       "matchStatus": {
         "present": "op het CV",
         "paraphrased": "geparafraseerd",
-        "missing": "ontbreekt"
+        "missing": "ontbreekt",
+        "adjacent": "aangrenzende vaardigheid"
       },
       "atsCheckerTitle": "ATS-checker",
       "atsCheckerScore": "Match {score}%",

@@ -3,6 +3,8 @@ model Company {
   name        String
   email       String?
   website     String?
+  linkedinUrl String?
+  location    String?
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -23,6 +25,7 @@ model Application {
   notes       String?
   salary      String?
   location    String?
+  jobUrl      String?
   coverLetterSubject String?
   coverLetterBody    String?
   ghostNudgeSnoozedUntil DateTime?

@@ -1,47 +1,38 @@
 "use client";
 
-import type { FC, ReactNode } from "react";
+import type { FC } from "react";
 import { useCallback, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  FileText,
-  Loader2,
-  RefreshCw,
-  Sparkles,
-  Upload,
-} from "lucide-react";
+import { CheckCircle2, FileText, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Link } from "@/i18n/routing";
-import { cn } from "@/lib/utils";
 import {
   ResumeAiControls,
   type AiProcessingMode,
 } from "@/features/resume-engine/components/resume-ai-controls";
 import { ManualAiPanel } from "@/features/resume-engine/components/manual-ai-panel";
-import { ResumeDocxUpload } from "@/features/resume-engine/components/resume-docx-upload";
 import type { AiProviderName } from "@/features/resume-engine/lib/ai/provider-types";
-import { ResumeTailorPreviewPanel } from "@/features/resume-engine/components/resume-tailor-preview-panel";
 import {
   parseMatchAnalysis,
   type CvMatchAnalysis,
 } from "@/features/resume-engine/lib/cv-match-analysis";
+import {
+  ResumeTailorSourceSelector,
+  type ResumeTailorSourceType,
+} from "@/features/resume-engine/components/resume-tailor-source-selector";
+import { ResumeTailorErrorAlert } from "@/features/resume-engine/components/resume-tailor-error-alert";
+import { ResumeTailorProgress } from "@/features/resume-engine/components/resume-tailor-progress";
+import {
+  ResumeTailorExistingBanner,
+  type ExistingCvFile,
+} from "@/features/resume-engine/components/resume-tailor-existing-banner";
+import { ResumeTailorResultView } from "@/features/resume-engine/components/resume-tailor-result-view";
 
-type SourceType = "studio" | "upload";
 type Step = "configure" | "tailoring" | "done";
-
-interface ExistingCvFile {
-  name: string;
-  url: string;
-  uploadedAt: Date;
-}
 
 interface ResumeTailorWorkflowProps {
   applicationId?: string;
@@ -56,7 +47,8 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [step, setStep] = useState<Step>("configure");
-  const [sourceType, setSourceType] = useState<SourceType>("studio");
+  const [sourceType, setSourceType] =
+    useState<ResumeTailorSourceType>("studio");
   const [uploadId, setUploadId] = useState<string | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -73,7 +65,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   const [provider, setProvider] = useState<AiProviderName | null>(null);
   const [manualTailorJson, setManualTailorJson] = useState("");
   const [showTailorForm, setShowTailorForm] = useState(() => !existingCvFile);
-  const [showReplaceFile, setShowReplaceFile] = useState(false);
   const [appliedExportId, setAppliedExportId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -303,7 +294,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           setExportId(result.exportId);
           setDownloadUrl(result.downloadUrl);
           setPdfDownloadUrl(result.pdfDownloadUrl ?? null);
-          setShowReplaceFile(false);
           toast.success(
             result.kind === "pdf"
               ? t("polishPdfSuccess")
@@ -332,78 +322,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     ],
   );
 
-  const renderPolishUpload = () => {
-    if (!exportId && !applicationId) return null;
-    if (!showReplaceFile) {
-      return (
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          onClick={() => setShowReplaceFile(true)}
-        >
-          <Upload className="size-3.5" aria-hidden />
-          {t("polishReplaceCta")}
-        </Button>
-      );
-    }
-    return (
-      <div className="rounded-md border p-3">
-        <div className="mb-2 flex items-start justify-between gap-2">
-          <p className="text-xs font-medium">{t("polishUploadTitle")}</p>
-          <Button
-            type="button"
-            size="sm"
-            variant="ghost"
-            className="h-auto px-0 text-xs"
-            onClick={() => setShowReplaceFile(false)}
-          >
-            {t("polishReplaceCancel")}
-          </Button>
-        </div>
-        <p className="text-muted-foreground mb-3 text-xs">
-          {t("polishUploadHint")}
-        </p>
-        <ResumeDocxUpload
-          allowPdf
-          preferPdf
-          resetKey={downloadUrl ?? exportId ?? "polish"}
-          onUploaded={handlePolishedUpload}
-          onError={(message) => {
-            toast.error(t("polishUploadFailed"), { description: message });
-          }}
-        />
-      </div>
-    );
-  };
-
-  const previewFileUrl = downloadUrl ?? existingCvFile?.url ?? "";
-
-  const renderPreviewPanel = (actions?: ReactNode) => (
-    <ResumeTailorPreviewPanel
-      fileUrl={previewFileUrl}
-      fileName={latestExport?.fileName ?? existingCvFile?.name}
-      mimeType={latestExport?.mimeType}
-      structuredSnapshot={structuredSnapshot}
-      downloadUrl={downloadUrl}
-      pdfDownloadUrl={pdfDownloadUrl}
-      aiScore={aiScore}
-      matchNotes={matchNotes}
-      matchAnalysis={matchAnalysis}
-      actions={
-        <>
-          {actions}
-          {!showReplaceFile ? renderPolishUpload() : null}
-        </>
-      }
-      belowToolbar={showReplaceFile ? renderPolishUpload() : null}
-    />
-  );
-
-  const renderTailorExtras = (actions?: ReactNode) => (
-    <div className="mt-3">{renderPreviewPanel(actions)}</div>
-  );
-
   const handleResetTailor = useCallback(() => {
     setStep("configure");
     setDownloadUrl(null);
@@ -418,313 +336,23 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     setShowTailorForm(true);
   }, []);
 
-  const showExistingBanner =
-    Boolean(existingCvFile) && !showTailorForm && step === "configure";
-
-  const renderExistingBanner = () =>
-    existingCvFile ? (
-      <div className="space-y-3">
-        <div className="flex items-start gap-2.5">
-          <CheckCircle2
-            className="text-primary mt-0.5 size-4.5 shrink-0"
-            aria-hidden
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-primary text-sm font-medium">
-              {t("tailorAlreadyDone")}
-            </p>
-            <p className="text-muted-foreground mt-0.5 text-xs">
-              {t("tailorGeneratedOn", {
-                date: new Intl.DateTimeFormat(undefined, {
-                  month: "short",
-                  day: "numeric",
-                }).format(new Date(existingCvFile.uploadedAt)),
-              })}
-            </p>
-          </div>
-        </div>
-        {renderTailorExtras(
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={handleResetTailor}
-          >
-            {t("tailorRegenerate")}
-          </Button>,
-        )}
-      </div>
-    ) : null;
-
   const handleSwitchToManual = useCallback(() => {
     setMode("manual");
     setError(null);
   }, []);
 
-  const sourceOptionClass = (active: boolean, disabled = false) =>
-    cn(
-      "flex flex-col gap-0.5 rounded-md border p-2.5 text-left transition-colors",
-      active
-        ? "border-primary bg-primary/5"
-        : "border-border bg-background hover:bg-muted/50",
-      disabled && "cursor-not-allowed opacity-50",
-    );
+  const handleClearError = useCallback(() => {
+    setError(null);
+  }, []);
 
-  const renderSourceSection = (compact: boolean) => (
-    <div className={compact ? "mb-5" : "flex flex-col gap-4"}>
-      {compact ? (
-        <p className="mb-2 text-sm font-medium">{t("tailorSourceTitle")}</p>
-      ) : null}
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-2">
-        <button
-          type="button"
-          onClick={() => setSourceType("studio")}
-          disabled={!hasStudioData}
-          className={sourceOptionClass(sourceType === "studio", !hasStudioData)}
-        >
-          <span
-            className={cn(
-              "font-medium",
-              compact ? "text-[13px]" : "text-sm",
-              sourceType === "studio" && compact && "text-primary",
-            )}
-          >
-            {t("tailorSourceStudio")}
-          </span>
-          <span className="text-muted-foreground text-xs leading-snug">
-            {hasStudioData && pageData.data?.studioPreview
-              ? t("tailorSourceStudioHint", {
-                  name: pageData.data.studioPreview.fullName,
-                  count: pageData.data.studioPreview.experienceCount,
-                })
-              : t("tailorSourceStudioEmpty")}
-          </span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setSourceType("upload")}
-          className={sourceOptionClass(sourceType === "upload")}
-        >
-          <span
-            className={cn(
-              "font-medium",
-              compact ? "text-[13px]" : "text-sm",
-              sourceType === "upload" && compact && "text-primary",
-            )}
-          >
-            {t("tailorSourceUpload")}
-          </span>
-          <span className="text-muted-foreground text-xs leading-snug">
-            {t("tailorSourceUploadHint")}
-          </span>
-        </button>
-      </div>
-
-      {sourceType === "upload" ? (
-        <div className="mt-3 flex flex-col gap-3">
-          {uploads.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              <Label>{t("tailorRecentUploads")}</Label>
-              <div className="flex flex-wrap gap-2">
-                {uploads.map((upload) => (
-                  <Button
-                    key={upload.id}
-                    type="button"
-                    size="sm"
-                    variant={uploadId === upload.id ? "default" : "outline"}
-                    onClick={() => setUploadId(upload.id)}
-                  >
-                    {upload.fileName}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
-          <ResumeDocxUpload
-            allowPdf
-            resetKey={uploadId ?? "new"}
-            onUploaded={(file) => {
-              void handleUploadComplete(file);
-            }}
-            onError={(message) => {
-              setError(message);
-              toast.error(t("uploadFailed"), { description: message });
-            }}
-          />
-        </div>
-      ) : null}
-    </div>
-  );
-
-  const renderErrorPanel = () =>
-    error ? (
-      <div
-        className="border-destructive/30 bg-destructive/5 mt-4 rounded-lg border p-3.5"
-        role="alert"
-      >
-        <div className="flex gap-2">
-          <AlertTriangle
-            className="text-destructive mt-0.5 size-[18px] shrink-0"
-            aria-hidden
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-destructive text-[13px] font-medium">
-              {t("tailorFailed")}
-            </p>
-            <p className="text-muted-foreground mt-1 text-[13px]">{error}</p>
-            <div className="mt-2.5 flex flex-wrap gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={isPending}
-                onClick={
-                  effectiveMode === "manual"
-                    ? handleTailorManual
-                    : handleTailorAuto
-                }
-              >
-                <RefreshCw className="mr-1.5 size-3.5" aria-hidden />
-                {t("tailorErrorRetry")}
-              </Button>
-              {effectiveMode === "auto" && hasAutoProviders ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setError(null)}
-                >
-                  {t("tailorErrorSwitchProvider")}
-                </Button>
-              ) : null}
-              {hasAutoProviders ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleSwitchToManual}
-                >
-                  {t("tailorErrorUseManual")}
-                </Button>
-              ) : null}
-            </div>
-            <details className="mt-2">
-              <summary className="text-muted-foreground cursor-pointer text-[11px]">
-                {t("tailorTechnicalDetails")}
-              </summary>
-              <p className="text-muted-foreground mt-1.5 font-mono text-[11px] break-all">
-                {error}
-              </p>
-            </details>
-          </div>
-        </div>
-      </div>
-    ) : null;
-
-  const renderSuccessPanel = () =>
-    step === "done" && downloadUrl ? (
-      <div className="mt-4">
-        {renderTailorExtras(
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleResetTailor}
-          >
-            {t("tailorRegenerate")}
-          </Button>,
-        )}
-      </div>
-    ) : null;
-
-  const renderConfigureForm = (compact: boolean) => (
-    <>
-      {renderSourceSection(compact)}
-
-      <div className={compact ? "mb-5" : undefined}>
-        {aiSettings.isLoading ? (
-          <div className="text-muted-foreground flex items-center gap-2 text-sm">
-            <Loader2 className="size-4 animate-spin" />
-            {t("aiSettingsLoading")}
-          </div>
-        ) : (
-          <ResumeAiControls
-            mode={effectiveMode}
-            onModeChange={setMode}
-            provider={provider}
-            onProviderChange={setProvider}
-            providers={providers}
-            defaultProvider={defaultProvider}
-            hasAutoProviders={hasAutoProviders}
-            layout={compact ? "compact" : "default"}
-          />
-        )}
-      </div>
-
-      {effectiveMode === "manual" ? (
-        <div className={compact ? "mb-5" : undefined}>
-          <ManualAiPanel
-            promptPackage={tailorPrompt.data}
-            isLoadingPrompt={tailorPrompt.isFetching}
-            onLoadPrompt={handleLoadTailorPrompt}
-            rawJson={manualTailorJson}
-            onRawJsonChange={setManualTailorJson}
-            onSubmit={handleTailorManual}
-            isPending={isPending}
-            submitLabel={t("tailorCta")}
-            canLoadPrompt={
-              effectiveJobDescription.length >= 20 &&
-              (sourceType === "studio" ? hasStudioData : Boolean(uploadId))
-            }
-            variant={compact ? "compact" : "default"}
-            hideSubmit={compact}
-          />
-        </div>
-      ) : null}
-
-      {!compact ? (
-        <Textarea
-          value={
-            jobDescription.length > 0
-              ? jobDescription
-              : (application?.description ?? "")
-          }
-          onChange={(e) => setJobDescription(e.target.value)}
-          placeholder={t("tailorJdPlaceholder")}
-          rows={10}
-          className="resize-y"
-        />
-      ) : null}
-
-      <Button
-        type="button"
-        className={cn(
-          "mt-5",
-          compact ? "w-full sm:w-auto sm:min-w-[200px]" : "self-start",
-        )}
-        disabled={isPending || step !== "configure"}
-        onClick={
-          effectiveMode === "manual" ? handleTailorManual : handleTailorAuto
-        }
-      >
-        {isPending ? (
-          <Loader2 className="mr-2 size-4 animate-spin" />
-        ) : (
-          <Sparkles className="mr-2 size-4" aria-hidden />
-        )}
-        {t("tailorCta")}
-      </Button>
-
-      {renderErrorPanel()}
-    </>
-  );
+  const previewFileUrl = downloadUrl ?? existingCvFile?.url ?? "";
+  const showExistingBanner =
+    Boolean(existingCvFile) && !showTailorForm && step === "configure";
 
   if (pageData.isLoading) {
     return (
       <div className="text-muted-foreground flex items-center gap-2 text-sm">
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2 className="size-4 animate-spin" />
         {t("tailorLoading")}
       </div>
     );
@@ -734,24 +362,135 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     return (
       <div className="w-full">
         {step === "tailoring" ? (
-          <div className="flex flex-col items-center gap-3 py-8">
-            <Loader2 className="text-primary size-8 animate-spin" />
-            <p className="text-sm font-medium">{t("tailoringTitle")}</p>
-            <p className="text-muted-foreground text-center text-xs">
-              {t("tailoringDescription")}
-            </p>
-          </div>
+          <ResumeTailorProgress embedded />
         ) : step === "done" && downloadUrl ? (
-          renderSuccessPanel()
-        ) : showExistingBanner ? (
-          renderExistingBanner()
+          <div className="mt-4">
+            <ResumeTailorResultView
+              previewFileUrl={previewFileUrl}
+              fileName={latestExport?.fileName ?? existingCvFile?.name}
+              mimeType={latestExport?.mimeType}
+              structuredSnapshot={structuredSnapshot}
+              downloadUrl={downloadUrl}
+              pdfDownloadUrl={pdfDownloadUrl}
+              aiScore={aiScore}
+              matchNotes={matchNotes}
+              matchAnalysis={matchAnalysis}
+              exportId={exportId}
+              applicationId={applicationId}
+              embedded
+              onResetTailor={handleResetTailor}
+              onPolishedUpload={handlePolishedUpload}
+            />
+          </div>
+        ) : showExistingBanner && existingCvFile ? (
+          <ResumeTailorExistingBanner existingCvFile={existingCvFile}>
+            <ResumeTailorResultView
+              previewFileUrl={previewFileUrl}
+              fileName={latestExport?.fileName ?? existingCvFile.name}
+              mimeType={latestExport?.mimeType}
+              structuredSnapshot={structuredSnapshot}
+              downloadUrl={downloadUrl}
+              pdfDownloadUrl={pdfDownloadUrl}
+              aiScore={aiScore}
+              matchNotes={matchNotes}
+              matchAnalysis={matchAnalysis}
+              exportId={exportId}
+              applicationId={applicationId}
+              embedded
+              onResetTailor={handleResetTailor}
+              onPolishedUpload={handlePolishedUpload}
+            />
+          </ResumeTailorExistingBanner>
         ) : (
-          <>
-            <p className="text-muted-foreground mb-4 text-sm">
+          <div className="flex flex-col gap-4">
+            <p className="text-muted-foreground text-sm">
               {t("tailorPageDescription")}
             </p>
-            {renderConfigureForm(true)}
-          </>
+
+            <ResumeTailorSourceSelector
+              sourceType={sourceType}
+              onSourceTypeChange={setSourceType}
+              hasStudioData={hasStudioData}
+              studioPreview={pageData.data?.studioPreview}
+              uploads={uploads}
+              uploadId={uploadId}
+              onUploadIdChange={setUploadId}
+              onUploadComplete={handleUploadComplete}
+              onError={setError}
+              compact
+            />
+
+            <div>
+              {aiSettings.isLoading ? (
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                  <Loader2 className="size-4 animate-spin" />
+                  {t("aiSettingsLoading")}
+                </div>
+              ) : (
+                <ResumeAiControls
+                  mode={effectiveMode}
+                  onModeChange={setMode}
+                  provider={provider}
+                  onProviderChange={setProvider}
+                  providers={providers}
+                  defaultProvider={defaultProvider}
+                  hasAutoProviders={hasAutoProviders}
+                  layout="compact"
+                />
+              )}
+            </div>
+
+            {effectiveMode === "manual" ? (
+              <ManualAiPanel
+                promptPackage={tailorPrompt.data}
+                isLoadingPrompt={tailorPrompt.isFetching}
+                onLoadPrompt={handleLoadTailorPrompt}
+                rawJson={manualTailorJson}
+                onRawJsonChange={setManualTailorJson}
+                onSubmit={handleTailorManual}
+                isPending={isPending}
+                submitLabel={t("tailorCta")}
+                canLoadPrompt={
+                  effectiveJobDescription.length >= 20 &&
+                  (sourceType === "studio" ? hasStudioData : Boolean(uploadId))
+                }
+                variant="compact"
+                hideSubmit
+              />
+            ) : null}
+
+            <Button
+              type="button"
+              className="mt-1 w-full sm:w-auto sm:min-w-50"
+              disabled={isPending || step !== "configure"}
+              onClick={
+                effectiveMode === "manual"
+                  ? handleTailorManual
+                  : handleTailorAuto
+              }
+            >
+              {isPending ? (
+                <Loader2 className="mr-2 size-4 animate-spin" />
+              ) : (
+                <Sparkles className="mr-2 size-4" aria-hidden />
+              )}
+              {t("tailorCta")}
+            </Button>
+
+            <ResumeTailorErrorAlert
+              error={error}
+              isPending={isPending}
+              effectiveMode={effectiveMode}
+              hasAutoProviders={hasAutoProviders}
+              onRetry={
+                effectiveMode === "manual"
+                  ? handleTailorManual
+                  : handleTailorAuto
+              }
+              onClearError={handleClearError}
+              onSwitchToManual={handleSwitchToManual}
+            />
+          </div>
         )}
       </div>
     );
@@ -803,17 +542,29 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           <Card className="bg-card text-card-foreground">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
-                <FileText className="h-5 w-5" />
+                <FileText className="size-5" />
                 {t("tailorSourceTitle")}
               </CardTitle>
             </CardHeader>
-            <CardContent>{renderSourceSection(false)}</CardContent>
+            <CardContent>
+              <ResumeTailorSourceSelector
+                sourceType={sourceType}
+                onSourceTypeChange={setSourceType}
+                hasStudioData={hasStudioData}
+                studioPreview={pageData.data?.studioPreview}
+                uploads={uploads}
+                uploadId={uploadId}
+                onUploadIdChange={setUploadId}
+                onUploadComplete={handleUploadComplete}
+                onError={setError}
+              />
+            </CardContent>
           </Card>
 
           <Card className="bg-card text-card-foreground">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Sparkles className="h-5 w-5" />
+                <Sparkles className="size-5" />
                 {t("tailorJdTitle")}
               </CardTitle>
             </CardHeader>
@@ -855,72 +606,58 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
                   className="self-start"
                 >
                   {isPending ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-2 size-4 animate-spin" />
                   ) : (
-                    <Sparkles className="mr-2 h-4 w-4" />
+                    <Sparkles className="mr-2 size-4" />
                   )}
                   {t("tailorCta")}
                 </Button>
               )}
 
-              {error ? (
-                <p className="text-destructive text-sm" role="alert">
-                  {error}
-                </p>
-              ) : null}
+              <ResumeTailorErrorAlert
+                error={error}
+                isPending={isPending}
+                effectiveMode={effectiveMode}
+                hasAutoProviders={hasAutoProviders}
+                onRetry={
+                  effectiveMode === "manual"
+                    ? handleTailorManual
+                    : handleTailorAuto
+                }
+                onClearError={handleClearError}
+                onSwitchToManual={handleSwitchToManual}
+              />
             </CardContent>
           </Card>
         </>
       )}
 
-      {step === "tailoring" && (
-        <Card className="bg-card text-card-foreground">
-          <CardContent className="flex flex-col items-center gap-4 py-12">
-            <Loader2 className="text-primary h-10 w-10 animate-spin" />
-            <p className="font-medium">{t("tailoringTitle")}</p>
-            <p className="text-muted-foreground text-center text-sm">
-              {t("tailoringDescription")}
-            </p>
-          </CardContent>
-        </Card>
-      )}
+      {step === "tailoring" && <ResumeTailorProgress />}
 
       {step === "done" && downloadUrl && (
         <Card className="bg-card text-card-foreground">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <CheckCircle2 className="text-primary h-5 w-5" />
+              <CheckCircle2 className="text-primary size-5" />
               {t("tailorDoneTitle")}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            {renderTailorExtras(
-              <>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={handleResetTailor}
-                >
-                  <Upload className="mr-1.5 size-3.5" aria-hidden />
-                  {t("tailorAgain")}
-                </Button>
-                {applicationId && !embedded ? (
-                  <Link
-                    href={{
-                      pathname: "/admin/job-tracker/applications/[id]",
-                      params: { id: applicationId },
-                    }}
-                    className={buttonVariants({
-                      variant: "outline",
-                      size: "sm",
-                    })}
-                  >
-                    {t("tailorBackToApplication")}
-                  </Link>
-                ) : null}
-              </>,
-            )}
+            <ResumeTailorResultView
+              previewFileUrl={previewFileUrl}
+              fileName={latestExport?.fileName ?? existingCvFile?.name}
+              mimeType={latestExport?.mimeType}
+              structuredSnapshot={structuredSnapshot}
+              downloadUrl={downloadUrl}
+              pdfDownloadUrl={pdfDownloadUrl}
+              aiScore={aiScore}
+              matchNotes={matchNotes}
+              matchAnalysis={matchAnalysis}
+              exportId={exportId}
+              applicationId={applicationId}
+              onResetTailor={handleResetTailor}
+              onPolishedUpload={handlePolishedUpload}
+            />
           </CardContent>
         </Card>
       )}

@@ -10,6 +10,13 @@ interface ResumeMatchChecklistProps {
   analysis: CvMatchAnalysis;
 }
 
+const STATUS_KEY_MAP = {
+  present: "matchStatus.present",
+  paraphrased: "matchStatus.paraphrased",
+  missing: "matchStatus.missing",
+  adjacent: "matchStatus.adjacent",
+} as const;
+
 export const ResumeMatchChecklist: FC<ResumeMatchChecklistProps> = ({
   analysis,
 }) => {
@@ -37,7 +44,7 @@ export const ResumeMatchChecklist: FC<ResumeMatchChecklistProps> = ({
                   <span className="font-medium">{keyword.term}</span>
                   <span className="text-muted-foreground">
                     {" "}
-                    — {t(`matchStatus.${keyword.status}`)}
+                    — {t(STATUS_KEY_MAP[keyword.status])}
                   </span>
                 </span>
               </li>

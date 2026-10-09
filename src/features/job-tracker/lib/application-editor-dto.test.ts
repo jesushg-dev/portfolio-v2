@@ -26,6 +26,7 @@ const application = {
   appliedDate: new Date("2026-08-01"),
   salary: "120k",
   location: "Remote",
+  jobUrl: "https://example.com/jobs/1",
   notes: "Nice team",
   cvFile: {
     name: "cv.pdf",
@@ -41,9 +42,10 @@ const application = {
 } as Application;
 
 describe("application editor dto", () => {
-  it("maps editor fields including the CV file", () => {
+  it("maps editor fields including the CV file and jobUrl", () => {
     const dto = mapApplicationToEditorDto(application);
     expect(dto.position).toBe("Engineer");
+    expect(dto.jobUrl).toBe("https://example.com/jobs/1");
     expect(dto.cvFile?.name).toBe("cv.pdf");
     expect(dto.status).toBe("INTERVIEW");
   });

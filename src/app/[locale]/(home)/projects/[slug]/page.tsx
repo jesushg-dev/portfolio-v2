@@ -15,9 +15,7 @@ export default async function ProjectCaseStudyPage({
   params,
 }: ProjectCaseStudyPageProps) {
   const { slug, locale } = await params;
-  const activeLocale = locales.includes(locale)
-    ? locale
-    : ((await getLocale()));
+  const activeLocale = locales.includes(locale) ? locale : await getLocale();
 
   const [project, nextProject] = await Promise.all([
     api.portfolio.getProjectBySlug({

@@ -3,7 +3,6 @@ import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 
 import type { CvSection } from "@/lib/types";
-import { isDocxTitleStyle } from "@/lib/docx/parser";
 import {
   DOCX_TAILOR_SYSTEM_PROMPT,
   STUDIO_DOCX_TAILOR_SYSTEM_PROMPT,
@@ -26,9 +25,11 @@ import type { TailorJobContext } from "@/features/resume-engine/lib/ai/tailor-jo
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import {
   CvDocxTailorResultSchema,
+  applyEditsToSections,
   type CvDocxTailorResult,
+  type TailoredResumeResult,
 } from "@/features/resume-engine/lib/cv-docx-tailor-result";
-import { skillAlignedBudget } from "@/features/resume-engine/lib/ai/skill-chip-budget";
+import { validateTailorEdits } from "@/features/resume-engine/lib/ai/tailor-validator";
 import {
   ShrinkResultSchema,
   type ShrinkResult,
@@ -256,94 +257,47 @@ async function shrinkOverflowingRuns(
   }
 }
 
-const SHRINK_TRIGGER_TOLERANCE = 1.1;
 const MAX_SHRINK_ATTEMPTS = 2;
 
-function collectBudgets(sections: CvSection[]): Map<string, number> {
-  const budgets = new Map<string, number>();
-  for (const section of sections) {
-    for (const paragraph of section.paragraphs) {
-      if (isDocxTitleStyle(paragraph.style)) continue;
-      for (const run of paragraph.runs) {
-        budgets.set(run.id, skillAlignedBudget(run.text));
+function calculateYearsOfExperience(draft?: CvImportDraft): number | undefined {
+  if (!draft?.experiences || draft.experiences.length === 0) return undefined;
+  let earliestYear: number | null = null;
+  const currentYear = new Date().getFullYear();
+  for (const exp of draft.experiences) {
+    if (exp.startDate) {
+      const match = /^(\d{4})/.exec(exp.startDate);
+      if (match) {
+        const year = parseInt(match[1], 10);
+        if (!earliestYear || year < earliestYear) earliestYear = year;
       }
     }
   }
-  return budgets;
+  if (!earliestYear) return undefined;
+  return Math.max(1, currentYear - earliestYear);
 }
 
-function findOverflows(
-  original: CvSection[],
-  tailored: CvDocxTailorResult,
-  tolerance = SHRINK_TRIGGER_TOLERANCE,
-): ShrinkFragment[] {
-  const budgets = collectBudgets(original);
-  const overflows: ShrinkFragment[] = [];
+function emptyLastBulletOfOldestJob(
+  sections: CvSection[],
+  currentEditsMap: Map<string, string>,
+): { emptiedRunId: string } | null {
+  const expSection = sections.find((s) =>
+    /experience|experiencia|ervaring/i.test(s.heading),
+  );
+  if (!expSection || expSection.paragraphs.length <= 1) return null;
 
-  for (const section of tailored.sections) {
-    for (const paragraph of section.paragraphs) {
-      for (const run of paragraph.runs) {
-        const budget = budgets.get(run.id);
-        if (budget !== undefined && run.text.length > budget * tolerance) {
-          overflows.push({ id: run.id, text: run.text, budget });
-        }
+  // Walk backwards from oldest bullet to find a job with >1 bullet
+  for (let i = expSection.paragraphs.length - 1; i >= 0; i--) {
+    const p = expSection.paragraphs[i];
+    const run = p.runs[0];
+    if (run) {
+      const currentText = (currentEditsMap.get(run.id) ?? run.text).trim();
+      if (currentText.length > 0) {
+        currentEditsMap.set(run.id, "");
+        return { emptiedRunId: run.id };
       }
     }
   }
-  return overflows;
-}
-
-function applyShrinkResult(
-  tailored: CvDocxTailorResult,
-  shrink: ShrinkResult,
-): CvDocxTailorResult {
-  const replacements = new Map(shrink.runs.map((r) => [r.id, r.text]));
-  return {
-    ...tailored,
-    sections: tailored.sections.map((section) => ({
-      ...section,
-      paragraphs: section.paragraphs.map((paragraph) => ({
-        ...paragraph,
-        runs: paragraph.runs.map((run) =>
-          replacements.has(run.id)
-            ? { ...run, text: replacements.get(run.id)! }
-            : run,
-        ),
-      })),
-    })),
-  };
-}
-
-function hardTruncate(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  const cut = text.slice(0, maxLength);
-  const lastSpace = cut.lastIndexOf(" ");
-  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd();
-}
-
-/**
- * Absolute last resort after shrink attempts: force every run within its
- * original budget so page overflow cannot slip through.
- */
-function forceWithinBudget(
-  original: CvSection[],
-  tailored: CvDocxTailorResult,
-): CvDocxTailorResult {
-  const budgets = collectBudgets(original);
-  return {
-    ...tailored,
-    sections: tailored.sections.map((section) => ({
-      ...section,
-      paragraphs: section.paragraphs.map((paragraph) => ({
-        ...paragraph,
-        runs: paragraph.runs.map((run) => {
-          const budget = budgets.get(run.id);
-          if (budget === undefined || run.text.length <= budget) return run;
-          return { ...run, text: hardTruncate(run.text, budget) };
-        }),
-      })),
-    })),
-  };
+  return null;
 }
 
 export async function tailorDocxResume(
@@ -353,17 +307,18 @@ export async function tailorDocxResume(
   providerName?: string,
   draft?: CvImportDraft,
   jobContext?: TailorJobContext | null,
-): Promise<{ result: CvDocxTailorResult; provider: AiProviderName }> {
+  options?: { yearsOfExperience?: number },
+): Promise<{ result: TailoredResumeResult; provider: AiProviderName }> {
   if (sections.length === 0) {
     throw new Error("No adaptable sections found in the DOCX.");
   }
 
   const provider = resolveAiProvider(credentials, providerName);
 
-  let result: CvDocxTailorResult;
+  let rawResult: CvDocxTailorResult;
   switch (provider) {
     case "claude":
-      result = await tailorDocxWithClaude(
+      rawResult = await tailorDocxWithClaude(
         sections,
         jobDescription,
         requireTenantAiApiKey(credentials, "claude"),
@@ -372,7 +327,7 @@ export async function tailorDocxResume(
       );
       break;
     case "openai":
-      result = await tailorDocxWithOpenAI(
+      rawResult = await tailorDocxWithOpenAI(
         sections,
         jobDescription,
         requireTenantAiApiKey(credentials, "openai"),
@@ -383,7 +338,7 @@ export async function tailorDocxResume(
       );
       break;
     case "deepseek":
-      result = await tailorDocxWithOpenAI(
+      rawResult = await tailorDocxWithOpenAI(
         sections,
         jobDescription,
         requireTenantAiApiKey(credentials, "deepseek"),
@@ -394,7 +349,7 @@ export async function tailorDocxResume(
       );
       break;
     case "gemini":
-      result = await tailorDocxWithGemini(
+      rawResult = await tailorDocxWithGemini(
         sections,
         jobDescription,
         requireTenantAiApiKey(credentials, "gemini"),
@@ -408,23 +363,108 @@ export async function tailorDocxResume(
     }
   }
 
+  // 1. Extract edits directly from LLM response
+  const initialEdits = rawResult.edits;
+
+  const effectiveYears =
+    options?.yearsOfExperience ?? calculateYearsOfExperience(draft);
+
+  // 2. Validate with pure post-LLM validator (E1 - E8)
+  let validation = validateTailorEdits({
+    originalSections: sections,
+    sourceDraft: draft,
+    jobDescription,
+    edits: initialEdits,
+    yearsOfExperience: effectiveYears,
+  });
+
+  const currentEditsMap = new Map<string, string>();
+  for (const edit of validation.acceptedEdits) {
+    currentEditsMap.set(edit.id, edit.text);
+  }
+
+  // 3. Repair loop (shrink) for over-budget runs (max 2 iterations)
   for (let attempt = 0; attempt < MAX_SHRINK_ATTEMPTS; attempt++) {
-    const overflows = findOverflows(sections, result);
-    if (overflows.length === 0) break;
+    if (validation.needsShrink.length === 0) break;
 
     try {
+      const fragments: ShrinkFragment[] = validation.needsShrink.map((c) => ({
+        id: c.id,
+        text: c.text,
+        budget: c.budget,
+        currentLength: c.currentLength,
+        role: c.role,
+      }));
+
       const shrink = await shrinkOverflowingRuns(
         credentials,
         provider,
-        overflows,
+        fragments,
       );
-      result = applyShrinkResult(result, shrink);
+
+      const shrinkValidation = validateTailorEdits({
+        originalSections: sections,
+        sourceDraft: draft,
+        jobDescription,
+        edits: shrink.runs
+          .filter((r) => !r.unfit)
+          .map((r) => ({ id: r.id, text: r.text })),
+      });
+
+      for (const edit of shrinkValidation.acceptedEdits) {
+        currentEditsMap.set(edit.id, edit.text);
+      }
+
+      // Re-validate
+      const prospectiveEdits = Array.from(currentEditsMap.entries()).map(
+        ([id, text]) => ({ id, text }),
+      );
+      validation = validateTailorEdits({
+        originalSections: sections,
+        sourceDraft: draft,
+        jobDescription,
+        edits: prospectiveEdits,
+        yearsOfExperience: effectiveYears,
+      });
     } catch {
       break;
     }
   }
 
-  result = forceWithinBudget(sections, result);
+  // 4. Deterministic fallback if still over budget: empty oldest job's last bullet
+  if (validation.needsShrink.length > 0) {
+    emptyLastBulletOfOldestJob(sections, currentEditsMap);
+
+    const prospectiveEdits = Array.from(currentEditsMap.entries()).map(
+      ([id, text]) => ({ id, text }),
+    );
+    validation = validateTailorEdits({
+      originalSections: sections,
+      sourceDraft: draft,
+      jobDescription,
+      edits: prospectiveEdits,
+      yearsOfExperience: effectiveYears,
+    });
+  }
+
+  // 5. Build final result with accepted edits and full sections
+  const finalEdits = Array.from(currentEditsMap.entries()).map(
+    ([id, text]) => ({
+      id,
+      text,
+    }),
+  );
+  const finalSections = applyEditsToSections(finalEdits, sections);
+
+  const result: TailoredResumeResult = {
+    ...rawResult,
+    edits: finalEdits,
+    sections: finalSections,
+    sourceWarnings: [
+      ...(rawResult.sourceWarnings ?? []),
+      ...validation.warnings,
+    ],
+  };
 
   return { result, provider };
 }

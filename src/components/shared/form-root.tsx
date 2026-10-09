@@ -277,8 +277,7 @@ export const FormActions = ({
 }: FormActionsProps) => (
   <div
     className={cn(
-      "border-border bg-background shrink-0 border-t px-1 pt-4",
-      "pb-[max(1rem,env(safe-area-inset-bottom))]",
+      "border-border shrink-0 border-t px-1 pt-4",
       "flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end",
       className,
     )}

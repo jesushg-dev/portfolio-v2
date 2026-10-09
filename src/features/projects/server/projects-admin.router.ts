@@ -141,10 +141,7 @@ export const projectsAdminRouter = createTRPCRouter({
         include: { ProjectTranslation: true, ProjectSkill: true },
       });
 
-      return mapProjectToEditorDto(
-        created,
-        languages,
-      );
+      return mapProjectToEditorDto(created, languages);
     }),
 
   updateItem: protectedProcedure

@@ -8,35 +8,44 @@ import { useTranslations, useLocale } from "next-intl";
 import { api } from "@/trpc/react";
 import { LIMIT_PER_PAGE } from "@/utils/constants";
 
+import type { ProjectType } from "@/utils/interfaces/types";
+
 import FilterType from "./filter-type";
 import PortfolioItem from "./project-item";
 import { PortfolioGridSkeleton } from "./portfolio-grid-skeleton";
+import { ProjectEmptyState } from "./project-empty-state";
 
 const type = [undefined, "FRONTEND", "BACKEND", "MOBILE", "DESKTOP"] as const;
 
 const container = {
-  hidden: { opacity: 1, scale: 0 },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    scale: 1,
     transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
+      staggerChildren: 0.08,
     },
   },
 };
 
 const item = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: { y: 12, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
+    transition: { duration: 0.25 },
   },
 };
 
 const limit = LIMIT_PER_PAGE;
 
-const PortfolioGrid: FC = () => {
+interface PortfolioGridProps {
+  initialData?: {
+    projects: ProjectType[];
+    nextCursor: string | null;
+  };
+}
+
+const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
   const locale = useLocale();
   const ref = useRef(null);
 
@@ -66,12 +75,24 @@ const PortfolioGrid: FC = () => {
       { limit, locale, type: type[crtValue] },
       {
         getNextPageParam: (info) => info.nextCursor,
+        initialData:
+          initialData && crtValue === 0
+            ? {
+                pages: [initialData],
+                pageParams: [undefined],
+              }
+            : undefined,
       },
     );
 
   const handleFetchMore = () => {
     void fetchNextPage();
   };
+
+  const allProjects = useMemo(
+    () => data?.pages.flatMap((page) => page.projects) ?? [],
+    [data],
+  );
 
   return (
     <>
@@ -84,6 +105,11 @@ const PortfolioGrid: FC = () => {
       >
         {isLoading ? (
           <PortfolioGridSkeleton />
+        ) : allProjects.length === 0 ? (
+          <ProjectEmptyState
+            type={type[crtValue]}
+            onReset={() => setCrtValue(0)}
+          />
         ) : (
           <motion.ul
             initial="hidden"
@@ -93,7 +119,7 @@ const PortfolioGrid: FC = () => {
           >
             {data?.pages.map((page, idx) => (
               <Fragment key={page.nextCursor ?? idx}>
-                {page.projects.map((project) => (
+                {page.projects.map((project, projectIdx) => (
                   <motion.li
                     layout
                     key={project.id}
@@ -102,7 +128,11 @@ const PortfolioGrid: FC = () => {
                     whileHover={{ y: -4 }}
                     transition={{ duration: 0.25 }}
                   >
-                    <PortfolioItem {...project} {...labels} />
+                    <PortfolioItem
+                      {...project}
+                      {...labels}
+                      priority={idx === 0 && projectIdx < 3}
+                    />
                   </motion.li>
                 ))}
               </Fragment>
