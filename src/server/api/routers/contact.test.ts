@@ -77,6 +77,7 @@ describe("contactRouter.sendMessage", () => {
     name: "Visitor",
     email: "visitor@example.com",
     message: "Hello there, I would like to work together.",
+    turnstileToken: "mock-valid-token",
   };
 
   it("rejects when there is no tenant", async () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import type { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +14,8 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
+import { TurnstileWidget } from "@/components/shared/turnstile-widget";
+import { env } from "@/env";
 import { api } from "@/trpc/react";
 import { Link } from "@/i18n/routing";
 import { SCHEDULE_PATH } from "@/utils/calendly-url";
@@ -21,7 +23,21 @@ import { SCHEDULE_PATH } from "@/utils/calendly-url";
 const ContactForm: FC = () => {
   const t = useTranslations("main.contact");
   const [isPending, startTransition] = useTransition();
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [turnstileWidgetId, setTurnstileWidgetId] = useState<string | null>(null);
   const sendMessage = api.contact.sendMessage.useMutation();
+
+  const handleTurnstileSuccess = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  const handleTurnstileExpire = useCallback(() => {
+    setTurnstileToken("");
+  }, []);
+
+  const handleTurnstileWidgetId = useCallback((id: string) => {
+    setTurnstileWidgetId(id);
+  }, []);
 
   const contactSchema = useMemo(
     () =>
@@ -48,17 +64,44 @@ const ContactForm: FC = () => {
 
   const onSubmit = useCallback(
     (data: ContactInput) => {
+      let token = turnstileToken;
+      if (
+        !token &&
+        typeof window !== "undefined" &&
+        window.turnstile &&
+        turnstileWidgetId
+      ) {
+        token =
+          window.turnstile.getResponse(turnstileWidgetId) ?? "";
+      }
+
+      if (!token) {
+        toast.error(t("form.errors.description"));
+        return;
+      }
+
       startTransition(async () => {
         try {
-          await sendMessage.mutateAsync(data);
+          await sendMessage.mutateAsync({
+            ...data,
+            turnstileToken: token,
+          });
           form.reset();
+          setTurnstileToken("");
+          if (turnstileWidgetId && window.turnstile) {
+            window.turnstile.reset(turnstileWidgetId);
+          }
           toast.success(t("form.success.description"));
         } catch {
+          if (turnstileWidgetId && window.turnstile) {
+            window.turnstile.reset(turnstileWidgetId);
+            setTurnstileToken("");
+          }
           toast.error(t("form.errors.description"));
         }
       });
     },
-    [form, sendMessage, t],
+    [form, sendMessage, t, turnstileToken, turnstileWidgetId],
   );
 
   return (
@@ -130,6 +173,16 @@ const ContactForm: FC = () => {
             )}
           />
         </div>
+
+        <TurnstileWidget
+          siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          action="contact"
+          appearance="interaction-only"
+          onSuccess={handleTurnstileSuccess}
+          onExpire={handleTurnstileExpire}
+          onWidgetId={handleTurnstileWidgetId}
+          className="flex justify-center empty:hidden"
+        />
 
         <motion.button
           type="submit"
