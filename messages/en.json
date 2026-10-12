@@ -575,9 +575,11 @@
       "availableForOpportunities": "Available for new opportunities",
       "scheduleCall": "Schedule a call",
       "scheduleCallAria": "Schedule a call — go to contact section",
+      "mttrBadgeValue": "-40% MTTR",
+      "mttrBadgeLabel": "Critical Incidents",
       "empty": {
         "title": "Hero not configured",
-        "description": "Add your profile photo, background, and intro from the admin profile hero tab."
+        "description": "Add your profile photo, subtitle, and intro from the admin Profile section."
       }
     },
     "services": {
@@ -670,9 +672,15 @@
         "featured": "Featured",
         "coreLegend": "brighter = featured stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
-        "searchFor": " for \"{query}\""
+        "searchFor": " for \"{query}\"",
+        "trend": "Trend",
+        "updatedTechPill": "Updated technologies 2024-2026"
       },
       "tabs": {
+        "ai": {
+          "title": "AI & Machine Learning",
+          "description": "Large language models (LLMs), orchestration frameworks, autonomous agents, and modern AI engineering tools."
+        },
         "architecture": {
           "title": "Architecture",
           "description": "System design, distributed systems, DDD, and structural foundations for scalable platforms."
@@ -2740,24 +2748,26 @@
     },
     "profile": {
       "title": "Profile & Hero Section",
-      "subtitle": "Edit your hero identity, rotating titles, summary, and about text.",
+      "subtitle": "Edit your identity, professional subtitle, tagline, and copy for the Hero and About Me sections.",
       "heroSection": "Identity",
       "fullNameLabel": "Display name",
-      "photoUrlLabel": "Photo URL",
-      "backgroundImageLabel": "Hero background image URL",
-      "backgroundImagePlaceholder": "https://example.com/hero-background.jpg",
-      "professionalTitle": "Professional Title",
-      "degreeLabel": "Professional title / degree",
-      "rotatingTitlesLabel": "Rotating titles",
-      "rotatingTitlesHint": "Shown in the hero typewriter animation. Drag to reorder.",
-      "dragToReorder": "Drag to reorder",
-      "titleWithLanguage": "Title ({language})",
-      "addTitle": "Add title",
-      "removeTitle": "Remove title",
-      "heroSummaryLabel": "Hero summary",
-      "heroSummaryWithLanguage": "Short summary ({language})",
-      "heroSummaryHint": "Brief description shown below your titles in the hero section.",
-      "heroSummaryPlaceholder": "A short introduction for the hero section...",
+      "photoUrlLabel": "Profile photo URL",
+      "heroSubtitleLabel": "Professional subtitle (H2)",
+      "heroSubtitleHint": "Main H2 title displayed below your name in the Hero and used in the page title (SEO).",
+      "heroSubtitleWithLanguage": "Professional subtitle ({language})",
+      "heroSubtitlePlaceholder": "e.g. Senior Software Engineer",
+      "heroTaglineLabel": "Tagline / Value proposition",
+      "heroTaglineHint": "Prominent paragraph summarizing your value and experience in the Hero section.",
+      "heroTaglineWithLanguage": "Tagline / Value proposition ({language})",
+      "heroTaglinePlaceholder": "e.g. 6+ years building scalable enterprise systems...",
+      "heroSummaryLabel": "Secondary hero summary",
+      "heroSummaryWithLanguage": "Secondary summary ({language})",
+      "heroSummaryHint": "Optional short description appearing below the tagline in the hero.",
+      "heroSummaryPlaceholder": "A short complementary introduction for the hero section...",
+      "heroBadgeLabel": "Availability Badge",
+      "heroBadgeHint": "Custom text for the top availability pill. Leave empty to use default 'Available for opportunities'.",
+      "heroBadgePlaceholder": "e.g. Open to B2B contracts / Available for hire",
+      "heroBadgeWithLanguage": "Availability badge ({language})",
       "descriptionWithLanguage": "About text ({language})",
       "altTextTitle": "Image Alt Text",
       "aboutMeTitle": "About Me",
@@ -2765,6 +2775,9 @@
       "altTextHint": "Describes your photo for screen readers and SEO.",
       "altTextLabel": "Image description",
       "consoleTab": "Terminal",
+      "aboutSectionTab": "About Section",
+      "aboutBioTitle": "Engineering Approach & Narrative",
+      "aboutBioSubtitle": "These paragraphs introduce your background and philosophy in the About section (#about). Words wrapped in **example** will be highlighted in bold primary color.",
       "tabsNavAria": "Profile sections",
       "heroConsoleTitle": "About Terminal",
       "heroConsoleSubtitle": "Configure the animated terminal sequence shown in your About section.",
@@ -2776,10 +2789,11 @@
       "heroTab": "Hero & Profile",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://example.com/photo.jpg",
-      "degreePlaceholder": "e.g. Web Developer",
       "altTextPlaceholder": "e.g. Photo of Jesús sitting at a desk",
       "aboutPlaceholder": "I am a passionate software engineer...",
       "aboutDescriptionHint": "Provide a detailed description of yourself. You can use multiple paragraphs.",
+      "heroPreviewTitle": "Live Hero Preview",
+      "heroPreviewBadge": "Available for opportunities",
       "console": {
         "loading": "Loading terminal configuration…",
         "loadFailed": "Could not load terminal configuration",

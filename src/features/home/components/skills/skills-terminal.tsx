@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type FC } from "react";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, Rocket, TrendingUp } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 
@@ -27,8 +27,7 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
   const shouldReduceMotion = useReducedMotion();
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const [activeCategory, setActiveCategory] =
-    useState<SkillCategoryId>("architecture");
+  const [activeCategory, setActiveCategory] = useState<SkillCategoryId>("ai");
   const [search, setSearch] = useState("");
 
   const skills = useMemo(() => initialSkills, [initialSkills]);
@@ -255,8 +254,17 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                           params: { slug: skillSlugFromTitle(skill.title) },
                         }}
                         scroll={false}
-                        className="group/feat border-border/30 bg-muted/20 hover:bg-card hover:border-primary/40 flex cursor-pointer flex-col rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xs"
+                        className="group/feat border-border/30 bg-muted/20 hover:bg-card hover:border-primary/40 relative flex cursor-pointer flex-col rounded-2xl border p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xs"
                       >
+                        {skill.trend ? (
+                          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full border border-pink-500/30 bg-pink-500/15 px-2 py-0.5 text-[10px] font-semibold text-pink-400 backdrop-blur-xs">
+                            <TrendingUp
+                              className="size-2.5"
+                              aria-hidden="true"
+                            />
+                            <span>{t("terminal.trend")}</span>
+                          </span>
+                        ) : null}
                         <SkillIcon
                           image={skill.image}
                           title={skill.title}
@@ -301,6 +309,16 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
                   ))}
                 </ul>
               ) : null}
+
+              <div className="mt-6 flex justify-center">
+                <div className="border-border/40 bg-muted/30 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium backdrop-blur-xs">
+                  <Rocket
+                    className="text-primary size-3.5"
+                    aria-hidden="true"
+                  />
+                  <span>{t("terminal.updatedTechPill")}</span>
+                </div>
+              </div>
             </motion.div>
           )}
         </div>

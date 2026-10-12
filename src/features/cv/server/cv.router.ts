@@ -1571,7 +1571,6 @@ export const cvRouter = createTRPCRouter({
       await tx.cvPersonalReference.deleteMany({ where: { userId } });
       await tx.cvHeader.deleteMany({ where: { userId } });
       await tx.cvAboutMe.deleteMany({ where: { userId } });
-      await tx.cvHeroTitle.deleteMany({ where: { userId } });
       await tx.cvTerminal.deleteMany({ where: { userId } });
       await tx.cvPdfLink.deleteMany({ where: { userId } });
     });

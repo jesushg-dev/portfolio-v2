@@ -9,7 +9,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   return createTranslatedMetadata(params, {
     namespace: "admin.profile",
-    titleKey: "consoleTab",
+    titleKey: "aboutSectionTab",
     descriptionKey: "heroConsoleSubtitle",
   });
 }

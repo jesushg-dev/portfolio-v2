@@ -5,7 +5,7 @@ import {
   DEFAULT_SOFT_SKILLS_POSTER_URL,
   DEFAULT_SOFT_SKILLS_VIDEO_URL,
 } from "@/features/soft-skills/lib/soft-skills-media";
-import { splitAboutParagraphs } from "@/features/profile/server/hero-titles";
+import { splitAboutParagraphs } from "@/features/profile/lib/about-utils";
 import { mapTimelineItemsToPublic } from "@/features/timeline/lib/map-timeline-public";
 import { caseStudyRowToDto } from "@/features/projects/lib/case-study";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
@@ -17,6 +17,7 @@ import { formatExperienceDates } from "@/utils/tools/date";
 
 const LanguageCode = z.enum(["es", "en", "nl"]);
 const StackType = z.enum([
+  "AI",
   "FRONTEND",
   "BACKEND",
   "MOBILE",
@@ -542,23 +543,26 @@ export const portfolioRouter = createTRPCRouter({
       const tenantUserId = ctx.tenant?.userId ?? null;
       if (!tenantUserId) return null;
 
-      const languages = await ctx.db.appLanguage.findMany();
-      const header = await ctx.db.cvHeader.findUnique({
-        where: { userId: tenantUserId },
-        include: { translations: true },
-      });
+      const [languages, header, profile] = await Promise.all([
+        ctx.db.appLanguage.findMany(),
+        ctx.db.cvHeader.findUnique({
+          where: { userId: tenantUserId },
+          include: { translations: true },
+        }),
+        ctx.db.profile.findUnique({
+          where: { userId: tenantUserId },
+          select: { displayName: true },
+        }),
+      ]);
 
       if (!header) return null;
-
-      const profile = await ctx.db.profile.findUnique({
-        where: { userId: tenantUserId },
-        select: { displayName: true },
-      });
 
       const locale = input.locale;
       const t = createLocalizedFieldResolver(languages, locale).for(
         header.translations ?? [],
       );
+
+      const availabilityBadgeText = t("availabilityBadge");
 
       return {
         fullName: profile?.displayName?.trim() ?? header.fullName,
@@ -568,6 +572,7 @@ export const portfolioRouter = createTRPCRouter({
         heroTagline: t("heroTagline"),
         heroSummary: t("heroSummary"),
         imageAlt: t("clientImageAlt"),
+        availabilityBadge: availabilityBadgeText?.trim() || null,
       };
     }),
 

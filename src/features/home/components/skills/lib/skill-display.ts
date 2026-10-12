@@ -32,6 +32,16 @@ const SKILL_INITIALS: Record<string, string> = {
   tRPC: "tR",
   "REST APIs": "Rt",
   Microservices: "Ms",
+  "OpenAI GPT-4o": "4o",
+  "Claude 3.5": "Cl",
+  "Gemini 1.5 Pro": "Ge",
+  LangChain: "LC",
+  LlamaIndex: "LI",
+  PyTorch: "PT",
+  "Hugging Face": "HF",
+  "GitHub Copilot": "CP",
+  Cursor: "Cr",
+  v0: "v0",
 };
 
 const SKILL_COLORS: Record<string, string> = {
@@ -77,10 +87,20 @@ const SKILL_COLORS: Record<string, string> = {
   tRPC: "#398ccb",
   "REST APIs": "#475569",
   Microservices: "#475569",
+  "OpenAI GPT-4o": "#10a37f",
+  "Claude 3.5": "#d97706",
+  "Gemini 1.5 Pro": "#4285f4",
+  LangChain: "#22c55e",
+  LlamaIndex: "#6366f1",
+  PyTorch: "#ee4c2c",
+  "Hugging Face": "#eab308",
+  "GitHub Copilot": "#8b5cf6",
+  Cursor: "#a855f7",
+  v0: "#111827",
 };
 
 export type SkillCategoryId =
-  "architecture" | "backend" | "data" | "frontend" | "quality";
+  "ai" | "frontend" | "backend" | "architecture" | "data" | "quality";
 
 export const SKILL_CATEGORIES: {
   id: SkillCategoryId;
@@ -89,6 +109,13 @@ export const SKILL_CATEGORIES: {
   indicatorClass: string;
   borderClass: string;
 }[] = [
+  {
+    id: "ai",
+    types: ["AI"],
+    dotClass: "bg-purple-500",
+    indicatorClass: "bg-purple-500",
+    borderClass: "border-purple-500",
+  },
   {
     id: "frontend",
     types: ["FRONTEND", "MOBILE", "DESKTOP"],
@@ -159,10 +186,14 @@ export function countSkillsByCategory(
       ).length;
       return counts;
     },
-    { architecture: 0, backend: 0, data: 0, frontend: 0, quality: 0 } as Record<
-      SkillCategoryId,
-      number
-    >,
+    {
+      ai: 0,
+      architecture: 0,
+      backend: 0,
+      data: 0,
+      frontend: 0,
+      quality: 0,
+    } as Record<SkillCategoryId, number>,
   );
 }
 

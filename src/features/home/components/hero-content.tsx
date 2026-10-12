@@ -7,6 +7,7 @@ interface Stats {
   yearsExperience: number;
   projectsCount: number;
   certificationsCount: number;
+  engineersMentored?: number;
 }
 
 interface HeroData {
@@ -14,6 +15,7 @@ interface HeroData {
   heroSubtitle: string;
   heroTagline: string;
   heroSummary: string;
+  availabilityBadge?: string | null;
 }
 
 interface HeroContentProps {
@@ -37,13 +39,15 @@ export default async function HeroContent({
   return (
     <div className="flex flex-1 flex-col text-left">
       {/* Availability badge */}
-      <div className="border-primary/25 bg-primary/10 text-primary mb-6 inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold">
-        <i
-          className="a-dot bg-primary size-2 rounded-full"
-          aria-hidden="true"
-        />
-        <span>{t("availableForOpportunities")}</span>
-      </div>
+      {heroData.availabilityBadge ? (
+        <div className="border-primary/25 bg-primary/10 text-primary mb-6 inline-flex w-fit items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold">
+          <i
+            className="a-dot bg-primary size-2 rounded-full"
+            aria-hidden="true"
+          />
+          <span>{heroData.availabilityBadge}</span>
+        </div>
+      ) : null}
 
       <div>
         <p className="text-muted-foreground text-base sm:text-lg">
@@ -90,7 +94,7 @@ export default async function HeroContent({
         </div>
         <div className="p-4 sm:p-5">
           <dd className="text-foreground font-mono text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">
-            6
+            {stats.engineersMentored ?? 6}
           </dd>
           <dt className="text-muted-foreground mt-1 text-xs font-medium sm:text-sm">
             {t("engineersLed")}

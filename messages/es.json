@@ -575,9 +575,11 @@
       "availableForOpportunities": "Disponible para nuevas oportunidades",
       "scheduleCall": "Agendar una llamada",
       "scheduleCallAria": "Agendar una llamada — ir a la sección de contacto",
+      "mttrBadgeValue": "-40% MTTR",
+      "mttrBadgeLabel": "Incidentes Críticos",
       "empty": {
         "title": "Héroe no configurado",
-        "description": "Agrega tu foto de perfil, fondo y presentación desde la pestaña héroe del perfil de administrador."
+        "description": "Agrega tu foto de perfil, subtítulo y presentación desde la sección Perfil del panel de administración."
       }
     },
     "services": {
@@ -670,9 +672,15 @@
         "featured": "Destacado",
         "coreLegend": "más brillante = stack destacado",
         "matchCount": "{count, plural, =1 {# coincidencia} other {# coincidencias}}",
-        "searchFor": " para \"{query}\""
+        "searchFor": " para \"{query}\"",
+        "trend": "Trend",
+        "updatedTechPill": "Tecnologías actualizadas 2024-2026"
       },
       "tabs": {
+        "ai": {
+          "title": "IA & Machine Learning",
+          "description": "Modelos de lenguaje (LLMs), frameworks de orquestación, agentes autónomos y herramientas de ingeniería de IA moderna."
+        },
         "architecture": {
           "title": "Arquitectura",
           "description": "Diseño de sistemas, sistemas distribuidos, DDD y bases estructurales para plataformas escalables."
@@ -2740,24 +2748,26 @@
     },
     "profile": {
       "title": "Perfil y sección Hero",
-      "subtitle": "Edita tu identidad del hero, títulos rotativos, resumen y texto sobre mí.",
+      "subtitle": "Edita tu identidad, subtítulo profesional, tagline y textos del Hero y Sobre mí.",
       "heroSection": "Identidad",
       "fullNameLabel": "Nombre para mostrar",
-      "photoUrlLabel": "URL de la foto",
-      "backgroundImageLabel": "URL de imagen de fondo del hero",
-      "backgroundImagePlaceholder": "https://ejemplo.com/fondo-hero.jpg",
-      "professionalTitle": "Título Profesional",
-      "degreeLabel": "Título profesional / grado",
-      "rotatingTitlesLabel": "Títulos rotativos",
-      "rotatingTitlesHint": "Se muestran en la animación typewriter del hero. Arrastra para reordenar.",
-      "dragToReorder": "Arrastra para reordenar",
-      "titleWithLanguage": "Título ({language})",
-      "addTitle": "Añadir título",
-      "removeTitle": "Eliminar título",
-      "heroSummaryLabel": "Resumen del hero",
-      "heroSummaryWithLanguage": "Resumen breve ({language})",
-      "heroSummaryHint": "Descripción breve mostrada debajo de tus títulos en el hero.",
-      "heroSummaryPlaceholder": "Una breve introducción para la sección hero...",
+      "photoUrlLabel": "URL de la foto de perfil",
+      "heroSubtitleLabel": "Subtítulo profesional (H2)",
+      "heroSubtitleHint": "Título principal H2 mostrado debajo de tu nombre en el Hero y utilizado en el título de la página (SEO).",
+      "heroSubtitleWithLanguage": "Subtítulo profesional ({language})",
+      "heroSubtitlePlaceholder": "ej. Senior Software Engineer",
+      "heroTaglineLabel": "Tagline / Propuesta de valor",
+      "heroTaglineHint": "Párrafo destacado que sintetiza tu valor y experiencia en la sección Hero.",
+      "heroTaglineWithLanguage": "Tagline / Propuesta de valor ({language})",
+      "heroTaglinePlaceholder": "ej. Más de 6 años construyendo sistemas empresariales escalables...",
+      "heroSummaryLabel": "Resumen secundario del hero",
+      "heroSummaryWithLanguage": "Resumen secundario ({language})",
+      "heroSummaryHint": "Descripción breve opcional que aparece debajo del tagline en el hero.",
+      "heroSummaryPlaceholder": "Una breve introducción complementaria para la sección hero...",
+      "heroBadgeLabel": "Badge de Disponibilidad",
+      "heroBadgeHint": "Texto personalizado para el badge superior del Hero. Déjalo en blanco para usar el valor predeterminado ('Disponible para nuevas oportunidades').",
+      "heroBadgePlaceholder": "ej. Abierto a contratos B2B / Disponible para proyectos",
+      "heroBadgeWithLanguage": "Badge de disponibilidad ({language})",
       "descriptionWithLanguage": "Texto sobre mí ({language})",
       "altTextTitle": "Texto alternativo de imagen",
       "altTextHint": "Describe tu foto para lectores de pantalla y SEO.",
@@ -2765,6 +2775,9 @@
       "aboutMeTitle": "Sobre mí",
       "descriptionLabel": "Descripción",
       "consoleTab": "Terminal",
+      "aboutSectionTab": "Sección About",
+      "aboutBioTitle": "Enfoque de Ingeniería y Narrativa",
+      "aboutBioSubtitle": "Estos párrafos presentan tu experiencia y filosofía en la sección About (#about). Las palabras envueltas en **ejemplo** se resaltarán en negrita y color primario.",
       "tabsNavAria": "Secciones del perfil",
       "heroConsoleTitle": "Terminal del About",
       "heroConsoleSubtitle": "Configura la secuencia animada de terminal que se muestra en tu sección Sobre mí.",
@@ -2776,10 +2789,11 @@
       "heroTab": "Hero y perfil",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://ejemplo.com/foto.jpg",
-      "degreePlaceholder": "ej. Desarrollador Web",
       "altTextPlaceholder": "ej. Foto de Jesús sentado en un escritorio",
       "aboutPlaceholder": "Soy un ingeniero de software apasionado...",
       "aboutDescriptionHint": "Proporciona una descripción detallada de ti mismo. Puedes usar varios párrafos.",
+      "heroPreviewTitle": "Vista previa en vivo del Hero",
+      "heroPreviewBadge": "Disponible para oportunidades",
       "console": {
         "loading": "Cargando configuración del terminal…",
         "loadFailed": "No se pudo cargar la configuración del terminal",

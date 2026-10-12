@@ -123,6 +123,9 @@ export const contactRouter = createTRPCRouter({
       });
 
       if (!turnstile.success) {
+        console.error(
+          `[contact.sendMessage] Turnstile verification failed (reason: ${turnstile.reason})`,
+        );
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "Turnstile verification failed",

@@ -148,15 +148,10 @@ export const pathnames = {
     es: "/panel/perfil",
     nl: "/beheer/profiel",
   },
-  "/admin/profile/about-me": {
-    en: "/admin/profile/about-me",
-    es: "/panel/perfil/sobre-mi",
-    nl: "/beheer/profiel/over-mij",
-  },
-  "/admin/profile/console": {
-    en: "/admin/profile/console",
-    es: "/panel/perfil/consola",
-    nl: "/beheer/profiel/console",
+  "/admin/profile/about": {
+    en: "/admin/profile/about",
+    es: "/panel/perfil/sobre",
+    nl: "/beheer/profiel/over",
   },
   "/admin/about": {
     en: "/admin/about",

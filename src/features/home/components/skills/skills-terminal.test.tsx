@@ -54,11 +54,26 @@ jest.mock("@/components/shared/header-article", () => ({
 
 const mockSkills: SkillType[] = [
   {
+    id: "ai-1",
+    userId: "user-1",
+    title: "OpenAI GPT-4o",
+    type: "AI",
+    featured: true,
+    trend: true,
+    image: "/icons/openai.svg",
+    createdAt: new Date(),
+    description: "OpenAI GPT-4o model",
+    appLanguageId: "lang-1",
+    skillId: "ai-1",
+    urlWiki: "https://openai.com",
+  },
+  {
     id: "0",
     userId: "user-1",
     title: "System Design",
     type: "ARCHITECTURE",
     featured: true,
+    trend: false,
     image: "/icons/arch.svg",
     createdAt: new Date(),
     description: "System Design",
@@ -72,6 +87,7 @@ const mockSkills: SkillType[] = [
     title: "React",
     type: "FRONTEND",
     featured: true,
+    trend: false,
     image: "/icons/react.svg",
     createdAt: new Date(),
     description: "React library",
@@ -85,6 +101,7 @@ const mockSkills: SkillType[] = [
     title: "Tailwind CSS",
     type: "FRONTEND",
     featured: false,
+    trend: false,
     image: "/icons/tailwind.svg",
     createdAt: new Date(),
     description: "Tailwind CSS framework",
@@ -98,6 +115,7 @@ const mockSkills: SkillType[] = [
     title: "Node.js",
     type: "BACKEND",
     featured: true,
+    trend: false,
     image: "/icons/node.svg",
     createdAt: new Date(),
     description: "Node runtime",
@@ -111,6 +129,7 @@ const mockSkills: SkillType[] = [
     title: "Docker",
     type: "TOOLS",
     featured: false,
+    trend: false,
     image: "/icons/docker.svg",
     createdAt: new Date(),
     description: "Docker platform",
@@ -121,15 +140,17 @@ const mockSkills: SkillType[] = [
 ];
 
 describe("SkillsTerminal", () => {
-  it("renders header, summary badge, and initial frontend category skills", () => {
+  it("renders header, summary badge, and initial AI category skills with trend badge and updated pill", () => {
     render(<SkillsTerminal initialSkills={mockSkills} />);
 
     // Header & summary badge
     expect(screen.getByTestId("header-article")).toBeInTheDocument();
     expect(screen.getByText("expertise.json")).toBeInTheDocument();
-    expect(screen.getByText("System Design")).toBeInTheDocument();
+    expect(screen.getByText("OpenAI GPT-4o")).toBeInTheDocument();
+    expect(screen.getByText("terminal.trend")).toBeInTheDocument();
+    expect(screen.getByText("terminal.updatedTechPill")).toBeInTheDocument();
 
-    // React is frontend, so not visible under architecture tab initially
+    // React is frontend, so not visible under AI tab initially
     expect(screen.queryByText("React")).not.toBeInTheDocument();
   });
 
@@ -143,6 +164,7 @@ describe("SkillsTerminal", () => {
 
     expect(screen.getByText("Node.js")).toBeInTheDocument();
     expect(screen.queryByText("React")).not.toBeInTheDocument();
+    expect(screen.queryByText("OpenAI GPT-4o")).not.toBeInTheDocument();
   });
 
   it("filters skills by search query across all categories", () => {

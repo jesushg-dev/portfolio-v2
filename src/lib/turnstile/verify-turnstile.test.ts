@@ -101,4 +101,51 @@ describe("verifyTurnstileToken", () => {
     expect(result.success).toBe(false);
     expect(result.reason).toBe("verification_rejected");
   });
+
+  it("succeeds when client hostname has www prefix but allowed hostname does not", async () => {
+    process.env.TURNSTILE_SECRET = "test-secret";
+    process.env.TURNSTILE_HOSTNAMES = "jesushg.com";
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({
+        success: true,
+        action: "contact",
+        hostname: "www.jesushg.com",
+      }),
+    });
+
+    const result = await verifyTurnstileToken({
+      token: "valid-token",
+      expectedAction: "contact",
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("succeeds in production by default when hostname is www.jesushg.com", async () => {
+    process.env.TURNSTILE_SECRET = "test-secret";
+    delete process.env.TURNSTILE_HOSTNAMES;
+    Object.defineProperty(process.env, "NODE_ENV", {
+      value: "production",
+      configurable: true,
+      writable: true,
+    });
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({
+        success: true,
+        action: "contact",
+        hostname: "www.jesushg.com",
+      }),
+    });
+
+    const result = await verifyTurnstileToken({
+      token: "valid-token",
+      expectedAction: "contact",
+    });
+
+    expect(result.success).toBe(true);
+  });
 });

@@ -44,7 +44,6 @@ model User {
   CvAdditionalInfo    CvAdditionalInfo[]
   CvPersonalReference CvPersonalReference[]
   CvPdfLink           CvPdfLink[]
-  CvHeroTitle         CvHeroTitle[]
 
   // Per-user portfolio (existing models become tenant-scoped)
   Project            Project[]
@@ -254,41 +253,16 @@ model CvHeaderTranslation {
   createdAt      DateTime    @default(now())
   degree         String
   heroSubtitle   String?
-  heroTagline    String?
-  heroSummary    String?
-  clientImageAlt String?
+  heroTagline       String?
+  heroSummary       String?
+  availabilityBadge String?
+  clientImageAlt    String?
   language       AppLanguage @relation(fields: [appLanguageId], references: [id])
   CvHeader       CvHeader?   @relation(fields: [cvHeaderId], references: [id], onDelete: Cascade)
   cvHeaderId     String?     @db.ObjectId
   appLanguageId  String      @db.ObjectId
 
   @@unique([cvHeaderId, appLanguageId])
-}
-
-/// Rotating professional titles shown in the portfolio hero typewriter.
-model CvHeroTitle {
-  id           String                   @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String                   @db.ObjectId
-  user         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  order        Int                      @default(0)
-  translations CvHeroTitleTranslation[]
-  createdAt    DateTime                 @default(now())
-  updatedAt    DateTime                 @updatedAt
-
-  @@index([userId, order])
-}
-
-model CvHeroTitleTranslation {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  heroTitleId   String      @db.ObjectId
-  heroTitle     CvHeroTitle @relation(fields: [heroTitleId], references: [id], onDelete: Cascade)
-  appLanguageId String      @db.ObjectId
-  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
-  text          String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-
-  @@unique([heroTitleId, appLanguageId])
 }
 
 model CvAboutMe {
@@ -609,7 +583,6 @@ model AppLanguage {
   ServiceTranslation             ServiceTranslation[]
   CertificationTranslation       CertificationTranslation[]
   CvTerminalStepTranslation      CvTerminalStepTranslation[]
-  CvHeroTitleTranslation         CvHeroTitleTranslation[]
   PortfolioSoftSkillTranslation  PortfolioSoftSkillTranslation[]
   TimelineItemTranslation        TimelineItemTranslation[]
   TestimonialTranslation         TestimonialTranslation[]
@@ -805,6 +778,7 @@ model Skill {
   title             String
   type              StackType
   featured          Boolean             @default(false)
+  trend             Boolean             @default(false)
   ProjectSkill      ProjectSkill[]
   SkillTranslation  SkillTranslation[]
   CertificateSkill  CertificateSkill[]
@@ -911,6 +885,7 @@ enum StackType {
   ARCHITECTURE
   DATA
   QUALITY_DELIVERY
+  AI
 }
 
 model TimelineItem {

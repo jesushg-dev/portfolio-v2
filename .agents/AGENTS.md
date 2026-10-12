@@ -1,5 +1,24 @@
 # Portfolio v2 — Agent Rules
 
+## Strict Zero-Legacy Policy — No Deprecated Shims, Remnants, or Dead Code
+
+### ❌ NEVER retain legacy code, deprecated shims, or compatibility workarounds
+
+Unless the user explicitly instructs otherwise, do NOT keep:
+
+- Legacy redirect pages, route shims, or deprecated alias routes (e.g., `@tabs/console`, `@tabs/about-me`).
+- Deprecated database models, schema remnants, or dead collections (e.g., `CvHeroTitle`).
+- Commented-out dead code, temporary backward-compatibility flags, or unused router procedures.
+- Deprecated mock tables or unused legacy helpers.
+
+### ✅ ALWAYS purge legacy assets completely and refactor to clean modern implementations
+
+- When migrating or replacing a feature, delete the old files, folders, and endpoints completely.
+- Remove retired schema models, database relations, and seed references immediately.
+- Refactor consumers directly to the new canonical architecture rather than creating intermediary redirects or shim layers.
+
+---
+
 ## Type Checking & Linting — Leave to the User
 
 ### ❌ NEVER run `pnpm run type`, `tsc`, `pnpm run lint`, or `eslint` automatically

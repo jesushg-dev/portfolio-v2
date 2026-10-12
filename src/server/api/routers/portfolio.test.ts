@@ -151,6 +151,7 @@ describe("portfolioRouter", () => {
               heroSummary: "Builder",
               heroSubtitle: "Hi",
               heroTagline: "Tag",
+              availabilityBadge: "Open to work",
               clientImageAlt: "Portrait",
             },
           ],
@@ -175,6 +176,7 @@ describe("portfolioRouter", () => {
     const hero = await caller.getHeroPublic({ locale: "en" });
     expect(hero?.fullName).toBe("Ada L.");
     expect(hero?.heroSummary).toBe("Builder");
+    expect(hero?.availabilityBadge).toBe("Open to work");
 
     const stats = await caller.getStatsPublic({ locale: "en" });
     expect(stats.projectsCount).toBe(19);
@@ -417,6 +419,6 @@ describe("portfolioRouter", () => {
       slug: "eleven",
       locale: "en",
     });
-    expect(next).toEqual({ slug: "atlas", title: "Atlas" });
+    expect(next).toMatchObject({ slug: "atlas", title: "Atlas" });
   });
 });

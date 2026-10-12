@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { resolveTenant } from "@/lib/tenant/resolve";
+import { api } from "@/trpc/server";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
@@ -12,6 +13,7 @@ interface HeroStats {
   yearsExperience: number;
   projectsCount: number;
   certificationsCount: number;
+  engineersMentored?: number;
 }
 
 interface HeroProps {
@@ -22,11 +24,19 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
   const locale = await getLocale();
   const t = await getTranslations("main.heroMain");
 
-  const heroData = await getCachedHeroPublic(locale);
+  const [heroData, experiences] = await Promise.all([
+    getCachedHeroPublic(locale),
+    api.portfolio.getExperiencesPublic({ locale, limit: 3 }).catch(() => []),
+  ]);
 
   if (!heroData) {
     return <HeroEmpty />;
   }
+
+  const mttrBadge = {
+    value: t("mttrBadgeValue"),
+    label: t("mttrBadgeLabel"),
+  };
 
   const showCvLink = isPublicCvVisible(await resolveTenant());
 
@@ -35,7 +45,14 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
   const heroSubtitle = heroData.heroSubtitle?.trim() ?? "";
   const heroTagline = heroData.heroTagline?.trim() ?? "";
   const heroSummary = heroData.heroSummary?.trim() ?? "";
-  const imageAlt = (heroData.imageAlt?.trim() ?? fullName) || "profile";
+  const imageAlt = heroData.imageAlt?.trim()
+    ? heroData.imageAlt.trim()
+    : fullName
+      ? fullName
+      : "profile";
+  const availabilityBadge = heroData.availabilityBadge?.trim()
+    ? heroData.availabilityBadge.trim()
+    : null;
 
   const parsedHeroData = {
     fullName,
@@ -44,6 +61,7 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
     heroTagline,
     heroSummary,
     imageAlt,
+    availabilityBadge,
   };
 
   return (
@@ -64,7 +82,11 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
           stats={stats}
           showCvLink={showCvLink}
         />
-        <HeroPhoto heroData={parsedHeroData} />
+        <HeroPhoto
+          heroData={parsedHeroData}
+          experiences={experiences}
+          mttrBadge={mttrBadge}
+        />
       </div>
 
       {/* Scroll Down Indicator matching Untitled-1.html */}

@@ -7,6 +7,7 @@ export interface PortfolioSkillSeed {
   type: StackType;
   image: string;
   featured?: boolean;
+  trend?: boolean;
   translations: {
     locale: "es" | "en" | "nl";
     description: string;
@@ -51,6 +52,7 @@ export async function seedPortfolioSkills(
         type: skill.type,
         image: skill.image,
         featured: skill.featured ?? false,
+        trend: skill.trend ?? false,
         SkillTranslation: {
           deleteMany: {},
           createMany: {
@@ -64,6 +66,7 @@ export async function seedPortfolioSkills(
         type: skill.type,
         image: skill.image,
         featured: skill.featured ?? false,
+        trend: skill.trend ?? false,
         SkillTranslation: {
           createMany: {
             data: translationRows(skill, langIds),

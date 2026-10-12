@@ -13,6 +13,7 @@ interface SkillDetailPageViewProps {
 }
 
 function formatStackType(type: string) {
+  if (type.toUpperCase() === "AI") return "AI";
   return type.charAt(0) + type.slice(1).toLowerCase();
 }
 

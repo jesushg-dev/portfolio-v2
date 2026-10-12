@@ -24,7 +24,9 @@ const ContactForm: FC = () => {
   const t = useTranslations("main.contact");
   const [isPending, startTransition] = useTransition();
   const [turnstileToken, setTurnstileToken] = useState<string>("");
-  const [turnstileWidgetId, setTurnstileWidgetId] = useState<string | null>(null);
+  const [turnstileWidgetId, setTurnstileWidgetId] = useState<string | null>(
+    null,
+  );
   const sendMessage = api.contact.sendMessage.useMutation();
 
   const handleTurnstileSuccess = useCallback((token: string) => {
@@ -71,8 +73,7 @@ const ContactForm: FC = () => {
         window.turnstile &&
         turnstileWidgetId
       ) {
-        token =
-          window.turnstile.getResponse(turnstileWidgetId) ?? "";
+        token = window.turnstile.getResponse(turnstileWidgetId) ?? "";
       }
 
       if (!token) {

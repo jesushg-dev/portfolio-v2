@@ -19,3 +19,14 @@ Applies to new and touched code — do not mass-rewrite historical `px`.
 # Forbidden: inline helper render functions inside components
 
 Do not create `const renderFoo = () => ...` or nested component functions inside component bodies. Decompose into standalone top-level components or dedicated files with explicit typed props.
+
+# Strict Zero-Legacy Policy — No Deprecated Shims, Remnants, or Dead Code
+
+Unless the user explicitly instructs otherwise, NEVER keep:
+
+- Legacy redirect pages, route shims, or deprecated alias routes.
+- Deprecated database models, schema remnants, or dead collections.
+- Commented-out dead code, temporary backward-compatibility flags, or unused router procedures.
+- Deprecated mock tables or unused legacy helpers.
+
+ALWAYS purge legacy assets completely and refactor to clean modern implementations.

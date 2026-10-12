@@ -54,8 +54,6 @@ function emptyCvDb() {
     cvHeaderTranslation: translationTable(),
     cvAboutMe: ownedCrud("about-1"),
     cvAboutMeTranslation: translationTable(),
-    cvHeroTitle: ownedCrud("hero-1"),
-    cvHeroTitleTranslation: translationTable(),
     cvTerminal: ownedCrud("term-1"),
     cvContact: ownedCrud("c1", { type: "EMAIL", value: "a@b.com" }),
     cvEducation: ownedCrud("edu-1", { institution: "UNI" }),
@@ -112,7 +110,6 @@ function emptyCvDb() {
           cvPersonalReference: { deleteMany: jest.fn() },
           cvHeader: { deleteMany: jest.fn() },
           cvAboutMe: { deleteMany: jest.fn() },
-          cvHeroTitle: { deleteMany: jest.fn() },
           cvTerminal: { deleteMany: jest.fn() },
           cvPdfLink: { deleteMany: jest.fn() },
         };

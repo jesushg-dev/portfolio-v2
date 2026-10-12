@@ -575,9 +575,11 @@
       "availableForOpportunities": "Beschikbaar voor nieuwe kansen",
       "scheduleCall": "Plan een gesprek",
       "scheduleCallAria": "Plan een gesprek — ga naar het contactgedeelte",
+      "mttrBadgeValue": "-40% MTTR",
+      "mttrBadgeLabel": "Kritieke Incidenten",
       "empty": {
         "title": "Hero niet geconfigureerd",
-        "description": "Voeg je profielfoto, achtergrond en introductie toe vanuit het beheerdersprofiel hero tabblad."
+        "description": "Voeg je profielfoto, ondertitel en introductie toe via het beheerdersprofiel."
       }
     },
     "services": {
@@ -670,9 +672,15 @@
         "featured": "Uitgelicht",
         "coreLegend": "helderder = uitgelichte stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
-        "searchFor": " voor \"{query}\""
+        "searchFor": " voor \"{query}\"",
+        "trend": "Trend",
+        "updatedTechPill": "Bijgewerkte technologieën 2024-2026"
       },
       "tabs": {
+        "ai": {
+          "title": "AI & Machine Learning",
+          "description": "Grote taalmodellen (LLM's), orkestratieframeworks, autonome agenten en moderne AI-engineeringtools."
+        },
         "architecture": {
           "title": "Architectuur",
           "description": "Systeemontwerp, gedistribueerde systemen, DDD en architectonische fundamenten voor schaalbare platformen."
@@ -2740,24 +2748,26 @@
     },
     "profile": {
       "title": "Profiel & Hero Sectie",
-      "subtitle": "Bewerk je hero-identiteit, roterende titels, samenvatting en over-mij-tekst.",
+      "subtitle": "Bewerk je identiteit, professionele ondertitel, tagline en teksten voor de Hero en Over mij-secties.",
       "heroSection": "Identiteit",
       "fullNameLabel": "Weergavenaam",
-      "photoUrlLabel": "Foto URL",
-      "backgroundImageLabel": "Hero-achtergrondafbeelding URL",
-      "backgroundImagePlaceholder": "https://voorbeeld.nl/hero-achtergrond.jpg",
-      "professionalTitle": "Professionele Titel",
-      "degreeLabel": "Professionele titel / graad",
-      "rotatingTitlesLabel": "Roterende titels",
-      "rotatingTitlesHint": "Getoond in de typewriter-animatie van de hero. Sleep om te herschikken.",
-      "dragToReorder": "Sleep om te herordenen",
-      "titleWithLanguage": "Titel ({language})",
-      "addTitle": "Titel toevoegen",
-      "removeTitle": "Titel verwijderen",
-      "heroSummaryLabel": "Hero-samenvatting",
-      "heroSummaryWithLanguage": "Korte samenvatting ({language})",
-      "heroSummaryHint": "Korte beschrijving onder je titels in de hero-sectie.",
-      "heroSummaryPlaceholder": "Een korte introductie voor de hero-sectie...",
+      "photoUrlLabel": "Profielfoto URL",
+      "heroSubtitleLabel": "Professionele ondertitel (H2)",
+      "heroSubtitleHint": "Belangrijkste H2-titel weergegeven onder je naam in de Hero en gebruikt in de paginatitel (SEO).",
+      "heroSubtitleWithLanguage": "Professionele ondertitel ({language})",
+      "heroSubtitlePlaceholder": "bijv. Senior Software Engineer",
+      "heroTaglineLabel": "Tagline / Waardepropositie",
+      "heroTaglineHint": "Uitgelichte alinea die je waarde en ervaring samenvat in de Hero-sectie.",
+      "heroTaglineWithLanguage": "Tagline / Waardepropositie ({language})",
+      "heroTaglinePlaceholder": "bijv. 6+ jaar ervaring in het bouwen van schaalbare enterprise systemen...",
+      "heroSummaryLabel": "Secundaire hero-samenvatting",
+      "heroSummaryWithLanguage": "Secundaire samenvatting ({language})",
+      "heroSummaryHint": "Optionele korte beschrijving onder de tagline in de hero.",
+      "heroSummaryPlaceholder": "Een korte aanvullende introductie voor de hero-sectie...",
+      "heroBadgeLabel": "Beschikbaarheidsbadge",
+      "heroBadgeHint": "Aangepaste tekst voor de badge bovenaan de Hero. Laat leeg om de standaard 'Beschikbaar voor nieuwe kansen' te gebruiken.",
+      "heroBadgePlaceholder": "bijv. Beschikbaar voor B2B-contracten / Beschikbaar voor projecten",
+      "heroBadgeWithLanguage": "Beschikbaarheidsbadge ({language})",
       "descriptionWithLanguage": "Over-mij-tekst ({language})",
       "altTextTitle": "Alternatieve Tekst Afbeelding",
       "altTextHint": "Beschrijft je foto voor schermlezers en SEO.",
@@ -2765,6 +2775,9 @@
       "aboutMeTitle": "Over mij",
       "descriptionLabel": "Beschrijving",
       "consoleTab": "Terminal",
+      "aboutSectionTab": "Over Mij Sectie",
+      "aboutBioTitle": "Engineering Aanpak & Verhaal",
+      "aboutBioSubtitle": "Deze alinea's introduceren je achtergrond en filosofie in de Over Mij sectie (#about). Woorden tussen **voorbeeld** worden gemarkeerd in het primaire thema.",
       "tabsNavAria": "Profielsecties",
       "heroConsoleTitle": "About-terminal",
       "heroConsoleSubtitle": "Configureer de geanimeerde terminalreeks in je Over mij-sectie.",
@@ -2776,10 +2789,11 @@
       "heroTab": "Hero & Profiel",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://voorbeeld.nl/foto.jpg",
-      "degreePlaceholder": "bijv. Web Developer",
       "altTextPlaceholder": "bijv. Foto van Jesús aan een bureau",
       "aboutPlaceholder": "Ik ben een gepassioneerde software engineer...",
       "aboutDescriptionHint": "Geef een gedetailleerde beschrijving van jezelf. Je kunt meerdere alinea's gebruiken.",
+      "heroPreviewTitle": "Live Hero Voorbeeld",
+      "heroPreviewBadge": "Beschikbaar voor kansen",
       "console": {
         "loading": "Terminalconfiguratie laden…",
         "loadFailed": "Kon terminalconfiguratie niet laden",
