@@ -44,16 +44,81 @@ describe("PortfolioItem", () => {
     privateDescription: "Private repo",
     caseStudyLabel: "Case Study",
     kindLabels: { PROFESSIONAL: "Professional" },
+    metaLabels: {
+      solo: "Solo",
+      formatTeam: (count: number) => `Team of ${count}`,
+      now: "present",
+      statuses: {
+        IN_PRODUCTION: "In production",
+      },
+    },
+    teaserLabels: {
+      formatDecisions: (count: number) => `${count} technical decisions`,
+      layers: "Architecture",
+      formatMetrics: (count: number) => `${count} metrics`,
+    },
   } as unknown as Parameters<typeof PortfolioItem>[0];
 
-  it("renders title, description and skills", () => {
-    renderWithIntl(<PortfolioItem {...defaultProps} />);
+  it("renders title, description, skills and meta line", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        teamSize={1}
+        startedAt="2022-01-01"
+        status="IN_PRODUCTION"
+      />,
+    );
 
     expect(screen.getByText("Awesome Project")).toBeInTheDocument();
     expect(
       screen.getByText("An awesome project description"),
     ).toBeInTheDocument();
     expect(screen.getByText("React")).toBeInTheDocument();
+    expect(
+      screen.getByText("Solo · 2022–present · In production"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders team size format when teamSize > 1", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        teamSize={4}
+        startedAt="2022-01-01"
+        status="IN_PRODUCTION"
+      />,
+    );
+
+    expect(
+      screen.getByText("Team of 4 · 2022–present · In production"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders key result chips when hook is provided", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        hook="-45% latency · Clean Architecture"
+      />,
+    );
+
+    expect(screen.getByText("-45% latency")).toBeInTheDocument();
+    expect(screen.getByText("Clean Architecture")).toBeInTheDocument();
+  });
+
+  it("renders case study teaser when csInfo is present", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        caseStudyEnabled
+        slug="awesome-project"
+        csInfo={{ decisions: 8, layers: true, metrics: 4 }}
+      />,
+    );
+
+    expect(
+      screen.getByText("8 technical decisions · Architecture · 4 metrics"),
+    ).toBeInTheDocument();
   });
 
   it("shows fallback when image fail event is triggered", () => {

@@ -8,7 +8,7 @@ import { isRenderableProjectImage } from "@/utils/tools/image";
 import { getSkillBadgeColor, getSkillInitials } from "./lib/skill-display";
 
 export interface SkillIconProps {
-  image: string;
+  image?: string | null;
   title: string;
   size?: "sm" | "md" | "lg";
   tile?: boolean;
@@ -38,7 +38,7 @@ const SkillIcon: FC<SkillIconProps> = ({
   className,
 }) => {
   const [failed, setFailed] = useState(false);
-  const trimmed = image.trim();
+  const trimmed = image?.trim() ?? "";
   const showFallback = failed || !isRenderableProjectImage(trimmed);
   const badgeColor = getSkillBadgeColor(title);
   const initials = getSkillInitials(title);

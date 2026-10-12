@@ -110,13 +110,6 @@ export const SKILL_CATEGORIES: {
   borderClass: string;
 }[] = [
   {
-    id: "ai",
-    types: ["AI"],
-    dotClass: "bg-purple-500",
-    indicatorClass: "bg-purple-500",
-    borderClass: "border-purple-500",
-  },
-  {
     id: "frontend",
     types: ["FRONTEND", "MOBILE", "DESKTOP"],
     dotClass: "bg-primary",
@@ -136,6 +129,13 @@ export const SKILL_CATEGORIES: {
     dotClass: "bg-primary",
     indicatorClass: "bg-primary",
     borderClass: "border-primary",
+  },
+  {
+    id: "ai",
+    types: ["AI"],
+    dotClass: "bg-purple-500",
+    indicatorClass: "bg-purple-500",
+    borderClass: "border-purple-500",
   },
   {
     id: "data",

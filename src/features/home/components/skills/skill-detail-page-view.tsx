@@ -171,11 +171,29 @@ export async function SkillDetailPageView({
                       privateName={t("page.privateLabel")}
                       privateDescription={t("page.privateDescription")}
                       canSeeDemo={t("page.canSeeDemo")}
-                      caseStudyLabel=""
+                      caseStudyLabel={t("page.caseStudy")}
                       kindLabels={{
-                        PROFESSIONAL: "",
-                        PERSONAL: "",
-                        LEARNING: "",
+                        PROFESSIONAL: t("page.kind.PROFESSIONAL"),
+                        PERSONAL: t("page.kind.PERSONAL"),
+                        LEARNING: t("page.kind.LEARNING"),
+                      }}
+                      metaLabels={{
+                        solo: t("page.meta.solo"),
+                        formatTeam: (count: number) =>
+                          t("page.meta.team", { count }),
+                        now: t("page.meta.now"),
+                        statuses: {
+                          IN_PRODUCTION: t("page.statuses.IN_PRODUCTION"),
+                          MAINTENANCE: t("page.statuses.MAINTENANCE"),
+                          ARCHIVED: t("page.statuses.ARCHIVED"),
+                        },
+                      }}
+                      teaserLabels={{
+                        formatDecisions: (count: number) =>
+                          t("page.teaser.decisions", { count }),
+                        layers: t("page.teaser.layers"),
+                        formatMetrics: (count: number) =>
+                          t("page.teaser.metrics", { count }),
                       }}
                     />
                   </li>

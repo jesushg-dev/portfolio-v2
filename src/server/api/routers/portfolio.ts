@@ -44,6 +44,95 @@ function mergeTranslation<
   return { ...entity, ...translationFields };
 }
 
+function toIsoOrNull(val?: Date | string | null): string | null {
+  if (!val) return null;
+  if (val instanceof Date) return val.toISOString();
+  if (typeof val === "string") return val;
+  return null;
+}
+
+interface ProjectRecordForList {
+  id: string;
+  image: string;
+  type: z.infer<typeof StackType>;
+  githubUrl: string | null;
+  websiteUrl: string | null;
+  isPrivate: boolean;
+  order: number;
+  kind?: string | null;
+  slug: string | null;
+  caseStudyEnabled: boolean;
+  status?: string | null;
+  startedAt?: Date | string | null;
+  endedAt?: Date | string | null;
+  teamSize?: number | null;
+  ProjectTranslation: {
+    title?: string;
+    description?: string;
+    hook?: string | null;
+    caseStudy?: {
+      sections?: { kind?: string; items?: unknown[] }[];
+      facts?: unknown[];
+    } | null;
+  }[];
+  ProjectSkill: {
+    Skill: {
+      id: string;
+      title: string;
+      image?: string | null;
+      type: z.infer<typeof StackType>;
+      SkillTranslation?: { id?: string; [key: string]: unknown }[];
+      [key: string]: unknown;
+    };
+  }[];
+}
+
+function formatProjectListItem(project: ProjectRecordForList) {
+  const translation = project.ProjectTranslation[0];
+  const skills = project.ProjectSkill.map(({ Skill }) => {
+    const { SkillTranslation, ...rest } = Skill;
+    return mergeTranslation(rest, SkillTranslation?.[0]);
+  });
+
+  const cs = translation?.caseStudy;
+  const decisionsCount =
+    cs?.sections?.find((s) => s.kind === "DECISIONS")?.items?.length ?? 0;
+  const hasLayers = Boolean(cs?.sections?.some((s) => s.kind === "LAYERS"));
+  const metricsCount =
+    cs?.sections?.find((s) => s.kind === "METRICS")?.items?.length ??
+    cs?.facts?.length ??
+    0;
+
+  return {
+    id: project.id,
+    title: translation?.title ?? "",
+    description: translation?.description ?? "",
+    image: project.image,
+    type: project.type,
+    githubUrl: project.githubUrl,
+    websiteUrl: project.websiteUrl,
+    isPrivate: project.isPrivate,
+    order: project.order,
+    kind: project.kind ?? "PERSONAL",
+    slug: project.slug,
+    caseStudyEnabled: project.caseStudyEnabled,
+    hook: translation?.hook ?? null,
+    status: project.status ?? null,
+    startedAt: toIsoOrNull(project.startedAt),
+    endedAt: toIsoOrNull(project.endedAt),
+    teamSize: project.teamSize ?? null,
+    csInfo:
+      project.caseStudyEnabled && cs
+        ? {
+            decisions: decisionsCount,
+            layers: hasLayers,
+            metrics: metricsCount,
+          }
+        : null,
+    skills,
+  };
+}
+
 export const portfolioRouter = createTRPCRouter({
   getCertificates: publicProcedure
     .input(
@@ -104,7 +193,7 @@ export const portfolioRouter = createTRPCRouter({
   getProjects: publicProcedure
     .input(
       z.object({
-        limit: z.number().int().positive().max(50).optional().default(10),
+        limit: z.number().int().positive().max(100).optional().default(10),
         cursor: z.string().nullish(),
         locale: LanguageCode.optional().default("en"),
         type: StackType.optional(),
@@ -113,38 +202,50 @@ export const portfolioRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const { limit, cursor, locale, type } = input;
       const tenantUserId = ctx.tenant?.userId ?? null;
-      if (!tenantUserId) return { projects: [], nextCursor: null };
+      if (!tenantUserId)
+        return {
+          projects: [],
+          nextCursor: null,
+          totalCount: 0,
+          caseStudyCount: 0,
+        };
 
       const appLanguage = await ctx.db.appLanguage.findUnique({
         where: { code: locale },
       });
 
-      const projects = await ctx.db.project.findMany({
-        where: {
-          userId: tenantUserId,
-          type,
-        },
-        take: limit + 1,
-        skip: cursor ? 1 : 0,
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: [{ order: "asc" }, { createdAt: "desc" }],
-        include: {
-          ProjectTranslation: {
-            where: { appLanguageId: appLanguage?.id },
+      const [totalCount, caseStudyCount, projects] = await Promise.all([
+        ctx.db.project.count({ where: { userId: tenantUserId } }),
+        ctx.db.project.count({
+          where: { userId: tenantUserId, caseStudyEnabled: true },
+        }),
+        ctx.db.project.findMany({
+          where: {
+            userId: tenantUserId,
+            type,
           },
-          ProjectSkill: {
-            include: {
-              Skill: {
-                include: {
-                  SkillTranslation: {
-                    where: { appLanguageId: appLanguage?.id },
+          take: limit + 1,
+          skip: cursor ? 1 : 0,
+          cursor: cursor ? { id: cursor } : undefined,
+          orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+          include: {
+            ProjectTranslation: {
+              where: { appLanguageId: appLanguage?.id },
+            },
+            ProjectSkill: {
+              include: {
+                Skill: {
+                  include: {
+                    SkillTranslation: {
+                      where: { appLanguageId: appLanguage?.id },
+                    },
                   },
                 },
               },
             },
           },
-        },
-      });
+        }),
+      ]);
 
       let nextCursor: typeof cursor = null;
       if (projects.length > limit) {
@@ -152,34 +253,13 @@ export const portfolioRouter = createTRPCRouter({
         nextCursor = nextItem?.id ?? null;
       }
 
-      const formatted = projects.map((project) => {
-        const translation = project.ProjectTranslation[0];
-        const skills = project.ProjectSkill.map(({ Skill }) => {
-          const { SkillTranslation, ...rest } = Skill;
-          return mergeTranslation(rest, SkillTranslation[0]);
-        });
-
-        return {
-          id: project.id,
-          title: translation?.title ?? "",
-          description: translation?.description ?? "",
-          image: project.image,
-          type: project.type,
-          githubUrl: project.githubUrl,
-          websiteUrl: project.websiteUrl,
-          isPrivate: project.isPrivate,
-          order: project.order,
-          kind: project.kind,
-          slug: project.slug,
-          caseStudyEnabled: project.caseStudyEnabled,
-          hook: translation?.hook ?? null,
-          skills,
-        };
-      });
+      const formatted = projects.map(formatProjectListItem);
 
       return {
         projects: formatted,
         nextCursor,
+        totalCount,
+        caseStudyCount,
       };
     }),
 
@@ -220,29 +300,7 @@ export const portfolioRouter = createTRPCRouter({
         },
       });
 
-      return projects.map((project) => {
-        const translation = project.ProjectTranslation[0];
-        const skills = project.ProjectSkill.map(({ Skill }) => {
-          const { SkillTranslation, ...rest } = Skill;
-          return mergeTranslation(rest, SkillTranslation[0]);
-        });
-
-        return {
-          id: project.id,
-          title: translation?.title ?? "",
-          description: translation?.description ?? "",
-          image: project.image,
-          type: project.type,
-          githubUrl: project.githubUrl,
-          websiteUrl: project.websiteUrl,
-          isPrivate: project.isPrivate,
-          order: project.order,
-          kind: project.kind,
-          slug: project.slug,
-          caseStudyEnabled: project.caseStudyEnabled,
-          skills,
-        };
-      });
+      return projects.map(formatProjectListItem);
     }),
 
   getSkills: publicProcedure
@@ -442,20 +500,9 @@ export const portfolioRouter = createTRPCRouter({
         order: experience.order,
       })).sort((a, b) => a.order - b.order);
 
-      const projects = ProjectSkill.map(({ Project }) => {
-        const {
-          ProjectTranslation,
-          ProjectSkill: nestedSkills,
-          ...project
-        } = Project;
-
-        const skills = nestedSkills.map(({ Skill }) => {
-          const { SkillTranslation, ...val } = Skill;
-          return mergeTranslation(val, SkillTranslation[0]);
-        });
-
-        return mergeTranslation({ ...project, skills }, ProjectTranslation[0]);
-      });
+      const projects = ProjectSkill.map(({ Project }) =>
+        formatProjectListItem(Project),
+      );
 
       return {
         ...mergeTranslation(rest, SkillTranslation[0]),
@@ -945,7 +992,7 @@ export const portfolioRouter = createTRPCRouter({
         slug: project.slug,
         image: project.image,
         type: project.type,
-        kind: project.kind,
+        kind: project.kind ?? "PERSONAL",
         githubUrl: project.githubUrl,
         websiteUrl: project.websiteUrl,
         isPrivate: project.isPrivate,

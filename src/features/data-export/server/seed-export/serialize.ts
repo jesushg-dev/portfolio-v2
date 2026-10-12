@@ -75,6 +75,7 @@ export interface SkillExportRow {
   type: StackType;
   image: string;
   featured: boolean;
+  trend?: boolean;
   SkillTranslation: (TranslationRow & {
     description: string;
     urlWiki: string;
@@ -302,6 +303,11 @@ export function serializeSkills(
       ...(catalogRecord?.featured !== undefined || skill.featured
         ? { featured: skill.featured }
         : {}),
+      ...(catalogRecord?.trend !== undefined
+        ? { trend: skill.trend ?? catalogRecord.trend }
+        : skill.trend
+          ? { trend: true }
+          : {}),
     };
     return record;
   });

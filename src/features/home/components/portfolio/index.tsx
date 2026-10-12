@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import HeaderArticle from "@/components/shared/header-article";
 import { api } from "@/trpc/server";
-import { LIMIT_PER_PAGE } from "@/utils/constants";
+import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
 import type { ProjectType } from "@/utils/interfaces/types";
 
 import PortfolioGrid from "./portfolio-grid";
@@ -13,11 +13,17 @@ const Portfolio: FC = async () => {
   const locale = await getLocale();
 
   let initialProjects:
-    { projects: ProjectType[]; nextCursor: string | null } | undefined;
+    | {
+        projects: ProjectType[];
+        nextCursor: string | null;
+        totalCount: number;
+        caseStudyCount: number;
+      }
+    | undefined;
 
   try {
     const data = await api.portfolio.getProjects({
-      limit: LIMIT_PER_PAGE,
+      limit: LIMIT_PER_PAGE_BIG,
       locale,
     });
     initialProjects = data;

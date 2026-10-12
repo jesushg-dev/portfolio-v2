@@ -641,7 +641,28 @@
         "experiencesTitle": "Dónde usé {skill}",
         "experiencesDescription": "Roles y equipos donde {skill} formó parte del día a día.",
         "projectsTitle": "Proyectos con {skill}",
-        "projectsDescription": "Trabajos seleccionados que usan {skill} en producción."
+        "projectsDescription": "Trabajos seleccionados que usan {skill} en producción.",
+        "caseStudy": "Leer caso de estudio",
+        "kind": {
+          "PROFESSIONAL": "Trabajo cliente",
+          "PERSONAL": "Personal",
+          "LEARNING": "Aprendizaje"
+        },
+        "meta": {
+          "solo": "En solitario",
+          "team": "Equipo de {count}",
+          "now": "actualidad"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "En producción",
+          "MAINTENANCE": "Mantenimiento",
+          "ARCHIVED": "Archivado"
+        },
+        "teaser": {
+          "decisions": "{count} decisiones",
+          "layers": "Arquitectura",
+          "metrics": "{count} métricas"
+        }
       },
       "modal": {
         "close": "Cerrar",
@@ -839,6 +860,47 @@
         "allTitle": "No hay proyectos disponibles",
         "allDescription": "Pronto se publicarán nuevos proyectos y casos de estudio.",
         "reset": "Ver todos los proyectos"
+      },
+      "meta": {
+        "solo": "Solo",
+        "team": "Equipo de {count}",
+        "now": "hoy"
+      },
+      "teaser": {
+        "decisions": "{count} decisiones",
+        "layers": "Arquitectura",
+        "metrics": "{count} métricas"
+      },
+      "topStack": {
+        "title": "Stack más usado",
+        "projectsWord": "proyectos"
+      },
+      "allCta": {
+        "button": "Ver todos los proyectos ({count})",
+        "subtitle": "{total} proyectos · {caseStudies} con caso de estudio"
+      },
+      "catalog": {
+        "backToPortfolio": "Volver al portafolio",
+        "pageTitle": "Todos los proyectos",
+        "pageSubtitle": "Explora por tipo, categoría o tecnología. Los casos de estudio detallan decisiones, arquitectura y resultados.",
+        "searchPlaceholder": "Buscar proyectos o tecnologías…",
+        "searchLabel": "Buscar proyectos o tecnologías",
+        "sortLabel": "Ordenar",
+        "sorts": {
+          "default": "Destacados",
+          "name": "Nombre (A–Z)",
+          "cs": "Con caso de estudio primero"
+        },
+        "kindLabel": "Categoría",
+        "techLabel": "Tecnología",
+        "csOnly": "Solo con caso de estudio",
+        "showing": "Mostrando {count} de {total} proyectos",
+        "showingAll": "{total} proyectos",
+        "clearFilters": "Limpiar filtros",
+        "more": "Ver más ({count} restantes)",
+        "emptyTitle": "Sin resultados",
+        "emptyDescription": "Prueba con otra búsqueda o quita algunos filtros.",
+        "emptyButton": "Limpiar filtros"
       }
     },
     "contact": {

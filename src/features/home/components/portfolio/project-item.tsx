@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useState,
-  useCallback,
-  useMemo,
-  type FC,
-  type PointerEvent,
-} from "react";
+import { useState, useCallback, type FC, type PointerEvent } from "react";
 import { AiFillGithub, AiFillEye } from "react-icons/ai";
 import { ArrowUpRight, Zap } from "lucide-react";
 
@@ -17,7 +11,21 @@ import SkillIcon from "@/features/home/components/skills/skill-icon";
 
 import { ProjectCoverMockup } from "./project-cover-mockup";
 
-interface IPortfolioItemProps extends ProjectType {
+export interface ProjectMetaLabels {
+  solo: string;
+  formatTeam: (count: number) => string;
+  now: string;
+  statuses: Record<string, string>;
+}
+
+export interface ProjectTeaserLabels {
+  formatDecisions: (count: number) => string;
+  layers: string;
+  formatMetrics: (count: number) => string;
+}
+
+export interface IPortfolioItemProps extends Omit<ProjectType, "csInfo"> {
+  csInfo?: { decisions: number; layers: boolean; metrics: number } | null;
   urlName: string;
   sourceName: string;
   canSeeDemo: string;
@@ -25,13 +33,170 @@ interface IPortfolioItemProps extends ProjectType {
   privateDescription: string;
   caseStudyLabel: string;
   kindLabels: Record<string, string>;
+  metaLabels?: ProjectMetaLabels;
+  teaserLabels?: ProjectTeaserLabels;
   priority?: boolean;
 }
 
-const MAX_TECH = 4;
+const MAX_TECH = 5;
 
 const actionButtonClass =
   "flex size-10 items-center justify-center rounded-xl border border-border bg-card/90 text-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary active:scale-95 shadow-2xs";
+
+interface ProjectMetaLineProps {
+  teamSize?: number | null;
+  startedAt?: string | null;
+  endedAt?: string | null;
+  status?: string | null;
+  metaLabels?: ProjectMetaLabels;
+}
+
+export function ProjectMetaLine({
+  teamSize,
+  startedAt,
+  endedAt,
+  status,
+  metaLabels,
+}: ProjectMetaLineProps) {
+  if (!metaLabels) return null;
+
+  const parts: string[] = [];
+
+  if (typeof teamSize === "number" && teamSize > 0) {
+    parts.push(
+      teamSize === 1 ? metaLabels.solo : metaLabels.formatTeam(teamSize),
+    );
+  }
+
+  if (startedAt) {
+    const startYear = startedAt.slice(0, 4);
+    if (endedAt) {
+      const endYear = endedAt.slice(0, 4);
+      parts.push(startYear === endYear ? startYear : `${startYear}–${endYear}`);
+    } else {
+      parts.push(`${startYear}–${metaLabels.now}`);
+    }
+  }
+
+  if (status && metaLabels.statuses[status]) {
+    parts.push(metaLabels.statuses[status]);
+  }
+
+  if (parts.length === 0) return null;
+
+  return (
+    <p className="text-muted-foreground mt-1.5 text-sm">{parts.join(" · ")}</p>
+  );
+}
+
+interface ProjectTeaserLineProps {
+  caseStudyEnabled?: boolean;
+  csInfo?: { decisions: number; layers: boolean; metrics: number } | null;
+  teaserLabels?: ProjectTeaserLabels;
+}
+
+export function ProjectTeaserLine({
+  caseStudyEnabled,
+  csInfo,
+  teaserLabels,
+}: ProjectTeaserLineProps) {
+  if (!caseStudyEnabled || !csInfo || !teaserLabels) return null;
+
+  const parts: string[] = [];
+
+  if (csInfo.decisions > 0) {
+    parts.push(teaserLabels.formatDecisions(csInfo.decisions));
+  }
+  if (csInfo.layers) {
+    parts.push(teaserLabels.layers);
+  }
+  if (csInfo.metrics > 0) {
+    parts.push(teaserLabels.formatMetrics(csInfo.metrics));
+  }
+
+  if (parts.length === 0) return null;
+
+  const text = parts.join(" · ");
+  return (
+    <p className="text-muted-foreground mb-3 truncate text-sm" title={text}>
+      {text}
+    </p>
+  );
+}
+
+interface ProjectResultsProps {
+  hook?: string | null;
+}
+
+export function ProjectResults({ hook }: ProjectResultsProps) {
+  if (!hook) return null;
+
+  const parts = hook
+    .split("·")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (parts.length === 0) return null;
+
+  return (
+    <ul className="mt-4 flex flex-wrap gap-2" aria-label="Key results">
+      {parts.map((part, index) => (
+        <li
+          key={part}
+          title={part}
+          className="bg-primary/10 text-primary inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs leading-none font-semibold"
+        >
+          {index === 0 ? (
+            <Zap className="size-3.5 shrink-0" aria-hidden="true" />
+          ) : null}
+          <span className="truncate">{part}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+interface ProjectTechRowProps {
+  skills?: ProjectType["skills"];
+}
+
+export function ProjectTechRow({ skills }: ProjectTechRowProps) {
+  if (!skills || skills.length === 0) return null;
+
+  const shownSkills = skills.slice(0, MAX_TECH);
+  const restCount = skills.length - MAX_TECH;
+
+  return (
+    <ul className="mt-auto flex flex-wrap gap-2 pt-5" aria-label="Technologies">
+      {shownSkills.map((skill) => (
+        <li
+          key={skill.title}
+          className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-xs font-medium"
+        >
+          <SkillIcon
+            image={skill.image}
+            title={skill.title}
+            tile
+            size="sm"
+            className="size-6 rounded-lg text-xs"
+          />
+          <span className="capitalize">{skill.title}</span>
+        </li>
+      ))}
+      {restCount > 0 ? (
+        <li
+          title={skills
+            .slice(MAX_TECH)
+            .map((s) => s.title)
+            .join(", ")}
+          className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-xs font-semibold"
+        >
+          +{restCount}
+        </li>
+      ) : null}
+    </ul>
+  );
+}
 
 const PortfolioItem: FC<IPortfolioItemProps> = ({
   image,
@@ -53,11 +218,20 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   kindLabels,
   caseStudyEnabled,
   slug,
+  status,
+  startedAt,
+  endedAt,
+  teamSize,
+  csInfo,
+  metaLabels,
+  teaserLabels,
   priority = false,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
   const showGithub = !isPrivate && Boolean(githubUrl);
-  const kindLabel = kind ? kindLabels[kind] : undefined;
+  const effectiveKind = kind ?? "PERSONAL";
+  const kindLabel =
+    kindLabels[effectiveKind] ?? (kind ? kindLabels[kind] : undefined);
   const showImageFallback = imageFailed || !image?.trim();
 
   const handlePointerMove = useCallback((e: PointerEvent<HTMLElement>) => {
@@ -70,24 +244,6 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
     e.currentTarget.style.removeProperty("--x");
     e.currentTarget.style.removeProperty("--y");
   }, []);
-
-  const hookParts = useMemo(() => {
-    if (!hook) return [];
-    return hook
-      .split("·")
-      .map((part) => part.trim())
-      .filter(Boolean);
-  }, [hook]);
-
-  const { shownSkills, restSkills } = useMemo(() => {
-    if (!skills || skills.length === 0) {
-      return { shownSkills: [], restSkills: [] };
-    }
-    return {
-      shownSkills: skills.slice(0, MAX_TECH),
-      restSkills: skills.slice(MAX_TECH),
-    };
-  }, [skills]);
 
   return (
     <article
@@ -139,143 +295,108 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
 
       {/* Card Body */}
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="text-foreground text-xl font-bold tracking-tight">
+        <h3
+          className="text-foreground line-clamp-2 text-xl font-bold tracking-tight"
+          title={title}
+        >
           {title}
         </h3>
 
-        {/* Key Results / Hook */}
-        {hook ? (
-          hookParts.length > 1 ? (
-            <ul className="mt-4 flex flex-wrap gap-2" aria-label="Key results">
-              {hookParts.map((part, index) => (
-                <li
-                  key={part}
-                  className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs leading-none font-semibold"
-                >
-                  {index === 0 ? (
-                    <Zap className="size-3.5 shrink-0" aria-hidden="true" />
-                  ) : null}
-                  <span>{part}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-primary mt-4 flex items-start gap-2 text-sm leading-snug font-semibold">
-              <Zap className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-              <span className="line-clamp-2">{hook}</span>
-            </p>
-          )
-        ) : null}
+        <ProjectMetaLine
+          teamSize={teamSize}
+          startedAt={startedAt}
+          endedAt={endedAt}
+          status={status}
+          metaLabels={metaLabels}
+        />
 
-        {/* Description */}
+        <ProjectResults hook={hook} />
+
         <p className="text-muted-foreground mt-4 line-clamp-3 text-sm leading-relaxed whitespace-pre-line">
           {description}
         </p>
 
-        {/* Technologies Row (Max 4 + count) */}
-        {skills && skills.length > 0 ? (
-          <ul
-            className="mt-auto flex flex-wrap gap-2 pt-5"
-            aria-label="Technologies"
-          >
-            {shownSkills.map((skill) => (
-              <li
-                key={skill.title}
-                className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-xs font-medium"
-              >
-                <SkillIcon
-                  image={skill.image}
-                  title={skill.title}
-                  tile
-                  size="sm"
-                  className="size-6 rounded-lg text-xs"
-                />
-                <span className="capitalize">{skill.title}</span>
-              </li>
-            ))}
-            {restSkills.length > 0 ? (
-              <li
-                title={restSkills.map((s) => s.title).join(", ")}
-                className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-xs font-semibold"
-              >
-                +{restSkills.length}
-              </li>
-            ) : null}
-          </ul>
-        ) : null}
+        <ProjectTechRow skills={skills} />
 
         {/* Action Footer */}
-        <div className="border-border mt-5 flex items-center justify-between gap-3 border-t pt-4">
-          {caseStudyEnabled && slug ? (
-            <Link
-              href={{
-                pathname: "/projects/[slug]",
-                params: { slug },
-              }}
-              aria-label={`${caseStudyLabel}: ${title}`}
-              className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2"
-            >
-              <span>{caseStudyLabel}</span>
-              <ArrowUpRight
-                className="size-4 transition-transform duration-200 group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5"
-                aria-hidden="true"
-              />
-            </Link>
-          ) : showGithub ? (
-            <a
-              href={githubUrl!}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`${sourceName}: ${title}`}
-              className="text-foreground hover:text-primary relative z-10 inline-flex items-center gap-2 text-sm font-semibold transition-colors"
-            >
-              <AiFillGithub className="size-4" aria-hidden="true" />
-              <span>{sourceName}</span>
-            </a>
-          ) : websiteUrl ? (
-            <a
-              href={websiteUrl}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`${urlName}: ${title}`}
-              className="text-primary hover:text-primary/80 relative z-10 inline-flex items-center gap-2 text-sm font-bold transition-colors"
-            >
-              <span>{urlName}</span>
-              <ArrowUpRight className="size-4" aria-hidden="true" />
-            </a>
-          ) : (
-            <span />
-          )}
-
-          {/* Secondary Action Buttons */}
-          <div className="relative z-10 flex items-center gap-2">
-            {caseStudyEnabled && slug && showGithub ? (
+        <div className="border-border mt-5 border-t pt-4">
+          <ProjectTeaserLine
+            caseStudyEnabled={caseStudyEnabled}
+            csInfo={csInfo}
+            teaserLabels={teaserLabels}
+          />
+          <div className="flex items-center justify-between gap-3">
+            {caseStudyEnabled && slug ? (
+              <Link
+                href={{
+                  pathname: "/projects/[slug]",
+                  params: { slug },
+                }}
+                aria-label={`${caseStudyLabel}: ${title}`}
+                className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2"
+              >
+                <span>{caseStudyLabel}</span>
+                <ArrowUpRight
+                  className="size-4 transition-transform duration-200 group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5"
+                  aria-hidden="true"
+                />
+              </Link>
+            ) : showGithub ? (
               <a
                 href={githubUrl!}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${sourceName}: ${title}`}
-                title={`${sourceName}: ${title}`}
-                className={actionButtonClass}
+                className="text-foreground hover:text-primary relative z-10 inline-flex items-center gap-2 text-sm font-semibold transition-colors"
               >
-                <AiFillGithub className="size-4.5" aria-hidden="true" />
+                <AiFillGithub className="size-4" aria-hidden="true" />
+                <span>{sourceName}</span>
               </a>
-            ) : null}
-            {caseStudyEnabled && slug && websiteUrl ? (
+            ) : websiteUrl ? (
               <a
                 href={websiteUrl}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${urlName}: ${title}`}
-                title={`${urlName}: ${title}`}
-                className={actionButtonClass}
+                className="text-primary hover:text-primary/80 relative z-10 inline-flex items-center gap-2 text-sm font-bold transition-colors"
               >
-                <AiFillEye
-                  className="text-primary size-4.5"
-                  aria-hidden="true"
-                />
+                <span>{urlName}</span>
+                <ArrowUpRight className="size-4" aria-hidden="true" />
               </a>
-            ) : null}
+            ) : (
+              <span />
+            )}
+
+            {/* Secondary Action Buttons */}
+            <div className="relative z-10 flex items-center gap-2">
+              {caseStudyEnabled && slug && showGithub ? (
+                <a
+                  href={githubUrl!}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${sourceName}: ${title}`}
+                  title={`${sourceName}: ${title}`}
+                  className={actionButtonClass}
+                >
+                  <AiFillGithub className="size-4.5" aria-hidden="true" />
+                </a>
+              ) : null}
+              {caseStudyEnabled && slug && websiteUrl ? (
+                <a
+                  href={websiteUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${urlName}: ${title}`}
+                  title={`${urlName}: ${title}`}
+                  className={actionButtonClass}
+                >
+                  <AiFillEye
+                    className="text-primary size-4.5"
+                    aria-hidden="true"
+                  />
+                </a>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>

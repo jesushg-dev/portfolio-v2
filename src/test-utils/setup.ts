@@ -10,6 +10,8 @@ if (typeof global.TextDecoder === "undefined") {
   global.TextDecoder = TextDecoder;
 }
 
+delete process.env.TURNSTILE_SECRET;
+
 if (typeof globalThis.Response === "undefined") {
   globalThis.Response = class PolyfillResponse {
     status: number;

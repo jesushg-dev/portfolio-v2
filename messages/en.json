@@ -641,7 +641,28 @@
         "experiencesTitle": "Where I used {skill}",
         "experiencesDescription": "Roles and teams where {skill} was part of the day-to-day work.",
         "projectsTitle": "Projects built with {skill}",
-        "projectsDescription": "Selected work that ships {skill} in production."
+        "projectsDescription": "Selected work that ships {skill} in production.",
+        "caseStudy": "Read case study",
+        "kind": {
+          "PROFESSIONAL": "Client work",
+          "PERSONAL": "Personal",
+          "LEARNING": "Learning"
+        },
+        "meta": {
+          "solo": "Solo",
+          "team": "Team of {count}",
+          "now": "present"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "In production",
+          "MAINTENANCE": "Maintenance",
+          "ARCHIVED": "Archived"
+        },
+        "teaser": {
+          "decisions": "{count} decisions",
+          "layers": "Architecture",
+          "metrics": "{count} metrics"
+        }
       },
       "modal": {
         "close": "Close",
@@ -839,6 +860,47 @@
         "allTitle": "No projects available",
         "allDescription": "New projects and case studies will be added soon.",
         "reset": "View all projects"
+      },
+      "meta": {
+        "solo": "Solo",
+        "team": "Team of {count}",
+        "now": "present"
+      },
+      "teaser": {
+        "decisions": "{count} decisions",
+        "layers": "Architecture",
+        "metrics": "{count} metrics"
+      },
+      "topStack": {
+        "title": "Most used stack",
+        "projectsWord": "projects"
+      },
+      "allCta": {
+        "button": "View all projects ({count})",
+        "subtitle": "{total} projects · {caseStudies} with case study"
+      },
+      "catalog": {
+        "backToPortfolio": "Back to portfolio",
+        "pageTitle": "All engineering projects",
+        "pageSubtitle": "Explore by type, category, or technology. Case studies detail decisions, architecture, and outcomes.",
+        "searchPlaceholder": "Search projects or technologies…",
+        "searchLabel": "Search projects or technologies",
+        "sortLabel": "Sort",
+        "sorts": {
+          "default": "Featured",
+          "name": "Name (A–Z)",
+          "cs": "With case study first"
+        },
+        "kindLabel": "Category",
+        "techLabel": "Technology",
+        "csOnly": "Only with case study",
+        "showing": "Showing {count} of {total} projects",
+        "showingAll": "{total} projects",
+        "clearFilters": "Clear filters",
+        "more": "View more ({count} remaining)",
+        "emptyTitle": "No results",
+        "emptyDescription": "Try another search term or remove some filters.",
+        "emptyButton": "Clear filters"
       }
     },
     "contact": {

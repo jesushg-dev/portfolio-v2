@@ -38,7 +38,7 @@ export async function verifyTurnstileToken({
     return { success: true };
   }
 
-  const secret = process.env.TURNSTILE_SECRET ?? env.TURNSTILE_SECRET;
+  const secret = process.env.TURNSTILE_SECRET;
   if (!secret) {
     console.error(
       "[Turnstile] Verification failed: TURNSTILE_SECRET is not configured in environment variables.",

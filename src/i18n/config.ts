@@ -68,6 +68,11 @@ export const pathnames = {
     es: "/habilidades/[slug]",
     nl: "/vaardigheden/[slug]",
   },
+  "/projects": {
+    en: "/projects",
+    es: "/proyectos",
+    nl: "/projecten",
+  },
   "/projects/[slug]": {
     en: "/projects/[slug]",
     es: "/proyectos/[slug]",

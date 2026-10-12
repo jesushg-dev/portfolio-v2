@@ -1,6 +1,7 @@
 import JSZip from "jszip";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
+import { SEED_LOCALES } from "./locales";
 
 import {
   certificationsCatalog,
@@ -64,6 +65,7 @@ function hydrateSkills(seeds: SkillSeedRecord[]): SkillExportRow[] {
     type: seed.type,
     image: seed.image,
     featured: seed.featured ?? false,
+    ...(seed.trend !== undefined ? { trend: seed.trend } : {}),
     SkillTranslation: seed.translations.map((translation) => ({
       appLanguageId: translation.locale,
       description: translation.description,
@@ -314,6 +316,9 @@ function expectedProjects(seeds: ProjectSeedRecord[]): ProjectSeedRecord[] {
   return seeds.map((seed) => ({
     ...seed,
     slug: seed.slug ?? slugFromKey(seed.key),
+    translations: [...seed.translations].sort(
+      (a, b) => SEED_LOCALES.indexOf(a.locale) - SEED_LOCALES.indexOf(b.locale),
+    ),
   }));
 }
 

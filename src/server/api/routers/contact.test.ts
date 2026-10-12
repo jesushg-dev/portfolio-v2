@@ -20,6 +20,10 @@ jest.mock("@/lib/geo/geocode-place", () => ({
   resolveOwnerMapLocation: jest.fn(() => Promise.resolve(null)),
 }));
 
+jest.mock("@/lib/turnstile/verify-turnstile", () => ({
+  verifyTurnstileToken: jest.fn().mockResolvedValue({ success: true }),
+}));
+
 import {
   canDeliverPortfolioContactEmail,
   getPortfolioContactTemplateId,

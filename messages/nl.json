@@ -641,7 +641,28 @@
         "experiencesTitle": "Waar ik {skill} gebruikte",
         "experiencesDescription": "Rollen en teams waar {skill} deel uitmaakte van het dagelijks werk.",
         "projectsTitle": "Projecten met {skill}",
-        "projectsDescription": "Geselecteerd werk dat {skill} in productie gebruikt."
+        "projectsDescription": "Geselecteerd werk dat {skill} in productie gebruikt.",
+        "caseStudy": "Lees casus",
+        "kind": {
+          "PROFESSIONAL": "Klantwerk",
+          "PERSONAL": "Persoonlijk",
+          "LEARNING": "Leren"
+        },
+        "meta": {
+          "solo": "Solo",
+          "team": "Team van {count}",
+          "now": "heden"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "In productie",
+          "MAINTENANCE": "Onderhoud",
+          "ARCHIVED": "Gearchiveerd"
+        },
+        "teaser": {
+          "decisions": "{count} beslissingen",
+          "layers": "Architectuur",
+          "metrics": "{count} statistieken"
+        }
       },
       "modal": {
         "close": "Sluiten",
@@ -839,6 +860,47 @@
         "allTitle": "Geen projecten beschikbaar",
         "allDescription": "Binnenkort worden nieuwe projecten en casestudies toegevoegd.",
         "reset": "Alle projecten bekijken"
+      },
+      "meta": {
+        "solo": "Solo",
+        "team": "Team van {count}",
+        "now": "heden"
+      },
+      "teaser": {
+        "decisions": "{count} beslissingen",
+        "layers": "Architectuur",
+        "metrics": "{count} statistieken"
+      },
+      "topStack": {
+        "title": "Meest gebruikte stack",
+        "projectsWord": "projecten"
+      },
+      "allCta": {
+        "button": "Bekijk alle projecten ({count})",
+        "subtitle": "{total} projecten · {caseStudies} met case study"
+      },
+      "catalog": {
+        "backToPortfolio": "Terug naar portfolio",
+        "pageTitle": "Alle projecten",
+        "pageSubtitle": "Verken op type, categorie of technologie. Case studies tonen beslissingen, architectuur en resultaten.",
+        "searchPlaceholder": "Zoek projecten of technologieën…",
+        "searchLabel": "Zoek projecten of technologieën",
+        "sortLabel": "Sorteren",
+        "sorts": {
+          "default": "Uitgelicht",
+          "name": "Naam (A–Z)",
+          "cs": "Met case study eerst"
+        },
+        "kindLabel": "Categorie",
+        "techLabel": "Technologie",
+        "csOnly": "Alleen met case study",
+        "showing": "Toont {count} van {total} projecten",
+        "showingAll": "{total} projecten",
+        "clearFilters": "Filters wissen",
+        "more": "Meer weergeven ({count} resterend)",
+        "emptyTitle": "Geen resultaten",
+        "emptyDescription": "Probeer een andere zoekopdracht of wis enkele filters.",
+        "emptyButton": "Filters wissen"
       }
     },
     "contact": {

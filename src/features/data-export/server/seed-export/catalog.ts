@@ -75,6 +75,7 @@ export interface SkillSeedRecord {
   type: StackType;
   image: string;
   featured?: boolean;
+  trend?: boolean;
   translations: {
     locale: SeedLocale;
     description: string;
