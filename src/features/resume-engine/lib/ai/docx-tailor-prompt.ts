@@ -122,7 +122,7 @@ Tier 2 (QUALITY GUIDANCE) is applied as far as Tier 1 allows.
 - Spanish source text usually becomes shorter in English and longer in Dutch.
   The budgets stay hard in every case.
 - Composite lines: some paragraphs hold several fields in one run, such as
-  "Tiempo completo | Full Stack Engineer · Medio tiempo", "Walmart (via
+  "Tiempo completo | Full Stack Engineer", "Walmart (via
   Imagemaker) · Remoto · Agosto de 2025 – Agosto de 2026" or "Ingeniería en
   Computación Universidad Nacional de Ingeniería | Managua". Keep every
   separator ("|", "·", "–") and the order of the fields. Localize only labels,

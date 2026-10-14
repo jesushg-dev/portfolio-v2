@@ -65,7 +65,9 @@ export function FormDialogContent({
       <div
         className={cn(
           "flex min-h-0 flex-1 flex-col",
-          footer || bodyScroll ? "overflow-y-auto py-4" : "overflow-hidden",
+          footer || bodyScroll
+            ? "overflow-y-auto py-4"
+            : "overflow-hidden p-[0.0625rem]",
         )}
       >
         {children}

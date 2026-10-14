@@ -251,6 +251,13 @@
   },
   "curriculum": {
     "title": "Curriculum Vitae",
+    "employmentTypes": {
+      "FULL_TIME": "Tiempo completo",
+      "PART_TIME": "Medio tiempo",
+      "CONTRACT": "Contrato",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Prácticas"
+    },
     "header": {
       "cvHeader": "Cabecera",
       "aboutMe": "Sobre Mí",
@@ -575,8 +582,6 @@
       "availableForOpportunities": "Disponible para nuevas oportunidades",
       "scheduleCall": "Agendar una llamada",
       "scheduleCallAria": "Agendar una llamada — ir a la sección de contacto",
-      "mttrBadgeValue": "-40% MTTR",
-      "mttrBadgeLabel": "Incidentes Críticos",
       "empty": {
         "title": "Héroe no configurado",
         "description": "Agrega tu foto de perfil, subtítulo y presentación desde la sección Perfil del panel de administración."
@@ -2051,6 +2056,14 @@
       "experience": {
         "company": "Empresa",
         "role": "Puesto",
+        "employmentType": "Tipo de contrato",
+        "employmentTypes": {
+          "FULL_TIME": "Tiempo completo",
+          "PART_TIME": "Medio tiempo",
+          "CONTRACT": "Contrato",
+          "FREELANCE": "Freelance",
+          "INTERNSHIP": "Prácticas"
+        },
         "location": "Ubicación (opcional)",
         "dates": "Fechas",
         "startDate": "Fecha de inicio",

@@ -39,6 +39,7 @@ export function mapLocalizedCvToDraft(
         id: exp.id,
         company: exp.company,
         role: exp.role,
+        employmentType: exp.employmentType ?? undefined,
         location: exp.location ?? undefined,
         companyBlurb: exp.companyBlurb,
         startDate: formatDate(exp.startDate),

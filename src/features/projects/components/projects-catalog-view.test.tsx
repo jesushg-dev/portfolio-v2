@@ -112,11 +112,11 @@ describe("ProjectsCatalogView", () => {
     expect(screen.queryByText("Portfolio v2")).not.toBeInTheDocument();
   });
 
-  it("filters projects by type when clicking segmented button", () => {
+  it("filters projects by type when clicking tab", () => {
     renderWithIntl(<ProjectsCatalogView initialProjects={mockProjects} />);
 
-    const backendBtn = screen.getByRole("button", { name: /backend/i });
-    fireEvent.click(backendBtn);
+    const backendTab = screen.getByRole("tab", { name: /backend/i });
+    fireEvent.click(backendTab);
 
     expect(screen.getByText("Tienda API")).toBeInTheDocument();
     expect(screen.queryByText("Musa Ecommerce")).not.toBeInTheDocument();

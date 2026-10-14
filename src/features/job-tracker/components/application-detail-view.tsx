@@ -30,7 +30,6 @@ import { Link, useRouter } from "@/i18n/routing";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ButtonGroup } from "@/components/ui/button-group";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -97,6 +96,12 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
     }
     return shouldPrioritizeTailor ? "tailor" : "timeline";
   });
+  const [mobileTab, setMobileTab] = useState<"details" | RightPanelTab>(() => {
+    if (defaultTab === "tailor" || defaultTab === "timeline") {
+      return defaultTab;
+    }
+    return shouldPrioritizeTailor ? "tailor" : "details";
+  });
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
   const [isCoverLetterOpen, setIsCoverLetterOpen] = useState(false);
@@ -150,7 +155,11 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
           </div>
         </div>
 
-        <ButtonGroup aria-label={t("detail.actionsGroup")}>
+        <div
+          role="toolbar"
+          aria-label={t("detail.actionsGroup")}
+          className="flex flex-wrap items-center gap-2"
+        >
           {application.jobUrl ? (
             <a
               href={application.jobUrl}
@@ -201,269 +210,126 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
             )}
             {t("detail.deleteApplicationButton")}
           </Button>
-        </ButtonGroup>
+        </div>
       </div>
 
-      <ResizablePanelGroup
-        orientation="horizontal"
-        className="min-h-[36rem] lg:h-[calc(100dvh-8.5rem)]"
-      >
-        <ResizablePanel defaultSize="42%" minSize="30%" className="min-w-0">
-          <section className="border-border bg-card h-full space-y-5 overflow-y-auto rounded-xl border p-5 shadow-sm">
-            <dl className="grid gap-4 sm:grid-cols-2">
-              <DetailField label={t("detail.applied")} value={appliedLabel} />
-              <DetailField
-                label={t("detail.location")}
-                value={application.location.trim() || t("detail.notProvided")}
-              />
-              <DetailField
-                label={t("detail.salary")}
-                value={application.salary.trim() || t("detail.notProvided")}
-              />
-              <div className="min-w-0">
-                <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                  {t("detail.cv")}
-                </dt>
-                <dd className="text-foreground mt-1 text-sm">
-                  {application.cvFile ? (
-                    <a
-                      href={application.cvFile.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
-                    >
-                      <FileText className="size-3.5 shrink-0" aria-hidden />
-                      <span className="truncate">
-                        {application.cvFile.name}
-                      </span>
-                    </a>
-                  ) : (
-                    t("detail.notProvided")
-                  )}
-                </dd>
-              </div>
-              {application.jobUrl ? (
-                <div className="min-w-0 sm:col-span-2">
-                  <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                    {t("detail.jobUrl")}
-                  </dt>
-                  <dd className="text-foreground mt-1 text-sm">
-                    <a
-                      href={application.jobUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
-                    >
-                      <ExternalLink className="size-3.5 shrink-0" aria-hidden />
-                      <span className="truncate">{application.jobUrl}</span>
-                    </a>
-                  </dd>
-                </div>
-              ) : null}
-            </dl>
+      {/* Mobile view (< lg): segmented tabs for Details, Timeline, Tailor CV */}
+      <div className="flex flex-col gap-4 lg:hidden">
+        <nav
+          aria-label={t("detail.tabsNavAria")}
+          className="border-border bg-muted/40 grid grid-cols-3 rounded-xl border p-1"
+        >
+          <button
+            type="button"
+            aria-pressed={mobileTab === "details"}
+            onClick={() => setMobileTab("details")}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
+              mobileTab === "details"
+                ? "bg-card text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <FileText className="size-3.5" aria-hidden />
+            <span>{t("detail.detailsTab")}</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={mobileTab === "timeline"}
+            onClick={() => {
+              setMobileTab("timeline");
+              setRightTab("timeline");
+            }}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
+              mobileTab === "timeline"
+                ? "bg-card text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <Clock className="size-3.5" aria-hidden />
+            <span>{t("detail.timelineTab")}</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={mobileTab === "tailor"}
+            onClick={() => {
+              setMobileTab("tailor");
+              setRightTab("tailor");
+            }}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
+              mobileTab === "tailor"
+                ? "bg-card text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <Sparkles className="size-3.5" aria-hidden />
+            <span>{t("detail.tailorTab")}</span>
+          </button>
+        </nav>
 
-            <div className="border-border border-t pt-5">
-              <div className="mb-3 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Building2
-                    className="text-muted-foreground size-4"
-                    aria-hidden
-                  />
-                  <h2 className="text-sm font-semibold">
-                    {t("detail.companyInfo")}
-                  </h2>
-                </div>
-                <Link
-                  href={{
-                    pathname: "/admin/job-tracker/companies/[id]/edit",
-                    params: { id: application.company.id },
-                  }}
-                  className="text-muted-foreground hover:text-foreground text-xs transition-colors"
-                >
-                  {t("detail.editCompany")}
-                </Link>
-              </div>
-              <div className="bg-muted/40 space-y-2 rounded-lg p-3.5 text-sm">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-foreground font-medium">
-                    {application.company.name}
-                  </span>
-                  <div className="flex items-center gap-3 text-xs">
-                    {application.company.website ? (
-                      <a
-                        href={application.company.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary inline-flex items-center gap-1 hover:underline"
-                      >
-                        <Globe className="size-3" aria-hidden />
-                        {t("websiteLink")}
-                      </a>
-                    ) : null}
-                    {application.company.linkedinUrl ? (
-                      <a
-                        href={application.company.linkedinUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary inline-flex items-center gap-1 hover:underline"
-                      >
-                        <FaLinkedin className="size-3" aria-hidden />
-                        LinkedIn
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-                {application.company.location ? (
-                  <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
-                    <MapPin className="size-3 shrink-0" aria-hidden />
-                    <span>{application.company.location}</span>
-                  </div>
-                ) : null}
-                {application.company.email ? (
-                  <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
-                    <Mail className="size-3 shrink-0" aria-hidden />
-                    <a
-                      href={`mailto:${application.company.email}`}
-                      className="hover:underline"
-                    >
-                      {application.company.email}
-                    </a>
-                  </div>
-                ) : null}
-                {application.company.description ? (
-                  <p className="text-muted-foreground text-xs leading-relaxed">
-                    {application.company.description}
-                  </p>
-                ) : null}
-              </div>
-            </div>
+        {mobileTab === "details" && (
+          <ApplicationDetailsPanel
+            application={application}
+            appliedLabel={appliedLabel}
+            onOpenCoverLetter={() => setIsCoverLetterOpen(true)}
+            t={t}
+          />
+        )}
 
-            {application.notes.trim() ? (
-              <div className="border-border border-t pt-5">
-                <h2 className="text-foreground mb-2 text-sm font-semibold">
-                  {t("detail.notes")}
-                </h2>
-                <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
-                  {application.notes}
-                </p>
-              </div>
-            ) : null}
-
-            <div className="border-border border-t pt-5">
-              <header className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <h2 className="text-foreground text-sm font-semibold">
-                    {t("coverLetter.sectionTitle")}
-                  </h2>
-                  <p className="text-muted-foreground text-xs">
-                    {t("coverLetter.optionalHint")}
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="text-primary h-auto shrink-0 px-0"
-                  onClick={() => setIsCoverLetterOpen(true)}
-                >
-                  <FilePenLine className="mr-1.5 size-3.5" aria-hidden />
-                  {application.coverLetterBody.trim()
-                    ? t("coverLetter.editButton")
-                    : t("coverLetter.openOptional")}
-                </Button>
-              </header>
-              {application.coverLetterBody.trim() ? (
-                <div className="space-y-1.5">
-                  {application.coverLetterSubject.trim() ? (
-                    <p className="text-foreground text-sm font-medium">
-                      {application.coverLetterSubject}
-                    </p>
-                  ) : null}
-                  <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed whitespace-pre-wrap">
-                    {application.coverLetterBody}
-                  </p>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="border-border border-t pt-5">
-              <header className="mb-3 flex items-center gap-2">
-                <FileText
-                  className="text-muted-foreground size-4"
-                  aria-hidden
-                />
-                <h2 className="text-sm font-semibold">
-                  {t("detail.jobDescription")}
-                </h2>
-              </header>
-              <CollapsibleJobDescription
-                description={application.description}
-                emptyLabel={t("detail.noDescription")}
-                showMoreLabel={t("detail.showFullDescription")}
-                showLessLabel={t("detail.hideFullDescription")}
-              />
-            </div>
+        {mobileTab === "timeline" && (
+          <section className="border-border bg-card rounded-xl border p-4 shadow-sm sm:p-5">
+            <ApplicationTimeline
+              application={application}
+              locale={locale}
+              variant="embedded"
+              activityHint={t("detail.timelineActivityHint")}
+            />
           </section>
-        </ResizablePanel>
+        )}
 
-        <ResizableHandle withHandle className="mx-1" />
-
-        <ResizablePanel defaultSize="58%" minSize="36%" className="min-w-0">
-          <section className="border-border bg-card flex h-full flex-col overflow-hidden rounded-xl border shadow-sm">
-            <nav
-              aria-label={t("detail.tabsNavAria")}
-              className="bg-muted/30 flex shrink-0 overflow-hidden rounded-t-xl"
-            >
-              {rightTabs.map(({ id, icon: Icon, labelKey }) => {
-                const isActive = rightTab === id;
-                return (
-                  <button
-                    key={id}
-                    type="button"
-                    aria-pressed={isActive}
-                    className={cn(
-                      "flex flex-1 items-center justify-center gap-2 border-b-2 px-5 py-3.5 text-sm font-medium transition-colors",
-                      isActive
-                        ? "border-primary text-primary bg-card"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60 border-transparent",
-                    )}
-                    onClick={() => setRightTab(id)}
-                  >
-                    <Icon className="size-4" aria-hidden />
-                    {t(labelKey)}
-                  </button>
-                );
-              })}
-            </nav>
-
-            <div className="relative min-h-0 flex-1">
-              <div
-                ref={rightPanelRef}
-                role="tabpanel"
-                className="h-full overflow-y-auto p-5"
-              >
-                {rightTab === "timeline" ? (
-                  <ApplicationTimeline
-                    application={application}
-                    locale={locale}
-                    variant="embedded"
-                    activityHint={t("detail.timelineActivityHint")}
-                  />
-                ) : (
-                  <ResumeTailorWorkflow
-                    applicationId={application.id}
-                    embedded
-                    existingCvFile={application.cvFile}
-                  />
-                )}
-              </div>
-              <div className="pointer-events-none absolute right-3 bottom-3 z-20">
-                <ScrollToTop containerRef={rightPanelRef} />
-              </div>
-            </div>
+        {mobileTab === "tailor" && (
+          <section className="border-border bg-card rounded-xl border p-4 shadow-sm sm:p-5">
+            <ResumeTailorWorkflow
+              applicationId={application.id}
+              embedded
+              existingCvFile={application.cvFile}
+            />
           </section>
-        </ResizablePanel>
-      </ResizablePanelGroup>
+        )}
+      </div>
+
+      {/* Desktop view (>= lg): resizable horizontal panels */}
+      <div className="hidden lg:block">
+        <ResizablePanelGroup
+          orientation="horizontal"
+          className="min-h-[36rem] lg:h-[calc(100dvh-8.5rem)]"
+        >
+          <ResizablePanel defaultSize="42%" minSize="30%" className="min-w-0">
+            <ApplicationDetailsPanel
+              application={application}
+              appliedLabel={appliedLabel}
+              onOpenCoverLetter={() => setIsCoverLetterOpen(true)}
+              t={t}
+            />
+          </ResizablePanel>
+
+          <ResizableHandle withHandle className="mx-1" />
+
+          <ResizablePanel defaultSize="58%" minSize="36%" className="min-w-0">
+            <ApplicationWorkspacePanel
+              application={application}
+              locale={locale}
+              rightTab={rightTab}
+              setRightTab={setRightTab}
+              rightTabs={rightTabs}
+              rightPanelRef={rightPanelRef}
+              t={t}
+            />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
 
       <ApplicationEmailDialog
         open={isEmailOpen}
@@ -495,6 +361,284 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
     </div>
   );
 };
+
+function ApplicationDetailsPanel({
+  application,
+  appliedLabel,
+  onOpenCoverLetter,
+  t,
+}: {
+  application: ApplicationDetail;
+  appliedLabel: string;
+  onOpenCoverLetter: () => void;
+  t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
+}) {
+  return (
+    <section className="border-border bg-card h-full space-y-5 overflow-y-auto rounded-xl border p-4 shadow-sm sm:p-5">
+      <dl className="grid gap-4 sm:grid-cols-2">
+        <DetailField label={t("detail.applied")} value={appliedLabel} />
+        <DetailField
+          label={t("detail.location")}
+          value={application.location.trim() || t("detail.notProvided")}
+        />
+        <DetailField
+          label={t("detail.salary")}
+          value={application.salary.trim() || t("detail.notProvided")}
+        />
+        <div className="min-w-0">
+          <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            {t("detail.cv")}
+          </dt>
+          <dd className="text-foreground mt-1 text-sm">
+            {application.cvFile ? (
+              <a
+                href={application.cvFile.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
+              >
+                <FileText className="size-3.5 shrink-0" aria-hidden />
+                <span className="truncate">{application.cvFile.name}</span>
+              </a>
+            ) : (
+              t("detail.notProvided")
+            )}
+          </dd>
+        </div>
+        {application.jobUrl ? (
+          <div className="min-w-0 sm:col-span-2">
+            <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+              {t("detail.jobUrl")}
+            </dt>
+            <dd className="text-foreground mt-1 text-sm">
+              <a
+                href={application.jobUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
+              >
+                <ExternalLink className="size-3.5 shrink-0" aria-hidden />
+                <span className="truncate">{application.jobUrl}</span>
+              </a>
+            </dd>
+          </div>
+        ) : null}
+      </dl>
+
+      <div className="border-border border-t pt-5">
+        <div className="mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Building2 className="text-muted-foreground size-4" aria-hidden />
+            <h2 className="text-sm font-semibold">{t("detail.companyInfo")}</h2>
+          </div>
+          <Link
+            href={{
+              pathname: "/admin/job-tracker/companies/[id]/edit",
+              params: { id: application.company.id },
+            }}
+            className="text-muted-foreground hover:text-foreground text-xs transition-colors"
+          >
+            {t("detail.editCompany")}
+          </Link>
+        </div>
+        <div className="bg-muted/40 space-y-2 rounded-lg p-3.5 text-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-foreground font-medium">
+              {application.company.name}
+            </span>
+            <div className="flex items-center gap-3 text-xs">
+              {application.company.website ? (
+                <a
+                  href={application.company.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary inline-flex items-center gap-1 hover:underline"
+                >
+                  <Globe className="size-3" aria-hidden />
+                  {t("websiteLink")}
+                </a>
+              ) : null}
+              {application.company.linkedinUrl ? (
+                <a
+                  href={application.company.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary inline-flex items-center gap-1 hover:underline"
+                >
+                  <FaLinkedin className="size-3" aria-hidden />
+                  LinkedIn
+                </a>
+              ) : null}
+            </div>
+          </div>
+          {application.company.location ? (
+            <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+              <MapPin className="size-3 shrink-0" aria-hidden />
+              <span>{application.company.location}</span>
+            </div>
+          ) : null}
+          {application.company.email ? (
+            <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+              <Mail className="size-3 shrink-0" aria-hidden />
+              <a
+                href={`mailto:${application.company.email}`}
+                className="hover:underline"
+              >
+                {application.company.email}
+              </a>
+            </div>
+          ) : null}
+          {application.company.description ? (
+            <p className="text-muted-foreground text-xs leading-relaxed">
+              {application.company.description}
+            </p>
+          ) : null}
+        </div>
+      </div>
+
+      {application.notes.trim() ? (
+        <div className="border-border border-t pt-5">
+          <h2 className="text-foreground mb-2 text-sm font-semibold">
+            {t("detail.notes")}
+          </h2>
+          <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
+            {application.notes}
+          </p>
+        </div>
+      ) : null}
+
+      <div className="border-border border-t pt-5">
+        <header className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <div className="min-w-0">
+            <h2 className="text-foreground text-sm font-semibold">
+              {t("coverLetter.sectionTitle")}
+            </h2>
+            <p className="text-muted-foreground text-xs">
+              {t("coverLetter.optionalHint")}
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="text-primary h-auto shrink-0 px-0"
+            onClick={onOpenCoverLetter}
+          >
+            <FilePenLine className="mr-1.5 size-3.5" aria-hidden />
+            {application.coverLetterBody.trim()
+              ? t("coverLetter.editButton")
+              : t("coverLetter.openOptional")}
+          </Button>
+        </header>
+        {application.coverLetterBody.trim() ? (
+          <div className="space-y-1.5">
+            {application.coverLetterSubject.trim() ? (
+              <p className="text-foreground text-sm font-medium">
+                {application.coverLetterSubject}
+              </p>
+            ) : null}
+            <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed whitespace-pre-wrap">
+              {application.coverLetterBody}
+            </p>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="border-border border-t pt-5">
+        <header className="mb-3 flex items-center gap-2">
+          <FileText className="text-muted-foreground size-4" aria-hidden />
+          <h2 className="text-sm font-semibold">
+            {t("detail.jobDescription")}
+          </h2>
+        </header>
+        <CollapsibleJobDescription
+          description={application.description}
+          emptyLabel={t("detail.noDescription")}
+          showMoreLabel={t("detail.showFullDescription")}
+          showLessLabel={t("detail.hideFullDescription")}
+        />
+      </div>
+    </section>
+  );
+}
+
+function ApplicationWorkspacePanel({
+  application,
+  locale,
+  rightTab,
+  setRightTab,
+  rightTabs,
+  rightPanelRef,
+  t,
+}: {
+  application: ApplicationDetail;
+  locale: Locale;
+  rightTab: RightPanelTab;
+  setRightTab: (tab: RightPanelTab) => void;
+  rightTabs: {
+    id: RightPanelTab;
+    icon: typeof Clock;
+    labelKey: "detail.timelineTab" | "detail.tailorTab";
+  }[];
+  rightPanelRef: React.RefObject<HTMLDivElement | null>;
+  t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
+}) {
+  return (
+    <section className="border-border bg-card flex h-full flex-col overflow-hidden rounded-xl border shadow-sm">
+      <nav
+        aria-label={t("detail.tabsNavAria")}
+        className="bg-muted/30 flex shrink-0 overflow-hidden rounded-t-xl"
+      >
+        {rightTabs.map(({ id, icon: Icon, labelKey }) => {
+          const isActive = rightTab === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              aria-pressed={isActive}
+              className={cn(
+                "flex flex-1 items-center justify-center gap-2 border-b-2 px-5 py-3.5 text-sm font-medium transition-colors",
+                isActive
+                  ? "border-primary text-primary bg-card font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60 border-transparent",
+              )}
+              onClick={() => setRightTab(id)}
+            >
+              <Icon className="size-4" aria-hidden />
+              {t(labelKey)}
+            </button>
+          );
+        })}
+      </nav>
+
+      <div className="relative min-h-0 flex-1">
+        <div
+          ref={rightPanelRef}
+          role="tabpanel"
+          className="h-full overflow-y-auto p-4 sm:p-5"
+        >
+          {rightTab === "timeline" ? (
+            <ApplicationTimeline
+              application={application}
+              locale={locale}
+              variant="embedded"
+              activityHint={t("detail.timelineActivityHint")}
+            />
+          ) : (
+            <ResumeTailorWorkflow
+              applicationId={application.id}
+              embedded
+              existingCvFile={application.cvFile}
+            />
+          )}
+        </div>
+        <div className="pointer-events-none absolute right-3 bottom-3 z-20">
+          <ScrollToTop containerRef={rightPanelRef} />
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function DetailField({ label, value }: { label: string; value: string }) {
   return (

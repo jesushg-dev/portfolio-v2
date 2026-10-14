@@ -417,6 +417,7 @@ model CvExperience {
   user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   company           String
   companyLogoUrl    String?
+  employmentType    CvEmploymentType?         @default(FULL_TIME)
   startDate         DateTime?
   endDate           DateTime?
   current           Boolean                   @default(false)
@@ -545,6 +546,14 @@ model CvPersonalReferenceTranslation {
   appLanguageId         String               @db.ObjectId
 
   @@unique([cvPersonalReferenceId, appLanguageId])
+}
+
+enum CvEmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  FREELANCE
+  INTERNSHIP
 }
 
 enum CvContactType {

@@ -13,6 +13,12 @@ import {
 import { hardNavigate } from "@/lib/hard-navigate";
 import { Link } from "@/i18n/routing";
 import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -183,21 +189,47 @@ const TwoFactorVerifyForm: FC = () => {
               </div>
             ) : null}
 
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="two-factor-code">{codeLabel}</Label>
-              <Input
-                id="two-factor-code"
-                name="code"
-                value={code}
-                onChange={(event) => setCode(event.target.value)}
-                inputMode={method === "backup" ? "text" : "numeric"}
-                autoComplete="one-time-code"
-                autoFocus
-                placeholder={codePlaceholder}
-                className={fieldInputClassName}
-                disabled={method === "otp" && !otpSent}
-              />
-            </div>
+            {method === "backup" ? (
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="two-factor-code">{codeLabel}</Label>
+                <Input
+                  id="two-factor-code"
+                  name="code"
+                  value={code}
+                  onChange={(event) => setCode(event.target.value)}
+                  inputMode="text"
+                  autoComplete="one-time-code"
+                  autoFocus
+                  placeholder={codePlaceholder}
+                  className={fieldInputClassName}
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="two-factor-code">{codeLabel}</Label>
+                <InputOTP
+                  id="two-factor-code"
+                  name="code"
+                  value={code}
+                  onChange={setCode}
+                  maxLength={6}
+                  autoFocus
+                  disabled={method === "otp" && !otpSent}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                  </InputOTPGroup>
+                  <InputOTPSeparator />
+                  <InputOTPGroup>
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+            )}
 
             <FormStatus error={serverError} />
           </FormContent>

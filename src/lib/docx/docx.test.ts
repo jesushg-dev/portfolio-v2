@@ -61,12 +61,14 @@ function buildAdaptedSections(
 async function rebuildAndReadXml(
   parsed: Awaited<ReturnType<typeof parseDocx>>,
   adapted: AdaptedSection[],
+  locale?: import("@/i18n/config").Locale,
 ): Promise<string> {
   const output = await rebuildDocx(
     parsed.zipFiles,
     parsed.rawXml,
     parsed.sections,
     adapted,
+    locale,
   );
   const zip = await JSZip.loadAsync(output);
   const xml = await zip.file("word/document.xml")?.async("string");
@@ -404,5 +406,30 @@ describe("rebuildDocx — empty-slot pruning", () => {
     expect(xml).not.toContain("TypeScript");
     // Second slot was not adapted → kept with original text
     expect(xml).toContain("React");
+  });
+
+  it("does not corrupt 'Mayo' into 'Mayoo' when localizing to Spanish", async () => {
+    const buffer = await buildMinimalDocx(`
+      <w:p>
+        <w:r><w:t>Febrero de 2022 – Mayo de 2022</w:t></w:r>
+      </w:p>
+    `);
+    const parsed = await parseDocx(buffer);
+    const xml = await rebuildAndReadXml(parsed, [], "es");
+    expect(xml).toContain("Mayo de 2022");
+    expect(xml).not.toContain("Mayoo");
+  });
+
+  it("localizes English job titles to Spanish cleanly", async () => {
+    const buffer = await buildMinimalDocx(`
+      <w:p><w:r><w:t>Full Stack Engineer</w:t></w:r></w:p>
+      <w:p><w:r><w:t>Development Team Lead</w:t></w:r></w:p>
+      <w:p><w:r><w:t>Senior Software Engineer</w:t></w:r></w:p>
+    `);
+    const parsed = await parseDocx(buffer);
+    const xml = await rebuildAndReadXml(parsed, [], "es");
+    expect(xml).toContain("Desarrollador Full Stack");
+    expect(xml).toContain("Líder de Equipo de Desarrollo");
+    expect(xml).toContain("Ingeniero de Software Senior");
   });
 });

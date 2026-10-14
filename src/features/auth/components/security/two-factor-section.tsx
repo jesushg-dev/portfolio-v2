@@ -10,6 +10,12 @@ import { authClient } from "@/lib/auth-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import FormStatus from "@/components/admin/shared/form-status";
 import BackupCodesList from "./backup-codes-list";
@@ -271,19 +277,29 @@ const TwoFactorSection: FC<TwoFactorSectionProps> = ({
                   </code>
                 </p>
               ) : null}
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-2">
                 <Label htmlFor="security-two-factor-code">
                   {t("codeLabel")}
                 </Label>
-                <Input
+                <InputOTP
                   id="security-two-factor-code"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  placeholder="123456"
+                  maxLength={6}
                   value={code}
-                  onChange={(event) => setCode(event.target.value)}
-                  className="max-w-48 font-mono tracking-[0.3em]"
-                />
+                  onChange={setCode}
+                  autoFocus
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                  </InputOTPGroup>
+                  <InputOTPSeparator />
+                  <InputOTPGroup>
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
               </div>
             </div>
           </div>

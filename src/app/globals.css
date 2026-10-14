@@ -26,6 +26,20 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
 
+  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
+
+  @keyframes caret-blink {
+    0%,
+    70%,
+    100% {
+      opacity: 1;
+    }
+    20%,
+    50% {
+      opacity: 0;
+    }
+  }
+
   /* US Letter page (8.5in × 11in @ 96dpi) */
   --max-width-letter: 51rem;
   --height-letter: 66rem;

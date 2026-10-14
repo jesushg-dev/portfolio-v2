@@ -95,7 +95,12 @@ function replaceCaseInsensitive(
   source: string,
   target: string,
 ): string {
-  const pattern = new RegExp(escapeRegex(source), "gi");
+  if (source.toLowerCase() === target.toLowerCase()) return text;
+
+  const isWordBoundaryStart = /^\w/.test(source);
+  const isWordBoundaryEnd = /\w$/.test(source);
+  const patternStr = `${isWordBoundaryStart ? "\\b" : ""}${escapeRegex(source)}${isWordBoundaryEnd ? "\\b" : ""}`;
+  const pattern = new RegExp(patternStr, "gi");
   return text.replace(pattern, (match) => applyHeadingCase(target, match));
 }
 
@@ -113,6 +118,16 @@ function localizeStaticText(text: string, locale?: Locale): string {
       "Ingeniería en Computación": "Computer Engineering",
       "Desarrollador Full Stack": "Full Stack Developer",
       "Desarrollador Fullstack": "Fullstack Developer",
+      "Desarrollador Full-Stack": "Full-Stack Developer",
+      "Ingeniero de Software Senior": "Senior Software Engineer",
+      "Líder de Equipo de Desarrollo": "Development Team Lead",
+      "Desarrollador móvil": "Mobile Developer",
+      "Desarrollador de aplicaciones móviles": "Mobile Application Developer",
+      "Técnico de TI y Desarrollador Web": "IT Technician & Web Developer",
+      "Desarrollador Frontend y Técnico de TI":
+        "Frontend Developer and IT Technician",
+      "Tiempo completo": "Full-time",
+      "Medio tiempo": "Part-time",
       "Capacitación en Seguridad Digital y Protección de Datos":
         "Digital Security and Data Protection Training",
     },
@@ -129,13 +144,23 @@ function localizeStaticText(text: string, locale?: Locale): string {
       "Native or Bilingual (C2)": "Nativo o bilingüe (C2)",
       "Computer Engineering": "Ingeniería en Computación",
       "Full Stack Developer": "Desarrollador Full Stack",
+      "Full Stack Engineer": "Desarrollador Full Stack",
       "Fullstack Developer": "Desarrollador Fullstack",
       "Full-Stack Developer": "Desarrollador Full-Stack",
       "Senior Software Engineer": "Ingeniero de Software Senior",
+      "Senior Full Stack Developer": "Desarrollador Full Stack Senior",
+      "Development Team Lead": "Líder de Equipo de Desarrollo",
       "Mobile Developer": "Desarrollador móvil",
+      "Mobile Application Developer": "Desarrollador de aplicaciones móviles",
       "IT Technician & Web Developer": "Técnico de TI y Desarrollador Web",
       "IT Technician &amp; Web Developer": "Técnico de TI y Desarrollador Web",
+      "Frontend Developer and IT Technician":
+        "Desarrollador Frontend y Técnico de TI",
       "Full-time": "Tiempo completo",
+      "Part-time": "Medio tiempo",
+      Contract: "Contrato",
+      Freelance: "Freelance",
+      Internship: "Prácticas",
       Remote: "Remoto",
       Hybrid: "Híbrido",
       Local: "Presencial",
@@ -165,8 +190,24 @@ function localizeStaticText(text: string, locale?: Locale): string {
       "Native or Bilingual (C2)": "Moedertaal of tweetalig (C2)",
       "Computer Engineering": "Computertechniek",
       "Full Stack Developer": "Full Stack Developer",
+      "Full Stack Engineer": "Full Stack Developer",
       "Fullstack Developer": "Fullstack ontwikkelaar",
       "Full-Stack Developer": "Full-Stack Developer",
+      "Senior Software Engineer": "Senior Software Engineer",
+      "Development Team Lead": "Development Team Lead",
+      "Mobile Developer": "Mobiele ontwikkelaar",
+      "Mobile Application Developer": "Mobiele applicatieontwikkelaar",
+      "Desarrollador Full Stack": "Full Stack Developer",
+      "Ingeniero de Software Senior": "Senior Software Engineer",
+      "Líder de Equipo de Desarrollo": "Development Team Lead",
+      "Desarrollador de aplicaciones móviles": "Mobiele applicatieontwikkelaar",
+      "Desarrollador Frontend y Técnico de TI":
+        "Frontend ontwikkelaar en IT-technicus",
+      "Full-time": "Voltijd",
+      "Part-time": "Deeltijd",
+      Contract: "Contract",
+      Freelance: "Freelance",
+      Internship: "Stage",
       "Digital Security and Data Protection Training":
         "Training Digitale Beveiliging en Gegevensbescherming",
     },

@@ -25,6 +25,8 @@ import { Link } from "@/i18n/routing";
 import type { ProjectType } from "@/utils/interfaces/types";
 import PortfolioItem from "@/features/home/components/portfolio/project-item";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
+import Tab from "@/components/custom-ui/custom-tab";
+import TabItem from "@/components/custom-ui/custom-tab/tab-item";
 
 const PAGE_SIZE = 6;
 const TYPES = ["All", "FRONTEND", "BACKEND", "MOBILE", "DESKTOP"] as const;
@@ -35,6 +37,7 @@ type SortOption = "default" | "name" | "cs";
 
 interface ProjectsCatalogViewProps {
   initialProjects: ProjectType[];
+  initialSearchParams?: Record<string, string | string[] | undefined>;
 }
 
 interface TypeSegmentButtonsProps {
@@ -42,6 +45,7 @@ interface TypeSegmentButtonsProps {
   counts: Record<ProjectTypeFilter, number>;
   onSelect: (type: ProjectTypeFilter) => void;
   typeLabels: Record<ProjectTypeFilter, string>;
+  ariaLabel: string;
 }
 
 export function TypeSegmentButtons({
@@ -49,44 +53,54 @@ export function TypeSegmentButtons({
   counts,
   onSelect,
   typeLabels,
+  ariaLabel,
 }: TypeSegmentButtonsProps) {
-  const icons: Record<ProjectTypeFilter, typeof Eye> = {
-    All: Eye,
-    FRONTEND: Monitor,
-    BACKEND: Server,
-    MOBILE: Smartphone,
-    DESKTOP: Laptop,
-  };
+  const currentIndex = Math.max(0, TYPES.indexOf(currentType));
+
+  const handleTabChange = useCallback(
+    (index: number) => {
+      const selected = TYPES[index] ?? "All";
+      onSelect(selected);
+    },
+    [onSelect],
+  );
 
   return (
-    <div
-      role="group"
-      aria-label="Filter by project type"
-      className="border-border bg-muted/70 flex flex-wrap justify-center gap-1 rounded-3xl border p-1.5 md:rounded-full"
-    >
-      {TYPES.map((t) => {
-        const IconComponent = icons[t];
-        const isSelected = currentType === t;
-        return (
-          <button
-            key={t}
-            type="button"
-            aria-pressed={isSelected}
-            onClick={() => onSelect(t)}
-            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-all md:px-5 md:py-2.5 md:text-sm ${
-              isSelected
-                ? "bg-card text-foreground border-border/80 border shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <IconComponent className="size-4 shrink-0" aria-hidden="true" />
-            <span>{typeLabels[t]}</span>
-            <span className="text-muted-foreground text-xs opacity-75">
-              {counts[t]}
-            </span>
-          </button>
-        );
-      })}
+    <div className="flex w-full justify-center px-2 sm:px-4">
+      <Tab
+        tabId="projects-catalog-tab"
+        minimal
+        currentTab={currentIndex}
+        setCurrentTab={handleTabChange}
+        ariaLabel={ariaLabel}
+        className="bg-muted/70 border-border text-foreground inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-3xl border p-1.5 shadow-xs md:rounded-full"
+      >
+        <TabItem
+          icon={Eye}
+          title={`${typeLabels.All} (${counts.All})`}
+          description=""
+        />
+        <TabItem
+          icon={Monitor}
+          title={`${typeLabels.FRONTEND} (${counts.FRONTEND})`}
+          description=""
+        />
+        <TabItem
+          icon={Server}
+          title={`${typeLabels.BACKEND} (${counts.BACKEND})`}
+          description=""
+        />
+        <TabItem
+          icon={Smartphone}
+          title={`${typeLabels.MOBILE} (${counts.MOBILE})`}
+          description=""
+        />
+        <TabItem
+          icon={Laptop}
+          title={`${typeLabels.DESKTOP} (${counts.DESKTOP})`}
+          description=""
+        />
+      </Tab>
     </div>
   );
 }
@@ -226,34 +240,47 @@ function normalizeSearch(text: string): string {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-function getInitialUrlParam(key: string): string | null {
-  if (typeof window === "undefined") return null;
-  return new URLSearchParams(window.location.search).get(key);
+function getInitialUrlParam(
+  key: string,
+  initialSearchParams?: Record<string, string | string[] | undefined>,
+): string | null {
+  if (initialSearchParams) {
+    const val = initialSearchParams[key];
+    if (Array.isArray(val)) return val[0] ?? null;
+    return typeof val === "string" ? val : null;
+  }
+  if (typeof window !== "undefined") {
+    return new URLSearchParams(window.location.search).get(key);
+  }
+  return null;
 }
 
 export function ProjectsCatalogView({
   initialProjects,
+  initialSearchParams,
 }: ProjectsCatalogViewProps) {
   const t = useTranslations("main.portfolio");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Filter and sort states initialized lazily from URL
-  const [query, setQuery] = useState(() => getInitialUrlParam("q") ?? "");
+  // Filter and sort states initialized lazily from initialSearchParams or URL
+  const [query, setQuery] = useState(
+    () => getInitialUrlParam("q", initialSearchParams) ?? "",
+  );
   const [selectedType, setSelectedType] = useState<ProjectTypeFilter>(() => {
-    const typeParam = getInitialUrlParam("type");
+    const typeParam = getInitialUrlParam("type", initialSearchParams);
     return typeParam && (TYPES as readonly string[]).includes(typeParam)
       ? (typeParam as ProjectTypeFilter)
       : "All";
   });
   const [selectedKind, setSelectedKind] = useState<ProjectKindFilter>(() => {
-    const kindParam = getInitialUrlParam("kind");
+    const kindParam = getInitialUrlParam("kind", initialSearchParams);
     return kindParam &&
       ["ALL", "PROFESSIONAL", "PERSONAL", "LEARNING"].includes(kindParam)
       ? (kindParam as ProjectKindFilter)
       : "ALL";
   });
   const [selectedTech, setSelectedTech] = useState<Set<string>>(() => {
-    const techParam = getInitialUrlParam("tech");
+    const techParam = getInitialUrlParam("tech", initialSearchParams);
     if (!techParam) return new Set();
     return new Set(
       techParam
@@ -263,10 +290,10 @@ export function ProjectsCatalogView({
     );
   });
   const [csOnly, setCsOnly] = useState(
-    () => getInitialUrlParam("cs") === "1",
+    () => getInitialUrlParam("cs", initialSearchParams) === "1",
   );
   const [sort, setSort] = useState<SortOption>(() => {
-    const sortParam = getInitialUrlParam("sort");
+    const sortParam = getInitialUrlParam("sort", initialSearchParams);
     return sortParam && ["default", "name", "cs"].includes(sortParam)
       ? (sortParam as SortOption)
       : "default";
@@ -589,6 +616,7 @@ export function ProjectsCatalogView({
           counts={typeCounts}
           onSelect={handleTypeSelect}
           typeLabels={typeLabels}
+          ariaLabel={t("filters.ariaLabel")}
         />
       </div>
 

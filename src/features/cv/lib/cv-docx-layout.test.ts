@@ -166,4 +166,58 @@ describe("CV DOCX layout and experience mapping", () => {
     expect(musaBullet1).toBe("Musa responsibility 1");
     expect(musaBullet2).toBe("Musa responsibility 2");
   });
+
+  it("renders Medio tiempo and Spanish roles cleanly for all experiences", async () => {
+    const template = await loadCvTemplateForTailor();
+    const esDraft: CvImportDraft = {
+      ...draftFixture,
+      detectedLocale: "es",
+      experiences: draftFixture.experiences.map((exp) => {
+        if (exp.company === "Claro Nicaragua") {
+          return {
+            ...exp,
+            role: "Desarrollador Full Stack",
+            employmentType: "PART_TIME" as const,
+          };
+        }
+        return { ...exp, employmentType: "FULL_TIME" as const };
+      }),
+    };
+
+    const adaptedSections = mapDraftToTemplateSections(
+      template.parsed.sections,
+      esDraft,
+      [],
+    );
+    const lockedAdapted = syncLockedParagraphsFromDraft(
+      template.parsed.lockedParagraphs,
+      esDraft,
+      "es",
+    );
+
+    const buffer = await rebuildDocx(
+      template.parsed.zipFiles,
+      template.parsed.rawXml,
+      withLockedMetaSection(
+        template.parsed.sections,
+        template.parsed.lockedParagraphs,
+      ),
+      withLockedMetaAdaptations(adaptedSections, lockedAdapted),
+      "es",
+    );
+
+    const zip = await JSZip.loadAsync(buffer);
+    const xml = await zip.file("word/document.xml")!.async("string");
+    const pRegex = /<w:p\b[\s\S]*?<\/w:p>/g;
+    const paragraphs = [...xml.matchAll(pRegex)].map((m) =>
+      m[0].replace(/<[^>]+>/g, "").trim(),
+    );
+
+    expect(
+      paragraphs.some((p) => p === "Medio tiempo | Desarrollador Full Stack"),
+    ).toBe(true);
+    expect(paragraphs.some((p) => p.includes("Tiempo completo | Claro"))).toBe(
+      false,
+    );
+  });
 });

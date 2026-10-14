@@ -4,6 +4,7 @@ import type { Locale } from "@/i18n/config";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { unifyConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
+import { normalizeEmploymentType } from "./employment-type";
 
 function formatExperienceDate(
   date: Date | null | undefined,
@@ -122,6 +123,7 @@ export async function loadCvStructuredDraft(
           id: exp.id || `exp-${index + 1}`,
           company: exp.company,
           role: expT("role"),
+          employmentType: normalizeEmploymentType(exp.employmentType),
           location: expT("location") || undefined,
           companyBlurb: expT("companyBlurb") || undefined,
           startDate: formatExperienceDate(exp.startDate),

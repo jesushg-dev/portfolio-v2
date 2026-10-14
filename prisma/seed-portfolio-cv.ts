@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import type {
   CvContactType,
+  CvEmploymentType,
   CvSkillCategory,
   PrismaClient,
   Skill,
@@ -17,6 +18,8 @@ interface ExperienceSeed {
   companyLogoUrl?: string;
   startDate?: string;
   endDate?: string;
+  /** Employment type enum value. Defaults to FULL_TIME if omitted. */
+  employmentType?: CvEmploymentType;
   role: LocaleMap;
   location?: LocaleMap;
   companyBlurb?: LocaleMap;
@@ -229,6 +232,7 @@ export async function seedPortfolioCv(
         userId,
         company: experience.company,
         companyLogoUrl: experience.companyLogoUrl ?? null,
+        employmentType: experience.employmentType ?? "FULL_TIME",
         startDate: experience.startDate ? new Date(experience.startDate) : null,
         endDate: experience.endDate ? new Date(experience.endDate) : null,
         current: !experience.endDate,

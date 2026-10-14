@@ -132,6 +132,10 @@ const ExperiencesList: FC<{
                       </p>
                       <p className="text-muted-foreground text-xs">
                         {exp.company} ·{" "}
+                        {t(
+                          `employmentTypes.${exp.employmentType ?? "FULL_TIME"}`,
+                        )}{" "}
+                        ·{" "}
                         {formatExperienceDates(
                           exp.startDate,
                           exp.endDate,

@@ -1,4 +1,3 @@
-import type { FC } from "react";
 import { useTranslations, useLocale } from "next-intl";
 
 import { formatExperienceDates } from "@/utils/tools/date";
@@ -14,124 +13,10 @@ interface IExperiencesProps {
 
 type CvExperience = LocalizedCvData["experiences"][number];
 
-function ResponsibilityItem({
-  responsibility,
-}: {
-  responsibility: CvExperience["responsibilities"][number];
-}) {
-  return <li>{responsibility.text}</li>;
-}
-
-function RoleBlock({
-  experience,
+export default function Experiences({
+  experiences,
   locale,
-  showCompanyInline,
-}: {
-  experience: CvExperience;
-  locale: Locale;
-  /** When true, this is a single-role group — keep legacy company · dates line. */
-  showCompanyInline: boolean;
-}) {
-  const dates = formatExperienceDates(
-    experience.startDate,
-    experience.endDate,
-    experience.current,
-    locale,
-  );
-
-  if (showCompanyInline) {
-    return (
-      <div className="mb-4">
-        <h3 className="text-sm font-bold">{experience.role}</h3>
-        <h4 className="my-1 text-sm text-[#333333]">
-          {experience.company}
-          {dates ? ` · ${dates}` : ""}
-        </h4>
-        {experience.responsibilities.length > 0 ? (
-          <ul className="list-disc pl-8 text-sm text-[#1a1a1a]">
-            {experience.responsibilities.map((responsibility) => (
-              <ResponsibilityItem
-                key={responsibility.id}
-                responsibility={responsibility}
-              />
-            ))}
-          </ul>
-        ) : null}
-      </div>
-    );
-  }
-
-  return (
-    <div className="mb-3">
-      <h3 className="text-sm font-bold">
-        {experience.role}
-        {dates ? (
-          <span className="font-normal text-[#333333]"> · {dates}</span>
-        ) : null}
-      </h3>
-      {experience.responsibilities.length > 0 ? (
-        <ul className="mt-1 list-disc pl-8 text-sm text-[#1a1a1a]">
-          {experience.responsibilities.map((responsibility) => (
-            <ResponsibilityItem
-              key={responsibility.id}
-              responsibility={responsibility}
-            />
-          ))}
-        </ul>
-      ) : null}
-    </div>
-  );
-}
-
-function ExperienceCompanyGroup({
-  company,
-  overallStart,
-  overallEnd,
-  overallCurrent,
-  roles,
-  locale,
-}: {
-  company: string;
-  overallStart: Date | null;
-  overallEnd: Date | null;
-  overallCurrent: boolean;
-  roles: CvExperience[];
-  locale: Locale;
-}) {
-  if (roles.length === 1 && roles[0]) {
-    return (
-      <RoleBlock experience={roles[0]} locale={locale} showCompanyInline />
-    );
-  }
-
-  const overallDates = formatExperienceDates(
-    overallStart,
-    overallEnd,
-    overallCurrent,
-    locale,
-  );
-
-  return (
-    <div className="mb-4">
-      <h3 className="text-sm font-bold text-[#333333]">
-        {company}
-        {overallDates ? ` · ${overallDates}` : ""}
-      </h3>
-      <div className="mt-2 space-y-2">
-        {roles.map((role) => (
-          <RoleBlock
-            key={role.id}
-            experience={role}
-            locale={locale}
-            showCompanyInline={false}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const Experiences: FC<IExperiencesProps> = ({ experiences, locale }) => {
+}: IExperiencesProps) {
   const t = useTranslations("curriculum");
   const routeLocale = useLocale();
   const dateLocale = locale ?? routeLocale;
@@ -155,10 +40,143 @@ const Experiences: FC<IExperiencesProps> = ({ experiences, locale }) => {
           overallCurrent={group.overallCurrent}
           roles={group.roles}
           locale={dateLocale}
+          t={t}
         />
       ))}
     </>
   );
-};
+}
 
-export default Experiences;
+function ExperienceCompanyGroup({
+  company,
+  overallStart,
+  overallEnd,
+  overallCurrent,
+  roles,
+  locale,
+  t,
+}: {
+  company: string;
+  overallStart: Date | null;
+  overallEnd: Date | null;
+  overallCurrent: boolean;
+  roles: CvExperience[];
+  locale: Locale;
+  t: ReturnType<typeof useTranslations<"curriculum">>;
+}) {
+  if (roles.length === 1 && roles[0]) {
+    return (
+      <RoleBlock
+        experience={roles[0]}
+        locale={locale}
+        showCompanyInline
+        t={t}
+      />
+    );
+  }
+
+  const overallDates = formatExperienceDates(
+    overallStart,
+    overallEnd,
+    overallCurrent,
+    locale,
+  );
+
+  return (
+    <div className="mb-4">
+      <h3 className="text-sm font-bold text-[#333333]">
+        {company}
+        {overallDates ? ` · ${overallDates}` : ""}
+      </h3>
+      <div className="mt-2 space-y-2">
+        {roles.map((role) => (
+          <RoleBlock
+            key={role.id}
+            experience={role}
+            locale={locale}
+            showCompanyInline={false}
+            t={t}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RoleBlock({
+  experience,
+  locale,
+  showCompanyInline,
+  t,
+}: {
+  experience: CvExperience;
+  locale: Locale;
+  /** When true, this is a single-role group — keep legacy company · dates line. */
+  showCompanyInline: boolean;
+  t: ReturnType<typeof useTranslations<"curriculum">>;
+}) {
+  const dates = formatExperienceDates(
+    experience.startDate,
+    experience.endDate,
+    experience.current,
+    locale,
+  );
+  const typeLabel = experience.employmentType
+    ? t(`employmentTypes.${experience.employmentType}`)
+    : null;
+
+  if (showCompanyInline) {
+    return (
+      <div className="mb-4">
+        <h3 className="text-sm font-bold">{experience.role}</h3>
+        <h4 className="my-1 text-sm text-[#333333]">
+          {experience.company}
+          {typeLabel ? ` · ${typeLabel}` : ""}
+          {dates ? ` · ${dates}` : ""}
+        </h4>
+        {experience.responsibilities.length > 0 ? (
+          <ul className="list-disc pl-8 text-sm text-[#1a1a1a]">
+            {experience.responsibilities.map((responsibility) => (
+              <ResponsibilityItem
+                key={responsibility.id}
+                responsibility={responsibility}
+              />
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-3">
+      <h3 className="text-sm font-bold">
+        {experience.role}
+        {typeLabel ? (
+          <span className="font-normal text-[#333333]"> · {typeLabel}</span>
+        ) : null}
+        {dates ? (
+          <span className="font-normal text-[#333333]"> · {dates}</span>
+        ) : null}
+      </h3>
+      {experience.responsibilities.length > 0 ? (
+        <ul className="mt-1 list-disc pl-8 text-sm text-[#1a1a1a]">
+          {experience.responsibilities.map((responsibility) => (
+            <ResponsibilityItem
+              key={responsibility.id}
+              responsibility={responsibility}
+            />
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+function ResponsibilityItem({
+  responsibility,
+}: {
+  responsibility: CvExperience["responsibilities"][number];
+}) {
+  return <li>{responsibility.text}</li>;
+}

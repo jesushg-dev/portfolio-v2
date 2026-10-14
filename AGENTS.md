@@ -30,3 +30,16 @@ Unless the user explicitly instructs otherwise, NEVER keep:
 - Deprecated mock tables or unused legacy helpers.
 
 ALWAYS purge legacy assets completely and refactor to clean modern implementations.
+
+# Canonical Tab Systems — Strict Prohibition of Ad-Hoc Tabs
+
+### ❌ NEVER create ad-hoc tab components, hand-rolled segmented button bars, or parallel tab designs
+Do not invent custom `<button>` groups, segmented controls, or hand-rolled tab bars (`<div role="group">{TYPES.map(...)}</div>`).
+
+### ✅ ALWAYS use the EXACT 2 canonical tab systems:
+1. **Public / Portfolio Tabs (`@/components/custom-ui/custom-tab`):**
+   - **Design 1 (Pill / Filters):** `minimal={true}`. Rounded pill format with sliding indicator, glow, and icon. Single source of truth for public filters (Home Portfolio, `/projects` catalog).
+   - **Design 2 (Card / Detailed):** `minimal={false}`. Structured card tabs with large icon, title, and description (Services, CV, Experience).
+2. **Admin & Forms Tabs (`@/components/ui/tabs`):**
+   - Base UI / Shadcn tabs (`Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`) exclusively for admin consoles and form dialogs.
+

@@ -338,4 +338,40 @@ describe("syncLockedParagraphsFromDraft", () => {
 
     expect(adapted[1]?.runs[0]?.text).toContain("Remote");
   });
+
+  it("translates employment type to Spanish (es) and Dutch (nl)", () => {
+    const partTimeDraft = {
+      ...draft,
+      experiences: [
+        {
+          ...draft.experiences[0],
+          role: "Full Stack Engineer",
+          employmentType: "PART_TIME" as const,
+        },
+      ],
+    };
+
+    const adaptedEs = syncLockedParagraphsFromDraft(
+      lockedFixture,
+      partTimeDraft,
+      "es",
+    );
+    expect(adaptedEs[0]?.runs[0]?.text).toBe(
+      "Medio tiempo | Full Stack Engineer",
+    );
+
+    const adaptedNl = syncLockedParagraphsFromDraft(
+      lockedFixture,
+      partTimeDraft,
+      "nl",
+    );
+    expect(adaptedNl[0]?.runs[0]?.text).toBe("Deeltijd | Full Stack Engineer");
+
+    const adaptedEn = syncLockedParagraphsFromDraft(
+      lockedFixture,
+      partTimeDraft,
+      "en",
+    );
+    expect(adaptedEn[0]?.runs[0]?.text).toBe("Part-time | Full Stack Engineer");
+  });
 });

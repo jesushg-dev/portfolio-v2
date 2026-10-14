@@ -805,8 +805,8 @@ function KanbanColumn(props: KanbanColumnProps) {
         items={items}
         strategy={
           context.orientation === "horizontal"
-            ? horizontalListSortingStrategy
-            : verticalListSortingStrategy
+            ? verticalListSortingStrategy
+            : horizontalListSortingStrategy
         }
       >
         <ColumnPrimitive

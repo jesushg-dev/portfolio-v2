@@ -134,12 +134,12 @@ const Logo = ({ userName, title }: { userName: string; title: string }) => {
   return (
     <CustomLink
       href="/admin"
-      className="z-20 flex items-center gap-2 px-2 py-1 font-bold"
+      className="z-20 flex min-w-0 items-center gap-2 px-2 py-1 font-bold"
     >
-      <div className="bg-primary text-primary-foreground flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-semibold">
+      <div className="bg-primary text-primary-foreground flex size-6 shrink-0 items-center justify-center rounded-lg text-xs font-semibold">
         {userName.charAt(0).toUpperCase()}
       </div>
-      <span className="text-foreground text-sm font-bold whitespace-pre opacity-100 transition-opacity">
+      <span className="text-foreground min-w-0 truncate text-sm font-bold opacity-100 transition-opacity">
         {title}
       </span>
     </CustomLink>
@@ -233,6 +233,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
       <Sidebar open={open} setOpen={setOpen}>
         <SidebarBody
           className="h-full min-h-0 justify-between gap-4"
+          mobileBrand={<Logo userName={userName} title={t("title")} />}
           mobileActions={
             <>
               <LocaleSelector />
@@ -240,9 +241,9 @@ const DashboardShell: FC<IDashboardShellProps> = ({
                 type="button"
                 aria-label={t("toggleThemeAria")}
                 onClick={() => setThemeMenuOpen((prev) => !prev)}
-                className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground shrink-0 rounded-lg border p-2"
+                className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground inline-flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors"
               >
-                <Palette className="h-4 w-4" />
+                <Palette className="size-4" aria-hidden />
               </button>
             </>
           }

@@ -271,7 +271,7 @@ export const ApplicationForm: FC<ApplicationFormProps> = ({
             className={isModal ? "space-y-4" : undefined}
           >
             {showUrlImport ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 p-[0.0625rem]">
                 <div className="min-w-0 flex-1">
                   <Input
                     id="importUrl"

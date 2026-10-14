@@ -197,8 +197,9 @@
       "key": "experience0",
       "company": "Walmart (via Imagemaker)",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1769196300/origin/bio/crawled-organizations/imagemaker_logo_z26lj4.jpg",
+      "employmentType": "FULL_TIME",
       "role": {
-        "es": "Senior Software Engineer",
+        "es": "Ingeniero de Software Senior",
         "en": "Senior Software Engineer",
         "nl": "Senior Software Engineer"
       },
@@ -273,10 +274,11 @@
       "key": "experience1",
       "company": "Claro Nicaragua",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/w_36,dpr_2.0/v1600924980/origin/bio/organizations/claro_zjqxzc.png",
+      "employmentType": "PART_TIME",
       "role": {
-        "es": "Full Stack Engineer · Medio tiempo",
-        "en": "Full Stack Engineer · Part-time",
-        "nl": "Full Stack Engineer · Parttime"
+        "es": "Desarrollador Full Stack",
+        "en": "Full Stack Engineer",
+        "nl": "Full Stack Engineer"
       },
       "location": {
         "es": "Remoto · Managua, Nicaragua",
@@ -338,8 +340,9 @@
       "key": "experience2-lead",
       "company": "Contollo",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1780694684/origin/bio/crawled-organizations/686411370a48745f463c757b3ee1e18d_gowsgt.jpg",
+      "employmentType": "FULL_TIME",
       "role": {
-        "es": "Development Team Lead",
+        "es": "Líder de Equipo de Desarrollo",
         "en": "Development Team Lead",
         "nl": "Development Team Lead"
       },
@@ -423,8 +426,9 @@
       "key": "experience2",
       "company": "Contollo",
       "companyLogoUrl": "https://res.cloudinary.com/torre-technologies-co/image/upload/c_pad,h_150,w_150,b_auto/w_36,dpr_2.0/v1780694684/origin/bio/crawled-organizations/686411370a48745f463c757b3ee1e18d_gowsgt.jpg",
+      "employmentType": "FULL_TIME",
       "role": {
-        "es": "Senior Software Engineer",
+        "es": "Ingeniero de Software Senior",
         "en": "Senior Software Engineer",
         "nl": "Senior Software Engineer"
       },
@@ -517,6 +521,7 @@
     {
       "key": "experience4",
       "company": "Musa",
+      "employmentType": "FULL_TIME",
       "role": {
         "es": "Desarrollador Full Stack",
         "en": "Full Stack Developer",
@@ -621,6 +626,7 @@
     {
       "key": "experience5",
       "company": "Telo Group",
+      "employmentType": "FULL_TIME",
       "role": {
         "es": "Desarrollador de aplicaciones móviles",
         "en": "Mobile Application Developer",
@@ -701,6 +707,7 @@
     {
       "key": "experience6",
       "company": "Asociación de Iglesias Reformadas",
+      "employmentType": "FULL_TIME",
       "role": {
         "es": "Desarrollador Frontend y Técnico de TI",
         "en": "Frontend Developer and IT Technician",

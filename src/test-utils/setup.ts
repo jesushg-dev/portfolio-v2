@@ -10,6 +10,10 @@ if (typeof global.TextDecoder === "undefined") {
   global.TextDecoder = TextDecoder;
 }
 
+if (typeof document !== "undefined" && !document.elementFromPoint) {
+  document.elementFromPoint = () => null;
+}
+
 delete process.env.TURNSTILE_SECRET;
 
 if (typeof globalThis.Response === "undefined") {

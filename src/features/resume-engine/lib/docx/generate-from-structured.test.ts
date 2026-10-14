@@ -89,4 +89,45 @@ describe("generateDocxFromStructured", () => {
     expect(documentXml).toContain("Liderazgo técnico.");
     expect(documentXml).toContain("Desarrollo frontend y backend.");
   });
+
+  it("renders localized employment type in experience header", async () => {
+    const draftEs: CvImportDraft = {
+      ...baseDraft,
+      detectedLocale: "es",
+      experiences: [
+        {
+          id: "exp-claro",
+          company: "Claro Nicaragua",
+          role: "Full Stack Engineer",
+          employmentType: "PART_TIME",
+          location: "Remoto · Managua, Nicaragua",
+          startDate: "2024-09",
+          endDate: "2025-08",
+          current: false,
+          responsibilities: ["Orquestación de servicios."],
+          atsResponsibilities: [],
+        },
+      ],
+    };
+
+    const bufferEs = await generateDocxFromStructured(draftEs);
+    const zipEs = await JSZip.loadAsync(bufferEs);
+    const xmlEs = await zipEs.file("word/document.xml")?.async("string");
+
+    expect(xmlEs).toContain(
+      "Full Stack Engineer — Medio tiempo — Claro Nicaragua",
+    );
+
+    const draftEn: CvImportDraft = {
+      ...draftEs,
+      detectedLocale: "en",
+    };
+    const bufferEn = await generateDocxFromStructured(draftEn);
+    const zipEn = await JSZip.loadAsync(bufferEn);
+    const xmlEn = await zipEn.file("word/document.xml")?.async("string");
+
+    expect(xmlEn).toContain(
+      "Full Stack Engineer — Part-time — Claro Nicaragua",
+    );
+  });
 });

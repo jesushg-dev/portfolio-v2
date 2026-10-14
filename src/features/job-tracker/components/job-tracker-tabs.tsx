@@ -94,7 +94,7 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
       </nav>
 
       <div
-        className="min-h-0 flex-1 overflow-hidden p-4 md:p-6"
+        className="min-h-0 flex-1 overflow-hidden p-2.5 sm:p-4 md:p-6"
         role="tabpanel"
       >
         {activeTab === "applications" ? (

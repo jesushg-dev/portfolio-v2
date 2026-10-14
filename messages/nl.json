@@ -251,6 +251,13 @@
   },
   "curriculum": {
     "title": "Curriculum Vitae",
+    "employmentTypes": {
+      "FULL_TIME": "Voltijd",
+      "PART_TIME": "Deeltijd",
+      "CONTRACT": "Contract",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Stage"
+    },
     "header": {
       "cvHeader": "Koptekst",
       "aboutMe": "Over Mij",
@@ -575,8 +582,6 @@
       "availableForOpportunities": "Beschikbaar voor nieuwe kansen",
       "scheduleCall": "Plan een gesprek",
       "scheduleCallAria": "Plan een gesprek — ga naar het contactgedeelte",
-      "mttrBadgeValue": "-40% MTTR",
-      "mttrBadgeLabel": "Kritieke Incidenten",
       "empty": {
         "title": "Hero niet geconfigureerd",
         "description": "Voeg je profielfoto, ondertitel en introductie toe via het beheerdersprofiel."
@@ -2051,6 +2056,14 @@
       "experience": {
         "company": "Bedrijf",
         "role": "Rol",
+        "employmentType": "Dienstverband",
+        "employmentTypes": {
+          "FULL_TIME": "Voltijd",
+          "PART_TIME": "Deeltijd",
+          "CONTRACT": "Contract",
+          "FREELANCE": "Freelance",
+          "INTERNSHIP": "Stage"
+        },
         "location": "Locatie (optioneel)",
         "dates": "Datums",
         "startDate": "Startdatum",

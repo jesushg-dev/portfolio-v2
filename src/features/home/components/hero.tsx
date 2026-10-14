@@ -4,7 +4,6 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { resolveTenant } from "@/lib/tenant/resolve";
-import { api } from "@/trpc/server";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
@@ -24,19 +23,11 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
   const locale = await getLocale();
   const t = await getTranslations("main.heroMain");
 
-  const [heroData, experiences] = await Promise.all([
-    getCachedHeroPublic(locale),
-    api.portfolio.getExperiencesPublic({ locale, limit: 3 }).catch(() => []),
-  ]);
+  const heroData = await getCachedHeroPublic(locale);
 
   if (!heroData) {
     return <HeroEmpty />;
   }
-
-  const mttrBadge = {
-    value: t("mttrBadgeValue"),
-    label: t("mttrBadgeLabel"),
-  };
 
   const showCvLink = isPublicCvVisible(await resolveTenant());
 
@@ -82,11 +73,7 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
           stats={stats}
           showCvLink={showCvLink}
         />
-        <HeroPhoto
-          heroData={parsedHeroData}
-          experiences={experiences}
-          mttrBadge={mttrBadge}
-        />
+        <HeroPhoto heroData={parsedHeroData} />
       </div>
 
       {/* Scroll Down Indicator matching Untitled-1.html */}

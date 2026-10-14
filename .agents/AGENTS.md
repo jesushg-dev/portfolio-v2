@@ -125,6 +125,38 @@ import SkillIcon from "@/features/home/components/skills/skill-icon";
 
 ---
 
+## Canonical Tab Systems — Strict Prohibition of Ad-Hoc Tabs
+
+### ❌ NEVER create ad-hoc tab components, hand-rolled segmented button bars, or parallel tab designs
+
+Do not invent custom `<button>` groups, segmented controls, or hand-rolled tab bars:
+
+```tsx
+// ❌ WRONG — Hand-rolling custom tab bars or segmented buttons
+<div role="group" className="flex rounded-3xl ...">
+  {TYPES.map((t) => (
+    <button onClick={() => onSelect(t)}>{t}</button>
+  ))}
+</div>
+```
+
+This creates design fragmentation, breaks sliding indicator animations and drag physics, and causes hydration or accessibility inconsistencies.
+
+### ✅ ALWAYS use the EXACT 2 canonical tab systems
+
+There are strictly ONLY TWO canonical tab implementations in this project:
+
+1. **Public / Portfolio Tabs (`@/components/custom-ui/custom-tab`):**
+   - Import `Tab` from `@/components/custom-ui/custom-tab` and `TabItem` from `@/components/custom-ui/custom-tab/tab-item`.
+   - **Design 1 — Pill / Filters (`minimal={true}`):** Rounded pill format (`rounded-full`) with animated sliding indicator, glow physics, icon, and compact title. Single source of truth for public filters (Home Portfolio, `/projects` catalog, etc.).
+   - **Design 2 — Card / Detailed (`minimal={false}`):** Structured card tabs with large icon, title, and descriptive text for multi-section showcases (Services, CV, Experience).
+
+2. **Admin & Forms Tabs (`@/components/ui/tabs`):**
+   - Import `Tabs`, `TabsList`, `TabsTrigger`, and `TabsContent` from `@/components/ui/tabs` (Base UI / Shadcn).
+   - Used exclusively for administrative consoles, job tracker layouts, and modal form settings (`default` and `line` variants).
+
+---
+
 ## Theming System
 
 This project uses a **`data-theme` attribute system** for theming, NOT Tailwind's `dark:` variant.

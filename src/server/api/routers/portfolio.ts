@@ -886,6 +886,7 @@ export const portfolioRouter = createTRPCRouter({
           id: experience.id,
           company: experience.company,
           companyLogoUrl: experience.companyLogoUrl,
+          employmentType: experience.employmentType ?? "FULL_TIME",
           startDate: experience.startDate,
           endDate: experience.endDate,
           current: experience.current,

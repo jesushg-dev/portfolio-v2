@@ -7,6 +7,7 @@ import {
 } from "@/lib/cv/group-consecutive-experiences-by-company";
 import type { Locale } from "@/i18n/config";
 import { formatExperienceDates } from "@/utils/tools/date";
+import { getEmploymentTypeLabel } from "@/features/cv/lib/employment-type";
 
 function escapeXml(text: string): string {
   return text
@@ -108,7 +109,16 @@ function buildDocumentBody(draft: CvImportDraft): string {
         Boolean(exp.current),
         locale,
       );
-      const header = [exp.role, exp.company, dateLine, exp.location]
+      const employmentTypeLabel = exp.employmentType
+        ? getEmploymentTypeLabel(exp.employmentType, locale)
+        : null;
+      const header = [
+        exp.role,
+        employmentTypeLabel,
+        exp.company,
+        dateLine,
+        exp.location,
+      ]
         .filter(Boolean)
         .join(" — ");
       parts.push(paragraph(header, "company"));

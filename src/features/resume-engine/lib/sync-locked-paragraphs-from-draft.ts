@@ -12,6 +12,7 @@ import type {
   LockedParagraph,
 } from "@/lib/types";
 import { formatExperienceDates } from "@/utils/tools/date";
+import { getEmploymentTypeLabel } from "@/features/cv/lib/employment-type";
 
 export const LOCKED_META_SECTION_ID = "__locked_meta__";
 
@@ -140,14 +141,17 @@ function buildExperienceMetaLine(
 
 function buildExperienceRoleLine(
   draftRole: string,
+  employmentType: string | undefined,
   previousText: string,
+  locale: Locale,
 ): string {
   const role = draftRole.trim();
   if (!role) return previousText;
   const pipeIndex = previousText.indexOf("|");
+  // If there is no pipe in the template paragraph, just return the role.
   if (pipeIndex === -1) return role;
-  const prefix = previousText.slice(0, pipeIndex).trim();
-  return prefix ? `${prefix} | ${role}` : role;
+  const label = getEmploymentTypeLabel(employmentType, locale);
+  return `${label} | ${role}`;
 }
 
 /**
@@ -178,7 +182,12 @@ export function syncLockedParagraphsFromDraft(
       adapted.push(
         adaptParagraphText(
           locked.paragraph,
-          buildExperienceRoleLine(experience.role, previousText),
+          buildExperienceRoleLine(
+            experience.role,
+            experience.employmentType,
+            previousText,
+            locale,
+          ),
         ),
       );
       continue;
