@@ -4,10 +4,11 @@ import { format } from "date-fns";
 import {
   Building2,
   Calendar,
-  MapPin,
   DollarSign,
-  MoreHorizontal,
+  ExternalLink,
   FileText,
+  MapPin,
+  MoreHorizontal,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "@/i18n/routing";
@@ -55,6 +56,7 @@ export function ApplicationCard({
     appliedDate,
     salary,
     location,
+    jobUrl,
     notes,
     description,
   } = application;
@@ -171,19 +173,34 @@ export function ApplicationCard({
             </p>
           )}
 
-          {company.website && (
-            <div className="pt-2">
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            {jobUrl ? (
               <a
-                href={company.website}
+                href={jobUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
                 className={buttonVariants({ variant: "outline", size: "sm" })}
               >
+                <ExternalLink className="mr-1.5 size-3.5" aria-hidden />
+                {t("detail.viewJobPosting")}
+              </a>
+            ) : null}
+            {company.website ? (
+              <a
+                href={company.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className={buttonVariants({
+                  variant: jobUrl ? "ghost" : "outline",
+                  size: "sm",
+                })}
+              >
                 {t("viewCompany")}
               </a>
-            </div>
-          )}
+            ) : null}
+          </div>
         </CardContent>
         <CelebrationAnimation
           show={showCelebration}

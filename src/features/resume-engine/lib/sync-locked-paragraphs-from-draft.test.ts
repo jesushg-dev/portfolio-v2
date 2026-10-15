@@ -132,7 +132,7 @@ describe("syncLockedParagraphsFromDraft", () => {
     );
   });
 
-  it("omits company on consecutive same-company experience meta lines", () => {
+  it("unifies consecutive same-company experience meta lines and empties redundant slots", () => {
     const locked: LockedParagraph[] = [
       {
         kind: "experience-role",
@@ -216,9 +216,9 @@ describe("syncLockedParagraphsFromDraft", () => {
 
     expect(adapted.map((paragraph) => paragraph.runs[0]?.text)).toEqual([
       "Development Team Lead",
-      "Contollo · Remote · November 2024 – March 2025",
-      "Senior Software Engineer",
-      "Remote · August 2023 – November 2024",
+      "Contollo · Remote · August 2023 – March 2025",
+      "",
+      "",
     ]);
   });
 
@@ -318,5 +318,60 @@ describe("syncLockedParagraphsFromDraft", () => {
       "Agosto de 2024",
     );
     expect(adapted[0]?.paragraphs[1]?.runs[0]?.text).toContain("Presente");
+    expect(adapted[0]?.paragraphs[1]?.runs[0]?.text).toContain("Híbrido");
+  });
+
+  it("translates workplace mode to Dutch (nl)", () => {
+    const adapted = syncLockedParagraphsFromDraft(
+      lockedFixture,
+      {
+        ...draft,
+        experiences: [
+          {
+            ...draft.experiences[0],
+            location: "Remote",
+          },
+        ],
+      },
+      "nl",
+    );
+
+    expect(adapted[1]?.runs[0]?.text).toContain("Remote");
+  });
+
+  it("translates employment type to Spanish (es) and Dutch (nl)", () => {
+    const partTimeDraft = {
+      ...draft,
+      experiences: [
+        {
+          ...draft.experiences[0],
+          role: "Full Stack Engineer",
+          employmentType: "PART_TIME" as const,
+        },
+      ],
+    };
+
+    const adaptedEs = syncLockedParagraphsFromDraft(
+      lockedFixture,
+      partTimeDraft,
+      "es",
+    );
+    expect(adaptedEs[0]?.runs[0]?.text).toBe(
+      "Medio tiempo | Full Stack Engineer",
+    );
+
+    const adaptedNl = syncLockedParagraphsFromDraft(
+      lockedFixture,
+      partTimeDraft,
+      "nl",
+    );
+    expect(adaptedNl[0]?.runs[0]?.text).toBe("Deeltijd | Full Stack Engineer");
+
+    const adaptedEn = syncLockedParagraphsFromDraft(
+      lockedFixture,
+      partTimeDraft,
+      "en",
+    );
+    expect(adaptedEn[0]?.runs[0]?.text).toBe("Part-time | Full Stack Engineer");
   });
 });

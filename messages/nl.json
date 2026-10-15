@@ -251,6 +251,13 @@
   },
   "curriculum": {
     "title": "Curriculum Vitae",
+    "employmentTypes": {
+      "FULL_TIME": "Voltijd",
+      "PART_TIME": "Deeltijd",
+      "CONTRACT": "Contract",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Stage"
+    },
     "header": {
       "cvHeader": "Koptekst",
       "aboutMe": "Over Mij",
@@ -560,7 +567,7 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Senior Full Stack .NET Developer",
+      "title": "Jesús Hernández | Senior Software Engineer",
       "description": "Senior Full Stack Developer met 6+ jaar ervaring in .NET Core, React en SQL Server, moderniseren van legacy systemen en leveren van productieklare software in veeleisende omgevingen.",
       "keywords": "Senior .NET Developer, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Software Engineer, Jesús Hernández, Senior Software Engineer"
     },
@@ -570,19 +577,20 @@
       "scrollDown": "Scrol naar beneden",
       "yearsExperience": "Jaren ervaring",
       "projectsDelivered": "Projecten opgeleverd",
+      "engineersLed": "Engineers geleid",
       "certifications": "Certificeringen",
       "availableForOpportunities": "Beschikbaar voor nieuwe kansen",
       "scheduleCall": "Plan een gesprek",
       "scheduleCallAria": "Plan een gesprek — ga naar het contactgedeelte",
       "empty": {
         "title": "Hero niet geconfigureerd",
-        "description": "Voeg je profielfoto, achtergrond en introductie toe vanuit het beheerdersprofiel hero tabblad."
+        "description": "Voeg je profielfoto, ondertitel en introductie toe via het beheerdersprofiel."
       }
     },
     "services": {
-      "title": "Diensten",
-      "subtitle": "",
-      "description": "",
+      "title": "Engineering Expertise",
+      "subtitle": "Diensten",
+      "description": "Gebieden waar ik productiesoftware ontwerp, bouw en leid.",
       "items": {
         "contact": {
           "title": "Laten we samen bouwen",
@@ -595,12 +603,32 @@
       "title": "Mijn reis",
       "subtitle": "Een tijdlijn van werk, studie en groei",
       "empty": "Nog geen tijdlijnitems.",
+      "emptyFilter": "Geen mijlpalen gevonden voor deze filter.",
       "metaTitle": "Tijdlijn",
-      "metaDescription": "Ontdek mijn professionele en academische reis door de tijd."
+      "metaDescription": "Ontdek mijn professionele en academische reis door de tijd.",
+      "stats": "Sinds {year} · {milestones} mijlpalen · {workplaces} werkplekken",
+      "filters": {
+        "all": "Alles",
+        "work": "Werkervaring",
+        "learning": "Studie & cursussen",
+        "ariaLabel": "Filter tijdlijnmijlpalen"
+      },
+      "categories": {
+        "WORK": "Werk",
+        "STUDY": "Studie",
+        "COURSE": "Cursus"
+      },
+      "roles": "Carrièreprogressie",
+      "present": "Heden",
+      "viewCv": "Volledig CV bekijken",
+      "showingAll": "Alle mijlpalen worden weergegeven.",
+      "showingFiltered": "{count} mijlpalen weergegeven.",
+      "imageOf": "Afbeelding {current} van {total}",
+      "techAria": "Technologieën"
     },
     "about": {
-      "title": "Over mij",
-      "subtitle": "Een beknopt overzicht",
+      "title": "Engineering Aanpak",
+      "subtitle": "Hoe ik ontwikkel",
       "terminalEmpty": {
         "title": "Terminal niet geconfigureerd",
         "description": "Voeg een geanimeerde terminalreeks toe via het Terminal-tabblad in het adminprofiel."
@@ -638,7 +666,28 @@
         "experiencesTitle": "Waar ik {skill} gebruikte",
         "experiencesDescription": "Rollen en teams waar {skill} deel uitmaakte van het dagelijks werk.",
         "projectsTitle": "Projecten met {skill}",
-        "projectsDescription": "Geselecteerd werk dat {skill} in productie gebruikt."
+        "projectsDescription": "Geselecteerd werk dat {skill} in productie gebruikt.",
+        "caseStudy": "Lees casus",
+        "kind": {
+          "PROFESSIONAL": "Klantwerk",
+          "PERSONAL": "Persoonlijk",
+          "LEARNING": "Leren"
+        },
+        "meta": {
+          "solo": "Solo",
+          "team": "Team van {count}",
+          "now": "heden"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "In productie",
+          "MAINTENANCE": "Onderhoud",
+          "ARCHIVED": "Gearchiveerd"
+        },
+        "teaser": {
+          "decisions": "{count} beslissingen",
+          "layers": "Architectuur",
+          "metrics": "{count} statistieken"
+        }
       },
       "modal": {
         "close": "Sluiten",
@@ -665,34 +714,38 @@
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Zoek technologieën",
         "noResults": "Geen match in de huidige stack.",
+        "noMatch": "grep: geen resultaten voor \"{query}\"",
+        "featured": "Uitgelicht",
         "coreLegend": "helderder = uitgelichte stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
-        "searchFor": " voor \"{query}\""
+        "searchFor": " voor \"{query}\"",
+        "trend": "Trend",
+        "updatedTechPill": "Bijgewerkte technologieën 2024-2026"
       },
       "tabs": {
-        "frontend": {
-          "title": "Frontend",
-          "description": "React- en Next.js-applicaties in productie op schaal, van e-commerce storefronts tot interne dashboards en beheerplatforms."
+        "ai": {
+          "title": "AI & Machine Learning",
+          "description": "Grote taalmodellen (LLM's), orkestratieframeworks, autonome agenten en moderne AI-engineeringtools."
+        },
+        "architecture": {
+          "title": "Architectuur",
+          "description": "Systeemontwerp, gedistribueerde systemen, DDD en architectonische fundamenten voor schaalbare platformen."
         },
         "backend": {
           "title": "Backend",
-          "description": "REST en GraphQL API's in C#/.NET Core en Node.js, met authenticatie, autorisatie en prestaties als hoogste prioriteit."
+          "description": "REST en GraphQL API's in C#/.NET Core en Node.js, met prestaties als hoogste prioriteit."
         },
-        "mobile": {
-          "title": "Mobiel",
-          "description": "Cross-platform React Native-apps met offline ondersteuning, biometrische authenticatie en betrouwbaarheid voor veldoperaties."
+        "data": {
+          "title": "Data",
+          "description": "SQL en NoSQL databases, ORM's en datamodellering voor krachtige applicaties."
         },
-        "database": {
-          "title": "Database",
-          "description": "SQL Server, PostgreSQL en MongoDB in financiële dashboards, serviceplatformen en multi-tenant inhoudssystemen."
+        "frontend": {
+          "title": "Frontend",
+          "description": "React- en Next.js-applicaties in productie op schaal, van e-commerce storefronts tot interne dashboards."
         },
-        "devops": {
-          "title": "DevOps",
-          "description": "CI/CD-pijplijnen in Azure DevOps en GitHub Actions, met Docker, beveiligingsscanning en omgevingspariteit."
-        },
-        "tools": {
-          "title": "Gereedschappen",
-          "description": "De dagelijkse professionele toolkit die levering snel houdt, kwaliteit hoog en teams op één lijn."
+        "quality": {
+          "title": "Kwaliteit & Levering",
+          "description": "CI/CD-pipelines, Docker containerisatie, geautomatiseerd testen en veiligheidsscans voor betrouwbare levering."
         }
       }
     },
@@ -704,8 +757,8 @@
     },
     "portfolio": {
       "subtitle": "Portfolio",
-      "title": "Beste projecten",
-      "description": "Een selectie van projecten die laten zien hoe ik ontwerp, bouw en echte problemen oplos met software.",
+      "title": "Geselecteerd Engineering Werk",
+      "description": "Een selectie van systemen en engineering initiatieven waar ik technische problemen oploste, oplevering verbeterde en meetbare business impact creëerde.",
       "actions": {
         "view": "Bekijk project",
         "source": "Bekijk bron",
@@ -727,7 +780,84 @@
         "stack": "Stack",
         "nextProject": "Volgend project",
         "visualTitle": "Verbindingen met intentie",
-        "visualSubtitle": "Elke node is een schakel; elke lijn een reden om te bouwen."
+        "visualSubtitle": "Elke node is een schakel; elke lijn een reden om te bouwen.",
+        "backToProjects": "Terug naar projecten",
+        "caseStudyLabel": "Casestudy",
+        "summaryEyebrow": "In 30 seconden",
+        "summaryTitle": "Samenvatting voor recruiters",
+        "context": "Context",
+        "ownership": "Verantwoordelijkheid",
+        "roleSectionTitle": "Mijn rol en verantwoordelijkheden",
+        "challengeEyebrow": "Het probleem",
+        "shortOnTime": "Weinig tijd? Lees alleen:",
+        "why": "Waarom",
+        "alternativesConsidered": "Overwogen alternatieven",
+        "similarRole": "Zoek je iemand voor een vergelijkbare functie?",
+        "decisionsWalkthrough": "Ik licht deze keuzes graag verder toe.",
+        "timeline": "Tijdlijn",
+        "present": "Heden",
+        "primaryScaleMainLight": "Primaire schaal · main-light",
+        "principles": "Principes",
+        "themePresetCount": "6 thema's, één data-theme-attribuut",
+        "lightDark": "Licht · Donker",
+        "customTheme": "Aangepast",
+        "visitorDefined": "Ingesteld door de bezoeker",
+        "section": "Sectie",
+        "decision": "Beslissing",
+        "tradeoff": "Afweging",
+        "via": "via",
+        "implementation": "Implementatie",
+        "notes": "Notities",
+        "project": "Project",
+        "status": "Status",
+        "team": "Team",
+        "platform": "Platform",
+        "liveSite": "Livewebsite",
+        "viewSource": "Bekijk broncode",
+        "privateRepository": "Privérepository",
+        "onThisPage": "Op deze pagina",
+        "sectionsNavigation": "Casestudysecties",
+        "indexLabels": {
+          "summary": "Samenvatting",
+          "context": "Context",
+          "role": "Mijn rol",
+          "challenge": "De uitdaging",
+          "decisions": "Beslissingen",
+          "architecture": "Architectuur",
+          "data": "Data en i18n",
+          "capabilities": "Mogelijkheden",
+          "security": "Beveiliging",
+          "quality": "Kwaliteit",
+          "designSystem": "Designsysteem",
+          "results": "Resultaten"
+        },
+        "projectTimeline": "Projecttijdlijn",
+        "started": "Gestart",
+        "ended": "Beëindigd",
+        "role": "Rol",
+        "productEngineer": "Productengineer",
+        "responsibilities": "Verantwoordelijkheden",
+        "whatIOwned": "Mijn bijdrage",
+        "constraints": "Randvoorwaarden",
+        "letsTalk": "Laten we praten",
+        "projectTypes": {
+          "FRONTEND": "Frontend",
+          "BACKEND": "Backend",
+          "MOBILE": "Mobiel",
+          "DESKTOP": "Desktop",
+          "CYBERSECURITY": "Cyberbeveiliging",
+          "DEVOPS": "DevOps",
+          "SOFTSKILLS": "Soft skills",
+          "TOOLS": "Tools",
+          "ARCHITECTURE": "Architectuur",
+          "DATA": "Data",
+          "QUALITY_DELIVERY": "Kwaliteit & levering"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "In productie",
+          "MAINTENANCE": "In onderhoud",
+          "ARCHIVED": "Gearchiveerd"
+        }
       },
       "private": {
         "title": "Prive",
@@ -748,6 +878,54 @@
         "mobile": "Mobiel",
         "desktop": "Bureaublad",
         "ariaLabel": "Portfolio projectcategorieën"
+      },
+      "emptyState": {
+        "title": "Geen projecten in deze categorie",
+        "description": "Er zijn momenteel geen openbare projecten gecategoriseerd als {category}. Je kunt andere categorieën verkennen.",
+        "allTitle": "Geen projecten beschikbaar",
+        "allDescription": "Binnenkort worden nieuwe projecten en casestudies toegevoegd.",
+        "reset": "Alle projecten bekijken"
+      },
+      "meta": {
+        "solo": "Solo",
+        "team": "Team van {count}",
+        "now": "heden"
+      },
+      "teaser": {
+        "decisions": "{count} beslissingen",
+        "layers": "Architectuur",
+        "metrics": "{count} statistieken"
+      },
+      "topStack": {
+        "title": "Meest gebruikte stack",
+        "projectsWord": "projecten"
+      },
+      "allCta": {
+        "button": "Bekijk alle projecten ({count})",
+        "subtitle": "{total} projecten · {caseStudies} met case study"
+      },
+      "catalog": {
+        "backToPortfolio": "Terug naar portfolio",
+        "pageTitle": "Alle projecten",
+        "pageSubtitle": "Verken op type, categorie of technologie. Case studies tonen beslissingen, architectuur en resultaten.",
+        "searchPlaceholder": "Zoek projecten of technologieën…",
+        "searchLabel": "Zoek projecten of technologieën",
+        "sortLabel": "Sorteren",
+        "sorts": {
+          "default": "Uitgelicht",
+          "name": "Naam (A–Z)",
+          "cs": "Met case study eerst"
+        },
+        "kindLabel": "Categorie",
+        "techLabel": "Technologie",
+        "csOnly": "Alleen met case study",
+        "showing": "Toont {count} van {total} projecten",
+        "showingAll": "{total} projecten",
+        "clearFilters": "Filters wissen",
+        "more": "Meer weergeven ({count} resterend)",
+        "emptyTitle": "Geen resultaten",
+        "emptyDescription": "Probeer een andere zoekopdracht of wis enkele filters.",
+        "emptyButton": "Filters wissen"
       }
     },
     "contact": {
@@ -761,6 +939,7 @@
       "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "globe": {
         "ariaLabel": "Interatieve kaart die de verbinding toont tussen {origin} en {destination}",
+        "localTime": "Lokale tijd",
         "yourLocation": "Jouw locatie",
         "replay": "Verbinding opnieuw afspelen",
         "unroll": "Uitvouwen naar platte kaart",
@@ -842,7 +1021,10 @@
       "title": "Professionele Ervaring",
       "subtitle": "Bedrijven, rollen en meetbare impact",
       "viewAll": "Bekijk volledig CV voor de complete geschiedenis",
-      "showingRecent": "Meest recente rollen weergegeven."
+      "showingRecent": "Meest recente rollen weergegeven.",
+      "promotion": "Interne promotie",
+      "previousRole": "Vorige functie",
+      "rolesCount": "{count} functies"
     },
     "impactStats": {
       "teamSize": {
@@ -870,14 +1052,14 @@
       "statsLabel": "In cijfers",
       "statsNote": "Cijfers verzameld over professionele betrokkenheden.",
       "stats": {
-        "certifications": {
-          "label": "Certificeringen"
-        },
         "projects": {
           "label": "Projecten"
         },
         "experience": {
           "label": "Jaar Ervaring"
+        },
+        "engineersMentored": {
+          "label": "Engineers geleid"
         }
       }
     },
@@ -1894,6 +2076,14 @@
       "experience": {
         "company": "Bedrijf",
         "role": "Rol",
+        "employmentType": "Dienstverband",
+        "employmentTypes": {
+          "FULL_TIME": "Voltijd",
+          "PART_TIME": "Deeltijd",
+          "CONTRACT": "Contract",
+          "FREELANCE": "Freelance",
+          "INTERNSHIP": "Stage"
+        },
         "location": "Locatie (optioneel)",
         "dates": "Datums",
         "startDate": "Startdatum",
@@ -2098,7 +2288,8 @@
       "jobTrackerApplication": {
         "validation": {
           "positionRequired": "Functie is verplicht",
-          "companyRequired": "Selecteer een bedrijf"
+          "companyRequired": "Selecteer een bedrijf",
+          "urlInvalid": "Ongeldige URL"
         },
         "toast": {
           "success": {
@@ -2124,6 +2315,7 @@
           "appliedDate": "Sollicitatiedatum",
           "location": "Locatie",
           "salary": "Salaris",
+          "jobUrl": "Vacaturelink",
           "description": "Beschrijving",
           "notes": "Notities",
           "cv": "CV"
@@ -2138,6 +2330,7 @@
           "company": "Selecteer of maak een bedrijf...",
           "location": "Remote, hybrid, etc...",
           "salary": "€50k - €60k",
+          "jobUrl": "https://linkedin.com/jobs/view/...",
           "description": "Plak de functieomschrijving…",
           "notes": "bijv. via Alex, follow-up vrijdag…",
           "date": "Selecteer een datum"
@@ -2164,10 +2357,10 @@
         },
         "import": {
           "placeholders": {
-            "url": "https://www.linkedin.com/jobs/view/…"
+            "url": "https://linkedin.com/..., bamboohr.com/careers/..., getonbrd.com/jobs/..."
           },
           "actions": {
-            "show": "Invullen via LinkedIn-link",
+            "show": "Invullen via link (LinkedIn, BambooHR, Get on Board)",
             "import": "Importeren",
             "importing": "Bezig met importeren…",
             "cancel": "Annuleren"
@@ -2183,9 +2376,9 @@
           },
           "errors": {
             "IMPORT_INVALID_URL": "Dat lijkt geen geldige URL.",
-            "IMPORT_UNSUPPORTED_HOST": "Alleen LinkedIn-vacatures en -posts worden ondersteund.",
-            "IMPORT_LOGIN_WALL": "LinkedIn heeft de pagina geblokkeerd. Plak de beschrijving handmatig.",
-            "IMPORT_EMPTY_CONTENT": "Er is geen vacaturetekst gevonden. Plak de beschrijving handmatig.",
+            "IMPORT_UNSUPPORTED_HOST": "Alleen vacaturelinks van LinkedIn, BambooHR en Get on Board worden ondersteund.",
+            "IMPORT_LOGIN_WALL": "De pagina vereist inloggen of is geblokkeerd. Plak de beschrijving handmatig.",
+            "IMPORT_EMPTY_CONTENT": "Geen vacaturetekst gevonden. Plak de beschrijving handmatig.",
             "IMPORT_FETCH_FAILED": "De link kon niet worden gelezen. Probeer opnieuw of plak de beschrijving handmatig."
           }
         },
@@ -2218,12 +2411,16 @@
           "name": "Naam",
           "website": "Website",
           "email": "E-mail",
+          "linkedinUrl": "LinkedIn-profiel",
+          "companyLocation": "Hoofdkantoor / Locatie",
           "description": "Beschrijving"
         },
         "placeholders": {
           "name": "Acme Corp",
           "email": "contact@bedrijf.com",
           "website": "https://bedrijf.com",
+          "linkedinUrl": "https://linkedin.com/company/...",
+          "companyLocation": "Amsterdam, Nederland / Remote",
           "description": "Bedrijfsbeschrijving..."
         },
         "actions": {
@@ -2646,24 +2843,26 @@
     },
     "profile": {
       "title": "Profiel & Hero Sectie",
-      "subtitle": "Bewerk je hero-identiteit, roterende titels, samenvatting en over-mij-tekst.",
+      "subtitle": "Bewerk je identiteit, professionele ondertitel, tagline en teksten voor de Hero en Over mij-secties.",
       "heroSection": "Identiteit",
       "fullNameLabel": "Weergavenaam",
-      "photoUrlLabel": "Foto URL",
-      "backgroundImageLabel": "Hero-achtergrondafbeelding URL",
-      "backgroundImagePlaceholder": "https://voorbeeld.nl/hero-achtergrond.jpg",
-      "professionalTitle": "Professionele Titel",
-      "degreeLabel": "Professionele titel / graad",
-      "rotatingTitlesLabel": "Roterende titels",
-      "rotatingTitlesHint": "Getoond in de typewriter-animatie van de hero. Sleep om te herschikken.",
-      "dragToReorder": "Sleep om te herordenen",
-      "titleWithLanguage": "Titel ({language})",
-      "addTitle": "Titel toevoegen",
-      "removeTitle": "Titel verwijderen",
-      "heroSummaryLabel": "Hero-samenvatting",
-      "heroSummaryWithLanguage": "Korte samenvatting ({language})",
-      "heroSummaryHint": "Korte beschrijving onder je titels in de hero-sectie.",
-      "heroSummaryPlaceholder": "Een korte introductie voor de hero-sectie...",
+      "photoUrlLabel": "Profielfoto URL",
+      "heroSubtitleLabel": "Professionele ondertitel (H2)",
+      "heroSubtitleHint": "Belangrijkste H2-titel weergegeven onder je naam in de Hero en gebruikt in de paginatitel (SEO).",
+      "heroSubtitleWithLanguage": "Professionele ondertitel ({language})",
+      "heroSubtitlePlaceholder": "bijv. Senior Software Engineer",
+      "heroTaglineLabel": "Tagline / Waardepropositie",
+      "heroTaglineHint": "Uitgelichte alinea die je waarde en ervaring samenvat in de Hero-sectie.",
+      "heroTaglineWithLanguage": "Tagline / Waardepropositie ({language})",
+      "heroTaglinePlaceholder": "bijv. 6+ jaar ervaring in het bouwen van schaalbare enterprise systemen...",
+      "heroSummaryLabel": "Secundaire hero-samenvatting",
+      "heroSummaryWithLanguage": "Secundaire samenvatting ({language})",
+      "heroSummaryHint": "Optionele korte beschrijving onder de tagline in de hero.",
+      "heroSummaryPlaceholder": "Een korte aanvullende introductie voor de hero-sectie...",
+      "heroBadgeLabel": "Beschikbaarheidsbadge",
+      "heroBadgeHint": "Aangepaste tekst voor de badge bovenaan de Hero. Laat leeg om de standaard 'Beschikbaar voor nieuwe kansen' te gebruiken.",
+      "heroBadgePlaceholder": "bijv. Beschikbaar voor B2B-contracten / Beschikbaar voor projecten",
+      "heroBadgeWithLanguage": "Beschikbaarheidsbadge ({language})",
       "descriptionWithLanguage": "Over-mij-tekst ({language})",
       "altTextTitle": "Alternatieve Tekst Afbeelding",
       "altTextHint": "Beschrijft je foto voor schermlezers en SEO.",
@@ -2671,6 +2870,9 @@
       "aboutMeTitle": "Over mij",
       "descriptionLabel": "Beschrijving",
       "consoleTab": "Terminal",
+      "aboutSectionTab": "Over Mij Sectie",
+      "aboutBioTitle": "Engineering Aanpak & Verhaal",
+      "aboutBioSubtitle": "Deze alinea's introduceren je achtergrond en filosofie in de Over Mij sectie (#about). Woorden tussen **voorbeeld** worden gemarkeerd in het primaire thema.",
       "tabsNavAria": "Profielsecties",
       "heroConsoleTitle": "About-terminal",
       "heroConsoleSubtitle": "Configureer de geanimeerde terminalreeks in je Over mij-sectie.",
@@ -2682,10 +2884,11 @@
       "heroTab": "Hero & Profiel",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://voorbeeld.nl/foto.jpg",
-      "degreePlaceholder": "bijv. Web Developer",
       "altTextPlaceholder": "bijv. Foto van Jesús aan een bureau",
       "aboutPlaceholder": "Ik ben een gepassioneerde software engineer...",
       "aboutDescriptionHint": "Geef een gedetailleerde beschrijving van jezelf. Je kunt meerdere alinea's gebruiken.",
+      "heroPreviewTitle": "Live Hero Voorbeeld",
+      "heroPreviewBadge": "Beschikbaar voor kansen",
       "console": {
         "loading": "Terminalconfiguratie laden…",
         "loadFailed": "Kon terminalconfiguratie niet laden",
@@ -3059,6 +3262,7 @@
         "timelineTab": "Tijdlijn",
         "detailsTab": "Details",
         "tailorTab": "CV aanpassen",
+        "emailTab": "E-mails",
         "jobDescription": "Functieomschrijving",
         "salary": "Salaris",
         "location": "Locatie",
@@ -3080,6 +3284,10 @@
         "showFullDescription": "Volledige omschrijving tonen",
         "hideFullDescription": "Minder tonen",
         "notProvided": "—",
+        "viewJobPosting": "Originele vacature bekijken",
+        "jobUrl": "Vacaturelink",
+        "companyInfo": "Bedrijfsinformatie",
+        "editCompany": "Bedrijf bewerken",
         "tabsNavAria": "Sollicitatiesecties"
       },
       "interviewPrep": {
@@ -3220,6 +3428,25 @@
         "attachmentInvalidType": "Alleen .doc, .docx of .pdf bestanden zijn toegestaan",
         "attachmentTooLarge": "Bestand mag maximaal 8 MB zijn",
         "needCv": "Maak eerst een CV op maat, of upload een .docx/.pdf om bij te voegen.",
+        "trackOpensLabel": "E-mailladingen meten",
+        "trackOpensHint": "Bij inschakeling bevat de e-mail een zichtbare melding voor de ontvanger. De tellingen zijn schattingen en bevestigen niet dat het cv is gelezen.",
+        "historyTitle": "Verzonden e-mails",
+        "historyTab": "E-mails",
+        "refreshHistory": "Vernieuwen",
+        "trackingApproximation": "E-mailclients kunnen afbeeldingen blokkeren of cachen, en proxies kunnen ze automatisch laden. Deze metingen bevestigen niet dat iemand de e-mail of het cv heeft gelezen.",
+        "historyLoading": "E-mailgeschiedenis laden...",
+        "historyError": "E-mailgeschiedenis kon niet worden geladen.",
+        "historyDateUnavailable": "Datum niet beschikbaar",
+        "trackingFirstDetected": "Eerste gedetecteerde lading",
+        "trackingLastDetected": "Laatst gedetecteerde lading",
+        "trackingNotDetected": "Nog niet gedetecteerd",
+        "trackingTotalLoads": "Totaal aantal afbeeldingsladingen",
+        "trackingDisabledForEmail": "Tracking was uitgeschakeld voor deze e-mail",
+        "viewOpenEvents": "Bekijk openingsdetails ({count})",
+        "hideOpenEvents": "Verberg details",
+        "openEventItem": "Opening #{index}",
+        "proxyBadge": "Proxy / Cache",
+        "historyEmpty": "Er zijn nog geen e-mails verstuurd vanuit deze sollicitatie.",
         "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een concept te maken.",
         "noResend": "Configureer Resend in Integraties om vanaf je domein te versturen."
       },
@@ -3245,7 +3472,13 @@
         "copyError": "Kon niet kopiëren",
         "subjectLabel": "Onderwerp / titel",
         "bodyLabel": "Brief",
-        "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een brief te maken."
+        "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een brief te maken.",
+        "aiFailedFallback": "Het model kon de brief niet genereren. Handmatige modus is nu ingeschakeld.",
+        "writeManually": "Handmatig schrijven",
+        "aiOptions": "AI-opties",
+        "applyResponse": "Toepassen op brief",
+        "responseApplied": "AI-antwoord toegepast op motivatiebrief",
+        "parseError": "Kon het onderwerp of de brief niet uit het antwoord halen."
       },
       "kanban": {
         "description": "Sleep kaarten tussen kolommen om de status bij te werken.",
@@ -3414,7 +3647,8 @@
       "matchStatus": {
         "present": "op het CV",
         "paraphrased": "geparafraseerd",
-        "missing": "ontbreekt"
+        "missing": "ontbreekt",
+        "adjacent": "aangrenzende vaardigheid"
       },
       "atsCheckerTitle": "ATS-checker",
       "atsCheckerScore": "Match {score}%",
@@ -3661,10 +3895,10 @@
     "privacy": {
       "title": "Privacybeleid",
       "metaTitle": "Privacybeleid",
-      "metaDescription": "Hoe wij met je gegevens omgaan, inclusief anonieme audience measurement en Spotify-credentials.",
+      "metaDescription": "Hoe wij met je gegevens omgaan, inclusief anonieme audience measurement, optionele e-mailmeting en Spotify-credentials.",
       "subtitle": "Hoe wij met je gegevens omgaan",
       "updatedAt": "Laatst bijgewerkt: september 2026",
-      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt anonieme audience measurement op publieke pagina's uit, en wat we verzamelen als je Spotify koppelt.",
+      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt anonieme audience measurement op publieke pagina's, optionele e-mailmeting en wat we verzamelen als je Spotify koppelt uit.",
       "spotify": {
         "title": "Spotify-integratie",
         "intro": "Als je Spotify koppelt in het adminpaneel, slaan we de credentials van je eigen Spotify Developer-app op zodat de Now Playing-widget je afspeelstatus op je openbare portfolio kan tonen.",
@@ -3689,6 +3923,10 @@
         "purpose": "We gebruiken deze aggregaten alleen voor de publieke /statistieken-pagina en het portfolio-admin. Data wordt niet verkocht of gedeeld met analytics-leveranciers.",
         "optOut": "Als je browser Do Not Track of Global Privacy Control stuurt, slaan we de meting volledig over.",
         "retention": "Aggregaten ouder dan 13 maanden worden verwijderd."
+      },
+      "emailMeasurement": {
+        "title": "Optionele e-mailmeting",
+        "intro": "Bij het versturen van een cv via Job Tracker kan de verzender ervoor kiezen een trackingafbeelding toe te voegen. Indien ingeschakeld, bevat de e-mail een zichtbare melding voor de ontvanger. De aantallen afbeeldingsladingen zijn schattingen en bevestigen niet dat iemand de e-mail of het cv heeft gelezen; e-mailclients kunnen afbeeldingen blokkeren of cachen en proxies kunnen ze automatisch laden. We bewaren voor deze meting geen IP-adres of user-agent van de ontvanger."
       }
     }
   },

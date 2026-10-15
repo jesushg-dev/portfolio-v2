@@ -130,13 +130,18 @@ export const Sidebar = ({
 };
 
 export const SidebarBody = ({
+  mobileBrand,
   mobileActions,
   ...props
-}: ComponentProps<typeof motion.div> & { mobileActions?: ReactNode }) => {
+}: ComponentProps<typeof motion.div> & {
+  mobileBrand?: ReactNode;
+  mobileActions?: ReactNode;
+}) => {
   return (
     <>
       <DesktopSidebar {...props} />
       <MobileSidebar
+        brand={mobileBrand}
         actions={mobileActions}
         {...(props as ComponentProps<"div">)}
       />
@@ -202,9 +207,10 @@ export const SidebarPinToggle = ({ className }: { className?: string }) => {
 export const MobileSidebar = ({
   className,
   children,
+  brand,
   actions,
   ...props
-}: ComponentProps<"div"> & { actions?: ReactNode }) => {
+}: ComponentProps<"div"> & { brand?: ReactNode; actions?: ReactNode }) => {
   const { open, setOpen } = useSidebar();
   const t = useTranslations("global.header");
 
@@ -216,17 +222,20 @@ export const MobileSidebar = ({
         )}
         {...props}
       >
-        <div className="flex min-w-0 flex-1 items-center gap-2">{actions}</div>
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-controls="mobile-sidebar-panel"
-          aria-label={open ? t("closeMenu") : t("openMenu")}
-          onClick={() => setOpen(!open)}
-          className="text-foreground inline-flex shrink-0 rounded-lg p-2"
-        >
-          <Menu className="h-5 w-5" aria-hidden />
-        </button>
+        <div className="flex min-w-0 items-center gap-2">{brand}</div>
+        <div className="flex shrink-0 items-center gap-2">
+          {actions}
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls="mobile-sidebar-panel"
+            aria-label={open ? t("closeMenu") : t("openMenu")}
+            onClick={() => setOpen(!open)}
+            className="text-foreground hover:bg-muted hover:text-foreground inline-flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors"
+          >
+            <Menu className="size-5" aria-hidden />
+          </button>
+        </div>
         <AnimatePresence>
           {open && (
             <motion.div

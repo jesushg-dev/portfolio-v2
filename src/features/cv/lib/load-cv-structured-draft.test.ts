@@ -131,6 +131,7 @@ describe("loadCvStructuredDraft", () => {
     expect(draft?.header.summary).toBe("Builder");
     expect(draft?.experiences[0]?.responsibilities).toEqual(["Shipped UI"]);
     expect(draft?.experiences[0]?.atsResponsibilities).toEqual(["ATS only"]);
+    expect(draft?.experiences[0]?.employmentType).toBe("FULL_TIME");
     expect(draft?.education[0]?.degreeName).toBe("BSc");
     expect(draft?.certifications[0]?.title).toBe("Solutions Architect");
   });

@@ -2,7 +2,11 @@ import type { RouterOutputs } from "@/trpc/react";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import type { Locale } from "@/i18n/config";
-import type { CvContactType, CvSkillCategory } from "@prisma/client";
+import type {
+  CvContactType,
+  CvEmploymentType,
+  CvSkillCategory,
+} from "@prisma/client";
 
 /**
  * Server-resolved CV data — the shape returned by `cv.getPublic` /
@@ -56,6 +60,7 @@ export interface LocalizedCvData {
     id: string;
     company: string;
     companyLogoUrl: string | null;
+    employmentType?: CvEmploymentType | null;
     startDate: Date | null;
     endDate: Date | null;
     current: boolean;
@@ -150,6 +155,7 @@ export function mapCvDataToLocalized(
     id: exp.id,
     company: exp.company,
     companyLogoUrl: exp.companyLogoUrl,
+    employmentType: exp.employmentType ?? "FULL_TIME",
     startDate: exp.startDate,
     endDate: exp.endDate,
     current: exp.current,

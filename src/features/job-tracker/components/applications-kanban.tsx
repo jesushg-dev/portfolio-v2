@@ -19,7 +19,6 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ButtonGroup } from "@/components/ui/button-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
@@ -281,12 +280,34 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
     return new Map(flat.map((app) => [app.id, app]));
   }, [columns]);
 
+  const scrollToColumn = useCallback((status: ApplicationStatus) => {
+    if (typeof window === "undefined") return;
+    const col = document.getElementById(`kanban-col-${status}`);
+    if (col) {
+      col.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, []);
+
+  const statusSelectItems = useMemo(
+    () =>
+      KANBAN_COLUMNS.map((columnStatus) => ({
+        value: columnStatus,
+        label: t(`status.${columnStatus}`),
+      })),
+    [t],
+  );
+
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
       <div className="flex shrink-0 flex-col gap-2">
-        <ButtonGroup
+        <div
+          role="group"
           aria-label={t("kanban.statusFilterAria")}
-          className="flex-wrap"
+          className="no-scrollbar -mx-1 flex items-center gap-1.5 overflow-x-auto px-1 pb-1 sm:flex-wrap"
         >
           {KANBAN_COLUMNS.map((status) => {
             const selected = enabledStatuses.has(status);
@@ -297,13 +318,27 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
                 size="sm"
                 variant={selected ? "default" : "outline"}
                 aria-pressed={selected}
-                onClick={() => toggleStatusFilter(status)}
+                onClick={() => {
+                  toggleStatusFilter(status);
+                  scrollToColumn(status);
+                }}
+                className={cn(
+                  "shrink-0 rounded-full text-xs font-medium transition-all",
+                  selected && "shadow-xs",
+                )}
               >
+                <span
+                  className={cn(
+                    "mr-1.5 inline-block size-1.5 rounded-full",
+                    kanbanColumnStyles[status].dot,
+                  )}
+                  aria-hidden
+                />
                 {t(`status.${status}`)} ({statusCounts[status]})
               </Button>
             );
           })}
-        </ButtonGroup>
+        </div>
 
         {hiddenCount > 0 ? (
           <p className="text-muted-foreground text-xs">
@@ -379,12 +414,13 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
           getItemValue={(item) => item.id}
           orientation="horizontal"
         >
-          <KanbanBoard className="h-full min-h-0 flex-1 gap-4 overflow-x-auto overflow-y-hidden pb-1">
+          <KanbanBoard className="h-full min-h-0 flex-1 snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden pb-1 md:snap-none md:gap-4">
             {KANBAN_COLUMNS.map((status) => (
               <KanbanColumn
                 key={status}
                 value={status}
-                className="bg-muted/25 border-border h-full min-h-0 w-[272px] shrink-0 gap-3 overflow-hidden rounded-xl border p-3"
+                id={`kanban-col-${status}`}
+                className="bg-muted/25 border-border h-full min-h-0 w-[84vw] max-w-[21.25rem] shrink-0 snap-center gap-2.5 overflow-hidden rounded-xl border p-2.5 sm:p-3 md:w-[17rem] md:snap-align-none"
               >
                 <KanbanColumnHeader
                   label={t(`status.${status}`)}
@@ -392,13 +428,13 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
                   dotClassName={kanbanColumnStyles[status].dot}
                 />
 
-                <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
+                <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-0.5 pb-2">
                   {columns[status].map((application) => (
                     <KanbanItem
                       key={application.id}
                       value={application.id}
                       className={cn(
-                        "group bg-card text-card-foreground border-border overflow-hidden rounded-lg border border-l-[3px] shadow-sm",
+                        "group bg-card text-card-foreground border-border shrink-0 overflow-hidden rounded-lg border border-l-[3px] shadow-sm",
                         kanbanColumnStyles[status].accent,
                       )}
                     >
@@ -446,10 +482,15 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
                         onPointerDown={(event) => event.stopPropagation()}
                       >
                         <Select
+                          items={statusSelectItems}
                           value={application.status}
                           onValueChange={(nextStatus) => {
-                            if (nextStatus === application.status) return;
-                            persistStatusChange(application.id, nextStatus!);
+                            if (
+                              !nextStatus ||
+                              nextStatus === application.status
+                            )
+                              return;
+                            persistStatusChange(application.id, nextStatus);
                           }}
                         >
                           <SelectTrigger

@@ -3,6 +3,7 @@ import { expect } from "@playwright/test";
 
 import { requireE2eCredentials } from "../env";
 import { portfolioProfile } from "../fixtures/portfolio-profile";
+import { syncE2eWorkerPassword } from "./ensure-app-languages";
 
 export interface RegisterOwnerInput {
   name: string;
@@ -195,10 +196,21 @@ export async function fillRegisterOwnerForm(
     );
     await assertAuthMutationSucceeded(profileResponse, "upsertProfile");
   } catch (error) {
-    const signedIn = await signInOwner(page, input.email, input.password).catch(
+    let signedIn = await signInOwner(page, input.email, input.password).catch(
       () => false,
     );
     if (signedIn) return;
+
+    try {
+      await syncE2eWorkerPassword(input.password);
+      signedIn = await signInOwner(page, input.email, input.password).catch(
+        () => false,
+      );
+      if (signedIn) return;
+    } catch {
+      // ignore
+    }
+
     throw error;
   }
 

@@ -65,16 +65,16 @@ export function FormDialogContent({
       <div
         className={cn(
           "flex min-h-0 flex-1 flex-col",
-          footer || bodyScroll ? "overflow-y-auto py-4" : "overflow-hidden",
+          footer || bodyScroll
+            ? "overflow-y-auto py-4"
+            : "overflow-hidden p-[0.0625rem]",
         )}
       >
         {children}
       </div>
 
       {footer ? (
-        <div className="border-border bg-background shrink-0 border-t pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          {footer}
-        </div>
+        <div className="border-border shrink-0 border-t pt-4">{footer}</div>
       ) : null}
     </DialogContent>
   );

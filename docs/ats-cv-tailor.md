@@ -65,6 +65,20 @@ flowchart TB
 
 ---
 
+## Pipeline Architecture & Stack
+
+| Pipeline Stage                 | Responsible Modules                                                                                                                                                      | Current Implementation & Strategy                                                                                                                   |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **DOCX Loading**               | `src/features/cv/lib/load-cv-template-docx.ts`<br>`src/features/resume-engine/lib/fetch-upload-docx.ts`                                                                  | Loads `cv-template.docx` from assets or fetches user upload via UploadThing.                                                                        |
+| **Extraction & Normalization** | `src/lib/docx/parser.ts`<br>`src/lib/docx/split-paragraphs.ts`                                                                                                           | Extracts XML with JSZip + fast-xml-parser. Normalizes adjacent runs within `<w:p>`, strips `w:proofErr`, preserves roles and locked blocks.         |
+| **LLM Call & Prompts**         | `src/features/resume-engine/lib/ai/tailor-docx.ts`<br>`src/features/resume-engine/lib/ai/prompt-package.ts`<br>`src/features/resume-engine/lib/ai/docx-tailor-prompt.ts` | Dispatches to Claude, OpenAI, DeepSeek, or Gemini using tenant AI credentials. Prompt caching and character budget limits.                          |
+| **Response Parsing**           | `src/features/resume-engine/lib/cv-docx-tailor-result.ts`<br>`src/features/resume-engine/lib/ai/parse-json-response.ts`                                                  | Validates structured JSON schema with Zod (`CvDocxTailorResultSchema` with edits and diff-fallback).                                                |
+| **DOCX Rebuilding**            | `src/lib/docx/rebuilder.ts`<br>`src/features/resume-engine/lib/finalize-tailor-export.ts`                                                                                | Replaces adapted run text inside `<w:t>` XML nodes, repacks with JSZip, uploads to UploadThing, and persists in MongoDB.                            |
+| **Validation & Shrink**        | `src/features/resume-engine/lib/ai/tailor-validator.ts`<br>`src/features/resume-engine/lib/ai/tailor-docx.ts`                                                            | Pure validator (E1-E8: metrics, new tech, CEFR, etc.). Targeted shrink passes for over-budget runs without truncation mid-sentence.                 |
+| **Page Fit Verification**      | `src/features/resume-engine/lib/pdf/fits-like.ts`<br>`src/features/resume-engine/lib/generate-pdf-from-docx.ts`                                                          | Serverless-safe headless Chromium (`docx-preview` + `@sparticuz/chromium-min` + `unpdf`) page bounding box inspection (no LibreOffice requirement). |
+
+---
+
 ## User flow (product path)
 
 1. Open an application:  
@@ -137,8 +151,6 @@ Both paths end in the same finalize: `finalizeDocxTailorExport` → `rebuildDocx
 | `src/features/resume-engine/lib/ai/parse-json-response.ts` | Strip fences / parse AI JSON                     |
 | `src/features/resume-engine/lib/ai/shrink-result.ts`       | Shrink-pass Zod schema                           |
 | `src/features/resume-engine/lib/cv-docx-tailor-result.ts`  | `CvDocxTailorResult` Zod schema                  |
-| `src/features/resume-engine/lib/ai/tailor-prompt.ts`       | Legacy structured-draft prompt (not live router) |
-| `src/features/resume-engine/lib/ai/tailor-structured.ts`   | Legacy structured tailor (not live router)       |
 | `src/features/resume-engine/lib/ai/import-prompt.ts`       | Import extract prompt                            |
 | `src/features/resume-engine/lib/ai/extract-structured.ts`  | AI import parse                                  |
 

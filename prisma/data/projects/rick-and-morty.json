@@ -1,0 +1,1091 @@
+{
+  "key": "RickAndMorty",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/Rick_and_morty_dn7xnz",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jess232017/rick-and-morty",
+  "websiteUrl": "https://rick-and-morty-virid.vercel.app/",
+  "isPrivate": false,
+  "slug": "rick-and-morty",
+  "caseStudyEnabled": true,
+  "order": 6,
+  "kind": "LEARNING",
+  "skillKeys": ["React", "Bootstrap", "Apollo", "GraphQL", "Redux"],
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Rick y Morty | Wiki",
+      "description": "Aplicación web interactiva para consultar y explorar personajes de la serie Rick y Morty con consumo de API pública.",
+      "hook": "API GraphQL pública con Apollo Client · Favoritos persistentes en Redux Toolkit · División de código por ruta",
+      "challenge": "Aprender a consumir una API GraphQL pública de extremo a extremo, manejar paginación incremental sin consultas redundantes y persistir favoritos sin necesidad de un backend propio.",
+      "approach": "Implementé Apollo Client con una política de caché personalizada para concatenar páginas, modelé el estado en Redux Toolkit con un middleware para sincronizar con localStorage y optimicé la carga con React.lazy y Suspense.",
+      "outcome": "Una interfaz reactiva y optimizada con 3 rutas de carga diferida, 51 carátulas locales en WebP y persistencia sólida en el navegador.",
+      "caseStudy": {
+        "chips": ["Aprendizaje", "Frontend", "GraphQL"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mi rol",
+            "value": "Desarrollador · proyecto de aprendizaje"
+          },
+          {
+            "key": "project-type",
+            "label": "Tipo de proyecto",
+            "value": "Aplicación frontend en React"
+          },
+          {
+            "key": "category",
+            "label": "Categoría",
+            "value": "Aprendizaje"
+          },
+          {
+            "key": "timeline",
+            "label": "Cronología",
+            "value": "Ene 2022 – Jun 2022"
+          }
+        ],
+        "nextProjectSlug": "soft-skills-quiz",
+        "context": "Una pequeña aplicación web hecha para practicar el consumo de una API GraphQL pública de principio a fin. Lista los episodios de Rick and Morty, abre cada uno con sus personajes y permite guardar una lista de favoritos que sobrevive a una recarga.",
+        "roleTitle": "Desarrollador · proyecto de aprendizaje",
+        "roleIntro": "Construí la interfaz, la capa de datos GraphQL y el estado de los favoritos para aprender cómo encajan estas piezas.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Una app en React que lista los episodios de Rick and Morty, muestra cada episodio con sus personajes y guarda una lista persistente de favoritos.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollador en un proyecto de aprendizaje: interfaz, capa de datos y estado, todo en una base de código pequeña.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Qué demuestra",
+            "summary": "",
+            "body": "Uso de punta a punta de una API GraphQL con Apollo Client, persistencia de estado con Redux Toolkit y división de código por ruta.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "data-layer",
+            "title": "Capa de datos GraphQL",
+            "summary": "",
+            "body": "Configuré Apollo Client contra la API pública, escribí las dos consultas y una política de caché que agrega cada página nueva.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "ui-routing",
+            "title": "Interfaz y rutas",
+            "summary": "",
+            "body": "Construí tres páginas (lista, detalle, favoritos) y seis componentes compartidos con React Router 6.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "favorites-state",
+            "title": "Estado de favoritos",
+            "summary": "",
+            "body": "Modelé los favoritos en un slice de Redux Toolkit y los persistí en localStorage con un middleware propio.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "loading-performance",
+            "title": "Pasada de rendimiento de carga",
+            "summary": "",
+            "body": "Dividí las rutas con React.lazy y Suspense, diferí las imágenes fuera de pantalla y reinicié el scroll al navegar.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Una API GraphQL pública que no controlo",
+          "Listas de episodios paginadas que deben acumularse en una sola vista",
+          "Favoritos que sobreviven a una recarga sin backend",
+          "Una interfaz con mucho contenido y 51 imágenes locales de episodios"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "",
+            "title": "Decisiones y estrategia",
+            "lead": "Las decisiones que moldearon cómo la app carga, cachea y guarda los datos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "apollo-cache-pagination",
+                "title": "Paginar fusionando páginas en la caché de Apollo",
+                "summary": "Dar al campo de episodios una política de caché que agrega cada página nueva a una sola lista en lugar de guardar páginas por separado.",
+                "body": "Con keyArgs desactivado y una función merge propia, los resultados de fetchMore se concatenan en una única lista en caché, así Home muestra una cuadrícula que crece y solo pide la siguiente página cuando el visitante pulsa cargar más.",
+                "value": "",
+                "icon": "",
+                "tags": ["Guardar el estado de página y reemplazar la lista"],
+                "note": "El merge solo concatena, sin eliminar duplicados, así que depende de que cada página se pida una sola vez."
+              },
+              {
+                "key": "query-per-screen",
+                "title": "Una consulta por pantalla, fuera de los componentes",
+                "summary": "Pedir solo los campos que cada pantalla muestra y mantener los documentos GraphQL en su propio módulo.",
+                "body": "La consulta de la lista pide id, nombre, fecha de emisión, código del episodio y fecha de creación; la de detalle añade los personajes con los campos que muestran sus tarjetas. Al mover los documentos a utils/graphql/query, el texto de las consultas queda fuera de las páginas.",
+                "value": "",
+                "icon": "",
+                "tags": ["Una sola consulta grande compartida"],
+                "note": ""
+              },
+              {
+                "key": "route-code-splitting",
+                "title": "Dividir la app por ruta",
+                "summary": "Cargar cada página con React.lazy y mostrar un spinner mientras se descarga.",
+                "body": "Home, Detail y Favorites son imports diferidos envueltos en Suspense con un Loader compartido, de modo que cada visita descarga solo la página que abre. Esto llegó en los commits de rendimiento de carga de junio de 2022.",
+                "value": "",
+                "icon": "",
+                "tags": ["Un único bundle"],
+                "note": "Navbar, Footer y el store quedan en el bundle principal; solo se difieren los tres componentes de página."
+              },
+              {
+                "key": "favorites-redux-localstorage",
+                "title": "Favoritos en Redux Toolkit, persistidos con un middleware",
+                "summary": "Guardar los favoritos en un slice y reflejar todo el store en localStorage mediante un middleware propio y pequeño.",
+                "body": "Cada acción despachada escribe el estado en localStorage, y el store se rehidrata con preloadedState al iniciar, así los favoritos sobreviven a las recargas sin backend.",
+                "value": "",
+                "icon": "",
+                "tags": ["Estado local de componentes", "React Context"],
+                "note": "Todo el estado se serializa tras cada acción y no tiene versión de esquema, así que cambiar su forma exigiría una migración."
+              },
+              {
+                "key": "local-webp-artwork",
+                "title": "Servir la ilustración de episodios como WebP local",
+                "summary": "Servir 51 imágenes de episodios desde /public en WebP y diferir las que quedan fuera de pantalla.",
+                "body": "Las consultas GraphQL no piden imágenes de episodios, así que la tarjeta y la página de detalle construyen la ruta del archivo a partir del id del episodio. Las tarjetas usan además loading=\"lazy\"; los retratos de personajes vienen de las URL de imagen de la propia API.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Enlazar imágenes de episodios desde un servidor remoto"
+                ],
+                "note": "Los nombres siguen el patrón episode (id).webp, lo que ata las ilustraciones a los ids de episodio de la API."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "",
+            "title": "Arquitectura y enfoque",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "presentation",
+                "title": "Presentación",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "React 18",
+                  "React Router 6",
+                  "3 páginas con carga diferida"
+                ],
+                "note": "useQuery · useSelector"
+              },
+              {
+                "key": "client-state",
+                "title": "Estado del cliente",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Redux Toolkit",
+                  "Slice de favoritos",
+                  "Middleware de localStorage"
+                ],
+                "note": ""
+              },
+              {
+                "key": "data-layer",
+                "title": "Capa de datos",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Apollo Client",
+                  "InMemoryCache",
+                  "Política de tipos propia"
+                ],
+                "note": "GraphQL sobre HTTP"
+              },
+              {
+                "key": "external-api",
+                "title": "API externa",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["rickandmortyapi.com/graphql", "API GraphQL pública"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "Build con Create React App (react-scripts 5.0.1), alojado en Vercel"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "request-flow",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Cómo fluyen los datos",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "list-query",
+                "title": "Home carga la página uno",
+                "summary": "",
+                "body": "useQuery pide la primera página de episodios con id, nombre, fecha de emisión, código del episodio y fecha de creación.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "load-more",
+                "title": "Cargar más agrega",
+                "summary": "",
+                "body": "fetchMore pide la siguiente página y la política de caché la concatena a la misma lista.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "detail-query",
+                "title": "Detalle carga un episodio",
+                "summary": "",
+                "body": "El id de la ruta alimenta una segunda consulta que devuelve el episodio y los personajes que muestran las tarjetas.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "favorites-persist",
+                "title": "Los favoritos persisten",
+                "summary": "",
+                "body": "Agregar o quitar un favorito actualiza el slice de Redux, y el middleware escribe el estado en localStorage.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "project-in-numbers",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "El proyecto en números",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "pages",
+                "title": "Páginas",
+                "summary": "",
+                "body": "",
+                "value": "3",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "graphql-queries",
+                "title": "Consultas GraphQL",
+                "summary": "",
+                "body": "",
+                "value": "2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "shared-components",
+                "title": "Componentes compartidos",
+                "summary": "",
+                "body": "",
+                "value": "6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "episode-images",
+                "title": "Imágenes locales de episodios",
+                "summary": "",
+                "body": "",
+                "value": "51",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "Rick and Morty | Wiki",
+      "description": "Interactive web application to explore characters from the Rick and Morty series using a public API.",
+      "hook": "Public GraphQL API with Apollo Client · Persistent favorites in Redux Toolkit · Route code splitting",
+      "challenge": "Consume a public GraphQL API end to end, handle paginated episode lists without duplicate queries, and keep favorites persistent across reloads without a backend.",
+      "approach": "Configured Apollo Client with a custom InMemoryCache merge policy for pagination, modeled state in Redux Toolkit with localStorage middleware, and deferred routes via React.lazy and Suspense.",
+      "outcome": "A fast, responsive frontend with 3 lazy-loaded routes, 51 local WebP episode cards, and robust client-side state persistence.",
+      "caseStudy": {
+        "chips": ["Learning", "Frontend", "GraphQL"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "My role",
+            "value": "Developer · learning project"
+          },
+          {
+            "key": "project-type",
+            "label": "Project type",
+            "value": "Frontend React app"
+          },
+          {
+            "key": "category",
+            "label": "Category",
+            "value": "Learning"
+          },
+          {
+            "key": "timeline",
+            "label": "Timeline",
+            "value": "Jan 2022 – Jun 2022"
+          }
+        ],
+        "nextProjectSlug": "soft-skills-quiz",
+        "context": "A small web app built to practice consuming a public GraphQL API end to end. It lists Rick and Morty episodes, opens each one with its characters, and lets visitors keep a list of favorites that survives a reload.",
+        "roleTitle": "Developer · learning project",
+        "roleIntro": "I built the interface, the GraphQL data layer and the favorites state to learn how these pieces fit together.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "A React app that lists Rick and Morty episodes, shows each episode with its characters and keeps a persistent list of favorites.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Developer on a learning project: UI, data layer and state, all in one small codebase.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "What it shows",
+            "summary": "",
+            "body": "End-to-end use of a GraphQL API with Apollo Client, Redux Toolkit state persistence and route-level code splitting.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "data-layer",
+            "title": "GraphQL data layer",
+            "summary": "",
+            "body": "Set up Apollo Client against the public API, wrote the two queries and a cache policy that appends each new page.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "ui-routing",
+            "title": "UI and routing",
+            "summary": "",
+            "body": "Built three pages (list, detail, favorites) and six shared components with React Router 6.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "favorites-state",
+            "title": "Favorites state",
+            "summary": "",
+            "body": "Modeled favorites in a Redux Toolkit slice and persisted them to localStorage with a custom middleware.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "loading-performance",
+            "title": "Loading performance pass",
+            "summary": "",
+            "body": "Split routes with React.lazy and Suspense, deferred below-the-fold images and reset the scroll on navigation.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "A public GraphQL API I don't control",
+          "Paginated episode lists that must accumulate into one view",
+          "Favorites that survive a reload without a backend",
+          "A content-heavy UI with 51 local episode images"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "",
+            "title": "Decisions & strategy",
+            "lead": "The calls that shaped how the app loads, caches and stores data.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "apollo-cache-pagination",
+                "title": "Paginate by merging pages in the Apollo cache",
+                "summary": "Give the episodes field a cache policy that appends each new page to one list instead of storing pages separately.",
+                "body": "With keyArgs disabled and a custom merge function, fetchMore results are concatenated into a single cached list, so Home renders one growing grid and only requests the next page when the visitor clicks load more.",
+                "value": "",
+                "icon": "",
+                "tags": ["Keep page state and replace the list"],
+                "note": "The merge simply concatenates, with no de-duplication, so it relies on each page being requested only once."
+              },
+              {
+                "key": "query-per-screen",
+                "title": "One query per screen, kept out of components",
+                "summary": "Request only the fields each screen renders and keep the GraphQL documents in their own module.",
+                "body": "The list query asks for id, name, air date, episode code and creation date; the detail query adds the characters with the fields their cards show. Moving the documents to utils/graphql/query keeps the query text out of the pages.",
+                "value": "",
+                "icon": "",
+                "tags": ["One large shared query"],
+                "note": ""
+              },
+              {
+                "key": "route-code-splitting",
+                "title": "Split the app by route",
+                "summary": "Load each page with React.lazy and show a spinner while it downloads.",
+                "body": "Home, Detail and Favorites are lazy imports wrapped in Suspense with a shared Loader, so a visit downloads only the page it opens. This arrived in the loading-performance commits of June 2022.",
+                "value": "",
+                "icon": "",
+                "tags": ["A single bundle"],
+                "note": "Navbar, Footer and the store stay in the main bundle; only the three page components are deferred."
+              },
+              {
+                "key": "favorites-redux-localstorage",
+                "title": "Favorites in Redux Toolkit, persisted by middleware",
+                "summary": "Keep favorites in a slice and mirror the whole store to localStorage through a small custom middleware.",
+                "body": "Every dispatched action writes the state to localStorage, and the store is rehydrated through preloadedState at startup, so favorites survive reloads without a backend.",
+                "value": "",
+                "icon": "",
+                "tags": ["Local component state", "React Context"],
+                "note": "The whole state is serialized after every action and has no schema version, so changing its shape would need a migration."
+              },
+              {
+                "key": "local-webp-artwork",
+                "title": "Ship episode artwork as local WebP",
+                "summary": "Serve 51 episode images from /public as WebP and defer the ones below the fold.",
+                "body": "The GraphQL queries don't request episode images, so the card and the detail page build the file path from the episode id. Cards also use loading=\"lazy\"; character portraits come from the API's own image URLs.",
+                "value": "",
+                "icon": "",
+                "tags": ["Hotlinking episode images from a remote host"],
+                "note": "File names follow the pattern episode (id).webp, which ties the artwork to the API's episode ids."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "",
+            "title": "Architecture & approach",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "presentation",
+                "title": "Presentation",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["React 18", "React Router 6", "3 lazy-loaded pages"],
+                "note": "useQuery · useSelector"
+              },
+              {
+                "key": "client-state",
+                "title": "Client state",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Redux Toolkit",
+                  "Favorites slice",
+                  "localStorage middleware"
+                ],
+                "note": ""
+              },
+              {
+                "key": "data-layer",
+                "title": "Data layer",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Apollo Client",
+                  "InMemoryCache",
+                  "Custom type policy"
+                ],
+                "note": "GraphQL over HTTP"
+              },
+              {
+                "key": "external-api",
+                "title": "External API",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["rickandmortyapi.com/graphql", "Public GraphQL API"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "Create React App build (react-scripts 5.0.1), hosted on Vercel"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "request-flow",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "How data flows",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "list-query",
+                "title": "Home loads page one",
+                "summary": "",
+                "body": "useQuery requests the first page of episodes with id, name, air date, episode code and creation date.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "load-more",
+                "title": "Load more appends",
+                "summary": "",
+                "body": "fetchMore asks for the next page and the cache policy concatenates it to the same list.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "detail-query",
+                "title": "Detail loads one episode",
+                "summary": "",
+                "body": "The route's id feeds a second query that returns the episode and the characters shown on the cards.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "favorites-persist",
+                "title": "Favorites persist",
+                "summary": "",
+                "body": "Adding or removing a favorite updates the Redux slice, and the middleware writes the state to localStorage.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "project-in-numbers",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Project in numbers",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "pages",
+                "title": "Pages",
+                "summary": "",
+                "body": "",
+                "value": "3",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "graphql-queries",
+                "title": "GraphQL queries",
+                "summary": "",
+                "body": "",
+                "value": "2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "shared-components",
+                "title": "Shared components",
+                "summary": "",
+                "body": "",
+                "value": "6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "episode-images",
+                "title": "Local episode images",
+                "summary": "",
+                "body": "",
+                "value": "51",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "Rick and Morty | Wiki",
+      "description": "Interactieve webtoepassing om personages uit de Rick and Morty-serie te verkennen via een openbare API.",
+      "hook": "Openbare GraphQL-API met Apollo Client · Blijvende favorieten in Redux Toolkit · Code splitting per route",
+      "challenge": "Het end-to-end gebruik van een openbare GraphQL-API oefenen, gepagineerde afleveringslijsten beheren zonder dubbele queries en favorieten persistent houden tussen herlaadbeurten zonder eigen backend.",
+      "approach": "Apollo Client geconfigureerd met een aangepast InMemoryCache-mergebeleid voor paginering, state gemodelleerd in Redux Toolkit met localStorage-middleware en routes uitgesteld via React.lazy en Suspense.",
+      "outcome": "Een snelle, responsieve frontend met 3 lazy geladen routes, 51 lokale WebP-afleveringskaarten en robuuste client-side persistentie.",
+      "caseStudy": {
+        "chips": ["Leerproject", "Frontend", "GraphQL"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mijn rol",
+            "value": "Ontwikkelaar · leerproject"
+          },
+          {
+            "key": "project-type",
+            "label": "Projecttype",
+            "value": "Frontend React-app"
+          },
+          {
+            "key": "category",
+            "label": "Categorie",
+            "value": "Leerproject"
+          },
+          {
+            "key": "timeline",
+            "label": "Tijdlijn",
+            "value": "Jan 2022 – Jun 2022"
+          }
+        ],
+        "nextProjectSlug": "soft-skills-quiz",
+        "context": "Een kleine webapp om het gebruik van een openbare GraphQL-API van begin tot eind te oefenen. De app toont de afleveringen van Rick and Morty, opent elke aflevering met de personages en laat bezoekers een lijst met favorieten bewaren die een herlaadbeurt overleeft.",
+        "roleTitle": "Ontwikkelaar · leerproject",
+        "roleIntro": "Ik bouwde de interface, de GraphQL-datalaag en de status van de favorieten om te leren hoe deze onderdelen in elkaar passen.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Een React-app die de afleveringen van Rick and Morty toont, elke aflevering met zijn personages laat zien en een blijvende lijst met favorieten bijhoudt.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Ontwikkelaar van een leerproject: interface, datalaag en state, alles in één kleine codebase.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Wat het laat zien",
+            "summary": "",
+            "body": "Een GraphQL-API van begin tot eind gebruikt met Apollo Client, persistente state met Redux Toolkit en code splitting per route.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "data-layer",
+            "title": "GraphQL-datalaag",
+            "summary": "",
+            "body": "Apollo Client ingesteld voor de openbare API, de twee queries geschreven en een cachebeleid dat elke nieuwe pagina toevoegt.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "ui-routing",
+            "title": "Interface en routing",
+            "summary": "",
+            "body": "Drie pagina's (lijst, detail, favorieten) en zes gedeelde componenten gebouwd met React Router 6.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "favorites-state",
+            "title": "Status van favorieten",
+            "summary": "",
+            "body": "Favorieten gemodelleerd in een Redux Toolkit-slice en met een eigen middleware in localStorage bewaard.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "loading-performance",
+            "title": "Ronde voor laadprestaties",
+            "summary": "",
+            "body": "Routes gesplitst met React.lazy en Suspense, afbeeldingen buiten beeld uitgesteld en de scrollpositie bij navigatie gereset.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Een openbare GraphQL-API die ik niet beheer",
+          "Gepagineerde afleveringslijsten die zich in één weergave moeten opstapelen",
+          "Favorieten die een herlaadbeurt overleven zonder backend",
+          "Een inhoudsrijke interface met 51 lokale afleveringsafbeeldingen"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "",
+            "title": "Beslissingen en strategie",
+            "lead": "De keuzes die bepalen hoe de app data laadt, cachet en opslaat.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "apollo-cache-pagination",
+                "title": "Pagineren door pagina's samen te voegen in de Apollo-cache",
+                "summary": "Geef het afleveringsveld een cachebeleid dat elke nieuwe pagina aan één lijst toevoegt in plaats van pagina's apart op te slaan.",
+                "body": "Met keyArgs uitgeschakeld en een eigen merge-functie worden de resultaten van fetchMore in één gecachete lijst samengevoegd, zodat Home één groeiend raster toont en pas de volgende pagina opvraagt als de bezoeker op meer laden klikt.",
+                "value": "",
+                "icon": "",
+                "tags": ["Paginastatus bijhouden en de lijst vervangen"],
+                "note": "De merge voegt alleen samen, zonder ontdubbeling, en gaat er dus van uit dat elke pagina maar één keer wordt opgevraagd."
+              },
+              {
+                "key": "query-per-screen",
+                "title": "Eén query per scherm, buiten de componenten",
+                "summary": "Vraag alleen de velden op die elk scherm toont en houd de GraphQL-documenten in een eigen module.",
+                "body": "De lijstquery vraagt id, naam, uitzenddatum, afleveringscode en aanmaakdatum op; de detailquery voegt de personages toe met de velden die hun kaarten tonen. Door de documenten naar utils/graphql/query te verplaatsen blijft de querytekst uit de pagina's.",
+                "value": "",
+                "icon": "",
+                "tags": ["Eén grote gedeelde query"],
+                "note": ""
+              },
+              {
+                "key": "route-code-splitting",
+                "title": "De app per route splitsen",
+                "summary": "Laad elke pagina met React.lazy en toon een spinner tijdens het downloaden.",
+                "body": "Home, Detail en Favorites zijn lazy imports in Suspense met een gedeelde Loader, zodat een bezoek alleen de geopende pagina downloadt. Dit kwam in juni 2022 met de commits over laadprestaties.",
+                "value": "",
+                "icon": "",
+                "tags": ["Eén enkele bundle"],
+                "note": "Navbar, Footer en de store blijven in de hoofdbundle; alleen de drie paginacomponenten worden uitgesteld."
+              },
+              {
+                "key": "favorites-redux-localstorage",
+                "title": "Favorieten in Redux Toolkit, bewaard via middleware",
+                "summary": "Bewaar favorieten in een slice en spiegel de hele store naar localStorage via een kleine eigen middleware.",
+                "body": "Elke verzonden actie schrijft de state naar localStorage en de store wordt bij het opstarten opnieuw gevuld via preloadedState, zodat favorieten een herlaadbeurt overleven zonder backend.",
+                "value": "",
+                "icon": "",
+                "tags": ["Lokale componentstate", "React Context"],
+                "note": "De hele state wordt na elke actie geserialiseerd en heeft geen schemaversie, dus een andere vorm vraagt om een migratie."
+              },
+              {
+                "key": "local-webp-artwork",
+                "title": "Afleveringsillustraties als lokale WebP leveren",
+                "summary": "Lever 51 afleveringsafbeeldingen vanuit /public als WebP en stel die buiten beeld uit.",
+                "body": "De GraphQL-queries vragen geen afleveringsafbeeldingen op, dus de kaart en de detailpagina bouwen het bestandspad op uit het afleverings-id. Kaarten gebruiken ook loading=\"lazy\"; de portretten van personages komen van de eigen afbeeldings-URL's van de API.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Afleveringsafbeeldingen van een externe host hotlinken"
+                ],
+                "note": "Bestandsnamen volgen het patroon episode (id).webp, wat de illustraties aan de afleverings-id's van de API koppelt."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "",
+            "title": "Architectuur en aanpak",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "presentation",
+                "title": "Presentatie",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "React 18",
+                  "React Router 6",
+                  "3 lazy geladen pagina's"
+                ],
+                "note": "useQuery · useSelector"
+              },
+              {
+                "key": "client-state",
+                "title": "Client-state",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Redux Toolkit",
+                  "Favorieten-slice",
+                  "localStorage-middleware"
+                ],
+                "note": ""
+              },
+              {
+                "key": "data-layer",
+                "title": "Datalaag",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["Apollo Client", "InMemoryCache", "Eigen type policy"],
+                "note": "GraphQL via HTTP"
+              },
+              {
+                "key": "external-api",
+                "title": "Externe API",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": ["rickandmortyapi.com/graphql", "Openbare GraphQL-API"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "Build met Create React App (react-scripts 5.0.1), gehost op Vercel"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "request-flow",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Hoe de data stroomt",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "list-query",
+                "title": "Home laadt pagina één",
+                "summary": "",
+                "body": "useQuery vraagt de eerste pagina afleveringen op met id, naam, uitzenddatum, afleveringscode en aanmaakdatum.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "load-more",
+                "title": "Meer laden voegt toe",
+                "summary": "",
+                "body": "fetchMore vraagt de volgende pagina op en het cachebeleid voegt die aan dezelfde lijst toe.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "detail-query",
+                "title": "Detail laadt één aflevering",
+                "summary": "",
+                "body": "Het id uit de route voedt een tweede query die de aflevering en de personages op de kaarten teruggeeft.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "favorites-persist",
+                "title": "Favorieten blijven bewaard",
+                "summary": "",
+                "body": "Een favoriet toevoegen of verwijderen werkt de Redux-slice bij en de middleware schrijft de state naar localStorage.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "project-in-numbers",
+            "kind": "METRICS",
+            "eyebrow": "",
+            "title": "Het project in cijfers",
+            "lead": "",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "pages",
+                "title": "Pagina's",
+                "summary": "",
+                "body": "",
+                "value": "3",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "graphql-queries",
+                "title": "GraphQL-queries",
+                "summary": "",
+                "body": "",
+                "value": "2",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "shared-components",
+                "title": "Gedeelde componenten",
+                "summary": "",
+                "body": "",
+                "value": "6",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "episode-images",
+                "title": "Lokale afleveringsafbeeldingen",
+                "summary": "",
+                "body": "",
+                "value": "51",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ]
+}

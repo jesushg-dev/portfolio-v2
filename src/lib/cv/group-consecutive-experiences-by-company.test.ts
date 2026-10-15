@@ -3,6 +3,7 @@ import {
   groupConsecutiveExperiencesByCompany,
   normalizeCompanyKey,
   parseExperienceDate,
+  unifyConsecutiveExperiencesByCompany,
 } from "./group-consecutive-experiences-by-company";
 
 describe("normalizeCompanyKey", () => {
@@ -102,5 +103,84 @@ describe("groupConsecutiveExperiencesByCompany", () => {
 
     expect(groups).toHaveLength(1);
     expect(groups[0]?.roles).toHaveLength(2);
+  });
+});
+
+describe("unifyConsecutiveExperiencesByCompany", () => {
+  it("unifies consecutive stints at the same company into one entry", () => {
+    const unified = unifyConsecutiveExperiencesByCompany([
+      {
+        id: "exp-lead",
+        company: "Contollo",
+        role: "Development Team Lead",
+        location: "Remote · Texas, United States",
+        startDate: "2024-11",
+        endDate: "2025-03",
+        current: false,
+        responsibilities: ["Led frontend architecture.", "Migrated Angular."],
+      },
+      {
+        id: "exp-sse",
+        company: "Contollo",
+        role: "Senior Software Engineer",
+        location: "Remote · Texas, United States",
+        startDate: "2023-08",
+        endDate: "2024-11",
+        current: false,
+        responsibilities: [
+          "Built responsive React interfaces.",
+          "Refactored legacy jQuery.",
+        ],
+      },
+    ]);
+
+    expect(unified).toHaveLength(1);
+    const item = unified[0];
+    expect(item.id).toBe("exp-lead");
+    expect(item.company).toBe("Contollo");
+    expect(item.role).toBe("Development Team Lead");
+    expect(item.startDate).toBe("2023-08");
+    expect(item.endDate).toBe("2025-03");
+    expect(item.current).toBe(false);
+    expect(item.responsibilities).toEqual([
+      "Led frontend architecture.",
+      "Migrated Angular.",
+      "Built responsive React interfaces.",
+      "Refactored legacy jQuery.",
+    ]);
+  });
+
+  it("does not merge non-consecutive stints at the same company", () => {
+    const unified = unifyConsecutiveExperiencesByCompany([
+      {
+        id: "a1",
+        company: "Contollo",
+        role: "Lead",
+        startDate: "2025-01",
+        endDate: "2025-06",
+        responsibilities: ["Lead team"],
+      },
+      {
+        id: "b1",
+        company: "OtherCo",
+        role: "Engineer",
+        startDate: "2024-06",
+        endDate: "2024-12",
+        responsibilities: ["Built apps"],
+      },
+      {
+        id: "a2",
+        company: "Contollo",
+        role: "Dev",
+        startDate: "2023-01",
+        endDate: "2024-05",
+        responsibilities: ["Wrote code"],
+      },
+    ]);
+
+    expect(unified).toHaveLength(3);
+    expect(unified[0]?.id).toBe("a1");
+    expect(unified[1]?.id).toBe("b1");
+    expect(unified[2]?.id).toBe("a2");
   });
 });

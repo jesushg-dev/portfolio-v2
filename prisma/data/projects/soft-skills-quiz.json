@@ -1,0 +1,29 @@
+{
+  "key": "SoftSkillsQuiz",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/soft-skill-quiz_rqnzmm",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jess232017/SoftSkill-Quiz",
+  "websiteUrl": "https://soft-skill-quiz.vercel.app/",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Soft Skills Quiz",
+      "description": "Aplicación web que permite realizar un test de habilidades blandas para desarrolladores."
+    },
+    {
+      "locale": "en",
+      "title": "Soft Skills Quiz",
+      "description": "Web application that allows you to take a test of soft skills for developers."
+    },
+    {
+      "locale": "nl",
+      "title": "Soft Skills Quiz",
+      "description": "Webapplicatie waarmee je een softwaretest voor ontwikkelaars kunt doen."
+    }
+  ],
+  "skillKeys": ["React", "Tailwind", "Typescript"],
+  "order": 7,
+  "kind": "LEARNING",
+  "slug": "soft-skills-quiz"
+}

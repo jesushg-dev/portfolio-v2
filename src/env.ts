@@ -56,6 +56,10 @@ export const env = createEnv({
 
     /// Optional dedicated key for tenant integration secrets (falls back to BETTER_AUTH_SECRET)
     INTEGRATION_ENCRYPTION_KEY: z.string().min(16).optional(),
+
+    // Cloudflare Turnstile
+    TURNSTILE_SECRET: z.string().optional(),
+    TURNSTILE_HOSTNAMES: z.string().optional(),
   },
 
   /**
@@ -66,6 +70,9 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_PRIMARY_DOMAIN: z.string().default("jesushg.com"),
     NEXT_PUBLIC_DEV_DOMAIN: z.string().default("lvh.me:3000"),
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z
+      .string()
+      .default("0x4AAAAAAFTw9aBm-s9GwPBl"),
   },
 
   /**
@@ -93,6 +100,8 @@ export const env = createEnv({
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     CV_PDF_GENERATOR_SECRET: process.env.CV_PDF_GENERATOR_SECRET,
     INTEGRATION_ENCRYPTION_KEY: process.env.INTEGRATION_ENCRYPTION_KEY,
+    TURNSTILE_SECRET: process.env.TURNSTILE_SECRET,
+    TURNSTILE_HOSTNAMES: process.env.TURNSTILE_HOSTNAMES,
     NEXT_PUBLIC_PRIMARY_DOMAIN: envOrDefault(
       process.env.NEXT_PUBLIC_PRIMARY_DOMAIN,
       "jesushg.com",
@@ -100,6 +109,10 @@ export const env = createEnv({
     NEXT_PUBLIC_DEV_DOMAIN: envOrDefault(
       process.env.NEXT_PUBLIC_DEV_DOMAIN,
       "lvh.me:3000",
+    ),
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: envOrDefault(
+      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+      "0x4AAAAAAFTw9aBm-s9GwPBl",
     ),
   },
   /**

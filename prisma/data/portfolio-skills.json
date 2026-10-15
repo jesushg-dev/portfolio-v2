@@ -74,7 +74,7 @@
   {
     "key": "Entity",
     "title": "Entity Framework",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/dotnet",
     "translations": [
       {
@@ -165,7 +165,7 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/Node.js"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Nestjs",
@@ -218,7 +218,7 @@
   {
     "key": "Mysql",
     "title": "MySQL",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/mysql",
     "translations": [
       {
@@ -242,7 +242,7 @@
   {
     "key": "SqlServer",
     "title": "SQL Server",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/microsoftsqlserver",
     "translations": [
       {
@@ -261,12 +261,12 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/Microsoft_SQL_Server"
       }
     ],
-    "featured": false
+    "featured": true
   },
   {
     "key": "MongoDb",
     "title": "MongoDB",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/mongodb",
     "translations": [
       {
@@ -285,7 +285,7 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/MongoDB"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Firebase",
@@ -314,7 +314,7 @@
   {
     "key": "Npm",
     "title": "NPM",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/npm",
     "translations": [
       {
@@ -338,7 +338,7 @@
   {
     "key": "Yarn",
     "title": "Yarn",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/yarn",
     "translations": [
       {
@@ -362,7 +362,7 @@
   {
     "key": "Vite",
     "title": "Vite",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/vite",
     "translations": [
       {
@@ -386,7 +386,7 @@
   {
     "key": "Git",
     "title": "Git",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/git",
     "translations": [
       {
@@ -410,7 +410,7 @@
   {
     "key": "Github",
     "title": "Github",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/github",
     "translations": [
       {
@@ -429,12 +429,12 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/GitHub"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Bitbucket",
     "title": "Bitbucket",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/bitbucket",
     "translations": [
       {
@@ -458,7 +458,7 @@
   {
     "key": "Vscode",
     "title": "VS Code",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/visualstudiocode",
     "translations": [
       {
@@ -482,7 +482,7 @@
   {
     "key": "Postman",
     "title": "Postman",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/postman",
     "translations": [
       {
@@ -506,7 +506,7 @@
   {
     "key": "GraphQL",
     "title": "GraphQL",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/graphql",
     "translations": [
       {
@@ -525,12 +525,12 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/GraphQL"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Prisma",
     "title": "Prisma",
-    "type": "BACKEND",
+    "type": "DATA",
     "image": "https://cdn.simpleicons.org/prisma",
     "translations": [
       {
@@ -554,7 +554,7 @@
   {
     "key": "Azure",
     "title": "Azure",
-    "type": "TOOLS",
+    "type": "DEVOPS",
     "image": "https://cdn.simpleicons.org/microsoftazure",
     "translations": [
       {
@@ -578,7 +578,7 @@
   {
     "key": "Notion",
     "title": "Notion",
-    "type": "TOOLS",
+    "type": "QUALITY_DELIVERY",
     "image": "https://cdn.simpleicons.org/notion",
     "translations": [
       {
@@ -669,7 +669,7 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/JavaScript"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Typescript",
@@ -789,7 +789,7 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/Tailwind_CSS"
       }
     ],
-    "featured": true
+    "featured": false
   },
   {
     "key": "Material",
@@ -890,7 +890,7 @@
   {
     "key": "Apollo",
     "title": "Apollo GraphQL",
-    "type": "FRONTEND",
+    "type": "BACKEND",
     "image": "https://cdn.simpleicons.org/apollographql",
     "translations": [
       {
@@ -914,7 +914,7 @@
   {
     "key": "WebSockets",
     "title": "WebSockets",
-    "type": "FRONTEND",
+    "type": "BACKEND",
     "image": "https://cdn.simpleicons.org/socketdotio",
     "translations": [
       {
@@ -938,7 +938,7 @@
   {
     "key": "ReactNative",
     "title": "React Native",
-    "type": "MOBILE",
+    "type": "FRONTEND",
     "image": "https://cdn.simpleicons.org/react",
     "translations": [
       {
@@ -962,7 +962,7 @@
   {
     "key": "Android",
     "title": "Android",
-    "type": "MOBILE",
+    "type": "FRONTEND",
     "image": "https://cdn.simpleicons.org/android",
     "translations": [
       {
@@ -1010,7 +1010,7 @@
   {
     "key": "DevExpress",
     "title": "DevExpress",
-    "type": "TOOLS",
+    "type": "QUALITY_DELIVERY",
     "image": "https://cdn.simpleicons.org/devexpress",
     "translations": [
       {
@@ -1030,5 +1030,589 @@
       }
     ],
     "featured": false
+  },
+  {
+    "key": "Docker",
+    "title": "Docker",
+    "type": "DEVOPS",
+    "image": "https://cdn.simpleicons.org/docker",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Plataforma de software para construir, probar y desplegar aplicaciones rápidamente como contenedores portátiles y autosuficientes.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Docker_(software)"
+      },
+      {
+        "locale": "en",
+        "description": "Software platform for building, testing, and deploying applications quickly as portable, self-sufficient containers.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Docker_(software)"
+      },
+      {
+        "locale": "nl",
+        "description": "Softwareplatform voor het bouwen, testen en implementeren van applicaties als draagbare, zelfvoorzienende containers.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Docker_(software)"
+      }
+    ],
+    "featured": true
+  },
+  {
+    "key": "DDD",
+    "title": "Domain-Driven Design",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/blueprint",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Enfoque de desarrollo de software con modelos complejos centrados en el dominio.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Dise%C3%B1o_guiado_por_el_dominio"
+      },
+      {
+        "locale": "en",
+        "description": "Software development approach based on complex domain-centric models.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Domain-driven_design"
+      },
+      {
+        "locale": "nl",
+        "description": "Software-ontwikkelingsaanpak gebaseerd op complexe domeingerichte modellen.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Domain-driven_design"
+      }
+    ]
+  },
+  {
+    "key": "CleanArchitecture",
+    "title": "Clean Architecture",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/cleanarchitecture",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Patrón arquitectónico que separa responsabilidades y mejora mantenibilidad.",
+        "urlWiki": ""
+      },
+      {
+        "locale": "en",
+        "description": "Architectural pattern that separates concerns and improves maintainability.",
+        "urlWiki": ""
+      },
+      {
+        "locale": "nl",
+        "description": "Architectuurpatroon dat zorgen scheidt en onderhoudbaarheid verbetert.",
+        "urlWiki": ""
+      }
+    ]
+  },
+  {
+    "key": "Microservices",
+    "title": "Microservices",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/microservices",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Arquitectura que estructura aplicaciones como una colección de servicios débilmente acoplados.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Microservicios"
+      },
+      {
+        "locale": "en",
+        "description": "Architecture that structures an application as a collection of loosely coupled services.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Microservices"
+      },
+      {
+        "locale": "nl",
+        "description": "Architectuur die een applicatie structureert als een verzameling losgekoppelde services.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Microservices"
+      }
+    ]
+  },
+  {
+    "key": "EventDriven",
+    "title": "Event-Driven",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/apachekafka",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Arquitectura de software que promueve la producción, detección y consumo de eventos.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Arquitectura_dirigida_por_eventos"
+      },
+      {
+        "locale": "en",
+        "description": "Software architecture paradigm promoting the production, detection, and consumption of events.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Event-driven_architecture"
+      },
+      {
+        "locale": "nl",
+        "description": "Softwarearchitectuur die de productie, detectie en consumptie van gebeurtenissen bevordert.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Event-driven_architecture"
+      }
+    ]
+  },
+  {
+    "key": "SystemDesign",
+    "title": "System Design",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/diagramsdotnet",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Diseño de la arquitectura, componentes, interfaces y datos de un sistema.",
+        "urlWiki": ""
+      },
+      {
+        "locale": "en",
+        "description": "Process of defining the architecture, components, modules, interfaces, and data for a system.",
+        "urlWiki": ""
+      },
+      {
+        "locale": "nl",
+        "description": "Proces van het definiëren van architectuur, componenten, interfaces en gegevens voor een systeem.",
+        "urlWiki": ""
+      }
+    ]
+  },
+  {
+    "key": "Postgresql",
+    "title": "PostgreSQL",
+    "type": "DATA",
+    "image": "https://cdn.simpleicons.org/postgresql",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Sistema de gestión de bases de datos relacional orientado a objetos y de código abierto.",
+        "urlWiki": "https://es.wikipedia.org/wiki/PostgreSQL"
+      },
+      {
+        "locale": "en",
+        "description": "Powerful, open source object-relational database system.",
+        "urlWiki": "https://en.wikipedia.org/wiki/PostgreSQL"
+      },
+      {
+        "locale": "nl",
+        "description": "Krachtig, open-source object-relationeel databasesysteem.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/PostgreSQL"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "Jest",
+    "title": "Jest",
+    "type": "QUALITY_DELIVERY",
+    "image": "https://cdn.simpleicons.org/jest",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework de pruebas en JavaScript con enfoque en la simplicidad y proyectos de React.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Jest_(software)"
+      },
+      {
+        "locale": "en",
+        "description": "Delightful JavaScript Testing Framework with a focus on simplicity.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Jest_(software)"
+      },
+      {
+        "locale": "nl",
+        "description": "JavaScript-testframework ontworpen met de nadruk op eenvoud.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Jest_(software)"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "Cypress",
+    "title": "Cypress",
+    "type": "QUALITY_DELIVERY",
+    "image": "https://cdn.simpleicons.org/cypress",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Herramienta de pruebas de frontend de extremo a extremo construida para la web moderna.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Cypress_(software)"
+      },
+      {
+        "locale": "en",
+        "description": "Next generation front end testing tool built for the modern web.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Cypress_(software)"
+      },
+      {
+        "locale": "nl",
+        "description": "Next-generation front-end testtool gebouwd voor het moderne web.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Cypress_(software)"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "Trpc",
+    "title": "tRPC",
+    "type": "BACKEND",
+    "image": "https://cdn.simpleicons.org/trpc",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Herramienta para crear APIs con seguridad de tipos de extremo a extremo sin esquemas ni generación de código.",
+        "urlWiki": "https://trpc.io"
+      },
+      {
+        "locale": "en",
+        "description": "End-to-end typesafe APIs made easy without schemas or code generation.",
+        "urlWiki": "https://trpc.io"
+      },
+      {
+        "locale": "nl",
+        "description": "End-to-end typesafe API's zonder schema's of codegeneratie.",
+        "urlWiki": "https://trpc.io"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "Playwright",
+    "title": "Playwright",
+    "type": "QUALITY_DELIVERY",
+    "image": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/playwright/playwright-original.svg",
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework de automatización y pruebas de extremo a extremo confiables para navegadores modernos.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Playwright_(software)"
+      },
+      {
+        "locale": "en",
+        "description": "Fast and reliable end-to-end testing and automation for modern web apps across browsers.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Playwright_(software)"
+      },
+      {
+        "locale": "nl",
+        "description": "Snelle en betrouwbare end-to-end testen en automatisering voor moderne webapps.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Playwright_(software)"
+      }
+    ],
+    "featured": false
+  },
+  {
+    "key": "OpenAIGpt4o",
+    "title": "OpenAI GPT-4o",
+    "type": "AI",
+    "image": "https://cdn.simpleicons.org/openai",
+    "featured": true,
+    "trend": true,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Modelo insignia omnicanal de OpenAI con razonamiento avanzado en texto, voz y visión.",
+        "urlWiki": "https://en.wikipedia.org/wiki/GPT-4o"
+      },
+      {
+        "locale": "en",
+        "description": "OpenAI flagship omni-modal model with advanced reasoning across text, voice, and vision.",
+        "urlWiki": "https://en.wikipedia.org/wiki/GPT-4o"
+      },
+      {
+        "locale": "nl",
+        "description": "OpenAI vlaggenschip omni-model met geavanceerde redenering over tekst, audio en visie.",
+        "urlWiki": "https://en.wikipedia.org/wiki/GPT-4o"
+      }
+    ]
+  },
+  {
+    "key": "Claude35",
+    "title": "Claude 3.5",
+    "type": "AI",
+    "image": "https://cdn.simpleicons.org/anthropic",
+    "featured": true,
+    "trend": true,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Familia de modelos de Anthropic líder en generación de código, análisis y razonamiento matizado.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Claude_(language_model)"
+      },
+      {
+        "locale": "en",
+        "description": "Anthropic model family leading in coding capabilities, detailed analysis, and nuanced reasoning.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Claude_(language_model)"
+      },
+      {
+        "locale": "nl",
+        "description": "Anthropic modellenfamilie toonaangevend in codering, gedetailleerde analyse en redenering.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Claude_(language_model)"
+      }
+    ]
+  },
+  {
+    "key": "Gemini15Pro",
+    "title": "Gemini 1.5 Pro",
+    "type": "AI",
+    "image": "https://cdn.simpleicons.org/google",
+    "featured": true,
+    "trend": true,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Modelo multimodal de Google con ventana de contexto de millones de tokens para análisis masivo.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Gemini_(chatbot)"
+      },
+      {
+        "locale": "en",
+        "description": "Google multimodal model featuring million-token context windows for massive data comprehension.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Gemini_(chatbot)"
+      },
+      {
+        "locale": "nl",
+        "description": "Google multimodaal model met miljoenen tokens contextvenster voor grootschalige gegevensanalyse.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Gemini_(chatbot)"
+      }
+    ]
+  },
+  {
+    "key": "GitHubCopilot",
+    "title": "GitHub Copilot",
+    "type": "AI",
+    "image": "https://cdn.simpleicons.org/githubcopilot",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Asistente de programación con IA integrado en el flujo de desarrollo para sugerencias en tiempo real.",
+        "urlWiki": "https://en.wikipedia.org/wiki/GitHub_Copilot"
+      },
+      {
+        "locale": "en",
+        "description": "AI pair programmer integrated into developer workflows for real-time code synthesis.",
+        "urlWiki": "https://en.wikipedia.org/wiki/GitHub_Copilot"
+      },
+      {
+        "locale": "nl",
+        "description": "AI-programmeurassistent geïntegreerd in de workflow voor realtime codesuggesties.",
+        "urlWiki": "https://en.wikipedia.org/wiki/GitHub_Copilot"
+      }
+    ]
+  },
+  {
+    "key": "Cursor",
+    "title": "Cursor",
+    "type": "AI",
+    "image": "https://cdn.simpleicons.org/visualstudiocode",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Editor de código nativo con IA diseñado para iteración rápida con agentes y contexto del repositorio.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Source-code_editor"
+      },
+      {
+        "locale": "en",
+        "description": "AI-native code editor designed for rapid agentic iteration and full codebase context.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Source-code_editor"
+      },
+      {
+        "locale": "nl",
+        "description": "AI-native code-editor ontworpen voor snelle iteratie met agenten en context van de codebase.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Source-code_editor"
+      }
+    ]
+  },
+  {
+    "key": "V0",
+    "title": "v0",
+    "type": "AI",
+    "image": "https://cdn.simpleicons.org/vercel",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Herramienta de diseño generativo y síntesis de interfaz React/Tailwind de Vercel impulsada por IA.",
+        "urlWiki": "https://v0.dev"
+      },
+      {
+        "locale": "en",
+        "description": "Generative UI system by Vercel for rapid React and Tailwind interface synthesis with AI.",
+        "urlWiki": "https://v0.dev"
+      },
+      {
+        "locale": "nl",
+        "description": "Generatief UI-systeem van Vercel voor snelle synthese van React-interfaces via AI.",
+        "urlWiki": "https://v0.dev"
+      }
+    ]
+  },
+  {
+    "key": "Flutter",
+    "title": "Flutter",
+    "type": "MOBILE",
+    "image": "https://cdn.simpleicons.org/flutter",
+    "featured": true,
+    "trend": true,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework multiplataforma de Google para desarrollo móvil y web.",
+        "urlWiki": "https://flutter.dev"
+      },
+      {
+        "locale": "en",
+        "description": "Google's multi-platform framework for crafting native mobile and web apps.",
+        "urlWiki": "https://flutter.dev"
+      },
+      {
+        "locale": "nl",
+        "description": "Google's multiplatform-framework voor mobiele en webapplicaties.",
+        "urlWiki": "https://flutter.dev"
+      }
+    ]
+  },
+  {
+    "key": "Dart",
+    "title": "Dart",
+    "type": "MOBILE",
+    "image": "https://cdn.simpleicons.org/dart",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Lenguaje optimizado para clientes para aplicaciones rápidas en cualquier plataforma.",
+        "urlWiki": "https://dart.dev"
+      },
+      {
+        "locale": "en",
+        "description": "Client-optimized language for fast apps on any platform.",
+        "urlWiki": "https://dart.dev"
+      },
+      {
+        "locale": "nl",
+        "description": "Client-geoptimaliseerde programmeertaal voor snelle apps.",
+        "urlWiki": "https://dart.dev"
+      }
+    ]
+  },
+  {
+    "key": "Angular",
+    "title": "Angular",
+    "type": "FRONTEND",
+    "image": "https://cdn.simpleicons.org/angular",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework de desarrollo frontend basado en componentes para la web.",
+        "urlWiki": "https://angular.dev"
+      },
+      {
+        "locale": "en",
+        "description": "Component-based frontend framework for building scalable web applications.",
+        "urlWiki": "https://angular.dev"
+      },
+      {
+        "locale": "nl",
+        "description": "Component-gebaseerd frontend framework voor schaalbare webapplicaties.",
+        "urlWiki": "https://angular.dev"
+      }
+    ]
+  },
+  {
+    "key": "VTEX",
+    "title": "VTEX",
+    "type": "FRONTEND",
+    "image": "https://cdn.simpleicons.org/vtex",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Plataforma de comercio digital empresarial componible y headless.",
+        "urlWiki": "https://vtex.com"
+      },
+      {
+        "locale": "en",
+        "description": "Enterprise digital commerce platform for composable commerce solutions.",
+        "urlWiki": "https://vtex.com"
+      },
+      {
+        "locale": "nl",
+        "description": "Enterprise digitaal commerce platform voor composable oplossingen.",
+        "urlWiki": "https://vtex.com"
+      }
+    ]
+  },
+  {
+    "key": "QuickBooks",
+    "title": "QuickBooks",
+    "type": "TOOLS",
+    "image": "https://cdn.simpleicons.org/quickbooks",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Software de contabilidad y gestión financiera empresarial.",
+        "urlWiki": "https://quickbooks.intuit.com"
+      },
+      {
+        "locale": "en",
+        "description": "Accounting software package developed and marketed by Intuit.",
+        "urlWiki": "https://quickbooks.intuit.com"
+      },
+      {
+        "locale": "nl",
+        "description": "Boekhoudsoftware ontwikkeld door Intuit.",
+        "urlWiki": "https://quickbooks.intuit.com"
+      }
+    ]
+  },
+  {
+    "key": "HTML",
+    "title": "HTML",
+    "type": "FRONTEND",
+    "image": "https://cdn.simpleicons.org/html5",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Lenguaje de marcado estándar para documentos web.",
+        "urlWiki": "https://es.wikipedia.org/wiki/HTML"
+      },
+      {
+        "locale": "en",
+        "description": "Standard markup language for documents designed to be displayed in a web browser.",
+        "urlWiki": "https://en.wikipedia.org/wiki/HTML"
+      },
+      {
+        "locale": "nl",
+        "description": "Standaard opmaaktaal voor documenten op het World Wide Web.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/HTML"
+      }
+    ]
+  },
+  {
+    "key": "CSS",
+    "title": "CSS",
+    "type": "FRONTEND",
+    "image": "https://cdn.simpleicons.org/css3",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Lenguaje de hojas de estilo utilizado para describir la presentación de un documento.",
+        "urlWiki": "https://es.wikipedia.org/wiki/CSS"
+      },
+      {
+        "locale": "en",
+        "description": "Style sheet language used for describing the presentation of a document.",
+        "urlWiki": "https://en.wikipedia.org/wiki/CSS"
+      },
+      {
+        "locale": "nl",
+        "description": "Stijlbladtaal gebruikt voor het beschrijven van de presentatie van een document.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/CSS"
+      }
+    ]
   }
 ]

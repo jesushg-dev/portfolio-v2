@@ -1,16 +1,31 @@
 "use client";
 
-import { useState, type FC } from "react";
+import { useState, useCallback, type FC, type PointerEvent } from "react";
 import { AiFillGithub, AiFillEye } from "react-icons/ai";
-import { FolderCode, Zap } from "lucide-react";
-// import { ArrowUpRight } from "lucide-react";
-// import { Link } from "@/i18n/routing";
+import { ArrowUpRight, Zap } from "lucide-react";
 
 import { MediaImage } from "@/components/shared/media-image";
+import { Link } from "@/i18n/routing";
 import { type ProjectType } from "@/utils/interfaces/types";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
 
-interface IPortfolioItemProps extends ProjectType {
+import { ProjectCoverMockup } from "./project-cover-mockup";
+
+export interface ProjectMetaLabels {
+  solo: string;
+  formatTeam: (count: number) => string;
+  now: string;
+  statuses: Record<string, string>;
+}
+
+export interface ProjectTeaserLabels {
+  formatDecisions: (count: number) => string;
+  layers: string;
+  formatMetrics: (count: number) => string;
+}
+
+export interface IPortfolioItemProps extends Omit<ProjectType, "csInfo"> {
+  csInfo?: { decisions: number; layers: boolean; metrics: number } | null;
   urlName: string;
   sourceName: string;
   canSeeDemo: string;
@@ -18,10 +33,170 @@ interface IPortfolioItemProps extends ProjectType {
   privateDescription: string;
   caseStudyLabel: string;
   kindLabels: Record<string, string>;
+  metaLabels?: ProjectMetaLabels;
+  teaserLabels?: ProjectTeaserLabels;
+  priority?: boolean;
 }
 
-const linkButtonClass =
-  "flex size-8.5 items-center justify-center rounded-lg border border-border/60 bg-card text-foreground transition-all hover:border-primary/40 hover:bg-primary/10 hover:text-primary active:scale-95";
+const MAX_TECH = 5;
+
+const actionButtonClass =
+  "flex size-10 items-center justify-center rounded-xl border border-border bg-card/90 text-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary active:scale-95 shadow-2xs";
+
+interface ProjectMetaLineProps {
+  teamSize?: number | null;
+  startedAt?: string | null;
+  endedAt?: string | null;
+  status?: string | null;
+  metaLabels?: ProjectMetaLabels;
+}
+
+export function ProjectMetaLine({
+  teamSize,
+  startedAt,
+  endedAt,
+  status,
+  metaLabels,
+}: ProjectMetaLineProps) {
+  if (!metaLabels) return null;
+
+  const parts: string[] = [];
+
+  if (typeof teamSize === "number" && teamSize > 0) {
+    parts.push(
+      teamSize === 1 ? metaLabels.solo : metaLabels.formatTeam(teamSize),
+    );
+  }
+
+  if (startedAt) {
+    const startYear = startedAt.slice(0, 4);
+    if (endedAt) {
+      const endYear = endedAt.slice(0, 4);
+      parts.push(startYear === endYear ? startYear : `${startYear}–${endYear}`);
+    } else {
+      parts.push(`${startYear}–${metaLabels.now}`);
+    }
+  }
+
+  if (status && metaLabels.statuses[status]) {
+    parts.push(metaLabels.statuses[status]);
+  }
+
+  if (parts.length === 0) return null;
+
+  return (
+    <p className="text-muted-foreground mt-1.5 text-sm">{parts.join(" · ")}</p>
+  );
+}
+
+interface ProjectTeaserLineProps {
+  caseStudyEnabled?: boolean;
+  csInfo?: { decisions: number; layers: boolean; metrics: number } | null;
+  teaserLabels?: ProjectTeaserLabels;
+}
+
+export function ProjectTeaserLine({
+  caseStudyEnabled,
+  csInfo,
+  teaserLabels,
+}: ProjectTeaserLineProps) {
+  if (!caseStudyEnabled || !csInfo || !teaserLabels) return null;
+
+  const parts: string[] = [];
+
+  if (csInfo.decisions > 0) {
+    parts.push(teaserLabels.formatDecisions(csInfo.decisions));
+  }
+  if (csInfo.layers) {
+    parts.push(teaserLabels.layers);
+  }
+  if (csInfo.metrics > 0) {
+    parts.push(teaserLabels.formatMetrics(csInfo.metrics));
+  }
+
+  if (parts.length === 0) return null;
+
+  const text = parts.join(" · ");
+  return (
+    <p className="text-muted-foreground mb-3 truncate text-sm" title={text}>
+      {text}
+    </p>
+  );
+}
+
+interface ProjectResultsProps {
+  hook?: string | null;
+}
+
+export function ProjectResults({ hook }: ProjectResultsProps) {
+  if (!hook) return null;
+
+  const parts = hook
+    .split("·")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (parts.length === 0) return null;
+
+  return (
+    <ul className="mt-4 flex flex-wrap gap-2" aria-label="Key results">
+      {parts.map((part, index) => (
+        <li
+          key={part}
+          title={part}
+          className="bg-primary/10 text-primary inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs leading-none font-semibold"
+        >
+          {index === 0 ? (
+            <Zap className="size-3.5 shrink-0" aria-hidden="true" />
+          ) : null}
+          <span className="truncate">{part}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+interface ProjectTechRowProps {
+  skills?: ProjectType["skills"];
+}
+
+export function ProjectTechRow({ skills }: ProjectTechRowProps) {
+  if (!skills || skills.length === 0) return null;
+
+  const shownSkills = skills.slice(0, MAX_TECH);
+  const restCount = skills.length - MAX_TECH;
+
+  return (
+    <ul className="mt-auto flex flex-wrap gap-2 pt-5" aria-label="Technologies">
+      {shownSkills.map((skill) => (
+        <li
+          key={skill.title}
+          className="border-border bg-muted/50 text-foreground flex items-center gap-1.5 rounded-lg border py-1 pr-2.5 pl-1 text-xs font-medium"
+        >
+          <SkillIcon
+            image={skill.image}
+            title={skill.title}
+            tile
+            size="sm"
+            className="size-6 rounded-lg text-xs"
+          />
+          <span className="capitalize">{skill.title}</span>
+        </li>
+      ))}
+      {restCount > 0 ? (
+        <li
+          title={skills
+            .slice(MAX_TECH)
+            .map((s) => s.title)
+            .join(", ")}
+          className="border-border bg-muted/50 text-muted-foreground flex items-center rounded-lg border px-2.5 py-1 text-xs font-semibold"
+        >
+          +{restCount}
+        </li>
+      ) : null}
+    </ul>
+  );
+}
 
 const PortfolioItem: FC<IPortfolioItemProps> = ({
   image,
@@ -32,53 +207,78 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   description,
   hook,
   kind,
+  type,
   isPrivate = false,
   urlName,
   sourceName,
   privateName,
   privateDescription,
   canSeeDemo,
+  caseStudyLabel,
   kindLabels,
+  caseStudyEnabled,
+  slug,
+  status,
+  startedAt,
+  endedAt,
+  teamSize,
+  csInfo,
+  metaLabels,
+  teaserLabels,
+  priority = false,
 }) => {
   const [imageFailed, setImageFailed] = useState(false);
   const showGithub = !isPrivate && Boolean(githubUrl);
-  const cardDescription = description;
-  const kindLabel = kind ? kindLabels[kind] : undefined;
+  const effectiveKind = kind ?? "PERSONAL";
+  const kindLabel =
+    kindLabels[effectiveKind] ?? (kind ? kindLabels[kind] : undefined);
   const showImageFallback = imageFailed || !image?.trim();
 
+  const handlePointerMove = useCallback((e: PointerEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--x", `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
+  }, []);
+
+  const handlePointerLeave = useCallback((e: PointerEvent<HTMLElement>) => {
+    e.currentTarget.style.removeProperty("--x");
+    e.currentTarget.style.removeProperty("--y");
+  }, []);
+
   return (
-    <article className="group/card border-border/60 bg-card text-card-foreground hover:border-primary/30 flex h-full w-full flex-col overflow-hidden rounded-2xl border shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl">
-      {/* Image container with clean treatment & gradient overlay */}
-      <div className="border-border/40 bg-muted/40 relative aspect-video overflow-hidden border-b">
+    <article
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      style={{
+        backgroundImage:
+          "radial-gradient(circle 22.5rem at var(--x, 100%) var(--y, 100%), color-mix(in srgb, var(--primary) 12%, transparent), transparent 70%)",
+      }}
+      className="group/card border-border bg-card text-card-foreground hover:border-primary/50 relative flex h-full w-full flex-col overflow-hidden rounded-[2rem] border shadow-xs transition-all duration-300 hover:shadow-xl"
+    >
+      {/* Cover Media container */}
+      <div className="border-border relative aspect-video overflow-hidden border-b">
         {showImageFallback ? (
-          <div className="from-primary/15 via-background to-primary/10 flex h-full w-full items-center justify-center bg-linear-to-br p-4">
-            <div className="flex flex-col items-center gap-2 text-center">
-              <FolderCode className="text-primary/70 size-10" />
-              <span className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                {title}
-              </span>
-            </div>
+          <div
+            className="absolute inset-0 transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover/card:scale-105"
+            aria-hidden="true"
+          >
+            <ProjectCoverMockup type={type} title={title} slug={slug} />
           </div>
         ) : (
-          <>
-            <MediaImage
-              src={image}
-              alt={title}
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-              className="object-cover object-top transition-transform duration-500 ease-out group-hover/card:scale-105"
-              onError={() => setImageFailed(true)}
-            />
-            {/* Subtle uniform lighting & gradient overlay */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-50 transition-opacity group-hover/card:opacity-30"
-            />
-          </>
+          <MediaImage
+            src={image}
+            alt={title}
+            fill
+            priority={priority}
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover/card:scale-105"
+            onError={() => setImageFailed(true)}
+          />
         )}
 
+        {/* Top Badges */}
         {kindLabel ? (
-          <span className="bg-card/90 text-foreground border-border/60 absolute top-3 left-3 z-10 rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase shadow-md backdrop-blur-md">
+          <span className="border-border/40 bg-card/95 text-foreground ring-foreground/10 absolute top-4 left-4 z-10 rounded-full border px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs ring-1 backdrop-blur-md">
             {kindLabel}
           </span>
         ) : null}
@@ -86,95 +286,119 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
         {isPrivate ? (
           <span
             title={websiteUrl ? canSeeDemo : privateDescription}
-            className="bg-primary text-primary-foreground absolute top-3 right-3 z-10 rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wide uppercase shadow-md"
+            className="bg-primary text-primary-foreground absolute top-4 right-4 z-10 rounded-full px-3.5 py-1.5 text-xs font-bold tracking-wide uppercase shadow-xs"
           >
             {privateName}
           </span>
         ) : null}
       </div>
 
-      {/* Card Content Body */}
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-foreground text-base font-bold tracking-tight sm:text-lg">
-            {title}
-          </h3>
+      {/* Card Body */}
+      <div className="flex flex-1 flex-col p-6">
+        <h3
+          className="text-foreground line-clamp-2 text-xl font-bold tracking-tight"
+          title={title}
+        >
+          {title}
+        </h3>
 
-          {(websiteUrl ?? showGithub) ? (
-            <div className="flex shrink-0 gap-1.5">
-              {websiteUrl ? (
+        <ProjectMetaLine
+          teamSize={teamSize}
+          startedAt={startedAt}
+          endedAt={endedAt}
+          status={status}
+          metaLabels={metaLabels}
+        />
+
+        <ProjectResults hook={hook} />
+
+        <p className="text-muted-foreground mt-4 line-clamp-3 text-sm leading-relaxed whitespace-pre-line">
+          {description}
+        </p>
+
+        <ProjectTechRow skills={skills} />
+
+        {/* Action Footer */}
+        <div className="border-border mt-5 border-t pt-4">
+          <ProjectTeaserLine
+            caseStudyEnabled={caseStudyEnabled}
+            csInfo={csInfo}
+            teaserLabels={teaserLabels}
+          />
+          <div className="flex items-center justify-between gap-3">
+            {caseStudyEnabled && slug ? (
+              <Link
+                href={{
+                  pathname: "/projects/[slug]",
+                  params: { slug },
+                }}
+                aria-label={`${caseStudyLabel}: ${title}`}
+                className="text-primary hover:text-primary/80 group/cta focus-visible:after:ring-primary inline-flex items-center gap-2 text-sm font-bold transition-colors after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:rounded-[2rem] focus-visible:after:ring-2"
+              >
+                <span>{caseStudyLabel}</span>
+                <ArrowUpRight
+                  className="size-4 transition-transform duration-200 group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5"
+                  aria-hidden="true"
+                />
+              </Link>
+            ) : showGithub ? (
+              <a
+                href={githubUrl!}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${sourceName}: ${title}`}
+                className="text-foreground hover:text-primary relative z-10 inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+              >
+                <AiFillGithub className="size-4" aria-hidden="true" />
+                <span>{sourceName}</span>
+              </a>
+            ) : websiteUrl ? (
+              <a
+                href={websiteUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${urlName}: ${title}`}
+                className="text-primary hover:text-primary/80 relative z-10 inline-flex items-center gap-2 text-sm font-bold transition-colors"
+              >
+                <span>{urlName}</span>
+                <ArrowUpRight className="size-4" aria-hidden="true" />
+              </a>
+            ) : (
+              <span />
+            )}
+
+            {/* Secondary Action Buttons */}
+            <div className="relative z-10 flex items-center gap-2">
+              {caseStudyEnabled && slug && showGithub ? (
+                <a
+                  href={githubUrl!}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${sourceName}: ${title}`}
+                  title={`${sourceName}: ${title}`}
+                  className={actionButtonClass}
+                >
+                  <AiFillGithub className="size-4.5" aria-hidden="true" />
+                </a>
+              ) : null}
+              {caseStudyEnabled && slug && websiteUrl ? (
                 <a
                   href={websiteUrl}
                   target="_blank"
                   rel="noreferrer"
-                  title={`${urlName}: ${title}`}
                   aria-label={`${urlName}: ${title}`}
-                  className={linkButtonClass}
+                  title={`${urlName}: ${title}`}
+                  className={actionButtonClass}
                 >
-                  <AiFillEye className="text-primary size-4" />
-                </a>
-              ) : null}
-              {showGithub && githubUrl ? (
-                <a
-                  href={githubUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  title={`${sourceName}: ${title}`}
-                  aria-label={`${sourceName}: ${title}`}
-                  className={linkButtonClass}
-                >
-                  <AiFillGithub className="size-4" />
+                  <AiFillEye
+                    className="text-primary size-4.5"
+                    aria-hidden="true"
+                  />
                 </a>
               ) : null}
             </div>
-          ) : null}
-        </div>
-
-        {/* Business Impact Metric / Hook */}
-        {hook ? (
-          <div className="border-primary/25 bg-primary/10 text-primary inline-flex w-full items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-[0.725rem] font-semibold">
-            <Zap className="fill-primary/20 text-primary mt-0.5 size-3.5 shrink-0" />
-            <span className="line-clamp-2 leading-tight">{hook}</span>
           </div>
-        ) : null}
-
-        <p className="text-muted-foreground line-clamp-2 text-xs leading-relaxed sm:text-sm">
-          {cardDescription}
-        </p>
-
-        {skills && skills.length > 0 ? (
-          <ul className="flex flex-wrap gap-1.5 pt-1">
-            {skills.map((skill) => (
-              <li
-                key={skill.title}
-                className="bg-muted/50 border-border/50 text-foreground inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium"
-              >
-                <SkillIcon
-                  image={skill.image}
-                  title={skill.title}
-                  className="size-3.5"
-                />
-                <span className="capitalize">{skill.title}</span>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-
-        {/* CTA Case Study Link with arrow animation (Disabled until case study feature is complete)
-        {caseStudyEnabled && slug ? (
-          <Link
-            href={{
-              pathname: "/projects/[slug]",
-              params: { slug },
-            }}
-            aria-label={`${caseStudyLabel}: ${title}`}
-            className="group/cta text-primary hover:text-primary/80 mt-auto inline-flex items-center gap-1 pt-2 text-[0.9rem] font-semibold transition-colors"
-          >
-            <span>{caseStudyLabel}</span>
-            <ArrowUpRight className="size-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
-          </Link>
-        ) : null}
-        */}
+        </div>
       </div>
     </article>
   );

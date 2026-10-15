@@ -24,6 +24,8 @@ describe("company editor dto", () => {
       name: "Acme",
       email: "",
       website: "",
+      linkedinUrl: "",
+      location: "",
       description: "",
     });
   });

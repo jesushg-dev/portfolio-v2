@@ -13,7 +13,7 @@ interface PortfolioHomeSeed {
   backgroundImageUrl: string;
   heroSubtitle: LocaleMap;
   heroTagline: LocaleMap;
-  heroSummary: LocaleMap;
+  availabilityBadge?: LocaleMap;
   terminal: {
     username: string;
     typingSpeed: number;
@@ -59,22 +59,29 @@ export async function seedPortfolioHome(
             cvHeaderId: header.id,
             appLanguageId,
             degree: "",
-            heroSubtitle: data.heroSubtitle[code] ?? data.heroSubtitle.es ?? "",
-            heroTagline: data.heroTagline[code] ?? data.heroTagline.es ?? "",
-            heroSummary: data.heroSummary[code] ?? data.heroSummary.es ?? "",
+            heroSubtitle:
+              data.heroSubtitle?.[code] ?? data.heroSubtitle?.es ?? "",
+            heroTagline: data.heroTagline?.[code] ?? data.heroTagline?.es ?? "",
+            heroSummary: null,
+            availabilityBadge:
+              data.availabilityBadge?.[code] ??
+              data.availabilityBadge?.es ??
+              null,
           },
           update: {
-            heroSubtitle: data.heroSubtitle[code] ?? data.heroSubtitle.es ?? "",
-            heroTagline: data.heroTagline[code] ?? data.heroTagline.es ?? "",
-            heroSummary: data.heroSummary[code] ?? data.heroSummary.es ?? "",
+            heroSubtitle:
+              data.heroSubtitle?.[code] ?? data.heroSubtitle?.es ?? "",
+            heroTagline: data.heroTagline?.[code] ?? data.heroTagline?.es ?? "",
+            heroSummary: null,
+            availabilityBadge:
+              data.availabilityBadge?.[code] ??
+              data.availabilityBadge?.es ??
+              null,
           },
         });
       }
     }
   }
-
-  // Remove old titles if they existed
-  await prisma.cvHeroTitle.deleteMany({ where: { userId } });
 
   const terminal = await prisma.cvTerminal.upsert({
     where: { userId },

@@ -59,7 +59,7 @@ export default tseslint.config(
             {
               target: "./src/features/projects",
               from: "./src/features",
-              except: ["./projects"],
+              except: ["./projects", "./home"],
             },
             {
               target: "./src/features/admin",

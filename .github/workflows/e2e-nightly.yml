@@ -21,6 +21,7 @@ jobs:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
       OWNER_USER_EMAIL: ${{ secrets.OWNER_USER_EMAIL }}
       OWNER_USER_PASSWORD: ${{ secrets.OWNER_USER_PASSWORD }}
+      CV_PDF_GENERATOR_SECRET: ${{ secrets.CV_PDF_GENERATOR_SECRET }}
       E2E_FULL: "1"
     steps:
       - uses: actions/checkout@v5
@@ -47,6 +48,7 @@ jobs:
         env:
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
           BETTER_AUTH_URL: http://localhost:3000
+          CV_PDF_GENERATOR_SECRET: ${{ secrets.CV_PDF_GENERATOR_SECRET }}
           E2E_FULL: "1"
 
       - uses: actions/upload-artifact@v6

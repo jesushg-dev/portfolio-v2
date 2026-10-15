@@ -205,6 +205,14 @@ const CvSkillCategory = z.enum([
   "OTHER",
 ]);
 
+const CvEmploymentType = z.enum([
+  "FULL_TIME",
+  "PART_TIME",
+  "CONTRACT",
+  "FREELANCE",
+  "INTERNSHIP",
+]);
+
 /**
  * Returns every CV section for a given userId. Used by the public CV page
  * (server-side) and by the dashboard to hydrate forms.
@@ -704,6 +712,7 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         company: z.string().min(1),
+        employmentType: CvEmploymentType.optional().default("FULL_TIME"),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
         companyBlurb: CvTextTranslationMapSchema.optional(),
@@ -779,6 +788,7 @@ export const cvRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         company: z.string().min(1),
+        employmentType: CvEmploymentType.optional(),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
         companyBlurb: CvTextTranslationMapSchema.optional(),
@@ -1571,7 +1581,6 @@ export const cvRouter = createTRPCRouter({
       await tx.cvPersonalReference.deleteMany({ where: { userId } });
       await tx.cvHeader.deleteMany({ where: { userId } });
       await tx.cvAboutMe.deleteMany({ where: { userId } });
-      await tx.cvHeroTitle.deleteMany({ where: { userId } });
       await tx.cvTerminal.deleteMany({ where: { userId } });
       await tx.cvPdfLink.deleteMany({ where: { userId } });
     });

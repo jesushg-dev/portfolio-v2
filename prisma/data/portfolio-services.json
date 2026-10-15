@@ -1,62 +1,30 @@
 [
   {
-    "key": "frontend",
-    "type": "FRONTEND",
-    "icon": "code",
-    "statsValue": "100+",
-    "featured": true,
-    "order": 1,
-    "image": "",
-    "translations": [
-      {
-        "locale": "es",
-        "title": "Desarrollo Frontend & UI/UX",
-        "description": "Diseño y desarrollo de interfaces web espectaculares, de alto rendimiento y totalmente accesibles cumpliendo el estándar WCAG 2.2 AAA con React, Next.js y Tailwind CSS.",
-        "badge": "Frontend & UI/UX",
-        "statsLabel": "WCAG 2.2 AAA · UI Components"
-      },
-      {
-        "locale": "en",
-        "title": "Frontend & UI/UX Development",
-        "description": "Crafting stunning, performant, and fully accessible web interfaces built with WCAG 2.2 AAA compliance, React, Next.js, and Tailwind CSS.",
-        "badge": "Frontend & UI/UX",
-        "statsLabel": "WCAG 2.2 AAA · UI Components"
-      },
-      {
-        "locale": "nl",
-        "title": "Frontend & UI/UX Ontwikkeling",
-        "description": "Ontwerp van prachtige, snelle en toegankelijke webinterfaces met WCAG 2.2 AAA-naleving, React, Next.js en Tailwind CSS.",
-        "badge": "Frontend & UI/UX",
-        "statsLabel": "WCAG 2.2 AAA · UI Components"
-      }
-    ]
-  },
-  {
     "key": "backend",
     "type": "BACKEND",
     "icon": "server",
     "statsValue": "99.9%",
     "featured": false,
-    "order": 2,
+    "order": 0,
     "image": "",
     "translations": [
       {
         "locale": "es",
-        "title": "Desarrollo Backend & APIs",
+        "title": "Backend & Sistemas Distribuidos",
         "description": "Arquitectura de microservicios, APIs REST/tRPC y bases de datos escalables enfocadas en seguridad y alto rendimiento.",
         "badge": "Backend & APIs",
         "statsLabel": "Disponibilidad · SQL & NoSQL"
       },
       {
         "locale": "en",
-        "title": "Backend Development & APIs",
+        "title": "Backend & Distributed Systems",
         "description": "Building robust microservices, REST & tRPC APIs with Node.js, C# / .NET, and scalable SQL/NoSQL databases.",
         "badge": "Backend & APIs",
         "statsLabel": "Uptime · SQL & NoSQL"
       },
       {
         "locale": "nl",
-        "title": "Backend Ontwikkeling & APIs",
+        "title": "Backend & Gedistribueerde Systemen",
         "description": "Robuuste microservices, REST & tRPC API's met Node.js, C# / .NET en schaalbare databases.",
         "badge": "Backend & API's",
         "statsLabel": "Uptime · SQL & NoSQL"
@@ -64,34 +32,66 @@
     ]
   },
   {
-    "key": "mobile",
-    "type": "MOBILE",
-    "icon": "smartphone",
-    "statsValue": "Cross-Platform",
-    "featured": false,
-    "order": 3,
+    "key": "architecture",
+    "type": "ARCHITECTURE",
+    "icon": "layers",
+    "statsValue": "100+",
+    "featured": true,
+    "order": 1,
     "image": "",
     "translations": [
       {
         "locale": "es",
-        "title": "Desarrollo Móvil",
-        "description": "Aplicaciones móviles nativas y multiplataforma ágiles, modernas y fluidas con React Native para iOS y Android.",
-        "badge": "Móvil Multiplataforma",
-        "statsLabel": "iOS & Android"
+        "title": "Arquitectura de Sistemas",
+        "description": "Diseño de sistemas distribuidos usando microservicios, DDD, Clean Architecture, REST/GraphQL y patrones guiados por eventos.",
+        "badge": "Arquitectura",
+        "statsLabel": "Microservicios · DDD"
       },
       {
         "locale": "en",
-        "title": "Mobile Development",
-        "description": "Delivering smooth, modern cross-platform mobile apps using React Native for iOS and Android.",
-        "badge": "Cross-Platform Mobile",
-        "statsLabel": "iOS & Android"
+        "title": "System Architecture",
+        "description": "Designing distributed systems using microservices, DDD, Clean Architecture, REST/GraphQL, and event-driven patterns where appropriate.",
+        "badge": "Architecture",
+        "statsLabel": "Microservices · DDD"
       },
       {
         "locale": "nl",
-        "title": "Mobiele Ontwikkeling",
-        "description": "Snel en vloeiend mobiel applicatieontwerp met React Native voor iOS en Android.",
-        "badge": "Cross-Platform Mobiel",
-        "statsLabel": "iOS & Android"
+        "title": "Systeemarchitectuur",
+        "description": "Ontwerpen van gedistribueerde systemen met microservices, DDD, Clean Architecture, REST/GraphQL en event-driven patronen.",
+        "badge": "Architectuur",
+        "statsLabel": "Microservices · DDD"
+      }
+    ]
+  },
+  {
+    "key": "frontend",
+    "type": "FRONTEND",
+    "icon": "code",
+    "statsValue": "100+",
+    "featured": true,
+    "order": 2,
+    "image": "",
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Ingeniería Frontend",
+        "description": "Sistemas frontend de alto rendimiento y accesibles construidos con React, Next.js y TypeScript.",
+        "badge": "Frontend & UI/UX",
+        "statsLabel": "WCAG 2.2 AAA · UI Components"
+      },
+      {
+        "locale": "en",
+        "title": "Frontend Engineering",
+        "description": "High-performance, accessible frontend systems built with React, Next.js, and TypeScript.",
+        "badge": "Frontend & UI/UX",
+        "statsLabel": "WCAG 2.2 AAA · UI Components"
+      },
+      {
+        "locale": "nl",
+        "title": "Frontend Engineering",
+        "description": "Snelle, toegankelijke frontendsystemen gebouwd met React, Next.js en TypeScript.",
+        "badge": "Frontend & UI/UX",
+        "statsLabel": "WCAG 2.2 AAA · UI Components"
       }
     ]
   },
@@ -101,26 +101,26 @@
     "icon": "terminal",
     "statsValue": "Docker & CI/CD",
     "featured": false,
-    "order": 4,
+    "order": 3,
     "image": "",
     "translations": [
       {
         "locale": "es",
-        "title": "Sistemas & Cloud DevOps",
+        "title": "Confiabilidad & DevOps",
         "description": "Administración de servidores Linux, contenedorización con Docker, integración continua CI/CD y despliegues en la nube.",
         "badge": "DevOps & Cloud",
         "statsLabel": "Automatización CI/CD"
       },
       {
         "locale": "en",
-        "title": "Systems & Cloud DevOps",
+        "title": "Reliability & DevOps",
         "description": "Linux server administration, Docker containerization, CI/CD pipeline automation, and cloud deployments.",
         "badge": "DevOps & Cloud",
         "statsLabel": "CI/CD Automation"
       },
       {
         "locale": "nl",
-        "title": "Systemen & Cloud DevOps",
+        "title": "Betrouwbaarheid & DevOps",
         "description": "Linux serverbeheer, Docker-containerisatie, CI/CD geautomatiseerde pipelines en cloud-deployments.",
         "badge": "DevOps & Cloud",
         "statsLabel": "CI/CD Automatisering"
@@ -133,29 +133,61 @@
     "icon": "shield",
     "statsValue": "OWASP & Snyk",
     "featured": false,
+    "order": 4,
+    "image": "",
+    "translations": [
+      {
+        "locale": "es",
+        "title": "Ingeniería de Software Segura",
+        "description": "Código seguro, seguridad de dependencias, prácticas OWASP y DevSecOps.",
+        "badge": "Seguridad",
+        "statsLabel": "OWASP & Snyk Compliance"
+      },
+      {
+        "locale": "en",
+        "title": "Secure Software Engineering",
+        "description": "Secure coding, dependency security, OWASP practices, and DevSecOps.",
+        "badge": "Security",
+        "statsLabel": "OWASP & Snyk Compliance"
+      },
+      {
+        "locale": "nl",
+        "title": "Veilige Software-engineering",
+        "description": "Veilige code, afhankelijkheidsbeveiliging, OWASP-praktijken en DevSecOps.",
+        "badge": "Security",
+        "statsLabel": "OWASP & Snyk Compliance"
+      }
+    ]
+  },
+  {
+    "key": "mobile",
+    "type": "MOBILE",
+    "icon": "smartphone",
+    "statsValue": "Cross-Platform",
+    "featured": false,
     "order": 5,
     "image": "",
     "translations": [
       {
         "locale": "es",
-        "title": "Ciberseguridad & Auditorías",
-        "description": "Auditorías de seguridad, análisis de vulnerabilidades con Snyk, cumplimiento de estándares OWASP Top 10 y pruebas de penetración.",
-        "badge": "Ciberseguridad",
-        "statsLabel": "OWASP & Snyk Compliance"
+        "title": "Móvil",
+        "description": "Aplicaciones móviles nativas y multiplataforma ágiles, modernas y fluidas con React Native para iOS y Android.",
+        "badge": "Móvil Multiplataforma",
+        "statsLabel": "iOS & Android"
       },
       {
         "locale": "en",
-        "title": "Cybersecurity & Security Audits",
-        "description": "Security audits, vulnerability scanning with Snyk, OWASP Top 10 compliance, and penetration testing.",
-        "badge": "Cybersecurity",
-        "statsLabel": "OWASP & Snyk Compliance"
+        "title": "Mobile",
+        "description": "Delivering smooth, modern cross-platform mobile apps using React Native for iOS and Android.",
+        "badge": "Cross-Platform Mobile",
+        "statsLabel": "iOS & Android"
       },
       {
         "locale": "nl",
-        "title": "Cybersecurity & Beveiligingsaudits",
-        "description": "Beveiligingsaudits, kwetsbaarheidsanalyse met Snyk, OWASP Top 10-naleving en pentesting.",
-        "badge": "Cybersecurity",
-        "statsLabel": "OWASP & Snyk Compliance"
+        "title": "Mobiel",
+        "description": "Snel en vloeiend mobiel applicatieontwerp met React Native voor iOS en Android.",
+        "badge": "Cross-Platform Mobiel",
+        "statsLabel": "iOS & Android"
       }
     ]
   }

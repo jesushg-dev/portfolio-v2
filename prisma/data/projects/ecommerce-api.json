@@ -1,0 +1,41 @@
+{
+  "key": "EcommerceApi",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_yaux6m",
+  "type": "BACKEND",
+  "githubUrl": "-",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tienda API (.NET Core)",
+      "description": "API REST empresarial en ASP.NET Core y SQL Server con arquitectura limpia y Swagger.",
+      "hook": "-45% latencia en transacciones críticas · Arquitectura limpia",
+      "challenge": "Diseñar un backend robusto para e-commerce empresarial que soportara transacciones concurrentes, documentación abierta OpenAPI y capas desacopladas de lógica de negocio.",
+      "approach": "Implementé una API RESTful en C# con ASP.NET Core y Entity Framework Core sobre SQL Server. Utilicé patrón Repository/Unit of Work, DTOs estrictos, migración automatizada e integración de Swagger.",
+      "outcome": "Mejora del 45% en tiempos de respuesta de endpoints críticos y establecimiento de una arquitectura backend estándar reutilizable para proyectos corporativos."
+    },
+    {
+      "locale": "en",
+      "title": "Store API (.NET Core)",
+      "description": "Enterprise REST API in ASP.NET Core and SQL Server with clean architecture and Swagger.",
+      "hook": "-45% latency on critical endpoints · Clean architecture",
+      "challenge": "Build a robust enterprise e-commerce backend capable of handling high-concurrency transactions, open API documentation, and clear separation of business concerns.",
+      "approach": "Architected a C# ASP.NET Core RESTful API with Entity Framework Core and SQL Server. Implemented Repository/Unit of Work pattern, strict DTO mapping, database migrations, and Swagger/OpenAPI.",
+      "outcome": "Achieved a 45% latency reduction on critical transaction endpoints and established an enterprise backend blueprint for .NET applications."
+    },
+    {
+      "locale": "nl",
+      "title": "Store API (.NET Core)",
+      "description": "Enterprise REST API in ASP.NET Core en SQL Server met schone architectuur en Swagger.",
+      "hook": "-45% latency op kritieke endpoints · Schone architectuur",
+      "challenge": "Ontwerpen van een robuuste enterprise e-commerce backend geschikt voor hoge gelijktijdigheid, open API-documentatie en ontkoppelde bedrijfslogica.",
+      "approach": "RESTful C# API gebouwd met ASP.NET Core, Entity Framework Core en SQL Server. Repository/Unit of Work-patroon, strikte DTO's, migraties en Swagger geïmplementeerd.",
+      "outcome": "45% snellere responstijden op kritieke endpoints en een enterprise .NET-backend blauwdruk gerealiseerd."
+    }
+  ],
+  "skillKeys": ["Csharp", "SqlServer", "Entity", "Dotnet", "Swagger"],
+  "order": 2,
+  "kind": "PROFESSIONAL",
+  "slug": "ecommerce-api"
+}

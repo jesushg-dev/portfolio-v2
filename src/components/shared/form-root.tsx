@@ -42,7 +42,10 @@ export const FormRoot = ({
           }
         : undefined
     }
-    className={cn("flex flex-1 flex-col overflow-hidden", className)}
+    className={cn(
+      "flex flex-1 flex-col overflow-hidden p-[0.0625rem]",
+      className,
+    )}
   >
     {children}
   </form>
@@ -59,8 +62,10 @@ export const FormContent = ({
   className,
   error,
 }: FormContentProps) => (
-  <div className="min-h-0 flex-1 overflow-y-auto pr-1">
-    <div className={cn("flex flex-col gap-4 px-1 pb-4", className)}>
+  <div className="min-h-0 flex-1 overflow-y-auto pt-[0.0625rem] pr-1">
+    <div
+      className={cn("flex flex-col gap-4 px-1 pt-[0.0625rem] pb-4", className)}
+    >
       <FormError error={error} />
       {children}
     </div>
@@ -94,7 +99,7 @@ export const FormSection = ({
     {description && (
       <p className="text-muted-foreground text-sm">{description}</p>
     )}
-    <div className="space-y-4">{children}</div>
+    <div className="space-y-4 p-[0.0625rem]">{children}</div>
   </fieldset>
 );
 
@@ -277,8 +282,7 @@ export const FormActions = ({
 }: FormActionsProps) => (
   <div
     className={cn(
-      "border-border bg-background shrink-0 border-t px-1 pt-4",
-      "pb-[max(1rem,env(safe-area-inset-bottom))]",
+      "border-border shrink-0 border-t px-1 pt-4",
       "flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end",
       className,
     )}

@@ -1,0 +1,48 @@
+---
+description: Forms architecture - Use FormRoot, FormContent, FormSection, FormActions, FormField, FormItem
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Forms Architecture
+
+This project uses a unified form architecture based on Shadcn UI and custom `@/components/shared/form-root` wrappers.
+
+### Structure
+
+```tsx
+import {
+  FormActions,
+  FormContent,
+  FormItem,
+  FormRoot,
+  FormSection,
+} from "@/components/shared/form-root";
+import { Form, FormField } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+<Form {...form}>
+  <FormRoot onSubmit={form.handleSubmit(onSubmit)}>
+    <FormContent error={submitError}>
+      <FormSection title="General Information">
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem label="Title" description="Optional help text">
+              <Input {...field} />
+            </FormItem>
+          )}
+        />
+      </FormSection>
+    </FormContent>
+    <FormActions isPending={isPending} title="Save">
+      <button type="button" onClick={() => router.back()}>
+        Cancel
+      </button>
+    </FormActions>
+  </FormRoot>
+</Form>;
+```
+
+### ❌ NEVER use raw `<form>` tags or unassociated `<label>` tags directly.

@@ -3,6 +3,13 @@ import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { createHash } from "node:crypto";
 
+import {
+  getEmailTrackingDisclosure,
+  createEmailOpenTrackingToken,
+  hashEmailOpenTrackingToken,
+} from "@/features/job-tracker/lib/email-open-tracking";
+import { getServerBaseUrl } from "@/lib/url/get-base-url";
+import { locales } from "@/i18n/config";
 import { assertNonEmptyUserId } from "@/lib/admin/get-authenticated-user-id";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
@@ -22,6 +29,7 @@ import { ghostNudgeSnoozeUntil } from "@/features/job-tracker/lib/stale-applicat
 import { ImportFromUrlError } from "@/features/job-tracker/lib/import-from-url-errors";
 import { importJobFromUrl } from "@/features/job-tracker/lib/import-job-from-url";
 import { draftApplicationEmailWithAi } from "@/features/job-tracker/lib/ai/run-draft-application-email";
+import { buildApplicationCoverLetterPromptPackage } from "@/features/job-tracker/lib/ai/draft-application-cover-letter";
 import { draftApplicationCoverLetterWithAi } from "@/features/job-tracker/lib/ai/run-draft-application-cover-letter";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { loadTailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
@@ -29,6 +37,7 @@ import { getPortfolioEmailClient } from "@/lib/email/resend";
 import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
 import { formatZodParseError } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
+  getAvailableAiProviders,
   getDefaultAiProvider,
   loadTenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
@@ -328,6 +337,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         name: z.string().min(1),
         email: z.string().email().optional().or(z.literal("")),
         website: z.string().url().optional().or(z.literal("")),
+        linkedinUrl: z.string().url().optional().or(z.literal("")),
+        location: z.string().optional(),
         description: z.string().optional(),
       }),
     )
@@ -337,6 +348,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           name: input.name,
           email: input.email === "" ? undefined : input.email,
           website: input.website === "" ? undefined : input.website,
+          linkedinUrl: input.linkedinUrl === "" ? undefined : input.linkedinUrl,
+          location: input.location ?? undefined,
           description: input.description ?? undefined,
           userId: ctx.user.id,
         },
@@ -351,6 +364,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         name: z.string().min(1).optional(),
         email: z.string().email().optional().or(z.literal("")),
         website: z.string().url().optional().or(z.literal("")),
+        linkedinUrl: z.string().url().optional().or(z.literal("")),
+        location: z.string().optional(),
         description: z.string().optional(),
       }),
     )
@@ -362,6 +377,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           name: data.name,
           email: data.email === "" ? undefined : data.email,
           website: data.website === "" ? undefined : data.website,
+          linkedinUrl: data.linkedinUrl === "" ? undefined : data.linkedinUrl,
+          location: data.location ?? undefined,
           description: data.description ?? undefined,
         },
       });
@@ -411,6 +428,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         appliedDate: z.date(),
         salary: z.string().optional(),
         location: z.string().optional(),
+        jobUrl: z.string().url().optional().or(z.literal("")),
         notes: z.string().optional(),
         description: z.string().optional(),
       }),
@@ -419,6 +437,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       const application = await ctx.db.application.create({
         data: {
           ...input,
+          jobUrl: input.jobUrl === "" ? undefined : input.jobUrl,
           userId: ctx.user.id,
         },
       });
@@ -435,6 +454,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         appliedDate: z.date().optional(),
         salary: z.string().optional(),
         location: z.string().optional(),
+        jobUrl: z.string().url().optional().or(z.literal("")),
         notes: z.string().optional(),
         description: z.string().optional(),
         cvFile: cvFileSchema.optional().nullable(),
@@ -446,6 +466,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         where: { id, userId: ctx.user.id },
         data: {
           ...data,
+          jobUrl: data.jobUrl === "" ? undefined : data.jobUrl,
           cvFile: cvFile === null ? undefined : cvFile,
         },
       });
@@ -817,6 +838,63 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }
     }),
 
+  getApplicationCoverLetterPrompt: protectedProcedure
+    .input(z.object({ applicationId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const application = await ctx.db.application.findFirst({
+        where: { id: input.applicationId, userId: ctx.user.id },
+        include: { company: true },
+      });
+      if (!application) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Application not found",
+        });
+      }
+
+      const draftCv = await loadCvStructuredDraft(ctx.db, ctx.user.id, {
+        locale: "es",
+        fallbackLocale: "en",
+      });
+      const jobContext = await loadTailorJobContext(
+        ctx.db,
+        ctx.user.id,
+        application.id,
+        "es",
+      );
+
+      const contacts = draftCv?.contacts ?? [];
+      const contactValue = (type: string) =>
+        contacts.find((c) => c.type === type)?.value?.trim() ?? null;
+
+      const highlights =
+        draftCv?.experiences
+          .flatMap((exp) => exp.responsibilities.slice(0, 2))
+          .filter((text) => text.trim().length > 0)
+          .slice(0, 6) ?? [];
+
+      const fromCv = draftCv?.header.fullName?.trim();
+      return buildApplicationCoverLetterPromptPackage({
+        position: application.position,
+        companyName: application.company.name,
+        companyDescription: application.company.description,
+        location: application.location,
+        salary: application.salary,
+        notes: application.notes,
+        jobDescription: application.description ?? "",
+        candidate: {
+          fullName: fromCv ?? ctx.user.name ?? "Candidato",
+          degree: draftCv?.header.degree,
+          summary: draftCv?.header.summary,
+          email: contactValue("EMAIL"),
+          phone: contactValue("PHONE"),
+          linkedin: contactValue("LINKEDIN"),
+          softSkills: jobContext?.softSkills,
+          highlights,
+        },
+      });
+    }),
+
   saveApplicationCoverLetter: protectedProcedure
     .input(
       z.object({
@@ -859,6 +937,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         subject: z.string().trim().min(1).max(200),
         body: z.string().trim().min(1).max(8000),
         recipientName: z.string().trim().max(120).optional(),
+        trackOpens: z.boolean().default(false),
+        locale: z.enum(locales).default("en"),
         /** Optional override; when set, this file is attached instead of application.cvFile. */
         attachmentUrl: z.string().url().optional(),
         attachmentName: z.string().trim().min(1).max(200).optional(),
@@ -923,22 +1003,51 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         `CV-${(draftCv?.header.fullName ?? "candidate").replace(/\s+/g, "-")}.docx`;
 
       const toEmail = input.toEmail.toLowerCase();
-      const bodyText = input.body;
+      const bodyText = input.trackOpens
+        ? `${input.body}\n\n${getEmailTrackingDisclosure(input.locale)}`
+        : input.body;
       const resendConfig = await getTenantIntegrationConfig(
         ctx.user.id,
         "resend",
-      );
-      const bodyHtml = buildApplicationEmailHtml(
-        bodyText,
-        resendConfig?.emailSignatureHtml,
       );
 
       const idempotencyKey = `app-cv-email/${application.id}/${createHash(
         "sha256",
       )
-        .update(`${toEmail}|${input.subject}|${bodyText}|${attachmentUrl}`)
+        .update(
+          `${toEmail}|${input.subject}|${bodyText}|${attachmentUrl}|${input.trackOpens}|${input.locale}`,
+        )
         .digest("hex")
         .slice(0, 24)}`;
+
+      const trackingToken = input.trackOpens
+        ? createEmailOpenTrackingToken(idempotencyKey)
+        : null;
+      const emailRecord = await ctx.db.applicationEmail.upsert({
+        where: { idempotencyKey },
+        create: {
+          applicationId: application.id,
+          userId: ctx.user.id,
+          recipientEmail: toEmail,
+          subject: input.subject,
+          attachmentName: filename,
+          trackingEnabled: input.trackOpens,
+          trackingTokenHash: trackingToken
+            ? hashEmailOpenTrackingToken(trackingToken)
+            : undefined,
+          idempotencyKey,
+        },
+        update: {},
+      });
+      const trackingPixelUrl =
+        emailRecord.trackingEnabled && trackingToken
+          ? `${getServerBaseUrl()}/api/job-tracker/email-open?token=${trackingToken}`
+          : undefined;
+      const bodyHtml = buildApplicationEmailHtml(
+        bodyText,
+        resendConfig?.emailSignatureHtml,
+        trackingPixelUrl,
+      );
 
       const { data, error } = await emailClient.resend.emails.send(
         {
@@ -962,6 +1071,13 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: error.message || "Failed to send email",
+        });
+      }
+
+      if (!emailRecord.sentAt) {
+        await ctx.db.applicationEmail.update({
+          where: { id: emailRecord.id },
+          data: { sentAt: new Date() },
         });
       }
 
@@ -992,14 +1108,49 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       return { emailId: data?.id ?? null };
     }),
 
+  getApplicationEmailHistory: protectedProcedure
+    .input(z.object({ applicationId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.applicationEmail.findMany({
+        where: {
+          applicationId: input.applicationId,
+          userId: ctx.user.id,
+          sentAt: { not: null },
+        },
+        select: {
+          id: true,
+          recipientEmail: true,
+          subject: true,
+          attachmentName: true,
+          trackingEnabled: true,
+          openCount: true,
+          firstOpenedAt: true,
+          lastOpenedAt: true,
+          sentAt: true,
+          opens: {
+            select: {
+              id: true,
+              openedAt: true,
+              userAgent: true,
+              ipAddress: true,
+            },
+            orderBy: { openedAt: "desc" },
+          },
+        },
+        orderBy: { sentAt: "desc" },
+      });
+    }),
+
   getApplicationEmailCapabilities: protectedProcedure.query(async ({ ctx }) => {
     const emailClient = await getPortfolioEmailClient(ctx.user.id);
     const credentials = await loadTenantAiCredentials(ctx.user.id);
+    const providers = getAvailableAiProviders(credentials);
     const defaultProvider = getDefaultAiProvider(credentials);
     return {
       canSendEmail: emailClient.isConfigured,
-      hasAiProvider: Boolean(defaultProvider),
-      defaultProvider: defaultProvider,
+      hasAiProvider: providers.length > 0,
+      defaultProvider,
+      providers,
     };
   }),
 });
@@ -1015,19 +1166,31 @@ function escapeHtml(value: string): string {
 function buildApplicationEmailHtml(
   bodyText: string,
   signatureHtml?: string | null,
+  trackingPixelUrl?: string,
 ): string {
   const paragraphs = bodyText
-    .split(/\n/)
+    .replace(/\r\n?/g, "\n")
+    .split(/\n[ \t]*\n+/)
+    .map((paragraph) =>
+      paragraph
+        .split("\n")
+        .map((line) => escapeHtml(line))
+        .join("<br />"),
+    )
+    .filter(Boolean)
     .map(
-      (line) =>
-        `<p style="margin:0 0 12px 0; font-family:Arial,sans-serif; font-size:14px; color:#111;">${escapeHtml(line) || "&nbsp;"}</p>`,
+      (paragraph) =>
+        `<p style="margin:0 0 0.75rem 0; font-family:Arial,sans-serif; font-size:0.875rem; color:#111;">${paragraph}</p>`,
     )
     .join("");
 
   const signature = signatureHtml?.trim();
-  if (!signature) return paragraphs;
+  const pixel = trackingPixelUrl
+    ? `<img src="${escapeHtml(trackingPixelUrl)}" width="1" height="1" border="0" alt="" style="display:none !important;width:1px !important;height:1px !important;max-height:0 !important;max-width:0 !important;opacity:0 !important;overflow:hidden !important;mso-hide:all;" />`
+    : "";
+  if (!signature) return `${paragraphs}${pixel}`;
 
-  return `${paragraphs}<div style="margin-top:28px;">${signature}</div>`;
+  return `${paragraphs}<div style="margin-top:1.75rem;">${signature}</div>${pixel}`;
 }
 
 /** Resend accepts `email@x.com` or `Name <email@x.com>` only. */

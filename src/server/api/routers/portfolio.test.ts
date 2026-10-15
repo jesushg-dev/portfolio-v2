@@ -78,6 +78,89 @@ describe("portfolioRouter", () => {
     });
   });
 
+  it("formats related projects with csInfo in getSkillBySlug", async () => {
+    const db = {
+      appLanguage: {
+        findUnique: jest.fn().mockResolvedValue({ id: "lang-en", code: "en" }),
+        findMany: jest.fn().mockResolvedValue([{ id: "lang-en", code: "en" }]),
+      },
+      skill: {
+        findFirst: jest.fn().mockResolvedValue({
+          id: "sk-1",
+          title: "React",
+          type: "FRONTEND",
+          SkillTranslation: [{ description: "UI library" }],
+          CertificateSkill: [],
+          CvExperienceSkill: [],
+          ProjectSkill: [
+            {
+              Project: {
+                id: "proj-1",
+                image: "https://example.com/p.png",
+                type: "FRONTEND",
+                githubUrl: "https://github.com",
+                websiteUrl: "https://example.com",
+                isPrivate: false,
+                order: 1,
+                kind: "PROFESSIONAL",
+                slug: "proj-slug",
+                caseStudyEnabled: true,
+                status: "IN_PRODUCTION",
+                startedAt: new Date("2023-01-01"),
+                endedAt: null,
+                teamSize: 4,
+                ProjectTranslation: [
+                  {
+                    title: "Project Alpha",
+                    description: "Alpha desc",
+                    hook: "Alpha hook",
+                    caseStudy: {
+                      sections: [
+                        { kind: "DECISIONS", items: [1, 2] },
+                        { kind: "LAYERS", items: [] },
+                      ],
+                      facts: [],
+                    },
+                  },
+                ],
+                ProjectSkill: [
+                  {
+                    Skill: {
+                      id: "sk-1",
+                      title: "React",
+                      image: null,
+                      type: "FRONTEND",
+                      SkillTranslation: [],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        }),
+      },
+    };
+    const caller = createRouterCaller(
+      portfolioRouter,
+      createTrpcTestContext({ db }),
+    );
+    const detail = await caller.getSkillBySlug({ slug: "react", locale: "en" });
+    expect(detail).not.toBeNull();
+    expect(detail?.title).toBe("React");
+    expect(detail?.projects).toHaveLength(1);
+    expect(detail?.projects[0]).toMatchObject({
+      id: "proj-1",
+      title: "Project Alpha",
+      kind: "PROFESSIONAL",
+      csInfo: {
+        decisions: 2,
+        layers: true,
+        metrics: 0,
+      },
+      startedAt: "2023-01-01T00:00:00.000Z",
+    });
+  });
+
   it("returns empty projects and hero without a tenant", async () => {
     const caller = createRouterCaller(
       portfolioRouter,
@@ -86,6 +169,8 @@ describe("portfolioRouter", () => {
     await expect(caller.getProjects({ locale: "en" })).resolves.toEqual({
       projects: [],
       nextCursor: null,
+      totalCount: 0,
+      caseStudyCount: 0,
     });
     await expect(caller.getFeaturedProjects({ locale: "en" })).resolves.toEqual(
       [],
@@ -95,6 +180,7 @@ describe("portfolioRouter", () => {
       projectsCount: 0,
       certificationsCount: 0,
       yearsExperience: 0,
+      engineersMentored: 0,
     });
   });
 
@@ -150,6 +236,7 @@ describe("portfolioRouter", () => {
               heroSummary: "Builder",
               heroSubtitle: "Hi",
               heroTagline: "Tag",
+              availabilityBadge: "Open to work",
               clientImageAlt: "Portrait",
             },
           ],
@@ -174,10 +261,12 @@ describe("portfolioRouter", () => {
     const hero = await caller.getHeroPublic({ locale: "en" });
     expect(hero?.fullName).toBe("Ada L.");
     expect(hero?.heroSummary).toBe("Builder");
+    expect(hero?.availabilityBadge).toBe("Open to work");
 
     const stats = await caller.getStatsPublic({ locale: "en" });
-    expect(stats.projectsCount).toBe(3);
+    expect(stats.projectsCount).toBe(19);
     expect(stats.certificationsCount).toBe(8);
+    expect(stats.engineersMentored).toBe(6);
     expect(stats.yearsExperience).toBeGreaterThanOrEqual(5);
   });
 
@@ -415,6 +504,6 @@ describe("portfolioRouter", () => {
       slug: "eleven",
       locale: "en",
     });
-    expect(next).toEqual({ slug: "atlas", title: "Atlas" });
+    expect(next).toMatchObject({ slug: "atlas", title: "Atlas" });
   });
 });

@@ -54,10 +54,10 @@ export const ExportSeedJsonButton: FC<ExportSeedJsonButtonProps> = ({
     setIsExporting(true);
     try {
       if (isZip) {
-        const result = await utils.portfolioSeedExport.allZip.fetch();
+        const result = await utils.seedExport.allZip.fetch();
         downloadZipFromBase64(result.fileName, result.base64);
       } else {
-        const result = await utils.portfolioSeedExport[entity].fetch();
+        const result = await utils.seedExport[entity].fetch();
         downloadJsonFile(result.fileName, result.json);
       }
     } catch {

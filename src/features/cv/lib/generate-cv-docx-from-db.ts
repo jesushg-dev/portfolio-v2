@@ -40,6 +40,8 @@ export async function generateCvDocxFromDb(
     template.parsed.sections,
     draft,
     softSkillTexts,
+    undefined,
+    template.parsed.lockedParagraphs,
   );
 
   const lockedAdapted = syncLockedParagraphsFromDraft(

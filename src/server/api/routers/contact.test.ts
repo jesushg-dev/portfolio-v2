@@ -20,6 +20,10 @@ jest.mock("@/lib/geo/geocode-place", () => ({
   resolveOwnerMapLocation: jest.fn(() => Promise.resolve(null)),
 }));
 
+jest.mock("@/lib/turnstile/verify-turnstile", () => ({
+  verifyTurnstileToken: jest.fn().mockResolvedValue({ success: true }),
+}));
+
 import {
   canDeliverPortfolioContactEmail,
   getPortfolioContactTemplateId,
@@ -77,6 +81,7 @@ describe("contactRouter.sendMessage", () => {
     name: "Visitor",
     email: "visitor@example.com",
     message: "Hello there, I would like to work together.",
+    turnstileToken: "mock-valid-token",
   };
 
   it("rejects when there is no tenant", async () => {

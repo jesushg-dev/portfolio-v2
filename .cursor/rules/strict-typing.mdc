@@ -1,0 +1,15 @@
+---
+description: Strict TypeScript & ESLint standards - No any, no turning off rules, no manual typecheck runs
+alwaysApply: true
+---
+
+# Strict Typing & ESLint Standards
+
+### ❌ NEVER use `any` to bypass type errors
+Use proper interfaces, types, or type guards.
+
+### ❌ NEVER turn off warnings or errors in eslint config or disable inline
+When asked to fix linting or type-checking issues, fix the actual code and types.
+
+### ❌ NEVER automatically run `pnpm run type`, `tsc`, `pnpm run lint`, or `eslint`
+Leave type-checking and linting to the user (unless explicitly requested).

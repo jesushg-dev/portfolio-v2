@@ -55,6 +55,8 @@ interface GlobeMapProps {
   autoPlayConnection?: boolean;
   /** Accent color for markers and the connecting line. Default uses theme primary token. */
   accentColor?: string;
+  /** Initial projection mode: "flat" (default) or "globe". */
+  initialProjection?: "globe" | "flat";
   /** Fill color for the ocean / globe sphere. Default uses theme card token. */
   oceanColor?: string;
   /** Fill color for land / continents. Default uses theme muted token. */
@@ -312,13 +314,16 @@ export function GlobeMap({
   destination,
   autoPlayConnection = true,
   accentColor = DEFAULT_ACCENT_COLOR,
+  initialProjection = "flat",
   oceanColor = DEFAULT_OCEAN_COLOR,
   landColor = DEFAULT_LAND_COLOR,
 }: GlobeMapProps) {
   const t = useTranslations("main.contact.globe");
   const svgRef = useRef<SVGSVGElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [progress, setProgress] = useState([0]);
+  const [progress, setProgress] = useState([
+    initialProjection === "globe" ? 0 : 100,
+  ]);
   const [worldData, setWorldData] = useState<GeoFeature[]>([]);
   const [rotation, setRotation] = useState([0, 0]);
   const [userZoomMultiplier, setUserZoomMultiplier] = useState(1);
@@ -1054,7 +1059,7 @@ export function GlobeMap({
     if (isAnimating) return;
     setIsAnimating(true);
     const startProgress = progress[0];
-    const endProgress = startProgress === 0 ? 100 : 0;
+    const endProgress = startProgress < 50 ? 100 : 0;
     const duration = 2000;
     const startTime = Date.now();
 
@@ -1146,7 +1151,7 @@ export function GlobeMap({
               disabled={isAnimating}
               className="cursor-pointer"
             >
-              {progress[0] === 0 ? (
+              {progress[0] < 50 ? (
                 <>
                   <MapIcon className="text-muted-foreground mr-2 size-3.5" />
                   <span>{t("unroll")}</span>

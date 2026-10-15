@@ -79,17 +79,16 @@ async function trpcMutate(
 }
 
 export async function goToCvEditor(page: Page): Promise<void> {
-  await Promise.all([
-    page.waitForResponse(
-      (response) =>
-        response.url().includes("/api/trpc/cv.getMine") &&
-        response.request().method() === "GET" &&
-        response.ok(),
-      { timeout: 30_000 },
-    ),
-    page.goto("/admin/cv"),
-  ]);
-  await page.locator("#header").waitFor({ state: "visible", timeout: 20_000 });
+  await page.goto("/admin/cv", { waitUntil: "domcontentloaded" });
+
+  await page.waitForURL(/\/admin\/cv(?:\?|$)/, {
+    timeout: 30_000,
+  });
+
+  await page.locator("#header").waitFor({
+    state: "visible",
+    timeout: 30_000,
+  });
 }
 
 export async function openCvSection(

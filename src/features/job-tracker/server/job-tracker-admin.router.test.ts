@@ -23,8 +23,20 @@ jest.mock("@/lib/google-calendar/connection", () => ({
 jest.mock("@/features/job-tracker/lib/import-job-from-url", () => ({
   importJobFromUrl: jest.fn(),
 }));
+jest.mock("@/features/cv/lib/load-cv-structured-draft", () => ({
+  loadCvStructuredDraft: jest.fn(),
+}));
+jest.mock("@/lib/email/resend", () => ({
+  getPortfolioEmailClient: jest.fn(),
+}));
+jest.mock("@/lib/integrations/tenant-integrations-service", () => ({
+  getTenantIntegrationConfig: jest.fn(),
+}));
 
 import { importJobFromUrl } from "@/features/job-tracker/lib/import-job-from-url";
+import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
+import { getPortfolioEmailClient } from "@/lib/email/resend";
+import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
 import { pullLinkedUpcomingEventsFromGoogle } from "@/lib/google-calendar/sync";
 import { getGoogleCalendarConnectionForUser } from "@/lib/google-calendar/connection";
 import { jobTrackerAdminRouter } from "./job-tracker-admin.router";
@@ -39,6 +51,8 @@ const company = {
   name: "Acme",
   email: "jobs@acme.com",
   website: "https://acme.com",
+  linkedinUrl: "https://linkedin.com/company/acme",
+  location: "Remote",
   description: "Widgets",
   userId: MOCK_OWNER_USER.id,
   createdAt: new Date(),
@@ -90,9 +104,13 @@ describe("jobTrackerAdminRouter", () => {
       name: "Acme",
       email: "jobs@acme.com",
       website: "https://acme.com",
+      linkedinUrl: "https://linkedin.com/company/acme",
+      location: "Remote",
       description: "Widgets",
     });
     expect(created.id).toBe("co-1");
+    expect(created.linkedinUrl).toBe("https://linkedin.com/company/acme");
+    expect(created.location).toBe("Remote");
   });
 
   it("throws when an application is missing", async () => {
@@ -119,6 +137,7 @@ describe("jobTrackerAdminRouter", () => {
       appliedDate: new Date("2026-01-01"),
       salary: "100k",
       location: "Remote",
+      jobUrl: "https://example.com/job/1",
       notes: "",
       cvFile: null,
       userId: MOCK_OWNER_USER.id,
@@ -145,8 +164,10 @@ describe("jobTrackerAdminRouter", () => {
       appliedDate: new Date("2026-01-01"),
       salary: "100k",
       location: "Remote",
+      jobUrl: "https://example.com/job/1",
     });
     expect(created.position).toBe("Engineer");
+    expect(created.jobUrl).toBe("https://example.com/job/1");
 
     await caller.updateApplication({
       id: "app-1",
@@ -225,5 +246,180 @@ describe("jobTrackerAdminRouter", () => {
     await expect(
       caller.importFromUrl({ url: "https://jobs.example/role" }),
     ).resolves.toMatchObject({ position: "Engineer" });
+  });
+
+  it("returns only the current user's sent-email history without token data", async () => {
+    const sentAt = new Date("2026-10-01T12:00:00.000Z");
+    const historyRecord = {
+      id: "mail-1",
+      recipientEmail: "jobs@acme.com",
+      subject: "Application",
+      attachmentName: "cv.pdf",
+      trackingEnabled: true,
+      openCount: 3,
+      firstOpenedAt: new Date("2026-10-01T13:00:00.000Z"),
+      lastOpenedAt: new Date("2026-10-01T14:00:00.000Z"),
+      sentAt,
+    };
+    const findMany = jest.fn().mockResolvedValue([historyRecord]);
+    const caller = createRouterCaller(
+      jobTrackerAdminRouter,
+      createTrpcTestContext({
+        db: { applicationEmail: { findMany } },
+      }),
+    );
+
+    const result = await caller.getApplicationEmailHistory({
+      applicationId: "app-1",
+    });
+
+    expect(findMany).toHaveBeenCalledWith({
+      where: {
+        applicationId: "app-1",
+        userId: MOCK_OWNER_USER.id,
+        sentAt: { not: null },
+      },
+      select: {
+        id: true,
+        recipientEmail: true,
+        subject: true,
+        attachmentName: true,
+        trackingEnabled: true,
+        openCount: true,
+        firstOpenedAt: true,
+        lastOpenedAt: true,
+        sentAt: true,
+        opens: {
+          select: {
+            id: true,
+            openedAt: true,
+            userAgent: true,
+            ipAddress: true,
+          },
+          orderBy: { openedAt: "desc" },
+        },
+      },
+      orderBy: { sentAt: "desc" },
+    });
+    expect(result).toEqual([historyRecord]);
+    expect(result[0]).not.toHaveProperty("trackingTokenHash");
+  });
+
+  it("adds a disclosed tracking pixel only when requested for a CV email", async () => {
+    const send = jest.fn(
+      (
+        _message: { text: string; html: string },
+        _options: { idempotencyKey: string },
+      ) => {
+        void _message;
+        void _options;
+        return Promise.resolve({
+          data: { id: "resend-1" },
+          error: null,
+        });
+      },
+    );
+    jest.mocked(getPortfolioEmailClient).mockResolvedValue({
+      isConfigured: true,
+      fromEmail: "candidate@example.com",
+      resend: { emails: { send } },
+    } as never);
+    jest.mocked(getTenantIntegrationConfig).mockResolvedValue(null);
+    jest.mocked(loadCvStructuredDraft).mockResolvedValue({
+      header: { fullName: "Candidate" },
+      contacts: [],
+    } as never);
+    const previousFetch = Reflect.get(globalThis, "fetch") as
+      typeof fetch | undefined;
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: true,
+      arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+    });
+    Reflect.set(globalThis, "fetch", fetchMock);
+    const previousBaseUrl = process.env.BETTER_AUTH_URL;
+    process.env.BETTER_AUTH_URL = "https://portfolio.example";
+    const emailRecord = {
+      id: "mail-1",
+      trackingEnabled: true,
+      trackingTokenHash: "stored-hash",
+      sentAt: null,
+    };
+    const applicationEmail = {
+      upsert: jest
+        .fn()
+        .mockResolvedValueOnce(emailRecord)
+        .mockResolvedValueOnce({
+          id: "mail-2",
+          trackingEnabled: false,
+          trackingTokenHash: null,
+          sentAt: null,
+        }),
+      update: jest.fn().mockResolvedValue(emailRecord),
+    };
+    const caller = createRouterCaller(
+      jobTrackerAdminRouter,
+      createTrpcTestContext({
+        db: {
+          application: {
+            findFirst: jest.fn().mockResolvedValue({
+              id: "app-1",
+              companyId: "co-1",
+              cvFile: { url: "https://files.example/cv.pdf", name: "cv.pdf" },
+              company: { id: "co-1", email: "jobs@acme.com" },
+            }),
+          },
+          applicationEmail,
+          applicationEvent: { create: jest.fn().mockResolvedValue({}) },
+        },
+      }),
+    );
+
+    try {
+      const result = await caller.sendApplicationEmail({
+        applicationId: "app-1",
+        toEmail: "jobs@acme.com",
+        subject: "Application",
+        body: "Hello,\nthere.\n\nPlease find my CV attached.",
+        trackOpens: true,
+        locale: "es",
+      });
+
+      expect(result.emailId).toBe("resend-1");
+      expect(applicationEmail.upsert).toHaveBeenCalledTimes(1);
+      const sentMessage = send.mock.calls[0]?.[0];
+      expect(sentMessage?.text).toContain("imagen de seguimiento");
+      expect(sentMessage?.html).toContain("imagen de seguimiento");
+      expect(sentMessage?.html).toContain("Hello,<br />there.");
+      expect(sentMessage?.html).not.toContain("&nbsp;");
+      const sentHtml = sentMessage?.html ?? "";
+      expect(sentHtml).toContain(
+        "https://portfolio.example/api/job-tracker/email-open?token=",
+      );
+      expect(applicationEmail.update).toHaveBeenCalledTimes(1);
+
+      await caller.sendApplicationEmail({
+        applicationId: "app-1",
+        toEmail: "jobs@acme.com",
+        subject: "Follow-up",
+        body: "Following up on my application.",
+        locale: "en",
+      });
+      const untrackedMessage = send.mock.calls[1]?.[0];
+      expect(untrackedMessage?.html).not.toContain("email-open?token=");
+      expect(untrackedMessage?.text).not.toContain("tracking image");
+      expect(applicationEmail.upsert).toHaveBeenCalledTimes(2);
+      expect(applicationEmail.update).toHaveBeenCalledTimes(2);
+    } finally {
+      if (previousFetch) {
+        Reflect.set(globalThis, "fetch", previousFetch);
+      } else {
+        Reflect.deleteProperty(globalThis, "fetch");
+      }
+      if (previousBaseUrl === undefined) {
+        delete process.env.BETTER_AUTH_URL;
+      } else {
+        process.env.BETTER_AUTH_URL = previousBaseUrl;
+      }
+    }
   });
 });

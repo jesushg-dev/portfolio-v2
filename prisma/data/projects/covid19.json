@@ -1,0 +1,29 @@
+{
+  "key": "Covid19",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/portf-2_crm7bn",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jess232017/SensorTemperatura",
+  "websiteUrl": "https://stc-uni.netlify.app/",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Sistema de Control de Temperatura",
+      "description": "Proyecto Web que permite registrar el ingreso al recinto de los estudiantes y su temperatura."
+    },
+    {
+      "locale": "en",
+      "title": "Temperature Control System",
+      "description": "Web project that allows to register the entry of the students and their temperature."
+    },
+    {
+      "locale": "nl",
+      "title": "Temperaturkontrollsystem",
+      "description": "Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur."
+    }
+  ],
+  "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"],
+  "order": 8,
+  "kind": "PERSONAL",
+  "slug": "covid19"
+}

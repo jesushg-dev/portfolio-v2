@@ -4,12 +4,15 @@ import {
 } from "@/features/job-tracker/lib/html-to-plain-text";
 import type { LinkedInSourceType } from "@/features/job-tracker/lib/linkedin-url";
 
+export type ImportedJobSourceType =
+  LinkedInSourceType | "bamboohr" | "getonbrd";
+
 export interface ImportedJobListing {
   position: string;
   companyName: string;
   location: string;
   description: string;
-  sourceType: LinkedInSourceType;
+  sourceType: ImportedJobSourceType;
 }
 
 const DESCRIPTION_MAX_CHARS = 50_000;

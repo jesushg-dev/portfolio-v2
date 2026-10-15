@@ -17,11 +17,13 @@ import {
   locationQueryFromContacts,
   resolveOwnerMapLocation,
 } from "@/lib/geo/geocode-place";
+import { verifyTurnstileToken } from "@/lib/turnstile/verify-turnstile";
 
 const ContactMessageSchema = z.object({
   name: z.string().trim().min(1).max(80),
   email: z.string().trim().email().max(120),
   message: z.string().trim().min(10).max(2000),
+  turnstileToken: z.string().min(1).max(2048),
 });
 
 export const contactRouter = createTRPCRouter({
@@ -112,8 +114,26 @@ export const contactRouter = createTRPCRouter({
         });
       }
 
+      const clientIp = getClientIpFromHeaders(ctx.headers);
+
+      const turnstile = await verifyTurnstileToken({
+        token: input.turnstileToken,
+        expectedAction: "contact",
+        clientIp,
+      });
+
+      if (!turnstile.success) {
+        console.error(
+          `[contact.sendMessage] Turnstile verification failed (reason: ${turnstile.reason})`,
+        );
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Turnstile verification failed",
+        });
+      }
+
       const allowed = await consumeFixedWindowLimit(ctx.db, {
-        key: `contact:${ctx.tenant.userId}:${hashClientIp(getClientIpFromHeaders(ctx.headers))}`,
+        key: `contact:${ctx.tenant.userId}:${hashClientIp(clientIp)}`,
         windowMs: 60 * 60 * 1000,
         max: 5,
       });

@@ -1,4 +1,4 @@
-﻿import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 import Tab from "./index";
 import TabItem from "./tab-item";
@@ -84,6 +84,33 @@ describe("Tab & TabItem components", () => {
 
     const tab = screen.getByRole("tab", { name: /Overview/ });
     expect(tab.className).not.toContain("flex-col");
+  });
+
+  it("handles pointer down and pointer up on active tab cleanly without getting stuck", () => {
+    const setCurrentTab = jest.fn();
+    render(
+      <Tab
+        ariaLabel="Interactive tabs"
+        currentTab={0}
+        setCurrentTab={setCurrentTab}
+        tabId="test-tabs"
+      >
+        <TabItem icon={DummyIcon} title="Active Tab" description="Desc 1" />
+        <TabItem icon={DummyIcon} title="Other Tab" description="Desc 2" />
+      </Tab>,
+    );
+
+    const activeTab = screen.getByRole("tab", { name: /Active Tab/ });
+    const otherTab = screen.getByRole("tab", { name: /Other Tab/ });
+
+    // Press down on active tab
+    fireEvent.pointerDown(activeTab, { button: 0 });
+    // Release pointer anywhere on window
+    fireEvent.pointerUp(window);
+
+    // Clicking other tab should immediately work
+    fireEvent.click(otherTab);
+    expect(setCurrentTab).toHaveBeenCalledWith(1);
   });
 
   it("throws error when invalid children are passed", () => {

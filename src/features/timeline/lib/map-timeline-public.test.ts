@@ -17,6 +17,30 @@ const baseItem: TimelineItemWithTranslations = {
   current: true,
   order: 0,
   images: ["https://example.com/photo.jpg"],
+  technologies: ["React", "TypeScript"],
+  TimelineItemSkill: [
+    {
+      skill: {
+        id: "s1",
+        title: "React",
+        image: "https://cdn.simpleicons.org/react",
+      },
+    },
+    {
+      skill: {
+        id: "s2",
+        title: "TypeScript",
+        image: "https://cdn.simpleicons.org/typescript",
+      },
+    },
+  ],
+  roles: [
+    {
+      title: "Team Lead",
+      startDate: "2024-11",
+      endDate: "2025-03",
+    },
+  ],
   createdAt: new Date(),
   updatedAt: new Date(),
   TimelineItemTranslation: [
@@ -71,23 +95,46 @@ describe("formatTimelineDate", () => {
 describe("mapTimelineItemToPublic", () => {
   it("resolves locale with fallback", () => {
     const item = mapTimelineItemToPublic(baseItem, "es", languages);
-    expect(item.title).toBe("Desarrollador Web - Acme");
+    expect(item.title).toBe("Desarrollador Web");
+    expect(item.organization).toBe("Acme");
     expect(item.description).toBe("Construí apps web");
     expect(item.images).toEqual(["https://example.com/photo.jpg"]);
+    expect(item.technologies).toEqual(["React", "TypeScript"]);
+    expect(item.skills).toEqual([
+      {
+        id: "s1",
+        title: "React",
+        image: "https://cdn.simpleicons.org/react",
+      },
+      {
+        id: "s2",
+        title: "TypeScript",
+        image: "https://cdn.simpleicons.org/typescript",
+      },
+    ]);
+    expect(item.roles).toEqual([
+      {
+        title: "Team Lead",
+        startDate: "2024-11",
+        endDate: "2025-03",
+      },
+    ]);
   });
 
   it("falls back to default locale", () => {
     const item = mapTimelineItemToPublic(baseItem, "nl", languages);
-    expect(item.title).toBe("Web Developer - Acme");
+    expect(item.title).toBe("Web Developer");
+    expect(item.organization).toBe("Acme");
   });
 
-  it("omits organization from title when organization is empty", () => {
+  it("retains title when organization is empty", () => {
     const item = mapTimelineItemToPublic(
       { ...baseItem, organization: "" },
       "en",
       languages,
     );
     expect(item.title).toBe("Web Developer");
+    expect(item.organization).toBe("");
   });
 
   it("returns null endDate when item has no endDate", () => {

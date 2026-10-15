@@ -1,0 +1,29 @@
+{
+  "key": "KwhMonitor",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-9_lw4apk",
+  "type": "MOBILE",
+  "githubUrl": "https://github.com/jess232017/Gestor-de-Consumo-Eletrico",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Kwh Monitor",
+      "description": "Aplicación móvil Android para el control de consumo de energía eléctrica."
+    },
+    {
+      "locale": "en",
+      "title": "Kwh Monitor",
+      "description": "Android mobile application for the control of electricity consumption."
+    },
+    {
+      "locale": "nl",
+      "title": "Kwh Monitor",
+      "description": "Mobiele Android-toepassing voor de controle van het elektriciteitsverbruik."
+    }
+  ],
+  "skillKeys": ["Java", "Android", "Mysql", "Nodejs"],
+  "order": 17,
+  "kind": "PERSONAL",
+  "slug": "kwh-monitor"
+}

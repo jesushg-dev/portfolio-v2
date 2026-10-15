@@ -59,7 +59,7 @@ const CertificateItem: FC<CertificateType> = ({
       </div>
 
       <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-sm">
+        <div className="text-foreground flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-sm">
           {issuedDate ? (
             <span className="flex items-center gap-1.5">
               <MdCalendarMonth className="size-3.5 shrink-0" aria-hidden />
@@ -79,7 +79,7 @@ const CertificateItem: FC<CertificateType> = ({
             rel="noreferrer"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "h-11 min-h-11 shrink-0 gap-2 px-4 text-sm",
+              "h-12 min-h-12 shrink-0 gap-2 px-4 text-sm",
             )}
           >
             <MdRemoveRedEye className="size-3.5" aria-hidden />

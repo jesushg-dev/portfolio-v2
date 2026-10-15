@@ -117,6 +117,7 @@ export const mockCvHeader = {
       heroSubtitle: "Senior Software Engineer",
       heroTagline: "Building things",
       heroSummary: null,
+      availabilityBadge: null,
       clientImageAlt: null,
       createdAt: new Date(),
     },

@@ -1,12 +1,12 @@
 ---
-description: Forbid raw px sizes; use rem or Tailwind spacing tokens
+description: Forbid raw px sizes; use rem or Tailwind spacing/size tokens
 alwaysApply: true
 ---
 
 # Forbidden: raw `px` sizes
 
-Do not use CSS / `className` / `style` sizes in `px`. Use rem or Tailwind tokens (`min-w-18`, `p-1.5`, `inset-1`). Prefer the Tailwind scale (`4` = 1rem, `1` = 0.25rem, `2` = 0.5rem). Arbitrary rem only if no token exists.
+Do not use CSS / `className` / `style` sizes in `px` (`w-[72px]`, `7px`, `style={{ width: 7 }}`). Use rem or Tailwind spacing/size tokens (`min-w-18`, `p-1.5`, `inset-1`). Prefer the Tailwind scale (`4` = 1rem, `1` = 0.25rem, `1.5` = 0.375rem, `2` = 0.5rem). Arbitrary rem (`min-w-[4.5rem]`) only when no token exists.
 
-`getBoundingClientRect` (and similar) may stay as pixel numbers. Design constants must be rem, converted to px from the root font size at use time.
+JS numbers from `getBoundingClientRect` (and similar) may stay in CSS pixels. Design constants that feed layout must be rem (Tailwind-aligned when possible) and converted to px from the root font size at use time.
 
-New/touched code only — do not mass-rewrite historical `px`.
+Applies to new and touched code — do not mass-rewrite historical `px`.

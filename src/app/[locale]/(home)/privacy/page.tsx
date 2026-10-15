@@ -67,6 +67,13 @@ export default async function PrivacyPage() {
             <p>{t("analytics.optOut")}</p>
             <p>{t("analytics.retention")}</p>
           </section>
+
+          <section className="space-y-3">
+            <h2 className="text-foreground text-lg font-semibold">
+              {t("emailMeasurement.title")}
+            </h2>
+            <p>{t("emailMeasurement.intro")}</p>
+          </section>
         </div>
       </div>
     </section>

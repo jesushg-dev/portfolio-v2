@@ -40,7 +40,7 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
   const panelId = `skill-modal-panel-${activeTab?.id ?? "0"}`;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
+    <div className="flex min-h-0 flex-col gap-3 overflow-hidden">
       <Tab
         tabId="skill-modal"
         minimal
@@ -69,7 +69,7 @@ export function SkillModalTabs({ tabs }: SkillModalTabsProps) {
         role="tabpanel"
         id={panelId}
         aria-labelledby={`skill-modal-tab-${currentTab}`}
-        className="themed-scrollbar min-h-0 flex-1 overflow-y-auto pr-1"
+        className="themed-scrollbar max-h-72 min-h-20 overflow-y-auto pr-1"
       >
         {activeTab?.content}
       </div>

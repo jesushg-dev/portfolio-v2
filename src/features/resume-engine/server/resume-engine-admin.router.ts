@@ -5,6 +5,7 @@ import { locales } from "@/i18n/config";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
+  type CvImportDraft,
   CvImportDraftSchema,
   PARSER_VERSION,
 } from "@/features/cv/lib/cv-import-draft";
@@ -39,19 +40,22 @@ import {
   parseAiJsonResponse,
 } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
+  type AiProviderName,
   getAvailableAiProviders,
   getDefaultAiProvider,
   loadTenantAiCredentials,
+  type TenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
-import type { TenantAiCredentials } from "@/features/resume-engine/lib/ai/providers";
-import { CvDocxTailorResultSchema } from "@/features/resume-engine/lib/cv-docx-tailor-result";
+import {
+  CvDocxTailorResultSchema,
+  applyEditsToSections,
+} from "@/features/resume-engine/lib/cv-docx-tailor-result";
 import { classifyPolishedResumeFile } from "@/features/resume-engine/lib/classify-polished-resume";
 import { isPdfUpload } from "@/features/resume-engine/lib/parse-pdf-for-import";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
 import { generateCvPdfFromSnapshot } from "@/features/resume-engine/lib/generate-cv-pdf-from-snapshot";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
-import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
-import type { AiProviderName } from "@/features/resume-engine/lib/ai/provider-types";
+import { processJobDescription } from "@/features/resume-engine/lib/ai/clean-job-description";
 
 function rethrowTailorExportError(error: unknown): never {
   if (error instanceof TRPCError) throw error;
@@ -141,39 +145,6 @@ const aiProviderSchema = z
   .optional();
 
 const localeSchema = z.enum(locales);
-
-function detectLocaleFromJobDescription(input: string): "en" | "es" | "nl" {
-  const value = input.toLowerCase();
-  const spanishHints = [
-    "responsabilidades",
-    "requisitos",
-    "experiencia",
-    "desarrollador",
-    "años",
-    "puesto",
-  ];
-  const dutchHints = [
-    "ervaring",
-    "vereisten",
-    "ontwikkelaar",
-    "functie",
-    "opleiding",
-    "vaardigheden",
-  ];
-
-  const esScore = spanishHints.reduce(
-    (acc, hint) => acc + (value.includes(hint) ? 1 : 0),
-    0,
-  );
-  const nlScore = dutchHints.reduce(
-    (acc, hint) => acc + (value.includes(hint) ? 1 : 0),
-    0,
-  );
-
-  if (esScore > nlScore && esScore > 0) return "es";
-  if (nlScore > esScore && nlScore > 0) return "nl";
-  return "en";
-}
 
 export const resumeEngineAdminRouter = createTRPCRouter({
   getAiSettings: protectedProcedure.query(async ({ ctx }) => {
@@ -481,6 +452,10 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         input.applicationId,
       );
 
+      const { cleanedText: jobDescription } = processJobDescription(
+        input.jobDescription,
+      );
+
       if (input.sourceType === "upload") {
         if (!input.uploadId) {
           throw new TRPCError({
@@ -497,7 +472,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
 
         return buildDocxTailorPromptPackage(
           parsed.sections,
-          input.jobDescription.trim(),
+          jobDescription,
           jobContext,
         );
       }
@@ -515,7 +490,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       return buildStudioDocxTailorPromptPackage(
         parsed.sections,
         draft,
-        input.jobDescription.trim(),
+        jobDescription,
         jobContext,
       );
     }),
@@ -533,9 +508,10 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const jobDescription = input.jobDescription.trim();
-      const preferredLocale =
-        input.targetLocale ?? detectLocaleFromJobDescription(jobDescription);
+      const { cleanedText: jobDescription } = processJobDescription(
+        input.jobDescription,
+      );
+      const preferredLocale = input.targetLocale;
       const jobContext = await loadTailorJobContext(
         ctx.db,
         ctx.user.id,
@@ -656,9 +632,10 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const jobDescription = input.jobDescription.trim();
-      const preferredLocale =
-        input.targetLocale ?? detectLocaleFromJobDescription(jobDescription);
+      const { cleanedText: jobDescription } = processJobDescription(
+        input.jobDescription,
+      );
+      const preferredLocale = input.targetLocale;
 
       if (input.sourceType === "upload") {
         if (!input.uploadId) {
@@ -719,9 +696,14 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         });
       }
 
+      const adaptedSections = applyEditsToSections(
+        result.edits,
+        parsed.sections,
+      );
+
       return finalizeDocxTailorExport(ctx.db, ctx.user.id, {
         parsed,
-        adaptedSections: result.sections,
+        adaptedSections,
         aiScore: result.aiScore,
         matchNotes: result.matchNotes,
         matchAnalysis: result.matchAnalysis,

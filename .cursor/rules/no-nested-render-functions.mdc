@@ -1,0 +1,54 @@
+---
+description: Prohibit nested helper render functions (renderFoo) and function components inside component bodies
+globs: src/**/*.{tsx,jsx}
+alwaysApply: true
+---
+
+# Forbidden: Helper Render Functions & Nested Component Functions Inside Components
+
+Never declare inline helper render functions (e.g. `const renderHeader = () => ...`, `function renderSection() { ... }`) or functional components inside another React component's body.
+
+### ❌ WRONG — helper render function inside component body
+```tsx
+export function MyWidget({ data }: Props) {
+  const renderItem = (item: Item) => {
+    return <li key={item.id}>{item.name}</li>;
+  };
+
+  return <ul>{data.map(renderItem)}</ul>;
+}
+```
+
+### ❌ WRONG — component declared inside component body
+```tsx
+export function MyWidget({ data }: Props) {
+  function SubItem({ item }: { item: Item }) {
+    return <li>{item.name}</li>;
+  }
+
+  return <ul>{data.map(item => <SubItem key={item.id} item={item} />)}</ul>;
+}
+```
+
+### ✅ CORRECT — decompose into standalone top-level components
+```tsx
+interface SubItemProps {
+  item: Item;
+}
+
+function SubItem({ item }: SubItemProps) {
+  return <li>{item.name}</li>;
+}
+
+export function MyWidget({ data }: Props) {
+  return (
+    <ul>
+      {data.map(item => (
+        <SubItem key={item.id} item={item} />
+      ))}
+    </ul>
+  );
+}
+```
+
+If the subcomponent is large or reused, extract it into its own file with explicit typed props and unit tests.

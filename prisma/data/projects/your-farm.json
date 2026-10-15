@@ -1,0 +1,29 @@
+{
+  "key": "YourFarm",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-11_cng5re",
+  "type": "MOBILE",
+  "githubUrl": "https://github.com/jess232017/Tu-Finca",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tu finca",
+      "description": "Aplicación móvil Android para el control de pedidos de comida."
+    },
+    {
+      "locale": "en",
+      "title": "Your farm",
+      "description": "Android mobile application for the control of food orders."
+    },
+    {
+      "locale": "nl",
+      "title": "Your farm",
+      "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+    }
+  ],
+  "skillKeys": ["Java", "Android"],
+  "order": 20,
+  "kind": "PERSONAL",
+  "slug": "your-farm"
+}

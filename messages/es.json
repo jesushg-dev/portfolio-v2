@@ -251,6 +251,13 @@
   },
   "curriculum": {
     "title": "Curriculum Vitae",
+    "employmentTypes": {
+      "FULL_TIME": "Tiempo completo",
+      "PART_TIME": "Medio tiempo",
+      "CONTRACT": "Contrato",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Prácticas"
+    },
     "header": {
       "cvHeader": "Cabecera",
       "aboutMe": "Sobre Mí",
@@ -560,7 +567,7 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Senior Full Stack .NET Developer",
+      "title": "Jesús Hernández | Senior Software Engineer",
       "description": "Senior Full Stack Developer con 6+ años en .NET Core, React y SQL Server, modernizando sistemas legados y entregando software listo para producción en entornos de alto cumplimiento.",
       "keywords": "Senior .NET Developer, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Ingeniero de Software, Jesús Hernández, Senior Software Engineer"
     },
@@ -570,23 +577,24 @@
       "scrollDown": "Desplázate hacia abajo",
       "yearsExperience": "Años de experiencia",
       "projectsDelivered": "Proyectos entregados",
+      "engineersLed": "Ingenieros liderados",
       "certifications": "Certificaciones",
       "availableForOpportunities": "Disponible para nuevas oportunidades",
       "scheduleCall": "Agendar una llamada",
       "scheduleCallAria": "Agendar una llamada — ir a la sección de contacto",
       "empty": {
         "title": "Héroe no configurado",
-        "description": "Agrega tu foto de perfil, fondo y presentación desde la pestaña héroe del perfil de administrador."
+        "description": "Agrega tu foto de perfil, subtítulo y presentación desde la sección Perfil del panel de administración."
       }
     },
     "services": {
-      "title": "Servicios",
-      "subtitle": "",
-      "description": "",
+      "title": "Experiencia en Ingeniería",
+      "subtitle": "Servicios",
+      "description": "Áreas donde diseño, construyo y lidero software de producción.",
       "items": {
         "contact": {
-          "title": "Hablemos de tu proyecto",
-          "subtitle": "¿Tienes una idea en mente?",
+          "title": "Construyamos juntos",
+          "subtitle": "¿Tienes un proyecto en mente?",
           "cta": "Contáctame"
         }
       }
@@ -595,12 +603,32 @@
       "title": "Mi recorrido",
       "subtitle": "Una línea de tiempo de trabajo, estudio y crecimiento",
       "empty": "Aún no hay entradas en la línea de tiempo.",
+      "emptyFilter": "No hay hitos que coincidan con este filtro.",
       "metaTitle": "Línea de tiempo",
-      "metaDescription": "Explora mi trayectoria profesional y académica a lo largo del tiempo."
+      "metaDescription": "Explora mi trayectoria profesional y académica a lo largo del tiempo.",
+      "stats": "Desde {year} · {milestones} hitos · {workplaces} centros de trabajo",
+      "filters": {
+        "all": "Todos",
+        "work": "Experiencia laboral",
+        "learning": "Estudio y formación",
+        "ariaLabel": "Filtrar hitos de la línea de tiempo"
+      },
+      "categories": {
+        "WORK": "Trabajo",
+        "STUDY": "Estudio",
+        "COURSE": "Curso"
+      },
+      "roles": "Progresión",
+      "present": "Presente",
+      "viewCv": "Ver CV completo",
+      "showingAll": "Mostrando todos los hitos.",
+      "showingFiltered": "Mostrando {count} hitos.",
+      "imageOf": "Imagen {current} de {total}",
+      "techAria": "Tecnologías"
     },
     "about": {
-      "title": "Acerca de mí",
-      "subtitle": "Breve resumen",
+      "title": "Enfoque de Ingeniería",
+      "subtitle": "Cómo desarrollo",
       "terminalEmpty": {
         "title": "Terminal no configurada",
         "description": "Añade una secuencia de terminal animada desde la pestaña Terminal del perfil en el admin."
@@ -638,7 +666,28 @@
         "experiencesTitle": "Dónde usé {skill}",
         "experiencesDescription": "Roles y equipos donde {skill} formó parte del día a día.",
         "projectsTitle": "Proyectos con {skill}",
-        "projectsDescription": "Trabajos seleccionados que usan {skill} en producción."
+        "projectsDescription": "Trabajos seleccionados que usan {skill} en producción.",
+        "caseStudy": "Leer caso de estudio",
+        "kind": {
+          "PROFESSIONAL": "Trabajo cliente",
+          "PERSONAL": "Personal",
+          "LEARNING": "Aprendizaje"
+        },
+        "meta": {
+          "solo": "En solitario",
+          "team": "Equipo de {count}",
+          "now": "actualidad"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "En producción",
+          "MAINTENANCE": "Mantenimiento",
+          "ARCHIVED": "Archivado"
+        },
+        "teaser": {
+          "decisions": "{count} decisiones",
+          "layers": "Arquitectura",
+          "metrics": "{count} métricas"
+        }
       },
       "modal": {
         "close": "Cerrar",
@@ -665,34 +714,38 @@
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Buscar tecnologías",
         "noResults": "Sin coincidencias en el stack actual.",
+        "noMatch": "grep: sin coincidencias para \"{query}\"",
+        "featured": "Destacado",
         "coreLegend": "más brillante = stack destacado",
         "matchCount": "{count, plural, =1 {# coincidencia} other {# coincidencias}}",
-        "searchFor": " para \"{query}\""
+        "searchFor": " para \"{query}\"",
+        "trend": "Trend",
+        "updatedTechPill": "Tecnologías actualizadas 2024-2026"
       },
       "tabs": {
-        "frontend": {
-          "title": "Frontend",
-          "description": "Aplicaciones React y Next.js en producción a escala, desde storefronts de e-commerce hasta dashboards internos y plataformas admin."
+        "ai": {
+          "title": "IA & Machine Learning",
+          "description": "Modelos de lenguaje (LLMs), frameworks de orquestación, agentes autónomos y herramientas de ingeniería de IA moderna."
+        },
+        "architecture": {
+          "title": "Arquitectura",
+          "description": "Diseño de sistemas, sistemas distribuidos, DDD y bases estructurales para plataformas escalables."
         },
         "backend": {
           "title": "Backend",
-          "description": "APIs REST y GraphQL en C#/.NET Core y Node.js, con autenticación, autorización y rendimiento como prioridades de primer nivel."
+          "description": "APIs REST y GraphQL en C#/.NET Core y Node.js, con el rendimiento como prioridad principal."
         },
-        "mobile": {
-          "title": "Móvil",
-          "description": "Apps React Native multiplataforma con soporte offline, autenticación biométrica y fiabilidad para operaciones de campo."
+        "data": {
+          "title": "Data",
+          "description": "Bases de datos SQL y NoSQL, ORMs y modelado de datos para aplicaciones de alto rendimiento."
         },
-        "database": {
-          "title": "Base de Datos",
-          "description": "SQL Server, PostgreSQL y MongoDB en dashboards financieros, plataformas de servicios y sistemas de contenido multi-tenant."
+        "frontend": {
+          "title": "Frontend",
+          "description": "Aplicaciones React y Next.js en producción a escala, desde storefronts hasta dashboards internos."
         },
-        "devops": {
-          "title": "DevOps",
-          "description": "Pipelines CI/CD en Azure DevOps y GitHub Actions, con Docker, análisis de seguridad y paridad de entornos."
-        },
-        "tools": {
-          "title": "Herramientas",
-          "description": "El kit de herramientas profesional del día a día que mantiene la entrega rápida, la calidad alta y los equipos alineados."
+        "quality": {
+          "title": "Calidad y Entrega",
+          "description": "Pipelines CI/CD, contenedores Docker, pruebas automatizadas y escaneo de seguridad para entregas fiables."
         }
       }
     },
@@ -704,8 +757,8 @@
     },
     "portfolio": {
       "subtitle": "Portafolio",
-      "title": "Mejores proyectos",
-      "description": "Una selección de proyectos que reflejan cómo diseño, desarrollo y resuelvo problemas reales con software.",
+      "title": "Trabajos de Ingeniería Seleccionados",
+      "description": "Una selección de sistemas e iniciativas de ingeniería donde resolví problemas técnicos, mejoré las entregas y creé impacto medible en el negocio.",
       "actions": {
         "view": "Ver proyecto",
         "source": "Ver código",
@@ -727,7 +780,84 @@
         "stack": "Stack",
         "nextProject": "Siguiente proyecto",
         "visualTitle": "Conexiones con intención",
-        "visualSubtitle": "Cada nodo es una pieza; cada línea, una razón para construir."
+        "visualSubtitle": "Cada nodo es una pieza; cada línea, una razón para construir.",
+        "backToProjects": "Volver a los proyectos",
+        "caseStudyLabel": "Caso de estudio",
+        "summaryEyebrow": "En 30 segundos",
+        "summaryTitle": "Resumen para reclutadores",
+        "ownership": "Responsabilidad",
+        "roleSectionTitle": "Mi rol y responsabilidades",
+        "challengeEyebrow": "El problema",
+        "shortOnTime": "¿Tienes poco tiempo? Lee solo:",
+        "why": "Por qué",
+        "alternativesConsidered": "Alternativas consideradas",
+        "similarRole": "¿Buscas contratar para un rol similar?",
+        "decisionsWalkthrough": "Con gusto puedo explicarte cualquiera de estas decisiones.",
+        "timeline": "Cronología",
+        "present": "Actualidad",
+        "primaryScaleMainLight": "Escala principal · main-light",
+        "principles": "Principios",
+        "themePresetCount": "6 temas, un atributo data-theme",
+        "lightDark": "Claro · Oscuro",
+        "customTheme": "Personalizado",
+        "visitorDefined": "Configurado por el visitante",
+        "section": "Sección",
+        "decision": "Decisión",
+        "tradeoff": "Compromiso",
+        "via": "mediante",
+        "implementation": "Implementación",
+        "notes": "Notas",
+        "project": "Proyecto",
+        "status": "Estado",
+        "team": "Equipo",
+        "platform": "Plataforma",
+        "liveSite": "Sitio web",
+        "viewSource": "Ver código fuente",
+        "privateRepository": "Repositorio privado",
+        "onThisPage": "En esta página",
+        "sectionsNavigation": "Secciones del caso de estudio",
+        "indexLabels": {
+          "summary": "Resumen",
+          "context": "Contexto",
+          "role": "Mi rol",
+          "challenge": "El desafío",
+          "decisions": "Decisiones",
+          "architecture": "Arquitectura",
+          "data": "Datos e i18n",
+          "capabilities": "Capacidades",
+          "security": "Seguridad",
+          "quality": "Calidad",
+          "designSystem": "Sistema de diseño",
+          "results": "Resultados"
+        },
+        "projectTimeline": "Cronología del proyecto",
+        "started": "Inicio",
+        "ended": "Finalización",
+        "role": "Rol",
+        "productEngineer": "Ingeniero de producto",
+        "responsibilities": "Responsabilidades",
+        "whatIOwned": "De qué me encargué",
+        "context": "Contexto",
+        "constraints": "Restricciones",
+        "letsTalk": "Hablemos",
+        "projectTypes": {
+          "FRONTEND": "Frontend",
+          "BACKEND": "Backend",
+          "MOBILE": "Móvil",
+          "DESKTOP": "Escritorio",
+          "CYBERSECURITY": "Ciberseguridad",
+          "DEVOPS": "DevOps",
+          "SOFTSKILLS": "Habilidades interpersonales",
+          "TOOLS": "Herramientas",
+          "ARCHITECTURE": "Arquitectura",
+          "DATA": "Datos",
+          "QUALITY_DELIVERY": "Calidad y entrega"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "En producción",
+          "MAINTENANCE": "En mantenimiento",
+          "ARCHIVED": "Archivado"
+        }
       },
       "private": {
         "title": "Privado",
@@ -748,6 +878,54 @@
         "mobile": "Móvil",
         "desktop": "Escritorio",
         "ariaLabel": "Categorías de proyectos del portafolio"
+      },
+      "emptyState": {
+        "title": "No hay proyectos en esta categoría",
+        "description": "Actualmente no hay proyectos públicos categorizados como {category}. Puedes explorar las demás categorías del portafolio.",
+        "allTitle": "No hay proyectos disponibles",
+        "allDescription": "Pronto se publicarán nuevos proyectos y casos de estudio.",
+        "reset": "Ver todos los proyectos"
+      },
+      "meta": {
+        "solo": "Solo",
+        "team": "Equipo de {count}",
+        "now": "hoy"
+      },
+      "teaser": {
+        "decisions": "{count} decisiones",
+        "layers": "Arquitectura",
+        "metrics": "{count} métricas"
+      },
+      "topStack": {
+        "title": "Stack más usado",
+        "projectsWord": "proyectos"
+      },
+      "allCta": {
+        "button": "Ver todos los proyectos ({count})",
+        "subtitle": "{total} proyectos · {caseStudies} con caso de estudio"
+      },
+      "catalog": {
+        "backToPortfolio": "Volver al portafolio",
+        "pageTitle": "Todos los proyectos",
+        "pageSubtitle": "Explora por tipo, categoría o tecnología. Los casos de estudio detallan decisiones, arquitectura y resultados.",
+        "searchPlaceholder": "Buscar proyectos o tecnologías…",
+        "searchLabel": "Buscar proyectos o tecnologías",
+        "sortLabel": "Ordenar",
+        "sorts": {
+          "default": "Destacados",
+          "name": "Nombre (A–Z)",
+          "cs": "Con caso de estudio primero"
+        },
+        "kindLabel": "Categoría",
+        "techLabel": "Tecnología",
+        "csOnly": "Solo con caso de estudio",
+        "showing": "Mostrando {count} de {total} proyectos",
+        "showingAll": "{total} proyectos",
+        "clearFilters": "Limpiar filtros",
+        "more": "Ver más ({count} restantes)",
+        "emptyTitle": "Sin resultados",
+        "emptyDescription": "Prueba con otra búsqueda o quita algunos filtros.",
+        "emptyButton": "Limpiar filtros"
       }
     },
     "contact": {
@@ -761,6 +939,7 @@
       "noChannelsWithoutForm": "Los enlaces sociales aparecerán aquí cuando se agreguen al CV.",
       "globe": {
         "ariaLabel": "Mapa interactivo mostrando la conexión entre {origin} y {destination}",
+        "localTime": "Hora local",
         "yourLocation": "Tu ubicación",
         "replay": "Repetir conexión",
         "unroll": "Desenrollar mapa",
@@ -842,7 +1021,10 @@
       "title": "Experiencia Profesional",
       "subtitle": "Empresas, roles e impacto medible",
       "viewAll": "Ver CV completo para el historial detallado",
-      "showingRecent": "Mostrando los roles más recientes."
+      "showingRecent": "Mostrando los roles más recientes.",
+      "promotion": "Ascenso interno",
+      "previousRole": "Puesto anterior",
+      "rolesCount": "{count} puestos"
     },
     "impactStats": {
       "teamSize": {
@@ -870,14 +1052,14 @@
       "statsLabel": "En números",
       "statsNote": "Números acumulados en compromisos profesionales.",
       "stats": {
-        "certifications": {
-          "label": "Certificaciones"
-        },
         "projects": {
           "label": "Proyectos"
         },
         "experience": {
           "label": "Años de Experiencia"
+        },
+        "engineersMentored": {
+          "label": "Ingenieros liderados"
         }
       }
     },
@@ -1894,6 +2076,14 @@
       "experience": {
         "company": "Empresa",
         "role": "Puesto",
+        "employmentType": "Tipo de contrato",
+        "employmentTypes": {
+          "FULL_TIME": "Tiempo completo",
+          "PART_TIME": "Medio tiempo",
+          "CONTRACT": "Contrato",
+          "FREELANCE": "Freelance",
+          "INTERNSHIP": "Prácticas"
+        },
         "location": "Ubicación (opcional)",
         "dates": "Fechas",
         "startDate": "Fecha de inicio",
@@ -2098,7 +2288,8 @@
       "jobTrackerApplication": {
         "validation": {
           "positionRequired": "El puesto es obligatorio",
-          "companyRequired": "Selecciona una empresa"
+          "companyRequired": "Selecciona una empresa",
+          "urlInvalid": "URL inválida"
         },
         "toast": {
           "success": {
@@ -2124,6 +2315,7 @@
           "appliedDate": "Fecha de Postulación",
           "location": "Ubicación",
           "salary": "Salario",
+          "jobUrl": "Enlace de la vacante",
           "description": "Descripción",
           "notes": "Notas",
           "cv": "CV/Currículum"
@@ -2138,6 +2330,7 @@
           "company": "Selecciona o crea una empresa...",
           "location": "Remoto, híbrido, etc...",
           "salary": "€50k - €60k",
+          "jobUrl": "https://linkedin.com/jobs/view/...",
           "description": "Pega la descripción del puesto…",
           "notes": "p. ej. referido por Alex, seguimiento el viernes…",
           "date": "Selecciona una fecha"
@@ -2164,10 +2357,10 @@
         },
         "import": {
           "placeholders": {
-            "url": "https://www.linkedin.com/jobs/view/…"
+            "url": "https://linkedin.com/..., bamboohr.com/careers/..., getonbrd.com/jobs/..."
           },
           "actions": {
-            "show": "Rellenar desde enlace de LinkedIn",
+            "show": "Rellenar desde enlace (LinkedIn, BambooHR, Get on Board)",
             "import": "Importar",
             "importing": "Importando…",
             "cancel": "Cancelar"
@@ -2183,8 +2376,8 @@
           },
           "errors": {
             "IMPORT_INVALID_URL": "Eso no parece una URL válida.",
-            "IMPORT_UNSUPPORTED_HOST": "Solo se admiten enlaces de jobs o posts de LinkedIn.",
-            "IMPORT_LOGIN_WALL": "LinkedIn bloqueó la página. Pega la descripción a mano.",
+            "IMPORT_UNSUPPORTED_HOST": "Solo se admiten enlaces de LinkedIn, BambooHR y Get on Board.",
+            "IMPORT_LOGIN_WALL": "La página requiere inicio de sesión o está bloqueada. Pega la descripción a mano.",
             "IMPORT_EMPTY_CONTENT": "No se encontró el texto de la oferta. Pega la descripción a mano.",
             "IMPORT_FETCH_FAILED": "No se pudo leer el enlace. Inténtalo de nuevo o pega la descripción a mano."
           }
@@ -2218,12 +2411,16 @@
           "name": "Nombre",
           "website": "Sitio Web",
           "email": "Correo Electrónico",
+          "linkedinUrl": "Perfil de LinkedIn",
+          "companyLocation": "Sede / Ubicación",
           "description": "Descripción"
         },
         "placeholders": {
           "name": "Acme Corp",
           "email": "contacto@empresa.com",
           "website": "https://empresa.com",
+          "linkedinUrl": "https://linkedin.com/company/...",
+          "companyLocation": "Madrid, España / Remoto",
           "description": "Descripción de la empresa..."
         },
         "actions": {
@@ -2646,24 +2843,26 @@
     },
     "profile": {
       "title": "Perfil y sección Hero",
-      "subtitle": "Edita tu identidad del hero, títulos rotativos, resumen y texto sobre mí.",
+      "subtitle": "Edita tu identidad, subtítulo profesional, tagline y textos del Hero y Sobre mí.",
       "heroSection": "Identidad",
       "fullNameLabel": "Nombre para mostrar",
-      "photoUrlLabel": "URL de la foto",
-      "backgroundImageLabel": "URL de imagen de fondo del hero",
-      "backgroundImagePlaceholder": "https://ejemplo.com/fondo-hero.jpg",
-      "professionalTitle": "Título Profesional",
-      "degreeLabel": "Título profesional / grado",
-      "rotatingTitlesLabel": "Títulos rotativos",
-      "rotatingTitlesHint": "Se muestran en la animación typewriter del hero. Arrastra para reordenar.",
-      "dragToReorder": "Arrastra para reordenar",
-      "titleWithLanguage": "Título ({language})",
-      "addTitle": "Añadir título",
-      "removeTitle": "Eliminar título",
-      "heroSummaryLabel": "Resumen del hero",
-      "heroSummaryWithLanguage": "Resumen breve ({language})",
-      "heroSummaryHint": "Descripción breve mostrada debajo de tus títulos en el hero.",
-      "heroSummaryPlaceholder": "Una breve introducción para la sección hero...",
+      "photoUrlLabel": "URL de la foto de perfil",
+      "heroSubtitleLabel": "Subtítulo profesional (H2)",
+      "heroSubtitleHint": "Título principal H2 mostrado debajo de tu nombre en el Hero y utilizado en el título de la página (SEO).",
+      "heroSubtitleWithLanguage": "Subtítulo profesional ({language})",
+      "heroSubtitlePlaceholder": "ej. Senior Software Engineer",
+      "heroTaglineLabel": "Tagline / Propuesta de valor",
+      "heroTaglineHint": "Párrafo destacado que sintetiza tu valor y experiencia en la sección Hero.",
+      "heroTaglineWithLanguage": "Tagline / Propuesta de valor ({language})",
+      "heroTaglinePlaceholder": "ej. Más de 6 años construyendo sistemas empresariales escalables...",
+      "heroSummaryLabel": "Resumen secundario del hero",
+      "heroSummaryWithLanguage": "Resumen secundario ({language})",
+      "heroSummaryHint": "Descripción breve opcional que aparece debajo del tagline en el hero.",
+      "heroSummaryPlaceholder": "Una breve introducción complementaria para la sección hero...",
+      "heroBadgeLabel": "Badge de Disponibilidad",
+      "heroBadgeHint": "Texto personalizado para el badge superior del Hero. Déjalo en blanco para usar el valor predeterminado ('Disponible para nuevas oportunidades').",
+      "heroBadgePlaceholder": "ej. Abierto a contratos B2B / Disponible para proyectos",
+      "heroBadgeWithLanguage": "Badge de disponibilidad ({language})",
       "descriptionWithLanguage": "Texto sobre mí ({language})",
       "altTextTitle": "Texto alternativo de imagen",
       "altTextHint": "Describe tu foto para lectores de pantalla y SEO.",
@@ -2671,6 +2870,9 @@
       "aboutMeTitle": "Sobre mí",
       "descriptionLabel": "Descripción",
       "consoleTab": "Terminal",
+      "aboutSectionTab": "Sección About",
+      "aboutBioTitle": "Enfoque de Ingeniería y Narrativa",
+      "aboutBioSubtitle": "Estos párrafos presentan tu experiencia y filosofía en la sección About (#about). Las palabras envueltas en **ejemplo** se resaltarán en negrita y color primario.",
       "tabsNavAria": "Secciones del perfil",
       "heroConsoleTitle": "Terminal del About",
       "heroConsoleSubtitle": "Configura la secuencia animada de terminal que se muestra en tu sección Sobre mí.",
@@ -2682,10 +2884,11 @@
       "heroTab": "Hero y perfil",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://ejemplo.com/foto.jpg",
-      "degreePlaceholder": "ej. Desarrollador Web",
       "altTextPlaceholder": "ej. Foto de Jesús sentado en un escritorio",
       "aboutPlaceholder": "Soy un ingeniero de software apasionado...",
       "aboutDescriptionHint": "Proporciona una descripción detallada de ti mismo. Puedes usar varios párrafos.",
+      "heroPreviewTitle": "Vista previa en vivo del Hero",
+      "heroPreviewBadge": "Disponible para oportunidades",
       "console": {
         "loading": "Cargando configuración del terminal…",
         "loadFailed": "No se pudo cargar la configuración del terminal",
@@ -3059,6 +3262,7 @@
         "timelineTab": "Timeline",
         "detailsTab": "Detalles",
         "tailorTab": "Personalizar CV",
+        "emailTab": "Correos",
         "jobDescription": "Descripción del puesto",
         "salary": "Salario",
         "location": "Ubicación",
@@ -3080,6 +3284,10 @@
         "showFullDescription": "Ver descripción completa",
         "hideFullDescription": "Ver menos",
         "notProvided": "—",
+        "viewJobPosting": "Ver vacante original",
+        "jobUrl": "Enlace de la vacante",
+        "companyInfo": "Información de la empresa",
+        "editCompany": "Editar empresa",
         "tabsNavAria": "Secciones de la postulación"
       },
       "interviewPrep": {
@@ -3220,6 +3428,25 @@
         "attachmentInvalidType": "Solo se permiten archivos .doc, .docx o .pdf",
         "attachmentTooLarge": "El archivo debe pesar 8 MB o menos",
         "needCv": "Primero personaliza un CV para esta postulación, o sube un .docx/.pdf para adjuntar.",
+        "trackOpensLabel": "Medir cargas del correo",
+        "trackOpensHint": "Si lo activas, el correo incluirá un aviso visible para el destinatario. Las cargas son aproximadas y no confirman que se haya leído el CV.",
+        "historyTitle": "Correos enviados",
+        "historyTab": "Correos",
+        "refreshHistory": "Actualizar",
+        "trackingApproximation": "Los clientes pueden bloquear o almacenar en caché imágenes, y los proxies pueden cargarlas automáticamente. Estos datos no confirman que una persona haya leído el correo o el CV.",
+        "historyLoading": "Cargando historial de correos...",
+        "historyError": "No se pudo cargar el historial de correos.",
+        "historyDateUnavailable": "Fecha no disponible",
+        "trackingFirstDetected": "Primera carga detectada",
+        "trackingLastDetected": "Última carga detectada",
+        "trackingNotDetected": "Aún no detectada",
+        "trackingTotalLoads": "Cargas totales de imagen",
+        "trackingDisabledForEmail": "Rastreo desactivado para este correo",
+        "viewOpenEvents": "Ver detalle de aperturas ({count})",
+        "hideOpenEvents": "Ocultar detalle",
+        "openEventItem": "Apertura #{index}",
+        "proxyBadge": "Proxy / Caché",
+        "historyEmpty": "Todavía no se han enviado correos desde esta postulación.",
         "noAi": "No hay proveedor de IA configurado. Añade una API key para generar el borrador.",
         "noResend": "Configura Resend en Integraciones para enviar desde tu dominio."
       },
@@ -3245,7 +3472,13 @@
         "copyError": "No se pudo copiar",
         "subjectLabel": "Asunto / título",
         "bodyLabel": "Carta",
-        "noAi": "No hay proveedor de IA configurado. Añade una API key para generar la carta."
+        "noAi": "No hay proveedor de IA configurado. Añade una API key para generar la carta.",
+        "aiFailedFallback": "El modelo no pudo generar la carta. Se ha habilitado el modo manual.",
+        "writeManually": "Escribir manual",
+        "aiOptions": "Opciones de IA",
+        "applyResponse": "Cargar en la carta",
+        "responseApplied": "Respuesta aplicada a la carta",
+        "parseError": "No se pudo extraer el asunto o la carta de la respuesta ingresada."
       },
       "kanban": {
         "description": "Arrastra las tarjetas entre columnas para actualizar el estado.",
@@ -3414,7 +3647,8 @@
       "matchStatus": {
         "present": "en el CV",
         "paraphrased": "parafraseado",
-        "missing": "ausente"
+        "missing": "ausente",
+        "adjacent": "habilidad adyacente"
       },
       "atsCheckerTitle": "Checker ATS",
       "atsCheckerScore": "Ajuste {score}%",
@@ -3661,10 +3895,10 @@
     "privacy": {
       "title": "Política de privacidad",
       "metaTitle": "Política de privacidad",
-      "metaDescription": "Cómo tratamos tus datos, incluida la medición anónima de audiencia y las credenciales de Spotify.",
+      "metaDescription": "Cómo tratamos tus datos, incluida la medición anónima de audiencia, la medición opcional de correos y las credenciales de Spotify.",
       "subtitle": "Cómo tratamos tus datos",
       "updatedAt": "Última actualización: septiembre de 2026",
-      "intro": "Esta plataforma de portafolios guarda solo los datos necesarios para ofrecer sus funciones. Esta página explica la medición anónima de audiencia en páginas públicas y qué recopilamos si conectas Spotify.",
+      "intro": "Esta plataforma de portafolios guarda solo los datos necesarios para ofrecer sus funciones. Esta página explica la medición anónima de audiencia en páginas públicas, la medición opcional de correos y qué recopilamos si conectas Spotify.",
       "spotify": {
         "title": "Integración con Spotify",
         "intro": "Si conectas Spotify en el panel de administración, guardamos las credenciales de tu propia app de Spotify Developer para que el widget Now Playing muestre tu reproducción en tu portafolio público.",
@@ -3689,6 +3923,10 @@
         "purpose": "Usamos estos agregados solo para mostrar stats en /estadisticas y en el admin del portafolio. No se venden ni se comparten con proveedores de analítica.",
         "optOut": "Si tu navegador envía Do Not Track o Global Privacy Control, omitimos la medición por completo.",
         "retention": "Los agregados de más de 13 meses se eliminan."
+      },
+      "emailMeasurement": {
+        "title": "Medición opcional de correos",
+        "intro": "Al enviar un CV desde Job Tracker, quien lo envía puede elegir incluir una imagen de seguimiento. Si la activa, el correo muestra un aviso visible al destinatario. Las cargas son aproximadas y no confirman que alguien haya leído el correo o el CV; los clientes pueden bloquear o almacenar en caché las imágenes y los proxies pueden cargarlas automáticamente. No guardamos la dirección IP ni el user-agent del destinatario para esta medición."
       }
     }
   },

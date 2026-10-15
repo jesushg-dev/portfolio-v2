@@ -162,7 +162,7 @@ export const SkillDetailView: FC<SkillDetailViewProps> = ({
     });
 
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <div className="flex min-h-0 flex-col overflow-hidden">
         <div className="mb-4 shrink-0 space-y-3">{header}</div>
 
         <SkillModalTabs key={skillSlug} tabs={tabs} />

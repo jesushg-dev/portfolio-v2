@@ -4,13 +4,14 @@ import { z } from "zod";
  * Response shape for the repair ("shrink") pass — just the runs that were
  * over budget, each with its shortened replacement text.
  */
+export const ShrinkRunSchema = z.object({
+  id: z.string(),
+  text: z.string(),
+  unfit: z.boolean().optional(),
+});
+
 export const ShrinkResultSchema = z.object({
-  runs: z.array(
-    z.object({
-      id: z.string(),
-      text: z.string(),
-    }),
-  ),
+  runs: z.array(ShrinkRunSchema),
 });
 
 export type ShrinkResult = z.infer<typeof ShrinkResultSchema>;

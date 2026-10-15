@@ -21,6 +21,7 @@ export interface ApplicationEditorDTO {
   appliedDate: Date;
   salary: string;
   location: string;
+  jobUrl: string;
   notes: string;
   cvFile?: ApplicationCvFileDTO;
 }
@@ -68,6 +69,7 @@ export function mapApplicationToEditorDto(
     appliedDate: application.appliedDate,
     salary: application.salary ?? "",
     location: application.location ?? "",
+    jobUrl: application.jobUrl ?? "",
     notes: application.notes ?? "",
     cvFile: application.cvFile
       ? {
@@ -120,6 +122,7 @@ export function buildEmptyApplicationCreateDto(): ApplicationCreateFormDTO {
     appliedDate: new Date(),
     salary: "",
     location: "",
+    jobUrl: "",
     notes: "",
   };
 }

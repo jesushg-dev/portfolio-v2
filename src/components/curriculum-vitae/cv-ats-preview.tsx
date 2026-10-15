@@ -33,10 +33,12 @@ function AtsRoleBlock({
   exp,
   presentLabel,
   includeRoleDates,
+  employmentTypeLabel,
 }: {
   exp: CvExperience;
   presentLabel: string;
   includeRoleDates: boolean;
+  employmentTypeLabel?: string | null;
 }) {
   const roleDates = includeRoleDates
     ? formatExperienceDateRange(
@@ -51,6 +53,7 @@ function AtsRoleBlock({
     <div className="mt-1">
       <p className="text-xs font-semibold italic">
         {exp.role}
+        {employmentTypeLabel ? ` — ${employmentTypeLabel}` : ""}
         {roleDates ? ` — ${roleDates}` : ""}
         {exp.location ? ` — ${exp.location}` : ""}
       </p>
@@ -167,6 +170,11 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
                       exp={single}
                       presentLabel={presentLabel}
                       includeRoleDates={false}
+                      employmentTypeLabel={
+                        single.employmentType
+                          ? t(`employmentTypes.${single.employmentType}`)
+                          : null
+                      }
                     />
                   ) : (
                     <div className="space-y-2">
@@ -176,6 +184,11 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
                           exp={exp}
                           presentLabel={presentLabel}
                           includeRoleDates
+                          employmentTypeLabel={
+                            exp.employmentType
+                              ? t(`employmentTypes.${exp.employmentType}`)
+                              : null
+                          }
                         />
                       ))}
                     </div>

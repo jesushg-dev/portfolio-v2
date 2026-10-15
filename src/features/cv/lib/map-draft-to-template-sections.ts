@@ -1,9 +1,11 @@
 import type { CvImportDraft } from "./cv-import-draft";
+import { unifyConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
 import type {
   AdaptedParagraph,
   AdaptedSection,
   CvParagraph,
   CvSection,
+  LockedParagraph,
 } from "@/lib/types";
 
 function normalizeHeading(heading: string): string {
@@ -45,12 +47,6 @@ function splitTextIntoChunks(text: string, chunkCount: number): string[] {
   }
 
   return chunks;
-}
-
-function collectExperienceBullets(draft: CvImportDraft): string[] {
-  return draft.experiences.flatMap((experience) =>
-    experience.responsibilities.filter((item) => item.trim().length > 0),
-  );
 }
 
 export function collectTechnicalSkillItems(
@@ -98,11 +94,87 @@ function mapSectionParagraphs(
   };
 }
 
+function mapExperienceSection(
+  section: CvSection,
+  draft: CvImportDraft,
+  lockedParagraphs?: LockedParagraph[],
+): AdaptedSection {
+  const unifiedExperiences = unifyConsecutiveExperiencesByCompany(
+    draft.experiences,
+  );
+
+  const metaParagraphs = (lockedParagraphs ?? []).filter(
+    (lp) => lp.kind === "experience-meta",
+  );
+  const roleParagraphs = (lockedParagraphs ?? []).filter(
+    (lp) => lp.kind === "experience-role",
+  );
+
+  let buckets: CvParagraph[][] = [];
+
+  if (metaParagraphs.length > 0) {
+    buckets = metaParagraphs.map((meta, i) => {
+      const minXml = meta.paragraph.xmlIndex;
+      const nextRole = roleParagraphs[i + 1];
+      const maxXml = nextRole ? nextRole.paragraph.xmlIndex : Infinity;
+      return section.paragraphs.filter(
+        (p) => p.xmlIndex > minXml && p.xmlIndex < maxXml,
+      );
+    });
+  } else {
+    // Detect xmlIndex jumps (> 1 between bullet paragraphs)
+    let currentBucket: CvParagraph[] = [];
+    for (let i = 0; i < section.paragraphs.length; i++) {
+      const curr = section.paragraphs[i];
+      const prev = section.paragraphs[i - 1];
+      if (prev && curr.xmlIndex - prev.xmlIndex > 1) {
+        if (currentBucket.length > 0) buckets.push(currentBucket);
+        currentBucket = [curr];
+      } else {
+        currentBucket.push(curr);
+      }
+    }
+    if (currentBucket.length > 0) buckets.push(currentBucket);
+  }
+
+  // Fallback for flat single-bucket or synthetic tests without gaps
+  if (buckets.length <= 1 && unifiedExperiences.length <= 1) {
+    const experienceBullets = unifiedExperiences.flatMap((exp) =>
+      exp.responsibilities.filter((item) => item.trim().length > 0),
+    );
+    const texts = section.paragraphs.map(
+      (_, index) => experienceBullets[index] ?? "",
+    );
+    return mapSectionParagraphs(section, texts);
+  }
+
+  const textByParaId = new Map<string, string>();
+
+  buckets.forEach((bucket, expIndex) => {
+    const exp = unifiedExperiences[expIndex];
+    const resps = exp
+      ? exp.responsibilities.filter((r) => r.trim().length > 0)
+      : [];
+
+    bucket.forEach((para, slotIndex) => {
+      textByParaId.set(para.id, resps[slotIndex] ?? "");
+    });
+  });
+
+  return {
+    id: section.id,
+    paragraphs: section.paragraphs.map((paragraph) =>
+      adaptParagraphText(paragraph, textByParaId.get(paragraph.id) ?? ""),
+    ),
+  };
+}
+
 export function mapDraftToTemplateSections(
   templateSections: CvSection[],
   draft: CvImportDraft,
   softSkillTexts: string[],
   jobDescription?: string,
+  lockedParagraphs?: LockedParagraph[],
 ): AdaptedSection[] {
   const aboutChunks = splitTextIntoChunks(
     draft.header.summary ?? "",
@@ -110,7 +182,6 @@ export function mapDraftToTemplateSections(
       normalizeHeading(section.heading).includes("about"),
     )?.paragraphs.length ?? 1,
   );
-  const experienceBullets = collectExperienceBullets(draft);
   const technicalSkillItems = collectTechnicalSkillItems(draft, jobDescription);
 
   return templateSections.map((section) => {
@@ -128,10 +199,7 @@ export function mapDraftToTemplateSections(
     }
 
     if (heading.includes("experience")) {
-      const texts = section.paragraphs.map(
-        (_, index) => experienceBullets[index] ?? "",
-      );
-      return mapSectionParagraphs(section, texts);
+      return mapExperienceSection(section, draft, lockedParagraphs);
     }
 
     if (heading.includes("soft")) {

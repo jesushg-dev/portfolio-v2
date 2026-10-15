@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CvEmploymentTypeSchema } from "./employment-type";
 
 export const PARSER_VERSION = "v1";
 
@@ -20,6 +21,8 @@ export const CvImportExperienceDraftSchema = z.object({
   id: z.string(),
   company: z.string().min(1),
   role: z.string().min(1),
+  /** Employment type enum value (FULL_TIME, PART_TIME, etc.). */
+  employmentType: CvEmploymentTypeSchema.optional(),
   location: z.string().optional(),
   /** Short factual company/context blurb for ATS tailor (not printed on the CV). */
   companyBlurb: z.string().optional(),

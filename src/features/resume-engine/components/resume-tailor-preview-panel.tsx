@@ -106,13 +106,16 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
         matchAnalysis.notes)),
   );
 
-  const defaultMode: PreviewMode = hasMatch
-    ? "match"
-    : exportIsPdf
+  const defaultMode: PreviewMode =
+    exportIsPdf && hasPdf
       ? "pdf"
       : hasWord
         ? "word"
-        : "ats";
+        : hasPdf
+          ? "pdf"
+          : hasMatch
+            ? "match"
+            : "ats";
   const previewSource = `${exportIsPdf ? "pdf" : "doc"}:${primaryUrl ?? ""}`;
   const [userMode, setUserMode] = useState<PreviewMode | null>(null);
   const [modeSource, setModeSource] = useState(previewSource);
@@ -130,9 +133,41 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
     hasMatch,
   );
 
-  const openUrl = (url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+  const triggerDownload = async (url: string, targetFilename: string) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Download request failed");
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = targetFilename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    } catch {
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = targetFilename;
+      link.target = "_self";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
+
+  const docxFilename = fileName
+    ? fileName.toLowerCase().endsWith(".docx")
+      ? fileName
+      : `${fileName.replace(/\.[^/.]+$/, "")}.docx`
+    : "tailored-cv.docx";
+
+  const pdfFilename = fileName
+    ? fileName.toLowerCase().endsWith(".pdf")
+      ? fileName
+      : `${fileName.replace(/\.[^/.]+$/, "")}.pdf`
+    : "tailored-cv.pdf";
 
   const previewLabel =
     mode === "pdf"
@@ -190,7 +225,18 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
             size="sm"
             variant={mode === "match" ? "default" : "outline"}
             aria-pressed={mode === "match"}
-            onClick={() => setUserMode("match")}
+            onClick={() =>
+              setUserMode((prev) => {
+                const current = prev ?? defaultMode;
+                return current === "match"
+                  ? hasWord
+                    ? "word"
+                    : hasPdf
+                      ? "pdf"
+                      : "ats"
+                  : "match";
+              })
+            }
           >
             <ChartColumn className="size-3.5" aria-hidden />
             {aiScore != null
@@ -199,40 +245,71 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
           </Button>
         ) : null}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                disabled={!hasWord && !hasPdf}
-              >
-                <Download className="size-3.5" aria-hidden />
-                {t("tailorDownloadMenu")}
-                <ChevronDown className="size-3.5" aria-hidden />
-              </Button>
-            }
-          />
-          <DropdownMenuContent align="start" className="min-w-44">
-            <DropdownMenuItem
-              disabled={!hasWord}
+        {hasWord && hasPdf ? (
+          <div className="inline-flex rounded-md shadow-xs">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="rounded-r-none border-r-0"
               onClick={() => {
-                if (wordUrl) openUrl(wordUrl);
+                if (wordUrl) void triggerDownload(wordUrl, docxFilename);
               }}
             >
+              <Download className="mr-1.5 size-3.5" aria-hidden />
               {t("tailorDownloadDocx")}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={!hasPdf}
-              onClick={() => {
-                if (pdfUrl) openUrl(pdfUrl);
-              }}
-            >
-              {t("tailorDownloadPdf")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="rounded-l-none px-2"
+                    aria-label={t("tailorDownloadMenu")}
+                  >
+                    <ChevronDown className="size-3.5" aria-hidden />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end" className="min-w-44">
+                <DropdownMenuItem
+                  onClick={() => {
+                    if (wordUrl) void triggerDownload(wordUrl, docxFilename);
+                  }}
+                >
+                  <Download className="mr-1.5 size-3.5" aria-hidden />
+                  {t("tailorDownloadDocx")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    if (pdfUrl) void triggerDownload(pdfUrl, pdfFilename);
+                  }}
+                >
+                  <Download className="mr-1.5 size-3.5" aria-hidden />
+                  {t("tailorDownloadPdf")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ) : (
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            disabled={!hasWord && !hasPdf}
+            onClick={() => {
+              if (wordUrl) void triggerDownload(wordUrl, docxFilename);
+              else if (pdfUrl) void triggerDownload(pdfUrl, pdfFilename);
+            }}
+          >
+            <Download className="mr-1.5 size-3.5" aria-hidden />
+            {hasPdf && !hasWord
+              ? t("tailorDownloadPdf")
+              : t("tailorDownloadDocx")}
+          </Button>
+        )}
 
         {actions}
       </div>
