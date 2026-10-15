@@ -603,8 +603,28 @@
       "title": "Mi recorrido",
       "subtitle": "Una línea de tiempo de trabajo, estudio y crecimiento",
       "empty": "Aún no hay entradas en la línea de tiempo.",
+      "emptyFilter": "No hay hitos que coincidan con este filtro.",
       "metaTitle": "Línea de tiempo",
-      "metaDescription": "Explora mi trayectoria profesional y académica a lo largo del tiempo."
+      "metaDescription": "Explora mi trayectoria profesional y académica a lo largo del tiempo.",
+      "stats": "Desde {year} · {milestones} hitos · {workplaces} centros de trabajo",
+      "filters": {
+        "all": "Todos",
+        "work": "Experiencia laboral",
+        "learning": "Estudio y formación",
+        "ariaLabel": "Filtrar hitos de la línea de tiempo"
+      },
+      "categories": {
+        "WORK": "Trabajo",
+        "STUDY": "Estudio",
+        "COURSE": "Curso"
+      },
+      "roles": "Progresión",
+      "present": "Presente",
+      "viewCv": "Ver CV completo",
+      "showingAll": "Mostrando todos los hitos.",
+      "showingFiltered": "Mostrando {count} hitos.",
+      "imageOf": "Imagen {current} de {total}",
+      "techAria": "Tecnologías"
     },
     "about": {
       "title": "Enfoque de Ingeniería",
@@ -3242,6 +3262,7 @@
         "timelineTab": "Timeline",
         "detailsTab": "Detalles",
         "tailorTab": "Personalizar CV",
+        "emailTab": "Correos",
         "jobDescription": "Descripción del puesto",
         "salary": "Salario",
         "location": "Ubicación",
@@ -3407,6 +3428,25 @@
         "attachmentInvalidType": "Solo se permiten archivos .doc, .docx o .pdf",
         "attachmentTooLarge": "El archivo debe pesar 8 MB o menos",
         "needCv": "Primero personaliza un CV para esta postulación, o sube un .docx/.pdf para adjuntar.",
+        "trackOpensLabel": "Medir cargas del correo",
+        "trackOpensHint": "Si lo activas, el correo incluirá un aviso visible para el destinatario. Las cargas son aproximadas y no confirman que se haya leído el CV.",
+        "historyTitle": "Correos enviados",
+        "historyTab": "Correos",
+        "refreshHistory": "Actualizar",
+        "trackingApproximation": "Los clientes pueden bloquear o almacenar en caché imágenes, y los proxies pueden cargarlas automáticamente. Estos datos no confirman que una persona haya leído el correo o el CV.",
+        "historyLoading": "Cargando historial de correos...",
+        "historyError": "No se pudo cargar el historial de correos.",
+        "historyDateUnavailable": "Fecha no disponible",
+        "trackingFirstDetected": "Primera carga detectada",
+        "trackingLastDetected": "Última carga detectada",
+        "trackingNotDetected": "Aún no detectada",
+        "trackingTotalLoads": "Cargas totales de imagen",
+        "trackingDisabledForEmail": "Rastreo desactivado para este correo",
+        "viewOpenEvents": "Ver detalle de aperturas ({count})",
+        "hideOpenEvents": "Ocultar detalle",
+        "openEventItem": "Apertura #{index}",
+        "proxyBadge": "Proxy / Caché",
+        "historyEmpty": "Todavía no se han enviado correos desde esta postulación.",
         "noAi": "No hay proveedor de IA configurado. Añade una API key para generar el borrador.",
         "noResend": "Configura Resend en Integraciones para enviar desde tu dominio."
       },
@@ -3855,10 +3895,10 @@
     "privacy": {
       "title": "Política de privacidad",
       "metaTitle": "Política de privacidad",
-      "metaDescription": "Cómo tratamos tus datos, incluida la medición anónima de audiencia y las credenciales de Spotify.",
+      "metaDescription": "Cómo tratamos tus datos, incluida la medición anónima de audiencia, la medición opcional de correos y las credenciales de Spotify.",
       "subtitle": "Cómo tratamos tus datos",
       "updatedAt": "Última actualización: septiembre de 2026",
-      "intro": "Esta plataforma de portafolios guarda solo los datos necesarios para ofrecer sus funciones. Esta página explica la medición anónima de audiencia en páginas públicas y qué recopilamos si conectas Spotify.",
+      "intro": "Esta plataforma de portafolios guarda solo los datos necesarios para ofrecer sus funciones. Esta página explica la medición anónima de audiencia en páginas públicas, la medición opcional de correos y qué recopilamos si conectas Spotify.",
       "spotify": {
         "title": "Integración con Spotify",
         "intro": "Si conectas Spotify en el panel de administración, guardamos las credenciales de tu propia app de Spotify Developer para que el widget Now Playing muestre tu reproducción en tu portafolio público.",
@@ -3883,6 +3923,10 @@
         "purpose": "Usamos estos agregados solo para mostrar stats en /estadisticas y en el admin del portafolio. No se venden ni se comparten con proveedores de analítica.",
         "optOut": "Si tu navegador envía Do Not Track o Global Privacy Control, omitimos la medición por completo.",
         "retention": "Los agregados de más de 13 meses se eliminan."
+      },
+      "emailMeasurement": {
+        "title": "Medición opcional de correos",
+        "intro": "Al enviar un CV desde Job Tracker, quien lo envía puede elegir incluir una imagen de seguimiento. Si la activa, el correo muestra un aviso visible al destinatario. Las cargas son aproximadas y no confirman que alguien haya leído el correo o el CV; los clientes pueden bloquear o almacenar en caché las imágenes y los proxies pueden cargarlas automáticamente. No guardamos la dirección IP ni el user-agent del destinatario para esta medición."
       }
     }
   },

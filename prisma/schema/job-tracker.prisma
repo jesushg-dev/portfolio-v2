@@ -15,34 +15,35 @@ model Company {
 }
 
 model Application {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  position    String
-  description String?
-  companyId   String   @db.ObjectId
-  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  status      String   // "APPLIED" | "INTERVIEW" | "OFFER" | "GHOSTED" | "REJECTED" | "HIRED"
-  appliedDate DateTime
-  notes       String?
-  salary      String?
-  location    String?
-  jobUrl      String?
-  coverLetterSubject String?
-  coverLetterBody    String?
+  id                     String    @id @default(auto()) @map("_id") @db.ObjectId
+  position               String
+  description            String?
+  companyId              String    @db.ObjectId
+  company                Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  status                 String // "APPLIED" | "INTERVIEW" | "OFFER" | "GHOSTED" | "REJECTED" | "HIRED"
+  appliedDate            DateTime
+  notes                  String?
+  salary                 String?
+  location               String?
+  jobUrl                 String?
+  coverLetterSubject     String?
+  coverLetterBody        String?
   ghostNudgeSnoozedUntil DateTime?
-  
+
   // cvFile embedded as a composite type
-  cvFile      CvFile?
+  cvFile CvFile?
 
-  resumeExports ResumeExport[]
+  resumeExports          ResumeExport[]
   interviewPrepQuestions InterviewPrepQuestion[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId      String   @db.ObjectId
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  events      ApplicationEvent[]
-  documents   Document[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  events    ApplicationEvent[]
+  documents Document[]
+  emails    ApplicationEmail[]
 }
 
 type CvFile {
@@ -52,55 +53,55 @@ type CvFile {
 }
 
 model ApplicationEvent {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  applicationId String   @db.ObjectId
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  type          String   // "INTERVIEW" | "TECHNICAL_TEST" | "QUESTIONNAIRE" | "PHONE_CALL" | "MEETING" | "FOLLOW_UP"
-  title         String
-  description   String?
-  scheduledDate DateTime
-  duration      Int?     // in minutes
-  location      String?
-  isVirtual     Boolean?
-  meetingLink   String?
-  notes         String?
-  completed     Boolean  @default(false)
-  completedAt   DateTime?
-  outcome       String?  // "POSITIVE" | "NEGATIVE" | "NEUTRAL"
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  applicationId  String      @db.ObjectId
+  application    Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type           String // "INTERVIEW" | "TECHNICAL_TEST" | "QUESTIONNAIRE" | "PHONE_CALL" | "MEETING" | "FOLLOW_UP"
+  title          String
+  description    String?
+  scheduledDate  DateTime
+  duration       Int? // in minutes
+  location       String?
+  isVirtual      Boolean?
+  meetingLink    String?
+  notes          String?
+  completed      Boolean     @default(false)
+  completedAt    DateTime?
+  outcome        String? // "POSITIVE" | "NEGATIVE" | "NEUTRAL"
   /// Google Calendar event id when synced (BYO OAuth connection).
-  googleEventId   String?
-  googleEtag      String?
-  googleSyncedAt  DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  userId        String   @db.ObjectId
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  googleEventId  String?
+  googleEtag     String?
+  googleSyncedAt DateTime?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  userId         String      @db.ObjectId
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   interviewPrepQuestions InterviewPrepQuestion[]
 }
 
 model Document {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
   name          String
   type          String
   url           String
-  applicationId String   @db.ObjectId
+  applicationId String      @db.ObjectId
   application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  uploadedAt    DateTime @default(now())
-  userId        String   @db.ObjectId
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  uploadedAt    DateTime    @default(now())
+  userId        String      @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model InterviewPrepQuestion {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId         String   @db.ObjectId
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  applicationId  String   @db.ObjectId
-  application    Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  applicationId String      @db.ObjectId
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
-  eventId        String   @db.ObjectId
-  event          ApplicationEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId String           @db.ObjectId
+  event   ApplicationEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   category       String
   question       String
@@ -112,10 +113,46 @@ model InterviewPrepQuestion {
   locale         String
   provider       String
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([eventId, createdAt])
   @@index([applicationId])
   @@index([userId, createdAt])
+}
+
+model ApplicationEmail {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  applicationId     String      @db.ObjectId
+  application       Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  userId            String      @db.ObjectId
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipientEmail    String
+  subject           String
+  attachmentName    String
+  trackingEnabled   Boolean     @default(false)
+  trackingTokenHash String?
+  openCount         Int         @default(0)
+  firstOpenedAt     DateTime?
+  lastOpenedAt      DateTime?
+  idempotencyKey    String      @unique
+  sentAt            DateTime?
+  createdAt         DateTime    @default(now())
+
+  opens ApplicationEmailOpen[]
+
+  @@index([applicationId, sentAt])
+  @@index([userId, applicationId])
+  @@index([trackingTokenHash])
+}
+
+model ApplicationEmailOpen {
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  emailId   String           @db.ObjectId
+  email     ApplicationEmail @relation(fields: [emailId], references: [id], onDelete: Cascade)
+  openedAt  DateTime         @default(now())
+  userAgent String?
+  ipAddress String?
+
+  @@index([emailId, openedAt])
 }

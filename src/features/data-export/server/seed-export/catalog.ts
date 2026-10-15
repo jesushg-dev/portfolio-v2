@@ -155,6 +155,12 @@ export interface TimelineItemSeedRecord {
   endDate?: string;
   current: boolean;
   images?: string[];
+  technologies?: string[];
+  roles?: {
+    title: string;
+    startDate: string;
+    endDate?: string;
+  }[];
 }
 
 export interface SoftSkillsSeedRecord {

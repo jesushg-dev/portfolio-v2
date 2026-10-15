@@ -17,6 +17,30 @@ const baseItem: TimelineItemWithTranslations = {
   current: true,
   order: 0,
   images: ["https://example.com/photo.jpg"],
+  technologies: ["React", "TypeScript"],
+  TimelineItemSkill: [
+    {
+      skill: {
+        id: "s1",
+        title: "React",
+        image: "https://cdn.simpleicons.org/react",
+      },
+    },
+    {
+      skill: {
+        id: "s2",
+        title: "TypeScript",
+        image: "https://cdn.simpleicons.org/typescript",
+      },
+    },
+  ],
+  roles: [
+    {
+      title: "Team Lead",
+      startDate: "2024-11",
+      endDate: "2025-03",
+    },
+  ],
   createdAt: new Date(),
   updatedAt: new Date(),
   TimelineItemTranslation: [
@@ -75,6 +99,26 @@ describe("mapTimelineItemToPublic", () => {
     expect(item.organization).toBe("Acme");
     expect(item.description).toBe("Construí apps web");
     expect(item.images).toEqual(["https://example.com/photo.jpg"]);
+    expect(item.technologies).toEqual(["React", "TypeScript"]);
+    expect(item.skills).toEqual([
+      {
+        id: "s1",
+        title: "React",
+        image: "https://cdn.simpleicons.org/react",
+      },
+      {
+        id: "s2",
+        title: "TypeScript",
+        image: "https://cdn.simpleicons.org/typescript",
+      },
+    ]);
+    expect(item.roles).toEqual([
+      {
+        title: "Team Lead",
+        startDate: "2024-11",
+        endDate: "2025-03",
+      },
+    ]);
   });
 
   it("falls back to default locale", () => {

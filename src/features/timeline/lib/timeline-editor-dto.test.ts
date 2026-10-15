@@ -23,6 +23,8 @@ const mockTimelineItem: TimelineItemWithTranslations = {
   endDate: new Date("2022-06-30"),
   current: false,
   images: ["https://example.com/img1.jpg"],
+  technologies: [],
+  roles: [],
   userId: "user-1",
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2022-06-30"),

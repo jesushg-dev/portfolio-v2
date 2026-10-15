@@ -603,8 +603,28 @@
       "title": "My Journey",
       "subtitle": "A timeline of work, study, and growth",
       "empty": "No timeline entries yet.",
+      "emptyFilter": "No milestones match this filter.",
       "metaTitle": "Timeline",
-      "metaDescription": "Explore my professional and academic journey over time."
+      "metaDescription": "Explore my professional and academic journey over time.",
+      "stats": "Since {year} · {milestones} milestones · {workplaces} workplaces",
+      "filters": {
+        "all": "All",
+        "work": "Work",
+        "learning": "Study & learning",
+        "ariaLabel": "Filter timeline milestones"
+      },
+      "categories": {
+        "WORK": "Work",
+        "STUDY": "Study",
+        "COURSE": "Course"
+      },
+      "roles": "Progression",
+      "present": "Present",
+      "viewCv": "View full CV",
+      "showingAll": "Showing every milestone.",
+      "showingFiltered": "Showing {count} milestones.",
+      "imageOf": "Image {current} of {total}",
+      "techAria": "Technologies"
     },
     "about": {
       "subtitle": "How I engineer",
@@ -3315,6 +3335,7 @@
         "timelineTab": "Timeline",
         "detailsTab": "Details",
         "tailorTab": "Tailor CV",
+        "emailTab": "Emails",
         "jobDescription": "Job description",
         "salary": "Salary",
         "location": "Location",
@@ -3480,6 +3501,25 @@
         "attachmentInvalidType": "Only .doc, .docx, or .pdf files are allowed",
         "attachmentTooLarge": "File must be 8 MB or smaller",
         "needCv": "Tailor a CV for this application first, or upload a .docx/.pdf to attach.",
+        "trackOpensLabel": "Measure email loads",
+        "trackOpensHint": "When enabled, the email will include a visible notice for the recipient. Loads are approximate and do not confirm that the CV was read.",
+        "historyTitle": "Sent emails",
+        "historyTab": "Emails",
+        "refreshHistory": "Refresh",
+        "trackingApproximation": "Email clients may block or cache images, and proxies may load them automatically. These measurements do not confirm that a person read the email or CV.",
+        "historyLoading": "Loading email history...",
+        "historyError": "Could not load email history.",
+        "historyDateUnavailable": "Date unavailable",
+        "trackingFirstDetected": "First detected load",
+        "trackingLastDetected": "Last detected load",
+        "trackingNotDetected": "Not detected yet",
+        "trackingTotalLoads": "Total image loads",
+        "trackingDisabledForEmail": "Tracking was disabled for this email",
+        "viewOpenEvents": "View open events ({count})",
+        "hideOpenEvents": "Hide details",
+        "openEventItem": "Open #{index}",
+        "proxyBadge": "Proxy / Cache",
+        "historyEmpty": "No emails have been sent from this application yet.",
         "noAi": "No AI provider is configured. Add an API key to draft the email.",
         "noResend": "Configure Resend in Integrations to send from your domain."
       },
@@ -3855,10 +3895,10 @@
     "privacy": {
       "title": "Privacy Policy",
       "metaTitle": "Privacy Policy",
-      "metaDescription": "How we handle your data, including anonymous audience measurement and Spotify credentials.",
+      "metaDescription": "How we handle your data, including anonymous audience measurement, optional email measurement, and Spotify credentials.",
       "subtitle": "How we handle your data",
       "updatedAt": "Last updated: September 2026",
-      "intro": "This portfolio platform stores only the data needed to provide its features. This page explains anonymous audience measurement on public pages and what we collect if you connect Spotify.",
+      "intro": "This portfolio platform stores only the data needed to provide its features. This page explains anonymous audience measurement on public pages, optional email measurement, and what we collect if you connect Spotify.",
       "spotify": {
         "title": "Spotify integration",
         "intro": "If you connect Spotify in the admin panel, we store credentials for your own Spotify developer app so the Now Playing widget can show playback on your public portfolio.",
@@ -3883,6 +3923,10 @@
         "purpose": "We use these aggregates only to show stats on the public /stats page and in the portfolio admin. Data is not sold or shared with analytics vendors.",
         "optOut": "If your browser sends Do Not Track or Global Privacy Control, we skip the measurement entirely.",
         "retention": "Aggregates older than 13 months are deleted."
+      },
+      "emailMeasurement": {
+        "title": "Optional email measurement",
+        "intro": "When sending a CV through the Job Tracker, the sender may choose to include a tracking image. If enabled, the email contains a visible notice to the recipient. Image-load counts are approximate and do not confirm that a person read the email or CV; email clients may block or cache images, and proxies may load them automatically. We do not store the recipient's IP address or user-agent for this measurement."
       }
     }
   },

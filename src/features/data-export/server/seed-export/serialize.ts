@@ -143,6 +143,12 @@ export interface TimelineExportRow {
   endDate: Date | string | null;
   current: boolean;
   images: string[];
+  technologies?: string[];
+  roles?: {
+    title: string;
+    startDate: string;
+    endDate?: string | null;
+  }[];
   TimelineItemTranslation: (TranslationRow & {
     title: string;
     description: string;
@@ -624,6 +630,18 @@ export function serializeTimeline(
       startDate: toDateOnly(item.startDate),
       current: item.current,
       images: item.images.filter((image) => typeof image === "string"),
+      ...(item.technologies !== undefined
+        ? { technologies: item.technologies }
+        : {}),
+      ...(item.roles && item.roles.length > 0
+        ? {
+            roles: item.roles.map((role) => ({
+              title: role.title,
+              startDate: role.startDate,
+              ...(role.endDate ? { endDate: role.endDate } : {}),
+            })),
+          }
+        : {}),
     };
     if (item.endDate) {
       record.endDate = toDateOnly(item.endDate);

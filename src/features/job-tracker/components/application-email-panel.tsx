@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,6 +15,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { FormDialogContent } from "@/components/shared/form-dialog-content";
 import { useRouter } from "@/i18n/routing";
 import { fileToBase64 } from "@/lib/uploadthing/file-to-base64";
+import type { Locale } from "@/i18n/config";
 
 interface ApplicationEmailDialogProps {
   open: boolean;
@@ -21,6 +23,7 @@ interface ApplicationEmailDialogProps {
   applicationId: string;
   hasCvFile: boolean;
   cvFileName?: string | null;
+  locale: Locale;
 }
 
 interface OverrideAttachment {
@@ -34,6 +37,7 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
   applicationId,
   hasCvFile,
   cvFileName,
+  locale,
 }) => {
   const t = useTranslations("admin.jobTracker.email");
   const utils = api.useUtils();
@@ -49,13 +53,21 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [notes, setNotes] = useState<string | null>(null);
-  const [drafted, setDrafted] = useState(false);
+  const [drafted, setDrafted] = useState(true);
+  const [trackOpens, setTrackOpens] = useState(false);
   const [overrideAttachment, setOverrideAttachment] =
     useState<OverrideAttachment | null>(null);
 
   const draftMutation = api.jobTrackerAdmin.draftApplicationEmail.useMutation();
   const sendMutation = api.jobTrackerAdmin.sendApplicationEmail.useMutation();
   const uploadFile = api.integrationsAdmin.uploadFile.useMutation();
+  const handleOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (!nextOpen) setTrackOpens(false);
+      onOpenChange(nextOpen);
+    },
+    [onOpenChange],
+  );
 
   const activeAttachmentName =
     overrideAttachment?.name ?? cvFileName ?? "CV.docx";
@@ -139,6 +151,8 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
         subject: subject.trim(),
         body: body.trim(),
         recipientName: recipientName.trim() || undefined,
+        trackOpens,
+        locale,
         ...(overrideAttachment
           ? {
               attachmentUrl: overrideAttachment.url,
@@ -154,6 +168,9 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
               id: applicationId,
             }),
             utils.jobTrackerAdmin.getApplications.invalidate(),
+            utils.jobTrackerAdmin.getApplicationEmailHistory.invalidate({
+              applicationId,
+            }),
           ]).then(() => {
             router.refresh();
             onOpenChange(false);
@@ -175,8 +192,11 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
     sendMutation,
     subject,
     t,
+    trackOpens,
+    locale,
     toEmail,
     utils.jobTrackerAdmin.getApplicationById,
+    utils.jobTrackerAdmin.getApplicationEmailHistory,
     utils.jobTrackerAdmin.getApplications,
   ]);
 
@@ -189,7 +209,7 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
     !uploadFile.isPending;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <FormDialogContent
         title={t("title")}
         description={t("description")}
@@ -334,6 +354,23 @@ export const ApplicationEmailDialog: FC<ApplicationEmailDialogProps> = ({
                   rows={8}
                   className="resize-y text-sm"
                 />
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="app-email-track-opens"
+                    checked={trackOpens}
+                    onCheckedChange={(checked) =>
+                      setTrackOpens(checked === true)
+                    }
+                  />
+                  <Label htmlFor="app-email-track-opens">
+                    {t("trackOpensLabel")}
+                  </Label>
+                </div>
+                <p className="text-muted-foreground text-xs">
+                  {t("trackOpensHint")}
+                </p>
               </div>
             </div>
           ) : (

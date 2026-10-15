@@ -7,7 +7,7 @@ export { generateMetadata } from "./metadata";
 
 interface ProjectsPageProps {
   params: Promise<{ locale: Locale }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export default async function ProjectsPage({

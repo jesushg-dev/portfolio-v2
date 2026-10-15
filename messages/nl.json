@@ -603,8 +603,28 @@
       "title": "Mijn reis",
       "subtitle": "Een tijdlijn van werk, studie en groei",
       "empty": "Nog geen tijdlijnitems.",
+      "emptyFilter": "Geen mijlpalen gevonden voor deze filter.",
       "metaTitle": "Tijdlijn",
-      "metaDescription": "Ontdek mijn professionele en academische reis door de tijd."
+      "metaDescription": "Ontdek mijn professionele en academische reis door de tijd.",
+      "stats": "Sinds {year} · {milestones} mijlpalen · {workplaces} werkplekken",
+      "filters": {
+        "all": "Alles",
+        "work": "Werkervaring",
+        "learning": "Studie & cursussen",
+        "ariaLabel": "Filter tijdlijnmijlpalen"
+      },
+      "categories": {
+        "WORK": "Werk",
+        "STUDY": "Studie",
+        "COURSE": "Cursus"
+      },
+      "roles": "Carrièreprogressie",
+      "present": "Heden",
+      "viewCv": "Volledig CV bekijken",
+      "showingAll": "Alle mijlpalen worden weergegeven.",
+      "showingFiltered": "{count} mijlpalen weergegeven.",
+      "imageOf": "Afbeelding {current} van {total}",
+      "techAria": "Technologieën"
     },
     "about": {
       "title": "Engineering Aanpak",
@@ -3242,6 +3262,7 @@
         "timelineTab": "Tijdlijn",
         "detailsTab": "Details",
         "tailorTab": "CV aanpassen",
+        "emailTab": "E-mails",
         "jobDescription": "Functieomschrijving",
         "salary": "Salaris",
         "location": "Locatie",
@@ -3407,6 +3428,25 @@
         "attachmentInvalidType": "Alleen .doc, .docx of .pdf bestanden zijn toegestaan",
         "attachmentTooLarge": "Bestand mag maximaal 8 MB zijn",
         "needCv": "Maak eerst een CV op maat, of upload een .docx/.pdf om bij te voegen.",
+        "trackOpensLabel": "E-mailladingen meten",
+        "trackOpensHint": "Bij inschakeling bevat de e-mail een zichtbare melding voor de ontvanger. De tellingen zijn schattingen en bevestigen niet dat het cv is gelezen.",
+        "historyTitle": "Verzonden e-mails",
+        "historyTab": "E-mails",
+        "refreshHistory": "Vernieuwen",
+        "trackingApproximation": "E-mailclients kunnen afbeeldingen blokkeren of cachen, en proxies kunnen ze automatisch laden. Deze metingen bevestigen niet dat iemand de e-mail of het cv heeft gelezen.",
+        "historyLoading": "E-mailgeschiedenis laden...",
+        "historyError": "E-mailgeschiedenis kon niet worden geladen.",
+        "historyDateUnavailable": "Datum niet beschikbaar",
+        "trackingFirstDetected": "Eerste gedetecteerde lading",
+        "trackingLastDetected": "Laatst gedetecteerde lading",
+        "trackingNotDetected": "Nog niet gedetecteerd",
+        "trackingTotalLoads": "Totaal aantal afbeeldingsladingen",
+        "trackingDisabledForEmail": "Tracking was uitgeschakeld voor deze e-mail",
+        "viewOpenEvents": "Bekijk openingsdetails ({count})",
+        "hideOpenEvents": "Verberg details",
+        "openEventItem": "Opening #{index}",
+        "proxyBadge": "Proxy / Cache",
+        "historyEmpty": "Er zijn nog geen e-mails verstuurd vanuit deze sollicitatie.",
         "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een concept te maken.",
         "noResend": "Configureer Resend in Integraties om vanaf je domein te versturen."
       },
@@ -3855,10 +3895,10 @@
     "privacy": {
       "title": "Privacybeleid",
       "metaTitle": "Privacybeleid",
-      "metaDescription": "Hoe wij met je gegevens omgaan, inclusief anonieme audience measurement en Spotify-credentials.",
+      "metaDescription": "Hoe wij met je gegevens omgaan, inclusief anonieme audience measurement, optionele e-mailmeting en Spotify-credentials.",
       "subtitle": "Hoe wij met je gegevens omgaan",
       "updatedAt": "Laatst bijgewerkt: september 2026",
-      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt anonieme audience measurement op publieke pagina's uit, en wat we verzamelen als je Spotify koppelt.",
+      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt anonieme audience measurement op publieke pagina's, optionele e-mailmeting en wat we verzamelen als je Spotify koppelt uit.",
       "spotify": {
         "title": "Spotify-integratie",
         "intro": "Als je Spotify koppelt in het adminpaneel, slaan we de credentials van je eigen Spotify Developer-app op zodat de Now Playing-widget je afspeelstatus op je openbare portfolio kan tonen.",
@@ -3883,6 +3923,10 @@
         "purpose": "We gebruiken deze aggregaten alleen voor de publieke /statistieken-pagina en het portfolio-admin. Data wordt niet verkocht of gedeeld met analytics-leveranciers.",
         "optOut": "Als je browser Do Not Track of Global Privacy Control stuurt, slaan we de meting volledig over.",
         "retention": "Aggregaten ouder dan 13 maanden worden verwijderd."
+      },
+      "emailMeasurement": {
+        "title": "Optionele e-mailmeting",
+        "intro": "Bij het versturen van een cv via Job Tracker kan de verzender ervoor kiezen een trackingafbeelding toe te voegen. Indien ingeschakeld, bevat de e-mail een zichtbare melding voor de ontvanger. De aantallen afbeeldingsladingen zijn schattingen en bevestigen niet dat iemand de e-mail of het cv heeft gelezen; e-mailclients kunnen afbeeldingen blokkeren of cachen en proxies kunnen ze automatisch laden. We bewaren voor deze meting geen IP-adres of user-agent van de ontvanger."
       }
     }
   },

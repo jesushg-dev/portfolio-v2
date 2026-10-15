@@ -36,6 +36,8 @@ LinkedIn, BambooHR, and Get on Board job URLs can be imported via `importJobFrom
 
 Outbound application mail uses **tenant Resend** (`getPortfolioEmailClient`). Cover-letter / email drafts use **tenant AI** keys. Missing credentials surface as UI errors pointing at Admin → Credentials — no platform `.env` fallback.
 
+The email dialog's **Sent emails** history lists each message separately. Open measurement is opt-in and off by default. When enabled, the HTML email contains a unique first-party tracking image and a visible notice to the recipient; the tracker records approximate image-load counts and the first detected load, not whether the CV was read. Email clients can block/cache images and privacy proxies can fetch them automatically. Do Not Track and Global Privacy Control requests are not counted. The tracker stores a hash of its opaque token and does not store request IP addresses or user-agent strings.
+
 ## Google Calendar
 
 Incomplete events (interviews, meetings, …) sync to the tenant’s calendar when Google Calendar is connected. Events created already `completed` are not pushed. See [`tenant-credentials.md`](./tenant-credentials.md) (Google Calendar section).

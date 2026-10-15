@@ -18,6 +18,9 @@ const mockItems: TimelinePublicItem[] = [
     endDate: null,
     current: true,
     images: [],
+    technologies: [],
+    skills: [],
+    roles: [],
     order: 1,
   },
   {
@@ -33,6 +36,9 @@ const mockItems: TimelinePublicItem[] = [
     endDate: "2024-01-01",
     current: false,
     images: [],
+    technologies: [],
+    skills: [],
+    roles: [],
     order: 2,
   },
 ];

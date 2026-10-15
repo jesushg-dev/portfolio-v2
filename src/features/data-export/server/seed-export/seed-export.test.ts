@@ -157,6 +157,8 @@ function hydrateTimeline(seeds: TimelineItemSeedRecord[]): TimelineExportRow[] {
     endDate: seed.endDate ? new Date(`${seed.endDate}T00:00:00.000Z`) : null,
     current: seed.current,
     images: seed.images ?? [],
+    technologies: seed.technologies ?? [],
+    roles: seed.roles ?? [],
     TimelineItemTranslation: (["es", "en", "nl"] as const).map((locale) => ({
       appLanguageId: locale,
       title: seed.title[locale] ?? "",

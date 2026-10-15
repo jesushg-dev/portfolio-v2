@@ -17,6 +17,7 @@ import {
   flip,
   shift,
   arrow,
+  type Placement,
 } from "@floating-ui/react";
 
 import { cn } from "@/lib/utils";
@@ -64,6 +65,8 @@ export interface ActionHintProps {
   hidden?: boolean;
   /** Custom leading icon. */
   icon?: ReactNode;
+  /** Floating placement preference (e.g. top, top-start). */
+  placement?: Placement;
   /** Class name for the anchor wrapper. */
   className?: string;
   /** Class name for the tooltip bubble. */
@@ -80,6 +83,7 @@ export function ActionHint({
   persistDismissal = true,
   hidden = false,
   icon,
+  placement: preferredPlacement = "top",
   className,
   bubbleClassName,
 }: ActionHintProps) {
@@ -119,7 +123,7 @@ export function ActionHint({
 
   const { refs, floatingStyles, placement, middlewareData } = useFloating({
     open: showHint,
-    placement: "top",
+    placement: preferredPlacement,
     strategy: "fixed",
     whileElementsMounted: (reference, floating, update) =>
       autoUpdate(reference, floating, update, {
@@ -215,7 +219,7 @@ export function ActionHint({
                   : { type: "spring", stiffness: 420, damping: 28 }
               }
               className={cn(
-                "bg-popover/95 text-popover-foreground border-border pointer-events-auto relative flex max-w-[min(22rem,calc(100vw-2rem))] items-center gap-2.5 rounded-xl border py-2.5 pr-10 pl-3.5 text-xs leading-snug shadow-xl backdrop-blur-md sm:text-sm",
+                "bg-popover/95 text-popover-foreground border-border pointer-events-auto relative flex max-w-[min(18rem,calc(100vw-2rem))] items-center gap-2.5 rounded-xl border py-2.5 pr-10 pl-3.5 text-xs leading-snug shadow-xl backdrop-blur-md sm:text-sm",
                 bubbleClassName,
               )}
             >

@@ -19,6 +19,7 @@ import {
   Globe,
   Loader2,
   Mail,
+  MailOpen,
   MapPin,
   Pencil,
   Sparkles,
@@ -38,6 +39,7 @@ import {
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import ScrollToTop from "@/components/custom-ui/scroll-to-top";
 import { ApplicationTimeline } from "@/features/job-tracker/components/application-timeline";
+import { ApplicationEmailHistory } from "@/features/job-tracker/components/application-email-history";
 import { ApplicationEmailDialog } from "@/features/job-tracker/components/application-email-panel";
 import { ApplicationCoverLetterDialog } from "@/features/job-tracker/components/application-cover-letter-panel";
 import { ResumeTailorWorkflow } from "@/features/resume-engine/components/resume-tailor-workflow";
@@ -49,12 +51,12 @@ import { isSuggestedGhost } from "@/features/job-tracker/lib/stale-application";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
-type RightPanelTab = "timeline" | "tailor";
+type RightPanelTab = "timeline" | "tailor" | "emails";
 
 interface ApplicationDetailViewProps {
   application: ApplicationDetail;
   locale: Locale;
-  /** Optional deep-link target (`?tab=timeline|tailor`). */
+  /** Optional deep-link target for a workspace tab. */
   defaultTab?: "details" | RightPanelTab;
 }
 
@@ -85,19 +87,32 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
       icon: Sparkles,
       labelKey: "detail.tailorTab" as const,
     };
+    const emailTabItem = {
+      id: "emails" as const,
+      icon: MailOpen,
+      labelKey: "detail.emailTab" as const,
+    };
     return shouldPrioritizeTailor
-      ? [tailorTabItem, timelineTabItem]
-      : [timelineTabItem, tailorTabItem];
+      ? [tailorTabItem, timelineTabItem, emailTabItem]
+      : [timelineTabItem, tailorTabItem, emailTabItem];
   }, [shouldPrioritizeTailor]);
 
   const [rightTab, setRightTab] = useState<RightPanelTab>(() => {
-    if (defaultTab === "tailor" || defaultTab === "timeline") {
+    if (
+      defaultTab === "tailor" ||
+      defaultTab === "timeline" ||
+      defaultTab === "emails"
+    ) {
       return defaultTab;
     }
     return shouldPrioritizeTailor ? "tailor" : "timeline";
   });
   const [mobileTab, setMobileTab] = useState<"details" | RightPanelTab>(() => {
-    if (defaultTab === "tailor" || defaultTab === "timeline") {
+    if (
+      defaultTab === "tailor" ||
+      defaultTab === "timeline" ||
+      defaultTab === "emails"
+    ) {
       return defaultTab;
     }
     return shouldPrioritizeTailor ? "tailor" : "details";
@@ -217,7 +232,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
       <div className="flex flex-col gap-4 lg:hidden">
         <nav
           aria-label={t("detail.tabsNavAria")}
-          className="border-border bg-muted/40 grid grid-cols-3 rounded-xl border p-1"
+          className="border-border bg-muted/40 grid grid-cols-4 rounded-xl border p-1"
         >
           <button
             type="button"
@@ -249,6 +264,20 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
           >
             <Clock className="size-3.5" aria-hidden />
             <span>{t("detail.timelineTab")}</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={mobileTab === "emails"}
+            onClick={() => setMobileTab("emails")}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
+              mobileTab === "emails"
+                ? "bg-card text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <MailOpen className="size-3.5" aria-hidden />
+            <span>{t("detail.emailTab")}</span>
           </button>
           <button
             type="button"
@@ -285,6 +314,15 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
               locale={locale}
               variant="embedded"
               activityHint={t("detail.timelineActivityHint")}
+            />
+          </section>
+        )}
+
+        {mobileTab === "emails" && (
+          <section className="border-border bg-card rounded-xl border p-4 shadow-sm sm:p-5">
+            <ApplicationEmailHistory
+              applicationId={application.id}
+              locale={locale}
             />
           </section>
         )}
@@ -337,6 +375,7 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
         applicationId={application.id}
         hasCvFile={Boolean(application.cvFile?.url)}
         cvFileName={application.cvFile?.name}
+        locale={locale}
       />
 
       <ApplicationCoverLetterDialog
@@ -578,7 +617,7 @@ function ApplicationWorkspacePanel({
   rightTabs: {
     id: RightPanelTab;
     icon: typeof Clock;
-    labelKey: "detail.timelineTab" | "detail.tailorTab";
+    labelKey: "detail.timelineTab" | "detail.tailorTab" | "detail.emailTab";
   }[];
   rightPanelRef: React.RefObject<HTMLDivElement | null>;
   t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
@@ -623,6 +662,11 @@ function ApplicationWorkspacePanel({
               locale={locale}
               variant="embedded"
               activityHint={t("detail.timelineActivityHint")}
+            />
+          ) : rightTab === "emails" ? (
+            <ApplicationEmailHistory
+              applicationId={application.id}
+              locale={locale}
             />
           ) : (
             <ResumeTailorWorkflow

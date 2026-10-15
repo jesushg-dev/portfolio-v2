@@ -535,8 +535,15 @@ export const portfolioRouter = createTRPCRouter({
           userId: tenantUserId,
           ...(input.category ? { category: input.category } : {}),
         },
-        include: { TimelineItemTranslation: true },
-        orderBy: [{ startDate: "asc" }, { createdAt: "asc" }],
+        include: {
+          TimelineItemTranslation: true,
+          TimelineItemSkill: {
+            include: {
+              skill: true,
+            },
+          },
+        },
+        orderBy: [{ startDate: "desc" }, { createdAt: "desc" }],
       });
 
       return mapTimelineItemsToPublic(

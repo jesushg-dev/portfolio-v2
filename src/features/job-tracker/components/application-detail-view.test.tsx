@@ -35,9 +35,19 @@ jest.mock("@/trpc/react", () => ({
       jobTrackerAdmin: {
         getApplications: { invalidate: jest.fn() },
         getDashboardStats: { invalidate: jest.fn() },
+        getApplicationEmailHistory: { invalidate: jest.fn() },
       },
     }),
     jobTrackerAdmin: {
+      getApplicationEmailHistory: {
+        useQuery: () => ({
+          data: [],
+          isLoading: false,
+          isFetching: false,
+          isError: false,
+          refetch: jest.fn(),
+        }),
+      },
       deleteApplication: {
         useMutation: () => ({
           mutateAsync: mockDeleteMutateAsync,
@@ -134,6 +144,9 @@ describe("ApplicationDetailView", () => {
     expect(
       within(mobileNav).getByRole("button", { name: "Tailor CV" }),
     ).toBeInTheDocument();
+    expect(
+      within(mobileNav).getByRole("button", { name: "Emails" }),
+    ).toBeInTheDocument();
   });
 
   it("switches mobile views when tapping tabs", () => {
@@ -168,5 +181,18 @@ describe("ApplicationDetailView", () => {
     expect(
       screen.getAllByTestId("resume-tailor-workflow-mock").length,
     ).toBeGreaterThan(0);
+  });
+
+  it("opens the dedicated email history tab", () => {
+    renderWithIntl(
+      <ApplicationDetailView
+        application={mockApplication}
+        locale="en"
+        defaultTab="details"
+      />,
+    );
+
+    fireEvent.click(screen.getAllByRole("button", { name: "Emails" })[0]);
+    expect(screen.getByText("Sent emails")).toBeInTheDocument();
   });
 });

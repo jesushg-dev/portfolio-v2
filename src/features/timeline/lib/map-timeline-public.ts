@@ -8,6 +8,18 @@ import type {
 import { type Locale } from "@/i18n/config";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 
+export interface TimelinePublicRole {
+  title: string;
+  startDate: string;
+  endDate?: string | null;
+}
+
+export interface TimelinePublicSkill {
+  id: string;
+  title: string;
+  image?: string | null;
+}
+
 export interface TimelinePublicItem {
   id: string;
   title: string;
@@ -21,11 +33,21 @@ export interface TimelinePublicItem {
   endDate: string | null;
   current: boolean;
   images: string[];
+  technologies: string[];
+  skills: TimelinePublicSkill[];
+  roles: TimelinePublicRole[];
   order: number;
 }
 
 export type TimelineItemWithTranslations = TimelineItem & {
   TimelineItemTranslation?: TimelineItemTranslation[];
+  TimelineItemSkill?: {
+    skill: {
+      id: string;
+      title: string;
+      image?: string | null;
+    };
+  }[];
 };
 
 const DEFAULT_LANGUAGES: Pick<AppLanguage, "id" | "code">[] = [
@@ -80,6 +102,24 @@ export function mapTimelineItemToPublic(
     endDate: item.endDate?.toISOString() ?? null,
     current: item.current,
     images: item.images ?? [],
+    technologies: item.technologies ?? [],
+    skills:
+      item.TimelineItemSkill && item.TimelineItemSkill.length > 0
+        ? item.TimelineItemSkill.map(({ skill }) => ({
+            id: skill.id,
+            title: skill.title,
+            image: skill.image,
+          }))
+        : (item.technologies ?? []).map((t) => ({
+            id: t,
+            title: t,
+            image: null,
+          })),
+    roles: (item.roles ?? []).map((r) => ({
+      title: r.title,
+      startDate: r.startDate,
+      endDate: r.endDate ?? null,
+    })),
     order: item.order,
   };
 }

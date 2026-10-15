@@ -187,7 +187,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
       >
         <AnimatedGradient accentColor={accentColor} />
 
-        <div className="relative flex items-center gap-3.5 p-3.5 sm:p-4">
+        <div className="relative flex max-w-full min-w-0 items-center gap-3.5 overflow-hidden p-3.5 sm:p-4">
           <button
             type="button"
             onClick={openExpanded}
@@ -203,8 +203,10 @@ const ExpandableSpotifyPlayerContent: FC = () => {
 
           <ActionHint
             hidden={isExpanded}
+            placement="top-start"
             label={t("spotify.hints.tapArtwork")}
             className="pointer-events-none z-10 shrink-0"
+            bubbleClassName="max-w-[min(15rem,calc(100vw-3rem))]"
           >
             <div
               ref={coverRef}
@@ -241,7 +243,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               rel="noopener noreferrer"
               title={playback.title}
               onClick={(event) => event.stopPropagation()}
-              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full truncate py-0.5 text-sm leading-tight font-bold text-white hover:underline sm:text-base"
+              className="relative z-10 mt-0.5 block min-h-6 w-full max-w-full truncate overflow-hidden py-0.5 text-sm leading-tight font-bold text-white hover:underline sm:text-base"
               style={{ opacity: isExpanded ? 0 : 1 }}
             >
               {playback.title}
@@ -254,7 +256,7 @@ const ExpandableSpotifyPlayerContent: FC = () => {
               rel="noopener noreferrer"
               title={playback.subtitle}
               onClick={(event) => event.stopPropagation()}
-              className="relative z-10 mt-0.5 block min-h-5 w-full max-w-full truncate py-0.5 text-xs text-white/85 hover:text-white hover:underline sm:text-sm"
+              className="relative z-10 mt-0.5 block min-h-5 w-full max-w-full truncate overflow-hidden py-0.5 text-xs text-white/85 hover:text-white hover:underline sm:text-sm"
               style={{ opacity: isExpanded ? 0 : 1 }}
             >
               {playback.subtitle}

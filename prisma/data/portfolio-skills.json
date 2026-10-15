@@ -1439,5 +1439,180 @@
         "urlWiki": "https://v0.dev"
       }
     ]
+  },
+  {
+    "key": "Flutter",
+    "title": "Flutter",
+    "type": "MOBILE",
+    "image": "https://cdn.simpleicons.org/flutter",
+    "featured": true,
+    "trend": true,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework multiplataforma de Google para desarrollo móvil y web.",
+        "urlWiki": "https://flutter.dev"
+      },
+      {
+        "locale": "en",
+        "description": "Google's multi-platform framework for crafting native mobile and web apps.",
+        "urlWiki": "https://flutter.dev"
+      },
+      {
+        "locale": "nl",
+        "description": "Google's multiplatform-framework voor mobiele en webapplicaties.",
+        "urlWiki": "https://flutter.dev"
+      }
+    ]
+  },
+  {
+    "key": "Dart",
+    "title": "Dart",
+    "type": "MOBILE",
+    "image": "https://cdn.simpleicons.org/dart",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Lenguaje optimizado para clientes para aplicaciones rápidas en cualquier plataforma.",
+        "urlWiki": "https://dart.dev"
+      },
+      {
+        "locale": "en",
+        "description": "Client-optimized language for fast apps on any platform.",
+        "urlWiki": "https://dart.dev"
+      },
+      {
+        "locale": "nl",
+        "description": "Client-geoptimaliseerde programmeertaal voor snelle apps.",
+        "urlWiki": "https://dart.dev"
+      }
+    ]
+  },
+  {
+    "key": "Angular",
+    "title": "Angular",
+    "type": "FRONTEND",
+    "image": "https://cdn.simpleicons.org/angular",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Framework de desarrollo frontend basado en componentes para la web.",
+        "urlWiki": "https://angular.dev"
+      },
+      {
+        "locale": "en",
+        "description": "Component-based frontend framework for building scalable web applications.",
+        "urlWiki": "https://angular.dev"
+      },
+      {
+        "locale": "nl",
+        "description": "Component-gebaseerd frontend framework voor schaalbare webapplicaties.",
+        "urlWiki": "https://angular.dev"
+      }
+    ]
+  },
+  {
+    "key": "VTEX",
+    "title": "VTEX",
+    "type": "FRONTEND",
+    "image": "https://cdn.simpleicons.org/vtex",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Plataforma de comercio digital empresarial componible y headless.",
+        "urlWiki": "https://vtex.com"
+      },
+      {
+        "locale": "en",
+        "description": "Enterprise digital commerce platform for composable commerce solutions.",
+        "urlWiki": "https://vtex.com"
+      },
+      {
+        "locale": "nl",
+        "description": "Enterprise digitaal commerce platform voor composable oplossingen.",
+        "urlWiki": "https://vtex.com"
+      }
+    ]
+  },
+  {
+    "key": "QuickBooks",
+    "title": "QuickBooks",
+    "type": "TOOLS",
+    "image": "https://cdn.simpleicons.org/quickbooks",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Software de contabilidad y gestión financiera empresarial.",
+        "urlWiki": "https://quickbooks.intuit.com"
+      },
+      {
+        "locale": "en",
+        "description": "Accounting software package developed and marketed by Intuit.",
+        "urlWiki": "https://quickbooks.intuit.com"
+      },
+      {
+        "locale": "nl",
+        "description": "Boekhoudsoftware ontwikkeld door Intuit.",
+        "urlWiki": "https://quickbooks.intuit.com"
+      }
+    ]
+  },
+  {
+    "key": "HTML",
+    "title": "HTML",
+    "type": "FRONTEND",
+    "image": "https://cdn.simpleicons.org/html5",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Lenguaje de marcado estándar para documentos web.",
+        "urlWiki": "https://es.wikipedia.org/wiki/HTML"
+      },
+      {
+        "locale": "en",
+        "description": "Standard markup language for documents designed to be displayed in a web browser.",
+        "urlWiki": "https://en.wikipedia.org/wiki/HTML"
+      },
+      {
+        "locale": "nl",
+        "description": "Standaard opmaaktaal voor documenten op het World Wide Web.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/HTML"
+      }
+    ]
+  },
+  {
+    "key": "CSS",
+    "title": "CSS",
+    "type": "FRONTEND",
+    "image": "https://cdn.simpleicons.org/css3",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Lenguaje de hojas de estilo utilizado para describir la presentación de un documento.",
+        "urlWiki": "https://es.wikipedia.org/wiki/CSS"
+      },
+      {
+        "locale": "en",
+        "description": "Style sheet language used for describing the presentation of a document.",
+        "urlWiki": "https://en.wikipedia.org/wiki/CSS"
+      },
+      {
+        "locale": "nl",
+        "description": "Stijlbladtaal gebruikt voor het beschrijven van de presentatie van een document.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/CSS"
+      }
+    ]
   }
 ]

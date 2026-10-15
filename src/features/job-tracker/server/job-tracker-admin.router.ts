@@ -3,6 +3,13 @@ import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { createHash } from "node:crypto";
 
+import {
+  getEmailTrackingDisclosure,
+  createEmailOpenTrackingToken,
+  hashEmailOpenTrackingToken,
+} from "@/features/job-tracker/lib/email-open-tracking";
+import { getServerBaseUrl } from "@/lib/url/get-base-url";
+import { locales } from "@/i18n/config";
 import { assertNonEmptyUserId } from "@/lib/admin/get-authenticated-user-id";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
@@ -930,6 +937,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         subject: z.string().trim().min(1).max(200),
         body: z.string().trim().min(1).max(8000),
         recipientName: z.string().trim().max(120).optional(),
+        trackOpens: z.boolean().default(false),
+        locale: z.enum(locales).default("en"),
         /** Optional override; when set, this file is attached instead of application.cvFile. */
         attachmentUrl: z.string().url().optional(),
         attachmentName: z.string().trim().min(1).max(200).optional(),
@@ -994,22 +1003,51 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         `CV-${(draftCv?.header.fullName ?? "candidate").replace(/\s+/g, "-")}.docx`;
 
       const toEmail = input.toEmail.toLowerCase();
-      const bodyText = input.body;
+      const bodyText = input.trackOpens
+        ? `${input.body}\n\n${getEmailTrackingDisclosure(input.locale)}`
+        : input.body;
       const resendConfig = await getTenantIntegrationConfig(
         ctx.user.id,
         "resend",
-      );
-      const bodyHtml = buildApplicationEmailHtml(
-        bodyText,
-        resendConfig?.emailSignatureHtml,
       );
 
       const idempotencyKey = `app-cv-email/${application.id}/${createHash(
         "sha256",
       )
-        .update(`${toEmail}|${input.subject}|${bodyText}|${attachmentUrl}`)
+        .update(
+          `${toEmail}|${input.subject}|${bodyText}|${attachmentUrl}|${input.trackOpens}|${input.locale}`,
+        )
         .digest("hex")
         .slice(0, 24)}`;
+
+      const trackingToken = input.trackOpens
+        ? createEmailOpenTrackingToken(idempotencyKey)
+        : null;
+      const emailRecord = await ctx.db.applicationEmail.upsert({
+        where: { idempotencyKey },
+        create: {
+          applicationId: application.id,
+          userId: ctx.user.id,
+          recipientEmail: toEmail,
+          subject: input.subject,
+          attachmentName: filename,
+          trackingEnabled: input.trackOpens,
+          trackingTokenHash: trackingToken
+            ? hashEmailOpenTrackingToken(trackingToken)
+            : undefined,
+          idempotencyKey,
+        },
+        update: {},
+      });
+      const trackingPixelUrl =
+        emailRecord.trackingEnabled && trackingToken
+          ? `${getServerBaseUrl()}/api/job-tracker/email-open?token=${trackingToken}`
+          : undefined;
+      const bodyHtml = buildApplicationEmailHtml(
+        bodyText,
+        resendConfig?.emailSignatureHtml,
+        trackingPixelUrl,
+      );
 
       const { data, error } = await emailClient.resend.emails.send(
         {
@@ -1033,6 +1071,13 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: error.message || "Failed to send email",
+        });
+      }
+
+      if (!emailRecord.sentAt) {
+        await ctx.db.applicationEmail.update({
+          where: { id: emailRecord.id },
+          data: { sentAt: new Date() },
         });
       }
 
@@ -1063,6 +1108,39 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       return { emailId: data?.id ?? null };
     }),
 
+  getApplicationEmailHistory: protectedProcedure
+    .input(z.object({ applicationId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.applicationEmail.findMany({
+        where: {
+          applicationId: input.applicationId,
+          userId: ctx.user.id,
+          sentAt: { not: null },
+        },
+        select: {
+          id: true,
+          recipientEmail: true,
+          subject: true,
+          attachmentName: true,
+          trackingEnabled: true,
+          openCount: true,
+          firstOpenedAt: true,
+          lastOpenedAt: true,
+          sentAt: true,
+          opens: {
+            select: {
+              id: true,
+              openedAt: true,
+              userAgent: true,
+              ipAddress: true,
+            },
+            orderBy: { openedAt: "desc" },
+          },
+        },
+        orderBy: { sentAt: "desc" },
+      });
+    }),
+
   getApplicationEmailCapabilities: protectedProcedure.query(async ({ ctx }) => {
     const emailClient = await getPortfolioEmailClient(ctx.user.id);
     const credentials = await loadTenantAiCredentials(ctx.user.id);
@@ -1088,19 +1166,31 @@ function escapeHtml(value: string): string {
 function buildApplicationEmailHtml(
   bodyText: string,
   signatureHtml?: string | null,
+  trackingPixelUrl?: string,
 ): string {
   const paragraphs = bodyText
-    .split(/\n/)
+    .replace(/\r\n?/g, "\n")
+    .split(/\n[ \t]*\n+/)
+    .map((paragraph) =>
+      paragraph
+        .split("\n")
+        .map((line) => escapeHtml(line))
+        .join("<br />"),
+    )
+    .filter(Boolean)
     .map(
-      (line) =>
-        `<p style="margin:0 0 12px 0; font-family:Arial,sans-serif; font-size:14px; color:#111;">${escapeHtml(line) || "&nbsp;"}</p>`,
+      (paragraph) =>
+        `<p style="margin:0 0 0.75rem 0; font-family:Arial,sans-serif; font-size:0.875rem; color:#111;">${paragraph}</p>`,
     )
     .join("");
 
   const signature = signatureHtml?.trim();
-  if (!signature) return paragraphs;
+  const pixel = trackingPixelUrl
+    ? `<img src="${escapeHtml(trackingPixelUrl)}" width="1" height="1" border="0" alt="" style="display:none !important;width:1px !important;height:1px !important;max-height:0 !important;max-width:0 !important;opacity:0 !important;overflow:hidden !important;mso-hide:all;" />`
+    : "";
+  if (!signature) return `${paragraphs}${pixel}`;
 
-  return `${paragraphs}<div style="margin-top:28px;">${signature}</div>`;
+  return `${paragraphs}<div style="margin-top:1.75rem;">${signature}</div>${pixel}`;
 }
 
 /** Resend accepts `email@x.com` or `Name <email@x.com>` only. */

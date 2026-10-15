@@ -271,11 +271,11 @@ const Footer = async ({
           </div>
 
           {/* Column 4: Now Playing / Spotify */}
-          <div className="space-y-3">
+          <div className="max-w-full min-w-0 space-y-3">
             <h3 className="text-primary-foreground text-base font-bold tracking-tight">
               {t("titles.NowPlaying")}
             </h3>
-            <div className="rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
+            <div className="max-w-full min-w-0 rounded-2xl border border-white/20 bg-white/10 p-3.5 backdrop-blur-md">
               <FooterSpotifySection />
               <a
                 target="_blank"
