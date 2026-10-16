@@ -290,7 +290,7 @@ function OutreachFilterBar({
 
 interface OutreachApplicationCardProps {
   application: HubApplication;
-  dateFnsLocale: Parameters<typeof formatDistanceToNow>[1]["locale"];
+  dateFnsLocale: ReturnType<typeof getDateFnsLocale>;
   t: TranslationFn;
 }
 
@@ -427,7 +427,7 @@ function OutreachApplicationCard({
 
 interface OutreachEmailItemProps {
   email: HubEmail;
-  dateFnsLocale: Parameters<typeof formatDistanceToNow>[1]["locale"];
+  dateFnsLocale: ReturnType<typeof getDateFnsLocale>;
   t: TranslationFn;
 }
 
