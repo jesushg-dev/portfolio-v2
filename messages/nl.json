@@ -3177,8 +3177,60 @@
       "newCompany": "Nieuw Bedrijf",
       "newApplication": "Nieuwe Sollicitatie",
       "applicationsTab": "Sollicitaties",
+      "eventsTab": "Evenementen",
       "companiesTab": "Bedrijven",
+      "outreachTab": "Opvolging & Lezingen",
+      "eventsThisWeekBadge": "{count} deze week",
       "tabsNavAria": "Job tracker secties",
+      "emailSummary": {
+        "opened": "{count, plural, one {# keer gelezen} other {# keren gelezen}}",
+        "sent": "{count, plural, one {# verzonden} other {# verzonden}}",
+        "openedTooltip": "{count, plural, one {# e-maillezing geregistreerd} other {# e-maillezingen geregistreerd}}",
+        "sentTooltip": "{count, plural, one {# verzonden e-mail} other {# verzonden e-mails}}"
+      },
+      "outreachHub": {
+        "title": "Opvolgings- en Lezingenhub",
+        "description": "Volg e-mailopeningen, interesse-signalen en contactkansen per sollicitatie.",
+        "refresh": "Vernieuwen",
+        "stats": {
+          "totalSent": "Verzonden e-mails",
+          "openRate": "Openingspercentage",
+          "totalOpens": "Totaal aantal lezingen",
+          "recent24h": "Activiteit afgelopen 24u",
+          "recent24hHint": "Sollicitaties met een lezing in de afgelopen 24 uur"
+        },
+        "filters": {
+          "all": "Alle sollicitaties",
+          "opened": "Recent geopend",
+          "unopened": "Nog niet geopend",
+          "searchPlaceholder": "Filter op bedrijf of functie..."
+        },
+        "card": {
+          "readsCount": "{count, plural, one {# lezing} other {# lezingen}}",
+          "sentCount": "{count, plural, one {# e-mail} other {# e-mails}}",
+          "lastRead": "Laatst gelezen {time}",
+          "lastSent": "Verzonden {time}",
+          "notReadYet": "Nog niet geopend",
+          "viewApplication": "Bekijk sollicitatie",
+          "toggleDetails": "Details tonen",
+          "emailsHeading": "Verzonden e-mails",
+          "recipient": "Aan: {email}",
+          "sentAt": "Verzonden: {date}",
+          "attachment": "CV: {name}",
+          "tracked": "Tracking actief",
+          "untracked": "Niet getrackt",
+          "openHistory": "Gedetecteerde leesmomenten",
+          "noOpensYet": "Er zijn nog geen lezingen gedetecteerd voor deze e-mail.",
+          "proxyNotice": "Afbeeldingsproxy",
+          "opensCount": "{count} totaal aantal weergaven"
+        },
+        "emptyState": {
+          "title": "Nog geen opvolgingsactiviteit",
+          "description": "Verstuur uw eerste sollicitatie-e-mail met tracking vanuit de sollicitatiedetails om hier statistieken te zien.",
+          "noFilteredTitle": "Geen sollicitaties gevonden",
+          "noFilteredDescription": "Probeer uw zoekopdracht of actief filter aan te passen."
+        }
+      },
       "columnPosition": "Functie",
       "columnCompany": "Bedrijf",
       "columnStatus": "Status",
@@ -3240,8 +3292,8 @@
         "hiredDescription": "Gefeliciteerd!"
       },
       "calendar": {
-        "title": "Aankomende Evenementen",
-        "description": "Geplande interviews en tests",
+        "title": "Evenementenagenda",
+        "description": "Geplande sollicitatiegesprekken, vergaderingen en tests",
         "googleSyncActive": "Gesynchroniseerd met Google Calendar",
         "googleSyncError": "Google Calendar-sync moet opnieuw worden gekoppeld",
         "add": "Toevoegen",
@@ -3254,7 +3306,26 @@
         "today": "Vandaag",
         "tomorrow": "Morgen",
         "virtual": "Virtueel",
-        "duration": "{minutes} min"
+        "duration": "{minutes} min",
+        "inHours": "Over {hours, plural, one {# uur} other {# uur}}",
+        "inDays": "Over {days, plural, one {# dag} other {# dagen}}",
+        "urgentAlertTitle": "Aankomend dringend evenement",
+        "joinMeeting": "Deelnemen aan vergadering",
+        "prepEvent": "Interview voorbereiden",
+        "viewInAgenda": "Bekijk in agenda",
+        "dismissAlert": "Melding sluiten",
+        "statsThisWeek": "Deze week",
+        "statsTotalUpcoming": "Totaal gepland",
+        "statsVirtual": "Virtuele vergaderingen",
+        "filterAll": "Alles",
+        "filterThisWeek": "Deze week",
+        "filterInterviews": "Sollicitaties",
+        "filterTechnical": "Technische tests",
+        "emptyFiltered": "Geen evenementen gevonden voor dit filter",
+        "emptyDescription": "Plan sollicitatiegesprekken, technische tests of opvolgacties om volledige controle te houden over uw proces.",
+        "scheduleEvent": "Evenement plannen",
+        "thisWeekShort": "deze wk",
+        "multipleUrgentCount": "{current} van {total} aankomend"
       },
       "detail": {
         "title": "Sollicitatiedetails",

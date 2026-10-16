@@ -3250,8 +3250,60 @@
       "newCompany": "New Company",
       "newApplication": "New Application",
       "applicationsTab": "Applications",
+      "eventsTab": "Events",
       "companiesTab": "Companies",
+      "outreachTab": "Outreach & Reads",
+      "eventsThisWeekBadge": "{count} this week",
       "tabsNavAria": "Job tracker sections",
+      "emailSummary": {
+        "opened": "{count, plural, one {# read} other {# reads}}",
+        "sent": "{count, plural, one {# sent} other {# sent}}",
+        "openedTooltip": "{count, plural, one {# email load detected} other {# email loads detected}}",
+        "sentTooltip": "{count, plural, one {# email sent} other {# emails sent}}"
+      },
+      "outreachHub": {
+        "title": "Outreach & Reads Hub",
+        "description": "Monitor email loads, engagement signals, and follow-up opportunities grouped by candidacy.",
+        "refresh": "Refresh",
+        "stats": {
+          "totalSent": "Sent Emails",
+          "openRate": "Open Rate",
+          "totalOpens": "Total Reads",
+          "recent24h": "Active in 24h",
+          "recent24hHint": "Candidacies with activity in the last 24 hours"
+        },
+        "filters": {
+          "all": "All candidacies",
+          "opened": "Read recently",
+          "unopened": "Awaiting read",
+          "searchPlaceholder": "Filter by company or role..."
+        },
+        "card": {
+          "readsCount": "{count, plural, one {# read} other {# reads}}",
+          "sentCount": "{count, plural, one {# email} other {# emails}}",
+          "lastRead": "Last read {time}",
+          "lastSent": "Sent {time}",
+          "notReadYet": "Awaiting first read",
+          "viewApplication": "View candidacy",
+          "toggleDetails": "Toggle details",
+          "emailsHeading": "Sent emails",
+          "recipient": "To: {email}",
+          "sentAt": "Sent: {date}",
+          "attachment": "CV: {name}",
+          "tracked": "Tracking active",
+          "untracked": "No tracking",
+          "openHistory": "Detected read events",
+          "noOpensYet": "No read events detected yet for this email.",
+          "proxyNotice": "Image Proxy",
+          "opensCount": "{count} total loads"
+        },
+        "emptyState": {
+          "title": "No outreach activity yet",
+          "description": "Send your first application email with tracking from any application detail page to see engagement metrics here.",
+          "noFilteredTitle": "No candidacies found",
+          "noFilteredDescription": "Try adjusting your search or active filter."
+        }
+      },
       "columnPosition": "Position",
       "columnCompany": "Company",
       "columnStatus": "Status",
@@ -3313,8 +3365,8 @@
         "hiredDescription": "Congratulations!"
       },
       "calendar": {
-        "title": "Upcoming Events",
-        "description": "Scheduled interviews and tests",
+        "title": "Events Agenda",
+        "description": "Scheduled interviews, meetings, and technical tests",
         "googleSyncActive": "Synced with Google Calendar",
         "googleSyncError": "Google Calendar sync needs reconnect",
         "add": "Add",
@@ -3327,7 +3379,26 @@
         "today": "Today",
         "tomorrow": "Tomorrow",
         "virtual": "Virtual",
-        "duration": "{minutes} min"
+        "duration": "{minutes} min",
+        "inHours": "In {hours, plural, one {# hour} other {# hours}}",
+        "inDays": "In {days, plural, one {# day} other {# days}}",
+        "urgentAlertTitle": "Upcoming imminent event",
+        "joinMeeting": "Join meeting",
+        "prepEvent": "Prepare interview",
+        "viewInAgenda": "View in agenda",
+        "dismissAlert": "Dismiss alert",
+        "statsThisWeek": "This week",
+        "statsTotalUpcoming": "Total upcoming",
+        "statsVirtual": "Virtual meetings",
+        "filterAll": "All",
+        "filterThisWeek": "This week",
+        "filterInterviews": "Interviews",
+        "filterTechnical": "Technical tests",
+        "emptyFiltered": "No events match this filter",
+        "emptyDescription": "Schedule interviews, technical tests, or follow-up calls to keep full control of your hiring process.",
+        "scheduleEvent": "Schedule Event",
+        "thisWeekShort": "this wk",
+        "multipleUrgentCount": "{current} of {total} upcoming"
       },
       "detail": {
         "title": "Application Details",

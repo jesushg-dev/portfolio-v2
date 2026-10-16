@@ -3177,8 +3177,60 @@
       "newCompany": "Nueva Empresa",
       "newApplication": "Nueva Postulación",
       "applicationsTab": "Postulaciones",
+      "eventsTab": "Eventos",
       "companiesTab": "Empresas",
+      "outreachTab": "Seguimiento y Lecturas",
+      "eventsThisWeekBadge": "{count} esta semana",
       "tabsNavAria": "Secciones del job tracker",
+      "emailSummary": {
+        "opened": "{count, plural, one {# lectura} other {# lecturas}}",
+        "sent": "{count, plural, one {# enviado} other {# enviados}}",
+        "openedTooltip": "{count, plural, one {# apertura de correo detectada} other {# aperturas de correo detectadas}}",
+        "sentTooltip": "{count, plural, one {# correo enviado} other {# correos enviados}}"
+      },
+      "outreachHub": {
+        "title": "Centro de Seguimiento y Lecturas",
+        "description": "Supervisa aperturas de correos, señales de interés y oportunidades de contacto agrupadas por candidatura.",
+        "refresh": "Actualizar",
+        "stats": {
+          "totalSent": "Correos enviados",
+          "openRate": "Tasa de apertura",
+          "totalOpens": "Total de lecturas",
+          "recent24h": "Actividad en 24h",
+          "recent24hHint": "Candidaturas con lectura en las últimas 24 horas"
+        },
+        "filters": {
+          "all": "Todas las candidaturas",
+          "opened": "Leídas recientemente",
+          "unopened": "Pendientes de lectura",
+          "searchPlaceholder": "Filtrar por empresa o rol..."
+        },
+        "card": {
+          "readsCount": "{count, plural, one {# lectura} other {# lecturas}}",
+          "sentCount": "{count, plural, one {# correo} other {# correos}}",
+          "lastRead": "Última lectura {time}",
+          "lastSent": "Enviado {time}",
+          "notReadYet": "Sin lecturas aún",
+          "viewApplication": "Ver candidatura",
+          "toggleDetails": "Ver detalles",
+          "emailsHeading": "Correos enviados",
+          "recipient": "Para: {email}",
+          "sentAt": "Enviado: {date}",
+          "attachment": "CV: {name}",
+          "tracked": "Rastreo activo",
+          "untracked": "Sin rastreo",
+          "openHistory": "Eventos de lectura detectados",
+          "noOpensYet": "No se han detectado aperturas aún para este correo.",
+          "proxyNotice": "Proxy de imágenes",
+          "opensCount": "{count} cargas en total"
+        },
+        "emptyState": {
+          "title": "Sin actividad de seguimiento aún",
+          "description": "Envía tu primer correo de candidatura con rastreo desde la vista de detalle de cualquier postulación para ver métricas aquí.",
+          "noFilteredTitle": "No se encontraron candidaturas",
+          "noFilteredDescription": "Intenta ajustar tu búsqueda o el filtro activo."
+        }
+      },
       "columnPosition": "Puesto",
       "columnCompany": "Empresa",
       "columnStatus": "Estado",
@@ -3240,8 +3292,8 @@
         "hiredDescription": "¡Felicidades!"
       },
       "calendar": {
-        "title": "Próximos Eventos",
-        "description": "Entrevistas y pruebas programadas",
+        "title": "Agenda de Eventos",
+        "description": "Entrevistas, reuniones y pruebas programadas",
         "googleSyncActive": "Sincronizado con Google Calendar",
         "googleSyncError": "La sync de Google Calendar necesita reconectar",
         "add": "Agregar",
@@ -3254,7 +3306,26 @@
         "today": "Hoy",
         "tomorrow": "Mañana",
         "virtual": "Virtual",
-        "duration": "{minutes} min"
+        "duration": "{minutes} min",
+        "inHours": "En {hours, plural, one {# hora} other {# horas}}",
+        "inDays": "En {days, plural, one {# día} other {# días}}",
+        "urgentAlertTitle": "Próximo evento inminente",
+        "joinMeeting": "Unirse a reunión",
+        "prepEvent": "Preparar entrevista",
+        "viewInAgenda": "Ver en agenda",
+        "dismissAlert": "Ocultar alerta",
+        "statsThisWeek": "Esta semana",
+        "statsTotalUpcoming": "Total programados",
+        "statsVirtual": "Reuniones virtuales",
+        "filterAll": "Todos",
+        "filterThisWeek": "Esta semana",
+        "filterInterviews": "Entrevistas",
+        "filterTechnical": "Pruebas técnicas",
+        "emptyFiltered": "No hay eventos que coincidan con este filtro",
+        "emptyDescription": "Programa entrevistas, pruebas técnicas o llamadas de seguimiento para tener un control total de tu proceso.",
+        "scheduleEvent": "Programar Evento",
+        "thisWeekShort": "esta sem.",
+        "multipleUrgentCount": "{current} de {total} próximos"
       },
       "detail": {
         "title": "Detalle de Postulación",

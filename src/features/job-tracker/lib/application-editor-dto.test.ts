@@ -60,6 +60,33 @@ describe("application editor dto", () => {
     ]);
     expect(row.company.name).toBe("Acme");
     expect(row.lastActivityAt).toBeInstanceOf(Date);
+    expect(row.emailSummary).toBeUndefined();
+  });
+
+  it("maps list rows with emailSummary when sent emails are present", () => {
+    const [row] = mapApplicationsToListDto([
+      {
+        ...application,
+        company,
+        events: [],
+        emails: [
+          {
+            id: "email-1",
+            sentAt: new Date("2026-08-01T10:00:00Z"),
+            openCount: 2,
+            firstOpenedAt: new Date("2026-08-01T11:00:00Z"),
+            lastOpenedAt: new Date("2026-08-01T12:00:00Z"),
+            trackingEnabled: true,
+          },
+        ],
+      },
+    ]);
+    expect(row.emailSummary).toEqual({
+      totalSent: 1,
+      totalOpens: 2,
+      lastOpenedAt: new Date("2026-08-01T12:00:00Z"),
+      hasTracking: true,
+    });
   });
 
   it("maps detail events and cover letter", () => {
