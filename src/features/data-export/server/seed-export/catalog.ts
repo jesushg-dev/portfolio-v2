@@ -31,8 +31,10 @@ import softSkillsQuiz from "../../../../../prisma/data/projects/soft-skills-quiz
 import techServiceApi from "../../../../../prisma/data/projects/tech-service-api.json";
 import techService from "../../../../../prisma/data/projects/tech-service.json";
 import yourFarm from "../../../../../prisma/data/projects/your-farm.json";
+import ofilegal from "../../../../../prisma/data/projects/ofilegal.json";
 
 const projectsJson = [
+  ofilegal,
   portfolio,
   musaEcommerce,
   musaAdmin,

@@ -1614,5 +1614,105 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/CSS"
       }
     ]
+  },
+  {
+    "key": "Scrum",
+    "title": "Scrum",
+    "type": "QUALITY_DELIVERY",
+    "image": "https://cdn.simpleicons.org/scrumalliance",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Marco de trabajo ágil iterativo para la gestión y entrega incremental de proyectos de software.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Scrum_(desarrollo_de_software)"
+      },
+      {
+        "locale": "en",
+        "description": "Iterative agile framework for managing and delivering software projects incrementally.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Scrum_(software_development)"
+      },
+      {
+        "locale": "nl",
+        "description": "Iteratief agile framework voor het incrementeel beheren en opleveren van softwareprojecten.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Scrum_(methode)"
+      }
+    ]
+  },
+  {
+    "key": "Cybersecurity",
+    "title": "Cybersecurity",
+    "type": "CYBERSECURITY",
+    "image": "https://cdn.simpleicons.org/hackthebox",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Prácticas y tecnologías para la protección de sistemas, redes, datos y prevención de amenazas.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Seguridad_inform%C3%A1tica"
+      },
+      {
+        "locale": "en",
+        "description": "Practices and technologies for protecting systems, networks, data, and threat prevention.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Computer_security"
+      },
+      {
+        "locale": "nl",
+        "description": "Praktijken en technologieën voor de bescherming van systemen, netwerken, gegevens en dreigingspreventie.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Computerveiligheid"
+      }
+    ]
+  },
+  {
+    "key": "EthicalHacking",
+    "title": "Ethical Hacking",
+    "type": "CYBERSECURITY",
+    "image": "https://cdn.simpleicons.org/kalilinux",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Evaluación de seguridad ofensiva, pruebas de penetración y análisis proactivo de vulnerabilidades.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Hacker_de_sombrero_blanco"
+      },
+      {
+        "locale": "en",
+        "description": "Offensive security assessment, penetration testing, and proactive vulnerability analysis.",
+        "urlWiki": "https://en.wikipedia.org/wiki/White_hat_(computer_security)"
+      },
+      {
+        "locale": "nl",
+        "description": "Offensieve veiligheidsbeoordeling, penetratietesten en proactieve kwetsbaarheidsanalyse.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/White_hat"
+      }
+    ]
+  },
+  {
+    "key": "Networks",
+    "title": "Computer Networks",
+    "type": "DEVOPS",
+    "image": "https://cdn.simpleicons.org/wireshark",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Arquitectura y protocolos de redes informáticas, modelo OSI, TCP/IP y comunicaciones de Internet.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Red_de_computadoras"
+      },
+      {
+        "locale": "en",
+        "description": "Computer networking architectures, OSI model, TCP/IP protocols, and Internet communications.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Computer_network"
+      },
+      {
+        "locale": "nl",
+        "description": "Computernetwerkarchitectuur, OSI-model, TCP/IP-protocollen en internetcommunicatie.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Computernetwerk"
+      }
+    ]
   }
 ]

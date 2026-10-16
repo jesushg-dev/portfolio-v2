@@ -17,7 +17,6 @@ import { LinkPreviewLazy } from "@/components/ui/link-preview-lazy";
 import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
 import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
-import { processPageHref } from "@/lib/process-pages/process-page-href";
 import type { ProcessNavPage } from "@/lib/process-pages/process-nav-page";
 import type { SiteBrand } from "@/lib/site-brand/site-brand";
 import SiteBrandMark from "@/components/app-layout/site-brand-mark";
@@ -67,9 +66,13 @@ function FooterPreviewLink({
   }
 
   return (
-    <Link href={href} className={footerLinkClassName}>
+    <LinkPreviewLazy
+      url={href}
+      imageAlt={label}
+      className={footerLinkClassName}
+    >
       {label}
-    </Link>
+    </LinkPreviewLazy>
   );
 }
 
@@ -92,11 +95,11 @@ const Footer = async ({
   const calendlyUrl = getCalendlyUrl(data.contacts);
 
   return (
-    <footer className="from-primary to-primary-900 text-primary-foreground relative z-10 overflow-hidden bg-linear-to-b">
+    <footer className="from-primary to-primary-900 text-primary-foreground relative z-20 bg-linear-to-b">
       {/* Subtle grid texture overlay */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.07]"
+        className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.07]"
         style={{
           backgroundImage:
             "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
@@ -227,12 +230,13 @@ const Footer = async ({
             <ul className="space-y-2.5">
               {processNavPages.map((page) => (
                 <li key={page.id}>
-                  <Link
-                    href={processPageHref(page.slug)}
+                  <LinkPreviewLazy
+                    url={`/process/${page.slug}`}
+                    imageAlt={page.menuTitle.trim() || page.slug}
                     className={footerLinkClassName}
                   >
                     {page.menuTitle.trim() || page.slug}
-                  </Link>
+                  </LinkPreviewLazy>
                 </li>
               ))}
               <li>

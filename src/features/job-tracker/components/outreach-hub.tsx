@@ -26,7 +26,6 @@ import { Input } from "@/components/ui/input";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
 import { statusVariants } from "@/features/job-tracker/lib/constants";
 import { parseEmailClient } from "@/features/job-tracker/lib/parse-email-client";
-import type { Locale } from "@/i18n/config";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { api, type RouterOutputs } from "@/trpc/react";
@@ -39,7 +38,7 @@ type TranslationFn = ReturnType<typeof useTranslations<"admin.jobTracker">>;
 
 export const OutreachHub: FC = () => {
   const t = useTranslations("admin.jobTracker");
-  const locale = useLocale() as Locale;
+  const locale = useLocale();
   const dateFnsLocale = getDateFnsLocale(locale);
 
   const { data, isLoading, isError, isFetching, refetch } =
@@ -50,10 +49,12 @@ export const OutreachHub: FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<HubFilter>("all");
 
-  const filteredApplications = useMemo(() => {
-    if (!data?.applications) return [];
+  const applications = data?.applications;
 
-    return data.applications.filter((app) => {
+  const filteredApplications = useMemo(() => {
+    if (!applications) return [];
+
+    return applications.filter((app) => {
       // Filter by category
       if (activeFilter === "opened" && app.totalOpens === 0) return false;
       if (activeFilter === "unopened" && app.totalOpens > 0) return false;
@@ -73,7 +74,7 @@ export const OutreachHub: FC = () => {
 
       return true;
     });
-  }, [data?.applications, activeFilter, searchQuery]);
+  }, [applications, activeFilter, searchQuery]);
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-4 overflow-y-auto pr-1">

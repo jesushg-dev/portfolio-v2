@@ -6,9 +6,6 @@ import type {
   StackType,
 } from "@prisma/client";
 
-import { matchCertificationSkillKeys } from "./lib/match-certification-skills";
-import { portfolioSkills } from "./seed-portfolio-skills";
-
 export interface PortfolioCertificationSeed {
   key: string;
   company: string;
@@ -42,10 +39,7 @@ export async function seedPortfolioCertifications(
   await prisma.certification.deleteMany({ where: { userId } });
 
   for (const certification of portfolioCertifications) {
-    const skillKeys =
-      certification.skillKeys.length > 0
-        ? certification.skillKeys
-        : matchCertificationSkillKeys(certification, portfolioSkills);
+    const skillKeys = certification.skillKeys;
 
     const skillIds = skillKeys.map((skillKey) => {
       const skill = skillsByKey[skillKey];

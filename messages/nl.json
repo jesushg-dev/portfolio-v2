@@ -387,82 +387,203 @@
         "contactCta": "Contact",
         "scheduleCta": "Gesprek plannen",
         "scheduleHint": "Gesprek van 30 min · Sollicitatie of kennismaking",
+        "availability": "Beschikbaar voor nieuwe kansen",
+        "availabilityHint": "30-min kennismakingsgesprek",
+        "goTo": "Ga naar {item}",
+        "viewProject": "Project bekijken",
+        "seeAllProjects": "Alle projecten bekijken",
         "groups": {
           "about": {
             "label": "Over mij",
             "eyebrow": "Over mij",
             "headline": "Achtergrond & technisch profiel",
-            "description": "Professionele achtergrond, werkervaring en belangrijkste tech stack."
+            "description": "Professionele achtergrond, werkervaring en engineering-filosofie."
           },
           "portfolio": {
             "label": "Portfolio",
             "eyebrow": "Portfolio",
-            "headline": "Projecten & referenties",
-            "description": "Uitgelichte projecten, certificeringen en carrièretijdlijn."
+            "headline": "Uitgelichte projecten & referenties",
+            "description": "Productiesystemen, microservices, certificeringen en carrièretijdlijn."
           },
           "process": {
             "label": "Hoe ik werk",
             "eyebrow": "Hoe ik werk",
-            "headline": "Werkmethodologie",
-            "description": "AI-gebruik bij ontwikkeling, softwarekwaliteit en teamsamenwerking."
+            "headline": "Engineering-aanpak & kwaliteit",
+            "description": "Moderne engineering-workflows, softwarekwaliteit en dagelijkse tools."
           }
         },
         "items": {
           "about": {
             "label": "Over mij",
-            "description": "Profielsamenvatting en engineering-filosofie."
+            "short": "Profiel en filosofie",
+            "headline": "Wie ik ben als engineer",
+            "description": "Een overzicht van mijn profiel, hoe ik software benader en de principes achter de systemen die ik bouw.",
+            "chips": ["Profieloverzicht", "Engineering-filosofie", "Ownership"],
+            "statValue": "6+",
+            "statLabel": "jaar ervaring",
+            "cta": "Ga naar over mij"
           },
           "experience": {
             "label": "Ervaring",
-            "description": "Werkgeschiedenis, projecten en vervulde rollen."
+            "short": "Rollen en sleutelprojecten",
+            "headline": "Waar ik heb gewerkt",
+            "description": "Werkgeschiedenis in e-commerce en telecom, met de projecten en resultaten waar ik het meest trots op ben.",
+            "chips": [
+              "Senior Software Engineer",
+              "Tech Lead",
+              "Full Stack Developer"
+            ],
+            "statValue": "20+",
+            "statLabel": "opgeleverde projecten",
+            "cta": "Bekijk werkgeschiedenis"
           },
           "skills": {
             "label": "Vaardigheden",
-            "description": ".NET-ecosysteem, C#, microservices en Cloud."
+            "short": ".NET, C#, microservices, cloud",
+            "headline": "De stack waarmee ik dagelijks werk",
+            "description": "De tools en technologieën die ik gebruik om betrouwbare productiesoftware te ontwerpen en te bouwen.",
+            "chips": [".NET", "C#", "Microservices", "Cloud"],
+            "statValue": "4",
+            "statLabel": "kerngebieden",
+            "cta": "Verken technische stack"
           },
           "services": {
             "label": "Technische specialismen",
-            "description": "Softwarearchitectuur, modernisering en ontwikkeling."
+            "short": "Architectuur en modernisering",
+            "headline": "Waar ik in uitblink",
+            "description": "Softwarearchitectuur ontwerpen, verouderde platforms moderniseren en de kern van nieuwe producten bouwen.",
+            "chips": [
+              "Systeemarchitectuur",
+              "Legacy modernisering",
+              "Core development"
+            ],
+            "statValue": "3",
+            "statLabel": "specialismen",
+            "cta": "Bekijk specialismen"
           },
           "soft-skills": {
             "label": "Leiderschap & competenties",
-            "description": "Teamleiderschap, mentorschap en communicatie."
+            "short": "Teams, mentorschap, communicatie",
+            "headline": "Hoe ik met mensen werk",
+            "description": "Teams leiden, ontwikkelaars begeleiden en helder communiceren met product- en businesspartners.",
+            "chips": ["Teamleiderschap", "Mentorschap", "Communicatie"],
+            "statValue": "6",
+            "statLabel": "begeleide engineers",
+            "cta": "Lees leiderschapsprincipes"
+          },
+          "testimonials": {
+            "label": "Testimonials",
+            "short": "Woorden van collega's",
+            "headline": "Wat collega's en leidinggevenden zeggen",
+            "description": "Directe feedback en aanbevelingen van teamleden, leads en klanten over samenwerking en oplevering.",
+            "chips": ["Testimonials", "Senior developers", "Aanbevelingen"],
+            "statValue": "100%",
+            "statLabel": "positieve feedback",
+            "cta": "Lees testimonials"
+          },
+          "projects": {
+            "label": "Projecten",
+            "short": "Engineering-projecten en casestudies",
+            "headline": "Projecten en systemen die ik heb gebouwd",
+            "description": "Een selectie van systemen, API's, e-commerceplatforms en interne beheerapplicaties.",
+            "chips": ["API's", "E-commerce", "Admin platforms", "Cloud"],
+            "statValue": "15+",
+            "statLabel": "uitgelichte projecten",
+            "cta": "Projecten bekijken"
           },
           "certificates": {
             "label": "Certificaten",
-            "description": "Technische referenties en certificeringen."
+            "short": "Technische referenties",
+            "headline": "Geverifieerde certificeringen",
+            "description": "Formele technische certificeringen in frontend, backend, cybersecurity en leiderschap.",
+            "chips": ["Frontend", "Backend", "Cybersecurity", "Soft skills"],
+            "statValue": "30+",
+            "statLabel": "behaalde certificaten",
+            "cta": "Bekijk certificaten"
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "Volledig professioneel CV in webformaat."
+            "short": "Professioneel cv",
+            "headline": "Volledig professioneel CV",
+            "description": "Uitgebreid cv in modern webformaat, inclusief volledige werkervaring en PDF-download.",
+            "chips": ["Interactief CV", "PDF export", "Geverifieerde historie"],
+            "statValue": "2026",
+            "statLabel": "actuele versie",
+            "cta": "Open Curriculum Vitae"
           },
           "timeline": {
             "label": "Tijdlijn",
-            "description": "Carrièremijlpalen en professionele groei."
+            "short": "Carrièreverloop",
+            "headline": "Carrièremijlpalen & evolutie",
+            "description": "Een chronologisch overzicht van professionele mijlpalen, rollen en technische groei.",
+            "chips": ["Carrièremijlpalen", "Evolutie", "Groei"],
+            "statValue": "6+",
+            "statLabel": "jaar evolutie",
+            "cta": "Bekijk tijdlijn"
           },
           "ai-workflow": {
             "label": "Hoe ik AI gebruik",
-            "description": "AI-toolintegratie en engineering-workflow."
+            "short": "Engineering-versnelling",
+            "headline": "AI-ondersteunde engineering",
+            "description": "Hoe ik moderne AI-tools, agent-workflows en automatisering integreer in dagelijkse softwareontwikkeling.",
+            "chips": ["AI Tooling", "Snelheid", "Geautomatiseerde workflows"],
+            "statValue": "2x",
+            "statLabel": "leveringssnelheid",
+            "cta": "Verken AI-workflow"
           },
           "qa-collaboration": {
             "label": "QA-samenwerking",
-            "description": "Kwaliteitspraktijken, testen en releases."
+            "short": "Kwaliteit & testen",
+            "headline": "Softwarekwaliteit & teststrategie",
+            "description": "Nauw samenwerken met QA, geautomatiseerde testsuites en nul regressies in productie.",
+            "chips": [
+              "Kwaliteitsborging",
+              "Geautomatiseerde tests",
+              "Nul regressies"
+            ],
+            "statValue": "99.9%",
+            "statLabel": "productiestabiliteit",
+            "cta": "Lees QA-praktijken"
           },
           "uses": {
             "label": "Uses",
-            "description": "Hardware, software en tools die ik elke dag gebruik."
+            "short": "Hardware, software & setup",
+            "headline": "Hardware & software die ik dagelijks gebruik",
+            "description": "De hardware, werkplekconfiguratie, editors en softwaretools waar ik dagelijks op vertrouw.",
+            "chips": ["Hardware", "Werkstation", "Dev tools", "Terminal"],
+            "statValue": "Dagelijks",
+            "statLabel": "developer tools",
+            "cta": "Bekijk setup"
           },
           "now": {
             "label": "Now",
-            "description": "Waar ik me nu op focus, wat ik lees en wat ik ship."
+            "short": "Huidige focus & lezen",
+            "headline": "Waar ik nu aan werk",
+            "description": "Een actueel overzicht van actieve projecten, technologieën die ik verken en wat ik nu oplever.",
+            "chips": ["Huidige focus", "Leeslijst", "Actieve projecten"],
+            "statValue": "Live",
+            "statLabel": "huidige status",
+            "cta": "Bekijk Now-pagina"
           },
           "stats": {
             "label": "Stats",
-            "description": "Anonieme bezoekersstats en portfolio-highlights."
+            "short": "Bezoekers- & portfoliostatistieken",
+            "headline": "Portfoliostatistieken & analytics",
+            "description": "Transparante statistieken over bezoeken, geografische spreiding en prestaties.",
+            "chips": ["Analytics", "Prestaties", "Demografie"],
+            "statValue": "Live",
+            "statLabel": "site-telemetrie",
+            "cta": "Bekijk statistieken"
           },
           "colophon": {
             "label": "Colofon",
-            "description": "Hoe deze site is gebouwd — stack, typografie, kleuren en voetafdruk."
+            "short": "Hoe deze site is gebouwd",
+            "headline": "Achter de schermen",
+            "description": "Architectuur, frameworks, design tokens, typografie en ecologische voetafdruk van deze website.",
+            "chips": ["Next.js 15", "Tailwind CSS", "TypeScript", "Prestaties"],
+            "statValue": "v2.0",
+            "statLabel": "portfolio-editie",
+            "cta": "Lees colofon"
           }
         }
       }

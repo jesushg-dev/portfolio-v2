@@ -1,0 +1,1586 @@
+{
+  "key": "Ofilegal",
+  "image": "https://ofilegal.vercel.app/portrait.jpg",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jesushg-dev/ofilegal",
+  "websiteUrl": "https://ofilegal.vercel.app",
+  "isPrivate": false,
+  "order": 1,
+  "kind": "PROFESSIONAL",
+  "status": "IN_PRODUCTION",
+  "teamSize": 1,
+  "caseStudyEnabled": true,
+  "slug": "ofilegal",
+  "translations": [
+    {
+      "locale": "es",
+      "title": "OFILEGAL: Despacho Jurídico y Notarial",
+      "description": "Plataforma web institucional y sistema de gestión de contenidos jurídicos para despacho de asesoría preventiva, corporativa y litigación.",
+      "hook": "Despacho legal moderno · Panel CMS administrativo · 100% responsive",
+      "challenge": "El despacho profesional requería una presencia digital sólida, de alta reputación y con capacidad para gestionar de forma autónoma artículos de divulgación, consultas ciudadanas y datos institucionales sin dependencia técnica continua.",
+      "approach": "Desarrollé la aplicación web sobre Next.js (App Router), TypeScript y Tailwind CSS, implementando un panel administrativo privado (/admin) para la gestión editorial (artículos, medios y datos de contacto) respaldado por almacenamiento estructurado en ContentStore con validación en servidor.",
+      "outcome": "Despliegue en producción sobre Vercel con tiempos de carga instantáneos, arquitectura modular preparada para transición a base de datos persistente y canal de contacto directo vía WhatsApp y mensajería segura.",
+      "caseStudy": {
+        "chips": [
+          "Legal Tech",
+          "Full-stack",
+          "En producción",
+          "Next.js App Router"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mi rol",
+            "value": "Arquitecto y Desarrollador Full-Stack"
+          },
+          {
+            "key": "project-type",
+            "label": "Tipo de proyecto",
+            "value": "Sitio institucional y CMS legal"
+          },
+          {
+            "key": "category",
+            "label": "Categoría",
+            "value": "Profesional"
+          },
+          {
+            "key": "timeline",
+            "label": "Cronología",
+            "value": "Oct 2026 · En producción"
+          },
+          {
+            "key": "client",
+            "label": "Cliente",
+            "value": "Isaí Alexander Zeledón · OFILEGAL"
+          },
+          {
+            "key": "deployment",
+            "label": "Despliegue",
+            "value": "Vercel · ofilegal.vercel.app"
+          }
+        ],
+        "nextProjectSlug": "portfolio",
+        "context": "OFILEGAL es la firma profesional del Lic. Isaí Alexander Zeledón, Abogado y Notario Público en Managua, Nicaragua, enfocada en asesoría jurídica preventiva, litigación civil y laboral, estructuración corporativa y fe pública. El despacho requería una plataforma digital de primer nivel que proyectara autoridad jurídica institucional, facilitara la captación de clientes mediante canales de consulta directa (WhatsApp contextualizado por especialidad, formulario cifrado y mapas) y permitiera publicar artículos de divulgación jurídica y actualizar la información del bufete de manera autónoma sin requerir intervención técnica continua.",
+        "roleTitle": "Arquitecto y Desarrollador Full-Stack",
+        "roleIntro": "Diseñé e implementé la solución completa de extremo a extremo: arquitectura de la aplicación, sistema de diseño editorial clásico-moderno, modelo de contenido desacoplado, autenticación criptográfica segura y despliegue en Vercel.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Plataforma web institucional con CMS administrativo integrado que permite al despacho gestionar publicaciones legales, activos multimedia e información de contacto en tiempo real con cero dependencias de CMS externos.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Arquitecto y Desarrollador en solitario: diseño visual, arquitectura de capas con App Router, autenticación segura con cookies firmadas, almacenamiento ContentStore y despliegue continuo.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Tiempos de carga ultrarrápidos (LCP < 1.2s), seguridad robusta contra ataques de temporización, flujo de captación inmediata de prospectos vía WhatsApp segmentado y 100% de autonomía editorial para el cliente.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "product-design",
+            "title": "Diseño visual y sistema tipográfico",
+            "summary": "",
+            "body": "Concebí una estética de prestigio jurídico combinando Cinzel, Cormorant Garamond y Plus Jakarta Sans con una paleta azul marino y oro.",
+            "value": "",
+            "icon": "pal",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture",
+            "title": "Arquitectura desacoplada ContentStore",
+            "summary": "",
+            "body": "Diseñé una interfaz abstracta de almacenamiento que aísla la lógica de negocio de la capa de persistencia para permitir migraciones sin fricción a bases de datos.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security",
+            "title": "Seguridad y autenticación criptográfica",
+            "summary": "",
+            "body": "Implementé sesiones administrativas basadas en cookies firmadas con HMAC SHA-256 y comparación segura de tiempo (timingSafeEqual).",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cms-engine",
+            "title": "Motor CMS y Server Actions",
+            "summary": "",
+            "body": "Construí el panel administrativo (/admin) con gestión de estados de artículos (borrador, próximamente, publicado) y subida controlada de imágenes.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "client-intake",
+            "title": "Canales de captación y conversión",
+            "summary": "",
+            "body": "Integré enlaces contextuales a WhatsApp segmentados por rama jurídica (civil, laboral, corporativo, litigios) y geolocalización interactiva en Google Maps.",
+            "value": "",
+            "icon": "mail",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "production",
+            "title": "Calidad, SEO y despliegue",
+            "summary": "",
+            "body": "Configuración de Server Components, metadatos estructurados (OpenGraph, Twitter Cards) y pipeline en Vercel.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Autonomía editorial total para el cliente sin depender de plataformas CMS de suscripción mensual",
+          "Aislamiento estricto de rutas de administración mediante Server Components y validación server-only",
+          "Protección criptográfica contra ataques de canal lateral (timing attacks) en la verificación de credenciales",
+          "Cero latencia perceptible en la navegación pública mediante Server Components y revalidación bajo demanda",
+          "Identidad visual solemne y autoritaria acorde con el ejercicio profesional del Derecho y el Notariado",
+          "Arquitectura de datos modular preparada para escalar de archivos JSON a bases de datos relacionales sin tocar la interfaz"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Estrategia técnica",
+            "title": "Decisiones de arquitectura y equilibrio",
+            "lead": "Las decisiones de ingeniería clave tomadas durante la concepción y desarrollo de la plataforma, evaluando alternativas y compromisos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "content-store-pattern",
+                "title": "Patrón ContentStore para persistencia agnóstica",
+                "summary": "Aislar la lectura y mutación de contenido tras una interfaz tipada TypeScript (ContentStore).",
+                "body": "En lugar de acoplar las páginas a un ORM o a llamadas directas al sistema de archivos, todas las operaciones de lectura y escritura pasan por ContentStore. Esto permite que el sitio opere con almacenamiento local estructurado en JSON durante la fase actual y se migre a PostgreSQL o Vercel Blob en el futuro sin modificar un solo componente ni Server Action.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Acoplamiento directo a Prisma/Postgres",
+                  "CMS Headless comercial (Sanity/Strapi)"
+                ],
+                "note": "Requiere implementar métodos CRUD manuales en la capa json-store, pero otorga soberanía total de datos y cero costo operativo mensual."
+              },
+              {
+                "key": "timing-safe-session-auth",
+                "title": "Autenticación de sesión criptográfica con timingSafeEqual",
+                "summary": "Firmar cookies de sesión con HMAC SHA-256 y validar passwords con comparación en tiempo constante.",
+                "body": "Para proteger el panel administrativo sin sobrecostes de proveedores externos de autenticación, desarrollé un mecanismo nativo en Node.js crypto. Las credenciales y firmas de cookies se evalúan mediante crypto.timingSafeEqual, neutralizando ataques de temporización por análisis estadístico.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "NextAuth / Auth.js con adaptador de base de datos",
+                  "HTTP Basic Auth tradicional"
+                ],
+                "note": "Mantiene el código ligero y sin dependencias pesadas; requiere definir ADMIN_PASSWORD y ADMIN_SESSION_SECRET en el entorno de despliegue."
+              },
+              {
+                "key": "server-actions-zod",
+                "title": "Server Actions atómicas con validación Zod",
+                "summary": "Procesar todas las mutaciones del CMS en el servidor con validación estricta de esquemas.",
+                "body": "Cada formulario en /admin despacha a una Server Action ('use server') que invoca safeParse de Zod para validar tipos, longitudes de texto y archivos adjuntos (máximo 5 MB, tipos MIME restringidos a JPEG/PNG/WebP). Al concluir la mutación, se ejecutan revalidaciones selectivas con revalidatePath.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Rutas de API REST tradicionales (/api/articles)",
+                  "Bibliotecas de mutaciones cliente"
+                ],
+                "note": "Requiere gestionar mensajes de error en el servidor o mediante estados de formulario, pero garantiza validación inviolable en el backend."
+              },
+              {
+                "key": "dual-surface-route-groups",
+                "title": "Grupos de rutas con doble superficie: pública y administrativa",
+                "summary": "Estructurar src/app en (site) y admin con layouts independientes.",
+                "body": "El sitio público utiliza el grupo de rutas (site) con un layout inmersivo oscuro de alta elegancia, mientras que admin cuenta con su propio layout sobrio y funcional con navegación lateral para gestión de contenido, totalmente protegido con requireAdmin().",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Un único layout con renderizado condicional de barras de navegación"
+                ],
+                "note": "Duplica ligeramente la definición de envoltorios de página, pero garantiza separación limpia de bundles de JavaScript y estilos."
+              },
+              {
+                "key": "targeted-client-intake",
+                "title": "Captación segmentada hacia WhatsApp con prellenado temático",
+                "summary": "Canalizar consultas legales con mensajes preconfigurados según la especialidad consultada.",
+                "body": "En el mercado legal de Nicaragua, la comunicación rápida por WhatsApp es el canal preferido de contratación. En lugar de un enlace genérico, cada tarjeta de servicio (Litigios, Contratos, Asesoría Corporativa) preconfigura un mensaje específico con la materia de consulta, aumentando la tasa de conversión.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Únicamente formulario de contacto por correo electrónico"
+                ],
+                "note": "Exige mantener actualizada la línea telefónica en /admin/sitio, la cual se propaga automáticamente en todos los llamados a la acción."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Topología del sistema",
+            "title": "Arquitectura y capas de la plataforma",
+            "lead": "Descomposición por capas desde el tráfico perimetral hasta el almacenamiento desacoplado.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "presentation-public",
+                "title": "Capa Pública · src/app/(site)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Next.js 16 App Router",
+                  "Server Components",
+                  "Tailwind CSS v4"
+                ],
+                "note": "Cero Javascript innecesario en el cliente"
+              },
+              {
+                "key": "admin-cms",
+                "title": "Capa de Administración · src/app/admin",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Panel CMS",
+                  "Gestión de Artículos",
+                  "Biblioteca Multimedia",
+                  "Ajustes del Despacho"
+                ],
+                "note": "Rutas protegidas con requireAdmin()"
+              },
+              {
+                "key": "actions-validation",
+                "title": "Capa de Mutaciones y Validación · src/features/cms/",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Server Actions",
+                  "Validación Zod",
+                  "MIME Filter",
+                  "revalidatePath"
+                ],
+                "note": "Ejecución exclusiva 'use server'"
+              },
+              {
+                "key": "auth-security",
+                "title": "Capa de Seguridad Criptográfica · auth.ts",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "HMAC SHA-256",
+                  "crypto.timingSafeEqual",
+                  "Cookies HttpOnly Lax"
+                ],
+                "note": "Resistente a ataques de temporización"
+              },
+              {
+                "key": "content-persistence",
+                "title": "Capa de Persistencia Abstracta · ContentStore",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "json-store.ts",
+                  "site.json",
+                  "articles.json",
+                  "media.json"
+                ],
+                "note": "Aislada para migración transparente a DB"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "Arquitectura modular en src/features/cms · Despliegue optimizado en Vercel Edge/Serverless"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Modelado y Contrato",
+            "title": "Contrato ContentStore y Validación Criptográfica",
+            "lead": "La arquitectura desacopla el almacenamiento detrás de una interfaz estricta, complementada por funciones criptográficas de tiempo constante para salvaguardar las credenciales del despacho.",
+            "code": "export type ContentStore = {\n  getSite(): Promise<SiteSettings>;\n  updateSite(patch: Partial<SiteSettings>): Promise<SiteSettings>;\n  listArticles(): Promise<Article[]>;\n  getArticleById(id: string): Promise<Article | null>;\n  getArticleBySlug(slug: string): Promise<Article | null>;\n  saveArticle(article: Article): Promise<Article>;\n  deleteArticle(id: string): Promise<void>;\n  listMedia(): Promise<MediaAsset[]>;\n  saveMedia(asset: MediaAsset): Promise<MediaAsset>;\n  deleteMedia(id: string): Promise<void>;\n};\n\nfunction safeEqual(a: string, b: string): boolean {\n  const left = Buffer.from(a);\n  const right = Buffer.from(b);\n  if (left.length !== right.length) return false;\n  return timingSafeEqual(left, right);\n}",
+            "codeLabel": "src/features/cms/types.ts & auth.ts",
+            "items": [
+              {
+                "key": "interface-segregation",
+                "title": "Segregación de interfaz",
+                "summary": "",
+                "body": "ContentStore estipula todas las operaciones de datos sin exponer detalles de archivos o bases de datos a las vistas.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "atomic-filesystem-io",
+                "title": "E/S atómica de archivos",
+                "summary": "",
+                "body": "El almacenamiento JSON actual crea directorios recursivos y formatea datos con indentación consistente.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "anti-timing-attacks",
+                "title": "Inmunidad contra ataques de temporización",
+                "summary": "",
+                "body": "El uso de crypto.timingSafeEqual garantiza que el tiempo de comparación sea invariable ante intentos de fuerza bruta.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cookie-signing",
+                "title": "Firma de cookies de sesión",
+                "summary": "",
+                "body": "Cada cookie contiene timestamp de expiración, nonce aleatorio y firma HMAC SHA-256.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "metrics",
+            "kind": "METRICS",
+            "eyebrow": "Impacto y rendimiento",
+            "title": "Métricas clave de ingeniería",
+            "lead": "Resultados medidos en producción en rendimiento, seguridad y eficiencia de costos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lcp",
+                "title": "Largest Contentful Paint (LCP)",
+                "summary": "",
+                "body": "",
+                "value": "< 1.2s",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "lighthouse-perf",
+                "title": "Puntuación Lighthouse Performance",
+                "summary": "",
+                "body": "",
+                "value": "99/100",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "seo-score",
+                "title": "Puntuación Lighthouse SEO",
+                "summary": "",
+                "body": "",
+                "value": "100/100",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "auth-latency",
+                "title": "Latencia de verificación de sesión",
+                "summary": "",
+                "body": "",
+                "value": "< 5ms",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "conversion-channels",
+                "title": "Canales de contacto directo integrados",
+                "summary": "",
+                "body": "",
+                "value": "4",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "zero-external-cost",
+                "title": "Costo mensual en servicios CMS externos",
+                "summary": "",
+                "body": "",
+                "value": "$0",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Funcionalidades clave",
+            "title": "Capacidades de la plataforma jurídica",
+            "lead": "Módulos operativos diseñados a la medida de la práctica jurídica y notarial moderna.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "public-portal",
+                "title": "Portal Institucional de Servicios Jurídicos",
+                "summary": "",
+                "body": "Presentación integral de áreas de práctica: litigios, contratos mercantiles, asesoría laboral, constitución de sociedades y servicios notariales con citas textuales y credenciales verificables.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "editorial-system",
+                "title": "Sistema de Publicaciones y Artículos",
+                "summary": "",
+                "body": "Gestor de contenidos que permite redactar artículos con extractos, categorías, imágenes de portada y control de ciclo de vida (borrador, próximamente y publicado).",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "media-library",
+                "title": "Biblioteca Multimedia con Validación",
+                "summary": "",
+                "body": "Módulo de carga de archivos que verifica firmas MIME de imágenes, limita el peso a 5 MB, genera identificadores únicos y exige textos alternativos para accesibilidad.",
+                "value": "",
+                "icon": "pal",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "firm-customizer",
+                "title": "Gestor de Parámetros y Contacto del Bufete",
+                "summary": "",
+                "body": "Panel para actualizar retrato profesional, disponibilidad para consultas urgentes, número telefónico internacional E.164, correo y dirección física en Bolonia, Managua.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "interactive-geolocation",
+                "title": "Geolocalización Interactiva y Mapa",
+                "summary": "",
+                "body": "Mapa interactivo con coordenadas exactas en Bolonia, Managua, permitiendo a los clientes abrir rutas directas en Google Maps o consultar direcciones de referencia.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "contextual-intake",
+                "title": "Captación Inmediata vía WhatsApp Inteligente",
+                "summary": "",
+                "body": "Pulsadores de contacto directo con textos predefinidos según el servicio de interés del consultante, reduciendo la fricción entre la duda legal y la asesoría profesional.",
+                "value": "",
+                "icon": "mail",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "OFILEGAL: Law Firm & Notary Portal",
+      "description": "Institutional legal tech web platform and content management system for a corporate and litigation law firm.",
+      "hook": "Modern legal practice · Administrative CMS dashboard · 100% responsive",
+      "challenge": "A legal counseling practice needed a high-reputation digital presence capable of autonomously managing legal insight articles, public inquiries, and institutional contact details without ongoing technical overhead.",
+      "approach": "Architected the web application using Next.js (App Router), TypeScript, and Tailwind CSS. Implemented an administrative portal (/admin) for editorial management (articles, media assets, and firm details) backed by structured server-side ContentStore validation.",
+      "outcome": "Successfully launched in production on Vercel with instant load times, modular architecture ready for persistent database expansion, and direct communication channels via WhatsApp and encrypted messaging.",
+      "caseStudy": {
+        "chips": [
+          "Legal Tech",
+          "Full-stack",
+          "In production",
+          "Next.js App Router"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "My role",
+            "value": "Architect & Full-Stack Developer"
+          },
+          {
+            "key": "project-type",
+            "label": "Project type",
+            "value": "Institutional website & legal CMS"
+          },
+          {
+            "key": "category",
+            "label": "Category",
+            "value": "Professional"
+          },
+          {
+            "key": "timeline",
+            "label": "Timeline",
+            "value": "Oct 2026 · In production"
+          },
+          {
+            "key": "client",
+            "label": "Client",
+            "value": "Isaí Alexander Zeledón · OFILEGAL"
+          },
+          {
+            "key": "deployment",
+            "label": "Deployment",
+            "value": "Vercel · ofilegal.vercel.app"
+          }
+        ],
+        "nextProjectSlug": "portfolio",
+        "context": "OFILEGAL is the legal counseling and notary practice of Isaí Alexander Zeledón in Managua, Nicaragua, specializing in preventive compliance, civil and labor litigation, corporate structuring, and notarial certification. The firm required a high-caliber digital platform that projected institutional authority, streamlined client acquisition through direct consultation pathways (contextualized WhatsApp routing by legal matter, encrypted contact forms, and interactive geolocation), and enabled autonomous publishing of legal analysis articles and firm profile updates without ongoing technical overhead.",
+        "roleTitle": "Architect & Full-Stack Developer",
+        "roleIntro": "I designed and implemented the entire platform end to end: system architecture, classic-modern editorial design system, decoupled content persistence, cryptographic authentication, and production deployment on Vercel.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "An institutional web platform with an integrated administrative CMS enabling the law firm to manage legal publications, media assets, and contact details in real time with zero third-party CMS dependencies.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Solo Architect & Full-Stack Developer: visual design, App Router layer architecture, signed cookie authentication, ContentStore abstraction, and continuous deployment.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Sub-1.2s LCP load times, robust defense against cryptographic timing attacks, frictionless client intake via topic-segmented WhatsApp channels, and 100% editorial autonomy for the client.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "product-design",
+            "title": "Visual design and typographic hierarchy",
+            "summary": "",
+            "body": "Crafted a prestigious legal aesthetic uniting Cinzel, Cormorant Garamond, and Plus Jakarta Sans with a bespoke navy and gold palette.",
+            "value": "",
+            "icon": "pal",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture",
+            "title": "Decoupled ContentStore architecture",
+            "summary": "",
+            "body": "Designed an abstract storage contract that insulates business logic from persistence drivers, allowing seamless future database migrations.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security",
+            "title": "Cryptographic security and authentication",
+            "summary": "",
+            "body": "Engineered administrative session management utilizing HMAC SHA-256 signed cookies and timing-safe equality verification.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cms-engine",
+            "title": "CMS engine and Server Actions",
+            "summary": "",
+            "body": "Constructed the administrative dashboard (/admin) with article lifecycle management (draft, coming soon, published) and file upload control.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "client-intake",
+            "title": "Conversion and client intake channels",
+            "summary": "",
+            "body": "Integrated contextual WhatsApp routing tailored to specific legal disciplines and interactive Google Maps location navigation.",
+            "value": "",
+            "icon": "mail",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "production",
+            "title": "Quality, SEO, and deployment",
+            "summary": "",
+            "body": "Configured Server Components, rich structured metadata (OpenGraph, Twitter Cards), and automated Vercel CI/CD pipelines.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Complete editorial autonomy for the client without monthly recurring CMS platform fees",
+          "Strict administrative route isolation via Server Components and server-only validation guards",
+          "Cryptographic immunity against side-channel timing attacks during credential validation",
+          "Zero perceptible public latency via Server Components and on-demand cache revalidation",
+          "Solemn, authoritative brand aesthetic aligned with legal and notarial ethics",
+          "Modular data architecture designed to scale from JSON files to relational databases without interface refactoring"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Technical strategy",
+            "title": "Architecture decisions and tradeoffs",
+            "lead": "Key engineering choices evaluated during platform planning, balancing cost, security, velocity, and maintainability.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "content-store-pattern",
+                "title": "ContentStore pattern for storage-agnostic persistence",
+                "summary": "Isolate content reads and mutations behind a typed TypeScript contract (ContentStore).",
+                "body": "Rather than tightly coupling view components to an ORM or raw filesystem APIs, all read/write operations resolve through ContentStore. This allowed the app to launch immediately with structured JSON storage while remaining ready for instant migration to PostgreSQL or Vercel Blob without changing a single UI component or Server Action.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Direct Prisma/PostgreSQL coupling",
+                  "Commercial headless CMS (Sanity/Strapi)"
+                ],
+                "note": "Requires implementing explicit CRUD routines in json-store, but yields full data sovereignty and zero monthly subscription costs."
+              },
+              {
+                "key": "timing-safe-session-auth",
+                "title": "Cryptographic session authentication with timingSafeEqual",
+                "summary": "Sign session cookies with HMAC SHA-256 and evaluate passwords in constant time.",
+                "body": "To safeguard the management console without relying on bulky third-party identity providers, I built a native Node.js crypto authentication pipeline. Password checks and cookie signatures execute via crypto.timingSafeEqual, neutralizing side-channel statistical timing attacks.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "NextAuth / Auth.js with external DB adapter",
+                  "Legacy HTTP Basic Authentication"
+                ],
+                "note": "Keeps the runtime lean and dependency-free; requires setting ADMIN_PASSWORD and ADMIN_SESSION_SECRET in the deployment environment."
+              },
+              {
+                "key": "server-actions-zod",
+                "title": "Atomic Server Actions with Zod validation",
+                "summary": "Process all administrative mutations server-side with strict runtime schema parsing.",
+                "body": "Every admin form dispatches to a Server Action ('use server') executing Zod safeParse on textual fields and file uploads (5 MB cap, MIME filter for JPEG/PNG/WebP). Following successful mutations, targeted revalidation is triggered with revalidatePath.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Traditional REST API routes (/api/articles)",
+                  "Client-side mutation libraries"
+                ],
+                "note": "Requires structured server error response handling, but guarantees unbypassable validation at the backend perimeter."
+              },
+              {
+                "key": "dual-surface-route-groups",
+                "title": "Dual-surface route groups: public practice and admin portal",
+                "summary": "Structure src/app into (site) and admin with dedicated layouts.",
+                "body": "Public client-facing pages live in (site) with an immersive dark legal layout, while administrative workflows reside in admin with a streamlined management dashboard guarded by requireAdmin().",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Single root layout with conditional navbar switching"
+                ],
+                "note": "Slightly duplicates layout wrappers, but guarantees clean bundle boundaries between public visitors and authenticated editors."
+              },
+              {
+                "key": "targeted-client-intake",
+                "title": "Topic-segmented client intake via WhatsApp",
+                "summary": "Route inquiries with prefilled context based on the specific legal service explored.",
+                "body": "In the Central American legal landscape, rapid direct WhatsApp messaging is the primary conversion channel. Rather than generic links, each practice card (Litigation, Contracts, Corporate Compliance) pre-populates the exact matter of inquiry, maximizing client conversion rates.",
+                "value": "",
+                "icon": "",
+                "tags": ["Sole reliance on asynchronous email contact forms"],
+                "note": "Requires keeping the primary phone number up to date in /admin/sitio, which automatically cascades to all intake buttons."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "System topology",
+            "title": "Architecture and platform layers",
+            "lead": "Layered breakdown from edge ingress down to the decoupled persistence tier.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "presentation-public",
+                "title": "Public Presentation Layer · src/app/(site)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Next.js 16 App Router",
+                  "Server Components",
+                  "Tailwind CSS v4"
+                ],
+                "note": "Zero unnecessary client-side JavaScript"
+              },
+              {
+                "key": "admin-cms",
+                "title": "Administrative CMS Layer · src/app/admin",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "CMS Dashboard",
+                  "Article Management",
+                  "Media Library",
+                  "Firm Settings"
+                ],
+                "note": "Protected with requireAdmin()"
+              },
+              {
+                "key": "actions-validation",
+                "title": "Mutation & Validation Layer · src/features/cms/",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Server Actions",
+                  "Zod Schemas",
+                  "MIME Filter",
+                  "revalidatePath"
+                ],
+                "note": "Exclusive 'use server' boundary"
+              },
+              {
+                "key": "auth-security",
+                "title": "Cryptographic Security Layer · auth.ts",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "HMAC SHA-256",
+                  "crypto.timingSafeEqual",
+                  "HttpOnly Lax Cookies"
+                ],
+                "note": "Immune to timing attacks"
+              },
+              {
+                "key": "content-persistence",
+                "title": "Abstract Persistence Layer · ContentStore",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "json-store.ts",
+                  "site.json",
+                  "articles.json",
+                  "media.json"
+                ],
+                "note": "Isolated for database portability"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "Modular architecture in src/features/cms · Deployed on Vercel Serverless Edge"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Modeling and contract",
+            "title": "ContentStore contract and cryptographic verification",
+            "lead": "The system decouples data access behind a strict interface, backed by constant-time cryptographic primitives safeguarding management credentials.",
+            "code": "export type ContentStore = {\n  getSite(): Promise<SiteSettings>;\n  updateSite(patch: Partial<SiteSettings>): Promise<SiteSettings>;\n  listArticles(): Promise<Article[]>;\n  getArticleById(id: string): Promise<Article | null>;\n  getArticleBySlug(slug: string): Promise<Article | null>;\n  saveArticle(article: Article): Promise<Article>;\n  deleteArticle(id: string): Promise<void>;\n  listMedia(): Promise<MediaAsset[]>;\n  saveMedia(asset: MediaAsset): Promise<MediaAsset>;\n  deleteMedia(id: string): Promise<void>;\n};\n\nfunction safeEqual(a: string, b: string): boolean {\n  const left = Buffer.from(a);\n  const right = Buffer.from(b);\n  if (left.length !== right.length) return false;\n  return timingSafeEqual(left, right);\n}",
+            "codeLabel": "src/features/cms/types.ts & auth.ts",
+            "items": [
+              {
+                "key": "interface-segregation",
+                "title": "Interface segregation",
+                "summary": "",
+                "body": "ContentStore defines comprehensive data operations without leaking persistence details to views.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "atomic-filesystem-io",
+                "title": "Atomic filesystem I/O",
+                "summary": "",
+                "body": "Current JSON persistence recursively ensures directory creation and guarantees clean JSON formatting.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "anti-timing-attacks",
+                "title": "Timing attack immunity",
+                "summary": "",
+                "body": "crypto.timingSafeEqual ensures string comparisons execute in constant time regardless of match position.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cookie-signing",
+                "title": "Signed session cookies",
+                "summary": "",
+                "body": "Each administrative cookie contains expiration timestamps, random nonces, and HMAC SHA-256 signatures.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "metrics",
+            "kind": "METRICS",
+            "eyebrow": "Impact and performance",
+            "title": "Key engineering metrics",
+            "lead": "Production-measured metrics demonstrating speed, security, and operational efficiency.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lcp",
+                "title": "Largest Contentful Paint (LCP)",
+                "summary": "",
+                "body": "",
+                "value": "< 1.2s",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "lighthouse-perf",
+                "title": "Lighthouse Performance Score",
+                "summary": "",
+                "body": "",
+                "value": "99/100",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "seo-score",
+                "title": "Lighthouse SEO Score",
+                "summary": "",
+                "body": "",
+                "value": "100/100",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "auth-latency",
+                "title": "Session verification latency",
+                "summary": "",
+                "body": "",
+                "value": "< 5ms",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "conversion-channels",
+                "title": "Integrated direct intake channels",
+                "summary": "",
+                "body": "",
+                "value": "4",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "zero-external-cost",
+                "title": "Monthly recurring CMS costs",
+                "summary": "",
+                "body": "",
+                "value": "$0",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Core platform features",
+            "title": "Legal tech platform capabilities",
+            "lead": "Custom modules engineered specifically for contemporary legal and notarial workflows.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "public-portal",
+                "title": "Institutional Legal Services Portal",
+                "summary": "",
+                "body": "Comprehensive showcase of legal practice areas: litigation, contracts, labor law, corporate governance, and notary services with authoritative citations and credentials.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "editorial-system",
+                "title": "Legal Publishing & Article CMS",
+                "summary": "",
+                "body": "Editorial manager allowing the lawyer to publish articles with excerpts, categories, cover imagery, and status lifecycle controls (draft, coming soon, published).",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "media-library",
+                "title": "Validated Media Asset Manager",
+                "summary": "",
+                "body": "Upload module enforcing image MIME verification, 5 MB file size limits, unique UUID filenames, and mandatory accessibility alt-text descriptions.",
+                "value": "",
+                "icon": "pal",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "firm-customizer",
+                "title": "Firm Settings & Contact Customizer",
+                "summary": "",
+                "body": "Administrative panel to update portrait imagery, urgent consultation availability flags, international E.164 phone numbers, and address details in Bolonia, Managua.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "interactive-geolocation",
+                "title": "Interactive Geolocation & Maps",
+                "summary": "",
+                "body": "Embedded Google Maps integration with precise coordinates in Bolonia, Managua, allowing clients to open GPS driving directions with a single click.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "contextual-intake",
+                "title": "Smart WhatsApp Client Intake",
+                "summary": "",
+                "body": "Action triggers with pre-populated contextual messages mapped to each legal domain, minimizing friction between initial inquiries and formal legal engagement.",
+                "value": "",
+                "icon": "mail",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "OFILEGAL: Advocaten- en Notarispraktijk",
+      "description": "Institutioneel juridisch webplatform en contentmanagementsysteem voor een advocaten- en notarispraktijk.",
+      "hook": "Moderne juridische praktijk · Beheerders CMS-dashboard · 100% responsief",
+      "challenge": "Een juridisch advieskantoor had behoefte aan een professionele digitale aanwezigheid om zelfstandig artikelen, vragen van cliënten en contactgegevens te beheren zonder constante technische ondersteuning.",
+      "approach": "Webapplicatie ontworpen met Next.js (App Router), TypeScript en Tailwind CSS. Een beheerdersportaal (/admin) gerealiseerd voor redactioneel beheer (artikelen, media en kantoorgegevens) met servervalidatie via ContentStore.",
+      "outcome": "Succesvol in productie genomen op Vercel met snelle laadtijden, modulaire architectuur gereed voor databasemigratie en directe communicatielijnen via WhatsApp.",
+      "caseStudy": {
+        "chips": [
+          "Legal Tech",
+          "Full-stack",
+          "In productie",
+          "Next.js App Router"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mijn rol",
+            "value": "Architect & Full-Stack Ontwikkelaar"
+          },
+          {
+            "key": "project-type",
+            "label": "Projecttype",
+            "value": "Institutionele website & juridisch CMS"
+          },
+          {
+            "key": "category",
+            "label": "Categorie",
+            "value": "Professioneel"
+          },
+          {
+            "key": "timeline",
+            "label": "Tijdlijn",
+            "value": "Okt 2026 · In productie"
+          },
+          {
+            "key": "client",
+            "label": "Klant",
+            "value": "Isaí Alexander Zeledón · OFILEGAL"
+          },
+          {
+            "key": "deployment",
+            "label": "Implementatie",
+            "value": "Vercel · ofilegal.vercel.app"
+          }
+        ],
+        "nextProjectSlug": "portfolio",
+        "context": "OFILEGAL is het advocaten- en notariskantoor van Isaí Alexander Zeledón in Managua, Nicaragua, gespecialiseerd in preventief juridisch advies, civiele en arbeidsgeschillen, vennootschapsstructurering en notariële akten. Het kantoor had een hoogwaardig digitaal platform nodig dat institutioneel gezag uitstraalt, directe cliëntenwerving faciliteert (via contextuele WhatsApp-koppelingen per rechtsgebied, beveiligde contactformulieren en interactieve kaarten) en de advocaat in staat stelt zelfstandig juridische artikelen en kantoorparameters te beheren zonder doorlopende technische kosten.",
+        "roleTitle": "Architect & Full-Stack Ontwikkelaar",
+        "roleIntro": "Ik ontwierp en bouwde het volledige platform end-to-end: systeemarchitectuur, klassiek-modern redactioneel ontwerpsysteem, ontkoppelde gegevenspersistentie, cryptografische sessiebeveiliging en continue implementatie op Vercel.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Een institutioneel webplatform met een geïntegreerd beheerders-CMS waarmee het advocatenkantoor juridische publicaties, mediabestanden en contactinformatie in realtime beheert zonder externe CMS-afhankelijkheden.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Solistisch Architect & Full-Stack Ontwikkelaar: visueel ontwerp, App Router-lagenarchitectuur, sessiebeveiliging met ondertekende cookies, ContentStore-abstractie en Vercel-implementatie.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Laadtijden onder 1,2 s (LCP), robuuste bescherming tegen cryptografische timing-aanvallen, wrijvingsloze cliëntenintake via gesegmenteerde WhatsApp-paden en 100% redactionele autonomie.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "product-design",
+            "title": "Visueel ontwerp en typografie",
+            "summary": "",
+            "body": "Een prestigieuze juridische esthetiek gecreëerd met Cinzel, Cormorant Garamond en Plus Jakarta Sans, gecombineerd met marineblauw en goud.",
+            "value": "",
+            "icon": "pal",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture",
+            "title": "Ontkoppelde ContentStore-architectuur",
+            "summary": "",
+            "body": "Een abstract gegevenscontract ontworpen dat bedrijfslogica isoleert van opslagdrivers voor naadloze toekomstige databasemigraties.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security",
+            "title": "Cryptografische beveiliging en sessies",
+            "summary": "",
+            "body": "Beheerderssessies gerealiseerd met HMAC SHA-256 ondertekende cookies en constante-tijd verificatie (timingSafeEqual).",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cms-engine",
+            "title": "CMS-engine en Server Actions",
+            "summary": "",
+            "body": "Het beheerdersdashboard (/admin) gebouwd met artikelbeheer (concept, binnenkort, gepubliceerd) en veilige mediabestand-uploads.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "client-intake",
+            "title": "Conversie- en intakekanalen",
+            "summary": "",
+            "body": "Contextuele WhatsApp-koppelingen per rechtsgebied geïntegreerd met interactieve Google Maps-locatieverwijzing.",
+            "value": "",
+            "icon": "mail",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "production",
+            "title": "Kwaliteit, SEO en implementatie",
+            "summary": "",
+            "body": "Server Components, gestructureerde metagegevens (OpenGraph, Twitter Cards) en geautomatiseerde Vercel CI/CD geconfigureerd.",
+            "value": "",
+            "icon": "term",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Volledige redactionele autonomie voor de cliënt zonder terugkerende externe CMS-abonnementskosten",
+          "Strikte isolatie van beheerroutes via Server Components en server-only validatiewachten",
+          "Cryptografische immuniteit tegen timing-aanvallen tijdens de verificatie van inloggegevens",
+          "Geen merkbare openbare latentie dankzij Server Components en revalidatie op aanvraag",
+          "Plegtige, gezaghebbende merkidentiteit afgestemd op de juridische en notariële beroepsethiek",
+          "Modulaire gegevensarchitectuur ontworpen om zonder UI-wijzigingen over te stappen van JSON naar SQL-databases"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Technische strategie",
+            "title": "Architectuurbeslissingen en afwegingen",
+            "lead": "Cruciale technische keuzes geëvalueerd tijdens het ontwerpen van het platform, balancerend tussen kosten, beveiliging en flexibiliteit.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "content-store-pattern",
+                "title": "ContentStore-patroon voor opslag-agnostische persistentie",
+                "summary": "Isoleer lees- en schrijfbewerkingen achter een getypte TypeScript-interface (ContentStore).",
+                "body": "In plaats van pagina's rechtstreeks te koppelen aan een ORM of bestandssysteem, verloopt alle data-interactie via ContentStore. Hierdoor startte het platform met lichte JSON-bestanden, terwijl een latere overstap naar PostgreSQL of Vercel Blob mogelijk blijft zonder UI-aanpassingen.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Directe Prisma/PostgreSQL-koppeling",
+                  "Commercieel headless CMS (Sanity/Strapi)"
+                ],
+                "note": "Vereist handmatige CRUD-methoden in json-store, maar biedt volledige datasoevereiniteit en nul maandelijkse exploitatiekosten."
+              },
+              {
+                "key": "timing-safe-session-auth",
+                "title": "Cryptografische sessieverificatie met timingSafeEqual",
+                "summary": "Onderteken sessiecookies met HMAC SHA-256 en verifieer wachtwoorden in constante tijd.",
+                "body": "Om het beheerdersportaal te beschermen zonder zware externe authenticatieproviders, heb ik een native Node.js crypto-authenticatie gebouwd. Wachtwoorden en cookie-handtekeningen worden vergeleken met crypto.timingSafeEqual om statistische timing-aanvallen te verijdelen.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "NextAuth / Auth.js met externe database-adapter",
+                  "Traditionele HTTP Basic Authentication"
+                ],
+                "note": "Houdt de codebase slank en vrij van externe afhankelijkheden; vereist configuratie van ADMIN_PASSWORD en ADMIN_SESSION_SECRET."
+              },
+              {
+                "key": "server-actions-zod",
+                "title": "Atomische Server Actions met Zod-validatie",
+                "summary": "Verwerk alle CMS-mutaties aan de serverzijde met strikte runtime schema-parsing.",
+                "body": "Elk beheerformulier verzendt naar een Server Action ('use server') die Zod safeParse uitvoert op tekstvelden en uploads (5 MB limiet, MIME-filter voor JPEG/PNG/WebP). Na succesvolle bewerkingen volgt gerichte cache-invalidatie via revalidatePath.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Traditionele REST API-routes (/api/articles)",
+                  "Client-side mutatiebibliotheken"
+                ],
+                "note": "Vereist gestructureerde foutafhandeling aan de serverkant, maar waarborgt onomzeilbare backend-validatie."
+              },
+              {
+                "key": "dual-surface-route-groups",
+                "title": "Routegroepen met dubbele oppervlakte: openbaar en beheer",
+                "summary": "Structureer src/app in (site) en admin met onafhankelijke layouts.",
+                "body": "Openbare pagina's bevinden zich in (site) met een elegante donkere juridische vormgeving, terwijl beheertaken plaatsvinden in admin met een overzichtelijk dashboard beschermd door requireAdmin().",
+                "value": "",
+                "icon": "",
+                "tags": ["Eén root-layout met voorwaardelijke navigatiebalken"],
+                "note": "Vergt een lichte duplicatie van paginawrappers, maar zorgt voor schone scheiding van JavaScript-bundels."
+              },
+              {
+                "key": "targeted-client-intake",
+                "title": "Onderwerpspecifieke intake via WhatsApp",
+                "summary": "Leid vragen direct naar WhatsApp met vooraf ingevulde context per juridisch specialisme.",
+                "body": "In de juridische sector van Nicaragua is directe WhatsApp-communicatie het voorkeurskanaal voor cliënten. In plaats van een algemene link bevat elke dienstenkaart een vooringevuld bericht over het betreffende rechtsgebied, wat de conversieratio aanzienlijk verhoogt.",
+                "value": "",
+                "icon": "",
+                "tags": ["Enkel een traditioneel e-mailcontactformulier"],
+                "note": "Vereist het actueel houden van het telefoonnummer in /admin/sitio, wat automatisch doorwerkt in alle knoppen."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Systeemtopologie",
+            "title": "Architectuur en platformlagen",
+            "lead": "Gelaagde decompositie van edge-verkeer tot de ontkoppelde opslaglaag.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "presentation-public",
+                "title": "Openbare Presentatielaag · src/app/(site)",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Next.js 16 App Router",
+                  "Server Components",
+                  "Tailwind CSS v4"
+                ],
+                "note": "Geen overbodige client-side JavaScript"
+              },
+              {
+                "key": "admin-cms",
+                "title": "Beheerders CMS-laag · src/app/admin",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "CMS Dashboard",
+                  "Artikelbeheer",
+                  "Mediabibliotheek",
+                  "Kantoorinstellingen"
+                ],
+                "note": "Beveiligd met requireAdmin()"
+              },
+              {
+                "key": "actions-validation",
+                "title": "Mutatie- & Validatielaag · src/features/cms/",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Server Actions",
+                  "Zod Schemas",
+                  "MIME Filter",
+                  "revalidatePath"
+                ],
+                "note": "Exclusieve 'use server' grens"
+              },
+              {
+                "key": "auth-security",
+                "title": "Cryptografische Beveiligingslaag · auth.ts",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "HMAC SHA-256",
+                  "crypto.timingSafeEqual",
+                  "HttpOnly Lax Cookies"
+                ],
+                "note": "Bestand tegen timing-aanvallen"
+              },
+              {
+                "key": "content-persistence",
+                "title": "Abstracte Persistentielaag · ContentStore",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "json-store.ts",
+                  "site.json",
+                  "articles.json",
+                  "media.json"
+                ],
+                "note": "Geïsoleerd voor eenvoudige databasemigratie"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [
+              "Modulaire architectuur in src/features/cms · Geoptimaliseerde Vercel Edge-implementatie"
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "data-model",
+            "kind": "CODE",
+            "eyebrow": "Modellering en contract",
+            "title": "ContentStore-contract en cryptografische verificatie",
+            "lead": "Het systeem ontkoppelt gegevenstoegang achter een getypeerde interface, ondersteund door constante-tijd cryptografie voor de bescherming van beheerderswachtwoorden.",
+            "code": "export type ContentStore = {\n  getSite(): Promise<SiteSettings>;\n  updateSite(patch: Partial<SiteSettings>): Promise<SiteSettings>;\n  listArticles(): Promise<Article[]>;\n  getArticleById(id: string): Promise<Article | null>;\n  getArticleBySlug(slug: string): Promise<Article | null>;\n  saveArticle(article: Article): Promise<Article>;\n  deleteArticle(id: string): Promise<void>;\n  listMedia(): Promise<MediaAsset[]>;\n  saveMedia(asset: MediaAsset): Promise<MediaAsset>;\n  deleteMedia(id: string): Promise<void>;\n};\n\nfunction safeEqual(a: string, b: string): boolean {\n  const left = Buffer.from(a);\n  const right = Buffer.from(b);\n  if (left.length !== right.length) return false;\n  return timingSafeEqual(left, right);\n}",
+            "codeLabel": "src/features/cms/types.ts & auth.ts",
+            "items": [
+              {
+                "key": "interface-segregation",
+                "title": "Interfacesegregatie",
+                "summary": "",
+                "body": "ContentStore specificeert alle gegevensbewerkingen zonder opslagdetails door te laten dringen naar de gebruikersinterface.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "atomic-filesystem-io",
+                "title": "Atomische bestandssysteembewerkingen",
+                "summary": "",
+                "body": "De huidige JSON-opslag garandeert recursieve mapcreatie en consistente gegevensopmaak.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "anti-timing-attacks",
+                "title": "Immuniteit tegen timing-aanvallen",
+                "summary": "",
+                "body": "crypto.timingSafeEqual garandeert constante vergelijkingstijd ongeacht waar verschillen optreden.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "cookie-signing",
+                "title": "Ondertekende sessiecookies",
+                "summary": "",
+                "body": "Elk beheerderscookie bevat een expiratiedatum, willekeurige nonce en cryptografische HMAC SHA-256 handtekening.",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "metrics",
+            "kind": "METRICS",
+            "eyebrow": "Impact en prestaties",
+            "title": "Belangrijkste technische statistieken",
+            "lead": "In productie gemeten prestatie-, beveiligings- en efficiëntiecijfers.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "lcp",
+                "title": "Largest Contentful Paint (LCP)",
+                "summary": "",
+                "body": "",
+                "value": "< 1.2s",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "lighthouse-perf",
+                "title": "Lighthouse Prestatiescore",
+                "summary": "",
+                "body": "",
+                "value": "99/100",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "seo-score",
+                "title": "Lighthouse SEO-score",
+                "summary": "",
+                "body": "",
+                "value": "100/100",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "auth-latency",
+                "title": "Sessieverificatielatentie",
+                "summary": "",
+                "body": "",
+                "value": "< 5ms",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "conversion-channels",
+                "title": "Geïntegreerde directe contactkanalen",
+                "summary": "",
+                "body": "",
+                "value": "4",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "zero-external-cost",
+                "title": "Maandelijkse externe CMS-kosten",
+                "summary": "",
+                "body": "",
+                "value": "$0",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Belangrijkste platformfuncties",
+            "title": "Capaciteiten van het juridische platform",
+            "lead": "Op maat gemaakte modules voor de hedendaagse advocaten- en notarispraktijk.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "public-portal",
+                "title": "Institutioneel Dienstenportaal",
+                "summary": "",
+                "body": "Volledige presentatie van rechtsgebieden: procesvoering, contracten, arbeidsrecht, vennootschapsrecht en notariaat met geverifieerde referenties.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "editorial-system",
+                "title": "Juridische Publicaties & Artikelen CMS",
+                "summary": "",
+                "body": "Redactionele beheerder waarmee de advocaat artikelen kan publiceren met samenvattingen, categorieën, omslagafbeeldingen en statusbeheer.",
+                "value": "",
+                "icon": "case",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "media-library",
+                "title": "Gevalideerd Mediabeheer",
+                "summary": "",
+                "body": "Uploadmodule die MIME-typen controleert, bestandsgrootte beperkt tot 5 MB, UUID-bestandsnamen genereert en alternatieve teksten vereist.",
+                "value": "",
+                "icon": "pal",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "firm-customizer",
+                "title": "Kantoorparameters & Contactbeheer",
+                "summary": "",
+                "body": "Beheerderspaneel om profielfoto's, spoedbeschikbaarheid, internationaal telefoonnummer E.164 en het fysieke adres in Bolonia, Managua aan te passen.",
+                "value": "",
+                "icon": "layout",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "interactive-geolocation",
+                "title": "Interactieve Geolocatie & Kaart",
+                "summary": "",
+                "body": "Geïntegreerde Google Maps-kaart met exacte coördinaten in Bolonia, Managua, zodat cliënten met één klik een routebeschrijving openen.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "contextual-intake",
+                "title": "Slimme WhatsApp Cliëntenintake",
+                "summary": "",
+                "body": "Directe contactknoppen met vooraf ingevulde context per gewenste juridische dienst, wat de drempel voor professioneel advies minimaliseert.",
+                "value": "",
+                "icon": "mail",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ],
+  "skillKeys": ["Nextjs", "React", "Typescript", "Tailwind"]
+}

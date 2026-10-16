@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
-import { Link } from "@/i18n/routing";
+import { LinkPreview } from "@/components/ui/link-preview";
 
 interface Stats {
   yearsExperience: number;
@@ -105,15 +105,15 @@ export default async function HeroContent({
       {/* Action Buttons */}
       <div className="mt-8 flex flex-wrap items-center gap-3">
         {showCvLink ? (
-          <Link
-            href="/curriculum-vitae"
+          <LinkPreview
+            url="/curriculum-vitae"
             className="group bg-primary text-primary-foreground hover:bg-primary/95 inline-flex items-center gap-3 rounded-full py-2 pr-2 pl-7 font-bold shadow-sm transition"
           >
             {t("viewCV")}
             <span className="bg-primary-foreground text-primary flex size-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-0.5">
               <ArrowRight className="size-4" aria-hidden="true" />
             </span>
-          </Link>
+          </LinkPreview>
         ) : null}
         <a
           href="#contact"
