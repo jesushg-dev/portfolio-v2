@@ -1,41 +1,764 @@
 {
   "key": "EcommerceApi",
-  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_yaux6m",
+  "image": "/projects/ecommerce-api.jpg",
   "type": "BACKEND",
-  "githubUrl": "-",
+  "githubUrl": "https://github.com/Jesus-Hernandez23/m-server",
   "websiteUrl": "",
-  "isPrivate": false,
+  "isPrivate": true,
   "translations": [
     {
       "locale": "es",
-      "title": "Tienda API (.NET Core)",
-      "description": "API REST empresarial en ASP.NET Core y SQL Server con arquitectura limpia y Swagger.",
-      "hook": "-45% latencia en transacciones críticas · Arquitectura limpia",
-      "challenge": "Diseñar un backend robusto para e-commerce empresarial que soportara transacciones concurrentes, documentación abierta OpenAPI y capas desacopladas de lógica de negocio.",
-      "approach": "Implementé una API RESTful en C# con ASP.NET Core y Entity Framework Core sobre SQL Server. Utilicé patrón Repository/Unit of Work, DTOs estrictos, migración automatizada e integración de Swagger.",
-      "outcome": "Mejora del 45% en tiempos de respuesta de endpoints críticos y establecimiento de una arquitectura backend estándar reutilizable para proyectos corporativos."
+      "title": "Tienda API: E-Commerce GraphQL",
+      "description": "API backend empresarial de comercio electrónico desarrollada con Node.js, TypeScript, Apollo Server (GraphQL), MySQL y Objection.js.",
+      "hook": "-60% sobrecarga de red (over-fetching) · Consultas GraphQL tipadas",
+      "challenge": "Diseñar e implementar un backend transaccional de alto rendimiento para tienda en línea, con operaciones concurrentes de pedidos, catálogos multi-unidad y control de permisos granulares.",
+      "approach": "Arquitectura modular por capas con Express, Apollo Server y TypeScript. Esquemas GraphQL con tipado estricto (GraphQL Code Generator), capa ORM con Objection.js/Knex sobre MySQL y seguridad con GraphQL Shield y JWT.",
+      "outcome": "Eliminación del over-fetching en clientes web y móviles, tiempos de respuesta sub-20ms en consultas de pedidos e inventario y despacho confiable de transacciones.",
+      "caseStudy": {
+        "chips": [
+          "E-Commerce Backend",
+          "Node.js & TypeScript",
+          "Apollo Server (GraphQL)",
+          "MySQL & Objection.js",
+          "GraphQL Shield (RBAC)"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Arquitecto Backend & Desarrollador Node.js / GraphQL"
+          },
+          {
+            "key": "performance-metric",
+            "label": "Latencia de respuesta",
+            "value": "⚡ 18ms promedio en consultas complejas de catálogo y pedidos"
+          },
+          {
+            "key": "impact",
+            "label": "Eficiencia de red",
+            "value": "-60% sobrecarga de payload frente a REST tradicional"
+          },
+          {
+            "key": "repository",
+            "label": "Código fuente",
+            "value": "m-server (https://github.com/Jesus-Hernandez23/m-server)"
+          }
+        ],
+        "nextProjectSlug": "covid19",
+        "context": "El servidor backend de comercio electrónico (m-server) es la columna vertebral de datos para la plataforma digital. Diseñado desde cero con Apollo Server y TypeScript, centraliza la lógica de negocio para pedidos, productos, clientes, créditos y facturación, exponiendo una API GraphQL fuertemente tipada con esquemas modulares y autorización granular.",
+        "roleTitle": "Desarrollador Backend Senior",
+        "roleIntro": "Arquitecté y desarrollé el servicio backend con Node.js, Express y Apollo Server 3. Implementé esquemas modulares en GraphQL, capa de persistencia transaccional con Knex y Objection.js sobre MySQL, autenticación JWT con GraphQL Shield y generación automática de tipos TypeScript con GraphQL Code Generator.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "API empresarial en GraphQL para gestión de catálogo, pedidos concurrentes, clientes y facturación electrónica de comercio electrónico.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Diseño de la arquitectura por capas (Auth, GraphQL, Services, Models), optimización de queries SQL y seguridad perimetral.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Reducción del 60% en payload transferido en comparación con APIs REST tradicionales y tiempos de respuesta sub-20ms.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "graphql-schema",
+            "title": "Diseño de Esquema GraphQL Modular y Tipado Estricto",
+            "summary": "",
+            "body": "Estructuración de types, inputs, mutations y queries con GraphQL Code Generator para contratos cliente-servidor 100% type-safe.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "orm-optimization",
+            "title": "Capa de Datos Transaccional con Objection.js & Knex",
+            "summary": "",
+            "body": "Modelado de relaciones relacionales, paginación por cursor y transacciones ACID en MySQL para evitar inconsistencias de inventario.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security-shield",
+            "title": "Autenticación JWT y Autorización con GraphQL Shield",
+            "summary": "",
+            "body": "Políticas declarativas de control de acceso por rol aplicadas directamente en el pipeline de resolución de cada mutación y consulta.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Evitar problemas de sobre-obtención (over-fetching) y consultas N+1 en relaciones complejas de pedidos y productos.",
+          "Garantizar transacciones ACID consistentes en MySQL durante picos concurrentes de compra.",
+          "Documentación viva autogenerada mediante introspección y compatibilidad con Apollo Studio Explorer."
+        ],
+        "sections": [
+          {
+            "key": "api-capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Capacidades de la API",
+            "title": "Módulos y Servicios del Backend m-server",
+            "lead": "Servicios modulares construidos para alimentar clientes web, aplicaciones móviles y paneles administrativos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "cap-explorer",
+                "title": "Apollo Studio Sandbox & Introspección",
+                "summary": "Exploración interactiva del esquema GraphQL",
+                "body": "Entorno interactivo para desarrolladores que permite testear consultas, depurar variables y validar contratos en tiempo real con latencias de 18ms.",
+                "value": "Apollo Sandbox",
+                "icon": "code",
+                "tags": ["GraphQL", "Apollo", "Introspección"],
+                "note": "/projects/ecommerce-api.jpg"
+              },
+              {
+                "key": "cap-query-engine",
+                "title": "Motor de Consultas de Pedidos y Catálogo",
+                "summary": "Resolución optimizada de grafos relacionales",
+                "body": "Queries especializadas como pedidosDashboard y listOrders con filtrado por cliente, fechas, estados de venta y paginación estructurada.",
+                "value": "Resolvers Tipados",
+                "icon": "db",
+                "tags": ["Resolvers", "TypeScript", "Queries"],
+                "note": "/projects/ecommerce-api-query.jpg"
+              },
+              {
+                "key": "cap-payload-response",
+                "title": "Respuestas JSON Optimizadas y Cero Over-Fetching",
+                "summary": "Solo los campos solicitados por el cliente",
+                "body": "El cliente solicita exclusivamente los atributos necesarios (id, total, cliente, facturaProductos), reduciendo el peso de red en un 60%.",
+                "value": "200 OK · 18ms",
+                "icon": "bolt",
+                "tags": ["Performance", "JSON", "Baja Latencia"],
+                "note": "/projects/ecommerce-api-payload.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "api-layers",
+            "kind": "LAYERS",
+            "eyebrow": "Arquitectura Técnica",
+            "title": "Estructura por Capas Desacopladas de m-server",
+            "lead": "Separación clara de responsabilidades para máxima mantenibilidad y extensibilidad.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "layer-auth",
+                "title": "1. Capa de Autenticación & GraphQL Shield",
+                "summary": "Extracción de JWT, resolución de permisos y barreras de seguridad",
+                "body": "Valida tokens de usuario antes de llegar a los resolvers. Reglas declarativas aseguran que solo usuarios autenticados con rol adecuado ejecuten mutaciones sensibles.",
+                "value": "JWT + Shield",
+                "icon": "shield",
+                "tags": ["Auth", "JWT", "Shield"],
+                "note": ""
+              },
+              {
+                "key": "layer-graphql",
+                "title": "2. Capa GraphQL (Schemas, Resolvers & Codegen)",
+                "summary": "Definición declarativa de tipos, inputs y contratos de negocio",
+                "body": "Archivos .graphql distribuidos por dominio (pedido, producto, cliente, venta) con generación automática de tipos TypeScript en cada compilación.",
+                "value": "Apollo Server",
+                "icon": "code",
+                "tags": ["GraphQL", "Codegen", "Types"],
+                "note": ""
+              },
+              {
+                "key": "layer-services",
+                "title": "3. Capa de Servicios y Cálculos de Negocio",
+                "summary": "Lógica de cálculo de descuentos, totales, impuestos y reglas de despacho",
+                "body": "Controladores desacoplados que ejecutan validaciones complejas de negocio antes de persistir o mutar datos.",
+                "value": "Business Logic",
+                "icon": "layers",
+                "tags": ["Services", "Controladores"],
+                "note": ""
+              },
+              {
+                "key": "layer-models",
+                "title": "4. Capa de Modelos y Persistencia (Objection.js & Knex)",
+                "summary": "ORM relacional con pooling de conexiones y migraciones en MySQL",
+                "body": "Modelado relacional con soporte para transacciones ACID, eager loading optimizado y consultas SQL parametrizadas de alta velocidad.",
+                "value": "Objection & Knex",
+                "icon": "db",
+                "tags": ["MySQL", "Knex", "Objection"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "api-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Decisiones de Ingeniería",
+            "title": "Decisiones Técnicas en el Desarrollo de la API",
+            "lead": "Criterios técnicos adoptados para el backend de comercio electrónico.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-graphql-vs-rest",
+                "title": "GraphQL vs Múltiples Endpoints REST",
+                "summary": "Flexibilidad para múltiples clientes (Web, Móvil, POS)",
+                "body": "Permite que el portal de compradores y el backoffice administrativo consulten exactamente lo que necesitan desde un único endpoint /graphql sin endpoints duplicados.",
+                "value": "Un solo Endpoint",
+                "icon": "code",
+                "tags": ["GraphQL", "REST", "Flexibilidad"],
+                "note": ""
+              },
+              {
+                "key": "dec-objection-knex",
+                "title": "Objection.js + Knex sobre ORMs abstractos",
+                "summary": "Control granular sobre sentencias SQL y transacciones en MySQL",
+                "body": "Combina la ergonomía de un ORM moderno con la potencia de escribir consultas SQL optimizadas cuando se manejan reportes de ventas complejos.",
+                "value": "Control SQL",
+                "icon": "db",
+                "tags": ["Knex", "SQL", "Performance"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
-      "title": "Store API (.NET Core)",
-      "description": "Enterprise REST API in ASP.NET Core and SQL Server with clean architecture and Swagger.",
-      "hook": "-45% latency on critical endpoints · Clean architecture",
-      "challenge": "Build a robust enterprise e-commerce backend capable of handling high-concurrency transactions, open API documentation, and clear separation of business concerns.",
-      "approach": "Architected a C# ASP.NET Core RESTful API with Entity Framework Core and SQL Server. Implemented Repository/Unit of Work pattern, strict DTO mapping, database migrations, and Swagger/OpenAPI.",
-      "outcome": "Achieved a 45% latency reduction on critical transaction endpoints and established an enterprise backend blueprint for .NET applications."
+      "title": "Store API: E-Commerce GraphQL",
+      "description": "Enterprise e-commerce backend API built with Node.js, TypeScript, Apollo Server (GraphQL), MySQL, and Objection.js.",
+      "hook": "-60% network over-fetching · Strongly-typed GraphQL queries",
+      "challenge": "Architect and implement a high-performance e-commerce backend handling concurrent order workflows, multi-tiered product catalogs, and fine-grained authorization.",
+      "approach": "Layered modular architecture using Express, Apollo Server, and TypeScript. Implemented strict GraphQL schemas with Code Generator, Objection.js/Knex ORM over MySQL, and security via GraphQL Shield and JWT.",
+      "outcome": "Eliminated network payload bloat across web and mobile clients, achieved sub-20ms latency on complex order/inventory queries, and ensured reliable order fulfillment.",
+      "caseStudy": {
+        "chips": [
+          "E-Commerce Backend",
+          "Node.js & TypeScript",
+          "Apollo Server (GraphQL)",
+          "MySQL & Objection.js",
+          "GraphQL Shield (RBAC)"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My Role",
+            "value": "Backend Architect & Node.js / GraphQL Developer"
+          },
+          {
+            "key": "performance-metric",
+            "label": "Response Latency",
+            "value": "⚡ 18ms average latency on complex catalog and order queries"
+          },
+          {
+            "key": "impact",
+            "label": "Network Efficiency",
+            "value": "-60% payload overhead reduction compared to traditional REST"
+          },
+          {
+            "key": "repository",
+            "label": "Source Code",
+            "value": "m-server (https://github.com/Jesus-Hernandez23/m-server)"
+          }
+        ],
+        "nextProjectSlug": "covid19",
+        "context": "The e-commerce backend server (m-server) serves as the core data backbone for the digital store. Built from scratch with Apollo Server and TypeScript, it centralizes business logic for orders, products, clients, credits, and invoicing, exposing a strictly-typed GraphQL API with modular schemas and fine-grained authorization.",
+        "roleTitle": "Senior Backend Developer",
+        "roleIntro": "Architected and built the backend service using Node.js, Express, and Apollo Server 3. Implemented modular GraphQL schemas, transactional persistence with Knex and Objection.js over MySQL, JWT authentication with GraphQL Shield, and automated TypeScript type generation with GraphQL Code Generator.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Enterprise GraphQL API powering catalog exploration, high-concurrency order intake, customer accounts, and electronic invoicing.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My Role",
+            "summary": "",
+            "body": "Layered architecture design (Auth, GraphQL, Services, Models), SQL query tuning, and perimetric access security.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "60% payload size reduction compared to REST APIs and consistent sub-20ms response latencies in production.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "graphql-schema",
+            "title": "Modular GraphQL Schema & Strict Type Safety",
+            "summary": "",
+            "body": "Organized domain types, inputs, mutations, and queries with GraphQL Code Generator for 100% type-safe client-server contracts.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "orm-optimization",
+            "title": "Transactional Persistence with Objection.js & Knex",
+            "summary": "",
+            "body": "Relational mapping, cursor-based pagination, and ACID transactions in MySQL preventing inventory inconsistencies during checkout bursts.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security-shield",
+            "title": "JWT Authentication & GraphQL Shield Authorization",
+            "summary": "",
+            "body": "Declarative rule-based access policies applied directly across mutation and query resolution pipelines.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Eliminate over-fetching and prevent N+1 query bottlenecks across complex order and product relations.",
+          "Ensure consistent ACID transaction handling in MySQL during high-concurrency flash purchase spikes.",
+          "Maintain live self-updating documentation via introspection and full Apollo Studio Explorer compatibility."
+        ],
+        "sections": [
+          {
+            "key": "api-capabilities",
+            "kind": "CARDS",
+            "eyebrow": "API Capabilities",
+            "title": "m-server Backend Modules & Services",
+            "lead": "Modular services built to power customer web apps, mobile clients, and administrative dashboards.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "cap-explorer",
+                "title": "Apollo Studio Sandbox & Introspection",
+                "summary": "Interactive GraphQL schema explorer",
+                "body": "Developer workspace allowing live query testing, variable debugging, and instant contract verification with 18ms latency.",
+                "value": "Apollo Sandbox",
+                "icon": "code",
+                "tags": ["GraphQL", "Apollo", "Introspection"],
+                "note": "/projects/ecommerce-api.jpg"
+              },
+              {
+                "key": "cap-query-engine",
+                "title": "Order Fulfillment & Catalog Query Engine",
+                "summary": "Optimized relational graph resolvers",
+                "body": "Specialized queries like pedidosDashboard and listOrders with client filters, date ranges, order statuses, and structured pagination.",
+                "value": "Typed Resolvers",
+                "icon": "db",
+                "tags": ["Resolvers", "TypeScript", "Queries"],
+                "note": "/projects/ecommerce-api-query.jpg"
+              },
+              {
+                "key": "cap-payload-response",
+                "title": "Lean JSON Responses with Zero Over-Fetching",
+                "summary": "Only client-demanded fields returned",
+                "body": "Clients request exactly what they render (id, total, client, invoiceItems), slashing payload bandwidth by 60%.",
+                "value": "200 OK · 18ms",
+                "icon": "bolt",
+                "tags": ["Performance", "JSON", "Low Latency"],
+                "note": "/projects/ecommerce-api-payload.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "api-layers",
+            "kind": "LAYERS",
+            "eyebrow": "Technical Architecture",
+            "title": "Decoupled Layered Architecture of m-server",
+            "lead": "Strict separation of concerns maximizing maintainability and operational stability.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "layer-auth",
+                "title": "1. Authentication Layer & GraphQL Shield",
+                "summary": "JWT decoding, permission resolution, and security perimeter",
+                "body": "Validates user tokens before reaching business resolvers. Declarative rules ensure only authorized roles execute sensitive operations.",
+                "value": "JWT + Shield",
+                "icon": "shield",
+                "tags": ["Auth", "JWT", "Shield"],
+                "note": ""
+              },
+              {
+                "key": "layer-graphql",
+                "title": "2. GraphQL Layer (Schemas, Resolvers & Codegen)",
+                "summary": "Declarative type definitions, inputs, and business contracts",
+                "body": "Domain-partitioned .graphql files (order, product, customer, sales) with automated TypeScript compilation at build time.",
+                "value": "Apollo Server",
+                "icon": "code",
+                "tags": ["GraphQL", "Codegen", "Types"],
+                "note": ""
+              },
+              {
+                "key": "layer-services",
+                "title": "3. Service Layer & Business Calculations",
+                "summary": "Discount computations, totals, tax rules, and dispatch validations",
+                "body": "Decoupled controllers executing multi-step business logic before committing or mutating data.",
+                "value": "Business Logic",
+                "icon": "layers",
+                "tags": ["Services", "Controllers"],
+                "note": ""
+              },
+              {
+                "key": "layer-models",
+                "title": "4. Persistence Layer (Objection.js & Knex)",
+                "summary": "Relational ORM with connection pooling and MySQL migrations",
+                "body": "Relational mapping supporting ACID transactions, optimized eager loading, and high-speed parameterized SQL execution.",
+                "value": "Objection & Knex",
+                "icon": "db",
+                "tags": ["MySQL", "Knex", "Objection"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "api-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Decisions",
+            "title": "Key Backend Architectural Choices",
+            "lead": "Technical criteria adopted for enterprise e-commerce backend reliability.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-graphql-vs-rest",
+                "title": "GraphQL vs Multiple REST Endpoints",
+                "summary": "Multi-client flexibility (Web, Mobile, POS)",
+                "body": "Allows customer shopping apps and admin backoffices to query exact data shapes from a single /graphql endpoint without endpoint proliferation.",
+                "value": "Single Endpoint",
+                "icon": "code",
+                "tags": ["GraphQL", "REST", "Flexibility"],
+                "note": ""
+              },
+              {
+                "key": "dec-objection-knex",
+                "title": "Objection.js + Knex over Heavy ORMs",
+                "summary": "Granular control over SQL statements and MySQL transactions",
+                "body": "Combines modern ORM developer experience with the raw power of fine-tuned SQL queries for complex sales aggregation reports.",
+                "value": "SQL Control",
+                "icon": "db",
+                "tags": ["Knex", "SQL", "Performance"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
-      "title": "Store API (.NET Core)",
-      "description": "Enterprise REST API in ASP.NET Core en SQL Server met schone architectuur en Swagger.",
-      "hook": "-45% latency op kritieke endpoints · Schone architectuur",
-      "challenge": "Ontwerpen van een robuuste enterprise e-commerce backend geschikt voor hoge gelijktijdigheid, open API-documentatie en ontkoppelde bedrijfslogica.",
-      "approach": "RESTful C# API gebouwd met ASP.NET Core, Entity Framework Core en SQL Server. Repository/Unit of Work-patroon, strikte DTO's, migraties en Swagger geïmplementeerd.",
-      "outcome": "45% snellere responstijden op kritieke endpoints en een enterprise .NET-backend blauwdruk gerealiseerd."
+      "title": "Store API: E-Commerce GraphQL",
+      "description": "Enterprise e-commerce backend API gebouwd met Node.js, TypeScript, Apollo Server (GraphQL), MySQL en Objection.js.",
+      "hook": "-60% netwerk overhead · Strikt getypeerde GraphQL queries",
+      "challenge": "Ontwikkelen van een krachtige e-commerce backend voor gelijktijdige bestellingen, productcatalogi en fijnmazige autorisatie.",
+      "approach": "Gelaagde modulaire architectuur met Express, Apollo Server en TypeScript. GraphQL-schema's met Code Generator, Objection.js/Knex ORM op MySQL en GraphQL Shield met JWT.",
+      "outcome": "Geen over-fetching meer op web en mobiel, sub-20ms responstijden bij complexe queries en betrouwbare orderverwerking.",
+      "caseStudy": {
+        "chips": [
+          "E-Commerce Backend",
+          "Node.js & TypeScript",
+          "Apollo Server (GraphQL)",
+          "MySQL & Objection.js",
+          "GraphQL Shield (RBAC)"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Backend Architect & Node.js / GraphQL Ontwikkelaar"
+          },
+          {
+            "key": "performance-metric",
+            "label": "Responstijd",
+            "value": "⚡ 18ms gemiddelde latentie bij complexe catalogus- en orderqueries"
+          },
+          {
+            "key": "impact",
+            "label": "Netwerkefficiëntie",
+            "value": "-60% minder payload-overhead vergeleken met traditionele REST"
+          },
+          {
+            "key": "repository",
+            "label": "Broncode",
+            "value": "m-server (https://github.com/Jesus-Hernandez23/m-server)"
+          }
+        ],
+        "nextProjectSlug": "covid19",
+        "context": "De e-commerce backendserver (m-server) fungeert als de centrale databackbone voor de digitale winkel. Ontworpen met Apollo Server en TypeScript, centraliseert het de bedrijfslogica voor bestellingen, producten, klanten, kredieten en facturatie via een strikt getypeerde GraphQL API.",
+        "roleTitle": "Senior Backend Ontwikkelaar",
+        "roleIntro": "Ontwerp en bouw van de backend met Node.js, Express en Apollo Server 3. Modulaire GraphQL-schema's, transactionele opslag met Knex en Objection.js op MySQL, JWT-authenticatie met GraphQL Shield en geautomatiseerde TypeScript-typegeneratie.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Enterprise GraphQL API voor catalogusbeheer, orderverwerking, klantbeheer en elektronische facturatie.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Gelaagde architectuur (Auth, GraphQL, Services, Models), SQL-optimalisatie en perimeterbeveiliging.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "60% minder netwerkoverhead ten opzichte van REST en stabiele responstijden van minder dan 20ms.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "graphql-schema",
+            "title": "Modulair GraphQL-Schema & Typeveiligheid",
+            "summary": "",
+            "body": "Gestructureerde types, inputs en queries met GraphQL Code Generator voor 100% typeveilige contracten.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "orm-optimization",
+            "title": "Transactionele Dataopslag met Objection.js & Knex",
+            "summary": "",
+            "body": "Relationele mapping en ACID-transacties in MySQL ter voorkoming van voorraadinconsistenties tijdens pieken.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "security-shield",
+            "title": "JWT-Authenticatie & GraphQL Shield Autorisatie",
+            "summary": "",
+            "body": "Declaratieve toegangsregels toegepast in de resolutieflow van elke query en mutatie.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Over-fetching en N+1 queryproblemen elimineren bij complexe product- en bestelrelaties.",
+          "ACID-transacties in MySQL waarborgen tijdens gelijktijdige winkelpieken.",
+          "Zelfactualiserende documentatie via introspectie en Apollo Studio Explorer."
+        ],
+        "sections": [
+          {
+            "key": "api-capabilities",
+            "kind": "CARDS",
+            "eyebrow": "API Mogelijkheden",
+            "title": "m-server Backend Modules & Diensten",
+            "lead": "Modulaire services gebouwd om webapplicaties, mobiele apps en beheerdashboards van data te voorzien.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "cap-explorer",
+                "title": "Apollo Studio Sandbox & Introspectie",
+                "summary": "Interactieve GraphQL-schemaverkenner",
+                "body": "Ontwikkelomgeving voor het live testen van queries, variabelen en contracten met een latentie van 18ms.",
+                "value": "Apollo Sandbox",
+                "icon": "code",
+                "tags": ["GraphQL", "Apollo", "Introspectie"],
+                "note": "/projects/ecommerce-api.jpg"
+              },
+              {
+                "key": "cap-query-engine",
+                "title": "Orderverwerking & Catalogus Query Engine",
+                "summary": "Geoptimaliseerde relationele graph resolvers",
+                "body": "Gespecialiseerde queries zoals pedidosDashboard en listOrders met filters en gestructureerde paginering.",
+                "value": "Getypeerde Resolvers",
+                "icon": "db",
+                "tags": ["Resolvers", "TypeScript", "Queries"],
+                "note": "/projects/ecommerce-api-query.jpg"
+              },
+              {
+                "key": "cap-payload-response",
+                "title": "Compacte JSON-Responses Zonder Over-Fetching",
+                "summary": "Alleen de door de client gevraagde velden",
+                "body": "Clients vragen uitsluitend op wat nodig is, wat de payloadgrootte met 60% vermindert.",
+                "value": "200 OK · 18ms",
+                "icon": "bolt",
+                "tags": ["Prestaties", "JSON", "Lage Latentie"],
+                "note": "/projects/ecommerce-api-payload.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "api-layers",
+            "kind": "LAYERS",
+            "eyebrow": "Technische Architectuur",
+            "title": "Ontkoppelde Gelaagde Architectuur van m-server",
+            "lead": "Duidelijke scheiding van verantwoordelijkheden voor maximale onderhoudbaarheid.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "layer-auth",
+                "title": "1. Authenticatie & GraphQL Shield",
+                "summary": "JWT-verificatie en toegangsbeveiliging",
+                "body": "Valideert gebruikers voorafgaand aan de resolvers met declaratieve regels per gebruikersrol.",
+                "value": "JWT + Shield",
+                "icon": "shield",
+                "tags": ["Auth", "JWT", "Shield"],
+                "note": ""
+              },
+              {
+                "key": "layer-graphql",
+                "title": "2. GraphQL Laag (Schemas, Resolvers & Codegen)",
+                "summary": "Declaratieve type-definities en contracten",
+                "body": "Domeingebaseerde .graphql-bestanden met automatische TypeScript-compilatie.",
+                "value": "Apollo Server",
+                "icon": "code",
+                "tags": ["GraphQL", "Codegen", "Types"],
+                "note": ""
+              },
+              {
+                "key": "layer-services",
+                "title": "3. Servicelaag & Bedrijfsberekeningen",
+                "summary": "Berekening van kortingen, subtotalen en leveringsregels",
+                "body": "Ontkoppelde controllers die bedrijfsregels uitvoeren vóór datamutaties.",
+                "value": "Bedrijfslogica",
+                "icon": "layers",
+                "tags": ["Services", "Controllers"],
+                "note": ""
+              },
+              {
+                "key": "layer-models",
+                "title": "4. Datalag & Persistentie (Objection.js & Knex)",
+                "summary": "Relationele ORM met MySQL-connectiebeheer",
+                "body": "Relationele mapping met ondersteuning voor ACID-transacties en geoptimaliseerde SQL-queries.",
+                "value": "Objection & Knex",
+                "icon": "db",
+                "tags": ["MySQL", "Knex", "Objection"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "api-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Beslissingen",
+            "title": "Belangrijke Backend Architectuurkeuzes",
+            "lead": "Technische overwegingen voor betrouwbaarheid en prestaties.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-graphql-vs-rest",
+                "title": "GraphQL versus meerdere REST-endpoints",
+                "summary": "Flexibiliteit voor web, mobiel en kassa (POS)",
+                "body": "Stelt diverse clients in staat om exact de benodigde data op te halen via één enkel /graphql endpoint.",
+                "value": "Enkel Endpoint",
+                "icon": "code",
+                "tags": ["GraphQL", "REST", "Flexibiliteit"],
+                "note": ""
+              },
+              {
+                "key": "dec-objection-knex",
+                "title": "Objection.js + Knex boven zware ORM's",
+                "summary": "Volledige controle over SQL-queries en transacties",
+                "body": "Combineert ORM-gemak met de kracht van geoptimaliseerde SQL voor complexe verkooprapportages.",
+                "value": "SQL Controle",
+                "icon": "db",
+                "tags": ["Knex", "SQL", "Prestaties"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
   ],
-  "skillKeys": ["Csharp", "SqlServer", "Entity", "Dotnet", "Swagger"],
+  "skillKeys": [
+    "Nodejs",
+    "Typescript",
+    "GraphQL",
+    "Apollo",
+    "Express",
+    "Mysql",
+    "Docker"
+  ],
   "order": 2,
   "kind": "PROFESSIONAL",
-  "slug": "ecommerce-api"
+  "slug": "ecommerce-api",
+  "caseStudyEnabled": true
 }

@@ -1,6 +1,6 @@
 {
   "key": "RickAndMorty",
-  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/Rick_and_morty_dn7xnz",
+  "image": "/projects/rick-and-morty.jpg",
   "type": "FRONTEND",
   "githubUrl": "https://github.com/jess232017/rick-and-morty",
   "websiteUrl": "https://rick-and-morty-virid.vercel.app/",
@@ -188,6 +188,60 @@
                   "Enlazar imágenes de episodios desde un servidor remoto"
                 ],
                 "note": "Los nombres siguen el patrón episode (id).webp, lo que ata las ilustraciones a los ids de episodio de la API."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Galería y Funcionalidades",
+            "title": "Capacidades de la Aplicación",
+            "lead": "Vistas interactivas de la aplicación web conectada a la API pública de Rick y Morty con Apollo Client y Redux Toolkit.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-episodes",
+                "title": "Catálogo de Episodios y Paginación GraphQL",
+                "summary": "Consumo reactivo de API pública con Apollo Client",
+                "body": "Exploración fluida de las temporadas y episodios de la serie con paginación acumulativa en memoria y renderizado condicional.",
+                "value": "Apollo Client",
+                "icon": "layout",
+                "tags": ["GraphQL", "Apollo Cache", "React"],
+                "note": "/projects/rick-and-morty.jpg"
+              },
+              {
+                "key": "screen-detail",
+                "title": "Ficha Detallada del Episodio y Personajes",
+                "summary": "Carga granular de personajes por episodio",
+                "body": "Consulta anidada que resuelve en tiempo real los personajes de cada capítulo, incluyendo especie, origen y estado vital.",
+                "value": "Consultas Anidadas",
+                "icon": "case",
+                "tags": ["Consultas Anidadas", "React Router 6", "Detalle"],
+                "note": "/projects/rick-and-morty-detail.jpg"
+              },
+              {
+                "key": "screen-favorites",
+                "title": "Colección de Favoritos en Redux Toolkit",
+                "summary": "Persistencia en localStorage mediante middleware síncrono",
+                "body": "Gestor centralizado de episodios favoritos con toggle instantáneo, sincronización en almacenamiento local y protección contra recargas.",
+                "value": "Redux Toolkit",
+                "icon": "db",
+                "tags": ["Redux Toolkit", "Persistencia", "LocalStorage"],
+                "note": "/projects/rick-and-morty-favorites.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Experiencia Móvil y Navegación Adaptativa",
+                "summary": "Diseño responsivo optimizado para pantallas táctiles",
+                "body": "Interfaz móvil optimizada con carátulas WebP ligeras, reinicio suave de scroll y navegación por pestañas en smartphones.",
+                "value": "100% Mobile Ready",
+                "icon": "layout",
+                "tags": ["Mobile First", "WebP", "Touch UX"],
+                "note": "/projects/rick-and-morty-mobile.jpg"
               }
             ],
             "footnoteTitle": "",
@@ -555,6 +609,60 @@
             "footnoteVariant": "default"
           },
           {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Gallery & Features",
+            "title": "Application Capabilities",
+            "lead": "Interactive views of the web application powered by the public Rick and Morty GraphQL API, Apollo Client, and Redux Toolkit.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-episodes",
+                "title": "Episodes Catalog & GraphQL Pagination",
+                "summary": "Reactive public API consumption with Apollo Client",
+                "body": "Seamless browsing of series seasons and episodes with cumulative in-memory pagination and conditional component rendering.",
+                "value": "Apollo Client",
+                "icon": "layout",
+                "tags": ["GraphQL", "Apollo Cache", "React"],
+                "note": "/projects/rick-and-morty.jpg"
+              },
+              {
+                "key": "screen-detail",
+                "title": "Episode Breakdown & Character Roster",
+                "summary": "Granular on-demand character loading per episode",
+                "body": "Nested query resolving characters in real time for each chapter, detailing origin dimension, species, and vital status.",
+                "value": "Nested Queries",
+                "icon": "case",
+                "tags": ["Nested Queries", "React Router 6", "Details"],
+                "note": "/projects/rick-and-morty-detail.jpg"
+              },
+              {
+                "key": "screen-favorites",
+                "title": "Favorites Collection in Redux Toolkit",
+                "summary": "LocalStorage persistence via custom middleware",
+                "body": "Centralized state slice for favorite episodes with instant toggle, local storage sync, and persistence across browser reloads.",
+                "value": "Redux Toolkit",
+                "icon": "db",
+                "tags": ["Redux Toolkit", "Persistence", "LocalStorage"],
+                "note": "/projects/rick-and-morty-favorites.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Mobile Experience & Adaptive Layout",
+                "summary": "Responsive touch-first UI for small viewports",
+                "body": "Mobile interface optimized with lightweight WebP imagery, scroll restoration on navigation, and fluid tab routing.",
+                "value": "100% Mobile Ready",
+                "icon": "layout",
+                "tags": ["Mobile First", "WebP", "Touch UX"],
+                "note": "/projects/rick-and-morty-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
             "key": "architecture",
             "kind": "LAYERS",
             "eyebrow": "",
@@ -906,6 +1014,60 @@
                   "Afleveringsafbeeldingen van een externe host hotlinken"
                 ],
                 "note": "Bestandsnamen volgen het patroon episode (id).webp, wat de illustraties aan de afleverings-id's van de API koppelt."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Galerij & Functionaliteiten",
+            "title": "Applicatiemogelijkheden",
+            "lead": "Interactieve weergaven van de webapplicatie aangedreven door de openbare Rick and Morty GraphQL API, Apollo Client en Redux Toolkit.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-episodes",
+                "title": "Afleveringencatalogus & GraphQL-paginering",
+                "summary": "Reactief gebruik van openbare API met Apollo Client",
+                "body": "Vloeiende navigatie door seizoenen en afleveringen met incrementele geheugenpaginering en voorwaardelijke rendering.",
+                "value": "Apollo Client",
+                "icon": "layout",
+                "tags": ["GraphQL", "Apollo Cache", "React"],
+                "note": "/projects/rick-and-morty.jpg"
+              },
+              {
+                "key": "screen-detail",
+                "title": "Afleveringsdetails & Personageoverzicht",
+                "summary": "Granulaire weergave van personages per aflevering",
+                "body": "Genestelde query die personages per aflevering realtime ophaalt, inclusief soort, oorsprong en vitale status.",
+                "value": "Genestelde Query's",
+                "icon": "case",
+                "tags": ["Genestelde Query's", "React Router 6", "Details"],
+                "note": "/projects/rick-and-morty-detail.jpg"
+              },
+              {
+                "key": "screen-favorites",
+                "title": "Favorietencollectie in Redux Toolkit",
+                "summary": "LocalStorage-persistentie via aangepaste middleware",
+                "body": "Gecentraliseerde toestand voor favoriete afleveringen met directe toggle, browseropslag en persistentie na herladen.",
+                "value": "Redux Toolkit",
+                "icon": "db",
+                "tags": ["Redux Toolkit", "Persistentie", "LocalStorage"],
+                "note": "/projects/rick-and-morty-favorites.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Mobiele Ervaring & Adaptieve Lay-out",
+                "summary": "Responsieve aanraakinterface voor mobiele apparaten",
+                "body": "Mobiele interface geoptimaliseerd met lichte WebP-afbeeldingen, scrollherstel bij navigatie en soepele schermwissels.",
+                "value": "100% Mobile Ready",
+                "icon": "layout",
+                "tags": ["Mobile First", "WebP", "Aanraak-UX"],
+                "note": "/projects/rick-and-morty-mobile.jpg"
               }
             ],
             "footnoteTitle": "",

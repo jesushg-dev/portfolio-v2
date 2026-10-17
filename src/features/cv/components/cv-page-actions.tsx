@@ -1,23 +1,23 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition } from "react";
-import type { FC } from "react";
+import type { FC, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { FaDownload, FaHome } from "react-icons/fa";
-import { Loader2, Mail, Send, X } from "lucide-react";
+import { Download, Home, Loader2, Mail, Send, X } from "lucide-react";
 import { TRPCClientError } from "@trpc/client";
 import { AnimatePresence, motion } from "motion/react";
 
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
+import type { Locale } from "@/i18n/config";
 
 interface CvPageActionsProps {
   fullName: string;
@@ -55,6 +55,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
   paginatePdfPages = false,
 }) => {
   const locale = useLocale();
+  const router = useRouter();
   const tPdf = useTranslations("curriculum.pdfDelivery");
   const [emailOpen, setEmailOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -92,6 +93,14 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
     setEmailOpen((open) => !open);
   }, []);
 
+  const handleLocaleChange = useCallback(
+    (e: ChangeEvent<HTMLSelectElement>) => {
+      const targetLocale = e.target.value as Locale;
+      router.replace("/curriculum-vitae", { locale: targetLocale });
+    },
+    [router],
+  );
+
   const handleSubmit = useCallback(
     (values: EmailInput) => {
       startTransition(async () => {
@@ -118,51 +127,72 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
   const isSending = isPending || sendPdf.isPending;
 
   return (
-    <div className="md:max-w-letter mx-4 flex flex-col gap-3 md:mx-0">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="mx-auto flex w-full max-w-[51rem] flex-col gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/"
-          className="pressable border-primary-800 text-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg border px-4 py-3 text-sm shadow-lg hover:text-white"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-blue-800 bg-white px-5 py-2.5 text-sm font-semibold text-blue-800 shadow-sm transition hover:bg-blue-50"
         >
-          {goBackLabel} <FaHome className="size-4" aria-hidden />
+          <Home className="size-4 shrink-0" aria-hidden="true" />
+          <span>{goBackLabel}</span>
         </Link>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
+          <label htmlFor="cv-locale-select">
+            <span className="sr-only">Language</span>
+            <select
+              id="cv-locale-select"
+              value={locale}
+              onChange={handleLocaleChange}
+              className="min-h-11 cursor-pointer rounded-full border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-blue-800"
+            >
+              <option value="nl">Nederlands</option>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+          </label>
+
           {downloadHref ? (
             <a
+              id="dl"
               href={downloadHref}
               target="_blank"
               rel="noopener noreferrer"
               download={downloadFileName}
               onClick={handleDownloadClick}
-              className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg disabled:opacity-75"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-blue-800 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-800/20 transition hover:-translate-y-0.5 hover:bg-blue-900"
               aria-busy={isDownloading}
             >
               <span>{isDownloading ? tPdf("generating") : downloadLabel}</span>
               {isDownloading ? (
-                <Loader2 className="size-4 animate-spin" aria-hidden />
+                <Loader2
+                  className="size-4 shrink-0 animate-spin"
+                  aria-hidden="true"
+                />
               ) : (
-                <FaDownload className="size-4" aria-hidden />
+                <Download className="size-4 shrink-0" aria-hidden="true" />
               )}
             </a>
           ) : null}
 
           {canSendByEmail ? (
-            <Button
+            <button
+              id="mail"
               type="button"
-              variant={emailOpen ? "secondary" : "outline"}
-              className="pressable h-auto min-h-11 gap-2 rounded-lg px-4 py-3 text-sm shadow-lg"
               onClick={handleToggleEmail}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-blue-800 hover:text-blue-800"
               aria-expanded={emailOpen}
               aria-controls="cv-email-panel"
             >
               {emailOpen ? (
-                <X className="size-4" aria-hidden />
+                <X className="size-4 shrink-0" aria-hidden="true" />
               ) : (
-                <Mail className="size-4" aria-hidden />
+                <Mail className="size-4 shrink-0" aria-hidden="true" />
               )}
-              {emailOpen ? tPdf("toggleClose") : tPdf("toggleSend")}
-            </Button>
+              <span>
+                {emailOpen ? tPdf("toggleClose") : tPdf("toggleSend")}
+              </span>
+            </button>
           ) : null}
         </div>
       </div>
@@ -192,7 +222,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
           >
             <section
               id="cv-email-panel"
-              className="bg-card text-card-foreground border-border rounded-lg border p-5 shadow-sm"
+              className="bg-card text-card-foreground border-border rounded-2xl border p-5 shadow-sm"
             >
               <div className="mb-4">
                 <h2 className="text-foreground text-base font-semibold">
@@ -237,7 +267,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
                   <Button
                     type="submit"
                     disabled={isSending}
-                    className="sm:mb-0.5"
+                    className="rounded-full sm:mb-0.5"
                     aria-busy={isSending}
                   >
                     {isSending ? (

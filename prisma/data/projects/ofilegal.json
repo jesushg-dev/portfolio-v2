@@ -1,9 +1,9 @@
 {
   "key": "Ofilegal",
-  "image": "https://ofilegal.vercel.app/portrait.jpg",
+  "image": "/projects/ofilegal.jpg",
   "type": "FRONTEND",
   "githubUrl": "https://github.com/jesushg-dev/ofilegal",
-  "websiteUrl": "https://ofilegal.vercel.app",
+  "websiteUrl": "https://www.ofi-legal.com",
   "isPrivate": false,
   "order": 1,
   "kind": "PROFESSIONAL",
@@ -59,7 +59,7 @@
             "value": "Vercel · ofilegal.vercel.app"
           }
         ],
-        "nextProjectSlug": "portfolio",
+        "nextProjectSlug": "walmart-centroamerica",
         "context": "OFILEGAL es la firma profesional del Lic. Isaí Alexander Zeledón, Abogado y Notario Público en Managua, Nicaragua, enfocada en asesoría jurídica preventiva, litigación civil y laboral, estructuración corporativa y fe pública. El despacho requería una plataforma digital de primer nivel que proyectara autoridad jurídica institucional, facilitara la captación de clientes mediante canales de consulta directa (WhatsApp contextualizado por especialidad, formulario cifrado y mapas) y permitiera publicar artículos de divulgación jurídica y actualizar la información del bufete de manera autónoma sin requerir intervención técnica continua.",
         "roleTitle": "Arquitecto y Desarrollador Full-Stack",
         "roleIntro": "Diseñé e implementé la solución completa de extremo a extremo: arquitectura de la aplicación, sistema de diseño editorial clásico-moderno, modelo de contenido desacoplado, autenticación criptográfica segura y despliegue en Vercel.",
@@ -463,71 +463,61 @@
           {
             "key": "capabilities",
             "kind": "CARDS",
-            "eyebrow": "Funcionalidades clave",
-            "title": "Capacidades de la plataforma jurídica",
-            "lead": "Módulos operativos diseñados a la medida de la práctica jurídica y notarial moderna.",
+            "eyebrow": "Módulos y Pantallas Clave",
+            "title": "Plataforma Institucional y Presencia Digital",
+            "lead": "Diseño solemne, responsive y optimizado para la captación de clientes y divulgación jurídica.",
             "code": "",
             "codeLabel": "",
             "items": [
               {
-                "key": "public-portal",
-                "title": "Portal Institucional de Servicios Jurídicos",
-                "summary": "",
-                "body": "Presentación integral de áreas de práctica: litigios, contratos mercantiles, asesoría laboral, constitución de sociedades y servicios notariales con citas textuales y credenciales verificables.",
-                "value": "",
-                "icon": "shield",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "editorial-system",
-                "title": "Sistema de Publicaciones y Artículos",
-                "summary": "",
-                "body": "Gestor de contenidos que permite redactar artículos con extractos, categorías, imágenes de portada y control de ciclo de vida (borrador, próximamente y publicado).",
-                "value": "",
-                "icon": "case",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "media-library",
-                "title": "Biblioteca Multimedia con Validación",
-                "summary": "",
-                "body": "Módulo de carga de archivos que verifica firmas MIME de imágenes, limita el peso a 5 MB, genera identificadores únicos y exige textos alternativos para accesibilidad.",
-                "value": "",
-                "icon": "pal",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "firm-customizer",
-                "title": "Gestor de Parámetros y Contacto del Bufete",
-                "summary": "",
-                "body": "Panel para actualizar retrato profesional, disponibilidad para consultas urgentes, número telefónico internacional E.164, correo y dirección física en Bolonia, Managua.",
-                "value": "",
+                "key": "screen-landing",
+                "title": "Sitio Institucional y Portada Profesional",
+                "summary": "Arquitectura Next.js App Router con Server Components",
+                "body": "Presentación formal del despacho legal con tiempos de carga instantáneos, perfil profesional del Notario y credenciales acreditadas.",
+                "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [],
-                "note": ""
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "note": "/projects/ofilegal.jpg"
               },
               {
-                "key": "interactive-geolocation",
-                "title": "Geolocalización Interactiva y Mapa",
-                "summary": "",
-                "body": "Mapa interactivo con coordenadas exactas en Bolonia, Managua, permitiendo a los clientes abrir rutas directas en Google Maps o consultar direcciones de referencia.",
-                "value": "",
+                "key": "screen-services",
+                "title": "Áreas de Práctica y Asesoría Especializada",
+                "summary": "Navegación por materias jurídicas y contacto segmentado",
+                "body": "Catálogo de especialidades en derecho corporativo, laboral, civil y notarial con derivación directa hacia mensajería segura y WhatsApp.",
+                "value": "Asesoría Multidisciplinaria",
+                "icon": "case",
+                "tags": ["Áreas de Práctica", "Captación", "WhatsApp"],
+                "note": "/projects/ofilegal-services.jpg"
+              },
+              {
+                "key": "screen-articles",
+                "title": "Publicaciones y Criterio Jurídico",
+                "summary": "Divulgación legal, artículos de opinión y contenido educativo",
+                "body": "Módulo de divulgación con análisis de jurisprudencia y sincronización con perfiles profesionales en LinkedIn y TikTok institucional.",
+                "value": "Divulgación Jurídica",
+                "icon": "search",
+                "tags": ["Artículos", "Jurisprudencia", "Educación Legal"],
+                "note": "/projects/ofilegal-articles.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Experiencia Móvil y Consulta Directa",
+                "summary": "Optimización completa para smartphones y comunicación ágil",
+                "body": "Interfaz móvil ultra-rápida con botones de acción flotantes para agendamiento de citas notariales y consultas confidenciales.",
+                "value": "100% Mobile Ready",
+                "icon": "layout",
+                "tags": ["Mobile First", "WhatsApp Direct", "UX Ágil"],
+                "note": "/projects/ofilegal-mobile.jpg"
+              },
+              {
+                "key": "screen-contact",
+                "title": "Despacho Físico, Contacto y Geolocalización",
+                "summary": "Ubicación interactiva en Google Maps y canales oficiales",
+                "body": "Integración de mapa interactivo con pines georreferenciados, correo institucional cifrado y líneas telefónicas oficiales.",
+                "value": "Despacho Céntrico",
                 "icon": "globe",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "contextual-intake",
-                "title": "Captación Inmediata vía WhatsApp Inteligente",
-                "summary": "",
-                "body": "Pulsadores de contacto directo con textos predefinidos según el servicio de interés del consultante, reduciendo la fricción entre la duda legal y la asesoría profesional.",
-                "value": "",
-                "icon": "mail",
-                "tags": [],
-                "note": ""
+                "tags": ["Google Maps", "Ubicación", "Contacto Oficial"],
+                "note": "/projects/ofilegal-contact.jpg"
               }
             ],
             "footnoteTitle": "",
@@ -584,7 +574,7 @@
             "value": "Vercel · ofilegal.vercel.app"
           }
         ],
-        "nextProjectSlug": "portfolio",
+        "nextProjectSlug": "walmart-centroamerica",
         "context": "OFILEGAL is the legal counseling and notary practice of Isaí Alexander Zeledón in Managua, Nicaragua, specializing in preventive compliance, civil and labor litigation, corporate structuring, and notarial certification. The firm required a high-caliber digital platform that projected institutional authority, streamlined client acquisition through direct consultation pathways (contextualized WhatsApp routing by legal matter, encrypted contact forms, and interactive geolocation), and enabled autonomous publishing of legal analysis articles and firm profile updates without ongoing technical overhead.",
         "roleTitle": "Architect & Full-Stack Developer",
         "roleIntro": "I designed and implemented the entire platform end to end: system architecture, classic-modern editorial design system, decoupled content persistence, cryptographic authentication, and production deployment on Vercel.",
@@ -986,71 +976,61 @@
           {
             "key": "capabilities",
             "kind": "CARDS",
-            "eyebrow": "Core platform features",
-            "title": "Legal tech platform capabilities",
-            "lead": "Custom modules engineered specifically for contemporary legal and notarial workflows.",
+            "eyebrow": "Key Modules & Screens",
+            "title": "Institutional Platform & Digital Presence",
+            "lead": "Prestige, responsive design optimized for legal practice client intake and public information.",
             "code": "",
             "codeLabel": "",
             "items": [
               {
-                "key": "public-portal",
-                "title": "Institutional Legal Services Portal",
-                "summary": "",
-                "body": "Comprehensive showcase of legal practice areas: litigation, contracts, labor law, corporate governance, and notary services with authoritative citations and credentials.",
-                "value": "",
-                "icon": "shield",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "editorial-system",
-                "title": "Legal Publishing & Article CMS",
-                "summary": "",
-                "body": "Editorial manager allowing the lawyer to publish articles with excerpts, categories, cover imagery, and status lifecycle controls (draft, coming soon, published).",
-                "value": "",
-                "icon": "case",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "media-library",
-                "title": "Validated Media Asset Manager",
-                "summary": "",
-                "body": "Upload module enforcing image MIME verification, 5 MB file size limits, unique UUID filenames, and mandatory accessibility alt-text descriptions.",
-                "value": "",
-                "icon": "pal",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "firm-customizer",
-                "title": "Firm Settings & Contact Customizer",
-                "summary": "",
-                "body": "Administrative panel to update portrait imagery, urgent consultation availability flags, international E.164 phone numbers, and address details in Bolonia, Managua.",
-                "value": "",
+                "key": "screen-landing",
+                "title": "Institutional Portal & Professional Landing",
+                "summary": "Next.js App Router architecture with Server Components",
+                "body": "Authoritative presentation for legal and notary practice featuring instant page load speeds and verified credentials.",
+                "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [],
-                "note": ""
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "note": "/projects/ofilegal.jpg"
               },
               {
-                "key": "interactive-geolocation",
-                "title": "Interactive Geolocation & Maps",
-                "summary": "",
-                "body": "Embedded Google Maps integration with precise coordinates in Bolonia, Managua, allowing clients to open GPS driving directions with a single click.",
-                "value": "",
+                "key": "screen-services",
+                "title": "Practice Areas & Specialized Legal Counsel",
+                "summary": "Structured legal consultation and segmented client intake",
+                "body": "Comprehensive practice areas covering corporate, labor, civil, and notary law with direct WhatsApp intake messaging.",
+                "value": "Multi-Practice Advisory",
+                "icon": "case",
+                "tags": ["Practice Areas", "Client Intake", "WhatsApp"],
+                "note": "/projects/ofilegal-services.jpg"
+              },
+              {
+                "key": "screen-articles",
+                "title": "Publications & Legal Insights",
+                "summary": "Educational legal articles and professional insights",
+                "body": "Content hub featuring legal analysis, statutory guidance, and integration with professional LinkedIn and TikTok channels.",
+                "value": "Legal Knowledge Base",
+                "icon": "search",
+                "tags": ["Publications", "Case Law", "Insights"],
+                "note": "/projects/ofilegal-articles.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Mobile Experience & Instant Client Intake",
+                "summary": "Fully responsive mobile flow with floating action triggers",
+                "body": "Ultra-fast mobile UI engineered for immediate client consultation bookings and secure messaging directly to the attorney.",
+                "value": "100% Mobile Ready",
+                "icon": "layout",
+                "tags": ["Mobile First", "WhatsApp Direct", "Smooth UX"],
+                "note": "/projects/ofilegal-mobile.jpg"
+              },
+              {
+                "key": "screen-contact",
+                "title": "Office Location & Interactive Maps",
+                "summary": "Interactive Google Maps pin and verified institutional channels",
+                "body": "Accurate geographic pin for in-person notary appointments, verified corporate email, and direct telephone contact.",
+                "value": "Prime Location",
                 "icon": "globe",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "contextual-intake",
-                "title": "Smart WhatsApp Client Intake",
-                "summary": "",
-                "body": "Action triggers with pre-populated contextual messages mapped to each legal domain, minimizing friction between initial inquiries and formal legal engagement.",
-                "value": "",
-                "icon": "mail",
-                "tags": [],
-                "note": ""
+                "tags": ["Google Maps", "Location", "Official Channels"],
+                "note": "/projects/ofilegal-contact.jpg"
               }
             ],
             "footnoteTitle": "",
@@ -1107,7 +1087,7 @@
             "value": "Vercel · ofilegal.vercel.app"
           }
         ],
-        "nextProjectSlug": "portfolio",
+        "nextProjectSlug": "walmart-centroamerica",
         "context": "OFILEGAL is het advocaten- en notariskantoor van Isaí Alexander Zeledón in Managua, Nicaragua, gespecialiseerd in preventief juridisch advies, civiele en arbeidsgeschillen, vennootschapsstructurering en notariële akten. Het kantoor had een hoogwaardig digitaal platform nodig dat institutioneel gezag uitstraalt, directe cliëntenwerving faciliteert (via contextuele WhatsApp-koppelingen per rechtsgebied, beveiligde contactformulieren en interactieve kaarten) en de advocaat in staat stelt zelfstandig juridische artikelen en kantoorparameters te beheren zonder doorlopende technische kosten.",
         "roleTitle": "Architect & Full-Stack Ontwikkelaar",
         "roleIntro": "Ik ontwierp en bouwde het volledige platform end-to-end: systeemarchitectuur, klassiek-modern redactioneel ontwerpsysteem, ontkoppelde gegevenspersistentie, cryptografische sessiebeveiliging en continue implementatie op Vercel.",
@@ -1507,71 +1487,61 @@
           {
             "key": "capabilities",
             "kind": "CARDS",
-            "eyebrow": "Belangrijkste platformfuncties",
-            "title": "Capaciteiten van het juridische platform",
-            "lead": "Op maat gemaakte modules voor de hedendaagse advocaten- en notarispraktijk.",
+            "eyebrow": "Belangrijkste Modules & Schermen",
+            "title": "Institutioneel Platform & Digitale Aanwezigheid",
+            "lead": "Representatief en responsief ontwerp voor juridische dienstverlening en cliëntenwerving.",
             "code": "",
             "codeLabel": "",
             "items": [
               {
-                "key": "public-portal",
-                "title": "Institutioneel Dienstenportaal",
-                "summary": "",
-                "body": "Volledige presentatie van rechtsgebieden: procesvoering, contracten, arbeidsrecht, vennootschapsrecht en notariaat met geverifieerde referenties.",
-                "value": "",
-                "icon": "shield",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "editorial-system",
-                "title": "Juridische Publicaties & Artikelen CMS",
-                "summary": "",
-                "body": "Redactionele beheerder waarmee de advocaat artikelen kan publiceren met samenvattingen, categorieën, omslagafbeeldingen en statusbeheer.",
-                "value": "",
-                "icon": "case",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "media-library",
-                "title": "Gevalideerd Mediabeheer",
-                "summary": "",
-                "body": "Uploadmodule die MIME-typen controleert, bestandsgrootte beperkt tot 5 MB, UUID-bestandsnamen genereert en alternatieve teksten vereist.",
-                "value": "",
-                "icon": "pal",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "firm-customizer",
-                "title": "Kantoorparameters & Contactbeheer",
-                "summary": "",
-                "body": "Beheerderspaneel om profielfoto's, spoedbeschikbaarheid, internationaal telefoonnummer E.164 en het fysieke adres in Bolonia, Managua aan te passen.",
-                "value": "",
+                "key": "screen-landing",
+                "title": "Institutioneel Portaal & Professionele Landing",
+                "summary": "Next.js App Router architectuur met Server Components",
+                "body": "Formele presentatie van het advocatenkantoor met ultrasnelle laadtijden en geverifieerde notariële referenties.",
+                "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [],
-                "note": ""
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "note": "/projects/ofilegal.jpg"
               },
               {
-                "key": "interactive-geolocation",
-                "title": "Interactieve Geolocatie & Kaart",
-                "summary": "",
-                "body": "Geïntegreerde Google Maps-kaart met exacte coördinaten in Bolonia, Managua, zodat cliënten met één klik een routebeschrijving openen.",
-                "value": "",
+                "key": "screen-services",
+                "title": "Rechtsgebieden & Gespecialiseerd Advies",
+                "summary": "Gestructureerde juridische navigatie en direct contact",
+                "body": "Overzicht van rechtsgebieden in ondernemings-, arbeids-, civiel en notarieel recht met directe koppeling naar WhatsApp.",
+                "value": "Multidisciplinair Advies",
+                "icon": "case",
+                "tags": ["Rechtsgebieden", "Cliëntenwerving", "WhatsApp"],
+                "note": "/projects/ofilegal-services.jpg"
+              },
+              {
+                "key": "screen-articles",
+                "title": "Publicaties & Juridische Kennisbank",
+                "summary": "Juridische artikelen en professionele inzichten",
+                "body": "Informatiecentrum met jurisprudentie-analyses en integratie met professionele LinkedIn- en TikTok-kanalen.",
+                "value": "Juridische Inzichten",
+                "icon": "search",
+                "tags": ["Publicaties", "Jurisprudentie", "Kennisbank"],
+                "note": "/projects/ofilegal-articles.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Mobiele Ervaring & Direct Contact",
+                "summary": "Responsieve mobiele navigatie en WhatsApp-koppeling",
+                "body": "Snelle mobiele interface ontworpen voor directe afsprakenplanning en vertrouwelijke juridische consultaties.",
+                "value": "100% Mobiel Gereed",
+                "icon": "layout",
+                "tags": ["Mobile First", "WhatsApp Direct", "Snelle UX"],
+                "note": "/projects/ofilegal-mobile.jpg"
+              },
+              {
+                "key": "screen-contact",
+                "title": "Kantoorlocatie & Interactieve Kaart",
+                "summary": "Google Maps integratie en officiële kantoorgegevens",
+                "body": "Exacte kantoorlocatie voor notariële bezoeken, versleutelde e-mail en officiële telefoonlijnen.",
+                "value": "Centrale Locatie",
                 "icon": "globe",
-                "tags": [],
-                "note": ""
-              },
-              {
-                "key": "contextual-intake",
-                "title": "Slimme WhatsApp Cliëntenintake",
-                "summary": "",
-                "body": "Directe contactknoppen met vooraf ingevulde context per gewenste juridische dienst, wat de drempel voor professioneel advies minimaliseert.",
-                "value": "",
-                "icon": "mail",
-                "tags": [],
-                "note": ""
+                "tags": ["Google Maps", "Locatie", "Contact"],
+                "note": "/projects/ofilegal-contact.jpg"
               }
             ],
             "footnoteTitle": "",

@@ -1406,3 +1406,29 @@ video::-webkit-media-controls {
   background: transparent !important;
   color-scheme: dark;
 }
+
+.sheet {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+@page {
+  size: Letter;
+  margin: 0;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+  .chrome {
+    display: none !important;
+  }
+  .sheet {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-width: none !important;
+    width: 816px !important;
+    margin: 0 !important;
+  }
+}

@@ -46,6 +46,9 @@ export function resolveNavItem(
 
   const getRawChips = (key: string): string[] => {
     try {
+      if (t.has && !t.has(key as never)) {
+        return item.chips ?? [];
+      }
       if (t.raw) {
         const rawVal: unknown = t.raw(key as never);
         if (Array.isArray(rawVal)) {

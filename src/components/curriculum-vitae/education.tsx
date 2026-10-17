@@ -17,18 +17,23 @@ function EducationItem({
     (education.startYear || education.endYear
       ? `${education.startYear ?? ""} - ${education.endYear ?? ""}`
       : "");
+  const location = education.location
+    ? education.location.split("|")[0]?.trim()
+    : "";
 
   return (
-    <section className="mb-4">
-      <header>
-        <h5 className="text-sm font-bold">{education.degreeName}</h5>
-        <h6 className="text-sm text-[#333333]">
-          {education.institution}
-          {education.location ? ` | ${education.location}` : ""}
-        </h6>
-      </header>
-      {dates ? <p className="my-1 text-sm text-[#333333]">{dates}</p> : null}
-    </section>
+    <div>
+      <h3 className="text-sm leading-snug font-bold text-slate-900">
+        {education.degreeName}
+      </h3>
+      <p className="text-sm text-slate-700">
+        {education.institution}
+        {location ? ` · ${location}` : ""}
+      </p>
+      {dates ? (
+        <p className="text-sm text-slate-600 tabular-nums">{dates}</p>
+      ) : null}
+    </div>
   );
 }
 
@@ -38,17 +43,17 @@ const Education: FC<IEducationProps> = ({ educations }) => {
   if (!educations.length) return null;
 
   return (
-    <>
-      <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+    <section>
+      <h2 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#0a3d7a] uppercase before:h-4 before:w-1 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
         {t("header.education")}
-      </h5>
+      </h2>
 
-      <div className="mb-4">
+      <div className="space-y-3">
         {educations.map((education) => (
           <EducationItem key={education.id} education={education} />
         ))}
       </div>
-    </>
+    </section>
   );
 };
 

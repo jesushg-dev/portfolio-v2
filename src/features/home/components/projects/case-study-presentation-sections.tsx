@@ -1,6 +1,8 @@
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { MediaImage } from "@/components/shared/media-image";
+
 import { SectionHeading } from "./case-study-primitives";
 import type { CaseStudySectionProps } from "./case-study-section-types";
 
@@ -17,22 +19,45 @@ function CaseStudyStepsSection({ section, index }: CaseStudySectionProps) {
           {section.lead}
         </p>
       ) : null}
-      <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {section.items.map((item, itemIndex) => (
-          <li
-            key={item.key}
-            data-case-study-card
-            className="b-card-glow bg-card border-border rounded-3xl border p-5"
-          >
-            <span className="text-primary font-mono text-xs font-bold">
-              {String(itemIndex + 1).padStart(2, "0")}
-            </span>
-            <p className="text-foreground mt-2 font-bold">{item.title}</p>
-            <p className="text-muted-foreground mt-1.5 text-[0.9375rem] leading-7">
-              {item.body}
-            </p>
-          </li>
-        ))}
+      <ol className="grid gap-4 sm:grid-cols-2">
+        {section.items.map((item, itemIndex) => {
+          const isImage =
+            item.note &&
+            (item.note.startsWith("/") || item.note.startsWith("http"));
+          return (
+            <li
+              key={item.key}
+              data-case-study-card
+              className="b-card-glow bg-card border-border flex flex-col justify-between rounded-3xl border p-5"
+            >
+              <div>
+                <span className="text-primary font-mono text-xs font-bold">
+                  {String(itemIndex + 1).padStart(2, "0")}
+                </span>
+                <p className="text-foreground mt-2 font-bold">{item.title}</p>
+                <p className="text-muted-foreground mt-1.5 text-[0.9375rem] leading-7">
+                  {item.body}
+                </p>
+                {item.note && !isImage ? (
+                  <p className="text-muted-foreground mt-3 text-sm">
+                    {item.note}
+                  </p>
+                ) : null}
+              </div>
+              {isImage ? (
+                <div className="border-border bg-muted relative mt-4 aspect-[2/1] w-full overflow-hidden rounded-2xl border">
+                  <MediaImage
+                    src={item.note}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover object-center transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
       </ol>
     </section>
   );

@@ -1,29 +1,786 @@
 {
   "key": "Covid19",
-  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/portf-2_crm7bn",
+  "image": "/projects/covid19.jpg",
   "type": "FRONTEND",
   "githubUrl": "https://github.com/jess232017/SensorTemperatura",
-  "websiteUrl": "https://stc-uni.netlify.app/",
+  "websiteUrl": "https://stc-uni.vercel.app/",
   "isPrivate": false,
   "translations": [
     {
       "locale": "es",
       "title": "Sistema de Control de Temperatura",
-      "description": "Proyecto Web que permite registrar el ingreso al recinto de los estudiantes y su temperatura."
+      "description": "Proyecto Web que permite registrar el ingreso al recinto de los estudiantes y su temperatura.",
+      "hook": "Telemetría en tiempo real · Detección térmica sub-segundo sin contacto · Monitoreo de 2,300+ accesos",
+      "challenge": "Implementar con urgencia en plena pandemia un sistema de triage térmico para la Universidad Nacional de Ingeniería que evitara aglomeraciones en los accesos peatonales.",
+      "approach": "Diseñé una aplicación web serverless conectada a sensores infrarrojos con Firebase Firestore y Auth, ofreciendo semáforo visual de alerta y curvas estadísticas en tiempo real.",
+      "outcome": "Monitoreo seguro y sin contacto de miles de miembros de la comunidad universitaria, con detección preventiva inmediata de temperaturas superiores a 37.5°C.",
+      "caseStudy": {
+        "chips": [
+          "Telemetría en Tiempo Real",
+          "Bioseguridad COVID-19",
+          "Universidad Nacional de Ingeniería (UNI)",
+          "Hardware IoT + Web",
+          "Firebase Firestore & Auth"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Creador del Proyecto & Desarrollador Full-Stack"
+          },
+          {
+            "key": "context-tag",
+            "label": "Contexto del proyecto",
+            "value": "Control epidemiológico y retorno seguro en pandemia (UNI)"
+          },
+          {
+            "key": "scale",
+            "label": "Comunidad monitoreada",
+            "value": "2,300+ visitantes, 1,340 estudiantes, 86 profesores y 120 empleados"
+          },
+          {
+            "key": "live-url",
+            "label": "Sistema en vivo",
+            "value": "STC UNI (https://stc-uni.vercel.app)"
+          }
+        ],
+        "nextProjectSlug": "soft-skills-quiz",
+        "context": "El Sistema de Control de Temperatura (STC UNI) nació durante la pandemia de COVID-19 como una iniciativa tecnológica para la Universidad Nacional de Ingeniería (UNI). El sistema permitía registrar el ingreso de la comunidad universitaria en puntos de acceso, capturando la temperatura corporal mediante sensores infrarrojos sin contacto físico y persistiendo telemetría en tiempo real en la nube para detección temprana de casos febriles y prevención de contagios.",
+        "roleTitle": "Desarrollador Full-Stack & Creador",
+        "roleIntro": "Diseñé e implementé la solución tecnológica de punta a punta: diseñé la interfaz web responsiva para puestos de control, la integración de datos del sensor infrarrojo con Firebase Firestore, la autenticación de operadores sanitarios y las gráficas analíticas de evolución térmica diaria.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Sistema web de telemetría y bioseguridad para el registro, control y análisis en tiempo real de la temperatura corporal en los accesos universitarios durante la pandemia.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollo frontend y backend serverless con Firebase: paneles de telemetría, gráficas con Chart.js, autenticación y log de accesos.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Monitoreo seguro y sin contacto de miles de ingresos diarios en el recinto universitario con alertas inmediatas ante temperaturas superiores a 37.5°C.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "realtime-telemetry",
+            "title": "Captura y Registro de Telemetría Térmica",
+            "summary": "",
+            "body": "Recepción de lecturas de temperatura corporal en tiempo real, categorización automática por rol (Estudiante, Profesor, Empleado, Visitante) y almacenamiento en Firebase Firestore.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "biosecurity-dashboard",
+            "title": "Panel de Control y Trazabilidad Epidemiológica",
+            "summary": "",
+            "body": "Construcción de dashboards analíticos con curvas de temperatura mensual (Mayo 2021) y semáforo visual de alerta para el personal de bioseguridad.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "operator-auth",
+            "title": "Autenticación Segura y Control de Puestos",
+            "summary": "",
+            "body": "Módulo administrativo protegido con Firebase Auth para operadores de guardia en casetas de acceso con auditoría histórica de registros.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Registro y validación de temperatura en menos de 1 segundo para evitar filas y aglomeraciones.",
+          "Interfaz altamente legible y usable en computadoras de caseta y tablets móviles.",
+          "Sincronización tolerante a cortes esporádicos de red gracias al soporte offline de Firebase."
+        ],
+        "sections": [
+          {
+            "key": "stc-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos y Pantallas",
+            "title": "Componentes del Sistema de Control Térmico",
+            "lead": "Vistas operativas desplegadas en los puntos de acceso de la universidad.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-telemetry-panel",
+                "title": "Dashboard de Telemetría y Curvas Térmicas",
+                "summary": "Métricas de asistencia y gráfica analítica de mayo 2021",
+                "body": "Panel principal mostrando contadores en tiempo real (2,300 visitantes, 1,340 estudiantes, 86 profesores, 120 empleados) y gráfica de evolución térmica.",
+                "value": "Telemetría en Vivo",
+                "icon": "gauge",
+                "tags": ["Chart.js", "Telemetría", "KPIs"],
+                "note": "/projects/covid19-telemetry.jpg"
+              },
+              {
+                "key": "mod-access-table",
+                "title": "Log de Asistencia y Registros Individuales",
+                "summary": "Tabla detallada de cada ingreso con hora y temperatura",
+                "body": "Listado con nombre, rol, hora exacta y lectura térmica con semáforo verde (<37.2°C) o alerta roja para aislamiento preventivo.",
+                "value": "Log de Accesos",
+                "icon": "layers",
+                "tags": ["Historial", "Bioseguridad", "Tiempo Real"],
+                "note": "/projects/covid19-access-log.jpg"
+              },
+              {
+                "key": "mod-auth-portal",
+                "title": "Portal de Acceso para Operadores Sanitarios",
+                "summary": "Autenticación segura para el personal en casetas",
+                "body": "Inicio de sesión seguro para operadores autorizados que garantiza la privacidad de los datos de salud de los alumnos.",
+                "value": "Firebase Auth",
+                "icon": "shield",
+                "tags": ["Seguridad", "Credenciales", "Firebase"],
+                "note": "/projects/covid19-auth.jpg"
+              },
+              {
+                "key": "mod-mobile-view",
+                "title": "Interfaz Móvil y Puntos de Control Rápidos",
+                "summary": "Diseño responsivo optimizado para tablets de guardia",
+                "body": "Visualización adaptativa que permitía a brigadistas móviles validar ingresos en portones peatonales secundarios.",
+                "value": "Mobile Ready",
+                "icon": "layout",
+                "tags": ["Responsive", "Mobile", "PWA"],
+                "note": "/projects/covid19.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "stc-flow",
+            "kind": "STEPS",
+            "eyebrow": "Protocolo de Ingreso",
+            "title": "Flujo de Control Sanitario en Puerta",
+            "lead": "Secuencia ágil de verificación sin contacto para cada persona que ingresaba a la universidad.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-sensor",
+                "title": "1. Medición Infrarroja sin Contacto",
+                "summary": "El sensor registra la temperatura en menos de 500ms",
+                "body": "La persona aproxima su frente o muñeca al sensor, obteniendo una medición precisa sin riesgo de contaminación cruzada.",
+                "value": "< 500ms",
+                "icon": "bolt",
+                "tags": ["Sensor", "Sin Contacto"],
+                "note": ""
+              },
+              {
+                "key": "step-identification",
+                "title": "2. Registro de Rol e Identificación",
+                "summary": "Asignación rápida: Estudiante, Profesor o Visitante",
+                "body": "El operador selecciona la categoría correspondiente en la interfaz web de caseta.",
+                "value": "Clasificación",
+                "icon": "user",
+                "tags": ["Identificación", "Comunidad UNI"],
+                "note": "/projects/covid19-access-log.jpg"
+              },
+              {
+                "key": "step-triage",
+                "title": "3. Evaluación de Umbral Térmico",
+                "summary": "Semáforo visual de bioseguridad inmediato",
+                "body": "Lecturas menores a 37.3°C habilitan el acceso inmediato; valores superiores disparan protocolo de descanso y re-chequeo.",
+                "value": "Protocolo COVID",
+                "icon": "shield",
+                "tags": ["Triage", "Semáforo"],
+                "note": "/projects/covid19-telemetry.jpg"
+              },
+              {
+                "key": "step-cloud-sync",
+                "title": "4. Sincronización en la Nube con Firebase",
+                "summary": "Persistencia instantánea para análisis de salud universitaria",
+                "body": "El registro queda almacenado en Firestore, actualizando las curvas epidemiológicas del día.",
+                "value": "Firebase Realtime",
+                "icon": "db",
+                "tags": ["Cloud", "Firestore"],
+                "note": "/projects/covid19.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "stc-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Decisiones Técnicas",
+            "title": "Criterios de Diseño en Contexto de Emergencia",
+            "lead": "Soluciones de ingeniería implementadas bajo restricciones estrictas de tiempo y recursos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-firebase-stack",
+                "title": "Firebase Firestore sobre Base de Datos Relacional Propia",
+                "summary": "Despliegue ultrarrápido y sincronización en tiempo real sin infraestructura dedicada",
+                "body": "Permitió tener el sistema en funcionamiento en días, con sincronización de sockets en tiempo real y soporte offline automático ante caídas de internet en casetas.",
+                "value": "Serverless Rápido",
+                "icon": "db",
+                "tags": ["Firebase", "Serverless", "Tiempo Real"],
+                "note": ""
+              },
+              {
+                "key": "dec-subsecond-ui",
+                "title": "Arquitectura Ligera sin Bundles Pesados",
+                "summary": "Carga instantánea en equipos de bajo rendimiento",
+                "body": "HTML, CSS/Sass y JavaScript modular permitieron que las computadoras de portería más antiguas cargaran la aplicación instantáneamente sin congelamiento.",
+                "value": "Carga Ligera",
+                "icon": "bolt",
+                "tags": ["Performance", "Accesibilidad"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
       "title": "Temperature Control System",
-      "description": "Web project that allows to register the entry of the students and their temperature."
+      "description": "Web project that allows to register the entry of the students and their temperature.",
+      "hook": "Real-time telemetry · Sub-second contactless screening · 2,300+ campus entries monitored",
+      "challenge": "Rapidly implement a pandemic thermal triage system for the National University of Engineering to prevent gate bottlenecks and safely monitor campus entries.",
+      "approach": "Built a serverless web application integrated with infrared sensors and Firebase Firestore/Auth, delivering instant visual traffic-light alerts and live thermal trend analytics.",
+      "outcome": "Safe, contactless biosecurity screening for thousands of daily entrants with automated threshold notifications for temperatures exceeding 37.5°C.",
+      "caseStudy": {
+        "chips": [
+          "Real-Time Telemetry",
+          "COVID-19 Biosecurity",
+          "National University of Engineering (UNI)",
+          "IoT Hardware + Web",
+          "Firebase Firestore & Auth"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My Role",
+            "value": "Project Creator & Full-Stack Developer"
+          },
+          {
+            "key": "context-tag",
+            "label": "Project Context",
+            "value": "Epidemiological monitoring & safe campus reopening during pandemic (UNI)"
+          },
+          {
+            "key": "scale",
+            "label": "Monitored Community",
+            "value": "2,300+ visitors, 1,340 students, 86 faculty members, and 120 staff"
+          },
+          {
+            "key": "live-url",
+            "label": "Live System",
+            "value": "STC UNI (https://stc-uni.vercel.app)"
+          }
+        ],
+        "nextProjectSlug": "soft-skills-quiz",
+        "context": "The Temperature Control System (STC UNI) originated during the COVID-19 pandemic as a student technological initiative for the National University of Engineering (UNI). It enabled contactless body temperature logging and real-time cloud telemetry at university access points for early fever triage and safe campus entry.",
+        "roleTitle": "Full-Stack Developer & Creator",
+        "roleIntro": "Engineered the complete solution end-to-end: built the responsive web dashboard for gate operators, integrated infrared sensor data with Firebase Firestore, implemented operator authentication, and created analytical temperature charts.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Biosecurity and telemetry web platform for real-time body temperature recording, monitoring, and analytics at university gates during the pandemic.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My Role",
+            "summary": "",
+            "body": "Full-stack development: telemetry dashboards with Chart.js, Firebase Auth & Firestore integration, and audit logs.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Safe, contactless screening for thousands of campus entries daily with instant automated threshold alerts for temperatures above 37.5°C.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "realtime-telemetry",
+            "title": "Real-Time Thermal Telemetry Logging",
+            "summary": "",
+            "body": "Ingested live sensor data, classified entrants by role (Student, Professor, Staff, Visitor), and committed entries into Firebase Firestore.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "biosecurity-dashboard",
+            "title": "Biosecurity Dashboard & Epidemiological Tracking",
+            "summary": "",
+            "body": "Built analytical charts visualizing monthly thermal trends (May 2021) and clear status indicators for health personnel.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "operator-auth",
+            "title": "Operator Authentication & Gate Access Control",
+            "summary": "",
+            "body": "Role-protected administration portal via Firebase Auth for authorized guardhouse operators, preserving student health data privacy.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Sub-second entry validation to prevent queues and congestion at gate entrances.",
+          "High readability and usability across old guardhouse PCs and touch tablets.",
+          "Network-fault tolerance with Firebase offline synchronization during campus connectivity dips."
+        ],
+        "sections": [
+          {
+            "key": "stc-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Screens",
+            "title": "Thermal Control System Architecture",
+            "lead": "Operational screens deployed across university security checkpoints.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-telemetry-panel",
+                "title": "Telemetry Dashboard & Thermal Trends",
+                "summary": "Live entry counts and May 2021 analytical curves",
+                "body": "Main operations overview displaying live counters (2,300 visitors, 1,340 students, 86 professors, 120 employees) and time-series temperature distributions.",
+                "value": "Live Telemetry",
+                "icon": "gauge",
+                "tags": ["Chart.js", "Telemetry", "KPIs"],
+                "note": "/projects/covid19-telemetry.jpg"
+              },
+              {
+                "key": "mod-access-table",
+                "title": "Access Log & Individual Entry Records",
+                "summary": "Detailed historical ledger of every check-in timestamp and temperature",
+                "body": "Tabular log showing entrant name, campus role, exact timestamp, and green/amber/red biosecurity status chips.",
+                "value": "Access Log",
+                "icon": "layers",
+                "tags": ["Audit", "Biosecurity", "Real Time"],
+                "note": "/projects/covid19-access-log.jpg"
+              },
+              {
+                "key": "mod-auth-portal",
+                "title": "Sanitary Operator Authentication Portal",
+                "summary": "Role-protected login for checkpoint personnel",
+                "body": "Secure gatekeeper authentication protecting sensitive student identification and health telemetries.",
+                "value": "Firebase Auth",
+                "icon": "shield",
+                "tags": ["Security", "Credentials", "Firebase"],
+                "note": "/projects/covid19-auth.jpg"
+              },
+              {
+                "key": "mod-mobile-view",
+                "title": "Mobile Portal for Roving Campus Brigades",
+                "summary": "Adaptive layout optimized for handheld security tablets",
+                "body": "Responsive view enabling roving health brigades to screen entrants at secondary gates and campus gardens.",
+                "value": "Mobile Ready",
+                "icon": "layout",
+                "tags": ["Responsive", "Mobile", "PWA"],
+                "note": "/projects/covid19.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "stc-flow",
+            "kind": "STEPS",
+            "eyebrow": "Entry Protocol",
+            "title": "Gate Biosecurity Screening Flow",
+            "lead": "Frictionless contactless screening sequence for every individual entering campus grounds.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-sensor",
+                "title": "1. Contactless Infrared Reading",
+                "summary": "Sensor logs temperature in under 500ms",
+                "body": "The entrant presents their wrist or forehead to the non-contact sensor, capturing accurate readings without cross-contamination risks.",
+                "value": "< 500ms",
+                "icon": "bolt",
+                "tags": ["Sensor", "Contactless"],
+                "note": ""
+              },
+              {
+                "key": "step-identification",
+                "title": "2. Role & Campus Identification",
+                "summary": "Fast triage tag: Student, Professor, Staff, or Visitor",
+                "body": "Gatekeeper assigns the corresponding category on the touch kiosk or guardhouse portal.",
+                "value": "Classification",
+                "icon": "user",
+                "tags": ["Identification", "UNI Community"],
+                "note": "/projects/covid19-access-log.jpg"
+              },
+              {
+                "key": "step-triage",
+                "title": "3. Thermal Threshold Evaluation",
+                "summary": "Instant visual biosecurity stoplight",
+                "body": "Readings under 37.3°C grant immediate clearance; higher temperatures trigger precautionary resting and secondary re-testing protocols.",
+                "value": "COVID Protocol",
+                "icon": "shield",
+                "tags": ["Triage", "Stoplight"],
+                "note": "/projects/covid19-telemetry.jpg"
+              },
+              {
+                "key": "step-cloud-sync",
+                "title": "4. Real-Time Cloud Sync with Firebase",
+                "summary": "Instant database commit for university health analytics",
+                "body": "Record is persisted directly to Firestore, updating live campus capacity and epidemiological charts in real time.",
+                "value": "Firebase Realtime",
+                "icon": "db",
+                "tags": ["Cloud", "Firestore"],
+                "note": "/projects/covid19.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "stc-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Decisions",
+            "title": "Emergency Response Engineering Choices",
+            "lead": "Pragmatic architectural choices made under strict time and hardware constraints.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-firebase-stack",
+                "title": "Firebase Firestore over Custom Relational Backend",
+                "summary": "Zero-infrastructure rapid deployment and automatic real-time sync",
+                "body": "Allowed delivering a working production prototype within days, with built-in websocket listeners and offline caching on gatehouse devices.",
+                "value": "Serverless Speed",
+                "icon": "db",
+                "tags": ["Firebase", "Serverless", "Real Time"],
+                "note": ""
+              },
+              {
+                "key": "dec-subsecond-ui",
+                "title": "Lightweight Architecture without Heavy Bundles",
+                "summary": "Instant rendering on legacy university hardware",
+                "body": "Clean modular JavaScript and semantic CSS allowed low-spec computers in security booths to run the portal without lag or crashes.",
+                "value": "Lightweight",
+                "icon": "bolt",
+                "tags": ["Performance", "Accessibility"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
       "title": "Temperaturkontrollsystem",
-      "description": "Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur."
+      "description": "Webproject voor het registreren van de binnenkomst van studenten en hun temperatuur.",
+      "hook": "Realtime telemetrie · Contactloze screening binnen 1 seconde · 2.300+ campusbezoeken gemonitord",
+      "challenge": "Met spoed een thermisch controlesysteem implementeren voor de universiteit om wachtrijen bij poorten te voorkomen en campusveiligheid te waarborgen.",
+      "approach": "Serverless webapplicatie gebouwd gekoppeld aan infraroodsensoren en Firebase Firestore/Auth, met visuele stoplicht-alerts en realtime analysetrends.",
+      "outcome": "Veilige, contactloze controle van duizenden dagelijkse campusbezoeken met directe meldingen bij temperaturen boven 37,5°C.",
+      "caseStudy": {
+        "chips": [
+          "Realtime Telemetrie",
+          "COVID-19 Biosecurity",
+          "Nationale Universiteit voor Techniek (UNI)",
+          "IoT Hardware + Web",
+          "Firebase Firestore & Auth"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Projectbedenker & Full-Stack Ontwikkelaar"
+          },
+          {
+            "key": "context-tag",
+            "label": "Projectcontext",
+            "value": "Epidemiologische bewaking & veilige campusheropening tijdens pandemie (UNI)"
+          },
+          {
+            "key": "scale",
+            "label": "Gemonitorde gemeenschap",
+            "value": "2.300+ bezoekers, 1.340 studenten, 86 docenten en 120 medewerkers"
+          },
+          {
+            "key": "live-url",
+            "label": "Live systeem",
+            "value": "STC UNI (https://stc-uni.vercel.app)"
+          }
+        ],
+        "nextProjectSlug": "soft-skills-quiz",
+        "context": "Het Temperatuurcontrolesysteem (STC UNI) ontstond tijdens de COVID-19-pandemie als studenteninitiatief voor de Nationale Universiteit voor Techniek (UNI). Het maakte contactloze lichaamstemperatuurmetingen en realtime telemetrie in de cloud mogelijk bij toegangspoorten voor vroege koortsdetectie.",
+        "roleTitle": "Full-Stack Ontwikkelaar & Bedenker",
+        "roleIntro": "Ontwierp en bouwde de complete oplossing: het responsieve dashboard voor portiers, integratie van infraroodsensordata met Firebase Firestore en analytische temperatuurgrafieken met Chart.js.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Webplatform voor realtime lichaamstemperatuurregistratie, monitoring en analyses bij universiteitspoorten tijdens de pandemie.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Full-stack ontwikkeling: dashboards met Chart.js, Firebase Auth & Firestore integratie en audittabellen.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Veilige, contactloze controle voor duizenden dagelijkse campusbezoeken met automatische waarschuwingen boven 37,5°C.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "realtime-telemetry",
+            "title": "Realtime Thermische Telemetrieregistratie",
+            "summary": "",
+            "body": "Verwerking van live sensordata, automatische classificatie per rol en opslag in Firebase Firestore.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "biosecurity-dashboard",
+            "title": "Biosecurity Dashboard & Trazabiliteit",
+            "summary": "",
+            "body": "Analytische grafieken voor maandelijkse trends (mei 2021) en statusindicatoren voor gezondheidspersoneel.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "operator-auth",
+            "title": "Beveiligde Portiersauthenticatie",
+            "summary": "",
+            "body": "Beheerdersportaal via Firebase Auth voor geautoriseerde portiers ter bescherming van privacy.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Verificatie binnen een seconde om wachtrijen bij poorten te voorkomen.",
+          "Hoge leesbaarheid op oudere computers en mobiele tablets.",
+          "Netwerktolerantie met offline synchronisatie van Firebase."
+        ],
+        "sections": [
+          {
+            "key": "stc-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Schermen",
+            "title": "Thermische Controle Systeemarchitectuur",
+            "lead": "Operationele schermen ingezet bij toegangspoorten.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-telemetry-panel",
+                "title": "Telemetriedashboard & Maandelijkse Curves",
+                "summary": "Live tellingen en analytische curven van mei 2021",
+                "body": "Hoofddashboard met realtime tellers (2.300 bezoekers, 1.340 studenten, 86 docenten, 120 medewerkers).",
+                "value": "Live Telemetrie",
+                "icon": "gauge",
+                "tags": ["Chart.js", "Telemetrie", "KPI's"],
+                "note": "/projects/covid19-telemetry.jpg"
+              },
+              {
+                "key": "mod-access-table",
+                "title": "Toegangslogboek & Individuele Registraties",
+                "summary": "Gedetailleerd overzicht met tijdstip en temperatuur",
+                "body": "Lijst met naam, rol, tijdstip en groene of rode biosecurity-indicatoren.",
+                "value": "Toegangslogboek",
+                "icon": "layers",
+                "tags": ["Audit", "Biosecurity", "Realtime"],
+                "note": "/projects/covid19-access-log.jpg"
+              },
+              {
+                "key": "mod-auth-portal",
+                "title": "Authenticatieportaal voor Portiers",
+                "summary": "Beveiligde inlog voor poortpersoneel",
+                "body": "Beveiligt gevoelige studentengegevens en gezondheidstelemetrie.",
+                "value": "Firebase Auth",
+                "icon": "shield",
+                "tags": ["Beveiliging", "Inlog", "Firebase"],
+                "note": "/projects/covid19-auth.jpg"
+              },
+              {
+                "key": "mod-mobile-view",
+                "title": "Mobiel Portaal voor Toegangscontrole",
+                "summary": "Responsieve weergave voor mobiele tablets",
+                "body": "Stelt rondlopende controleurs in staat om bij secundaire poorten controles uit te voeren.",
+                "value": "Mobiel Gereed",
+                "icon": "layout",
+                "tags": ["Responsief", "Mobiel", "PWA"],
+                "note": "/projects/covid19.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "stc-flow",
+            "kind": "STEPS",
+            "eyebrow": "Toegangsprotocol",
+            "title": "Gezondheidscontrole aan de Poort",
+            "lead": "Snelle, contactloze controlesequentie voor iedereen die de universiteitscampus betreedt.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-sensor",
+                "title": "1. Contactloze Infraroodmeting",
+                "summary": "Sensor registreert temperatuur in minder dan 500ms",
+                "body": "De bezoeker houdt pols of voorhoofd voor de infraroodsensor voor een nauwkeurige meting zonder besmettingsrisico.",
+                "value": "< 500ms",
+                "icon": "bolt",
+                "tags": ["Sensor", "Contactloos"],
+                "note": ""
+              },
+              {
+                "key": "step-identification",
+                "title": "2. Rol- en Identificatieregistratie",
+                "summary": "Snelle categorisering: Student, Docent of Bezoeker",
+                "body": "De portier selecteert de juiste categorie in de webinterface bij de toegangspoort.",
+                "value": "Classificatie",
+                "icon": "user",
+                "tags": ["Identificatie", "UNI Gemeenschap"],
+                "note": "/projects/covid19-access-log.jpg"
+              },
+              {
+                "key": "step-triage",
+                "title": "3. Thermische Drempelwaardebeoordeling",
+                "summary": "Direct visueel biosecurity-stoplicht",
+                "body": "Metingen onder 37,3°C geven direct groen licht; hogere waarden activeren een rust- en hertestprotocol.",
+                "value": "COVID-protocol",
+                "icon": "shield",
+                "tags": ["Triage", "Stoplicht"],
+                "note": "/projects/covid19-telemetry.jpg"
+              },
+              {
+                "key": "step-cloud-sync",
+                "title": "4. Realtime Cloudsynchronisatie met Firebase",
+                "summary": "Directe opslag voor universitaire gezondheidsanalyses",
+                "body": "Het meetresultaat wordt opgeslagen in Firestore en werkt direct de dagelijkse curves bij.",
+                "value": "Firebase Realtime",
+                "icon": "db",
+                "tags": ["Cloud", "Firestore"],
+                "note": "/projects/covid19.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "stc-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Beslissingen",
+            "title": "Keuzes in Noodcontext",
+            "lead": "Praktische keuzes binnen beperkte tijd en hardware.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-firebase-stack",
+                "title": "Firebase Firestore versus Eigen Relationele Database",
+                "summary": "Snelle implementatie en automatische realtime synchronisatie",
+                "body": "Maakte het mogelijk om binnen enkele dagen live te gaan met betrouwbare offline caching bij internetonderbrekingen.",
+                "value": "Serverless Snelheid",
+                "icon": "db",
+                "tags": ["Firebase", "Serverless", "Realtime"],
+                "note": ""
+              },
+              {
+                "key": "dec-subsecond-ui",
+                "title": "Lichtgewicht Architectuur Zonder Zware Bundels",
+                "summary": "Directe laadtijd op oudere universiteitscomputers",
+                "body": "Schone, modulaire code zorgde ervoor dat ook oudere hardware in portiershokjes probleemloos functioneerde.",
+                "value": "Lichtgewicht",
+                "icon": "bolt",
+                "tags": ["Prestaties", "Toegankelijkheid"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
   ],
   "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"],
   "order": 8,
   "kind": "PERSONAL",
-  "slug": "covid19"
+  "slug": "covid19",
+  "caseStudyEnabled": true
 }

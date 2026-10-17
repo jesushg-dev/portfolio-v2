@@ -1,6 +1,6 @@
 {
   "key": "SoftSkillsQuiz",
-  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/soft-skill-quiz_rqnzmm",
+  "image": "/projects/soft-skills-quiz.jpg",
   "type": "FRONTEND",
   "githubUrl": "https://github.com/jess232017/SoftSkill-Quiz",
   "websiteUrl": "https://soft-skill-quiz.vercel.app/",
@@ -9,21 +9,586 @@
     {
       "locale": "es",
       "title": "Soft Skills Quiz",
-      "description": "Aplicación web que permite realizar un test de habilidades blandas para desarrolladores."
+      "description": "Aplicación web que permite realizar un test de habilidades blandas para desarrolladores.",
+      "hook": "Evaluación situacional interactiva · Temporizador preciso de 45 min · Diagnóstico de habilidades blandas para devs",
+      "challenge": "Diseñar una evaluación atractiva y fidedigna para medir competencias interpersonales en ingenieros de software sin caer en cuestionarios teóricos aburridos.",
+      "approach": "Construí una SPA interactiva en React, TypeScript y Tailwind CSS con escenarios de trabajo en equipo, cronómetro sincronizado resiliente a recargas y ponderación automatizada.",
+      "outcome": "Herramienta inmersiva adoptada por candidatos de ingeniería para autodiagnóstico y preparación previa a procesos de selección técnica.",
+      "caseStudy": {
+        "chips": [
+          "Evaluación Psicométrica",
+          "React & TypeScript",
+          "Tailwind CSS",
+          "Temporizador Preciso (45 min)",
+          "Escenarios Prácticos para Devs"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Creador & Desarrollador Frontend"
+          },
+          {
+            "key": "target-audience",
+            "label": "Público objetivo",
+            "value": "Desarrolladores de software y equipos de reclutamiento técnico"
+          },
+          {
+            "key": "evaluation-format",
+            "label": "Formato de evaluación",
+            "value": "Test cronometrado de 45 minutos con reactivos situacionales (A-E)"
+          },
+          {
+            "key": "live-url",
+            "label": "Aplicación en vivo",
+            "value": "Soft Skills Quiz (https://soft-skill-quiz.vercel.app)"
+          }
+        ],
+        "nextProjectSlug": "rick-and-morty",
+        "context": "Soft Skills Quiz es una aplicación web interactiva diseñada para diagnosticar y medir habilidades blandas esenciales en desarrolladores de software: comunicación asertiva, resolución de conflictos en equipos ágiles, adaptabilidad tecnológica y liderazgo colaborativo. Frente a pruebas teóricas abstractas, la plataforma somete al candidato a dilemas reales de ingeniería con opciones múltiples y límite estricto de tiempo.",
+        "roleTitle": "Desarrollador Frontend React",
+        "roleIntro": "Diseñé y construí la experiencia de evaluación completa con React, TypeScript y Tailwind CSS, implementando un motor de cuenta regresiva de 45 minutos resiliente a recargas, navegación secuencial de preguntas y ponderación automatizada de resultados.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Plataforma de evaluación interactiva de habilidades blandas para ingenieros de software con cronómetro activo y escenarios situacionales de desarrollo.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Arquitectura frontend en React, tipado estricto con TypeScript, persistencia del estado del examen y diseño responsivo accesible con Tailwind CSS.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Herramienta inmersiva y de alta usabilidad utilizada por candidatos para autodiagnóstico previo a entrevistas técnicas de ingeniería.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "quiz-engine",
+            "title": "Motor de Preguntas Situacionales y Ponderación",
+            "summary": "",
+            "body": "Estructuración de tipos y lógica de cálculo ponderado por competencia blanda con soporte para respuestas de opción múltiple (A a E).",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "resilient-timer",
+            "title": "Subsistema de Temporizador de 45 Minutos",
+            "summary": "",
+            "body": "Control de tiempo regresivo sincronizado mediante timestamps absolutos que sobrevive a recargas accidentales del navegador sin perder el progreso.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "accessible-ui",
+            "title": "Diseño Focalizado y Accesible",
+            "summary": "",
+            "body": "Interfaz limpia desarrollada con Tailwind CSS optimizada para lectura prolongada, con navegación fluida por teclado y adaptación móvil completa.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Persistencia de respuestas y tiempo restante ante recarga accidental de página.",
+          "Interfaz libre de distracciones con contrastes accesibles para lectura de escenarios largos.",
+          "Validación estricta de nombres y estados de formulario antes de iniciar el test."
+        ],
+        "sections": [
+          {
+            "key": "quiz-modules",
+            "kind": "CARDS",
+            "eyebrow": "Pantallas y Experiencia",
+            "title": "Flujo de Evaluación en Soft Skills Quiz",
+            "lead": "Vistas interactivas diseñadas para una experiencia de usuario ágil y sin fricción.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-question",
+                "title": "Tarjeta de Pregunta y Cronómetro Regresivo",
+                "summary": "Escenario de trabajo en equipo y opciones múltiples",
+                "body": "Interfaz con cuenta regresiva activa de 45:00 minutos, encabezado con nombre del candidato y opciones de respuesta rápida (A-E).",
+                "value": "Escenario Activo",
+                "icon": "layout",
+                "tags": ["Temporizador", "Escenarios", "React"],
+                "note": "/projects/soft-skills-quiz-question.jpg"
+              },
+              {
+                "key": "mod-welcome",
+                "title": "Portal de Registro e Instrucciones del Test",
+                "summary": "Bienvenida y validación de datos del candidato",
+                "body": "Pantalla inicial con banner de competencias, reglas de la evaluación y formulario de inicio de sesión rápido.",
+                "value": "Onboarding",
+                "icon": "case",
+                "tags": ["Bienvenida", "Instrucciones", "Tailwind"],
+                "note": "/projects/soft-skills-quiz-welcome.jpg"
+              },
+              {
+                "key": "mod-mobile",
+                "title": "Evaluación Responsiva en Smartphones",
+                "summary": "Optimización táctil para responder en cualquier lugar",
+                "body": "Diseño Mobile First con botones táctiles generosos y navegación fluida con una sola mano.",
+                "value": "Mobile First",
+                "icon": "gauge",
+                "tags": ["Mobile", "UX Táctil", "Responsive"],
+                "note": "/projects/soft-skills-quiz.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "quiz-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Decisiones de Ingeniería",
+            "title": "Decisiones Técnicas de Implementación",
+            "lead": "Criterios técnicos adoptados para asegurar una evaluación fidedigna y libre de fallos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-timestamp-timer",
+                "title": "Temporizador Basado en Timestamps vs setInterval Simple",
+                "summary": "Precisión garantizada incluso si la pestaña se suspende en segundo plano",
+                "body": "Un setInterval tradicional se desacelera cuando el navegador pasa a segundo plano. Al calcular la diferencia contra un timestamp objetivo absoluto, la cuenta regresiva conserva precisión de milisegundos sin desincronización.",
+                "value": "Timestamp Drift-Proof",
+                "icon": "bolt",
+                "tags": ["JavaScript", "Temporizador", "Precisión"],
+                "note": ""
+              },
+              {
+                "key": "dec-tailwind-clean",
+                "title": "Tailwind CSS para Experiencia de Lectura Concentrada",
+                "summary": "Tipografía pulida y contrastes conformes con WCAG",
+                "body": "Garantiza que los candidatos lean enunciados situacionales extensos sin fatiga visual gracias a escalas tipográficas cuidadas y componentes de formulario accesibles.",
+                "value": "Alta Legibilidad",
+                "icon": "layout",
+                "tags": ["Tailwind", "Accesibilidad", "UI"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
       "title": "Soft Skills Quiz",
-      "description": "Web application that allows you to take a test of soft skills for developers."
+      "description": "Web application that allows you to take a test of soft skills for developers.",
+      "hook": "Interactive situational assessment · Accurate 45-min countdown · Soft skill diagnostics for software engineers",
+      "challenge": "Design an engaging, fair assessment to measure interpersonal engineering competencies beyond abstract theoretical multiple-choice quizzes.",
+      "approach": "Built an interactive React, TypeScript, and Tailwind CSS SPA featuring real workplace scenarios, a drift-proof countdown clock, and automated weighted competency scoring.",
+      "outcome": "Immersive evaluation platform used by engineering candidates for self-diagnosis and preparation ahead of technical hiring interviews.",
+      "caseStudy": {
+        "chips": [
+          "Psychometric Assessment",
+          "React & TypeScript",
+          "Tailwind CSS",
+          "Accurate 45-Min Timer",
+          "Situational Scenarios for Devs"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My Role",
+            "value": "Creator & Frontend Developer"
+          },
+          {
+            "key": "target-audience",
+            "label": "Target Audience",
+            "value": "Software developers and technical recruitment teams"
+          },
+          {
+            "key": "evaluation-format",
+            "label": "Evaluation Format",
+            "value": "Timed 45-minute test with situational multiple-choice questions (A-E)"
+          },
+          {
+            "key": "live-url",
+            "label": "Live Application",
+            "value": "Soft Skills Quiz (https://soft-skill-quiz.vercel.app)"
+          }
+        ],
+        "nextProjectSlug": "rick-and-morty",
+        "context": "Soft Skills Quiz is an interactive web assessment built to measure crucial interpersonal competencies in software engineers: team conflict resolution, agile communication, technical adaptability, and collaborative leadership. Instead of dry theoretical trivia, the test presents real engineering workplace scenarios under a strict time limit.",
+        "roleTitle": "React Frontend Developer",
+        "roleIntro": "Designed and built the full evaluation experience using React, TypeScript, and Tailwind CSS. Implemented a drift-proof 45-minute countdown clock, sequential question progression, and automated skill-category weighting.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Interactive soft skills assessment platform for technology professionals featuring an active countdown timer and realistic engineering workplace scenarios.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My Role",
+            "summary": "",
+            "body": "React component architecture, TypeScript type safety, exam state persistence, and responsive accessible UI design with Tailwind CSS.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Immersive diagnostic tool widely utilized by candidates for self-assessment prior to technical engineering interviews.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "quiz-engine",
+            "title": "Situational Question & Scoring Engine",
+            "summary": "",
+            "body": "Type definitions and weighted scoring algorithms for soft skill competencies supporting multiple-choice answers (A through E).",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "resilient-timer",
+            "title": "Resilient 45-Minute Countdown Subsystem",
+            "summary": "",
+            "body": "Timestamp-synchronized countdown clock resilient against accidental browser reloads without losing exam progress.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "accessible-ui",
+            "title": "Focused, Distraction-Free Accessible UI",
+            "summary": "",
+            "body": "Clean interface engineered with Tailwind CSS optimized for extended reading, smooth keyboard navigation, and full mobile responsiveness.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Persistence of selected answers and elapsed time across accidental page reloads.",
+          "Distraction-free interface with accessible contrast for reading long scenario prompts.",
+          "Strict input validation before candidate begins the evaluation."
+        ],
+        "sections": [
+          {
+            "key": "quiz-modules",
+            "kind": "CARDS",
+            "eyebrow": "Screens & User Experience",
+            "title": "Candidate Assessment Flow in Soft Skills Quiz",
+            "lead": "Interactive screens engineered for high focus and frictionless test-taking.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-question",
+                "title": "Scenario Card & Active Countdown Clock",
+                "summary": "Teamwork workplace prompt and multiple-choice options",
+                "body": "Interactive test card featuring live 45:00 countdown clock, candidate name banner, and radio option selection (A through E).",
+                "value": "Live Scenario",
+                "icon": "layout",
+                "tags": ["Timer", "Scenarios", "React"],
+                "note": "/projects/soft-skills-quiz-question.jpg"
+              },
+              {
+                "key": "mod-welcome",
+                "title": "Candidate Registration & Instructions Portal",
+                "summary": "Welcoming instructions and candidate profile onboarding",
+                "body": "Introduction screen outlining evaluation parameters, target soft skills, and fast name registration.",
+                "value": "Onboarding",
+                "icon": "case",
+                "tags": ["Welcome", "Instructions", "Tailwind"],
+                "note": "/projects/soft-skills-quiz-welcome.jpg"
+              },
+              {
+                "key": "mod-mobile",
+                "title": "Responsive Smartphone Exam Experience",
+                "summary": "Touch-optimized test interface for on-the-go candidates",
+                "body": "Mobile-first design with generous tap targets and fluid single-handed navigation across all modern mobile browsers.",
+                "value": "Mobile First",
+                "icon": "gauge",
+                "tags": ["Mobile", "Touch UX", "Responsive"],
+                "note": "/projects/soft-skills-quiz.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "quiz-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Decisions",
+            "title": "Key Technical Implementation Choices",
+            "lead": "Architectural choices ensuring reliable test delivery and fair candidate scoring.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-timestamp-timer",
+                "title": "Timestamp-Based Timer over Naive setInterval",
+                "summary": "Guaranteed time accuracy even when the browser tab is throttled in background",
+                "body": "Standard setInterval suffers from browser throttling when switching tabs. By computing elapsed time against an absolute target timestamp, the timer remains accurate to the millisecond.",
+                "value": "Drift-Proof Timer",
+                "icon": "bolt",
+                "tags": ["JavaScript", "Timer", "Accuracy"],
+                "note": ""
+              },
+              {
+                "key": "dec-tailwind-clean",
+                "title": "Tailwind CSS for High-Legibility Typography",
+                "summary": "WCAG-compliant contrast and clean reading typography",
+                "body": "Ensures candidates read long situational scenarios without eye fatigue through disciplined typographic scales and accessible form controls.",
+                "value": "High Legibility",
+                "icon": "layout",
+                "tags": ["Tailwind", "Accessibility", "UI"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
       "title": "Soft Skills Quiz",
-      "description": "Webapplicatie waarmee je een softwaretest voor ontwikkelaars kunt doen."
+      "description": "Webapplicatie waarmee je een softwaretest voor ontwikkelaars kunt doen.",
+      "hook": "Interactieve situatiegebonden test · Nauwkeurige 45-minuten afteltimer · Soft skills diagnostiek voor developers",
+      "challenge": "Een boeiende test ontwikkelen om sociale en communicatieve vaardigheden bij softwareontwikkelaars te meten via realistische casussen.",
+      "approach": "Interactieve SPA gebouwd in React, TypeScript en Tailwind CSS met realistische werkvloerscenario's, driftvrije timer en gewogen competentiescores.",
+      "outcome": "Meertalig testplatform ingezet door ontwikkelaars ter voorbereiding op technische sollicitatieprocedures.",
+      "caseStudy": {
+        "chips": [
+          "Psychometrische Beoordeling",
+          "React & TypeScript",
+          "Tailwind CSS",
+          "Nauwkeurige 45-Min Timer",
+          "Praktijkscenario's voor Devs"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Bedenker & Frontend Ontwikkelaar"
+          },
+          {
+            "key": "target-audience",
+            "label": "Doelgroep",
+            "value": "Software-engineers en technische recruitmentteams"
+          },
+          {
+            "key": "evaluation-format",
+            "label": "Evaluatieformaat",
+            "value": "Getimede test van 45 minuten met situatiegebonden meerkeuzevragen (A-E)"
+          },
+          {
+            "key": "live-url",
+            "label": "Live applicatie",
+            "value": "Soft Skills Quiz (https://soft-skill-quiz.vercel.app)"
+          }
+        ],
+        "nextProjectSlug": "rick-and-morty",
+        "context": "Soft Skills Quiz is een interactieve webapplicatie om cruciale sociale en communicatieve vaardigheden bij softwareontwikkelaars te meten: conflicthantering in agile teams, proactieve communicatie en technisch leiderschap via realistische praktijksituaties onder tijdsdruk.",
+        "roleTitle": "React Frontend Ontwikkelaar",
+        "roleIntro": "Ontwerp en bouw van de complete test-ervaring met React, TypeScript en Tailwind CSS, inclusief een driftvrije timer van 45 minuten en geautomatiseerde vaardigheidsweging.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Interactief testplatform voor soft skills bij softwareontwikkelaars met actieve timer en realistische werkplekscenario's.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "React componentarchitectuur, TypeScript typeveiligheid, examenstatuspersistentie en responsief UI-ontwerp met Tailwind CSS.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Waardevol diagnostisch instrument voor kandidaten ter voorbereiding op technische sollicitatiegesprekken.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "quiz-engine",
+            "title": "Vraag- en Beoordelingssysteem",
+            "summary": "",
+            "body": "Typestructuur en gewogen scoringslogica per vaardigheidscategorie met ondersteuning voor meerkeuzeantwoorden (A t/m E).",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "resilient-timer",
+            "title": "Betrouwbare 45-Minuten Afteltimer",
+            "summary": "",
+            "body": "Tijdcontrole gesynchroniseerd via absolute timestamps die bestand is tegen onbedoeld herladen van de browser.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "accessible-ui",
+            "title": "Gerichte en Toegankelijke Interface",
+            "summary": "",
+            "body": "Heldere interface gebouwd met Tailwind CSS, geoptimaliseerd voor langere leessessies en volledige mobiele bediening.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Behoud van antwoorden en resterende tijd bij per ongeluk herladen.",
+          "Afleidingsvrije interface met hoog contrast voor het lezen van uitgebreide scenario's.",
+          "Strikte invoervalidatie voordat de test begint."
+        ],
+        "sections": [
+          {
+            "key": "quiz-modules",
+            "kind": "CARDS",
+            "eyebrow": "Schermen & Gebruikerservaring",
+            "title": "Kandidaat-ervaring in Soft Skills Quiz",
+            "lead": "Interactieve schermen ontworpen voor maximale focus.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-question",
+                "title": "Vraagkaart & Actieve Aftelklok",
+                "summary": "Teamwerkscenario en meerkeuzeopties",
+                "body": "Interactieve kaart met live aftellende timer van 45:00 minuten, kandidaatnaam en optieselectie (A t/m E).",
+                "value": "Actief Scenario",
+                "icon": "layout",
+                "tags": ["Timer", "Scenario's", "React"],
+                "note": "/projects/soft-skills-quiz-question.jpg"
+              },
+              {
+                "key": "mod-welcome",
+                "title": "Kandidaatregistratie & Instructieportaal",
+                "summary": "Welkomstvenster en onboarding",
+                "body": "Introductiescherm met overzicht van regels, geteste competenties en snelle registratie.",
+                "value": "Onboarding",
+                "icon": "case",
+                "tags": ["Welkom", "Instructies", "Tailwind"],
+                "note": "/projects/soft-skills-quiz-welcome.jpg"
+              },
+              {
+                "key": "mod-mobile",
+                "title": "Responsieve Smartphone-ervaring",
+                "summary": "Touch-geoptimaliseerde testomgeving",
+                "body": "Mobile-first ontwerp met duidelijke aanraakknoppen voor vlotte bediening op mobiele telefoons.",
+                "value": "Mobiel Gereed",
+                "icon": "gauge",
+                "tags": ["Mobiel", "Touch UX", "Responsief"],
+                "note": "/projects/soft-skills-quiz.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "quiz-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Beslissingen",
+            "title": "Belangrijke Technische Implementatiekeuzes",
+            "lead": "Technische afwegingen voor een betrouwbare testafname.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-timestamp-timer",
+                "title": "Timestamp-Timer versus Simpele setInterval",
+                "summary": "Gegarandeerde precisie, ook bij browsertab-throttling",
+                "body": "Een standaard setInterval vertraagt wanneer het tabblad naar de achtergrond verdwijnt. Berekening tegen een absolute timestamp voorkomt desynchronisatie.",
+                "value": "Driftvrije Timer",
+                "icon": "bolt",
+                "tags": ["JavaScript", "Timer", "Precisie"],
+                "note": ""
+              },
+              {
+                "key": "dec-tailwind-clean",
+                "title": "Tailwind CSS voor Rustige Typografie",
+                "summary": "Uitstekende leesbaarheid en WCAG-contrast",
+                "body": "Zorgt ervoor dat kandidaten lange casussen zonder vermoeidheid kunnen doornemen dankzij heldere typografische schalen.",
+                "value": "Hoge Leesbaarheid",
+                "icon": "layout",
+                "tags": ["Tailwind", "Toegankelijkheid", "UI"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
   ],
   "skillKeys": ["React", "Tailwind", "Typescript"],
   "order": 7,
   "kind": "LEARNING",
-  "slug": "soft-skills-quiz"
+  "slug": "soft-skills-quiz",
+  "caseStudyEnabled": true
 }

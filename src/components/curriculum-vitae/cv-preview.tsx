@@ -2,7 +2,6 @@ import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
 import HeaderCv from "@/components/curriculum-vitae/header-cv";
-import ContactMe from "@/components/curriculum-vitae/contact-me";
 import Education from "@/components/curriculum-vitae/education";
 import Languages from "@/components/curriculum-vitae/languages";
 import TechnicalSkills from "@/components/curriculum-vitae/technical-skills";
@@ -27,45 +26,53 @@ const CvPreview: FC<ICvPreviewProps> = ({
   locale,
 }) => {
   const t = useTranslations("curriculum");
+  const availability = data.additionalInformation?.[0]?.text ?? null;
+  const remainingAdditionalInfo =
+    data.additionalInformation && data.additionalInformation.length > 1
+      ? data.additionalInformation.slice(1)
+      : [];
 
   return (
     <CvContextProvider>
       <HeaderCv
         header={data.header}
         fallbackName={data.profile?.displayName ?? null}
+        contacts={data.contacts}
+        availability={availability}
       />
       <div
         className={
           pdfMode
-            ? "grid grid-cols-1 px-5 pt-2 sm:grid-cols-9"
-            : "grid grid-cols-1 p-5 pb-10 sm:grid-cols-9"
+            ? "grid grid-cols-1 px-5 pt-2 md:grid-cols-[1fr_17rem]"
+            : "grid grid-cols-1 md:grid-cols-[1fr_17rem]"
         }
       >
-        <div className="sm:col-span-3">
-          <ContactMe contacts={data.contacts} />
-          <Education educations={data.educations} />
-          <Languages languages={data.languages} />
-          <TechnicalSkills technicalSkills={data.technicalSkills} />
-        </div>
-        <div className="col-span-1 hidden w-full justify-center sm:flex">
-          <div className="h-full w-[1px] border-r" />
-        </div>
-        <div className="sm:col-span-5">
+        <div className="px-6 py-6 md:px-10 md:py-8">
           {aboutMeText ? (
-            <div className="mb-4">
-              <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+            <section className="mb-7">
+              <h2 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-[0.12em] text-[#0a3d7a] uppercase before:h-4 before:w-1 before:rounded-full before:bg-[#0a3d7a] before:content-['']">
                 {t("header.aboutMe")}
-              </h5>
-              <h3 className="text-sm text-[#1a1a1a]">{aboutMeText}</h3>
-            </div>
+              </h2>
+              <p className="text-sm leading-relaxed text-slate-800">
+                {aboutMeText}
+              </p>
+            </section>
           ) : null}
 
           <Experience experiences={data.experiences} locale={locale} />
-          <SoftSkills softSkills={data.softSkills} />
-          <AdditionalInformation
-            additionalInformation={data.additionalInformation}
-          />
         </div>
+
+        <aside className="space-y-7 border-t border-slate-200 bg-[#f1f5fb] px-6 py-6 md:border-t-0 md:border-l md:px-7 md:py-8">
+          <TechnicalSkills technicalSkills={data.technicalSkills} />
+          <Education educations={data.educations} />
+          <Languages languages={data.languages} />
+          <SoftSkills softSkills={data.softSkills} />
+          {remainingAdditionalInfo.length > 0 ? (
+            <AdditionalInformation
+              additionalInformation={remainingAdditionalInfo}
+            />
+          ) : null}
+        </aside>
       </div>
     </CvContextProvider>
   );
