@@ -11,7 +11,7 @@ import SiteBrandMark from "@/components/app-layout/site-brand-mark";
 
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
-import { DesktopMegaMenu } from "./nav-menu-parts";
+import DesktopMegaMenu from "./desktop-mega-menu";
 import ToolbarHeader from "./toolbar-header";
 import ThemeSelectorLazy from "./theme-selector-lazy";
 import { NAV_GROUPS } from "./navigation-config";
@@ -43,7 +43,7 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
 
   const scheduleMegaMenuClose = useCallback(() => {
     clearCloseTimer();
-    closeTimerRef.current = setTimeout(() => setActiveGroup(null), 160);
+    closeTimerRef.current = setTimeout(() => setActiveGroup(null), 180);
   }, [clearCloseTimer]);
 
   const closeMenus = useCallback(() => {
@@ -144,10 +144,10 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
           </div>
 
           <div className="w-full lg:hidden">
-            <MobileNav isOpen={isMenuOpen} />
+            <MobileNav isOpen={isMenuOpen} onClose={closeMenus} />
           </div>
 
-          <DesktopMegaMenu activeGroup={activeGroup} />
+          <DesktopMegaMenu activeGroup={activeGroup} onClose={closeMenus} />
         </div>
       </nav>
     </header>

@@ -1,29 +1,759 @@
 {
   "key": "KwhMonitorApi",
-  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/api-rest_u56jdu",
+  "image": "/projects/kwh-monitor-api.jpg",
   "type": "BACKEND",
-  "githubUrl": "https://github.com/jess232017/Consultar-Consumo-API",
+  "githubUrl": "https://github.com/jesushg-dev/Consultar-Consumo-API",
   "websiteUrl": "",
   "isPrivate": false,
   "translations": [
     {
       "locale": "es",
-      "title": "Kwh Monitor Api",
-      "description": "Api Rest para la aplicación móvil Kwh Monitor."
+      "title": "Kwh Monitor API",
+      "description": "Microservicio desacoplado en Node.js y Express para scraping y cálculo en tiempo real de facturación eléctrica en Nicaragua. Automatiza sesiones complejas en portales gubernamentales, parsea tablas dinámicas a JSON estructurado y responde consultas tarifarias del INE en sub-segundos.",
+      "hook": "Microservicio Node.js & Express · Scraping y parsing de tarifas oficiales INE · API REST sub-segundo para app móvil",
+      "challenge": "El ente regulador carecía de una API abierta para consultar tarifas y subsidios, obligando a interactuar con formularios ASP legados con sesiones complejas.",
+      "approach": "Desarrollé un microservicio en Node.js y Express que automatiza handshakes de sesión, envía payloads con Axios y transforma tablas HTML en JSON estructurado.",
+      "outcome": "Cálculo instantáneo sub-segundo consumible por la app móvil Android, permitiendo a miles de hogares anticipar su factura eléctrica y proteger subsidios.",
+      "caseStudy": {
+        "chips": [
+          "Microservicio Node.js",
+          "Scraping en Tiempo Real",
+          "Cálculo de Facturación",
+          "Consumo Eléctrico",
+          "API REST Sub-segundo",
+          "Tarifas INE"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Creador & Desarrollador Backend"
+          },
+          {
+            "key": "target-source",
+            "label": "Fuente reguladora",
+            "value": "Motor de cálculo oficial del Instituto Nicaragüense de Energía (INE)"
+          },
+          {
+            "key": "runtime",
+            "label": "Stack de ejecución",
+            "value": "Node.js (ES Modules) · Express · Axios · Parsers HTML a JSON"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repositorio",
+            "value": "Consultar-Consumo-API (https://github.com/jesushg-dev/Consultar-Consumo-API)"
+          }
+        ],
+        "nextProjectSlug": "tech-service-api",
+        "context": "Kwh Monitor API es un microservicio desacoplado concebido para resolver la ausencia de una API pública y abierta en el portal regulador de energía eléctrica de Nicaragua (INE). Permite a la aplicación móvil Kwh Monitor calcular el monto estimado de la factura eléctrica en tiempo real a partir de lecturas activas del medidor (kWh), automatizando sesiones HTTP, extracción de tablas dinámicas y desagregación de subsidios nacionales.",
+        "roleTitle": "Desarrollador Backend Node.js",
+        "roleIntro": "Diseñé la arquitectura del microservicio en Node.js y Express: realicé ingeniería inversa a los formularios ASP/PHP del portal estatal, implementé el manejo automático de cookies de sesión, el parseo de tablas HTML a contratos JSON tipados y la resolución geográfica de tarifas en milisegundos.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Microservicio web de cálculo y scraping de facturación eléctrica en tiempo real para Nicaragua.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollo completo en Node.js y Express: reverse engineering de endpoints estatales, parsing HTML y API REST.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Facilitó a miles de familias proyectar su consumo eléctrico mensual y evitar saltos a rangos tarifarios sin subsidio.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ine-scraping",
+            "title": "Motor de Scraping y Gestión de Sesiones HTTP",
+            "summary": "",
+            "body": "Orquestación de peticiones HTTP con cookies persistentes (PHPSESSID) y serialización de parámetros de formulario gubernamentales (__EVENTTARGET, __EVENTARGUMENT).",
+            "value": "",
+            "icon": "globe",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "table-to-json",
+            "title": "Conversión de Tablas HTML a Contratos JSON Tipados",
+            "summary": "",
+            "body": "Procesamiento de respuestas HTML tabulares con html-table-to-json para extraer consumo activo, alumbrado público, subsidio y total a pagar.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "geo-tariff",
+            "title": "Resolución Dinámica de Tarifas y Departamentos",
+            "summary": "",
+            "body": "Endpoints de soporte para catálogo de tarifas residenciales (T-0) e industriales, departamentos y municipios de Nicaragua.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Tolerancia a cambios no anunciados en el DOM del portal gubernamental.",
+          "Mantenimiento transparente de cookies y tokens de sesión de corta duración.",
+          "Tiempo de respuesta sub-segundo para garantizar fluidez en la app móvil."
+        ],
+        "sections": [
+          {
+            "key": "kwh-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos y Endpoints",
+            "title": "Estructura del Microservicio Kwh Monitor API",
+            "lead": "Endpoints optimizados para la integración con la aplicación móvil Android.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-calculator",
+                "title": "Cálculo de Facturación Eléctrica (/calcular-recibo)",
+                "summary": "Recepción de lectura activa y fechas de ciclo",
+                "body": "Recibe kWh activos, fechas de corte y tipo de tarifa, entregando el desglose exacto de la factura en Córdobas y Dólares.",
+                "value": "POST /calcular-recibo",
+                "icon": "bolt",
+                "tags": ["Node.js", "Express", "Cálculo"],
+                "note": "/projects/kwh-monitor-api.jpg"
+              },
+              {
+                "key": "mod-scraper",
+                "title": "Pipeline de Scraping y Sesión INE",
+                "summary": "Conexión transparente con el portal estatal",
+                "body": "Emulación de peticiones con Axios y cookies de sesión para obtener la respuesta del motor oficial del INE.",
+                "value": "Scraper Engine",
+                "icon": "globe",
+                "tags": ["Axios", "INE", "Scraping"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "mod-response",
+                "title": "Desglose Financiero Estructurado",
+                "summary": "Subsidios, energía activa y alumbrado público",
+                "body": "Transformación de tablas HTML complejas en un objeto JSON limpio con indicadores numéricos listos para graficar.",
+                "value": "JSON Limpio",
+                "icon": "code",
+                "tags": ["JSON", "Subsidio", "Tarifas"],
+                "note": "/projects/kwh-monitor-api-response.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-flow",
+            "kind": "STEPS",
+            "eyebrow": "Pipeline de Ejecución",
+            "title": "Flujo de Consulta y Cálculo en Tiempo Real",
+            "lead": "Secuencia sub-segundo desde la solicitud del usuario hasta la respuesta procesada.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-meter",
+                "title": "1. Captura de Lectura en App Móvil",
+                "summary": "El usuario ingresa los kWh de su medidor",
+                "body": "La aplicación móvil envía los parámetros del ciclo de consumo al endpoint /calcular-recibo.",
+                "value": "< 50ms",
+                "icon": "gauge",
+                "tags": ["App Móvil", "Input"],
+                "note": ""
+              },
+              {
+                "key": "step-session",
+                "title": "2. Handshake y Adquisición de Sesión INE",
+                "summary": "Gestión de cookies y headers de sesión",
+                "body": "El microservicio inicializa la conexión con el servidor del INE manteniendo la cookie de sesión activa.",
+                "value": "PHPSESSID",
+                "icon": "shield",
+                "tags": ["Cookies", "Sesión"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "step-scrape",
+                "title": "3. Envío de Formulario y Extracción DOM",
+                "summary": "Disparo de evento de cálculo gubernamental",
+                "body": "Se envían los campos de formulario codificados en urlencoded y se intercepta el documento HTML resultante.",
+                "value": "POST INE",
+                "icon": "globe",
+                "tags": ["INE", "DOM"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "step-json",
+                "title": "4. Normalización JSON y Entrega al Cliente",
+                "summary": "Parsing de tabla a objeto JSON estructurado",
+                "body": "Se extraen cargos, descuentos por subsidio y total neto, retornando un payload estructurado en menos de 300ms.",
+                "value": "200 OK",
+                "icon": "code",
+                "tags": ["JSON", "Salida"],
+                "note": "/projects/kwh-monitor-api-response.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Decisiones de Ingeniería",
+            "title": "Criterios Técnicos de Implementación",
+            "lead": "Razonamiento detrás de la arquitectura y tecnologías elegidas.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-node-microservice",
+                "title": "Microservicio Independiente vs Lógica Embebida en la App",
+                "summary": "Desacoplamiento total ante cambios en el portal del INE",
+                "body": "Al mantener el scraping en un microservicio de backend, cualquier ajuste en el HTML del gobierno se resuelve en el servidor sin obligar a los usuarios a actualizar la app en Google Play.",
+                "value": "Desacoplado",
+                "icon": "layers",
+                "tags": ["Microservicio", "Mantenibilidad"],
+                "note": ""
+              },
+              {
+                "key": "dec-html-table-json",
+                "title": "Parsers de Tabla Livianos vs Navegador Headless",
+                "summary": "Bajo consumo de memoria y respuestas en milisegundos",
+                "body": "El uso de html-table-to-json y Axios redujo el consumo de RAM a menos de 50MB, descartando Puppeteer y permitiendo alojar el servicio en niveles gratuitos sin latencia.",
+                "value": "Ultra Ligero",
+                "icon": "bolt",
+                "tags": ["Performance", "RAM", "Axios"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
-      "title": "Kwh Monitor Api",
-      "description": "Rest Api for the mobile application Kwh Monitor."
+      "title": "Kwh Monitor API",
+      "description": "Decoupled Node.js and Express microservice for real-time web scraping and billing calculations from Nicaraguan energy regulator portals. Automates complex governmental session handshakes, transforms dynamic tables to typed JSON, and returns sub-second INE tariff evaluations.",
+      "hook": "Node.js & Express Microservice · Scraping and parsing of official INE tariffs · Sub-second REST API for mobile app",
+      "challenge": "The state regulatory agency lacked a public API to query tiered energy rates, requiring automated interaction with legacy ASP forms.",
+      "approach": "Engineered a Node.js & Express microservice automating session handshakes, form submission with Axios, and table-to-JSON parsing.",
+      "outcome": "Sub-second calculations powering the Android mobile app, enabling thousands of households to forecast utility bills and retain subsidies.",
+      "caseStudy": {
+        "chips": [
+          "Node.js Microservice",
+          "Real-Time Scraping",
+          "Billing Calculator",
+          "Electricity Consumption",
+          "Sub-Second REST API",
+          "INE Tariffs"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My Role",
+            "value": "Creator & Backend Developer"
+          },
+          {
+            "key": "target-source",
+            "label": "Regulatory Source",
+            "value": "Official billing engine of the Nicaraguan Energy Institute (INE)"
+          },
+          {
+            "key": "runtime",
+            "label": "Runtime Stack",
+            "value": "Node.js (ES Modules) · Express · Axios · HTML-to-JSON Parsers"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "Consultar-Consumo-API (https://github.com/jesushg-dev/Consultar-Consumo-API)"
+          }
+        ],
+        "nextProjectSlug": "tech-service-api",
+        "context": "Kwh Monitor API is a decoupled microservice built to overcome the absence of a public API from the Nicaraguan electric energy regulatory authority (INE). It powers the Kwh Monitor Android app with real-time bill calculations based on active meter readings (kWh), automating HTTP sessions, legacy ASP table scraping, and tiered subsidy calculations.",
+        "roleTitle": "Node.js Backend Developer",
+        "roleIntro": "Architected the microservice in Node.js and Express: reverse-engineered the state agency's ASP/PHP billing form, implemented automatic session cookie persistence, HTML table-to-JSON normalization, and sub-second geographic tariff resolution.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Real-time electricity billing calculator and web scraping microservice for Nicaragua's energy grid.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My Role",
+            "summary": "",
+            "body": "Full backend delivery: reverse engineering government endpoints, HTML table parsing, and high-speed REST API.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Empowered thousands of households to track monthly electricity spend and avoid sudden tier spikes.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ine-scraping",
+            "title": "HTTP Session Management & Scraping Engine",
+            "summary": "",
+            "body": "Orchestrated HTTP requests with persistent cookies (PHPSESSID) and government form serialization (__EVENTTARGET, __EVENTARGUMENT).",
+            "value": "",
+            "icon": "globe",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "table-to-json",
+            "title": "HTML Table to Structured JSON Transformation",
+            "summary": "",
+            "body": "Extracted energy tiers, commercial taxes, street lighting fees, and government subsidies using html-table-to-json.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "geo-tariff",
+            "title": "Dynamic Geographic & Tariff Resolution",
+            "summary": "",
+            "body": "Endpoints providing lookup data for residential (T-0), commercial, and municipal tariffs across all Nicaraguan departments.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Resilience against unannounced DOM changes on the government regulatory portal.",
+          "Transparent handling of short-lived session cookies without user interruption.",
+          "Sub-second response latency to ensure instantaneous feedback on mobile devices."
+        ],
+        "sections": [
+          {
+            "key": "kwh-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Endpoints",
+            "title": "Kwh Monitor API Microservice Architecture",
+            "lead": "High-performance endpoints tailored for the Android mobile application.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-calculator",
+                "title": "Billing Calculation Endpoint (/calcular-recibo)",
+                "summary": "Active kWh readings and billing dates input",
+                "body": "Takes active consumption, billing window dates, and tariff bracket, returning exact financial breakdown in Córdobas and USD.",
+                "value": "POST /calcular-recibo",
+                "icon": "bolt",
+                "tags": ["Node.js", "Express", "Calculator"],
+                "note": "/projects/kwh-monitor-api.jpg"
+              },
+              {
+                "key": "mod-scraper",
+                "title": "INE Session & Scraping Pipeline",
+                "summary": "Transparent connectivity with the regulatory engine",
+                "body": "Axios-driven request emulation with cookie preservation ensuring reliable communication with the official INE server.",
+                "value": "Scraper Engine",
+                "icon": "globe",
+                "tags": ["Axios", "INE", "Scraping"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "mod-response",
+                "title": "Structured Financial Breakdown",
+                "summary": "Subsidies, active energy, and public lighting",
+                "body": "Transforms dense HTML markup into a clean JSON contract with ready-to-plot numerical indicators.",
+                "value": "Clean JSON",
+                "icon": "code",
+                "tags": ["JSON", "Subsidy", "Tariffs"],
+                "note": "/projects/kwh-monitor-api-response.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-flow",
+            "kind": "STEPS",
+            "eyebrow": "Execution Pipeline",
+            "title": "Real-Time Query & Calculation Sequence",
+            "lead": "Sub-second pipeline from user meter entry to normalized JSON delivery.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-meter",
+                "title": "1. Meter Reading Intake in Mobile App",
+                "summary": "User logs active kWh consumption",
+                "body": "The mobile app dispatches cycle parameters and meter readings to /calcular-recibo.",
+                "value": "< 50ms",
+                "icon": "gauge",
+                "tags": ["Mobile", "Input"],
+                "note": ""
+              },
+              {
+                "key": "step-session",
+                "title": "2. Handshake & INE Session Acquisition",
+                "summary": "Session cookie and header negotiation",
+                "body": "The microservice establishes a session with the state server, retaining the active PHPSESSID token.",
+                "value": "PHPSESSID",
+                "icon": "shield",
+                "tags": ["Cookies", "Session"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "step-scrape",
+                "title": "3. Form Submission & DOM Interception",
+                "summary": "Form payload post and response capture",
+                "body": "Urlencoded form parameters are transmitted and the resulting calculation HTML document is intercepted.",
+                "value": "POST INE",
+                "icon": "globe",
+                "tags": ["INE", "DOM"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "step-json",
+                "title": "4. JSON Normalization & Client Delivery",
+                "summary": "Table markup to structured JSON payload",
+                "body": "Energy fees, national subsidies, and total balances are parsed and delivered to the phone in under 300ms.",
+                "value": "200 OK",
+                "icon": "code",
+                "tags": ["JSON", "Output"],
+                "note": "/projects/kwh-monitor-api-response.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Decisions",
+            "title": "Technical Design Rationale",
+            "lead": "Key decisions behind the chosen microservice architecture and tooling.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-node-microservice",
+                "title": "Decoupled Microservice over Embedded App Logic",
+                "summary": "Complete isolation from government portal updates",
+                "body": "Keeping scraping logic on a Node.js backend allows patching DOM selectors instantaneously on the server without requiring Google Play app updates.",
+                "value": "Decoupled",
+                "icon": "layers",
+                "tags": ["Microservice", "Maintainability"],
+                "note": ""
+              },
+              {
+                "key": "dec-html-table-json",
+                "title": "Lightweight Parsers over Headless Chromium",
+                "summary": "Low memory footprint and sub-second responses",
+                "body": "Using html-table-to-json and Axios kept RAM usage below 50MB, avoiding heavy Puppeteer dependencies and enabling zero-latency hosting.",
+                "value": "Ultra Light",
+                "icon": "bolt",
+                "tags": ["Performance", "RAM", "Axios"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
-      "title": "Kwh Monitor Api",
-      "description": "Rest Api voor de mobiele toepassing Kwh Monitor."
+      "title": "Kwh Monitor API",
+      "description": "Ontkoppelde Node.js en Express microservice voor realtime scraping en factuurberekening van elektriciteitstarieven. Automatiseert sessie-handshakes op overheidsportalen, zet dynamische tabellen om naar getypeerde JSON en levert INE-tarieven in milliseconden.",
+      "hook": "Node.js & Express Microservice · Scraping en verwerking van officiële INE-tarieven · Sub-seconde REST API voor mobiele app",
+      "challenge": "Het overheidsagentschap had geen openbare API voor tarieven, waardoor geautomatiseerde interactie met verouderde ASP-formulieren noodzakelijk was.",
+      "approach": "Ontwikkelde een Node.js & Express microservice die sessies automatiseert, formulieren verstuurt met Axios en tabellen omzet in JSON.",
+      "outcome": "Sub-seconde berekeningen voor de Android-app, waardoor duizenden gezinnen hun energiekosten konden voorspellen en subsidies behouden.",
+      "caseStudy": {
+        "chips": [
+          "Node.js Microservice",
+          "Realtime Scraping",
+          "Facturatieberekening",
+          "Elektriciteitsverbruik",
+          "Sub-seconde REST API",
+          "INE-tarieven"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Bedenker & Backend Ontwikkelaar"
+          },
+          {
+            "key": "target-source",
+            "label": "Regulator",
+            "value": "Officiële rekenmachine van het Nicaraguaanse Energie-instituut (INE)"
+          },
+          {
+            "key": "runtime",
+            "label": "Stack",
+            "value": "Node.js (ES Modules) · Express · Axios · HTML-naar-JSON Parsers"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "Consultar-Consumo-API (https://github.com/jesushg-dev/Consultar-Consumo-API)"
+          }
+        ],
+        "nextProjectSlug": "tech-service-api",
+        "context": "Kwh Monitor API is een ontkoppelde microservice die is gebouwd om het ontbreken van een openbare API bij de Nicaraguaanse energieregulator (INE) op te lossen. Het stelt de mobiele Android-app Kwh Monitor in staat om realtime elektriciteitsfacturen te berekenen op basis van meterstanden (kWh) via geautomatiseerde websessies en tabelparsing.",
+        "roleTitle": "Node.js Backend Ontwikkelaar",
+        "roleIntro": "Ontwierp de microservice in Node.js en Express: voerde reverse engineering uit op de formulieren van de overheid, implementeerde automatische sessieafhandeling en zette HTML-tabellen om in JSON-contracten.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Microservice voor het realtime berekenen en scrapen van elektriciteitsfacturen in Nicaragua.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Volledige backendontwikkeling in Node.js & Express: scraping van overheidsportalen en snelle REST API.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Stelde duizenden huishoudens in staat om hun maandelijkse elektriciteitsverbruik te voorspellen en tariefsprongen te voorkomen.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ine-scraping",
+            "title": "Scraping-engine & Sessiebeheer",
+            "summary": "",
+            "body": "Orkestratie van HTTP-verzoeken met persistente cookies (PHPSESSID) en formulierparameters (__EVENTTARGET, __EVENTARGUMENT).",
+            "value": "",
+            "icon": "globe",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "table-to-json",
+            "title": "Omzetting van HTML-tabellen naar JSON",
+            "summary": "",
+            "body": "Verwerking van HTML-responsen met html-table-to-json om verbruik, subsidies en eindbedrag te extraheren.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "geo-tariff",
+            "title": "Dynamische Tarief- en Regio-opzoeking",
+            "summary": "",
+            "body": "Endpoints voor residentiële (T-0) en industriële tarieven per departement en gemeente in Nicaragua.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Robuust tegen onaangekondigde DOM-wijzigingen op het overheidsportaal.",
+          "Automatisch beheer van kortlevende sessiecookies zonder gebruikershinder.",
+          "Sub-seconde responstijd voor vloeiend gebruik in de mobiele app."
+        ],
+        "sections": [
+          {
+            "key": "kwh-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Endpoints",
+            "title": "Kwh Monitor API Microservice Architectuur",
+            "lead": "Endpoints geoptimaliseerd voor integratie met de mobiele Android-app.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-calculator",
+                "title": "Factuurberekening Endpoint (/calcular-recibo)",
+                "summary": "Verwerking van actieve kWh en factuurdata",
+                "body": "Berekent op basis van invoer het exacte bedrag in Córdobas en USD met alle subsidiecomponenten.",
+                "value": "POST /calcular-recibo",
+                "icon": "bolt",
+                "tags": ["Node.js", "Express", "Berekening"],
+                "note": "/projects/kwh-monitor-api.jpg"
+              },
+              {
+                "key": "mod-scraper",
+                "title": "INE Sessie- en Scrapingpijplijn",
+                "summary": "Betrouwbare verbinding met de overheidsengine",
+                "body": "Axios-verzoeken met sessiebehoud garanderen stabiele communicatie met de officiële server.",
+                "value": "Scraper Engine",
+                "icon": "globe",
+                "tags": ["Axios", "INE", "Scraping"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "mod-response",
+                "title": "Gestructureerde Financiële Uitsplitsing",
+                "summary": "Subsidies, actieve stroom en openbare verlichting",
+                "body": "Zet complexe HTML-tabellen om in een schone JSON-respons met kant-en-klare getallen.",
+                "value": "Schone JSON",
+                "icon": "code",
+                "tags": ["JSON", "Subsidie", "Tarieven"],
+                "note": "/projects/kwh-monitor-api-response.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-flow",
+            "kind": "STEPS",
+            "eyebrow": "Uitvoeringsstroom",
+            "title": "Realtime Opvraag- en Rekensequentie",
+            "lead": "Snelle pijplijn van meterinvoer tot genormaliseerde JSON-levering.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-meter",
+                "title": "1. Meterstandinvoer in de Mobiele App",
+                "summary": "Gebruiker voert actuele kWh in",
+                "body": "De mobiele app verstuurt cyclusparameters naar het endpoint /calcular-recibo.",
+                "value": "< 50ms",
+                "icon": "gauge",
+                "tags": ["Mobiel", "Invoer"],
+                "note": ""
+              },
+              {
+                "key": "step-session",
+                "title": "2. Handshake & Sessieopbouw met INE",
+                "summary": "Beheer van sessiecookies en headers",
+                "body": "De microservice zet de verbinding op en behoudt het actieve PHPSESSID-token.",
+                "value": "PHPSESSID",
+                "icon": "shield",
+                "tags": ["Cookies", "Sessie"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "step-scrape",
+                "title": "3. Formulierverzending en DOM-extractie",
+                "summary": "Versturen van data en opvangen van HTML",
+                "body": "Urlencoded parameters worden verstuurd en het resulterende HTML-document wordt opgevangen.",
+                "value": "POST INE",
+                "icon": "globe",
+                "tags": ["INE", "DOM"],
+                "note": "/projects/kwh-monitor-api-scraper.jpg"
+              },
+              {
+                "key": "step-json",
+                "title": "4. JSON-normalisatie en Respons",
+                "summary": "Tabelconversie naar gestructureerd object",
+                "body": "Kosten, subsidies en totaalbedragen worden binnen 300ms als gestructureerde JSON geretourneerd.",
+                "value": "200 OK",
+                "icon": "code",
+                "tags": ["JSON", "Uitvoer"],
+                "note": "/projects/kwh-monitor-api-response.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Beslissingen",
+            "title": "Technische Ontwerpkeuzes",
+            "lead": "Overwegingen achter de gekozen architectuur en componenten.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-node-microservice",
+                "title": "Ontkoppelde Microservice versus Ingebouwde App-logica",
+                "summary": "Volledige isolatie van wijzigingen op de INE-website",
+                "body": "Door scraping in een backend-service onder te brengen kunnen selectorwijzigingen direct worden opgelost zonder app-updates in de store.",
+                "value": "Ontkoppeld",
+                "icon": "layers",
+                "tags": ["Microservice", "Onderhoud"],
+                "note": ""
+              },
+              {
+                "key": "dec-html-table-json",
+                "title": "Lichtgewicht Parsers versus Headless Chromium",
+                "summary": "Laag RAM-gebruik en sub-seconde responstijden",
+                "body": "Gebruik van html-table-to-json hield het geheugengebruik onder 50MB, wat snelle en voordelige hosting mogelijk maakte.",
+                "value": "Ultra Licht",
+                "icon": "bolt",
+                "tags": ["Prestaties", "RAM", "Axios"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
   ],
-  "skillKeys": ["Nodejs", "Mysql"],
+  "skillKeys": ["Nodejs", "Express", "Mysql"],
   "order": 18,
   "kind": "PERSONAL",
-  "slug": "kwh-monitor-api"
+  "slug": "kwh-monitor-api",
+  "caseStudyEnabled": true
 }

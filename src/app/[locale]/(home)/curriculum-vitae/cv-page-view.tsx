@@ -183,21 +183,21 @@ const CvPageView: FC<CvPageViewProps> = async ({
     return (
       <div
         id="cv-public-preview"
-        className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
+        className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-slate-900`}
       >
         <PreviewComponent
           data={localizedData}
           aboutMeText={aboutMeText}
           pdfMode
+          locale={currentLocale}
         />
-        {design !== "ats" ? <div className="bg-cv h-4" aria-hidden /> : null}
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-3xl pb-16 md:pb-24">
-      <div className="-mt-2 pt-24 print:hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-[#f4f6fb] to-slate-200 pt-24 pb-16 font-sans text-slate-900 print:bg-white print:p-0">
+      <div className="chrome mx-auto max-w-[51rem] px-4 pb-4 print:hidden">
         <CvPageActions
           fullName={header?.fullName ?? profile?.username ?? "user"}
           canSendByEmail={canSendByEmail}
@@ -208,21 +208,21 @@ const CvPageView: FC<CvPageViewProps> = async ({
           paginatePdfPages={paginatePdfPages}
         />
       </div>
-      <section className="page md:max-w-letter print:max-w-letter print:max-h-letter print:my-o my-6 mb-0 bg-gray-100 sm:mb-6 print:mx-0 print:overflow-hidden print:border-0 print:bg-white">
+      <main
+        id="sheet"
+        className="sheet mx-auto w-full max-w-[51rem] overflow-hidden bg-white text-slate-900 shadow-[0_1.875rem_4.375rem_-1.875rem_rgba(10,61,122,0.45)] md:rounded-2xl print:m-0 print:w-[51rem] print:max-w-none print:rounded-none print:shadow-none"
+      >
         <div
           id="cv-public-preview"
-          className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-black`}
+          className={`${cvPreviewFont.variable} ${cvPreviewFont.className} cv-docx-font bg-white text-slate-900`}
         >
-          <PreviewComponent data={localizedData} aboutMeText={aboutMeText} />
-          {design !== "ats" ? (
-            <div className="bg-cv p-4">
-              <p className="text-sm font-semibold text-white">
-                {t("codedWith")}
-              </p>
-            </div>
-          ) : null}
+          <PreviewComponent
+            data={localizedData}
+            aboutMeText={aboutMeText}
+            locale={currentLocale}
+          />
         </div>
-      </section>
+      </main>
     </div>
   );
 };

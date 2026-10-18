@@ -1,4 +1,9 @@
-import type { Application, ApplicationEvent, Company } from "@prisma/client";
+import type {
+  Application,
+  ApplicationEmail,
+  ApplicationEvent,
+  Company,
+} from "@prisma/client";
 import type { CompanyEditorDTO } from "@/features/job-tracker/lib/company-editor-dto";
 import { mapCompanyToEditorDto } from "@/features/job-tracker/lib/company-editor-dto";
 import { computeLastActivityAt } from "@/features/job-tracker/lib/stale-application";
@@ -10,6 +15,13 @@ export interface ApplicationCvFileDTO {
   name: string;
   url: string;
   uploadedAt: Date;
+}
+
+export interface ApplicationEmailSummaryDTO {
+  totalSent: number;
+  totalOpens: number;
+  lastOpenedAt: Date | null;
+  hasTracking: boolean;
 }
 
 export interface ApplicationEditorDTO {
@@ -33,6 +45,7 @@ export interface ApplicationListRowDTO extends ApplicationEditorDTO {
   updatedAt: Date;
   lastActivityAt: Date;
   ghostNudgeSnoozedUntil: Date | null;
+  emailSummary?: ApplicationEmailSummaryDTO;
 }
 
 export interface ApplicationDetailDTO extends ApplicationListRowDTO {
@@ -44,6 +57,15 @@ export interface ApplicationDetailDTO extends ApplicationListRowDTO {
 type ApplicationWithCompany = Application & {
   company: Company;
   events?: Pick<ApplicationEvent, "scheduledDate" | "completedAt">[];
+  emails?: Pick<
+    ApplicationEmail,
+    | "id"
+    | "sentAt"
+    | "openCount"
+    | "firstOpenedAt"
+    | "lastOpenedAt"
+    | "trackingEnabled"
+  >[];
 };
 
 type ApplicationWithCompanyAndEvents = ApplicationWithCompany & {
@@ -54,6 +76,17 @@ export const applicationListInclude = {
   company: true,
   events: {
     select: { scheduledDate: true, completedAt: true },
+  },
+  emails: {
+    where: { sentAt: { not: null } },
+    select: {
+      id: true,
+      sentAt: true,
+      openCount: true,
+      firstOpenedAt: true,
+      lastOpenedAt: true,
+      trackingEnabled: true,
+    },
   },
 } as const;
 
@@ -84,6 +117,22 @@ export function mapApplicationToEditorDto(
 export function mapApplicationToListDto(
   application: ApplicationWithCompany,
 ): ApplicationListRowDTO {
+  const sentEmails = (application.emails ?? []).filter(
+    (e) => e.sentAt !== null,
+  );
+  const totalSent = sentEmails.length;
+  const totalOpens = sentEmails.reduce(
+    (acc, email) => acc + (email.openCount || 0),
+    0,
+  );
+  const validDates = sentEmails
+    .map((e) => (e.lastOpenedAt ? new Date(e.lastOpenedAt) : null))
+    .filter((d): d is Date => d !== null);
+  const lastOpenedAt =
+    validDates.length > 0
+      ? new Date(Math.max(...validDates.map((d) => d.getTime())))
+      : null;
+
   return {
     ...mapApplicationToEditorDto(application),
     company: mapCompanyToEditorDto(application.company),
@@ -93,6 +142,15 @@ export function mapApplicationToListDto(
       application.events ?? [],
     ),
     ghostNudgeSnoozedUntil: application.ghostNudgeSnoozedUntil ?? null,
+    emailSummary:
+      totalSent > 0
+        ? {
+            totalSent,
+            totalOpens,
+            lastOpenedAt,
+            hasTracking: sentEmails.some((e) => e.trackingEnabled),
+          }
+        : undefined,
   };
 }
 

@@ -7,7 +7,7 @@ import { Award, Briefcase, Code, ExternalLink, Sparkles } from "lucide-react";
 import { getPathname, Link } from "@/i18n/routing";
 import { api } from "@/trpc/react";
 import { buttonVariants } from "@/components/ui/button";
-import { formatIssuedDate } from "@/components/certification/format-issued-date";
+import { formatIssuedDate } from "@/features/certifications/lib/format-issued-date";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProjectThumbnail } from "@/features/home/components/portfolio/project-thumbnail";
 import type { SkillDetailType } from "@/utils/interfaces/types";

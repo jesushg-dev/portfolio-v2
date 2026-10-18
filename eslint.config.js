@@ -14,6 +14,7 @@ export default tseslint.config(
       "prettier.config.js",
       "prisma.config.ts",
       "scripts/**/*.mjs",
+      "scratch/**",
     ],
   },
   ...nextVitals,

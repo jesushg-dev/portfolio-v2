@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 
 import { api } from "@/trpc/react";
 import { LIMIT_PER_PAGE_BIG } from "@/utils/constants";
-import { Link } from "@/i18n/routing";
+import { LinkPreview } from "@/components/ui/link-preview";
 import type { ProjectType } from "@/utils/interfaces/types";
 
 import FilterType from "./filter-type";
@@ -178,15 +178,15 @@ const PortfolioGrid: FC<PortfolioGridProps> = ({ initialData }) => {
         />
 
         <div className="mt-10 flex flex-col items-center gap-3 text-center">
-          <Link
-            href="/projects"
+          <LinkPreview
+            url="/projects"
             className="bg-primary text-primary-foreground hover:bg-primary/90 pressable inline-flex items-center gap-3 rounded-full py-2 pr-2 pl-7 text-sm font-bold shadow-md transition-all hover:shadow-lg active:scale-95"
           >
             <span>{t("allCta.button", { count: totalCount })}</span>
             <span className="bg-card text-foreground flex size-9 items-center justify-center rounded-full shadow-2xs">
               <ArrowRight className="size-4" aria-hidden="true" />
             </span>
-          </Link>
+          </LinkPreview>
           <p className="text-muted-foreground text-sm">
             {t("allCta.subtitle", {
               total: totalCount,

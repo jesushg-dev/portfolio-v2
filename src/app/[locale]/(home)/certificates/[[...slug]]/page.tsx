@@ -4,13 +4,13 @@ import type { Locale } from "next-intl";
 
 export { generateMetadata } from "./metadata";
 
-import Certification from "@/components/certification/certification";
+import Certification from "@/features/certifications/components/certification";
 import type { stackTypes } from "@/utils/constants/certificates-type";
 
 interface ICvPageProps {
   params: Promise<{
     locale: Locale;
-    slug: [(typeof stackTypes)[number]];
+    slug?: [(typeof stackTypes)[number]];
   }>;
 }
 

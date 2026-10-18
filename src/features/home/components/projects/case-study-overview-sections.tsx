@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { CaseStudyLightboxImage } from "./case-study-lightbox-image";
 import { renderCaseStudyIcon, SectionHeading } from "./case-study-primitives";
 import type { CaseStudySectionProps } from "./case-study-section-types";
 
@@ -15,21 +16,43 @@ function CaseStudyCardsSection({ section, index }: CaseStudySectionProps) {
         label={section.eyebrow}
         title={section.title}
       />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {section.lead ? (
+        <p className="text-muted-foreground mb-6 max-w-3xl text-lg leading-8">
+          {section.lead}
+        </p>
+      ) : null}
+      <div className="grid gap-4 sm:grid-cols-2">
         {section.items.map((item) => {
+          const isImage =
+            item.note &&
+            (item.note.startsWith("/") || item.note.startsWith("http"));
           return (
             <article
               key={item.key}
               data-case-study-card
-              className="b-card-glow bg-card border-border hover:border-primary/40 rounded-4xl border p-5 transition-colors"
+              className="b-card-glow bg-card border-border hover:border-primary/40 flex flex-col justify-between rounded-4xl border p-5 transition-colors"
             >
-              <div className="bg-primary/10 text-primary flex size-11 items-center justify-center rounded-2xl border border-current/10">
-                {renderCaseStudyIcon(item.icon, "size-5")}
+              <div>
+                <div className="bg-primary/10 text-primary flex size-11 items-center justify-center rounded-2xl border border-current/10">
+                  {renderCaseStudyIcon(item.icon, "size-5")}
+                </div>
+                <h3 className="text-foreground mt-4 font-bold">{item.title}</h3>
+                <p className="text-muted-foreground mt-1.5 text-base leading-7">
+                  {item.body}
+                </p>
+                {item.note && !isImage ? (
+                  <p className="text-muted-foreground mt-3 text-sm">
+                    {item.note}
+                  </p>
+                ) : null}
               </div>
-              <h3 className="text-foreground mt-4 font-bold">{item.title}</h3>
-              <p className="text-muted-foreground mt-1.5 text-base leading-7">
-                {item.body}
-              </p>
+              {isImage ? (
+                <CaseStudyLightboxImage
+                  src={item.note}
+                  alt={item.title}
+                  aspectClassName="aspect-[2/1] mt-5"
+                />
+              ) : null}
             </article>
           );
         })}

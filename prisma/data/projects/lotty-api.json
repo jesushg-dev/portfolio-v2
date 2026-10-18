@@ -9,17 +9,20 @@
     {
       "locale": "es",
       "title": "Lotty Api",
-      "description": "Api Rest para la aplicación móvil Lucky App."
+      "description": "API REST desarrollada en Node.js y MySQL para la recolección, estructuración y consulta de resultados de sorteos de lotería. Proporciona endpoints optimizados con baja latencia y alta concurrencia para aplicaciones web y clientes móviles.",
+      "hook": "API REST en Node.js & MySQL · Extracción y agregación de sorteos oficiales · Endpoints de baja latencia para clientes web y móviles"
     },
     {
       "locale": "en",
       "title": "Lotty Api",
-      "description": "Rest Api for the mobile application Lucky App."
+      "description": "RESTful API built with Node.js and MySQL for aggregating, parsing, and serving lottery draw results. Delivers low-latency, highly concurrent endpoints designed for reliable consumption by web portals and mobile clients.",
+      "hook": "REST API in Node.js & MySQL · Aggregation and extraction of official lottery draws · Low-latency endpoints for web & mobile clients"
     },
     {
       "locale": "nl",
       "title": "Lotty Api",
-      "description": "Rest Api voor de mobiele applicatie Lucky App."
+      "description": "RESTful API gebouwd met Node.js en MySQL voor het aggregeren, structureren en leveren van loterijuitslagen. Biedt geoptimaliseerde endpoints met lage latency voor webportalen en mobiele applicaties.",
+      "hook": "REST API in Node.js & MySQL · Aggregatie en verwerking van officiële loterijuitslagen · Lage latency endpoints voor web en mobiel"
     }
   ],
   "skillKeys": ["Nodejs", "Mysql"],

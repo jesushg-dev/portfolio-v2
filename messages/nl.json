@@ -247,6 +247,33 @@
         "title": "Zachte Vaardigheden",
         "subtitle": "Zachte Vaardigheden"
       }
+    },
+    "catalog": {
+      "backToPortfolio": "Terug naar portfolio",
+      "pageTitle": "Alle Certificaten",
+      "pageSubtitle": "Officiële certificaten en afgeronde programma's die mijn expertise in frontend, backend, beveiliging en softwareontwikkeling valideren.",
+      "searchPlaceholder": "Zoek op titel, technologie of uitgever…",
+      "searchLabel": "Zoek certificaten of technologieën",
+      "sortLabel": "Sorteren op",
+      "sorts": {
+        "newest": "Nieuwste eerst",
+        "name": "Naam (A–Z)",
+        "issuer": "Uitgever (A–Z)"
+      },
+      "issuerLabel": "Uitgever / Instelling",
+      "techLabel": "Technologie",
+      "allIssuers": "Alle uitgevers",
+      "showing": "{count} van {total} certificaten weergegeven",
+      "showingAll": "{total} certificaten",
+      "clearFilters": "Filters wissen",
+      "more": "Meer weergeven ({count} resterend)",
+      "emptyTitle": "Geen certificaten gevonden",
+      "emptyDescription": "Probeer een andere zoekopdracht of wis enkele filters.",
+      "emptyButton": "Filters wissen",
+      "preview": "Voorbeeld",
+      "verify": "Referentie bekijken",
+      "credentialId": "Certificaat-ID",
+      "closeModal": "Sluiten"
     }
   },
   "curriculum": {
@@ -387,82 +414,203 @@
         "contactCta": "Contact",
         "scheduleCta": "Gesprek plannen",
         "scheduleHint": "Gesprek van 30 min · Sollicitatie of kennismaking",
+        "availability": "Beschikbaar voor nieuwe kansen",
+        "availabilityHint": "30-min kennismakingsgesprek",
+        "goTo": "Ga naar {item}",
+        "viewProject": "Project bekijken",
+        "seeAllProjects": "Alle projecten bekijken",
         "groups": {
           "about": {
             "label": "Over mij",
             "eyebrow": "Over mij",
             "headline": "Achtergrond & technisch profiel",
-            "description": "Professionele achtergrond, werkervaring en belangrijkste tech stack."
+            "description": "Professionele achtergrond, werkervaring en engineering-filosofie."
           },
           "portfolio": {
             "label": "Portfolio",
             "eyebrow": "Portfolio",
-            "headline": "Projecten & referenties",
-            "description": "Uitgelichte projecten, certificeringen en carrièretijdlijn."
+            "headline": "Uitgelichte projecten & referenties",
+            "description": "Productiesystemen, microservices, certificeringen en carrièretijdlijn."
           },
           "process": {
             "label": "Hoe ik werk",
             "eyebrow": "Hoe ik werk",
-            "headline": "Werkmethodologie",
-            "description": "AI-gebruik bij ontwikkeling, softwarekwaliteit en teamsamenwerking."
+            "headline": "Engineering-aanpak & kwaliteit",
+            "description": "Moderne engineering-workflows, softwarekwaliteit en dagelijkse tools."
           }
         },
         "items": {
           "about": {
             "label": "Over mij",
-            "description": "Profielsamenvatting en engineering-filosofie."
+            "short": "Profiel en filosofie",
+            "headline": "Wie ik ben als engineer",
+            "description": "Een overzicht van mijn profiel, hoe ik software benader en de principes achter de systemen die ik bouw.",
+            "chips": ["Profieloverzicht", "Engineering-filosofie", "Ownership"],
+            "statValue": "6+",
+            "statLabel": "jaar ervaring",
+            "cta": "Ga naar over mij"
           },
           "experience": {
             "label": "Ervaring",
-            "description": "Werkgeschiedenis, projecten en vervulde rollen."
+            "short": "Rollen en sleutelprojecten",
+            "headline": "Waar ik heb gewerkt",
+            "description": "Werkgeschiedenis in e-commerce en telecom, met de projecten en resultaten waar ik het meest trots op ben.",
+            "chips": [
+              "Senior Software Engineer",
+              "Tech Lead",
+              "Full Stack Developer"
+            ],
+            "statValue": "20+",
+            "statLabel": "opgeleverde projecten",
+            "cta": "Bekijk werkgeschiedenis"
           },
           "skills": {
             "label": "Vaardigheden",
-            "description": ".NET-ecosysteem, C#, microservices en Cloud."
+            "short": ".NET, C#, microservices, cloud",
+            "headline": "De stack waarmee ik dagelijks werk",
+            "description": "De tools en technologieën die ik gebruik om betrouwbare productiesoftware te ontwerpen en te bouwen.",
+            "chips": [".NET", "C#", "Microservices", "Cloud"],
+            "statValue": "4",
+            "statLabel": "kerngebieden",
+            "cta": "Verken technische stack"
           },
           "services": {
             "label": "Technische specialismen",
-            "description": "Softwarearchitectuur, modernisering en ontwikkeling."
+            "short": "Architectuur en modernisering",
+            "headline": "Waar ik in uitblink",
+            "description": "Softwarearchitectuur ontwerpen, verouderde platforms moderniseren en de kern van nieuwe producten bouwen.",
+            "chips": [
+              "Systeemarchitectuur",
+              "Legacy modernisering",
+              "Core development"
+            ],
+            "statValue": "3",
+            "statLabel": "specialismen",
+            "cta": "Bekijk specialismen"
           },
           "soft-skills": {
             "label": "Leiderschap & competenties",
-            "description": "Teamleiderschap, mentorschap en communicatie."
+            "short": "Teams, mentorschap, communicatie",
+            "headline": "Hoe ik met mensen werk",
+            "description": "Teams leiden, ontwikkelaars begeleiden en helder communiceren met product- en businesspartners.",
+            "chips": ["Teamleiderschap", "Mentorschap", "Communicatie"],
+            "statValue": "6",
+            "statLabel": "begeleide engineers",
+            "cta": "Lees leiderschapsprincipes"
+          },
+          "testimonials": {
+            "label": "Testimonials",
+            "short": "Woorden van collega's",
+            "headline": "Wat collega's en leidinggevenden zeggen",
+            "description": "Directe feedback en aanbevelingen van teamleden, leads en klanten over samenwerking en oplevering.",
+            "chips": ["Testimonials", "Senior developers", "Aanbevelingen"],
+            "statValue": "100%",
+            "statLabel": "positieve feedback",
+            "cta": "Lees testimonials"
+          },
+          "projects": {
+            "label": "Projecten",
+            "short": "Engineering-projecten en casestudies",
+            "headline": "Projecten en systemen die ik heb gebouwd",
+            "description": "Een selectie van systemen, API's, e-commerceplatforms en interne beheerapplicaties.",
+            "chips": ["API's", "E-commerce", "Admin platforms", "Cloud"],
+            "statValue": "15+",
+            "statLabel": "uitgelichte projecten",
+            "cta": "Projecten bekijken"
           },
           "certificates": {
             "label": "Certificaten",
-            "description": "Technische referenties en certificeringen."
+            "short": "Technische referenties",
+            "headline": "Geverifieerde certificeringen",
+            "description": "Formele technische certificeringen in frontend, backend, cybersecurity en leiderschap.",
+            "chips": ["Frontend", "Backend", "Cybersecurity", "Soft skills"],
+            "statValue": "30+",
+            "statLabel": "behaalde certificaten",
+            "cta": "Bekijk certificaten"
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "Volledig professioneel CV in webformaat."
+            "short": "Professioneel cv",
+            "headline": "Volledig professioneel CV",
+            "description": "Uitgebreid cv in modern webformaat, inclusief volledige werkervaring en PDF-download.",
+            "chips": ["Interactief CV", "PDF export", "Geverifieerde historie"],
+            "statValue": "2026",
+            "statLabel": "actuele versie",
+            "cta": "Open Curriculum Vitae"
           },
           "timeline": {
             "label": "Tijdlijn",
-            "description": "Carrièremijlpalen en professionele groei."
+            "short": "Carrièreverloop",
+            "headline": "Carrièremijlpalen & evolutie",
+            "description": "Een chronologisch overzicht van professionele mijlpalen, rollen en technische groei.",
+            "chips": ["Carrièremijlpalen", "Evolutie", "Groei"],
+            "statValue": "6+",
+            "statLabel": "jaar evolutie",
+            "cta": "Bekijk tijdlijn"
           },
           "ai-workflow": {
             "label": "Hoe ik AI gebruik",
-            "description": "AI-toolintegratie en engineering-workflow."
+            "short": "Engineering-versnelling",
+            "headline": "AI-ondersteunde engineering",
+            "description": "Hoe ik moderne AI-tools, agent-workflows en automatisering integreer in dagelijkse softwareontwikkeling.",
+            "chips": ["AI Tooling", "Snelheid", "Geautomatiseerde workflows"],
+            "statValue": "2x",
+            "statLabel": "leveringssnelheid",
+            "cta": "Verken AI-workflow"
           },
           "qa-collaboration": {
             "label": "QA-samenwerking",
-            "description": "Kwaliteitspraktijken, testen en releases."
+            "short": "Kwaliteit & testen",
+            "headline": "Softwarekwaliteit & teststrategie",
+            "description": "Nauw samenwerken met QA, geautomatiseerde testsuites en nul regressies in productie.",
+            "chips": [
+              "Kwaliteitsborging",
+              "Geautomatiseerde tests",
+              "Nul regressies"
+            ],
+            "statValue": "99.9%",
+            "statLabel": "productiestabiliteit",
+            "cta": "Lees QA-praktijken"
           },
           "uses": {
             "label": "Uses",
-            "description": "Hardware, software en tools die ik elke dag gebruik."
+            "short": "Hardware, software & setup",
+            "headline": "Hardware & software die ik dagelijks gebruik",
+            "description": "De hardware, werkplekconfiguratie, editors en softwaretools waar ik dagelijks op vertrouw.",
+            "chips": ["Hardware", "Werkstation", "Dev tools", "Terminal"],
+            "statValue": "Dagelijks",
+            "statLabel": "developer tools",
+            "cta": "Bekijk setup"
           },
           "now": {
             "label": "Now",
-            "description": "Waar ik me nu op focus, wat ik lees en wat ik ship."
+            "short": "Huidige focus & lezen",
+            "headline": "Waar ik nu aan werk",
+            "description": "Een actueel overzicht van actieve projecten, technologieën die ik verken en wat ik nu oplever.",
+            "chips": ["Huidige focus", "Leeslijst", "Actieve projecten"],
+            "statValue": "Live",
+            "statLabel": "huidige status",
+            "cta": "Bekijk Now-pagina"
           },
           "stats": {
             "label": "Stats",
-            "description": "Anonieme bezoekersstats en portfolio-highlights."
+            "short": "Bezoekers- & portfoliostatistieken",
+            "headline": "Portfoliostatistieken & analytics",
+            "description": "Transparante statistieken over bezoeken, geografische spreiding en prestaties.",
+            "chips": ["Analytics", "Prestaties", "Demografie"],
+            "statValue": "Live",
+            "statLabel": "site-telemetrie",
+            "cta": "Bekijk statistieken"
           },
           "colophon": {
             "label": "Colofon",
-            "description": "Hoe deze site is gebouwd — stack, typografie, kleuren en voetafdruk."
+            "short": "Hoe deze site is gebouwd",
+            "headline": "Achter de schermen",
+            "description": "Architectuur, frameworks, design tokens, typografie en ecologische voetafdruk van deze website.",
+            "chips": ["Next.js 15", "Tailwind CSS", "TypeScript", "Prestaties"],
+            "statValue": "v2.0",
+            "statLabel": "portfolio-editie",
+            "cta": "Lees colofon"
           }
         }
       }
@@ -857,7 +1005,10 @@
           "IN_PRODUCTION": "In productie",
           "MAINTENANCE": "In onderhoud",
           "ARCHIVED": "Gearchiveerd"
-        }
+        },
+        "expandImage": "Afbeelding vergroten",
+        "closeLightbox": "Vergrote afbeelding sluiten",
+        "pressEscToClose": "Druk op Esc om te sluiten"
       },
       "private": {
         "title": "Prive",
@@ -3177,8 +3328,60 @@
       "newCompany": "Nieuw Bedrijf",
       "newApplication": "Nieuwe Sollicitatie",
       "applicationsTab": "Sollicitaties",
+      "eventsTab": "Evenementen",
       "companiesTab": "Bedrijven",
+      "outreachTab": "Opvolging & Lezingen",
+      "eventsThisWeekBadge": "{count} deze week",
       "tabsNavAria": "Job tracker secties",
+      "emailSummary": {
+        "opened": "{count, plural, one {# keer gelezen} other {# keren gelezen}}",
+        "sent": "{count, plural, one {# verzonden} other {# verzonden}}",
+        "openedTooltip": "{count, plural, one {# e-maillezing geregistreerd} other {# e-maillezingen geregistreerd}}",
+        "sentTooltip": "{count, plural, one {# verzonden e-mail} other {# verzonden e-mails}}"
+      },
+      "outreachHub": {
+        "title": "Opvolgings- en Lezingenhub",
+        "description": "Volg e-mailopeningen, interesse-signalen en contactkansen per sollicitatie.",
+        "refresh": "Vernieuwen",
+        "stats": {
+          "totalSent": "Verzonden e-mails",
+          "openRate": "Openingspercentage",
+          "totalOpens": "Totaal aantal lezingen",
+          "recent24h": "Activiteit afgelopen 24u",
+          "recent24hHint": "Sollicitaties met een lezing in de afgelopen 24 uur"
+        },
+        "filters": {
+          "all": "Alle sollicitaties",
+          "opened": "Recent geopend",
+          "unopened": "Nog niet geopend",
+          "searchPlaceholder": "Filter op bedrijf of functie..."
+        },
+        "card": {
+          "readsCount": "{count, plural, one {# lezing} other {# lezingen}}",
+          "sentCount": "{count, plural, one {# e-mail} other {# e-mails}}",
+          "lastRead": "Laatst gelezen {time}",
+          "lastSent": "Verzonden {time}",
+          "notReadYet": "Nog niet geopend",
+          "viewApplication": "Bekijk sollicitatie",
+          "toggleDetails": "Details tonen",
+          "emailsHeading": "Verzonden e-mails",
+          "recipient": "Aan: {email}",
+          "sentAt": "Verzonden: {date}",
+          "attachment": "CV: {name}",
+          "tracked": "Tracking actief",
+          "untracked": "Niet getrackt",
+          "openHistory": "Gedetecteerde leesmomenten",
+          "noOpensYet": "Er zijn nog geen lezingen gedetecteerd voor deze e-mail.",
+          "proxyNotice": "Afbeeldingsproxy",
+          "opensCount": "{count} totaal aantal weergaven"
+        },
+        "emptyState": {
+          "title": "Nog geen opvolgingsactiviteit",
+          "description": "Verstuur uw eerste sollicitatie-e-mail met tracking vanuit de sollicitatiedetails om hier statistieken te zien.",
+          "noFilteredTitle": "Geen sollicitaties gevonden",
+          "noFilteredDescription": "Probeer uw zoekopdracht of actief filter aan te passen."
+        }
+      },
       "columnPosition": "Functie",
       "columnCompany": "Bedrijf",
       "columnStatus": "Status",
@@ -3240,8 +3443,8 @@
         "hiredDescription": "Gefeliciteerd!"
       },
       "calendar": {
-        "title": "Aankomende Evenementen",
-        "description": "Geplande interviews en tests",
+        "title": "Evenementenagenda",
+        "description": "Geplande sollicitatiegesprekken, vergaderingen en tests",
         "googleSyncActive": "Gesynchroniseerd met Google Calendar",
         "googleSyncError": "Google Calendar-sync moet opnieuw worden gekoppeld",
         "add": "Toevoegen",
@@ -3254,7 +3457,26 @@
         "today": "Vandaag",
         "tomorrow": "Morgen",
         "virtual": "Virtueel",
-        "duration": "{minutes} min"
+        "duration": "{minutes} min",
+        "inHours": "Over {hours, plural, one {# uur} other {# uur}}",
+        "inDays": "Over {days, plural, one {# dag} other {# dagen}}",
+        "urgentAlertTitle": "Aankomend dringend evenement",
+        "joinMeeting": "Deelnemen aan vergadering",
+        "prepEvent": "Interview voorbereiden",
+        "viewInAgenda": "Bekijk in agenda",
+        "dismissAlert": "Melding sluiten",
+        "statsThisWeek": "Deze week",
+        "statsTotalUpcoming": "Totaal gepland",
+        "statsVirtual": "Virtuele vergaderingen",
+        "filterAll": "Alles",
+        "filterThisWeek": "Deze week",
+        "filterInterviews": "Sollicitaties",
+        "filterTechnical": "Technische tests",
+        "emptyFiltered": "Geen evenementen gevonden voor dit filter",
+        "emptyDescription": "Plan sollicitatiegesprekken, technische tests of opvolgacties om volledige controle te houden over uw proces.",
+        "scheduleEvent": "Evenement plannen",
+        "thisWeekShort": "deze wk",
+        "multipleUrgentCount": "{current} van {total} aankomend"
       },
       "detail": {
         "title": "Sollicitatiedetails",

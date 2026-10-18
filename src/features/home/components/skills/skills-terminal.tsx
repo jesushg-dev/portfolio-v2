@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 
 import HeaderArticle from "@/components/shared/header-article";
 import { Link } from "@/i18n/routing";
+import { LinkPreview } from "@/components/ui/link-preview";
 import { cn } from "@/lib/utils";
 import type { SkillType } from "@/utils/interfaces/types";
 import { skillSlugFromTitle } from "@/utils/tools/skill-slug";
@@ -325,14 +326,13 @@ const SkillsTerminal: FC<SkillsTerminalProps> = ({ initialSkills }) => {
       </div>
 
       <div className="mt-8 flex justify-center">
-        <Link
-          scroll
-          href="/certificates"
+        <LinkPreview
+          url="/certificates"
           className="text-primary hover:text-primary/80 group inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold transition-colors"
         >
           <span>{t("modal.seeCertificates")}</span>
           <ArrowRightIcon className="size-4 transition-transform duration-150 group-hover:translate-x-1" />
-        </Link>
+        </LinkPreview>
       </div>
     </div>
   );

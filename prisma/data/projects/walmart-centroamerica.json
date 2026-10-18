@@ -1,0 +1,1559 @@
+{
+  "key": "WalmartCentroamerica",
+  "image": "/projects/walmart-centroamerica.jpg",
+  "type": "MOBILE",
+  "githubUrl": "",
+  "websiteUrl": "https://www.walmart.co.cr",
+  "isPrivate": true,
+  "order": 2,
+  "kind": "PROFESSIONAL",
+  "status": "IN_PRODUCTION",
+  "teamSize": 18,
+  "startedAt": "2025-08-01T00:00:00.000Z",
+  "endedAt": "2026-08-01T00:00:00.000Z",
+  "caseStudyEnabled": true,
+  "slug": "walmart-centroamerica",
+  "skillKeys": [
+    "Flutter",
+    "Dart",
+    "React",
+    "VTEX",
+    "GraphQL",
+    "Typescript",
+    "Playwright",
+    "Jest",
+    "Microservices"
+  ],
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Walmart Centroamérica: Plataforma Móvil Multi-Formato",
+      "description": "Plataforma móvil empresarial de retail y e-commerce omnicanal para el ecosistema de Walmart Centroamérica y sus diversos formatos comerciales: hipermercados Walmart, bodegas de descuento (Maxi Palí, Maxi Despensa) y supermercados (Masxmenos, La Despensa de Don Juan, Paiz), atendiendo a millones de usuarios en 5 países con arquitectura Flutter, Dart y VTEX IO.",
+      "hook": "Multi-formato: Walmart, Maxi Palí, Masxmenos · 5 países · Flutter & VTEX · -40% MTTR",
+      "challenge": "Diseñar y orquestar una experiencia móvil omnicanal unificada y resiliente para múltiples formatos comerciales con propuestas de valor dispares (hipermercados Walmart, bodegas de descuento como Maxi Palí y supermercados como Masxmenos y La Despensa de Don Juan) en 5 países centroamericanos, sobre un stack heterogéneo (arquitectura Flutter multi-banner y microservicios VTEX IO), superando cuellos de botella en checkout, largos ciclos de regresión de 7 días y la sincronización en tiempo real de políticas de precio, inventario y facturación por tienda.",
+      "approach": "Desarrollé una arquitectura modular multi-banner con contratos GraphQL sobre VTEX IO que aísla la lógica de identidad visual, catálogos segmentados y facturación electrónica; diseñé flujos críticos de checkout y búsqueda predictiva adaptados a las particularidades de cada formato (desde compras masivas en Maxi Palí hasta surtidos de conveniencia en Masxmenos y Walmart); reduje el retrabajo técnico en un ~25% mediante spikes arquitectónicos e introduje pruebas automatizadas con Playwright (+30% cobertura) y unit tests que comprimieron los ciclos de regresión de 7 a 4 días.",
+      "outcome": "Reducción del MTTR en un ~40% en producción mediante análisis estructurado de causa raíz, disminución de regresiones a 4 días, ~25% menos retrabajo en squads de ingeniería y una experiencia de compra móvil altamente confiable y escalable para millones de clientes a lo largo de todas las marcas y formatos comerciales del grupo en Centroamérica.",
+      "caseStudy": {
+        "chips": [
+          "Multi-Banner Retail",
+          "Walmart, Maxi Palí & Más",
+          "Flutter & Mobile",
+          "VTEX IO",
+          "En producción"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mi rol",
+            "value": "Ingeniero de Software Senior (Walmart Global Tech / Imagemaker)"
+          },
+          {
+            "key": "platform",
+            "label": "Plataforma",
+            "value": "iOS & Android (Flutter / Dart / VTEX IO)"
+          },
+          {
+            "key": "domain",
+            "label": "Dominio",
+            "value": "Retail E-Commerce Multi-Formato (Hipermercados, Bodegas y Supermercados)"
+          },
+          {
+            "key": "scale",
+            "label": "Alcance regional y formatos",
+            "value": "5 países (CR, GT, SV, HN, NI) · Walmart, Maxi Palí, Masxmenos, Despensa de Don Juan, Paiz"
+          },
+          {
+            "key": "impact",
+            "label": "Impacto clave",
+            "value": "~40% mejor MTTR · Regresión 7 → 4 días · ~25% menos retrabajo"
+          },
+          {
+            "key": "client",
+            "label": "Cliente corporativo",
+            "value": "Walmart México y Centroamérica"
+          }
+        ],
+        "nextProjectSlug": "ofilegal",
+        "context": "Walmart Centroamérica opera la red de retail más extensa de la región mediante un portafolio multi-formato adaptado a diversas necesidades y segmentos de clientes: Hipermercados (Walmart), Bodegas de descuento (Maxi Palí en Costa Rica y Nicaragua, Maxi Despensa en Guatemala, El Salvador y Honduras, Palí y Despensa Familiar) y Supermercados de cercanía y alta gama (Masxmenos en Costa Rica, La Despensa de Don Juan en El Salvador, Paiz en Guatemala y La Unión en Nicaragua). Como parte de Walmart Global Tech (vía Imagemaker), formé parte del equipo de ingeniería móvil responsable de unificar y evolucionar las aplicaciones móviles de compra en línea y los servicios de e-commerce omnicanal, permitiendo a millones de familias abastecerse de abarrotes, frescos, farmacia y mercancías generales con retiro en tienda (Pickup) o entrega a domicilio.",
+        "roleTitle": "Ingeniero de Software Senior",
+        "roleIntro": "Lideré iniciativas de desarrollo móvil en Flutter con soporte multi-banner, diseñé contratos de integración GraphQL con microservicios en VTEX IO, optimicé flujos de alta conversión en checkout y facturación electrónica multicountry, e institucionalicé prácticas de aseguramiento de calidad con pruebas E2E automatizadas en Playwright.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Plataforma móvil omnicanal multi-formato que centraliza el e-commerce de Walmart, Maxi Palí, Masxmenos, La Despensa de Don Juan y Paiz, permitiendo compras digitales con precios y surtidos por tienda en 5 países.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Ingeniero de Software Senior: desarrollo de flujos críticos multi-marca (checkout, búsqueda, facturación), spikes de arquitectura de sistemas, resolución de incidentes de producción e implementación de testing automatizado.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Reducción del MTTR en un ~40%, reducción de ciclos de regresión de 7 a 4 días con Playwright, ~25% menos retrabajo mediante spikes arquitectónicos y servicio continuo para millones de compradores en múltiples formatos.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "critical-features",
+            "title": "Funcionalidades críticas multi-formato de checkout y facturación",
+            "summary": "",
+            "body": "Diseñé e implementé módulos en React, Flutter y VTEX para checkout, búsqueda predictiva de productos y facturación electrónica adaptada a las particularidades comerciales y leyes fiscales de cada país centroamericano y formato de tienda.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture-spikes",
+            "title": "Spikes de arquitectura multi-banner y diseño de sistemas",
+            "summary": "",
+            "body": "Lideré decisiones de diseño de software y definición de contratos GraphQL que redujeron el retrabajo en un ~25%, permitiendo desacoplar la capa visual de las reglas de negocio de Walmart, Maxi Palí y Masxmenos.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "qa-automation",
+            "title": "Automatización E2E con Playwright y testing",
+            "summary": "",
+            "body": "Comprimí los ciclos de regresión de 7 a 4 días implementando suites de pruebas automatizadas E2E en Playwright (+30% cobertura) y pruebas unitarias (+15% cobertura) en flujos de compra críticos a través de las distintas marcas.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "incident-response",
+            "title": "Respuesta a incidentes y reducción de MTTR",
+            "summary": "",
+            "body": "Asumí la atención y diagnóstico de incidentes críticos de producción en sistemas móviles y backend, logrando una mejora del ~40% en el tiempo medio de recuperación (MTTR) mediante análisis de causa raíz y mitigación proactiva.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cross-collaboration",
+            "title": "Colaboración transversal multidisciplinaria",
+            "summary": "",
+            "body": "Coordiné esfuerzos técnicos continuos con producto, QA, backend, frontend, arquitectura y líderes de negocio en Centroamérica para alinear lanzamientos con campañas comerciales clave en todos los formatos.",
+            "value": "",
+            "icon": "users",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Coexistencia multi-formato: Manejo unificado de propuestas comerciales dispares (Everyday Low Price en Maxi Palí vs. surtido y marcas premium en Masxmenos y Walmart)",
+          "Cumplimiento tributario y fiscal heterogéneo: Facturación electrónica y normativas fiscales distintas en Costa Rica, Guatemala, El Salvador, Honduras y Nicaragua",
+          "Interoperabilidad de tecnologías híbridas: Coexistencia fluida entre módulos en Flutter (BLoC), inyección de temas dinámicos multi-marca y microservicios en VTEX IO",
+          "Resiliencia ante picos de demanda masiva: Soporte continuo durante eventos comerciales (Cyber, Black Friday, días de quincena y promociones de bodegas)",
+          "Compatibilidad amplia en dispositivos móviles: Desempeño óptimo en smartphones de gama baja, media y alta con conexiones de red variables (3G/4G/5G)",
+          "Tolerancia cero a inconsistencias transaccionales en pagos y sincronización de stock por tienda física"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Estrategia técnica",
+            "title": "Decisiones de arquitectura y diseño de sistemas",
+            "lead": "Compromisos de ingeniería clave para soportar múltiples formatos de tienda, acelerar entregas y blindar la fiabilidad operativa.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "multi-banner-theming-bff",
+                "title": "Arquitectura multi-banner y capa BFF con GraphQL",
+                "summary": "Desacoplar la identidad de marca y las reglas por formato comercial a través de un BFF sobre VTEX IO.",
+                "body": "En lugar de mantener aplicaciones bifurcadas para Walmart, Maxi Palí o Masxmenos, diseñamos una arquitectura modular donde el BFF resuelve tokens de marca, catálogos específicos por tienda física y políticas de descuento dinámicamente mediante GraphQL. Esto redujo el retrabajo en un ~25% y permitió reutilizar más del 80% del código transaccional.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Aplicaciones separadas con código duplicado",
+                  "Llamadas REST no coordinadas por formato"
+                ],
+                "note": "Aceleró la incorporación de nuevas tiendas y formatos comerciales en toda la región centroamericana."
+              },
+              {
+                "key": "playwright-e2e-pipeline",
+                "title": "Automatización E2E con Playwright en pipelines de integración",
+                "summary": "Automatizar la validación de checkout, medios de pago y navegación de catálogo en CI/CD.",
+                "body": "Históricamente, los lanzamientos a producción dependían de hasta 7 días de pruebas manuales de regresión. Diseñé e implementé suites E2E con Playwright que cubren los flujos de alta conversión para diferentes formatos, complementadas con pruebas unitarias en Jest, lo que permitió comprimir las regresiones a solo 4 días con +30% de cobertura en flujos clave.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Validación manual exclusiva previa al release",
+                  "Pruebas de humo no orquestadas"
+                ],
+                "note": "Proporcionó retroalimentación inmediata a los desarrolladores y evitó regresiones silenciosas en pasarelas de pago."
+              },
+              {
+                "key": "root-cause-observability",
+                "title": "Observabilidad proactiva y reducción del MTTR",
+                "summary": "Estandarización de telemetría y análisis de causa raíz para incidentes de alta severidad.",
+                "body": "Implementé trazabilidad estructurada de errores y diagnóstico rápido en flujos móviles y endpoints de servicio. Al correlacionar fallas de red, anomalías de stock y rechazos de transacciones bancarias, el equipo redujo el MTTR en un ~40%, solucionando incidentes en minutos en lugar de horas.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Monitoreo reactivo basado en reportes de usuarios",
+                  "Logs fragmentados sin correlación"
+                ],
+                "note": "Elevó la confianza operativa durante ventas especiales y picos estacionales de alta demanda."
+              },
+              {
+                "key": "modular-fiscal-invoicing",
+                "title": "Módulo de facturación electrónica multicountry desacoplado",
+                "summary": "Arquitectura modular que aísla las reglas fiscales específicas de cada país centroamericano.",
+                "body": "Cada territorio (Costa Rica, Guatemala, El Salvador, Honduras, Nicaragua) posee requerimientos tributarios únicos (DGT, SAT, Hacienda). Diseñé un módulo con adaptadores fiscales independientes que valida la cédula jurídica/NIT y emite la factura electrónica sin alterar la lógica de checkout compartida.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Condicionales 'if-else' dispersos por toda la app",
+                  "Bifurcación de bases de código por país"
+                ],
+                "note": "Garantizó total cumplimiento legal y facilitó el mantenimiento continuo de normativas tributarias."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Módulos y pantallas clave",
+            "title": "Experiencia móvil y pantallas del ecosistema",
+            "lead": "Exploración visual y funcional de los módulos principales que integran la experiencia de compra en cada formato de tienda.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-multibanner",
+                "title": "Ecosistema Multi-Marca",
+                "summary": "Soporte dinámico para hipermercados, bodegas y supermercados",
+                "body": "Presentación unificada que resuelve dinámicamente temas visuales, promociones y catálogos específicos según el formato de tienda seleccionado.",
+                "value": "3 formatos · 5 países",
+                "icon": "layers",
+                "tags": ["Multi-Banner", "Theming Engine", "Flutter"],
+                "note": "/projects/walmart-centroamerica.jpg"
+              },
+              {
+                "key": "screen-maxipali",
+                "title": "Maxi Palí: Formato Bodega y Ahorro",
+                "summary": "Experiencia centrada en volumen y precios más bajos",
+                "body": "Catálogo especializado para compras masivas familiares, cálculo dinámico de fletes por bulto y visualización prioritaria de rebajas de bodega.",
+                "value": "Bodega de Descuento",
+                "icon": "case",
+                "tags": ["Maxi Palí", "Precios Bajos", "Ahorro"],
+                "note": "/projects/walmart-maxipali.jpg"
+              },
+              {
+                "key": "screen-masxmenos",
+                "title": "Masxmenos: Supermercado Premium y Frescos",
+                "summary": "Surtido de alta conveniencia y control de perecederos",
+                "body": "Experiencia enfocada en carnes, frescos y gourmet con algoritmos de tolerancia de pesaje y sugerencias automáticas de sustitutos de calidad.",
+                "value": "Supermercado de Frescos",
+                "icon": "search",
+                "tags": ["Masxmenos", "Perecederos", "Gourmet"],
+                "note": "/projects/walmart-masxmenos.jpg"
+              },
+              {
+                "key": "screen-checkout",
+                "title": "Checkout Omnicanal y Pickup Programado",
+                "summary": "Pasarela segura y agendamiento de retiro o delivery",
+                "body": "Flujo de pago ágil con selección de franjas horarias de 1 hora, geocercas para retiro en bahía de parqueo y facturación electrónica multicountry.",
+                "value": "Click & Collect / Delivery",
+                "icon": "gauge",
+                "tags": ["Checkout", "Slot Booking", "Facturación"],
+                "note": "/projects/walmart-checkout.jpg"
+              },
+              {
+                "key": "screen-donjuan",
+                "title": "La Despensa de Don Juan & Paiz: Supermercados Regionales",
+                "summary": "Formatos de cercanía y conveniencia en El Salvador y Guatemala",
+                "body": "Experiencia optimizada para compras rápidas de reposición diaria, surtido de marcas locales reconocidas y promociones geolocalizadas por territorio.",
+                "value": "Supermercados Regionales",
+                "icon": "case",
+                "tags": [
+                  "La Despensa de Don Juan",
+                  "Paiz",
+                  "Conveniencia",
+                  "Supermercados"
+                ],
+                "note": "/projects/walmart-donjuan.jpg"
+              },
+              {
+                "key": "screen-search-catalog",
+                "title": "Búsqueda Predictiva y Catálogo Inteligente",
+                "summary": "Autocompletado en tiempo real y navegación facetada",
+                "body": "Motor de búsqueda con tolerancia a errores tipográficos, navegación por departamentos y sincronización instantánea de precios e inventario por tienda en Flutter.",
+                "value": "Búsqueda Predictiva",
+                "icon": "search",
+                "tags": [
+                  "Búsqueda Predictiva",
+                  "Catálogo Inteligente",
+                  "Filtros Facetados"
+                ],
+                "note": "/projects/walmart-search-catalog.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "fulfillment-process",
+            "kind": "STEPS",
+            "eyebrow": "Ingeniería de Procesos",
+            "title": "Flujo omnicanal transaccional y procesos de fulfillment",
+            "lead": "Detalle técnico de cada fase del ciclo de compra móvil: desde la resolución geo-localizada de la tienda física hasta la facturación electrónica regional.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-georesolution",
+                "title": "1. Resolución geo-localizada y formato de tienda",
+                "summary": "Detección automática de país y sucursal más cercana",
+                "body": "La aplicación detecta el país (CR, GT, SV, HN, NI), localiza la tienda física más cercana del banner activo (Walmart, Maxi Palí o Masxmenos) y sincroniza en milisegundos el catálogo con precios, promociones e inventario físico de esa sucursal.",
+                "value": "5 Países",
+                "icon": "globe",
+                "tags": ["Geo-Resolución", "Store Selector", "Multi-País"],
+                "note": "/projects/walmart-centroamerica.jpg"
+              },
+              {
+                "key": "step-smart-cart",
+                "title": "2. Canasta inteligente y pesaje variable de frescos",
+                "summary": "Algoritmo de tolerancia de peso y sustitutos en tiempo real",
+                "body": "Algoritmo de carrito con cálculo de tolerancia (+/- 10%) para productos perecederos (carnes, frutas y verduras). Si el picker de tienda agota un producto físico, el motor de sustitutos sugiere automáticamente equivalentes aprobados por el cliente.",
+                "value": "Tolerancia +/- 10%",
+                "icon": "search",
+                "tags": ["Smart Cart", "Frescos", "Sustitutos"],
+                "note": "/projects/walmart-search-catalog.jpg"
+              },
+              {
+                "key": "step-slot-booking",
+                "title": "3. Agendamiento de entrega: Pickup o Delivery programado",
+                "summary": "Orquestación de capacidad logística y Click & Collect",
+                "body": "El cliente reserva franjas horarias de 1 hora. En Pickup (retiro en parqueo), la app usa geocercas para notificar al personal de tienda cuando el cliente arriba, reduciendo el tiempo de entrega en bahía a menos de 5 minutos.",
+                "value": "Ventanas de 1h",
+                "icon": "gauge",
+                "tags": ["Slot Booking", "Pickup", "Geofencing"],
+                "note": "/projects/walmart-masxmenos.jpg"
+              },
+              {
+                "key": "step-fiscal-checkout",
+                "title": "4. Pasarela tokenizada y facturación tributaria multicountry",
+                "summary": "Cobro seguro PCI-DSS y validación fiscal digital",
+                "body": "Tokenización de medios de pago bancarios locales e internacionales y emisión asíncrona de factura electrónica autorizada por los ministerios de hacienda respectivos, garantizando cumplimiento tributario y conciliación contable automática en ERP.",
+                "value": "PCI-DSS Compliance",
+                "icon": "shield",
+                "tags": ["Tokenización", "Facturación Fiscal", "ERP"],
+                "note": "/projects/walmart-checkout.jpg"
+              }
+            ],
+            "footnoteTitle": "Pipeline de Calidad y Regresión",
+            "footnotes": [
+              "Automatización con Playwright en flujos transaccionales redujo el ciclo de pruebas de 7 a 4 días.",
+              "Suites unitarias y de widgets con flutter_test garantizan cobertura en lógica crítica de cálculo de impuestos y descuentos.",
+              "Monitoreo estructurado y análisis de causa raíz (RCA) recortaron el MTTR un ~40% en producción."
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Topología de la solución",
+            "title": "Arquitectura en capas y ecosistema móvil multi-banner",
+            "lead": "Estructura multicapa diseñada para alta concurrencia, soporte de múltiples marcas comerciales y velocidad de entrega.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mobile-client-layer",
+                "title": "Capa de presentación móvil multi-marca (Flutter / Dart)",
+                "summary": "Arquitectura limpia en Flutter modularizada por paquetes independientes, BLoC para gestión de estado predecible, motor de temas dinámicos y caché offline-first.",
+                "body": "Interfaz moderna con navegación fluida, búsqueda predictiva de abarrotes y catálogo adaptado al formato seleccionado. Maneja almacenamiento local para carrito persistente, favoritos y autenticación biométrica.",
+                "value": "",
+                "icon": "layout",
+                "tags": [
+                  "Flutter",
+                  "Dart",
+                  "BLoC",
+                  "Clean Architecture",
+                  "Dynamic Theming",
+                  "Android",
+                  "iOS"
+                ],
+                "note": ""
+              },
+              {
+                "key": "bff-graphql-layer",
+                "title": "Capa BFF y orquestación de servicios (VTEX IO)",
+                "summary": "Servicios Node.js y esquemas GraphQL que unifican las APIs de backend por formato comercial.",
+                "body": "Concentrador de lógica de negocio móvil: resuelve catálogos segmentados, políticas de precios por formato y tienda, slots de entrega a domicilio y franjas horarias de Pickup con baja latencia.",
+                "value": "",
+                "icon": "layers",
+                "tags": ["VTEX IO", "GraphQL", "Node.js", "TypeScript"],
+                "note": ""
+              },
+              {
+                "key": "core-commerce-layer",
+                "title": "Motor de e-commerce transaccional y microservicios",
+                "summary": "Procesamiento de pagos, reservas de stock en tiempo real y facturación electrónica.",
+                "body": "Integración con pasarelas de pago bancarias locales, motores de inventario en tiempo real de centros de distribución y supermercados físicos, y ERPs centrales de Walmart.",
+                "value": "",
+                "icon": "db",
+                "tags": [
+                  "Microservices",
+                  "VTEX Engine",
+                  "ERP",
+                  "Electronic Invoicing"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "quality",
+            "kind": "METRICS",
+            "eyebrow": "Impacto cuantificado",
+            "title": "Métricas de rendimiento e ingeniería",
+            "lead": "Resultados concretos logrados tras la optimización de procesos de desarrollo, pruebas y estabilidad en producción.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mttr-metric",
+                "title": "Mejora del MTTR",
+                "summary": "Reducción en tiempo de resolución de incidentes",
+                "body": "El tiempo promedio de resolución de anomalías críticas de producción en backend y clientes móviles se redujo drásticamente gracias a diagnósticos rápidos y análisis de causa raíz.",
+                "value": "~40%",
+                "icon": "gauge",
+                "tags": [],
+                "note": "Menor tiempo de inactividad y recuperación acelerada ante incidentes"
+              },
+              {
+                "key": "regression-metric",
+                "title": "Ciclo de regresión",
+                "summary": "Aceleración de pruebas previas a release",
+                "body": "Las pruebas de regresión pasaron de 7 a 4 días tras la introducción de suites automatizadas de Playwright y cobertura unitaria reforzada en flujos de checkout.",
+                "value": "7 → 4 días",
+                "icon": "shield",
+                "tags": [],
+                "note": "3 días ahorrados en cada ciclo de despliegue a producción"
+              },
+              {
+                "key": "rework-metric",
+                "title": "Reducción de retrabajo",
+                "summary": "Eficiencia en diseño de sistemas y arquitectura",
+                "body": "Los spikes de arquitectura y la estandarización de contratos GraphQL evitaron refactorizaciones constantes y desalineaciones entre squads multi-marca.",
+                "value": "~25%",
+                "icon": "bolt",
+                "tags": [],
+                "note": "Aceleración en la entrega de features estratégicas corporativas"
+              },
+              {
+                "key": "coverage-metric",
+                "title": "Cobertura E2E automatizada",
+                "summary": "Ampliación de pruebas de integración continua",
+                "body": "Se elevó la cobertura de pruebas de punta a punta con Playwright en los caminos críticos de compra, facturación y búsqueda de producto.",
+                "value": "+30 pp",
+                "icon": "code",
+                "tags": [],
+                "note": "Detección temprana de regresiones antes del despliegue"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "Logros obtenidos",
+            "title": "Impacto comercial y técnico en la región",
+            "lead": "Transformación de la experiencia digital de compras para millones de familias centroamericanas en todos los formatos del grupo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "scale-adoption",
+                "title": "Escala regional y multi-formato",
+                "summary": "",
+                "body": "Operación continua y sin fricciones en Costa Rica, Guatemala, El Salvador, Honduras y Nicaragua, atendiendo millones de transacciones a través de Walmart, Maxi Palí, Masxmenos y La Despensa de Don Juan.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "checkout-resilience",
+                "title": "Flujo de compra de alta fidelidad",
+                "summary": "",
+                "body": "Experiencia de checkout ágil con soporte para múltiples métodos de pago, programación de entregas a domicilio y retiro en tienda (Pickup) con confirmación inmediata.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "team-culture",
+                "title": "Cultura de excelencia técnica",
+                "summary": "",
+                "body": "Establecimiento de estándares de código, documentación técnica clara, rutas de onboarding efectivas y automatización como pilar esencial del ciclo de vida del software.",
+                "value": "",
+                "icon": "users",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "Walmart Central America: Multi-Banner Mobile Platform",
+      "description": "Enterprise-scale omnichannel retail and e-commerce mobile platform powering the Walmart Central America ecosystem across all retail banners: Walmart hypermarkets, discount warehouse bodegas (Maxi Palí, Maxi Despensa), and supermarkets (Masxmenos, La Despensa de Don Juan, Paiz), serving millions of shoppers across 5 countries with Flutter, Dart, and VTEX IO.",
+      "hook": "Multi-banner: Walmart, Maxi Palí, Masxmenos · 5 countries · Flutter & VTEX · -40% MTTR",
+      "challenge": "Architect and orchestrate a unified, resilient omnichannel mobile experience across distinct retail formats with diverse commercial value propositions (Walmart hypermarkets, discount warehouse bodegas like Maxi Palí, and supermarkets like Masxmenos and La Despensa de Don Juan) across 5 Central American countries over a heterogeneous stack (Flutter, Dart, and VTEX IO microservices), resolving checkout bottlenecks, lengthy 7-day manual regression cycles, and real-time store-level price/inventory synchronization.",
+      "approach": "Engineered a modular, multi-banner architecture with GraphQL contracts on VTEX IO that decouples visual identity, segmented catalogs, and fiscal invoicing; designed mission-critical checkout and predictive search flows tailored to each retail banner's purchasing patterns (from bulk grocery runs at Maxi Palí to curated convenience orders at Masxmenos and Walmart); reduced engineering rework by ~25% via system spikes; and instituted Playwright E2E automation (+30% coverage) and unit testing suites compressing regression cycles from 7 to 4 days.",
+      "outcome": "Slashing production MTTR by ~40% via systematic root-cause mitigation, compressing release regression to 4 days, reducing squad rework by ~25%, and delivering a rock-solid, scalable shopping journey for millions of mobile customers across all group retail banners in Central America.",
+      "caseStudy": {
+        "chips": [
+          "Multi-Banner Retail",
+          "Walmart, Maxi Palí & More",
+          "Flutter & Mobile",
+          "VTEX IO",
+          "In Production"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "My Role",
+            "value": "Senior Software Engineer (Walmart Global Tech / Imagemaker)"
+          },
+          {
+            "key": "platform",
+            "label": "Platform",
+            "value": "iOS & Android (Flutter / Dart / VTEX IO)"
+          },
+          {
+            "key": "domain",
+            "label": "Domain",
+            "value": "Multi-Banner Retail E-Commerce (Hypermarkets, Bodegas & Supermarkets)"
+          },
+          {
+            "key": "scale",
+            "label": "Regional Scale & Banners",
+            "value": "5 countries (CR, GT, SV, HN, NI) · Walmart, Maxi Palí, Masxmenos, Despensa de Don Juan, Paiz"
+          },
+          {
+            "key": "impact",
+            "label": "Key Impact",
+            "value": "~40% better MTTR · Regression 7 → 4 days · ~25% less rework"
+          },
+          {
+            "key": "client",
+            "label": "Enterprise Client",
+            "value": "Walmart Mexico & Central America"
+          }
+        ],
+        "nextProjectSlug": "ofilegal",
+        "context": "Walmart Central America is the leading retail network in Central America, operating an extensive multi-banner portfolio tailored to distinct consumer segments and shopping missions: Hypermarkets (Walmart), Discount Warehouse Bodegas (Maxi Palí in Costa Rica and Nicaragua, Maxi Despensa in Guatemala, El Salvador and Honduras, Palí, and Despensa Familiar), and Convenience/Supermarkets (Masxmenos in Costa Rica, La Despensa de Don Juan in El Salvador, Paiz in Guatemala, and La Unión in Nicaragua). As a Senior Software Engineer with Walmart Global Tech (via Imagemaker), I was embedded within the digital engineering organization building the multi-banner mobile apps and omnichannel e-commerce infrastructure, enabling millions of households to shop for groceries, fresh produce, pharmacy, and general merchandise with doorstep delivery and store Pickup.",
+        "roleTitle": "Senior Software Engineer",
+        "roleIntro": "Spearheaded mobile feature delivery in Flutter with multi-banner support, engineered GraphQL integration contracts with VTEX IO microservices, accelerated high-conversion checkout and localized multi-country electronic invoicing, and instituted automated E2E quality gates with Playwright.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Omnichannel multi-banner mobile retail and e-commerce platform centralizing digital commerce for Walmart, Maxi Palí, Masxmenos, La Despensa de Don Juan, and Paiz, enabling localized pricing and fulfillment across 5 countries.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Senior Software Engineer: building mission-critical multi-banner features (checkout, search, billing), conducting architecture spikes, resolving production incidents, and implementing automated testing pipelines.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "~40% MTTR reduction on production incidents, regression cycles compressed from 7 to 4 days with Playwright, ~25% rework reduction via architectural spikes, and continuous service for millions of shoppers across multiple formats.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "critical-features",
+            "title": "Critical multi-banner checkout and electronic billing features",
+            "summary": "",
+            "body": "Engineered core modules in React, Flutter, and VTEX for shopping cart management, predictive catalog search, and multi-country electronic invoicing adhering to regional fiscal regulations and banner-specific business models.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture-spikes",
+            "title": "System design spikes and multi-banner architecture",
+            "summary": "",
+            "body": "Led system design investigations and standardized GraphQL schemas that reduced engineering rework by ~25%, enabling clean separation between visual presentation and business rules across Walmart, Maxi Palí, and Masxmenos.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "qa-automation",
+            "title": "Automated E2E testing with Playwright",
+            "summary": "",
+            "body": "Compressed release regression testing from 7 to 4 days by implementing automated Playwright E2E test suites (+30% coverage) and expanding unit test coverage (+15%) on critical purchase flows across all brands.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "incident-response",
+            "title": "Production incident response and MTTR reduction",
+            "summary": "",
+            "body": "Investigated and resolved high-severity production incidents across mobile apps and backend services, achieving a ~40% MTTR improvement through systematic root-cause mitigation.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cross-collaboration",
+            "title": "Cross-functional squad collaboration",
+            "summary": "",
+            "body": "Collaborated across product managers, QA analysts, backend teams, UI/UX designers, and Central American business leadership to align technical roadmap milestones with major retail campaigns across all banners.",
+            "value": "",
+            "icon": "users",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Multi-banner coexistence: Harmonizing disparate commercial models (Everyday Low Price at Maxi Palí vs. premium assortment at Masxmenos and Walmart)",
+          "Multi-country regulatory compliance: Disparate fiscal and electronic tax invoicing standards across Costa Rica, Guatemala, El Salvador, Honduras, and Nicaragua",
+          "Hybrid tech stack interoperability: Clean communication between modular Flutter BLoC packages, dynamic multi-banner design tokens, and VTEX IO microservices",
+          "High-concurrency resilience: Uncompromising stability during peak commercial spikes (Cyber Days, Black Friday, payday rushes, bodega promotions)",
+          "Broad device compatibility: Fluid performance across a wide spectrum of entry-level, mid-tier, and flagship Android/iOS smartphones over volatile mobile networks",
+          "Zero tolerance for financial transaction discrepancies or store-level inventory allocation drift"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Technical Strategy",
+            "title": "Architectural and system design decisions",
+            "lead": "Key engineering trade-offs made to support multiple retail banners, accelerate release velocity, and fortify operational reliability.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "multi-banner-theming-bff",
+                "title": "Multi-banner architecture and GraphQL BFF layer",
+                "summary": "Decoupling brand identity and format-specific logic via a unified BFF on VTEX IO.",
+                "body": "Rather than maintaining fragmented, duplicated codebases for Walmart, Maxi Palí, and Masxmenos, we architected a modular platform where the GraphQL BFF dynamically resolves brand tokens, physical store inventory catalogs, and promotional rules. This reduced team rework by ~25% and allowed over 80% code reuse across transactional journeys.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Forked separate codebases per retail brand",
+                  "Uncoordinated REST endpoints per banner"
+                ],
+                "note": "Accelerated onboarding of new store locations and retail banners across the Central American region."
+              },
+              {
+                "key": "playwright-e2e-pipeline",
+                "title": "Automated Playwright E2E testing in CI/CD pipelines",
+                "summary": "Automating end-to-end checkout, payment validation, and search journeys in continuous integration.",
+                "body": "Previously, releases suffered from up to 7 days of manual regression verification. I designed Playwright E2E automation suites covering checkout and customer payment paths across formats, combined with unit tests in Jest, cutting regression cycles down to 4 days with +30% critical path coverage.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Exclusively manual pre-release regression passes",
+                  "Ad-hoc manual smoke testing"
+                ],
+                "note": "Provided rapid developer feedback and caught silent regressions before app store submission."
+              },
+              {
+                "key": "root-cause-observability",
+                "title": "Proactive observability and MTTR acceleration",
+                "summary": "Structured logging, distributed tracing, and rapid root-cause isolation for production incidents.",
+                "body": "Engineered standardized telemetry and error diagnostics across mobile clients and backend API gateways. By correlating network dropouts, inventory mismatches, and bank gateway timeouts, we cut MTTR by ~40%, allowing squads to remediate anomalies in minutes rather than hours.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Reactive monitoring based on customer complaints",
+                  "Fragmented unindexed log files"
+                ],
+                "note": "Substantially boosted system confidence during peak seasonal sales surges."
+              },
+              {
+                "key": "modular-fiscal-invoicing",
+                "title": "Decoupled multi-country electronic tax invoicing module",
+                "summary": "Modular adapter pattern isolating country-specific billing requirements.",
+                "body": "Each jurisdiction (Costa Rica, Guatemala, El Salvador, Honduras, Nicaragua) imposes different fiscal protocols. I architected an isolated billing adapter system that validates taxpayer IDs and generates digital tax invoices without polluting the core checkout domain logic.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Branching 'if-else' logic scattered throughout the app",
+                  "Forked country-specific codebases"
+                ],
+                "note": "Ensured 100% legal compliance while preserving clean, maintainable single-codebase velocity."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Key Screens & Modules",
+            "title": "Mobile Experience & Screen Architecture",
+            "lead": "Visual and functional overview of the core mobile modules powering the customer journey across each retail format.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-multibanner",
+                "title": "Multi-Banner Ecosystem",
+                "summary": "Dynamic support for hypermarkets, discount bodegas, and supermarkets",
+                "body": "Unified presentation resolving branding, promotional campaigns, and store-specific catalogs dynamically according to the active retail banner.",
+                "value": "3 Formats · 5 Countries",
+                "icon": "layers",
+                "tags": ["Multi-Banner", "Theming Engine", "Flutter"],
+                "note": "/projects/walmart-centroamerica.jpg"
+              },
+              {
+                "key": "screen-maxipali",
+                "title": "Maxi Palí: Bulk Savings & Discount Bodega",
+                "summary": "Retail experience tailored for bulk family groceries and value",
+                "body": "Specialized catalog for bulk grocery shopping, volume discounts, dynamic freight pricing, and prominent bodega savings banners.",
+                "value": "Discount Bodega",
+                "icon": "case",
+                "tags": ["Maxi Palí", "Everyday Low Prices", "Bulk Savings"],
+                "note": "/projects/walmart-maxipali.jpg"
+              },
+              {
+                "key": "screen-masxmenos",
+                "title": "Masxmenos: Premium Supermarket & Fresh Produce",
+                "summary": "Convenience, quality produce, and perishables management",
+                "body": "Experience focused on fresh meats, produce, and gourmet goods with variable weight tolerance algorithms and smart substitution workflows.",
+                "value": "Fresh Supermarket",
+                "icon": "search",
+                "tags": ["Masxmenos", "Fresh Produce", "Gourmet"],
+                "note": "/projects/walmart-masxmenos.jpg"
+              },
+              {
+                "key": "screen-checkout",
+                "title": "Omnichannel Checkout & Scheduled Pickup",
+                "summary": "Secure payment gateway and scheduled slot booking",
+                "body": "Streamlined checkout with 1-hour delivery slot selection, parking bay pickup geofencing, and multi-country electronic tax invoicing.",
+                "value": "Click & Collect / Delivery",
+                "icon": "gauge",
+                "tags": ["Checkout", "Slot Booking", "Invoicing"],
+                "note": "/projects/walmart-checkout.jpg"
+              },
+              {
+                "key": "screen-donjuan",
+                "title": "La Despensa de Don Juan & Paiz: Regional Supermarkets",
+                "summary": "Convenient neighborhood supermarket formats in El Salvador and Guatemala",
+                "body": "Optimized shopping journey for quick daily replenishments, recognized local domestic brands, and geo-targeted promotions per territory.",
+                "value": "Regional Supermarkets",
+                "icon": "case",
+                "tags": [
+                  "La Despensa de Don Juan",
+                  "Paiz",
+                  "Convenience",
+                  "Supermarkets"
+                ],
+                "note": "/projects/walmart-donjuan.jpg"
+              },
+              {
+                "key": "screen-search-catalog",
+                "title": "Predictive Search & Smart Catalog",
+                "summary": "Real-time autocomplete and faceted aisle browsing",
+                "body": "High-speed search engine with typo tolerance, category browsing, and instant store shelf inventory rendering in Flutter.",
+                "value": "Predictive Search",
+                "icon": "search",
+                "tags": [
+                  "Predictive Search",
+                  "Smart Catalog",
+                  "Faceted Filters"
+                ],
+                "note": "/projects/walmart-search-catalog.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "fulfillment-process",
+            "kind": "STEPS",
+            "eyebrow": "Process Engineering",
+            "title": "Omnichannel purchasing flow & fulfillment processes",
+            "lead": "End-to-end technical overview of each purchasing stage: from geo-located store resolution to regional electronic fiscal invoicing.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-georesolution",
+                "title": "1. Geo-located store and banner resolution",
+                "summary": "Automatic country and nearest physical store detection",
+                "body": "The app identifies the country (CR, GT, SV, HN, NI), pinpoints the nearest physical branch for the active banner (Walmart, Maxi Palí, or Masxmenos), and syncs local pricing, deals, and shelf stock in milliseconds.",
+                "value": "5 Countries",
+                "icon": "globe",
+                "tags": ["Geo-Resolution", "Store Selector", "Multi-Country"],
+                "note": "/projects/walmart-centroamerica.jpg"
+              },
+              {
+                "key": "step-smart-cart",
+                "title": "2. Smart cart and variable weight handling for fresh goods",
+                "summary": "Weight tolerance algorithm and real-time substitution engine",
+                "body": "Cart algorithm supporting price tolerance (+/- 10%) for weighed items (meat, produce). If store pickers encounter out-of-stock items, the engine automatically recommends customer-approved substitutions.",
+                "value": "+/- 10% Tolerance",
+                "icon": "search",
+                "tags": ["Smart Cart", "Fresh Goods", "Substitutions"],
+                "note": "/projects/walmart-search-catalog.jpg"
+              },
+              {
+                "key": "step-slot-booking",
+                "title": "3. Fulfillment slot booking: Pickup vs Scheduled Delivery",
+                "summary": "Logistics capacity management and Click & Collect geofencing",
+                "body": "Customers book 1-hour fulfillment slots. For Click & Collect (parking bay pickup), GPS geofencing alerts store staff upon customer arrival, keeping bay turnaround under 5 minutes.",
+                "value": "1-Hour Slots",
+                "icon": "gauge",
+                "tags": ["Slot Booking", "Pickup", "Geofencing"],
+                "note": "/projects/walmart-masxmenos.jpg"
+              },
+              {
+                "key": "step-fiscal-checkout",
+                "title": "4. Tokenized payment gateway and multi-country fiscal invoicing",
+                "summary": "PCI-DSS tokenized checkout and digital tax authority validation",
+                "body": "Credit and debit card tokenization with PCI-DSS compliance, paired with asynchronous electronic invoicing directly validated with tax authorities across Costa Rica, Guatemala, El Salvador, Honduras, and Nicaragua.",
+                "value": "PCI-DSS Compliance",
+                "icon": "shield",
+                "tags": ["Tokenization", "Fiscal Invoicing", "ERP"],
+                "note": "/projects/walmart-checkout.jpg"
+              }
+            ],
+            "footnoteTitle": "Quality & Regression Pipeline",
+            "footnotes": [
+              "Playwright automation across transactional flows compressed regression cycles from 7 to 4 days.",
+              "Unit and widget test suites with flutter_test ensure rigorous coverage over critical tax and discount algorithms.",
+              "Structured observability and root-cause analysis (RCA) slashed production MTTR by ~40% across all markets."
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Solution Topology",
+            "title": "Layered architecture and multi-banner mobile ecosystem",
+            "lead": "Multi-tier enterprise architecture built for high concurrency, multi-brand support, and delivery velocity.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mobile-client-layer",
+                "title": "Multi-banner mobile presentation layer (Flutter / Dart)",
+                "summary": "Clean architecture in Flutter organized into modular packages, BLoC for predictable state management, dynamic theming, and offline-first caching.",
+                "body": "Modern, intuitive UI supporting predictive search, product catalog browsing adapted to the active retail format, offline shopping cart retention, biometric authentication, and push notifications.",
+                "value": "",
+                "icon": "layout",
+                "tags": [
+                  "Flutter",
+                  "Dart",
+                  "BLoC",
+                  "Clean Architecture",
+                  "Dynamic Theming",
+                  "Android",
+                  "iOS"
+                ],
+                "note": ""
+              },
+              {
+                "key": "bff-graphql-layer",
+                "title": "BFF & orchestration layer (VTEX IO)",
+                "summary": "Node.js services and GraphQL schemas orchestrating underlying commerce APIs per retail format.",
+                "body": "Central mobile business logic hub: resolves segmented catalogs, store-specific pricing policies, delivery slot availability, and Drive-thru Pickup scheduling with minimal latency.",
+                "value": "",
+                "icon": "layers",
+                "tags": ["VTEX IO", "GraphQL", "Node.js", "TypeScript"],
+                "note": ""
+              },
+              {
+                "key": "core-commerce-layer",
+                "title": "Transactional commerce core & backend microservices",
+                "summary": "Payment processing, real-time inventory locking, and fiscal invoicing engines.",
+                "body": "Deep integration with regional payment gateways, real-time stock sync across distribution centers and physical supermarkets, and central Walmart ERP backbones.",
+                "value": "",
+                "icon": "db",
+                "tags": [
+                  "Microservices",
+                  "VTEX Engine",
+                  "ERP",
+                  "Electronic Invoicing"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "quality",
+            "kind": "METRICS",
+            "eyebrow": "Quantified Impact",
+            "title": "Engineering performance metrics",
+            "lead": "Measurable improvements achieved across developer velocity, testing automation, and operational uptime.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mttr-metric",
+                "title": "MTTR Improvement",
+                "summary": "Reduction in mean time to resolve production incidents",
+                "body": "Mean time to resolution across mobile and backend production systems dropped sharply through rapid root-cause workflows and automated regression safeguards.",
+                "value": "~40%",
+                "icon": "gauge",
+                "tags": [],
+                "note": "Faster recovery and minimized operational disruption"
+              },
+              {
+                "key": "regression-metric",
+                "title": "Regression Cycle Time",
+                "summary": "Acceleration of pre-release validation",
+                "body": "Pre-release testing cycles compressed from 7 to 4 days through Playwright automated test suites and expanded unit test coverage across checkout journeys.",
+                "value": "7 → 4 days",
+                "icon": "shield",
+                "tags": [],
+                "note": "3 full business days saved every release window"
+              },
+              {
+                "key": "rework-metric",
+                "title": "Rework Reduction",
+                "summary": "Engineering efficiency and architectural clarity",
+                "body": "Architecture spikes and standard GraphQL contracts eliminated cross-squad misunderstandings and redundant rewrite cycles across multi-banner squads.",
+                "value": "~25%",
+                "icon": "bolt",
+                "tags": [],
+                "note": "Accelerated time-to-market for strategic commercial features"
+              },
+              {
+                "key": "coverage-metric",
+                "title": "Automated E2E Coverage",
+                "summary": "Continuous integration test expansion",
+                "body": "Increased end-to-end automated coverage on mission-critical paths including checkout, electronic billing, and catalog navigation.",
+                "value": "+30 pp",
+                "icon": "code",
+                "tags": [],
+                "note": "Early regression detection before staging handoff"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "Key Outcomes",
+            "title": "Regional commercial and technical impact",
+            "lead": "Transforming the digital shopping experience for millions of Central American families across all group retail brands.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "scale-adoption",
+                "title": "Regional and multi-banner scale",
+                "summary": "",
+                "body": "Frictionless, continuous operation across Costa Rica, Guatemala, El Salvador, Honduras, and Nicaragua, accommodating millions of transactions across Walmart, Maxi Palí, Masxmenos, and La Despensa de Don Juan.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "checkout-resilience",
+                "title": "High-conversion checkout experience",
+                "summary": "",
+                "body": "Resilient checkout flow supporting diverse localized payment methods, flexible delivery windows, and Drive-thru Pickup scheduling with immediate status tracking.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "team-culture",
+                "title": "Engineering excellence & test culture",
+                "summary": "",
+                "body": "Solidified modular coding standards, thorough architectural documentation, accelerated team onboarding, and automation as a cornerstone of the delivery lifecycle.",
+                "value": "",
+                "icon": "users",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "Walmart Midden-Amerika: Multi-Format Mobiel Platform",
+      "description": "Grootschalig mobiel retail- en e-commerceplatform voor het Walmart Midden-Amerika ecosysteem en zijn diverse winkelformules: Walmart-hypermarkten, discountbodega's (Maxi Palí, Maxi Despensa) en supermarkten (Masxmenos, La Despensa de Don Juan, Paiz), die miljoenen shoppers bedienen in 5 landen met Flutter, Dart en VTEX IO.",
+      "hook": "Multi-format: Walmart, Maxi Palí, Masxmenos · 5 landen · Flutter & VTEX · -40% MTTR",
+      "challenge": "Het ontwerpen en orkestreren van een veerkrachtige, uniforme omnichannel mobiele winkelervaring voor uiteenlopende winkelformules (Walmart hypermarkten, discountbodega's zoals Maxi Palí en supermarkten zoals Masxmenos en La Despensa de Don Juan) in 5 Midden-Amerikaanse landen op een heterogene stack (Flutter, Dart en VTEX IO-microservices), met aanpak van checkout-knelpunten, langdurige regressiecycli van 7 dagen en realtime winkelspecifieke prijs- en voorraadsynchronisatie.",
+      "approach": "Ontwikkelde een modulaire multi-format architectuur met GraphQL-contracten op VTEX IO die merkinsignes, gesegmenteerde catalogi en fiscale facturatie isoleert; ontwierp checkout- en zoekflows afgestemd op elke formule (van bulkinkopen bij Maxi Palí tot gemakswinkelen bij Masxmenos en Walmart); verminderde herwerk met 25% via systeemspikes; en introduceerde Playwright-tests (+30% dekking) en unit-tests die regressiecycli verkortten van 7 naar 4 dagen.",
+      "outcome": "Een MTTR-reductie van ~40% bij productie-incidenten via snelle root-cause analyse, verkorting van regressietests naar 4 dagen, ~25% minder herwerk in engineering teams en een uiterst betrouwbare, schaalbare mobiele winkelervaring voor miljoenen klanten binnen alle winkelformules van de groep in Midden-Amerika.",
+      "caseStudy": {
+        "chips": [
+          "Multi-Banner Retail",
+          "Walmart, Maxi Palí & Meer",
+          "Flutter & Mobiel",
+          "VTEX IO",
+          "In Productie"
+        ],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mijn rol",
+            "value": "Senior Software Engineer (Walmart Global Tech / Imagemaker)"
+          },
+          {
+            "key": "platform",
+            "label": "Platform",
+            "value": "iOS & Android (Flutter / Dart / VTEX IO)"
+          },
+          {
+            "key": "domain",
+            "label": "Domein",
+            "value": "Multi-Format Retail E-Commerce (Hypermarkten, Bodega's & Supermarkten)"
+          },
+          {
+            "key": "scale",
+            "label": "Regionale schaal en formules",
+            "value": "5 landen (CR, GT, SV, HN, NI) · Walmart, Maxi Palí, Masxmenos, Despensa de Don Juan, Paiz"
+          },
+          {
+            "key": "impact",
+            "label": "Belangrijkste impact",
+            "value": "~40% betere MTTR · Regressie 7 → 4 dagen · ~25% minder herwerk"
+          },
+          {
+            "key": "client",
+            "label": "Zakelijke klant",
+            "value": "Walmart Mexico & Midden-Amerika"
+          }
+        ],
+        "nextProjectSlug": "ofilegal",
+        "context": "Walmart Midden-Amerika beheert het meest uitgebreide retailnetwerk in de regio via een multi-format portfolio afgestemd op verschillende consumentensegmenten: Hypermarkten (Walmart), Discountbodega's (Maxi Palí in Costa Rica en Nicaragua, Maxi Despensa in Guatemala, El Salvador en Honduras, Palí en Despensa Familiar) en Supermarkten (Masxmenos in Costa Rica, La Despensa de Don Juan in El Salvador, Paiz in Guatemala en La Unión in Nicaragua). Als Senior Software Engineer bij Walmart Global Tech (via Imagemaker) maakte ik deel uit van de mobiele engineering-organisatie die verantwoordelijk is voor de multi-banner mobiele applicaties en omnichannel e-commerce infrastructuur, waardoor miljoenen gezinnen levensmiddelen, verse producten, apotheekartikelen en algemene goederen kunnen bestellen met thuisbezorging of afhalen in de winkel (Pickup).",
+        "roleTitle": "Senior Software Engineer",
+        "roleIntro": "Leidde mobiele ontwikkelingsinitiatieven in Flutter met multi-banner ondersteuning, ontwierp GraphQL-integratiecontracten met VTEX IO microservices, optimaliseerde checkout- en facturatieflows en implementeerde geautomatiseerde kwaliteitsborging met Playwright E2E-tests.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Omnichannel multi-format mobiel retail- en e-commerceplatform dat de digitale handel centraliseert voor Walmart, Maxi Palí, Masxmenos, La Despensa de Don Juan en Paiz in 5 landen.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Senior Software Engineer: ontwikkelen van kritieke multi-banner flows (checkout, zoeken, facturatie), leiden van architectuurspikes, oplossen van productie-incidenten en implementeren van geautomatiseerde testpipelines.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Verlaging van MTTR met ~40%, verkorting van regressiecycli van 7 naar 4 dagen met Playwright, ~25% minder herwerk door architectuurspikes en continue dienstverlening voor miljoenen shoppers over meerdere formules.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "critical-features",
+            "title": "Kritieke multi-format checkout- en facturatiefuncties",
+            "summary": "",
+            "body": "Ontwikkelde kernmodules in React, Flutter en VTEX voor winkelmandbeheer, voorspellend zoeken en elektronische facturatie afgestemd op de belastingwetgeving en specifieke bedrijfsmodellen van elk land en winkeltype.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "architecture-spikes",
+            "title": "Systeemontwerp en multi-banner architectuurspikes",
+            "summary": "",
+            "body": "Leidde systeemontwerpbeslissingen en definieerde GraphQL-contracten die herwerk met ~25% verminderden en een duidelijke scheiding aanbrachten tussen presentatielagen en bedrijfsregels voor Walmart, Maxi Palí en Masxmenos.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "qa-automation",
+            "title": "Geautomatiseerde E2E-tests met Playwright",
+            "summary": "",
+            "body": "Verkortte regressietestcycli van 7 naar 4 dagen door het implementeren van geautomatiseerde Playwright E2E-suites (+30% dekking) en uitbreiding van unit-tests (+15% dekking) op kritieke koopstromen binnen alle formules.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "incident-response",
+            "title": "Incidentrespons en MTTR-verlaging",
+            "summary": "",
+            "body": "Onderzocht en loste ernstige productie-incidenten op in mobiele en backend-systemen, wat leidde tot een verbetering van ~40% in MTTR door gestructureerde root-cause analyses en proactieve preventie.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cross-collaboration",
+            "title": "Multidisciplinaire samenwerking",
+            "summary": "",
+            "body": "Werkte nauw samen met productmanagers, QA, backend, frontend, UX-designers en zakelijke belanghebbenden in Midden-Amerika om releases af te stemmen op grote commerciële campagnes over alle formules.",
+            "value": "",
+            "icon": "users",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Multi-format co-existentie: Harmoniseren van uiteenlopende commerciële formules (Everyday Low Price bij Maxi Palí vs. premium assortiment bij Masxmenos en Walmart)",
+          "Complexe fiscale regelgeving: Verschillende normen voor elektronische facturatie in Costa Rica, Guatemala, El Salvador, Honduras en Nicaragua",
+          "Hybride techstack-integratie: Naadloze interactie tussen modulaire Flutter BLoC packages, dynamische multi-banner tokens en VTEX IO microservices",
+          "Hoge schaalbaarheid tijdens piekmomenten: Continue stabiliteit tijdens grote commerciële evenementen (Cyber Days, Black Friday, seizoensacties en bodegapromoties)",
+          "Brede apparaatcompatibiliteit: Vloeiende prestaties op uiteenlopende Android- en iOS-apparaten onder wisselende netwerkomstandigheden (3G/4G/5G)",
+          "Nultolerantie voor fouten in betalingsverwerking en realtime voorraadbeheer per fysieke winkel"
+        ],
+        "sections": [
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Technische Strategie",
+            "title": "Architectuur- en systeemontwerpbeslissingen",
+            "lead": "Belangrijke engineeringkeuzes om meerdere winkelformules te ondersteunen, releasecycli te versnellen en operationele betrouwbaarheid te waarborgen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "multi-banner-theming-bff",
+                "title": "Multi-banner architectuur en GraphQL BFF-laag",
+                "summary": "Ontkoppelen van merkidentiteit en formulespecifieke logica via een centrale BFF op VTEX IO.",
+                "body": "In plaats van aparte, dubbele applicaties te onderhouden voor Walmart, Maxi Palí en Masxmenos, ontwierpen we een modulaire architectuur waarin het GraphQL BFF dynamisch merktokens, winkelinventaris en promoties afhandelt. Dit verminderde herwerk met ~25% en maakte meer dan 80% codehergebruik mogelijk.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Aparte codebases per winkelmerk",
+                  "Niet-gecoördineerde REST-eindpunten per formule"
+                ],
+                "note": "Versnelde de aansluiting van nieuwe winkellocaties en formules in heel Midden-Amerika."
+              },
+              {
+                "key": "playwright-e2e-pipeline",
+                "title": "Geautomatiseerde Playwright E2E-tests in CI/CD",
+                "summary": "Automatiseren van checkout, betalingsverificatie en catalogusnavigatie in continue integratie.",
+                "body": "Voorheen vereisten releases tot 7 dagen aan handmatige regressietests. Ik ontwierp geautomatiseerde E2E-suites in Playwright voor kritieke aankoopflows, gecombineerd met Jest unit-tests, waardoor de regressiecyclus werd teruggebracht naar 4 dagen met +30% dekking op kernstromen.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Uitsluitend handmatige pre-release regressietests",
+                  "Niet-georkestreerde handmatige smoketests"
+                ],
+                "note": "Bood directe feedback aan ontwikkelaars en voorkwam onopgemerkte regressies in betaalstromen."
+              },
+              {
+                "key": "root-cause-observability",
+                "title": "Proactive observabiliteit en MTTR-versnelling",
+                "summary": "Gestructureerde logging en snelle root-cause isolatie voor productie-incidenten.",
+                "body": "Implementeerde gestandaardiseerde telemetrie en foutdiagnostiek over mobiele clients en backend-gateways. Door netwerkuitval, voorraadverschillen en time-outs bij betaalproviders direct te correleren, daalde de MTTR met ~40%.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Reactieve monitoring gebaseerd op gebruikersmeldingen",
+                  "Gefragmenteerde logbestanden zonder correlatie"
+                ],
+                "note": "Verhoogde het operationele vertrouwen aanzienlijk tijdens seizoensgebonden verkooppieken."
+              },
+              {
+                "key": "modular-fiscal-invoicing",
+                "title": "Modulaire elektronische facturatie voor meerdere landen",
+                "summary": "Modulair adapterpatroon dat landspecifieke facturatievereisten isoleert.",
+                "body": "Elk land (Costa Rica, Guatemala, El Salvador, Honduras, Nicaragua) hanteert unieke fiscale protocollen. Ik ontwierp een geïsoleerd facturatie-adaptersysteem dat belastingnummers valideert en facturen genereert zonder de centrale checkout-domeinlogica te beïnvloeden.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Verspreide 'if-else' vertakkingen door de hele codebase",
+                  "Aparte codebases per land"
+                ],
+                "note": "Garandeerde volledige wettelijke naleving met behoud van een schone, uniforme codebase."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Belangrijkste Schermen & Modules",
+            "title": "Mobiele Ervaring en Schermarchitectuur",
+            "lead": "Visuele en functionele verkenning van de kernmodules die de winkelervaring binnen elke formule aansturen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-multibanner",
+                "title": "Multi-Banner Ecosysteem",
+                "summary": "Dynamische ondersteuning voor hypermarkten, discountbodega's en supermarkten",
+                "body": "Uniforme presentatie die merkelementen, promoties en winkelspecifieke catalogi dynamisch laadt op basis van de geselecteerde winkelformule.",
+                "value": "3 Formules · 5 Landen",
+                "icon": "layers",
+                "tags": ["Multi-Banner", "Theming Engine", "Flutter"],
+                "note": "/projects/walmart-centroamerica.jpg"
+              },
+              {
+                "key": "screen-maxipali",
+                "title": "Maxi Palí: Discountbodega & Bulkvoordeel",
+                "summary": "Winkelervaring gericht op gezinsverpakkingen en lage prijzen",
+                "body": "Gespecialiseerde catalogus voor bulkboodschappen, dynamische transporttarieven en prominente weergave van bodegaprijzen.",
+                "value": "Discountbodega",
+                "icon": "case",
+                "tags": ["Maxi Palí", "Lage Prijzen", "Besparingen"],
+                "note": "/projects/walmart-maxipali.jpg"
+              },
+              {
+                "key": "screen-masxmenos",
+                "title": "Masxmenos: Supermarkt & Verswaren",
+                "summary": "Kwaliteitsproducten en beheer van bederfelijke waren",
+                "body": "Ervaring gericht op vers vlees, groenten, fruit en delicatessen met algoritmen voor variabele gewichten en automatische vervangers.",
+                "value": "Verssupermarkt",
+                "icon": "search",
+                "tags": ["Masxmenos", "Verswaren", "Gourmet"],
+                "note": "/projects/walmart-masxmenos.jpg"
+              },
+              {
+                "key": "screen-checkout",
+                "title": "Omnichannel Checkout & Afhalen",
+                "summary": "Veilige betaalpoort en geplande afhaal- en bezorgslots",
+                "body": "Snelle checkout met tijdvakken van 1 uur, parkeerafhaal-geofencing en meertalige elektronische belastingfacturatie.",
+                "value": "Click & Collect / Levering",
+                "icon": "gauge",
+                "tags": ["Checkout", "Slot Booking", "Facturatie"],
+                "note": "/projects/walmart-checkout.jpg"
+              },
+              {
+                "key": "screen-donjuan",
+                "title": "La Despensa de Don Juan & Paiz: Regionale Supermarkten",
+                "summary": "Buurtsupermarkten met hoge servicegraad in El Salvador en Guatemala",
+                "body": "Winkelervaring geoptimaliseerd voor dagelijkse boodschappen, erkende lokale merken en landspecifieke promoties per filiaal.",
+                "value": "Regionale Supermarkten",
+                "icon": "case",
+                "tags": [
+                  "La Despensa de Don Juan",
+                  "Paiz",
+                  "Gemak",
+                  "Supermarkten"
+                ],
+                "note": "/projects/walmart-donjuan.jpg"
+              },
+              {
+                "key": "screen-search-catalog",
+                "title": "Voorspellend Zoeken & Slimme Catalogus",
+                "summary": "Realtime automatisch aanvullen en gefilterde navigatie",
+                "body": "Snelle zoekmotor met typfouttolerantie, navigatie per afdeling en realtime schapvoorraadweergave in Flutter.",
+                "value": "Voorspellend Zoeken",
+                "icon": "search",
+                "tags": [
+                  "Voorspellend Zoeken",
+                  "Slimme Catalogus",
+                  "Gefilterde Navigatie"
+                ],
+                "note": "/projects/walmart-search-catalog.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "fulfillment-process",
+            "kind": "STEPS",
+            "eyebrow": "Procesarchitectuur",
+            "title": "Omnichannel aankoopstroom en fulfillmentprocessen",
+            "lead": "Gedetailleerd technisch overzicht van elke fase van het koopproces: van geolocatiebepaling van fysieke winkels tot regionale fiscale facturatie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-georesolution",
+                "title": "1. Geolocatiebepaling en winkeltoewijzing",
+                "summary": "Automatische detectie van land en dichtstbijzijnde fysieke winkel",
+                "body": "De app detecteert het land (CR, GT, SV, HN, NI), bepaalt het dichtstbijzijnde fysieke filiaal voor de actieve formule (Walmart, Maxi Palí of Masxmenos) en synchroniseert lokale prijzen en voorraad in milliseconden.",
+                "value": "5 Landen",
+                "icon": "globe",
+                "tags": ["Geo-Resolutie", "Store Selector", "Multi-Land"],
+                "note": "/projects/walmart-centroamerica.jpg"
+              },
+              {
+                "key": "step-smart-cart",
+                "title": "2. Slimme winkelwagen en variabel gewicht voor verswaren",
+                "summary": "Gewichtstolerantie-algoritme en realtime vervangingsmotor",
+                "body": "Winkelwagen-algoritme met gewichtstolerantie (+/- 10%) voor gewogen artikelen. Wanneer een product niet voorradig is, beveelt het systeem automatisch klantgoedgekeurde alternatieven aan.",
+                "value": "+/- 10% Tolerantie",
+                "icon": "search",
+                "tags": ["Smart Cart", "Verswaren", "Vervangingen"],
+                "note": "/projects/walmart-search-catalog.jpg"
+              },
+              {
+                "key": "step-slot-booking",
+                "title": "3. Tijdvakreservering: Click & Collect vs Geplande Bezorging",
+                "summary": "Capaciteitsbeheer en Click & Collect geofencing",
+                "body": "Klanten reserveren tijdvakken van 1 uur. Bij afhalen op parkeerplaatsen activeert geofencing een melding voor het winkelpersoneel zodra de klant arriveert, waardoor afhandeling onder 5 minuten blijft.",
+                "value": "Tijdvakken van 1u",
+                "icon": "gauge",
+                "tags": ["Slot Booking", "Afhalen", "Geofencing"],
+                "note": "/projects/walmart-masxmenos.jpg"
+              },
+              {
+                "key": "step-fiscal-checkout",
+                "title": "4. Getokeniseerde betalingen en fiscale facturatie per land",
+                "summary": "PCI-DSS betalingen en digitale validatie door belastingdiensten",
+                "body": "Tokenisatie van lokale en internationale bankkaarten conform PCI-DSS, gekoppeld aan elektronische facturatie gevalideerd bij de belastingautoriteiten van Costa Rica, Guatemala, El Salvador, Honduras en Nicaragua.",
+                "value": "PCI-DSS Compliance",
+                "icon": "shield",
+                "tags": ["Tokenisatie", "Fiscale Facturatie", "ERP"],
+                "note": "/projects/walmart-checkout.jpg"
+              }
+            ],
+            "footnoteTitle": "Kwaliteits- en Regressiepijplijn",
+            "footnotes": [
+              "Automatisering met Playwright verkortte regressietests van 7 naar 4 dagen.",
+              "Unit- en widgettests met flutter_test borgen betrouwbaarheid in bedrijfskritische berekeningen van belastingen en kortingen.",
+              "Gestructureerde observatie en Root Cause Analysis (RCA) verlaagden de MTTR in productie met ~40%."
+            ],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Systeembouw",
+            "title": "Gelaagde architectuur en multi-banner mobiel ecosysteem",
+            "lead": "Meerlaagse bedrijfsarchitectuur ontworpen voor hoge gelijktijdigheid, ondersteuning van meerdere winkelmerken en ontwikkelsnelheid.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mobile-client-layer",
+                "title": "Multi-banner mobiele presentatielaag (Flutter / Dart)",
+                "summary": "Schone architectuur in Flutter opgebouwd uit modulaire packages, BLoC voor voorspelbaar statusbeheer, dynamische thema's en offline-first caching.",
+                "body": "Moderne interface met vloeiende navigatie, voorspellend zoeken, categorie-overzichten afgestemd op de formule, persistente winkelwagens en biometrische authenticatie.",
+                "value": "",
+                "icon": "layout",
+                "tags": [
+                  "Flutter",
+                  "Dart",
+                  "BLoC",
+                  "Clean Architecture",
+                  "Dynamic Theming",
+                  "Android",
+                  "iOS"
+                ],
+                "note": ""
+              },
+              {
+                "key": "bff-graphql-layer",
+                "title": "BFF- & orkestratielaag (VTEX IO)",
+                "summary": "Node.js-services en GraphQL-schema's die achterliggende e-commerce API's ontsluiten per winkelformule.",
+                "body": "Centrale mobiele bedrijfslogica: berekent gesegmenteerde catalogi, prijsregels per winkelmerk, bezorgslot-beschikbaarheid en Drive-thru afhaaltijden met minimale latentie.",
+                "value": "",
+                "icon": "layers",
+                "tags": ["VTEX IO", "GraphQL", "Node.js", "TypeScript"],
+                "note": ""
+              },
+              {
+                "key": "core-commerce-layer",
+                "title": "Transactionele e-commerce kern en microservices",
+                "summary": "Betalingsverwerking, realtime voorraadreservering en elektronische facturatiesystemen.",
+                "body": "Diepe integratie met lokale bankgateways, realtime voorraadkoppelingen met distributiecentra en fysieke supermarkten, en centrale Walmart ERP-systemen.",
+                "value": "",
+                "icon": "db",
+                "tags": [
+                  "Microservices",
+                  "VTEX Engine",
+                  "ERP",
+                  "Electronic Invoicing"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "quality",
+            "kind": "METRICS",
+            "eyebrow": "Gekwantificeerde Impact",
+            "title": "Engineering- en prestatiemetrieken",
+            "lead": "Meetbare resultaten behaald op het gebied van ontwikkelsnelheid, testautomatisering en productiestabiliteit.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mttr-metric",
+                "title": "MTTR-verbetering",
+                "summary": "Daling in de gemiddelde hersteltijd bij productie-incidenten",
+                "body": "De gemiddelde hersteltijd bij ernstige anomalieën in backend en mobiele apps daalde aanzienlijk dankzij snelle diagnoses en gestructureerde root-cause workflows.",
+                "value": "~40%",
+                "icon": "gauge",
+                "tags": [],
+                "note": "Snellere hersteltijd en minimale impact op shoppers"
+              },
+              {
+                "key": "regression-metric",
+                "title": "Regressietestcyclus",
+                "summary": "Versnelling van pre-release verificaties",
+                "body": "De duur van regressietests werd teruggebracht van 7 naar 4 dagen dankzij geautomatiseerde Playwright-suites en verhoogde unittestreikwijdte in checkout-flows.",
+                "value": "7 → 4 dagen",
+                "icon": "shield",
+                "tags": [],
+                "note": "3 volledige werkdagen bespaard per releasecyclus"
+              },
+              {
+                "key": "rework-metric",
+                "title": "Herwerkreductie",
+                "summary": "Engineering-efficiëntie en architecturale helderheid",
+                "body": "Architectuurspikes en uniforme GraphQL-contracten voorkwamen herhaaldelijke misverstanden en overbodige herstructureringen tussen multi-banner squads.",
+                "value": "~25%",
+                "icon": "bolt",
+                "tags": [],
+                "note": "Snellere time-to-market voor strategische commerciële functies"
+              },
+              {
+                "key": "coverage-metric",
+                "title": "Geautomatiseerde E2E-dekking",
+                "summary": "Uitbreiding van continue integratietests",
+                "body": "Verhoogde geautomatiseerde end-to-end dekking met Playwright op kritieke trajecten zoals betalingen, facturatie en productzoekopdrachten.",
+                "value": "+30 pp",
+                "icon": "code",
+                "tags": [],
+                "note": "Vroegtijdige detectie van regressies vóór productie-uitrol"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "Belangrijkste Resultaten",
+            "title": "Regionale commerciële en technische impact",
+            "lead": "Transformatie van de digitale winkelervaring voor miljoenen gezinnen in Midden-Amerika over alle winkelmerken van de groep.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "scale-adoption",
+                "title": "Regionale en multi-format schaal",
+                "summary": "",
+                "body": "Naadloze en continue werking in Costa Rica, Guatemala, El Salvador, Honduras en Nicaragua voor miljoenen transacties via Walmart, Maxi Palí, Masxmenos en La Despensa de Don Juan.",
+                "value": "",
+                "icon": "globe",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "checkout-resilience",
+                "title": "Betrouwbare checkout-ervaring",
+                "summary": "",
+                "body": "Soepele afronding van bestellingen met ondersteuning voor meerdere lokale betaalmethoden, flexibele bezorgmomenten en Drive-thru Pickup.",
+                "value": "",
+                "icon": "shield",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "team-culture",
+                "title": "Engineering-excellentie en testcultuur",
+                "summary": "",
+                "body": "Vastlegging van modulaire standaarden, heldere technische documentatie, effectieve inwerkpaden en testautomatisering als vaste standaard.",
+                "value": "",
+                "icon": "users",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ]
+}

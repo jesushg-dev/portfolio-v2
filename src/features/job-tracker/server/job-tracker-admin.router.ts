@@ -1153,6 +1153,154 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       providers,
     };
   }),
+
+  getEmailTrackingHub: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.id;
+    const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+    const [sentEmails, recentOpens24h] = await Promise.all([
+      ctx.db.applicationEmail.findMany({
+        where: {
+          userId,
+          sentAt: { not: null },
+        },
+        select: {
+          id: true,
+          applicationId: true,
+          recipientEmail: true,
+          subject: true,
+          attachmentName: true,
+          trackingEnabled: true,
+          openCount: true,
+          firstOpenedAt: true,
+          lastOpenedAt: true,
+          sentAt: true,
+          application: {
+            select: {
+              id: true,
+              position: true,
+              status: true,
+              appliedDate: true,
+              company: {
+                select: {
+                  id: true,
+                  name: true,
+                  location: true,
+                },
+              },
+            },
+          },
+          opens: {
+            select: {
+              id: true,
+              openedAt: true,
+              userAgent: true,
+              ipAddress: true,
+            },
+            orderBy: { openedAt: "desc" },
+            take: 10,
+          },
+        },
+        orderBy: { sentAt: "desc" },
+      }),
+      ctx.db.applicationEmailOpen.count({
+        where: {
+          email: { userId },
+          openedAt: { gte: since24h },
+        },
+      }),
+    ]);
+
+    const totalSent = sentEmails.length;
+    const trackedEmails = sentEmails.filter((e) => e.trackingEnabled);
+    const totalTracked = trackedEmails.length;
+    const openedTracked = trackedEmails.filter((e) => e.openCount > 0).length;
+    const totalOpens = sentEmails.reduce(
+      (acc, e) => acc + (e.openCount || 0),
+      0,
+    );
+    const openRate =
+      totalTracked > 0 ? Math.round((openedTracked / totalTracked) * 100) : 0;
+
+    type SentEmailItem = (typeof sentEmails)[number];
+    interface GroupedApplication {
+      applicationId: string;
+      position: string;
+      status: string;
+      appliedDate: Date;
+      company: {
+        id: string;
+        name: string;
+        location: string | null;
+      };
+      totalEmails: number;
+      totalOpens: number;
+      lastOpenedAt: Date | null;
+      lastSentAt: Date;
+      emails: SentEmailItem[];
+    }
+
+    const appMap = new Map<string, GroupedApplication>();
+
+    for (const email of sentEmails) {
+      if (!email.application) continue;
+      const appId = email.applicationId;
+      const existing = appMap.get(appId);
+      const emailSentAt = email.sentAt ?? new Date();
+
+      if (!existing) {
+        appMap.set(appId, {
+          applicationId: appId,
+          position: email.application.position,
+          status: email.application.status,
+          appliedDate: email.application.appliedDate,
+          company: {
+            id: email.application.company.id,
+            name: email.application.company.name,
+            location: email.application.company.location,
+          },
+          totalEmails: 1,
+          totalOpens: email.openCount || 0,
+          lastOpenedAt: email.lastOpenedAt,
+          lastSentAt: emailSentAt,
+          emails: [email],
+        });
+      } else {
+        existing.totalEmails += 1;
+        existing.totalOpens += email.openCount || 0;
+        existing.emails.push(email);
+        if (emailSentAt > existing.lastSentAt) {
+          existing.lastSentAt = emailSentAt;
+        }
+        if (
+          email.lastOpenedAt &&
+          (!existing.lastOpenedAt || email.lastOpenedAt > existing.lastOpenedAt)
+        ) {
+          existing.lastOpenedAt = email.lastOpenedAt;
+        }
+      }
+    }
+
+    const applications = Array.from(appMap.values()).sort((a, b) => {
+      if (a.lastOpenedAt && b.lastOpenedAt) {
+        return b.lastOpenedAt.getTime() - a.lastOpenedAt.getTime();
+      }
+      if (a.lastOpenedAt) return -1;
+      if (b.lastOpenedAt) return 1;
+      return b.lastSentAt.getTime() - a.lastSentAt.getTime();
+    });
+
+    return {
+      stats: {
+        totalSent,
+        totalTracked,
+        totalOpens,
+        openRate,
+        recentOpens24h,
+      },
+      applications,
+    };
+  }),
 });
 
 function escapeHtml(value: string): string {

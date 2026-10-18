@@ -5,25 +5,653 @@
   "githubUrl": "https://github.com/jess232017/Control-Inventario-y-Ventas",
   "websiteUrl": "",
   "isPrivate": false,
+  "order": 13,
+  "kind": "PROFESSIONAL",
+  "slug": "pos-inventory",
+  "caseStudyEnabled": true,
+  "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"],
   "translations": [
     {
       "locale": "es",
       "title": "Control de Inventario y Ventas",
-      "description": "Sistema de control de inventario y ventas para una tienda de ropa."
+      "description": "Software empresarial de escritorio para punto de venta (POS) y control de inventario en tiendas de retail. Integra lectores de códigos de barras, facturación térmica, matriz de prendas por tallas y colores, arqueos de caja y reportes analíticos con DevExpress y SQL Server.",
+      "hook": "Sistema POS de Escritorio en C# & DevExpress · Control de inventario en tiempo real, facturación térmica y SQL Server",
+      "challenge": "Evitar inconsistencias de stock en ventas concurrentes de prendas por talla y color, garantizando emisión de tickets en <2 segundos y arqueos de caja exactos sin depender de internet.",
+      "approach": "Construí una solución cliente-servidor en C# con Windows Forms y controles DevExpress (XtraGrid, Ribbon, XtraReports), transacciones ACID en SQL Server y arquitectura desacoplada N-Capas.",
+      "outcome": "Punto de venta de alta velocidad, reducción a cero de discrepancias de inventario, auditoría financiera completa con DevExpress Reports y despliegue exitoso en tienda de ropa.",
+      "caseStudy": {
+        "chips": [
+          "C# / .NET",
+          "DevExpress Suite",
+          "SQL Server",
+          "Punto de Venta (POS)",
+          "Control de Inventario",
+          "XtraReports"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Desarrollador Full-Stack Desktop & Diseñador de BD"
+          },
+          {
+            "key": "target-industry",
+            "label": "Industria destino",
+            "value": "Comercio minorista y tiendas de ropa con gestión de tallas y colores"
+          },
+          {
+            "key": "desktop-stack",
+            "label": "Stack tecnológico",
+            "value": "C# (.NET) · DevExpress Controls · Windows Forms · SQL Server (T-SQL)"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repositorio",
+            "value": "Control-Inventario-y-Ventas (https://github.com/jess232017/Control-Inventario-y-Ventas)"
+          }
+        ],
+        "nextProjectSlug": "ecommerce-admin",
+        "context": "Control de Inventario y Ventas es una aplicación de escritorio diseñada para automatizar la operación comercial completa de comercios minoristas y tiendas de ropa. Resuelve la complejidad de gestionar catálogos con múltiples variantes de prendas (tallas, marcas, colores, precios diferenciados), cobro rápido en punto de venta con lector de código de barras, emisión de facturas y recibos térmicos, arqueo de turnos de caja y conciliación de inventario con reportes analíticos de alta fidelidad.",
+        "roleTitle": "Desarrollador C# / .NET & Especialista DevExpress",
+        "roleIntro": "Diseñé e implementé la arquitectura de la aplicación en C# siguiendo el patrón N-Capas (Presentación, Lógica de Negocio y Acceso a Datos). Modelé el esquema relacional en SQL Server con procedimientos almacenados transaccionales, integré la suite visual de DevExpress para crear cuadrículas interactivas y diseñé plantillas de recibos y reportes en DevExpress XtraReports.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Sistema de escritorio comercial POS para control de inventario de prendas, ventas rápidas con código de barras y facturación con DevExpress y SQL Server.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Arquitectura completa en C# .NET: diseño de la base de datos relacional, vistas enriquecidas con DevExpress XtraGrid y generador de reportes en XtraReports.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Atención al cliente en caja en menos de 2 segundos por ticket, control exacto de existencias por variantes y cuadratura precisa de turnos de caja.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "devexpress-ui-ux",
+            "title": "Lienzo de Usuario con DevExpress Controls & Ribbon",
+            "summary": "",
+            "body": "Construcción de interfaz enriquecida con RibbonBar para navegación por módulos, controles XtraGrid con agrupación dinámica de artículos, filtrado instantáneo por columnas y skins profesionales de escritorio.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "inventory-transactions",
+            "title": "Transacciones Atómicas de Inventario y Ventas",
+            "summary": "",
+            "body": "Implementación de transacciones ACID en SQL Server mediante procedimientos almacenados con control de concurrencia para descontar existencias por variante de prenda y registrar líneas de detalle en una sola operación atómica.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "xtrareports-billing",
+            "title": "Facturación Térmica y Reportes con DevExpress XtraReports",
+            "summary": "",
+            "body": "Diseño de formatos de impresión para impresoras térmicas de tickets (58mm/80mm), códigos de barras para etiquetas de prendas y reportes ejecutivos de ventas diarias con exportación a PDF y Excel.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Operación autónoma 100% offline en la terminal de punto de venta sin depender de red externa.",
+          "Tiempos de respuesta menores a 50 milisegundos en búsquedas por código de barras entre miles de registros.",
+          "Manejo estricto de permisos por turnos de cajero para evitar manipulaciones de saldo o anulaciones no autorizadas."
+        ],
+        "sections": [
+          {
+            "key": "pos-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos del Sistema",
+            "title": "Estructura Funcional de Control de Inventario y Ventas",
+            "lead": "Componentes desacoplados para agilizar la venta en mostrador y el control de existencias en almacén.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-pos-checkout",
+                "title": "Terminal Punto de Venta (POS Checkout)",
+                "summary": "Cobro ágil con lector de barras y teclado",
+                "body": "Pantalla optimizada para cobro rápido mediante escáner de códigos de barras, soporte para múltiples medios de pago (efectivo, tarjeta, crédito) y cálculo de cambio instantáneo.",
+                "value": "POS Terminal",
+                "icon": "bolt",
+                "tags": ["Punto de Venta", "C#", "Scanner"],
+                "note": ""
+              },
+              {
+                "key": "mod-inventory-matrix",
+                "title": "Matriz de Inventario por Tallas y Colores",
+                "summary": "Catálogo dimensional de prendas",
+                "body": "Gestión de artículos categorizados con matrices de tallas, colores y marcas, alertas automáticas de reposición para existencias mínimas y registro de lotes de compra.",
+                "value": "Inventario Matrix",
+                "icon": "layers",
+                "tags": ["DevExpress Grid", "Inventario", "Variantes"],
+                "note": ""
+              },
+              {
+                "key": "mod-cash-register",
+                "title": "Arqueo y Control de Turnos de Caja",
+                "summary": "Apertura, cortes parciales y cierre de jornada",
+                "body": "Control estricto de dinero en caja con fondos iniciales, registro de entradas y salidas justificadas, y reporte comparativo de ventas esperadas versus efectivo real contado.",
+                "value": "Caja & Turnos",
+                "icon": "shield",
+                "tags": ["Arqueo", "Auditoría", "Caja"],
+                "note": ""
+              },
+              {
+                "key": "mod-devexpress-reports",
+                "title": "Generador de Reportes y Facturación XtraReports",
+                "summary": "Impresión de tickets y balances ejecutivos",
+                "body": "Motor de impresión térmica para recibos de venta con corte de papel y generador de reportes contables con métricas de utilidad, prendas más vendidas y estados de cuenta de clientes.",
+                "value": "XtraReports",
+                "icon": "layout",
+                "tags": ["DevExpress", "XtraReports", "Facturación"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pos-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Estrategia de Ingeniería",
+            "title": "Decisiones Técnicas y de Arquitectura",
+            "lead": "Selección de tecnologías de escritorio para garantizar solidez operativa comercial.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-csharp-devexpress",
+                "title": "C# (.NET) y DevExpress frente a Controles WinForms Estándar",
+                "summary": "Ergonomía empresarial y rendimiento de interfaz",
+                "body": "Los controles nativos de Windows Forms carecen de capacidades avanzadas de agrupación y ordenamiento en memoria. La suite DevExpress permitió manejar cuadrículas de miles de productos con scroll suave, filtrado en tiempo de ejecución y diseño visual moderno.",
+                "value": "DevExpress UI",
+                "icon": "layout",
+                "tags": ["C#", "DevExpress", "Rendimiento"],
+                "note": ""
+              },
+              {
+                "key": "dec-stored-procedures",
+                "title": "Procedimientos Almacenados en SQL Server para Lógica Transaccional",
+                "summary": "Integridad referencial y transacciones atómicas",
+                "body": "Toda la lógica de descuento de inventario y generación de tickets se encapsuló en stored procedures de SQL Server con bloques TRY/CATCH y transacciones atómicas, previniendo ventas fantasma o discrepancias entre el recibo y el kardex.",
+                "value": "T-SQL Core",
+                "icon": "shield",
+                "tags": ["SQL Server", "Transacciones", "ACID"],
+                "note": ""
+              },
+              {
+                "key": "dec-n-layer-architecture",
+                "title": "Arquitectura en 3 Capas Desacopladas (UI, BLL, DAL)",
+                "summary": "Mantenibilidad y reutilización de componentes",
+                "body": "Separar la interfaz gráfica de la capa de reglas de negocio y de los adaptadores de datos permitió refactorizar reportes y validaciones sin tocar la lógica de base de datos ni romper la UI del cajero.",
+                "value": "N-Capas",
+                "icon": "layers",
+                "tags": ["Arquitectura", "Clean Design", "Desacople"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
       "title": "Inventory and Sales Control",
-      "description": "Inventory and sales control system for a clothing store."
+      "description": "Enterprise desktop Point of Sale (POS) and inventory control software for retail stores. Features barcode scanning, thermal receipt billing, size/color apparel matrices, cashier shift audits, and executive analytics powered by DevExpress and SQL Server.",
+      "hook": "Desktop POS System in C# & DevExpress · Real-time inventory control, thermal billing & SQL Server",
+      "challenge": "Prevent stock inconsistencies during concurrent garment sales across sizes and colors, ensuring receipt checkout in <2s and exact cash register drawer reconciliations without internet reliance.",
+      "approach": "Engineered a robust client-server solution in C# with Windows Forms and DevExpress controls (XtraGrid, Ribbon, XtraReports), atomic SQL Server transactions, and an N-Tier architecture.",
+      "outcome": "High-speed point of sale, complete elimination of inventory discrepancies, rich financial auditing with DevExpress Reports, and successful retail clothing store deployment.",
+      "caseStudy": {
+        "chips": [
+          "C# / .NET",
+          "DevExpress Suite",
+          "SQL Server",
+          "Point of Sale (POS)",
+          "Inventory Control",
+          "XtraReports"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My role",
+            "value": "Full-Stack Desktop Developer & Database Designer"
+          },
+          {
+            "key": "target-industry",
+            "label": "Target industry",
+            "value": "Retail commerce and apparel stores managing size/color matrices"
+          },
+          {
+            "key": "desktop-stack",
+            "label": "Technology stack",
+            "value": "C# (.NET) · DevExpress Controls · Windows Forms · SQL Server (T-SQL)"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "Control-Inventario-y-Ventas (https://github.com/jess232017/Control-Inventario-y-Ventas)"
+          }
+        ],
+        "nextProjectSlug": "ecommerce-admin",
+        "context": "Inventory and Sales Control is an enterprise desktop software created to automate retail sales operations and inventory workflows for clothing stores. It addresses the complexity of tracking apparel variants (sizes, brands, colors, differential pricing), rapid checkout via barcode scanners, thermal receipt and invoice printing, cashier shift reconciliations, and high-fidelity analytical reporting.",
+        "roleTitle": "C# / .NET Developer & DevExpress Specialist",
+        "roleIntro": "Architected and implemented the application in C# adopting an N-Tier structure (Presentation, Business Logic, and Data Access Layers). Designed the relational database in SQL Server using transactional stored procedures, integrated DevExpress UI components for data grids, and created customizable print templates in DevExpress XtraReports.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Commercial desktop POS system for apparel inventory control, rapid barcode sales, and thermal receipt generation with DevExpress and SQL Server.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "End-to-end development in C# .NET: relational database design, interactive views with DevExpress XtraGrid, and report generation in XtraReports.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Counter customer checkout in under 2 seconds per ticket, accurate stock tracking across garment variants, and exact cashier shift drawer balancing.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "devexpress-ui-ux",
+            "title": "User Experience with DevExpress Controls & Ribbon",
+            "summary": "",
+            "body": "Engineered responsive desktop interface featuring a RibbonBar for intuitive module navigation, XtraGrid controls with multi-column grouping and instant filtering, and clean desktop application skins.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "inventory-transactions",
+            "title": "Atomic Inventory & Sales Transactions",
+            "summary": "",
+            "body": "Implemented ACID transactions in SQL Server via stored procedures with concurrency handling to deduct item stock per variant and register receipt line items in a single atomic database operation.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "xtrareports-billing",
+            "title": "Thermal Billing & Executive Reporting with XtraReports",
+            "summary": "",
+            "body": "Designed print templates for 58mm/80mm thermal receipt printers, barcode generation for clothing labels, and executive sales audit reports with export capabilities to PDF and Excel.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "100% offline standalone operation on point-of-sale workstations without external network dependency.",
+          "Sub-50 millisecond query latency for barcode lookups across thousands of inventory records.",
+          "Strict cashier shift privilege controls to prevent unauthorized price alterations or invalid voids."
+        ],
+        "sections": [
+          {
+            "key": "pos-modules",
+            "kind": "CARDS",
+            "eyebrow": "System Modules",
+            "title": "Functional Architecture of Inventory and Sales Control",
+            "lead": "Decoupled functional modules built for swift counter transactions and accurate warehouse management.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-pos-checkout",
+                "title": "Point of Sale (POS Checkout)",
+                "summary": "Rapid barcode scanning and tender calculation",
+                "body": "Optimized checkout screen supporting barcode scanners, multiple tender types (cash, credit cards, customer store credit), and instant change calculations.",
+                "value": "POS Terminal",
+                "icon": "bolt",
+                "tags": ["Point of Sale", "C#", "Scanner"],
+                "note": ""
+              },
+              {
+                "key": "mod-inventory-matrix",
+                "title": "Apparel Inventory Matrix by Size & Color",
+                "summary": "Dimensional catalog for fashion retail",
+                "body": "Catalog management with matrix structures for sizes, colors, and brands, automated reorder thresholds for low stock, and supplier batch tracking.",
+                "value": "Inventory Matrix",
+                "icon": "layers",
+                "tags": ["DevExpress Grid", "Inventory", "Variants"],
+                "note": ""
+              },
+              {
+                "key": "mod-cash-register",
+                "title": "Cash Drawer & Shift Auditing",
+                "summary": "Opening balance, interim audits and day-end close",
+                "body": "Rigorous cash drawer tracking with starting funds, logged cash drops and payouts, and comparative reconciliation of expected vs counted cash.",
+                "value": "Cash & Shifts",
+                "icon": "shield",
+                "tags": ["Audit", "Drawer", "Cash"],
+                "note": ""
+              },
+              {
+                "key": "mod-devexpress-reports",
+                "title": "XtraReports Billing & Financial Analytics",
+                "summary": "Thermal receipt printing and executive balances",
+                "body": "Thermal printer driver integration with auto-cutter triggers and reporting engine displaying gross margins, best-selling items, and customer statements.",
+                "value": "XtraReports",
+                "icon": "layout",
+                "tags": ["DevExpress", "XtraReports", "Billing"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pos-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Engineering Strategy",
+            "title": "Technical and Architectural Decisions",
+            "lead": "Selecting specialized desktop technologies to guarantee commercial operational resilience.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-csharp-devexpress",
+                "title": "C# (.NET) and DevExpress vs Standard WinForms Controls",
+                "summary": "Enterprise ergonomics and grid performance",
+                "body": "Standard Windows Forms controls lack advanced in-memory grouping and sorting capabilities. DevExpress allowed smooth scrolling across thousands of SKUs, runtime filtering, and modern theme styling.",
+                "value": "DevExpress UI",
+                "icon": "layout",
+                "tags": ["C#", "DevExpress", "Performance"],
+                "note": ""
+              },
+              {
+                "key": "dec-stored-procedures",
+                "title": "SQL Server Stored Procedures for Transactional Integrity",
+                "summary": "Referential integrity and atomic execution",
+                "body": "All stock deductions and receipt logging were encapsulated in SQL Server stored procedures with TRY/CATCH blocks and atomic transactions, eliminating phantom inventory updates.",
+                "value": "T-SQL Core",
+                "icon": "shield",
+                "tags": ["SQL Server", "Transactions", "ACID"],
+                "note": ""
+              },
+              {
+                "key": "dec-n-layer-architecture",
+                "title": "Decoupled 3-Tier Architecture (UI, BLL, DAL)",
+                "summary": "Maintainability and modular separation",
+                "body": "Separating user interface from business rule evaluation and database data access objects made it straightforward to refactor print formats and validation rules without breaking cash checkout flows.",
+                "value": "N-Tier",
+                "icon": "layers",
+                "tags": ["Architecture", "Clean Design", "Decoupling"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
-      "title": "Inventar- und Verkaufskontrolle",
-      "description": "Inventaris- en verkoopcontrolesysteem voor een kledingwinkel."
+      "title": "Voorraad- en Verkoopbeheer",
+      "description": "Desktopsoftware voor kassa (POS) en voorraadbeheer in detailhandelszaken. Biedt barcodescanning, thermische facturatie, kledingmatrices naar maat en kleur, kassa-afsluitingen en analyses aangedreven door DevExpress en SQL Server.",
+      "hook": "Desktop POS-systeem in C# & DevExpress · Realtime voorraadbeheer, thermische facturatie & SQL Server",
+      "challenge": "Voorkom voorraadinconsistenties bij gelijktijdige verkoop van kledingvarianten (maten/kleuren) en garandeer ticketuitgifte in <2s en exacte kassa-afsluitingen zonder internetafhankelijkheid.",
+      "approach": "Ontwikkelde een robuuste client-serveroplossing in C# met Windows Forms en DevExpress-componenten (XtraGrid, Ribbon, XtraReports), atomische SQL Server-transacties en N-laags architectuur.",
+      "outcome": "Supersnel kassasysteem, volledige eliminatie van voorraaddiscrepanties, rijke financiële audits met DevExpress Reports en succesvolle implementatie in een kledingwinkel.",
+      "caseStudy": {
+        "chips": [
+          "C# / .NET",
+          "DevExpress Suite",
+          "SQL Server",
+          "Point of Sale (POS)",
+          "Voorraadbeheer",
+          "XtraReports"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Full-Stack Desktop Ontwikkelaar & Database-ontwerper"
+          },
+          {
+            "key": "target-industry",
+            "label": "Doelbranche",
+            "value": "Detailhandel en kledingwinkels met beheer van maat- en kleurmatrices"
+          },
+          {
+            "key": "desktop-stack",
+            "label": "Technologie-stack",
+            "value": "C# (.NET) · DevExpress Controls · Windows Forms · SQL Server (T-SQL)"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "Control-Inventario-y-Ventas (https://github.com/jess232017/Control-Inventario-y-Ventas)"
+          }
+        ],
+        "nextProjectSlug": "ecommerce-admin",
+        "context": "Voorraad- en Verkoopbeheer is een desktopapplicatie ontworpen om de complete commerciële bedrijfsvoering van detailhandelszaken en kledingwinkels te automatiseren. Het lost de complexiteit op van het beheren van kledingvarianten (maten, merken, kleuren, verschillende prijzen), snel afrekenen via barcodescanners, thermische ticket- en factuurprint, kassa-afsluitingen en diepgaande rapportages.",
+        "roleTitle": "C# / .NET Ontwikkelaar & DevExpress Specialist",
+        "roleIntro": "Ontwierp en implementeerde de applicatiearchitectuur in C# volgens het N-lagen patroon (Presentatie, Bedrijfslogica en Data-toegang). Modelleerde de relationele database in SQL Server met transactie-opgeslagen procedures, integreerde DevExpress voor interactieve tabellen en ontwierp rapporten in DevExpress XtraReports.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Commercieel desktop POS-systeem voor voorraadbeheer van kleding, snelle barcodeverkoop en facturatie met DevExpress en SQL Server.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Volledige ontwikkeling in C# .NET: relationeel database-ontwerp, interactieve schermen met DevExpress XtraGrid en rapporten met XtraReports.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Klantafhandeling aan de kassa in minder dan 2 seconden per ticket, exacte voorraad per variant en nauwkeurige kassa-afsluitingen.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "devexpress-ui-ux",
+            "title": "Gebruikerservaring met DevExpress Controls & Ribbon",
+            "summary": "",
+            "body": "Bouw van een rijke desktopinterface met RibbonBar voor modulaire navigatie, XtraGrid-componenten met dynamische groepering en realtime filtering, en moderne applicatiesthema's.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "inventory-transactions",
+            "title": "Atomische Voorraad- en Verkooptransacties",
+            "summary": "",
+            "body": "Implementatie van ACID-transacties in SQL Server via stored procedures om voorraad per kledingvariant af te boeken en factuurregels in één atomische databaseoperatie vast te leggen.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "xtrareports-billing",
+            "title": "Thermische Facturatie en Rapporten met XtraReports",
+            "summary": "",
+            "body": "Ontwerp van afdruksjablonen voor thermische ticketprinters (58mm/80mm), barcodegeneratie voor kledinglabels en managementrapporten met export naar PDF en Excel.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "100% offline zelfstandige werking op het kassasysteem zonder externe netwerkafhankelijkheid.",
+          "Responstijden onder 50 milliseconden bij barcodezoekopdrachten tussen duizenden artikelen.",
+          "Strikte kassarollen en bevoegdheden om ongeautoriseerde prijsaanpassingen of ongeldige annuleringen te voorkomen."
+        ],
+        "sections": [
+          {
+            "key": "pos-modules",
+            "kind": "CARDS",
+            "eyebrow": "Systeemmodules",
+            "title": "Functionele Structuur van Voorraad- en Verkoopbeheer",
+            "lead": "Ontkoppelde modules voor snelle balieverkoop en nauwkeurig magazijnbeheer.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-pos-checkout",
+                "title": "Kassaterminal (POS Checkout)",
+                "summary": "Snel afrekenen met barcodescanner",
+                "body": "Geoptimaliseerd scherm voor snelle verkoop via barcodescanners, ondersteuning voor meerdere betaalwijzen (contant, kaart, klantkrediet) en wisselgeldberekening.",
+                "value": "POS Terminal",
+                "icon": "bolt",
+                "tags": ["Kassa", "C#", "Scanner"],
+                "note": ""
+              },
+              {
+                "key": "mod-inventory-matrix",
+                "title": "Kledingmatrix naar Maten en Kleuren",
+                "summary": "Gedetailleerde catalogus voor modewinkels",
+                "body": "Beheer van artikelen met matrices voor maten, kleuren en merken, automatische waarschuwingen voor minimumvoorraden en inkoopbeheer.",
+                "value": "Voorraad Matrix",
+                "icon": "layers",
+                "tags": ["DevExpress Grid", "Voorraad", "Varianten"],
+                "note": ""
+              },
+              {
+                "key": "mod-cash-register",
+                "title": "Kassa-afsluiting en Ploegbeheer",
+                "summary": "Openingssaldo, tussentijdse tellingen en dagafsluiting",
+                "body": "Nauwkeurige geldopvolging met openingsfondsen, geregistreerde in- en uitbetalingen en vergelijkende controle van verwachte versus getelde omzet.",
+                "value": "Kassa & Beheer",
+                "icon": "shield",
+                "tags": ["Audit", "Kassa", "Geldstroom"],
+                "note": ""
+              },
+              {
+                "key": "mod-devexpress-reports",
+                "title": "XtraReports Facturatie en Financiële Rapporten",
+                "summary": "Thermisch printen en managementoverzichten",
+                "body": "Aansturing van thermische bonprinters en rapportage-engine voor winstmarges, best verkopende artikelen en klantoverzichten.",
+                "value": "XtraReports",
+                "icon": "layout",
+                "tags": ["DevExpress", "XtraReports", "Facturatie"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pos-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Technologiestrategie",
+            "title": "Technische en Architecturale Beslissingen",
+            "lead": "Selectie van desktoptechnologieën voor maximale betrouwbaarheid.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-csharp-devexpress",
+                "title": "C# (.NET) en DevExpress versus Standaard WinForms",
+                "summary": "Zakelijke ergonomie en tabelprestaties",
+                "body": "Standaard Windows Forms missen geavanceerde groeperings- en sorteeropties. DevExpress maakte het mogelijk duizenden artikelen soepel te scrollen met dynamische filtering en moderne styling.",
+                "value": "DevExpress UI",
+                "icon": "layout",
+                "tags": ["C#", "DevExpress", "Prestaties"],
+                "note": ""
+              },
+              {
+                "key": "dec-stored-procedures",
+                "title": "SQL Server Stored Procedures voor Transactie-integriteit",
+                "summary": "Referentiële integriteit en atomische operaties",
+                "body": "Alle voorraadafboekingen en kassatransacties zijn ingekapseld in SQL Server stored procedures met TRY/CATCH-blokken en atomische transacties.",
+                "value": "T-SQL Core",
+                "icon": "shield",
+                "tags": ["SQL Server", "Transacties", "ACID"],
+                "note": ""
+              },
+              {
+                "key": "dec-n-layer-architecture",
+                "title": "Ontkoppelde 3-Lagen Architectuur (UI, BLL, DAL)",
+                "summary": "Onderhoudbaarheid en herbruikbaarheid",
+                "body": "Het scheiden van de gebruikersinterface van de bedrijfslogica en database-adapters maakte het eenvoudig afdrukformaten en validaties bij te werken zonder de kassa te verstoren.",
+                "value": "N-Lagen",
+                "icon": "layers",
+                "tags": ["Architectuur", "Clean Design", "Ontkoppeling"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
-  ],
-  "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"],
-  "order": 13,
-  "kind": "PROFESSIONAL",
-  "slug": "pos-inventory"
+  ]
 }

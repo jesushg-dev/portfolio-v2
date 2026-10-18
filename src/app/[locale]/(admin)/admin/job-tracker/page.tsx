@@ -4,7 +4,6 @@ import type { Locale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { Building2, Plus } from "lucide-react";
 
-import { UpcomingEventsCalendar } from "@/features/job-tracker/components/upcoming-events-calendar";
 import { JobTrackerTabs } from "@/features/job-tracker/components/job-tracker-tabs";
 import {
   getJobTrackerPageData,
@@ -52,7 +51,7 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
 
   return (
     <div>
-      <div className="mb-6 flex flex-col gap-6">
+      <div className="mb-4 flex flex-col gap-4">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">
@@ -79,12 +78,6 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
             </Link>
           </div>
         </div>
-
-        <UpcomingEventsCalendar
-          initialEvents={pageData.upcomingEvents}
-          locale={locale as Locale}
-          variant="sidebar"
-        />
       </div>
 
       <JobTrackerTabs
@@ -93,6 +86,8 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
         initialCompanies={companiesData.data}
         companiesPageCount={companiesData.pageCount}
         companiesTotalCount={companiesData.totalCount}
+        initialUpcomingEvents={pageData.upcomingEvents}
+        locale={locale as Locale}
       />
     </div>
   );

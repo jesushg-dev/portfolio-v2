@@ -422,4 +422,65 @@ describe("jobTrackerAdminRouter", () => {
       }
     }
   });
+
+  it("aggregates email tracking data for getEmailTrackingHub", async () => {
+    const sentDate = new Date("2026-08-01T10:00:00Z");
+    const openDate = new Date("2026-08-01T12:00:00Z");
+    const db = {
+      applicationEmail: {
+        findMany: jest.fn().mockResolvedValue([
+          {
+            id: "email-1",
+            applicationId: "app-1",
+            recipientEmail: "hiring@acme.com",
+            subject: "Application for Frontend Lead",
+            attachmentName: "CV.pdf",
+            trackingEnabled: true,
+            openCount: 2,
+            firstOpenedAt: openDate,
+            lastOpenedAt: openDate,
+            sentAt: sentDate,
+            application: {
+              id: "app-1",
+              position: "Frontend Lead",
+              status: "APPLIED",
+              appliedDate: sentDate,
+              company: {
+                id: "co-1",
+                name: "Acme",
+                location: "Remote",
+              },
+            },
+            opens: [
+              {
+                id: "open-1",
+                openedAt: openDate,
+                userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                ipAddress: "192.168.1.1",
+              },
+            ],
+          },
+        ]),
+      },
+      applicationEmailOpen: {
+        count: jest.fn().mockResolvedValue(1),
+      },
+    };
+
+    const ctx = createTrpcTestContext({ db });
+    const caller = createRouterCaller(jobTrackerAdminRouter, ctx);
+    const result = await caller.getEmailTrackingHub();
+
+    expect(result.stats).toEqual({
+      totalSent: 1,
+      totalTracked: 1,
+      totalOpens: 2,
+      openRate: 100,
+      recentOpens24h: 1,
+    });
+    expect(result.applications).toHaveLength(1);
+    expect(result.applications[0]?.position).toBe("Frontend Lead");
+    expect(result.applications[0]?.company.name).toBe("Acme");
+    expect(result.applications[0]?.totalOpens).toBe(2);
+  });
 });

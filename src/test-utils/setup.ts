@@ -14,6 +14,22 @@ if (typeof document !== "undefined" && !document.elementFromPoint) {
   document.elementFromPoint = () => null;
 }
 
+if (typeof window !== "undefined" && !window.matchMedia) {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: jest.fn().mockImplementation((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
+}
+
 delete process.env.TURNSTILE_SECRET;
 
 if (typeof globalThis.Response === "undefined") {

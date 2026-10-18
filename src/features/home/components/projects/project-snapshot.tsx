@@ -1,12 +1,87 @@
+"use client";
+
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ExternalLink, Lock } from "lucide-react";
 import { AiFillGithub } from "react-icons/ai";
+import { LuShoppingBag, LuSmartphone, LuStore, LuTruck } from "react-icons/lu";
+import type { IconType } from "react-icons/lib";
 
-import { Button } from "@/components/ui/button";
+import Tab from "@/components/custom-ui/custom-tab";
+import TabItem from "@/components/custom-ui/custom-tab/tab-item";
 import { MediaImage } from "@/components/shared/media-image";
+import { cn } from "@/lib/utils";
 
 import { SkillChip } from "./case-study-primitives";
 import type { ProjectCaseStudyViewProps } from "./case-study-view.types";
+
+interface ProjectGalleryItem {
+  title: Record<string, string>;
+  description: Record<string, string>;
+  image: string;
+  icon: IconType;
+}
+
+const PROJECT_GALLERIES: Record<string, ProjectGalleryItem[]> = {
+  "walmart-centroamerica": [
+    {
+      title: {
+        es: "Multi-Marca",
+        en: "Multi-Banner",
+        nl: "Multi-Format",
+      },
+      description: {
+        es: "Walmart, Maxi Palí y Masxmenos",
+        en: "Walmart, Maxi Palí & Masxmenos",
+        nl: "Walmart, Maxi Palí en Masxmenos",
+      },
+      image: "/projects/walmart-centroamerica.jpg",
+      icon: LuSmartphone,
+    },
+    {
+      title: {
+        es: "Maxi Palí",
+        en: "Maxi Palí",
+        nl: "Maxi Palí",
+      },
+      description: {
+        es: "Formato bodega y ahorro en grande",
+        en: "Discount bodega & bulk savings",
+        nl: "Discountbodega & bulkbesparingen",
+      },
+      image: "/projects/walmart-maxipali.jpg",
+      icon: LuShoppingBag,
+    },
+    {
+      title: {
+        es: "Masxmenos",
+        en: "Masxmenos",
+        nl: "Masxmenos",
+      },
+      description: {
+        es: "Supermercado premium y frescos",
+        en: "Supermarket & fresh groceries",
+        nl: "Supermarkt & verswaren",
+      },
+      image: "/projects/walmart-masxmenos.jpg",
+      icon: LuStore,
+    },
+    {
+      title: {
+        es: "Checkout & Pickup",
+        en: "Checkout & Pickup",
+        nl: "Checkout & Pickup",
+      },
+      description: {
+        es: "Facturación electrónica y entrega",
+        en: "Electronic billing & store pickup",
+        nl: "Elektronische facturatie & afhalen",
+      },
+      image: "/projects/walmart-checkout.jpg",
+      icon: LuTruck,
+    },
+  ],
+};
 
 function formatDate(value: Date | string | null, locale: string) {
   if (!value) return "—";
@@ -27,32 +102,30 @@ function ProjectActions({
   return (
     <div className="flex flex-wrap gap-2">
       {project.websiteUrl ? (
-        <Button
-          variant="outline"
-          size="sm"
-          render={
-            <a href={project.websiteUrl} target="_blank" rel="noreferrer" />
-          }
+        <a
+          href={project.websiteUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="bg-card hover:bg-muted/80 text-foreground hover:text-primary border-border inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-colors"
         >
-          <ExternalLink className="size-3.5" aria-hidden="true" />
+          <ExternalLink className="text-primary size-3.5" aria-hidden="true" />
           <span>{t("liveSite")}</span>
-        </Button>
+        </a>
       ) : null}
       {!project.isPrivate && project.githubUrl ? (
-        <Button
-          variant="outline"
-          size="sm"
-          render={
-            <a href={project.githubUrl} target="_blank" rel="noreferrer" />
-          }
+        <a
+          href={project.githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="bg-card hover:bg-muted/80 text-foreground hover:text-primary border-border inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-colors"
         >
-          <AiFillGithub className="size-3.5" aria-hidden="true" />
+          <AiFillGithub className="text-primary size-3.5" aria-hidden="true" />
           <span>{t("viewSource")}</span>
-        </Button>
+        </a>
       ) : project.isPrivate ? (
         <span className="bg-card border-border text-muted-foreground inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium">
           <Lock className="size-3.5" aria-hidden="true" />
-          {t("privateRepository")}
+          <span>{t("privateRepository")}</span>
         </span>
       ) : null}
     </div>
@@ -67,6 +140,17 @@ export default function ProjectSnapshot({
   const locale = useLocale();
   const t = useTranslations("main.portfolio.caseStudy");
   const tPortfolio = useTranslations("main.portfolio");
+  const [activeScreenIndex, setActiveScreenIndex] = useState(0);
+
+  const gallery = project.slug ? PROJECT_GALLERIES[project.slug] : undefined;
+  const currentImage = gallery?.[activeScreenIndex]
+    ? gallery[activeScreenIndex].image
+    : project.image;
+  const currentTitle = gallery?.[activeScreenIndex]
+    ? (gallery[activeScreenIndex].title[locale] ??
+      gallery[activeScreenIndex].title.es)
+    : project.title;
+
   const projectTypes: Record<string, string> = {
     FRONTEND: t("projectTypes.FRONTEND"),
     BACKEND: t("projectTypes.BACKEND"),
@@ -115,17 +199,41 @@ export default function ProjectSnapshot({
       <div
         data-case-study-card
         data-case-study-preview
-        className="b-card-glow bg-card border-border mt-10 rounded-4xl border p-3 shadow-[0_1.875rem_3.75rem_-1.875rem_rgba(15,23,42,0.35)]"
+        className="b-card-glow bg-card border-border mt-10 w-full max-w-full min-w-0 overflow-hidden rounded-3xl border p-2 shadow-[0_1.875rem_3.75rem_-1.875rem_rgba(15,23,42,0.35)] sm:rounded-4xl sm:p-3"
       >
-        <div className="border-border overflow-hidden rounded-3xl border">
-          <div className="bg-muted flex items-center gap-1.5 px-4 py-3">
-            <span className="bg-muted-foreground/30 size-2.5 rounded-full" />
-            <span className="bg-muted-foreground/30 size-2.5 rounded-full" />
-            <span className="bg-muted-foreground/30 size-2.5 rounded-full" />
-            <span className="bg-background/80 ml-3 h-4 max-w-64 flex-1 rounded" />
+        {gallery && gallery.length > 1 ? (
+          <div className="mb-3 px-1">
+            <Tab
+              minimal
+              currentTab={activeScreenIndex}
+              setCurrentTab={setActiveScreenIndex}
+              ariaLabel="Screens Gallery"
+              tabId="project-screens"
+            >
+              {gallery.map((item, idx) => (
+                <TabItem
+                  key={item.image}
+                  index={idx}
+                  icon={item.icon}
+                  title={item.title[locale] ?? item.title.es}
+                  description={item.description[locale] ?? item.description.es}
+                />
+              ))}
+            </Tab>
           </div>
-          <div className="bg-muted relative aspect-[2/1]">
-            {/* VIS fallback — always rendered underneath, exactly as the HTML cover() function does */}
+        ) : null}
+
+        <div className="border-border w-full max-w-full min-w-0 overflow-hidden rounded-2xl border sm:rounded-3xl">
+          <div className="bg-muted flex items-center gap-1.5 px-3 py-2.5 sm:px-4 sm:py-3">
+            <span className="bg-muted-foreground/30 size-2 rounded-full sm:size-2.5" />
+            <span className="bg-muted-foreground/30 size-2 rounded-full sm:size-2.5" />
+            <span className="bg-muted-foreground/30 size-2 rounded-full sm:size-2.5" />
+            <span className="bg-background/80 text-muted-foreground ml-2 flex h-4 max-w-[10rem] flex-1 items-center truncate rounded px-2 text-[0.6875rem] sm:ml-3 sm:max-w-64">
+              {currentTitle}
+            </span>
+          </div>
+          <div className="bg-muted relative aspect-[2/1] w-full max-w-full min-w-0 overflow-hidden">
+            {/* VIS fallback — always rendered underneath */}
             <div
               className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950"
               aria-hidden="true"
@@ -145,24 +253,78 @@ export default function ProjectSnapshot({
               </div>
               <div className="absolute -right-12 -bottom-12 h-48 w-48 rounded-full border border-indigo-400/40" />
             </div>
-            {/* Real image on top — if it fails to load the VIS remains visible */}
-            {project.image ? (
+            {/* Active image */}
+            {currentImage ? (
               <MediaImage
-                src={project.image}
-                alt={`${project.title} preview`}
+                key={currentImage}
+                src={currentImage}
+                alt={
+                  gallery?.[activeScreenIndex]
+                    ? `${project.title} - ${currentTitle}`
+                    : `${project.title} preview`
+                }
                 fill
                 sizes="(max-width: 768px) 100vw, 1152px"
                 loading="eager"
-                className="object-cover object-top"
+                className="object-cover object-center transition-opacity duration-300"
               />
             ) : null}
           </div>
         </div>
+
+        {/* Multi-screen interactive thumbnails */}
+        {gallery && gallery.length > 1 ? (
+          <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            {gallery.map((item, idx) => {
+              const isSelected = activeScreenIndex === idx;
+              const title = item.title[locale] ?? item.title.es;
+              const description =
+                item.description[locale] ?? item.description.es;
+              return (
+                <button
+                  key={item.image}
+                  type="button"
+                  onClick={() => setActiveScreenIndex(idx)}
+                  className={cn(
+                    "group relative flex flex-col overflow-hidden rounded-2xl border p-1 text-left transition-all",
+                    isSelected
+                      ? "border-primary bg-primary/10 ring-primary/40 shadow-sm ring-1"
+                      : "border-border hover:border-primary/40 bg-card hover:bg-muted/40",
+                  )}
+                >
+                  <div className="bg-muted relative aspect-[2/1] w-full overflow-hidden rounded-xl">
+                    <MediaImage
+                      src={item.image}
+                      alt={title}
+                      fill
+                      sizes="(max-width: 640px) 50vw, 25vw"
+                      className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="min-w-0 p-1.5">
+                    <p
+                      className={cn(
+                        "truncate text-xs leading-tight font-bold",
+                        isSelected ? "text-primary" : "text-foreground",
+                      )}
+                    >
+                      {title}
+                    </p>
+                    <p className="text-muted-foreground mt-0.5 truncate text-[0.6875rem]">
+                      {description}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
+
       <div
         data-case-study-card
         data-case-study-facts
-        className="b-card-glow bg-card border-border mt-5 rounded-4xl border p-6 md:p-7"
+        className="b-card-glow bg-card border-border mt-5 w-full max-w-full min-w-0 overflow-hidden rounded-3xl border p-4 sm:rounded-4xl sm:p-6 md:p-7"
       >
         <dl className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {facts.map((fact) => (

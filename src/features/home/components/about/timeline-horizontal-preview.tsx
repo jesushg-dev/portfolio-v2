@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 
-import { Link } from "@/i18n/routing";
+import { LinkPreview } from "@/components/ui/link-preview";
 import {
   Tooltip,
   TooltipContent,
@@ -180,8 +180,8 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
 
       {hasItems ? (
         <div className="flex justify-center">
-          <Link
-            href="/timeline"
+          <LinkPreview
+            url="/timeline"
             className="group text-primary hover:text-primary/80 inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold transition-colors"
           >
             <span>{t("viewAll")}</span>
@@ -189,7 +189,7 @@ export const TimelineHorizontalPreview: FC<TimelineHorizontalPreviewProps> = ({
               className="size-4 transition-transform group-hover:translate-x-1"
               aria-hidden="true"
             />
-          </Link>
+          </LinkPreview>
         </div>
       ) : null}
     </div>

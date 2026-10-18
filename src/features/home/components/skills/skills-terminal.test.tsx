@@ -13,6 +13,7 @@ jest.mock("next-intl", () => ({
       if (typeof params?.query !== "undefined") return ` for "${params.query}"`;
       return key;
     },
+  useLocale: () => "en",
 }));
 
 // Mock routing Link

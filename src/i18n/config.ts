@@ -58,6 +58,11 @@ export const pathnames = {
     es: "/certificados/ciberseguridad",
     nl: "/certificaten/cyberveiligheid",
   },
+  "/certificates/devops": {
+    en: "/certificates/devops",
+    es: "/certificados/devops",
+    nl: "/certificaten/devops",
+  },
   "/certificates/softskills": {
     en: "/certificates/softskills",
     es: "/certificados/habilidades",

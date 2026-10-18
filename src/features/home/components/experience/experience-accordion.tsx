@@ -9,7 +9,7 @@ import {
   ChevronDownIcon,
   TrendingUpIcon,
 } from "lucide-react";
-import { Link } from "@/i18n/routing";
+import { LinkPreview } from "@/components/ui/link-preview";
 import { useTranslations } from "next-intl";
 import { usePublicCvVisible } from "@/components/app-layout/public-cv-visible";
 import { cn } from "@/lib/utils";
@@ -353,8 +353,8 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
       <div className="mt-12 flex flex-col items-center justify-center gap-2 text-center sm:mt-14">
         <p className="text-muted-foreground text-sm">{showingRecentLabel}</p>
         {showCvLink ? (
-          <Link
-            href="/curriculum-vitae"
+          <LinkPreview
+            url="/curriculum-vitae"
             className="group text-primary hover:text-primary/80 inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold transition-colors"
           >
             <span>{viewAllLabel}</span>
@@ -362,7 +362,7 @@ export function ExperienceAccordion({ experiences, viewAllLabel }: Props) {
               className="size-4 transition-transform group-hover:translate-x-1"
               aria-hidden="true"
             />
-          </Link>
+          </LinkPreview>
         ) : null}
       </div>
     </div>

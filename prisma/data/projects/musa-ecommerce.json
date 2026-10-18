@@ -1,37 +1,676 @@
 {
   "key": "MusaEcommerce",
-  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/musa-client_blxhyy",
+  "image": "/projects/musa.jpg",
   "type": "FRONTEND",
   "githubUrl": "musa-client_blxhyy",
-  "websiteUrl": "",
+  "websiteUrl": "https://musa.markets/",
   "isPrivate": true,
   "translations": [
     {
       "locale": "es",
       "title": "Musa Ecommerce",
-      "description": "Plataforma B2C e-commerce para productos perecederos con control de inventario en tiempo real.",
-      "hook": "99.9% precisión de stock · -35% latencia de respuesta",
+      "description": "Plataforma de comercio electrónico B2C orientada a la venta y distribución de productos agrícolas perecederos. Construida en Next.js con renderizado híbrido (SSR/ISR), sincronización de existencias en tiempo real, geolocalización de entregas y checkout optimizado.",
+      "hook": "E-Commerce B2C en Next.js & React · Sincronización de inventario en tiempo real · Entrega geolocalizada de perecederos",
       "challenge": "El negocio requería un canal digital de alta disponibilidad capaz de gestionar inventario de alta rotación (perecederos), reglas por categoría y procesos de pago rápidos sin sobrecargar la infraestructura.",
       "approach": "Diseñé la arquitectura frontend con Next.js, TypeScript y Tailwind CSS, integrando microservicios internos GraphQL/Nest.js. Implementé optimizaciones de renderizado y validaciones estrictas en el cliente.",
-      "outcome": "Lanzamiento exitoso del canal digital con 99.9% de precisión en sincronización de stock y una reducción del 35% en tiempos de respuesta frente al sistema heredado."
+      "outcome": "Lanzamiento exitoso del canal digital con 99.9% de precisión en sincronización de stock y una reducción del 35% en tiempos de respuesta frente al sistema heredado.",
+      "caseStudy": {
+        "chips": [
+          "B2C Marketplace",
+          "E-commerce",
+          "En producción",
+          "Next.js & Tailwind"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Arquitecto y Desarrollador Frontend"
+          },
+          {
+            "key": "scale",
+            "label": "Escala y catálogo",
+            "value": "Catálogo de perecederos y abarrotes con actualización en tiempo real"
+          },
+          {
+            "key": "impact",
+            "label": "Impacto operativo",
+            "value": "99.9% precisión de inventario · -35% latencia de respuesta"
+          },
+          {
+            "key": "client",
+            "label": "Plataforma comercial",
+            "value": "Musa Markets (https://musa.markets)"
+          }
+        ],
+        "nextProjectSlug": "musa-admin",
+        "context": "Musa Markets (https://musa.markets/) es un marketplace y supermercado digital orientado a productos frescos, perecederos y alimentos de alta demanda. La plataforma requería una experiencia de compra ágil, amigable y con visualización transparente de precios, ofertas del día y estado de inventario para compradores residenciales y minoristas.",
+        "roleTitle": "Desarrollador Frontend Senior",
+        "roleIntro": "Lideré el diseño y construcción de la tienda digital en Next.js, TypeScript y Tailwind CSS, integrando microservicios internos GraphQL para sincronizar precios y disponibilidad en milisegundos.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Plataforma digital e-commerce para compras de supermercado y perecederos con navegación por departamentos y checkout en línea.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollo frontend integral: catálogo, carrito reactivo, pasarelas de pago y diseño responsive optimizado para móviles.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "99.9% de precisión en stock sincronizado y -35% de latencia frente a sistemas web tradicionales.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "catalog-engine",
+            "title": "Catálogo interactivo y navegación por categorías",
+            "summary": "",
+            "body": "Construí componentes de cuadrícula de productos con renderizado optimizado, badges de descuento y filtros rápidos.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cart-reactive",
+            "title": "Carrito de compras reactivo y persistencia local",
+            "summary": "",
+            "body": "Gestión de estado de canasta con actualización instantánea de subtotales, cálculo de cargos de envío y soporte offline.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "performance",
+            "title": "Optimización de Core Web Vitals",
+            "summary": "",
+            "body": "Compresión adaptativa de imágenes WebP, precarga inteligente de rutas y Server Components para lograr navegación instantánea.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Visualización fidedigna de inventario perecedero con rotación diaria",
+          "Desempeño óptimo en dispositivos móviles con redes celulares 3G/4G",
+          "Integración desacoplada con el backend administrativo y GraphQL"
+        ],
+        "sections": [
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Pantallas y Módulos",
+            "title": "Experiencia de Compra Digital Musa",
+            "lead": "Módulos diseñados para maximizar la conversión y facilitar la reposición rápida de víveres.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-marketplace",
+                "title": "Marketplace y Portal Principal Musa",
+                "summary": "Catálogo dinámico de alimentos y promociones destacadas",
+                "body": "Interfaz web optimizada para navegación rápida, carrusel de productos de temporada y ofertas del día con alta conversión.",
+                "value": "Marketplace B2C",
+                "icon": "layout",
+                "tags": ["Next.js", "Tailwind CSS", "Responsive"],
+                "note": "/projects/musa.jpg"
+              },
+              {
+                "key": "screen-catalog",
+                "title": "Catálogo por Pasillos y Frescos",
+                "summary": "Visualización clara de precios y departamentos",
+                "body": "Cuadrícula estructurada por categorías de frutas, verduras, despensa y abarrotes con actualización en tiempo real.",
+                "value": "Filtros por Categoría",
+                "icon": "case",
+                "tags": ["Categorías", "Perecederos", "Filtros"],
+                "note": "/projects/musa-catalog.jpg"
+              },
+              {
+                "key": "screen-store",
+                "title": "Tiendas Asociadas y Ecosistema Multi-Vendor",
+                "summary": "Perfiles individuales por sucursal y surtido específico",
+                "body": "Páginas dedicadas para cada comercio y bodega asociada, permitiendo a los clientes comprar directamente en sus locales preferidos.",
+                "value": "Multi-Vendor",
+                "icon": "globe",
+                "tags": ["Tiendas", "Multi-Vendor", "Surtido Local"],
+                "note": "/projects/musa-store.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Experiencia Móvil y Carrito Reactivo",
+                "summary": "Compra ágil desde smartphones en redes 3G y 4G",
+                "body": "Flujo de compra optimizado para pantallas táctiles con adición en 1 clic y cálculo en milisegundos de costos de envío.",
+                "value": "1-Click Add",
+                "icon": "gauge",
+                "tags": ["Mobile First", "Carrito Reactivo", "UX Ágil"],
+                "note": "/projects/musa-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "fulfillment-process",
+            "kind": "STEPS",
+            "eyebrow": "Flujo de Compra",
+            "title": "Ciclo de Pedido y Entrega en Musa Markets",
+            "lead": "Pasos del comprador desde el descubrimiento de productos hasta la recepción del pedido.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-browse",
+                "title": "1. Exploración y portada del Marketplace",
+                "summary": "Descubrimiento ágil de comercios y ofertas destacadas",
+                "body": "El cliente explora el portal web responsivo, visualiza promociones del día y selecciona su comercio de proximidad.",
+                "value": "Catálogo Ágil",
+                "icon": "layout",
+                "tags": ["Marketplace", "Ofertas"],
+                "note": "/projects/musa.jpg"
+              },
+              {
+                "key": "step-catalog",
+                "title": "2. Selección por pasillo y productos frescos",
+                "summary": "Navegación facetada con precios por kilogramo o unidad",
+                "body": "Búsqueda por categorías de perecederos y despensa con actualización en tiempo real de disponibilidad.",
+                "value": "Precios Claros",
+                "icon": "case",
+                "tags": ["Pasillos", "Perecederos"],
+                "note": "/projects/musa-catalog.jpg"
+              },
+              {
+                "key": "step-store",
+                "title": "3. Surtido en tiendas asociadas",
+                "summary": "Consolidación de inventario con bodegas locales",
+                "body": "El motor multi-vendor asigna los productos a la sucursal más cercana para optimizar tiempos de despacho.",
+                "value": "Multi-Vendor",
+                "icon": "globe",
+                "tags": ["Multi-Vendor", "Stock Local"],
+                "note": "/projects/musa-store.jpg"
+              },
+              {
+                "key": "step-mobile-checkout",
+                "title": "4. Carrito reactivo y despacho móvil",
+                "summary": "Validación de existencias y agendamiento de entrega",
+                "body": "El cliente confirma el pedido desde su smartphone con 99.9% de precisión en stock y cálculo automático de ruta.",
+                "value": "99.9% Precisión",
+                "icon": "gauge",
+                "tags": ["Mobile Checkout", "Delivery"],
+                "note": "/projects/musa-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
       "title": "Musa Ecommerce",
-      "description": "B2C e-commerce platform for perishable goods with real-time inventory control.",
-      "hook": "99.9% inventory sync accuracy · 35% latency reduction",
+      "description": "B2C e-commerce storefront for selling and distributing fresh agricultural and perishable products. Built in Next.js with hybrid rendering (SSR/ISR), real-time stock synchronization, delivery zone routing, and frictionless mobile-first checkout.",
+      "hook": "B2C E-Commerce in Next.js & React · Real-time inventory synchronization · Geolocation-based delivery for perishables",
       "challenge": "The business required a high-availability digital channel to handle fast-rotating perishable inventory, category-based rules, and frictionless checkout flows under high traffic.",
       "approach": "Architected the frontend using Next.js, TypeScript, and Tailwind CSS, integrating internal GraphQL/Nest.js microservices. Implemented client-side performance optimizations and strict data validation.",
-      "outcome": "Successful launch of the online channel with 99.9% inventory sync accuracy and a 35% reduction in response latencies compared to the legacy system."
+      "outcome": "Successful launch of the online channel with 99.9% inventory sync accuracy and a 35% reduction in response latencies compared to the legacy system.",
+      "caseStudy": {
+        "chips": [
+          "B2C Marketplace",
+          "E-commerce",
+          "Production",
+          "Next.js & Tailwind"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My Role",
+            "value": "Frontend Architect & Developer"
+          },
+          {
+            "key": "scale",
+            "label": "Scale & Catalog",
+            "value": "Perishables and groceries catalog with real-time stock updates"
+          },
+          {
+            "key": "impact",
+            "label": "Operational Impact",
+            "value": "99.9% stock sync accuracy · 35% latency reduction"
+          },
+          {
+            "key": "client",
+            "label": "E-commerce Platform",
+            "value": "Musa Markets (https://musa.markets)"
+          }
+        ],
+        "nextProjectSlug": "musa-admin",
+        "context": "Musa Markets (https://musa.markets/) is an online marketplace dedicated to fresh produce, perishable groceries, and everyday household essentials. The platform demanded a responsive, intuitive shopping journey with transparent pricing, daily discounts, and real-time inventory visibility.",
+        "roleTitle": "Senior Frontend Engineer",
+        "roleIntro": "Led frontend architecture and implementation using Next.js, TypeScript, and Tailwind CSS, integrating internal GraphQL microservices for millisecond-fast price and stock updates.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Digital marketplace and e-commerce web platform for fresh grocery orders with aisle navigation and online checkout.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My Role",
+            "summary": "",
+            "body": "Complete frontend engineering: dynamic catalog, reactive cart state, checkout flows, and mobile responsiveness.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "99.9% inventory sync accuracy and a 35% reduction in API response latency compared to traditional systems.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "catalog-engine",
+            "title": "Interactive catalog and aisle browsing",
+            "summary": "",
+            "body": "Engineered high-performance product grids with optimized image delivery, discount badges, and instant search.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cart-reactive",
+            "title": "Reactive cart and local persistence",
+            "summary": "",
+            "body": "Client-side cart state management with real-time subtotal computation, delivery fee handling, and offline resilience.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "performance",
+            "title": "Core Web Vitals optimization",
+            "summary": "",
+            "body": "Adaptive WebP image compression, route prefetching, and Server Components for instant navigational feedback.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Reliable real-time stock sync for perishable items with daily inventory turnover",
+          "Smooth performance on mid-tier mobile smartphones over 3G/4G cellular connections",
+          "Decoupled microservice architecture integrating GraphQL and admin management"
+        ],
+        "sections": [
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Key Screens & Modules",
+            "title": "Musa Digital Shopping Experience",
+            "lead": "Modules engineered to maximize conversion and streamline online grocery orders.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-marketplace",
+                "title": "Musa Marketplace & Web Storefront",
+                "summary": "Dynamic groceries catalog and promotional highlights",
+                "body": "Web storefront optimized for rapid discovery, seasonal hero banners, and high-conversion daily deals.",
+                "value": "B2C Marketplace",
+                "icon": "layout",
+                "tags": ["Next.js", "Tailwind CSS", "Responsive"],
+                "note": "/projects/musa.jpg"
+              },
+              {
+                "key": "screen-catalog",
+                "title": "Aisle Browsing & Fresh Produce",
+                "summary": "Clear price breakdown and departmental navigation",
+                "body": "Structured catalog layout organized across fresh produce, pantry goods, and household staples with live pricing.",
+                "value": "Aisle Filters",
+                "icon": "case",
+                "tags": ["Categories", "Perishables", "Filtering"],
+                "note": "/projects/musa-catalog.jpg"
+              },
+              {
+                "key": "screen-store",
+                "title": "Partner Stores & Multi-Vendor Hub",
+                "summary": "Dedicated storefronts for local merchants and bodegas",
+                "body": "Independent branch profiles and curated inventories allowing customers to order directly from their preferred local vendors.",
+                "value": "Multi-Vendor Hub",
+                "icon": "globe",
+                "tags": ["Stores", "Multi-Vendor", "Local Inventory"],
+                "note": "/projects/musa-store.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Mobile Shopping & Reactive Cart",
+                "summary": "Frictionless ordering over 3G/4G cellular connections",
+                "body": "Touch-first shopping experience with 1-click cart addition and instant delivery fee computation.",
+                "value": "1-Click Add",
+                "icon": "gauge",
+                "tags": ["Mobile First", "Reactive Cart", "Smooth UX"],
+                "note": "/projects/musa-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "fulfillment-process",
+            "kind": "STEPS",
+            "eyebrow": "Purchasing Journey",
+            "title": "Order Cycle & Delivery in Musa Markets",
+            "lead": "End-to-end customer journey from product discovery to doorstep delivery.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-browse",
+                "title": "1. Marketplace discovery & storefront",
+                "summary": "Intuitive browsing of merchants and daily featured specials",
+                "body": "Customers browse the responsive storefront, explore seasonal promotions, and choose local vendors.",
+                "value": "Quick Discovery",
+                "icon": "layout",
+                "tags": ["Marketplace", "Deals"],
+                "note": "/projects/musa.jpg"
+              },
+              {
+                "key": "step-catalog",
+                "title": "2. Aisle navigation & fresh perishables",
+                "summary": "Faceted aisle search with live pricing per kg or unit",
+                "body": "Product search across grocery categories with real-time inventory updates and clear savings badges.",
+                "value": "Live Pricing",
+                "icon": "case",
+                "tags": ["Aisles", "Produce"],
+                "note": "/projects/musa-catalog.jpg"
+              },
+              {
+                "key": "step-store",
+                "title": "3. Local partner store fulfillment",
+                "summary": "Order routing to nearest neighborhood branch",
+                "body": "Multi-vendor fulfillment engine maps items to the closest merchant hub to accelerate dispatch times.",
+                "value": "Multi-Vendor Hub",
+                "icon": "globe",
+                "tags": ["Multi-Vendor", "Local Inventory"],
+                "note": "/projects/musa-store.jpg"
+              },
+              {
+                "key": "step-mobile-checkout",
+                "title": "4. Reactive mobile cart & delivery dispatch",
+                "summary": "Real-time inventory verification and automated checkout",
+                "body": "Shoppers finalize orders seamlessly on mobile with 99.9% inventory sync accuracy and automated delivery tracking.",
+                "value": "99.9% Accuracy",
+                "icon": "gauge",
+                "tags": ["Mobile Checkout", "Delivery"],
+                "note": "/projects/musa-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
       "title": "Musa Ecommerce",
-      "description": "B2C e-commerceplatform voor bederfelijke goederen met realtime voorraadbeheer.",
-      "hook": "99,9% voorraadnauwkeurigheid · 35% snellere responstijd",
+      "description": "B2C e-commerceplatform voor de verkoop en distributie van verse agrarische producten. Gebouwd in Next.js met hybride rendering (SSR/ISR), realtime voorraadsynchronisatie, bezorgzone-routering en een mobielvriendelijke checkout.",
+      "hook": "B2C E-Commerce in Next.js & React · Realtime voorraadsynchronisatie · Geolocatie-levering voor bederfelijke waar",
       "challenge": "Het bedrijf had een hoog-beschikbaar digitaal kanaal nodig voor snel roterende voorraad, categorie-regels en snelle checkout-processen.",
       "approach": "Frontend-architectuur ontworpen met Next.js, TypeScript en Tailwind CSS, geïntegreerd met interne GraphQL/Nest.js microservices. Prestatie-optimalisaties en strikte validaties geïmplementeerd.",
-      "outcome": "Succesvolle lancering van het digitale kanaal met 99,9% voorraadnauwkeurigheid en 35% snellere responstijden vergeleken met het oude systeem."
+      "outcome": "Succesvolle lancering van het digitale kanaal met 99,9% voorraadnauwkeurigheid en 35% snellere responstijden vergeleken met het oude systeem.",
+      "caseStudy": {
+        "chips": [
+          "B2C Marketplace",
+          "E-commerce",
+          "In productie",
+          "Next.js & Tailwind"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Frontend Architect & Ontwikkelaar"
+          },
+          {
+            "key": "scale",
+            "label": "Schaal & Catalogus",
+            "value": "Catalogus voor verswaren en kruidenierswaren met realtime voorraadupdates"
+          },
+          {
+            "key": "impact",
+            "label": "Operationele impact",
+            "value": "99,9% voorraadnauwkeurigheid · 35% lagere responstijd"
+          },
+          {
+            "key": "client",
+            "label": "Handelsplatform",
+            "value": "Musa Markets (https://musa.markets)"
+          }
+        ],
+        "nextProjectSlug": "musa-admin",
+        "context": "Musa Markets (https://musa.markets/) is een digitale marktplaats voor verse levensmiddelen en dagelijkse boodschappen. Het platform vereist een overzichtelijke winkelervaring met actuele prijzen, dagdeals en realtime voorraadbeheer.",
+        "roleTitle": "Senior Frontend Engineer",
+        "roleIntro": "Leiding gegeven aan de frontend-ontwikkeling met Next.js, TypeScript en Tailwind CSS, gekoppeld aan interne GraphQL-microservices voor milliseconde-snelle prijsupdates.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Online e-commerceplatform voor boodschappen en verswaren met afdelingsnavigatie en digitale checkout.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Volledige frontend-architectuur: interactieve catalogus, winkelmandstatus, betalingen en mobiele optimalisatie.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "99,9% voorraadnauwkeurigheid en 35% snellere responstijden ten opzichte van traditionele weboplossingen.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "catalog-engine",
+            "title": "Interactieve catalogus en afdelingsnavigatie",
+            "summary": "",
+            "body": "Productoverzichten ontworpen met geoptimaliseerde afbeeldingen, kortingslabels en snelle filters.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "cart-reactive",
+            "title": "Reactieve winkelwagen en lokale opslag",
+            "summary": "",
+            "body": "Beheer van winkelwagenstatus met realtime berekening van subtotalen, bezorgkosten en offline bestendigheid.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "performance",
+            "title": "Optimalisatie van Core Web Vitals",
+            "summary": "",
+            "body": "WebP-compressie, route-prefetching en Server Components voor directe navigatierespons.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Betrouwbare realtime voorraadsynchronisatie voor dagelijks roterende verswaren",
+          "Vloeiende werking op mobiele apparaten over mobiele 3G/4G-netwerken",
+          "Ontkoppelde microservice-architectuur met GraphQL en backend-beheer"
+        ],
+        "sections": [
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Schermen",
+            "title": "Musa Digitale Winkelervaring",
+            "lead": "Modules ontworpen voor optimale conversie en eenvoudig online boodschappen doen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-marketplace",
+                "title": "Musa Marktplaats & Hoofdpagina",
+                "summary": "Dynamische catalogus en actuele promoties",
+                "body": "Webwinkel geoptimaliseerd voor snel navigeren, seizoensaanbiedingen en dagdeals met hoge conversie.",
+                "value": "B2C Marktplaats",
+                "icon": "layout",
+                "tags": ["Next.js", "Tailwind CSS", "Responsief"],
+                "note": "/projects/musa.jpg"
+              },
+              {
+                "key": "screen-catalog",
+                "title": "Catalogus per Afdeling & Verswaren",
+                "summary": "Duidelijk prijzenoverzicht en categorienavigatie",
+                "body": "Gestructureerde weergave van groenten, fruit, voorraad en dagelijkse benodigdheden met actuele prijzen.",
+                "value": "Afdelingsfilters",
+                "icon": "case",
+                "tags": ["Categorieën", "Verswaren", "Filters"],
+                "note": "/projects/musa-catalog.jpg"
+              },
+              {
+                "key": "screen-store",
+                "title": "Partnerwinkels & Multi-Vendor Hub",
+                "summary": "Winkelprofielen voor aangesloten handelaren en bodega's",
+                "body": "Onafhankelijke filialen met eigen assortimenten zodat consumenten direct bij hun favoriete leverancier kunnen bestellen.",
+                "value": "Multi-Vendor Hub",
+                "icon": "globe",
+                "tags": ["Winkels", "Multi-Vendor", "Lokaal Aanbod"],
+                "note": "/projects/musa-store.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Mobiel Winkelen & Reactieve Winkelwagen",
+                "summary": "Wrijvingloos bestellen via mobiele 3G/4G-netwerken",
+                "body": "Touch-geoptimaliseerde winkelervaring met 1-klik toevoegen en directe berekening van bezorgkosten.",
+                "value": "1-Klik Toevoegen",
+                "icon": "gauge",
+                "tags": ["Mobile First", "Reactieve Winkelwagen", "Snelle UX"],
+                "note": "/projects/musa-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "fulfillment-process",
+            "kind": "STEPS",
+            "eyebrow": "Besteltraject",
+            "title": "Bestelcyclus en Bezorging bij Musa Markets",
+            "lead": "Volledig koopproces van productselectie tot thuisbezorging.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-browse",
+                "title": "1. Marktplaatsontdekking & hoofdpagina",
+                "summary": "Vloeiend bladeren door aangesloten winkels en dagaanbiedingen",
+                "body": "Klanten verkennen de responsieve webwinkel, bekijken seizoenspromoties en selecteren lokale handelaren.",
+                "value": "Snel Ontdekken",
+                "icon": "layout",
+                "tags": ["Marktplaats", "Aanbiedingen"],
+                "note": "/projects/musa.jpg"
+              },
+              {
+                "key": "step-catalog",
+                "title": "2. Afdelingsnavigatie & verse levensmiddelen",
+                "summary": "Gefilterd zoeken met actuele prijzen per kilo of stuk",
+                "body": "Productselectie over categorieën met realtime voorraadinzichten en duidelijke prijzen.",
+                "value": "Actuele Prijzen",
+                "icon": "case",
+                "tags": ["Afdelingen", "Verswaren"],
+                "note": "/projects/musa-catalog.jpg"
+              },
+              {
+                "key": "step-store",
+                "title": "3. Afhandeling via aangesloten partnerwinkels",
+                "summary": "Orderroutering naar de dichtstbijzijnde lokale bodega",
+                "body": "De multi-vendor logica koppelt bestellingen aan het dichtstbijzijnde magazijn voor snelle levering.",
+                "value": "Multi-Vendor Hub",
+                "icon": "globe",
+                "tags": ["Multi-Vendor", "Lokale Voorraad"],
+                "note": "/projects/musa-store.jpg"
+              },
+              {
+                "key": "step-mobile-checkout",
+                "title": "4. Mobiele winkelwagen & bezorgbevestiging",
+                "summary": "Realtime voorraadcontrole en vlotte checkout",
+                "body": "Klanten ronden bestellingen direct af op hun smartphone met 99,9% voorraadnauwkeurigheid.",
+                "value": "99,9% Nauwkeurigheid",
+                "icon": "gauge",
+                "tags": ["Mobiele Checkout", "Bezorging"],
+                "note": "/projects/musa-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
   ],
   "skillKeys": ["Nextjs", "Tailwind", "Typescript"],

@@ -169,17 +169,37 @@ export const portfolioRouter = createTRPCRouter({
               appLanguageId: appLanguage?.id,
             },
           },
+          CertificateSkill: {
+            include: {
+              Skill: {
+                include: {
+                  SkillTranslation: {
+                    where: { appLanguageId: appLanguage?.id },
+                  },
+                },
+              },
+            },
+          },
         },
         take: limit,
         skip: cursor ? 1 : 0,
         where: baseWhere,
         cursor: cursor ? { id: cursor } : undefined,
+        orderBy: [{ issuedDate: "desc" }, { createdAt: "desc" }],
       });
 
       const dataWithTranslation = data.map((certification) => {
-        const { CertificationTranslation, ...rest } = certification;
+        const { CertificationTranslation, CertificateSkill, ...rest } =
+          certification;
+        const skills = (CertificateSkill ?? []).map(({ Skill }) => {
+          const { SkillTranslation, ...skillRest } = Skill;
+          return mergeTranslation(skillRest, SkillTranslation?.[0]);
+        });
 
-        return mergeTranslation(rest, CertificationTranslation[0]);
+        return {
+          ...mergeTranslation(rest, CertificationTranslation?.[0]),
+          skills,
+        };
       });
 
       const lastCursor = data[data.length - 1]?.id ?? null;
@@ -1075,19 +1095,29 @@ export const portfolioRouter = createTRPCRouter({
       const currentIndex = slugs.findIndex(
         (project) => project.slug === input.slug,
       );
-      if (currentIndex === -1) return null;
+      if (currentIndex === -1 || slugs.length < 2) return null;
 
       const currentProject = slugs[currentIndex];
       if (!currentProject) return null;
 
+      // Canonical sequence: next project in catalog order, wrapping around from last to first
+      const nextIndex = (currentIndex + 1) % slugs.length;
+      const sequentialNext = slugs[nextIndex] ?? null;
+
+      // If a custom nextProjectSlug is configured, ensure it doesn't create a 2-way loop (A <-> B) or self-loop
       if (currentProject.nextProjectSlug) {
-        const nextProject = slugs.find(
+        const customNext = slugs.find(
           (project) => project.slug === currentProject.nextProjectSlug,
         );
-        return nextProject ? { ...nextProject, image: "" } : null;
+        if (
+          customNext &&
+          customNext.slug !== currentProject.slug &&
+          customNext.nextProjectSlug !== currentProject.slug
+        ) {
+          return customNext;
+        }
       }
 
-      if (slugs.length < 2) return null;
-      return slugs[(currentIndex + 1) % slugs.length] ?? null;
+      return sequentialNext;
     }),
 });

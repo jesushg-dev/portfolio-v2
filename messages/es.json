@@ -247,6 +247,33 @@
         "title": "Habilidades Blandas",
         "subtitle": "Habilidades Blandas"
       }
+    },
+    "catalog": {
+      "backToPortfolio": "Volver al portafolio",
+      "pageTitle": "Todas las Certificaciones",
+      "pageSubtitle": "Credenciales oficiales y cursos completados que validan mi experiencia en tecnologías frontend, backend, seguridad y buenas prácticas.",
+      "searchPlaceholder": "Buscar por título, tecnología o emisor…",
+      "searchLabel": "Buscar certificados o tecnologías",
+      "sortLabel": "Ordenar",
+      "sorts": {
+        "newest": "Más recientes",
+        "name": "Nombre (A–Z)",
+        "issuer": "Emisor (A–Z)"
+      },
+      "issuerLabel": "Emisor / Institución",
+      "techLabel": "Tecnología",
+      "allIssuers": "Todos los emisores",
+      "showing": "Mostrando {count} de {total} certificaciones",
+      "showingAll": "{total} certificaciones",
+      "clearFilters": "Limpiar filtros",
+      "more": "Ver más ({count} restantes)",
+      "emptyTitle": "Sin certificaciones encontradas",
+      "emptyDescription": "Prueba con otra búsqueda o quita algunos filtros.",
+      "emptyButton": "Limpiar filtros",
+      "preview": "Vista previa",
+      "verify": "Ver credencial",
+      "credentialId": "ID de credencial",
+      "closeModal": "Cerrar"
     }
   },
   "curriculum": {
@@ -387,82 +414,229 @@
         "contactCta": "Contacto",
         "scheduleCta": "Agendar entrevista",
         "scheduleHint": "Reunión de 30 min · Contacto o entrevista profesional",
+        "availability": "Disponible para nuevas oportunidades",
+        "availabilityHint": "Llamada de 30 min",
+        "goTo": "Ir a {item}",
+        "viewProject": "Ver proyecto",
+        "seeAllProjects": "Ver todos los proyectos",
         "groups": {
           "about": {
             "label": "Sobre mí",
             "eyebrow": "Sobre mí",
             "headline": "Trayectoria y perfil técnico",
-            "description": "Perfil profesional, experiencia laboral y stack tecnológico principal."
+            "description": "Perfil profesional, experiencia laboral y filosofía de ingeniería."
           },
           "portfolio": {
             "label": "Portafolio",
             "eyebrow": "Portafolio",
-            "headline": "Proyectos y credenciales",
-            "description": "Proyectos destacados, certificaciones y trayectoria profesional."
+            "headline": "Proyectos destacados y credenciales",
+            "description": "Sistemas en producción, microservicios, certificaciones e hitos de carrera."
           },
           "process": {
             "label": "Cómo trabajo",
             "eyebrow": "Cómo trabajo",
-            "headline": "Metodología de trabajo",
-            "description": "Uso de IA en desarrollo, calidad de software y colaboración con equipos."
+            "headline": "Enfoque de ingeniería y calidad",
+            "description": "Metodología moderna de trabajo, calidad de software y herramientas diarias."
           }
         },
         "items": {
           "about": {
             "label": "Acerca de mí",
-            "description": "Resumen de perfil y filosofía de ingeniería."
+            "short": "Perfil y filosofía",
+            "headline": "Quién soy como ingeniero",
+            "description": "Un resumen de mi perfil, mi enfoque hacia el software y los principios detrás de los sistemas que construyo.",
+            "chips": [
+              "Resumen de perfil",
+              "Filosofía de ingeniería",
+              "Ownership"
+            ],
+            "statValue": "6+",
+            "statLabel": "años de experiencia",
+            "cta": "Ir a acerca de mí"
           },
           "experience": {
             "label": "Experiencia",
-            "description": "Historial laboral, proyectos y roles desempeñados."
+            "short": "Roles y proyectos clave",
+            "headline": "Dónde he trabajado",
+            "description": "Historial laboral en e-commerce y telecomunicaciones, con los proyectos y resultados de los que me siento más orgulloso.",
+            "chips": [
+              "Senior Software Engineer",
+              "Tech Lead",
+              "Full Stack Developer"
+            ],
+            "statValue": "20+",
+            "statLabel": "proyectos entregados",
+            "cta": "Ver historial laboral"
           },
           "skills": {
             "label": "Habilidades",
-            "description": "Ecosistema .NET, C#, microservicios y Cloud."
+            "short": ".NET, C#, microservicios, cloud",
+            "headline": "El stack con el que trabajo a diario",
+            "description": "Las herramientas y tecnologías que empleo para diseñar, construir y desplegar software en producción.",
+            "chips": [".NET", "C#", "Microservicios", "Cloud"],
+            "statValue": "4",
+            "statLabel": "áreas clave",
+            "cta": "Explorar stack técnico"
           },
           "services": {
             "label": "Especialidades técnicas",
-            "description": "Arquitectura de software, modernización y desarrollo."
+            "short": "Arquitectura y modernización",
+            "headline": "En qué destaco",
+            "description": "Diseño de arquitectura de software, modernización de plataformas legacy y desarrollo de productos core.",
+            "chips": [
+              "Arquitectura de sistemas",
+              "Modernización legacy",
+              "Desarrollo core"
+            ],
+            "statValue": "3",
+            "statLabel": "especialidades",
+            "cta": "Ver especialidades"
           },
           "soft-skills": {
             "label": "Liderazgo y competencias",
-            "description": "Dirección de equipos, mentoría y comunicación."
+            "short": "Equipos, mentoría, comunicación",
+            "headline": "Cómo trabajo con las personas",
+            "description": "Liderazgo de equipos, mentoría de desarrolladores y comunicación fluida con producto y negocio.",
+            "chips": ["Liderazgo técnico", "Mentoría", "Comunicación"],
+            "statValue": "6",
+            "statLabel": "ingenieros guiados",
+            "cta": "Leer principios de liderazgo"
+          },
+          "testimonials": {
+            "label": "Testimonios",
+            "short": "Palabras de colegas",
+            "headline": "Lo que dicen colegas y líderes",
+            "description": "Comentarios directos y recomendaciones de compañeros, líderes y colaboradores sobre cómo es trabajar conmigo.",
+            "chips": [
+              "Testimonios",
+              "Desarrolladores senior",
+              "Recomendaciones"
+            ],
+            "statValue": "100%",
+            "statLabel": "opiniones positivas",
+            "cta": "Leer testimonios"
+          },
+          "projects": {
+            "label": "Proyectos",
+            "short": "Proyectos de ingeniería y casos de estudio",
+            "headline": "Proyectos y sistemas construidos",
+            "description": "Una selección de sistemas, APIs, plataformas de comercio electrónico y paneles administrativos internos.",
+            "chips": ["APIs", "E-commerce", "Plataformas admin", "Cloud"],
+            "statValue": "15+",
+            "statLabel": "proyectos destacados",
+            "cta": "Ver proyectos"
           },
           "certificates": {
             "label": "Certificados",
-            "description": "Acreditaciones y certificaciones en tecnología."
+            "short": "Acreditaciones técnicas",
+            "headline": "Certificaciones verificadas",
+            "description": "Acreditaciones técnicas formales en frontend, backend, seguridad y habilidades directivas.",
+            "chips": ["Frontend", "Backend", "Ciberseguridad", "Habilidades"],
+            "statValue": "30+",
+            "statLabel": "certificaciones obtenidas",
+            "cta": "Ver certificados"
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "CV profesional completo en formato web."
+            "short": "Currículum profesional",
+            "headline": "CV profesional completo",
+            "description": "Currículum exhaustivo en formato web moderno, con historial laboral detallado y opción de descarga en PDF.",
+            "chips": [
+              "CV interactivo",
+              "Exportar a PDF",
+              "Historial verificado"
+            ],
+            "statValue": "2026",
+            "statLabel": "versión actualizada",
+            "cta": "Abrir Curriculum Vitae"
           },
           "timeline": {
             "label": "Línea de tiempo",
-            "description": "Hitos de carrera y evolución profesional."
+            "short": "Evolución profesional",
+            "headline": "Hitos de carrera y trayectoria",
+            "description": "Recorrido cronológico de hitos profesionales, roles asumidos y evolución técnica.",
+            "chips": ["Hitos de carrera", "Evolución", "Crecimiento"],
+            "statValue": "6+",
+            "statLabel": "años de evolución",
+            "cta": "Ver línea de tiempo"
           },
           "ai-workflow": {
             "label": "Cómo uso la IA",
-            "description": "Flujo de trabajo e integración de herramientas de IA."
+            "short": "Aceleración en ingeniería",
+            "headline": "Ingeniería asistida por IA",
+            "description": "Cómo integro herramientas modernas de IA, flujos agénticos y automatización en el día a día del desarrollo.",
+            "chips": [
+              "Herramientas de IA",
+              "Velocidad",
+              "Flujos automatizados"
+            ],
+            "statValue": "2x",
+            "statLabel": "velocidad de entrega",
+            "cta": "Explorar flujo con IA"
           },
           "qa-collaboration": {
             "label": "Colaboración con QA",
-            "description": "Prácticas de calidad, testing y despliegues."
+            "short": "Calidad y testing",
+            "headline": "Estrategia de calidad y pruebas",
+            "description": "Trabajo conjunto con QA, suites de pruebas automáticas y aseguramiento de cero regresiones en producción.",
+            "chips": [
+              "Control de calidad",
+              "Pruebas automáticas",
+              "Cero regresiones"
+            ],
+            "statValue": "99.9%",
+            "statLabel": "estabilidad en producción",
+            "cta": "Leer prácticas de QA"
           },
           "uses": {
             "label": "Uses",
-            "description": "Hardware, software y herramientas que uso cada día."
+            "short": "Hardware, software y setup",
+            "headline": "Herramientas y hardware diario",
+            "description": "El hardware, configuración de estación de trabajo, editores y aplicaciones que utilizo todos los días.",
+            "chips": [
+              "Hardware",
+              "Workstation",
+              "Herramientas dev",
+              "Terminal"
+            ],
+            "statValue": "Diario",
+            "statLabel": "setup de trabajo",
+            "cta": "Ver configuración"
           },
           "now": {
             "label": "Now",
-            "description": "En qué estoy enfocado, leyendo y entregando ahora mismo."
+            "short": "Enfoque actual y lectura",
+            "headline": "En qué estoy trabajando ahora",
+            "description": "Una instantánea viva de proyectos activos, tecnologías que estoy explorando y prioridades actuales.",
+            "chips": ["Enfoque actual", "Lecturas", "Proyectos activos"],
+            "statValue": "En vivo",
+            "statLabel": "estado actual",
+            "cta": "Ver página Now"
           },
           "stats": {
             "label": "Estadísticas",
-            "description": "Visitas anónimas y highlights del portafolio."
+            "short": "Métricas del portafolio",
+            "headline": "Estadísticas y analítica del sitio",
+            "description": "Métricas transparentes sobre visitas anónimas, distribución geográfica y rendimiento de la plataforma.",
+            "chips": ["Analítica", "Rendimiento", "Demografía"],
+            "statValue": "En vivo",
+            "statLabel": "métricas del sitio",
+            "cta": "Ver estadísticas"
           },
           "colophon": {
             "label": "Colofón",
-            "description": "Cómo está hecho este sitio: stack, tipografía, colores y huella."
+            "short": "Cómo está hecho este sitio",
+            "headline": "Detrás del portafolio",
+            "description": "Arquitectura, frameworks, tokens de diseño, tipografía y huella ambiental de esta web.",
+            "chips": [
+              "Next.js 15",
+              "Tailwind CSS",
+              "TypeScript",
+              "Rendimiento"
+            ],
+            "statValue": "v2.0",
+            "statLabel": "edición del portafolio",
+            "cta": "Leer colofón"
           }
         }
       }
@@ -857,7 +1031,10 @@
           "IN_PRODUCTION": "En producción",
           "MAINTENANCE": "En mantenimiento",
           "ARCHIVED": "Archivado"
-        }
+        },
+        "expandImage": "Ampliar imagen",
+        "closeLightbox": "Cerrar imagen ampliada",
+        "pressEscToClose": "Presiona Esc para cerrar"
       },
       "private": {
         "title": "Privado",
@@ -3177,8 +3354,60 @@
       "newCompany": "Nueva Empresa",
       "newApplication": "Nueva Postulación",
       "applicationsTab": "Postulaciones",
+      "eventsTab": "Eventos",
       "companiesTab": "Empresas",
+      "outreachTab": "Seguimiento y Lecturas",
+      "eventsThisWeekBadge": "{count} esta semana",
       "tabsNavAria": "Secciones del job tracker",
+      "emailSummary": {
+        "opened": "{count, plural, one {# lectura} other {# lecturas}}",
+        "sent": "{count, plural, one {# enviado} other {# enviados}}",
+        "openedTooltip": "{count, plural, one {# apertura de correo detectada} other {# aperturas de correo detectadas}}",
+        "sentTooltip": "{count, plural, one {# correo enviado} other {# correos enviados}}"
+      },
+      "outreachHub": {
+        "title": "Centro de Seguimiento y Lecturas",
+        "description": "Supervisa aperturas de correos, señales de interés y oportunidades de contacto agrupadas por candidatura.",
+        "refresh": "Actualizar",
+        "stats": {
+          "totalSent": "Correos enviados",
+          "openRate": "Tasa de apertura",
+          "totalOpens": "Total de lecturas",
+          "recent24h": "Actividad en 24h",
+          "recent24hHint": "Candidaturas con lectura en las últimas 24 horas"
+        },
+        "filters": {
+          "all": "Todas las candidaturas",
+          "opened": "Leídas recientemente",
+          "unopened": "Pendientes de lectura",
+          "searchPlaceholder": "Filtrar por empresa o rol..."
+        },
+        "card": {
+          "readsCount": "{count, plural, one {# lectura} other {# lecturas}}",
+          "sentCount": "{count, plural, one {# correo} other {# correos}}",
+          "lastRead": "Última lectura {time}",
+          "lastSent": "Enviado {time}",
+          "notReadYet": "Sin lecturas aún",
+          "viewApplication": "Ver candidatura",
+          "toggleDetails": "Ver detalles",
+          "emailsHeading": "Correos enviados",
+          "recipient": "Para: {email}",
+          "sentAt": "Enviado: {date}",
+          "attachment": "CV: {name}",
+          "tracked": "Rastreo activo",
+          "untracked": "Sin rastreo",
+          "openHistory": "Eventos de lectura detectados",
+          "noOpensYet": "No se han detectado aperturas aún para este correo.",
+          "proxyNotice": "Proxy de imágenes",
+          "opensCount": "{count} cargas en total"
+        },
+        "emptyState": {
+          "title": "Sin actividad de seguimiento aún",
+          "description": "Envía tu primer correo de candidatura con rastreo desde la vista de detalle de cualquier postulación para ver métricas aquí.",
+          "noFilteredTitle": "No se encontraron candidaturas",
+          "noFilteredDescription": "Intenta ajustar tu búsqueda o el filtro activo."
+        }
+      },
       "columnPosition": "Puesto",
       "columnCompany": "Empresa",
       "columnStatus": "Estado",
@@ -3240,8 +3469,8 @@
         "hiredDescription": "¡Felicidades!"
       },
       "calendar": {
-        "title": "Próximos Eventos",
-        "description": "Entrevistas y pruebas programadas",
+        "title": "Agenda de Eventos",
+        "description": "Entrevistas, reuniones y pruebas programadas",
         "googleSyncActive": "Sincronizado con Google Calendar",
         "googleSyncError": "La sync de Google Calendar necesita reconectar",
         "add": "Agregar",
@@ -3254,7 +3483,26 @@
         "today": "Hoy",
         "tomorrow": "Mañana",
         "virtual": "Virtual",
-        "duration": "{minutes} min"
+        "duration": "{minutes} min",
+        "inHours": "En {hours, plural, one {# hora} other {# horas}}",
+        "inDays": "En {days, plural, one {# día} other {# días}}",
+        "urgentAlertTitle": "Próximo evento inminente",
+        "joinMeeting": "Unirse a reunión",
+        "prepEvent": "Preparar entrevista",
+        "viewInAgenda": "Ver en agenda",
+        "dismissAlert": "Ocultar alerta",
+        "statsThisWeek": "Esta semana",
+        "statsTotalUpcoming": "Total programados",
+        "statsVirtual": "Reuniones virtuales",
+        "filterAll": "Todos",
+        "filterThisWeek": "Esta semana",
+        "filterInterviews": "Entrevistas",
+        "filterTechnical": "Pruebas técnicas",
+        "emptyFiltered": "No hay eventos que coincidan con este filtro",
+        "emptyDescription": "Programa entrevistas, pruebas técnicas o llamadas de seguimiento para tener un control total de tu proceso.",
+        "scheduleEvent": "Programar Evento",
+        "thisWeekShort": "esta sem.",
+        "multipleUrgentCount": "{current} de {total} próximos"
       },
       "detail": {
         "title": "Detalle de Postulación",

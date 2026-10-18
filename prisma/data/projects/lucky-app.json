@@ -9,17 +9,20 @@
     {
       "locale": "es",
       "title": "Lucky App",
-      "description": "Aplicación móvil Android para el control de pedidos de comida."
+      "description": "Aplicación móvil Android nativa para la gestión y venta de números de rifas y sorteos comunitarios. Permite seleccionar boletos en cuadrículas interactivas, registrar compradores con datos de contacto, validar pagos pendientes y generar comprobantes digitales de participación.",
+      "hook": "App Móvil Android (Java) · Gestión de sorteos y rifas comunitarias · Selección de boletos interactiva y validación de pagos"
     },
     {
       "locale": "en",
       "title": "Lucky App",
-      "description": "Android mobile application for the control of food orders."
+      "description": "Native Android mobile app for managing and selling tickets for raffles and community sweepstakes. Features interactive ticket grid selection, participant contact tracking, payment validation, and digital receipt generation for buyers.",
+      "hook": "Native Android App (Java) · Raffle & community sweepstakes management · Interactive ticket selection & payment tracking"
     },
     {
       "locale": "nl",
       "title": "Lucky App",
-      "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+      "description": "Native Android-app voor het beheer en de verkoop van loterij- en verlotingstickets. Biedt interactieve nummerselectie, contactbeheer van deelnemers, betalingsvalidatie en digitale deelnamebewijzen.",
+      "hook": "Mobiele Android-app (Java) · Beheer van loterijen en verlotingen · Interactieve ticketselectie & betalingsvalidatie"
     }
   ],
   "skillKeys": ["Java", "Android"],

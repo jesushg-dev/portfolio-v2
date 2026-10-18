@@ -247,6 +247,33 @@
         "title": "Soft Skills",
         "subtitle": "Soft Skills"
       }
+    },
+    "catalog": {
+      "backToPortfolio": "Back to portfolio",
+      "pageTitle": "All Certifications",
+      "pageSubtitle": "Official credentials and completed programs validating hands-on expertise across frontend, backend, cybersecurity, and engineering practices.",
+      "searchPlaceholder": "Search by title, technology, or issuer…",
+      "searchLabel": "Search certificates or technologies",
+      "sortLabel": "Sort by",
+      "sorts": {
+        "newest": "Newest first",
+        "name": "Name (A–Z)",
+        "issuer": "Issuer (A–Z)"
+      },
+      "issuerLabel": "Issuer / Institution",
+      "techLabel": "Technology",
+      "allIssuers": "All issuers",
+      "showing": "Showing {count} of {total} certifications",
+      "showingAll": "{total} certifications",
+      "clearFilters": "Clear filters",
+      "more": "Show more ({count} remaining)",
+      "emptyTitle": "No certifications found",
+      "emptyDescription": "Try adjusting your search query or clearing some filters.",
+      "emptyButton": "Clear filters",
+      "preview": "Preview",
+      "verify": "Verify credential",
+      "credentialId": "Credential ID",
+      "closeModal": "Close"
     }
   },
   "curriculum": {
@@ -387,82 +414,208 @@
         "contactCta": "Contact",
         "scheduleCta": "Schedule interview",
         "scheduleHint": "30-min meeting · Interview or professional intro",
+        "availability": "Open to new opportunities",
+        "availabilityHint": "30-min intro call",
+        "goTo": "Go to {item}",
+        "viewProject": "View project",
+        "seeAllProjects": "See all projects",
         "groups": {
           "about": {
             "label": "About me",
             "eyebrow": "About me",
             "headline": "Background & technical profile",
-            "description": "Professional background, work experience, and core tech stack."
+            "description": "Professional background, work experience, and core engineering philosophy."
           },
           "portfolio": {
             "label": "Portfolio",
             "eyebrow": "Portfolio",
-            "headline": "Projects & credentials",
-            "description": "Featured projects, certifications, and career path."
+            "headline": "Featured projects & credentials",
+            "description": "Production systems, microservices, credentials, and career milestones."
           },
           "process": {
             "label": "How I work",
             "eyebrow": "How I work",
-            "headline": "Work methodology",
-            "description": "AI tooling in development, software quality, and team collaboration."
+            "headline": "Engineering approach & quality",
+            "description": "Modern engineering workflows, quality practices, and daily tools."
           }
         },
         "items": {
           "about": {
             "label": "About me",
-            "description": "Profile summary and engineering philosophy."
+            "short": "Profile and philosophy",
+            "headline": "Who I am as an engineer",
+            "description": "A summary of my profile, how I approach software, and the principles behind the systems I build.",
+            "chips": ["Profile summary", "Engineering philosophy", "Ownership"],
+            "statValue": "6+",
+            "statLabel": "years of experience",
+            "cta": "Go to about me"
           },
           "experience": {
             "label": "Experience",
-            "description": "Work history, key projects, and roles."
+            "short": "Roles and key projects",
+            "headline": "Where I have worked",
+            "description": "Work history across e-commerce and telecom, with the projects and results I am most proud of.",
+            "chips": [
+              "Senior Software Engineer",
+              "Tech Lead",
+              "Full Stack Developer"
+            ],
+            "statValue": "20+",
+            "statLabel": "projects delivered",
+            "cta": "View work history"
           },
           "skills": {
             "label": "Skills",
-            "description": ".NET ecosystem, C#, microservices, and Cloud."
+            "short": ".NET, C#, microservices, cloud",
+            "headline": "The stack I work with daily",
+            "description": "The tools and technologies I use to design, build, and ship production software.",
+            "chips": [".NET", "C#", "Microservices", "Cloud"],
+            "statValue": "4",
+            "statLabel": "core areas",
+            "cta": "Explore technical stack"
           },
           "services": {
             "label": "Technical specialties",
-            "description": "Software architecture, modernization, and core development."
+            "short": "Architecture and modernization",
+            "headline": "What I am best at",
+            "description": "Designing software architecture, modernizing legacy platforms, and building the core of new products.",
+            "chips": [
+              "System architecture",
+              "Legacy modernization",
+              "Core development"
+            ],
+            "statValue": "3",
+            "statLabel": "specialties",
+            "cta": "View specialties"
           },
           "soft-skills": {
             "label": "Leadership & competencies",
-            "description": "Team leadership, mentorship, and communication."
+            "short": "Teams, mentorship, communication",
+            "headline": "How I work with people",
+            "description": "Leading teams, mentoring developers, and communicating clearly with product and business partners.",
+            "chips": ["Team leadership", "Mentorship", "Communication"],
+            "statValue": "6",
+            "statLabel": "engineers led",
+            "cta": "Read leadership principles"
+          },
+          "testimonials": {
+            "label": "Testimonials",
+            "short": "Words from colleagues",
+            "headline": "What colleagues and leaders say",
+            "description": "Feedback from senior developers, teammates, and stakeholders on what it is like to work with me.",
+            "chips": ["Testimonials", "Senior developers", "Recommendations"],
+            "statValue": "100%",
+            "statLabel": "positive feedback",
+            "cta": "Read testimonials"
+          },
+          "projects": {
+            "label": "Projects",
+            "short": "Engineering projects & case studies",
+            "headline": "Projects and systems I have built",
+            "description": "A collection of systems and products, from APIs and e-commerce to internal admin platforms.",
+            "chips": ["APIs", "E-commerce", "Admin platforms", "Cloud"],
+            "statValue": "15+",
+            "statLabel": "featured projects",
+            "cta": "View projects"
           },
           "certificates": {
             "label": "Certificates",
-            "description": "Technical credentials and certifications."
+            "short": "Technical credentials",
+            "headline": "Verified credentials & certifications",
+            "description": "Formal credentials and certifications across backend, frontend, cloud, and security.",
+            "chips": ["Frontend", "Backend", "Cybersecurity", "Soft skills"],
+            "statValue": "30+",
+            "statLabel": "certifications",
+            "cta": "View certificates"
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "Full professional CV in web format."
+            "short": "Professional resume",
+            "headline": "Full professional CV",
+            "description": "Comprehensive resume in modern web format, with full employment history and PDF export.",
+            "chips": ["Interactive CV", "PDF export", "Work history"],
+            "statValue": "2026",
+            "statLabel": "current resume",
+            "cta": "Open Curriculum Vitae"
           },
           "timeline": {
             "label": "Timeline",
-            "description": "Career milestones and professional progression."
+            "short": "Career progression",
+            "headline": "Career milestones & evolution",
+            "description": "A chronological overview of career milestones, roles, and professional evolution.",
+            "chips": ["Career milestones", "Progression", "Growth"],
+            "statValue": "6+",
+            "statLabel": "years evolution",
+            "cta": "View timeline"
           },
           "ai-workflow": {
             "label": "How I use AI",
-            "description": "AI tool integration and engineering workflow."
+            "short": "Engineering acceleration",
+            "headline": "AI-assisted engineering",
+            "description": "How I integrate modern AI tools, agentic workflows, and automation into daily software engineering.",
+            "chips": ["AI Tooling", "Velocity", "Automated workflows"],
+            "statValue": "2x",
+            "statLabel": "delivery velocity",
+            "cta": "Explore AI workflow"
           },
           "qa-collaboration": {
             "label": "QA collaboration",
-            "description": "Quality practices, testing, and release strategy."
+            "short": "Quality & testing",
+            "headline": "Software quality & test strategy",
+            "description": "Collaborating closely with QA, automated test suites, and maintaining zero regressions in production.",
+            "chips": [
+              "Quality assurance",
+              "Automated tests",
+              "Zero regressions"
+            ],
+            "statValue": "99.9%",
+            "statLabel": "production stability",
+            "cta": "Read QA practices"
           },
           "uses": {
             "label": "Uses",
-            "description": "Hardware, software, and tools I use every day."
+            "short": "Gear, software & setup",
+            "headline": "Hardware & software I use daily",
+            "description": "The hardware, workstation configuration, editor setup, and software tools I use every day.",
+            "chips": ["Hardware", "Workstation", "Dev tools", "Terminal"],
+            "statValue": "Daily",
+            "statLabel": "developer tools",
+            "cta": "View setup"
           },
           "now": {
             "label": "Now",
-            "description": "What I'm focused on, reading, and shipping right now."
+            "short": "Current focus & reading",
+            "headline": "What I am focused on now",
+            "description": "A living snapshot of active projects, technologies I am exploring, and what I am shipping right now.",
+            "chips": ["Current focus", "Reading", "Active projects"],
+            "statValue": "Live",
+            "statLabel": "current status",
+            "cta": "See now page"
           },
           "stats": {
             "label": "Stats",
-            "description": "Anonymous visitor stats and portfolio highlights."
+            "short": "Visitor & portfolio metrics",
+            "headline": "Portfolio highlights & analytics",
+            "description": "Transparent statistics on visits, visitor geographic distribution, and performance metrics.",
+            "chips": ["Analytics", "Performance", "Demographics"],
+            "statValue": "Live",
+            "statLabel": "site telemetry",
+            "cta": "View statistics"
           },
           "colophon": {
             "label": "Colophon",
-            "description": "How this site is built — stack, type, colors, and footprint."
+            "short": "How this site is built",
+            "headline": "Behind the portfolio",
+            "description": "How this site is built — tech stack, design tokens, typography, and performance footprint.",
+            "chips": [
+              "Next.js 15",
+              "Tailwind CSS",
+              "TypeScript",
+              "Performance"
+            ],
+            "statValue": "v2.0",
+            "statLabel": "portfolio build",
+            "cta": "Read colophon"
           }
         }
       }
@@ -857,7 +1010,10 @@
           "IN_PRODUCTION": "In production",
           "MAINTENANCE": "In maintenance",
           "ARCHIVED": "Archived"
-        }
+        },
+        "expandImage": "Expand image",
+        "closeLightbox": "Close enlarged image",
+        "pressEscToClose": "Press Esc to close"
       },
       "private": {
         "title": "Private",
@@ -3250,8 +3406,60 @@
       "newCompany": "New Company",
       "newApplication": "New Application",
       "applicationsTab": "Applications",
+      "eventsTab": "Events",
       "companiesTab": "Companies",
+      "outreachTab": "Outreach & Reads",
+      "eventsThisWeekBadge": "{count} this week",
       "tabsNavAria": "Job tracker sections",
+      "emailSummary": {
+        "opened": "{count, plural, one {# read} other {# reads}}",
+        "sent": "{count, plural, one {# sent} other {# sent}}",
+        "openedTooltip": "{count, plural, one {# email load detected} other {# email loads detected}}",
+        "sentTooltip": "{count, plural, one {# email sent} other {# emails sent}}"
+      },
+      "outreachHub": {
+        "title": "Outreach & Reads Hub",
+        "description": "Monitor email loads, engagement signals, and follow-up opportunities grouped by candidacy.",
+        "refresh": "Refresh",
+        "stats": {
+          "totalSent": "Sent Emails",
+          "openRate": "Open Rate",
+          "totalOpens": "Total Reads",
+          "recent24h": "Active in 24h",
+          "recent24hHint": "Candidacies with activity in the last 24 hours"
+        },
+        "filters": {
+          "all": "All candidacies",
+          "opened": "Read recently",
+          "unopened": "Awaiting read",
+          "searchPlaceholder": "Filter by company or role..."
+        },
+        "card": {
+          "readsCount": "{count, plural, one {# read} other {# reads}}",
+          "sentCount": "{count, plural, one {# email} other {# emails}}",
+          "lastRead": "Last read {time}",
+          "lastSent": "Sent {time}",
+          "notReadYet": "Awaiting first read",
+          "viewApplication": "View candidacy",
+          "toggleDetails": "Toggle details",
+          "emailsHeading": "Sent emails",
+          "recipient": "To: {email}",
+          "sentAt": "Sent: {date}",
+          "attachment": "CV: {name}",
+          "tracked": "Tracking active",
+          "untracked": "No tracking",
+          "openHistory": "Detected read events",
+          "noOpensYet": "No read events detected yet for this email.",
+          "proxyNotice": "Image Proxy",
+          "opensCount": "{count} total loads"
+        },
+        "emptyState": {
+          "title": "No outreach activity yet",
+          "description": "Send your first application email with tracking from any application detail page to see engagement metrics here.",
+          "noFilteredTitle": "No candidacies found",
+          "noFilteredDescription": "Try adjusting your search or active filter."
+        }
+      },
       "columnPosition": "Position",
       "columnCompany": "Company",
       "columnStatus": "Status",
@@ -3313,8 +3521,8 @@
         "hiredDescription": "Congratulations!"
       },
       "calendar": {
-        "title": "Upcoming Events",
-        "description": "Scheduled interviews and tests",
+        "title": "Events Agenda",
+        "description": "Scheduled interviews, meetings, and technical tests",
         "googleSyncActive": "Synced with Google Calendar",
         "googleSyncError": "Google Calendar sync needs reconnect",
         "add": "Add",
@@ -3327,7 +3535,26 @@
         "today": "Today",
         "tomorrow": "Tomorrow",
         "virtual": "Virtual",
-        "duration": "{minutes} min"
+        "duration": "{minutes} min",
+        "inHours": "In {hours, plural, one {# hour} other {# hours}}",
+        "inDays": "In {days, plural, one {# day} other {# days}}",
+        "urgentAlertTitle": "Upcoming imminent event",
+        "joinMeeting": "Join meeting",
+        "prepEvent": "Prepare interview",
+        "viewInAgenda": "View in agenda",
+        "dismissAlert": "Dismiss alert",
+        "statsThisWeek": "This week",
+        "statsTotalUpcoming": "Total upcoming",
+        "statsVirtual": "Virtual meetings",
+        "filterAll": "All",
+        "filterThisWeek": "This week",
+        "filterInterviews": "Interviews",
+        "filterTechnical": "Technical tests",
+        "emptyFiltered": "No events match this filter",
+        "emptyDescription": "Schedule interviews, technical tests, or follow-up calls to keep full control of your hiring process.",
+        "scheduleEvent": "Schedule Event",
+        "thisWeekShort": "this wk",
+        "multipleUrgentCount": "{current} of {total} upcoming"
       },
       "detail": {
         "title": "Application Details",

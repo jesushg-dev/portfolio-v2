@@ -5,25 +5,653 @@
   "githubUrl": "https://github.com/jess232017/Gestor-de-Consumo-Eletrico",
   "websiteUrl": "",
   "isPrivate": false,
+  "order": 17,
+  "kind": "PERSONAL",
+  "slug": "kwh-monitor",
+  "caseStudyEnabled": true,
+  "skillKeys": ["Java", "Android", "Mysql", "Nodejs"],
   "translations": [
     {
       "locale": "es",
       "title": "Kwh Monitor",
-      "description": "Aplicación móvil Android para el control de consumo de energía eléctrica."
+      "description": "Aplicación móvil Android nativa para el monitoreo y proyección de facturas de consumo eléctrico doméstico. Permite registrar lecturas de medidores físicos fuera de línea con SQLite, graficar tendencias de gasto y consultar en tiempo real las tarifas y subsidios del INE.",
+      "hook": "App Móvil Android (Java) · Monitoreo y proyección de consumo eléctrico · Conexión a Kwh Monitor API y cálculo de subsidios INE",
+      "challenge": "Las familias carecían de visibilidad del monto acumulado de su factura hasta que llegaba el recibo en papel, perdiendo subsidios estatales por pequeños excesos de lectura sin previo aviso.",
+      "approach": "Desarrollé una app nativa en Java con base de datos local SQLite para registro de lecturas offline, gráficos interactivos de consumo y sincronización asíncrona con Kwh Monitor API para cálculo de facturas.",
+      "outcome": "Proyección precisa del costo del recibo en tiempo real, alertas tempranas para no sobrepasar el umbral de subsidio (150 kWh) y miles de lecturas registradas con fluidez.",
+      "caseStudy": {
+        "chips": [
+          "Android Nativo",
+          "Java",
+          "Kwh Monitor API",
+          "Cálculo de Facturas",
+          "SQLite Local",
+          "Subsidios INE"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Creador & Desarrollador Móvil Android"
+          },
+          {
+            "key": "target-utility",
+            "label": "Entorno regulador",
+            "value": "Normativa y pliego tarifario del Instituto Nicaragüense de Energía (INE)"
+          },
+          {
+            "key": "mobile-stack",
+            "label": "Stack tecnológico",
+            "value": "Java · Android SDK · SQLite / Room · Retrofit / Volley · Kwh Monitor API"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repositorio",
+            "value": "Gestor-de-Consumo-Eletrico (https://github.com/jess232017/Gestor-de-Consumo-Eletrico)"
+          }
+        ],
+        "nextProjectSlug": "tech-service",
+        "context": "Kwh Monitor es una aplicación móvil Android nativa diseñada para que los usuarios residenciales lleven un control riguroso de su consumo eléctrico doméstico. Permite ingresar lecturas periódicas directamente del medidor físico, visualizar la curva de gasto diario y mensual, calcular el monto proyectado de la factura antes de la fecha de corte mediante integración con el microservicio Kwh Monitor API, y recibir alertas preventivas para proteger los subsidios energéticos nacionales.",
+        "roleTitle": "Desarrollador Móvil Android & Diseñador de Solución",
+        "roleIntro": "Diseñé y programé la aplicación completa en Java para Android: implementé el almacenamiento local en SQLite para funcionamiento 100% offline, diseñé pantallas con Material Design y gráficas de consumo, e integré el cliente HTTP asíncrono para comunicarse con el microservicio de scraping Kwh Monitor API.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Aplicación móvil Android para registro de lecturas de medidor eléctrico, gráficos de consumo y proyección de facturas con subsidio en Nicaragua.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollo completo en Java nativo para Android: arquitectura offline-first con SQLite, gráficas de consumo e integración con la API de scraping.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Permitió a los usuarios anticipar el valor exacto de su recibo y controlar sus hábitos de consumo para no perder el subsidio de energía.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "android-meter-logging",
+            "title": "Registro de Lecturas y Cálculo de Delta kWh",
+            "summary": "",
+            "body": "Formularios móviles con validaciones para registrar la lectura del medidor, calculando automáticamente el consumo acumulado en kWh y la tasa de consumo diario promedio.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "offline-sqlite-sync",
+            "title": "Almacenamiento Local Offline-First con SQLite",
+            "summary": "",
+            "body": "Persistencia local en base de datos SQLite para consultar históricos de meses anteriores, gráficos de tendencia y lecturas sin necesidad de conexión a internet.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "api-tariff-integration",
+            "title": "Integración con Microservicio Kwh Monitor API",
+            "summary": "",
+            "body": "Cliente HTTP asíncrono para enviar lecturas y fechas de ciclo a Kwh Monitor API, obteniendo el desglose de tarifa oficial, subsidio social, alumbrado público y total en Córdobas/Dólares.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Funcionamiento fluido en smartphones Android de gama baja y media comunes en el mercado nicaragüense.",
+          "Capacidad total de operar fuera de línea y sincronizar proyecciones cuando haya conectividad.",
+          "Cálculo exacto conforme al pliego tarifario regulado para evitar discrepancias con la factura oficial."
+        ],
+        "sections": [
+          {
+            "key": "kwh-app-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos de la App",
+            "title": "Funcionalidades de Kwh Monitor Android",
+            "lead": "Herramientas diseñadas para empoderar al consumidor en el control de su gasto energético.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-meter-reading",
+                "title": "Captura de Lecturas del Medidor",
+                "summary": "Entrada rápida de kWh con fecha y hora",
+                "body": "Pantalla intuitiva para anotar la lectura actual del contador eléctrico con validación de valores decrecientes para evitar errores de tipeo.",
+                "value": "Lectura",
+                "icon": "bolt",
+                "tags": ["Medidor", "Java", "Validación"],
+                "note": ""
+              },
+              {
+                "key": "mod-bill-projection",
+                "title": "Proyección del Recibo Eléctrico",
+                "summary": "Estimación del costo total antes de la fecha de corte",
+                "body": "Conecta con Kwh Monitor API para calcular el costo proyectado de la factura mensual desglosando energía activa, subsidio estatal y tributos municipales.",
+                "value": "Proyección",
+                "icon": "gauge",
+                "tags": ["Tarifas", "INE", "Subsidio"],
+                "note": ""
+              },
+              {
+                "key": "mod-consumption-charts",
+                "title": "Gráficos de Consumo y Tendencias",
+                "summary": "Visualización histórica del gasto energético",
+                "body": "Gráficos de barras y líneas que muestran el consumo diario comparado contra la cuota mensual objetivo para alertar sobre incrementos inusuales.",
+                "value": "Gráficas",
+                "icon": "layout",
+                "tags": ["Gráficos", "Tendencia", "Análisis"],
+                "note": ""
+              },
+              {
+                "key": "mod-tariff-alerts",
+                "title": "Semáforo y Alertas de Subsidio",
+                "summary": "Indicador visual de riesgo de pérdida de subsidio",
+                "body": "Semáforo visual (Verde, Amarillo, Rojo) que alerta al usuario cuando el consumo acumulado se aproxima al límite de los 150 kWh subsidiados por el estado.",
+                "value": "Alertas",
+                "icon": "shield",
+                "tags": ["Subsidio", "Alertas", "Protección"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-app-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Estrategia de Desarrollo",
+            "title": "Decisiones Técnicas y de Diseño",
+            "lead": "Criterios para asegurar utilidad práctica y accesibilidad para todos los usuarios.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-offline-first-sqlite",
+                "title": "Arquitectura Offline-First con SQLite Local",
+                "summary": "Disponibilidad garantizada frente al medidor",
+                "body": "Dado que muchos medidores se encuentran en patios o áreas con baja señal móvil, la aplicación almacena todas las lecturas localmente en SQLite, permitiendo registrar datos en cualquier instante sin bloqueos.",
+                "value": "Offline-First",
+                "icon": "shield",
+                "tags": ["SQLite", "Offline", "Resiliencia"],
+                "note": ""
+              },
+              {
+                "key": "dec-microservice-companion",
+                "title": "Desacople mediante Microservicio Kwh Monitor API",
+                "summary": "Aislamiento de la lógica de scraping y regulaciones",
+                "body": "Al delegar el scraping y la fórmula tarifaria al backend Node.js, cualquier cambio en el formato de cálculo gubernamental se actualiza en el servidor sin obligar a los usuarios a descargar una nueva versión de la app.",
+                "value": "Microservicio",
+                "icon": "bolt",
+                "tags": ["Node.js", "API", "Desacople"],
+                "note": ""
+              },
+              {
+                "key": "dec-visual-subsidy-alerts",
+                "title": "Semáforo Visual de Subsidio en Lugar de Números Complejos",
+                "summary": "Diseño centrado en la toma de decisiones familiares",
+                "body": "Los pliegos tarifarios son confusos para el consumidor promedio. Traducir fórmulas matemáticas complejas a un semáforo visual de consumo facilitó que las familias ajustaran el uso de electrodomésticos oportunamente.",
+                "value": "UX Centrada",
+                "icon": "layout",
+                "tags": ["UX", "Accesibilidad", "Ahorro"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
       "title": "Kwh Monitor",
-      "description": "Android mobile application for the control of electricity consumption."
+      "description": "Native Android mobile app for monitoring household power usage and forecasting electricity bills. Enables offline power meter logging with SQLite, interactive usage trend charts, and real-time calculation of official INE tariffs and national subsidies.",
+      "hook": "Native Android App (Java) · Electricity consumption tracking & bill forecasting · Integration with Kwh Monitor API & INE tariffs",
+      "challenge": "Households had no visibility into their accumulating electricity costs until receiving their monthly paper bill, frequently losing government subsidies due to unforeseen consumption spikes.",
+      "approach": "Built a native Android app in Java featuring offline SQLite storage for meter logs, interactive energy consumption charts, and async communication with Kwh Monitor API for exact bill calculation.",
+      "outcome": "Real-time utility bill forecasting, proactive alerts before exceeding the 150 kWh national subsidy ceiling, and reliable logging across thousands of residential entries.",
+      "caseStudy": {
+        "chips": [
+          "Native Android",
+          "Java",
+          "Kwh Monitor API",
+          "Utility Billing",
+          "Local SQLite",
+          "INE Subsidies"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My role",
+            "value": "Creator & Mobile Android Developer"
+          },
+          {
+            "key": "target-utility",
+            "label": "Regulatory agency",
+            "value": "Tariff frameworks of the Nicaraguan Energy Institute (INE)"
+          },
+          {
+            "key": "mobile-stack",
+            "label": "Technology stack",
+            "value": "Java · Android SDK · SQLite / Room · Retrofit / Volley · Kwh Monitor API"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "Gestor-de-Consumo-Eletrico (https://github.com/jess232017/Gestor-de-Consumo-Eletrico)"
+          }
+        ],
+        "nextProjectSlug": "tech-service",
+        "context": "Kwh Monitor is a native Java Android application built to empower residential utility consumers with granular control over their household power consumption. It allows users to log physical electric meter values, track daily and monthly usage curves, project upcoming utility bills before the billing cycle cutoff date using Kwh Monitor API, and receive notifications to safeguard subsidized rates.",
+        "roleTitle": "Android Mobile Developer & Solution Designer",
+        "roleIntro": "Sole architect and developer for the Android application in Java: developed local SQLite persistence for fully offline logging, crafted clean Material Design views with interactive charts, and implemented async HTTP communication to query the Kwh Monitor API scraping microservice.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Android mobile application for electricity meter reading logging, consumption charting, and subsidized bill forecasting in Nicaragua.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Native Java Android development: offline-first SQLite architecture, consumption graphs, and integration with the backend scraping API.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Enabled consumers to project exact monthly utility charges in advance and manage electricity consumption to retain government subsidies.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "android-meter-logging",
+            "title": "Meter Logging & Delta kWh Calculations",
+            "summary": "",
+            "body": "Mobile data entry forms with input sanity checks to log power meter digits, automatically calculating accumulated kWh consumption and average daily burn rate.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "offline-sqlite-sync",
+            "title": "Offline-First Local Storage with SQLite",
+            "summary": "",
+            "body": "Local database persistence using SQLite to review historical records from past months, trend charts, and readings without active internet connectivity.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "api-tariff-integration",
+            "title": "Integration with Kwh Monitor API Microservice",
+            "summary": "",
+            "body": "Async HTTP client dispatching reading numbers and cycle dates to Kwh Monitor API, returning official tariff breakdowns, subsidies, and billing totals in Cordobas/USD.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Smooth performance on low-to-mid range Android devices common in Central American markets.",
+          "Complete offline operational capability with seamless calculation sync once internet is re-established.",
+          "Precise mathematical alignment with official regulatory tariff formulas to ensure bill accuracy."
+        ],
+        "sections": [
+          {
+            "key": "kwh-app-modules",
+            "kind": "CARDS",
+            "eyebrow": "App Modules",
+            "title": "Functionality of Kwh Monitor Android",
+            "lead": "Tools designed to give utility consumers full transparency over their energy budget.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-meter-reading",
+                "title": "Meter Reading Capture",
+                "summary": "Quick kWh logging with timestamp",
+                "body": "Streamlined data entry form to record electric meter numbers with sanity validation preventing decremental readings.",
+                "value": "Reading",
+                "icon": "bolt",
+                "tags": ["Meter", "Java", "Validation"],
+                "note": ""
+              },
+              {
+                "key": "mod-bill-projection",
+                "title": "Electricity Bill Projection",
+                "summary": "Total cost projection before cutoff date",
+                "body": "Communicates with Kwh Monitor API to forecast month-end bill totals, itemizing active energy, public lighting, and national subsidies.",
+                "value": "Projection",
+                "icon": "gauge",
+                "tags": ["Tariffs", "INE", "Subsidy"],
+                "note": ""
+              },
+              {
+                "key": "mod-consumption-charts",
+                "title": "Usage Charts & Historical Trends",
+                "summary": "Visualizing energy spending patterns",
+                "body": "Bar and line charts displaying daily consumption progress against target monthly limits to detect abnormal appliance usage spikes.",
+                "value": "Charts",
+                "icon": "layout",
+                "tags": ["Charts", "Trends", "Analytics"],
+                "note": ""
+              },
+              {
+                "key": "mod-tariff-alerts",
+                "title": "Subsidy Protection Alerts & Indicator",
+                "summary": "Visual warning before subsidy threshold",
+                "body": "Color-coded indicator (Green, Yellow, Red) notifying users when their monthly consumption nears the subsidized 150 kWh ceiling.",
+                "value": "Alerts",
+                "icon": "shield",
+                "tags": ["Subsidy", "Alerts", "Protection"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-app-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Engineering Strategy",
+            "title": "Design and Technical Decisions",
+            "lead": "Architectural choices ensuring practical usability and accessibility.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-offline-first-sqlite",
+                "title": "Offline-First Architecture with Local SQLite",
+                "summary": "Guaranteed availability next to utility meters",
+                "body": "Since many power meters are installed in outdoor yards with poor cellular coverage, storing all logs locally in SQLite guarantees effortless meter entry without connection drops.",
+                "value": "Offline-First",
+                "icon": "shield",
+                "tags": ["SQLite", "Offline", "Resilience"],
+                "note": ""
+              },
+              {
+                "key": "dec-microservice-companion",
+                "title": "Decoupling via Kwh Monitor API Microservice",
+                "summary": "Isolating web scraping and regulatory formulas",
+                "body": "Delegating web scraping and tariff calculations to the Node.js backend means changes to governmental formulas update on the server without requiring app store updates.",
+                "value": "Microservice",
+                "icon": "bolt",
+                "tags": ["Node.js", "API", "Decoupling"],
+                "note": ""
+              },
+              {
+                "key": "dec-visual-subsidy-alerts",
+                "title": "Visual Threshold Indicator over Complex Math",
+                "summary": "Human-centered UX for household decision making",
+                "body": "Government energy tariff structures are opaque to average citizens. Translating complex progressive brackets into an intuitive visual traffic light helped families adjust appliance usage.",
+                "value": "User-Centered",
+                "icon": "layout",
+                "tags": ["UX", "Accessibility", "Savings"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
       "title": "Kwh Monitor",
-      "description": "Mobiele Android-toepassing voor de controle van het elektriciteitsverbruik."
+      "description": "Native Android-app voor het monitoren van stroomverbruik en het ramen van energiefacturen. Biedt offline meterstandenregistratie met SQLite, interactieve verbruiksgrafieken en realtime berekening van officiële INE-tarieven en overheidssubsidies.",
+      "hook": "Mobiele Android-app (Java) · Elektriciteitsverbruik monitoren & factuurprognose · Integratie met Kwh Monitor API & INE-tarieven",
+      "challenge": "Gezinnen hadden geen inzicht in hun opgebouwde elektriciteitskosten tot de maandelijkse papieren factuur arriveerde, waardoor energiesubsidies ongemerkt verloren gingen.",
+      "approach": "Ontwikkelde een native Android-app in Java met offline SQLite-opslag voor meterstanden, interactieve energiegrafieken en synchronisatie met Kwh Monitor API voor factuurberekeningen.",
+      "outcome": "Realtime prognose van energiekosten, vroegtijdige waarschuwingen voor het 150 kWh subsidieplafond en betrouwbare registratie over duizenden metingen.",
+      "caseStudy": {
+        "chips": [
+          "Native Android",
+          "Java",
+          "Kwh Monitor API",
+          "Factuurberekening",
+          "Lokale SQLite",
+          "INE Subsidies"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Bedenker & Mobiele Android Ontwikkelaar"
+          },
+          {
+            "key": "target-utility",
+            "label": "Regelgevende instantie",
+            "value": "Tariefkaders van het Nicaraguaanse Energie-instituut (INE)"
+          },
+          {
+            "key": "mobile-stack",
+            "label": "Technologie-stack",
+            "value": "Java · Android SDK · SQLite / Room · Retrofit / Volley · Kwh Monitor API"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "Gestor-de-Consumo-Eletrico (https://github.com/jess232017/Gestor-de-Consumo-Eletrico)"
+          }
+        ],
+        "nextProjectSlug": "tech-service",
+        "context": "Kwh Monitor is een native Java Android-app waarmee particuliere consumenten grip houden op hun huishoudelijk stroomverbruik. Gebruikers voeren periodiek meterstanden in, volgen dagelijkse en maandelijkse verbruikscurves, berekenen vooraf de energiefactuur via de Kwh Monitor API en ontvangen meldingen om overheidssubsidies te behouden.",
+        "roleTitle": "Android Ontwikkelaar & Oplossingsarchitect",
+        "roleIntro": "Volledige ontwikkeling in Java voor Android: ontwierp lokale SQLite-opslag voor 100% offline werking, creëerde Material Design schermen met interactieve grafieken en implementeerde asynchrone HTTP-communicatie met de scraping-microservice Kwh Monitor API.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Mobiele Android-applicatie voor meterstandenregistratie, energiegrafieken en gesubsidieerde factuurprognose in Nicaragua.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Native Java Android-ontwikkeling: offline-first SQLite-architectuur, verbruiksgrafieken en koppeling met de backend scraping-API.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Stelde consumenten in staat om vooraf de exacte maandelijkse energiekosten te ramen en stroomverbruik aan te passen om subsidies te behouden.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "android-meter-logging",
+            "title": "Meterregistratie & Berekening van Delta kWh",
+            "summary": "",
+            "body": "Mobiele formulieren met invoervalidatie om meterstanden vast te leggen en automatisch het geaccumuleerde kWh-verbruik en daggemiddelde te berekenen.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "offline-sqlite-sync",
+            "title": "Offline-First Lokale Opslag met SQLite",
+            "summary": "",
+            "body": "Lokale database-persistentie via SQLite om historische gegevens van voorgaande maanden, trends en metingen zonder internet te raadplegen.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "api-tariff-integration",
+            "title": "Integratie met Kwh Monitor API Microservice",
+            "summary": "",
+            "body": "Asynchrone HTTP-client die meterstanden doorstuurt naar Kwh Monitor API en officiële tarieven, subsidies en factuurbedragen ophaalt.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Vloeiende werking op budget- en midrange Android-telefoons gangbaar in Midden-Amerika.",
+          "Volledige offline werking met automatische synchronisatie zodra er weer verbinding is.",
+          "Exacte berekening conform de gereguleerde tarieven om afwijkingen van de officiële factuur te voorkomen."
+        ],
+        "sections": [
+          {
+            "key": "kwh-app-modules",
+            "kind": "CARDS",
+            "eyebrow": "App Modules",
+            "title": "Functionaliteiten van Kwh Monitor Android",
+            "lead": "Tools ontworpen om consumenten volledige controle over hun energiekosten te geven.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-meter-reading",
+                "title": "Meterstanden Registreren",
+                "summary": "Snelle kWh-invoer met tijdstempel",
+                "body": "Overzichtelijk scherm om de elektriciteitsmeterstand te noteren met invoervalidatie die onlogische dalingen voorkomt.",
+                "value": "Meting",
+                "icon": "bolt",
+                "tags": ["Meter", "Java", "Validatie"],
+                "note": ""
+              },
+              {
+                "key": "mod-bill-projection",
+                "title": "Factuurprognose",
+                "summary": "Totale kostenraming voor de afrekendatum",
+                "body": "Communiceert met Kwh Monitor API om de maandfactuur te ramen met uitsplitsing van verbruik, overheidssubsidie en heffingen.",
+                "value": "Prognose",
+                "icon": "gauge",
+                "tags": ["Tarieven", "INE", "Subsidie"],
+                "note": ""
+              },
+              {
+                "key": "mod-consumption-charts",
+                "title": "Verbruiksgrafieken en Trends",
+                "summary": "Inzicht in historisch stroomverbruik",
+                "body": "Staaf- en lijngrafieken die het dagverbruik afzetten tegen de maandelijkse doellimiet om ongebruikelijke pieken te signaleren.",
+                "value": "Grafieken",
+                "icon": "layout",
+                "tags": ["Grafieken", "Trends", "Analyse"],
+                "note": ""
+              },
+              {
+                "key": "mod-tariff-alerts",
+                "title": "Subsidiewaarschuwingen & Indicator",
+                "summary": "Visuele waarschuwing voor subsidielimiet",
+                "body": "Kleurindicator (Groen, Geel, Rood) die waarschuwt wanneer het verbruik het gesubsidieerde plafond van 150 kWh nadert.",
+                "value": "Meldingen",
+                "icon": "shield",
+                "tags": ["Subsidie", "Meldingen", "Bescherming"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "kwh-app-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Technologiestrategie",
+            "title": "Technische en Ontwerpkeuzes",
+            "lead": "Architectuurkeuzes die gebruiksgemak en betrouwbaarheid waarborgen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-offline-first-sqlite",
+                "title": "Offline-First Architectuur met Lokale SQLite",
+                "summary": "Beschikbaarheid gegarandeerd bij de meter",
+                "body": "Doordat veel meters buiten hangen waar mobiele ontvangst beperkt is, slaat de app alle gegevens lokaal op in SQLite voor een betrouwbare invoer zonder haperingen.",
+                "value": "Offline-First",
+                "icon": "shield",
+                "tags": ["SQLite", "Offline", "Robuust"],
+                "note": ""
+              },
+              {
+                "key": "dec-microservice-companion",
+                "title": "Ontkoppeling via Kwh Monitor API Microservice",
+                "summary": "Isolatie van scraping en overheidsformules",
+                "body": "Door de scraping en berekeningen naar de Node.js backend te delegeren, worden wijzigingen in overheidsformules op de server verwerkt zonder verplichte app-updates.",
+                "value": "Microservice",
+                "icon": "bolt",
+                "tags": ["Node.js", "API", "Ontkoppeling"],
+                "note": ""
+              },
+              {
+                "key": "dec-visual-subsidy-alerts",
+                "title": "Visuele Indicator boven Complexe Berekeningen",
+                "summary": "Gebruiksvriendelijke UX voor gezinnen",
+                "body": "Overheidstarieven zijn complex voor de gemiddelde gebruiker. Het vertalen van formules naar een intuïtieve kleurindicator hielp gezinnen tijdig stroom te besparen.",
+                "value": "Gebruikers-UX",
+                "icon": "layout",
+                "tags": ["UX", "Besparing", "Eenvoud"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
-  ],
-  "skillKeys": ["Java", "Android", "Mysql", "Nodejs"],
-  "order": 17,
-  "kind": "PERSONAL",
-  "slug": "kwh-monitor"
+  ]
 }
