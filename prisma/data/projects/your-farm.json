@@ -9,20 +9,26 @@
     {
       "locale": "es",
       "title": "Tu finca",
-      "description": "Aplicación móvil Android para el control de pedidos de comida."
+      "description": "Aplicación móvil Android orientada a la gestión agropecuaria en fincas productivas. Facilita el control de inventario de ganado, registro de vacunaciones y tratamientos veterinarios, monitoreo de cosechas y registro de costos e ingresos operativos con funcionamiento fuera de línea.",
+      "hook": "App Móvil Android (Java) · Gestión integral agropecuaria y ganadera · Control de cosechas, inventario de ganado y costos offline"
     },
     {
       "locale": "en",
       "title": "Your farm",
-      "description": "Android mobile application for the control of food orders."
+      "description": "Native Android mobile app engineered for agricultural and livestock farm management. Streamlines livestock inventory tracking, veterinary vaccination schedules, harvest monitoring, and operational cost accounting with robust offline operation.",
+      "hook": "Native Android App (Java) · Comprehensive agricultural & livestock management · Livestock inventory, harvest & cost tracking offline"
     },
     {
       "locale": "nl",
       "title": "Your farm",
-      "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+      "description": "Native Android-app voor agrarisch en veeteeltbeheer op boerderijen. Stroomlijnt veestapelregistratie, veterinaire vaccinatieschema's, oogstmonitoring en kostenbeheer met betrouwbare offline werking.",
+      "hook": "Mobiele Android-app (Java) · Integraal agrarisch en veeteeltbeheer · Veestapelregistratie, oogst- en kostenbeheer offline"
     }
   ],
-  "skillKeys": ["Java", "Android"],
+  "skillKeys": [
+    "Java",
+    "Android"
+  ],
   "order": 20,
   "kind": "PERSONAL",
   "slug": "your-farm"

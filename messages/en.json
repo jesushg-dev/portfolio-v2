@@ -418,7 +418,11 @@
             "short": "Profile and philosophy",
             "headline": "Who I am as an engineer",
             "description": "A summary of my profile, how I approach software, and the principles behind the systems I build.",
-            "chips": ["Profile summary", "Engineering philosophy", "Ownership"],
+            "chips": [
+              "Profile summary",
+              "Engineering philosophy",
+              "Ownership"
+            ],
             "statValue": "6+",
             "statLabel": "years of experience",
             "cta": "Go to about me"
@@ -442,7 +446,12 @@
             "short": ".NET, C#, microservices, cloud",
             "headline": "The stack I work with daily",
             "description": "The tools and technologies I use to design, build, and ship production software.",
-            "chips": [".NET", "C#", "Microservices", "Cloud"],
+            "chips": [
+              ".NET",
+              "C#",
+              "Microservices",
+              "Cloud"
+            ],
             "statValue": "4",
             "statLabel": "core areas",
             "cta": "Explore technical stack"
@@ -466,7 +475,11 @@
             "short": "Teams, mentorship, communication",
             "headline": "How I work with people",
             "description": "Leading teams, mentoring developers, and communicating clearly with product and business partners.",
-            "chips": ["Team leadership", "Mentorship", "Communication"],
+            "chips": [
+              "Team leadership",
+              "Mentorship",
+              "Communication"
+            ],
             "statValue": "6",
             "statLabel": "engineers led",
             "cta": "Read leadership principles"
@@ -476,7 +489,11 @@
             "short": "Words from colleagues",
             "headline": "What colleagues and leaders say",
             "description": "Feedback from senior developers, teammates, and stakeholders on what it is like to work with me.",
-            "chips": ["Testimonials", "Senior developers", "Recommendations"],
+            "chips": [
+              "Testimonials",
+              "Senior developers",
+              "Recommendations"
+            ],
             "statValue": "100%",
             "statLabel": "positive feedback",
             "cta": "Read testimonials"
@@ -486,7 +503,12 @@
             "short": "Engineering projects & case studies",
             "headline": "Projects and systems I have built",
             "description": "A collection of systems and products, from APIs and e-commerce to internal admin platforms.",
-            "chips": ["APIs", "E-commerce", "Admin platforms", "Cloud"],
+            "chips": [
+              "APIs",
+              "E-commerce",
+              "Admin platforms",
+              "Cloud"
+            ],
             "statValue": "15+",
             "statLabel": "featured projects",
             "cta": "View projects"
@@ -496,7 +518,12 @@
             "short": "Technical credentials",
             "headline": "Verified credentials & certifications",
             "description": "Formal credentials and certifications across backend, frontend, cloud, and security.",
-            "chips": ["Frontend", "Backend", "Cybersecurity", "Soft skills"],
+            "chips": [
+              "Frontend",
+              "Backend",
+              "Cybersecurity",
+              "Soft skills"
+            ],
             "statValue": "30+",
             "statLabel": "certifications",
             "cta": "View certificates"
@@ -506,7 +533,11 @@
             "short": "Professional resume",
             "headline": "Full professional CV",
             "description": "Comprehensive resume in modern web format, with full employment history and PDF export.",
-            "chips": ["Interactive CV", "PDF export", "Work history"],
+            "chips": [
+              "Interactive CV",
+              "PDF export",
+              "Work history"
+            ],
             "statValue": "2026",
             "statLabel": "current resume",
             "cta": "Open Curriculum Vitae"
@@ -516,7 +547,11 @@
             "short": "Career progression",
             "headline": "Career milestones & evolution",
             "description": "A chronological overview of career milestones, roles, and professional evolution.",
-            "chips": ["Career milestones", "Progression", "Growth"],
+            "chips": [
+              "Career milestones",
+              "Progression",
+              "Growth"
+            ],
             "statValue": "6+",
             "statLabel": "years evolution",
             "cta": "View timeline"
@@ -526,7 +561,11 @@
             "short": "Engineering acceleration",
             "headline": "AI-assisted engineering",
             "description": "How I integrate modern AI tools, agentic workflows, and automation into daily software engineering.",
-            "chips": ["AI Tooling", "Velocity", "Automated workflows"],
+            "chips": [
+              "AI Tooling",
+              "Velocity",
+              "Automated workflows"
+            ],
             "statValue": "2x",
             "statLabel": "delivery velocity",
             "cta": "Explore AI workflow"
@@ -550,7 +589,12 @@
             "short": "Gear, software & setup",
             "headline": "Hardware & software I use daily",
             "description": "The hardware, workstation configuration, editor setup, and software tools I use every day.",
-            "chips": ["Hardware", "Workstation", "Dev tools", "Terminal"],
+            "chips": [
+              "Hardware",
+              "Workstation",
+              "Dev tools",
+              "Terminal"
+            ],
             "statValue": "Daily",
             "statLabel": "developer tools",
             "cta": "View setup"
@@ -560,7 +604,11 @@
             "short": "Current focus & reading",
             "headline": "What I am focused on now",
             "description": "A living snapshot of active projects, technologies I am exploring, and what I am shipping right now.",
-            "chips": ["Current focus", "Reading", "Active projects"],
+            "chips": [
+              "Current focus",
+              "Reading",
+              "Active projects"
+            ],
             "statValue": "Live",
             "statLabel": "current status",
             "cta": "See now page"
@@ -570,7 +618,11 @@
             "short": "Visitor & portfolio metrics",
             "headline": "Portfolio highlights & analytics",
             "description": "Transparent statistics on visits, visitor geographic distribution, and performance metrics.",
-            "chips": ["Analytics", "Performance", "Demographics"],
+            "chips": [
+              "Analytics",
+              "Performance",
+              "Demographics"
+            ],
             "statValue": "Live",
             "statLabel": "site telemetry",
             "cta": "View statistics"
@@ -983,7 +1035,10 @@
           "IN_PRODUCTION": "In production",
           "MAINTENANCE": "In maintenance",
           "ARCHIVED": "Archived"
-        }
+        },
+        "expandImage": "Expand image",
+        "closeLightbox": "Close enlarged image",
+        "pressEscToClose": "Press Esc to close"
       },
       "private": {
         "title": "Private",

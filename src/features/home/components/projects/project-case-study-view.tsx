@@ -60,9 +60,9 @@ export default function ProjectCaseStudyView({
         ];
 
   return (
-    <CaseStudyGlowContainer className="mx-auto max-w-6xl px-5 pt-24 pb-24">
+    <CaseStudyGlowContainer className="mx-auto w-full max-w-6xl min-w-0 overflow-x-hidden px-4 pt-20 pb-24 sm:px-5 sm:pt-24">
       <CaseStudyProgressBar />
-      <div className="fade">
+      <div className="fade w-full max-w-full min-w-0">
         <BackToProjectsLink />
         <header className="mt-8">
           <div className="flex flex-wrap gap-2">
@@ -75,17 +75,17 @@ export default function ProjectCaseStudyView({
               </span>
             ))}
           </div>
-          <h1 className="mt-5 text-5xl leading-[1.05] font-extrabold tracking-tight md:text-7xl">
+          <h1 className="mt-5 text-3xl leading-[1.08] font-extrabold tracking-tight break-words sm:text-5xl md:text-7xl">
             {project.title}
           </h1>
-          <p className="text-muted-foreground mt-5 max-w-2xl text-xl leading-8">
+          <p className="text-muted-foreground mt-5 max-w-2xl text-lg leading-relaxed sm:text-xl sm:leading-8">
             {project.description ?? project.hook}
           </p>
         </header>
 
         <ProjectSnapshot project={project} />
 
-        <div className="mt-16 grid gap-12 lg:grid-cols-[13.125rem_minmax(0,1fr)]">
+        <div className="mt-16 grid w-full max-w-full min-w-0 gap-12 lg:grid-cols-[13.125rem_minmax(0,1fr)]">
           <CaseStudySidebar sections={pageSections} />
           <div className="min-w-0 space-y-20">
             {pageSections.map((section, index) => (

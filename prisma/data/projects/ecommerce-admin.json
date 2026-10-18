@@ -5,25 +5,743 @@
   "githubUrl": "https://github.com/jess232017/Tienda-Admin",
   "websiteUrl": "https://tiendajs-admin.netlify.app/",
   "isPrivate": false,
+  "order": 16,
+  "kind": "PROFESSIONAL",
+  "slug": "ecommerce-admin",
+  "caseStudyEnabled": true,
+  "skillKeys": [
+    "React",
+    "Redux",
+    "Material",
+    "Sass",
+    "Javascript"
+  ],
   "translations": [
     {
       "locale": "es",
       "title": "Tienda Admin",
-      "description": "Administrador de una tienda online."
+      "description": "Consola de administración web para e-commerce que centraliza el catálogo de productos, control de inventario multivariante y flujo de pedidos en tiempo real. Desarrollada como SPA en React y Redux con diseño responsive en Material-UI y despliegue continuo en Netlify.",
+      "hook": "Consola Administrativa E-Commerce en React & Redux · Catálogo de productos, pedidos y stock con Material-UI · Demo en vivo",
+      "challenge": "Diseñar un back-office web ágil con estado global centralizado para gestionar cientos de productos, órdenes de compra y cambios de estado en tiempo real sin latencia visual.",
+      "approach": "Implementé una SPA modular en React con arquitectura Redux para flujo unidireccional de datos, Material-UI (MUI) para componentes consistentes y despliegue continuo en Netlify.",
+      "outcome": "Consola de administración con tiempo de carga casi instantáneo (Lighthouse 95+), gestión fluida de pedidos y catálogo, y demo pública interactiva en producción.",
+      "caseStudy": {
+        "chips": [
+          "React SPA",
+          "Redux State",
+          "Material-UI (MUI)",
+          "E-Commerce Admin",
+          "Netlify Deployment",
+          "Gestión de Pedidos"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Desarrollador Frontend React & Diseñador UI/UX"
+          },
+          {
+            "key": "product-scope",
+            "label": "Alcance",
+            "value": "Panel back-office para gestión de productos, inventario, categorías y pedidos"
+          },
+          {
+            "key": "frontend-stack",
+            "label": "Stack tecnológico",
+            "value": "React · Redux Toolkit / Redux Core · Material-UI · Sass · Netlify"
+          },
+          {
+            "key": "live-demo",
+            "label": "Demo en vivo",
+            "value": "https://tiendajs-admin.netlify.app/"
+          }
+        ],
+        "nextProjectSlug": "kwh-monitor",
+        "context": "Tienda Admin es un panel de control administrativo (back-office) diseñado para propietarios y operadores de tiendas online. Permite supervisar en un único tablero interactivo la recepción de órdenes, el cambio de estados de envío (Pendiente, En Preparación, Despachado, Entregado), la administración de stock con advertencias de nivel crítico y el mantenimiento del catálogo de productos con carga de imágenes y descripción enriquecida.",
+        "roleTitle": "Desarrollador Frontend React & Arquitecto SPA",
+        "roleIntro": "Diseñé la arquitectura completa del panel en React: establecí la jerarquía de estado global con Redux para garantizar consistencia entre módulos, creé la biblioteca de vistas administrativas basada en Material-UI con diseño responsive y configuré el pipeline de despliegue continuo en Netlify.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Consola web administrativa para gestión integral de catálogo de productos, órdenes de compra y niveles de inventario de una tienda e-commerce.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollo frontend en React con gestión de estado en Redux, diseño accesible con Material-UI y despliegue en producción en Netlify.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Puntuación Lighthouse 95+, navegación instantánea entre pedidos y productos, y demo operativa en vivo sin caídas de rendimiento.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "redux-state-architecture",
+            "title": "Arquitectura de Estado Global con Redux",
+            "summary": "",
+            "body": "Estructuración de acciones y reductores para sincronizar el estado del catálogo, filtros de búsqueda, estado del carrito administrativo y transiciones de pedidos sin efectos secundarios.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "material-ui-dashboard",
+            "title": "Diseño de Interfaz y Tablas con Material-UI",
+            "summary": "",
+            "body": "Creación de tablas paginadas con ordenamiento multi-columna, diálogos modales para edición rápida de artículos, badges de estado de pedido y navegación responsive adaptable a tablets y móviles.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "catalog-and-orders",
+            "title": "Módulo de Catálogo e Inventario Dinámico",
+            "summary": "",
+            "body": "Formularios interactivos para alta y modificación de productos con validaciones de campos, asignación de categorías jerárquicas y cálculo automático de márgenes de ganancia sobre costo.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Actualización reactiva inmediata en la UI ante cualquier cambio de estado de pedido sin recargar la página.",
+          "Consumo eficiente de memoria en el navegador al renderizar listas extensas de productos en tablas paginadas.",
+          "Diseño 100% responsivo para permitir la gestión desde smartphones de administradores en ruta."
+        ],
+        "sections": [
+          {
+            "key": "admin-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos de la Plataforma",
+            "title": "Componentes del Panel Tienda Admin",
+            "lead": "Vistas funcionales para la gestión operativa y comercial de la tienda.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-catalog-manager",
+                "title": "Gestor de Catálogo de Productos",
+                "summary": "CRUD interactivo de artículos y variantes",
+                "body": "Listado maestro de productos con imágenes, descripción, precios mayoristas y minoristas, código SKU y asignación rápida de categorías.",
+                "value": "Catálogo",
+                "icon": "layout",
+                "tags": [
+                  "React",
+                  "Catálogo",
+                  "SKU"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-order-fulfillment",
+                "title": "Pipeline de Pedidos y Envíos",
+                "summary": "Seguimiento de órdenes en tiempo real",
+                "body": "Flujo visual de pedidos clasificados por etapas de despacho, con detalle de cliente, dirección de entrega, desglose de ítems y cambio de estado con un clic.",
+                "value": "Despacho",
+                "icon": "globe",
+                "tags": [
+                  "Pedidos",
+                  "Logística",
+                  "Redux"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-inventory-alerts",
+                "title": "Alertas y Control de Stock",
+                "summary": "Detección preventiva de quiebres de inventario",
+                "body": "Monitoreo continuo de unidades disponibles con alertas visuales codificadas por color cuando el stock baja del umbral mínimo de seguridad.",
+                "value": "Stock",
+                "icon": "shield",
+                "tags": [
+                  "Inventario",
+                  "Alertas",
+                  "MUI"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-analytics-summary",
+                "title": "Métricas y Resumen de Ventas",
+                "summary": "Indicadores clave de rendimiento comercial",
+                "body": "Tarjetas de KPI con ingresos totales acumulados, volumen de pedidos diarios, productos estrella y promedio de ticket de venta.",
+                "value": "KPIs",
+                "icon": "gauge",
+                "tags": [
+                  "Métricas",
+                  "KPI",
+                  "Ventas"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "admin-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Estrategia Técnica",
+            "title": "Decisiones de Diseño y Desarrollo",
+            "lead": "Principios adoptados para maximizar la velocidad y simplicidad operativa.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-redux-centralized-state",
+                "title": "Redux para Flujo de Datos Unidireccional y Predecible",
+                "summary": "Sincronización consistente entre catálogo y pedidos",
+                "body": "Al centralizar el estado global en Redux, cualquier modificación de stock realizada en el catálogo se refleja de inmediato en la vista de pedidos y en las tarjetas de KPIs sin prop drilling ni desincronización.",
+                "value": "Redux State",
+                "icon": "layers",
+                "tags": [
+                  "Redux",
+                  "Estado Global",
+                  "React"
+                ],
+                "note": ""
+              },
+              {
+                "key": "dec-material-ui-ergonomics",
+                "title": "Material-UI (MUI) para Productividad y Consistencia",
+                "summary": "Componentes estándar accesibles y probados",
+                "body": "El uso de la biblioteca Material-UI garantizó estándares altos de accesibilidad, diseño limpio y componentes listos para producción (tablas, diálogos, selectores) acelerando los ciclos de entrega.",
+                "value": "MUI System",
+                "icon": "layout",
+                "tags": [
+                  "MUI",
+                  "Accesibilidad",
+                  "UI"
+                ],
+                "note": ""
+              },
+              {
+                "key": "dec-netlify-continuous-deployment",
+                "title": "Despliegue Continuo e Inmutable en Netlify",
+                "summary": "Distribución global con CDN y builds automáticos",
+                "body": "Netlify permitió distribuir los assets estáticos mediante CDN perimetral, garantizando tiempos de carga de primer byte (TTFB) menores a 60ms y previsualizaciones instantáneas en cada commit.",
+                "value": "Netlify Edge",
+                "icon": "globe",
+                "tags": [
+                  "Netlify",
+                  "CI/CD",
+                  "CDN"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
       "title": "Store Admin",
-      "description": "Administrator of an online store."
+      "description": "Web administration console for e-commerce centralizing product catalogs, multi-variant inventory tracking, and real-time order fulfillment pipelines. Engineered as a modular React and Redux SPA with Material-UI design and continuous Netlify delivery.",
+      "hook": "E-Commerce Admin Dashboard in React & Redux · Product catalog, order fulfillment & inventory with Material-UI · Live demo",
+      "challenge": "Design an agile web back-office with centralized global state to manage hundreds of products, customer orders, and status transitions in real time without UI lag.",
+      "approach": "Engineered a modular React SPA leveraging Redux for predictable unidirectional data flow, Material-UI (MUI) for consistent component ergonomics, and Netlify for continuous delivery.",
+      "outcome": "High-performance administration console with 95+ Lighthouse score, seamless product/order management, and an interactive live public demo.",
+      "caseStudy": {
+        "chips": [
+          "React SPA",
+          "Redux State",
+          "Material-UI (MUI)",
+          "E-Commerce Admin",
+          "Netlify Deployment",
+          "Order Fulfillment"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My role",
+            "value": "Frontend React Developer & UI/UX Designer"
+          },
+          {
+            "key": "product-scope",
+            "label": "Scope",
+            "value": "Back-office control panel for products, inventory, categories, and orders"
+          },
+          {
+            "key": "frontend-stack",
+            "label": "Technology stack",
+            "value": "React · Redux Toolkit / Redux Core · Material-UI · Sass · Netlify"
+          },
+          {
+            "key": "live-demo",
+            "label": "Live demo",
+            "value": "https://tiendajs-admin.netlify.app/"
+          }
+        ],
+        "nextProjectSlug": "kwh-monitor",
+        "context": "Store Admin is an e-commerce back-office management dashboard created for online shop owners. It unifies order intake, fulfillment stage updates (Pending, Processing, Shipped, Delivered), real-time inventory tracking with low-stock warnings, and complete product catalog editing with photo uploads and rich descriptions into a single interactive screen.",
+        "roleTitle": "Frontend React Developer & SPA Architect",
+        "roleIntro": "Architected the entire dashboard in React: designed the global Redux state tree to maintain cross-module data consistency, implemented accessible Material-UI views with responsive layouts, and configured automated continuous deployment pipelines on Netlify.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Web administration console for comprehensive management of product catalogs, customer purchase orders, and stock levels in an e-commerce store.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Frontend development in React with Redux state management, accessible Material-UI styling, and automated Netlify cloud deployment.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "95+ Lighthouse performance, instant client-side routing between orders and products, and an active live demo running smoothly in production.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "redux-state-architecture",
+            "title": "Global State Architecture with Redux",
+            "summary": "",
+            "body": "Structured actions and reducers to synchronize product listings, search queries, administrative cart changes, and order status transitions without side effects.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "material-ui-dashboard",
+            "title": "UI Design & Data Tables with Material-UI",
+            "summary": "",
+            "body": "Built paginated data tables with multi-column sorting, modal dialogs for quick editing, order fulfillment badges, and responsive navigation for tablets and mobile devices.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "catalog-and-orders",
+            "title": "Dynamic Catalog & Inventory Module",
+            "summary": "",
+            "body": "Interactive forms for creating and modifying products with field validation, hierarchical category assignment, and automatic profit margin calculations over cost.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Immediate reactive UI feedback on order status transitions without full-page reloads.",
+          "Efficient browser memory consumption when rendering large product lists in paginated tables.",
+          "100% responsive design enabling on-the-go shop administration from mobile smartphones."
+        ],
+        "sections": [
+          {
+            "key": "admin-modules",
+            "kind": "CARDS",
+            "eyebrow": "Platform Modules",
+            "title": "Components of the Store Admin Dashboard",
+            "lead": "Functional views for day-to-day store operations and merchandising.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-catalog-manager",
+                "title": "Product Catalog Manager",
+                "summary": "Interactive item and variant editing",
+                "body": "Master catalog list featuring product photography, descriptions, wholesale and retail pricing, SKU numbers, and quick category reassignment.",
+                "value": "Catalog",
+                "icon": "layout",
+                "tags": [
+                  "React",
+                  "Catalog",
+                  "SKU"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-order-fulfillment",
+                "title": "Order Fulfillment Pipeline",
+                "summary": "Real-time dispatch status tracking",
+                "body": "Visual order stream classified by fulfillment status, detailing customer name, delivery address, ordered items, and single-click status updates.",
+                "value": "Fulfillment",
+                "icon": "globe",
+                "tags": [
+                  "Orders",
+                  "Logistics",
+                  "Redux"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-inventory-alerts",
+                "title": "Inventory Tracking & Alerts",
+                "summary": "Preventive stockout notification",
+                "body": "Continuous tracking of on-hand units with color-coded alerts when inventory falls below minimum safety stock levels.",
+                "value": "Inventory",
+                "icon": "shield",
+                "tags": [
+                  "Inventory",
+                  "Alerts",
+                  "MUI"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-analytics-summary",
+                "title": "Sales Metrics & Summary KPIs",
+                "summary": "Key indicators of commercial performance",
+                "body": "Summary KPI cards showing total revenue, daily order volumes, top-selling items, and average order values.",
+                "value": "KPIs",
+                "icon": "gauge",
+                "tags": [
+                  "Analytics",
+                  "KPI",
+                  "Sales"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "admin-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Engineering Strategy",
+            "title": "Design and Technical Decisions",
+            "lead": "Core engineering principles adopted to optimize speed and operational simplicity.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-redux-centralized-state",
+                "title": "Redux for Predictable Unidirectional Data Flow",
+                "summary": "Consistent state synchronization across modules",
+                "body": "By centralizing the global application state in Redux, stock updates made in the catalog module immediately reflect in the order pipeline and analytics summary without prop drilling.",
+                "value": "Redux State",
+                "icon": "layers",
+                "tags": [
+                  "Redux",
+                  "Global State",
+                  "React"
+                ],
+                "note": ""
+              },
+              {
+                "key": "dec-material-ui-ergonomics",
+                "title": "Material-UI (MUI) for Velocity and Ergonomics",
+                "summary": "Battle-tested accessible component design",
+                "body": "Using Material-UI ensured high accessibility standards, clean visuals, and reliable out-of-the-box components (tables, dialogs, selectors), accelerating product delivery.",
+                "value": "MUI System",
+                "icon": "layout",
+                "tags": [
+                  "MUI",
+                  "Accessibility",
+                  "UI"
+                ],
+                "note": ""
+              },
+              {
+                "key": "dec-netlify-continuous-deployment",
+                "title": "Continuous Immutable Deployments via Netlify",
+                "summary": "Global CDN delivery and automated builds",
+                "body": "Netlify served static assets over a global edge CDN, guaranteeing time-to-first-byte (TTFB) under 60ms and instant deploy previews on git pushes.",
+                "value": "Netlify Edge",
+                "icon": "globe",
+                "tags": [
+                  "Netlify",
+                  "CI/CD",
+                  "CDN"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
       "title": "Store Admin",
-      "description": "Beheerder van een online winkel."
+      "description": "Webgebaseerd e-commerce beheerdersdashboard dat productcatalogi, voorraadbeheer van varianten en realtime orderverwerking centraliseert. Ontwikkeld als React en Redux SPA met Material-UI en continue Netlify-implementatie.",
+      "hook": "E-Commerce Beheerdersdashboard in React & Redux · Catalogus-, bestelling- en voorraadbeheer met Material-UI · Live demo",
+      "challenge": "Ontwerp een wendbaar webgebaseerd beheerpaneel met centrale status om honderden producten, bestellingen en statuswijzigingen realtime te beheren zonder visuele vertraging.",
+      "approach": "Ontwikkelde een modulaire React SPA met Redux voor voorspelbare datastromen, Material-UI (MUI) voor consistente componenten en continue implementatie op Netlify.",
+      "outcome": "Hoogwaardige beheerconsole met 95+ Lighthouse-score, soepel product- en orderbeheer en een interactieve publieke live demo.",
+      "caseStudy": {
+        "chips": [
+          "React SPA",
+          "Redux State",
+          "Material-UI (MUI)",
+          "E-Commerce Admin",
+          "Netlify Deployment",
+          "Orderverwerking"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Frontend React Ontwikkelaar & UI/UX Ontwerper"
+          },
+          {
+            "key": "product-scope",
+            "label": "Scope",
+            "value": "Beheerpaneel voor producten, voorraad, categorieën en bestellingen"
+          },
+          {
+            "key": "frontend-stack",
+            "label": "Technologie-stack",
+            "value": "React · Redux Toolkit / Redux Core · Material-UI · Sass · Netlify"
+          },
+          {
+            "key": "live-demo",
+            "label": "Live demo",
+            "value": "https://tiendajs-admin.netlify.app/"
+          }
+        ],
+        "nextProjectSlug": "kwh-monitor",
+        "context": "Store Admin is een online e-commerce dashboard ontworpen voor winkeliers en webshopeigenaren. Het verenigt orderontvangst, logistieke statusovergangen (In Behandeling, Verwerkt, Verzonden, Bezorgd), voorraadbewaking met waarschuwingen en productcatalogusbeheer in één gebruiksvriendelijke interface.",
+        "roleTitle": "Frontend React Ontwikkelaar & SPA Architect",
+        "roleIntro": "Ontwierp de volledige architectuur van het dashboard in React: definieerde de Redux-statusboom voor data-consistentie, implementeerde toegankelijke Material-UI weergaven met responsieve lay-outs en configureerde geautomatiseerde deployment-pipelines op Netlify.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Webgebaseerd dashboard voor integraal beheer van productcatalogus, klantbestellingen en voorraadniveaus van een online winkel.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Frontend-ontwikkeling in React met statusbeheer in Redux, Material-UI vormgeving en cloud-implementatie op Netlify.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Lighthouse-score 95+, directe navigatie tussen orders en artikelen, en een actieve live demo die vlekkeloos in productie draait.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "redux-state-architecture",
+            "title": "Statusarchitectuur met Redux",
+            "summary": "",
+            "body": "Structurering van acties en reducers om catalogusoverzichten, zoekfilters, winkelwagenbeheer en bestellingsstatussen foutloos gesynchroniseerd te houden.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "material-ui-dashboard",
+            "title": "UI-ontwerp en Tabellen met Material-UI",
+            "summary": "",
+            "body": "Ontwikkeling van gepagineerde tabellen met sortering, modale vensters voor snelle bewerking, statusbadges en responsieve navigatie voor tablets en mobiel.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "catalog-and-orders",
+            "title": "Dynamische Catalogus en Voorraadmodule",
+            "summary": "",
+            "body": "Interactieve formulieren voor het toevoegen en wijzigen van artikelen met validaties, hiërarchische categorieën en automatische winstmargeberekening.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Directe reactieve statusupdates in de interface zonder volledige herlading van de pagina.",
+          "Efficiënt browsergeheugengebruik bij het tonen van uitgebreide tabellen met honderden artikelen.",
+          "100% responsief ontwerp voor eenvoudig mobiel beheer door winkeliers onderweg."
+        ],
+        "sections": [
+          {
+            "key": "admin-modules",
+            "kind": "CARDS",
+            "eyebrow": "Platformmodules",
+            "title": "Componenten van het Store Admin Dashboard",
+            "lead": "Functionele weergaven voor de dagelijkse operationele winkelpraktijk.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-catalog-manager",
+                "title": "Productcatalogus Beheerder",
+                "summary": "Interactief artikel- en variantenbeheer",
+                "body": "Hoofdlijst met productafbeeldingen, beschrijvingen, groothandels- en consumentenprijzen, SKU-codes en categorie-toewijzingen.",
+                "value": "Catalogus",
+                "icon": "layout",
+                "tags": [
+                  "React",
+                  "Catalogus",
+                  "SKU"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-order-fulfillment",
+                "title": "Orderverwerkingspijplijn",
+                "summary": "Realtime opvolging van bestellingen",
+                "body": "Visuele orderstroom gerangschikt op status, met klantgegevens, afleveradres, artikelenoverzicht en statuswijzigingen met één klik.",
+                "value": "Verzending",
+                "icon": "globe",
+                "tags": [
+                  "Orders",
+                  "Logistiek",
+                  "Redux"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-inventory-alerts",
+                "title": "Voorraadoptimalisatie en Meldingen",
+                "summary": "Preventieve melding bij lage voorraad",
+                "body": "Continue bewaking van beschikbare voorraad met kleurgecodeerde meldingen wanneer artikelen onder de veiligheidsdrempel dalen.",
+                "value": "Voorraad",
+                "icon": "shield",
+                "tags": [
+                  "Voorraad",
+                  "Meldingen",
+                  "MUI"
+                ],
+                "note": ""
+              },
+              {
+                "key": "mod-analytics-summary",
+                "title": "Verkoopstatistieken en KPI-overzicht",
+                "summary": "Kernindicatoren van commerciële prestaties",
+                "body": "KPI-kaarten met totale inkomsten, dagelijkse ordervolumes, best verkopende artikelen en gemiddelde bestelwaarde.",
+                "value": "KPIs",
+                "icon": "gauge",
+                "tags": [
+                  "Statistieken",
+                  "KPI",
+                  "Verkoop"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "admin-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Technologiestrategie",
+            "title": "Ontwerp- en Ontwikkelbeslissingen",
+            "lead": "Toegepaste principes om snelheid en eenvoud in gebruik te maximaliseren.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-redux-centralized-state",
+                "title": "Redux voor Voorspelbare Unidirectionele Datastromen",
+                "summary": "Consistente synchronisatie tussen catalogus en orders",
+                "body": "Door de status centraal in Redux te beheren, worden voorraadwijzigingen in de catalogus direct weerspiegeld in het orderoverzicht en KPI-overzichten zonder prop drilling.",
+                "value": "Redux State",
+                "icon": "layers",
+                "tags": [
+                  "Redux",
+                  "Globale Status",
+                  "React"
+                ],
+                "note": ""
+              },
+              {
+                "key": "dec-material-ui-ergonomics",
+                "title": "Material-UI (MUI) voor Snelheid en Betrouwbaarheid",
+                "summary": "Standaard toegankelijke en geteste componenten",
+                "body": "Het gebruik van Material-UI zorgde voor hoge toegankelijkheid, strakke vormgeving en kant-en-klare tabellen en dialoogvensters.",
+                "value": "MUI Systeem",
+                "icon": "layout",
+                "tags": [
+                  "MUI",
+                  "Toegankelijkheid",
+                  "UI"
+                ],
+                "note": ""
+              },
+              {
+                "key": "dec-netlify-continuous-deployment",
+                "title": "Continue Implementaties via Netlify",
+                "summary": "Wereldwijde CDN-distributie en geautomatiseerde builds",
+                "body": "Netlify verzorgt snelle statische asset-levering via een edge CDN met TTFB onder 60ms en automatische voorvertoningen bij elke commit.",
+                "value": "Netlify Edge",
+                "icon": "globe",
+                "tags": [
+                  "Netlify",
+                  "CI/CD",
+                  "CDN"
+                ],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     }
-  ],
-  "skillKeys": ["React", "Redux", "Material", "Sass"],
-  "order": 16,
-  "kind": "PROFESSIONAL",
-  "slug": "ecommerce-admin"
+  ]
 }

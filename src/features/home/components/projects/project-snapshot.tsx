@@ -4,12 +4,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ExternalLink, Lock } from "lucide-react";
 import { AiFillGithub } from "react-icons/ai";
-import {
-  LuShoppingBag,
-  LuSmartphone,
-  LuStore,
-  LuTruck,
-} from "react-icons/lu";
+import { LuShoppingBag, LuSmartphone, LuStore, LuTruck } from "react-icons/lu";
 import type { IconType } from "react-icons/lib";
 
 import Tab from "@/components/custom-ui/custom-tab";
@@ -148,15 +143,13 @@ export default function ProjectSnapshot({
   const [activeScreenIndex, setActiveScreenIndex] = useState(0);
 
   const gallery = project.slug ? PROJECT_GALLERIES[project.slug] : undefined;
-  const currentImage =
-    gallery?.[activeScreenIndex]
-      ? gallery[activeScreenIndex].image
-      : project.image;
-  const currentTitle =
-    gallery?.[activeScreenIndex]
-      ? (gallery[activeScreenIndex].title[locale] ??
-        gallery[activeScreenIndex].title.es)
-      : project.title;
+  const currentImage = gallery?.[activeScreenIndex]
+    ? gallery[activeScreenIndex].image
+    : project.image;
+  const currentTitle = gallery?.[activeScreenIndex]
+    ? (gallery[activeScreenIndex].title[locale] ??
+      gallery[activeScreenIndex].title.es)
+    : project.title;
 
   const projectTypes: Record<string, string> = {
     FRONTEND: t("projectTypes.FRONTEND"),
@@ -206,7 +199,7 @@ export default function ProjectSnapshot({
       <div
         data-case-study-card
         data-case-study-preview
-        className="b-card-glow bg-card border-border mt-10 rounded-4xl border p-3 shadow-[0_1.875rem_3.75rem_-1.875rem_rgba(15,23,42,0.35)]"
+        className="b-card-glow bg-card border-border mt-10 w-full max-w-full min-w-0 overflow-hidden rounded-3xl border p-2 shadow-[0_1.875rem_3.75rem_-1.875rem_rgba(15,23,42,0.35)] sm:rounded-4xl sm:p-3"
       >
         {gallery && gallery.length > 1 ? (
           <div className="mb-3 px-1">
@@ -230,16 +223,16 @@ export default function ProjectSnapshot({
           </div>
         ) : null}
 
-        <div className="border-border overflow-hidden rounded-3xl border">
-          <div className="bg-muted flex items-center gap-1.5 px-4 py-3">
-            <span className="bg-muted-foreground/30 size-2.5 rounded-full" />
-            <span className="bg-muted-foreground/30 size-2.5 rounded-full" />
-            <span className="bg-muted-foreground/30 size-2.5 rounded-full" />
-            <span className="bg-background/80 text-muted-foreground ml-3 flex h-4 max-w-64 flex-1 items-center truncate rounded px-2 text-[0.6875rem]">
+        <div className="border-border w-full max-w-full min-w-0 overflow-hidden rounded-2xl border sm:rounded-3xl">
+          <div className="bg-muted flex items-center gap-1.5 px-3 py-2.5 sm:px-4 sm:py-3">
+            <span className="bg-muted-foreground/30 size-2 rounded-full sm:size-2.5" />
+            <span className="bg-muted-foreground/30 size-2 rounded-full sm:size-2.5" />
+            <span className="bg-muted-foreground/30 size-2 rounded-full sm:size-2.5" />
+            <span className="bg-background/80 text-muted-foreground ml-2 flex h-4 max-w-[10rem] flex-1 items-center truncate rounded px-2 text-[0.6875rem] sm:ml-3 sm:max-w-64">
               {currentTitle}
             </span>
           </div>
-          <div className="bg-muted relative aspect-[2/1] overflow-hidden">
+          <div className="bg-muted relative aspect-[2/1] w-full max-w-full min-w-0 overflow-hidden">
             {/* VIS fallback — always rendered underneath */}
             <div
               className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950"
@@ -331,7 +324,7 @@ export default function ProjectSnapshot({
       <div
         data-case-study-card
         data-case-study-facts
-        className="b-card-glow bg-card border-border mt-5 rounded-4xl border p-6 md:p-7"
+        className="b-card-glow bg-card border-border mt-5 w-full max-w-full min-w-0 overflow-hidden rounded-3xl border p-4 sm:rounded-4xl sm:p-6 md:p-7"
       >
         <dl className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {facts.map((fact) => (

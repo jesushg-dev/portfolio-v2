@@ -15,8 +15,8 @@
     {
       "locale": "es",
       "title": "OFILEGAL: Despacho Jurídico y Notarial",
-      "description": "Plataforma web institucional y sistema de gestión de contenidos jurídicos para despacho de asesoría preventiva, corporativa y litigación.",
-      "hook": "Despacho legal moderno · Panel CMS administrativo · 100% responsive",
+      "description": "Plataforma web institucional y CMS jurídico para despacho legal corporativo en Nicaragua (Lic. Isaí Alexander Zeledón). Desarrollada en Next.js App Router, React y Tailwind CSS, integra catálogo de 6 áreas de práctica (incluyendo Notaría, Negocios, OSFL y Litigios), divulgación editorial y canal de captación directa vía WhatsApp.",
+      "hook": "Plataforma LegalTech en Next.js & TypeScript · 6 áreas de práctica corporativa · Notaría, OSFL y Litigios",
       "challenge": "El despacho profesional requería una presencia digital sólida, de alta reputación y con capacidad para gestionar de forma autónoma artículos de divulgación, consultas ciudadanas y datos institucionales sin dependencia técnica continua.",
       "approach": "Desarrollé la aplicación web sobre Next.js (App Router), TypeScript y Tailwind CSS, implementando un panel administrativo privado (/admin) para la gestión editorial (artículos, medios y datos de contacto) respaldado por almacenamiento estructurado en ContentStore con validación en servidor.",
       "outcome": "Despliegue en producción sobre Vercel con tiempos de carga instantáneos, arquitectura modular preparada para transición a base de datos persistente y canal de contacto directo vía WhatsApp y mensajería segura.",
@@ -60,7 +60,7 @@
           }
         ],
         "nextProjectSlug": "walmart-centroamerica",
-        "context": "OFILEGAL es la firma profesional del Lic. Isaí Alexander Zeledón, Abogado y Notario Público en Managua, Nicaragua, enfocada en asesoría jurídica preventiva, litigación civil y laboral, estructuración corporativa y fe pública. El despacho requería una plataforma digital de primer nivel que proyectara autoridad jurídica institucional, facilitara la captación de clientes mediante canales de consulta directa (WhatsApp contextualizado por especialidad, formulario cifrado y mapas) y permitiera publicar artículos de divulgación jurídica y actualizar la información del bufete de manera autónoma sin requerir intervención técnica continua.",
+        "context": "OFILEGAL es la firma profesional del Lic. Isaí Alexander Zeledón, Abogado y Notario Público en Managua, Nicaragua (Licenciado en Derecho por la UNP y Candidato a Máster en Derecho Empresarial Corporativo por la UAM). El bufete se enfoca en asesoría jurídica preventiva, litigación civil, laboral y corporativa, gobernanza de OSFL y fe pública notarial. El despacho requería una plataforma digital solemne y autoritaria, con nuevo sello heráldico institucional, que facilitara la captación de clientes mediante canales directos de WhatsApp segmentados por sus 6 áreas de práctica, formulario de consultas confidenciales, georreferenciación en Bolonia y un módulo editorial autónomo para divulgación legal.",
         "roleTitle": "Arquitecto y Desarrollador Full-Stack",
         "roleIntro": "Diseñé e implementé la solución completa de extremo a extremo: arquitectura de la aplicación, sistema de diseño editorial clásico-moderno, modelo de contenido desacoplado, autenticación criptográfica segura y despliegue en Vercel.",
         "tldr": [
@@ -476,27 +476,39 @@
                 "body": "Presentación formal del despacho legal con tiempos de carga instantáneos, perfil profesional del Notario y credenciales acreditadas.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/ofilegal.jpg"
               },
               {
                 "key": "screen-services",
                 "title": "Áreas de Práctica y Asesoría Especializada",
-                "summary": "Navegación por materias jurídicas y contacto segmentado",
-                "body": "Catálogo de especialidades en derecho corporativo, laboral, civil y notarial con derivación directa hacia mensajería segura y WhatsApp.",
-                "value": "Asesoría Multidisciplinaria",
+                "summary": "Catálogo completo de 6 especialidades jurídicas",
+                "body": "Catálogo de 6 especialidades: Notaría, Civil y Contratos, Asesoría para Negocios, Asesoría Laboral, Asesoría para OSFL y Disputas & Litigios, con derivación directa hacia WhatsApp.",
+                "value": "6 Áreas de Práctica",
                 "icon": "case",
-                "tags": ["Áreas de Práctica", "Captación", "WhatsApp"],
+                "tags": [
+                  "Notaría & Civil",
+                  "Negocios & OSFL",
+                  "Litigios & WhatsApp"
+                ],
                 "note": "/projects/ofilegal-services.jpg"
               },
               {
                 "key": "screen-articles",
-                "title": "Publicaciones y Criterio Jurídico",
-                "summary": "Divulgación legal, artículos de opinión y contenido educativo",
-                "body": "Módulo de divulgación con análisis de jurisprudencia y sincronización con perfiles profesionales en LinkedIn y TikTok institucional.",
+                "title": "Publicaciones y Divulgación Jurídica",
+                "summary": "Artículos de criterio legal y divulgación en redes",
+                "body": "Módulo editorial para análisis de promesas de venta inmobiliaria, cláusulas contractuales de solución de controversias y canal activo de criterio legal en TikTok (@isaizeledonnn) y LinkedIn.",
                 "value": "Divulgación Jurídica",
                 "icon": "search",
-                "tags": ["Artículos", "Jurisprudencia", "Educación Legal"],
+                "tags": [
+                  "Promesa de Venta",
+                  "Contratos Privados",
+                  "TikTok & LinkedIn"
+                ],
                 "note": "/projects/ofilegal-articles.jpg"
               },
               {
@@ -506,17 +518,25 @@
                 "body": "Interfaz móvil ultra-rápida con botones de acción flotantes para agendamiento de citas notariales y consultas confidenciales.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": ["Mobile First", "WhatsApp Direct", "UX Ágil"],
+                "tags": [
+                  "Mobile First",
+                  "WhatsApp Direct",
+                  "UX Ágil"
+                ],
                 "note": "/projects/ofilegal-mobile.jpg"
               },
               {
                 "key": "screen-contact",
                 "title": "Despacho Físico, Contacto y Geolocalización",
-                "summary": "Ubicación interactiva en Google Maps y canales oficiales",
-                "body": "Integración de mapa interactivo con pines georreferenciados, correo institucional cifrado y líneas telefónicas oficiales.",
-                "value": "Despacho Céntrico",
+                "summary": "Ubicación en Bolonia, Managua y formulario clasificado",
+                "body": "Integración de mapa interactivo en Bolonia (Mansión Teodolinda), formulario con selector por materia jurídica y correspondencia oficial vía correo institucional.",
+                "value": "Bolonia, Managua",
                 "icon": "globe",
-                "tags": ["Google Maps", "Ubicación", "Contacto Oficial"],
+                "tags": [
+                  "Bolonia Managua",
+                  "Formulario Clasificado",
+                  "Google Maps"
+                ],
                 "note": "/projects/ofilegal-contact.jpg"
               }
             ],
@@ -530,8 +550,8 @@
     {
       "locale": "en",
       "title": "OFILEGAL: Law Firm & Notary Portal",
-      "description": "Institutional legal tech web platform and content management system for a corporate and litigation law firm.",
-      "hook": "Modern legal practice · Administrative CMS dashboard · 100% responsive",
+      "description": "Institutional web platform and custom legal CMS for a corporate law firm in Nicaragua (Isaí Alexander Zeledón). Built on Next.js App Router, React, and Tailwind CSS, featuring 6 practice areas (including Notary, Business Advisory, Non-Profit OSFL & Litigation), editorial publishing, and direct WhatsApp intake.",
+      "hook": "LegalTech Platform in Next.js & TypeScript · 6 specialized legal practice areas · Notary, Non-Profit & Litigation",
       "challenge": "A legal counseling practice needed a high-reputation digital presence capable of autonomously managing legal insight articles, public inquiries, and institutional contact details without ongoing technical overhead.",
       "approach": "Architected the web application using Next.js (App Router), TypeScript, and Tailwind CSS. Implemented an administrative portal (/admin) for editorial management (articles, media assets, and firm details) backed by structured server-side ContentStore validation.",
       "outcome": "Successfully launched in production on Vercel with instant load times, modular architecture ready for persistent database expansion, and direct communication channels via WhatsApp and encrypted messaging.",
@@ -575,7 +595,7 @@
           }
         ],
         "nextProjectSlug": "walmart-centroamerica",
-        "context": "OFILEGAL is the legal counseling and notary practice of Isaí Alexander Zeledón in Managua, Nicaragua, specializing in preventive compliance, civil and labor litigation, corporate structuring, and notarial certification. The firm required a high-caliber digital platform that projected institutional authority, streamlined client acquisition through direct consultation pathways (contextualized WhatsApp routing by legal matter, encrypted contact forms, and interactive geolocation), and enabled autonomous publishing of legal analysis articles and firm profile updates without ongoing technical overhead.",
+        "context": "OFILEGAL is the legal practice of Isaí Alexander Zeledón, Attorney at Law and Notary Public in Managua, Nicaragua (LL.B. from UNP, Master Candidate in Corporate Business Law at UAM). The firm specializes in preventive legal counsel, civil/commercial litigation, labor compliance, non-profit (OSFL) governance, and notarial deeds. The practice required a prestigious institutional digital platform with a new heraldic seal, direct WhatsApp consultation channels across 6 practice areas, confidential inquiry forms, physical office mapping in Bolonia, and an autonomous editorial CMS.",
         "roleTitle": "Architect & Full-Stack Developer",
         "roleIntro": "I designed and implemented the entire platform end to end: system architecture, classic-modern editorial design system, decoupled content persistence, cryptographic authentication, and production deployment on Vercel.",
         "tldr": [
@@ -748,7 +768,9 @@
                 "body": "In the Central American legal landscape, rapid direct WhatsApp messaging is the primary conversion channel. Rather than generic links, each practice card (Litigation, Contracts, Corporate Compliance) pre-populates the exact matter of inquiry, maximizing client conversion rates.",
                 "value": "",
                 "icon": "",
-                "tags": ["Sole reliance on asynchronous email contact forms"],
+                "tags": [
+                  "Sole reliance on asynchronous email contact forms"
+                ],
                 "note": "Requires keeping the primary phone number up to date in /admin/sitio, which automatically cascades to all intake buttons."
               }
             ],
@@ -989,27 +1011,39 @@
                 "body": "Authoritative presentation for legal and notary practice featuring instant page load speeds and verified credentials.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/ofilegal.jpg"
               },
               {
                 "key": "screen-services",
-                "title": "Practice Areas & Specialized Legal Counsel",
-                "summary": "Structured legal consultation and segmented client intake",
-                "body": "Comprehensive practice areas covering corporate, labor, civil, and notary law with direct WhatsApp intake messaging.",
-                "value": "Multi-Practice Advisory",
+                "title": "Specialized Practice Areas & Counsel",
+                "summary": "Comprehensive catalog of 6 legal practice areas",
+                "body": "Structured catalog across 6 legal disciplines: Notary, Civil & Contracts, Business Advisory, Labor Counsel, Non-Profit (OSFL), and Dispute Resolution & Litigation, each with direct WhatsApp dispatch.",
+                "value": "6 Practice Areas",
                 "icon": "case",
-                "tags": ["Practice Areas", "Client Intake", "WhatsApp"],
+                "tags": [
+                  "Notary & Civil",
+                  "Corporate & OSFL",
+                  "Litigation & WhatsApp"
+                ],
                 "note": "/projects/ofilegal-services.jpg"
               },
               {
                 "key": "screen-articles",
-                "title": "Publications & Legal Insights",
-                "summary": "Educational legal articles and professional insights",
-                "body": "Content hub featuring legal analysis, statutory guidance, and integration with professional LinkedIn and TikTok channels.",
-                "value": "Legal Knowledge Base",
+                "title": "Publications & Legal Commentary",
+                "summary": "Legal insight articles and digital outreach",
+                "body": "Editorial publishing engine covering real estate sale pledges, alternative dispute resolution clauses, and active social outreach via TikTok (@isaizeledonnn) and LinkedIn.",
+                "value": "Legal Insights",
                 "icon": "search",
-                "tags": ["Publications", "Case Law", "Insights"],
+                "tags": [
+                  "Real Estate Law",
+                  "Private Contracts",
+                  "TikTok & LinkedIn"
+                ],
                 "note": "/projects/ofilegal-articles.jpg"
               },
               {
@@ -1019,17 +1053,25 @@
                 "body": "Ultra-fast mobile UI engineered for immediate client consultation bookings and secure messaging directly to the attorney.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": ["Mobile First", "WhatsApp Direct", "Smooth UX"],
+                "tags": [
+                  "Mobile First",
+                  "WhatsApp Direct",
+                  "Smooth UX"
+                ],
                 "note": "/projects/ofilegal-mobile.jpg"
               },
               {
                 "key": "screen-contact",
-                "title": "Office Location & Interactive Maps",
-                "summary": "Interactive Google Maps pin and verified institutional channels",
-                "body": "Accurate geographic pin for in-person notary appointments, verified corporate email, and direct telephone contact.",
-                "value": "Prime Location",
+                "title": "Physical Office, Contact & Geolocation",
+                "summary": "Office mapping in Bolonia, Managua with categorized intake",
+                "body": "Interactive mapping for the Bolonia office (Mansión Teodolinda), categorized inquiry form routed by legal discipline, and official encrypted institutional correspondence.",
+                "value": "Bolonia, Managua",
                 "icon": "globe",
-                "tags": ["Google Maps", "Location", "Official Channels"],
+                "tags": [
+                  "Bolonia Managua",
+                  "Categorized Intake",
+                  "Google Maps"
+                ],
                 "note": "/projects/ofilegal-contact.jpg"
               }
             ],
@@ -1043,8 +1085,8 @@
     {
       "locale": "nl",
       "title": "OFILEGAL: Advocaten- en Notarispraktijk",
-      "description": "Institutioneel juridisch webplatform en contentmanagementsysteem voor een advocaten- en notarispraktijk.",
-      "hook": "Moderne juridische praktijk · Beheerders CMS-dashboard · 100% responsief",
+      "description": "Institutioneel webplatform en juridisch CMS voor een corporate advocatenkantoor in Nicaragua (Isaí Alexander Zeledón). Gebouwd op Next.js App Router, React en Tailwind CSS, met 6 praktijkgebieden (inclusief notariaat, bedrijfsadvies, non-profit OSFL en procesvoering), redactionele publicaties en directe WhatsApp-intake.",
+      "hook": "LegalTech-platform in Next.js & TypeScript · 6 gespecialiseerde rechtsgebieden · Notariaat, Non-profit & Geschillen",
       "challenge": "Een juridisch advieskantoor had behoefte aan een professionele digitale aanwezigheid om zelfstandig artikelen, vragen van cliënten en contactgegevens te beheren zonder constante technische ondersteuning.",
       "approach": "Webapplicatie ontworpen met Next.js (App Router), TypeScript en Tailwind CSS. Een beheerdersportaal (/admin) gerealiseerd voor redactioneel beheer (artikelen, media en kantoorgegevens) met servervalidatie via ContentStore.",
       "outcome": "Succesvol in productie genomen op Vercel met snelle laadtijden, modulaire architectuur gereed voor databasemigratie en directe communicatielijnen via WhatsApp.",
@@ -1088,7 +1130,7 @@
           }
         ],
         "nextProjectSlug": "walmart-centroamerica",
-        "context": "OFILEGAL is het advocaten- en notariskantoor van Isaí Alexander Zeledón in Managua, Nicaragua, gespecialiseerd in preventief juridisch advies, civiele en arbeidsgeschillen, vennootschapsstructurering en notariële akten. Het kantoor had een hoogwaardig digitaal platform nodig dat institutioneel gezag uitstraalt, directe cliëntenwerving faciliteert (via contextuele WhatsApp-koppelingen per rechtsgebied, beveiligde contactformulieren en interactieve kaarten) en de advocaat in staat stelt zelfstandig juridische artikelen en kantoorparameters te beheren zonder doorlopende technische kosten.",
+        "context": "OFILEGAL is het advocatenkantoor van Isaí Alexander Zeledón, advocaat en notaris in Managua, Nicaragua (Rechtenopleiding aan UNP, Masterkandidaat Ondernemingsrecht aan UAM). Het kantoor richt zich op preventief juridisch advies, civiele en arbeidsgeschillen, non-profit (OSFL) governance en notariële akten. Het kantoor vereiste een prestigieus digitaal platform met een nieuw heraldisch zegel, directe WhatsApp-consultatiekanalen verdeeld over 6 rechtsgebieden, vertrouwelijke intakeformulieren, kantoorlocatie in Bolonia en een autonoom redactioneel CMS.",
         "roleTitle": "Architect & Full-Stack Ontwikkelaar",
         "roleIntro": "Ik ontwierp en bouwde het volledige platform end-to-end: systeemarchitectuur, klassiek-modern redactioneel ontwerpsysteem, ontkoppelde gegevenspersistentie, cryptografische sessiebeveiliging en continue implementatie op Vercel.",
         "tldr": [
@@ -1249,7 +1291,9 @@
                 "body": "Openbare pagina's bevinden zich in (site) met een elegante donkere juridische vormgeving, terwijl beheertaken plaatsvinden in admin met een overzichtelijk dashboard beschermd door requireAdmin().",
                 "value": "",
                 "icon": "",
-                "tags": ["Eén root-layout met voorwaardelijke navigatiebalken"],
+                "tags": [
+                  "Eén root-layout met voorwaardelijke navigatiebalken"
+                ],
                 "note": "Vergt een lichte duplicatie van paginawrappers, maar zorgt voor schone scheiding van JavaScript-bundels."
               },
               {
@@ -1259,7 +1303,9 @@
                 "body": "In de juridische sector van Nicaragua is directe WhatsApp-communicatie het voorkeurskanaal voor cliënten. In plaats van een algemene link bevat elke dienstenkaart een vooringevuld bericht over het betreffende rechtsgebied, wat de conversieratio aanzienlijk verhoogt.",
                 "value": "",
                 "icon": "",
-                "tags": ["Enkel een traditioneel e-mailcontactformulier"],
+                "tags": [
+                  "Enkel een traditioneel e-mailcontactformulier"
+                ],
                 "note": "Vereist het actueel houden van het telefoonnummer in /admin/sitio, wat automatisch doorwerkt in alle knoppen."
               }
             ],
@@ -1500,27 +1546,39 @@
                 "body": "Formele presentatie van het advocatenkantoor met ultrasnelle laadtijden en geverifieerde notariële referenties.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/ofilegal.jpg"
               },
               {
                 "key": "screen-services",
-                "title": "Rechtsgebieden & Gespecialiseerd Advies",
-                "summary": "Gestructureerde juridische navigatie en direct contact",
-                "body": "Overzicht van rechtsgebieden in ondernemings-, arbeids-, civiel en notarieel recht met directe koppeling naar WhatsApp.",
-                "value": "Multidisciplinair Advies",
+                "title": "Gespecialiseerde Rechtsgebieden & Advies",
+                "summary": "Volledige catalogus van 6 juridische disciplines",
+                "body": "Gestructureerde catalogus van 6 rechtsgebieden: Notariaat, Burgerlijk & Contractenrecht, Bedrijfsadvies, Arbeidsrecht, Non-profit (OSFL) en Geschillenbeslechting, elk gekoppeld aan WhatsApp-intake.",
+                "value": "6 Rechtsgebieden",
                 "icon": "case",
-                "tags": ["Rechtsgebieden", "Cliëntenwerving", "WhatsApp"],
+                "tags": [
+                  "Notariaat & Civiel",
+                  "Bedrijven & OSFL",
+                  "Geschillen & WhatsApp"
+                ],
                 "note": "/projects/ofilegal-services.jpg"
               },
               {
                 "key": "screen-articles",
-                "title": "Publicaties & Juridische Kennisbank",
-                "summary": "Juridische artikelen en professionele inzichten",
-                "body": "Informatiecentrum met jurisprudentie-analyses en integratie met professionele LinkedIn- en TikTok-kanalen.",
+                "title": "Publicaties & Juridische Inzichten",
+                "summary": "Juridische artikelen en digitale outreach",
+                "body": "Redactionele publicatiemodule voor vastgoedkoopakten, geschillenbeslechtingsclausules in contracten en actieve juridische tips op TikTok (@isaizeledonnn) en LinkedIn.",
                 "value": "Juridische Inzichten",
                 "icon": "search",
-                "tags": ["Publicaties", "Jurisprudentie", "Kennisbank"],
+                "tags": [
+                  "Vastgoedrecht",
+                  "Contractenrecht",
+                  "TikTok & LinkedIn"
+                ],
                 "note": "/projects/ofilegal-articles.jpg"
               },
               {
@@ -1530,17 +1588,25 @@
                 "body": "Snelle mobiele interface ontworpen voor directe afsprakenplanning en vertrouwelijke juridische consultaties.",
                 "value": "100% Mobiel Gereed",
                 "icon": "layout",
-                "tags": ["Mobile First", "WhatsApp Direct", "Snelle UX"],
+                "tags": [
+                  "Mobile First",
+                  "WhatsApp Direct",
+                  "Snelle UX"
+                ],
                 "note": "/projects/ofilegal-mobile.jpg"
               },
               {
                 "key": "screen-contact",
-                "title": "Kantoorlocatie & Interactieve Kaart",
-                "summary": "Google Maps integratie en officiële kantoorgegevens",
-                "body": "Exacte kantoorlocatie voor notariële bezoeken, versleutelde e-mail en officiële telefoonlijnen.",
-                "value": "Centrale Locatie",
+                "title": "Fysiek Kantoor, Contact & Geolocatie",
+                "summary": "Kantoorlocatie in Bolonia, Managua met gecategoriseerde intake",
+                "body": "Interactieve kaart voor het kantoor in Bolonia (Mansión Teodolinda), gecategoriseerd intakeformulier per rechtsgebied en officiële correspondentie via institutionele e-mail.",
+                "value": "Bolonia, Managua",
                 "icon": "globe",
-                "tags": ["Google Maps", "Locatie", "Contact"],
+                "tags": [
+                  "Bolonia Managua",
+                  "Gecategoriseerd Formulier",
+                  "Google Maps"
+                ],
                 "note": "/projects/ofilegal-contact.jpg"
               }
             ],
@@ -1552,5 +1618,10 @@
       }
     }
   ],
-  "skillKeys": ["Nextjs", "React", "Typescript", "Tailwind"]
+  "skillKeys": [
+    "Nextjs",
+    "React",
+    "Typescript",
+    "Tailwind"
+  ]
 }

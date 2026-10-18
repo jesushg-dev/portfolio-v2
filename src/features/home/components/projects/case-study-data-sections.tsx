@@ -24,8 +24,8 @@ function CaseStudyCodeSection({
         </p>
       ) : null}
       {section.code ? (
-        <div className="mt-8 grid gap-4 lg:grid-cols-[1.2fr_1fr]">
-          <div className="overflow-hidden rounded-[1.6rem] bg-[#0b1020] shadow-[0_1.5rem_3.75rem_-2.1875rem_rgba(15,23,42,0.7)]">
+        <div className="mt-8 grid w-full max-w-full min-w-0 gap-4 lg:grid-cols-[1.2fr_1fr]">
+          <div className="w-full max-w-full min-w-0 overflow-hidden rounded-[1.6rem] bg-[#0b1020] shadow-[0_1.5rem_3.75rem_-2.1875rem_rgba(15,23,42,0.7)]">
             <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-3">
               <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
               <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />

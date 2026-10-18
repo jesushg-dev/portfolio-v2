@@ -11,13 +11,17 @@
     {
       "locale": "es",
       "title": "Portfolio v2",
-      "description": "Plataforma de portafolio profesional multi-tenant con i18n, panel de administración y motor de CV en producción.",
-      "hook": "LCP < 1.8s · 100% WCAG AAA · Multi-tenant sin CMS de terceros",
+      "description": "Plataforma web de ingeniería full-stack en producción con Next.js 15, React 19, TypeScript y Tailwind CSS. Integra internacionalización tri-idioma (ES/EN/NL), catálogo interactivo con filtros avanzados, visor lightbox accesible (WCAG AAA), panel de administración tRPC y base de datos Prisma con MongoDB.",
+      "hook": "Next.js 15 + React 19 + TypeScript · Plataforma tri-idioma (ES/EN/NL) con accesibilidad WCAG AAA · Panel de administración tRPC y Prisma",
       "challenge": "Diseñar una arquitectura web moderna capaz de soportar internacionalización (3 idiomas), tematización dinámica basada en tokens semánticos (data-theme) sin clases dark:, gestión CMS en tiempo real mediante tRPC y cumplimiento estricto de accesibilidad WCAG 2.2 AAA sin comprometer la latencia.",
       "approach": "Implementé una arquitectura basada en características (src/features/) con Next.js App Router, TypeScript estricto, Prisma + MongoDB para flexibilidad de esquema y tRPC para seguridad de tipos end-to-end. La UI utiliza únicamente tokens semánticos y componentes Shadcn adaptados.",
       "outcome": "LCP en producción < 1.8s, accesibilidad WCAG 2.2 AAA auditada al 100% y una plataforma autoadministrable completa que elimina la dependencia y costos de CMS de terceros.",
       "caseStudy": {
-        "chips": ["Personal", "Full-stack", "En producción"],
+        "chips": [
+          "Personal",
+          "Full-stack",
+          "En producción"
+        ],
         "facts": [
           {
             "key": "my-role",
@@ -201,7 +205,9 @@
                 "body": "El contenido por inquilino varía en forma, así que la flexibilidad del esquema acelera la iteración mientras Prisma mantiene cada consulta tipada.",
                 "value": "",
                 "icon": "",
-                "tags": ["PostgreSQL con migraciones SQL"],
+                "tags": [
+                  "PostgreSQL con migraciones SQL"
+                ],
                 "note": "La integridad se mueve a la aplicación. Por ejemplo, customDomain no es @unique porque los índices únicos de MongoDB permiten un único null, así que la unicidad se verifica en código."
               },
               {
@@ -211,7 +217,10 @@
                 "body": "El tipo de procedimiento indica quién puede llamarlo, y las mutaciones toman ctx.user.id, así que un cliente nunca puede actuar como otro usuario. Los tipos fluyen desde la base de datos hasta la IU de administración.",
                 "value": "",
                 "icon": "",
-                "tags": ["Controladores de rutas REST", "GraphQL"],
+                "tags": [
+                  "Controladores de rutas REST",
+                  "GraphQL"
+                ],
                 "note": "Está estrechamente acoplado a TypeScript y es menos conveniente para consumidores de API de terceros."
               },
               {
@@ -221,7 +230,9 @@
                 "body": "La facturación, las cuotas y la residencia de datos permanecen con el inquilino, y un inquilino nunca puede gastar la cuota de otro. Los secretos se cifran en reposo con AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": ["Claves compartidas de la API de la plataforma"],
+                "tags": [
+                  "Claves compartidas de la API de la plataforma"
+                ],
                 "note": "Más configuración por inquilino. Las funciones quedan desactivadas hasta conectarlas, y la IA tiene un modo JSON manual."
               },
               {
@@ -231,7 +242,9 @@
                 "body": "6 temas (3 paletas, claro y oscuro) más un tema personalizado definido por el usuario provienen de una sola capa de tokens, sin clases dark: en los componentes.",
                 "value": "",
                 "icon": "",
-                "tags": ["Variantes dark: de Tailwind en cada elemento"],
+                "tags": [
+                  "Variantes dark: de Tailwind en cada elemento"
+                ],
                 "note": "Requiere disciplina de tokens: cada componente nuevo debe usar tokens."
               },
               {
@@ -282,7 +295,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["(inicio) público", "(admin) /admin", "/api/*"],
+                "tags": [
+                  "(inicio) público",
+                  "(admin) /admin",
+                  "/api/*"
+                ],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -306,7 +323,12 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["22 módulos", "UI", "lib", "routers de servidor"],
+                "tags": [
+                  "22 módulos",
+                  "UI",
+                  "lib",
+                  "routers de servidor"
+                ],
                 "note": "Cliente de Prisma"
               },
               {
@@ -316,7 +338,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["Prisma", "MongoDB", "84 modelos"],
+                "tags": [
+                  "Prisma",
+                  "MongoDB",
+                  "84 modelos"
+                ],
                 "note": ""
               }
             ],
@@ -450,7 +476,11 @@
                 "body": "Portada interactiva, perfil profesional, resumen de experiencia, habilidades y navegación de alto impacto con Next.js App Router.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -460,7 +490,11 @@
                 "body": "Currículum web interactivo, descargas en PDF y DOCX generadas dinámicamente en caché y distribución protegida contra límites de tasa.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
+                "tags": [
+                  "PDF Engine",
+                  "DOCX Cache",
+                  "Rate Limiting"
+                ],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -470,7 +504,11 @@
                 "body": "Exploración facetada de proyectos por stack, métricas auditadas en producción, decisiones de ingeniería y lecciones aprendidas.",
                 "value": "Estudios de Caso",
                 "icon": "case",
-                "tags": ["Showcase", "Filtros Facetados", "Arquitectura"],
+                "tags": [
+                  "Showcase",
+                  "Filtros Facetados",
+                  "Arquitectura"
+                ],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -480,7 +518,11 @@
                 "body": "Consola interactiva con comandos ejecutables, categorización de competencias técnicas e insignias visuales con SkillIcon.",
                 "value": "Terminal Interactiva",
                 "icon": "term",
-                "tags": ["CLI Terminal", "SkillIcon", "UX Interactiva"],
+                "tags": [
+                  "CLI Terminal",
+                  "SkillIcon",
+                  "UX Interactiva"
+                ],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -490,7 +532,11 @@
                 "body": "Navegación móvil con gestos táctiles, cajón de filtros adaptable, menús semánticos y 60 FPS garantizados en pantallas de smartphones.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": ["Mobile First", "Animaciones Fluidas", "Touch Ready"],
+                "tags": [
+                  "Mobile First",
+                  "Animaciones Fluidas",
+                  "Touch Ready"
+                ],
                 "note": "/projects/portfolio-mobile.jpg"
               },
               {
@@ -934,13 +980,17 @@
     {
       "locale": "en",
       "title": "Portfolio v2",
-      "description": "Multi-tenant professional portfolio platform with i18n, admin panel, and CV engine in production.",
-      "hook": "LCP < 1.8s · 100% WCAG AAA · Multi-tenant with zero third-party CMS",
+      "description": "Production full-stack engineering portfolio built with Next.js 15, React 19, TypeScript, and Tailwind CSS. Features tri-lingual internationalization (ES/EN/NL), interactive project catalog with deep filtering, accessible WCAG AAA lightbox viewer, tRPC admin suite, and Prisma with MongoDB.",
+      "hook": "Next.js 15 + React 19 + TypeScript · Tri-lingual platform (ES/EN/NL) with WCAG AAA accessibility · tRPC admin panel & Prisma",
       "challenge": "Design a modern web architecture supporting multi-language i18n (3 locales), dynamic data-theme system without dark: classes, real-time tRPC admin CMS, and WCAG 2.2 AAA accessibility compliance without sacrificing speed.",
       "approach": "Implemented a Feature-Based Architecture (src/features/) with Next.js App Router, strict TypeScript, Prisma + MongoDB for schema flexibility, and tRPC for end-to-end type safety. UI components strictly enforce semantic design tokens.",
       "outcome": "Production LCP < 1.8s, 100% audited WCAG 2.2 AAA accessibility, and a self-managed platform completely eliminating third-party CMS overhead.",
       "caseStudy": {
-        "chips": ["Personal", "Full-stack", "In production"],
+        "chips": [
+          "Personal",
+          "Full-stack",
+          "In production"
+        ],
         "facts": [
           {
             "key": "my-role",
@@ -1086,7 +1136,9 @@
                 "body": "Each of the 22 modules (CV, Job Tracker, Resume Engine, Spotify, analytics…) owns its UI, lib and tRPC routers, so one feature can change without touching the others.",
                 "value": "",
                 "icon": "",
-                "tags": ["Layer-based folders (components / hooks / services)"],
+                "tags": [
+                  "Layer-based folders (components / hooks / services)"
+                ],
                 "note": "Shared code needs deliberate boundaries as modules grow."
               },
               {
@@ -1122,7 +1174,9 @@
                 "body": "Per-tenant content varies in shape, so schema flexibility speeds iteration while Prisma keeps every query typed.",
                 "value": "",
                 "icon": "",
-                "tags": ["PostgreSQL with SQL migrations"],
+                "tags": [
+                  "PostgreSQL with SQL migrations"
+                ],
                 "note": "Integrity moves into the app. For example, customDomain isn't @unique because MongoDB unique indexes allow a single null, so uniqueness is checked in code."
               },
               {
@@ -1132,7 +1186,10 @@
                 "body": "The procedure type states who may call it, and mutations take ctx.user.id, so a client can never act as another user. Types flow from the database to the admin UI.",
                 "value": "",
                 "icon": "",
-                "tags": ["REST route handlers", "GraphQL"],
+                "tags": [
+                  "REST route handlers",
+                  "GraphQL"
+                ],
                 "note": "Tightly coupled to TypeScript and less convenient for third-party API consumers."
               },
               {
@@ -1142,7 +1199,9 @@
                 "body": "Billing, quotas and data residency stay with the tenant, and one tenant can never spend another's quota. Secrets are encrypted at rest with AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": ["Shared platform API keys"],
+                "tags": [
+                  "Shared platform API keys"
+                ],
                 "note": "More setup per tenant. Features stay off until connected, and AI has a manual JSON mode."
               },
               {
@@ -1152,7 +1211,9 @@
                 "body": "6 themes (3 palettes, light and dark) plus a user-defined custom theme come from one token layer, with no dark: classes in components.",
                 "value": "",
                 "icon": "",
-                "tags": ["Tailwind dark: variants on every element"],
+                "tags": [
+                  "Tailwind dark: variants on every element"
+                ],
                 "note": "Requires token discipline: every new component must use tokens."
               },
               {
@@ -1203,7 +1264,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["(home) public", "(admin) /admin", "/api/*"],
+                "tags": [
+                  "(home) public",
+                  "(admin) /admin",
+                  "/api/*"
+                ],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -1227,7 +1292,12 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["22 modules", "UI", "lib", "server routers"],
+                "tags": [
+                  "22 modules",
+                  "UI",
+                  "lib",
+                  "server routers"
+                ],
                 "note": "Prisma client"
               },
               {
@@ -1237,7 +1307,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["Prisma", "MongoDB", "84 models"],
+                "tags": [
+                  "Prisma",
+                  "MongoDB",
+                  "84 models"
+                ],
                 "note": ""
               }
             ],
@@ -1371,7 +1445,11 @@
                 "body": "Interactive hero, professional profile, experience highlights, skills breakdown, and high-impact Next.js App Router architecture.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -1381,7 +1459,11 @@
                 "body": "Interactive web resume, on-the-fly cached PDF and DOCX exports, and rate-limited email delivery.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
+                "tags": [
+                  "PDF Engine",
+                  "DOCX Cache",
+                  "Rate Limiting"
+                ],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -1391,7 +1473,11 @@
                 "body": "Faceted project exploration by tech stack, production-audited metrics, engineering decisions, and architectural tradeoffs.",
                 "value": "Case Studies",
                 "icon": "case",
-                "tags": ["Showcase", "Faceted Filters", "Architecture"],
+                "tags": [
+                  "Showcase",
+                  "Faceted Filters",
+                  "Architecture"
+                ],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -1401,7 +1487,11 @@
                 "body": "Interactive console with executable commands, technical proficiency mapping, and dynamic visual badges via SkillIcon.",
                 "value": "Interactive Terminal",
                 "icon": "term",
-                "tags": ["CLI Terminal", "SkillIcon", "Interactive UX"],
+                "tags": [
+                  "CLI Terminal",
+                  "SkillIcon",
+                  "Interactive UX"
+                ],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -1411,7 +1501,11 @@
                 "body": "Mobile navigation with touch gestures, adaptive drawer sheets, semantic menus, and 60 FPS guaranteed on smaller smartphone displays.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": ["Mobile First", "Fluid Animation", "Touch Ready"],
+                "tags": [
+                  "Mobile First",
+                  "Fluid Animation",
+                  "Touch Ready"
+                ],
                 "note": "/projects/portfolio-mobile.jpg"
               },
               {
@@ -1855,13 +1949,17 @@
     {
       "locale": "nl",
       "title": "Portfolio v2",
-      "description": "Multi-tenant professioneel portfolioplatform met i18n, beheerpaneel en CV-engine in productie.",
-      "hook": "LCP < 1.8s · 100% WCAG AAA · Multi-tenant zonder third-party CMS",
+      "description": "Productie full-stack engineering portfolio gebouwd met Next.js 15, React 19, TypeScript en Tailwind CSS. Biedt drietalige internationalisering (ES/EN/NL), interactieve projectcatalogus met geavanceerde filters, toegankelijke WCAG AAA lightbox, tRPC-beheer en Prisma met MongoDB.",
+      "hook": "Next.js 15 + React 19 + TypeScript · Drietalig platform (ES/EN/NL) met WCAG AAA-toegankelijkheid · tRPC-beheerpaneel & Prisma",
       "challenge": "Ontwerpen van een moderne webarchitectuur die meertalige i18n (3 talen), dynamische thema's zonder dark: classes, realtime tRPC admin CMS en WCAG 2.2 AAA-toegankelijkheid ondersteunt zonder snelheid te verliezen.",
       "approach": "Feature-Based Architecture (src/features/) geïmplementeerd met Next.js App Router, strikte TypeScript, Prisma + MongoDB voor schemaflexibiliteit en tRPC voor end-to-end typeveiligheid.",
       "outcome": "Productie LCP < 1,8s, 100% geauditeerde WCAG 2.2 AAA-toegankelijkheid en een volledig zelfbeheerd platform zonder afhankelijkheid van externe CMS-diensten.",
       "caseStudy": {
-        "chips": ["Persoonlijk", "Full-stack", "In productie"],
+        "chips": [
+          "Persoonlijk",
+          "Full-stack",
+          "In productie"
+        ],
         "facts": [
           {
             "key": "my-role",
@@ -2045,7 +2143,9 @@
                 "body": "De inhoud per tenant verschilt in vorm, dus schemaflexibiliteit versnelt iteratie terwijl Prisma elke query getypeerd houdt.",
                 "value": "",
                 "icon": "",
-                "tags": ["PostgreSQL met SQL-migraties"],
+                "tags": [
+                  "PostgreSQL met SQL-migraties"
+                ],
                 "note": "Integriteit verschuift naar de app. Bijvoorbeeld, customDomain is niet @unique omdat MongoDB unieke indexen één null toestaat; daarom wordt uniciteit in code gecontroleerd."
               },
               {
@@ -2055,7 +2155,10 @@
                 "body": "Het procedure-type bepaalt wie het mag aanroepen, en mutaties nemen ctx.user.id op, zodat een client nooit als een andere gebruiker kan handelen. Types stromen van de database naar de admin-UI.",
                 "value": "",
                 "icon": "",
-                "tags": ["REST-routehandlers", "GraphQL"],
+                "tags": [
+                  "REST-routehandlers",
+                  "GraphQL"
+                ],
                 "note": "Sterk gekoppeld aan TypeScript en minder handig voor API-consumenten van derden."
               },
               {
@@ -2065,7 +2168,9 @@
                 "body": "Facturering, quota en data residency blijven bij de tenant, en één tenant kan nooit het quota van een andere consumeren. Secrets zijn versleuteld in rust met AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": ["Gedeelde platform-API-sleutels"],
+                "tags": [
+                  "Gedeelde platform-API-sleutels"
+                ],
                 "note": "Meer setup per tenant. Functies blijven uit totdat ze zijn gekoppeld, en AI heeft een handmatige JSON-modus."
               },
               {
@@ -2075,7 +2180,9 @@
                 "body": "6 thema's (3 paletten, licht en donker) plus een door de gebruiker gedefinieerd aangepast thema komen uit één tokenlaag, zonder dark: classes in componenten.",
                 "value": "",
                 "icon": "",
-                "tags": ["Tailwind dark:-varianten op elk element"],
+                "tags": [
+                  "Tailwind dark:-varianten op elk element"
+                ],
                 "note": "Vereist token-discipline: elke nieuwe component moet tokens gebruiken."
               },
               {
@@ -2126,7 +2233,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["(home) public", "(admin) /admin", "/api/*"],
+                "tags": [
+                  "(home) public",
+                  "(admin) /admin",
+                  "/api/*"
+                ],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -2150,7 +2261,12 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["22 modules", "UI", "lib", "server routers"],
+                "tags": [
+                  "22 modules",
+                  "UI",
+                  "lib",
+                  "server routers"
+                ],
                 "note": "Prisma client"
               },
               {
@@ -2160,7 +2276,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["Prisma", "MongoDB", "84 models"],
+                "tags": [
+                  "Prisma",
+                  "MongoDB",
+                  "84 models"
+                ],
                 "note": ""
               }
             ],
@@ -2294,7 +2414,11 @@
                 "body": "Interactieve landingspagina, professioneel profiel, ervaringssamenvatting, vaardigheden en snelle Next.js App Router-architectuur.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -2304,7 +2428,11 @@
                 "body": "Interactief online cv, dynamisch gegenereerde PDF- en DOCX-exports in cache en beveiligde e-mailverzending.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
+                "tags": [
+                  "PDF Engine",
+                  "DOCX Cache",
+                  "Rate Limiting"
+                ],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -2314,7 +2442,11 @@
                 "body": "Gefacetteerde projectnavigatie per technologiestack, productie-gevalideerde statistieken en diepgaande technische afwegingen.",
                 "value": "Casestudies",
                 "icon": "case",
-                "tags": ["Showcase", "Gefacetteerde Filters", "Architectuur"],
+                "tags": [
+                  "Showcase",
+                  "Gefacetteerde Filters",
+                  "Architectuur"
+                ],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -2324,7 +2456,11 @@
                 "body": "Interactieve console met uitvoerbare commando's, technische vaardigheden en dynamische badges via SkillIcon.",
                 "value": "Interactieve Terminal",
                 "icon": "term",
-                "tags": ["CLI Terminal", "SkillIcon", "Interactieve UX"],
+                "tags": [
+                  "CLI Terminal",
+                  "SkillIcon",
+                  "Interactieve UX"
+                ],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -2334,7 +2470,11 @@
                 "body": "Mobiele navigatie met aanraakgebaren, adaptieve filterlades, semantische menu's en gegarandeerde 60 FPS op smartphoneschermen.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": ["Mobile First", "Vloeiende Animaties", "Touch Ready"],
+                "tags": [
+                  "Mobile First",
+                  "Vloeiende Animaties",
+                  "Touch Ready"
+                ],
                 "note": "/projects/portfolio-mobile.jpg"
               },
               {

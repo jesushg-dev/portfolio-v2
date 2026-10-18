@@ -446,7 +446,12 @@
             "short": ".NET, C#, microservicios, cloud",
             "headline": "El stack con el que trabajo a diario",
             "description": "Las herramientas y tecnologías que empleo para diseñar, construir y desplegar software en producción.",
-            "chips": [".NET", "C#", "Microservicios", "Cloud"],
+            "chips": [
+              ".NET",
+              "C#",
+              "Microservicios",
+              "Cloud"
+            ],
             "statValue": "4",
             "statLabel": "áreas clave",
             "cta": "Explorar stack técnico"
@@ -470,7 +475,11 @@
             "short": "Equipos, mentoría, comunicación",
             "headline": "Cómo trabajo con las personas",
             "description": "Liderazgo de equipos, mentoría de desarrolladores y comunicación fluida con producto y negocio.",
-            "chips": ["Liderazgo técnico", "Mentoría", "Comunicación"],
+            "chips": [
+              "Liderazgo técnico",
+              "Mentoría",
+              "Comunicación"
+            ],
             "statValue": "6",
             "statLabel": "ingenieros guiados",
             "cta": "Leer principios de liderazgo"
@@ -494,7 +503,12 @@
             "short": "Proyectos de ingeniería y casos de estudio",
             "headline": "Proyectos y sistemas construidos",
             "description": "Una selección de sistemas, APIs, plataformas de comercio electrónico y paneles administrativos internos.",
-            "chips": ["APIs", "E-commerce", "Plataformas admin", "Cloud"],
+            "chips": [
+              "APIs",
+              "E-commerce",
+              "Plataformas admin",
+              "Cloud"
+            ],
             "statValue": "15+",
             "statLabel": "proyectos destacados",
             "cta": "Ver proyectos"
@@ -504,7 +518,12 @@
             "short": "Acreditaciones técnicas",
             "headline": "Certificaciones verificadas",
             "description": "Acreditaciones técnicas formales en frontend, backend, seguridad y habilidades directivas.",
-            "chips": ["Frontend", "Backend", "Ciberseguridad", "Habilidades"],
+            "chips": [
+              "Frontend",
+              "Backend",
+              "Ciberseguridad",
+              "Habilidades"
+            ],
             "statValue": "30+",
             "statLabel": "certificaciones obtenidas",
             "cta": "Ver certificados"
@@ -528,7 +547,11 @@
             "short": "Evolución profesional",
             "headline": "Hitos de carrera y trayectoria",
             "description": "Recorrido cronológico de hitos profesionales, roles asumidos y evolución técnica.",
-            "chips": ["Hitos de carrera", "Evolución", "Crecimiento"],
+            "chips": [
+              "Hitos de carrera",
+              "Evolución",
+              "Crecimiento"
+            ],
             "statValue": "6+",
             "statLabel": "años de evolución",
             "cta": "Ver línea de tiempo"
@@ -581,7 +604,11 @@
             "short": "Enfoque actual y lectura",
             "headline": "En qué estoy trabajando ahora",
             "description": "Una instantánea viva de proyectos activos, tecnologías que estoy explorando y prioridades actuales.",
-            "chips": ["Enfoque actual", "Lecturas", "Proyectos activos"],
+            "chips": [
+              "Enfoque actual",
+              "Lecturas",
+              "Proyectos activos"
+            ],
             "statValue": "En vivo",
             "statLabel": "estado actual",
             "cta": "Ver página Now"
@@ -591,7 +618,11 @@
             "short": "Métricas del portafolio",
             "headline": "Estadísticas y analítica del sitio",
             "description": "Métricas transparentes sobre visitas anónimas, distribución geográfica y rendimiento de la plataforma.",
-            "chips": ["Analítica", "Rendimiento", "Demografía"],
+            "chips": [
+              "Analítica",
+              "Rendimiento",
+              "Demografía"
+            ],
             "statValue": "En vivo",
             "statLabel": "métricas del sitio",
             "cta": "Ver estadísticas"
@@ -1004,7 +1035,10 @@
           "IN_PRODUCTION": "En producción",
           "MAINTENANCE": "En mantenimiento",
           "ARCHIVED": "Archivado"
-        }
+        },
+        "expandImage": "Ampliar imagen",
+        "closeLightbox": "Cerrar imagen ampliada",
+        "pressEscToClose": "Presiona Esc para cerrar"
       },
       "private": {
         "title": "Privado",

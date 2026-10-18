@@ -4,8 +4,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { MediaImage } from "@/components/shared/media-image";
-
+import { CaseStudyLightboxImage } from "./case-study-lightbox-image";
 import { renderCaseStudyIcon, SectionHeading } from "./case-study-primitives";
 import type { CaseStudySectionProps } from "./case-study-section-types";
 
@@ -48,15 +47,11 @@ function CaseStudyCardsSection({ section, index }: CaseStudySectionProps) {
                 ) : null}
               </div>
               {isImage ? (
-                <div className="border-border bg-muted relative mt-5 aspect-[2/1] w-full overflow-hidden rounded-2xl border">
-                  <MediaImage
-                    src={item.note}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover object-center transition-transform duration-300 hover:scale-105"
-                  />
-                </div>
+                <CaseStudyLightboxImage
+                  src={item.note}
+                  alt={item.title}
+                  aspectClassName="aspect-[2/1] mt-5"
+                />
               ) : null}
             </article>
           );

@@ -9,20 +9,27 @@
     {
       "locale": "es",
       "title": "Food Service",
-      "description": "Aplicación móvil Android para el control de pedidos de comida."
+      "description": "Aplicación móvil Android nativa para pedidos de comida a domicilio y gestión de restaurantes. Incluye menú interactivo con categorías de platillos, personalización de pedidos, cálculo de tiempos estimados de entrega y sincronización de órdenes mediante API REST y base de datos relacional.",
+      "hook": "App Móvil Android (Java) · Catálogo interactivo de restaurantes · Gestión de órdenes en tiempo real y base de datos MySQL"
     },
     {
       "locale": "en",
       "title": "Food Service",
-      "description": "Android mobile application for the control of food orders."
+      "description": "Native Android mobile application for food delivery ordering and restaurant management. Features interactive categorized menus, order customizations, estimated delivery time tracking, and backend order synchronization via REST APIs.",
+      "hook": "Native Android App (Java) · Interactive restaurant menu catalog · Real-time order fulfillment & MySQL backend"
     },
     {
       "locale": "nl",
       "title": "Food Service",
-      "description": "Mobiele Android-applicatie voor de controle van voedselbestellingen."
+      "description": "Native Android-app voor maaltijdbezorging en restaurantbeheer. Bevat interactieve menukaarten, bestelaanpassingen, geschatte bezorgtijden en synchronisatie via REST API's en een relationele database.",
+      "hook": "Mobiele Android-app (Java) · Interactieve menukaart voor restaurants · Realtime orderverwerking & MySQL backend"
     }
   ],
-  "skillKeys": ["Java", "Android", "Mysql"],
+  "skillKeys": [
+    "Java",
+    "Android",
+    "Mysql"
+  ],
   "order": 14,
   "kind": "PROFESSIONAL",
   "slug": "food-delivery"
