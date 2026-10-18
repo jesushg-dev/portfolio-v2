@@ -25,12 +25,7 @@
       "hook": "Webwinkel in React & Redux · Filterbare catalogus & winkelwagen · Responsieve Material-UI checkout"
     }
   ],
-  "skillKeys": [
-    "React",
-    "Redux",
-    "Material",
-    "Sass"
-  ],
+  "skillKeys": ["React", "Redux", "Material", "Sass"],
   "order": 15,
   "kind": "PROFESSIONAL",
   "slug": "ecommerce"

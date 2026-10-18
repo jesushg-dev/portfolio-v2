@@ -25,10 +25,7 @@
       "hook": "Mobiele Android-app (Java) · Beheer van loterijen en verlotingen · Interactieve ticketselectie & betalingsvalidatie"
     }
   ],
-  "skillKeys": [
-    "Java",
-    "Android"
-  ],
+  "skillKeys": ["Java", "Android"],
   "order": 19,
   "kind": "PERSONAL",
   "slug": "lucky-app"

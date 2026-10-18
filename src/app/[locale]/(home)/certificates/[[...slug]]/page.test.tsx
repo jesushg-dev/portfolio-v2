@@ -22,7 +22,7 @@ jest.mock("next-intl/server", () => {
   };
 });
 
-jest.mock("@/components/certification/certification", () => ({
+jest.mock("@/features/certifications/components/certification", () => ({
   __esModule: true,
   default: ({ slug }: { slug?: string[] }) => (
     <div data-testid="certification" data-slug={JSON.stringify(slug ?? null)} />

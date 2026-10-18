@@ -17,6 +17,7 @@ const baseCertificate = {
   appLanguageId: "lang-en",
   certificationId: "cert-base-1",
   createdAt: new Date(),
+  skills: [],
 } satisfies CertificateType;
 
 describe("CertificateItem", () => {

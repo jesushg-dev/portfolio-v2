@@ -9,13 +9,7 @@
   "caseStudyEnabled": true,
   "order": 6,
   "kind": "LEARNING",
-  "skillKeys": [
-    "React",
-    "Bootstrap",
-    "Apollo",
-    "GraphQL",
-    "Redux"
-  ],
+  "skillKeys": ["React", "Bootstrap", "Apollo", "GraphQL", "Redux"],
   "translations": [
     {
       "locale": "es",
@@ -26,11 +20,7 @@
       "approach": "Implementé Apollo Client con una política de caché personalizada para concatenar páginas, modelé el estado en Redux Toolkit con un middleware para sincronizar con localStorage y optimicé la carga con React.lazy y Suspense.",
       "outcome": "Una interfaz reactiva y optimizada con 3 rutas de carga diferida, 51 carátulas locales en WebP y persistencia sólida en el navegador.",
       "caseStudy": {
-        "chips": [
-          "Aprendizaje",
-          "Frontend",
-          "GraphQL"
-        ],
+        "chips": ["Aprendizaje", "Frontend", "GraphQL"],
         "facts": [
           {
             "key": "my-role",
@@ -154,9 +144,7 @@
                 "body": "Con keyArgs desactivado y una función merge propia, los resultados de fetchMore se concatenan en una única lista en caché, así Home muestra una cuadrícula que crece y solo pide la siguiente página cuando el visitante pulsa cargar más.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Guardar el estado de página y reemplazar la lista"
-                ],
+                "tags": ["Guardar el estado de página y reemplazar la lista"],
                 "note": "El merge solo concatena, sin eliminar duplicados, así que depende de que cada página se pida una sola vez."
               },
               {
@@ -166,9 +154,7 @@
                 "body": "La consulta de la lista pide id, nombre, fecha de emisión, código del episodio y fecha de creación; la de detalle añade los personajes con los campos que muestran sus tarjetas. Al mover los documentos a utils/graphql/query, el texto de las consultas queda fuera de las páginas.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Una sola consulta grande compartida"
-                ],
+                "tags": ["Una sola consulta grande compartida"],
                 "note": ""
               },
               {
@@ -178,9 +164,7 @@
                 "body": "Home, Detail y Favorites son imports diferidos envueltos en Suspense con un Loader compartido, de modo que cada visita descarga solo la página que abre. Esto llegó en los commits de rendimiento de carga de junio de 2022.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Un único bundle"
-                ],
+                "tags": ["Un único bundle"],
                 "note": "Navbar, Footer y el store quedan en el bundle principal; solo se difieren los tres componentes de página."
               },
               {
@@ -190,10 +174,7 @@
                 "body": "Cada acción despachada escribe el estado en localStorage, y el store se rehidrata con preloadedState al iniciar, así los favoritos sobreviven a las recargas sin backend.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Estado local de componentes",
-                  "React Context"
-                ],
+                "tags": ["Estado local de componentes", "React Context"],
                 "note": "Todo el estado se serializa tras cada acción y no tiene versión de esquema, así que cambiar su forma exigiría una migración."
               },
               {
@@ -229,11 +210,7 @@
                 "body": "Exploración fluida de las temporadas y episodios de la serie con paginación acumulativa en memoria y renderizado condicional.",
                 "value": "Apollo Client",
                 "icon": "layout",
-                "tags": [
-                  "GraphQL",
-                  "Apollo Cache",
-                  "React"
-                ],
+                "tags": ["GraphQL", "Apollo Cache", "React"],
                 "note": "/projects/rick-and-morty.jpg"
               },
               {
@@ -243,11 +220,7 @@
                 "body": "Consulta anidada que resuelve en tiempo real los personajes de cada capítulo, incluyendo especie, origen y estado vital.",
                 "value": "Consultas Anidadas",
                 "icon": "case",
-                "tags": [
-                  "Consultas Anidadas",
-                  "React Router 6",
-                  "Detalle"
-                ],
+                "tags": ["Consultas Anidadas", "React Router 6", "Detalle"],
                 "note": "/projects/rick-and-morty-detail.jpg"
               },
               {
@@ -257,11 +230,7 @@
                 "body": "Gestor centralizado de episodios favoritos con toggle instantáneo, sincronización en almacenamiento local y protección contra recargas.",
                 "value": "Redux Toolkit",
                 "icon": "db",
-                "tags": [
-                  "Redux Toolkit",
-                  "Persistencia",
-                  "LocalStorage"
-                ],
+                "tags": ["Redux Toolkit", "Persistencia", "LocalStorage"],
                 "note": "/projects/rick-and-morty-favorites.jpg"
               },
               {
@@ -271,11 +240,7 @@
                 "body": "Interfaz móvil optimizada con carátulas WebP ligeras, reinicio suave de scroll y navegación por pestañas en smartphones.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "WebP",
-                  "Touch UX"
-                ],
+                "tags": ["Mobile First", "WebP", "Touch UX"],
                 "note": "/projects/rick-and-morty-mobile.jpg"
               }
             ],
@@ -341,10 +306,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "rickandmortyapi.com/graphql",
-                  "API GraphQL pública"
-                ],
+                "tags": ["rickandmortyapi.com/graphql", "API GraphQL pública"],
                 "note": ""
               }
             ],
@@ -474,11 +436,7 @@
       "approach": "Configured Apollo Client with a custom InMemoryCache merge policy for pagination, modeled state in Redux Toolkit with localStorage middleware, and deferred routes via React.lazy and Suspense.",
       "outcome": "A fast, responsive frontend with 3 lazy-loaded routes, 51 local WebP episode cards, and robust client-side state persistence.",
       "caseStudy": {
-        "chips": [
-          "Learning",
-          "Frontend",
-          "GraphQL"
-        ],
+        "chips": ["Learning", "Frontend", "GraphQL"],
         "facts": [
           {
             "key": "my-role",
@@ -602,9 +560,7 @@
                 "body": "With keyArgs disabled and a custom merge function, fetchMore results are concatenated into a single cached list, so Home renders one growing grid and only requests the next page when the visitor clicks load more.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Keep page state and replace the list"
-                ],
+                "tags": ["Keep page state and replace the list"],
                 "note": "The merge simply concatenates, with no de-duplication, so it relies on each page being requested only once."
               },
               {
@@ -614,9 +570,7 @@
                 "body": "The list query asks for id, name, air date, episode code and creation date; the detail query adds the characters with the fields their cards show. Moving the documents to utils/graphql/query keeps the query text out of the pages.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "One large shared query"
-                ],
+                "tags": ["One large shared query"],
                 "note": ""
               },
               {
@@ -626,9 +580,7 @@
                 "body": "Home, Detail and Favorites are lazy imports wrapped in Suspense with a shared Loader, so a visit downloads only the page it opens. This arrived in the loading-performance commits of June 2022.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "A single bundle"
-                ],
+                "tags": ["A single bundle"],
                 "note": "Navbar, Footer and the store stay in the main bundle; only the three page components are deferred."
               },
               {
@@ -638,10 +590,7 @@
                 "body": "Every dispatched action writes the state to localStorage, and the store is rehydrated through preloadedState at startup, so favorites survive reloads without a backend.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Local component state",
-                  "React Context"
-                ],
+                "tags": ["Local component state", "React Context"],
                 "note": "The whole state is serialized after every action and has no schema version, so changing its shape would need a migration."
               },
               {
@@ -651,9 +600,7 @@
                 "body": "The GraphQL queries don't request episode images, so the card and the detail page build the file path from the episode id. Cards also use loading=\"lazy\"; character portraits come from the API's own image URLs.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Hotlinking episode images from a remote host"
-                ],
+                "tags": ["Hotlinking episode images from a remote host"],
                 "note": "File names follow the pattern episode (id).webp, which ties the artwork to the API's episode ids."
               }
             ],
@@ -677,11 +624,7 @@
                 "body": "Seamless browsing of series seasons and episodes with cumulative in-memory pagination and conditional component rendering.",
                 "value": "Apollo Client",
                 "icon": "layout",
-                "tags": [
-                  "GraphQL",
-                  "Apollo Cache",
-                  "React"
-                ],
+                "tags": ["GraphQL", "Apollo Cache", "React"],
                 "note": "/projects/rick-and-morty.jpg"
               },
               {
@@ -691,11 +634,7 @@
                 "body": "Nested query resolving characters in real time for each chapter, detailing origin dimension, species, and vital status.",
                 "value": "Nested Queries",
                 "icon": "case",
-                "tags": [
-                  "Nested Queries",
-                  "React Router 6",
-                  "Details"
-                ],
+                "tags": ["Nested Queries", "React Router 6", "Details"],
                 "note": "/projects/rick-and-morty-detail.jpg"
               },
               {
@@ -705,11 +644,7 @@
                 "body": "Centralized state slice for favorite episodes with instant toggle, local storage sync, and persistence across browser reloads.",
                 "value": "Redux Toolkit",
                 "icon": "db",
-                "tags": [
-                  "Redux Toolkit",
-                  "Persistence",
-                  "LocalStorage"
-                ],
+                "tags": ["Redux Toolkit", "Persistence", "LocalStorage"],
                 "note": "/projects/rick-and-morty-favorites.jpg"
               },
               {
@@ -719,11 +654,7 @@
                 "body": "Mobile interface optimized with lightweight WebP imagery, scroll restoration on navigation, and fluid tab routing.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "WebP",
-                  "Touch UX"
-                ],
+                "tags": ["Mobile First", "WebP", "Touch UX"],
                 "note": "/projects/rick-and-morty-mobile.jpg"
               }
             ],
@@ -747,11 +678,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "React 18",
-                  "React Router 6",
-                  "3 lazy-loaded pages"
-                ],
+                "tags": ["React 18", "React Router 6", "3 lazy-loaded pages"],
                 "note": "useQuery · useSelector"
               },
               {
@@ -789,10 +716,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "rickandmortyapi.com/graphql",
-                  "Public GraphQL API"
-                ],
+                "tags": ["rickandmortyapi.com/graphql", "Public GraphQL API"],
                 "note": ""
               }
             ],
@@ -922,11 +846,7 @@
       "approach": "Apollo Client geconfigureerd met een aangepast InMemoryCache-mergebeleid voor paginering, state gemodelleerd in Redux Toolkit met localStorage-middleware en routes uitgesteld via React.lazy en Suspense.",
       "outcome": "Een snelle, responsieve frontend met 3 lazy geladen routes, 51 lokale WebP-afleveringskaarten en robuuste client-side persistentie.",
       "caseStudy": {
-        "chips": [
-          "Leerproject",
-          "Frontend",
-          "GraphQL"
-        ],
+        "chips": ["Leerproject", "Frontend", "GraphQL"],
         "facts": [
           {
             "key": "my-role",
@@ -1050,9 +970,7 @@
                 "body": "Met keyArgs uitgeschakeld en een eigen merge-functie worden de resultaten van fetchMore in één gecachete lijst samengevoegd, zodat Home één groeiend raster toont en pas de volgende pagina opvraagt als de bezoeker op meer laden klikt.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Paginastatus bijhouden en de lijst vervangen"
-                ],
+                "tags": ["Paginastatus bijhouden en de lijst vervangen"],
                 "note": "De merge voegt alleen samen, zonder ontdubbeling, en gaat er dus van uit dat elke pagina maar één keer wordt opgevraagd."
               },
               {
@@ -1062,9 +980,7 @@
                 "body": "De lijstquery vraagt id, naam, uitzenddatum, afleveringscode en aanmaakdatum op; de detailquery voegt de personages toe met de velden die hun kaarten tonen. Door de documenten naar utils/graphql/query te verplaatsen blijft de querytekst uit de pagina's.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Eén grote gedeelde query"
-                ],
+                "tags": ["Eén grote gedeelde query"],
                 "note": ""
               },
               {
@@ -1074,9 +990,7 @@
                 "body": "Home, Detail en Favorites zijn lazy imports in Suspense met een gedeelde Loader, zodat een bezoek alleen de geopende pagina downloadt. Dit kwam in juni 2022 met de commits over laadprestaties.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Eén enkele bundle"
-                ],
+                "tags": ["Eén enkele bundle"],
                 "note": "Navbar, Footer en de store blijven in de hoofdbundle; alleen de drie paginacomponenten worden uitgesteld."
               },
               {
@@ -1086,10 +1000,7 @@
                 "body": "Elke verzonden actie schrijft de state naar localStorage en de store wordt bij het opstarten opnieuw gevuld via preloadedState, zodat favorieten een herlaadbeurt overleven zonder backend.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Lokale componentstate",
-                  "React Context"
-                ],
+                "tags": ["Lokale componentstate", "React Context"],
                 "note": "De hele state wordt na elke actie geserialiseerd en heeft geen schemaversie, dus een andere vorm vraagt om een migratie."
               },
               {
@@ -1125,11 +1036,7 @@
                 "body": "Vloeiende navigatie door seizoenen en afleveringen met incrementele geheugenpaginering en voorwaardelijke rendering.",
                 "value": "Apollo Client",
                 "icon": "layout",
-                "tags": [
-                  "GraphQL",
-                  "Apollo Cache",
-                  "React"
-                ],
+                "tags": ["GraphQL", "Apollo Cache", "React"],
                 "note": "/projects/rick-and-morty.jpg"
               },
               {
@@ -1139,11 +1046,7 @@
                 "body": "Genestelde query die personages per aflevering realtime ophaalt, inclusief soort, oorsprong en vitale status.",
                 "value": "Genestelde Query's",
                 "icon": "case",
-                "tags": [
-                  "Genestelde Query's",
-                  "React Router 6",
-                  "Details"
-                ],
+                "tags": ["Genestelde Query's", "React Router 6", "Details"],
                 "note": "/projects/rick-and-morty-detail.jpg"
               },
               {
@@ -1153,11 +1056,7 @@
                 "body": "Gecentraliseerde toestand voor favoriete afleveringen met directe toggle, browseropslag en persistentie na herladen.",
                 "value": "Redux Toolkit",
                 "icon": "db",
-                "tags": [
-                  "Redux Toolkit",
-                  "Persistentie",
-                  "LocalStorage"
-                ],
+                "tags": ["Redux Toolkit", "Persistentie", "LocalStorage"],
                 "note": "/projects/rick-and-morty-favorites.jpg"
               },
               {
@@ -1167,11 +1066,7 @@
                 "body": "Mobiele interface geoptimaliseerd met lichte WebP-afbeeldingen, scrollherstel bij navigatie en soepele schermwissels.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "WebP",
-                  "Aanraak-UX"
-                ],
+                "tags": ["Mobile First", "WebP", "Aanraak-UX"],
                 "note": "/projects/rick-and-morty-mobile.jpg"
               }
             ],
@@ -1223,11 +1118,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Apollo Client",
-                  "InMemoryCache",
-                  "Eigen type policy"
-                ],
+                "tags": ["Apollo Client", "InMemoryCache", "Eigen type policy"],
                 "note": "GraphQL via HTTP"
               },
               {
@@ -1237,10 +1128,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "rickandmortyapi.com/graphql",
-                  "Openbare GraphQL-API"
-                ],
+                "tags": ["rickandmortyapi.com/graphql", "Openbare GraphQL-API"],
                 "note": ""
               }
             ],

@@ -203,7 +203,7 @@ function SocialProofContent({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.25 }}
-                    className="text-foreground relative mt-4 text-base leading-relaxed font-medium sm:mt-5 sm:text-lg sm:leading-8"
+                    className="text-foreground relative mt-4 line-clamp-4 text-base leading-relaxed font-medium sm:mt-5 sm:line-clamp-none sm:text-lg sm:leading-8"
                   >
                     &ldquo;{activeTestimonial.quote}&rdquo;
                   </motion.blockquote>

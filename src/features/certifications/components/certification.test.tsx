@@ -32,6 +32,15 @@ jest.mock("@/trpc/react", () => ({
 
 jest.mock("@/i18n/routing", () => ({
   useRouter: () => ({ push: jest.fn() }),
+  Link: ({
+    children,
+    href,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
 }));
 
 jest.mock("next/dynamic", () => () => {
@@ -67,7 +76,7 @@ describe("Certification", () => {
       fetchNextPage: jest.fn(),
     });
     const { container } = renderWithIntl(
-      <Certification slug={undefined as never} />,
+      <Certification slug={undefined} />,
     );
     expect(container.querySelector(".react-loading-skeleton")).toBeTruthy();
   });
@@ -83,9 +92,9 @@ describe("Certification", () => {
       isFetching: false,
       fetchNextPage: jest.fn(),
     });
-    renderWithIntl(<Certification slug={undefined as never} />);
+    renderWithIntl(<Certification slug={undefined} />);
     expect(screen.getByAltText("TypeScript Mastery")).toBeInTheDocument();
-    expect(screen.getByText("Academy")).toBeInTheDocument();
+    expect(screen.getAllByText("Academy")[0]).toBeInTheDocument();
   });
 
   it("shows no result when data is empty", () => {
@@ -95,7 +104,7 @@ describe("Certification", () => {
       isFetching: false,
       fetchNextPage: jest.fn(),
     });
-    renderWithIntl(<Certification slug={undefined as never} />);
+    renderWithIntl(<Certification slug={undefined} />);
     expect(screen.getByTestId("no-result")).toBeInTheDocument();
   });
 
@@ -112,7 +121,7 @@ describe("Certification", () => {
       fetchNextPage,
     });
     const user = userEvent.setup();
-    renderWithIntl(<Certification slug={undefined as never} />);
+    renderWithIntl(<Certification slug={undefined} />);
     await user.click(screen.getByText("Load More"));
     expect(fetchNextPage).toHaveBeenCalled();
   });

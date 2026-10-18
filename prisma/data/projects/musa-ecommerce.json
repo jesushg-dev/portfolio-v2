@@ -133,11 +133,7 @@
                 "body": "Interfaz web optimizada para navegación rápida, carrusel de productos de temporada y ofertas del día con alta conversión.",
                 "value": "Marketplace B2C",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Responsive"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Responsive"],
                 "note": "/projects/musa.jpg"
               },
               {
@@ -147,11 +143,7 @@
                 "body": "Cuadrícula estructurada por categorías de frutas, verduras, despensa y abarrotes con actualización en tiempo real.",
                 "value": "Filtros por Categoría",
                 "icon": "case",
-                "tags": [
-                  "Categorías",
-                  "Perecederos",
-                  "Filtros"
-                ],
+                "tags": ["Categorías", "Perecederos", "Filtros"],
                 "note": "/projects/musa-catalog.jpg"
               },
               {
@@ -161,11 +153,7 @@
                 "body": "Páginas dedicadas para cada comercio y bodega asociada, permitiendo a los clientes comprar directamente en sus locales preferidos.",
                 "value": "Multi-Vendor",
                 "icon": "globe",
-                "tags": [
-                  "Tiendas",
-                  "Multi-Vendor",
-                  "Surtido Local"
-                ],
+                "tags": ["Tiendas", "Multi-Vendor", "Surtido Local"],
                 "note": "/projects/musa-store.jpg"
               },
               {
@@ -175,11 +163,7 @@
                 "body": "Flujo de compra optimizado para pantallas táctiles con adición en 1 clic y cálculo en milisegundos de costos de envío.",
                 "value": "1-Click Add",
                 "icon": "gauge",
-                "tags": [
-                  "Mobile First",
-                  "Carrito Reactivo",
-                  "UX Ágil"
-                ],
+                "tags": ["Mobile First", "Carrito Reactivo", "UX Ágil"],
                 "note": "/projects/musa-mobile.jpg"
               }
             ],
@@ -203,10 +187,7 @@
                 "body": "El cliente explora el portal web responsivo, visualiza promociones del día y selecciona su comercio de proximidad.",
                 "value": "Catálogo Ágil",
                 "icon": "layout",
-                "tags": [
-                  "Marketplace",
-                  "Ofertas"
-                ],
+                "tags": ["Marketplace", "Ofertas"],
                 "note": "/projects/musa.jpg"
               },
               {
@@ -216,10 +197,7 @@
                 "body": "Búsqueda por categorías de perecederos y despensa con actualización en tiempo real de disponibilidad.",
                 "value": "Precios Claros",
                 "icon": "case",
-                "tags": [
-                  "Pasillos",
-                  "Perecederos"
-                ],
+                "tags": ["Pasillos", "Perecederos"],
                 "note": "/projects/musa-catalog.jpg"
               },
               {
@@ -229,10 +207,7 @@
                 "body": "El motor multi-vendor asigna los productos a la sucursal más cercana para optimizar tiempos de despacho.",
                 "value": "Multi-Vendor",
                 "icon": "globe",
-                "tags": [
-                  "Multi-Vendor",
-                  "Stock Local"
-                ],
+                "tags": ["Multi-Vendor", "Stock Local"],
                 "note": "/projects/musa-store.jpg"
               },
               {
@@ -242,10 +217,7 @@
                 "body": "El cliente confirma el pedido desde su smartphone con 99.9% de precisión en stock y cálculo automático de ruta.",
                 "value": "99.9% Precisión",
                 "icon": "gauge",
-                "tags": [
-                  "Mobile Checkout",
-                  "Delivery"
-                ],
+                "tags": ["Mobile Checkout", "Delivery"],
                 "note": "/projects/musa-mobile.jpg"
               }
             ],
@@ -383,11 +355,7 @@
                 "body": "Web storefront optimized for rapid discovery, seasonal hero banners, and high-conversion daily deals.",
                 "value": "B2C Marketplace",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Responsive"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Responsive"],
                 "note": "/projects/musa.jpg"
               },
               {
@@ -397,11 +365,7 @@
                 "body": "Structured catalog layout organized across fresh produce, pantry goods, and household staples with live pricing.",
                 "value": "Aisle Filters",
                 "icon": "case",
-                "tags": [
-                  "Categories",
-                  "Perishables",
-                  "Filtering"
-                ],
+                "tags": ["Categories", "Perishables", "Filtering"],
                 "note": "/projects/musa-catalog.jpg"
               },
               {
@@ -411,11 +375,7 @@
                 "body": "Independent branch profiles and curated inventories allowing customers to order directly from their preferred local vendors.",
                 "value": "Multi-Vendor Hub",
                 "icon": "globe",
-                "tags": [
-                  "Stores",
-                  "Multi-Vendor",
-                  "Local Inventory"
-                ],
+                "tags": ["Stores", "Multi-Vendor", "Local Inventory"],
                 "note": "/projects/musa-store.jpg"
               },
               {
@@ -425,11 +385,7 @@
                 "body": "Touch-first shopping experience with 1-click cart addition and instant delivery fee computation.",
                 "value": "1-Click Add",
                 "icon": "gauge",
-                "tags": [
-                  "Mobile First",
-                  "Reactive Cart",
-                  "Smooth UX"
-                ],
+                "tags": ["Mobile First", "Reactive Cart", "Smooth UX"],
                 "note": "/projects/musa-mobile.jpg"
               }
             ],
@@ -453,10 +409,7 @@
                 "body": "Customers browse the responsive storefront, explore seasonal promotions, and choose local vendors.",
                 "value": "Quick Discovery",
                 "icon": "layout",
-                "tags": [
-                  "Marketplace",
-                  "Deals"
-                ],
+                "tags": ["Marketplace", "Deals"],
                 "note": "/projects/musa.jpg"
               },
               {
@@ -466,10 +419,7 @@
                 "body": "Product search across grocery categories with real-time inventory updates and clear savings badges.",
                 "value": "Live Pricing",
                 "icon": "case",
-                "tags": [
-                  "Aisles",
-                  "Produce"
-                ],
+                "tags": ["Aisles", "Produce"],
                 "note": "/projects/musa-catalog.jpg"
               },
               {
@@ -479,10 +429,7 @@
                 "body": "Multi-vendor fulfillment engine maps items to the closest merchant hub to accelerate dispatch times.",
                 "value": "Multi-Vendor Hub",
                 "icon": "globe",
-                "tags": [
-                  "Multi-Vendor",
-                  "Local Inventory"
-                ],
+                "tags": ["Multi-Vendor", "Local Inventory"],
                 "note": "/projects/musa-store.jpg"
               },
               {
@@ -492,10 +439,7 @@
                 "body": "Shoppers finalize orders seamlessly on mobile with 99.9% inventory sync accuracy and automated delivery tracking.",
                 "value": "99.9% Accuracy",
                 "icon": "gauge",
-                "tags": [
-                  "Mobile Checkout",
-                  "Delivery"
-                ],
+                "tags": ["Mobile Checkout", "Delivery"],
                 "note": "/projects/musa-mobile.jpg"
               }
             ],
@@ -633,11 +577,7 @@
                 "body": "Webwinkel geoptimaliseerd voor snel navigeren, seizoensaanbiedingen en dagdeals met hoge conversie.",
                 "value": "B2C Marktplaats",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Responsief"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Responsief"],
                 "note": "/projects/musa.jpg"
               },
               {
@@ -647,11 +587,7 @@
                 "body": "Gestructureerde weergave van groenten, fruit, voorraad en dagelijkse benodigdheden met actuele prijzen.",
                 "value": "Afdelingsfilters",
                 "icon": "case",
-                "tags": [
-                  "Categorieën",
-                  "Verswaren",
-                  "Filters"
-                ],
+                "tags": ["Categorieën", "Verswaren", "Filters"],
                 "note": "/projects/musa-catalog.jpg"
               },
               {
@@ -661,11 +597,7 @@
                 "body": "Onafhankelijke filialen met eigen assortimenten zodat consumenten direct bij hun favoriete leverancier kunnen bestellen.",
                 "value": "Multi-Vendor Hub",
                 "icon": "globe",
-                "tags": [
-                  "Winkels",
-                  "Multi-Vendor",
-                  "Lokaal Aanbod"
-                ],
+                "tags": ["Winkels", "Multi-Vendor", "Lokaal Aanbod"],
                 "note": "/projects/musa-store.jpg"
               },
               {
@@ -675,11 +607,7 @@
                 "body": "Touch-geoptimaliseerde winkelervaring met 1-klik toevoegen en directe berekening van bezorgkosten.",
                 "value": "1-Klik Toevoegen",
                 "icon": "gauge",
-                "tags": [
-                  "Mobile First",
-                  "Reactieve Winkelwagen",
-                  "Snelle UX"
-                ],
+                "tags": ["Mobile First", "Reactieve Winkelwagen", "Snelle UX"],
                 "note": "/projects/musa-mobile.jpg"
               }
             ],
@@ -703,10 +631,7 @@
                 "body": "Klanten verkennen de responsieve webwinkel, bekijken seizoenspromoties en selecteren lokale handelaren.",
                 "value": "Snel Ontdekken",
                 "icon": "layout",
-                "tags": [
-                  "Marktplaats",
-                  "Aanbiedingen"
-                ],
+                "tags": ["Marktplaats", "Aanbiedingen"],
                 "note": "/projects/musa.jpg"
               },
               {
@@ -716,10 +641,7 @@
                 "body": "Productselectie over categorieën met realtime voorraadinzichten en duidelijke prijzen.",
                 "value": "Actuele Prijzen",
                 "icon": "case",
-                "tags": [
-                  "Afdelingen",
-                  "Verswaren"
-                ],
+                "tags": ["Afdelingen", "Verswaren"],
                 "note": "/projects/musa-catalog.jpg"
               },
               {
@@ -729,10 +651,7 @@
                 "body": "De multi-vendor logica koppelt bestellingen aan het dichtstbijzijnde magazijn voor snelle levering.",
                 "value": "Multi-Vendor Hub",
                 "icon": "globe",
-                "tags": [
-                  "Multi-Vendor",
-                  "Lokale Voorraad"
-                ],
+                "tags": ["Multi-Vendor", "Lokale Voorraad"],
                 "note": "/projects/musa-store.jpg"
               },
               {
@@ -742,10 +661,7 @@
                 "body": "Klanten ronden bestellingen direct af op hun smartphone met 99,9% voorraadnauwkeurigheid.",
                 "value": "99,9% Nauwkeurigheid",
                 "icon": "gauge",
-                "tags": [
-                  "Mobiele Checkout",
-                  "Bezorging"
-                ],
+                "tags": ["Mobiele Checkout", "Bezorging"],
                 "note": "/projects/musa-mobile.jpg"
               }
             ],
@@ -757,11 +673,7 @@
       }
     }
   ],
-  "skillKeys": [
-    "Nextjs",
-    "Tailwind",
-    "Typescript"
-  ],
+  "skillKeys": ["Nextjs", "Tailwind", "Typescript"],
   "order": 3,
   "kind": "PROFESSIONAL",
   "caseStudyEnabled": true,

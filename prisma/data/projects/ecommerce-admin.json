@@ -9,13 +9,7 @@
   "kind": "PROFESSIONAL",
   "slug": "ecommerce-admin",
   "caseStudyEnabled": true,
-  "skillKeys": [
-    "React",
-    "Redux",
-    "Material",
-    "Sass",
-    "Javascript"
-  ],
+  "skillKeys": ["React", "Redux", "Material", "Sass", "Javascript"],
   "translations": [
     {
       "locale": "es",
@@ -146,11 +140,7 @@
                 "body": "Listado maestro de productos con imágenes, descripción, precios mayoristas y minoristas, código SKU y asignación rápida de categorías.",
                 "value": "Catálogo",
                 "icon": "layout",
-                "tags": [
-                  "React",
-                  "Catálogo",
-                  "SKU"
-                ],
+                "tags": ["React", "Catálogo", "SKU"],
                 "note": ""
               },
               {
@@ -160,11 +150,7 @@
                 "body": "Flujo visual de pedidos clasificados por etapas de despacho, con detalle de cliente, dirección de entrega, desglose de ítems y cambio de estado con un clic.",
                 "value": "Despacho",
                 "icon": "globe",
-                "tags": [
-                  "Pedidos",
-                  "Logística",
-                  "Redux"
-                ],
+                "tags": ["Pedidos", "Logística", "Redux"],
                 "note": ""
               },
               {
@@ -174,11 +160,7 @@
                 "body": "Monitoreo continuo de unidades disponibles con alertas visuales codificadas por color cuando el stock baja del umbral mínimo de seguridad.",
                 "value": "Stock",
                 "icon": "shield",
-                "tags": [
-                  "Inventario",
-                  "Alertas",
-                  "MUI"
-                ],
+                "tags": ["Inventario", "Alertas", "MUI"],
                 "note": ""
               },
               {
@@ -188,11 +170,7 @@
                 "body": "Tarjetas de KPI con ingresos totales acumulados, volumen de pedidos diarios, productos estrella y promedio de ticket de venta.",
                 "value": "KPIs",
                 "icon": "gauge",
-                "tags": [
-                  "Métricas",
-                  "KPI",
-                  "Ventas"
-                ],
+                "tags": ["Métricas", "KPI", "Ventas"],
                 "note": ""
               }
             ],
@@ -216,11 +194,7 @@
                 "body": "Al centralizar el estado global en Redux, cualquier modificación de stock realizada en el catálogo se refleja de inmediato en la vista de pedidos y en las tarjetas de KPIs sin prop drilling ni desincronización.",
                 "value": "Redux State",
                 "icon": "layers",
-                "tags": [
-                  "Redux",
-                  "Estado Global",
-                  "React"
-                ],
+                "tags": ["Redux", "Estado Global", "React"],
                 "note": ""
               },
               {
@@ -230,11 +204,7 @@
                 "body": "El uso de la biblioteca Material-UI garantizó estándares altos de accesibilidad, diseño limpio y componentes listos para producción (tablas, diálogos, selectores) acelerando los ciclos de entrega.",
                 "value": "MUI System",
                 "icon": "layout",
-                "tags": [
-                  "MUI",
-                  "Accesibilidad",
-                  "UI"
-                ],
+                "tags": ["MUI", "Accesibilidad", "UI"],
                 "note": ""
               },
               {
@@ -244,11 +214,7 @@
                 "body": "Netlify permitió distribuir los assets estáticos mediante CDN perimetral, garantizando tiempos de carga de primer byte (TTFB) menores a 60ms y previsualizaciones instantáneas en cada commit.",
                 "value": "Netlify Edge",
                 "icon": "globe",
-                "tags": [
-                  "Netlify",
-                  "CI/CD",
-                  "CDN"
-                ],
+                "tags": ["Netlify", "CI/CD", "CDN"],
                 "note": ""
               }
             ],
@@ -388,11 +354,7 @@
                 "body": "Master catalog list featuring product photography, descriptions, wholesale and retail pricing, SKU numbers, and quick category reassignment.",
                 "value": "Catalog",
                 "icon": "layout",
-                "tags": [
-                  "React",
-                  "Catalog",
-                  "SKU"
-                ],
+                "tags": ["React", "Catalog", "SKU"],
                 "note": ""
               },
               {
@@ -402,11 +364,7 @@
                 "body": "Visual order stream classified by fulfillment status, detailing customer name, delivery address, ordered items, and single-click status updates.",
                 "value": "Fulfillment",
                 "icon": "globe",
-                "tags": [
-                  "Orders",
-                  "Logistics",
-                  "Redux"
-                ],
+                "tags": ["Orders", "Logistics", "Redux"],
                 "note": ""
               },
               {
@@ -416,11 +374,7 @@
                 "body": "Continuous tracking of on-hand units with color-coded alerts when inventory falls below minimum safety stock levels.",
                 "value": "Inventory",
                 "icon": "shield",
-                "tags": [
-                  "Inventory",
-                  "Alerts",
-                  "MUI"
-                ],
+                "tags": ["Inventory", "Alerts", "MUI"],
                 "note": ""
               },
               {
@@ -430,11 +384,7 @@
                 "body": "Summary KPI cards showing total revenue, daily order volumes, top-selling items, and average order values.",
                 "value": "KPIs",
                 "icon": "gauge",
-                "tags": [
-                  "Analytics",
-                  "KPI",
-                  "Sales"
-                ],
+                "tags": ["Analytics", "KPI", "Sales"],
                 "note": ""
               }
             ],
@@ -458,11 +408,7 @@
                 "body": "By centralizing the global application state in Redux, stock updates made in the catalog module immediately reflect in the order pipeline and analytics summary without prop drilling.",
                 "value": "Redux State",
                 "icon": "layers",
-                "tags": [
-                  "Redux",
-                  "Global State",
-                  "React"
-                ],
+                "tags": ["Redux", "Global State", "React"],
                 "note": ""
               },
               {
@@ -472,11 +418,7 @@
                 "body": "Using Material-UI ensured high accessibility standards, clean visuals, and reliable out-of-the-box components (tables, dialogs, selectors), accelerating product delivery.",
                 "value": "MUI System",
                 "icon": "layout",
-                "tags": [
-                  "MUI",
-                  "Accessibility",
-                  "UI"
-                ],
+                "tags": ["MUI", "Accessibility", "UI"],
                 "note": ""
               },
               {
@@ -486,11 +428,7 @@
                 "body": "Netlify served static assets over a global edge CDN, guaranteeing time-to-first-byte (TTFB) under 60ms and instant deploy previews on git pushes.",
                 "value": "Netlify Edge",
                 "icon": "globe",
-                "tags": [
-                  "Netlify",
-                  "CI/CD",
-                  "CDN"
-                ],
+                "tags": ["Netlify", "CI/CD", "CDN"],
                 "note": ""
               }
             ],
@@ -630,11 +568,7 @@
                 "body": "Hoofdlijst met productafbeeldingen, beschrijvingen, groothandels- en consumentenprijzen, SKU-codes en categorie-toewijzingen.",
                 "value": "Catalogus",
                 "icon": "layout",
-                "tags": [
-                  "React",
-                  "Catalogus",
-                  "SKU"
-                ],
+                "tags": ["React", "Catalogus", "SKU"],
                 "note": ""
               },
               {
@@ -644,11 +578,7 @@
                 "body": "Visuele orderstroom gerangschikt op status, met klantgegevens, afleveradres, artikelenoverzicht en statuswijzigingen met één klik.",
                 "value": "Verzending",
                 "icon": "globe",
-                "tags": [
-                  "Orders",
-                  "Logistiek",
-                  "Redux"
-                ],
+                "tags": ["Orders", "Logistiek", "Redux"],
                 "note": ""
               },
               {
@@ -658,11 +588,7 @@
                 "body": "Continue bewaking van beschikbare voorraad met kleurgecodeerde meldingen wanneer artikelen onder de veiligheidsdrempel dalen.",
                 "value": "Voorraad",
                 "icon": "shield",
-                "tags": [
-                  "Voorraad",
-                  "Meldingen",
-                  "MUI"
-                ],
+                "tags": ["Voorraad", "Meldingen", "MUI"],
                 "note": ""
               },
               {
@@ -672,11 +598,7 @@
                 "body": "KPI-kaarten met totale inkomsten, dagelijkse ordervolumes, best verkopende artikelen en gemiddelde bestelwaarde.",
                 "value": "KPIs",
                 "icon": "gauge",
-                "tags": [
-                  "Statistieken",
-                  "KPI",
-                  "Verkoop"
-                ],
+                "tags": ["Statistieken", "KPI", "Verkoop"],
                 "note": ""
               }
             ],
@@ -700,11 +622,7 @@
                 "body": "Door de status centraal in Redux te beheren, worden voorraadwijzigingen in de catalogus direct weerspiegeld in het orderoverzicht en KPI-overzichten zonder prop drilling.",
                 "value": "Redux State",
                 "icon": "layers",
-                "tags": [
-                  "Redux",
-                  "Globale Status",
-                  "React"
-                ],
+                "tags": ["Redux", "Globale Status", "React"],
                 "note": ""
               },
               {
@@ -714,11 +632,7 @@
                 "body": "Het gebruik van Material-UI zorgde voor hoge toegankelijkheid, strakke vormgeving en kant-en-klare tabellen en dialoogvensters.",
                 "value": "MUI Systeem",
                 "icon": "layout",
-                "tags": [
-                  "MUI",
-                  "Toegankelijkheid",
-                  "UI"
-                ],
+                "tags": ["MUI", "Toegankelijkheid", "UI"],
                 "note": ""
               },
               {
@@ -728,11 +642,7 @@
                 "body": "Netlify verzorgt snelle statische asset-levering via een edge CDN met TTFB onder 60ms en automatische voorvertoningen bij elke commit.",
                 "value": "Netlify Edge",
                 "icon": "globe",
-                "tags": [
-                  "Netlify",
-                  "CI/CD",
-                  "CDN"
-                ],
+                "tags": ["Netlify", "CI/CD", "CDN"],
                 "note": ""
               }
             ],

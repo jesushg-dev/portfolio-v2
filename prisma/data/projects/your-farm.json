@@ -25,10 +25,7 @@
       "hook": "Mobiele Android-app (Java) · Integraal agrarisch en veeteeltbeheer · Veestapelregistratie, oogst- en kostenbeheer offline"
     }
   ],
-  "skillKeys": [
-    "Java",
-    "Android"
-  ],
+  "skillKeys": ["Java", "Android"],
   "order": 20,
   "kind": "PERSONAL",
   "slug": "your-farm"

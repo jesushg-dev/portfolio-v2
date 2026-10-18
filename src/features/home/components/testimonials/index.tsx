@@ -34,7 +34,7 @@ const Testimonials: FC = () => {
             key={item.id}
             className="bg-card text-card-foreground border-border/30 rounded-xl border p-5 shadow-sm"
           >
-            <blockquote className="text-foreground text-sm leading-relaxed italic">
+            <blockquote className="text-foreground line-clamp-4 text-sm leading-relaxed italic sm:line-clamp-none">
               “{item.quote}”
             </blockquote>
             <footer className="mt-4 flex items-center gap-3 text-sm">

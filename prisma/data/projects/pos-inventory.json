@@ -9,12 +9,7 @@
   "kind": "PROFESSIONAL",
   "slug": "pos-inventory",
   "caseStudyEnabled": true,
-  "skillKeys": [
-    "Csharp",
-    "SqlServer",
-    "Windforms",
-    "DevExpress"
-  ],
+  "skillKeys": ["Csharp", "SqlServer", "Windforms", "DevExpress"],
   "translations": [
     {
       "locale": "es",
@@ -145,11 +140,7 @@
                 "body": "Pantalla optimizada para cobro rápido mediante escáner de códigos de barras, soporte para múltiples medios de pago (efectivo, tarjeta, crédito) y cálculo de cambio instantáneo.",
                 "value": "POS Terminal",
                 "icon": "bolt",
-                "tags": [
-                  "Punto de Venta",
-                  "C#",
-                  "Scanner"
-                ],
+                "tags": ["Punto de Venta", "C#", "Scanner"],
                 "note": ""
               },
               {
@@ -159,11 +150,7 @@
                 "body": "Gestión de artículos categorizados con matrices de tallas, colores y marcas, alertas automáticas de reposición para existencias mínimas y registro de lotes de compra.",
                 "value": "Inventario Matrix",
                 "icon": "layers",
-                "tags": [
-                  "DevExpress Grid",
-                  "Inventario",
-                  "Variantes"
-                ],
+                "tags": ["DevExpress Grid", "Inventario", "Variantes"],
                 "note": ""
               },
               {
@@ -173,11 +160,7 @@
                 "body": "Control estricto de dinero en caja con fondos iniciales, registro de entradas y salidas justificadas, y reporte comparativo de ventas esperadas versus efectivo real contado.",
                 "value": "Caja & Turnos",
                 "icon": "shield",
-                "tags": [
-                  "Arqueo",
-                  "Auditoría",
-                  "Caja"
-                ],
+                "tags": ["Arqueo", "Auditoría", "Caja"],
                 "note": ""
               },
               {
@@ -187,11 +170,7 @@
                 "body": "Motor de impresión térmica para recibos de venta con corte de papel y generador de reportes contables con métricas de utilidad, prendas más vendidas y estados de cuenta de clientes.",
                 "value": "XtraReports",
                 "icon": "layout",
-                "tags": [
-                  "DevExpress",
-                  "XtraReports",
-                  "Facturación"
-                ],
+                "tags": ["DevExpress", "XtraReports", "Facturación"],
                 "note": ""
               }
             ],
@@ -215,11 +194,7 @@
                 "body": "Los controles nativos de Windows Forms carecen de capacidades avanzadas de agrupación y ordenamiento en memoria. La suite DevExpress permitió manejar cuadrículas de miles de productos con scroll suave, filtrado en tiempo de ejecución y diseño visual moderno.",
                 "value": "DevExpress UI",
                 "icon": "layout",
-                "tags": [
-                  "C#",
-                  "DevExpress",
-                  "Rendimiento"
-                ],
+                "tags": ["C#", "DevExpress", "Rendimiento"],
                 "note": ""
               },
               {
@@ -229,11 +204,7 @@
                 "body": "Toda la lógica de descuento de inventario y generación de tickets se encapsuló en stored procedures de SQL Server con bloques TRY/CATCH y transacciones atómicas, previniendo ventas fantasma o discrepancias entre el recibo y el kardex.",
                 "value": "T-SQL Core",
                 "icon": "shield",
-                "tags": [
-                  "SQL Server",
-                  "Transacciones",
-                  "ACID"
-                ],
+                "tags": ["SQL Server", "Transacciones", "ACID"],
                 "note": ""
               },
               {
@@ -243,11 +214,7 @@
                 "body": "Separar la interfaz gráfica de la capa de reglas de negocio y de los adaptadores de datos permitió refactorizar reportes y validaciones sin tocar la lógica de base de datos ni romper la UI del cajero.",
                 "value": "N-Capas",
                 "icon": "layers",
-                "tags": [
-                  "Arquitectura",
-                  "Clean Design",
-                  "Desacople"
-                ],
+                "tags": ["Arquitectura", "Clean Design", "Desacople"],
                 "note": ""
               }
             ],
@@ -387,11 +354,7 @@
                 "body": "Optimized checkout screen supporting barcode scanners, multiple tender types (cash, credit cards, customer store credit), and instant change calculations.",
                 "value": "POS Terminal",
                 "icon": "bolt",
-                "tags": [
-                  "Point of Sale",
-                  "C#",
-                  "Scanner"
-                ],
+                "tags": ["Point of Sale", "C#", "Scanner"],
                 "note": ""
               },
               {
@@ -401,11 +364,7 @@
                 "body": "Catalog management with matrix structures for sizes, colors, and brands, automated reorder thresholds for low stock, and supplier batch tracking.",
                 "value": "Inventory Matrix",
                 "icon": "layers",
-                "tags": [
-                  "DevExpress Grid",
-                  "Inventory",
-                  "Variants"
-                ],
+                "tags": ["DevExpress Grid", "Inventory", "Variants"],
                 "note": ""
               },
               {
@@ -415,11 +374,7 @@
                 "body": "Rigorous cash drawer tracking with starting funds, logged cash drops and payouts, and comparative reconciliation of expected vs counted cash.",
                 "value": "Cash & Shifts",
                 "icon": "shield",
-                "tags": [
-                  "Audit",
-                  "Drawer",
-                  "Cash"
-                ],
+                "tags": ["Audit", "Drawer", "Cash"],
                 "note": ""
               },
               {
@@ -429,11 +384,7 @@
                 "body": "Thermal printer driver integration with auto-cutter triggers and reporting engine displaying gross margins, best-selling items, and customer statements.",
                 "value": "XtraReports",
                 "icon": "layout",
-                "tags": [
-                  "DevExpress",
-                  "XtraReports",
-                  "Billing"
-                ],
+                "tags": ["DevExpress", "XtraReports", "Billing"],
                 "note": ""
               }
             ],
@@ -457,11 +408,7 @@
                 "body": "Standard Windows Forms controls lack advanced in-memory grouping and sorting capabilities. DevExpress allowed smooth scrolling across thousands of SKUs, runtime filtering, and modern theme styling.",
                 "value": "DevExpress UI",
                 "icon": "layout",
-                "tags": [
-                  "C#",
-                  "DevExpress",
-                  "Performance"
-                ],
+                "tags": ["C#", "DevExpress", "Performance"],
                 "note": ""
               },
               {
@@ -471,11 +418,7 @@
                 "body": "All stock deductions and receipt logging were encapsulated in SQL Server stored procedures with TRY/CATCH blocks and atomic transactions, eliminating phantom inventory updates.",
                 "value": "T-SQL Core",
                 "icon": "shield",
-                "tags": [
-                  "SQL Server",
-                  "Transactions",
-                  "ACID"
-                ],
+                "tags": ["SQL Server", "Transactions", "ACID"],
                 "note": ""
               },
               {
@@ -485,11 +428,7 @@
                 "body": "Separating user interface from business rule evaluation and database data access objects made it straightforward to refactor print formats and validation rules without breaking cash checkout flows.",
                 "value": "N-Tier",
                 "icon": "layers",
-                "tags": [
-                  "Architecture",
-                  "Clean Design",
-                  "Decoupling"
-                ],
+                "tags": ["Architecture", "Clean Design", "Decoupling"],
                 "note": ""
               }
             ],
@@ -629,11 +568,7 @@
                 "body": "Geoptimaliseerd scherm voor snelle verkoop via barcodescanners, ondersteuning voor meerdere betaalwijzen (contant, kaart, klantkrediet) en wisselgeldberekening.",
                 "value": "POS Terminal",
                 "icon": "bolt",
-                "tags": [
-                  "Kassa",
-                  "C#",
-                  "Scanner"
-                ],
+                "tags": ["Kassa", "C#", "Scanner"],
                 "note": ""
               },
               {
@@ -643,11 +578,7 @@
                 "body": "Beheer van artikelen met matrices voor maten, kleuren en merken, automatische waarschuwingen voor minimumvoorraden en inkoopbeheer.",
                 "value": "Voorraad Matrix",
                 "icon": "layers",
-                "tags": [
-                  "DevExpress Grid",
-                  "Voorraad",
-                  "Varianten"
-                ],
+                "tags": ["DevExpress Grid", "Voorraad", "Varianten"],
                 "note": ""
               },
               {
@@ -657,11 +588,7 @@
                 "body": "Nauwkeurige geldopvolging met openingsfondsen, geregistreerde in- en uitbetalingen en vergelijkende controle van verwachte versus getelde omzet.",
                 "value": "Kassa & Beheer",
                 "icon": "shield",
-                "tags": [
-                  "Audit",
-                  "Kassa",
-                  "Geldstroom"
-                ],
+                "tags": ["Audit", "Kassa", "Geldstroom"],
                 "note": ""
               },
               {
@@ -671,11 +598,7 @@
                 "body": "Aansturing van thermische bonprinters en rapportage-engine voor winstmarges, best verkopende artikelen en klantoverzichten.",
                 "value": "XtraReports",
                 "icon": "layout",
-                "tags": [
-                  "DevExpress",
-                  "XtraReports",
-                  "Facturatie"
-                ],
+                "tags": ["DevExpress", "XtraReports", "Facturatie"],
                 "note": ""
               }
             ],
@@ -699,11 +622,7 @@
                 "body": "Standaard Windows Forms missen geavanceerde groeperings- en sorteeropties. DevExpress maakte het mogelijk duizenden artikelen soepel te scrollen met dynamische filtering en moderne styling.",
                 "value": "DevExpress UI",
                 "icon": "layout",
-                "tags": [
-                  "C#",
-                  "DevExpress",
-                  "Prestaties"
-                ],
+                "tags": ["C#", "DevExpress", "Prestaties"],
                 "note": ""
               },
               {
@@ -713,11 +632,7 @@
                 "body": "Alle voorraadafboekingen en kassatransacties zijn ingekapseld in SQL Server stored procedures met TRY/CATCH-blokken en atomische transacties.",
                 "value": "T-SQL Core",
                 "icon": "shield",
-                "tags": [
-                  "SQL Server",
-                  "Transacties",
-                  "ACID"
-                ],
+                "tags": ["SQL Server", "Transacties", "ACID"],
                 "note": ""
               },
               {
@@ -727,11 +642,7 @@
                 "body": "Het scheiden van de gebruikersinterface van de bedrijfslogica en database-adapters maakte het eenvoudig afdrukformaten en validaties bij te werken zonder de kassa te verstoren.",
                 "value": "N-Lagen",
                 "icon": "layers",
-                "tags": [
-                  "Architectuur",
-                  "Clean Design",
-                  "Ontkoppeling"
-                ],
+                "tags": ["Architectuur", "Clean Design", "Ontkoppeling"],
                 "note": ""
               }
             ],

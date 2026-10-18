@@ -476,11 +476,7 @@
                 "body": "Presentación formal del despacho legal con tiempos de carga instantáneos, perfil profesional del Notario y credenciales acreditadas.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Server Components"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
                 "note": "/projects/ofilegal.jpg"
               },
               {
@@ -518,11 +514,7 @@
                 "body": "Interfaz móvil ultra-rápida con botones de acción flotantes para agendamiento de citas notariales y consultas confidenciales.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "WhatsApp Direct",
-                  "UX Ágil"
-                ],
+                "tags": ["Mobile First", "WhatsApp Direct", "UX Ágil"],
                 "note": "/projects/ofilegal-mobile.jpg"
               },
               {
@@ -768,9 +760,7 @@
                 "body": "In the Central American legal landscape, rapid direct WhatsApp messaging is the primary conversion channel. Rather than generic links, each practice card (Litigation, Contracts, Corporate Compliance) pre-populates the exact matter of inquiry, maximizing client conversion rates.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Sole reliance on asynchronous email contact forms"
-                ],
+                "tags": ["Sole reliance on asynchronous email contact forms"],
                 "note": "Requires keeping the primary phone number up to date in /admin/sitio, which automatically cascades to all intake buttons."
               }
             ],
@@ -1011,11 +1001,7 @@
                 "body": "Authoritative presentation for legal and notary practice featuring instant page load speeds and verified credentials.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Server Components"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
                 "note": "/projects/ofilegal.jpg"
               },
               {
@@ -1053,11 +1039,7 @@
                 "body": "Ultra-fast mobile UI engineered for immediate client consultation bookings and secure messaging directly to the attorney.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "WhatsApp Direct",
-                  "Smooth UX"
-                ],
+                "tags": ["Mobile First", "WhatsApp Direct", "Smooth UX"],
                 "note": "/projects/ofilegal-mobile.jpg"
               },
               {
@@ -1291,9 +1273,7 @@
                 "body": "Openbare pagina's bevinden zich in (site) met een elegante donkere juridische vormgeving, terwijl beheertaken plaatsvinden in admin met een overzichtelijk dashboard beschermd door requireAdmin().",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Eén root-layout met voorwaardelijke navigatiebalken"
-                ],
+                "tags": ["Eén root-layout met voorwaardelijke navigatiebalken"],
                 "note": "Vergt een lichte duplicatie van paginawrappers, maar zorgt voor schone scheiding van JavaScript-bundels."
               },
               {
@@ -1303,9 +1283,7 @@
                 "body": "In de juridische sector van Nicaragua is directe WhatsApp-communicatie het voorkeurskanaal voor cliënten. In plaats van een algemene link bevat elke dienstenkaart een vooringevuld bericht over het betreffende rechtsgebied, wat de conversieratio aanzienlijk verhoogt.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Enkel een traditioneel e-mailcontactformulier"
-                ],
+                "tags": ["Enkel een traditioneel e-mailcontactformulier"],
                 "note": "Vereist het actueel houden van het telefoonnummer in /admin/sitio, wat automatisch doorwerkt in alle knoppen."
               }
             ],
@@ -1546,11 +1524,7 @@
                 "body": "Formele presentatie van het advocatenkantoor met ultrasnelle laadtijden en geverifieerde notariële referenties.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Server Components"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
                 "note": "/projects/ofilegal.jpg"
               },
               {
@@ -1588,11 +1562,7 @@
                 "body": "Snelle mobiele interface ontworpen voor directe afsprakenplanning en vertrouwelijke juridische consultaties.",
                 "value": "100% Mobiel Gereed",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "WhatsApp Direct",
-                  "Snelle UX"
-                ],
+                "tags": ["Mobile First", "WhatsApp Direct", "Snelle UX"],
                 "note": "/projects/ofilegal-mobile.jpg"
               },
               {
@@ -1618,10 +1588,5 @@
       }
     }
   ],
-  "skillKeys": [
-    "Nextjs",
-    "React",
-    "Typescript",
-    "Tailwind"
-  ]
+  "skillKeys": ["Nextjs", "React", "Typescript", "Tailwind"]
 }

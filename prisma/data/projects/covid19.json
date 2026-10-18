@@ -134,11 +134,7 @@
                 "body": "Panel principal mostrando contadores en tiempo real (2,300 visitantes, 1,340 estudiantes, 86 profesores, 120 empleados) y gráfica de evolución térmica.",
                 "value": "Telemetría en Vivo",
                 "icon": "gauge",
-                "tags": [
-                  "Chart.js",
-                  "Telemetría",
-                  "KPIs"
-                ],
+                "tags": ["Chart.js", "Telemetría", "KPIs"],
                 "note": "/projects/covid19-telemetry.jpg"
               },
               {
@@ -148,11 +144,7 @@
                 "body": "Listado con nombre, rol, hora exacta y lectura térmica con semáforo verde (<37.2°C) o alerta roja para aislamiento preventivo.",
                 "value": "Log de Accesos",
                 "icon": "layers",
-                "tags": [
-                  "Historial",
-                  "Bioseguridad",
-                  "Tiempo Real"
-                ],
+                "tags": ["Historial", "Bioseguridad", "Tiempo Real"],
                 "note": "/projects/covid19-access-log.jpg"
               },
               {
@@ -162,11 +154,7 @@
                 "body": "Inicio de sesión seguro para operadores autorizados que garantiza la privacidad de los datos de salud de los alumnos.",
                 "value": "Firebase Auth",
                 "icon": "shield",
-                "tags": [
-                  "Seguridad",
-                  "Credenciales",
-                  "Firebase"
-                ],
+                "tags": ["Seguridad", "Credenciales", "Firebase"],
                 "note": "/projects/covid19-auth.jpg"
               },
               {
@@ -176,11 +164,7 @@
                 "body": "Visualización adaptativa que permitía a brigadistas móviles validar ingresos en portones peatonales secundarios.",
                 "value": "Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Responsive",
-                  "Mobile",
-                  "PWA"
-                ],
+                "tags": ["Responsive", "Mobile", "PWA"],
                 "note": "/projects/covid19.jpg"
               }
             ],
@@ -204,10 +188,7 @@
                 "body": "La persona aproxima su frente o muñeca al sensor, obteniendo una medición precisa sin riesgo de contaminación cruzada.",
                 "value": "< 500ms",
                 "icon": "bolt",
-                "tags": [
-                  "Sensor",
-                  "Sin Contacto"
-                ],
+                "tags": ["Sensor", "Sin Contacto"],
                 "note": ""
               },
               {
@@ -217,10 +198,7 @@
                 "body": "El operador selecciona la categoría correspondiente en la interfaz web de caseta.",
                 "value": "Clasificación",
                 "icon": "user",
-                "tags": [
-                  "Identificación",
-                  "Comunidad UNI"
-                ],
+                "tags": ["Identificación", "Comunidad UNI"],
                 "note": "/projects/covid19-access-log.jpg"
               },
               {
@@ -230,10 +208,7 @@
                 "body": "Lecturas menores a 37.3°C habilitan el acceso inmediato; valores superiores disparan protocolo de descanso y re-chequeo.",
                 "value": "Protocolo COVID",
                 "icon": "shield",
-                "tags": [
-                  "Triage",
-                  "Semáforo"
-                ],
+                "tags": ["Triage", "Semáforo"],
                 "note": "/projects/covid19-telemetry.jpg"
               },
               {
@@ -243,10 +218,7 @@
                 "body": "El registro queda almacenado en Firestore, actualizando las curvas epidemiológicas del día.",
                 "value": "Firebase Realtime",
                 "icon": "db",
-                "tags": [
-                  "Cloud",
-                  "Firestore"
-                ],
+                "tags": ["Cloud", "Firestore"],
                 "note": "/projects/covid19.jpg"
               }
             ],
@@ -270,11 +242,7 @@
                 "body": "Permitió tener el sistema en funcionamiento en días, con sincronización de sockets en tiempo real y soporte offline automático ante caídas de internet en casetas.",
                 "value": "Serverless Rápido",
                 "icon": "db",
-                "tags": [
-                  "Firebase",
-                  "Serverless",
-                  "Tiempo Real"
-                ],
+                "tags": ["Firebase", "Serverless", "Tiempo Real"],
                 "note": ""
               },
               {
@@ -284,10 +252,7 @@
                 "body": "HTML, CSS/Sass y JavaScript modular permitieron que las computadoras de portería más antiguas cargaran la aplicación instantáneamente sin congelamiento.",
                 "value": "Carga Ligera",
                 "icon": "bolt",
-                "tags": [
-                  "Performance",
-                  "Accesibilidad"
-                ],
+                "tags": ["Performance", "Accesibilidad"],
                 "note": ""
               }
             ],
@@ -426,11 +391,7 @@
                 "body": "Main operations overview displaying live counters (2,300 visitors, 1,340 students, 86 professors, 120 employees) and time-series temperature distributions.",
                 "value": "Live Telemetry",
                 "icon": "gauge",
-                "tags": [
-                  "Chart.js",
-                  "Telemetry",
-                  "KPIs"
-                ],
+                "tags": ["Chart.js", "Telemetry", "KPIs"],
                 "note": "/projects/covid19-telemetry.jpg"
               },
               {
@@ -440,11 +401,7 @@
                 "body": "Tabular log showing entrant name, campus role, exact timestamp, and green/amber/red biosecurity status chips.",
                 "value": "Access Log",
                 "icon": "layers",
-                "tags": [
-                  "Audit",
-                  "Biosecurity",
-                  "Real Time"
-                ],
+                "tags": ["Audit", "Biosecurity", "Real Time"],
                 "note": "/projects/covid19-access-log.jpg"
               },
               {
@@ -454,11 +411,7 @@
                 "body": "Secure gatekeeper authentication protecting sensitive student identification and health telemetries.",
                 "value": "Firebase Auth",
                 "icon": "shield",
-                "tags": [
-                  "Security",
-                  "Credentials",
-                  "Firebase"
-                ],
+                "tags": ["Security", "Credentials", "Firebase"],
                 "note": "/projects/covid19-auth.jpg"
               },
               {
@@ -468,11 +421,7 @@
                 "body": "Responsive view enabling roving health brigades to screen entrants at secondary gates and campus gardens.",
                 "value": "Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Responsive",
-                  "Mobile",
-                  "PWA"
-                ],
+                "tags": ["Responsive", "Mobile", "PWA"],
                 "note": "/projects/covid19.jpg"
               }
             ],
@@ -496,10 +445,7 @@
                 "body": "The entrant presents their wrist or forehead to the non-contact sensor, capturing accurate readings without cross-contamination risks.",
                 "value": "< 500ms",
                 "icon": "bolt",
-                "tags": [
-                  "Sensor",
-                  "Contactless"
-                ],
+                "tags": ["Sensor", "Contactless"],
                 "note": ""
               },
               {
@@ -509,10 +455,7 @@
                 "body": "Gatekeeper assigns the corresponding category on the touch kiosk or guardhouse portal.",
                 "value": "Classification",
                 "icon": "user",
-                "tags": [
-                  "Identification",
-                  "UNI Community"
-                ],
+                "tags": ["Identification", "UNI Community"],
                 "note": "/projects/covid19-access-log.jpg"
               },
               {
@@ -522,10 +465,7 @@
                 "body": "Readings under 37.3°C grant immediate clearance; higher temperatures trigger precautionary resting and secondary re-testing protocols.",
                 "value": "COVID Protocol",
                 "icon": "shield",
-                "tags": [
-                  "Triage",
-                  "Stoplight"
-                ],
+                "tags": ["Triage", "Stoplight"],
                 "note": "/projects/covid19-telemetry.jpg"
               },
               {
@@ -535,10 +475,7 @@
                 "body": "Record is persisted directly to Firestore, updating live campus capacity and epidemiological charts in real time.",
                 "value": "Firebase Realtime",
                 "icon": "db",
-                "tags": [
-                  "Cloud",
-                  "Firestore"
-                ],
+                "tags": ["Cloud", "Firestore"],
                 "note": "/projects/covid19.jpg"
               }
             ],
@@ -562,11 +499,7 @@
                 "body": "Allowed delivering a working production prototype within days, with built-in websocket listeners and offline caching on gatehouse devices.",
                 "value": "Serverless Speed",
                 "icon": "db",
-                "tags": [
-                  "Firebase",
-                  "Serverless",
-                  "Real Time"
-                ],
+                "tags": ["Firebase", "Serverless", "Real Time"],
                 "note": ""
               },
               {
@@ -576,10 +509,7 @@
                 "body": "Clean modular JavaScript and semantic CSS allowed low-spec computers in security booths to run the portal without lag or crashes.",
                 "value": "Lightweight",
                 "icon": "bolt",
-                "tags": [
-                  "Performance",
-                  "Accessibility"
-                ],
+                "tags": ["Performance", "Accessibility"],
                 "note": ""
               }
             ],
@@ -718,11 +648,7 @@
                 "body": "Hoofddashboard met realtime tellers (2.300 bezoekers, 1.340 studenten, 86 docenten, 120 medewerkers).",
                 "value": "Live Telemetrie",
                 "icon": "gauge",
-                "tags": [
-                  "Chart.js",
-                  "Telemetrie",
-                  "KPI's"
-                ],
+                "tags": ["Chart.js", "Telemetrie", "KPI's"],
                 "note": "/projects/covid19-telemetry.jpg"
               },
               {
@@ -732,11 +658,7 @@
                 "body": "Lijst met naam, rol, tijdstip en groene of rode biosecurity-indicatoren.",
                 "value": "Toegangslogboek",
                 "icon": "layers",
-                "tags": [
-                  "Audit",
-                  "Biosecurity",
-                  "Realtime"
-                ],
+                "tags": ["Audit", "Biosecurity", "Realtime"],
                 "note": "/projects/covid19-access-log.jpg"
               },
               {
@@ -746,11 +668,7 @@
                 "body": "Beveiligt gevoelige studentengegevens en gezondheidstelemetrie.",
                 "value": "Firebase Auth",
                 "icon": "shield",
-                "tags": [
-                  "Beveiliging",
-                  "Inlog",
-                  "Firebase"
-                ],
+                "tags": ["Beveiliging", "Inlog", "Firebase"],
                 "note": "/projects/covid19-auth.jpg"
               },
               {
@@ -760,11 +678,7 @@
                 "body": "Stelt rondlopende controleurs in staat om bij secundaire poorten controles uit te voeren.",
                 "value": "Mobiel Gereed",
                 "icon": "layout",
-                "tags": [
-                  "Responsief",
-                  "Mobiel",
-                  "PWA"
-                ],
+                "tags": ["Responsief", "Mobiel", "PWA"],
                 "note": "/projects/covid19.jpg"
               }
             ],
@@ -788,10 +702,7 @@
                 "body": "De bezoeker houdt pols of voorhoofd voor de infraroodsensor voor een nauwkeurige meting zonder besmettingsrisico.",
                 "value": "< 500ms",
                 "icon": "bolt",
-                "tags": [
-                  "Sensor",
-                  "Contactloos"
-                ],
+                "tags": ["Sensor", "Contactloos"],
                 "note": ""
               },
               {
@@ -801,10 +712,7 @@
                 "body": "De portier selecteert de juiste categorie in de webinterface bij de toegangspoort.",
                 "value": "Classificatie",
                 "icon": "user",
-                "tags": [
-                  "Identificatie",
-                  "UNI Gemeenschap"
-                ],
+                "tags": ["Identificatie", "UNI Gemeenschap"],
                 "note": "/projects/covid19-access-log.jpg"
               },
               {
@@ -814,10 +722,7 @@
                 "body": "Metingen onder 37,3°C geven direct groen licht; hogere waarden activeren een rust- en hertestprotocol.",
                 "value": "COVID-protocol",
                 "icon": "shield",
-                "tags": [
-                  "Triage",
-                  "Stoplicht"
-                ],
+                "tags": ["Triage", "Stoplicht"],
                 "note": "/projects/covid19-telemetry.jpg"
               },
               {
@@ -827,10 +732,7 @@
                 "body": "Het meetresultaat wordt opgeslagen in Firestore en werkt direct de dagelijkse curves bij.",
                 "value": "Firebase Realtime",
                 "icon": "db",
-                "tags": [
-                  "Cloud",
-                  "Firestore"
-                ],
+                "tags": ["Cloud", "Firestore"],
                 "note": "/projects/covid19.jpg"
               }
             ],
@@ -854,11 +756,7 @@
                 "body": "Maakte het mogelijk om binnen enkele dagen live te gaan met betrouwbare offline caching bij internetonderbrekingen.",
                 "value": "Serverless Snelheid",
                 "icon": "db",
-                "tags": [
-                  "Firebase",
-                  "Serverless",
-                  "Realtime"
-                ],
+                "tags": ["Firebase", "Serverless", "Realtime"],
                 "note": ""
               },
               {
@@ -868,10 +766,7 @@
                 "body": "Schone, modulaire code zorgde ervoor dat ook oudere hardware in portiershokjes probleemloos functioneerde.",
                 "value": "Lichtgewicht",
                 "icon": "bolt",
-                "tags": [
-                  "Prestaties",
-                  "Toegankelijkheid"
-                ],
+                "tags": ["Prestaties", "Toegankelijkheid"],
                 "note": ""
               }
             ],
@@ -883,14 +778,7 @@
       }
     }
   ],
-  "skillKeys": [
-    "Html",
-    "Css",
-    "Javascript",
-    "Sass",
-    "Bootstrap",
-    "Firebase"
-  ],
+  "skillKeys": ["Html", "Css", "Javascript", "Sass", "Bootstrap", "Firebase"],
   "order": 8,
   "kind": "PERSONAL",
   "slug": "covid19",

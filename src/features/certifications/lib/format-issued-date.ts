@@ -1,5 +1,5 @@
 export function formatIssuedDate(
-  issuedDate: number | null,
+  issuedDate: number | null | undefined,
   locale: string,
 ): string {
   if (!issuedDate) return "";

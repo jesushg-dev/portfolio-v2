@@ -15,11 +15,7 @@
       "approach": "Diseñé una SPA interactiva en React con Bootstrap para una interfaz limpia, modularicé las vistas por modalidad de juego mediante HashRouter para compatibilidad universal en Vercel, y optimicé el consumo de datos para carga instantánea de números ganadores.",
       "outcome": "Una plataforma ágil con consulta de sorteos en vivo a las 11:00 AM, 03:00 PM y 09:00 PM, historial categorizado por juego y experiencia 100% responsiva para usuarios móviles.",
       "caseStudy": {
-        "chips": [
-          "Lotería Nacional",
-          "Frontend",
-          "Resultados en Vivo"
-        ],
+        "chips": ["Lotería Nacional", "Frontend", "Resultados en Vivo"],
         "facts": [
           {
             "key": "my-role",
@@ -132,11 +128,7 @@
                 "body": "Tablero principal con los números ganadores del día en los horarios oficiales de las 11:00 AM, 03:00 PM y 09:00 PM.",
                 "value": "Resultados en Vivo",
                 "icon": "layout",
-                "tags": [
-                  "React",
-                  "Bootstrap",
-                  "En Vivo"
-                ],
+                "tags": ["React", "Bootstrap", "En Vivo"],
                 "note": "/projects/lotty.jpg"
               },
               {
@@ -146,11 +138,7 @@
                 "body": "Consulta histórica de resultados anteriores de La Diaria con número premiado y su correspondiente símbolo de la guía.",
                 "value": "La Diaria",
                 "icon": "case",
-                "tags": [
-                  "La Diaria",
-                  "Historial",
-                  "Símbolo"
-                ],
+                "tags": ["La Diaria", "Historial", "Símbolo"],
                 "note": "/projects/lotty-diaria.jpg"
               },
               {
@@ -160,11 +148,7 @@
                 "body": "Secciones dedicadas para verificar combinaciones de 3 dígitos, pares premiados y fechas de la suerte con filtros por fecha.",
                 "value": "Multi-Modalidad",
                 "icon": "globe",
-                "tags": [
-                  "Jugá 3",
-                  "Premia 2",
-                  "Fechas"
-                ],
+                "tags": ["Jugá 3", "Premia 2", "Fechas"],
                 "note": "/projects/lotty-results.jpg"
               },
               {
@@ -174,11 +158,7 @@
                 "body": "Interfaz touch-first pensada para usuarios que consultan resultados desde puntos de venta o dispositivos móviles.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "Touch UX",
-                  "Ligera"
-                ],
+                "tags": ["Mobile First", "Touch UX", "Ligera"],
                 "note": "/projects/lotty-mobile.jpg"
               }
             ],
@@ -202,10 +182,7 @@
                 "body": "El uso de HashRouter garantiza que el usuario pueda recargar en cualquier ruta (/results/diaria) sin errores 404 en hosting estático.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "HashRouter",
-                  "SPA"
-                ],
+                "tags": ["HashRouter", "SPA"],
                 "note": "Permite compartir enlaces directos a resultados específicos."
               },
               {
@@ -215,10 +192,7 @@
                 "body": "Cada sorteo se encapsula en una tarjeta independiente con insignias de color para distinguir horarios de forma inmediata.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "UI",
-                  "Tarjetas"
-                ],
+                "tags": ["UI", "Tarjetas"],
                 "note": "Facilita la lectura rápida en pantallas pequeñas."
               }
             ],
@@ -242,11 +216,7 @@
                 "body": "Componentes de vista para Inicio, Diaria, Fechas, Jugá 3 y Premia 2.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Home",
-                  "ResultsView",
-                  "GameCard"
-                ],
+                "tags": ["Home", "ResultsView", "GameCard"],
                 "note": "Renderiza números y fechas"
               },
               {
@@ -256,11 +226,7 @@
                 "body": "Formateo de fechas, mapeo de símbolos de lotería y filtrado cronológico.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "DateHelper",
-                  "SymbolMapper",
-                  "ResultStore"
-                ],
+                "tags": ["DateHelper", "SymbolMapper", "ResultStore"],
                 "note": "Normaliza la información"
               }
             ],
@@ -284,12 +250,7 @@
                 "body": "Cobertura completa de los 4 juegos principales de la lotería nacional.",
                 "value": "4 Juegos",
                 "icon": "case",
-                "tags": [
-                  "Diaria",
-                  "Fechas",
-                  "Jugá 3",
-                  "Premia 2"
-                ],
+                "tags": ["Diaria", "Fechas", "Jugá 3", "Premia 2"],
                 "note": ""
               },
               {
@@ -299,11 +260,7 @@
                 "body": "Actualizaciones programadas a lo largo de cada jornada oficial.",
                 "value": "3 Horarios",
                 "icon": "gauge",
-                "tags": [
-                  "11:00 AM",
-                  "03:00 PM",
-                  "09:00 PM"
-                ],
+                "tags": ["11:00 AM", "03:00 PM", "09:00 PM"],
                 "note": ""
               },
               {
@@ -313,10 +270,7 @@
                 "body": "Optimización de bundle y carga ligera sin librerías pesadas innecesarias.",
                 "value": "98/100",
                 "icon": "bolt",
-                "tags": [
-                  "Lighthouse",
-                  "Fast Load"
-                ],
+                "tags": ["Lighthouse", "Fast Load"],
                 "note": ""
               }
             ],
@@ -336,11 +290,7 @@
       "approach": "Engineered an interactive React SPA with Bootstrap for clean responsive styling, organized game modalities using HashRouter for universal Vercel static hosting compatibility, and structured data modules for instant result rendering.",
       "outcome": "An agile platform offering live draw verification across all three official daily timeslots (11:00 AM, 03:00 PM, 09:00 PM), categorized historical draw logs, and a 100% responsive mobile layout.",
       "caseStudy": {
-        "chips": [
-          "National Lottery",
-          "Frontend",
-          "Live Draws"
-        ],
+        "chips": ["National Lottery", "Frontend", "Live Draws"],
         "facts": [
           {
             "key": "my-role",
@@ -453,11 +403,7 @@
                 "body": "Main dashboard displaying the latest winning numbers across the three official schedules at 11:00 AM, 03:00 PM, and 09:00 PM.",
                 "value": "Live Results",
                 "icon": "layout",
-                "tags": [
-                  "React",
-                  "Bootstrap",
-                  "Live"
-                ],
+                "tags": ["React", "Bootstrap", "Live"],
                 "note": "/projects/lotty.jpg"
               },
               {
@@ -467,11 +413,7 @@
                 "body": "Historical record of previous La Diaria draws featuring the winning number alongside its lucky dream guide symbol.",
                 "value": "La Diaria",
                 "icon": "case",
-                "tags": [
-                  "La Diaria",
-                  "History",
-                  "Symbols"
-                ],
+                "tags": ["La Diaria", "History", "Symbols"],
                 "note": "/projects/lotty-diaria.jpg"
               },
               {
@@ -481,11 +423,7 @@
                 "body": "Dedicated views to verify 3-digit combinations, paired numbers, and lucky calendar dates with historical filters.",
                 "value": "Multi-Game",
                 "icon": "globe",
-                "tags": [
-                  "Juga 3",
-                  "Premia 2",
-                  "Fechas"
-                ],
+                "tags": ["Juga 3", "Premia 2", "Fechas"],
                 "note": "/projects/lotty-results.jpg"
               },
               {
@@ -495,11 +433,7 @@
                 "body": "Touch-first layout designed for retail agents and customers checking winning tickets on the go.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "Touch UX",
-                  "Fast"
-                ],
+                "tags": ["Mobile First", "Touch UX", "Fast"],
                 "note": "/projects/lotty-mobile.jpg"
               }
             ],
@@ -523,10 +457,7 @@
                 "body": "HashRouter ensures users can bookmark or reload any route (/results/diaria) without 404 errors on static hosts.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "HashRouter",
-                  "SPA"
-                ],
+                "tags": ["HashRouter", "SPA"],
                 "note": "Enables direct link sharing for specific game modalities."
               },
               {
@@ -536,10 +467,7 @@
                 "body": "Each draw is isolated in a self-contained card with color badges to distinguish morning, afternoon, and evening draws.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "UI",
-                  "Cards"
-                ],
+                "tags": ["UI", "Cards"],
                 "note": "Greatly enhances scannability on small screens."
               }
             ],
@@ -563,11 +491,7 @@
                 "body": "Page views for Home, Diaria, Fechas, Juga 3, and Premia 2.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Home",
-                  "ResultsView",
-                  "GameCard"
-                ],
+                "tags": ["Home", "ResultsView", "GameCard"],
                 "note": "Renders numbers and dates"
               },
               {
@@ -577,11 +501,7 @@
                 "body": "Date formatting, lucky symbol dictionary, and chronological filtering.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "DateHelper",
-                  "SymbolMapper",
-                  "ResultStore"
-                ],
+                "tags": ["DateHelper", "SymbolMapper", "ResultStore"],
                 "note": "Normalizes draw data"
               }
             ],
@@ -605,12 +525,7 @@
                 "body": "Comprehensive coverage of the 4 primary national lottery games.",
                 "value": "4 Games",
                 "icon": "case",
-                "tags": [
-                  "Diaria",
-                  "Fechas",
-                  "Juga 3",
-                  "Premia 2"
-                ],
+                "tags": ["Diaria", "Fechas", "Juga 3", "Premia 2"],
                 "note": ""
               },
               {
@@ -620,11 +535,7 @@
                 "body": "Live updates scheduled throughout the official drawing hours.",
                 "value": "3 Timeslots",
                 "icon": "gauge",
-                "tags": [
-                  "11:00 AM",
-                  "03:00 PM",
-                  "09:00 PM"
-                ],
+                "tags": ["11:00 AM", "03:00 PM", "09:00 PM"],
                 "note": ""
               },
               {
@@ -634,10 +545,7 @@
                 "body": "Slim client bundle and swift rendering without unnecessary third-party overhead.",
                 "value": "98/100",
                 "icon": "bolt",
-                "tags": [
-                  "Lighthouse",
-                  "Fast Load"
-                ],
+                "tags": ["Lighthouse", "Fast Load"],
                 "note": ""
               }
             ],
@@ -657,11 +565,7 @@
       "approach": "Een interactieve React SPA met Bootstrap voor overzichtelijke opmaak, spelvormen georganiseerd met HashRouter voor compatibiliteit met statische hosting op Vercel en snelle nummerweergave.",
       "outcome": "Een responsief platform met live trekkingen om 11:00 uur, 15:00 uur en 21:00 uur, gecategoriseerde uitslagen en een vlotte mobiele weergave.",
       "caseStudy": {
-        "chips": [
-          "Nationale Loterij",
-          "Frontend",
-          "Live Uitslagen"
-        ],
+        "chips": ["Nationale Loterij", "Frontend", "Live Uitslagen"],
         "facts": [
           {
             "key": "my-role",
@@ -774,11 +678,7 @@
                 "body": "Hoofddashboard met winnende getallen voor de officiële tijdstippen van 11:00 uur, 15:00 uur en 21:00 uur.",
                 "value": "Live Uitslagen",
                 "icon": "layout",
-                "tags": [
-                  "React",
-                  "Bootstrap",
-                  "Live"
-                ],
+                "tags": ["React", "Bootstrap", "Live"],
                 "note": "/projects/lotty.jpg"
               },
               {
@@ -788,11 +688,7 @@
                 "body": "Historisch overzicht van eerdere La Diaria-trekkingen met het winnende getal en het bijbehorende gidssymbool.",
                 "value": "La Diaria",
                 "icon": "case",
-                "tags": [
-                  "La Diaria",
-                  "Geschiedenis",
-                  "Symbolen"
-                ],
+                "tags": ["La Diaria", "Geschiedenis", "Symbolen"],
                 "note": "/projects/lotty-diaria.jpg"
               },
               {
@@ -802,11 +698,7 @@
                 "body": "Specifieke pagina's voor driecijferige combinaties, paren en geluksdata met historische filters.",
                 "value": "Multi-Spelvorm",
                 "icon": "globe",
-                "tags": [
-                  "Juga 3",
-                  "Premia 2",
-                  "Fechas"
-                ],
+                "tags": ["Juga 3", "Premia 2", "Fechas"],
                 "note": "/projects/lotty-results.jpg"
               },
               {
@@ -816,11 +708,7 @@
                 "body": "Aanraakgeoptimaliseerde interface ontworpen voor gebruikers die onderweg snel hun lot willen controleren.",
                 "value": "100% Mobile Ready",
                 "icon": "layout",
-                "tags": [
-                  "Mobile First",
-                  "Touch UX",
-                  "Snel"
-                ],
+                "tags": ["Mobile First", "Touch UX", "Snel"],
                 "note": "/projects/lotty-mobile.jpg"
               }
             ],
@@ -844,10 +732,7 @@
                 "body": "HashRouter voorkomt 404-fouten bij het herladen van specifieke spelpagina's (/results/diaria) op statische hosts.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "HashRouter",
-                  "SPA"
-                ],
+                "tags": ["HashRouter", "SPA"],
                 "note": "Maakt direct delen van uitslaglinks mogelijk."
               },
               {
@@ -857,10 +742,7 @@
                 "body": "Elke trekking is modulair opgebouwd met kleurcodes om ochtend-, middag- en avondrondes direct te herkennen.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "UI",
-                  "Kaarten"
-                ],
+                "tags": ["UI", "Kaarten"],
                 "note": "Verbetert de leesbaarheid op kleine schermen aanzienlijk."
               }
             ],
@@ -884,11 +766,7 @@
                 "body": "Pagina-onderdelen voor Home, Diaria, Fechas, Juga 3 en Premia 2.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Home",
-                  "ResultsView",
-                  "GameCard"
-                ],
+                "tags": ["Home", "ResultsView", "GameCard"],
                 "note": "Toont getallen en data"
               },
               {
@@ -898,11 +776,7 @@
                 "body": "Datumformattering, symboolwoordenboek en chronologische filters.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "DateHelper",
-                  "SymbolMapper",
-                  "ResultStore"
-                ],
+                "tags": ["DateHelper", "SymbolMapper", "ResultStore"],
                 "note": "Normaliseert trekkingsdata"
               }
             ],
@@ -926,12 +800,7 @@
                 "body": "Volledige dekking van de 4 belangrijkste nationale loterijspelen.",
                 "value": "4 Spelen",
                 "icon": "case",
-                "tags": [
-                  "Diaria",
-                  "Fechas",
-                  "Juga 3",
-                  "Premia 2"
-                ],
+                "tags": ["Diaria", "Fechas", "Juga 3", "Premia 2"],
                 "note": ""
               },
               {
@@ -941,11 +810,7 @@
                 "body": "Regelmatige updates verspreid over de officiële trekkingsuren.",
                 "value": "3 Rondes",
                 "icon": "gauge",
-                "tags": [
-                  "11:00 uur",
-                  "15:00 uur",
-                  "21:00 uur"
-                ],
+                "tags": ["11:00 uur", "15:00 uur", "21:00 uur"],
                 "note": ""
               },
               {
@@ -955,10 +820,7 @@
                 "body": "Lichte JavaScript-bundel zonder overbodige externe afhankelijkheden.",
                 "value": "98/100",
                 "icon": "bolt",
-                "tags": [
-                  "Lighthouse",
-                  "Snelle Lading"
-                ],
+                "tags": ["Lighthouse", "Snelle Lading"],
                 "note": ""
               }
             ],
@@ -970,10 +832,7 @@
       }
     }
   ],
-  "skillKeys": [
-    "React",
-    "Bootstrap"
-  ],
+  "skillKeys": ["React", "Bootstrap"],
   "order": 9,
   "kind": "LEARNING",
   "slug": "lotty",

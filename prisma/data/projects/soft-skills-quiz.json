@@ -134,11 +134,7 @@
                 "body": "Interfaz con cuenta regresiva activa de 45:00 minutos, encabezado con nombre del candidato y opciones de respuesta rápida (A-E).",
                 "value": "Escenario Activo",
                 "icon": "layout",
-                "tags": [
-                  "Temporizador",
-                  "Escenarios",
-                  "React"
-                ],
+                "tags": ["Temporizador", "Escenarios", "React"],
                 "note": "/projects/soft-skills-quiz-question.jpg"
               },
               {
@@ -148,11 +144,7 @@
                 "body": "Pantalla inicial con banner de competencias, reglas de la evaluación y formulario de inicio de sesión rápido.",
                 "value": "Onboarding",
                 "icon": "case",
-                "tags": [
-                  "Bienvenida",
-                  "Instrucciones",
-                  "Tailwind"
-                ],
+                "tags": ["Bienvenida", "Instrucciones", "Tailwind"],
                 "note": "/projects/soft-skills-quiz-welcome.jpg"
               },
               {
@@ -162,11 +154,7 @@
                 "body": "Diseño Mobile First con botones táctiles generosos y navegación fluida con una sola mano.",
                 "value": "Mobile First",
                 "icon": "gauge",
-                "tags": [
-                  "Mobile",
-                  "UX Táctil",
-                  "Responsive"
-                ],
+                "tags": ["Mobile", "UX Táctil", "Responsive"],
                 "note": "/projects/soft-skills-quiz.jpg"
               }
             ],
@@ -190,11 +178,7 @@
                 "body": "Un setInterval tradicional se desacelera cuando el navegador pasa a segundo plano. Al calcular la diferencia contra un timestamp objetivo absoluto, la cuenta regresiva conserva precisión de milisegundos sin desincronización.",
                 "value": "Timestamp Drift-Proof",
                 "icon": "bolt",
-                "tags": [
-                  "JavaScript",
-                  "Temporizador",
-                  "Precisión"
-                ],
+                "tags": ["JavaScript", "Temporizador", "Precisión"],
                 "note": ""
               },
               {
@@ -204,11 +188,7 @@
                 "body": "Garantiza que los candidatos lean enunciados situacionales extensos sin fatiga visual gracias a escalas tipográficas cuidadas y componentes de formulario accesibles.",
                 "value": "Alta Legibilidad",
                 "icon": "layout",
-                "tags": [
-                  "Tailwind",
-                  "Accesibilidad",
-                  "UI"
-                ],
+                "tags": ["Tailwind", "Accesibilidad", "UI"],
                 "note": ""
               }
             ],
@@ -347,11 +327,7 @@
                 "body": "Interactive test card featuring live 45:00 countdown clock, candidate name banner, and radio option selection (A through E).",
                 "value": "Live Scenario",
                 "icon": "layout",
-                "tags": [
-                  "Timer",
-                  "Scenarios",
-                  "React"
-                ],
+                "tags": ["Timer", "Scenarios", "React"],
                 "note": "/projects/soft-skills-quiz-question.jpg"
               },
               {
@@ -361,11 +337,7 @@
                 "body": "Introduction screen outlining evaluation parameters, target soft skills, and fast name registration.",
                 "value": "Onboarding",
                 "icon": "case",
-                "tags": [
-                  "Welcome",
-                  "Instructions",
-                  "Tailwind"
-                ],
+                "tags": ["Welcome", "Instructions", "Tailwind"],
                 "note": "/projects/soft-skills-quiz-welcome.jpg"
               },
               {
@@ -375,11 +347,7 @@
                 "body": "Mobile-first design with generous tap targets and fluid single-handed navigation across all modern mobile browsers.",
                 "value": "Mobile First",
                 "icon": "gauge",
-                "tags": [
-                  "Mobile",
-                  "Touch UX",
-                  "Responsive"
-                ],
+                "tags": ["Mobile", "Touch UX", "Responsive"],
                 "note": "/projects/soft-skills-quiz.jpg"
               }
             ],
@@ -403,11 +371,7 @@
                 "body": "Standard setInterval suffers from browser throttling when switching tabs. By computing elapsed time against an absolute target timestamp, the timer remains accurate to the millisecond.",
                 "value": "Drift-Proof Timer",
                 "icon": "bolt",
-                "tags": [
-                  "JavaScript",
-                  "Timer",
-                  "Accuracy"
-                ],
+                "tags": ["JavaScript", "Timer", "Accuracy"],
                 "note": ""
               },
               {
@@ -417,11 +381,7 @@
                 "body": "Ensures candidates read long situational scenarios without eye fatigue through disciplined typographic scales and accessible form controls.",
                 "value": "High Legibility",
                 "icon": "layout",
-                "tags": [
-                  "Tailwind",
-                  "Accessibility",
-                  "UI"
-                ],
+                "tags": ["Tailwind", "Accessibility", "UI"],
                 "note": ""
               }
             ],
@@ -560,11 +520,7 @@
                 "body": "Interactieve kaart met live aftellende timer van 45:00 minuten, kandidaatnaam en optieselectie (A t/m E).",
                 "value": "Actief Scenario",
                 "icon": "layout",
-                "tags": [
-                  "Timer",
-                  "Scenario's",
-                  "React"
-                ],
+                "tags": ["Timer", "Scenario's", "React"],
                 "note": "/projects/soft-skills-quiz-question.jpg"
               },
               {
@@ -574,11 +530,7 @@
                 "body": "Introductiescherm met overzicht van regels, geteste competenties en snelle registratie.",
                 "value": "Onboarding",
                 "icon": "case",
-                "tags": [
-                  "Welkom",
-                  "Instructies",
-                  "Tailwind"
-                ],
+                "tags": ["Welkom", "Instructies", "Tailwind"],
                 "note": "/projects/soft-skills-quiz-welcome.jpg"
               },
               {
@@ -588,11 +540,7 @@
                 "body": "Mobile-first ontwerp met duidelijke aanraakknoppen voor vlotte bediening op mobiele telefoons.",
                 "value": "Mobiel Gereed",
                 "icon": "gauge",
-                "tags": [
-                  "Mobiel",
-                  "Touch UX",
-                  "Responsief"
-                ],
+                "tags": ["Mobiel", "Touch UX", "Responsief"],
                 "note": "/projects/soft-skills-quiz.jpg"
               }
             ],
@@ -616,11 +564,7 @@
                 "body": "Een standaard setInterval vertraagt wanneer het tabblad naar de achtergrond verdwijnt. Berekening tegen een absolute timestamp voorkomt desynchronisatie.",
                 "value": "Driftvrije Timer",
                 "icon": "bolt",
-                "tags": [
-                  "JavaScript",
-                  "Timer",
-                  "Precisie"
-                ],
+                "tags": ["JavaScript", "Timer", "Precisie"],
                 "note": ""
               },
               {
@@ -630,11 +574,7 @@
                 "body": "Zorgt ervoor dat kandidaten lange casussen zonder vermoeidheid kunnen doornemen dankzij heldere typografische schalen.",
                 "value": "Hoge Leesbaarheid",
                 "icon": "layout",
-                "tags": [
-                  "Tailwind",
-                  "Toegankelijkheid",
-                  "UI"
-                ],
+                "tags": ["Tailwind", "Toegankelijkheid", "UI"],
                 "note": ""
               }
             ],
@@ -646,11 +586,7 @@
       }
     }
   ],
-  "skillKeys": [
-    "React",
-    "Tailwind",
-    "Typescript"
-  ],
+  "skillKeys": ["React", "Tailwind", "Typescript"],
   "order": 7,
   "kind": "LEARNING",
   "slug": "soft-skills-quiz",

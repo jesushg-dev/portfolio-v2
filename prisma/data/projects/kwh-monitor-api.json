@@ -135,11 +135,7 @@
                 "body": "Recibe kWh activos, fechas de corte y tipo de tarifa, entregando el desglose exacto de la factura en Córdobas y Dólares.",
                 "value": "POST /calcular-recibo",
                 "icon": "bolt",
-                "tags": [
-                  "Node.js",
-                  "Express",
-                  "Cálculo"
-                ],
+                "tags": ["Node.js", "Express", "Cálculo"],
                 "note": "/projects/kwh-monitor-api.jpg"
               },
               {
@@ -149,11 +145,7 @@
                 "body": "Emulación de peticiones con Axios y cookies de sesión para obtener la respuesta del motor oficial del INE.",
                 "value": "Scraper Engine",
                 "icon": "globe",
-                "tags": [
-                  "Axios",
-                  "INE",
-                  "Scraping"
-                ],
+                "tags": ["Axios", "INE", "Scraping"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -163,11 +155,7 @@
                 "body": "Transformación de tablas HTML complejas en un objeto JSON limpio con indicadores numéricos listos para graficar.",
                 "value": "JSON Limpio",
                 "icon": "code",
-                "tags": [
-                  "JSON",
-                  "Subsidio",
-                  "Tarifas"
-                ],
+                "tags": ["JSON", "Subsidio", "Tarifas"],
                 "note": "/projects/kwh-monitor-api-response.jpg"
               }
             ],
@@ -191,10 +179,7 @@
                 "body": "La aplicación móvil envía los parámetros del ciclo de consumo al endpoint /calcular-recibo.",
                 "value": "< 50ms",
                 "icon": "gauge",
-                "tags": [
-                  "App Móvil",
-                  "Input"
-                ],
+                "tags": ["App Móvil", "Input"],
                 "note": ""
               },
               {
@@ -204,10 +189,7 @@
                 "body": "El microservicio inicializa la conexión con el servidor del INE manteniendo la cookie de sesión activa.",
                 "value": "PHPSESSID",
                 "icon": "shield",
-                "tags": [
-                  "Cookies",
-                  "Sesión"
-                ],
+                "tags": ["Cookies", "Sesión"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -217,10 +199,7 @@
                 "body": "Se envían los campos de formulario codificados en urlencoded y se intercepta el documento HTML resultante.",
                 "value": "POST INE",
                 "icon": "globe",
-                "tags": [
-                  "INE",
-                  "DOM"
-                ],
+                "tags": ["INE", "DOM"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -230,10 +209,7 @@
                 "body": "Se extraen cargos, descuentos por subsidio y total neto, retornando un payload estructurado en menos de 300ms.",
                 "value": "200 OK",
                 "icon": "code",
-                "tags": [
-                  "JSON",
-                  "Salida"
-                ],
+                "tags": ["JSON", "Salida"],
                 "note": "/projects/kwh-monitor-api-response.jpg"
               }
             ],
@@ -257,10 +233,7 @@
                 "body": "Al mantener el scraping en un microservicio de backend, cualquier ajuste en el HTML del gobierno se resuelve en el servidor sin obligar a los usuarios a actualizar la app en Google Play.",
                 "value": "Desacoplado",
                 "icon": "layers",
-                "tags": [
-                  "Microservicio",
-                  "Mantenibilidad"
-                ],
+                "tags": ["Microservicio", "Mantenibilidad"],
                 "note": ""
               },
               {
@@ -270,11 +243,7 @@
                 "body": "El uso de html-table-to-json y Axios redujo el consumo de RAM a menos de 50MB, descartando Puppeteer y permitiendo alojar el servicio en niveles gratuitos sin latencia.",
                 "value": "Ultra Ligero",
                 "icon": "bolt",
-                "tags": [
-                  "Performance",
-                  "RAM",
-                  "Axios"
-                ],
+                "tags": ["Performance", "RAM", "Axios"],
                 "note": ""
               }
             ],
@@ -414,11 +383,7 @@
                 "body": "Takes active consumption, billing window dates, and tariff bracket, returning exact financial breakdown in Córdobas and USD.",
                 "value": "POST /calcular-recibo",
                 "icon": "bolt",
-                "tags": [
-                  "Node.js",
-                  "Express",
-                  "Calculator"
-                ],
+                "tags": ["Node.js", "Express", "Calculator"],
                 "note": "/projects/kwh-monitor-api.jpg"
               },
               {
@@ -428,11 +393,7 @@
                 "body": "Axios-driven request emulation with cookie preservation ensuring reliable communication with the official INE server.",
                 "value": "Scraper Engine",
                 "icon": "globe",
-                "tags": [
-                  "Axios",
-                  "INE",
-                  "Scraping"
-                ],
+                "tags": ["Axios", "INE", "Scraping"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -442,11 +403,7 @@
                 "body": "Transforms dense HTML markup into a clean JSON contract with ready-to-plot numerical indicators.",
                 "value": "Clean JSON",
                 "icon": "code",
-                "tags": [
-                  "JSON",
-                  "Subsidy",
-                  "Tariffs"
-                ],
+                "tags": ["JSON", "Subsidy", "Tariffs"],
                 "note": "/projects/kwh-monitor-api-response.jpg"
               }
             ],
@@ -470,10 +427,7 @@
                 "body": "The mobile app dispatches cycle parameters and meter readings to /calcular-recibo.",
                 "value": "< 50ms",
                 "icon": "gauge",
-                "tags": [
-                  "Mobile",
-                  "Input"
-                ],
+                "tags": ["Mobile", "Input"],
                 "note": ""
               },
               {
@@ -483,10 +437,7 @@
                 "body": "The microservice establishes a session with the state server, retaining the active PHPSESSID token.",
                 "value": "PHPSESSID",
                 "icon": "shield",
-                "tags": [
-                  "Cookies",
-                  "Session"
-                ],
+                "tags": ["Cookies", "Session"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -496,10 +447,7 @@
                 "body": "Urlencoded form parameters are transmitted and the resulting calculation HTML document is intercepted.",
                 "value": "POST INE",
                 "icon": "globe",
-                "tags": [
-                  "INE",
-                  "DOM"
-                ],
+                "tags": ["INE", "DOM"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -509,10 +457,7 @@
                 "body": "Energy fees, national subsidies, and total balances are parsed and delivered to the phone in under 300ms.",
                 "value": "200 OK",
                 "icon": "code",
-                "tags": [
-                  "JSON",
-                  "Output"
-                ],
+                "tags": ["JSON", "Output"],
                 "note": "/projects/kwh-monitor-api-response.jpg"
               }
             ],
@@ -536,10 +481,7 @@
                 "body": "Keeping scraping logic on a Node.js backend allows patching DOM selectors instantaneously on the server without requiring Google Play app updates.",
                 "value": "Decoupled",
                 "icon": "layers",
-                "tags": [
-                  "Microservice",
-                  "Maintainability"
-                ],
+                "tags": ["Microservice", "Maintainability"],
                 "note": ""
               },
               {
@@ -549,11 +491,7 @@
                 "body": "Using html-table-to-json and Axios kept RAM usage below 50MB, avoiding heavy Puppeteer dependencies and enabling zero-latency hosting.",
                 "value": "Ultra Light",
                 "icon": "bolt",
-                "tags": [
-                  "Performance",
-                  "RAM",
-                  "Axios"
-                ],
+                "tags": ["Performance", "RAM", "Axios"],
                 "note": ""
               }
             ],
@@ -693,11 +631,7 @@
                 "body": "Berekent op basis van invoer het exacte bedrag in Córdobas en USD met alle subsidiecomponenten.",
                 "value": "POST /calcular-recibo",
                 "icon": "bolt",
-                "tags": [
-                  "Node.js",
-                  "Express",
-                  "Berekening"
-                ],
+                "tags": ["Node.js", "Express", "Berekening"],
                 "note": "/projects/kwh-monitor-api.jpg"
               },
               {
@@ -707,11 +641,7 @@
                 "body": "Axios-verzoeken met sessiebehoud garanderen stabiele communicatie met de officiële server.",
                 "value": "Scraper Engine",
                 "icon": "globe",
-                "tags": [
-                  "Axios",
-                  "INE",
-                  "Scraping"
-                ],
+                "tags": ["Axios", "INE", "Scraping"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -721,11 +651,7 @@
                 "body": "Zet complexe HTML-tabellen om in een schone JSON-respons met kant-en-klare getallen.",
                 "value": "Schone JSON",
                 "icon": "code",
-                "tags": [
-                  "JSON",
-                  "Subsidie",
-                  "Tarieven"
-                ],
+                "tags": ["JSON", "Subsidie", "Tarieven"],
                 "note": "/projects/kwh-monitor-api-response.jpg"
               }
             ],
@@ -749,10 +675,7 @@
                 "body": "De mobiele app verstuurt cyclusparameters naar het endpoint /calcular-recibo.",
                 "value": "< 50ms",
                 "icon": "gauge",
-                "tags": [
-                  "Mobiel",
-                  "Invoer"
-                ],
+                "tags": ["Mobiel", "Invoer"],
                 "note": ""
               },
               {
@@ -762,10 +685,7 @@
                 "body": "De microservice zet de verbinding op en behoudt het actieve PHPSESSID-token.",
                 "value": "PHPSESSID",
                 "icon": "shield",
-                "tags": [
-                  "Cookies",
-                  "Sessie"
-                ],
+                "tags": ["Cookies", "Sessie"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -775,10 +695,7 @@
                 "body": "Urlencoded parameters worden verstuurd en het resulterende HTML-document wordt opgevangen.",
                 "value": "POST INE",
                 "icon": "globe",
-                "tags": [
-                  "INE",
-                  "DOM"
-                ],
+                "tags": ["INE", "DOM"],
                 "note": "/projects/kwh-monitor-api-scraper.jpg"
               },
               {
@@ -788,10 +705,7 @@
                 "body": "Kosten, subsidies en totaalbedragen worden binnen 300ms als gestructureerde JSON geretourneerd.",
                 "value": "200 OK",
                 "icon": "code",
-                "tags": [
-                  "JSON",
-                  "Uitvoer"
-                ],
+                "tags": ["JSON", "Uitvoer"],
                 "note": "/projects/kwh-monitor-api-response.jpg"
               }
             ],
@@ -815,10 +729,7 @@
                 "body": "Door scraping in een backend-service onder te brengen kunnen selectorwijzigingen direct worden opgelost zonder app-updates in de store.",
                 "value": "Ontkoppeld",
                 "icon": "layers",
-                "tags": [
-                  "Microservice",
-                  "Onderhoud"
-                ],
+                "tags": ["Microservice", "Onderhoud"],
                 "note": ""
               },
               {
@@ -828,11 +739,7 @@
                 "body": "Gebruik van html-table-to-json hield het geheugengebruik onder 50MB, wat snelle en voordelige hosting mogelijk maakte.",
                 "value": "Ultra Licht",
                 "icon": "bolt",
-                "tags": [
-                  "Prestaties",
-                  "RAM",
-                  "Axios"
-                ],
+                "tags": ["Prestaties", "RAM", "Axios"],
                 "note": ""
               }
             ],
@@ -844,11 +751,7 @@
       }
     }
   ],
-  "skillKeys": [
-    "Nodejs",
-    "Express",
-    "Mysql"
-  ],
+  "skillKeys": ["Nodejs", "Express", "Mysql"],
   "order": 18,
   "kind": "PERSONAL",
   "slug": "kwh-monitor-api",

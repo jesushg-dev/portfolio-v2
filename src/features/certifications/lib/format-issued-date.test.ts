@@ -1,8 +1,9 @@
 import { formatIssuedDate } from "./format-issued-date";
 
 describe("formatIssuedDate", () => {
-  it("returns empty string for null", () => {
+  it("returns empty string for null and undefined", () => {
     expect(formatIssuedDate(null, "en")).toBe("");
+    expect(formatIssuedDate(undefined, "en")).toBe("");
   });
 
   it("formats a valid timestamp", () => {

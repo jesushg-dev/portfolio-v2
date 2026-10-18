@@ -9,12 +9,7 @@
   "kind": "PROFESSIONAL",
   "slug": "tech-service",
   "caseStudyEnabled": true,
-  "skillKeys": [
-    "Java",
-    "Android",
-    "Php",
-    "Mysql"
-  ],
+  "skillKeys": ["Java", "Android", "Php", "Mysql"],
   "translations": [
     {
       "locale": "es",
@@ -145,11 +140,7 @@
                 "body": "Vista de órdenes de reparación asignadas al técnico con indicadores de prioridad (Baja, Media, Urgente), datos de contacto del cliente y ubicación.",
                 "value": "Bandeja",
                 "icon": "layout",
-                "tags": [
-                  "Tickets",
-                  "Prioridad",
-                  "Java"
-                ],
+                "tags": ["Tickets", "Prioridad", "Java"],
                 "note": ""
               },
               {
@@ -159,11 +150,7 @@
                 "body": "Formulario de inspección visual para marcar golpes, rayones o componentes faltantes, adjuntando fotografías antes de iniciar la reparación.",
                 "value": "Diagnóstico",
                 "icon": "bolt",
-                "tags": [
-                  "Hardware",
-                  "Checklist",
-                  "Fotos"
-                ],
+                "tags": ["Hardware", "Checklist", "Fotos"],
                 "note": ""
               },
               {
@@ -173,11 +160,7 @@
                 "body": "Lienzo interactivo donde el cliente estampa su firma manuscrita al recibir el equipo reparado, sellando la orden con marca de tiempo.",
                 "value": "Firma",
                 "icon": "shield",
-                "tags": [
-                  "Firma",
-                  "Canvas",
-                  "Seguridad"
-                ],
+                "tags": ["Firma", "Canvas", "Seguridad"],
                 "note": ""
               },
               {
@@ -187,11 +170,7 @@
                 "body": "Generación del resumen de servicio con desglose de costos, garantía aplicable y envío directo de constancia al correo del cliente.",
                 "value": "Comprobante",
                 "icon": "globe",
-                "tags": [
-                  "Garantía",
-                  "Resumen",
-                  "Soporte"
-                ],
+                "tags": ["Garantía", "Resumen", "Soporte"],
                 "note": ""
               }
             ],
@@ -215,11 +194,7 @@
                 "body": "El desarrollo nativo con Android SDK garantizó máxima fluidez en el trazo de la firma táctil y compresión rápida de imágenes sin congelamientos en terminales de bajo costo.",
                 "value": "Android Nativo",
                 "icon": "bolt",
-                "tags": [
-                  "Java",
-                  "Android SDK",
-                  "Rendimiento"
-                ],
+                "tags": ["Java", "Android SDK", "Rendimiento"],
                 "note": ""
               },
               {
@@ -229,11 +204,7 @@
                 "body": "La inclusión de la firma táctil obligatoria y la fecha sellada eliminó los reclamos de clientes sobre garantías expiradas o entregas no autorizadas a terceras personas.",
                 "value": "Auditoría Legal",
                 "icon": "shield",
-                "tags": [
-                  "Firma",
-                  "Conformidad",
-                  "Auditoría"
-                ],
+                "tags": ["Firma", "Conformidad", "Auditoría"],
                 "note": ""
               },
               {
@@ -243,11 +214,7 @@
                 "body": "Obligar a fotografiar rayones previos de pantallas o carcasas al momento del ingreso protegió al taller de reclamos por daños preexistentes.",
                 "value": "Transparencia",
                 "icon": "layout",
-                "tags": [
-                  "Cámara",
-                  "Fotos",
-                  "Seguridad"
-                ],
+                "tags": ["Cámara", "Fotos", "Seguridad"],
                 "note": ""
               }
             ],
@@ -387,11 +354,7 @@
                 "body": "List of repair orders assigned to the logged-in technician with urgency badges (Low, Medium, Urgent), client contact information, and location.",
                 "value": "Inbox",
                 "icon": "layout",
-                "tags": [
-                  "Tickets",
-                  "Priority",
-                  "Java"
-                ],
+                "tags": ["Tickets", "Priority", "Java"],
                 "note": ""
               },
               {
@@ -401,11 +364,7 @@
                 "body": "Visual inspection form to log scratches, dents, or missing parts, requiring attached photos before beginning repair work.",
                 "value": "Diagnosis",
                 "icon": "bolt",
-                "tags": [
-                  "Hardware",
-                  "Checklist",
-                  "Photos"
-                ],
+                "tags": ["Hardware", "Checklist", "Photos"],
                 "note": ""
               },
               {
@@ -415,11 +374,7 @@
                 "body": "Interactive touch canvas allowing customers to sign upon receiving their repaired device, stamping the work order with a verifiable timestamp.",
                 "value": "Signature",
                 "icon": "shield",
-                "tags": [
-                  "Signature",
-                  "Canvas",
-                  "Security"
-                ],
+                "tags": ["Signature", "Canvas", "Security"],
                 "note": ""
               },
               {
@@ -429,11 +384,7 @@
                 "body": "Generates digital service receipts itemizing costs, applicable warranty terms, and dispatching summary emails directly to customers.",
                 "value": "Receipt",
                 "icon": "globe",
-                "tags": [
-                  "Warranty",
-                  "Summary",
-                  "Support"
-                ],
+                "tags": ["Warranty", "Summary", "Support"],
                 "note": ""
               }
             ],
@@ -457,11 +408,7 @@
                 "body": "Native Android SDK development ensured zero input lag during finger signatures and rapid image compression on low-cost company devices.",
                 "value": "Native Android",
                 "icon": "bolt",
-                "tags": [
-                  "Java",
-                  "Android SDK",
-                  "Performance"
-                ],
+                "tags": ["Java", "Android SDK", "Performance"],
                 "note": ""
               },
               {
@@ -471,11 +418,7 @@
                 "body": "Capturing a required client signature with recorded timestamp eliminated customer disputes regarding warranty claims or unauthorized pickups.",
                 "value": "Audit Trail",
                 "icon": "shield",
-                "tags": [
-                  "Signature",
-                  "Compliance",
-                  "Audit"
-                ],
+                "tags": ["Signature", "Compliance", "Audit"],
                 "note": ""
               },
               {
@@ -485,11 +428,7 @@
                 "body": "Requiring intake photos of pre-existing casing dents or cracked glass protected the service shop against fraudulent damage claims.",
                 "value": "Transparency",
                 "icon": "layout",
-                "tags": [
-                  "Camera",
-                  "Photos",
-                  "Protection"
-                ],
+                "tags": ["Camera", "Photos", "Protection"],
                 "note": ""
               }
             ],
@@ -629,11 +568,7 @@
                 "body": "Overzicht van reparatieorders toegewezen aan de monteur met prioriteitslabels (Laag, Normaal, Urgent), klantcontact en locatie.",
                 "value": "Werklijst",
                 "icon": "layout",
-                "tags": [
-                  "Tickets",
-                  "Prioriteit",
-                  "Java"
-                ],
+                "tags": ["Tickets", "Prioriteit", "Java"],
                 "note": ""
               },
               {
@@ -643,11 +578,7 @@
                 "body": "Inspectieformulier om krassen, beschadigingen of ontbrekende onderdelen vast te leggen inclusief verplichte foto's voor aanvang.",
                 "value": "Diagnose",
                 "icon": "bolt",
-                "tags": [
-                  "Hardware",
-                  "Checklist",
-                  "Fotos"
-                ],
+                "tags": ["Hardware", "Checklist", "Fotos"],
                 "note": ""
               },
               {
@@ -657,11 +588,7 @@
                 "body": "Interactief canvas waarop de klant tekent bij ontvangst van het gerepareerde apparaat met een geverifieerd tijdstempel.",
                 "value": "Handtekening",
                 "icon": "shield",
-                "tags": [
-                  "Handtekening",
-                  "Canvas",
-                  "Veiligheid"
-                ],
+                "tags": ["Handtekening", "Canvas", "Veiligheid"],
                 "note": ""
               },
               {
@@ -671,11 +598,7 @@
                 "body": "Generatie van een digitaal serviceoverzicht met kosten, garantievoorwaarden en directe verzending naar de e-mail van de klant.",
                 "value": "Bewijs",
                 "icon": "globe",
-                "tags": [
-                  "Garantie",
-                  "Overzicht",
-                  "Ondersteuning"
-                ],
+                "tags": ["Garantie", "Overzicht", "Ondersteuning"],
                 "note": ""
               }
             ],
@@ -699,11 +622,7 @@
                 "body": "Native Android SDK-ontwikkeling garandeerde vloeiende handtekeningregistratie en snelle beeldcompressie op voordelige bedrijfstoestellen.",
                 "value": "Native Android",
                 "icon": "bolt",
-                "tags": [
-                  "Java",
-                  "Android SDK",
-                  "Prestaties"
-                ],
+                "tags": ["Java", "Android SDK", "Prestaties"],
                 "note": ""
               },
               {
@@ -713,11 +632,7 @@
                 "body": "De verplichte digitale handtekening met tijdstempel voorkwam geschillen over garantietermijnen of ongeautoriseerde afhalingen.",
                 "value": "Audit Trail",
                 "icon": "shield",
-                "tags": [
-                  "Handtekening",
-                  "Akkoord",
-                  "Audit"
-                ],
+                "tags": ["Handtekening", "Akkoord", "Audit"],
                 "note": ""
               },
               {
@@ -727,11 +642,7 @@
                 "body": "Het verplicht fotograferen van krassen of schade bij binnenkomst beschermde het reparatiecentrum tegen valse schadeclaims.",
                 "value": "Transparantie",
                 "icon": "layout",
-                "tags": [
-                  "Camera",
-                  "Fotos",
-                  "Zekerheid"
-                ],
+                "tags": ["Camera", "Fotos", "Zekerheid"],
                 "note": ""
               }
             ],

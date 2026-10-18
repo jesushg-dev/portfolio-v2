@@ -25,10 +25,7 @@
       "hook": "REST API in Node.js & MySQL · Aggregatie en verwerking van officiële loterijuitslagen · Lage latency endpoints voor web en mobiel"
     }
   ],
-  "skillKeys": [
-    "Nodejs",
-    "Mysql"
-  ],
+  "skillKeys": ["Nodejs", "Mysql"],
   "order": 10,
   "kind": "LEARNING",
   "slug": "lotty-api"

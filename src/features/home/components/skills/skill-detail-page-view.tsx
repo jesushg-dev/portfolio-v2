@@ -2,7 +2,7 @@ import { MediaImage } from "@/components/shared/media-image";
 import { getTranslations } from "next-intl/server";
 import { MdOpenInNew } from "react-icons/md";
 
-import CertificateItem from "@/components/certification/certification-item";
+import CertificateItem from "@/features/certifications/components/certification-item";
 import PortfolioItem from "@/features/home/components/portfolio/project-item";
 import { SkillExperienceList } from "@/features/home/components/skills/skill-experience-list";
 import { Link } from "@/i18n/routing";

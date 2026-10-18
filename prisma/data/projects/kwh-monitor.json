@@ -9,12 +9,7 @@
   "kind": "PERSONAL",
   "slug": "kwh-monitor",
   "caseStudyEnabled": true,
-  "skillKeys": [
-    "Java",
-    "Android",
-    "Mysql",
-    "Nodejs"
-  ],
+  "skillKeys": ["Java", "Android", "Mysql", "Nodejs"],
   "translations": [
     {
       "locale": "es",
@@ -145,11 +140,7 @@
                 "body": "Pantalla intuitiva para anotar la lectura actual del contador eléctrico con validación de valores decrecientes para evitar errores de tipeo.",
                 "value": "Lectura",
                 "icon": "bolt",
-                "tags": [
-                  "Medidor",
-                  "Java",
-                  "Validación"
-                ],
+                "tags": ["Medidor", "Java", "Validación"],
                 "note": ""
               },
               {
@@ -159,11 +150,7 @@
                 "body": "Conecta con Kwh Monitor API para calcular el costo proyectado de la factura mensual desglosando energía activa, subsidio estatal y tributos municipales.",
                 "value": "Proyección",
                 "icon": "gauge",
-                "tags": [
-                  "Tarifas",
-                  "INE",
-                  "Subsidio"
-                ],
+                "tags": ["Tarifas", "INE", "Subsidio"],
                 "note": ""
               },
               {
@@ -173,11 +160,7 @@
                 "body": "Gráficos de barras y líneas que muestran el consumo diario comparado contra la cuota mensual objetivo para alertar sobre incrementos inusuales.",
                 "value": "Gráficas",
                 "icon": "layout",
-                "tags": [
-                  "Gráficos",
-                  "Tendencia",
-                  "Análisis"
-                ],
+                "tags": ["Gráficos", "Tendencia", "Análisis"],
                 "note": ""
               },
               {
@@ -187,11 +170,7 @@
                 "body": "Semáforo visual (Verde, Amarillo, Rojo) que alerta al usuario cuando el consumo acumulado se aproxima al límite de los 150 kWh subsidiados por el estado.",
                 "value": "Alertas",
                 "icon": "shield",
-                "tags": [
-                  "Subsidio",
-                  "Alertas",
-                  "Protección"
-                ],
+                "tags": ["Subsidio", "Alertas", "Protección"],
                 "note": ""
               }
             ],
@@ -215,11 +194,7 @@
                 "body": "Dado que muchos medidores se encuentran en patios o áreas con baja señal móvil, la aplicación almacena todas las lecturas localmente en SQLite, permitiendo registrar datos en cualquier instante sin bloqueos.",
                 "value": "Offline-First",
                 "icon": "shield",
-                "tags": [
-                  "SQLite",
-                  "Offline",
-                  "Resiliencia"
-                ],
+                "tags": ["SQLite", "Offline", "Resiliencia"],
                 "note": ""
               },
               {
@@ -229,11 +204,7 @@
                 "body": "Al delegar el scraping y la fórmula tarifaria al backend Node.js, cualquier cambio en el formato de cálculo gubernamental se actualiza en el servidor sin obligar a los usuarios a descargar una nueva versión de la app.",
                 "value": "Microservicio",
                 "icon": "bolt",
-                "tags": [
-                  "Node.js",
-                  "API",
-                  "Desacople"
-                ],
+                "tags": ["Node.js", "API", "Desacople"],
                 "note": ""
               },
               {
@@ -243,11 +214,7 @@
                 "body": "Los pliegos tarifarios son confusos para el consumidor promedio. Traducir fórmulas matemáticas complejas a un semáforo visual de consumo facilitó que las familias ajustaran el uso de electrodomésticos oportunamente.",
                 "value": "UX Centrada",
                 "icon": "layout",
-                "tags": [
-                  "UX",
-                  "Accesibilidad",
-                  "Ahorro"
-                ],
+                "tags": ["UX", "Accesibilidad", "Ahorro"],
                 "note": ""
               }
             ],
@@ -387,11 +354,7 @@
                 "body": "Streamlined data entry form to record electric meter numbers with sanity validation preventing decremental readings.",
                 "value": "Reading",
                 "icon": "bolt",
-                "tags": [
-                  "Meter",
-                  "Java",
-                  "Validation"
-                ],
+                "tags": ["Meter", "Java", "Validation"],
                 "note": ""
               },
               {
@@ -401,11 +364,7 @@
                 "body": "Communicates with Kwh Monitor API to forecast month-end bill totals, itemizing active energy, public lighting, and national subsidies.",
                 "value": "Projection",
                 "icon": "gauge",
-                "tags": [
-                  "Tariffs",
-                  "INE",
-                  "Subsidy"
-                ],
+                "tags": ["Tariffs", "INE", "Subsidy"],
                 "note": ""
               },
               {
@@ -415,11 +374,7 @@
                 "body": "Bar and line charts displaying daily consumption progress against target monthly limits to detect abnormal appliance usage spikes.",
                 "value": "Charts",
                 "icon": "layout",
-                "tags": [
-                  "Charts",
-                  "Trends",
-                  "Analytics"
-                ],
+                "tags": ["Charts", "Trends", "Analytics"],
                 "note": ""
               },
               {
@@ -429,11 +384,7 @@
                 "body": "Color-coded indicator (Green, Yellow, Red) notifying users when their monthly consumption nears the subsidized 150 kWh ceiling.",
                 "value": "Alerts",
                 "icon": "shield",
-                "tags": [
-                  "Subsidy",
-                  "Alerts",
-                  "Protection"
-                ],
+                "tags": ["Subsidy", "Alerts", "Protection"],
                 "note": ""
               }
             ],
@@ -457,11 +408,7 @@
                 "body": "Since many power meters are installed in outdoor yards with poor cellular coverage, storing all logs locally in SQLite guarantees effortless meter entry without connection drops.",
                 "value": "Offline-First",
                 "icon": "shield",
-                "tags": [
-                  "SQLite",
-                  "Offline",
-                  "Resilience"
-                ],
+                "tags": ["SQLite", "Offline", "Resilience"],
                 "note": ""
               },
               {
@@ -471,11 +418,7 @@
                 "body": "Delegating web scraping and tariff calculations to the Node.js backend means changes to governmental formulas update on the server without requiring app store updates.",
                 "value": "Microservice",
                 "icon": "bolt",
-                "tags": [
-                  "Node.js",
-                  "API",
-                  "Decoupling"
-                ],
+                "tags": ["Node.js", "API", "Decoupling"],
                 "note": ""
               },
               {
@@ -485,11 +428,7 @@
                 "body": "Government energy tariff structures are opaque to average citizens. Translating complex progressive brackets into an intuitive visual traffic light helped families adjust appliance usage.",
                 "value": "User-Centered",
                 "icon": "layout",
-                "tags": [
-                  "UX",
-                  "Accessibility",
-                  "Savings"
-                ],
+                "tags": ["UX", "Accessibility", "Savings"],
                 "note": ""
               }
             ],
@@ -629,11 +568,7 @@
                 "body": "Overzichtelijk scherm om de elektriciteitsmeterstand te noteren met invoervalidatie die onlogische dalingen voorkomt.",
                 "value": "Meting",
                 "icon": "bolt",
-                "tags": [
-                  "Meter",
-                  "Java",
-                  "Validatie"
-                ],
+                "tags": ["Meter", "Java", "Validatie"],
                 "note": ""
               },
               {
@@ -643,11 +578,7 @@
                 "body": "Communiceert met Kwh Monitor API om de maandfactuur te ramen met uitsplitsing van verbruik, overheidssubsidie en heffingen.",
                 "value": "Prognose",
                 "icon": "gauge",
-                "tags": [
-                  "Tarieven",
-                  "INE",
-                  "Subsidie"
-                ],
+                "tags": ["Tarieven", "INE", "Subsidie"],
                 "note": ""
               },
               {
@@ -657,11 +588,7 @@
                 "body": "Staaf- en lijngrafieken die het dagverbruik afzetten tegen de maandelijkse doellimiet om ongebruikelijke pieken te signaleren.",
                 "value": "Grafieken",
                 "icon": "layout",
-                "tags": [
-                  "Grafieken",
-                  "Trends",
-                  "Analyse"
-                ],
+                "tags": ["Grafieken", "Trends", "Analyse"],
                 "note": ""
               },
               {
@@ -671,11 +598,7 @@
                 "body": "Kleurindicator (Groen, Geel, Rood) die waarschuwt wanneer het verbruik het gesubsidieerde plafond van 150 kWh nadert.",
                 "value": "Meldingen",
                 "icon": "shield",
-                "tags": [
-                  "Subsidie",
-                  "Meldingen",
-                  "Bescherming"
-                ],
+                "tags": ["Subsidie", "Meldingen", "Bescherming"],
                 "note": ""
               }
             ],
@@ -699,11 +622,7 @@
                 "body": "Doordat veel meters buiten hangen waar mobiele ontvangst beperkt is, slaat de app alle gegevens lokaal op in SQLite voor een betrouwbare invoer zonder haperingen.",
                 "value": "Offline-First",
                 "icon": "shield",
-                "tags": [
-                  "SQLite",
-                  "Offline",
-                  "Robuust"
-                ],
+                "tags": ["SQLite", "Offline", "Robuust"],
                 "note": ""
               },
               {
@@ -713,11 +632,7 @@
                 "body": "Door de scraping en berekeningen naar de Node.js backend te delegeren, worden wijzigingen in overheidsformules op de server verwerkt zonder verplichte app-updates.",
                 "value": "Microservice",
                 "icon": "bolt",
-                "tags": [
-                  "Node.js",
-                  "API",
-                  "Ontkoppeling"
-                ],
+                "tags": ["Node.js", "API", "Ontkoppeling"],
                 "note": ""
               },
               {
@@ -727,11 +642,7 @@
                 "body": "Overheidstarieven zijn complex voor de gemiddelde gebruiker. Het vertalen van formules naar een intuïtieve kleurindicator hielp gezinnen tijdig stroom te besparen.",
                 "value": "Gebruikers-UX",
                 "icon": "layout",
-                "tags": [
-                  "UX",
-                  "Besparing",
-                  "Eenvoud"
-                ],
+                "tags": ["UX", "Besparing", "Eenvoud"],
                 "note": ""
               }
             ],

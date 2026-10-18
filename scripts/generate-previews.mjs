@@ -142,14 +142,37 @@ async function main() {
   console.log(`[previews] Target baseUrl: ${baseUrl}`);
   console.log(`[previews] Target locales: [${activeLocales.join(", ")}]`);
 
+  let serverReachable = false;
   try {
     const res = await fetch(baseUrl);
+    serverReachable = true;
     if (!res.ok) {
       console.warn(
         `[previews] Warning: ${baseUrl} returned status ${res.status}`,
       );
     }
   } catch {
+    if (!urlArg && !process.env.APP_URL) {
+      const fallbackUrl = "http://127.0.0.1:3001";
+      try {
+        const fallbackRes = await fetch(fallbackUrl);
+        baseUrl = fallbackUrl;
+        serverReachable = true;
+        console.log(
+          `[previews] Note: Port 3000 unreachable, auto-switched to ${baseUrl}`,
+        );
+        if (!fallbackRes.ok) {
+          console.warn(
+            `[previews] Warning: ${baseUrl} returned status ${fallbackRes.status}`,
+          );
+        }
+      } catch {
+        // neither port reachable
+      }
+    }
+  }
+
+  if (!serverReachable) {
     console.error(`\n[previews] Error: Could not reach ${baseUrl}.`);
     console.error(
       `Please ensure your local dev server is running ('pnpm dev')`,

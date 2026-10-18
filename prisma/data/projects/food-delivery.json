@@ -25,11 +25,7 @@
       "hook": "Mobiele Android-app (Java) · Interactieve menukaart voor restaurants · Realtime orderverwerking & MySQL backend"
     }
   ],
-  "skillKeys": [
-    "Java",
-    "Android",
-    "Mysql"
-  ],
+  "skillKeys": ["Java", "Android", "Mysql"],
   "order": 14,
   "kind": "PROFESSIONAL",
   "slug": "food-delivery"
