@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useState, type FC } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { motion, AnimatePresence } from "motion/react";
-import { ArrowRightIcon, Quote } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { ArrowRightIcon, ChevronDown, ChevronUp, Quote } from "lucide-react";
 
 import { Link } from "@/i18n/routing";
 import { MediaImage } from "@/components/shared/media-image";
@@ -103,8 +103,11 @@ function SocialProofContent({
 }) {
   const t = useTranslations("main.socialProof");
   const cvPublic = usePublicCvVisible();
+  const shouldReduceMotion = useReducedMotion();
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const hasItems = items.length > 0;
   const activeTestimonial = hasItems
@@ -113,20 +116,22 @@ function SocialProofContent({
 
   const handleNext = useCallback(() => {
     if (items.length <= 1) return;
+    setIsExpanded(false);
     setCurrentIndex((prev) => (prev + 1) % items.length);
   }, [items.length]);
 
   const handlePrev = useCallback(() => {
     if (items.length <= 1) return;
+    setIsExpanded(false);
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   }, [items.length]);
 
-  // Autoplay rotation every 8 seconds if multiple testimonials
+  // Autoplay rotation every 8 seconds if multiple testimonials and not expanded or hovered
   useEffect(() => {
-    if (items.length <= 1) return;
+    if (items.length <= 1 || isExpanded || isPaused) return;
     const interval = setInterval(handleNext, 8000);
     return () => clearInterval(interval);
-  }, [handleNext, items.length]);
+  }, [handleNext, isExpanded, isPaused, items.length]);
 
   const initials = activeTestimonial?.author
     ? activeTestimonial.author
@@ -146,6 +151,7 @@ function SocialProofContent({
   const handlePointerLeave = (e: React.PointerEvent<HTMLElement>) => {
     e.currentTarget.style.removeProperty("--x");
     e.currentTarget.style.removeProperty("--y");
+    setIsPaused(false);
   };
 
   return (
@@ -178,7 +184,8 @@ function SocialProofContent({
               <figure
                 onPointerMove={handlePointerMove}
                 onPointerLeave={handlePointerLeave}
-                className="b-card-glow group border-border/80 bg-card hover:border-primary/30 relative flex flex-1 flex-col justify-between overflow-hidden rounded-[1.75rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-lg sm:p-7 md:p-8"
+                onPointerEnter={() => setIsPaused(true)}
+                className="b-card-glow group border-border/80 bg-card hover:border-primary/30 relative flex min-h-[29rem] flex-1 flex-col justify-between overflow-hidden rounded-[1.75rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-lg sm:min-h-0 sm:p-7 md:p-8"
               >
                 {/* Large Background Watermark Quote Mark */}
                 <svg
@@ -190,113 +197,156 @@ function SocialProofContent({
                   <path d="M7.2 6C4.9 6 3 7.9 3 10.2V18h7v-7.2H6.4c0-1.4 1-2.4 2.3-2.5L7.2 6zm9 0C13.9 6 12 7.9 12 10.2V18h7v-7.2h-3.6c0-1.4 1-2.4 2.3-2.5L16.2 6z" />
                 </svg>
 
-                {/* Branded Icon Tile */}
-                <span className="border-primary/15 bg-primary/8 text-primary relative z-10 flex size-10 shrink-0 items-center justify-center rounded-xl border shadow-xs">
-                  <Quote className="size-4.5" aria-hidden="true" />
-                </span>
-
-                {/* Blockquote with Animated Key Transition */}
-                <AnimatePresence mode="wait">
-                  <motion.blockquote
-                    key={activeTestimonial.id}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.25 }}
-                    className="text-foreground relative mt-4 line-clamp-4 text-base leading-relaxed font-medium sm:mt-5 sm:line-clamp-none sm:text-lg sm:leading-8"
-                  >
-                    &ldquo;{activeTestimonial.quote}&rdquo;
-                  </motion.blockquote>
-                </AnimatePresence>
-
-                {/* Figcaption with Author Info & Slider Controls */}
-                <figcaption className="border-border/60 relative mt-6 flex flex-wrap items-center gap-3 border-t pt-5">
-                  {/* Avatar */}
-                  {activeTestimonial.avatarUrl ? (
-                    <div className="border-border/60 relative size-10 shrink-0 overflow-hidden rounded-full border shadow-xs sm:size-11">
-                      <MediaImage
-                        src={activeTestimonial.avatarUrl}
-                        alt={activeTestimonial.author}
-                        fill
-                        className="object-cover"
-                        sizes="44px"
-                      />
-                    </div>
-                  ) : (
-                    <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-bold sm:size-11 sm:text-sm">
-                      {initials}
-                    </span>
-                  )}
-
-                  {/* Name and Role */}
-                  <div className="mr-auto min-w-0">
-                    <AuthorName
-                      author={activeTestimonial.author}
-                      linkedInUrl={activeTestimonial.linkedInUrl}
-                    />
-                    {activeTestimonial.role ? (
-                      <span className="text-muted-foreground block text-xs">
-                        {activeTestimonial.role}
-                      </span>
-                    ) : null}
-                  </div>
-
-                  {/* Slider Controls */}
-                  {items.length > 1 ? (
-                    <div className="flex items-center gap-2.5">
-                      <div
-                        className="flex items-center gap-1.5"
-                        aria-label="Pagination"
-                      >
-                        {items.map((_, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            aria-label={`Go to slide ${idx + 1}`}
-                            onClick={() => setCurrentIndex(idx)}
-                            className={cn(
-                              "h-1.5 cursor-pointer rounded-full transition-all duration-300",
-                              idx === currentIndex % items.length
-                                ? "bg-primary w-6"
-                                : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-1.5",
-                            )}
-                          />
-                        ))}
-                      </div>
-
-                      <div className="flex items-center gap-1">
-                        <button
-                          type="button"
-                          aria-label="Previous testimonial"
-                          onClick={handlePrev}
-                          className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
-                        >
-                          ‹
-                        </button>
-                        <button
-                          type="button"
-                          aria-label="Next testimonial"
-                          onClick={handleNext}
-                          className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
-                        >
-                          ›
-                        </button>
-                      </div>
-                    </div>
-                  ) : null}
-                </figcaption>
-
-                {/* Hire Me CTA Button */}
-                <a
-                  href="#contact"
-                  id="hire-me-cta"
-                  className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-xs font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6 sm:text-sm"
-                >
-                  {t("cta")}
-                  <span className="bg-primary-foreground text-primary flex size-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
-                    <ArrowRightIcon className="size-3.5" />
+                {/* Top Section: Icon Tile + Blockquote with Read More Toggle */}
+                <div>
+                  {/* Branded Icon Tile */}
+                  <span className="border-primary/15 bg-primary/8 text-primary relative z-10 flex size-10 shrink-0 items-center justify-center rounded-xl border shadow-xs">
+                    <Quote className="size-4.5" aria-hidden="true" />
                   </span>
-                </a>
+
+                  {/* Blockquote with Animated Key Transition */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeTestimonial.id}
+                      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: shouldReduceMotion ? 0 : -6 }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.25 }}
+                    >
+                      <blockquote
+                        className={cn(
+                          "text-foreground relative mt-4 text-base leading-relaxed font-medium transition-all duration-300 sm:mt-5 sm:text-lg sm:leading-8",
+                          !isExpanded && "line-clamp-4 sm:line-clamp-none",
+                        )}
+                      >
+                        &ldquo;{activeTestimonial.quote}&rdquo;
+                      </blockquote>
+
+                      {/* Read More / Read Less Toggle for Mobile */}
+                      {activeTestimonial.quote.length > 140 ? (
+                        <button
+                          type="button"
+                          onClick={() => setIsExpanded((prev) => !prev)}
+                          aria-expanded={isExpanded}
+                          className="text-primary hover:text-primary/80 mt-2.5 inline-flex cursor-pointer items-center gap-1 text-xs font-semibold transition-colors sm:hidden"
+                        >
+                          <span>
+                            {isExpanded ? t("readLess") : t("readMore")}
+                          </span>
+                          {isExpanded ? (
+                            <ChevronUp
+                              className="size-3.5"
+                              aria-hidden="true"
+                            />
+                          ) : (
+                            <ChevronDown
+                              className="size-3.5"
+                              aria-hidden="true"
+                            />
+                          )}
+                        </button>
+                      ) : null}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* Bottom Section: Author Info, Controls & Hire CTA */}
+                <div>
+                  {/* Figcaption with Author Info & Slider Controls */}
+                  <figcaption className="border-border/60 relative mt-6 flex flex-col gap-3.5 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
+                    {/* Author & Avatar (Full role, wraps naturally without clipping) */}
+                    <div className="flex items-center gap-3 min-w-0">
+                      {/* Avatar */}
+                      {activeTestimonial.avatarUrl ? (
+                        <div className="border-border/60 relative size-10 shrink-0 overflow-hidden rounded-full border shadow-xs sm:size-11">
+                          <MediaImage
+                            src={activeTestimonial.avatarUrl}
+                            alt={activeTestimonial.author}
+                            fill
+                            className="object-cover"
+                            sizes="44px"
+                          />
+                        </div>
+                      ) : (
+                        <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-bold sm:size-11 sm:text-sm">
+                          {initials}
+                        </span>
+                      )}
+
+                      {/* Name and Role */}
+                      <div className="min-w-0">
+                        <AuthorName
+                          author={activeTestimonial.author}
+                          linkedInUrl={activeTestimonial.linkedInUrl}
+                        />
+                        {activeTestimonial.role ? (
+                          <span className="text-muted-foreground block text-xs leading-normal">
+                            {activeTestimonial.role}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    {/* Slider Controls */}
+                    {items.length > 1 ? (
+                      <div className="flex items-center justify-between gap-3 shrink-0 sm:justify-end">
+                        <div
+                          className="flex items-center gap-1.5"
+                          aria-label="Pagination"
+                        >
+                          {items.map((_, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              aria-label={`Go to slide ${idx + 1}`}
+                              onClick={() => {
+                                setIsExpanded(false);
+                                setCurrentIndex(idx);
+                              }}
+                              className={cn(
+                                "h-1.5 cursor-pointer rounded-full transition-all duration-300",
+                                idx === currentIndex % items.length
+                                  ? "bg-primary w-6"
+                                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50 w-1.5",
+                              )}
+                            />
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            aria-label="Previous testimonial"
+                            onClick={handlePrev}
+                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
+                          >
+                            ‹
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Next testimonial"
+                            onClick={handleNext}
+                            className="border-border/60 bg-card hover:border-primary/40 text-foreground flex size-7 cursor-pointer items-center justify-center rounded-full border text-sm shadow-2xs transition-colors"
+                          >
+                            ›
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
+                  </figcaption>
+
+                  {/* Hire Me CTA Button */}
+                  <a
+                    href="#contact"
+                    id="hire-me-cta"
+                    className="group bg-primary text-primary-foreground hover:bg-primary/95 relative mt-5 inline-flex cursor-pointer items-center gap-2.5 self-start rounded-full py-1.5 pr-1.5 pl-5 text-xs font-bold shadow-sm transition-all duration-200 hover:scale-[1.02] sm:mt-6 sm:text-sm"
+                  >
+                    {t("cta")}
+                    <span className="bg-primary-foreground text-primary flex size-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1">
+                      <ArrowRightIcon className="size-3.5" />
+                    </span>
+                  </a>
+                </div>
               </figure>
             ) : null}
           </div>

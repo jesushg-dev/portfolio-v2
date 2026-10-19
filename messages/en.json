@@ -1210,6 +1210,8 @@
       "title": "{count, plural, =0 {What senior developers say about me} =1 {What a senior developer says about me} other {What senior developers say about me}}",
       "subtitle": "Colleagues who have seen my work up close.",
       "cta": "Hire me",
+      "readMore": "Read more",
+      "readLess": "Read less",
       "statsLabel": "By the numbers",
       "statsNote": "Numbers accumulated across professional engagements.",
       "stats": {

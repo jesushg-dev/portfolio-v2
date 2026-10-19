@@ -11,6 +11,9 @@ jest.mock("next-intl", () => ({
       projectsCount: "Projects delivered",
       certificationsCount: "Certifications",
       hireMe: "Hire me",
+      cta: "Hire me",
+      readMore: "Read more",
+      readLess: "Read less",
       statsFootnote: "Numbers accumulated across professional engagements.",
     };
     return map[key] || key;
@@ -78,5 +81,40 @@ describe("SocialProof Component", () => {
     expect(screen.getByText(/Mauricio Arias/i)).toBeInTheDocument();
     expect(screen.getByText(/19\+/i)).toBeInTheDocument();
     expect(screen.getByText(/6\+/i)).toBeInTheDocument();
+  });
+
+  it("renders read more button and toggles expansion on long quotes", async () => {
+    const { fireEvent } = await import("@testing-library/react");
+    const longQuoteTestimonial = [
+      {
+        id: "t2",
+        quote:
+          "I worked with Jesús at Contollo leading complex deliveries. What defines him as a senior engineer is his level of ownership: he takes on end-to-end design, makes decisions with great technical judgment, and operates with complete autonomy. He is the engineer you trust with the hardest problems.",
+        author: "Mauricio Arias",
+        role: "Software Engineer · Capstone Logistics (Contollo)",
+        avatarUrl: null,
+        linkedInUrl: null,
+      },
+    ];
+
+    render(
+      <SocialProof stats={mockStats} testimonials={longQuoteTestimonial} />,
+    );
+
+    const toggleBtn = screen.getByRole("button", { name: /read more/i });
+    expect(toggleBtn).toBeInTheDocument();
+    expect(toggleBtn).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.click(toggleBtn);
+    expect(
+      screen.getByRole("button", { name: /read less/i }),
+    ).toBeInTheDocument();
+    expect(toggleBtn).toHaveAttribute("aria-expanded", "true");
+
+    fireEvent.click(toggleBtn);
+    expect(
+      screen.getByRole("button", { name: /read more/i }),
+    ).toBeInTheDocument();
+    expect(toggleBtn).toHaveAttribute("aria-expanded", "false");
   });
 });

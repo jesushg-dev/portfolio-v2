@@ -1231,6 +1231,8 @@
       "title": "{count, plural, =0 {Lo que dicen los seniors sobre mí} =1 {Lo que dice un senior sobre mí} other {Lo que dicen los seniors sobre mí}}",
       "subtitle": "Colegas que han visto mi trabajo de cerca.",
       "cta": "Contrátame",
+      "readMore": "Ver más",
+      "readLess": "Ver menos",
       "statsLabel": "En números",
       "statsNote": "Números acumulados en compromisos profesionales.",
       "stats": {

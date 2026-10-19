@@ -300,13 +300,21 @@ export function useTabIndicatorDrag({
       width.set(rect.width);
       height.set(rect.height);
       hasPositionedRef.current = true;
-      return;
+    } else {
+      void animate(x, rect.left, SPRING);
+      void animate(y, rect.top, SPRING);
+      void animate(width, rect.width, SPRING);
+      void animate(height, rect.height, SPRING);
     }
 
-    void animate(x, rect.left, SPRING);
-    void animate(y, rect.top, SPRING);
-    void animate(width, rect.width, SPRING);
-    void animate(height, rect.height, SPRING);
+    const activeNode = tabNodesRef.current.get(currentTab);
+    if (activeNode && typeof activeNode.scrollIntoView === "function") {
+      activeNode.scrollIntoView({
+        behavior: shouldReduceMotion ? "auto" : "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
   }, [currentTab, height, rects, shouldReduceMotion, width, x, y]);
 
   const snapToNearest = useCallback(() => {

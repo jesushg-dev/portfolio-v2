@@ -1205,6 +1205,8 @@
       "title": "{count, plural, =0 {Wat senior developers over mij zeggen} =1 {Wat een senior developer over mij zegt} other {Wat senior developers over mij zeggen}}",
       "subtitle": "Collega's die mijn werk van dichtbij hebben gezien.",
       "cta": "Neem me aan",
+      "readMore": "Lees meer",
+      "readLess": "Lees minder",
       "statsLabel": "In cijfers",
       "statsNote": "Cijfers verzameld over professionele betrokkenheden.",
       "stats": {
