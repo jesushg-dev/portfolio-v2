@@ -923,6 +923,11 @@
         "LEARNING": "Learning"
       },
       "caseStudy": {
+        "kind": {
+          "PROFESSIONAL": "Client work",
+          "PERSONAL": "Personal",
+          "LEARNING": "Learning"
+        },
         "challenge": "The challenge",
         "approach": "Architecture & approach",
         "outcome": "Outcome & results",

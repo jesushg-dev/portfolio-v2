@@ -59,6 +59,32 @@ describe("ProjectSnapshot", () => {
       caseStudy: CaseStudyContentSchema.parse({
         chips: [],
         facts: [],
+        gallery: [
+          {
+            title: "Multi-Banner",
+            description: "Walmart, Maxi Palí & Masxmenos",
+            image: "/projects/walmart-centroamerica.jpg",
+            icon: "smartphone",
+          },
+          {
+            title: "Maxi Palí",
+            description: "Discount bodega & bulk savings",
+            image: "/projects/walmart-maxipali.jpg",
+            icon: "bag",
+          },
+          {
+            title: "Masxmenos",
+            description: "Supermarket & fresh groceries",
+            image: "/projects/walmart-masxmenos.jpg",
+            icon: "store",
+          },
+          {
+            title: "Checkout & Pickup",
+            description: "Electronic billing & store pickup",
+            image: "/projects/walmart-checkout.jpg",
+            icon: "truck",
+          },
+        ],
         tldr: [],
         responsibilities: [],
         constraints: [],

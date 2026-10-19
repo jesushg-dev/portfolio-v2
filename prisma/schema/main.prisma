@@ -644,6 +644,13 @@ type CaseStudyFact {
   value String
 }
 
+type CaseStudyGalleryItem {
+  title       String
+  description String?
+  image       String
+  icon        String?
+}
+
 type CaseStudySection {
   key             String
   kind            String
@@ -661,6 +668,7 @@ type CaseStudySection {
 type CaseStudyContent {
   chips            String[]
   facts            CaseStudyFact[]
+  gallery          CaseStudyGalleryItem[]
   stack            String[]
   nextProjectSlug  String?
   context          String?

@@ -15,10 +15,10 @@ import {
   Layers,
   Server,
   ShieldCheck,
-  Smartphone,
   Terminal,
-  Zap,
 } from "lucide-react";
+import { resolveIcon, type IconComponent } from "@/lib/icons/icon-registry";
+import { DynamicIcon } from "@/components/shared/dynamic-icon";
 
 export interface ServiceItem {
   id: string;
@@ -37,21 +37,6 @@ export interface ServiceItem {
 interface ServicesBentoProps {
   dbServices?: ServiceItem[];
 }
-
-const ICON_MAP: Record<
-  string,
-  FC<{ className?: string; "aria-hidden"?: boolean }>
-> = {
-  code: Code2,
-  server: Server,
-  smartphone: Smartphone,
-  terminal: Terminal,
-  shield: ShieldCheck,
-  database: Database,
-  zap: Zap,
-  globe: Globe,
-  layers: Layers,
-};
 
 function getVisualType(
   service: ServiceItem,
@@ -334,7 +319,7 @@ function DefaultVisual({
   IconComponent,
   service,
 }: {
-  IconComponent: FC<{ className?: string; "aria-hidden"?: boolean }>;
+  IconComponent: IconComponent;
   service: ServiceItem;
 }) {
   if (
@@ -356,9 +341,10 @@ function DefaultVisual({
   return (
     <div className="relative flex h-full w-full items-center justify-center">
       <div className="bg-primary/10 absolute size-24 rounded-full blur-xl" />
-      <IconComponent
+      <DynamicIcon
+        name={service.icon}
+        fallback={IconComponent}
         className="text-primary size-16 opacity-75"
-        aria-hidden={true}
       />
       {service.statsValue ? (
         <span className="border-border/30 bg-card text-foreground absolute bottom-3 rounded-full border px-3 py-1 font-mono text-xs font-bold shadow-2xs">
@@ -435,7 +421,7 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
       className="grid w-full gap-5 md:grid-cols-12"
     >
       {dbServices.map((service, index) => {
-        const IconComponent = ICON_MAP[service.icon ?? "code"] ?? Code2;
+        const IconComponent = resolveIcon(service.icon, Code2);
         const visualType = getVisualType(service);
         const colSpanClass = getColSpan(index, dbServices.length);
 

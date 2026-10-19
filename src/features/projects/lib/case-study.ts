@@ -17,22 +17,38 @@ export const CASE_STUDY_SECTION_KINDS = [
 export type CaseStudySectionKind = (typeof CASE_STUDY_SECTION_KINDS)[number];
 
 export const CASE_STUDY_ICONS = [
+  "badge",
+  "bag",
   "bolt",
+  "calendar",
   "case",
+  "chart",
+  "check",
   "code",
+  "cpu",
   "db",
+  "eye",
+  "file",
   "gauge",
   "globe",
+  "key",
   "layers",
   "layout",
+  "lock",
   "mail",
   "music",
   "pal",
+  "radio",
   "search",
+  "settings",
   "shield",
+  "smartphone",
+  "store",
   "term",
+  "truck",
   "user",
   "users",
+  "workflow",
 ] as const;
 
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -83,10 +99,18 @@ function duplicates(keys: string[]): string[] {
   return [...duplicate];
 }
 
+export const CaseStudyGalleryItemSchema = z.object({
+  title: text,
+  description: text,
+  image: z.string().trim().default(""),
+  icon: z.string().trim().default(""),
+});
+
 export const CaseStudyContentSchema = z
   .object({
     chips: textList,
     facts: z.array(CaseStudyFactSchema).default([]),
+    gallery: z.array(CaseStudyGalleryItemSchema).default([]),
     nextProjectSlug: z.string().trim().default(""),
     context: text,
     roleTitle: text,
@@ -134,10 +158,20 @@ export const CaseStudyContentSchema = z
 export type CaseStudyItemDTO = z.output<typeof CaseStudyItemSchema>;
 export type CaseStudySectionDTO = z.output<typeof CaseStudySectionSchema>;
 export type CaseStudyFactDTO = z.output<typeof CaseStudyFactSchema>;
+export type CaseStudyGalleryItemDTO = z.output<
+  typeof CaseStudyGalleryItemSchema
+>;
 export type CaseStudyContentDTO = z.output<typeof CaseStudyContentSchema>;
 
 export type CaseStudyMap = Record<string, CaseStudyContentDTO>;
 export const CaseStudyMapSchema = z.record(z.string(), CaseStudyContentSchema);
+
+export interface CaseStudyGalleryItemRow {
+  title?: string | null;
+  description?: string | null;
+  image?: string | null;
+  icon?: string | null;
+}
 
 export interface CaseStudyItemRow {
   key: string;
@@ -167,6 +201,7 @@ export interface CaseStudySectionRow {
 export interface CaseStudyContentRow {
   chips?: string[] | null;
   facts?: CaseStudyFactDTO[] | null;
+  gallery?: CaseStudyGalleryItemRow[] | null;
   stack?: string[] | null;
   nextProjectSlug?: string | null;
   context?: string | null;
@@ -182,6 +217,7 @@ export function buildEmptyCaseStudy(): CaseStudyContentDTO {
   return {
     chips: [],
     facts: [],
+    gallery: [],
     nextProjectSlug: "",
     context: "",
     roleTitle: "",
@@ -204,6 +240,15 @@ const itemRowToDto = (row: CaseStudyItemRow): CaseStudyItemDTO => ({
   note: row.note ?? "",
 });
 
+const galleryRowToDto = (
+  row: CaseStudyGalleryItemRow,
+): CaseStudyGalleryItemDTO => ({
+  title: row.title ?? "",
+  description: row.description ?? "",
+  image: row.image ?? "",
+  icon: row.icon ?? "",
+});
+
 export function caseStudyRowToDto(
   row: CaseStudyContentRow | null | undefined,
 ): CaseStudyContentDTO {
@@ -212,6 +257,7 @@ export function caseStudyRowToDto(
   return {
     chips: row.chips ?? [],
     facts: row.facts ?? [],
+    gallery: (row.gallery ?? []).map(galleryRowToDto),
     nextProjectSlug: row.nextProjectSlug ?? "",
     context: row.context ?? "",
     roleTitle: row.roleTitle ?? "",
@@ -257,6 +303,15 @@ export function caseStudyDtoToWrite(
     note: item.note || null,
   });
 
+  const galleryToWrite = (
+    item: CaseStudyGalleryItemDTO,
+  ): Prisma.CaseStudyGalleryItemCreateInput => ({
+    title: item.title,
+    description: item.description || null,
+    image: item.image,
+    icon: item.icon || null,
+  });
+
   const sectionToWrite = (
     section: CaseStudySectionDTO,
   ): Prisma.CaseStudySectionCreateInput => ({
@@ -276,6 +331,7 @@ export function caseStudyDtoToWrite(
   return {
     chips: dto.chips,
     facts: dto.facts,
+    gallery: dto.gallery.map(galleryToWrite),
     nextProjectSlug: dto.nextProjectSlug || null,
     context: dto.context || null,
     roleTitle: dto.roleTitle || null,
@@ -291,6 +347,7 @@ export function isCaseStudyEmpty(dto: CaseStudyContentDTO): boolean {
   return (
     dto.chips.length === 0 &&
     dto.facts.length === 0 &&
+    dto.gallery.length === 0 &&
     dto.nextProjectSlug === "" &&
     dto.context === "" &&
     dto.roleTitle === "" &&
@@ -400,6 +457,10 @@ export function auditCaseStudyParity(
 
     if (reference.constraints.length !== content.constraints.length) {
       issues.push({ locale, path: "constraints", problem: "missing" });
+    }
+
+    if (reference.gallery.length !== content.gallery.length) {
+      issues.push({ locale, path: "gallery", problem: "missing" });
     }
   }
 

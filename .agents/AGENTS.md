@@ -94,6 +94,65 @@ import { Calendar, Zap } from "lucide-react";
 
 ---
 
+## Universal Icon System & Selector — Canonical Component: UniversalIconPicker & DynamicIcon
+
+### ❌ NEVER create ad-hoc icon select pickers, hardcoded string icon dropdowns, or parallel icon resolution maps
+
+Do not create custom icon dropdowns, inline string-based icon selects (`<Select>{["code", "server"].map(...)}</Select>`), or hand-rolled string-to-icon dictionaries across feature folders.
+
+```tsx
+// ❌ WRONG — Hand-rolling custom icon dropdowns with raw strings
+<Select onValueChange={field.onChange} value={field.value}>
+  <SelectContent>
+    {["code", "server", "smartphone"].map((name) => (
+      <SelectItem key={name} value={name}>{name}</SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+```
+
+### ✅ ALWAYS use or extend `UniversalIconPicker`, `DynamicIcon`, and `icon-registry`
+
+1. **For Form Inputs & Admin Selectors (`UniversalIconPicker`):**
+   - Import `UniversalIconPicker` from `@/components/shared/universal-icon-picker`.
+   - Use existing presets (`"service"`, `"soft-skill"`, `"case-study"`, `"all"`).
+   - If a new domain or icon category is needed, **extend** `src/lib/icons/icon-registry.ts` with new options / presets instead of creating a separate picker.
+
+```tsx
+// ✅ CORRECT — Universal icon picker with live preview and registry preset
+import { UniversalIconPicker } from "@/components/shared/universal-icon-picker";
+
+<FormField
+  control={form.control}
+  name="icon"
+  render={({ field }) => (
+    <FormItem label={t("icon")} inputId="service-icon">
+      <UniversalIconPicker
+        value={field.value}
+        onChange={field.onChange}
+        preset="service"
+        triggerId="service-icon"
+        showPreview
+      />
+    </FormItem>
+  )}
+/>
+```
+
+2. **For Dynamic Rendering from Database / String Keys (`DynamicIcon` / `resolveIcon`):**
+   - Import `DynamicIcon` from `@/components/shared/dynamic-icon` to render any registered icon key in JSX.
+   - Or import `resolveIcon` from `@/lib/icons/icon-registry` when passing the icon component directly to primitives like `TabItem`.
+
+```tsx
+// ✅ CORRECT — Rendering registered string icon dynamically
+import { DynamicIcon } from "@/components/shared/dynamic-icon";
+import { resolveIcon } from "@/lib/icons/icon-registry";
+
+<DynamicIcon name={service.icon} className="size-6 text-primary" />
+```
+
+---
+
 ## Skill & Technology Icons — Canonical Component: SkillIcon
 
 ### ❌ NEVER create ad-hoc skill badges, hand-rolled letters, or hardcoded maps (like `TECH_MARKS`)

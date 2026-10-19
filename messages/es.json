@@ -944,6 +944,11 @@
         "LEARNING": "Aprendizaje"
       },
       "caseStudy": {
+        "kind": {
+          "PROFESSIONAL": "Trabajo cliente",
+          "PERSONAL": "Personal",
+          "LEARNING": "Aprendizaje"
+        },
         "challenge": "El desafío",
         "approach": "Arquitectura y enfoque",
         "outcome": "Resultado e impacto",

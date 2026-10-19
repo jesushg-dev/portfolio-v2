@@ -41,6 +41,32 @@
           "VTEX IO",
           "En producción"
         ],
+        "gallery": [
+          {
+            "title": "Multi-Marca",
+            "description": "Walmart, Maxi Palí y Masxmenos",
+            "image": "/projects/walmart-centroamerica.jpg",
+            "icon": "smartphone"
+          },
+          {
+            "title": "Maxi Palí",
+            "description": "Formato bodega y ahorro en grande",
+            "image": "/projects/walmart-maxipali.jpg",
+            "icon": "bag"
+          },
+          {
+            "title": "Masxmenos",
+            "description": "Supermercado premium y frescos",
+            "image": "/projects/walmart-masxmenos.jpg",
+            "icon": "store"
+          },
+          {
+            "title": "Checkout & Pickup",
+            "description": "Facturación electrónica y entrega",
+            "image": "/projects/walmart-checkout.jpg",
+            "icon": "truck"
+          }
+        ],
         "facts": [
           {
             "key": "my-role",
@@ -551,6 +577,32 @@
           "VTEX IO",
           "In Production"
         ],
+        "gallery": [
+          {
+            "title": "Multi-Banner",
+            "description": "Walmart, Maxi Palí & Masxmenos",
+            "image": "/projects/walmart-centroamerica.jpg",
+            "icon": "smartphone"
+          },
+          {
+            "title": "Maxi Palí",
+            "description": "Discount bodega & bulk savings",
+            "image": "/projects/walmart-maxipali.jpg",
+            "icon": "bag"
+          },
+          {
+            "title": "Masxmenos",
+            "description": "Supermarket & fresh groceries",
+            "image": "/projects/walmart-masxmenos.jpg",
+            "icon": "store"
+          },
+          {
+            "title": "Checkout & Pickup",
+            "description": "Electronic billing & store pickup",
+            "image": "/projects/walmart-checkout.jpg",
+            "icon": "truck"
+          }
+        ],
         "facts": [
           {
             "key": "my-role",
@@ -1060,6 +1112,32 @@
           "Flutter & Mobiel",
           "VTEX IO",
           "In Productie"
+        ],
+        "gallery": [
+          {
+            "title": "Multi-Format",
+            "description": "Walmart, Maxi Palí en Masxmenos",
+            "image": "/projects/walmart-centroamerica.jpg",
+            "icon": "smartphone"
+          },
+          {
+            "title": "Maxi Palí",
+            "description": "Discountbodega & bulkbesparingen",
+            "image": "/projects/walmart-maxipali.jpg",
+            "icon": "bag"
+          },
+          {
+            "title": "Masxmenos",
+            "description": "Supermarkt & verswaren",
+            "image": "/projects/walmart-masxmenos.jpg",
+            "icon": "store"
+          },
+          {
+            "title": "Checkout & Pickup",
+            "description": "Elektronische facturatie & afhalen",
+            "image": "/projects/walmart-checkout.jpg",
+            "icon": "truck"
+          }
         ],
         "facts": [
           {

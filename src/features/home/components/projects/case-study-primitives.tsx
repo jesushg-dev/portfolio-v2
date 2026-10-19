@@ -1,46 +1,83 @@
 import { createElement } from "react";
 import {
+  Award,
+  BarChart3,
   BriefcaseBusiness,
+  Calendar,
+  CheckCircle2,
+  Code2,
+  Cpu,
   Database,
+  Eye,
+  FileText,
   Gauge,
   Globe2,
+  KeyRound,
   Layers3,
   LayoutGrid,
+  Lock,
+  Mail,
   MoveLeft,
   Music2,
   Palette,
+  Radio,
   Search,
+  Settings,
   ShieldCheck,
+  ShoppingBag,
+  Smartphone,
   Sparkles,
+  Store,
   Terminal,
+  Truck,
   User,
   Users,
+  Workflow,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { resolveIcon } from "@/lib/icons/icon-registry";
 import SkillIcon from "@/features/home/components/skills/skill-icon";
 import { Link } from "@/i18n/routing";
 import type { CaseStudySectionDTO } from "@/features/projects/lib/case-study";
 
-const SECTION_ICONS = {
-  layers: Layers3,
-  user: User,
-  gauge: Gauge,
-  case: BriefcaseBusiness,
-  shield: ShieldCheck,
-  pal: Palette,
-  db: Database,
-  term: Terminal,
-  layout: LayoutGrid,
-  search: Search,
+export const SECTION_ICONS = {
+  badge: Award,
+  bag: ShoppingBag,
   bolt: Sparkles,
+  calendar: Calendar,
+  case: BriefcaseBusiness,
+  chart: BarChart3,
+  check: CheckCircle2,
+  code: Code2,
+  cpu: Cpu,
+  db: Database,
+  eye: Eye,
+  file: FileText,
+  gauge: Gauge,
   globe: Globe2,
+  key: KeyRound,
+  layers: Layers3,
+  layout: LayoutGrid,
+  lock: Lock,
+  mail: Mail,
   music: Music2,
+  pal: Palette,
+  radio: Radio,
+  search: Search,
+  settings: Settings,
+  shield: ShieldCheck,
+  smartphone: Smartphone,
+  store: Store,
+  term: Terminal,
+  truck: Truck,
+  user: User,
   users: Users,
+  workflow: Workflow,
 } as const;
 
 export function renderCaseStudyIcon(icon: string, className: string) {
-  const Icon = SECTION_ICONS[icon as keyof typeof SECTION_ICONS] ?? Sparkles;
+  const Icon = resolveIcon(icon, Sparkles);
   return createElement(Icon, {
     className,
     "aria-hidden": true,

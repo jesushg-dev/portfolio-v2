@@ -3,7 +3,7 @@
 import { type FC, useMemo, useCallback, useTransition } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -13,13 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { UniversalIconPicker } from "@/components/shared/universal-icon-picker";
 import {
   FormActions,
   FormContent,
@@ -33,10 +27,6 @@ import {
   titleDescriptionTranslationMapSchema,
 } from "@/lib/i18n/localized-form";
 import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
-import {
-  SOFT_SKILL_ICON_KEYS,
-  resolveSoftSkillIcon,
-} from "@/features/soft-skills/lib/soft-skill-icons";
 import {
   type SoftSkillCreateFormDTO,
   type SoftSkillEditorDTO,
@@ -102,8 +92,7 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
     copyFields: ["title", "description"],
   });
 
-  const selectedIcon = useWatch({ control: form.control, name: "icon" });
-  const SelectedIcon = resolveSoftSkillIcon(selectedIcon);
+
 
   const createItem = api.softSkillsAdmin.createItem.useMutation();
   const updateItem = api.softSkillsAdmin.updateItem.useMutation();
@@ -171,35 +160,16 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
               control={form.control}
               name="icon"
               render={({ field }) => (
-                <div className="space-y-3">
-                  <FormItem label={t("icon")} inputId="soft-skill-icon">
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger id="soft-skill-icon" className="w-full">
-                        <SelectValue placeholder={t("selectIcon")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {SOFT_SKILL_ICON_KEYS.map((key) => {
-                          const Icon = resolveSoftSkillIcon(key);
-                          return (
-                            <SelectItem
-                              key={key}
-                              value={key}
-                              id={`soft-skill-icon-option-${key}`}
-                            >
-                              <span className="flex items-center gap-2">
-                                <Icon className="h-4 w-4" />
-                                {key}
-                              </span>
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                  <div className="border-border bg-muted/40 flex h-16 w-16 items-center justify-center rounded-full border">
-                    <SelectedIcon className="text-primary h-8 w-8" />
-                  </div>
-                </div>
+                <FormItem label={t("icon")} inputId="soft-skill-icon">
+                  <UniversalIconPicker
+                    value={field.value}
+                    onChange={field.onChange}
+                    preset="soft-skill"
+                    triggerId="soft-skill-icon"
+                    placeholder={t("selectIcon")}
+                    showPreview
+                  />
+                </FormItem>
               )}
             />
 

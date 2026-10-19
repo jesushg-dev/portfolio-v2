@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SkillPicker } from "@/components/admin/skill-picker";
+import { UniversalIconPicker } from "@/components/shared/universal-icon-picker";
 import {
   FormActions,
   FormContent,
@@ -229,33 +230,14 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                 name="icon"
                 render={({ field }) => (
                   <FormItem label="Icon" inputId="service-icon">
-                    <Select
-                      onValueChange={field.onChange}
+                    <UniversalIconPicker
                       value={field.value ?? "code"}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select icon" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {[
-                          "code",
-                          "server",
-                          "smartphone",
-                          "terminal",
-                          "shield",
-                          "database",
-                          "zap",
-                          "globe",
-                          "layers",
-                        ].map((iconName) => (
-                          <SelectItem key={iconName} value={iconName}>
-                            {iconName}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      onChange={field.onChange}
+                      preset="service"
+                      triggerId="service-icon"
+                      placeholder="Select icon"
+                      showPreview
+                    />
                   </FormItem>
                 )}
               />

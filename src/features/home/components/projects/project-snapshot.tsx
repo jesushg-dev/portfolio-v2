@@ -2,86 +2,16 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ExternalLink, Lock } from "lucide-react";
+import { ExternalLink, LayoutGrid, Lock } from "lucide-react";
 import { AiFillGithub } from "react-icons/ai";
-import { LuShoppingBag, LuSmartphone, LuStore, LuTruck } from "react-icons/lu";
-import type { IconType } from "react-icons/lib";
-
 import Tab from "@/components/custom-ui/custom-tab";
 import TabItem from "@/components/custom-ui/custom-tab/tab-item";
 import { MediaImage } from "@/components/shared/media-image";
+import { resolveIcon } from "@/lib/icons/icon-registry";
 import { cn } from "@/lib/utils";
 
 import { SkillChip } from "./case-study-primitives";
 import type { ProjectCaseStudyViewProps } from "./case-study-view.types";
-
-interface ProjectGalleryItem {
-  title: Record<string, string>;
-  description: Record<string, string>;
-  image: string;
-  icon: IconType;
-}
-
-const PROJECT_GALLERIES: Record<string, ProjectGalleryItem[]> = {
-  "walmart-centroamerica": [
-    {
-      title: {
-        es: "Multi-Marca",
-        en: "Multi-Banner",
-        nl: "Multi-Format",
-      },
-      description: {
-        es: "Walmart, Maxi Palí y Masxmenos",
-        en: "Walmart, Maxi Palí & Masxmenos",
-        nl: "Walmart, Maxi Palí en Masxmenos",
-      },
-      image: "/projects/walmart-centroamerica.jpg",
-      icon: LuSmartphone,
-    },
-    {
-      title: {
-        es: "Maxi Palí",
-        en: "Maxi Palí",
-        nl: "Maxi Palí",
-      },
-      description: {
-        es: "Formato bodega y ahorro en grande",
-        en: "Discount bodega & bulk savings",
-        nl: "Discountbodega & bulkbesparingen",
-      },
-      image: "/projects/walmart-maxipali.jpg",
-      icon: LuShoppingBag,
-    },
-    {
-      title: {
-        es: "Masxmenos",
-        en: "Masxmenos",
-        nl: "Masxmenos",
-      },
-      description: {
-        es: "Supermercado premium y frescos",
-        en: "Supermarket & fresh groceries",
-        nl: "Supermarkt & verswaren",
-      },
-      image: "/projects/walmart-masxmenos.jpg",
-      icon: LuStore,
-    },
-    {
-      title: {
-        es: "Checkout & Pickup",
-        en: "Checkout & Pickup",
-        nl: "Checkout & Pickup",
-      },
-      description: {
-        es: "Facturación electrónica y entrega",
-        en: "Electronic billing & store pickup",
-        nl: "Elektronische facturatie & afhalen",
-      },
-      image: "/projects/walmart-checkout.jpg",
-      icon: LuTruck,
-    },
-  ],
-};
 
 function formatDate(value: Date | string | null, locale: string) {
   if (!value) return "—";
@@ -92,46 +22,6 @@ function formatDate(value: Date | string | null, locale: string) {
   }).format(new Date(value));
 }
 
-function ProjectActions({
-  project,
-}: {
-  project: ProjectCaseStudyViewProps["project"];
-}) {
-  const t = useTranslations("main.portfolio.caseStudy");
-
-  return (
-    <div className="flex flex-wrap gap-2">
-      {project.websiteUrl ? (
-        <a
-          href={project.websiteUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="bg-card hover:bg-muted/80 text-foreground hover:text-primary border-border inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-colors"
-        >
-          <ExternalLink className="text-primary size-3.5" aria-hidden="true" />
-          <span>{t("liveSite")}</span>
-        </a>
-      ) : null}
-      {!project.isPrivate && project.githubUrl ? (
-        <a
-          href={project.githubUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="bg-card hover:bg-muted/80 text-foreground hover:text-primary border-border inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-colors"
-        >
-          <AiFillGithub className="text-primary size-3.5" aria-hidden="true" />
-          <span>{t("viewSource")}</span>
-        </a>
-      ) : project.isPrivate ? (
-        <span className="bg-card border-border text-muted-foreground inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium">
-          <Lock className="size-3.5" aria-hidden="true" />
-          <span>{t("privateRepository")}</span>
-        </span>
-      ) : null}
-    </div>
-  );
-}
-
 export default function ProjectSnapshot({
   project,
 }: {
@@ -139,16 +29,17 @@ export default function ProjectSnapshot({
 }) {
   const locale = useLocale();
   const t = useTranslations("main.portfolio.caseStudy");
-  const tPortfolio = useTranslations("main.portfolio");
   const [activeScreenIndex, setActiveScreenIndex] = useState(0);
 
-  const gallery = project.slug ? PROJECT_GALLERIES[project.slug] : undefined;
+  const gallery =
+    project.caseStudy.gallery && project.caseStudy.gallery.length > 0
+      ? project.caseStudy.gallery
+      : undefined;
   const currentImage = gallery?.[activeScreenIndex]
     ? gallery[activeScreenIndex].image
     : project.image;
   const currentTitle = gallery?.[activeScreenIndex]
-    ? (gallery[activeScreenIndex].title[locale] ??
-      gallery[activeScreenIndex].title.es)
+    ? gallery[activeScreenIndex].title
     : project.title;
 
   const projectTypes: Record<string, string> = {
@@ -165,9 +56,9 @@ export default function ProjectSnapshot({
     QUALITY_DELIVERY: t("projectTypes.QUALITY_DELIVERY"),
   };
   const projectKinds: Record<string, string> = {
-    PROFESSIONAL: tPortfolio("kind.PROFESSIONAL"),
-    PERSONAL: tPortfolio("kind.PERSONAL"),
-    LEARNING: tPortfolio("kind.LEARNING"),
+    PROFESSIONAL: t("kind.PROFESSIONAL"),
+    PERSONAL: t("kind.PERSONAL"),
+    LEARNING: t("kind.LEARNING"),
   };
   const timeline =
     project.startedAt || project.endedAt
@@ -214,9 +105,9 @@ export default function ProjectSnapshot({
                 <TabItem
                   key={item.image}
                   index={idx}
-                  icon={item.icon}
-                  title={item.title[locale] ?? item.title.es}
-                  description={item.description[locale] ?? item.description.es}
+                  icon={resolveIcon(item.icon, LayoutGrid)}
+                  title={item.title}
+                  description={item.description}
                 />
               ))}
             </Tab>
@@ -277,9 +168,8 @@ export default function ProjectSnapshot({
           <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
             {gallery.map((item, idx) => {
               const isSelected = activeScreenIndex === idx;
-              const title = item.title[locale] ?? item.title.es;
-              const description =
-                item.description[locale] ?? item.description.es;
+              const title = item.title;
+              const description = item.description;
               return (
                 <button
                   key={item.image}
@@ -346,9 +236,49 @@ export default function ProjectSnapshot({
               />
             ))}
           </ul>
-          <ProjectActions project={project} />
+          <ProjectActions project={project} t={t} />
         </div>
       </div>
     </>
+  );
+}
+
+function ProjectActions({
+  project,
+  t,
+}: {
+  project: ProjectCaseStudyViewProps["project"];
+  t: ReturnType<typeof useTranslations<"main.portfolio.caseStudy">>;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {project.websiteUrl ? (
+        <a
+          href={project.websiteUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="bg-card hover:bg-muted/80 text-foreground hover:text-primary border-border inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-colors"
+        >
+          <ExternalLink className="text-primary size-3.5" aria-hidden="true" />
+          <span>{t("liveSite")}</span>
+        </a>
+      ) : null}
+      {!project.isPrivate && project.githubUrl ? (
+        <a
+          href={project.githubUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="bg-card hover:bg-muted/80 text-foreground hover:text-primary border-border inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium transition-colors"
+        >
+          <AiFillGithub className="text-primary size-3.5" aria-hidden="true" />
+          <span>{t("viewSource")}</span>
+        </a>
+      ) : project.isPrivate ? (
+        <span className="bg-card border-border text-muted-foreground inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-sm font-medium">
+          <Lock className="size-3.5" aria-hidden="true" />
+          <span>{t("privateRepository")}</span>
+        </span>
+      ) : null}
+    </div>
   );
 }

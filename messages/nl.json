@@ -918,6 +918,11 @@
         "LEARNING": "Leren"
       },
       "caseStudy": {
+        "kind": {
+          "PROFESSIONAL": "Klantwerk",
+          "PERSONAL": "Persoonlijk",
+          "LEARNING": "Leren"
+        },
         "challenge": "De uitdaging",
         "approach": "Architectuur & aanpak",
         "outcome": "Resultaat & impact",

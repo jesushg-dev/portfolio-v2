@@ -44,3 +44,19 @@ Do not invent custom `<button>` groups, segmented controls, or hand-rolled tab b
    - **Design 2 (Card / Detailed):** `minimal={false}`. Structured card tabs with large icon, title, and description (Services, CV, Experience).
 2. **Admin & Forms Tabs (`@/components/ui/tabs`):**
    - Base UI / Shadcn tabs (`Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`) exclusively for admin consoles and form dialogs.
+
+# Universal Icon System & Selector — Canonical Component: UniversalIconPicker & DynamicIcon
+
+### ❌ NEVER create ad-hoc icon select pickers, hardcoded string icon dropdowns, or parallel icon resolution maps
+
+Do not create custom icon dropdowns, inline string-based icon selects (`<Select>{["code", "server"].map(...)}</Select>`), or hand-rolled string-to-icon dictionaries across feature folders.
+
+### ✅ ALWAYS use or extend `UniversalIconPicker`, `DynamicIcon`, and `icon-registry`
+
+1. **For Form Inputs & Admin Selectors (`UniversalIconPicker`):**
+   - Import `UniversalIconPicker` from `@/components/shared/universal-icon-picker`.
+   - Use existing presets (`"service"`, `"soft-skill"`, `"case-study"`, `"all"`).
+   - If a new domain or icon category is needed, **extend** `src/lib/icons/icon-registry.ts` with new options / presets instead of creating a separate picker.
+2. **For Dynamic Rendering from Database / String Keys (`DynamicIcon` / `resolveIcon`):**
+   - Import `DynamicIcon` from `@/components/shared/dynamic-icon` to render any registered icon key in JSX.
+   - Or import `resolveIcon` from `@/lib/icons/icon-registry` when passing the icon component directly to primitives like `TabItem`.

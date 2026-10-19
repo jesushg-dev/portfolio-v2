@@ -17,7 +17,73 @@
       "approach": "Implementé una arquitectura basada en características (src/features/) con Next.js App Router, TypeScript estricto, Prisma + MongoDB para flexibilidad de esquema y tRPC para seguridad de tipos end-to-end. La UI utiliza únicamente tokens semánticos y componentes Shadcn adaptados.",
       "outcome": "LCP en producción < 1.8s, accesibilidad WCAG 2.2 AAA auditada al 100% y una plataforma autoadministrable completa que elimina la dependencia y costos de CMS de terceros.",
       "caseStudy": {
-        "chips": ["Personal", "Full-stack", "En producción"],
+        "chips": [
+          "Personal",
+          "Full-stack",
+          "En producción"
+        ],
+        "gallery": [
+          {
+            "title": "Inicio",
+            "description": "Landing principal y experiencia interactiva",
+            "image": "/projects/portfolio.jpg",
+            "icon": "layout"
+          },
+          {
+            "title": "Spotify en Vivo",
+            "description": "Mockup iOS con telemetría en tiempo real",
+            "image": "/projects/portfolio-spotify-player.png",
+            "icon": "music"
+          },
+          {
+            "title": "Letras LRC",
+            "description": "Karaoke a 60 FPS con scroll activo",
+            "image": "/projects/portfolio-spotify-lyrics.jpg",
+            "icon": "music"
+          },
+          {
+            "title": "Dashboard",
+            "description": "Analítica de tráfico y mapa de visitantes",
+            "image": "/projects/portfolio-admin-dashboard.jpg",
+            "icon": "chart"
+          },
+          {
+            "title": "Editor de CV",
+            "description": "Edición modular de currículum y preview",
+            "image": "/projects/portfolio-resume-engine.jpg",
+            "icon": "file"
+          },
+          {
+            "title": "Job Tracker",
+            "description": "Pipeline laboral y agenda de eventos",
+            "image": "/projects/portfolio-job-tracker.jpg",
+            "icon": "calendar"
+          },
+          {
+            "title": "Credenciales BYO",
+            "description": "Claves de API con cifrado AES-256",
+            "image": "/projects/portfolio-admin-integrations.jpg",
+            "icon": "key"
+          },
+          {
+            "title": "Seguridad & 2FA",
+            "description": "2FA y llaves biométricas WebAuthn",
+            "image": "/projects/portfolio-admin-security.jpg",
+            "icon": "lock"
+          },
+          {
+            "title": "Páginas de Proceso",
+            "description": "Editor visual modular con widgets",
+            "image": "/projects/portfolio-admin-process.jpg",
+            "icon": "workflow"
+          },
+          {
+            "title": "Mobile",
+            "description": "Diseño responsivo fluido y táctil",
+            "image": "/projects/portfolio-mobile.jpg",
+            "icon": "smartphone"
+          }
+        ],
         "facts": [
           {
             "key": "my-role",
@@ -201,7 +267,9 @@
                 "body": "El contenido por inquilino varía en forma, así que la flexibilidad del esquema acelera la iteración mientras Prisma mantiene cada consulta tipada.",
                 "value": "",
                 "icon": "",
-                "tags": ["PostgreSQL con migraciones SQL"],
+                "tags": [
+                  "PostgreSQL con migraciones SQL"
+                ],
                 "note": "La integridad se mueve a la aplicación. Por ejemplo, customDomain no es @unique porque los índices únicos de MongoDB permiten un único null, así que la unicidad se verifica en código."
               },
               {
@@ -211,7 +279,10 @@
                 "body": "El tipo de procedimiento indica quién puede llamarlo, y las mutaciones toman ctx.user.id, así que un cliente nunca puede actuar como otro usuario. Los tipos fluyen desde la base de datos hasta la IU de administración.",
                 "value": "",
                 "icon": "",
-                "tags": ["Controladores de rutas REST", "GraphQL"],
+                "tags": [
+                  "Controladores de rutas REST",
+                  "GraphQL"
+                ],
                 "note": "Está estrechamente acoplado a TypeScript y es menos conveniente para consumidores de API de terceros."
               },
               {
@@ -221,7 +292,9 @@
                 "body": "La facturación, las cuotas y la residencia de datos permanecen con el inquilino, y un inquilino nunca puede gastar la cuota de otro. Los secretos se cifran en reposo con AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": ["Claves compartidas de la API de la plataforma"],
+                "tags": [
+                  "Claves compartidas de la API de la plataforma"
+                ],
                 "note": "Más configuración por inquilino. Las funciones quedan desactivadas hasta conectarlas, y la IA tiene un modo JSON manual."
               },
               {
@@ -231,7 +304,9 @@
                 "body": "6 temas (3 paletas, claro y oscuro) más un tema personalizado definido por el usuario provienen de una sola capa de tokens, sin clases dark: en los componentes.",
                 "value": "",
                 "icon": "",
-                "tags": ["Variantes dark: de Tailwind en cada elemento"],
+                "tags": [
+                  "Variantes dark: de Tailwind en cada elemento"
+                ],
                 "note": "Requiere disciplina de tokens: cada componente nuevo debe usar tokens."
               },
               {
@@ -246,6 +321,19 @@
                   "Incluir Chromium en cada ruta"
                 ],
                 "note": "Un endpoint interno adicional para operar, protegido con un secreto bearer."
+              },
+              {
+                "key": "spotify-lrc-sync-privacy",
+                "title": "Reproductor Spotify en vivo con letras LRC y privacidad estricta",
+                "summary": "Telemetría de audio en tiempo real y letras sincronizadas vía LRCLIB en un mockup iOS nativo, con proxies server-side que previenen cookies de terceros y filtrado de sesiones privadas.",
+                "body": "En lugar de embeber un reproductor iframe de Spotify con cookies de rastreo y limitaciones de personalización, el backend consulta Spotify mediante tenantProcedure y resuelve letras timestamped (.lrc) en caché CDN a través de LRCLIB. El frontend interpola el progreso en milisegundos para scroll y resaltado tipo karaoke a 60 FPS, detectando silenciosamente sesiones privadas y podcasts para proteger la privacidad del usuario sin exponer tokens ni IPs.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Iframe oficial de Spotify con rastreadores",
+                  "SDK web de Spotify que exige cuenta Premium"
+                ],
+                "note": "Cero cookies de terceros para los visitantes y caché server-side de 7 días para las letras."
               }
             ],
             "footnoteTitle": "",
@@ -282,7 +370,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["(inicio) público", "(admin) /admin", "/api/*"],
+                "tags": [
+                  "(inicio) público",
+                  "(admin) /admin",
+                  "/api/*"
+                ],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -306,7 +398,12 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["22 módulos", "UI", "lib", "routers de servidor"],
+                "tags": [
+                  "22 módulos",
+                  "UI",
+                  "lib",
+                  "routers de servidor"
+                ],
                 "note": "Cliente de Prisma"
               },
               {
@@ -316,7 +413,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["Prisma", "MongoDB", "84 modelos"],
+                "tags": [
+                  "Prisma",
+                  "MongoDB",
+                  "84 modelos"
+                ],
                 "note": ""
               }
             ],
@@ -450,7 +551,11 @@
                 "body": "Portada interactiva, perfil profesional, resumen de experiencia, habilidades y navegación de alto impacto con Next.js App Router.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -460,7 +565,11 @@
                 "body": "Currículum web interactivo, descargas en PDF y DOCX generadas dinámicamente en caché y distribución protegida contra límites de tasa.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
+                "tags": [
+                  "PDF Engine",
+                  "DOCX Cache",
+                  "Rate Limiting"
+                ],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -470,7 +579,11 @@
                 "body": "Exploración facetada de proyectos por stack, métricas auditadas en producción, decisiones de ingeniería y lecciones aprendidas.",
                 "value": "Estudios de Caso",
                 "icon": "case",
-                "tags": ["Showcase", "Filtros Facetados", "Arquitectura"],
+                "tags": [
+                  "Showcase",
+                  "Filtros Facetados",
+                  "Arquitectura"
+                ],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -480,7 +593,11 @@
                 "body": "Consola interactiva con comandos ejecutables, categorización de competencias técnicas e insignias visuales con SkillIcon.",
                 "value": "Terminal Interactiva",
                 "icon": "term",
-                "tags": ["CLI Terminal", "SkillIcon", "UX Interactiva"],
+                "tags": [
+                  "CLI Terminal",
+                  "SkillIcon",
+                  "UX Interactiva"
+                ],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -489,39 +606,86 @@
                 "summary": "Optimización táctil completa y navegación ágil",
                 "body": "Navegación móvil con gestos táctiles, cajón de filtros adaptable, menús semánticos y 60 FPS garantizados en pantallas de smartphones.",
                 "value": "100% Mobile Ready",
-                "icon": "layout",
-                "tags": ["Mobile First", "Animaciones Fluidas", "Touch Ready"],
+                "icon": "smartphone",
+                "tags": [
+                  "Mobile First",
+                  "Animaciones Fluidas",
+                  "Touch Ready"
+                ],
                 "note": "/projects/portfolio-mobile.jpg"
+              },
+              {
+                "key": "certificates-catalog",
+                "title": "Catálogo de certificaciones y credenciales",
+                "summary": "Explorador por especialidad técnica con verificación de credenciales",
+                "body": "Filtros en tiempo real por frontend, backend, devops y ciberseguridad, con insignias de tecnologías, verificación de ID de credencial y lightbox.",
+                "value": "Filtros Facetados",
+                "icon": "badge",
+                "tags": [
+                  "Certificados",
+                  "Verificación",
+                  "SkillIcon"
+                ],
+                "note": "/previews/certificates.webp"
+              },
+              {
+                "key": "timeline-interactive",
+                "title": "Línea de tiempo profesional e hitos",
+                "summary": "Visualización interactiva de trayectoria y roles clave",
+                "body": "Recorrido cronológico interactivo con hitos de ingeniería, filtros por categoría y diseño adaptativo.",
+                "value": "Línea de Tiempo",
+                "icon": "layers",
+                "tags": [
+                  "Timeline",
+                  "Carrera",
+                  "Hitos"
+                ],
+                "note": "/previews/timeline.webp"
               },
               {
                 "key": "admin-cms",
                 "title": "CMS de administración",
-                "summary": "",
-                "body": "Gestión de contenido en tiempo real por inquilino en /admin, con estado de traducción por idioma.",
-                "value": "",
+                "summary": "Panel de control y analítica de tráfico en tiempo real",
+                "body": "Gestión de contenido en tiempo real por inquilino en /admin con métricas de visitas, páginas top, desglose geográfico de tráfico y estado de traducción.",
+                "value": "Dashboard en Tiempo Real",
                 "icon": "db",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "Panel Admin",
+                  "Métricas",
+                  "Geolocalización",
+                  "Gestión de Contenido"
+                ],
+                "note": "/projects/portfolio-admin-dashboard.jpg"
               },
               {
                 "key": "job-tracker",
                 "title": "Job Tracker",
-                "summary": "",
-                "body": "Un CRM para solicitudes: empresas, estados, eventos, documentos y sincronización con Google Calendar.",
-                "value": "",
-                "icon": "search",
-                "tags": [],
-                "note": ""
+                "summary": "CRM de postulaciones, agenda de entrevistas y seguimiento de procesos",
+                "body": "Un CRM especializado para solicitudes laborales: empresas, etapas del pipeline (aplicado, ghosted, rechazado, ofertas), agenda de eventos, notas y sincronización con Google Calendar.",
+                "value": "Pipeline & Agenda",
+                "icon": "calendar",
+                "tags": [
+                  "CRM Laboral",
+                  "Pipeline",
+                  "Google Calendar",
+                  "Eventos"
+                ],
+                "note": "/projects/portfolio-job-tracker.jpg"
               },
               {
                 "key": "resume-engine",
                 "title": "Resume Engine",
-                "summary": "",
-                "body": "Importación de currículum, adaptación ATS que conserva el diseño y preparación para entrevistas, usando el proveedor de IA de cada inquilino.",
-                "value": "",
+                "summary": "Editor interactivo de CV con previsualización en vivo e importación de documentos",
+                "body": "Gestión interactiva de currículum con pestañas por sección, conmutador de idiomas en vivo, adaptación ATS e integración con proveedores de IA por inquilino.",
+                "value": "Editor Visual Multilingüe",
                 "icon": "bolt",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "Editor de CV",
+                  "i18n",
+                  "ATS Optimizer",
+                  "Live Preview"
+                ],
+                "note": "/projects/portfolio-resume-engine.jpg"
               },
               {
                 "key": "three-languages",
@@ -535,33 +699,181 @@
               },
               {
                 "key": "first-party-analytics",
-                "title": "Analítica propia",
-                "summary": "",
-                "body": "Estadísticas de vistas de página sin rastreador de terceros. Respeta Do Not Track y Global Privacy Control.",
-                "value": "",
-                "icon": "gauge",
-                "tags": [],
-                "note": ""
+                "title": "Analítica propia y privacidad",
+                "summary": "Telemetría interna sin cookies de terceros",
+                "body": "Estadísticas de visitas y páginas más consultadas sin rastreador externo. Respeta estrictamente Do Not Track y Global Privacy Control.",
+                "value": "100% Privacy-First",
+                "icon": "chart",
+                "tags": [
+                  "Sin Cookies",
+                  "DNT / GPC",
+                  "Telemetría"
+                ],
+                "note": "/previews/stats.webp"
               },
               {
                 "key": "integrations",
-                "title": "Integraciones",
-                "summary": "",
-                "body": "Widget Now Playing de Spotify y formulario de contacto por correo, conectados por inquilino.",
-                "value": "",
+                "title": "Reproductor Spotify en vivo con letras LRC",
+                "summary": "Mockup interactivo estilo iOS con sincronización karaoke y reproducción activa",
+                "body": "Visualización en vivo de la música actual con sincronización de letras LRC vía LRCLIB, extracción dinámica de paleta de colores del álbum, soporte para sesión privada y conexión segura multi-tenant.",
+                "value": "Spotify + LRCLIB",
                 "icon": "music",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "Spotify Web API",
+                  "LRCLIB Sync",
+                  "Mockup iOS",
+                  "Multi-Tenant"
+                ],
+                "note": "/projects/portfolio-spotify-player.png"
               },
               {
                 "key": "process-pages",
-                "title": "Páginas de proceso",
-                "summary": "",
-                "body": "Cómo uso IA y cómo colaboro con QA, además de las páginas Now, Uses y Colophon.",
-                "value": "",
+                "title": "Páginas de metodología de ingeniería",
+                "summary": "Documentación interactiva de flujos de desarrollo y calidad",
+                "body": "Artículos interactivos sobre cómo utilizo IA en el desarrollo diario y cómo colaboro con QA, además de las páginas Now, Uses y Colophon.",
+                "value": "Procesos Documentados",
                 "icon": "users",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "AI Workflow",
+                  "QA",
+                  "Metodología"
+                ],
+                "note": "/previews/process-how-i-use-ai.webp"
+              },
+              {
+                "key": "resume-pdf-exports",
+                "title": "Exportación de currículum a PDF y DOCX en múltiples idiomas",
+                "summary": "Motor de renderizado de CV profesional optimizado para ATS y reclutadores",
+                "body": "Generación de documentos PDF de alta precisión tipográfica y descarga en DOCX estructurado, adaptados a plantillas en español, inglés y neerlandés con aislamiento de renderizado.",
+                "value": "ATS-Ready PDF",
+                "icon": "file",
+                "tags": [
+                  "Generación PDF",
+                  "DOCX",
+                  "Multi-Idioma",
+                  "ATS"
+                ],
+                "note": "/projects/portfolio-resume-pdf-es.jpg"
+              },
+              {
+                "key": "spotify-widget-mini",
+                "title": "Widget de reproducción discreto en pie de página",
+                "summary": "Indicador Now Playing no intrusivo integrado en el footer global",
+                "body": "Componente minimalista en el pie de página que muestra la pista actual con ecualizador animado, barra de progreso y botón de despliegue al reproductor iOS con letras.",
+                "value": "Now Playing en Footer",
+                "icon": "radio",
+                "tags": [
+                  "Now Playing",
+                  "Footer",
+                  "Ecualizador",
+                  "Minimalista"
+                ],
+                "note": "/projects/portfolio-spotify-widget.png"
+              },
+              {
+                "key": "admin-integrations-byo",
+                "title": "Gestión de credenciales e integraciones independientes (BYO)",
+                "summary": "Panel de conexión de APIs por inquilino con cifrado en reposo AES-256-GCM",
+                "body": "Permite a cada inquilino conectar sus credenciales de Spotify OAuth, Resend, UploadThing, IA y Google Calendar, superando límites de plataforma y garantizando aislamiento absoluto.",
+                "value": "AES-256 Cifrado",
+                "icon": "key",
+                "tags": [
+                  "BYO Keys",
+                  "AES-256",
+                  "OAuth",
+                  "Multi-Tenant"
+                ],
+                "note": "/projects/portfolio-admin-integrations.jpg"
+              },
+              {
+                "key": "admin-security-passkeys",
+                "title": "Seguridad de cuenta, 2FA y Passkeys WebAuthn",
+                "summary": "Autenticación multifactor y biometría con Touch ID, Face ID y Windows Hello",
+                "body": "Panel administrativo de seguridad con soporte para verificación en dos pasos (TOTP / correo) y gestión de llaves de acceso Passkeys resistentes a phishing mediante Better-Auth.",
+                "value": "WebAuthn / Passkeys",
+                "icon": "lock",
+                "tags": [
+                  "Passkeys",
+                  "2FA",
+                  "WebAuthn",
+                  "Biometría"
+                ],
+                "note": "/projects/portfolio-admin-security.jpg"
+              },
+              {
+                "key": "admin-process-builder",
+                "title": "Editor visual modular de páginas de proceso",
+                "summary": "Constructor drag-and-drop para documentar metodologías de desarrollo e IA",
+                "body": "Editor administrativo con widgets modulares (Hero, navegación interna, timeline, herramientas, roles, FAQ y CTA) con previsualización en vivo y sincronización trilingüe.",
+                "value": "Widget Drag & Drop",
+                "icon": "workflow",
+                "tags": [
+                  "Drag & Drop",
+                  "Widgets",
+                  "CMS Modular",
+                  "i18n"
+                ],
+                "note": "/projects/portfolio-admin-process.jpg"
+              },
+              {
+                "key": "admin-hero",
+                "title": "Editor de identidad, perfil y sección Hero",
+                "summary": "Configuración en vivo del encabezado del portafolio con disponibilidad y SEO",
+                "body": "Gestión visual de identidad, foto de perfil, badge de disponibilidad laboral, subtítulo profesional y propuesta de valor con previsualización en tiempo real.",
+                "value": "Perfil en Vivo",
+                "icon": "user",
+                "tags": [
+                  "Hero Editor",
+                  "Disponibilidad",
+                  "SEO",
+                  "Live Preview"
+                ],
+                "note": "/projects/portfolio-admin-hero.jpg"
+              },
+              {
+                "key": "admin-certificates",
+                "title": "Gestión administrativa de certificaciones y credenciales",
+                "summary": "Formulario de acreditaciones con asignación de habilidades y validación",
+                "body": "Gestión en tiempo real de títulos, entidades emisoras, identificadores de credencial, URLs de verificación y asociación de tecnologías vinculadas mediante SkillIcon.",
+                "value": "Verificación de Títulos",
+                "icon": "badge",
+                "tags": [
+                  "Acreditaciones",
+                  "SkillIcon",
+                  "Credenciales",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-certificates.jpg"
+              },
+              {
+                "key": "admin-timeline",
+                "title": "Gestor de trayectoria e hitos en el Timeline",
+                "summary": "Administración cronológica de experiencias laborales, educación y proyectos",
+                "body": "Formulario trilingüe para registrar posiciones, organizaciones, períodos, fechas activas e imágenes de apoyo para el timeline interactivo.",
+                "value": "Gestión Cronológica",
+                "icon": "layers",
+                "tags": [
+                  "Timeline",
+                  "Trayectoria",
+                  "Hitos",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-timeline.jpg"
+              },
+              {
+                "key": "admin-skills",
+                "title": "Catálogo y destacado de habilidades técnicas",
+                "summary": "Administración de tecnologías, categorización por stack y modo destacado",
+                "body": "Control de tecnologías con URLs de wiki, iconos vectoriales, categorización en Frontend/Backend/DevOps/Mobile y conmutador para destacar en la terminal interactiva.",
+                "value": "Ecosistema de Skills",
+                "icon": "code",
+                "tags": [
+                  "Habilidades",
+                  "Stack",
+                  "Terminal",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-skills.jpg"
               }
             ],
             "footnoteTitle": "",
@@ -611,7 +923,7 @@
                 "key": "secrets",
                 "title": "Secretos",
                 "summary": "",
-                "body": "Las claves API del inquilino se cifran en reposo con AES-256-GCM, sin respaldo a claves de la plataforma.",
+                "body": "Las credenciales e integraciones por inquilino (Spotify OAuth, Google Calendar, Resend, proveedores de IA) se cifran en reposo con AES-256-GCM, particionadas por userId sin claves compartidas.",
                 "value": "",
                 "icon": "",
                 "tags": [],
@@ -641,7 +953,7 @@
                 "key": "privacy",
                 "title": "Privacidad",
                 "summary": "",
-                "body": "Solo analítica de primera parte. Respeta DNT y Global Privacy Control y omite bots y al propietario del sitio.",
+                "body": "Solo analítica de primera parte y telemetría privada. El reproductor de Spotify consulta desde el servidor de Next.js sin exponer la IP del visitante a Spotify ni inyectar cookies de rastreo, respetando sesiones privadas y DNT/GPC.",
                 "value": "",
                 "icon": "",
                 "tags": [],
@@ -940,7 +1252,73 @@
       "approach": "Implemented a Feature-Based Architecture (src/features/) with Next.js App Router, strict TypeScript, Prisma + MongoDB for schema flexibility, and tRPC for end-to-end type safety. UI components strictly enforce semantic design tokens.",
       "outcome": "Production LCP < 1.8s, 100% audited WCAG 2.2 AAA accessibility, and a self-managed platform completely eliminating third-party CMS overhead.",
       "caseStudy": {
-        "chips": ["Personal", "Full-stack", "In production"],
+        "chips": [
+          "Personal",
+          "Full-stack",
+          "In production"
+        ],
+        "gallery": [
+          {
+            "title": "Home",
+            "description": "Main landing & interactive showcase",
+            "image": "/projects/portfolio.jpg",
+            "icon": "layout"
+          },
+          {
+            "title": "Live Spotify",
+            "description": "iOS mockup with real-time telemetry",
+            "image": "/projects/portfolio-spotify-player.png",
+            "icon": "music"
+          },
+          {
+            "title": "LRC Lyrics",
+            "description": "60 FPS karaoke with active scroll",
+            "image": "/projects/portfolio-spotify-lyrics.jpg",
+            "icon": "music"
+          },
+          {
+            "title": "Dashboard",
+            "description": "Traffic analytics & visitor breakdown",
+            "image": "/projects/portfolio-admin-dashboard.jpg",
+            "icon": "chart"
+          },
+          {
+            "title": "CV Editor",
+            "description": "Modular resume editing & live preview",
+            "image": "/projects/portfolio-resume-engine.jpg",
+            "icon": "file"
+          },
+          {
+            "title": "Job Tracker",
+            "description": "Application pipeline & events schedule",
+            "image": "/projects/portfolio-job-tracker.jpg",
+            "icon": "calendar"
+          },
+          {
+            "title": "BYO Credentials",
+            "description": "API keys with AES-256 encryption",
+            "image": "/projects/portfolio-admin-integrations.jpg",
+            "icon": "key"
+          },
+          {
+            "title": "Security & 2FA",
+            "description": "2FA & WebAuthn biometric keys",
+            "image": "/projects/portfolio-admin-security.jpg",
+            "icon": "lock"
+          },
+          {
+            "title": "Process Pages",
+            "description": "Modular visual editor with widgets",
+            "image": "/projects/portfolio-admin-process.jpg",
+            "icon": "workflow"
+          },
+          {
+            "title": "Mobile",
+            "description": "Fluid responsive layout & touch navigation",
+            "image": "/projects/portfolio-mobile.jpg",
+            "icon": "smartphone"
+          }
+        ],
         "facts": [
           {
             "key": "my-role",
@@ -1086,7 +1464,9 @@
                 "body": "Each of the 22 modules (CV, Job Tracker, Resume Engine, Spotify, analytics…) owns its UI, lib and tRPC routers, so one feature can change without touching the others.",
                 "value": "",
                 "icon": "",
-                "tags": ["Layer-based folders (components / hooks / services)"],
+                "tags": [
+                  "Layer-based folders (components / hooks / services)"
+                ],
                 "note": "Shared code needs deliberate boundaries as modules grow."
               },
               {
@@ -1122,7 +1502,9 @@
                 "body": "Per-tenant content varies in shape, so schema flexibility speeds iteration while Prisma keeps every query typed.",
                 "value": "",
                 "icon": "",
-                "tags": ["PostgreSQL with SQL migrations"],
+                "tags": [
+                  "PostgreSQL with SQL migrations"
+                ],
                 "note": "Integrity moves into the app. For example, customDomain isn't @unique because MongoDB unique indexes allow a single null, so uniqueness is checked in code."
               },
               {
@@ -1132,7 +1514,10 @@
                 "body": "The procedure type states who may call it, and mutations take ctx.user.id, so a client can never act as another user. Types flow from the database to the admin UI.",
                 "value": "",
                 "icon": "",
-                "tags": ["REST route handlers", "GraphQL"],
+                "tags": [
+                  "REST route handlers",
+                  "GraphQL"
+                ],
                 "note": "Tightly coupled to TypeScript and less convenient for third-party API consumers."
               },
               {
@@ -1142,7 +1527,9 @@
                 "body": "Billing, quotas and data residency stay with the tenant, and one tenant can never spend another's quota. Secrets are encrypted at rest with AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": ["Shared platform API keys"],
+                "tags": [
+                  "Shared platform API keys"
+                ],
                 "note": "More setup per tenant. Features stay off until connected, and AI has a manual JSON mode."
               },
               {
@@ -1152,7 +1539,9 @@
                 "body": "6 themes (3 palettes, light and dark) plus a user-defined custom theme come from one token layer, with no dark: classes in components.",
                 "value": "",
                 "icon": "",
-                "tags": ["Tailwind dark: variants on every element"],
+                "tags": [
+                  "Tailwind dark: variants on every element"
+                ],
                 "note": "Requires token discipline: every new component must use tokens."
               },
               {
@@ -1167,6 +1556,19 @@
                   "Bundling Chromium into every route"
                 ],
                 "note": "One extra internal endpoint to operate, protected with a bearer secret."
+              },
+              {
+                "key": "spotify-lrc-sync-privacy",
+                "title": "Live Spotify player with synced LRC lyrics & strict privacy",
+                "summary": "Real-time audio telemetry and synchronized lyrics via LRCLIB inside a native iOS mockup, using server-side proxies that prevent third-party cookies and private listening leakage.",
+                "body": "Rather than embedding an official Spotify iframe player with third-party tracking cookies and customization constraints, the backend queries Spotify via tenantProcedure and resolves timestamped lyrics (.lrc) in a CDN cache via LRCLIB. The frontend interpolates playback progress in milliseconds for smooth 60 FPS karaoke scrolling and highlighting, silently detecting private sessions and podcasts to safeguard user privacy without exposing tokens or IPs.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Official Spotify iframe with third-party trackers",
+                  "Spotify Web Playback SDK requiring Premium account"
+                ],
+                "note": "Zero third-party cookies for visitors and 7-day server-side caching for lyrics."
               }
             ],
             "footnoteTitle": "",
@@ -1203,7 +1605,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["(home) public", "(admin) /admin", "/api/*"],
+                "tags": [
+                  "(home) public",
+                  "(admin) /admin",
+                  "/api/*"
+                ],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -1227,7 +1633,12 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["22 modules", "UI", "lib", "server routers"],
+                "tags": [
+                  "22 modules",
+                  "UI",
+                  "lib",
+                  "server routers"
+                ],
                 "note": "Prisma client"
               },
               {
@@ -1237,7 +1648,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["Prisma", "MongoDB", "84 models"],
+                "tags": [
+                  "Prisma",
+                  "MongoDB",
+                  "84 models"
+                ],
                 "note": ""
               }
             ],
@@ -1371,7 +1786,11 @@
                 "body": "Interactive hero, professional profile, experience highlights, skills breakdown, and high-impact Next.js App Router architecture.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -1381,7 +1800,11 @@
                 "body": "Interactive web resume, on-the-fly cached PDF and DOCX exports, and rate-limited email delivery.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
+                "tags": [
+                  "PDF Engine",
+                  "DOCX Cache",
+                  "Rate Limiting"
+                ],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -1391,7 +1814,11 @@
                 "body": "Faceted project exploration by tech stack, production-audited metrics, engineering decisions, and architectural tradeoffs.",
                 "value": "Case Studies",
                 "icon": "case",
-                "tags": ["Showcase", "Faceted Filters", "Architecture"],
+                "tags": [
+                  "Showcase",
+                  "Faceted Filters",
+                  "Architecture"
+                ],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -1401,7 +1828,11 @@
                 "body": "Interactive console with executable commands, technical proficiency mapping, and dynamic visual badges via SkillIcon.",
                 "value": "Interactive Terminal",
                 "icon": "term",
-                "tags": ["CLI Terminal", "SkillIcon", "Interactive UX"],
+                "tags": [
+                  "CLI Terminal",
+                  "SkillIcon",
+                  "Interactive UX"
+                ],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -1410,39 +1841,86 @@
                 "summary": "Full touch optimization and agile navigation",
                 "body": "Mobile navigation with touch gestures, adaptive drawer sheets, semantic menus, and 60 FPS guaranteed on smaller smartphone displays.",
                 "value": "100% Mobile Ready",
-                "icon": "layout",
-                "tags": ["Mobile First", "Fluid Animation", "Touch Ready"],
+                "icon": "smartphone",
+                "tags": [
+                  "Mobile First",
+                  "Fluid Animation",
+                  "Touch Ready"
+                ],
                 "note": "/projects/portfolio-mobile.jpg"
+              },
+              {
+                "key": "certificates-catalog",
+                "title": "Certifications & credentials catalog",
+                "summary": "Technical specialty explorer with verified credential validation",
+                "body": "Real-time filters by frontend, backend, devops, and cybersecurity, with technology badges, credential ID verification, and full-resolution lightbox viewer.",
+                "value": "Faceted Filters",
+                "icon": "badge",
+                "tags": [
+                  "Certifications",
+                  "Verification",
+                  "SkillIcon"
+                ],
+                "note": "/previews/certificates.webp"
+              },
+              {
+                "key": "timeline-interactive",
+                "title": "Professional interactive timeline & milestones",
+                "summary": "Interactive career trajectory and key milestones viewer",
+                "body": "Chronological interactive walkthrough with engineering achievements, category filters, and responsive layout.",
+                "value": "Career Timeline",
+                "icon": "layers",
+                "tags": [
+                  "Timeline",
+                  "Career",
+                  "Milestones"
+                ],
+                "note": "/previews/timeline.webp"
               },
               {
                 "key": "admin-cms",
                 "title": "Admin CMS",
-                "summary": "",
-                "body": "Real-time per-tenant content management in /admin, with translation completion status per locale.",
-                "value": "",
+                "summary": "Real-time tenant control panel and visitor traffic analytics",
+                "body": "Real-time content management per tenant in /admin with translation completeness indicators, visitor metrics, top pages, and geographic traffic distribution.",
+                "value": "Real-Time Dashboard",
                 "icon": "db",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "Admin Panel",
+                  "Metrics",
+                  "Geolocation",
+                  "Content Management"
+                ],
+                "note": "/projects/portfolio-admin-dashboard.jpg"
               },
               {
                 "key": "job-tracker",
                 "title": "Job Tracker",
-                "summary": "",
-                "body": "An applicant CRM: companies, statuses, events, documents, and Google Calendar sync.",
-                "value": "",
-                "icon": "search",
-                "tags": [],
-                "note": ""
+                "summary": "Application CRM, interview scheduling, and pipeline status tracking",
+                "body": "A specialized CRM for job applications: companies, application stages (applied, ghosted, rejected, offers), events calendar, notes, and Google Calendar sync.",
+                "value": "Pipeline & Agenda",
+                "icon": "calendar",
+                "tags": [
+                  "Job CRM",
+                  "Pipeline",
+                  "Google Calendar",
+                  "Events"
+                ],
+                "note": "/projects/portfolio-job-tracker.jpg"
               },
               {
                 "key": "resume-engine",
                 "title": "Resume Engine",
-                "summary": "",
-                "body": "Resume imports, ATS-targeted adaptation that preserves layout, and interview prep, powered by each tenant's AI provider.",
-                "value": "",
+                "summary": "Interactive CV editor with real-time preview and document import",
+                "body": "Interactive resume management with section tabs, multilingual preview switcher, ATS optimization, and multi-format export powered by tenant-isolated AI providers.",
+                "value": "Multilingual Visual Editor",
                 "icon": "bolt",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "CV Editor",
+                  "i18n",
+                  "ATS Optimizer",
+                  "Live Preview"
+                ],
+                "note": "/projects/portfolio-resume-engine.jpg"
               },
               {
                 "key": "three-languages",
@@ -1456,33 +1934,181 @@
               },
               {
                 "key": "first-party-analytics",
-                "title": "First-party analytics",
-                "summary": "",
-                "body": "Pageview statistics without third-party trackers. Respects Do Not Track and Global Privacy Control.",
-                "value": "",
-                "icon": "gauge",
-                "tags": [],
-                "note": ""
+                "title": "First-party analytics & privacy",
+                "summary": "Internal telemetry without third-party cookies",
+                "body": "Pageview and route telemetry without external tracking scripts. Strictly honors Do Not Track and Global Privacy Control headers.",
+                "value": "100% Privacy-First",
+                "icon": "chart",
+                "tags": [
+                  "Cookie-Free",
+                  "DNT / GPC",
+                  "Telemetry"
+                ],
+                "note": "/previews/stats.webp"
               },
               {
                 "key": "integrations",
-                "title": "Integrations",
-                "summary": "",
-                "body": "Spotify Now Playing widget and contact email form, wired per tenant.",
-                "value": "",
+                "title": "Live Spotify player with synced LRC lyrics",
+                "summary": "Interactive iOS-style mockup with active playback and lyrics preview",
+                "body": "Real-time music display with synced LRC lyrics via LRCLIB, dynamic album color extraction, private session support, and secure multi-tenant connection.",
+                "value": "Spotify + LRCLIB",
                 "icon": "music",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "Spotify Web API",
+                  "LRCLIB Sync",
+                  "iOS Mockup",
+                  "Multi-Tenant"
+                ],
+                "note": "/projects/portfolio-spotify-player.png"
               },
               {
                 "key": "process-pages",
-                "title": "Process pages",
-                "summary": "",
-                "body": "How I Use AI and How I Work with QA, plus Now, Uses, and Colophon pages.",
-                "value": "",
+                "title": "Engineering methodology & process pages",
+                "summary": "Interactive documentation of engineering and software quality workflows",
+                "body": "Interactive case studies covering How I Use AI in daily engineering and How I Collaborate with QA, plus Now, Uses, and Colophon pages.",
+                "value": "Documented Workflows",
                 "icon": "users",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "AI Workflow",
+                  "QA",
+                  "Methodology"
+                ],
+                "note": "/previews/process-how-i-use-ai.webp"
+              },
+              {
+                "key": "resume-pdf-exports",
+                "title": "Resume export to PDF & DOCX in multiple languages",
+                "summary": "Professional CV rendering engine tailored for ATS parsers and recruiters",
+                "body": "High-fidelity PDF document generation and structured DOCX export, tailored across Spanish, English, and Dutch templates with isolated rendering.",
+                "value": "ATS-Ready PDF",
+                "icon": "file",
+                "tags": [
+                  "PDF Generation",
+                  "DOCX",
+                  "Multilingual",
+                  "ATS"
+                ],
+                "note": "/projects/portfolio-resume-pdf-en.jpg"
+              },
+              {
+                "key": "spotify-widget-mini",
+                "title": "Discreet Now Playing footer widget",
+                "summary": "Non-intrusive playback indicator embedded in the global footer",
+                "body": "Minimalist component in the page footer showing the currently playing track with an animated equalizer, live progress bar, and instant launch to the iOS lyrics modal.",
+                "value": "Footer Now Playing",
+                "icon": "radio",
+                "tags": [
+                  "Now Playing",
+                  "Footer",
+                  "Equalizer",
+                  "Minimalist"
+                ],
+                "note": "/projects/portfolio-spotify-widget.png"
+              },
+              {
+                "key": "admin-integrations-byo",
+                "title": "Independent credential & integration management (BYO)",
+                "summary": "Per-tenant API connection dashboard with AES-256-GCM encryption at rest",
+                "body": "Allows each tenant to connect their own credentials for Spotify OAuth, Resend, UploadThing, AI models, and Google Calendar, bypassing platform quotas with strict isolation.",
+                "value": "AES-256 Encrypted",
+                "icon": "key",
+                "tags": [
+                  "BYO Keys",
+                  "AES-256",
+                  "OAuth",
+                  "Multi-Tenant"
+                ],
+                "note": "/projects/portfolio-admin-integrations.jpg"
+              },
+              {
+                "key": "admin-security-passkeys",
+                "title": "Account security, 2FA & WebAuthn Passkeys",
+                "summary": "Multi-factor authentication and biometric logins with Touch ID, Face ID, and Windows Hello",
+                "body": "Security configuration panel supporting two-step verification (TOTP / email) and phishing-resistant WebAuthn Passkeys registered via Better-Auth.",
+                "value": "WebAuthn / Passkeys",
+                "icon": "lock",
+                "tags": [
+                  "Passkeys",
+                  "2FA",
+                  "WebAuthn",
+                  "Biometrics"
+                ],
+                "note": "/projects/portfolio-admin-security.jpg"
+              },
+              {
+                "key": "admin-process-builder",
+                "title": "Modular visual editor for process pages",
+                "summary": "Drag-and-drop builder for documenting engineering and AI methodologies",
+                "body": "Administrative editor with modular widgets (Hero, internal nav, timeline, tools, roles, FAQ, and CTA) featuring live preview and trilingual synchronization.",
+                "value": "Widget Drag & Drop",
+                "icon": "workflow",
+                "tags": [
+                  "Drag & Drop",
+                  "Widgets",
+                  "Modular CMS",
+                  "i18n"
+                ],
+                "note": "/projects/portfolio-admin-process.jpg"
+              },
+              {
+                "key": "admin-hero",
+                "title": "Profile, identity & Hero section editor",
+                "summary": "Live configuration of portfolio hero header with availability badge and SEO",
+                "body": "Visual management of identity, avatar photo, job availability badge, professional title, and value proposition with live preview.",
+                "value": "Live Profile",
+                "icon": "user",
+                "tags": [
+                  "Hero Editor",
+                  "Availability",
+                  "SEO",
+                  "Live Preview"
+                ],
+                "note": "/projects/portfolio-admin-hero.jpg"
+              },
+              {
+                "key": "admin-certificates",
+                "title": "Administrative management of certifications & credentials",
+                "summary": "Accreditation forms with skill linking and credential verification",
+                "body": "Real-time management of certificates, issuing organizations, credential IDs, verification URLs, and technology badges linked via SkillIcon.",
+                "value": "Credential Verification",
+                "icon": "badge",
+                "tags": [
+                  "Certifications",
+                  "SkillIcon",
+                  "Credentials",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-certificates.jpg"
+              },
+              {
+                "key": "admin-timeline",
+                "title": "Career trajectory & milestones manager",
+                "summary": "Chronological management of work experience, education, and key achievements",
+                "body": "Trilingual form to register professional positions, organizations, time periods, current statuses, and supporting images for the interactive timeline.",
+                "value": "Chronological Management",
+                "icon": "layers",
+                "tags": [
+                  "Timeline",
+                  "Career",
+                  "Milestones",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-timeline.jpg"
+              },
+              {
+                "key": "admin-skills",
+                "title": "Technical skills catalog & stack highlights",
+                "summary": "Technology administration, stack categorization, and featured terminal mode",
+                "body": "Manage technologies with documentation URLs, vector icons, stack categorization (Frontend/Backend/DevOps/Mobile), and a toggle to highlight them on the interactive terminal.",
+                "value": "Skill Ecosystem",
+                "icon": "code",
+                "tags": [
+                  "Skills",
+                  "Stack",
+                  "Terminal",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-skills.jpg"
               }
             ],
             "footnoteTitle": "",
@@ -1532,7 +2158,7 @@
                 "key": "secrets",
                 "title": "Secrets",
                 "summary": "",
-                "body": "Tenant API keys are encrypted at rest with AES-256-GCM, with no fallback to platform keys.",
+                "body": "Tenant API credentials and integrations (Spotify OAuth, Google Calendar, Resend, AI providers) are encrypted at rest with AES-256-GCM, partitioned by userId with no shared platform keys.",
                 "value": "",
                 "icon": "",
                 "tags": [],
@@ -1562,7 +2188,7 @@
                 "key": "privacy",
                 "title": "Privacy",
                 "summary": "",
-                "body": "First-party analytics only. It honors DNT and Global Privacy Control and skips bots and the site owner.",
+                "body": "First-party analytics and private telemetry only. The Spotify widget queries from the Next.js server without exposing visitor IPs to Spotify or injecting tracking cookies, honoring private sessions and DNT/GPC.",
                 "value": "",
                 "icon": "",
                 "tags": [],
@@ -1861,7 +2487,73 @@
       "approach": "Feature-Based Architecture (src/features/) geïmplementeerd met Next.js App Router, strikte TypeScript, Prisma + MongoDB voor schemaflexibiliteit en tRPC voor end-to-end typeveiligheid.",
       "outcome": "Productie LCP < 1,8s, 100% geauditeerde WCAG 2.2 AAA-toegankelijkheid en een volledig zelfbeheerd platform zonder afhankelijkheid van externe CMS-diensten.",
       "caseStudy": {
-        "chips": ["Persoonlijk", "Full-stack", "In productie"],
+        "chips": [
+          "Persoonlijk",
+          "Full-stack",
+          "In productie"
+        ],
+        "gallery": [
+          {
+            "title": "Home",
+            "description": "Hoofdlanding & interactieve showcase",
+            "image": "/projects/portfolio.jpg",
+            "icon": "layout"
+          },
+          {
+            "title": "Live Spotify",
+            "description": "iOS-mockup met realtime telemetrie",
+            "image": "/projects/portfolio-spotify-player.png",
+            "icon": "music"
+          },
+          {
+            "title": "LRC-teksten",
+            "description": "60 FPS karaoke met actieve scroll",
+            "image": "/projects/portfolio-spotify-lyrics.jpg",
+            "icon": "music"
+          },
+          {
+            "title": "Dashboard",
+            "description": "Verkeersstatistieken & bezoekerskaart",
+            "image": "/projects/portfolio-admin-dashboard.jpg",
+            "icon": "chart"
+          },
+          {
+            "title": "CV-editor",
+            "description": "Modulair CV-beheer & live voorbeeld",
+            "image": "/projects/portfolio-resume-engine.jpg",
+            "icon": "file"
+          },
+          {
+            "title": "Job Tracker",
+            "description": "Sollicitatiepipeline & agenda",
+            "image": "/projects/portfolio-job-tracker.jpg",
+            "icon": "calendar"
+          },
+          {
+            "title": "BYO-referenties",
+            "description": "API-sleutels met AES-256-versleuteling",
+            "image": "/projects/portfolio-admin-integrations.jpg",
+            "icon": "key"
+          },
+          {
+            "title": "Beveiliging & 2FA",
+            "description": "2FA & WebAuthn biometrische sleutels",
+            "image": "/projects/portfolio-admin-security.jpg",
+            "icon": "lock"
+          },
+          {
+            "title": "Procespagina's",
+            "description": "Modulaire visuele editor met widgets",
+            "image": "/projects/portfolio-admin-process.jpg",
+            "icon": "workflow"
+          },
+          {
+            "title": "Mobiel",
+            "description": "Vloeiende responsieve lay-out & touch",
+            "image": "/projects/portfolio-mobile.jpg",
+            "icon": "smartphone"
+          }
+        ],
         "facts": [
           {
             "key": "my-role",
@@ -2045,7 +2737,9 @@
                 "body": "De inhoud per tenant verschilt in vorm, dus schemaflexibiliteit versnelt iteratie terwijl Prisma elke query getypeerd houdt.",
                 "value": "",
                 "icon": "",
-                "tags": ["PostgreSQL met SQL-migraties"],
+                "tags": [
+                  "PostgreSQL met SQL-migraties"
+                ],
                 "note": "Integriteit verschuift naar de app. Bijvoorbeeld, customDomain is niet @unique omdat MongoDB unieke indexen één null toestaat; daarom wordt uniciteit in code gecontroleerd."
               },
               {
@@ -2055,7 +2749,10 @@
                 "body": "Het procedure-type bepaalt wie het mag aanroepen, en mutaties nemen ctx.user.id op, zodat een client nooit als een andere gebruiker kan handelen. Types stromen van de database naar de admin-UI.",
                 "value": "",
                 "icon": "",
-                "tags": ["REST-routehandlers", "GraphQL"],
+                "tags": [
+                  "REST-routehandlers",
+                  "GraphQL"
+                ],
                 "note": "Sterk gekoppeld aan TypeScript en minder handig voor API-consumenten van derden."
               },
               {
@@ -2065,7 +2762,9 @@
                 "body": "Facturering, quota en data residency blijven bij de tenant, en één tenant kan nooit het quota van een andere consumeren. Secrets zijn versleuteld in rust met AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": ["Gedeelde platform-API-sleutels"],
+                "tags": [
+                  "Gedeelde platform-API-sleutels"
+                ],
                 "note": "Meer setup per tenant. Functies blijven uit totdat ze zijn gekoppeld, en AI heeft een handmatige JSON-modus."
               },
               {
@@ -2075,7 +2774,9 @@
                 "body": "6 thema's (3 paletten, licht en donker) plus een door de gebruiker gedefinieerd aangepast thema komen uit één tokenlaag, zonder dark: classes in componenten.",
                 "value": "",
                 "icon": "",
-                "tags": ["Tailwind dark:-varianten op elk element"],
+                "tags": [
+                  "Tailwind dark:-varianten op elk element"
+                ],
                 "note": "Vereist token-discipline: elke nieuwe component moet tokens gebruiken."
               },
               {
@@ -2090,6 +2791,19 @@
                   "Chromium in elke route bundelen"
                 ],
                 "note": "Extra interne endpoint om te bedienen, beveiligd met een bearer secret."
+              },
+              {
+                "key": "spotify-lrc-sync-privacy",
+                "title": "Live Spotify-speler met gesynchroniseerde LRC-teksten en strikte privacy",
+                "summary": "Realtime audiotelemetrie en gesynchroniseerde teksten via LRCLIB in een native iOS-mockup, met server-side proxies die cookies van derden en privégereislekken voorkomen.",
+                "body": "In plaats van een officiële Spotify iframe-speler in te sluiten met trackingcookies van derden en stylingbeperkingen, raadpleegt de backend Spotify via tenantProcedure en lost tijdgestempelde songteksten (.lrc) op in een CDN-cache via LRCLIB. De frontend interpoleert afspeelvoortgang in milliseconden voor soepel karaokescrollen op 60 FPS, waarbij privésessies en podcasts geruisloos worden gedetecteerd om gebruikersprivacy te waarborgen zonder tokens of IP's bloot te stellen.",
+                "value": "",
+                "icon": "",
+                "tags": [
+                  "Officiële Spotify-iframe met trackers van derden",
+                  "Spotify Web Playback SDK die Premium-account vereist"
+                ],
+                "note": "Geen cookies van derden voor bezoekers en 7-daagse server-side caching voor songteksten."
               }
             ],
             "footnoteTitle": "",
@@ -2126,7 +2840,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["(home) public", "(admin) /admin", "/api/*"],
+                "tags": [
+                  "(home) public",
+                  "(admin) /admin",
+                  "/api/*"
+                ],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -2150,7 +2868,12 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["22 modules", "UI", "lib", "server routers"],
+                "tags": [
+                  "22 modules",
+                  "UI",
+                  "lib",
+                  "server routers"
+                ],
                 "note": "Prisma client"
               },
               {
@@ -2160,7 +2883,11 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": ["Prisma", "MongoDB", "84 models"],
+                "tags": [
+                  "Prisma",
+                  "MongoDB",
+                  "84 models"
+                ],
                 "note": ""
               }
             ],
@@ -2294,7 +3021,11 @@
                 "body": "Interactieve landingspagina, professioneel profiel, ervaringssamenvatting, vaardigheden en snelle Next.js App Router-architectuur.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
+                "tags": [
+                  "Next.js",
+                  "Tailwind CSS",
+                  "Server Components"
+                ],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -2304,7 +3035,11 @@
                 "body": "Interactief online cv, dynamisch gegenereerde PDF- en DOCX-exports in cache en beveiligde e-mailverzending.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
+                "tags": [
+                  "PDF Engine",
+                  "DOCX Cache",
+                  "Rate Limiting"
+                ],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -2314,7 +3049,11 @@
                 "body": "Gefacetteerde projectnavigatie per technologiestack, productie-gevalideerde statistieken en diepgaande technische afwegingen.",
                 "value": "Casestudies",
                 "icon": "case",
-                "tags": ["Showcase", "Gefacetteerde Filters", "Architectuur"],
+                "tags": [
+                  "Showcase",
+                  "Gefacetteerde Filters",
+                  "Architectuur"
+                ],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -2324,7 +3063,11 @@
                 "body": "Interactieve console met uitvoerbare commando's, technische vaardigheden en dynamische badges via SkillIcon.",
                 "value": "Interactieve Terminal",
                 "icon": "term",
-                "tags": ["CLI Terminal", "SkillIcon", "Interactieve UX"],
+                "tags": [
+                  "CLI Terminal",
+                  "SkillIcon",
+                  "Interactieve UX"
+                ],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -2333,39 +3076,86 @@
                 "summary": "Volledige aanraakoptimalisatie en snelle navigatie",
                 "body": "Mobiele navigatie met aanraakgebaren, adaptieve filterlades, semantische menu's en gegarandeerde 60 FPS op smartphoneschermen.",
                 "value": "100% Mobile Ready",
-                "icon": "layout",
-                "tags": ["Mobile First", "Vloeiende Animaties", "Touch Ready"],
+                "icon": "smartphone",
+                "tags": [
+                  "Mobile First",
+                  "Vloeiende Animaties",
+                  "Touch Ready"
+                ],
                 "note": "/projects/portfolio-mobile.jpg"
+              },
+              {
+                "key": "certificates-catalog",
+                "title": "Certificeringen & referenties catalogus",
+                "summary": "Verkenner op technische specialiteit met verificatie van referenties",
+                "body": "Realtime filters op frontend, backend, devops en cybersecurity, met technologiebadges, referentie-ID-verificatie en lightboxweergave.",
+                "value": "Gefacetteerde Filters",
+                "icon": "badge",
+                "tags": [
+                  "Certificaten",
+                  "Verificatie",
+                  "SkillIcon"
+                ],
+                "note": "/previews/certificates.webp"
+              },
+              {
+                "key": "timeline-interactive",
+                "title": "Professionele interactieve tijdlijn & mijlpalen",
+                "summary": "Interactieve weergave van loopbaantraject en kernrollen",
+                "body": "Chronologische interactieve reis met technische mijlpalen, categoriefilters en responsief ontwerp.",
+                "value": "Carrièretijdlijn",
+                "icon": "layers",
+                "tags": [
+                  "Tijdlijn",
+                  "Carrière",
+                  "Mijlpalen"
+                ],
+                "note": "/previews/timeline.webp"
               },
               {
                 "key": "admin-cms",
                 "title": "Beheer-CMS",
-                "summary": "",
-                "body": "Realtime contentbeheer per huurder in /admin, met vertaalstatus per taal.",
-                "value": "",
+                "summary": "Realtime controlepaneel per huurder en analyse van bezoekersverkeer",
+                "body": "Realtime contentbeheer per huurder in /admin met indicatoren voor vertaalvolledigheid, bezoekersstatistieken, toppagina's en geografische verkeersverdeling.",
+                "value": "Realtime Dashboard",
                 "icon": "db",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "Beheerderspaneel",
+                  "Statistieken",
+                  "Geolocatie",
+                  "Contentbeheer"
+                ],
+                "note": "/projects/portfolio-admin-dashboard.jpg"
               },
               {
                 "key": "job-tracker",
                 "title": "Sollicitatietracker",
-                "summary": "",
-                "body": "Een sollicitatie-CRM: bedrijven, statussen, gebeurtenissen, documenten en synchronisatie met Google Agenda.",
-                "value": "",
-                "icon": "search",
-                "tags": [],
-                "note": ""
+                "summary": "Sollicitatie-CRM, interviewplanning en pipeline-statusbeheer",
+                "body": "Een gespecialiseerd CRM voor sollicitaties: bedrijven, statussen (gesolliciteerd, ghosted, afgewezen, aanbiedingen), evenementenagenda, notities en synchronisatie met Google Agenda.",
+                "value": "Pipeline & Agenda",
+                "icon": "calendar",
+                "tags": [
+                  "Sollicitatie-CRM",
+                  "Pipeline",
+                  "Google Agenda",
+                  "Evenementen"
+                ],
+                "note": "/projects/portfolio-job-tracker.jpg"
               },
               {
                 "key": "resume-engine",
                 "title": "Resume Engine",
-                "summary": "",
-                "body": "Cv-import, ATS-gerichte aanpassing met behoud van opmaak en voorbereiding op sollicitatiegesprekken, aangedreven door de AI-provider van elke huurder.",
-                "value": "",
+                "summary": "Interactieve CV-editor met realtime voorbeeldweergave en documentimport",
+                "body": "Interactief curriculum vitae-beheer met sectietabbladen, meertalige voorbeeldschakelaar, ATS-optimalisatie en meervoudige formaatexport aangedreven door per-huurder geïsoleerde AI-modellen.",
+                "value": "Meertalige Visuele Editor",
                 "icon": "bolt",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "CV-editor",
+                  "i18n",
+                  "ATS-optimalisatie",
+                  "Live Voorbeeld"
+                ],
+                "note": "/projects/portfolio-resume-engine.jpg"
               },
               {
                 "key": "three-languages",
@@ -2379,33 +3169,181 @@
               },
               {
                 "key": "first-party-analytics",
-                "title": "Eigen analytiek",
-                "summary": "",
-                "body": "Paginabezoekstatistieken zonder trackers van derden. Respecteert Do Not Track en Global Privacy Control.",
-                "value": "",
-                "icon": "gauge",
-                "tags": [],
-                "note": ""
+                "title": "Eigen analytiek & privacy",
+                "summary": "Interne telemetrie zonder cookies van derden",
+                "body": "Paginabezoekstatistieken zonder externe trackingscripts. Respecteert strikt Do Not Track en Global Privacy Control.",
+                "value": "100% Privacy-First",
+                "icon": "chart",
+                "tags": [
+                  "Zonder Cookies",
+                  "DNT / GPC",
+                  "Telemetrie"
+                ],
+                "note": "/previews/stats.webp"
               },
               {
                 "key": "integrations",
-                "title": "Integraties",
-                "summary": "",
-                "body": "Spotify Now Playing-widget en contactformulier per e-mail, per huurder ingesteld.",
-                "value": "",
+                "title": "Live Spotify-speler met gesynchroniseerde LRC-teksten",
+                "summary": "Interactieve iOS-stijl mockup met actieve weergave en songtekstvoorbeeld",
+                "body": "Realtime weergave van huidige muziek met gesynchroniseerde LRC-teksten via LRCLIB, dynamische albumpaletextractie, ondersteuning voor privésessies en veilige multi-tenantverbinding.",
+                "value": "Spotify + LRCLIB",
                 "icon": "music",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "Spotify Web API",
+                  "LRCLIB Sync",
+                  "iOS Mockup",
+                  "Multi-Tenant"
+                ],
+                "note": "/projects/portfolio-spotify-player.png"
               },
               {
                 "key": "process-pages",
-                "title": "Procespagina's",
-                "summary": "",
-                "body": "Hoe ik AI gebruik en hoe ik met QA samenwerk, plus Now-, Uses- en Colophon-pagina's.",
-                "value": "",
+                "title": "Engineeringmethodologie & procespagina's",
+                "summary": "Interactieve documentatie van ontwikkelings- en kwaliteitsworkflows",
+                "body": "Interactieve casestudy's over hoe ik AI gebruik bij dagelijkse ontwikkeling en hoe ik samenwerk met QA, plus Now-, Uses- en Colophon-pagina's.",
+                "value": "Gedocumenteerde Processen",
                 "icon": "users",
-                "tags": [],
-                "note": ""
+                "tags": [
+                  "AI Workflow",
+                  "QA",
+                  "Methodologie"
+                ],
+                "note": "/previews/process-how-i-use-ai.webp"
+              },
+              {
+                "key": "resume-pdf-exports",
+                "title": "Curriculum vitae export naar PDF & DOCX in meerdere talen",
+                "summary": "Professionele CV-renderengine afgestemd op ATS-parsers en recruiters",
+                "body": "Hoogwaardige PDF-documentgeneratie en gestructureerde DOCX-export, aangepast aan sjablonen in het Spaans, Engels en Nederlands met geïsoleerde rendering.",
+                "value": "ATS-Ready PDF",
+                "icon": "file",
+                "tags": [
+                  "PDF Generatie",
+                  "DOCX",
+                  "Meertalig",
+                  "ATS"
+                ],
+                "note": "/projects/portfolio-resume-pdf-es.jpg"
+              },
+              {
+                "key": "spotify-widget-mini",
+                "title": "Discrete Now Playing footer-widget",
+                "summary": "Niet-opdringerige weergave-indicator ingebed in de globale voettekst",
+                "body": "Minimalistische component in de paginavoettekst die het momenteel afspelende nummer toont met een geanimeerde equalizer, realtime voortgangsbalk en directe lancering van de iOS-songtekstmodal.",
+                "value": "Voettekst Now Playing",
+                "icon": "radio",
+                "tags": [
+                  "Now Playing",
+                  "Voettekst",
+                  "Equalizer",
+                  "Minimalistisch"
+                ],
+                "note": "/projects/portfolio-spotify-widget.png"
+              },
+              {
+                "key": "admin-integrations-byo",
+                "title": "Onafhankelijk beheer van inloggegevens & integraties (BYO)",
+                "summary": "API-verbindingsdashboard per huurder met AES-256-GCM-versleuteling in rust",
+                "body": "Hiermee kan elke huurder zijn eigen inloggegevens verbinden voor Spotify OAuth, Resend, UploadThing, AI-modellen en Google Agenda, waardoor platformlimieten worden omzeild met strikte isolatie.",
+                "value": "AES-256 Versleuteld",
+                "icon": "key",
+                "tags": [
+                  "BYO Keys",
+                  "AES-256",
+                  "OAuth",
+                  "Multi-Tenant"
+                ],
+                "note": "/projects/portfolio-admin-integrations.jpg"
+              },
+              {
+                "key": "admin-security-passkeys",
+                "title": "Accountbeveiliging, 2FA en WebAuthn Passkeys",
+                "summary": "Multifactorauthenticatie en biometrische aanmelding met Touch ID, Face ID en Windows Hello",
+                "body": "Beveiligingsconfiguratiepaneel met ondersteuning voor tweestapsverificatie (TOTP / e-mail) en phishingbestendige WebAuthn Passkeys geregistreerd via Better-Auth.",
+                "value": "WebAuthn / Passkeys",
+                "icon": "lock",
+                "tags": [
+                  "Passkeys",
+                  "2FA",
+                  "WebAuthn",
+                  "Biometrie"
+                ],
+                "note": "/projects/portfolio-admin-security.jpg"
+              },
+              {
+                "key": "admin-process-builder",
+                "title": "Modulaire visuele editor voor procespagina's",
+                "summary": "Drag-and-drop bouwer voor het documenteren van ontwikkelings- en AI-methodologieën",
+                "body": "Beheerderseditor met modulaire widgets (Hero, interne navigatie, tijdlijn, tools, rollen, FAQ en CTA) met live voorbeeld en drietalige synchronisatie.",
+                "value": "Widget Drag & Drop",
+                "icon": "workflow",
+                "tags": [
+                  "Drag & Drop",
+                  "Widgets",
+                  "Modulair CMS",
+                  "i18n"
+                ],
+                "note": "/projects/portfolio-admin-process.jpg"
+              },
+              {
+                "key": "admin-hero",
+                "title": "Profiel-, identiteit- en Hero-sectie-editor",
+                "summary": "Live configuratie van de portfolio-header met beschikbaarheidsbadge en SEO",
+                "body": "Visueel beheer van identiteit, profielfoto, beschikbaarheidsbadge, professionele titel en waardevoorstel met realtime voorbeeldweergave.",
+                "value": "Live Profiel",
+                "icon": "user",
+                "tags": [
+                  "Hero Editor",
+                  "Beschikbaarheid",
+                  "SEO",
+                  "Live Voorbeeld"
+                ],
+                "note": "/projects/portfolio-admin-hero.jpg"
+              },
+              {
+                "key": "admin-certificates",
+                "title": "Beheer van certificeringen & referenties",
+                "summary": "Accreditatieformulieren met vaardigheidskoppeling en referentieverificatie",
+                "body": "Realtime beheer van certificaten, uitgevende instanties, referentie-ID's, verificatie-URL's en technologiebadges gekoppeld via SkillIcon.",
+                "value": "Referentieverificatie",
+                "icon": "badge",
+                "tags": [
+                  "Certificeringen",
+                  "SkillIcon",
+                  "Referenties",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-certificates.jpg"
+              },
+              {
+                "key": "admin-timeline",
+                "title": "Beheerder van loopbaantraject & mijlpalen",
+                "summary": "Chronologisch beheer van werkervaring, opleiding en kernprestaties",
+                "body": "Drietalig formulier voor het registreren van professionele functies, organisaties, periodes, actieve statussen en ondersteunende afbeeldingen voor de interactieve tijdlijn.",
+                "value": "Chronologisch Beheer",
+                "icon": "layers",
+                "tags": [
+                  "Tijdlijn",
+                  "Carrière",
+                  "Mijlpalen",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-timeline.jpg"
+              },
+              {
+                "key": "admin-skills",
+                "title": "Technische vaardighedencatalogus & stack-highlights",
+                "summary": "Technologiebeheer, stackcategorisatie en uitgelichte terminalmodus",
+                "body": "Beheer technologieën met documentatie-URL's, vectoriconen, stackcategorisatie (Frontend/Backend/DevOps/Mobile) en een schakelaar om ze te markeren op de interactieve terminal.",
+                "value": "Vaardighedeneconomie",
+                "icon": "code",
+                "tags": [
+                  "Vaardigheden",
+                  "Stack",
+                  "Terminal",
+                  "CMS"
+                ],
+                "note": "/projects/portfolio-admin-skills.jpg"
               }
             ],
             "footnoteTitle": "",
@@ -2455,7 +3393,7 @@
                 "key": "secrets",
                 "title": "Secrets",
                 "summary": "",
-                "body": "Tenant-API-sleutels zijn versleuteld in rust met AES-256-GCM, zonder fallback naar platformsleutels.",
+                "body": "Tenant-API-sleutels en integraties (Spotify OAuth, Google Agenda, Resend, AI-providers) zijn versleuteld in rust met AES-256-GCM, gepartitioneerd per userId zonder gedeelde platformsleutels.",
                 "value": "",
                 "icon": "",
                 "tags": [],
@@ -2485,7 +3423,7 @@
                 "key": "privacy",
                 "title": "Privacy",
                 "summary": "",
-                "body": "Alleen first-party analytics. Het respecteert DNT en Global Privacy Control en slaat bots en de site-eigenaar over.",
+                "body": "Alleen first-party analytics en privételemetrie. De Spotify-widget bevraagt vanaf de Next.js-server zonder bezoekers-IP's bloot te stellen aan Spotify of trackingcookies te injecteren, met respect voor privésessies en DNT/GPC.",
                 "value": "",
                 "icon": "",
                 "tags": [],
