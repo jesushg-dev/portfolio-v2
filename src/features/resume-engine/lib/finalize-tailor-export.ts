@@ -9,10 +9,6 @@ import {
 } from "@/features/resume-engine/lib/cv-docx-tailor-result";
 import type { UploadTailorSource } from "@/features/resume-engine/lib/fetch-upload-docx";
 import type { ParsedPdfForTailor } from "@/features/resume-engine/lib/pdf/parse-pdf-for-tailor";
-import {
-  convertDocxToPdfForTenant,
-  isTenantILovePdfConfigured,
-} from "@/lib/ilovepdf/tenant-ilovepdf";
 import type { AdaptedSection } from "@/lib/types";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
 import {
@@ -66,9 +62,6 @@ interface FinalizeDocxTailorExportInput {
   tailoredFor?: string;
   structuredSnapshot?: unknown;
   targetLocale?: Locale;
-  /** Parsed `cv-template.pdf` plus AI output that uses those PDF run ids. */
-  parsedPdf?: ParsedPdfForTailor;
-  pdfAdaptedSections?: AdaptedSection[];
 }
 
 function fullNameFromSnapshot(snapshot: unknown): string | null {
@@ -116,8 +109,6 @@ async function persistResumeExport(
     tailoredFor?: string;
     structuredSnapshot?: unknown;
     fileKind?: "docx" | "pdf";
-    /** Sidecar PDF from `rebuildPdfInPlace` when the primary export is DOCX. */
-    pdfBuffer?: Buffer;
   },
 ) {
   let application: {
@@ -164,22 +155,6 @@ async function persistResumeExport(
     pdfFileName = fileName;
     pdfFileUrl = url;
     pdfUploadThingKey = key;
-  } else if (input.pdfBuffer) {
-    pdfFileName = buildAtsCvFileName({
-      fullName: input.fullName,
-      roleTrack,
-      company: application?.company.name,
-      locale: input.locale,
-      extension: "pdf",
-    });
-    const pdfUpload = await uploadBufferToUploadThing(
-      userId,
-      input.pdfBuffer,
-      pdfFileName,
-      "application/pdf",
-    );
-    pdfFileUrl = pdfUpload.url;
-    pdfUploadThingKey = pdfUpload.key;
   }
 
   const tailoredFor =
@@ -267,19 +242,6 @@ export async function finalizeTailorExport(
   );
   const locale = input.targetLocale ?? input.draft.detectedLocale ?? "en";
 
-  let pdfBuffer: Buffer | undefined;
-  if (await isTenantILovePdfConfigured(userId)) {
-    try {
-      pdfBuffer = await convertDocxToPdfForTenant(
-        userId,
-        buffer,
-        "resume.docx",
-      );
-    } catch (err) {
-      console.error("[finalizeTailorExport] iLovePDF conversion error:", err);
-    }
-  }
-
   return persistResumeExport(db, userId, {
     buffer,
     fullName,
@@ -294,7 +256,6 @@ export async function finalizeTailorExport(
     applicationId: input.applicationId,
     tailoredFor: input.tailoredFor,
     structuredSnapshot: input.draft,
-    pdfBuffer,
   });
 }
 
@@ -338,22 +299,6 @@ export async function finalizeDocxTailorExport(
     locale,
   );
 
-  let pdfBuffer: Buffer | undefined;
-  if (await isTenantILovePdfConfigured(userId)) {
-    try {
-      pdfBuffer = await convertDocxToPdfForTenant(
-        userId,
-        buffer,
-        "resume.docx",
-      );
-    } catch (err) {
-      console.error(
-        "[finalizeDocxTailorExport] iLovePDF conversion error:",
-        err,
-      );
-    }
-  }
-
   const fullName = await resolveExportFullName(
     db,
     userId,
@@ -374,7 +319,6 @@ export async function finalizeDocxTailorExport(
     applicationId: input.applicationId,
     tailoredFor: input.tailoredFor,
     structuredSnapshot,
-    pdfBuffer,
   });
 }
 
@@ -421,23 +365,10 @@ export async function finalizePdfTailorExport(
     ? await generateDocxFromStructured(docxDraft)
     : Buffer.from("");
 
-  let exportBuffer = docxBuffer;
-  let fileKind: "docx" | "pdf" = "docx";
-  let pdfBuffer: Buffer | undefined;
-
-  if (docxBuffer.byteLength > 0 && (await isTenantILovePdfConfigured(userId))) {
-    try {
-      pdfBuffer = await convertDocxToPdfForTenant(
-        userId,
-        docxBuffer,
-        "resume.docx",
-      );
-      exportBuffer = pdfBuffer;
-      fileKind = "pdf";
-    } catch (err) {
-      console.error("[finalizePdfTailorExport] iLovePDF conversion error:", err);
-    }
-  }
+  // Do not generate PDF eagerly during AI tailoring to conserve iLovePDF credits.
+  // PDF is generated on demand when the user clicks the PDF download button.
+  const exportBuffer = docxBuffer;
+  const fileKind: "docx" | "pdf" = "docx";
 
   const fullName = await resolveExportFullName(
     db,
@@ -460,7 +391,6 @@ export async function finalizePdfTailorExport(
     tailoredFor: input.tailoredFor,
     structuredSnapshot,
     fileKind,
-    pdfBuffer,
   });
 }
 

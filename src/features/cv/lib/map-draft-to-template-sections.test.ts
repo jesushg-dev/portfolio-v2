@@ -235,4 +235,60 @@ describe("mapDraftToTemplateSections", () => {
       "Docker · Kubernetes · Git · Jest",
     ]);
   });
+
+  it("assigns overflow responsibilities to extraBullets on the last paragraph of an experience", () => {
+    const expSection: CvSection = {
+      id: "section-exp",
+      heading: "EXPERIENCIA LABORAL",
+      paragraphs: [
+        {
+          id: "para-exp-0",
+          style: "CV-Bullet",
+          xmlIndex: 10,
+          runs: [{ id: "run-0", text: "Old bullet 1" }],
+        },
+        {
+          id: "para-exp-1",
+          style: "CV-Bullet",
+          xmlIndex: 11,
+          runs: [{ id: "run-1", text: "Old bullet 2" }],
+        },
+      ],
+    };
+
+    const draftWithExtraResponsibilities: CvImportDraft = {
+      ...draft,
+      experiences: [
+        {
+          id: "exp-extra",
+          company: "Acme Corp",
+          role: "Engineer",
+          startDate: "2023-01-01",
+          responsibilities: [
+            "Resp 1",
+            "Resp 2",
+            "Resp 3 (overflow)",
+            "Resp 4 (overflow)",
+          ],
+          atsResponsibilities: [],
+        },
+      ],
+    };
+
+    const adapted = mapDraftToTemplateSections(
+      [expSection],
+      draftWithExtraResponsibilities,
+      [],
+    );
+
+    const adaptedExp = adapted.find((s) => s.id === "section-exp");
+    expect(adaptedExp).toBeDefined();
+    expect(adaptedExp!.paragraphs.length).toBe(2);
+    expect(adaptedExp!.paragraphs[0]?.runs[0]?.text).toBe("Resp 1");
+    expect(adaptedExp!.paragraphs[1]?.runs[0]?.text).toBe("Resp 2");
+    expect(adaptedExp!.paragraphs[1]?.extraBullets).toEqual([
+      "Resp 3 (overflow)",
+      "Resp 4 (overflow)",
+    ]);
+  });
 });

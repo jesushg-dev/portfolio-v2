@@ -13,22 +13,23 @@ describe("iLovePDF Service", () => {
   });
 
   describe("generateILovePdfToken", () => {
-    it("generates a valid 3-part HS256 JWT containing public key as issuer", () => {
+    it("generates a valid 3-part HS256 JWT containing public key as jti and api.ilovepdf.com as issuer", () => {
       const token = generateILovePdfToken("pub_12345", "sec_67890");
       const parts = token.split(".");
       expect(parts).toHaveLength(3);
 
       const header = JSON.parse(
-        Buffer.from(parts[0]!, "base64url").toString("utf-8"),
-      );
+        Buffer.from(parts[0], "base64url").toString("utf-8"),
+      ) as { alg: string; typ: string };
       expect(header.alg).toBe("HS256");
       expect(header.typ).toBe("JWT");
 
       const payload = JSON.parse(
-        Buffer.from(parts[1]!, "base64url").toString("utf-8"),
-      );
-      expect(payload.iss).toBe("pub_12345");
-      expect(payload.exp).toBeGreaterThan(payload.iat);
+        Buffer.from(parts[1], "base64url").toString("utf-8"),
+      ) as { iss: string; jti: string; iat: number };
+      expect(payload.iss).toBe("api.ilovepdf.com");
+      expect(payload.jti).toBe("pub_12345");
+      expect(typeof payload.iat).toBe("number");
     });
   });
 
@@ -36,8 +37,9 @@ describe("iLovePDF Service", () => {
     it("returns success: true when iLovePDF start task succeeds", async () => {
       global.fetch = jest.fn().mockResolvedValue({
         ok: true,
-        json: async () => ({ server: "api25.ilovepdf.com", task: "task_abc123" }),
-      } as unknown as Response);
+        json: () =>
+          Promise.resolve({ server: "api25.ilovepdf.com", task: "task_abc123" }),
+      });
 
       const result = await testILovePdfConnection("pub_12345", "sec_67890");
       expect(result.success).toBe(true);
@@ -47,11 +49,12 @@ describe("iLovePDF Service", () => {
       global.fetch = jest.fn().mockResolvedValue({
         ok: false,
         status: 401,
-        json: async () => ({
-          name: "Unauthorized",
-          message: "Invalid public key or token signature",
-        }),
-      } as unknown as Response);
+        json: () =>
+          Promise.resolve({
+            name: "Unauthorized",
+            message: "Invalid public key or token signature",
+          }),
+      });
 
       const result = await testILovePdfConnection("pub_bad", "sec_bad");
       expect(result.success).toBe(false);
@@ -69,19 +72,20 @@ describe("iLovePDF Service", () => {
         if (url.includes("/v1/start/officepdf")) {
           return Promise.resolve({
             ok: true,
-            json: async () => ({ server: "api01.ilovepdf.com", task: "tsk_99" }),
+            json: () =>
+              Promise.resolve({ server: "api01.ilovepdf.com", task: "tsk_99" }),
           });
         }
         if (url.includes("/v1/upload")) {
           return Promise.resolve({
             ok: true,
-            json: async () => ({ server_filename: "srv_file_01.docx" }),
+            json: () => Promise.resolve({ server_filename: "srv_file_01.docx" }),
           });
         }
         if (url.includes("/v1/process")) {
           return Promise.resolve({
             ok: true,
-            json: async () => ({ status: "TaskSuccess" }),
+            json: () => Promise.resolve({ status: "TaskSuccess" }),
           });
         }
         if (url.includes("/v1/download/tsk_99")) {
@@ -91,7 +95,7 @@ describe("iLovePDF Service", () => {
           );
           return Promise.resolve({
             ok: true,
-            arrayBuffer: async () => slice,
+            arrayBuffer: () => Promise.resolve(slice),
           });
         }
         return Promise.reject(new Error(`Unexpected URL: ${url}`));

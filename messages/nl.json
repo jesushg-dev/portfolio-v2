@@ -3946,7 +3946,8 @@
       "polishDocxSuccess": "Gepolijste DOCX heeft het gegenereerde bestand vervangen",
       "polishPdfSuccess": "PDF opgeslagen als CV voor deze sollicitatie",
       "polishUploadFailed": "CV-bestand vervangen mislukt",
-      "tailorRegeneratePdf": "PDF opnieuw opbouwen vanuit DOCX"
+      "tailorRegeneratePdf": "PDF opnieuw opbouwen vanuit DOCX",
+      "tailorPdfOnDemandNotice": "Om je iLovePDF-tegoed te besparen, wordt de PDF alleen op verzoek gegenereerd."
     },
     "uses": {
       "title": "Uses",

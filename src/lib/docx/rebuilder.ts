@@ -12,6 +12,7 @@
  * This avoids any XML serialization that could corrupt attributes or namespaces.
  */
 
+import crypto from "node:crypto";
 import JSZip from "jszip";
 import type { Locale } from "@/i18n/config";
 
@@ -364,6 +365,8 @@ export async function rebuildDocx(
   locale?: Locale,
 ): Promise<Buffer> {
   const adaptedByXmlIndex = new Map<number, string[]>();
+  const extraBulletsByXmlIndex = new Map<number, string[]>();
+
   for (const section of originalSections) {
     const adaptedSection = adaptedSections.find((s) => s.id === section.id);
     if (!adaptedSection) continue;
@@ -376,6 +379,12 @@ export async function rebuildDocx(
         origPara.xmlIndex,
         adaptedPara.runs.map((r) => r.text),
       );
+      if (adaptedPara.extraBullets && adaptedPara.extraBullets.length > 0) {
+        extraBulletsByXmlIndex.set(
+          origPara.xmlIndex,
+          adaptedPara.extraBullets,
+        );
+      }
     }
   }
 
@@ -395,6 +404,7 @@ export async function rebuildDocx(
     }
 
     const adaptedTexts = adaptedByXmlIndex.get(xmlIndex)!;
+    const extraBullets = extraBulletsByXmlIndex.get(xmlIndex);
 
     // When every run text is empty the AI deliberately left this slot unused.
     // Remove the entire paragraph from the output so bullet counts are dynamic,
@@ -411,7 +421,27 @@ export async function rebuildDocx(
       replaceWtNodes(part, adaptedTexts),
       locale,
     );
-    return alignExperienceRoleParagraph(replaced, adaptedTexts.join(" "));
+    const aligned = alignExperienceRoleParagraph(replaced, adaptedTexts.join(" "));
+
+    if (extraBullets && extraBullets.length > 0) {
+      const extraParagraphs = extraBullets
+        .filter((extraText) => extraText.trim().length > 0)
+        .map((extraText) => {
+          const freshParaId = crypto.randomBytes(4).toString("hex").toUpperCase();
+          let cloned = part.replace(
+            /w14:paraId="[^"]*"/,
+            `w14:paraId="${freshParaId}"`,
+          );
+          cloned = replaceStaticHeadings(
+            replaceWtNodes(cloned, [extraText]),
+            locale,
+          );
+          return alignExperienceRoleParagraph(cloned, extraText);
+        });
+      return aligned + extraParagraphs.join("");
+    }
+
+    return aligned;
   });
 
   const newXml = newParts.join("");

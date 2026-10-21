@@ -36,6 +36,8 @@ export interface AdaptedRun {
 export interface AdaptedParagraph {
   id: string;
   runs: AdaptedRun[];
+  /** Optional extra bullet texts to clone and append immediately after this paragraph */
+  extraBullets?: string[];
 }
 
 export interface AdaptedSection {

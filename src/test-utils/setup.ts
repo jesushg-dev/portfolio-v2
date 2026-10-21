@@ -291,6 +291,7 @@ jest.mock("@/lib/auth", () => ({
 
 jest.mock("@/lib/auth-redirect", () => ({
   redirectToLogin: jest.fn(),
+  redirectToAdmin: jest.fn(),
 }));
 
 global.ResizeObserver = jest.fn().mockImplementation(() => ({

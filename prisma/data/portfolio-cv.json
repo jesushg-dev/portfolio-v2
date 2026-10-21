@@ -330,6 +330,15 @@
           },
           "order": 1,
           "atsOnly": false
+        },
+        {
+          "text": {
+            "es": "Modelé la base de datos relacional en SQL Server e implementé control de acceso basado en roles (RBAC) y vistas de auditoría técnica, asegurando gobernanza e integridad de solicitudes.",
+            "en": "Modeled the relational database in SQL Server via Prisma and implemented role-based access control (RBAC) with technical audit views, ensuring request integrity and governance.",
+            "nl": "Modeleerde de relationele database in SQL Server via Prisma en implementeerde rolgebaseerde toegangscontrole (RBAC) met auditoverzichten, wat datagovernance waarborgde."
+          },
+          "order": 2,
+          "atsOnly": false
         }
       ],
       "order": 1,
@@ -639,9 +648,9 @@
         "nl": "Hybrid · San José, Costa Rica"
       },
       "companyBlurb": {
-        "es": "Ecosistema cripto B2C/B2B: desarrollo móvil React Native de Telo Wallet (billetera de activos digitales) y Telo Business (punto de venta mPOS con cobros QR en tiempo real).",
-        "en": "B2C/B2B crypto ecosystem: React Native mobile development for Telo Wallet (digital asset wallet) and Telo Business (mPOS merchant terminal with real-time QR payments).",
-        "nl": "B2C/B2B crypto-ecosysteem: mobiele React Native-ontwikkeling van Telo Wallet (digitale activa wallet) en Telo Business (mPOS-kassa met realtime QR-betalingen)."
+        "es": "Ecosistema fintech cripto: apps React Native B2C y B2B (Telo Wallet y Telo Business mPOS) con WebSockets y pagos QR.",
+        "en": "Crypto fintech ecosystem: B2C & B2B React Native apps (Telo Wallet & Telo Business mPOS) with WebSockets and QR payments.",
+        "nl": "Crypto fintech-ecosysteem: B2C & B2B React Native-apps (Telo Wallet en Telo Business mPOS) met WebSockets en QR-betalingen."
       },
       "metrics": {
         "es": [
@@ -694,7 +703,7 @@
             "nl": "Implementeerde dynamische QR-betalingen, camera-scannen met react-native-qrcode-scanner, KYC-verificatie en winkel-geolocatie met Mapbox GL."
           },
           "order": 2,
-          "atsOnly": true
+          "atsOnly": false
         },
         {
           "text": {
@@ -712,7 +721,7 @@
             "nl": "Ontwierp uitgebreide unittests met Jest en werkte in Scrum samen met backend en QA, wat leidde tot ~70% minder kritieke productiebugs."
           },
           "order": 4,
-          "atsOnly": true
+          "atsOnly": false
         }
       ],
       "order": 5,

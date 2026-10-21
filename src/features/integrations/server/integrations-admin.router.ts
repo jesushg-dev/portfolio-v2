@@ -389,15 +389,14 @@ export const integrationsAdminRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
-      const current =
-        (await getTenantIntegrationConfig(userId, "ilovepdf")) ?? {};
+      const current = await getTenantIntegrationConfig(userId, "ilovepdf");
 
       const publicKey = input.publicKey?.trim()
         ? input.publicKey.trim()
-        : current.publicKey;
+        : current?.publicKey;
       const secretKey = input.secretKey?.trim()
         ? input.secretKey.trim()
-        : current.secretKey;
+        : current?.secretKey;
 
       if (!publicKey || !secretKey) {
         throw new TRPCError({

@@ -1,11 +1,11 @@
 import { loadCvTemplateForTailor, DEFAULT_CV_TEMPLATE_VERSION } from "./load-cv-template-docx";
 
-describe("CV DOCX layout v2 (extended 6 experiences, 21 bullets)", () => {
+describe("CV DOCX layout v2 (extended 6 experiences, 22 bullets)", () => {
   it("defaults to v2 template version", () => {
     expect(DEFAULT_CV_TEMPLATE_VERSION).toBe("v2");
   });
 
-  it("loads cv-template-v2.docx by default and parses 6 experiences and 21 bullets", async () => {
+  it("loads cv-template-v2.docx by default and parses 6 experiences and 22 bullets", async () => {
     const template = await loadCvTemplateForTailor();
 
     expect(template.version).toBe("v2");
@@ -20,8 +20,8 @@ describe("CV DOCX layout v2 (extended 6 experiences, 21 bullets)", () => {
 
     expect(expSection).toBeDefined();
 
-    // 21 bullet points across 6 experiences
-    expect(expSection?.paragraphs.length).toBe(21);
+    // 22 bullet points across 6 experiences
+    expect(expSection?.paragraphs.length).toBe(22);
 
     // Verify company names are preserved in the template's document XML
     expect(template.parsed.rawXml).toContain("Claro Nicaragua");

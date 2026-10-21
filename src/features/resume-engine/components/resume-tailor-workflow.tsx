@@ -388,6 +388,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               embedded
               onResetTailor={handleResetTailor}
               onPolishedUpload={handlePolishedUpload}
+              onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />
           </div>
         ) : showExistingBanner && existingCvFile ? (
@@ -407,6 +408,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               embedded
               onResetTailor={handleResetTailor}
               onPolishedUpload={handlePolishedUpload}
+              onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />
           </ResumeTailorExistingBanner>
         ) : (
@@ -669,6 +671,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               applicationId={applicationId}
               onResetTailor={handleResetTailor}
               onPolishedUpload={handlePolishedUpload}
+              onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />
           </CardContent>
         </Card>

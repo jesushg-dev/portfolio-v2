@@ -31,6 +31,7 @@ export interface ResumeTailorResultViewProps {
     name: string;
     mimeType: string;
   }) => void;
+  onPdfGenerated?: (pdfUrl: string) => void;
 }
 
 export const ResumeTailorResultView: FC<ResumeTailorResultViewProps> = ({
@@ -48,6 +49,7 @@ export const ResumeTailorResultView: FC<ResumeTailorResultViewProps> = ({
   embedded = false,
   onResetTailor,
   onPolishedUpload,
+  onPdfGenerated,
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [showReplaceFile, setShowReplaceFile] = useState(false);
@@ -140,6 +142,8 @@ export const ResumeTailorResultView: FC<ResumeTailorResultViewProps> = ({
         aiScore={aiScore}
         matchNotes={matchNotes}
         matchAnalysis={matchAnalysis}
+        exportId={exportId}
+        onPdfGenerated={onPdfGenerated}
         actions={actions}
         belowToolbar={belowToolbar}
       />

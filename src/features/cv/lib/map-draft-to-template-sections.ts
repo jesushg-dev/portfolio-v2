@@ -146,22 +146,35 @@ function mapExperienceSection(
     exp.responsibilities.filter((item) => item.trim().length > 0),
   );
 
-  if (experienceBullets.length === section.paragraphs.length) {
-    const texts = section.paragraphs.map(
-      (_, index) => experienceBullets[index] ?? "",
-    );
-    return mapSectionParagraphs(section, texts);
-  }
-
   // Fallback for flat single-bucket or synthetic tests without gaps
   if (buckets.length <= 1 && experiences.length <= 1) {
+    const exp = experiences[0];
+    const resps = exp
+      ? exp.responsibilities.filter((r) => r.trim().length > 0)
+      : experienceBullets;
     const texts = section.paragraphs.map(
-      (_, index) => experienceBullets[index] ?? "",
+      (_, index) => resps[index] ?? "",
     );
-    return mapSectionParagraphs(section, texts);
+    const lastPara = section.paragraphs[section.paragraphs.length - 1];
+    const extra =
+      lastPara && resps.length > section.paragraphs.length
+        ? resps.slice(section.paragraphs.length)
+        : undefined;
+
+    return {
+      id: section.id,
+      paragraphs: section.paragraphs.map((paragraph, index) => {
+        const adapted = adaptParagraphText(paragraph, texts[index] ?? "");
+        if (extra && paragraph.id === lastPara?.id) {
+          adapted.extraBullets = extra;
+        }
+        return adapted;
+      }),
+    };
   }
 
   const textByParaId = new Map<string, string>();
+  const extraBulletsByParaId = new Map<string, string[]>();
 
   buckets.forEach((bucket, expIndex) => {
     const exp = experiences[expIndex];
@@ -172,13 +185,28 @@ function mapExperienceSection(
     bucket.forEach((para, slotIndex) => {
       textByParaId.set(para.id, resps[slotIndex] ?? "");
     });
+
+    if (resps.length > bucket.length && bucket.length > 0) {
+      const lastPara = bucket[bucket.length - 1];
+      if (lastPara) {
+        extraBulletsByParaId.set(lastPara.id, resps.slice(bucket.length));
+      }
+    }
   });
 
   return {
     id: section.id,
-    paragraphs: section.paragraphs.map((paragraph) =>
-      adaptParagraphText(paragraph, textByParaId.get(paragraph.id) ?? ""),
-    ),
+    paragraphs: section.paragraphs.map((paragraph) => {
+      const adapted = adaptParagraphText(
+        paragraph,
+        textByParaId.get(paragraph.id) ?? "",
+      );
+      const extra = extraBulletsByParaId.get(paragraph.id);
+      if (extra && extra.length > 0) {
+        adapted.extraBullets = extra;
+      }
+      return adapted;
+    }),
   };
 }
 
@@ -287,11 +315,15 @@ export function mapDraftToTemplateSections(
       return mapSectionParagraphs(section, [headerText]);
     }
 
-    if (heading.includes("about")) {
+    if (heading.includes("about") || heading.includes("sobre") || heading.includes("over")) {
       return mapSectionParagraphs(section, aboutChunks);
     }
 
-    if (heading.includes("experience")) {
+    if (
+      heading.includes("experience") ||
+      heading.includes("experiencia") ||
+      heading.includes("werkervaring")
+    ) {
       return mapExperienceSection(section, draft, lockedParagraphs);
     }
 

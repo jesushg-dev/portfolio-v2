@@ -5,7 +5,6 @@ import { locales } from "@/i18n/config";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
-  type CvImportDraft,
   CvImportDraftSchema,
   PARSER_VERSION,
 } from "@/features/cv/lib/cv-import-draft";
@@ -26,28 +25,21 @@ import { resolveTailorBaseDraft } from "@/features/resume-engine/lib/resolve-tai
 import {
   DEFAULT_CV_TEMPLATE_VERSION,
   loadCvTemplateForTailor,
-  loadCvTemplatePdfBuffer,
-  type CvTemplateVersion,
 } from "@/features/cv/lib/load-cv-template-docx";
-import { parsePdfForTailor } from "@/features/resume-engine/lib/pdf/parse-pdf-for-tailor";
 import {
   buildDocxTailorPromptPackage,
   buildImportPromptPackage,
   buildStudioDocxTailorPromptPackage,
-  type TailorPromptPayloadOptions,
 } from "@/features/resume-engine/lib/ai/prompt-package";
 import { loadTailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
-import type { TailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
 import {
   formatZodParseError,
   parseAiJsonResponse,
 } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
-  type AiProviderName,
   getAvailableAiProviders,
   getDefaultAiProvider,
   loadTenantAiCredentials,
-  type TenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
 import {
   CvDocxTailorResultSchema,
@@ -85,45 +77,6 @@ function rethrowTailorExportError(error: unknown): never {
     code: "INTERNAL_SERVER_ERROR",
     message: error instanceof Error ? error.message : "Failed to tailor resume",
   });
-}
-
-async function tailorStudioPdfSidecar(
-  jobDescription: string,
-  credentials: TenantAiCredentials,
-  provider: AiProviderName | null | undefined,
-  baseDraft?: CvImportDraft | null,
-  jobContext?: TailorJobContext | null,
-  version?: CvTemplateVersion,
-  options?: TailorPromptPayloadOptions,
-) {
-  const templateVersion = version ?? DEFAULT_CV_TEMPLATE_VERSION;
-  const targetPageCount = templateVersion === "v2" ? 2 : 1;
-  const pageBudgetNotice =
-    templateVersion === "v2"
-      ? "This is an intended 2-page resume template (v2). Fill available bullet slots with relevant facts; do NOT aggressively empty slots to compress into 1 page."
-      : "This is a 1-page resume template (v1). Keep concise to fit 1 page.";
-
-  const parsedPdf = await parsePdfForTailor(
-    await loadCvTemplatePdfBuffer(templateVersion),
-  );
-  const { result } = await tailorDocxResume(
-    parsedPdf.sections,
-    jobDescription,
-    credentials,
-    provider ?? undefined,
-    baseDraft ?? undefined,
-    jobContext,
-    {
-      ...options,
-      templateVersion,
-      targetPageCount,
-      pageBudgetNotice,
-    },
-  );
-  return {
-    parsedPdf,
-    pdfAdaptedSections: result.sections,
-  };
 }
 
 async function ensureStyledPdf(
@@ -181,14 +134,26 @@ async function ensureStyledPdf(
         await db.resumeExport.update({
           where: { id: resumeExport.id },
           data: {
-            pdfFileName: uploaded.fileName ?? pdfFileName,
+            pdfFileName,
             pdfFileUrl: uploaded.url,
             pdfUploadThingKey: uploaded.key,
           },
         });
+        if (resumeExport.applicationId) {
+          await db.application.update({
+            where: { id: resumeExport.applicationId },
+            data: {
+              cvFile: {
+                name: pdfFileName,
+                url: uploaded.url,
+                uploadedAt: new Date(),
+              },
+            },
+          });
+        }
         return {
           url: uploaded.url,
-          fileName: uploaded.fileName ?? pdfFileName,
+          fileName: pdfFileName,
         };
       }
     } catch (err) {
@@ -678,29 +643,6 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           },
         );
 
-        let parsedPdf;
-        let pdfAdaptedSections;
-        try {
-          const sidecar = await tailorStudioPdfSidecar(
-            jobDescription,
-            credentials,
-            input.provider,
-            baseDraft,
-            jobContext,
-            templateVersion,
-            {
-              templateVersion,
-              targetPageCount,
-              pageBudgetNotice,
-              targetLocale: preferredLocale,
-            },
-          );
-          parsedPdf = sidecar.parsedPdf;
-          pdfAdaptedSections = sidecar.pdfAdaptedSections;
-        } catch (error) {
-          console.error("studio PDF tailor failed", error);
-        }
-
         return finalizeDocxTailorExport(ctx.db, ctx.user.id, {
           parsed,
           adaptedSections: result.sections,
@@ -713,8 +655,6 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           applicationId: input.applicationId,
           tailoredFor: input.tailoredFor,
           structuredSnapshot: baseDraft,
-          parsedPdf,
-          pdfAdaptedSections,
           targetLocale:
             result.detectedLocale ??
             input.targetLocale ??
@@ -865,11 +805,11 @@ export const resumeEngineAdminRouter = createTRPCRouter({
             fileName: resumeExport.fileName,
           };
         }
-        throw new TRPCError({
-          code: "PRECONDITION_FAILED",
-          message:
-            "No styled PDF on this export. Tailor again so cv-template.pdf is rebuilt in place.",
-        });
+        const pdf = await ensureStyledPdf(ctx.db, resumeExport);
+        return {
+          url: pdf.url,
+          fileName: pdf.fileName,
+        };
       }
 
       const parsed = CvImportDraftSchema.safeParse(

@@ -2,7 +2,8 @@
 
 import { useState, type FC, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { ChartColumn, ChevronDown, Download, Eye } from "lucide-react";
+import { ChartColumn, ChevronDown, Download, Eye, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,7 @@ import { TailoredAtsPreview } from "@/features/resume-engine/components/tailored
 import { ResumeMatchChecklist } from "@/features/resume-engine/components/resume-match-checklist";
 import { ResumeAtsCheckerSummary } from "@/features/resume-engine/components/resume-ats-checker-summary";
 import type { CvMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
+import { api } from "@/trpc/react";
 
 type PreviewMode = "word" | "pdf" | "ats" | "match";
 
@@ -33,6 +35,8 @@ interface ResumeTailorPreviewPanelProps {
   aiScore?: number | null;
   matchNotes?: string | null;
   matchAnalysis?: CvMatchAnalysis | null;
+  exportId?: string | null;
+  onPdfGenerated?: (pdfUrl: string) => void;
   actions?: ReactNode;
   belowToolbar?: ReactNode;
 }
@@ -51,9 +55,10 @@ function resolvePreviewMode(
   hasPdf: boolean,
   hasAts: boolean,
   hasMatch: boolean,
+  canGeneratePdf: boolean,
 ): PreviewMode {
   if (requested === "word" && hasWord) return "word";
-  if (requested === "pdf" && hasPdf) return "pdf";
+  if (requested === "pdf" && (hasPdf || canGeneratePdf)) return "pdf";
   if (requested === "ats" && hasAts) return "ats";
   if (requested === "match" && hasMatch) return "match";
   if (hasWord) return "word";
@@ -72,10 +77,14 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
   aiScore = null,
   matchNotes = null,
   matchAnalysis = null,
+  exportId = null,
+  onPdfGenerated,
   actions,
   belowToolbar,
 }) => {
   const t = useTranslations("admin.resumeStudio");
+  const [localPdfUrl, setLocalPdfUrl] = useState<string | null>(null);
+
   const primaryUrl = firstNonEmpty(downloadUrl, fileUrl);
   const exportIsPdf = isPdfResumeFile({
     url: primaryUrl,
@@ -84,11 +93,24 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
   });
   const wordUrl = exportIsPdf ? null : primaryUrl;
   const pdfUrl = exportIsPdf
-    ? firstNonEmpty(pdfDownloadUrl, primaryUrl)
-    : pdfDownloadUrl;
+    ? firstNonEmpty(localPdfUrl, pdfDownloadUrl, primaryUrl)
+    : firstNonEmpty(localPdfUrl, pdfDownloadUrl);
+  const canGeneratePdf = Boolean(exportId && !pdfUrl);
   const hasAts = Boolean(structuredSnapshot);
   const hasWord = Boolean(wordUrl);
   const hasPdf = Boolean(pdfUrl);
+
+  const generatePdfMutation = api.resumeEngineAdmin.generateTailoredPdf.useMutation({
+    onSuccess: (data) => {
+      setLocalPdfUrl(data.pdfDownloadUrl);
+      onPdfGenerated?.(data.pdfDownloadUrl);
+      toast.success(t("tailorPdfSuccess"));
+    },
+    onError: (err) => {
+      toast.error(err.message || t("tailorPdfFailed"));
+    },
+  });
+
   const noteItems =
     matchNotes
       ?.split(/\n+/)
@@ -111,7 +133,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       ? "pdf"
       : hasWord
         ? "word"
-        : hasPdf
+        : hasPdf || canGeneratePdf
           ? "pdf"
           : hasMatch
             ? "match"
@@ -131,6 +153,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
     hasPdf,
     hasAts,
     hasMatch,
+    canGeneratePdf,
   );
 
   const triggerDownload = async (url: string, targetFilename: string) => {
@@ -169,6 +192,18 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       : `${fileName.replace(/\.[^/.]+$/, "")}.pdf`
     : "tailored-cv.pdf";
 
+    const handleGeneratePdf = async (autoDownload = false) => {
+    if (!exportId || generatePdfMutation.isPending) return;
+    try {
+      const res = await generatePdfMutation.mutateAsync({ exportId });
+      if (autoDownload && res.pdfDownloadUrl) {
+        void triggerDownload(res.pdfDownloadUrl, pdfFilename);
+      }
+    } catch {
+      // toast is handled in onError
+    }
+  };
+
   const previewLabel =
     mode === "pdf"
       ? t("tailorPreviewPdf")
@@ -199,7 +234,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
               {t("tailorPreviewWord")}
             </DropdownMenuItem>
             <DropdownMenuItem
-              disabled={!hasPdf}
+              disabled={!hasPdf && !canGeneratePdf}
               onClick={() => setUserMode("pdf")}
             >
               {t("tailorPreviewPdf")}
@@ -231,7 +266,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
                 return current === "match"
                   ? hasWord
                     ? "word"
-                    : hasPdf
+                    : hasPdf || canGeneratePdf
                       ? "pdf"
                       : "ats"
                   : "match";
@@ -245,7 +280,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
           </Button>
         ) : null}
 
-        {hasWord && hasPdf ? (
+        {hasWord && (hasPdf || canGeneratePdf) ? (
           <div className="inline-flex rounded-md shadow-xs">
             <Button
               type="button"
@@ -283,11 +318,20 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
                   {t("tailorDownloadDocx")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  disabled={generatePdfMutation.isPending}
                   onClick={() => {
-                    if (pdfUrl) void triggerDownload(pdfUrl, pdfFilename);
+                    if (pdfUrl) {
+                      void triggerDownload(pdfUrl, pdfFilename);
+                    } else if (canGeneratePdf) {
+                      void handleGeneratePdf(true);
+                    }
                   }}
                 >
-                  <Download className="mr-1.5 size-3.5" aria-hidden />
+                  {generatePdfMutation.isPending ? (
+                    <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+                  ) : (
+                    <Download className="mr-1.5 size-3.5" aria-hidden />
+                  )}
                   {t("tailorDownloadPdf")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -298,13 +342,18 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
             type="button"
             size="sm"
             variant="outline"
-            disabled={!hasWord && !hasPdf}
+            disabled={!hasWord && !hasPdf && !canGeneratePdf}
             onClick={() => {
               if (wordUrl) void triggerDownload(wordUrl, docxFilename);
               else if (pdfUrl) void triggerDownload(pdfUrl, pdfFilename);
+              else if (canGeneratePdf) void handleGeneratePdf(true);
             }}
           >
-            <Download className="mr-1.5 size-3.5" aria-hidden />
+            {generatePdfMutation.isPending ? (
+              <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+            ) : (
+              <Download className="mr-1.5 size-3.5" aria-hidden />
+            )}
             {hasPdf && !hasWord
               ? t("tailorDownloadPdf")
               : t("tailorDownloadDocx")}
@@ -333,6 +382,27 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
 
       {mode === "pdf" && pdfUrl ? (
         <PdfFilePreview fileUrl={pdfUrl} title={t("tailorPreviewPdf")} />
+      ) : null}
+
+      {mode === "pdf" && !pdfUrl ? (
+        <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border p-8 text-center bg-card">
+          <p className="text-sm text-muted-foreground max-w-md">
+            {t("tailorPdfOnDemandNotice")}
+          </p>
+          <Button
+            type="button"
+            size="sm"
+            disabled={!exportId || generatePdfMutation.isPending}
+            onClick={() => void handleGeneratePdf(false)}
+          >
+            {generatePdfMutation.isPending ? (
+              <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+            ) : (
+              <Download className="mr-1.5 size-3.5" aria-hidden />
+            )}
+            {t("tailorRegeneratePdf")}
+          </Button>
+        </div>
       ) : null}
 
       {mode === "ats" && hasAts ? (

@@ -458,4 +458,44 @@ describe("rebuildDocx — empty-slot pruning", () => {
     expect(xml).toContain("Líder de Equipo de Desarrollo");
     expect(xml).toContain("Ingeniero de Software Senior");
   });
+
+  it("dynamically clones paragraphs when extraBullets are provided", async () => {
+    const buffer = await buildMinimalDocx(`
+      <w:p w14:paraId="11111111" w:rsidR="00000001">
+        <w:pPr><w:pStyle w:val="Prrafodelista"/></w:pPr>
+        <w:r><w:t>Base bullet point</w:t></w:r>
+      </w:p>
+    `);
+    const parsed = await parseDocx(buffer);
+    const adapted: AdaptedSection[] = [
+      {
+        id: parsed.sections[0].id,
+        paragraphs: [
+          {
+            id: parsed.sections[0].paragraphs[0].id,
+            runs: [{ id: "run-0", text: "Adapted base bullet" }],
+            extraBullets: ["Dynamic bullet 1", "Dynamic bullet 2"],
+          },
+        ],
+      },
+    ];
+
+    const xml = await rebuildAndReadXml(parsed, adapted, "en");
+
+    expect(xml).toContain("Adapted base bullet");
+    expect(xml).toContain("Dynamic bullet 1");
+    expect(xml).toContain("Dynamic bullet 2");
+
+    // All 3 paragraphs should retain the Prrafodelista style
+    const styleMatches = xml.match(/w:val="Prrafodelista"/g);
+    expect(styleMatches?.length).toBe(3);
+
+    // Each paragraph should have a distinct paraId
+    const paraIdMatches = [...xml.matchAll(/w14:paraId="([^"]+)"/g)].map(
+      (m) => m[1],
+    );
+    expect(paraIdMatches.length).toBe(3);
+    const uniqueParaIds = new Set(paraIdMatches);
+    expect(uniqueParaIds.size).toBe(3);
+  });
 });

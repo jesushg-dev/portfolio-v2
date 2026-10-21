@@ -4024,7 +4024,8 @@
       "polishDocxSuccess": "Polished DOCX replaced the generated file",
       "polishPdfSuccess": "PDF saved as the resume for this application",
       "polishUploadFailed": "Could not replace the resume file",
-      "tailorRegeneratePdf": "Rebuild PDF from DOCX"
+      "tailorRegeneratePdf": "Rebuild PDF from DOCX",
+      "tailorPdfOnDemandNotice": "To conserve your iLovePDF credits, the PDF is generated on demand upon request."
     }
   },
   "auth": {

@@ -4003,7 +4003,8 @@
       "polishDocxSuccess": "El DOCX pulido reemplazó el archivo generado",
       "polishPdfSuccess": "PDF guardado como currículum de esta postulación",
       "polishUploadFailed": "No se pudo reemplazar el currículum",
-      "tailorRegeneratePdf": "Regenerar PDF desde el DOCX"
+      "tailorRegeneratePdf": "Regenerar PDF desde el DOCX",
+      "tailorPdfOnDemandNotice": "Para conservar tus créditos de iLovePDF, el PDF se genera bajo demanda al solicitarlo."
     },
     "uses": {
       "title": "Uses",

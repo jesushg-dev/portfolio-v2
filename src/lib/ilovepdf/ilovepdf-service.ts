@@ -37,7 +37,7 @@ function base64UrlEncode(data: string | Buffer): string {
 
 /**
  * Generates an HS256 JSON Web Token signed with the iLovePDF secret key.
- * Contains `iss: publicKey`, `iat` (now), and `exp` (now + 2 hours).
+ * Contains `iss: "api.ilovepdf.com"`, `jti: publicKey`, and `iat: now - 5`.
  */
 export function generateILovePdfToken(
   publicKey: string,
@@ -46,10 +46,9 @@ export function generateILovePdfToken(
   const header = { alg: "HS256", typ: "JWT" };
   const now = Math.floor(Date.now() / 1000);
   const payload = {
-    iss: publicKey,
-    iat: now,
-    exp: now + 7200,
-    jti: crypto.randomUUID(),
+    iss: "api.ilovepdf.com",
+    jti: publicKey,
+    iat: now - 5,
   };
 
   const encodedHeader = base64UrlEncode(JSON.stringify(header));
@@ -75,7 +74,7 @@ export async function testILovePdfConnection(
   try {
     const token = generateILovePdfToken(publicKey, secretKey);
     const response = await fetch("https://api.ilovepdf.com/v1/start/officepdf", {
-      method: "POST",
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -86,11 +85,13 @@ export async function testILovePdfConnection(
       const errorJson = (await response.json().catch(() => null)) as {
         name?: string;
         message?: string;
+        error?: { message?: string };
       } | null;
       return {
         success: false,
         error:
           errorJson?.message ??
+          errorJson?.error?.message ??
           `iLovePDF API returned status ${response.status}`,
       };
     }
@@ -115,7 +116,7 @@ async function startTask(
   token: string,
 ): Promise<ILovePdfStartResponse> {
   const response = await fetch(`https://api.ilovepdf.com/v1/start/${tool}`, {
-    method: "POST",
+    method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },

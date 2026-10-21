@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
-import { CheckCircle2, Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { api, type RouterOutputs } from "@/trpc/react";
@@ -157,7 +157,9 @@ export function ILovePdfIntegrationForm({
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={handleTestConnection}
+                onClick={() => {
+                  void handleTestConnection();
+                }}
                 disabled={isTesting || isPending}
               >
                 {isTesting ? (

@@ -6,6 +6,7 @@ export const INTEGRATION_PROVIDERS = [
   "spotify",
   "uploadthing",
   "ai",
+  "ilovepdf",
   "google-calendar",
 ] as const satisfies readonly IntegrationProvider[];
 
