@@ -43,3 +43,7 @@ if (!hasDatabaseName) {
 }
 
 console.log("MONGODB_URI includes a database name.");
+
+// Run pre-push cleanup to purge invalid/duplicate index records that would block unique indexes
+const { cleanupOrphanRecords } = await import("./cleanup-orphan-translations.mjs");
+await cleanupOrphanRecords();

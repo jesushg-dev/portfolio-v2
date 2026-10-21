@@ -166,7 +166,6 @@
   "pnpm": {
     "overrides": {
       "proxy-addr": ">=2.0.8",
-      "brace-expansion": ">=5.0.11",
       "source-map-js": ">=1.2.2",
       "effect": ">=3.20.0",
       "deepmerge-ts": ">=8.0.0"
