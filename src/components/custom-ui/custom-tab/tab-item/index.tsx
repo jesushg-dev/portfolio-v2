@@ -67,7 +67,7 @@ const TabItem: FC<TabItemProps> = ({
         className={cn(
           "group relative z-10 flex shrink-0 cursor-pointer items-center rounded-full transition-all",
           minimal
-            ? "min-h-0 w-full flex-col justify-center gap-0.5 px-2.5 py-1.5 text-center sm:min-h-11 sm:flex-row sm:gap-0 sm:px-5 sm:py-2 sm:text-left"
+            ? "min-h-11 min-w-11 w-full flex-col justify-center gap-0.5 px-2.5 py-1.5 text-center sm:flex-row sm:gap-0 sm:px-5 sm:py-2 sm:text-left"
             : "min-h-11 w-full px-4 py-2 text-left sm:p-4 sm:px-5 md:p-5",
           isActive
             ? "text-foreground touch-none"

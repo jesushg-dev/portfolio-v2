@@ -1,4 +1,8 @@
-import { initialsFromDisplayName, resolveSiteBrand } from "./site-brand";
+import {
+  getBrandAccessibleLabel,
+  initialsFromDisplayName,
+  resolveSiteBrand,
+} from "./site-brand";
 
 describe("initialsFromDisplayName", () => {
   it("uses first letters of multiple words", () => {
@@ -77,5 +81,37 @@ describe("resolveSiteBrand", () => {
       text: "AB",
       label: "Ann Baker",
     });
+  });
+});
+
+describe("getBrandAccessibleLabel", () => {
+  it("returns image brand label unmodified", () => {
+    expect(
+      getBrandAccessibleLabel({
+        mode: "image",
+        imageUrl: "https://example.com/logo.png",
+        label: "Jesús Hernández",
+      }),
+    ).toBe("Jesús Hernández");
+  });
+
+  it("prefixes label with visible initials if not contained", () => {
+    expect(
+      getBrandAccessibleLabel({
+        mode: "text",
+        text: "Jehg",
+        label: "Jesús Hernández",
+      }),
+    ).toBe("Jehg · Jesús Hernández");
+  });
+
+  it("returns label as-is if visible text is already contained", () => {
+    expect(
+      getBrandAccessibleLabel({
+        mode: "text",
+        text: "Jesús",
+        label: "Jesús Hernández",
+      }),
+    ).toBe("Jesús Hernández");
   });
 });

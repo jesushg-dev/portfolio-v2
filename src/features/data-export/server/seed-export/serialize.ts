@@ -353,21 +353,40 @@ function resolveProjectKey(
   return uniqueKey(toPascalKey(enTitle || "Project"), used);
 }
 
+function cleanCaseStudyForExport(caseStudy: ReturnType<typeof caseStudyRowToDto>) {
+  const { gallery, ...rest } = caseStudy;
+  return {
+    ...rest,
+    ...(gallery.length > 0 ? { gallery } : {}),
+  };
+}
+
 function optionalCaseStudyFields(row: {
   hook: string | null;
   challenge: string | null;
   approach: string | null;
   outcome: string | null;
-}): Pick<
-  ProjectSeedRecord["translations"][number],
-  "hook" | "challenge" | "approach" | "outcome"
+}): Partial<
+  Pick<
+    ProjectSeedRecord["translations"][number],
+    "hook" | "challenge" | "approach" | "outcome"
+  >
 > {
-  const hook = row.hook?.trim() ?? "";
-  const challenge = row.challenge?.trim() ?? "";
-  const approach = row.approach?.trim() ?? "";
-  const outcome = row.outcome?.trim() ?? "";
-  if (!hook && !challenge && !approach && !outcome) return {};
-  return { hook, challenge, approach, outcome };
+  const result: Partial<
+    Pick<
+      ProjectSeedRecord["translations"][number],
+      "hook" | "challenge" | "approach" | "outcome"
+    >
+  > = {};
+  const hook = row.hook?.trim();
+  const challenge = row.challenge?.trim();
+  const approach = row.approach?.trim();
+  const outcome = row.outcome?.trim();
+  if (hook) result.hook = hook;
+  if (challenge) result.challenge = challenge;
+  if (approach) result.approach = approach;
+  if (outcome) result.outcome = outcome;
+  return result;
 }
 
 export function serializeProjects(
@@ -405,7 +424,7 @@ export function serializeProjects(
             title: row.title,
             description: row.description,
             ...optionalCaseStudyFields(row),
-            ...(isCaseStudyEmpty(caseStudy) ? {} : { caseStudy }),
+            ...(isCaseStudyEmpty(caseStudy) ? {} : { caseStudy: cleanCaseStudyForExport(caseStudy) }),
           };
         },
       ),

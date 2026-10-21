@@ -76,3 +76,19 @@ export function resolveSiteBrand(input: SiteBrandInput): SiteBrand {
 
   return { mode: "text", text: "?", label };
 }
+
+/**
+ * Ensures the accessible name of the logo link contains the visible text
+ * (WCAG 2.5.3 Label in Name / Axe label-content-name-mismatch).
+ */
+export function getBrandAccessibleLabel(brand: SiteBrand): string {
+  if (brand.mode === "image") {
+    return brand.label;
+  }
+  const text = brand.text.trim();
+  const label = brand.label.trim();
+  if (!text || label.toLowerCase().includes(text.toLowerCase())) {
+    return label;
+  }
+  return `${text} · ${label}`;
+}
