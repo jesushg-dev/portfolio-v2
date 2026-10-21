@@ -7,12 +7,18 @@ import PortfolioItem from "./project-item";
 
 interface MockLinkProps extends Omit<ComponentPropsWithoutRef<"a">, "href"> {
   children?: ReactNode;
-  href: string | { pathname?: string };
+  href: string | { pathname?: string; params?: Record<string, string> };
 }
 
 jest.mock("@/i18n/routing", () => ({
   Link: ({ children, href, ...props }: MockLinkProps) => {
-    const targetHref = typeof href === "string" ? href : (href.pathname ?? "#");
+    const targetHref =
+      typeof href === "string"
+        ? href
+        : Object.entries(href.params ?? {}).reduce(
+            (path, [key, value]) => path.replace(`[${key}]`, value),
+            href.pathname ?? "#",
+          );
     return (
       <a href={targetHref} {...props}>
         {children}
@@ -30,7 +36,7 @@ describe("PortfolioItem", () => {
     image: "https://example.com/project.png",
     description: "An awesome project description",
     type: "Web",
-    skills: [{ title: "React", image: "react.png" }],
+    skills: [{ title: "React", image: "https://cdn.simpleicons.org/react" }],
     urlName: "View Website",
     sourceName: "View Source",
     canSeeDemo: "Can see demo",
@@ -38,16 +44,81 @@ describe("PortfolioItem", () => {
     privateDescription: "Private repo",
     caseStudyLabel: "Case Study",
     kindLabels: { PROFESSIONAL: "Professional" },
+    metaLabels: {
+      solo: "Solo",
+      formatTeam: (count: number) => `Team of ${count}`,
+      now: "present",
+      statuses: {
+        IN_PRODUCTION: "In production",
+      },
+    },
+    teaserLabels: {
+      formatDecisions: (count: number) => `${count} technical decisions`,
+      layers: "Architecture",
+      formatMetrics: (count: number) => `${count} metrics`,
+    },
   } as unknown as Parameters<typeof PortfolioItem>[0];
 
-  it("renders title, description and skills", () => {
-    renderWithIntl(<PortfolioItem {...defaultProps} />);
+  it("renders title, description, skills and meta line", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        teamSize={1}
+        startedAt="2022-01-01"
+        status="IN_PRODUCTION"
+      />,
+    );
 
     expect(screen.getByText("Awesome Project")).toBeInTheDocument();
     expect(
       screen.getByText("An awesome project description"),
     ).toBeInTheDocument();
     expect(screen.getByText("React")).toBeInTheDocument();
+    expect(
+      screen.getByText("Solo · 2022–present · In production"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders team size format when teamSize > 1", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        teamSize={4}
+        startedAt="2022-01-01"
+        status="IN_PRODUCTION"
+      />,
+    );
+
+    expect(
+      screen.getByText("Team of 4 · 2022–present · In production"),
+    ).toBeInTheDocument();
+  });
+
+  it("renders key result chips when hook is provided", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        hook="-45% latency · Clean Architecture"
+      />,
+    );
+
+    expect(screen.getByText("-45% latency")).toBeInTheDocument();
+    expect(screen.getByText("Clean Architecture")).toBeInTheDocument();
+  });
+
+  it("renders case study teaser when csInfo is present", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        caseStudyEnabled
+        slug="awesome-project"
+        csInfo={{ decisions: 8, layers: true, metrics: 4 }}
+      />,
+    );
+
+    expect(
+      screen.getByText("8 technical decisions · Architecture · 4 metrics"),
+    ).toBeInTheDocument();
   });
 
   it("shows fallback when image fail event is triggered", () => {
@@ -57,6 +128,39 @@ describe("PortfolioItem", () => {
     fireEvent.error(img);
 
     expect(screen.queryByAltText("Awesome Project")).not.toBeInTheDocument();
-    expect(screen.getAllByText("Awesome Project")).toHaveLength(2);
+    expect(screen.getByText("Awesome Project")).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-mock="frontend"]'),
+    ).toBeInTheDocument();
+  });
+
+  it("shows a modern case study button for enabled projects", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        slug="awesome-project"
+        caseStudyEnabled
+      />,
+    );
+
+    const caseStudyLink = screen.getByRole("link", {
+      name: "Case Study: Awesome Project",
+    });
+    expect(caseStudyLink).toHaveAttribute("href", "/projects/awesome-project");
+    expect(caseStudyLink).toHaveClass("text-primary");
+  });
+
+  it("does not show the case study button when it is disabled", () => {
+    renderWithIntl(
+      <PortfolioItem
+        {...defaultProps}
+        slug="awesome-project"
+        caseStudyEnabled={false}
+      />,
+    );
+
+    expect(
+      screen.queryByRole("link", { name: "Case Study: Awesome Project" }),
+    ).not.toBeInTheDocument();
   });
 });

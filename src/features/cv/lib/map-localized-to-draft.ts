@@ -18,8 +18,7 @@ const CONTACT_TYPE_MAP: Record<
 
 function formatDate(date: Date | null): string | undefined {
   if (!date) return undefined;
-  const month = date.toLocaleString("en-US", { month: "long" });
-  return `${month} ${date.getFullYear()}`;
+  return date.toISOString().slice(0, 7);
 }
 
 export function mapLocalizedCvToDraft(
@@ -38,11 +37,14 @@ export function mapLocalizedCvToDraft(
       id: exp.id,
       company: exp.company,
       role: exp.role,
+      employmentType: exp.employmentType ?? undefined,
       location: exp.location ?? undefined,
+      companyBlurb: exp.companyBlurb,
       startDate: formatDate(exp.startDate),
       endDate: formatDate(exp.endDate),
       current: exp.current ?? undefined,
       responsibilities: exp.responsibilities.map((r) => r.text),
+      atsResponsibilities: [],
     })),
     education: data.educations.map((edu) => ({
       id: edu.id,
@@ -64,6 +66,10 @@ export function mapLocalizedCvToDraft(
       type: CONTACT_TYPE_MAP[c.type] ?? "OTHER",
       value: c.value,
     })),
-    certifications: [],
+    certifications: (data.certifications ?? []).map((cert) => ({
+      title: cert.title,
+      issuer: cert.issuer,
+      year: cert.year,
+    })),
   };
 }

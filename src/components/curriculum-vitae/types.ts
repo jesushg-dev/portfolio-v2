@@ -2,7 +2,11 @@ import type { RouterOutputs } from "@/trpc/react";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import type { Locale } from "@/i18n/config";
-import type { CvContactType, CvSkillCategory } from "@prisma/client";
+import type {
+  CvContactType,
+  CvEmploymentType,
+  CvSkillCategory,
+} from "@prisma/client";
 
 /**
  * Server-resolved CV data — the shape returned by `cv.getPublic` /
@@ -56,12 +60,14 @@ export interface LocalizedCvData {
     id: string;
     company: string;
     companyLogoUrl: string | null;
+    employmentType?: CvEmploymentType | null;
     startDate: Date | null;
     endDate: Date | null;
     current: boolean;
     order: number;
     role: string;
     location: string;
+    companyBlurb?: string;
     responsibilities: {
       id: string;
       order: number;
@@ -85,6 +91,12 @@ export interface LocalizedCvData {
     contact: string | null;
     order: number;
     role: string;
+  }[];
+  certifications: {
+    id: string;
+    title: string;
+    issuer?: string;
+    year?: number;
   }[];
 }
 
@@ -143,17 +155,21 @@ export function mapCvDataToLocalized(
     id: exp.id,
     company: exp.company,
     companyLogoUrl: exp.companyLogoUrl,
+    employmentType: exp.employmentType ?? "FULL_TIME",
     startDate: exp.startDate,
     endDate: exp.endDate,
     current: exp.current,
     order: exp.order,
     role: resolver(exp.translations, "role"),
     location: resolver(exp.translations, "location") ?? "",
-    responsibilities: exp.responsibilities.map((resp) => ({
-      id: resp.id,
-      order: resp.order,
-      text: resolver(resp.translations, "text"),
-    })),
+    companyBlurb: resolver(exp.translations, "companyBlurb") || undefined,
+    responsibilities: exp.responsibilities
+      .filter((resp) => !resp.atsOnly)
+      .map((resp) => ({
+        id: resp.id,
+        order: resp.order,
+        text: resolver(resp.translations, "text"),
+      })),
     skills: exp.CvExperienceSkill.map((s) => s.skill.title),
   }));
 
@@ -193,5 +209,6 @@ export function mapCvDataToLocalized(
     softSkills,
     additionalInformation,
     personalReferences,
+    certifications: [],
   };
 }

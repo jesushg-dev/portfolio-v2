@@ -6,7 +6,8 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const revealEase = [0.16, 0.8, 0.3, 1] as const;
-const revealViewport = { once: true, margin: "-80px" as const };
+const revealTransition = { duration: 0.65, ease: revealEase } as const;
+const revealItemTransition = { duration: 0.55, ease: revealEase } as const;
 
 interface ProcessRevealProps {
   children: ReactNode;
@@ -29,9 +30,8 @@ export function ProcessReveal({
     <motion.div
       className={className}
       initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={revealViewport}
-      transition={{ duration: 0.65, ease: revealEase, delay }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ ...revealTransition, delay }}
     >
       {children}
     </motion.div>
@@ -66,11 +66,9 @@ export function ProcessRevealItem({
     <motion.li
       className={cn(className)}
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={revealViewport}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.55,
-        ease: revealEase,
+        ...revealItemTransition,
         delay: index * 0.08,
       }}
       {...props}
@@ -108,11 +106,9 @@ export function ProcessRevealStaggerItem({
     <motion.div
       className={cn(className)}
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={revealViewport}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.55,
-        ease: revealEase,
+        ...revealItemTransition,
         delay: index * 0.08,
       }}
       {...props}

@@ -25,3 +25,17 @@ export function resolveCompanyLabel(
 
   return companies.find((company) => company.id === value)?.name ?? null;
 }
+
+/** Match an imported company name to an existing row, or encode a pending create. */
+export function matchCompanyByName(
+  name: string,
+  companies: readonly { id: string; name: string }[],
+): string | null {
+  const trimmed = name.trim();
+  if (!trimmed) return null;
+
+  const found = companies.find(
+    (company) => company.name.toLowerCase() === trimmed.toLowerCase(),
+  );
+  return found ? found.id : encodeNewCompanyName(trimmed);
+}

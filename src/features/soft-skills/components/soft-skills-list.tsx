@@ -13,6 +13,7 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -241,6 +242,7 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
               <Settings2 className="mr-2 h-4 w-4" />
               {t("sectionSettings")}
             </Link>
+            <ExportSeedJsonButton entity="softSkills" />
             <Link
               href="/admin/soft-skills/new"
               id="soft-skills-add"

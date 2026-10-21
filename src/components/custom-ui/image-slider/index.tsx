@@ -1,12 +1,11 @@
 import { useState, useEffect, type FC } from "react";
-import type { ImageLoader } from "next/image";
-import Image from "next/image";
 import { motion } from "motion/react";
+
+import { MediaImage } from "@/components/shared/media-image";
 
 interface ImageSliderProps {
   images: string[];
   interval: number;
-  loader?: ImageLoader;
   className?: string;
   width?: number;
   height?: number;
@@ -16,7 +15,6 @@ interface ImageSliderProps {
 const ImageSlider: FC<ImageSliderProps> = ({
   images,
   interval,
-  loader,
   className,
   width,
   height,
@@ -26,12 +24,10 @@ const ImageSlider: FC<ImageSliderProps> = ({
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      // Calculate the index of the next image
       const nextImageIndex = (currentImageIndex + 1) % images.length;
       setCurrentImageIndex(nextImageIndex);
     }, interval);
 
-    // Cleanup the interval when the component is unmounted
     return () => {
       clearInterval(intervalId);
     };
@@ -44,12 +40,11 @@ const ImageSlider: FC<ImageSliderProps> = ({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <Image
+      <MediaImage
         src={images[currentImageIndex]}
         alt={alt ?? "ImageSlider's image"}
         width={width}
         height={height}
-        loader={loader}
         className={className}
       />
     </motion.div>

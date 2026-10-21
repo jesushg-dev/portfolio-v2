@@ -71,7 +71,10 @@ function softSkillsNavLink(page: Page) {
 
 export async function goToSoftSkillsList(page: Page): Promise<void> {
   const addButton = page.locator("#soft-skills-add");
-  if (await addButton.isVisible()) {
+  const onList = /\/admin\/soft-skills\/?$/.test(
+    new URL(page.url(), "http://127.0.0.1").pathname,
+  );
+  if (onList && (await addButton.isVisible())) {
     return;
   }
 

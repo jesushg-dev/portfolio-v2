@@ -8,7 +8,7 @@ import { SITE_URL } from "@/lib/seo/site";
 type StaticHref = Parameters<typeof getPathname>[0]["href"];
 
 interface DynamicHref {
-  pathname: "/projects/[slug]" | "/skills/[slug]";
+  pathname: "/projects/[slug]" | "/skills/[slug]" | "/process/[slug]";
   params: { slug: string };
 }
 
@@ -70,6 +70,7 @@ export const PUBLIC_SITEMAP_PATHS = [
   "/uses",
   "/now",
   "/colophon",
+  "/stats",
 ] as const satisfies readonly StaticHref[];
 
 const SITEMAP_LIVE_FLAGS: Partial<
@@ -78,6 +79,7 @@ const SITEMAP_LIVE_FLAGS: Partial<
   "/uses": PUBLIC_PAGE_LIVE.uses,
   "/now": PUBLIC_PAGE_LIVE.now,
   "/colophon": PUBLIC_PAGE_LIVE.colophon,
+  "/stats": PUBLIC_PAGE_LIVE.stats,
 };
 
 export const INDEXABLE_SITEMAP_PATHS = PUBLIC_SITEMAP_PATHS.filter(
@@ -95,6 +97,7 @@ export const PUBLIC_SITEMAP_PRIORITIES: Partial<
   "/uses": 0.6,
   "/now": 0.6,
   "/colophon": 0.4,
+  "/stats": 0.5,
   "/privacy": 0.3,
 };
 
@@ -112,5 +115,6 @@ export const PUBLIC_SITEMAP_CHANGE_FREQUENCY: Partial<
   "/uses": "monthly",
   "/now": "weekly",
   "/colophon": "yearly",
+  "/stats": "weekly",
   "/privacy": "yearly",
 };

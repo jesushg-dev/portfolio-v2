@@ -79,17 +79,16 @@ async function trpcMutate(
 }
 
 export async function goToCvEditor(page: Page): Promise<void> {
-  await Promise.all([
-    page.waitForResponse(
-      (response) =>
-        response.url().includes("/api/trpc/cv.getMine") &&
-        response.request().method() === "GET" &&
-        response.ok(),
-      { timeout: 30_000 },
-    ),
-    page.goto("/admin/cv"),
-  ]);
-  await page.locator("#header").waitFor({ state: "visible", timeout: 20_000 });
+  await page.goto("/admin/cv", { waitUntil: "domcontentloaded" });
+
+  await page.waitForURL(/\/admin\/cv(?:\?|$)/, {
+    timeout: 30_000,
+  });
+
+  await page.locator("#header").waitFor({
+    state: "visible",
+    timeout: 30_000,
+  });
 }
 
 export async function openCvSection(
@@ -478,75 +477,7 @@ export async function fillCvFromFixture(page: Page): Promise<void> {
 }
 
 export async function cleanupUserCv(page: Page): Promise<void> {
-  for (let pass = 0; pass < 3; pass += 1) {
-    const cv = await trpcQuery<CvMine>(page, "cv.getMine");
-    const remaining =
-      cv.contacts.length +
-      cv.educations.length +
-      cv.languages.length +
-      cv.technicalSkills.length +
-      cv.experiences.length +
-      cv.softSkills.length +
-      cv.additionalInformation.length;
-    if (remaining === 0) return;
-
-    for (const experience of cv.experiences) {
-      await trpcMutate(
-        page,
-        "cv.deleteExperience",
-        { id: experience.id },
-        { ignoreNotFound: true },
-      );
-    }
-    for (const contact of cv.contacts) {
-      await trpcMutate(
-        page,
-        "cv.deleteContact",
-        { id: contact.id },
-        { ignoreNotFound: true },
-      );
-    }
-    for (const education of cv.educations) {
-      await trpcMutate(
-        page,
-        "cv.deleteEducation",
-        { id: education.id },
-        { ignoreNotFound: true },
-      );
-    }
-    for (const language of cv.languages) {
-      await trpcMutate(
-        page,
-        "cv.deleteLanguage",
-        { id: language.id },
-        { ignoreNotFound: true },
-      );
-    }
-    for (const skill of cv.technicalSkills) {
-      await trpcMutate(
-        page,
-        "cv.deleteTechnicalSkill",
-        { id: skill.id },
-        { ignoreNotFound: true },
-      );
-    }
-    for (const softSkill of cv.softSkills) {
-      await trpcMutate(
-        page,
-        "cv.deleteSoftSkill",
-        { id: softSkill.id },
-        { ignoreNotFound: true },
-      );
-    }
-    for (const item of cv.additionalInformation) {
-      await trpcMutate(
-        page,
-        "cv.deleteAdditionalInfo",
-        { id: item.id },
-        { ignoreNotFound: true },
-      );
-    }
-  }
+  await trpcMutate(page, "cv.deleteAll", null);
 }
 
 export async function getCvMine(page: Page): Promise<CvMine> {

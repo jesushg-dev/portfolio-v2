@@ -18,6 +18,7 @@ export interface AxeViolationSummary {
   description: string;
   helpUrl: string;
   nodeCount: number;
+  samples: string[];
 }
 
 export interface ShieldHouseRuleIssue {
@@ -44,6 +45,11 @@ export function summarizeAxeViolations(
     description: violation.description,
     helpUrl: violation.helpUrl,
     nodeCount: violation.nodes.length,
+    samples: violation.nodes.slice(0, 4).map((node) => {
+      const target = node.target.join(" ");
+      const html = node.html.replace(/\s+/g, " ").slice(0, 140);
+      return `${target} → ${html}`;
+    }),
   }));
 }
 
@@ -165,6 +171,9 @@ export function formatA11yReport(options: {
       lines.push(
         `  [${violation.impact ?? "unknown"}] ${violation.id} (${violation.nodeCount} nodes) — ${violation.helpUrl}`,
       );
+      for (const sample of violation.samples) {
+        lines.push(`    ${sample}`);
+      }
     }
   }
 

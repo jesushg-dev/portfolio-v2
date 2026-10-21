@@ -3,6 +3,8 @@ import type { PrismaClient } from "@prisma/client";
 import type { Locale } from "@/i18n/config";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
+import { normalizeEmploymentType } from "./employment-type";
+import { resolveUserTechnicalSkills } from "./resolve-user-technical-skills";
 
 function formatExperienceDate(
   date: Date | null | undefined,
@@ -35,6 +37,7 @@ export async function loadCvStructuredDraft(
     skills,
     contacts,
     languages,
+    certifications,
   ] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
     db.cvHeader.findUnique({
@@ -61,10 +64,7 @@ export async function loadCvStructuredDraft(
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    db.cvTechnicalSkill.findMany({
-      where: { userId },
-      orderBy: { order: "asc" },
-    }),
+    resolveUserTechnicalSkills(db, userId),
     db.cvContact.findMany({
       where: { userId },
       orderBy: { order: "asc" },
@@ -73,6 +73,11 @@ export async function loadCvStructuredDraft(
       where: { userId },
       include: { translations: true },
       orderBy: { order: "asc" },
+    }),
+    db.certification.findMany({
+      where: { userId },
+      include: { CertificationTranslation: true },
+      orderBy: { issuedDate: "desc" },
     }),
   ]);
 
@@ -102,17 +107,26 @@ export async function loadCvStructuredDraft(
     },
     experiences: experiences.map((exp, index) => {
       const expT = field.for(exp.translations);
+      const visible: string[] = [];
+      const atsOnly: string[] = [];
+      for (const resp of exp.responsibilities) {
+        const text = field(resp.translations, "text");
+        if (!text.trim()) continue;
+        if (resp.atsOnly) atsOnly.push(text);
+        else visible.push(text);
+      }
       return {
         id: exp.id || `exp-${index + 1}`,
         company: exp.company,
         role: expT("role"),
+        employmentType: normalizeEmploymentType(exp.employmentType),
         location: expT("location") || undefined,
+        companyBlurb: expT("companyBlurb") || undefined,
         startDate: formatExperienceDate(exp.startDate),
         endDate: formatExperienceDate(exp.endDate),
         current: exp.current,
-        responsibilities: exp.responsibilities.map((resp) =>
-          field(resp.translations, "text"),
-        ),
+        responsibilities: visible,
+        atsResponsibilities: atsOnly,
       };
     }),
     education: education.map((edu, index) => {
@@ -124,6 +138,7 @@ export async function loadCvStructuredDraft(
         location: eduT("location") || undefined,
         startYear: edu.startYear ?? undefined,
         endYear: edu.endYear ?? undefined,
+        dates: edu.dates ?? undefined,
       };
     }),
     skills: skills.map((skill) => ({
@@ -141,6 +156,21 @@ export async function loadCvStructuredDraft(
       type: contact.type,
       value: contact.value,
     })),
-    certifications: [],
+    certifications: certifications.map((cert) => {
+      const translation = cert.CertificationTranslation.find(
+        (row) =>
+          appLanguages.find((lang) => lang.id === row.appLanguageId)?.code ===
+          activeLocale,
+      );
+      const fallback = cert.CertificationTranslation[0];
+      return {
+        title:
+          [translation?.title, fallback?.title].find((value) =>
+            Boolean(value?.trim()),
+          ) ?? cert.company,
+        issuer: cert.company.trim() ? cert.company : undefined,
+        year: cert.issuedDate ?? undefined,
+      };
+    }),
   };
 }

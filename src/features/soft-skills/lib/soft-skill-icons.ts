@@ -16,6 +16,7 @@ import {
   RiBarChartLine,
 } from "react-icons/ri";
 import type { IconType } from "react-icons/lib";
+import { resolveIcon } from "@/lib/icons/icon-registry";
 
 export const SOFT_SKILL_ICON_OPTIONS = {
   RiTeamLine: RiTeamLine,
@@ -44,10 +45,7 @@ export const SOFT_SKILL_ICON_KEYS = Object.keys(
 const DEFAULT_ICON: SoftSkillIconKey = "RiTeamLine";
 
 export function resolveSoftSkillIcon(key: string): IconType {
-  if (key in SOFT_SKILL_ICON_OPTIONS) {
-    return SOFT_SKILL_ICON_OPTIONS[key as SoftSkillIconKey];
-  }
-  return SOFT_SKILL_ICON_OPTIONS[DEFAULT_ICON];
+  return resolveIcon(key, SOFT_SKILL_ICON_OPTIONS[DEFAULT_ICON]) as IconType;
 }
 
 export function isSoftSkillIconKey(key: string): key is SoftSkillIconKey {

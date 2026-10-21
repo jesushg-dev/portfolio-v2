@@ -3,6 +3,12 @@ import type { Locale } from "@/i18n/config";
 
 import { parseDocx } from "@/lib/docx/parser";
 import { rebuildDocx } from "@/lib/docx/rebuilder";
+import {
+  applyEditsToSections,
+  type CvDocxTailorResult,
+} from "@/features/resume-engine/lib/cv-docx-tailor-result";
+import type { UploadTailorSource } from "@/features/resume-engine/lib/fetch-upload-docx";
+import type { ParsedPdfForTailor } from "@/features/resume-engine/lib/pdf/parse-pdf-for-tailor";
 import type { AdaptedSection } from "@/lib/types";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
 import {
@@ -14,6 +20,16 @@ import {
   type CvImportDraft,
 } from "@/features/cv/lib/cv-import-draft";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
+import { applyAdaptedSectionsToDraft } from "@/features/cv/lib/apply-adapted-sections-to-draft";
+import {
+  parseMatchAnalysis,
+  type CvMatchAnalysis,
+} from "@/features/resume-engine/lib/cv-match-analysis";
+import {
+  syncLockedParagraphsFromDraft,
+  withLockedMetaAdaptations,
+  withLockedMetaSection,
+} from "@/features/resume-engine/lib/sync-locked-paragraphs-from-draft";
 
 const DOCX_MIME =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -22,6 +38,7 @@ interface FinalizeTailorExportInput {
   draft: CvImportDraft;
   aiScore?: number | null;
   matchNotes?: string | null;
+  matchAnalysis?: CvMatchAnalysis | null;
   aiProvider: string;
   sourceType: "studio" | "upload";
   sourceUploadId?: string;
@@ -36,6 +53,7 @@ interface FinalizeDocxTailorExportInput {
   adaptedSections: AdaptedSection[];
   aiScore?: number | null;
   matchNotes?: string | null;
+  matchAnalysis?: CvMatchAnalysis | null;
   aiProvider: string;
   sourceType: "studio" | "upload";
   sourceUploadId?: string;
@@ -82,6 +100,7 @@ async function persistResumeExport(
     locale: Locale;
     aiScore?: number | null;
     matchNotes?: string | null;
+    matchAnalysis?: CvMatchAnalysis | null;
     aiProvider: string;
     sourceType: "studio" | "upload";
     sourceUploadId?: string;
@@ -89,6 +108,7 @@ async function persistResumeExport(
     applicationId?: string;
     tailoredFor?: string;
     structuredSnapshot?: unknown;
+    fileKind?: "docx" | "pdf";
   },
 ) {
   let application: {
@@ -110,19 +130,32 @@ async function persistResumeExport(
       .join(" "),
   );
 
+  const fileKind = input.fileKind ?? "docx";
+  const mimeType = fileKind === "pdf" ? "application/pdf" : DOCX_MIME;
   const fileName = buildAtsCvFileName({
     fullName: input.fullName,
     roleTrack,
     company: application?.company.name,
     locale: input.locale,
+    extension: fileKind,
   });
 
   const { url, key } = await uploadBufferToUploadThing(
     userId,
     input.buffer,
     fileName,
-    DOCX_MIME,
+    mimeType,
   );
+
+  let pdfFileName: string | undefined;
+  let pdfFileUrl: string | undefined;
+  let pdfUploadThingKey: string | undefined;
+
+  if (fileKind === "pdf") {
+    pdfFileName = fileName;
+    pdfFileUrl = url;
+    pdfUploadThingKey = key;
+  }
 
   const tailoredFor =
     input.tailoredFor ??
@@ -136,7 +169,14 @@ async function persistResumeExport(
       fileName,
       fileUrl: url,
       uploadThingKey: key,
-      mimeType: DOCX_MIME,
+      mimeType,
+      ...(pdfFileUrl
+        ? {
+            pdfFileName,
+            pdfFileUrl,
+            pdfUploadThingKey,
+          }
+        : {}),
       sourceType: input.sourceType,
       sourceUploadId: input.sourceUploadId,
       tailoredFor,
@@ -145,6 +185,14 @@ async function persistResumeExport(
       aiProvider: input.aiProvider,
       structuredSnapshot: input.structuredSnapshot as
         Prisma.InputJsonValue | undefined,
+      matchAnalysis: (input.matchAnalysis
+        ? {
+            ...input.matchAnalysis,
+            notes: input.matchNotes ?? input.matchAnalysis.notes,
+          }
+        : input.matchNotes
+          ? { notes: input.matchNotes }
+          : null) as Prisma.InputJsonValue | undefined,
       applicationId: application?.id,
     },
   });
@@ -154,8 +202,8 @@ async function persistResumeExport(
       where: { id: application.id },
       data: {
         cvFile: {
-          name: fileName,
-          url,
+          name: pdfFileName ?? fileName,
+          url: pdfFileUrl ?? url,
           uploadedAt: new Date(),
         },
       },
@@ -163,11 +211,19 @@ async function persistResumeExport(
   }
 
   return {
+    exportId: resumeExport.id,
     export: resumeExport,
     downloadUrl: url,
     aiScore: input.aiScore ?? null,
     matchNotes: input.matchNotes ?? null,
+    matchAnalysis:
+      parseMatchAnalysis(input.matchAnalysis) ?? input.matchAnalysis ?? null,
+    structuredSnapshot: input.structuredSnapshot ?? null,
     provider: input.aiProvider,
+    pdfDownloadUrl:
+      resumeExport.pdfFileUrl ?? (fileKind === "pdf" ? url : null),
+    pitchSubject: resumeExport.pitchSubject ?? null,
+    pitchBody: resumeExport.pitchBody ?? null,
   };
 }
 
@@ -192,6 +248,7 @@ export async function finalizeTailorExport(
     locale,
     aiScore: input.aiScore,
     matchNotes: input.matchNotes,
+    matchAnalysis: input.matchAnalysis,
     aiProvider: input.aiProvider,
     sourceType: input.sourceType,
     sourceUploadId: input.sourceUploadId,
@@ -202,20 +259,46 @@ export async function finalizeTailorExport(
   });
 }
 
-/** Upload path: rebuild original DOCX preserving layout, styles, and tables. */
+/** Upload/studio path: rebuild original DOCX preserving layout, styles, and tables. */
 export async function finalizeDocxTailorExport(
   db: PrismaClient,
   userId: string,
   input: FinalizeDocxTailorExportInput,
 ) {
   const locale = input.targetLocale ?? "en";
+  const draft = CvImportDraftSchema.safeParse(input.structuredSnapshot);
+
+  let sections = input.parsed.sections;
+  let adaptedSections: AdaptedSection[] = input.adaptedSections;
+  let structuredSnapshot: unknown =
+    input.structuredSnapshot ?? input.parsed.sections;
+
+  if (draft.success) {
+    structuredSnapshot = applyAdaptedSectionsToDraft(
+      draft.data,
+      input.parsed.sections,
+      input.adaptedSections,
+    );
+  }
+
+  if (draft.success && input.parsed.lockedParagraphs.length > 0) {
+    const lockedAdapted = syncLockedParagraphsFromDraft(
+      input.parsed.lockedParagraphs,
+      draft.data,
+      locale,
+    );
+    sections = withLockedMetaSection(sections, input.parsed.lockedParagraphs);
+    adaptedSections = withLockedMetaAdaptations(adaptedSections, lockedAdapted);
+  }
+
   const buffer = await rebuildDocx(
     input.parsed.zipFiles,
     input.parsed.rawXml,
-    input.parsed.sections,
-    input.adaptedSections,
+    sections,
+    adaptedSections,
     locale,
   );
+
   const fullName = await resolveExportFullName(
     db,
     userId,
@@ -228,12 +311,130 @@ export async function finalizeDocxTailorExport(
     locale,
     aiScore: input.aiScore,
     matchNotes: input.matchNotes,
+    matchAnalysis: input.matchAnalysis,
     aiProvider: input.aiProvider,
     sourceType: input.sourceType,
     sourceUploadId: input.sourceUploadId,
     jobDescription: input.jobDescription,
     applicationId: input.applicationId,
     tailoredFor: input.tailoredFor,
-    structuredSnapshot: input.structuredSnapshot ?? input.parsed.sections,
+    structuredSnapshot,
+  });
+}
+
+interface FinalizePdfTailorExportInput {
+  parsed: ParsedPdfForTailor;
+  adaptedSections: AdaptedSection[];
+  aiScore?: number | null;
+  matchNotes?: string | null;
+  matchAnalysis?: CvMatchAnalysis | null;
+  aiProvider: string;
+  sourceType: "studio" | "upload";
+  sourceUploadId?: string;
+  jobDescription: string;
+  applicationId?: string;
+  tailoredFor?: string;
+  structuredSnapshot?: unknown;
+  targetLocale?: Locale;
+}
+
+/** Upload path: generate tailored document and convert via iLovePDF. */
+export async function finalizePdfTailorExport(
+  db: PrismaClient,
+  userId: string,
+  input: FinalizePdfTailorExportInput,
+) {
+  const locale = input.targetLocale ?? "en";
+  const draft = CvImportDraftSchema.safeParse(input.structuredSnapshot);
+
+  let structuredSnapshot: unknown =
+    input.structuredSnapshot ?? input.parsed.sections;
+
+  let docxDraft: CvImportDraft | null = null;
+  if (draft.success) {
+    const updated = applyAdaptedSectionsToDraft(
+      draft.data,
+      input.parsed.sections,
+      input.adaptedSections,
+    );
+    structuredSnapshot = updated;
+    docxDraft = updated;
+  }
+
+  const docxBuffer = docxDraft
+    ? await generateDocxFromStructured(docxDraft)
+    : Buffer.from("");
+
+  // Do not generate PDF eagerly during AI tailoring to conserve iLovePDF credits.
+  // PDF is generated on demand when the user clicks the PDF download button.
+  const exportBuffer = docxBuffer;
+  const fileKind: "docx" | "pdf" = "docx";
+
+  const fullName = await resolveExportFullName(
+    db,
+    userId,
+    input.structuredSnapshot,
+  );
+
+  return persistResumeExport(db, userId, {
+    buffer: exportBuffer,
+    fullName,
+    locale,
+    aiScore: input.aiScore,
+    matchNotes: input.matchNotes,
+    matchAnalysis: input.matchAnalysis,
+    aiProvider: input.aiProvider,
+    sourceType: input.sourceType,
+    sourceUploadId: input.sourceUploadId,
+    jobDescription: input.jobDescription,
+    applicationId: input.applicationId,
+    tailoredFor: input.tailoredFor,
+    structuredSnapshot,
+    fileKind,
+  });
+}
+
+export async function finalizeUploadTailorExport(
+  db: PrismaClient,
+  userId: string,
+  input: {
+    source: UploadTailorSource;
+    result: CvDocxTailorResult;
+    aiProvider: string;
+    jobDescription: string;
+    applicationId?: string;
+    tailoredFor?: string;
+    targetLocale?: Locale;
+  },
+) {
+  const adaptedSections = applyEditsToSections(
+    input.result.edits,
+    input.source.parsed.sections,
+  );
+  const shared = {
+    adaptedSections,
+    aiScore: input.result.aiScore,
+    matchNotes: input.result.matchNotes,
+    matchAnalysis: input.result.matchAnalysis,
+    aiProvider: input.aiProvider,
+    sourceType: "upload" as const,
+    sourceUploadId: input.source.upload.id,
+    jobDescription: input.jobDescription,
+    applicationId: input.applicationId,
+    tailoredFor: input.tailoredFor,
+    structuredSnapshot: input.source.upload.parsedDraft ?? undefined,
+    targetLocale: input.result.detectedLocale ?? input.targetLocale,
+  };
+
+  if (input.source.kind === "pdf") {
+    return finalizePdfTailorExport(db, userId, {
+      parsed: input.source.parsed,
+      ...shared,
+    });
+  }
+
+  return finalizeDocxTailorExport(db, userId, {
+    parsed: input.source.parsed,
+    ...shared,
   });
 }

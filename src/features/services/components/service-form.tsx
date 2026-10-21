@@ -14,6 +14,7 @@ import { Form, FormField, FormControl } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -22,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SkillPicker } from "@/components/admin/skill-picker";
+import { UniversalIconPicker } from "@/components/shared/universal-icon-picker";
 import {
   FormActions,
   FormContent,
@@ -76,6 +78,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
         icon: z.string().default("code"),
         statsValue: z.string().default(""),
         featured: z.boolean().default(false),
+        isActive: z.boolean().default(true),
         order: z.number().default(0),
         skillIds: z.array(z.string()).default([]),
         translations: translationMapSchema(
@@ -227,33 +230,14 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                 name="icon"
                 render={({ field }) => (
                   <FormItem label="Icon" inputId="service-icon">
-                    <Select
-                      onValueChange={field.onChange}
+                    <UniversalIconPicker
                       value={field.value ?? "code"}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select icon" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {[
-                          "code",
-                          "server",
-                          "smartphone",
-                          "terminal",
-                          "shield",
-                          "database",
-                          "zap",
-                          "globe",
-                          "layers",
-                        ].map((iconName) => (
-                          <SelectItem key={iconName} value={iconName}>
-                            {iconName}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      onChange={field.onChange}
+                      preset="service"
+                      triggerId="service-icon"
+                      placeholder="Select icon"
+                      showPreview
+                    />
                   </FormItem>
                 )}
               />
@@ -310,6 +294,28 @@ export const ServiceForm: FC<ServiceFormProps> = ({
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="pt-2">
+              <FormField
+                control={form.control}
+                name="isActive"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("isActive")}
+                    description={t("isActiveHint")}
+                    inputId="service-active"
+                  >
+                    <div className="flex h-10 items-center">
+                      <Switch
+                        id="service-active"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
                   </FormItem>
                 )}
               />

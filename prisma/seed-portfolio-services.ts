@@ -7,6 +7,7 @@ export interface PortfolioServiceSeed {
   icon?: string;
   statsValue?: string;
   featured?: boolean;
+  isActive?: boolean;
   order?: number;
   image: string;
   translations: {
@@ -43,6 +44,7 @@ export async function seedPortfolioServices(
         icon: service.icon ?? "code",
         statsValue: service.statsValue ?? "",
         featured: service.featured ?? false,
+        isActive: service.isActive ?? true,
         order: service.order ?? 0,
         ServiceTranslation: {
           createMany: {

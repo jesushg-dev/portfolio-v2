@@ -5,6 +5,8 @@ export interface CompanyEditorDTO {
   name: string;
   email: string;
   website: string;
+  linkedinUrl: string;
+  location: string;
   description: string;
 }
 
@@ -16,6 +18,8 @@ export function mapCompanyToEditorDto(company: Company): CompanyEditorDTO {
     name: company.name,
     email: company.email ?? "",
     website: company.website ?? "",
+    linkedinUrl: company.linkedinUrl ?? "",
+    location: company.location ?? "",
     description: company.description ?? "",
   };
 }
@@ -31,6 +35,8 @@ export function buildEmptyCompanyCreateDto(): CompanyCreateFormDTO {
     name: "",
     email: "",
     website: "",
+    linkedinUrl: "",
+    location: "",
     description: "",
   };
 }

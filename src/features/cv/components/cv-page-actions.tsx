@@ -7,17 +7,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { FaDownload, FaHome } from "react-icons/fa";
-import { Loader2, Mail, Send, X } from "lucide-react";
+import { Download, Home, Loader2, Mail, Send, X } from "lucide-react";
 import { TRPCClientError } from "@trpc/client";
 import { AnimatePresence, motion } from "motion/react";
 
 import { Link } from "@/i18n/routing";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
+import { cn } from "@/lib/utils";
+
 
 interface CvPageActionsProps {
   fullName: string;
@@ -78,11 +79,19 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
     defaultValues: { email: "" },
   });
 
-  const handleToggleEmail = useCallback(() => {
-    setEmailOpen((open) => !open);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadClick = useCallback(() => {
+    setIsDownloading(true);
+    const timer = setTimeout(() => {
+      setIsDownloading(false);
+    }, 6000);
+    return () => clearTimeout(timer);
   }, []);
 
-  const handleSubmit = useCallback(
+  const handleToggleEmail = useCallback(() => {
+    setEmailOpen((open) => !open);
+  }, []);  const handleSubmit = useCallback(
     (values: EmailInput) => {
       startTransition(async () => {
         try {
@@ -108,42 +117,61 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
   const isSending = isPending || sendPdf.isPending;
 
   return (
-    <div className="md:max-w-letter mx-4 flex flex-col gap-3 md:mx-0">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+    <div className="mx-auto flex w-full max-w-[51rem] flex-col gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/"
-          className="pressable border-primary-800 text-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg border px-4 py-3 text-sm shadow-lg hover:text-white"
+          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full gap-2")}
         >
-          {goBackLabel} <FaHome className="size-4" aria-hidden />
+          <Home className="size-4 shrink-0" aria-hidden="true" />
+          <span>{goBackLabel}</span>
         </Link>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           {downloadHref ? (
             <a
+              id="dl"
               href={downloadHref}
+              target="_blank"
+              rel="noopener noreferrer"
               download={downloadFileName}
-              className="pressable bg-primary-800 hover:bg-primary-900 inline-flex min-h-11 items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg"
+              onClick={handleDownloadClick}
+              className={cn(
+                buttonVariants({ variant: "default", size: "lg" }),
+                "rounded-full gap-2 shadow-sm hover:-translate-y-0.5",
+              )}
+              aria-busy={isDownloading}
             >
-              {downloadLabel} <FaDownload className="size-4" aria-hidden />
+              <span>{isDownloading ? tPdf("generating") : downloadLabel}</span>
+              {isDownloading ? (
+                <Loader2
+                  className="size-4 shrink-0 animate-spin"
+                  aria-hidden="true"
+                />
+              ) : (
+                <Download className="size-4 shrink-0" aria-hidden="true" />
+              )}
             </a>
           ) : null}
 
           {canSendByEmail ? (
-            <Button
+            <button
+              id="mail"
               type="button"
-              variant={emailOpen ? "secondary" : "outline"}
-              className="pressable h-auto min-h-11 gap-2 rounded-lg px-4 py-3 text-sm shadow-lg"
               onClick={handleToggleEmail}
+              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full gap-2")}
               aria-expanded={emailOpen}
               aria-controls="cv-email-panel"
             >
               {emailOpen ? (
-                <X className="size-4" aria-hidden />
+                <X className="size-4 shrink-0" aria-hidden="true" />
               ) : (
-                <Mail className="size-4" aria-hidden />
+                <Mail className="size-4 shrink-0" aria-hidden="true" />
               )}
-              {emailOpen ? tPdf("toggleClose") : tPdf("toggleSend")}
-            </Button>
+              <span>
+                {emailOpen ? tPdf("toggleClose") : tPdf("toggleSend")}
+              </span>
+            </button>
           ) : null}
         </div>
       </div>
@@ -173,7 +201,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
           >
             <section
               id="cv-email-panel"
-              className="bg-card text-card-foreground border-border rounded-lg border p-5 shadow-sm"
+              className="bg-card text-card-foreground border-border rounded-2xl border p-5 shadow-sm"
             >
               <div className="mb-4">
                 <h2 className="text-foreground text-base font-semibold">
@@ -218,7 +246,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
                   <Button
                     type="submit"
                     disabled={isSending}
-                    className="sm:mb-0.5"
+                    className="rounded-full sm:mb-0.5"
                     aria-busy={isSending}
                   >
                     {isSending ? (

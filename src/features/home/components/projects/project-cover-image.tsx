@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, type FC } from "react";
-import Image from "next/image";
 import { FolderCode } from "lucide-react";
+
+import { MediaImage } from "@/components/shared/media-image";
 import { cn } from "@/lib/utils";
 
 interface ProjectCoverImageProps {
@@ -43,7 +44,7 @@ export const ProjectCoverImage: FC<ProjectCoverImageProps> = ({
   }
 
   return (
-    <Image
+    <MediaImage
       src={src}
       alt={alt}
       fill={fill}

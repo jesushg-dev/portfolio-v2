@@ -2,11 +2,11 @@
 
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
+import { ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-
 import { NAV_GROUPS } from "./navigation-config";
-import { DesktopNavTrigger } from "./nav-menu-parts";
+import { headerNavTriggerStyles } from "./toolbar-control-styles";
 
 interface DesktopNavProps {
   activeGroup: (typeof NAV_GROUPS)[number]["id"] | null;
@@ -16,7 +16,38 @@ interface DesktopNavProps {
   className?: string;
 }
 
-const DesktopNav: FC<DesktopNavProps> = ({
+interface DesktopNavTriggerProps {
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+  onMouseEnter?: () => void;
+}
+
+export const DesktopNavTrigger: FC<DesktopNavTriggerProps> = ({
+  label,
+  isActive,
+  onClick,
+  onMouseEnter,
+}) => (
+  <button
+    type="button"
+    aria-expanded={isActive}
+    onClick={onClick}
+    onMouseEnter={onMouseEnter}
+    className={headerNavTriggerStyles(isActive)}
+  >
+    <span>{label}</span>
+    <ChevronDown
+      aria-hidden="true"
+      className={cn(
+        "size-3 opacity-70 transition-transform duration-200",
+        isActive && "rotate-180 opacity-100",
+      )}
+    />
+  </button>
+);
+
+export const DesktopNav: FC<DesktopNavProps> = ({
   activeGroup,
   onActiveGroupChange,
   className,
@@ -24,7 +55,7 @@ const DesktopNav: FC<DesktopNavProps> = ({
   const tGroups = useTranslations("global.header.nav.groups");
 
   return (
-    <div className={cn("hidden items-center gap-0.5 lg:flex", className)}>
+    <div className={cn("hidden items-center gap-1 lg:flex", className)}>
       {NAV_GROUPS.map((group) => (
         <DesktopNavTrigger
           key={group.id}

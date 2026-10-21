@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const StackTypeSchema = z.enum([
+  "AI",
   "FRONTEND",
   "BACKEND",
   "MOBILE",
@@ -10,6 +11,9 @@ export const StackTypeSchema = z.enum([
   "DEVOPS",
   "SOFTSKILLS",
   "TOOLS",
+  "ARCHITECTURE",
+  "DATA",
+  "QUALITY_DELIVERY",
 ]);
 
 export const optionalUrl = z

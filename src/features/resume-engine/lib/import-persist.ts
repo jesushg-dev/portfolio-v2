@@ -2,6 +2,51 @@ import type { PrismaClient } from "@prisma/client";
 
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 
+async function persistImportedCertifications(
+  db: PrismaClient,
+  userId: string,
+  draft: CvImportDraft,
+  appLanguageId?: string,
+): Promise<void> {
+  if (draft.certifications.length === 0) return;
+
+  const existing = await db.certification.findMany({
+    where: { userId },
+    include: { CertificationTranslation: true },
+  });
+
+  for (const cert of draft.certifications) {
+    const titleKey = cert.title.trim().toLowerCase();
+    const issuerKey = (cert.issuer ?? "").trim().toLowerCase();
+    const alreadyImported = existing.some((row) => {
+      const sameIssuer = row.company.trim().toLowerCase() === issuerKey;
+      const sameTitle = row.CertificationTranslation.some(
+        (translation) => translation.title.trim().toLowerCase() === titleKey,
+      );
+      return sameTitle && (issuerKey.length === 0 || sameIssuer);
+    });
+    if (alreadyImported) continue;
+
+    await db.certification.create({
+      data: {
+        userId,
+        company: cert.issuer?.trim() ? cert.issuer.trim() : "Unknown",
+        issuedDate: cert.year,
+        CertificationTranslation: appLanguageId
+          ? {
+              create: [
+                {
+                  appLanguageId,
+                  title: cert.title.trim(),
+                },
+              ],
+            }
+          : undefined,
+      },
+    });
+  }
+}
+
 function parseExperienceDate(value?: string): Date | undefined {
   if (!value) return undefined;
   const trimmed = value.trim();
@@ -194,4 +239,6 @@ export async function persistCvImportDraft(
       },
     });
   }
+
+  await persistImportedCertifications(db, userId, draft, appLang?.id);
 }

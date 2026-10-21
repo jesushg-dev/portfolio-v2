@@ -11,13 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import { FormDialogContent } from "@/components/shared/form-dialog-content";
 
 type FooterAction = ReactNode;
 
@@ -80,20 +75,13 @@ export const PageDialogWrapper = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent
-        className={cn(
-          "max-h-[calc(100vh-2rem)]",
-          "flex flex-col overflow-hidden",
-          "sm:max-w-5xl",
-          className,
-        )}
+      <FormDialogContent
+        title={title}
+        description={description}
+        className={cn("sm:max-w-5xl", className)}
       >
-        <DialogHeader className="shrink-0">
-          <DialogTitle>{title}</DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
-        </DialogHeader>
-        <div className="min-h-0 flex-1 overflow-y-auto pr-1">{children}</div>
-      </DialogContent>
+        {children}
+      </FormDialogContent>
     </Dialog>
   );
 };

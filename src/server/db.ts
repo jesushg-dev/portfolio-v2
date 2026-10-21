@@ -17,7 +17,9 @@ const globalForPrisma = globalThis as unknown as {
 if (
   env.NODE_ENV !== "production" &&
   globalForPrisma.prisma &&
-  !("cvTerminal" in globalForPrisma.prisma)
+  (!("cvTerminal" in globalForPrisma.prisma) ||
+    !("processPage" in globalForPrisma.prisma) ||
+    !("analyticsDailyStat" in globalForPrisma.prisma))
 ) {
   globalForPrisma.prisma = undefined;
 }

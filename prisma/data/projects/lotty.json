@@ -1,0 +1,840 @@
+{
+  "key": "Lotty",
+  "image": "/projects/lotty.jpg",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jess232017/Loto-Nicaragua",
+  "websiteUrl": "https://loto-nicaragua.vercel.app/",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Lotty",
+      "description": "Portal web interactivo en React para la consulta y análisis en tiempo real de los sorteos oficiales de Loto Nicaragua. Cuenta con estadísticas de números frecuentes, historial de jugadas diarias, diseño responsive con Bootstrap y visualización inmediata de resultados.",
+      "hook": "Portal Web en React · Consulta de sorteos oficiales en tiempo real · Estadísticas de números frecuentes y diseño responsive",
+      "challenge": "Construir una aplicación web ligera y accesible para consultar los sorteos diarios y el histórico de resultados de la lotería nacional (La Diaria, Fechas, Jugá 3, Premia 2) sin fricción en conexiones móviles lentas.",
+      "approach": "Diseñé una SPA interactiva en React con Bootstrap para una interfaz limpia, modularicé las vistas por modalidad de juego mediante HashRouter para compatibilidad universal en Vercel, y optimicé el consumo de datos para carga instantánea de números ganadores.",
+      "outcome": "Una plataforma ágil con consulta de sorteos en vivo a las 11:00 AM, 03:00 PM y 09:00 PM, historial categorizado por juego y experiencia 100% responsiva para usuarios móviles.",
+      "caseStudy": {
+        "chips": ["Lotería Nacional", "Frontend", "Resultados en Vivo"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mi rol",
+            "value": "Desarrollador Frontend"
+          },
+          {
+            "key": "project-type",
+            "label": "Tipo de proyecto",
+            "value": "Aplicación Web en React"
+          },
+          {
+            "key": "category",
+            "label": "Categoría",
+            "value": "Proyecto de Aprendizaje"
+          },
+          {
+            "key": "timeline",
+            "label": "Cronología",
+            "value": "Ene 2022 – Jun 2022"
+          }
+        ],
+        "nextProjectSlug": "rick-and-morty",
+        "context": "Aplicación web orientada a brindar a los usuarios una forma rápida, clara y visualmente agradable de verificar los números ganadores y las combinaciones de la lotería en Nicaragua.",
+        "roleTitle": "Desarrollador Frontend en solitario",
+        "roleIntro": "Diseñé la interfaz de usuario, estructuré el enrutamiento por modalidad de sorteo y optimicé la presentación de resultados para dispositivos móviles.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Una aplicación web responsiva en React para consultar los sorteos en vivo y resultados anteriores de la Lotería de Nicaragua.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollador frontend. Diseñé las tarjetas de sorteo, la navegación por juego y la adaptación móvil.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Tiempos de carga casi instantáneos, compatibilidad con redes móviles 3G/4G y navegación intuitiva entre las distintas modalidades.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ui-design",
+            "title": "Diseño de Interfaz y Tarjetas",
+            "summary": "",
+            "body": "Diseñé tarjetas de resultados de alto contraste con tipografía legible para visualizar de inmediato el número y símbolo premiado.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "routing-architecture",
+            "title": "Enrutamiento por Modalidad",
+            "summary": "",
+            "body": "Configuración de rutas independientes para Diaria, Fechas, Jugá 3 y Premia 2 sin recargas completas de página.",
+            "value": "",
+            "icon": "globe",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "mobile-optimization",
+            "title": "Optimización Móvil",
+            "summary": "",
+            "body": "Diseño adaptable que permite a los usuarios revisar sorteos desde cualquier smartphone con botones de acción grandes.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Carga instantánea en conexiones móviles de baja velocidad",
+          "Compatibilidad con despliegues en Vercel sin servidor dinámico",
+          "Diseño visual de alto contraste y legibilidad para números ganadores"
+        ],
+        "sections": [
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Módulos y Funcionalidades",
+            "title": "Capacidades de la Plataforma",
+            "lead": "Vistas interactivas de la aplicación web para la consulta de sorteos en tiempo real e históricos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-live-draws",
+                "title": "Sorteos del Día y Resultados en Vivo",
+                "summary": "Visualización clara de los sorteos diarios",
+                "body": "Tablero principal con los números ganadores del día en los horarios oficiales de las 11:00 AM, 03:00 PM y 09:00 PM.",
+                "value": "Resultados en Vivo",
+                "icon": "layout",
+                "tags": ["React", "Bootstrap", "En Vivo"],
+                "note": "/projects/lotty.jpg"
+              },
+              {
+                "key": "screen-diaria",
+                "title": "Historial de La Diaria y Símbolos",
+                "summary": "Registro cronológico con guía de la suerte",
+                "body": "Consulta histórica de resultados anteriores de La Diaria con número premiado y su correspondiente símbolo de la guía.",
+                "value": "La Diaria",
+                "icon": "case",
+                "tags": ["La Diaria", "Historial", "Símbolo"],
+                "note": "/projects/lotty-diaria.jpg"
+              },
+              {
+                "key": "screen-multi-game",
+                "title": "Jugá 3, Premia 2 y Fechas",
+                "summary": "Navegación segmentada por modalidad de juego",
+                "body": "Secciones dedicadas para verificar combinaciones de 3 dígitos, pares premiados y fechas de la suerte con filtros por fecha.",
+                "value": "Multi-Modalidad",
+                "icon": "globe",
+                "tags": ["Jugá 3", "Premia 2", "Fechas"],
+                "note": "/projects/lotty-results.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Experiencia Móvil Ligera",
+                "summary": "Acceso ágil desde smartphones",
+                "body": "Interfaz touch-first pensada para usuarios que consultan resultados desde puntos de venta o dispositivos móviles.",
+                "value": "100% Mobile Ready",
+                "icon": "layout",
+                "tags": ["Mobile First", "Touch UX", "Ligera"],
+                "note": "/projects/lotty-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Estrategia",
+            "title": "Decisiones de Diseño e Ingeniería",
+            "lead": "Criterios técnicos adoptados para garantizar rapidez, simplicidad y facilidad de uso.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "hash-routing-strategy",
+                "title": "Enrutamiento basado en Hash",
+                "summary": "Navegación del lado del cliente sin configuración compleja de servidor",
+                "body": "El uso de HashRouter garantiza que el usuario pueda recargar en cualquier ruta (/results/diaria) sin errores 404 en hosting estático.",
+                "value": "",
+                "icon": "",
+                "tags": ["HashRouter", "SPA"],
+                "note": "Permite compartir enlaces directos a resultados específicos."
+              },
+              {
+                "key": "card-based-hierarchy",
+                "title": "Jerarquía visual basada en tarjetas",
+                "summary": "Separación modular de sorteos y horarios",
+                "body": "Cada sorteo se encapsula en una tarjeta independiente con insignias de color para distinguir horarios de forma inmediata.",
+                "value": "",
+                "icon": "",
+                "tags": ["UI", "Tarjetas"],
+                "note": "Facilita la lectura rápida en pantallas pequeñas."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Arquitectura",
+            "title": "Capas de la Aplicación",
+            "lead": "Organización modular del frontend para desacoplar presentación de los datos de sorteo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "ui-views",
+                "title": "Vistas de Presentación",
+                "summary": "",
+                "body": "Componentes de vista para Inicio, Diaria, Fechas, Jugá 3 y Premia 2.",
+                "value": "",
+                "icon": "",
+                "tags": ["Home", "ResultsView", "GameCard"],
+                "note": "Renderiza números y fechas"
+              },
+              {
+                "key": "data-services",
+                "title": "Servicios de Datos y Helpers",
+                "summary": "",
+                "body": "Formateo de fechas, mapeo de símbolos de lotería y filtrado cronológico.",
+                "value": "",
+                "icon": "",
+                "tags": ["DateHelper", "SymbolMapper", "ResultStore"],
+                "note": "Normaliza la información"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "metrics",
+            "kind": "METRICS",
+            "eyebrow": "Resultados",
+            "title": "Métricas de la Plataforma",
+            "lead": "Rendimiento y cobertura de modalidades de sorteo en la plataforma.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "draw-modalities",
+                "title": "Modalidades de juego",
+                "summary": "",
+                "body": "Cobertura completa de los 4 juegos principales de la lotería nacional.",
+                "value": "4 Juegos",
+                "icon": "case",
+                "tags": ["Diaria", "Fechas", "Jugá 3", "Premia 2"],
+                "note": ""
+              },
+              {
+                "key": "daily-schedules",
+                "title": "Sorteos diarios",
+                "summary": "",
+                "body": "Actualizaciones programadas a lo largo de cada jornada oficial.",
+                "value": "3 Horarios",
+                "icon": "gauge",
+                "tags": ["11:00 AM", "03:00 PM", "09:00 PM"],
+                "note": ""
+              },
+              {
+                "key": "lighthouse-score",
+                "title": "Puntuación de rendimiento",
+                "summary": "",
+                "body": "Optimización de bundle y carga ligera sin librerías pesadas innecesarias.",
+                "value": "98/100",
+                "icon": "bolt",
+                "tags": ["Lighthouse", "Fast Load"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "Lotty",
+      "description": "Interactive React web portal for real-time tracking and statistical analysis of official Nicaraguan lottery draws. Features frequently drawn number analytics, daily draw archives, responsive Bootstrap UI, and instant winning number lookups.",
+      "hook": "React Web Portal · Real-time official lottery draw verification · Number frequency statistics & responsive UI",
+      "challenge": "Build a fast, lightweight, and accessible web application to consult daily lottery draws and historical winning records in Nicaragua (La Diaria, Fechas, Juga 3, Premia 2) over variable mobile network speeds.",
+      "approach": "Engineered an interactive React SPA with Bootstrap for clean responsive styling, organized game modalities using HashRouter for universal Vercel static hosting compatibility, and structured data modules for instant result rendering.",
+      "outcome": "An agile platform offering live draw verification across all three official daily timeslots (11:00 AM, 03:00 PM, 09:00 PM), categorized historical draw logs, and a 100% responsive mobile layout.",
+      "caseStudy": {
+        "chips": ["National Lottery", "Frontend", "Live Draws"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "My role",
+            "value": "Frontend Developer"
+          },
+          {
+            "key": "project-type",
+            "label": "Project type",
+            "value": "React Web Application"
+          },
+          {
+            "key": "category",
+            "label": "Category",
+            "value": "Learning Project"
+          },
+          {
+            "key": "timeline",
+            "label": "Timeline",
+            "value": "Jan 2022 – Jun 2022"
+          }
+        ],
+        "nextProjectSlug": "rick-and-morty",
+        "context": "A web application crafted to give users a fast, clear, and visually appealing way to check winning lottery numbers and game results in Nicaragua.",
+        "roleTitle": "Solo Frontend Developer",
+        "roleIntro": "Designed the UI components, structured the route hierarchy per game modality, and tuned the mobile viewport experience.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "A responsive React web app to view live draws and historical winning numbers for the Nicaraguan lottery.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Frontend developer. Designed the draw result cards, multi-game navigation, and mobile viewports.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Near-instant page loads, reliability over 3G/4G cellular connections, and clear navigation across games.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ui-design",
+            "title": "Card Design & Visual Hierarchy",
+            "summary": "",
+            "body": "Crafted high-contrast result cards with bold typography to make winning numbers and lucky symbols instantly readable.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "routing-architecture",
+            "title": "Modality-Based Routing",
+            "summary": "",
+            "body": "Configured distinct client routes for Diaria, Fechas, Juga 3, and Premia 2 without full page refreshes.",
+            "value": "",
+            "icon": "globe",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "mobile-optimization",
+            "title": "Mobile Optimization",
+            "summary": "",
+            "body": "Adaptive viewport design allowing users to check results on any smartphone with generous touch target buttons.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Instant loading on low-bandwidth cellular networks",
+          "Zero-backend Vercel static deployment compatibility",
+          "High-contrast visual design for rapid number readability"
+        ],
+        "sections": [
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Features",
+            "title": "Platform Capabilities",
+            "lead": "Interactive views of the web application for live draw verification and historical records.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-live-draws",
+                "title": "Daily Draws & Live Results",
+                "summary": "Clear overview of daily lottery outcomes",
+                "body": "Main dashboard displaying the latest winning numbers across the three official schedules at 11:00 AM, 03:00 PM, and 09:00 PM.",
+                "value": "Live Results",
+                "icon": "layout",
+                "tags": ["React", "Bootstrap", "Live"],
+                "note": "/projects/lotty.jpg"
+              },
+              {
+                "key": "screen-diaria",
+                "title": "La Diaria History & Lucky Guide",
+                "summary": "Chronological winning log with symbol mapping",
+                "body": "Historical record of previous La Diaria draws featuring the winning number alongside its lucky dream guide symbol.",
+                "value": "La Diaria",
+                "icon": "case",
+                "tags": ["La Diaria", "History", "Symbols"],
+                "note": "/projects/lotty-diaria.jpg"
+              },
+              {
+                "key": "screen-multi-game",
+                "title": "Juga 3, Premia 2 & Fechas",
+                "summary": "Segmented browsing per lottery game",
+                "body": "Dedicated views to verify 3-digit combinations, paired numbers, and lucky calendar dates with historical filters.",
+                "value": "Multi-Game",
+                "icon": "globe",
+                "tags": ["Juga 3", "Premia 2", "Fechas"],
+                "note": "/projects/lotty-results.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Lightweight Mobile Experience",
+                "summary": "Agile access from mobile smartphones",
+                "body": "Touch-first layout designed for retail agents and customers checking winning tickets on the go.",
+                "value": "100% Mobile Ready",
+                "icon": "layout",
+                "tags": ["Mobile First", "Touch UX", "Fast"],
+                "note": "/projects/lotty-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Strategy",
+            "title": "Design & Engineering Decisions",
+            "lead": "Key technical decisions made to deliver speed, reliability, and ease of use.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "hash-routing-strategy",
+                "title": "Hash-based routing strategy",
+                "summary": "Client-side routing without server rewrites",
+                "body": "HashRouter ensures users can bookmark or reload any route (/results/diaria) without 404 errors on static hosts.",
+                "value": "",
+                "icon": "",
+                "tags": ["HashRouter", "SPA"],
+                "note": "Enables direct link sharing for specific game modalities."
+              },
+              {
+                "key": "card-based-hierarchy",
+                "title": "Card-based visual hierarchy",
+                "summary": "Modular compartmentalization of draw schedules",
+                "body": "Each draw is isolated in a self-contained card with color badges to distinguish morning, afternoon, and evening draws.",
+                "value": "",
+                "icon": "",
+                "tags": ["UI", "Cards"],
+                "note": "Greatly enhances scannability on small screens."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Architecture",
+            "title": "Application Layers",
+            "lead": "Modular frontend organization separating presentation from lottery data processing.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "ui-views",
+                "title": "Presentation Views",
+                "summary": "",
+                "body": "Page views for Home, Diaria, Fechas, Juga 3, and Premia 2.",
+                "value": "",
+                "icon": "",
+                "tags": ["Home", "ResultsView", "GameCard"],
+                "note": "Renders numbers and dates"
+              },
+              {
+                "key": "data-services",
+                "title": "Data Services & Helpers",
+                "summary": "",
+                "body": "Date formatting, lucky symbol dictionary, and chronological filtering.",
+                "value": "",
+                "icon": "",
+                "tags": ["DateHelper", "SymbolMapper", "ResultStore"],
+                "note": "Normalizes draw data"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "metrics",
+            "kind": "METRICS",
+            "eyebrow": "Results",
+            "title": "Platform Metrics",
+            "lead": "Performance benchmarks and coverage across lottery draw schedules.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "draw-modalities",
+                "title": "Game modalities",
+                "summary": "",
+                "body": "Comprehensive coverage of the 4 primary national lottery games.",
+                "value": "4 Games",
+                "icon": "case",
+                "tags": ["Diaria", "Fechas", "Juga 3", "Premia 2"],
+                "note": ""
+              },
+              {
+                "key": "daily-schedules",
+                "title": "Daily draws",
+                "summary": "",
+                "body": "Live updates scheduled throughout the official drawing hours.",
+                "value": "3 Timeslots",
+                "icon": "gauge",
+                "tags": ["11:00 AM", "03:00 PM", "09:00 PM"],
+                "note": ""
+              },
+              {
+                "key": "lighthouse-score",
+                "title": "Performance score",
+                "summary": "",
+                "body": "Slim client bundle and swift rendering without unnecessary third-party overhead.",
+                "value": "98/100",
+                "icon": "bolt",
+                "tags": ["Lighthouse", "Fast Load"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "Lotty",
+      "description": "Interactief React-webportaal voor realtime uitslagen en statistische analyse van de officiële Nicaraguaanse loterij. Bevat frequentie-analyses van getallen, dagelijkse trekkingsarchieven, responsieve Bootstrap UI en directe verificatie.",
+      "hook": "React Webportaal · Realtime officiële loterijuitslagen raadplegen · Getalfrequentie-statistieken & responsieve UI",
+      "challenge": "Bouw een snelle, lichte en toegankelijke webapplicatie om dagelijkse trekkingen en historische uitslagen van de Nicaraguaanse loterij (La Diaria, Fechas, Juga 3, Premia 2) te bekijken over mobiele verbindingen.",
+      "approach": "Een interactieve React SPA met Bootstrap voor overzichtelijke opmaak, spelvormen georganiseerd met HashRouter voor compatibiliteit met statische hosting op Vercel en snelle nummerweergave.",
+      "outcome": "Een responsief platform met live trekkingen om 11:00 uur, 15:00 uur en 21:00 uur, gecategoriseerde uitslagen en een vlotte mobiele weergave.",
+      "caseStudy": {
+        "chips": ["Nationale Loterij", "Frontend", "Live Uitslagen"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mijn rol",
+            "value": "Frontend Ontwikkelaar"
+          },
+          {
+            "key": "project-type",
+            "label": "Type project",
+            "value": "React Webapplicatie"
+          },
+          {
+            "key": "category",
+            "label": "Categorie",
+            "value": "Leerproject"
+          },
+          {
+            "key": "timeline",
+            "label": "Tijdlijn",
+            "value": "Jan 2022 – Jun 2022"
+          }
+        ],
+        "nextProjectSlug": "rick-and-morty",
+        "context": "Een webapplicatie ontworpen om gebruikers snel en eenvoudig toegang te geven tot winnende getallen en trekkingsresultaten van de loterij in Nicaragua.",
+        "roleTitle": "Solo Frontend Ontwikkelaar",
+        "roleIntro": "Ontwierp de interface, categoriseerde de trekkingsroutes en optimaliseerde de weergave voor mobiele schermen.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Een responsieve React-applicatie om live trekkingsresultaten en winnende getallen van de Nicaraguaanse loterij te bekijken.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Frontend ontwikkelaar. Ontwierp de uitslagkaarten, spelnavigatie en mobiele ervaring.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Directe laadtijden, betrouwbare werking op mobiele 3G/4G-netwerken en heldere navigatie.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ui-design",
+            "title": "Kaartontwerp en Typografie",
+            "summary": "",
+            "body": "Ontwerp van contrastrijke uitslagkaarten met duidelijke cijfers om winnende getallen en symbolen direct leesbaar te maken.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "routing-architecture",
+            "title": "Navigatie per Spelvorm",
+            "summary": "",
+            "body": "Onafhankelijke clientroutes voor Diaria, Fechas, Juga 3 en Premia 2 zonder paginaherlaad.",
+            "value": "",
+            "icon": "globe",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "mobile-optimization",
+            "title": "Mobiele Optimalisatie",
+            "summary": "",
+            "body": "Aanpasbare lay-out met grote aanraakknoppen voor snelle controle vanaf smartphones.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Directe laadtijd op trage mobiele netwerken",
+          "Volledig statische Vercel-compatibiliteit zonder serverprocessen",
+          "Contrastrijk ontwerp voor directe leesbaarheid van getallen"
+        ],
+        "sections": [
+          {
+            "key": "capabilities",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Functies",
+            "title": "Mogelijkheden van het Platform",
+            "lead": "Interactieve weergaven van de webapplicatie voor live trekkingen en historische uitslagen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "screen-live-draws",
+                "title": "Dagelijkse Trekkingen & Live Uitslagen",
+                "summary": "Duidelijk overzicht van dagelijkse trekkingen",
+                "body": "Hoofddashboard met winnende getallen voor de officiële tijdstippen van 11:00 uur, 15:00 uur en 21:00 uur.",
+                "value": "Live Uitslagen",
+                "icon": "layout",
+                "tags": ["React", "Bootstrap", "Live"],
+                "note": "/projects/lotty.jpg"
+              },
+              {
+                "key": "screen-diaria",
+                "title": "Geschiedenis van La Diaria & Geluksgids",
+                "summary": "Chronologisch overzicht met symboolweergave",
+                "body": "Historisch overzicht van eerdere La Diaria-trekkingen met het winnende getal en het bijbehorende gidssymbool.",
+                "value": "La Diaria",
+                "icon": "case",
+                "tags": ["La Diaria", "Geschiedenis", "Symbolen"],
+                "note": "/projects/lotty-diaria.jpg"
+              },
+              {
+                "key": "screen-multi-game",
+                "title": "Juga 3, Premia 2 & Fechas",
+                "summary": "Gesegmenteerde navigatie per spelvorm",
+                "body": "Specifieke pagina's voor driecijferige combinaties, paren en geluksdata met historische filters.",
+                "value": "Multi-Spelvorm",
+                "icon": "globe",
+                "tags": ["Juga 3", "Premia 2", "Fechas"],
+                "note": "/projects/lotty-results.jpg"
+              },
+              {
+                "key": "screen-mobile",
+                "title": "Lichte Mobiele Ervaring",
+                "summary": "Vlotte toegang vanaf smartphones",
+                "body": "Aanraakgeoptimaliseerde interface ontworpen voor gebruikers die onderweg snel hun lot willen controleren.",
+                "value": "100% Mobile Ready",
+                "icon": "layout",
+                "tags": ["Mobile First", "Touch UX", "Snel"],
+                "note": "/projects/lotty-mobile.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Strategie",
+            "title": "Ontwerp- en Ontwikkelbeslissingen",
+            "lead": "Belangrijke keuzes gericht op snelheid, eenvoud en gebruiksgemak.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "hash-routing-strategy",
+                "title": "Hash-gebaseerde navigatie",
+                "summary": "Client-side navigatie zonder serverherschrijvingen",
+                "body": "HashRouter voorkomt 404-fouten bij het herladen van specifieke spelpagina's (/results/diaria) op statische hosts.",
+                "value": "",
+                "icon": "",
+                "tags": ["HashRouter", "SPA"],
+                "note": "Maakt direct delen van uitslaglinks mogelijk."
+              },
+              {
+                "key": "card-based-hierarchy",
+                "title": "Visuele kaartstructuur",
+                "summary": "Duidelijke scheiding van trekkingen en tijden",
+                "body": "Elke trekking is modulair opgebouwd met kleurcodes om ochtend-, middag- en avondrondes direct te herkennen.",
+                "value": "",
+                "icon": "",
+                "tags": ["UI", "Kaarten"],
+                "note": "Verbetert de leesbaarheid op kleine schermen aanzienlijk."
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "architecture",
+            "kind": "LAYERS",
+            "eyebrow": "Architectuur",
+            "title": "Applicatielagen",
+            "lead": "Modulaire opzet die de presentatie scheidt van trekkingsgegevens.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "ui-views",
+                "title": "Presentatielagen",
+                "summary": "",
+                "body": "Pagina-onderdelen voor Home, Diaria, Fechas, Juga 3 en Premia 2.",
+                "value": "",
+                "icon": "",
+                "tags": ["Home", "ResultsView", "GameCard"],
+                "note": "Toont getallen en data"
+              },
+              {
+                "key": "data-services",
+                "title": "Gegevensservices & Hulpfuncties",
+                "summary": "",
+                "body": "Datumformattering, symboolwoordenboek en chronologische filters.",
+                "value": "",
+                "icon": "",
+                "tags": ["DateHelper", "SymbolMapper", "ResultStore"],
+                "note": "Normaliseert trekkingsdata"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "metrics",
+            "kind": "METRICS",
+            "eyebrow": "Resultaten",
+            "title": "Platformstatistieken",
+            "lead": "Prestaties en dekking van loterijspelen op het platform.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "draw-modalities",
+                "title": "Spelvormen",
+                "summary": "",
+                "body": "Volledige dekking van de 4 belangrijkste nationale loterijspelen.",
+                "value": "4 Spelen",
+                "icon": "case",
+                "tags": ["Diaria", "Fechas", "Juga 3", "Premia 2"],
+                "note": ""
+              },
+              {
+                "key": "daily-schedules",
+                "title": "Dagelijkse trekkingen",
+                "summary": "",
+                "body": "Regelmatige updates verspreid over de officiële trekkingsuren.",
+                "value": "3 Rondes",
+                "icon": "gauge",
+                "tags": ["11:00 uur", "15:00 uur", "21:00 uur"],
+                "note": ""
+              },
+              {
+                "key": "lighthouse-score",
+                "title": "Prestatiescore",
+                "summary": "",
+                "body": "Lichte JavaScript-bundel zonder overbodige externe afhankelijkheden.",
+                "value": "98/100",
+                "icon": "bolt",
+                "tags": ["Lighthouse", "Snelle Lading"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ],
+  "skillKeys": ["React", "Bootstrap"],
+  "order": 9,
+  "kind": "LEARNING",
+  "slug": "lotty",
+  "caseStudyEnabled": true
+}

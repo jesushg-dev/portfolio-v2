@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/config";
 import { ApplicationDetailView } from "@/features/job-tracker/components/application-detail-view";
 import { getApplicationDetailPageData } from "@/features/job-tracker/server/job-tracker-queries";
 
-type ApplicationDetailTab = "details" | "timeline" | "tailor";
+type ApplicationDetailTab = "details" | "timeline" | "tailor" | "emails";
 
 export default async function ApplicationDetailPage({
   params,
@@ -17,7 +17,10 @@ export default async function ApplicationDetailPage({
   const { tab } = await searchParams;
 
   const defaultTab: ApplicationDetailTab =
-    tab === "tailor" || tab === "timeline" || tab === "details"
+    tab === "tailor" ||
+    tab === "timeline" ||
+    tab === "emails" ||
+    tab === "details"
       ? tab
       : "details";
 

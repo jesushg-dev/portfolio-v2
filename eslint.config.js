@@ -14,6 +14,7 @@ export default tseslint.config(
       "prettier.config.js",
       "prisma.config.ts",
       "scripts/**/*.mjs",
+      "scratch/**",
     ],
   },
   ...nextVitals,
@@ -59,7 +60,7 @@ export default tseslint.config(
             {
               target: "./src/features/projects",
               from: "./src/features",
-              except: ["./projects"],
+              except: ["./projects", "./home"],
             },
             {
               target: "./src/features/admin",

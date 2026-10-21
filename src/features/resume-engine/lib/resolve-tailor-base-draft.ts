@@ -61,8 +61,9 @@ export async function resolveTailorBaseDraft(
     });
   }
 
+  const parsedDraft = CvImportDraftSchema.parse(upload.parsedDraft);
   return {
-    draft: CvImportDraftSchema.parse(upload.parsedDraft),
+    draft: parsedDraft,
     sourceUploadId: upload.id,
   };
 }

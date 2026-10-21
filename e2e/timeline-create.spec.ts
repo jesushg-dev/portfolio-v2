@@ -45,7 +45,9 @@ test.describe("timeline create", () => {
     expect(studyItem?.current).toBe(false);
 
     const currentJobs = items.filter((row) => row.current);
-    expect(currentJobs).toHaveLength(2);
+    expect(currentJobs).toHaveLength(
+      portfolioTimeline.items.filter((row) => row.current).length,
+    );
 
     const imagemaker = items.find((row) => row.organization === "Imagemaker");
     expect(imagemaker).toBeDefined();

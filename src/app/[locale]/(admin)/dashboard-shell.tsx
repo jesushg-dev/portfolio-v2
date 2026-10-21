@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC, ReactNode, ComponentProps } from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   LayoutDashboard,
@@ -17,15 +17,16 @@ import {
   Palette,
   Sparkles,
   ClipboardList,
-  KeyRound,
   MonitorSmartphone,
   Radio,
+  Workflow,
 } from "lucide-react";
 
 import { Link as CustomLink, usePathname, useRouter } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 import ThemeSelectorLazy from "@/components/app-layout/app-header/theme-selector-lazy";
 import LocaleSelector from "@/components/app-layout/app-header/locale-selector";
+import ScrollToTop from "@/components/custom-ui/scroll-to-top";
 import {
   Sidebar,
   SidebarBody,
@@ -52,11 +53,11 @@ interface NavItem {
     | "services"
     | "certifications"
     | "spotify"
-    | "credentials"
     | "jobTracker"
     | "settings"
     | "uses"
-    | "now";
+    | "now"
+    | "processPages";
   icon: typeof LayoutDashboard;
   group?: "portfolio" | "pages";
 }
@@ -119,7 +120,12 @@ const NAV_ITEMS: NavItem[] = [
     icon: Radio,
     group: "pages",
   },
-  { href: "/admin/credentials", labelKey: "credentials", icon: KeyRound },
+  {
+    href: "/admin/process-pages",
+    labelKey: "processPages",
+    icon: Workflow,
+    group: "pages",
+  },
   // ── Config ─────────────────────────────────────────────
   { href: "/admin/settings", labelKey: "settings", icon: Settings },
 ];
@@ -128,12 +134,12 @@ const Logo = ({ userName, title }: { userName: string; title: string }) => {
   return (
     <CustomLink
       href="/admin"
-      className="z-20 flex items-center gap-2 px-2 py-1 font-bold"
+      className="z-20 flex min-w-0 items-center gap-2 px-2 py-1 font-bold"
     >
-      <div className="bg-primary text-primary-foreground flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-semibold">
+      <div className="bg-primary text-primary-foreground flex size-6 shrink-0 items-center justify-center rounded-lg text-xs font-semibold">
         {userName.charAt(0).toUpperCase()}
       </div>
-      <span className="text-foreground text-sm font-bold whitespace-pre opacity-100 transition-opacity">
+      <span className="text-foreground min-w-0 truncate text-sm font-bold opacity-100 transition-opacity">
         {title}
       </span>
     </CustomLink>
@@ -163,6 +169,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
   const t = useTranslations("admin.shell");
   const [open, setOpen] = useState(true);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
 
   const onSignOut = async () => {
     await authClient.signOut();
@@ -182,10 +189,20 @@ const DashboardShell: FC<IDashboardShellProps> = ({
     if (item.href === "/admin") {
       return isAdminOverview(normalizedPathname);
     }
+    if (item.labelKey === "settings") {
+      return (
+        normalizedPathname.startsWith("/admin/settings") ||
+        normalizedPathname.startsWith("/admin/credentials")
+      );
+    }
     return normalizedPathname.startsWith(item.href);
   };
 
   const pageTitle = useMemo(() => {
+    if (normalizedPathname.startsWith("/admin/credentials")) {
+      return t("nav.credentials");
+    }
+
     const matched = [...NAV_ITEMS]
       .sort((a, b) => b.href.length - a.href.length)
       .find((item) => {
@@ -214,21 +231,34 @@ const DashboardShell: FC<IDashboardShellProps> = ({
   return (
     <div className="bg-background text-foreground flex h-screen w-full flex-col overflow-hidden md:flex-row">
       <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-4">
-          <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
-            <div className="flex h-12 items-center justify-between gap-1">
-              {open ? (
-                <Logo userName={userName} title={t("title")} />
-              ) : (
-                <LogoIcon userName={userName} />
-              )}
-              <SidebarPinToggle />
-            </div>
+        <SidebarBody
+          className="h-full min-h-0 justify-between gap-4"
+          mobileBrand={<Logo userName={userName} title={t("title")} />}
+          mobileActions={
+            <>
+              <LocaleSelector />
+              <button
+                type="button"
+                aria-label={t("toggleThemeAria")}
+                onClick={() => setThemeMenuOpen((prev) => !prev)}
+                className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground inline-flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors"
+              >
+                <Palette className="size-4" aria-hidden />
+              </button>
+            </>
+          }
+        >
+          <div className="flex h-12 shrink-0 items-center justify-between gap-1">
+            {open ? (
+              <Logo userName={userName} title={t("title")} />
+            ) : (
+              <LogoIcon userName={userName} />
+            )}
+            <SidebarPinToggle />
+          </div>
 
-            <nav
-              aria-label={t("nav.sidebar")}
-              className="mt-8 flex flex-col gap-1"
-            >
+          <div className="mt-4 flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto">
+            <nav aria-label={t("nav.sidebar")} className="flex flex-col gap-1">
               {topItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -304,7 +334,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex shrink-0 flex-col gap-1 border-t pt-3">
             <SidebarLink
               link={{
                 label: t("nav.settings"),
@@ -334,57 +364,67 @@ const DashboardShell: FC<IDashboardShellProps> = ({
         </SidebarBody>
       </Sidebar>
 
-      <main className="flex min-w-0 flex-1 flex-col overflow-y-auto">
-        <header
-          aria-label={t("pageToolbar")}
-          className="border-border/60 bg-background/75 supports-backdrop-filter:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block"
+      <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
+        <main
+          ref={mainRef}
+          className="flex min-w-0 flex-1 flex-col overflow-y-auto"
         >
-          <div className="flex h-16 items-center justify-between px-4 md:px-6">
-            <div className="flex items-center gap-3">
-              <div>
-                <h1 className="text-foreground text-sm font-semibold">
-                  {pageTitle}
-                </h1>
-                {pageSubtitle ? (
-                  <p className="text-muted-foreground text-xs">
-                    {pageSubtitle}
+          <header
+            aria-label={t("pageToolbar")}
+            className="border-border/60 bg-background/75 supports-backdrop-filter:bg-background/55 sticky top-0 z-30 hidden border-b shadow-sm backdrop-blur-lg backdrop-saturate-150 md:block"
+          >
+            <div className="flex h-16 items-center justify-between px-4 md:px-6">
+              <div className="flex items-center gap-3">
+                <div>
+                  <h1 className="text-foreground text-sm font-semibold">
+                    {pageTitle}
+                  </h1>
+                  {pageSubtitle ? (
+                    <p className="text-muted-foreground text-xs">
+                      {pageSubtitle}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 pl-4">
+                <LocaleSelector />
+                <button
+                  type="button"
+                  aria-label={t("toggleThemeAria")}
+                  onClick={() => setThemeMenuOpen((prev) => !prev)}
+                  className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg border p-2"
+                >
+                  <Palette className="h-4 w-4" />
+                </button>
+                <div className="hidden text-right md:block">
+                  <p className="text-foreground text-sm font-medium">
+                    {userName}
                   </p>
-                ) : null}
+                  <p className="text-muted-foreground text-xs">
+                    {t("portfolioManager")}
+                  </p>
+                </div>
+                <div className="bg-primary text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
               </div>
             </div>
+          </header>
 
-            <div className="flex items-center gap-3 pl-4">
-              <LocaleSelector />
-              <button
-                type="button"
-                aria-label={t("toggleThemeAria")}
-                onClick={() => setThemeMenuOpen((prev) => !prev)}
-                className="border-border text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-lg border p-2"
-              >
-                <Palette className="h-4 w-4" />
-              </button>
-              <div className="hidden text-right md:block">
-                <p className="text-foreground text-sm font-medium">
-                  {userName}
-                </p>
-                <p className="text-muted-foreground text-xs">
-                  {t("portfolioManager")}
-                </p>
-              </div>
-              <div className="bg-primary text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full text-xs font-semibold">
-                {userName.charAt(0).toUpperCase()}
-              </div>
-            </div>
+          <ThemeSelectorLazy
+            open={themeMenuOpen}
+            onOpenChange={setThemeMenuOpen}
+          />
+
+          <div className="flex w-full flex-1 flex-col p-4 md:p-6">
+            {children}
           </div>
-        </header>
-
-        <ThemeSelectorLazy
-          open={themeMenuOpen}
-          onOpenChange={setThemeMenuOpen}
-        />
-
-        <div className="flex w-full flex-1 flex-col p-4 md:p-6">{children}</div>
-      </main>
+        </main>
+        <div className="pointer-events-none absolute right-4 bottom-4 z-40">
+          <ScrollToTop containerRef={mainRef} />
+        </div>
+      </div>
       {modal}
     </div>
   );

@@ -1,0 +1,759 @@
+{
+  "key": "TechServiceApi",
+  "image": "/projects/tech-service-api.jpg",
+  "type": "BACKEND",
+  "githubUrl": "https://github.com/jesushg-dev/Api_TechService",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tech Service API",
+      "description": "API REST desarrollada en PHP y MySQL para la gestión integral de órdenes de reparación y soporte técnico en campo. Provee autenticación por roles para técnicos y clientes, control transaccional de estados de trabajo, almacenamiento seguro de firmas digitales y adjuntos fotográficos.",
+      "hook": "API REST en PHP & MySQL · Ciclo de vida y estados de reparación de hardware · Almacenamiento seguro de firmas digitales y fotos",
+      "challenge": "Digitalizar la gestión de reparaciones en talleres de hardware para eliminar boletas manuales en papel y asegurar evidencia fotográfica de averías.",
+      "approach": "Construí una API REST en PHP y MySQL con patrón MVC nativo, capa PDO segura, subida multipart de fotos y endpoints de consulta rápida.",
+      "outcome": "Trazabilidad 100% digital de órdenes de reparación, erradicación de papeleo manual y reducción del 60% en tiempos de consulta para clientes.",
+      "caseStudy": {
+        "chips": [
+          "API REST Modular",
+          "PHP & MySQL",
+          "Gestión de Taller",
+          "Carga de Evidencia",
+          "Arquitectura MVC",
+          "Control de Estados"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Creador & Desarrollador Backend"
+          },
+          {
+            "key": "service-scope",
+            "label": "Alcance del servicio",
+            "value": "Taller multimarca de reparación de dispositivos electrónicos"
+          },
+          {
+            "key": "architecture",
+            "label": "Arquitectura técnica",
+            "value": "Patrón MVC en PHP nativo con PDO y base de datos relacional MySQL"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repositorio",
+            "value": "Api_TechService (https://github.com/jesushg-dev/Api_TechService)"
+          }
+        ],
+        "nextProjectSlug": "tech-service",
+        "context": "TechService API es el motor backend concebido para digitalizar las operaciones diarias de talleres de servicio técnico y reparación de dispositivos electrónicos. Centraliza el ciclo de vida de los equipos desde su recepción en mostrador, diagnóstico técnico inicial, catálogo de repuestos por categoría, asignación a técnicos especialistas y archivo de evidencias fotográficas de averías para evitar discrepancias con clientes.",
+        "roleTitle": "Desarrollador Backend PHP / MySQL",
+        "roleIntro": "Diseñé y construí la API REST completa implementando un patrón MVC ligero sin sobrecarga de frameworks, estructurando el esquema relacional en MySQL, la validación de parámetros HTTP y la carga segura de archivos multipart para fotografías de dispositivos.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "API REST modular para el seguimiento integral de órdenes de servicio técnico, gestión de piezas de repuesto y control de estados de reparación.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollo backend en PHP y MySQL: endpoints JSON, controladores, capa de acceso a datos con PDO y subida de imágenes.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Trazabilidad completa de órdenes de reparación, erradicación de boletas físicas en papel y reducción del 60% en tiempos de consulta de estado.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ticket-lifecycle",
+            "title": "Gestión del Ciclo de Vida del Ticket de Reparación",
+            "summary": "",
+            "body": "Implementación de la máquina de estados para equipos en taller: Ingreso, En Diagnóstico, Espera de Repuesto, En Reparación y Listo para Entrega.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "evidence-upload",
+            "title": "Módulo de Evidencia Fotográfica Multipart",
+            "summary": "",
+            "body": "Controlador dedicado para carga segura de imágenes (fileUpload.php) que asocia fotografías del estado físico del equipo antes de ser desarmado.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "catalog-management",
+            "title": "Catálogo de Repuestos y Categorías de Equipos",
+            "summary": "",
+            "body": "Endpoints CRUD para administración de categorías (Smartphones, Laptops, Consolas) y componentes requeridos para cada orden técnica.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Respuestas JSON ligeras consumibles directamente por clientes móviles Android.",
+          "Operación confiable en servidores compartidos económicos con Apache y MySQL sin dependencias complejas.",
+          "Sanitización estricta de nombres y tipos MIME de imágenes para evitar vulnerabilidades."
+        ],
+        "sections": [
+          {
+            "key": "ts-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos y Endpoints",
+            "title": "Arquitectura de la API de Servicio Técnico",
+            "lead": "Endpoints REST diseñados para soportar el flujo operacional del taller.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-tickets",
+                "title": "Gestión de Órdenes y Recepción de Equipos",
+                "summary": "Alta y seguimiento de órdenes con asignación de folio",
+                "body": "Endpoints para crear y consultar equipos con marca, modelo, descripción de falla y observaciones de recepción en taller.",
+                "value": "REST Principal",
+                "icon": "code",
+                "tags": ["PHP", "MySQL", "CRUD"],
+                "note": "/projects/tech-service-api.jpg"
+              },
+              {
+                "key": "mod-endpoints",
+                "title": "Catálogo de Categorías y Repuestos",
+                "summary": "Control granular de componentes disponibles",
+                "body": "Estructura modular que permite a los técnicos asociar piezas reemplazadas a cada número de orden de reparación.",
+                "value": "Catálogo",
+                "icon": "db",
+                "tags": ["Categorías", "Repuestos", "Taller"],
+                "note": "/projects/tech-service-api-endpoints.jpg"
+              },
+              {
+                "key": "mod-payload",
+                "title": "Trazabilidad de Estados y Diagnóstico",
+                "summary": "Respuesta JSON estructurada con historial técnico",
+                "body": "Contrato JSON consistente con códigos de estado, técnico asignado y enlace a fotografías de evidencia.",
+                "value": "JSON Contract",
+                "icon": "case",
+                "tags": ["JSON", "Estados", "Diagnóstico"],
+                "note": "/projects/tech-service-api-ticket.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "ts-flow",
+            "kind": "STEPS",
+            "eyebrow": "Flujo Operativo",
+            "title": "Ciclo de Vida de una Orden Técnica",
+            "lead": "Secuencia digital desde la recepción del dispositivo hasta su entrega garantizada.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-intake",
+                "title": "1. Recepción y Alta de Equipo",
+                "summary": "Registro de marca, modelo y falla del cliente",
+                "body": "El personal de recepción emite la solicitud POST crear_equipo generando un folio único de servicio.",
+                "value": "POST crear_equipo",
+                "icon": "bolt",
+                "tags": ["Recepción", "Folio"],
+                "note": ""
+              },
+              {
+                "key": "step-diagnosis",
+                "title": "2. Inspección y Evidencia Fotográfica",
+                "summary": "Carga de fotos de condición inicial del equipo",
+                "body": "Se utiliza fileUpload.php para almacenar capturas del chasis y pantalla previa a la apertura técnica.",
+                "value": "fileUpload.php",
+                "icon": "layout",
+                "tags": ["Fotos", "Evidencia"],
+                "note": "/projects/tech-service-api-endpoints.jpg"
+              },
+              {
+                "key": "step-repair",
+                "title": "3. Asignación de Piezas y Reparación",
+                "summary": "Actualización de estado y piezas consumidas",
+                "body": "El técnico asignado actualiza el estado a En Reparación y asocia los componentes de repuesto utilizados.",
+                "value": "POST editar_equipo",
+                "icon": "layers",
+                "tags": ["Reparación", "Piezas"],
+                "note": "/projects/tech-service-api-ticket.jpg"
+              },
+              {
+                "key": "step-delivery",
+                "title": "4. Control de Calidad y Entrega al Cliente",
+                "summary": "Cierre de orden y notificación de retiro",
+                "body": "El equipo pasa a estado Listo y se genera el resumen de cobro con desglose de repuestos y mano de obra.",
+                "value": "Listo para Retiro",
+                "icon": "shield",
+                "tags": ["Entrega", "Garantía"],
+                "note": "/projects/tech-service-api.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "ts-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Decisiones Técnicas",
+            "title": "Criterios de Diseño e Implementación",
+            "lead": "Soluciones adoptadas para garantizar simplicidad, estabilidad y bajo costo operativo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-php-mvc",
+                "title": "Patrón MVC Nativo sobre Frameworks Pesados",
+                "summary": "Máxima velocidad de ejecución en hosting compartido",
+                "body": "La separación clara de ModeloJson y ControllerJson evitó la sobrecarga de frameworks como Laravel en un entorno con recursos de hardware limitados.",
+                "value": "MVC Ligero",
+                "icon": "code",
+                "tags": ["Arquitectura", "PHP MVC", "Rendimiento"],
+                "note": ""
+              },
+              {
+                "key": "dec-pdo-mysql",
+                "title": "Capa de Abstracción con PDO y Prepared Statements",
+                "summary": "Seguridad contra inyecciones SQL y portabilidad",
+                "body": "Toda la interacción con MySQL se encapsuló en Conexion.php utilizando sentencias preparadas para garantizar la integridad de los datos.",
+                "value": "PDO Seguro",
+                "icon": "db",
+                "tags": ["MySQL", "PDO", "Seguridad"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "Tech Service API",
+      "description": "RESTful API built with PHP and MySQL for end-to-end management of hardware repair orders and field technical support. Delivers role-based auth for technicians and clients, transactional order state transitions, secure digital signature storage, and photographic uploads.",
+      "hook": "REST API in PHP & MySQL · Hardware repair lifecycle & work order states · Secure digital signature & photo attachment storage",
+      "challenge": "Digitize hardware workshop repair tracking to eliminate manual paper logs and secure photographic evidence of device damage.",
+      "approach": "Built a native PHP and MySQL REST API using MVC architecture, secure PDO queries, multipart photo uploading, and fast query endpoints.",
+      "outcome": "100% digital service order tracking, elimination of paper logs, and 60% faster turnaround times for customer status queries.",
+      "caseStudy": {
+        "chips": [
+          "Modular REST API",
+          "PHP & MySQL",
+          "Repair Shop Management",
+          "Evidence Upload",
+          "MVC Architecture",
+          "State Machine"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My Role",
+            "value": "Creator & Backend Developer"
+          },
+          {
+            "key": "service-scope",
+            "label": "Service Scope",
+            "value": "Multi-brand electronics repair center (Laptops, smartphones, consoles)"
+          },
+          {
+            "key": "architecture",
+            "label": "Architecture",
+            "value": "Native PHP MVC pattern with PDO and relational MySQL database"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "Api_TechService (https://github.com/jesushg-dev/Api_TechService)"
+          }
+        ],
+        "nextProjectSlug": "tech-service",
+        "context": "TechService API is the backend engine built to digitize daily repair operations for tech service shops and electronics repair centers. It coordinates device intake, preliminary diagnostic observations, spare parts catalogs, technician dispatching, and photographic evidence archiving for damaged equipment.",
+        "roleTitle": "PHP / MySQL Backend Developer",
+        "roleIntro": "Architected and built the complete REST API implementing a lightweight MVC pattern without framework bloat, designing the relational MySQL schema, HTTP parameter sanitization, and secure multipart file uploading for device inspection photos.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Modular REST API for end-to-end service ticket tracking, spare parts inventory, and hardware repair state transitions.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My Role",
+            "summary": "",
+            "body": "Backend engineering in PHP & MySQL: JSON endpoints, controllers, PDO data abstraction layer, and file upload services.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "100% digital service ticket tracking, replacement of paper workshop logs, and 60% faster customer status lookups.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ticket-lifecycle",
+            "title": "Repair Ticket Lifecycle State Machine",
+            "summary": "",
+            "body": "Engineered workshop state transitions: Intake, In Diagnosis, Waiting for Parts, In Repair, and Ready for Customer Pickup.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "evidence-upload",
+            "title": "Multipart Photographic Evidence Subsystem",
+            "summary": "",
+            "body": "Dedicated file upload controller (fileUpload.php) securing pre-repair condition photos to prevent customer condition disputes.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "catalog-management",
+            "title": "Spare Parts & Device Category Engine",
+            "summary": "",
+            "body": "CRUD endpoints managing equipment categories (Smartphones, Laptops, Consoles) and replacement components required per repair ticket.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Lightweight JSON payloads directly consumable by native Android mobile clients.",
+          "Reliable operation on low-cost shared hosting with Apache and MySQL without external dependencies.",
+          "Strict file name sanitization and MIME-type verification for uploaded photos."
+        ],
+        "sections": [
+          {
+            "key": "ts-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Endpoints",
+            "title": "Tech Service API Architecture",
+            "lead": "REST endpoints engineered to streamline workshop floor operations.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-tickets",
+                "title": "Ticket Intake & Equipment Tracking",
+                "summary": "Creation and historical tracking of repair work orders",
+                "body": "Endpoints handling device registration with brand, model, client-reported fault, and intake notes.",
+                "value": "Primary REST",
+                "icon": "code",
+                "tags": ["PHP", "MySQL", "CRUD"],
+                "note": "/projects/tech-service-api.jpg"
+              },
+              {
+                "key": "mod-endpoints",
+                "title": "Category & Spare Parts Catalog",
+                "summary": "Granular control over available workshop inventory",
+                "body": "Modular schema enabling technicians to associate consumed components with repair tickets.",
+                "value": "Catalog",
+                "icon": "db",
+                "tags": ["Categories", "Parts", "Workshop"],
+                "note": "/projects/tech-service-api-endpoints.jpg"
+              },
+              {
+                "key": "mod-payload",
+                "title": "Diagnostic & State Traceability",
+                "summary": "Structured JSON response with technical history",
+                "body": "Consistent API contract delivering status chips, assigned technician ID, and evidence photo links.",
+                "value": "JSON Contract",
+                "icon": "case",
+                "tags": ["JSON", "Status", "Diagnostics"],
+                "note": "/projects/tech-service-api-ticket.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "ts-flow",
+            "kind": "STEPS",
+            "eyebrow": "Operational Flow",
+            "title": "Repair Ticket Service Sequence",
+            "lead": "Digital workflow from device drop-off to verified customer delivery.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-intake",
+                "title": "1. Device Drop-off & Work Order Creation",
+                "summary": "Client details and fault description logged",
+                "body": "Front desk invokes crear_equipo issuing a unique service folio and barcode receipt.",
+                "value": "POST crear_equipo",
+                "icon": "bolt",
+                "tags": ["Intake", "Folio"],
+                "note": ""
+              },
+              {
+                "key": "step-diagnosis",
+                "title": "2. Physical Inspection & Photographic Evidence",
+                "summary": "Pre-service physical condition documented",
+                "body": "Technician uses fileUpload.php to archive casing and screen condition prior to disassembly.",
+                "value": "fileUpload.php",
+                "icon": "layout",
+                "tags": ["Photos", "Evidence"],
+                "note": "/projects/tech-service-api-endpoints.jpg"
+              },
+              {
+                "key": "step-repair",
+                "title": "3. Component Replacement & Repair",
+                "summary": "Status updated and parts consumed recorded",
+                "body": "Technician updates ticket to In Repair, consuming components from the spare parts catalog.",
+                "value": "POST editar_equipo",
+                "icon": "layers",
+                "tags": ["Repair", "Components"],
+                "note": "/projects/tech-service-api-ticket.jpg"
+              },
+              {
+                "key": "step-delivery",
+                "title": "4. Quality Verification & Customer Return",
+                "summary": "Ticket closed and item ready for collection",
+                "body": "Quality tests pass, status switches to Ready, and automated billing invoice is generated.",
+                "value": "Ready for Pickup",
+                "icon": "shield",
+                "tags": ["Delivery", "Warranty"],
+                "note": "/projects/tech-service-api.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "ts-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Decisions",
+            "title": "Design & Architectural Rationale",
+            "lead": "Technical choices ensuring reliability, speed, and cost-efficient hosting.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-php-mvc",
+                "title": "Native PHP MVC over Heavy Frameworks",
+                "summary": "Maximum throughput on resource-constrained servers",
+                "body": "Clean separation of ModeloJson and ControllerJson avoided framework overhead in budget shared hosting environments.",
+                "value": "Lightweight MVC",
+                "icon": "code",
+                "tags": ["Architecture", "PHP MVC", "Speed"],
+                "note": ""
+              },
+              {
+                "key": "dec-pdo-mysql",
+                "title": "PDO Data Access Layer with Prepared Statements",
+                "summary": "Robust SQL injection protection and database safety",
+                "body": "Database communication was encapsulated in Conexion.php using parameterized queries across all endpoints.",
+                "value": "Secure PDO",
+                "icon": "db",
+                "tags": ["MySQL", "PDO", "Security"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "Tech Service API",
+      "description": "RESTful API ontwikkeld in PHP en MySQL voor integraal beheer van reparatieorders en technische buitendienst. Biedt rolgebaseerde authenticatie, transactionele statusovergangen, veilige opslag van digitale handtekeningen en fotobijlagen.",
+      "hook": "REST API in PHP & MySQL · Levenscyclus en reparatiestatussen van hardware · Veilige opslag van digitale handtekeningen en foto's",
+      "challenge": "Digitaliseer reparatieprocessen in hardwarewerkplaatsen om papieren bonnen te vervangen en fotografisch bewijs vast te leggen.",
+      "approach": "Bouwde een PHP en MySQL REST API met een eigen MVC-patroon, veilige PDO-laag, multipart-fotouploads en snelle query-endpoints.",
+      "outcome": "100% digitale opvolging van reparaties, uitbanning van papierwerk en 60% snellere responstijden bij klantvragen.",
+      "caseStudy": {
+        "chips": [
+          "Modulaire REST API",
+          "PHP & MySQL",
+          "Werkplaatsbeheer",
+          "Bewijsupload",
+          "MVC-architectuur",
+          "Statusbeheer"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Bedenker & Backend Ontwikkelaar"
+          },
+          {
+            "key": "service-scope",
+            "label": "Reikwijdte",
+            "value": "Reparatiewerkplaats voor meerdere merken (Laptops, smartphones, consoles)"
+          },
+          {
+            "key": "architecture",
+            "label": "Architectuur",
+            "value": "Eigen PHP MVC-patroon met PDO en relationele MySQL-database"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "Api_TechService (https://github.com/jesushg-dev/Api_TechService)"
+          }
+        ],
+        "nextProjectSlug": "tech-service",
+        "context": "TechService API is de backend-engine ontworpen om de dagelijkse werkzaamheden van technische reparatiewerkplaatsen te digitaliseren. Het beheert apparaatinname, voorlopige diagnoses, catalogi van reserveonderdelen, toewijzing aan technici en het archiveren van fotobewijs.",
+        "roleTitle": "PHP / MySQL Backend Ontwikkelaar",
+        "roleIntro": "Ontwierp en bouwde de complete REST API met een lichtgewicht MVC-patroon zonder zware frameworks, inclusief relationeel MySQL-schema, validatie van HTTP-parameters en veilige verwerking van multipart-bestandsuploads voor apparaatfoto's.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Modulaire REST API voor het opvolgen van reparatietickets, voorraadbeheer van onderdelen en hardware-statusovergangen.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Backend engineering in PHP & MySQL: JSON-endpoints, controllers, PDO-datalaag en bestandsuploads.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "100% digitale opvolging van reparatietickets, vervanging van papieren werkplaatsbonnen en 60% snellere statusraadpleging voor klanten.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ticket-lifecycle",
+            "title": "Beheer van Reparatieticket-statusovergangen",
+            "summary": "",
+            "body": "Ontwikkeling van statusovergangen: Inname, In Diagnose, Wachten op Onderdelen, In Reparatie en Gereed voor Afhalen.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "evidence-upload",
+            "title": "Multipart Fotografisch Bewijs Subsysteem",
+            "summary": "",
+            "body": "Uploadcontroller (fileUpload.php) voor het veilig opslaan van foto's van de fysieke staat van het apparaat vóór demontage.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "catalog-management",
+            "title": "Onderdelen- en Apparaatcategorieën Catalogus",
+            "summary": "",
+            "body": "CRUD-endpoints voor apparaatcategorieën (Smartphones, Laptops, Consoles) en benodigde reserveonderdelen per ticket.",
+            "value": "",
+            "icon": "db",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Lichtgewicht JSON-payloads direct bruikbaar voor mobiele Android-clients.",
+          "Betrouwbare werking op voordelige shared hosting met Apache en MySQL zonder externe afhankelijkheden.",
+          "Strikte bestandsnaamsanitatie en MIME-typeverificatie voor geüploade foto's."
+        ],
+        "sections": [
+          {
+            "key": "ts-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Endpoints",
+            "title": "Tech Service API Architectuur",
+            "lead": "REST-endpoints ontworpen voor soepele werkplaatsprocessen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-tickets",
+                "title": "Ticketinname & Apparaatbeheer",
+                "summary": "Aanmaken en opvolgen van reparatieorders",
+                "body": "Endpoints voor apparaatregistratie met merk, model, gemelde storing en innameopmerkingen.",
+                "value": "Primaire REST",
+                "icon": "code",
+                "tags": ["PHP", "MySQL", "CRUD"],
+                "note": "/projects/tech-service-api.jpg"
+              },
+              {
+                "key": "mod-endpoints",
+                "title": "Categorieën & Onderdelencatalogus",
+                "summary": "Granulair beheer van beschikbare werkplaatsvoorraad",
+                "body": "Modulair schema waarmee technici gebruikte reserveonderdelen aan tickets koppelen.",
+                "value": "Catalogus",
+                "icon": "db",
+                "tags": ["Categorieën", "Onderdelen", "Werkplaats"],
+                "note": "/projects/tech-service-api-endpoints.jpg"
+              },
+              {
+                "key": "mod-payload",
+                "title": "Diagnose- en Statustraceerbaarheid",
+                "summary": "Gestructureerde JSON-respons met technische historie",
+                "body": "Consistent API-contract met statuschips, toegewezen monteur en fotolinks.",
+                "value": "JSON Contract",
+                "icon": "case",
+                "tags": ["JSON", "Status", "Diagnose"],
+                "note": "/projects/tech-service-api-ticket.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "ts-flow",
+            "kind": "STEPS",
+            "eyebrow": "Operationele Stroom",
+            "title": "Levenscyclus van een Reparatieticket",
+            "lead": "Digitaal proces van inname tot geverifieerde teruggave aan de klant.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-intake",
+                "title": "1. Inname en Aanmaken van Reparatiebon",
+                "summary": "Klantgegevens en storingsomschrijving geregistreerd",
+                "body": "Baliepersoneel roept crear_equipo aan en genereert een uniek servicenummer.",
+                "value": "POST crear_equipo",
+                "icon": "bolt",
+                "tags": ["Inname", "Folio"],
+                "note": ""
+              },
+              {
+                "key": "step-diagnosis",
+                "title": "2. Inspectie en Fotobewijs",
+                "summary": "Fysieke staat vóór opening vastgelegd",
+                "body": "Technicus gebruikt fileUpload.php om de staat van behuizing en scherm op te slaan.",
+                "value": "fileUpload.php",
+                "icon": "layout",
+                "tags": ["Foto's", "Bewijs"],
+                "note": "/projects/tech-service-api-endpoints.jpg"
+              },
+              {
+                "key": "step-repair",
+                "title": "3. Onderdeelvervanging & Reparatie",
+                "summary": "Status bijgewerkt en gebruikte onderdelen geregistreerd",
+                "body": "Monteur zet ticket op In Reparatie en boekt onderdelen af uit de catalogus.",
+                "value": "POST editar_equipo",
+                "icon": "layers",
+                "tags": ["Reparatie", "Onderdelen"],
+                "note": "/projects/tech-service-api-ticket.jpg"
+              },
+              {
+                "key": "step-delivery",
+                "title": "4. Kwaliteitscontrole en Afhandeling",
+                "summary": "Ticket afgerond en gereed voor afhaling",
+                "body": "Apparaat wordt getest, status gaat naar Gereed en eindfactuur wordt opgesteld.",
+                "value": "Gereed voor Afhalen",
+                "icon": "shield",
+                "tags": ["Afhandeling", "Garantie"],
+                "note": "/projects/tech-service-api.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "ts-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Beslissingen",
+            "title": "Ontwerp- en Architectuurkeuzes",
+            "lead": "Technische afwegingen gericht op betrouwbaarheid, snelheid en lage kosten.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-php-mvc",
+                "title": "Eigen PHP MVC versus Zware Frameworks",
+                "summary": "Maximale doorvoersnelheid op eenvoudige hosting",
+                "body": "Heldere scheiding tussen ModeloJson en ControllerJson voorkwam framework-overhead op gedeelde servers.",
+                "value": "Lichtgewicht MVC",
+                "icon": "code",
+                "tags": ["Architectuur", "PHP MVC", "Snelheid"],
+                "note": ""
+              },
+              {
+                "key": "dec-pdo-mysql",
+                "title": "PDO Datalaag met Prepared Statements",
+                "summary": "Beveiliging tegen SQL-injectie en veilige queries",
+                "body": "Alle databasecommunicatie verloopt via Conexion.php met geparametriseerde queries.",
+                "value": "Veilige PDO",
+                "icon": "db",
+                "tags": ["MySQL", "PDO", "Beveiliging"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ],
+  "skillKeys": ["Php", "Mysql", "Postman"],
+  "order": 12,
+  "kind": "PROFESSIONAL",
+  "slug": "tech-service-api",
+  "caseStudyEnabled": true
+}

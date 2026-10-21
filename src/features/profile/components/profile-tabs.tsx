@@ -26,9 +26,9 @@ export const ProfileTabs = () => {
       exact: true,
     },
     {
-      id: "profile-tab-console",
-      href: "/admin/profile/console",
-      label: t("consoleTab"),
+      id: "profile-tab-about",
+      href: "/admin/profile/about",
+      label: t("aboutSectionTab"),
       icon: Code2,
     },
   ];

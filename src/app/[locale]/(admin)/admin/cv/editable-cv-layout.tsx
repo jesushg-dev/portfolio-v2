@@ -1,22 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { FC, ReactNode } from "react";
+import type { FC, KeyboardEvent, ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { FaEdit } from "react-icons/fa";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import { FormDialogContent } from "@/components/shared/form-dialog-content";
 import { CvContextProvider } from "@/hoc/cv-context-provider";
 import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import type { Locale as AppLocale } from "@/i18n/config";
 import { api } from "@/trpc/react";
 import { FollowerPointerCard } from "@/components/ui/following-pointer";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
 
 // Display Components
 import HeaderCv from "@/components/curriculum-vitae/header-cv";
@@ -27,6 +25,7 @@ import TechnicalSkills from "@/components/curriculum-vitae/technical-skills";
 import Experience from "@/components/curriculum-vitae/experiences";
 import SoftSkills from "@/components/curriculum-vitae/soft-skills";
 import AdditionalInformation from "@/components/curriculum-vitae/additional-information";
+import PersonalReferences from "@/components/curriculum-vitae/personal-references";
 
 // Form Components
 import AboutForm from "@/features/cv/components/about-form";
@@ -38,8 +37,11 @@ import LanguagesList from "@/features/cv/components/languages-list";
 import SkillsList from "@/features/cv/components/skills-list";
 import AdditionalList from "@/features/cv/components/additional-list";
 import SoftSkillsList from "@/features/cv/components/soft-skills-list";
+import PersonalReferencesList from "@/features/cv/components/personal-references-list";
 
 import type { CvData } from "@/components/curriculum-vitae/types";
+
+const FINE_HOVER_QUERY = "(hover: hover) and (pointer: fine)";
 
 type SectionType =
   | "header"
@@ -50,7 +52,8 @@ type SectionType =
   | "about"
   | "experience"
   | "soft-skills"
-  | "additional";
+  | "additional"
+  | "personal-references";
 
 type CvTranslator = ReturnType<typeof useTranslations<"admin.cv">>;
 
@@ -73,6 +76,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
     [languages],
   );
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
+  const canHoverEdit = useMediaQuery(FINE_HOVER_QUERY);
   const displayContacts = useMemo(
     () => resolveCvDisplayContacts(data.contacts, data.profile),
     [data.contacts, data.profile],
@@ -113,8 +117,12 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
         return t("sections.personalSkills");
       case "additional":
         return t("sections.additionalInformation");
-      default:
-        return "";
+      case "personal-references":
+        return t("sections.personalReferences");
+      default: {
+        const _exhaustive: never = section;
+        return _exhaustive;
+      }
     }
   };
 
@@ -127,6 +135,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
           onClick={() => setActiveSection("header")}
           isEmpty={!data.header}
           t={t}
+          canHoverEdit={canHoverEdit}
         >
           <HeaderCv
             header={localizedData.header}
@@ -134,7 +143,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
           />
         </EditableSection>
 
-        <div className="bg-card grid grid-cols-1 p-5 pb-10 sm:grid-cols-9">
+        <div className="grid grid-cols-1 bg-white p-5 pb-10 text-black sm:grid-cols-9">
           <div className="flex flex-col gap-6 sm:col-span-3">
             <EditableSection
               id="contacts"
@@ -142,6 +151,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               onClick={() => setActiveSection("contacts")}
               isEmpty={displayContacts.length === 0}
               t={t}
+              canHoverEdit={canHoverEdit}
             >
               <ContactMe contacts={localizedData.contacts} />
             </EditableSection>
@@ -152,6 +162,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               onClick={() => setActiveSection("education")}
               isEmpty={data.educations.length === 0}
               t={t}
+              canHoverEdit={canHoverEdit}
             >
               <Education educations={localizedData.educations} />
             </EditableSection>
@@ -162,6 +173,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               onClick={() => setActiveSection("languages")}
               isEmpty={data.languages.length === 0}
               t={t}
+              canHoverEdit={canHoverEdit}
             >
               <Languages languages={localizedData.languages} />
             </EditableSection>
@@ -172,6 +184,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               onClick={() => setActiveSection("skills")}
               isEmpty={data.technicalSkills.length === 0}
               t={t}
+              canHoverEdit={canHoverEdit}
             >
               <TechnicalSkills
                 technicalSkills={localizedData.technicalSkills}
@@ -190,12 +203,13 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               onClick={() => setActiveSection("about")}
               isEmpty={!aboutMeText}
               t={t}
+              canHoverEdit={canHoverEdit}
             >
               <div className="mb-4">
-                <h5 className="text-primary mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
+                <h5 className="text-cv mb-1 flex items-center gap-1 text-lg font-semibold tracking-tight uppercase">
                   {t("sections.aboutMe")}
                 </h5>
-                <h3 className="text-foreground text-xs">{aboutMeText}</h3>
+                <h3 className="text-xs text-[#1a1a1a]">{aboutMeText}</h3>
               </div>
             </EditableSection>
 
@@ -205,6 +219,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               onClick={() => setActiveSection("experience")}
               isEmpty={data.experiences.length === 0}
               t={t}
+              canHoverEdit={canHoverEdit}
             >
               <Experience experiences={localizedData.experiences} />
             </EditableSection>
@@ -215,6 +230,7 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               onClick={() => setActiveSection("soft-skills")}
               isEmpty={data.softSkills.length === 0}
               t={t}
+              canHoverEdit={canHoverEdit}
             >
               <SoftSkills softSkills={localizedData.softSkills} />
             </EditableSection>
@@ -225,9 +241,23 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
               onClick={() => setActiveSection("additional")}
               isEmpty={data.additionalInformation.length === 0}
               t={t}
+              canHoverEdit={canHoverEdit}
             >
               <AdditionalInformation
                 additionalInformation={localizedData.additionalInformation}
+              />
+            </EditableSection>
+
+            <EditableSection
+              id="personal-references"
+              title={t("sections.personalReferences")}
+              onClick={() => setActiveSection("personal-references")}
+              isEmpty={data.personalReferences.length === 0}
+              t={t}
+              canHoverEdit={canHoverEdit}
+            >
+              <PersonalReferences
+                personalReferences={localizedData.personalReferences}
               />
             </EditableSection>
           </div>
@@ -235,59 +265,60 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
       </CvContextProvider>
 
       <Dialog open={activeSection !== null} onOpenChange={handleClose}>
-        <DialogContent
+        <FormDialogContent
           id="cv-section-modal"
           closeButtonId="cv-section-modal-close"
-          className="max-h-[85vh] w-full overflow-y-auto sm:max-w-5xl"
+          title={activeSection ? getModalTitle(activeSection) : ""}
+          className="sm:max-w-5xl"
+          bodyScroll={
+            activeSection != null &&
+            activeSection !== "header" &&
+            activeSection !== "about"
+          }
         >
-          <DialogHeader className="border-border flex flex-row items-center justify-between border-b pb-3">
-            <DialogTitle className="text-lg">
-              {activeSection ? getModalTitle(activeSection) : ""}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="mt-4">
-            {activeSection === "header" && <HeaderForm languages={languages} />}
-            {activeSection === "contacts" && (
-              <ContactsList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "education" && (
-              <EducationsList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "languages" && (
-              <LanguagesList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "skills" && <SkillsList />}
-            {activeSection === "about" && <AboutForm languages={languages} />}
-            {activeSection === "experience" && (
-              <ExperiencesList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "soft-skills" && (
-              <SoftSkillsList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-            {activeSection === "additional" && (
-              <AdditionalList
-                languages={languages}
-                displayLocale={currentLocale}
-              />
-            )}
-          </div>
-        </DialogContent>
+          {activeSection === "header" && <HeaderForm languages={languages} />}
+          {activeSection === "contacts" && (
+            <ContactsList languages={languages} displayLocale={currentLocale} />
+          )}
+          {activeSection === "education" && (
+            <EducationsList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "languages" && (
+            <LanguagesList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "skills" && <SkillsList />}
+          {activeSection === "about" && <AboutForm languages={languages} />}
+          {activeSection === "experience" && (
+            <ExperiencesList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "soft-skills" && (
+            <SoftSkillsList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "additional" && (
+            <AdditionalList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+          {activeSection === "personal-references" && (
+            <PersonalReferencesList
+              languages={languages}
+              displayLocale={currentLocale}
+            />
+          )}
+        </FormDialogContent>
       </Dialog>
     </div>
   );
@@ -300,40 +331,76 @@ const EditableSection: FC<{
   children: ReactNode;
   isEmpty?: boolean;
   t: CvTranslator;
-}> = ({ id, title, onClick, children, isEmpty = false, t }) => {
-  return (
-    <FollowerPointerCard title={`${t("edit")} ${title}`}>
+  canHoverEdit: boolean;
+}> = ({ id, title, onClick, children, isEmpty = false, t, canHoverEdit }) => {
+  const editLabel = `${t("edit")} ${title}`;
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onClick();
+    }
+  };
+
+  const section = (
+    <div
+      id={id}
+      role="button"
+      tabIndex={0}
+      aria-label={editLabel}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      className={cn(
+        "group hover:border-cv/40 relative -m-2 scroll-mt-32 rounded-xl border border-transparent p-2 transition-colors hover:bg-black/3",
+        canHoverEdit ? "cursor-none" : "cursor-pointer",
+      )}
+    >
       <div
-        id={id}
-        className="group hover:border-primary-500/50 hover:bg-muted/10 relative -m-2 scroll-mt-32 rounded-xl border border-transparent p-2 transition-colors"
-      >
-        <div className="absolute top-2 right-2 z-10 opacity-0 transition-opacity group-hover:opacity-100">
-          <button
-            id={`cv-section-${id}-edit`}
-            type="button"
-            onClick={onClick}
-            className="bg-primary-600 hover:bg-primary-700 flex cursor-none items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold text-white shadow-md transition-colors"
-          >
-            <FaEdit /> {t("edit")} {title}
-          </button>
-        </div>
-        {isEmpty ? (
-          <div
-            id={`cv-section-${id}-empty`}
-            className="border-muted-foreground/30 bg-muted/20 text-muted-foreground hover:border-primary-500/50 hover:bg-muted/40 hover:text-primary-600 flex h-24 w-full cursor-none flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors"
-            onClick={onClick}
-          >
-            <p className="text-sm font-medium">
-              {t("empty")} {title}
-            </p>
-            <p className="text-xs opacity-70">{t("clickToAdd")}</p>
-          </div>
-        ) : (
-          children
+        className={cn(
+          "absolute top-2 right-2 z-10 transition-opacity",
+          canHoverEdit
+            ? "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100"
+            : "opacity-100",
         )}
+      >
+        <button
+          id={`cv-section-${id}-edit`}
+          type="button"
+          aria-label={editLabel}
+          title={editLabel}
+          onClick={(event) => {
+            event.stopPropagation();
+            onClick();
+          }}
+          className={cn(
+            "bg-cv hover:bg-cv/90 inline-flex size-8 items-center justify-center rounded-md text-white shadow-sm transition-colors",
+            canHoverEdit ? "cursor-none" : "cursor-pointer",
+          )}
+        >
+          <FaEdit className="size-3.5" aria-hidden />
+        </button>
       </div>
-    </FollowerPointerCard>
+      {isEmpty ? (
+        <div
+          id={`cv-section-${id}-empty`}
+          className="border-cv/30 bg-cv/4 hover:border-cv/50 hover:bg-cv/8 hover:text-cv flex h-24 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed text-[#333333] transition-colors"
+        >
+          <p className="text-sm font-medium">
+            {t("empty")} {title}
+          </p>
+          <p className="text-xs opacity-70">{t("clickToAdd")}</p>
+        </div>
+      ) : (
+        children
+      )}
+    </div>
   );
+
+  if (!canHoverEdit) {
+    return section;
+  }
+
+  return <FollowerPointerCard title={editLabel}>{section}</FollowerPointerCard>;
 };
 
 export default EditableCvLayout;

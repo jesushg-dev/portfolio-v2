@@ -8,6 +8,7 @@ import {
   mapUsesItemsToEditorDto,
   mapUsesSettingsToEditorDto,
 } from "@/features/uses/lib/uses-editor-dto";
+import { clampPercent } from "@/features/uses/lib/workspace-tag-coords";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -56,6 +57,17 @@ const settingsInput = z.object({
       }),
     )
     .default([]),
+  workspaceTags: z
+    .array(
+      z.object({
+        id: z.string().optional(),
+        usesItemId: z.string(),
+        xPercent: z.number(),
+        yPercent: z.number(),
+        order: z.number().int().nonnegative().default(0),
+      }),
+    )
+    .default([]),
 });
 
 const settingsInclude = {
@@ -63,6 +75,9 @@ const settingsInclude = {
   UsesClarification: {
     orderBy: { order: "asc" as const },
     include: { UsesClarificationTranslation: true },
+  },
+  UsesWorkspaceTag: {
+    orderBy: { order: "asc" as const },
   },
 };
 
@@ -205,6 +220,9 @@ export const usesAdminRouter = createTRPCRouter({
         await ctx.db.usesItem.findUnique({ where: { id: input.id } }),
         ctx.user.id,
       );
+      await ctx.db.usesWorkspaceTag.deleteMany({
+        where: { usesItemId: input.id },
+      });
       await ctx.db.usesItemTranslation.deleteMany({
         where: { usesItemId: input.id },
       });
@@ -300,6 +318,61 @@ export const usesAdminRouter = createTRPCRouter({
               ? { createMany: { data: translationRows } }
               : undefined,
           },
+        });
+      }
+
+      const tagItemIds = [
+        ...new Set(
+          input.workspaceTags
+            .map((tag) => tag.usesItemId.trim())
+            .filter(Boolean),
+        ),
+      ];
+      const ownedItems =
+        tagItemIds.length === 0
+          ? []
+          : await ctx.db.usesItem.findMany({
+              where: {
+                userId: ctx.user.id,
+                id: { in: tagItemIds },
+                type: { in: ["EVERYDAY", "SOFTWARE"] },
+              },
+              select: { id: true },
+            });
+      const ownedItemIds = new Set(ownedItems.map((item) => item.id));
+      const uniqueTags = new Map<
+        string,
+        {
+          usesItemId: string;
+          xPercent: number;
+          yPercent: number;
+          order: number;
+        }
+      >();
+      for (const [index, tag] of input.workspaceTags.entries()) {
+        const usesItemId = tag.usesItemId.trim();
+        if (!ownedItemIds.has(usesItemId)) continue;
+        uniqueTags.set(usesItemId, {
+          usesItemId,
+          xPercent: clampPercent(tag.xPercent),
+          yPercent: clampPercent(tag.yPercent),
+          order: tag.order ?? index,
+        });
+      }
+
+      await ctx.db.usesWorkspaceTag.deleteMany({
+        where: { usesSettingsId: settings.id },
+      });
+      const tagRows = [...uniqueTags.values()];
+      if (tagRows.length > 0) {
+        await ctx.db.usesWorkspaceTag.createMany({
+          data: tagRows.map((tag) => ({
+            usesSettingsId: settings.id,
+            usesItemId: tag.usesItemId,
+            xPercent: tag.xPercent,
+            yPercent: tag.yPercent,
+            order: tag.order,
+          })),
         });
       }
 

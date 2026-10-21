@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { locales, type Locale } from "@/i18n/config";
 import { getCvPdfDownload } from "@/features/cv/lib/get-cv-pdf-download";
 import { resolveTenant } from "@/lib/tenant/resolve";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,7 +15,7 @@ function isLocale(value: string | null): value is Locale {
 
 export async function GET(request: Request) {
   const tenant = await resolveTenant();
-  if (!tenant) {
+  if (!tenant || !isPublicCvVisible(tenant)) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
@@ -35,26 +36,24 @@ export async function GET(request: Request) {
       { paginatePages, design },
     );
 
-    if (!result?.buffer && !result?.url) {
+    const buffer =
+      result?.buffer ??
+      (result?.url
+        ? await fetch(result.url, { cache: "no-store" })
+            .then((r) => r.arrayBuffer())
+            .then((b) => Buffer.from(b))
+        : null);
+
+    if (!buffer || !result?.fileName) {
       return NextResponse.json({ error: "CV not found" }, { status: 404 });
     }
 
-    if (result.url && result.fromCache) {
-      return NextResponse.redirect(result.url, 302);
-    }
+    const encodedFileName = encodeURIComponent(result.fileName);
 
-    if (result.url) {
-      return NextResponse.redirect(result.url, 302);
-    }
-
-    if (!result.buffer) {
-      return NextResponse.json({ error: "CV not found" }, { status: 404 });
-    }
-
-    return new NextResponse(new Uint8Array(result.buffer), {
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="${result.fileName}"`,
+        "Content-Disposition": `inline; filename="${result.fileName}"; filename*=UTF-8''${encodedFileName}`,
         "Cache-Control": "no-store",
       },
     });

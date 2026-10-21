@@ -24,12 +24,14 @@ export default async function EditApplicationModal({
     <PageDialogWrapper
       title={t("editApplication")}
       description={t("editApplicationDescription")}
+      className="sm:max-w-3xl"
     >
       <ApplicationForm
         key={editorDto.id}
         initialData={editorDto}
         companies={companies}
         locale={locale as Locale}
+        variant="modal"
       />
     </PageDialogWrapper>
   );

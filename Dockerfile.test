@@ -16,4 +16,5 @@ COPY . .
 ARG MONGODB_URI="mongodb://dummy"
 RUN pnpm prisma generate
 
-CMD ["sh", "-c", "pnpm db:push && pnpm test:e2e:full"]
+ENV E2E_FULL=1
+CMD ["sh", "-c", "pnpm db:push && pnpm exec playwright test"]

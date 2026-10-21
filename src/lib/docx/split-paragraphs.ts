@@ -4,7 +4,7 @@
  * where even-indexed entries are separators and odd-indexed are <w:p>...</w:p> blocks.
  */
 export function splitIntoParagraphs(xml: string): string[] {
-  return xml.split(/(<w:p[ >][\s\S]*?<\/w:p>)/g);
+  return xml.split(/(<w:p\b[^>]*\/>|<w:p\b[^>]*>[\s\S]*?<\/w:p>)/g);
 }
 
 /** Return only <w:p> blocks from splitIntoParagraphs, in document order. */

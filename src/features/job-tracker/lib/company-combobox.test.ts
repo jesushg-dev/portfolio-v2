@@ -2,6 +2,7 @@ import {
   decodeNewCompanyName,
   encodeNewCompanyName,
   isNewCompanyValue,
+  matchCompanyByName,
   resolveCompanyLabel,
 } from "./company-combobox";
 
@@ -47,5 +48,19 @@ describe("company-combobox helpers", () => {
 
   it("returns null for resolveCompanyLabel when company id is not found", () => {
     expect(resolveCompanyLabel("unknown-id", companies)).toBeNull();
+  });
+
+  it("matches an existing company by name case-insensitively", () => {
+    expect(matchCompanyByName("acme corp", companies)).toBe("c1");
+  });
+
+  it("encodes a pending company when the name is new", () => {
+    expect(matchCompanyByName("JuegaOk", companies)).toBe(
+      encodeNewCompanyName("JuegaOk"),
+    );
+  });
+
+  it("returns null for an empty imported company name", () => {
+    expect(matchCompanyByName("   ", companies)).toBeNull();
   });
 });

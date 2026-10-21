@@ -9,19 +9,32 @@ import {
   canDeliverPortfolioContactEmail,
   type Locale,
 } from "@/lib/email/resend";
+import { getClientIpFromHeaders, hashClientIp } from "@/lib/http/client-ip";
+import { consumeFixedWindowLimit } from "@/lib/rate-limit/consume-fixed-window";
 import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
+import {
+  locationQueryFromContacts,
+  resolveOwnerMapLocation,
+} from "@/lib/geo/geocode-place";
+import { verifyTurnstileToken } from "@/lib/turnstile/verify-turnstile";
 
 const ContactMessageSchema = z.object({
   name: z.string().trim().min(1).max(80),
   email: z.string().trim().email().max(120),
   message: z.string().trim().min(10).max(2000),
+  turnstileToken: z.string().min(1).max(2048),
 });
 
 export const contactRouter = createTRPCRouter({
   getPublic: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.tenant) {
-      return { contacts: [], recipientReady: false, emailFormEnabled: false };
+      return {
+        contacts: [],
+        recipientReady: false,
+        emailFormEnabled: false,
+        mapLocation: null,
+      };
     }
 
     const ownerLocale: Locale = ctx.tenant.defaultLocale ?? "en";
@@ -36,7 +49,14 @@ export const contactRouter = createTRPCRouter({
         }),
         ctx.db.profile.findUnique({
           where: { userId: ctx.tenant.userId },
-          select: { username: true, isPrimary: true, customDomain: true },
+          select: {
+            username: true,
+            isPrimary: true,
+            customDomain: true,
+            mapLocationLabel: true,
+            mapLatitude: true,
+            mapLongitude: true,
+          },
         }),
         ctx.db.user.findUnique({
           where: { id: ctx.tenant.userId },
@@ -53,12 +73,21 @@ export const contactRouter = createTRPCRouter({
       label: field(contact.translations, "label"),
     }));
 
+    const locationQuery = locationQueryFromContacts(contacts);
+    const mapLocation = await resolveOwnerMapLocation({
+      mapLatitude: profile?.mapLatitude,
+      mapLongitude: profile?.mapLongitude,
+      mapLocationLabel: profile?.mapLocationLabel,
+      contactQuery: locationQuery,
+    });
+
     return {
       contacts,
       portfolioUrl: profile ? getTenantPublicUrl(profile) : null,
       displayName: user?.name ?? ctx.tenant.username,
       recipientReady: Boolean(user?.email),
       emailFormEnabled,
+      mapLocation,
     };
   }),
 
@@ -82,6 +111,36 @@ export const contactRouter = createTRPCRouter({
         throw new TRPCError({
           code: "PRECONDITION_FAILED",
           message: "Email delivery is not configured",
+        });
+      }
+
+      const clientIp = getClientIpFromHeaders(ctx.headers);
+
+      const turnstile = await verifyTurnstileToken({
+        token: input.turnstileToken,
+        expectedAction: "contact",
+        clientIp,
+      });
+
+      if (!turnstile.success) {
+        console.error(
+          `[contact.sendMessage] Turnstile verification failed (reason: ${turnstile.reason})`,
+        );
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Turnstile verification failed",
+        });
+      }
+
+      const allowed = await consumeFixedWindowLimit(ctx.db, {
+        key: `contact:${ctx.tenant.userId}:${hashClientIp(clientIp)}`,
+        windowMs: 60 * 60 * 1000,
+        max: 5,
+      });
+      if (!allowed) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Contact form rate limit exceeded",
         });
       }
 

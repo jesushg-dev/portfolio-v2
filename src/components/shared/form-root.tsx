@@ -42,7 +42,10 @@ export const FormRoot = ({
           }
         : undefined
     }
-    className={cn("flex flex-1 flex-col overflow-hidden", className)}
+    className={cn(
+      "flex flex-1 flex-col overflow-hidden p-[0.0625rem]",
+      className,
+    )}
   >
     {children}
   </form>
@@ -59,12 +62,9 @@ export const FormContent = ({
   className,
   error,
 }: FormContentProps) => (
-  <div className="flex-1 overflow-auto">
+  <div className="min-h-0 flex-1 overflow-y-auto pt-[0.0625rem] pr-1">
     <div
-      className={cn(
-        "flex flex-1 flex-col justify-between gap-4 overflow-hidden px-1",
-        className,
-      )}
+      className={cn("flex flex-col gap-4 px-1 pt-[0.0625rem] pb-4", className)}
     >
       <FormError error={error} />
       {children}
@@ -99,7 +99,7 @@ export const FormSection = ({
     {description && (
       <p className="text-muted-foreground text-sm">{description}</p>
     )}
-    <div className="space-y-4">{children}</div>
+    <div className="space-y-4 p-[0.0625rem]">{children}</div>
   </fieldset>
 );
 
@@ -265,6 +265,7 @@ export const FormSwitchItem = ({
 
 interface FormActionsProps {
   isPending?: boolean;
+  disabled?: boolean;
   title?: string;
   className?: string;
   children?: ReactNode;
@@ -274,6 +275,7 @@ interface FormActionsProps {
 
 export const FormActions = ({
   isPending,
+  disabled,
   title = "Submit",
   onClick,
   className,
@@ -281,7 +283,11 @@ export const FormActions = ({
   submitId,
 }: FormActionsProps) => (
   <div
-    className={cn("mt-4 flex w-full items-center justify-end gap-2", className)}
+    className={cn(
+      "border-border shrink-0 border-t px-1 pt-4",
+      "flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end",
+      className,
+    )}
   >
     {children}
     <Button
@@ -290,7 +296,7 @@ export const FormActions = ({
       onClick={onClick}
       className="w-full sm:w-auto"
       size="sm"
-      disabled={isPending}
+      disabled={disabled ?? isPending}
     >
       {title}
       {isPending && <LoaderCircleIcon className="ml-2 animate-spin" />}

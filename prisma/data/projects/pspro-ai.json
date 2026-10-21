@@ -1,0 +1,1007 @@
+{
+  "key": "PSPro",
+  "image": "/projects/pspro-ai.jpg",
+  "type": "AI",
+  "githubUrl": "",
+  "websiteUrl": "https://pspro.ai/",
+  "isPrivate": true,
+  "order": 4,
+  "kind": "PROFESSIONAL",
+  "slug": "pspro-ai",
+  "caseStudyEnabled": true,
+  "status": "IN_PRODUCTION",
+  "startedAt": "2024-08-01T00:00:00.000Z",
+  "endedAt": "2025-03-01T00:00:00.000Z",
+  "teamSize": 8,
+  "skillKeys": [
+    "Csharp",
+    "Dotnet",
+    "Nestjs",
+    "Angular",
+    "Typescript",
+    "DevExpress",
+    "Firebase",
+    "Postgresql",
+    "Azure",
+    "Docker",
+    "Microservices",
+    "EventDriven"
+  ],
+  "translations": [
+    {
+      "locale": "es",
+      "title": "PSPro AI",
+      "description": "Plataforma SaaS empresarial multi-tenant con DevExpress para diagramas y reportes dinámicos, modelado flexible de datos en Firebase, formularios multi-registro y automatización de procesos industriales con C# (.NET) y Nest.js.",
+      "hook": "SaaS Multi-Tenant · C# (.NET) + Nest.js + Angular + DevExpress · Reportes dinámicos, Firebase y automatización con IA",
+      "challenge": "Orquestar flujos de trabajo de alta concurrencia en logística y manufactura sin degradar la API transaccional bajo cargas pesadas de cálculo y con aislamiento estricto por cliente.",
+      "approach": "Diseñé una arquitectura híbrida multi-tenant: Angular con DevExpress para diagramación y reportes dinámicos, Firebase para esquemas de datos flexibles definidos por el usuario, Nest.js para la API central y despacho de formularios, C# (.NET 8) para workers asíncronos y PostgreSQL para aislamiento seguro.",
+      "outcome": "Aislamiento total de datos entre organizaciones, libertad de modelado para cada cliente, generación dinámica de reportes conectados a diagramas de flujo y latencia sub-50ms en la API.",
+      "caseStudy": {
+        "chips": [
+          "Arquitectura Multi-Tenant",
+          "DevExpress Reporting",
+          "Firebase Dynamic Schemas",
+          "Arquitectura Híbrida",
+          "C# / .NET 8",
+          "Nest.js Core",
+          "Angular 17+",
+          "Event-Driven"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Ingeniero Full-Stack Senior · Contollo"
+          },
+          {
+            "key": "company-context",
+            "label": "Contexto empresarial",
+            "value": "Contollo Consulting (Texas, USA) · Cliente: PSPro AI"
+          },
+          {
+            "key": "hybrid-stack",
+            "label": "Stack híbrido",
+            "value": "Angular + DevExpress · Nest.js · C# .NET · PostgreSQL + Firebase"
+          },
+          {
+            "key": "tenancy-model",
+            "label": "Modelo de Tenancy",
+            "value": "Multi-Tenant SaaS · Aislamiento lógico estricto y contexto dinámico"
+          },
+          {
+            "key": "live-url",
+            "label": "Plataforma en vivo",
+            "value": "PSPro AI (https://pspro.ai/)"
+          }
+        ],
+        "nextProjectSlug": "walmart-centroamerica",
+        "context": "PSPro AI (desarrollado en Contollo Consulting) es una plataforma SaaS multi-tenant de automatización de procesos de negocio impulsada por IA para industrias complejas. Combina modelado visual de flujos con DevExpress, generación de reportes dinámicos conectados a datos del usuario, modelador de datos personalizado sobre Firebase, formularios multi-registro y despacho de tareas por mensajería con estricto aislamiento entre organizaciones clientes.",
+        "roleTitle": "Ingeniero Full-Stack Senior & Arquitecto Técnico",
+        "roleIntro": "Formé parte del equipo núcleo de ingeniería en Contollo responsable de la arquitectura full-stack de la plataforma. Diseñé los módulos principales del backend en Nest.js, integré DevExpress en Angular para el lienzo de diagramas y reportes dinámicos, implementé el modelador de esquemas flexibles sobre Firebase, orquesté microservicios desacoplados en C# (.NET) para procesamiento asíncrono y construí el motor de despacho de formularios a usuarios destino.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Suite industrial SaaS multi-tenant con DevExpress para diagramas y reportes dinámicos, modelador de datos Firebase, formularios multi-registro y automatización con IA.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Arquitectura full-stack híbrida: Angular con DevExpress para diagramas y reportes, Firebase para datos dinámicos, Nest.js para la API central y C# (.NET) para workers de eventos y cron jobs.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Aislamiento robusto de datos entre clientes, libertad total de modelado para cada empresa, generación instantánea de reportes vinculados a procesos y latencia <50ms.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "devexpress-reporting-workflows",
+            "title": "Lienzo DevExpress y Generación de Reportes Dinámicos",
+            "summary": "",
+            "body": "Integración de componentes DevExpress en Angular para el diseño interactivo de diagramas de flujo de procesos industriales y un generador de reportes dinámicos que los usuarios conectan directamente a sus datos operacionales para exportar y auditar la ejecución de cada proceso.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "firebase-data-modeling",
+            "title": "Modelador de Datos y Formularios Dinámicos con Firebase",
+            "summary": "",
+            "body": "Desarrollo de un modelador de datos no-code sobre Firebase (Firestore) para que cada empresa defina sus propias tablas y entidades a conveniencia, junto a formularios dinámicos multi-registro y un motor de mensajería para despachar formularios a usuarios destino.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "csharp-workers",
+            "title": "Background Workers y Cron Jobs en C# (.NET)",
+            "summary": "",
+            "body": "Diseño y despliegue de workers en .NET 8 encargados de procesar colas de eventos asíncronos (RabbitMQ / Azure Service Bus), ejecuciones masivas y cron jobs periódicos.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "nestjs-core",
+            "title": "Backend Central y Gateway de Dominio en Nest.js",
+            "summary": "",
+            "body": "Implementación de arquitectura modular en Nest.js con TypeScript, autenticación JWT, control de acceso RBAC multi-tenant, controladores REST y publicador de eventos hacia la cola.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "multi-tenant-engine",
+            "title": "Aislamiento Multi-Tenant y Seguridad de Datos",
+            "summary": "",
+            "body": "Implementación de arquitectura multi-tenant con resolución dinámica de tenant por request en Nest.js, partición de colas asíncronas en C# y políticas estrictas de aislamiento de datos en PostgreSQL.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Aislamiento estricto de datos multi-tenant garantizando privacidad total entre cuentas corporativas.",
+          "Procesamiento asíncrono no bloqueante para evitar degradación de la API bajo picos de carga industrial.",
+          "Garantía de entrega 'at least once' e idempotencia en el consumo de eventos en C#."
+        ],
+        "sections": [
+          {
+            "key": "pspro-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos y Capacidades",
+            "title": "Ecosistema Tecnológico de PSPro AI",
+            "lead": "Módulos interconectados para automatizar operaciones de misión crítica en un entorno multi-tenant.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-overview",
+                "title": "Plataforma SaaS Multi-Tenant PSPro AI",
+                "summary": "Suite industrial multi-tenant de automatización de procesos",
+                "body": "Portal web SaaS multi-tenant que unifica Enterprise Manager, centros de trabajo y flujos de procesos en una interfaz centralizada con aislamiento por cliente.",
+                "value": "PSPro Platform",
+                "icon": "layout",
+                "tags": ["Multi-Tenant", "AI", "Enterprise"],
+                "note": "/projects/pspro-ai.jpg"
+              },
+              {
+                "key": "mod-architecture",
+                "title": "Arquitectura Híbrida Multi-Tenant (Nest.js + C# + Angular)",
+                "summary": "Segregación óptima de responsabilidades y contexto de tenant",
+                "body": "Especialización de capas: Angular con DevExpress para UX reactiva, Nest.js para resolución de tenant y dominio REST, C# para workers particionados y PostgreSQL + Firebase para datos.",
+                "value": "Hybrid Spec",
+                "icon": "layers",
+                "tags": ["Multi-Tenant", "Nest.js", "C# .NET"],
+                "note": "/projects/pspro-ai-architecture.jpg"
+              },
+              {
+                "key": "mod-workflow",
+                "title": "Lienzo DevExpress y Reportes Dinámicos",
+                "summary": "Modelado visual de flujos y generación de reportes con DevExpress",
+                "body": "Diseñador interactivo que permite orquestar flujos de trabajo con DevExpress Diagram y generar reportes dinámicos que los usuarios conectan directamente a sus datos operacionales para exportación y auditoría.",
+                "value": "DevExpress Flow",
+                "icon": "case",
+                "tags": ["DevExpress", "Reportes Dinámicos", "BPMN"],
+                "note": "/projects/pspro-ai-workflow.jpg"
+              },
+              {
+                "key": "mod-data-modeling",
+                "title": "Modelador de Datos Flexible con Firebase",
+                "summary": "Definición de tablas y entidades a conveniencia del tenant",
+                "body": "Módulo no-code que permite a los usuarios estructurar sus propios modelos de datos y catálogos en Firebase (Firestore), ofreciendo libertad de esquema sin alterar el core relacional.",
+                "value": "Firebase Modeler",
+                "icon": "layers",
+                "tags": ["Firebase", "Modelador", "NoSQL"],
+                "note": ""
+              },
+              {
+                "key": "mod-forms-dispatch",
+                "title": "Formularios Multi-Registro y Despacho por Mensajería",
+                "summary": "Captura de tablas y asignación a usuarios destinatarios",
+                "body": "Formularios dinámicos que permiten capturar uno o múltiples registros en tablas interactivas, con un sistema de mensajería que despacha formularios a usuarios destino para su llenado oportuno.",
+                "value": "Form Dispatch",
+                "icon": "globe",
+                "tags": ["Formularios", "Mensajería", "Colaboración"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pspro-flow",
+            "kind": "STEPS",
+            "eyebrow": "Flujo Asíncrono Multi-Tenant",
+            "title": "Ciclo de Procesamiento Event-Driven con Contexto de Tenant",
+            "lead": "Desacoplamiento entre la solicitud del cliente y la ejecución de segundo plano con propagación de tenant.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-client-action",
+                "title": "1. Interacción en Angular SPA",
+                "summary": "El usuario solicita un cálculo masivo o cambio de estado",
+                "body": "Formularios reactivos en Angular validan y despachan la orden al backend principal inyectando cabeceras de contexto.",
+                "value": "Angular 17+",
+                "icon": "layout",
+                "tags": ["Angular", "RxJS"],
+                "note": ""
+              },
+              {
+                "key": "step-nest-gateway",
+                "title": "2. Validación de Tenant y Persistencia en Nest.js",
+                "summary": "Validación de permisos RBAC, contexto de tenant y persistencia",
+                "body": "Nest.js autentica al usuario, resuelve el contexto del tenant, guarda el estado preliminar en PostgreSQL y publica el evento etiquetado al bus de mensajes.",
+                "value": "Nest.js API",
+                "icon": "code",
+                "tags": ["Nest.js", "Multi-Tenant", "PostgreSQL"],
+                "note": ""
+              },
+              {
+                "key": "step-event-bus",
+                "title": "3. Encolamiento en Message Broker",
+                "summary": "Transmisión confiable sin bloqueo de la API",
+                "body": "Azure Service Bus / RabbitMQ encola el mensaje particionado por tenant garantizando entrega ordenada y desacoplamiento de carga.",
+                "value": "Message Bus",
+                "icon": "globe",
+                "tags": ["Colas", "Azure"],
+                "note": ""
+              },
+              {
+                "key": "step-csharp-worker",
+                "title": "4. Ejecución Asíncrona en C# (.NET)",
+                "summary": "Procesamiento de fondo, cron jobs y notificación",
+                "body": "Los workers en .NET consumen los eventos bajo el ámbito del tenant, ejecutan reconciliaciones o cron jobs y actualizan el estado final.",
+                "value": "C# Worker",
+                "icon": "bolt",
+                "tags": ["C#", ".NET 8", "Workers"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pspro-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Decisiones de Ingeniería",
+            "title": "Criterios de Modernización y Arquitectura Híbrida",
+            "lead": "Principios técnicos que guiaron la separación entre C#, Nest.js y Angular.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-hybrid-split",
+                "title": "Segregación C# (Workers) vs Nest.js (Core API)",
+                "summary": "Aprovechar la fortaleza óptima de cada ecosistema",
+                "body": "Nest.js ofrece agilidad excepcional para construir APIs REST y GraphQL en TypeScript, mientras que C# (.NET) sobresale en procesamiento multihilo, tareas pesadas en segundo plano y cron jobs de precisión.",
+                "value": "Stack Híbrido",
+                "icon": "layers",
+                "tags": ["C#", "Nest.js", "Microservicios"],
+                "note": ""
+              },
+              {
+                "key": "dec-devexpress-reporting",
+                "title": "DevExpress para Diagramación Industrial y Reportes Dinámicos",
+                "summary": "Capacidades avanzadas de renderizado de flujos y enlace de datos",
+                "body": "DevExpress proveyó herramientas especializadas para manipular diagramas de procesos con cientos de nodos interactivos y un motor de reportes con enlace dinámico a los orígenes de datos del cliente, reduciendo meses de desarrollo y garantizando exportaciones ejecutivas de alta fidelidad.",
+                "value": "DevExpress Suite",
+                "icon": "layout",
+                "tags": ["DevExpress", "Reportes", "Angular"],
+                "note": ""
+              },
+              {
+                "key": "dec-firebase-dynamic-schema",
+                "title": "Arquitectura de Datos Políglota: PostgreSQL + Firebase",
+                "summary": "Seguridad transaccional multi-tenant y libertad de modelado para el usuario",
+                "body": "Elegimos una estrategia políglota: PostgreSQL almacena datos transaccionales de misión crítica con aislamiento RLS, mientras que Firebase (Firestore) actúa como almacén dinámico y flexible para que cada tenant defina sus propias entidades y tablas sin requerir migraciones de esquema en producción.",
+                "value": "Políglota DB",
+                "icon": "shield",
+                "tags": ["Firebase", "PostgreSQL", "Data Modeling"],
+                "note": ""
+              },
+              {
+                "key": "dec-event-driven",
+                "title": "Arquitectura Basada en Eventos para Escalabilidad",
+                "summary": "Respuesta inmediata en interfaz y cero bloqueos de base de datos",
+                "body": "Al delegar las operaciones pesadas y los cron jobs a microservicios en segundo plano, la API mantiene tiempos de respuesta menores a 50ms incluso durante horas pico de producción.",
+                "value": "Event-Driven",
+                "icon": "bolt",
+                "tags": ["Event-Driven", "Escalabilidad", "Colas"],
+                "note": ""
+              },
+              {
+                "key": "dec-multi-tenant",
+                "title": "Estrategia Multi-Tenant: Aislamiento Lógico y Gobernanza",
+                "summary": "Escalabilidad en nube compartida con límites estrictos entre organizaciones",
+                "body": "Cada solicitud HTTP y evento asíncrono viaja con el identificador del tenant validado en el token de autenticación. Nest.js inyecta el contexto de ejecución y en PostgreSQL se aplican filtros y esquemas seguros para garantizar que ninguna empresa pueda acceder a datos de otra, manteniendo costos de infraestructura optimizados.",
+                "value": "Multi-Tenant SaaS",
+                "icon": "shield",
+                "tags": ["Multi-Tenant", "PostgreSQL", "Seguridad"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "PSPro AI",
+      "description": "Enterprise multi-tenant SaaS platform featuring DevExpress for visual flowcharts and dynamic reports, flexible Firebase data modeling, multi-row dynamic forms, and industrial process automation with C# (.NET) and Nest.js.",
+      "hook": "Multi-Tenant SaaS · C# (.NET) + Nest.js + Angular + DevExpress · Dynamic reporting, Firebase & AI automation",
+      "challenge": "Orchestrate high-concurrency workflows in logistics and manufacturing without degrading transactional API performance under heavy computation and with strict tenant isolation.",
+      "approach": "Architected a hybrid multi-tenant solution: Angular with DevExpress for flowcharting and dynamic reporting, Firebase for tenant-defined flexible data schemas, Nest.js for domain APIs and form dispatching, C# (.NET 8) for async workers, and PostgreSQL for strict data isolation.",
+      "outcome": "Complete multi-tenant data boundaries, tenant-driven data modeling freedom, instant dynamic report generation bound to flowcharts, and sub-50ms API response latency.",
+      "caseStudy": {
+        "chips": [
+          "Multi-Tenant Architecture",
+          "DevExpress Reporting",
+          "Firebase Dynamic Schemas",
+          "Hybrid Architecture",
+          "C# / .NET 8",
+          "Nest.js Core",
+          "Angular 17+",
+          "Event-Driven"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My Role",
+            "value": "Senior Full-Stack Engineer · Contollo"
+          },
+          {
+            "key": "company-context",
+            "label": "Company Context",
+            "value": "Contollo Consulting (Texas, USA) · Client: PSPro AI"
+          },
+          {
+            "key": "hybrid-stack",
+            "label": "Hybrid Stack",
+            "value": "Angular + DevExpress · Nest.js · C# .NET · PostgreSQL + Firebase"
+          },
+          {
+            "key": "tenancy-model",
+            "label": "Tenancy Model",
+            "value": "Multi-Tenant SaaS · Strict tenant data isolation & dynamic context"
+          },
+          {
+            "key": "live-url",
+            "label": "Live Platform",
+            "value": "PSPro AI (https://pspro.ai/)"
+          }
+        ],
+        "nextProjectSlug": "walmart-centroamerica",
+        "context": "PSPro AI (engineered at Contollo Consulting) is an AI-driven multi-tenant business process automation suite designed for complex industrial verticals. It integrates DevExpress visual process flowcharts, dynamic reporting bound to user data, tenant-defined data modeling on Firebase, multi-row interactive forms, and task message dispatching with strict cross-tenant isolation.",
+        "roleTitle": "Senior Full-Stack Engineer & Technical Architect",
+        "roleIntro": "Core member of Contollo's engineering team responsible for the end-to-end full-stack architecture. Designed main backend modules in Nest.js, integrated DevExpress components into Angular for flowcharting and dynamic reporting, implemented the flexible Firebase data modeler, orchestrated decoupled C# (.NET) microservices, and built the form dispatch engine.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Industrial multi-tenant SaaS suite featuring DevExpress for process flowcharts and dynamic reports, Firebase data modeling, multi-row forms, and AI automation.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My Role",
+            "summary": "",
+            "body": "Hybrid full-stack architecture: Angular with DevExpress for diagrams and reports, Firebase for dynamic data, Nest.js for core domain APIs, and C# (.NET) for async workers and cron jobs.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Guaranteed multi-tenant data boundaries, full schema modeling freedom for each enterprise client, instant reporting tied to workflows, and sub-50ms API latency.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "devexpress-reporting-workflows",
+            "title": "DevExpress Process Flow Canvas & Dynamic Reporting",
+            "summary": "",
+            "body": "Integrated DevExpress components into Angular for interactive process workflow modeling and an enterprise dynamic report generator, enabling clients to link custom operational datasets directly to flowcharts for on-demand reporting and audits.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "firebase-data-modeling",
+            "title": "Data Modeler, Multi-Row Forms & Firebase Persistence",
+            "summary": "",
+            "body": "Engineered a no-code data modeling layer on Firebase (Firestore) allowing tenants to define custom tables and entities on demand, coupled with dynamic multi-row entry forms and a messaging dispatch pipeline to assign forms to target users.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "csharp-workers",
+            "title": "C# (.NET 8) Background Workers & Cron Jobs",
+            "summary": "",
+            "body": "Designed and deployed .NET 8 background workers processing asynchronous event queues (RabbitMQ / Azure Service Bus), bulk batches, and scheduled cron jobs.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "nestjs-core",
+            "title": "Nest.js Core Backend & Domain Gateway",
+            "summary": "",
+            "body": "Implemented modular NestJS architecture with TypeScript, JWT authentication, multi-tenant RBAC, REST controllers, and outbox event publishers.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "multi-tenant-engine",
+            "title": "Multi-Tenant Isolation & Data Governance",
+            "summary": "",
+            "body": "Architected multi-tenant isolation with dynamic request-scoped tenant resolution in Nest.js, tenant-partitioned queue processing in C# workers, and strict data governance policies in PostgreSQL.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Strict multi-tenant data isolation ensuring complete privacy across enterprise client organizations.",
+          "Non-blocking asynchronous event handling to prevent API response degradation under heavy industrial traffic.",
+          "Guaranteed at-least-once message delivery and idempotency across C# worker consumers."
+        ],
+        "sections": [
+          {
+            "key": "pspro-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Capabilities",
+            "title": "PSPro AI Technological Ecosystem",
+            "lead": "Interconnected modules built to automate mission-critical industrial workflows in a multi-tenant environment.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-overview",
+                "title": "PSPro AI Multi-Tenant SaaS Platform",
+                "summary": "Industrial multi-tenant process automation suite",
+                "body": "Multi-tenant SaaS web portal unifying Enterprise Manager, workstations, and business process workflows with isolated client spaces.",
+                "value": "PSPro Platform",
+                "icon": "layout",
+                "tags": ["Multi-Tenant", "AI", "Enterprise"],
+                "note": "/projects/pspro-ai.jpg"
+              },
+              {
+                "key": "mod-architecture",
+                "title": "Multi-Tenant Hybrid Architecture (Nest.js + C# + Angular)",
+                "summary": "Optimal separation of engineering concerns and tenant context",
+                "body": "Layered specialization: Angular with DevExpress for reactive UX, Nest.js for tenant context and REST domain gateways, C# for background workers, and PostgreSQL + Firebase for storage.",
+                "value": "Hybrid Spec",
+                "icon": "layers",
+                "tags": ["Multi-Tenant", "Nest.js", "C# .NET"],
+                "note": "/projects/pspro-ai-architecture.jpg"
+              },
+              {
+                "key": "mod-workflow",
+                "title": "DevExpress Canvas & Dynamic Reporting",
+                "summary": "Visual workflow modeling and document generation with DevExpress",
+                "body": "Interactive designer enabling operations teams to model workflows with DevExpress Diagram and generate dynamic reports bound directly to operational datasets for auditing.",
+                "value": "DevExpress Flow",
+                "icon": "case",
+                "tags": ["DevExpress", "Dynamic Reporting", "BPMN"],
+                "note": "/projects/pspro-ai-workflow.jpg"
+              },
+              {
+                "key": "mod-data-modeling",
+                "title": "Flexible Data Modeler with Firebase",
+                "summary": "Tenant-defined tables and entities on demand",
+                "body": "No-code data modeling module empowering organizations to define custom data entities and catalogs in Firebase (Firestore) without altering the core relational schema.",
+                "value": "Firebase Modeler",
+                "icon": "layers",
+                "tags": ["Firebase", "Data Modeler", "NoSQL"],
+                "note": ""
+              },
+              {
+                "key": "mod-forms-dispatch",
+                "title": "Multi-Row Dynamic Forms & Message Dispatch",
+                "summary": "Tabular data capture and assignee routing",
+                "body": "Dynamic forms supporting single and multi-row tabular entry, paired with an automated messaging engine that dispatches forms to target assignees across the workflow.",
+                "value": "Form Dispatch",
+                "icon": "globe",
+                "tags": ["Forms", "Messaging", "Collaboration"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pspro-flow",
+            "kind": "STEPS",
+            "eyebrow": "Multi-Tenant Asynchronous Flow",
+            "title": "Event-Driven Processing Lifecycle with Tenant Context",
+            "lead": "Decoupling user interactions from heavy backend task execution with tenant propagation.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-client-action",
+                "title": "1. Interaction on Angular SPA",
+                "summary": "User triggers batch recalculation or state change",
+                "body": "Reactive Angular forms validate inputs and dispatch work orders to the core API injecting tenant context headers.",
+                "value": "Angular 17+",
+                "icon": "layout",
+                "tags": ["Angular", "RxJS"],
+                "note": ""
+              },
+              {
+                "key": "step-nest-gateway",
+                "title": "2. Tenant Validation & Persistence in Nest.js",
+                "summary": "RBAC verification, tenant context resolution & state persistence",
+                "body": "Nest.js authenticates the tenant, resolves execution scope, commits state into PostgreSQL, and publishes tagged events to the broker.",
+                "value": "Nest.js API",
+                "icon": "code",
+                "tags": ["Nest.js", "Multi-Tenant", "PostgreSQL"],
+                "note": ""
+              },
+              {
+                "key": "step-event-bus",
+                "title": "3. Message Broker Queuing",
+                "summary": "Reliable asynchronous message transit",
+                "body": "Azure Service Bus / RabbitMQ holds tenant-partitioned queued jobs, ensuring orderly delivery and load decoupling.",
+                "value": "Message Bus",
+                "icon": "globe",
+                "tags": ["Queues", "Azure"],
+                "note": ""
+              },
+              {
+                "key": "step-csharp-worker",
+                "title": "4. Asynchronous Execution in C# (.NET)",
+                "summary": "Background processing, cron jobs, and notification",
+                "body": "Dedicated .NET workers consume messages scoped to the tenant, execute scheduled cron jobs, and persist the final verified state.",
+                "value": "C# Worker",
+                "icon": "bolt",
+                "tags": ["C#", ".NET 8", "Workers"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pspro-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Decisions",
+            "title": "Hybrid Architecture & Technical Choices",
+            "lead": "Technical rationale guiding the separation between C#, Nest.js, and Angular.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-hybrid-split",
+                "title": "Separation: C# Workers vs Nest.js Core API",
+                "summary": "Leveraging the distinct strengths of each runtime",
+                "body": "Nest.js provides unmatched developer velocity for REST and GraphQL APIs in TypeScript, while C# (.NET) excels at multithreaded workers and high-precision cron jobs.",
+                "value": "Hybrid Stack",
+                "icon": "layers",
+                "tags": ["C#", "Nest.js", "Microservices"],
+                "note": ""
+              },
+              {
+                "key": "dec-devexpress-reporting",
+                "title": "DevExpress for Industrial Diagrams and Dynamic Reporting",
+                "summary": "Advanced flowchart rendering and dynamic data binding",
+                "body": "DevExpress provided enterprise-grade capabilities for manipulating complex process flowcharts with hundreds of interactive nodes and generating dynamic reports bound to custom tenant data.",
+                "value": "DevExpress Suite",
+                "icon": "layout",
+                "tags": ["DevExpress", "Reporting", "Angular"],
+                "note": ""
+              },
+              {
+                "key": "dec-firebase-dynamic-schema",
+                "title": "Polyglot Data Architecture: PostgreSQL + Firebase",
+                "summary": "Relational transactional integrity plus schema-less user flexibility",
+                "body": "Adopted a polyglot approach: PostgreSQL enforces ACID consistency and tenant RLS for core operations, while Firebase (Firestore) allows users to dynamically model custom tables and entities without DDL migrations.",
+                "value": "Polyglot DB",
+                "icon": "shield",
+                "tags": ["Firebase", "PostgreSQL", "Data Modeling"],
+                "note": ""
+              },
+              {
+                "key": "dec-event-driven",
+                "title": "Event-Driven Architecture for Industrial Scale",
+                "summary": "Instant UI feedback and zero database lockups",
+                "body": "Delegating heavy processing to background workers kept API response latencies below 50ms even during peak production shifts.",
+                "value": "Event-Driven",
+                "icon": "bolt",
+                "tags": ["Event-Driven", "Scalability", "Queues"],
+                "note": ""
+              },
+              {
+                "key": "dec-multi-tenant",
+                "title": "Multi-Tenant Strategy: Logical Isolation & Governance",
+                "summary": "Shared-cloud cost scalability with strict organizational boundaries",
+                "body": "Every incoming HTTP request and async queue message carries an authenticated tenant context. Nest.js enforces tenant-scoping interceptors and PostgreSQL applies partitioned query isolation, guaranteeing complete cross-tenant data privacy while maximizing shared infrastructure efficiency.",
+                "value": "Multi-Tenant SaaS",
+                "icon": "shield",
+                "tags": ["Multi-Tenant", "PostgreSQL", "Security"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "PSPro AI",
+      "description": "Enterprise multi-tenant SaaS-platform met DevExpress voor stroomdiagrammen en dynamische rapporten, flexibele Firebase-gegevensmodellering, multi-row formulieren en procesautomatisering met C# (.NET) en Nest.js.",
+      "hook": "Multi-Tenant SaaS · C# (.NET) + Nest.js + Angular + DevExpress · Dynamische rapporten, Firebase & AI automatisering",
+      "challenge": "Orkestreer gelijktijdige workflows in logistiek en productie zonder vertraging van de transactionele API onder zware rekenlasten en met strikte tenant-isolatie.",
+      "approach": "Ontwierp een hybride multi-tenant architectuur: Angular met DevExpress voor diagrammen en dynamische rapportage, Firebase voor flexibele gebruikersschema's, Nest.js voor domein-API's en formulierverzending, C# (.NET 8) voor asynchrone workers en PostgreSQL voor strikte data-isolatie.",
+      "outcome": "Volledige data-isolatie tussen organisaties, vrijheid van gegevensmodellering voor elke klant, dynamische rapportgeneratie gekoppeld aan processtromen en sub-50ms API-latency.",
+      "caseStudy": {
+        "chips": [
+          "Multi-Tenant Architectuur",
+          "DevExpress Rapportage",
+          "Firebase Dynamische Schema's",
+          "Hybride Architectuur",
+          "C# / .NET 8",
+          "Nest.js Core",
+          "Angular 17+",
+          "Event-Driven"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Senior Full-Stack Engineer · Contollo"
+          },
+          {
+            "key": "company-context",
+            "label": "Bedrijfscontext",
+            "value": "Contollo Consulting (Texas, USA) · Klant: PSPro AI"
+          },
+          {
+            "key": "hybrid-stack",
+            "label": "Hybride stack",
+            "value": "Angular + DevExpress · Nest.js · C# .NET · PostgreSQL + Firebase"
+          },
+          {
+            "key": "tenancy-model",
+            "label": "Tenancy-model",
+            "value": "Multi-Tenant SaaS · Strikte tenant-data-isolatie & dynamische context"
+          },
+          {
+            "key": "live-url",
+            "label": "Live platform",
+            "value": "PSPro AI (https://pspro.ai/)"
+          }
+        ],
+        "nextProjectSlug": "walmart-centroamerica",
+        "context": "PSPro AI (ontwikkeld bij Contollo Consulting) is een multi-tenant platform voor bedrijfsprocesautomatisering aangedreven door AI. Het combineert visuele processtroomdiagrammen met DevExpress, dynamische rapportage gekoppeld aan gebruikersgegevens, aangepaste gegevensmodellering op Firebase, multi-row formulieren en taakberichtverzending met strikte isolatie.",
+        "roleTitle": "Senior Full-Stack Engineer & Technisch Architect",
+        "roleIntro": "Kernlid van Contollo's engineeringteam verantwoordelijk voor de end-to-end full-stack architectuur. Ontwierp backendmodules in Nest.js, integreerde DevExpress in Angular voor diagrammen en rapporten, implementeerde de flexibele Firebase-gegevensmodelleerder, orkestreerde ontkoppelde C# (.NET) microservices en bouwde het formulierverzendsysteem.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Industrieel multi-tenant SaaS-platform met DevExpress voor procesdiagrammen en dynamische rapporten, Firebase-gegevensmodellering, multi-row formulieren en AI-automatisering.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Hybride full-stack architectuur: Angular met DevExpress voor diagrammen en rapporten, Firebase voor dynamische gegevens, Nest.js voor de kern-API en C# (.NET) voor async workers en cron jobs.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Gegarandeerde data-isolatie tussen tenants, volledige schemamodellering voor elke klant, directe rapportage gekoppeld aan workflows en API-responstijden onder 50ms.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "devexpress-reporting-workflows",
+            "title": "DevExpress Processtroomcanvas & Dynamische Rapportage",
+            "summary": "",
+            "body": "Integratie van DevExpress-componenten in Angular voor interactieve processtroommodellering en een dynamische rapportgenerator waarmee gebruikers operationele datasets rechtstreeks aan stroomdiagrammen koppelen voor rapportages en audits.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "firebase-data-modeling",
+            "title": "Gegevensmodellering, Multi-Row Formulieren & Firebase",
+            "summary": "",
+            "body": "Ontwikkeling van een no-code gegevensmodelleerlaag op Firebase (Firestore) waarmee tenants aangepaste tabellen en entiteiten kunnen definiëren, gekoppeld aan dynamische multi-row formulieren en een berichtensysteem voor toewijzing aan gebruikers.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "csharp-workers",
+            "title": "C# (.NET 8) Background Workers & Cron Jobs",
+            "summary": "",
+            "body": "Ontwerp en implementatie van .NET 8 background workers voor het verwerken van asynchrone event queues, batches en periodieke cron jobs.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "nestjs-core",
+            "title": "Nest.js Hoofd-backend & Domein Gateway",
+            "summary": "",
+            "body": "Modulaire NestJS-architectuur met TypeScript, JWT-authenticatie, multi-tenant RBAC en betrouwbare event publishing.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "multi-tenant-engine",
+            "title": "Multi-Tenant Isolatie & Data Governance",
+            "summary": "",
+            "body": "Ontwikkelde multi-tenant isolatie met dynamische request-scoped tenant-resolutie in Nest.js, tenant-gepartitioneerde wachtrijverwerking in C# workers en strikte data-isolatie in PostgreSQL.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Strikte multi-tenant data-isolatie ter waarborging van volledige privacy tussen enterprise-accounts.",
+          "Niet-blokkerende asynchrone eventverwerking ter voorkoming van API-vertragingen onder zware industriële belasting.",
+          "Gegarandeerde at-least-once aflevering en idempotentie bij eventverwerking in C#."
+        ],
+        "sections": [
+          {
+            "key": "pspro-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Mogelijkheden",
+            "title": "PSPro AI Technologisch Ecosysteem",
+            "lead": "Onderling verbonden modules voor het automatiseren van missiekritieke industriële processen in een multi-tenant omgeving.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-overview",
+                "title": "PSPro AI Multi-Tenant SaaS Platform",
+                "summary": "Industriële multi-tenant procesautomatiseringssuite",
+                "body": "Multi-tenant SaaS-webportaal dat Enterprise Manager, werkstations en bedrijfsprocesworkflows verenigt met geïsoleerde klantomgevingen.",
+                "value": "PSPro Platform",
+                "icon": "layout",
+                "tags": ["Multi-Tenant", "AI", "Enterprise"],
+                "note": "/projects/pspro-ai.jpg"
+              },
+              {
+                "key": "mod-architecture",
+                "title": "Multi-Tenant Hybride Architectuur (Nest.js + C# + Angular)",
+                "summary": "Optimale scheiding van engineeringverantwoordelijkheden en tenant-context",
+                "body": "Gelaagde specialisatie: Angular met DevExpress voor reactieve UX, Nest.js voor tenant-context en REST domein-gateways, C# voor achtergrondworkers en PostgreSQL + Firebase voor opslag.",
+                "value": "Hybrid Spec",
+                "icon": "layers",
+                "tags": ["Multi-Tenant", "Nest.js", "C# .NET"],
+                "note": "/projects/pspro-ai-architecture.jpg"
+              },
+              {
+                "key": "mod-workflow",
+                "title": "DevExpress Canvas & Dynamische Rapportage",
+                "summary": "Visuele processtroommodellering en documentgeneratie met DevExpress",
+                "body": "Interactieve ontwerper waarmee operationele teams workflows configureren met DevExpress Diagram en dynamische rapporten genereren die rechtstreeks zijn gekoppeld aan operationele data.",
+                "value": "DevExpress Flow",
+                "icon": "case",
+                "tags": ["DevExpress", "Dynamische Rapportage", "BPMN"],
+                "note": "/projects/pspro-ai-workflow.jpg"
+              },
+              {
+                "key": "mod-data-modeling",
+                "title": "Flexibele Gegevensmodelleerder met Firebase",
+                "summary": "Tenant-gedefinieerde tabellen en entiteiten op aanvraag",
+                "body": "No-code gegevensmodelleringsmodule waarmee organisaties aangepaste gegevensentiteiten en catalogi kunnen definiëren in Firebase (Firestore) zonder het relationele kernschema aan te passen.",
+                "value": "Firebase Modeler",
+                "icon": "layers",
+                "tags": ["Firebase", "Gegevensmodellering", "NoSQL"],
+                "note": ""
+              },
+              {
+                "key": "mod-forms-dispatch",
+                "title": "Multi-Row Dynamische Formulieren & Berichtverzending",
+                "summary": "Tabulaire gegevensinvoer en toewijzing aan gebruikers",
+                "body": "Dynamische formulieren voor invoer van enkele en meerdere rijen, gekoppeld aan een geautomatiseerde berichten-engine die formulieren doorstuurt naar specifieke gebruikers.",
+                "value": "Form Dispatch",
+                "icon": "globe",
+                "tags": ["Formulieren", "Berichten", "Samenwerking"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pspro-flow",
+            "kind": "STEPS",
+            "eyebrow": "Multi-Tenant Asynchrone Stroom",
+            "title": "Event-Driven Verwerkingscyclus met Tenant-Context",
+            "lead": "Ontkoppeling van gebruikersacties en zware achtergrondtaken met tenant-propagatie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "step-client-action",
+                "title": "1. Interactie op Angular SPA",
+                "summary": "Gebruiker start bulkberekening of statuswijziging",
+                "body": "Reactieve Angular-formulieren valideren invoer en sturen werkorders door naar de hoofd-API met tenant-contextheaders.",
+                "value": "Angular 17+",
+                "icon": "layout",
+                "tags": ["Angular", "RxJS"],
+                "note": ""
+              },
+              {
+                "key": "step-nest-gateway",
+                "title": "2. Tenant-Validatie en Persistentie in Nest.js",
+                "summary": "RBAC-verificatie, tenant-contextresolutie en state-persistentie",
+                "body": "Nest.js verifieert de tenant, lost de uitvoeringscontext op, slaat de status op in PostgreSQL en publiceert getagde events naar de message broker.",
+                "value": "Nest.js API",
+                "icon": "code",
+                "tags": ["Nest.js", "Multi-Tenant", "PostgreSQL"],
+                "note": ""
+              },
+              {
+                "key": "step-event-bus",
+                "title": "3. Wachtrijplaatsing in Message Broker",
+                "summary": "Betrouwbare asynchrone berichtoverdracht",
+                "body": "Azure Service Bus / RabbitMQ houdt per tenant gepartitioneerde taken vast en zorgt voor ordelijke aflevering en ontkoppeling.",
+                "value": "Message Bus",
+                "icon": "globe",
+                "tags": ["Wachtrijen", "Azure"],
+                "note": ""
+              },
+              {
+                "key": "step-csharp-worker",
+                "title": "4. Asynchrone Uitvoering in C# (.NET)",
+                "summary": "Achtergrondverwerking, cron jobs en updates",
+                "body": "Toegewijde .NET-workers verwerken berichten binnen de tenant-scope, voeren geplande taken uit en slaan de definitieve status op.",
+                "value": "C# Worker",
+                "icon": "bolt",
+                "tags": ["C#", ".NET 8", "Workers"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "pspro-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Beslissingen",
+            "title": "Technische Keuzes & Hybride Architectuur",
+            "lead": "Overwegingen achter de scheiding tussen C#, Nest.js en Angular.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-hybrid-split",
+                "title": "Scheiding: C# (Workers) versus Nest.js (Core API)",
+                "summary": "Benutten van de sterke punten van elke runtime",
+                "body": "Nest.js biedt ongeëvenaarde snelheid voor TypeScript REST/GraphQL API's, terwijl C# (.NET) uitblinkt in multithreaded workers en cron jobs.",
+                "value": "Hybride Stack",
+                "icon": "layers",
+                "tags": ["C#", "Nest.js", "Microservices"],
+                "note": ""
+              },
+              {
+                "key": "dec-devexpress-reporting",
+                "title": "DevExpress voor Industriële Diagrammen en Dynamische Rapportage",
+                "summary": "Geavanceerde stroomdiagramrendering en dynamische gegevenskoppeling",
+                "body": "DevExpress bood robuuste componenten voor het verwerken van complexe stroomdiagrammen met honderden interactieve knooppunten en een rapportage-engine gekoppeld aan aangepaste tenant-gegevens.",
+                "value": "DevExpress Suite",
+                "icon": "layout",
+                "tags": ["DevExpress", "Rapportage", "Angular"],
+                "note": ""
+              },
+              {
+                "key": "dec-firebase-dynamic-schema",
+                "title": "Polyglot Data-architectuur: PostgreSQL + Firebase",
+                "summary": "Relationele integriteit plus schema-loze gebruikersflexibiliteit",
+                "body": "Gekozen voor een polyglot aanpak: PostgreSQL handhaaft relationele integriteit en tenant-RLS voor kernprocessen, terwijl Firebase (Firestore) gebruikers in staat stelt dynamisch aangepaste tabellen te modelleren.",
+                "value": "Polyglot DB",
+                "icon": "shield",
+                "tags": ["Firebase", "PostgreSQL", "Gegevensmodellering"],
+                "note": ""
+              },
+              {
+                "key": "dec-event-driven",
+                "title": "Event-Driven Architectuur voor Industriële Schaal",
+                "summary": "Directe UI-respons en geen database-blokkades",
+                "body": "Door zware berekeningen uit te besteden aan achtergrondworkers blijven API-responstijden onder 50ms, zelfs tijdens piekuren.",
+                "value": "Event-Driven",
+                "icon": "bolt",
+                "tags": ["Event-Driven", "Schaalbaarheid", "Queues"],
+                "note": ""
+              },
+              {
+                "key": "dec-multi-tenant",
+                "title": "Multi-Tenant Strategie: Logische Isolatie & Beheer",
+                "summary": "Gedeelde cloud-schaalbaarheid met strikte scheiding tussen organisaties",
+                "body": "Elk binnenkomend HTTP-verzoek en asynchroon queue-bericht draagt een geauthenticeerde tenant-context. Nest.js handhaaft tenant-interceptors en PostgreSQL garandeert strikte gegevensisolatie tussen klanten met geoptimaliseerde infrastructuurkosten.",
+                "value": "Multi-Tenant SaaS",
+                "icon": "shield",
+                "tags": ["Multi-Tenant", "PostgreSQL", "Beveiliging"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ]
+}

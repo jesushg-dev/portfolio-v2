@@ -42,6 +42,7 @@ import {
   type ProjectEditorDTO,
 } from "@/features/projects/lib/project-editor-dto";
 import { StackTypeSchema } from "@/lib/admin/portfolio-schemas";
+import { isAbsoluteOrLocalImagePath } from "@/utils/tools/image";
 
 interface ProjectFormProps {
   languages: AppLanguage[];
@@ -66,7 +67,10 @@ export const ProjectForm: FC<ProjectFormProps> = ({
     () =>
       z.object({
         id: z.string().optional(),
-        image: z.string().min(1, t("imageRequired")),
+        image: z
+          .string()
+          .min(1, t("imageRequired"))
+          .refine(isAbsoluteOrLocalImagePath, t("imageUrlInvalid")),
         type: StackTypeSchema,
         githubUrl: z.string().url().optional().or(z.literal("")),
         websiteUrl: z.string().url().optional().or(z.literal("")),

@@ -7,6 +7,7 @@ import {
   getTenantIntegrationConfig,
   saveTenantIntegrationConfig,
   type AiIntegrationConfig,
+  type ILovePdfIntegrationConfig,
   type ResendIntegrationConfig,
   type SpotifyIntegrationConfig,
   type UploadThingIntegrationConfig,
@@ -14,6 +15,7 @@ import {
 import { syncResendTemplatesForTenant } from "@/lib/integrations/resend-tenant-publisher";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 import { UploadThingNotConfiguredError } from "@/lib/uploadthing/tenant-uploadthing";
+import { testILovePdfConnection } from "@/lib/ilovepdf/ilovepdf-service";
 
 function maskSecret(value?: string | null): string {
   if (!value) return "";
@@ -26,13 +28,19 @@ export const integrationsAdminRouter = createTRPCRouter({
   getConfigs: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.user.id;
 
-    const [resendConfig, spotifyConfig, uploadthingConfig, aiConfig] =
-      await Promise.all([
-        getTenantIntegrationConfig(userId, "resend"),
-        getTenantIntegrationConfig(userId, "spotify"),
-        getTenantIntegrationConfig(userId, "uploadthing"),
-        getTenantIntegrationConfig(userId, "ai"),
-      ]);
+    const [
+      resendConfig,
+      spotifyConfig,
+      uploadthingConfig,
+      aiConfig,
+      ilovepdfConfig,
+    ] = await Promise.all([
+      getTenantIntegrationConfig(userId, "resend"),
+      getTenantIntegrationConfig(userId, "spotify"),
+      getTenantIntegrationConfig(userId, "uploadthing"),
+      getTenantIntegrationConfig(userId, "ai"),
+      getTenantIntegrationConfig(userId, "ilovepdf"),
+    ]);
 
     const resendIntegration = await ctx.db.tenantIntegration.findUnique({
       where: { userId_provider: { userId, provider: "resend" } },
@@ -46,6 +54,7 @@ export const integrationsAdminRouter = createTRPCRouter({
         ),
         emailDomain: resendConfig?.emailDomain ?? "",
         fromEmail: resendConfig?.fromEmail ?? "",
+        emailSignatureHtml: resendConfig?.emailSignatureHtml ?? "",
         maskedApiKey: maskSecret(resendConfig?.apiKey),
         syncedTemplatesCount: Object.keys(resendConfig?.templates ?? {}).length,
         lastSyncedAt: resendIntegration?.lastSyncedAt ?? null,
@@ -74,15 +83,25 @@ export const integrationsAdminRouter = createTRPCRouter({
         isConfigured: Boolean(
           aiConfig?.geminiApiKey ??
           aiConfig?.openaiApiKey ??
-          aiConfig?.anthropicApiKey,
+          aiConfig?.anthropicApiKey ??
+          aiConfig?.deepseekApiKey,
         ),
         hasGemini: Boolean(aiConfig?.geminiApiKey),
         hasOpenAi: Boolean(aiConfig?.openaiApiKey),
         hasAnthropic: Boolean(aiConfig?.anthropicApiKey),
+        hasDeepSeek: Boolean(aiConfig?.deepseekApiKey),
         defaultProvider: aiConfig?.defaultProvider ?? "gemini",
         maskedGeminiApiKey: maskSecret(aiConfig?.geminiApiKey),
         maskedOpenAiApiKey: maskSecret(aiConfig?.openaiApiKey),
         maskedAnthropicApiKey: maskSecret(aiConfig?.anthropicApiKey),
+        maskedDeepseekApiKey: maskSecret(aiConfig?.deepseekApiKey),
+      },
+      ilovepdf: {
+        isConfigured: Boolean(
+          ilovepdfConfig?.publicKey && ilovepdfConfig?.secretKey,
+        ),
+        maskedPublicKey: maskSecret(ilovepdfConfig?.publicKey),
+        maskedSecretKey: maskSecret(ilovepdfConfig?.secretKey),
       },
     };
   }),
@@ -91,9 +110,10 @@ export const integrationsAdminRouter = createTRPCRouter({
   saveResend: protectedProcedure
     .input(
       z.object({
-        apiKey: z.string().trim().min(1),
-        emailDomain: z.string().trim().min(1),
+        apiKey: z.string().trim().optional(),
+        emailDomain: z.string().trim().optional(),
         fromEmail: z.string().trim().optional(),
+        emailSignatureHtml: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -104,14 +124,38 @@ export const integrationsAdminRouter = createTRPCRouter({
         emailDomain: "",
       };
 
+      const nextApiKey = input.apiKey?.trim() ?? current.apiKey;
+      const nextDomain = input.emailDomain?.trim() ?? current.emailDomain;
+
+      if (!nextApiKey || !nextDomain) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Resend API key and email domain are required.",
+        });
+      }
+
+      const credentialsChanged =
+        nextApiKey !== current.apiKey || nextDomain !== current.emailDomain;
+
       const updatedConfig: ResendIntegrationConfig = {
         ...current,
-        apiKey: input.apiKey,
-        emailDomain: input.emailDomain,
-        fromEmail: input.fromEmail ?? undefined,
+        apiKey: nextApiKey,
+        emailDomain: nextDomain,
+        fromEmail: input.fromEmail?.trim() ?? current.fromEmail,
+        emailSignatureHtml:
+          input.emailSignatureHtml !== undefined
+            ? input.emailSignatureHtml.trim() || undefined
+            : current.emailSignatureHtml,
       };
 
       await saveTenantIntegrationConfig(userId, "resend", updatedConfig);
+
+      if (!credentialsChanged && current.templates) {
+        return {
+          ok: true as const,
+          syncedCount: Object.keys(current.templates).length,
+        };
+      }
 
       try {
         const syncedTemplates = await syncResendTemplatesForTenant(
@@ -246,29 +290,137 @@ export const integrationsAdminRouter = createTRPCRouter({
       }
     }),
 
-  /** Saves AI model credentials (Gemini, OpenAI, Anthropic). */
+  /** Saves AI model credentials (Gemini, OpenAI, Anthropic, DeepSeek). Empty fields keep current keys. */
   saveAi: protectedProcedure
     .input(
       z.object({
         geminiApiKey: z.string().trim().optional(),
         openaiApiKey: z.string().trim().optional(),
         anthropicApiKey: z.string().trim().optional(),
+        deepseekApiKey: z.string().trim().optional(),
         defaultProvider: z
-          .enum(["gemini", "openai", "anthropic"])
+          .enum(["gemini", "openai", "anthropic", "deepseek"])
           .default("gemini"),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id;
+      const current = (await getTenantIntegrationConfig(userId, "ai")) ?? {};
 
       const config: AiIntegrationConfig = {
-        geminiApiKey: input.geminiApiKey ?? undefined,
-        openaiApiKey: input.openaiApiKey ?? undefined,
-        anthropicApiKey: input.anthropicApiKey ?? undefined,
+        geminiApiKey: input.geminiApiKey?.trim()
+          ? input.geminiApiKey.trim()
+          : current.geminiApiKey,
+        openaiApiKey: input.openaiApiKey?.trim()
+          ? input.openaiApiKey.trim()
+          : current.openaiApiKey,
+        anthropicApiKey: input.anthropicApiKey?.trim()
+          ? input.anthropicApiKey.trim()
+          : current.anthropicApiKey,
+        deepseekApiKey: input.deepseekApiKey?.trim()
+          ? input.deepseekApiKey.trim()
+          : current.deepseekApiKey,
         defaultProvider: input.defaultProvider,
       };
 
+      if (
+        !config.geminiApiKey &&
+        !config.openaiApiKey &&
+        !config.anthropicApiKey &&
+        !config.deepseekApiKey
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "At least one AI API key is required.",
+        });
+      }
+
       await saveTenantIntegrationConfig(userId, "ai", config);
+      return { ok: true as const };
+    }),
+
+  /** Tests iLovePDF credentials against the iLovePDF API. */
+  testILovePdf: protectedProcedure
+    .input(
+      z.object({
+        publicKey: z.string().trim().optional(),
+        secretKey: z.string().trim().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let publicKey = input.publicKey?.trim();
+      let secretKey = input.secretKey?.trim();
+
+      if (!publicKey || !secretKey) {
+        const current = await getTenantIntegrationConfig(
+          ctx.user.id,
+          "ilovepdf",
+        );
+        publicKey = publicKey ?? current?.publicKey;
+        secretKey = secretKey ?? current?.secretKey;
+      }
+
+      if (!publicKey || !secretKey) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "Both Public Key and Secret Key are required to test connection.",
+        });
+      }
+
+      const result = await testILovePdfConnection(publicKey, secretKey);
+      if (!result.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: result.error ?? "Failed to connect to iLovePDF",
+        });
+      }
+
+      return { ok: true as const };
+    }),
+
+  /** Saves iLovePDF credentials (BYOK). Empty fields keep existing values. */
+  saveILovePdf: protectedProcedure
+    .input(
+      z.object({
+        publicKey: z.string().trim().optional(),
+        secretKey: z.string().trim().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user.id;
+      const current = await getTenantIntegrationConfig(userId, "ilovepdf");
+
+      const publicKey = input.publicKey?.trim()
+        ? input.publicKey.trim()
+        : current?.publicKey;
+      const secretKey = input.secretKey?.trim()
+        ? input.secretKey.trim()
+        : current?.secretKey;
+
+      if (!publicKey || !secretKey) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Both Public Key and Secret Key are required.",
+        });
+      }
+
+      const testResult = await testILovePdfConnection(publicKey, secretKey);
+      if (!testResult.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            testResult.error ??
+            "Invalid iLovePDF credentials. Could not authenticate.",
+        });
+      }
+
+      const config: ILovePdfIntegrationConfig = {
+        publicKey,
+        secretKey,
+      };
+
+      await saveTenantIntegrationConfig(userId, "ilovepdf", config);
       return { ok: true as const };
     }),
 
@@ -276,7 +428,7 @@ export const integrationsAdminRouter = createTRPCRouter({
   deleteIntegration: protectedProcedure
     .input(
       z.object({
-        provider: z.enum(["resend", "spotify", "uploadthing", "ai"]),
+        provider: z.enum(["resend", "spotify", "uploadthing", "ai", "ilovepdf"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {

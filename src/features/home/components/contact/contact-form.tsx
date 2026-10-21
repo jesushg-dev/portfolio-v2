@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 import type { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +14,8 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
+import { TurnstileWidget } from "@/components/shared/turnstile-widget";
+import { env } from "@/env";
 import { api } from "@/trpc/react";
 import { Link } from "@/i18n/routing";
 import { SCHEDULE_PATH } from "@/utils/calendly-url";
@@ -21,7 +23,23 @@ import { SCHEDULE_PATH } from "@/utils/calendly-url";
 const ContactForm: FC = () => {
   const t = useTranslations("main.contact");
   const [isPending, startTransition] = useTransition();
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [turnstileWidgetId, setTurnstileWidgetId] = useState<string | null>(
+    null,
+  );
   const sendMessage = api.contact.sendMessage.useMutation();
+
+  const handleTurnstileSuccess = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  const handleTurnstileExpire = useCallback(() => {
+    setTurnstileToken("");
+  }, []);
+
+  const handleTurnstileWidgetId = useCallback((id: string) => {
+    setTurnstileWidgetId(id);
+  }, []);
 
   const contactSchema = useMemo(
     () =>
@@ -48,35 +66,61 @@ const ContactForm: FC = () => {
 
   const onSubmit = useCallback(
     (data: ContactInput) => {
+      let token = turnstileToken;
+      if (
+        !token &&
+        typeof window !== "undefined" &&
+        window.turnstile &&
+        turnstileWidgetId
+      ) {
+        token = window.turnstile.getResponse(turnstileWidgetId) ?? "";
+      }
+
+      if (!token) {
+        toast.error(t("form.errors.description"));
+        return;
+      }
+
       startTransition(async () => {
         try {
-          await sendMessage.mutateAsync(data);
+          await sendMessage.mutateAsync({
+            ...data,
+            turnstileToken: token,
+          });
           form.reset();
+          setTurnstileToken("");
+          if (turnstileWidgetId && window.turnstile) {
+            window.turnstile.reset(turnstileWidgetId);
+          }
           toast.success(t("form.success.description"));
         } catch {
+          if (turnstileWidgetId && window.turnstile) {
+            window.turnstile.reset(turnstileWidgetId);
+            setTurnstileToken("");
+          }
           toast.error(t("form.errors.description"));
         }
       });
     },
-    [form, sendMessage, t],
+    [form, sendMessage, t, turnstileToken, turnstileWidgetId],
   );
 
   return (
     <Form {...form}>
       <FormRoot
         id="contact-form"
-        className="text-card-foreground mx-auto box-border h-full w-full max-w-md min-w-0 flex-none flex-col justify-center gap-4 overflow-visible p-0"
+        className="text-card-foreground mx-auto box-border h-full w-full max-w-lg min-w-0 flex-none flex-col justify-center gap-5 overflow-visible p-0"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="space-y-2 text-center md:text-left">
-          <div className="border-primary/25 bg-primary/10 text-primary inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[0.75rem] font-medium backdrop-blur-xs">
-            <Zap className="fill-primary/20 text-primary size-3 shrink-0" />
+        <div className="space-y-2 text-left">
+          <div className="border-primary/20 bg-primary/10 text-primary inline-flex w-fit items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-semibold backdrop-blur-xs">
+            <Zap className="fill-primary/20 text-primary size-3.5 shrink-0" />
             <span>{t("responseTime")}</span>
           </div>
 
-          <p className="text-foreground text-lg font-semibold tracking-tight">
+          <h3 className="text-foreground text-2xl font-bold tracking-tight">
             {t("title2")}
-          </p>
+          </h3>
           <p className="text-muted-foreground text-sm">{t("form.helper")}</p>
         </div>
 
@@ -90,7 +134,7 @@ const ContactForm: FC = () => {
                   {...field}
                   autoComplete="name"
                   placeholder={t("form.name.placeholder")}
-                  className="bg-background/70 focus-visible:border-primary/50 focus-visible:ring-primary/20 h-11 px-4 transition-all"
+                  className="border-border/80 bg-background/80 focus-visible:border-primary focus-visible:ring-primary/10 h-12 rounded-2xl px-4.5 text-base transition-all focus-visible:ring-4"
                 />
               </FormItem>
             )}
@@ -106,7 +150,7 @@ const ContactForm: FC = () => {
                   type="email"
                   autoComplete="email"
                   placeholder={t("form.email.placeholder")}
-                  className="bg-background/70 focus-visible:border-primary/50 focus-visible:ring-primary/20 h-11 px-4 transition-all"
+                  className="border-border/80 bg-background/80 focus-visible:border-primary focus-visible:ring-primary/10 h-12 rounded-2xl px-4.5 text-base transition-all focus-visible:ring-4"
                 />
               </FormItem>
             )}
@@ -124,23 +168,33 @@ const ContactForm: FC = () => {
                   {...field}
                   rows={4}
                   placeholder={t("form.message.placeholder")}
-                  className="bg-background/70 focus-visible:border-primary/50 focus-visible:ring-primary/20 min-h-28 px-4 py-3 transition-all"
+                  className="border-border/80 bg-background/80 focus-visible:border-primary focus-visible:ring-primary/10 min-h-28 resize-none rounded-2xl px-4.5 py-3.5 text-base transition-all focus-visible:ring-4"
                 />
               </FormItem>
             )}
           />
         </div>
 
+        <TurnstileWidget
+          siteKey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          action="contact"
+          appearance="interaction-only"
+          onSuccess={handleTurnstileSuccess}
+          onExpire={handleTurnstileExpire}
+          onWidgetId={handleTurnstileWidgetId}
+          className="flex justify-center empty:hidden"
+        />
+
         <motion.button
           type="submit"
           disabled={isPending || sendMessage.isPending}
           whileHover={{
-            scale: isPending || sendMessage.isPending ? 1 : 1.015,
+            scale: isPending || sendMessage.isPending ? 1 : 1.01,
           }}
           whileTap={{
             scale: isPending || sendMessage.isPending ? 1 : 0.98,
           }}
-          className="group from-primary via-primary/95 to-primary/90 hover:from-primary/95 hover:to-primary/85 text-primary-foreground pressable shadow-primary/20 relative box-border flex w-full max-w-full min-w-0 items-center justify-center gap-2 overflow-hidden rounded-xl bg-linear-to-b px-6 py-3.5 text-sm font-semibold tracking-[0.14em] uppercase shadow-md transition-all disabled:opacity-60"
+          className="group bg-primary text-primary-foreground shadow-primary/25 hover:bg-primary/90 relative box-border flex w-full max-w-full min-w-0 items-center justify-center gap-3 overflow-hidden rounded-2xl py-4 text-sm font-bold tracking-[0.2em] uppercase shadow-lg transition-all hover:-translate-y-0.5 active:scale-[0.99] disabled:opacity-60"
         >
           {!(isPending || sendMessage.isPending) && (
             <span
@@ -172,12 +226,12 @@ const ContactForm: FC = () => {
           {t("form.submit")}
         </motion.button>
 
-        <p className="text-muted-foreground/80 mt-3.5 text-center text-[0.75rem] leading-relaxed">
+        <p className="text-muted-foreground mt-2 text-center text-[0.8125rem] leading-relaxed">
           {t.rich("form.alternativeContact", {
             schedule: (chunks) => (
               <Link
                 href={SCHEDULE_PATH}
-                className="text-primary/90 hover:text-primary font-medium underline underline-offset-4 transition-colors"
+                className="text-primary hover:text-primary/80 font-semibold underline underline-offset-4 transition-colors"
               >
                 {chunks}
               </Link>
@@ -187,7 +241,7 @@ const ContactForm: FC = () => {
                 href="https://www.linkedin.com/in/jesushg-dev"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary/90 hover:text-primary font-medium underline underline-offset-4 transition-colors"
+                className="text-primary hover:text-primary/80 font-semibold underline underline-offset-4 transition-colors"
               >
                 {chunks}
               </a>

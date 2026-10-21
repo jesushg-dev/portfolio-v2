@@ -5,7 +5,6 @@ import {
   type PortfolioCertificationFixture,
 } from "../fixtures/portfolio-certifications";
 import { portfolioSkills } from "../fixtures/portfolio-skills";
-import { matchCertificationSkillKeys } from "../../prisma/lib/match-certification-skills";
 import {
   ensureAdminOrigin,
   gotoAdminPath,
@@ -23,16 +22,6 @@ const skillsByKey = Object.fromEntries(
 
 interface FillCertificationFormOptions {
   verifyInList?: boolean;
-}
-
-function resolveCertificationSkillKeys(
-  certification: PortfolioCertificationFixture,
-): string[] {
-  if (certification.skillKeys.length > 0) {
-    return certification.skillKeys;
-  }
-
-  return matchCertificationSkillKeys(certification, portfolioSkills);
 }
 
 function isValidUrl(value: string): boolean {
@@ -172,11 +161,7 @@ export async function fillCertificationForm(
   }
 
   await selectCertificationType(page, certification.type);
-  await selectSkillsInPicker(
-    page,
-    resolveCertificationSkillKeys(certification),
-    skillsByKey,
-  );
+  await selectSkillsInPicker(page, certification.skillKeys, skillsByKey);
 
   const [createResponse] = await Promise.all([
     page.waitForResponse(

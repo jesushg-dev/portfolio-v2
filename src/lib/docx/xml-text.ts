@@ -13,6 +13,10 @@ export function extractTextFromWt(wt: unknown): string {
   return items
     .map((item) => {
       if (typeof item === "string") return item;
+      if (typeof item === "number" || typeof item === "boolean") {
+        // fast-xml-parser may coerce digit-only <w:t>2024</w:t> to a number
+        return String(item);
+      }
       if (typeof item === "object" && item !== null) {
         return coalesceXmlText((item as Record<string, unknown>)["#text"]);
       }

@@ -1,0 +1,32 @@
+{
+  "key": "Ecommerce",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-7png_jclbvc",
+  "type": "FRONTEND",
+  "githubUrl": "https://github.com/jess232017/Tienda-AdminMUI",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tienda Cliente",
+      "description": "Tienda online interactiva construida con React, Redux y Material-UI. Ofrece catálogo categorizado con filtros dinámicos, carrito de compras persistente, cálculo automático de impuestos y costos de envío, y flujo de checkout fluido con diseño responsive optimizado.",
+      "hook": "Tienda Online en React & Redux · Catálogo con filtros y carrito persistente · Checkout responsive en Material-UI"
+    },
+    {
+      "locale": "en",
+      "title": "Store Client",
+      "description": "Interactive online storefront built with React, Redux, and Material-UI. Features a categorized catalog with dynamic filters, persistent shopping cart, automated shipping and tax calculation, and a seamless responsive checkout experience.",
+      "hook": "Online Storefront in React & Redux · Filterable catalog & persistent cart · Responsive Material-UI checkout"
+    },
+    {
+      "locale": "nl",
+      "title": "Store Client",
+      "description": "Interactieve webwinkel gebouwd met React, Redux en Material-UI. Biedt een gecategoriseerde catalogus met dynamische filters, winkelwagen, automatische verzend- en belastingberekening en een soepele responsieve checkout.",
+      "hook": "Webwinkel in React & Redux · Filterbare catalogus & winkelwagen · Responsieve Material-UI checkout"
+    }
+  ],
+  "skillKeys": ["React", "Redux", "Material", "Sass"],
+  "order": 15,
+  "kind": "PROFESSIONAL",
+  "slug": "ecommerce"
+}

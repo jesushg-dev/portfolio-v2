@@ -26,6 +26,9 @@ export async function getSoftSkillEditPageData(id: string) {
 
   const item = await db.portfolioSoftSkill.findUnique({
     where: { id, userId },
+    include: {
+      PortfolioSoftSkillTranslation: true,
+    },
   });
 
   if (!item) notFound();
@@ -65,6 +68,9 @@ export async function getUserSoftSkillsWithLanguages(params: DataTableParams) {
   const [items, totalCount] = await Promise.all([
     db.portfolioSoftSkill.findMany({
       where,
+      include: {
+        PortfolioSoftSkillTranslation: true,
+      },
       orderBy,
       skip,
       take,

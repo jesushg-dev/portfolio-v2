@@ -1,4 +1,4 @@
-import { getHeroLcpImageUrl, HERO_LCP_WIDTH } from "./hero-lcp-image";
+import { HERO_LCP_WIDTH } from "./hero-lcp-image";
 
 interface HeroPhotoImageProps {
   photoUrl: string;
@@ -9,13 +9,11 @@ export default function HeroPhotoImage({
   photoUrl,
   imageAlt,
 }: HeroPhotoImageProps) {
-  const optimizedSrc = getHeroLcpImageUrl(photoUrl);
-
   return (
     // Native img keeps the LCP URL in SSR HTML and matches the preload href exactly.
-    // eslint-disable-next-line @next/next/no-img-element -- intentional LCP element; Cloudinary already optimizes the src
+    // eslint-disable-next-line @next/next/no-img-element -- intentional LCP element
     <img
-      src={optimizedSrc}
+      src={photoUrl}
       alt={imageAlt}
       width={HERO_LCP_WIDTH}
       height={Math.round(HERO_LCP_WIDTH * (4 / 3))}

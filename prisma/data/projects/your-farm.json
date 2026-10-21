@@ -1,0 +1,32 @@
+{
+  "key": "YourFarm",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/port-11_cng5re",
+  "type": "MOBILE",
+  "githubUrl": "https://github.com/jess232017/Tu-Finca",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tu finca",
+      "description": "Aplicación móvil Android orientada a la gestión agropecuaria en fincas productivas. Facilita el control de inventario de ganado, registro de vacunaciones y tratamientos veterinarios, monitoreo de cosechas y registro de costos e ingresos operativos con funcionamiento fuera de línea.",
+      "hook": "App Móvil Android (Java) · Gestión integral agropecuaria y ganadera · Control de cosechas, inventario de ganado y costos offline"
+    },
+    {
+      "locale": "en",
+      "title": "Your farm",
+      "description": "Native Android mobile app engineered for agricultural and livestock farm management. Streamlines livestock inventory tracking, veterinary vaccination schedules, harvest monitoring, and operational cost accounting with robust offline operation.",
+      "hook": "Native Android App (Java) · Comprehensive agricultural & livestock management · Livestock inventory, harvest & cost tracking offline"
+    },
+    {
+      "locale": "nl",
+      "title": "Your farm",
+      "description": "Native Android-app voor agrarisch en veeteeltbeheer op boerderijen. Stroomlijnt veestapelregistratie, veterinaire vaccinatieschema's, oogstmonitoring en kostenbeheer met betrouwbare offline werking.",
+      "hook": "Mobiele Android-app (Java) · Integraal agrarisch en veeteeltbeheer · Veestapelregistratie, oogst- en kostenbeheer offline"
+    }
+  ],
+  "skillKeys": ["Java", "Android"],
+  "order": 20,
+  "kind": "PERSONAL",
+  "slug": "your-farm"
+}

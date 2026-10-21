@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CvEmploymentTypeSchema } from "./employment-type";
 
 export const PARSER_VERSION = "v1";
 
@@ -20,11 +21,18 @@ export const CvImportExperienceDraftSchema = z.object({
   id: z.string(),
   company: z.string().min(1),
   role: z.string().min(1),
+  /** Employment type enum value (FULL_TIME, PART_TIME, etc.). */
+  employmentType: CvEmploymentTypeSchema.optional(),
   location: z.string().optional(),
+  /** Short factual company/context blurb for ATS tailor (not printed on the CV). */
+  companyBlurb: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   current: z.boolean().optional(),
+  /** Bullets shown on the public/printed CV. */
   responsibilities: z.array(z.string()),
+  /** Complementary bullets hidden from the doc; available to the ATS tailor bank. */
+  atsResponsibilities: z.array(z.string()).default([]),
 });
 
 export const CvImportEducationDraftSchema = z.object({
@@ -34,6 +42,8 @@ export const CvImportEducationDraftSchema = z.object({
   location: z.string().optional(),
   startYear: z.number().int().optional(),
   endYear: z.number().int().optional(),
+  /** Free-form range from CMS, e.g. "2017 – 2024" (used when years are absent). */
+  dates: z.string().optional(),
 });
 
 export const CvImportSkillDraftSchema = z.object({
@@ -83,6 +93,12 @@ export type CvImportExperienceDraft = z.infer<
 >;
 export type CvImportEducationDraft = z.infer<
   typeof CvImportEducationDraftSchema
+>;
+export type CvImportSkillDraft = z.infer<typeof CvImportSkillDraftSchema>;
+export type CvImportContactDraft = z.infer<typeof CvImportContactDraftSchema>;
+export type CvImportLanguageDraft = z.infer<typeof CvImportLanguageDraftSchema>;
+export type CvImportCertificationDraft = z.infer<
+  typeof CvImportCertificationDraftSchema
 >;
 
 export interface CvImportTextSection {

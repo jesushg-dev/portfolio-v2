@@ -232,8 +232,12 @@ function Kanban<T>(props: KanbanProps<T>) {
   const lastOverIdRef = React.useRef<UniqueIdentifier | null>(null);
   const hasMovedRef = React.useRef(false);
   const sensors = useSensors(
-    useSensor(MouseSensor),
-    useSensor(TouchSensor),
+    useSensor(MouseSensor, {
+      activationConstraint: { distance: 8 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 200, tolerance: 8 },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter,
     }),
@@ -801,8 +805,8 @@ function KanbanColumn(props: KanbanColumnProps) {
         items={items}
         strategy={
           context.orientation === "horizontal"
-            ? horizontalListSortingStrategy
-            : verticalListSortingStrategy
+            ? verticalListSortingStrategy
+            : horizontalListSortingStrategy
         }
       >
         <ColumnPrimitive

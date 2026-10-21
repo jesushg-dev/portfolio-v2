@@ -38,7 +38,9 @@ test.describe("soft skills create", () => {
     await page.waitForTimeout(1_000);
     const response = await getSoftSkillsMine(page);
     const items = response.data;
-    expect(items.length).toBeGreaterThanOrEqual(portfolioSoftSkills.items.length);
+    expect(items.length).toBeGreaterThanOrEqual(
+      portfolioSoftSkills.items.length,
+    );
 
     const firstFixture = portfolioSoftSkills.items[0];
     const firstItem = items.find((row) =>

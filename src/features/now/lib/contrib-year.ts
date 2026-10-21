@@ -46,9 +46,8 @@ export function buildContributionYear(
     const r = unit(i + 1);
     const count = r < 0.28 ? 0 : Math.floor(unit(i + 2) * unit(i + 3) * 10);
     total += count;
-    const level = (
-      count === 0 ? 0 : count < 3 ? 1 : count < 6 ? 2 : count < 9 ? 3 : 4
-    );
+    const level =
+      count === 0 ? 0 : count < 3 ? 1 : count < 6 ? 2 : count < 9 ? 3 : 4;
 
     cells.push({
       key: d.toISOString().slice(0, 10),

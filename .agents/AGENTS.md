@@ -1,5 +1,24 @@
 # Portfolio v2 — Agent Rules
 
+## Strict Zero-Legacy Policy — No Deprecated Shims, Remnants, or Dead Code
+
+### ❌ NEVER retain legacy code, deprecated shims, or compatibility workarounds
+
+Unless the user explicitly instructs otherwise, do NOT keep:
+
+- Legacy redirect pages, route shims, or deprecated alias routes (e.g., `@tabs/console`, `@tabs/about-me`).
+- Deprecated database models, schema remnants, or dead collections (e.g., `CvHeroTitle`).
+- Commented-out dead code, temporary backward-compatibility flags, or unused router procedures.
+- Deprecated mock tables or unused legacy helpers.
+
+### ✅ ALWAYS purge legacy assets completely and refactor to clean modern implementations
+
+- When migrating or replacing a feature, delete the old files, folders, and endpoints completely.
+- Remove retired schema models, database relations, and seed references immediately.
+- Refactor consumers directly to the new canonical architecture rather than creating intermediary redirects or shim layers.
+
+---
+
 ## Type Checking & Linting — Leave to the User
 
 ### ❌ NEVER run `pnpm run type`, `tsc`, `pnpm run lint`, or `eslint` automatically
@@ -72,6 +91,128 @@ import { Calendar, Zap } from "lucide-react";
   <span>{t("scheduleCall")}</span>
 </Link>
 ```
+
+---
+
+## Universal Icon System & Selector — Canonical Component: UniversalIconPicker & DynamicIcon
+
+### ❌ NEVER create ad-hoc icon select pickers, hardcoded string icon dropdowns, or parallel icon resolution maps
+
+Do not create custom icon dropdowns, inline string-based icon selects (`<Select>{["code", "server"].map(...)}</Select>`), or hand-rolled string-to-icon dictionaries across feature folders.
+
+```tsx
+// ❌ WRONG — Hand-rolling custom icon dropdowns with raw strings
+<Select onValueChange={field.onChange} value={field.value}>
+  <SelectContent>
+    {["code", "server", "smartphone"].map((name) => (
+      <SelectItem key={name} value={name}>{name}</SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+```
+
+### ✅ ALWAYS use or extend `UniversalIconPicker`, `DynamicIcon`, and `icon-registry`
+
+1. **For Form Inputs & Admin Selectors (`UniversalIconPicker`):**
+   - Import `UniversalIconPicker` from `@/components/shared/universal-icon-picker`.
+   - Use existing presets (`"service"`, `"soft-skill"`, `"case-study"`, `"all"`).
+   - If a new domain or icon category is needed, **extend** `src/lib/icons/icon-registry.ts` with new options / presets instead of creating a separate picker.
+
+```tsx
+// ✅ CORRECT — Universal icon picker with live preview and registry preset
+import { UniversalIconPicker } from "@/components/shared/universal-icon-picker";
+
+<FormField
+  control={form.control}
+  name="icon"
+  render={({ field }) => (
+    <FormItem label={t("icon")} inputId="service-icon">
+      <UniversalIconPicker
+        value={field.value}
+        onChange={field.onChange}
+        preset="service"
+        triggerId="service-icon"
+        showPreview
+      />
+    </FormItem>
+  )}
+/>
+```
+
+2. **For Dynamic Rendering from Database / String Keys (`DynamicIcon` / `resolveIcon`):**
+   - Import `DynamicIcon` from `@/components/shared/dynamic-icon` to render any registered icon key in JSX.
+   - Or import `resolveIcon` from `@/lib/icons/icon-registry` when passing the icon component directly to primitives like `TabItem`.
+
+```tsx
+// ✅ CORRECT — Rendering registered string icon dynamically
+import { DynamicIcon } from "@/components/shared/dynamic-icon";
+import { resolveIcon } from "@/lib/icons/icon-registry";
+
+<DynamicIcon name={service.icon} className="size-6 text-primary" />
+```
+
+---
+
+## Skill & Technology Icons — Canonical Component: SkillIcon
+
+### ❌ NEVER create ad-hoc skill badges, hand-rolled letters, or hardcoded maps (like `TECH_MARKS`)
+
+Do not invent custom initial badges or parallel maps for skill/technology logos. This leads to visual inconsistency and code redundancy.
+
+```tsx
+// ❌ WRONG — hardcoding initials and custom tile colors
+const TECH_MARKS = { React: { mark: "R", color: "#61dafb" } };
+<span style={{ color: mark.color }}>{mark.mark}</span>;
+```
+
+### ✅ ALWAYS use `SkillIcon` as the single source of truth for all skills and tools
+
+Import `SkillIcon` from `@/features/home/components/skills/skill-icon`. It handles image rendering, image validation, and elegant badge fallbacks (`initials` + semantic badge colors from `@/features/home/components/skills/lib/skill-display`) when images are not available.
+
+```tsx
+// ✅ CORRECT — single source of truth across projects, terminal, and case studies
+import SkillIcon from "@/features/home/components/skills/skill-icon";
+
+<SkillIcon
+  image={skill.image}
+  title={skill.title}
+  tile
+  size="sm"
+  className="size-6 rounded-lg text-xs"
+/>;
+```
+
+---
+
+## Canonical Tab Systems — Strict Prohibition of Ad-Hoc Tabs
+
+### ❌ NEVER create ad-hoc tab components, hand-rolled segmented button bars, or parallel tab designs
+
+Do not invent custom `<button>` groups, segmented controls, or hand-rolled tab bars:
+
+```tsx
+// ❌ WRONG — Hand-rolling custom tab bars or segmented buttons
+<div role="group" className="flex rounded-3xl ...">
+  {TYPES.map((t) => (
+    <button onClick={() => onSelect(t)}>{t}</button>
+  ))}
+</div>
+```
+
+This creates design fragmentation, breaks sliding indicator animations and drag physics, and causes hydration or accessibility inconsistencies.
+
+### ✅ ALWAYS use the EXACT 2 canonical tab systems
+
+There are strictly ONLY TWO canonical tab implementations in this project:
+
+1. **Public / Portfolio Tabs (`@/components/custom-ui/custom-tab`):**
+   - Import `Tab` from `@/components/custom-ui/custom-tab` and `TabItem` from `@/components/custom-ui/custom-tab/tab-item`.
+   - **Design 1 — Pill / Filters (`minimal={true}`):** Rounded pill format (`rounded-full`) with animated sliding indicator, glow physics, icon, and compact title. Single source of truth for public filters (Home Portfolio, `/projects` catalog, etc.).
+   - **Design 2 — Card / Detailed (`minimal={false}`):** Structured card tabs with large icon, title, and descriptive text for multi-section showcases (Services, CV, Experience).
+
+2. **Admin & Forms Tabs (`@/components/ui/tabs`):**
+   - Import `Tabs`, `TabsList`, `TabsTrigger`, and `TabsContent` from `@/components/ui/tabs` (Base UI / Shadcn).
+   - Used exclusively for administrative consoles, job tracker layouts, and modal form settings (`default` and `line` variants).
 
 ---
 
@@ -202,6 +343,40 @@ When building a card or panel, set **both** background and foreground on the con
 </div>
 ```
 
+## Button-as-link — use `buttonVariants`, not `<Button asChild>`
+
+Our `Button` is built on Base UI and always applies `role="button"`, which overrides the semantic link role on `<a>` elements.
+
+### ❌ NEVER wrap links with `<Button asChild>` or `<Button render={<a />} nativeButton={false} />`
+
+```tsx
+// ❌ WRONG — link loses native semantics
+<Button asChild variant="outline">
+  <Link href="/skills/react">View skill</Link>
+</Button>
+```
+
+### ✅ ALWAYS use `buttonVariants` on the link element
+
+With `next-intl` routing, apply `buttonVariants` to `Link` from `@/i18n/routing`. For external URLs, use a plain `<a>`.
+
+```tsx
+// ✅ CORRECT — link keeps native semantics, looks like a button
+import { buttonVariants } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
+
+<Link
+  href="/admin/cv"
+  className={buttonVariants({ variant: "outline", size: "sm" })}
+>
+  Open CV editor
+</Link>;
+```
+
+Use `<Button>` only for real actions (`type="button"`, `type="submit"`, or `onClick`).
+
+---
+
 ## Animation Libraries
 
 This project has migrated to the official `motion` package.
@@ -221,6 +396,49 @@ import { motion, AnimatePresence } from "motion/react";
 ```
 
 When generating components (like Aceternity UI), automatically fix the imports to use `motion/react`.
+
+## Component Architecture — No Helper Render Functions Inside Components
+
+### ❌ NEVER define inline render helper functions or component functions inside component bodies
+
+Do not create `const renderFoo = () => ...`, `const renderHeader = () => ...`, `const renderItem = (item) => ...`, or declare subcomponents inside a parent component's body.
+This is a severe anti-pattern in React:
+
+- It creates nested closures that re-instantiate on every render cycle.
+- It causes unexpected unmounting / remounting of child trees, breaking internal state, focus, transitions, and DOM reconciliation.
+- It balloons components into monolithic, untestable files.
+
+```tsx
+// ❌ WRONG — inline render functions inside component body
+export const MyWorkflow = () => {
+  const [data, setData] = useState(...);
+
+  const renderUploadPanel = () => (
+    <div>...</div>
+  );
+
+  return <div>{renderUploadPanel()}</div>;
+};
+```
+
+### ✅ ALWAYS decompose into standalone top-level components or separate files
+
+Extract every sub-view, section, or complex fragment into its own standalone component (either exported from a dedicated file in `@/features/{domain}/components/` or defined at top-level outside the parent) and pass data via explicit typed props:
+
+```tsx
+// ✅ CORRECT — standalone components with explicit props
+export const MyWorkflow = () => {
+  const [data, setData] = useState(...);
+
+  return (
+    <div>
+      <UploadPanel data={data} onUpload={...} />
+    </div>
+  );
+};
+```
+
+---
 
 ## Forms Architecture
 
@@ -451,7 +669,7 @@ src/lib/i18n/
 
 ### ❌ NEVER mirror the entire `src/` tree under a top-level `tests/` folder
 
-A parallel `tests/components/...` structure drifts out of sync, especially with App Router route groups `(portfolio)` and catch-all segments `[[...slug]]`. Keep unit tests co-located; centralize only shared infrastructure.
+A parallel `tests/components/...` structure drifts out of sync, especially with App Router route groups `(home)` and catch-all segments `[[...slug]]`. Keep unit tests co-located; centralize only shared infrastructure.
 
 ### Shared test infrastructure lives in `src/test-utils/`
 
@@ -742,12 +960,12 @@ Generate `CV_PDF_GENERATOR_SECRET` once (e.g. `openssl rand -base64 32`) and set
 
 ### Optional (feature-specific)
 
-| Variable                                    | When needed                   |
-| ------------------------------------------- | ----------------------------- |
-| `RESEND_API_KEY` + `RESEND_EMAIL_DOMAIN`    | Contact / transactional email |
-| `GOOGLE_*` / `GITHUB_*`                     | OAuth login providers         |
-| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, etc. | Resume tailor / AI import     |
-| `SPOTIFY_REDIRECT_URI`                      | Spotify integration override  |
+| Variable                                   | When needed                                                        |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| `RESEND_API_KEY` + `RESEND_EMAIL_DOMAIN`   | Auth email (password reset / 2FA OTP) only                         |
+| `GOOGLE_*` / `GITHUB_*`                    | OAuth login providers                                              |
+| Tenant AI / Resend / UploadThing / Spotify | Admin → Credentials (per tenant; see `docs/tenant-credentials.md`) |
+| `SPOTIFY_REDIRECT_URI`                     | Spotify integration override                                       |
 
 Local dev may omit production-only vars; set them in `.env.local` when testing CV PDF download/email end-to-end.
 
@@ -904,3 +1122,27 @@ The only acceptable case for client-side locale resolution is a **purely present
 1. Be commented with `// locale resolution on client: [reason]`.
 2. Use `createLocalizedFieldResolver` from `@/lib/i18n/localized-display` — never use client hooks or context providers.
 3. Have the resolution hidden inside the component, not spread across multiple files.
+
+---
+
+## Translation Models Architecture (Prisma & Seed Strictness)
+
+### ✅ ALWAYS enforce strict normalized relational translation models
+
+Every translatable model (`*Translation`) in `prisma/schema/main.prisma` MUST strictly satisfy:
+
+1. **Required Foreign Keys**:
+   - `<parentId> String @db.ObjectId` (MUST be required `String`, NEVER optional `String?`).
+   - `Parent Parent @relation(fields: [<parentId>], references: [id], onDelete: Cascade)` (MUST be required `Parent`, NEVER `Parent?`).
+   - `appLanguageId String @db.ObjectId` (MUST be required `String`).
+   - `language AppLanguage @relation(fields: [appLanguageId], references: [id])`.
+2. **Compound Unique Constraint**:
+   - `@@unique([<parentId>, appLanguageId])` MUST be present on EVERY `*Translation` model.
+   - Guarantees exactly ONE translation row per locale per entity.
+   - Enables atomic `prisma.*Translation.upsert({ where: { parentId_appLanguageId: ... } })` operations without race conditions.
+3. **Embedded Types Inherit Locale**:
+   - Composite types (such as `CaseStudyContent` in MongoDB) embedded inside a `*Translation` row inherit the `appLanguageId` of the parent translation row.
+4. **Modular Project Files (`prisma/data/projects/<slug>.json`)**:
+   - Projects live in individual files under `prisma/data/projects/<slug>.json` (1 file per project as a single object).
+   - Monolithic `portfolio-projects.json` is obsolete and forbidden.
+   - Clear separation: Card metadata (`title`, short `description`, `skills`, distinct metric `hook`) vs. Case Study content (`sections`, `architecture`, `decisions`). Do NOT repeat the card description word-for-word in `context`.

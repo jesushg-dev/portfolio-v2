@@ -1,0 +1,657 @@
+{
+  "key": "TechService",
+  "image": "https://res.cloudinary.com/js-media/image/upload/v1642524352/portfolio/Tech_Service_xjuilx",
+  "type": "MOBILE",
+  "githubUrl": "https://github.com/jess232017/TechService",
+  "websiteUrl": "",
+  "isPrivate": false,
+  "order": 11,
+  "kind": "PROFESSIONAL",
+  "slug": "tech-service",
+  "caseStudyEnabled": true,
+  "skillKeys": ["Java", "Android", "Php", "Mysql"],
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Tech Service",
+      "description": "Aplicación móvil Android nativa para técnicos de soporte y talleres de reparación electrónica. Gestiona órdenes de servicio en campo, listas de verificación con evidencia fotográfica obligatoria, registro de repuestos y captura de firma táctil de conformidad del cliente.",
+      "hook": "App Móvil Android (Java) · Gestión de órdenes de reparación y soporte en campo · Firma digital e integración con Tech Service API",
+      "challenge": "Los técnicos de soporte gestionaban diagnósticos en boletas de papel propensas a extravío, sin registro fotográfico del estado del equipo ni firma digital de conformidad.",
+      "approach": "Construí una app móvil nativa en Java con soporte offline, captura de fotografías del dispositivo, lienzo de firma digital y sincronización REST con Tech Service API.",
+      "outcome": "Eliminación total del papel en talleres y campo, trazabilidad 100% de equipos recibidos, reducción del tiempo de entrega en un 40% y clientes con comprobante digital inmediato.",
+      "caseStudy": {
+        "chips": [
+          "Android Nativo",
+          "Java",
+          "Soporte en Campo",
+          "Firma Digital",
+          "Tech Service API",
+          "Gestión de Tickets"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Desarrollador Android & Diseñador Móvil"
+          },
+          {
+            "key": "target-service",
+            "label": "Servicios cubiertos",
+            "value": "Mantenimiento y reparación de cómputo, telefonía móvil e infraestructura TI"
+          },
+          {
+            "key": "mobile-stack",
+            "label": "Stack tecnológico",
+            "value": "Java · Android SDK · SQLite · Signature Canvas · Tech Service API (PHP)"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repositorio",
+            "value": "TechService (https://github.com/jess232017/TechService)"
+          }
+        ],
+        "nextProjectSlug": "pos-inventory",
+        "context": "Tech Service es una solución móvil Android desarrollada para técnicos de soporte en campo y talleres de servicio electrónico. Digitaliza el ciclo de vida completo de una orden de reparación: ingreso de equipo con número de serie y descripción de fallas, inspección física con evidencia fotográfica, asignación de repuestos utilizados, captura de firma táctil de conformidad del cliente y emisión de constancias de servicio mediante la integración con el backend Tech Service API.",
+        "roleTitle": "Desarrollador Móvil Android Full-Cycle",
+        "roleIntro": "Desarrollé la aplicación móvil nativa en Java para Android: implementé el lienzo táctil para captura de firmas vectoriales, el módulo de toma y compresión de fotografías de evidencia, la base de datos local SQLite para soporte en campo sin señal y los clientes de red REST hacia la API de Tech Service.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Aplicación móvil Android para técnicos de soporte que digitaliza órdenes de reparación de equipos, registro de fallas, fotografías y firmas digitales.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Desarrollo completo en Java nativo para Android: lienzo de firma digital, captura de fotos, almacenamiento local y sincronización con Tech Service API.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Cero extravío de órdenes de servicio, auditoría fotográfica del estado físico del equipo y firma digital instantánea de conformidad del cliente.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "field-order-workflow",
+            "title": "Flujo de Trabajo de Órdenes de Reparación",
+            "summary": "",
+            "body": "Diseño de formularios dinámicos para ingreso de equipos (marcas, modelos, números de serie, contraseñas de desbloqueo, falla reportada y accesorios entregados).",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "camera-and-signature",
+            "title": "Lienzo de Firma Digital y Evidencia Fotográfica",
+            "summary": "",
+            "body": "Implementación de un componente Canvas personalizado para captura fluida de firma táctil del cliente y compresión automática de fotografías para no saturar el almacenamiento.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "offline-resilient-sync",
+            "title": "Sincronización Resiliente con Tech Service API",
+            "summary": "",
+            "body": "Mecanismo de cola de peticiones con SQLite que almacena los tickets registrados cuando el técnico atiende en ubicaciones sin cobertura y los sincroniza al recuperar red.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Captura de firma táctil de alta resolución con serialización a formato PNG o SVG ligero.",
+          "Capacidad de almacenar órdenes completas en almacenamiento local de forma encriptada en caso de pérdida del dispositivo móvil.",
+          "Sincronización rápida y eficiente con el backend PHP / MySQL de Tech Service API."
+        ],
+        "sections": [
+          {
+            "key": "tech-service-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos de la Aplicación",
+            "title": "Estructura Operativa de Tech Service Android",
+            "lead": "Herramientas móviles especializadas para el personal técnico en campo.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-ticket-inbox",
+                "title": "Bandeja de Tickets Asignados",
+                "summary": "Cola de trabajo priorizada para técnicos",
+                "body": "Vista de órdenes de reparación asignadas al técnico con indicadores de prioridad (Baja, Media, Urgente), datos de contacto del cliente y ubicación.",
+                "value": "Bandeja",
+                "icon": "layout",
+                "tags": ["Tickets", "Prioridad", "Java"],
+                "note": ""
+              },
+              {
+                "key": "mod-device-intake",
+                "title": "Recepción y Diagnóstico de Dispositivos",
+                "summary": "Checklist de estado físico y fallas detectadas",
+                "body": "Formulario de inspección visual para marcar golpes, rayones o componentes faltantes, adjuntando fotografías antes de iniciar la reparación.",
+                "value": "Diagnóstico",
+                "icon": "bolt",
+                "tags": ["Hardware", "Checklist", "Fotos"],
+                "note": ""
+              },
+              {
+                "key": "mod-digital-signature",
+                "title": "Lienzo de Firma de Conformidad",
+                "summary": "Aceptación legal del cliente en pantalla táctil",
+                "body": "Lienzo interactivo donde el cliente estampa su firma manuscrita al recibir el equipo reparado, sellando la orden con marca de tiempo.",
+                "value": "Firma",
+                "icon": "shield",
+                "tags": ["Firma", "Canvas", "Seguridad"],
+                "note": ""
+              },
+              {
+                "key": "mod-work-order-summary",
+                "title": "Comprobante Digital de Entrega",
+                "summary": "Detalle de mano de obra y repuestos utilizados",
+                "body": "Generación del resumen de servicio con desglose de costos, garantía aplicable y envío directo de constancia al correo del cliente.",
+                "value": "Comprobante",
+                "icon": "globe",
+                "tags": ["Garantía", "Resumen", "Soporte"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "tech-service-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Estrategia Móvil",
+            "title": "Decisiones Técnicas en Tech Service",
+            "lead": "Garantizando productividad en campo y validez de las órdenes de servicio.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-native-java-performance",
+                "title": "Desarrollo Nativo en Java frente a Soluciones Híbridas",
+                "summary": "Acceso directo a cámara, hardware táctil y base de datos local",
+                "body": "El desarrollo nativo con Android SDK garantizó máxima fluidez en el trazo de la firma táctil y compresión rápida de imágenes sin congelamientos en terminales de bajo costo.",
+                "value": "Android Nativo",
+                "icon": "bolt",
+                "tags": ["Java", "Android SDK", "Rendimiento"],
+                "note": ""
+              },
+              {
+                "key": "dec-digital-signature-audit",
+                "title": "Firma Digital en Pantalla para Evitar Litigios Comerciales",
+                "summary": "Constancia verificable de recepción y entrega",
+                "body": "La inclusión de la firma táctil obligatoria y la fecha sellada eliminó los reclamos de clientes sobre garantías expiradas o entregas no autorizadas a terceras personas.",
+                "value": "Auditoría Legal",
+                "icon": "shield",
+                "tags": ["Firma", "Conformidad", "Auditoría"],
+                "note": ""
+              },
+              {
+                "key": "dec-photo-attachment-proof",
+                "title": "Evidencia Fotográfica del Estado Inicial del Dispositivo",
+                "summary": "Protección mutua entre el taller y el cliente",
+                "body": "Obligar a fotografiar rayones previos de pantallas o carcasas al momento del ingreso protegió al taller de reclamos por daños preexistentes.",
+                "value": "Transparencia",
+                "icon": "layout",
+                "tags": ["Cámara", "Fotos", "Seguridad"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "Tech Service",
+      "description": "Native Android mobile app for IT field technicians and repair workshops. Manages field service orders, diagnostic checklists with mandatory photo evidence, spare parts tracking, and digital customer signature capture on touchscreen.",
+      "hook": "Native Android App (Java) · Field tech support & repair order management · Integration with Tech Service API & digital signatures",
+      "challenge": "Support technicians managed diagnostics on paper carbon slips prone to loss, lacking photo evidence of device conditions and instant customer sign-offs.",
+      "approach": "Engineered a native Java Android application with offline support, camera integration, digital signature canvas, and bidirectional REST sync with the Tech Service API backend.",
+      "outcome": "Zero paper work orders across workshops and field sites, 100% photographic device traceability, 40% reduction in repair turnaround times, and instant digital customer receipts.",
+      "caseStudy": {
+        "chips": [
+          "Native Android",
+          "Java",
+          "Field Support",
+          "Digital Signature",
+          "Tech Service API",
+          "Ticket Management"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My role",
+            "value": "Mobile Android Developer & UI Designer"
+          },
+          {
+            "key": "target-service",
+            "label": "Covered services",
+            "value": "Computer hardware, mobile phone repair, and IT infrastructure support"
+          },
+          {
+            "key": "mobile-stack",
+            "label": "Technology stack",
+            "value": "Java · Android SDK · SQLite · Signature Canvas · Tech Service API (PHP)"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "TechService (https://github.com/jess232017/TechService)"
+          }
+        ],
+        "nextProjectSlug": "pos-inventory",
+        "context": "Tech Service is an Android mobile application engineered for field IT technicians and repair workshops. It digitizes the full equipment repair lifecycle: device intake with serial numbers and reported issues, physical condition checklist with attached photographs, replacement part tracking, touchscreen digital customer signature capture, and electronic service receipt generation via Tech Service API.",
+        "roleTitle": "Full-Cycle Android Mobile Developer",
+        "roleIntro": "Engineered the native Android application in Java: built the custom touch canvas for digital signatures, integrated photo capture with automated compression, implemented local SQLite queues for offline work, and connected to the Tech Service API backend.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Android mobile application for technicians digitizing hardware repair orders, fault logging, diagnostic photos, and digital signatures.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My role",
+            "summary": "",
+            "body": "Native Java Android development: digital signature canvas, camera photo capture, offline caching, and REST sync with Tech Service API.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Eliminated paper tickets, provided photographic verification of device condition, and captured instant digital customer signatures.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "field-order-workflow",
+            "title": "Hardware Repair Order Workflow",
+            "summary": "",
+            "body": "Designed dynamic input forms for device intake (make, model, serial numbers, screen unlock pins, reported defects, and included accessories).",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "camera-and-signature",
+            "title": "Digital Signature Canvas & Photo Evidence",
+            "summary": "",
+            "body": "Custom Canvas view delivering smooth touchscreen signature capture and automatic JPEG compression to avoid excessive local storage footprint.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "offline-resilient-sync",
+            "title": "Resilient Offline Sync with Tech Service API",
+            "summary": "",
+            "body": "SQLite offline queue storing completed service tickets when technicians work in zero-signal areas, auto-syncing upon network restoration.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "High-resolution vector-like signature capture serialized to lightweight PNG/SVG formats.",
+          "Secure on-device SQLite storage preventing data tampering in case of lost field devices.",
+          "Smooth integration with PHP/MySQL backend endpoints provided by Tech Service API."
+        ],
+        "sections": [
+          {
+            "key": "tech-service-modules",
+            "kind": "CARDS",
+            "eyebrow": "App Modules",
+            "title": "Operational Structure of Tech Service Android",
+            "lead": "Mobile field utilities engineered for repair technicians and workshop managers.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-ticket-inbox",
+                "title": "Assigned Ticket Inbox",
+                "summary": "Prioritized technician task queue",
+                "body": "List of repair orders assigned to the logged-in technician with urgency badges (Low, Medium, Urgent), client contact information, and location.",
+                "value": "Inbox",
+                "icon": "layout",
+                "tags": ["Tickets", "Priority", "Java"],
+                "note": ""
+              },
+              {
+                "key": "mod-device-intake",
+                "title": "Device Intake & Diagnosis Checklist",
+                "summary": "Physical condition and defects inspection",
+                "body": "Visual inspection form to log scratches, dents, or missing parts, requiring attached photos before beginning repair work.",
+                "value": "Diagnosis",
+                "icon": "bolt",
+                "tags": ["Hardware", "Checklist", "Photos"],
+                "note": ""
+              },
+              {
+                "key": "mod-digital-signature",
+                "title": "Customer Acceptance Signature Canvas",
+                "summary": "Legal customer sign-off on touchscreen",
+                "body": "Interactive touch canvas allowing customers to sign upon receiving their repaired device, stamping the work order with a verifiable timestamp.",
+                "value": "Signature",
+                "icon": "shield",
+                "tags": ["Signature", "Canvas", "Security"],
+                "note": ""
+              },
+              {
+                "key": "mod-work-order-summary",
+                "title": "Digital Service Delivery Receipt",
+                "summary": "Itemized labor and replacement parts breakdown",
+                "body": "Generates digital service receipts itemizing costs, applicable warranty terms, and dispatching summary emails directly to customers.",
+                "value": "Receipt",
+                "icon": "globe",
+                "tags": ["Warranty", "Summary", "Support"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "tech-service-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Mobile Strategy",
+            "title": "Technical Decisions in Tech Service",
+            "lead": "Ensuring field productivity and legal traceability of service jobs.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-native-java-performance",
+                "title": "Native Java Android vs Cross-Platform Frameworks",
+                "summary": "Direct hardware access for camera, canvas, and SQLite",
+                "body": "Native Android SDK development ensured zero input lag during finger signatures and rapid image compression on low-cost company devices.",
+                "value": "Native Android",
+                "icon": "bolt",
+                "tags": ["Java", "Android SDK", "Performance"],
+                "note": ""
+              },
+              {
+                "key": "dec-digital-signature-audit",
+                "title": "Touchscreen Signatures to Eliminate Customer Disputes",
+                "summary": "Legally verifiable proof of delivery",
+                "body": "Capturing a required client signature with recorded timestamp eliminated customer disputes regarding warranty claims or unauthorized pickups.",
+                "value": "Audit Trail",
+                "icon": "shield",
+                "tags": ["Signature", "Compliance", "Audit"],
+                "note": ""
+              },
+              {
+                "key": "dec-photo-attachment-proof",
+                "title": "Mandatory Intake Photography of Device Condition",
+                "summary": "Mutual liability protection for customer and shop",
+                "body": "Requiring intake photos of pre-existing casing dents or cracked glass protected the service shop against fraudulent damage claims.",
+                "value": "Transparency",
+                "icon": "layout",
+                "tags": ["Camera", "Photos", "Protection"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "Tech Service",
+      "description": "Native Android-app voor servicemonteurs en reparatiewerkplaatsen. Beheert buitendienstorders, diagnosechecklists met verplicht fotobewijs, onderdelenregistratie en digitale handtekeningen op het touchscreen.",
+      "hook": "Mobiele Android-app (Java) · Beheer van reparatieorders en technische buitendienst · Integratie met Tech Service API",
+      "challenge": "Monteurs beheerden diagnoses op papieren formulieren die kwetsbaar waren voor verlies, zonder fotografisch bewijs van apparaatconditie of digitale handtekeningen.",
+      "approach": "Ontwikkelde een native Android-app in Java met offline ondersteuning, fotocamera-integratie, digitaal handtekeningcanvas en REST-synchronisatie met Tech Service API.",
+      "outcome": "Volledige eliminatie van papieren werkbonnen, 100% traceerbaarheid van apparaten, 40% snellere reparatiedoorloop en directe digitale ontvangstbewijzen.",
+      "caseStudy": {
+        "chips": [
+          "Native Android",
+          "Java",
+          "Buitendienst",
+          "Digitale Handtekening",
+          "Tech Service API",
+          "Ticketbeheer"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Mobiele Android Ontwikkelaar & UI-ontwerper"
+          },
+          {
+            "key": "target-service",
+            "label": "Diensten",
+            "value": "Hardwareonderhoud, smartphone-reparatie en IT-infrastructuurondersteuning"
+          },
+          {
+            "key": "mobile-stack",
+            "label": "Technologie-stack",
+            "value": "Java · Android SDK · SQLite · Signature Canvas · Tech Service API (PHP)"
+          },
+          {
+            "key": "github-repo",
+            "label": "Repository",
+            "value": "TechService (https://github.com/jess232017/TechService)"
+          }
+        ],
+        "nextProjectSlug": "pos-inventory",
+        "context": "Tech Service is een native Android-applicatie gebouwd voor buitendienstmonteurs en elektronische reparatiewerkplaatsen. Het digitaliseert de volledige levenscyclus van reparaties: apparaatontvangst met serienummers en foutbeschrijving, fysieke inspectie met foto's, verbruikte onderdelen, handtekening op het touchscreen en digitale afleverbonnen via de Tech Service API.",
+        "roleTitle": "Full-Cycle Android Mobiele Ontwikkelaar",
+        "roleIntro": "Ontwikkelde de native Android-applicatie in Java: ontwierp het aanraakgevoelige handtekeningcanvas, integreerde fotocompressie, bouwde lokale SQLite-wachtrijen voor gebieden zonder bereik en verbond met de Tech Service API backend.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Mobiele Android-app voor servicemonteurs voor het digitaliseren van reparatieorders, foutenregistratie, foto's en digitale handtekeningen.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Native Java Android-ontwikkeling: digitaal handtekeningcanvas, fotocamera-koppeling, lokale opslag en REST-synchronisatie met Tech Service API.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Geen kwijtgeraakte werkbonnen meer, fotografisch bewijs van apparaatconditie en directe digitale akkoordverklaring door klanten.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "field-order-workflow",
+            "title": "Werkstroom voor Reparatieorders",
+            "summary": "",
+            "body": "Ontwerp van dynamische formulieren voor apparaatontvangst (merk, model, serienummer, ontgrendelcodes, gerapporteerde storing en accessoires).",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "camera-and-signature",
+            "title": "Digitaal Handtekeningcanvas en Fotobewijs",
+            "summary": "",
+            "body": "Aangepaste Canvas-component voor soepele aanraakhandtekeningen en automatische fotocompressie om lokaal geheugen te besparen.",
+            "value": "",
+            "icon": "shield",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "offline-resilient-sync",
+            "title": "Robuuste Offline Synchronisatie met Tech Service API",
+            "summary": "",
+            "body": "SQLite offline wachtrij die voltooide bonnen opslaat wanneer monteurs op locaties zonder mobiel bereik werken en synchroniseert bij herstel.",
+            "value": "",
+            "icon": "bolt",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Hoge resolutie handtekeningregistratie geserialiseerd naar lichte PNG/SVG formaten.",
+          "Veilige lokale SQLite-opslag om datalekken bij apparaatverlies te voorkomen.",
+          "Soepele koppeling met PHP/MySQL backend-endpoints van Tech Service API."
+        ],
+        "sections": [
+          {
+            "key": "tech-service-modules",
+            "kind": "CARDS",
+            "eyebrow": "App Modules",
+            "title": "Operationele Structuur van Tech Service Android",
+            "lead": "Mobiele tools ontworpen voor monteurs en werkplaatsbeheerders.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-ticket-inbox",
+                "title": "Toegewezen Werkorders",
+                "summary": "Geprioriteerde takenlijst voor monteurs",
+                "body": "Overzicht van reparatieorders toegewezen aan de monteur met prioriteitslabels (Laag, Normaal, Urgent), klantcontact en locatie.",
+                "value": "Werklijst",
+                "icon": "layout",
+                "tags": ["Tickets", "Prioriteit", "Java"],
+                "note": ""
+              },
+              {
+                "key": "mod-device-intake",
+                "title": "Apparaatontvangst & Diagnose",
+                "summary": "Conditiechecklist en geconstateerde defecten",
+                "body": "Inspectieformulier om krassen, beschadigingen of ontbrekende onderdelen vast te leggen inclusief verplichte foto's voor aanvang.",
+                "value": "Diagnose",
+                "icon": "bolt",
+                "tags": ["Hardware", "Checklist", "Fotos"],
+                "note": ""
+              },
+              {
+                "key": "mod-digital-signature",
+                "title": "Klantakkoord via Touchscreen Handtekening",
+                "summary": "Juridisch akkoord van de klant op het scherm",
+                "body": "Interactief canvas waarop de klant tekent bij ontvangst van het gerepareerde apparaat met een geverifieerd tijdstempel.",
+                "value": "Handtekening",
+                "icon": "shield",
+                "tags": ["Handtekening", "Canvas", "Veiligheid"],
+                "note": ""
+              },
+              {
+                "key": "mod-work-order-summary",
+                "title": "Digitaal Aflever- en Garantiebewijs",
+                "summary": "Uitsplitsing van arbeidsloon en onderdelen",
+                "body": "Generatie van een digitaal serviceoverzicht met kosten, garantievoorwaarden en directe verzending naar de e-mail van de klant.",
+                "value": "Bewijs",
+                "icon": "globe",
+                "tags": ["Garantie", "Overzicht", "Ondersteuning"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "tech-service-decisions",
+            "kind": "CARDS",
+            "eyebrow": "Mobiele Strategie",
+            "title": "Technische Beslissingen in Tech Service",
+            "lead": "Maximale productiviteit in het veld en sluitende traceerbaarheid.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-native-java-performance",
+                "title": "Native Java Android versus Hybride Frameworks",
+                "summary": "Directe hardwaretoegang voor camera, canvas en SQLite",
+                "body": "Native Android SDK-ontwikkeling garandeerde vloeiende handtekeningregistratie en snelle beeldcompressie op voordelige bedrijfstoestellen.",
+                "value": "Native Android",
+                "icon": "bolt",
+                "tags": ["Java", "Android SDK", "Prestaties"],
+                "note": ""
+              },
+              {
+                "key": "dec-digital-signature-audit",
+                "title": "Touchscreen Handtekening om Klachten te Voorkomen",
+                "summary": "Aantoonbaar bewijs van overdracht",
+                "body": "De verplichte digitale handtekening met tijdstempel voorkwam geschillen over garantietermijnen of ongeautoriseerde afhalingen.",
+                "value": "Audit Trail",
+                "icon": "shield",
+                "tags": ["Handtekening", "Akkoord", "Audit"],
+                "note": ""
+              },
+              {
+                "key": "dec-photo-attachment-proof",
+                "title": "Verplicht Fotobewijs bij Apparaatontvangst",
+                "summary": "Wederzijdse bescherming van klant en reparateur",
+                "body": "Het verplicht fotograferen van krassen of schade bij binnenkomst beschermde het reparatiecentrum tegen valse schadeclaims.",
+                "value": "Transparantie",
+                "icon": "layout",
+                "tags": ["Camera", "Fotos", "Zekerheid"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ]
+}

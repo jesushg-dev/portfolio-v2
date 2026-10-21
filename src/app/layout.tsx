@@ -66,7 +66,10 @@ export default async function RootLayout({
   return (
     <html
       lang={lang}
-      className={cn("h-full", "font-sans", geist.variable)}
+      className={cn(
+        "h-full max-w-full overflow-x-hidden font-sans",
+        geist.variable,
+      )}
       suppressHydrationWarning
     >
       <head>
@@ -76,7 +79,7 @@ export default async function RootLayout({
       <body
         className={clsx(
           inter.className,
-          "bg-background-200 text-foreground flex min-h-screen flex-col justify-between overflow-x-hidden scroll-smooth",
+          "bg-card text-foreground flex min-h-screen w-full max-w-full flex-col justify-between overflow-x-hidden scroll-smooth",
         )}
       >
         <NextIntlClientProvider>

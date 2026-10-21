@@ -2,6 +2,8 @@ import type { FC } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { getCachedHeroPublic } from "@/lib/hero/get-cached-hero-public";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
+import { resolveTenant } from "@/lib/tenant/resolve";
 import HeroEmpty from "./hero-empty";
 import HeroContent from "./hero-content";
 import HeroPhoto from "./hero-photo";
@@ -10,6 +12,7 @@ interface HeroStats {
   yearsExperience: number;
   projectsCount: number;
   certificationsCount: number;
+  engineersMentored?: number;
 }
 
 interface HeroProps {
@@ -26,12 +29,21 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
     return <HeroEmpty />;
   }
 
+  const showCvLink = isPublicCvVisible(await resolveTenant());
+
   const fullName = heroData.fullName?.trim() ?? "";
   const photoUrl = heroData.photoUrl?.trim() ?? "";
   const heroSubtitle = heroData.heroSubtitle?.trim() ?? "";
   const heroTagline = heroData.heroTagline?.trim() ?? "";
   const heroSummary = heroData.heroSummary?.trim() ?? "";
-  const imageAlt = (heroData.imageAlt?.trim() ?? fullName) || "profile";
+  const imageAlt = heroData.imageAlt?.trim()
+    ? heroData.imageAlt.trim()
+    : fullName
+      ? fullName
+      : "profile";
+  const availabilityBadge = heroData.availabilityBadge?.trim()
+    ? heroData.availabilityBadge.trim()
+    : null;
 
   const parsedHeroData = {
     fullName,
@@ -40,30 +52,41 @@ const Hero: FC<HeroProps> = async ({ stats }) => {
     heroTagline,
     heroSummary,
     imageAlt,
+    availabilityBadge,
   };
 
   return (
     <section
-      id="home"
+      id="top"
       aria-label="Home"
-      className="bg-background relative flex min-h-screen w-full items-center overflow-hidden"
+      className="bg-card relative flex min-h-screen w-full items-center overflow-hidden"
     >
-      {/* Starry Background / Glow - Now SSR */}
-      <div className="bg-background absolute inset-0 z-0 overflow-hidden">
-        {/* Top central glow */}
-        <div className="bg-primary/20 absolute top-[-20%] left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-[100%] blur-[100px]" />
-      </div>
+      {/* Top radial gradient light effect */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] bg-[radial-gradient(60%_70%_at_45%_0%,rgba(99,102,241,.18),transparent)]"
+        aria-hidden="true"
+      />
 
-      <div className="z-10 mx-auto flex w-full flex-col items-center gap-16 px-4 pt-32 pb-24 sm:px-6 md:pt-40 md:pb-32 lg:container lg:flex-row-reverse lg:items-center lg:px-20">
+      <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-4 pt-28 pb-24 sm:px-6 md:pt-36 md:pb-28 lg:container lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:px-20">
+        <HeroContent
+          heroData={parsedHeroData}
+          stats={stats}
+          showCvLink={showCvLink}
+        />
         <HeroPhoto heroData={parsedHeroData} />
-        <HeroContent heroData={parsedHeroData} stats={stats} />
       </div>
 
-      {/* Scroll Down Indicator - Now SSR */}
-      <div className="absolute inset-x-0 bottom-8 mx-auto hidden flex-col items-center justify-center gap-2 lg:flex">
-        <div className="scroll-indicator" />
-        <p className="text-muted-foreground text-sm">{t("scrollDown")}</p>
-      </div>
+      {/* Scroll Down Indicator matching Untitled-1.html */}
+      <a
+        href="#about"
+        className="text-muted-foreground hover:text-foreground absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-sm transition-colors lg:flex"
+        aria-label={t("scrollDown")}
+      >
+        <span className="border-border flex h-9 w-6 justify-center rounded-full border pt-1.5">
+          <i className="a-wheel bg-muted-foreground h-1.5 w-1 rounded-full" />
+        </span>
+        {t("scrollDown")}
+      </a>
     </section>
   );
 };

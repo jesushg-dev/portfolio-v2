@@ -16,18 +16,27 @@ export default function HeroPhoto({ heroData }: HeroPhotoProps) {
   const nameParts = fullName.split(" ");
   const firstName = nameParts.slice(0, -1).join(" ") || fullName;
   const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+  const initials = `${firstName.charAt(0).toUpperCase()}${lastName ? lastName.charAt(0).toUpperCase() : ""}`;
 
   return (
-    <div className="relative flex flex-1 justify-center lg:justify-end">
-      <div className="from-primary to-primary-700 ring-primary/30 relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br shadow-[0_0_50px_-10px_var(--primary)] ring-8 md:h-80 md:w-80">
-        {photoUrl ? (
-          <HeroPhotoImage photoUrl={photoUrl} imageAlt={imageAlt} />
-        ) : (
-          <span className="font-display text-primary-foreground/90 text-6xl font-bold md:text-7xl">
-            {firstName.charAt(0).toUpperCase()}
-            {lastName ? lastName.charAt(0).toUpperCase() : ""}
-          </span>
-        )}
+    <div className="relative mx-auto w-full max-w-[20rem] sm:max-w-[24rem] lg:max-w-[26rem]">
+      {/* Spinning dashed orbital ring matching hero design */}
+      <span
+        className="a-spin border-primary/30 pointer-events-none absolute -inset-5 rounded-full border border-dashed select-none sm:-inset-6"
+        aria-hidden="true"
+      />
+
+      {/* Main Avatar Container */}
+      <div className="bg-primary/20 relative aspect-square rounded-full p-2 shadow-[0_24px_70px_-12px_rgba(30,64,175,.35)] sm:p-2.5">
+        <div className="bg-primary/10 relative h-full w-full overflow-hidden rounded-full">
+          {photoUrl ? (
+            <HeroPhotoImage photoUrl={photoUrl} imageAlt={imageAlt} />
+          ) : (
+            <span className="font-display text-primary flex h-full w-full items-center justify-center text-6xl font-bold sm:text-7xl">
+              {initials}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

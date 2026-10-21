@@ -81,37 +81,47 @@ export async function getUsesSettingsPageData() {
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
   ]);
 
-  const existing = await db.usesSettings.findUnique({
-    where: { userId },
-    include: {
-      UsesSettingsTranslation: true,
-      UsesClarification: {
-        orderBy: { order: "asc" },
-        include: { UsesClarificationTranslation: true },
-      },
+  const settingsInclude = {
+    UsesSettingsTranslation: true,
+    UsesClarification: {
+      orderBy: { order: "asc" as const },
+      include: { UsesClarificationTranslation: true },
     },
-  });
+    UsesWorkspaceTag: {
+      orderBy: { order: "asc" as const },
+    },
+  };
+
+  const [existing, taggableItems] = await Promise.all([
+    db.usesSettings.findUnique({
+      where: { userId },
+      include: settingsInclude,
+    }),
+    db.usesItem.findMany({
+      where: { userId, type: { in: ["EVERYDAY", "SOFTWARE"] } },
+      include: { UsesItemTranslation: true },
+      orderBy: [{ type: "asc" }, { order: "asc" }],
+    }),
+  ]);
+
+  const taggable = mapUsesItemsToEditorDto(taggableItems, languages);
 
   if (existing) {
     return {
       settings: mapUsesSettingsToEditorDto(existing, languages),
       languages,
+      taggableItems: taggable,
     };
   }
 
   const created = await db.usesSettings.create({
     data: { userId },
-    include: {
-      UsesSettingsTranslation: true,
-      UsesClarification: {
-        orderBy: { order: "asc" },
-        include: { UsesClarificationTranslation: true },
-      },
-    },
+    include: settingsInclude,
   });
 
   return {
     settings: mapUsesSettingsToEditorDto(created, languages),
     languages,
+    taggableItems: taggable,
   };
 }

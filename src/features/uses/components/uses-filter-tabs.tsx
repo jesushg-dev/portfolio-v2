@@ -49,7 +49,7 @@ const UsesFilterTabs: FC<UsesFilterTabsProps> = ({
         currentTab={value}
         setCurrentTab={onChange}
         ariaLabel={ariaLabel}
-        className="bg-muted/50 border-border z-20 inline-flex max-w-full items-center justify-center gap-1 overflow-x-auto rounded-2xl border p-1"
+        className="bg-muted/50 border-border z-20 inline-flex max-w-full items-center justify-center gap-1 rounded-2xl border p-1"
       >
         <TabItem icon={HiOutlineEye} title={labels.all} description="" />
         <TabItem

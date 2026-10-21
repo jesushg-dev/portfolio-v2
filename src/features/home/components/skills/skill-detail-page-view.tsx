@@ -1,10 +1,10 @@
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { getTranslations } from "next-intl/server";
-import { MdCalendarMonth, MdOpenInNew, MdWorkOutline } from "react-icons/md";
+import { MdOpenInNew } from "react-icons/md";
 
-import { resolveSkillImageUrl } from "@/utils/tools/image";
-import CertificateItem from "@/components/certification/certification-item";
+import CertificateItem from "@/features/certifications/components/certification-item";
 import PortfolioItem from "@/features/home/components/portfolio/project-item";
+import { SkillExperienceList } from "@/features/home/components/skills/skill-experience-list";
 import { Link } from "@/i18n/routing";
 import type { SkillDetailType } from "@/utils/interfaces/types";
 
@@ -13,6 +13,7 @@ interface SkillDetailPageViewProps {
 }
 
 function formatStackType(type: string) {
+  if (type.toUpperCase() === "AI") return "AI";
   return type.charAt(0) + type.slice(1).toLowerCase();
 }
 
@@ -53,12 +54,11 @@ export async function SkillDetailPageView({
       <header className="border-background-100 mb-14 border-b pb-10 md:mb-16 md:pb-12">
         <div className="mb-5 flex flex-col items-center gap-4 md:flex-row md:items-start">
           <div className="bg-background-100 relative flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl shadow-md">
-            <Image
+            <MediaImage
               alt=""
               width={40}
               height={40}
-              src={resolveSkillImageUrl(detail.image)}
-              unoptimized
+              src={detail.image}
               className="h-10 w-10 object-contain"
               priority
             />
@@ -115,28 +115,7 @@ export async function SkillDetailPageView({
                   {t("page.experiencesDescription", { skill: skillName })}
                 </p>
               </div>
-              <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                {detail.experiences.map((experience) => (
-                  <li
-                    key={experience.id}
-                    className="bg-background-100/80 rounded-xl px-4 py-3.5"
-                  >
-                    <p className="text-primaryText-500 text-sm font-semibold md:text-base">
-                      {experience.role}
-                    </p>
-                    <p className="text-primaryText-700 mt-1 flex items-center gap-1.5 text-sm">
-                      <MdWorkOutline className="h-4 w-4 shrink-0" />
-                      {experience.company}
-                    </p>
-                    {experience.dates ? (
-                      <p className="text-primaryText-700 mt-1.5 flex items-center gap-1.5 text-xs">
-                        <MdCalendarMonth className="h-3.5 w-3.5 shrink-0" />
-                        {experience.dates}
-                      </p>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
+              <SkillExperienceList experiences={detail.experiences} />
             </section>
           ) : null}
 
@@ -156,7 +135,7 @@ export async function SkillDetailPageView({
                   {t("page.certificatesDescription", { skill: skillName })}
                 </p>
               </div>
-              <ul className="group/list grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
                 {detail.certificates.map((certificate) => (
                   <li key={certificate.id} className="flex">
                     <CertificateItem {...certificate} />
@@ -182,7 +161,7 @@ export async function SkillDetailPageView({
                   {t("page.projectsDescription", { skill: skillName })}
                 </p>
               </div>
-              <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
                 {detail.projects.map((project) => (
                   <li key={project.id} className="flex justify-center">
                     <PortfolioItem
@@ -192,11 +171,29 @@ export async function SkillDetailPageView({
                       privateName={t("page.privateLabel")}
                       privateDescription={t("page.privateDescription")}
                       canSeeDemo={t("page.canSeeDemo")}
-                      caseStudyLabel=""
+                      caseStudyLabel={t("page.caseStudy")}
                       kindLabels={{
-                        PROFESSIONAL: "",
-                        PERSONAL: "",
-                        LEARNING: "",
+                        PROFESSIONAL: t("page.kind.PROFESSIONAL"),
+                        PERSONAL: t("page.kind.PERSONAL"),
+                        LEARNING: t("page.kind.LEARNING"),
+                      }}
+                      metaLabels={{
+                        solo: t("page.meta.solo"),
+                        formatTeam: (count: number) =>
+                          t("page.meta.team", { count }),
+                        now: t("page.meta.now"),
+                        statuses: {
+                          IN_PRODUCTION: t("page.statuses.IN_PRODUCTION"),
+                          MAINTENANCE: t("page.statuses.MAINTENANCE"),
+                          ARCHIVED: t("page.statuses.ARCHIVED"),
+                        },
+                      }}
+                      teaserLabels={{
+                        formatDecisions: (count: number) =>
+                          t("page.teaser.decisions", { count }),
+                        layers: t("page.teaser.layers"),
+                        formatMetrics: (count: number) =>
+                          t("page.teaser.metrics", { count }),
                       }}
                     />
                   </li>

@@ -12,10 +12,12 @@
  * This avoids any XML serialization that could corrupt attributes or namespaces.
  */
 
+import crypto from "node:crypto";
 import JSZip from "jszip";
 import type { Locale } from "@/i18n/config";
 
 import type { AdaptedSection, CvSection } from "@/lib/types";
+import { isExperienceRoleLine } from "./parser";
 import { splitIntoParagraphs } from "./split-paragraphs";
 
 /**
@@ -94,7 +96,12 @@ function replaceCaseInsensitive(
   source: string,
   target: string,
 ): string {
-  const pattern = new RegExp(escapeRegex(source), "gi");
+  if (source.toLowerCase() === target.toLowerCase()) return text;
+
+  const isWordBoundaryStart = /^\w/.test(source);
+  const isWordBoundaryEnd = /\w$/.test(source);
+  const patternStr = `${isWordBoundaryStart ? "\\b" : ""}${escapeRegex(source)}${isWordBoundaryEnd ? "\\b" : ""}`;
+  const pattern = new RegExp(patternStr, "gi");
   return text.replace(pattern, (match) => applyHeadingCase(target, match));
 }
 
@@ -112,6 +119,16 @@ function localizeStaticText(text: string, locale?: Locale): string {
       "Ingeniería en Computación": "Computer Engineering",
       "Desarrollador Full Stack": "Full Stack Developer",
       "Desarrollador Fullstack": "Fullstack Developer",
+      "Desarrollador Full-Stack": "Full-Stack Developer",
+      "Ingeniero de Software Senior": "Senior Software Engineer",
+      "Líder de Equipo de Desarrollo": "Development Team Lead",
+      "Desarrollador móvil": "Mobile Developer",
+      "Desarrollador de aplicaciones móviles": "Mobile Application Developer",
+      "Técnico de TI y Desarrollador Web": "IT Technician & Web Developer",
+      "Desarrollador Frontend y Técnico de TI":
+        "Frontend Developer and IT Technician",
+      "Tiempo completo": "Full-time",
+      "Medio tiempo": "Part-time",
       "Capacitación en Seguridad Digital y Protección de Datos":
         "Digital Security and Data Protection Training",
     },
@@ -128,13 +145,23 @@ function localizeStaticText(text: string, locale?: Locale): string {
       "Native or Bilingual (C2)": "Nativo o bilingüe (C2)",
       "Computer Engineering": "Ingeniería en Computación",
       "Full Stack Developer": "Desarrollador Full Stack",
+      "Full Stack Engineer": "Desarrollador Full Stack",
       "Fullstack Developer": "Desarrollador Fullstack",
       "Full-Stack Developer": "Desarrollador Full-Stack",
       "Senior Software Engineer": "Ingeniero de Software Senior",
+      "Senior Full Stack Developer": "Desarrollador Full Stack Senior",
+      "Development Team Lead": "Líder de Equipo de Desarrollo",
       "Mobile Developer": "Desarrollador móvil",
+      "Mobile Application Developer": "Desarrollador de aplicaciones móviles",
       "IT Technician & Web Developer": "Técnico de TI y Desarrollador Web",
       "IT Technician &amp; Web Developer": "Técnico de TI y Desarrollador Web",
+      "Frontend Developer and IT Technician":
+        "Desarrollador Frontend y Técnico de TI",
       "Full-time": "Tiempo completo",
+      "Part-time": "Medio tiempo",
+      Contract: "Contrato",
+      Freelance: "Freelance",
+      Internship: "Prácticas",
       Remote: "Remoto",
       Hybrid: "Híbrido",
       Local: "Presencial",
@@ -164,8 +191,24 @@ function localizeStaticText(text: string, locale?: Locale): string {
       "Native or Bilingual (C2)": "Moedertaal of tweetalig (C2)",
       "Computer Engineering": "Computertechniek",
       "Full Stack Developer": "Full Stack Developer",
+      "Full Stack Engineer": "Full Stack Developer",
       "Fullstack Developer": "Fullstack ontwikkelaar",
       "Full-Stack Developer": "Full-Stack Developer",
+      "Senior Software Engineer": "Senior Software Engineer",
+      "Development Team Lead": "Development Team Lead",
+      "Mobile Developer": "Mobiele ontwikkelaar",
+      "Mobile Application Developer": "Mobiele applicatieontwikkelaar",
+      "Desarrollador Full Stack": "Full Stack Developer",
+      "Ingeniero de Software Senior": "Senior Software Engineer",
+      "Líder de Equipo de Desarrollo": "Development Team Lead",
+      "Desarrollador de aplicaciones móviles": "Mobiele applicatieontwikkelaar",
+      "Desarrollador Frontend y Técnico de TI":
+        "Frontend ontwikkelaar en IT-technicus",
+      "Full-time": "Voltijd",
+      "Part-time": "Deeltijd",
+      Contract: "Contract",
+      Freelance: "Freelance",
+      Internship: "Stage",
       "Digital Security and Data Protection Training":
         "Training Digitale Beveiliging en Gegevensbescherming",
     },
@@ -281,6 +324,39 @@ function replaceStaticHeadings(paraXml: string, locale?: Locale): string {
   );
 }
 
+/**
+ * Returns true when every adapted run text for a paragraph is empty/whitespace.
+ * Used to decide whether to suppress the entire `<w:p>` node.
+ */
+export function isAllEmpty(adaptedTexts: string[]): boolean {
+  return (
+    adaptedTexts.length === 0 || adaptedTexts.every((t) => t.trim() === "")
+  );
+}
+
+function alignExperienceRoleParagraph(paraXml: string, text: string): string {
+  if (!paraXml.includes('w:val="CV-Role"') && !isExperienceRoleLine(text)) {
+    return paraXml;
+  }
+
+  // If paragraph already has left indentation, leave it as is
+  if (/<w:ind[^>]*\bw:left="/.test(paraXml)) {
+    return paraXml;
+  }
+
+  // If paragraph has an existing <w:ind />, add w:left="141"
+  if (/<w:ind\b[^>]*\/>/.test(paraXml)) {
+    return paraXml.replace(/<w:ind\b([^>]*)\/>/, '<w:ind w:left="141"$1/>');
+  }
+
+  // If paragraph has <w:pPr> without <w:ind>, inject <w:ind w:left="141"/>
+  if (paraXml.includes("<w:pPr>")) {
+    return paraXml.replace("<w:pPr>", '<w:pPr><w:ind w:left="141"/>');
+  }
+
+  return paraXml;
+}
+
 export async function rebuildDocx(
   zipFiles: JSZip,
   rawXml: string,
@@ -289,6 +365,8 @@ export async function rebuildDocx(
   locale?: Locale,
 ): Promise<Buffer> {
   const adaptedByXmlIndex = new Map<number, string[]>();
+  const extraBulletsByXmlIndex = new Map<number, string[]>();
+
   for (const section of originalSections) {
     const adaptedSection = adaptedSections.find((s) => s.id === section.id);
     if (!adaptedSection) continue;
@@ -301,6 +379,12 @@ export async function rebuildDocx(
         origPara.xmlIndex,
         adaptedPara.runs.map((r) => r.text),
       );
+      if (adaptedPara.extraBullets && adaptedPara.extraBullets.length > 0) {
+        extraBulletsByXmlIndex.set(
+          origPara.xmlIndex,
+          adaptedPara.extraBullets,
+        );
+      }
     }
   }
 
@@ -313,11 +397,51 @@ export async function rebuildDocx(
     }
 
     const xmlIndex = paragraphCount++;
-    const adaptedTexts = adaptedByXmlIndex.get(xmlIndex);
-    if (!adaptedTexts || adaptedTexts.length === 0) {
+
+    if (!adaptedByXmlIndex.has(xmlIndex)) {
+      // Not touched by AI — apply heading localization only.
       return replaceStaticHeadings(part, locale);
     }
-    return replaceStaticHeadings(replaceWtNodes(part, adaptedTexts), locale);
+
+    const adaptedTexts = adaptedByXmlIndex.get(xmlIndex)!;
+    const extraBullets = extraBulletsByXmlIndex.get(xmlIndex);
+
+    // When every run text is empty the AI deliberately left this slot unused.
+    // Remove the entire paragraph from the output so bullet counts are dynamic,
+    // UNLESS the paragraph is inside a table cell (e.g. TableParagraph or inside <w:tc>),
+    // where OpenXML schema requires at least one <w:p> per cell.
+    if (isAllEmpty(adaptedTexts)) {
+      if (part.includes("TableParagraph") || part.includes("<w:tc")) {
+        return replaceStaticHeadings(replaceWtNodes(part, [""]), locale);
+      }
+      return "";
+    }
+
+    const replaced = replaceStaticHeadings(
+      replaceWtNodes(part, adaptedTexts),
+      locale,
+    );
+    const aligned = alignExperienceRoleParagraph(replaced, adaptedTexts.join(" "));
+
+    if (extraBullets && extraBullets.length > 0) {
+      const extraParagraphs = extraBullets
+        .filter((extraText) => extraText.trim().length > 0)
+        .map((extraText) => {
+          const freshParaId = crypto.randomBytes(4).toString("hex").toUpperCase();
+          let cloned = part.replace(
+            /w14:paraId="[^"]*"/,
+            `w14:paraId="${freshParaId}"`,
+          );
+          cloned = replaceStaticHeadings(
+            replaceWtNodes(cloned, [extraText]),
+            locale,
+          );
+          return alignExperienceRoleParagraph(cloned, extraText);
+        });
+      return aligned + extraParagraphs.join("");
+    }
+
+    return aligned;
   });
 
   const newXml = newParts.join("");

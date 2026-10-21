@@ -6,15 +6,17 @@ import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import type { SiteBrand } from "@/lib/site-brand/site-brand";
+import SiteBrandMark from "@/components/app-layout/site-brand-mark";
 
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
-import { DesktopMegaMenu } from "./nav-menu-parts";
+import DesktopMegaMenu from "./desktop-mega-menu";
 import ToolbarHeader from "./toolbar-header";
 import ThemeSelectorLazy from "./theme-selector-lazy";
 import { NAV_GROUPS } from "./navigation-config";
 
-const Header: FC = () => {
+const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
   const t = useTranslations("global.header");
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,7 +43,7 @@ const Header: FC = () => {
 
   const scheduleMegaMenuClose = useCallback(() => {
     clearCloseTimer();
-    closeTimerRef.current = setTimeout(() => setActiveGroup(null), 160);
+    closeTimerRef.current = setTimeout(() => setActiveGroup(null), 180);
   }, [clearCloseTimer]);
 
   const closeMenus = useCallback(() => {
@@ -113,15 +115,13 @@ const Header: FC = () => {
           <div className="flex w-full items-center justify-between gap-3 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-6">
             <Link
               href="/"
-              aria-label={t("homeLogo")}
-              className="group text-primary-700 z-10 inline-flex h-11 min-h-11 shrink-0 items-center text-2xl leading-none font-bold tracking-tighter transition duration-600 ease-in-out"
+              aria-label={t("homeLogo", { brand: siteBrand.label })}
+              className="group text-primary z-10 inline-flex h-11 min-h-11 shrink-0 items-center text-2xl leading-none font-bold tracking-tighter transition duration-600 ease-in-out"
             >
-              <span className="tracking-relaxed">
-                Jehg{" "}
-                <span className="tracking-relaxed text-secondaryText-500 group-hover:text-primary-500">
-                  .
-                </span>
-              </span>
+              <SiteBrandMark
+                brand={siteBrand}
+                dotClassName="text-primary/50 group-hover:text-primary"
+              />
             </Link>
 
             <DesktopNav
@@ -144,10 +144,10 @@ const Header: FC = () => {
           </div>
 
           <div className="w-full lg:hidden">
-            <MobileNav isOpen={isMenuOpen} />
+            <MobileNav isOpen={isMenuOpen} onClose={closeMenus} />
           </div>
 
-          <DesktopMegaMenu activeGroup={activeGroup} />
+          <DesktopMegaMenu activeGroup={activeGroup} onClose={closeMenus} />
         </div>
       </nav>
     </header>

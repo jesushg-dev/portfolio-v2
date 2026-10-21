@@ -58,6 +58,11 @@ export const pathnames = {
     es: "/certificados/ciberseguridad",
     nl: "/certificaten/cyberveiligheid",
   },
+  "/certificates/devops": {
+    en: "/certificates/devops",
+    es: "/certificados/devops",
+    nl: "/certificaten/devops",
+  },
   "/certificates/softskills": {
     en: "/certificates/softskills",
     es: "/certificados/habilidades",
@@ -68,10 +73,20 @@ export const pathnames = {
     es: "/habilidades/[slug]",
     nl: "/vaardigheden/[slug]",
   },
+  "/projects": {
+    en: "/projects",
+    es: "/proyectos",
+    nl: "/projecten",
+  },
   "/projects/[slug]": {
     en: "/projects/[slug]",
     es: "/proyectos/[slug]",
     nl: "/projecten/[slug]",
+  },
+  "/process/[slug]": {
+    en: "/process/[slug]",
+    es: "/proceso/[slug]",
+    nl: "/proces/[slug]",
   },
   "/timeline": {
     en: "/timeline",
@@ -82,16 +97,6 @@ export const pathnames = {
     en: "/privacy",
     es: "/privacidad",
     nl: "/privacy",
-  },
-  "/how-i-use-ai": {
-    en: "/how-i-use-ai",
-    es: "/como-uso-ia",
-    nl: "/hoe-ik-ai-gebruik",
-  },
-  "/qa-collaboration": {
-    en: "/qa-collaboration",
-    es: "/colaboracion-qa",
-    nl: "/qa-samenwerking",
   },
   "/theme-customizer": {
     en: "/theme-customizer",
@@ -113,6 +118,11 @@ export const pathnames = {
     es: "/colofon",
     nl: "/colofon",
   },
+  "/stats": {
+    en: "/stats",
+    es: "/estadisticas",
+    nl: "/statistieken",
+  },
   "/login": {
     en: "/login",
     es: "/iniciar-sesion",
@@ -133,6 +143,11 @@ export const pathnames = {
     es: "/restablecer-contrasena",
     nl: "/wachtwoord-herstellen",
   },
+  "/two-factor": {
+    en: "/two-factor",
+    es: "/verificacion-en-dos-pasos",
+    nl: "/tweestapsverificatie",
+  },
   "/admin": {
     en: "/admin",
     es: "/panel",
@@ -143,15 +158,10 @@ export const pathnames = {
     es: "/panel/perfil",
     nl: "/beheer/profiel",
   },
-  "/admin/profile/about-me": {
-    en: "/admin/profile/about-me",
-    es: "/panel/perfil/sobre-mi",
-    nl: "/beheer/profiel/over-mij",
-  },
-  "/admin/profile/console": {
-    en: "/admin/profile/console",
-    es: "/panel/perfil/consola",
-    nl: "/beheer/profiel/console",
+  "/admin/profile/about": {
+    en: "/admin/profile/about",
+    es: "/panel/perfil/sobre",
+    nl: "/beheer/profiel/over",
   },
   "/admin/about": {
     en: "/admin/about",
@@ -207,6 +217,21 @@ export const pathnames = {
     en: "/admin/now/focuses/[id]/edit",
     es: "/panel/now/focuses/[id]/editar",
     nl: "/beheer/now/focuses/[id]/bewerken",
+  },
+  "/admin/process-pages": {
+    en: "/admin/process-pages",
+    es: "/panel/paginas-de-proceso",
+    nl: "/beheer/procespaginas",
+  },
+  "/admin/process-pages/new": {
+    en: "/admin/process-pages/new",
+    es: "/panel/paginas-de-proceso/nuevo",
+    nl: "/beheer/procespaginas/nieuw",
+  },
+  "/admin/process-pages/[id]/edit": {
+    en: "/admin/process-pages/[id]/edit",
+    es: "/panel/paginas-de-proceso/[id]/editar",
+    nl: "/beheer/procespaginas/[id]/bewerken",
   },
   "/admin/spotify": {
     en: "/admin/spotify",
@@ -277,6 +302,11 @@ export const pathnames = {
     en: "/admin/job-tracker/applications/[id]/edit",
     es: "/panel/seguimiento-laboral/postulaciones/[id]/editar",
     nl: "/beheer/vacature-tracker/sollicitaties/[id]/bewerken",
+  },
+  "/admin/job-tracker/applications/[id]/events/[eventId]": {
+    en: "/admin/job-tracker/applications/[id]/events/[eventId]",
+    es: "/panel/seguimiento-laboral/postulaciones/[id]/eventos/[eventId]",
+    nl: "/beheer/vacature-tracker/sollicitaties/[id]/evenementen/[eventId]",
   },
   "/admin/job-tracker/companies/new": {
     en: "/admin/job-tracker/companies/new",

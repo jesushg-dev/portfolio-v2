@@ -15,7 +15,8 @@ export const CvPageFrame: FC<CvPageFrameProps> = ({ hint, children }) => {
             {hint}
           </p>
         ) : null}
-        {children}
+        {/* CV paper is always light — body copy uses fixed dark hexes for print fidelity. */}
+        <div className="bg-white text-black">{children}</div>
       </div>
     </div>
   );

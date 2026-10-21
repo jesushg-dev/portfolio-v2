@@ -129,11 +129,22 @@ export const Sidebar = ({
   );
 };
 
-export const SidebarBody = (props: ComponentProps<typeof motion.div>) => {
+export const SidebarBody = ({
+  mobileBrand,
+  mobileActions,
+  ...props
+}: ComponentProps<typeof motion.div> & {
+  mobileBrand?: ReactNode;
+  mobileActions?: ReactNode;
+}) => {
   return (
     <>
       <DesktopSidebar {...props} />
-      <MobileSidebar {...(props as ComponentProps<"div">)} />
+      <MobileSidebar
+        brand={mobileBrand}
+        actions={mobileActions}
+        {...(props as ComponentProps<"div">)}
+      />
     </>
   );
 };
@@ -147,7 +158,7 @@ export const DesktopSidebar = ({
   return (
     <motion.div
       className={cn(
-        "bg-card border-border hidden h-full shrink-0 border-r px-4 py-4 transition-[width] duration-300 md:flex md:flex-col",
+        "bg-card border-border hidden h-full min-h-0 shrink-0 overflow-hidden border-r px-4 py-4 transition-[width] duration-300 md:flex md:flex-col",
         className,
       )}
       animate={{
@@ -196,8 +207,10 @@ export const SidebarPinToggle = ({ className }: { className?: string }) => {
 export const MobileSidebar = ({
   className,
   children,
+  brand,
+  actions,
   ...props
-}: ComponentProps<"div">) => {
+}: ComponentProps<"div"> & { brand?: ReactNode; actions?: ReactNode }) => {
   const { open, setOpen } = useSidebar();
   const t = useTranslations("global.header");
 
@@ -205,20 +218,22 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "bg-card border-border flex h-14 w-full flex-row items-center justify-between border-b px-4 md:hidden",
+          "bg-card border-border flex h-14 w-full flex-row items-center justify-between gap-3 border-b px-4 md:hidden",
         )}
         {...props}
       >
-        <div className="z-20 flex w-full justify-end">
+        <div className="flex min-w-0 items-center gap-2">{brand}</div>
+        <div className="flex shrink-0 items-center gap-2">
+          {actions}
           <button
             type="button"
             aria-expanded={open}
             aria-controls="mobile-sidebar-panel"
             aria-label={open ? t("closeMenu") : t("openMenu")}
             onClick={() => setOpen(!open)}
-            className="text-foreground inline-flex rounded-lg p-2"
+            className="text-foreground hover:bg-muted hover:text-foreground inline-flex size-9 shrink-0 items-center justify-center rounded-lg transition-colors"
           >
-            <Menu className="h-5 w-5" aria-hidden />
+            <Menu className="size-5" aria-hidden />
           </button>
         </div>
         <AnimatePresence>
@@ -233,7 +248,7 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "bg-background fixed inset-0 z-100 flex h-full w-full flex-col justify-between p-10",
+                "bg-background fixed inset-0 z-100 flex h-full min-h-0 w-full flex-col justify-between overflow-hidden p-10",
                 className,
               )}
             >

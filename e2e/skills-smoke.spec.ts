@@ -34,6 +34,8 @@ test.describe("skills smoke", () => {
     }
 
     await fillSkillForm(page, skill);
-    await expect(page.getByRole("cell", { name: skill.title })).toBeVisible();
+    await expect(
+      page.getByRole("cell", { name: skill.title, exact: true }),
+    ).toBeVisible();
   });
 });

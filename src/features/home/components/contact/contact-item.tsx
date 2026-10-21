@@ -54,8 +54,8 @@ const ContactItem: FC<ContactItemProps> = ({
   } as CSSProperties;
 
   const className = cn(
-    "group inline-flex items-center gap-2 rounded-lg border border-border/60 bg-card/60 px-3 py-1.5 text-xs font-medium text-card-foreground shadow-2xs transition-all",
-    "hover:border-transparent hover:bg-[var(--contact-accent)] hover:text-white hover:shadow-md active:scale-[0.98]",
+    "group inline-flex min-h-11 items-center gap-2 rounded-full border border-border/80 bg-card px-4 py-2.5 text-sm font-semibold text-foreground shadow-2xs transition-all duration-200",
+    "hover:border-transparent hover:bg-[var(--contact-accent)] hover:text-white hover:shadow-md hover:-translate-y-0.5 active:scale-95",
   );
 
   return isInternal ? (
@@ -65,7 +65,7 @@ const ContactItem: FC<ContactItemProps> = ({
       className={className}
       style={style}
     >
-      <Icon className="text-primary size-3.5 shrink-0 transition-all group-hover:scale-110 group-hover:text-white" />
+      <Icon className="text-primary size-4 shrink-0 transition-all group-hover:scale-110 group-hover:text-white" />
       <span className="truncate">{label}</span>
     </Link>
   ) : (
@@ -77,7 +77,7 @@ const ContactItem: FC<ContactItemProps> = ({
       className={className}
       style={style}
     >
-      <Icon className="text-primary size-3.5 shrink-0 transition-all group-hover:scale-110 group-hover:text-white" />
+      <Icon className="text-primary size-4 shrink-0 transition-all group-hover:scale-110 group-hover:text-white" />
       <span className="truncate">{label}</span>
     </a>
   );

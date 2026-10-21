@@ -1,20 +1,33 @@
 "use client";
 
-import { useState, type FC } from "react";
-import { Building2, Kanban, type LucideIcon } from "lucide-react";
+import { useMemo, useState, type FC } from "react";
+import { isThisWeek } from "date-fns";
+import {
+  Building2,
+  Calendar,
+  Kanban,
+  MailCheck,
+  type LucideIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { ApplicationsKanban } from "@/features/job-tracker/components/applications-kanban";
 import { CompaniesList } from "@/features/job-tracker/components/companies-list";
-import type { RouterOutputs } from "@/trpc/react";
-import { cn } from "@/lib/utils";
+import { OutreachHub } from "@/features/job-tracker/components/outreach-hub";
+import { UpcomingEventsAlertBanner } from "@/features/job-tracker/components/upcoming-events-alert-banner";
+import { UpcomingEventsCalendar } from "@/features/job-tracker/components/upcoming-events-calendar";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { api, type RouterOutputs } from "@/trpc/react";
+import type { Locale } from "@/i18n/config";
+import type { UpcomingEvent } from "@/features/job-tracker/types";
 
 type ApplicationRow =
   RouterOutputs["jobTrackerAdmin"]["getApplications"]["data"][number];
 type CompanyRow =
   RouterOutputs["jobTrackerAdmin"]["getCompanies"]["data"][number];
 
-type JobTrackerTab = "applications" | "companies";
+type JobTrackerTab = "applications" | "events" | "companies" | "outreach";
 
 interface JobTrackerTabsProps {
   initialApplications: ApplicationRow[];
@@ -22,14 +35,18 @@ interface JobTrackerTabsProps {
   initialCompanies: CompanyRow[];
   companiesPageCount: number;
   companiesTotalCount: number;
+  initialUpcomingEvents: UpcomingEvent[];
+  locale: Locale;
 }
 
 const TAB_CONFIG: {
   id: JobTrackerTab;
   icon: LucideIcon;
-  labelKey: "applicationsTab" | "companiesTab";
+  labelKey: "applicationsTab" | "eventsTab" | "companiesTab" | "outreachTab";
 }[] = [
   { id: "applications", icon: Kanban, labelKey: "applicationsTab" },
+  { id: "events", icon: Calendar, labelKey: "eventsTab" },
+  { id: "outreach", icon: MailCheck, labelKey: "outreachTab" },
   { id: "companies", icon: Building2, labelKey: "companiesTab" },
 ];
 
@@ -39,54 +56,144 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
   initialCompanies,
   companiesPageCount,
   companiesTotalCount,
+  initialUpcomingEvents,
+  locale,
 }) => {
   const t = useTranslations("admin.jobTracker");
   const [activeTab, setActiveTab] = useState<JobTrackerTab>("applications");
 
+  const { data: stats } = api.jobTrackerAdmin.getDashboardStats.useQuery(
+    undefined,
+    {
+      placeholderData: {
+        totalApplications: applicationsTotalCount,
+        totalCompanies: companiesTotalCount,
+        applied: 0,
+        inProgress: 0,
+        offers: 0,
+        ghosted: 0,
+        rejected: 0,
+        hired: 0,
+      },
+    },
+  );
+
+  const { data: upcomingEvents = initialUpcomingEvents } =
+    api.jobTrackerAdmin.getUpcomingEvents.useQuery(
+      { limit: 20 },
+      { placeholderData: initialUpcomingEvents },
+    );
+
+  const { data: outreachData } =
+    api.jobTrackerAdmin.getEmailTrackingHub.useQuery(undefined, {
+      select: (res) => ({
+        totalSent: res.stats.totalSent,
+        recentOpens24h: res.stats.recentOpens24h,
+      }),
+    });
+
+  const weekEventsCount = useMemo(() => {
+    return upcomingEvents.filter((event) =>
+      isThisWeek(new Date(event.scheduledDate), { weekStartsOn: 1 }),
+    ).length;
+  }, [upcomingEvents]);
+
+  const applicationsCount = stats?.totalApplications ?? applicationsTotalCount;
+  const companiesCount = stats?.totalCompanies ?? companiesTotalCount;
+  const outreachCount = outreachData?.totalSent ?? 0;
+  const eventsCount = upcomingEvents.length;
+
+  const getCount = (tabId: JobTrackerTab) => {
+    switch (tabId) {
+      case "applications":
+        return applicationsCount;
+      case "events":
+        return eventsCount;
+      case "companies":
+        return companiesCount;
+      case "outreach":
+        return outreachCount;
+    }
+  };
+
   return (
-    <div className="border-border bg-card flex min-h-[560px] flex-col overflow-hidden rounded-xl border shadow-sm">
-      <nav
-        aria-label={t("tabsNavAria")}
-        className="bg-muted/30 flex shrink-0 overflow-x-auto"
-        role="tablist"
-      >
-        {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => {
-          const isActive = activeTab === id;
-          return (
-            <button
+    <Tabs
+      value={activeTab}
+      onValueChange={(val) => setActiveTab(val as JobTrackerTab)}
+      className="border-border bg-card sticky top-0 z-20 flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col overflow-hidden rounded-xl border shadow-sm md:top-16 md:h-[calc(100dvh-4rem)]"
+    >
+      <div className="border-border bg-muted/30 border-b px-3">
+        <TabsList
+          variant="line"
+          aria-label={t("tabsNavAria")}
+          className="flex h-12 w-full [scrollbar-width:none] justify-start gap-1 overflow-x-auto overflow-y-hidden p-0 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => (
+            <TabsTrigger
               key={id}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setActiveTab(id)}
-              className={cn(
-                "flex shrink-0 items-center gap-2 border-b-2 px-5 py-3.5 text-sm font-medium transition-colors",
-                isActive
-                  ? "border-primary text-primary bg-card"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60 border-transparent",
-              )}
+              value={id}
+              className="h-full flex-initial shrink-0 px-4 text-sm font-medium after:bottom-0"
             >
               <Icon className="size-4" aria-hidden />
-              {t(labelKey)}
-            </button>
-          );
-        })}
-      </nav>
-
-      <div className="min-h-0 flex-1 p-6" role="tabpanel">
-        {activeTab === "applications" ? (
-          <ApplicationsKanban
-            initialApplications={initialApplications}
-            totalCount={applicationsTotalCount}
-          />
-        ) : (
-          <CompaniesList
-            initialCompanies={initialCompanies}
-            pageCount={companiesPageCount}
-            totalCount={companiesTotalCount}
-          />
-        )}
+              <span>{t(labelKey)}</span>
+              <span className="tabular-nums opacity-75">({getCount(id)})</span>
+              {id === "events" && weekEventsCount > 0 ? (
+                <Badge
+                  variant="secondary"
+                  className="border-primary/25 bg-primary/10 text-primary ml-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+                >
+                  {t("eventsThisWeekBadge", { count: weekEventsCount })}
+                </Badge>
+              ) : null}
+            </TabsTrigger>
+          ))}
+        </TabsList>
       </div>
-    </div>
+
+      <UpcomingEventsAlertBanner
+        events={upcomingEvents}
+        locale={locale}
+        onViewAgenda={() => setActiveTab("events")}
+        className="mx-3 mt-3 sm:mx-4 sm:mt-4"
+      />
+
+      <TabsContent
+        value="applications"
+        className="min-h-0 flex-1 overflow-hidden p-2.5 sm:p-4 md:p-6"
+      >
+        <ApplicationsKanban
+          initialApplications={initialApplications}
+          totalCount={applicationsTotalCount}
+        />
+      </TabsContent>
+
+      <TabsContent
+        value="events"
+        className="min-h-0 flex-1 overflow-hidden p-2.5 sm:p-4 md:p-6"
+      >
+        <UpcomingEventsCalendar
+          initialEvents={upcomingEvents}
+          locale={locale}
+        />
+      </TabsContent>
+
+      <TabsContent
+        value="outreach"
+        className="min-h-0 flex-1 overflow-hidden p-2.5 sm:p-4 md:p-6"
+      >
+        <OutreachHub />
+      </TabsContent>
+
+      <TabsContent
+        value="companies"
+        className="min-h-0 flex-1 overflow-hidden p-2.5 sm:p-4 md:p-6"
+      >
+        <CompaniesList
+          initialCompanies={initialCompanies}
+          pageCount={companiesPageCount}
+          totalCount={companiesTotalCount}
+        />
+      </TabsContent>
+    </Tabs>
   );
 };

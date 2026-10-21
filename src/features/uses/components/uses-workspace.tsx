@@ -1,18 +1,23 @@
 "use client";
 
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
 import { USES_WORKSPACE_IMAGE_FALLBACK } from "../data";
 import { usesContainerClassName } from "./uses-layout";
+import {
+  UsesWorkspaceHotspots,
+  type UsesWorkspacePublicTag,
+} from "./uses-workspace-hotspots";
 
 interface UsesWorkspaceProps {
   show: boolean;
   caption: string;
   alt: string;
   imageSrc?: string | null;
+  tags?: UsesWorkspacePublicTag[];
 }
 
 export function UsesWorkspace({
@@ -20,6 +25,7 @@ export function UsesWorkspace({
   caption,
   alt,
   imageSrc,
+  tags = [],
 }: UsesWorkspaceProps) {
   const shouldReduceMotion = useReducedMotion();
   const src = imageSrc ?? USES_WORKSPACE_IMAGE_FALLBACK;
@@ -45,7 +51,7 @@ export function UsesWorkspace({
           transition={{ duration: 0.45, ease: [0.16, 0.8, 0.3, 1] }}
         >
           <div className="relative aspect-video w-full overflow-hidden rounded-xl">
-            <Image
+            <MediaImage
               src={src}
               alt={alt}
               fill
@@ -53,6 +59,7 @@ export function UsesWorkspace({
               sizes="(max-width: 1440px) 100vw, 1440px"
               className="object-cover object-center select-none"
             />
+            <UsesWorkspaceHotspots tags={tags} />
           </div>
           <figcaption className="text-muted-foreground text-center text-xs">
             {caption}

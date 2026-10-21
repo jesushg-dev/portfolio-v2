@@ -10,6 +10,10 @@ import {
 import { TextTranslationMapSchema } from "@/lib/i18n/localized-form";
 import type { TextTranslationMap } from "@/lib/i18n/translation-map";
 import { resolveCvPdfAsset } from "@/features/cv/lib/resolve-cv-pdf-asset";
+import { normalizeEmploymentDates } from "@/utils/tools/date";
+import { geocodePlace } from "@/lib/geo/geocode-place";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
+import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 
 type CvDbClient = Pick<PrismaClient, "appLanguage">;
 
@@ -93,11 +97,15 @@ async function upsertExperienceTranslations(
   experienceId: string,
   role: TextTranslationMap,
   location?: TextTranslationMap,
+  companyBlurb?: TextTranslationMap,
 ) {
   for (const lang of languages) {
     const data = {
       role: role[lang.id]?.text ?? "",
       location: location?.[lang.id]?.text ?? null,
+      companyBlurb: companyBlurb?.[lang.id]?.text?.trim()
+        ? companyBlurb[lang.id].text
+        : null,
     };
     const existing = await db.cvExperienceTranslation.findFirst({
       where: { cvExperienceId: experienceId, appLanguageId: lang.id },
@@ -151,11 +159,15 @@ function buildExperienceTranslationCreates(
   languages: AppLanguage[],
   role: TextTranslationMap,
   location?: TextTranslationMap,
+  companyBlurb?: TextTranslationMap,
 ) {
   return languages.map((lang) => ({
     appLanguageId: lang.id,
     role: role[lang.id]?.text ?? "",
     location: location?.[lang.id]?.text ?? null,
+    companyBlurb: companyBlurb?.[lang.id]?.text?.trim()
+      ? companyBlurb[lang.id].text
+      : null,
   }));
 }
 
@@ -192,6 +204,14 @@ const CvSkillCategory = z.enum([
   "DEVOPS",
   "CYBERSECURITY",
   "OTHER",
+]);
+
+const CvEmploymentType = z.enum([
+  "FULL_TIME",
+  "PART_TIME",
+  "CONTRACT",
+  "FREELANCE",
+  "INTERNSHIP",
 ]);
 
 /**
@@ -236,10 +256,7 @@ const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    ctx.db.cvTechnicalSkill.findMany({
-      where: { userId },
-      orderBy: { order: "asc" },
-    }),
+    resolveUserTechnicalSkills(ctx.db, userId),
     ctx.db.cvExperience.findMany({
       where: { userId },
       include: {
@@ -290,7 +307,7 @@ export const cvRouter = createTRPCRouter({
    * Used by the public CV page renderer.
    */
   getPublic: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.tenant) return null;
+    if (!ctx.tenant || !isPublicCvVisible(ctx.tenant)) return null;
     return getFullCvForUser(ctx, ctx.tenant.userId);
   }),
 
@@ -693,8 +710,10 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         company: z.string().min(1),
+        employmentType: CvEmploymentType.optional().default("FULL_TIME"),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
+        companyBlurb: CvTextTranslationMapSchema.optional(),
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean().default(false),
@@ -706,24 +725,35 @@ export const cvRouter = createTRPCRouter({
             z.object({
               text: CvTextTranslationMapSchema,
               order: z.number().int().nonnegative().default(0),
+              atsOnly: z.boolean().default(false),
             }),
           )
           .default([]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { responsibilities, role, location, skillIds, ...rest } = input;
+      const {
+        responsibilities,
+        role,
+        location,
+        companyBlurb,
+        skillIds,
+        ...rest
+      } = input;
       const languages = await getAppLanguages(ctx.db);
+      const dates = normalizeEmploymentDates(rest);
 
       return ctx.db.cvExperience.create({
         data: {
           ...rest,
+          ...dates,
           userId: ctx.user.id,
           translations: {
             create: buildExperienceTranslationCreates(
               languages,
               role,
               location,
+              companyBlurb,
             ),
           },
           CvExperienceSkill: skillIds.length
@@ -733,6 +763,7 @@ export const cvRouter = createTRPCRouter({
             ? {
                 create: responsibilities.map((responsibility) => ({
                   order: responsibility.order,
+                  atsOnly: responsibility.atsOnly,
                   translations: {
                     create: buildResponsibilityTranslationCreates(
                       languages,
@@ -755,8 +786,10 @@ export const cvRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         company: z.string().min(1),
+        employmentType: CvEmploymentType.optional(),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
+        companyBlurb: CvTextTranslationMapSchema.optional(),
         startDate: z.date().optional(),
         endDate: z.date().optional(),
         current: z.boolean().default(false),
@@ -768,13 +801,22 @@ export const cvRouter = createTRPCRouter({
             z.object({
               text: CvTextTranslationMapSchema,
               order: z.number().int().nonnegative().default(0),
+              atsOnly: z.boolean().default(false),
             }),
           )
           .default([]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, responsibilities, role, location, skillIds, ...data } = input;
+      const {
+        id,
+        responsibilities,
+        role,
+        location,
+        companyBlurb,
+        skillIds,
+        ...data
+      } = input;
       const existing = await ctx.db.cvExperience.findUnique({ where: { id } });
       if (existing?.userId !== ctx.user.id) {
         throw new TRPCError({ code: "NOT_FOUND" });
@@ -794,8 +836,21 @@ export const cvRouter = createTRPCRouter({
         });
       }
 
-      await ctx.db.cvExperience.update({ where: { id }, data });
-      await upsertExperienceTranslations(ctx.db, languages, id, role, location);
+      await ctx.db.cvExperience.update({
+        where: { id },
+        data: {
+          ...data,
+          ...normalizeEmploymentDates(data),
+        },
+      });
+      await upsertExperienceTranslations(
+        ctx.db,
+        languages,
+        id,
+        role,
+        location,
+        companyBlurb,
+      );
 
       if (responsibilities.length > 0) {
         for (const responsibility of responsibilities) {
@@ -803,6 +858,7 @@ export const cvRouter = createTRPCRouter({
             data: {
               experienceId: id,
               order: responsibility.order,
+              atsOnly: responsibility.atsOnly,
               translations: {
                 create: buildResponsibilityTranslationCreates(
                   languages,
@@ -867,6 +923,12 @@ export const cvRouter = createTRPCRouter({
       }
       await ctx.db.cvResponsibility.deleteMany({
         where: { experienceId: input.id },
+      });
+      await ctx.db.cvExperienceSkill.deleteMany({
+        where: { experienceId: input.id },
+      });
+      await ctx.db.cvExperienceTranslation.deleteMany({
+        where: { cvExperienceId: input.id },
       });
       return ctx.db.cvExperience.delete({ where: { id: input.id } });
     }),
@@ -1039,6 +1101,103 @@ export const cvRouter = createTRPCRouter({
       return ctx.db.cvAdditionalInfo.delete({ where: { id: input.id } });
     }),
 
+  // ---------- Personal references ----------
+  createPersonalReference: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        contact: z.string().nullable().optional(),
+        role: CvTextTranslationMapSchema,
+        order: z.number().int().nonnegative().default(0),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { role, contact, ...rest } = input;
+      const languages = await getAppLanguages(ctx.db);
+
+      return ctx.db.cvPersonalReference.create({
+        data: {
+          ...rest,
+          contact: contact?.trim() ? contact.trim() : null,
+          userId: ctx.user.id,
+          translations: {
+            create: languages.map((lang) => ({
+              appLanguageId: lang.id,
+              role: role[lang.id]?.text ?? "",
+            })),
+          },
+        },
+        include: { translations: true },
+      });
+    }),
+  updatePersonalReference: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(1),
+        contact: z.string().nullable().optional(),
+        role: CvTextTranslationMapSchema,
+        order: z.number().int().nonnegative().default(0),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, role, contact, ...rest } = input;
+      const existing = await ctx.db.cvPersonalReference.findUnique({
+        where: { id },
+      });
+      if (existing?.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const languages = await getAppLanguages(ctx.db);
+      await ctx.db.cvPersonalReference.update({
+        where: { id },
+        data: {
+          ...rest,
+          contact: contact?.trim() ? contact.trim() : null,
+        },
+      });
+
+      for (const lang of languages) {
+        const roleText = role[lang.id]?.text ?? "";
+        const existingTranslation =
+          await ctx.db.cvPersonalReferenceTranslation.findFirst({
+            where: { cvPersonalReferenceId: id, appLanguageId: lang.id },
+          });
+
+        if (existingTranslation) {
+          await ctx.db.cvPersonalReferenceTranslation.update({
+            where: { id: existingTranslation.id },
+            data: { role: roleText },
+          });
+        } else {
+          await ctx.db.cvPersonalReferenceTranslation.create({
+            data: {
+              cvPersonalReferenceId: id,
+              appLanguageId: lang.id,
+              role: roleText,
+            },
+          });
+        }
+      }
+
+      return ctx.db.cvPersonalReference.findUniqueOrThrow({
+        where: { id },
+        include: { translations: true },
+      });
+    }),
+  deletePersonalReference: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.cvPersonalReference.findUnique({
+        where: { id: input.id },
+      });
+      if (existing?.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+      return ctx.db.cvPersonalReference.delete({ where: { id: input.id } });
+    }),
+
   // ---------- Profile / settings ----------
   upsertProfile: protectedProcedure
     .input(
@@ -1049,9 +1208,11 @@ export const cvRouter = createTRPCRouter({
           .max(40)
           .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and dashes"),
         displayName: z.string().min(1).optional(),
+        logoInitials: z.string().max(8).optional(),
+        logoImageUrl: z.string().url().or(z.literal("")).optional(),
         defaultLocale: z.enum(["en", "es", "nl"]),
         isPublished: z.boolean().default(false),
-        cvPdfUrl: z.string().url().nullable().optional(),
+        mapLocationLabel: z.string().max(160).optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -1066,6 +1227,38 @@ export const cvRouter = createTRPCRouter({
         });
       }
 
+      const trimmedMapLocation = input.mapLocationLabel?.trim();
+      const mapLocationLabel =
+        trimmedMapLocation && trimmedMapLocation.length > 0
+          ? trimmedMapLocation
+          : null;
+      const geocoded = mapLocationLabel
+        ? await geocodePlace(mapLocationLabel)
+        : null;
+
+      const mapFields = {
+        mapLocationLabel,
+        mapLatitude: geocoded?.lat ?? null,
+        mapLongitude: geocoded?.lon ?? null,
+      };
+
+      const logoFields = {
+        ...(input.logoInitials !== undefined
+          ? {
+              logoInitials: input.logoInitials.trim()
+                ? input.logoInitials.trim()
+                : null,
+            }
+          : {}),
+        ...(input.logoImageUrl !== undefined
+          ? {
+              logoImageUrl: input.logoImageUrl.trim()
+                ? input.logoImageUrl.trim()
+                : null,
+            }
+          : {}),
+      };
+
       // Omit customDomain on create so MongoDB does not store an explicit null
       // under a legacy unique index (only one null was allowed).
       return ctx.db.profile.upsert({
@@ -1074,16 +1267,18 @@ export const cvRouter = createTRPCRouter({
           userId: ctx.user.id,
           username: input.username,
           displayName: input.displayName,
+          ...logoFields,
           defaultLocale: input.defaultLocale,
           isPublished: input.isPublished,
-          ...(input.cvPdfUrl !== undefined ? { cvPdfUrl: input.cvPdfUrl } : {}),
+          ...mapFields,
         },
         update: {
           username: input.username,
           displayName: input.displayName,
+          ...logoFields,
           defaultLocale: input.defaultLocale,
           isPublished: input.isPublished,
-          ...(input.cvPdfUrl !== undefined ? { cvPdfUrl: input.cvPdfUrl } : {}),
+          ...mapFields,
         },
       });
     }),
@@ -1331,4 +1526,61 @@ export const cvRouter = createTRPCRouter({
         ),
       );
     }),
+  reorderPersonalReferences: protectedProcedure
+    .input(
+      z.array(
+        z.object({ id: z.string(), order: z.number().int().nonnegative() }),
+      ),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.$transaction(
+        input.map((item) =>
+          ctx.db.cvPersonalReference.update({
+            where: { id: item.id, userId: ctx.user.id },
+            data: { order: item.order },
+          }),
+        ),
+      );
+    }),
+
+  /**
+   * Deletes all CV sections and entities for the currently authenticated user.
+   */
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
+    const userId = ctx.user.id;
+    const experiences = await ctx.db.cvExperience.findMany({
+      where: { userId },
+      select: { id: true },
+    });
+    const expIds = experiences.map((e) => e.id);
+
+    return ctx.db.$transaction(async (tx) => {
+      if (expIds.length > 0) {
+        await tx.cvResponsibility.deleteMany({
+          where: { experienceId: { in: expIds } },
+        });
+        await tx.cvExperienceSkill.deleteMany({
+          where: { experienceId: { in: expIds } },
+        });
+        await tx.cvExperienceTranslation.deleteMany({
+          where: { cvExperienceId: { in: expIds } },
+        });
+        await tx.cvExperience.deleteMany({
+          where: { id: { in: expIds } },
+        });
+      }
+
+      await tx.cvContact.deleteMany({ where: { userId } });
+      await tx.cvEducation.deleteMany({ where: { userId } });
+      await tx.cvLanguage.deleteMany({ where: { userId } });
+      await tx.cvTechnicalSkill.deleteMany({ where: { userId } });
+      await tx.cvSoftSkill.deleteMany({ where: { userId } });
+      await tx.cvAdditionalInfo.deleteMany({ where: { userId } });
+      await tx.cvPersonalReference.deleteMany({ where: { userId } });
+      await tx.cvHeader.deleteMany({ where: { userId } });
+      await tx.cvAboutMe.deleteMany({ where: { userId } });
+      await tx.cvTerminal.deleteMany({ where: { userId } });
+      await tx.cvPdfLink.deleteMany({ where: { userId } });
+    });
+  }),
 });

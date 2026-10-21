@@ -3,9 +3,9 @@
 import { useCallback, useMemo, useState, useTransition } from "react";
 import type { AppLanguage } from "@prisma/client";
 import { useTranslations } from "next-intl";
-import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GripVertical, Plus, Trash2, User } from "lucide-react";
+import { User } from "lucide-react";
 import { z } from "zod";
 
 import { api } from "@/trpc/react";
@@ -20,19 +20,13 @@ import {
 import { Form, FormControl, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import {
-  Sortable,
-  SortableContent,
-  SortableItem,
-  SortableItemHandle,
-} from "@/components/ui/sortable";
 import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
+  TextTranslationMapSchema,
 } from "@/lib/i18n/localized-form";
-import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
 import type { ProfileHeroEditorDTO } from "@/features/profile/lib/profile-hero-editor-dto";
+import { ProfileHeroPreview } from "./profile-hero-preview";
 
 interface ProfileHeroFormProps {
   languages: AppLanguage[];
@@ -56,24 +50,17 @@ export function ProfileHeroForm({
       z.object({
         fullName: z.string().min(1),
         photoUrl: z.string().url().or(z.literal("")),
-        backgroundImageUrl: z.string().url().or(z.literal("")),
-        heroSummaryTranslations: textTranslationMapSchema(
+        heroSubtitleTranslations: textTranslationMapSchema(
           primaryLang?.id,
-          t("heroSummaryLabel"),
+          t("heroSubtitleLabel"),
         ),
-        aboutMeTranslations: textTranslationMapSchema(
+        heroTaglineTranslations: textTranslationMapSchema(
           primaryLang?.id,
-          t("aboutMeTitle"),
+          t("heroTaglineLabel"),
         ),
-        titles: z.array(
-          z.object({
-            order: z.number().int().nonnegative(),
-            translations: textTranslationMapSchema(
-              primaryLang?.id,
-              t("rotatingTitlesLabel"),
-            ),
-          }),
-        ),
+        heroSummaryTranslations: TextTranslationMapSchema,
+        clientImageAltTranslations: TextTranslationMapSchema,
+        heroBadgeTranslations: TextTranslationMapSchema,
       }),
     [primaryLang?.id, t],
   );
@@ -90,20 +77,13 @@ export function ProfileHeroForm({
     () => ({
       fullName: initialData.fullName,
       photoUrl: initialData.photoUrl,
-      backgroundImageUrl: initialData.backgroundImageUrl,
+      heroSubtitleTranslations: initialData.heroSubtitleTranslations,
+      heroTaglineTranslations: initialData.heroTaglineTranslations,
       heroSummaryTranslations: initialData.heroSummaryTranslations,
-      aboutMeTranslations: initialData.aboutMeTranslations,
-      titles:
-        initialData.titles.length > 0
-          ? initialData.titles
-          : [
-              {
-                order: 0,
-                translations: buildEmptyTranslationMap(languages, { text: "" }),
-              },
-            ],
+      clientImageAltTranslations: initialData.clientImageAltTranslations,
+      heroBadgeTranslations: initialData.heroBadgeTranslations,
     }),
-    [initialData, languages],
+    [initialData],
   );
 
   const form = useForm<ProfileHeroFormValues>({
@@ -111,39 +91,50 @@ export function ProfileHeroForm({
     defaultValues,
   });
 
-  const { fields, append, remove, move } = useFieldArray({
-    control: form.control,
-    name: "titles",
-  });
-
   const upsertProfileHero = api.profileAdmin.upsertHero.useMutation();
 
   const photoUrlValue = useWatch({ control: form.control, name: "photoUrl" });
   const fullNameValue = useWatch({ control: form.control, name: "fullName" });
+  const heroSubtitleTranslations = useWatch({
+    control: form.control,
+    name: "heroSubtitleTranslations",
+  });
+  const heroTaglineTranslations = useWatch({
+    control: form.control,
+    name: "heroTaglineTranslations",
+  });
+  const heroSummaryTranslations = useWatch({
+    control: form.control,
+    name: "heroSummaryTranslations",
+  });
+  const clientImageAltTranslations = useWatch({
+    control: form.control,
+    name: "clientImageAltTranslations",
+  });
+  const heroBadgeTranslations = useWatch({
+    control: form.control,
+    name: "heroBadgeTranslations",
+  });
+
+  const activeSubtitle = heroSubtitleTranslations?.[activeLangId]?.text ?? "";
+  const activeTagline = heroTaglineTranslations?.[activeLangId]?.text ?? "";
+  const activeSummary = heroSummaryTranslations?.[activeLangId]?.text ?? "";
+  const activeImageAlt = clientImageAltTranslations?.[activeLangId]?.text ?? "";
+  const activeBadge = heroBadgeTranslations?.[activeLangId]?.text ?? "";
 
   const handleSubmit = useCallback(
     (values: ProfileHeroFormValues) => {
       startTransition(async () => {
         setServerError(null);
         try {
-          const titlesPayload = values.titles
-            .map((title, index) => ({
-              order: index,
-              translations: title.translations,
-            }))
-            .filter((title) =>
-              Object.values(title.translations).some(
-                (entry) => entry.text.trim() !== "",
-              ),
-            );
-
           await upsertProfileHero.mutateAsync({
             fullName: values.fullName,
             photoUrl: values.photoUrl,
-            backgroundImageUrl: values.backgroundImageUrl,
+            heroSubtitleTranslations: values.heroSubtitleTranslations,
+            heroTaglineTranslations: values.heroTaglineTranslations,
             heroSummaryTranslations: values.heroSummaryTranslations,
-            aboutMeTranslations: values.aboutMeTranslations,
-            titles: titlesPayload,
+            clientImageAltTranslations: values.clientImageAltTranslations,
+            heroBadgeTranslations: values.heroBadgeTranslations,
           });
 
           await utils.profileAdmin.getHeroEditor.invalidate();
@@ -153,21 +144,6 @@ export function ProfileHeroForm({
       });
     },
     [t, upsertProfileHero, utils],
-  );
-
-  const handleAddTitle = useCallback(() => {
-    append({
-      order: fields.length,
-      translations: buildEmptyTranslationMap(languages, { text: "" }),
-    });
-  }, [append, fields.length, languages]);
-
-  const handleRemoveTitle = useCallback(
-    (index: number) => {
-      if (fields.length <= 1) return;
-      remove(index);
-    },
-    [fields.length, remove],
   );
 
   return (
@@ -180,7 +156,24 @@ export function ProfileHeroForm({
           buttonIdPrefix="profile-hero"
         />
 
+        {/* Live Hero Preview Component */}
+        <div className="space-y-2">
+          <h2 className="text-foreground text-sm font-semibold">
+            {t("heroPreviewTitle")}
+          </h2>
+          <ProfileHeroPreview
+            fullName={fullNameValue}
+            photoUrl={photoUrlValue}
+            imageAlt={activeImageAlt}
+            heroSubtitle={activeSubtitle}
+            heroTagline={activeTagline}
+            heroSummary={activeSummary}
+            badgeLabel={activeBadge}
+          />
+        </div>
+
         <FormContent error={serverError}>
+          {/* Identity Section: Name, Photo, Image Alt */}
           <FormSection title={t("heroSection")}>
             <div className="flex items-start gap-6">
               <div className="mt-2 shrink-0">
@@ -188,7 +181,7 @@ export function ProfileHeroForm({
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={photoUrlValue}
-                    alt={fullNameValue}
+                    alt={activeImageAlt.trim() || fullNameValue}
                     className="border-background h-24 w-24 rounded-full border-4 object-cover shadow-sm"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = "";
@@ -236,114 +229,158 @@ export function ProfileHeroForm({
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="backgroundImageUrl"
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("backgroundImageLabel")}
-                      inputId="profile-hero-background-url"
-                    >
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="url"
-                          placeholder={t("backgroundImagePlaceholder")}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
               </div>
             </div>
-          </FormSection>
 
-          <FormSection
-            title={t("rotatingTitlesLabel")}
-            description={t("rotatingTitlesHint")}
-          >
-            <Sortable
-              value={fields}
-              onMove={({ activeIndex, overIndex }) => {
-                move(activeIndex, overIndex);
-              }}
-              getItemValue={(item) => item.id}
-            >
-              <SortableContent asChild>
-                <div className="flex flex-col gap-3">
-                  {fields.map((field, index) => (
-                    <SortableItem key={field.id} value={field.id}>
-                      <div className="border-border bg-card flex items-start gap-3 rounded-lg border p-4">
-                        <SortableItemHandle
-                          aria-label={t("dragToReorder")}
-                          className="text-muted-foreground mt-2 shrink-0 cursor-grab"
-                        >
-                          <GripVertical className="h-4 w-4" />
-                        </SortableItemHandle>
-                        <div className="min-w-0 flex-1">
-                          {languages.map((lang) => {
-                            const isActive = lang.id === activeLangId;
-                            return (
-                              <div
-                                key={lang.id}
-                                className={isActive ? "block" : "hidden"}
-                                aria-hidden={!isActive}
-                              >
-                                <FormField
-                                  control={form.control}
-                                  name={`titles.${index}.translations.${lang.id}.text`}
-                                  render={({ field: textField }) => (
-                                    <FormItem
-                                      label={t("titleWithLanguage", {
-                                        language: lang.name,
-                                      })}
-                                      inputId={`profile-hero-title-${index}-${lang.code}`}
-                                    >
-                                      <FormControl>
-                                        <Input
-                                          {...textField}
-                                          placeholder={t("degreePlaceholder")}
-                                        />
-                                      </FormControl>
-                                    </FormItem>
-                                  )}
-                                />
-                              </div>
-                            );
-                          })}
-                        </div>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="text-muted-foreground hover:text-destructive shrink-0"
-                          onClick={() => handleRemoveTitle(index)}
-                          disabled={fields.length <= 1}
-                          aria-label={t("removeTitle")}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </SortableItem>
-                  ))}
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "mt-4 block" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`clientImageAltTranslations.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("altTextLabel")}
+                        inputId={`profile-hero-photo-alt-${lang.code}`}
+                        description={t("altTextHint")}
+                      >
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={t("altTextPlaceholder")}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                 </div>
-              </SortableContent>
-            </Sortable>
-
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-3"
-              id="profile-hero-add-title"
-              onClick={handleAddTitle}
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              {t("addTitle")}
-            </Button>
+              );
+            })}
           </FormSection>
 
-          <FormSection title={t("heroSummaryLabel")}>
+          {/* Availability Badge Pill */}
+          <FormSection
+            title={t("heroBadgeLabel")}
+            description={t("heroBadgeHint")}
+          >
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "block" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`heroBadgeTranslations.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("heroBadgeWithLanguage", {
+                          language: lang.name,
+                        })}
+                        inputId={`profile-hero-badge-${lang.code}`}
+                        description={t("heroBadgeHint")}
+                      >
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={t("heroBadgePlaceholder")}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
+          </FormSection>
+
+          {/* Professional Subtitle (H2 in Hero) */}
+          <FormSection
+            title={t("heroSubtitleLabel")}
+            description={t("heroSubtitleHint")}
+          >
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "block" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`heroSubtitleTranslations.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("heroSubtitleWithLanguage", {
+                          language: lang.name,
+                        })}
+                        inputId={`profile-hero-subtitle-${lang.code}`}
+                      >
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder={t("heroSubtitlePlaceholder")}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
+          </FormSection>
+
+          {/* Tagline / Value Proposition (Main highlighted paragraph in Hero) */}
+          <FormSection
+            title={t("heroTaglineLabel")}
+            description={t("heroTaglineHint")}
+          >
+            {languages.map((lang) => {
+              const isActive = lang.id === activeLangId;
+              return (
+                <div
+                  key={lang.id}
+                  className={isActive ? "block" : "hidden"}
+                  aria-hidden={!isActive}
+                >
+                  <FormField
+                    control={form.control}
+                    name={`heroTaglineTranslations.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("heroTaglineWithLanguage", {
+                          language: lang.name,
+                        })}
+                        inputId={`profile-hero-tagline-${lang.code}`}
+                      >
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            rows={3}
+                            placeholder={t("heroTaglinePlaceholder")}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            })}
+          </FormSection>
+
+          {/* Secondary Hero Summary */}
+          <FormSection
+            title={t("heroSummaryLabel")}
+            description={t("heroSummaryHint")}
+          >
             {languages.map((lang) => {
               const isActive = lang.id === activeLangId;
               return (
@@ -361,48 +398,12 @@ export function ProfileHeroForm({
                           language: lang.name,
                         })}
                         inputId={`profile-hero-summary-${lang.code}`}
-                        description={t("heroSummaryHint")}
                       >
                         <FormControl>
                           <Textarea
                             {...field}
                             rows={3}
                             placeholder={t("heroSummaryPlaceholder")}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              );
-            })}
-          </FormSection>
-
-          <FormSection title={t("aboutMeTitle")}>
-            {languages.map((lang) => {
-              const isActive = lang.id === activeLangId;
-              return (
-                <div
-                  key={lang.id}
-                  className={isActive ? "block" : "hidden"}
-                  aria-hidden={!isActive}
-                >
-                  <FormField
-                    control={form.control}
-                    name={`aboutMeTranslations.${lang.id}.text`}
-                    render={({ field }) => (
-                      <FormItem
-                        label={t("descriptionWithLanguage", {
-                          language: lang.name,
-                        })}
-                        inputId={`profile-about-${lang.code}`}
-                        description={t("aboutDescriptionHint")}
-                      >
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            rows={6}
-                            placeholder={t("aboutPlaceholder")}
                           />
                         </FormControl>
                       </FormItem>

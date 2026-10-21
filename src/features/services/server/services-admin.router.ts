@@ -31,6 +31,7 @@ const serviceUpsertInput = z.object({
   icon: z.string().default("code"),
   statsValue: z.string().default(""),
   featured: z.boolean().default(false),
+  isActive: z.boolean().default(true),
   order: z.number().default(0),
   skillIds: z.array(z.string()).default([]),
   translations: ServiceTranslationMapSchema.default({}),

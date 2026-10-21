@@ -2,12 +2,15 @@ import { NextResponse } from "next/server";
 
 import { locales, type Locale } from "@/i18n/config";
 import { resolveTenant } from "@/lib/tenant/resolve";
+import { isPublicCvVisible } from "@/lib/tenant/public-cv";
 import { db } from "@/server/db";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
+import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-preview-text";
 import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import { mapLocalizedCvToDraft } from "@/features/cv/lib/map-localized-to-draft";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
+import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,7 +21,7 @@ function isLocale(value: string | null): value is Locale {
 
 export async function GET(request: Request) {
   const tenant = await resolveTenant();
-  if (!tenant) {
+  if (!tenant || !isPublicCvVisible(tenant)) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
@@ -70,10 +73,7 @@ export async function GET(request: Request) {
         include: { translations: true },
         orderBy: { order: "asc" },
       }),
-      db.cvTechnicalSkill.findMany({
-        where: { userId },
-        orderBy: { order: "asc" },
-      }),
+      resolveUserTechnicalSkills(db, userId),
       db.cvExperience.findMany({
         where: { userId },
         include: {
@@ -129,9 +129,10 @@ export async function GET(request: Request) {
       locale,
     );
 
-    const aboutMeText =
-      field(header.translations, "heroSummary") ||
-      (aboutMe ? field(aboutMe.translations, "aboutMe") : null);
+    const aboutMeText = resolveCvAboutPreviewText(
+      field(header.translations, "heroSummary"),
+      aboutMe ? field(aboutMe.translations, "aboutMe") : null,
+    );
 
     const draft = mapLocalizedCvToDraft(localizedData, aboutMeText, locale);
     const buffer = await generateDocxFromStructured(draft);

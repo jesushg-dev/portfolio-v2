@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, type FC } from "react";
-import type { UsesItemType } from "@prisma/client";
+import type { AppLanguage, UsesItemType } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import {
@@ -14,9 +14,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UsesItemsList } from "@/features/uses/components/admin/uses-items-list";
 import { UsesSettingsForm } from "@/features/uses/components/admin/uses-settings-form";
-import type { UsesSettingsEditorDTO } from "@/features/uses/lib/uses-editor-dto";
+import type {
+  UsesItemEditorDTO,
+  UsesSettingsEditorDTO,
+} from "@/features/uses/lib/uses-editor-dto";
 import type { RouterOutputs } from "@/trpc/react";
-import type { AppLanguage } from "@prisma/client";
 
 type UsesItemRow = RouterOutputs["usesAdmin"]["getMine"]["data"][number];
 
@@ -30,6 +32,7 @@ interface UsesAdminPanelProps {
   >;
   settings: UsesSettingsEditorDTO;
   languages: AppLanguage[];
+  taggableItems: UsesItemEditorDTO[];
 }
 
 const TAB_TYPES: UsesTab[] = ["EVERYDAY", "SOFTWARE", "BROWSER", "SETTINGS"];
@@ -39,6 +42,7 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
   lists,
   settings,
   languages,
+  taggableItems,
 }) => {
   const t = useTranslations("admin.uses");
   const [tab, setTab] = useQueryState(
@@ -100,7 +104,11 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
         />
       </TabsContent>
       <TabsContent value="SETTINGS" className="min-h-0 flex-1">
-        <UsesSettingsForm initialData={settings} languages={languages} />
+        <UsesSettingsForm
+          initialData={settings}
+          languages={languages}
+          taggableItems={taggableItems}
+        />
       </TabsContent>
     </Tabs>
   );

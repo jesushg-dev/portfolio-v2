@@ -17,6 +17,12 @@ interface UsesClarificationSeed {
   body: LocaleMap;
 }
 
+interface UsesWorkspaceTagSeed {
+  itemHref: string;
+  xPercent: number;
+  yPercent: number;
+}
+
 interface PortfolioUsesSeed {
   settings: {
     workspaceImage: string;
@@ -25,6 +31,7 @@ interface PortfolioUsesSeed {
     codingIntro: LocaleMap;
     browserIntro: LocaleMap;
     clarifications: UsesClarificationSeed[];
+    workspaceTags?: UsesWorkspaceTagSeed[];
   };
   items: UsesItemSeed[];
 }
@@ -44,13 +51,14 @@ export async function seedPortfolioUses(
   const data = portfolioUses;
   console.log("[seed-portfolio-uses] seeding settings + items...");
 
-  await prisma.usesItem.deleteMany({ where: { userId } });
-
   const existingSettings = await prisma.usesSettings.findUnique({
     where: { userId },
     select: { id: true },
   });
   if (existingSettings) {
+    await prisma.usesWorkspaceTag.deleteMany({
+      where: { usesSettingsId: existingSettings.id },
+    });
     await prisma.usesClarificationTranslation.deleteMany({
       where: { UsesClarification: { usesSettingsId: existingSettings.id } },
     });
@@ -62,6 +70,8 @@ export async function seedPortfolioUses(
     });
     await prisma.usesSettings.delete({ where: { id: existingSettings.id } });
   }
+
+  await prisma.usesItem.deleteMany({ where: { userId } });
 
   const languages = await prisma.appLanguage.findMany();
   const s = data.settings;
@@ -97,8 +107,10 @@ export async function seedPortfolioUses(
     });
   }
 
+  const hrefToItemId = new Map<string, string>();
+
   for (const item of data.items) {
-    await prisma.usesItem.create({
+    const created = await prisma.usesItem.create({
       data: {
         userId,
         type: item.type,
@@ -116,10 +128,25 @@ export async function seedPortfolioUses(
         },
       },
     });
+    hrefToItemId.set(item.href, created.id);
+  }
+
+  for (const [index, tag] of (s.workspaceTags ?? []).entries()) {
+    const usesItemId = hrefToItemId.get(tag.itemHref);
+    if (!usesItemId) continue;
+    await prisma.usesWorkspaceTag.create({
+      data: {
+        usesSettingsId: settings.id,
+        usesItemId,
+        xPercent: tag.xPercent,
+        yPercent: tag.yPercent,
+        order: index,
+      },
+    });
   }
 
   console.log(
-    `[seed-portfolio-uses] done. items=${data.items.length} clarifications=${s.clarifications.length}`,
+    `[seed-portfolio-uses] done. items=${data.items.length} clarifications=${s.clarifications.length} tags=${s.workspaceTags?.length ?? 0}`,
   );
 }
 

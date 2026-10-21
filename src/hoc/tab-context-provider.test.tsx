@@ -14,6 +14,8 @@ describe("TabContextProvider and useTabContext", () => {
         variant="primary"
         currentTab={1}
         setCurrentTab={setCurrentTab}
+        registerTab={jest.fn()}
+        onActivePointerDown={jest.fn()}
       >
         {children}
       </TabContextProvider>

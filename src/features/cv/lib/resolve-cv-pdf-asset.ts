@@ -2,18 +2,20 @@ import "server-only";
 
 import type { Locale } from "@/i18n/config";
 import { computeCvPdfContentHash } from "@/features/cv/lib/compute-cv-pdf-content-hash";
-import { requestCvPdfGeneration } from "@/features/cv/lib/request-cv-pdf-generation";
 import { loadCvPreviewSnapshot } from "@/features/cv/lib/load-cv-preview-snapshot";
+import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
+import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
+import { convertDocxToPdfForTenant } from "@/lib/ilovepdf/tenant-ilovepdf";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 import {
   getTenantUploadThingClient,
   isTenantUploadThingConfigured,
 } from "@/lib/uploadthing/tenant-uploadthing";
+import {
+  buildAtsCvFileName,
+  inferCvRoleTrack,
+} from "@/lib/cv/build-ats-cv-file-name";
 import { db } from "@/server/db";
-
-function sanitizeFileName(value: string): string {
-  return value.replace(/[^\w.-]+/g, "_");
-}
 
 export interface ResolveCvPdfAssetOptions {
   paginatePages?: boolean;
@@ -64,7 +66,12 @@ export async function resolveCvPdfAsset(
   if (!snapshot?.header) return null;
 
   const contentHash = computeCvPdfContentHash(snapshot, paginatePages);
-  const fileName = `CV-${sanitizeFileName(snapshot.header.fullName)}.pdf`;
+  const fileName = buildAtsCvFileName({
+    fullName: snapshot.header.fullName,
+    roleTrack: inferCvRoleTrack(snapshot.header.degree || ""),
+    locale,
+    extension: "pdf",
+  });
 
   const cached = await db.cvPdfLink.findUnique({
     where: {
@@ -91,27 +98,19 @@ export async function resolveCvPdfAsset(
     };
   }
 
-  if (
-    !options?.forceRegenerate &&
-    cached &&
-    !cached.contentHash &&
-    cached.url
-  ) {
-    return {
-      url: cached.url,
-      buffer: options?.includeBuffer ? await fetchPdfBuffer(cached.url) : null,
-      fileName,
-      fromCache: true,
-      contentHash,
-    };
-  }
-
-  const buffer = await requestCvPdfGeneration({
+  const draft = await loadCvStructuredDraft(db, userId, {
     locale,
-    tenantUsername: username,
-    paginatePages,
-    design: options?.design,
+    fallbackLocale,
   });
+
+  if (!draft) return null;
+
+  const docxBuffer = await generateDocxFromStructured(draft);
+  const buffer = await convertDocxToPdfForTenant(
+    userId,
+    docxBuffer,
+    fileName.replace(/\.pdf$/i, ".docx"),
+  );
 
   if (!(await isTenantUploadThingConfigured(userId))) {
     return {

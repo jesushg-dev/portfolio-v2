@@ -1,7 +1,7 @@
 {
   "adminCredentials": {
     "title": "Credentials & Integrations",
-    "subtitle": "Configure per-tenant API keys and integration settings for Resend, Spotify, UploadThing, and AI Models.",
+    "subtitle": "Configure per-tenant API keys and integration settings for Resend, Spotify, Google Calendar, UploadThing, and AI Models.",
     "providers": {
       "resend": {
         "name": "Resend (Email)",
@@ -11,6 +11,10 @@
         "name": "Spotify (Audio)",
         "description": "OAuth credentials for the Now Playing widget."
       },
+      "google-calendar": {
+        "name": "Google Calendar",
+        "description": "Sync job tracker interviews and follow-ups with your Google Calendar."
+      },
       "uploadthing": {
         "name": "UploadThing (Storage)",
         "description": "Custom file upload credentials for your tenant."
@@ -18,6 +22,10 @@
       "ai": {
         "name": "AI Models",
         "description": "API keys for Gemini, OpenAI, and Anthropic services."
+      },
+      "ilovepdf": {
+        "name": "iLovePDF (PDF Engine)",
+        "description": "High-fidelity conversions (DOCX to PDF, HTML to PDF) via iLoveAPI."
       }
     },
     "actions": {
@@ -38,6 +46,14 @@
       "noRefreshToken": "Spotify did not return a refresh token. Revoke access in Spotify and reconnect.",
       "accessDenied": "You denied access to Spotify."
     },
+    "googleCalendarCallback": {
+      "connected": "Google Calendar connected successfully.",
+      "exchangeFailed": "Could not complete Google Calendar authorization. Try again.",
+      "invalidState": "Authorization session expired. Start again from this page.",
+      "missingParams": "Google did not return the expected authorization data.",
+      "noRefreshToken": "Google did not return a refresh token. Revoke access in Google Account settings and reconnect.",
+      "accessDenied": "You denied access to Google Calendar."
+    },
     "summary": {
       "domain": "Domain",
       "clientId": "Client ID",
@@ -45,6 +61,81 @@
       "tokenSaved": "Credentials saved",
       "providers": "Active providers",
       "defaultProvider": "Default provider"
+    },
+    "filters": {
+      "all": "All services",
+      "connected": "Connected",
+      "available": "Available"
+    },
+    "securityNotice": "Credentials and API keys are encrypted at rest with per-tenant isolation (AES-256).",
+    "backToIntegrations": "Back to Integrations",
+    "tags": {
+      "resend": "Transactional Emails & CV Delivery",
+      "spotify": "Now Playing Widget & Top Tracks",
+      "google-calendar": "Interviews & Calendar Sync",
+      "uploadthing": "File & PDF Storage CDN",
+      "ai": "Resume Engine, ATS & Flashcards",
+      "ilovepdf": "DOCX to PDF & HTML to PDF Engine"
+    },
+    "guides": {
+      "title": "Setup Guide",
+      "howToGet": "How to get your credentials",
+      "openConsole": "Open {provider} Dashboard",
+      "copyUri": "Copy URI",
+      "copied": "Copied to clipboard",
+      "resend": {
+        "title": "How to get Resend credentials",
+        "step1": "Sign in to your Resend account at resend.com.",
+        "step2": "Navigate to API Keys and click \"Create API Key\" (select Sending or Full Access).",
+        "step3": "In Domains, verify your sending domain (or use onboarding@resend.dev for testing).",
+        "step4": "Paste your API key (re_...) and sender email on the left.",
+        "dashboardLink": "Open Resend API Keys",
+        "domainsLink": "Open Resend Domains"
+      },
+      "uploadthing": {
+        "title": "How to get UploadThing credentials",
+        "step1": "Log in to your UploadThing dashboard at uploadthing.com.",
+        "step2": "Select your application or click \"Create App\".",
+        "step3": "Go to API Keys in the sidebar to view your UPLOADTHING_TOKEN.",
+        "step4": "Copy and paste the secret token (starts with eyJ...) into the field on the left.",
+        "dashboardLink": "Open UploadThing Dashboard"
+      },
+      "ai": {
+        "title": "How to get AI API keys",
+        "step1": "Choose your preferred LLM provider(s) from Google Gemini, DeepSeek, OpenAI, or Anthropic.",
+        "step2": "Google Gemini (Recommended): Get a free/pay-as-you-go key from Google AI Studio for fast ATS resume scoring & interview prep.",
+        "step3": "DeepSeek: Generate an API key (sk-...) in the DeepSeek Open Platform console.",
+        "step4": "OpenAI: Generate a secret API key (sk-proj-...) in the OpenAI Platform dashboard.",
+        "step5": "Anthropic: Create an API key (sk-ant-...) in the Anthropic Console for Claude models.",
+        "geminiLink": "Get Gemini API Key",
+        "deepseekLink": "Get DeepSeek API Key",
+        "openaiLink": "Get OpenAI API Key",
+        "anthropicLink": "Get Anthropic API Key"
+      },
+      "ilovepdf": {
+        "title": "How to get iLovePDF API keys",
+        "step1": "Create an account or sign in at developer.ilovepdf.com.",
+        "step2": "Navigate to the Projects / API Keys section to find your Public Key and Secret Key.",
+        "step3": "Paste the keys into the form on the left to activate BYOK PDF conversions.",
+        "dashboardLink": "Open iLovePDF Developer Console"
+      },
+      "spotify": {
+        "title": "How to configure Spotify OAuth",
+        "step1": "Sign in to the Spotify Developer Dashboard.",
+        "step2": "Click \"Create App\", enter an app name, and select Web API.",
+        "step3": "In App Settings, add the exact Redirect URI shown below.",
+        "step4": "Copy your Client ID and Client Secret, then paste them to connect.",
+        "dashboardLink": "Open Spotify Developer Dashboard"
+      },
+      "googleCalendar": {
+        "title": "How to configure Google Calendar OAuth",
+        "step1": "Open Google Cloud Console > APIs & Services > Credentials.",
+        "step2": "Create an OAuth 2.0 Client ID (Application type: Web application).",
+        "step3": "Add the exact Authorized Redirect URI shown below.",
+        "step4": "Enable the Google Calendar API in APIs & Services > Library.",
+        "step5": "Copy your Client ID and Client Secret into the form.",
+        "dashboardLink": "Open Google Cloud Console"
+      }
     },
     "connected": {
       "title": "Connected"
@@ -71,7 +162,10 @@
       "domainLabel": "Email Domain",
       "domainPlaceholder": "yourdomain.com",
       "fromLabel": "From Email / Name (Optional)",
-      "fromPlaceholder": "Portfolio '<'no-reply@yourdomain.com'>'",
+      "fromPlaceholder": "Portfolio <no-reply@yourdomain.com>",
+      "signatureLabel": "HTML email signature (optional)",
+      "signatureHint": "Pasted below the body of application emails (e.g. Send CV). Leave empty to skip.",
+      "signaturePlaceholder": "<table>...</table>",
       "syncButton": "Sync Templates Now",
       "saveButton": "Save & Deploy Templates",
       "saveSuccess": "Resend credentials saved and templates deployed successfully!",
@@ -106,17 +200,34 @@
     },
     "ai": {
       "title": "AI Models Credentials",
-      "description": "Configure API keys for LLM services (Gemini, OpenAI, Anthropic).",
+      "description": "Configure API keys for LLM services (Gemini, DeepSeek, OpenAI, Anthropic).",
       "geminiLabel": "Google Gemini API Key",
+      "deepseekLabel": "DeepSeek API Key",
       "openaiLabel": "OpenAI API Key",
       "anthropicLabel": "Anthropic API Key",
       "geminiPlaceholder": "AIzaSy...",
+      "deepseekPlaceholder": "sk-...",
       "openaiPlaceholder": "sk-proj-...",
       "anthropicPlaceholder": "sk-ant-...",
       "defaultProviderLabel": "Default AI Provider",
       "defaultProviderPlaceholder": "Select default provider",
       "saveButton": "Save AI Credentials",
       "saveSuccess": "AI credentials saved successfully!"
+    },
+    "ilovepdf": {
+      "title": "iLovePDF Credentials",
+      "description": "Configure your iLovePDF API keys for fast, high-quality DOCX to PDF and HTML to PDF conversions.",
+      "publicKeyLabel": "Public Key",
+      "publicKeyPlaceholder": "project_public_...",
+      "secretKeyLabel": "Secret Key",
+      "secretKeyPlaceholder": "secret_key_...",
+      "testButton": "Test Connection",
+      "saveButton": "Save Credentials",
+      "saveSuccess": "iLovePDF credentials saved successfully!",
+      "saveFailed": "Failed to save iLovePDF credentials",
+      "testSuccess": "iLovePDF connection verified successfully!",
+      "testFailed": "Failed to connect to iLovePDF",
+      "missingKeysToTest": "Enter a Public Key and Secret Key to test the connection"
     }
   },
   "certification": {
@@ -163,10 +274,44 @@
         "title": "Soft Skills",
         "subtitle": "Soft Skills"
       }
+    },
+    "catalog": {
+      "backToPortfolio": "Back to portfolio",
+      "pageTitle": "All Certifications",
+      "pageSubtitle": "Official credentials and completed programs validating hands-on expertise across frontend, backend, cybersecurity, and engineering practices.",
+      "searchPlaceholder": "Search by title, technology, or issuer…",
+      "searchLabel": "Search certificates or technologies",
+      "sortLabel": "Sort by",
+      "sorts": {
+        "newest": "Newest first",
+        "name": "Name (A–Z)",
+        "issuer": "Issuer (A–Z)"
+      },
+      "issuerLabel": "Issuer / Institution",
+      "techLabel": "Technology",
+      "allIssuers": "All issuers",
+      "showing": "Showing {count} of {total} certifications",
+      "showingAll": "{total} certifications",
+      "clearFilters": "Clear filters",
+      "more": "Show more ({count} remaining)",
+      "emptyTitle": "No certifications found",
+      "emptyDescription": "Try adjusting your search query or clearing some filters.",
+      "emptyButton": "Clear filters",
+      "preview": "Preview",
+      "verify": "Verify credential",
+      "credentialId": "Credential ID",
+      "closeModal": "Close"
     }
   },
   "curriculum": {
     "title": "Curriculum Vitae",
+    "employmentTypes": {
+      "FULL_TIME": "Full-time",
+      "PART_TIME": "Part-time",
+      "CONTRACT": "Contract",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Internship"
+    },
     "header": {
       "cvHeader": "Header",
       "aboutMe": "About Me",
@@ -206,9 +351,15 @@
     },
     "telephone": "tel.",
     "codedWith": "This CV was created using ReactJS.",
+    "unpublished": {
+      "title": "CV isn’t public yet",
+      "description": "This résumé is still a draft. You can keep browsing the rest of the portfolio.",
+      "backHome": "Back to home"
+    },
     "pdfDelivery": {
       "toggleSend": "Send by email",
       "toggleClose": "Close",
+      "generating": "Generating PDF…",
       "title": "Grab the PDF Resume for Reference",
       "description": "Recruiters, submit your work email below and receive a downloadable PDF version of my resume for comprehensive reference.",
       "footnote": "The PDF is generated from the latest CV data for {fullName}.",
@@ -283,91 +434,221 @@
         "editCustom": "Edit custom colors"
       },
       "scrollToTop": "Scroll to top",
-      "homeLogo": "Jehg, go to homepage",
+      "homeLogo": "{brand}, go to homepage",
       "nav": {
         "explore": "Explore",
         "comingSoon": "Soon",
         "contactCta": "Contact",
         "scheduleCta": "Schedule interview",
         "scheduleHint": "30-min meeting · Interview or professional intro",
+        "availability": "Open to new opportunities",
+        "availabilityHint": "30-min intro call",
+        "goTo": "Go to {item}",
+        "viewProject": "View project",
+        "seeAllProjects": "See all projects",
         "groups": {
           "about": {
             "label": "About me",
             "eyebrow": "About me",
             "headline": "Background & technical profile",
-            "description": "Professional background, work experience, and core tech stack."
+            "description": "Professional background, work experience, and core engineering philosophy."
           },
           "portfolio": {
             "label": "Portfolio",
             "eyebrow": "Portfolio",
-            "headline": "Projects & credentials",
-            "description": "Featured projects, certifications, and career path."
+            "headline": "Featured projects & credentials",
+            "description": "Production systems, microservices, credentials, and career milestones."
           },
           "process": {
             "label": "How I work",
             "eyebrow": "How I work",
-            "headline": "Work methodology",
-            "description": "AI tooling in development, software quality, and team collaboration."
+            "headline": "Engineering approach & quality",
+            "description": "Modern engineering workflows, quality practices, and daily tools."
           }
         },
         "items": {
           "about": {
             "label": "About me",
-            "description": "Profile summary and engineering philosophy."
+            "short": "Profile and philosophy",
+            "headline": "Who I am as an engineer",
+            "description": "A summary of my profile, how I approach software, and the principles behind the systems I build.",
+            "chips": ["Profile summary", "Engineering philosophy", "Ownership"],
+            "statValue": "6+",
+            "statLabel": "years of experience",
+            "cta": "Go to about me"
           },
           "experience": {
             "label": "Experience",
-            "description": "Work history, key projects, and roles."
+            "short": "Roles and key projects",
+            "headline": "Where I have worked",
+            "description": "Work history across e-commerce and telecom, with the projects and results I am most proud of.",
+            "chips": [
+              "Senior Software Engineer",
+              "Tech Lead",
+              "Full Stack Developer"
+            ],
+            "statValue": "20+",
+            "statLabel": "projects delivered",
+            "cta": "View work history"
           },
           "skills": {
             "label": "Skills",
-            "description": ".NET ecosystem, C#, microservices, and Cloud."
+            "short": ".NET, C#, microservices, cloud",
+            "headline": "The stack I work with daily",
+            "description": "The tools and technologies I use to design, build, and ship production software.",
+            "chips": [".NET", "C#", "Microservices", "Cloud"],
+            "statValue": "4",
+            "statLabel": "core areas",
+            "cta": "Explore technical stack"
           },
           "services": {
             "label": "Technical specialties",
-            "description": "Software architecture, modernization, and core development."
+            "short": "Architecture and modernization",
+            "headline": "What I am best at",
+            "description": "Designing software architecture, modernizing legacy platforms, and building the core of new products.",
+            "chips": [
+              "System architecture",
+              "Legacy modernization",
+              "Core development"
+            ],
+            "statValue": "3",
+            "statLabel": "specialties",
+            "cta": "View specialties"
           },
           "soft-skills": {
             "label": "Leadership & competencies",
-            "description": "Team leadership, mentorship, and communication."
+            "short": "Teams, mentorship, communication",
+            "headline": "How I work with people",
+            "description": "Leading teams, mentoring developers, and communicating clearly with product and business partners.",
+            "chips": ["Team leadership", "Mentorship", "Communication"],
+            "statValue": "6",
+            "statLabel": "engineers led",
+            "cta": "Read leadership principles"
+          },
+          "testimonials": {
+            "label": "Testimonials",
+            "short": "Words from colleagues",
+            "headline": "What colleagues and leaders say",
+            "description": "Feedback from senior developers, teammates, and stakeholders on what it is like to work with me.",
+            "chips": ["Testimonials", "Senior developers", "Recommendations"],
+            "statValue": "100%",
+            "statLabel": "positive feedback",
+            "cta": "Read testimonials"
+          },
+          "projects": {
+            "label": "Projects",
+            "short": "Engineering projects & case studies",
+            "headline": "Projects and systems I have built",
+            "description": "A collection of systems and products, from APIs and e-commerce to internal admin platforms.",
+            "chips": ["APIs", "E-commerce", "Admin platforms", "Cloud"],
+            "statValue": "15+",
+            "statLabel": "featured projects",
+            "cta": "View projects"
           },
           "certificates": {
             "label": "Certificates",
-            "description": "Technical credentials and certifications."
+            "short": "Technical credentials",
+            "headline": "Verified credentials & certifications",
+            "description": "Formal credentials and certifications across backend, frontend, cloud, and security.",
+            "chips": ["Frontend", "Backend", "Cybersecurity", "Soft skills"],
+            "statValue": "30+",
+            "statLabel": "certifications",
+            "cta": "View certificates"
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "Full professional CV in web format."
+            "short": "Professional resume",
+            "headline": "Full professional CV",
+            "description": "Comprehensive resume in modern web format, with full employment history and PDF export.",
+            "chips": ["Interactive CV", "PDF export", "Work history"],
+            "statValue": "2026",
+            "statLabel": "current resume",
+            "cta": "Open Curriculum Vitae"
           },
           "timeline": {
             "label": "Timeline",
-            "description": "Career milestones and professional progression."
+            "short": "Career progression",
+            "headline": "Career milestones & evolution",
+            "description": "A chronological overview of career milestones, roles, and professional evolution.",
+            "chips": ["Career milestones", "Progression", "Growth"],
+            "statValue": "6+",
+            "statLabel": "years evolution",
+            "cta": "View timeline"
           },
           "ai-workflow": {
             "label": "How I use AI",
-            "description": "AI tool integration and engineering workflow."
+            "short": "Engineering acceleration",
+            "headline": "AI-assisted engineering",
+            "description": "How I integrate modern AI tools, agentic workflows, and automation into daily software engineering.",
+            "chips": ["AI Tooling", "Velocity", "Automated workflows"],
+            "statValue": "2x",
+            "statLabel": "delivery velocity",
+            "cta": "Explore AI workflow"
           },
           "qa-collaboration": {
             "label": "QA collaboration",
-            "description": "Quality practices, testing, and release strategy."
+            "short": "Quality & testing",
+            "headline": "Software quality & test strategy",
+            "description": "Collaborating closely with QA, automated test suites, and maintaining zero regressions in production.",
+            "chips": [
+              "Quality assurance",
+              "Automated tests",
+              "Zero regressions"
+            ],
+            "statValue": "99.9%",
+            "statLabel": "production stability",
+            "cta": "Read QA practices"
           },
           "uses": {
             "label": "Uses",
-            "description": "Hardware, software, and tools I use every day."
+            "short": "Gear, software & setup",
+            "headline": "Hardware & software I use daily",
+            "description": "The hardware, workstation configuration, editor setup, and software tools I use every day.",
+            "chips": ["Hardware", "Workstation", "Dev tools", "Terminal"],
+            "statValue": "Daily",
+            "statLabel": "developer tools",
+            "cta": "View setup"
           },
           "now": {
             "label": "Now",
-            "description": "What I'm focused on, reading, and shipping right now."
+            "short": "Current focus & reading",
+            "headline": "What I am focused on now",
+            "description": "A living snapshot of active projects, technologies I am exploring, and what I am shipping right now.",
+            "chips": ["Current focus", "Reading", "Active projects"],
+            "statValue": "Live",
+            "statLabel": "current status",
+            "cta": "See now page"
+          },
+          "stats": {
+            "label": "Stats",
+            "short": "Visitor & portfolio metrics",
+            "headline": "Portfolio highlights & analytics",
+            "description": "Transparent statistics on visits, visitor geographic distribution, and performance metrics.",
+            "chips": ["Analytics", "Performance", "Demographics"],
+            "statValue": "Live",
+            "statLabel": "site telemetry",
+            "cta": "View statistics"
           },
           "colophon": {
             "label": "Colophon",
-            "description": "How this site is built — stack, type, colors, and footprint."
+            "short": "How this site is built",
+            "headline": "Behind the portfolio",
+            "description": "How this site is built — tech stack, design tokens, typography, and performance footprint.",
+            "chips": [
+              "Next.js 15",
+              "Tailwind CSS",
+              "TypeScript",
+              "Performance"
+            ],
+            "statValue": "v2.0",
+            "statLabel": "portfolio build",
+            "cta": "Read colophon"
           }
         }
       }
     },
     "footer": {
-      "homeLogo": "Jehg, go to homepage",
+      "homeLogo": "{brand}, go to homepage",
       "title": "All rights reserved © ",
       "madeWith": "Made with ",
       "by": " by ",
@@ -382,6 +663,7 @@
           "qaCollaboration": "QA collaboration",
           "uses": "Uses",
           "now": "Now",
+          "stats": "Stats",
           "colophon": "Colophon"
         },
         "miscellaneous": {
@@ -465,7 +747,7 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Senior Full Stack .NET Developer",
+      "title": "Jesús Hernández | Senior Software Engineer",
       "description": "Senior Full Stack Developer with 6+ years in .NET Core, React, and SQL Server, modernizing legacy systems and shipping production-ready software in high-compliance environments.",
       "keywords": "Senior .NET Developer, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Software Engineer, Jesús Hernández, Senior Software Engineer"
     },
@@ -473,47 +755,23 @@
       "viewCV": "View CV",
       "greeting": "Hello, I'm",
       "scrollDown": "Scroll Down",
-      "yearsExperience": "Years experience",
+      "yearsExperience": "Years of experience",
       "projectsDelivered": "Projects delivered",
+      "engineersLed": "Engineers led",
       "certifications": "Certifications",
       "availableForOpportunities": "Available for new opportunities",
       "scheduleCall": "Schedule a call",
       "scheduleCallAria": "Schedule a call — go to contact section",
       "empty": {
         "title": "Hero not configured",
-        "description": "Add your profile photo, background, and intro from the admin profile hero tab."
+        "description": "Add your profile photo, subtitle, and intro from the admin Profile section."
       }
     },
     "services": {
-      "title": "What I Build",
-      "subtitle": "Engineering Capabilities",
-      "description": "A practical overview of technical areas I've delivered in: from full-stack web systems and financial platforms to mobile apps and cloud infrastructure.",
+      "title": "Engineering Expertise",
+      "subtitle": "Services",
+      "description": "Areas where I design, build, and lead production software.",
       "items": {
-        "frontend": {
-          "title": "Frontend & UI/UX Development",
-          "description": "Crafting stunning, performant, and fully accessible web interfaces built with WCAG 2.2 AAA compliance, React, Next.js, and Tailwind CSS.",
-          "stats": "100+ UI Components · WCAG 2.2 AAA"
-        },
-        "backend": {
-          "title": "Backend Development & APIs",
-          "description": "Building robust microservices, REST & tRPC APIs with Node.js, C# / .NET, and scalable SQL/NoSQL databases.",
-          "stats": "99.9% Uptime · SQL & NoSQL"
-        },
-        "mobile": {
-          "title": "Mobile Development",
-          "description": "Delivering smooth, modern cross-platform mobile apps using React Native for iOS and Android.",
-          "stats": "Cross-Platform · iOS & Android"
-        },
-        "devops": {
-          "title": "Systems & Cloud DevOps",
-          "description": "Linux server administration, Docker containerization, CI/CD pipeline automation, and cloud deployments.",
-          "stats": "Docker & Linux · CI/CD Automation"
-        },
-        "cybersecurity": {
-          "title": "Cybersecurity & Security Audits",
-          "description": "Security audits, vulnerability scanning with Snyk, OWASP Top 10 compliance, and penetration testing.",
-          "stats": "OWASP Top 10 · Snyk Compliance"
-        },
         "contact": {
           "title": "Let's build together",
           "subtitle": "Have a project in mind?",
@@ -525,12 +783,32 @@
       "title": "My Journey",
       "subtitle": "A timeline of work, study, and growth",
       "empty": "No timeline entries yet.",
+      "emptyFilter": "No milestones match this filter.",
       "metaTitle": "Timeline",
-      "metaDescription": "Explore my professional and academic journey over time."
+      "metaDescription": "Explore my professional and academic journey over time.",
+      "stats": "Since {year} · {milestones} milestones · {workplaces} workplaces",
+      "filters": {
+        "all": "All",
+        "work": "Work",
+        "learning": "Study & learning",
+        "ariaLabel": "Filter timeline milestones"
+      },
+      "categories": {
+        "WORK": "Work",
+        "STUDY": "Study",
+        "COURSE": "Course"
+      },
+      "roles": "Progression",
+      "present": "Present",
+      "viewCv": "View full CV",
+      "showingAll": "Showing every milestone.",
+      "showingFiltered": "Showing {count} milestones.",
+      "imageOf": "Image {current} of {total}",
+      "techAria": "Technologies"
     },
     "about": {
-      "subtitle": "A Brief Overview",
-      "title": "About Me",
+      "subtitle": "How I engineer",
+      "title": "Engineering Approach",
       "terminalEmpty": {
         "title": "Terminal not configured",
         "description": "Add an animated terminal sequence from the admin profile console tab."
@@ -568,13 +846,35 @@
         "experiencesTitle": "Where I used {skill}",
         "experiencesDescription": "Roles and teams where {skill} was part of the day-to-day work.",
         "projectsTitle": "Projects built with {skill}",
-        "projectsDescription": "Selected work that ships {skill} in production."
+        "projectsDescription": "Selected work that ships {skill} in production.",
+        "caseStudy": "Read case study",
+        "kind": {
+          "PROFESSIONAL": "Client work",
+          "PERSONAL": "Personal",
+          "LEARNING": "Learning"
+        },
+        "meta": {
+          "solo": "Solo",
+          "team": "Team of {count}",
+          "now": "present"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "In production",
+          "MAINTENANCE": "Maintenance",
+          "ARCHIVED": "Archived"
+        },
+        "teaser": {
+          "decisions": "{count} decisions",
+          "layers": "Architecture",
+          "metrics": "{count} metrics"
+        }
       },
       "modal": {
         "close": "Close",
         "tabsAriaLabel": "Skill detail sections",
         "readMore": "Read more",
         "viewMoreDetails": "View more details",
+        "viewFullPage": "View full page",
         "seeCertificates": "See certificates",
         "certificates": "Certifications",
         "experiences": "Professional experience",
@@ -586,6 +886,7 @@
         "viewProject": "View project",
         "viewSource": "View source code",
         "noRelatedContent": "No linked certifications, experience, or projects yet.",
+        "emptyTab": "Nothing here yet for this skill.",
         "loadError": "Could not load skill details. Please try again."
       },
       "terminal": {
@@ -593,34 +894,38 @@
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Search technologies",
         "noResults": "No match in the current stack.",
+        "noMatch": "grep: no match for \"{query}\"",
+        "featured": "Featured",
         "coreLegend": "brighter = featured stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
-        "searchFor": " for \"{query}\""
+        "searchFor": " for \"{query}\"",
+        "trend": "Trend",
+        "updatedTechPill": "Updated technologies 2024-2026"
       },
       "tabs": {
-        "frontend": {
-          "title": "Frontend",
-          "description": "Production React & Next.js applications at scale, from e-commerce storefronts to internal dashboards and admin platforms."
+        "ai": {
+          "title": "AI & Machine Learning",
+          "description": "Large language models (LLMs), orchestration frameworks, autonomous agents, and modern AI engineering tools."
+        },
+        "architecture": {
+          "title": "Architecture",
+          "description": "System design, distributed systems, DDD, and structural foundations for scalable platforms."
         },
         "backend": {
           "title": "Backend",
-          "description": "REST and GraphQL APIs in C#/.NET Core and Node.js, with authentication, authorization, and performance as first-class concerns."
+          "description": "REST and GraphQL APIs in C#/.NET Core and Node.js, with performance as first-class concerns."
         },
-        "mobile": {
-          "title": "Mobile",
-          "description": "Cross-platform React Native apps with offline support, biometric auth, and field-operations reliability."
+        "data": {
+          "title": "Data",
+          "description": "SQL and NoSQL databases, ORMs, and data modeling for high-performance applications."
         },
-        "database": {
-          "title": "Database",
-          "description": "SQL Server, PostgreSQL, and MongoDB across financial dashboards, service platforms, and multi-tenant content systems."
+        "frontend": {
+          "title": "Frontend",
+          "description": "Production React & Next.js applications at scale, from e-commerce storefronts to internal dashboards."
         },
-        "devops": {
-          "title": "DevOps",
-          "description": "CI/CD pipelines in Azure DevOps and GitHub Actions, using Docker, security scanning, and environment parity."
-        },
-        "tools": {
-          "title": "Tools",
-          "description": "The day-to-day professional toolkit that keeps delivery fast, quality high, and teams aligned."
+        "quality": {
+          "title": "Quality & Delivery",
+          "description": "CI/CD pipelines, Docker containerization, automated testing, and security scanning for reliable delivery."
         }
       }
     },
@@ -656,8 +961,8 @@
     },
     "portfolio": {
       "subtitle": "Portfolio",
-      "title": "Best Projects",
-      "description": "A selection of projects reflecting how I design, build, and solve real-world problems with software.",
+      "title": "Selected Engineering Work",
+      "description": "A selection of systems and engineering initiatives where I solved technical problems, improved delivery, and created measurable business impact.",
       "actions": {
         "view": "View project",
         "source": "View source",
@@ -669,6 +974,11 @@
         "LEARNING": "Learning"
       },
       "caseStudy": {
+        "kind": {
+          "PROFESSIONAL": "Client work",
+          "PERSONAL": "Personal",
+          "LEARNING": "Learning"
+        },
         "challenge": "The challenge",
         "approach": "Architecture & approach",
         "outcome": "Outcome & results",
@@ -684,7 +994,87 @@
         "gallery": "Gallery",
         "demo": "Live demo",
         "visualTitle": "Matching, made intentional",
-        "visualSubtitle": "Every node is a connection; every line, a reason to build."
+        "visualSubtitle": "Every node is a connection; every line, a reason to build.",
+        "backToProjects": "Back to projects",
+        "caseStudyLabel": "Case study",
+        "summaryEyebrow": "In 30 seconds",
+        "summaryTitle": "Summary for recruiters",
+        "ownership": "Ownership",
+        "roleSectionTitle": "My role & responsibilities",
+        "challengeEyebrow": "The problem",
+        "shortOnTime": "Short on time? Read only:",
+        "why": "Why",
+        "alternativesConsidered": "Alternatives considered",
+        "similarRole": "Hiring for a similar role?",
+        "decisionsWalkthrough": "I'm happy to walk you through any of these decisions.",
+        "timeline": "Timeline",
+        "present": "Present",
+        "primaryScaleMainLight": "Primary scale · main-light",
+        "principles": "Principles",
+        "themePresetCount": "6 themes, one data-theme attribute",
+        "lightDark": "Light · Dark",
+        "customTheme": "Custom",
+        "visitorDefined": "Set by the visitor",
+        "section": "Section",
+        "decision": "Decision",
+        "tradeoff": "Trade-off",
+        "via": "via",
+        "implementation": "Implementation",
+        "notes": "Notes",
+        "project": "Project",
+        "status": "Status",
+        "team": "Team",
+        "platform": "Platform",
+        "liveSite": "Live site",
+        "viewSource": "View source",
+        "privateRepository": "Private repository",
+        "onThisPage": "On this page",
+        "sectionsNavigation": "Case study sections",
+        "indexLabels": {
+          "summary": "Summary",
+          "context": "Context",
+          "role": "My role",
+          "challenge": "The challenge",
+          "decisions": "Decisions",
+          "architecture": "Architecture",
+          "data": "Data & i18n",
+          "capabilities": "Capabilities",
+          "security": "Security",
+          "quality": "Quality",
+          "designSystem": "Design system",
+          "results": "Results"
+        },
+        "projectTimeline": "Project timeline",
+        "started": "Started",
+        "ended": "Ended",
+        "role": "Role",
+        "productEngineer": "Product engineer",
+        "responsibilities": "Responsibilities",
+        "whatIOwned": "What I owned",
+        "context": "Context",
+        "constraints": "Constraints",
+        "letsTalk": "Let’s talk",
+        "projectTypes": {
+          "FRONTEND": "Frontend",
+          "BACKEND": "Backend",
+          "MOBILE": "Mobile",
+          "DESKTOP": "Desktop",
+          "CYBERSECURITY": "Cybersecurity",
+          "DEVOPS": "DevOps",
+          "SOFTSKILLS": "Soft skills",
+          "TOOLS": "Tools",
+          "ARCHITECTURE": "Architecture",
+          "DATA": "Data",
+          "QUALITY_DELIVERY": "Quality & delivery"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "In production",
+          "MAINTENANCE": "In maintenance",
+          "ARCHIVED": "Archived"
+        },
+        "expandImage": "Expand image",
+        "closeLightbox": "Close enlarged image",
+        "pressEscToClose": "Press Esc to close"
       },
       "private": {
         "title": "Private",
@@ -705,19 +1095,68 @@
         "mobile": "Mobile",
         "desktop": "Desktop",
         "ariaLabel": "Portfolio project categories"
+      },
+      "emptyState": {
+        "title": "No projects in this category",
+        "description": "There are currently no public projects categorized as {category}. You can explore other portfolio categories.",
+        "allTitle": "No projects available",
+        "allDescription": "New projects and case studies will be added soon.",
+        "reset": "View all projects"
+      },
+      "meta": {
+        "solo": "Solo",
+        "team": "Team of {count}",
+        "now": "present"
+      },
+      "teaser": {
+        "decisions": "{count} decisions",
+        "layers": "Architecture",
+        "metrics": "{count} metrics"
+      },
+      "topStack": {
+        "title": "Most used stack",
+        "projectsWord": "projects"
+      },
+      "allCta": {
+        "button": "View all projects ({count})",
+        "subtitle": "{total} projects · {caseStudies} with case study"
+      },
+      "catalog": {
+        "backToPortfolio": "Back to portfolio",
+        "pageTitle": "All engineering projects",
+        "pageSubtitle": "Explore by type, category, or technology. Case studies detail decisions, architecture, and outcomes.",
+        "searchPlaceholder": "Search projects or technologies…",
+        "searchLabel": "Search projects or technologies",
+        "sortLabel": "Sort",
+        "sorts": {
+          "default": "Featured",
+          "name": "Name (A–Z)",
+          "cs": "With case study first"
+        },
+        "kindLabel": "Category",
+        "techLabel": "Technology",
+        "csOnly": "Only with case study",
+        "showing": "Showing {count} of {total} projects",
+        "showingAll": "{total} projects",
+        "clearFilters": "Clear filters",
+        "more": "View more ({count} remaining)",
+        "emptyTitle": "No results",
+        "emptyDescription": "Try another search term or remove some filters.",
+        "emptyButton": "Clear filters"
       }
     },
     "contact": {
       "title": "Let's talk",
       "title2": "Send a message",
       "eyebrow": "Contact",
-      "subtitle": "If you're looking for a Senior Full Stack Developer who can contribute from day one, take part in technical discussions, and ship reliable software at scale, let's talk.\n\nFeel free to reach out even just to connect.",
+      "subtitle": "Use the form or the channels below.",
       "responseTime": "Reply within 24h",
       "divider": "or",
       "noChannels": "Use the form to get in touch — social links will appear here once they are added to the CV.",
       "noChannelsWithoutForm": "Social links will appear here once added to the CV.",
       "globe": {
         "ariaLabel": "Interactive map showing connection from {origin} to {destination}",
+        "localTime": "Local time",
         "yourLocation": "Your location",
         "replay": "Replay connection",
         "unroll": "Unroll to flat map",
@@ -727,7 +1166,10 @@
         "showOcean": "Show ocean fill",
         "zoomIn": "Zoom in",
         "zoomOut": "Zoom out",
-        "options": "Map options"
+        "options": "Map options",
+        "basedIn": "I'm based in {place}.",
+        "nearbyFromVisitor": "I'm from {place}, very close to your current location, according to your IP address.",
+        "distanceFromVisitor": "I'm from {place}, roughly <km>{distance}</km> away from your current location, according to your IP address."
       },
       "form": {
         "helper": "Tell me about your project or inquiry and I'll reply as soon as possible.",
@@ -797,8 +1239,9 @@
       "subtitle": "Companies, roles, and measurable impact",
       "viewAll": "View full CV for complete history",
       "showingRecent": "Showing most recent roles.",
-      "leadershipTitle": "Technical leadership across every role",
-      "leadershipDescription": "From leading a 6-person engineering team at Contollo to architecting systems at Imagemaker and Walmart/VTEX, I've owned technical decisions, mentored developers, and driven delivery at every level."
+      "promotion": "Promotion",
+      "previousRole": "Previous position",
+      "rolesCount": "{count} roles"
     },
     "impactStats": {
       "teamSize": {
@@ -823,17 +1266,19 @@
       "title": "{count, plural, =0 {What senior developers say about me} =1 {What a senior developer says about me} other {What senior developers say about me}}",
       "subtitle": "Colleagues who have seen my work up close.",
       "cta": "Hire me",
+      "readMore": "Read more",
+      "readLess": "Read less",
       "statsLabel": "By the numbers",
       "statsNote": "Numbers accumulated across professional engagements.",
       "stats": {
-        "certifications": {
-          "label": "Certifications"
-        },
         "projects": {
           "label": "Projects"
         },
         "experience": {
-          "label": "Years Experience"
+          "label": "Years of experience"
+        },
+        "engineersMentored": {
+          "label": "Engineers led"
         }
       }
     },
@@ -1339,6 +1784,31 @@
           "cleaner": "Rated A+ on Website Carbon"
         }
       }
+    },
+    "stats": {
+      "metaTitle": "Stats",
+      "metaDescription": "Anonymous visitor stats and portfolio highlights — no cookies, unique IDs, or IP addresses.",
+      "eyebrow": "Public stats",
+      "title": "How this site is used",
+      "description": "Cookieless, first-party audience measurement plus a snapshot of the portfolio. No unique visitors, no tracking across other sites.",
+      "highlightsTitle": "Highlights",
+      "kpis": {
+        "pageviews": "Pageviews (30 days)",
+        "visits": "Visits (30 days)",
+        "countries": "Countries",
+        "projects": "Projects",
+        "certifications": "Certifications",
+        "years": "Years of experience"
+      },
+      "countriesTitle": "Where visits come from",
+      "pagesTitle": "Most viewed pages",
+      "windowHint": "Last 30 days. Country-level only.",
+      "pageviewsCount": "{count, plural, one {# view} other {# views}}",
+      "unknownCountry": "Unknown",
+      "emptyTraffic": "No public visits recorded yet.",
+      "servicesTitle": "Active services",
+      "emptyServices": "No active services right now.",
+      "privacyNote": "Measurement is anonymous and explained in the <link>privacy policy</link>."
     }
   },
   "admin": {
@@ -1371,6 +1841,7 @@
         "pagesGroup": "Pages",
         "uses": "Uses",
         "now": "Now",
+        "processPages": "Process pages",
         "sidebar": "Admin navigation"
       },
       "pageToolbar": "Page header",
@@ -1381,7 +1852,7 @@
       "title": "Dashboard",
       "subtitle": "Welcome back! Manage your public portfolio from here.",
       "welcomeTitle": "Welcome to your Portfolio Admin",
-      "welcomeSubtitle": "Manage all your portfolio content in one place. Switch between languages to manage translated content.",
+      "welcomeSubtitle": "Traffic, job pipeline, and which services are live — not just content counts.",
       "noProfile": "Profile not set up yet",
       "noProfileHint": "Go to <link>Settings</link> to create your public profile.",
       "publicUrl": "Public URL",
@@ -1392,6 +1863,49 @@
       "editCv": "Edit your <cv>CV</cv>",
       "publishInSettings": "Publish your portfolio in <link>Settings</link>",
       "manage": "Manage",
+      "traffic": {
+        "title": "Visitors",
+        "subtitle": "Anonymous pageviews from the last 30 days. No cookies, IPs, or unique IDs.",
+        "viewPublic": "Open public stats",
+        "pageviews": "Pageviews",
+        "visits": "Visits",
+        "countries": "Countries",
+        "topPage": "Top page",
+        "emptyValue": "—",
+        "pageviewsCount": "{count, plural, one {# view} other {# views}}",
+        "countriesTitle": "Where they visit from",
+        "pagesTitle": "What they viewed",
+        "referrersTitle": "Referrers",
+        "referrersHint": "Hostnames only. Direct visits are omitted.",
+        "empty": "No visitor data yet. Public pages start counting after the first anonymous visit.",
+        "emptyReferrers": "No external referrers in this window.",
+        "unknownCountry": "Unknown"
+      },
+      "jobs": {
+        "title": "Job tracker",
+        "subtitle": "{applications, plural, one {# application} other {# applications}} across {companies, plural, one {# company} other {# companies}}",
+        "openTracker": "Open job tracker",
+        "applied": "Applied",
+        "inProgress": "Interview",
+        "offers": "Offers",
+        "ghosted": "Ghosted",
+        "rejected": "Rejected",
+        "hired": "Hired",
+        "upcoming": "Upcoming events",
+        "upcomingHint": "Next interviews, tests, and follow-ups.",
+        "noUpcoming": "Nothing scheduled."
+      },
+      "services": {
+        "title": "Services",
+        "subtitle": "Which offerings are visible on the public site.",
+        "empty": "No services yet.",
+        "active": "Active",
+        "inactive": "Inactive",
+        "featured": "Featured"
+      },
+      "inventory": {
+        "title": "Content inventory"
+      },
       "stats": {
         "certificates": {
           "title": "Certificates",
@@ -1453,26 +1967,122 @@
         "contact": "Contact Me",
         "technicalSkills": "Technical Skills",
         "personalSkills": "Soft Skills",
-        "additionalInformation": "Additional Information"
+        "additionalInformation": "Additional Information",
+        "personalReferences": "Personal References"
       }
     },
     "settings": {
       "title": "Settings",
       "subtitle": "Public URL, default language and visibility.",
+      "tabGeneral": "General & Brand",
+      "tabSecurity": "Security & Integrations",
+      "brandPreviewTitle": "Live Brand Preview",
+      "brandPreviewDescription": "Real-time preview of your brand logo or text mark in headers.",
+      "identitySectionTitle": "Profile & Subdomain",
+      "identitySectionDescription": "Public identity and URL handle for your portfolio.",
+      "visibilitySectionTitle": "Portfolio Visibility",
+      "visibilitySectionDescription": "Control whether your CV and portfolio are publicly accessible online.",
+      "statusPublic": "Live & Public",
+      "statusDraft": "Hidden / Draft",
+      "viewPublicSite": "View public site",
+      "subdomainPrefix": "jesushg.com/cv/",
       "username": "Username (subdomain)",
       "displayName": "Display name",
+      "brandSectionTitle": "Logo & initials",
+      "brandSectionDescription": "Shown in the public header and footer. Prefer a logo image when you have one; otherwise use short initials or a text mark.",
+      "logoInitials": "Initials / text logo",
+      "logoInitialsHint": "Short mark when no image is set (e.g. Jehg). Leave empty to derive initials from the display name.",
+      "logoInitialsPlaceholder": "Jehg",
+      "logoImageUrl": "Logo image URL (optional)",
+      "logoImageUrlHint": "When set, this image replaces the text mark in the header and footer.",
+      "logoImageUrlPlaceholder": "https://cdn.example.com/logo.svg",
       "defaultLocale": "Default language",
       "defaultLocaleHint": "The language your CV defaults to when no translation is available.",
-      "cvPdfUrl": "CV PDF URL (optional)",
+      "mapLocation": "Map location",
+      "mapLocationHint": "City shown on the Let's Talk globe. Visitors connect to this point when their location can be detected.",
+      "mapLocationPlaceholder": "Amsterdam, Netherlands",
       "publish": "Publish my CV publicly",
       "saved": "Settings saved.",
       "saveFailed": "Could not save settings",
       "save": "Save settings",
       "saving": "Saving...",
+      "usernameValidation": "Use lowercase letters, numbers and dashes",
+      "credentialsTitle": "Credentials & Integrations",
+      "credentialsDescription": "Connect Spotify, email, file uploads, and AI for this portfolio. Saved connections stay available here.",
+      "credentialsCta": "Manage integrations",
       "pdfSectionTitle": "PDF Resumes (Multi-language)",
-      "pdfSectionDescription": "Provide separate PDF links for each language. When visitors view your portfolio in a specific language, they will download the corresponding PDF.",
+      "pdfSectionDescription": "Provide direct PDF download links per language. Visitors downloading your CV in a specific language will receive the corresponding file.",
       "pdfLinkPlaceholder": "https://example.com/resume-{locale}.pdf",
-      "usernameValidation": "Use lowercase letters, numbers and dashes"
+      "testLink": "Test link",
+      "security": {
+        "title": "Security",
+        "description": "Protect your account with a second factor and passkeys. Two-factor authentication is optional; passkeys sign you in without a password.",
+        "twoFactor": {
+          "title": "Two-factor authentication",
+          "description": "Ask for a code from your authenticator app (or your email) on every password sign-in.",
+          "statusOn": "On",
+          "statusOff": "Off",
+          "enable": "Enable 2FA",
+          "disable": "Disable 2FA",
+          "regenerateBackup": "New backup codes",
+          "needsPassword": "Set a password for this account before enabling two-factor authentication.",
+          "confirmPassword": "Confirm your password",
+          "confirmPasswordHint": {
+            "enable": "We need your password to generate the authenticator secret.",
+            "disable": "Disabling 2FA removes your authenticator and backup codes.",
+            "backup": "New codes replace the old ones immediately."
+          },
+          "confirm": {
+            "enable": "Continue",
+            "disable": "Disable",
+            "backup": "Generate codes"
+          },
+          "qrLabel": "QR code for your authenticator app",
+          "scanHint": "Scan this QR code with Google Authenticator, 1Password or any TOTP app, then enter the 6-digit code it shows.",
+          "manualKey": "Can't scan? Enter this key manually:",
+          "codeLabel": "Code from the app",
+          "verifyAndEnable": "Verify and enable",
+          "savedCodes": "I've saved my backup codes",
+          "working": "Working...",
+          "cancel": "Cancel",
+          "enabled": "Two-factor authentication is on. You'll be asked for a code on your next sign-in.",
+          "disabled": "Two-factor authentication is off.",
+          "errorGeneric": "Something went wrong. Check your password and try again.",
+          "errorCode": "That code didn't match. Wait for the next one and try again."
+        },
+        "backupCodes": {
+          "title": "Backup codes",
+          "description": "Store these somewhere safe. Each code signs you in once if you lose access to your authenticator and email.",
+          "copy": "Copy",
+          "copied": "Copied",
+          "download": "Download .txt"
+        },
+        "passkeys": {
+          "title": "Passkeys",
+          "description": "Sign in with Face ID, Touch ID, Windows Hello or a security key. Passkeys are phishing-resistant and skip the 2FA step.",
+          "loading": "Loading passkeys...",
+          "empty": "No passkeys yet.",
+          "unnamed": "Unnamed passkey",
+          "meta": "{kind} · added {date}",
+          "kindSynced": "Synced passkey",
+          "kindDevice": "Device-bound passkey",
+          "nameLabel": "Passkey name",
+          "namePlaceholder": "e.g. MacBook Touch ID",
+          "add": "Add passkey",
+          "working": "Waiting for your device...",
+          "added": "Passkey added.",
+          "deleted": "Passkey removed.",
+          "confirmDelete": "Remove this passkey? You won't be able to sign in with it anymore.",
+          "rename": "Rename {name}",
+          "delete": "Remove {name}",
+          "save": "Save",
+          "cancel": "Cancel",
+          "errorLoad": "Could not load your passkeys.",
+          "errorAdd": "Could not add the passkey.",
+          "errorDelete": "Could not remove the passkey.",
+          "errorRename": "Could not rename the passkey."
+        }
+      }
     },
     "spotify": {
       "title": "Spotify",
@@ -1529,6 +2139,46 @@
         "disconnectFailed": "Could not disconnect Spotify"
       }
     },
+    "googleCalendar": {
+      "title": "Google Calendar",
+      "subtitle": "Sync job tracker events with your own Google Calendar OAuth client.",
+      "storagePolicy": "Your Google OAuth client secret and refresh token are encrypted and stored only for your account — the same pattern as Spotify.",
+      "disconnectPolicy": "Disconnecting deletes your Calendar tokens from our database. It does not remove events already created in Google Calendar.",
+      "privacyNote": "See our <link>privacy policy</link> for what calendar data we store and why.",
+      "redirectUriLabel": "Authorized redirect URI (add this in Google Cloud Console)",
+      "redirectUriHint": "APIs & Services → Credentials → your OAuth client → Authorized redirect URIs",
+      "scopesTitle": "Permissions requested",
+      "scopes": {
+        "calendarEvents": "Create, update, and delete events on your calendars"
+      },
+      "connect": {
+        "title": "Connect your Google Calendar app",
+        "description": "Create an OAuth client in your Google Cloud project, enable the Calendar API, then paste the Client ID and Secret here.",
+        "byoNote": "Use your own Google Cloud OAuth credentials — not the site login Google app. Enable the Google Calendar API on that project.",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "clientIdPlaceholder": "Paste your Client ID",
+        "clientSecretPlaceholder": "Paste your Client Secret",
+        "dashboardLink": "Open Google Cloud Credentials",
+        "connect": "Connect with Google",
+        "connecting": "Redirecting to Google…",
+        "validationError": "Enter a valid Client ID and Client Secret from your Google Cloud OAuth client."
+      },
+      "status": {
+        "connected": "Connected to Google Calendar",
+        "disconnected": "Not connected",
+        "refreshError": "Could not refresh your Google Calendar connection",
+        "connectedAt": "Connected on {date}",
+        "clientId": "Client ID: {id}",
+        "disconnect": "Disconnect Google Calendar",
+        "disconnecting": "Disconnecting…",
+        "reconnect": "Reconnect Google Calendar"
+      },
+      "actions": {
+        "connectFailed": "Could not start Google Calendar authorization",
+        "disconnectFailed": "Could not disconnect Google Calendar"
+      }
+    },
     "forms": {
       "saved": "Saved.",
       "order": "Order",
@@ -1573,6 +2223,7 @@
       "contact": {
         "type": "Type",
         "value": "Value",
+        "locationValueHint": "City used on the Let's Talk map if you have not set Map location in Settings (e.g. Amsterdam, Netherlands).",
         "labelOptional": "Label (optional)",
         "labelHint": "What to display next to the contact (e.g. 'Email me' or your handle).",
         "add": "+ Add contact",
@@ -1645,6 +2296,14 @@
       "experience": {
         "company": "Company",
         "role": "Role",
+        "employmentType": "Employment type",
+        "employmentTypes": {
+          "FULL_TIME": "Full-time",
+          "PART_TIME": "Part-time",
+          "CONTRACT": "Contract",
+          "FREELANCE": "Freelance",
+          "INTERNSHIP": "Internship"
+        },
         "location": "Location (optional)",
         "dates": "Dates",
         "startDate": "Start date",
@@ -1684,7 +2343,12 @@
         "dragToReorder": "Drag to reorder",
         "addLabel": "Add",
         "featuredOnHome": "Show on homepage",
-        "featuredOnHomeDescription": "This experience will appear in the Home section"
+        "featuredOnHomeDescription": "This experience will appear in the Home section",
+        "companyBlurb": "Company / context blurb (ATS)",
+        "companyBlurbDescription": "Short factual note about the company or what you worked on. Used by ATS tailor — not shown on the printed CV.",
+        "companyBlurbPlaceholder": "e.g. Telecom B2C · digital service requests",
+        "atsOnly": "ATS only (hide on CV)",
+        "atsOnlyDescription": "Keeps this bullet out of the public/printed CV but available when tailoring for a job."
       },
       "softSkill": {
         "label": "Soft skill",
@@ -1704,6 +2368,28 @@
       "additional": {
         "label": "Additional info",
         "add": "+ Add item",
+        "save": "Save",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "loading": "Loading...",
+        "saveFailed": "Save failed",
+        "deleteFailed": "Delete failed",
+        "savedSuccess": "Saved successfully",
+        "deleteSuccess": "Deleted successfully",
+        "edit": "Edit",
+        "create": "Add",
+        "dragToReorder": "Drag to reorder"
+      },
+      "personalReference": {
+        "details": "Reference details",
+        "name": "Name",
+        "nameRequired": "Name is required",
+        "contact": "Contact",
+        "contactHint": "Phone, email, or other contact info (optional).",
+        "contactPlaceholder": "e.g. (+505) 8679-3204",
+        "role": "Role / relationship",
+        "rolePlaceholder": "e.g. Developer, Manager",
+        "add": "+ Add personal reference",
         "save": "Save",
         "saving": "Saving...",
         "cancel": "Cancel",
@@ -1767,6 +2453,7 @@
         "updateFailed": "Failed to update project",
         "createFailed": "Failed to create project",
         "imageRequired": "Image is required",
+        "imageUrlInvalid": "Enter a valid image URL or local path",
         "titleRequiredPrimary": "Title is required for the primary language",
         "atLeastOneLanguage": "At least one language is required"
       },
@@ -1815,7 +2502,9 @@
         "createFailed": "Failed to create service",
         "imageRequired": "Image is required",
         "titleRequiredPrimary": "Title is required for the primary language",
-        "atLeastOneLanguage": "At least one language is required"
+        "atLeastOneLanguage": "At least one language is required",
+        "isActive": "Active on the public site",
+        "isActiveHint": "Inactive services stay in admin but are hidden from the homepage and public stats."
       },
       "certification": {
         "generalSection": "General Information",
@@ -1845,7 +2534,8 @@
       "jobTrackerApplication": {
         "validation": {
           "positionRequired": "Position is required",
-          "companyRequired": "Select a company"
+          "companyRequired": "Select a company",
+          "urlInvalid": "Invalid URL"
         },
         "toast": {
           "success": {
@@ -1871,20 +2561,24 @@
           "appliedDate": "Applied Date",
           "location": "Location",
           "salary": "Salary",
+          "jobUrl": "Job posting link",
           "description": "Description",
           "notes": "Notes",
           "cv": "CV/Resume"
         },
         "descriptions": {
-          "cvUpload": "Upload your CV (PDF, max 5MB)"
+          "cvUpload": "Upload your CV (PDF, max 5MB)",
+          "description": "Optional. Paste the job posting to reuse it when tailoring a resume.",
+          "notes": "Private reminders - not shared with employers."
         },
         "placeholders": {
           "position": "Frontend Developer",
           "company": "Select or create a company...",
           "location": "Remote, Hybrid, etc...",
           "salary": "€50k - €60k",
-          "description": "Job description...",
-          "notes": "Personal notes...",
+          "jobUrl": "https://linkedin.com/jobs/view/...",
+          "description": "Paste the job description…",
+          "notes": "e.g. referred by Alex, follow up Friday…",
           "date": "Select a date"
         },
         "actions": {
@@ -1906,7 +2600,36 @@
           "empty": "No companies found",
           "createFailed": "Could not create company",
           "clearSearch": "Clear search"
-        }
+        },
+        "import": {
+          "placeholders": {
+            "url": "https://linkedin.com/..., bamboohr.com/careers/..., getonbrd.com/jobs/..."
+          },
+          "actions": {
+            "show": "Fill from job link (LinkedIn, BambooHR, Get on Board)",
+            "import": "Import",
+            "importing": "Importing…",
+            "cancel": "Cancel"
+          },
+          "toast": {
+            "success": {
+              "title": "Listing imported",
+              "description": "Review the fields before saving."
+            },
+            "error": {
+              "title": "Could not import"
+            }
+          },
+          "errors": {
+            "IMPORT_INVALID_URL": "That doesn't look like a valid URL.",
+            "IMPORT_UNSUPPORTED_HOST": "Only LinkedIn, BambooHR, and Get on Board job links are supported.",
+            "IMPORT_LOGIN_WALL": "The page is blocked or requires login. Paste the description manually.",
+            "IMPORT_EMPTY_CONTENT": "No job text was found on that page. Paste the description manually.",
+            "IMPORT_FETCH_FAILED": "Could not read the link. Try again or paste the description manually."
+          }
+        },
+        "descriptionHint": "Optional. Paste the job posting to reuse it when tailoring a resume.",
+        "notesHint": "Private reminders - not shared with employers."
       },
       "jobTrackerCompany": {
         "validation": {
@@ -1934,12 +2657,16 @@
           "name": "Name",
           "website": "Website",
           "email": "Email",
+          "linkedinUrl": "LinkedIn profile",
+          "companyLocation": "Headquarters / Location",
           "description": "Description"
         },
         "placeholders": {
           "name": "Acme Corp",
           "email": "contact@company.com",
           "website": "https://company.com",
+          "linkedinUrl": "https://linkedin.com/company/...",
+          "companyLocation": "San Francisco, CA / Remote",
           "description": "Company description..."
         },
         "actions": {
@@ -1972,21 +2699,35 @@
         },
         "sections": {
           "application": "Application",
-          "info": "Event Information",
-          "dateTime": "Date & Time",
-          "modality": "Modality"
+          "info": "What kind of event?",
+          "infoHint": "The type shapes interview-prep questions later.",
+          "dateTime": "When",
+          "modality": "Where"
         },
         "fields": {
           "application": "Select Application",
           "type": "Event Type",
           "title": "Title",
-          "description": "Description",
-          "scheduledDate": "Scheduled Date",
-          "duration": "Duration (minutes)",
-          "isVirtual": "Virtual Meeting",
+          "description": "Notes (optional)",
+          "scheduledDate": "Date",
+          "scheduledTime": "Time",
+          "duration": "Duration",
+          "isVirtual": "Format",
           "isVirtualDescription": "Is this meeting taking place online?",
-          "meetingLink": "Meeting Link",
+          "meetingLink": "Meeting link",
           "location": "Location"
+        },
+        "linkedApplication": "For this application",
+        "modalityVirtual": "Virtual",
+        "modalityInPerson": "In person",
+        "durationMinutes": "{minutes} min",
+        "typeHint": {
+          "INTERVIEW": "Live interview loop",
+          "TECHNICAL_TEST": "Coding or architecture",
+          "QUESTIONNAIRE": "Written answers",
+          "PHONE_CALL": "Recruiter or screen",
+          "MEETING": "Hiring team conversation",
+          "FOLLOW_UP": "After a previous round"
         },
         "placeholders": {
           "application": "Select an application...",
@@ -2000,6 +2741,14 @@
         "actions": {
           "submit": "Save Event",
           "cancel": "Cancel"
+        },
+        "stepper": {
+          "label": "Event steps",
+          "what": "What",
+          "when": "When",
+          "where": "Where",
+          "next": "Continue",
+          "back": "Back"
         },
         "eventType": {
           "INTERVIEW": "Interview",
@@ -2129,6 +2878,19 @@
         "addClarification": "Add clarification",
         "removeClarification": "Remove",
         "optionalMarkdownHint": "Optional. Markdown links: [label](https://…)",
+        "sectionWorkspaceTags": "Workspace tags",
+        "sectionWorkspaceTagsHint": "Click the photo to drop a pin, then pick the item in the dialog. Hover on the public page shows the name; click scrolls to that card.",
+        "selectItem": "Choose item",
+        "selectItemDescription": "Choose the product this pin points to.",
+        "selectItemPlaceholder": "Select a product",
+        "searchItem": "Search items…",
+        "noMatchingItems": "No matching items",
+        "groupEveryday": "Everyday",
+        "groupSoftware": "Software",
+        "deleteTag": "Remove pin",
+        "noImageHint": "Add a workspace image path above to place tags.",
+        "emptyTags": "No tags yet. Click the image to add one.",
+        "untitledItem": "Untitled",
         "save": "Save settings",
         "saving": "Saving…",
         "updatedSuccess": "Settings saved",
@@ -2181,6 +2943,117 @@
         "createFailed": "Could not create focus",
         "updateFailed": "Could not update focus"
       },
+      "processPage": {
+        "addNew": "Add page",
+        "editTitle": "Edit process page",
+        "sectionBasics": "Basics",
+        "sectionCopy": "Copy",
+        "sectionPageNav": "In-page nav",
+        "sectionHeroTerminal": "Hero terminal",
+        "sectionBenefits": "Benefits",
+        "sectionSteps": "Steps",
+        "sectionToolkit": "Toolkit",
+        "sectionRoles": "Roles",
+        "sectionFaq": "FAQ",
+        "template": "Template",
+        "templateHint": "Choose the layout. Changing this on a new page resets section content.",
+        "templateWorkflow": "Workflow (How I use AI)",
+        "templateQa": "QA collaboration",
+        "slug": "Slug",
+        "slugHint": "Lowercase kebab-case. Reserved site paths are blocked.",
+        "navIcon": "Nav icon",
+        "order": "Order",
+        "isPublished": "Published",
+        "isPublishedHint": "Unpublished pages return 404 on the public site.",
+        "showInNav": "Show in header and footer",
+        "showInNavHint": "Independent of publish. Hidden pages can still be public if published.",
+        "menuTitle": "Menu title",
+        "menuTitleRequired": "Menu title is required for the primary language",
+        "navDescription": "Nav description",
+        "navDescriptionHint": "Short line under the title in the header Explore menu.",
+        "pageNavLabel": "In-page nav label",
+        "metaTitle": "SEO title",
+        "metaDescription": "SEO description",
+        "heroEyebrow": "Hero eyebrow",
+        "heroTitle": "Hero title",
+        "heroTitleHighlight": "Hero title highlight",
+        "heroDescription": "Hero description",
+        "heroPrimaryCta": "Primary CTA",
+        "heroSecondaryCta": "Secondary CTA",
+        "heroScrollHint": "Scroll hint",
+        "ctaTitle": "Closing CTA title",
+        "ctaDescription": "Closing CTA description",
+        "ctaButton": "Closing CTA button",
+        "navId": "Anchor id",
+        "navLabel": "Label",
+        "addNavItem": "Add nav item",
+        "primaryHref": "Primary CTA href",
+        "secondaryHref": "Secondary CTA href",
+        "terminalTitle": "Terminal title",
+        "workflowTitle": "Cycle title",
+        "workflowLive": "Live label",
+        "workflowSteps": "Cycle steps",
+        "cursorLabel": "Cursor label",
+        "testRunnerLines": "Test runner lines",
+        "onePerLine": "One item per line",
+        "eyebrow": "Eyebrow",
+        "sectionTitle": "Section title",
+        "title": "Title",
+        "description": "Description",
+        "icon": "Icon",
+        "benefitItem": "Benefit {index}",
+        "addBenefit": "Add benefit",
+        "inPracticeLabel": "In practice label",
+        "stepItem": "Step {index}",
+        "stepNumber": "Number",
+        "stepDetail": "Detail",
+        "stepTools": "Tools",
+        "addStep": "Add step",
+        "toolkitFootnote": "Footnote",
+        "toolItem": "Tool {index}",
+        "toolName": "Name",
+        "toolInitials": "Initials",
+        "addTool": "Add tool",
+        "myRolesLabel": "My roles label",
+        "myRoles": "My roles",
+        "ecosystemRoles": "Ecosystem roles",
+        "testingLabel": "Testing label",
+        "testingTags": "Testing tags",
+        "faqItem": "FAQ {index}",
+        "question": "Question",
+        "answer": "Answer",
+        "addFaq": "Add FAQ",
+        "remove": "Remove",
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create",
+        "saving": "Saving…",
+        "createdSuccess": "Process page created",
+        "updatedSuccess": "Process page updated",
+        "createFailed": "Could not create process page",
+        "updateFailed": "Could not update process page",
+        "designerHint": "Drag widgets onto the canvas, then click to fill them in.",
+        "widgetPalette": "Widgets",
+        "pageSettings": "Page settings",
+        "emptyCanvas": "Drop a widget here, or click + in the palette.",
+        "dragToReorder": "Drag to reorder",
+        "removeWidget": "Remove widget",
+        "visualNone": "No visual",
+        "visualWorkflow": "Workflow cycle",
+        "visualTestRunner": "Test runner",
+        "addChip": "Add",
+        "widgets": {
+          "nav": "In-page nav",
+          "hero": "Hero",
+          "benefits": "Benefits grid",
+          "stepsAccordion": "Steps accordion",
+          "stepsTimeline": "Steps timeline",
+          "toolkit": "Toolkit",
+          "roles": "Roles",
+          "faq": "FAQ",
+          "closingCta": "Closing CTA"
+        }
+      },
       "portfolioSkill": {
         "generalSection": "General Information",
         "title": "Title",
@@ -2202,6 +3075,7 @@
         "createFailed": "Failed to create skill",
         "titleRequired": "Title is required",
         "imageRequired": "Image URL is required",
+        "imageUrlInvalid": "Enter a valid image URL or local path",
         "featuredLabel": "Featured in stack",
         "featuredDescription": "Featured skills appear brighter in the home terminal and highlight your primary stack."
       }
@@ -2215,24 +3089,26 @@
     },
     "profile": {
       "title": "Profile & Hero Section",
-      "subtitle": "Edit your hero identity, rotating titles, summary, and about text.",
+      "subtitle": "Edit your identity, professional subtitle, tagline, and copy for the Hero and About Me sections.",
       "heroSection": "Identity",
       "fullNameLabel": "Display name",
-      "photoUrlLabel": "Photo URL",
-      "backgroundImageLabel": "Hero background image URL",
-      "backgroundImagePlaceholder": "https://example.com/hero-background.jpg",
-      "professionalTitle": "Professional Title",
-      "degreeLabel": "Professional title / degree",
-      "rotatingTitlesLabel": "Rotating titles",
-      "rotatingTitlesHint": "Shown in the hero typewriter animation. Drag to reorder.",
-      "dragToReorder": "Drag to reorder",
-      "titleWithLanguage": "Title ({language})",
-      "addTitle": "Add title",
-      "removeTitle": "Remove title",
-      "heroSummaryLabel": "Hero summary",
-      "heroSummaryWithLanguage": "Short summary ({language})",
-      "heroSummaryHint": "Brief description shown below your titles in the hero section.",
-      "heroSummaryPlaceholder": "A short introduction for the hero section...",
+      "photoUrlLabel": "Profile photo URL",
+      "heroSubtitleLabel": "Professional subtitle (H2)",
+      "heroSubtitleHint": "Main H2 title displayed below your name in the Hero and used in the page title (SEO).",
+      "heroSubtitleWithLanguage": "Professional subtitle ({language})",
+      "heroSubtitlePlaceholder": "e.g. Senior Software Engineer",
+      "heroTaglineLabel": "Tagline / Value proposition",
+      "heroTaglineHint": "Prominent paragraph summarizing your value and experience in the Hero section.",
+      "heroTaglineWithLanguage": "Tagline / Value proposition ({language})",
+      "heroTaglinePlaceholder": "e.g. 6+ years building scalable enterprise systems...",
+      "heroSummaryLabel": "Secondary hero summary",
+      "heroSummaryWithLanguage": "Secondary summary ({language})",
+      "heroSummaryHint": "Optional short description appearing below the tagline in the hero.",
+      "heroSummaryPlaceholder": "A short complementary introduction for the hero section...",
+      "heroBadgeLabel": "Availability Badge",
+      "heroBadgeHint": "Custom text for the top availability pill. Leave empty to use default 'Available for opportunities'.",
+      "heroBadgePlaceholder": "e.g. Open to B2B contracts / Available for hire",
+      "heroBadgeWithLanguage": "Availability badge ({language})",
       "descriptionWithLanguage": "About text ({language})",
       "altTextTitle": "Image Alt Text",
       "aboutMeTitle": "About Me",
@@ -2240,6 +3116,9 @@
       "altTextHint": "Describes your photo for screen readers and SEO.",
       "altTextLabel": "Image description",
       "consoleTab": "Terminal",
+      "aboutSectionTab": "About Section",
+      "aboutBioTitle": "Engineering Approach & Narrative",
+      "aboutBioSubtitle": "These paragraphs introduce your background and philosophy in the About section (#about). Words wrapped in **example** will be highlighted in bold primary color.",
       "tabsNavAria": "Profile sections",
       "heroConsoleTitle": "About Terminal",
       "heroConsoleSubtitle": "Configure the animated terminal sequence shown in your About section.",
@@ -2251,10 +3130,11 @@
       "heroTab": "Hero & Profile",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://example.com/photo.jpg",
-      "degreePlaceholder": "e.g. Web Developer",
       "altTextPlaceholder": "e.g. Photo of Jesús sitting at a desk",
       "aboutPlaceholder": "I am a passionate software engineer...",
       "aboutDescriptionHint": "Provide a detailed description of yourself. You can use multiple paragraphs.",
+      "heroPreviewTitle": "Live Hero Preview",
+      "heroPreviewBadge": "Available for opportunities",
       "console": {
         "loading": "Loading terminal configuration…",
         "loadFailed": "Could not load terminal configuration",
@@ -2372,6 +3252,34 @@
       "edit": "Edit Post",
       "editDescription": "Edit blog post content."
     },
+    "processPages": {
+      "title": "Process pages",
+      "subtitle": "Compose process pages from reusable widgets.",
+      "addNew": "Add page",
+      "createDescription": "Drag widgets onto the canvas and fill in the copy.",
+      "editTitle": "Edit process page",
+      "editDescription": "Add, reorder, and fill widgets. Switch languages in the designer.",
+      "count": "{count} pages",
+      "searchTitle": "Search title",
+      "searchSlug": "Search slug",
+      "deletedSuccess": "Page deleted.",
+      "deleteFailed": "Could not delete page.",
+      "toggleFailed": "Could not update page.",
+      "templates": {
+        "workflow": "Workflow",
+        "qa": "QA"
+      },
+      "columns": {
+        "order": "Order",
+        "title": "Title",
+        "slug": "Slug",
+        "template": "Template",
+        "published": "Published",
+        "inNav": "In nav",
+        "widgets": "Widgets"
+      }
+>>>>>>> main
+    },
     "projects": {
       "title": "Projects",
       "subtitle": "Showcase your work.",
@@ -2428,6 +3336,9 @@
       "deleteFailed": "Failed to delete service",
       "columnTitle": "Title",
       "columnType": "Type",
+      "columnActive": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
       "columnSkills": "Skills",
       "columnActions": "Actions",
       "columnCompany": "Company",
@@ -2588,7 +3499,12 @@
       "editItem": "Edit Item",
       "addItem": "Add Item",
       "deleteSuccess": "Deleted successfully",
-      "close": "Close"
+      "close": "Close",
+      "exportSeedJson": "Export",
+      "exportSeedJsonHint": "Export the current database records as prisma/data seed JSON",
+      "exportSeedJsonError": "Could not export seed JSON",
+      "exportSeedZipHint": "Download a ZIP of all prisma/data seed JSON files",
+      "exportSeedZipError": "Could not export seed ZIP"
     },
     "jobTracker": {
       "title": "Job Tracker",
@@ -2596,8 +3512,60 @@
       "newCompany": "New Company",
       "newApplication": "New Application",
       "applicationsTab": "Applications",
+      "eventsTab": "Events",
       "companiesTab": "Companies",
+      "outreachTab": "Outreach & Reads",
+      "eventsThisWeekBadge": "{count} this week",
       "tabsNavAria": "Job tracker sections",
+      "emailSummary": {
+        "opened": "{count, plural, one {# read} other {# reads}}",
+        "sent": "{count, plural, one {# sent} other {# sent}}",
+        "openedTooltip": "{count, plural, one {# email load detected} other {# email loads detected}}",
+        "sentTooltip": "{count, plural, one {# email sent} other {# emails sent}}"
+      },
+      "outreachHub": {
+        "title": "Outreach & Reads Hub",
+        "description": "Monitor email loads, engagement signals, and follow-up opportunities grouped by candidacy.",
+        "refresh": "Refresh",
+        "stats": {
+          "totalSent": "Sent Emails",
+          "openRate": "Open Rate",
+          "totalOpens": "Total Reads",
+          "recent24h": "Active in 24h",
+          "recent24hHint": "Candidacies with activity in the last 24 hours"
+        },
+        "filters": {
+          "all": "All candidacies",
+          "opened": "Read recently",
+          "unopened": "Awaiting read",
+          "searchPlaceholder": "Filter by company or role..."
+        },
+        "card": {
+          "readsCount": "{count, plural, one {# read} other {# reads}}",
+          "sentCount": "{count, plural, one {# email} other {# emails}}",
+          "lastRead": "Last read {time}",
+          "lastSent": "Sent {time}",
+          "notReadYet": "Awaiting first read",
+          "viewApplication": "View candidacy",
+          "toggleDetails": "Toggle details",
+          "emailsHeading": "Sent emails",
+          "recipient": "To: {email}",
+          "sentAt": "Sent: {date}",
+          "attachment": "CV: {name}",
+          "tracked": "Tracking active",
+          "untracked": "No tracking",
+          "openHistory": "Detected read events",
+          "noOpensYet": "No read events detected yet for this email.",
+          "proxyNotice": "Image Proxy",
+          "opensCount": "{count} total loads"
+        },
+        "emptyState": {
+          "title": "No outreach activity yet",
+          "description": "Send your first application email with tracking from any application detail page to see engagement metrics here.",
+          "noFilteredTitle": "No candidacies found",
+          "noFilteredDescription": "Try adjusting your search or active filter."
+        }
+      },
       "columnPosition": "Position",
       "columnCompany": "Company",
       "columnStatus": "Status",
@@ -2659,14 +3627,40 @@
         "hiredDescription": "Congratulations!"
       },
       "calendar": {
-        "title": "Upcoming Events",
-        "description": "Scheduled interviews and tests",
+        "title": "Events Agenda",
+        "description": "Scheduled interviews, meetings, and technical tests",
+        "googleSyncActive": "Synced with Google Calendar",
+        "googleSyncError": "Google Calendar sync needs reconnect",
         "add": "Add",
         "empty": "You have no scheduled events",
+        "expand": "Show all",
+        "collapse": "Show less",
+        "expandAria": "Show more upcoming events",
+        "collapseAria": "Show only the next event",
+        "moreCount": "{count, plural, one {# more event} other {# more events}}",
         "today": "Today",
         "tomorrow": "Tomorrow",
         "virtual": "Virtual",
-        "duration": "{minutes} min"
+        "duration": "{minutes} min",
+        "inHours": "In {hours, plural, one {# hour} other {# hours}}",
+        "inDays": "In {days, plural, one {# day} other {# days}}",
+        "urgentAlertTitle": "Upcoming imminent event",
+        "joinMeeting": "Join meeting",
+        "prepEvent": "Prepare interview",
+        "viewInAgenda": "View in agenda",
+        "dismissAlert": "Dismiss alert",
+        "statsThisWeek": "This week",
+        "statsTotalUpcoming": "Total upcoming",
+        "statsVirtual": "Virtual meetings",
+        "filterAll": "All",
+        "filterThisWeek": "This week",
+        "filterInterviews": "Interviews",
+        "filterTechnical": "Technical tests",
+        "emptyFiltered": "No events match this filter",
+        "emptyDescription": "Schedule interviews, technical tests, or follow-up calls to keep full control of your hiring process.",
+        "scheduleEvent": "Schedule Event",
+        "thisWeekShort": "this wk",
+        "multipleUrgentCount": "{current} of {total} upcoming"
       },
       "detail": {
         "title": "Application Details",
@@ -2674,6 +3668,7 @@
         "timelineTab": "Timeline",
         "detailsTab": "Details",
         "tailorTab": "Tailor CV",
+        "emailTab": "Emails",
         "jobDescription": "Job description",
         "salary": "Salary",
         "location": "Location",
@@ -2688,17 +3683,232 @@
         "deleteApplicationConfirm": "Delete this application? This cannot be undone.",
         "deleteCancel": "Cancel",
         "deleteConfirmAction": "Delete",
+        "actionsGroup": "Application actions",
+        "moreActions": "More actions",
         "timelineActivityHint": "Generated automatically from application activity — add your own with the button above.",
         "noDescription": "No job description provided.",
+        "showFullDescription": "Show full description",
+        "hideFullDescription": "Show less",
+        "notProvided": "—",
+        "viewJobPosting": "View original posting",
+        "jobUrl": "Job posting link",
+        "companyInfo": "Company Information",
+        "editCompany": "Edit company",
         "tabsNavAria": "Application sections"
+      },
+      "interviewPrep": {
+        "pageTitle": "Interview prep",
+        "breadcrumb": "Job Tracker / Application",
+        "hint": "Start with why they should hire you. Then practice the rest out loud: 3-part intro, STAR, company research from the JD, and questions to ask.",
+        "aiSettingsLoading": "Loading AI settings...",
+        "eventType": {
+          "INTERVIEW": "Interview",
+          "TECHNICAL_TEST": "Technical Test",
+          "QUESTIONNAIRE": "Questionnaire",
+          "PHONE_CALL": "Phone Call",
+          "MEETING": "Meeting",
+          "FOLLOW_UP": "Follow-up"
+        },
+        "cta": "Build prep pack",
+        "regenerate": "Rebuild",
+        "generateMore": "Generate more",
+        "moreSuccess": "Added more questions",
+        "cancelRegenerate": "Cancel",
+        "alreadyDoneForType": "{count} questions for {type}",
+        "focusToolsLabel": "Focus on specific tools & technologies (optional)",
+        "focusToolsHint": "Select detected tools from the job posting or add custom ones for deep-dive technical questions.",
+        "addCustomTool": "Add tool",
+        "customToolPlaceholder": "e.g. Docker, PostgreSQL...",
+        "generateForTool": "Add questions for {tool}",
+        "toolDeepDive": "Tool Deep Dive",
+        "selectedToolsCount": "{count} selected",
+        "clearSelectedTools": "Clear selection",
+        "eventHint": "Questions are generated for a {type}.",
+        "usingTailored": "Using the latest tailored CV snapshot.",
+        "usingStudio": "No tailored snapshot yet — using Resume Studio.",
+        "needJd": "Add a job description on this application (or tailor a CV) before generating questions.",
+        "success": "Interview pack ready",
+        "failed": "Could not build interview prep",
+        "copyAnswer": "Copy answer",
+        "copied": "Copied",
+        "copyFailed": "Could not copy",
+        "copyAll": "Copy all Q&A",
+        "practiceProgress": "{current} of {total}",
+        "practiceRated": "{rated} of {total} practiced",
+        "practiceShuffle": "Shuffle",
+        "practiceShowHints": "Show talking points",
+        "practiceHideHints": "Hide talking points",
+        "practiceSpeakHint": "Speak the answer before you type. Timing and clarity beat a polished paragraph you have never said.",
+        "practiceYourAnswer": "Your answer",
+        "practiceYourAnswerPlaceholder": "Say it out loud first (that changes everything), then type a draft if you want. Reveal the model answer after.",
+        "practiceReveal": "Reveal model answer",
+        "practiceHideAnswer": "Hide model answer",
+        "practiceRate": "How did that feel?",
+        "practiceRateAgain": "Needs work",
+        "practiceRateOk": "Okay",
+        "practiceRateSolid": "Solid",
+        "practicePrev": "Previous",
+        "practiceNext": "Next",
+        "practiceSkip": "Skip",
+        "practiceDone": "Done",
+        "practiceTalkingPoints": "Select the talking points you would cover.",
+        "practiceActions": "Practice actions",
+        "practiceTechnical": "Technical questions",
+        "practiceDrill": "STAR practice",
+        "why": "Why they ask",
+        "modelAnswer": "Model answer",
+        "talkingPoints": "Talking points",
+        "evidence": "From your CV",
+        "avoid": "Avoid",
+        "generatedOn": "Generated {date}",
+        "category": {
+          "hire": "Why hire you",
+          "intro": "Intro",
+          "behavioral": "Behavioral",
+          "role": "Role",
+          "gap": "Gap",
+          "closing": "Closing",
+          "technical": "Technical",
+          "screening": "Screening"
+        },
+        "flipToAnswer": "Flip to answer",
+        "flipToQuestion": "Flip to question",
+        "tapToFlip": "Tap card or press Space to flip",
+        "voiceStart": "Record answer",
+        "voiceListening": "Listening... speak now",
+        "voiceStop": "Stop recording",
+        "voiceUnsupported": "Voice input not supported in this browser",
+        "voiceClear": "Clear text",
+        "evaluateAi": "Evaluate with AI",
+        "evaluatingAi": "Evaluating answer...",
+        "aiFeedback": "AI Feedback",
+        "aiScore": "Score: {score}/10",
+        "aiStrengths": "Strengths",
+        "aiImprovements": "Areas to improve",
+        "aiVerdict": "Verdict",
+        "cardFront": "Question",
+        "cardBack": "Answer",
+        "swipeHint": "Swipe to navigate",
+        "voiceErrorNotAllowed": "Microphone permission denied. Please allow microphone access in your browser.",
+        "voiceErrorAudioCapture": "No microphone was found or it is in use by another application.",
+        "voiceErrorNetwork": "Network error with the speech recognition service.",
+        "voiceErrorUnknown": "An error occurred with speech recognition.",
+        "addManualQuestion": "Add manual question",
+        "addManualQuestionTitle": "Create manual question",
+        "addManualQuestionDesc": "Add a custom question to your practice session.",
+        "questionLabel": "Question",
+        "categoryLabel": "Category",
+        "modelAnswerLabel": "Model answer",
+        "whyTheyAskLabel": "Why they ask (Optional)",
+        "talkingPointsLabel": "Talking points (one per line)",
+        "saveQuestion": "Save question",
+        "questionSaved": "Question added",
+        "aiKeyInvalid": "The AI API key is invalid or inactive. You can use Manual mode to generate with ChatGPT/Claude or create questions manually.",
+        "openGenerator": "AI / Manual Generator"
+      },
+      "email": {
+        "title": "Send CV by email",
+        "openButton": "Send CV",
+        "description": "AI drafts a short cover email from this job description: recipient, subject, and body mapped to the posting. Review, then send the tailored CV with Resend.",
+        "draft": "Draft with AI",
+        "redraft": "Regenerate draft",
+        "draftHint": "Generate a draft to fill recipient, subject, and body — you can edit everything before sending.",
+        "draftSuccess": "Email draft ready",
+        "draftError": "Could not draft the email",
+        "send": "Send CV",
+        "sendSuccess": "CV email sent",
+        "sendError": "Could not send the email",
+        "sendMissingFields": "Add recipient, subject, and body before sending",
+        "toLabel": "To",
+        "recipientLabel": "Recipient name",
+        "recipientPlaceholder": "Carol",
+        "subjectLabel": "Subject",
+        "bodyLabel": "Body",
+        "attachment": "Attachment: {name}",
+        "attachmentLabel": "Attachment",
+        "attachmentOverride": "Custom file: {name}",
+        "replaceAttachment": "Replace file",
+        "useTailoredCv": "Use tailored CV",
+        "attachmentReplaced": "Attachment updated",
+        "attachmentUploadError": "Could not upload the file",
+        "attachmentInvalidType": "Only .doc, .docx, or .pdf files are allowed",
+        "attachmentTooLarge": "File must be 8 MB or smaller",
+        "needCv": "Tailor a CV for this application first, or upload a .docx/.pdf to attach.",
+        "trackOpensLabel": "Measure email loads",
+        "trackOpensHint": "Loads are approximate and do not confirm that the CV was read.",
+        "sendCopyLabel": "Send a copy to my email",
+        "sendCopyHint": "Sends an identical copy to your inbox without a tracking pixel to back up the email in your records.",
+        "historyTitle": "Sent emails",
+        "historyTab": "Emails",
+        "refreshHistory": "Refresh",
+        "trackingApproximation": "Email clients may block or cache images, and proxies may load them automatically. These measurements do not confirm that a person read the email or CV.",
+        "historyLoading": "Loading email history...",
+        "historyError": "Could not load email history.",
+        "historyDateUnavailable": "Date unavailable",
+        "trackingFirstDetected": "First detected load",
+        "trackingLastDetected": "Last detected load",
+        "trackingNotDetected": "Not detected yet",
+        "trackingTotalLoads": "Total image loads",
+        "trackingDisabledForEmail": "Tracking was disabled for this email",
+        "viewOpenEvents": "View open events ({count})",
+        "hideOpenEvents": "Hide details",
+        "openEventItem": "Open #{index}",
+        "proxyBadge": "Proxy / Cache",
+        "historyEmpty": "No emails have been sent from this application yet.",
+        "noAi": "No AI provider is configured. Add an API key to draft the email.",
+        "noResend": "Configure Resend in Integrations to send from your domain."
+      },
+      "coverLetter": {
+        "title": "Cover letter",
+        "sectionTitle": "Cover letter",
+        "optionalHint": "Optional — only if the posting asks for one.",
+        "openButton": "Cover letter",
+        "openOptional": "Add if needed",
+        "editButton": "Edit",
+        "description": "AI drafts a formal cover letter tailored to this job posting using your CV, company context, and notes. Skip this unless the employer asks for one.",
+        "draft": "Draft with AI",
+        "redraft": "Regenerate",
+        "draftHint": "Generate a cover letter draft from this application — you can edit everything before saving.",
+        "draftSuccess": "Cover letter draft ready",
+        "draftError": "Could not draft the cover letter",
+        "save": "Save",
+        "saveSuccess": "Cover letter saved",
+        "saveError": "Could not save the cover letter",
+        "saveMissingFields": "Add a subject and body before saving",
+        "copy": "Copy",
+        "copySuccess": "Copied to clipboard",
+        "copyError": "Could not copy",
+        "subjectLabel": "Subject / title",
+        "bodyLabel": "Letter",
+        "noAi": "No AI provider is configured. Add an API key to draft the cover letter.",
+        "aiFailedFallback": "The model could not generate the letter. Manual mode is now enabled.",
+        "writeManually": "Write manually",
+        "aiOptions": "AI options",
+        "applyResponse": "Apply to letter",
+        "responseApplied": "AI response applied to cover letter",
+        "parseError": "Could not extract subject or letter from the response."
       },
       "kanban": {
         "description": "Drag cards between columns to update application status.",
         "addApplication": "Add application",
         "emptyColumn": "Drag a card here",
         "dragCard": "Drag application",
+        "moveToColumn": "Move to column",
         "updating": "Updating status…",
-        "statusUpdateError": "Could not update application status"
+        "statusUpdateError": "Could not update application status",
+        "statusFilterAria": "Filter by status",
+        "hiddenCount": "{count} hidden by filters",
+        "hiddenGhosts": "{count} ghosts with no update in {days}+ days",
+        "showHidden": "Show them",
+        "ghostNudge": "{count} applied {days}+ days ago with no reply",
+        "ghostNudgeReview": "Review",
+        "ghostNudgeLater": "Not now",
+        "ghostNudgeSnoozeLabel": "Ask again in (days)",
+        "ghostNudgeSnoozed": "Won't ask again for {days} days",
+        "ghostNudgeTitle": "Move to Ghosted?",
+        "ghostNudgeDescription": "Still no status change after {days} days. Uncheck any that are still waiting on a reply.",
+        "ghostNudgeConfirm": "Ghost {count}",
+        "ghostNudgeSuccess": "Moved {count} to Ghosted"
       },
       "timeline": {
         "title": "Event Timeline",
@@ -2715,6 +3925,12 @@
         "cancel": "Cancel",
         "joinMeeting": "Join meeting",
         "completedAt": "Completed on {date}",
+        "delete": "Delete event",
+        "deleteAria": "Delete event",
+        "deleteTitle": "Delete this event?",
+        "deleteConfirm": "Interview prep for this event will also be removed. This cannot be undone.",
+        "deleteSuccess": "Event deleted",
+        "deleteError": "Could not delete event",
         "outcome": {
           "POSITIVE": "Positive",
           "NEUTRAL": "Neutral",
@@ -2724,9 +3940,9 @@
     },
     "resumeStudio": {
       "importPageTitle": "Import Resume",
-      "importPageDescription": "Upload a DOCX resume to extract structured data into your CV profile. The original file is kept for re-processing.",
+      "importPageDescription": "Upload a DOCX or PDF resume to extract structured data into your CV profile. The original file is kept for re-processing.",
       "uploadTitle": "Upload your resume",
-      "uploadDescription": "DOCX only in this phase. PDF support is coming soon.",
+      "uploadDescription": "Upload a DOCX or PDF resume. Tailoring still uses DOCX (studio or upload).",
       "parsingTitle": "Parsing resume...",
       "parsingDescription": "Extracting experience, education, skills, and more with AI.",
       "previewTitle": "Review before import",
@@ -2758,15 +3974,18 @@
       "tailorSourceStudio": "Resume Studio (CMS)",
       "tailorSourceStudioHint": "{name} — {count} experiences in your profile",
       "tailorSourceStudioEmpty": "No CV data yet. Import a resume or edit your CV first.",
-      "tailorSourceUpload": "Upload DOCX",
-      "tailorSourceUploadHint": "Use a parsed upload without importing to your profile.",
+      "tailorSourceUpload": "Upload DOCX or PDF",
+      "tailorSourceUploadHint": "Optional: tailor a different DOCX or PDF. Studio PDF always uses cv-template.pdf.",
+      "tailorTemplateVersionLabel": "CV Template",
+      "tailorTemplateV2": "v2 (Recommended · 6 roles · 21 bullets)",
+      "tailorTemplateV1": "v1 (Classic · 4 roles · 14 bullets)",
       "tailorRecentUploads": "Recent uploads",
       "tailorJdTitle": "Job description",
       "tailorJdPlaceholder": "Paste the full job description here...",
       "tailorJdTooShort": "Job description is too short. Paste at least 20 characters.",
       "tailorNoStudioData": "No resume data in Resume Studio.",
-      "tailorNoUpload": "Select or upload a DOCX resume first.",
-      "tailorUploadReady": "DOCX uploaded and ready to tailor.",
+      "tailorNoUpload": "Select or upload a DOCX or PDF resume first.",
+      "tailorUploadReady": "File uploaded and ready to tailor.",
       "tailorCta": "Tailor resume",
       "tailoringTitle": "Tailoring your resume...",
       "tailoringDescription": "AI is adapting your experience and summary to match the job description.",
@@ -2780,6 +3999,9 @@
       "tailorAlreadyDone": "Already tailored for this application",
       "tailorGeneratedOn": "Generated {date}",
       "tailorViewResume": "View resume",
+      "tailorPreviewTitle": "Resume preview",
+      "tailorPreviewOpen": "Show preview",
+      "tailorPreviewClose": "Hide preview",
       "tailorRegenerate": "Regenerate",
       "tailorSuccessTitle": "Your resume now matches this job",
       "tailorErrorRetry": "Retry",
@@ -2826,7 +4048,56 @@
       "fileUploadSelected": "File selected",
       "fileUploading": "Uploading file...",
       "tailorUploadNeedsDraft": "This upload needs structured data first. Complete the import JSON step below.",
-      "tailorUploadImportStep": "Step 1 — Import JSON for this upload"
+      "tailorUploadImportStep": "Step 1 — Import JSON for this upload",
+      "matchKeywords": "Job keywords",
+      "matchMustHaves": "Must-haves",
+      "matchNiceToHaves": "Nice-to-haves",
+      "matchGaps": "Skills not claimed",
+      "matchImprovements": "Recruiter notes",
+      "matchTouched": "Sections updated",
+      "matchStatus": {
+        "present": "on the resume",
+        "paraphrased": "paraphrased",
+        "missing": "missing",
+        "adjacent": "adjacent skill"
+      },
+      "atsCheckerTitle": "ATS checker",
+      "atsCheckerScore": "Match {score}%",
+      "atsCheckerGaps": "Gaps vs this job",
+      "atsCheckerNoCriticalGaps": "No critical skill gaps called out",
+      "tailorAtsPreview": "ATS preview",
+      "tailorPreviewMenu": "Preview",
+      "tailorPreviewWord": "Word (DOCX)",
+      "tailorPreviewPdf": "PDF",
+      "tailorPreviewAts": "ATS",
+      "tailorPreviewMatch": "Match",
+      "tailorMatchButton": "Match stats",
+      "tailorMatchButtonScore": "Match {score}%",
+      "tailorDownloadMenu": "Download",
+      "tailorDownloadDocx": "DOCX",
+      "tailorDownloadPdf": "PDF",
+      "tailorDownloadAtsDocx": "ATS DOCX",
+      "tailorDownloadAtsPdf": "ATS PDF",
+      "tailorExportFailed": "Could not export the file",
+      "tailorPdfSuccess": "ATS PDF ready",
+      "tailorPdfFailed": "Could not generate PDF",
+      "pitchTitle": "Application pitch",
+      "pitchGenerate": "Write pitch",
+      "pitchRegenerate": "Rewrite pitch",
+      "pitchCopy": "Copy",
+      "pitchCopied": "Pitch copied",
+      "pitchCopyFailed": "Could not copy pitch",
+      "pitchSuccess": "Pitch ready",
+      "pitchFailed": "Could not generate pitch",
+      "polishUploadTitle": "Upload your PDF",
+      "polishUploadHint": "Upload a normal PDF — same as Word: preview it in the panel and download that file. Replacing it updates the attached resume.",
+      "polishReplaceCta": "Replace attached file",
+      "polishReplaceCancel": "Cancel",
+      "polishDocxSuccess": "Polished DOCX replaced the generated file",
+      "polishPdfSuccess": "PDF saved as the resume for this application",
+      "polishUploadFailed": "Could not replace the resume file",
+      "tailorRegeneratePdf": "Rebuild PDF from DOCX",
+      "tailorPdfOnDemandNotice": "To conserve your iLovePDF credits, the PDF is generated on demand upon request."
     }
   },
   "auth": {
@@ -2865,7 +4136,39 @@
       "signInGithub": "Sign in with GitHub",
       "connectingGoogle": "Connecting with Google",
       "connectingGithub": "Connecting with GitHub",
-      "errorSignIn": "Could not sign in"
+      "errorSignIn": "Could not sign in",
+      "signInPasskey": "Sign in with a passkey",
+      "connectingPasskey": "Waiting for your passkey...",
+      "errorPasskey": "Could not sign in with your passkey"
+    },
+    "twoFactor": {
+      "title": "Confirm it's you",
+      "metaDescription": "Enter your two-factor code to finish signing in.",
+      "description": {
+        "totp": "Enter the 6-digit code from your authenticator app.",
+        "otp": "We'll email a 6-digit code to the address on your account.",
+        "backup": "Enter one of your single-use backup codes. Each code works once."
+      },
+      "methodLabel": "Verification method",
+      "method": {
+        "totp": "Authenticator",
+        "otp": "Email code",
+        "backup": "Backup code"
+      },
+      "codeLabel": "Verification code",
+      "codePlaceholder": "123456",
+      "backupLabel": "Backup code",
+      "backupPlaceholder": "xxxxx-xxxxx",
+      "sendCode": "Email me a code",
+      "sending": "Sending...",
+      "resend": "Send a new code",
+      "codeSent": "Code sent. Check your inbox — it expires in 5 minutes.",
+      "verify": "Verify",
+      "verifying": "Verifying...",
+      "errorVerify": "That code is invalid or has expired.",
+      "errorSend": "Could not send the code. Try again in a minute.",
+      "backToSignIn": "Wrong account?",
+      "signIn": "Back to sign in"
     },
     "register": {
       "titlePortfolio": "Create your portfolio",
@@ -2931,10 +4234,10 @@
     "privacy": {
       "title": "Privacy Policy",
       "metaTitle": "Privacy Policy",
-      "metaDescription": "How we handle your data, including Spotify integration credentials and retention.",
+      "metaDescription": "How we handle your data, including anonymous audience measurement, optional email measurement, and Spotify credentials.",
       "subtitle": "How we handle your data",
-      "updatedAt": "Last updated: July 2026",
-      "intro": "This portfolio platform stores only the data needed to provide its features. This page explains what we collect when you connect Spotify and how you can remove it.",
+      "updatedAt": "Last updated: September 2026",
+      "intro": "This portfolio platform stores only the data needed to provide its features. This page explains anonymous audience measurement on public pages, optional email measurement, and what we collect if you connect Spotify.",
       "spotify": {
         "title": "Spotify integration",
         "intro": "If you connect Spotify in the admin panel, we store credentials for your own Spotify developer app so the Now Playing widget can show playback on your public portfolio.",
@@ -2946,6 +4249,23 @@
         "purpose": "We use this data only to request Spotify playback information on your behalf for visitors to your portfolio. We do not sell or share it with third parties.",
         "disconnect": "You can disconnect Spotify at any time from Admin → Spotify. Disconnecting deletes your Spotify tokens and app credentials from our database immediately.",
         "retention": "If you disconnect or ask us to stop processing your Spotify data, we delete it without undue delay and within five days at most, in line with Spotify's developer terms."
+      },
+      "analytics": {
+        "title": "Audience measurement",
+        "intro": "Public pages send a small first-party beacon so the owner can see approximate traffic. This is not advertising or cross-site tracking, and it does not set cookies.",
+        "storedTitle": "What we store",
+        "storedPageviews": "Daily totals of pageviews and session visits, grouped by page path, country, and referrer hostname",
+        "notStoredTitle": "What we do not store",
+        "notStoredIp": "IP addresses",
+        "notStoredId": "Cookies, fingerprints, or unique visitor identifiers",
+        "notStoredCity": "City-level location (country only, from the hosting platform)",
+        "purpose": "We use these aggregates only to show stats on the public /stats page and in the portfolio admin. Data is not sold or shared with analytics vendors.",
+        "optOut": "If your browser sends Do Not Track or Global Privacy Control, we skip the measurement entirely.",
+        "retention": "Aggregates older than 13 months are deleted."
+      },
+      "emailMeasurement": {
+        "title": "Optional email measurement",
+        "intro": "When sending a CV through the Job Tracker, the sender may choose to include a tracking image. If enabled, the email contains a visible notice to the recipient. Image-load counts are approximate and do not confirm that a person read the email or CV; email clients may block or cache images, and proxies may load them automatically. We do not store the recipient's IP address or user-agent for this measurement."
       }
     }
   },

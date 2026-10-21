@@ -4,13 +4,27 @@ import { ServicesBento } from "./services-bento";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
 
 describe("ServicesBento", () => {
-  it("renders all service cards and contact CTA card correctly", () => {
-    renderWithIntl(<ServicesBento dbServices={[]} />);
+  it("renders nothing when the tenant has no services", () => {
+    const { container } = renderWithIntl(<ServicesBento dbServices={[]} />);
+    expect(container).toBeEmptyDOMElement();
+  });
 
-    expect(screen.getAllByText(/Frontend & UI\/UX/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Backend & APIs/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Mobile/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/DevOps & Cloud/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Cybersecurity/i).length).toBeGreaterThan(0);
+  it("renders tenant service cards and contact CTA", () => {
+    renderWithIntl(
+      <ServicesBento
+        dbServices={[
+          {
+            id: "svc-1",
+            type: "FRONTEND",
+            image: "",
+            title: "Tenant Frontend",
+            description: "Only this tenant's copy",
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Tenant Frontend")).toBeInTheDocument();
+    expect(screen.queryByText(/Cybersecurity/i)).not.toBeInTheDocument();
   });
 });

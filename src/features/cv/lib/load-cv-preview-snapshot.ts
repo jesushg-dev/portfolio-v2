@@ -4,6 +4,8 @@ import type { Locale } from "@/i18n/config";
 import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { appendPortfolioWebsiteContact } from "@/lib/cv/append-portfolio-website-contact";
+import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-preview-text";
+import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 
 function formatExperienceDate(date: Date | null): string {
   if (!date) return "";
@@ -118,10 +120,7 @@ export async function loadCvPreviewSnapshot(
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    db.cvTechnicalSkill.findMany({
-      where: { userId },
-      orderBy: { order: "asc" },
-    }),
+    resolveUserTechnicalSkills(db, userId),
     db.cvExperience.findMany({
       where: { userId },
       include: {
@@ -151,9 +150,10 @@ export async function loadCvPreviewSnapshot(
   const field = createLocalizedFieldResolver(appLanguages, locale);
   const headerT = field.for(header.translations);
 
-  const aboutMeText =
-    headerT("heroSummary") ||
-    (aboutMe ? field(aboutMe.translations, "aboutMe") : null);
+  const aboutMeText = resolveCvAboutPreviewText(
+    headerT("heroSummary"),
+    aboutMe ? field(aboutMe.translations, "aboutMe") : null,
+  );
 
   return {
     header: {
@@ -217,10 +217,12 @@ export async function loadCvPreviewSnapshot(
         endDate: formatExperienceDate(experience.endDate),
         current: experience.current,
         order: experience.order,
-        responsibilities: experience.responsibilities.map((responsibility) => ({
-          text: field(responsibility.translations, "text"),
-          order: responsibility.order,
-        })),
+        responsibilities: experience.responsibilities
+          .filter((responsibility) => !responsibility.atsOnly)
+          .map((responsibility) => ({
+            text: field(responsibility.translations, "text"),
+            order: responsibility.order,
+          })),
         skillNames: experience.CvExperienceSkill.map((item) => item.skill.title)
           .slice()
           .sort(),

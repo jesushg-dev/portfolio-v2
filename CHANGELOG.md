@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+Entries below **3.0.0** are historical. Current `package.json` is **3.0.0** on
+**Next.js 16.3**, **React 19**, **TypeScript 6**, **Tailwind CSS 4**, **pnpm 10**.
+See [README](./README.md) and [docs/README.md](./docs/README.md).
+
+## Unreleased
+
+### Tests
+
+- Expanded Jest unit and tRPC integration coverage for admin/public routers,
+  query modules, analytics helpers, CV import, and ATS preview HTML.
+- Coverage collection now targets the logic layer (`lib` / `server` / `hooks`)
+  instead of pages and shadcn UI.
+
+### Docs
+
+- Replaced the stale README (Next.js 13 / Mongoose) with the current stack, pnpm
+  install steps, env table, and a documentation index.
+- Added architecture, security, analytics, admin CMS, Job Tracker, Resume Engine,
+  public pages, i18n, seed/export, email-template, and media guides.
+- Email templates and compiled HTML use jesushg.com (not jehg.dev).
+
+### Security
+
+- Bind analytics collect and tenant resolution to Host; HMAC-proof PDF tenant
+  header; stop logging reset tokens in production; rate-limit collect and contact;
+  ignore PDF `baseUrl` from clients; HTTPS-only `next/image` catch-all.
+
 ## 3.0.0 (2025-04-01)
 
 ### Features

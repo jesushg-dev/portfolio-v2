@@ -30,12 +30,13 @@ export default async function EditApplicationPage({
           {t("editApplicationDescription")}
         </p>
       </div>
-      <div className="mx-auto w-full max-w-3xl">
+      <div className="mx-auto w-full max-w-4xl">
         <ApplicationForm
           key={editorDto.id}
           initialData={editorDto}
           companies={companies}
           locale={locale as Locale}
+          variant="page"
         />
       </div>
     </div>

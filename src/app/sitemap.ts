@@ -29,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return staticEntries;
   }
 
-  const [projects, skills] = await Promise.all([
+  const [projects, skills, processPages] = await Promise.all([
     db.project.findMany({
       where: {
         userId: primaryProfile.userId,
@@ -44,6 +44,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       where: { userId: primaryProfile.userId },
       select: { title: true, createdAt: true },
       orderBy: { createdAt: "desc" },
+    }),
+    db.processPage.findMany({
+      where: {
+        userId: primaryProfile.userId,
+        isPublished: true,
+      },
+      select: { slug: true, updatedAt: true },
+      orderBy: [{ order: "asc" }, { createdAt: "asc" }],
     }),
   ]);
 
@@ -79,5 +87,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ),
   );
 
-  return [...staticEntries, ...projectEntries, ...skillEntries];
+  const processPageEntries = processPages.map((page) =>
+    buildLocalizedSitemapEntry(
+      {
+        pathname: "/process/[slug]",
+        params: { slug: page.slug },
+      },
+      {
+        lastModified: page.updatedAt,
+        changeFrequency: "monthly",
+        priority: 0.6,
+      },
+    ),
+  );
+
+  return [
+    ...staticEntries,
+    ...projectEntries,
+    ...skillEntries,
+    ...processPageEntries,
+  ];
 }

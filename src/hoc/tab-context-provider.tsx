@@ -1,12 +1,23 @@
-import { createContext, useMemo, type ReactNode, useContext } from "react";
+"use client";
+
+import {
+  createContext,
+  useMemo,
+  type ReactNode,
+  useContext,
+  type PointerEvent,
+} from "react";
 
 interface ITabContext {
   tabId: string;
   tabCount: number;
   minimal?: boolean;
   variant?: "primary" | "secondary";
+  vertical: boolean;
   currentTab: number;
   setCurrentTab: (value: number) => void;
+  registerTab: (index: number, node: HTMLElement | null) => void;
+  onActivePointerDown: (event: PointerEvent<HTMLElement>) => void;
 }
 
 const TabContext = createContext<ITabContext | undefined>(undefined);
@@ -20,6 +31,8 @@ interface ITabContextProviderProps {
   variant: "primary" | "secondary";
   currentTab: number;
   setCurrentTab: (value: number) => void;
+  registerTab: (index: number, node: HTMLElement | null) => void;
+  onActivePointerDown: (event: PointerEvent<HTMLElement>) => void;
 }
 
 const TabContextProvider = ({
@@ -31,6 +44,8 @@ const TabContextProvider = ({
   currentTab,
   vertical,
   setCurrentTab,
+  registerTab,
+  onActivePointerDown,
 }: ITabContextProviderProps) => {
   const contextValue = useMemo(
     () => ({
@@ -41,8 +56,20 @@ const TabContextProvider = ({
       variant,
       tabId,
       tabCount,
+      registerTab,
+      onActivePointerDown,
     }),
-    [currentTab, minimal, setCurrentTab, tabId, tabCount, variant, vertical],
+    [
+      currentTab,
+      minimal,
+      onActivePointerDown,
+      registerTab,
+      setCurrentTab,
+      tabId,
+      tabCount,
+      variant,
+      vertical,
+    ],
   );
 
   return (
@@ -50,7 +77,6 @@ const TabContextProvider = ({
   );
 };
 
-// create a usContext but validate if it is used inside a Tab
 export const useTabContext = () => {
   const context = useContext(TabContext);
   if (context === undefined) {

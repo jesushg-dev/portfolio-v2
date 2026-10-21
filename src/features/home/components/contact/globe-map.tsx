@@ -48,29 +48,20 @@ type ConnectionPhase =
 
 interface GlobeMapProps {
   /** Where the camera starts, zoomed in close (visitor's location). */
-  origin?: LocationPoint;
+  origin: LocationPoint;
   /** Where the connecting line travels to (portfolio owner's location). */
-  destination?: LocationPoint;
+  destination: LocationPoint;
   /** Auto-run the reveal sequence once world data has loaded. */
   autoPlayConnection?: boolean;
   /** Accent color for markers and the connecting line. Default uses theme primary token. */
   accentColor?: string;
+  /** Initial projection mode: "flat" (default) or "globe". */
+  initialProjection?: "globe" | "flat";
   /** Fill color for the ocean / globe sphere. Default uses theme card token. */
   oceanColor?: string;
   /** Fill color for land / continents. Default uses theme muted token. */
   landColor?: string;
 }
-
-const DEFAULT_ORIGIN: LocationPoint = {
-  lat: 12.1364,
-  lon: -86.2514,
-  label: "Managua",
-};
-const DEFAULT_DESTINATION: LocationPoint = {
-  lat: 45.5017,
-  lon: -73.5673,
-  label: "Montréal",
-};
 
 const DEFAULT_ACCENT_COLOR = "var(--primary)";
 const DEFAULT_OCEAN_COLOR = "var(--card)";
@@ -86,6 +77,8 @@ const BOUNDARY_SEGMENTS = 144;
 const FRAME_MARGIN_PX = 180;
 const MIN_ZOOM_OUT = 1;
 const MAX_ZOOM_OUT = 3.2;
+const FLIGHT_EXTRA_LIFT_RATIO = 0.1;
+const FLIGHT_EXTRA_LIFT_MAX_PX = 28;
 
 export interface InterpolatedProjection extends d3.GeoProjection {
   alpha(): number;
@@ -184,6 +177,118 @@ function getFollowRotation(
   return [-midLon, -midLat];
 }
 
+function isValidProjected(
+  point: [number, number] | null,
+): point is [number, number] {
+  return (
+    point != null &&
+    Number.isFinite(point[0]) &&
+    Number.isFinite(point[1]) &&
+    !Number.isNaN(point[0]) &&
+    !Number.isNaN(point[1])
+  );
+}
+
+function quadraticThrough(
+  start: [number, number],
+  through: [number, number],
+  end: [number, number],
+): [number, number] {
+  return [
+    2 * through[0] - (start[0] + end[0]) / 2,
+    2 * through[1] - (start[1] + end[1]) / 2,
+  ];
+}
+
+function quadraticSegment(
+  start: [number, number],
+  control: [number, number],
+  end: [number, number],
+  t: number,
+): string {
+  const progress = Math.min(Math.max(t, 0), 1);
+  if (progress <= 0) return "";
+
+  const rest = 1 - progress;
+  const controlPrime: [number, number] = [
+    rest * start[0] + progress * control[0],
+    rest * start[1] + progress * control[1],
+  ];
+  const tip: [number, number] = [
+    rest * rest * start[0] +
+      2 * rest * progress * control[0] +
+      progress * progress * end[0],
+    rest * rest * start[1] +
+      2 * rest * progress * control[1] +
+      progress * progress * end[1],
+  ];
+
+  return `M${start[0]},${start[1]} Q${controlPrime[0]},${controlPrime[1]} ${tip[0]},${tip[1]}`;
+}
+
+function flightPathD(
+  origin: LocationPoint,
+  destination: LocationPoint,
+  project: (point: [number, number]) => [number, number] | null,
+  lineProgress: number,
+  globeFactor: number,
+  isVisible: (lon: number, lat: number) => boolean,
+): string {
+  const start = project([origin.lon, origin.lat]);
+  const end = project([destination.lon, destination.lat]);
+  if (!isValidProjected(start) || !isValidProjected(end)) return "";
+
+  const interpolate = d3.geoInterpolate(
+    [origin.lon, origin.lat],
+    [destination.lon, destination.lat],
+  );
+  const [midLon, midLat] = interpolate(0.5);
+  const geoMid = isVisible(midLon, midLat) ? project([midLon, midLat]) : null;
+
+  const chordMid: [number, number] = [
+    (start[0] + end[0]) / 2,
+    (start[1] + end[1]) / 2,
+  ];
+  const through: [number, number] = isValidProjected(geoMid)
+    ? [
+        chordMid[0] + (geoMid[0] - chordMid[0]) * globeFactor,
+        chordMid[1] + (geoMid[1] - chordMid[1]) * globeFactor,
+      ]
+    : chordMid;
+
+  const dx = end[0] - start[0];
+  const dy = end[1] - start[1];
+  const chord = Math.hypot(dx, dy) || 1;
+  const geoLiftX = through[0] - chordMid[0];
+  const geoLiftY = through[1] - chordMid[1];
+  const geoLift = Math.hypot(geoLiftX, geoLiftY);
+
+  let liftX: number;
+  let liftY: number;
+  if (geoLift > 2) {
+    liftX = geoLiftX / geoLift;
+    liftY = geoLiftY / geoLift;
+  } else {
+    liftX = -dy / chord;
+    liftY = dx / chord;
+    if (liftY > 0) {
+      liftX = -liftX;
+      liftY = -liftY;
+    }
+  }
+
+  const extra =
+    Math.min(chord * FLIGHT_EXTRA_LIFT_RATIO, FLIGHT_EXTRA_LIFT_MAX_PX) *
+    globeFactor;
+  const peaked: [number, number] = [
+    through[0] + liftX * extra,
+    through[1] + liftY * extra,
+  ];
+  const control = quadraticThrough(start, peaked, end);
+
+  return quadraticSegment(start, control, end, lineProgress);
+}
+
 function getZoomOutTarget(
   origin: LocationPoint,
   destination: LocationPoint,
@@ -205,17 +310,20 @@ function getZoomOutTarget(
 }
 
 export function GlobeMap({
-  origin = DEFAULT_ORIGIN,
-  destination = DEFAULT_DESTINATION,
+  origin,
+  destination,
   autoPlayConnection = true,
   accentColor = DEFAULT_ACCENT_COLOR,
+  initialProjection = "flat",
   oceanColor = DEFAULT_OCEAN_COLOR,
   landColor = DEFAULT_LAND_COLOR,
-}: GlobeMapProps = {}) {
+}: GlobeMapProps) {
   const t = useTranslations("main.contact.globe");
   const svgRef = useRef<SVGSVGElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [progress, setProgress] = useState([0]);
+  const [progress, setProgress] = useState([
+    initialProjection === "globe" ? 0 : 100,
+  ]);
   const [worldData, setWorldData] = useState<GeoFeature[]>([]);
   const [rotation, setRotation] = useState([0, 0]);
   const [userZoomMultiplier, setUserZoomMultiplier] = useState(1);
@@ -569,39 +677,71 @@ export function GlobeMap({
     const coordOrigin = projection([origin.lon, origin.lat]);
     const coordDestination = projection([destination.lon, destination.lat]);
 
+    const distinctOrigin =
+      origin.lat !== destination.lat || origin.lon !== destination.lon;
     const showOrigin =
+      distinctOrigin &&
       connectionPhase !== "idle" &&
       !!coordOrigin &&
       isFrontFacing(origin.lon, origin.lat);
     const showDestination =
       (connectionPhase === "revealDestination" ||
         connectionPhase === "line" ||
-        connectionPhase === "done") &&
+        connectionPhase === "done" ||
+        !distinctOrigin) &&
       !!coordDestination &&
       isFrontFacing(destination.lon, destination.lat);
     const showLine =
+      distinctOrigin &&
       (connectionPhase === "line" || connectionPhase === "done") &&
       !!coordOrigin &&
       !!coordDestination &&
       isFrontFacing(origin.lon, origin.lat) &&
       isFrontFacing(destination.lon, destination.lat);
 
-    const drawMarker = (
-      coord: [number, number],
-      label: string | undefined,
-      hasPopped: React.MutableRefObject<boolean>,
+    const drawHalo = (
+      group: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
+      x: number,
+      y: number,
     ) => {
-      const group = svg.append("g").attr("class", "location-marker");
-
-      // Outer glowing ring for high Mapbox-like contrast
       group
         .append("circle")
-        .attr("cx", coord[0])
-        .attr("cy", coord[1])
+        .attr("cx", x)
+        .attr("cy", y)
         .attr("r", 9)
         .attr("fill", accentColor)
         .attr("opacity", 0.3)
         .attr("class", "animate-pulse");
+    };
+
+    const drawLabel = (
+      group: d3.Selection<SVGGElement, unknown, d3.BaseType, unknown>,
+      x: number,
+      y: number,
+      text: string,
+    ) => {
+      if (!text) return;
+      group
+        .append("text")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("text-anchor", "middle")
+        .attr("fill", "var(--foreground)")
+        .attr("stroke", "var(--background)")
+        .attr("stroke-width", 4)
+        .attr("paint-order", "stroke")
+        .attr("font-size", 11)
+        .attr("font-weight", 600)
+        .text(text);
+    };
+
+    const drawDotMarker = (
+      coord: [number, number],
+      label: string,
+      hasPopped: React.MutableRefObject<boolean>,
+    ) => {
+      const group = svg.append("g").attr("class", "location-marker");
+      drawHalo(group, coord[0], coord[1]);
 
       const circle = group
         .append("circle")
@@ -624,32 +764,276 @@ export function GlobeMap({
       } else {
         circle.attr("r", 6).attr("opacity", 1);
       }
+
+      drawLabel(group, coord[0], coord[1] - 16, label);
+    };
+
+    const drawPinMarker = (
+      coord: [number, number],
+      label: string,
+      hasPopped: React.MutableRefObject<boolean>,
+    ) => {
+      const group = svg.append("g").attr("class", "location-marker");
+      drawHalo(group, coord[0], coord[1]);
+
+      const pin = group
+        .append("g")
+        .attr("transform", `translate(${coord[0]},${coord[1]})`);
+
+      const path = pin
+        .append("path")
+        .attr(
+          "d",
+          "M0,0 C-1,-10 -9,-16 -9,-24 A9,9 0 1,1 9,-24 C9,-16 1,-10 0,0 Z",
+        )
+        .attr("fill", accentColor)
+        .attr("stroke", "var(--background)")
+        .attr("stroke-width", 1.5);
+
+      pin
+        .append("circle")
+        .attr("cx", 0)
+        .attr("cy", -24)
+        .attr("r", 3.5)
+        .attr("fill", "var(--background)");
+
+      if (!hasPopped.current) {
+        path.attr("opacity", 0).transition().duration(380).attr("opacity", 1);
+        hasPopped.current = true;
+      }
+
+      drawLabel(group, coord[0], coord[1] - 38, label);
     };
 
     if (showOrigin && coordOrigin) {
-      drawMarker(coordOrigin, "", hasPoppedOrigin);
+      drawPinMarker(coordOrigin, origin.label ?? "", hasPoppedOrigin);
     }
     if (showDestination && coordDestination) {
-      drawMarker(coordDestination, "", hasPoppedDestination);
+      drawDotMarker(
+        coordDestination,
+        destination.label ?? "",
+        hasPoppedDestination,
+      );
     }
 
     if (showLine && coordOrigin && coordDestination) {
-      const currentX =
-        coordOrigin[0] + (coordDestination[0] - coordOrigin[0]) * lineProgress;
-      const currentY =
-        coordOrigin[1] + (coordDestination[1] - coordOrigin[1]) * lineProgress;
+      const flightPath = flightPathD(
+        origin,
+        destination,
+        projection,
+        lineProgress,
+        1 - tProg,
+        isFrontFacing,
+      );
 
-      svg
-        .insert("path", ".location-marker")
-        .attr(
-          "d",
-          `M${coordOrigin[0]},${coordOrigin[1]} L${currentX},${currentY}`,
-        )
-        .attr("fill", "none")
-        .attr("stroke", accentColor)
-        .attr("stroke-width", 2)
-        .attr("stroke-linecap", "round")
-        .attr("stroke-dasharray", "6,5");
+      if (flightPath) {
+        svg
+          .insert("path", ".location-marker")
+          .attr("d", flightPath)
+          .attr("fill", "none")
+          .attr("stroke", accentColor)
+          .attr("stroke-width", 2)
+          .attr("stroke-linecap", "round")
+          .attr("stroke-linejoin", "round")
+          .attr("stroke-dasharray", "6,5");
+
+        if (connectionPhase === "done") {
+          let defs = svg.select<SVGDefsElement>("defs");
+          if (defs.empty()) {
+            defs = svg.append("defs");
+          }
+          if (defs.select("#packet-glow").empty()) {
+            const filter = defs
+              .append("filter")
+              .attr("id", "packet-glow")
+              .attr("x", "-50%")
+              .attr("y", "-50%")
+              .attr("width", "200%")
+              .attr("height", "200%");
+            filter
+              .append("feGaussianBlur")
+              .attr("stdDeviation", "2.5")
+              .attr("result", "coloredBlur");
+            const merge = filter.append("feMerge");
+            merge.append("feMergeNode").attr("in", "coloredBlur");
+            merge.append("feMergeNode").attr("in", "SourceGraphic");
+          }
+
+          const packetGroup = svg
+            .insert("g", ".location-marker")
+            .attr("class", "packet-transmission");
+
+          // Ping ripple at destination (Managua) upon request packet arrival
+          const destRipple = packetGroup
+            .append("circle")
+            .attr("cx", coordDestination[0])
+            .attr("cy", coordDestination[1])
+            .attr("fill", "none")
+            .attr("stroke", accentColor)
+            .attr("stroke-width", 1.5)
+            .attr("opacity", 0);
+
+          destRipple
+            .append("animate")
+            .attr("attributeName", "r")
+            .attr("values", "4;4;24;26;4")
+            .attr("keyTimes", "0;0.38;0.52;0.56;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          destRipple
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0;0.85;0;0")
+            .attr("keyTimes", "0;0.38;0.41;0.54;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Ping ripple at origin (Visitor) upon return packet arrival
+          const originRipple = packetGroup
+            .append("circle")
+            .attr("cx", coordOrigin[0])
+            .attr("cy", coordOrigin[1])
+            .attr("fill", "none")
+            .attr("stroke", accentColor)
+            .attr("stroke-width", 1.5)
+            .attr("opacity", 0);
+
+          originRipple
+            .append("animate")
+            .attr("attributeName", "r")
+            .attr("values", "4;4;24;26;4")
+            .attr("keyTimes", "0;0.86;0.97;0.99;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          originRipple
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0;0.85;0;0")
+            .attr("keyTimes", "0;0.86;0.89;0.98;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Forward Trail Particle (faint trail behind forward packet)
+          const fwdTrail = packetGroup.append("g");
+          fwdTrail
+            .append("circle")
+            .attr("r", 2.2)
+            .attr("fill", accentColor)
+            .attr("opacity", 0.5)
+            .attr("filter", "url(#packet-glow)");
+
+          fwdTrail
+            .append("animateMotion")
+            .attr("path", flightPath)
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite")
+            .attr("keyPoints", "0;0.97;0.97;0.97;0")
+            .attr("keyTimes", "0;0.41;0.41;0.98;1")
+            .attr("calcMode", "linear");
+
+          fwdTrail
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0.6;0.6;0;0;0")
+            .attr("keyTimes", "0;0.05;0.37;0.41;0.98;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Forward Main Packet (Origin -> Destination)
+          const fwdPacket = packetGroup.append("g");
+          fwdPacket
+            .append("circle")
+            .attr("r", 5)
+            .attr("fill", accentColor)
+            .attr("opacity", 0.45)
+            .attr("filter", "url(#packet-glow)");
+
+          fwdPacket
+            .append("circle")
+            .attr("r", 2.8)
+            .attr("fill", "#ffffff")
+            .attr("stroke", accentColor)
+            .attr("stroke-width", 1.2);
+
+          fwdPacket
+            .append("animateMotion")
+            .attr("path", flightPath)
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite")
+            .attr("keyPoints", "0;1;1;1;0")
+            .attr("keyTimes", "0;0.40;0.40;0.98;1")
+            .attr("calcMode", "linear");
+
+          fwdPacket
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;1;1;0;0;0")
+            .attr("keyTimes", "0;0.04;0.36;0.40;0.98;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Return Trail Particle (faint trail behind return packet)
+          const retTrail = packetGroup.append("g");
+          retTrail
+            .append("circle")
+            .attr("r", 2.2)
+            .attr("fill", accentColor)
+            .attr("opacity", 0.5)
+            .attr("filter", "url(#packet-glow)");
+
+          retTrail
+            .append("animateMotion")
+            .attr("path", flightPath)
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite")
+            .attr("keyPoints", "1;1;0.03;0.03;1")
+            .attr("keyTimes", "0;0.49;0.89;0.98;1")
+            .attr("calcMode", "linear");
+
+          retTrail
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0;0.6;0.6;0;0")
+            .attr("keyTimes", "0;0.49;0.53;0.85;0.89;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+
+          // Return Main Packet (Destination -> Origin)
+          const retPacket = packetGroup.append("g");
+          retPacket
+            .append("circle")
+            .attr("r", 5)
+            .attr("fill", accentColor)
+            .attr("opacity", 0.45)
+            .attr("filter", "url(#packet-glow)");
+
+          retPacket
+            .append("circle")
+            .attr("r", 2.8)
+            .attr("fill", "#ffffff")
+            .attr("stroke", accentColor)
+            .attr("stroke-width", 1.2);
+
+          retPacket
+            .append("animateMotion")
+            .attr("path", flightPath)
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite")
+            .attr("keyPoints", "1;1;0;0;1")
+            .attr("keyTimes", "0;0.48;0.88;0.98;1")
+            .attr("calcMode", "linear");
+
+          retPacket
+            .append("animate")
+            .attr("attributeName", "opacity")
+            .attr("values", "0;0;1;1;0;0")
+            .attr("keyTimes", "0;0.48;0.52;0.84;0.88;1")
+            .attr("dur", "4.5s")
+            .attr("repeatCount", "indefinite");
+        }
+      }
     }
   }, [
     worldData,
@@ -668,13 +1052,14 @@ export function GlobeMap({
     showGraticule,
     showOceanFill,
     fallbackLabel,
+    t,
   ]);
 
   const handleAnimate = () => {
     if (isAnimating) return;
     setIsAnimating(true);
     const startProgress = progress[0];
-    const endProgress = startProgress === 0 ? 100 : 0;
+    const endProgress = startProgress < 50 ? 100 : 0;
     const duration = 2000;
     const startTime = Date.now();
 
@@ -766,7 +1151,7 @@ export function GlobeMap({
               disabled={isAnimating}
               className="cursor-pointer"
             >
-              {progress[0] === 0 ? (
+              {progress[0] < 50 ? (
                 <>
                   <MapIcon className="text-muted-foreground mr-2 size-3.5" />
                   <span>{t("unroll")}</span>

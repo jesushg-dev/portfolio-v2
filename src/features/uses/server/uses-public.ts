@@ -20,6 +20,12 @@ export interface UsesPublicPageData {
     codingIntro: string | null;
     browserIntro: string | null;
     clarifications: string[];
+    workspaceTags: {
+      itemId: string;
+      title: string;
+      xPercent: number;
+      yPercent: number;
+    }[];
   };
   everyday: UsesPublicItem[];
   software: UsesPublicItem[];
@@ -81,6 +87,16 @@ export async function getUsesPageData(
             UsesClarificationTranslation: { include: { language: true } },
           },
         },
+        UsesWorkspaceTag: {
+          orderBy: { order: "asc" },
+          include: {
+            UsesItem: {
+              include: {
+                UsesItemTranslation: { include: { language: true } },
+              },
+            },
+          },
+        },
       },
     }),
     db.usesItem.findMany({
@@ -108,6 +124,37 @@ export async function getUsesPageData(
       ),
     ).filter(Boolean) ?? [];
 
+  const everyday = items
+    .filter((item) => item.type === "EVERYDAY")
+    .map((item) => mapItem(item, locale));
+  const software = items
+    .filter((item) => item.type === "SOFTWARE")
+    .map((item) => mapItem(item, locale));
+  const browser = items
+    .filter((item) => item.type === "BROWSER")
+    .map((item) => mapItem(item, locale));
+
+  const visibleItemIds = new Set(
+    [...everyday, ...software]
+      .filter((item) => Boolean(item.image))
+      .map((item) => item.id),
+  );
+
+  const workspaceTags =
+    settings?.UsesWorkspaceTag?.flatMap((tag) => {
+      if (!visibleItemIds.has(tag.usesItemId)) return [];
+      const mapped = mapItem(tag.UsesItem, locale);
+      if (!mapped.title) return [];
+      return [
+        {
+          itemId: tag.usesItemId,
+          title: mapped.title,
+          xPercent: tag.xPercent,
+          yPercent: tag.yPercent,
+        },
+      ];
+    }) ?? [];
+
   return {
     settings: {
       workspaceImage: settings?.workspaceImage ?? null,
@@ -116,15 +163,10 @@ export async function getUsesPageData(
       codingIntro: settingsTranslation?.codingIntro?.trim() ?? null,
       browserIntro: settingsTranslation?.browserIntro?.trim() ?? null,
       clarifications,
+      workspaceTags,
     },
-    everyday: items
-      .filter((item) => item.type === "EVERYDAY")
-      .map((item) => mapItem(item, locale)),
-    software: items
-      .filter((item) => item.type === "SOFTWARE")
-      .map((item) => mapItem(item, locale)),
-    browser: items
-      .filter((item) => item.type === "BROWSER")
-      .map((item) => mapItem(item, locale)),
+    everyday,
+    software,
+    browser,
   };
 }

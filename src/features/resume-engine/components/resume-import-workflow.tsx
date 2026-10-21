@@ -107,9 +107,10 @@ export const ResumeImportWorkflow: FC<{
     });
   }, [manualJson, submitManualImport, t, uploadId]);
 
-  const handleLoadPrompt = useCallback(() => {
-    if (!uploadId) return;
-    void importPrompt.refetch();
+  const handleLoadPrompt = useCallback(async () => {
+    if (!uploadId) return null;
+    const result = await importPrompt.refetch();
+    return result.data ?? null;
   }, [importPrompt, uploadId]);
 
   const handleImport = useCallback(() => {
@@ -198,6 +199,7 @@ export const ResumeImportWorkflow: FC<{
         <CardContent className="space-y-4">
           {(step === "upload" || step === "manual") && (
             <ResumeDocxUpload
+              allowPdf
               resetKey={uploadId ?? step}
               onUploaded={handleUploadComplete}
               onError={(message) => {

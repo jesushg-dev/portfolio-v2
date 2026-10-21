@@ -4,26 +4,28 @@ import { ProcessSectionHeader } from "./process-section-header";
 import { processSectionHeadingId } from "./process-page-styles";
 
 interface ProcessBenefitsGridProps {
+  id?: string;
   eyebrow: string;
   title: string;
   items: ProcessBenefit[];
 }
 
 export function ProcessBenefitsGrid({
+  id = "why",
   eyebrow,
   title,
   items,
 }: ProcessBenefitsGridProps) {
   return (
     <section
-      id="why"
-      aria-labelledby={processSectionHeadingId("why")}
+      id={id}
+      aria-labelledby={processSectionHeadingId(id)}
       className="bg-muted/50 px-6 py-20"
     >
       <div className="mx-auto max-w-6xl">
         <ProcessReveal>
           <ProcessSectionHeader
-            sectionId="why"
+            sectionId={id}
             eyebrow={eyebrow}
             title={title}
           />

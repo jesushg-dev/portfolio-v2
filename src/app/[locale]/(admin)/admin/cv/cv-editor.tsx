@@ -16,6 +16,7 @@ import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { CvEditorSkeleton } from "@/features/cv/components/cv-editor-skeleton";
 import { CvPageFrame } from "@/features/cv/components/cv-page-frame";
+import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-preview-text";
 import { ResumeImportWorkflow } from "@/features/resume-engine/components/resume-import-workflow";
 
 const SECTION_LINKS = [
@@ -28,6 +29,7 @@ const SECTION_LINKS = [
   { id: "experience", labelKey: "experience" as const },
   { id: "soft-skills", labelKey: "personalSkills" as const },
   { id: "additional", labelKey: "additionalInformation" as const },
+  { id: "personal-references", labelKey: "personalReferences" as const },
 ] as const;
 
 type EditorView = "edit" | "preview" | "import";
@@ -64,7 +66,10 @@ export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
     [languages, previewLocale],
   );
 
-  const aboutMePreview = field(data?.aboutMe?.translations, "aboutMe");
+  const aboutMePreview = resolveCvAboutPreviewText(
+    field(data?.header?.translations, "heroSummary"),
+    field(data?.aboutMe?.translations, "aboutMe"),
+  );
 
   const localizedPreviewData = useMemo(() => {
     if (!previewData) return null;

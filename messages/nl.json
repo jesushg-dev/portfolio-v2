@@ -1,7 +1,7 @@
 {
   "adminCredentials": {
     "title": "Inloggegevens & Integraties",
-    "subtitle": "Configureer API-sleutels en integratie-instellingen per gebruiker voor Resend, Spotify, UploadThing en AI-modellen.",
+    "subtitle": "Configureer API-sleutels en integratie-instellingen per gebruiker voor Resend, Spotify, Google Calendar, UploadThing en AI-modellen.",
     "providers": {
       "resend": {
         "name": "Resend (E-mail)",
@@ -11,6 +11,10 @@
         "name": "Spotify (Audio)",
         "description": "OAuth-gegevens voor de Now Playing-widget."
       },
+      "google-calendar": {
+        "name": "Google Calendar",
+        "description": "Synchroniseer job tracker-interviews en follow-ups met je Google Agenda."
+      },
       "uploadthing": {
         "name": "UploadThing (Opslag)",
         "description": "Aangepaste uploadreferenties voor je tenant."
@@ -18,6 +22,10 @@
       "ai": {
         "name": "AI-modellen",
         "description": "API-sleutels voor Gemini, OpenAI en Anthropic."
+      },
+      "ilovepdf": {
+        "name": "iLovePDF (PDF-engine)",
+        "description": "Hoogwaardige conversies (DOCX naar PDF, HTML naar PDF) via iLoveAPI."
       }
     },
     "actions": {
@@ -38,19 +46,102 @@
       "noRefreshToken": "Spotify heeft geen refresh token teruggestuurd. Trek toegang in bij Spotify en verbind opnieuw.",
       "accessDenied": "Je hebt toegang tot Spotify geweigerd."
     },
+    "googleCalendarCallback": {
+      "connected": "Google Calendar succesvol verbonden.",
+      "exchangeFailed": "Google Calendar-autorisatie kon niet worden voltooid. Probeer opnieuw.",
+      "invalidState": "Autorisatiesessie verlopen. Start opnieuw vanaf deze pagina.",
+      "missingParams": "Google heeft niet de verwachte autorisatiegegevens teruggestuurd.",
+      "noRefreshToken": "Google heeft geen refresh token teruggestuurd. Trek toegang in bij Google en verbind opnieuw.",
+      "accessDenied": "Je hebt toegang tot Google Calendar geweigerd."
+    },
     "summary": {
       "domain": "Domein",
-      "clientId": "Client ID",
-      "appId": "App ID",
-      "tokenSaved": "Referenties opgeslagen",
+      "clientId": "Client-ID",
+      "appId": "App-ID",
+      "tokenSaved": "Inloggegevens opgeslagen",
       "providers": "Actieve providers",
-      "defaultProvider": "Standaard provider"
+      "defaultProvider": "Standaardprovider"
+    },
+    "filters": {
+      "all": "Alle diensten",
+      "connected": "Verbonden",
+      "available": "Beschikbaar"
+    },
+    "securityNotice": "Inloggegevens en API-sleutels zijn versleuteld in rust met isolatie per tenant (AES-256).",
+    "backToIntegrations": "Terug naar integraties",
+    "tags": {
+      "resend": "Transactionele e-mails & CV-levering",
+      "spotify": "Now Playing widget & topnummers",
+      "google-calendar": "Gesprekken & agendasynchronisatie",
+      "uploadthing": "Bestandsopslag & CV PDF-CDN",
+      "ai": "CV-engine, ATS & voorbereiding op interviews",
+      "ilovepdf": "DOCX naar PDF & HTML naar PDF engine"
+    },
+    "guides": {
+      "title": "Installatiehandleiding",
+      "howToGet": "Hoe je inloggegevens kunt verkrijgen",
+      "openConsole": "Open {provider}-dashboard",
+      "copyUri": "Kopieer URI",
+      "copied": "Gekopieerd naar klembord",
+      "resend": {
+        "title": "Hoe je Resend-inloggegevens verkrijgt",
+        "step1": "Log in op je Resend-account op resend.com.",
+        "step2": "Ga naar API Keys en klik op \"Create API Key\" (met verzend- of volledige toegang).",
+        "step3": "Verifieer in Domains je verzenddomein (of gebruik onboarding@resend.dev voor testen).",
+        "step4": "Plak je API-sleutel (re_...) en afzenderadres aan de linkerkant.",
+        "dashboardLink": "Open Resend API-sleutels",
+        "domainsLink": "Open Resend Domeinen"
+      },
+      "uploadthing": {
+        "title": "Hoe je UploadThing-inloggegevens verkrijgt",
+        "step1": "Log in op het UploadThing-dashboard op uploadthing.com.",
+        "step2": "Selecteer je applicatie of klik op \"Create App\".",
+        "step3": "Ga naar API Keys in de zijbalk om je UPLOADTHING_TOKEN te bekijken.",
+        "step4": "Kopieer en plak de geheime token (begint met eyJ...) in het veld links.",
+        "dashboardLink": "Open UploadThing-dashboard"
+      },
+      "ai": {
+        "title": "Hoe je AI API-sleutels verkrijgt",
+        "step1": "Kies je gewenste LLM-provider(s) uit Google Gemini, DeepSeek, OpenAI of Anthropic.",
+        "step2": "Google Gemini (Aanbevolen): Verkrijg een gratis/betaalde sleutel in Google AI Studio voor ATS en interviews.",
+        "step3": "DeepSeek: Genereer een API-sleutel (sk-...) in het DeepSeek Open Platform.",
+        "step4": "OpenAI: Genereer een geheime API-sleutel (sk-proj-...) in het OpenAI-platform.",
+        "step5": "Anthropic: Maak een API-sleutel (sk-ant-...) in de Anthropic-console voor Claude-modellen.",
+        "geminiLink": "Verkrijg Gemini API-sleutel",
+        "deepseekLink": "Verkrijg DeepSeek API-sleutel",
+        "openaiLink": "Verkrijg OpenAI API-sleutel",
+        "anthropicLink": "Verkrijg Anthropic API-sleutel"
+      },
+      "ilovepdf": {
+        "title": "Hoe je iLovePDF-inloggegevens verkrijgt",
+        "step1": "Maak een account aan of log in op developer.ilovepdf.com.",
+        "step2": "Ga naar de sectie Projecten / API-sleutels om je Public Key en Secret Key te vinden.",
+        "step3": "Plak de sleutels in het formulier links om PDF-conversie met eigen sleutels (BYOK) te activeren.",
+        "dashboardLink": "Open iLovePDF-ontwikkelaarsconsole"
+      },
+      "spotify": {
+        "title": "Hoe je Spotify OAuth configureert",
+        "step1": "Log in op het Spotify Developer Dashboard.",
+        "step2": "Klik op \"Create App\", vul app-details in en kies Web API.",
+        "step3": "Voeg in App Settings de onderstaande Redirect URI toe aan je Redirect URIs.",
+        "step4": "Kopieer je Client ID en Client Secret en plak ze hier om te koppelen.",
+        "dashboardLink": "Open Spotify Developer Dashboard"
+      },
+      "googleCalendar": {
+        "title": "Hoe je Google Calendar OAuth configureert",
+        "step1": "Open Google Cloud Console > APIs & Services > Credentials.",
+        "step2": "Maak een OAuth 2.0 Client-ID aan (Applicatietype: Webapplicatie).",
+        "step3": "Voeg de onderstaande geautoriseerde Redirect URI toe.",
+        "step4": "Schakel de Google Calendar API in via APIs & Services > Library.",
+        "step5": "Kopieer je Client ID en Client Secret naar het formulier.",
+        "dashboardLink": "Open Google Cloud Console"
+      }
     },
     "connected": {
       "title": "Verbonden"
     },
     "available": {
-      "title": "Beschikbaar om te verbinden",
+      "title": "Beschikbaar om te koppelen",
       "description": "Voeg meer diensten toe om je portfolio uit te breiden."
     },
     "empty": {
@@ -71,7 +162,10 @@
       "domainLabel": "E-maildomein",
       "domainPlaceholder": "joudomein.nl",
       "fromLabel": "Afzender e-mail / naam (optioneel)",
-      "fromPlaceholder": "Portfolio '<'no-reply@joudomein.nl'>'",
+      "fromPlaceholder": "Portfolio <no-reply@joudomein.nl>",
+      "signatureLabel": "HTML e-mailhandtekening (optioneel)",
+      "signatureHint": "Wordt onder de tekst geplakt bij CV-mails. Laat leeg om over te slaan.",
+      "signaturePlaceholder": "<table>...</table>",
       "syncButton": "Sjablonen nu synchroniseren",
       "saveButton": "Opslaan en sjablonen publiceren",
       "saveSuccess": "Resend-inloggegevens opgeslagen en sjablonen succesvol gepubliceerd!",
@@ -106,17 +200,34 @@
     },
     "ai": {
       "title": "AI-modellen inloggegevens",
-      "description": "Configureer API-sleutels voor LLM-diensten (Gemini, OpenAI, Anthropic).",
+      "description": "Configureer API-sleutels voor LLM-diensten (Gemini, DeepSeek, OpenAI, Anthropic).",
       "geminiLabel": "Google Gemini API-sleutel",
+      "deepseekLabel": "DeepSeek API-sleutel",
       "openaiLabel": "OpenAI API-sleutel",
       "anthropicLabel": "Anthropic API-sleutel",
       "geminiPlaceholder": "AIzaSy...",
+      "deepseekPlaceholder": "sk-...",
       "openaiPlaceholder": "sk-proj-...",
       "anthropicPlaceholder": "sk-ant-...",
       "defaultProviderLabel": "Standaard AI-provider",
       "defaultProviderPlaceholder": "Selecteer standaard provider",
       "saveButton": "AI-inloggegevens opslaan",
       "saveSuccess": "AI-inloggegevens succesvol opgeslagen!"
+    },
+    "ilovepdf": {
+      "title": "iLovePDF-inloggegevens",
+      "description": "Configureer je iLovePDF API-sleutels voor snelle en betrouwbare DOCX naar PDF en HTML naar PDF conversies.",
+      "publicKeyLabel": "Public Key",
+      "publicKeyPlaceholder": "project_public_...",
+      "secretKeyLabel": "Secret Key",
+      "secretKeyPlaceholder": "secret_key_...",
+      "testButton": "Verbinding testen",
+      "saveButton": "Inloggegevens opslaan",
+      "saveSuccess": "iLovePDF-inloggegevens succesvol opgeslagen!",
+      "saveFailed": "Opslaan van iLovePDF-inloggegevens mislukt",
+      "testSuccess": "iLovePDF-verbinding succesvol geverifieerd!",
+      "testFailed": "Verbinding met iLovePDF mislukt",
+      "missingKeysToTest": "Voer een Public Key en Secret Key in om de verbinding te testen"
     }
   },
   "certification": {
@@ -163,10 +274,44 @@
         "title": "Zachte Vaardigheden",
         "subtitle": "Zachte Vaardigheden"
       }
+    },
+    "catalog": {
+      "backToPortfolio": "Terug naar portfolio",
+      "pageTitle": "Alle Certificaten",
+      "pageSubtitle": "Officiële certificaten en afgeronde programma's die mijn expertise in frontend, backend, beveiliging en softwareontwikkeling valideren.",
+      "searchPlaceholder": "Zoek op titel, technologie of uitgever…",
+      "searchLabel": "Zoek certificaten of technologieën",
+      "sortLabel": "Sorteren op",
+      "sorts": {
+        "newest": "Nieuwste eerst",
+        "name": "Naam (A–Z)",
+        "issuer": "Uitgever (A–Z)"
+      },
+      "issuerLabel": "Uitgever / Instelling",
+      "techLabel": "Technologie",
+      "allIssuers": "Alle uitgevers",
+      "showing": "{count} van {total} certificaten weergegeven",
+      "showingAll": "{total} certificaten",
+      "clearFilters": "Filters wissen",
+      "more": "Meer weergeven ({count} resterend)",
+      "emptyTitle": "Geen certificaten gevonden",
+      "emptyDescription": "Probeer een andere zoekopdracht of wis enkele filters.",
+      "emptyButton": "Filters wissen",
+      "preview": "Voorbeeld",
+      "verify": "Referentie bekijken",
+      "credentialId": "Certificaat-ID",
+      "closeModal": "Sluiten"
     }
   },
   "curriculum": {
     "title": "Curriculum Vitae",
+    "employmentTypes": {
+      "FULL_TIME": "Voltijd",
+      "PART_TIME": "Deeltijd",
+      "CONTRACT": "Contract",
+      "FREELANCE": "Freelance",
+      "INTERNSHIP": "Stage"
+    },
     "header": {
       "cvHeader": "Koptekst",
       "aboutMe": "Over Mij",
@@ -206,10 +351,16 @@
     },
     "telephone": "tel.",
     "codedWith": "Deze CV is gemaakt met ReactJS.",
+    "unpublished": {
+      "title": "CV is nog niet openbaar",
+      "description": "Dit cv is nog een concept. Je kunt de rest van het portfolio wel bekijken.",
+      "backHome": "Terug naar home"
+    },
     "pdfDelivery": {
-      "toggleSend": "Per e-mail versturen",
+      "toggleSend": "Verstuur via e-mail",
       "toggleClose": "Sluiten",
-      "title": "Download het PDF-cv als referentie",
+      "generating": "PDF genereren…",
+      "title": "Download het PDF-CV ter referentie",
       "description": "Recruiters, vul hieronder je zakelijke e-mail in en ontvang een downloadbare PDF-versie van mijn actuele cv.",
       "footnote": "De PDF wordt gegenereerd op basis van de meest recente cv-gegevens van {fullName}.",
       "form": {
@@ -283,91 +434,216 @@
         "editCustom": "Kleuren aanpassen"
       },
       "scrollToTop": "Naar boven scrollen",
-      "homeLogo": "Jehg, naar startpagina",
+      "homeLogo": "{brand}, naar startpagina",
       "nav": {
         "explore": "Ontdekken",
         "comingSoon": "Binnenkort",
         "contactCta": "Contact",
         "scheduleCta": "Gesprek plannen",
         "scheduleHint": "Gesprek van 30 min · Sollicitatie of kennismaking",
+        "availability": "Beschikbaar voor nieuwe kansen",
+        "availabilityHint": "30-min kennismakingsgesprek",
+        "goTo": "Ga naar {item}",
+        "viewProject": "Project bekijken",
+        "seeAllProjects": "Alle projecten bekijken",
         "groups": {
           "about": {
             "label": "Over mij",
             "eyebrow": "Over mij",
             "headline": "Achtergrond & technisch profiel",
-            "description": "Professionele achtergrond, werkervaring en belangrijkste tech stack."
+            "description": "Professionele achtergrond, werkervaring en engineering-filosofie."
           },
           "portfolio": {
             "label": "Portfolio",
             "eyebrow": "Portfolio",
-            "headline": "Projecten & referenties",
-            "description": "Uitgelichte projecten, certificeringen en carrièretijdlijn."
+            "headline": "Uitgelichte projecten & referenties",
+            "description": "Productiesystemen, microservices, certificeringen en carrièretijdlijn."
           },
           "process": {
             "label": "Hoe ik werk",
             "eyebrow": "Hoe ik werk",
-            "headline": "Werkmethodologie",
-            "description": "AI-gebruik bij ontwikkeling, softwarekwaliteit en teamsamenwerking."
+            "headline": "Engineering-aanpak & kwaliteit",
+            "description": "Moderne engineering-workflows, softwarekwaliteit en dagelijkse tools."
           }
         },
         "items": {
           "about": {
             "label": "Over mij",
-            "description": "Profielsamenvatting en engineering-filosofie."
+            "short": "Profiel en filosofie",
+            "headline": "Wie ik ben als engineer",
+            "description": "Een overzicht van mijn profiel, hoe ik software benader en de principes achter de systemen die ik bouw.",
+            "chips": ["Profieloverzicht", "Engineering-filosofie", "Ownership"],
+            "statValue": "6+",
+            "statLabel": "jaar ervaring",
+            "cta": "Ga naar over mij"
           },
           "experience": {
             "label": "Ervaring",
-            "description": "Werkgeschiedenis, projecten en vervulde rollen."
+            "short": "Rollen en sleutelprojecten",
+            "headline": "Waar ik heb gewerkt",
+            "description": "Werkgeschiedenis in e-commerce en telecom, met de projecten en resultaten waar ik het meest trots op ben.",
+            "chips": [
+              "Senior Software Engineer",
+              "Tech Lead",
+              "Full Stack Developer"
+            ],
+            "statValue": "20+",
+            "statLabel": "opgeleverde projecten",
+            "cta": "Bekijk werkgeschiedenis"
           },
           "skills": {
             "label": "Vaardigheden",
-            "description": ".NET-ecosysteem, C#, microservices en Cloud."
+            "short": ".NET, C#, microservices, cloud",
+            "headline": "De stack waarmee ik dagelijks werk",
+            "description": "De tools en technologieën die ik gebruik om betrouwbare productiesoftware te ontwerpen en te bouwen.",
+            "chips": [".NET", "C#", "Microservices", "Cloud"],
+            "statValue": "4",
+            "statLabel": "kerngebieden",
+            "cta": "Verken technische stack"
           },
           "services": {
             "label": "Technische specialismen",
-            "description": "Softwarearchitectuur, modernisering en ontwikkeling."
+            "short": "Architectuur en modernisering",
+            "headline": "Waar ik in uitblink",
+            "description": "Softwarearchitectuur ontwerpen, verouderde platforms moderniseren en de kern van nieuwe producten bouwen.",
+            "chips": [
+              "Systeemarchitectuur",
+              "Legacy modernisering",
+              "Core development"
+            ],
+            "statValue": "3",
+            "statLabel": "specialismen",
+            "cta": "Bekijk specialismen"
           },
           "soft-skills": {
             "label": "Leiderschap & competenties",
-            "description": "Teamleiderschap, mentorschap en communicatie."
+            "short": "Teams, mentorschap, communicatie",
+            "headline": "Hoe ik met mensen werk",
+            "description": "Teams leiden, ontwikkelaars begeleiden en helder communiceren met product- en businesspartners.",
+            "chips": ["Teamleiderschap", "Mentorschap", "Communicatie"],
+            "statValue": "6",
+            "statLabel": "begeleide engineers",
+            "cta": "Lees leiderschapsprincipes"
+          },
+          "testimonials": {
+            "label": "Testimonials",
+            "short": "Woorden van collega's",
+            "headline": "Wat collega's en leidinggevenden zeggen",
+            "description": "Directe feedback en aanbevelingen van teamleden, leads en klanten over samenwerking en oplevering.",
+            "chips": ["Testimonials", "Senior developers", "Aanbevelingen"],
+            "statValue": "100%",
+            "statLabel": "positieve feedback",
+            "cta": "Lees testimonials"
+          },
+          "projects": {
+            "label": "Projecten",
+            "short": "Engineering-projecten en casestudies",
+            "headline": "Projecten en systemen die ik heb gebouwd",
+            "description": "Een selectie van systemen, API's, e-commerceplatforms en interne beheerapplicaties.",
+            "chips": ["API's", "E-commerce", "Admin platforms", "Cloud"],
+            "statValue": "15+",
+            "statLabel": "uitgelichte projecten",
+            "cta": "Projecten bekijken"
           },
           "certificates": {
             "label": "Certificaten",
-            "description": "Technische referenties en certificeringen."
+            "short": "Technische referenties",
+            "headline": "Geverifieerde certificeringen",
+            "description": "Formele technische certificeringen in frontend, backend, cybersecurity en leiderschap.",
+            "chips": ["Frontend", "Backend", "Cybersecurity", "Soft skills"],
+            "statValue": "30+",
+            "statLabel": "behaalde certificaten",
+            "cta": "Bekijk certificaten"
           },
           "curriculum": {
             "label": "Curriculum Vitae",
-            "description": "Volledig professioneel CV in webformaat."
+            "short": "Professioneel cv",
+            "headline": "Volledig professioneel CV",
+            "description": "Uitgebreid cv in modern webformaat, inclusief volledige werkervaring en PDF-download.",
+            "chips": ["Interactief CV", "PDF export", "Geverifieerde historie"],
+            "statValue": "2026",
+            "statLabel": "actuele versie",
+            "cta": "Open Curriculum Vitae"
           },
           "timeline": {
             "label": "Tijdlijn",
-            "description": "Carrièremijlpalen en professionele groei."
+            "short": "Carrièreverloop",
+            "headline": "Carrièremijlpalen & evolutie",
+            "description": "Een chronologisch overzicht van professionele mijlpalen, rollen en technische groei.",
+            "chips": ["Carrièremijlpalen", "Evolutie", "Groei"],
+            "statValue": "6+",
+            "statLabel": "jaar evolutie",
+            "cta": "Bekijk tijdlijn"
           },
           "ai-workflow": {
             "label": "Hoe ik AI gebruik",
-            "description": "AI-toolintegratie en engineering-workflow."
+            "short": "Engineering-versnelling",
+            "headline": "AI-ondersteunde engineering",
+            "description": "Hoe ik moderne AI-tools, agent-workflows en automatisering integreer in dagelijkse softwareontwikkeling.",
+            "chips": ["AI Tooling", "Snelheid", "Geautomatiseerde workflows"],
+            "statValue": "2x",
+            "statLabel": "leveringssnelheid",
+            "cta": "Verken AI-workflow"
           },
           "qa-collaboration": {
             "label": "QA-samenwerking",
-            "description": "Kwaliteitspraktijken, testen en releases."
+            "short": "Kwaliteit & testen",
+            "headline": "Softwarekwaliteit & teststrategie",
+            "description": "Nauw samenwerken met QA, geautomatiseerde testsuites en nul regressies in productie.",
+            "chips": [
+              "Kwaliteitsborging",
+              "Geautomatiseerde tests",
+              "Nul regressies"
+            ],
+            "statValue": "99.9%",
+            "statLabel": "productiestabiliteit",
+            "cta": "Lees QA-praktijken"
           },
           "uses": {
             "label": "Uses",
-            "description": "Hardware, software en tools die ik elke dag gebruik."
+            "short": "Hardware, software & setup",
+            "headline": "Hardware & software die ik dagelijks gebruik",
+            "description": "De hardware, werkplekconfiguratie, editors en softwaretools waar ik dagelijks op vertrouw.",
+            "chips": ["Hardware", "Werkstation", "Dev tools", "Terminal"],
+            "statValue": "Dagelijks",
+            "statLabel": "developer tools",
+            "cta": "Bekijk setup"
           },
           "now": {
             "label": "Now",
-            "description": "Waar ik me nu op focus, wat ik lees en wat ik ship."
+            "short": "Huidige focus & lezen",
+            "headline": "Waar ik nu aan werk",
+            "description": "Een actueel overzicht van actieve projecten, technologieën die ik verken en wat ik nu oplever.",
+            "chips": ["Huidige focus", "Leeslijst", "Actieve projecten"],
+            "statValue": "Live",
+            "statLabel": "huidige status",
+            "cta": "Bekijk Now-pagina"
+          },
+          "stats": {
+            "label": "Stats",
+            "short": "Bezoekers- & portfoliostatistieken",
+            "headline": "Portfoliostatistieken & analytics",
+            "description": "Transparante statistieken over bezoeken, geografische spreiding en prestaties.",
+            "chips": ["Analytics", "Prestaties", "Demografie"],
+            "statValue": "Live",
+            "statLabel": "site-telemetrie",
+            "cta": "Bekijk statistieken"
           },
           "colophon": {
             "label": "Colofon",
-            "description": "Hoe deze site is gebouwd — stack, typografie, kleuren en voetafdruk."
+            "short": "Hoe deze site is gebouwd",
+            "headline": "Achter de schermen",
+            "description": "Architectuur, frameworks, design tokens, typografie en ecologische voetafdruk van deze website.",
+            "chips": ["Next.js 15", "Tailwind CSS", "TypeScript", "Prestaties"],
+            "statValue": "v2.0",
+            "statLabel": "portfolio-editie",
+            "cta": "Lees colofon"
           }
         }
       }
     },
     "footer": {
-      "homeLogo": "Jehg, naar startpagina",
+      "homeLogo": "{brand}, naar startpagina",
       "title": "Alle Rechten Voorbehouden © ",
       "madeWith": "Gemaakt met ",
       "by": " door ",
@@ -382,6 +658,7 @@
           "qaCollaboration": "QA-samenwerking",
           "uses": "Uses",
           "now": "Now",
+          "stats": "Stats",
           "colophon": "Colofon"
         },
         "miscellaneous": {
@@ -465,7 +742,7 @@
   },
   "main": {
     "meta": {
-      "title": "Jesús Hernández | Senior Full Stack .NET Developer",
+      "title": "Jesús Hernández | Senior Software Engineer",
       "description": "Senior Full Stack Developer met 6+ jaar ervaring in .NET Core, React en SQL Server, moderniseren van legacy systemen en leveren van productieklare software in veeleisende omgevingen.",
       "keywords": "Senior .NET Developer, Full Stack Developer, C#, ASP.NET Core, React, Next.js, SQL Server, Azure, Software Engineer, Jesús Hernández, Senior Software Engineer"
     },
@@ -475,45 +752,21 @@
       "scrollDown": "Scrol naar beneden",
       "yearsExperience": "Jaren ervaring",
       "projectsDelivered": "Projecten opgeleverd",
+      "engineersLed": "Engineers geleid",
       "certifications": "Certificeringen",
       "availableForOpportunities": "Beschikbaar voor nieuwe kansen",
       "scheduleCall": "Plan een gesprek",
       "scheduleCallAria": "Plan een gesprek — ga naar het contactgedeelte",
       "empty": {
         "title": "Hero niet geconfigureerd",
-        "description": "Voeg je profielfoto, achtergrond en introductie toe vanuit het beheerdersprofiel hero tabblad."
+        "description": "Voeg je profielfoto, ondertitel en introductie toe via het beheerdersprofiel."
       }
     },
     "services": {
-      "title": "Wat Ik Bouw",
-      "subtitle": "Engineering Capaciteiten",
-      "description": "Een praktisch overzicht van de technische domeinen waarin ik heb geleverd: van full-stack websystemen en financiële platforms tot mobiele apps en cloudinfrastructuur.",
+      "title": "Engineering Expertise",
+      "subtitle": "Diensten",
+      "description": "Gebieden waar ik productiesoftware ontwerp, bouw en leid.",
       "items": {
-        "frontend": {
-          "title": "Frontend & UI/UX Ontwikkeling",
-          "description": "Ontwerp van prachtige, snelle en toegankelijke webinterfaces met WCAG 2.2 AAA-naleving, React, Next.js en Tailwind CSS.",
-          "stats": "100+ UI Components · WCAG 2.2 AAA"
-        },
-        "backend": {
-          "title": "Backend Ontwikkeling & APIs",
-          "description": "Robuuste microservices, REST & tRPC API's met Node.js, C# / .NET en schaalbare databases.",
-          "stats": "99.9% Uptime · SQL & NoSQL"
-        },
-        "mobile": {
-          "title": "Mobiele Ontwikkeling",
-          "description": "Snel en vloeiend mobiel applicatieontwerp met React Native voor iOS en Android.",
-          "stats": "Cross-Platform · iOS & Android"
-        },
-        "devops": {
-          "title": "Systemen & Cloud DevOps",
-          "description": "Linux serverbeheer, Docker-containerisatie, CI/CD geautomatiseerde pipelines en cloud-deployments.",
-          "stats": "Docker & Linux · CI/CD Automation"
-        },
-        "cybersecurity": {
-          "title": "Cybersecurity & Beveiligingsaudits",
-          "description": "Beveiligingsaudits, kwetsbaarheidsanalyse met Snyk, OWASP Top 10-naleving en pentesting.",
-          "stats": "OWASP Top 10 · Snyk Compliance"
-        },
         "contact": {
           "title": "Laten we samen bouwen",
           "subtitle": "Heb je een project in gedachten?",
@@ -525,12 +778,32 @@
       "title": "Mijn reis",
       "subtitle": "Een tijdlijn van werk, studie en groei",
       "empty": "Nog geen tijdlijnitems.",
+      "emptyFilter": "Geen mijlpalen gevonden voor deze filter.",
       "metaTitle": "Tijdlijn",
-      "metaDescription": "Ontdek mijn professionele en academische reis door de tijd."
+      "metaDescription": "Ontdek mijn professionele en academische reis door de tijd.",
+      "stats": "Sinds {year} · {milestones} mijlpalen · {workplaces} werkplekken",
+      "filters": {
+        "all": "Alles",
+        "work": "Werkervaring",
+        "learning": "Studie & cursussen",
+        "ariaLabel": "Filter tijdlijnmijlpalen"
+      },
+      "categories": {
+        "WORK": "Werk",
+        "STUDY": "Studie",
+        "COURSE": "Cursus"
+      },
+      "roles": "Carrièreprogressie",
+      "present": "Heden",
+      "viewCv": "Volledig CV bekijken",
+      "showingAll": "Alle mijlpalen worden weergegeven.",
+      "showingFiltered": "{count} mijlpalen weergegeven.",
+      "imageOf": "Afbeelding {current} van {total}",
+      "techAria": "Technologieën"
     },
     "about": {
-      "title": "Over mij",
-      "subtitle": "Een beknopt overzicht",
+      "title": "Engineering Aanpak",
+      "subtitle": "Hoe ik ontwikkel",
       "terminalEmpty": {
         "title": "Terminal niet geconfigureerd",
         "description": "Voeg een geanimeerde terminalreeks toe via het Terminal-tabblad in het adminprofiel."
@@ -568,13 +841,35 @@
         "experiencesTitle": "Waar ik {skill} gebruikte",
         "experiencesDescription": "Rollen en teams waar {skill} deel uitmaakte van het dagelijks werk.",
         "projectsTitle": "Projecten met {skill}",
-        "projectsDescription": "Geselecteerd werk dat {skill} in productie gebruikt."
+        "projectsDescription": "Geselecteerd werk dat {skill} in productie gebruikt.",
+        "caseStudy": "Lees casus",
+        "kind": {
+          "PROFESSIONAL": "Klantwerk",
+          "PERSONAL": "Persoonlijk",
+          "LEARNING": "Leren"
+        },
+        "meta": {
+          "solo": "Solo",
+          "team": "Team van {count}",
+          "now": "heden"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "In productie",
+          "MAINTENANCE": "Onderhoud",
+          "ARCHIVED": "Gearchiveerd"
+        },
+        "teaser": {
+          "decisions": "{count} beslissingen",
+          "layers": "Architectuur",
+          "metrics": "{count} statistieken"
+        }
       },
       "modal": {
         "close": "Sluiten",
         "tabsAriaLabel": "Secties van vaardigheidsdetails",
         "readMore": "Lees meer",
         "viewMoreDetails": "Meer details bekijken",
+        "viewFullPage": "Volledige pagina bekijken",
         "seeCertificates": "Bekijk certificaten",
         "certificates": "Certificeringen",
         "experiences": "Professionele ervaring",
@@ -586,6 +881,7 @@
         "viewProject": "Bekijk project",
         "viewSource": "Bekijk broncode",
         "noRelatedContent": "Nog geen gekoppelde certificeringen, ervaring of projecten.",
+        "emptyTab": "Nog niets hier voor deze vaardigheid.",
         "loadError": "Details konden niet worden geladen. Probeer het opnieuw."
       },
       "terminal": {
@@ -593,34 +889,38 @@
         "searchPlaceholder": "grep stack…",
         "searchLabel": "Zoek technologieën",
         "noResults": "Geen match in de huidige stack.",
+        "noMatch": "grep: geen resultaten voor \"{query}\"",
+        "featured": "Uitgelicht",
         "coreLegend": "helderder = uitgelichte stack",
         "matchCount": "{count, plural, =1 {# match} other {# matches}}",
-        "searchFor": " voor \"{query}\""
+        "searchFor": " voor \"{query}\"",
+        "trend": "Trend",
+        "updatedTechPill": "Bijgewerkte technologieën 2024-2026"
       },
       "tabs": {
-        "frontend": {
-          "title": "Frontend",
-          "description": "React- en Next.js-applicaties in productie op schaal, van e-commerce storefronts tot interne dashboards en beheerplatforms."
+        "ai": {
+          "title": "AI & Machine Learning",
+          "description": "Grote taalmodellen (LLM's), orkestratieframeworks, autonome agenten en moderne AI-engineeringtools."
+        },
+        "architecture": {
+          "title": "Architectuur",
+          "description": "Systeemontwerp, gedistribueerde systemen, DDD en architectonische fundamenten voor schaalbare platformen."
         },
         "backend": {
           "title": "Backend",
-          "description": "REST en GraphQL API's in C#/.NET Core en Node.js, met authenticatie, autorisatie en prestaties als hoogste prioriteit."
+          "description": "REST en GraphQL API's in C#/.NET Core en Node.js, met prestaties als hoogste prioriteit."
         },
-        "mobile": {
-          "title": "Mobiel",
-          "description": "Cross-platform React Native-apps met offline ondersteuning, biometrische authenticatie en betrouwbaarheid voor veldoperaties."
+        "data": {
+          "title": "Data",
+          "description": "SQL en NoSQL databases, ORM's en datamodellering voor krachtige applicaties."
         },
-        "database": {
-          "title": "Database",
-          "description": "SQL Server, PostgreSQL en MongoDB in financiële dashboards, serviceplatformen en multi-tenant inhoudssystemen."
+        "frontend": {
+          "title": "Frontend",
+          "description": "React- en Next.js-applicaties in productie op schaal, van e-commerce storefronts tot interne dashboards."
         },
-        "devops": {
-          "title": "DevOps",
-          "description": "CI/CD-pijplijnen in Azure DevOps en GitHub Actions, met Docker, beveiligingsscanning en omgevingspariteit."
-        },
-        "tools": {
-          "title": "Gereedschappen",
-          "description": "De dagelijkse professionele toolkit die levering snel houdt, kwaliteit hoog en teams op één lijn."
+        "quality": {
+          "title": "Kwaliteit & Levering",
+          "description": "CI/CD-pipelines, Docker containerisatie, geautomatiseerd testen en veiligheidsscans voor betrouwbare levering."
         }
       }
     },
@@ -656,8 +956,8 @@
     },
     "portfolio": {
       "subtitle": "Portfolio",
-      "title": "Beste projecten",
-      "description": "Een selectie van projecten die laten zien hoe ik ontwerp, bouw en echte problemen oplos met software.",
+      "title": "Geselecteerd Engineering Werk",
+      "description": "Een selectie van systemen en engineering initiatieven waar ik technische problemen oploste, oplevering verbeterde en meetbare business impact creëerde.",
       "actions": {
         "view": "Bekijk project",
         "source": "Bekijk bron",
@@ -669,6 +969,11 @@
         "LEARNING": "Leren"
       },
       "caseStudy": {
+        "kind": {
+          "PROFESSIONAL": "Klantwerk",
+          "PERSONAL": "Persoonlijk",
+          "LEARNING": "Leren"
+        },
         "challenge": "De uitdaging",
         "approach": "Architectuur & aanpak",
         "outcome": "Resultaat & impact",
@@ -684,7 +989,87 @@
         "gallery": "Galerij",
         "demo": "Live demo",
         "visualTitle": "Verbindingen met intentie",
-        "visualSubtitle": "Elke node is een schakel; elke lijn een reden om te bouwen."
+        "visualSubtitle": "Elke node is een schakel; elke lijn een reden om te bouwen.",
+        "backToProjects": "Terug naar projecten",
+        "caseStudyLabel": "Casestudy",
+        "summaryEyebrow": "In 30 seconden",
+        "summaryTitle": "Samenvatting voor recruiters",
+        "context": "Context",
+        "ownership": "Verantwoordelijkheid",
+        "roleSectionTitle": "Mijn rol en verantwoordelijkheden",
+        "challengeEyebrow": "Het probleem",
+        "shortOnTime": "Weinig tijd? Lees alleen:",
+        "why": "Waarom",
+        "alternativesConsidered": "Overwogen alternatieven",
+        "similarRole": "Zoek je iemand voor een vergelijkbare functie?",
+        "decisionsWalkthrough": "Ik licht deze keuzes graag verder toe.",
+        "timeline": "Tijdlijn",
+        "present": "Heden",
+        "primaryScaleMainLight": "Primaire schaal · main-light",
+        "principles": "Principes",
+        "themePresetCount": "6 thema's, één data-theme-attribuut",
+        "lightDark": "Licht · Donker",
+        "customTheme": "Aangepast",
+        "visitorDefined": "Ingesteld door de bezoeker",
+        "section": "Sectie",
+        "decision": "Beslissing",
+        "tradeoff": "Afweging",
+        "via": "via",
+        "implementation": "Implementatie",
+        "notes": "Notities",
+        "project": "Project",
+        "status": "Status",
+        "team": "Team",
+        "platform": "Platform",
+        "liveSite": "Livewebsite",
+        "viewSource": "Bekijk broncode",
+        "privateRepository": "Privérepository",
+        "onThisPage": "Op deze pagina",
+        "sectionsNavigation": "Casestudysecties",
+        "indexLabels": {
+          "summary": "Samenvatting",
+          "context": "Context",
+          "role": "Mijn rol",
+          "challenge": "De uitdaging",
+          "decisions": "Beslissingen",
+          "architecture": "Architectuur",
+          "data": "Data en i18n",
+          "capabilities": "Mogelijkheden",
+          "security": "Beveiliging",
+          "quality": "Kwaliteit",
+          "designSystem": "Designsysteem",
+          "results": "Resultaten"
+        },
+        "projectTimeline": "Projecttijdlijn",
+        "started": "Gestart",
+        "ended": "Beëindigd",
+        "role": "Rol",
+        "productEngineer": "Productengineer",
+        "responsibilities": "Verantwoordelijkheden",
+        "whatIOwned": "Mijn bijdrage",
+        "constraints": "Randvoorwaarden",
+        "letsTalk": "Laten we praten",
+        "projectTypes": {
+          "FRONTEND": "Frontend",
+          "BACKEND": "Backend",
+          "MOBILE": "Mobiel",
+          "DESKTOP": "Desktop",
+          "CYBERSECURITY": "Cyberbeveiliging",
+          "DEVOPS": "DevOps",
+          "SOFTSKILLS": "Soft skills",
+          "TOOLS": "Tools",
+          "ARCHITECTURE": "Architectuur",
+          "DATA": "Data",
+          "QUALITY_DELIVERY": "Kwaliteit & levering"
+        },
+        "statuses": {
+          "IN_PRODUCTION": "In productie",
+          "MAINTENANCE": "In onderhoud",
+          "ARCHIVED": "Gearchiveerd"
+        },
+        "expandImage": "Afbeelding vergroten",
+        "closeLightbox": "Vergrote afbeelding sluiten",
+        "pressEscToClose": "Druk op Esc om te sluiten"
       },
       "private": {
         "title": "Prive",
@@ -705,19 +1090,68 @@
         "mobile": "Mobiel",
         "desktop": "Bureaublad",
         "ariaLabel": "Portfolio projectcategorieën"
+      },
+      "emptyState": {
+        "title": "Geen projecten in deze categorie",
+        "description": "Er zijn momenteel geen openbare projecten gecategoriseerd als {category}. Je kunt andere categorieën verkennen.",
+        "allTitle": "Geen projecten beschikbaar",
+        "allDescription": "Binnenkort worden nieuwe projecten en casestudies toegevoegd.",
+        "reset": "Alle projecten bekijken"
+      },
+      "meta": {
+        "solo": "Solo",
+        "team": "Team van {count}",
+        "now": "heden"
+      },
+      "teaser": {
+        "decisions": "{count} beslissingen",
+        "layers": "Architectuur",
+        "metrics": "{count} statistieken"
+      },
+      "topStack": {
+        "title": "Meest gebruikte stack",
+        "projectsWord": "projecten"
+      },
+      "allCta": {
+        "button": "Bekijk alle projecten ({count})",
+        "subtitle": "{total} projecten · {caseStudies} met case study"
+      },
+      "catalog": {
+        "backToPortfolio": "Terug naar portfolio",
+        "pageTitle": "Alle projecten",
+        "pageSubtitle": "Verken op type, categorie of technologie. Case studies tonen beslissingen, architectuur en resultaten.",
+        "searchPlaceholder": "Zoek projecten of technologieën…",
+        "searchLabel": "Zoek projecten of technologieën",
+        "sortLabel": "Sorteren",
+        "sorts": {
+          "default": "Uitgelicht",
+          "name": "Naam (A–Z)",
+          "cs": "Met case study eerst"
+        },
+        "kindLabel": "Categorie",
+        "techLabel": "Technologie",
+        "csOnly": "Alleen met case study",
+        "showing": "Toont {count} van {total} projecten",
+        "showingAll": "{total} projecten",
+        "clearFilters": "Filters wissen",
+        "more": "Meer weergeven ({count} resterend)",
+        "emptyTitle": "Geen resultaten",
+        "emptyDescription": "Probeer een andere zoekopdracht of wis enkele filters.",
+        "emptyButton": "Filters wissen"
       }
     },
     "contact": {
       "eyebrow": "Contact",
       "title": "Laten we praten",
       "title2": "Stuur een bericht",
-      "subtitle": "Als je op zoek bent naar een Senior Full Stack Developer die vanaf dag één waarde toevoegt en betrouwbare software op schaal levert, laten we praten.\n\nVoel je vrij om contact op te nemen.",
+      "subtitle": "Gebruik het formulier of de kanalen hieronder.",
       "responseTime": "Antwoord binnen 24u",
       "divider": "of",
       "noChannels": "Gebruik het formulier om contact op te nemen. Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "noChannelsWithoutForm": "Socialelinks verschijnen hier zodra ze aan het CV zijn toegevoegd.",
       "globe": {
         "ariaLabel": "Interatieve kaart die de verbinding toont tussen {origin} en {destination}",
+        "localTime": "Lokale tijd",
         "yourLocation": "Jouw locatie",
         "replay": "Verbinding opnieuw afspelen",
         "unroll": "Uitvouwen naar platte kaart",
@@ -727,7 +1161,10 @@
         "showOcean": "Oceaan tonen",
         "zoomIn": "Inzoomen",
         "zoomOut": "Uitzoomen",
-        "options": "Kaartopties"
+        "options": "Kaartopties",
+        "basedIn": "Ik ben gevestigd in {place}.",
+        "nearbyFromVisitor": "Ik kom uit {place}, heel dicht bij je huidige locatie, volgens je IP-adres.",
+        "distanceFromVisitor": "Ik kom uit {place}, ongeveer <km>{distance}</km> van je huidige locatie, volgens je IP-adres."
       },
       "form": {
         "helper": "Vertel me over je project of vraag en ik reageer zo snel mogelijk.",
@@ -797,8 +1234,9 @@
       "subtitle": "Bedrijven, rollen en meetbare impact",
       "viewAll": "Bekijk volledig CV voor de complete geschiedenis",
       "showingRecent": "Meest recente rollen weergegeven.",
-      "leadershipTitle": "Technisch leiderschap in elke rol",
-      "leadershipDescription": "Van het leiden van een team van 6 ontwikkelaars bij Contollo tot het ontwerpen van systemen bij Imagemaker en Walmart/VTEX, ik heb technische beslissingen genomen, ontwikkelaars begeleid en resultaten geleverd."
+      "promotion": "Interne promotie",
+      "previousRole": "Vorige functie",
+      "rolesCount": "{count} functies"
     },
     "impactStats": {
       "teamSize": {
@@ -823,17 +1261,19 @@
       "title": "{count, plural, =0 {Wat senior developers over mij zeggen} =1 {Wat een senior developer over mij zegt} other {Wat senior developers over mij zeggen}}",
       "subtitle": "Collega's die mijn werk van dichtbij hebben gezien.",
       "cta": "Neem me aan",
+      "readMore": "Lees meer",
+      "readLess": "Lees minder",
       "statsLabel": "In cijfers",
       "statsNote": "Cijfers verzameld over professionele betrokkenheden.",
       "stats": {
-        "certifications": {
-          "label": "Certificeringen"
-        },
         "projects": {
           "label": "Projecten"
         },
         "experience": {
           "label": "Jaar Ervaring"
+        },
+        "engineersMentored": {
+          "label": "Engineers geleid"
         }
       }
     },
@@ -1339,6 +1779,31 @@
           "cleaner": "Beoordeling A+ op Website Carbon"
         }
       }
+    },
+    "stats": {
+      "metaTitle": "Stats",
+      "metaDescription": "Anonieme bezoekersstats en portfolio-highlights — geen cookies, unieke ID's of IP-adressen.",
+      "eyebrow": "Publieke stats",
+      "title": "Hoe deze site wordt gebruikt",
+      "description": "First-party audience measurement zonder cookies, plus een snapshot van het portfolio. Geen unieke bezoekers, geen tracking op andere sites.",
+      "highlightsTitle": "Highlights",
+      "kpis": {
+        "pageviews": "Pageviews (30 dagen)",
+        "visits": "Bezoeken (30 dagen)",
+        "countries": "Landen",
+        "projects": "Projecten",
+        "certifications": "Certificeringen",
+        "years": "Jaren ervaring"
+      },
+      "countriesTitle": "Waar bezoeken vandaan komen",
+      "pagesTitle": "Meest bekeken pagina's",
+      "windowHint": "Laatste 30 dagen. Alleen op landniveau.",
+      "pageviewsCount": "{count, plural, one {# weergave} other {# weergaven}}",
+      "unknownCountry": "Onbekend",
+      "emptyTraffic": "Nog geen publieke bezoeken geregistreerd.",
+      "servicesTitle": "Actieve diensten",
+      "emptyServices": "Er zijn nu geen actieve diensten.",
+      "privacyNote": "De meting is anoniem en uitgelegd in het <link>privacybeleid</link>."
     }
   },
   "admin": {
@@ -1371,6 +1836,7 @@
         "pagesGroup": "Pagina's",
         "uses": "Uses",
         "now": "Now",
+        "processPages": "Procespagina's",
         "sidebar": "Admin-navigatie"
       },
       "pageToolbar": "Paginakop",
@@ -1381,7 +1847,7 @@
       "title": "Dashboard",
       "subtitle": "Welkom terug! Beheer je publieke portfolio hier.",
       "welcomeTitle": "Welkom in je Portfolio Admin",
-      "welcomeSubtitle": "Beheer al je portfolio-inhoud op een plek. Wissel tussen talen om vertaalde content te beheren.",
+      "welcomeSubtitle": "Verkeer, sollicitatiepipeline en welke diensten live zijn — niet alleen contenttellingen.",
       "noProfile": "Profiel nog niet ingesteld",
       "noProfileHint": "Ga naar <link>Instellingen</link> om je publieke profiel aan te maken.",
       "publicUrl": "Publieke URL",
@@ -1392,6 +1858,49 @@
       "editCv": "Bewerk je <cv>CV</cv>",
       "publishInSettings": "Publiceer je portfolio in <link>Instellingen</link>",
       "manage": "Beheren",
+      "traffic": {
+        "title": "Bezoekers",
+        "subtitle": "Anonieme pageviews van de afgelopen 30 dagen. Geen cookies, IP's of unieke ID's.",
+        "viewPublic": "Open publieke stats",
+        "pageviews": "Pageviews",
+        "visits": "Bezoeken",
+        "countries": "Landen",
+        "topPage": "Top pagina",
+        "emptyValue": "—",
+        "pageviewsCount": "{count, plural, one {# weergave} other {# weergaven}}",
+        "countriesTitle": "Waar ze vandaan komen",
+        "pagesTitle": "Wat ze bekeken",
+        "referrersTitle": "Verwijzers",
+        "referrersHint": "Alleen hostnames. Directe bezoeken worden weggelaten.",
+        "empty": "Nog geen bezoekersdata. Publieke pagina's tellen vanaf het eerste anonieme bezoek.",
+        "emptyReferrers": "Geen externe verwijzers in dit venster.",
+        "unknownCountry": "Onbekend"
+      },
+      "jobs": {
+        "title": "Vacature-tracker",
+        "subtitle": "{applications, plural, one {# sollicitatie} other {# sollicitaties}} bij {companies, plural, one {# bedrijf} other {# bedrijven}}",
+        "openTracker": "Open tracker",
+        "applied": "Gesolliciteerd",
+        "inProgress": "Interview",
+        "offers": "Aanbiedingen",
+        "ghosted": "Ghosted",
+        "rejected": "Afgewezen",
+        "hired": "Aangenomen",
+        "upcoming": "Aankomende events",
+        "upcomingHint": "Volgende interviews, tests en follow-ups.",
+        "noUpcoming": "Niets gepland."
+      },
+      "services": {
+        "title": "Diensten",
+        "subtitle": "Welke aanbiedingen zichtbaar zijn op de publieke site.",
+        "empty": "Nog geen diensten.",
+        "active": "Actief",
+        "inactive": "Inactief",
+        "featured": "Uitgelicht"
+      },
+      "inventory": {
+        "title": "Contentoverzicht"
+      },
       "stats": {
         "certificates": {
           "title": "Certificaten",
@@ -1453,26 +1962,122 @@
         "contact": "Contact",
         "technicalSkills": "Technische vaardigheden",
         "personalSkills": "Persoonlijke vaardigheden",
-        "additionalInformation": "Aanvullende informatie"
+        "additionalInformation": "Aanvullende informatie",
+        "personalReferences": "Persoonlijke referenties"
       }
     },
     "settings": {
       "title": "Instellingen",
       "subtitle": "Publieke URL, standaardtaal en zichtbaarheid.",
+      "tabGeneral": "Algemeen & Merk",
+      "tabSecurity": "Beveiliging & Integraties",
+      "brandPreviewTitle": "Live merkvoorbeeld",
+      "brandPreviewDescription": "Realtime voorbeeld van je logo of tekstmerk in headers.",
+      "identitySectionTitle": "Profiel & Subdomein",
+      "identitySectionDescription": "Openbare identiteit en link voor je portfolio.",
+      "visibilitySectionTitle": "Zichtbaarheid portfolio",
+      "visibilitySectionDescription": "Bepaal of je CV en portfolio online openbaar toegankelijk zijn.",
+      "statusPublic": "Live & Openbaar",
+      "statusDraft": "Verborgen / Concept",
+      "viewPublicSite": "Bekijk openbare site",
+      "subdomainPrefix": "jesushg.com/cv/",
       "username": "Gebruikersnaam (subdomein)",
       "displayName": "Weergavenaam",
+      "brandSectionTitle": "Logo & initialen",
+      "brandSectionDescription": "Zichtbaar in de openbare header en footer. Gebruik bij voorkeur een logo-afbeelding; anders korte initialen of een tekstmerk.",
+      "logoInitials": "Initialen / tekstlogo",
+      "logoInitialsHint": "Kort merk wanneer er geen afbeelding is (bijv. Jehg). Laat leeg om initialen uit de weergavenaam af te leiden.",
+      "logoInitialsPlaceholder": "Jehg",
+      "logoImageUrl": "Logo-afbeelding-URL (optioneel)",
+      "logoImageUrlHint": "Indien ingesteld, vervangt deze afbeelding het tekstmerk in de header en footer.",
+      "logoImageUrlPlaceholder": "https://cdn.voorbeeld.nl/logo.svg",
       "defaultLocale": "Standaardtaal",
       "defaultLocaleHint": "De taal van je CV wanneer geen vertaling beschikbaar is.",
-      "cvPdfUrl": "CV PDF URL (optioneel)",
+      "mapLocation": "Kaartlocatie",
+      "mapLocationHint": "Stad op de Let's talk-globe. Bezoekers verbinden naar dit punt als hun locatie bekend is.",
+      "mapLocationPlaceholder": "Amsterdam, Nederland",
       "publish": "Publiceer mijn CV",
       "saved": "Instellingen opgeslagen.",
       "saveFailed": "Instellingen konden niet worden opgeslagen",
       "save": "Instellingen opslaan",
       "saving": "Opslaan...",
-      "pdfSectionTitle": "PDF CV's (meertalig)",
-      "pdfSectionDescription": "Geef aparte PDF-links voor elke taal. Wanneer bezoekers je portfolio in een specifieke taal bekijken, downloaden ze de bijbehorende PDF.",
-      "pdfLinkPlaceholder": "https://voorbeeld.nl/cv-{locale}.pdf",
-      "usernameValidation": "Gebruik kleine letters, cijfers en streepjes"
+      "usernameValidation": "Gebruik kleine letters, cijfers en streepjes",
+      "credentialsTitle": "Inloggegevens & integraties",
+      "credentialsDescription": "Koppel Spotify, e-mail, uploads en AI voor dit portfolio. Bestaande koppelingen blijven hier beschikbaar.",
+      "credentialsCta": "Integraties beheren",
+      "pdfSectionTitle": "PDF Resumes (Meertalig)",
+      "pdfSectionDescription": "Geef directe PDF-downloadlinks per taal op. Bezoekers die je cv in een specifieke taal downloaden, ontvangen het bijbehorende bestand.",
+      "pdfLinkPlaceholder": "https://example.com/resume-{locale}.pdf",
+      "testLink": "Test link",
+      "security": {
+        "title": "Beveiliging",
+        "description": "Bescherm je account met een tweede factor en passkeys. Tweestapsverificatie is optioneel; met passkeys log je in zonder wachtwoord.",
+        "twoFactor": {
+          "title": "Tweestapsverificatie",
+          "description": "Vraag bij elke wachtwoordlogin een code uit je authenticator-app (of je e-mail).",
+          "statusOn": "Aan",
+          "statusOff": "Uit",
+          "enable": "2FA inschakelen",
+          "disable": "2FA uitschakelen",
+          "regenerateBackup": "Nieuwe back-upcodes",
+          "needsPassword": "Stel eerst een wachtwoord in voor dit account voordat je tweestapsverificatie inschakelt.",
+          "confirmPassword": "Bevestig je wachtwoord",
+          "confirmPasswordHint": {
+            "enable": "We hebben je wachtwoord nodig om het authenticator-geheim te genereren.",
+            "disable": "Als je 2FA uitschakelt, worden je authenticator en back-upcodes verwijderd.",
+            "backup": "Nieuwe codes vervangen de oude direct."
+          },
+          "confirm": {
+            "enable": "Doorgaan",
+            "disable": "Uitschakelen",
+            "backup": "Codes genereren"
+          },
+          "qrLabel": "QR-code voor je authenticator-app",
+          "scanHint": "Scan deze QR-code met Google Authenticator, 1Password of een andere TOTP-app en voer daarna de 6-cijferige code in.",
+          "manualKey": "Kun je niet scannen? Voer deze sleutel handmatig in:",
+          "codeLabel": "Code uit de app",
+          "verifyAndEnable": "Verifiëren en inschakelen",
+          "savedCodes": "Ik heb mijn back-upcodes opgeslagen",
+          "working": "Bezig...",
+          "cancel": "Annuleren",
+          "enabled": "Tweestapsverificatie staat aan. Bij je volgende login vragen we om een code.",
+          "disabled": "Tweestapsverificatie staat uit.",
+          "errorGeneric": "Er ging iets mis. Controleer je wachtwoord en probeer het opnieuw.",
+          "errorCode": "Die code klopt niet. Wacht op de volgende en probeer het opnieuw."
+        },
+        "backupCodes": {
+          "title": "Back-upcodes",
+          "description": "Bewaar deze op een veilige plek. Elke code laat je één keer inloggen als je geen toegang hebt tot je authenticator en e-mail.",
+          "copy": "Kopiëren",
+          "copied": "Gekopieerd",
+          "download": ".txt downloaden"
+        },
+        "passkeys": {
+          "title": "Passkeys",
+          "description": "Log in met Face ID, Touch ID, Windows Hello of een beveiligingssleutel. Passkeys zijn phishingbestendig en slaan de 2FA-stap over.",
+          "loading": "Passkeys laden...",
+          "empty": "Nog geen passkeys.",
+          "unnamed": "Naamloze passkey",
+          "meta": "{kind} · toegevoegd op {date}",
+          "kindSynced": "Gesynchroniseerde passkey",
+          "kindDevice": "Apparaatgebonden passkey",
+          "nameLabel": "Naam van de passkey",
+          "namePlaceholder": "bijv. MacBook Touch ID",
+          "add": "Passkey toevoegen",
+          "working": "Wachten op je apparaat...",
+          "added": "Passkey toegevoegd.",
+          "deleted": "Passkey verwijderd.",
+          "confirmDelete": "Deze passkey verwijderen? Je kunt er dan niet meer mee inloggen.",
+          "rename": "{name} hernoemen",
+          "delete": "{name} verwijderen",
+          "save": "Opslaan",
+          "cancel": "Annuleren",
+          "errorLoad": "Je passkeys konden niet worden geladen.",
+          "errorAdd": "De passkey kon niet worden toegevoegd.",
+          "errorDelete": "De passkey kon niet worden verwijderd.",
+          "errorRename": "De passkey kon niet worden hernoemd."
+        }
+      }
     },
     "spotify": {
       "title": "Spotify",
@@ -1529,6 +2134,46 @@
         "disconnectFailed": "Spotify kon niet worden ontkoppeld"
       }
     },
+    "googleCalendar": {
+      "title": "Google Calendar",
+      "subtitle": "Synchroniseer job tracker-events met je eigen Google Calendar OAuth-client.",
+      "storagePolicy": "Je Google OAuth client secret en refresh token worden versleuteld opgeslagen alleen voor jouw account — hetzelfde patroon als Spotify.",
+      "disconnectPolicy": "Ontkoppelen verwijdert je Calendar-tokens uit onze database. Events die al in Google Calendar staan blijven staan.",
+      "privacyNote": "Zie ons <link>privacybeleid</link> voor welke agenda-gegevens we opslaan en waarom.",
+      "redirectUriLabel": "Geautoriseerde redirect-URI (voeg toe in Google Cloud Console)",
+      "redirectUriHint": "APIs & Services → Credentials → je OAuth-client → Authorized redirect URIs",
+      "scopesTitle": "Gevraagde machtigingen",
+      "scopes": {
+        "calendarEvents": "Events op je agenda's maken, bijwerken en verwijderen"
+      },
+      "connect": {
+        "title": "Koppel je Google Calendar-app",
+        "description": "Maak een OAuth-client in je Google Cloud-project, schakel de Calendar API in en plak hier Client ID en Secret.",
+        "byoNote": "Gebruik je eigen Google Cloud OAuth-gegevens — niet de site-login Google-app. Schakel Google Calendar API in op dat project.",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "clientIdPlaceholder": "Plak je Client ID",
+        "clientSecretPlaceholder": "Plak je Client Secret",
+        "dashboardLink": "Open Google Cloud Credentials",
+        "connect": "Verbinden met Google",
+        "connecting": "Doorsturen naar Google…",
+        "validationError": "Voer een geldige Client ID en Client Secret van je Google Cloud OAuth-client in."
+      },
+      "status": {
+        "connected": "Verbonden met Google Calendar",
+        "disconnected": "Niet verbonden",
+        "refreshError": "Kon je Google Calendar-verbinding niet vernieuwen",
+        "connectedAt": "Verbonden op {date}",
+        "clientId": "Client ID: {id}",
+        "disconnect": "Google Calendar ontkoppelen",
+        "disconnecting": "Ontkoppelen…",
+        "reconnect": "Google Calendar opnieuw koppelen"
+      },
+      "actions": {
+        "connectFailed": "Google Calendar-autorisatie kon niet worden gestart",
+        "disconnectFailed": "Google Calendar kon niet worden ontkoppeld"
+      }
+    },
     "forms": {
       "saved": "Opgeslagen.",
       "order": "Volgorde",
@@ -1573,6 +2218,7 @@
       "contact": {
         "type": "Soort",
         "value": "Waarde",
+        "locationValueHint": "Stad op de Let's talk-globe als je geen kaartlocatie in Instellingen hebt gezet (bijv. Amsterdam, Nederland).",
         "labelOptional": "Label (optioneel)",
         "labelHint": "Tekst naast het contact.",
         "add": "+ Contact toevoegen",
@@ -1645,6 +2291,14 @@
       "experience": {
         "company": "Bedrijf",
         "role": "Rol",
+        "employmentType": "Dienstverband",
+        "employmentTypes": {
+          "FULL_TIME": "Voltijd",
+          "PART_TIME": "Deeltijd",
+          "CONTRACT": "Contract",
+          "FREELANCE": "Freelance",
+          "INTERNSHIP": "Stage"
+        },
         "location": "Locatie (optioneel)",
         "dates": "Datums",
         "startDate": "Startdatum",
@@ -1684,7 +2338,12 @@
         "dragToReorder": "Sleep om te herordenen",
         "addLabel": "Toevoegen",
         "featuredOnHome": "Tonen op startpagina",
-        "featuredOnHomeDescription": "Deze ervaring verschijnt in de startpagina sectie"
+        "featuredOnHomeDescription": "Deze ervaring verschijnt in de startpagina sectie",
+        "companyBlurb": "Bedrijfs-/contextbeschrijving (ATS)",
+        "companyBlurbDescription": "Korte feitelijke notitie over het bedrijf of waar je aan werkte. Voor ATS tailor — niet op het geprinte CV.",
+        "companyBlurbPlaceholder": "bijv. Telecom B2C · digitale serviceaanvragen",
+        "atsOnly": "Alleen ATS (verberg op CV)",
+        "atsOnlyDescription": "Verschijnt niet op het openbare/geprinte CV, wel bij het afstemmen op een vacature."
       },
       "softSkill": {
         "label": "Soft skill",
@@ -1710,6 +2369,28 @@
         "loading": "Laden...",
         "saveFailed": "Kon item niet opslaan",
         "deleteFailed": "Kon item niet verwijderen",
+        "savedSuccess": "Succesvol opgeslagen",
+        "deleteSuccess": "Succesvol verwijderd",
+        "edit": "Bewerken",
+        "create": "Toevoegen",
+        "dragToReorder": "Sleep om te herordenen"
+      },
+      "personalReference": {
+        "details": "Referentiegegevens",
+        "name": "Naam",
+        "nameRequired": "Naam is verplicht",
+        "contact": "Contact",
+        "contactHint": "Telefoon, e-mail of ander contact (optioneel).",
+        "contactPlaceholder": "bijv. (+505) 8679-3204",
+        "role": "Rol / relatie",
+        "rolePlaceholder": "bijv. Ontwikkelaar, Manager",
+        "add": "+ Persoonlijke referentie toevoegen",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan...",
+        "cancel": "Annuleren",
+        "loading": "Laden...",
+        "saveFailed": "Kon referentie niet opslaan",
+        "deleteFailed": "Kon referentie niet verwijderen",
         "savedSuccess": "Succesvol opgeslagen",
         "deleteSuccess": "Succesvol verwijderd",
         "edit": "Bewerken",
@@ -1767,6 +2448,7 @@
         "updateFailed": "Project bijwerken mislukt",
         "createFailed": "Project aanmaken mislukt",
         "imageRequired": "Afbeelding is verplicht",
+        "imageUrlInvalid": "Voer een geldige afbeelding-URL of lokaal pad in",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
         "atLeastOneLanguage": "Minstens één taal is verplicht"
       },
@@ -1815,7 +2497,9 @@
         "createFailed": "Dienst aanmaken mislukt",
         "imageRequired": "Afbeelding is verplicht",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
-        "atLeastOneLanguage": "Minstens één taal is verplicht"
+        "atLeastOneLanguage": "Minstens één taal is verplicht",
+        "isActive": "Actief op de publieke site",
+        "isActiveHint": "Inactieve diensten blijven in admin maar verdwijnen van de homepage en publieke stats."
       },
       "certification": {
         "generalSection": "Algemene informatie",
@@ -1845,7 +2529,8 @@
       "jobTrackerApplication": {
         "validation": {
           "positionRequired": "Functie is verplicht",
-          "companyRequired": "Selecteer een bedrijf"
+          "companyRequired": "Selecteer een bedrijf",
+          "urlInvalid": "Ongeldige URL"
         },
         "toast": {
           "success": {
@@ -1871,20 +2556,24 @@
           "appliedDate": "Sollicitatiedatum",
           "location": "Locatie",
           "salary": "Salaris",
+          "jobUrl": "Vacaturelink",
           "description": "Beschrijving",
           "notes": "Notities",
           "cv": "CV"
         },
         "descriptions": {
-          "cvUpload": "Upload uw CV (PDF, max 5MB)"
+          "cvUpload": "Upload je CV (PDF, max 5MB)",
+          "description": "Optioneel. Plak de vacaturetekst om later je CV toe te spitsen.",
+          "notes": "Privénotities - niet gedeeld met werkgevers."
         },
         "placeholders": {
           "position": "Frontend Developer",
           "company": "Selecteer of maak een bedrijf...",
-          "location": "Remote, Hybride, etc...",
+          "location": "Remote, hybrid, etc...",
           "salary": "€50k - €60k",
-          "description": "Functieomschrijving...",
-          "notes": "Persoonlijke notities...",
+          "jobUrl": "https://linkedin.com/jobs/view/...",
+          "description": "Plak de functieomschrijving…",
+          "notes": "bijv. via Alex, follow-up vrijdag…",
           "date": "Selecteer een datum"
         },
         "actions": {
@@ -1906,7 +2595,36 @@
           "empty": "Geen bedrijven gevonden",
           "createFailed": "Bedrijf aanmaken mislukt",
           "clearSearch": "Zoekopdracht wissen"
-        }
+        },
+        "import": {
+          "placeholders": {
+            "url": "https://linkedin.com/..., bamboohr.com/careers/..., getonbrd.com/jobs/..."
+          },
+          "actions": {
+            "show": "Invullen via link (LinkedIn, BambooHR, Get on Board)",
+            "import": "Importeren",
+            "importing": "Bezig met importeren…",
+            "cancel": "Annuleren"
+          },
+          "toast": {
+            "success": {
+              "title": "Vacature geïmporteerd",
+              "description": "Controleer de velden voordat je opslaat."
+            },
+            "error": {
+              "title": "Importeren mislukt"
+            }
+          },
+          "errors": {
+            "IMPORT_INVALID_URL": "Dat lijkt geen geldige URL.",
+            "IMPORT_UNSUPPORTED_HOST": "Alleen vacaturelinks van LinkedIn, BambooHR en Get on Board worden ondersteund.",
+            "IMPORT_LOGIN_WALL": "De pagina vereist inloggen of is geblokkeerd. Plak de beschrijving handmatig.",
+            "IMPORT_EMPTY_CONTENT": "Geen vacaturetekst gevonden. Plak de beschrijving handmatig.",
+            "IMPORT_FETCH_FAILED": "De link kon niet worden gelezen. Probeer opnieuw of plak de beschrijving handmatig."
+          }
+        },
+        "descriptionHint": "Optioneel. Plak de vacaturetekst om later je CV toe te spitsen.",
+        "notesHint": "Privénotities - niet gedeeld met werkgevers."
       },
       "jobTrackerCompany": {
         "validation": {
@@ -1934,12 +2652,16 @@
           "name": "Naam",
           "website": "Website",
           "email": "E-mail",
+          "linkedinUrl": "LinkedIn-profiel",
+          "companyLocation": "Hoofdkantoor / Locatie",
           "description": "Beschrijving"
         },
         "placeholders": {
           "name": "Acme Corp",
           "email": "contact@bedrijf.com",
           "website": "https://bedrijf.com",
+          "linkedinUrl": "https://linkedin.com/company/...",
+          "companyLocation": "Amsterdam, Nederland / Remote",
           "description": "Bedrijfsbeschrijving..."
         },
         "actions": {
@@ -1972,21 +2694,35 @@
         },
         "sections": {
           "application": "Sollicitatie",
-          "info": "Evenementinformatie",
-          "dateTime": "Datum & Tijd",
-          "modality": "Modaliteit"
+          "info": "Wat voor event?",
+          "infoHint": "Het type bepaalt later de interviewvragen.",
+          "dateTime": "Wanneer",
+          "modality": "Waar"
         },
         "fields": {
           "application": "Selecteer Sollicitatie",
           "type": "Evenementtype",
           "title": "Titel",
-          "description": "Beschrijving",
-          "scheduledDate": "Geplande Datum",
-          "duration": "Duur (minuten)",
-          "isVirtual": "Virtuele Vergadering",
+          "description": "Notities (optioneel)",
+          "scheduledDate": "Datum",
+          "scheduledTime": "Tijd",
+          "duration": "Duur",
+          "isVirtual": "Formaat",
           "isVirtualDescription": "Vindt deze vergadering online plaats?",
           "meetingLink": "Vergaderlink",
           "location": "Locatie"
+        },
+        "linkedApplication": "Voor deze sollicitatie",
+        "modalityVirtual": "Virtueel",
+        "modalityInPerson": "Op locatie",
+        "durationMinutes": "{minutes} min",
+        "typeHint": {
+          "INTERVIEW": "Live interview",
+          "TECHNICAL_TEST": "Code of architectuur",
+          "QUESTIONNAIRE": "Schriftelijke antwoorden",
+          "PHONE_CALL": "Recruiter of screening",
+          "MEETING": "Gesprek met het team",
+          "FOLLOW_UP": "Na een eerdere ronde"
         },
         "placeholders": {
           "application": "Selecteer een sollicitatie...",
@@ -2000,6 +2736,14 @@
         "actions": {
           "submit": "Evenement Opslaan",
           "cancel": "Annuleren"
+        },
+        "stepper": {
+          "label": "Stappen van het evenement",
+          "what": "Wat",
+          "when": "Wanneer",
+          "where": "Waar",
+          "next": "Verder",
+          "back": "Terug"
         },
         "eventType": {
           "INTERVIEW": "Interview",
@@ -2115,6 +2859,7 @@
         "createFailed": "Vaardigheid aanmaken mislukt",
         "titleRequired": "Titel is verplicht",
         "imageRequired": "Afbeelding-URL is verplicht",
+        "imageUrlInvalid": "Voer een geldige afbeelding-URL of lokaal pad in",
         "featuredLabel": "Uitgelicht in stack",
         "featuredDescription": "Uitgelichte skills zijn helderder in de home-terminal en benadrukken je primaire stack."
       },
@@ -2153,6 +2898,19 @@
         "addClarification": "Toelichting toevoegen",
         "removeClarification": "Verwijderen",
         "optionalMarkdownHint": "Optioneel. Markdown-links: [label](https://…)",
+        "sectionWorkspaceTags": "Workspace-tags",
+        "sectionWorkspaceTagsHint": "Klik op de foto om een pin te plaatsen en kies het item in het venster. Op de publieke pagina toont hover de naam; klik scrolt naar die kaart.",
+        "selectItem": "Item kiezen",
+        "selectItemDescription": "Kies het product waar deze pin naar wijst.",
+        "selectItemPlaceholder": "Selecteer een product",
+        "searchItem": "Items zoeken…",
+        "noMatchingItems": "Geen overeenkomsten",
+        "groupEveryday": "Everyday",
+        "groupSoftware": "Software",
+        "deleteTag": "Pin verwijderen",
+        "noImageHint": "Voeg hierboven een pad voor de workspace-afbeelding toe om tags te plaatsen.",
+        "emptyTags": "Nog geen tags. Klik op de afbeelding om er een toe te voegen.",
+        "untitledItem": "Naamloos",
         "save": "Instellingen opslaan",
         "saving": "Opslaan…",
         "updatedSuccess": "Instellingen opgeslagen",
@@ -2204,6 +2962,117 @@
         "updatedSuccess": "Focus bijgewerkt",
         "createFailed": "Kon focus niet aanmaken",
         "updateFailed": "Kon focus niet bijwerken"
+      },
+      "processPage": {
+        "addNew": "Pagina toevoegen",
+        "editTitle": "Procespagina bewerken",
+        "sectionBasics": "Basis",
+        "sectionCopy": "Teksten",
+        "sectionPageNav": "Navigatie op de pagina",
+        "sectionHeroTerminal": "Hero-terminal",
+        "sectionBenefits": "Voordelen",
+        "sectionSteps": "Stappen",
+        "sectionToolkit": "Toolkit",
+        "sectionRoles": "Rollen",
+        "sectionFaq": "FAQ",
+        "template": "Sjabloon",
+        "templateHint": "Kies de layout. Wijzigen op een nieuwe pagina reset sectie-inhoud.",
+        "templateWorkflow": "Workflow (Hoe ik AI gebruik)",
+        "templateQa": "QA-samenwerking",
+        "slug": "Slug",
+        "slugHint": "Kleine letters, kebab-case. Gereserveerde paden zijn geblokkeerd.",
+        "navIcon": "Nav-icoon",
+        "order": "Volgorde",
+        "isPublished": "Gepubliceerd",
+        "isPublishedHint": "Niet-gepubliceerde pagina's geven 404 op de publieke site.",
+        "showInNav": "Tonen in header en footer",
+        "showInNavHint": "Onafhankelijk van publiceren. Een publieke pagina kan buiten het menu blijven.",
+        "menuTitle": "Menutitel",
+        "menuTitleRequired": "Menutitel is verplicht voor de primaire taal",
+        "navDescription": "Nav-beschrijving",
+        "navDescriptionHint": "Korte regel onder de titel in het Explore-menu van de header.",
+        "pageNavLabel": "Label in-page navigatie",
+        "metaTitle": "SEO-titel",
+        "metaDescription": "SEO-beschrijving",
+        "heroEyebrow": "Hero-eyebrow",
+        "heroTitle": "Hero-titel",
+        "heroTitleHighlight": "Hero-titel highlight",
+        "heroDescription": "Hero-beschrijving",
+        "heroPrimaryCta": "Primaire CTA",
+        "heroSecondaryCta": "Secundaire CTA",
+        "heroScrollHint": "Scrollhint",
+        "ctaTitle": "Afsluitende CTA-titel",
+        "ctaDescription": "Afsluitende CTA-beschrijving",
+        "ctaButton": "Afsluitende CTA-knop",
+        "navId": "Anker-id",
+        "navLabel": "Label",
+        "addNavItem": "Nav-item toevoegen",
+        "primaryHref": "Href van primaire CTA",
+        "secondaryHref": "Href van secundaire CTA",
+        "terminalTitle": "Terminallabel",
+        "workflowTitle": "Cyclustitel",
+        "workflowLive": "Live-label",
+        "workflowSteps": "Cyclusstappen",
+        "cursorLabel": "Cursorlabel",
+        "testRunnerLines": "Test runner-regels",
+        "onePerLine": "Eén item per regel",
+        "eyebrow": "Eyebrow",
+        "sectionTitle": "Sectietitel",
+        "title": "Titel",
+        "description": "Beschrijving",
+        "icon": "Icoon",
+        "benefitItem": "Voordeel {index}",
+        "addBenefit": "Voordeel toevoegen",
+        "inPracticeLabel": "In de praktijk-label",
+        "stepItem": "Stap {index}",
+        "stepNumber": "Nummer",
+        "stepDetail": "Detail",
+        "stepTools": "Tools",
+        "addStep": "Stap toevoegen",
+        "toolkitFootnote": "Voetnoot",
+        "toolItem": "Tool {index}",
+        "toolName": "Naam",
+        "toolInitials": "Initialen",
+        "addTool": "Tool toevoegen",
+        "myRolesLabel": "Label mijn rollen",
+        "myRoles": "Mijn rollen",
+        "ecosystemRoles": "Ecosysteemrollen",
+        "testingLabel": "Testing-label",
+        "testingTags": "Testing-tags",
+        "faqItem": "FAQ {index}",
+        "question": "Vraag",
+        "answer": "Antwoord",
+        "addFaq": "FAQ toevoegen",
+        "remove": "Verwijderen",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "create": "Aanmaken",
+        "saving": "Opslaan…",
+        "createdSuccess": "Procespagina aangemaakt",
+        "updatedSuccess": "Procespagina bijgewerkt",
+        "createFailed": "Kon procespagina niet aanmaken",
+        "updateFailed": "Kon procespagina niet bijwerken",
+        "designerHint": "Sleep widgets naar het canvas en klik om ze in te vullen.",
+        "widgetPalette": "Widgets",
+        "pageSettings": "Pagina-instellingen",
+        "emptyCanvas": "Sleep hier een widget naartoe, of klik + in het palet.",
+        "dragToReorder": "Sleep om te herschikken",
+        "removeWidget": "Widget verwijderen",
+        "visualNone": "Geen visual",
+        "visualWorkflow": "Workflow-cyclus",
+        "visualTestRunner": "Test runner",
+        "addChip": "Toevoegen",
+        "widgets": {
+          "nav": "Navigatie op de pagina",
+          "hero": "Hero",
+          "benefits": "Voordelengrid",
+          "stepsAccordion": "Stappen-accordion",
+          "stepsTimeline": "Stappen-tijdlijn",
+          "toolkit": "Toolkit",
+          "roles": "Rollen",
+          "faq": "FAQ",
+          "closingCta": "Afsluitende CTA"
+        }
       }
     },
     "errors": {
@@ -2215,24 +3084,26 @@
     },
     "profile": {
       "title": "Profiel & Hero Sectie",
-      "subtitle": "Bewerk je hero-identiteit, roterende titels, samenvatting en over-mij-tekst.",
+      "subtitle": "Bewerk je identiteit, professionele ondertitel, tagline en teksten voor de Hero en Over mij-secties.",
       "heroSection": "Identiteit",
       "fullNameLabel": "Weergavenaam",
-      "photoUrlLabel": "Foto URL",
-      "backgroundImageLabel": "Hero-achtergrondafbeelding URL",
-      "backgroundImagePlaceholder": "https://voorbeeld.nl/hero-achtergrond.jpg",
-      "professionalTitle": "Professionele Titel",
-      "degreeLabel": "Professionele titel / graad",
-      "rotatingTitlesLabel": "Roterende titels",
-      "rotatingTitlesHint": "Getoond in de typewriter-animatie van de hero. Sleep om te herschikken.",
-      "dragToReorder": "Sleep om te herordenen",
-      "titleWithLanguage": "Titel ({language})",
-      "addTitle": "Titel toevoegen",
-      "removeTitle": "Titel verwijderen",
-      "heroSummaryLabel": "Hero-samenvatting",
-      "heroSummaryWithLanguage": "Korte samenvatting ({language})",
-      "heroSummaryHint": "Korte beschrijving onder je titels in de hero-sectie.",
-      "heroSummaryPlaceholder": "Een korte introductie voor de hero-sectie...",
+      "photoUrlLabel": "Profielfoto URL",
+      "heroSubtitleLabel": "Professionele ondertitel (H2)",
+      "heroSubtitleHint": "Belangrijkste H2-titel weergegeven onder je naam in de Hero en gebruikt in de paginatitel (SEO).",
+      "heroSubtitleWithLanguage": "Professionele ondertitel ({language})",
+      "heroSubtitlePlaceholder": "bijv. Senior Software Engineer",
+      "heroTaglineLabel": "Tagline / Waardepropositie",
+      "heroTaglineHint": "Uitgelichte alinea die je waarde en ervaring samenvat in de Hero-sectie.",
+      "heroTaglineWithLanguage": "Tagline / Waardepropositie ({language})",
+      "heroTaglinePlaceholder": "bijv. 6+ jaar ervaring in het bouwen van schaalbare enterprise systemen...",
+      "heroSummaryLabel": "Secundaire hero-samenvatting",
+      "heroSummaryWithLanguage": "Secundaire samenvatting ({language})",
+      "heroSummaryHint": "Optionele korte beschrijving onder de tagline in de hero.",
+      "heroSummaryPlaceholder": "Een korte aanvullende introductie voor de hero-sectie...",
+      "heroBadgeLabel": "Beschikbaarheidsbadge",
+      "heroBadgeHint": "Aangepaste tekst voor de badge bovenaan de Hero. Laat leeg om de standaard 'Beschikbaar voor nieuwe kansen' te gebruiken.",
+      "heroBadgePlaceholder": "bijv. Beschikbaar voor B2B-contracten / Beschikbaar voor projecten",
+      "heroBadgeWithLanguage": "Beschikbaarheidsbadge ({language})",
       "descriptionWithLanguage": "Over-mij-tekst ({language})",
       "altTextTitle": "Alternatieve Tekst Afbeelding",
       "altTextHint": "Beschrijft je foto voor schermlezers en SEO.",
@@ -2240,6 +3111,9 @@
       "aboutMeTitle": "Over mij",
       "descriptionLabel": "Beschrijving",
       "consoleTab": "Terminal",
+      "aboutSectionTab": "Over Mij Sectie",
+      "aboutBioTitle": "Engineering Aanpak & Verhaal",
+      "aboutBioSubtitle": "Deze alinea's introduceren je achtergrond en filosofie in de Over Mij sectie (#about). Woorden tussen **voorbeeld** worden gemarkeerd in het primaire thema.",
       "tabsNavAria": "Profielsecties",
       "heroConsoleTitle": "About-terminal",
       "heroConsoleSubtitle": "Configureer de geanimeerde terminalreeks in je Over mij-sectie.",
@@ -2251,10 +3125,11 @@
       "heroTab": "Hero & Profiel",
       "fullNamePlaceholder": "Jesús Hernández",
       "photoUrlPlaceholder": "https://voorbeeld.nl/foto.jpg",
-      "degreePlaceholder": "bijv. Web Developer",
       "altTextPlaceholder": "bijv. Foto van Jesús aan een bureau",
       "aboutPlaceholder": "Ik ben een gepassioneerde software engineer...",
       "aboutDescriptionHint": "Geef een gedetailleerde beschrijving van jezelf. Je kunt meerdere alinea's gebruiken.",
+      "heroPreviewTitle": "Live Hero Voorbeeld",
+      "heroPreviewBadge": "Beschikbaar voor kansen",
       "console": {
         "loading": "Terminalconfiguratie laden…",
         "loadFailed": "Kon terminalconfiguratie niet laden",
@@ -2376,6 +3251,9 @@
       "cancel": "Annuleren",
       "columnTitle": "Titel",
       "columnType": "Soort",
+      "columnActive": "Status",
+      "active": "Actief",
+      "inactive": "Inactief",
       "columnSkills": "Vaardigheden",
       "columnActions": "Acties",
       "columnCompany": "Bedrijf",
@@ -2542,7 +3420,12 @@
       "editItem": "Item bewerken",
       "addItem": "Item toevoegen",
       "deleteSuccess": "Succesvol verwijderd",
-      "close": "Sluiten"
+      "close": "Sluiten",
+      "exportSeedJson": "Exporteren",
+      "exportSeedJsonHint": "Exporteer de huidige databaserecords als prisma/data seed-JSON",
+      "exportSeedJsonError": "Seed-JSON exporteren is mislukt",
+      "exportSeedZipHint": "Download een ZIP met alle prisma/data seed-JSON-bestanden",
+      "exportSeedZipError": "Seed-ZIP exporteren is mislukt"
     },
     "jobTracker": {
       "title": "Job Tracker",
@@ -2550,8 +3433,60 @@
       "newCompany": "Nieuw Bedrijf",
       "newApplication": "Nieuwe Sollicitatie",
       "applicationsTab": "Sollicitaties",
+      "eventsTab": "Evenementen",
       "companiesTab": "Bedrijven",
+      "outreachTab": "Opvolging & Lezingen",
+      "eventsThisWeekBadge": "{count} deze week",
       "tabsNavAria": "Job tracker secties",
+      "emailSummary": {
+        "opened": "{count, plural, one {# keer gelezen} other {# keren gelezen}}",
+        "sent": "{count, plural, one {# verzonden} other {# verzonden}}",
+        "openedTooltip": "{count, plural, one {# e-maillezing geregistreerd} other {# e-maillezingen geregistreerd}}",
+        "sentTooltip": "{count, plural, one {# verzonden e-mail} other {# verzonden e-mails}}"
+      },
+      "outreachHub": {
+        "title": "Opvolgings- en Lezingenhub",
+        "description": "Volg e-mailopeningen, interesse-signalen en contactkansen per sollicitatie.",
+        "refresh": "Vernieuwen",
+        "stats": {
+          "totalSent": "Verzonden e-mails",
+          "openRate": "Openingspercentage",
+          "totalOpens": "Totaal aantal lezingen",
+          "recent24h": "Activiteit afgelopen 24u",
+          "recent24hHint": "Sollicitaties met een lezing in de afgelopen 24 uur"
+        },
+        "filters": {
+          "all": "Alle sollicitaties",
+          "opened": "Recent geopend",
+          "unopened": "Nog niet geopend",
+          "searchPlaceholder": "Filter op bedrijf of functie..."
+        },
+        "card": {
+          "readsCount": "{count, plural, one {# lezing} other {# lezingen}}",
+          "sentCount": "{count, plural, one {# e-mail} other {# e-mails}}",
+          "lastRead": "Laatst gelezen {time}",
+          "lastSent": "Verzonden {time}",
+          "notReadYet": "Nog niet geopend",
+          "viewApplication": "Bekijk sollicitatie",
+          "toggleDetails": "Details tonen",
+          "emailsHeading": "Verzonden e-mails",
+          "recipient": "Aan: {email}",
+          "sentAt": "Verzonden: {date}",
+          "attachment": "CV: {name}",
+          "tracked": "Tracking actief",
+          "untracked": "Niet getrackt",
+          "openHistory": "Gedetecteerde leesmomenten",
+          "noOpensYet": "Er zijn nog geen lezingen gedetecteerd voor deze e-mail.",
+          "proxyNotice": "Afbeeldingsproxy",
+          "opensCount": "{count} totaal aantal weergaven"
+        },
+        "emptyState": {
+          "title": "Nog geen opvolgingsactiviteit",
+          "description": "Verstuur uw eerste sollicitatie-e-mail met tracking vanuit de sollicitatiedetails om hier statistieken te zien.",
+          "noFilteredTitle": "Geen sollicitaties gevonden",
+          "noFilteredDescription": "Probeer uw zoekopdracht of actief filter aan te passen."
+        }
+      },
       "columnPosition": "Functie",
       "columnCompany": "Bedrijf",
       "columnStatus": "Status",
@@ -2613,14 +3548,40 @@
         "hiredDescription": "Gefeliciteerd!"
       },
       "calendar": {
-        "title": "Aankomende Evenementen",
-        "description": "Geplande interviews en tests",
+        "title": "Evenementenagenda",
+        "description": "Geplande sollicitatiegesprekken, vergaderingen en tests",
+        "googleSyncActive": "Gesynchroniseerd met Google Calendar",
+        "googleSyncError": "Google Calendar-sync moet opnieuw worden gekoppeld",
         "add": "Toevoegen",
         "empty": "U heeft geen geplande evenementen",
+        "expand": "Alles tonen",
+        "collapse": "Minder tonen",
+        "expandAria": "Meer aankomende evenementen tonen",
+        "collapseAria": "Alleen het eerstvolgende evenement tonen",
+        "moreCount": "{count, plural, one {# evenement extra} other {# evenementen extra}}",
         "today": "Vandaag",
         "tomorrow": "Morgen",
         "virtual": "Virtueel",
-        "duration": "{minutes} min"
+        "duration": "{minutes} min",
+        "inHours": "Over {hours, plural, one {# uur} other {# uur}}",
+        "inDays": "Over {days, plural, one {# dag} other {# dagen}}",
+        "urgentAlertTitle": "Aankomend dringend evenement",
+        "joinMeeting": "Deelnemen aan vergadering",
+        "prepEvent": "Interview voorbereiden",
+        "viewInAgenda": "Bekijk in agenda",
+        "dismissAlert": "Melding sluiten",
+        "statsThisWeek": "Deze week",
+        "statsTotalUpcoming": "Totaal gepland",
+        "statsVirtual": "Virtuele vergaderingen",
+        "filterAll": "Alles",
+        "filterThisWeek": "Deze week",
+        "filterInterviews": "Sollicitaties",
+        "filterTechnical": "Technische tests",
+        "emptyFiltered": "Geen evenementen gevonden voor dit filter",
+        "emptyDescription": "Plan sollicitatiegesprekken, technische tests of opvolgacties om volledige controle te houden over uw proces.",
+        "scheduleEvent": "Evenement plannen",
+        "thisWeekShort": "deze wk",
+        "multipleUrgentCount": "{current} van {total} aankomend"
       },
       "detail": {
         "title": "Sollicitatiedetails",
@@ -2628,6 +3589,7 @@
         "timelineTab": "Tijdlijn",
         "detailsTab": "Details",
         "tailorTab": "CV aanpassen",
+        "emailTab": "E-mails",
         "jobDescription": "Functieomschrijving",
         "salary": "Salaris",
         "location": "Locatie",
@@ -2642,17 +3604,232 @@
         "deleteApplicationConfirm": "Deze sollicitatie verwijderen? Dit kan niet ongedaan worden gemaakt.",
         "deleteCancel": "Annuleren",
         "deleteConfirmAction": "Verwijderen",
+        "actionsGroup": "Sollicitatie-acties",
+        "moreActions": "Meer acties",
         "timelineActivityHint": "Automatisch gegenereerd uit sollicitatieactiviteit — voeg je eigen toe met de knop hierboven.",
         "noDescription": "Geen functieomschrijving beschikbaar.",
+        "showFullDescription": "Volledige omschrijving tonen",
+        "hideFullDescription": "Minder tonen",
+        "notProvided": "—",
+        "viewJobPosting": "Originele vacature bekijken",
+        "jobUrl": "Vacaturelink",
+        "companyInfo": "Bedrijfsinformatie",
+        "editCompany": "Bedrijf bewerken",
         "tabsNavAria": "Sollicitatiesecties"
+      },
+      "interviewPrep": {
+        "pageTitle": "Interviewvoorbereiding",
+        "breadcrumb": "Job Tracker / Sollicitatie",
+        "hint": "Begin met waarom ze jou moeten aannemen. Oefen daarna de rest hardop: intro in drie delen, STAR, bedrijfsonderzoek en vragen over de rol.",
+        "aiSettingsLoading": "AI-instellingen laden...",
+        "eventType": {
+          "INTERVIEW": "Interview",
+          "TECHNICAL_TEST": "Technische test",
+          "QUESTIONNAIRE": "Vragenlijst",
+          "PHONE_CALL": "Telefoongesprek",
+          "MEETING": "Vergadering",
+          "FOLLOW_UP": "Opvolging"
+        },
+        "cta": "Prep-pack maken",
+        "regenerate": "Opnieuw bouwen",
+        "generateMore": "Meer genereren",
+        "moreSuccess": "Meer vragen toegevoegd",
+        "cancelRegenerate": "Annuleren",
+        "alreadyDoneForType": "{count} vragen voor {type}",
+        "focusToolsLabel": "Focus op specifieke tools & technologieën (optioneel)",
+        "focusToolsHint": "Selecteer gedetecteerde tools uit de vacature of voeg aangepaste toe voor diepgaande technische vragen.",
+        "addCustomTool": "Tool toevoegen",
+        "customToolPlaceholder": "bijv. Docker, PostgreSQL...",
+        "generateForTool": "Vragen toevoegen voor {tool}",
+        "toolDeepDive": "Tool Deep Dive",
+        "selectedToolsCount": "{count} geselecteerd",
+        "clearSelectedTools": "Selectie wissen",
+        "eventHint": "Vragen worden gegenereerd voor een {type}.",
+        "usingTailored": "Gebruikt de laatste aangepaste CV-snapshot.",
+        "usingStudio": "Nog geen aangepaste snapshot — Resume Studio wordt gebruikt.",
+        "needJd": "Voeg een functieomschrijving toe (of pas eerst een CV aan) voordat je vragen genereert.",
+        "success": "Interviewpack klaar",
+        "failed": "Interviewvoorbereiding kon niet worden gemaakt",
+        "copyAnswer": "Antwoord kopiëren",
+        "copied": "Gekopieerd",
+        "copyFailed": "Kopiëren mislukt",
+        "copyAll": "Alle Q&A kopiëren",
+        "practiceProgress": "{current} van {total}",
+        "practiceRated": "{rated} van {total} geoefend",
+        "practiceShuffle": "Schudden",
+        "practiceShowHints": "Kernpunten tonen",
+        "practiceHideHints": "Kernpunten verbergen",
+        "practiceSpeakHint": "Zeg het antwoord hardop voordat je typt. Timing en helderheid winnen van een alinea die je nooit hebt uitgesproken.",
+        "practiceYourAnswer": "Jouw antwoord",
+        "practiceYourAnswerPlaceholder": "Zeg het eerst hardop (dat verandert alles) en typ daarna desgewenst een concept. Toon daarna het modelantwoord.",
+        "practiceReveal": "Modelantwoord tonen",
+        "practiceHideAnswer": "Modelantwoord verbergen",
+        "practiceRate": "Hoe voelde dat?",
+        "practiceRateAgain": "Nog oefenen",
+        "practiceRateOk": "Oké",
+        "practiceRateSolid": "Sterk",
+        "practicePrev": "Vorige",
+        "practiceNext": "Volgende",
+        "practiceSkip": "Overslaan",
+        "practiceDone": "Klaar",
+        "practiceTalkingPoints": "Selecteer de punten die je zou behandelen.",
+        "practiceActions": "Oefenacties",
+        "practiceTechnical": "Technische vragen",
+        "practiceDrill": "STAR-oefening",
+        "why": "Waarom ze dit vragen",
+        "modelAnswer": "Modelantwoord",
+        "talkingPoints": "Kernpunten",
+        "evidence": "Uit je CV",
+        "avoid": "Vermijd",
+        "generatedOn": "Gegenereerd {date}",
+        "category": {
+          "hire": "Waarom aannemen",
+          "intro": "Intro",
+          "behavioral": "Gedrag",
+          "role": "Rol",
+          "gap": "Gat",
+          "closing": "Afsluiting",
+          "technical": "Technisch",
+          "screening": "Screening"
+        },
+        "flipToAnswer": "Omdraaien voor antwoord",
+        "flipToQuestion": "Omdraaien naar vraag",
+        "tapToFlip": "Tik op de kaart of druk op Spatie om om te draaien",
+        "voiceStart": "Antwoord opnemen",
+        "voiceListening": "Luisteren... spreek nu",
+        "voiceStop": "Stop opname",
+        "voiceUnsupported": "Spraakherkenning niet ondersteund in deze browser",
+        "voiceClear": "Tekst wissen",
+        "evaluateAi": "Beoordelen met AI",
+        "evaluatingAi": "Antwoord beoordelen...",
+        "aiFeedback": "AI-beoordeling",
+        "aiScore": "Score: {score}/10",
+        "aiStrengths": "Sterke punten",
+        "aiImprovements": "Verbeterpunten",
+        "aiVerdict": "Oordeel",
+        "cardFront": "Vraag",
+        "cardBack": "Antwoord",
+        "swipeHint": "Veeg om te navigeren",
+        "voiceErrorNotAllowed": "Microfoontoestemming geweigerd. Schakel dit in via uw browserinstellingen.",
+        "voiceErrorAudioCapture": "Er is geen microfoon gevonden of deze is in gebruik door een andere applicatie.",
+        "voiceErrorNetwork": "Netwerkfout met de spraakherkenningsdienst.",
+        "voiceErrorUnknown": "Er is een fout opgetreden bij spraakherkenning.",
+        "addManualQuestion": "Handmatige vraag toevoegen",
+        "addManualQuestionTitle": "Handmatige vraag maken",
+        "addManualQuestionDesc": "Voeg een aangepaste vraag toe aan uw oefensessie.",
+        "questionLabel": "Vraag",
+        "categoryLabel": "Categorie",
+        "modelAnswerLabel": "Modelantwoord",
+        "whyTheyAskLabel": "Waarom ze dit vragen (Optioneel)",
+        "talkingPointsLabel": "Kernpunten (één per regel)",
+        "saveQuestion": "Vraag opslaan",
+        "questionSaved": "Vraag toegevoegd",
+        "aiKeyInvalid": "De AI API-sleutel is ongeldig of inactief. U kunt de handmatige modus gebruiken om te genereren met ChatGPT/Claude of handmatig vragen toe te voegen.",
+        "openGenerator": "AI / Handmatige generator"
+      },
+      "email": {
+        "title": "CV per e-mail versturen",
+        "openButton": "CV versturen",
+        "description": "AI schrijft een korte sollicitatie-e-mail bij deze vacature: ontvanger, onderwerp en tekst afgestemd op de posting. Controleer en verstuur het CV via Resend.",
+        "draft": "Concept met AI",
+        "redraft": "Concept opnieuw genereren",
+        "draftHint": "Genereer een concept voor ontvanger, onderwerp en tekst — je kunt alles bewerken vóór het verzenden.",
+        "draftSuccess": "E-mailconcept klaar",
+        "draftError": "Kon het concept niet maken",
+        "send": "CV versturen",
+        "sendSuccess": "E-mail verzonden",
+        "sendError": "Kon de e-mail niet versturen",
+        "sendMissingFields": "Vul ontvanger, onderwerp en tekst in vóór het verzenden",
+        "toLabel": "Aan",
+        "recipientLabel": "Naam ontvanger",
+        "recipientPlaceholder": "Carol",
+        "subjectLabel": "Onderwerp",
+        "bodyLabel": "Bericht",
+        "attachment": "Bijlage: {name}",
+        "attachmentLabel": "Bijlage",
+        "attachmentOverride": "Aangepast bestand: {name}",
+        "replaceAttachment": "Bestand vervangen",
+        "useTailoredCv": "Op maat gemaakt CV gebruiken",
+        "attachmentReplaced": "Bijlage bijgewerkt",
+        "attachmentUploadError": "Kon het bestand niet uploaden",
+        "attachmentInvalidType": "Alleen .doc, .docx of .pdf bestanden zijn toegestaan",
+        "attachmentTooLarge": "Bestand mag maximaal 8 MB zijn",
+        "needCv": "Maak eerst een CV op maat, of upload een .docx/.pdf om bij te voegen.",
+        "trackOpensLabel": "E-mailladingen meten",
+        "trackOpensHint": "Afbeeldingsladingen zijn schattingen en bevestigen niet dat het cv is gelezen.",
+        "sendCopyLabel": "Stuur een kopie naar mijn e-mail",
+        "sendCopyHint": "Stuurt een identieke kopie naar je inbox zonder trackingpixel om de e-mail in je administratie te bewaren.",
+        "historyTitle": "Verzonden e-mails",
+        "historyTab": "E-mails",
+        "refreshHistory": "Vernieuwen",
+        "trackingApproximation": "E-mailclients kunnen afbeeldingen blokkeren of cachen, en proxies kunnen ze automatisch laden. Deze metingen bevestigen niet dat iemand de e-mail of het cv heeft gelezen.",
+        "historyLoading": "E-mailgeschiedenis laden...",
+        "historyError": "E-mailgeschiedenis kon niet worden geladen.",
+        "historyDateUnavailable": "Datum niet beschikbaar",
+        "trackingFirstDetected": "Eerste gedetecteerde lading",
+        "trackingLastDetected": "Laatst gedetecteerde lading",
+        "trackingNotDetected": "Nog niet gedetecteerd",
+        "trackingTotalLoads": "Totaal aantal afbeeldingsladingen",
+        "trackingDisabledForEmail": "Tracking was uitgeschakeld voor deze e-mail",
+        "viewOpenEvents": "Bekijk openingsdetails ({count})",
+        "hideOpenEvents": "Verberg details",
+        "openEventItem": "Opening #{index}",
+        "proxyBadge": "Proxy / Cache",
+        "historyEmpty": "Er zijn nog geen e-mails verstuurd vanuit deze sollicitatie.",
+        "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een concept te maken.",
+        "noResend": "Configureer Resend in Integraties om vanaf je domein te versturen."
+      },
+      "coverLetter": {
+        "title": "Motivatiebrief",
+        "sectionTitle": "Motivatiebrief",
+        "optionalHint": "Optioneel — alleen als de vacature erom vraagt.",
+        "openButton": "Motivatiebrief",
+        "openOptional": "Toevoegen indien nodig",
+        "editButton": "Bewerken",
+        "description": "AI schrijft een formele motivatiebrief op maat van deze vacature met je CV, bedrijfscontext en notities. Sla over tenzij de werkgever erom vraagt.",
+        "draft": "Concept met AI",
+        "redraft": "Opnieuw genereren",
+        "draftHint": "Genereer een briefconcept vanuit deze sollicitatie — je kunt alles bewerken vóór het opslaan.",
+        "draftSuccess": "Briefconcept klaar",
+        "draftError": "Kon de brief niet maken",
+        "save": "Opslaan",
+        "saveSuccess": "Brief opgeslagen",
+        "saveError": "Kon de brief niet opslaan",
+        "saveMissingFields": "Vul onderwerp en tekst in vóór het opslaan",
+        "copy": "Kopiëren",
+        "copySuccess": "Gekopieerd naar klembord",
+        "copyError": "Kon niet kopiëren",
+        "subjectLabel": "Onderwerp / titel",
+        "bodyLabel": "Brief",
+        "noAi": "Geen AI-provider geconfigureerd. Voeg een API-sleutel toe om een brief te maken.",
+        "aiFailedFallback": "Het model kon de brief niet genereren. Handmatige modus is nu ingeschakeld.",
+        "writeManually": "Handmatig schrijven",
+        "aiOptions": "AI-opties",
+        "applyResponse": "Toepassen op brief",
+        "responseApplied": "AI-antwoord toegepast op motivatiebrief",
+        "parseError": "Kon het onderwerp of de brief niet uit het antwoord halen."
       },
       "kanban": {
         "description": "Sleep kaarten tussen kolommen om de status bij te werken.",
         "addApplication": "Sollicitatie toevoegen",
         "emptyColumn": "Sleep een kaart hierheen",
         "dragCard": "Sollicitatie slepen",
+        "moveToColumn": "Verplaats naar kolom",
         "updating": "Status bijwerken…",
-        "statusUpdateError": "Status bijwerken mislukt"
+        "statusUpdateError": "Status bijwerken mislukt",
+        "statusFilterAria": "Filteren op status",
+        "hiddenCount": "{count} verborgen door filters",
+        "hiddenGhosts": "{count} ghosts zonder update in {days}+ dagen",
+        "showHidden": "Tonen",
+        "ghostNudge": "{count} verstuurd {days}+ dagen geleden zonder reactie",
+        "ghostNudgeReview": "Bekijken",
+        "ghostNudgeLater": "Niet nu",
+        "ghostNudgeSnoozeLabel": "Opnieuw vragen over (dagen)",
+        "ghostNudgeSnoozed": "Niet opnieuw vragen voor {days} dagen",
+        "ghostNudgeTitle": "Naar Ghosted verplaatsen?",
+        "ghostNudgeDescription": "Nog geen statuswijziging na {days} dagen. Vink uit wat nog kan reageren.",
+        "ghostNudgeConfirm": "Ghost {count}",
+        "ghostNudgeSuccess": "{count} naar Ghosted verplaatst"
       },
       "timeline": {
         "title": "Evenementen Tijdlijn",
@@ -2669,6 +3846,12 @@
         "cancel": "Annuleren",
         "joinMeeting": "Deelnemen aan vergadering",
         "completedAt": "Voltooid op {date}",
+        "delete": "Evenement verwijderen",
+        "deleteAria": "Evenement verwijderen",
+        "deleteTitle": "Dit evenement verwijderen?",
+        "deleteConfirm": "Interviewvoorbereiding voor dit evenement wordt ook verwijderd. Dit kan niet ongedaan worden gemaakt.",
+        "deleteSuccess": "Evenement verwijderd",
+        "deleteError": "Evenement verwijderen mislukt",
         "outcome": {
           "POSITIVE": "Positief",
           "NEUTRAL": "Neutraal",
@@ -2678,9 +3861,9 @@
     },
     "resumeStudio": {
       "importPageTitle": "CV importeren",
-      "importPageDescription": "Upload een DOCX om gestructureerde gegevens naar je CV-profiel te extraheren. Het originele bestand blijft bewaard.",
+      "importPageDescription": "Upload een DOCX of PDF om gestructureerde gegevens naar je CV-profiel te extraheren. Het originele bestand blijft bewaard.",
       "uploadTitle": "Upload je CV",
-      "uploadDescription": "Alleen DOCX in deze fase. PDF-ondersteuning volgt binnenkort.",
+      "uploadDescription": "Upload een DOCX of PDF. Tailoring gebruikt nog DOCX (studio of upload).",
       "parsingTitle": "CV analyseren...",
       "parsingDescription": "Ervaring, opleiding, vaardigheden en meer extraheren met AI.",
       "previewTitle": "Controleren voor import",
@@ -2712,15 +3895,18 @@
       "tailorSourceStudio": "Resume Studio (CMS)",
       "tailorSourceStudioHint": "{name} — {count} ervaringen in je profiel",
       "tailorSourceStudioEmpty": "Nog geen CV-gegevens. Importeer eerst een CV of bewerk je profiel.",
-      "tailorSourceUpload": "DOCX uploaden",
-      "tailorSourceUploadHint": "Gebruik een geparseerde upload zonder te importeren naar je profiel.",
+      "tailorSourceUpload": "DOCX of PDF uploaden",
+      "tailorSourceUploadHint": "Optioneel: een andere DOCX of PDF aanpassen. Studio-PDF gebruikt altijd cv-template.pdf.",
+      "tailorTemplateVersionLabel": "CV-sjabloon",
+      "tailorTemplateV2": "v2 (Aanbevolen · 6 rollen · 21 bullets)",
+      "tailorTemplateV1": "v1 (Klassiek · 4 rollen · 14 bullets)",
       "tailorRecentUploads": "Recente uploads",
       "tailorJdTitle": "Vacatureomschrijving",
       "tailorJdPlaceholder": "Plak hier de volledige vacatureomschrijving...",
       "tailorJdTooShort": "Vacatureomschrijving is te kort. Plak minstens 20 tekens.",
       "tailorNoStudioData": "Geen CV-gegevens in Resume Studio.",
-      "tailorNoUpload": "Selecteer of upload eerst een DOCX.",
-      "tailorUploadReady": "DOCX geüpload en klaar om aan te passen.",
+      "tailorNoUpload": "Selecteer of upload eerst een DOCX of PDF.",
+      "tailorUploadReady": "Bestand geüpload en klaar om aan te passen.",
       "tailorCta": "CV aanpassen",
       "tailoringTitle": "Je CV wordt aangepast...",
       "tailoringDescription": "AI past je ervaring en samenvatting aan op de vacature.",
@@ -2734,6 +3920,9 @@
       "tailorAlreadyDone": "Al aangepast voor deze sollicitatie",
       "tailorGeneratedOn": "Gegenereerd {date}",
       "tailorViewResume": "CV bekijken",
+      "tailorPreviewTitle": "CV-voorbeeld",
+      "tailorPreviewOpen": "Voorbeeld tonen",
+      "tailorPreviewClose": "Voorbeeld verbergen",
       "tailorRegenerate": "Opnieuw genereren",
       "tailorSuccessTitle": "Je CV past nu bij deze vacature",
       "tailorErrorRetry": "Opnieuw proberen",
@@ -2780,7 +3969,56 @@
       "fileUploadSelected": "Bestand geselecteerd",
       "fileUploading": "Bestand uploaden...",
       "tailorUploadNeedsDraft": "Deze upload heeft eerst gestructureerde data nodig. Voltooi de import-JSON-stap hieronder.",
-      "tailorUploadImportStep": "Stap 1 — Import-JSON voor deze upload"
+      "tailorUploadImportStep": "Stap 1 — Import-JSON voor deze upload",
+      "matchKeywords": "Vacature-keywords",
+      "matchMustHaves": "Must-haves",
+      "matchNiceToHaves": "Nice-to-haves",
+      "matchGaps": "Niet geclaimd op het CV",
+      "matchImprovements": "Recruiter-notities",
+      "matchTouched": "Bijgewerkte secties",
+      "matchStatus": {
+        "present": "op het CV",
+        "paraphrased": "geparafraseerd",
+        "missing": "ontbreekt",
+        "adjacent": "aangrenzende vaardigheid"
+      },
+      "atsCheckerTitle": "ATS-checker",
+      "atsCheckerScore": "Match {score}%",
+      "atsCheckerGaps": "Gaps t.o.v. deze vacature",
+      "atsCheckerNoCriticalGaps": "Geen kritieke skill-gaps gemeld",
+      "tailorAtsPreview": "ATS-voorbeeld",
+      "tailorPreviewMenu": "Voorbeeld",
+      "tailorPreviewWord": "Word (DOCX)",
+      "tailorPreviewPdf": "PDF",
+      "tailorPreviewAts": "ATS",
+      "tailorPreviewMatch": "Match",
+      "tailorMatchButton": "Match-statistieken",
+      "tailorMatchButtonScore": "Match {score}%",
+      "tailorDownloadMenu": "Downloaden",
+      "tailorDownloadDocx": "DOCX",
+      "tailorDownloadPdf": "PDF",
+      "tailorDownloadAtsDocx": "ATS DOCX",
+      "tailorDownloadAtsPdf": "ATS PDF",
+      "tailorExportFailed": "Bestand exporteren is mislukt",
+      "tailorPdfSuccess": "ATS-PDF klaar",
+      "tailorPdfFailed": "PDF genereren mislukt",
+      "pitchTitle": "Sollicitatiepitch",
+      "pitchGenerate": "Pitch schrijven",
+      "pitchRegenerate": "Pitch herschrijven",
+      "pitchCopy": "Kopiëren",
+      "pitchCopied": "Pitch gekopieerd",
+      "pitchCopyFailed": "Pitch kopiëren mislukt",
+      "pitchSuccess": "Pitch klaar",
+      "pitchFailed": "Pitch genereren mislukt",
+      "polishUploadTitle": "Upload je PDF",
+      "polishUploadHint": "Upload een gewone PDF, net als Word: bekijk hem in het paneel en download dat bestand. Vervangen werkt het bijgevoegde CV bij.",
+      "polishReplaceCta": "Bijgevoegd bestand vervangen",
+      "polishReplaceCancel": "Annuleren",
+      "polishDocxSuccess": "Gepolijste DOCX heeft het gegenereerde bestand vervangen",
+      "polishPdfSuccess": "PDF opgeslagen als CV voor deze sollicitatie",
+      "polishUploadFailed": "CV-bestand vervangen mislukt",
+      "tailorRegeneratePdf": "PDF opnieuw opbouwen vanuit DOCX",
+      "tailorPdfOnDemandNotice": "Om je iLovePDF-tegoed te besparen, wordt de PDF alleen op verzoek gegenereerd."
     },
     "uses": {
       "title": "Uses",
@@ -2827,6 +4065,33 @@
       "editFocus": "Focus bewerken",
       "focusDeleted": "Focus verwijderd.",
       "focusDeleteFailed": "Kon focus niet verwijderen."
+    },
+    "processPages": {
+      "title": "Procespagina's",
+      "subtitle": "Bouw procespagina's met herbruikbare widgets.",
+      "addNew": "Pagina toevoegen",
+      "createDescription": "Sleep widgets naar het canvas en vul de teksten in.",
+      "editTitle": "Procespagina bewerken",
+      "editDescription": "Voeg widgets toe, herschik ze en vul ze in. Wissel van taal in de designer.",
+      "count": "{count} pagina's",
+      "searchTitle": "Zoek titel",
+      "searchSlug": "Zoek slug",
+      "deletedSuccess": "Pagina verwijderd.",
+      "deleteFailed": "Kon pagina niet verwijderen.",
+      "toggleFailed": "Kon pagina niet bijwerken.",
+      "templates": {
+        "workflow": "Workflow",
+        "qa": "QA"
+      },
+      "columns": {
+        "order": "Volgorde",
+        "title": "Titel",
+        "slug": "Slug",
+        "template": "Sjabloon",
+        "published": "Gepubliceerd",
+        "inNav": "In nav",
+        "widgets": "Widgets"
+      }
     }
   },
   "auth": {
@@ -2865,7 +4130,39 @@
       "signInGithub": "Inloggen met GitHub",
       "connectingGoogle": "Verbinden met Google",
       "connectingGithub": "Verbinden met GitHub",
-      "errorSignIn": "Inloggen mislukt"
+      "errorSignIn": "Inloggen mislukt",
+      "signInPasskey": "Inloggen met een passkey",
+      "connectingPasskey": "Wachten op je passkey...",
+      "errorPasskey": "Inloggen met je passkey is mislukt"
+    },
+    "twoFactor": {
+      "title": "Bevestig dat jij het bent",
+      "metaDescription": "Voer je tweestapscode in om het inloggen af te ronden.",
+      "description": {
+        "totp": "Voer de 6-cijferige code uit je authenticator-app in.",
+        "otp": "We e-mailen een 6-cijferige code naar het adres van je account.",
+        "backup": "Voer een van je eenmalige back-upcodes in. Elke code werkt één keer."
+      },
+      "methodLabel": "Verificatiemethode",
+      "method": {
+        "totp": "Authenticator",
+        "otp": "E-mailcode",
+        "backup": "Back-upcode"
+      },
+      "codeLabel": "Verificatiecode",
+      "codePlaceholder": "123456",
+      "backupLabel": "Back-upcode",
+      "backupPlaceholder": "xxxxx-xxxxx",
+      "sendCode": "Stuur me een code",
+      "sending": "Versturen...",
+      "resend": "Nieuwe code versturen",
+      "codeSent": "Code verstuurd. Controleer je inbox — de code verloopt na 5 minuten.",
+      "verify": "Verifiëren",
+      "verifying": "Verifiëren...",
+      "errorVerify": "Die code is ongeldig of verlopen.",
+      "errorSend": "De code kon niet worden verstuurd. Probeer het over een minuut opnieuw.",
+      "backToSignIn": "Verkeerd account?",
+      "signIn": "Terug naar inloggen"
     },
     "register": {
       "titlePortfolio": "Maak je portfolio",
@@ -2931,10 +4228,10 @@
     "privacy": {
       "title": "Privacybeleid",
       "metaTitle": "Privacybeleid",
-      "metaDescription": "Hoe wij met je gegevens omgaan, inclusief Spotify-koppeling en bewaartermijnen.",
+      "metaDescription": "Hoe wij met je gegevens omgaan, inclusief anonieme audience measurement, optionele e-mailmeting en Spotify-credentials.",
       "subtitle": "Hoe wij met je gegevens omgaan",
-      "updatedAt": "Laatst bijgewerkt: juli 2026",
-      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt uit wat we verzamelen wanneer je Spotify koppelt en hoe je dat kunt verwijderen.",
+      "updatedAt": "Laatst bijgewerkt: september 2026",
+      "intro": "Dit portfolio-platform slaat alleen gegevens op die nodig zijn voor de functies. Deze pagina legt anonieme audience measurement op publieke pagina's, optionele e-mailmeting en wat we verzamelen als je Spotify koppelt uit.",
       "spotify": {
         "title": "Spotify-integratie",
         "intro": "Als je Spotify koppelt in het adminpaneel, slaan we de credentials van je eigen Spotify Developer-app op zodat de Now Playing-widget je afspeelstatus op je openbare portfolio kan tonen.",
@@ -2946,6 +4243,23 @@
         "purpose": "We gebruiken deze gegevens alleen om namens jou Spotify-afspeelinformatie op te vragen voor bezoekers van je portfolio. We verkopen of delen ze niet met derden.",
         "disconnect": "Je kunt Spotify op elk moment ontkoppelen via Admin → Spotify. Bij ontkoppeling verwijderen we je Spotify-tokens en app-credentials direct uit onze database.",
         "retention": "Als je ontkoppelt of ons vraagt te stoppen met het verwerken van je Spotify-gegevens, verwijderen we die zonder onredelijke vertraging en uiterlijk binnen vijf dagen, conform de Spotify-developervoorwaarden."
+      },
+      "analytics": {
+        "title": "Audience measurement",
+        "intro": "Publieke pagina's sturen een kleine first-party beacon zodat de eigenaar bij benadering verkeer kan zien. Dit is geen advertising of cross-site tracking, en er worden geen cookies gezet.",
+        "storedTitle": "Wat we opslaan",
+        "storedPageviews": "Dagelijkse totalen van pageviews en sessiebezoeken, gegroepeerd op pad, land en referrer-hostname",
+        "notStoredTitle": "Wat we niet opslaan",
+        "notStoredIp": "IP-adressen",
+        "notStoredId": "Cookies, fingerprints of unieke bezoekers-ID's",
+        "notStoredCity": "Locatie op stadsniveau (alleen land, via het hostingplatform)",
+        "purpose": "We gebruiken deze aggregaten alleen voor de publieke /statistieken-pagina en het portfolio-admin. Data wordt niet verkocht of gedeeld met analytics-leveranciers.",
+        "optOut": "Als je browser Do Not Track of Global Privacy Control stuurt, slaan we de meting volledig over.",
+        "retention": "Aggregaten ouder dan 13 maanden worden verwijderd."
+      },
+      "emailMeasurement": {
+        "title": "Optionele e-mailmeting",
+        "intro": "Bij het versturen van een cv via Job Tracker kan de verzender ervoor kiezen een trackingafbeelding toe te voegen. Indien ingeschakeld, bevat de e-mail een zichtbare melding voor de ontvanger. De aantallen afbeeldingsladingen zijn schattingen en bevestigen niet dat iemand de e-mail of het cv heeft gelezen; e-mailclients kunnen afbeeldingen blokkeren of cachen en proxies kunnen ze automatisch laden. We bewaren voor deze meting geen IP-adres of user-agent van de ontvanger."
       }
     }
   },

@@ -16,13 +16,38 @@ import {
   KanbanItemHandle,
   KanbanOverlay,
 } from "@/components/ui/kanban";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CelebrationAnimation } from "@/components/celebration-animation";
 import type { ApplicationStatus } from "@/features/job-tracker/types";
 import {
   KANBAN_COLUMNS,
   kanbanColumnStyles,
 } from "@/features/job-tracker/lib/constants";
+import {
+  APPLIED_STALE_DAYS,
+  GHOST_ARCHIVE_DAYS,
+  GHOST_NUDGE_SNOOZE_DAYS,
+  isArchivedGhost,
+  isSuggestedGhost,
+} from "@/features/job-tracker/lib/stale-application";
 import { cn } from "@/lib/utils";
 
 type ApplicationRow =
@@ -61,6 +86,13 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
   const [overrideColumns, setOverrideColumns] = useState<KanbanColumns | null>(
     null,
   );
+  const [showArchivedGhosts, setShowArchivedGhosts] = useState(false);
+  const [enabledStatuses, setEnabledStatuses] = useState<
+    Set<ApplicationStatus>
+  >(() => new Set(KANBAN_COLUMNS));
+  const [ghostDialogOpen, setGhostDialogOpen] = useState(false);
+  const [selectedGhostIds, setSelectedGhostIds] = useState<string[]>([]);
+  const [snoozeDays, setSnoozeDays] = useState(GHOST_NUDGE_SNOOZE_DAYS);
   const [celebration, setCelebration] = useState<{
     companyName: string;
     position: string;
@@ -78,14 +110,50 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
       },
     );
 
-  const serverColumns = useMemo(
-    () => buildKanbanColumns(applications),
+  const archivedGhosts = useMemo(
+    () => applications.filter((application) => isArchivedGhost(application)),
     [applications],
+  );
+  const suggestedGhosts = useMemo(
+    () => applications.filter((application) => isSuggestedGhost(application)),
+    [applications],
+  );
+
+  const visibleApplications = useMemo(
+    () =>
+      applications.filter((application) => {
+        if (!enabledStatuses.has(application.status)) return false;
+        if (!showArchivedGhosts && isArchivedGhost(application)) return false;
+        return true;
+      }),
+    [applications, enabledStatuses, showArchivedGhosts],
+  );
+  const hiddenCount = applications.length - visibleApplications.length;
+
+  const statusCounts = useMemo(() => {
+    const counts = Object.fromEntries(
+      KANBAN_COLUMNS.map((status) => [status, 0]),
+    ) as Record<ApplicationStatus, number>;
+
+    for (const application of applications) {
+      counts[application.status] += 1;
+    }
+
+    return counts;
+  }, [applications]);
+
+  const serverColumns = useMemo(
+    () => buildKanbanColumns(visibleApplications),
+    [visibleApplications],
   );
   const columns = overrideColumns ?? serverColumns;
 
   const updateStatus =
     api.jobTrackerAdmin.updateApplicationStatus.useMutation();
+
+  const updateStatuses =
+    api.jobTrackerAdmin.updateApplicationStatuses.useMutation();
+  const snoozeGhostNudge = api.jobTrackerAdmin.snoozeGhostNudge.useMutation();
 
   const persistStatusChange = useCallback(
     (applicationId: string, status: ApplicationStatus) => {
@@ -114,6 +182,67 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
     },
     [applications, t, updateStatus, utils],
   );
+
+  const toggleStatusFilter = useCallback((status: ApplicationStatus) => {
+    setEnabledStatuses((current) => {
+      const next = new Set(current);
+      if (next.has(status)) {
+        if (next.size === 1) return current;
+        next.delete(status);
+      } else {
+        next.add(status);
+      }
+      return next;
+    });
+  }, []);
+
+  const clearBoardFilters = useCallback(() => {
+    setEnabledStatuses(new Set(KANBAN_COLUMNS));
+    setShowArchivedGhosts(true);
+  }, []);
+
+  const dismissGhostNudge = useCallback(() => {
+    const ids = suggestedGhosts.map((application) => application.id);
+    if (ids.length === 0) return;
+    startTransition(async () => {
+      try {
+        await snoozeGhostNudge.mutateAsync({ ids, days: snoozeDays });
+        setGhostDialogOpen(false);
+        toast.success(t("kanban.ghostNudgeSnoozed", { days: snoozeDays }));
+        await utils.jobTrackerAdmin.getApplications.invalidate();
+      } catch {
+        toast.error(t("kanban.statusUpdateError"));
+      }
+    });
+  }, [snoozeDays, snoozeGhostNudge, suggestedGhosts, t, utils]);
+
+  const openGhostDialog = useCallback(() => {
+    setSelectedGhostIds(suggestedGhosts.map((application) => application.id));
+    setGhostDialogOpen(true);
+  }, [suggestedGhosts]);
+
+  const confirmGhostMove = useCallback(() => {
+    if (selectedGhostIds.length === 0) return;
+    startTransition(async () => {
+      try {
+        await updateStatuses.mutateAsync({
+          ids: selectedGhostIds,
+          status: "GHOSTED",
+        });
+        setGhostDialogOpen(false);
+        setOverrideColumns(null);
+        toast.success(
+          t("kanban.ghostNudgeSuccess", { count: selectedGhostIds.length }),
+        );
+        await Promise.all([
+          utils.jobTrackerAdmin.getApplications.invalidate(),
+          utils.jobTrackerAdmin.getDashboardStats.invalidate(),
+        ]);
+      } catch {
+        toast.error(t("kanban.statusUpdateError"));
+      }
+    });
+  }, [selectedGhostIds, t, updateStatuses, utils]);
 
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
@@ -151,129 +280,294 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
     return new Map(flat.map((app) => [app.id, app]));
   }, [columns]);
 
+  const scrollToColumn = useCallback((status: ApplicationStatus) => {
+    if (typeof window === "undefined") return;
+    const col = document.getElementById(`kanban-col-${status}`);
+    if (col) {
+      col.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, []);
+
+  const statusSelectItems = useMemo(
+    () =>
+      KANBAN_COLUMNS.map((columnStatus) => ({
+        value: columnStatus,
+        label: t(`status.${columnStatus}`),
+      })),
+    [t],
+  );
+
   return (
-    <div className="flex h-full min-h-[420px] flex-col">
-      <Kanban
-        value={columns}
-        onValueChange={handleValueChange}
-        onDragEnd={handleDragEnd}
-        getItemValue={(item) => item.id}
-        orientation="horizontal"
-      >
-        <KanbanBoard className="min-h-[380px] flex-1 gap-4 overflow-x-auto pb-1">
-          {KANBAN_COLUMNS.map((status) => (
-            <KanbanColumn
-              key={status}
-              value={status}
-              className="bg-muted/25 border-border w-[272px] shrink-0 gap-3 rounded-xl border p-3"
-            >
-              <KanbanColumnHeader
-                label={t(`status.${status}`)}
-                count={columns[status].length}
-                dotClassName={kanbanColumnStyles[status].dot}
-              />
-
-              <div className="flex min-h-[200px] flex-1 flex-col gap-2">
-                {columns[status].map((application) => (
-                  <KanbanItem
-                    key={application.id}
-                    value={application.id}
-                    className={cn(
-                      "group bg-card text-card-foreground border-border overflow-hidden rounded-lg border border-l-[3px] shadow-sm",
-                      kanbanColumnStyles[status].accent,
-                    )}
-                  >
-                    <div className="flex items-start gap-2 p-3">
-                      <KanbanItemHandle
-                        className="text-muted-foreground hover:text-foreground mt-0.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
-                        aria-label={t("kanban.dragCard")}
-                      >
-                        <GripVertical className="size-4" aria-hidden />
-                      </KanbanItemHandle>
-
-                      <Link
-                        href={{
-                          pathname: "/admin/job-tracker/applications/[id]",
-                          params: { id: application.id },
-                        }}
-                        className="min-w-0 flex-1 space-y-1.5"
-                      >
-                        <div className="flex items-start gap-2">
-                          <span
-                            className={cn(
-                              "flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold",
-                              kanbanColumnStyles[status].avatar,
-                            )}
-                          >
-                            {getCompanyInitial(application.company.name)}
-                          </span>
-                          <div className="min-w-0">
-                            <p className="text-foreground line-clamp-2 text-sm leading-snug font-medium">
-                              {application.position}
-                            </p>
-                            <p className="text-muted-foreground mt-1 truncate text-xs">
-                              {application.company.name}
-                              {application.salary
-                                ? ` · ${application.salary}`
-                                : null}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-                  </KanbanItem>
-                ))}
-
-                {columns[status].length === 0 ? (
-                  <div className="border-border/70 text-muted-foreground flex flex-1 items-center justify-center rounded-lg border border-dashed px-3 py-6 text-center text-xs">
-                    {t("kanban.emptyColumn")}
-                  </div>
-                ) : null}
-              </div>
-
-              {status === "APPLIED" ? (
-                <Link
-                  href="/admin/job-tracker/applications/new"
-                  className={cn(
-                    buttonVariants({ variant: "ghost", size: "sm" }),
-                    "text-muted-foreground hover:text-foreground w-full border border-dashed",
-                  )}
-                >
-                  <Plus className="mr-1.5 size-4" aria-hidden />
-                  {t("kanban.addApplication")}
-                </Link>
-              ) : null}
-            </KanbanColumn>
-          ))}
-        </KanbanBoard>
-
-        <KanbanOverlay>
-          {({ value }) => {
-            const application = activeApplication.get(String(value));
-            if (!application) return null;
-
-            const status = KANBAN_COLUMNS.find((columnStatus) =>
-              columns[columnStatus].some((item) => item.id === application.id),
-            );
-
+    <div className="flex h-full min-h-0 flex-col gap-3">
+      <div className="flex shrink-0 flex-col gap-2">
+        <div
+          role="group"
+          aria-label={t("kanban.statusFilterAria")}
+          className="no-scrollbar -mx-1 flex items-center gap-1.5 overflow-x-auto px-1 pb-1 sm:flex-wrap"
+        >
+          {KANBAN_COLUMNS.map((status) => {
+            const selected = enabledStatuses.has(status);
             return (
-              <div
+              <Button
+                key={status}
+                type="button"
+                size="sm"
+                variant={selected ? "default" : "outline"}
+                aria-pressed={selected}
+                onClick={() => {
+                  toggleStatusFilter(status);
+                  scrollToColumn(status);
+                }}
                 className={cn(
-                  "bg-card text-card-foreground w-72 overflow-hidden rounded-lg border border-l-[3px] p-3 shadow-lg",
-                  status
-                    ? kanbanColumnStyles[status].accent
-                    : "border-l-primary",
+                  "shrink-0 rounded-full text-xs font-medium transition-all",
+                  selected && "shadow-xs",
                 )}
               >
-                <p className="text-sm font-medium">{application.position}</p>
-                <p className="text-muted-foreground mt-1 text-xs">
-                  {application.company.name}
-                </p>
-              </div>
+                <span
+                  className={cn(
+                    "mr-1.5 inline-block size-1.5 rounded-full",
+                    kanbanColumnStyles[status].dot,
+                  )}
+                  aria-hidden
+                />
+                {t(`status.${status}`)} ({statusCounts[status]})
+              </Button>
             );
-          }}
-        </KanbanOverlay>
-      </Kanban>
+          })}
+        </div>
+
+        {hiddenCount > 0 ? (
+          <p className="text-muted-foreground text-xs">
+            {t("kanban.hiddenCount", { count: hiddenCount })}
+            {!showArchivedGhosts && archivedGhosts.length > 0
+              ? ` · ${t("kanban.hiddenGhosts", {
+                  count: archivedGhosts.length,
+                  days: GHOST_ARCHIVE_DAYS,
+                })}`
+              : null}{" "}
+            <button
+              type="button"
+              className="text-foreground underline-offset-2 hover:underline"
+              onClick={clearBoardFilters}
+            >
+              {t("kanban.showHidden")}
+            </button>
+          </p>
+        ) : null}
+
+        {suggestedGhosts.length > 0 ? (
+          <div className="border-border bg-muted/40 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm">
+            <p className="text-muted-foreground min-w-0">
+              {t("kanban.ghostNudge", {
+                count: suggestedGhosts.length,
+                days: APPLIED_STALE_DAYS,
+              })}
+            </p>
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <Label
+                htmlFor="ghost-snooze-days"
+                className="text-muted-foreground text-xs whitespace-nowrap"
+              >
+                {t("kanban.ghostNudgeSnoozeLabel")}
+              </Label>
+              <Input
+                id="ghost-snooze-days"
+                type="number"
+                min={1}
+                max={90}
+                value={snoozeDays}
+                onChange={(event) => {
+                  const next = Number(event.target.value);
+                  setSnoozeDays(
+                    Number.isFinite(next)
+                      ? Math.min(90, Math.max(1, Math.round(next)))
+                      : GHOST_NUDGE_SNOOZE_DAYS,
+                  );
+                }}
+                className="h-8 w-16"
+              />
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={dismissGhostNudge}
+              >
+                {t("kanban.ghostNudgeLater")}
+              </Button>
+              <Button type="button" size="sm" onClick={openGhostDialog}>
+                {t("kanban.ghostNudgeReview")}
+              </Button>
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <Kanban
+          value={columns}
+          onValueChange={handleValueChange}
+          onDragEnd={handleDragEnd}
+          getItemValue={(item) => item.id}
+          orientation="horizontal"
+        >
+          <KanbanBoard className="h-full min-h-0 flex-1 snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden pb-1 md:snap-none md:gap-4">
+            {KANBAN_COLUMNS.map((status) => (
+              <KanbanColumn
+                key={status}
+                value={status}
+                id={`kanban-col-${status}`}
+                className="bg-muted/25 border-border h-full min-h-0 w-[84vw] max-w-[21.25rem] shrink-0 snap-center gap-2.5 overflow-hidden rounded-xl border p-2.5 sm:p-3 md:w-[17rem] md:snap-align-none"
+              >
+                <KanbanColumnHeader
+                  label={t(`status.${status}`)}
+                  count={columns[status].length}
+                  dotClassName={kanbanColumnStyles[status].dot}
+                />
+
+                <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-0.5 pb-2">
+                  {columns[status].map((application) => (
+                    <KanbanItem
+                      key={application.id}
+                      value={application.id}
+                      className={cn(
+                        "group bg-card text-card-foreground border-border shrink-0 overflow-hidden rounded-lg border border-l-[3px] shadow-sm",
+                        kanbanColumnStyles[status].accent,
+                      )}
+                    >
+                      <div className="flex items-start gap-2 p-3">
+                        <KanbanItemHandle
+                          className="text-muted-foreground hover:text-foreground mt-0.5 shrink-0 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100"
+                          aria-label={t("kanban.dragCard")}
+                        >
+                          <GripVertical className="size-4" aria-hidden />
+                        </KanbanItemHandle>
+
+                        <Link
+                          href={{
+                            pathname: "/admin/job-tracker/applications/[id]",
+                            params: { id: application.id },
+                          }}
+                          className="min-w-0 flex-1 space-y-1.5"
+                        >
+                          <div className="flex items-start gap-2">
+                            <span
+                              className={cn(
+                                "flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold",
+                                kanbanColumnStyles[status].avatar,
+                              )}
+                            >
+                              {getCompanyInitial(application.company.name)}
+                            </span>
+                            <div className="min-w-0">
+                              <p className="text-foreground line-clamp-2 text-sm leading-snug font-medium">
+                                {application.position}
+                              </p>
+                              <p className="text-muted-foreground mt-1 truncate text-xs">
+                                {application.company.name}
+                                {application.salary
+                                  ? ` · ${application.salary}`
+                                  : null}
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+                      </div>
+
+                      <div
+                        className="border-border/70 bg-muted/20 border-t px-3 py-2 md:hidden"
+                        onPointerDown={(event) => event.stopPropagation()}
+                      >
+                        <Select
+                          items={statusSelectItems}
+                          value={application.status}
+                          onValueChange={(nextStatus) => {
+                            if (
+                              !nextStatus ||
+                              nextStatus === application.status
+                            )
+                              return;
+                            persistStatusChange(application.id, nextStatus);
+                          }}
+                        >
+                          <SelectTrigger
+                            size="sm"
+                            aria-label={t("kanban.moveToColumn")}
+                            className="bg-background h-8 w-full text-xs"
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {KANBAN_COLUMNS.map((columnStatus) => (
+                              <SelectItem
+                                key={columnStatus}
+                                value={columnStatus}
+                              >
+                                {t(`status.${columnStatus}`)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </KanbanItem>
+                  ))}
+
+                  {columns[status].length === 0 ? (
+                    <div className="border-border/70 text-muted-foreground flex flex-1 items-center justify-center rounded-lg border border-dashed px-3 py-6 text-center text-xs">
+                      {t("kanban.emptyColumn")}
+                    </div>
+                  ) : null}
+                </div>
+
+                {status === "APPLIED" ? (
+                  <Link
+                    href="/admin/job-tracker/applications/new"
+                    className={cn(
+                      buttonVariants({ variant: "ghost", size: "sm" }),
+                      "text-muted-foreground hover:text-foreground w-full border border-dashed",
+                    )}
+                  >
+                    <Plus className="mr-1.5 size-4" aria-hidden />
+                    {t("kanban.addApplication")}
+                  </Link>
+                ) : null}
+              </KanbanColumn>
+            ))}
+          </KanbanBoard>
+
+          <KanbanOverlay>
+            {({ value }) => {
+              const application = activeApplication.get(String(value));
+              if (!application) return null;
+
+              const status = KANBAN_COLUMNS.find((columnStatus) =>
+                columns[columnStatus].some(
+                  (item) => item.id === application.id,
+                ),
+              );
+
+              return (
+                <div
+                  className={cn(
+                    "bg-card text-card-foreground w-72 overflow-hidden rounded-lg border border-l-[3px] p-3 shadow-lg",
+                    status
+                      ? kanbanColumnStyles[status].accent
+                      : "border-l-primary",
+                  )}
+                >
+                  <p className="text-sm font-medium">{application.position}</p>
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    {application.company.name}
+                  </p>
+                </div>
+              );
+            }}
+          </KanbanOverlay>
+        </Kanban>
+      </div>
 
       {isPending ? (
         <p className="text-muted-foreground text-xs">{t("kanban.updating")}</p>
@@ -287,6 +581,62 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
           position={celebration.position}
         />
       ) : null}
+
+      <Dialog open={ghostDialogOpen} onOpenChange={setGhostDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("kanban.ghostNudgeTitle")}</DialogTitle>
+            <DialogDescription>
+              {t("kanban.ghostNudgeDescription", { days: APPLIED_STALE_DAYS })}
+            </DialogDescription>
+          </DialogHeader>
+          <ul className="max-h-64 space-y-2 overflow-y-auto text-sm">
+            {suggestedGhosts.map((application) => {
+              const checked = selectedGhostIds.includes(application.id);
+              return (
+                <li key={application.id} className="flex items-start gap-2">
+                  <Checkbox
+                    checked={checked}
+                    onCheckedChange={(value) => {
+                      setSelectedGhostIds((current) =>
+                        value
+                          ? [...current, application.id]
+                          : current.filter((id) => id !== application.id),
+                      );
+                    }}
+                    aria-label={application.position}
+                  />
+                  <span className="min-w-0">
+                    <span className="font-medium">{application.position}</span>
+                    <span className="text-muted-foreground">
+                      {" "}
+                      · {application.company.name}
+                    </span>
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          <DialogFooter showCloseButton={false}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setGhostDialogOpen(false)}
+            >
+              {t("kanban.ghostNudgeLater")}
+            </Button>
+            <Button
+              type="button"
+              disabled={selectedGhostIds.length === 0 || isPending}
+              onClick={confirmGhostMove}
+            >
+              {t("kanban.ghostNudgeConfirm", {
+                count: selectedGhostIds.length,
+              })}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

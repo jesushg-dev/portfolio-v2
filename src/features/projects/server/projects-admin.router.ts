@@ -8,10 +8,16 @@ import {
   optionalUrl,
   StackTypeSchema,
 } from "@/lib/admin/portfolio-schemas";
+import { isAbsoluteOrLocalImagePath } from "@/utils/tools/image";
 import {
   mapProjectToEditorDto,
   mapProjectsToEditorDto,
 } from "@/features/projects/lib/project-editor-dto";
+import {
+  buildEmptyCaseStudy,
+  CaseStudyContentSchema,
+  caseStudyDtoToWrite,
+} from "@/features/projects/lib/case-study";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
 import { type Prisma, type StackType } from "@prisma/client";
@@ -25,12 +31,12 @@ const ProjectTranslationMapSchema = z.record(
     challenge: z.string().default(""),
     approach: z.string().default(""),
     outcome: z.string().default(""),
-    techDecisions: z.string().default(""),
+    caseStudy: CaseStudyContentSchema.default(buildEmptyCaseStudy),
   }),
 );
 
 const projectUpsertInput = z.object({
-  image: z.string().min(1),
+  image: z.string().min(1).refine(isAbsoluteOrLocalImagePath),
   type: StackTypeSchema,
   githubUrl: optionalUrl,
   websiteUrl: optionalUrl,
@@ -40,24 +46,6 @@ const projectUpsertInput = z.object({
   kind: z.enum(["PROFESSIONAL", "PERSONAL", "LEARNING"]).default("PERSONAL"),
   slug: z.string().optional(),
   caseStudyEnabled: z.boolean().default(false),
-  gallery: z.array(z.string()).default([]),
-  metrics: z
-    .array(z.object({ label: z.string(), value: z.string(), icon: z.string().optional() }))
-    .nullable()
-    .default(null),
-  timeline: z
-    .array(z.object({ title: z.string(), description: z.string().optional(), date: z.string().optional() }))
-    .nullable()
-    .default(null),
-  beforeAfter: z
-    .object({ before: z.string(), after: z.string(), beforeLabel: z.string().optional(), afterLabel: z.string().optional() })
-    .nullable()
-    .default(null),
-  demoUrl: z.string().optional(),
-  testimonial: z.string().optional(),
-  testimonialAuthor: z.string().optional(),
-  testimonialRole: z.string().optional(),
-  testimonialAvatar: z.string().optional(),
   translations: ProjectTranslationMapSchema.default({}),
 });
 
@@ -136,7 +124,15 @@ export const projectsAdminRouter = createTRPCRouter({
           ...rest,
           userId: ctx.user.id,
           ProjectTranslation: translationRows.length
-            ? { createMany: { data: translationRows } }
+            ? {
+                createMany: {
+                  data: translationRows.map((translation) => ({
+                    ...translation,
+                    caseStudy:
+                      caseStudyDtoToWrite(translation.caseStudy) ?? undefined,
+                  })),
+                },
+              }
             : undefined,
           ProjectSkill: skillIds.length
             ? { createMany: { data: skillIds.map((skillId) => ({ skillId })) } }
@@ -178,12 +174,18 @@ export const projectsAdminRouter = createTRPCRouter({
               challenge: translation.challenge ?? null,
               approach: translation.approach ?? null,
               outcome: translation.outcome ?? null,
-              techDecisions: translation.techDecisions ?? null,
+              caseStudy:
+                caseStudyDtoToWrite(translation.caseStudy) ?? undefined,
             },
           });
         } else {
           await ctx.db.projectTranslation.create({
-            data: { projectId: id, ...translation },
+            data: {
+              projectId: id,
+              ...translation,
+              caseStudy:
+                caseStudyDtoToWrite(translation.caseStudy) ?? undefined,
+            },
           });
         }
       }

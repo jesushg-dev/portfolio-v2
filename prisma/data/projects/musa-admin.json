@@ -1,0 +1,672 @@
+{
+  "key": "MusaAdmin",
+  "image": "/projects/musa-admin.jpg",
+  "type": "FRONTEND",
+  "githubUrl": "musa-admin_oufeum",
+  "websiteUrl": "https://musa.markets/",
+  "isPrivate": true,
+  "translations": [
+    {
+      "locale": "es",
+      "title": "Musa Admin",
+      "description": "Consola de administración empresarial para marketplace agrícola y de perecederos. Gestiona catálogo multitienda, trazabilidad de pedidos en tiempo real, control dinámico de inventario perecedero y analítica de ventas con React, TypeScript y Tailwind CSS.",
+      "hook": "Consola de Operaciones en React & TypeScript · Trazabilidad de pedidos y catálogo multi-tienda · Control de inventario perecedero",
+      "challenge": "El equipo de operaciones gestionaba pedidos e inventario de forma manual con hojas de cálculo y scripts aislados, lo que generaba errores humanos y retrasos en despachos.",
+      "approach": "Desarrollé una SPA administrativa en React + TypeScript con control de acceso basado en roles (RBAC), formularios dinámicos, gestión de estados complejos y métricas operativas en tiempo real.",
+      "outcome": "Eliminación del 70% de tareas manuales repetitivas, trazabilidad total de pedidos desde la recepción hasta la entrega y adopción completa por el equipo operativo.",
+      "caseStudy": {
+        "chips": [
+          "Backoffice de Operaciones",
+          "Migración a TypeScript",
+          "Microservicios",
+          "Material-UI",
+          "MUI X-Data-Grid",
+          "Control de Acceso (RBAC)"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mi rol",
+            "value": "Arquitecto Frontend & Desarrollador Full-Stack"
+          },
+          {
+            "key": "tech-evolution",
+            "label": "Evolución técnica",
+            "value": "Migración completa de JavaScript a TypeScript · Integración con Microservicios"
+          },
+          {
+            "key": "operations-scale",
+            "label": "Escala operativa",
+            "value": "Gestión centralizada de catálogo, 180+ pedidos diarios y lotes perecederos"
+          },
+          {
+            "key": "impact",
+            "label": "Impacto operativo",
+            "value": "-70% tareas manuales · Trazabilidad 100% de pedidos"
+          },
+          {
+            "key": "client",
+            "label": "Negocio comercial",
+            "value": "Musa / Abarrotería San José (Backoffice Privado)"
+          }
+        ],
+        "nextProjectSlug": "ecommerce-api",
+        "context": "MUSA Admin es la plataforma operativa centralizada para la cadena de tiendas de conveniencia y abarroterías MUSA / Abarrotería San José. Permite a supervisores, cajeros y personal de bodega coordinar ventas de mostrador, control de lotes con fecha de vencimiento, inventario crítico y trazabilidad de órdenes en tiempo real conectándose a los microservicios del negocio.",
+        "roleTitle": "Desarrollador Frontend Senior & Arquitecto",
+        "roleIntro": "Lideré la evolución y modernización del backoffice administrativo. Guié la migración completa de la base de código desde JavaScript hacia TypeScript estricto, desacoplé los módulos para consumir microservicios independientes (Catálogo, Pedidos, Notificaciones) y construí la interfaz reactiva con Material-UI, ApexCharts y MUI X-Data-Grid.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Qué es",
+            "summary": "",
+            "body": "Plataforma administrativa integral (SPA) para operaciones de tienda, gestión de pedidos en tiempo real, catálogo de productos y control de inventario conectada a microservicios.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mi rol",
+            "summary": "",
+            "body": "Migración integral de JavaScript a TypeScript, integración con microservicios de backend, diseño de interfaz y tablas de alta concurrencia.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impacto",
+            "summary": "",
+            "body": "Eliminación del 70% de tareas operativas manuales, código 100% type-safe sin errores de tipo en producción y trazabilidad punta a punta.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ts-migration",
+            "title": "Migración Completa de JavaScript a TypeScript",
+            "summary": "",
+            "body": "Refactorización sistemática de componentes, modelos y hooks, definiendo contratos fuertemente tipados para productos, lotes y estados de orden que erradicaron bugs en tiempo de ejecución.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "microservices-integration",
+            "title": "Arquitectura y Consumo de Microservicios",
+            "summary": "",
+            "body": "Desacoplamiento de la lógica de backend para consumir microservicios independientes (Servicio de Órdenes, Servicio de Inventario y Notificaciones) mediante adaptadores y API Gateway.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "inventory-engine",
+            "title": "Motor de Control de Inventario y Lotes",
+            "summary": "",
+            "body": "Gestión de stock mínimo, alertas tempranas de productos perecederos y auditoría de vencimiento de lotes en tiempo real.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Migración progresiva a TypeScript sin interrumpir la operación continua en tiendas.",
+          "Consumo desacoplado de microservicios con tolerancia a fallos y estados de reintento.",
+          "Control de acceso granular por perfiles (Administrador, Vendedor, Supervisor de Bodega)."
+        ],
+        "sections": [
+          {
+            "key": "admin-modules",
+            "kind": "CARDS",
+            "eyebrow": "Módulos y Pantallas",
+            "title": "Arquitectura de Operaciones de Musa Admin",
+            "lead": "Módulos diseñados para optimizar el control de bodega, facturación y trazabilidad en tienda.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-dashboard",
+                "title": "Panel de Control Operativo y KPIs",
+                "summary": "Visión ejecutiva de ventas del día, rotación y alertas",
+                "body": "Dashboard central con tarjetas métricas en tiempo real: $14,850.00 en ventas de hoy, 14 productos en stock bajo y estado de los 180 lotes.",
+                "value": "Panel Principal",
+                "icon": "layout",
+                "tags": ["KPIs", "ApexCharts", "Tiempo Real"],
+                "note": "/projects/musa-admin.jpg"
+              },
+              {
+                "key": "mod-inventory",
+                "title": "Detalle de Productos e Inventario Crítico",
+                "summary": "Auditoría de existencias y productos disponibles",
+                "body": "Vista de control de inventario con indicador radial del 90% de disponibilidad, alertas de vencimiento y categorías activas.",
+                "value": "Control de Stock",
+                "icon": "layers",
+                "tags": ["Inventario", "Lotes", "Alertas"],
+                "note": "/projects/musa-admin-inventory.jpg"
+              },
+              {
+                "key": "mod-transactions",
+                "title": "DataGrid de Pedidos y Transacciones",
+                "summary": "Trazabilidad de cada orden desde el ingreso hasta el despacho",
+                "body": "Tabla de alto rendimiento construida con MUI X-Data-Grid con filtros por cliente, fecha, montos y badges de estado Aprobado y Despachado.",
+                "value": "DataGrid MUI",
+                "icon": "case",
+                "tags": ["X-Data-Grid", "Filtros", "Despacho"],
+                "note": "/projects/musa-admin-orders.jpg"
+              },
+              {
+                "key": "mod-sales-analytics",
+                "title": "Ventas Semanales y Top Vendedores",
+                "summary": "Monitoreo de cuotas y rendimiento por cajero",
+                "body": "Gráfica de curva semanal de ventas (+14.2%) combinada con ranking de volumen facturado por cada miembro del equipo operativo.",
+                "value": "Analítica de Caja",
+                "icon": "gauge",
+                "tags": ["ApexCharts", "Ranking", "Auditoría"],
+                "note": "/projects/musa-admin-sales.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "admin-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Decisiones de Ingeniería",
+            "title": "Decisiones Clave de Modernización y Arquitectura",
+            "lead": "Criterios técnicos adoptados para transformar la aplicación en una solución empresarial escalable.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-ts-migration",
+                "title": "Migración de JavaScript a TypeScript",
+                "summary": "Seguridad de tipos y reducción de errores en tiempo de ejecución",
+                "body": "La base heredada en JS causaba discrepancias al manejar modelos complejos de facturas y lotes. La migración a TypeScript introdujo tipado estricto, interfaces compartidas y autocompletado en todo el stack.",
+                "value": "TypeScript 100%",
+                "icon": "code",
+                "tags": ["TypeScript", "Refactoring", "Clean Code"],
+                "note": ""
+              },
+              {
+                "key": "dec-microservices",
+                "title": "Adopción de Microservicios",
+                "summary": "Desacoplamiento de catálogo, pedidos y facturación",
+                "body": "Aunque las versiones iniciales operaban como un monolito unificado, el crecimiento del negocio requirió separar responsabilidades en microservicios independientes, permitiendo escalar el motor de pagos y pedidos sin afectar el catálogo.",
+                "value": "Microservicios",
+                "icon": "layers",
+                "tags": ["Microservicios", "Escalabilidad", "Arquitectura"],
+                "note": ""
+              },
+              {
+                "key": "dec-mui-grid",
+                "title": "MUI X-Data-Grid con Virtualización",
+                "summary": "Renderizado instantáneo de transacciones concurrentes",
+                "body": "Permite gestionar miles de filas de pedidos y productos con ordenamiento, filtrado en servidor y paginación rápida sin degradación del navegador.",
+                "value": "Virtualización",
+                "icon": "layout",
+                "tags": ["MUI", "DataGrid", "Performance"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "en",
+      "title": "Musa Admin",
+      "description": "Enterprise administration portal for agricultural and perishable marketplaces. Manages multi-vendor catalogs, real-time order lifecycle tracking, perishable batch inventory, and commercial metrics with React, TypeScript, and Tailwind CSS.",
+      "hook": "Operations Console in React & TypeScript · Order lifecycle tracking & multi-vendor catalog · Perishable inventory control",
+      "challenge": "The operations team managed inventory and order fulfillment manually via spreadsheets and one-off scripts, leading to operational bottlenecks and shipping errors.",
+      "approach": "Developed an administrative SPA using React + TypeScript featuring role-based access control (RBAC), dynamic form validation, complex state management, and live fulfillment tracking.",
+      "outcome": "Eliminated 70% of repetitive manual tasks, established full order traceability from receipt to dispatch, and achieved 100% team adoption.",
+      "caseStudy": {
+        "chips": [
+          "Operations Backoffice",
+          "TypeScript Migration",
+          "Microservices",
+          "Material-UI",
+          "MUI X-Data-Grid",
+          "Role-Based Access (RBAC)"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "My Role",
+            "value": "Frontend Architect & Full-Stack Developer"
+          },
+          {
+            "key": "tech-evolution",
+            "label": "Technical Evolution",
+            "value": "Complete JavaScript to TypeScript Migration · Microservices Architecture"
+          },
+          {
+            "key": "operations-scale",
+            "label": "Operational Scale",
+            "value": "Centralized catalog management, 180+ daily orders, and perishable batch audits"
+          },
+          {
+            "key": "impact",
+            "label": "Operational Impact",
+            "value": "-70% manual repetitive tasks · 100% order traceability"
+          },
+          {
+            "key": "client",
+            "label": "Commercial Platform",
+            "value": "Musa / Abarrotería San José (Private Backoffice)"
+          }
+        ],
+        "nextProjectSlug": "ecommerce-api",
+        "context": "MUSA Admin is the centralized operations backoffice for the MUSA / Abarrotería San José store chain. It coordinates retail front-desk checkout, perishable lot expiration tracking, safety inventory monitoring, and real-time customer order dispatching connected to underlying business microservices.",
+        "roleTitle": "Senior Frontend Developer & Architect",
+        "roleIntro": "Led the architectural modernization of the administrative backoffice. Spearheaded the full codebase migration from JavaScript to strict TypeScript, decoupled client modules to consume independent backend microservices (Catalog, Orders, Notifications), and delivered a responsive UI with Material-UI, ApexCharts, and MUI X-Data-Grid.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "What it is",
+            "summary": "",
+            "body": "Comprehensive administrative SPA for daily store operations, live order fulfillment, product catalog, and multi-tier inventory auditing connected to microservices.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "My Role",
+            "summary": "",
+            "body": "End-to-end JavaScript to TypeScript migration, microservices integration, responsive UI design, and high-concurrency data tables.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "Eliminated 70% of manual repetitive tasks, achieved 100% type-safe production code, and ensured complete order auditability.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ts-migration",
+            "title": "Full JavaScript to TypeScript Migration",
+            "summary": "",
+            "body": "Refactored legacy JS components, custom hooks, and data models to strict TypeScript types, eliminating runtime null pointer exceptions and schema drifts.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "microservices-integration",
+            "title": "Microservices Integration & Decoupling",
+            "summary": "",
+            "body": "Decoupled monolithic assumptions to interact seamlessly with autonomous backend microservices (Orders, Inventory, Invoicing) via structured API adapters.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "inventory-engine",
+            "title": "Perishable Inventory & Lot Auditing Engine",
+            "summary": "",
+            "body": "Safety stock monitoring, automated expiration warnings, and multi-unit batch traceability in real time.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Zero-downtime progressive migration to TypeScript during active commercial operations.",
+          "Fault-tolerant microservices communication with optimistic UI updates and retries.",
+          "Strict role-based access control (Administrator, Cashier, Warehouse Supervisor)."
+        ],
+        "sections": [
+          {
+            "key": "admin-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Screens",
+            "title": "Musa Admin Operations Architecture",
+            "lead": "Specialized views designed to streamline warehouse auditing, invoicing, and real-time order dispatch.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-dashboard",
+                "title": "Executive Operational Dashboard & KPIs",
+                "summary": "Real-time visibility over daily revenue, turnover, and alerts",
+                "body": "Central dashboard featuring live telemetry cards: $14,850.00 today's sales, 14 critical low-stock items, and 180 active batches.",
+                "value": "Primary Dashboard",
+                "icon": "layout",
+                "tags": ["KPIs", "ApexCharts", "Real Time"],
+                "note": "/projects/musa-admin.jpg"
+              },
+              {
+                "key": "mod-inventory",
+                "title": "Product Details & Safety Stock Auditing",
+                "summary": "Stock health tracking and available item ratios",
+                "body": "Inventory control view featuring a 90% radial availability gauge, expiration alerts, and active category breakdowns.",
+                "value": "Stock Control",
+                "icon": "layers",
+                "tags": ["Inventory", "Batches", "Alerts"],
+                "note": "/projects/musa-admin-inventory.jpg"
+              },
+              {
+                "key": "mod-transactions",
+                "title": "Order Fulfillment DataGrid",
+                "summary": "Complete traceability for every customer transaction",
+                "body": "High-performance table powered by MUI X-Data-Grid with customer search, timestamps, total amounts, and status chips (Approved, Shipped).",
+                "value": "MUI DataGrid",
+                "icon": "case",
+                "tags": ["X-Data-Grid", "Filtering", "Fulfillment"],
+                "note": "/projects/musa-admin-orders.jpg"
+              },
+              {
+                "key": "mod-sales-analytics",
+                "title": "Weekly Revenue Curve & Cashier Ranking",
+                "summary": "Quota monitoring and individual sales performance",
+                "body": "Weekly revenue trend chart (+14.2%) combined with individual cashier volume rankings for full financial transparency.",
+                "value": "Cash Analytics",
+                "icon": "gauge",
+                "tags": ["ApexCharts", "Ranking", "Auditing"],
+                "note": "/projects/musa-admin-sales.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "admin-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Decisions",
+            "title": "Key Modernization & Architectural Decisions",
+            "lead": "Technical rationale behind transforming legacy tooling into a scalable enterprise backoffice.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-ts-migration",
+                "title": "Migrating from JavaScript to TypeScript",
+                "summary": "Type safety and zero runtime surprises",
+                "body": "The original JS codebase was prone to subtle property mismatch errors across order items and batch states. Migrating to TypeScript enforced strict compile-time verification across the entire team.",
+                "value": "100% TypeScript",
+                "icon": "code",
+                "tags": ["TypeScript", "Refactoring", "Clean Code"],
+                "note": ""
+              },
+              {
+                "key": "dec-microservices",
+                "title": "Transition to Microservices Architecture",
+                "summary": "Decoupled domain services for catalog, orders, and fulfillment",
+                "body": "While early prototypes ran as a single monolith, expanding retail stores demanded independent microservices to scale checkout traffic without bottlenecks in batch reporting.",
+                "value": "Microservices",
+                "icon": "layers",
+                "tags": ["Microservices", "Scalability", "Architecture"],
+                "note": ""
+              },
+              {
+                "key": "dec-mui-grid",
+                "title": "MUI X-Data-Grid with Row Virtualization",
+                "summary": "Smooth rendering under heavy operational loads",
+                "body": "Handles thousands of records effortlessly with server-side pagination, instant column filtering, and zero UI stuttering.",
+                "value": "Virtualization",
+                "icon": "layout",
+                "tags": ["MUI", "DataGrid", "Performance"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    },
+    {
+      "locale": "nl",
+      "title": "Musa Admin",
+      "description": "Enterprise beheerportaal voor agrarische marktplaatsen en bederfelijke goederen. Beheert multi-vendor catalogi, realtime orderopvolging, batch-voorraadbeheer en verkoopanalyses met React, TypeScript en Tailwind CSS.",
+      "hook": "Beheerconsole in React & TypeScript · Orderopvolging & multi-vendor catalogus · Voorraadbeheer van bederfelijke waar",
+      "challenge": "Het operationele team beheerde voorraad en bestellingen handmatig via spreadsheets, wat leidde tot menselijke fouten en vertragingen.",
+      "approach": "Een administratieve SPA ontwikkeld met React + TypeScript, voorzien van rolgebaseerde toegang (RBAC), dynamische formulieren en realtime fulfillment tracking.",
+      "outcome": "70% van de handmatige taken geëlimineerd, volledige traceerbaarheid van bestellingen gerealiseerd en direct geadopteerd door het team.",
+      "caseStudy": {
+        "chips": [
+          "Operationeel Beheer",
+          "TypeScript Migratie",
+          "Microservices",
+          "Material-UI",
+          "MUI X-Data-Grid",
+          "Toegangscontrole (RBAC)"
+        ],
+        "facts": [
+          {
+            "key": "role",
+            "label": "Mijn rol",
+            "value": "Frontend Architect & Full-Stack Ontwikkelaar"
+          },
+          {
+            "key": "tech-evolution",
+            "label": "Technische evolutie",
+            "value": "Volledige migratie van JavaScript naar TypeScript · Microservices Architectuur"
+          },
+          {
+            "key": "operations-scale",
+            "label": "Operationele schaal",
+            "value": "Centraal catalogusbeheer, 180+ dagelijkse bestellingen en partijtracering"
+          },
+          {
+            "key": "impact",
+            "label": "Operationele impact",
+            "value": "-70% handmatige taken · 100% ordertracering"
+          },
+          {
+            "key": "client",
+            "label": "Commercieel platform",
+            "value": "Musa / Abarrotería San José (Privé Backoffice)"
+          }
+        ],
+        "nextProjectSlug": "ecommerce-api",
+        "context": "MUSA Admin is het centrale operationele backoffice voor winkelketen MUSA / Abarrotería San José. Het coördineert kassatransacties, houdbaarheidsdata van partijen, voorraadbewaking en realtime orderafhandeling gekoppeld aan achterliggende microservices.",
+        "roleTitle": "Senior Frontend Ontwikkelaar & Architect",
+        "roleIntro": "Leidde de modernisering van het administratieve backoffice: volledige migratie van JavaScript naar TypeScript, integratie met onafhankelijke microservices en bouw van een responsieve interface met Material-UI en MUI X-Data-Grid.",
+        "tldr": [
+          {
+            "key": "what",
+            "title": "Wat het is",
+            "summary": "",
+            "body": "Geïntegreerde administratieve SPA voor winkelbeheer, realtime ordertracering, productcatalogus en voorraadbeheer gekoppeld aan microservices.",
+            "value": "",
+            "icon": "layout",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "role",
+            "title": "Mijn rol",
+            "summary": "",
+            "body": "Volledige JavaScript naar TypeScript migratie, microservices integratie, UI-ontwerp en tabellen met hoge gelijktijdigheid.",
+            "value": "",
+            "icon": "user",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "impact",
+            "title": "Impact",
+            "summary": "",
+            "body": "70% van de repetitieve taken geëlimineerd, 100% typeveilige code en volledige ordertracering gerealiseerd.",
+            "value": "",
+            "icon": "gauge",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "responsibilities": [
+          {
+            "key": "ts-migration",
+            "title": "Migratie van JavaScript naar TypeScript",
+            "summary": "",
+            "body": "Systematische refactoring van componenten en modellen naar strikte TypeScript-types, waardoor runtime-fouten volledig werden geëlimineerd.",
+            "value": "",
+            "icon": "code",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "microservices-integration",
+            "title": "Integratie van Microservices",
+            "summary": "",
+            "body": "Ontkoppeling van de backend-logica om zelfstandige microservices voor bestellingen, voorraad en notificaties aan te spreken.",
+            "value": "",
+            "icon": "layers",
+            "tags": [],
+            "note": ""
+          },
+          {
+            "key": "inventory-engine",
+            "title": "Voorraad- en Partijbeheersysteem",
+            "summary": "",
+            "body": "Bewaking van minimumvoorraden, houdbaarheidswaarschuwingen en realtime controle van bederfelijke partijen.",
+            "value": "",
+            "icon": "case",
+            "tags": [],
+            "note": ""
+          }
+        ],
+        "constraints": [
+          "Geleidelijke TypeScript-migratie zonder onderbreking van de winkeloperaties.",
+          "Fouttolerante communicatie met microservices en automatische herpogingen.",
+          "Strikte rolgebaseerde toegangscontrole (Beheerder, Verkoper, Magazijnpersoneel)."
+        ],
+        "sections": [
+          {
+            "key": "admin-modules",
+            "kind": "CARDS",
+            "eyebrow": "Modules & Schermen",
+            "title": "Operaties Architectuur van Musa Admin",
+            "lead": "Gespecialiseerde schermen ontworpen voor magazijnbeheer, facturatie en snelle orderafhandeling.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "mod-dashboard",
+                "title": "Operationeel Dashboard & KPI's",
+                "summary": "Realtime inzicht in omzet, omloopsnelheid en waarschuwingen",
+                "body": "Centraal dashboard met realtime kaarten: $14.850,00 omzet vandaag, 14 kritieke voorraadartikelen en status van 180 partijen.",
+                "value": "Hoofddashboard",
+                "icon": "layout",
+                "tags": ["KPI's", "ApexCharts", "Realtime"],
+                "note": "/projects/musa-admin.jpg"
+              },
+              {
+                "key": "mod-inventory",
+                "title": "Productdetails & Veiligheidsvoorraad",
+                "summary": "Voorraadaudit en beschikbaarheidsratio's",
+                "body": "Voorraadoverzicht met 90% beschikbaarheidsindicator, vervaldata en actieve categorieën.",
+                "value": "Voorraadbeheer",
+                "icon": "layers",
+                "tags": ["Voorraad", "Partijen", "Alerts"],
+                "note": "/projects/musa-admin-inventory.jpg"
+              },
+              {
+                "key": "mod-transactions",
+                "title": "DataGrid voor Bestellingen & Transacties",
+                "summary": "Volledige traceerbaarheid voor elke transactie",
+                "body": "Snelle tabel met MUI X-Data-Grid voorzien van filters op klant, datum, bedragen en statuschips (Goedgekeurd, Verzonden).",
+                "value": "MUI DataGrid",
+                "icon": "case",
+                "tags": ["X-Data-Grid", "Filters", "Afhandeling"],
+                "note": "/projects/musa-admin-orders.jpg"
+              },
+              {
+                "key": "mod-sales-analytics",
+                "title": "Wekelijkse Omzetcurve & Verkoperstatistieken",
+                "summary": "Doelstellingen en individuele verkoopvolumes",
+                "body": "Wekelijkse omzettrend (+14,2%) gecombineerd met verkoopranglijsten per kassamedewerker.",
+                "value": "Kassa-analyse",
+                "icon": "gauge",
+                "tags": ["ApexCharts", "Ranglijst", "Audit"],
+                "note": "/projects/musa-admin-sales.jpg"
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "admin-decisions",
+            "kind": "DECISIONS",
+            "eyebrow": "Engineering Beslissingen",
+            "title": "Belangrijke Modernisering & Architectuurkeuzes",
+            "lead": "Technische overwegingen achter de migratie naar moderne standaarden.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "dec-ts-migration",
+                "title": "Migratie van JavaScript naar TypeScript",
+                "summary": "Typeveiligheid en elimineren van runtimefouten",
+                "body": "De oorspronkelijke JS-codebase leidde tot afwijkingen bij complexe factuur- en partijmodellen. De migratie naar TypeScript garandeert strikte verificatie tijdens het compileren.",
+                "value": "100% TypeScript",
+                "icon": "code",
+                "tags": ["TypeScript", "Refactoring", "Clean Code"],
+                "note": ""
+              },
+              {
+                "key": "dec-microservices",
+                "title": "Overstap naar Microservices",
+                "summary": "Ontkoppelde domeinservices voor catalogus, orders en levering",
+                "body": "Waar vroege versies als monoliet draaiden, vereiste de groei een scheiding in zelfstandige microservices om bestelpieken moeiteloos te verwerken.",
+                "value": "Microservices",
+                "icon": "layers",
+                "tags": ["Microservices", "Schaalbaarheid", "Architectuur"],
+                "note": ""
+              },
+              {
+                "key": "dec-mui-grid",
+                "title": "MUI X-Data-Grid met Rijvirtualisatie",
+                "summary": "Vloeiende weergave van duizenden transacties",
+                "body": "Biedt moeiteloze weergave van duizenden transacties met paginering en filtering zonder prestatieverlies.",
+                "value": "Virtualisatie",
+                "icon": "layout",
+                "tags": ["MUI", "DataGrid", "Prestaties"],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
+    }
+  ],
+  "skillKeys": ["React", "Tailwind", "Typescript"],
+  "order": 4,
+  "kind": "PROFESSIONAL",
+  "caseStudyEnabled": true,
+  "slug": "musa-admin"
+}

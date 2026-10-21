@@ -31,7 +31,7 @@ export function ProcessTerminalPanel({
         <span aria-hidden className="size-3 rounded-full bg-red-500/80" />
         <span aria-hidden className="size-3 rounded-full bg-yellow-500/80" />
         <span aria-hidden className="size-3 rounded-full bg-green-500/80" />
-        <span className="ml-auto font-mono text-sm text-slate-300">
+        <span className="ml-auto font-mono text-sm text-slate-100">
           {title}
         </span>
         {badge}
@@ -57,10 +57,10 @@ export function ProcessTestRunnerOutput({
           key={`${line}-${index}`}
           className={
             index === 0
-              ? "text-slate-400"
+              ? "text-slate-100"
               : index >= lines.length - 3
-                ? "text-slate-300"
-                : "text-emerald-400"
+                ? "text-slate-100"
+                : "text-emerald-300"
           }
         >
           {line}

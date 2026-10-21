@@ -2,7 +2,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import { GoogleGenAI } from "@google/genai";
 
-import { env } from "@/env";
 import {
   CvImportDraftSchema,
   type CvImportDraft,
@@ -12,15 +11,18 @@ import { IMPORT_SYSTEM_PROMPT } from "@/features/resume-engine/lib/ai/import-pro
 import { parseAiJsonResponse } from "@/features/resume-engine/lib/ai/parse-json-response";
 import {
   AI_PROVIDER_MODELS,
+  requireTenantAiApiKey,
   resolveAiProvider,
   type AiProviderName,
+  type TenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
 import { buildImportUserPrompt } from "@/features/resume-engine/lib/ai/prompt-package";
 
 async function extractWithClaude(
   sections: CvImportTextSection[],
+  apiKey: string,
 ): Promise<CvImportDraft> {
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  const client = new Anthropic({ apiKey });
   const response = await client.messages.create({
     model: AI_PROVIDER_MODELS.claude,
     max_tokens: 8192,
@@ -40,12 +42,12 @@ async function extractWithClaude(
 
 async function extractWithOpenAI(
   sections: CvImportTextSection[],
+  apiKey: string,
   baseURL?: string,
-  apiKey?: string,
   model = AI_PROVIDER_MODELS.openai,
 ): Promise<CvImportDraft> {
   const client = new OpenAI({
-    apiKey: apiKey ?? env.OPENAI_API_KEY,
+    apiKey,
     ...(baseURL ? { baseURL } : {}),
   });
   const response = await client.chat.completions.create({
@@ -66,8 +68,9 @@ async function extractWithOpenAI(
 
 async function extractWithGemini(
   sections: CvImportTextSection[],
+  apiKey: string,
 ): Promise<CvImportDraft> {
-  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY! });
+  const client = new GoogleGenAI({ apiKey });
   const response = await client.models.generateContent({
     model: AI_PROVIDER_MODELS.gemini,
     contents: [
@@ -91,28 +94,38 @@ async function extractWithGemini(
 
 export async function extractStructuredResume(
   sections: CvImportTextSection[],
+  credentials: TenantAiCredentials,
   providerName?: string,
 ): Promise<{ draft: CvImportDraft; provider: AiProviderName }> {
-  const provider = resolveAiProvider(providerName);
+  const provider = resolveAiProvider(credentials, providerName);
 
   let draft: CvImportDraft;
   switch (provider) {
     case "claude":
-      draft = await extractWithClaude(sections);
+      draft = await extractWithClaude(
+        sections,
+        requireTenantAiApiKey(credentials, "claude"),
+      );
       break;
     case "openai":
-      draft = await extractWithOpenAI(sections);
+      draft = await extractWithOpenAI(
+        sections,
+        requireTenantAiApiKey(credentials, "openai"),
+      );
       break;
     case "deepseek":
       draft = await extractWithOpenAI(
         sections,
+        requireTenantAiApiKey(credentials, "deepseek"),
         "https://api.deepseek.com",
-        env.DEEPSEEK_API_KEY,
         AI_PROVIDER_MODELS.deepseek,
       );
       break;
     case "gemini":
-      draft = await extractWithGemini(sections);
+      draft = await extractWithGemini(
+        sections,
+        requireTenantAiApiKey(credentials, "gemini"),
+      );
       break;
     default: {
       const exhaustiveCheck: never = provider;

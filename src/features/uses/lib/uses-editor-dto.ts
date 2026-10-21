@@ -6,6 +6,7 @@ import type {
   UsesItemType,
   UsesSettings,
   UsesSettingsTranslation,
+  UsesWorkspaceTag,
 } from "@prisma/client";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
@@ -54,6 +55,14 @@ export interface UsesClarificationEditorDTO {
   translations: UsesClarificationTranslationMap;
 }
 
+export interface UsesWorkspaceTagEditorDTO {
+  id: string;
+  usesItemId: string;
+  xPercent: number;
+  yPercent: number;
+  order: number;
+}
+
 export interface UsesSettingsEditorDTO {
   id: string;
   workspaceImage: string;
@@ -61,6 +70,7 @@ export interface UsesSettingsEditorDTO {
   codingPreviewDark: string;
   translations: UsesSettingsTranslationMap;
   clarifications: UsesClarificationEditorDTO[];
+  workspaceTags: UsesWorkspaceTagEditorDTO[];
 }
 
 const emptyItemTranslationFields: UsesItemTranslationFields = {
@@ -87,6 +97,7 @@ type UsesSettingsWithRelations = UsesSettings & {
   UsesClarification: (UsesClarification & {
     UsesClarificationTranslation: UsesClarificationTranslation[];
   })[];
+  UsesWorkspaceTag: UsesWorkspaceTag[];
 };
 
 export function mapUsesItemToEditorDto(
@@ -169,6 +180,17 @@ export function mapUsesSettingsToEditorDto(
       };
     });
 
+  const workspaceTags = (settings.UsesWorkspaceTag ?? [])
+    .slice()
+    .sort((left, right) => left.order - right.order)
+    .map((tag) => ({
+      id: tag.id,
+      usesItemId: tag.usesItemId,
+      xPercent: tag.xPercent,
+      yPercent: tag.yPercent,
+      order: tag.order,
+    }));
+
   return {
     id: settings.id,
     workspaceImage: settings.workspaceImage ?? "",
@@ -180,6 +202,7 @@ export function mapUsesSettingsToEditorDto(
       emptySettingsTranslationFields,
     ),
     clarifications,
+    workspaceTags,
   };
 }
 
@@ -194,4 +217,17 @@ export function buildEmptyUsesClarificationDto(
       emptyClarificationTranslationFields,
     ),
   };
+}
+
+export function usesItemEditorTitle(
+  item: Pick<UsesItemEditorDTO, "translations">,
+  langId: string,
+): string {
+  const preferred = item.translations[langId]?.title?.trim();
+  if (preferred) return preferred;
+  for (const fields of Object.values(item.translations)) {
+    const title = fields?.title?.trim();
+    if (title) return title;
+  }
+  return "";
 }

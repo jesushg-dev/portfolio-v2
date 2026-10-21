@@ -1,47 +1,66 @@
 "use client";
 
-import { useCallback, useState, useTransition, type FC } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+  type FC,
+} from "react";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import {
+  Building2,
   Clock,
+  ExternalLink,
+  FilePenLine,
   FileText,
+  Globe,
   Loader2,
+  Mail,
+  MailOpen,
+  MapPin,
   Pencil,
   Sparkles,
   Trash2,
 } from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
 import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/routing";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import ScrollToTop from "@/components/custom-ui/scroll-to-top";
 import { ApplicationTimeline } from "@/features/job-tracker/components/application-timeline";
+import { ApplicationEmailHistory } from "@/features/job-tracker/components/application-email-history";
+import { ApplicationEmailDialog } from "@/features/job-tracker/components/application-email-panel";
+import { ApplicationCoverLetterDialog } from "@/features/job-tracker/components/application-cover-letter-panel";
 import { ResumeTailorWorkflow } from "@/features/resume-engine/components/resume-tailor-workflow";
 import type { ApplicationDetail } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
 import { statusVariants } from "@/features/job-tracker/lib/constants";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
+import { isSuggestedGhost } from "@/features/job-tracker/lib/stale-application";
 import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 
-type ApplicationDetailTab = "details" | "timeline" | "tailor";
+type RightPanelTab = "timeline" | "tailor" | "emails";
 
 interface ApplicationDetailViewProps {
   application: ApplicationDetail;
   locale: Locale;
-  defaultTab?: ApplicationDetailTab;
+  /** Optional deep-link target for a workspace tab. */
+  defaultTab?: "details" | RightPanelTab;
 }
 
-const TAB_CONFIG: {
-  id: ApplicationDetailTab;
-  icon: FC<{ className?: string }>;
-}[] = [
-  { id: "details", icon: FileText },
-  { id: "timeline", icon: Clock },
-  { id: "tailor", icon: Sparkles },
-];
+const DESCRIPTION_COLLAPSE_CHARS = 480;
 
 export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
   application,
@@ -51,9 +70,58 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
   const t = useTranslations("admin.jobTracker");
   const router = useRouter();
   const utils = api.useUtils();
-  const [activeTab, setActiveTab] = useState<ApplicationDetailTab>(defaultTab);
+
+  const hasGeneratedCv = Boolean(application.cvFile?.url);
+  const hasPendingEvents = application.events.some((e) => !e.completed);
+  const hasAlerts = isSuggestedGhost(application) || hasPendingEvents;
+  const shouldPrioritizeTailor = !hasAlerts && !hasGeneratedCv;
+
+  const rightTabs = useMemo(() => {
+    const timelineTabItem = {
+      id: "timeline" as const,
+      icon: Clock,
+      labelKey: "detail.timelineTab" as const,
+    };
+    const tailorTabItem = {
+      id: "tailor" as const,
+      icon: Sparkles,
+      labelKey: "detail.tailorTab" as const,
+    };
+    const emailTabItem = {
+      id: "emails" as const,
+      icon: MailOpen,
+      labelKey: "detail.emailTab" as const,
+    };
+    return shouldPrioritizeTailor
+      ? [tailorTabItem, timelineTabItem, emailTabItem]
+      : [timelineTabItem, tailorTabItem, emailTabItem];
+  }, [shouldPrioritizeTailor]);
+
+  const [rightTab, setRightTab] = useState<RightPanelTab>(() => {
+    if (
+      defaultTab === "tailor" ||
+      defaultTab === "timeline" ||
+      defaultTab === "emails"
+    ) {
+      return defaultTab;
+    }
+    return shouldPrioritizeTailor ? "tailor" : "timeline";
+  });
+  const [mobileTab, setMobileTab] = useState<"details" | RightPanelTab>(() => {
+    if (
+      defaultTab === "tailor" ||
+      defaultTab === "timeline" ||
+      defaultTab === "emails"
+    ) {
+      return defaultTab;
+    }
+    return shouldPrioritizeTailor ? "tailor" : "details";
+  });
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isEmailOpen, setIsEmailOpen] = useState(false);
+  const [isCoverLetterOpen, setIsCoverLetterOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const rightPanelRef = useRef<HTMLDivElement>(null);
   const dateFnsLocale = getDateFnsLocale(locale);
   const deleteApplication = api.jobTrackerAdmin.deleteApplication.useMutation();
 
@@ -75,241 +143,598 @@ export const ApplicationDetailView: FC<ApplicationDetailViewProps> = ({
     });
   }, [application.id, deleteApplication, router, t, utils]);
 
-  return (
-    <div className="mx-auto w-full max-w-6xl space-y-6">
-      <div>
-        <Link
-          href="/admin/job-tracker"
-          className="text-muted-foreground hover:text-foreground mb-1 block text-xs transition-colors"
-        >
-          {t("detail.breadcrumb")}
-        </Link>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {application.position}
-        </h1>
-        <div className="mt-1 flex flex-wrap items-center gap-2.5">
-          <span className="text-muted-foreground text-sm">
-            {application.company.name}
-          </span>
-          <Badge variant={statusVariants[application.status]}>
-            {t(`status.${application.status}`)}
-          </Badge>
-        </div>
-      </div>
-
-      <div className="border-border bg-card rounded-xl border shadow-sm">
-        <nav
-          aria-label={t("detail.tabsNavAria")}
-          className="bg-muted/30 flex overflow-x-auto rounded-t-xl"
-          role="tablist"
-        >
-          {TAB_CONFIG.map(({ id, icon: Icon }) => {
-            const isActive = activeTab === id;
-            return (
-              <button
-                key={id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setActiveTab(id)}
-                className={cn(
-                  "flex shrink-0 items-center gap-2 border-b-2 px-5 py-3.5 text-sm font-medium transition-colors",
-                  isActive
-                    ? "border-primary text-primary bg-card"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60 border-transparent",
-                )}
-              >
-                <Icon className="size-4" aria-hidden />
-                {t(
-                  id === "details"
-                    ? "detail.detailsTab"
-                    : id === "timeline"
-                      ? "detail.timelineTab"
-                      : "detail.tailorTab",
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        <div className="p-6">
-          <ApplicationMetadataBar
-            application={application}
-            dateFnsLocale={dateFnsLocale}
-            isConfirmOpen={isConfirmOpen}
-            isDeleting={isPending}
-            onConfirmOpenChange={setIsConfirmOpen}
-            onDelete={handleDelete}
-            t={t}
-          />
-
-          <div role="tabpanel" className="w-full">
-            {activeTab === "details" ? (
-              <ApplicationJobDescription
-                description={application.description}
-                notes={application.notes}
-                emptyLabel={t("detail.noDescription")}
-                notesLabel={t("detail.notes")}
-              />
-            ) : null}
-
-            {activeTab === "timeline" ? (
-              <ApplicationTimeline
-                application={application}
-                locale={locale}
-                variant="embedded"
-                activityHint={t("detail.timelineActivityHint")}
-              />
-            ) : null}
-
-            {activeTab === "tailor" ? (
-              <ResumeTailorWorkflow
-                applicationId={application.id}
-                embedded
-                existingCvFile={application.cvFile}
-              />
-            ) : null}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-function ApplicationJobDescription({
-  description,
-  notes,
-  emptyLabel,
-  notesLabel,
-}: {
-  description: string;
-  notes: string;
-  emptyLabel: string;
-  notesLabel: string;
-}) {
-  if (!description.trim() && !notes.trim()) {
-    return <p className="text-muted-foreground text-sm">{emptyLabel}</p>;
-  }
-
-  return (
-    <div className="text-muted-foreground space-y-6 text-sm leading-relaxed">
-      {description.trim() ? (
-        <div className="whitespace-pre-wrap">{description}</div>
-      ) : null}
-      {notes.trim() ? (
-        <div className="border-border border-t pt-6">
-          <h3 className="text-foreground mb-2 text-sm font-medium">
-            {notesLabel}
-          </h3>
-          <p className="whitespace-pre-wrap">{notes}</p>
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function ApplicationMetadataBar({
-  application,
-  dateFnsLocale,
-  isConfirmOpen,
-  isDeleting,
-  onConfirmOpenChange,
-  onDelete,
-  t,
-}: {
-  application: ApplicationDetail;
-  dateFnsLocale: ReturnType<typeof getDateFnsLocale>;
-  isConfirmOpen: boolean;
-  isDeleting: boolean;
-  onConfirmOpenChange: (open: boolean) => void;
-  onDelete: () => void;
-  t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
-}) {
   const appliedLabel = format(new Date(application.appliedDate), "PP", {
     locale: dateFnsLocale,
   });
 
   return (
-    <div className="border-border mb-6 flex flex-wrap items-end justify-between gap-4 border-b pb-6">
-      <dl className="grid flex-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
-        {application.salary.trim() ? (
-          <MetadataItem label={t("detail.salary")} value={application.salary} />
-        ) : null}
-        {application.location.trim() ? (
-          <MetadataItem
-            label={t("detail.location")}
-            value={application.location}
+    <div className="mx-auto w-full max-w-7xl space-y-5">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          <Link
+            href="/admin/job-tracker"
+            className="text-muted-foreground hover:text-foreground mb-1 block text-xs transition-colors"
+          >
+            {t("detail.breadcrumb")}
+          </Link>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {application.position}
+          </h1>
+          <div className="mt-1 flex flex-wrap items-center gap-2.5">
+            <span className="text-muted-foreground text-sm">
+              {application.company.name}
+            </span>
+            <Badge variant={statusVariants[application.status]}>
+              {t(`status.${application.status}`)}
+            </Badge>
+          </div>
+        </div>
+
+        <div
+          role="toolbar"
+          aria-label={t("detail.actionsGroup")}
+          className="flex flex-wrap items-center gap-2"
+        >
+          {application.jobUrl ? (
+            <a
+              href={application.jobUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <ExternalLink className="mr-1.5 size-3.5" aria-hidden />
+              {t("detail.viewJobPosting")}
+            </a>
+          ) : null}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setIsEmailOpen(true)}
+          >
+            <Mail className="mr-1.5 size-3.5" aria-hidden />
+            {t("email.openButton")}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            render={
+              <Link
+                href={{
+                  pathname: "/admin/job-tracker/applications/[id]/edit",
+                  params: { id: application.id },
+                }}
+              />
+            }
+          >
+            <Pencil className="mr-1.5 size-3.5" aria-hidden />
+            {t("detail.editApplicationButton")}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isPending}
+            onClick={() => setIsConfirmOpen(true)}
+            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+          >
+            {isPending ? (
+              <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+            ) : (
+              <Trash2 className="mr-1.5 size-3.5" aria-hidden />
+            )}
+            {t("detail.deleteApplicationButton")}
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile view (< lg): segmented tabs for Details, Timeline, Tailor CV */}
+      <div className="flex flex-col gap-4 lg:hidden">
+        <nav
+          aria-label={t("detail.tabsNavAria")}
+          className="border-border bg-muted/40 grid grid-cols-4 rounded-xl border p-1"
+        >
+          <button
+            type="button"
+            aria-pressed={mobileTab === "details"}
+            onClick={() => setMobileTab("details")}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
+              mobileTab === "details"
+                ? "bg-card text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <FileText className="size-3.5" aria-hidden />
+            <span>{t("detail.detailsTab")}</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={mobileTab === "timeline"}
+            onClick={() => {
+              setMobileTab("timeline");
+              setRightTab("timeline");
+            }}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
+              mobileTab === "timeline"
+                ? "bg-card text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <Clock className="size-3.5" aria-hidden />
+            <span>{t("detail.timelineTab")}</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={mobileTab === "emails"}
+            onClick={() => setMobileTab("emails")}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
+              mobileTab === "emails"
+                ? "bg-card text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <MailOpen className="size-3.5" aria-hidden />
+            <span>{t("detail.emailTab")}</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={mobileTab === "tailor"}
+            onClick={() => {
+              setMobileTab("tailor");
+              setRightTab("tailor");
+            }}
+            className={cn(
+              "flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-medium transition-colors",
+              mobileTab === "tailor"
+                ? "bg-card text-foreground font-semibold shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <Sparkles className="size-3.5" aria-hidden />
+            <span>{t("detail.tailorTab")}</span>
+          </button>
+        </nav>
+
+        {mobileTab === "details" && (
+          <ApplicationDetailsPanel
+            application={application}
+            appliedLabel={appliedLabel}
+            onOpenCoverLetter={() => setIsCoverLetterOpen(true)}
+            t={t}
           />
-        ) : null}
-        <MetadataItem label={t("detail.applied")} value={appliedLabel} />
-        {application.cvFile ? (
-          <div className="flex flex-col gap-1">
-            <dt className="text-muted-foreground text-xs">
-              {t("detail.resumeOnFile")}
-            </dt>
-            <dd>
+        )}
+
+        {mobileTab === "timeline" && (
+          <section className="border-border bg-card rounded-xl border p-4 shadow-sm sm:p-5">
+            <ApplicationTimeline
+              application={application}
+              locale={locale}
+              variant="embedded"
+              activityHint={t("detail.timelineActivityHint")}
+            />
+          </section>
+        )}
+
+        {mobileTab === "emails" && (
+          <section className="border-border bg-card rounded-xl border p-4 shadow-sm sm:p-5">
+            <ApplicationEmailHistory
+              applicationId={application.id}
+              locale={locale}
+            />
+          </section>
+        )}
+
+        {mobileTab === "tailor" && (
+          <section className="border-border bg-card rounded-xl border p-4 shadow-sm sm:p-5">
+            <ResumeTailorWorkflow
+              applicationId={application.id}
+              embedded
+              existingCvFile={application.cvFile}
+            />
+          </section>
+        )}
+      </div>
+
+      {/* Desktop view (>= lg): resizable horizontal panels */}
+      <div className="hidden lg:block">
+        <ResizablePanelGroup
+          orientation="horizontal"
+          className="min-h-[36rem] lg:h-[calc(100dvh-8.5rem)]"
+        >
+          <ResizablePanel defaultSize="42%" minSize="30%" className="min-w-0">
+            <ApplicationDetailsPanel
+              application={application}
+              appliedLabel={appliedLabel}
+              onOpenCoverLetter={() => setIsCoverLetterOpen(true)}
+              t={t}
+            />
+          </ResizablePanel>
+
+          <ResizableHandle withHandle className="mx-1" />
+
+          <ResizablePanel defaultSize="58%" minSize="36%" className="min-w-0">
+            <ApplicationWorkspacePanel
+              application={application}
+              locale={locale}
+              rightTab={rightTab}
+              setRightTab={setRightTab}
+              rightTabs={rightTabs}
+              rightPanelRef={rightPanelRef}
+              t={t}
+            />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
+
+      <ApplicationEmailDialog
+        open={isEmailOpen}
+        onOpenChange={setIsEmailOpen}
+        applicationId={application.id}
+        hasCvFile={Boolean(application.cvFile?.url)}
+        cvFileName={application.cvFile?.name}
+        locale={locale}
+      />
+
+      <ApplicationCoverLetterDialog
+        open={isCoverLetterOpen}
+        onOpenChange={setIsCoverLetterOpen}
+        applicationId={application.id}
+        initialSubject={application.coverLetterSubject}
+        initialBody={application.coverLetterBody}
+      />
+
+      <ConfirmDialog
+        open={isConfirmOpen}
+        onOpenChange={setIsConfirmOpen}
+        title={t("detail.deleteApplicationButton")}
+        description={t("detail.deleteApplicationConfirm")}
+        cancelLabel={t("detail.deleteCancel")}
+        confirmLabel={t("detail.deleteConfirmAction")}
+        confirmVariant="destructive"
+        isPending={isPending}
+        onConfirm={handleDelete}
+      />
+    </div>
+  );
+};
+
+function ApplicationDetailsPanel({
+  application,
+  appliedLabel,
+  onOpenCoverLetter,
+  t,
+}: {
+  application: ApplicationDetail;
+  appliedLabel: string;
+  onOpenCoverLetter: () => void;
+  t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
+}) {
+  return (
+    <section className="border-border bg-card h-full space-y-5 overflow-y-auto rounded-xl border p-4 shadow-sm sm:p-5">
+      <dl className="grid gap-4 sm:grid-cols-2">
+        <DetailField label={t("detail.applied")} value={appliedLabel} />
+        <DetailField
+          label={t("detail.location")}
+          value={application.location.trim() || t("detail.notProvided")}
+        />
+        <DetailField
+          label={t("detail.salary")}
+          value={application.salary.trim() || t("detail.notProvided")}
+        />
+        <div className="min-w-0">
+          <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            {t("detail.cv")}
+          </dt>
+          <dd className="text-foreground mt-1 text-sm">
+            {application.cvFile ? (
               <a
                 href={application.cvFile.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary inline-flex items-center gap-1.5 text-sm hover:underline"
+                className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
               >
                 <FileText className="size-3.5 shrink-0" aria-hidden />
-                {application.cvFile.name}
+                <span className="truncate">{application.cvFile.name}</span>
+              </a>
+            ) : (
+              t("detail.notProvided")
+            )}
+          </dd>
+        </div>
+        {application.jobUrl ? (
+          <div className="min-w-0 sm:col-span-2">
+            <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+              {t("detail.jobUrl")}
+            </dt>
+            <dd className="text-foreground mt-1 text-sm">
+              <a
+                href={application.jobUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary inline-flex max-w-full items-center gap-1.5 hover:underline"
+              >
+                <ExternalLink className="size-3.5 shrink-0" aria-hidden />
+                <span className="truncate">{application.jobUrl}</span>
               </a>
             </dd>
           </div>
         ) : null}
       </dl>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <Link
-          href={{
-            pathname: "/admin/job-tracker/applications/[id]/edit",
-            params: { id: application.id },
-          }}
-          className={buttonVariants({ variant: "outline", size: "sm" })}
-        >
-          <Pencil className="mr-1.5 size-3.5" aria-hidden />
-          {t("detail.editApplicationButton")}
-        </Link>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={isDeleting}
-          onClick={() => onConfirmOpenChange(true)}
-          className="text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
-        >
-          {isDeleting ? (
-            <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
-          ) : (
-            <Trash2 className="mr-1.5 size-3.5" aria-hidden />
-          )}
-          {t("detail.deleteApplicationButton")}
-        </Button>
+      <div className="border-border border-t pt-5">
+        <div className="mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Building2 className="text-muted-foreground size-4" aria-hidden />
+            <h2 className="text-sm font-semibold">{t("detail.companyInfo")}</h2>
+          </div>
+          <Link
+            href={{
+              pathname: "/admin/job-tracker/companies/[id]/edit",
+              params: { id: application.company.id },
+            }}
+            className="text-muted-foreground hover:text-foreground text-xs transition-colors"
+          >
+            {t("detail.editCompany")}
+          </Link>
+        </div>
+        <div className="bg-muted/40 space-y-2 rounded-lg p-3.5 text-sm">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-foreground font-medium">
+              {application.company.name}
+            </span>
+            <div className="flex items-center gap-3 text-xs">
+              {application.company.website ? (
+                <a
+                  href={application.company.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary inline-flex items-center gap-1 hover:underline"
+                >
+                  <Globe className="size-3" aria-hidden />
+                  {t("websiteLink")}
+                </a>
+              ) : null}
+              {application.company.linkedinUrl ? (
+                <a
+                  href={application.company.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary inline-flex items-center gap-1 hover:underline"
+                >
+                  <FaLinkedin className="size-3" aria-hidden />
+                  LinkedIn
+                </a>
+              ) : null}
+            </div>
+          </div>
+          {application.company.location ? (
+            <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+              <MapPin className="size-3 shrink-0" aria-hidden />
+              <span>{application.company.location}</span>
+            </div>
+          ) : null}
+          {application.company.email ? (
+            <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+              <Mail className="size-3 shrink-0" aria-hidden />
+              <a
+                href={`mailto:${application.company.email}`}
+                className="hover:underline"
+              >
+                {application.company.email}
+              </a>
+            </div>
+          ) : null}
+          {application.company.description ? (
+            <p className="text-muted-foreground text-xs leading-relaxed">
+              {application.company.description}
+            </p>
+          ) : null}
+        </div>
       </div>
 
-      <ConfirmDialog
-        open={isConfirmOpen}
-        onOpenChange={onConfirmOpenChange}
-        title={t("detail.deleteApplicationButton")}
-        description={t("detail.deleteApplicationConfirm")}
-        cancelLabel={t("detail.deleteCancel")}
-        confirmLabel={t("detail.deleteConfirmAction")}
-        confirmVariant="destructive"
-        isPending={isDeleting}
-        onConfirm={onDelete}
-      />
+      {application.notes.trim() ? (
+        <div className="border-border border-t pt-5">
+          <h2 className="text-foreground mb-2 text-sm font-semibold">
+            {t("detail.notes")}
+          </h2>
+          <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap">
+            {application.notes}
+          </p>
+        </div>
+      ) : null}
+
+      <div className="border-border border-t pt-5">
+        <header className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <div className="min-w-0">
+            <h2 className="text-foreground text-sm font-semibold">
+              {t("coverLetter.sectionTitle")}
+            </h2>
+            <p className="text-muted-foreground text-xs">
+              {t("coverLetter.optionalHint")}
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="text-primary h-auto shrink-0 px-0"
+            onClick={onOpenCoverLetter}
+          >
+            <FilePenLine className="mr-1.5 size-3.5" aria-hidden />
+            {application.coverLetterBody.trim()
+              ? t("coverLetter.editButton")
+              : t("coverLetter.openOptional")}
+          </Button>
+        </header>
+        {application.coverLetterBody.trim() ? (
+          <div className="space-y-1.5">
+            {application.coverLetterSubject.trim() ? (
+              <p className="text-foreground text-sm font-medium">
+                {application.coverLetterSubject}
+              </p>
+            ) : null}
+            <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed whitespace-pre-wrap">
+              {application.coverLetterBody}
+            </p>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="border-border border-t pt-5">
+        <header className="mb-3 flex items-center gap-2">
+          <FileText className="text-muted-foreground size-4" aria-hidden />
+          <h2 className="text-sm font-semibold">
+            {t("detail.jobDescription")}
+          </h2>
+        </header>
+        <CollapsibleJobDescription
+          description={application.description}
+          emptyLabel={t("detail.noDescription")}
+          showMoreLabel={t("detail.showFullDescription")}
+          showLessLabel={t("detail.hideFullDescription")}
+        />
+      </div>
+    </section>
+  );
+}
+
+function ApplicationWorkspacePanel({
+  application,
+  locale,
+  rightTab,
+  setRightTab,
+  rightTabs,
+  rightPanelRef,
+  t,
+}: {
+  application: ApplicationDetail;
+  locale: Locale;
+  rightTab: RightPanelTab;
+  setRightTab: (tab: RightPanelTab) => void;
+  rightTabs: {
+    id: RightPanelTab;
+    icon: typeof Clock;
+    labelKey: "detail.timelineTab" | "detail.tailorTab" | "detail.emailTab";
+  }[];
+  rightPanelRef: React.RefObject<HTMLDivElement | null>;
+  t: ReturnType<typeof useTranslations<"admin.jobTracker">>;
+}) {
+  return (
+    <section className="border-border bg-card flex h-full flex-col overflow-hidden rounded-xl border shadow-sm">
+      <nav
+        aria-label={t("detail.tabsNavAria")}
+        className="bg-muted/30 flex shrink-0 overflow-hidden rounded-t-xl"
+      >
+        {rightTabs.map(({ id, icon: Icon, labelKey }) => {
+          const isActive = rightTab === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              aria-pressed={isActive}
+              className={cn(
+                "flex flex-1 items-center justify-center gap-2 border-b-2 px-5 py-3.5 text-sm font-medium transition-colors",
+                isActive
+                  ? "border-primary text-primary bg-card font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/60 border-transparent",
+              )}
+              onClick={() => setRightTab(id)}
+            >
+              <Icon className="size-4" aria-hidden />
+              {t(labelKey)}
+            </button>
+          );
+        })}
+      </nav>
+
+      <div className="relative min-h-0 flex-1">
+        <div
+          ref={rightPanelRef}
+          role="tabpanel"
+          className="h-full overflow-y-auto p-4 sm:p-5"
+        >
+          {rightTab === "timeline" ? (
+            <ApplicationTimeline
+              application={application}
+              locale={locale}
+              variant="embedded"
+              activityHint={t("detail.timelineActivityHint")}
+            />
+          ) : rightTab === "emails" ? (
+            <ApplicationEmailHistory
+              applicationId={application.id}
+              locale={locale}
+            />
+          ) : (
+            <ResumeTailorWorkflow
+              applicationId={application.id}
+              embedded
+              existingCvFile={application.cvFile}
+            />
+          )}
+        </div>
+        <div className="pointer-events-none absolute right-3 bottom-3 z-20">
+          <ScrollToTop containerRef={rightPanelRef} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DetailField({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="min-w-0">
+      <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+        {label}
+      </dt>
+      <dd className="text-foreground mt-1 truncate text-sm">{value}</dd>
     </div>
   );
 }
 
-function MetadataItem({ label, value }: { label: string; value: string }) {
+function CollapsibleJobDescription({
+  description,
+  emptyLabel,
+  showMoreLabel,
+  showLessLabel,
+}: {
+  description: string;
+  emptyLabel: string;
+  showMoreLabel: string;
+  showLessLabel: string;
+}) {
+  const trimmed = description.trim();
+  const [expanded, setExpanded] = useState(false);
+  const canCollapse = trimmed.length > DESCRIPTION_COLLAPSE_CHARS;
+
+  if (!trimmed) {
+    return <p className="text-muted-foreground text-sm">{emptyLabel}</p>;
+  }
+
   return (
-    <div className="flex flex-col gap-1">
-      <dt className="text-muted-foreground text-xs">{label}</dt>
-      <dd className="text-foreground text-sm">{value}</dd>
+    <div>
+      <div
+        className={cn(
+          "text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap",
+          !expanded && canCollapse && "max-h-40 overflow-hidden",
+        )}
+      >
+        {trimmed}
+      </div>
+      {canCollapse ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="text-primary mt-2 h-auto px-0"
+          onClick={() => setExpanded((value) => !value)}
+        >
+          {expanded ? showLessLabel : showMoreLabel}
+        </Button>
+      ) : null}
     </div>
   );
 }

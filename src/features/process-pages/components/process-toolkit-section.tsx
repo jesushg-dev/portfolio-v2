@@ -13,6 +13,7 @@ import { ProcessReveal } from "./process-reveal";
 import { ProcessSectionHeader } from "./process-section-header";
 
 interface ProcessToolkitSectionProps {
+  id?: string;
   eyebrow: string;
   title: string;
   description: string;
@@ -21,6 +22,7 @@ interface ProcessToolkitSectionProps {
 }
 
 export function ProcessToolkitSection({
+  id = "stack",
   eyebrow,
   title,
   description,
@@ -33,14 +35,14 @@ export function ProcessToolkitSection({
 
   return (
     <section
-      id="stack"
-      aria-labelledby={processSectionHeadingId("stack")}
+      id={id}
+      aria-labelledby={processSectionHeadingId(id)}
       className="bg-muted/50 px-6 py-20"
     >
       <div className="mx-auto max-w-4xl px-0 text-center">
         <ProcessReveal>
           <ProcessSectionHeader
-            sectionId="stack"
+            sectionId={id}
             eyebrow={eyebrow}
             title={title}
             description={description}

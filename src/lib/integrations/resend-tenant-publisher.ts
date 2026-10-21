@@ -163,7 +163,7 @@ export async function syncResendTemplatesForTenant(
           {
             key: "SENDER_EMAIL",
             type: "string",
-            fallbackValue: "[email protected]",
+            fallbackValue: "visitor@example.com",
           },
           { key: "MESSAGE", type: "string", fallbackValue: "" },
           { key: "SENT_AT", type: "string", fallbackValue: "" },

@@ -22,7 +22,14 @@ import {
   SortableItemHandle,
 } from "@/components/ui/sortable";
 import { GripVertical } from "lucide-react";
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormControl, FormField } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,36 +51,56 @@ import {
   buildEmptyTranslationMap,
   textTranslationMapFromRows,
 } from "@/lib/i18n/translation-map";
+import {
+  CV_EMPLOYMENT_TYPES,
+  CvEmploymentTypeSchema,
+  normalizeEmploymentType,
+} from "@/features/cv/lib/employment-type";
 import type { AppLanguage } from "@prisma/client";
 
-export const ResponsibilitySchema = z.object({
-  text: z.record(z.string(), z.object({ text: z.string() })),
-  order: z.number().int().nonnegative(),
-});
+export function buildExperienceFormSchema(
+  primaryLangId?: string,
+  messages?: { role?: string; responsibility?: string },
+) {
+  return z.object({
+    company: z.string().min(1),
+    employmentType: CvEmploymentTypeSchema,
+    role: textTranslationMapSchema(primaryLangId, messages?.role ?? "Role"),
+    location: TextTranslationMapSchema.optional(),
+    companyBlurb: TextTranslationMapSchema.optional(),
+    startDate: z.date().optional(),
+    endDate: z.date().optional(),
+    current: z.boolean(),
+    featuredOnHome: z.boolean(),
+    skillIds: z.array(z.string()),
+    responsibilities: z.array(
+      z.object({
+        text: textTranslationMapSchema(
+          primaryLangId,
+          messages?.responsibility ?? "Responsibility",
+        ),
+        order: z.number().int().nonnegative(),
+        atsOnly: z.boolean(),
+      }),
+    ),
+  });
+}
 
-export const ExperienceSchema = z.object({
-  company: z.string().min(1),
-  role: z.record(z.string(), z.object({ text: z.string() })),
-  location: TextTranslationMapSchema.optional(),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
-  current: z.boolean(),
-  featuredOnHome: z.boolean(),
-  skillIds: z.array(z.string()),
-  responsibilities: z.array(ResponsibilitySchema),
-});
-
-export type ExperienceInput = z.infer<typeof ExperienceSchema>;
+export type ExperienceInput = z.infer<
+  ReturnType<typeof buildExperienceFormSchema>
+>;
 
 interface ExperienceInitial {
   id: string;
   company: string;
+  employmentType?: string | null;
   role?: unknown;
   location?: unknown;
   translations?: {
     appLanguageId: string;
     role: string;
     location?: string | null;
+    companyBlurb?: string | null;
   }[];
   startDate?: Date | null;
   endDate?: Date | null;
@@ -84,6 +111,7 @@ interface ExperienceInitial {
   responsibilities?: {
     id?: string;
     text?: unknown;
+    atsOnly?: boolean;
     translations?: { appLanguageId: string; text: string }[];
     order: number;
   }[];
@@ -147,24 +175,9 @@ export const ExperienceForm: FC<{
 
   const formSchema = useMemo(
     () =>
-      z.object({
-        company: z.string().min(1),
-        role: textTranslationMapSchema(primaryLang?.id, t("role")),
-        location: TextTranslationMapSchema.optional(),
-        startDate: z.date().optional(),
-        endDate: z.date().optional(),
-        current: z.boolean(),
-        featuredOnHome: z.boolean(),
-        skillIds: z.array(z.string()),
-        responsibilities: z.array(
-          z.object({
-            text: textTranslationMapSchema(
-              primaryLang?.id,
-              t("responsibility", { n: 1 }),
-            ),
-            order: z.number().int().nonnegative(),
-          }),
-        ),
+      buildExperienceFormSchema(primaryLang?.id, {
+        role: t("role"),
+        responsibility: t("responsibility", { n: 1 }),
       }),
     [primaryLang?.id, t],
   );
@@ -173,6 +186,7 @@ export const ExperienceForm: FC<{
     resolver: zodResolver(formSchema),
     defaultValues: {
       company: initial?.company ?? "",
+      employmentType: normalizeEmploymentType(initial?.employmentType),
       role: initial?.translations
         ? textTranslationMapFromRows(
             languages,
@@ -185,6 +199,13 @@ export const ExperienceForm: FC<{
             languages,
             initial.translations,
             (row) => row.location,
+          )
+        : buildEmptyTranslationMap(languages, { text: "" }),
+      companyBlurb: initial?.translations
+        ? textTranslationMapFromRows(
+            languages,
+            initial.translations,
+            (row) => row.companyBlurb,
           )
         : buildEmptyTranslationMap(languages, { text: "" }),
       startDate: initial?.startDate ?? undefined,
@@ -202,6 +223,7 @@ export const ExperienceForm: FC<{
               (row) => row.text,
             ),
             order: index,
+            atsOnly: r.atsOnly ?? false,
           })) ?? [],
     },
   });
@@ -260,6 +282,40 @@ export const ExperienceForm: FC<{
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="employmentType"
+                render={({ field }) => (
+                  <FormItem
+                    label={t("employmentType")}
+                    inputId="experience-employment-type"
+                  >
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger
+                          id="experience-employment-type"
+                          className="w-full"
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {CV_EMPLOYMENT_TYPES.map((type) => (
+                          <SelectItem
+                            key={type}
+                            value={type}
+                            id={`experience-employment-type-option-${type}`}
+                          >
+                            {t(`employmentTypes.${type}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -341,6 +397,23 @@ export const ExperienceForm: FC<{
                         inputId={`experience-location-${lang.code}`}
                       >
                         <Input {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`companyBlurb.${lang.id}.text`}
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("companyBlurb")}
+                        inputId={`experience-company-blurb-${lang.code}`}
+                        description={t("companyBlurbDescription")}
+                      >
+                        <Textarea
+                          {...field}
+                          rows={2}
+                          placeholder={t("companyBlurbPlaceholder")}
+                        />
                       </FormItem>
                     )}
                   />
@@ -453,6 +526,24 @@ export const ExperienceForm: FC<{
                                 </div>
                               );
                             })}
+                            <FormField
+                              control={form.control}
+                              name={`responsibilities.${idx}.atsOnly`}
+                              render={({ field: atsField }) => (
+                                <FormCheckboxItem
+                                  label={t("atsOnly")}
+                                  description={t("atsOnlyDescription")}
+                                >
+                                  <Checkbox
+                                    id={`experience-responsibility-ats-${idx}`}
+                                    checked={atsField.value}
+                                    onCheckedChange={(checked) =>
+                                      atsField.onChange(checked === true)
+                                    }
+                                  />
+                                </FormCheckboxItem>
+                              )}
+                            />
                           </div>
                           <Button
                             variant="ghost"
@@ -478,6 +569,7 @@ export const ExperienceForm: FC<{
                 append({
                   text: buildEmptyTranslationMap(languages, { text: "" }),
                   order: fields.length,
+                  atsOnly: false,
                 })
               }
               className="mt-4"

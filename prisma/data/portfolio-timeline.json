@@ -18,7 +18,8 @@
       "startDate": "2017-03-01",
       "endDate": "2023-12-01",
       "current": false,
-      "images": []
+      "images": [],
+      "technologies": []
     },
     {
       "key": "work-it-technician",
@@ -38,7 +39,8 @@
       "startDate": "2020-10-01",
       "endDate": "2022-01-31",
       "current": false,
-      "images": []
+      "images": [],
+      "technologies": ["HTML", "CSS", "JavaScript"]
     },
     {
       "key": "work-mobile-developer",
@@ -48,9 +50,9 @@
         "nl": "Mobiele Applicatie Ontwikkelaar"
       },
       "description": {
-        "es": "Creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente.",
-        "en": "Built mobile software applications, consistently delivering high-quality products.",
-        "nl": "Bouwde mobiele softwareapplicaties en leverde consequent producten van hoge kwaliteit."
+        "es": "Desarrollo en React Native de las aplicaciones móviles del ecosistema cripto Telo: billetera B2C (transferencias P2P y KYC) y punto de venta B2B (cobros QR en tiempo real con WebSockets).",
+        "en": "React Native mobile development for the Telo crypto ecosystem: B2C wallet (P2P transfers and KYC) and B2B point of sale (real-time QR payments with WebSockets).",
+        "nl": "React Native mobiele ontwikkeling voor het Telo crypto-ecosysteem: B2C-wallet (P2P-overboekingen en KYC) en B2B-kassa (realtime QR-betalingen met WebSockets)."
       },
       "category": "WORK",
       "organization": "Telo Group",
@@ -58,7 +60,8 @@
       "startDate": "2022-02-01",
       "endDate": "2022-05-31",
       "current": false,
-      "images": []
+      "images": [],
+      "technologies": ["ReactNative", "Redux", "WebSockets", "Android"]
     },
     {
       "key": "work-musa",
@@ -78,7 +81,8 @@
       "startDate": "2022-06-01",
       "endDate": "2023-07-31",
       "current": false,
-      "images": []
+      "images": [],
+      "technologies": ["React", "TypeScript", "Node.js"]
     },
     {
       "key": "work-contollo",
@@ -96,9 +100,29 @@
       "organization": "Contollo",
       "location": "Remote",
       "startDate": "2023-08-01",
-      "endDate": "2024-11-30",
+      "endDate": "2025-03-31",
       "current": false,
-      "images": []
+      "images": [],
+      "technologies": [
+        "C#",
+        "Nest.js",
+        "Angular",
+        "React",
+        "Next.js",
+        "QuickBooks"
+      ],
+      "roles": [
+        {
+          "title": "Development Team Lead",
+          "startDate": "2024-11-01",
+          "endDate": "2025-03-31"
+        },
+        {
+          "title": "Senior Software Engineer",
+          "startDate": "2023-08-01",
+          "endDate": "2024-11-01"
+        }
+      ]
     },
     {
       "key": "work-claro",
@@ -118,7 +142,8 @@
       "startDate": "2024-09-01",
       "endDate": "2025-08-31",
       "current": false,
-      "images": []
+      "images": [],
+      "technologies": ["React", "Next.js", "Prisma", "SQL Server"]
     },
     {
       "key": "work-imagemaker",
@@ -136,8 +161,10 @@
       "organization": "Imagemaker",
       "location": "Remote",
       "startDate": "2025-08-01",
-      "current": true,
-      "images": []
+      "endDate": "2026-08-01",
+      "current": false,
+      "images": [],
+      "technologies": ["React", "Flutter", "VTEX", "Playwright"]
     },
     {
       "key": "course-platzi",
@@ -157,7 +184,8 @@
       "startDate": "2022-01-01",
       "endDate": "2024-06-30",
       "current": false,
-      "images": []
+      "images": [],
+      "technologies": ["HTML", "CSS", "JavaScript", "React", "Node.js"]
     },
     {
       "key": "course-continuous-learning",
@@ -176,7 +204,8 @@
       "location": "Online",
       "startDate": "2022-01-01",
       "current": true,
-      "images": []
+      "images": [],
+      "technologies": []
     }
   ]
 }

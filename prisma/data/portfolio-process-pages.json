@@ -1,0 +1,156 @@
+[
+  {
+    "key": "howIUseAi",
+    "slug": "how-i-use-ai",
+    "template": "WORKFLOW",
+    "navIcon": "Bot",
+    "order": 0,
+    "isPublished": true,
+    "showInNav": true,
+    "translations": [
+      {
+        "locale": "es",
+        "metaTitle": "",
+        "metaDescription": "",
+        "menuTitle": "",
+        "navDescription": "",
+        "pageNavLabel": "",
+        "heroEyebrow": "",
+        "heroTitle": "",
+        "heroTitleHighlight": "",
+        "heroDescription": "",
+        "heroPrimaryCta": "",
+        "heroSecondaryCta": "",
+        "heroScrollHint": "",
+        "ctaTitle": "",
+        "ctaDescription": "",
+        "ctaButton": "",
+        "content": {
+          "version": 2,
+          "sections": []
+        }
+      },
+      {
+        "locale": "en",
+        "metaTitle": "",
+        "metaDescription": "",
+        "menuTitle": "",
+        "navDescription": "",
+        "pageNavLabel": "",
+        "heroEyebrow": "",
+        "heroTitle": "",
+        "heroTitleHighlight": "",
+        "heroDescription": "",
+        "heroPrimaryCta": "",
+        "heroSecondaryCta": "",
+        "heroScrollHint": "",
+        "ctaTitle": "",
+        "ctaDescription": "",
+        "ctaButton": "",
+        "content": {
+          "version": 2,
+          "sections": []
+        }
+      },
+      {
+        "locale": "nl",
+        "metaTitle": "",
+        "metaDescription": "",
+        "menuTitle": "",
+        "navDescription": "",
+        "pageNavLabel": "",
+        "heroEyebrow": "",
+        "heroTitle": "",
+        "heroTitleHighlight": "",
+        "heroDescription": "",
+        "heroPrimaryCta": "",
+        "heroSecondaryCta": "",
+        "heroScrollHint": "",
+        "ctaTitle": "",
+        "ctaDescription": "",
+        "ctaButton": "",
+        "content": {
+          "version": 2,
+          "sections": []
+        }
+      }
+    ]
+  },
+  {
+    "key": "qaCollaboration",
+    "slug": "qa-collaboration",
+    "template": "QA",
+    "navIcon": "HeartHandshake",
+    "order": 1,
+    "isPublished": true,
+    "showInNav": true,
+    "translations": [
+      {
+        "locale": "es",
+        "metaTitle": "",
+        "metaDescription": "",
+        "menuTitle": "",
+        "navDescription": "",
+        "pageNavLabel": "",
+        "heroEyebrow": "",
+        "heroTitle": "",
+        "heroTitleHighlight": "",
+        "heroDescription": "",
+        "heroPrimaryCta": "",
+        "heroSecondaryCta": "",
+        "heroScrollHint": "",
+        "ctaTitle": "",
+        "ctaDescription": "",
+        "ctaButton": "",
+        "content": {
+          "version": 2,
+          "sections": []
+        }
+      },
+      {
+        "locale": "en",
+        "metaTitle": "",
+        "metaDescription": "",
+        "menuTitle": "",
+        "navDescription": "",
+        "pageNavLabel": "",
+        "heroEyebrow": "",
+        "heroTitle": "",
+        "heroTitleHighlight": "",
+        "heroDescription": "",
+        "heroPrimaryCta": "",
+        "heroSecondaryCta": "",
+        "heroScrollHint": "",
+        "ctaTitle": "",
+        "ctaDescription": "",
+        "ctaButton": "",
+        "content": {
+          "version": 2,
+          "sections": []
+        }
+      },
+      {
+        "locale": "nl",
+        "metaTitle": "",
+        "metaDescription": "",
+        "menuTitle": "",
+        "navDescription": "",
+        "pageNavLabel": "",
+        "heroEyebrow": "",
+        "heroTitle": "",
+        "heroTitleHighlight": "",
+        "heroDescription": "",
+        "heroPrimaryCta": "",
+        "heroSecondaryCta": "",
+        "heroScrollHint": "",
+        "ctaTitle": "",
+        "ctaDescription": "",
+        "ctaButton": "",
+        "content": {
+          "version": 2,
+          "sections": []
+        }
+      }
+    ]
+  }
+]

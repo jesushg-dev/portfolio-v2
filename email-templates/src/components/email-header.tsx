@@ -3,7 +3,7 @@ import { theme } from "../theme";
 
 /**
  * Soft brand header: tinted background band + the real "Jehg" wordmark,
- * same weight/letter-spacing as the nav logo on jehg.dev. Gives the email
+ * same weight/letter-spacing as the nav logo on jesushg.com. Gives the email
  * some visual presence without going back to a fake dark "app" banner.
  */
 export function EmailHeader({

@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { format } from "date-fns";
-import { CheckCircle, Circle, Clock, Edit, Plus } from "lucide-react";
+import { CheckCircle, Circle, Clock, Edit, MapPin, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
@@ -31,8 +31,10 @@ import type {
   EventType,
 } from "@/features/job-tracker/types";
 import type { Locale } from "@/i18n/config";
-import { eventTypeIcons } from "@/features/job-tracker/lib/constants";
+import { EventTypeIcon } from "@/features/job-tracker/lib/event-type-icons";
+import { EventDeleteControl } from "@/features/job-tracker/components/event-delete-control";
 import { getDateFnsLocale } from "@/features/job-tracker/lib/date-locale";
+import { eventPrepHref } from "@/features/job-tracker/lib/event-prep-href";
 
 const EVENT_OUTCOMES = ["POSITIVE", "NEUTRAL", "NEGATIVE"] as const;
 
@@ -179,19 +181,21 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
                       }
                     >
                       {variant === "default" ? (
-                        <span className="text-lg">
-                          {eventTypeIcons[event.type as EventType]}
-                        </span>
+                        <EventTypeIcon
+                          type={event.type}
+                          className="text-muted-foreground size-4 shrink-0"
+                        />
                       ) : null}
-                      <h4
+                      <Link
+                        href={eventPrepHref(application.id, event.id)}
                         className={
                           variant === "embedded"
-                            ? "text-[13px] font-medium"
-                            : "font-medium"
+                            ? "hover:text-primary text-[13px] font-medium hover:underline"
+                            : "hover:text-primary font-medium hover:underline"
                         }
                       >
                         {event.title}
-                      </h4>
+                      </Link>
                       {variant === "default" ? (
                         <>
                           <Badge variant="outline" className="text-xs">
@@ -234,8 +238,9 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
                     {variant === "default" &&
                     event.location &&
                     !event.isVirtual ? (
-                      <p className="text-muted-foreground text-sm">
-                        📍 {event.location}
+                      <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
+                        <MapPin className="size-3.5 shrink-0" aria-hidden />
+                        {event.location}
                       </p>
                     ) : null}
                     {variant === "default" &&
@@ -252,22 +257,28 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
                     ) : null}
                   </div>
 
-                  {variant === "default" &&
-                  !event.completed &&
-                  new Date(event.scheduledDate) > new Date() ? (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        setEditingEvent(
-                          editingEvent === event.id ? null : event.id,
-                        )
-                      }
-                    >
-                      <Edit className="mr-2 h-4 w-4" />
-                      {t("timeline.complete")}
-                    </Button>
-                  ) : null}
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    {variant === "default" &&
+                    !event.completed &&
+                    new Date(event.scheduledDate) > new Date() ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setEditingEvent(
+                            editingEvent === event.id ? null : event.id,
+                          )
+                        }
+                      >
+                        <Edit className="mr-2 h-4 w-4" />
+                        {t("timeline.complete")}
+                      </Button>
+                    ) : null}
+                    <EventDeleteControl
+                      applicationId={application.id}
+                      eventId={event.id}
+                    />
+                  </div>
                 </div>
 
                 {editingEvent === event.id ? (

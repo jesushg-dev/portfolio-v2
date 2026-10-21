@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { MediaImage } from "@/components/shared/media-image";
 import { motion, useReducedMotion } from "motion/react";
 
 import { ProcessRevealStaggerItem } from "@/features/process-pages/components/process-reveal";
@@ -40,7 +40,7 @@ export function UsesLinkedCard({
             whileHover={shouldReduceMotion ? undefined : { y: -2 }}
             className="flex flex-col items-center gap-1.5"
           >
-            <Image
+            <MediaImage
               src={imageSrc}
               alt={imageAlt}
               width={48}
@@ -69,7 +69,7 @@ export function UsesLinkedCard({
           whileHover={shouldReduceMotion ? undefined : { y: -2 }}
           className="flex flex-row items-start gap-4"
         >
-          <Image
+          <MediaImage
             src={imageSrc}
             alt={imageAlt}
             width={48}

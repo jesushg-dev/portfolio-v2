@@ -5,6 +5,7 @@ import { processSectionHeadingId } from "@/features/process-pages/components/pro
 import { ProcessReveal } from "@/features/process-pages/components/process-reveal";
 
 import type { UsesSoftwareItem } from "../data";
+import { usesItemAnchorId } from "../lib/uses-item-anchor";
 import { UsesLinkedCard } from "./uses-linked-card";
 import { usesContainerClassName, usesSectionClassName } from "./uses-layout";
 
@@ -40,7 +41,11 @@ export function UsesSoftwareSection({
 
         <ul className="grid list-none grid-cols-3 gap-x-4 gap-y-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10">
           {items.map((item, index) => (
-            <li key={item.id}>
+            <li
+              key={item.id}
+              id={usesItemAnchorId(item.id)}
+              className="target:ring-primary target:ring-offset-background scroll-mt-24 rounded-lg target:ring-2 target:ring-offset-2"
+            >
               <UsesLinkedCard
                 href={item.href}
                 title={item.title}

@@ -1,4 +1,5 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { isPrivateOrLocalIpv4, isValidIpv4 } from "@/lib/http/client-ip";
 
 interface IpApiResponse {
   status: string;
@@ -8,11 +9,26 @@ interface IpApiResponse {
   country?: string;
 }
 
+/** Preview visitor pin + distance locally (no public IP on localhost). */
+const DEV_VISITOR_NETHERLANDS = {
+  lat: 52.3676,
+  lon: 4.9041,
+  city: "Amsterdam",
+  country: "Netherlands",
+};
+
+function isLocalIp(ip: string): boolean {
+  if (ip === "::1") return true;
+  if (!isValidIpv4(ip)) return true;
+  return isPrivateOrLocalIpv4(ip);
+}
+
 export const geoRouter = createTRPCRouter({
   /**
    * Returns the visitor's approximate lat/lon.
    * Primary: Uses Vercel Geolocation headers (0ms latency, zero rate-limit).
    * Secondary (fallback for local dev / non-Vercel environments): Queries ip-api.com.
+   * On localhost in development, mocks Amsterdam so the contact globe can be previewed.
    */
   getVisitorLocation: publicProcedure.query(async ({ ctx }) => {
     // 1. Check Vercel Geolocation Headers
@@ -42,19 +58,16 @@ export const geoRouter = createTRPCRouter({
     const realIp = ctx.headers.get("x-real-ip");
     const ip = forwardedFor?.split(",")[0]?.trim() ?? realIp ?? "";
 
-    // On local environment without IP, return null (handled by fallback UI/default origin)
-    if (
-      !ip ||
-      ip === "127.0.0.1" ||
-      ip === "::1" ||
-      ip.startsWith("192.168.")
-    ) {
+    if (!isValidIpv4(ip) || isLocalIp(ip)) {
+      if (process.env.NODE_ENV !== "production") {
+        return DEV_VISITOR_NETHERLANDS;
+      }
       return null;
     }
 
     try {
       const res = await fetch(
-        `http://ip-api.com/json/${ip}?fields=status,country,city,lat,lon`,
+        `https://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,country,city,lat,lon`,
         {
           signal: AbortSignal.timeout(4000),
           cache: "no-store",

@@ -1,4 +1,4 @@
-﻿import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 import Tab from "./index";
 import TabItem from "./tab-item";
@@ -20,9 +20,10 @@ describe("Tab & TabItem components", () => {
       </Tab>,
     );
 
-    expect(
-      screen.getByRole("tablist", { name: "Main tabs" }),
-    ).toBeInTheDocument();
+    const tablist = screen.getByRole("tablist", { name: "Main tabs" });
+    expect(tablist).toBeInTheDocument();
+    expect(tablist.className).toContain("overflow-visible");
+    expect(tablist.className).not.toContain("overflow-x-auto");
     const tab1 = screen.getByRole("tab", { name: /Tab 1/ });
     const tab2 = screen.getByRole("tab", { name: /Tab 2/ });
 
@@ -47,6 +48,69 @@ describe("Tab & TabItem components", () => {
 
     expect(screen.getByText("Min Tab 1")).toBeInTheDocument();
     expect(screen.queryByText("Desc 1")).toBeNull();
+  });
+
+  it("stacks the icon above the label on minimal tabs", () => {
+    render(
+      <Tab ariaLabel="Stacked tabs" currentTab={0} minimal>
+        <TabItem icon={DummyIcon} title="All" description="" />
+      </Tab>,
+    );
+
+    const tab = screen.getByRole("tab", { name: /All/ });
+    expect(tab.className).toContain("flex-col");
+    expect(tab.firstElementChild?.className).toContain("flex-col");
+  });
+
+  it("gives minimal tab items a mobile min-width on the measured wrapper", () => {
+    render(
+      <Tab ariaLabel="Sized tabs" currentTab={0} minimal>
+        <TabItem icon={DummyIcon} title="All" description="" />
+      </Tab>,
+    );
+
+    const tab = screen.getByRole("tab", { name: /All/ });
+    expect(tab.parentElement?.className).toContain("min-w-18");
+    expect(tab.parentElement?.className).toContain("sm:min-w-0");
+    expect(tab.className).toContain("w-full");
+  });
+
+  it("keeps non-minimal tabs in a horizontal row", () => {
+    render(
+      <Tab ariaLabel="Full tabs" currentTab={0}>
+        <TabItem icon={DummyIcon} title="Overview" description="Details" />
+      </Tab>,
+    );
+
+    const tab = screen.getByRole("tab", { name: /Overview/ });
+    expect(tab.className).not.toContain("flex-col");
+  });
+
+  it("handles pointer down and pointer up on active tab cleanly without getting stuck", () => {
+    const setCurrentTab = jest.fn();
+    render(
+      <Tab
+        ariaLabel="Interactive tabs"
+        currentTab={0}
+        setCurrentTab={setCurrentTab}
+        tabId="test-tabs"
+      >
+        <TabItem icon={DummyIcon} title="Active Tab" description="Desc 1" />
+        <TabItem icon={DummyIcon} title="Other Tab" description="Desc 2" />
+      </Tab>,
+    );
+
+    const activeTab = screen.getByRole("tab", { name: /Active Tab/ });
+    const otherTab = screen.getByRole("tab", { name: /Other Tab/ });
+
+    // Press down on active tab
+    fireEvent.pointerDown(activeTab, { button: 0 });
+    // Release pointer anywhere on window
+    fireEvent.pointerUp(window);
+
+    // Clicking other tab should immediately work
+    fireEvent.click(otherTab);
+    expect(setCurrentTab).toHaveBeenCalledWith(1);
   });
 
   it("throws error when invalid children are passed", () => {

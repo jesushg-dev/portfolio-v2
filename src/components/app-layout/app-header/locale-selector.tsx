@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { useTransition, useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 import { Globe } from "lucide-react";
 
 import {
@@ -51,6 +52,7 @@ const LocaleSelector: FC<LocaleSelectorProps> = ({ inverted = false }) => {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const params = useParams();
   const t = useTranslations("global.header");
   const [isPending, startTransition] = useTransition();
 
@@ -76,8 +78,7 @@ const LocaleSelector: FC<LocaleSelectorProps> = ({ inverted = false }) => {
     if (!nextLocale || nextLocale === locale) return;
     startTransition(() => {
       // @ts-expect-error - Next-Intl typing for dynamic routes returned by usePathname
-      router.replace(pathname, { locale: nextLocale });
-      router.refresh();
+      router.replace({ pathname, params }, { locale: nextLocale });
     });
   };
 

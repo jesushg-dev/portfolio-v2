@@ -22,3 +22,12 @@ export async function redirectToLogin(locale: Locale): Promise<never> {
     locale,
   });
 }
+
+/** Redirect authenticated users to admin panel, preserving locale. */
+export function redirectToAdmin(locale: Locale): Promise<never> {
+  return redirect({
+    href: "/admin",
+    locale,
+  });
+}
+

@@ -10,12 +10,8 @@ import {
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import { FormDialogContent } from "@/components/shared/form-dialog-content";
 
 import { api } from "@/trpc/react";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
@@ -154,14 +150,12 @@ const AdditionalList: FC<{
           }
         }}
       >
-        <DialogContent
+        <FormDialogContent
           id="cv-item-modal"
           closeButtonId="cv-item-modal-close"
-          className="max-h-[90vh] w-full overflow-y-auto sm:max-w-4xl"
+          title={editingId ? t("edit") : t("create")}
+          className="sm:max-w-4xl"
         >
-          <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
-            <DialogTitle>{editingId ? t("edit") : t("create")}</DialogTitle>
-          </DialogHeader>
           {(editingId ?? creating) && (
             <AdditionalForm
               key={editingId ?? "create"}
@@ -181,7 +175,7 @@ const AdditionalList: FC<{
               }}
             />
           )}
-        </DialogContent>
+        </FormDialogContent>
       </Dialog>
 
       {!editingId && !creating ? (

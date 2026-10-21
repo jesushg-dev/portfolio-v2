@@ -21,6 +21,8 @@ jobs:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
       OWNER_USER_EMAIL: ${{ secrets.OWNER_USER_EMAIL }}
       OWNER_USER_PASSWORD: ${{ secrets.OWNER_USER_PASSWORD }}
+      CV_PDF_GENERATOR_SECRET: ${{ secrets.CV_PDF_GENERATOR_SECRET }}
+      E2E_FULL: "1"
     steps:
       - uses: actions/checkout@v5
 
@@ -31,7 +33,7 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -42,12 +44,14 @@ jobs:
 
       - run: pnpm db:push && pnpm db:seed
 
-      - run: pnpm test:e2e:full
+      - run: pnpm exec playwright test
         env:
           BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
           BETTER_AUTH_URL: http://localhost:3000
+          CV_PDF_GENERATOR_SECRET: ${{ secrets.CV_PDF_GENERATOR_SECRET }}
+          E2E_FULL: "1"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: failure()
         with:
           name: playwright-report-nightly

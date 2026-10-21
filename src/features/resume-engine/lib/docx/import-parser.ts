@@ -5,6 +5,7 @@ import type { CvImportTextSection } from "@/features/cv/lib/cv-import-draft";
 import { coalesceXmlText, extractTextFromWt } from "@/lib/docx/xml-text";
 
 const HEADING_STYLES = new Set([
+  "CV-Heading",
   "Heading1",
   "Ttulo1",
   "heading1",

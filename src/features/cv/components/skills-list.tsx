@@ -5,12 +5,8 @@ import type { FC } from "react";
 
 import { useTranslations } from "next-intl";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import { FormDialogContent } from "@/components/shared/form-dialog-content";
 
 import CvLanguageTabs from "@/components/admin/shared/cv/cv-language-tabs";
 import { api } from "@/trpc/react";
@@ -140,19 +136,17 @@ const SkillsList: FC = () => {
           }
         }}
       >
-        <DialogContent
+        <FormDialogContent
           id="cv-item-modal"
           closeButtonId="cv-item-modal-close"
-          className="max-h-[90vh] w-full overflow-y-auto sm:max-w-4xl"
+          title={
+            editingId
+              ? t("edit") || "Editar Habilidad"
+              : t("create") || "Añadir Habilidad"
+          }
+          headerExtra={<CvLanguageTabs />}
+          className="sm:max-w-4xl"
         >
-          <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
-            <DialogTitle>
-              {editingId
-                ? t("edit") || "Editar Habilidad"
-                : t("create") || "Añadir Habilidad"}
-            </DialogTitle>
-            <CvLanguageTabs />
-          </DialogHeader>
           {(editingId ?? creating) && (
             <SkillForm
               initial={
@@ -170,7 +164,7 @@ const SkillsList: FC = () => {
               }}
             />
           )}
-        </DialogContent>
+        </FormDialogContent>
       </Dialog>
 
       {!editingId && !creating ? (

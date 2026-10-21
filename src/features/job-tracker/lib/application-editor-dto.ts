@@ -1,6 +1,12 @@
-import type { Application, ApplicationEvent, Company } from "@prisma/client";
+import type {
+  Application,
+  ApplicationEmail,
+  ApplicationEvent,
+  Company,
+} from "@prisma/client";
 import type { CompanyEditorDTO } from "@/features/job-tracker/lib/company-editor-dto";
 import { mapCompanyToEditorDto } from "@/features/job-tracker/lib/company-editor-dto";
+import { computeLastActivityAt } from "@/features/job-tracker/lib/stale-application";
 
 export type ApplicationStatus =
   "APPLIED" | "INTERVIEW" | "OFFER" | "GHOSTED" | "REJECTED" | "HIRED";
@@ -9,6 +15,13 @@ export interface ApplicationCvFileDTO {
   name: string;
   url: string;
   uploadedAt: Date;
+}
+
+export interface ApplicationEmailSummaryDTO {
+  totalSent: number;
+  totalOpens: number;
+  lastOpenedAt: Date | null;
+  hasTracking: boolean;
 }
 
 export interface ApplicationEditorDTO {
@@ -20,6 +33,7 @@ export interface ApplicationEditorDTO {
   appliedDate: Date;
   salary: string;
   location: string;
+  jobUrl: string;
   notes: string;
   cvFile?: ApplicationCvFileDTO;
 }
@@ -28,19 +42,53 @@ export type ApplicationCreateFormDTO = Omit<ApplicationEditorDTO, "id">;
 
 export interface ApplicationListRowDTO extends ApplicationEditorDTO {
   company: CompanyEditorDTO;
+  updatedAt: Date;
+  lastActivityAt: Date;
+  ghostNudgeSnoozedUntil: Date | null;
+  emailSummary?: ApplicationEmailSummaryDTO;
 }
 
 export interface ApplicationDetailDTO extends ApplicationListRowDTO {
   events: ApplicationEvent[];
+  coverLetterSubject: string;
+  coverLetterBody: string;
 }
 
 type ApplicationWithCompany = Application & {
   company: Company;
+  events?: Pick<ApplicationEvent, "scheduledDate" | "completedAt">[];
+  emails?: Pick<
+    ApplicationEmail,
+    | "id"
+    | "sentAt"
+    | "openCount"
+    | "firstOpenedAt"
+    | "lastOpenedAt"
+    | "trackingEnabled"
+  >[];
 };
 
 type ApplicationWithCompanyAndEvents = ApplicationWithCompany & {
   events: ApplicationEvent[];
 };
+
+export const applicationListInclude = {
+  company: true,
+  events: {
+    select: { scheduledDate: true, completedAt: true },
+  },
+  emails: {
+    where: { sentAt: { not: null } },
+    select: {
+      id: true,
+      sentAt: true,
+      openCount: true,
+      firstOpenedAt: true,
+      lastOpenedAt: true,
+      trackingEnabled: true,
+    },
+  },
+} as const;
 
 export function mapApplicationToEditorDto(
   application: Application,
@@ -54,6 +102,7 @@ export function mapApplicationToEditorDto(
     appliedDate: application.appliedDate,
     salary: application.salary ?? "",
     location: application.location ?? "",
+    jobUrl: application.jobUrl ?? "",
     notes: application.notes ?? "",
     cvFile: application.cvFile
       ? {
@@ -68,9 +117,40 @@ export function mapApplicationToEditorDto(
 export function mapApplicationToListDto(
   application: ApplicationWithCompany,
 ): ApplicationListRowDTO {
+  const sentEmails = (application.emails ?? []).filter(
+    (e) => e.sentAt !== null,
+  );
+  const totalSent = sentEmails.length;
+  const totalOpens = sentEmails.reduce(
+    (acc, email) => acc + (email.openCount || 0),
+    0,
+  );
+  const validDates = sentEmails
+    .map((e) => (e.lastOpenedAt ? new Date(e.lastOpenedAt) : null))
+    .filter((d): d is Date => d !== null);
+  const lastOpenedAt =
+    validDates.length > 0
+      ? new Date(Math.max(...validDates.map((d) => d.getTime())))
+      : null;
+
   return {
     ...mapApplicationToEditorDto(application),
     company: mapCompanyToEditorDto(application.company),
+    updatedAt: application.updatedAt,
+    lastActivityAt: computeLastActivityAt(
+      application.appliedDate,
+      application.events ?? [],
+    ),
+    ghostNudgeSnoozedUntil: application.ghostNudgeSnoozedUntil ?? null,
+    emailSummary:
+      totalSent > 0
+        ? {
+            totalSent,
+            totalOpens,
+            lastOpenedAt,
+            hasTracking: sentEmails.some((e) => e.trackingEnabled),
+          }
+        : undefined,
   };
 }
 
@@ -86,6 +166,8 @@ export function mapApplicationToDetailDto(
   return {
     ...mapApplicationToListDto(application),
     events: application.events,
+    coverLetterSubject: application.coverLetterSubject ?? "",
+    coverLetterBody: application.coverLetterBody ?? "",
   };
 }
 
@@ -98,6 +180,7 @@ export function buildEmptyApplicationCreateDto(): ApplicationCreateFormDTO {
     appliedDate: new Date(),
     salary: "",
     location: "",
+    jobUrl: "",
     notes: "",
   };
 }

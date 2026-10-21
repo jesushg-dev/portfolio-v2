@@ -54,7 +54,7 @@ function getScrollRestoredServerSnapshot(): boolean {
 
 /**
  * Defers tRPC on the home landing until first interaction so Hero/LCP stays lean.
- * Other routes under `(home)` (e.g. `/schedule`) mount the footer Spotify widget
+ * Other routes under `(home)` (e.g. `/schedule`, `/timeline`) mount the footer Spotify widget
  * immediately and need tRPC on first paint. Skill intercept modals also need tRPC right away.
  */
 export default function DeferredTrpcProvider({

@@ -11,12 +11,8 @@ import type { FC } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import { FormDialogContent } from "@/components/shared/form-dialog-content";
 
 import type { AppLanguage } from "@prisma/client";
 import { api } from "@/trpc/react";
@@ -136,6 +132,10 @@ const ExperiencesList: FC<{
                       </p>
                       <p className="text-muted-foreground text-xs">
                         {exp.company} ·{" "}
+                        {t(
+                          `employmentTypes.${exp.employmentType ?? "FULL_TIME"}`,
+                        )}{" "}
+                        ·{" "}
                         {formatExperienceDates(
                           exp.startDate,
                           exp.endDate,
@@ -144,7 +144,18 @@ const ExperiencesList: FC<{
                         )}
                       </p>
                       <p className="mt-1 text-xs text-gray-400">
-                        {exp.responsibilities.length} responsibilities
+                        {
+                          exp.responsibilities.filter((item) => !item.atsOnly)
+                            .length
+                        }{" "}
+                        on CV
+                        {exp.responsibilities.some((item) => item.atsOnly)
+                          ? ` · ${
+                              exp.responsibilities.filter(
+                                (item) => item.atsOnly,
+                              ).length
+                            } ATS-only`
+                          : ""}
                       </p>
                     </div>
                   </div>
@@ -173,14 +184,12 @@ const ExperiencesList: FC<{
           }
         }}
       >
-        <DialogContent
+        <FormDialogContent
           id="cv-item-modal"
           closeButtonId="cv-item-modal-close"
-          className="max-h-[90vh] w-full overflow-y-auto sm:max-w-4xl"
+          title={editingId ? t("edit") : t("create")}
+          className="sm:max-w-4xl"
         >
-          <DialogHeader className="mb-4 flex flex-row items-center justify-between border-b pb-3">
-            <DialogTitle>{editingId ? t("edit") : t("create")}</DialogTitle>
-          </DialogHeader>
           {(editingId ?? creating) && (
             <ExperienceForm
               key={editingId ?? "create"}
@@ -200,7 +209,7 @@ const ExperiencesList: FC<{
               }}
             />
           )}
-        </DialogContent>
+        </FormDialogContent>
       </Dialog>
 
       {!editingId && !creating ? (
