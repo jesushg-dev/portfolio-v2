@@ -24,6 +24,7 @@ import {
   inferCvRoleTrack,
 } from "@/lib/cv/build-ats-cv-file-name";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
+import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 import CvUnpublished from "./cv-unpublished";
 
 interface CvPageViewProps {
@@ -99,10 +100,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    db.cvTechnicalSkill.findMany({
-      where: { userId },
-      orderBy: { order: "asc" },
-    }),
+    resolveUserTechnicalSkills(db, userId),
     db.cvExperience.findMany({
       where: { userId },
       include: {
@@ -196,7 +194,7 @@ const CvPageView: FC<CvPageViewProps> = async ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-[#f4f6fb] to-slate-200 pt-24 pb-16 font-sans text-slate-900 print:bg-white print:p-0">
+    <div className="bg-background text-foreground min-h-screen pt-24 pb-16 font-sans print:bg-white print:p-0">
       <div className="chrome mx-auto max-w-[51rem] px-4 pb-4 print:hidden">
         <CvPageActions
           fullName={header?.fullName ?? profile?.username ?? "user"}

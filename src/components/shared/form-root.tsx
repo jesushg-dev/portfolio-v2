@@ -265,6 +265,7 @@ export const FormSwitchItem = ({
 
 interface FormActionsProps {
   isPending?: boolean;
+  disabled?: boolean;
   title?: string;
   className?: string;
   children?: ReactNode;
@@ -274,6 +275,7 @@ interface FormActionsProps {
 
 export const FormActions = ({
   isPending,
+  disabled,
   title = "Submit",
   onClick,
   className,
@@ -294,7 +296,7 @@ export const FormActions = ({
       onClick={onClick}
       className="w-full sm:w-auto"
       size="sm"
-      disabled={isPending}
+      disabled={disabled ?? isPending}
     >
       {title}
       {isPending && <LoaderCircleIcon className="ml-2 animate-spin" />}

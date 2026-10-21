@@ -49,13 +49,21 @@ describe("ApplicationEmailDialog", () => {
       />,
     );
 
-    expect(screen.getByRole("checkbox")).toHaveAttribute(
-      "aria-checked",
-      "false",
-    );
+    const copyCheckbox = screen.getByRole("checkbox", {
+      name: "Send a copy to my email",
+    });
+    const trackCheckbox = screen.getByRole("checkbox", {
+      name: "Measure email loads",
+    });
+
+    expect(copyCheckbox).toHaveAttribute("aria-checked", "true");
+    expect(trackCheckbox).toHaveAttribute("aria-checked", "true");
     expect(screen.getByText("Measure email loads")).toBeInTheDocument();
     expect(
       screen.getByText(/Loads are approximate and do not confirm/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Sends an identical copy to your inbox without a tracking pixel/),
     ).toBeInTheDocument();
   });
 });

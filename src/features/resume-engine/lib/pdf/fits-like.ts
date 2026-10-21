@@ -121,26 +121,24 @@ export async function fitsLike(
       pages: resPageCount,
       originalPages: origPageCount,
       resultPages: resPageCount,
-      perColumn: [
-        {
-          pageIndex: 1,
-          ok: true,
-          columns: {
-            left: {
-              ok: true,
-              origLowestY: bottomMargin,
-              resultLowestY: bottomMargin,
-              limit: bottomMargin,
-            },
-            right: {
-              ok: true,
-              origLowestY: bottomMargin,
-              resultLowestY: bottomMargin,
-              limit: bottomMargin,
-            },
+      perColumn: Array.from({ length: resPageCount }, (_, idx) => ({
+        pageIndex: idx + 1,
+        ok: true,
+        columns: {
+          left: {
+            ok: true,
+            origLowestY: bottomMargin,
+            resultLowestY: bottomMargin,
+            limit: bottomMargin,
+          },
+          right: {
+            ok: true,
+            origLowestY: bottomMargin,
+            resultLowestY: bottomMargin,
+            limit: bottomMargin,
           },
         },
-      ],
+      })),
     };
   }
 

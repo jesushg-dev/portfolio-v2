@@ -96,7 +96,7 @@ const draftFixture: CvImportDraft = {
 
 describe("CV DOCX layout and experience mapping", () => {
   it("renders experiences without bullet spillover and with correct alignment", async () => {
-    const template = await loadCvTemplateForTailor();
+    const template = await loadCvTemplateForTailor("v1");
     const adaptedSections = mapDraftToTemplateSections(
       template.parsed.sections,
       draftFixture,
@@ -168,7 +168,7 @@ describe("CV DOCX layout and experience mapping", () => {
   });
 
   it("renders Medio tiempo and Spanish roles cleanly for all experiences", async () => {
-    const template = await loadCvTemplateForTailor();
+    const template = await loadCvTemplateForTailor("v1");
     const esDraft: CvImportDraft = {
       ...draftFixture,
       detectedLocale: "es",

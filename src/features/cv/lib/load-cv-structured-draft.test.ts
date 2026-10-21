@@ -134,5 +134,47 @@ describe("loadCvStructuredDraft", () => {
     expect(draft?.experiences[0]?.employmentType).toBe("FULL_TIME");
     expect(draft?.education[0]?.degreeName).toBe("BSc");
     expect(draft?.certifications[0]?.title).toBe("Solutions Architect");
+    expect(draft?.skills).toEqual([{ category: "FRONTEND", items: ["React"] }]);
+  });
+
+  it("populates draft.skills from portfolio skills (db.skill)", async () => {
+    const db = {
+      appLanguage: {
+        findMany: jest.fn().mockResolvedValue([{ id: "lang-en", code: "en" }]),
+      },
+      cvHeader: {
+        findUnique: jest.fn().mockResolvedValue({
+          fullName: "Dev User",
+          translations: [{ appLanguageId: "lang-en", degree: "Engineer" }],
+        }),
+      },
+      profile: {
+        findUnique: jest.fn().mockResolvedValue({ defaultLocale: "en" }),
+      },
+      cvAboutMe: { findUnique: jest.fn().mockResolvedValue(null) },
+      cvExperience: { findMany: jest.fn().mockResolvedValue([]) },
+      cvEducation: { findMany: jest.fn().mockResolvedValue([]) },
+      cvTechnicalSkill: { findMany: jest.fn().mockResolvedValue([]) },
+      skill: {
+        findMany: jest.fn().mockResolvedValue([
+          { title: "React", type: "FRONTEND", featured: true },
+          { title: "Node.js", type: "BACKEND", featured: false },
+          { title: "PostgreSQL", type: "DATA", featured: false },
+        ]),
+      },
+      cvContact: { findMany: jest.fn().mockResolvedValue([]) },
+      cvLanguage: { findMany: jest.fn().mockResolvedValue([]) },
+      certification: { findMany: jest.fn().mockResolvedValue([]) },
+    };
+
+    const draft = await loadCvStructuredDraft(db as never, "user-1", {
+      locale: "en",
+    });
+
+    expect(draft?.skills).toEqual([
+      { category: "FRONTEND", items: ["React"] },
+      { category: "BACKEND", items: ["Node.js"] },
+      { category: "DATABASE", items: ["PostgreSQL"] },
+    ]);
   });
 });

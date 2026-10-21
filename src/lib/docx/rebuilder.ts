@@ -334,7 +334,9 @@ export function isAllEmpty(adaptedTexts: string[]): boolean {
 }
 
 function alignExperienceRoleParagraph(paraXml: string, text: string): string {
-  if (!isExperienceRoleLine(text)) return paraXml;
+  if (!paraXml.includes('w:val="CV-Role"') && !isExperienceRoleLine(text)) {
+    return paraXml;
+  }
 
   // If paragraph already has left indentation, leave it as is
   if (/<w:ind[^>]*\bw:left="/.test(paraXml)) {
@@ -395,8 +397,13 @@ export async function rebuildDocx(
     const adaptedTexts = adaptedByXmlIndex.get(xmlIndex)!;
 
     // When every run text is empty the AI deliberately left this slot unused.
-    // Remove the entire paragraph from the output so bullet counts are dynamic.
+    // Remove the entire paragraph from the output so bullet counts are dynamic,
+    // UNLESS the paragraph is inside a table cell (e.g. TableParagraph or inside <w:tc>),
+    // where OpenXML schema requires at least one <w:p> per cell.
     if (isAllEmpty(adaptedTexts)) {
+      if (part.includes("TableParagraph") || part.includes("<w:tc")) {
+        return replaceStaticHeadings(replaceWtNodes(part, [""]), locale);
+      }
       return "";
     }
 

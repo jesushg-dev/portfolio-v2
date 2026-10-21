@@ -24,6 +24,7 @@ import {
   ResumeTailorSourceSelector,
   type ResumeTailorSourceType,
 } from "@/features/resume-engine/components/resume-tailor-source-selector";
+import type { CvTemplateVersion } from "@/features/cv/lib/load-cv-template-docx";
 import { ResumeTailorErrorAlert } from "@/features/resume-engine/components/resume-tailor-error-alert";
 import { ResumeTailorProgress } from "@/features/resume-engine/components/resume-tailor-progress";
 import {
@@ -49,6 +50,8 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   const [step, setStep] = useState<Step>("configure");
   const [sourceType, setSourceType] =
     useState<ResumeTailorSourceType>("studio");
+  const [templateVersion, setTemplateVersion] =
+    useState<CvTemplateVersion>("v2");
   const [uploadId, setUploadId] = useState<string | null>(null);
   const [jobDescription, setJobDescription] = useState("");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -77,6 +80,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       sourceType,
       uploadId: uploadId ?? undefined,
       applicationId,
+      templateVersion,
       jobDescription:
         jobDescription.trim().length > 0
           ? jobDescription.trim()
@@ -171,6 +175,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           jobDescription: effectiveJobDescription,
           applicationId,
           provider: effectiveProvider ?? undefined,
+          templateVersion,
         });
         applyTailorResult(result);
         setStep("done");
@@ -192,6 +197,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     applyTailorResult,
     t,
     uploadId,
+    templateVersion,
   ]);
 
   const handleTailorManual = useCallback(() => {
@@ -218,6 +224,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
           jobDescription: effectiveJobDescription,
           applicationId,
           rawJson: manualTailorJson,
+          templateVersion,
         });
         applyTailorResult(result);
         setStep("done");
@@ -239,6 +246,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     applyTailorResult,
     t,
     uploadId,
+    templateVersion,
   ]);
 
   const handleUploadComplete = useCallback(
@@ -410,6 +418,8 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
             <ResumeTailorSourceSelector
               sourceType={sourceType}
               onSourceTypeChange={setSourceType}
+              templateVersion={templateVersion}
+              onTemplateVersionChange={setTemplateVersion}
               hasStudioData={hasStudioData}
               studioPreview={pageData.data?.studioPreview}
               uploads={uploads}
@@ -550,6 +560,8 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               <ResumeTailorSourceSelector
                 sourceType={sourceType}
                 onSourceTypeChange={setSourceType}
+                templateVersion={templateVersion}
+                onTemplateVersionChange={setTemplateVersion}
                 hasStudioData={hasStudioData}
                 studioPreview={pageData.data?.studioPreview}
                 uploads={uploads}

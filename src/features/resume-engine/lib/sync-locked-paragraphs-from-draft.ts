@@ -13,6 +13,7 @@ import type {
 } from "@/lib/types";
 import { formatExperienceDates } from "@/utils/tools/date";
 import { getEmploymentTypeLabel } from "@/features/cv/lib/employment-type";
+import { WORKPLACE_OR_EMPLOYMENT_RE } from "@/lib/docx/parser";
 
 export const LOCKED_META_SECTION_ID = "__locked_meta__";
 
@@ -53,6 +54,14 @@ const WORKPLACE_MODE_TRANSLATIONS: Record<Locale, Record<string, string>> = {
     presencial: "On-site",
     "on-site": "On-site",
     onsite: "On-site",
+    "tiempo completo": "Full-time",
+    "full-time": "Full-time",
+    fulltime: "Full-time",
+    "tiempo parcial": "Part-time",
+    "part-time": "Part-time",
+    parttime: "Part-time",
+    voltijd: "Full-time",
+    deeltijd: "Part-time",
   },
   es: {
     remoto: "Remoto",
@@ -63,6 +72,14 @@ const WORKPLACE_MODE_TRANSLATIONS: Record<Locale, Record<string, string>> = {
     presencial: "Presencial",
     "on-site": "Presencial",
     onsite: "Presencial",
+    "tiempo completo": "Tiempo completo",
+    "full-time": "Tiempo completo",
+    fulltime: "Tiempo completo",
+    "tiempo parcial": "Tiempo parcial",
+    "part-time": "Tiempo parcial",
+    parttime: "Tiempo parcial",
+    voltijd: "Tiempo completo",
+    deeltijd: "Tiempo parcial",
   },
   nl: {
     remoto: "Remote",
@@ -73,6 +90,14 @@ const WORKPLACE_MODE_TRANSLATIONS: Record<Locale, Record<string, string>> = {
     presencial: "Op locatie",
     "on-site": "Op locatie",
     onsite: "Op locatie",
+    "tiempo completo": "Voltijd",
+    "full-time": "Voltijd",
+    fulltime: "Voltijd",
+    "tiempo parcial": "Deeltijd",
+    "part-time": "Deeltijd",
+    parttime: "Deeltijd",
+    voltijd: "Voltijd",
+    deeltijd: "Deeltijd",
   },
 };
 
@@ -100,6 +125,15 @@ function buildExperienceMetaLine(
     .split("·")
     .map((part) => part.trim())
     .filter(Boolean);
+
+  // If previousText does NOT start with a company name, but starts with workplace mode / employment type
+  // (e.g. v2: "Tiempo completo · Remoto · San José, Costa Rica"), do not prepend company or append date.
+  const firstPartIsModeOrEmployment =
+    parts.length > 0 && WORKPLACE_OR_EMPLOYMENT_RE.test(parts[0]);
+
+  if (firstPartIsModeOrEmployment) {
+    return translateWorkplaceModes(previousText, locale);
+  }
 
   // Preserve client annotations in company when draft company is a short match,
   // e.g. template "Imagemaker (Client: Walmart…)" + draft "Imagemaker".
@@ -164,7 +198,16 @@ export function syncLockedParagraphsFromDraft(
   draft: CvImportDraft,
   locale: Locale,
 ): AdaptedParagraph[] {
-  const experiences = unifyConsecutiveExperiencesByCompany(draft.experiences);
+  const isV2Template = lockedParagraphs.some(
+    (lp) =>
+      lp.kind === "experience-meta" &&
+      WORKPLACE_OR_EMPLOYMENT_RE.test(
+        lp.paragraph.runs[0]?.text?.split("·")[0]?.trim() ?? "",
+      ),
+  );
+  const experiences = isV2Template
+    ? draft.experiences
+    : unifyConsecutiveExperiencesByCompany(draft.experiences);
   let experienceIndex = 0;
   let educationIndex = 0;
   const adapted: AdaptedParagraph[] = [];

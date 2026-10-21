@@ -35,6 +35,9 @@ export interface TailorPromptPayloadOptions {
   yearsOfExperience?: number;
   primary?: string;
   lowPriority?: string[];
+  templateVersion?: "v1" | "v2";
+  targetPageCount?: number;
+  pageBudgetNotice?: string;
 }
 
 export function buildCombinedPrompt(
@@ -116,6 +119,12 @@ function formatOptionsBlock(options?: TailorPromptPayloadOptions): string {
   if (options.primary) filtered.primary = options.primary;
   if (options.lowPriority && options.lowPriority.length > 0)
     filtered.lowPriority = options.lowPriority;
+  if (options.templateVersion)
+    filtered.templateVersion = options.templateVersion;
+  if (options.targetPageCount !== undefined)
+    filtered.targetPageCount = options.targetPageCount;
+  if (options.pageBudgetNotice)
+    filtered.pageBudgetNotice = options.pageBudgetNotice;
 
   if (Object.keys(filtered).length === 0) return "";
   return `OPTIONS:\n${JSON.stringify(filtered, null, 2)}\n\n`;

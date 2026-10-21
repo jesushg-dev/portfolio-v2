@@ -5,6 +5,7 @@ import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
 import { appendPortfolioWebsiteContact } from "@/lib/cv/append-portfolio-website-contact";
 import { resolveCvAboutPreviewText } from "@/features/cv/lib/resolve-cv-about-preview-text";
+import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 
 function formatExperienceDate(date: Date | null): string {
   if (!date) return "";
@@ -119,10 +120,7 @@ export async function loadCvPreviewSnapshot(
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    db.cvTechnicalSkill.findMany({
-      where: { userId },
-      orderBy: { order: "asc" },
-    }),
+    resolveUserTechnicalSkills(db, userId),
     db.cvExperience.findMany({
       where: { userId },
       include: {

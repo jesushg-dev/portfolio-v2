@@ -4,7 +4,6 @@ import { TRPCError } from "@trpc/server";
 import { createHash } from "node:crypto";
 
 import {
-  getEmailTrackingDisclosure,
   createEmailOpenTrackingToken,
   hashEmailOpenTrackingToken,
 } from "@/features/job-tracker/lib/email-open-tracking";
@@ -938,6 +937,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         body: z.string().trim().min(1).max(8000),
         recipientName: z.string().trim().max(120).optional(),
         trackOpens: z.boolean().default(false),
+        sendCopy: z.boolean().default(true),
         locale: z.enum(locales).default("en"),
         /** Optional override; when set, this file is attached instead of application.cvFile. */
         attachmentUrl: z.string().url().optional(),
@@ -982,10 +982,19 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         locale: "es",
         fallbackLocale: "en",
       });
+      const candidateContactEmail = draftCv?.contacts.find(
+        (c) => c.type === "EMAIL",
+      )?.value;
       const replyTo = parseReplyToAddress(
-        draftCv?.contacts.find((c) => c.type === "EMAIL")?.value,
+        candidateContactEmail,
         draftCv?.header.fullName ?? ctx.user.name,
       );
+      const rawCandidateEmail = candidateContactEmail ?? ctx.user.email;
+      const copyRecipientEmail = rawCandidateEmail
+        ? parseReplyToAddress(rawCandidateEmail)?.match(
+            /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/,
+          )?.[0]?.toLowerCase() ?? ctx.user.email?.toLowerCase()
+        : ctx.user.email?.toLowerCase();
 
       const fileResponse = await fetch(attachmentUrl, {
         cache: "no-store",
@@ -1003,9 +1012,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         `CV-${(draftCv?.header.fullName ?? "candidate").replace(/\s+/g, "-")}.docx`;
 
       const toEmail = input.toEmail.toLowerCase();
-      const bodyText = input.trackOpens
-        ? `${input.body}\n\n${getEmailTrackingDisclosure(input.locale)}`
-        : input.body;
+      const bodyText = input.body;
       const resendConfig = await getTenantIntegrationConfig(
         ctx.user.id,
         "resend",
@@ -1074,6 +1081,42 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         });
       }
 
+      let copySent = false;
+      if (
+        input.sendCopy &&
+        copyRecipientEmail &&
+        copyRecipientEmail !== toEmail
+      ) {
+        const copyHtml = buildApplicationEmailHtml(
+          bodyText,
+          resendConfig?.emailSignatureHtml,
+          undefined,
+        );
+        const copyIdempotencyKey = `copy/${idempotencyKey}`;
+        try {
+          await emailClient.resend.emails.send(
+            {
+              from: emailClient.fromEmail,
+              to: copyRecipientEmail,
+              ...(replyTo ? { replyTo } : {}),
+              subject: input.subject,
+              text: bodyText,
+              html: copyHtml,
+              attachments: [
+                {
+                  filename,
+                  content: fileBuffer,
+                },
+              ],
+            },
+            { idempotencyKey: copyIdempotencyKey },
+          );
+          copySent = true;
+        } catch (copyError) {
+          console.error("Failed to send applicant copy email:", copyError);
+        }
+      }
+
       if (!emailRecord.sentAt) {
         await ctx.db.applicationEmail.update({
           where: { id: emailRecord.id },
@@ -1088,8 +1131,8 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           type: "FOLLOW_UP",
           title: `CV emailed to ${toEmail}`,
           description: input.recipientName
-            ? `Sent CV to ${input.recipientName} <${toEmail}> (${filename})`
-            : `Sent CV to ${toEmail} (${filename})`,
+            ? `Sent CV to ${input.recipientName} <${toEmail}> (${filename})${copySent ? ` · Copy sent to ${copyRecipientEmail}` : ""}`
+            : `Sent CV to ${toEmail} (${filename})${copySent ? ` · Copy sent to ${copyRecipientEmail}` : ""}`,
           scheduledDate: new Date(),
           completed: true,
           completedAt: new Date(),
@@ -1105,7 +1148,7 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         });
       }
 
-      return { emailId: data?.id ?? null };
+      return { emailId: data?.id ?? null, copySent };
     }),
 
   getApplicationEmailHistory: protectedProcedure

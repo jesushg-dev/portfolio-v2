@@ -213,4 +213,10 @@ describe("FormActions", () => {
     const saveBtn = screen.getByRole("button", { name: /Save Changes/ });
     expect(saveBtn).toBeDisabled();
   });
+
+  it("disables button when disabled is true", () => {
+    render(<FormActions title="Save Changes" disabled={true} />);
+    const saveBtn = screen.getByRole("button", { name: /Save Changes/ });
+    expect(saveBtn).toBeDisabled();
+  });
 });

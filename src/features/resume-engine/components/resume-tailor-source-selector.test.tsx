@@ -76,4 +76,28 @@ describe("ResumeTailorSourceSelector", () => {
     fireEvent.click(screen.getByText("resume.docx"));
     expect(onUploadIdChange).toHaveBeenCalledWith("up-1");
   });
+
+  it("renders template version selector and triggers onTemplateVersionChange when clicked", () => {
+    const onTemplateVersionChange = jest.fn();
+
+    renderWithIntl(
+      <ResumeTailorSourceSelector
+        sourceType="studio"
+        onSourceTypeChange={jest.fn()}
+        templateVersion="v2"
+        onTemplateVersionChange={onTemplateVersionChange}
+        hasStudioData={true}
+        uploads={[]}
+        uploadId={null}
+        onUploadIdChange={jest.fn()}
+        onUploadComplete={jest.fn()}
+        onError={jest.fn()}
+      />,
+    );
+
+    const v1Tab = screen.getByRole("tab", { name: /v1/i });
+    expect(v1Tab).toBeInTheDocument();
+    fireEvent.click(v1Tab);
+    expect(onTemplateVersionChange).toHaveBeenCalledWith("v1");
+  });
 });

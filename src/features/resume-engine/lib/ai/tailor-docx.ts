@@ -20,6 +20,7 @@ import {
   buildStudioDocxTailorUserPrompt,
   buildShrinkPromptPackage,
   type ShrinkFragment,
+  type TailorPromptPayloadOptions,
 } from "@/features/resume-engine/lib/ai/prompt-package";
 import type { TailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
@@ -41,6 +42,7 @@ async function tailorDocxWithClaude(
   apiKey: string,
   draft?: CvImportDraft,
   jobContext?: TailorJobContext | null,
+  options?: TailorPromptPayloadOptions,
 ): Promise<CvDocxTailorResult> {
   const client = new Anthropic({ apiKey });
   const systemPrompt = draft
@@ -52,8 +54,9 @@ async function tailorDocxWithClaude(
         draft,
         jobDescription,
         jobContext,
+        options,
       )
-    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext);
+    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext, options);
 
   const response = await client.messages.create({
     model: AI_PROVIDER_MODELS.claude,
@@ -80,6 +83,7 @@ async function tailorDocxWithOpenAI(
   baseURL?: string,
   model = AI_PROVIDER_MODELS.openai,
   jobContext?: TailorJobContext | null,
+  options?: TailorPromptPayloadOptions,
 ): Promise<CvDocxTailorResult> {
   const client = new OpenAI({
     apiKey,
@@ -94,8 +98,9 @@ async function tailorDocxWithOpenAI(
         draft,
         jobDescription,
         jobContext,
+        options,
       )
-    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext);
+    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext, options);
 
   const response = await client.chat.completions.create({
     model,
@@ -119,6 +124,7 @@ async function tailorDocxWithGemini(
   apiKey: string,
   draft?: CvImportDraft,
   jobContext?: TailorJobContext | null,
+  options?: TailorPromptPayloadOptions,
 ): Promise<CvDocxTailorResult> {
   const client = new GoogleGenAI({ apiKey });
   const systemPrompt = draft
@@ -130,8 +136,9 @@ async function tailorDocxWithGemini(
         draft,
         jobDescription,
         jobContext,
+        options,
       )
-    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext);
+    : buildDocxTailorUserPrompt(sections, jobDescription, jobContext, options);
 
   const response = await client.models.generateContent({
     model: AI_PROVIDER_MODELS.gemini,
@@ -307,13 +314,20 @@ export async function tailorDocxResume(
   providerName?: string,
   draft?: CvImportDraft,
   jobContext?: TailorJobContext | null,
-  options?: { yearsOfExperience?: number },
+  options?: TailorPromptPayloadOptions,
 ): Promise<{ result: TailoredResumeResult; provider: AiProviderName }> {
   if (sections.length === 0) {
     throw new Error("No adaptable sections found in the DOCX.");
   }
 
   const provider = resolveAiProvider(credentials, providerName);
+
+  const effectiveYears =
+    options?.yearsOfExperience ?? calculateYearsOfExperience(draft);
+  const effectiveOptions: TailorPromptPayloadOptions = {
+    ...options,
+    yearsOfExperience: effectiveYears,
+  };
 
   let rawResult: CvDocxTailorResult;
   switch (provider) {
@@ -324,6 +338,7 @@ export async function tailorDocxResume(
         requireTenantAiApiKey(credentials, "claude"),
         draft,
         jobContext,
+        effectiveOptions,
       );
       break;
     case "openai":
@@ -335,6 +350,7 @@ export async function tailorDocxResume(
         undefined,
         AI_PROVIDER_MODELS.openai,
         jobContext,
+        effectiveOptions,
       );
       break;
     case "deepseek":
@@ -346,6 +362,7 @@ export async function tailorDocxResume(
         "https://api.deepseek.com",
         AI_PROVIDER_MODELS.deepseek,
         jobContext,
+        effectiveOptions,
       );
       break;
     case "gemini":
@@ -355,6 +372,7 @@ export async function tailorDocxResume(
         requireTenantAiApiKey(credentials, "gemini"),
         draft,
         jobContext,
+        effectiveOptions,
       );
       break;
     default: {
@@ -366,8 +384,7 @@ export async function tailorDocxResume(
   // 1. Extract edits directly from LLM response
   const initialEdits = rawResult.edits;
 
-  const effectiveYears =
-    options?.yearsOfExperience ?? calculateYearsOfExperience(draft);
+  const accumulatedWarnings = new Set<string>();
 
   // 2. Validate with pure post-LLM validator (E1 - E8)
   let validation = validateTailorEdits({
@@ -377,6 +394,7 @@ export async function tailorDocxResume(
     edits: initialEdits,
     yearsOfExperience: effectiveYears,
   });
+  for (const w of validation.warnings) accumulatedWarnings.add(w);
 
   const currentEditsMap = new Map<string, string>();
   for (const edit of validation.acceptedEdits) {
@@ -410,6 +428,7 @@ export async function tailorDocxResume(
           .filter((r) => !r.unfit)
           .map((r) => ({ id: r.id, text: r.text })),
       });
+      for (const w of shrinkValidation.warnings) accumulatedWarnings.add(w);
 
       for (const edit of shrinkValidation.acceptedEdits) {
         currentEditsMap.set(edit.id, edit.text);
@@ -426,6 +445,7 @@ export async function tailorDocxResume(
         edits: prospectiveEdits,
         yearsOfExperience: effectiveYears,
       });
+      for (const w of validation.warnings) accumulatedWarnings.add(w);
     } catch {
       break;
     }
@@ -445,6 +465,7 @@ export async function tailorDocxResume(
       edits: prospectiveEdits,
       yearsOfExperience: effectiveYears,
     });
+    for (const w of validation.warnings) accumulatedWarnings.add(w);
   }
 
   // 5. Build final result with accepted edits and full sections
@@ -462,7 +483,7 @@ export async function tailorDocxResume(
     sections: finalSections,
     sourceWarnings: [
       ...(rawResult.sourceWarnings ?? []),
-      ...validation.warnings,
+      ...Array.from(accumulatedWarnings),
     ],
   };
 

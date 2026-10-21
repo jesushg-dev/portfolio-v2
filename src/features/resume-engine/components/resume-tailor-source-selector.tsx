@@ -6,7 +6,9 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResumeDocxUpload } from "@/features/resume-engine/components/resume-docx-upload";
+import type { CvTemplateVersion } from "@/features/cv/lib/load-cv-template-docx";
 import { cn } from "@/lib/utils";
 
 export type ResumeTailorSourceType = "studio" | "upload";
@@ -14,6 +16,8 @@ export type ResumeTailorSourceType = "studio" | "upload";
 export interface ResumeTailorSourceSelectorProps {
   sourceType: ResumeTailorSourceType;
   onSourceTypeChange: (source: ResumeTailorSourceType) => void;
+  templateVersion?: CvTemplateVersion;
+  onTemplateVersionChange?: (version: CvTemplateVersion) => void;
   hasStudioData: boolean;
   studioPreview?: {
     fullName: string;
@@ -47,6 +51,8 @@ export const ResumeTailorSourceSelector: FC<
 > = ({
   sourceType,
   onSourceTypeChange,
+  templateVersion = "v2",
+  onTemplateVersionChange,
   hasStudioData,
   studioPreview,
   uploads,
@@ -111,6 +117,30 @@ export const ResumeTailorSourceSelector: FC<
           </span>
         </button>
       </div>
+
+      {sourceType === "studio" && onTemplateVersionChange ? (
+        <div className="mt-2.5 flex flex-col gap-1.5">
+          <Label className="text-muted-foreground text-xs font-medium">
+            {t("tailorTemplateVersionLabel")}
+          </Label>
+          <Tabs
+            value={templateVersion}
+            onValueChange={(val) =>
+              onTemplateVersionChange(val as CvTemplateVersion)
+            }
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="v2" className="text-xs">
+                {t("tailorTemplateV2")}
+              </TabsTrigger>
+              <TabsTrigger value="v1" className="text-xs">
+                {t("tailorTemplateV1")}
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      ) : null}
 
       {sourceType === "upload" ? (
         <div className="mt-3 flex flex-col gap-3">

@@ -2,9 +2,9 @@
   "header": {
     "fullName": "Jesús Enmanuel Hernández González",
     "degree": {
-      "es": "Desarrollador Fullstack",
-      "en": "Fullstack Developer",
-      "nl": "Fullstack ontwikkelaar"
+      "es": "Senior Fullstack Developer",
+      "en": "Senior Fullstack Developer",
+      "nl": "Senior Fullstack Developer"
     },
     "clientImageAlt": {
       "es": "Foto de Jesús Hernández",
@@ -13,9 +13,9 @@
     }
   },
   "aboutMe": {
-    "es": "Senior Software Engineer diseñando y evolucionando sistemas de software en comercio electrónico, telecomunicaciones y plataformas enterprise. Combino el rigor arquitectónico con resultados de negocio medibles — desde modernizar sistemas legacy y mejorar la fiabilidad hasta establecer prácticas de ingeniería que ayudan a los equipos a entregar de forma segura a escala.\n\nMi trabajo abarca sistemas distribuidos, diseño de sistemas, fiabilidad y liderazgo técnico.",
-    "en": "Senior Software Engineer designing and evolving software systems across e-commerce, telecommunications, and enterprise platforms. I combine architectural rigor with measurable business outcomes — from modernizing legacy systems and improving reliability to establishing engineering practices that help teams deliver safely at scale.\n\nMy work spans distributed systems, system design, reliability, and technical leadership.",
-    "nl": "Senior Software Engineer ontwerpt en evolueren van softwaresystemen in e-commerce, telecommunicatie en enterprise platformen. Ik combineer architectonische striktheid met meetbare bedrijfsresultaten — van het moderniseren van legacy systemen en het verbeteren van betrouwbaarheid tot het opzetten van engineering praktijken die teams helpen veilig op schaal te leveren.\n\nMijn werk omvat gedistribueerde systemen, systeemontwerp, betrouwbaarheid en technisch leiderschap."
+    "es": "Ingeniero en Computación y Senior Fullstack Developer con 6+ años de experiencia construyendo aplicaciones web y móviles para productos empresariales y plataformas de alto volumen. Especializado en React, TypeScript, Next.js y .NET, con experiencia en APIs, integración de sistemas, arquitectura frontend, CI/CD y optimización de rendimiento. He trabajado en productos para Walmart Global Tech y Claro, liderando iniciativas técnicas, modernizando sistemas y resolviendo incidentes críticos en producción.",
+    "en": "Computer Engineer and Senior Fullstack Developer with 6+ years of experience building web and mobile applications for enterprise products and high-volume platforms. Specialized in React, TypeScript, Next.js, and .NET, with expertise in APIs, systems integration, frontend architecture, CI/CD, and performance optimization. Shipped high-impact products for Walmart Global Tech and Claro, leading technical initiatives, modernizing legacy systems, and resolving critical production incidents.",
+    "nl": "Computer Engineer en Senior Fullstack Developer met 6+ jaar ervaring in het bouwen van web- en mobiele applicaties voor enterprise producten en platformen met hoog volume. Gespecialiseerd in React, TypeScript, Next.js en .NET, met expertise in API's, systeemintegratie, frontend architectuur, CI/CD en prestatie-optimalisatie. Gewerkt aan producten voor Walmart Global Tech en Claro, technische initiatieven geleid, legacy systemen gemoderniseerd en kritieke productie-incidenten opgelost."
   },
   "contacts": [
     {
@@ -155,9 +155,10 @@
         "Next.js",
         "React",
         "React Native",
-        "API REST",
-        "Socket",
-        "Taiwind"
+        "Redux",
+        "Tailwind",
+        "WebSockets",
+        "REST APIs"
       ],
       "order": 0
     },
@@ -382,9 +383,9 @@
         },
         {
           "text": {
-            "es": "Establecí pipelines CI/CD, estándares de code review y mentoricé a 4+ desarrolladores, impulsando un aumento del 40% en velocidad y ganando 2 hackathons.",
-            "en": "Established CI/CD pipelines, code review standards, and mentored 4+ developers, driving a 40% velocity increase and securing 2 internal hackathon wins.",
-            "nl": "CI/CD-pipelines en code review standaarden opgezet, 4+ developers begeleid, wat leidde tot 40% meer snelheid en 2 hackathonoverwinningen."
+            "es": "Establecí pipelines CI/CD, estándares de code review y mentoricé a 4+ desarrolladores, aumentando la velocidad de entrega del equipo ~40% y logrando 2 victorias en hackathons internos.",
+            "en": "Established CI/CD pipelines, code review standards, and mentored 4+ developers, increasing team delivery velocity ~40% and winning 2 internal hackathons.",
+            "nl": "CI/CD-pipelines en code review-standaarden opgezet en 4+ developers gementord; leveringssnelheid van het team met ~40% verhoogd en 2 interne hackathons gewonnen."
           },
           "order": 1,
           "atsOnly": false
@@ -638,62 +639,77 @@
         "nl": "Hybrid · San José, Costa Rica"
       },
       "companyBlurb": {
-        "es": "Producto móvil: apps React Native con UX definido por diseño y entrega en Scrum.",
-        "en": "Mobile product: React Native apps with design-driven UX delivered in Scrum.",
-        "nl": "Mobiel product: React Native-apps met design-gedreven UX, geleverd in Scrum."
+        "es": "Ecosistema cripto B2C/B2B: desarrollo móvil React Native de Telo Wallet (billetera de activos digitales) y Telo Business (punto de venta mPOS con cobros QR en tiempo real).",
+        "en": "B2C/B2B crypto ecosystem: React Native mobile development for Telo Wallet (digital asset wallet) and Telo Business (mPOS merchant terminal with real-time QR payments).",
+        "nl": "B2C/B2B crypto-ecosysteem: mobiele React Native-ontwikkeling van Telo Wallet (digitale activa wallet) en Telo Business (mPOS-kassa met realtime QR-betalingen)."
       },
       "metrics": {
         "es": [
           "~70% menos bugs en prod",
-          "Sincronización offline-first",
-          "Auth biométrica"
+          "Pagos QR & P2P en tiempo real",
+          "Suite B2C y B2B"
         ],
-        "en": ["~70% fewer prod bugs", "Offline-first sync", "Biometric auth"],
-        "nl": ["~70% minder bugs", "Offline-first sync", "Biometrische auth"]
+        "en": [
+          "~70% fewer prod bugs",
+          "Real-time QR & P2P payments",
+          "B2C & B2B suite"
+        ],
+        "nl": [
+          "~70% minder bugs",
+          "Realtime QR & P2P-betalingen",
+          "B2C & B2B suite"
+        ]
       },
-      "skillKeys": ["ReactNative", "Typescript", "Android", "Javascript"],
+      "skillKeys": [
+        "ReactNative",
+        "Redux",
+        "WebSockets",
+        "Android",
+        "Javascript",
+        "Jest"
+      ],
       "responsibilities": [
         {
           "text": {
-            "es": "Entregué apps React Native con arquitectura offline-first y autenticación biométrica para operaciones de campo.",
-            "en": "Delivered React Native apps with offline-first architecture and biometric authentication for field operations.",
-            "nl": "React Native-apps geleverd met offline-first-architectuur en biometrische authenticatie voor veldoperaties."
+            "es": "Desarrollé en React Native las aplicaciones móviles del ecosistema cripto: Telo Wallet (para usuarios y transferencias P2P) y Telo Business (para cobros comerciales e invoices QR).",
+            "en": "Developed React Native mobile apps for the crypto ecosystem: Telo Wallet (for users and P2P transfers) and Telo Business (for merchant checkout and QR invoicing).",
+            "nl": "Ontwikkelde React Native-apps voor het crypto-ecosysteem: Telo Wallet (voor gebruikers en P2P-transacties) en Telo Business (voor winkels en QR-facturen)."
           },
           "order": 0,
           "atsOnly": false
         },
         {
           "text": {
-            "es": "Implementé pruebas unitarias (Jest) y CI, reduciendo bugs en producción ~70%.",
-            "en": "Implemented Jest unit tests and CI, reducing production bugs ~70%.",
-            "nl": "Jest unit tests en CI geïmplementeerd; productiebugs ~70% lager."
+            "es": "Integré WebSockets con Socket.IO para recepción instantánea de eventos de pago (NOTIFY_INVOICE_PAYMENT) y acreditaciones P2P (NOTIFY_P2P) sin necesidad de refresco manual.",
+            "en": "Integrated WebSockets via Socket.IO for instantaneous payment event streaming (NOTIFY_INVOICE_PAYMENT) and P2P credits (NOTIFY_P2P) without manual polling.",
+            "nl": "Integreerde WebSockets via Socket.IO voor directe betalingsnotificaties (NOTIFY_INVOICE_PAYMENT) en P2P-overboekingen (NOTIFY_P2P) zonder handmatige polling."
           },
           "order": 1,
           "atsOnly": false
         },
         {
           "text": {
-            "es": "Creé UI a partir de specs de UX, garantizando una experiencia atractiva y funcional.",
-            "en": "Built UI from UX specs, ensuring an attractive and functional experience.",
-            "nl": "UI gebouwd op basis van UX-specs voor een aantrekkelijke, functionele ervaring."
+            "es": "Implementé flujos de cobro dinámico con códigos QR, escáner con react-native-qrcode-scanner, verificación de identidad KYC y geolocalización de sucursales en mapas Mapbox GL.",
+            "en": "Implemented dynamic QR checkout flows, camera scanning with react-native-qrcode-scanner, KYC onboarding verification, and store branch mapping with Mapbox GL.",
+            "nl": "Implementeerde dynamische QR-betalingen, camera-scannen met react-native-qrcode-scanner, KYC-verificatie en winkel-geolocatie met Mapbox GL."
           },
           "order": 2,
           "atsOnly": true
         },
         {
           "text": {
-            "es": "Participé en Scrum implementando historias de usuario según plazos del proyecto.",
-            "en": "Worked in Scrum implementing user stories to project deadlines.",
-            "nl": "In Scrum user stories geïmplementeerd volgens projectdeadlines."
+            "es": "Estructuré la arquitectura de estado global y persistencia con Redux Thunk y Redux Persist, agregando sincronización reactiva offline-first ante caídas de red móvil.",
+            "en": "Structured global state management and persistence using Redux Thunk and Redux Persist, ensuring reactive offline-first sync across mobile network interruptions.",
+            "nl": "Structureerde globaal statebeheer en persistentie met Redux Thunk en Redux Persist, met offline-first synchronisatie bij wisselende mobiele netwerken."
           },
           "order": 3,
           "atsOnly": true
         },
         {
           "text": {
-            "es": "Apoyé QA y backend con pruebas, code reviews y resolución de problemas.",
-            "en": "Supported QA and backend with testing, code reviews, and issue resolution.",
-            "nl": "QA en backend ondersteund met tests, code reviews en probleemoplossing."
+            "es": "Diseñé pruebas unitarias exhaustivas con Jest y colaboré en Scrum con backend y QA, logrando una reducción del ~70% en defectos críticos en producción.",
+            "en": "Designed comprehensive Jest unit test suites and collaborated in Scrum with backend and QA teams, reducing critical production defects by ~70%.",
+            "nl": "Ontwierp uitgebreide unittests met Jest en werkte in Scrum samen met backend en QA, wat leidde tot ~70% minder kritieke productiebugs."
           },
           "order": 4,
           "atsOnly": true
@@ -835,7 +851,14 @@
     },
     {
       "category": "Frontend",
-      "items": ["React", "Next.js", "TypeScript", "Tailwind", "Redux"],
+      "items": [
+        "React",
+        "React Native",
+        "Next.js",
+        "TypeScript",
+        "Tailwind",
+        "Redux"
+      ],
       "order": 1
     },
     {

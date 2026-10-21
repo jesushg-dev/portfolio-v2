@@ -94,6 +94,12 @@ export type CvImportExperienceDraft = z.infer<
 export type CvImportEducationDraft = z.infer<
   typeof CvImportEducationDraftSchema
 >;
+export type CvImportSkillDraft = z.infer<typeof CvImportSkillDraftSchema>;
+export type CvImportContactDraft = z.infer<typeof CvImportContactDraftSchema>;
+export type CvImportLanguageDraft = z.infer<typeof CvImportLanguageDraftSchema>;
+export type CvImportCertificationDraft = z.infer<
+  typeof CvImportCertificationDraftSchema
+>;
 
 export interface CvImportTextSection {
   heading: string;

@@ -50,9 +50,9 @@
         "nl": "Mobiele Applicatie Ontwikkelaar"
       },
       "description": {
-        "es": "Creación de aplicaciones de software para dispositivos móviles, entregando productos de alta calidad de manera consistente.",
-        "en": "Built mobile software applications, consistently delivering high-quality products.",
-        "nl": "Bouwde mobiele softwareapplicaties en leverde consequent producten van hoge kwaliteit."
+        "es": "Desarrollo en React Native de las aplicaciones móviles del ecosistema cripto Telo: billetera B2C (transferencias P2P y KYC) y punto de venta B2B (cobros QR en tiempo real con WebSockets).",
+        "en": "React Native mobile development for the Telo crypto ecosystem: B2C wallet (P2P transfers and KYC) and B2B point of sale (real-time QR payments with WebSockets).",
+        "nl": "React Native mobiele ontwikkeling voor het Telo crypto-ecosysteem: B2C-wallet (P2P-overboekingen en KYC) en B2B-kassa (realtime QR-betalingen met WebSockets)."
       },
       "category": "WORK",
       "organization": "Telo Group",
@@ -61,7 +61,7 @@
       "endDate": "2022-05-31",
       "current": false,
       "images": [],
-      "technologies": ["Flutter", "Dart", "Android"]
+      "technologies": ["ReactNative", "Redux", "WebSockets", "Android"]
     },
     {
       "key": "work-musa",

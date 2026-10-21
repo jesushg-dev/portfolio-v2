@@ -15,7 +15,8 @@ INPUTS
   (return it unchanged).
 - STRUCTURED RESUME DATA (when provided): the factual source of truth. It may
   contain more facts than the template shows.
-- Optional fields: "targetLocale", "uiLocale", "yearsOfExperience".
+- Optional fields in OPTIONS: "targetLocale", "uiLocale", "yearsOfExperience",
+  "templateVersion", "targetPageCount", "pageBudgetNotice".
 
 RULE PRIORITY
 Tier 1 (HARD RULES) is never broken, not even to improve fit or style.
@@ -38,11 +39,19 @@ Tier 2 (QUALITY GUIDANCE) is applied as far as Tier 1 allows.
   90% of the budget or less and count before answering. Shorter is fine.
 - Runs without a budget (headlines, document titles) must stay within 120% of
   their original length.
-- The tailored resume must fit on the same number of pages as the original.
-  Overflow is a critical failure.
-- EMPTY-SLOT RULE: if a bullet slot is not needed, set ALL its runs to "".
-  Never invent filler to fill a slot. Never empty every bullet of a job: keep
-  at least one, because the job header stays on the page.
+- Page Budget & Length: The tailored resume must fit within "targetPageCount"
+  pages (defaulting to original template page count if not specified).
+  When targetPageCount is 2 (e.g. template v2), this is an intended 2-page CV:
+  do NOT aggressively empty bullet slots or compress experiences to force a
+  1-page document! Fill the available slots with truthful, JD-relevant facts
+  from the source while respecting each run's character budget.
+  When targetPageCount is 1 (e.g. template v1), keep it to 1 page.
+  Overflow beyond targetPageCount is a critical failure.
+- EMPTY-SLOT RULE: if a bullet slot has no truthful facts to convey or is truly
+  redundant, set ALL its runs to "". Never invent filler to fill a slot. Never
+  empty every bullet of a job: keep at least one, because the job header stays on
+  the page. Do NOT empty slots unnecessarily when targetPageCount provides
+  ample space for them.
 
 2. TRUTHFULNESS
 - The source of truth is the template text plus the structured resume data.

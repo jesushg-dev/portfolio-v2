@@ -63,8 +63,17 @@ describe("resume-engine prompt packages", () => {
       sections,
       draft,
       "Need React.",
+      null,
+      {
+        templateVersion: "v2",
+        targetPageCount: 2,
+        pageBudgetNotice: "This is a 2-page resume.",
+      },
     );
     expect(studio.userPrompt).toContain("STRUCTURED RESUME DATA");
+    expect(studio.userPrompt).toContain('"targetPageCount": 2');
+    expect(studio.userPrompt).toContain('"templateVersion": "v2"');
+    expect(studio.userPrompt).toContain("This is a 2-page resume.");
   });
 
   it("builds a shrink package for overflowing fragments", () => {

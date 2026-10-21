@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition } from "react";
-import type { FC, ChangeEvent } from "react";
+import type { FC } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,13 +11,14 @@ import { Download, Home, Loader2, Mail, Send, X } from "lucide-react";
 import { TRPCClientError } from "@trpc/client";
 import { AnimatePresence, motion } from "motion/react";
 
-import { Link, useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { FormItem, FormRoot } from "@/components/shared/form-root";
 import { api } from "@/trpc/react";
-import type { Locale } from "@/i18n/config";
+import { cn } from "@/lib/utils";
+
 
 interface CvPageActionsProps {
   fullName: string;
@@ -55,7 +56,6 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
   paginatePdfPages = false,
 }) => {
   const locale = useLocale();
-  const router = useRouter();
   const tPdf = useTranslations("curriculum.pdfDelivery");
   const [emailOpen, setEmailOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -91,17 +91,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
 
   const handleToggleEmail = useCallback(() => {
     setEmailOpen((open) => !open);
-  }, []);
-
-  const handleLocaleChange = useCallback(
-    (e: ChangeEvent<HTMLSelectElement>) => {
-      const targetLocale = e.target.value as Locale;
-      router.replace("/curriculum-vitae", { locale: targetLocale });
-    },
-    [router],
-  );
-
-  const handleSubmit = useCallback(
+  }, []);  const handleSubmit = useCallback(
     (values: EmailInput) => {
       startTransition(async () => {
         try {
@@ -131,27 +121,13 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-blue-800 bg-white px-5 py-2.5 text-sm font-semibold text-blue-800 shadow-sm transition hover:bg-blue-50"
+          className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full gap-2")}
         >
           <Home className="size-4 shrink-0" aria-hidden="true" />
           <span>{goBackLabel}</span>
         </Link>
 
         <div className="flex flex-wrap items-center gap-3">
-          <label htmlFor="cv-locale-select">
-            <span className="sr-only">Language</span>
-            <select
-              id="cv-locale-select"
-              value={locale}
-              onChange={handleLocaleChange}
-              className="min-h-11 cursor-pointer rounded-full border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-blue-800"
-            >
-              <option value="nl">Nederlands</option>
-              <option value="en">English</option>
-              <option value="es">Español</option>
-            </select>
-          </label>
-
           {downloadHref ? (
             <a
               id="dl"
@@ -160,7 +136,10 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
               rel="noopener noreferrer"
               download={downloadFileName}
               onClick={handleDownloadClick}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-blue-800 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-800/20 transition hover:-translate-y-0.5 hover:bg-blue-900"
+              className={cn(
+                buttonVariants({ variant: "default", size: "lg" }),
+                "rounded-full gap-2 shadow-sm hover:-translate-y-0.5",
+              )}
               aria-busy={isDownloading}
             >
               <span>{isDownloading ? tPdf("generating") : downloadLabel}</span>
@@ -180,7 +159,7 @@ export const CvPageActions: FC<CvPageActionsProps> = ({
               id="mail"
               type="button"
               onClick={handleToggleEmail}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-blue-800 hover:text-blue-800"
+              className={cn(buttonVariants({ variant: "outline", size: "lg" }), "rounded-full gap-2")}
               aria-expanded={emailOpen}
               aria-controls="cv-email-panel"
             >

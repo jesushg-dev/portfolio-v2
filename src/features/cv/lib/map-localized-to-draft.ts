@@ -1,7 +1,6 @@
 import type { LocalizedCvData } from "@/components/curriculum-vitae/types";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import type { Locale } from "@/i18n/config";
-import { unifyConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
 
 const CONTACT_TYPE_MAP: Record<
   string,
@@ -34,21 +33,19 @@ export function mapLocalizedCvToDraft(
       degree: data.header?.degree ?? undefined,
       summary: aboutMeText ?? undefined,
     },
-    experiences: unifyConsecutiveExperiencesByCompany(
-      data.experiences.map((exp) => ({
-        id: exp.id,
-        company: exp.company,
-        role: exp.role,
-        employmentType: exp.employmentType ?? undefined,
-        location: exp.location ?? undefined,
-        companyBlurb: exp.companyBlurb,
-        startDate: formatDate(exp.startDate),
-        endDate: formatDate(exp.endDate),
-        current: exp.current ?? undefined,
-        responsibilities: exp.responsibilities.map((r) => r.text),
-        atsResponsibilities: [],
-      })),
-    ),
+    experiences: data.experiences.map((exp) => ({
+      id: exp.id,
+      company: exp.company,
+      role: exp.role,
+      employmentType: exp.employmentType ?? undefined,
+      location: exp.location ?? undefined,
+      companyBlurb: exp.companyBlurb,
+      startDate: formatDate(exp.startDate),
+      endDate: formatDate(exp.endDate),
+      current: exp.current ?? undefined,
+      responsibilities: exp.responsibilities.map((r) => r.text),
+      atsResponsibilities: [],
+    })),
     education: data.educations.map((edu) => ({
       id: edu.id,
       institution: edu.institution,

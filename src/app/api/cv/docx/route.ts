@@ -10,6 +10,7 @@ import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import { mapLocalizedCvToDraft } from "@/features/cv/lib/map-localized-to-draft";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
+import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -72,10 +73,7 @@ export async function GET(request: Request) {
         include: { translations: true },
         orderBy: { order: "asc" },
       }),
-      db.cvTechnicalSkill.findMany({
-        where: { userId },
-        orderBy: { order: "asc" },
-      }),
+      resolveUserTechnicalSkills(db, userId),
       db.cvExperience.findMany({
         where: { userId },
         include: {

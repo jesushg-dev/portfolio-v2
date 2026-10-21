@@ -174,4 +174,65 @@ describe("mapDraftToTemplateSections", () => {
 
     expect(mappedTechSkills).toEqual(["React", "C# / .NET Core", "HTML"]);
   });
+
+  it("maps category line technical skills (V2 format) joined with middle dot", () => {
+    const v2SkillsSection: CvSection = {
+      id: "section-skills-v2",
+      heading: "HABILIDADES TÉCNICAS",
+      paragraphs: [
+        {
+          id: "p-fe",
+          style: "CV-Skill-List",
+          xmlIndex: 10,
+          runs: [{ id: "r-fe", text: "React · Next.js · TypeScript" }],
+        },
+        {
+          id: "p-be",
+          style: "CV-Skill-List",
+          xmlIndex: 12,
+          runs: [{ id: "r-be", text: ".NET Core · C# · Node.js" }],
+        },
+        {
+          id: "p-data",
+          style: "CV-Skill-List",
+          xmlIndex: 14,
+          runs: [{ id: "r-data", text: "SQL Server · PostgreSQL" }],
+        },
+        {
+          id: "p-cloud",
+          style: "CV-Skill-List",
+          xmlIndex: 16,
+          runs: [{ id: "r-cloud", text: "Azure · Docker · Git" }],
+        },
+      ],
+    };
+
+    const draftWithPortfolioSkills: CvImportDraft = {
+      ...draft,
+      skills: [
+        { category: "FRONTEND", items: ["React", "Next.js", "Tailwind CSS"] },
+        { category: "BACKEND", items: ["NestJS", "Node.js", "GraphQL"] },
+        { category: "DATABASE", items: ["PostgreSQL", "MongoDB"] },
+        { category: "DEVOPS", items: ["Docker", "Kubernetes"] },
+        { category: "TOOLS", items: ["Git", "Jest"] },
+      ],
+    };
+
+    const adapted = mapDraftToTemplateSections(
+      [v2SkillsSection],
+      draftWithPortfolioSkills,
+      [],
+    );
+
+    const mappedSkills = adapted
+      .find((s) => s.id === "section-skills-v2")
+      ?.paragraphs.map((p) => p.runs[0]?.text);
+
+    expect(mappedSkills).toEqual([
+      "React · Next.js · Tailwind CSS",
+      "NestJS · Node.js · GraphQL",
+      "PostgreSQL · MongoDB",
+      "Docker · Kubernetes · Git · Jest",
+    ]);
+  });
 });

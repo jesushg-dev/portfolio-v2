@@ -306,9 +306,17 @@ describe("jobTrackerAdminRouter", () => {
   });
 
   it("adds a disclosed tracking pixel only when requested for a CV email", async () => {
+    interface MockEmailMessage {
+      to: string;
+      subject: string;
+      text: string;
+      html: string;
+      attachments?: { filename: string; content: Buffer }[];
+    }
+
     const send = jest.fn(
       (
-        _message: { text: string; html: string },
+        _message: MockEmailMessage,
         _options: { idempotencyKey: string },
       ) => {
         void _message;
@@ -385,10 +393,11 @@ describe("jobTrackerAdminRouter", () => {
       });
 
       expect(result.emailId).toBe("resend-1");
+      expect(result.copySent).toBe(true);
       expect(applicationEmail.upsert).toHaveBeenCalledTimes(1);
       const sentMessage = send.mock.calls[0]?.[0];
-      expect(sentMessage?.text).toContain("imagen de seguimiento");
-      expect(sentMessage?.html).toContain("imagen de seguimiento");
+      expect(sentMessage?.text).not.toContain("imagen de seguimiento");
+      expect(sentMessage?.html).not.toContain("imagen de seguimiento");
       expect(sentMessage?.html).toContain("Hello,<br />there.");
       expect(sentMessage?.html).not.toContain("&nbsp;");
       const sentHtml = sentMessage?.html ?? "";
@@ -397,16 +406,26 @@ describe("jobTrackerAdminRouter", () => {
       );
       expect(applicationEmail.update).toHaveBeenCalledTimes(1);
 
+      const copyMessage = send.mock.calls[1]?.[0];
+      expect(copyMessage?.to).toBe("owner@example.com");
+      expect(copyMessage?.subject).toBe("Application");
+      expect(copyMessage?.html).not.toContain("email-open?token=");
+      expect(copyMessage?.html).toContain("Hello,<br />there.");
+      expect(copyMessage?.attachments?.[0]?.filename).toBe("cv.pdf");
+
       await caller.sendApplicationEmail({
         applicationId: "app-1",
         toEmail: "jobs@acme.com",
         subject: "Follow-up",
         body: "Following up on my application.",
         locale: "en",
+        sendCopy: false,
       });
-      const untrackedMessage = send.mock.calls[1]?.[0];
+      const untrackedMessage = send.mock.calls[2]?.[0];
+      expect(untrackedMessage?.to).toBe("jobs@acme.com");
       expect(untrackedMessage?.html).not.toContain("email-open?token=");
       expect(untrackedMessage?.text).not.toContain("tracking image");
+      expect(send.mock.calls).toHaveLength(3);
       expect(applicationEmail.upsert).toHaveBeenCalledTimes(2);
       expect(applicationEmail.update).toHaveBeenCalledTimes(2);
     } finally {

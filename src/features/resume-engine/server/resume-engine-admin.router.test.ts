@@ -25,6 +25,7 @@ jest.mock("@/features/resume-engine/lib/resolve-tailor-base-draft", () => ({
   resolveTailorBaseDraft: jest.fn(),
 }));
 jest.mock("@/features/cv/lib/load-cv-template-docx", () => ({
+  DEFAULT_CV_TEMPLATE_VERSION: "v2",
   loadCvTemplateForTailor: jest.fn(),
   loadCvTemplatePdfBuffer: jest.fn(),
 }));

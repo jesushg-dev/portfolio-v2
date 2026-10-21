@@ -49,21 +49,17 @@ function splitTextIntoChunks(text: string, chunkCount: number): string[] {
   return chunks;
 }
 
-export function collectTechnicalSkillItems(
-  draft: CvImportDraft,
+export function prioritizeSkillItems(
+  items: string[],
   jobDescription?: string,
 ): string[] {
-  const allItems = draft.skills.flatMap((group) =>
-    group.items.map((item) => item.trim()).filter((item) => item.length > 0),
-  );
-
   if (!jobDescription || jobDescription.trim().length === 0) {
-    return allItems;
+    return items;
   }
 
   const jdLower = jobDescription.toLowerCase();
 
-  const scored = allItems.map((item, originalIndex) => {
+  const scored = items.map((item, originalIndex) => {
     const itemLower = item.toLowerCase();
     let score = 0;
     if (jdLower.includes(itemLower)) {
@@ -80,6 +76,17 @@ export function collectTechnicalSkillItems(
   scored.sort((a, b) => b.score - a.score || a.originalIndex - b.originalIndex);
 
   return scored.map((entry) => entry.item);
+}
+
+export function collectTechnicalSkillItems(
+  draft: CvImportDraft,
+  jobDescription?: string,
+): string[] {
+  const allItems = draft.skills.flatMap((group) =>
+    group.items.map((item) => item.trim()).filter((item) => item.length > 0),
+  );
+
+  return prioritizeSkillItems(allItems, jobDescription);
 }
 
 function mapSectionParagraphs(
@@ -99,24 +106,22 @@ function mapExperienceSection(
   draft: CvImportDraft,
   lockedParagraphs?: LockedParagraph[],
 ): AdaptedSection {
-  const unifiedExperiences = unifyConsecutiveExperiencesByCompany(
-    draft.experiences,
-  );
-
   const metaParagraphs = (lockedParagraphs ?? []).filter(
     (lp) => lp.kind === "experience-meta",
   );
-  const roleParagraphs = (lockedParagraphs ?? []).filter(
-    (lp) => lp.kind === "experience-role",
-  );
+
+  const experiences =
+    metaParagraphs.length === draft.experiences.length
+      ? draft.experiences
+      : unifyConsecutiveExperiencesByCompany(draft.experiences);
 
   let buckets: CvParagraph[][] = [];
 
   if (metaParagraphs.length > 0) {
     buckets = metaParagraphs.map((meta, i) => {
       const minXml = meta.paragraph.xmlIndex;
-      const nextRole = roleParagraphs[i + 1];
-      const maxXml = nextRole ? nextRole.paragraph.xmlIndex : Infinity;
+      const nextMeta = metaParagraphs[i + 1];
+      const maxXml = nextMeta ? nextMeta.paragraph.xmlIndex : Infinity;
       return section.paragraphs.filter(
         (p) => p.xmlIndex > minXml && p.xmlIndex < maxXml,
       );
@@ -137,11 +142,19 @@ function mapExperienceSection(
     if (currentBucket.length > 0) buckets.push(currentBucket);
   }
 
-  // Fallback for flat single-bucket or synthetic tests without gaps
-  if (buckets.length <= 1 && unifiedExperiences.length <= 1) {
-    const experienceBullets = unifiedExperiences.flatMap((exp) =>
-      exp.responsibilities.filter((item) => item.trim().length > 0),
+  const experienceBullets = experiences.flatMap((exp) =>
+    exp.responsibilities.filter((item) => item.trim().length > 0),
+  );
+
+  if (experienceBullets.length === section.paragraphs.length) {
+    const texts = section.paragraphs.map(
+      (_, index) => experienceBullets[index] ?? "",
     );
+    return mapSectionParagraphs(section, texts);
+  }
+
+  // Fallback for flat single-bucket or synthetic tests without gaps
+  if (buckets.length <= 1 && experiences.length <= 1) {
     const texts = section.paragraphs.map(
       (_, index) => experienceBullets[index] ?? "",
     );
@@ -151,7 +164,7 @@ function mapExperienceSection(
   const textByParaId = new Map<string, string>();
 
   buckets.forEach((bucket, expIndex) => {
-    const exp = unifiedExperiences[expIndex];
+    const exp = experiences[expIndex];
     const resps = exp
       ? exp.responsibilities.filter((r) => r.trim().length > 0)
       : [];
@@ -166,6 +179,86 @@ function mapExperienceSection(
     paragraphs: section.paragraphs.map((paragraph) =>
       adaptParagraphText(paragraph, textByParaId.get(paragraph.id) ?? ""),
     ),
+  };
+}
+
+function mapCategoryLineSkills(
+  section: CvSection,
+  draft: CvImportDraft,
+  jobDescription?: string,
+): AdaptedSection {
+  const getCategoryItems = (categories: string[]) => {
+    const matching = draft.skills.filter((g) => categories.includes(g.category));
+    const items = matching.flatMap((g) =>
+      g.items.map((i) => i.trim()).filter(Boolean),
+    );
+    return prioritizeSkillItems(items, jobDescription);
+  };
+
+  const frontendItems = getCategoryItems(["FRONTEND", "MOBILE"]);
+  const backendItems = getCategoryItems(["BACKEND"]);
+  const dataItems = getCategoryItems(["DATABASE"]);
+  const cloudToolsItems = getCategoryItems([
+    "DEVOPS",
+    "TOOLS",
+    "CYBERSECURITY",
+    "DESKTOP",
+    "OTHER",
+  ]);
+
+  const defaultBuckets = [
+    frontendItems,
+    backendItems,
+    dataItems,
+    cloudToolsItems,
+  ];
+
+  return {
+    id: section.id,
+    paragraphs: section.paragraphs.map((paragraph, index) => {
+      const origText = paragraph.runs.map((r) => r.text).join("");
+      const lower = origText.toLowerCase();
+
+      let itemsToUse: string[] = [];
+      if (
+        lower.includes("react") ||
+        lower.includes("html") ||
+        lower.includes("css") ||
+        lower.includes("frontend")
+      ) {
+        itemsToUse = frontendItems;
+      } else if (
+        lower.includes("node") ||
+        lower.includes("net") ||
+        lower.includes("python") ||
+        lower.includes("backend")
+      ) {
+        itemsToUse = backendItems;
+      } else if (
+        lower.includes("sql") ||
+        lower.includes("mongo") ||
+        lower.includes("postgres") ||
+        lower.includes("data")
+      ) {
+        itemsToUse = dataItems;
+      } else if (
+        lower.includes("docker") ||
+        lower.includes("azure") ||
+        lower.includes("git") ||
+        lower.includes("cloud") ||
+        lower.includes("devops") ||
+        lower.includes("tool")
+      ) {
+        itemsToUse = cloudToolsItems;
+      } else {
+        itemsToUse = defaultBuckets[index] ?? [];
+      }
+
+      const text =
+        itemsToUse.length > 0 ? itemsToUse.slice(0, 10).join(" · ") : origText;
+
+      return adaptParagraphText(paragraph, text);
+    }),
   };
 }
 
@@ -211,8 +304,19 @@ export function mapDraftToTemplateSections(
 
     if (
       heading.includes("technical") ||
+      heading.includes("habilidad") ||
       (heading.includes("skills") && !heading.includes("soft"))
     ) {
+      const isCategoryLineLayout = section.paragraphs.some(
+        (p) =>
+          p.style === "CV-Skill-List" ||
+          p.runs.some((r) => r.text.includes("·")),
+      );
+
+      if (isCategoryLineLayout) {
+        return mapCategoryLineSkills(section, draft, jobDescription);
+      }
+
       if (technicalSkillItems.length > 0) {
         const texts = section.paragraphs.map(
           (_, index) => technicalSkillItems[index] ?? "",

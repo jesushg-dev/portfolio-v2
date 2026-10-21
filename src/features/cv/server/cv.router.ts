@@ -13,6 +13,7 @@ import { resolveCvPdfAsset } from "@/features/cv/lib/resolve-cv-pdf-asset";
 import { normalizeEmploymentDates } from "@/utils/tools/date";
 import { geocodePlace } from "@/lib/geo/geocode-place";
 import { isPublicCvVisible } from "@/lib/tenant/public-cv";
+import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 
 type CvDbClient = Pick<PrismaClient, "appLanguage">;
 
@@ -255,10 +256,7 @@ const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    ctx.db.cvTechnicalSkill.findMany({
-      where: { userId },
-      orderBy: { order: "asc" },
-    }),
+    resolveUserTechnicalSkills(ctx.db, userId),
     ctx.db.cvExperience.findMany({
       where: { userId },
       include: {

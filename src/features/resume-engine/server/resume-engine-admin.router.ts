@@ -24,14 +24,17 @@ import {
 } from "@/features/resume-engine/lib/fetch-upload-docx";
 import { resolveTailorBaseDraft } from "@/features/resume-engine/lib/resolve-tailor-base-draft";
 import {
+  DEFAULT_CV_TEMPLATE_VERSION,
   loadCvTemplateForTailor,
   loadCvTemplatePdfBuffer,
+  type CvTemplateVersion,
 } from "@/features/cv/lib/load-cv-template-docx";
 import { parsePdfForTailor } from "@/features/resume-engine/lib/pdf/parse-pdf-for-tailor";
 import {
   buildDocxTailorPromptPackage,
   buildImportPromptPackage,
   buildStudioDocxTailorPromptPackage,
+  type TailorPromptPayloadOptions,
 } from "@/features/resume-engine/lib/ai/prompt-package";
 import { loadTailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
 import type { TailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
@@ -79,8 +82,19 @@ async function tailorStudioPdfSidecar(
   provider: AiProviderName | null | undefined,
   baseDraft?: CvImportDraft | null,
   jobContext?: TailorJobContext | null,
+  version?: CvTemplateVersion,
+  options?: TailorPromptPayloadOptions,
 ) {
-  const parsedPdf = await parsePdfForTailor(await loadCvTemplatePdfBuffer());
+  const templateVersion = version ?? DEFAULT_CV_TEMPLATE_VERSION;
+  const targetPageCount = templateVersion === "v2" ? 2 : 1;
+  const pageBudgetNotice =
+    templateVersion === "v2"
+      ? "This is an intended 2-page resume template (v2). Fill available bullet slots with relevant facts; do NOT aggressively empty slots to compress into 1 page."
+      : "This is a 1-page resume template (v1). Keep concise to fit 1 page.";
+
+  const parsedPdf = await parsePdfForTailor(
+    await loadCvTemplatePdfBuffer(templateVersion),
+  );
   const { result } = await tailorDocxResume(
     parsedPdf.sections,
     jobDescription,
@@ -88,6 +102,12 @@ async function tailorStudioPdfSidecar(
     provider ?? undefined,
     baseDraft ?? undefined,
     jobContext,
+    {
+      ...options,
+      templateVersion,
+      targetPageCount,
+      pageBudgetNotice,
+    },
   );
   return {
     parsedPdf,
@@ -443,6 +463,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         uploadId: z.string().optional(),
         applicationId: z.string().optional(),
         jobDescription: z.string().min(20),
+        templateVersion: z.enum(["v1", "v2"]).default("v2").optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -477,6 +498,14 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         );
       }
 
+      const templateVersion =
+        input.templateVersion ?? DEFAULT_CV_TEMPLATE_VERSION;
+      const targetPageCount = templateVersion === "v2" ? 2 : 1;
+      const pageBudgetNotice =
+        templateVersion === "v2"
+          ? "This is an intended 2-page resume template (v2). Fill available bullet slots with relevant facts; do NOT aggressively empty slots to compress into 1 page."
+          : "This is a 1-page resume template (v1). Keep concise to fit 1 page.";
+
       const [{ draft }, { parsed }] = await Promise.all([
         resolveTailorBaseDraft(
           ctx.db,
@@ -484,7 +513,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           input.sourceType,
           input.uploadId,
         ),
-        loadCvTemplateForTailor(),
+        loadCvTemplateForTailor(templateVersion),
       ]);
 
       return buildStudioDocxTailorPromptPackage(
@@ -492,6 +521,11 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         draft,
         jobDescription,
         jobContext,
+        {
+          templateVersion,
+          targetPageCount,
+          pageBudgetNotice,
+        },
       );
     }),
 
@@ -505,6 +539,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         provider: aiProviderSchema,
         targetLocale: localeSchema.optional(),
         tailoredFor: z.string().optional(),
+        templateVersion: z.enum(["v1", "v2"]).default("v2").optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -567,7 +602,15 @@ export const resumeEngineAdminRouter = createTRPCRouter({
       );
 
       try {
-        const { parsed } = await loadCvTemplateForTailor();
+        const templateVersion =
+          input.templateVersion ?? DEFAULT_CV_TEMPLATE_VERSION;
+        const targetPageCount = templateVersion === "v2" ? 2 : 1;
+        const pageBudgetNotice =
+          templateVersion === "v2"
+            ? "This is an intended 2-page resume template (v2). Fill available bullet slots with relevant facts; do NOT aggressively empty slots to compress into 1 page."
+            : "This is a 1-page resume template (v1). Keep concise to fit 1 page.";
+
+        const { parsed } = await loadCvTemplateForTailor(templateVersion);
 
         const credentials = await loadTenantAiCredentials(ctx.user.id);
         const { result, provider } = await tailorDocxResume(
@@ -577,6 +620,12 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           input.provider,
           baseDraft,
           jobContext,
+          {
+            templateVersion,
+            targetPageCount,
+            pageBudgetNotice,
+            targetLocale: preferredLocale,
+          },
         );
 
         let parsedPdf;
@@ -588,6 +637,13 @@ export const resumeEngineAdminRouter = createTRPCRouter({
             input.provider,
             baseDraft,
             jobContext,
+            templateVersion,
+            {
+              templateVersion,
+              targetPageCount,
+              pageBudgetNotice,
+              targetLocale: preferredLocale,
+            },
           );
           parsedPdf = sidecar.parsedPdf;
           pdfAdaptedSections = sidecar.pdfAdaptedSections;
@@ -629,6 +685,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         rawJson: z.string().min(2),
         targetLocale: localeSchema.optional(),
         tailoredFor: z.string().optional(),
+        templateVersion: z.enum(["v1", "v2"]).default("v2").optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -682,7 +739,9 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         preferredLocale,
       );
 
-      const { parsed } = await loadCvTemplateForTailor();
+      const templateVersion =
+        input.templateVersion ?? DEFAULT_CV_TEMPLATE_VERSION;
+      const { parsed } = await loadCvTemplateForTailor(templateVersion);
 
       let result;
       try {

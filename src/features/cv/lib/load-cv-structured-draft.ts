@@ -3,8 +3,8 @@ import type { PrismaClient } from "@prisma/client";
 import type { Locale } from "@/i18n/config";
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
-import { unifyConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
 import { normalizeEmploymentType } from "./employment-type";
+import { resolveUserTechnicalSkills } from "./resolve-user-technical-skills";
 
 function formatExperienceDate(
   date: Date | null | undefined,
@@ -64,10 +64,7 @@ export async function loadCvStructuredDraft(
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    db.cvTechnicalSkill.findMany({
-      where: { userId },
-      orderBy: { order: "asc" },
-    }),
+    resolveUserTechnicalSkills(db, userId),
     db.cvContact.findMany({
       where: { userId },
       orderBy: { order: "asc" },
@@ -108,32 +105,30 @@ export async function loadCvStructuredDraft(
       degree: headerT("degree") || undefined,
       summary: summary !== "" ? summary : undefined,
     },
-    experiences: unifyConsecutiveExperiencesByCompany(
-      experiences.map((exp, index) => {
-        const expT = field.for(exp.translations);
-        const visible: string[] = [];
-        const atsOnly: string[] = [];
-        for (const resp of exp.responsibilities) {
-          const text = field(resp.translations, "text");
-          if (!text.trim()) continue;
-          if (resp.atsOnly) atsOnly.push(text);
-          else visible.push(text);
-        }
-        return {
-          id: exp.id || `exp-${index + 1}`,
-          company: exp.company,
-          role: expT("role"),
-          employmentType: normalizeEmploymentType(exp.employmentType),
-          location: expT("location") || undefined,
-          companyBlurb: expT("companyBlurb") || undefined,
-          startDate: formatExperienceDate(exp.startDate),
-          endDate: formatExperienceDate(exp.endDate),
-          current: exp.current,
-          responsibilities: visible,
-          atsResponsibilities: atsOnly,
-        };
-      }),
-    ),
+    experiences: experiences.map((exp, index) => {
+      const expT = field.for(exp.translations);
+      const visible: string[] = [];
+      const atsOnly: string[] = [];
+      for (const resp of exp.responsibilities) {
+        const text = field(resp.translations, "text");
+        if (!text.trim()) continue;
+        if (resp.atsOnly) atsOnly.push(text);
+        else visible.push(text);
+      }
+      return {
+        id: exp.id || `exp-${index + 1}`,
+        company: exp.company,
+        role: expT("role"),
+        employmentType: normalizeEmploymentType(exp.employmentType),
+        location: expT("location") || undefined,
+        companyBlurb: expT("companyBlurb") || undefined,
+        startDate: formatExperienceDate(exp.startDate),
+        endDate: formatExperienceDate(exp.endDate),
+        current: exp.current,
+        responsibilities: visible,
+        atsResponsibilities: atsOnly,
+      };
+    }),
     education: education.map((edu, index) => {
       const eduT = field.for(edu.translations);
       return {

@@ -1714,5 +1714,55 @@
         "urlWiki": "https://nl.wikipedia.org/wiki/Computernetwerk"
       }
     ]
+  },
+  {
+    "key": "VbNet",
+    "title": "VB.NET",
+    "type": "DESKTOP",
+    "image": "https://cdn.simpleicons.org/dotnet",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Lenguaje de programación orientado a objetos implementado en el framework .NET para desarrollo de aplicaciones de escritorio y empresariales.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Visual_Basic_.NET"
+      },
+      {
+        "locale": "en",
+        "description": "Object-oriented programming language implemented on the .NET framework for desktop and enterprise application development.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Visual_Basic_wrapper"
+      },
+      {
+        "locale": "nl",
+        "description": "Objectgeoriënteerde programmeertaal geïmplementeerd op het .NET framework voor desktop- en enterpriseapplicaties.",
+        "urlWiki": "https://nl.wikipedia.org/wiki/Visual_Basic_.NET"
+      }
+    ]
+  },
+  {
+    "key": "Mvvm",
+    "title": "MVVM",
+    "type": "ARCHITECTURE",
+    "image": "https://cdn.simpleicons.org/dotnet",
+    "featured": false,
+    "trend": false,
+    "translations": [
+      {
+        "locale": "es",
+        "description": "Patrón arquitectónico Modelo-Vista-ModeloDeVista para desacoplar lógica de presentación y UI en aplicaciones de escritorio y cliente.",
+        "urlWiki": "https://es.wikipedia.org/wiki/Modelo%E2%80%93vista%E2%80%93modelo_de_vista"
+      },
+      {
+        "locale": "en",
+        "description": "Model-View-ViewModel architectural pattern to decouple presentation logic and UI in desktop and client applications.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel"
+      },
+      {
+        "locale": "nl",
+        "description": "Model-View-ViewModel architectuurpatroon voor het ontkoppelen van UI en presentatielogica.",
+        "urlWiki": "https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel"
+      }
+    ]
   }
 ]

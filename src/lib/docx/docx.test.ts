@@ -290,6 +290,32 @@ describe("docx parser + rebuilder regressions", () => {
           .includes("2024"),
       ),
     ).toBe(true);
+
+    const skillsSection = parsed.sections.find((s) =>
+      s.heading.toUpperCase().includes("SKILL"),
+    );
+    expect(skillsSection).toBeDefined();
+    expect(skillsSection!.paragraphs.length).toBe(30);
+  });
+
+  it("parses cv-template-v2.docx with HABILIDADES TÉCNICAS category lines", async () => {
+    const templatePath = path.join(
+      process.cwd(),
+      "src",
+      "features",
+      "resume-engine",
+      "assets",
+      "cv-template-v2.docx",
+    );
+    const buffer = await readFile(templatePath);
+    const parsed = await parseDocx(buffer);
+
+    const skillsSection = parsed.sections.find((s) =>
+      s.heading.toUpperCase().includes("HABILIDADES"),
+    );
+    expect(skillsSection).toBeDefined();
+    expect(skillsSection!.paragraphs.length).toBe(4);
+    expect(skillsSection!.paragraphs[0]?.runs[0]?.text).toContain("React");
   });
 });
 

@@ -473,7 +473,12 @@
             "short": ".NET, C#, microservicios, cloud",
             "headline": "El stack con el que trabajo a diario",
             "description": "Las herramientas y tecnologías que empleo para diseñar, construir y desplegar software en producción.",
-            "chips": [".NET", "C#", "Microservicios", "Cloud"],
+            "chips": [
+              ".NET",
+              "C#",
+              "Microservicios",
+              "Cloud"
+            ],
             "statValue": "4",
             "statLabel": "áreas clave",
             "cta": "Explorar stack técnico"
@@ -497,7 +502,11 @@
             "short": "Equipos, mentoría, comunicación",
             "headline": "Cómo trabajo con las personas",
             "description": "Liderazgo de equipos, mentoría de desarrolladores y comunicación fluida con producto y negocio.",
-            "chips": ["Liderazgo técnico", "Mentoría", "Comunicación"],
+            "chips": [
+              "Liderazgo técnico",
+              "Mentoría",
+              "Comunicación"
+            ],
             "statValue": "6",
             "statLabel": "ingenieros guiados",
             "cta": "Leer principios de liderazgo"
@@ -521,7 +530,12 @@
             "short": "Proyectos de ingeniería y casos de estudio",
             "headline": "Proyectos y sistemas construidos",
             "description": "Una selección de sistemas, APIs, plataformas de comercio electrónico y paneles administrativos internos.",
-            "chips": ["APIs", "E-commerce", "Plataformas admin", "Cloud"],
+            "chips": [
+              "APIs",
+              "E-commerce",
+              "Plataformas admin",
+              "Cloud"
+            ],
             "statValue": "15+",
             "statLabel": "proyectos destacados",
             "cta": "Ver proyectos"
@@ -531,7 +545,12 @@
             "short": "Acreditaciones técnicas",
             "headline": "Certificaciones verificadas",
             "description": "Acreditaciones técnicas formales en frontend, backend, seguridad y habilidades directivas.",
-            "chips": ["Frontend", "Backend", "Ciberseguridad", "Habilidades"],
+            "chips": [
+              "Frontend",
+              "Backend",
+              "Ciberseguridad",
+              "Habilidades"
+            ],
             "statValue": "30+",
             "statLabel": "certificaciones obtenidas",
             "cta": "Ver certificados"
@@ -555,7 +574,11 @@
             "short": "Evolución profesional",
             "headline": "Hitos de carrera y trayectoria",
             "description": "Recorrido cronológico de hitos profesionales, roles asumidos y evolución técnica.",
-            "chips": ["Hitos de carrera", "Evolución", "Crecimiento"],
+            "chips": [
+              "Hitos de carrera",
+              "Evolución",
+              "Crecimiento"
+            ],
             "statValue": "6+",
             "statLabel": "años de evolución",
             "cta": "Ver línea de tiempo"
@@ -608,7 +631,11 @@
             "short": "Enfoque actual y lectura",
             "headline": "En qué estoy trabajando ahora",
             "description": "Una instantánea viva de proyectos activos, tecnologías que estoy explorando y prioridades actuales.",
-            "chips": ["Enfoque actual", "Lecturas", "Proyectos activos"],
+            "chips": [
+              "Enfoque actual",
+              "Lecturas",
+              "Proyectos activos"
+            ],
             "statValue": "En vivo",
             "statLabel": "estado actual",
             "cta": "Ver página Now"
@@ -618,7 +645,11 @@
             "short": "Métricas del portafolio",
             "headline": "Estadísticas y analítica del sitio",
             "description": "Métricas transparentes sobre visitas anónimas, distribución geográfica y rendimiento de la plataforma.",
-            "chips": ["Analítica", "Rendimiento", "Demografía"],
+            "chips": [
+              "Analítica",
+              "Rendimiento",
+              "Demografía"
+            ],
             "statValue": "En vivo",
             "statLabel": "métricas del sitio",
             "cta": "Ver estadísticas"
@@ -3684,7 +3715,9 @@
         "attachmentTooLarge": "El archivo debe pesar 8 MB o menos",
         "needCv": "Primero personaliza un CV para esta postulación, o sube un .docx/.pdf para adjuntar.",
         "trackOpensLabel": "Medir cargas del correo",
-        "trackOpensHint": "Si lo activas, el correo incluirá un aviso visible para el destinatario. Las cargas son aproximadas y no confirman que se haya leído el CV.",
+        "trackOpensHint": "Las cargas de imagen son aproximadas y no confirman que se haya leído el CV.",
+        "sendCopyLabel": "Enviarme una copia",
+        "sendCopyHint": "Envía una copia idéntica a tu correo sin píxel de seguimiento para respaldar el envío en tu bandeja.",
         "historyTitle": "Correos enviados",
         "historyTab": "Correos",
         "refreshHistory": "Actualizar",
@@ -3701,7 +3734,7 @@
         "hideOpenEvents": "Ocultar detalle",
         "openEventItem": "Apertura #{index}",
         "proxyBadge": "Proxy / Caché",
-        "historyEmpty": "Todavía no se han enviado correos desde esta postulación.",
+        "historyEmpty": "Aún no se han enviado correos desde esta postulación.",
         "noAi": "No hay proveedor de IA configurado. Añade una API key para generar el borrador.",
         "noResend": "Configura Resend en Integraciones para enviar desde tu dominio."
       },
@@ -3823,6 +3856,9 @@
       "tailorSourceStudioEmpty": "Sin datos de CV. Importa un currículum o edita tu CV primero.",
       "tailorSourceUpload": "Subir DOCX o PDF",
       "tailorSourceUploadHint": "Opcional: adaptar otro DOCX o PDF. El PDF de estudio siempre usa cv-template.pdf.",
+      "tailorTemplateVersionLabel": "Plantilla de CV",
+      "tailorTemplateV2": "v2 (Recomendada · 6 roles · 21 viñetas)",
+      "tailorTemplateV1": "v1 (Clásica · 4 roles · 14 viñetas)",
       "tailorRecentUploads": "Subidas recientes",
       "tailorJdTitle": "Descripción del puesto",
       "tailorJdPlaceholder": "Pega aquí la descripción completa del puesto...",
