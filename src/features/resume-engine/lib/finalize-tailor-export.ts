@@ -9,7 +9,10 @@ import {
 } from "@/features/resume-engine/lib/cv-docx-tailor-result";
 import type { UploadTailorSource } from "@/features/resume-engine/lib/fetch-upload-docx";
 import type { ParsedPdfForTailor } from "@/features/resume-engine/lib/pdf/parse-pdf-for-tailor";
-import { rebuildPdfInPlace } from "@/features/resume-engine/lib/pdf/rebuild-pdf-in-place";
+import {
+  convertDocxToPdfForTenant,
+  isTenantILovePdfConfigured,
+} from "@/lib/ilovepdf/tenant-ilovepdf";
 import type { AdaptedSection } from "@/lib/types";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
 import {
@@ -264,6 +267,19 @@ export async function finalizeTailorExport(
   );
   const locale = input.targetLocale ?? input.draft.detectedLocale ?? "en";
 
+  let pdfBuffer: Buffer | undefined;
+  if (await isTenantILovePdfConfigured(userId)) {
+    try {
+      pdfBuffer = await convertDocxToPdfForTenant(
+        userId,
+        buffer,
+        "resume.docx",
+      );
+    } catch (err) {
+      console.error("[finalizeTailorExport] iLovePDF conversion error:", err);
+    }
+  }
+
   return persistResumeExport(db, userId, {
     buffer,
     fullName,
@@ -278,6 +294,7 @@ export async function finalizeTailorExport(
     applicationId: input.applicationId,
     tailoredFor: input.tailoredFor,
     structuredSnapshot: input.draft,
+    pdfBuffer,
   });
 }
 
@@ -321,14 +338,21 @@ export async function finalizeDocxTailorExport(
     locale,
   );
 
-  const pdfBuffer =
-    input.parsedPdf && input.pdfAdaptedSections
-      ? await rebuildPdfInPlace(
-          input.parsedPdf.buffer,
-          input.parsedPdf.items,
-          input.pdfAdaptedSections,
-        )
-      : undefined;
+  let pdfBuffer: Buffer | undefined;
+  if (await isTenantILovePdfConfigured(userId)) {
+    try {
+      pdfBuffer = await convertDocxToPdfForTenant(
+        userId,
+        buffer,
+        "resume.docx",
+      );
+    } catch (err) {
+      console.error(
+        "[finalizeDocxTailorExport] iLovePDF conversion error:",
+        err,
+      );
+    }
+  }
 
   const fullName = await resolveExportFullName(
     db,
@@ -370,7 +394,7 @@ interface FinalizePdfTailorExportInput {
   targetLocale?: Locale;
 }
 
-/** Upload path: stamp adapted text onto the original PDF without rebuilding layout. */
+/** Upload path: generate tailored document and convert via iLovePDF. */
 export async function finalizePdfTailorExport(
   db: PrismaClient,
   userId: string,
@@ -382,19 +406,39 @@ export async function finalizePdfTailorExport(
   let structuredSnapshot: unknown =
     input.structuredSnapshot ?? input.parsed.sections;
 
+  let docxDraft: CvImportDraft | null = null;
   if (draft.success) {
-    structuredSnapshot = applyAdaptedSectionsToDraft(
+    const updated = applyAdaptedSectionsToDraft(
       draft.data,
       input.parsed.sections,
       input.adaptedSections,
     );
+    structuredSnapshot = updated;
+    docxDraft = updated;
   }
 
-  const buffer = await rebuildPdfInPlace(
-    input.parsed.buffer,
-    input.parsed.items,
-    input.adaptedSections,
-  );
+  const docxBuffer = docxDraft
+    ? await generateDocxFromStructured(docxDraft)
+    : Buffer.from("");
+
+  let exportBuffer = docxBuffer;
+  let fileKind: "docx" | "pdf" = "docx";
+  let pdfBuffer: Buffer | undefined;
+
+  if (docxBuffer.byteLength > 0 && (await isTenantILovePdfConfigured(userId))) {
+    try {
+      pdfBuffer = await convertDocxToPdfForTenant(
+        userId,
+        docxBuffer,
+        "resume.docx",
+      );
+      exportBuffer = pdfBuffer;
+      fileKind = "pdf";
+    } catch (err) {
+      console.error("[finalizePdfTailorExport] iLovePDF conversion error:", err);
+    }
+  }
+
   const fullName = await resolveExportFullName(
     db,
     userId,
@@ -402,7 +446,7 @@ export async function finalizePdfTailorExport(
   );
 
   return persistResumeExport(db, userId, {
-    buffer,
+    buffer: exportBuffer,
     fullName,
     locale,
     aiScore: input.aiScore,
@@ -415,7 +459,8 @@ export async function finalizePdfTailorExport(
     applicationId: input.applicationId,
     tailoredFor: input.tailoredFor,
     structuredSnapshot,
-    fileKind: "pdf",
+    fileKind,
+    pdfBuffer,
   });
 }
 

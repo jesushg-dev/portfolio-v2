@@ -101,6 +101,13 @@ function ConnectedDetails({
         </ul>
       );
     }
+    case "ilovepdf": {
+      return (
+        <p className="text-muted-foreground text-sm">
+          {t("summary.tokenSaved")}
+        </p>
+      );
+    }
     default: {
       const _exhaustive: never = provider;
       return _exhaustive;

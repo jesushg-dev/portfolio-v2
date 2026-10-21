@@ -56,7 +56,11 @@ import {
 import { classifyPolishedResumeFile } from "@/features/resume-engine/lib/classify-polished-resume";
 import { isPdfUpload } from "@/features/resume-engine/lib/parse-pdf-for-import";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
-import { generateCvPdfFromSnapshot } from "@/features/resume-engine/lib/generate-cv-pdf-from-snapshot";
+import {
+  convertDocxToPdfForTenant,
+  isTenantILovePdfConfigured,
+  ILovePdfNotConfiguredError,
+} from "@/lib/ilovepdf/tenant-ilovepdf";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 import { processJobDescription } from "@/features/resume-engine/lib/ai/clean-job-description";
 
@@ -67,6 +71,13 @@ function rethrowTailorExportError(error: unknown): never {
       code: "PRECONDITION_FAILED",
       message:
         "UploadThing is not configured. Connect it in Admin → Credentials first.",
+    });
+  }
+  if (error instanceof ILovePdfNotConfiguredError) {
+    throw new TRPCError({
+      code: "PRECONDITION_FAILED",
+      message:
+        "iLovePDF is not configured. Connect your API keys in Admin → Credentials to enable PDF conversions.",
     });
   }
 
@@ -146,10 +157,49 @@ async function ensureStyledPdf(
     return { url: pdfFileUrl, fileName: pdfFileName };
   }
 
+  // If this export has a DOCX file, convert it to PDF via iLovePDF
+  if (
+    resumeExport.fileUrl &&
+    (await isTenantILovePdfConfigured(resumeExport.userId))
+  ) {
+    try {
+      const docxResponse = await fetch(resumeExport.fileUrl);
+      if (docxResponse.ok) {
+        const docxBuffer = Buffer.from(await docxResponse.arrayBuffer());
+        const pdfBuffer = await convertDocxToPdfForTenant(
+          resumeExport.userId,
+          docxBuffer,
+          resumeExport.fileName,
+        );
+        const pdfFileName = resumeExport.fileName.replace(/\.docx$/i, ".pdf");
+        const uploaded = await uploadBufferToUploadThing(
+          resumeExport.userId,
+          pdfBuffer,
+          pdfFileName,
+          "application/pdf",
+        );
+        await db.resumeExport.update({
+          where: { id: resumeExport.id },
+          data: {
+            pdfFileName: uploaded.fileName ?? pdfFileName,
+            pdfFileUrl: uploaded.url,
+            pdfUploadThingKey: uploaded.key,
+          },
+        });
+        return {
+          url: uploaded.url,
+          fileName: uploaded.fileName ?? pdfFileName,
+        };
+      }
+    } catch (err) {
+      console.error("[ensureStyledPdf] iLovePDF conversion error:", err);
+    }
+  }
+
   throw new TRPCError({
     code: "PRECONDITION_FAILED",
     message:
-      "No styled PDF on this export. Tailor again so cv-template.pdf is rebuilt in place.",
+      "No PDF available. Connect iLovePDF in Admin → Credentials to convert this resume to PDF.",
   });
 }
 
@@ -845,9 +895,11 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           return { url: uploaded.url, fileName };
         }
 
-        const buffer = await generateCvPdfFromSnapshot(
-          parsed.data,
-          parsed.data.detectedLocale,
+        const docxBuffer = await generateDocxFromStructured(parsed.data);
+        const buffer = await convertDocxToPdfForTenant(
+          ctx.user.id,
+          docxBuffer,
+          `${stem} - ATS.docx`,
         );
         const fileName = `${stem} - ATS.pdf`;
         const uploaded = await uploadBufferToUploadThing(

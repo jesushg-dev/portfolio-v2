@@ -1,6 +1,7 @@
 import {
   Bot,
   CalendarDays,
+  FileText,
   HardDrive,
   Mail,
   Music2,
@@ -14,7 +15,7 @@ export interface IntegrationCatalogItem {
   icon: LucideIcon;
   accentClass: string;
   badgeClass: string;
-  category: "communication" | "media" | "storage" | "ai";
+  category: "communication" | "media" | "storage" | "ai" | "documents";
 }
 
 export const INTEGRATION_CATALOG: IntegrationCatalogItem[] = [
@@ -52,5 +53,12 @@ export const INTEGRATION_CATALOG: IntegrationCatalogItem[] = [
     accentClass: "bg-purple-500/10 text-purple-500 border-purple-500/20",
     badgeClass: "bg-purple-500/10 text-purple-600 border-purple-500/20",
     category: "ai",
+  },
+  {
+    id: "ilovepdf",
+    icon: FileText,
+    accentClass: "bg-red-500/10 text-red-500 border-red-500/20",
+    badgeClass: "bg-red-500/10 text-red-600 border-red-500/20",
+    category: "documents",
   },
 ];

@@ -22,6 +22,10 @@
       "ai": {
         "name": "Modelos de IA",
         "description": "Claves de API para servicios Gemini, OpenAI y Anthropic."
+      },
+      "ilovepdf": {
+        "name": "iLovePDF (Motor PDF)",
+        "description": "Conversiones de alta fidelidad (DOCX a PDF, HTML a PDF) mediante iLoveAPI."
       }
     },
     "actions": {
@@ -70,7 +74,8 @@
       "spotify": "Widget Now Playing y Top Canciones",
       "google-calendar": "Sincronización de entrevistas en calendario",
       "uploadthing": "CDN de archivos y almacenamiento de PDF",
-      "ai": "Motor de CV, ATS y preparación de entrevistas"
+      "ai": "Motor de CV, ATS y preparación de entrevistas",
+      "ilovepdf": "Motor de conversión DOCX a PDF y HTML a PDF"
     },
     "guides": {
       "title": "Guía de Configuración",
@@ -106,6 +111,13 @@
         "deepseekLink": "Obtener API Key de DeepSeek",
         "openaiLink": "Obtener API Key de OpenAI",
         "anthropicLink": "Obtener API Key de Anthropic"
+      },
+      "ilovepdf": {
+        "title": "Cómo obtener credenciales de iLovePDF",
+        "step1": "Crea una cuenta o inicia sesión en developer.ilovepdf.com.",
+        "step2": "Dirígete a la sección de Proyectos / Claves de API para obtener tu Public Key y Secret Key.",
+        "step3": "Pega ambas claves en el formulario de la izquierda para habilitar la conversión de PDF propia (BYOK).",
+        "dashboardLink": "Abrir consola de desarrollador de iLovePDF"
       },
       "spotify": {
         "title": "Cómo configurar Spotify OAuth",
@@ -201,6 +213,21 @@
       "defaultProviderPlaceholder": "Seleccionar proveedor por defecto",
       "saveButton": "Guardar Credenciales de IA",
       "saveSuccess": "¡Credenciales de IA guardadas con éxito!"
+    },
+    "ilovepdf": {
+      "title": "Credenciales de iLovePDF",
+      "description": "Configura tus claves de API de iLovePDF para conversiones rápidas y fiables de DOCX a PDF y HTML a PDF.",
+      "publicKeyLabel": "Public Key",
+      "publicKeyPlaceholder": "project_public_...",
+      "secretKeyLabel": "Secret Key",
+      "secretKeyPlaceholder": "secret_key_...",
+      "testButton": "Probar Conexión",
+      "saveButton": "Guardar Credenciales",
+      "saveSuccess": "¡Credenciales de iLovePDF guardadas con éxito!",
+      "saveFailed": "Error al guardar las credenciales de iLovePDF",
+      "testSuccess": "¡Conexión con iLovePDF verificada con éxito!",
+      "testFailed": "Error al conectar con iLovePDF",
+      "missingKeysToTest": "Ingresa una Public Key y una Secret Key para probar la conexión"
     }
   },
   "certification": {

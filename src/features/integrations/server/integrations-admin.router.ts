@@ -7,6 +7,7 @@ import {
   getTenantIntegrationConfig,
   saveTenantIntegrationConfig,
   type AiIntegrationConfig,
+  type ILovePdfIntegrationConfig,
   type ResendIntegrationConfig,
   type SpotifyIntegrationConfig,
   type UploadThingIntegrationConfig,
@@ -14,6 +15,7 @@ import {
 import { syncResendTemplatesForTenant } from "@/lib/integrations/resend-tenant-publisher";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 import { UploadThingNotConfiguredError } from "@/lib/uploadthing/tenant-uploadthing";
+import { testILovePdfConnection } from "@/lib/ilovepdf/ilovepdf-service";
 
 function maskSecret(value?: string | null): string {
   if (!value) return "";
@@ -26,13 +28,19 @@ export const integrationsAdminRouter = createTRPCRouter({
   getConfigs: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.user.id;
 
-    const [resendConfig, spotifyConfig, uploadthingConfig, aiConfig] =
-      await Promise.all([
-        getTenantIntegrationConfig(userId, "resend"),
-        getTenantIntegrationConfig(userId, "spotify"),
-        getTenantIntegrationConfig(userId, "uploadthing"),
-        getTenantIntegrationConfig(userId, "ai"),
-      ]);
+    const [
+      resendConfig,
+      spotifyConfig,
+      uploadthingConfig,
+      aiConfig,
+      ilovepdfConfig,
+    ] = await Promise.all([
+      getTenantIntegrationConfig(userId, "resend"),
+      getTenantIntegrationConfig(userId, "spotify"),
+      getTenantIntegrationConfig(userId, "uploadthing"),
+      getTenantIntegrationConfig(userId, "ai"),
+      getTenantIntegrationConfig(userId, "ilovepdf"),
+    ]);
 
     const resendIntegration = await ctx.db.tenantIntegration.findUnique({
       where: { userId_provider: { userId, provider: "resend" } },
@@ -87,6 +95,13 @@ export const integrationsAdminRouter = createTRPCRouter({
         maskedOpenAiApiKey: maskSecret(aiConfig?.openaiApiKey),
         maskedAnthropicApiKey: maskSecret(aiConfig?.anthropicApiKey),
         maskedDeepseekApiKey: maskSecret(aiConfig?.deepseekApiKey),
+      },
+      ilovepdf: {
+        isConfigured: Boolean(
+          ilovepdfConfig?.publicKey && ilovepdfConfig?.secretKey,
+        ),
+        maskedPublicKey: maskSecret(ilovepdfConfig?.publicKey),
+        maskedSecretKey: maskSecret(ilovepdfConfig?.secretKey),
       },
     };
   }),
@@ -324,11 +339,97 @@ export const integrationsAdminRouter = createTRPCRouter({
       return { ok: true as const };
     }),
 
+  /** Tests iLovePDF credentials against the iLovePDF API. */
+  testILovePdf: protectedProcedure
+    .input(
+      z.object({
+        publicKey: z.string().trim().optional(),
+        secretKey: z.string().trim().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let publicKey = input.publicKey?.trim();
+      let secretKey = input.secretKey?.trim();
+
+      if (!publicKey || !secretKey) {
+        const current = await getTenantIntegrationConfig(
+          ctx.user.id,
+          "ilovepdf",
+        );
+        publicKey = publicKey ?? current?.publicKey;
+        secretKey = secretKey ?? current?.secretKey;
+      }
+
+      if (!publicKey || !secretKey) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "Both Public Key and Secret Key are required to test connection.",
+        });
+      }
+
+      const result = await testILovePdfConnection(publicKey, secretKey);
+      if (!result.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: result.error ?? "Failed to connect to iLovePDF",
+        });
+      }
+
+      return { ok: true as const };
+    }),
+
+  /** Saves iLovePDF credentials (BYOK). Empty fields keep existing values. */
+  saveILovePdf: protectedProcedure
+    .input(
+      z.object({
+        publicKey: z.string().trim().optional(),
+        secretKey: z.string().trim().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.user.id;
+      const current =
+        (await getTenantIntegrationConfig(userId, "ilovepdf")) ?? {};
+
+      const publicKey = input.publicKey?.trim()
+        ? input.publicKey.trim()
+        : current.publicKey;
+      const secretKey = input.secretKey?.trim()
+        ? input.secretKey.trim()
+        : current.secretKey;
+
+      if (!publicKey || !secretKey) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Both Public Key and Secret Key are required.",
+        });
+      }
+
+      const testResult = await testILovePdfConnection(publicKey, secretKey);
+      if (!testResult.success) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            testResult.error ??
+            "Invalid iLovePDF credentials. Could not authenticate.",
+        });
+      }
+
+      const config: ILovePdfIntegrationConfig = {
+        publicKey,
+        secretKey,
+      };
+
+      await saveTenantIntegrationConfig(userId, "ilovepdf", config);
+      return { ok: true as const };
+    }),
+
   /** Deletes an integration provider for the tenant. */
   deleteIntegration: protectedProcedure
     .input(
       z.object({
-        provider: z.enum(["resend", "spotify", "uploadthing", "ai"]),
+        provider: z.enum(["resend", "spotify", "uploadthing", "ai", "ilovepdf"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {

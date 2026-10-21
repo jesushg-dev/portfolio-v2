@@ -95,7 +95,8 @@ export function IntegrationsPage() {
     if (
       catalogItem.id === "resend" ||
       catalogItem.id === "uploadthing" ||
-      catalogItem.id === "ai"
+      catalogItem.id === "ai" ||
+      catalogItem.id === "ilovepdf"
     ) {
       return (
         <IntegrationCard

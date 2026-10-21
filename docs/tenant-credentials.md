@@ -15,11 +15,12 @@ Platform `.env` keys are reserved for **system** concerns (auth email, database,
 | Public CV PDF-by-email                                      | Tenant Resend                                             | **None**                                                  |
 | Job Tracker outbound email                                  | Tenant Resend                                             | **None**                                                  |
 | UploadThing (CV PDF cache, resume export, attachments)      | Tenant UploadThing                                        | **None**                                                  |
+| iLovePDF (DOCX to PDF, HTML to PDF conversions)             | Tenant iLovePDF (`TenantIntegration` `ilovepdf`)          | **None**                                                  |
 | Spotify Now Playing widget                                  | Tenant Spotify OAuth (`SpotifyConnection`)                | **None**                                                  |
 | Job Tracker ↔ Google Calendar                               | Tenant Google Calendar OAuth (`GoogleCalendarConnection`) | **None** — never `GOOGLE_CLIENT_*` (those are login-only) |
 | Resume import / ATS tailor / interview prep / job drafts AI | Tenant AI (`TenantIntegration` `ai`)                      | **None** (manual JSON mode still works)                   |
 
-`.env.example` documents the same split: system Resend is auth-only; portfolio email, Spotify, UploadThing, and AI are per-tenant.
+`.env.example` documents the same split: system Resend is auth-only; portfolio email, Spotify, UploadThing, iLovePDF, and AI are per-tenant.
 
 ---
 
@@ -31,11 +32,12 @@ UI: `src/features/integrations/components/` → page at `src/app/[locale]/(admin
 | --------------- | ----------------------------------------------------- | ------------------------------------------------ | --------------------------------------- |
 | Resend          | Form → `integrationsAdmin.saveResend`                 | `TenantIntegration` (`provider: "resend"`)       | `getPortfolioEmailClient()`             |
 | UploadThing     | Form → `integrationsAdmin.saveUploadThing`            | `TenantIntegration` (`provider: "uploadthing"`)  | `getTenantUploadThingClient()`          |
+| iLovePDF        | Form → `integrationsAdmin.saveILovePdf`               | `TenantIntegration` (`provider: "ilovepdf"`)     | `getTenantILovePdfKeys()`               |
 | AI              | Form → `integrationsAdmin.saveAi`                     | `TenantIntegration` (`provider: "ai"`)           | `loadTenantAiCredentials()`             |
 | Spotify         | OAuth connect → `spotifyAdmin.initiateConnect`        | `SpotifyConnection` (+ encrypted secrets)        | `getSpotifyCredentialsForUser()`        |
 | Google Calendar | OAuth connect → `googleCalendarAdmin.initiateConnect` | `GoogleCalendarConnection` (+ encrypted secrets) | `getGoogleCalendarCredentialsForUser()` |
 
-Catalog: `src/features/integrations/lib/integration-catalog.ts` (`resend` \| `spotify` \| `google-calendar` \| `uploadthing` \| `ai`).
+Catalog: `src/features/integrations/lib/integration-catalog.ts` (`resend` \| `spotify` \| `google-calendar` \| `uploadthing` \| `ai` \| `ilovepdf`).
 
 tRPC: `integrationsAdmin.*` in `src/features/integrations/server/integrations-admin.router.ts`. Spotify live connect uses `spotifyAdmin.*` (`src/server/api/routers/spotify-admin.ts`). Google Calendar uses `googleCalendarAdmin.*` (`src/server/api/routers/google-calendar-admin.ts`) — it must stay registered on `appRouter` in `src/server/api/root.ts`.
 

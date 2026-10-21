@@ -1,20 +1,6 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
-const playwrightServerAssets = [
-  "./node_modules/playwright-core/browsers.json",
-  "./node_modules/playwright-core/lib/**",
-  "./node_modules/playwright-core/index.js",
-  "./node_modules/playwright-core/index.mjs",
-  "./node_modules/playwright-core/package.json",
-  "./node_modules/@sparticuz/chromium-min/**",
-];
-
-const playwrightExcludeAssets = [
-  "./node_modules/playwright-core/**",
-  "./node_modules/@sparticuz/chromium-min/**",
-];
-
 /** Dev-only email template tooling; runtime uses compiled-templates.ts */
 const emailTemplatesDevAssets = [
   "./email-templates/out/**",
@@ -92,16 +78,10 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     "jszip",
     "docx-preview",
-    "playwright-core",
-    "@sparticuz/chromium-min",
   ],
-  outputFileTracingIncludes: {
-    "/api/internal/cv/generate-pdf": playwrightServerAssets,
-  },
   outputFileTracingExcludes: {
     "/*": emailTemplatesDevAssets,
-    "/api/trpc/*": [...playwrightExcludeAssets, ...emailTemplatesDevAssets],
-    "/api/cv/pdf": [...playwrightExcludeAssets, ...emailTemplatesDevAssets],
+    "/api/trpc/*": emailTemplatesDevAssets,
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "motion/react"],

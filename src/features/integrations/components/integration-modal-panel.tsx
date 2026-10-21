@@ -17,11 +17,13 @@ import SpotifyConnectionStatus from "@/features/spotify-connect/components/spoti
 import { ResendIntegrationForm } from "./resend-integration-form";
 import { UploadThingIntegrationForm } from "./uploadthing-integration-form";
 import { AiIntegrationForm } from "./ai-integration-form";
+import { ILovePdfIntegrationForm } from "./ilovepdf-integration-form";
 import { GoogleCalendarIntegrationGuide } from "./google-calendar-integration-guide";
 import { SpotifyIntegrationGuide } from "./spotify-integration-guide";
 import { ResendIntegrationGuide } from "./resend-integration-guide";
 import { UploadThingIntegrationGuide } from "./uploadthing-integration-guide";
 import { AiIntegrationGuide } from "./ai-integration-guide";
+import { ILovePdfIntegrationGuide } from "./ilovepdf-integration-guide";
 
 interface IntegrationModalPanelProps {
   provider: IntegrationProvider;
@@ -235,6 +237,17 @@ function TenantIntegrationModalContent({
             onCancel={onClose}
           />
           <AiIntegrationGuide />
+        </div>
+      );
+    case "ilovepdf":
+      return (
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-start">
+          <ILovePdfIntegrationForm
+            status={configs.ilovepdf}
+            onSuccess={onClose}
+            onCancel={onClose}
+          />
+          <ILovePdfIntegrationGuide />
         </div>
       );
     default: {

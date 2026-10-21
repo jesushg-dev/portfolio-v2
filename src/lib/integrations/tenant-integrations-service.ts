@@ -36,11 +36,17 @@ export interface AiIntegrationConfig {
   defaultProvider?: "gemini" | "openai" | "anthropic" | "deepseek";
 }
 
+export interface ILovePdfIntegrationConfig {
+  publicKey: string;
+  secretKey: string;
+}
+
 export interface IntegrationConfigMap {
   resend: ResendIntegrationConfig;
   spotify: SpotifyIntegrationConfig;
   uploadthing: UploadThingIntegrationConfig;
   ai: AiIntegrationConfig;
+  ilovepdf: ILovePdfIntegrationConfig;
 }
 
 export type TenantIntegrationProvider = keyof IntegrationConfigMap;

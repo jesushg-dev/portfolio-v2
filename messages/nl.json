@@ -22,6 +22,10 @@
       "ai": {
         "name": "AI-modellen",
         "description": "API-sleutels voor Gemini, OpenAI en Anthropic."
+      },
+      "ilovepdf": {
+        "name": "iLovePDF (PDF-engine)",
+        "description": "Hoogwaardige conversies (DOCX naar PDF, HTML naar PDF) via iLoveAPI."
       }
     },
     "actions": {
@@ -70,7 +74,8 @@
       "spotify": "Now Playing widget & topnummers",
       "google-calendar": "Gesprekken & agendasynchronisatie",
       "uploadthing": "Bestandsopslag & CV PDF-CDN",
-      "ai": "CV-engine, ATS & voorbereiding op interviews"
+      "ai": "CV-engine, ATS & voorbereiding op interviews",
+      "ilovepdf": "DOCX naar PDF & HTML naar PDF engine"
     },
     "guides": {
       "title": "Installatiehandleiding",
@@ -106,6 +111,13 @@
         "deepseekLink": "Verkrijg DeepSeek API-sleutel",
         "openaiLink": "Verkrijg OpenAI API-sleutel",
         "anthropicLink": "Verkrijg Anthropic API-sleutel"
+      },
+      "ilovepdf": {
+        "title": "Hoe je iLovePDF-inloggegevens verkrijgt",
+        "step1": "Maak een account aan of log in op developer.ilovepdf.com.",
+        "step2": "Ga naar de sectie Projecten / API-sleutels om je Public Key en Secret Key te vinden.",
+        "step3": "Plak de sleutels in het formulier links om PDF-conversie met eigen sleutels (BYOK) te activeren.",
+        "dashboardLink": "Open iLovePDF-ontwikkelaarsconsole"
       },
       "spotify": {
         "title": "Hoe je Spotify OAuth configureert",
@@ -201,6 +213,21 @@
       "defaultProviderPlaceholder": "Selecteer standaard provider",
       "saveButton": "AI-inloggegevens opslaan",
       "saveSuccess": "AI-inloggegevens succesvol opgeslagen!"
+    },
+    "ilovepdf": {
+      "title": "iLovePDF-inloggegevens",
+      "description": "Configureer je iLovePDF API-sleutels voor snelle en betrouwbare DOCX naar PDF en HTML naar PDF conversies.",
+      "publicKeyLabel": "Public Key",
+      "publicKeyPlaceholder": "project_public_...",
+      "secretKeyLabel": "Secret Key",
+      "secretKeyPlaceholder": "secret_key_...",
+      "testButton": "Verbinding testen",
+      "saveButton": "Inloggegevens opslaan",
+      "saveSuccess": "iLovePDF-inloggegevens succesvol opgeslagen!",
+      "saveFailed": "Opslaan van iLovePDF-inloggegevens mislukt",
+      "testSuccess": "iLovePDF-verbinding succesvol geverifieerd!",
+      "testFailed": "Verbinding met iLovePDF mislukt",
+      "missingKeysToTest": "Voer een Public Key en Secret Key in om de verbinding te testen"
     }
   },
   "certification": {
