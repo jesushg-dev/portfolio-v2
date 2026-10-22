@@ -26,6 +26,6 @@ export async function generateMetadata({
 
   return {
     title: `${title} · ${t("subtitle")}`,
-    description: project.description ?? undefined,
+    description: project.description,
   };
 }

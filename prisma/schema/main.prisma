@@ -669,14 +669,12 @@ type CaseStudyContent {
   chips            String[]
   facts            CaseStudyFact[]
   gallery          CaseStudyGalleryItem[]
-  stack            String[]
   nextProjectSlug  String?
   context          String?
   roleTitle        String?
   roleIntro        String?
   tldr             CaseStudyItem[]
   responsibilities CaseStudyItem[]
-  constraints      String[]
   sections         CaseStudySection[]
 }
 
@@ -717,10 +715,6 @@ model ProjectTranslation {
   createdAt     DateTime          @default(now())
   title         String
   description   String
-  hook          String?
-  challenge     String?
-  approach      String?
-  outcome       String?
   caseStudy     CaseStudyContent?
   language      AppLanguage       @relation(fields: [appLanguageId], references: [id])
   Project       Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)

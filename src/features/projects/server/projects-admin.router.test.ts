@@ -1,4 +1,5 @@
 import { projectsAdminRouter } from "./projects-admin.router";
+import { CaseStudyContentSchema } from "../lib/case-study";
 import {
   createRouterCaller,
   createTrpcTestContext,
@@ -24,10 +25,6 @@ const row = {
       appLanguageId: "lang-en",
       title: "Eleven",
       description: "App",
-      hook: "",
-      challenge: "",
-      approach: "",
-      outcome: "",
     },
   ],
   ProjectSkill: [],
@@ -51,7 +48,7 @@ function createDb() {
     projectTranslation: {
       findFirst: jest.fn().mockResolvedValue(null),
       create: jest.fn(),
-      update: jest.fn(),
+      update: jest.fn<unknown, [unknown]>(),
     },
     appLanguage: { findMany: jest.fn().mockResolvedValue(languages) },
   };
@@ -92,13 +89,60 @@ describe("projectsAdminRouter", () => {
         "lang-en": {
           title: "Eleven",
           description: "App",
-          hook: "",
-          challenge: "",
-          approach: "",
-          outcome: "",
         },
       },
     });
     expect(db.project.create).toHaveBeenCalled();
+  });
+
+  it("saves structured narrative and unsets content when it is cleared", async () => {
+    const db = createDb();
+    db.projectTranslation.findFirst.mockResolvedValue({ id: "translation-1" });
+    const caller = createRouterCaller(
+      projectsAdminRouter,
+      createTrpcTestContext({ db }),
+    );
+    const caseStudy = CaseStudyContentSchema.parse({
+      gallery: [{ image: "/preview.jpg" }],
+      sections: [
+        {
+          key: "approach",
+          title: "Approach",
+          kind: "CARDS",
+          lead: "Design choice",
+        },
+      ],
+    });
+    const input = {
+      id: row.id,
+      image: row.image,
+      type: "FRONTEND" as const,
+      translations: {
+        "lang-en": { title: "Eleven", description: "App", caseStudy },
+      },
+    };
+    await caller.updateItem(input);
+    expect(db.projectTranslation.update.mock.lastCall?.[0]).toMatchObject({
+      where: { id: "translation-1" },
+      data: {
+        title: "Eleven",
+        description: "App",
+        caseStudy: { set: { sections: [{ lead: "Design choice" }] } },
+      },
+    });
+    await caller.updateItem({
+      ...input,
+      translations: {
+        "lang-en": {
+          title: "Eleven",
+          description: "App",
+          caseStudy: CaseStudyContentSchema.parse({}),
+        },
+      },
+    });
+    expect(db.projectTranslation.update).toHaveBeenLastCalledWith({
+      where: { id: "translation-1" },
+      data: { title: "Eleven", description: "App", caseStudy: { unset: true } },
+    });
   });
 });

@@ -10,10 +10,6 @@
       "locale": "es",
       "title": "Kwh Monitor API",
       "description": "Microservicio desacoplado en Node.js y Express para scraping y cálculo en tiempo real de facturación eléctrica en Nicaragua. Automatiza sesiones complejas en portales gubernamentales, parsea tablas dinámicas a JSON estructurado y responde consultas tarifarias del INE en sub-segundos.",
-      "hook": "Microservicio Node.js & Express · Scraping y parsing de tarifas oficiales INE · API REST sub-segundo para app móvil",
-      "challenge": "El ente regulador carecía de una API abierta para consultar tarifas y subsidios, obligando a interactuar con formularios ASP legados con sesiones complejas.",
-      "approach": "Desarrollé un microservicio en Node.js y Express que automatiza handshakes de sesión, envía payloads con Axios y transforma tablas HTML en JSON estructurado.",
-      "outcome": "Cálculo instantáneo sub-segundo consumible por la app móvil Android, permitiendo a miles de hogares anticipar su factura eléctrica y proteger subsidios.",
       "caseStudy": {
         "chips": [
           "Microservicio Node.js",
@@ -45,6 +41,7 @@
             "value": "Consultar-Consumo-API (https://github.com/jesushg-dev/Consultar-Consumo-API)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service-api",
         "context": "Kwh Monitor API es un microservicio desacoplado concebido para resolver la ausencia de una API pública y abierta en el portal regulador de energía eléctrica de Nicaragua (INE). Permite a la aplicación móvil Kwh Monitor calcular el monto estimado de la factura eléctrica en tiempo real a partir de lecturas activas del medidor (kWh), automatizando sesiones HTTP, extracción de tablas dinámicas y desagregación de subsidios nacionales.",
         "roleTitle": "Desarrollador Backend Node.js",
@@ -113,12 +110,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Tolerancia a cambios no anunciados en el DOM del portal gubernamental.",
-          "Mantenimiento transparente de cookies y tokens de sesión de corta duración.",
-          "Tiempo de respuesta sub-segundo para garantizar fluidez en la app móvil."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "El ente regulador carecía de una API abierta para consultar tarifas y subsidios, obligando a interactuar con formularios ASP legados con sesiones complejas.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Tolerancia a cambios no anunciados en el DOM del portal gubernamental.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Mantenimiento transparente de cookies y tokens de sesión de corta duración.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Tiempo de respuesta sub-segundo para garantizar fluidez en la app móvil.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Desarrollé un microservicio en Node.js y Express que automatiza handshakes de sesión, envía payloads con Axios y transforma tablas HTML en JSON estructurado.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "kwh-modules",
             "kind": "CARDS",
@@ -250,6 +299,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Cálculo instantáneo sub-segundo consumible por la app móvil Android, permitiendo a miles de hogares anticipar su factura eléctrica y proteger subsidios.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -258,10 +320,6 @@
       "locale": "en",
       "title": "Kwh Monitor API",
       "description": "Decoupled Node.js and Express microservice for real-time web scraping and billing calculations from Nicaraguan energy regulator portals. Automates complex governmental session handshakes, transforms dynamic tables to typed JSON, and returns sub-second INE tariff evaluations.",
-      "hook": "Node.js & Express Microservice · Scraping and parsing of official INE tariffs · Sub-second REST API for mobile app",
-      "challenge": "The state regulatory agency lacked a public API to query tiered energy rates, requiring automated interaction with legacy ASP forms.",
-      "approach": "Engineered a Node.js & Express microservice automating session handshakes, form submission with Axios, and table-to-JSON parsing.",
-      "outcome": "Sub-second calculations powering the Android mobile app, enabling thousands of households to forecast utility bills and retain subsidies.",
       "caseStudy": {
         "chips": [
           "Node.js Microservice",
@@ -293,6 +351,7 @@
             "value": "Consultar-Consumo-API (https://github.com/jesushg-dev/Consultar-Consumo-API)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service-api",
         "context": "Kwh Monitor API is a decoupled microservice built to overcome the absence of a public API from the Nicaraguan electric energy regulatory authority (INE). It powers the Kwh Monitor Android app with real-time bill calculations based on active meter readings (kWh), automating HTTP sessions, legacy ASP table scraping, and tiered subsidy calculations.",
         "roleTitle": "Node.js Backend Developer",
@@ -361,12 +420,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Resilience against unannounced DOM changes on the government regulatory portal.",
-          "Transparent handling of short-lived session cookies without user interruption.",
-          "Sub-second response latency to ensure instantaneous feedback on mobile devices."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "The state regulatory agency lacked a public API to query tiered energy rates, requiring automated interaction with legacy ASP forms.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Resilience against unannounced DOM changes on the government regulatory portal.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Transparent handling of short-lived session cookies without user interruption.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Sub-second response latency to ensure instantaneous feedback on mobile devices.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Engineered a Node.js & Express microservice automating session handshakes, form submission with Axios, and table-to-JSON parsing.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "kwh-modules",
             "kind": "CARDS",
@@ -498,6 +609,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Sub-second calculations powering the Android mobile app, enabling thousands of households to forecast utility bills and retain subsidies.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -506,10 +630,6 @@
       "locale": "nl",
       "title": "Kwh Monitor API",
       "description": "Ontkoppelde Node.js en Express microservice voor realtime scraping en factuurberekening van elektriciteitstarieven. Automatiseert sessie-handshakes op overheidsportalen, zet dynamische tabellen om naar getypeerde JSON en levert INE-tarieven in milliseconden.",
-      "hook": "Node.js & Express Microservice · Scraping en verwerking van officiële INE-tarieven · Sub-seconde REST API voor mobiele app",
-      "challenge": "Het overheidsagentschap had geen openbare API voor tarieven, waardoor geautomatiseerde interactie met verouderde ASP-formulieren noodzakelijk was.",
-      "approach": "Ontwikkelde een Node.js & Express microservice die sessies automatiseert, formulieren verstuurt met Axios en tabellen omzet in JSON.",
-      "outcome": "Sub-seconde berekeningen voor de Android-app, waardoor duizenden gezinnen hun energiekosten konden voorspellen en subsidies behouden.",
       "caseStudy": {
         "chips": [
           "Node.js Microservice",
@@ -541,6 +661,7 @@
             "value": "Consultar-Consumo-API (https://github.com/jesushg-dev/Consultar-Consumo-API)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "tech-service-api",
         "context": "Kwh Monitor API is een ontkoppelde microservice die is gebouwd om het ontbreken van een openbare API bij de Nicaraguaanse energieregulator (INE) op te lossen. Het stelt de mobiele Android-app Kwh Monitor in staat om realtime elektriciteitsfacturen te berekenen op basis van meterstanden (kWh) via geautomatiseerde websessies en tabelparsing.",
         "roleTitle": "Node.js Backend Ontwikkelaar",
@@ -609,12 +730,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Robuust tegen onaangekondigde DOM-wijzigingen op het overheidsportaal.",
-          "Automatisch beheer van kortlevende sessiecookies zonder gebruikershinder.",
-          "Sub-seconde responstijd voor vloeiend gebruik in de mobiele app."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Het overheidsagentschap had geen openbare API voor tarieven, waardoor geautomatiseerde interactie met verouderde ASP-formulieren noodzakelijk was.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Robuust tegen onaangekondigde DOM-wijzigingen op het overheidsportaal.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Automatisch beheer van kortlevende sessiecookies zonder gebruikershinder.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Sub-seconde responstijd voor vloeiend gebruik in de mobiele app.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Ontwikkelde een Node.js & Express microservice die sessies automatiseert, formulieren verstuurt met Axios en tabellen omzet in JSON.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "kwh-modules",
             "kind": "CARDS",
@@ -743,6 +916,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Sub-seconde berekeningen voor de Android-app, waardoor duizenden gezinnen hun energiekosten konden voorspellen en subsidies behouden.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

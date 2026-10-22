@@ -16,10 +16,6 @@
       "locale": "es",
       "title": "OFILEGAL: Despacho Jurídico y Notarial",
       "description": "Plataforma web institucional y CMS jurídico para despacho legal corporativo en Nicaragua (Lic. Isaí Alexander Zeledón). Desarrollada en Next.js App Router, React y Tailwind CSS, integra catálogo de 6 áreas de práctica (incluyendo Notaría, Negocios, OSFL y Litigios), divulgación editorial y canal de captación directa vía WhatsApp.",
-      "hook": "Plataforma LegalTech en Next.js & TypeScript · 6 áreas de práctica corporativa · Notaría, OSFL y Litigios",
-      "challenge": "El despacho profesional requería una presencia digital sólida, de alta reputación y con capacidad para gestionar de forma autónoma artículos de divulgación, consultas ciudadanas y datos institucionales sin dependencia técnica continua.",
-      "approach": "Desarrollé la aplicación web sobre Next.js (App Router), TypeScript y Tailwind CSS, implementando un panel administrativo privado (/admin) para la gestión editorial (artículos, medios y datos de contacto) respaldado por almacenamiento estructurado en ContentStore con validación en servidor.",
-      "outcome": "Despliegue en producción sobre Vercel con tiempos de carga instantáneos, arquitectura modular preparada para transición a base de datos persistente y canal de contacto directo vía WhatsApp y mensajería segura.",
       "caseStudy": {
         "chips": [
           "Legal Tech",
@@ -59,6 +55,7 @@
             "value": "Vercel · ofilegal.vercel.app"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "walmart-centroamerica",
         "context": "OFILEGAL es la firma profesional del Lic. Isaí Alexander Zeledón, Abogado y Notario Público en Managua, Nicaragua (Licenciado en Derecho por la UNP y Candidato a Máster en Derecho Empresarial Corporativo por la UAM). El bufete se enfoca en asesoría jurídica preventiva, litigación civil, laboral y corporativa, gobernanza de OSFL y fe pública notarial. El despacho requería una plataforma digital solemne y autoritaria, con nuevo sello heráldico institucional, que facilitara la captación de clientes mediante canales directos de WhatsApp segmentados por sus 6 áreas de práctica, formulario de consultas confidenciales, georreferenciación en Bolonia y un módulo editorial autónomo para divulgación legal.",
         "roleTitle": "Arquitecto y Desarrollador Full-Stack",
@@ -157,15 +154,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Autonomía editorial total para el cliente sin depender de plataformas CMS de suscripción mensual",
-          "Aislamiento estricto de rutas de administración mediante Server Components y validación server-only",
-          "Protección criptográfica contra ataques de canal lateral (timing attacks) en la verificación de credenciales",
-          "Cero latencia perceptible en la navegación pública mediante Server Components y revalidación bajo demanda",
-          "Identidad visual solemne y autoritaria acorde con el ejercicio profesional del Derecho y el Notariado",
-          "Arquitectura de datos modular preparada para escalar de archivos JSON a bases de datos relacionales sin tocar la interfaz"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "El despacho profesional requería una presencia digital sólida, de alta reputación y con capacidad para gestionar de forma autónoma artículos de divulgación, consultas ciudadanas y datos institucionales sin dependencia técnica continua.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Autonomía editorial total para el cliente sin depender de plataformas CMS de suscripción mensual",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Aislamiento estricto de rutas de administración mediante Server Components y validación server-only",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Protección criptográfica contra ataques de canal lateral (timing attacks) en la verificación de credenciales",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Cero latencia perceptible en la navegación pública mediante Server Components y revalidación bajo demanda",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Identidad visual solemne y autoritaria acorde con el ejercicio profesional del Derecho y el Notariado",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Arquitectura de datos modular preparada para escalar de archivos JSON a bases de datos relacionales sin tocar la interfaz",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -248,7 +311,7 @@
             "kind": "LAYERS",
             "eyebrow": "Topología del sistema",
             "title": "Arquitectura y capas de la plataforma",
-            "lead": "Descomposición por capas desde el tráfico perimetral hasta el almacenamiento desacoplado.",
+            "lead": "Descomposición por capas desde el tráfico perimetral hasta el almacenamiento desacoplado.\n\nDesarrollé la aplicación web sobre Next.js (App Router), TypeScript y Tailwind CSS, implementando un panel administrativo privado (/admin) para la gestión editorial (artículos, medios y datos de contacto) respaldado por almacenamiento estructurado en ContentStore con validación en servidor.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -535,6 +598,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Despliegue en producción sobre Vercel con tiempos de carga instantáneos, arquitectura modular preparada para transición a base de datos persistente y canal de contacto directo vía WhatsApp y mensajería segura.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -543,10 +619,6 @@
       "locale": "en",
       "title": "OFILEGAL: Law Firm & Notary Portal",
       "description": "Institutional web platform and custom legal CMS for a corporate law firm in Nicaragua (Isaí Alexander Zeledón). Built on Next.js App Router, React, and Tailwind CSS, featuring 6 practice areas (including Notary, Business Advisory, Non-Profit OSFL & Litigation), editorial publishing, and direct WhatsApp intake.",
-      "hook": "LegalTech Platform in Next.js & TypeScript · 6 specialized legal practice areas · Notary, Non-Profit & Litigation",
-      "challenge": "A legal counseling practice needed a high-reputation digital presence capable of autonomously managing legal insight articles, public inquiries, and institutional contact details without ongoing technical overhead.",
-      "approach": "Architected the web application using Next.js (App Router), TypeScript, and Tailwind CSS. Implemented an administrative portal (/admin) for editorial management (articles, media assets, and firm details) backed by structured server-side ContentStore validation.",
-      "outcome": "Successfully launched in production on Vercel with instant load times, modular architecture ready for persistent database expansion, and direct communication channels via WhatsApp and encrypted messaging.",
       "caseStudy": {
         "chips": [
           "Legal Tech",
@@ -586,6 +658,7 @@
             "value": "Vercel · ofilegal.vercel.app"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "walmart-centroamerica",
         "context": "OFILEGAL is the legal practice of Isaí Alexander Zeledón, Attorney at Law and Notary Public in Managua, Nicaragua (LL.B. from UNP, Master Candidate in Corporate Business Law at UAM). The firm specializes in preventive legal counsel, civil/commercial litigation, labor compliance, non-profit (OSFL) governance, and notarial deeds. The practice required a prestigious institutional digital platform with a new heraldic seal, direct WhatsApp consultation channels across 6 practice areas, confidential inquiry forms, physical office mapping in Bolonia, and an autonomous editorial CMS.",
         "roleTitle": "Architect & Full-Stack Developer",
@@ -684,15 +757,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Complete editorial autonomy for the client without monthly recurring CMS platform fees",
-          "Strict administrative route isolation via Server Components and server-only validation guards",
-          "Cryptographic immunity against side-channel timing attacks during credential validation",
-          "Zero perceptible public latency via Server Components and on-demand cache revalidation",
-          "Solemn, authoritative brand aesthetic aligned with legal and notarial ethics",
-          "Modular data architecture designed to scale from JSON files to relational databases without interface refactoring"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "A legal counseling practice needed a high-reputation digital presence capable of autonomously managing legal insight articles, public inquiries, and institutional contact details without ongoing technical overhead.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Complete editorial autonomy for the client without monthly recurring CMS platform fees",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Strict administrative route isolation via Server Components and server-only validation guards",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Cryptographic immunity against side-channel timing attacks during credential validation",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Zero perceptible public latency via Server Components and on-demand cache revalidation",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Solemn, authoritative brand aesthetic aligned with legal and notarial ethics",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Modular data architecture designed to scale from JSON files to relational databases without interface refactoring",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -773,7 +912,7 @@
             "kind": "LAYERS",
             "eyebrow": "System topology",
             "title": "Architecture and platform layers",
-            "lead": "Layered breakdown from edge ingress down to the decoupled persistence tier.",
+            "lead": "Layered breakdown from edge ingress down to the decoupled persistence tier.\n\nArchitected the web application using Next.js (App Router), TypeScript, and Tailwind CSS. Implemented an administrative portal (/admin) for editorial management (articles, media assets, and firm details) backed by structured server-side ContentStore validation.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1060,6 +1199,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Successfully launched in production on Vercel with instant load times, modular architecture ready for persistent database expansion, and direct communication channels via WhatsApp and encrypted messaging.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -1068,10 +1220,6 @@
       "locale": "nl",
       "title": "OFILEGAL: Advocaten- en Notarispraktijk",
       "description": "Institutioneel webplatform en juridisch CMS voor een corporate advocatenkantoor in Nicaragua (Isaí Alexander Zeledón). Gebouwd op Next.js App Router, React en Tailwind CSS, met 6 praktijkgebieden (inclusief notariaat, bedrijfsadvies, non-profit OSFL en procesvoering), redactionele publicaties en directe WhatsApp-intake.",
-      "hook": "LegalTech-platform in Next.js & TypeScript · 6 gespecialiseerde rechtsgebieden · Notariaat, Non-profit & Geschillen",
-      "challenge": "Een juridisch advieskantoor had behoefte aan een professionele digitale aanwezigheid om zelfstandig artikelen, vragen van cliënten en contactgegevens te beheren zonder constante technische ondersteuning.",
-      "approach": "Webapplicatie ontworpen met Next.js (App Router), TypeScript en Tailwind CSS. Een beheerdersportaal (/admin) gerealiseerd voor redactioneel beheer (artikelen, media en kantoorgegevens) met servervalidatie via ContentStore.",
-      "outcome": "Succesvol in productie genomen op Vercel met snelle laadtijden, modulaire architectuur gereed voor databasemigratie en directe communicatielijnen via WhatsApp.",
       "caseStudy": {
         "chips": [
           "Legal Tech",
@@ -1111,6 +1259,7 @@
             "value": "Vercel · ofilegal.vercel.app"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "walmart-centroamerica",
         "context": "OFILEGAL is het advocatenkantoor van Isaí Alexander Zeledón, advocaat en notaris in Managua, Nicaragua (Rechtenopleiding aan UNP, Masterkandidaat Ondernemingsrecht aan UAM). Het kantoor richt zich op preventief juridisch advies, civiele en arbeidsgeschillen, non-profit (OSFL) governance en notariële akten. Het kantoor vereiste een prestigieus digitaal platform met een nieuw heraldisch zegel, directe WhatsApp-consultatiekanalen verdeeld over 6 rechtsgebieden, vertrouwelijke intakeformulieren, kantoorlocatie in Bolonia en een autonoom redactioneel CMS.",
         "roleTitle": "Architect & Full-Stack Ontwikkelaar",
@@ -1209,15 +1358,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Volledige redactionele autonomie voor de cliënt zonder terugkerende externe CMS-abonnementskosten",
-          "Strikte isolatie van beheerroutes via Server Components en server-only validatiewachten",
-          "Cryptografische immuniteit tegen timing-aanvallen tijdens de verificatie van inloggegevens",
-          "Geen merkbare openbare latentie dankzij Server Components en revalidatie op aanvraag",
-          "Plegtige, gezaghebbende merkidentiteit afgestemd op de juridische en notariële beroepsethiek",
-          "Modulaire gegevensarchitectuur ontworpen om zonder UI-wijzigingen over te stappen van JSON naar SQL-databases"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Een juridisch advieskantoor had behoefte aan een professionele digitale aanwezigheid om zelfstandig artikelen, vragen van cliënten en contactgegevens te beheren zonder constante technische ondersteuning.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Volledige redactionele autonomie voor de cliënt zonder terugkerende externe CMS-abonnementskosten",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Strikte isolatie van beheerroutes via Server Components en server-only validatiewachten",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Cryptografische immuniteit tegen timing-aanvallen tijdens de verificatie van inloggegevens",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Geen merkbare openbare latentie dankzij Server Components en revalidatie op aanvraag",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Plegtige, gezaghebbende merkidentiteit afgestemd op de juridische en notariële beroepsethiek",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Modulaire gegevensarchitectuur ontworpen om zonder UI-wijzigingen over te stappen van JSON naar SQL-databases",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -1296,7 +1511,7 @@
             "kind": "LAYERS",
             "eyebrow": "Systeemtopologie",
             "title": "Architectuur en platformlagen",
-            "lead": "Gelaagde decompositie van edge-verkeer tot de ontkoppelde opslaglaag.",
+            "lead": "Gelaagde decompositie van edge-verkeer tot de ontkoppelde opslaglaag.\n\nWebapplicatie ontworpen met Next.js (App Router), TypeScript en Tailwind CSS. Een beheerdersportaal (/admin) gerealiseerd voor redactioneel beheer (artikelen, media en kantoorgegevens) met servervalidatie via ContentStore.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1580,6 +1795,19 @@
                 "note": "/projects/ofilegal-contact.jpg"
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Succesvol in productie genomen op Vercel met snelle laadtijden, modulaire architectuur gereed voor databasemigratie en directe communicatielijnen via WhatsApp.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

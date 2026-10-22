@@ -24,6 +24,7 @@
     "db:seed:projects": "npx tsx prisma/seed-portfolio-projects.ts",
     "db:auth-audit": "npx tsx prisma/scripts/audit-account-identity.ts",
     "db:auth-backfill": "npx tsx prisma/scripts/backfill-account-issuer.ts",
+    "db:projects:migrate": "npx tsx prisma/scripts/migrate-project-case-studies.ts",
     "prettier": "prettier --write .",
     "test": "jest",
     "test:watch": "jest --watch",

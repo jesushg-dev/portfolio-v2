@@ -14,7 +14,6 @@ interface CaseStudyPageSectionProps {
   entry: CaseStudyPageSection;
   index: number;
   content: CaseStudyContentDTO;
-  challenge: string | null;
   shortOnTimeSections: CaseStudyPageSection[];
 }
 
@@ -22,7 +21,6 @@ export default function CaseStudyPageSectionView({
   entry,
   index,
   content,
-  challenge,
   shortOnTimeSections,
 }: CaseStudyPageSectionProps) {
   const t = useTranslations("main.portfolio.caseStudy");
@@ -112,47 +110,11 @@ export default function CaseStudyPageSectionView({
     );
   }
 
-  if (entry.kind === "CHALLENGE") {
-    return (
-      <section id={`s-${entry.key}`} className="scroll-mt-8">
-        <SectionHeading
-          counter={counter}
-          label={entry.eyebrow}
-          title={entry.title}
-        />
-        {challenge ? (
-          <p className="text-muted-foreground mt-4 text-lg leading-8">
-            {challenge}
-          </p>
-        ) : null}
-        {content.constraints.length > 0 ? (
-          <ol className="mt-6 grid gap-3 sm:grid-cols-2">
-            {content.constraints.map((constraint, constraintIndex) => (
-              <li
-                key={constraint}
-                data-case-study-card
-                className="b-card-glow bg-card border-border flex items-center gap-3 rounded-2xl border p-4"
-              >
-                <span className="bg-primary/10 text-primary flex size-7 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold">
-                  {constraintIndex + 1}
-                </span>
-                <span className="text-foreground text-sm leading-6 font-medium">
-                  {constraint}
-                </span>
-              </li>
-            ))}
-          </ol>
-        ) : null}
-      </section>
-    );
-  }
-
   if (entry.kind === "CONTENT") {
     return (
       <CaseStudySection
         section={entry.section}
         relatedSection={entry.relatedSection}
-        introText={entry.introText}
         index={index}
       />
     );

@@ -12,15 +12,29 @@
       "locale": "es",
       "title": "Portfolio v2",
       "description": "Plataforma web de ingeniería full-stack en producción con Next.js 15, React 19, TypeScript y Tailwind CSS. Integra internacionalización tri-idioma (ES/EN/NL), catálogo interactivo con filtros avanzados, visor lightbox accesible (WCAG AAA), panel de administración tRPC y base de datos Prisma con MongoDB.",
-      "hook": "Next.js 15 + React 19 + TypeScript · Plataforma tri-idioma (ES/EN/NL) con accesibilidad WCAG AAA · Panel de administración tRPC y Prisma",
-      "challenge": "Diseñar una arquitectura web moderna capaz de soportar internacionalización (3 idiomas), tematización dinámica basada en tokens semánticos (data-theme) sin clases dark:, gestión CMS en tiempo real mediante tRPC y cumplimiento estricto de accesibilidad WCAG 2.2 AAA sin comprometer la latencia.",
-      "approach": "Implementé una arquitectura basada en características (src/features/) con Next.js App Router, TypeScript estricto, Prisma + MongoDB para flexibilidad de esquema y tRPC para seguridad de tipos end-to-end. La UI utiliza únicamente tokens semánticos y componentes Shadcn adaptados.",
-      "outcome": "LCP en producción < 1.8s, accesibilidad WCAG 2.2 AAA auditada al 100% y una plataforma autoadministrable completa que elimina la dependencia y costos de CMS de terceros.",
       "caseStudy": {
-        "chips": [
-          "Personal",
-          "Full-stack",
-          "En producción"
+        "chips": ["Personal", "Full-stack", "En producción"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mi rol",
+            "value": "Arquitecto y desarrollador en solitario"
+          },
+          {
+            "key": "project-type",
+            "label": "Tipo de proyecto",
+            "value": "Plataforma full-stack"
+          },
+          {
+            "key": "category",
+            "label": "Categoría",
+            "value": "Personal"
+          },
+          {
+            "key": "timeline",
+            "label": "Cronología",
+            "value": "Nov 2022 – Sep 2026 · 240 commits"
+          }
         ],
         "gallery": [
           {
@@ -82,28 +96,6 @@
             "description": "Diseño responsivo fluido y táctil",
             "image": "/projects/portfolio-mobile.jpg",
             "icon": "smartphone"
-          }
-        ],
-        "facts": [
-          {
-            "key": "my-role",
-            "label": "Mi rol",
-            "value": "Arquitecto y desarrollador en solitario"
-          },
-          {
-            "key": "project-type",
-            "label": "Tipo de proyecto",
-            "value": "Plataforma full-stack"
-          },
-          {
-            "key": "category",
-            "label": "Categoría",
-            "value": "Personal"
-          },
-          {
-            "key": "timeline",
-            "label": "Cronología",
-            "value": "Nov 2022 – Sep 2026 · 240 commits"
           }
         ],
         "nextProjectSlug": "musa-admin",
@@ -204,15 +196,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "3 locales, traducidos en la IU y en la base de datos",
-          "Tematización mediante tokens data-theme, sin clases dark:",
-          "CMS de administración en tiempo real con seguridad de tipos de extremo a extremo",
-          "WCAG 2.2 AAA sin sacrificar velocidad",
-          "Muchos inquilinos en una sola implementación, cada uno aislado",
-          "Sin dependencia de un CMS de terceros"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Diseñar una arquitectura web moderna capaz de soportar internacionalización (3 idiomas), tematización dinámica basada en tokens semánticos (data-theme) sin clases dark:, gestión CMS en tiempo real mediante tRPC y cumplimiento estricto de accesibilidad WCAG 2.2 AAA sin comprometer la latencia.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "3 locales, traducidos en la IU y en la base de datos",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Tematización mediante tokens data-theme, sin clases dark:",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "CMS de administración en tiempo real con seguridad de tipos de extremo a extremo",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "WCAG 2.2 AAA sin sacrificar velocidad",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Muchos inquilinos en una sola implementación, cada uno aislado",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Sin dependencia de un CMS de terceros",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -267,9 +325,7 @@
                 "body": "El contenido por inquilino varía en forma, así que la flexibilidad del esquema acelera la iteración mientras Prisma mantiene cada consulta tipada.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "PostgreSQL con migraciones SQL"
-                ],
+                "tags": ["PostgreSQL con migraciones SQL"],
                 "note": "La integridad se mueve a la aplicación. Por ejemplo, customDomain no es @unique porque los índices únicos de MongoDB permiten un único null, así que la unicidad se verifica en código."
               },
               {
@@ -279,10 +335,7 @@
                 "body": "El tipo de procedimiento indica quién puede llamarlo, y las mutaciones toman ctx.user.id, así que un cliente nunca puede actuar como otro usuario. Los tipos fluyen desde la base de datos hasta la IU de administración.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Controladores de rutas REST",
-                  "GraphQL"
-                ],
+                "tags": ["Controladores de rutas REST", "GraphQL"],
                 "note": "Está estrechamente acoplado a TypeScript y es menos conveniente para consumidores de API de terceros."
               },
               {
@@ -292,9 +345,7 @@
                 "body": "La facturación, las cuotas y la residencia de datos permanecen con el inquilino, y un inquilino nunca puede gastar la cuota de otro. Los secretos se cifran en reposo con AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Claves compartidas de la API de la plataforma"
-                ],
+                "tags": ["Claves compartidas de la API de la plataforma"],
                 "note": "Más configuración por inquilino. Las funciones quedan desactivadas hasta conectarlas, y la IA tiene un modo JSON manual."
               },
               {
@@ -304,9 +355,7 @@
                 "body": "6 temas (3 paletas, claro y oscuro) más un tema personalizado definido por el usuario provienen de una sola capa de tokens, sin clases dark: en los componentes.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Variantes dark: de Tailwind en cada elemento"
-                ],
+                "tags": ["Variantes dark: de Tailwind en cada elemento"],
                 "note": "Requiere disciplina de tokens: cada componente nuevo debe usar tokens."
               },
               {
@@ -345,7 +394,7 @@
             "kind": "LAYERS",
             "eyebrow": "Cómo se integra",
             "title": "Arquitectura y enfoque",
-            "lead": "",
+            "lead": "Implementé una arquitectura basada en características (src/features/) con Next.js App Router, TypeScript estricto, Prisma + MongoDB para flexibilidad de esquema y tRPC para seguridad de tipos end-to-end. La UI utiliza únicamente tokens semánticos y componentes Shadcn adaptados.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -370,11 +419,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "(inicio) público",
-                  "(admin) /admin",
-                  "/api/*"
-                ],
+                "tags": ["(inicio) público", "(admin) /admin", "/api/*"],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -398,12 +443,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "22 módulos",
-                  "UI",
-                  "lib",
-                  "routers de servidor"
-                ],
+                "tags": ["22 módulos", "UI", "lib", "routers de servidor"],
                 "note": "Cliente de Prisma"
               },
               {
@@ -413,11 +453,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Prisma",
-                  "MongoDB",
-                  "84 modelos"
-                ],
+                "tags": ["Prisma", "MongoDB", "84 modelos"],
                 "note": ""
               }
             ],
@@ -432,8 +468,8 @@
             "kind": "CODE",
             "eyebrow": "Modelado de datos",
             "title": "Modelo de datos e i18n en la base de datos",
-            "lead": "El contenido se modela como datos. Cada entidad traducible tiene una colección *Translation vinculada a un AppLanguage, y la página del caso de estudio lee sus campos traducidos desde ProjectTranslation, protegidos por caseStudyEnabled.",
-            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  hook          String?\n  challenge     String?\n  approach      String?\n  outcome       String?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
+            "lead": "El contenido se modela como datos. Cada entidad traducible tiene una colección *Translation vinculada a un AppLanguage, y la página del caso de estudio lee todo el contenido narrativo desde las secciones de CaseStudyContent en ProjectTranslation, protegido por caseStudyEnabled.",
+            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  caseStudy     CaseStudyContent?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
             "codeLabel": "prisma/schema/main.prisma (fragmento)",
             "items": [
               {
@@ -551,11 +587,7 @@
                 "body": "Portada interactiva, perfil profesional, resumen de experiencia, habilidades y navegación de alto impacto con Next.js App Router.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Server Components"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -565,11 +597,7 @@
                 "body": "Currículum web interactivo, descargas en PDF y DOCX generadas dinámicamente en caché y distribución protegida contra límites de tasa.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": [
-                  "PDF Engine",
-                  "DOCX Cache",
-                  "Rate Limiting"
-                ],
+                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -579,11 +607,7 @@
                 "body": "Exploración facetada de proyectos por stack, métricas auditadas en producción, decisiones de ingeniería y lecciones aprendidas.",
                 "value": "Estudios de Caso",
                 "icon": "case",
-                "tags": [
-                  "Showcase",
-                  "Filtros Facetados",
-                  "Arquitectura"
-                ],
+                "tags": ["Showcase", "Filtros Facetados", "Arquitectura"],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -593,11 +617,7 @@
                 "body": "Consola interactiva con comandos ejecutables, categorización de competencias técnicas e insignias visuales con SkillIcon.",
                 "value": "Terminal Interactiva",
                 "icon": "term",
-                "tags": [
-                  "CLI Terminal",
-                  "SkillIcon",
-                  "UX Interactiva"
-                ],
+                "tags": ["CLI Terminal", "SkillIcon", "UX Interactiva"],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -607,11 +627,7 @@
                 "body": "Navegación móvil con gestos táctiles, cajón de filtros adaptable, menús semánticos y 60 FPS garantizados en pantallas de smartphones.",
                 "value": "100% Mobile Ready",
                 "icon": "smartphone",
-                "tags": [
-                  "Mobile First",
-                  "Animaciones Fluidas",
-                  "Touch Ready"
-                ],
+                "tags": ["Mobile First", "Animaciones Fluidas", "Touch Ready"],
                 "note": "/projects/portfolio-mobile.jpg"
               },
               {
@@ -621,11 +637,7 @@
                 "body": "Filtros en tiempo real por frontend, backend, devops y ciberseguridad, con insignias de tecnologías, verificación de ID de credencial y lightbox.",
                 "value": "Filtros Facetados",
                 "icon": "badge",
-                "tags": [
-                  "Certificados",
-                  "Verificación",
-                  "SkillIcon"
-                ],
+                "tags": ["Certificados", "Verificación", "SkillIcon"],
                 "note": "/previews/certificates.webp"
               },
               {
@@ -635,11 +647,7 @@
                 "body": "Recorrido cronológico interactivo con hitos de ingeniería, filtros por categoría y diseño adaptativo.",
                 "value": "Línea de Tiempo",
                 "icon": "layers",
-                "tags": [
-                  "Timeline",
-                  "Carrera",
-                  "Hitos"
-                ],
+                "tags": ["Timeline", "Carrera", "Hitos"],
                 "note": "/previews/timeline.webp"
               },
               {
@@ -704,11 +712,7 @@
                 "body": "Estadísticas de visitas y páginas más consultadas sin rastreador externo. Respeta estrictamente Do Not Track y Global Privacy Control.",
                 "value": "100% Privacy-First",
                 "icon": "chart",
-                "tags": [
-                  "Sin Cookies",
-                  "DNT / GPC",
-                  "Telemetría"
-                ],
+                "tags": ["Sin Cookies", "DNT / GPC", "Telemetría"],
                 "note": "/previews/stats.webp"
               },
               {
@@ -733,11 +737,7 @@
                 "body": "Artículos interactivos sobre cómo utilizo IA en el desarrollo diario y cómo colaboro con QA, además de las páginas Now, Uses y Colophon.",
                 "value": "Procesos Documentados",
                 "icon": "users",
-                "tags": [
-                  "AI Workflow",
-                  "QA",
-                  "Metodología"
-                ],
+                "tags": ["AI Workflow", "QA", "Metodología"],
                 "note": "/previews/process-how-i-use-ai.webp"
               },
               {
@@ -747,12 +747,7 @@
                 "body": "Generación de documentos PDF de alta precisión tipográfica y descarga en DOCX estructurado, adaptados a plantillas en español, inglés y neerlandés con aislamiento de renderizado.",
                 "value": "ATS-Ready PDF",
                 "icon": "file",
-                "tags": [
-                  "Generación PDF",
-                  "DOCX",
-                  "Multi-Idioma",
-                  "ATS"
-                ],
+                "tags": ["Generación PDF", "DOCX", "Multi-Idioma", "ATS"],
                 "note": "/projects/portfolio-resume-pdf-es.jpg"
               },
               {
@@ -762,12 +757,7 @@
                 "body": "Componente minimalista en el pie de página que muestra la pista actual con ecualizador animado, barra de progreso y botón de despliegue al reproductor iOS con letras.",
                 "value": "Now Playing en Footer",
                 "icon": "radio",
-                "tags": [
-                  "Now Playing",
-                  "Footer",
-                  "Ecualizador",
-                  "Minimalista"
-                ],
+                "tags": ["Now Playing", "Footer", "Ecualizador", "Minimalista"],
                 "note": "/projects/portfolio-spotify-widget.png"
               },
               {
@@ -777,12 +767,7 @@
                 "body": "Permite a cada inquilino conectar sus credenciales de Spotify OAuth, Resend, UploadThing, IA y Google Calendar, superando límites de plataforma y garantizando aislamiento absoluto.",
                 "value": "AES-256 Cifrado",
                 "icon": "key",
-                "tags": [
-                  "BYO Keys",
-                  "AES-256",
-                  "OAuth",
-                  "Multi-Tenant"
-                ],
+                "tags": ["BYO Keys", "AES-256", "OAuth", "Multi-Tenant"],
                 "note": "/projects/portfolio-admin-integrations.jpg"
               },
               {
@@ -792,12 +777,7 @@
                 "body": "Panel administrativo de seguridad con soporte para verificación en dos pasos (TOTP / correo) y gestión de llaves de acceso Passkeys resistentes a phishing mediante Better-Auth.",
                 "value": "WebAuthn / Passkeys",
                 "icon": "lock",
-                "tags": [
-                  "Passkeys",
-                  "2FA",
-                  "WebAuthn",
-                  "Biometría"
-                ],
+                "tags": ["Passkeys", "2FA", "WebAuthn", "Biometría"],
                 "note": "/projects/portfolio-admin-security.jpg"
               },
               {
@@ -807,12 +787,7 @@
                 "body": "Editor administrativo con widgets modulares (Hero, navegación interna, timeline, herramientas, roles, FAQ y CTA) con previsualización en vivo y sincronización trilingüe.",
                 "value": "Widget Drag & Drop",
                 "icon": "workflow",
-                "tags": [
-                  "Drag & Drop",
-                  "Widgets",
-                  "CMS Modular",
-                  "i18n"
-                ],
+                "tags": ["Drag & Drop", "Widgets", "CMS Modular", "i18n"],
                 "note": "/projects/portfolio-admin-process.jpg"
               },
               {
@@ -837,12 +812,7 @@
                 "body": "Gestión en tiempo real de títulos, entidades emisoras, identificadores de credencial, URLs de verificación y asociación de tecnologías vinculadas mediante SkillIcon.",
                 "value": "Verificación de Títulos",
                 "icon": "badge",
-                "tags": [
-                  "Acreditaciones",
-                  "SkillIcon",
-                  "Credenciales",
-                  "CMS"
-                ],
+                "tags": ["Acreditaciones", "SkillIcon", "Credenciales", "CMS"],
                 "note": "/projects/portfolio-admin-certificates.jpg"
               },
               {
@@ -852,12 +822,7 @@
                 "body": "Formulario trilingüe para registrar posiciones, organizaciones, períodos, fechas activas e imágenes de apoyo para el timeline interactivo.",
                 "value": "Gestión Cronológica",
                 "icon": "layers",
-                "tags": [
-                  "Timeline",
-                  "Trayectoria",
-                  "Hitos",
-                  "CMS"
-                ],
+                "tags": ["Timeline", "Trayectoria", "Hitos", "CMS"],
                 "note": "/projects/portfolio-admin-timeline.jpg"
               },
               {
@@ -867,12 +832,7 @@
                 "body": "Control de tecnologías con URLs de wiki, iconos vectoriales, categorización en Frontend/Backend/DevOps/Mobile y conmutador para destacar en la terminal interactiva.",
                 "value": "Ecosistema de Skills",
                 "icon": "code",
-                "tags": [
-                  "Habilidades",
-                  "Stack",
-                  "Terminal",
-                  "CMS"
-                ],
+                "tags": ["Habilidades", "Stack", "Terminal", "CMS"],
                 "note": "/projects/portfolio-admin-skills.jpg"
               }
             ],
@@ -1137,7 +1097,7 @@
             "kind": "METRICS",
             "eyebrow": "Resultados",
             "title": "Resultado y logros",
-            "lead": "",
+            "lead": "LCP en producción < 1.8s, accesibilidad WCAG 2.2 AAA auditada al 100% y una plataforma autoadministrable completa que elimina la dependencia y costos de CMS de terceros.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1247,15 +1207,29 @@
       "locale": "en",
       "title": "Portfolio v2",
       "description": "Production full-stack engineering portfolio built with Next.js 15, React 19, TypeScript, and Tailwind CSS. Features tri-lingual internationalization (ES/EN/NL), interactive project catalog with deep filtering, accessible WCAG AAA lightbox viewer, tRPC admin suite, and Prisma with MongoDB.",
-      "hook": "Next.js 15 + React 19 + TypeScript · Tri-lingual platform (ES/EN/NL) with WCAG AAA accessibility · tRPC admin panel & Prisma",
-      "challenge": "Design a modern web architecture supporting multi-language i18n (3 locales), dynamic data-theme system without dark: classes, real-time tRPC admin CMS, and WCAG 2.2 AAA accessibility compliance without sacrificing speed.",
-      "approach": "Implemented a Feature-Based Architecture (src/features/) with Next.js App Router, strict TypeScript, Prisma + MongoDB for schema flexibility, and tRPC for end-to-end type safety. UI components strictly enforce semantic design tokens.",
-      "outcome": "Production LCP < 1.8s, 100% audited WCAG 2.2 AAA accessibility, and a self-managed platform completely eliminating third-party CMS overhead.",
       "caseStudy": {
-        "chips": [
-          "Personal",
-          "Full-stack",
-          "In production"
+        "chips": ["Personal", "Full-stack", "In production"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "My role",
+            "value": "Solo architect & developer"
+          },
+          {
+            "key": "project-type",
+            "label": "Project type",
+            "value": "Full-stack platform"
+          },
+          {
+            "key": "category",
+            "label": "Category",
+            "value": "Personal"
+          },
+          {
+            "key": "timeline",
+            "label": "Timeline",
+            "value": "Nov 2022 – Sep 2026 · 240 commits"
+          }
         ],
         "gallery": [
           {
@@ -1317,28 +1291,6 @@
             "description": "Fluid responsive layout & touch navigation",
             "image": "/projects/portfolio-mobile.jpg",
             "icon": "smartphone"
-          }
-        ],
-        "facts": [
-          {
-            "key": "my-role",
-            "label": "My role",
-            "value": "Solo architect & developer"
-          },
-          {
-            "key": "project-type",
-            "label": "Project type",
-            "value": "Full-stack platform"
-          },
-          {
-            "key": "category",
-            "label": "Category",
-            "value": "Personal"
-          },
-          {
-            "key": "timeline",
-            "label": "Timeline",
-            "value": "Nov 2022 – Sep 2026 · 240 commits"
           }
         ],
         "nextProjectSlug": "musa-admin",
@@ -1439,15 +1391,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "3 locales, translated in the UI and in the database",
-          "Theming through data-theme tokens, with no dark: classes",
-          "Real-time admin CMS with end-to-end type safety",
-          "WCAG 2.2 AAA without sacrificing speed",
-          "Many tenants on one deployment, each isolated",
-          "No dependency on a third-party CMS"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Design a modern web architecture supporting multi-language i18n (3 locales), dynamic data-theme system without dark: classes, real-time tRPC admin CMS, and WCAG 2.2 AAA accessibility compliance without sacrificing speed.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "3 locales, translated in the UI and in the database",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Theming through data-theme tokens, with no dark: classes",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Real-time admin CMS with end-to-end type safety",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "WCAG 2.2 AAA without sacrificing speed",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Many tenants on one deployment, each isolated",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "No dependency on a third-party CMS",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -1464,9 +1482,7 @@
                 "body": "Each of the 22 modules (CV, Job Tracker, Resume Engine, Spotify, analytics…) owns its UI, lib and tRPC routers, so one feature can change without touching the others.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Layer-based folders (components / hooks / services)"
-                ],
+                "tags": ["Layer-based folders (components / hooks / services)"],
                 "note": "Shared code needs deliberate boundaries as modules grow."
               },
               {
@@ -1502,9 +1518,7 @@
                 "body": "Per-tenant content varies in shape, so schema flexibility speeds iteration while Prisma keeps every query typed.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "PostgreSQL with SQL migrations"
-                ],
+                "tags": ["PostgreSQL with SQL migrations"],
                 "note": "Integrity moves into the app. For example, customDomain isn't @unique because MongoDB unique indexes allow a single null, so uniqueness is checked in code."
               },
               {
@@ -1514,10 +1528,7 @@
                 "body": "The procedure type states who may call it, and mutations take ctx.user.id, so a client can never act as another user. Types flow from the database to the admin UI.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "REST route handlers",
-                  "GraphQL"
-                ],
+                "tags": ["REST route handlers", "GraphQL"],
                 "note": "Tightly coupled to TypeScript and less convenient for third-party API consumers."
               },
               {
@@ -1527,9 +1538,7 @@
                 "body": "Billing, quotas and data residency stay with the tenant, and one tenant can never spend another's quota. Secrets are encrypted at rest with AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Shared platform API keys"
-                ],
+                "tags": ["Shared platform API keys"],
                 "note": "More setup per tenant. Features stay off until connected, and AI has a manual JSON mode."
               },
               {
@@ -1539,9 +1548,7 @@
                 "body": "6 themes (3 palettes, light and dark) plus a user-defined custom theme come from one token layer, with no dark: classes in components.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Tailwind dark: variants on every element"
-                ],
+                "tags": ["Tailwind dark: variants on every element"],
                 "note": "Requires token discipline: every new component must use tokens."
               },
               {
@@ -1580,7 +1587,7 @@
             "kind": "LAYERS",
             "eyebrow": "How it fits together",
             "title": "Architecture & approach",
-            "lead": "A Next.js 16 App Router app on Vercel. Middleware resolves the locale and the tenant, route groups separate public pages from the admin, and tRPC sits in front of Prisma with the session and tenant always in context.",
+            "lead": "A Next.js 16 App Router app on Vercel. Middleware resolves the locale and the tenant, route groups separate public pages from the admin, and tRPC sits in front of Prisma with the session and tenant always in context.\n\nImplemented a Feature-Based Architecture (src/features/) with Next.js App Router, strict TypeScript, Prisma + MongoDB for schema flexibility, and tRPC for end-to-end type safety. UI components strictly enforce semantic design tokens.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1605,11 +1612,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "(home) public",
-                  "(admin) /admin",
-                  "/api/*"
-                ],
+                "tags": ["(home) public", "(admin) /admin", "/api/*"],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -1633,12 +1636,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "22 modules",
-                  "UI",
-                  "lib",
-                  "server routers"
-                ],
+                "tags": ["22 modules", "UI", "lib", "server routers"],
                 "note": "Prisma client"
               },
               {
@@ -1648,11 +1646,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Prisma",
-                  "MongoDB",
-                  "84 models"
-                ],
+                "tags": ["Prisma", "MongoDB", "84 models"],
                 "note": ""
               }
             ],
@@ -1667,8 +1661,8 @@
             "kind": "CODE",
             "eyebrow": "Data modeling",
             "title": "Data model & i18n in the database",
-            "lead": "Content is modeled as data. Every translatable entity has a *Translation collection linked to an AppLanguage, and the case-study page reads four translated fields (hook, challenge, approach, outcome) from ProjectTranslation, gated by caseStudyEnabled.",
-            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  hook          String?\n  challenge     String?\n  approach      String?\n  outcome       String?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
+            "lead": "Content is modeled as data. Every translatable entity has a *Translation collection linked to an AppLanguage, and the case-study page reads all narrative content from structured CaseStudyContent sections in ProjectTranslation, gated by caseStudyEnabled.",
+            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  caseStudy     CaseStudyContent?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
             "codeLabel": "prisma/schema/main.prisma (trimmed)",
             "items": [
               {
@@ -1786,11 +1780,7 @@
                 "body": "Interactive hero, professional profile, experience highlights, skills breakdown, and high-impact Next.js App Router architecture.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Server Components"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -1800,11 +1790,7 @@
                 "body": "Interactive web resume, on-the-fly cached PDF and DOCX exports, and rate-limited email delivery.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": [
-                  "PDF Engine",
-                  "DOCX Cache",
-                  "Rate Limiting"
-                ],
+                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -1814,11 +1800,7 @@
                 "body": "Faceted project exploration by tech stack, production-audited metrics, engineering decisions, and architectural tradeoffs.",
                 "value": "Case Studies",
                 "icon": "case",
-                "tags": [
-                  "Showcase",
-                  "Faceted Filters",
-                  "Architecture"
-                ],
+                "tags": ["Showcase", "Faceted Filters", "Architecture"],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -1828,11 +1810,7 @@
                 "body": "Interactive console with executable commands, technical proficiency mapping, and dynamic visual badges via SkillIcon.",
                 "value": "Interactive Terminal",
                 "icon": "term",
-                "tags": [
-                  "CLI Terminal",
-                  "SkillIcon",
-                  "Interactive UX"
-                ],
+                "tags": ["CLI Terminal", "SkillIcon", "Interactive UX"],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -1842,11 +1820,7 @@
                 "body": "Mobile navigation with touch gestures, adaptive drawer sheets, semantic menus, and 60 FPS guaranteed on smaller smartphone displays.",
                 "value": "100% Mobile Ready",
                 "icon": "smartphone",
-                "tags": [
-                  "Mobile First",
-                  "Fluid Animation",
-                  "Touch Ready"
-                ],
+                "tags": ["Mobile First", "Fluid Animation", "Touch Ready"],
                 "note": "/projects/portfolio-mobile.jpg"
               },
               {
@@ -1856,11 +1830,7 @@
                 "body": "Real-time filters by frontend, backend, devops, and cybersecurity, with technology badges, credential ID verification, and full-resolution lightbox viewer.",
                 "value": "Faceted Filters",
                 "icon": "badge",
-                "tags": [
-                  "Certifications",
-                  "Verification",
-                  "SkillIcon"
-                ],
+                "tags": ["Certifications", "Verification", "SkillIcon"],
                 "note": "/previews/certificates.webp"
               },
               {
@@ -1870,11 +1840,7 @@
                 "body": "Chronological interactive walkthrough with engineering achievements, category filters, and responsive layout.",
                 "value": "Career Timeline",
                 "icon": "layers",
-                "tags": [
-                  "Timeline",
-                  "Career",
-                  "Milestones"
-                ],
+                "tags": ["Timeline", "Career", "Milestones"],
                 "note": "/previews/timeline.webp"
               },
               {
@@ -1899,12 +1865,7 @@
                 "body": "A specialized CRM for job applications: companies, application stages (applied, ghosted, rejected, offers), events calendar, notes, and Google Calendar sync.",
                 "value": "Pipeline & Agenda",
                 "icon": "calendar",
-                "tags": [
-                  "Job CRM",
-                  "Pipeline",
-                  "Google Calendar",
-                  "Events"
-                ],
+                "tags": ["Job CRM", "Pipeline", "Google Calendar", "Events"],
                 "note": "/projects/portfolio-job-tracker.jpg"
               },
               {
@@ -1914,12 +1875,7 @@
                 "body": "Interactive resume management with section tabs, multilingual preview switcher, ATS optimization, and multi-format export powered by tenant-isolated AI providers.",
                 "value": "Multilingual Visual Editor",
                 "icon": "bolt",
-                "tags": [
-                  "CV Editor",
-                  "i18n",
-                  "ATS Optimizer",
-                  "Live Preview"
-                ],
+                "tags": ["CV Editor", "i18n", "ATS Optimizer", "Live Preview"],
                 "note": "/projects/portfolio-resume-engine.jpg"
               },
               {
@@ -1939,11 +1895,7 @@
                 "body": "Pageview and route telemetry without external tracking scripts. Strictly honors Do Not Track and Global Privacy Control headers.",
                 "value": "100% Privacy-First",
                 "icon": "chart",
-                "tags": [
-                  "Cookie-Free",
-                  "DNT / GPC",
-                  "Telemetry"
-                ],
+                "tags": ["Cookie-Free", "DNT / GPC", "Telemetry"],
                 "note": "/previews/stats.webp"
               },
               {
@@ -1968,11 +1920,7 @@
                 "body": "Interactive case studies covering How I Use AI in daily engineering and How I Collaborate with QA, plus Now, Uses, and Colophon pages.",
                 "value": "Documented Workflows",
                 "icon": "users",
-                "tags": [
-                  "AI Workflow",
-                  "QA",
-                  "Methodology"
-                ],
+                "tags": ["AI Workflow", "QA", "Methodology"],
                 "note": "/previews/process-how-i-use-ai.webp"
               },
               {
@@ -1982,12 +1930,7 @@
                 "body": "High-fidelity PDF document generation and structured DOCX export, tailored across Spanish, English, and Dutch templates with isolated rendering.",
                 "value": "ATS-Ready PDF",
                 "icon": "file",
-                "tags": [
-                  "PDF Generation",
-                  "DOCX",
-                  "Multilingual",
-                  "ATS"
-                ],
+                "tags": ["PDF Generation", "DOCX", "Multilingual", "ATS"],
                 "note": "/projects/portfolio-resume-pdf-en.jpg"
               },
               {
@@ -1997,12 +1940,7 @@
                 "body": "Minimalist component in the page footer showing the currently playing track with an animated equalizer, live progress bar, and instant launch to the iOS lyrics modal.",
                 "value": "Footer Now Playing",
                 "icon": "radio",
-                "tags": [
-                  "Now Playing",
-                  "Footer",
-                  "Equalizer",
-                  "Minimalist"
-                ],
+                "tags": ["Now Playing", "Footer", "Equalizer", "Minimalist"],
                 "note": "/projects/portfolio-spotify-widget.png"
               },
               {
@@ -2012,12 +1950,7 @@
                 "body": "Allows each tenant to connect their own credentials for Spotify OAuth, Resend, UploadThing, AI models, and Google Calendar, bypassing platform quotas with strict isolation.",
                 "value": "AES-256 Encrypted",
                 "icon": "key",
-                "tags": [
-                  "BYO Keys",
-                  "AES-256",
-                  "OAuth",
-                  "Multi-Tenant"
-                ],
+                "tags": ["BYO Keys", "AES-256", "OAuth", "Multi-Tenant"],
                 "note": "/projects/portfolio-admin-integrations.jpg"
               },
               {
@@ -2027,12 +1960,7 @@
                 "body": "Security configuration panel supporting two-step verification (TOTP / email) and phishing-resistant WebAuthn Passkeys registered via Better-Auth.",
                 "value": "WebAuthn / Passkeys",
                 "icon": "lock",
-                "tags": [
-                  "Passkeys",
-                  "2FA",
-                  "WebAuthn",
-                  "Biometrics"
-                ],
+                "tags": ["Passkeys", "2FA", "WebAuthn", "Biometrics"],
                 "note": "/projects/portfolio-admin-security.jpg"
               },
               {
@@ -2042,12 +1970,7 @@
                 "body": "Administrative editor with modular widgets (Hero, internal nav, timeline, tools, roles, FAQ, and CTA) featuring live preview and trilingual synchronization.",
                 "value": "Widget Drag & Drop",
                 "icon": "workflow",
-                "tags": [
-                  "Drag & Drop",
-                  "Widgets",
-                  "Modular CMS",
-                  "i18n"
-                ],
+                "tags": ["Drag & Drop", "Widgets", "Modular CMS", "i18n"],
                 "note": "/projects/portfolio-admin-process.jpg"
               },
               {
@@ -2057,12 +1980,7 @@
                 "body": "Visual management of identity, avatar photo, job availability badge, professional title, and value proposition with live preview.",
                 "value": "Live Profile",
                 "icon": "user",
-                "tags": [
-                  "Hero Editor",
-                  "Availability",
-                  "SEO",
-                  "Live Preview"
-                ],
+                "tags": ["Hero Editor", "Availability", "SEO", "Live Preview"],
                 "note": "/projects/portfolio-admin-hero.jpg"
               },
               {
@@ -2072,12 +1990,7 @@
                 "body": "Real-time management of certificates, issuing organizations, credential IDs, verification URLs, and technology badges linked via SkillIcon.",
                 "value": "Credential Verification",
                 "icon": "badge",
-                "tags": [
-                  "Certifications",
-                  "SkillIcon",
-                  "Credentials",
-                  "CMS"
-                ],
+                "tags": ["Certifications", "SkillIcon", "Credentials", "CMS"],
                 "note": "/projects/portfolio-admin-certificates.jpg"
               },
               {
@@ -2087,12 +2000,7 @@
                 "body": "Trilingual form to register professional positions, organizations, time periods, current statuses, and supporting images for the interactive timeline.",
                 "value": "Chronological Management",
                 "icon": "layers",
-                "tags": [
-                  "Timeline",
-                  "Career",
-                  "Milestones",
-                  "CMS"
-                ],
+                "tags": ["Timeline", "Career", "Milestones", "CMS"],
                 "note": "/projects/portfolio-admin-timeline.jpg"
               },
               {
@@ -2102,12 +2010,7 @@
                 "body": "Manage technologies with documentation URLs, vector icons, stack categorization (Frontend/Backend/DevOps/Mobile), and a toggle to highlight them on the interactive terminal.",
                 "value": "Skill Ecosystem",
                 "icon": "code",
-                "tags": [
-                  "Skills",
-                  "Stack",
-                  "Terminal",
-                  "CMS"
-                ],
+                "tags": ["Skills", "Stack", "Terminal", "CMS"],
                 "note": "/projects/portfolio-admin-skills.jpg"
               }
             ],
@@ -2372,7 +2275,7 @@
             "kind": "METRICS",
             "eyebrow": "Results",
             "title": "Outcome & results",
-            "lead": "",
+            "lead": "Production LCP < 1.8s, 100% audited WCAG 2.2 AAA accessibility, and a self-managed platform completely eliminating third-party CMS overhead.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -2482,15 +2385,29 @@
       "locale": "nl",
       "title": "Portfolio v2",
       "description": "Productie full-stack engineering portfolio gebouwd met Next.js 15, React 19, TypeScript en Tailwind CSS. Biedt drietalige internationalisering (ES/EN/NL), interactieve projectcatalogus met geavanceerde filters, toegankelijke WCAG AAA lightbox, tRPC-beheer en Prisma met MongoDB.",
-      "hook": "Next.js 15 + React 19 + TypeScript · Drietalig platform (ES/EN/NL) met WCAG AAA-toegankelijkheid · tRPC-beheerpaneel & Prisma",
-      "challenge": "Ontwerpen van een moderne webarchitectuur die meertalige i18n (3 talen), dynamische thema's zonder dark: classes, realtime tRPC admin CMS en WCAG 2.2 AAA-toegankelijkheid ondersteunt zonder snelheid te verliezen.",
-      "approach": "Feature-Based Architecture (src/features/) geïmplementeerd met Next.js App Router, strikte TypeScript, Prisma + MongoDB voor schemaflexibiliteit en tRPC voor end-to-end typeveiligheid.",
-      "outcome": "Productie LCP < 1,8s, 100% geauditeerde WCAG 2.2 AAA-toegankelijkheid en een volledig zelfbeheerd platform zonder afhankelijkheid van externe CMS-diensten.",
       "caseStudy": {
-        "chips": [
-          "Persoonlijk",
-          "Full-stack",
-          "In productie"
+        "chips": ["Persoonlijk", "Full-stack", "In productie"],
+        "facts": [
+          {
+            "key": "my-role",
+            "label": "Mijn rol",
+            "value": "Solo architect en ontwikkelaar"
+          },
+          {
+            "key": "project-type",
+            "label": "Projecttype",
+            "value": "Full-stackplatform"
+          },
+          {
+            "key": "category",
+            "label": "Categorie",
+            "value": "Persoonlijk"
+          },
+          {
+            "key": "timeline",
+            "label": "Tijdlijn",
+            "value": "Nov 2022 – sep 2026 · 240 commits"
+          }
         ],
         "gallery": [
           {
@@ -2552,28 +2469,6 @@
             "description": "Vloeiende responsieve lay-out & touch",
             "image": "/projects/portfolio-mobile.jpg",
             "icon": "smartphone"
-          }
-        ],
-        "facts": [
-          {
-            "key": "my-role",
-            "label": "Mijn rol",
-            "value": "Solo architect en ontwikkelaar"
-          },
-          {
-            "key": "project-type",
-            "label": "Projecttype",
-            "value": "Full-stackplatform"
-          },
-          {
-            "key": "category",
-            "label": "Categorie",
-            "value": "Persoonlijk"
-          },
-          {
-            "key": "timeline",
-            "label": "Tijdlijn",
-            "value": "Nov 2022 – sep 2026 · 240 commits"
           }
         ],
         "nextProjectSlug": "musa-admin",
@@ -2674,15 +2569,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "3 locales, vertaald in de UI en in de database",
-          "Theming via data-theme-tokens, zonder dark: classes",
-          "Realtime admin-CMS met end-to-end typeveiligheid",
-          "WCAG 2.2 AAA zonder de snelheid op te offeren",
-          "Veel tenants op één deployment, elk geïsoleerd",
-          "Geen afhankelijkheid van een externe CMS"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Ontwerpen van een moderne webarchitectuur die meertalige i18n (3 talen), dynamische thema's zonder dark: classes, realtime tRPC admin CMS en WCAG 2.2 AAA-toegankelijkheid ondersteunt zonder snelheid te verliezen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "3 locales, vertaald in de UI en in de database",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Theming via data-theme-tokens, zonder dark: classes",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Realtime admin-CMS met end-to-end typeveiligheid",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "WCAG 2.2 AAA zonder de snelheid op te offeren",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Veel tenants op één deployment, elk geïsoleerd",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Geen afhankelijkheid van een externe CMS",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -2737,9 +2698,7 @@
                 "body": "De inhoud per tenant verschilt in vorm, dus schemaflexibiliteit versnelt iteratie terwijl Prisma elke query getypeerd houdt.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "PostgreSQL met SQL-migraties"
-                ],
+                "tags": ["PostgreSQL met SQL-migraties"],
                 "note": "Integriteit verschuift naar de app. Bijvoorbeeld, customDomain is niet @unique omdat MongoDB unieke indexen één null toestaat; daarom wordt uniciteit in code gecontroleerd."
               },
               {
@@ -2749,10 +2708,7 @@
                 "body": "Het procedure-type bepaalt wie het mag aanroepen, en mutaties nemen ctx.user.id op, zodat een client nooit als een andere gebruiker kan handelen. Types stromen van de database naar de admin-UI.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "REST-routehandlers",
-                  "GraphQL"
-                ],
+                "tags": ["REST-routehandlers", "GraphQL"],
                 "note": "Sterk gekoppeld aan TypeScript en minder handig voor API-consumenten van derden."
               },
               {
@@ -2762,9 +2718,7 @@
                 "body": "Facturering, quota en data residency blijven bij de tenant, en één tenant kan nooit het quota van een andere consumeren. Secrets zijn versleuteld in rust met AES-256-GCM.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Gedeelde platform-API-sleutels"
-                ],
+                "tags": ["Gedeelde platform-API-sleutels"],
                 "note": "Meer setup per tenant. Functies blijven uit totdat ze zijn gekoppeld, en AI heeft een handmatige JSON-modus."
               },
               {
@@ -2774,9 +2728,7 @@
                 "body": "6 thema's (3 paletten, licht en donker) plus een door de gebruiker gedefinieerd aangepast thema komen uit één tokenlaag, zonder dark: classes in componenten.",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Tailwind dark:-varianten op elk element"
-                ],
+                "tags": ["Tailwind dark:-varianten op elk element"],
                 "note": "Vereist token-discipline: elke nieuwe component moet tokens gebruiken."
               },
               {
@@ -2815,7 +2767,7 @@
             "kind": "LAYERS",
             "eyebrow": "Hoe het samenwerkt",
             "title": "Architectuur & aanpak",
-            "lead": "",
+            "lead": "Feature-Based Architecture (src/features/) geïmplementeerd met Next.js App Router, strikte TypeScript, Prisma + MongoDB voor schemaflexibiliteit en tRPC voor end-to-end typeveiligheid.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -2840,11 +2792,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "(home) public",
-                  "(admin) /admin",
-                  "/api/*"
-                ],
+                "tags": ["(home) public", "(admin) /admin", "/api/*"],
                 "note": "resolveTenant(Host)"
               },
               {
@@ -2868,12 +2816,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "22 modules",
-                  "UI",
-                  "lib",
-                  "server routers"
-                ],
+                "tags": ["22 modules", "UI", "lib", "server routers"],
                 "note": "Prisma client"
               },
               {
@@ -2883,11 +2826,7 @@
                 "body": "",
                 "value": "",
                 "icon": "",
-                "tags": [
-                  "Prisma",
-                  "MongoDB",
-                  "84 models"
-                ],
+                "tags": ["Prisma", "MongoDB", "84 models"],
                 "note": ""
               }
             ],
@@ -2902,8 +2841,8 @@
             "kind": "CODE",
             "eyebrow": "Datamodellering",
             "title": "Datamodel & i18n in de database",
-            "lead": "Content wordt als data gemodelleerd. Elk vertaalbaar item heeft een *Translation-collectie gekoppeld aan een AppLanguage, en de case-study-pagina leest de vertaalde velden uit ProjectTranslation, geblokkeerd door caseStudyEnabled.",
-            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  hook          String?\n  challenge     String?\n  approach      String?\n  outcome       String?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
+            "lead": "Content wordt als data gemodelleerd. Elk vertaalbaar item heeft een *Translation-collectie gekoppeld aan een AppLanguage, en de case-study-pagina leest alle verhalende inhoud uit gestructureerde CaseStudyContent-secties in ProjectTranslation, afgeschermd door caseStudyEnabled.",
+            "code": "model Project {\n  id               String      @id @default(auto()) @map(\"_id\") @db.ObjectId\n  userId           String?     @db.ObjectId   // tenant owner\n  slug             String?\n  kind             ProjectKind @default(PERSONAL)\n  isPrivate        Boolean     @default(false)\n  caseStudyEnabled Boolean     @default(false)\n  ProjectTranslation ProjectTranslation[]\n}\n\nmodel ProjectTranslation {\n  title         String\n  description   String\n  caseStudy     CaseStudyContent?\n  language      AppLanguage @relation(fields: [appLanguageId], references: [id])\n  appLanguageId String      @db.ObjectId\n  Project       Project?    @relation(fields: [projectId], references: [id], onDelete: Cascade)\n  projectId     String?     @db.ObjectId\n}\n\nmodel AppLanguage {\n  code String @unique   // \"en\" | \"es\" | \"nl\"\n  name String\n  ProjectTranslation ProjectTranslation[]\n  // plus 24 more Translation relations\n}",
             "codeLabel": "prisma/schema/main.prisma (uittreksel)",
             "items": [
               {
@@ -3021,11 +2960,7 @@
                 "body": "Interactieve landingspagina, professioneel profiel, ervaringssamenvatting, vaardigheden en snelle Next.js App Router-architectuur.",
                 "value": "Next.js App Router",
                 "icon": "layout",
-                "tags": [
-                  "Next.js",
-                  "Tailwind CSS",
-                  "Server Components"
-                ],
+                "tags": ["Next.js", "Tailwind CSS", "Server Components"],
                 "note": "/projects/portfolio.jpg"
               },
               {
@@ -3035,11 +2970,7 @@
                 "body": "Interactief online cv, dynamisch gegenereerde PDF- en DOCX-exports in cache en beveiligde e-mailverzending.",
                 "value": "Cached PDF / DOCX",
                 "icon": "case",
-                "tags": [
-                  "PDF Engine",
-                  "DOCX Cache",
-                  "Rate Limiting"
-                ],
+                "tags": ["PDF Engine", "DOCX Cache", "Rate Limiting"],
                 "note": "/projects/portfolio-cv.jpg"
               },
               {
@@ -3049,11 +2980,7 @@
                 "body": "Gefacetteerde projectnavigatie per technologiestack, productie-gevalideerde statistieken en diepgaande technische afwegingen.",
                 "value": "Casestudies",
                 "icon": "case",
-                "tags": [
-                  "Showcase",
-                  "Gefacetteerde Filters",
-                  "Architectuur"
-                ],
+                "tags": ["Showcase", "Gefacetteerde Filters", "Architectuur"],
                 "note": "/projects/portfolio-projects.jpg"
               },
               {
@@ -3063,11 +2990,7 @@
                 "body": "Interactieve console met uitvoerbare commando's, technische vaardigheden en dynamische badges via SkillIcon.",
                 "value": "Interactieve Terminal",
                 "icon": "term",
-                "tags": [
-                  "CLI Terminal",
-                  "SkillIcon",
-                  "Interactieve UX"
-                ],
+                "tags": ["CLI Terminal", "SkillIcon", "Interactieve UX"],
                 "note": "/projects/portfolio-skills.jpg"
               },
               {
@@ -3077,11 +3000,7 @@
                 "body": "Mobiele navigatie met aanraakgebaren, adaptieve filterlades, semantische menu's en gegarandeerde 60 FPS op smartphoneschermen.",
                 "value": "100% Mobile Ready",
                 "icon": "smartphone",
-                "tags": [
-                  "Mobile First",
-                  "Vloeiende Animaties",
-                  "Touch Ready"
-                ],
+                "tags": ["Mobile First", "Vloeiende Animaties", "Touch Ready"],
                 "note": "/projects/portfolio-mobile.jpg"
               },
               {
@@ -3091,11 +3010,7 @@
                 "body": "Realtime filters op frontend, backend, devops en cybersecurity, met technologiebadges, referentie-ID-verificatie en lightboxweergave.",
                 "value": "Gefacetteerde Filters",
                 "icon": "badge",
-                "tags": [
-                  "Certificaten",
-                  "Verificatie",
-                  "SkillIcon"
-                ],
+                "tags": ["Certificaten", "Verificatie", "SkillIcon"],
                 "note": "/previews/certificates.webp"
               },
               {
@@ -3105,11 +3020,7 @@
                 "body": "Chronologische interactieve reis met technische mijlpalen, categoriefilters en responsief ontwerp.",
                 "value": "Carrièretijdlijn",
                 "icon": "layers",
-                "tags": [
-                  "Tijdlijn",
-                  "Carrière",
-                  "Mijlpalen"
-                ],
+                "tags": ["Tijdlijn", "Carrière", "Mijlpalen"],
                 "note": "/previews/timeline.webp"
               },
               {
@@ -3174,11 +3085,7 @@
                 "body": "Paginabezoekstatistieken zonder externe trackingscripts. Respecteert strikt Do Not Track en Global Privacy Control.",
                 "value": "100% Privacy-First",
                 "icon": "chart",
-                "tags": [
-                  "Zonder Cookies",
-                  "DNT / GPC",
-                  "Telemetrie"
-                ],
+                "tags": ["Zonder Cookies", "DNT / GPC", "Telemetrie"],
                 "note": "/previews/stats.webp"
               },
               {
@@ -3203,11 +3110,7 @@
                 "body": "Interactieve casestudy's over hoe ik AI gebruik bij dagelijkse ontwikkeling en hoe ik samenwerk met QA, plus Now-, Uses- en Colophon-pagina's.",
                 "value": "Gedocumenteerde Processen",
                 "icon": "users",
-                "tags": [
-                  "AI Workflow",
-                  "QA",
-                  "Methodologie"
-                ],
+                "tags": ["AI Workflow", "QA", "Methodologie"],
                 "note": "/previews/process-how-i-use-ai.webp"
               },
               {
@@ -3217,12 +3120,7 @@
                 "body": "Hoogwaardige PDF-documentgeneratie en gestructureerde DOCX-export, aangepast aan sjablonen in het Spaans, Engels en Nederlands met geïsoleerde rendering.",
                 "value": "ATS-Ready PDF",
                 "icon": "file",
-                "tags": [
-                  "PDF Generatie",
-                  "DOCX",
-                  "Meertalig",
-                  "ATS"
-                ],
+                "tags": ["PDF Generatie", "DOCX", "Meertalig", "ATS"],
                 "note": "/projects/portfolio-resume-pdf-es.jpg"
               },
               {
@@ -3247,12 +3145,7 @@
                 "body": "Hiermee kan elke huurder zijn eigen inloggegevens verbinden voor Spotify OAuth, Resend, UploadThing, AI-modellen en Google Agenda, waardoor platformlimieten worden omzeild met strikte isolatie.",
                 "value": "AES-256 Versleuteld",
                 "icon": "key",
-                "tags": [
-                  "BYO Keys",
-                  "AES-256",
-                  "OAuth",
-                  "Multi-Tenant"
-                ],
+                "tags": ["BYO Keys", "AES-256", "OAuth", "Multi-Tenant"],
                 "note": "/projects/portfolio-admin-integrations.jpg"
               },
               {
@@ -3262,12 +3155,7 @@
                 "body": "Beveiligingsconfiguratiepaneel met ondersteuning voor tweestapsverificatie (TOTP / e-mail) en phishingbestendige WebAuthn Passkeys geregistreerd via Better-Auth.",
                 "value": "WebAuthn / Passkeys",
                 "icon": "lock",
-                "tags": [
-                  "Passkeys",
-                  "2FA",
-                  "WebAuthn",
-                  "Biometrie"
-                ],
+                "tags": ["Passkeys", "2FA", "WebAuthn", "Biometrie"],
                 "note": "/projects/portfolio-admin-security.jpg"
               },
               {
@@ -3277,12 +3165,7 @@
                 "body": "Beheerderseditor met modulaire widgets (Hero, interne navigatie, tijdlijn, tools, rollen, FAQ en CTA) met live voorbeeld en drietalige synchronisatie.",
                 "value": "Widget Drag & Drop",
                 "icon": "workflow",
-                "tags": [
-                  "Drag & Drop",
-                  "Widgets",
-                  "Modulair CMS",
-                  "i18n"
-                ],
+                "tags": ["Drag & Drop", "Widgets", "Modulair CMS", "i18n"],
                 "note": "/projects/portfolio-admin-process.jpg"
               },
               {
@@ -3307,12 +3190,7 @@
                 "body": "Realtime beheer van certificaten, uitgevende instanties, referentie-ID's, verificatie-URL's en technologiebadges gekoppeld via SkillIcon.",
                 "value": "Referentieverificatie",
                 "icon": "badge",
-                "tags": [
-                  "Certificeringen",
-                  "SkillIcon",
-                  "Referenties",
-                  "CMS"
-                ],
+                "tags": ["Certificeringen", "SkillIcon", "Referenties", "CMS"],
                 "note": "/projects/portfolio-admin-certificates.jpg"
               },
               {
@@ -3322,12 +3200,7 @@
                 "body": "Drietalig formulier voor het registreren van professionele functies, organisaties, periodes, actieve statussen en ondersteunende afbeeldingen voor de interactieve tijdlijn.",
                 "value": "Chronologisch Beheer",
                 "icon": "layers",
-                "tags": [
-                  "Tijdlijn",
-                  "Carrière",
-                  "Mijlpalen",
-                  "CMS"
-                ],
+                "tags": ["Tijdlijn", "Carrière", "Mijlpalen", "CMS"],
                 "note": "/projects/portfolio-admin-timeline.jpg"
               },
               {
@@ -3337,12 +3210,7 @@
                 "body": "Beheer technologieën met documentatie-URL's, vectoriconen, stackcategorisatie (Frontend/Backend/DevOps/Mobile) en een schakelaar om ze te markeren op de interactieve terminal.",
                 "value": "Vaardighedeneconomie",
                 "icon": "code",
-                "tags": [
-                  "Vaardigheden",
-                  "Stack",
-                  "Terminal",
-                  "CMS"
-                ],
+                "tags": ["Vaardigheden", "Stack", "Terminal", "CMS"],
                 "note": "/projects/portfolio-admin-skills.jpg"
               }
             ],
@@ -3607,7 +3475,7 @@
             "kind": "METRICS",
             "eyebrow": "Resultaten",
             "title": "Uitkomst & resultaten",
-            "lead": "",
+            "lead": "Productie LCP < 1,8s, 100% geauditeerde WCAG 2.2 AAA-toegankelijkheid en een volledig zelfbeheerd platform zonder afhankelijkheid van externe CMS-diensten.",
             "code": "",
             "codeLabel": "",
             "items": [

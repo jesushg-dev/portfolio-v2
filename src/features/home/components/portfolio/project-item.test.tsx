@@ -94,16 +94,15 @@ describe("PortfolioItem", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders key result chips when hook is provided", () => {
+  it("renders highlights derived from the structured case-study summary", () => {
     renderWithIntl(
       <PortfolioItem
         {...defaultProps}
-        hook="-45% latency · Clean Architecture"
+        highlights={["45% faster", "100 users"]}
       />,
     );
-
-    expect(screen.getByText("-45% latency")).toBeInTheDocument();
-    expect(screen.getByText("Clean Architecture")).toBeInTheDocument();
+    expect(screen.getByText("45% faster")).toBeInTheDocument();
+    expect(screen.getByText("100 users")).toBeInTheDocument();
   });
 
   it("renders case study teaser when csInfo is present", () => {

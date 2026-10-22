@@ -2,7 +2,7 @@
 
 import { useState, useCallback, type FC, type PointerEvent } from "react";
 import { AiFillGithub, AiFillEye } from "react-icons/ai";
-import { ArrowUpRight, Zap } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { MediaImage } from "@/components/shared/media-image";
 import { Link } from "@/i18n/routing";
@@ -124,32 +124,17 @@ export function ProjectTeaserLine({
   );
 }
 
-interface ProjectResultsProps {
-  hook?: string | null;
-}
-
-export function ProjectResults({ hook }: ProjectResultsProps) {
-  if (!hook) return null;
-
-  const parts = hook
-    .split("·")
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  if (parts.length === 0) return null;
-
+export function ProjectHighlights({ highlights }: { highlights: string[] }) {
+  if (highlights.length === 0) return null;
   return (
-    <ul className="mt-4 flex flex-wrap gap-2" aria-label="Key results">
-      {parts.map((part, index) => (
+    <ul className="mt-4 flex flex-wrap gap-2" aria-label="Project highlights">
+      {highlights.map((highlight, index) => (
         <li
-          key={part}
-          title={part}
-          className="bg-primary/10 text-primary inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs leading-none font-semibold"
+          key={`${index}-${highlight}`}
+          title={highlight}
+          className="bg-primary/10 text-primary max-w-full min-w-0 rounded-full px-3 py-1.5 text-xs leading-none font-semibold"
         >
-          {index === 0 ? (
-            <Zap className="size-3.5 shrink-0" aria-hidden="true" />
-          ) : null}
-          <span className="truncate">{part}</span>
+          <span className="truncate">{highlight}</span>
         </li>
       ))}
     </ul>
@@ -205,7 +190,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
   githubUrl,
   websiteUrl,
   description,
-  hook,
+  highlights = [],
   kind,
   type,
   isPrivate = false,
@@ -310,8 +295,7 @@ const PortfolioItem: FC<IPortfolioItemProps> = ({
           metaLabels={metaLabels}
         />
 
-        <ProjectResults hook={hook} />
-
+        <ProjectHighlights highlights={highlights} />
         <p className="text-muted-foreground mt-4 line-clamp-3 text-sm leading-relaxed whitespace-pre-line">
           {description}
         </p>

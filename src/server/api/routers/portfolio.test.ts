@@ -113,8 +113,8 @@ describe("portfolioRouter", () => {
                   {
                     title: "Project Alpha",
                     description: "Alpha desc",
-                    hook: "Alpha hook",
                     caseStudy: {
+                      tldr: [{ title: "Users", value: "100 users" }],
                       sections: [
                         { kind: "DECISIONS", items: [1, 2] },
                         { kind: "LAYERS", items: [] },
@@ -151,6 +151,7 @@ describe("portfolioRouter", () => {
     expect(detail?.projects[0]).toMatchObject({
       id: "proj-1",
       title: "Project Alpha",
+      highlights: ["100 users"],
       kind: "PROFESSIONAL",
       csInfo: {
         decisions: 2,
@@ -203,9 +204,7 @@ describe("portfolioRouter", () => {
             kind: "PERSONAL",
             slug: "eleven",
             caseStudyEnabled: true,
-            ProjectTranslation: [
-              { title: "Eleven", description: "App", hook: "Hook" },
-            ],
+            ProjectTranslation: [{ title: "Eleven", description: "App" }],
             ProjectSkill: [
               {
                 Skill: {
@@ -439,10 +438,6 @@ describe("portfolioRouter", () => {
             {
               title: "Eleven",
               description: "App",
-              hook: "Hook",
-              challenge: "Hard",
-              approach: "Ship",
-              outcome: "Won",
             },
           ],
           ProjectSkill: [

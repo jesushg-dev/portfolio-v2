@@ -9,20 +9,17 @@
     {
       "locale": "es",
       "title": "Tu finca",
-      "description": "Aplicación móvil Android orientada a la gestión agropecuaria en fincas productivas. Facilita el control de inventario de ganado, registro de vacunaciones y tratamientos veterinarios, monitoreo de cosechas y registro de costos e ingresos operativos con funcionamiento fuera de línea.",
-      "hook": "App Móvil Android (Java) · Gestión integral agropecuaria y ganadera · Control de cosechas, inventario de ganado y costos offline"
+      "description": "Aplicación móvil Android orientada a la gestión agropecuaria en fincas productivas. Facilita el control de inventario de ganado, registro de vacunaciones y tratamientos veterinarios, monitoreo de cosechas y registro de costos e ingresos operativos con funcionamiento fuera de línea."
     },
     {
       "locale": "en",
       "title": "Your farm",
-      "description": "Native Android mobile app engineered for agricultural and livestock farm management. Streamlines livestock inventory tracking, veterinary vaccination schedules, harvest monitoring, and operational cost accounting with robust offline operation.",
-      "hook": "Native Android App (Java) · Comprehensive agricultural & livestock management · Livestock inventory, harvest & cost tracking offline"
+      "description": "Native Android mobile app engineered for agricultural and livestock farm management. Streamlines livestock inventory tracking, veterinary vaccination schedules, harvest monitoring, and operational cost accounting with robust offline operation."
     },
     {
       "locale": "nl",
       "title": "Your farm",
-      "description": "Native Android-app voor agrarisch en veeteeltbeheer op boerderijen. Stroomlijnt veestapelregistratie, veterinaire vaccinatieschema's, oogstmonitoring en kostenbeheer met betrouwbare offline werking.",
-      "hook": "Mobiele Android-app (Java) · Integraal agrarisch en veeteeltbeheer · Veestapelregistratie, oogst- en kostenbeheer offline"
+      "description": "Native Android-app voor agrarisch en veeteeltbeheer op boerderijen. Stroomlijnt veestapelregistratie, veterinaire vaccinatieschema's, oogstmonitoring en kostenbeheer met betrouwbare offline werking."
     }
   ],
   "skillKeys": ["Java", "Android"],

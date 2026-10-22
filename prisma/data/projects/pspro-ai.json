@@ -32,10 +32,6 @@
       "locale": "es",
       "title": "PSPro AI",
       "description": "Plataforma SaaS empresarial multi-tenant con DevExpress para diagramas y reportes dinámicos, modelado flexible de datos en Firebase, formularios multi-registro y automatización de procesos industriales con C# (.NET) y Nest.js.",
-      "hook": "SaaS Multi-Tenant · C# (.NET) + Nest.js + Angular + DevExpress · Reportes dinámicos, Firebase y automatización con IA",
-      "challenge": "Orquestar flujos de trabajo de alta concurrencia en logística y manufactura sin degradar la API transaccional bajo cargas pesadas de cálculo y con aislamiento estricto por cliente.",
-      "approach": "Diseñé una arquitectura híbrida multi-tenant: Angular con DevExpress para diagramación y reportes dinámicos, Firebase para esquemas de datos flexibles definidos por el usuario, Nest.js para la API central y despacho de formularios, C# (.NET 8) para workers asíncronos y PostgreSQL para aislamiento seguro.",
-      "outcome": "Aislamiento total de datos entre organizaciones, libertad de modelado para cada cliente, generación dinámica de reportes conectados a diagramas de flujo y latencia sub-50ms en la API.",
       "caseStudy": {
         "chips": [
           "Arquitectura Multi-Tenant",
@@ -74,6 +70,7 @@
             "value": "PSPro AI (https://pspro.ai/)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "walmart-centroamerica",
         "context": "PSPro AI (desarrollado en Contollo Consulting) es una plataforma SaaS multi-tenant de automatización de procesos de negocio impulsada por IA para industrias complejas. Combina modelado visual de flujos con DevExpress, generación de reportes dinámicos conectados a datos del usuario, modelador de datos personalizado sobre Firebase, formularios multi-registro y despacho de tareas por mensajería con estricto aislamiento entre organizaciones clientes.",
         "roleTitle": "Ingeniero Full-Stack Senior & Arquitecto Técnico",
@@ -162,12 +159,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Aislamiento estricto de datos multi-tenant garantizando privacidad total entre cuentas corporativas.",
-          "Procesamiento asíncrono no bloqueante para evitar degradación de la API bajo picos de carga industrial.",
-          "Garantía de entrega 'at least once' e idempotencia en el consumo de eventos en C#."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Orquestar flujos de trabajo de alta concurrencia en logística y manufactura sin degradar la API transaccional bajo cargas pesadas de cálculo y con aislamiento estricto por cliente.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Aislamiento estricto de datos multi-tenant garantizando privacidad total entre cuentas corporativas.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Procesamiento asíncrono no bloqueante para evitar degradación de la API bajo picos de carga industrial.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Garantía de entrega 'at least once' e idempotencia en el consumo de eventos en C#.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Diseñé una arquitectura híbrida multi-tenant: Angular con DevExpress para diagramación y reportes dinámicos, Firebase para esquemas de datos flexibles definidos por el usuario, Nest.js para la API central y despacho de formularios, C# (.NET 8) para workers asíncronos y PostgreSQL para aislamiento seguro.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "pspro-modules",
             "kind": "CARDS",
@@ -349,6 +398,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Aislamiento total de datos entre organizaciones, libertad de modelado para cada cliente, generación dinámica de reportes conectados a diagramas de flujo y latencia sub-50ms en la API.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -357,10 +419,6 @@
       "locale": "en",
       "title": "PSPro AI",
       "description": "Enterprise multi-tenant SaaS platform featuring DevExpress for visual flowcharts and dynamic reports, flexible Firebase data modeling, multi-row dynamic forms, and industrial process automation with C# (.NET) and Nest.js.",
-      "hook": "Multi-Tenant SaaS · C# (.NET) + Nest.js + Angular + DevExpress · Dynamic reporting, Firebase & AI automation",
-      "challenge": "Orchestrate high-concurrency workflows in logistics and manufacturing without degrading transactional API performance under heavy computation and with strict tenant isolation.",
-      "approach": "Architected a hybrid multi-tenant solution: Angular with DevExpress for flowcharting and dynamic reporting, Firebase for tenant-defined flexible data schemas, Nest.js for domain APIs and form dispatching, C# (.NET 8) for async workers, and PostgreSQL for strict data isolation.",
-      "outcome": "Complete multi-tenant data boundaries, tenant-driven data modeling freedom, instant dynamic report generation bound to flowcharts, and sub-50ms API response latency.",
       "caseStudy": {
         "chips": [
           "Multi-Tenant Architecture",
@@ -399,6 +457,7 @@
             "value": "PSPro AI (https://pspro.ai/)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "walmart-centroamerica",
         "context": "PSPro AI (engineered at Contollo Consulting) is an AI-driven multi-tenant business process automation suite designed for complex industrial verticals. It integrates DevExpress visual process flowcharts, dynamic reporting bound to user data, tenant-defined data modeling on Firebase, multi-row interactive forms, and task message dispatching with strict cross-tenant isolation.",
         "roleTitle": "Senior Full-Stack Engineer & Technical Architect",
@@ -487,12 +546,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Strict multi-tenant data isolation ensuring complete privacy across enterprise client organizations.",
-          "Non-blocking asynchronous event handling to prevent API response degradation under heavy industrial traffic.",
-          "Guaranteed at-least-once message delivery and idempotency across C# worker consumers."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Orchestrate high-concurrency workflows in logistics and manufacturing without degrading transactional API performance under heavy computation and with strict tenant isolation.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Strict multi-tenant data isolation ensuring complete privacy across enterprise client organizations.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Non-blocking asynchronous event handling to prevent API response degradation under heavy industrial traffic.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Guaranteed at-least-once message delivery and idempotency across C# worker consumers.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Architected a hybrid multi-tenant solution: Angular with DevExpress for flowcharting and dynamic reporting, Firebase for tenant-defined flexible data schemas, Nest.js for domain APIs and form dispatching, C# (.NET 8) for async workers, and PostgreSQL for strict data isolation.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "pspro-modules",
             "kind": "CARDS",
@@ -674,6 +785,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Complete multi-tenant data boundaries, tenant-driven data modeling freedom, instant dynamic report generation bound to flowcharts, and sub-50ms API response latency.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -682,10 +806,6 @@
       "locale": "nl",
       "title": "PSPro AI",
       "description": "Enterprise multi-tenant SaaS-platform met DevExpress voor stroomdiagrammen en dynamische rapporten, flexibele Firebase-gegevensmodellering, multi-row formulieren en procesautomatisering met C# (.NET) en Nest.js.",
-      "hook": "Multi-Tenant SaaS · C# (.NET) + Nest.js + Angular + DevExpress · Dynamische rapporten, Firebase & AI automatisering",
-      "challenge": "Orkestreer gelijktijdige workflows in logistiek en productie zonder vertraging van de transactionele API onder zware rekenlasten en met strikte tenant-isolatie.",
-      "approach": "Ontwierp een hybride multi-tenant architectuur: Angular met DevExpress voor diagrammen en dynamische rapportage, Firebase voor flexibele gebruikersschema's, Nest.js voor domein-API's en formulierverzending, C# (.NET 8) voor asynchrone workers en PostgreSQL voor strikte data-isolatie.",
-      "outcome": "Volledige data-isolatie tussen organisaties, vrijheid van gegevensmodellering voor elke klant, dynamische rapportgeneratie gekoppeld aan processtromen en sub-50ms API-latency.",
       "caseStudy": {
         "chips": [
           "Multi-Tenant Architectuur",
@@ -724,6 +844,7 @@
             "value": "PSPro AI (https://pspro.ai/)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "walmart-centroamerica",
         "context": "PSPro AI (ontwikkeld bij Contollo Consulting) is een multi-tenant platform voor bedrijfsprocesautomatisering aangedreven door AI. Het combineert visuele processtroomdiagrammen met DevExpress, dynamische rapportage gekoppeld aan gebruikersgegevens, aangepaste gegevensmodellering op Firebase, multi-row formulieren en taakberichtverzending met strikte isolatie.",
         "roleTitle": "Senior Full-Stack Engineer & Technisch Architect",
@@ -812,12 +933,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Strikte multi-tenant data-isolatie ter waarborging van volledige privacy tussen enterprise-accounts.",
-          "Niet-blokkerende asynchrone eventverwerking ter voorkoming van API-vertragingen onder zware industriële belasting.",
-          "Gegarandeerde at-least-once aflevering en idempotentie bij eventverwerking in C#."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Orkestreer gelijktijdige workflows in logistiek en productie zonder vertraging van de transactionele API onder zware rekenlasten en met strikte tenant-isolatie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Strikte multi-tenant data-isolatie ter waarborging van volledige privacy tussen enterprise-accounts.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Niet-blokkerende asynchrone eventverwerking ter voorkoming van API-vertragingen onder zware industriële belasting.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Gegarandeerde at-least-once aflevering en idempotentie bij eventverwerking in C#.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Ontwierp een hybride multi-tenant architectuur: Angular met DevExpress voor diagrammen en dynamische rapportage, Firebase voor flexibele gebruikersschema's, Nest.js voor domein-API's en formulierverzending, C# (.NET 8) voor asynchrone workers en PostgreSQL voor strikte data-isolatie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "pspro-modules",
             "kind": "CARDS",
@@ -996,6 +1169,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Volledige data-isolatie tussen organisaties, vrijheid van gegevensmodellering voor elke klant, dynamische rapportgeneratie gekoppeld aan processtromen en sub-50ms API-latency.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

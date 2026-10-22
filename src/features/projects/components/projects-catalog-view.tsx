@@ -394,7 +394,6 @@ export function ProjectsCatalogView({
           [
             project.title,
             project.description,
-            project.hook ?? "",
             ...(project.skills?.map((s) => s.title) ?? []),
           ].join(" "),
         );
@@ -449,7 +448,6 @@ export function ProjectsCatalogView({
             [
               project.title,
               project.description,
-              project.hook ?? "",
               ...(project.skills?.map((s) => s.title) ?? []),
             ].join(" "),
           );

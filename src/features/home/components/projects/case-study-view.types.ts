@@ -9,9 +9,6 @@ export interface ProjectCaseStudyViewProps {
     image: string;
     title: string;
     description: string;
-    hook: string | null;
-    challenge: string | null;
-    outcome: string | null;
     githubUrl: string | null;
     websiteUrl: string | null;
     isPrivate: boolean;
@@ -37,7 +34,7 @@ export type CaseStudyPageSection =
       eyebrow: string;
       title: string;
       navTitle: string;
-      kind: "SUMMARY" | "CONTEXT" | "ROLE" | "CHALLENGE";
+      kind: "SUMMARY" | "CONTEXT" | "ROLE";
     }
   | {
       key: string;
@@ -47,5 +44,4 @@ export type CaseStudyPageSection =
       kind: "CONTENT";
       section: CaseStudySectionDTO;
       relatedSection?: CaseStudySectionDTO;
-      introText?: string;
     };

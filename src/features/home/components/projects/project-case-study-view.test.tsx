@@ -43,9 +43,6 @@ describe("ProjectCaseStudyView", () => {
       image: "",
       title: "Sample project",
       description: "A concise project description.",
-      hook: "A high-performance platform.",
-      challenge: "Build a maintainable system for multiple tenants.",
-      outcome: "A production-ready platform.",
       githubUrl: null,
       websiteUrl: null,
       isPrivate: false,
@@ -91,8 +88,16 @@ describe("ProjectCaseStudyView", () => {
             note: "",
           },
         ],
-        constraints: ["Three supported locales"],
         sections: [
+          {
+            key: "challenge",
+            kind: "STEPS",
+            title: "Challenge",
+            lead: "Build a maintainable system for multiple tenants.",
+            items: [
+              { key: "locale-support", title: "Three supported locales" },
+            ],
+          },
           {
             key: "decisions",
             kind: "DECISIONS",
@@ -193,7 +198,7 @@ describe("ProjectCaseStudyView", () => {
             kind: "METRICS",
             eyebrow: "Results",
             title: "Outcome & results",
-            lead: "",
+            lead: "A production-ready platform.",
             code: "",
             codeLabel: "",
             items: [],
@@ -253,6 +258,16 @@ describe("ProjectCaseStudyView", () => {
     ]);
     expect(container.querySelector("#s-data-model-numbers")).toBeNull();
     expect(container.querySelector("#s-scope")).toBeNull();
+    expect(
+      screen.getByText("A concise project description."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Build a maintainable system for multiple tenants."),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Three supported locales")).toBeInTheDocument();
+    expect(
+      screen.getByText("A production-ready platform."),
+    ).toBeInTheDocument();
     expect(screen.getByText("84")).toBeInTheDocument();
     expect(screen.getByText("22")).toBeInTheDocument();
     expect(screen.getByText("Solo architect & developer")).toBeInTheDocument();

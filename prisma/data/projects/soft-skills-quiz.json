@@ -10,10 +10,6 @@
       "locale": "es",
       "title": "Soft Skills Quiz",
       "description": "Evaluador interactivo en React, TypeScript y Tailwind CSS diseñado para medir habilidades blandas en equipos de ingeniería. Incorpora cuestionarios ponderados, retroalimentación diagnóstica con recomendaciones personalizadas y visualización de perfiles profesionales.",
-      "hook": "Evaluador Interactivo en React & TypeScript · Diagnóstico de habilidades blandas para desarrolladores · Estilos modernos con Tailwind CSS",
-      "challenge": "Diseñar una evaluación atractiva y fidedigna para medir competencias interpersonales en ingenieros de software sin caer en cuestionarios teóricos aburridos.",
-      "approach": "Construí una SPA interactiva en React, TypeScript y Tailwind CSS con escenarios de trabajo en equipo, cronómetro sincronizado resiliente a recargas y ponderación automatizada.",
-      "outcome": "Herramienta inmersiva adoptada por candidatos de ingeniería para autodiagnóstico y preparación previa a procesos de selección técnica.",
       "caseStudy": {
         "chips": [
           "Evaluación Psicométrica",
@@ -44,6 +40,7 @@
             "value": "Soft Skills Quiz (https://soft-skill-quiz.vercel.app)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "rick-and-morty",
         "context": "Soft Skills Quiz es una aplicación web interactiva diseñada para diagnosticar y medir habilidades blandas esenciales en desarrolladores de software: comunicación asertiva, resolución de conflictos en equipos ágiles, adaptabilidad tecnológica y liderazgo colaborativo. Frente a pruebas teóricas abstractas, la plataforma somete al candidato a dilemas reales de ingeniería con opciones múltiples y límite estricto de tiempo.",
         "roleTitle": "Desarrollador Frontend React",
@@ -112,12 +109,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Persistencia de respuestas y tiempo restante ante recarga accidental de página.",
-          "Interfaz libre de distracciones con contrastes accesibles para lectura de escenarios largos.",
-          "Validación estricta de nombres y estados de formulario antes de iniciar el test."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Diseñar una evaluación atractiva y fidedigna para medir competencias interpersonales en ingenieros de software sin caer en cuestionarios teóricos aburridos.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Persistencia de respuestas y tiempo restante ante recarga accidental de página.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Interfaz libre de distracciones con contrastes accesibles para lectura de escenarios largos.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Validación estricta de nombres y estados de formulario antes de iniciar el test.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Construí una SPA interactiva en React, TypeScript y Tailwind CSS con escenarios de trabajo en equipo, cronómetro sincronizado resiliente a recargas y ponderación automatizada.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "quiz-modules",
             "kind": "CARDS",
@@ -195,6 +244,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Herramienta inmersiva adoptada por candidatos de ingeniería para autodiagnóstico y preparación previa a procesos de selección técnica.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -203,10 +265,6 @@
       "locale": "en",
       "title": "Soft Skills Quiz",
       "description": "Interactive assessment app built with React, TypeScript, and Tailwind CSS designed to evaluate soft skills in engineering teams. Features weighted psychometric questionnaires, diagnostic feedback with actionable recommendations, and profile scoring.",
-      "hook": "Interactive Assessment in React & TypeScript · Soft skills diagnostics for software engineers · Modern Tailwind CSS styling",
-      "challenge": "Design an engaging, fair assessment to measure interpersonal engineering competencies beyond abstract theoretical multiple-choice quizzes.",
-      "approach": "Built an interactive React, TypeScript, and Tailwind CSS SPA featuring real workplace scenarios, a drift-proof countdown clock, and automated weighted competency scoring.",
-      "outcome": "Immersive evaluation platform used by engineering candidates for self-diagnosis and preparation ahead of technical hiring interviews.",
       "caseStudy": {
         "chips": [
           "Psychometric Assessment",
@@ -237,6 +295,7 @@
             "value": "Soft Skills Quiz (https://soft-skill-quiz.vercel.app)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "rick-and-morty",
         "context": "Soft Skills Quiz is an interactive web assessment built to measure crucial interpersonal competencies in software engineers: team conflict resolution, agile communication, technical adaptability, and collaborative leadership. Instead of dry theoretical trivia, the test presents real engineering workplace scenarios under a strict time limit.",
         "roleTitle": "React Frontend Developer",
@@ -305,12 +364,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Persistence of selected answers and elapsed time across accidental page reloads.",
-          "Distraction-free interface with accessible contrast for reading long scenario prompts.",
-          "Strict input validation before candidate begins the evaluation."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Design an engaging, fair assessment to measure interpersonal engineering competencies beyond abstract theoretical multiple-choice quizzes.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Persistence of selected answers and elapsed time across accidental page reloads.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Distraction-free interface with accessible contrast for reading long scenario prompts.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Strict input validation before candidate begins the evaluation.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Built an interactive React, TypeScript, and Tailwind CSS SPA featuring real workplace scenarios, a drift-proof countdown clock, and automated weighted competency scoring.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "quiz-modules",
             "kind": "CARDS",
@@ -388,6 +499,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Immersive evaluation platform used by engineering candidates for self-diagnosis and preparation ahead of technical hiring interviews.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -396,10 +520,6 @@
       "locale": "nl",
       "title": "Soft Skills Quiz",
       "description": "Interactieve beoordelingstool in React, TypeScript en Tailwind CSS voor het evalueren van soft skills bij softwareteams. Biedt gewogen psychometrische vragenlijsten, diagnostische feedback met aanbevelingen en profielvisualisaties.",
-      "hook": "Interactieve Testtool in React & TypeScript · Soft skills diagnose voor softwareontwikkelaars · Moderne Tailwind CSS styling",
-      "challenge": "Een boeiende test ontwikkelen om sociale en communicatieve vaardigheden bij softwareontwikkelaars te meten via realistische casussen.",
-      "approach": "Interactieve SPA gebouwd in React, TypeScript en Tailwind CSS met realistische werkvloerscenario's, driftvrije timer en gewogen competentiescores.",
-      "outcome": "Meertalig testplatform ingezet door ontwikkelaars ter voorbereiding op technische sollicitatieprocedures.",
       "caseStudy": {
         "chips": [
           "Psychometrische Beoordeling",
@@ -430,6 +550,7 @@
             "value": "Soft Skills Quiz (https://soft-skill-quiz.vercel.app)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "rick-and-morty",
         "context": "Soft Skills Quiz is een interactieve webapplicatie om cruciale sociale en communicatieve vaardigheden bij softwareontwikkelaars te meten: conflicthantering in agile teams, proactieve communicatie en technisch leiderschap via realistische praktijksituaties onder tijdsdruk.",
         "roleTitle": "React Frontend Ontwikkelaar",
@@ -498,12 +619,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Behoud van antwoorden en resterende tijd bij per ongeluk herladen.",
-          "Afleidingsvrije interface met hoog contrast voor het lezen van uitgebreide scenario's.",
-          "Strikte invoervalidatie voordat de test begint."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Een boeiende test ontwikkelen om sociale en communicatieve vaardigheden bij softwareontwikkelaars te meten via realistische casussen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Behoud van antwoorden en resterende tijd bij per ongeluk herladen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Afleidingsvrije interface met hoog contrast voor het lezen van uitgebreide scenario's.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Strikte invoervalidatie voordat de test begint.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Interactieve SPA gebouwd in React, TypeScript en Tailwind CSS met realistische werkvloerscenario's, driftvrije timer en gewogen competentiescores.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "quiz-modules",
             "kind": "CARDS",
@@ -578,6 +751,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Meertalig testplatform ingezet door ontwikkelaars ter voorbereiding op technische sollicitatieprocedures.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

@@ -25,10 +25,6 @@
       "locale": "en",
       "title": "Request Admin: multi-tenant request management platform",
       "description": "Enterprise telecom service ticketing and work order platform. Manages granular RBAC permissions, request lifecycle transitions, dynamic crew assignments, and strict SLA compliance using Next.js, Prisma, and SQL Server.",
-      "hook": "Telecom Ticketing & Work Order Suite · Granular RBAC permissions & SLA lifecycle · Next.js, Prisma & SQL Server",
-      "challenge": "A telecommunications operation handles service requests from many teams and organizations. People need to know who is responsible, which step a request is in and whether it is within its SLA, while each organization's data stays completely separate.",
-      "approach": "I implemented database-level multi-tenancy using ZenStack access policies across 105 models, a visual DAG workflow designer with cycle detection in React Flow, a dual-engine schema compiler for SQL Server and PostgreSQL, and end-to-end typed server actions.",
-      "outcome": "Deployed on Vercel with 262 commits, 299 unit test cases, 75 Cypress E2E specs across 15 suites, and automated English/Spanish parity for 4,159 UI strings.",
       "caseStudy": {
         "chips": ["Full stack", "Multi-tenant", "Workflows", "In production"],
         "facts": [
@@ -58,6 +54,7 @@
             "value": "Vercel · request-admin.vercel.app"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "portfolio",
         "context": "A unified enterprise platform for managing telecom service requests. Multiple organizations share one deployment with strict data isolation, configurable state workflows, an interactive DAG process editor, 14 reports, chat, and a secure data room module.",
         "roleTitle": "Architect and Lead Developer",
@@ -156,15 +153,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Data separation must be enforced at the database engine level, not screen by screen.",
-          "Development runs on SQL Server while production runs on PostgreSQL (Vercel), requiring automated schema compilation.",
-          "External API routes (/api/*) skip session middleware for API keys, requiring per-route credential verification.",
-          "Requests can only be categorized under leaf nodes at the deepest hierarchy level.",
-          "Requests reaching a terminal status cannot be moved forward by transitions.",
-          "Tests run locally and pre-push; GitHub CI enforces automated translation parity across 4,159 strings."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "A telecommunications operation handles service requests from many teams and organizations. People need to know who is responsible, which step a request is in and whether it is within its SLA, while each organization's data stays completely separate.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Data separation must be enforced at the database engine level, not screen by screen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Development runs on SQL Server while production runs on PostgreSQL (Vercel), requiring automated schema compilation.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "External API routes (/api/*) skip session middleware for API keys, requiring per-route credential verification.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Requests can only be categorized under leaf nodes at the deepest hierarchy level.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Requests reaching a terminal status cannot be moved forward by transitions.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Tests run locally and pre-push; GitHub CI enforces automated translation parity across 4,159 strings.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -263,7 +326,7 @@
             "kind": "LAYERS",
             "eyebrow": "System Design",
             "title": "Architecture & layers",
-            "lead": "Five decoupled layers, from the edge middleware down to database persistence.",
+            "lead": "Five decoupled layers, from the edge middleware down to database persistence.\n\nI implemented database-level multi-tenancy using ZenStack access policies across 105 models, a visual DAG workflow designer with cycle detection in React Flow, a dual-engine schema compiler for SQL Server and PostgreSQL, and end-to-end typed server actions.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -703,7 +766,7 @@
             "kind": "METRICS",
             "eyebrow": "Results",
             "title": "Outcome & results",
-            "lead": "",
+            "lead": "Deployed on Vercel with 262 commits, 299 unit test cases, 75 Cypress E2E specs across 15 suites, and automated English/Spanish parity for 4,159 UI strings.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -813,10 +876,6 @@
       "locale": "es",
       "title": "Request Admin: plataforma multi-tenant de gestión de solicitudes",
       "description": "Plataforma empresarial de gestión de tickets y órdenes de servicio para operadores de telecomunicaciones. Controla permisos RBAC, flujos de transición de solicitudes, asignación dinámica a cuadrillas y cumplimiento de SLAs con Next.js, Prisma y SQL Server.",
-      "hook": "Gestión de Tickets y Órdenes Telecom · Arquitectura RBAC granular y control de SLAs · Next.js, Prisma y SQL Server",
-      "challenge": "Una operación de telecomunicaciones maneja solicitudes de servicio de múltiples equipos y organizaciones. Se requiere control riguroso de responsabilidades, estados y SLAs, garantizando que los datos de cada organización permanezcan estrictamente aislados.",
-      "approach": "Implementé aislamiento multi-tenant a nivel de base de datos con políticas de ZenStack en 105 modelos, un diseñador visual de flujos DAG con detección de ciclos en React Flow, un compilador de esquemas dual para SQL Server y PostgreSQL, y server actions con tipos end-to-end.",
-      "outcome": "Desplegado en Vercel con 262 commits, 299 pruebas unitarias, 75 pruebas E2E en Cypress sobre 15 suites, y paridad automatizada en inglés y español para 4,159 cadenas de interfaz.",
       "caseStudy": {
         "chips": ["Full stack", "Multi-tenant", "Workflows", "En producción"],
         "facts": [
@@ -846,6 +905,7 @@
             "value": "Vercel · request-admin.vercel.app"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "portfolio",
         "context": "Plataforma empresarial unificada para la gestión de solicitudes en telecomunicaciones. Múltiples organizaciones comparten una sola instancia con aislamiento estricto de datos, flujos de estados configurables, editor interactivo de procesos DAG, 14 reportes, chat y salas de datos seguras.",
         "roleTitle": "Arquitecto y Desarrollador Principal",
@@ -944,15 +1004,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "La separación de datos debe garantizarse en el motor de base de datos, no pantalla por pantalla.",
-          "El desarrollo local corre sobre SQL Server y producción sobre PostgreSQL (Vercel), requiriendo compilación automatizada de esquemas.",
-          "Las rutas de API externas (/api/*) omiten el middleware de sesión para soportar API keys, exigiendo verificación en cada manejador.",
-          "Las solicitudes solo pueden categorizarse en nodos hoja en el nivel más específico de la jerarquía.",
-          "Las solicitudes que alcanzan un estado final no pueden avanzar mediante transiciones.",
-          "Las pruebas se ejecutan localmente y pre-push; el CI de GitHub verifica paridad de traducciones sobre 4,159 cadenas."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Una operación de telecomunicaciones maneja solicitudes de servicio de múltiples equipos y organizaciones. Se requiere control riguroso de responsabilidades, estados y SLAs, garantizando que los datos de cada organización permanezcan estrictamente aislados.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "La separación de datos debe garantizarse en el motor de base de datos, no pantalla por pantalla.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "El desarrollo local corre sobre SQL Server y producción sobre PostgreSQL (Vercel), requiriendo compilación automatizada de esquemas.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Las rutas de API externas (/api/*) omiten el middleware de sesión para soportar API keys, exigiendo verificación en cada manejador.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Las solicitudes solo pueden categorizarse en nodos hoja en el nivel más específico de la jerarquía.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Las solicitudes que alcanzan un estado final no pueden avanzar mediante transiciones.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Las pruebas se ejecutan localmente y pre-push; el CI de GitHub verifica paridad de traducciones sobre 4,159 cadenas.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -1051,7 +1177,7 @@
             "kind": "LAYERS",
             "eyebrow": "Diseño del sistema",
             "title": "Arquitectura y capas",
-            "lead": "Cinco capas desacopladas, desde el middleware perimetral hasta la persistencia en base de datos.",
+            "lead": "Cinco capas desacopladas, desde el middleware perimetral hasta la persistencia en base de datos.\n\nImplementé aislamiento multi-tenant a nivel de base de datos con políticas de ZenStack en 105 modelos, un diseñador visual de flujos DAG con detección de ciclos en React Flow, un compilador de esquemas dual para SQL Server y PostgreSQL, y server actions con tipos end-to-end.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1491,7 +1617,7 @@
             "kind": "METRICS",
             "eyebrow": "Resultados",
             "title": "Resultados e impacto",
-            "lead": "",
+            "lead": "Desplegado en Vercel con 262 commits, 299 pruebas unitarias, 75 pruebas E2E en Cypress sobre 15 suites, y paridad automatizada en inglés y español para 4,159 cadenas de interfaz.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1601,10 +1727,6 @@
       "locale": "nl",
       "title": "Request Admin: multi-tenant platform voor serviceverzoeken",
       "description": "Enterprise ticket- en werkorderplatform voor telecomoperatoren. Beheert fijnmazige RBAC-rechten, statusovergangen, dynamische toewijzing aan monteurs en SLA-naleving met Next.js, Prisma en SQL Server.",
-      "hook": "Telecom Ticket- en Werkorder Suite · Fijnmazige RBAC-rechten & SLA-beheer · Next.js, Prisma & SQL Server",
-      "challenge": "Een telecommunicatie-operatie verwerkt serviceverzoeken van meerdere teams en organisaties. Betrokkenen moeten weten wie verantwoordelijk is en wat de SLA-status is, terwijl organisatiegegevens strikt gescheiden blijven.",
-      "approach": "Ik implementeerde multi-tenancy op database-niveau via ZenStack-toegangsregels over 105 modellen, een visuele DAG-procesontwerper in React Flow, een dual-engine schemacompiler voor SQL Server en PostgreSQL, en getypeerde server actions.",
-      "outcome": "Geïmplementeerd op Vercel na 262 commits, met 299 Jest-unittests, 75 Cypress E2E-tests in 15 suites, en geautomatiseerde pariteit voor 4.159 interface-teksten in Engels en Spaans.",
       "caseStudy": {
         "chips": ["Full stack", "Multi-tenant", "Workflows", "In productie"],
         "facts": [
@@ -1634,6 +1756,7 @@
             "value": "Vercel · request-admin.vercel.app"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "portfolio",
         "context": "Een uniform enterprise-platform voor het beheer van serviceverzoeken in telecom. Meerdere organisaties delen één installatie met strikte gegevensscheiding, configureerbare statusworkflows, een interactieve DAG-proceseditor, 14 rapporten, chat en datarooms.",
         "roleTitle": "Architect en Hoofdontwikkelaar",
@@ -1732,15 +1855,81 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Gegevensscheiding moet worden afgedwongen in de database-engine, niet scherm voor scherm.",
-          "Lokale ontwikkeling draait op SQL Server en productie op PostgreSQL (Vercel), wat geautomatiseerde schemacompilatie vereist.",
-          "Externe API-routes (/api/*) omzeilen sessie-middleware voor API-sleutels, wat verificatie per handler vereist.",
-          "Verzoeken kunnen alleen worden ingedeeld in bladcategorieën op het diepste niveau van de hiërarchie.",
-          "Verzoeken met een definitieve status kunnen niet verder worden verplaatst via transities.",
-          "Tests draaien lokaal en pre-push; GitHub CI controleert vertaalpariteit over 4.159 interface-teksten."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Een telecommunicatie-operatie verwerkt serviceverzoeken van meerdere teams en organisaties. Betrokkenen moeten weten wie verantwoordelijk is en wat de SLA-status is, terwijl organisatiegegevens strikt gescheiden blijven.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Gegevensscheiding moet worden afgedwongen in de database-engine, niet scherm voor scherm.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Lokale ontwikkeling draait op SQL Server en productie op PostgreSQL (Vercel), wat geautomatiseerde schemacompilatie vereist.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Externe API-routes (/api/*) omzeilen sessie-middleware voor API-sleutels, wat verificatie per handler vereist.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Verzoeken kunnen alleen worden ingedeeld in bladcategorieën op het diepste niveau van de hiërarchie.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-5",
+                "title": "Verzoeken met een definitieve status kunnen niet verder worden verplaatst via transities.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-6",
+                "title": "Tests draaien lokaal en pre-push; GitHub CI controleert vertaalpariteit over 4.159 interface-teksten.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -1839,7 +2028,7 @@
             "kind": "LAYERS",
             "eyebrow": "Systeemontwerp",
             "title": "Architectuur en lagen",
-            "lead": "Vijf ontkoppelde lagen, van edge-middleware tot database-persistentie.",
+            "lead": "Vijf ontkoppelde lagen, van edge-middleware tot database-persistentie.\n\nIk implementeerde multi-tenancy op database-niveau via ZenStack-toegangsregels over 105 modellen, een visuele DAG-procesontwerper in React Flow, een dual-engine schemacompiler voor SQL Server en PostgreSQL, en getypeerde server actions.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -2279,7 +2468,7 @@
             "kind": "METRICS",
             "eyebrow": "Resultaten",
             "title": "Resultaten en impact",
-            "lead": "",
+            "lead": "Geïmplementeerd op Vercel na 262 commits, met 299 Jest-unittests, 75 Cypress E2E-tests in 15 suites, en geautomatiseerde pariteit voor 4.159 interface-teksten in Engels en Spaans.",
             "code": "",
             "codeLabel": "",
             "items": [
