@@ -17,7 +17,7 @@ test.describe.configure({ mode: "serial" });
 test.describe("timeline create", () => {
   test.beforeAll(async ({ browser }, testInfo) => {
     const context = await browser.newContext({
-      storageState: getWorkerAuthFile(testInfo.workerIndex),
+      storageState: getWorkerAuthFile(testInfo.parallelIndex),
     });
     const page = await context.newPage();
     await cleanupUserTimeline(page);

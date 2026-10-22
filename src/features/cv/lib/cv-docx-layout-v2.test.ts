@@ -1,4 +1,7 @@
-import { loadCvTemplateForTailor, DEFAULT_CV_TEMPLATE_VERSION } from "./load-cv-template-docx";
+import {
+  loadCvTemplateForTailor,
+  DEFAULT_CV_TEMPLATE_VERSION,
+} from "./load-cv-template-docx";
 
 describe("CV DOCX layout v2 (extended 6 experiences, 22 bullets)", () => {
   it("defaults to v2 template version", () => {
@@ -28,7 +31,9 @@ describe("CV DOCX layout v2 (extended 6 experiences, 22 bullets)", () => {
     expect(template.parsed.rawXml).toContain("Contollo");
     expect(template.parsed.rawXml).toContain("Musa");
     expect(template.parsed.rawXml).toContain("Telo Group");
-    expect(template.parsed.rawXml).toContain("Asociación de Iglesias Reformadas");
+    expect(template.parsed.rawXml).toContain(
+      "Asociación de Iglesias Reformadas",
+    );
   });
 
   it("can also load v1 explicitly when requested", async () => {
@@ -54,9 +59,8 @@ describe("CV DOCX layout v2 (extended 6 experiences, 22 bullets)", () => {
     expect(skillsSection).toBeDefined();
     expect(skillsSection!.paragraphs.length).toBe(4);
 
-    const { mapDraftToTemplateSections } = await import(
-      "./map-draft-to-template-sections"
-    );
+    const { mapDraftToTemplateSections } =
+      await import("./map-draft-to-template-sections");
     const { rebuildDocx } = await import("@/lib/docx/rebuilder");
     const JSZip = (await import("jszip")).default;
 

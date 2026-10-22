@@ -367,7 +367,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
       <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
         <main
           ref={mainRef}
-          className="flex min-w-0 flex-1 flex-col overflow-y-auto"
+          className="flex min-w-0 flex-1 scroll-pb-24 flex-col overflow-y-auto"
         >
           <header
             aria-label={t("pageToolbar")}
@@ -417,7 +417,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
             onOpenChange={setThemeMenuOpen}
           />
 
-          <div className="flex w-full flex-1 flex-col p-4 md:p-6">
+          <div className="flex w-full flex-1 flex-col p-4 pb-24 md:p-6 md:pb-24">
             {children}
           </div>
         </main>

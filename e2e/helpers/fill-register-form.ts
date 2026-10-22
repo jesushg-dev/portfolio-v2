@@ -109,6 +109,30 @@ export function buildRegisterOwnerInput(workerIndex = 0): RegisterOwnerInput {
   };
 }
 
+/** Retry throttled test logins according to the production Retry-After header. */
+export async function submitSignInRequest(page: Page): Promise<Response> {
+  let response: Response | undefined;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const signInResponse = page.waitForResponse(
+      (candidate) =>
+        candidate.url().includes("/api/auth/sign-in/email") &&
+        candidate.request().method() === "POST",
+      { timeout: 30_000 },
+    );
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    response = await signInResponse;
+    if (response.status() !== 429) break;
+    if (attempt === 1)
+      throw new Error("Sign-in remains rate limited after Retry-After");
+    const seconds = Number(response.headers()["retry-after"] ?? "60");
+    await new Promise((resolve) =>
+      setTimeout(resolve, (Math.min(60, Math.max(1, seconds)) + 1) * 1000),
+    );
+  }
+  if (!response) throw new Error("Sign-in returned no response");
+  return response;
+}
+
 export async function signInOwner(
   page: Page,
   email: string,
@@ -130,14 +154,7 @@ export async function signInOwner(
   await page.locator("#login-email").fill(email);
   await page.locator("#login-password").fill(password);
 
-  const signInResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("/api/auth/sign-in/email") &&
-      response.request().method() === "POST",
-    { timeout: 30_000 },
-  );
-  await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  const response = await signInResponse;
+  const response = await submitSignInRequest(page);
 
   try {
     await parseSignInResponse(response);
@@ -227,7 +244,7 @@ export async function ensureOwnerAccount(
   } catch (error) {
     if (
       error instanceof Error &&
-      error.message.includes("session cookie was not applied")
+      /session cookie was not applied|rate limited/.test(error.message)
     ) {
       throw error;
     }

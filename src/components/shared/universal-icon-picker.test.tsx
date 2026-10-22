@@ -24,8 +24,6 @@ describe("UniversalIconPicker", () => {
       />,
     );
 
-    expect(
-      screen.getByTestId("test-icon-select-preview"),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("test-icon-select-preview")).toBeInTheDocument();
   });
 });

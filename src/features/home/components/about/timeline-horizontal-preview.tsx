@@ -90,7 +90,7 @@ const TimelineCard: FC<TimelineCardProps> = ({
         <TooltipTrigger
           type="button"
           aria-label={categoryLabel}
-          className="border-primary/20 bg-card text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/20 relative z-10 mt-3 flex size-10 items-center justify-center rounded-full border shadow-xs transition-all duration-300 group-hover:scale-105 group-hover:shadow-md"
+          className="border-primary/20 bg-card text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/20 relative z-10 mt-3 flex size-11 items-center justify-center rounded-full border shadow-xs transition-all duration-300 group-hover:scale-105 group-hover:shadow-md"
         >
           <Icon className="size-4" aria-hidden="true" />
         </TooltipTrigger>

@@ -48,6 +48,7 @@ export const CvEditor: FC<{ defaultLocale: Locale }> = ({ defaultLocale }) => {
     if (!data) return null;
     return {
       profile: data.profile,
+      portfolioUrl: data.portfolioUrl,
       header: data.header,
       contacts: data.contacts,
       educations: data.educations,

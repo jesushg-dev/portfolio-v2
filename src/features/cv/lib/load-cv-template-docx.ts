@@ -16,16 +16,17 @@ const ASSETS_DIR = path.join(
   "assets",
 );
 
-const TEMPLATE_FILES: Record<CvTemplateVersion, { docx: string; pdf: string }> = {
-  v1: {
-    docx: "cv-template.docx",
-    pdf: "cv-template.pdf",
-  },
-  v2: {
-    docx: "cv-template-v2.docx",
-    pdf: "cv-template-v2.pdf",
-  },
-};
+const TEMPLATE_FILES: Record<CvTemplateVersion, { docx: string; pdf: string }> =
+  {
+    v1: {
+      docx: "cv-template.docx",
+      pdf: "cv-template.pdf",
+    },
+    v2: {
+      docx: "cv-template-v2.docx",
+      pdf: "cv-template-v2.pdf",
+    },
+  };
 
 export async function loadCvTemplateDocxBuffer(
   version: CvTemplateVersion = DEFAULT_CV_TEMPLATE_VERSION,
@@ -77,4 +78,3 @@ export async function loadCvTemplateForTailor(
     version,
   };
 }
-

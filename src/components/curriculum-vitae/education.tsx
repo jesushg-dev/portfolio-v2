@@ -31,7 +31,7 @@ function EducationItem({
         {location ? ` · ${location}` : ""}
       </p>
       {dates ? (
-        <p className="text-sm text-slate-600 tabular-nums">{dates}</p>
+        <p className="text-sm text-slate-700 tabular-nums">{dates}</p>
       ) : null}
     </div>
   );

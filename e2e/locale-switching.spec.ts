@@ -29,7 +29,7 @@ test.describe("public locale switching", () => {
     const skills = page.locator("#skills");
     await skills.scrollIntoViewIfNeeded();
 
-    const backendTab = skills.getByRole("button", { name: /^Backend/i });
+    const backendTab = skills.getByRole("tab", { name: /^Backend/i });
     await expect(backendTab).toBeVisible();
 
     // Tabs hydrate after ViewportSection mounts; retry the click until the

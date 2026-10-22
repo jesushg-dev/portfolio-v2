@@ -137,7 +137,7 @@ export async function auditShieldHouseRules(
         if (rect.width < minTargetPx || rect.height < minTargetPx) {
           push({
             kind: "target-size",
-            detail: `${Math.round(rect.width)}×${Math.round(rect.height)}px on <${element.tagName.toLowerCase()}>`,
+            detail: `${Math.round(rect.width)}×${Math.round(rect.height)}px on <${element.tagName.toLowerCase()}>: ${element.getAttribute("aria-label") ?? element.textContent?.trim().slice(0, 80) ?? ""}`,
           });
         }
       }

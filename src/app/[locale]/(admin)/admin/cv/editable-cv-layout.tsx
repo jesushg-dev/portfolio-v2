@@ -9,7 +9,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { FormDialogContent } from "@/components/shared/form-dialog-content";
 import { CvContextProvider } from "@/hoc/cv-context-provider";
 import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
-import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
+import { appendPortfolioWebsiteContact } from "@/lib/cv/append-portfolio-website-contact";
 import type { Locale as AppLocale } from "@/i18n/config";
 import { api } from "@/trpc/react";
 import { FollowerPointerCard } from "@/components/ui/following-pointer";
@@ -78,8 +78,8 @@ const EditableCvLayout: FC<ICvEditableLayoutProps> = ({
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
   const canHoverEdit = useMediaQuery(FINE_HOVER_QUERY);
   const displayContacts = useMemo(
-    () => resolveCvDisplayContacts(data.contacts, data.profile),
-    [data.contacts, data.profile],
+    () => appendPortfolioWebsiteContact(data.contacts, data.portfolioUrl ?? ""),
+    [data.contacts, data.portfolioUrl],
   );
 
   const localizedData = useMemo(() => {

@@ -315,10 +315,7 @@ describe("jobTrackerAdminRouter", () => {
     }
 
     const send = jest.fn(
-      (
-        _message: MockEmailMessage,
-        _options: { idempotencyKey: string },
-      ) => {
+      (_message: MockEmailMessage, _options: { idempotencyKey: string }) => {
         void _message;
         void _options;
         return Promise.resolve({

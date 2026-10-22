@@ -75,10 +75,7 @@ const nextConfig: NextConfig = {
     "lvh.me",
     "*.lvh.me",
   ],
-  serverExternalPackages: [
-    "jszip",
-    "docx-preview",
-  ],
+  serverExternalPackages: ["jszip", "docx-preview"],
   outputFileTracingExcludes: {
     "/*": emailTemplatesDevAssets,
     "/api/trpc/*": emailTemplatesDevAssets,

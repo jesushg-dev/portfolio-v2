@@ -100,16 +100,17 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
   const hasWord = Boolean(wordUrl);
   const hasPdf = Boolean(pdfUrl);
 
-  const generatePdfMutation = api.resumeEngineAdmin.generateTailoredPdf.useMutation({
-    onSuccess: (data) => {
-      setLocalPdfUrl(data.pdfDownloadUrl);
-      onPdfGenerated?.(data.pdfDownloadUrl);
-      toast.success(t("tailorPdfSuccess"));
-    },
-    onError: (err) => {
-      toast.error(err.message || t("tailorPdfFailed"));
-    },
-  });
+  const generatePdfMutation =
+    api.resumeEngineAdmin.generateTailoredPdf.useMutation({
+      onSuccess: (data) => {
+        setLocalPdfUrl(data.pdfDownloadUrl);
+        onPdfGenerated?.(data.pdfDownloadUrl);
+        toast.success(t("tailorPdfSuccess"));
+      },
+      onError: (err) => {
+        toast.error(err.message || t("tailorPdfFailed"));
+      },
+    });
 
   const noteItems =
     matchNotes
@@ -192,7 +193,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       : `${fileName.replace(/\.[^/.]+$/, "")}.pdf`
     : "tailored-cv.pdf";
 
-    const handleGeneratePdf = async (autoDownload = false) => {
+  const handleGeneratePdf = async (autoDownload = false) => {
     if (!exportId || generatePdfMutation.isPending) return;
     try {
       const res = await generatePdfMutation.mutateAsync({ exportId });
@@ -328,7 +329,10 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
                   }}
                 >
                   {generatePdfMutation.isPending ? (
-                    <Loader2 className="mr-1.5 size-3.5 animate-spin" aria-hidden />
+                    <Loader2
+                      className="mr-1.5 size-3.5 animate-spin"
+                      aria-hidden
+                    />
                   ) : (
                     <Download className="mr-1.5 size-3.5" aria-hidden />
                   )}
@@ -385,8 +389,8 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       ) : null}
 
       {mode === "pdf" && !pdfUrl ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border p-8 text-center bg-card">
-          <p className="text-sm text-muted-foreground max-w-md">
+        <div className="border-border bg-card flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed p-8 text-center">
+          <p className="text-muted-foreground max-w-md text-sm">
             {t("tailorPdfOnDemandNotice")}
           </p>
           <Button

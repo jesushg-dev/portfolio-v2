@@ -95,9 +95,7 @@ export async function resolveUserTechnicalSkills(
     }
     const list = categoryItemsMap.get(cat)!;
     if (
-      !list.some(
-        (existing) => existing.toLowerCase() === s.title.toLowerCase(),
-      )
+      !list.some((existing) => existing.toLowerCase() === s.title.toLowerCase())
     ) {
       list.push(s.title);
     }
@@ -113,9 +111,7 @@ export async function resolveUserTechnicalSkills(
     const list = categoryItemsMap.get(cvSkill.category)!;
     for (const item of cvSkill.items) {
       if (
-        !list.some(
-          (existing) => existing.toLowerCase() === item.toLowerCase(),
-        )
+        !list.some((existing) => existing.toLowerCase() === item.toLowerCase())
       ) {
         list.push(item);
       }

@@ -21,6 +21,7 @@ const PUBLIC_ROUTES = [
 ] as const;
 
 test.describe("accessibility — Shield (WCAG AAA)", () => {
+  test.use({ reducedMotion: "reduce" });
   for (const route of PUBLIC_ROUTES) {
     test(`${route.name} (${route.path})`, async ({ page }) => {
       await page.goto(route.path, { waitUntil: "load" });

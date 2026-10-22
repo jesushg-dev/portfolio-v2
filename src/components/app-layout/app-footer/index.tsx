@@ -18,7 +18,10 @@ import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
 import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 import type { ProcessNavPage } from "@/lib/process-pages/process-nav-page";
-import { getBrandAccessibleLabel, type SiteBrand } from "@/lib/site-brand/site-brand";
+import {
+  getBrandAccessibleLabel,
+  type SiteBrand,
+} from "@/lib/site-brand/site-brand";
 import SiteBrandMark from "@/components/app-layout/site-brand-mark";
 import { buildContactLinks } from "@/utils/contact-links";
 import type { ContactIconKey } from "@/utils/contact-links";
@@ -116,7 +119,9 @@ const Footer = async ({
           <div className="space-y-4">
             <Link
               href="/"
-              aria-label={t("homeLogo", { brand: getBrandAccessibleLabel(siteBrand) })}
+              aria-label={t("homeLogo", {
+                brand: getBrandAccessibleLabel(siteBrand),
+              })}
               className="group text-primary-foreground inline-flex min-h-11 items-center text-2xl font-extrabold tracking-tight"
             >
               <SiteBrandMark

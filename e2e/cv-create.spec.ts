@@ -33,7 +33,6 @@ test.describe("cv create", () => {
             contacts: current.contacts.length,
             educations: current.educations.length,
             languages: current.languages.length,
-            technicalSkills: current.technicalSkills.length,
             experiences: current.experiences.length,
             softSkills: current.softSkills.length,
             additionalInformation: current.additionalInformation.length,
@@ -45,7 +44,6 @@ test.describe("cv create", () => {
         contacts: portfolioCv.contacts.length,
         educations: portfolioCv.education.length,
         languages: portfolioCv.languages.length,
-        technicalSkills: portfolioCv.technicalSkills.length,
         experiences: portfolioCv.experiences.length,
         softSkills: portfolioCv.softSkills.length,
         additionalInformation: portfolioCv.additionalInformation.length,
@@ -57,7 +55,19 @@ test.describe("cv create", () => {
     expect(cv.contacts).toHaveLength(portfolioCv.contacts.length);
     expect(cv.educations).toHaveLength(portfolioCv.education.length);
     expect(cv.languages).toHaveLength(portfolioCv.languages.length);
-    expect(cv.technicalSkills).toHaveLength(portfolioCv.technicalSkills.length);
+    expect(
+      new Set(cv.technicalSkills.map((skill) => skill.category)).size,
+    ).toBe(cv.technicalSkills.length);
+    for (const skill of portfolioCv.technicalSkills) {
+      expect(cv.technicalSkills).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            category: skill.category,
+            items: expect.arrayContaining(skill.items),
+          }),
+        ]),
+      );
+    }
     expect(cv.experiences).toHaveLength(portfolioCv.experiences.length);
     expect(cv.softSkills).toHaveLength(portfolioCv.softSkills.length);
     expect(cv.additionalInformation).toHaveLength(

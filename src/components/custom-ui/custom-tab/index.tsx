@@ -240,7 +240,7 @@ const Tab: FC<ITabProps> = ({
       listEl.removeEventListener("pointercancel", handlePointerCancel);
       listEl.removeEventListener("selectstart", handleSelectStart);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scrollContainerRef, vertical]);
 
   if (tabItems.length !== Children.count(children)) {
@@ -309,7 +309,10 @@ const Tab: FC<ITabProps> = ({
           </motion.div>
           {/* Mask wrapper: isolates mask-image from the scroll container so pointer
               events are not blocked on the edge zones by the transparent gradient */}
-          <div style={maskStyle} className="relative z-10 w-full max-w-full min-w-0">
+          <div
+            style={maskStyle}
+            className="relative z-10 w-full max-w-full min-w-0"
+          >
             <div
               ref={scrollContainerRef}
               className={cn(

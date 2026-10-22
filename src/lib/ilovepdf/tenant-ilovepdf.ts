@@ -13,7 +13,9 @@ import {
 
 export class ILovePdfNotConfiguredError extends Error {
   constructor() {
-    super("iLovePDF is not configured for this portfolio. Connect your keys in Admin → Credentials.");
+    super(
+      "iLovePDF is not configured for this portfolio. Connect your keys in Admin → Credentials.",
+    );
     this.name = "ILovePdfNotConfiguredError";
   }
 }
