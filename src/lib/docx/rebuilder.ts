@@ -380,10 +380,7 @@ export async function rebuildDocx(
         adaptedPara.runs.map((r) => r.text),
       );
       if (adaptedPara.extraBullets && adaptedPara.extraBullets.length > 0) {
-        extraBulletsByXmlIndex.set(
-          origPara.xmlIndex,
-          adaptedPara.extraBullets,
-        );
+        extraBulletsByXmlIndex.set(origPara.xmlIndex, adaptedPara.extraBullets);
       }
     }
   }
@@ -421,13 +418,19 @@ export async function rebuildDocx(
       replaceWtNodes(part, adaptedTexts),
       locale,
     );
-    const aligned = alignExperienceRoleParagraph(replaced, adaptedTexts.join(" "));
+    const aligned = alignExperienceRoleParagraph(
+      replaced,
+      adaptedTexts.join(" "),
+    );
 
     if (extraBullets && extraBullets.length > 0) {
       const extraParagraphs = extraBullets
         .filter((extraText) => extraText.trim().length > 0)
         .map((extraText) => {
-          const freshParaId = crypto.randomBytes(4).toString("hex").toUpperCase();
+          const freshParaId = crypto
+            .randomBytes(4)
+            .toString("hex")
+            .toUpperCase();
           let cloned = part.replace(
             /w14:paraId="[^"]*"/,
             `w14:paraId="${freshParaId}"`,

@@ -428,7 +428,13 @@ export const integrationsAdminRouter = createTRPCRouter({
   deleteIntegration: protectedProcedure
     .input(
       z.object({
-        provider: z.enum(["resend", "spotify", "uploadthing", "ai", "ilovepdf"]),
+        provider: z.enum([
+          "resend",
+          "spotify",
+          "uploadthing",
+          "ai",
+          "ilovepdf",
+        ]),
       }),
     )
     .mutation(async ({ ctx, input }) => {

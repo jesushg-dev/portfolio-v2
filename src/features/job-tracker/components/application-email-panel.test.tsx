@@ -63,7 +63,9 @@ describe("ApplicationEmailDialog", () => {
       screen.getByText(/Loads are approximate and do not confirm/),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/Sends an identical copy to your inbox without a tracking pixel/),
+      screen.getByText(
+        /Sends an identical copy to your inbox without a tracking pixel/,
+      ),
     ).toBeInTheDocument();
   });
 });

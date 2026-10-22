@@ -47,10 +47,16 @@ async function deduplicateCollection(prisma, collection, fieldA, fieldB) {
           },
         ],
       });
-      console.log(`[db:prep] Deduplicated ${collection}: removed ${idsToDelete.length} duplicates`, res);
+      console.log(
+        `[db:prep] Deduplicated ${collection}: removed ${idsToDelete.length} duplicates`,
+        res,
+      );
     }
   } catch (err) {
-    console.warn(`[db:prep] Deduplication check on ${collection} skipped:`, err?.message ?? err);
+    console.warn(
+      `[db:prep] Deduplication check on ${collection} skipped:`,
+      err?.message ?? err,
+    );
   }
 }
 
@@ -74,7 +80,10 @@ export async function cleanupOrphanRecords() {
         },
       ],
     });
-    console.log("[db:prep] Cleaned invalid ProjectTranslation records:", resProject);
+    console.log(
+      "[db:prep] Cleaned invalid ProjectTranslation records:",
+      resProject,
+    );
 
     // 2. Remove TimelineItemSkill with null or missing timelineItemId or skillId
     const resTimeline = await prisma.$runCommandRaw({
@@ -93,15 +102,31 @@ export async function cleanupOrphanRecords() {
         },
       ],
     });
-    console.log("[db:prep] Cleaned invalid TimelineItemSkill records:", resTimeline);
+    console.log(
+      "[db:prep] Cleaned invalid TimelineItemSkill records:",
+      resTimeline,
+    );
 
     // 3. Deduplicate ProjectTranslation (projectId, appLanguageId)
-    await deduplicateCollection(prisma, "ProjectTranslation", "projectId", "appLanguageId");
+    await deduplicateCollection(
+      prisma,
+      "ProjectTranslation",
+      "projectId",
+      "appLanguageId",
+    );
 
     // 4. Deduplicate TimelineItemSkill (timelineItemId, skillId)
-    await deduplicateCollection(prisma, "TimelineItemSkill", "timelineItemId", "skillId");
+    await deduplicateCollection(
+      prisma,
+      "TimelineItemSkill",
+      "timelineItemId",
+      "skillId",
+    );
   } catch (error) {
-    console.warn("[db:prep] Warning during pre-push cleanup:", error?.message ?? error);
+    console.warn(
+      "[db:prep] Warning during pre-push cleanup:",
+      error?.message ?? error,
+    );
   } finally {
     await prisma.$disconnect();
   }

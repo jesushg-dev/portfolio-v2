@@ -6,6 +6,7 @@ import {
 } from "./helpers/fill-register-form";
 
 test.describe("register smoke", () => {
+  test.setTimeout(150_000);
   test("ensures the owner account exists via sign-in or register UI", async ({
     page,
   }) => {

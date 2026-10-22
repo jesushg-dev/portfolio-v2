@@ -12,7 +12,7 @@
     "prepare": "husky",
     "dev": "next dev --turbopack",
     "postinstall": "prisma generate",
-    "build": "next build",
+    "build": "next build --webpack",
     "analyze": "next build && node scripts/report-bundle-sizes.mjs",
     "start": "next start",
     "lint": "eslint . --fix",

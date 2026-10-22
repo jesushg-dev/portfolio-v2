@@ -15,10 +15,6 @@
       "locale": "es",
       "title": "Control de Inventario y Ventas",
       "description": "Software empresarial de escritorio para punto de venta (POS) y control de inventario en tiendas de retail. Integra lectores de códigos de barras, facturación térmica, matriz de prendas por tallas y colores, arqueos de caja y reportes analíticos con DevExpress y SQL Server.",
-      "hook": "Sistema POS de Escritorio en C# & DevExpress · Control de inventario en tiempo real, facturación térmica y SQL Server",
-      "challenge": "Evitar inconsistencias de stock en ventas concurrentes de prendas por talla y color, garantizando emisión de tickets en <2 segundos y arqueos de caja exactos sin depender de internet.",
-      "approach": "Construí una solución cliente-servidor en C# con Windows Forms y controles DevExpress (XtraGrid, Ribbon, XtraReports), transacciones ACID en SQL Server y arquitectura desacoplada N-Capas.",
-      "outcome": "Punto de venta de alta velocidad, reducción a cero de discrepancias de inventario, auditoría financiera completa con DevExpress Reports y despliegue exitoso en tienda de ropa.",
       "caseStudy": {
         "chips": [
           "C# / .NET",
@@ -50,6 +46,7 @@
             "value": "Control-Inventario-y-Ventas (https://github.com/jess232017/Control-Inventario-y-Ventas)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "ecommerce-admin",
         "context": "Control de Inventario y Ventas es una aplicación de escritorio diseñada para automatizar la operación comercial completa de comercios minoristas y tiendas de ropa. Resuelve la complejidad de gestionar catálogos con múltiples variantes de prendas (tallas, marcas, colores, precios diferenciados), cobro rápido en punto de venta con lector de código de barras, emisión de facturas y recibos térmicos, arqueo de turnos de caja y conciliación de inventario con reportes analíticos de alta fidelidad.",
         "roleTitle": "Desarrollador C# / .NET & Especialista DevExpress",
@@ -118,12 +115,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Operación autónoma 100% offline en la terminal de punto de venta sin depender de red externa.",
-          "Tiempos de respuesta menores a 50 milisegundos en búsquedas por código de barras entre miles de registros.",
-          "Manejo estricto de permisos por turnos de cajero para evitar manipulaciones de saldo o anulaciones no autorizadas."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Evitar inconsistencias de stock en ventas concurrentes de prendas por talla y color, garantizando emisión de tickets en <2 segundos y arqueos de caja exactos sin depender de internet.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Operación autónoma 100% offline en la terminal de punto de venta sin depender de red externa.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Tiempos de respuesta menores a 50 milisegundos en búsquedas por código de barras entre miles de registros.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Manejo estricto de permisos por turnos de cajero para evitar manipulaciones de saldo o anulaciones no autorizadas.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Construí una solución cliente-servidor en C# con Windows Forms y controles DevExpress (XtraGrid, Ribbon, XtraReports), transacciones ACID en SQL Server y arquitectura desacoplada N-Capas.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "pos-modules",
             "kind": "CARDS",
@@ -221,6 +270,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Punto de venta de alta velocidad, reducción a cero de discrepancias de inventario, auditoría financiera completa con DevExpress Reports y despliegue exitoso en tienda de ropa.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -229,10 +291,6 @@
       "locale": "en",
       "title": "Inventory and Sales Control",
       "description": "Enterprise desktop Point of Sale (POS) and inventory control software for retail stores. Features barcode scanning, thermal receipt billing, size/color apparel matrices, cashier shift audits, and executive analytics powered by DevExpress and SQL Server.",
-      "hook": "Desktop POS System in C# & DevExpress · Real-time inventory control, thermal billing & SQL Server",
-      "challenge": "Prevent stock inconsistencies during concurrent garment sales across sizes and colors, ensuring receipt checkout in <2s and exact cash register drawer reconciliations without internet reliance.",
-      "approach": "Engineered a robust client-server solution in C# with Windows Forms and DevExpress controls (XtraGrid, Ribbon, XtraReports), atomic SQL Server transactions, and an N-Tier architecture.",
-      "outcome": "High-speed point of sale, complete elimination of inventory discrepancies, rich financial auditing with DevExpress Reports, and successful retail clothing store deployment.",
       "caseStudy": {
         "chips": [
           "C# / .NET",
@@ -264,6 +322,7 @@
             "value": "Control-Inventario-y-Ventas (https://github.com/jess232017/Control-Inventario-y-Ventas)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "ecommerce-admin",
         "context": "Inventory and Sales Control is an enterprise desktop software created to automate retail sales operations and inventory workflows for clothing stores. It addresses the complexity of tracking apparel variants (sizes, brands, colors, differential pricing), rapid checkout via barcode scanners, thermal receipt and invoice printing, cashier shift reconciliations, and high-fidelity analytical reporting.",
         "roleTitle": "C# / .NET Developer & DevExpress Specialist",
@@ -332,12 +391,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "100% offline standalone operation on point-of-sale workstations without external network dependency.",
-          "Sub-50 millisecond query latency for barcode lookups across thousands of inventory records.",
-          "Strict cashier shift privilege controls to prevent unauthorized price alterations or invalid voids."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Prevent stock inconsistencies during concurrent garment sales across sizes and colors, ensuring receipt checkout in <2s and exact cash register drawer reconciliations without internet reliance.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "100% offline standalone operation on point-of-sale workstations without external network dependency.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Sub-50 millisecond query latency for barcode lookups across thousands of inventory records.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Strict cashier shift privilege controls to prevent unauthorized price alterations or invalid voids.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Engineered a robust client-server solution in C# with Windows Forms and DevExpress controls (XtraGrid, Ribbon, XtraReports), atomic SQL Server transactions, and an N-Tier architecture.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "pos-modules",
             "kind": "CARDS",
@@ -435,6 +546,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "High-speed point of sale, complete elimination of inventory discrepancies, rich financial auditing with DevExpress Reports, and successful retail clothing store deployment.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -443,10 +567,6 @@
       "locale": "nl",
       "title": "Voorraad- en Verkoopbeheer",
       "description": "Desktopsoftware voor kassa (POS) en voorraadbeheer in detailhandelszaken. Biedt barcodescanning, thermische facturatie, kledingmatrices naar maat en kleur, kassa-afsluitingen en analyses aangedreven door DevExpress en SQL Server.",
-      "hook": "Desktop POS-systeem in C# & DevExpress · Realtime voorraadbeheer, thermische facturatie & SQL Server",
-      "challenge": "Voorkom voorraadinconsistenties bij gelijktijdige verkoop van kledingvarianten (maten/kleuren) en garandeer ticketuitgifte in <2s en exacte kassa-afsluitingen zonder internetafhankelijkheid.",
-      "approach": "Ontwikkelde een robuuste client-serveroplossing in C# met Windows Forms en DevExpress-componenten (XtraGrid, Ribbon, XtraReports), atomische SQL Server-transacties en N-laags architectuur.",
-      "outcome": "Supersnel kassasysteem, volledige eliminatie van voorraaddiscrepanties, rijke financiële audits met DevExpress Reports en succesvolle implementatie in een kledingwinkel.",
       "caseStudy": {
         "chips": [
           "C# / .NET",
@@ -478,6 +598,7 @@
             "value": "Control-Inventario-y-Ventas (https://github.com/jess232017/Control-Inventario-y-Ventas)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "ecommerce-admin",
         "context": "Voorraad- en Verkoopbeheer is een desktopapplicatie ontworpen om de complete commerciële bedrijfsvoering van detailhandelszaken en kledingwinkels te automatiseren. Het lost de complexiteit op van het beheren van kledingvarianten (maten, merken, kleuren, verschillende prijzen), snel afrekenen via barcodescanners, thermische ticket- en factuurprint, kassa-afsluitingen en diepgaande rapportages.",
         "roleTitle": "C# / .NET Ontwikkelaar & DevExpress Specialist",
@@ -546,12 +667,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "100% offline zelfstandige werking op het kassasysteem zonder externe netwerkafhankelijkheid.",
-          "Responstijden onder 50 milliseconden bij barcodezoekopdrachten tussen duizenden artikelen.",
-          "Strikte kassarollen en bevoegdheden om ongeautoriseerde prijsaanpassingen of ongeldige annuleringen te voorkomen."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Voorkom voorraadinconsistenties bij gelijktijdige verkoop van kledingvarianten (maten/kleuren) en garandeer ticketuitgifte in <2s en exacte kassa-afsluitingen zonder internetafhankelijkheid.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "100% offline zelfstandige werking op het kassasysteem zonder externe netwerkafhankelijkheid.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Responstijden onder 50 milliseconden bij barcodezoekopdrachten tussen duizenden artikelen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Strikte kassarollen en bevoegdheden om ongeautoriseerde prijsaanpassingen of ongeldige annuleringen te voorkomen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Ontwikkelde een robuuste client-serveroplossing in C# met Windows Forms en DevExpress-componenten (XtraGrid, Ribbon, XtraReports), atomische SQL Server-transacties en N-laags architectuur.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "pos-modules",
             "kind": "CARDS",
@@ -646,6 +819,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Supersnel kassasysteem, volledige eliminatie van voorraaddiscrepanties, rijke financiële audits met DevExpress Reports en succesvolle implementatie in een kledingwinkel.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

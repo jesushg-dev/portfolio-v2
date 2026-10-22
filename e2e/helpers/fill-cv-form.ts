@@ -31,7 +31,7 @@ interface CvMine {
   contacts: { id: string; value: string }[];
   educations: { id: string; institution: string }[];
   languages: { id: string }[];
-  technicalSkills: { id: string; category: string }[];
+  technicalSkills: { id: string; category: string; items: string[] }[];
   experiences: { id: string; company: string }[];
   softSkills: { id: string }[];
   additionalInformation: { id: string }[];

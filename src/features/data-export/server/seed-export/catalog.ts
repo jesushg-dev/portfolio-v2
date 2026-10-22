@@ -67,7 +67,10 @@ import timelineJson from "../../../../../prisma/data/portfolio-timeline.json";
 import usesJson from "../../../../../prisma/data/portfolio-uses.json";
 
 import type { ProcessPageContent } from "@/features/process-pages/lib/process-page-content";
-import type { CaseStudyContentDTO } from "@/features/projects/lib/case-study";
+import {
+  CaseStudyContentSchema,
+  type CaseStudyContentDTO,
+} from "@/features/projects/lib/case-study";
 
 import type { LocaleMap, SeedLocale } from "./locales";
 
@@ -104,10 +107,6 @@ export interface ProjectSeedRecord {
     locale: SeedLocale;
     title: string;
     description: string;
-    hook?: string;
-    challenge?: string;
-    approach?: string;
-    outcome?: string;
     caseStudy?: CaseStudyContentDTO;
   }[];
   skillKeys: string[];
@@ -262,7 +261,15 @@ export interface ProcessPageSeedRecord {
 }
 
 export const skillsCatalog = skillsJson as SkillSeedRecord[];
-export const projectsCatalog = projectsJson as ProjectSeedRecord[];
+export const projectsCatalog = projectsJson.map((project) => ({
+  ...project,
+  translations: project.translations.map((translation) => ({
+    ...translation,
+    ...("caseStudy" in translation
+      ? { caseStudy: CaseStudyContentSchema.parse(translation.caseStudy) }
+      : {}),
+  })),
+})) as ProjectSeedRecord[];
 export const servicesCatalog = servicesJson as ServiceSeedRecord[];
 export const certificationsCatalog =
   certificationsJson as CertificationSeedRecord[];

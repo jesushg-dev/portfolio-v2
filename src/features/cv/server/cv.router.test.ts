@@ -155,6 +155,20 @@ describe("cvRouter", () => {
     expect(result.header).toBeNull();
   });
 
+  it("resolves the portfolio URL on the server for the CV editor", async () => {
+    const db = emptyCvDb();
+    db.profile.findUnique.mockResolvedValue({
+      userId: MOCK_OWNER_USER.id,
+      username: "ada",
+      isPrimary: false,
+      customDomain: "cv.example.com",
+    });
+    const caller = createRouterCaller(cvRouter, createTrpcTestContext({ db }));
+    expect((await caller.getMine()).portfolioUrl).toBe(
+      "https://cv.example.com",
+    );
+  });
+
   it("upserts a header and creates translations", async () => {
     const db = emptyCvDb();
     const caller = createRouterCaller(cvRouter, createTrpcTestContext({ db }));

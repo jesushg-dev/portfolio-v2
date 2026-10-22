@@ -8,6 +8,7 @@ import {
   type PortfolioHomeFixture,
 } from "../fixtures/portfolio-home";
 import { portfolioProfile } from "../fixtures/portfolio-profile";
+import type { ProfileHeroEditorDTO } from "../../src/features/profile/lib/profile-hero-editor-dto";
 
 const PROFILE_LOCALES = ["es", "en", "nl"] as const;
 type ProfileLocale = (typeof PROFILE_LOCALES)[number];
@@ -25,13 +26,6 @@ interface CvHeaderMine {
 
 interface CvMineHeaderResponse {
   header: CvHeaderMine | null;
-}
-
-interface HeroTitlesMine {
-  titles: {
-    order: number;
-    translations: Record<string, { text: string }>;
-  }[];
 }
 
 interface TerminalMine {
@@ -82,10 +76,7 @@ async function trpcMutate(
 }
 
 function profileNavLink(page: Page) {
-  return page
-    .locator('a[href*="/admin/profile"]')
-    .filter({ hasNot: page.locator('[href*="/console"]') })
-    .first();
+  return page.locator('a[href="/admin/profile"]').first();
 }
 
 export async function goToProfileHero(page: Page): Promise<void> {
@@ -105,8 +96,8 @@ export async function goToProfileHero(page: Page): Promise<void> {
 
 export async function goToProfileConsole(page: Page): Promise<void> {
   await goToProfileHero(page);
-  await page.locator("#profile-tab-console").click();
-  await page.waitForURL(/\/admin\/profile\/console\/?$/, { timeout: 15_000 });
+  await page.locator("#profile-tab-about").click();
+  await page.waitForURL(/\/admin\/profile\/about\/?$/, { timeout: 15_000 });
   await page
     .locator("#profile-console-username")
     .waitFor({ state: "visible", timeout: 15_000 });
@@ -120,11 +111,7 @@ async function selectProfileLocale(
   await page.locator(`#${prefix}-lang-${locale}`).click();
 }
 
-async function submitProfileHeroForm(
-  page: Page,
-  options?: { includeAboutMe?: boolean },
-): Promise<void> {
-  void options;
+async function submitProfileHeroForm(page: Page): Promise<void> {
   const submit = page.locator("#profile-hero-submit");
   const savePromise = page.waitForResponse(
     (response) =>
@@ -139,14 +126,17 @@ async function submitProfileHeroForm(
   await expect(submit).not.toHaveText(/Saving/i);
 }
 
-/** Clears profile-owned content: hero titles, hero summary/background, terminal steps, about text. */
+/** Clears profile-owned hero content, terminal steps, and about text. */
 export async function cleanupUserProfile(page: Page): Promise<void> {
   const [cv, languages] = await Promise.all([
     trpcQuery<CvMineHeaderResponse>(page, "cv.getMine"),
     trpcQuery<AppLanguageRow[]>(page, "appLanguagesAdmin.getAll"),
   ]);
 
-  await trpcMutate(page, "profileAdmin.upsertHeroTitlesOnly", { titles: [] });
+  await trpcMutate(page, "profileAdmin.upsertHero", {
+    fullName: cv.header?.fullName ?? portfolioProfile.name,
+    photoUrl: cv.header?.photoUrl ?? "",
+  });
 
   if (cv.header) {
     await trpcMutate(page, "profileAdmin.upsertPortfolioHeader", {
@@ -192,39 +182,23 @@ export async function fillProfileHeroFromFixture(
     .locator("#profile-hero-full-name")
     .fill(portfolioCv.header.fullName);
   await page.locator("#profile-hero-photo-url").fill(portfolioProfile.photoUrl);
-  await page
-    .locator("#profile-hero-background-url")
-    .fill(fixture.backgroundImageUrl);
-
-  const titleCount = fixture.heroTitles.length;
-  let titleRows = await page
-    .locator('[id^="profile-hero-title-"][id$="-en"]')
-    .count();
-
-  for (let index = titleRows; index < titleCount; index += 1) {
-    await page.locator("#profile-hero-add-title").click();
-    titleRows += 1;
-  }
 
   for (const locale of PROFILE_LOCALES) {
     await selectProfileLocale(page, "profile-hero", locale);
 
     await page
       .locator(`#profile-hero-summary-${locale}`)
-      .fill(fixture.heroSummary[locale]);
-
-    await page
-      .locator(`#profile-about-${locale}`)
       .fill(portfolioCv.aboutMe[locale]);
 
-    for (const [index, title] of fixture.heroTitles.entries()) {
-      await page
-        .locator(`#profile-hero-title-${index}-${locale}`)
-        .fill(title[locale]);
-    }
+    await page
+      .locator(`#profile-hero-subtitle-${locale}`)
+      .fill(fixture.heroSubtitle[locale]);
+    await page
+      .locator(`#profile-hero-tagline-${locale}`)
+      .fill(fixture.heroTagline[locale]);
   }
 
-  await submitProfileHeroForm(page, { includeAboutMe: true });
+  await submitProfileHeroForm(page);
 }
 
 async function countConsoleSteps(page: Page): Promise<number> {
@@ -282,12 +256,8 @@ export async function fillProfileConsoleFromFixture(
   await expect(submit).not.toHaveText(/Saving/i);
 }
 
-export async function getHeroTitlesMine(page: Page): Promise<HeroTitlesMine> {
-  const editor = await trpcQuery<{ titles: HeroTitlesMine["titles"] }>(
-    page,
-    "profileAdmin.getHeroEditor",
-  );
-  return { titles: editor.titles };
+export async function getHeroEditor(page: Page): Promise<ProfileHeroEditorDTO> {
+  return trpcQuery<ProfileHeroEditorDTO>(page, "profileAdmin.getHeroEditor");
 }
 
 export async function getTerminalMine(
@@ -298,8 +268,8 @@ export async function getTerminalMine(
 
 export async function fillProfileHeroSmoke(
   page: Page,
-  title: LocalizedFixture = portfolioHome.heroTitles[0],
-  heroSummary: LocalizedFixture = portfolioHome.heroSummary,
+  title: LocalizedFixture = portfolioHome.heroSubtitle,
+  heroSummary: LocalizedFixture = portfolioCv.aboutMe,
 ): Promise<void> {
   await goToProfileHero(page);
 
@@ -307,7 +277,14 @@ export async function fillProfileHeroSmoke(
   await page
     .locator("#profile-hero-full-name")
     .fill(portfolioCv.header.fullName);
-  await page.locator("#profile-hero-title-0-en").fill(title.en);
+  for (const locale of PROFILE_LOCALES) {
+    await selectProfileLocale(page, "profile-hero", locale);
+    await page.locator(`#profile-hero-subtitle-${locale}`).fill(title[locale]);
+    await page
+      .locator(`#profile-hero-tagline-${locale}`)
+      .fill(portfolioHome.heroTagline[locale]);
+  }
+  await selectProfileLocale(page, "profile-hero", "en");
   await page.locator("#profile-hero-summary-en").fill(heroSummary.en);
 
   await submitProfileHeroForm(page);

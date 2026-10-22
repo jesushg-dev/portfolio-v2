@@ -43,6 +43,8 @@ import {
 } from "@/features/projects/lib/project-editor-dto";
 import { StackTypeSchema } from "@/lib/admin/portfolio-schemas";
 import { isAbsoluteOrLocalImagePath } from "@/utils/tools/image";
+import { ProjectTranslationFormSchema } from "../lib/project-translation-form-schema";
+import { CaseStudyNarrativeEditor } from "./case-study-narrative-editor";
 
 interface ProjectFormProps {
   languages: AppLanguage[];
@@ -81,14 +83,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
         slug: z.string().optional(),
         caseStudyEnabled: z.boolean(),
         translations: translationMapSchema(
-          z.object({
-            title: z.string(),
-            description: z.string(),
-            hook: z.string(),
-            challenge: z.string(),
-            approach: z.string(),
-            outcome: z.string(),
-          }),
+          ProjectTranslationFormSchema,
           primaryLang?.id,
           "title",
           t("titleRequiredPrimary"),
@@ -209,50 +204,13 @@ export const ProjectForm: FC<ProjectFormProps> = ({
                   />
                   <FormField
                     control={form.control}
-                    name={`translations.${lang.id}.hook`}
+                    name={`translations.${lang.id}.caseStudy`}
                     render={({ field }) => (
-                      <FormItem
-                        label="Hook"
-                        inputId={`project-hook-${lang.code}`}
-                      >
-                        <Input {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`translations.${lang.id}.challenge`}
-                    render={({ field }) => (
-                      <FormItem
-                        label="Challenge"
-                        inputId={`project-challenge-${lang.code}`}
-                      >
-                        <Textarea rows={3} {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`translations.${lang.id}.approach`}
-                    render={({ field }) => (
-                      <FormItem
-                        label="Approach"
-                        inputId={`project-approach-${lang.code}`}
-                      >
-                        <Textarea rows={3} {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`translations.${lang.id}.outcome`}
-                    render={({ field }) => (
-                      <FormItem
-                        label="Outcome"
-                        inputId={`project-outcome-${lang.code}`}
-                      >
-                        <Textarea rows={3} {...field} />
-                      </FormItem>
+                      <CaseStudyNarrativeEditor
+                        value={field.value}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                      />
                     )}
                   />
                 </div>

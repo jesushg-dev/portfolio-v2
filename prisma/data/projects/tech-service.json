@@ -15,10 +15,6 @@
       "locale": "es",
       "title": "Tech Service",
       "description": "Aplicación móvil Android nativa para técnicos de soporte y talleres de reparación electrónica. Gestiona órdenes de servicio en campo, listas de verificación con evidencia fotográfica obligatoria, registro de repuestos y captura de firma táctil de conformidad del cliente.",
-      "hook": "App Móvil Android (Java) · Gestión de órdenes de reparación y soporte en campo · Firma digital e integración con Tech Service API",
-      "challenge": "Los técnicos de soporte gestionaban diagnósticos en boletas de papel propensas a extravío, sin registro fotográfico del estado del equipo ni firma digital de conformidad.",
-      "approach": "Construí una app móvil nativa en Java con soporte offline, captura de fotografías del dispositivo, lienzo de firma digital y sincronización REST con Tech Service API.",
-      "outcome": "Eliminación total del papel en talleres y campo, trazabilidad 100% de equipos recibidos, reducción del tiempo de entrega en un 40% y clientes con comprobante digital inmediato.",
       "caseStudy": {
         "chips": [
           "Android Nativo",
@@ -50,6 +46,7 @@
             "value": "TechService (https://github.com/jess232017/TechService)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "pos-inventory",
         "context": "Tech Service es una solución móvil Android desarrollada para técnicos de soporte en campo y talleres de servicio electrónico. Digitaliza el ciclo de vida completo de una orden de reparación: ingreso de equipo con número de serie y descripción de fallas, inspección física con evidencia fotográfica, asignación de repuestos utilizados, captura de firma táctil de conformidad del cliente y emisión de constancias de servicio mediante la integración con el backend Tech Service API.",
         "roleTitle": "Desarrollador Móvil Android Full-Cycle",
@@ -118,12 +115,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Captura de firma táctil de alta resolución con serialización a formato PNG o SVG ligero.",
-          "Capacidad de almacenar órdenes completas en almacenamiento local de forma encriptada en caso de pérdida del dispositivo móvil.",
-          "Sincronización rápida y eficiente con el backend PHP / MySQL de Tech Service API."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Los técnicos de soporte gestionaban diagnósticos en boletas de papel propensas a extravío, sin registro fotográfico del estado del equipo ni firma digital de conformidad.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Captura de firma táctil de alta resolución con serialización a formato PNG o SVG ligero.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Capacidad de almacenar órdenes completas en almacenamiento local de forma encriptada en caso de pérdida del dispositivo móvil.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Sincronización rápida y eficiente con el backend PHP / MySQL de Tech Service API.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Construí una app móvil nativa en Java con soporte offline, captura de fotografías del dispositivo, lienzo de firma digital y sincronización REST con Tech Service API.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "tech-service-modules",
             "kind": "CARDS",
@@ -221,6 +270,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Eliminación total del papel en talleres y campo, trazabilidad 100% de equipos recibidos, reducción del tiempo de entrega en un 40% y clientes con comprobante digital inmediato.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -229,10 +291,6 @@
       "locale": "en",
       "title": "Tech Service",
       "description": "Native Android mobile app for IT field technicians and repair workshops. Manages field service orders, diagnostic checklists with mandatory photo evidence, spare parts tracking, and digital customer signature capture on touchscreen.",
-      "hook": "Native Android App (Java) · Field tech support & repair order management · Integration with Tech Service API & digital signatures",
-      "challenge": "Support technicians managed diagnostics on paper carbon slips prone to loss, lacking photo evidence of device conditions and instant customer sign-offs.",
-      "approach": "Engineered a native Java Android application with offline support, camera integration, digital signature canvas, and bidirectional REST sync with the Tech Service API backend.",
-      "outcome": "Zero paper work orders across workshops and field sites, 100% photographic device traceability, 40% reduction in repair turnaround times, and instant digital customer receipts.",
       "caseStudy": {
         "chips": [
           "Native Android",
@@ -264,6 +322,7 @@
             "value": "TechService (https://github.com/jess232017/TechService)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "pos-inventory",
         "context": "Tech Service is an Android mobile application engineered for field IT technicians and repair workshops. It digitizes the full equipment repair lifecycle: device intake with serial numbers and reported issues, physical condition checklist with attached photographs, replacement part tracking, touchscreen digital customer signature capture, and electronic service receipt generation via Tech Service API.",
         "roleTitle": "Full-Cycle Android Mobile Developer",
@@ -332,12 +391,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "High-resolution vector-like signature capture serialized to lightweight PNG/SVG formats.",
-          "Secure on-device SQLite storage preventing data tampering in case of lost field devices.",
-          "Smooth integration with PHP/MySQL backend endpoints provided by Tech Service API."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Support technicians managed diagnostics on paper carbon slips prone to loss, lacking photo evidence of device conditions and instant customer sign-offs.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "High-resolution vector-like signature capture serialized to lightweight PNG/SVG formats.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Secure on-device SQLite storage preventing data tampering in case of lost field devices.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Smooth integration with PHP/MySQL backend endpoints provided by Tech Service API.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Engineered a native Java Android application with offline support, camera integration, digital signature canvas, and bidirectional REST sync with the Tech Service API backend.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "tech-service-modules",
             "kind": "CARDS",
@@ -435,6 +546,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Zero paper work orders across workshops and field sites, 100% photographic device traceability, 40% reduction in repair turnaround times, and instant digital customer receipts.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -443,10 +567,6 @@
       "locale": "nl",
       "title": "Tech Service",
       "description": "Native Android-app voor servicemonteurs en reparatiewerkplaatsen. Beheert buitendienstorders, diagnosechecklists met verplicht fotobewijs, onderdelenregistratie en digitale handtekeningen op het touchscreen.",
-      "hook": "Mobiele Android-app (Java) · Beheer van reparatieorders en technische buitendienst · Integratie met Tech Service API",
-      "challenge": "Monteurs beheerden diagnoses op papieren formulieren die kwetsbaar waren voor verlies, zonder fotografisch bewijs van apparaatconditie of digitale handtekeningen.",
-      "approach": "Ontwikkelde een native Android-app in Java met offline ondersteuning, fotocamera-integratie, digitaal handtekeningcanvas en REST-synchronisatie met Tech Service API.",
-      "outcome": "Volledige eliminatie van papieren werkbonnen, 100% traceerbaarheid van apparaten, 40% snellere reparatiedoorloop en directe digitale ontvangstbewijzen.",
       "caseStudy": {
         "chips": [
           "Native Android",
@@ -478,6 +598,7 @@
             "value": "TechService (https://github.com/jess232017/TechService)"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "pos-inventory",
         "context": "Tech Service is een native Android-applicatie gebouwd voor buitendienstmonteurs en elektronische reparatiewerkplaatsen. Het digitaliseert de volledige levenscyclus van reparaties: apparaatontvangst met serienummers en foutbeschrijving, fysieke inspectie met foto's, verbruikte onderdelen, handtekening op het touchscreen en digitale afleverbonnen via de Tech Service API.",
         "roleTitle": "Full-Cycle Android Mobiele Ontwikkelaar",
@@ -546,12 +667,64 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Hoge resolutie handtekeningregistratie geserialiseerd naar lichte PNG/SVG formaten.",
-          "Veilige lokale SQLite-opslag om datalekken bij apparaatverlies te voorkomen.",
-          "Soepele koppeling met PHP/MySQL backend-endpoints van Tech Service API."
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Monteurs beheerden diagnoses op papieren formulieren die kwetsbaar waren voor verlies, zonder fotografisch bewijs van apparaatconditie of digitale handtekeningen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Hoge resolutie handtekeningregistratie geserialiseerd naar lichte PNG/SVG formaten.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Veilige lokale SQLite-opslag om datalekken bij apparaatverlies te voorkomen.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Soepele koppeling met PHP/MySQL backend-endpoints van Tech Service API.",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Aanpak",
+            "lead": "Ontwikkelde een native Android-app in Java met offline ondersteuning, fotocamera-integratie, digitaal handtekeningcanvas en REST-synchronisatie met Tech Service API.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "tech-service-modules",
             "kind": "CARDS",
@@ -646,6 +819,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Volledige eliminatie van papieren werkbonnen, 100% traceerbaarheid van apparaten, 40% snellere reparatiedoorloop en directe digitale ontvangstbewijzen.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

@@ -255,7 +255,7 @@ function SocialProofContent({
                   {/* Figcaption with Author Info & Slider Controls */}
                   <figcaption className="border-border/60 relative mt-6 flex flex-col gap-3.5 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
                     {/* Author & Avatar (Full role, wraps naturally without clipping) */}
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex min-w-0 items-center gap-3">
                       {/* Avatar */}
                       {activeTestimonial.avatarUrl ? (
                         <div className="border-border/60 relative size-10 shrink-0 overflow-hidden rounded-full border shadow-xs sm:size-11">
@@ -289,7 +289,7 @@ function SocialProofContent({
 
                     {/* Slider Controls */}
                     {items.length > 1 ? (
-                      <div className="flex items-center justify-between gap-3 shrink-0 sm:justify-end">
+                      <div className="flex shrink-0 items-center justify-between gap-3 sm:justify-end">
                         <div
                           className="flex items-center gap-1.5"
                           aria-label="Pagination"

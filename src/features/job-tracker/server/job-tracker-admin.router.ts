@@ -991,9 +991,9 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       );
       const rawCandidateEmail = candidateContactEmail ?? ctx.user.email;
       const copyRecipientEmail = rawCandidateEmail
-        ? parseReplyToAddress(rawCandidateEmail)?.match(
-            /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/,
-          )?.[0]?.toLowerCase() ?? ctx.user.email?.toLowerCase()
+        ? (parseReplyToAddress(rawCandidateEmail)
+            ?.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)?.[0]
+            ?.toLowerCase() ?? ctx.user.email?.toLowerCase())
         : ctx.user.email?.toLowerCase();
 
       const fileResponse = await fetch(attachmentUrl, {

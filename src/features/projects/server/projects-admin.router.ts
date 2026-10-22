@@ -27,10 +27,6 @@ const ProjectTranslationMapSchema = z.record(
   z.object({
     title: z.string(),
     description: z.string(),
-    hook: z.string().default(""),
-    challenge: z.string().default(""),
-    approach: z.string().default(""),
-    outcome: z.string().default(""),
     caseStudy: CaseStudyContentSchema.default(buildEmptyCaseStudy),
   }),
 );
@@ -165,17 +161,13 @@ export const projectsAdminRouter = createTRPCRouter({
           where: { projectId: id, appLanguageId: translation.appLanguageId },
         });
         if (existing) {
+          const caseStudy = caseStudyDtoToWrite(translation.caseStudy);
           await ctx.db.projectTranslation.update({
             where: { id: existing.id },
             data: {
               title: translation.title,
               description: translation.description,
-              hook: translation.hook ?? null,
-              challenge: translation.challenge ?? null,
-              approach: translation.approach ?? null,
-              outcome: translation.outcome ?? null,
-              caseStudy:
-                caseStudyDtoToWrite(translation.caseStudy) ?? undefined,
+              caseStudy: caseStudy ? { set: caseStudy } : { unset: true },
             },
           });
         } else {

@@ -389,7 +389,9 @@ export async function parseDocx(buffer: Buffer): Promise<{
     if (runs.length > 0 && trimmed.length > 0) {
       const isExperience = currentSection === experienceSection;
       const headingNorm =
-        currentSection != null ? normalizeHeadingKey(currentSection.heading) : "";
+        currentSection != null
+          ? normalizeHeadingKey(currentSection.heading)
+          : "";
       const isEducation =
         headingNorm.includes("educaci") || headingNorm.includes("education");
 

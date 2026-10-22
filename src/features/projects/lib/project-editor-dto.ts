@@ -15,19 +15,10 @@ import {
 export interface ProjectTranslationFields {
   title: string;
   description: string;
-  hook: string;
-  challenge: string;
-  approach: string;
-  outcome: string;
+  caseStudy: CaseStudyContentDTO;
 }
 
-export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields> &
-  Record<
-    string,
-    ProjectTranslationFields & {
-      caseStudy: CaseStudyContentDTO;
-    }
-  >;
+export type ProjectTranslationMap = TranslationMap<ProjectTranslationFields>;
 
 export interface ProjectEditorDTO {
   id: string;
@@ -53,10 +44,6 @@ export type ProjectCreateFormDTO = Omit<ProjectEditorDTO, "id">;
 const emptyProjectTranslationFields = {
   title: "",
   description: "",
-  hook: "",
-  challenge: "",
-  approach: "",
-  outcome: "",
   caseStudy: buildEmptyCaseStudy(),
 };
 
@@ -74,10 +61,6 @@ export function mapProjectToEditorDto(
       appLanguageId: translation.appLanguageId,
       title: translation.title,
       description: translation.description,
-      hook: translation.hook ?? "",
-      challenge: translation.challenge ?? "",
-      approach: translation.approach ?? "",
-      outcome: translation.outcome ?? "",
       caseStudy: caseStudyRowToDto(translation.caseStudy ?? null),
     })) ?? [];
 

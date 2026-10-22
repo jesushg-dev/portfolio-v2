@@ -99,10 +99,6 @@ export interface ProjectExportRow {
   ProjectTranslation: (TranslationRow & {
     title: string;
     description: string;
-    hook: string | null;
-    challenge: string | null;
-    approach: string | null;
-    outcome: string | null;
     caseStudy?: CaseStudyContentRow | null;
   })[];
   ProjectSkill: { Skill: { title: string } }[];
@@ -353,42 +349,6 @@ function resolveProjectKey(
   return uniqueKey(toPascalKey(enTitle || "Project"), used);
 }
 
-function cleanCaseStudyForExport(caseStudy: ReturnType<typeof caseStudyRowToDto>) {
-  const { gallery, ...rest } = caseStudy;
-  return {
-    ...rest,
-    ...(gallery.length > 0 ? { gallery } : {}),
-  };
-}
-
-function optionalCaseStudyFields(row: {
-  hook: string | null;
-  challenge: string | null;
-  approach: string | null;
-  outcome: string | null;
-}): Partial<
-  Pick<
-    ProjectSeedRecord["translations"][number],
-    "hook" | "challenge" | "approach" | "outcome"
-  >
-> {
-  const result: Partial<
-    Pick<
-      ProjectSeedRecord["translations"][number],
-      "hook" | "challenge" | "approach" | "outcome"
-    >
-  > = {};
-  const hook = row.hook?.trim();
-  const challenge = row.challenge?.trim();
-  const approach = row.approach?.trim();
-  const outcome = row.outcome?.trim();
-  if (hook) result.hook = hook;
-  if (challenge) result.challenge = challenge;
-  if (approach) result.approach = approach;
-  if (outcome) result.outcome = outcome;
-  return result;
-}
-
 export function serializeProjects(
   projects: ProjectExportRow[],
   languages: LanguageRef[],
@@ -423,8 +383,7 @@ export function serializeProjects(
             locale,
             title: row.title,
             description: row.description,
-            ...optionalCaseStudyFields(row),
-            ...(isCaseStudyEmpty(caseStudy) ? {} : { caseStudy: cleanCaseStudyForExport(caseStudy) }),
+            ...(isCaseStudyEmpty(caseStudy) ? {} : { caseStudy }),
           };
         },
       ),

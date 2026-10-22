@@ -15,10 +15,6 @@
       "locale": "es",
       "title": "Rick y Morty | Wiki",
       "description": "Explorador web interactivo desarrollado en React, Apollo Client y GraphQL. Permite consultar y filtrar cientos de personajes, episodios y dimensiones de Rick y Morty, con paginación optimizada, caché en memoria de Apollo y gestión de favoritos con Redux.",
-      "hook": "Explorador Web en React & GraphQL · Consultas y caché en memoria con Apollo Client · Paginación y favoritos con Redux",
-      "challenge": "Aprender a consumir una API GraphQL pública de extremo a extremo, manejar paginación incremental sin consultas redundantes y persistir favoritos sin necesidad de un backend propio.",
-      "approach": "Implementé Apollo Client con una política de caché personalizada para concatenar páginas, modelé el estado en Redux Toolkit con un middleware para sincronizar con localStorage y optimicé la carga con React.lazy y Suspense.",
-      "outcome": "Una interfaz reactiva y optimizada con 3 rutas de carga diferida, 51 carátulas locales en WebP y persistencia sólida en el navegador.",
       "caseStudy": {
         "chips": ["Aprendizaje", "Frontend", "GraphQL"],
         "facts": [
@@ -43,6 +39,7 @@
             "value": "Ene 2022 – Jun 2022"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "soft-skills-quiz",
         "context": "Una pequeña aplicación web hecha para practicar el consumo de una API GraphQL pública de principio a fin. Lista los episodios de Rick and Morty, abre cada uno con sus personajes y permite guardar una lista de favoritos que sobrevive a una recarga.",
         "roleTitle": "Desarrollador · proyecto de aprendizaje",
@@ -121,13 +118,61 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Una API GraphQL pública que no controlo",
-          "Listas de episodios paginadas que deben acumularse en una sola vista",
-          "Favoritos que sobreviven a una recarga sin backend",
-          "Una interfaz con mucho contenido y 51 imágenes locales de episodios"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Aprender a consumir una API GraphQL pública de extremo a extremo, manejar paginación incremental sin consultas redundantes y persistir favoritos sin necesidad de un backend propio.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Una API GraphQL pública que no controlo",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Listas de episodios paginadas que deben acumularse en una sola vista",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Favoritos que sobreviven a una recarga sin backend",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Una interfaz con mucho contenido y 51 imágenes locales de episodios",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -253,7 +298,7 @@
             "kind": "LAYERS",
             "eyebrow": "",
             "title": "Arquitectura y enfoque",
-            "lead": "",
+            "lead": "Implementé Apollo Client con una política de caché personalizada para concatenar páginas, modelé el estado en Redux Toolkit con un middleware para sincronizar con localStorage y optimicé la carga con React.lazy y Suspense.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -423,6 +468,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Una interfaz reactiva y optimizada con 3 rutas de carga diferida, 51 carátulas locales en WebP y persistencia sólida en el navegador.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -431,10 +489,6 @@
       "locale": "en",
       "title": "Rick and Morty | Wiki",
       "description": "Interactive web explorer built with React, Apollo Client, and GraphQL. Enables filtering and inspecting hundreds of Rick and Morty characters, episodes, and locations with optimized in-memory caching, responsive design, and Redux favorites state.",
-      "hook": "Web Explorer in React & GraphQL · In-memory caching & queries via Apollo Client · Pagination & favorites with Redux",
-      "challenge": "Consume a public GraphQL API end to end, handle paginated episode lists without duplicate queries, and keep favorites persistent across reloads without a backend.",
-      "approach": "Configured Apollo Client with a custom InMemoryCache merge policy for pagination, modeled state in Redux Toolkit with localStorage middleware, and deferred routes via React.lazy and Suspense.",
-      "outcome": "A fast, responsive frontend with 3 lazy-loaded routes, 51 local WebP episode cards, and robust client-side state persistence.",
       "caseStudy": {
         "chips": ["Learning", "Frontend", "GraphQL"],
         "facts": [
@@ -459,6 +513,7 @@
             "value": "Jan 2022 – Jun 2022"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "soft-skills-quiz",
         "context": "A small web app built to practice consuming a public GraphQL API end to end. It lists Rick and Morty episodes, opens each one with its characters, and lets visitors keep a list of favorites that survives a reload.",
         "roleTitle": "Developer · learning project",
@@ -537,13 +592,61 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "A public GraphQL API I don't control",
-          "Paginated episode lists that must accumulate into one view",
-          "Favorites that survive a reload without a backend",
-          "A content-heavy UI with 51 local episode images"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Consume a public GraphQL API end to end, handle paginated episode lists without duplicate queries, and keep favorites persistent across reloads without a backend.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "A public GraphQL API I don't control",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Paginated episode lists that must accumulate into one view",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Favorites that survive a reload without a backend",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "A content-heavy UI with 51 local episode images",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -667,7 +770,7 @@
             "kind": "LAYERS",
             "eyebrow": "",
             "title": "Architecture & approach",
-            "lead": "",
+            "lead": "Configured Apollo Client with a custom InMemoryCache merge policy for pagination, modeled state in Redux Toolkit with localStorage middleware, and deferred routes via React.lazy and Suspense.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -833,6 +936,19 @@
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "A fast, responsive frontend with 3 lazy-loaded routes, 51 local WebP episode cards, and robust client-side state persistence.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
           }
         ]
       }
@@ -841,10 +957,6 @@
       "locale": "nl",
       "title": "Rick and Morty | Wiki",
       "description": "Interactieve webapplicatie ontwikkeld in React, Apollo Client en GraphQL. Biedt geavanceerde filtering en inspectie van honderden Rick and Morty-personages, afleveringen en dimensies met Apollo-caching en Redux-favorietenbeheer.",
-      "hook": "Webverkenner in React & GraphQL · In-memory caching & queries via Apollo Client · Paginering & favorieten met Redux",
-      "challenge": "Het end-to-end gebruik van een openbare GraphQL-API oefenen, gepagineerde afleveringslijsten beheren zonder dubbele queries en favorieten persistent houden tussen herlaadbeurten zonder eigen backend.",
-      "approach": "Apollo Client geconfigureerd met een aangepast InMemoryCache-mergebeleid voor paginering, state gemodelleerd in Redux Toolkit met localStorage-middleware en routes uitgesteld via React.lazy en Suspense.",
-      "outcome": "Een snelle, responsieve frontend met 3 lazy geladen routes, 51 lokale WebP-afleveringskaarten en robuuste client-side persistentie.",
       "caseStudy": {
         "chips": ["Leerproject", "Frontend", "GraphQL"],
         "facts": [
@@ -869,6 +981,7 @@
             "value": "Jan 2022 – Jun 2022"
           }
         ],
+        "gallery": [],
         "nextProjectSlug": "soft-skills-quiz",
         "context": "Een kleine webapp om het gebruik van een openbare GraphQL-API van begin tot eind te oefenen. De app toont de afleveringen van Rick and Morty, opent elke aflevering met de personages en laat bezoekers een lijst met favorieten bewaren die een herlaadbeurt overleeft.",
         "roleTitle": "Ontwikkelaar · leerproject",
@@ -947,13 +1060,61 @@
             "note": ""
           }
         ],
-        "constraints": [
-          "Een openbare GraphQL-API die ik niet beheer",
-          "Gepagineerde afleveringslijsten die zich in één weergave moeten opstapelen",
-          "Favorieten die een herlaadbeurt overleven zonder backend",
-          "Een inhoudsrijke interface met 51 lokale afleveringsafbeeldingen"
-        ],
         "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Uitdaging & beperkingen",
+            "lead": "Het end-to-end gebruik van een openbare GraphQL-API oefenen, gepagineerde afleveringslijsten beheren zonder dubbele queries en favorieten persistent houden tussen herlaadbeurten zonder eigen backend.",
+            "code": "",
+            "codeLabel": "",
+            "items": [
+              {
+                "key": "constraint-1",
+                "title": "Een openbare GraphQL-API die ik niet beheer",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-2",
+                "title": "Gepagineerde afleveringslijsten die zich in één weergave moeten opstapelen",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-3",
+                "title": "Favorieten die een herlaadbeurt overleven zonder backend",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              },
+              {
+                "key": "constraint-4",
+                "title": "Een inhoudsrijke interface met 51 lokale afleveringsafbeeldingen",
+                "summary": "",
+                "body": "",
+                "value": "",
+                "icon": "",
+                "tags": [],
+                "note": ""
+              }
+            ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
           {
             "key": "decisions",
             "kind": "DECISIONS",
@@ -1079,7 +1240,7 @@
             "kind": "LAYERS",
             "eyebrow": "",
             "title": "Architectuur en aanpak",
-            "lead": "",
+            "lead": "Apollo Client geconfigureerd met een aangepast InMemoryCache-mergebeleid voor paginering, state gemodelleerd in Redux Toolkit met localStorage-middleware en routes uitgesteld via React.lazy en Suspense.",
             "code": "",
             "codeLabel": "",
             "items": [
@@ -1242,6 +1403,19 @@
                 "note": ""
               }
             ],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultaten",
+            "lead": "Een snelle, responsieve frontend met 3 lazy geladen routes, 51 lokale WebP-afleveringskaarten en robuuste client-side persistentie.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
             "footnoteTitle": "",
             "footnotes": [],
             "footnoteVariant": "default"

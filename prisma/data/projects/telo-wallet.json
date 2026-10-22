@@ -10,25 +10,120 @@
       "locale": "es",
       "title": "Telo Wallet: Billetera Cripto & P2P",
       "description": "Aplicación móvil B2C para la administración de criptomonedas y activos digitales desarrollada en React Native y Redux para Android e iOS. Proporciona gestión de billeteras multimoneda (BTC, ETH, LTC, USDT y Telo Coin), transferencias P2P en tiempo real mediante WebSockets (Socket.IO), pagos en comercios mediante escaneo de códigos QR, verificación de identidad KYC asistida por cámara y sincronización offline-first ante fluctuaciones de red móvil.",
-      "hook": "App Móvil React Native · Billetera Cripto B2C · Transferencias P2P por WebSockets & Pagos QR",
-      "challenge": "Desarrollar una aplicación de billetera de criptoactivos rápida, segura y reactiva para el usuario final, capaz de reflejar transferencias P2P de forma instantánea sin refrescos manuales y garantizar la persistencia de datos ante interrupciones de conectividad.",
-      "approach": "Arquitectura modular en React Native con Redux Thunk y Redux Persist para caché offline seguro; integración de Socket.IO para eventos bidireccionales en transferencias (NOTIFY_P2P); escáner QR de alta velocidad y suite de pruebas unitarias en Jest.",
-      "outcome": "Experiencia de pagos y transferencias en sub-segundos con notificaciones push en tiempo real, reducción del ~70% en incidencias en producción y adopción segura de pagos cripto para usuarios finales."
+      "caseStudy": {
+        "chips": [],
+        "facts": [],
+        "gallery": [],
+        "nextProjectSlug": "",
+        "context": "",
+        "roleTitle": "",
+        "roleIntro": "",
+        "tldr": [],
+        "responsibilities": [],
+        "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Reto y restricciones",
+            "lead": "Desarrollar una aplicación de billetera de criptoactivos rápida, segura y reactiva para el usuario final, capaz de reflejar transferencias P2P de forma instantánea sin refrescos manuales y garantizar la persistencia de datos ante interrupciones de conectividad.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Enfoque",
+            "lead": "Arquitectura modular en React Native con Redux Thunk y Redux Persist para caché offline seguro; integración de Socket.IO para eventos bidireccionales en transferencias (NOTIFY_P2P); escáner QR de alta velocidad y suite de pruebas unitarias en Jest.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Resultados",
+            "lead": "Experiencia de pagos y transferencias en sub-segundos con notificaciones push en tiempo real, reducción del ~70% en incidencias en producción y adopción segura de pagos cripto para usuarios finales.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "en",
       "title": "Telo Wallet: Crypto & P2P Mobile Wallet",
       "description": "B2C mobile application for cryptocurrency and digital asset management developed in React Native and Redux for Android and iOS. Features multi-currency wallets (BTC, ETH, LTC, USDT, Telo Coin), real-time peer-to-peer (P2P) transfers via WebSockets (Socket.IO), QR code point-of-sale merchant payments, camera-assisted KYC onboarding, and offline-first data caching.",
-      "hook": "React Native Mobile App · B2C Crypto Wallet · Real-Time P2P WebSockets & QR Payments",
-      "challenge": "Building a fast, reactive, and secure end-user cryptocurrency wallet capable of reflecting instant P2P transfers without manual refreshing while maintaining state consistency across mobile network drops.",
-      "approach": "Engineered a modular React Native architecture leveraging Redux Thunk and Redux Persist for secure local storage; integrated Socket.IO for bidirectional P2P transfer notifications (NOTIFY_P2P); high-speed QR scanning and Jest unit testing.",
-      "outcome": "Sub-second transfer and payment updates with instant real-time notifications, a ~70% decrease in production defects, and frictionless crypto onboarding for mobile users."
+      "caseStudy": {
+        "chips": [],
+        "facts": [],
+        "gallery": [],
+        "nextProjectSlug": "",
+        "context": "",
+        "roleTitle": "",
+        "roleIntro": "",
+        "tldr": [],
+        "responsibilities": [],
+        "sections": [
+          {
+            "key": "challenge",
+            "kind": "STEPS",
+            "eyebrow": "",
+            "title": "Challenge & constraints",
+            "lead": "Building a fast, reactive, and secure end-user cryptocurrency wallet capable of reflecting instant P2P transfers without manual refreshing while maintaining state consistency across mobile network drops.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "approach",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Approach",
+            "lead": "Engineered a modular React Native architecture leveraging Redux Thunk and Redux Persist for secure local storage; integrated Socket.IO for bidirectional P2P transfer notifications (NOTIFY_P2P); high-speed QR scanning and Jest unit testing.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          },
+          {
+            "key": "results",
+            "kind": "CARDS",
+            "eyebrow": "",
+            "title": "Results",
+            "lead": "Sub-second transfer and payment updates with instant real-time notifications, a ~70% decrease in production defects, and frictionless crypto onboarding for mobile users.",
+            "code": "",
+            "codeLabel": "",
+            "items": [],
+            "footnoteTitle": "",
+            "footnotes": [],
+            "footnoteVariant": "default"
+          }
+        ]
+      }
     },
     {
       "locale": "nl",
       "title": "Telo Wallet: Crypto & P2P Mobiele Wallet",
-      "description": "B2C mobiele applicatie voor cryptocurrency- en activabeheer, gebouwd met React Native en Redux voor Android en iOS. Voorzien van multi-currency wallets (BTC, ETH, LTC, USDT, Telo Coin), realtime P2P-overboekingen via WebSockets (Socket.IO), betalingen aan winkels via QR-code, camera-gestuurde KYC-verificatie en offline-first caching.",
-      "hook": "Mobiele React Native-app · B2C Crypto Wallet · Realtime P2P WebSockets & QR-betalingen"
+      "description": "B2C mobiele applicatie voor cryptocurrency- en activabeheer, gebouwd met React Native en Redux voor Android en iOS. Voorzien van multi-currency wallets (BTC, ETH, LTC, USDT, Telo Coin), realtime P2P-overboekingen via WebSockets (Socket.IO), betalingen aan winkels via QR-code, camera-gestuurde KYC-verificatie en offline-first caching."
     }
   ],
   "skillKeys": [

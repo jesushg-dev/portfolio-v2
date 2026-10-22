@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getTenantPublicUrl } from "@/lib/tenant/public-url";
 import { TRPCError } from "@trpc/server";
 import type { AppLanguage, PrismaClient } from "@prisma/client";
 
@@ -288,6 +289,7 @@ const getFullCvForUser = async (ctx: { db: PrismaClient }, userId: string) => {
 
   return {
     profile,
+    portfolioUrl: profile ? getTenantPublicUrl(profile) : null,
     header,
     aboutMe,
     contacts,

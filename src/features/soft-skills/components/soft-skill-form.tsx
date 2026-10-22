@@ -92,8 +92,6 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
     copyFields: ["title", "description"],
   });
 
-
-
   const createItem = api.softSkillsAdmin.createItem.useMutation();
   const updateItem = api.softSkillsAdmin.updateItem.useMutation();
   const utils = api.useUtils();

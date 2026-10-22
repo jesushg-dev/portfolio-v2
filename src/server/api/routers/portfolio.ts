@@ -69,8 +69,8 @@ interface ProjectRecordForList {
   ProjectTranslation: {
     title?: string;
     description?: string;
-    hook?: string | null;
     caseStudy?: {
+      tldr?: { title?: string | null; value?: string | null }[];
       sections?: { kind?: string; items?: unknown[] }[];
       facts?: unknown[];
     } | null;
@@ -116,7 +116,11 @@ function formatProjectListItem(project: ProjectRecordForList) {
     kind: project.kind ?? "PERSONAL",
     slug: project.slug,
     caseStudyEnabled: project.caseStudyEnabled,
-    hook: translation?.hook ?? null,
+    highlights:
+      cs?.tldr
+        ?.map((item) => (item.value?.trim() ? item.value : (item.title ?? "")))
+        .filter(Boolean)
+        .slice(0, 3) ?? [],
     status: project.status ?? null,
     startedAt: toIsoOrNull(project.startedAt),
     endedAt: toIsoOrNull(project.endedAt),
@@ -1030,10 +1034,6 @@ export const portfolioRouter = createTRPCRouter({
         teamSize: project.teamSize,
         title: translation.title,
         description: translation.description,
-        hook: translation.hook,
-        challenge: translation.challenge,
-        approach: translation.approach,
-        outcome: translation.outcome,
         caseStudy: caseStudyRowToDto(translation.caseStudy ?? null),
         skills,
       };
@@ -1076,7 +1076,7 @@ export const portfolioRouter = createTRPCRouter({
             slug: project.slug,
             title: translation.title,
             image: project.image,
-            summary: translation.hook ?? translation.description,
+            summary: translation.description,
             nextProjectSlug: translation.caseStudy?.nextProjectSlug ?? null,
           };
         })

@@ -26,7 +26,9 @@ describe("Universal Icon Registry", () => {
     expect(resolveIcon("non_existent_key")).toBe(DEFAULT_FALLBACK_ICON);
 
     const customFallback = LayoutGrid;
-    expect(resolveIcon("non_existent_key", customFallback)).toBe(customFallback);
+    expect(resolveIcon("non_existent_key", customFallback)).toBe(
+      customFallback,
+    );
   });
 
   it("checks whether an icon key is registered", () => {
@@ -42,11 +44,15 @@ describe("Universal Icon Registry", () => {
 
     const softSkillOptions = getIconOptions("soft-skill");
     expect(softSkillOptions.length).toBe(15);
-    expect(softSkillOptions.every((o) => o.category === "soft-skill")).toBe(true);
+    expect(softSkillOptions.every((o) => o.category === "soft-skill")).toBe(
+      true,
+    );
 
     const caseStudyOptions = getIconOptions("case-study");
     expect(caseStudyOptions.length).toBeGreaterThan(0);
-    expect(caseStudyOptions.every((o) => o.category === "case-study")).toBe(true);
+    expect(caseStudyOptions.every((o) => o.category === "case-study")).toBe(
+      true,
+    );
 
     const allOptions = getIconOptions("all");
     expect(allOptions.length).toBeGreaterThan(serviceOptions.length);

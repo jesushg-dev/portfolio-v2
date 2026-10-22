@@ -38,7 +38,10 @@ describe("iLovePDF Service", () => {
       global.fetch = jest.fn().mockResolvedValue({
         ok: true,
         json: () =>
-          Promise.resolve({ server: "api25.ilovepdf.com", task: "task_abc123" }),
+          Promise.resolve({
+            server: "api25.ilovepdf.com",
+            task: "task_abc123",
+          }),
       });
 
       const result = await testILovePdfConnection("pub_12345", "sec_67890");
@@ -79,7 +82,8 @@ describe("iLovePDF Service", () => {
         if (url.includes("/v1/upload")) {
           return Promise.resolve({
             ok: true,
-            json: () => Promise.resolve({ server_filename: "srv_file_01.docx" }),
+            json: () =>
+              Promise.resolve({ server_filename: "srv_file_01.docx" }),
           });
         }
         if (url.includes("/v1/process")) {

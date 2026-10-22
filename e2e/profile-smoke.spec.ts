@@ -3,7 +3,7 @@ import { expect, test } from "./authenticated-test";
 import {
   cleanupUserProfile,
   fillProfileHeroSmoke,
-  getHeroTitlesMine,
+  getHeroEditor,
   portfolioHome,
 } from "./helpers/fill-profile-form";
 
@@ -15,18 +15,14 @@ test.describe("profile smoke", () => {
   test("saves one hero title and summary from the shared fixture", async ({
     page,
   }) => {
-    const title = portfolioHome.heroTitles[0];
-    if (!title) {
-      throw new Error("portfolio-home fixture has no hero titles");
-    }
+    const title = portfolioHome.heroSubtitle;
 
     await page.goto("/admin");
-    await fillProfileHeroSmoke(page, title, portfolioHome.heroSummary);
+    await fillProfileHeroSmoke(page, title);
 
-    const heroTitles = await getHeroTitlesMine(page);
-    expect(heroTitles.titles).toHaveLength(1);
+    const hero = await getHeroEditor(page);
     expect(
-      Object.values(heroTitles.titles[0]?.translations ?? {}).some(
+      Object.values(hero.heroSubtitleTranslations).some(
         (translation) => translation.text === title.en,
       ),
     ).toBe(true);

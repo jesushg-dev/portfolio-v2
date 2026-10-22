@@ -101,7 +101,7 @@ export interface LocalizedCvData {
 }
 
 export function mapCvDataToLocalized(
-  data: CvData,
+  data: Omit<CvData, "portfolioUrl">,
   appLanguages: LanguageRef[],
   locale: Locale,
 ): LocalizedCvData {

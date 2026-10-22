@@ -950,8 +950,6 @@
           "PERSONAL": "Persoonlijk",
           "LEARNING": "Leren"
         },
-        "challenge": "De uitdaging",
-        "approach": "Architectuur & aanpak",
         "outcome": "Resultaat & impact",
         "introduction": "Context",
         "backToPortfolio": "Terug naar portfolio",
@@ -968,7 +966,6 @@
         "context": "Context",
         "ownership": "Verantwoordelijkheid",
         "roleSectionTitle": "Mijn rol en verantwoordelijkheden",
-        "challengeEyebrow": "Het probleem",
         "shortOnTime": "Weinig tijd? Lees alleen:",
         "why": "Waarom",
         "alternativesConsidered": "Overwogen alternatieven",
@@ -2396,6 +2393,13 @@
         "allTypes": "Alle types"
       },
       "project": {
+        "caseStudyContent": "Inhoud van de casestudy",
+        "caseStudyContext": "Context",
+        "caseStudySectionTitle": "Sectietitel",
+        "caseStudySectionLead": "Inleiding van de sectie",
+        "newCaseStudySection": "Nieuwe sectie",
+        "addCaseStudySection": "Sectie toevoegen",
+        "removeCaseStudySection": "Sectie verwijderen",
         "generalSection": "Algemene informatie",
         "skillsSection": "Vaardigheden",
         "titleWithLanguage": "Titel ({language})",

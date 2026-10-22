@@ -955,8 +955,6 @@
           "PERSONAL": "Personal",
           "LEARNING": "Learning"
         },
-        "challenge": "The challenge",
-        "approach": "Architecture & approach",
         "outcome": "Outcome & results",
         "introduction": "Context",
         "backToPortfolio": "Back to portfolio",
@@ -972,7 +970,6 @@
         "summaryTitle": "Summary for recruiters",
         "ownership": "Ownership",
         "roleSectionTitle": "My role & responsibilities",
-        "challengeEyebrow": "The problem",
         "shortOnTime": "Short on time? Read only:",
         "why": "Why",
         "alternativesConsidered": "Alternatives considered",
@@ -2401,6 +2398,13 @@
         "allTypes": "All types"
       },
       "project": {
+        "caseStudyContent": "Case study content",
+        "caseStudyContext": "Context",
+        "caseStudySectionTitle": "Section title",
+        "caseStudySectionLead": "Section introduction",
+        "newCaseStudySection": "New section",
+        "addCaseStudySection": "Add section",
+        "removeCaseStudySection": "Remove section",
         "generalSection": "General Information",
         "skillsSection": "Skills",
         "titleWithLanguage": "Title ({language})",

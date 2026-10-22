@@ -55,7 +55,9 @@ jest.mock("@/features/resume-engine/lib/docx/generate-from-structured", () => ({
   generateDocxFromStructured: jest.fn(),
 }));
 jest.mock("@/lib/ilovepdf/tenant-ilovepdf", () => ({
-  convertDocxToPdfForTenant: jest.fn().mockResolvedValue(Buffer.from("%PDF-mock")),
+  convertDocxToPdfForTenant: jest
+    .fn()
+    .mockResolvedValue(Buffer.from("%PDF-mock")),
   isTenantILovePdfConfigured: jest.fn().mockResolvedValue(true),
   ILovePdfNotConfiguredError: class ILovePdfNotConfiguredError extends Error {},
 }));

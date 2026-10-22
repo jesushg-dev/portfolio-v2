@@ -152,9 +152,7 @@ function mapExperienceSection(
     const resps = exp
       ? exp.responsibilities.filter((r) => r.trim().length > 0)
       : experienceBullets;
-    const texts = section.paragraphs.map(
-      (_, index) => resps[index] ?? "",
-    );
+    const texts = section.paragraphs.map((_, index) => resps[index] ?? "");
     const lastPara = section.paragraphs[section.paragraphs.length - 1];
     const extra =
       lastPara && resps.length > section.paragraphs.length
@@ -216,7 +214,9 @@ function mapCategoryLineSkills(
   jobDescription?: string,
 ): AdaptedSection {
   const getCategoryItems = (categories: string[]) => {
-    const matching = draft.skills.filter((g) => categories.includes(g.category));
+    const matching = draft.skills.filter((g) =>
+      categories.includes(g.category),
+    );
     const items = matching.flatMap((g) =>
       g.items.map((i) => i.trim()).filter(Boolean),
     );
@@ -315,7 +315,11 @@ export function mapDraftToTemplateSections(
       return mapSectionParagraphs(section, [headerText]);
     }
 
-    if (heading.includes("about") || heading.includes("sobre") || heading.includes("over")) {
+    if (
+      heading.includes("about") ||
+      heading.includes("sobre") ||
+      heading.includes("over")
+    ) {
       return mapSectionParagraphs(section, aboutChunks);
     }
 

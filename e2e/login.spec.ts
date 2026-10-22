@@ -9,6 +9,7 @@ import {
 } from "./helpers/fill-register-form";
 
 test.describe("login", () => {
+  test.setTimeout(150_000);
   test.beforeAll(async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();

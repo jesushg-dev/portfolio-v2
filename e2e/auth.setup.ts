@@ -43,10 +43,6 @@ setup("authenticate workers", async ({ browser }) => {
     const workerAuthFile = `e2e/.auth/user-worker-${i}.json`;
     await page.context().storageState({ path: workerAuthFile });
 
-    if (i === 0) {
-      await page.context().storageState({ path: "e2e/.auth/user.json" });
-    }
-
     await context.close();
   }
 

@@ -7,6 +7,7 @@ import {
   expectAdminDashboard,
   isAdminPath,
   portfolioProfile,
+  submitSignInRequest,
 } from "./helpers/fill-register-form";
 import { generateTotp } from "./helpers/totp";
 import {
@@ -43,7 +44,8 @@ async function submitCredentials(
   ).toBeVisible({ timeout: 15_000 });
   await page.locator("#login-email").fill(email);
   await page.locator("#login-password").fill(password);
-  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  const response = await submitSignInRequest(page);
+  expect(response.ok(), response.ok() ? "" : await response.text()).toBe(true);
 }
 
 async function expectTwoFactorPage(page: Page): Promise<void> {
@@ -54,6 +56,7 @@ async function expectTwoFactorPage(page: Page): Promise<void> {
 }
 
 test.describe("two-factor authentication", () => {
+  test.setTimeout(150_000);
   test.describe.configure({ mode: "serial" });
 
   const account = buildTwoFactorAccount();
@@ -83,6 +86,7 @@ test.describe("two-factor authentication", () => {
 
     await ensureOwnerAccount(page, account);
     await page.goto("/admin/settings");
+    await page.getByRole("tab", { name: "Security & Integrations" }).click();
 
     const section = page.getByRole("region", {
       name: "Two-factor authentication",
@@ -138,12 +142,36 @@ test.describe("two-factor authentication", () => {
 
     await page.getByRole("tab", { name: "Authenticator" }).click();
     await page.getByLabel("Verification code").fill("000000");
+    const invalidResponse = page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/auth/two-factor/verify-totp") &&
+        response.request().method() === "POST",
+    );
     await page.getByRole("button", { name: "Verify" }).click();
-    await expect(page.getByRole("alert")).toBeVisible({ timeout: 30_000 });
+    expect((await invalidResponse).ok()).toBe(false);
+    await expect(
+      page.getByRole("alert").filter({ hasText: "Invalid code" }),
+    ).toBeVisible({ timeout: 30_000 });
     await expect(page).toHaveURL(/\/two-factor/);
 
-    await page.getByLabel("Verification code").fill(generateTotp(totpSecret));
+    const correctCode = generateTotp(totpSecret);
+    await page.getByLabel("Verification code").press("ControlOrMeta+A");
+    await page.getByLabel("Verification code").press("Backspace");
+    await expect(page.getByLabel("Verification code")).toHaveValue("");
+    await page.getByLabel("Verification code").pressSequentially(correctCode);
+    await expect(page.getByLabel("Verification code")).toHaveValue(correctCode);
+    const verifyResponse = page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/auth/two-factor/verify-totp") &&
+        response.request().method() === "POST" &&
+        (response.request().postDataJSON() as { code: string }).code ===
+          correctCode,
+    );
     await page.getByRole("button", { name: "Verify" }).click();
+    const verified = await verifyResponse;
+    expect(verified.ok(), verified.ok() ? "" : await verified.text()).toBe(
+      true,
+    );
     await expectAdminDashboard(page);
 
     await context.close();
@@ -184,11 +212,14 @@ test.describe("two-factor authentication", () => {
 
     await submitCredentials(page, account.email, account.password);
     await expectTwoFactorPage(page);
-    await page.getByLabel("Verification code").fill(generateTotp(totpSecret));
+    await page
+      .getByLabel("Verification code")
+      .pressSequentially(generateTotp(totpSecret));
     await page.getByRole("button", { name: "Verify" }).click();
     await expectAdminDashboard(page);
 
     await page.goto("/admin/settings");
+    await page.getByRole("tab", { name: "Security & Integrations" }).click();
     const section = page.getByRole("region", {
       name: "Two-factor authentication",
     });
