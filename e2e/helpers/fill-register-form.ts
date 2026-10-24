@@ -148,7 +148,7 @@ export async function signInOwner(
   }
 
   await expect(
-    page.getByRole("heading", { name: "Welcome back!" }),
+    page.getByRole("heading", { name: "Welcome back, developer" }),
   ).toBeVisible({ timeout: 15_000 });
 
   await page.locator("#login-email").fill(email);

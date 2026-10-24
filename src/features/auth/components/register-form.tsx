@@ -239,8 +239,8 @@ const RegisterForm: FC = () => {
               render={({ field }) => (
                 <ShadcnFormItem id="register-password">
                   <FormLabel>{t("register.password")}</FormLabel>
-                  <FormControl>
-                    <div className="relative">
+                  <div className="relative">
+                    <FormControl>
                       <Input
                         type={showPassword ? "text" : "password"}
                         autoComplete="new-password"
@@ -251,18 +251,18 @@ const RegisterForm: FC = () => {
                         )}
                         {...field}
                       />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword((prev) => !prev)}
-                        aria-label={
-                          showPassword ? t("hidePassword") : t("showPassword")
-                        }
-                        className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 flex min-h-11 -translate-y-1/2 items-center px-2 text-xs font-medium transition-colors focus-visible:underline focus-visible:outline-none"
-                      >
-                        {showPassword ? t("hide") : t("show")}
-                      </button>
-                    </div>
-                  </FormControl>
+                    </FormControl>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={
+                        showPassword ? t("hidePassword") : t("showPassword")
+                      }
+                      className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 flex min-h-11 -translate-y-1/2 items-center px-2 text-xs font-medium transition-colors focus-visible:underline focus-visible:outline-none"
+                    >
+                      {showPassword ? t("hide") : t("show")}
+                    </button>
+                  </div>
                   <div className="mt-2.5 flex gap-1.5" aria-hidden="true">
                     <span
                       className={cn(

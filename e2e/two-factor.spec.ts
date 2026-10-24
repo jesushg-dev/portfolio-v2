@@ -40,7 +40,7 @@ async function submitCredentials(
 ): Promise<void> {
   await page.goto("/login");
   await expect(
-    page.getByRole("heading", { name: "Welcome back!" }),
+    page.getByRole("heading", { name: "Welcome back, developer" }),
   ).toBeVisible({ timeout: 15_000 });
   await page.locator("#login-email").fill(email);
   await page.locator("#login-password").fill(password);
