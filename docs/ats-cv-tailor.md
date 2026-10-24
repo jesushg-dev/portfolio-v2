@@ -1,410 +1,100 @@
-# ATS Tailored CV Generator
+# Multilingual CV Tailored
 
-How the admin **Resume Engine** adapts a DOCX CV to a job description (ATS-oriented export), uploads it, and optionally attaches it to a Job Tracker application.
+CV Tailored uses saved CMS records exclusively. Resume Studio continues to import DOCX/PDF files into editable CMS drafts. Existing exports and their historical source metadata remain readable and downloadable; no stored files are migrated or regenerated.
 
-This is **not** the public portfolio PDF/DOCX download (`docs/cv-pdf.md`, `/api/cv/pdf`, `/api/cv/docx`). Those serve the CMS CV for visitors. ATS tailor is an **admin-only** pipeline: tRPC → AI → layout-preserving DOCX rebuild → UploadThing → `ResumeExport` / `Application.cvFile`.
+## Content flow
 
----
+CMS → job-relevant selection by CMS IDs → localized and tailored selected fields → validated `TailoredResumeDocument` → official Word design → stored DOCX and snapshot → visual preview, ATS DOCX and PDFs.
 
-## Goals
+`targetLocale` is independent of `uiLocale`. An explicit target always wins. Without one, the model detects `en`, `es` or `nl` from the job description. A conflicting model response fails validation; automatic generation gets one correction attempt. Manual generation returns field-specific errors for the pasted JSON. Neither path restores rejected text from a different language.
 
-1. **Layout stability** — adapt run text inside an existing DOCX template (or uploaded DOCX); do not regenerate layout from scratch on the live path.
-2. **JD fit** — rewrite bullets/summary for the job description while preserving facts and the candidate’s real title.
-3. **Organized exports** — ATS-safe filenames: name + role + company + locale.
-4. **Job Tracker link** — when run from an application, overwrite `Application.cvFile` with the latest tailored file.
+`resolveTailorContext` loads all three CMS translations, including fallback text for missing translations. The model first chooses relevant experiences and achievements, education, skill items, languages and certifications, then translates only that selection. The complete profile is evidence for selection, not a checklist to print. This does not update CMS records. Structural labels, months and employment types come from the typed `resume-labels.ts` catalog.
 
----
+## Shared contract
 
-## Overview
+`tailored-resume-document.ts` defines schema version 1, output locale, template ID/revision, header, experiences, education, skills, languages, contacts and certifications. Items and responsibility bullets keep stable CMS IDs. Identity, company/institution names, contacts, dates, skills, photo URL and credential years are copied from CMS, not returned by the model.
 
-```mermaid
-flowchart TB
-  subgraph ui [Admin UI]
-    APP["/admin/job-tracker/applications/[id]?tab=tailor"]
-    WF["ResumeTailorWorkflow"]
-    CTRL["ResumeAiControls / ManualAiPanel"]
-  end
+Both generation modes accept exactly the same response shape:
 
-  subgraph trpc [tRPC resumeEngineAdmin]
-    DATA["getTailorPageData"]
-    PROMPT["getTailorPrompt"]
-    AUTO["tailorResume"]
-    MANUAL["tailorResumeManual"]
-  end
-
-  subgraph source [Base DOCX]
-    STUDIO["studio: cv-template.docx + CMS draft"]
-    UPLOAD["upload: CvSourceUpload DOCX"]
-  end
-
-  subgraph ai [AI adapt]
-    TD["tailorDocxResume"]
-    SHRINK["shrink passes + hard budget truncate"]
-  end
-
-  subgraph finalize [Finalize]
-    REBUILD["rebuildDocx"]
-    NAME["buildAtsCvFileName"]
-    UT["uploadBufferToUploadThing"]
-    DB[("ResumeExport + Application.cvFile")]
-  end
-
-  APP --> WF --> CTRL
-  WF --> DATA
-  WF --> PROMPT
-  WF --> AUTO
-  WF --> MANUAL
-  AUTO --> STUDIO
-  AUTO --> UPLOAD
-  MANUAL --> STUDIO
-  MANUAL --> UPLOAD
-  AUTO --> TD --> SHRINK
-  MANUAL -->|"pasted CvDocxTailorResult JSON"| REBUILD
-  SHRINK --> REBUILD --> NAME --> UT --> DB
-```
-
----
-
-## Pipeline Architecture & Stack
-
-| Pipeline Stage                 | Responsible Modules                                                                                                                                                      | Current Implementation & Strategy                                                                                                           |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **DOCX Loading**               | `src/features/cv/lib/load-cv-template-docx.ts`<br>`src/features/resume-engine/lib/fetch-upload-docx.ts`                                                                  | Loads `cv-template.docx` from assets or fetches user upload via UploadThing.                                                                |
-| **Extraction & Normalization** | `src/lib/docx/parser.ts`<br>`src/lib/docx/split-paragraphs.ts`                                                                                                           | Extracts XML with JSZip + fast-xml-parser. Normalizes adjacent runs within `<w:p>`, strips `w:proofErr`, preserves roles and locked blocks. |
-| **LLM Call & Prompts**         | `src/features/resume-engine/lib/ai/tailor-docx.ts`<br>`src/features/resume-engine/lib/ai/prompt-package.ts`<br>`src/features/resume-engine/lib/ai/docx-tailor-prompt.ts` | Dispatches to Claude, OpenAI, DeepSeek, or Gemini using tenant AI credentials. Prompt caching and character budget limits.                  |
-| **Response Parsing**           | `src/features/resume-engine/lib/cv-docx-tailor-result.ts`<br>`src/features/resume-engine/lib/ai/parse-json-response.ts`                                                  | Validates structured JSON schema with Zod (`CvDocxTailorResultSchema` with edits and diff-fallback).                                        |
-| **DOCX Rebuilding**            | `src/lib/docx/rebuilder.ts`<br>`src/features/resume-engine/lib/finalize-tailor-export.ts`                                                                                | Replaces adapted run text inside `<w:t>` XML nodes, repacks with JSZip, uploads to UploadThing, and persists in MongoDB.                    |
-| **Validation & Shrink**        | `src/features/resume-engine/lib/ai/tailor-validator.ts`<br>`src/features/resume-engine/lib/ai/tailor-docx.ts`                                                            | Pure validator (E1-E8: metrics, new tech, CEFR, etc.). Targeted shrink passes for over-budget runs without truncation mid-sentence.         |
-| **Page Fit Verification**      | `src/features/resume-engine/lib/pdf/fits-like.ts`<br>`src/lib/ilovepdf/tenant-ilovepdf.ts`                                                                               | Page fit inspection and high-fidelity PDF conversion via iLovePDF BYOK REST API (`officepdf`).                                              |
-
----
-
-## User flow (product path)
-
-1. Open an application:  
-   `src/app/[locale]/(admin)/admin/job-tracker/applications/[id]/page.tsx`  
-   URL query: `?tab=tailor`.
-2. `ApplicationDetailView` embeds `ResumeTailorWorkflow`  
-   (`src/features/job-tracker/components/application-detail-view.tsx`).
-3. Choose source:
-   - **Studio** — CMS structured draft injected into `cv-template.docx`.
-   - **Upload** — previously registered DOCX (`CvSourceUpload`).
-4. Paste / confirm job description (often prefilled from `Application.description`).
-5. Run **auto** (AI provider) or **manual** (copy prompt → paste JSON).
-6. Server rebuilds DOCX, uploads, creates `ResumeExport`, updates `Application.cvFile`.
-7. Detail view shows the downloadable CV name/URL.
-
-Resume Studio / import (feeds studio content) lives under admin CV:
-
-- `src/app/[locale]/(admin)/admin/cv/cv-editor.tsx`
-- `src/features/resume-engine/components/resume-import-workflow.tsx`
-
----
-
-## Source modes
-
-| Mode     | Base DOCX                                                                            | Content facts                                                       |
-| -------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| `studio` | `src/features/resume-engine/assets/cv-template.docx` via `loadCvTemplateForTailor()` | CMS draft from `resolveTailorBaseDraft()` / `loadCvStructuredDraft` |
-| `upload` | File at `CvSourceUpload.originalFileUrl` via `fetchUploadDocxForTailor()`            | Existing DOCX text adapted in place                                 |
-
-Both paths end in the same finalize: `finalizeDocxTailorExport` → `rebuildDocx` → persist.
-
-> Note: `finalizeTailorExport` (structured → `generateDocxFromStructured`) still exists in `finalize-tailor-export.ts` but is **not** used by the current router. Live tailor always uses the DOCX rebuild path.
-
----
-
-## File map (paths)
-
-### UI
-
-| Path                                                                    | Role                                               |
-| ----------------------------------------------------------------------- | -------------------------------------------------- |
-| `src/features/resume-engine/components/resume-tailor-workflow.tsx`      | Main wizard (configure → running → done)           |
-| `src/features/resume-engine/components/resume-ai-controls.tsx`          | Auto / manual + provider picker                    |
-| `src/features/resume-engine/components/manual-ai-panel.tsx`             | Prompt + JSON paste for manual mode                |
-| `src/features/resume-engine/components/resume-docx-upload.tsx`          | Upload DOCX for upload-source mode                 |
-| `src/features/resume-engine/components/resume-import-workflow.tsx`      | Import into Resume Studio                          |
-| `src/features/job-tracker/components/application-detail-view.tsx`       | Hosts tailor tab; shows `cvFile`                   |
-| `src/features/job-tracker/components/application-card.tsx`              | Shows attached CV name on cards                    |
-| `src/app/[locale]/(admin)/admin/job-tracker/applications/[id]/page.tsx` | Application page (`tab=tailor\|timeline\|details`) |
-| `src/app/[locale]/(admin)/admin/cv/cv-editor.tsx`                       | Resume Studio / import                             |
-
-### tRPC / server
-
-| Path                                                              | Role                                                                                              |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `src/features/resume-engine/server/resume-engine-admin.router.ts` | `getTailorPageData`, `getTailorPrompt`, `tailorResume`, `tailorResumeManual`, `registerUpload`, … |
-| `src/features/job-tracker/server/job-tracker-admin.router.ts`     | Application CRUD (optional `cvFile`)                                                              |
-| `src/features/job-tracker/server/job-tracker-queries.ts`          | Application detail data                                                                           |
-| `src/server/api/root.ts`                                          | Registers `resumeEngineAdmin`, `jobTrackerAdmin`                                                  |
-
-### AI
-
-| Path                                                       | Role                                             |
-| ---------------------------------------------------------- | ------------------------------------------------ |
-| `src/features/resume-engine/lib/ai/docx-tailor-prompt.ts`  | DOCX / studio / shrink system prompts            |
-| `src/features/resume-engine/lib/ai/prompt-package.ts`      | Builds system + user prompt packages             |
-| `src/features/resume-engine/lib/ai/tailor-docx.ts`         | Provider call, shrink loop, `tailorDocxResume`   |
-| `src/features/resume-engine/lib/ai/providers.ts`           | Available providers, models, `resolveAiProvider` |
-| `src/features/resume-engine/lib/ai/provider-types.ts`      | Provider name types                              |
-| `src/features/resume-engine/lib/ai/parse-json-response.ts` | Strip fences / parse AI JSON                     |
-| `src/features/resume-engine/lib/ai/shrink-result.ts`       | Shrink-pass Zod schema                           |
-| `src/features/resume-engine/lib/cv-docx-tailor-result.ts`  | `CvDocxTailorResult` Zod schema                  |
-| `src/features/resume-engine/lib/ai/import-prompt.ts`       | Import extract prompt                            |
-| `src/features/resume-engine/lib/ai/extract-structured.ts`  | AI import parse                                  |
-
-### DOCX parse / rebuild / template
-
-| Path                                                              | Role                                                                     |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `src/lib/docx/parser.ts`                                          | `parseDocx` → sections, raw XML, zip                                     |
-| `src/lib/docx/rebuilder.ts`                                       | `rebuildDocx` — write adapted run text back into `document.xml`          |
-| `src/lib/types.ts`                                                | `CvSection`, `AdaptedSection`, etc.                                      |
-| `src/features/resume-engine/assets/cv-template.docx`              | Studio tailor template                                                   |
-| `src/features/cv/lib/load-cv-template-docx.ts`                    | Load + parse template                                                    |
-| `src/features/resume-engine/lib/fetch-upload-docx.ts`             | Fetch + parse uploaded DOCX                                              |
-| `src/features/resume-engine/lib/resolve-tailor-base-draft.ts`     | Resolve CMS or upload draft                                              |
-| `src/features/resume-engine/lib/docx/generate-from-structured.ts` | Generate DOCX from structured draft (public DOCX / unused finalize path) |
-| `src/features/resume-engine/lib/docx/import-parser.ts`            | Import-oriented parse                                                    |
-
-### Finalize, filename, upload
-
-| Path                                                            | Role                                                                             |
-| --------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `src/features/resume-engine/lib/finalize-tailor-export.ts`      | `finalizeDocxTailorExport`, `persistResumeExport`, unused `finalizeTailorExport` |
-| `src/features/resume-engine/lib/build-ats-cv-file-name.ts`      | ATS filename helpers                                                             |
-| `src/lib/uploadthing/upload-buffer.ts`                          | `uploadBufferToUploadThing`                                                      |
-| `src/lib/uploadthing/tenant-uploadthing.ts`                     | Per-tenant UT client / config                                                    |
-| `src/app/api/uploadthing/route.ts`                              | UploadThing HTTP handler                                                         |
-| `src/app/api/uploadthing/core.ts`                               | File router (incl. resume importer)                                              |
-| `src/features/integrations/server/integrations-admin.router.ts` | `uploadFile` used by DOCX upload UI                                              |
-
-### Prisma
-
-| Path                                                     | Role                                              |
-| -------------------------------------------------------- | ------------------------------------------------- |
-| `prisma/schema/resume-engine.prisma`                     | `CvSourceUpload`, `ResumeExport`                  |
-| `prisma/schema/job-tracker.prisma`                       | `Application`, embedded `CvFile`, `resumeExports` |
-| `src/features/job-tracker/lib/application-editor-dto.ts` | Maps `cvFile` for UI                              |
-
-### Related public routes (not ATS tailor)
-
-| Path                           | Role                                        |
-| ------------------------------ | ------------------------------------------- |
-| `src/app/api/cv/docx/route.ts` | Public portfolio DOCX                       |
-| `src/app/api/cv/pdf/route.ts`  | Public portfolio PDF — see `docs/cv-pdf.md` |
-
----
-
-## Key procedures & functions
-
-### Router (`resume-engine-admin.router.ts`)
-
-| Procedure            | What it does                                                          |
-| -------------------- | --------------------------------------------------------------------- |
-| `getTailorPageData`  | Studio preview, recent uploads, application JD/company for the wizard |
-| `getTailorPrompt`    | Builds copyable prompt package for manual mode                        |
-| `tailorResume`       | Auto AI → `finalizeDocxTailorExport`                                  |
-| `tailorResumeManual` | Parse pasted `CvDocxTailorResult` JSON → same finalize                |
-| `registerUpload`     | Persists `CvSourceUpload` after client upload                         |
-
-Locale helper in the same file: `detectLocaleFromJobDescription` (heuristic `en` / `es` / `nl` from JD keywords).
-
-### Pipeline helpers
-
-| Function                                                                | File                                           | Role                                                           |
-| ----------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------- |
-| `tailorDocxResume`                                                      | `lib/ai/tailor-docx.ts`                        | Call provider; shrink overflows; hard-truncate to run budgets  |
-| `buildDocxTailorPromptPackage` / `buildStudioDocxTailorPromptPackage`   | `lib/ai/prompt-package.ts`                     | System + user prompts with per-run `budget`                    |
-| `parseDocx`                                                             | `src/lib/docx/parser.ts`                       | Extract adaptable sections                                     |
-| `rebuildDocx`                                                           | `src/lib/docx/rebuilder.ts`                    | Apply adapted texts; localize static headings; return `Buffer` |
-| `loadCvTemplateForTailor`                                               | `src/features/cv/lib/load-cv-template-docx.ts` | Read template asset                                            |
-| `fetchUploadDocxForTailor`                                              | `lib/fetch-upload-docx.ts`                     | Download + parse upload                                        |
-| `resolveTailorBaseDraft`                                                | `lib/resolve-tailor-base-draft.ts`             | CMS draft for studio path                                      |
-| `finalizeDocxTailorExport`                                              | `lib/finalize-tailor-export.ts`                | Rebuild → persist                                              |
-| `persistResumeExport`                                                   | same                                           | Filename → UploadThing → DB                                    |
-| `buildAtsCvFileName` / `inferCvRoleTrack` / `atsPersonNameFromFullName` | `lib/build-ats-cv-file-name.ts`                | Export naming                                                  |
-| `uploadBufferToUploadThing`                                             | `src/lib/uploadthing/upload-buffer.ts`         | Tenant UT upload                                               |
-
----
-
-## Inputs / outputs
-
-### `tailorResume` / `tailorResumeManual` input
-
-| Field            | Type                                     | Notes                                                  |
-| ---------------- | ---------------------------------------- | ------------------------------------------------------ |
-| `sourceType`     | `"studio" \| "upload"`                   | Required                                               |
-| `uploadId`       | `string?`                                | Required when `sourceType === "upload"`                |
-| `jobDescription` | `string` (min 20)                        | Trimmed; UI may fall back to `Application.description` |
-| `applicationId`  | `string?`                                | Links export + updates `cvFile`                        |
-| `provider`       | `claude \| openai \| deepseek \| gemini` | Auto mode                                              |
-| `targetLocale`   | `en \| es \| nl`                         | Optional                                               |
-| `tailoredFor`    | `string?`                                | Label; else `"{position} @ {company}"`                 |
-| `rawJson`        | `string`                                 | Manual mode only                                       |
-
-### AI result (`CvDocxTailorResult`)
-
-Defined in `src/features/resume-engine/lib/cv-docx-tailor-result.ts`:
-
-```ts
+```json
 {
-  detectedLocale: "en" | "es" | "nl";
-  sections: AdaptedSection[]; // same section/paragraph/run ids; text only
-  aiScore: number;            // 0–100
-  matchNotes?: string;
+  "schemaVersion": 1,
+  "locale": "en",
+  "selection": {
+    "experiences": [
+      {
+        "id": "CMS_EXPERIENCE_ID",
+        "responsibilityIds": ["CMS_RESPONSIBILITY_ID"]
+      }
+    ],
+    "educationIds": [],
+    "skills": [],
+    "languageIds": [],
+    "certificationIds": []
+  },
+  "fields": [
+    { "id": "header.degree", "text": "Software Engineer" },
+    {
+      "id": "header.summary",
+      "text": "Computer engineer building accessible web applications."
+    },
+    { "id": "experience.CMS_EXPERIENCE_ID.role", "text": "Software Engineer" },
+    {
+      "id": "experience.CMS_EXPERIENCE_ID.bullet.CMS_RESPONSIBILITY_ID",
+      "text": "Built accessible React interfaces."
+    }
+  ],
+  "aiScore": 80,
+  "matchNotes": "Strong alignment with the role."
 }
 ```
 
-### Mutation return (typical)
+This abbreviated example is illustrative. The manual prompt contains the available records, field inventory and character budgets. Return `selection` with only the IDs and skill items worth including for this job. Every selected record must exist in CMS; duplicate IDs, unknown IDs, skills not in the selected group and achievements belonging to another role are rejected. Preserve source chronology. Each selected experience with available achievements needs at least one selected achievement.
 
-`{ export, downloadUrl, aiScore, matchNotes, provider }` after persist.
+Return populated header/contact-location fields and every populated text field of selected records and achievements exactly once. Omitted records need neither IDs nor translations in `fields`. Empty strings are invalid, including selected certification titles. There is no adapter for the former all-fields/empty-string contract.
 
-### Locale resolution (priority)
+Certifications default to none unless they add relevant evidence. v1 allows at most one and v2 at most two; these are ceilings, not quotas. v2 uses additional room primarily for experience and achievements. `requiredCoverage` in each locale's prompt preserves all spoken languages, the first two education records for one-page designs or three for multi-page designs, and balanced core technical categories. Multi-page designs preserve all roles when the role count fits their capacity. Core technical categories require up to three items in multi-page designs or two in one-page designs; additional useful technologies remain selectable. Submitted skill-item and achievement order is preserved; role chronology and category order remain fixed. Tailoring prioritizes achievements and concise descriptions before removing this coverage. The CV editor's technical skills take precedence over the portfolio-wide inventory; the latter is used only when no CV-specific list exists. All records remain in CMS. The persisted snapshot records the full selection in `selection.manifest`, omitted credential IDs in `selection.omittedCertificationIds`, and selection counts in match notes. Visible-text capacity excludes CMS IDs and JSON metadata, for both experience pages and the sidebar.
 
-1. AI `detectedLocale` (when present)
-2. Explicit `targetLocale`
-3. Studio draft `detectedLocale` / JD heuristic
-4. Default `"en"`
+Validation rejects unknown/duplicate/missing IDs, empty required content, numeric/CEFR changes, unsupported technologies, credential inflation, changed known language/proficiency labels, recognizable foreign-language prose and template capacity overflow. Language and factual checks are deterministic guardrails, not a semantic proof of arbitrary prose: review generated wording before applying. Source facts and proper names remain immutable regardless of model output.
 
-### Full name for filename
+## Word designs
 
-Draft/snapshot header → else `cvHeader.fullName` → else `"Candidate"`  
-(`resolveExportFullName` in `finalize-tailor-export.ts`).
+`template-registry.ts` is the sole list of supported designs. It supplies the API enum, interface options, revision, assets, page target, capabilities, per-page experience slots and content budgets. v1 targets one page; v2 targets two.
 
----
+Each DOCX is editable in Word. In Developer → Properties, preserve the content control **Tag**. Visible sample text can use any language; rendering never locates fields by that text.
 
-## Filename convention
+- Global fields: `field:header.fullName`, `field:header.degree`, `field:header.summary`, `field:header.availability`, `field:contacts` and `image:photo`.
+- Labels use `label:` followed by a typed catalog key, such as `label:experience`.
+- Experience blocks use `repeat:experiences:0`, then one block per additional configured page. Their fields are `company`, `role`, `context`, `dates`, `meta` or the compact `companyMeta`; nested `repeat:bullets` contains `field:bullet`. Designs supporting company logos use `image:companyLogo` inside each experience block. `optional:experiences:N` can wrap its continuation page so short profiles do not acquire blank pages.
+- Sidebar blocks use `repeat:education`, `repeat:skills`, `repeat:languages` and `repeat:certifications`. Certifications have an `optional:certifications` wrapper so an empty list has no heading.
+- Education fields: `degree`, `institution`, `educationDates`. Skill fields: `category`, `items` or `itemsLeft`/`itemsRight`. Language fields: `name`, `level`. Certification field: `certification`.
 
-Implemented in `src/features/resume-engine/lib/build-ats-cv-file-name.ts`.
+`render-template.ts` expands semantic controls while preserving the design's paragraph/run styles, tables, section geometry and decorative assets. It inserts CMS contact hyperlinks and the CMS photo, removing unreferenced sample media. Missing required or unknown tags fail clearly; there is no substitute template.
 
-**Pattern**
+Contact icons are taken from the original design via `icon:TYPE` controls inside the contacts field. Contact values never show URI prefixes such as `mailto:` or `tel:`. Transparent photos are flattened onto white. Company images and bordered monograms occupy the same square drawing with rounded corners; source images retain their aspect ratio within that square. `optional:companyHeader` groups consecutive roles at the same employer without repeating its logo and context within a page. `optional:companyDates` contains `field:companyDates`, the group's earliest start and latest end (or present for an ongoing role); each role retains its own dates. A continuation page repeats the company header with the full group range. Separate stints at the same employer remain separate groups.
 
-```text
-{PersonName} - {RoleTrack} Developer - {Company?} - {LOCALE}.docx
-```
+`format:companyProgression` scopes the role content whose timeline appears only for companies with multiple consecutive roles. In that scope, Word paragraph styles ending in `-Progression` define the timeline and their corresponding base styles define single-role presentation. The renderer selects the base styles and clears the scope's progression indentation for single-role companies. These styles stay editable in Word. Role/date rows use fixed borderless cells, separated from company tables so Word does not merge their column grids. v2 section headings retain uppercase formatting.
 
-**Examples**
+To add a design: create/tag one DOCX, add its registry entry and reference PDF, then run the common renderer tests and visual QA in all three languages. No locale-specific DOCX or version conditionals are required. Character budgets are conservative preflight checks; actual pagination must be verified with Word or a compatible office renderer whenever the design changes.
 
-| Case                    | Filename                                                     |
-| ----------------------- | ------------------------------------------------------------ |
-| Tailored for Nisum (ES) | `Jesus Hernandez - Fullstack Developer - Nisum - ES.docx`    |
-| Backend + company       | `Jesus Hernandez - Backend Developer - Imagemaker - ES.docx` |
-| No company              | `Jesus Hernandez - Fullstack Developer - EN.docx`            |
+## API and exports
 
-**Rules**
+`getTailorPrompt`, `tailorResume` and `tailorResumeManual` accept `templateVersion`, `jobDescription`, optional `targetLocale`, `uiLocale`, `applicationId` and `tailoredFor`. Automatic mode additionally accepts `provider`; manual mode accepts `rawJson`. The strict schemas reject `sourceType` and `uploadId`.
 
-- `stripForAtsFileName` — NFD strip diacritics; keep ASCII letters/digits/spaces/hyphens.
-- `atsPersonNameFromFullName` — given name + paternal surname (LatAm-style).  
-  Example: `Jesús Enmanuel Hernández González` → `Jesus Hernandez`  
-  (first token + second-to-last when there are 3+ tokens; avoids using the middle given name as “surname”).
-- `inferCvRoleTrack` — scans `position + tailoredFor + jobDescription` → `Frontend` | `Backend` | `Fullstack` (default Fullstack). Label becomes `{track} Developer`.
-- Company — from linked `Application.company.name` when `applicationId` resolves; omitted from the filename when empty.
-- Locale — uppercased (`ES`, `EN`, `NL`).
+The canonical document is persisted as `ResumeExport.structuredSnapshot`. Visual DOCX, the ATS preview and ATS DOCX use that same content. ATS omits decorative photography but keeps descriptive text, context, availability, dates and credentials. PDF export converts its respective DOCX through the tenant's iLovePDF integration. Existing historical snapshots have a read-only decoder; they are not accepted as new generation JSON.
 
-Tests: `src/features/resume-engine/lib/build-ats-cv-file-name.test.ts`.
+Replacing generated files externally was removed from CV Tailored to keep the persisted document and its exports consistent. Import documents through the Resume Studio editor, save changes in CMS, then generate again.
 
----
+## Verification
 
-## Persistence model
+Run `pnpm exec jest --runInBand src/features/resume-engine src/features/cv/lib`, `pnpm type`, ESLint on changed files, Prettier and `pnpm build`.
 
-### `ResumeExport` (`prisma/schema/resume-engine.prisma`)
+Set `RESUME_QA_OUTPUT=1` while running `tailored-resume-document.test.ts` to write all six visual DOCX, ATS variants and explicit-photo variants into ignored `scratch/resume-qa`. Convert each DOCX to PDF and inspect every page for clipping, links, sample-image leaks, empty blocks and page targets. Test fixtures make no paid AI calls and do not mutate CMS records.
 
-Immutable tailored DOCX record: `fileName`, `fileUrl`, `uploadThingKey`, `mimeType`, `sourceType`, `sourceUploadId?`, `tailoredFor?`, `jobDescription?`, `aiScore?`, `aiProvider?`, `structuredSnapshot?`, `applicationId?`.
+Tailoring includes all CMS achievements, including those marked ATS-only in the editor, as selectable evidence with their original record IDs. Selected achievements enter the same visual and ATS document. Regular CV loading retains the editor visibility setting. Certificate dates are normalized from CMS milliseconds or four-digit years to UTC calendar years before prompting and export. Prompts separate immutable facts from editable field text to avoid duplicating prose, and request an evidence-based score with explicit missing or unverified prerequisites. Listed familiarity alone does not substantiate specialization; language proficiency labels do not establish CEFR equivalence.
 
-### `Application.cvFile` (`prisma/schema/job-tracker.prisma`)
+## Prompt version and input format
 
-Embedded composite `{ name, url, uploadedAt }`. **Overwritten** when a tailor run includes that `applicationId` (latest wins).
+The production prompt exposes `promptVersion` in both system instructions and input metadata. It is independent of the response's `schemaVersion` and must not be returned as an extra response property. Immutable CMS facts are shared once; locale inventories contain editable prose and per-locale coverage. Generation rejects inconsistent immutable facts across locales.
 
-### `CvSourceUpload`
-
-Original uploaded DOCX metadata + optional `parsedDraft` for import/studio.
-
----
-
-## AI providers & env
-
-AI keys are **per-tenant** (Admin → Credentials → AI). There is no shared platform AI fallback — see [`tenant-credentials.md`](./tenant-credentials.md).
-
-| Source                                                                        | Use                                                                                                   |
-| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Tenant `ai` integration (`anthropicApiKey` / `openaiApiKey` / `geminiApiKey`) | Claude / OpenAI / Gemini for import, tailor, interview prep                                           |
-| UploadThing                                                                   | **Tenant** Admin → Credentials (`uploadthing`). Export upload does not rely on a global env fallback. |
-
-If the tenant has no AI keys, auto mode is unavailable; **manual JSON** still works (`aiProvider: "manual"`).
-
-Models (`AI_PROVIDER_MODELS` in `providers.ts`):
-
-| Provider | Model               |
-| -------- | ------------------- |
-| claude   | `claude-sonnet-4-5` |
-| openai   | `gpt-4o`            |
-| deepseek | `deepseek-chat`     |
-| gemini   | `gemini-3.6-flash`  |
-
-Packages: `@anthropic-ai/sdk`, `openai`, `@google/genai`, `uploadthing`, `@uploadthing/react`.
-
----
-
-## Locked dates / company lines
-
-Company–location–date lines (e.g. `Imagemaker · Remote · August 2025 – Present`) and education year lines are **intentionally not sent to the AI** (they contain `·` / year-only patterns). Historically that meant the baked-in `cv-template.docx` dates survived every export.
-
-On finalize (studio / any path with a structured draft snapshot), those **locked** paragraphs are synced from the CMS draft before `rebuildDocx`:
-
-| Path                                                                  | Role                                                                                  |
-| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `src/lib/docx/parser.ts`                                              | Collects `lockedParagraphs` (`experience-meta`, `experience-role`, `education-dates`) |
-| `src/features/resume-engine/lib/sync-locked-paragraphs-from-draft.ts` | Builds updated texts from draft experiences/education                                 |
-| `src/features/resume-engine/lib/finalize-tailor-export.ts`            | Merges locked adaptations into rebuild                                                |
-| `src/features/cv/lib/generate-cv-docx-from-db.ts`                     | Same sync for portfolio DOCX-from-DB                                                  |
-
-Experience meta format: `{company} · {location} · {formatted dates}` (preserves client annotations when the draft company is a prefix of the template company). Role lines like `Full-time | …` keep the employment-type prefix and take the draft role.
-
----
-
-## Shrink / budget behavior
-
-After the main tailor call (`tailorDocxResume`):
-
-1. Up to **2 shrink API passes** if adapted run text exceeds original budgets.
-2. Then **hard truncate** to original run budgets so page count / layout stay stable.
-
-Prompt packages include per-run `budget` so the model knows length limits up front (`prompt-package.ts`, `docx-tailor-prompt.ts`).
-
----
-
-## Tests
-
-| Path                                                                       | Coverage                                                                  |
-| -------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `src/features/resume-engine/lib/build-ats-cv-file-name.test.ts`            | Name stripping, ATS filename, role-track inference                        |
-| `src/features/resume-engine/lib/sync-locked-paragraphs-from-draft.test.ts` | CMS date/company/role sync into locked lines                              |
-| `src/lib/docx/docx.test.ts`                                                | Parse / rebuild round-trip; template locked paragraphs                    |
-| `src/lib/docx/xml-text.test.ts`                                            | XML text helpers                                                          |
-| `src/features/resume-engine/components/resume-import-workflow.test.tsx`    | Import UI                                                                 |
-| `e2e/cv-import-tailor.spec.ts`                                             | Light admin CV import/preview smoke (not full tailor → UT → `cvFile` E2E) |
-
----
-
-## Architecture notes
-
-1. **ATS tailor ≠ public CV download.** Public `/api/cv/*` serves the portfolio CV; ATS is admin tRPC + UploadThing + optional Job Tracker attach.
-2. **Studio path** injects CMS facts into `cv-template.docx` run slots, then adapts for the JD.
-3. **Upload path** adapts the user’s own DOCX in place (same id/budget rules).
-4. **Complementary bullets / company blurbs** — each experience can store `companyBlurb` and `atsOnly` responsibilities. Public/printed CV shows only non-`atsOnly` bullets; the studio tailor draft includes `atsResponsibilities` + `companyBlurb` as a factual bank (see `cv-import-draft.ts`, `load-cv-structured-draft.ts`, `docx-tailor-prompt.ts`).
-5. **Job Tracker link is optional** but is the intended product path: application → Tailor tab → export lands on `Application.cvFile` and `ResumeExport`.
-6. Prompts must preserve the candidate’s real professional title/degree (see system prompts in `docx-tailor-prompt.ts`).
-
----
-
-## Quick debug checklist
-
-1. Confirm UploadThing tenant credentials are connected (Admin → Credentials).
-2. Confirm tenant AI keys in Admin → Credentials → AI for auto mode, or use manual JSON.
-3. Studio: ensure Resume Studio / CMS draft has `header.fullName` (drives filename).
-4. Upload: ensure `registerUpload` created a `CvSourceUpload` and `uploadId` is passed.
-5. Filename wrong? Check `build-ats-cv-file-name.ts` + full name resolution in `finalize-tailor-export.ts`.
-6. Dates/company lines stale? Confirm CMS experience `startDate`/`endDate`/`current` (and education years or `dates`) and that `structuredSnapshot` is passed into `finalizeDocxTailorExport`. See **Locked dates / company lines**.
-7. Layout broken / overflow? Inspect shrink logs in `tailor-docx.ts` and run budgets from parse.
+Production uses TOON input for both the copied manual prompt and automatic generation. Model responses remain strict JSON and use the same selection, language, factual and layout validations. The active prompt version is `tailored-cv/2026-10-23.2`. The official TOON encoder is a production dependency.

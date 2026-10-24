@@ -1,12 +1,7 @@
 import JSZip from "jszip";
 
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
-import {
-  parseExperienceDate,
-  unifyConsecutiveExperiencesByCompany,
-} from "@/lib/cv/group-consecutive-experiences-by-company";
-import type { Locale } from "@/i18n/config";
-import { formatExperienceDates } from "@/utils/tools/date";
+import { RESUME_LABELS, resumeDates } from "@/lib/cv/resume-labels";
 import { getEmploymentTypeLabel } from "@/features/cv/lib/employment-type";
 
 function escapeXml(text: string): string {
@@ -37,51 +32,10 @@ function bullet(text: string, indent = 360): string {
   return `<w:p><w:pPr><w:ind w:left="${indent}"/></w:pPr><w:r><w:t xml:space="preserve">• ${escapeXml(text)}</w:t></w:r></w:p>`;
 }
 
-function getSectionLabels(locale: Locale) {
-  const labelsByLocale: Record<
-    Locale,
-    {
-      summary: string;
-      experience: string;
-      education: string;
-      skills: string;
-      languages: string;
-      certifications: string;
-    }
-  > = {
-    en: {
-      summary: "Summary",
-      experience: "Experience",
-      education: "Education",
-      skills: "Skills",
-      languages: "Languages",
-      certifications: "Certifications",
-    },
-    es: {
-      summary: "Resumen",
-      experience: "Experiencia",
-      education: "Educación",
-      skills: "Habilidades",
-      languages: "Idiomas",
-      certifications: "Certificaciones",
-    },
-    nl: {
-      summary: "Samenvatting",
-      experience: "Ervaring",
-      education: "Opleiding",
-      skills: "Vaardigheden",
-      languages: "Talen",
-      certifications: "Certificeringen",
-    },
-  };
-
-  return labelsByLocale[locale];
-}
-
 function buildDocumentBody(draft: CvImportDraft): string {
   const parts: string[] = [];
   const locale = draft.detectedLocale;
-  const labels = getSectionLabels(locale);
+  const labels = RESUME_LABELS[locale];
 
   parts.push(paragraph(draft.header.fullName, "title"));
   if (draft.header.degree) {
@@ -100,15 +54,10 @@ function buildDocumentBody(draft: CvImportDraft): string {
 
   if (draft.experiences.length > 0) {
     parts.push(paragraph(labels.experience, "heading"));
-    const experiences = unifyConsecutiveExperiencesByCompany(draft.experiences);
+    const experiences = draft.experiences;
 
     for (const exp of experiences) {
-      const dateLine = formatExperienceDates(
-        parseExperienceDate(exp.startDate),
-        parseExperienceDate(exp.endDate),
-        Boolean(exp.current),
-        locale,
-      );
+      const dateLine = resumeDates(exp, locale);
       const employmentTypeLabel = exp.employmentType
         ? getEmploymentTypeLabel(exp.employmentType, locale)
         : null;
@@ -122,6 +71,7 @@ function buildDocumentBody(draft: CvImportDraft): string {
         .filter(Boolean)
         .join(" — ");
       parts.push(paragraph(header, "company"));
+      if (exp.companyBlurb) parts.push(paragraph(exp.companyBlurb, "body"));
       for (const resp of exp.responsibilities) {
         if (resp.trim()) parts.push(bullet(resp, 360));
       }
@@ -134,7 +84,7 @@ function buildDocumentBody(draft: CvImportDraft): string {
       const years =
         edu.startYear || edu.endYear
           ? `${edu.startYear ?? ""}${edu.endYear ? ` – ${edu.endYear}` : ""}`
-          : "";
+          : (edu.dates ?? "");
       const line = [edu.degreeName, edu.institution, years, edu.location]
         .filter(Boolean)
         .join(" — ");
@@ -146,7 +96,10 @@ function buildDocumentBody(draft: CvImportDraft): string {
     parts.push(paragraph(labels.skills, "heading"));
     for (const group of draft.skills) {
       parts.push(
-        paragraph(`${group.category}: ${group.items.join(", ")}`, "body"),
+        paragraph(
+          `${labels[group.category]}: ${group.items.join(", ")}`,
+          "body",
+        ),
       );
     }
   }
@@ -167,6 +120,13 @@ function buildDocumentBody(draft: CvImportDraft): string {
         .join(" — ");
       parts.push(paragraph(line, "body"));
     }
+  }
+
+  if (draft.header.availability) {
+    parts.push(
+      paragraph(labels.availability, "heading"),
+      paragraph(draft.header.availability, "body"),
+    );
   }
 
   parts.push(
@@ -198,6 +158,8 @@ const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
   <w:style w:type="paragraph" w:default="1" w:styleId="Normal">
     <w:name w:val="Normal"/>
+    <w:pPr><w:spacing w:after="80" w:line="240" w:lineRule="auto"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/></w:rPr>
   </w:style>
   <w:style w:type="paragraph" w:styleId="Title">
     <w:name w:val="Title"/>
@@ -205,11 +167,12 @@ const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
   </w:style>
   <w:style w:type="paragraph" w:styleId="Heading2">
     <w:name w:val="Heading 2"/>
+    <w:pPr><w:keepNext/><w:spacing w:before="120" w:after="80"/></w:pPr>
     <w:rPr><w:b/><w:sz w:val="24"/></w:rPr>
   </w:style>
   <w:style w:type="paragraph" w:styleId="CompanyGroup">
     <w:name w:val="Company Group"/>
-    <w:pPr><w:spacing w:before="120" w:after="40"/></w:pPr>
+    <w:pPr><w:keepNext/><w:spacing w:before="120" w:after="40"/></w:pPr>
     <w:rPr><w:b/><w:sz w:val="22"/></w:rPr>
   </w:style>
   <w:style w:type="paragraph" w:styleId="SubRole">

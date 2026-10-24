@@ -401,9 +401,9 @@
         },
         {
           "text": {
-            "es": "Diseñé la arquitectura frontend e integraciones, definiendo una librería de componentes y estándares adoptados en toda la organización.",
-            "en": "Architected frontend systems and integrations, defining a component library and development standards adopted organization-wide.",
-            "nl": "Frontend-systemen en integraties ontworpen, inclusief een componentenbibliotheek en standaarden die organisatiebreed zijn overgenomen."
+            "es": "Diseñé la arquitectura frontend e integraciones para 5+ proyectos, definiendo una librería de componentes y estándares adoptados en toda la organización.",
+            "en": "Architected frontend systems and integrations for 5+ projects, defining a component library and development standards adopted organization-wide.",
+            "nl": "Frontend-systemen en integraties ontworpen voor 5+ projecten, inclusief een componentenbibliotheek en standaarden die organisatiebreed zijn overgenomen."
           },
           "order": 2,
           "atsOnly": false
@@ -511,15 +511,6 @@
             "nl": "Scrum-praktijken toegepast voor agile leveringen van hoge kwaliteit."
           },
           "order": 3,
-          "atsOnly": true
-        },
-        {
-          "text": {
-            "es": "Dirigí la arquitectura frontend y de integración para 5+ proyectos; definí librería de componentes y estándares adoptados por la organización.",
-            "en": "Led frontend & integration architecture for 5+ projects; defined component library and standards adopted org-wide.",
-            "nl": "Frontend- & integratiearchitectuur geleid voor 5+ projecten; componentbibliotheek en standaarden org-breed overgenomen."
-          },
-          "order": 4,
           "atsOnly": true
         }
       ],

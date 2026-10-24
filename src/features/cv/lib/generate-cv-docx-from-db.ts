@@ -1,16 +1,14 @@
 import type { PrismaClient } from "@prisma/client";
-
 import type { Locale } from "@/i18n/config";
-import { createLocalizedFieldResolver } from "@/lib/i18n/localized-display";
-import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
-import { loadCvTemplateForTailor } from "@/features/cv/lib/load-cv-template-docx";
-import { mapDraftToTemplateSections } from "@/features/cv/lib/map-draft-to-template-sections";
+import { loadCvStructuredDraft } from "./load-cv-structured-draft";
+import { loadCvTemplateDocxBuffer } from "./load-cv-template-docx";
 import {
-  syncLockedParagraphsFromDraft,
-  withLockedMetaAdaptations,
-  withLockedMetaSection,
-} from "@/features/resume-engine/lib/sync-locked-paragraphs-from-draft";
-import { rebuildDocx } from "@/lib/docx/rebuilder";
+  getResumeTemplate,
+  DEFAULT_CV_TEMPLATE_VERSION,
+} from "@/features/resume-engine/lib/template-registry";
+import { TailoredResumeDocumentSchema } from "@/features/resume-engine/lib/tailored-resume-document";
+import { renderResumeTemplate } from "@/features/resume-engine/lib/docx/render-template";
+import { loadResumeImages } from "@/features/resume-engine/lib/docx/resume-photo";
 
 export async function generateCvDocxFromDb(
   db: PrismaClient,
@@ -18,51 +16,32 @@ export async function generateCvDocxFromDb(
   locale: Locale,
   fallbackLocale: Locale,
 ): Promise<{ buffer: Buffer; fileName: string } | null> {
-  const [appLanguages, draft, template, softSkills] = await Promise.all([
-    db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    loadCvStructuredDraft(db, userId, { locale, fallbackLocale }),
-    loadCvTemplateForTailor(),
-    db.cvSoftSkill.findMany({
-      where: { userId },
-      include: { translations: true },
-      orderBy: { order: "asc" },
-    }),
-  ]);
-
+  const draft = await loadCvStructuredDraft(db, userId, {
+    locale,
+    fallbackLocale,
+  });
   if (!draft) return null;
-
-  const field = createLocalizedFieldResolver(appLanguages, locale);
-  const softSkillTexts = softSkills
-    .map((skill) => field(skill.translations, "name"))
-    .filter((text: string) => text.trim().length > 0);
-
-  const adaptedSections = mapDraftToTemplateSections(
-    template.parsed.sections,
-    draft,
-    softSkillTexts,
-    undefined,
-    template.parsed.lockedParagraphs,
-  );
-
-  const lockedAdapted = syncLockedParagraphsFromDraft(
-    template.parsed.lockedParagraphs,
-    draft,
+  const template = getResumeTemplate(DEFAULT_CV_TEMPLATE_VERSION);
+  const document = TailoredResumeDocumentSchema.parse({
+    ...draft,
+    schemaVersion: 1,
     locale,
+    templateId: template.id,
+    templateRevision: template.revision,
+  });
+  const images = await loadResumeImages(
+    document,
+    template.capabilities.companyLogos,
   );
-
-  const buffer = await rebuildDocx(
-    template.parsed.zipFiles,
-    template.parsed.rawXml,
-    withLockedMetaSection(
-      template.parsed.sections,
-      template.parsed.lockedParagraphs,
-    ),
-    withLockedMetaAdaptations(adaptedSections, lockedAdapted),
-    locale,
+  const buffer = await renderResumeTemplate(
+    await loadCvTemplateDocxBuffer(DEFAULT_CV_TEMPLATE_VERSION),
+    document,
+    template,
+    images.photo,
+    images.companyLogos,
   );
-
-  const sanitizedName = draft.header.fullName.replace(/[^\w.-]+/g, "_");
-  const fileName = `CV_${sanitizedName}_${locale}.docx`;
-
-  return { buffer, fileName };
+  return {
+    buffer,
+    fileName: `CV_${draft.header.fullName.replace(/[^\w.-]+/g, "_")}_${locale}.docx`,
+  };
 }
