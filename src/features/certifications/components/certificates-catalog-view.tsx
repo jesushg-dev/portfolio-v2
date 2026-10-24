@@ -36,6 +36,8 @@ import CertificateItem from "./certification-item";
 import { formatIssuedDate } from "@/features/certifications/lib/format-issued-date";
 
 const PAGE_SIZE = 9;
+const CATALOG_TAB_ID = "certificates-catalog-tab";
+const CATALOG_PANEL_ID = "certificates-catalog-results";
 
 export const CERT_TYPES = [
   "ALL",
@@ -92,7 +94,7 @@ export function TypeSegmentButtons({
   return (
     <div className="flex w-full justify-center px-2 sm:px-4">
       <Tab
-        tabId="certificates-catalog-tab"
+        tabId={CATALOG_TAB_ID}
         minimal
         currentTab={currentIndex}
         setCurrentTab={handleTabChange}
@@ -101,31 +103,37 @@ export function TypeSegmentButtons({
       >
         <TabItem
           icon={Eye}
+          panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.ALL} (${counts.ALL})`}
           description=""
         />
         <TabItem
           icon={Monitor}
+          panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.FRONTEND} (${counts.FRONTEND})`}
           description=""
         />
         <TabItem
           icon={Server}
+          panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.BACKEND} (${counts.BACKEND})`}
           description=""
         />
         <TabItem
           icon={ShieldCheck}
+          panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.CYBERSECURITY} (${counts.CYBERSECURITY})`}
           description=""
         />
         <TabItem
           icon={Terminal}
+          panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.DEVOPS} (${counts.DEVOPS})`}
           description=""
         />
         <TabItem
           icon={Users}
+          panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.SOFTSKILLS} (${counts.SOFTSKILLS})`}
           description=""
         />
@@ -919,75 +927,82 @@ export function CertificatesCatalogView({
         </div>
       </div>
 
-      {/* Filter Status Bar */}
-      <div className="text-muted-foreground mt-5 flex min-h-8 flex-wrap items-center justify-between gap-x-6 gap-y-2 px-1 text-sm">
-        <p role="status" aria-live="polite">
-          {t("catalog.showing", {
-            count: filteredCertificates.length,
-            total: initialCertificates.length,
-          })}
-        </p>
+      <div
+        id={CATALOG_PANEL_ID}
+        role="tabpanel"
+        aria-labelledby={`${CATALOG_TAB_ID}-tab-${CERT_TYPES.indexOf(selectedType)}`}
+        tabIndex={0}
+      >
+        {/* Filter Status Bar */}
+        <div className="text-muted-foreground mt-5 flex min-h-8 flex-wrap items-center justify-between gap-x-6 gap-y-2 px-1 text-sm">
+          <p role="status" aria-live="polite">
+            {t("catalog.showing", {
+              count: filteredCertificates.length,
+              total: initialCertificates.length,
+            })}
+          </p>
 
-        {hasActiveFilters ? (
-          <button
-            type="button"
-            onClick={handleClearFilters}
-            className="text-primary hover:text-primary/80 inline-flex min-h-11 min-w-11 cursor-pointer items-center gap-1.5 font-semibold transition-colors"
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              onClick={handleClearFilters}
+              className="text-primary hover:text-primary/80 inline-flex min-h-11 min-w-11 cursor-pointer items-center gap-1.5 font-semibold transition-colors"
+            >
+              <X className="size-4" aria-hidden="true" />
+              <span>{t("catalog.clearFilters")}</span>
+            </button>
+          ) : null}
+        </div>
+
+        {/* Certificates Grid or Empty State */}
+        {visibleCertificates.length === 0 ? (
+          <div className="mt-8">
+            <CatalogEmptyState
+              title={t("catalog.emptyTitle")}
+              description={t("catalog.emptyDescription")}
+              buttonText={t("catalog.emptyButton")}
+              onClear={handleClearFilters}
+            />
+          </div>
+        ) : (
+          <motion.ul
+            layout
+            className={`mt-6 grid items-stretch gap-6 ${
+              visibleCertificates.length === 1
+                ? "mx-auto max-w-md grid-cols-1"
+                : visibleCertificates.length === 2
+                  ? "mx-auto max-w-4xl grid-cols-1 md:grid-cols-2"
+                  : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            }`}
           >
-            <X className="size-4" aria-hidden="true" />
-            <span>{t("catalog.clearFilters")}</span>
-          </button>
+            {visibleCertificates.map((certificate, idx) => (
+              <motion.li
+                layout
+                key={certificate.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, delay: Math.min(idx, 8) * 0.04 }}
+                className="flex justify-center"
+              >
+                <CertificateItem {...certificate} onPreview={handleOpenPreview} />
+              </motion.li>
+            ))}
+          </motion.ul>
+        )}
+
+        {/* Pagination "Ver más" */}
+        {remainingCount > 0 ? (
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              onClick={handleLoadMore}
+              className="border-border bg-card text-foreground hover:border-primary/50 hover:text-primary cursor-pointer rounded-full border px-7 py-3 text-sm font-bold shadow-xs transition-colors"
+            >
+              {t("catalog.more", { count: remainingCount })}
+            </button>
+          </div>
         ) : null}
       </div>
-
-      {/* Certificates Grid or Empty State */}
-      {visibleCertificates.length === 0 ? (
-        <div className="mt-8">
-          <CatalogEmptyState
-            title={t("catalog.emptyTitle")}
-            description={t("catalog.emptyDescription")}
-            buttonText={t("catalog.emptyButton")}
-            onClear={handleClearFilters}
-          />
-        </div>
-      ) : (
-        <motion.ul
-          layout
-          className={`mt-6 grid items-stretch gap-6 ${
-            visibleCertificates.length === 1
-              ? "mx-auto max-w-md grid-cols-1"
-              : visibleCertificates.length === 2
-                ? "mx-auto max-w-4xl grid-cols-1 md:grid-cols-2"
-                : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          }`}
-        >
-          {visibleCertificates.map((certificate, idx) => (
-            <motion.li
-              layout
-              key={certificate.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.25, delay: Math.min(idx, 8) * 0.04 }}
-              className="flex justify-center"
-            >
-              <CertificateItem {...certificate} onPreview={handleOpenPreview} />
-            </motion.li>
-          ))}
-        </motion.ul>
-      )}
-
-      {/* Pagination "Ver más" */}
-      {remainingCount > 0 ? (
-        <div className="mt-10 flex justify-center">
-          <button
-            type="button"
-            onClick={handleLoadMore}
-            className="border-border bg-card text-foreground hover:border-primary/50 hover:text-primary cursor-pointer rounded-full border px-7 py-3 text-sm font-bold shadow-xs transition-colors"
-          >
-            {t("catalog.more", { count: remainingCount })}
-          </button>
-        </div>
-      ) : null}
 
       {/* Reusable Image Lightbox Modal */}
       <ImageLightbox

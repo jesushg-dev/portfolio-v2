@@ -27,6 +27,21 @@ test.describe("accessibility — Shield (WCAG AAA)", () => {
       await page.goto(route.path, { waitUntil: "load" });
       await page.evaluate(() => document.fonts.ready);
 
+      if (route.path === "/certificates") {
+        const panel = page.getByRole("tabpanel");
+        await expect(panel).toHaveCount(1);
+        const panelId = await panel.getAttribute("id");
+        expect(panelId).toBeTruthy();
+        for (const tab of await page.getByRole("tab").all()) {
+          await expect(tab).toHaveAttribute("aria-controls", panelId!);
+        }
+        const selectedTabId = await page
+          .getByRole("tab", { selected: true })
+          .getAttribute("id");
+        expect(selectedTabId).toBeTruthy();
+        await expect(panel).toHaveAttribute("aria-labelledby", selectedTabId!);
+      }
+
       const axeResults = await runAxeAudit(page);
       const axeSummary = summarizeAxeViolations(axeResults.violations);
       const houseRuleIssues = await auditShieldHouseRules(page);
