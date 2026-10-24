@@ -1120,4 +1120,85 @@ export const portfolioRouter = createTRPCRouter({
 
       return sequentialNext;
     }),
+
+  getShowcasePortfolios: publicProcedure
+    .input(
+      z
+        .object({
+          locale: LanguageCode.optional().default("en"),
+        })
+        .optional(),
+    )
+    .query(async ({ input, ctx }) => {
+      const locale = input?.locale ?? "en";
+      const [languages, profiles] = await Promise.all([
+        ctx.db.appLanguage.findMany(),
+        ctx.db.profile.findMany({
+          where: { isPublished: true },
+          select: {
+            id: true,
+            username: true,
+            displayName: true,
+            logoInitials: true,
+            customDomain: true,
+            userId: true,
+          },
+          take: 12,
+        }),
+      ]);
+
+      if (profiles.length === 0) {
+        return [];
+      }
+
+      const userIds = profiles.map((p) => p.userId);
+      const headers = await ctx.db.cvHeader.findMany({
+        where: { userId: { in: userIds } },
+        include: { translations: true },
+      });
+
+      const headerByUserId = new Map(headers.map((h) => [h.userId, h]));
+
+      return profiles
+        .filter((p) => Boolean(p.username))
+        .map((p) => {
+          const header = headerByUserId.get(p.userId);
+          const t = header
+            ? createLocalizedFieldResolver(languages, locale).for(
+                header.translations ?? [],
+              )
+            : null;
+
+          const subtitle = t?.("heroSubtitle")?.trim();
+          const degree = t?.("degree")?.trim();
+          const role =
+            subtitle && subtitle.length > 0
+              ? subtitle
+              : degree && degree.length > 0
+                ? degree
+                : null;
+
+          const trimmedInitials = p.logoInitials?.trim();
+          const trimmedDisplayName = p.displayName?.trim();
+          const initials =
+            trimmedInitials && trimmedInitials.length > 0
+              ? trimmedInitials
+              : trimmedDisplayName && trimmedDisplayName.length > 0
+                ? trimmedDisplayName
+                    .split(/\s+/)
+                    .slice(0, 2)
+                    .map((part) => part[0]?.toUpperCase())
+                    .join("")
+                : p.username.slice(0, 2).toUpperCase();
+
+          return {
+            id: p.id,
+            username: p.username,
+            displayName: p.displayName,
+            subdomain: p.customDomain ?? p.username,
+            initials,
+            role,
+          };
+        });
+    }),
 });
