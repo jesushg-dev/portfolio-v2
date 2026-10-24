@@ -37,11 +37,15 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
+  // Next dev writes its prerender manifest as routes are requested.
+  // Keep local requests serial to avoid concurrent manifest writes.
   workers: process.env.E2E_WORKERS
     ? Number.parseInt(process.env.E2E_WORKERS, 10)
     : process.env.CI
       ? 2
-      : 4,
+      : isLocalTarget
+        ? 1
+        : 4,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   timeout: 60_000,
   expect: {
