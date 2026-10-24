@@ -24,6 +24,12 @@ test.describe("accessibility — Shield (WCAG AAA)", () => {
   test.use({ reducedMotion: "reduce" });
   for (const route of PUBLIC_ROUTES) {
     test(`${route.name} (${route.path})`, async ({ page }) => {
+      const hydrationErrors: string[] = [];
+      page.on("pageerror", (error) => {
+        if (/hydration|server rendered HTML/i.test(error.message)) {
+          hydrationErrors.push(error.message);
+        }
+      });
       await page.goto(route.path, { waitUntil: "load" });
       await page.evaluate(() => document.fonts.ready);
 
@@ -54,6 +60,9 @@ test.describe("accessibility — Shield (WCAG AAA)", () => {
 
       expect.soft(axeSummary, report).toEqual([]);
       expect.soft(houseRuleIssues, report).toEqual([]);
+      expect
+        .soft(hydrationErrors, "Hydration must match the server HTML")
+        .toEqual([]);
     });
   }
 });
