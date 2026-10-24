@@ -1,8 +1,9 @@
 "use client";
+import type { Locale } from "@/i18n/config";
 
 import type { FC } from "react";
 import { useCallback, useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { CheckCircle2, FileText, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,11 +21,11 @@ import {
   parseMatchAnalysis,
   type CvMatchAnalysis,
 } from "@/features/resume-engine/lib/cv-match-analysis";
+import { ResumeTemplateSelector } from "./resume-template-selector";
 import {
-  ResumeTailorSourceSelector,
-  type ResumeTailorSourceType,
-} from "@/features/resume-engine/components/resume-tailor-source-selector";
-import type { CvTemplateVersion } from "@/features/cv/lib/load-cv-template-docx";
+  DEFAULT_CV_TEMPLATE_VERSION,
+  type CvTemplateVersion,
+} from "@/features/resume-engine/lib/template-registry";
 import { ResumeTailorErrorAlert } from "@/features/resume-engine/components/resume-tailor-error-alert";
 import { ResumeTailorProgress } from "@/features/resume-engine/components/resume-tailor-progress";
 import {
@@ -48,11 +49,11 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [step, setStep] = useState<Step>("configure");
-  const [sourceType, setSourceType] =
-    useState<ResumeTailorSourceType>("studio");
-  const [templateVersion, setTemplateVersion] =
-    useState<CvTemplateVersion>("v2");
-  const [uploadId, setUploadId] = useState<string | null>(null);
+  const uiLocale = useLocale();
+  const [targetLocale, setTargetLocale] = useState<Locale | "auto">("auto");
+  const [templateVersion, setTemplateVersion] = useState<CvTemplateVersion>(
+    DEFAULT_CV_TEMPLATE_VERSION,
+  );
   const [jobDescription, setJobDescription] = useState("");
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [exportId, setExportId] = useState<string | null>(null);
@@ -77,10 +78,10 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   });
   const tailorPrompt = api.resumeEngineAdmin.getTailorPrompt.useQuery(
     {
-      sourceType,
-      uploadId: uploadId ?? undefined,
       applicationId,
       templateVersion,
+      targetLocale: targetLocale === "auto" ? undefined : targetLocale,
+      uiLocale,
       jobDescription:
         jobDescription.trim().length > 0
           ? jobDescription.trim()
@@ -89,18 +90,13 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     { enabled: false },
   );
 
-  const registerUpload = api.resumeEngineAdmin.registerUpload.useMutation();
   const tailorResume = api.resumeEngineAdmin.tailorResume.useMutation();
   const tailorResumeManual =
     api.resumeEngineAdmin.tailorResumeManual.useMutation();
-  const replacePolishedResume =
-    api.resumeEngineAdmin.replacePolishedResume.useMutation();
-  const utils = api.useUtils();
 
   const application = pageData.data?.application;
   const latestExport = pageData.data?.latestExport;
   const hasStudioData = pageData.data?.hasStudioData ?? false;
-  const uploads = pageData.data?.uploads ?? [];
   const hasAutoProviders = aiSettings.data?.hasAutoProviders ?? false;
   const providers = aiSettings.data?.providers ?? [];
   const defaultProvider = aiSettings.data?.defaultProvider ?? null;
@@ -156,12 +152,8 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       setError(t("tailorJdTooShort"));
       return;
     }
-    if (sourceType === "studio" && !hasStudioData) {
+    if (!hasStudioData) {
       setError(t("tailorNoStudioData"));
-      return;
-    }
-    if (sourceType === "upload" && !uploadId) {
-      setError(t("tailorNoUpload"));
       return;
     }
 
@@ -170,12 +162,12 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       setStep("tailoring");
       try {
         const result = await tailorResume.mutateAsync({
-          sourceType,
-          uploadId: uploadId ?? undefined,
           jobDescription: effectiveJobDescription,
           applicationId,
           provider: effectiveProvider ?? undefined,
           templateVersion,
+          targetLocale: targetLocale === "auto" ? undefined : targetLocale,
+          uiLocale,
         });
         applyTailorResult(result);
         setStep("done");
@@ -192,12 +184,14 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     effectiveJobDescription,
     effectiveProvider,
     hasStudioData,
-    sourceType,
+
     tailorResume,
     applyTailorResult,
     t,
-    uploadId,
+
     templateVersion,
+    targetLocale,
+    uiLocale,
   ]);
 
   const handleTailorManual = useCallback(() => {
@@ -205,12 +199,8 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       setError(t("tailorJdTooShort"));
       return;
     }
-    if (sourceType === "studio" && !hasStudioData) {
+    if (!hasStudioData) {
       setError(t("tailorNoStudioData"));
-      return;
-    }
-    if (sourceType === "upload" && !uploadId) {
-      setError(t("tailorNoUpload"));
       return;
     }
 
@@ -219,12 +209,12 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
       setStep("tailoring");
       try {
         const result = await tailorResumeManual.mutateAsync({
-          sourceType,
-          uploadId: uploadId ?? undefined,
           jobDescription: effectiveJobDescription,
           applicationId,
           rawJson: manualTailorJson,
           templateVersion,
+          targetLocale: targetLocale === "auto" ? undefined : targetLocale,
+          uiLocale,
         });
         applyTailorResult(result);
         setStep("done");
@@ -241,42 +231,15 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     effectiveJobDescription,
     hasStudioData,
     manualTailorJson,
-    sourceType,
+
     tailorResumeManual,
     applyTailorResult,
     t,
-    uploadId,
-    templateVersion,
-  ]);
 
-  const handleUploadComplete = useCallback(
-    (file: { url: string; key: string; name: string; mimeType?: string }) => {
-      startTransition(async () => {
-        setError(null);
-        try {
-          const registered = await registerUpload.mutateAsync({
-            originalFileUrl: file.url,
-            uploadThingKey: file.key,
-            fileName: file.name,
-            mimeType:
-              file.mimeType && file.mimeType.length > 0
-                ? file.mimeType
-                : file.name.toLowerCase().endsWith(".pdf")
-                  ? "application/pdf"
-                  : "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          });
-          setUploadId(registered.id);
-          toast.success(t("tailorUploadReady"));
-        } catch (err) {
-          const message =
-            err instanceof Error ? err.message : t("uploadFailed");
-          setError(message);
-          toast.error(t("uploadFailed"), { description: message });
-        }
-      });
-    },
-    [registerUpload, t],
-  );
+    templateVersion,
+    targetLocale,
+    uiLocale,
+  ]);
 
   const handleLoadTailorPrompt = useCallback(async () => {
     if (effectiveJobDescription.length < 20) {
@@ -286,49 +249,6 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     const result = await tailorPrompt.refetch();
     return result.data ?? null;
   }, [effectiveJobDescription.length, t, tailorPrompt]);
-
-  const handlePolishedUpload = useCallback(
-    (file: { url: string; key: string; name: string; mimeType: string }) => {
-      startTransition(async () => {
-        try {
-          const result = await replacePolishedResume.mutateAsync({
-            exportId: exportId ?? undefined,
-            applicationId,
-            originalFileUrl: file.url,
-            uploadThingKey: file.key,
-            fileName: file.name,
-            mimeType: file.mimeType,
-          });
-          setExportId(result.exportId);
-          setDownloadUrl(result.downloadUrl);
-          setPdfDownloadUrl(result.pdfDownloadUrl ?? null);
-          toast.success(
-            result.kind === "pdf"
-              ? t("polishPdfSuccess")
-              : t("polishDocxSuccess"),
-          );
-          void utils.resumeEngineAdmin.getTailorPageData.invalidate();
-          if (applicationId) {
-            void utils.jobTrackerAdmin.getApplicationById.invalidate({
-              id: applicationId,
-            });
-          }
-        } catch (err) {
-          const message =
-            err instanceof Error ? err.message : t("polishUploadFailed");
-          toast.error(t("polishUploadFailed"), { description: message });
-        }
-      });
-    },
-    [
-      applicationId,
-      exportId,
-      replacePolishedResume,
-      t,
-      utils.jobTrackerAdmin.getApplicationById,
-      utils.resumeEngineAdmin.getTailorPageData,
-    ],
-  );
 
   const handleResetTailor = useCallback(() => {
     setStep("configure");
@@ -387,7 +307,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               applicationId={applicationId}
               embedded
               onResetTailor={handleResetTailor}
-              onPolishedUpload={handlePolishedUpload}
+
               onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />
           </div>
@@ -407,7 +327,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               applicationId={applicationId}
               embedded
               onResetTailor={handleResetTailor}
-              onPolishedUpload={handlePolishedUpload}
+
               onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />
           </ResumeTailorExistingBanner>
@@ -417,18 +337,20 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               {t("tailorPageDescription")}
             </p>
 
-            <ResumeTailorSourceSelector
-              sourceType={sourceType}
-              onSourceTypeChange={setSourceType}
+            <ResumeTemplateSelector
               templateVersion={templateVersion}
-              onTemplateVersionChange={setTemplateVersion}
+              onTemplateVersionChange={(value) => {
+                setTemplateVersion(value);
+                setManualTailorJson("");
+              }}
+              targetLocale={targetLocale}
+              onTargetLocaleChange={(value) => {
+                setTargetLocale(value);
+                setManualTailorJson("");
+              }}
               hasStudioData={hasStudioData}
               studioPreview={pageData.data?.studioPreview}
-              uploads={uploads}
-              uploadId={uploadId}
-              onUploadIdChange={setUploadId}
-              onUploadComplete={handleUploadComplete}
-              onError={setError}
+
               compact
             />
 
@@ -463,8 +385,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
                 isPending={isPending}
                 submitLabel={t("tailorCta")}
                 canLoadPrompt={
-                  effectiveJobDescription.length >= 20 &&
-                  (sourceType === "studio" ? hasStudioData : Boolean(uploadId))
+                  effectiveJobDescription.length >= 20 && hasStudioData
                 }
                 variant="compact"
                 hideSubmit
@@ -559,18 +480,19 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResumeTailorSourceSelector
-                sourceType={sourceType}
-                onSourceTypeChange={setSourceType}
+              <ResumeTemplateSelector
                 templateVersion={templateVersion}
-                onTemplateVersionChange={setTemplateVersion}
+                onTemplateVersionChange={(value) => {
+                  setTemplateVersion(value);
+                  setManualTailorJson("");
+                }}
+                targetLocale={targetLocale}
+                onTargetLocaleChange={(value) => {
+                  setTargetLocale(value);
+                  setManualTailorJson("");
+                }}
                 hasStudioData={hasStudioData}
                 studioPreview={pageData.data?.studioPreview}
-                uploads={uploads}
-                uploadId={uploadId}
-                onUploadIdChange={setUploadId}
-                onUploadComplete={handleUploadComplete}
-                onError={setError}
               />
             </CardContent>
           </Card>
@@ -606,10 +528,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
                   isPending={isPending}
                   submitLabel={t("tailorCta")}
                   canLoadPrompt={
-                    effectiveJobDescription.length >= 20 &&
-                    (sourceType === "studio"
-                      ? hasStudioData
-                      : Boolean(uploadId))
+                    effectiveJobDescription.length >= 20 && hasStudioData
                   }
                 />
               ) : (
@@ -670,7 +589,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               exportId={exportId}
               applicationId={applicationId}
               onResetTailor={handleResetTailor}
-              onPolishedUpload={handlePolishedUpload}
+
               onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />
           </CardContent>

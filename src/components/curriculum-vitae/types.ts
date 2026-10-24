@@ -22,6 +22,7 @@ export interface LocalizedCvData {
     backgroundImageUrl: string | null;
     degree: string;
     clientImageAlt: string;
+    availabilityBadge?: string | null;
   } | null;
   profile?: {
     displayName: string | null;

@@ -1,4 +1,15 @@
-import { loadCvStructuredDraft } from "./load-cv-structured-draft";
+import {
+  certificationYear,
+  loadCvStructuredDraft,
+} from "./load-cv-structured-draft";
+
+it.each([
+  [2024, 2024],
+  [1688191200000, 2023],
+  [null, undefined],
+] as const)("normalizes certificate date %s to year %s", (value, expected) =>
+  expect(certificationYear(value)).toBe(expected),
+);
 
 const languages = [
   { id: "lang-en", code: "en" },
@@ -61,12 +72,14 @@ describe("loadCvStructuredDraft", () => {
             ],
             responsibilities: [
               {
+                id: "achievement-visible",
                 atsOnly: false,
                 translations: [
                   { appLanguageId: "lang-en", text: "Shipped UI" },
                 ],
               },
               {
+                id: "achievement-additional",
                 atsOnly: true,
                 translations: [{ appLanguageId: "lang-en", text: "ATS only" }],
               },
@@ -135,6 +148,19 @@ describe("loadCvStructuredDraft", () => {
     expect(draft?.education[0]?.degreeName).toBe("BSc");
     expect(draft?.certifications[0]?.title).toBe("Solutions Architect");
     expect(draft?.skills).toEqual([{ category: "FRONTEND", items: ["React"] }]);
+    const tailored = await loadCvStructuredDraft(db as never, "user-1", {
+      locale: "en",
+      evidenceScope: "all",
+    });
+    expect(tailored?.experiences[0].responsibilities).toEqual([
+      "Shipped UI",
+      "ATS only",
+    ]);
+    expect(tailored?.experiences[0].responsibilityIds).toEqual([
+      "achievement-visible",
+      "achievement-additional",
+    ]);
+    expect(tailored?.experiences[0].atsResponsibilities).toEqual([]);
   });
 
   it("populates draft.skills from portfolio skills (db.skill)", async () => {
@@ -172,9 +198,13 @@ describe("loadCvStructuredDraft", () => {
     });
 
     expect(draft?.skills).toEqual([
-      { category: "FRONTEND", items: ["React"] },
-      { category: "BACKEND", items: ["Node.js"] },
-      { category: "DATABASE", items: ["PostgreSQL"] },
+      { id: "tech-skill-frontend", category: "FRONTEND", items: ["React"] },
+      { id: "tech-skill-backend", category: "BACKEND", items: ["Node.js"] },
+      {
+        id: "tech-skill-database",
+        category: "DATABASE",
+        items: ["PostgreSQL"],
+      },
     ]);
   });
 });

@@ -1,7 +1,18 @@
+import { buildTailoredResumePrompt } from "@/features/resume-engine/lib/ai/tailor-resume-prompt";
+import { tailorResumeDocument } from "@/features/resume-engine/lib/ai/tailor-resume";
+import { finalizeTailoredResume } from "@/features/resume-engine/lib/finalize-tailor-export";
+import { resolveTailorContext } from "@/features/resume-engine/lib/resolve-tailor-context";
+import {
+  validateTailoredResume,
+  readResumeSnapshot,
+} from "@/features/resume-engine/lib/tailored-resume-document";
+import {
+  CvTemplateVersionSchema,
+  DEFAULT_CV_TEMPLATE_VERSION,
+} from "@/features/resume-engine/lib/template-registry";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import type { Prisma, PrismaClient } from "@prisma/client";
-import { locales } from "@/i18n/config";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -11,27 +22,9 @@ import {
 import { extractStructuredResume } from "@/features/resume-engine/lib/ai/extract-structured";
 import { persistCvImportDraft } from "@/features/resume-engine/lib/import-persist";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
-import { tailorDocxResume } from "@/features/resume-engine/lib/ai/tailor-docx";
-import {
-  finalizeDocxTailorExport,
-  finalizeUploadTailorExport,
-} from "@/features/resume-engine/lib/finalize-tailor-export";
 import { UploadThingNotConfiguredError } from "@/lib/uploadthing/tenant-uploadthing";
-import {
-  fetchUploadForTailor,
-  fetchUploadDocxSections,
-} from "@/features/resume-engine/lib/fetch-upload-docx";
-import { resolveTailorBaseDraft } from "@/features/resume-engine/lib/resolve-tailor-base-draft";
-import {
-  DEFAULT_CV_TEMPLATE_VERSION,
-  loadCvTemplateForTailor,
-} from "@/features/cv/lib/load-cv-template-docx";
-import {
-  buildDocxTailorPromptPackage,
-  buildImportPromptPackage,
-  buildStudioDocxTailorPromptPackage,
-} from "@/features/resume-engine/lib/ai/prompt-package";
-import { loadTailorJobContext } from "@/features/resume-engine/lib/ai/tailor-job-context";
+import { fetchUploadDocxSections } from "@/features/resume-engine/lib/fetch-upload-docx";
+import { buildImportPromptPackage } from "@/features/resume-engine/lib/ai/prompt-package";
 import {
   formatZodParseError,
   parseAiJsonResponse,
@@ -41,11 +34,6 @@ import {
   getDefaultAiProvider,
   loadTenantAiCredentials,
 } from "@/features/resume-engine/lib/ai/providers";
-import {
-  CvDocxTailorResultSchema,
-  applyEditsToSections,
-} from "@/features/resume-engine/lib/cv-docx-tailor-result";
-import { classifyPolishedResumeFile } from "@/features/resume-engine/lib/classify-polished-resume";
 import { isPdfUpload } from "@/features/resume-engine/lib/parse-pdf-for-import";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
 import {
@@ -55,6 +43,19 @@ import {
 } from "@/lib/ilovepdf/tenant-ilovepdf";
 import { uploadBufferToUploadThing } from "@/lib/uploadthing/upload-buffer";
 import { processJobDescription } from "@/features/resume-engine/lib/ai/clean-job-description";
+
+const tailorInputSchema = z
+  .object({
+    applicationId: z.string().optional(),
+    jobDescription: z.string().min(20),
+    templateVersion: CvTemplateVersionSchema.default(
+      DEFAULT_CV_TEMPLATE_VERSION,
+    ),
+    targetLocale: z.enum(["en", "es", "nl"]).optional(),
+    uiLocale: z.enum(["en", "es", "nl"]).optional(),
+    tailoredFor: z.string().optional(),
+  })
+  .strict();
 
 function rethrowTailorExportError(error: unknown): never {
   if (error instanceof TRPCError) throw error;
@@ -178,8 +179,6 @@ const registerUploadSchema = z.object({
 const aiProviderSchema = z
   .enum(["claude", "openai", "deepseek", "gemini"])
   .optional();
-
-const localeSchema = z.enum(locales);
 
 export const resumeEngineAdminRouter = createTRPCRouter({
   getAiSettings: protectedProcedure.query(async ({ ctx }) => {
@@ -396,55 +395,40 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           ? profile.defaultLocale
           : "en";
 
-      const [studioDraft, uploads, application, latestExport] =
-        await Promise.all([
-          loadCvStructuredDraft(ctx.db, ctx.user.id, {
-            locale: fallbackLocale,
-            fallbackLocale,
-          }),
-          ctx.db.cvSourceUpload.findMany({
-            where: {
-              userId: ctx.user.id,
-              importStatus: { in: ["pending", "preview", "imported"] },
-            },
-            orderBy: { createdAt: "desc" },
-            take: 10,
-            select: {
-              id: true,
-              fileName: true,
-              importStatus: true,
-              createdAt: true,
-            },
-          }),
-          input.applicationId
-            ? ctx.db.application.findFirst({
-                where: { id: input.applicationId, userId: ctx.user.id },
-                include: { company: true },
-              })
-            : Promise.resolve(null),
-          input.applicationId
-            ? ctx.db.resumeExport.findFirst({
-                where: {
-                  applicationId: input.applicationId,
-                  userId: ctx.user.id,
-                },
-                orderBy: { createdAt: "desc" },
-                select: {
-                  id: true,
-                  fileUrl: true,
-                  fileName: true,
-                  mimeType: true,
-                  pdfFileUrl: true,
-                  pdfFileName: true,
-                  structuredSnapshot: true,
-                  matchAnalysis: true,
-                  aiScore: true,
-                  pitchSubject: true,
-                  pitchBody: true,
-                },
-              })
-            : Promise.resolve(null),
-        ]);
+      const [studioDraft, application, latestExport] = await Promise.all([
+        loadCvStructuredDraft(ctx.db, ctx.user.id, {
+          locale: fallbackLocale,
+          fallbackLocale,
+        }),
+        input.applicationId
+          ? ctx.db.application.findFirst({
+              where: { id: input.applicationId, userId: ctx.user.id },
+              include: { company: true },
+            })
+          : Promise.resolve(null),
+        input.applicationId
+          ? ctx.db.resumeExport.findFirst({
+              where: {
+                applicationId: input.applicationId,
+                userId: ctx.user.id,
+              },
+              orderBy: { createdAt: "desc" },
+              select: {
+                id: true,
+                fileUrl: true,
+                fileName: true,
+                mimeType: true,
+                pdfFileUrl: true,
+                pdfFileName: true,
+                structuredSnapshot: true,
+                matchAnalysis: true,
+                aiScore: true,
+                pitchSubject: true,
+                pitchBody: true,
+              },
+            })
+          : Promise.resolve(null),
+      ]);
 
       return {
         hasStudioData: Boolean(studioDraft),
@@ -454,7 +438,6 @@ export const resumeEngineAdminRouter = createTRPCRouter({
               experienceCount: studioDraft.experiences.length,
             }
           : null,
-        uploads,
         application: application
           ? {
               id: application.id,
@@ -472,300 +455,73 @@ export const resumeEngineAdminRouter = createTRPCRouter({
     }),
 
   getTailorPrompt: protectedProcedure
-    .input(
-      z.object({
-        sourceType: z.enum(["studio", "upload"]),
-        uploadId: z.string().optional(),
-        applicationId: z.string().optional(),
-        jobDescription: z.string().min(20),
-        templateVersion: z.enum(["v1", "v2"]).default("v2").optional(),
-      }),
-    )
+    .input(tailorInputSchema)
     .query(async ({ ctx, input }) => {
-      const jobContext = await loadTailorJobContext(
-        ctx.db,
-        ctx.user.id,
-        input.applicationId,
-      );
-
-      const { cleanedText: jobDescription } = processJobDescription(
-        input.jobDescription,
-      );
-
-      if (input.sourceType === "upload") {
-        if (!input.uploadId) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "uploadId is required when sourceType is upload.",
-          });
-        }
-
-        const { parsed } = await fetchUploadForTailor(
-          ctx.db,
-          input.uploadId,
-          ctx.user.id,
-        );
-
-        return buildDocxTailorPromptPackage(
-          parsed.sections,
-          jobDescription,
-          jobContext,
-        );
-      }
-
-      const templateVersion =
-        input.templateVersion ?? DEFAULT_CV_TEMPLATE_VERSION;
-      const targetPageCount = templateVersion === "v2" ? 2 : 1;
-      const pageBudgetNotice =
-        templateVersion === "v2"
-          ? "This is an intended 2-page resume template (v2). Fill available bullet slots with relevant facts; do NOT aggressively empty slots to compress into 1 page."
-          : "This is a 1-page resume template (v1). Keep concise to fit 1 page.";
-
-      const [{ draft }, { parsed }] = await Promise.all([
-        resolveTailorBaseDraft(
-          ctx.db,
-          ctx.user.id,
-          input.sourceType,
-          input.uploadId,
-        ),
-        loadCvTemplateForTailor(templateVersion),
-      ]);
-
-      return buildStudioDocxTailorPromptPackage(
-        parsed.sections,
-        draft,
-        jobDescription,
-        jobContext,
-        {
-          templateVersion,
-          targetPageCount,
-          pageBudgetNotice,
-        },
-      );
+      const context = await resolveTailorContext(ctx.db, ctx.user.id, {
+        templateId: input.templateVersion,
+        targetLocale: input.targetLocale,
+        uiLocale: input.uiLocale,
+        jobDescription: processJobDescription(input.jobDescription).cleanedText,
+      });
+      return buildTailoredResumePrompt(context);
     }),
-
   tailorResume: protectedProcedure
-    .input(
-      z.object({
-        sourceType: z.enum(["studio", "upload"]),
-        uploadId: z.string().optional(),
-        jobDescription: z.string().min(20),
-        applicationId: z.string().optional(),
-        provider: aiProviderSchema,
-        targetLocale: localeSchema.optional(),
-        tailoredFor: z.string().optional(),
-        templateVersion: z.enum(["v1", "v2"]).default("v2").optional(),
-      }),
-    )
+    .input(tailorInputSchema.extend({ provider: aiProviderSchema }))
     .mutation(async ({ ctx, input }) => {
-      const { cleanedText: jobDescription } = processJobDescription(
-        input.jobDescription,
-      );
-      const preferredLocale = input.targetLocale;
-      const jobContext = await loadTailorJobContext(
-        ctx.db,
-        ctx.user.id,
-        input.applicationId,
-        preferredLocale,
-      );
-
-      if (input.sourceType === "upload") {
-        if (!input.uploadId) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "uploadId is required when sourceType is upload.",
-          });
-        }
-
-        try {
-          const source = await fetchUploadForTailor(
-            ctx.db,
-            input.uploadId,
-            ctx.user.id,
-          );
-
-          const credentials = await loadTenantAiCredentials(ctx.user.id);
-          const { result, provider } = await tailorDocxResume(
-            source.parsed.sections,
-            jobDescription,
-            credentials,
-            input.provider,
-            undefined,
-            jobContext,
-          );
-
-          return finalizeUploadTailorExport(ctx.db, ctx.user.id, {
-            source,
-            result,
-            aiProvider: provider,
-            jobDescription,
-            applicationId: input.applicationId,
-            tailoredFor: input.tailoredFor,
-            targetLocale: result.detectedLocale ?? input.targetLocale,
-          });
-        } catch (error) {
-          rethrowTailorExportError(error);
-        }
-      }
-
-      const { draft: baseDraft } = await resolveTailorBaseDraft(
-        ctx.db,
-        ctx.user.id,
-        input.sourceType,
-        input.uploadId,
-        preferredLocale,
-      );
-
       try {
-        const templateVersion =
-          input.templateVersion ?? DEFAULT_CV_TEMPLATE_VERSION;
-        const targetPageCount = templateVersion === "v2" ? 2 : 1;
-        const pageBudgetNotice =
-          templateVersion === "v2"
-            ? "This is an intended 2-page resume template (v2). Fill available bullet slots with relevant facts; do NOT aggressively empty slots to compress into 1 page."
-            : "This is a 1-page resume template (v1). Keep concise to fit 1 page.";
-
-        const { parsed } = await loadCvTemplateForTailor(templateVersion);
-
+        const context = await resolveTailorContext(ctx.db, ctx.user.id, {
+          templateId: input.templateVersion,
+          targetLocale: input.targetLocale,
+          uiLocale: input.uiLocale,
+          jobDescription: processJobDescription(input.jobDescription)
+            .cleanedText,
+        });
         const credentials = await loadTenantAiCredentials(ctx.user.id);
-        const { result, provider } = await tailorDocxResume(
-          parsed.sections,
-          jobDescription,
+        const { document, result, provider } = await tailorResumeDocument(
+          context,
           credentials,
           input.provider,
-          baseDraft,
-          jobContext,
-          {
-            templateVersion,
-            targetPageCount,
-            pageBudgetNotice,
-            targetLocale: preferredLocale,
-          },
         );
-
-        return finalizeDocxTailorExport(ctx.db, ctx.user.id, {
-          parsed,
-          adaptedSections: result.sections,
-          aiScore: result.aiScore,
-          matchNotes: result.matchNotes,
-          matchAnalysis: result.matchAnalysis,
+        return await finalizeTailoredResume(ctx.db, ctx.user.id, {
+          document,
+          result,
           aiProvider: provider,
-          sourceType: "studio",
-          jobDescription,
+          jobDescription: context.jobDescription,
           applicationId: input.applicationId,
           tailoredFor: input.tailoredFor,
-          structuredSnapshot: baseDraft,
-          targetLocale:
-            result.detectedLocale ??
-            input.targetLocale ??
-            baseDraft.detectedLocale,
         });
       } catch (error) {
         rethrowTailorExportError(error);
       }
     }),
-
   tailorResumeManual: protectedProcedure
-    .input(
-      z.object({
-        sourceType: z.enum(["studio", "upload"]),
-        uploadId: z.string().optional(),
-        jobDescription: z.string().min(20),
-        applicationId: z.string().optional(),
-        rawJson: z.string().min(2),
-        targetLocale: localeSchema.optional(),
-        tailoredFor: z.string().optional(),
-        templateVersion: z.enum(["v1", "v2"]).default("v2").optional(),
-      }),
-    )
+    .input(tailorInputSchema.extend({ rawJson: z.string().min(2) }))
     .mutation(async ({ ctx, input }) => {
-      const { cleanedText: jobDescription } = processJobDescription(
-        input.jobDescription,
-      );
-      const preferredLocale = input.targetLocale;
-
-      if (input.sourceType === "upload") {
-        if (!input.uploadId) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "uploadId is required when sourceType is upload.",
-          });
-        }
-
-        const source = await fetchUploadForTailor(
-          ctx.db,
-          input.uploadId,
-          ctx.user.id,
-        );
-
-        let result;
-        try {
-          result = CvDocxTailorResultSchema.parse(
-            parseAiJsonResponse(input.rawJson),
-          );
-        } catch (error) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: formatZodParseError(error),
-          });
-        }
-
-        return finalizeUploadTailorExport(ctx.db, ctx.user.id, {
-          source,
-          result,
-          aiProvider: "manual",
-          jobDescription,
-          applicationId: input.applicationId,
-          tailoredFor: input.tailoredFor,
-          targetLocale: result.detectedLocale ?? input.targetLocale,
-        });
-      }
-
-      const { draft: baseDraft } = await resolveTailorBaseDraft(
-        ctx.db,
-        ctx.user.id,
-        input.sourceType,
-        input.uploadId,
-        preferredLocale,
-      );
-
-      const templateVersion =
-        input.templateVersion ?? DEFAULT_CV_TEMPLATE_VERSION;
-      const { parsed } = await loadCvTemplateForTailor(templateVersion);
-
-      let result;
+      const context = await resolveTailorContext(ctx.db, ctx.user.id, {
+        templateId: input.templateVersion,
+        targetLocale: input.targetLocale,
+        uiLocale: input.uiLocale,
+        jobDescription: processJobDescription(input.jobDescription).cleanedText,
+      });
+      let validated;
       try {
-        result = CvDocxTailorResultSchema.parse(
+        validated = validateTailoredResume(
           parseAiJsonResponse(input.rawJson),
+          context,
         );
       } catch (error) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: formatZodParseError(error),
+          message:
+            error instanceof Error ? error.message : "Invalid resume JSON",
         });
       }
-
-      const adaptedSections = applyEditsToSections(
-        result.edits,
-        parsed.sections,
-      );
-
-      return finalizeDocxTailorExport(ctx.db, ctx.user.id, {
-        parsed,
-        adaptedSections,
-        aiScore: result.aiScore,
-        matchNotes: result.matchNotes,
-        matchAnalysis: result.matchAnalysis,
+      return finalizeTailoredResume(ctx.db, ctx.user.id, {
+        ...validated,
         aiProvider: "manual",
-        sourceType: "studio",
-        jobDescription,
+        jobDescription: context.jobDescription,
         applicationId: input.applicationId,
         tailoredFor: input.tailoredFor,
-        structuredSnapshot: baseDraft,
-        targetLocale:
-          result.detectedLocale ??
-          input.targetLocale ??
-          baseDraft.detectedLocale,
       });
     }),
 
@@ -812,10 +568,8 @@ export const resumeEngineAdminRouter = createTRPCRouter({
         };
       }
 
-      const parsed = CvImportDraftSchema.safeParse(
-        resumeExport.structuredSnapshot,
-      );
-      if (!parsed.success) {
+      const snapshot = readResumeSnapshot(resumeExport.structuredSnapshot);
+      if (!snapshot) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "No ATS snapshot is available for this export.",
@@ -824,7 +578,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
 
       try {
         if (input.variant === "ats-docx") {
-          const buffer = await generateDocxFromStructured(parsed.data);
+          const buffer = await generateDocxFromStructured(snapshot);
           const fileName = `${stem} - ATS.docx`;
           const uploaded = await uploadBufferToUploadThing(
             ctx.user.id,
@@ -835,7 +589,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
           return { url: uploaded.url, fileName };
         }
 
-        const docxBuffer = await generateDocxFromStructured(parsed.data);
+        const docxBuffer = await generateDocxFromStructured(snapshot);
         const buffer = await convertDocxToPdfForTenant(
           ctx.user.id,
           docxBuffer,
@@ -866,92 +620,5 @@ export const resumeEngineAdminRouter = createTRPCRouter({
 
       const pdf = await ensureStyledPdf(ctx.db, resumeExport);
       return { pdfDownloadUrl: pdf.url, pdfFileName: pdf.fileName };
-    }),
-
-  replacePolishedResume: protectedProcedure
-    .input(
-      z.object({
-        exportId: z.string().optional(),
-        applicationId: z.string().optional(),
-        originalFileUrl: z.string().url(),
-        uploadThingKey: z.string().min(1),
-        fileName: z.string().min(1),
-        mimeType: z.string().min(1),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const kind = classifyPolishedResumeFile(input.fileName, input.mimeType);
-
-      let resumeExport = input.exportId
-        ? await ctx.db.resumeExport.findFirst({
-            where: { id: input.exportId, userId: ctx.user.id },
-          })
-        : null;
-
-      if (!resumeExport && input.applicationId) {
-        resumeExport = await ctx.db.resumeExport.findFirst({
-          where: {
-            applicationId: input.applicationId,
-            userId: ctx.user.id,
-          },
-          orderBy: { createdAt: "desc" },
-        });
-      }
-
-      if (!resumeExport) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "No tailored resume found to replace. Generate one first.",
-        });
-      }
-
-      const pdfFileName =
-        kind === "pdf"
-          ? input.fileName
-          : resumeExport.fileName.replace(/\.docx$/i, ".pdf");
-
-      const updated = await ctx.db.resumeExport.update({
-        where: { id: resumeExport.id },
-        data:
-          kind === "pdf"
-            ? {
-                pdfFileName,
-                pdfFileUrl: input.originalFileUrl,
-                pdfUploadThingKey: input.uploadThingKey,
-              }
-            : {
-                fileName: resumeExport.fileName.endsWith(".docx")
-                  ? resumeExport.fileName
-                  : `${resumeExport.fileName.replace(/\.[^.]+$/, "")}.docx`,
-                fileUrl: input.originalFileUrl,
-                uploadThingKey: input.uploadThingKey,
-                mimeType: input.mimeType,
-                pdfFileName: null,
-                pdfFileUrl: null,
-                pdfUploadThingKey: null,
-              },
-      });
-
-      if (updated.applicationId) {
-        await ctx.db.application.update({
-          where: { id: updated.applicationId },
-          data: {
-            cvFile: {
-              name: kind === "pdf" ? pdfFileName : updated.fileName,
-              url: kind === "pdf" ? input.originalFileUrl : updated.fileUrl,
-              uploadedAt: new Date(),
-            },
-          },
-        });
-      }
-
-      return {
-        exportId: updated.id,
-        downloadUrl: updated.fileUrl,
-        fileName: updated.fileName,
-        pdfDownloadUrl: updated.pdfFileUrl,
-        pdfFileName: updated.pdfFileName,
-        kind,
-      };
     }),
 });

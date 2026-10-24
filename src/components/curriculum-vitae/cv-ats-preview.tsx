@@ -1,11 +1,18 @@
+import type { Locale } from "@/i18n/config";
+import {
+  RESUME_LABELS,
+  resumeDate,
+  getEmploymentTypeLabel,
+} from "@/lib/cv/resume-labels";
 import type { FC } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 import { groupConsecutiveExperiencesByCompany } from "@/lib/cv/group-consecutive-experiences-by-company";
 import type { LocalizedCvData } from "./types";
 
 interface CvAtsPreviewProps {
   data: LocalizedCvData;
+  locale?: Locale;
   aboutMeText: string | null;
   pdfMode?: boolean;
 }
@@ -17,11 +24,9 @@ function formatExperienceDateRange(
   endDate: Date | null,
   current: boolean,
   presentLabel: string,
+  locale: Locale,
 ): string {
-  const fmt = (d: Date) => {
-    const month = d.toLocaleString("en-US", { month: "long" });
-    return `${month} ${d.getFullYear()}`;
-  };
+  const fmt = (date: Date) => resumeDate(date.toISOString(), locale);
 
   if (!startDate && !endDate) return "";
   const start = startDate ? fmt(startDate) : "";
@@ -33,11 +38,13 @@ function AtsRoleBlock({
   exp,
   presentLabel,
   includeRoleDates,
+  locale,
   employmentTypeLabel,
 }: {
   exp: CvExperience;
   presentLabel: string;
   includeRoleDates: boolean;
+  locale: Locale;
   employmentTypeLabel?: string | null;
 }) {
   const roleDates = includeRoleDates
@@ -46,6 +53,7 @@ function AtsRoleBlock({
         exp.endDate,
         exp.current,
         presentLabel,
+        locale,
       )
     : "";
 
@@ -57,6 +65,9 @@ function AtsRoleBlock({
         {roleDates ? ` — ${roleDates}` : ""}
         {exp.location ? ` — ${exp.location}` : ""}
       </p>
+      {exp.companyBlurb ? (
+        <p className="mt-1 text-xs italic">{exp.companyBlurb}</p>
+      ) : null}
       {exp.responsibilities.length > 0 ? (
         <ul className="mt-1 list-disc space-y-1 pl-5">
           {exp.responsibilities.map((r) => (
@@ -93,25 +104,20 @@ function AtsSection({
   );
 }
 
-const SKILL_CATEGORY_LABELS: Record<string, string> = {
-  FRONTEND: "Front-end",
-  BACKEND: "Back-end",
-  DATABASE: "Databases",
-  TOOLS: "Tools",
-  MOBILE: "Mobile",
-  DESKTOP: "Desktop",
-  DEVOPS: "DevOps",
-  CYBERSECURITY: "Cybersecurity",
-  OTHER: "Other",
-};
-
-const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
+const CvAtsPreview: FC<CvAtsPreviewProps> = ({
+  data,
+  aboutMeText,
+  locale: outputLocale,
+}) => {
+  const uiLocale = useLocale();
+  const locale = outputLocale ?? uiLocale;
+  const labels = RESUME_LABELS[locale];
   const t = useTranslations("curriculum");
 
   const fullName =
     data.header?.fullName ?? data.profile?.displayName ?? "Unknown";
   const degree = data.header?.degree ?? "";
-  const presentLabel = t("ats.present");
+  const presentLabel = labels.present;
 
   const contactLine = data.contacts.map((c) => c.value).join("   |   ");
   const experienceGroups = groupConsecutiveExperiencesByCompany(
@@ -130,14 +136,20 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
         ) : null}
       </header>
 
+      {data.header?.availabilityBadge ? (
+        <AtsSection title={labels.availability}>
+          <p className="text-xs">{data.header.availabilityBadge}</p>
+        </AtsSection>
+      ) : null}
+
       {aboutMeText ? (
-        <AtsSection title={t("header.aboutMe")}>
+        <AtsSection title={labels.summary}>
           <p className="text-xs leading-relaxed">{aboutMeText}</p>
         </AtsSection>
       ) : null}
 
       {experienceGroups.length > 0 ? (
-        <AtsSection title={t("header.experience")}>
+        <AtsSection title={labels.experience}>
           <div className="space-y-4">
             {experienceGroups.map((group) => {
               const overallDates = formatExperienceDateRange(
@@ -145,6 +157,7 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
                 group.overallEnd,
                 group.overallCurrent,
                 presentLabel,
+                locale,
               );
               const single = group.roles.length === 1 ? group.roles[0] : null;
 
@@ -161,6 +174,7 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
                             single.endDate,
                             single.current,
                             presentLabel,
+                            locale,
                           )
                         : overallDates}
                     </span>
@@ -169,10 +183,14 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
                     <AtsRoleBlock
                       exp={single}
                       presentLabel={presentLabel}
+                      locale={locale}
                       includeRoleDates={false}
                       employmentTypeLabel={
                         single.employmentType
-                          ? t(`employmentTypes.${single.employmentType}`)
+                          ? getEmploymentTypeLabel(
+                              single.employmentType,
+                              locale,
+                            )
                           : null
                       }
                     />
@@ -183,10 +201,14 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
                           key={exp.id}
                           exp={exp}
                           presentLabel={presentLabel}
+                          locale={locale}
                           includeRoleDates
                           employmentTypeLabel={
                             exp.employmentType
-                              ? t(`employmentTypes.${exp.employmentType}`)
+                              ? getEmploymentTypeLabel(
+                                  exp.employmentType,
+                                  locale,
+                                )
                               : null
                           }
                         />
@@ -201,13 +223,12 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
       ) : null}
 
       {data.technicalSkills.length > 0 ? (
-        <AtsSection title={t("header.technicalSkills")}>
+        <AtsSection title={labels.skills}>
           <div className="space-y-1">
             {data.technicalSkills.map((group) => (
               <p key={group.id} className="text-xs">
                 <span className="font-bold">
-                  {SKILL_CATEGORY_LABELS[group.category] ?? group.category}
-                  :{" "}
+                  {labels[group.category] ?? group.category}:{" "}
                 </span>
                 {group.items.join(", ")}
               </p>
@@ -217,7 +238,7 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
       ) : null}
 
       {data.educations.length > 0 ? (
-        <AtsSection title={t("header.education")}>
+        <AtsSection title={labels.education}>
           <div className="space-y-1">
             {data.educations.map((edu) => {
               const years =
@@ -246,7 +267,7 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
       ) : null}
 
       {data.languages.length > 0 ? (
-        <AtsSection title={t("header.languages")}>
+        <AtsSection title={labels.languages}>
           <p className="text-xs">
             {data.languages.map((lang, i) => (
               <span key={lang.id}>
@@ -293,7 +314,7 @@ const CvAtsPreview: FC<CvAtsPreviewProps> = ({ data, aboutMeText }) => {
       ) : null}
 
       {(data.certifications ?? []).length > 0 ? (
-        <AtsSection title={t("header.certifications")}>
+        <AtsSection title={labels.certifications}>
           <div className="space-y-1">
             {(data.certifications ?? []).map((cert) => (
               <p key={cert.id} className="text-xs">

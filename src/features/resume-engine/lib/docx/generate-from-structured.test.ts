@@ -77,11 +77,11 @@ describe("generateDocxFromStructured", () => {
     // Single experience retains role and company
     expect(documentXml).toContain("Senior Software Engineer — Imagemaker");
 
-    // Contollo is unified under the highest role with overall dates
+    // Each CMS role retains its own dates, as in the visual document.
     expect(documentXml).toContain("Development Team Lead — Contollo");
-    expect(documentXml).toContain("Agosto de 2023 – Marzo de 2025");
-    // No second separate Contollo entry or subrole
-    expect(documentXml).not.toContain("Senior Software Engineer — Contollo");
+    expect(documentXml).toContain("noviembre de 2024 – marzo de 2025");
+    expect(documentXml).toContain("agosto de 2023 – noviembre de 2024");
+    expect(documentXml).toContain("Senior Software Engineer — Contollo");
     expect(documentXml).not.toContain('w:pStyle w:val="SubRole"');
 
     // Responsibilities from both stints are rendered

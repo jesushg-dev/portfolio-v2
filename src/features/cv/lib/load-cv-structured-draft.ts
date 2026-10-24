@@ -21,6 +21,30 @@ function resolveLocale(value: string | undefined): Locale {
 export interface LoadCvStructuredDraftOptions {
   locale: Locale;
   fallbackLocale?: Locale;
+  /** Make all CMS achievements selectable for a single shared tailored document. */
+  evidenceScope?: "visible" | "all";
+}
+
+export function certificationYear(
+  value: number | null | undefined,
+): number | undefined {
+  if (value == null || !Number.isFinite(value)) return undefined;
+  if (Number.isInteger(value) && value >= 1000 && value <= 9999) return value;
+  // CMS date pickers persist Unix milliseconds; older records may contain a year.
+  const year = new Date(value).getUTCFullYear();
+  if (!Number.isInteger(year) || year < 1000 || year > 9999)
+    throw new Error("certification.issuedDate: invalid date");
+  return year;
+}
+
+async function loadResumeTechnicalSkills(db: PrismaClient, userId: string) {
+  const curated = await db.cvTechnicalSkill.findMany({
+    where: { userId },
+    orderBy: { order: "asc" },
+  });
+  // The CV editor's curated categories are the source for printed skills.
+  // Portfolio-wide skills are useful only when no CV-specific list exists.
+  return curated.length ? curated : resolveUserTechnicalSkills(db, userId);
 }
 
 export async function loadCvStructuredDraft(
@@ -64,7 +88,7 @@ export async function loadCvStructuredDraft(
       include: { translations: true },
       orderBy: { order: "asc" },
     }),
-    resolveUserTechnicalSkills(db, userId),
+    loadResumeTechnicalSkills(db, userId),
     db.cvContact.findMany({
       where: { userId },
       orderBy: { order: "asc" },
@@ -102,22 +126,30 @@ export async function loadCvStructuredDraft(
     detectedLocale: activeLocale,
     header: {
       fullName: header.fullName,
+      photoUrl: header.photoUrl ?? undefined,
+      availability: headerT("availabilityBadge") || undefined,
       degree: headerT("degree") || undefined,
       summary: summary !== "" ? summary : undefined,
     },
     experiences: experiences.map((exp, index) => {
       const expT = field.for(exp.translations);
       const visible: string[] = [];
+      const responsibilityIds: string[] = [];
       const atsOnly: string[] = [];
       for (const resp of exp.responsibilities) {
         const text = field(resp.translations, "text");
         if (!text.trim()) continue;
-        if (resp.atsOnly) atsOnly.push(text);
-        else visible.push(text);
+        if (resp.atsOnly && options?.evidenceScope !== "all")
+          atsOnly.push(text);
+        else {
+          visible.push(text);
+          responsibilityIds.push(resp.id);
+        }
       }
       return {
         id: exp.id || `exp-${index + 1}`,
         company: exp.company,
+        companyLogoUrl: exp.companyLogoUrl ?? undefined,
         role: expT("role"),
         employmentType: normalizeEmploymentType(exp.employmentType),
         location: expT("location") || undefined,
@@ -126,6 +158,7 @@ export async function loadCvStructuredDraft(
         endDate: formatExperienceDate(exp.endDate),
         current: exp.current,
         responsibilities: visible,
+        responsibilityIds,
         atsResponsibilities: atsOnly,
       };
     }),
@@ -142,17 +175,20 @@ export async function loadCvStructuredDraft(
       };
     }),
     skills: skills.map((skill) => ({
+      id: skill.id,
       category: skill.category,
       items: skill.items,
     })),
     languages: languages.map((lang) => {
       const langT = field.for(lang.translations);
       return {
+        id: lang.id,
         name: langT("name"),
         level: langT("level"),
       };
     }),
     contacts: contacts.map((contact) => ({
+      id: contact.id,
       type: contact.type,
       value: contact.value,
     })),
@@ -164,12 +200,13 @@ export async function loadCvStructuredDraft(
       );
       const fallback = cert.CertificationTranslation[0];
       return {
+        id: cert.id,
         title:
           [translation?.title, fallback?.title].find((value) =>
             Boolean(value?.trim()),
           ) ?? cert.company,
         issuer: cert.company.trim() ? cert.company : undefined,
-        year: cert.issuedDate ?? undefined,
+        year: certificationYear(cert.issuedDate),
       };
     }),
   };
