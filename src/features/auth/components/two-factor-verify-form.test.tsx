@@ -26,9 +26,11 @@ jest.mock("@/lib/auth-client", () => ({
   },
 }));
 
-jest.mock("@/features/auth/components/auth-showcase-panel", () => ({
+jest.mock("@/features/auth/components/login-layout", () => ({
   __esModule: true,
-  default: () => null,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 const assign = jest.fn();

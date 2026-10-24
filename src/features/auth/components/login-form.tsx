@@ -29,16 +29,22 @@ import { hardNavigate } from "@/lib/hard-navigate";
 import { serializeTwoFactorMethods } from "@/features/auth/lib/two-factor-methods";
 import { Link, useRouter } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { Form, FormField } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem as ShadcnFormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormContent, FormItem, FormRoot } from "@/components/shared/form-root";
 import FormStatus from "@/components/admin/shared/form-status";
-import AuthBrandHeader from "@/features/auth/components/auth-brand-header";
-import AuthSplitLayout from "@/features/auth/components/auth-split-layout";
-import AuthShowcasePanel from "@/features/auth/components/auth-showcase-panel";
+import LoginLayout from "@/features/auth/components/login-layout";
 
-const fieldInputClassName = "mt-1 h-11 shadow-sm";
+const fieldInputClassName =
+  "mt-1.5 h-12 rounded-xl border-border/70 bg-background/40 px-4 shadow-none transition-colors focus-visible:border-primary/60 focus-visible:ring-primary/15";
 
 interface LoginFormProps {
   socialProviders?: {
@@ -48,7 +54,7 @@ interface LoginFormProps {
 }
 
 const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
-  const t = useTranslations("auth.login");
+  const t = useTranslations("auth");
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -58,6 +64,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
   );
   const [serverError, setServerError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
   const hasSocialProviders = socialProviders?.github ?? socialProviders?.google;
   const [socialLoading, setSocialLoading] = useState<
     "github" | "google" | null
@@ -113,7 +120,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
           callbackURL,
         });
         if (error) {
-          setServerError(error.message ?? t("errorSignIn"));
+          setServerError(error.message ?? t("login.errorSignIn"));
           return;
         }
         if (isTwoFactorRedirect(result)) {
@@ -137,7 +144,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
       if (error) {
         // Conditional UI is cancelled silently when the user types instead.
         if (!autoFill) {
-          setServerError(error.message ?? t("errorPasskey"));
+          setServerError(error.message ?? t("login.errorPasskey"));
           setPasskeyLoading(false);
         }
         return;
@@ -169,7 +176,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
         callbackURL,
       });
       if (error) {
-        setServerError(error.message ?? t("errorSignIn"));
+        setServerError(error.message ?? t("login.errorSignIn"));
         setSocialLoading(null);
       }
     },
@@ -189,164 +196,202 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
         };
 
   return (
-    <AuthSplitLayout
-      form={
-        <Form {...form}>
-          <FormRoot
-            className="flex-none overflow-visible"
-            onSubmit={form.handleSubmit(onSubmit)}
+    <LoginLayout badge={t("showcase.badgeAdmin")} variant="login">
+      <Form {...form}>
+        <FormRoot
+          className="text-foreground [&_input]:text-foreground [&_input]:placeholder:text-muted-foreground [&_label]:text-muted-foreground flex-none overflow-visible [&_label]:text-xs [&_label]:font-medium"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <h1 className="text-foreground text-left text-4xl font-semibold tracking-tight sm:text-5xl">
+            {formatWelcomeTitle(t("login.title"))}
+          </h1>
+          <p className="text-muted-foreground mt-3 max-w-xl text-left text-sm leading-relaxed sm:text-base">
+            {redirectTo.startsWith("/admin/cv")
+              ? t("login.subtitleCv")
+              : t("login.subtitleDefault")}
+          </p>
+
+          <FormContent className="mt-8 gap-4 px-0">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem label={t("login.email")} inputId="login-email">
+                  <Input
+                    type="email"
+                    autoComplete={
+                      passkeyAutofill ? "username webauthn" : "email"
+                    }
+                    placeholder={t("login.emailPlaceholder")}
+                    className={cn(
+                      fieldInputClassName,
+                      "border-border/70 bg-background/40",
+                    )}
+                    {...field}
+                  />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <ShadcnFormItem id="login-password">
+                  <FormLabel>{t("login.password")}</FormLabel>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
+                        placeholder={t("login.passwordPlaceholder")}
+                        className={cn(
+                          fieldInputClassName,
+                          "border-border/70 bg-background/40 pr-16",
+                        )}
+                        {...field}
+                      />
+                    </FormControl>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={
+                        showPassword ? t("hidePassword") : t("showPassword")
+                      }
+                      className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 flex min-h-11 -translate-y-1/2 items-center px-2 text-xs font-medium transition-colors focus-visible:underline focus-visible:outline-none"
+                    >
+                      {showPassword ? t("hide") : t("show")}
+                    </button>
+                  </div>
+                  <FormMessage />
+                </ShadcnFormItem>
+              )}
+            />
+
+            <FormStatus error={serverError} />
+          </FormContent>
+
+          <Button
+            type="submit"
+            disabled={isPending || !!socialLoading || passkeyLoading}
+            className="shadow-primary/20 mt-2 h-12 w-full rounded-xl text-sm font-semibold shadow-lg"
           >
-            <AuthBrandHeader />
+            {isPending ? t("login.submitting") : t("login.submit")}
+          </Button>
 
-            <h1 className="text-foreground mt-6 text-left text-3xl font-medium tracking-tight md:text-4xl">
-              {t("title")}
-            </h1>
-            <p className="text-muted-foreground mt-4 max-w-xl text-left text-sm md:text-base">
-              {redirectTo.startsWith("/admin/cv")
-                ? t("subtitleCv")
-                : t("subtitleDefault")}
+          <div className="mt-6 flex items-center">
+            <div className="bg-border h-px flex-1" />
+            <span className="text-muted-foreground px-4 text-sm">
+              {t("login.or")}
+            </span>
+            <div className="bg-border h-px flex-1" />
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            disabled={isPending || !!socialLoading || passkeyLoading}
+            onClick={() => void handlePasskeySignIn(false)}
+            className="border-border bg-card/30 text-foreground hover:bg-accent mt-4 h-12 w-full rounded-xl text-sm font-medium"
+          >
+            <KeyRound aria-hidden className="size-4" />
+            {passkeyLoading
+              ? t("login.connectingPasskey")
+              : t("login.signInPasskey")}
+          </Button>
+
+          {hasSocialProviders ? (
+            <>
+              <div
+                className={cn(
+                  "mt-4 grid grid-cols-1 gap-4",
+                  socialCount > 1 && "sm:grid-cols-2",
+                )}
+              >
+                {socialProviders?.google ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={!!socialLoading || passkeyLoading}
+                    onClick={() => void handleSocialSignIn("google")}
+                    className="border-border bg-card/30 text-foreground hover:bg-accent h-12 w-full rounded-xl"
+                    aria-label={
+                      socialLoading === "google"
+                        ? t("login.connectingGoogle")
+                        : t("login.signInGoogle")
+                    }
+                  >
+                    <GoogleBrandIcon />
+                  </Button>
+                ) : null}
+                {socialProviders?.github ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={!!socialLoading || passkeyLoading}
+                    onClick={() => void handleSocialSignIn("github")}
+                    className="border-border bg-card/30 text-foreground hover:bg-accent h-12 w-full rounded-xl"
+                    aria-label={
+                      socialLoading === "github"
+                        ? t("login.connectingGithub")
+                        : t("login.signInGithub")
+                    }
+                  >
+                    <GitHubBrandIcon />
+                  </Button>
+                ) : null}
+              </div>
+            </>
+          ) : null}
+
+          <div className="text-muted-foreground mt-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-sm">
+            <p>
+              {t("login.noAccount")}{" "}
+              <Link
+                href={registerHref}
+                className="text-primary inline-flex min-h-11 items-center font-medium hover:underline"
+              >
+                {t("login.signUp")}
+              </Link>
             </p>
-
-            <FormContent className="mt-8 gap-6 px-0">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem label={t("email")} inputId="login-email">
-                    <Input
-                      type="email"
-                      autoComplete={
-                        passkeyAutofill ? "username webauthn" : "email"
-                      }
-                      placeholder={t("emailPlaceholder")}
-                      className={fieldInputClassName}
-                      {...field}
-                    />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem label={t("password")} inputId="login-password">
-                    <Input
-                      type="password"
-                      autoComplete="current-password"
-                      placeholder={t("passwordPlaceholder")}
-                      className={fieldInputClassName}
-                      {...field}
-                    />
-                  </FormItem>
-                )}
-              />
-
-              <FormStatus error={serverError} />
-            </FormContent>
-
-            <Button
-              type="submit"
-              disabled={isPending || !!socialLoading || passkeyLoading}
-              className="mt-2 h-11 w-full rounded-xl text-sm font-medium"
-            >
-              {isPending ? t("submitting") : t("submit")}
-            </Button>
-
-            <div className="mt-6 flex items-center">
-              <div className="bg-border h-px flex-1" />
-              <span className="text-muted-foreground px-4 text-sm">
-                {t("or")}
-              </span>
-              <div className="bg-border h-px flex-1" />
-            </div>
-
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isPending || !!socialLoading || passkeyLoading}
-              onClick={() => void handlePasskeySignIn(false)}
-              className="mt-4 h-11 w-full rounded-xl text-sm font-medium"
-            >
-              <KeyRound aria-hidden className="size-4" />
-              {passkeyLoading ? t("connectingPasskey") : t("signInPasskey")}
-            </Button>
-
-            {hasSocialProviders ? (
-              <>
-                <div
-                  className={cn(
-                    "mt-4 grid grid-cols-1 gap-4",
-                    socialCount > 1 && "sm:grid-cols-2",
-                  )}
-                >
-                  {socialProviders?.google ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      disabled={!!socialLoading || passkeyLoading}
-                      onClick={() => void handleSocialSignIn("google")}
-                      className="w-full rounded-xl py-6"
-                      aria-label={
-                        socialLoading === "google"
-                          ? t("connectingGoogle")
-                          : t("signInGoogle")
-                      }
-                    >
-                      <GoogleBrandIcon />
-                    </Button>
-                  ) : null}
-                  {socialProviders?.github ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      disabled={!!socialLoading || passkeyLoading}
-                      onClick={() => void handleSocialSignIn("github")}
-                      className="w-full rounded-xl py-6"
-                      aria-label={
-                        socialLoading === "github"
-                          ? t("connectingGithub")
-                          : t("signInGithub")
-                      }
-                    >
-                      <GitHubBrandIcon />
-                    </Button>
-                  ) : null}
-                </div>
-              </>
-            ) : null}
-
-            <div className="text-muted-foreground mt-8 space-y-2 text-center text-sm">
-              <p>
-                {t("noAccount")}{" "}
-                <Link
-                  href={registerHref}
-                  className="text-primary inline-flex min-h-11 items-center font-medium hover:underline"
-                >
-                  {t("signUp")}
-                </Link>
-              </p>
-              <p>
-                <Link
-                  href="/forgot-password"
-                  className="text-primary inline-flex min-h-11 items-center font-medium hover:underline"
-                >
-                  {t("forgotPassword")}
-                </Link>
-              </p>
-            </div>
-          </FormRoot>
-        </Form>
-      }
-      showcase={<AuthShowcasePanel variant="hero" />}
-    />
+            <p>
+              <Link
+                href="/forgot-password"
+                className="text-primary inline-flex min-h-11 items-center font-medium hover:underline"
+              >
+                {t("login.forgotPassword")}
+              </Link>
+            </p>
+          </div>
+        </FormRoot>
+      </Form>
+    </LoginLayout>
   );
 };
+
+function formatWelcomeTitle(rawTitle: string) {
+  const lastComma = rawTitle.lastIndexOf(",");
+  if (lastComma !== -1) {
+    const prefix = rawTitle.slice(0, lastComma + 1);
+    const suffix = rawTitle.slice(lastComma + 1).trim();
+    return (
+      <>
+        {prefix} <span className="text-primary">{suffix}</span>
+      </>
+    );
+  }
+  const parts = rawTitle.split(" ");
+  const lastWord = parts.pop();
+  return (
+    <>
+      {parts.join(" ")} <span className="text-primary">{lastWord}</span>
+    </>
+  );
+}
 
 function GoogleBrandIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={29}
-      height={29}
+      className="size-5"
       viewBox="0 0 29 29"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -388,13 +433,11 @@ function GoogleBrandIcon(props: SVGProps<SVGSVGElement>) {
 function GitHubBrandIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={29}
-      height={29}
+      className="size-5"
       viewBox="0 0 24 24"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
-      className="text-background"
       {...props}
     >
       <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />

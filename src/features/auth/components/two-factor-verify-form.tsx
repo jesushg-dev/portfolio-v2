@@ -12,6 +12,7 @@ import {
 } from "@/lib/auth-routing";
 import { hardNavigate } from "@/lib/hard-navigate";
 import { Link } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import {
   InputOTP,
@@ -24,15 +25,14 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FormContent, FormRoot } from "@/components/shared/form-root";
 import FormStatus from "@/components/admin/shared/form-status";
-import AuthBrandHeader from "@/features/auth/components/auth-brand-header";
-import AuthSplitLayout from "@/features/auth/components/auth-split-layout";
-import AuthShowcasePanel from "@/features/auth/components/auth-showcase-panel";
+import LoginLayout from "@/features/auth/components/login-layout";
 import {
   parseTwoFactorMethods,
   type TwoFactorMethod,
 } from "@/features/auth/lib/two-factor-methods";
 
-const fieldInputClassName = "mt-1 h-11 shadow-sm font-mono tracking-[0.3em]";
+const fieldInputClassName =
+  "mt-1.5 h-12 rounded-xl border-border/70 bg-background/40 px-4 shadow-none transition-colors focus-visible:border-primary/60 focus-visible:ring-primary/15";
 
 /**
  * Second step of a password sign-in for users with 2FA enabled. Better Auth
@@ -128,133 +128,128 @@ const TwoFactorVerifyForm: FC = () => {
     !isPending && code.trim().length > 0 && (method !== "otp" || otpSent);
 
   return (
-    <AuthSplitLayout
-      form={
-        <FormRoot className="flex-none overflow-visible" onSubmit={onSubmit}>
-          <AuthBrandHeader />
+    <LoginLayout badge={t("title")} variant="reset">
+      <FormRoot className="flex-none overflow-visible" onSubmit={onSubmit}>
+        <h1 className="text-foreground text-left text-4xl font-semibold tracking-tight sm:text-5xl">
+          {t("title")}
+        </h1>
+        <p className="text-muted-foreground mt-3 max-w-xl text-left text-sm leading-relaxed sm:text-base">
+          {t(`description.${method}`)}
+        </p>
 
-          <h1 className="text-foreground mt-6 text-left text-3xl font-medium tracking-tight md:text-4xl">
-            {t("title")}
-          </h1>
-          <p className="text-muted-foreground mt-4 max-w-xl text-left text-sm md:text-base">
-            {t(`description.${method}`)}
-          </p>
-
-          <FormContent className="mt-8 gap-6 px-0">
-            {availableMethods.length > 1 ? (
-              <Tabs
-                value={method}
-                onValueChange={(value) =>
-                  switchMethod(value as TwoFactorMethod)
-                }
-              >
-                {/* min-h-12 / text-foreground: WCAG AAA target size + contrast for inactive tabs. */}
-                <TabsList
-                  className="min-h-12 w-full"
-                  aria-label={t("methodLabel")}
-                >
-                  {availableMethods.map((item) => (
-                    <TabsTrigger
-                      key={item}
-                      value={item}
-                      className="text-foreground min-h-11 flex-1"
-                    >
-                      {t(`method.${item}`)}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-              </Tabs>
-            ) : null}
-
-            {method === "otp" ? (
-              <div className="flex flex-col gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={isSendingOtp || isPending}
-                  onClick={() => void sendOtp()}
-                  className="h-11 w-full rounded-xl text-sm font-medium"
-                >
-                  {isSendingOtp
-                    ? t("sending")
-                    : otpSent
-                      ? t("resend")
-                      : t("sendCode")}
-                </Button>
-                {otpSent ? (
-                  <p className="text-muted-foreground text-sm" role="status">
-                    {t("codeSent")}
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
-
-            {method === "backup" ? (
-              <div className="flex flex-col gap-1.5">
-                <Label htmlFor="two-factor-code">{codeLabel}</Label>
-                <Input
-                  id="two-factor-code"
-                  name="code"
-                  value={code}
-                  onChange={(event) => setCode(event.target.value)}
-                  inputMode="text"
-                  autoComplete="one-time-code"
-                  autoFocus
-                  placeholder={codePlaceholder}
-                  className={fieldInputClassName}
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="two-factor-code">{codeLabel}</Label>
-                <InputOTP
-                  id="two-factor-code"
-                  name="code"
-                  value={code}
-                  onChange={setCode}
-                  maxLength={6}
-                  autoFocus
-                  disabled={method === "otp" && !otpSent}
-                >
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                  </InputOTPGroup>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-              </div>
-            )}
-
-            <FormStatus error={serverError} />
-          </FormContent>
-
-          <Button
-            type="submit"
-            disabled={!canSubmit}
-            className="mt-2 h-11 w-full rounded-xl text-sm font-medium"
-          >
-            {isPending ? t("verifying") : t("verify")}
-          </Button>
-
-          <p className="text-muted-foreground mt-8 text-center text-sm">
-            {t("backToSignIn")}{" "}
-            <Link
-              href="/login"
-              className="text-primary inline-flex min-h-11 items-center font-medium hover:underline"
+        <FormContent className="mt-8 gap-5 px-0">
+          {availableMethods.length > 1 ? (
+            <Tabs
+              value={method}
+              onValueChange={(value) => switchMethod(value as TwoFactorMethod)}
             >
-              {t("signIn")}
-            </Link>
-          </p>
-        </FormRoot>
-      }
-      showcase={<AuthShowcasePanel variant="trust" />}
-    />
+              <TabsList
+                className="min-h-12 w-full"
+                aria-label={t("methodLabel")}
+              >
+                {availableMethods.map((item) => (
+                  <TabsTrigger
+                    key={item}
+                    value={item}
+                    className="text-foreground min-h-11 flex-1"
+                  >
+                    {t(`method.${item}`)}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          ) : null}
+
+          {method === "otp" ? (
+            <div className="flex flex-col gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isSendingOtp || isPending}
+                onClick={() => void sendOtp()}
+                className="border-border bg-card/40 text-foreground hover:bg-accent h-12 w-full rounded-xl text-sm font-medium"
+              >
+                {isSendingOtp
+                  ? t("sending")
+                  : otpSent
+                    ? t("resend")
+                    : t("sendCode")}
+              </Button>
+              {otpSent ? (
+                <p className="text-muted-foreground text-sm" role="status">
+                  {t("codeSent")}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+
+          {method === "backup" ? (
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="two-factor-code">{codeLabel}</Label>
+              <Input
+                id="two-factor-code"
+                name="code"
+                value={code}
+                onChange={(event) => setCode(event.target.value)}
+                inputMode="text"
+                autoComplete="one-time-code"
+                autoFocus
+                placeholder={codePlaceholder}
+                className={cn(
+                  fieldInputClassName,
+                  "font-mono tracking-[0.3em]",
+                )}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="two-factor-code">{codeLabel}</Label>
+              <InputOTP
+                id="two-factor-code"
+                name="code"
+                value={code}
+                onChange={setCode}
+                maxLength={6}
+                autoFocus
+                disabled={method === "otp" && !otpSent}
+              >
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+            </div>
+          )}
+
+          <FormStatus error={serverError} />
+        </FormContent>
+
+        <Button
+          type="submit"
+          disabled={!canSubmit}
+          className="shadow-primary/20 mt-2 h-12 w-full rounded-xl text-sm font-semibold shadow-lg"
+        >
+          {isPending ? t("verifying") : t("verify")}
+        </Button>
+
+        <p className="text-muted-foreground mt-8 text-center text-sm">
+          {t("backToSignIn")}{" "}
+          <Link
+            href="/login"
+            className="text-primary inline-flex min-h-11 items-center font-medium hover:underline"
+          >
+            {t("signIn")}
+          </Link>
+        </p>
+      </FormRoot>
+    </LoginLayout>
   );
 };
 
