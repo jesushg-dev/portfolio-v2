@@ -133,6 +133,19 @@ export async function submitSignInRequest(page: Page): Promise<Response> {
   return response;
 }
 
+export async function fillSignInCredentials(
+  page: Page,
+  email: string,
+  password: string,
+): Promise<void> {
+  const emailInput = page.locator("#login-email:visible");
+  const passwordInput = page.locator("#login-password:visible");
+  await expect(emailInput).toHaveCount(1);
+  await expect(passwordInput).toHaveCount(1);
+  await emailInput.fill(email);
+  await passwordInput.fill(password);
+}
+
 export async function signInOwner(
   page: Page,
   email: string,
@@ -151,8 +164,7 @@ export async function signInOwner(
     page.getByRole("heading", { name: "Welcome back, developer" }),
   ).toBeVisible({ timeout: 15_000 });
 
-  await page.locator("#login-email").fill(email);
-  await page.locator("#login-password").fill(password);
+  await fillSignInCredentials(page, email, password);
 
   const response = await submitSignInRequest(page);
 

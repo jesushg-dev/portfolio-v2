@@ -5,6 +5,7 @@ import { requireE2eCredentials } from "./env";
 import {
   ensureOwnerAccount,
   expectAdminDashboard,
+  fillSignInCredentials,
   isAdminPath,
   portfolioProfile,
   submitSignInRequest,
@@ -42,8 +43,7 @@ async function submitCredentials(
   await expect(
     page.getByRole("heading", { name: "Welcome back, developer" }),
   ).toBeVisible({ timeout: 15_000 });
-  await page.locator("#login-email").fill(email);
-  await page.locator("#login-password").fill(password);
+  await fillSignInCredentials(page, email, password);
   const response = await submitSignInRequest(page);
   expect(response.ok(), response.ok() ? "" : await response.text()).toBe(true);
 }

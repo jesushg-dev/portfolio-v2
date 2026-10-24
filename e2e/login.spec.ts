@@ -1,10 +1,12 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 import {
   buildRegisterOwnerInput,
   ensureOwnerAccount,
   expectAdminDashboard,
+  fillSignInCredentials,
   signInOwner,
+  submitSignInRequest,
 } from "./helpers/fill-register-form";
 
 test.describe("login", () => {
@@ -22,6 +24,28 @@ test.describe("login", () => {
   }) => {
     await signInOwner(page, account.email, account.password);
 
+    await expectAdminDashboard(page);
+  });
+
+  test("signs in when an inactive login form remains in the DOM", async ({
+    page,
+  }) => {
+    await page.goto("/login");
+    const emailInput = page.locator("#login-email:visible");
+    await expect(emailInput).toBeVisible();
+    await emailInput.evaluate((input) => {
+      const form = input.closest("form");
+      if (!form) throw new Error("Login input must belong to a form");
+      const inactiveForm = form.cloneNode(true) as HTMLFormElement;
+      inactiveForm.hidden = true;
+      inactiveForm.inert = true;
+      document.body.append(inactiveForm);
+    });
+    await expect(page.locator("#login-email")).toHaveCount(2);
+
+    await fillSignInCredentials(page, account.email, account.password);
+    const response = await submitSignInRequest(page);
+    expect(response.ok(), response.ok() ? "" : await response.text()).toBe(true);
     await expectAdminDashboard(page);
   });
 });
