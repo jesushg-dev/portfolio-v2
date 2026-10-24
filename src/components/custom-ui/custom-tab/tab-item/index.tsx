@@ -11,6 +11,8 @@ export interface TabItemProps {
   icon: IconComponent | IconType;
   title: string;
   description: string;
+  /** A stable results panel shared by filter tabs, when content is reused. */
+  panelId?: string;
 }
 
 const TabItem: FC<TabItemProps> = ({
@@ -18,6 +20,7 @@ const TabItem: FC<TabItemProps> = ({
   icon: Icon,
   title,
   description,
+  panelId,
 }) => {
   const {
     currentTab,
@@ -29,7 +32,7 @@ const TabItem: FC<TabItemProps> = ({
   } = useTabContext();
 
   const isActive = currentTab === index;
-  const tabPanelId = `${tabId}-panel-${index}`;
+  const tabPanelId = panelId ?? `${tabId}-panel-${index}`;
   const tabButtonId = `${tabId}-tab-${index}`;
 
   const textClassName = isActive
@@ -55,7 +58,7 @@ const TabItem: FC<TabItemProps> = ({
         type="button"
         role="tab"
         id={tabButtonId}
-        {...(tabId ? { "aria-controls": tabPanelId } : {})}
+        {...(panelId || tabId ? { "aria-controls": tabPanelId } : {})}
         aria-selected={isActive}
         tabIndex={isActive ? 0 : -1}
         title={title}
