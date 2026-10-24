@@ -60,7 +60,7 @@ export default function LoginLayout({
         <div className="flex items-center gap-2">
           <Link
             href="/"
-            className="text-muted-foreground hover:text-foreground hidden text-sm transition-colors sm:inline"
+            className="text-muted-foreground hover:text-foreground hidden min-h-11 items-center text-sm transition-colors sm:inline-flex"
           >
             {t("backToPortfolio")}
           </Link>
@@ -139,7 +139,7 @@ function AuthGlow() {
 
 function AuthBadge({ label }: { label: string }) {
   return (
-    <span className="border-primary/30 bg-primary/10 text-primary mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium">
+    <span className="border-primary/30 bg-primary/10 text-primary mb-5 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-medium">
       <span
         aria-hidden
         className="size-1.5 animate-pulse rounded-full bg-emerald-400"
@@ -236,7 +236,7 @@ function LoginShowcase({
 
         {hasPortfolios ? (
           <>
-            <div className="mt-7 flex items-center justify-between text-xs">
+            <div className="mt-7 flex items-center justify-between text-sm">
               <p className="text-muted-foreground">{t("heroAuthor")}</p>
               {dbPortfolios && dbPortfolios.length > 3 ? (
                 <button
@@ -324,7 +324,7 @@ function RegisterShowcase({
               <div className="bg-muted/70 h-2 w-5/6 rounded" />
               <div className="bg-muted/60 h-2 w-2/3 rounded" />
             </div>
-            <div className="mt-6 flex flex-wrap gap-2 text-xs">
+            <div className="mt-6 flex flex-wrap gap-2 text-sm">
               <span className="bg-primary/10 text-primary rounded-full px-3 py-1 font-medium">
                 {t("previewProjects")}
               </span>
@@ -378,14 +378,14 @@ function ShowcaseFrame({
         <span aria-hidden className="size-2.5 rounded-full bg-amber-400/80" />
         <span aria-hidden className="size-2.5 rounded-full bg-emerald-400/80" />
         {address ? (
-          <div className="bg-muted/70 text-foreground ml-3 flex-1 truncate rounded-md px-3 py-1 text-xs">
+          <div className="bg-muted/70 text-foreground ml-3 flex-1 truncate rounded-md px-3 py-1 text-sm">
             <span className="text-primary font-medium">
               {address.split(".")[0]}
             </span>
             .{address.split(".").slice(1).join(".")}
           </div>
         ) : (
-          <span className="text-muted-foreground ml-3 text-xs">{label}</span>
+          <span className="text-muted-foreground ml-3 text-sm">{label}</span>
         )}
       </div>
       {children}
@@ -418,13 +418,13 @@ function ShowcaseSkillsCard({
       <span className="text-muted-foreground mb-2 block size-4">{icon}</span>
       <p className="text-foreground text-sm font-medium">{label}</p>
       <div className="mt-2.5 flex flex-wrap gap-1.5">
-        <span className="bg-primary/15 text-primary rounded-full px-2 py-0.5 text-[0.625rem] font-medium">
+        <span className="bg-primary/15 text-primary rounded-full px-2 py-0.5 text-sm font-medium">
           React
         </span>
-        <span className="bg-primary/15 text-primary rounded-full px-2 py-0.5 text-[0.625rem] font-medium">
+        <span className="bg-primary/15 text-primary rounded-full px-2 py-0.5 text-sm font-medium">
           Node
         </span>
-        <span className="bg-primary/15 text-primary rounded-full px-2 py-0.5 text-[0.625rem] font-medium">
+        <span className="bg-primary/15 text-primary rounded-full px-2 py-0.5 text-sm font-medium">
           SQL
         </span>
       </div>
@@ -438,7 +438,7 @@ function ShowcaseCvCard({ icon, label }: { icon: ReactNode; label: string }) {
       <span className="text-primary mb-3 block size-4">{icon}</span>
       <div className="flex items-center justify-between text-sm font-medium">
         <span className="text-foreground">{label}</span>
-        <span className="bg-primary/20 text-primary rounded px-1.5 text-[0.625rem] font-medium">
+        <span className="bg-primary/20 text-primary rounded px-1.5 text-sm font-medium">
           Beta
         </span>
       </div>
@@ -453,7 +453,7 @@ function ShowcaseCvCard({ icon, label }: { icon: ReactNode; label: string }) {
 function RecoveryStep({ label, number }: { label: string; number: string }) {
   return (
     <li className="text-foreground flex items-center gap-3.5 text-sm">
-      <span className="bg-primary/15 text-primary grid size-7 shrink-0 place-items-center rounded-full text-xs font-semibold">
+      <span className="bg-primary/15 text-primary grid size-7 shrink-0 place-items-center rounded-full text-sm font-semibold">
         {number}
       </span>
       <span className="text-muted-foreground leading-snug">{label}</span>
@@ -474,7 +474,7 @@ function PortfolioRow({
 
   return (
     <li className="text-foreground flex items-center gap-3 text-sm">
-      <span className="bg-primary/20 text-primary ring-primary/40 grid size-9 place-items-center rounded-full text-xs font-bold ring-1">
+      <span className="bg-primary/20 text-primary ring-primary/40 grid size-9 place-items-center rounded-full text-sm font-bold ring-1">
         {initials}
       </span>
       <div className="min-w-0">
@@ -485,7 +485,7 @@ function PortfolioRow({
           ) : null}
         </div>
         {role ? (
-          <div className="text-muted-foreground truncate text-xs">{role}</div>
+          <div className="text-muted-foreground truncate text-sm">{role}</div>
         ) : null}
       </div>
     </li>

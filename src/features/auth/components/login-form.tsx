@@ -199,7 +199,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
     <LoginLayout badge={t("showcase.badgeAdmin")} variant="login">
       <Form {...form}>
         <FormRoot
-          className="text-foreground [&_input]:text-foreground [&_input]:placeholder:text-muted-foreground [&_label]:text-muted-foreground flex-none overflow-visible [&_label]:text-xs [&_label]:font-medium"
+          className="text-foreground [&_input]:text-foreground [&_input]:placeholder:text-muted-foreground [&_label]:text-muted-foreground flex-none overflow-visible [&_label]:text-sm [&_label]:font-medium"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <h1 className="text-foreground text-left text-4xl font-semibold tracking-tight sm:text-5xl">
@@ -257,7 +257,7 @@ const LoginForm: FC<LoginFormProps> = ({ socialProviders }) => {
                       aria-label={
                         showPassword ? t("hidePassword") : t("showPassword")
                       }
-                      className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 flex min-h-11 -translate-y-1/2 items-center px-2 text-xs font-medium transition-colors focus-visible:underline focus-visible:outline-none"
+                      className="text-muted-foreground hover:text-foreground absolute top-1/2 right-2 flex min-h-11 -translate-y-1/2 items-center px-2 text-sm font-medium transition-colors focus-visible:underline focus-visible:outline-none"
                     >
                       {showPassword ? t("hide") : t("show")}
                     </button>
