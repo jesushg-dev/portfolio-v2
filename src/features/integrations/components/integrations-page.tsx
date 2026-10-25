@@ -116,48 +116,46 @@ export function IntegrationsPage() {
       </header>
 
       {/* Filter Tabs */}
-      <div className="-mx-4 flex overflow-x-auto px-4 sm:mx-0">
-        <Tabs
-          value={filter}
-          onValueChange={(val) =>
-            setFilter(val as "all" | "connected" | "available")
-          }
-          className="w-full sm:w-fit"
+      <Tabs
+        value={filter}
+        onValueChange={(val) =>
+          setFilter(val as "all" | "connected" | "available")
+        }
+        className="w-full"
+      >
+        <TabsList
+          variant="line"
+          className="w-full justify-start overflow-x-auto"
         >
-          <TabsList
-            variant="pill"
-            className="w-full justify-start overflow-x-auto sm:w-fit"
+          <TabsTrigger
+            value="all"
+            className="gap-2 px-4 py-2.5 text-sm"
           >
-            <TabsTrigger
-              value="all"
-              className="min-h-10 gap-2 px-3.5 py-1.5 text-xs sm:text-sm"
-            >
-              <span>{t("filters.all")}</span>
-              <span className="tabular-nums opacity-75">
-                ({INTEGRATION_CATALOG.length})
-              </span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="connected"
-              className="min-h-10 gap-2 px-3.5 py-1.5 text-xs sm:text-sm"
-            >
-              <span>{t("filters.connected")}</span>
-              <span className="tabular-nums opacity-75">
-                ({connectedCatalog.length})
-              </span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="available"
-              className="min-h-10 gap-2 px-3.5 py-1.5 text-xs sm:text-sm"
-            >
-              <span>{t("filters.available")}</span>
-              <span className="tabular-nums opacity-75">
-                ({availableCatalog.length})
-              </span>
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
+            <span>{t("filters.all")}</span>
+            <span className="text-muted-foreground text-xs tabular-nums">
+              ({INTEGRATION_CATALOG.length})
+            </span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="connected"
+            className="gap-2 px-4 py-2.5 text-sm"
+          >
+            <span>{t("filters.connected")}</span>
+            <span className="text-muted-foreground text-xs tabular-nums">
+              ({connectedCatalog.length})
+            </span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="available"
+            className="gap-2 px-4 py-2.5 text-sm"
+          >
+            <span>{t("filters.available")}</span>
+            <span className="text-muted-foreground text-xs tabular-nums">
+              ({availableCatalog.length})
+            </span>
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {/* Main Grid Content */}
       <div className="space-y-8">

@@ -7,6 +7,7 @@ export interface RankListItem {
   key: string;
   label: string;
   pageviews: number;
+  valueDisplay?: string;
 }
 
 export interface RankListProps {
@@ -76,7 +77,10 @@ export function RankList({
                 </span>
                 <span className="text-muted-foreground shrink-0 text-sm tabular-nums">
                   <b className="text-foreground font-semibold">
-                    {valueLabel ? valueLabel(item.pageviews) : item.pageviews}
+                    {item.valueDisplay ??
+                      (valueLabel
+                        ? valueLabel(item.pageviews)
+                        : item.pageviews)}
                   </b>
                   {showPercentage && pctOfTotal !== null ? (
                     <span className="text-muted-foreground/80 font-normal">
