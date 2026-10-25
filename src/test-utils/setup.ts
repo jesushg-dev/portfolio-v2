@@ -14,6 +14,18 @@ if (typeof document !== "undefined" && !document.elementFromPoint) {
   document.elementFromPoint = () => null;
 }
 
+if (typeof Element !== "undefined" && !Element.prototype.getAnimations) {
+  Element.prototype.getAnimations = () => [];
+}
+
+if (
+  typeof window !== "undefined" &&
+  typeof window.PointerEvent === "undefined"
+) {
+  window.PointerEvent =
+    class PointerEvent extends MouseEvent {} as unknown as typeof PointerEvent;
+}
+
 if (typeof window !== "undefined" && !window.matchMedia) {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
@@ -150,6 +162,11 @@ jest.mock("next-intl", () => {
       return translate;
     },
     useLocale: () => "en",
+    useFormatter: () => ({
+      number: (value: number) => String(value),
+      dateTime: (date: Date) =>
+        date instanceof Date ? date.toLocaleDateString() : String(date),
+    }),
     NextIntlClientProvider: ({ children }: { children: ReactNode }) => children,
   };
 });

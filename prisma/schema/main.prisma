@@ -708,6 +708,8 @@ model ProjectSkill {
   Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   skillId   String   @db.ObjectId
   projectId String   @db.ObjectId
+
+  @@unique([projectId, skillId])
 }
 
 model ProjectTranslation {
@@ -849,6 +851,8 @@ model CertificateSkill {
   Skill           Skill         @relation(fields: [skillId], references: [id], onDelete: Cascade)
   certificationId String        @db.ObjectId
   skillId         String        @db.ObjectId
+
+  @@unique([certificationId, skillId])
 }
 
 //an certificate can validate multiple projects
@@ -860,6 +864,8 @@ model CertificateProject {
   Project         Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
   certificationId String        @db.ObjectId
   projectId       String        @db.ObjectId
+
+  @@unique([projectId, certificationId])
 }
 
 model ServiceSkill {
@@ -884,6 +890,7 @@ model CertificateService {
   serviceId                  String                    @db.ObjectId
   CertificationTranslation   CertificationTranslation? @relation(fields: [certificationTranslationId], references: [id], onDelete: Cascade)
   certificationTranslationId String?                   @db.ObjectId
+
 }
 
 enum StackType {

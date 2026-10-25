@@ -5,6 +5,20 @@ import { auth } from "@/lib/auth";
 const f = createUploadthing();
 
 export const ourFileRouter = {
+  projectCover: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+    .middleware(async ({ req }) => {
+      const session = await auth.api.getSession({ headers: req.headers });
+      const userId = session?.user?.id;
+      if (typeof userId !== "string" || userId.length === 0) {
+        throw new Error("Unauthorized");
+      }
+      return { userId };
+    })
+    .onUploadComplete(({ metadata, file }) => ({
+      userId: metadata.userId,
+      url: file.ufsUrl ?? file.url,
+      key: file.key,
+    })),
   resumeImporter: f({
     blob: {
       maxFileSize: "8MB",

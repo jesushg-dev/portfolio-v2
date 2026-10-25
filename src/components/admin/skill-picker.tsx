@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, Check } from "lucide-react";
+import { Check, ChevronUp, Search, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -25,10 +27,6 @@ interface SkillPickerProps {
   compact?: boolean;
 }
 
-// ---------------------------------------------------------------------------
-// Type filter tabs
-// ---------------------------------------------------------------------------
-
 const ALL_FILTER = "ALL";
 
 function getUniqueTypes(skills: SkillOption[]): string[] {
@@ -37,7 +35,80 @@ function getUniqueTypes(skills: SkillOption[]): string[] {
 }
 
 // ---------------------------------------------------------------------------
-// Component
+// Subcomponents
+// ---------------------------------------------------------------------------
+
+function SkillAvatar({
+  image,
+  title,
+  size = "md",
+}: {
+  image: string;
+  title: string;
+  size?: "sm" | "md";
+}) {
+  const [failed, setFailed] = useState(false);
+  const initial = (title[0] ?? "?").toUpperCase();
+
+  if (image && !failed) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={image}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className={
+          size === "sm"
+            ? "size-5 rounded-md object-contain"
+            : "size-8 object-contain"
+        }
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  return (
+    <span
+      className={`bg-primary/15 text-primary grid shrink-0 place-items-center font-mono font-bold ${
+        size === "sm"
+          ? "size-5 rounded-md text-[10px]"
+          : "size-8 rounded-xl text-xs"
+      }`}
+      aria-hidden="true"
+    >
+      {initial}
+    </span>
+  );
+}
+
+interface SkillChipProps {
+  skill: SkillOption;
+  onRemove: () => void;
+  removeLabel: string;
+}
+
+function SkillChip({ skill, onRemove, removeLabel }: SkillChipProps) {
+  return (
+    <span className="border-border bg-muted/50 inline-flex min-h-9 shrink-0 items-center gap-2 rounded-lg border pr-1 pl-2 text-xs">
+      <SkillAvatar image={skill.image} title={skill.title} size="sm" />
+      <span className="text-foreground max-w-40 truncate font-medium">
+        {skill.title}
+      </span>
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={removeLabel}
+        className="text-muted-foreground hover:bg-destructive/15 hover:text-destructive focus-visible:ring-primary grid size-7 shrink-0 place-items-center rounded-md transition-colors outline-none focus-visible:ring-2"
+      >
+        <X className="size-3.5" />
+      </button>
+    </span>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main Component
 // ---------------------------------------------------------------------------
 
 export function SkillPicker({
@@ -46,21 +117,29 @@ export function SkillPicker({
   onChange,
   compact = false,
 }: SkillPickerProps) {
-  const selectedSkillIds = selectedSkillIdsProp ?? [];
+  const selectedSkillIds = useMemo(
+    () => selectedSkillIdsProp ?? [],
+    [selectedSkillIdsProp],
+  );
   const t = useTranslations("admin.forms.skillPicker");
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState<string>(ALL_FILTER);
+  const [trayExpanded, setTrayExpanded] = useState(false);
 
   const types = useMemo(
     () => getUniqueTypes(availableSkills),
     [availableSkills],
   );
 
+  const selectedSkills = useMemo(() => {
+    const set = new Set(selectedSkillIds);
+    return availableSkills.filter((s) => set.has(s.id));
+  }, [availableSkills, selectedSkillIds]);
+
   const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
     return availableSkills.filter((s) => {
-      const matchesSearch = s.title
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      const matchesSearch = !q || s.title.toLowerCase().includes(q);
       const matchesType = activeType === ALL_FILTER || s.type === activeType;
       return matchesSearch && matchesType;
     });
@@ -74,32 +153,21 @@ export function SkillPicker({
     }
   };
 
-  const selectedSkills = availableSkills.filter((s) =>
-    selectedSkillIds.includes(s.id),
-  );
+  const handleClearAll = () => {
+    onChange([]);
+  };
 
   // ── Compact chip-only display ─────────────────────────────────────────────
   if (compact) {
     return (
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-2">
         {selectedSkills.map((s) => (
-          <button
+          <SkillChip
             key={s.id}
-            type="button"
-            onClick={() => toggle(s.id)}
-            className="border-border bg-card text-foreground hover:border-destructive/40 hover:text-destructive flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={s.image}
-              alt=""
-              className="h-3.5 w-3.5 object-contain"
-              loading="lazy"
-              decoding="async"
-            />
-            {s.title}
-            <span className="text-muted-foreground ml-0.5">×</span>
-          </button>
+            skill={s}
+            onRemove={() => toggle(s.id)}
+            removeLabel={t("clickToRemove")}
+          />
         ))}
         {selectedSkills.length === 0 && (
           <span className="text-muted-foreground text-xs">
@@ -110,70 +178,62 @@ export function SkillPicker({
     );
   }
 
+  const selectedCount = selectedSkillIds.length;
+
   // ── Full picker ───────────────────────────────────────────────────────────
   return (
-    <div id="skill-picker" className="space-y-3">
-      {/* Selected counter */}
-      {selectedSkillIds.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {selectedSkills.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => toggle(s.id)}
-              className="border-primary/30 bg-primary/10 text-primary hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium"
-              title={t("clickToRemove")}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={s.image}
-                alt=""
-                className="h-3.5 w-3.5 object-contain"
-                loading="lazy"
-                decoding="async"
-              />
-              {s.title}
-              <span className="ml-0.5 opacity-60">×</span>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Search */}
+    <div id="skill-picker" className="flex flex-col gap-4">
+      {/* Search Header */}
       <div className="relative">
-        <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2" />
+        <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
         <Input
           id="skill-picker-search"
-          type="text"
+          type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t("searchPlaceholder")}
           className="pl-9"
+          aria-label={t("searchPlaceholder")}
         />
       </div>
 
       {/* Type filter tabs */}
-      <div className="flex flex-wrap gap-1">
-        {[ALL_FILTER, ...types].map((type) => (
-          <button
-            key={type}
-            type="button"
-            onClick={() => setActiveType(type)}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-              activeType === type
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
-            }`}
-          >
-            {type === ALL_FILTER ? t("allTypes") : type}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        value={activeType}
+        onValueChange={(val) => {
+          if (typeof val === "string") setActiveType(val);
+        }}
+      >
+        <TabsList
+          variant="pill"
+          className="h-auto w-full flex-wrap justify-start gap-1.5 border-0 bg-transparent p-0"
+        >
+          {[ALL_FILTER, ...types].map((type) => {
+            const count =
+              type === ALL_FILTER
+                ? availableSkills.length
+                : availableSkills.filter((s) => s.type === type).length;
+
+            return (
+              <TabsTrigger
+                key={type}
+                value={type}
+                className="inline-flex min-h-8 items-center gap-1.5 px-3 text-xs"
+              >
+                <span>{type === ALL_FILTER ? t("allTypes") : type}</span>
+                <span className="text-[10px] tabular-nums opacity-75">
+                  {count}
+                </span>
+              </TabsTrigger>
+            );
+          })}
+        </TabsList>
+      </Tabs>
 
       {/* Skills grid */}
       <div
         id="skill-picker-grid"
-        className="grid max-h-72 grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-4 md:grid-cols-5"
+        className="grid max-h-72 grid-cols-2 gap-2.5 overflow-y-auto sm:grid-cols-3 md:grid-cols-4"
       >
         {filtered.map((skill) => {
           const isSelected = selectedSkillIds.includes(skill.id);
@@ -183,52 +243,91 @@ export function SkillPicker({
               id={`skill-picker-${skill.id}`}
               type="button"
               onClick={() => toggle(skill.id)}
-              className={`relative flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition-all hover:shadow-sm ${
-                isSelected
-                  ? "border-primary/40 bg-primary/10 shadow-sm"
-                  : "border-border bg-card hover:border-border/80"
+              aria-pressed={isSelected}
+              className={`group border-border bg-card hover:border-primary/50 focus-visible:ring-primary relative flex min-h-16 items-center gap-3 rounded-xl border p-3 text-left transition-all outline-none focus-visible:ring-2 ${
+                isSelected ? "border-primary/60 bg-primary/10" : ""
               }`}
             >
-              {/* Checkmark overlay */}
-              {isSelected && (
-                <span className="bg-primary absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full">
-                  <Check className="text-primary-foreground h-2.5 w-2.5" />
+              <SkillAvatar image={skill.image} title={skill.title} size="md" />
+              <span className="min-w-0 flex-1">
+                <span className="text-foreground block truncate text-xs leading-tight font-semibold">
+                  {skill.title}
                 </span>
+                <span className="text-muted-foreground block truncate text-[11px]">
+                  {skill.type}
+                </span>
+              </span>
+              {isSelected ? (
+                <span className="bg-primary text-primary-foreground grid size-5 shrink-0 place-items-center rounded-full">
+                  <Check className="size-3.5 stroke-[2.5]" />
+                </span>
+              ) : (
+                <span className="border-border size-5 shrink-0 rounded-full border" />
               )}
-              {/* Skill image */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={skill.image}
-                alt={skill.title}
-                className="h-8 w-8 object-contain"
-                loading="lazy"
-                decoding="async"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
-              <span className="text-foreground line-clamp-2 text-xs leading-tight font-medium">
-                {skill.title}
-              </span>
-              <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[0.625rem]">
-                {skill.type}
-              </span>
             </button>
           );
         })}
         {filtered.length === 0 && (
-          <p className="text-muted-foreground col-span-full py-6 text-center text-sm">
+          <p className="text-muted-foreground col-span-full py-8 text-center text-sm">
             {t("noResults")}
           </p>
         )}
       </div>
 
-      {/* Footer summary */}
-      <p className="text-muted-foreground text-right text-xs">
-        {t("selectedCount", { count: selectedSkillIds.length })}
-        {filtered.length < availableSkills.length &&
-          ` · ${t("shownCount", { shown: filtered.length, total: availableSkills.length })}`}
-      </p>
+      {/* Bottom Selected Tray */}
+      <div className="border-border bg-card/90 sticky bottom-0 z-10 -mx-1 mt-2 rounded-xl border p-3 backdrop-blur">
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => setTrayExpanded((prev) => !prev)}
+            aria-expanded={trayExpanded}
+            className="text-foreground flex items-center gap-2 text-xs font-semibold outline-none focus-visible:underline"
+          >
+            <span>{t("selectedCount", { count: selectedCount })}</span>
+            {selectedCount > 0 && (
+              <ChevronUp
+                className={`text-muted-foreground size-4 transition-transform ${
+                  trayExpanded ? "rotate-180" : ""
+                }`}
+              />
+            )}
+          </button>
+          {selectedCount > 0 && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleClearAll}
+              className="text-muted-foreground hover:text-foreground h-7 px-2 text-xs"
+            >
+              {t("clearAll")}
+            </Button>
+          )}
+        </div>
+
+        {selectedCount === 0 ? (
+          <p className="text-muted-foreground mt-1.5 text-xs">
+            {t("noSelected")}
+          </p>
+        ) : (
+          <div
+            className={`mt-2.5 flex gap-2 ${
+              trayExpanded
+                ? "max-h-40 flex-wrap overflow-y-auto"
+                : "overflow-x-auto"
+            }`}
+          >
+            {selectedSkills.map((s) => (
+              <SkillChip
+                key={s.id}
+                skill={s}
+                onRemove={() => toggle(s.id)}
+                removeLabel={t("clickToRemove")}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
