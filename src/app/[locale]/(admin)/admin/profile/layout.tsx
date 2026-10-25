@@ -4,8 +4,9 @@ import type { ReactNode } from "react";
 import { ProfileTabs } from "@/features/profile/components/profile-tabs";
 
 interface ProfileLayoutProps {
-  children: ReactNode;
-  tabs?: ReactNode;
+  children?: ReactNode;
+  tabs: ReactNode;
+  params?: Promise<{ locale: string }>;
 }
 
 export default async function ProfileLayout({
