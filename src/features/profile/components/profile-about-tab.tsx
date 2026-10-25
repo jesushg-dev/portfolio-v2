@@ -6,8 +6,13 @@ import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { FormItem, FormSection } from "@/components/shared/form-root";
-import { ProfileReferenceBox } from "./profile-reference-box";
+import { FormSection } from "@/components/shared/form-root";
+import { ProfileField } from "./profile-field";
+import {
+  AdminFormDeleteTranslation,
+  AdminFormEmptyTranslation,
+  ReferenceSnippet,
+} from "@/components/admin/shared/admin-form-language-bar";
 import type {
   ProfileLocaleTranslation,
   ProfileSharedState,
@@ -94,7 +99,7 @@ export const ProfileAboutTab: FC<ProfileAboutTabProps> = ({
 
   const handleBoldSelection = () => {
     const textarea = aboutTextareaRef.current;
-    if (!textarea || !currentTranslation) return;
+    if (!textarea) return;
 
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
@@ -130,39 +135,23 @@ export const ProfileAboutTab: FC<ProfileAboutTabProps> = ({
     <div className="space-y-8">
       {/* About Me Text Section */}
       {!currentTranslation ? (
-        <div className="border-border/60 bg-muted/10 rounded-2xl border border-dashed px-5 py-12 text-center">
-          <p className="text-foreground text-base font-semibold">
-            {t.noTranslationTitle.replace("{lang}", activeLanguage.name)}
-          </p>
-          <p className="text-muted-foreground mx-auto mt-1.5 max-w-sm text-xs sm:text-sm">
-            {t.noTranslationHint.replace("{baseLang}", baseLanguage.name)}
-          </p>
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            <Button
-              type="button"
-              variant="default"
-              onClick={onCopyAllFromBase}
-              className="min-h-10 text-xs sm:text-sm"
-            >
-              {t.copyFromBase.replace("{baseLang}", baseLanguage.name)}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onStartBlank}
-              className="min-h-10 text-xs sm:text-sm"
-            >
-              {t.startBlank}
-            </Button>
-          </div>
-        </div>
+        <AdminFormEmptyTranslation
+          languageName={activeLanguage.name}
+          baseLanguageName={baseLanguage.name}
+          onCopyFromBase={onCopyAllFromBase}
+          onStartBlank={onStartBlank}
+          notTranslatedTitle={t.noTranslationTitle}
+          notTranslatedHint={t.noTranslationHint}
+          copyFromBaseText={t.copyFromBase}
+          startBlankText={t.startBlank}
+        />
       ) : (
         <FormSection title={t.aboutSectionTitle}>
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={handleBoldSelection}
-              className="size-8 rounded-lg border border-border bg-muted/30 hover:bg-muted font-bold text-sm text-foreground grid place-items-center cursor-pointer transition-colors"
+              className="border-border bg-muted/30 hover:bg-muted text-foreground grid size-8 cursor-pointer place-items-center rounded-lg border text-sm font-bold transition-colors"
               title={t.boldHelper}
               aria-label={t.boldHelper}
             >
@@ -171,17 +160,17 @@ export const ProfileAboutTab: FC<ProfileAboutTabProps> = ({
             <span className="text-muted-foreground text-xs">{t.boldHint}</span>
           </div>
 
-          <FormItem
+          <ProfileField
             label={`${t.aboutLabel} *`}
             description={t.aboutHint}
             inputId="profile-tr-about"
           >
-            {showReference && isNonBase && baseTranslation && (
-              <ProfileReferenceBox
-                baseLanguageCode={baseLanguage.code}
-                referenceText={baseTranslation.about}
+            {showReference && isNonBase && baseTranslation?.about && (
+              <ReferenceSnippet
+                label={baseLanguage.code.toUpperCase()}
+                content={baseTranslation.about}
                 onCopy={copyAboutFromBase}
-                copyLabel={t.copySnippet}
+                copyText={t.copySnippet}
               />
             )}
             <Textarea
@@ -191,166 +180,173 @@ export const ProfileAboutTab: FC<ProfileAboutTabProps> = ({
               value={currentTranslation.about}
               onChange={(e) => onUpdateTranslation("about", e.target.value)}
               placeholder={t.aboutPlaceholder}
-              className="min-h-48 resize-y font-sans leading-relaxed text-sm"
+              className="min-h-48 resize-y font-sans text-sm leading-relaxed"
             />
-          </FormItem>
+          </ProfileField>
         </FormSection>
       )}
 
       {/* Terminal Settings (Shared across languages) */}
       <FormSection title={t.terminalSettingsTitle}>
         <div className="grid gap-4 sm:grid-cols-3">
-          <FormItem label={t.usernameLabel} inputId="profile-terminal-username">
+          <ProfileField
+            label={t.usernameLabel}
+            description="e.g. jehg@workspace"
+            inputId="profile-terminal-username"
+          >
             <Input
               id="profile-terminal-username"
               value={shared.username}
               onChange={(e) => onUpdateShared("username", e.target.value)}
-              placeholder="Jesus-Macbook"
-              className="h-11 font-mono text-xs sm:text-sm"
+              placeholder="jehg"
+              className="font-mono text-xs sm:text-sm"
             />
-          </FormItem>
+          </ProfileField>
 
-          <FormItem
+          <ProfileField
             label={t.typingSpeedLabel}
+            description="ms per char (20-100)"
             inputId="profile-terminal-speed"
           >
             <Input
               id="profile-terminal-speed"
               type="number"
-              min={1}
-              value={shared.typingSpeed || ""}
+              min={10}
+              max={300}
+              value={shared.typingSpeed}
               onChange={(e) =>
-                onUpdateShared(
-                  "typingSpeed",
-                  e.target.value === "" ? 45 : Number(e.target.value),
-                )
+                onUpdateShared("typingSpeed", Number(e.target.value) || 38)
               }
-              className="h-11 font-mono text-xs sm:text-sm"
+              className="font-mono text-xs sm:text-sm"
             />
-          </FormItem>
+          </ProfileField>
 
-          <FormItem label={t.delayLabel} inputId="profile-terminal-delay">
+          <ProfileField
+            label={t.delayLabel}
+            description="ms between commands"
+            inputId="profile-terminal-delay"
+          >
             <Input
               id="profile-terminal-delay"
               type="number"
-              min={0}
-              value={
-                shared.delayBetweenCommands === 0
-                  ? "0"
-                  : shared.delayBetweenCommands || ""
-              }
+              min={100}
+              max={5000}
+              step={100}
+              value={shared.delayBetweenCommands}
               onChange={(e) =>
                 onUpdateShared(
                   "delayBetweenCommands",
-                  e.target.value === "" ? 1000 : Number(e.target.value),
+                  Number(e.target.value) || 800,
                 )
               }
-              className="h-11 font-mono text-xs sm:text-sm"
+              className="font-mono text-xs sm:text-sm"
             />
-          </FormItem>
+          </ProfileField>
         </div>
-        <p className="text-muted-foreground mt-2 text-xs">
-          {t.terminalSettingsHint}
-        </p>
       </FormSection>
 
       {/* Terminal Steps Sequence */}
-      <FormSection
-        title={`${t.commandSequenceTitle} · ${steps.length}`}
-        className="space-y-4"
-      >
-        <p className="text-muted-foreground text-xs sm:text-sm">
+      <FormSection title={t.commandSequenceTitle}>
+        <p className="text-muted-foreground -mt-3 text-xs leading-relaxed">
           {t.commandSequenceHint}
         </p>
 
         {steps.length === 0 ? (
-          <p className="border-border/80 rounded-xl border border-dashed py-8 text-center text-xs text-muted-foreground">
-            No steps configured.
-          </p>
+          <div className="border-border/70 rounded-xl border border-dashed p-6 text-center">
+            <p className="text-muted-foreground text-xs">
+              No command steps defined. Click below to add your first command.
+            </p>
+          </div>
         ) : (
           <div className="space-y-4">
             {steps.map((step, idx) => {
-              const out = currentTranslation?.outs[idx] ?? "";
-              const baseOut = baseTranslation?.outs[idx] ?? "";
+              const out = currentTranslation?.outs?.[idx] ?? "";
+              const baseOut = baseTranslation?.outs?.[idx] ?? "";
 
               return (
                 <div
-                  key={step.id || idx}
-                  className="border-border/80 bg-card rounded-xl border p-4 shadow-2xs space-y-3"
+                  key={step.id ?? idx}
+                  className="border-border/80 bg-card/60 relative space-y-3 rounded-2xl border p-4 shadow-2xs"
                 >
-                  {/* Step Card Header */}
-                  <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2.5">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-primary/10 text-primary grid size-6 place-items-center rounded-md text-xs font-bold tabular-nums">
-                        {idx + 1}
-                      </span>
-                      <span className="text-foreground text-xs font-semibold">
-                        {t.stepNumber.replace("{n}", String(idx + 1))}
-                      </span>
-                    </div>
+                  {/* Step Header */}
+                  <div className="border-border/60 flex items-center justify-between gap-2 border-b pb-2">
+                    <span className="text-foreground text-xs font-semibold tracking-wider uppercase">
+                      {`${t.stepNumber} ${idx + 1}`}
+                    </span>
 
                     <div className="flex items-center gap-1">
-                      <button
+                      <Button
                         type="button"
-                        onClick={() => onMoveStep(idx, -1)}
+                        variant="ghost"
+                        size="icon-sm"
                         disabled={idx === 0}
+                        onClick={() => onMoveStep(idx, -1)}
+                        className="size-7"
                         aria-label="Move step up"
-                        className="text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-30 grid size-8 place-items-center rounded-md cursor-pointer transition-colors"
                       >
-                        <ArrowUp className="size-4" />
-                      </button>
-
-                      <button
+                        <ArrowUp className="size-3.5" />
+                      </Button>
+                      <Button
                         type="button"
-                        onClick={() => onMoveStep(idx, 1)}
+                        variant="ghost"
+                        size="icon-sm"
                         disabled={idx === steps.length - 1}
+                        onClick={() => onMoveStep(idx, 1)}
+                        className="size-7"
                         aria-label="Move step down"
-                        className="text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-30 grid size-8 place-items-center rounded-md cursor-pointer transition-colors"
                       >
-                        <ArrowDown className="size-4" />
-                      </button>
-
-                      <button
+                        <ArrowDown className="size-3.5" />
+                      </Button>
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="icon-sm"
                         onClick={() => {
                           if (window.confirm(t.deleteStepConfirm)) {
                             onRemoveStep(idx);
                           }
                         }}
+                        className="hover:bg-destructive/10 text-muted-foreground hover:text-destructive size-7"
                         aria-label="Delete step"
-                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 grid size-8 place-items-center rounded-md cursor-pointer transition-colors"
                       >
-                        <Trash2 className="size-4" />
-                      </button>
+                        <Trash2 className="size-3.5" />
+                      </Button>
                     </div>
                   </div>
 
-                  {/* Shared Command Field */}
-                  <FormItem
-                    label={`${t.commandLabel} * (${t.commandSharedHint})`}
+                  {/* Command (shared across all languages) */}
+                  <ProfileField
+                    label={t.commandLabel}
+                    description={t.commandSharedHint}
                     inputId={`profile-step-cmd-${idx}`}
                   >
-                    <Input
-                      id={`profile-step-cmd-${idx}`}
-                      value={step.cmd}
-                      onChange={(e) => onUpdateStepCmd(idx, e.target.value)}
-                      placeholder="whoami"
-                      className="h-10 font-mono text-xs"
-                    />
-                  </FormItem>
+                    <div className="relative flex items-center">
+                      <span className="text-primary pointer-events-none absolute left-3 font-mono text-xs font-bold select-none">
+                        $&nbsp;
+                      </span>
+                      <Input
+                        id={`profile-step-cmd-${idx}`}
+                        value={step.cmd}
+                        onChange={(e) => onUpdateStepCmd(idx, e.target.value)}
+                        placeholder="cat skills.txt"
+                        className="pl-7 font-mono text-xs sm:text-sm"
+                      />
+                    </div>
+                  </ProfileField>
 
-                  {/* Localized Output Field */}
+                  {/* Output (per-language) */}
                   {currentTranslation && (
-                    <FormItem
-                      label={`${t.outputLabel} (${t.outputPerLangHint})`}
+                    <ProfileField
+                      label={t.outputLabel}
+                      description={t.outputPerLangHint}
                       inputId={`profile-step-out-${idx}`}
                     >
                       {showReference && isNonBase && baseOut && (
-                        <ProfileReferenceBox
-                          baseLanguageCode={baseLanguage.code}
-                          referenceText={baseOut}
+                        <ReferenceSnippet
+                          label={baseLanguage.code.toUpperCase()}
+                          content={baseOut}
                           onCopy={() => onUpdateStepOutput(idx, baseOut)}
-                          copyLabel={t.copySnippet}
+                          copyText={t.copySnippet}
                         />
                       )}
                       <Textarea
@@ -363,7 +359,7 @@ export const ProfileAboutTab: FC<ProfileAboutTabProps> = ({
                         placeholder="output text"
                         className="font-mono text-xs leading-relaxed"
                       />
-                    </FormItem>
+                    </ProfileField>
                   )}
                 </div>
               );
@@ -384,28 +380,12 @@ export const ProfileAboutTab: FC<ProfileAboutTabProps> = ({
 
       {/* Non-Base Locale Delete Option */}
       {isNonBase && currentTranslation && (
-        <div className="border-border/80 border-t pt-4">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              if (
-                window.confirm(
-                  t.deleteTranslationConfirm.replace(
-                    "{lang}",
-                    activeLanguage.name,
-                  ),
-                )
-              ) {
-                onDeleteTranslation();
-              }
-            }}
-            className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto p-0 text-xs font-normal underline-offset-4 hover:underline"
-          >
-            {t.deleteTranslation.replace("{lang}", activeLanguage.name)}
-          </Button>
-        </div>
+        <AdminFormDeleteTranslation
+          languageName={activeLanguage.name}
+          onDelete={onDeleteTranslation}
+          buttonText={t.deleteTranslation}
+          confirmQuestion={t.deleteTranslationConfirm}
+        />
       )}
     </div>
   );

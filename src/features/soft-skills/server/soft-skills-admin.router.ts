@@ -316,9 +316,7 @@ export const softSkillsAdminRouter = createTRPCRouter({
       });
 
       if (metrics) {
-        const keepIds = metrics
-          .filter((m) => !!m.id)
-          .map((m) => m.id!);
+        const keepIds = metrics.filter((m) => !!m.id).map((m) => m.id!);
         await ctx.db.softSkillsMetric.deleteMany({
           where: {
             sectionId: section.id,

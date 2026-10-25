@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type FC } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FC,
+} from "react";
 import { Play, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -144,7 +151,7 @@ export const ProfileAboutLivePreview: FC<ProfileAboutLivePreviewProps> = ({
     <div className="space-y-4">
       {/* About Paragraphs Preview */}
       <div className="border-border/80 bg-card rounded-2xl border p-4 shadow-xs">
-        <h4 className="text-muted-foreground mb-2.5 text-xs font-semibold uppercase tracking-wider">
+        <h4 className="text-muted-foreground mb-2.5 text-xs font-semibold tracking-wider uppercase">
           {t.aboutTitle}
         </h4>
         {paragraphs.length > 0 ? (
@@ -215,7 +222,10 @@ export const ProfileAboutLivePreview: FC<ProfileAboutLivePreviewProps> = ({
                 disabled={steps.length === 0}
                 className="h-6 gap-1 px-2 text-[0.6875rem]"
               >
-                <Play className="size-3 text-primary fill-primary" aria-hidden />
+                <Play
+                  className="text-primary fill-primary size-3"
+                  aria-hidden
+                />
                 <span>{t.play}</span>
               </Button>
             )}
@@ -235,7 +245,7 @@ export const ProfileAboutLivePreview: FC<ProfileAboutLivePreviewProps> = ({
                     ~ % <span className="text-foreground">{row.command}</span>
                   </div>
                   {row.output && (
-                    <pre className="text-muted-foreground/90 whitespace-pre-wrap font-sans text-xs">
+                    <pre className="text-muted-foreground/90 font-sans text-xs whitespace-pre-wrap">
                       {row.output}
                     </pre>
                   )}
@@ -263,12 +273,10 @@ export const ProfileAboutLivePreview: FC<ProfileAboutLivePreviewProps> = ({
                       {username || "Jesus-Macbook"}
                     </span>{" "}
                     ~ %{" "}
-                    <span className="text-foreground">
-                      {step.cmd || "..."}
-                    </span>
+                    <span className="text-foreground">{step.cmd || "..."}</span>
                   </div>
                   {out ? (
-                    <pre className="text-muted-foreground/90 whitespace-pre-wrap font-sans text-xs">
+                    <pre className="text-muted-foreground/90 font-sans text-xs whitespace-pre-wrap">
                       {out}
                     </pre>
                   ) : null}

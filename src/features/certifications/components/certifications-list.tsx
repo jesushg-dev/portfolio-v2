@@ -36,10 +36,7 @@ import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  useQueryState,
-  parseAsInteger,
-} from "nuqs";
+import { useQueryState, parseAsInteger } from "nuqs";
 import { getSortingStateParser } from "@/lib/parsers";
 import type { FilterItemSchema } from "@/lib/parsers";
 import { cn } from "@/lib/utils";
@@ -91,7 +88,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     image: string;
     title: string;
     company?: string;
-    issuedDate?: string | null;
+    issuedDate?: string | number | null;
     url?: string | null;
   } | null>(null);
 
@@ -280,14 +277,14 @@ export const CertificationsList: FC<CertificationsListProps> = ({
                   type="button"
                   onClick={() =>
                     setPreviewCert({
-                      image: cert.image!,
+                      image: cert.image,
                       title,
                       company: cert.company,
                       issuedDate: cert.issuedDate,
                       url: cert.url,
                     })
                   }
-                  className="group border-border bg-muted/60 hover:border-primary/60 hover:shadow-xs relative flex size-10 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border transition-all"
+                  className="group border-border bg-muted/60 hover:border-primary/60 relative flex size-10 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border transition-all hover:shadow-xs"
                   title="Click to view image"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -574,7 +571,9 @@ export const CertificationsList: FC<CertificationsListProps> = ({
               <span className="border-border/60 bg-muted/40 text-foreground inline-flex items-center gap-1 rounded-md border px-2 py-0.5 font-semibold">
                 {previewCert.company}
               </span>
-              {previewCert.issuedDate && <span>· {previewCert.issuedDate}</span>}
+              {previewCert.issuedDate && (
+                <span>· {previewCert.issuedDate}</span>
+              )}
             </div>
           ) : undefined
         }

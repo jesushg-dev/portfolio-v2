@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, type FC } from "react";
-import { Sparkles } from "lucide-react";
 import {
   type ProfileLocaleTranslation,
   hasText,
@@ -13,7 +12,6 @@ interface ProfileHeroLivePreviewProps {
   currentTranslation: ProfileLocaleTranslation | null;
   baseTranslation: ProfileLocaleTranslation | null;
   isNonBase: boolean;
-  baseLangName: string;
   t: {
     fallbackNotice: string;
     defaultBadge: string;
@@ -27,7 +25,6 @@ export const ProfileHeroLivePreview: FC<ProfileHeroLivePreviewProps> = ({
   currentTranslation,
   baseTranslation,
   isNonBase,
-  baseLangName,
   t,
 }) => {
   const tr = currentTranslation ?? baseTranslation;
@@ -96,12 +93,12 @@ export const ProfileHeroLivePreview: FC<ProfileHeroLivePreviewProps> = ({
   return (
     <div className="space-y-3">
       {isUsingFallback && (
-        <div className="border-amber-500/20 bg-amber-500/10 text-amber-500 rounded-xl border p-2.5 text-xs font-medium">
-          {t.fallbackNotice.replace("{baseLang}", baseLangName)}
+        <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-2.5 text-xs font-medium text-amber-500">
+          {t.fallbackNotice}
         </div>
       )}
 
-      <div className="border-border/80 bg-gradient-to-br from-primary/10 via-card to-card relative overflow-hidden rounded-2xl border p-5 shadow-sm">
+      <div className="border-border/80 from-primary/10 via-card to-card relative overflow-hidden rounded-2xl border bg-gradient-to-br p-5 shadow-sm">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1 space-y-2">
             {/* Availability Pill */}
@@ -125,7 +122,7 @@ export const ProfileHeroLivePreview: FC<ProfileHeroLivePreviewProps> = ({
 
             {/* Professional Subtitle */}
             {subtitleText && (
-              <p className="text-foreground/90 text-sm font-semibold leading-snug">
+              <p className="text-foreground/90 text-sm leading-snug font-semibold">
                 {subtitleText}
               </p>
             )}

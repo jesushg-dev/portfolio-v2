@@ -132,7 +132,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
       url: initialData.url ?? "",
       idCredential: initialData.idCredential ?? "",
       image: initialData.image ?? "",
-      type: (initialData.type) ?? [],
+      type: initialData.type ?? [],
       skillIds: initialData.skillIds ?? [],
       translations: normalizedTranslations,
     };
@@ -392,8 +392,14 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                   control={form.control}
                   name="image"
                   render={({ field }) => (
-                    <FormItem label={t("imageUrl")} inputId="certification-image">
-                      <Input placeholder={t("imageUrlPlaceholder")} {...field} />
+                    <FormItem
+                      label={t("imageUrl")}
+                      inputId="certification-image"
+                    >
+                      <Input
+                        placeholder={t("imageUrlPlaceholder")}
+                        {...field}
+                      />
                     </FormItem>
                   )}
                 />
@@ -428,7 +434,9 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                         className="text-primary mt-1 inline-flex cursor-pointer items-center gap-1 text-xs hover:underline"
                       >
                         <Eye className="size-3" />
-                        <span>{t("viewFullImage") || "Ver imagen completa"}</span>
+                        <span>
+                          {t("viewFullImage") || "Ver imagen completa"}
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -572,15 +580,14 @@ export const CertificationForm: FC<CertificationFormProps> = ({
       <ImageLightbox
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
-        src={watchedImage || ""}
+        src={watchedImage ?? ""}
         alt="Certificate Preview"
         title={
           <div className="flex items-center gap-2">
             <Award className="text-primary size-5" />
             <span className="font-semibold">
-              {form.getValues(`translations.${activeLangId}.title`) ||
-                t("previewTitle") ||
-                "Certificate"}
+              {form.getValues(`translations.${activeLangId}.title`) ??
+                t("previewTitle")}
             </span>
           </div>
         }

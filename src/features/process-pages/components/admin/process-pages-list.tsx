@@ -257,22 +257,22 @@ export const ProcessPagesList: FC<ProcessPagesListProps> = ({
       },
       ...(languages && languages.length > 0
         ? [
-          {
-            id: "languages",
-            header: t("columns.languages"),
-            cell: ({ row }: { row: { original: ProcessPageRow } }) => {
-              const statuses = languages.map((lang) => {
-                const trans = row.original.translations[lang.id];
-                return {
-                  code: lang.code,
-                  name: lang.name,
-                  status: computeTranslationStatus(trans, ["menuTitle"]),
-                };
-              });
-              return <LanguageStatusBadge languages={statuses} />;
+            {
+              id: "languages",
+              header: t("columns.languages"),
+              cell: ({ row }: { row: { original: ProcessPageRow } }) => {
+                const statuses = languages.map((lang) => {
+                  const trans = row.original.translations[lang.id];
+                  return {
+                    code: lang.code,
+                    name: lang.name,
+                    status: computeTranslationStatus(trans, ["menuTitle"]),
+                  };
+                });
+                return <LanguageStatusBadge languages={statuses} />;
+              },
             },
-          },
-        ]
+          ]
         : []),
       {
         id: "isPublished",

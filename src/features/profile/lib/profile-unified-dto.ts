@@ -1,4 +1,5 @@
 import type { AppLanguage } from "@prisma/client";
+import { resolvePrimaryLanguage } from "@/lib/i18n/localized-form";
 import type {
   ProfileAboutEditorDTO,
   ProfileHeroEditorDTO,
@@ -17,6 +18,7 @@ export function toUnifiedState(
   about: ProfileAboutEditorDTO,
   terminal: TerminalEditorDTO | null,
 ): ProfileUnifiedState {
+  const primaryLang = resolvePrimaryLanguage(languages);
   const terminalSteps = terminal?.steps ?? [];
 
   // Extract shared steps and commands
@@ -62,7 +64,8 @@ export function toUnifiedState(
       hasText(aboutMe) ||
       outs.some(hasText);
 
-    if (lang.isPrimary || hasAnyContent) {
+    const isBase = lang.id === primaryLang?.id;
+    if (isBase || hasAnyContent) {
       translations[lang.id] = {
         alt,
         badge,

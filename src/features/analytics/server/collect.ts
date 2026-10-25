@@ -43,10 +43,12 @@ const emptyResponse = (markOwner = false) =>
   });
 
 function hasOwnerOptOutCookie(headers: Headers): boolean {
-  return headers
-    .get("cookie")
-    ?.split(";")
-    .some((cookie) => cookie.trim() === `${OWNER_OPTOUT_COOKIE}=1`) ?? false;
+  return (
+    headers
+      .get("cookie")
+      ?.split(";")
+      .some((cookie) => cookie.trim() === `${OWNER_OPTOUT_COOKIE}=1`) ?? false
+  );
 }
 
 async function incrementDailyStat(input: {

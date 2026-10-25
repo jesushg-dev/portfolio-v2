@@ -5,10 +5,7 @@ interface ProfileLayoutProps {
   tabs: ReactNode;
 }
 
-export default function ProfileLayout({
-  children,
-  tabs,
-}: ProfileLayoutProps) {
+export default function ProfileLayout({ children, tabs }: ProfileLayoutProps) {
   return (
     <div>
       {tabs}

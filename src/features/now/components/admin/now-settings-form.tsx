@@ -93,11 +93,10 @@ export const NowSettingsForm: FC<NowSettingsFormProps> = ({
   const { activeLangId, setActiveLangId } = useLocalizedForm({
     languages,
     form,
-    buildDefaultValues: () =>
-      ({
-        ...settings,
-        photoUrls: settings.photoUrls.join("\n"),
-      }),
+    buildDefaultValues: () => ({
+      ...settings,
+      photoUrls: settings.photoUrls.join("\n"),
+    }),
     resourceId: "settings",
   });
 
