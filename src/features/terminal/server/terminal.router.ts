@@ -109,7 +109,7 @@ async function fetchTerminalForUser(
   });
 }
 
-async function getTerminalEditorDto(
+export async function getTerminalEditorDto(
   client: DbLike,
   userId: string,
 ): Promise<TerminalEditorDTO | null> {
