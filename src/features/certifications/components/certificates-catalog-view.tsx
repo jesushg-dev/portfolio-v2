@@ -95,47 +95,40 @@ export function TypeSegmentButtons({
     <div className="flex w-full justify-center px-2 sm:px-4">
       <Tab
         tabId={CATALOG_TAB_ID}
-        minimal
         currentTab={currentIndex}
         setCurrentTab={handleTabChange}
         ariaLabel={ariaLabel}
-        className="bg-muted/70 border-border text-foreground inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-3xl border p-1.5 shadow-xs md:rounded-full"
+        className="max-w-full"
       >
         <TabItem
           icon={Eye}
           panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.ALL} (${counts.ALL})`}
-          description=""
         />
         <TabItem
           icon={Monitor}
           panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.FRONTEND} (${counts.FRONTEND})`}
-          description=""
         />
         <TabItem
           icon={Server}
           panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.BACKEND} (${counts.BACKEND})`}
-          description=""
         />
         <TabItem
           icon={ShieldCheck}
           panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.CYBERSECURITY} (${counts.CYBERSECURITY})`}
-          description=""
         />
         <TabItem
           icon={Terminal}
           panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.DEVOPS} (${counts.DEVOPS})`}
-          description=""
         />
         <TabItem
           icon={Users}
           panelId={CATALOG_PANEL_ID}
           title={`${typeLabels.SOFTSKILLS} (${counts.SOFTSKILLS})`}
-          description=""
         />
       </Tab>
     </div>
@@ -984,7 +977,10 @@ export function CertificatesCatalogView({
                 transition={{ duration: 0.25, delay: Math.min(idx, 8) * 0.04 }}
                 className="flex justify-center"
               >
-                <CertificateItem {...certificate} onPreview={handleOpenPreview} />
+                <CertificateItem
+                  {...certificate}
+                  onPreview={handleOpenPreview}
+                />
               </motion.li>
             ))}
           </motion.ul>

@@ -8,11 +8,21 @@ export interface CompanyEditorDTO {
   linkedinUrl: string;
   location: string;
   description: string;
+  applicationsCount?: number;
 }
 
-export type CompanyCreateFormDTO = Omit<CompanyEditorDTO, "id">;
+export type CompanyCreateFormDTO = Omit<
+  CompanyEditorDTO,
+  "id" | "applicationsCount"
+>;
 
-export function mapCompanyToEditorDto(company: Company): CompanyEditorDTO {
+export type CompanyWithApplicationCount = Company & {
+  _count?: { applications?: number };
+};
+
+export function mapCompanyToEditorDto(
+  company: CompanyWithApplicationCount,
+): CompanyEditorDTO {
   return {
     id: company.id,
     name: company.name,
@@ -21,11 +31,12 @@ export function mapCompanyToEditorDto(company: Company): CompanyEditorDTO {
     linkedinUrl: company.linkedinUrl ?? "",
     location: company.location ?? "",
     description: company.description ?? "",
+    applicationsCount: company._count?.applications ?? 0,
   };
 }
 
 export function mapCompaniesToEditorDto(
-  companies: Company[],
+  companies: CompanyWithApplicationCount[],
 ): CompanyEditorDTO[] {
   return companies.map(mapCompanyToEditorDto);
 }

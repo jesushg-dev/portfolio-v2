@@ -48,7 +48,10 @@ const SettingsPage: FC<ISettingsPageProps> = async ({ params }) => {
 
       <Tabs defaultValue="general" className="w-full space-y-6">
         <div className="overflow-x-auto pb-1">
-          <TabsList className="bg-muted/70 inline-flex h-11 w-full max-w-md justify-start gap-1 p-1 sm:w-auto">
+          <TabsList
+            variant="line"
+            className="w-full max-w-md justify-start sm:w-auto"
+          >
             <TabsTrigger
               value="general"
               className="gap-2 px-4 py-1.5 text-xs font-medium sm:text-sm"

@@ -42,26 +42,16 @@ export const TimelineFilterTabs: FC<TimelineFilterTabsProps> = ({
     <div className="flex w-full justify-start">
       <Tab
         tabId="timeline-filter-tab"
-        minimal
         currentTab={currentIndex}
         setCurrentTab={handleTabChange}
         ariaLabel={labels.ariaLabel}
-        className="bg-muted/70 border-border text-foreground inline-flex max-w-full flex-wrap items-center justify-start gap-1 rounded-3xl border p-1.5 shadow-xs md:rounded-full"
+        className="max-w-full justify-start"
       >
-        <TabItem
-          icon={Eye}
-          title={`${labels.all} (${counts.all})`}
-          description=""
-        />
-        <TabItem
-          icon={Briefcase}
-          title={`${labels.work} (${counts.work})`}
-          description=""
-        />
+        <TabItem icon={Eye} title={`${labels.all} (${counts.all})`} />
+        <TabItem icon={Briefcase} title={`${labels.work} (${counts.work})`} />
         <TabItem
           icon={GraduationCap}
           title={`${labels.learning} (${counts.learning})`}
-          description=""
         />
       </Tab>
     </div>

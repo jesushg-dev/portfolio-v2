@@ -1,20 +1,29 @@
 "use client";
 
+import type { AppLanguage } from "@prisma/client";
 import { useCallback, useState, useTransition, type FC } from "react";
 import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { toast } from "sonner";
 
+import {
+  computeTranslationStatus,
+  LanguageStatusBadge,
+} from "@/components/shared/data-table/language-status-badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import type { NowFocusEditorDTO } from "@/features/now/lib/now-editor-dto";
 import { api } from "@/trpc/react";
 
 interface NowFocusesListProps {
   initialFocuses: NowFocusEditorDTO[];
+  languages?: AppLanguage[];
 }
 
-export const NowFocusesList: FC<NowFocusesListProps> = ({ initialFocuses }) => {
+export const NowFocusesList: FC<NowFocusesListProps> = ({
+  initialFocuses,
+  languages,
+}) => {
   const t = useTranslations("admin.now");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -72,9 +81,23 @@ export const NowFocusesList: FC<NowFocusesListProps> = ({ initialFocuses }) => {
               className="flex items-start justify-between gap-3 px-4 py-3"
             >
               <div className="min-w-0">
-                <p className="text-muted-foreground font-mono text-xs">
-                  #{focus.order}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-muted-foreground font-mono text-xs">
+                    #{focus.order}
+                  </p>
+                  {languages && languages.length > 0 ? (
+                    <LanguageStatusBadge
+                      languages={languages.map((lang) => ({
+                        code: lang.code,
+                        name: lang.name,
+                        status: computeTranslationStatus(
+                          focus.translations[lang.id],
+                          ["label", "body"],
+                        ),
+                      }))}
+                    />
+                  ) : null}
+                </div>
                 <p className="font-semibold">{first?.label}</p>
                 <p className="text-muted-foreground text-sm">{first?.body}</p>
               </div>

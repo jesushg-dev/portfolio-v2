@@ -15,9 +15,20 @@ export default async function SoftSkillsSettingsPage() {
   const userId = session!.user.id;
   const t = await getTranslations("admin.softSkills");
 
-  const sectionRecord = await db.softSkillsSection.findUnique({
-    where: { userId },
-  });
+  const [sectionRecord, languages] = await Promise.all([
+    db.softSkillsSection.findUnique({
+      where: { userId },
+      include: {
+        metrics: {
+          include: { SoftSkillsMetricTranslation: true },
+          orderBy: { order: "asc" },
+        },
+      },
+    }),
+    db.appLanguage.findMany({
+      orderBy: { code: "asc" },
+    }),
+  ]);
 
   const section =
     sectionRecord ??
@@ -27,6 +38,12 @@ export default async function SoftSkillsSettingsPage() {
         mediaType: "VIDEO",
         videoUrl: DEFAULT_SOFT_SKILLS_VIDEO_URL,
         posterUrl: DEFAULT_SOFT_SKILLS_POSTER_URL,
+      },
+      include: {
+        metrics: {
+          include: { SoftSkillsMetricTranslation: true },
+          orderBy: { order: "asc" },
+        },
       },
     }));
 
@@ -41,7 +58,7 @@ export default async function SoftSkillsSettingsPage() {
         </p>
       </div>
       <div className="mx-auto w-full max-w-3xl">
-        <SoftSkillsSectionForm initialData={section} />
+        <SoftSkillsSectionForm initialData={section} languages={languages} />
       </div>
     </div>
   );

@@ -41,15 +41,38 @@ const softSkillUpsertInput = z.object({
   translations: SoftSkillTranslationMapSchema,
 });
 
+const metricInput = z.object({
+  id: z.string().optional(),
+  value: z.string().default(""),
+  order: z.number().int().default(0),
+  translations: z
+    .record(
+      z.string(),
+      z.object({
+        label: z.string().default(""),
+      }),
+    )
+    .default({}),
+});
+
 const sectionInput = z.object({
   mediaType: SoftSkillsMediaTypeSchema,
   videoUrl: z.string().url().or(z.literal("")).optional(),
   posterUrl: z.string().url().or(z.literal("")).optional(),
   imageUrl: z.string().url().or(z.literal("")).optional(),
+  metrics: z.array(metricInput).optional(),
 });
 
 async function ensureSection(userId: string, db: PrismaClient) {
-  const existing = await db.softSkillsSection.findUnique({ where: { userId } });
+  const existing = await db.softSkillsSection.findUnique({
+    where: { userId },
+    include: {
+      metrics: {
+        include: { SoftSkillsMetricTranslation: true },
+        orderBy: { order: "asc" },
+      },
+    },
+  });
   if (existing) return existing;
 
   return db.softSkillsSection.create({
@@ -58,6 +81,12 @@ async function ensureSection(userId: string, db: PrismaClient) {
       mediaType: "VIDEO",
       videoUrl: DEFAULT_SOFT_SKILLS_VIDEO_URL,
       posterUrl: DEFAULT_SOFT_SKILLS_POSTER_URL,
+    },
+    include: {
+      metrics: {
+        include: { SoftSkillsMetricTranslation: true },
+        orderBy: { order: "asc" },
+      },
     },
   });
 }
@@ -234,6 +263,24 @@ export const softSkillsAdminRouter = createTRPCRouter({
       return ctx.db.portfolioSoftSkill.delete({ where: { id: input.id } });
     }),
 
+  deleteMany: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      if (input.ids.length === 0) return { count: 0 };
+      const items = await ctx.db.portfolioSoftSkill.findMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        select: { id: true },
+      });
+      const ids = items.map((i) => i.id);
+      if (ids.length === 0) return { count: 0 };
+      await ctx.db.portfolioSoftSkillTranslation.deleteMany({
+        where: { portfolioSoftSkillId: { in: ids } },
+      });
+      return ctx.db.portfolioSoftSkill.deleteMany({
+        where: { id: { in: ids } },
+      });
+    }),
+
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     const items = await ctx.db.portfolioSoftSkill.findMany({
       where: { userId: ctx.user.id },
@@ -250,8 +297,8 @@ export const softSkillsAdminRouter = createTRPCRouter({
   upsertSection: protectedProcedure
     .input(sectionInput)
     .mutation(async ({ ctx, input }) => {
-      const { videoUrl, posterUrl, imageUrl, ...rest } = input;
-      return ctx.db.softSkillsSection.upsert({
+      const { videoUrl, posterUrl, imageUrl, metrics, ...rest } = input;
+      const section = await ctx.db.softSkillsSection.upsert({
         where: { userId: ctx.user.id },
         create: {
           userId: ctx.user.id,
@@ -267,5 +314,58 @@ export const softSkillsAdminRouter = createTRPCRouter({
           imageUrl: imageUrl ?? null,
         },
       });
+
+      if (metrics) {
+        const keepIds = metrics
+          .filter((m) => !!m.id)
+          .map((m) => m.id!);
+        await ctx.db.softSkillsMetric.deleteMany({
+          where: {
+            sectionId: section.id,
+            id: { notIn: keepIds },
+          },
+        });
+
+        for (let i = 0; i < metrics.length; i++) {
+          const m = metrics[i];
+          let metricId = m.id;
+          if (metricId) {
+            await ctx.db.softSkillsMetric.update({
+              where: { id: metricId },
+              data: { value: m.value, order: i },
+            });
+          } else {
+            const created = await ctx.db.softSkillsMetric.create({
+              data: {
+                sectionId: section.id,
+                value: m.value,
+                order: i,
+              },
+            });
+            metricId = created.id;
+          }
+
+          for (const [langId, trans] of Object.entries(m.translations)) {
+            await ctx.db.softSkillsMetricTranslation.upsert({
+              where: {
+                metricId_appLanguageId: {
+                  metricId,
+                  appLanguageId: langId,
+                },
+              },
+              create: {
+                metricId,
+                appLanguageId: langId,
+                label: trans.label,
+              },
+              update: {
+                label: trans.label,
+              },
+            });
+          }
+        }
+      }
+
+      return section;
     }),
 });

@@ -27,6 +27,7 @@ describe("company editor dto", () => {
       linkedinUrl: "",
       location: "",
       description: "",
+      applicationsCount: 0,
     });
   });
 

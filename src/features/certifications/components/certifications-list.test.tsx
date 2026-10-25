@@ -80,6 +80,11 @@ jest.mock("@/trpc/react", () => ({
       deleteItem: {
         useMutation: () => ({ mutateAsync: mockDelete }),
       },
+      deleteMany: {
+        useMutation: () => ({
+          mutateAsync: jest.fn().mockResolvedValue({ count: 1 }),
+        }),
+      },
     },
   },
 }));
@@ -106,7 +111,7 @@ describe("CertificationsList", () => {
     renderWithIntl(<CertificationsList {...defaultProps} />);
 
     expect(screen.getByText("AWS Certified")).toBeInTheDocument();
-    expect(screen.getByText("Amazon")).toBeInTheDocument();
+    expect(screen.getAllByText("Amazon").length).toBeGreaterThanOrEqual(1);
   });
 
   it("renders skill titles for certifications that have skills", () => {
@@ -125,4 +130,26 @@ describe("CertificationsList", () => {
       expect(mockDelete).toHaveBeenCalled();
     });
   }, 30000);
+
+  it("renders category chips using canonical pill tabs", () => {
+    renderWithIntl(<CertificationsList {...defaultProps} />);
+    expect(screen.getByRole("tab", { name: /all/i })).toBeInTheDocument();
+  });
+
+  it("shows bulk bar when rows are selected", () => {
+    renderWithIntl(<CertificationsList {...defaultProps} />);
+
+    const selectAllCheckbox = screen.getByRole("checkbox", {
+      name: /select all/i,
+    });
+    fireEvent.click(selectAllCheckbox);
+
+    expect(screen.getAllByText(/selected/i).length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getByRole("button", { name: /clear selection/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /delete selected/i }),
+    ).toBeInTheDocument();
+  });
 });

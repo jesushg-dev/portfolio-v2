@@ -16,9 +16,20 @@ export default async function SoftSkillsSettingsModal() {
   const userId = session!.user.id;
   const t = await getTranslations("admin.softSkills");
 
-  const sectionRecord = await db.softSkillsSection.findUnique({
-    where: { userId },
-  });
+  const [sectionRecord, languages] = await Promise.all([
+    db.softSkillsSection.findUnique({
+      where: { userId },
+      include: {
+        metrics: {
+          include: { SoftSkillsMetricTranslation: true },
+          orderBy: { order: "asc" },
+        },
+      },
+    }),
+    db.appLanguage.findMany({
+      orderBy: { code: "asc" },
+    }),
+  ]);
 
   const section =
     sectionRecord ??
@@ -29,6 +40,12 @@ export default async function SoftSkillsSettingsModal() {
         videoUrl: DEFAULT_SOFT_SKILLS_VIDEO_URL,
         posterUrl: DEFAULT_SOFT_SKILLS_POSTER_URL,
       },
+      include: {
+        metrics: {
+          include: { SoftSkillsMetricTranslation: true },
+          orderBy: { order: "asc" },
+        },
+      },
     }));
 
   return (
@@ -36,7 +53,7 @@ export default async function SoftSkillsSettingsModal() {
       title={t("sectionSettings")}
       description={t("sectionSettingsDescription")}
     >
-      <SoftSkillsSectionForm initialData={section} />
+      <SoftSkillsSectionForm initialData={section} languages={languages} />
     </ModalWrapper>
   );
 }

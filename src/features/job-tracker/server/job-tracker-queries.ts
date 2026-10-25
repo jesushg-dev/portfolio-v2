@@ -266,6 +266,11 @@ export async function getCompaniesListData(params: DataTableParams) {
       orderBy,
       skip,
       take,
+      include: {
+        _count: {
+          select: { applications: true },
+        },
+      },
     }),
     db.company.count({ where }),
   ]);

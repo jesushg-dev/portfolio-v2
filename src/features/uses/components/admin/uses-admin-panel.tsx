@@ -85,6 +85,7 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
           initialItems={lists.EVERYDAY.data}
           pageCount={lists.EVERYDAY.pageCount}
           totalCount={lists.EVERYDAY.totalCount}
+          languages={languages}
         />
       </TabsContent>
       <TabsContent value="SOFTWARE" className="min-h-0 flex-1">
@@ -93,6 +94,7 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
           initialItems={lists.SOFTWARE.data}
           pageCount={lists.SOFTWARE.pageCount}
           totalCount={lists.SOFTWARE.totalCount}
+          languages={languages}
         />
       </TabsContent>
       <TabsContent value="BROWSER" className="min-h-0 flex-1">
@@ -101,6 +103,7 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
           initialItems={lists.BROWSER.data}
           pageCount={lists.BROWSER.pageCount}
           totalCount={lists.BROWSER.totalCount}
+          languages={languages}
         />
       </TabsContent>
       <TabsContent value="SETTINGS" className="min-h-0 flex-1">

@@ -31,7 +31,10 @@ export async function getTimelineEditPageData(id: string) {
   const item = timelineItemDelegate
     ? await timelineItemDelegate.findUnique({
         where: { id, userId },
-        include: { TimelineItemTranslation: true },
+        include: {
+          TimelineItemTranslation: true,
+          TimelineItemSkill: { select: { skillId: true } },
+        },
       })
     : null;
 

@@ -15,12 +15,20 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { DataTableCategoryChips } from "@/components/shared/data-table/data-table-category-chips";
+import {
+  LanguageStatusBadge,
+  computeTranslationStatus,
+} from "@/components/shared/data-table/language-status-badge";
+import { DataTableBulkBar } from "@/components/shared/data-table/data-table-bulk-bar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { getSortingStateParser } from "@/lib/parsers";
 import type { FilterItemSchema } from "@/lib/parsers";
+import { cn } from "@/lib/utils";
 
 import type { RouterOutputs } from "@/trpc/react";
 
@@ -42,6 +50,28 @@ const isTimelineItemRow = (value: unknown): value is TimelineItemRow => {
   const row = value as Partial<TimelineItemRow>;
   return typeof row.id === "string";
 };
+
+const CATEGORY_STYLES: Record<string, string> = {
+  WORK: "bg-primary/15 text-primary border-primary/25",
+  STUDY: "bg-violet-500/15 text-violet-600 border-violet-500/25",
+  COURSE: "bg-amber-500/15 text-amber-600 border-amber-500/25",
+};
+
+function getCategoryLabel(
+  t: ReturnType<typeof useTranslations<"admin.timeline">>,
+  category: string,
+): string {
+  switch (category) {
+    case "WORK":
+      return t("categories.work");
+    case "STUDY":
+      return t("categories.study");
+    case "COURSE":
+      return t("categories.course");
+    default:
+      return category;
+  }
+}
 
 export const TimelineList: FC<TimelineListProps> = ({
   initialItems,
@@ -65,7 +95,7 @@ export const TimelineList: FC<TimelineListProps> = ({
 
   const [titleFilter] = useQueryState("title");
   const [orgFilter] = useQueryState("organization");
-  const [catFilter] = useQueryState("category");
+  const [catFilter, setCatFilter] = useQueryState("category");
 
   const parsedFilters = useMemo((): FilterItemSchema[] => {
     const f: FilterItemSchema[] = [];
@@ -174,8 +204,72 @@ export const TimelineList: FC<TimelineListProps> = ({
 
   const timelineItems = useMemo(() => items.filter(isTimelineItemRow), [items]);
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {
+      all: trpcTotalCount,
+      WORK: 0,
+      STUDY: 0,
+      COURSE: 0,
+    };
+    for (const item of timelineItems) {
+      if (item.category && item.category in counts) {
+        counts[item.category] = (counts[item.category] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [timelineItems, trpcTotalCount]);
+
+  const categories = useMemo(
+    () => [
+      { value: "all", label: t("categories.all"), count: categoryCounts.all },
+      {
+        value: "WORK",
+        label: t("categories.work"),
+        count: categoryCounts.WORK,
+      },
+      {
+        value: "STUDY",
+        label: t("categories.study"),
+        count: categoryCounts.STUDY,
+      },
+      {
+        value: "COURSE",
+        label: t("categories.course"),
+        count: categoryCounts.COURSE,
+      },
+    ],
+    [categoryCounts, t],
+  );
+
   const columns = useMemo<ColumnDef<AppTableFeatures, TimelineItemRow>[]>(
     () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            aria-label={t("bulk.selected")}
+            className="translate-y-0.5"
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(Boolean(value))
+            }
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            aria-label={t("bulk.selected")}
+            className="translate-y-0.5"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(Boolean(value))}
+          />
+        ),
+        enableHiding: false,
+        enableSorting: false,
+        size: 40,
+      },
       {
         accessorKey: "title",
         header: ({ column }) => (
@@ -237,17 +331,23 @@ export const TimelineList: FC<TimelineListProps> = ({
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnCategory")} />
         ),
-        meta: {
-          label: t("columnCategory"),
-          placeholder: "Search category...",
-          variant: "text",
+        enableColumnFilter: false,
+        cell: ({ row }) => {
+          const cat = row.original.category;
+          const badgeStyle =
+            CATEGORY_STYLES[cat] ??
+            "bg-muted text-muted-foreground border-border";
+          return (
+            <span
+              className={cn(
+                "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium tracking-wide",
+                badgeStyle,
+              )}
+            >
+              {getCategoryLabel(t, cat)}
+            </span>
+          );
         },
-        enableColumnFilter: true,
-        cell: ({ row }) => (
-          <span className="text-muted-foreground text-xs tracking-wide uppercase">
-            {row.original.category.toLowerCase()}
-          </span>
-        ),
       },
       {
         accessorKey: "startDate",
@@ -258,7 +358,7 @@ export const TimelineList: FC<TimelineListProps> = ({
             className="text-muted-foreground h-auto p-0 text-xs font-semibold tracking-wide uppercase"
           >
             {t("columnPeriod")}
-            <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
+            <ArrowUpDown className="ml-1 size-3.5" />
           </Button>
         ),
         accessorFn: (row) => {
@@ -266,7 +366,7 @@ export const TimelineList: FC<TimelineListProps> = ({
           return startDate ? startDate.getTime() : 0;
         },
         cell: ({ row }) => (
-          <span className="text-muted-foreground text-xs">
+          <span className="text-muted-foreground text-xs whitespace-nowrap tabular-nums">
             {getDateLabel(row.original)}
           </span>
         ),
@@ -281,6 +381,29 @@ export const TimelineList: FC<TimelineListProps> = ({
             {row.original.location ?? "-"}
           </span>
         ),
+      },
+      {
+        id: "languages",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} label={t("columnLanguages")} />
+        ),
+        cell: ({ row }) => {
+          const item = row.original;
+          const statuses = languages.map((lang) => {
+            const tr = item.translations?.[lang.id];
+            const status = computeTranslationStatus(tr, [
+              "title",
+              "description",
+            ]);
+            return {
+              code: lang.code,
+              name: lang.name,
+              status,
+            };
+          });
+
+          return <LanguageStatusBadge languages={statuses} />;
+        },
       },
       {
         id: "images",
@@ -304,7 +427,7 @@ export const TimelineList: FC<TimelineListProps> = ({
                 />
               </div>
               {images.length > 1 ? (
-                <span className="text-muted-foreground text-xs">
+                <span className="text-muted-foreground text-xs tabular-nums">
                   +{images.length - 1}
                 </span>
               ) : null}
@@ -321,12 +444,16 @@ export const TimelineList: FC<TimelineListProps> = ({
         cell: ({ row }) => {
           const item = row.original;
           return (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
               <Link
                 href={`/admin/timeline/${item.id}/edit`}
-                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "sm" }),
+                  "h-8 gap-1.5 px-2.5 text-xs font-medium",
+                )}
               >
-                <Pencil className="h-3 w-3" /> {t("edit")}
+                <Pencil className="size-3.5" />
+                <span>{t("edit")}</span>
               </Link>
 
               <Button
@@ -336,12 +463,12 @@ export const TimelineList: FC<TimelineListProps> = ({
                 type="button"
                 aria-label={t("delete")}
                 onClick={() => handleDelete(item.id)}
-                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
+                className="text-muted-foreground hover:bg-destructive/15 hover:text-destructive size-8 rounded-lg"
               >
                 {deletingId === item.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="size-4 animate-spin" />
                 ) : (
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="size-4" />
                 )}
               </Button>
             </div>
@@ -374,10 +501,49 @@ export const TimelineList: FC<TimelineListProps> = ({
     shallow: true,
   });
 
+  const selectedRows = table.getFilteredSelectedRowModel().rows;
+  const selectedCount = selectedRows.length;
+  const selectedIds = useMemo(
+    () => selectedRows.map((r) => r.original.id),
+    [selectedRows],
+  );
+
+  const handleBulkDelete = useCallback(() => {
+    if (selectedIds.length === 0) return;
+    startTransition(async () => {
+      try {
+        await Promise.all(
+          selectedIds.map((id) => deleteItem.mutateAsync({ id })),
+        );
+        toast.success(t("bulk.deleteConfirmTitle"));
+        table.resetRowSelection();
+        await utils.timelineAdmin.getMine.invalidate();
+      } catch {
+        toast.error(t("deleteError"));
+      }
+    });
+  }, [deleteItem, selectedIds, t, table, utils]);
+
+  const bulkBar = useMemo(() => {
+    if (selectedCount === 0) return null;
+    return (
+      <DataTableBulkBar
+        selectedCount={selectedCount}
+        onClearSelection={() => table.resetRowSelection()}
+        onDeleteSelected={handleBulkDelete}
+        isDeleting={isPending}
+        selectedText={t("bulk.selected")}
+        clearText={t("bulk.clear")}
+        deleteText={t("bulk.delete")}
+      />
+    );
+  }, [selectedCount, table, handleBulkDelete, isPending, t]);
+
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="relative flex h-full flex-col gap-3">
       <DataTableFetchingIndicator isFetching={isFetching} />
-      <DataTable table={table}>
+
+      <div className="flex flex-col gap-2">
         <DataTableToolbar table={table}>
           <div className="flex flex-wrap items-center gap-2">
             <ExportSeedJsonButton entity="timeline" />
@@ -386,12 +552,24 @@ export const TimelineList: FC<TimelineListProps> = ({
               href="/admin/timeline/new"
               className={buttonVariants()}
             >
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="mr-2 size-4" />
               {t("addNew")}
             </Link>
           </div>
         </DataTableToolbar>
-      </DataTable>
+
+        <div className="overflow-x-auto pb-1">
+          <DataTableCategoryChips
+            chips={categories}
+            value={catFilter ?? "all"}
+            onChange={(val) => {
+              void setCatFilter(val === "all" ? null : val);
+            }}
+          />
+        </div>
+      </div>
+
+      <DataTable table={table} bulkBar={bulkBar} />
     </div>
   );
 };

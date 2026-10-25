@@ -72,6 +72,25 @@ jest.mock("@/trpc/react", () => ({
       deleteItem: {
         useMutation: () => ({ mutateAsync: mockDelete }),
       },
+      deleteMany: {
+        useMutation: () => ({
+          mutateAsync: jest.fn().mockResolvedValue({ count: 1 }),
+        }),
+      },
+    },
+    appLanguagesAdmin: {
+      getAll: {
+        useQuery: () => ({
+          data: [
+            {
+              id: "l1",
+              code: "en",
+              name: "English",
+              isDefault: true,
+            },
+          ],
+        }),
+      },
     },
   },
 }));
@@ -104,8 +123,8 @@ describe("SkillsList", () => {
     renderWithIntl(<SkillsList {...defaultProps} />);
     expect(screen.getByText("Node.js")).toBeInTheDocument();
     // Both FRONTEND and BACKEND appear as type cells
-    expect(screen.getByText("FRONTEND")).toBeInTheDocument();
-    expect(screen.getByText("BACKEND")).toBeInTheDocument();
+    expect(screen.getAllByText("FRONTEND").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("BACKEND").length).toBeGreaterThanOrEqual(1);
   });
 
   it("triggers deletion on delete button click", async () => {
@@ -118,4 +137,26 @@ describe("SkillsList", () => {
       expect(mockDelete).toHaveBeenCalled();
     });
   }, 30000);
+
+  it("renders category chips using canonical pill tabs", () => {
+    renderWithIntl(<SkillsList {...defaultProps} />);
+    expect(screen.getByRole("tab", { name: /all/i })).toBeInTheDocument();
+  });
+
+  it("shows bulk bar when rows are selected", () => {
+    renderWithIntl(<SkillsList {...defaultProps} />);
+
+    const selectAllCheckbox = screen.getByRole("checkbox", {
+      name: /select all/i,
+    });
+    fireEvent.click(selectAllCheckbox);
+
+    expect(screen.getAllByText(/selected/i).length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getByRole("button", { name: /clear selection/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /delete selected/i }),
+    ).toBeInTheDocument();
+  });
 });

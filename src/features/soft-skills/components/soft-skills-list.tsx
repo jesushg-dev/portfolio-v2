@@ -13,11 +13,17 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { DataTableBulkBar } from "@/components/shared/data-table/data-table-bulk-bar";
+import {
+  LanguageStatusBadge,
+  computeTranslationStatus,
+} from "@/components/shared/data-table/language-status-badge";
 import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { resolveSoftSkillIcon } from "@/features/soft-skills/lib/soft-skill-icons";
+import { DynamicIcon } from "@/components/shared/dynamic-icon";
 import { getSoftSkillTranslationText } from "@/features/soft-skills/lib/soft-skill-editor-dto";
 import type { RouterOutputs } from "@/trpc/react";
 import type { AppLanguage } from "@prisma/client";
@@ -46,12 +52,14 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
 
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState("sort", getSortingStateParser<SoftSkillRow>());
   const [titleFilter] = useQueryState("title");
+
   const parsedFilters = useMemo((): FilterItemSchema[] => {
     const f: FilterItemSchema[] = [];
     if (titleFilter) {
@@ -84,6 +92,7 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
   );
 
   const deleteItem = api.softSkillsAdmin.deleteItem.useMutation();
+  const deleteManyItems = api.softSkillsAdmin.deleteMany.useMutation();
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -106,18 +115,45 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
   const columns = useMemo<ColumnDef<AppTableFeatures, SoftSkillRow>[]>(
     () => [
       {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            aria-label="Select all"
+            className="translate-y-0.5"
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            aria-label="Select row"
+            className="translate-y-0.5"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+          />
+        ),
+        enableHiding: false,
+        enableSorting: false,
+        size: 40,
+      },
+      {
         accessorKey: "icon",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnIcon")} />
         ),
-        cell: ({ row }) => {
-          const Icon = resolveSoftSkillIcon(row.original.icon);
-          return (
-            <div className="border-border bg-muted/40 flex h-10 w-10 items-center justify-center rounded-full border">
-              <Icon className="text-primary h-5 w-5" />
-            </div>
-          );
-        },
+        cell: ({ row }) => (
+          <div className="border-border bg-muted/40 flex size-9 items-center justify-center rounded-lg border">
+            <DynamicIcon
+              name={row.original.icon}
+              className="text-primary size-4"
+            />
+          </div>
+        ),
       },
       {
         accessorKey: "title",
@@ -147,16 +183,42 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
 
           return (
             <div className="space-y-0.5">
-              <p className="text-foreground font-medium">
+              <p className="text-foreground text-sm leading-tight font-semibold">
                 {titleText || t("untitled")}
               </p>
               {descriptionText ? (
-                <p className="text-muted-foreground line-clamp-2 text-xs">
+                <p className="text-muted-foreground line-clamp-1 text-xs">
                   {descriptionText}
                 </p>
               ) : null}
             </div>
           );
+        },
+      },
+      {
+        id: "languages",
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            label={t("columnLanguages") || "Languages"}
+          />
+        ),
+        cell: ({ row }) => {
+          const softSkill = row.original;
+          const statuses = languages.map((lang) => {
+            const tr = softSkill.translations?.[lang.id];
+            const status = computeTranslationStatus(tr, [
+              "title",
+              "description",
+            ]);
+            return {
+              code: lang.code,
+              name: lang.name,
+              status,
+            };
+          });
+
+          return <LanguageStatusBadge languages={statuses} />;
         },
       },
       {
@@ -228,10 +290,49 @@ export const SoftSkillsList: FC<SoftSkillsListProps> = ({
     shallow: true,
   });
 
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+
+  const handleBulkDelete = useCallback(() => {
+    const ids = table
+      .getFilteredSelectedRowModel()
+      .rows.map((r) => r.original.id);
+    if (ids.length === 0) return;
+
+    const confirmMsg = t("bulk.deleteConfirm", { count: ids.length });
+    if (!window.confirm(confirmMsg)) return;
+
+    startTransition(async () => {
+      setIsBulkDeleting(true);
+      try {
+        await deleteManyItems.mutateAsync({ ids });
+        toast.success(t("bulk.deleteSuccess", { count: ids.length }));
+        table.resetRowSelection();
+        await utils.softSkillsAdmin.getMine.invalidate();
+      } catch {
+        toast.error(t("bulk.deleteError"));
+      } finally {
+        setIsBulkDeleting(false);
+      }
+    });
+  }, [deleteManyItems, t, table, utils]);
+
   return (
     <div className="relative flex h-full flex-col">
       <DataTableFetchingIndicator isFetching={isFetching} />
-      <DataTable table={table}>
+      <DataTable
+        table={table}
+        bulkBar={
+          <DataTableBulkBar
+            selectedCount={selectedCount}
+            onClearSelection={() => table.resetRowSelection()}
+            onDeleteSelected={handleBulkDelete}
+            isDeleting={isBulkDeleting}
+            clearLabel={t("bulk.clear")}
+            deleteLabel={t("bulk.delete")}
+            selectedLabel={t("bulk.selected", { count: selectedCount })}
+          />
+        }
+      >
         <DataTableToolbar table={table}>
           <div className="flex flex-wrap items-center gap-2">
             <Link

@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import type { AppTableFeatures } from "@/lib/app-table-features";
-import { Plus, Pencil, Trash2, Loader2, Globe, Mail } from "lucide-react";
+import { Plus, Pencil, Trash2, Globe, Mail } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
@@ -15,8 +15,18 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { DataTableBulkBar } from "@/components/shared/data-table/data-table-bulk-bar";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { getSortingStateParser } from "@/lib/parsers";
 import type { FilterItemSchema } from "@/lib/parsers";
 
@@ -36,8 +46,15 @@ export const CompaniesList: FC<CompaniesListProps> = ({
 }) => {
   const t = useTranslations("admin.jobTracker");
   const utils = api.useUtils();
-  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  const [pendingDeleteCompany, setPendingDeleteCompany] =
+    useState<CompanyRow | null>(null);
+  const [cannotDeleteCompany, setCannotDeleteCompany] =
+    useState<CompanyRow | null>(null);
+  const [pendingBulkDelete, setPendingBulkDelete] = useState<
+    CompanyRow[] | null
+  >(null);
 
   const [page] = useQueryState("companiesPage", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState(
@@ -93,28 +110,81 @@ export const CompaniesList: FC<CompaniesListProps> = ({
   );
 
   const deleteCompany = api.jobTrackerAdmin.deleteCompany.useMutation();
+  const deleteManyCompanies =
+    api.jobTrackerAdmin.deleteManyCompanies.useMutation();
 
-  const handleDelete = useCallback(
-    (id: string) => {
-      startTransition(async () => {
-        setDeletingId(id);
-        try {
-          await deleteCompany.mutateAsync({ id });
-          toast.success(t("deleteCompanySuccess"));
-          await utils.jobTrackerAdmin.getCompanies.invalidate();
-          await utils.jobTrackerAdmin.getDashboardStats.invalidate();
-        } catch {
-          toast.error(t("deleteCompanyError"));
-        } finally {
-          setDeletingId(null);
-        }
-      });
+  const handleRequestDelete = useCallback((company: CompanyRow) => {
+    if (company.applicationsCount && company.applicationsCount > 0) {
+      setCannotDeleteCompany(company);
+    } else {
+      setPendingDeleteCompany(company);
+    }
+  }, []);
+
+  const handleConfirmSingleDelete = useCallback(() => {
+    if (!pendingDeleteCompany) return;
+    const companyId = pendingDeleteCompany.id;
+    startTransition(async () => {
+      try {
+        await deleteCompany.mutateAsync({ id: companyId });
+        toast.success(t("deleteCompanySuccess"));
+        setPendingDeleteCompany(null);
+        await Promise.all([
+          utils.jobTrackerAdmin.getCompanies.invalidate(),
+          utils.jobTrackerAdmin.getDashboardStats.invalidate(),
+        ]);
+      } catch {
+        toast.error(t("deleteCompanyError"));
+      }
+    });
+  }, [deleteCompany, pendingDeleteCompany, t, utils]);
+
+  const handleRequestBulkDelete = useCallback(
+    (selectedRows: CompanyRow[]) => {
+      const companiesWithApps = selectedRows.filter(
+        (c) => c.applicationsCount && c.applicationsCount > 0,
+      );
+      if (companiesWithApps.length > 0) {
+        const totalApps = companiesWithApps.reduce(
+          (acc, c) => acc + (c.applicationsCount ?? 0),
+          0,
+        );
+        toast.error(t("cannotDeleteWithApps", { count: totalApps }));
+        return;
+      }
+      setPendingBulkDelete(selectedRows);
     },
-    [deleteCompany, t, utils],
+    [t],
   );
 
   const columns = useMemo<ColumnDef<AppTableFeatures, CompanyRow>[]>(
     () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label={t("columnActions")}
+            className="translate-y-0.5"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label={row.original.name}
+            className="translate-y-0.5"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
       {
         id: "name",
         accessorKey: "name",
@@ -127,16 +197,26 @@ export const CompaniesList: FC<CompaniesListProps> = ({
           variant: "text",
         },
         enableColumnFilter: true,
-        cell: ({ row }) => (
-          <div>
-            <p className="text-foreground font-medium">{row.original.name}</p>
-            {row.original.location ? (
-              <p className="text-muted-foreground text-xs">
-                {row.original.location}
-              </p>
-            ) : null}
-          </div>
-        ),
+        cell: ({ row }) => {
+          const appCount = row.original.applicationsCount ?? 0;
+          return (
+            <div>
+              <p className="text-foreground font-medium">{row.original.name}</p>
+              {appCount > 0 ? (
+                <p className="text-muted-foreground text-xs">
+                  {appCount}{" "}
+                  {appCount === 1
+                    ? t("singleApplicationCount")
+                    : t("multipleApplicationsCount")}
+                </p>
+              ) : row.original.location ? (
+                <p className="text-muted-foreground text-xs">
+                  {row.original.location}
+                </p>
+              ) : null}
+            </div>
+          );
+        },
       },
       {
         id: "email",
@@ -152,12 +232,12 @@ export const CompaniesList: FC<CompaniesListProps> = ({
         enableColumnFilter: true,
         cell: ({ row }) =>
           row.original.email ? (
-            <div className="text-muted-foreground flex items-center gap-1 text-sm">
-              <Mail className="h-3 w-3" />
+            <div className="text-muted-foreground flex items-center gap-1.5 text-sm">
+              <Mail className="size-3.5" />
               {row.original.email}
             </div>
           ) : (
-            <span className="text-muted-foreground text-sm">-</span>
+            <span className="text-muted-foreground text-sm">—</span>
           ),
       },
       {
@@ -170,7 +250,7 @@ export const CompaniesList: FC<CompaniesListProps> = ({
           const hasWebsite = Boolean(row.original.website);
           const hasLinkedin = Boolean(row.original.linkedinUrl);
           if (!hasWebsite && !hasLinkedin) {
-            return <span className="text-muted-foreground text-sm">-</span>;
+            return <span className="text-muted-foreground text-sm">—</span>;
           }
           return (
             <div className="flex flex-wrap items-center gap-3">
@@ -181,7 +261,7 @@ export const CompaniesList: FC<CompaniesListProps> = ({
                   rel="noopener noreferrer"
                   className="text-primary flex items-center gap-1 text-sm hover:underline"
                 >
-                  <Globe className="h-3 w-3" />
+                  <Globe className="size-3.5" />
                   {t("websiteLink")}
                 </a>
               ) : null}
@@ -192,7 +272,7 @@ export const CompaniesList: FC<CompaniesListProps> = ({
                   rel="noopener noreferrer"
                   className="text-primary flex items-center gap-1 text-sm hover:underline"
                 >
-                  <FaLinkedin className="size-3" />
+                  <FaLinkedin className="size-3.5" />
                   LinkedIn
                 </a>
               ) : null}
@@ -207,37 +287,33 @@ export const CompaniesList: FC<CompaniesListProps> = ({
         cell: ({ row }) => {
           const company = row.original;
           return (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <Link
                 href={{
                   pathname: "/admin/job-tracker/companies/[id]/edit",
                   params: { id: company.id },
                 }}
-                className="bg-muted text-foreground hover:bg-accent hover:text-accent-foreground inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap"
+                className={buttonVariants({ variant: "ghost", size: "sm" })}
               >
-                <Pencil className="h-3 w-3" /> {t("edit")}
+                <Pencil className="mr-1 size-3.5" /> {t("edit")}
               </Link>
               <Button
-                disabled={isPending || deletingId === company.id}
+                disabled={isPending}
                 variant="ghost"
                 size="icon"
                 type="button"
                 aria-label={t("delete")}
-                onClick={() => handleDelete(company.id)}
-                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 rounded"
+                onClick={() => handleRequestDelete(company)}
+                className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive size-8"
               >
-                {deletingId === company.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Trash2 className="h-4 w-4" />
-                )}
+                <Trash2 className="size-4" />
               </Button>
             </div>
           );
         },
       },
     ],
-    [deletingId, handleDelete, isPending, t],
+    [handleRequestDelete, isPending, t],
   );
 
   const { table } = useDataTable({
@@ -260,21 +336,152 @@ export const CompaniesList: FC<CompaniesListProps> = ({
     shallow: true,
   });
 
+  const selectedRows = table.getSelectedRowModel().rows.map((r) => r.original);
+
+  const handleConfirmBulkDelete = useCallback(() => {
+    if (!pendingBulkDelete || pendingBulkDelete.length === 0) return;
+    const ids = pendingBulkDelete.map((c) => c.id);
+    startTransition(async () => {
+      try {
+        await deleteManyCompanies.mutateAsync({ ids });
+        toast.success(t("deleteManySuccess"));
+        setPendingBulkDelete(null);
+        table.resetRowSelection();
+        await Promise.all([
+          utils.jobTrackerAdmin.getCompanies.invalidate(),
+          utils.jobTrackerAdmin.getDashboardStats.invalidate(),
+        ]);
+      } catch {
+        toast.error(t("deleteManyError"));
+      }
+    });
+  }, [deleteManyCompanies, pendingBulkDelete, t, table, utils]);
+
   return (
     <div className="relative flex h-full min-h-0 flex-col overflow-auto">
       <DataTableFetchingIndicator isFetching={isFetching} />
-      <DataTable table={table}>
+      <DataTable
+        table={table}
+        bulkBar={
+          <DataTableBulkBar
+            selectedCount={selectedRows.length}
+            onClearSelection={() => table.resetRowSelection()}
+            onDeleteSelected={() => handleRequestBulkDelete(selectedRows)}
+            isDeleting={isPending}
+          />
+        }
+      >
         <DataTableToolbar table={table}>
           <Link
             id="companies-add"
             href="/admin/job-tracker/companies/new"
             className={buttonVariants({ variant: "outline" })}
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="mr-1.5 size-4" />
             {t("newCompany")}
           </Link>
         </DataTableToolbar>
       </DataTable>
+
+      {/* Cannot delete dialog (company has active applications) */}
+      <Dialog
+        open={Boolean(cannotDeleteCompany)}
+        onOpenChange={(open) => !open && setCannotDeleteCompany(null)}
+      >
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("cannotDeleteTitle")}</DialogTitle>
+            <DialogDescription>
+              {cannotDeleteCompany
+                ? t("cannotDeleteWithApps", {
+                    count: cannotDeleteCompany.applicationsCount ?? 0,
+                  })
+                : null}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="default"
+              onClick={() => setCannotDeleteCompany(null)}
+            >
+              {t("close")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirm single delete dialog */}
+      <Dialog
+        open={Boolean(pendingDeleteCompany)}
+        onOpenChange={(open) => !open && setPendingDeleteCompany(null)}
+      >
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("deleteConfirmTitle")}</DialogTitle>
+            <DialogDescription>
+              {pendingDeleteCompany
+                ? t("deleteConfirmMessage", { name: pendingDeleteCompany.name })
+                : null}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isPending}
+              onClick={() => setPendingDeleteCompany(null)}
+            >
+              {t("timeline.cancel")}
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              disabled={isPending}
+              onClick={handleConfirmSingleDelete}
+            >
+              {t("delete")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirm bulk delete dialog */}
+      <Dialog
+        open={Boolean(pendingBulkDelete)}
+        onOpenChange={(open) => !open && setPendingBulkDelete(null)}
+      >
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("deleteManyConfirmTitle")}</DialogTitle>
+            <DialogDescription>
+              {pendingBulkDelete
+                ? t("deleteManyConfirmMessage", {
+                    count: pendingBulkDelete.length,
+                  })
+                : null}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isPending}
+              onClick={() => setPendingBulkDelete(null)}
+            >
+              {t("timeline.cancel")}
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              disabled={isPending}
+              onClick={handleConfirmBulkDelete}
+            >
+              {t("delete")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

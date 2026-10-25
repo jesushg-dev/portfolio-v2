@@ -201,6 +201,33 @@ export const certificationsAdminRouter = createTRPCRouter({
         return tx.certification.delete({ where: { id: input.id } });
       });
     }),
+  deleteMany: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      if (input.ids.length === 0) return { count: 0 };
+      const items = await ctx.db.certification.findMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        select: { id: true },
+      });
+      const ids = items.map((i) => i.id);
+      if (ids.length === 0) return { count: 0 };
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.certificateSkill.deleteMany({
+          where: { certificationId: { in: ids } },
+        });
+        await tx.certificateProject.deleteMany({
+          where: { certificationId: { in: ids } },
+        });
+        await tx.certificateService.deleteMany({
+          where: { certificationId: { in: ids } },
+        });
+        await tx.certificationTranslation.deleteMany({
+          where: { certificationId: { in: ids } },
+        });
+        return tx.certification.deleteMany({ where: { id: { in: ids } } });
+      });
+    }),
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     const items = await ctx.db.certification.findMany({
       where: { userId: ctx.user.id },

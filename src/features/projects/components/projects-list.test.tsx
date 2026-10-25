@@ -90,6 +90,11 @@ jest.mock("@/trpc/react", () => ({
       deleteItem: {
         useMutation: () => ({ mutateAsync: mockDelete }),
       },
+      deleteMany: {
+        useMutation: () => ({
+          mutateAsync: jest.fn().mockResolvedValue({ count: 1 }),
+        }),
+      },
     },
   },
 }));

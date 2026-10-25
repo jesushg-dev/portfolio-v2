@@ -221,6 +221,11 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           orderBy,
           skip,
           take,
+          include: {
+            _count: {
+              select: { applications: true },
+            },
+          },
         }),
         ctx.db.company.count({ where }),
       ]);
@@ -387,9 +392,36 @@ export const jobTrackerAdminRouter = createTRPCRouter({
   deleteCompany: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const appCount = await ctx.db.application.count({
+        where: { companyId: input.id, userId: ctx.user.id },
+      });
+      if (appCount > 0) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "COMPANY_HAS_APPLICATIONS",
+        });
+      }
       return ctx.db.company.delete({
         where: { id: input.id, userId: ctx.user.id },
       });
+    }),
+
+  deleteManyCompanies: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()).min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const appCount = await ctx.db.application.count({
+        where: { companyId: { in: input.ids }, userId: ctx.user.id },
+      });
+      if (appCount > 0) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "COMPANY_HAS_APPLICATIONS",
+        });
+      }
+      const result = await ctx.db.company.deleteMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+      });
+      return { count: result.count };
     }),
 
   importFromUrl: protectedProcedure
