@@ -10,9 +10,12 @@ import {
   Loader2,
   Award,
   ExternalLink,
+  Eye,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+
+import { ImageLightbox } from "@/components/shared/image-lightbox";
 
 import { api, type RouterOutputs } from "@/trpc/react";
 import { toast } from "sonner";
@@ -84,6 +87,13 @@ export const CertificationsList: FC<CertificationsListProps> = ({
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [previewCert, setPreviewCert] = useState<{
+    image: string;
+    title: string;
+    company?: string;
+    issuedDate?: string | null;
+    url?: string | null;
+  } | null>(null);
 
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
@@ -265,18 +275,36 @@ export const CertificationsList: FC<CertificationsListProps> = ({
           const title = field(cert.translations, "title") || t("untitled");
           return (
             <div className="flex items-center gap-3">
-              <div className="bg-muted border-border flex size-9 shrink-0 items-center justify-center rounded-lg border">
-                {cert.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
+              {cert.image ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPreviewCert({
+                      image: cert.image!,
+                      title,
+                      company: cert.company,
+                      issuedDate: cert.issuedDate,
+                      url: cert.url,
+                    })
+                  }
+                  className="group border-border bg-muted/60 hover:border-primary/60 hover:shadow-xs relative flex size-10 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border transition-all"
+                  title="Click to view image"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={cert.image}
-                    alt=""
-                    className="size-5 object-contain"
+                    alt={title}
+                    className="size-full object-contain transition-transform group-hover:scale-105"
                   />
-                ) : (
-                  <Award className="text-muted-foreground size-4" />
-                )}
-              </div>
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                    <Eye className="size-3.5 text-white" />
+                  </div>
+                </button>
+              ) : (
+                <div className="bg-muted border-border flex size-10 shrink-0 items-center justify-center rounded-lg border">
+                  <Award className="text-muted-foreground size-5" />
+                </div>
+              )}
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <p className="text-foreground text-sm leading-tight font-semibold">
@@ -528,6 +556,42 @@ export const CertificationsList: FC<CertificationsListProps> = ({
           onChange={handleCategoryChange}
         />
       </DataTable>
+
+      <ImageLightbox
+        isOpen={Boolean(previewCert)}
+        onClose={() => setPreviewCert(null)}
+        src={previewCert?.image ?? ""}
+        alt={previewCert?.title ?? ""}
+        title={
+          <div className="flex items-center gap-2">
+            <Award className="text-primary size-5" />
+            <span className="font-semibold">{previewCert?.title}</span>
+          </div>
+        }
+        subtitle={
+          previewCert?.company ? (
+            <div className="text-muted-foreground mt-1 flex items-center gap-2 text-xs">
+              <span className="border-border/60 bg-muted/40 text-foreground inline-flex items-center gap-1 rounded-md border px-2 py-0.5 font-semibold">
+                {previewCert.company}
+              </span>
+              {previewCert.issuedDate && <span>· {previewCert.issuedDate}</span>}
+            </div>
+          ) : undefined
+        }
+        footer={
+          previewCert?.url ? (
+            <a
+              href={previewCert.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <ExternalLink className="mr-1.5 size-3.5" />
+              {t("verifyCredential") || "Verify Credential"}
+            </a>
+          ) : undefined
+        }
+      />
     </div>
   );
 };

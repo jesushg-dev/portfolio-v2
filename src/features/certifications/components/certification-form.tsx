@@ -9,11 +9,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 
+import { Award, Eye } from "lucide-react";
+
 import { api } from "@/trpc/react";
 import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ImageLightbox } from "@/components/shared/image-lightbox";
 import { SkillPicker } from "@/components/admin/skill-picker";
 import {
   FormActions,
@@ -91,6 +94,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [activeTab, setActiveTab] = useState("general");
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const primaryLang = useMemo(
     () => resolvePrimaryLanguage(languages),
@@ -165,6 +169,10 @@ export const CertificationForm: FC<CertificationFormProps> = ({
   const watchedTypes = useWatch({
     control: form.control,
     name: "type",
+  });
+  const watchedImage = useWatch({
+    control: form.control,
+    name: "image",
   });
 
   const languageProgress = useMemo<LanguageProgress[]>(() => {
@@ -379,15 +387,53 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem label={t("imageUrl")} inputId="certification-image">
-                    <Input placeholder={t("imageUrlPlaceholder")} {...field} />
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-3">
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem label={t("imageUrl")} inputId="certification-image">
+                      <Input placeholder={t("imageUrlPlaceholder")} {...field} />
+                    </FormItem>
+                  )}
+                />
+                {watchedImage ? (
+                  <div className="border-border bg-muted/30 flex items-center gap-4 rounded-xl border p-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsPreviewOpen(true)}
+                      className="group border-border bg-card hover:border-primary/60 relative flex size-16 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-lg border transition-all"
+                      title="Click to expand"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={watchedImage}
+                        alt="Certificate Preview"
+                        className="size-full object-contain p-1 transition-transform group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                        <Eye className="size-4 text-white" />
+                      </div>
+                    </button>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-foreground text-xs font-semibold">
+                        {t("previewTitle") || "Vista previa del certificado"}
+                      </p>
+                      <p className="text-muted-foreground truncate font-mono text-xs">
+                        {watchedImage}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setIsPreviewOpen(true)}
+                        className="text-primary mt-1 inline-flex cursor-pointer items-center gap-1 text-xs hover:underline"
+                      >
+                        <Eye className="size-3" />
+                        <span>{t("viewFullImage") || "Ver imagen completa"}</span>
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
 
               <div className="space-y-2">
                 <span className="text-foreground text-sm font-medium">
@@ -522,6 +568,30 @@ export const CertificationForm: FC<CertificationFormProps> = ({
           </Button>
         </FormActions>
       </FormRoot>
+
+      <ImageLightbox
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        src={watchedImage || ""}
+        alt="Certificate Preview"
+        title={
+          <div className="flex items-center gap-2">
+            <Award className="text-primary size-5" />
+            <span className="font-semibold">
+              {form.getValues(`translations.${activeLangId}.title`) ||
+                t("previewTitle") ||
+                "Certificate"}
+            </span>
+          </div>
+        }
+        subtitle={
+          form.getValues("company") ? (
+            <span className="text-muted-foreground text-xs">
+              {form.getValues("company")}
+            </span>
+          ) : undefined
+        }
+      />
     </Form>
   );
 };
