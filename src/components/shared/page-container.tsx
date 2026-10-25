@@ -13,6 +13,13 @@ import {
 } from "@/components/ui/card";
 import { Dialog } from "@/components/ui/dialog";
 import { FormDialogContent } from "@/components/shared/form-dialog-content";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 type FooterAction = ReactNode;
 
@@ -83,5 +90,37 @@ export const PageDialogWrapper = ({
         {children}
       </FormDialogContent>
     </Dialog>
+  );
+};
+
+export const PageSheetWrapper = ({
+  title,
+  description,
+  children,
+}: PageBase) => {
+  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(true);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setTimeout(() => router.back(), 300);
+  };
+
+  return (
+    <Sheet open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+      <SheetContent side="right" className="sm:max-w-5xl">
+        <SheetHeader className="shrink-0 border-b pr-8 pb-4">
+          <SheetTitle className="text-base font-semibold">{title}</SheetTitle>
+          {description && (
+            <SheetDescription className="text-muted-foreground text-sm">
+              {description}
+            </SheetDescription>
+          )}
+        </SheetHeader>
+        <div className="flex min-h-0 flex-1 flex-col p-[0.0625rem]">
+          {children}
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 };

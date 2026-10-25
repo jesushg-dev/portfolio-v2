@@ -37,13 +37,12 @@ ALWAYS purge legacy assets completely and refactor to clean modern implementatio
 
 Do not invent custom `<button>` groups, segmented controls, or hand-rolled tab bars (`<div role="group">{TYPES.map(...)}</div>`).
 
-### ✅ ALWAYS use the EXACT 2 canonical tab systems:
+### ✅ Use only these two visual styles:
 
-1. **Public / Portfolio Tabs (`@/components/custom-ui/custom-tab`):**
-   - **Design 1 (Pill / Filters):** `minimal={true}`. Rounded pill format with sliding indicator, glow, and icon. Single source of truth for public filters (Home Portfolio, `/projects` catalog).
-   - **Design 2 (Card / Detailed):** `minimal={false}`. Structured card tabs with large icon, title, and description (Services, CV, Experience).
-2. **Admin & Forms Tabs (`@/components/ui/tabs`):**
-   - Base UI / Shadcn tabs (`Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`) exclusively for admin consoles and form dialogs.
+1. **Line tabs:** `@/components/ui/tabs` with `TabsList variant="line"` (the default). Use for admin sections and forms. The active tab has a bottom underline and accent text.
+2. **Pill tabs:** `@/components/custom-ui/custom-tab` for public portfolio filters, or `@/components/ui/tabs` with `TabsList variant="pill"` for admin filters. The active tab has a rounded outline and the public component keeps its sliding indicator.
+
+Keep layout classes (width, overflow, spacing) at call sites; keep tab shape, colors, active state, and indicator styling inside the canonical components. Do not add card tabs, segmented tabs, or new visual variants.
 
 # Universal Icon System & Selector — Canonical Component: UniversalIconPicker & DynamicIcon
 

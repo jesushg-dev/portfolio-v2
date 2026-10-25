@@ -22,13 +22,11 @@ import { cn } from "@/lib/utils";
 import { useTabIndicatorDrag } from "./use-tab-indicator-drag";
 
 interface ITabProps {
-  minimal?: boolean;
   vertical?: boolean;
   currentTab?: number;
   setCurrentTab?: (value: number) => void;
   children?: ReactNode;
   className?: string;
-  variant?: "primary" | "secondary";
   tabId?: string;
   ariaLabel: string;
 }
@@ -40,10 +38,8 @@ const Tab: FC<ITabProps> = ({
   },
   className,
   tabId = "",
-  minimal = false,
   currentTab = 0,
   vertical = false,
-  variant = "primary",
   ariaLabel,
 }) => {
   const tabItems = useMemo(() => {
@@ -255,7 +251,9 @@ const Tab: FC<ITabProps> = ({
   const maskStyle = useMemo(() => {
     if (vertical || (!canScrollLeft && !canScrollRight)) return undefined;
 
-    const leftStop = canScrollLeft ? "transparent, black 1.75rem" : "black 0px";
+    const leftStop = canScrollLeft
+      ? "transparent, black 1.75rem"
+      : "black 0rem";
     const rightStop = canScrollRight
       ? "black calc(100% - 1.75rem), transparent 100%"
       : "black 100%";
@@ -271,8 +269,6 @@ const Tab: FC<ITabProps> = ({
     <TabContextProvider
       tabId={tabId}
       tabCount={tabItems.length}
-      minimal={minimal}
-      variant={variant}
       vertical={vertical}
       currentTab={currentTab}
       setCurrentTab={handleTabChange}
@@ -286,7 +282,7 @@ const Tab: FC<ITabProps> = ({
           aria-label={ariaLabel}
           data-dragging={isDragging ? "" : undefined}
           className={cn(
-            "relative overflow-visible select-none",
+            "bg-background border-border text-foreground relative inline-flex max-w-full items-center justify-center gap-1 overflow-visible rounded-full border p-1 select-none",
             className,
             "overflow-visible",
           )}

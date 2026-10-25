@@ -16,11 +16,13 @@ import { type ComponentProps, type ReactNode } from "react";
 interface DataTableProps<TData extends RowData> extends ComponentProps<"div"> {
   table: ReactTable<AppTableFeatures, TData>;
   actionBar?: ReactNode;
+  bulkBar?: ReactNode;
 }
 
 export function DataTable<TData extends RowData>({
   table,
   actionBar,
+  bulkBar,
   children,
   className,
   ...props
@@ -34,6 +36,7 @@ export function DataTable<TData extends RowData>({
       {...props}
     >
       {children}
+      {bulkBar}
       <div className="bg-card text-card-foreground border-border min-h-0 flex-1 overflow-auto rounded-md border">
         <Table>
           <TableHeader>
