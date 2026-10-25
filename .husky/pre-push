@@ -1,2 +1,2 @@
-pnpm test
-pnpm test:a11y
+npm test
+npm run test:a11y

@@ -10,7 +10,6 @@ export interface TabItemProps {
   index?: number;
   icon: IconComponent | IconType;
   title: string;
-  description: string;
   /** A stable results panel shared by filter tabs, when content is reused. */
   panelId?: string;
 }
@@ -19,17 +18,10 @@ const TabItem: FC<TabItemProps> = ({
   index = -1,
   icon: Icon,
   title,
-  description,
   panelId,
 }) => {
-  const {
-    currentTab,
-    setCurrentTab,
-    minimal,
-    tabId,
-    registerTab,
-    onActivePointerDown,
-  } = useTabContext();
+  const { currentTab, setCurrentTab, tabId, registerTab, onActivePointerDown } =
+    useTabContext();
 
   const isActive = currentTab === index;
   const tabPanelId = panelId ?? `${tabId}-panel-${index}`;
@@ -49,10 +41,7 @@ const TabItem: FC<TabItemProps> = ({
   return (
     <div
       ref={setTabNode}
-      className={cn(
-        "relative isolate z-10 shrink-0 snap-start",
-        minimal && "min-w-18 sm:min-w-0",
-      )}
+      className="relative isolate z-10 min-w-18 shrink-0 snap-start sm:min-w-0"
     >
       <button
         type="button"
@@ -68,10 +57,7 @@ const TabItem: FC<TabItemProps> = ({
           setCurrentTab(index);
         }}
         className={cn(
-          "group relative z-10 flex shrink-0 cursor-pointer items-center rounded-full transition-all",
-          minimal
-            ? "min-h-11 w-full min-w-11 flex-col justify-center gap-0.5 px-2.5 py-1.5 text-center sm:flex-row sm:gap-0 sm:px-5 sm:py-2 sm:text-left"
-            : "min-h-11 w-full px-4 py-2 text-left sm:p-4 sm:px-5 md:p-5",
+          "group relative z-10 flex min-h-11 w-full min-w-11 shrink-0 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-full px-2.5 py-1.5 text-center transition-all sm:flex-row sm:gap-0 sm:px-5 sm:py-2 sm:text-left",
           isActive
             ? "text-foreground touch-none"
             : "hover:bg-accent/40 touch-manipulation",
@@ -79,36 +65,20 @@ const TabItem: FC<TabItemProps> = ({
       >
         <span
           className={cn(
-            "flex items-center transition-all",
-            minimal && "flex-col sm:flex-row",
+            "flex flex-col items-center transition-all sm:flex-row",
             textClassName,
           )}
         >
           <Icon
-            className={cn(
-              "shrink-0",
-              minimal ? "size-3.5 sm:size-4.5" : "mt-2 size-6 md:size-7",
-            )}
+            className="size-3.5 shrink-0 sm:size-4.5"
             width={16}
             height={16}
             aria-hidden
           />
-          <span className={cn(minimal ? "ml-0 sm:ml-3 sm:grow" : "ml-6 grow")}>
-            <span
-              className={cn(
-                "block whitespace-nowrap",
-                minimal
-                  ? "text-[0.6875rem] leading-tight sm:text-sm"
-                  : "text-lg font-semibold",
-              )}
-            >
+          <span className="ml-0 sm:ml-3 sm:grow">
+            <span className="block text-[0.6875rem] leading-tight whitespace-nowrap sm:text-sm">
               {title}
             </span>
-            {minimal ? null : (
-              <span className="text-muted-foreground mt-1 hidden lg:block">
-                {description}
-              </span>
-            )}
           </span>
         </span>
       </button>
