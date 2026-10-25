@@ -486,7 +486,11 @@
             "short": "Profiel en filosofie",
             "headline": "Wie ik ben als engineer",
             "description": "Een overzicht van mijn profiel, hoe ik software benader en de principes achter de systemen die ik bouw.",
-            "chips": ["Profieloverzicht", "Engineering-filosofie", "Ownership"],
+            "chips": [
+              "Profieloverzicht",
+              "Engineering-filosofie",
+              "Ownership"
+            ],
             "statValue": "6+",
             "statLabel": "jaar ervaring",
             "cta": "Ga naar over mij"
@@ -510,7 +514,12 @@
             "short": ".NET, C#, microservices, cloud",
             "headline": "De stack waarmee ik dagelijks werk",
             "description": "De tools en technologieën die ik gebruik om betrouwbare productiesoftware te ontwerpen en te bouwen.",
-            "chips": [".NET", "C#", "Microservices", "Cloud"],
+            "chips": [
+              ".NET",
+              "C#",
+              "Microservices",
+              "Cloud"
+            ],
             "statValue": "4",
             "statLabel": "kerngebieden",
             "cta": "Verken technische stack"
@@ -534,7 +543,11 @@
             "short": "Teams, mentorschap, communicatie",
             "headline": "Hoe ik met mensen werk",
             "description": "Teams leiden, ontwikkelaars begeleiden en helder communiceren met product- en businesspartners.",
-            "chips": ["Teamleiderschap", "Mentorschap", "Communicatie"],
+            "chips": [
+              "Teamleiderschap",
+              "Mentorschap",
+              "Communicatie"
+            ],
             "statValue": "6",
             "statLabel": "begeleide engineers",
             "cta": "Lees leiderschapsprincipes"
@@ -544,7 +557,11 @@
             "short": "Woorden van collega's",
             "headline": "Wat collega's en leidinggevenden zeggen",
             "description": "Directe feedback en aanbevelingen van teamleden, leads en klanten over samenwerking en oplevering.",
-            "chips": ["Testimonials", "Senior developers", "Aanbevelingen"],
+            "chips": [
+              "Testimonials",
+              "Senior developers",
+              "Aanbevelingen"
+            ],
             "statValue": "100%",
             "statLabel": "positieve feedback",
             "cta": "Lees testimonials"
@@ -554,7 +571,12 @@
             "short": "Engineering-projecten en casestudies",
             "headline": "Projecten en systemen die ik heb gebouwd",
             "description": "Een selectie van systemen, API's, e-commerceplatforms en interne beheerapplicaties.",
-            "chips": ["API's", "E-commerce", "Admin platforms", "Cloud"],
+            "chips": [
+              "API's",
+              "E-commerce",
+              "Admin platforms",
+              "Cloud"
+            ],
             "statValue": "15+",
             "statLabel": "uitgelichte projecten",
             "cta": "Projecten bekijken"
@@ -564,7 +586,12 @@
             "short": "Technische referenties",
             "headline": "Geverifieerde certificeringen",
             "description": "Formele technische certificeringen in frontend, backend, cybersecurity en leiderschap.",
-            "chips": ["Frontend", "Backend", "Cybersecurity", "Soft skills"],
+            "chips": [
+              "Frontend",
+              "Backend",
+              "Cybersecurity",
+              "Soft skills"
+            ],
             "statValue": "30+",
             "statLabel": "behaalde certificaten",
             "cta": "Bekijk certificaten"
@@ -574,7 +601,11 @@
             "short": "Professioneel cv",
             "headline": "Volledig professioneel CV",
             "description": "Uitgebreid cv in modern webformaat, inclusief volledige werkervaring en PDF-download.",
-            "chips": ["Interactief CV", "PDF export", "Geverifieerde historie"],
+            "chips": [
+              "Interactief CV",
+              "PDF export",
+              "Geverifieerde historie"
+            ],
             "statValue": "2026",
             "statLabel": "actuele versie",
             "cta": "Open Curriculum Vitae"
@@ -584,7 +615,11 @@
             "short": "Carrièreverloop",
             "headline": "Carrièremijlpalen & evolutie",
             "description": "Een chronologisch overzicht van professionele mijlpalen, rollen en technische groei.",
-            "chips": ["Carrièremijlpalen", "Evolutie", "Groei"],
+            "chips": [
+              "Carrièremijlpalen",
+              "Evolutie",
+              "Groei"
+            ],
             "statValue": "6+",
             "statLabel": "jaar evolutie",
             "cta": "Bekijk tijdlijn"
@@ -594,7 +629,11 @@
             "short": "Engineering-versnelling",
             "headline": "AI-ondersteunde engineering",
             "description": "Hoe ik moderne AI-tools, agent-workflows en automatisering integreer in dagelijkse softwareontwikkeling.",
-            "chips": ["AI Tooling", "Snelheid", "Geautomatiseerde workflows"],
+            "chips": [
+              "AI Tooling",
+              "Snelheid",
+              "Geautomatiseerde workflows"
+            ],
             "statValue": "2x",
             "statLabel": "leveringssnelheid",
             "cta": "Verken AI-workflow"
@@ -618,7 +657,12 @@
             "short": "Hardware, software & setup",
             "headline": "Hardware & software die ik dagelijks gebruik",
             "description": "De hardware, werkplekconfiguratie, editors en softwaretools waar ik dagelijks op vertrouw.",
-            "chips": ["Hardware", "Werkstation", "Dev tools", "Terminal"],
+            "chips": [
+              "Hardware",
+              "Werkstation",
+              "Dev tools",
+              "Terminal"
+            ],
             "statValue": "Dagelijks",
             "statLabel": "developer tools",
             "cta": "Bekijk setup"
@@ -628,7 +672,11 @@
             "short": "Huidige focus & lezen",
             "headline": "Waar ik nu aan werk",
             "description": "Een actueel overzicht van actieve projecten, technologieën die ik verken en wat ik nu oplever.",
-            "chips": ["Huidige focus", "Leeslijst", "Actieve projecten"],
+            "chips": [
+              "Huidige focus",
+              "Leeslijst",
+              "Actieve projecten"
+            ],
             "statValue": "Live",
             "statLabel": "huidige status",
             "cta": "Bekijk Now-pagina"
@@ -638,7 +686,11 @@
             "short": "Bezoekers- & portfoliostatistieken",
             "headline": "Portfoliostatistieken & analytics",
             "description": "Transparante statistieken over bezoeken, geografische spreiding en prestaties.",
-            "chips": ["Analytics", "Prestaties", "Demografie"],
+            "chips": [
+              "Analytics",
+              "Prestaties",
+              "Demografie"
+            ],
             "statValue": "Live",
             "statLabel": "site-telemetrie",
             "cta": "Bekijk statistieken"
@@ -648,7 +700,12 @@
             "short": "Hoe deze site is gebouwd",
             "headline": "Achter de schermen",
             "description": "Architectuur, frameworks, design tokens, typografie en ecologische voetafdruk van deze website.",
-            "chips": ["Next.js 15", "Tailwind CSS", "TypeScript", "Prestaties"],
+            "chips": [
+              "Next.js 15",
+              "Tailwind CSS",
+              "TypeScript",
+              "Prestaties"
+            ],
             "statValue": "v2.0",
             "statLabel": "portfolio-editie",
             "cta": "Lees colofon"
@@ -3311,7 +3368,54 @@
         "addStep": "Stap toevoegen",
         "removeStep": "Verwijderen",
         "dragToReorder": "Sleep om te herordenen"
-      }
+      },
+      "tabIdentity": "Identiteit",
+      "tabAbout": "Sectie “Over mij”",
+      "baseBadge": "Basis",
+      "completeStatus": "voltooid",
+      "noTranslationBadge": "Geen vertaling",
+      "allComplete": "Alles voltooid ✓",
+      "missingPrefix": "Ontbreekt",
+      "showReference": "Toon origineel",
+      "copySnippet": "Kopiëren",
+      "noTranslationTitle": "Geen vertaling in {lang}",
+      "noTranslationHint": "Opgeslagen als een onafhankelijke vertaling. Begin leeg of kopieer van {baseLang}.",
+      "copyFromBase": "Kopiëren van {baseLang}",
+      "startBlank": "Begin leeg",
+      "deleteTranslation": "Vertaling in {lang} verwijderen",
+      "deleteTranslationConfirm": "Vertaling in {lang} verwijderen? Alle vertaalde teksten gaan verloren.",
+      "checkSubtitle": "ondertitel",
+      "checkTagline": "tagline",
+      "checkAbout": "over mij-tekst",
+      "checkOutputs": "terminal-uitvoer",
+      "fallbackNotice": "Toont {baseLang} waar vertaling ontbreekt.",
+      "defaultBadge": "Available for opportunities",
+      "previewHeading": "Live Voorbeeld",
+      "uploadButton": "Uploaden",
+      "uploadHint": "Plak een URL of upload een afbeeldingsbestand (max. 4 MB).",
+      "photoAndBadgeSection": "Foto & Beschikbaarheidsbadge",
+      "subtitleSection": "Professionele ondertitel (H2)",
+      "taglineSection": "Tagline & Waardepropositie",
+      "boldHelper": "Selectie markeren in vet",
+      "boldHint": "Selecteer tekst en klik op B, of schrijf **zo**, om te markeren in de primaire kleur.",
+      "commandSequenceHint": "Elke stap wordt op volgorde uitgevoerd. Toevoegen, verplaatsen of verwijderen werkt alle talen bij; de opdracht is gedeeld en de uitvoer is vertaald.",
+      "commandSharedHint": "gedeeld voor alle talen",
+      "outputPerLangHint": "één regel per rij; meerdere voor JSON",
+      "deleteStepConfirm": "Verwijderen in alle talen?",
+      "addStep": "+ Stap toevoegen",
+      "stepNumber": "Stap {n}",
+      "play": "Afspelen",
+      "playing": "Afspelen…",
+      "reset": "Reset",
+      "discard": "Verwerpen",
+      "unsavedChanges": "Niet-opgeslagen wijzigingen",
+      "missingDisplayName": "Weergavenaam is verplicht.",
+      "missingSubtitle": "Professionele ondertitel in {lang} is verplicht.",
+      "missingTagline": "Tagline in {lang} is verplicht.",
+      "missingAbout": "Over mij-tekst in {lang} is verplicht.",
+      "speedMinError": "Typsnelheid moet 1 ms of meer zijn.",
+      "delayMinError": "Pauze tussen opdrachten kan niet negatief zijn.",
+      "stepMissingCmd": "Stap {n} heeft uitvoer maar geen opdracht."
     },
     "skills": {
       "title": "Vaardigheden",

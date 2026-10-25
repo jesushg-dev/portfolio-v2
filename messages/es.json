@@ -514,7 +514,12 @@
             "short": ".NET, C#, microservicios, cloud",
             "headline": "El stack con el que trabajo a diario",
             "description": "Las herramientas y tecnologías que empleo para diseñar, construir y desplegar software en producción.",
-            "chips": [".NET", "C#", "Microservicios", "Cloud"],
+            "chips": [
+              ".NET",
+              "C#",
+              "Microservicios",
+              "Cloud"
+            ],
             "statValue": "4",
             "statLabel": "áreas clave",
             "cta": "Explorar stack técnico"
@@ -538,7 +543,11 @@
             "short": "Equipos, mentoría, comunicación",
             "headline": "Cómo trabajo con las personas",
             "description": "Liderazgo de equipos, mentoría de desarrolladores y comunicación fluida con producto y negocio.",
-            "chips": ["Liderazgo técnico", "Mentoría", "Comunicación"],
+            "chips": [
+              "Liderazgo técnico",
+              "Mentoría",
+              "Comunicación"
+            ],
             "statValue": "6",
             "statLabel": "ingenieros guiados",
             "cta": "Leer principios de liderazgo"
@@ -562,7 +571,12 @@
             "short": "Proyectos de ingeniería y casos de estudio",
             "headline": "Proyectos y sistemas construidos",
             "description": "Una selección de sistemas, APIs, plataformas de comercio electrónico y paneles administrativos internos.",
-            "chips": ["APIs", "E-commerce", "Plataformas admin", "Cloud"],
+            "chips": [
+              "APIs",
+              "E-commerce",
+              "Plataformas admin",
+              "Cloud"
+            ],
             "statValue": "15+",
             "statLabel": "proyectos destacados",
             "cta": "Ver proyectos"
@@ -572,7 +586,12 @@
             "short": "Acreditaciones técnicas",
             "headline": "Certificaciones verificadas",
             "description": "Acreditaciones técnicas formales en frontend, backend, seguridad y habilidades directivas.",
-            "chips": ["Frontend", "Backend", "Ciberseguridad", "Habilidades"],
+            "chips": [
+              "Frontend",
+              "Backend",
+              "Ciberseguridad",
+              "Habilidades"
+            ],
             "statValue": "30+",
             "statLabel": "certificaciones obtenidas",
             "cta": "Ver certificados"
@@ -596,7 +615,11 @@
             "short": "Evolución profesional",
             "headline": "Hitos de carrera y trayectoria",
             "description": "Recorrido cronológico de hitos profesionales, roles asumidos y evolución técnica.",
-            "chips": ["Hitos de carrera", "Evolución", "Crecimiento"],
+            "chips": [
+              "Hitos de carrera",
+              "Evolución",
+              "Crecimiento"
+            ],
             "statValue": "6+",
             "statLabel": "años de evolución",
             "cta": "Ver línea de tiempo"
@@ -649,7 +672,11 @@
             "short": "Enfoque actual y lectura",
             "headline": "En qué estoy trabajando ahora",
             "description": "Una instantánea viva de proyectos activos, tecnologías que estoy explorando y prioridades actuales.",
-            "chips": ["Enfoque actual", "Lecturas", "Proyectos activos"],
+            "chips": [
+              "Enfoque actual",
+              "Lecturas",
+              "Proyectos activos"
+            ],
             "statValue": "En vivo",
             "statLabel": "estado actual",
             "cta": "Ver página Now"
@@ -659,7 +686,11 @@
             "short": "Métricas del portafolio",
             "headline": "Estadísticas y analítica del sitio",
             "description": "Métricas transparentes sobre visitas anónimas, distribución geográfica y rendimiento de la plataforma.",
-            "chips": ["Analítica", "Rendimiento", "Demografía"],
+            "chips": [
+              "Analítica",
+              "Rendimiento",
+              "Demografía"
+            ],
             "statValue": "En vivo",
             "statLabel": "métricas del sitio",
             "cta": "Ver estadísticas"
@@ -3337,7 +3368,54 @@
         "addStep": "Añadir paso",
         "removeStep": "Eliminar",
         "dragToReorder": "Arrastra para reordenar"
-      }
+      },
+      "tabIdentity": "Identidad",
+      "tabAbout": "Sección “Sobre mí”",
+      "baseBadge": "Base",
+      "completeStatus": "completo",
+      "noTranslationBadge": "Sin traducción",
+      "allComplete": "Todo completo ✓",
+      "missingPrefix": "Falta",
+      "showReference": "Ver original",
+      "copySnippet": "Copiar",
+      "noTranslationTitle": "No hay traducción en {lang}",
+      "noTranslationHint": "Se guarda como una traducción independiente. Empieza en blanco o parte del texto en {baseLang}.",
+      "copyFromBase": "Copiar desde {baseLang}",
+      "startBlank": "Empezar en blanco",
+      "deleteTranslation": "Eliminar traducción en {lang}",
+      "deleteTranslationConfirm": "¿Eliminar la traducción en {lang}? Se pierden todos sus textos.",
+      "checkSubtitle": "subtítulo",
+      "checkTagline": "lema",
+      "checkAbout": "texto “Sobre mí”",
+      "checkOutputs": "salidas del terminal",
+      "fallbackNotice": "Mostrando {baseLang} donde falta la traducción.",
+      "defaultBadge": "Available for opportunities",
+      "previewHeading": "Vista previa en vivo",
+      "uploadButton": "Subir",
+      "uploadHint": "Pega una URL o sube un archivo (máx. 4 MB).",
+      "photoAndBadgeSection": "Foto y etiqueta",
+      "subtitleSection": "Subtítulo profesional (H2)",
+      "taglineSection": "Lema y propuesta de valor",
+      "boldHelper": "Resaltar selección en negrita",
+      "boldHint": "Selecciona texto y pulsa B, o escribe **así**, para resaltarlo en el color principal.",
+      "commandSequenceHint": "Cada paso se ejecuta en orden. Añadir, mover o eliminar un paso lo hace en todos los idiomas; el comando es común y la salida se traduce.",
+      "commandSharedHint": "igual en todos los idiomas",
+      "outputPerLangHint": "una línea por fila; varias para JSON",
+      "deleteStepConfirm": "¿Eliminar en todos los idiomas?",
+      "addStep": "+ Añadir paso",
+      "stepNumber": "Paso {n}",
+      "play": "Reproducir",
+      "playing": "Reproduciendo…",
+      "reset": "Reiniciar",
+      "discard": "Descartar",
+      "unsavedChanges": "Cambios sin guardar",
+      "missingDisplayName": "Falta el nombre para mostrar.",
+      "missingSubtitle": "Falta el subtítulo profesional en {lang}.",
+      "missingTagline": "Falta el lema en {lang}.",
+      "missingAbout": "Falta el texto “Sobre mí” en {lang}.",
+      "speedMinError": "La velocidad de tecleo debe ser 1 ms o más.",
+      "delayMinError": "La pausa entre comandos no puede ser negativa.",
+      "stepMissingCmd": "El paso {n} tiene salida pero no comando."
     },
     "skills": {
       "title": "Habilidades",
