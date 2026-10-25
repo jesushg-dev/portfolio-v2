@@ -146,7 +146,7 @@ export const MobileNav: FC<MobileNavProps> = ({ isOpen, onClose }) => {
                           <Link
                             key={item.id}
                             href={item.href}
-                            onClick={onClose}
+                            onNavigate={onClose}
                             className={sharedClass}
                           >
                             {content}
@@ -177,7 +177,7 @@ export const MobileNav: FC<MobileNavProps> = ({ isOpen, onClose }) => {
             <div className="grid grid-cols-2 gap-2">
               <Link
                 href="/schedule"
-                onClick={onClose}
+                onNavigate={onClose}
                 className={cn(
                   buttonVariants({ variant: "outline", size: "default" }),
                   "h-11 justify-center gap-1.5 rounded-full text-xs font-medium sm:text-sm",
@@ -188,7 +188,7 @@ export const MobileNav: FC<MobileNavProps> = ({ isOpen, onClose }) => {
               </Link>
               <Link
                 href={homeSectionHref("contact")}
-                onClick={onClose}
+                onNavigate={onClose}
                 className={cn(
                   buttonVariants({ variant: "default", size: "default" }),
                   "h-11 justify-center gap-1.5 rounded-full text-xs font-medium sm:text-sm",

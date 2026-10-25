@@ -26,11 +26,28 @@ export const collectPayloadSchema = z.object({
   isNewVisit: z.boolean().optional().default(false),
 });
 
-const emptyResponse = () =>
+const OWNER_OPTOUT_COOKIE = "portfolio-analytics-owner";
+const OWNER_OPTOUT_MAX_AGE = 60 * 60 * 24 * 365;
+
+const emptyResponse = (markOwner = false) =>
   new Response(null, {
     status: 204,
-    headers: { "Cache-Control": "no-store" },
+    headers: {
+      "Cache-Control": "no-store",
+      ...(markOwner
+        ? {
+            "Set-Cookie": `${OWNER_OPTOUT_COOKIE}=1; Path=/; Max-Age=${OWNER_OPTOUT_MAX_AGE}; SameSite=Lax; HttpOnly${process.env.NODE_ENV === "production" ? "; Secure" : ""}`,
+          }
+        : {}),
+    },
   });
+
+function hasOwnerOptOutCookie(headers: Headers): boolean {
+  return headers
+    .get("cookie")
+    ?.split(";")
+    .some((cookie) => cookie.trim() === `${OWNER_OPTOUT_COOKIE}=1`) ?? false;
+}
 
 async function incrementDailyStat(input: {
   userId: string;
@@ -106,17 +123,7 @@ export async function handleAnalyticsCollect(
         : await db.profile.findFirst({ where: { isPrimary: true } });
     if (!profile) return emptyResponse();
 
-    const ipHash = hashClientIp(getClientIpFromHeaders(headers));
-    try {
-      const allowed = await consumeFixedWindowLimit(db, {
-        key: `analytics-collect:${ipHash}`,
-        windowMs: 60_000,
-        max: 60,
-      });
-      if (!allowed) return emptyResponse();
-    } catch {
-      // Fail open: a RateLimit write error must not drop legitimate pageviews.
-    }
+    if (hasOwnerOptOutCookie(headers)) return emptyResponse();
 
     const session = await auth.api.getSession({ headers });
     const isOwner = session?.user?.id === profile.userId;
@@ -131,7 +138,19 @@ export async function handleAnalyticsCollect(
         isOwner,
       })
     ) {
-      return emptyResponse();
+      return emptyResponse(isOwner);
+    }
+
+    const ipHash = hashClientIp(getClientIpFromHeaders(headers));
+    try {
+      const allowed = await consumeFixedWindowLimit(db, {
+        key: `analytics-collect:${ipHash}`,
+        windowMs: 60_000,
+        max: 60,
+      });
+      if (!allowed) return emptyResponse();
+    } catch {
+      // Fail open: a RateLimit write error must not drop legitimate pageviews.
     }
 
     const host =

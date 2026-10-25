@@ -102,7 +102,6 @@ export async function PublicStatsView({
             </p>
             <RankList
               emptyLabel={t("emptyTraffic")}
-              valueLabel={(count) => t("pageviewsCount", { count })}
               items={traffic.countries.map((item) => ({
                 key: item.key,
                 pageviews: item.pageviews,
@@ -111,6 +110,7 @@ export async function PublicStatsView({
                   locale,
                   t("unknownCountry"),
                 ),
+                valueDisplay: t("pageviewsCount", { count: item.pageviews }),
               }))}
             />
           </section>
@@ -126,11 +126,11 @@ export async function PublicStatsView({
             </p>
             <RankList
               emptyLabel={t("emptyTraffic")}
-              valueLabel={(count) => t("pageviewsCount", { count })}
               items={traffic.paths.map((item) => ({
                 key: item.key,
                 pageviews: item.pageviews,
                 label: item.key,
+                valueDisplay: t("pageviewsCount", { count: item.pageviews }),
               }))}
             />
           </section>
