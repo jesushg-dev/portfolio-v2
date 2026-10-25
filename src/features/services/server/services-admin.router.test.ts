@@ -120,6 +120,14 @@ describe("servicesAdminRouter", () => {
     });
     expect(db.serviceSkill.createMany).toHaveBeenCalled();
 
+    await caller.toggleActive({ id: "sv-1", isActive: false });
+    expect(db.service.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "sv-1" },
+        data: { isActive: false },
+      }),
+    );
+
     await caller.deleteItem({ id: "sv-1" });
     await expect(caller.deleteAll()).resolves.toEqual({ count: 1 });
   });

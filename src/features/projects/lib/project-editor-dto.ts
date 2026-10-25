@@ -1,4 +1,9 @@
-import type { Project, ProjectSkill, ProjectTranslation } from "@prisma/client";
+import type {
+  CertificateProject,
+  Project,
+  ProjectSkill,
+  ProjectTranslation,
+} from "@prisma/client";
 
 import type { LanguageRef } from "@/lib/i18n/editor-rows";
 import {
@@ -28,6 +33,7 @@ export interface ProjectEditorDTO {
   websiteUrl: string;
   isPrivate: boolean;
   skillIds: string[];
+  certificateIds: string[];
   order: number;
   kind: Project["kind"];
   slug: string;
@@ -48,8 +54,9 @@ const emptyProjectTranslationFields = {
 };
 
 type ProjectWithRelations = Project & {
-  ProjectTranslation: ProjectTranslation[];
-  ProjectSkill: ProjectSkill[];
+  ProjectTranslation?: ProjectTranslation[];
+  ProjectSkill?: ProjectSkill[];
+  CertificateProject?: CertificateProject[];
 };
 
 export function mapProjectToEditorDto(
@@ -72,6 +79,8 @@ export function mapProjectToEditorDto(
     websiteUrl: project.websiteUrl ?? "",
     isPrivate: project.isPrivate,
     skillIds: project.ProjectSkill?.map((entry) => entry.skillId) ?? [],
+    certificateIds:
+      project.CertificateProject?.map((entry) => entry.certificationId) ?? [],
     order: project.order ?? 0,
     kind: project.kind ?? "PERSONAL",
     slug: project.slug ?? "",
@@ -107,6 +116,7 @@ export function buildEmptyProjectCreateDto(
     websiteUrl: "",
     isPrivate: false,
     skillIds: [],
+    certificateIds: [],
     order: 0,
     kind: "PERSONAL",
     slug: "",

@@ -34,6 +34,7 @@ const ProcessPagesAdminPage: FC<Props> = async ({ params }) => {
         initialPages={list.data}
         pageCount={list.pageCount}
         totalCount={list.totalCount}
+        languages={list.languages}
       />
     </div>
   );

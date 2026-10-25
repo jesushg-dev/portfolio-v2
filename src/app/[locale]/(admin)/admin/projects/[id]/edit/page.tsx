@@ -26,7 +26,7 @@ export default async function EditProjectPage({
           {t("editDescription")}
         </p>
       </div>
-      <div className="mx-auto w-full max-w-3xl">
+      <div className="mx-auto h-[calc(100dvh-12rem)] min-h-96 w-full max-w-3xl">
         <ProjectForm
           key={editorDto.id}
           initialData={editorDto}

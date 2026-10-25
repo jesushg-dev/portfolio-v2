@@ -11,7 +11,6 @@ import {
 } from "@/features/job-tracker/server/job-tracker-queries";
 import { Link } from "@/i18n/routing";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -54,7 +53,7 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
       <div className="mb-4 flex flex-col gap-4">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
               {t("title")}
             </h1>
             <p className="text-muted-foreground mt-1 max-w-xl text-sm">
@@ -63,18 +62,18 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Link
+              href="/admin/job-tracker/companies/new"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              <Building2 className="mr-1.5 size-4" aria-hidden />
+              {t("newCompany")}
+            </Link>
+            <Link
               href="/admin/job-tracker/applications/new"
               className={buttonVariants()}
             >
               <Plus className="mr-1.5 size-4" aria-hidden />
               {t("newApplication")}
-            </Link>
-            <Link
-              href="/admin/job-tracker/companies/new"
-              className={cn(buttonVariants({ variant: "outline" }))}
-            >
-              <Building2 className="mr-1.5 size-4" aria-hidden />
-              {t("newCompany")}
             </Link>
           </div>
         </div>

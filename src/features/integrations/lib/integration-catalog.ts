@@ -22,43 +22,49 @@ export const INTEGRATION_CATALOG: IntegrationCatalogItem[] = [
   {
     id: "spotify",
     icon: Music2,
-    accentClass: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-    badgeClass: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+    accentClass:
+      "border-emerald-500/25 bg-emerald-500/10 text-emerald-500 ring-emerald-500/20",
+    badgeClass: "border-emerald-500/25 bg-emerald-500/10 text-emerald-600",
     category: "media",
   },
   {
     id: "resend",
     icon: Mail,
-    accentClass: "bg-violet-500/10 text-violet-500 border-violet-500/20",
-    badgeClass: "bg-violet-500/10 text-violet-600 border-violet-500/20",
+    accentClass:
+      "border-violet-500/25 bg-violet-500/10 text-violet-500 ring-violet-500/20",
+    badgeClass: "border-violet-500/25 bg-violet-500/10 text-violet-600",
     category: "communication",
   },
   {
     id: "google-calendar",
     icon: CalendarDays,
-    accentClass: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    badgeClass: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+    accentClass:
+      "border-blue-500/25 bg-blue-500/10 text-blue-500 ring-blue-500/20",
+    badgeClass: "border-blue-500/25 bg-blue-500/10 text-blue-600",
     category: "communication",
   },
   {
     id: "uploadthing",
     icon: HardDrive,
-    accentClass: "bg-orange-500/10 text-orange-500 border-orange-500/20",
-    badgeClass: "bg-orange-500/10 text-orange-600 border-orange-500/20",
+    accentClass:
+      "border-amber-500/25 bg-amber-500/10 text-amber-500 ring-amber-500/20",
+    badgeClass: "border-amber-500/25 bg-amber-500/10 text-amber-600",
     category: "storage",
   },
   {
     id: "ai",
     icon: Bot,
-    accentClass: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-    badgeClass: "bg-purple-500/10 text-purple-600 border-purple-500/20",
+    accentClass:
+      "border-purple-500/25 bg-purple-500/10 text-purple-500 ring-purple-500/20",
+    badgeClass: "border-purple-500/25 bg-purple-500/10 text-purple-600",
     category: "ai",
   },
   {
     id: "ilovepdf",
     icon: FileText,
-    accentClass: "bg-red-500/10 text-red-500 border-red-500/20",
-    badgeClass: "bg-red-500/10 text-red-600 border-red-500/20",
+    accentClass:
+      "border-rose-500/25 bg-rose-500/10 text-rose-500 ring-rose-500/20",
+    badgeClass: "border-rose-500/25 bg-rose-500/10 text-rose-600",
     category: "documents",
   },
 ];

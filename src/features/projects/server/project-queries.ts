@@ -29,6 +29,7 @@ export async function getProjectEditPageData(id: string) {
     include: {
       ProjectTranslation: true,
       ProjectSkill: true,
+      CertificateProject: true,
     },
   });
 

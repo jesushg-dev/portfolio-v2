@@ -1,4 +1,4 @@
-﻿import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import React from "react";
 import { ServicesList } from "./services-list";
 import { renderWithIntl } from "@/test-utils/render-with-intl";
@@ -73,6 +73,11 @@ jest.mock("@/trpc/react", () => ({
       },
       deleteItem: {
         useMutation: () => ({ mutateAsync: mockDelete }),
+      },
+      deleteMany: {
+        useMutation: () => ({
+          mutateAsync: jest.fn().mockResolvedValue({ count: 1 }),
+        }),
       },
     },
   },

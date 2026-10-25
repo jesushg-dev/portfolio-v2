@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import type { DragEndEvent } from "@dnd-kit/core";
-import { GripVertical, Plus } from "lucide-react";
+import { GripVertical, Plus, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
@@ -45,6 +45,7 @@ import {
   APPLIED_STALE_DAYS,
   GHOST_ARCHIVE_DAYS,
   GHOST_NUDGE_SNOOZE_DAYS,
+  daysBetween,
   isArchivedGhost,
   isSuggestedGhost,
 } from "@/features/job-tracker/lib/stale-application";
@@ -93,6 +94,8 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
   const [ghostDialogOpen, setGhostDialogOpen] = useState(false);
   const [selectedGhostIds, setSelectedGhostIds] = useState<string[]>([]);
   const [snoozeDays, setSnoozeDays] = useState(GHOST_NUDGE_SNOOZE_DAYS);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isReviewMode, setIsReviewMode] = useState(false);
   const [celebration, setCelebration] = useState<{
     companyName: string;
     position: string;
@@ -122,11 +125,28 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
   const visibleApplications = useMemo(
     () =>
       applications.filter((application) => {
+        if (isReviewMode) {
+          return isSuggestedGhost(application);
+        }
         if (!enabledStatuses.has(application.status)) return false;
         if (!showArchivedGhosts && isArchivedGhost(application)) return false;
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase();
+          const matchRole = application.position.toLowerCase().includes(q);
+          const matchCompany = application.company.name
+            .toLowerCase()
+            .includes(q);
+          if (!matchRole && !matchCompany) return false;
+        }
         return true;
       }),
-    [applications, enabledStatuses, showArchivedGhosts],
+    [
+      applications,
+      enabledStatuses,
+      isReviewMode,
+      searchQuery,
+      showArchivedGhosts,
+    ],
   );
   const hiddenCount = applications.length - visibleApplications.length;
 
@@ -303,71 +323,94 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
-      <div className="flex shrink-0 flex-col gap-2">
-        <div
-          role="group"
-          aria-label={t("kanban.statusFilterAria")}
-          className="no-scrollbar -mx-1 flex items-center gap-1.5 overflow-x-auto px-1 pb-1 sm:flex-wrap"
-        >
-          {KANBAN_COLUMNS.map((status) => {
-            const selected = enabledStatuses.has(status);
-            return (
-              <Button
-                key={status}
-                type="button"
-                size="sm"
-                variant={selected ? "default" : "outline"}
-                aria-pressed={selected}
-                onClick={() => {
-                  toggleStatusFilter(status);
-                  scrollToColumn(status);
-                }}
-                className={cn(
-                  "shrink-0 rounded-full text-xs font-medium transition-all",
-                  selected && "shadow-xs",
-                )}
-              >
-                <span
+      <div className="flex shrink-0 flex-col gap-2.5">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative w-full sm:w-72">
+            <Search
+              className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
+              aria-hidden
+            />
+            <Input
+              type="search"
+              placeholder={t("kanban.searchPlaceholder")}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-9 pl-9 text-xs sm:text-sm"
+              aria-label={t("kanban.searchPlaceholder")}
+            />
+          </div>
+
+          <div
+            role="group"
+            aria-label={t("kanban.statusFilterAria")}
+            className="no-scrollbar -mx-1 flex flex-1 items-center gap-1.5 overflow-x-auto px-1 pb-1 sm:flex-wrap"
+          >
+            {KANBAN_COLUMNS.map((status) => {
+              const selected = enabledStatuses.has(status);
+              return (
+                <Button
+                  key={status}
+                  type="button"
+                  size="sm"
+                  variant={selected ? "default" : "outline"}
+                  aria-pressed={selected}
+                  onClick={() => {
+                    toggleStatusFilter(status);
+                    scrollToColumn(status);
+                  }}
                   className={cn(
-                    "mr-1.5 inline-block size-1.5 rounded-full",
-                    kanbanColumnStyles[status].dot,
+                    "shrink-0 rounded-full text-xs font-medium transition-all",
+                    selected && "shadow-xs",
                   )}
-                  aria-hidden
-                />
-                {t(`status.${status}`)} ({statusCounts[status]})
-              </Button>
-            );
-          })}
+                >
+                  <span
+                    className={cn(
+                      "mr-1.5 inline-block size-1.5 rounded-full",
+                      kanbanColumnStyles[status].dot,
+                    )}
+                    aria-hidden
+                  />
+                  {t(`status.${status}`)} ({statusCounts[status]})
+                </Button>
+              );
+            })}
+          </div>
         </div>
 
-        {hiddenCount > 0 ? (
-          <p className="text-muted-foreground text-xs">
-            {t("kanban.hiddenCount", { count: hiddenCount })}
-            {!showArchivedGhosts && archivedGhosts.length > 0
-              ? ` · ${t("kanban.hiddenGhosts", {
-                  count: archivedGhosts.length,
-                  days: GHOST_ARCHIVE_DAYS,
-                })}`
-              : null}{" "}
-            <button
-              type="button"
-              className="text-foreground underline-offset-2 hover:underline"
-              onClick={clearBoardFilters}
-            >
-              {t("kanban.showHidden")}
-            </button>
-          </p>
-        ) : null}
-
-        {suggestedGhosts.length > 0 ? (
-          <div className="border-border bg-muted/40 flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm">
-            <p className="text-muted-foreground min-w-0">
+        {isReviewMode ? (
+          <div className="border-primary/30 bg-primary/10 flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm">
+            <span>{t("kanban.reviewTitle")}</span>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => setIsReviewMode(false)}
+              >
+                {t("kanban.exitReview")}
+              </Button>
+              <Button type="button" size="sm" onClick={openGhostDialog}>
+                {t("kanban.ghostNudgeReview")}
+              </Button>
+            </div>
+          </div>
+        ) : suggestedGhosts.length > 0 ? (
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm">
+            <p className="text-foreground min-w-0">
+              <b className="font-semibold">{suggestedGhosts.length}</b>{" "}
               {t("kanban.ghostNudge", {
                 count: suggestedGhosts.length,
                 days: APPLIED_STALE_DAYS,
               })}
             </p>
             <div className="flex flex-wrap items-center justify-end gap-2">
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => setIsReviewMode(true)}
+              >
+                {t("kanban.ghostNudgeReview")}
+              </Button>
               <Label
                 htmlFor="ghost-snooze-days"
                 className="text-muted-foreground text-xs whitespace-nowrap"
@@ -398,11 +441,49 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
               >
                 {t("kanban.ghostNudgeLater")}
               </Button>
-              <Button type="button" size="sm" onClick={openGhostDialog}>
-                {t("kanban.ghostNudgeReview")}
-              </Button>
             </div>
           </div>
+        ) : null}
+
+        {!isReviewMode && hiddenCount > 0 ? (
+          <p className="text-muted-foreground text-xs">
+            {t("kanban.hiddenCount", { count: hiddenCount })}
+            {!showArchivedGhosts && archivedGhosts.length > 0
+              ? ` · ${t("kanban.hiddenGhosts", {
+                  count: archivedGhosts.length,
+                  days: GHOST_ARCHIVE_DAYS,
+                })}`
+              : null}{" "}
+            <button
+              type="button"
+              className="text-foreground underline-offset-2 hover:underline"
+              onClick={clearBoardFilters}
+            >
+              {t("kanban.showHidden")}
+            </button>
+          </p>
+        ) : null}
+
+        {!isReviewMode && archivedGhosts.length > 0 && hiddenCount === 0 ? (
+          <p className="text-muted-foreground text-xs">
+            {showArchivedGhosts
+              ? t("kanban.showingArchivedGhosts", {
+                  count: archivedGhosts.length,
+                })
+              : t("kanban.hiddenGhosts", {
+                  count: archivedGhosts.length,
+                  days: GHOST_ARCHIVE_DAYS,
+                })}{" "}
+            <button
+              type="button"
+              className="text-primary hover:underline"
+              onClick={() => setShowArchivedGhosts((prev) => !prev)}
+            >
+              {showArchivedGhosts
+                ? t("kanban.hideArchivedGhosts")
+                : t("kanban.showArchivedGhosts")}
+            </button>
+          </p>
         ) : null}
       </div>
 
@@ -466,12 +547,32 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
                               <p className="text-foreground line-clamp-2 text-sm leading-snug font-medium">
                                 {application.position}
                               </p>
-                              <p className="text-muted-foreground mt-1 truncate text-xs">
+                              <p className="text-muted-foreground mt-0.5 truncate text-xs">
                                 {application.company.name}
                                 {application.salary
                                   ? ` · ${application.salary}`
                                   : null}
                               </p>
+                              {application.status === "APPLIED" ? (
+                                <span
+                                  className={cn(
+                                    "mt-1.5 inline-block rounded px-1.5 py-0.5 text-[10px] font-medium tabular-nums",
+                                    daysBetween(
+                                      application.appliedDate,
+                                      new Date(),
+                                    ) >= APPLIED_STALE_DAYS
+                                      ? "border border-amber-500/30 bg-amber-500/15 text-amber-500"
+                                      : "bg-muted text-muted-foreground",
+                                  )}
+                                >
+                                  {daysBetween(
+                                    application.appliedDate,
+                                    new Date(),
+                                  ) <= 0
+                                    ? t("kanban.today")
+                                    : `${daysBetween(application.appliedDate, new Date())} d`}
+                                </span>
+                              ) : null}
                             </div>
                           </div>
                         </Link>
@@ -568,6 +669,10 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
           </KanbanOverlay>
         </Kanban>
       </div>
+
+      <p className="text-muted-foreground shrink-0 text-xs">
+        {t("kanban.dragHelp")}
+      </p>
 
       {isPending ? (
         <p className="text-muted-foreground text-xs">{t("kanban.updating")}</p>

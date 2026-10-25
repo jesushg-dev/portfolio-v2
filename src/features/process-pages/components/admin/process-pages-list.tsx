@@ -1,19 +1,25 @@
 "use client";
-
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import type { AppLanguage } from "@prisma/client";
 import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 import { toast } from "sonner";
 
 import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { DataTable } from "@/components/shared/data-table/data-table";
+import { DataTableBulkBar } from "@/components/shared/data-table/data-table-bulk-bar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
+import {
+  computeTranslationStatus,
+  LanguageStatusBadge,
+} from "@/components/shared/data-table/language-status-badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { useDataTable } from "@/hooks/use-data-table";
 import type { AppTableFeatures } from "@/lib/app-table-features";
@@ -28,6 +34,7 @@ interface ProcessPagesListProps {
   initialPages: ProcessPageRow[];
   pageCount: number;
   totalCount: number;
+  languages?: AppLanguage[];
 }
 
 function toUpsertInput(row: ProcessPageRow) {
@@ -47,6 +54,7 @@ export const ProcessPagesList: FC<ProcessPagesListProps> = ({
   initialPages,
   pageCount: initialPageCount,
   totalCount: initialTotalCount,
+  languages,
 }) => {
   const t = useTranslations("admin.processPages");
   const utils = api.useUtils();
@@ -106,6 +114,7 @@ export const ProcessPagesList: FC<ProcessPagesListProps> = ({
   );
 
   const deleteItem = api.processPagesAdmin.deleteItem.useMutation();
+  const deleteMany = api.processPagesAdmin.deleteMany.useMutation();
   const updateItem = api.processPagesAdmin.updateItem.useMutation();
 
   const handleDelete = useCallback(
@@ -124,6 +133,23 @@ export const ProcessPagesList: FC<ProcessPagesListProps> = ({
       });
     },
     [deleteItem, utils, t],
+  );
+
+  const handleBulkDelete = useCallback(
+    (selectedRows: ProcessPageRow[]) => {
+      const ids = selectedRows.map((r) => r.id);
+      if (ids.length === 0) return;
+      startTransition(async () => {
+        try {
+          await deleteMany.mutateAsync({ ids });
+          await utils.processPagesAdmin.getMine.invalidate();
+          toast.success(t("bulkDeleteSuccess"));
+        } catch {
+          toast.error(t("bulkDeleteFailed"));
+        }
+      });
+    },
+    [deleteMany, utils, t],
   );
 
   const handleToggle = useCallback(
@@ -153,6 +179,32 @@ export const ProcessPagesList: FC<ProcessPagesListProps> = ({
 
   const columns = useMemo<ColumnDef<AppTableFeatures, ProcessPageRow>[]>(
     () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label={t("selectAll")}
+            className="translate-y-0.5"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label={t("selectRow")}
+            className="translate-y-0.5"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
       {
         accessorKey: "order",
         header: ({ column }) => (
@@ -203,6 +255,25 @@ export const ProcessPagesList: FC<ProcessPagesListProps> = ({
           0,
         enableSorting: false,
       },
+      ...(languages && languages.length > 0
+        ? [
+          {
+            id: "languages",
+            header: t("columns.languages"),
+            cell: ({ row }: { row: { original: ProcessPageRow } }) => {
+              const statuses = languages.map((lang) => {
+                const trans = row.original.translations[lang.id];
+                return {
+                  code: lang.code,
+                  name: lang.name,
+                  status: computeTranslationStatus(trans, ["menuTitle"]),
+                };
+              });
+              return <LanguageStatusBadge languages={statuses} />;
+            },
+          },
+        ]
+        : []),
       {
         id: "isPublished",
         header: ({ column }) => (
@@ -278,13 +349,22 @@ export const ProcessPagesList: FC<ProcessPagesListProps> = ({
         },
       },
     ],
-    [t, deletingId, togglingId, isPending, handleDelete, handleToggle],
+    [
+      t,
+      deletingId,
+      togglingId,
+      isPending,
+      handleDelete,
+      handleToggle,
+      languages,
+    ],
   );
 
   const { table } = useDataTable({
     data: pages ?? [],
     columns,
     rowCount: trpcTotalCount ?? initialTotalCount,
+    enableRowSelection: true,
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
@@ -314,6 +394,11 @@ export const ProcessPagesList: FC<ProcessPagesListProps> = ({
       <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable table={table}>
         <DataTableToolbar table={table} />
+        <DataTableBulkBar
+          table={table}
+          onDeleteSelected={handleBulkDelete}
+          isDeleting={isPending}
+        />
       </DataTable>
     </div>
   );

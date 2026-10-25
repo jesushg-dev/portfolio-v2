@@ -16,7 +16,7 @@ export default async function NewProjectPage() {
         <h1 className="text-2xl font-semibold tracking-tight">{t("create")}</h1>
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
-      <div className="mx-auto w-full max-w-3xl">
+      <div className="mx-auto h-[calc(100dvh-12rem)] min-h-96 w-full max-w-3xl">
         <ProjectForm initialData={initialData} languages={languages} />
       </div>
     </div>

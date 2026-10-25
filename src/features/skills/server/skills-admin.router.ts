@@ -203,6 +203,32 @@ export const skillsAdminRouter = createTRPCRouter({
         return tx.skill.delete({ where: { id: input.id } });
       });
     }),
+  deleteMany: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      if (input.ids.length === 0) return { count: 0 };
+      const items = await ctx.db.skill.findMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        select: { id: true },
+      });
+      const ids = items.map((i) => i.id);
+      if (ids.length === 0) return { count: 0 };
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.projectSkill.deleteMany({ where: { skillId: { in: ids } } });
+        await tx.certificateSkill.deleteMany({
+          where: { skillId: { in: ids } },
+        });
+        await tx.serviceSkill.deleteMany({ where: { skillId: { in: ids } } });
+        await tx.cvExperienceSkill.deleteMany({
+          where: { skillId: { in: ids } },
+        });
+        await tx.skillTranslation.deleteMany({
+          where: { skillId: { in: ids } },
+        });
+        return tx.skill.deleteMany({ where: { id: { in: ids } } });
+      });
+    }),
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     const items = await ctx.db.skill.findMany({
       where: { userId: ctx.user.id },

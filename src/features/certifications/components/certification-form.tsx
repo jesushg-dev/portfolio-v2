@@ -1,10 +1,10 @@
 "use client";
-import type { AppLanguage } from "@prisma/client";
 
-import { type FC, useTransition, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { type FC, useTransition, useMemo, useCallback, useState } from "react";
+import type { AppLanguage } from "@prisma/client";
+import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -13,32 +13,74 @@ import { api } from "@/trpc/react";
 import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SkillPicker } from "@/components/admin/skill-picker";
 import {
   FormActions,
   FormContent,
   FormItem,
   FormRoot,
-  FormSection,
-  FormCheckboxItem,
 } from "@/components/shared/form-root";
-import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
 import {
-  resolvePrimaryLanguage,
-  translationMapSchema,
-} from "@/lib/i18n/localized-form";
-import { useLocalizedForm } from "@/hooks/admin/use-localized-form";
+  AdminFormLanguageBar,
+  ReferenceSnippet,
+  AdminFormEmptyTranslation,
+  AdminFormDeleteTranslation,
+  type LanguageProgress,
+} from "@/components/admin/shared/admin-form-language-bar";
+import { resolvePrimaryLanguage } from "@/lib/i18n/localized-form";
 import {
   type CertificationEditorDTO,
   type CertificationCreateFormDTO,
 } from "@/features/certifications/lib/certification-editor-dto";
 import { StackTypeSchema } from "@/features/portfolio/server/portfolio-admin-shared";
+import { cn } from "@/lib/utils";
 
 interface CertificationFormProps {
   languages: AppLanguage[];
   initialData: CertificationEditorDTO | CertificationCreateFormDTO;
 }
+
+type TTranslations = ReturnType<
+  typeof useTranslations<"admin.forms.certification">
+>;
+
+function createCertificationFormSchema(
+  t: TTranslations,
+  primaryLangId: string | undefined,
+) {
+  return z.object({
+    id: z.string().optional(),
+    company: z.string().min(1, t("companyRequired")),
+    issuedDate: z.number().int().optional().nullable(),
+    url: z.string().url().optional().or(z.literal("")),
+    idCredential: z.string().optional().or(z.literal("")),
+    image: z.string().optional().or(z.literal("")),
+    type: z.array(StackTypeSchema),
+    skillIds: z.array(z.string()),
+    translations: z
+      .record(
+        z.string(),
+        z.object({
+          title: z.string(),
+        }),
+      )
+      .refine(
+        (val) => {
+          if (!primaryLangId) return true;
+          return Boolean(val[primaryLangId]?.title?.trim());
+        },
+        {
+          message: t("titleRequiredPrimary"),
+          path: [primaryLangId ?? "", "title"],
+        },
+      ),
+  });
+}
+
+type CertificationFormValues = z.infer<
+  ReturnType<typeof createCertificationFormSchema>
+>;
 
 export const CertificationForm: FC<CertificationFormProps> = ({
   initialData,
@@ -48,66 +90,166 @@ export const CertificationForm: FC<CertificationFormProps> = ({
   const t = useTranslations("admin.forms.certification");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [activeTab, setActiveTab] = useState("general");
 
   const primaryLang = useMemo(
     () => resolvePrimaryLanguage(languages),
     [languages],
   );
 
-  const certFormSchema = useMemo(
-    () =>
-      z.object({
-        id: z.string().optional(),
-        company: z.string().min(1, t("companyRequired")),
-        issuedDate: z.number().int().optional().nullable(),
-        url: z.string().url().optional().or(z.literal("")),
-        idCredential: z.string().optional().or(z.literal("")),
-        image: z.string().optional().or(z.literal("")),
-        type: z.array(StackTypeSchema),
-        skillIds: z.array(z.string()),
-        translations: translationMapSchema(
-          z.object({
-            title: z.string(),
-          }),
-          primaryLang?.id,
-          "title",
-          t("titleRequiredPrimary"),
-        ),
-      }),
+  const [activeLangId, setActiveLangId] = useState<string>(
+    primaryLang?.id ?? languages[0]?.id ?? "",
+  );
+  const [showOriginal, setShowOriginal] = useState(true);
+
+  const formSchema = useMemo(
+    () => createCertificationFormSchema(t, primaryLang?.id),
     [primaryLang?.id, t],
   );
 
-  type TCertForm = z.infer<typeof certFormSchema>;
+  const defaultValues = useMemo<CertificationFormValues>(() => {
+    const rawTranslations = (initialData.translations ?? {}) as Record<
+      string,
+      { title?: string }
+    >;
+    const normalizedTranslations: Record<string, { title: string }> = {};
 
-  const createCert = api.certificationsAdmin.createItem.useMutation();
-  const updateCert = api.certificationsAdmin.updateItem.useMutation();
+    for (const lang of languages) {
+      const existing = rawTranslations[lang.id];
+      normalizedTranslations[lang.id] = {
+        title: existing?.title ?? "",
+      };
+    }
 
-  const { data: { data: rawSkills = [] } = {} } =
-    api.skillsAdmin.getMine.useQuery({});
-  const utils = api.useUtils();
+    return {
+      id: "id" in initialData ? initialData.id : undefined,
+      company: initialData.company ?? "",
+      issuedDate: initialData.issuedDate ?? null,
+      url: initialData.url ?? "",
+      idCredential: initialData.idCredential ?? "",
+      image: initialData.image ?? "",
+      type: (initialData.type) ?? [],
+      skillIds: initialData.skillIds ?? [],
+      translations: normalizedTranslations,
+    };
+  }, [initialData, languages]);
 
-  const availableSkills = rawSkills.map((s) => ({
-    id: s.id,
-    title: s.title,
-    image: s.image,
-    type: s.type,
-  }));
-
-  const form = useForm<TCertForm>({
-    resolver: zodResolver(certFormSchema),
-    defaultValues: initialData as TCertForm,
+  const form = useForm<CertificationFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
     mode: "onBlur",
   });
 
-  const { activeLangId, setActiveLangId } = useLocalizedForm({
-    languages,
-    form,
-    buildDefaultValues: () => initialData as TCertForm,
-    resourceId: "id" in initialData ? initialData.id : undefined,
+  const createCert = api.certificationsAdmin.createItem.useMutation();
+  const updateCert = api.certificationsAdmin.updateItem.useMutation();
+  const utils = api.useUtils();
+
+  const { data: { data: rawSkills = [] } = {} } =
+    api.skillsAdmin.getMine.useQuery({});
+
+  const availableSkills = useMemo(
+    () =>
+      rawSkills.map((s) => ({
+        id: s.id,
+        title: s.title,
+        image: s.image,
+        type: s.type,
+      })),
+    [rawSkills],
+  );
+
+  const watchedTranslations = useWatch({
+    control: form.control,
+    name: "translations",
+  });
+  const watchedTypes = useWatch({
+    control: form.control,
+    name: "type",
   });
 
+  const languageProgress = useMemo<LanguageProgress[]>(() => {
+    return languages.map((lang) => {
+      const tr = watchedTranslations?.[lang.id];
+      const isBase = lang.id === primaryLang?.id;
+      const hasTitle = Boolean(tr?.title && tr.title.trim().length > 0);
+      const completedCount = hasTitle ? 1 : 0;
+      const totalCount = 1;
+      const hasContent = hasTitle;
+
+      return {
+        id: lang.id,
+        name: lang.name,
+        code: lang.code,
+        isBase,
+        hasContent,
+        completedCount,
+        totalCount,
+      };
+    });
+  }, [languages, primaryLang?.id, watchedTranslations]);
+
+  const activeLang = useMemo(
+    () => languages.find((l) => l.id === activeLangId),
+    [languages, activeLangId],
+  );
+  const isNonPrimary = activeLangId !== primaryLang?.id;
+
+  const currentTranslation = watchedTranslations?.[activeLangId];
+  const isCurrentTranslationEmpty = !currentTranslation?.title?.trim();
+
+  const primaryTranslation = primaryLang?.id
+    ? watchedTranslations?.[primaryLang.id]
+    : undefined;
+
+  const primaryTitle = primaryTranslation?.title ?? "";
+
+  const handleCopyFromBase = useCallback(
+    (langId: string) => {
+      if (!primaryTranslation) return;
+      form.setValue(`translations.${langId}`, {
+        title: primaryTranslation.title ?? "",
+      });
+    },
+    [form, primaryTranslation],
+  );
+
+  const handleStartBlank = useCallback(
+    (langId: string) => {
+      form.setValue(`translations.${langId}`, {
+        title: "",
+      });
+    },
+    [form],
+  );
+
+  const handleDeleteTranslation = useCallback(
+    (langId: string) => {
+      form.setValue(`translations.${langId}`, {
+        title: "",
+      });
+      toast.success(t("delete"));
+    },
+    [form, t],
+  );
+
+  const toggleType = useCallback(
+    (typeOption: z.infer<typeof StackTypeSchema>) => {
+      const current = form.getValues("type") ?? [];
+      if (current.includes(typeOption)) {
+        form.setValue(
+          "type",
+          current.filter((t) => t !== typeOption),
+          { shouldDirty: true },
+        );
+      } else {
+        form.setValue("type", [...current, typeOption], { shouldDirty: true });
+      }
+    },
+    [form],
+  );
+
   const onSubmit = useCallback(
-    (values: TCertForm) => {
+    (values: CertificationFormValues) => {
       startTransition(async () => {
         try {
           const data = {
@@ -117,6 +259,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
             idCredential: values.idCredential ?? undefined,
             image: values.image ?? undefined,
           };
+
           if (isEditMode && values.id) {
             await updateCert.mutateAsync({
               id: values.id,
@@ -138,173 +281,243 @@ export const CertificationForm: FC<CertificationFormProps> = ({
     [isEditMode, updateCert, createCert, utils, router, t],
   );
 
-  const isSaving = createCert.isPending || updateCert.isPending;
+  const isSaving = isPending || createCert.isPending || updateCert.isPending;
   const anyError = createCert.error ?? updateCert.error;
 
   return (
     <Form {...form}>
       <FormRoot onSubmit={form.handleSubmit(onSubmit)}>
-        <GlobalLanguageSelector
-          languages={languages}
-          activeLangId={activeLangId}
-          onLangChange={setActiveLangId}
-          buttonIdPrefix="certification"
-        />
         <FormContent error={anyError}>
-          <FormSection title={t("generalSection")}>
-            {languages.map((lang) => {
-              const isActive = lang.id === activeLangId;
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <TabsList
+              variant="line"
+              className="mb-6 w-full justify-start border-b"
+            >
+              <TabsTrigger value="general">{t("tabGeneral")}</TabsTrigger>
+              <TabsTrigger value="content">{t("tabContent")}</TabsTrigger>
+              <TabsTrigger value="skills">{t("tabSkills")}</TabsTrigger>
+            </TabsList>
 
-              return (
-                <div
-                  key={lang.id}
-                  className={isActive ? "mb-4 grid gap-4" : "hidden"}
-                  aria-hidden={!isActive}
-                >
+            <TabsContent value="general" className="space-y-6">
+              <div className="grid gap-6 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="company"
+                  render={({ field }) => (
+                    <FormItem
+                      label={t("issuingCompany")}
+                      inputId="certification-issuing-company"
+                    >
+                      <Input
+                        placeholder={t("issuingCompanyPlaceholder")}
+                        {...field}
+                      />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="issuedDate"
+                  render={({ field }) => (
+                    <FormItem
+                      label={t("issuedDate")}
+                      inputId="certification-issued-date"
+                    >
+                      <Input
+                        type="number"
+                        placeholder={t("issuedDatePlaceholder")}
+                        value={field.value ?? ""}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value === ""
+                              ? null
+                              : Number(e.target.value),
+                          )
+                        }
+                      />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid gap-6 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="url"
+                  render={({ field }) => (
+                    <FormItem
+                      label={t("credentialUrl")}
+                      inputId="certification-credential-url"
+                    >
+                      <Input
+                        placeholder={t("credentialUrlPlaceholder")}
+                        {...field}
+                      />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="idCredential"
+                  render={({ field }) => (
+                    <FormItem
+                      label={t("credentialId")}
+                      inputId="certification-credential-id"
+                    >
+                      <Input
+                        placeholder={t("credentialIdPlaceholder")}
+                        {...field}
+                      />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem label={t("imageUrl")} inputId="certification-image">
+                    <Input placeholder={t("imageUrlPlaceholder")} {...field} />
+                  </FormItem>
+                )}
+              />
+
+              <div className="space-y-2">
+                <span className="text-foreground text-sm font-medium">
+                  {t("relatedTypes")}
+                </span>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {StackTypeSchema.options.map((opt) => {
+                    const isSelected = watchedTypes?.includes(opt);
+                    return (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => toggleType(opt)}
+                        className={cn(
+                          "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                          isSelected
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                        )}
+                      >
+                        {opt}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="content" className="space-y-6">
+              <AdminFormLanguageBar
+                languages={languageProgress}
+                activeLangId={activeLangId}
+                onSelectLang={setActiveLangId}
+                showOriginal={showOriginal}
+                onToggleShowOriginal={() => setShowOriginal(!showOriginal)}
+                baseLabel={t("baseLanguageLabel")}
+                allCompleteText={t("allComplete")}
+                showOriginalText={t("showOriginal")}
+              />
+
+              {isNonPrimary && isCurrentTranslationEmpty ? (
+                <AdminFormEmptyTranslation
+                  languageName={activeLang?.name ?? activeLang?.code ?? ""}
+                  baseLanguageName={
+                    primaryLang?.name ?? primaryLang?.code ?? ""
+                  }
+                  onCopyFromBase={() => handleCopyFromBase(activeLangId)}
+                  onStartBlank={() => handleStartBlank(activeLangId)}
+                  notTranslatedText={t("notTranslated", {
+                    language: activeLang?.name ?? activeLang?.code ?? "",
+                  })}
+                  notTranslatedHintText={t("notTranslatedHint", {
+                    baseLanguage: primaryLang?.name ?? primaryLang?.code ?? "",
+                  })}
+                  copyFromBaseText={t("copyFromBase", {
+                    baseLanguage: primaryLang?.name ?? primaryLang?.code ?? "",
+                  })}
+                  startBlankText={t("startBlank")}
+                />
+              ) : (
+                <div className="space-y-6">
                   <FormField
                     control={form.control}
-                    name={`translations.${lang.id}.title`}
+                    name={`translations.${activeLangId}.title`}
                     render={({ field }) => (
-                      <FormItem
-                        label={t("titleWithLanguage", {
-                          language: lang.name ?? lang.code,
-                        })}
-                        inputId={`certification-title-${lang.code}`}
-                      >
-                        <Input {...field} />
-                      </FormItem>
+                      <div>
+                        {showOriginal && isNonPrimary && primaryTitle && (
+                          <ReferenceSnippet
+                            label={primaryLang?.code.toUpperCase() ?? ""}
+                            content={primaryTitle}
+                            onCopy={() => field.onChange(primaryTitle)}
+                            copyText={t("copy")}
+                          />
+                        )}
+                        <FormItem
+                          label={t("title")}
+                          inputId={`certification-title-${activeLangId}`}
+                        >
+                          <Input
+                            placeholder={t("titlePlaceholder")}
+                            {...field}
+                          />
+                        </FormItem>
+                      </div>
                     )}
                   />
+
+                  {isNonPrimary && !isCurrentTranslationEmpty && (
+                    <AdminFormDeleteTranslation
+                      languageName={activeLang?.name ?? activeLang?.code ?? ""}
+                      deleteTranslationText={t("deleteTranslation", {
+                        language: activeLang?.name ?? activeLang?.code ?? "",
+                      })}
+                      deleteConfirmText={t("deleteTranslationConfirm", {
+                        language: activeLang?.name ?? activeLang?.code ?? "",
+                      })}
+                      onDelete={() => handleDeleteTranslation(activeLangId)}
+                    />
+                  )}
                 </div>
-              );
-            })}
-
-            <FormField
-              control={form.control}
-              name="company"
-              render={({ field }) => (
-                <FormItem
-                  label={t("issuingCompany")}
-                  inputId="certification-issuing-company"
-                >
-                  <Input
-                    placeholder={t("issuingCompanyPlaceholder")}
-                    {...field}
-                  />
-                </FormItem>
               )}
-            />
+            </TabsContent>
 
-            <div className="grid grid-cols-2 gap-4">
+            <TabsContent value="skills" className="space-y-6">
               <FormField
                 control={form.control}
-                name="url"
+                name="skillIds"
                 render={({ field }) => (
-                  <FormItem
-                    label={t("credentialUrl")}
-                    inputId="certification-credential-url"
-                  >
-                    <Input
-                      placeholder={t("credentialUrlPlaceholder")}
-                      {...field}
-                    />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="idCredential"
-                render={({ field }) => (
-                  <FormItem
-                    label={t("credentialId")}
-                    inputId="certification-credential-id"
-                  >
-                    <Input
-                      placeholder={t("credentialIdPlaceholder")}
-                      {...field}
-                    />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem label={t("imageUrl")} inputId="certification-image">
-                  <Input placeholder={t("imageUrlPlaceholder")} {...field} />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="type"
-              render={() => (
-                <FormItem
-                  label={t("relatedTypes")}
-                  inputId="certification-type"
-                >
-                  <div className="mt-2 grid grid-cols-2 gap-2">
-                    {StackTypeSchema.options.map((item) => (
-                      <FormField
-                        key={item}
-                        control={form.control}
-                        name="type"
-                        render={({ field }) => {
-                          return (
-                            <FormCheckboxItem key={item} label={item}>
-                              <Checkbox
-                                checked={field.value?.includes(item)}
-                                onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([...field.value, item])
-                                    : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== item,
-                                        ),
-                                      );
-                                }}
-                              />
-                            </FormCheckboxItem>
-                          );
-                        }}
-                      />
-                    ))}
-                  </div>
-                </FormItem>
-              )}
-            />
-          </FormSection>
-
-          <FormSection
-            title={t("skillsSection")}
-            className="mt-4 border-t pt-4"
-          >
-            <FormField
-              control={form.control}
-              name="skillIds"
-              render={({ field }) => (
-                <FormItem
-                  label={t("associatedSkills")}
-                  inputId="certification-skill-picker"
-                >
                   <SkillPicker
-                    availableSkills={availableSkills}
-                    selectedSkillIds={field.value}
+                    selectedSkillIds={field.value ?? []}
                     onChange={field.onChange}
+                    availableSkills={availableSkills}
                   />
-                </FormItem>
-              )}
-            />
-          </FormSection>
+                )}
+              />
+            </TabsContent>
+          </Tabs>
         </FormContent>
+
         <FormActions
-          isPending={isPending || isSaving}
+          isPending={isSaving}
           title={isEditMode ? t("save") : t("create")}
+          submitId="certification-form-submit"
         >
-          <Button type="button" variant="ghost" onClick={() => router.back()}>
+          <Button
+            id="certification-form-cancel"
+            type="button"
+            variant="ghost"
+            onClick={() => router.back()}
+          >
             {t("cancel")}
           </Button>
         </FormActions>

@@ -3,7 +3,14 @@
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { type ColumnDef } from "@tanstack/react-table";
 import type { AppTableFeatures } from "@/lib/app-table-features";
-import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Loader2,
+  Award,
+  ExternalLink,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
@@ -16,12 +23,23 @@ import { DataTable } from "@/components/shared/data-table/data-table";
 import { DataTableToolbar } from "@/components/shared/data-table/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/shared/data-table/data-table-column-header";
 import { DataTableFetchingIndicator } from "@/components/shared/data-table/data-table-fetching-indicator";
+import { DataTableCategoryChips } from "@/components/shared/data-table/data-table-category-chips";
+import { DataTableBulkBar } from "@/components/shared/data-table/data-table-bulk-bar";
+import {
+  LanguageStatusBadge,
+  computeTranslationStatus,
+} from "@/components/shared/data-table/language-status-badge";
 import { ExportSeedJsonButton } from "@/components/admin/shared/export-seed-json-button";
 import { useDataTable } from "@/hooks/use-data-table";
 import { buttonVariants, Button } from "@/components/ui/button";
-import { useQueryState, parseAsInteger } from "nuqs";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  useQueryState,
+  parseAsInteger,
+} from "nuqs";
 import { getSortingStateParser } from "@/lib/parsers";
 import type { FilterItemSchema } from "@/lib/parsers";
+import { cn } from "@/lib/utils";
 
 type CertificationRow =
   RouterOutputs["certificationsAdmin"]["getMine"]["data"][number];
@@ -39,6 +57,21 @@ interface CertificationsListProps {
   totalCount: number;
 }
 
+const STACK_TYPE_STYLES: Record<string, string> = {
+  FRONTEND: "bg-sky-500/10 text-sky-500 border-sky-500/20",
+  BACKEND: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+  DATABASE: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  DEVOPS: "bg-purple-500/10 text-purple-500 border-purple-500/20",
+  MOBILE: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+  TOOLS: "bg-orange-500/10 text-orange-500 border-orange-500/20",
+  CYBERSECURITY: "bg-red-500/10 text-red-500 border-red-500/20",
+  AI: "bg-indigo-500/10 text-indigo-500 border-indigo-500/20",
+  ARCHITECTURE: "bg-teal-500/10 text-teal-500 border-teal-500/20",
+  DATA: "bg-cyan-500/10 text-cyan-500 border-cyan-500/20",
+  SOFTSKILLS: "bg-pink-500/10 text-pink-500 border-pink-500/20",
+  QUALITY_DELIVERY: "bg-lime-500/10 text-lime-500 border-lime-500/20",
+};
+
 export const CertificationsList: FC<CertificationsListProps> = ({
   initialCertifications,
   languages,
@@ -49,6 +82,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
   const t = useTranslations("admin.certifications");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const [page] = useQueryState("page", parseAsInteger.withDefault(1));
@@ -58,9 +92,8 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     getSortingStateParser<CertificationRow>(),
   );
 
-  // Basic filtering writes to individual keys, not the "filters" array key.
   const [titleFilter] = useQueryState("title");
-  const [companyFilter] = useQueryState("company");
+  const [companyFilter, setCompanyFilter] = useQueryState("company");
 
   const parsedFilters = useMemo((): FilterItemSchema[] => {
     const f: FilterItemSchema[] = [];
@@ -104,6 +137,8 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     api.skillsAdmin.getMine.useQuery({});
 
   const deleteCertification = api.certificationsAdmin.deleteItem.useMutation();
+  const deleteManyCertifications =
+    api.certificationsAdmin.deleteMany.useMutation();
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -131,11 +166,87 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     return map;
   }, [rawSkills]);
 
+  const uniqueCompanies = useMemo(() => {
+    return Array.from(new Set(certifications.map((c) => c.company))).filter(
+      Boolean,
+    );
+  }, [certifications]);
+
+  const companyCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: trpcTotalCount };
+    for (const cert of certifications) {
+      if (cert.company) {
+        counts[cert.company] = (counts[cert.company] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [certifications, trpcTotalCount]);
+
+  const categories = useMemo(() => {
+    const items = [
+      {
+        value: "all",
+        label: t("categories.all") || "All",
+        count: companyCounts.all,
+      },
+    ];
+    for (const company of uniqueCompanies) {
+      items.push({
+        value: company,
+        label: company,
+        count: companyCounts[company] ?? 0,
+      });
+    }
+    return items;
+  }, [companyCounts, t, uniqueCompanies]);
+
+  const activeCategory = useMemo(() => {
+    return companyFilter ?? "all";
+  }, [companyFilter]);
+
+  const handleCategoryChange = useCallback(
+    (val: string) => {
+      if (val === "all") {
+        void setCompanyFilter(null);
+      } else {
+        void setCompanyFilter(val);
+      }
+    },
+    [setCompanyFilter],
+  );
+
   const columns = useMemo<
     ColumnDef<AppTableFeatures, CertificationRow>[]
   >(() => {
     const field = createLocalizedFieldResolver(languages, locale);
     return [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            aria-label="Select all"
+            className="translate-y-0.5"
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            aria-label="Select row"
+            className="translate-y-0.5"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+          />
+        ),
+        enableHiding: false,
+        enableSorting: false,
+        size: 40,
+      },
       {
         id: "title",
         accessorFn: (row) => field(row.translations, "title"),
@@ -149,11 +260,48 @@ export const CertificationsList: FC<CertificationsListProps> = ({
         },
         enableSorting: false,
         enableColumnFilter: false,
-        cell: ({ row }) => (
-          <p className="text-foreground font-medium">
-            {field(row.original.translations, "title") || t("untitled")}
-          </p>
-        ),
+        cell: ({ row }) => {
+          const cert = row.original;
+          const title = field(cert.translations, "title") || t("untitled");
+          return (
+            <div className="flex items-center gap-3">
+              <div className="bg-muted border-border flex size-9 shrink-0 items-center justify-center rounded-lg border">
+                {cert.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={cert.image}
+                    alt=""
+                    className="size-5 object-contain"
+                  />
+                ) : (
+                  <Award className="text-muted-foreground size-4" />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-foreground text-sm leading-tight font-semibold">
+                    {title}
+                  </p>
+                  {cert.url && (
+                    <a
+                      href={cert.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-primary transition-colors"
+                      title="View Credential"
+                    >
+                      <ExternalLink className="size-3" />
+                    </a>
+                  )}
+                </div>
+                <span className="text-muted-foreground text-xs">
+                  {cert.company}
+                  {cert.issuedDate ? ` · ${cert.issuedDate}` : ""}
+                </span>
+              </div>
+            </div>
+          );
+        },
       },
       {
         id: "company",
@@ -167,18 +315,83 @@ export const CertificationsList: FC<CertificationsListProps> = ({
           variant: "text",
         },
         enableColumnFilter: true,
-      },
-      {
-        id: "issuedDate",
-        accessorFn: (row) => row.issuedDate ?? 0,
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} label={t("columnIssued")} />
-        ),
         cell: ({ row }) => (
-          <span className="text-muted-foreground text-xs">
-            {row.original.issuedDate ?? "-"}
+          <span className="text-muted-foreground text-xs font-medium">
+            {row.original.company}
           </span>
         ),
+      },
+      {
+        id: "type",
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            label={t("columnType") || "Type"}
+          />
+        ),
+        cell: ({ row }) => {
+          const types = (row.original.type as string[]) ?? [];
+          if (types.length === 0)
+            return <span className="text-muted-foreground text-xs">-</span>;
+          return (
+            <div className="flex flex-wrap gap-1">
+              {types.map((type) => {
+                const badgeStyle =
+                  STACK_TYPE_STYLES[type] ??
+                  "bg-muted text-muted-foreground border-border";
+                return (
+                  <span
+                    key={type}
+                    className={cn(
+                      "inline-flex items-center rounded-full border px-2 py-0.5 text-[0.6875rem] font-medium tracking-wide",
+                      badgeStyle,
+                    )}
+                  >
+                    {type}
+                  </span>
+                );
+              })}
+            </div>
+          );
+        },
+      },
+      {
+        id: "languages",
+        header: ({ column }) => (
+          <DataTableColumnHeader
+            column={column}
+            label={t("columnLanguages") || "Languages"}
+          />
+        ),
+        cell: ({ row }) => {
+          const cert = row.original;
+          const translationsRecord = cert.translations as
+            | Record<string, { title?: string }>
+            | { appLanguageId: string; title?: string }[]
+            | undefined;
+
+          const statuses = languages.map((lang) => {
+            let tr: { title?: string } | undefined;
+            if (Array.isArray(translationsRecord)) {
+              tr = translationsRecord.find(
+                (tItem) => tItem.appLanguageId === lang.id,
+              );
+            } else if (
+              translationsRecord &&
+              typeof translationsRecord === "object"
+            ) {
+              tr = translationsRecord[lang.id];
+            }
+            const status = computeTranslationStatus(tr, ["title"]);
+            return {
+              code: lang.code,
+              name: lang.name,
+              status,
+            };
+          });
+
+          return <LanguageStatusBadge languages={statuses} />;
+        },
       },
       {
         id: "skills",
@@ -247,15 +460,54 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     manualSorting: true,
     manualFiltering: true,
     initialState: {
-      sorting: [{ id: "issuedDate", desc: true }],
+      sorting: [{ id: "company", desc: false }],
     },
     shallow: true,
   });
 
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+
+  const handleBulkDelete = useCallback(() => {
+    const ids = table
+      .getFilteredSelectedRowModel()
+      .rows.map((r) => r.original.id);
+    if (ids.length === 0) return;
+
+    const confirmMsg = t("bulk.deleteConfirm", { count: ids.length });
+    if (!window.confirm(confirmMsg)) return;
+
+    startTransition(async () => {
+      setIsBulkDeleting(true);
+      try {
+        await deleteManyCertifications.mutateAsync({ ids });
+        toast.success(t("bulk.deleteSuccess", { count: ids.length }));
+        table.resetRowSelection();
+        await utils.certificationsAdmin.getMine.invalidate();
+      } catch {
+        toast.error(t("bulk.deleteError"));
+      } finally {
+        setIsBulkDeleting(false);
+      }
+    });
+  }, [deleteManyCertifications, t, table, utils]);
+
   return (
     <div className="relative flex h-full flex-col">
       <DataTableFetchingIndicator isFetching={isFetching} />
-      <DataTable table={table}>
+      <DataTable
+        table={table}
+        bulkBar={
+          <DataTableBulkBar
+            selectedCount={selectedCount}
+            onClearSelection={() => table.resetRowSelection()}
+            onDeleteSelected={handleBulkDelete}
+            isDeleting={isBulkDeleting}
+            clearLabel={t("bulk.clear")}
+            deleteLabel={t("bulk.delete")}
+            selectedLabel={t("bulk.selected", { count: selectedCount })}
+          />
+        }
+      >
         <DataTableToolbar table={table}>
           <div className="flex flex-wrap items-center gap-2">
             <ExportSeedJsonButton entity="certifications" />
@@ -269,6 +521,12 @@ export const CertificationsList: FC<CertificationsListProps> = ({
             </Link>
           </div>
         </DataTableToolbar>
+
+        <DataTableCategoryChips
+          chips={categories}
+          value={activeCategory}
+          onChange={handleCategoryChange}
+        />
       </DataTable>
     </div>
   );

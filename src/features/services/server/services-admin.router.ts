@@ -180,6 +180,30 @@ export const servicesAdminRouter = createTRPCRouter({
       );
       return ctx.db.service.delete({ where: { id: input.id } });
     }),
+  toggleActive: protectedProcedure
+    .input(z.object({ id: z.string(), isActive: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      await assertOwner(
+        await ctx.db.service.findUnique({ where: { id: input.id } }),
+        ctx.user.id,
+      );
+      return ctx.db.service.update({
+        where: { id: input.id },
+        data: { isActive: input.isActive },
+      });
+    }),
+  deleteMany: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      if (input.ids.length === 0) return { count: 0 };
+      const items = await ctx.db.service.findMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        select: { id: true },
+      });
+      const ids = items.map((i) => i.id);
+      if (ids.length === 0) return { count: 0 };
+      return ctx.db.service.deleteMany({ where: { id: { in: ids } } });
+    }),
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     const items = await ctx.db.service.findMany({
       where: { userId: ctx.user.id },

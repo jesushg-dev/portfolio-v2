@@ -230,6 +230,27 @@ export const usesAdminRouter = createTRPCRouter({
       return { ok: true };
     }),
 
+  deleteMany: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()) }))
+    .mutation(async ({ ctx, input }) => {
+      const items = await ctx.db.usesItem.findMany({
+        where: { id: { in: input.ids }, userId: ctx.user.id },
+        select: { id: true },
+      });
+      const ids = items.map((i) => i.id);
+      if (ids.length === 0) return { count: 0 };
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.usesWorkspaceTag.deleteMany({
+          where: { usesItemId: { in: ids } },
+        });
+        await tx.usesItemTranslation.deleteMany({
+          where: { usesItemId: { in: ids } },
+        });
+        return tx.usesItem.deleteMany({ where: { id: { in: ids } } });
+      });
+    }),
+
   getSettings: protectedProcedure.query(async ({ ctx }) => {
     const languages = await ctx.db.appLanguage.findMany({
       orderBy: { code: "asc" },

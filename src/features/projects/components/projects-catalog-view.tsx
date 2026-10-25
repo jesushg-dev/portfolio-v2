@@ -69,36 +69,27 @@ export function TypeSegmentButtons({
     <div className="flex w-full justify-center px-2 sm:px-4">
       <Tab
         tabId="projects-catalog-tab"
-        minimal
         currentTab={currentIndex}
         setCurrentTab={handleTabChange}
         ariaLabel={ariaLabel}
-        className="bg-muted/70 border-border text-foreground inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-3xl border p-1.5 shadow-xs md:rounded-full"
+        className="max-w-full"
       >
-        <TabItem
-          icon={Eye}
-          title={`${typeLabels.All} (${counts.All})`}
-          description=""
-        />
+        <TabItem icon={Eye} title={`${typeLabels.All} (${counts.All})`} />
         <TabItem
           icon={Monitor}
           title={`${typeLabels.FRONTEND} (${counts.FRONTEND})`}
-          description=""
         />
         <TabItem
           icon={Server}
           title={`${typeLabels.BACKEND} (${counts.BACKEND})`}
-          description=""
         />
         <TabItem
           icon={Smartphone}
           title={`${typeLabels.MOBILE} (${counts.MOBILE})`}
-          description=""
         />
         <TabItem
           icon={Laptop}
           title={`${typeLabels.DESKTOP} (${counts.DESKTOP})`}
-          description=""
         />
       </Tab>
     </div>

@@ -132,11 +132,13 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
             <TabsTrigger
               key={id}
               value={id}
-              className="h-full flex-initial shrink-0 px-4 text-sm font-medium after:bottom-0"
+              className="h-full flex-initial shrink-0 gap-2 px-4 text-sm font-medium"
             >
               <Icon className="size-4" aria-hidden />
               <span>{t(labelKey)}</span>
-              <span className="tabular-nums opacity-75">({getCount(id)})</span>
+              <span className="bg-muted/80 text-foreground rounded-full px-2 py-0.5 text-xs font-medium tabular-nums">
+                {getCount(id)}
+              </span>
               {id === "events" && weekEventsCount > 0 ? (
                 <Badge
                   variant="secondary"
