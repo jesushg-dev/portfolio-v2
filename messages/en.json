@@ -34,6 +34,8 @@
       "disconnecting": "Disconnecting…",
       "disconnectSuccess": "Integration disconnected successfully.",
       "disconnectFailed": "Failed to disconnect integration.",
+      "disconnectConfirmTitle": "Disconnect {provider}",
+      "disconnectConfirmDescription": "Credentials are saved and encrypted. You can reconnect this service at any time.",
       "update": "Update credentials",
       "manage": "Manage",
       "cancel": "Cancel"
@@ -76,6 +78,13 @@
       "uploadthing": "File & PDF Storage CDN",
       "ai": "Resume Engine, ATS & Flashcards",
       "ilovepdf": "DOCX to PDF & HTML to PDF Engine"
+    },
+    "categories": {
+      "communication": "Email",
+      "media": "Music",
+      "storage": "Storage",
+      "ai": "Artificial intelligence",
+      "documents": "Documents"
     },
     "guides": {
       "title": "Setup Guide",
@@ -146,11 +155,16 @@
     },
     "empty": {
       "title": "No integrations connected yet",
-      "description": "Pick a service below to connect your first integration."
+      "description": "Pick a service below to connect your first integration.",
+      "allConnectedTitle": "Everything is connected",
+      "allConnectedDescription": "No pending integrations left to configure in the catalog.",
+      "noneConnectedTitle": "No connected services yet",
+      "noneConnectedDescription": "Connect a service from the Available tab to power up your portfolio."
     },
     "status": {
       "configured": "Configured",
       "notConfigured": "Not Configured",
+      "notConnected": "Not connected yet",
       "syncing": "Syncing templates...",
       "syncedCount": "{count} templates published"
     },
@@ -1846,7 +1860,13 @@
         "referrersHint": "Hostnames only. Direct visits are omitted.",
         "empty": "No visitor data yet. Public pages start counting after the first anonymous visit.",
         "emptyReferrers": "No external referrers in this window.",
-        "unknownCountry": "Unknown"
+        "unknownCountry": "Unknown",
+        "pagesPerVisit": "{ratio} pages per visit",
+        "last30Days": "Last 30 days",
+        "mostFromCountry": "Most from {country} ({percentage}%)",
+        "pageviewsShare": "{views} views · {percentage}% of pageviews",
+        "showAll": "Show all ({count})",
+        "showLess": "Show less"
       },
       "jobs": {
         "title": "Job tracker",
@@ -1860,18 +1880,25 @@
         "hired": "Hired",
         "upcoming": "Upcoming events",
         "upcomingHint": "Next interviews, tests, and follow-ups.",
-        "noUpcoming": "Nothing scheduled."
+        "noUpcoming": "Nothing scheduled.",
+        "statusDistribution": "Status of all {count} applications",
+        "noUpcomingEvents": "No upcoming events",
+        "noUpcomingHint": "Interviews, tests and follow-ups will show up here.",
+        "addEvent": "Add event"
       },
       "services": {
         "title": "Services",
-        "subtitle": "Which offerings are visible on the public site.",
+        "subtitle": "Choose which offerings appear on the public site.",
         "empty": "No services yet.",
         "active": "Active",
         "inactive": "Inactive",
-        "featured": "Featured"
+        "featured": "Featured",
+        "visibleCount": "{active} of {total} visible.",
+        "toggleVisibilityAria": "Show {title} on the public site"
       },
       "inventory": {
-        "title": "Content inventory"
+        "title": "Content inventory",
+        "subtitle": "What visitors can find on your portfolio."
       },
       "stats": {
         "certificates": {
@@ -2395,9 +2422,67 @@
         "noResults": "No skills found",
         "selectedCount": "{count, plural, one {# skill selected} other {# skills selected}}",
         "shownCount": "{shown} of {total} shown",
-        "allTypes": "All types"
+        "allTypes": "All types",
+        "clearAll": "Clear all"
+      },
+      "certificatePicker": {
+        "title": "Associated certificates",
+        "searchPlaceholder": "Search certificates by title or issuer…",
+        "noResults": "No certificates found for this search.",
+        "noCertificatesYet": "No certificates registered yet.",
+        "clickToRemove": "Click to remove",
+        "selectedCount": "{count, plural, =0 {No certificates selected} one {1 certificate selected} other {# certificates selected}}",
+        "clearAll": "Clear all",
+        "hintEmpty": "Search and link certificates that endorse this project.",
+        "noSelected": "No certificates selected"
       },
       "project": {
+        "tabs": {
+          "general": "General",
+          "content": "Content",
+          "skills": "Skills",
+          "certificates": "Certificates"
+        },
+        "generalNote": "These settings apply across all languages. Translated content is under Content.",
+        "coverSection": "Cover",
+        "coverHint": "Paste a URL or upload an image file.",
+        "coverUpload": "Upload image",
+        "coverChange": "Change",
+        "coverRemove": "Remove",
+        "coverEmptyTitle": "No cover image",
+        "coverEmptyHint": "Upload a file or paste a URL below",
+        "classification": "Classification",
+        "datesAndTeam": "Dates & Team",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "teamSize": "Team size",
+        "teamSizePlaceholder": "1",
+        "status": "Status",
+        "linksSection": "Links",
+        "publicationSection": "Publication",
+        "slugHint": "Optional. Required when enabling case study.",
+        "order": "Order",
+        "orderHint": "Position in project catalog.",
+        "caseStudyPublishHint": "While turned off it stays as a draft: you can keep editing in Content without showing on the live site.",
+        "caseStudyNotReady": "Cannot publish yet: {reasons}",
+        "caseStudyStatus": "Case study status",
+        "caseStudyPublished": "Published",
+        "caseStudyDraft": "Draft",
+        "caseStudyPublish": "Publish",
+        "caseStudyUnpublish": "Revert to draft",
+        "notTranslated": "No translation in {language}",
+        "baseLanguageLabel": "Base",
+        "notTranslatedHint": "Saved as an independent translation. Start blank or copy text from {baseLanguage}.",
+        "copyFromBase": "Copy from {baseLanguage}",
+        "startBlank": "Start blank",
+        "showOriginal": "Show original",
+        "copy": "Copy",
+        "completeProgress": "{completed}/{total} complete",
+        "allComplete": "All complete ✓",
+        "missingFields": "Missing: {fields}",
+        "associatedCertificates": "Associated certificates",
+        "deleteTranslation": "Delete {language} translation",
+        "deleteTranslationConfirm": "Delete the translation in {language}? Title, description and case study will be removed.",
         "caseStudyContent": "Case study content",
         "caseStudyContext": "Context",
         "caseStudySectionTitle": "Section title",
@@ -2421,6 +2506,7 @@
         "associatedSkills": "Associated Skills",
         "save": "Save",
         "create": "Create",
+        "delete": "Delete",
         "cancel": "Cancel",
         "updatedSuccess": "Project updated",
         "createdSuccess": "Project created",
@@ -2437,10 +2523,22 @@
         "titleWithLanguage": "Title ({language})",
         "descriptionWithLanguage": "Description ({language})",
         "imageUrl": "Image URL / Icon",
+        "icon": "Icon",
         "imageUrlPlaceholder": "https://...",
         "serviceType": "Service Type",
+        "type": "Service Type",
         "selectType": "Select a type",
         "associatedSkills": "Associated Skills",
+        "image": "Image URL",
+        "imagePlaceholder": "https://...",
+        "statsValue": "Metrics / Key Stat",
+        "statsValuePlaceholder": "e.g. 99.9%, 10+, 50ms",
+        "featuredLabel": "Featured Service",
+        "featuredDescription": "Highlight this service prominently on the homepage and services grid.",
+        "badge": "Badge / Pill text",
+        "badgePlaceholder": "e.g. Popular, Advanced, Core",
+        "statsLabel": "Metric Label",
+        "statsLabelPlaceholder": "e.g. Uptime SLA, Completed Projects",
         "save": "Save",
         "create": "Create",
         "cancel": "Cancel",
@@ -2452,7 +2550,27 @@
         "titleRequiredPrimary": "Title is required for the primary language",
         "atLeastOneLanguage": "At least one language is required",
         "isActive": "Active on the public site",
-        "isActiveHint": "Inactive services stay in admin but are hidden from the homepage and public stats."
+        "isActiveHint": "Inactive services stay in admin but are hidden from the homepage and public stats.",
+        "tabGeneral": "General",
+        "tabContent": "Content",
+        "tabSkills": "Skills",
+        "title": "Title",
+        "titlePlaceholder": "e.g. Full-Stack Web Development",
+        "description": "Description",
+        "descriptionPlaceholder": "Detailed description of this service...",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completed",
+        "notTranslated": "Not translated in {language}",
+        "notTranslatedHint": "Saved as an independent translation. Start blank or copy from {baseLanguage}.",
+        "copyFromBase": "Copy from {baseLanguage}",
+        "startBlank": "Start blank",
+        "allComplete": "All complete ✓",
+        "missingFields": "Missing: {fields}",
+        "showOriginal": "Show original",
+        "copy": "Copy",
+        "deleteTranslation": "Delete translation in {language}",
+        "deleteTranslationConfirm": "Delete translation in {language}?",
+        "delete": "Delete"
       },
       "certification": {
         "generalSection": "General Information",
@@ -2477,7 +2595,27 @@
         "createFailed": "Failed to create certification",
         "companyRequired": "Company is required",
         "titleRequiredPrimary": "Title is required for the primary language",
-        "atLeastOneLanguage": "At least one language is required"
+        "atLeastOneLanguage": "At least one language is required",
+        "tabGeneral": "General",
+        "tabContent": "Content",
+        "tabSkills": "Skills",
+        "title": "Title",
+        "titlePlaceholder": "e.g. AWS Certified Solutions Architect",
+        "issuedDate": "Issued Year",
+        "issuedDatePlaceholder": "e.g. 2024",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completed",
+        "notTranslated": "Not translated in {language}",
+        "notTranslatedHint": "Saved as an independent translation. Start blank or copy from {baseLanguage}.",
+        "copyFromBase": "Copy from {baseLanguage}",
+        "startBlank": "Start blank",
+        "allComplete": "All complete ✓",
+        "missingFields": "Missing: {fields}",
+        "showOriginal": "Show original",
+        "copy": "Copy",
+        "deleteTranslation": "Delete translation in {language}",
+        "deleteTranslationConfirm": "Delete translation in {language}?",
+        "delete": "Delete"
       },
       "jobTrackerApplication": {
         "validation": {
@@ -2743,7 +2881,32 @@
         "organizationRequired": "Organization is required",
         "startDateRequired": "Start date is required",
         "titleRequiredPrimary": "Title is required for the primary language",
-        "atLeastOneLanguage": "At least one language is required"
+        "atLeastOneLanguage": "At least one language is required",
+        "tabGeneral": "General",
+        "tabContent": "Content",
+        "tabRoles": "Roles",
+        "tabSkills": "Skills",
+        "rolesHint": "Roles or positions held within this organization.",
+        "roleTitle": "Role Title",
+        "roleTitlePlaceholder": "e.g. Senior Software Engineer",
+        "roleStartDate": "Start Date",
+        "roleEndDate": "End Date",
+        "addRole": "Add role",
+        "noRoles": "No roles yet.",
+        "skillsHint": "Skills associated with this timeline entry.",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completed",
+        "notTranslated": "Not translated in {language}",
+        "notTranslatedHint": "Saved as an independent translation. Start blank or copy from {baseLanguage}.",
+        "copyFromBase": "Copy from {baseLanguage}",
+        "startBlank": "Start blank",
+        "allComplete": "All complete ✓",
+        "missingFields": "Missing: {fields}",
+        "showOriginal": "Show original",
+        "copy": "Copy",
+        "deleteTranslation": "Delete translation in {language}",
+        "deleteTranslationConfirm": "Delete translation in {language}?",
+        "delete": "Delete"
       },
       "portfolioSoftSkill": {
         "generalSection": "General Information",
@@ -2759,8 +2922,8 @@
         "displayOrder": "Display order",
         "titleWithLanguage": "Title ({language})",
         "descriptionWithLanguage": "Description ({language})",
-        "titlePlaceholder": "e.g. Teamwork",
-        "descriptionPlaceholder": "Short description shown in the tooltip",
+        "titlePlaceholder": "e.g. Critical Thinking",
+        "descriptionPlaceholder": "Description of this soft skill...",
         "save": "Save",
         "create": "Create",
         "cancel": "Cancel",
@@ -2771,7 +2934,24 @@
         "titleRequiredPrimary": "Title is required for the primary language",
         "atLeastOneLanguage": "At least one language is required",
         "copyFromPrimary": "Copy from {language}",
-        "unsavedChangesConfirm": "You have unsaved changes. Leave anyway?"
+        "unsavedChangesConfirm": "You have unsaved changes. Leave anyway?",
+        "tabGeneral": "General",
+        "tabContent": "Content",
+        "title": "Title",
+        "description": "Description",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completed",
+        "notTranslated": "Not translated in {language}",
+        "notTranslatedHint": "Saved as an independent translation. Start blank or copy from {baseLanguage}.",
+        "copyFromBase": "Copy from {baseLanguage}",
+        "startBlank": "Start blank",
+        "allComplete": "All complete ✓",
+        "missingFields": "Missing: {fields}",
+        "showOriginal": "Show original",
+        "copy": "Copy",
+        "deleteTranslation": "Delete translation in {language}",
+        "deleteTranslationConfirm": "Delete translation in {language}?",
+        "delete": "Delete"
       },
       "softSkillsSection": {
         "title": "Section background",
@@ -2789,7 +2969,19 @@
         "save": "Save section",
         "cancel": "Cancel",
         "savedSuccess": "Section background saved",
-        "saveFailed": "Failed to save section background"
+        "saveFailed": "Failed to save section background",
+        "generalTab": "General",
+        "metricsTab": "Metrics",
+        "metricsDescription": "The value (e.g. \"40%\") is the same in all languages; the label is translated.",
+        "noMetrics": "No metrics yet.",
+        "addMetric": "Add metric",
+        "metricValue": "Value",
+        "metricValuePlaceholder": "e.g. 40%",
+        "metricLabel": "Label",
+        "metricLabelPlaceholder": "e.g. Engineers led",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "deleteMetric": "Delete"
       },
       "usesItem": {
         "sectionBasics": "Basics",
@@ -3025,7 +3217,24 @@
         "imageRequired": "Image URL is required",
         "imageUrlInvalid": "Enter a valid image URL or local path",
         "featuredLabel": "Featured in stack",
-        "featuredDescription": "Featured skills appear brighter in the home terminal and highlight your primary stack."
+        "featuredDescription": "Featured skills appear brighter in the home terminal and highlight your primary stack.",
+        "tabGeneral": "General",
+        "tabContent": "Content",
+        "description": "Description",
+        "wikiUrl": "Wiki URL",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completed",
+        "notTranslated": "Not translated in {language}",
+        "notTranslatedHint": "Saved as an independent translation. Start blank or copy from {baseLanguage}.",
+        "copyFromBase": "Copy from {baseLanguage}",
+        "startBlank": "Start blank",
+        "allComplete": "All complete ✓",
+        "missingFields": "Missing: {fields}",
+        "showOriginal": "Show original",
+        "copy": "Copy",
+        "deleteTranslation": "Delete translation in {language}",
+        "deleteTranslationConfirm": "Delete translation in {language}?",
+        "delete": "Delete"
       }
     },
     "errors": {
@@ -3137,7 +3346,19 @@
       "columnPeriod": "Period",
       "columnLocation": "Location",
       "delete": "Delete",
-      "deleting": "Deleting..."
+      "deleting": "Deleting...",
+      "categories": {
+        "all": "All"
+      },
+      "columnLanguages": "Languages",
+      "bulk": {
+        "selected": "{count} selected",
+        "clear": "Clear selection",
+        "delete": "Delete selected",
+        "deleteConfirm": "Are you sure you want to delete {count} selected skills?",
+        "deleteSuccess": "{count} skills deleted",
+        "deleteError": "Failed to delete selected skills"
+      }
     },
     "uses": {
       "title": "Uses",
@@ -3157,10 +3378,15 @@
       "searchTitle": "Search title",
       "deletedSuccess": "Item deleted.",
       "deleteFailed": "Could not delete item.",
+      "bulkDeleteSuccess": "Selected items deleted.",
+      "bulkDeleteFailed": "Failed to delete selected items.",
+      "selectAll": "Select all",
+      "selectRow": "Select row",
       "columns": {
         "order": "Order",
         "title": "Title",
-        "href": "Link"
+        "href": "Link",
+        "languages": "Languages"
       }
     },
     "now": {
@@ -3197,6 +3423,10 @@
       "searchSlug": "Search slug",
       "deletedSuccess": "Page deleted.",
       "deleteFailed": "Could not delete page.",
+      "bulkDeleteSuccess": "Pages deleted.",
+      "bulkDeleteFailed": "Failed to delete pages.",
+      "selectAll": "Select all",
+      "selectRow": "Select row",
       "toggleFailed": "Could not update page.",
       "templates": {
         "workflow": "Workflow",
@@ -3209,7 +3439,8 @@
         "template": "Template",
         "published": "Published",
         "inNav": "In nav",
-        "widgets": "Widgets"
+        "widgets": "Widgets",
+        "languages": "Languages"
       }
     },
     "projects": {
@@ -3243,7 +3474,19 @@
       "columnCategory": "Category",
       "columnPeriod": "Period",
       "columnLocation": "Location",
-      "delete": "Delete"
+      "delete": "Delete",
+      "categories": {
+        "all": "All"
+      },
+      "columnLanguages": "Languages",
+      "bulk": {
+        "selected": "{count} selected",
+        "clear": "Clear selection",
+        "delete": "Delete selected",
+        "deleteConfirm": "Are you sure you want to delete {count} selected projects?",
+        "deleteSuccess": "{count} projects deleted",
+        "deleteError": "Failed to delete selected projects"
+      }
     },
     "services": {
       "title": "Services",
@@ -3279,7 +3522,19 @@
       "columnCategory": "Category",
       "columnPeriod": "Period",
       "columnLocation": "Location",
-      "delete": "Delete"
+      "delete": "Delete",
+      "categories": {
+        "all": "All"
+      },
+      "columnLanguages": "Languages",
+      "bulk": {
+        "selected": "{count} selected",
+        "clear": "Clear selection",
+        "delete": "Delete selected",
+        "deleteConfirm": "Are you sure you want to delete {count} selected services?",
+        "deleteSuccess": "{count} services deleted",
+        "deleteError": "Failed to delete selected services"
+      }
     },
     "certifications": {
       "title": "Certifications",
@@ -3311,7 +3566,19 @@
       "columnCategory": "Category",
       "columnPeriod": "Period",
       "columnLocation": "Location",
-      "delete": "Delete"
+      "delete": "Delete",
+      "categories": {
+        "all": "All"
+      },
+      "columnLanguages": "Languages",
+      "bulk": {
+        "selected": "{count} selected",
+        "clear": "Clear selection",
+        "delete": "Delete selected",
+        "deleteConfirm": "Are you sure you want to delete {count} selected certifications?",
+        "deleteSuccess": "{count} certifications deleted",
+        "deleteError": "Failed to delete selected certifications"
+      }
     },
     "timeline": {
       "title": "Timeline",
@@ -3348,7 +3615,21 @@
       "delete": "Delete",
       "createDescription": "Add a new item to your timeline.",
       "editDescription": "Update an existing item in your timeline.",
-      "editEntry": "Edit Timeline Entry"
+      "editEntry": "Edit Timeline Entry",
+      "columnLanguages": "Languages",
+      "categories": {
+        "all": "All",
+        "work": "Work",
+        "study": "Study",
+        "course": "Course"
+      },
+      "bulk": {
+        "selected": "selected",
+        "clear": "Clear selection",
+        "delete": "Delete selected",
+        "deleteConfirmTitle": "Delete selected entries?",
+        "deleteConfirmDescription": "The selected entries will be permanently deleted."
+      }
     },
     "softSkills": {
       "title": "Soft Skills",
@@ -3373,7 +3654,16 @@
       "columnTitle": "Title",
       "columnVisible": "Status",
       "columnOrder": "Order",
-      "columnActions": "Actions"
+      "columnActions": "Actions",
+      "columnLanguages": "Languages",
+      "bulk": {
+        "selected": "{count} selected",
+        "clear": "Clear selection",
+        "delete": "Delete selected",
+        "deleteConfirm": "Are you sure you want to delete {count} selected soft skills?",
+        "deleteSuccess": "{count} soft skills deleted",
+        "deleteError": "Failed to delete selected soft skills"
+      }
     },
     "dataTable": {
       "searchBy": "Search by",
@@ -3440,13 +3730,13 @@
     },
     "jobTracker": {
       "title": "Job Tracker",
-      "pageDescription": "Manage your job applications efficiently",
-      "newCompany": "New Company",
-      "newApplication": "New Application",
+      "pageDescription": "Manage your job applications, events, outreach emails, and companies.",
+      "newCompany": "New company",
+      "newApplication": "New application",
       "applicationsTab": "Applications",
       "eventsTab": "Events",
       "companiesTab": "Companies",
-      "outreachTab": "Outreach & Reads",
+      "outreachTab": "Emails & Reads",
       "eventsThisWeekBadge": "{count} this week",
       "tabsNavAria": "Job tracker sections",
       "emailSummary": {
@@ -3840,7 +4130,15 @@
         "ghostNudgeTitle": "Move to Ghosted?",
         "ghostNudgeDescription": "Still no status change after {days} days. Uncheck any that are still waiting on a reply.",
         "ghostNudgeConfirm": "Ghost {count}",
-        "ghostNudgeSuccess": "Moved {count} to Ghosted"
+        "ghostNudgeSuccess": "Moved {count} to Ghosted",
+        "searchPlaceholder": "Search by role or company…",
+        "reviewTitle": "Reviewing applications with no response for 21 days or more.",
+        "exitReview": "Exit review",
+        "today": "today",
+        "showingArchivedGhosts": "Also showing {count} applications inactive for 30+ days.",
+        "hideArchivedGhosts": "Hide them",
+        "showArchivedGhosts": "Show them",
+        "dragHelp": "Drag a card to another column to update its status, or open it to edit."
       },
       "timeline": {
         "title": "Event Timeline",
@@ -3868,7 +4166,18 @@
           "NEUTRAL": "Neutral",
           "NEGATIVE": "Negative"
         }
-      }
+      },
+      "singleApplicationCount": "application",
+      "multipleApplicationsCount": "applications",
+      "cannotDeleteTitle": "Cannot delete",
+      "cannotDeleteWithApps": "This company has {count, plural, one {# application} other {# applications}}. Delete or move them to another company first.",
+      "deleteConfirmTitle": "Delete company?",
+      "deleteConfirmMessage": "“{name}” will be removed from your companies.",
+      "deleteManyConfirmTitle": "Delete companies?",
+      "deleteManyConfirmMessage": "Delete {count, plural, one {# company} other {# companies}}.",
+      "deleteManySuccess": "Companies deleted",
+      "deleteManyError": "Could not delete selected companies",
+      "close": "Close"
     },
     "resumeStudio": {
       "importPageTitle": "Import Resume",

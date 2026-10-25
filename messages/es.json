@@ -34,6 +34,8 @@
       "disconnecting": "Desconectando…",
       "disconnectSuccess": "Integración desconectada correctamente.",
       "disconnectFailed": "No se pudo desconectar la integración.",
+      "disconnectConfirmTitle": "Desconectar {provider}",
+      "disconnectConfirmDescription": "Las credenciales están guardadas y cifradas. Puedes volver a conectar este servicio cuando quieras.",
       "update": "Actualizar credenciales",
       "manage": "Administrar",
       "cancel": "Cancelar"
@@ -76,6 +78,13 @@
       "uploadthing": "CDN de archivos y almacenamiento de PDF",
       "ai": "Motor de CV, ATS y preparación de entrevistas",
       "ilovepdf": "Motor de conversión DOCX a PDF y HTML a PDF"
+    },
+    "categories": {
+      "communication": "Correo",
+      "media": "Música",
+      "storage": "Almacenamiento",
+      "ai": "Inteligencia artificial",
+      "documents": "Documentos"
     },
     "guides": {
       "title": "Guía de Configuración",
@@ -146,11 +155,16 @@
     },
     "empty": {
       "title": "Aún no hay integraciones conectadas",
-      "description": "Elige un servicio abajo para conectar tu primera integración."
+      "description": "Elige un servicio abajo para conectar tu primera integración.",
+      "allConnectedTitle": "Todo está conectado",
+      "allConnectedDescription": "No quedan integraciones pendientes por configurar en el catálogo.",
+      "noneConnectedTitle": "Aún no hay servicios conectados",
+      "noneConnectedDescription": "Conecta un servicio desde la pestaña Disponibles para potenciar tu portafolio."
     },
     "status": {
       "configured": "Configurado",
       "notConfigured": "No configurado",
+      "notConnected": "Aún sin conectar",
       "syncing": "Sincronizando plantillas...",
       "syncedCount": "{count} plantillas publicadas"
     },
@@ -1867,7 +1881,13 @@
         "referrersHint": "Solo hostnames. Las visitas directas se omiten.",
         "empty": "Aún no hay datos de visitantes. Las páginas públicas empiezan a contar tras la primera visita anónima.",
         "emptyReferrers": "No hay referencias externas en esta ventana.",
-        "unknownCountry": "Desconocido"
+        "unknownCountry": "Desconocido",
+        "pagesPerVisit": "{ratio} páginas por visita",
+        "last30Days": "Últimos 30 días",
+        "mostFromCountry": "La mayoría de {country} ({percentage}%)",
+        "pageviewsShare": "{views} vistas · {percentage}% de visitas",
+        "showAll": "Mostrar todos ({count})",
+        "showLess": "Mostrar menos"
       },
       "jobs": {
         "title": "Seguimiento laboral",
@@ -1881,18 +1901,25 @@
         "hired": "Contratado",
         "upcoming": "Próximos eventos",
         "upcomingHint": "Siguientes entrevistas, pruebas y seguimientos.",
-        "noUpcoming": "Nada programado."
+        "noUpcoming": "Nada programado.",
+        "statusDistribution": "Estado de las {count} postulaciones",
+        "noUpcomingEvents": "No hay eventos próximos",
+        "noUpcomingHint": "Las entrevistas, pruebas y seguimientos aparecerán aquí.",
+        "addEvent": "Agregar evento"
       },
       "services": {
         "title": "Servicios",
-        "subtitle": "Qué ofertas están visibles en el sitio público.",
+        "subtitle": "Elige qué ofertas aparecen en el sitio público.",
         "empty": "Aún no hay servicios.",
         "active": "Activo",
         "inactive": "Inactivo",
-        "featured": "Destacado"
+        "featured": "Destacado",
+        "visibleCount": "{active} de {total} visibles.",
+        "toggleVisibilityAria": "Mostrar {title} en el sitio público"
       },
       "inventory": {
-        "title": "Inventario de contenido"
+        "title": "Inventario de contenido",
+        "subtitle": "Lo que los visitantes pueden encontrar en tu portafolio."
       },
       "stats": {
         "certificates": {
@@ -2416,9 +2443,67 @@
         "noResults": "No se encontraron habilidades",
         "selectedCount": "{count, plural, one {# habilidad seleccionada} other {# habilidades seleccionadas}}",
         "shownCount": "{shown} de {total} mostradas",
-        "allTypes": "Todos los tipos"
+        "allTypes": "Todos los tipos",
+        "clearAll": "Quitar todas"
+      },
+      "certificatePicker": {
+        "title": "Certificados asociados",
+        "searchPlaceholder": "Buscar certificados por nombre o emisor…",
+        "noResults": "No se encontraron certificados para esta búsqueda.",
+        "noCertificatesYet": "Aún no tienes certificados registrados.",
+        "clickToRemove": "Clic para quitar",
+        "selectedCount": "{count, plural, =0 {Ningún certificado seleccionado} one {1 certificado seleccionado} other {# certificados seleccionados}}",
+        "clearAll": "Quitar todos",
+        "hintEmpty": "Busca y vincula los certificados que respaldan este proyecto.",
+        "noSelected": "Ningún certificado seleccionado"
       },
       "project": {
+        "tabs": {
+          "general": "General",
+          "content": "Contenido",
+          "skills": "Habilidades",
+          "certificates": "Certificados"
+        },
+        "generalNote": "Estos ajustes son iguales para todos los idiomas. Lo que se traduce está en Contenido.",
+        "coverSection": "Portada",
+        "coverHint": "Pega una URL o sube un archivo de imagen.",
+        "coverUpload": "Subir imagen",
+        "coverChange": "Cambiar",
+        "coverRemove": "Quitar",
+        "coverEmptyTitle": "Sin imagen de portada",
+        "coverEmptyHint": "Sube un archivo o pega una URL abajo",
+        "classification": "Clasificación",
+        "datesAndTeam": "Fechas y equipo",
+        "startDate": "Inicio",
+        "endDate": "Fin",
+        "teamSize": "Personas en el equipo",
+        "teamSizePlaceholder": "1",
+        "status": "Estado",
+        "linksSection": "Enlaces",
+        "publicationSection": "Publicación",
+        "slugHint": "Opcional. Necesario si activas el caso de estudio.",
+        "order": "Posición",
+        "orderHint": "Orden en la lista de proyectos.",
+        "caseStudyPublishHint": "Mientras esté apagado es un borrador: puedes seguir completándolo en Contenido sin que se vea en el sitio.",
+        "caseStudyNotReady": "Aún no se puede publicar: {reasons}",
+        "caseStudyStatus": "Estado del caso de estudio",
+        "caseStudyPublished": "Publicado",
+        "caseStudyDraft": "Borrador",
+        "caseStudyPublish": "Publicar",
+        "caseStudyUnpublish": "Volver a borrador",
+        "notTranslated": "Sin traducción en {language}",
+        "baseLanguageLabel": "Base",
+        "notTranslatedHint": "Se guarda como una traducción independiente. Empieza en blanco o parte del texto en {baseLanguage}.",
+        "copyFromBase": "Copiar desde {baseLanguage}",
+        "startBlank": "Empezar en blanco",
+        "showOriginal": "Ver original",
+        "copy": "Copiar",
+        "completeProgress": "{completed}/{total} completo",
+        "allComplete": "Todo completo ✓",
+        "missingFields": "Falta: {fields}",
+        "associatedCertificates": "Certificados asociados",
+        "deleteTranslation": "Eliminar traducción en {language}",
+        "deleteTranslationConfirm": "¿Eliminar la traducción en {language}? Se pierden el título, la descripción y el caso de estudio.",
         "caseStudyContent": "Contenido del caso de estudio",
         "caseStudyContext": "Contexto",
         "caseStudySectionTitle": "Título de la sección",
@@ -2442,6 +2527,7 @@
         "associatedSkills": "Habilidades asociadas",
         "save": "Guardar",
         "create": "Crear",
+        "delete": "Eliminar",
         "cancel": "Cancelar",
         "updatedSuccess": "Proyecto actualizado",
         "createdSuccess": "Proyecto creado",
@@ -2458,10 +2544,22 @@
         "titleWithLanguage": "Título ({language})",
         "descriptionWithLanguage": "Descripción ({language})",
         "imageUrl": "URL de imagen / icono",
+        "icon": "Ícono",
         "imageUrlPlaceholder": "https://...",
         "serviceType": "Tipo de servicio",
+        "type": "Tipo de servicio",
         "selectType": "Selecciona un tipo",
         "associatedSkills": "Habilidades asociadas",
+        "image": "URL de imagen",
+        "imagePlaceholder": "https://...",
+        "statsValue": "Métrica / Dato clave",
+        "statsValuePlaceholder": "ej. 99.9%, 10+, 50ms",
+        "featuredLabel": "Servicio destacado",
+        "featuredDescription": "Destaca este servicio en la página principal y en la cuadrícula de servicios.",
+        "badge": "Etiqueta / Insignia",
+        "badgePlaceholder": "ej. Popular, Avanzado, Principal",
+        "statsLabel": "Etiqueta de métrica",
+        "statsLabelPlaceholder": "ej. SLA de disponibilidad, Proyectos completados",
         "save": "Guardar",
         "create": "Crear",
         "cancel": "Cancelar",
@@ -2473,7 +2571,27 @@
         "titleRequiredPrimary": "El título es obligatorio en el idioma principal",
         "atLeastOneLanguage": "Se requiere al menos un idioma",
         "isActive": "Activo en el sitio público",
-        "isActiveHint": "Los servicios inactivos siguen en el admin pero se ocultan en la home y en las stats públicas."
+        "isActiveHint": "Los servicios inactivos siguen en el admin pero se ocultan en la home y en las stats públicas.",
+        "tabGeneral": "General",
+        "tabContent": "Contenido",
+        "tabSkills": "Habilidades",
+        "title": "Título",
+        "titlePlaceholder": "ej. Desarrollo Web Full-Stack",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Descripción detallada del servicio...",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completo",
+        "notTranslated": "Sin traducción en {language}",
+        "notTranslatedHint": "Se guarda como una traducción independiente. Empieza en blanco o copia desde {baseLanguage}.",
+        "copyFromBase": "Copiar desde {baseLanguage}",
+        "startBlank": "Empezar en blanco",
+        "allComplete": "Todo completo ✓",
+        "missingFields": "Falta: {fields}",
+        "showOriginal": "Ver original",
+        "copy": "Copiar",
+        "deleteTranslation": "Eliminar traducción en {language}",
+        "deleteTranslationConfirm": "¿Eliminar la traducción en {language}?",
+        "delete": "Eliminar"
       },
       "certification": {
         "generalSection": "Información general",
@@ -2498,7 +2616,27 @@
         "createFailed": "No se pudo crear la certificación",
         "companyRequired": "La empresa es obligatoria",
         "titleRequiredPrimary": "El título es obligatorio en el idioma principal",
-        "atLeastOneLanguage": "Se requiere al menos un idioma"
+        "atLeastOneLanguage": "Se requiere al menos un idioma",
+        "tabGeneral": "General",
+        "tabContent": "Contenido",
+        "tabSkills": "Habilidades",
+        "title": "Título",
+        "titlePlaceholder": "ej. AWS Certified Solutions Architect",
+        "issuedDate": "Año de emisión",
+        "issuedDatePlaceholder": "ej. 2024",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completo",
+        "notTranslated": "Sin traducción en {language}",
+        "notTranslatedHint": "Se guarda como una traducción independiente. Empieza en blanco o copia desde {baseLanguage}.",
+        "copyFromBase": "Copiar desde {baseLanguage}",
+        "startBlank": "Empezar en blanco",
+        "allComplete": "Todo completo ✓",
+        "missingFields": "Falta: {fields}",
+        "showOriginal": "Ver original",
+        "copy": "Copiar",
+        "deleteTranslation": "Eliminar traducción en {language}",
+        "deleteTranslationConfirm": "¿Eliminar la traducción en {language}?",
+        "delete": "Eliminar"
       },
       "jobTrackerApplication": {
         "validation": {
@@ -2764,7 +2902,32 @@
         "organizationRequired": "La organización es obligatoria",
         "startDateRequired": "La fecha de inicio es obligatoria",
         "titleRequiredPrimary": "El título es obligatorio en el idioma principal",
-        "atLeastOneLanguage": "Se requiere al menos un idioma"
+        "atLeastOneLanguage": "Se requiere al menos un idioma",
+        "tabGeneral": "General",
+        "tabContent": "Contenido",
+        "tabRoles": "Roles",
+        "tabSkills": "Habilidades",
+        "rolesHint": "Cargos que tuviste dentro de esta organización.",
+        "roleTitle": "Cargo",
+        "roleTitlePlaceholder": "Ej. Senior Software Engineer",
+        "roleStartDate": "Fecha de inicio",
+        "roleEndDate": "Fecha de fin",
+        "addRole": "Añadir rol",
+        "noRoles": "Aún no hay roles.",
+        "skillsHint": "Habilidades asociadas a esta entrada.",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completo",
+        "notTranslated": "Sin traducción en {language}",
+        "notTranslatedHint": "Se guarda como una traducción independiente. Empieza en blanco o copia desde {baseLanguage}.",
+        "copyFromBase": "Copiar desde {baseLanguage}",
+        "startBlank": "Empezar en blanco",
+        "allComplete": "Todo completo ✓",
+        "missingFields": "Falta: {fields}",
+        "showOriginal": "Ver original",
+        "copy": "Copiar",
+        "deleteTranslation": "Eliminar traducción en {language}",
+        "deleteTranslationConfirm": "¿Eliminar la traducción en {language}?",
+        "delete": "Eliminar"
       },
       "portfolioSoftSkill": {
         "generalSection": "Información general",
@@ -2780,8 +2943,8 @@
         "displayOrder": "Orden de visualización",
         "titleWithLanguage": "Título ({language})",
         "descriptionWithLanguage": "Descripción ({language})",
-        "titlePlaceholder": "ej. Trabajo en equipo",
-        "descriptionPlaceholder": "Descripción breve mostrada en el tooltip",
+        "titlePlaceholder": "ej. Pensamiento Crítico",
+        "descriptionPlaceholder": "Descripción de esta habilidad blanda...",
         "save": "Guardar",
         "create": "Crear",
         "cancel": "Cancelar",
@@ -2792,7 +2955,24 @@
         "titleRequiredPrimary": "El título es obligatorio para el idioma principal",
         "atLeastOneLanguage": "Se requiere al menos un idioma",
         "copyFromPrimary": "Copiar desde {language}",
-        "unsavedChangesConfirm": "Tienes cambios sin guardar. ¿Salir de todos modos?"
+        "unsavedChangesConfirm": "Tienes cambios sin guardar. ¿Salir de todos modos?",
+        "tabGeneral": "General",
+        "tabContent": "Contenido",
+        "title": "Título",
+        "description": "Descripción",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completo",
+        "notTranslated": "Sin traducción en {language}",
+        "notTranslatedHint": "Se guarda como una traducción independiente. Empieza en blanco o copia desde {baseLanguage}.",
+        "copyFromBase": "Copiar desde {baseLanguage}",
+        "startBlank": "Empezar en blanco",
+        "allComplete": "Todo completo ✓",
+        "missingFields": "Falta: {fields}",
+        "showOriginal": "Ver original",
+        "copy": "Copiar",
+        "deleteTranslation": "Eliminar traducción en {language}",
+        "deleteTranslationConfirm": "¿Eliminar la traducción en {language}?",
+        "delete": "Eliminar"
       },
       "softSkillsSection": {
         "title": "Fondo de la sección",
@@ -2810,7 +2990,19 @@
         "save": "Guardar sección",
         "cancel": "Cancelar",
         "savedSuccess": "Fondo de sección guardado",
-        "saveFailed": "No se pudo guardar el fondo de la sección"
+        "saveFailed": "No se pudo guardar el fondo de la sección",
+        "generalTab": "General",
+        "metricsTab": "Métricas",
+        "metricsDescription": "El valor (por ejemplo “40%”) es igual en todos los idiomas; la etiqueta se traduce.",
+        "noMetrics": "Aún no hay métricas.",
+        "addMetric": "Añadir métrica",
+        "metricValue": "Valor",
+        "metricValuePlaceholder": "ej. 40%",
+        "metricLabel": "Etiqueta",
+        "metricLabelPlaceholder": "ej. Ingenieros liderados",
+        "moveUp": "Subir",
+        "moveDown": "Bajar",
+        "deleteMetric": "Eliminar"
       },
       "portfolioSkill": {
         "generalSection": "Información general",
@@ -2835,7 +3027,24 @@
         "imageRequired": "La URL de imagen es obligatoria",
         "imageUrlInvalid": "Introduce una URL de imagen o una ruta local válida",
         "featuredLabel": "Destacada en el stack",
-        "featuredDescription": "Las skills destacadas se ven más brillantes en el terminal de inicio y resaltan tu stack principal."
+        "featuredDescription": "Las skills destacadas se ven más brillantes en el terminal de inicio y resaltan tu stack principal.",
+        "tabGeneral": "General",
+        "tabContent": "Contenido",
+        "description": "Descripción",
+        "wikiUrl": "URL de Wiki",
+        "baseLanguageLabel": "Base",
+        "completeProgress": "{completed}/{total} completo",
+        "notTranslated": "Sin traducción en {language}",
+        "notTranslatedHint": "Se guarda como una traducción independiente. Empieza en blanco o copia desde {baseLanguage}.",
+        "copyFromBase": "Copiar desde {baseLanguage}",
+        "startBlank": "Empezar en blanco",
+        "allComplete": "Todo completo ✓",
+        "missingFields": "Falta: {fields}",
+        "showOriginal": "Ver original",
+        "copy": "Copiar",
+        "deleteTranslation": "Eliminar traducción en {language}",
+        "deleteTranslationConfirm": "¿Eliminar la traducción en {language}?",
+        "delete": "Eliminar"
       },
       "usesItem": {
         "sectionBasics": "Básicos",
@@ -3158,7 +3367,19 @@
       "columnPeriod": "Período",
       "columnLocation": "Ubicación",
       "delete": "Eliminar",
-      "deleting": "Eliminando..."
+      "deleting": "Eliminando...",
+      "categories": {
+        "all": "Todos"
+      },
+      "columnLanguages": "Idiomas",
+      "bulk": {
+        "selected": "{count} seleccionados",
+        "clear": "Limpiar selección",
+        "delete": "Eliminar seleccionados",
+        "deleteConfirm": "¿Estás seguro de eliminar los {count} elementos seleccionados?",
+        "deleteSuccess": "{count} habilidades eliminadas",
+        "deleteError": "Error al eliminar las habilidades seleccionadas"
+      }
     },
     "projects": {
       "title": "Proyectos",
@@ -3191,7 +3412,19 @@
       "columnCategory": "Categoría",
       "columnPeriod": "Período",
       "columnLocation": "Ubicación",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "categories": {
+        "all": "Todos"
+      },
+      "columnLanguages": "Idiomas",
+      "bulk": {
+        "selected": "{count} seleccionados",
+        "clear": "Limpiar selección",
+        "delete": "Eliminar seleccionados",
+        "deleteConfirm": "¿Estás seguro de eliminar los {count} proyectos seleccionados?",
+        "deleteSuccess": "{count} proyectos eliminados",
+        "deleteError": "Error al eliminar los proyectos seleccionados"
+      }
     },
     "services": {
       "title": "Servicios",
@@ -3227,7 +3460,19 @@
       "columnCategory": "Categoría",
       "columnPeriod": "Período",
       "columnLocation": "Ubicación",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "categories": {
+        "all": "Todos"
+      },
+      "columnLanguages": "Idiomas",
+      "bulk": {
+        "selected": "{count} seleccionados",
+        "clear": "Limpiar selección",
+        "delete": "Eliminar seleccionados",
+        "deleteConfirm": "¿Estás seguro de eliminar los {count} servicios seleccionados?",
+        "deleteSuccess": "{count} servicios eliminados",
+        "deleteError": "Error al eliminar los servicios seleccionados"
+      }
     },
     "certifications": {
       "title": "Certificaciones",
@@ -3259,7 +3504,19 @@
       "columnCategory": "Categoría",
       "columnPeriod": "Período",
       "columnLocation": "Ubicación",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "categories": {
+        "all": "Todos"
+      },
+      "columnLanguages": "Idiomas",
+      "bulk": {
+        "selected": "{count} seleccionados",
+        "clear": "Limpiar selección",
+        "delete": "Eliminar seleccionados",
+        "deleteConfirm": "¿Estás seguro de eliminar las {count} certificaciones seleccionadas?",
+        "deleteSuccess": "{count} certificaciones eliminadas",
+        "deleteError": "Error al eliminar las certificaciones seleccionadas"
+      }
     },
     "timeline": {
       "title": "Timeline",
@@ -3296,7 +3553,21 @@
       "delete": "Eliminar",
       "createDescription": "Añade un nuevo elemento a tu timeline.",
       "editDescription": "Actualiza un elemento existente en tu timeline.",
-      "editEntry": "Editar entrada del timeline"
+      "editEntry": "Editar entrada del timeline",
+      "columnLanguages": "Idiomas",
+      "categories": {
+        "all": "Todos",
+        "work": "Trabajo",
+        "study": "Estudio",
+        "course": "Curso"
+      },
+      "bulk": {
+        "selected": "seleccionadas",
+        "clear": "Quitar selección",
+        "delete": "Eliminar selección",
+        "deleteConfirmTitle": "¿Eliminar las entradas seleccionadas?",
+        "deleteConfirmDescription": "Las entradas seleccionadas se eliminarán permanentemente."
+      }
     },
     "softSkills": {
       "title": "Habilidades blandas",
@@ -3321,7 +3592,16 @@
       "columnTitle": "Título",
       "columnVisible": "Estado",
       "columnOrder": "Orden",
-      "columnActions": "Acciones"
+      "columnActions": "Acciones",
+      "columnLanguages": "Idiomas",
+      "bulk": {
+        "selected": "{count} seleccionados",
+        "clear": "Limpiar selección",
+        "delete": "Eliminar seleccionados",
+        "deleteConfirm": "¿Estás seguro de eliminar las {count} habilidades blandas seleccionadas?",
+        "deleteSuccess": "{count} habilidades blandas eliminadas",
+        "deleteError": "Error al eliminar las habilidades blandas seleccionadas"
+      }
     },
     "dataTable": {
       "searchBy": "Buscar por",
@@ -3387,14 +3667,14 @@
       "exportSeedZipError": "No se pudo exportar el ZIP de seed"
     },
     "jobTracker": {
-      "title": "Job Tracker",
-      "pageDescription": "Gestiona tus postulaciones laborales de manera eficiente",
-      "newCompany": "Nueva Empresa",
-      "newApplication": "Nueva Postulación",
+      "title": "Seguimiento laboral",
+      "pageDescription": "Gestiona tus postulaciones, eventos, correos y empresas.",
+      "newCompany": "Nueva empresa",
+      "newApplication": "Nueva postulación",
       "applicationsTab": "Postulaciones",
       "eventsTab": "Eventos",
       "companiesTab": "Empresas",
-      "outreachTab": "Seguimiento y Lecturas",
+      "outreachTab": "Correos y lecturas",
       "eventsThisWeekBadge": "{count} esta semana",
       "tabsNavAria": "Secciones del job tracker",
       "emailSummary": {
@@ -3788,7 +4068,15 @@
         "ghostNudgeTitle": "¿Mover a Ghost?",
         "ghostNudgeDescription": "Siguen sin cambio de estado después de {days} días. Desmarca las que todavía pueden responder.",
         "ghostNudgeConfirm": "Pasar a Ghost ({count})",
-        "ghostNudgeSuccess": "Se movieron {count} a Ghost"
+        "ghostNudgeSuccess": "Se movieron {count} a Ghost",
+        "searchPlaceholder": "Buscar por rol o empresa…",
+        "reviewTitle": "Revisando las postulaciones sin respuesta de 21 días o más.",
+        "exitReview": "Salir de la revisión",
+        "today": "hoy",
+        "showingArchivedGhosts": "Mostrando también las {count} sin respuesta hace más de 30 días.",
+        "hideArchivedGhosts": "Ocultarlas",
+        "showArchivedGhosts": "Mostrarlas",
+        "dragHelp": "Arrastra una tarjeta a otra columna para cambiar su estado, o ábrela y cámbialo desde ahí."
       },
       "timeline": {
         "title": "Timeline de Eventos",
@@ -3816,7 +4104,18 @@
           "NEUTRAL": "Neutral",
           "NEGATIVE": "Negativo"
         }
-      }
+      },
+      "singleApplicationCount": "postulación",
+      "multipleApplicationsCount": "postulaciones",
+      "cannotDeleteTitle": "No se puede eliminar",
+      "cannotDeleteWithApps": "Esta empresa tiene {count, plural, one {# postulación} other {# postulaciones}}. Elimínalas o muévelas a otra empresa primero.",
+      "deleteConfirmTitle": "¿Eliminar empresa?",
+      "deleteConfirmMessage": "“{name}” se eliminará de tus empresas.",
+      "deleteManyConfirmTitle": "¿Eliminar empresas?",
+      "deleteManyConfirmMessage": "Se eliminarán {count, plural, one {# empresa} other {# empresas}}.",
+      "deleteManySuccess": "Empresas eliminadas",
+      "deleteManyError": "No se pudieron eliminar las empresas seleccionadas",
+      "close": "Cerrar"
     },
     "resumeStudio": {
       "importPageTitle": "Importar currículum",
@@ -3986,10 +4285,15 @@
       "searchTitle": "Buscar título",
       "deletedSuccess": "Ítem eliminado.",
       "deleteFailed": "No se pudo eliminar.",
+      "bulkDeleteSuccess": "Ítems seleccionados eliminados.",
+      "bulkDeleteFailed": "No se pudieron eliminar los ítems seleccionados.",
+      "selectAll": "Seleccionar todo",
+      "selectRow": "Seleccionar fila",
       "columns": {
         "order": "Orden",
         "title": "Título",
-        "href": "Enlace"
+        "href": "Enlace",
+        "languages": "Idiomas"
       }
     },
     "now": {
@@ -4026,6 +4330,10 @@
       "searchSlug": "Buscar slug",
       "deletedSuccess": "Página eliminada.",
       "deleteFailed": "No se pudo eliminar la página.",
+      "bulkDeleteSuccess": "Páginas eliminadas.",
+      "bulkDeleteFailed": "No se pudieron eliminar las páginas.",
+      "selectAll": "Seleccionar todo",
+      "selectRow": "Seleccionar fila",
       "toggleFailed": "No se pudo actualizar la página.",
       "templates": {
         "workflow": "Flujo",
@@ -4038,7 +4346,8 @@
         "template": "Plantilla",
         "published": "Publicada",
         "inNav": "En nav",
-        "widgets": "Widgets"
+        "widgets": "Widgets",
+        "languages": "Idiomas"
       }
     }
   },
