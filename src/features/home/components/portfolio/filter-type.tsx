@@ -27,11 +27,10 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange, counts }) => {
     <div className="mb-10 flex w-full justify-center px-2 sm:px-4">
       <Tab
         tabId="portfolio-tab"
-        minimal
         currentTab={value}
         setCurrentTab={onChange}
         ariaLabel={t("filters.ariaLabel")}
-        className="bg-muted/70 border-border text-foreground inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-3xl border p-1.5 shadow-xs md:rounded-full"
+        className="max-w-full"
       >
         <TabItem
           icon={Eye}
@@ -40,7 +39,6 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange, counts }) => {
               ? `${titles[0]} (${counts[0]})`
               : titles[0]
           }
-          description=""
         />
         <TabItem
           icon={Monitor}
@@ -49,7 +47,6 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange, counts }) => {
               ? `${titles[1]} (${counts[1]})`
               : titles[1]
           }
-          description=""
         />
         <TabItem
           icon={Server}
@@ -58,7 +55,6 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange, counts }) => {
               ? `${titles[2]} (${counts[2]})`
               : titles[2]
           }
-          description=""
         />
         <TabItem
           icon={Smartphone}
@@ -67,7 +63,6 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange, counts }) => {
               ? `${titles[3]} (${counts[3]})`
               : titles[3]
           }
-          description=""
         />
         <TabItem
           icon={Laptop}
@@ -76,7 +71,6 @@ const FilterType: FC<IFilterTypeProps> = ({ value, onChange, counts }) => {
               ? `${titles[4]} (${counts[4]})`
               : titles[4]
           }
-          description=""
         />
       </Tab>
     </div>

@@ -45,7 +45,9 @@ test.describe("login", () => {
 
     await fillSignInCredentials(page, account.email, account.password);
     const response = await submitSignInRequest(page);
-    expect(response.ok(), response.ok() ? "" : await response.text()).toBe(true);
+    expect(response.ok(), response.ok() ? "" : await response.text()).toBe(
+      true,
+    );
     await expectAdminDashboard(page);
   });
 });
