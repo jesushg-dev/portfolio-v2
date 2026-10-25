@@ -6,8 +6,13 @@ import { Upload } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { FormItem, FormSection } from "@/components/shared/form-root";
-import { ProfileReferenceBox } from "./profile-reference-box";
+import { FormSection } from "@/components/shared/form-root";
+import { ProfileField } from "./profile-field";
+import {
+  AdminFormDeleteTranslation,
+  AdminFormEmptyTranslation,
+  ReferenceSnippet,
+} from "@/components/admin/shared/admin-form-language-bar";
 import type {
   ProfileLocaleTranslation,
   ProfileSharedState,
@@ -65,8 +70,6 @@ interface ProfileIdentityTabProps {
     deleteTranslation: string;
     deleteTranslationConfirm: string;
     copySnippet: string;
-    confirmDeleteButton: string;
-    cancelButton: string;
   };
 }
 
@@ -114,74 +117,73 @@ export const ProfileIdentityTab: FC<ProfileIdentityTabProps> = ({
     reader.readAsDataURL(file);
   };
 
-  const copyFieldFromBase = (fieldKey: keyof ProfileLocaleTranslation) => {
+  const copyFieldFromBase = (field: keyof ProfileLocaleTranslation) => {
     if (!baseTranslation) return;
-    const val = baseTranslation[fieldKey];
-    onUpdateTranslation(fieldKey, val);
+    const baseVal = baseTranslation[field];
+    if (typeof baseVal === "string") {
+      onUpdateTranslation(field, baseVal);
+    }
   };
 
   return (
     <div className="space-y-8">
-      {/* Shared Identity Section (Name & Photo) */}
+      {/* Shared Section: Full Name & Avatar URL */}
       <FormSection title={t.sharedSectionTitle}>
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-          {/* Avatar Preview */}
-          <div className="bg-primary/20 text-primary ring-primary/30 relative grid size-20 shrink-0 place-items-center overflow-hidden rounded-full text-lg font-bold shadow-sm ring-2">
-            {shared.photoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={shared.photoUrl}
-                alt=""
-                className="absolute inset-0 size-full object-cover"
-              />
-            ) : (
-              <span>{initials}</span>
-            )}
-          </div>
+        <ProfileField
+          label={`${t.fullNameLabel} *`}
+          description={t.fullNameHint}
+          inputId="profile-full-name"
+        >
+          <Input
+            id="profile-full-name"
+            value={shared.fullName}
+            onChange={(e) => onUpdateShared("fullName", e.target.value)}
+            placeholder={t.fullNamePlaceholder}
+            className="h-11 font-medium"
+          />
+        </ProfileField>
 
-          {/* Display Name Input */}
-          <div className="min-w-0 flex-1">
-            <FormItem
-              label={`${t.fullNameLabel} *`}
-              description={t.fullNameHint}
-              inputId="profile-shared-fullname"
-            >
-              <Input
-                id="profile-shared-fullname"
-                value={shared.fullName}
-                onChange={(e) => onUpdateShared("fullName", e.target.value)}
-                placeholder={t.fullNamePlaceholder}
-                className="h-11 font-medium"
-              />
-            </FormItem>
-          </div>
-        </div>
-
-        {/* Photo URL & Upload */}
-        <FormItem
+        <ProfileField
           label={t.photoUrlLabel}
           description={t.photoUrlHint}
-          inputId="profile-shared-photourl"
-          className="mt-4"
+          inputId="profile-photo-url"
         >
-          <div className="flex gap-2">
-            <Input
-              id="profile-shared-photourl"
-              type="text"
-              value={shared.photoUrl}
-              onChange={(e) => onUpdateShared("photoUrl", e.target.value)}
-              placeholder={t.photoUrlPlaceholder}
-              className="h-11 min-w-0 flex-1"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => fileInputRef.current?.click()}
-              className="h-11 shrink-0 gap-1.5"
-            >
-              <Upload className="size-4" aria-hidden />
-              <span>{t.uploadButton}</span>
-            </Button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            {/* Live Thumbnail / Avatar Preview */}
+            <div className="border-border bg-muted/60 relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border shadow-inner">
+              {shared.photoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={shared.photoUrl}
+                  alt={shared.fullName}
+                  className="size-full object-cover"
+                />
+              ) : (
+                <span className="text-muted-foreground text-sm font-semibold tracking-wider">
+                  {initials}
+                </span>
+              )}
+            </div>
+
+            <div className="flex flex-1 items-center gap-2">
+              <Input
+                id="profile-photo-url"
+                value={shared.photoUrl}
+                onChange={(e) => onUpdateShared("photoUrl", e.target.value)}
+                placeholder={t.photoUrlPlaceholder}
+                className="h-11 font-mono text-xs sm:text-sm"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                className="h-11 shrink-0 gap-1.5 px-3 text-xs"
+              >
+                <Upload className="size-3.5" aria-hidden />
+                <span>{t.uploadButton}</span>
+              </Button>
+            </div>
+
             <input
               ref={fileInputRef}
               type="file"
@@ -192,53 +194,37 @@ export const ProfileIdentityTab: FC<ProfileIdentityTabProps> = ({
               aria-label={t.uploadButton}
             />
           </div>
-        </FormItem>
+        </ProfileField>
       </FormSection>
 
       {/* Per-Language Sections or Empty Translation Prompt */}
       {!currentTranslation ? (
-        <div className="border-border/60 bg-muted/10 rounded-2xl border border-dashed px-5 py-12 text-center">
-          <p className="text-foreground text-base font-semibold">
-            {t.noTranslationTitle.replace("{lang}", activeLanguage.name)}
-          </p>
-          <p className="text-muted-foreground mx-auto mt-1.5 max-w-sm text-xs sm:text-sm">
-            {t.noTranslationHint.replace("{baseLang}", baseLanguage.name)}
-          </p>
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            <Button
-              type="button"
-              variant="default"
-              onClick={onCopyAllFromBase}
-              className="min-h-10 text-xs sm:text-sm"
-            >
-              {t.copyFromBase.replace("{baseLang}", baseLanguage.name)}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onStartBlank}
-              className="min-h-10 text-xs sm:text-sm"
-            >
-              {t.startBlank}
-            </Button>
-          </div>
-        </div>
+        <AdminFormEmptyTranslation
+          languageName={activeLanguage.name}
+          baseLanguageName={baseLanguage.name}
+          onCopyFromBase={onCopyAllFromBase}
+          onStartBlank={onStartBlank}
+          notTranslatedTitle={t.noTranslationTitle}
+          notTranslatedHint={t.noTranslationHint}
+          copyFromBaseText={t.copyFromBase}
+          startBlankText={t.startBlank}
+        />
       ) : (
         <>
           {/* Photo Alt & Availability Badge */}
           <FormSection title={t.photoAndBadgeSection}>
             <div className="space-y-4">
-              <FormItem
+              <ProfileField
                 label={t.altLabel}
                 description={t.altHint}
                 inputId="profile-tr-alt"
               >
-                {showReference && isNonBase && baseTranslation && (
-                  <ProfileReferenceBox
-                    baseLanguageCode={baseLanguage.code}
-                    referenceText={baseTranslation.alt}
+                {showReference && isNonBase && baseTranslation?.alt && (
+                  <ReferenceSnippet
+                    label={baseLanguage.code.toUpperCase()}
+                    content={baseTranslation.alt}
                     onCopy={() => copyFieldFromBase("alt")}
-                    copyLabel={t.copySnippet}
+                    copyText={t.copySnippet}
                   />
                 )}
                 <Input
@@ -248,19 +234,19 @@ export const ProfileIdentityTab: FC<ProfileIdentityTabProps> = ({
                   placeholder={t.altPlaceholder}
                   className="h-11"
                 />
-              </FormItem>
+              </ProfileField>
 
-              <FormItem
+              <ProfileField
                 label={t.badgeLabel}
                 description={t.badgeHint}
                 inputId="profile-tr-badge"
               >
-                {showReference && isNonBase && baseTranslation && (
-                  <ProfileReferenceBox
-                    baseLanguageCode={baseLanguage.code}
-                    referenceText={baseTranslation.badge}
+                {showReference && isNonBase && baseTranslation?.badge && (
+                  <ReferenceSnippet
+                    label={baseLanguage.code.toUpperCase()}
+                    content={baseTranslation.badge}
                     onCopy={() => copyFieldFromBase("badge")}
-                    copyLabel={t.copySnippet}
+                    copyText={t.copySnippet}
                   />
                 )}
                 <Input
@@ -270,110 +256,100 @@ export const ProfileIdentityTab: FC<ProfileIdentityTabProps> = ({
                   placeholder={t.badgePlaceholder}
                   className="h-11"
                 />
-              </FormItem>
+              </ProfileField>
             </div>
           </FormSection>
 
           {/* Subtitle Section */}
           <FormSection title={t.subtitleSection}>
-            <FormItem
+            <ProfileField
               label={`${t.subtitleLabel} *`}
               description={t.subtitleHint}
               inputId="profile-tr-subtitle"
             >
-              {showReference && isNonBase && baseTranslation && (
-                <ProfileReferenceBox
-                  baseLanguageCode={baseLanguage.code}
-                  referenceText={baseTranslation.subtitle}
+              {showReference && isNonBase && baseTranslation?.subtitle && (
+                <ReferenceSnippet
+                  label={baseLanguage.code.toUpperCase()}
+                  content={baseTranslation.subtitle}
                   onCopy={() => copyFieldFromBase("subtitle")}
-                  copyLabel={t.copySnippet}
+                  copyText={t.copySnippet}
                 />
               )}
               <Input
                 id="profile-tr-subtitle"
                 value={currentTranslation.subtitle}
-                onChange={(e) => onUpdateTranslation("subtitle", e.target.value)}
+                onChange={(e) =>
+                  onUpdateTranslation("subtitle", e.target.value)
+                }
                 placeholder={t.subtitlePlaceholder}
                 className="h-11 font-medium"
               />
-            </FormItem>
+            </ProfileField>
           </FormSection>
 
           {/* Tagline & Secondary Summary Section */}
           <FormSection title={t.taglineSection}>
             <div className="space-y-4">
-              <FormItem
+              <ProfileField
                 label={`${t.taglineLabel} *`}
                 description={t.taglineHint}
                 inputId="profile-tr-tagline"
               >
-                {showReference && isNonBase && baseTranslation && (
-                  <ProfileReferenceBox
-                    baseLanguageCode={baseLanguage.code}
-                    referenceText={baseTranslation.tagline}
+                {showReference && isNonBase && baseTranslation?.tagline && (
+                  <ReferenceSnippet
+                    label={baseLanguage.code.toUpperCase()}
+                    content={baseTranslation.tagline}
                     onCopy={() => copyFieldFromBase("tagline")}
-                    copyLabel={t.copySnippet}
+                    copyText={t.copySnippet}
                   />
                 )}
                 <Textarea
                   id="profile-tr-tagline"
                   rows={3}
                   value={currentTranslation.tagline}
-                  onChange={(e) => onUpdateTranslation("tagline", e.target.value)}
+                  onChange={(e) =>
+                    onUpdateTranslation("tagline", e.target.value)
+                  }
                   placeholder={t.taglinePlaceholder}
                   className="min-h-24 resize-y leading-relaxed"
                 />
-              </FormItem>
+              </ProfileField>
 
-              <FormItem
+              <ProfileField
                 label={t.summaryLabel}
                 description={t.summaryHint}
                 inputId="profile-tr-summary"
               >
-                {showReference && isNonBase && baseTranslation && (
-                  <ProfileReferenceBox
-                    baseLanguageCode={baseLanguage.code}
-                    referenceText={baseTranslation.summary}
+                {showReference && isNonBase && baseTranslation?.summary && (
+                  <ReferenceSnippet
+                    label={baseLanguage.code.toUpperCase()}
+                    content={baseTranslation.summary}
                     onCopy={() => copyFieldFromBase("summary")}
-                    copyLabel={t.copySnippet}
+                    copyText={t.copySnippet}
                   />
                 )}
                 <Textarea
                   id="profile-tr-summary"
                   rows={3}
                   value={currentTranslation.summary}
-                  onChange={(e) => onUpdateTranslation("summary", e.target.value)}
+                  onChange={(e) =>
+                    onUpdateTranslation("summary", e.target.value)
+                  }
                   placeholder={t.summaryPlaceholder}
                   className="min-h-20 resize-y leading-relaxed"
                 />
-              </FormItem>
+              </ProfileField>
             </div>
           </FormSection>
 
           {/* Non-Base Locale Delete Option */}
           {isNonBase && (
-            <div className="border-border/80 border-t pt-4">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      t.deleteTranslationConfirm.replace(
-                        "{lang}",
-                        activeLanguage.name,
-                      ),
-                    )
-                  ) {
-                    onDeleteTranslation();
-                  }
-                }}
-                className="text-destructive hover:bg-destructive/10 hover:text-destructive h-auto p-0 text-xs font-normal underline-offset-4 hover:underline"
-              >
-                {t.deleteTranslation.replace("{lang}", activeLanguage.name)}
-              </Button>
-            </div>
+            <AdminFormDeleteTranslation
+              languageName={activeLanguage.name}
+              onDelete={onDeleteTranslation}
+              buttonText={t.deleteTranslation}
+              confirmQuestion={t.deleteTranslationConfirm}
+            />
           )}
         </>
       )}

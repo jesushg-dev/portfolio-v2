@@ -62,7 +62,7 @@ export function AdminFormLanguageBar({
   return (
     <div
       className={cn(
-        "border-border bg-card/90 sticky top-0 z-10 -mx-1 -mt-2 rounded-xl border p-3 backdrop-blur",
+        "border-border bg-card rounded-xl border p-3 shadow-2xs",
         className,
       )}
     >

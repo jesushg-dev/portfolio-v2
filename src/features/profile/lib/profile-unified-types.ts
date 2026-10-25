@@ -1,7 +1,3 @@
-import type { AppLanguage } from "@prisma/client";
-import type { ProfileHeroEditorDTO } from "./profile-hero-editor-dto";
-import type { TerminalEditorDTO } from "@/features/terminal/lib/types";
-
 export interface ProfileSharedState {
   fullName: string;
   photoUrl: string;
@@ -38,7 +34,13 @@ export interface ProfileCompletenessCheck {
 }
 
 export function hasText(value: unknown): boolean {
-  return value != null && String(value).trim().length > 0;
+  if (typeof value === "string") {
+    return value.trim().length > 0;
+  }
+  if (typeof value === "number") {
+    return !Number.isNaN(value);
+  }
+  return false;
 }
 
 export function getCompletenessChecks(
@@ -60,14 +62,24 @@ export function getCompletenessChecks(
       translation.outs.slice(0, stepCount).every(hasText));
 
   return [
-    { id: "subtitle", labelKey: "checkSubtitle", passed: hasText(translation.subtitle) },
-    { id: "tagline", labelKey: "checkTagline", passed: hasText(translation.tagline) },
+    {
+      id: "subtitle",
+      labelKey: "checkSubtitle",
+      passed: hasText(translation.subtitle),
+    },
+    {
+      id: "tagline",
+      labelKey: "checkTagline",
+      passed: hasText(translation.tagline),
+    },
     { id: "about", labelKey: "checkAbout", passed: hasText(translation.about) },
     { id: "outputs", labelKey: "checkOutputs", passed: allOutputsFilled },
   ];
 }
 
-export function createBlankLocaleTranslation(stepCount: number): ProfileLocaleTranslation {
+export function createBlankLocaleTranslation(
+  stepCount: number,
+): ProfileLocaleTranslation {
   return {
     alt: "",
     badge: "",

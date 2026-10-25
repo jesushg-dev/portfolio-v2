@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useMemo,
-  useState,
-  useTransition,
-  type FC,
-} from "react";
+import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import type { AppLanguage } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { Code2, User } from "lucide-react";
@@ -14,6 +8,7 @@ import { toast } from "sonner";
 
 import { api } from "@/trpc/react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { resolvePrimaryLanguage } from "@/lib/i18n/localized-form";
 import type {
   ProfileAboutEditorDTO,
   ProfileHeroEditorDTO,
@@ -22,6 +17,7 @@ import type { TerminalEditorDTO } from "@/features/terminal/lib/types";
 import {
   createBlankLocaleTranslation,
   hasText,
+  getCompletenessChecks,
   type ProfileLocaleTranslation,
   type ProfileSharedState,
   type ProfileUnifiedState,
@@ -32,7 +28,10 @@ import {
   toTerminalMutationInput,
   toUnifiedState,
 } from "../lib/profile-unified-dto";
-import { ProfileLanguageBar } from "./profile-language-bar";
+import {
+  AdminFormLanguageBar,
+  type LanguageProgress,
+} from "@/components/admin/shared/admin-form-language-bar";
 import { ProfileHeroLivePreview } from "./profile-hero-live-preview";
 import { ProfileAboutLivePreview } from "./profile-about-live-preview";
 import { ProfileIdentityTab } from "./profile-identity-tab";
@@ -57,10 +56,10 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
   const t = useTranslations("admin.profile");
   const utils = api.useUtils();
 
-  const baseLanguage = useMemo(
-    () => languages.find((l) => l.isPrimary) ?? languages[0]!,
-    [languages],
-  );
+  const baseLanguage = useMemo(() => {
+    const primaryRef = resolvePrimaryLanguage(languages);
+    return languages.find((l) => l.id === primaryRef?.id) ?? languages[0];
+  }, [languages]);
 
   const [activeTab, setActiveTab] = useState<"identity" | "about">(initialTab);
   const [activeLangId, setActiveLangId] = useState<string>(baseLanguage.id);
@@ -110,6 +109,45 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
 
   const currentTranslation = state.translations[activeLangId] ?? null;
   const baseTranslation = state.translations[baseLanguage.id] ?? null;
+
+  const languageProgress = useMemo<LanguageProgress[]>(() => {
+    return languages.map((lang) => {
+      const tr = state.translations[lang.id];
+      const checks = getCompletenessChecks(tr, state.steps.length);
+      const passedCount = checks.filter((c) => c.passed).length;
+      const totalCount = checks.length;
+      const isBase = lang.id === baseLanguage.id;
+      const hasContent = tr !== null;
+
+      return {
+        id: lang.id,
+        name: lang.name,
+        code: lang.code,
+        isBase,
+        hasContent,
+        completedCount: passedCount,
+        totalCount,
+      };
+    });
+  }, [languages, state.translations, state.steps.length, baseLanguage.id]);
+
+  const activeChecks = useMemo(
+    () => getCompletenessChecks(currentTranslation, state.steps.length),
+    [currentTranslation, state.steps.length],
+  );
+
+  const missingItems = useMemo(() => {
+    if (!currentTranslation) return [];
+    const checkLabels: Record<string, string> = {
+      checkSubtitle: t("checkSubtitle"),
+      checkTagline: t("checkTagline"),
+      checkAbout: t("checkAbout"),
+      checkOutputs: t("checkOutputs"),
+    };
+    return activeChecks
+      .filter((c) => !c.passed)
+      .map((c) => checkLabels[c.labelKey] ?? c.id);
+  }, [currentTranslation, activeChecks, t]);
 
   // State update handlers
   const handleUpdateShared = useCallback(
@@ -250,7 +288,7 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
         if (targetIndex < 0 || targetIndex >= prev.steps.length) return prev;
 
         const nextSteps = [...prev.steps];
-        const tempStep = nextSteps[index]!;
+        const tempStep = nextSteps[index];
         nextSteps[index] = nextSteps[targetIndex]!;
         nextSteps[targetIndex] = tempStep;
 
@@ -285,7 +323,7 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
     setState((prev) => {
       const nextSteps = [...prev.steps];
       if (nextSteps[index]) {
-        nextSteps[index] = { ...nextSteps[index]!, cmd };
+        nextSteps[index] = { ...nextSteps[index], cmd };
       }
       return { ...prev, steps: nextSteps };
     });
@@ -329,25 +367,21 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
 
     const baseTr = state.translations[baseLanguage.id];
     if (!baseTr || !hasText(baseTr.subtitle)) {
-      setValidationError(
-        t("missingSubtitle").replace("{lang}", baseLanguage.name),
-      );
+      setValidationError(t("missingSubtitle", { lang: baseLanguage.name }));
       setActiveTab("identity");
       setActiveLangId(baseLanguage.id);
       return false;
     }
 
     if (!hasText(baseTr.tagline)) {
-      setValidationError(
-        t("missingTagline").replace("{lang}", baseLanguage.name),
-      );
+      setValidationError(t("missingTagline", { lang: baseLanguage.name }));
       setActiveTab("identity");
       setActiveLangId(baseLanguage.id);
       return false;
     }
 
     if (!hasText(baseTr.about)) {
-      setValidationError(t("missingAbout").replace("{lang}", baseLanguage.name));
+      setValidationError(t("missingAbout", { lang: baseLanguage.name }));
       setActiveTab("about");
       setActiveLangId(baseLanguage.id);
       return false;
@@ -366,12 +400,12 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
     }
 
     for (let i = 0; i < state.steps.length; i++) {
-      const step = state.steps[i]!;
+      const step = state.steps[i];
       const hasAnyOutput = languages.some((l) =>
         hasText(state.translations[l.id]?.outs[i]),
       );
       if (hasAnyOutput && !hasText(step.cmd)) {
-        setValidationError(t("stepMissingCmd").replace("{n}", String(i + 1)));
+        setValidationError(t("stepMissingCmd", { n: i + 1 }));
         setActiveTab("about");
         return false;
       }
@@ -457,26 +491,23 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
         </TabsList>
       </Tabs>
 
-      {/* Language Switcher Bar */}
-      <ProfileLanguageBar
-        languages={languages}
+      {/* Reusable Admin Form Language Bar */}
+      <AdminFormLanguageBar
+        languages={languageProgress}
         activeLangId={activeLangId}
         onSelectLang={setActiveLangId}
-        state={state}
-        showReference={showReference}
-        onToggleReference={setShowReference}
-        t={{
-          baseLabel: t("baseBadge"),
-          completeStatus: t("completeStatus"),
-          noTranslationBadge: t("noTranslationBadge"),
-          allComplete: t("allComplete"),
-          missingPrefix: t("missingPrefix"),
-          showReference: t("showReference"),
-          checkSubtitle: t("checkSubtitle"),
-          checkTagline: t("checkTagline"),
-          checkAbout: t("checkAbout"),
-          checkOutputs: t("checkOutputs"),
-        }}
+        missingItems={missingItems}
+        isNonPrimary={activeLangId !== baseLanguage.id}
+        showOriginal={showReference}
+        onToggleShowOriginal={setShowReference}
+        baseLabel={t("baseBadge")}
+        completeProgressText={(ok, total) =>
+          `${ok}/${total} ${t("completeStatus")}`
+        }
+        notTranslatedText={() => t("noTranslationBadge")}
+        allCompleteText={t("allComplete")}
+        missingFieldsText={(fields) => `${t("missingPrefix")}: ${fields}`}
+        showOriginalText={t("showReference")}
       />
 
       {/* Mobile Live Preview Accordion */}
@@ -492,9 +523,10 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
               currentTranslation={currentTranslation}
               baseTranslation={baseTranslation}
               isNonBase={activeLangId !== baseLanguage.id}
-              baseLangName={baseLanguage.name}
               t={{
-                fallbackNotice: t("fallbackNotice"),
+                fallbackNotice: t("fallbackNotice", {
+                  baseLang: baseLanguage.name,
+                }),
                 defaultBadge: t("defaultBadge"),
                 previewHeading: t("previewHeading"),
               }}
@@ -563,15 +595,23 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
                 summaryLabel: t("heroSummaryLabel"),
                 summaryHint: t("heroSummaryHint"),
                 summaryPlaceholder: t("heroSummaryPlaceholder"),
-                noTranslationTitle: t("noTranslationTitle"),
-                noTranslationHint: t("noTranslationHint"),
-                copyFromBase: t("copyFromBase"),
+                noTranslationTitle: t("noTranslationTitle", {
+                  lang: activeLanguage.name,
+                }),
+                noTranslationHint: t("noTranslationHint", {
+                  baseLang: baseLanguage.name,
+                }),
+                copyFromBase: t("copyFromBase", {
+                  baseLang: baseLanguage.name,
+                }),
                 startBlank: t("startBlank"),
-                deleteTranslation: t("deleteTranslation"),
-                deleteTranslationConfirm: t("deleteTranslationConfirm"),
+                deleteTranslation: t("deleteTranslation", {
+                  lang: activeLanguage.name,
+                }),
+                deleteTranslationConfirm: t("deleteTranslationConfirm", {
+                  lang: activeLanguage.name,
+                }),
                 copySnippet: t("copySnippet"),
-                confirmDeleteButton: t("discard"),
-                cancelButton: t("discard"),
               }}
             />
           ) : (
@@ -614,12 +654,22 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
                 outputPerLangHint: t("outputPerLangHint"),
                 deleteStepConfirm: t("deleteStepConfirm"),
                 addStep: t("addStep"),
-                noTranslationTitle: t("noTranslationTitle"),
-                noTranslationHint: t("noTranslationHint"),
-                copyFromBase: t("copyFromBase"),
+                noTranslationTitle: t("noTranslationTitle", {
+                  lang: activeLanguage.name,
+                }),
+                noTranslationHint: t("noTranslationHint", {
+                  baseLang: baseLanguage.name,
+                }),
+                copyFromBase: t("copyFromBase", {
+                  baseLang: baseLanguage.name,
+                }),
                 startBlank: t("startBlank"),
-                deleteTranslation: t("deleteTranslation"),
-                deleteTranslationConfirm: t("deleteTranslationConfirm"),
+                deleteTranslation: t("deleteTranslation", {
+                  lang: activeLanguage.name,
+                }),
+                deleteTranslationConfirm: t("deleteTranslationConfirm", {
+                  lang: activeLanguage.name,
+                }),
                 copySnippet: t("copySnippet"),
               }}
             />
@@ -628,8 +678,8 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
 
         {/* Right Column: Sticky Live Preview */}
         <aside className="hidden lg:block">
-          <div className="sticky top-40 space-y-2">
-            <div className="text-muted-foreground px-1 text-xs font-semibold uppercase tracking-wider">
+          <div className="sticky top-20 space-y-2">
+            <div className="text-muted-foreground px-1 text-xs font-semibold tracking-wider uppercase">
               {t("previewHeading")}
             </div>
             {activeTab === "identity" ? (
@@ -639,9 +689,10 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
                 currentTranslation={currentTranslation}
                 baseTranslation={baseTranslation}
                 isNonBase={activeLangId !== baseLanguage.id}
-                baseLangName={baseLanguage.name}
                 t={{
-                  fallbackNotice: t("fallbackNotice"),
+                  fallbackNotice: t("fallbackNotice", {
+                    baseLang: baseLanguage.name,
+                  }),
                   defaultBadge: t("defaultBadge"),
                   previewHeading: t("previewHeading"),
                 }}

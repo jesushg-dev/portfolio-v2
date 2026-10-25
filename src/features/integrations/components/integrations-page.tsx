@@ -127,28 +127,19 @@ export function IntegrationsPage() {
           variant="line"
           className="w-full justify-start overflow-x-auto"
         >
-          <TabsTrigger
-            value="all"
-            className="gap-2 px-4 py-2.5 text-sm"
-          >
+          <TabsTrigger value="all" className="gap-2 px-4 py-2.5 text-sm">
             <span>{t("filters.all")}</span>
             <span className="text-muted-foreground text-xs tabular-nums">
               ({INTEGRATION_CATALOG.length})
             </span>
           </TabsTrigger>
-          <TabsTrigger
-            value="connected"
-            className="gap-2 px-4 py-2.5 text-sm"
-          >
+          <TabsTrigger value="connected" className="gap-2 px-4 py-2.5 text-sm">
             <span>{t("filters.connected")}</span>
             <span className="text-muted-foreground text-xs tabular-nums">
               ({connectedCatalog.length})
             </span>
           </TabsTrigger>
-          <TabsTrigger
-            value="available"
-            className="gap-2 px-4 py-2.5 text-sm"
-          >
+          <TabsTrigger value="available" className="gap-2 px-4 py-2.5 text-sm">
             <span>{t("filters.available")}</span>
             <span className="text-muted-foreground text-xs tabular-nums">
               ({availableCatalog.length})

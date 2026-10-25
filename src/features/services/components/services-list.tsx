@@ -155,9 +155,7 @@ export const ServicesList: FC<ServicesListProps> = ({
   }, [rawSkills]);
 
   const uniqueTypes = useMemo(() => {
-    return Array.from(new Set(services.map((s) => s.type))).filter(
-      Boolean,
-    );
+    return Array.from(new Set(services.map((s) => s.type))).filter(Boolean);
   }, [services]);
 
   const typeCounts = useMemo(() => {
