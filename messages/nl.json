@@ -34,6 +34,8 @@
       "disconnecting": "Verbinding verbreken…",
       "disconnectSuccess": "Integratie succesvol verbroken.",
       "disconnectFailed": "Integratie verbreken mislukt.",
+      "disconnectConfirmTitle": "{provider} verbreken",
+      "disconnectConfirmDescription": "Inloggegevens zijn opgeslagen en versleuteld. Je kunt deze dienst op elk moment opnieuw verbinden.",
       "update": "Referenties bijwerken",
       "manage": "Beheren",
       "cancel": "Annuleren"
@@ -76,6 +78,13 @@
       "uploadthing": "Bestandsopslag & CV PDF-CDN",
       "ai": "CV-engine, ATS & voorbereiding op interviews",
       "ilovepdf": "DOCX naar PDF & HTML naar PDF engine"
+    },
+    "categories": {
+      "communication": "E-mail",
+      "media": "Muziek",
+      "storage": "Opslag",
+      "ai": "Kunstmatige intelligentie",
+      "documents": "Documenten"
     },
     "guides": {
       "title": "Installatiehandleiding",
@@ -146,11 +155,16 @@
     },
     "empty": {
       "title": "Nog geen integraties verbonden",
-      "description": "Kies hieronder een dienst om je eerste integratie te verbinden."
+      "description": "Kies hieronder een dienst om je eerste integratie te verbinden.",
+      "allConnectedTitle": "Alles is verbonden",
+      "allConnectedDescription": "Geen openstaande integraties meer te configureren in de catalogus.",
+      "noneConnectedTitle": "Nog geen diensten verbonden",
+      "noneConnectedDescription": "Verbind een dienst vanaf het tabblad Beschikbaar om je portfolio uit te breiden."
     },
     "status": {
       "configured": "Geconfigureerd",
       "notConfigured": "Niet geconfigureerd",
+      "notConnected": "Nog niet verbonden",
       "syncing": "Sjablonen synchroniseren...",
       "syncedCount": "{count} sjablonen gepubliceerd"
     },
@@ -1841,7 +1855,13 @@
         "referrersHint": "Alleen hostnames. Directe bezoeken worden weggelaten.",
         "empty": "Nog geen bezoekersdata. Publieke pagina's tellen vanaf het eerste anonieme bezoek.",
         "emptyReferrers": "Geen externe verwijzers in dit venster.",
-        "unknownCountry": "Onbekend"
+        "unknownCountry": "Onbekend",
+        "pagesPerVisit": "{ratio} pagina's per bezoek",
+        "last30Days": "Laatste 30 dagen",
+        "mostFromCountry": "Meeste uit {country} ({percentage}%)",
+        "pageviewsShare": "{views} weergaven · {percentage}% van pageviews",
+        "showAll": "Toon alles ({count})",
+        "showLess": "Toon minder"
       },
       "jobs": {
         "title": "Vacature-tracker",
@@ -1855,18 +1875,25 @@
         "hired": "Aangenomen",
         "upcoming": "Aankomende events",
         "upcomingHint": "Volgende interviews, tests en follow-ups.",
-        "noUpcoming": "Niets gepland."
+        "noUpcoming": "Niets gepland.",
+        "statusDistribution": "Status van alle {count} sollicitaties",
+        "noUpcomingEvents": "Geen aankomende evenementen",
+        "noUpcomingHint": "Interviews, tests en follow-ups verschijnen hier.",
+        "addEvent": "Evenement toevoegen"
       },
       "services": {
         "title": "Diensten",
-        "subtitle": "Welke aanbiedingen zichtbaar zijn op de publieke site.",
+        "subtitle": "Kies welke aanbiedingen op de publieke site verschijnen.",
         "empty": "Nog geen diensten.",
         "active": "Actief",
         "inactive": "Inactief",
-        "featured": "Uitgelicht"
+        "featured": "Uitgelicht",
+        "visibleCount": "{active} van {total} zichtbaar.",
+        "toggleVisibilityAria": "Toon {title} op de openbare site"
       },
       "inventory": {
-        "title": "Contentoverzicht"
+        "title": "Contentoverzicht",
+        "subtitle": "Wat bezoekers kunnen vinden op je portfolio."
       },
       "stats": {
         "certificates": {
@@ -2390,9 +2417,67 @@
         "noResults": "Geen vaardigheden gevonden",
         "selectedCount": "{count, plural, one {# vaardigheid geselecteerd} other {# vaardigheden geselecteerd}}",
         "shownCount": "{shown} van {total} getoond",
-        "allTypes": "Alle types"
+        "allTypes": "Alle types",
+        "clearAll": "Alles wissen"
+      },
+      "certificatePicker": {
+        "title": "Gekoppelde certificaten",
+        "searchPlaceholder": "Zoek certificaten op titel of uitgever…",
+        "noResults": "Geen certificaten gevonden voor deze zoekopdracht.",
+        "noCertificatesYet": "Nog geen certificaten geregistreerd.",
+        "clickToRemove": "Klik om te verwijderen",
+        "selectedCount": "{count, plural, =0 {Geen certificaten geselecteerd} one {1 certificaat geselecteerd} other {# certificaten geselecteerd}}",
+        "clearAll": "Alles wissen",
+        "hintEmpty": "Zoek en koppel certificaten die dit project ondersteunen.",
+        "noSelected": "Geen certificaten geselecteerd"
       },
       "project": {
+        "tabs": {
+          "general": "Algemeen",
+          "content": "Inhoud",
+          "skills": "Vaardigheden",
+          "certificates": "Certificaten"
+        },
+        "generalNote": "Deze instellingen gelden voor alle talen. Vertaalde inhoud staat onder Inhoud.",
+        "coverSection": "Omslag",
+        "coverHint": "Plak een URL of upload een afbeeldingsbestand.",
+        "coverUpload": "Afbeelding uploaden",
+        "coverChange": "Wijzigen",
+        "coverRemove": "Verwijderen",
+        "coverEmptyTitle": "Geen omslagafbeelding",
+        "coverEmptyHint": "Upload een bestand of plak hieronder een URL",
+        "classification": "Classificatie",
+        "datesAndTeam": "Data & Team",
+        "startDate": "Startdatum",
+        "endDate": "Einddatum",
+        "teamSize": "Teamgrootte",
+        "teamSizePlaceholder": "1",
+        "status": "Status",
+        "linksSection": "Links",
+        "publicationSection": "Publicatie",
+        "slugHint": "Optioneel. Vereist bij het inschakelen van een casestudy.",
+        "order": "Volgorde",
+        "orderHint": "Positie in de projectcatalogus.",
+        "caseStudyPublishHint": "Zolang uitgeschakeld blijft het een concept: je kunt blijven bewerken in Inhoud zonder het op de live site te tonen.",
+        "caseStudyNotReady": "Kan nog niet publiceren: {reasons}",
+        "caseStudyStatus": "Status van de casestudy",
+        "caseStudyPublished": "Gepubliceerd",
+        "caseStudyDraft": "Concept",
+        "caseStudyPublish": "Publiceren",
+        "caseStudyUnpublish": "Terugzetten naar concept",
+        "notTranslated": "Geen vertaling in {language}",
+        "baseLanguageLabel": "Basis",
+        "notTranslatedHint": "Opgeslagen als een onafhankelijke vertaling. Begin leeg of kopieer tekst van {baseLanguage}.",
+        "copyFromBase": "Kopiëren van {baseLanguage}",
+        "startBlank": "Leeg beginnen",
+        "showOriginal": "Origineel tonen",
+        "copy": "Kopiëren",
+        "completeProgress": "{completed}/{total} voltooid",
+        "allComplete": "Alles voltooid ✓",
+        "missingFields": "Ontbrekend: {fields}",
+        "associatedCertificates": "Gekoppelde certificaten",
+        "deleteTranslation": "{language}-vertaling verwijderen",
+        "deleteTranslationConfirm": "De vertaling in het {language} verwijderen? Titel, beschrijving en casestudy worden verwijderd.",
         "caseStudyContent": "Inhoud van de casestudy",
         "caseStudyContext": "Context",
         "caseStudySectionTitle": "Sectietitel",
@@ -2416,6 +2501,7 @@
         "associatedSkills": "Gekoppelde vaardigheden",
         "save": "Opslaan",
         "create": "Maken",
+        "delete": "Verwijderen",
         "cancel": "Annuleren",
         "updatedSuccess": "Project bijgewerkt",
         "createdSuccess": "Project aangemaakt",
@@ -2432,10 +2518,22 @@
         "titleWithLanguage": "Titel ({language})",
         "descriptionWithLanguage": "Beschrijving ({language})",
         "imageUrl": "Afbeelding-URL / pictogram",
+        "icon": "Icoon",
         "imageUrlPlaceholder": "https://...",
         "serviceType": "Diensttype",
+        "type": "Diensttype",
         "selectType": "Selecteer een type",
         "associatedSkills": "Gekoppelde vaardigheden",
+        "image": "Afbeelding-URL",
+        "imagePlaceholder": "https://...",
+        "statsValue": "Statistiek / Kernwaarde",
+        "statsValuePlaceholder": "bijv. 99.9%, 10+, 50ms",
+        "featuredLabel": "Uitgelichte dienst",
+        "featuredDescription": "Markeer deze dienst prominent op de startpagina en in het dienstenoverzicht.",
+        "badge": "Badge / Labeltekst",
+        "badgePlaceholder": "bijv. Populair, Geavanceerd, Basis",
+        "statsLabel": "Statistieklabel",
+        "statsLabelPlaceholder": "bijv. Uptime SLA, Voltooide projecten",
         "save": "Opslaan",
         "create": "Maken",
         "cancel": "Annuleren",
@@ -2447,7 +2545,27 @@
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
         "atLeastOneLanguage": "Minstens één taal is verplicht",
         "isActive": "Actief op de publieke site",
-        "isActiveHint": "Inactieve diensten blijven in admin maar verdwijnen van de homepage en publieke stats."
+        "isActiveHint": "Inactieve diensten blijven in admin maar verdwijnen van de homepage en publieke stats.",
+        "tabGeneral": "Algemeen",
+        "tabContent": "Inhoud",
+        "tabSkills": "Vaardigheden",
+        "title": "Titel",
+        "titlePlaceholder": "bijv. Full-Stack Webontwikkeling",
+        "description": "Beschrijving",
+        "descriptionPlaceholder": "Gedetailleerde beschrijving van deze dienst...",
+        "baseLanguageLabel": "Basis",
+        "completeProgress": "{completed}/{total} voltooid",
+        "notTranslated": "Niet vertaald in {language}",
+        "notTranslatedHint": "Opgeslagen als onafhankelijke vertaling. Begin leeg of kopieer vanaf {baseLanguage}.",
+        "copyFromBase": "Kopieer vanaf {baseLanguage}",
+        "startBlank": "Begin leeg",
+        "allComplete": "Alles voltooid ✓",
+        "missingFields": "Ontbrekend: {fields}",
+        "showOriginal": "Toon origineel",
+        "copy": "Kopiëren",
+        "deleteTranslation": "Verwijder vertaling in {language}",
+        "deleteTranslationConfirm": "Vertaling in {language} verwijderen?",
+        "delete": "Verwijderen"
       },
       "certification": {
         "generalSection": "Algemene informatie",
@@ -2472,7 +2590,27 @@
         "createFailed": "Certificering aanmaken mislukt",
         "companyRequired": "Organisatie is verplicht",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
-        "atLeastOneLanguage": "Minstens één taal is verplicht"
+        "atLeastOneLanguage": "Minstens één taal is verplicht",
+        "tabGeneral": "Algemeen",
+        "tabContent": "Inhoud",
+        "tabSkills": "Vaardigheden",
+        "title": "Titel",
+        "titlePlaceholder": "bijv. AWS Certified Solutions Architect",
+        "issuedDate": "Uitgiftejaar",
+        "issuedDatePlaceholder": "bijv. 2024",
+        "baseLanguageLabel": "Basis",
+        "completeProgress": "{completed}/{total} voltooid",
+        "notTranslated": "Niet vertaald in {language}",
+        "notTranslatedHint": "Opgeslagen als onafhankelijke vertaling. Begin leeg of kopieer vanaf {baseLanguage}.",
+        "copyFromBase": "Kopieer vanaf {baseLanguage}",
+        "startBlank": "Begin leeg",
+        "allComplete": "Alles voltooid ✓",
+        "missingFields": "Ontbrekend: {fields}",
+        "showOriginal": "Toon origineel",
+        "copy": "Kopiëren",
+        "deleteTranslation": "Verwijder vertaling in {language}",
+        "deleteTranslationConfirm": "Vertaling in {language} verwijderen?",
+        "delete": "Verwijderen"
       },
       "jobTrackerApplication": {
         "validation": {
@@ -2738,7 +2876,32 @@
         "organizationRequired": "Organisatie is verplicht",
         "startDateRequired": "Startdatum is verplicht",
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
-        "atLeastOneLanguage": "Minstens één taal is verplicht"
+        "atLeastOneLanguage": "Minstens één taal is verplicht",
+        "tabGeneral": "Algemeen",
+        "tabContent": "Inhoud",
+        "tabRoles": "Rollen",
+        "tabSkills": "Vaardigheden",
+        "rolesHint": "Rollen of functies binnen deze organisatie.",
+        "roleTitle": "Functietitel",
+        "roleTitlePlaceholder": "bijv. Senior Software Engineer",
+        "roleStartDate": "Startdatum",
+        "roleEndDate": "Einddatum",
+        "addRole": "Rol toevoegen",
+        "noRoles": "Nog geen rollen.",
+        "skillsHint": "Vaardigheden gekoppeld aan dit tijdlijnitem.",
+        "baseLanguageLabel": "Basis",
+        "completeProgress": "{completed}/{total} voltooid",
+        "notTranslated": "Niet vertaald in {language}",
+        "notTranslatedHint": "Opgeslagen als onafhankelijke vertaling. Begin leeg of kopieer vanaf {baseLanguage}.",
+        "copyFromBase": "Kopieer vanaf {baseLanguage}",
+        "startBlank": "Begin leeg",
+        "allComplete": "Alles voltooid ✓",
+        "missingFields": "Ontbrekend: {fields}",
+        "showOriginal": "Toon origineel",
+        "copy": "Kopiëren",
+        "deleteTranslation": "Verwijder vertaling in {language}",
+        "deleteTranslationConfirm": "Vertaling in {language} verwijderen?",
+        "delete": "Verwijderen"
       },
       "portfolioSoftSkill": {
         "generalSection": "Algemene informatie",
@@ -2754,8 +2917,8 @@
         "displayOrder": "Weergavevolgorde",
         "titleWithLanguage": "Titel ({language})",
         "descriptionWithLanguage": "Beschrijving ({language})",
-        "titlePlaceholder": "bijv. Teamwork",
-        "descriptionPlaceholder": "Korte beschrijving in de tooltip",
+        "titlePlaceholder": "bijv. Kritisch Denken",
+        "descriptionPlaceholder": "Beschrijving van deze soft skill...",
         "save": "Opslaan",
         "create": "Aanmaken",
         "cancel": "Annuleren",
@@ -2766,7 +2929,24 @@
         "titleRequiredPrimary": "Titel is verplicht in de hoofdtaal",
         "atLeastOneLanguage": "Minstens één taal is verplicht",
         "copyFromPrimary": "Kopiëren van {language}",
-        "unsavedChangesConfirm": "Je hebt niet-opgeslagen wijzigingen. Toch verlaten?"
+        "unsavedChangesConfirm": "Je hebt niet-opgeslagen wijzigingen. Toch verlaten?",
+        "tabGeneral": "Algemeen",
+        "tabContent": "Inhoud",
+        "title": "Titel",
+        "description": "Beschrijving",
+        "baseLanguageLabel": "Basis",
+        "completeProgress": "{completed}/{total} voltooid",
+        "notTranslated": "Niet vertaald in {language}",
+        "notTranslatedHint": "Opgeslagen als onafhankelijke vertaling. Begin leeg of kopieer vanaf {baseLanguage}.",
+        "copyFromBase": "Kopieer vanaf {baseLanguage}",
+        "startBlank": "Begin leeg",
+        "allComplete": "Alles voltooid ✓",
+        "missingFields": "Ontbrekend: {fields}",
+        "showOriginal": "Toon origineel",
+        "copy": "Kopiëren",
+        "deleteTranslation": "Verwijder vertaling in {language}",
+        "deleteTranslationConfirm": "Vertaling in {language} verwijderen?",
+        "delete": "Verwijderen"
       },
       "softSkillsSection": {
         "title": "Sectie-achtergrond",
@@ -2784,7 +2964,19 @@
         "save": "Sectie opslaan",
         "cancel": "Annuleren",
         "savedSuccess": "Sectie-achtergrond opgeslagen",
-        "saveFailed": "Sectie-achtergrond opslaan mislukt"
+        "saveFailed": "Sectie-achtergrond opslaan mislukt",
+        "generalTab": "Algemeen",
+        "metricsTab": "Statistieken",
+        "metricsDescription": "De waarde (bijv. “40%”) is hetzelfde in alle talen; het label wordt vertaald.",
+        "noMetrics": "Nog geen statistieken.",
+        "addMetric": "Statistiek toevoegen",
+        "metricValue": "Waarde",
+        "metricValuePlaceholder": "bijv. 40%",
+        "metricLabel": "Label",
+        "metricLabelPlaceholder": "bijv. Ingenieurs geleid",
+        "moveUp": "Omhoog",
+        "moveDown": "Omlaag",
+        "deleteMetric": "Verwijderen"
       },
       "portfolioSkill": {
         "generalSection": "Algemene informatie",
@@ -2809,7 +3001,24 @@
         "imageRequired": "Afbeelding-URL is verplicht",
         "imageUrlInvalid": "Voer een geldige afbeelding-URL of lokaal pad in",
         "featuredLabel": "Uitgelicht in stack",
-        "featuredDescription": "Uitgelichte skills zijn helderder in de home-terminal en benadrukken je primaire stack."
+        "featuredDescription": "Uitgelichte skills zijn helderder in de home-terminal en benadrukken je primaire stack.",
+        "tabGeneral": "Algemeen",
+        "tabContent": "Inhoud",
+        "description": "Beschrijving",
+        "wikiUrl": "Wiki-URL",
+        "baseLanguageLabel": "Basis",
+        "completeProgress": "{completed}/{total} voltooid",
+        "notTranslated": "Niet vertaald in {language}",
+        "notTranslatedHint": "Opgeslagen als onafhankelijke vertaling. Begin leeg of kopieer vanaf {baseLanguage}.",
+        "copyFromBase": "Kopieer vanaf {baseLanguage}",
+        "startBlank": "Begin leeg",
+        "allComplete": "Alles voltooid ✓",
+        "missingFields": "Ontbrekend: {fields}",
+        "showOriginal": "Toon origineel",
+        "copy": "Kopiëren",
+        "deleteTranslation": "Verwijder vertaling in {language}",
+        "deleteTranslationConfirm": "Vertaling in {language} verwijderen?",
+        "delete": "Verwijderen"
       },
       "usesItem": {
         "sectionBasics": "Basis",
@@ -3132,7 +3341,19 @@
       "columnPeriod": "Periode",
       "columnLocation": "Locatie",
       "delete": "Verwijderen",
-      "deleting": "Verwijderen..."
+      "deleting": "Verwijderen...",
+      "categories": {
+        "all": "Alles"
+      },
+      "columnLanguages": "Talen",
+      "bulk": {
+        "selected": "{count} geselecteerd",
+        "clear": "Selectie wissen",
+        "delete": "Geselecteerde verwijderen",
+        "deleteConfirm": "Weet u zeker dat u {count} geselecteerde vaardigheden wilt verwijderen?",
+        "deleteSuccess": "{count} vaardigheden verwijderd",
+        "deleteError": "Fout bij verwijderen van geselecteerde vaardigheden"
+      }
     },
     "projects": {
       "title": "Projecten",
@@ -3147,8 +3368,14 @@
       "savedSuccess": "Opgeslagen!",
       "deleteSuccess": "Project succesvol verwijderd.",
       "deleteError": "Project verwijderen is mislukt.",
+      "create": "Project aanmaken",
       "edit": "Bewerken",
+      "createDescription": "Maak een nieuw portfolioproject.",
+      "editDescription": "Bewerk een bestaand portfolioproject.",
+      "deleting": "Verwijderen...",
       "cancel": "Annuleren",
+      "saveFailed": "Project opslaan mislukt",
+      "deleteFailed": "Project verwijderen mislukt",
       "columnTitle": "Titel",
       "columnType": "Soort",
       "columnSkills": "Vaardigheden",
@@ -3159,13 +3386,19 @@
       "columnCategory": "Categorie",
       "columnPeriod": "Periode",
       "columnLocation": "Locatie",
-      "create": "Project toevoegen",
-      "createDescription": "Maak een nieuw portfolio-project.",
-      "editDescription": "Bewerk een bestaand portfolio-project.",
       "delete": "Verwijderen",
-      "deleting": "Verwijderen...",
-      "saveFailed": "Project opslaan mislukt",
-      "deleteFailed": "Project verwijderen mislukt"
+      "categories": {
+        "all": "Alle"
+      },
+      "columnLanguages": "Talen",
+      "bulk": {
+        "selected": "{count} geselecteerd",
+        "clear": "Selectie wissen",
+        "delete": "Geselecteerde verwijderen",
+        "deleteConfirm": "Weet u zeker dat u {count} geselecteerde projecten wilt verwijderen?",
+        "deleteSuccess": "{count} projecten verwijderd",
+        "deleteError": "Verwijderen van geselecteerde projecten mislukt"
+      }
     },
     "services": {
       "title": "Diensten",
@@ -3201,7 +3434,19 @@
       "delete": "Verwijderen",
       "deleting": "Verwijderen...",
       "saveFailed": "Dienst opslaan mislukt",
-      "deleteFailed": "Dienst verwijderen mislukt"
+      "deleteFailed": "Dienst verwijderen mislukt",
+      "categories": {
+        "all": "Alles"
+      },
+      "columnLanguages": "Talen",
+      "bulk": {
+        "selected": "{count} geselecteerd",
+        "clear": "Selectie wissen",
+        "delete": "Geselecteerde verwijderen",
+        "deleteConfirm": "Weet u zeker dat u {count} geselecteerde diensten wilt verwijderen?",
+        "deleteSuccess": "{count} diensten verwijderd",
+        "deleteError": "Fout bij verwijderen van geselecteerde diensten"
+      }
     },
     "certifications": {
       "title": "Certificeringen",
@@ -3218,7 +3463,7 @@
       "edit": "Bewerken",
       "cancel": "Annuleren",
       "columnTitle": "Titel",
-      "columnType": "Soort",
+      "columnType": "Type",
       "columnSkills": "Vaardigheden",
       "columnActions": "Acties",
       "columnCompany": "Bedrijf",
@@ -3233,7 +3478,19 @@
       "delete": "Verwijderen",
       "deleting": "Verwijderen...",
       "saveFailed": "Certificering opslaan mislukt",
-      "deleteFailed": "Certificering verwijderen mislukt"
+      "deleteFailed": "Certificering verwijderen mislukt",
+      "categories": {
+        "all": "Alles"
+      },
+      "columnLanguages": "Talen",
+      "bulk": {
+        "selected": "{count} geselecteerd",
+        "clear": "Selectie wissen",
+        "delete": "Geselecteerde verwijderen",
+        "deleteConfirm": "Weet u zeker dat u {count} geselecteerde certificeringen wilt verwijderen?",
+        "deleteSuccess": "{count} certificeringen verwijderd",
+        "deleteError": "Fout bij verwijderen van geselecteerde certificeringen"
+      }
     },
     "timeline": {
       "title": "Tijdlijn",
@@ -3270,7 +3527,21 @@
       "delete": "Verwijderen",
       "createDescription": "Voeg een nieuw item toe aan je tijdlijn.",
       "editDescription": "Werk een bestaand tijdlijnitem bij.",
-      "editEntry": "Tijdlijnitem bewerken"
+      "editEntry": "Tijdlijnitem bewerken",
+      "columnLanguages": "Talen",
+      "categories": {
+        "all": "Alle",
+        "work": "Werk",
+        "study": "Studie",
+        "course": "Cursus"
+      },
+      "bulk": {
+        "selected": "geselecteerd",
+        "clear": "Selectie wissen",
+        "delete": "Selectie verwijderen",
+        "deleteConfirmTitle": "Geselecteerde items verwijderen?",
+        "deleteConfirmDescription": "De geselecteerde items worden definitief verwijderd."
+      }
     },
     "softSkills": {
       "title": "Soft skills",
@@ -3295,7 +3566,16 @@
       "columnTitle": "Titel",
       "columnVisible": "Status",
       "columnOrder": "Volgorde",
-      "columnActions": "Acties"
+      "columnActions": "Acties",
+      "columnLanguages": "Talen",
+      "bulk": {
+        "selected": "{count} geselecteerd",
+        "clear": "Selectie wissen",
+        "delete": "Geselecteerde verwijderen",
+        "deleteConfirm": "Weet u zeker dat u {count} geselecteerde soft skills wilt verwijderen?",
+        "deleteSuccess": "{count} soft skills verwijderd",
+        "deleteError": "Fout bij verwijderen van geselecteerde soft skills"
+      }
     },
     "dataTable": {
       "searchBy": "Zoeken op",
@@ -3361,14 +3641,14 @@
       "exportSeedZipError": "Seed-ZIP exporteren is mislukt"
     },
     "jobTracker": {
-      "title": "Job Tracker",
-      "pageDescription": "Beheer uw sollicitaties efficiënt",
-      "newCompany": "Nieuw Bedrijf",
-      "newApplication": "Nieuwe Sollicitatie",
+      "title": "Vacature tracker",
+      "pageDescription": "Beheer je sollicitaties, evenementen, outreach en bedrijven.",
+      "newCompany": "Nieuw bedrijf",
+      "newApplication": "Nieuwe sollicitatie",
       "applicationsTab": "Sollicitaties",
       "eventsTab": "Evenementen",
       "companiesTab": "Bedrijven",
-      "outreachTab": "Opvolging & Lezingen",
+      "outreachTab": "E-mails & lezingen",
       "eventsThisWeekBadge": "{count} deze week",
       "tabsNavAria": "Job tracker secties",
       "emailSummary": {
@@ -3762,7 +4042,15 @@
         "ghostNudgeTitle": "Naar Ghosted verplaatsen?",
         "ghostNudgeDescription": "Nog geen statuswijziging na {days} dagen. Vink uit wat nog kan reageren.",
         "ghostNudgeConfirm": "Ghost {count}",
-        "ghostNudgeSuccess": "{count} naar Ghosted verplaatst"
+        "ghostNudgeSuccess": "{count} naar Ghosted verplaatst",
+        "searchPlaceholder": "Zoek op rol of bedrijf…",
+        "reviewTitle": "Sollicitaties bekijken zonder reactie van 21 dagen of langer.",
+        "exitReview": "Verlaat controle",
+        "today": "vandaag",
+        "showingArchivedGhosts": "Toont ook de {count} zonder reactie na meer dan 30 dagen.",
+        "hideArchivedGhosts": "Verbergen",
+        "showArchivedGhosts": "Weergeven",
+        "dragHelp": "Sleep een kaart naar een andere kolom om de status bij te werken, of open om te bewerken."
       },
       "timeline": {
         "title": "Evenementen Tijdlijn",
@@ -3790,7 +4078,18 @@
           "NEUTRAL": "Neutraal",
           "NEGATIVE": "Negatief"
         }
-      }
+      },
+      "singleApplicationCount": "sollicitatie",
+      "multipleApplicationsCount": "sollicitaties",
+      "cannotDeleteTitle": "Kan niet verwijderen",
+      "cannotDeleteWithApps": "Dit bedrijf heeft {count, plural, one {# sollicitatie} other {# sollicitaties}}. Verwijder of verplaats ze eerst.",
+      "deleteConfirmTitle": "Bedrijf verwijderen?",
+      "deleteConfirmMessage": "“{name}” wordt verwijderd uit je bedrijven.",
+      "deleteManyConfirmTitle": "Bedrijven verwijderen?",
+      "deleteManyConfirmMessage": "Verwijder {count, plural, one {# bedrijf} other {# bedrijven}}.",
+      "deleteManySuccess": "Bedrijven verwijderd",
+      "deleteManyError": "Kon geselecteerde bedrijven niet verwijderen",
+      "close": "Sluiten"
     },
     "resumeStudio": {
       "importPageTitle": "CV importeren",
@@ -3960,10 +4259,15 @@
       "searchTitle": "Zoek titel",
       "deletedSuccess": "Item verwijderd.",
       "deleteFailed": "Kon item niet verwijderen.",
+      "bulkDeleteSuccess": "Geselecteerde items verwijderd.",
+      "bulkDeleteFailed": "Kon geselecteerde items niet verwijderen.",
+      "selectAll": "Alles selecteren",
+      "selectRow": "Rij selecteren",
       "columns": {
         "order": "Volgorde",
         "title": "Titel",
-        "href": "Link"
+        "href": "Link",
+        "languages": "Talen"
       }
     },
     "now": {
@@ -4000,6 +4304,10 @@
       "searchSlug": "Zoek slug",
       "deletedSuccess": "Pagina verwijderd.",
       "deleteFailed": "Kon pagina niet verwijderen.",
+      "bulkDeleteSuccess": "Pagina's verwijderd.",
+      "bulkDeleteFailed": "Kon pagina's niet verwijderen.",
+      "selectAll": "Alles selecteren",
+      "selectRow": "Rij selecteren",
       "toggleFailed": "Kon pagina niet bijwerken.",
       "templates": {
         "workflow": "Workflow",
@@ -4012,7 +4320,8 @@
         "template": "Sjabloon",
         "published": "Gepubliceerd",
         "inNav": "In nav",
-        "widgets": "Widgets"
+        "widgets": "Widgets",
+        "languages": "Talen"
       }
     }
   },
