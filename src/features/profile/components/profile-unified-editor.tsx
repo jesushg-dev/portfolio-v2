@@ -462,10 +462,10 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
     <div className="relative space-y-6 pb-20">
       {/* Header */}
       <div>
-        <h1 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
+        <h1 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
           {t("title")}
         </h1>
-        <p className="text-muted-foreground mt-1 max-w-2xl text-sm leading-relaxed">
+        <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-relaxed">
           {t("subtitle")}
         </p>
       </div>
@@ -478,7 +478,7 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
       >
         <TabsList
           variant="line"
-          className="w-full justify-start overflow-x-auto border-b"
+          className="w-fit justify-start overflow-x-auto"
         >
           <TabsTrigger value="identity" className="min-h-12 gap-2 px-4 text-sm">
             <User className="size-4" aria-hidden />
@@ -491,24 +491,27 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
         </TabsList>
       </Tabs>
 
-      {/* Reusable Admin Form Language Bar */}
-      <AdminFormLanguageBar
-        languages={languageProgress}
-        activeLangId={activeLangId}
-        onSelectLang={setActiveLangId}
-        missingItems={missingItems}
-        isNonPrimary={activeLangId !== baseLanguage.id}
-        showOriginal={showReference}
-        onToggleShowOriginal={setShowReference}
-        baseLabel={t("baseBadge")}
-        completeProgressText={(ok, total) =>
-          `${ok}/${total} ${t("completeStatus")}`
-        }
-        notTranslatedText={() => t("noTranslationBadge")}
-        allCompleteText={t("allComplete")}
-        missingFieldsText={(fields) => `${t("missingPrefix")}: ${fields}`}
-        showOriginalText={t("showReference")}
-      />
+      {/* Reusable Admin Form Language Bar - Sticky below navbar on large screens */}
+      <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/80 sticky top-16 z-20 -mx-4 border-b px-4 pt-4 pb-3 backdrop-blur sm:-mx-6 sm:px-6">
+        <AdminFormLanguageBar
+          className="border-none bg-transparent p-0 shadow-none"
+          languages={languageProgress}
+          activeLangId={activeLangId}
+          onSelectLang={setActiveLangId}
+          missingItems={missingItems}
+          isNonPrimary={activeLangId !== baseLanguage.id}
+          showOriginal={showReference}
+          onToggleShowOriginal={setShowReference}
+          baseLabel={t("baseBadge")}
+          completeProgressText={(ok, total) =>
+            `${ok}/${total} ${t("completeStatus")}`
+          }
+          notTranslatedText={() => t("noTranslationBadge")}
+          allCompleteText={t("allComplete")}
+          missingFieldsText={(fields) => `${t("missingPrefix")}: ${fields}`}
+          showOriginalText={t("showReference")}
+        />
+      </div>
 
       {/* Mobile Live Preview Accordion */}
       <details className="border-border/80 bg-card/60 mb-6 rounded-2xl border lg:hidden">

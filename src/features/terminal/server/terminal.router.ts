@@ -53,9 +53,9 @@ const terminalInclude = {
       },
     },
   },
-} satisfies Prisma.CvTerminalInclude;
+} satisfies Prisma.PortfolioTerminalInclude;
 
-type TerminalWithRelations = Prisma.CvTerminalGetPayload<{
+type TerminalWithRelations = Prisma.PortfolioTerminalGetPayload<{
   include: typeof terminalInclude;
 }>;
 
@@ -103,7 +103,7 @@ async function fetchTerminalForUser(
   client: DbLike,
   userId: string,
 ): Promise<TerminalWithRelations | null> {
-  return client.cvTerminal.findUnique({
+  return client.portfolioTerminal.findUnique({
     where: { userId },
     include: terminalInclude,
   });
@@ -149,7 +149,7 @@ async function upsertTerminal(
   input: z.infer<typeof TerminalUpsertSchema>,
 ): Promise<TerminalEditorDTO> {
   const terminal = await client.$transaction(async (tx) => {
-    const upserted = await tx.cvTerminal.upsert({
+    const upserted = await tx.portfolioTerminal.upsert({
       where: { userId },
       create: {
         userId,
@@ -166,7 +166,7 @@ async function upsertTerminal(
       },
     });
 
-    await tx.cvTerminalStep.deleteMany({
+    await tx.portfolioTerminalStep.deleteMany({
       where: { terminalId: upserted.id },
     });
 
@@ -177,7 +177,7 @@ async function upsertTerminal(
 
       if (translations.length === 0) continue;
 
-      await tx.cvTerminalStep.create({
+      await tx.portfolioTerminalStep.create({
         data: {
           terminalId: upserted.id,
           order: step.order,
@@ -192,7 +192,7 @@ async function upsertTerminal(
       });
     }
 
-    return tx.cvTerminal.findUnique({
+    return tx.portfolioTerminal.findUnique({
       where: { id: upserted.id },
       include: terminalInclude,
     });

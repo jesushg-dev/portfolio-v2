@@ -356,7 +356,7 @@ describe("portfolioRouter", () => {
           ],
         }),
       },
-      cvTerminal: {
+      portfolioTerminal: {
         findUnique: jest.fn().mockResolvedValue({ steps: [{ id: "st-1" }] }),
       },
       softSkillsSection: {

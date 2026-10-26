@@ -83,7 +83,7 @@ export async function seedPortfolioHome(
     }
   }
 
-  const terminal = await prisma.cvTerminal.upsert({
+  const terminal = await prisma.portfolioTerminal.upsert({
     where: { userId },
     create: {
       userId,
@@ -98,14 +98,14 @@ export async function seedPortfolioHome(
     },
   });
 
-  await prisma.cvTerminalStep.deleteMany({
+  await prisma.portfolioTerminalStep.deleteMany({
     where: { terminalId: terminal.id },
   });
   for (const [index, step] of data.terminal.steps.entries()) {
     const commandDefault = step.command.es ?? "";
     const outputDefault = step.output.es ?? "";
 
-    await prisma.cvTerminalStep.create({
+    await prisma.portfolioTerminalStep.create({
       data: {
         terminalId: terminal.id,
         order: index,

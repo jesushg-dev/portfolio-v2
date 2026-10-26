@@ -32,7 +32,9 @@ describe("terminalRouter", () => {
     const caller = createRouterCaller(
       terminalRouter,
       createTrpcTestContext({
-        db: { cvTerminal: { findUnique: jest.fn().mockResolvedValue(null) } },
+        db: {
+          portfolioTerminal: { findUnique: jest.fn().mockResolvedValue(null) },
+        },
       }),
     );
     await expect(caller.getMine()).resolves.toBeNull();
@@ -40,7 +42,7 @@ describe("terminalRouter", () => {
 
   it("maps getMine and getPublic from stored steps", async () => {
     const db = {
-      cvTerminal: { findUnique: jest.fn().mockResolvedValue(terminal) },
+      portfolioTerminal: { findUnique: jest.fn().mockResolvedValue(terminal) },
     };
     const caller = createRouterCaller(
       terminalRouter,
@@ -57,17 +59,17 @@ describe("terminalRouter", () => {
 
   it("upserts a terminal and returns the editor DTO", async () => {
     const tx = {
-      cvTerminal: {
+      portfolioTerminal: {
         upsert: jest.fn().mockResolvedValue({ id: "term-1" }),
         findUnique: jest.fn().mockResolvedValue(terminal),
       },
-      cvTerminalStep: {
+      portfolioTerminalStep: {
         deleteMany: jest.fn(),
         create: jest.fn(),
       },
     };
     const db = {
-      cvTerminal: { findUnique: jest.fn().mockResolvedValue(terminal) },
+      portfolioTerminal: { findUnique: jest.fn().mockResolvedValue(terminal) },
       $transaction: jest.fn(
         async (fn: (client: typeof tx) => unknown) => await fn(tx),
       ),
@@ -90,6 +92,6 @@ describe("terminalRouter", () => {
       ],
     });
     expect(result.username).toBe("ada");
-    expect(tx.cvTerminalStep.create).toHaveBeenCalledTimes(1);
+    expect(tx.portfolioTerminalStep.create).toHaveBeenCalledTimes(1);
   });
 });
