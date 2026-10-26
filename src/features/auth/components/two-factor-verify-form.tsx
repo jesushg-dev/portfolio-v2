@@ -151,7 +151,7 @@ const TwoFactorVerifyForm: FC = () => {
                   <TabsTrigger
                     key={item}
                     value={item}
-                    className="min-h-11 flex-1"
+                    className="text-foreground min-h-11 flex-1"
                   >
                     {t(`method.${item}`)}
                   </TabsTrigger>

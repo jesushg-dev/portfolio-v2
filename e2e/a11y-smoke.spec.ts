@@ -35,7 +35,7 @@ test.describe("accessibility — Shield (WCAG AAA)", () => {
 
       if (route.path === "/certificates") {
         const panel = page.getByRole("tabpanel");
-        await expect(panel).toHaveCount(1, { timeout: 60_000 });
+        await expect(panel).toHaveCount(1);
         const panelId = await panel.getAttribute("id");
         expect(panelId).toBeTruthy();
         for (const tab of await page.getByRole("tab").all()) {

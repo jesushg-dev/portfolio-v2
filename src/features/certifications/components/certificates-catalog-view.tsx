@@ -95,6 +95,7 @@ export function TypeSegmentButtons({
     <div className="flex w-full justify-center px-2 sm:px-4">
       <Tab
         tabId={CATALOG_TAB_ID}
+        minimal
         currentTab={currentIndex}
         setCurrentTab={handleTabChange}
         ariaLabel={ariaLabel}
@@ -977,10 +978,7 @@ export function CertificatesCatalogView({
                 transition={{ duration: 0.25, delay: Math.min(idx, 8) * 0.04 }}
                 className="flex justify-center"
               >
-                <CertificateItem
-                  {...certificate}
-                  onPreview={handleOpenPreview}
-                />
+                <CertificateItem {...certificate} onPreview={handleOpenPreview} />
               </motion.li>
             ))}
           </motion.ul>

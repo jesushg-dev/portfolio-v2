@@ -10,6 +10,7 @@ export interface TabItemProps {
   index?: number;
   icon: IconComponent | IconType;
   title: string;
+  description: string;
   /** A stable results panel shared by filter tabs, when content is reused. */
   panelId?: string;
 }
@@ -18,6 +19,7 @@ const TabItem: FC<TabItemProps> = ({
   index = -1,
   icon: Icon,
   title,
+  description,
   panelId,
 }) => {
   const { currentTab, setCurrentTab, tabId, registerTab, onActivePointerDown } =
