@@ -1,0 +1,350 @@
+// ============================================================================
+// CV PDF LINKS (per-user, per-locale)
+// ============================================================================
+
+/// Stores a separate PDF download URL for each locale so users can have
+/// language-specific CV files (e.g., a Spanish CV and an English CV).
+model CvPdfLink {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String    @db.ObjectId
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// BCP-47 locale code, e.g. "en", "es", "nl"
+  locale        String
+  /// Direct URL to the PDF file
+  url           String
+  /// Optional human-readable label, e.g. "Currículum en Español"
+  label         String?
+  /// Whether the PDF uses US Letter pagination or a single continuous page
+  paginatePages Boolean   @default(false)
+  /// SHA-256 of rendered CV content; null = manually managed URL (legacy)
+  contentHash   String?
+  /// UploadThing file key for replacing/deleting cached PDFs
+  storageKey    String?
+  generatedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, locale, paginatePages])
+}
+
+model CvPdfEmailLog {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipHash         String
+  recipientEmail String
+  locale         String
+  createdAt      DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([ipHash, createdAt])
+  @@index([recipientEmail, createdAt])
+}
+
+// ============================================================================
+// CV MODELS (per-user, multi-locale via relational *Translation models)
+// ============================================================================
+
+model CvHeader {
+  id                 String                @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String                @unique @db.ObjectId
+  user               User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName           String
+  photoUrl           String?
+  backgroundImageUrl String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  translations       CvHeaderTranslation[]
+}
+
+model CvHeaderTranslation {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt         DateTime    @default(now())
+  degree            String
+  heroSubtitle      String?
+  heroTagline       String?
+  heroSummary       String?
+  availabilityBadge String?
+  clientImageAlt    String?
+  language          AppLanguage @relation(fields: [appLanguageId], references: [id])
+  CvHeader          CvHeader?   @relation(fields: [cvHeaderId], references: [id], onDelete: Cascade)
+  cvHeaderId        String?     @db.ObjectId
+  appLanguageId     String      @db.ObjectId
+
+  @@unique([cvHeaderId, appLanguageId])
+}
+
+model CvAboutMe {
+  id           String                 @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                 @unique @db.ObjectId
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  translations CvAboutMeTranslation[]
+}
+
+model CvAboutMeTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  aboutMe       String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  CvAboutMe     CvAboutMe?  @relation(fields: [cvAboutMeId], references: [id], onDelete: Cascade)
+  cvAboutMeId   String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+
+  @@unique([cvAboutMeId, appLanguageId])
+}
+
+model CvContact {
+  id           String                 @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                 @db.ObjectId
+  user         User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         CvContactType
+  value        String
+  order        Int                    @default(0)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  translations CvContactTranslation[]
+}
+
+model CvContactTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  label         String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  CvContact     CvContact?  @relation(fields: [cvContactId], references: [id], onDelete: Cascade)
+  cvContactId   String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+
+  @@unique([cvContactId, appLanguageId])
+}
+
+model CvEducation {
+  id           String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                   @db.ObjectId
+  user         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution  String
+  startYear    Int?
+  endYear      Int?
+  dates        String?
+  order        Int                      @default(0)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  translations CvEducationTranslation[]
+}
+
+model CvEducationTranslation {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime     @default(now())
+  degreeName    String
+  location      String?
+  description   String?
+  language      AppLanguage  @relation(fields: [appLanguageId], references: [id])
+  CvEducation   CvEducation? @relation(fields: [cvEducationId], references: [id], onDelete: Cascade)
+  cvEducationId String?      @db.ObjectId
+  appLanguageId String       @db.ObjectId
+
+  @@unique([cvEducationId, appLanguageId])
+}
+
+model CvLanguage {
+  id           String                  @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                  @db.ObjectId
+  user         User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order        Int                     @default(0)
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  translations CvLanguageTranslation[]
+}
+
+model CvLanguageTranslation {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime    @default(now())
+  name          String
+  level         String
+  language      AppLanguage @relation(fields: [appLanguageId], references: [id])
+  CvLanguage    CvLanguage? @relation(fields: [cvLanguageId], references: [id], onDelete: Cascade)
+  cvLanguageId  String?     @db.ObjectId
+  appLanguageId String      @db.ObjectId
+
+  @@unique([cvLanguageId, appLanguageId])
+}
+
+model CvTechnicalSkill {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String          @db.ObjectId
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  CvSkillCategory
+  items     String[]
+  order     Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model CvExperience {
+  id                String                    @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String                    @db.ObjectId
+  user              User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company           String
+  companyLogoUrl    String?
+  employmentType    CvEmploymentType?         @default(FULL_TIME)
+  startDate         DateTime?
+  endDate           DateTime?
+  current           Boolean                   @default(false)
+  featuredOnHome    Boolean                   @default(false)
+  skills            String?
+  order             Int                       @default(0)
+  responsibilities  CvResponsibility[]
+  CvExperienceSkill CvExperienceSkill[]
+  translations      CvExperienceTranslation[]
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+}
+
+model CvExperienceTranslation {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime      @default(now())
+  role           String
+  location       String?
+  /// Short factual blurb for ATS tailor context (industry / product / what you worked on). Not printed on the public CV by default.
+  companyBlurb   String?
+  language       AppLanguage   @relation(fields: [appLanguageId], references: [id])
+  CvExperience   CvExperience? @relation(fields: [cvExperienceId], references: [id], onDelete: Cascade)
+  cvExperienceId String?       @db.ObjectId
+  appLanguageId  String        @db.ObjectId
+
+  @@unique([cvExperienceId, appLanguageId])
+}
+
+model CvResponsibility {
+  id           String                        @id @default(auto()) @map("_id") @db.ObjectId
+  experienceId String                        @db.ObjectId
+  experience   CvExperience                  @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  order        Int                           @default(0)
+  /// When true, bullet is hidden from the printed/public CV but available as an ATS tailor bank.
+  atsOnly      Boolean                       @default(false)
+  createdAt    DateTime                      @default(now())
+  translations CvResponsibilityTranslation[]
+}
+
+model CvResponsibilityTranslation {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime          @default(now())
+  text               String
+  language           AppLanguage       @relation(fields: [appLanguageId], references: [id])
+  CvResponsibility   CvResponsibility? @relation(fields: [cvResponsibilityId], references: [id], onDelete: Cascade)
+  cvResponsibilityId String?           @db.ObjectId
+  appLanguageId      String            @db.ObjectId
+
+  @@unique([cvResponsibilityId, appLanguageId])
+}
+
+model CvExperienceSkill {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  experienceId String       @db.ObjectId
+  skillId      String       @db.ObjectId
+  experience   CvExperience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  skill        Skill        @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  createdAt    DateTime     @default(now())
+
+  @@unique([experienceId, skillId])
+}
+
+model CvSoftSkill {
+  id           String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                   @db.ObjectId
+  user         User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order        Int                      @default(0)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  translations CvSoftSkillTranslation[]
+}
+
+model CvSoftSkillTranslation {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime     @default(now())
+  name          String
+  language      AppLanguage  @relation(fields: [appLanguageId], references: [id])
+  CvSoftSkill   CvSoftSkill? @relation(fields: [cvSoftSkillId], references: [id], onDelete: Cascade)
+  cvSoftSkillId String?      @db.ObjectId
+  appLanguageId String       @db.ObjectId
+
+  @@unique([cvSoftSkillId, appLanguageId])
+}
+
+model CvAdditionalInfo {
+  id           String                        @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                        @db.ObjectId
+  user         User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order        Int                           @default(0)
+  createdAt    DateTime                      @default(now())
+  updatedAt    DateTime                      @updatedAt
+  translations CvAdditionalInfoTranslation[]
+}
+
+model CvAdditionalInfoTranslation {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt          DateTime          @default(now())
+  text               String
+  language           AppLanguage       @relation(fields: [appLanguageId], references: [id])
+  CvAdditionalInfo   CvAdditionalInfo? @relation(fields: [cvAdditionalInfoId], references: [id], onDelete: Cascade)
+  cvAdditionalInfoId String?           @db.ObjectId
+  appLanguageId      String            @db.ObjectId
+
+  @@unique([cvAdditionalInfoId, appLanguageId])
+}
+
+model CvPersonalReference {
+  id           String                           @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String                           @db.ObjectId
+  user         User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  contact      String?
+  order        Int                              @default(0)
+  createdAt    DateTime                         @default(now())
+  updatedAt    DateTime                         @updatedAt
+  translations CvPersonalReferenceTranslation[]
+}
+
+model CvPersonalReferenceTranslation {
+  id                    String               @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt             DateTime             @default(now())
+  role                  String
+  language              AppLanguage          @relation(fields: [appLanguageId], references: [id])
+  CvPersonalReference   CvPersonalReference? @relation(fields: [cvPersonalReferenceId], references: [id], onDelete: Cascade)
+  cvPersonalReferenceId String?              @db.ObjectId
+  appLanguageId         String               @db.ObjectId
+
+  @@unique([cvPersonalReferenceId, appLanguageId])
+}
+
+enum CvEmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  FREELANCE
+  INTERNSHIP
+}
+
+enum CvContactType {
+  EMAIL
+  PHONE
+  LINKEDIN
+  GITHUB
+  WEBSITE
+  LOCATION
+  CALENDLY
+  OTHER
+}
+
+enum CvSkillCategory {
+  FRONTEND
+  BACKEND
+  DATABASE
+  TOOLS
+  MOBILE
+  DESKTOP
+  DEVOPS
+  CYBERSECURITY
+  OTHER
+}

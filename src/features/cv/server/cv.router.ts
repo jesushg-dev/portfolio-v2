@@ -328,7 +328,7 @@ export const cvRouter = createTRPCRouter({
         degree: CvTextTranslationMapSchema.optional(),
         photoUrl: z.string().nullable().optional(),
         backgroundImageUrl: z.string().nullable().optional(),
-        heroSummary: CvTextTranslationMapSchema.optional(),
+        availabilityBadge: CvTextTranslationMapSchema.optional(),
         clientImageAlt: CvTextTranslationMapSchema.optional(),
       }),
     )
@@ -355,8 +355,8 @@ export const cvRouter = createTRPCRouter({
         const degreeText = input.degree
           ? (input.degree[lang.id]?.text ?? "")
           : "";
-        const summaryText = input.heroSummary
-          ? (input.heroSummary[lang.id]?.text ?? null)
+        const badgeText = input.availabilityBadge
+          ? (input.availabilityBadge[lang.id]?.text ?? null)
           : null;
         const altText = input.clientImageAlt
           ? (input.clientImageAlt[lang.id]?.text ?? null)
@@ -371,7 +371,7 @@ export const cvRouter = createTRPCRouter({
             where: { id: existing.id },
             data: {
               ...(degreeText ? { degree: degreeText } : {}),
-              ...(summaryText !== null ? { heroSummary: summaryText } : {}),
+              ...(badgeText !== null ? { availabilityBadge: badgeText } : {}),
               ...(altText !== null ? { clientImageAlt: altText } : {}),
             },
           });
@@ -381,7 +381,7 @@ export const cvRouter = createTRPCRouter({
               cvHeaderId: header.id,
               appLanguageId: lang.id,
               degree: degreeText,
-              heroSummary: summaryText,
+              availabilityBadge: badgeText,
               clientImageAlt: altText,
             },
           });
@@ -712,6 +712,7 @@ export const cvRouter = createTRPCRouter({
     .input(
       z.object({
         company: z.string().min(1),
+        companyLogoUrl: z.string().nullable().optional(),
         employmentType: CvEmploymentType.optional().default("FULL_TIME"),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
@@ -788,6 +789,7 @@ export const cvRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         company: z.string().min(1),
+        companyLogoUrl: z.string().nullable().optional(),
         employmentType: CvEmploymentType.optional(),
         role: CvTextTranslationMapSchema,
         location: CvTextTranslationMapSchema.optional(),
@@ -1581,7 +1583,6 @@ export const cvRouter = createTRPCRouter({
       await tx.cvPersonalReference.deleteMany({ where: { userId } });
       await tx.cvHeader.deleteMany({ where: { userId } });
       await tx.cvAboutMe.deleteMany({ where: { userId } });
-      await tx.cvTerminal.deleteMany({ where: { userId } });
       await tx.cvPdfLink.deleteMany({ where: { userId } });
     });
   }),

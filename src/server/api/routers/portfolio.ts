@@ -754,7 +754,7 @@ export const portfolioRouter = createTRPCRouter({
           where: { userId: tenantUserId },
           include: { translations: true },
         }),
-        ctx.db.cvTerminal.findUnique({
+        ctx.db.portfolioTerminal.findUnique({
           where: { userId: tenantUserId },
           include: { steps: true },
         }),

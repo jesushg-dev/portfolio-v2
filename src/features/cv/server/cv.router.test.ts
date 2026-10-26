@@ -54,7 +54,6 @@ function emptyCvDb() {
     cvHeaderTranslation: translationTable(),
     cvAboutMe: ownedCrud("about-1"),
     cvAboutMeTranslation: translationTable(),
-    cvTerminal: ownedCrud("term-1"),
     cvContact: ownedCrud("c1", { type: "EMAIL", value: "a@b.com" }),
     cvEducation: ownedCrud("edu-1", { institution: "UNI" }),
     cvEducationTranslation: translationTable(),
@@ -110,7 +109,6 @@ function emptyCvDb() {
           cvPersonalReference: { deleteMany: jest.fn() },
           cvHeader: { deleteMany: jest.fn() },
           cvAboutMe: { deleteMany: jest.fn() },
-          cvTerminal: { deleteMany: jest.fn() },
           cvPdfLink: { deleteMany: jest.fn() },
         };
         return (ops as (tx: typeof txObj) => Promise<unknown>)(txObj);
@@ -175,7 +173,6 @@ describe("cvRouter", () => {
     const header = await caller.upsertHeader({
       fullName: "Ada Lovelace",
       degree: { "lang-en": { text: "Math" } },
-      heroSummary: { "lang-en": { text: "Builder" } },
     });
     expect(header.fullName).toBe("Ada");
     expect(db.cvHeaderTranslation.create).toHaveBeenCalled();

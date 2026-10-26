@@ -61,7 +61,7 @@ export async function getProfileHeroEditorDto(
   const heroSubtitleTranslations = Object.fromEntries(
     languages.map((l) => {
       const trans = header?.translations.find((t) => t.appLanguageId === l.id);
-      return [l.id, { text: trans?.heroSubtitle ?? trans?.degree ?? "" }];
+      return [l.id, { text: trans?.heroSubtitle ?? "" }];
     }),
   );
 
@@ -207,7 +207,6 @@ export async function upsertProfileHeroFromMaps(
       await db.cvHeaderTranslation.update({
         where: { id: existingTrans.id },
         data: {
-          degree: heroSubtitleText || existingTrans.degree || "",
           heroSubtitle: heroSubtitleText || null,
           heroTagline: heroTaglineText || null,
           heroSummary: heroSummaryText || null,
@@ -220,7 +219,7 @@ export async function upsertProfileHeroFromMaps(
         data: {
           cvHeaderId: header.id,
           appLanguageId: lang.id,
-          degree: heroSubtitleText || "",
+          degree: "",
           heroSubtitle: heroSubtitleText || null,
           heroTagline: heroTaglineText || null,
           heroSummary: heroSummaryText || null,
@@ -291,10 +290,7 @@ export const profileAdminRouter = createTRPCRouter({
             where: { id: existingTrans.id },
             data: {
               ...(heroSubtitleText !== undefined
-                ? {
-                    heroSubtitle: heroSubtitleText || null,
-                    degree: heroSubtitleText || existingTrans.degree || "",
-                  }
+                ? { heroSubtitle: heroSubtitleText || null }
                 : {}),
               ...(heroTaglineText !== undefined
                 ? { heroTagline: heroTaglineText || null }
@@ -312,7 +308,7 @@ export const profileAdminRouter = createTRPCRouter({
             data: {
               cvHeaderId: header.id,
               appLanguageId: lang.id,
-              degree: heroSubtitleText ?? "",
+              degree: "",
               heroSubtitle: heroSubtitleText ?? null,
               heroTagline: heroTaglineText ?? null,
               heroSummary: heroSummaryText ?? null,

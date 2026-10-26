@@ -1,0 +1,46 @@
+// ============================================================================
+// PORTFOLIO HOME (Interactive Terminal & Home Features)
+// ============================================================================
+
+/// Configurable interactive terminal sequence for the portfolio About section.
+model PortfolioTerminal {
+  id                   String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId               String                   @unique @db.ObjectId
+  user                 User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  username             String                   @default("Jesus-Macbook")
+  typingSpeed          Int                      @default(45)
+  delayBetweenCommands Int                      @default(1000)
+  steps                PortfolioTerminalStep[]
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+
+  @@map("CvTerminal")
+}
+
+model PortfolioTerminalStep {
+  id           String                              @id @default(auto()) @map("_id") @db.ObjectId
+  terminalId   String                              @db.ObjectId
+  terminal     PortfolioTerminal                   @relation(fields: [terminalId], references: [id], onDelete: Cascade)
+  order        Int                                 @default(0)
+  translations PortfolioTerminalStepTranslation[]
+  createdAt    DateTime                            @default(now())
+  updatedAt    DateTime                            @updatedAt
+
+  @@index([terminalId, order])
+  @@map("CvTerminalStep")
+}
+
+model PortfolioTerminalStepTranslation {
+  id            String                @id @default(auto()) @map("_id") @db.ObjectId
+  stepId        String                @db.ObjectId
+  step          PortfolioTerminalStep @relation(fields: [stepId], references: [id], onDelete: Cascade)
+  appLanguageId String                @db.ObjectId
+  language      AppLanguage           @relation(fields: [appLanguageId], references: [id])
+  command       String
+  output        String
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  @@unique([stepId, appLanguageId])
+  @@map("CvTerminalStepTranslation")
+}
