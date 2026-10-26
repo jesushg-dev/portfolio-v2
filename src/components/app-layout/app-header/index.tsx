@@ -125,7 +125,10 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
             >
               <SiteBrandMark
                 brand={siteBrand}
-                dotClassName="text-primary/50 group-hover:text-primary"
+                className={
+                  siteBrand.mode === "monogram" ? "text-foreground" : undefined
+                }
+                dotClassName="text-primary group-hover:text-primary/80"
               />
             </Link>
 
