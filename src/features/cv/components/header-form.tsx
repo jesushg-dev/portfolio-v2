@@ -22,7 +22,15 @@ import {
   ReferenceSnippet,
   type LanguageProgress,
 } from "@/components/admin/shared/admin-form-language-bar";
-import { Form, FormField } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem as FieldItem,
+  FormLabel,
+  FormDescription,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -269,12 +277,14 @@ export const HeaderForm: FC<{
                 control={form.control}
                 name="photoUrl"
                 render={({ field }) => (
-                  <FormItem
-                    label={t("photoUrl")}
-                    description="Paste a URL or upload an image (max 4 MB)"
-                    inputId="cv-header-photo-url"
+                  <FieldItem
+                    id="cv-header-photo-url"
                     className="sm:col-span-2"
                   >
+                    <FormLabel>{t("photoUrl")}</FormLabel>
+                    <FormDescription>
+                      Paste a URL or upload an image (max 4 MB)
+                    </FormDescription>
                     <div className="flex items-center gap-3">
                       <div className="border-border bg-muted/40 relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border">
                         {watchedPhotoUrl ? (
@@ -288,12 +298,14 @@ export const HeaderForm: FC<{
                           <ImageIcon className="text-muted-foreground/50 size-5" />
                         )}
                       </div>
-                      <Input
-                        type="url"
-                        placeholder="https://..."
-                        className="min-w-0 flex-1 font-mono text-xs"
-                        {...field}
-                      />
+                      <FormControl>
+                        <Input
+                          type="url"
+                          placeholder="https://..."
+                          className="min-w-0 flex-1 font-mono text-xs"
+                          {...field}
+                        />
+                      </FormControl>
                       <input
                         ref={photoFileInputRef}
                         type="file"
@@ -311,7 +323,8 @@ export const HeaderForm: FC<{
                         Upload
                       </Button>
                     </div>
-                  </FormItem>
+                    <FormMessage />
+                  </FieldItem>
                 )}
               />
 
@@ -320,12 +333,14 @@ export const HeaderForm: FC<{
                 control={form.control}
                 name="backgroundImageUrl"
                 render={({ field }) => (
-                  <FormItem
-                    label="Background image"
-                    description="Hero background banner or texture (optional)"
-                    inputId="cv-header-bg-url"
+                  <FieldItem
+                    id="cv-header-bg-url"
                     className="sm:col-span-2"
                   >
+                    <FormLabel>Background image</FormLabel>
+                    <FormDescription>
+                      Hero background banner or texture (optional)
+                    </FormDescription>
                     <div className="flex items-center gap-3">
                       <div className="border-border bg-muted/40 relative flex h-14 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border">
                         {watchedBackgroundUrl ? (
@@ -339,12 +354,14 @@ export const HeaderForm: FC<{
                           <ImageIcon className="text-muted-foreground/50 size-5" />
                         )}
                       </div>
-                      <Input
-                        type="url"
-                        placeholder="https://..."
-                        className="min-w-0 flex-1 font-mono text-xs"
-                        {...field}
-                      />
+                      <FormControl>
+                        <Input
+                          type="url"
+                          placeholder="https://..."
+                          className="min-w-0 flex-1 font-mono text-xs"
+                          {...field}
+                        />
+                      </FormControl>
                       <input
                         ref={bgFileInputRef}
                         type="file"
@@ -364,7 +381,8 @@ export const HeaderForm: FC<{
                         Upload
                       </Button>
                     </div>
-                  </FormItem>
+                    <FormMessage />
+                  </FieldItem>
                 )}
               />
             </div>

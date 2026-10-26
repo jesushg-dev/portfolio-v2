@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -373,11 +374,15 @@ function TimelineGeneralTab({
           render={({ field }) => (
             <div className="border-border bg-card/60 flex items-center justify-between rounded-xl border p-3.5 sm:col-span-2">
               <div className="space-y-0.5">
-                <span className="text-foreground text-sm font-medium">
+                <Label
+                  htmlFor="timeline-current"
+                  className="text-foreground text-sm font-medium"
+                >
                   {t("currentEntry")}
-                </span>
+                </Label>
               </div>
               <Switch
+                id="timeline-current"
                 checked={field.value}
                 onCheckedChange={(checked) => {
                   field.onChange(checked);

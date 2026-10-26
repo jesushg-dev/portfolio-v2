@@ -176,11 +176,14 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
   );
   const isNonPrimary = activeLangId !== primaryLang?.id;
 
+  const [blankLanguages, setBlankLanguages] = useState<string[]>([]);
+
   const currentTranslation = watchedTranslations?.[activeLangId];
   const isCurrentTranslationEmpty =
-    !currentTranslation ||
-    (!currentTranslation.description?.trim() &&
-      !currentTranslation.urlWiki?.trim());
+    !blankLanguages.includes(activeLangId) &&
+    (!currentTranslation ||
+      (!currentTranslation.description?.trim() &&
+        !currentTranslation.urlWiki?.trim()));
 
   const primaryTranslation = primaryLang?.id
     ? watchedTranslations?.[primaryLang.id]
@@ -202,6 +205,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
 
   const handleStartBlank = useCallback(
     (langId: string) => {
+      setBlankLanguages((current) => [...current, langId]);
       form.setValue(`translations.${langId}`, {
         description: "",
         urlWiki: "",
@@ -212,6 +216,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
 
   const handleDeleteTranslation = useCallback(
     (langId: string) => {
+      setBlankLanguages((current) => current.filter((id) => id !== langId));
       form.setValue(`translations.${langId}`, {
         description: "",
         urlWiki: "",

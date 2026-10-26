@@ -114,6 +114,29 @@ describe("SkillForm", () => {
     ).toBeInTheDocument();
   });
 
+  it("opens and preserves a blank translation while switching languages", () => {
+    renderWithIntl(
+      <SkillForm
+        initialData={{
+          ...mockInitialData,
+          translations: { "lang-en": mockInitialData.translations["lang-en"]! },
+        }}
+        languages={mockLanguages}
+      />,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: /content/i }));
+    fireEvent.click(screen.getByRole("tab", { name: /Español/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Start blank" }));
+    const description = screen.getByRole("textbox", { name: /description/i });
+    expect(description).toHaveValue("");
+    fireEvent.change(description, { target: { value: "Nueva descripción" } });
+    fireEvent.click(screen.getByRole("tab", { name: /English/i }));
+    fireEvent.click(screen.getByRole("tab", { name: /Español/i }));
+    expect(screen.getByRole("textbox", { name: /description/i })).toHaveValue(
+      "Nueva descripción",
+    );
+  });
+
   it("submits the form with updated data in edit mode", async () => {
     renderWithIntl(
       <SkillForm initialData={mockInitialData} languages={mockLanguages} />,

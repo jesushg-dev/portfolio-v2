@@ -214,11 +214,14 @@ export const ServiceForm: FC<ServiceFormProps> = ({
   );
   const isNonPrimary = activeLangId !== primaryLang?.id;
 
+  const [blankLanguages, setBlankLanguages] = useState<string[]>([]);
+
   const currentTranslation = watchedTranslations?.[activeLangId];
   const isCurrentTranslationEmpty =
-    !currentTranslation ||
-    (!currentTranslation.title?.trim() &&
-      !currentTranslation.description?.trim());
+    !blankLanguages.includes(activeLangId) &&
+    (!currentTranslation ||
+      (!currentTranslation.title?.trim() &&
+        !currentTranslation.description?.trim()));
 
   const primaryTranslation = primaryLang?.id
     ? watchedTranslations?.[primaryLang.id]
@@ -242,6 +245,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
 
   const handleStartBlank = useCallback(
     (langId: string) => {
+      setBlankLanguages((current) => [...current, langId]);
       form.setValue(`translations.${langId}`, {
         title: "",
         description: "",
@@ -254,6 +258,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
 
   const handleDeleteTranslation = useCallback(
     (langId: string) => {
+      setBlankLanguages((current) => current.filter((id) => id !== langId));
       form.setValue(`translations.${langId}`, {
         title: "",
         description: "",

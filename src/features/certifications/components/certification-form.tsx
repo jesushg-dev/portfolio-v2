@@ -202,8 +202,11 @@ export const CertificationForm: FC<CertificationFormProps> = ({
   );
   const isNonPrimary = activeLangId !== primaryLang?.id;
 
+  const [blankLanguages, setBlankLanguages] = useState<string[]>([]);
+
   const currentTranslation = watchedTranslations?.[activeLangId];
-  const isCurrentTranslationEmpty = !currentTranslation?.title?.trim();
+  const isCurrentTranslationEmpty =
+    !blankLanguages.includes(activeLangId) && !currentTranslation?.title?.trim();
 
   const primaryTranslation = primaryLang?.id
     ? watchedTranslations?.[primaryLang.id]
@@ -223,6 +226,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
 
   const handleStartBlank = useCallback(
     (langId: string) => {
+      setBlankLanguages((current) => [...current, langId]);
       form.setValue(`translations.${langId}`, {
         title: "",
       });
@@ -232,6 +236,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
 
   const handleDeleteTranslation = useCallback(
     (langId: string) => {
+      setBlankLanguages((current) => current.filter((id) => id !== langId));
       form.setValue(`translations.${langId}`, {
         title: "",
       });
@@ -451,6 +456,8 @@ export const CertificationForm: FC<CertificationFormProps> = ({
                       <button
                         key={opt}
                         type="button"
+                        role="checkbox"
+                        aria-checked={Boolean(isSelected)}
                         onClick={() => toggleType(opt)}
                         className={cn(
                           "rounded-full border px-3 py-1 text-xs font-medium transition-colors",
