@@ -9,6 +9,7 @@ export const getCachedSiteBrand = cache(async (): Promise<SiteBrand> => {
     return resolveSiteBrand({});
   }
   return resolveSiteBrand({
+    isPrimary: tenant.isPrimary,
     logoImageUrl: tenant.logoImageUrl,
     logoInitials: tenant.logoInitials,
     displayName: tenant.displayName,

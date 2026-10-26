@@ -23,33 +23,15 @@ import { Toaster } from "@/components/ui/sonner";
 export const metadata: Metadata = {
   manifest: "/manifest.json",
   metadataBase: new URL("https://www.jesushg.com"),
-  icons: [
-    {
-      url: "/icon-192x192.png",
-      sizes: "192x192",
-      type: "image/png",
-    },
-    {
-      url: "/icon-256x256.png",
-      sizes: "256x256",
-      type: "image/png",
-    },
-    {
-      url: "/icon-384x384.png",
-      sizes: "384x384",
-      type: "image/png",
-    },
-    {
-      url: "/icon-512x512.png",
-      sizes: "512x512",
-      type: "image/png",
-    },
-    {
-      url: "/icon-512x512-maskable.png",
-      sizes: "512x512",
-      type: "image/png",
-    },
-  ],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { url: "/favicon.svg", sizes: "any", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export default async function RootLayout({

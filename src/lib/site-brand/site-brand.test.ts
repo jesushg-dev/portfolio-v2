@@ -21,9 +21,27 @@ describe("initialsFromDisplayName", () => {
 });
 
 describe("resolveSiteBrand", () => {
+  it("uses the JH monogram for the primary portfolio without changing other tenants", () => {
+    expect(
+      resolveSiteBrand({
+        isPrimary: true,
+        logoInitials: "Jehg",
+        displayName: "Jesús Hernández",
+      }),
+    ).toEqual({ mode: "monogram", text: "jh", label: "Jesús Hernández" });
+    expect(
+      resolveSiteBrand({
+        isPrimary: false,
+        logoInitials: "JH",
+        displayName: "Jane Hill",
+      }),
+    ).toEqual({ mode: "text", text: "JH", label: "Jane Hill" });
+  });
+
   it("prefers logo image over initials", () => {
     expect(
       resolveSiteBrand({
+        isPrimary: true,
         logoImageUrl: "https://cdn.example/logo.png",
         logoInitials: "JH",
         displayName: "Jane Doe",

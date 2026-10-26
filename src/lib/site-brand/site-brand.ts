@@ -1,4 +1,5 @@
 export interface SiteBrandInput {
+  isPrimary?: boolean;
   logoImageUrl?: string | null;
   logoInitials?: string | null;
   displayName?: string | null;
@@ -6,6 +7,7 @@ export interface SiteBrandInput {
 }
 
 export type SiteBrand =
+  | { mode: "monogram"; text: "jh"; label: string }
   | { mode: "image"; imageUrl: string; label: string }
   | { mode: "text"; text: string; label: string };
 
@@ -30,16 +32,13 @@ export function initialsFromDisplayName(
     .join("");
 }
 
-/**
- * Resolve the public site brand mark.
- * Priority: logo image → configured initials → displayName initials → username.
- */
 /** Trimmed value, or `null` when missing or blank. */
 function nonBlank(value: string | null | undefined): string | null {
   const trimmed = value?.trim() ?? "";
   return trimmed.length > 0 ? trimmed : null;
 }
 
+/** Image override → primary monogram → configured initials → name → username. */
 export function resolveSiteBrand(input: SiteBrandInput): SiteBrand {
   const displayName = nonBlank(input.displayName);
   const username = nonBlank(input.username);
@@ -48,6 +47,10 @@ export function resolveSiteBrand(input: SiteBrandInput): SiteBrand {
   const imageUrl = nonBlank(input.logoImageUrl);
   if (imageUrl) {
     return { mode: "image", imageUrl, label };
+  }
+
+  if (input.isPrimary) {
+    return { mode: "monogram", text: "jh", label };
   }
 
   const configured = nonBlank(input.logoInitials);
