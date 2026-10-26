@@ -176,11 +176,14 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
   );
   const isNonPrimary = activeLangId !== primaryLang?.id;
 
+  const [blankLanguages, setBlankLanguages] = useState<string[]>([]);
+
   const currentTranslation = watchedTranslations?.[activeLangId];
   const isCurrentTranslationEmpty =
-    !currentTranslation ||
-    (!currentTranslation.title?.trim() &&
-      !currentTranslation.description?.trim());
+    !blankLanguages.includes(activeLangId) &&
+    (!currentTranslation ||
+      (!currentTranslation.title?.trim() &&
+        !currentTranslation.description?.trim()));
 
   const primaryTranslation = primaryLang?.id
     ? watchedTranslations?.[primaryLang.id]
@@ -202,6 +205,7 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
 
   const handleStartBlank = useCallback(
     (langId: string) => {
+      setBlankLanguages((current) => [...current, langId]);
       form.setValue(`translations.${langId}`, {
         title: "",
         description: "",
@@ -212,6 +216,7 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
 
   const handleDeleteTranslation = useCallback(
     (langId: string) => {
+      setBlankLanguages((current) => current.filter((id) => id !== langId));
       form.setValue(`translations.${langId}`, {
         title: "",
         description: "",
