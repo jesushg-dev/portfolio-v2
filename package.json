@@ -12,7 +12,7 @@
     "prepare": "husky",
     "dev": "next dev --turbopack",
     "postinstall": "prisma generate",
-    "build": "next build --webpack",
+    "build": "next build",
     "analyze": "next build && node scripts/report-bundle-sizes.mjs",
     "start": "next start",
     "lint": "eslint . --fix",
@@ -166,7 +166,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.0"
   },
-  "packageManager": "pnpm@12.15.0",
+  "packageManager": "pnpm@10.34.5",
   "browserslist": [
     "chrome >= 111",
     "edge >= 111",

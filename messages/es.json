@@ -1954,8 +1954,8 @@
       }
     },
     "cv": {
-      "title": "Curriculum vitae",
-      "subtitle": "Elige un idioma, edita cada sección y abre Vista previa para ver el CV público.",
+      "title": "Editor de CV",
+      "subtitle": "Los formularios de cada sección de tu CV. La lista de cada sección es solo un acceso mínimo para abrirlos.",
       "edit": "Editar",
       "preview": "Vista previa",
       "import": "Importar desde DOCX",
@@ -1963,6 +1963,9 @@
       "editingHint": "Haz clic en el botón de editar de cualquier sección para actualizarla.",
       "editingBanner": "Editando — Haz clic en el botón de editar de cualquier sección para actualizarla.",
       "previewLanguage": "Idioma de vista previa",
+      "layoutVersion": "Estilo de diseño",
+      "layoutModern": "Moderna (CV público)",
+      "layoutClassic": "Clásica (Actual)",
       "viewTabsAria": "Vistas del editor de CV",
       "sectionNavAria": "Secciones del CV",
       "clickToAdd": "Haz clic para añadir",
@@ -1984,6 +1987,30 @@
         "personalSkills": "Habilidades personales",
         "additionalInformation": "Información adicional",
         "personalReferences": "Referencias personales"
+      },
+      "sectionsView": "Secciones",
+      "visualSheet": "Diseño visual",
+      "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV.",
+      "singleEntryHint": "Un solo registro por usuario.",
+      "actionTitles": {
+        "editHeader": "Editar encabezado",
+        "editAbout": "Editar sobre mí",
+        "editContact": "Editar contacto",
+        "newContact": "Nuevo contacto",
+        "editEducation": "Editar estudio",
+        "newEducation": "Nueva formación",
+        "editLanguage": "Editar idioma",
+        "newLanguage": "Nuevo idioma",
+        "editSkillGroup": "Editar grupo",
+        "newSkillGroup": "Nuevo grupo",
+        "editExperience": "Editar experiencia",
+        "newExperience": "Nueva experiencia",
+        "editSoftSkill": "Editar habilidad blanda",
+        "newSoftSkill": "Nueva habilidad blanda",
+        "editAdditional": "Editar dato",
+        "newAdditional": "Nuevo dato",
+        "editReference": "Editar referencia",
+        "newReference": "Nueva referencia"
       }
     },
     "settings": {
@@ -2252,7 +2279,11 @@
         "deleteSuccess": "Eliminado con éxito",
         "edit": "Editar",
         "create": "Añadir",
-        "dragToReorder": "Arrastra para reordenar"
+        "dragToReorder": "Arrastra para reordenar",
+        "noEntries": "Sin contactos todavía.",
+        "newEntry": "Nuevo contacto",
+        "delete": "Eliminar",
+        "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV."
       },
       "education": {
         "institution": "Institución",
@@ -2273,7 +2304,15 @@
         "deleteSuccess": "Eliminado con éxito",
         "edit": "Editar",
         "create": "Añadir",
-        "dragToReorder": "Arrastra para reordenar"
+        "dragToReorder": "Arrastra para reordenar",
+        "noEntries": "Sin educación todavía.",
+        "newEntry": "Nueva educación",
+        "sectionInstitutionDates": "Institución y fechas",
+        "sectionLocalizedText": "Texto por idioma",
+        "datesHint": "Si lo rellenas, reemplaza a los años en el CV.",
+        "previewDates": "Se mostrará como:",
+        "delete": "Eliminar",
+        "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV."
       },
       "language": {
         "name": "Idioma",
@@ -2289,7 +2328,11 @@
         "deleteSuccess": "Eliminado con éxito",
         "edit": "Editar",
         "create": "Añadir",
-        "dragToReorder": "Arrastra para reordenar"
+        "dragToReorder": "Arrastra para reordenar",
+        "noEntries": "Sin idiomas todavía.",
+        "newEntry": "Nuevo idioma",
+        "delete": "Eliminar",
+        "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV."
       },
       "skills": {
         "category": "Categoría",
@@ -2306,7 +2349,10 @@
         "deleteSuccess": "Eliminado con éxito",
         "edit": "Editar",
         "create": "Añadir",
-        "dragToReorder": "Arrastra para reordenar"
+        "dragToReorder": "Arrastra para reordenar",
+        "delete": "Eliminar",
+        "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV.",
+        "noEntries": "Sin grupos de habilidades todavía."
       },
       "experience": {
         "company": "Empresa",
@@ -2363,7 +2409,23 @@
         "companyBlurbDescription": "Nota breve y factual sobre la empresa o en qué trabajaste. La usa el ATS tailor — no se muestra en el CV impreso.",
         "companyBlurbPlaceholder": "p. ej. Telecom B2C · solicitudes de servicios digitales",
         "atsOnly": "Solo ATS (ocultar en el CV)",
-        "atsOnlyDescription": "No aparece en el CV público/impreso, pero sí al adaptar el CV a una oferta."
+        "atsOnlyDescription": "No aparece en el CV público/impreso, pero sí al adaptar el CV a una oferta.",
+        "tabGeneral": "General",
+        "tabContent": "Contenido",
+        "tabSkills": "Habilidades",
+        "sectionCompany": "Empresa",
+        "sectionDates": "Fechas",
+        "sectionVisibility": "Visibilidad",
+        "companyLogo": "Logo de la empresa",
+        "contentHint": "Estos datos son iguales para todos los idiomas. Lo que se traduce está en Contenido.",
+        "responsibilitiesHeading": "Responsabilidades · {count}",
+        "responsibilitiesHint": "Añadir, mover o eliminar una responsabilidad lo hace en todos los idiomas; el texto se escribe en cada uno. Las marcadas Solo ATS no salen en el CV público ni impreso; se usan al adaptarlo a una vacante.",
+        "skillsHeading": "Habilidades",
+        "skillsHint": "Habilidades de tu catálogo que usaste en esta experiencia.",
+        "onCv": "en el CV",
+        "onlyAts": "solo ATS",
+        "delete": "Eliminar",
+        "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV."
       },
       "softSkill": {
         "label": "Habilidad blanda",
@@ -2378,7 +2440,11 @@
         "deleteSuccess": "Eliminado con éxito",
         "edit": "Editar",
         "create": "Añadir",
-        "dragToReorder": "Arrastra para reordenar"
+        "dragToReorder": "Arrastra para reordenar",
+        "noEntries": "Sin habilidades blandas todavía.",
+        "newEntry": "Nueva habilidad blanda",
+        "delete": "Eliminar",
+        "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV."
       },
       "additional": {
         "label": "Información adicional",
@@ -2393,7 +2459,11 @@
         "deleteSuccess": "Eliminado con éxito",
         "edit": "Editar",
         "create": "Añadir",
-        "dragToReorder": "Arrastra para reordenar"
+        "dragToReorder": "Arrastra para reordenar",
+        "noEntries": "Sin información adicional todavía.",
+        "newEntry": "Nuevo elemento",
+        "delete": "Eliminar",
+        "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV."
       },
       "personalReference": {
         "details": "Datos de la referencia",
@@ -2415,7 +2485,11 @@
         "deleteSuccess": "Eliminado con éxito",
         "edit": "Editar",
         "create": "Añadir",
-        "dragToReorder": "Arrastra para reordenar"
+        "dragToReorder": "Arrastra para reordenar",
+        "noEntries": "Sin referencias personales todavía.",
+        "newEntry": "Nueva referencia",
+        "delete": "Eliminar",
+        "entriesCount": "{count, plural, one {# registro} other {# registros}}. Se muestran en este orden en el CV."
       },
       "localized": {
         "requiredDefault": "Obligatorio en el idioma por defecto",

@@ -1,14 +1,18 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
 
-import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
+import {
+  AdminFormLanguageBar,
+  ReferenceSnippet,
+  type LanguageProgress,
+} from "@/components/admin/shared/admin-form-language-bar";
 import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,16 +27,16 @@ import {
 import {
   resolvePrimaryLanguage,
   textTranslationMapSchema,
+  TextTranslationMapSchema,
 } from "@/lib/i18n/localized-form";
 import {
   buildEmptyTranslationMap,
   textTranslationMapFromRows,
 } from "@/lib/i18n/translation-map";
-import { TextTranslationMapSchema } from "@/lib/i18n/localized-form";
 import type { AppLanguage } from "@prisma/client";
 
 export const EducationSchema = z.object({
-  institution: z.string().min(1),
+  institution: z.string().min(1, "Institution is required"),
   degreeName: z.record(z.string(), z.object({ text: z.string() })),
   location: TextTranslationMapSchema.optional(),
   description: TextTranslationMapSchema.optional(),
@@ -70,6 +74,8 @@ export const EducationForm: FC<{
   const update = api.cv.updateEducation.useMutation();
   const [isPending, startTransition] = useTransition();
 
+  const [showOriginal, setShowOriginal] = useState(true);
+
   const primaryLang = useMemo(
     () => resolvePrimaryLanguage(languages),
     [languages],
@@ -81,7 +87,7 @@ export const EducationForm: FC<{
   const formSchema = useMemo(
     () =>
       z.object({
-        institution: z.string().min(1),
+        institution: z.string().min(1, t("institution")),
         degreeName: textTranslationMapSchema(primaryLang?.id, t("degree")),
         location: TextTranslationMapSchema.optional(),
         description: TextTranslationMapSchema.optional(),
@@ -123,6 +129,66 @@ export const EducationForm: FC<{
     },
   });
 
+  const startYear = useWatch({ control: form.control, name: "startYear" });
+  const endYear = useWatch({ control: form.control, name: "endYear" });
+  const dates = useWatch({ control: form.control, name: "dates" });
+
+  const datesPreview = useMemo(() => {
+    if (dates?.trim()) return dates;
+    if (startYear) {
+      return `${startYear} – ${endYear ?? "Present"}`;
+    }
+    return null;
+  }, [dates, startYear, endYear]);
+
+  const watchedDegrees = useWatch({
+    control: form.control,
+    name: "degreeName",
+  });
+  const watchedLocations = useWatch({
+    control: form.control,
+    name: "location",
+  });
+  const watchedDescriptions = useWatch({
+    control: form.control,
+    name: "description",
+  });
+
+  const isNonPrimary = activeLangId !== primaryLang?.id;
+
+  const languageProgressList: LanguageProgress[] = useMemo(() => {
+    return languages.map((lang) => {
+      const degreeText = watchedDegrees?.[lang.id]?.text?.trim();
+      const degreeOk = Boolean(degreeText);
+      const descText = watchedDescriptions?.[lang.id]?.text?.trim();
+      const descOk = Boolean(descText);
+
+      const completedCount = [degreeOk, descOk].filter(Boolean).length;
+
+      return {
+        id: lang.id,
+        name: lang.name,
+        code: lang.code,
+        isBase: lang.id === primaryLang?.id,
+        hasContent: completedCount > 0,
+        completedCount,
+        totalCount: 2,
+      };
+    });
+  }, [languages, watchedDegrees, watchedDescriptions, primaryLang?.id]);
+
+  const activeProgress = languageProgressList.find(
+    (l) => l.id === activeLangId,
+  );
+  const missingItems: string[] = [];
+  if (activeProgress && !watchedDegrees?.[activeLangId]?.text?.trim()) {
+    missingItems.push(t("degree"));
+  }
+
+  const primaryDegree = watchedDegrees?.[primaryLang?.id ?? ""]?.text;
+  const primaryLocation = watchedLocations?.[primaryLang?.id ?? ""]?.text;
+  const primaryDesc = watchedDescriptions?.[primaryLang?.id ?? ""]?.text;
+
   const handleSubmit = useCallback(
     (input: EducationInput) => {
       startTransition(async () => {
@@ -133,7 +199,7 @@ export const EducationForm: FC<{
             await create.mutateAsync(input);
           }
           await utils.cv.getMine.invalidate();
-          toast.success(t("save"));
+          toast.success(t("save") || "Saved successfully");
           onSuccess();
         } catch (err) {
           toast.error(
@@ -144,7 +210,7 @@ export const EducationForm: FC<{
         }
       });
     },
-    [create, initial, onSuccess, t, update, utils],
+    [initial, update, create, utils, t, onSuccess],
   );
 
   return (
@@ -153,15 +219,9 @@ export const EducationForm: FC<{
         id="cv-education-form"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <GlobalLanguageSelector
-          languages={languages}
-          activeLangId={activeLangId}
-          onLangChange={setActiveLangId}
-          buttonIdPrefix="cv-education"
-        />
-
         <FormContent>
-          <FormSection title={t("institution")}>
+          {/* Shared: Institution & Dates */}
+          <FormSection title={t("sectionInstitutionDates")} uppercase>
             <FormField
               control={form.control}
               name="institution"
@@ -170,60 +230,15 @@ export const EducationForm: FC<{
                   label={t("institution")}
                   inputId="education-institution"
                 >
-                  <Input {...field} />
+                  <Input
+                    {...field}
+                    placeholder="e.g. Universidad Nacional de Ingeniería"
+                  />
                 </FormItem>
               )}
             />
 
-            {languages.map((lang) => {
-              const isActive = lang.id === activeLangId;
-              return (
-                <div
-                  key={lang.id}
-                  className={isActive ? "space-y-4" : "hidden"}
-                  aria-hidden={!isActive}
-                >
-                  <FormField
-                    control={form.control}
-                    name={`degreeName.${lang.id}.text`}
-                    render={({ field }) => (
-                      <FormItem
-                        label={t("degree")}
-                        inputId={`education-degree-${lang.code}`}
-                      >
-                        <Input {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`location.${lang.id}.text`}
-                    render={({ field }) => (
-                      <FormItem
-                        label={t("location")}
-                        inputId={`education-location-${lang.code}`}
-                      >
-                        <Input {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`description.${lang.id}.text`}
-                    render={({ field }) => (
-                      <FormItem
-                        label={t("description")}
-                        inputId={`education-description-${lang.code}`}
-                      >
-                        <Textarea {...field} rows={4} />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              );
-            })}
-
-            <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <FormField
                 control={form.control}
                 name="startYear"
@@ -234,14 +249,20 @@ export const EducationForm: FC<{
                   >
                     <Input
                       type="number"
-                      {...field}
+                      min={1950}
+                      max={2100}
+                      placeholder="2017"
+                      value={field.value ?? ""}
                       onChange={(e) =>
-                        field.onChange(e.target.valueAsNumber || undefined)
+                        field.onChange(
+                          e.target.value ? Number(e.target.value) : undefined,
+                        )
                       }
                     />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="endYear"
@@ -249,26 +270,147 @@ export const EducationForm: FC<{
                   <FormItem label={t("endYear")} inputId="education-end-year">
                     <Input
                       type="number"
-                      {...field}
+                      min={1950}
+                      max={2100}
+                      placeholder="2024"
+                      value={field.value ?? ""}
                       onChange={(e) =>
-                        field.onChange(e.target.valueAsNumber || undefined)
+                        field.onChange(
+                          e.target.value ? Number(e.target.value) : undefined,
+                        )
                       }
                     />
                   </FormItem>
                 )}
               />
+            </div>
+
+            <div className="mt-4">
               <FormField
                 control={form.control}
                 name="dates"
                 render={({ field }) => (
-                  <FormItem label={t("dates")} inputId="education-dates">
-                    <Input placeholder="2017 - 2024" {...field} />
+                  <FormItem
+                    label={t("dates")}
+                    description={t("datesHint")}
+                    inputId="education-dates"
+                  >
+                    <Input {...field} placeholder="e.g. 2017 – 2024" />
+                  </FormItem>
+                )}
+              />
+              {datesPreview ? (
+                <p className="text-muted-foreground mt-2 text-xs">
+                  {t("previewDates")}{" "}
+                  <b className="text-foreground font-semibold">
+                    {datesPreview}
+                  </b>
+                </p>
+              ) : null}
+            </div>
+          </FormSection>
+
+          {/* Translatable: Degree, Location & Description */}
+          <FormSection title={t("sectionLocalizedText")} uppercase>
+            <AdminFormLanguageBar
+              languages={languageProgressList}
+              activeLangId={activeLangId}
+              onSelectLang={setActiveLangId}
+              missingItems={missingItems}
+              isNonPrimary={isNonPrimary}
+              showOriginal={showOriginal}
+              onToggleShowOriginal={setShowOriginal}
+            />
+
+            <div className="mt-4 space-y-4">
+              {isNonPrimary && showOriginal && primaryDegree ? (
+                <ReferenceSnippet
+                  content={primaryDegree}
+                  label={t("degree")}
+                  onCopy={() =>
+                    form.setValue(
+                      `degreeName.${activeLangId}.text`,
+                      primaryDegree,
+                      { shouldDirty: true },
+                    )
+                  }
+                />
+              ) : null}
+
+              <FormField
+                control={form.control}
+                name={`degreeName.${activeLangId}.text`}
+                render={({ field }) => (
+                  <FormItem
+                    label={t("degree")}
+                    inputId={`education-degree-${activeLangId}`}
+                  >
+                    <Input {...field} placeholder="e.g. Computer Engineering" />
+                  </FormItem>
+                )}
+              />
+
+              {isNonPrimary && showOriginal && primaryLocation ? (
+                <ReferenceSnippet
+                  content={primaryLocation}
+                  label={t("location")}
+                  onCopy={() =>
+                    form.setValue(
+                      `location.${activeLangId}.text`,
+                      primaryLocation,
+                      { shouldDirty: true },
+                    )
+                  }
+                />
+              ) : null}
+
+              <FormField
+                control={form.control}
+                name={`location.${activeLangId}.text`}
+                render={({ field }) => (
+                  <FormItem
+                    label={t("location")}
+                    inputId={`education-location-${activeLangId}`}
+                  >
+                    <Input {...field} placeholder="e.g. Managua, Nicaragua" />
+                  </FormItem>
+                )}
+              />
+
+              {isNonPrimary && showOriginal && primaryDesc ? (
+                <ReferenceSnippet
+                  content={primaryDesc}
+                  label={t("description")}
+                  onCopy={() =>
+                    form.setValue(
+                      `description.${activeLangId}.text`,
+                      primaryDesc,
+                      { shouldDirty: true },
+                    )
+                  }
+                />
+              ) : null}
+
+              <FormField
+                control={form.control}
+                name={`description.${activeLangId}.text`}
+                render={({ field }) => (
+                  <FormItem
+                    label={t("description")}
+                    inputId={`education-description-${activeLangId}`}
+                  >
+                    <Textarea
+                      {...field}
+                      rows={3}
+                      placeholder="Key achievements, honors, or thesis topic…"
+                    />
                   </FormItem>
                 )}
               />
             </div>
           </FormSection>
         </FormContent>
+
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save")}
@@ -282,3 +424,5 @@ export const EducationForm: FC<{
     </Form>
   );
 };
+
+export default EducationForm;

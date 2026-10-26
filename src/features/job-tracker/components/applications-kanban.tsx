@@ -397,7 +397,6 @@ export const ApplicationsKanban: FC<ApplicationsKanbanProps> = ({
         ) : suggestedGhosts.length > 0 ? (
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm">
             <p className="text-foreground min-w-0">
-              <b className="font-semibold">{suggestedGhosts.length}</b>{" "}
               {t("kanban.ghostNudge", {
                 count: suggestedGhosts.length,
                 days: APPLIED_STALE_DAYS,

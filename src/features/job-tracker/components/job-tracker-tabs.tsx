@@ -126,7 +126,7 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
         <TabsList
           variant="line"
           aria-label={t("tabsNavAria")}
-          className="flex h-12 w-full [scrollbar-width:none] justify-start gap-1 overflow-x-auto overflow-y-hidden p-0 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="flex h-12 w-fit [scrollbar-width:none] justify-start gap-1 overflow-x-auto overflow-y-hidden p-0 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => (
             <TabsTrigger
