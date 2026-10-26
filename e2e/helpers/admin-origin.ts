@@ -74,7 +74,7 @@ export async function gotoAdminPath(page: Page, path: string): Promise<void> {
 
   for (let attempt = 0; attempt < 4; attempt += 1) {
     try {
-      await page.goto(path, { waitUntil: "domcontentloaded" });
+      await page.goto(path);
       return;
     } catch (error) {
       lastError = error;

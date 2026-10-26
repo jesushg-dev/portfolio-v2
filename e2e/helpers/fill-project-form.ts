@@ -1,3 +1,4 @@
+import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
 import type { Page, Response } from "@playwright/test";
 
 import {
@@ -71,8 +72,7 @@ async function assertCreateProjectSucceeded(response: Response): Promise<void> {
 
 /** Navigate to the projects list via the admin sidebar. */
 export async function goToProjectsList(page: Page): Promise<void> {
-  // Locale title fields for inactive tabs stay `hidden`; lang buttons are always visible.
-  const formOpen = await page.locator("#project-lang-es").isVisible();
+  const formOpen = await page.getByRole("dialog").isVisible();
   if (
     isAdminCollectionListUrl(page, "projects") &&
     !formOpen &&
@@ -96,11 +96,7 @@ async function openNewProjectForm(page: Page): Promise<void> {
   await addButton.click();
 
   await page.waitForURL(/\/admin\/projects\/new\/?$/, { timeout: 20_000 });
-  // Primary locale is `en`; `#project-title-es` exists but is hidden until its tab is active.
-  await page.locator("#project-lang-es").waitFor({
-    state: "visible",
-    timeout: 20_000,
-  });
+  await selectFormTab(page, "Content");
 }
 
 async function enablePrivateProjectIfNeeded(page: Page): Promise<void> {
@@ -156,18 +152,18 @@ export async function fillProjectForm(
     );
     if (!translation) continue;
 
-    await page.locator(`#project-lang-${locale}`).click();
+    await selectFormLanguage(page, locale);
 
-    await page.locator(`#project-title-${locale}`).fill(translation.title);
+    await translationField(page, "title").fill(translation.title);
 
     if (translation.description) {
-      await page
-        .locator(`#project-description-${locale}`)
+      await translationField(page, "description")
         .fill(translation.description);
     }
   }
 
-  await page.locator("#project-image").fill(project.image);
+  await selectFormTab(page, "General");
+  await page.locator('input[name="image"]:visible').fill(project.image);
 
   await page.locator("#project-type").click();
   await page.getByRole("option", { name: project.type, exact: true }).click();
@@ -187,10 +183,11 @@ export async function fillProjectForm(
   }
 
   if (isValidUrl(project.websiteUrl)) {
-    await page.locator("#project-live-demo-url").fill(project.websiteUrl);
+    await page.locator("#project-website-url").fill(project.websiteUrl);
   }
 
   if (project.skillKeys.length > 0) {
+    await selectFormTab(page, "Skills");
     await selectProjectSkills(page, project.skillKeys);
   }
 

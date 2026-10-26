@@ -1,3 +1,4 @@
+import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
 import type { Page, Response } from "@playwright/test";
 
 import {
@@ -72,8 +73,7 @@ async function assertCreateCertificationSucceeded(
 }
 
 export async function goToCertificationsList(page: Page): Promise<void> {
-  // Locale title fields for inactive tabs stay `hidden`; lang buttons are always visible.
-  const formOpen = await page.locator("#certification-lang-es").isVisible();
+  const formOpen = await page.getByRole("dialog").isVisible();
   if (
     isAdminCollectionListUrl(page, "certifications") &&
     !formOpen &&
@@ -99,11 +99,7 @@ async function openNewCertificationForm(page: Page): Promise<void> {
   await page.waitForURL(/\/admin\/certifications\/new\/?$/, {
     timeout: 20_000,
   });
-  // Primary locale is `en`; ES title input exists but stays hidden until its tab is active.
-  await page.locator("#certification-lang-es").waitFor({
-    state: "visible",
-    timeout: 20_000,
-  });
+  await selectFormTab(page, "Content");
 }
 
 async function waitForCertificationSaveToFinish(page: Page): Promise<void> {
@@ -136,12 +132,12 @@ export async function fillCertificationForm(
     );
     if (!translation) continue;
 
-    await page.locator(`#certification-lang-${locale}`).click();
-    await page
-      .locator(`#certification-title-${locale}`)
+    await selectFormLanguage(page, locale);
+    await translationField(page, "title")
       .fill(translation.title);
   }
 
+  await selectFormTab(page, "General");
   await page
     .locator("#certification-issuing-company")
     .fill(certification.company);
@@ -161,6 +157,7 @@ export async function fillCertificationForm(
   }
 
   await selectCertificationType(page, certification.type);
+  await selectFormTab(page, "Skills");
   await selectSkillsInPicker(page, certification.skillKeys, skillsByKey);
 
   const [createResponse] = await Promise.all([

@@ -1,3 +1,4 @@
+import { selectFormLanguage, translationField } from "./helpers/admin-form";
 import { expect, test } from "./authenticated-test";
 
 import {
@@ -39,7 +40,8 @@ test.describe("services edit and restore data integrity", () => {
     await page.waitForURL(/\/admin\/services\/.*\/edit/, { timeout: 15_000 });
 
     // 3. Edit title to updated title and submit
-    const titleInput = page.locator("#service-title-en");
+    await selectFormLanguage(page, "en");
+    const titleInput = translationField(page, "title");
     await expect(titleInput).toHaveValue(testService.title);
 
     const modifiedTitle = `${testService.title} (Updated)`;
@@ -72,7 +74,8 @@ test.describe("services edit and restore data integrity", () => {
       .click();
     await page.waitForURL(/\/admin\/services\/.*\/edit/, { timeout: 15_000 });
 
-    const modInput = page.locator("#service-title-en");
+    await selectFormLanguage(page, "en");
+    const modInput = translationField(page, "title");
     await modInput.fill(testService.title);
 
     const restoreResponse = page.waitForResponse(

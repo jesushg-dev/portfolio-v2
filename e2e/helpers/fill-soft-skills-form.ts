@@ -1,3 +1,4 @@
+import { selectFormLanguage, translationField } from "./admin-form";
 import type { Page, Response } from "@playwright/test";
 
 import { clickSelectOption } from "./select-option";
@@ -242,10 +243,9 @@ export async function fillSoftSkillItemForm(
   await page.locator("#soft-skill-order").fill(String(item.order));
 
   for (const locale of SOFT_SKILL_LOCALES) {
-    await page.locator(`#soft-skill-lang-${locale}`).click();
-    await page.locator(`#soft-skill-title-${locale}`).fill(item.title[locale]);
-    await page
-      .locator(`#soft-skill-description-${locale}`)
+    await selectFormLanguage(page, locale);
+    await translationField(page, "title").fill(item.title[locale]);
+    await translationField(page, "description")
       .fill(item.description[locale]);
   }
 

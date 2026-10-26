@@ -1,3 +1,4 @@
+import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
 import { expect, type Page, type Response } from "@playwright/test";
 
 import {
@@ -82,7 +83,7 @@ export function timelineListTitle(item: PortfolioTimelineItemFixture): string {
 }
 
 export async function goToTimelineList(page: Page): Promise<void> {
-  const formOpen = await page.locator("#timeline-lang-es").isVisible();
+  const formOpen = await page.getByRole("dialog").isVisible();
   if (
     isAdminCollectionListUrl(page, "timeline") &&
     !formOpen &&
@@ -106,10 +107,7 @@ async function openNewTimelineForm(page: Page): Promise<void> {
   await addButton.click();
 
   await page.waitForURL(/\/admin\/timeline\/new\/?$/, { timeout: 20_000 });
-  await page.locator("#timeline-lang-es").waitFor({
-    state: "visible",
-    timeout: 20_000,
-  });
+  await selectFormTab(page, "Content");
 }
 
 async function waitForTimelineSaveToFinish(page: Page): Promise<void> {
@@ -146,7 +144,7 @@ async function setCurrentSwitch(
   page: Page,
   shouldBeCurrent: boolean,
 ): Promise<void> {
-  const currentSwitch = page.locator("#timeline-current").getByRole("switch");
+  const currentSwitch = page.getByRole("switch", { name: "Current entry?" });
   const isChecked = await currentSwitch.getAttribute("aria-checked");
   const checked = isChecked === "true";
 
@@ -165,13 +163,13 @@ export async function fillTimelineItemForm(
   await openNewTimelineForm(page);
 
   for (const locale of TIMELINE_LOCALES) {
-    await page.locator(`#timeline-lang-${locale}`).click();
-    await page.locator(`#timeline-title-${locale}`).fill(item.title[locale]);
-    await page
-      .locator(`#timeline-description-${locale}`)
+    await selectFormLanguage(page, locale);
+    await translationField(page, "title").fill(item.title[locale]);
+    await translationField(page, "description")
       .fill(item.description[locale]);
   }
 
+  await selectFormTab(page, "General");
   await page.locator("#timeline-organization").fill(item.organization);
 
   if (item.location) {
