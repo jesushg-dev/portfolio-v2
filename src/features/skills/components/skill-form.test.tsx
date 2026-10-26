@@ -119,7 +119,7 @@ describe("SkillForm", () => {
       <SkillForm
         initialData={{
           ...mockInitialData,
-          translations: { "lang-en": mockInitialData.translations["lang-en"]! },
+          translations: { "lang-en": mockInitialData.translations["lang-en"] },
         }}
         languages={mockLanguages}
       />,

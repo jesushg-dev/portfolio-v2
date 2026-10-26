@@ -1,4 +1,5 @@
-import type { Page } from "@playwright/test";
+import { selectFormLanguage } from "./admin-form";
+import type { Locator, Page } from "@playwright/test";
 
 import {
   portfolioCv,
@@ -95,7 +96,7 @@ export async function openCvSection(
   page: Page,
   sectionId: string,
 ): Promise<void> {
-  await closeCvSectionModal(page);
+  await closeCvSectionSheet(page);
 
   const section = page.locator(`#${sectionId}`);
   await section.scrollIntoViewIfNeeded();
@@ -107,43 +108,38 @@ export async function openCvSection(
     await page.locator(`#cv-section-${sectionId}-edit`).click({ force: true });
   }
 
-  await page.locator("#cv-section-modal").waitFor({ state: "visible" });
+  await page.locator("#cv-section-sheet").waitFor({ state: "visible" });
 }
 
-async function closeCvSectionModal(page: Page): Promise<void> {
-  const modal = page.locator("#cv-section-modal");
+async function closeCvSectionSheet(page: Page): Promise<void> {
+  const modal = page.locator("#cv-section-sheet");
   if (!(await modal.isVisible())) return;
-  await page.locator("#cv-section-modal-close").click();
+  await modal.getByRole("button", { name: "Close", exact: true }).click();
   await modal.waitFor({ state: "hidden", timeout: 15_000 });
 }
 
-async function activeCvModal(page: Page) {
-  const itemModal = page.locator("#cv-item-modal");
-  if (await itemModal.isVisible()) {
-    return itemModal;
-  }
-  return page.locator("#cv-section-modal");
+function activeCvSheet(page: Page): Locator {
+  return page.locator("#cv-section-sheet");
 }
 
 async function switchCvLocale(
   page: Page,
   locale: (typeof CV_LOCALES)[number],
-  langSelectorPrefix: string,
 ): Promise<void> {
-  const modal = await activeCvModal(page);
-  await modal.locator(`#${langSelectorPrefix}-lang-${locale}`).click();
+  await selectFormLanguage(page, locale);
 }
 
 async function fillLocalizedField(
   page: Page,
   inputIdPrefix: string,
-  langSelectorPrefix: string,
   text: LocalizedFixture,
 ): Promise<void> {
-  const modal = await activeCvModal(page);
+  const modal = activeCvSheet(page);
   for (const locale of CV_LOCALES) {
-    await switchCvLocale(page, locale, langSelectorPrefix);
-    const field = modal.locator(`#${inputIdPrefix}-${locale}`);
+    await switchCvLocale(page, locale);
+    const field = modal.locator(
+      `:is(input, textarea)[id^="${inputIdPrefix}-"]:visible`,
+    );
     await field.waitFor({ state: "visible", timeout: 15_000 });
     await field.fill(text[locale]);
   }
@@ -154,7 +150,7 @@ async function submitCvForm(
   formId: string,
   mutation: string,
 ): Promise<void> {
-  const modal = await activeCvModal(page);
+  const modal = activeCvSheet(page);
   const submitId = `${formId}-submit`;
 
   const [response] = await Promise.all([
@@ -196,9 +192,9 @@ async function ensureCvItemAddReady(
   const addButton = page.locator(`#${addButtonId}`);
   if (await addButton.isVisible()) return;
 
-  const sectionModal = page.locator("#cv-section-modal");
+  const sectionModal = page.locator("#cv-section-sheet");
   if (await sectionModal.isVisible()) {
-    await page.locator("#cv-section-modal-close").click();
+    await sectionModal.getByRole("button", { name: "Close", exact: true }).click();
     await sectionModal.waitFor({ state: "hidden", timeout: 15_000 });
   }
 
@@ -206,19 +202,19 @@ async function ensureCvItemAddReady(
   await addButton.waitFor({ state: "visible", timeout: 15_000 });
 }
 
-async function openCvItemModal(page: Page, addButtonId: string): Promise<void> {
+async function openCvItemSheet(page: Page, addButtonId: string): Promise<void> {
   const addButton = page.locator(`#${addButtonId}`);
   await addButton.waitFor({ state: "visible", timeout: 15_000 });
   await addButton.scrollIntoViewIfNeeded();
   await addButton.click();
   await page
-    .locator("#cv-item-modal")
+    .locator("#cv-section-sheet")
     .waitFor({ state: "visible", timeout: 15_000 });
 }
 
-async function waitForCvItemModalClosed(page: Page): Promise<void> {
+async function waitForCvItemSheetClosed(page: Page): Promise<void> {
   await page
-    .locator("#cv-item-modal")
+    .locator("#cv-section-sheet form")
     .waitFor({ state: "hidden", timeout: 30_000 });
 }
 
@@ -232,24 +228,22 @@ export async function fillCvHeader(
 ): Promise<void> {
   await openCvSection(page, "header");
   await page
-    .locator("#cv-section-modal #cv-header-full-name")
+    .locator("#cv-section-sheet #cv-header-full-name")
     .waitFor({ state: "visible", timeout: 20_000 });
   await page.locator("#cv-header-full-name").fill(cv.header.fullName);
   await page.locator("#cv-header-photo-url").fill(portfolioProfile.photoUrl);
   await fillLocalizedField(
     page,
     "cv-header-degree",
-    "cv-header",
     cv.header.degree,
   );
   await fillLocalizedField(
     page,
     "cv-header-photo-alt",
-    "cv-header",
     cv.header.clientImageAlt,
   );
   await submitCvForm(page, "cv-header-form", "upsertHeader");
-  await closeCvSectionModal(page);
+  await closeCvSectionSheet(page);
 }
 
 export async function fillCvAbout(
@@ -258,11 +252,11 @@ export async function fillCvAbout(
 ): Promise<void> {
   await openCvSection(page, "about");
   await page
-    .locator("#cv-section-modal #cv-about-lang-en")
+    .locator("#cv-section-sheet #cv-about-form")
     .waitFor({ state: "visible", timeout: 20_000 });
-  await fillLocalizedField(page, "cv-about-me", "cv-about", cv.aboutMe);
+  await fillLocalizedField(page, "cv-about-me", cv.aboutMe);
   await submitCvForm(page, "cv-about-form", "upsertAboutMe");
-  await closeCvSectionModal(page);
+  await closeCvSectionSheet(page);
 }
 
 export async function fillCvContact(
@@ -270,7 +264,7 @@ export async function fillCvContact(
   contact: PortfolioCvContactFixture,
 ): Promise<void> {
   await ensureCvItemAddReady(page, "contacts", "cv-contacts-add");
-  await openCvItemModal(page, "cv-contacts-add");
+  await openCvItemSheet(page, "cv-contacts-add");
   await clickSelectOption(
     page,
     "cv-contact-type",
@@ -280,11 +274,10 @@ export async function fillCvContact(
   await fillLocalizedField(
     page,
     "cv-contact-label",
-    "cv-contact",
     contact.label,
   );
   await submitCvForm(page, "cv-contact-form", "createContact");
-  await waitForCvItemModalClosed(page);
+  await waitForCvItemSheetClosed(page);
 }
 
 export async function fillCvEducation(
@@ -292,19 +285,17 @@ export async function fillCvEducation(
   education: PortfolioCvEducationFixture,
 ): Promise<void> {
   await ensureCvItemAddReady(page, "education", "cv-education-add");
-  await openCvItemModal(page, "cv-education-add");
+  await openCvItemSheet(page, "cv-education-add");
   await page.locator("#education-institution").fill(education.institution);
   await fillLocalizedField(
     page,
     "education-degree",
-    "cv-education",
     education.degreeName,
   );
   if (education.location) {
     await fillLocalizedField(
       page,
       "education-location",
-      "cv-education",
       education.location,
     );
   }
@@ -312,7 +303,7 @@ export async function fillCvEducation(
     await page.locator("#education-dates").fill(education.dates);
   }
   await submitCvForm(page, "cv-education-form", "createEducation");
-  await waitForCvItemModalClosed(page);
+  await waitForCvItemSheetClosed(page);
 }
 
 export async function fillCvLanguage(
@@ -320,21 +311,19 @@ export async function fillCvLanguage(
   language: PortfolioCvLanguageFixture,
 ): Promise<void> {
   await ensureCvItemAddReady(page, "languages", "cv-languages-add");
-  await openCvItemModal(page, "cv-languages-add");
+  await openCvItemSheet(page, "cv-languages-add");
   await fillLocalizedField(
     page,
     "cv-language-name",
-    "cv-language",
     language.name,
   );
   await fillLocalizedField(
     page,
     "cv-language-level",
-    "cv-language",
     language.level,
   );
   await submitCvForm(page, "cv-language-form", "createLanguage");
-  await waitForCvItemModalClosed(page);
+  await waitForCvItemSheetClosed(page);
 }
 
 export async function fillCvTechnicalSkill(
@@ -342,7 +331,7 @@ export async function fillCvTechnicalSkill(
   skill: PortfolioCvTechnicalSkillFixture,
 ): Promise<void> {
   await ensureCvItemAddReady(page, "skills", "cv-skills-add");
-  await openCvItemModal(page, "cv-skills-add");
+  await openCvItemSheet(page, "cv-skills-add");
   await clickSelectOption(
     page,
     "cv-skill-category",
@@ -350,7 +339,7 @@ export async function fillCvTechnicalSkill(
   );
   await page.locator("#cv-skill-items").fill(skill.items.join(", "));
   await submitCvForm(page, "cv-skill-form", "createTechnicalSkill");
-  await waitForCvItemModalClosed(page);
+  await waitForCvItemSheetClosed(page);
 }
 
 export async function fillCvExperience(
@@ -358,7 +347,7 @@ export async function fillCvExperience(
   experience: PortfolioCvExperienceFixture,
 ): Promise<void> {
   await ensureCvItemAddReady(page, "experience", "cv-experience-add");
-  await openCvItemModal(page, "cv-experience-add");
+  await openCvItemSheet(page, "cv-experience-add");
   await page.locator("#experience-company").fill(experience.company);
   // Format date as YYYY-MM for type="month" input
   const formatMonth = (d: string | Date) =>
@@ -378,7 +367,6 @@ export async function fillCvExperience(
   await fillLocalizedField(
     page,
     "experience-role",
-    "cv-experience",
     experience.role,
   );
 
@@ -387,7 +375,6 @@ export async function fillCvExperience(
     await fillLocalizedField(
       page,
       `experience-responsibility-${index}`,
-      "cv-experience",
       experience.responsibilities[index].text,
     );
   }
@@ -397,7 +384,7 @@ export async function fillCvExperience(
   }
 
   await submitCvForm(page, "cv-experience-form", "createExperience");
-  await waitForCvItemModalClosed(page);
+  await waitForCvItemSheetClosed(page);
 }
 
 export async function fillCvSoftSkill(
@@ -405,15 +392,14 @@ export async function fillCvSoftSkill(
   softSkill: PortfolioCvSoftSkillFixture,
 ): Promise<void> {
   await ensureCvItemAddReady(page, "soft-skills", "cv-soft-skills-add");
-  await openCvItemModal(page, "cv-soft-skills-add");
+  await openCvItemSheet(page, "cv-soft-skills-add");
   await fillLocalizedField(
     page,
     "cv-soft-skill-text",
-    "cv-soft-skill",
     softSkill.name,
   );
   await submitCvForm(page, "cv-soft-skill-form", "createSoftSkill");
-  await waitForCvItemModalClosed(page);
+  await waitForCvItemSheetClosed(page);
 }
 
 export async function fillCvAdditionalInfo(
@@ -421,15 +407,14 @@ export async function fillCvAdditionalInfo(
   item: PortfolioCvFixture["additionalInformation"][number],
 ): Promise<void> {
   await ensureCvItemAddReady(page, "additional", "cv-additional-add");
-  await openCvItemModal(page, "cv-additional-add");
+  await openCvItemSheet(page, "cv-additional-add");
   await fillLocalizedField(
     page,
     "cv-additional-text",
-    "cv-additional",
     item.text,
   );
   await submitCvForm(page, "cv-additional-form", "createAdditionalInfo");
-  await waitForCvItemModalClosed(page);
+  await waitForCvItemSheetClosed(page);
 }
 
 export async function fillCvFromFixture(page: Page): Promise<void> {
@@ -473,7 +458,7 @@ export async function fillCvFromFixture(page: Page): Promise<void> {
     await fillCvAdditionalInfo(page, item);
   }
 
-  await closeCvSectionModal(page);
+  await closeCvSectionSheet(page);
 }
 
 export async function cleanupUserCv(page: Page): Promise<void> {

@@ -1,3 +1,4 @@
+import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
 import type { Page } from "@playwright/test";
 
 export interface ServiceFixture {
@@ -28,14 +29,16 @@ export async function fillServiceForm(
 ): Promise<void> {
   await openNewServiceForm(page);
 
-  await page.locator("#service-title-en").waitFor({ state: "visible" });
-  await page.locator("#service-title-en").fill(service.title);
+  await selectFormLanguage(page, "en");
+  await translationField(page, "title").waitFor({ state: "visible" });
+  await translationField(page, "title").fill(service.title);
 
-  const descField = page.locator("#service-description-en");
+  const descField = translationField(page, "description");
   if (await descField.isVisible()) {
     await descField.fill(service.description);
   }
 
+  await selectFormTab(page, "General");
   await page.locator("#service-image").fill(service.image);
 
   const createResponse = page.waitForResponse(

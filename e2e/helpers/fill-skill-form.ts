@@ -1,3 +1,4 @@
+import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
 import type { Page, Response } from "@playwright/test";
 
 import { clickSelectOption } from "./select-option";
@@ -81,12 +82,8 @@ async function waitForSkillSaveToFinish(page: Page): Promise<void> {
 
 /** Switch the skill form to a locale and wait until its fields are visible. */
 async function switchSkillLanguage(page: Page, locale: string): Promise<void> {
-  const description = page.locator(`#skill-description-${locale}`);
-  if (await description.isVisible()) return;
-
-  const tab = page.locator(`#skill-lang-${locale}`);
-  await tab.scrollIntoViewIfNeeded();
-  await tab.click({ timeout: 10_000 });
+  const description = translationField(page, "description");
+  await selectFormLanguage(page, locale);
   await description.waitFor({ state: "visible", timeout: 10_000 });
 }
 
@@ -128,16 +125,16 @@ export async function fillSkillForm(
     await switchSkillLanguage(page, locale);
 
     if (translation.description) {
-      await page
-        .locator(`#skill-description-${locale}`)
+      await translationField(page, "description")
         .fill(translation.description);
     }
 
     if (translation.urlWiki) {
-      await page.locator(`#skill-wiki-${locale}`).fill(translation.urlWiki);
+      await translationField(page, "urlWiki").fill(translation.urlWiki);
     }
   }
 
+  await selectFormTab(page, "General");
   await selectSkillType(page, skill.type);
   await setFeaturedSwitch(page, skill.featured ?? false);
 

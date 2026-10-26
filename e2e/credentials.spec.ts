@@ -35,7 +35,7 @@ test.describe("Admin Credentials & Integrations", () => {
       ).toBeVisible();
     } else {
       await expect(
-        page.locator('[data-integration="resend"][data-available]'),
+        page.locator('[data-integration="resend"][data-connected="false"]'),
       ).toBeVisible();
     }
   });

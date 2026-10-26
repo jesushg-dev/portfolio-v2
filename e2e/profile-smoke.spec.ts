@@ -20,11 +20,13 @@ test.describe("profile smoke", () => {
     await page.goto("/admin");
     await fillProfileHeroSmoke(page, title);
 
-    const hero = await getHeroEditor(page);
-    expect(
-      Object.values(hero.heroSubtitleTranslations).some(
-        (translation) => translation.text === title.en,
-      ),
-    ).toBe(true);
+    await expect
+      .poll(async () => {
+        const hero = await getHeroEditor(page);
+        return Object.values(hero.heroSubtitleTranslations).some(
+          (translation) => translation.text === title.en,
+        );
+      })
+      .toBe(true);
   });
 });

@@ -1,4 +1,5 @@
 import { expect, test } from "./authenticated-test";
+import { selectFormLanguage, selectFormTab, translationField } from "./helpers/admin-form";
 
 import {
   gotoAdminPath,
@@ -57,11 +58,13 @@ test.describe("timeline edit and data integrity", () => {
       .click();
     await page.waitForURL(/\/admin\/timeline\/.*\/edit/, { timeout: 15_000 });
 
-    const titleInput = page.locator("#timeline-title-en");
+    await selectFormLanguage(page, "en");
+    const titleInput = translationField(page, "title");
     await expect(titleInput).toHaveValue(tempTimelineItem.title.en, {
       timeout: 15_000,
     });
 
+    await selectFormTab(page, "General");
     const orgInput = page.locator("#timeline-organization");
     await expect(orgInput).toHaveValue(tempTimelineItem.organization);
 
