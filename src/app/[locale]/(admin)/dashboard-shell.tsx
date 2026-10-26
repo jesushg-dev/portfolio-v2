@@ -376,9 +376,9 @@ const DashboardShell: FC<IDashboardShellProps> = ({
             <div className="flex h-16 items-center justify-between px-4 md:px-6">
               <div className="flex items-center gap-3">
                 <div>
-                  <h1 className="text-foreground text-sm font-semibold">
+                  <p className="text-foreground text-sm font-semibold">
                     {pageTitle}
-                  </h1>
+                  </p>
                   {pageSubtitle ? (
                     <p className="text-muted-foreground text-xs">
                       {pageSubtitle}

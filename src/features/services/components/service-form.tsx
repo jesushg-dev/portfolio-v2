@@ -301,12 +301,9 @@ export const ServiceForm: FC<ServiceFormProps> = ({
           <Tabs
             value={activeTab}
             onValueChange={setActiveTab}
-            className="w-full"
+            className="flex min-h-0 w-full flex-1 flex-col"
           >
-            <TabsList
-              variant="line"
-              className="mb-6 w-full justify-start border-b"
-            >
+            <TabsList variant="line" className="mb-6 w-fit justify-start">
               <TabsTrigger value="general">{t("tabGeneral")}</TabsTrigger>
               <TabsTrigger value="content">{t("tabContent")}</TabsTrigger>
               <TabsTrigger value="skills">{t("tabSkills")}</TabsTrigger>
@@ -568,16 +565,21 @@ export const ServiceForm: FC<ServiceFormProps> = ({
               )}
             </TabsContent>
 
-            <TabsContent value="skills" className="space-y-6">
+            <TabsContent
+              value="skills"
+              className="mt-0 flex min-h-0 flex-1 flex-col space-y-4"
+            >
               <FormField
                 control={form.control}
                 name="skillIds"
                 render={({ field }) => (
-                  <SkillPicker
-                    selectedSkillIds={field.value ?? []}
-                    onChange={field.onChange}
-                    availableSkills={availableSkills}
-                  />
+                  <div className="flex min-h-0 flex-1 flex-col">
+                    <SkillPicker
+                      selectedSkillIds={field.value ?? []}
+                      onChange={field.onChange}
+                      availableSkills={availableSkills}
+                    />
+                  </div>
                 )}
               />
             </TabsContent>

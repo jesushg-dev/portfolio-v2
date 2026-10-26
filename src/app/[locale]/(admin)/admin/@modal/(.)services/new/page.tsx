@@ -1,6 +1,6 @@
 export { generateMetadata } from "../../../services/new/metadata";
 import { getTranslations } from "next-intl/server";
-import { PageDialogWrapper } from "@/components/shared/page-container";
+import { PageSheetWrapper } from "@/components/shared/page-container";
 import { ServiceForm } from "@/features/services/components/service-form";
 import { getServiceCreatePageData } from "@/features/services/server/service-queries";
 
@@ -11,8 +11,12 @@ export default async function NewServiceModal() {
   ]);
 
   return (
-    <PageDialogWrapper title={t("create")} description={t("createDescription")}>
+    <PageSheetWrapper
+      title={t("create")}
+      description={t("createDescription")}
+      fallbackUrl="/admin/services"
+    >
       <ServiceForm initialData={initialData} languages={languages} />
-    </PageDialogWrapper>
+    </PageSheetWrapper>
   );
 }

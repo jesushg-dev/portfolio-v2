@@ -42,16 +42,15 @@ const SettingsPage: FC<ISettingsPageProps> = async ({ params }) => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <h1 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
+          {t("title")}
+        </h1>
         <p className="text-muted-foreground mt-1 text-sm">{t("subtitle")}</p>
       </div>
 
       <Tabs defaultValue="general" className="w-full space-y-6">
         <div className="overflow-x-auto pb-1">
-          <TabsList
-            variant="line"
-            className="w-full max-w-md justify-start sm:w-auto"
-          >
+          <TabsList variant="line" className="w-fit justify-start">
             <TabsTrigger
               value="general"
               className="gap-2 px-4 py-1.5 text-xs font-medium sm:text-sm"

@@ -310,7 +310,7 @@ export const SoftSkillsSectionForm: FC<SoftSkillsSectionFormProps> = ({
             onValueChange={setActiveTab}
             className="w-full space-y-6"
           >
-            <TabsList variant="line" className="w-full">
+            <TabsList variant="line" className="w-fit justify-start">
               <TabsTrigger value="general">{t("generalTab")}</TabsTrigger>
               {languages && languages.length > 0 && (
                 <TabsTrigger value="metrics">

@@ -258,10 +258,7 @@ export const SoftSkillForm: FC<SoftSkillFormProps> = ({
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList
-              variant="line"
-              className="mb-6 w-full justify-start border-b"
-            >
+            <TabsList variant="line" className="mb-6 w-fit justify-start">
               <TabsTrigger value="general">{t("tabGeneral")}</TabsTrigger>
               <TabsTrigger value="content">{t("tabContent")}</TabsTrigger>
             </TabsList>

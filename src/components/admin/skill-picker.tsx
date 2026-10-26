@@ -182,9 +182,9 @@ export function SkillPicker({
 
   // ── Full picker ───────────────────────────────────────────────────────────
   return (
-    <div id="skill-picker" className="flex flex-col gap-4">
+    <div id="skill-picker" className="flex min-h-0 flex-1 flex-col gap-4">
       {/* Search Header */}
-      <div className="relative">
+      <div className="relative shrink-0">
         <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
         <Input
           id="skill-picker-search"
@@ -203,6 +203,7 @@ export function SkillPicker({
         onValueChange={(val) => {
           if (typeof val === "string") setActiveType(val);
         }}
+        className="shrink-0"
       >
         <TabsList
           variant="pill"
@@ -233,7 +234,7 @@ export function SkillPicker({
       {/* Skills grid */}
       <div
         id="skill-picker-grid"
-        className="grid max-h-72 grid-cols-2 gap-2.5 overflow-y-auto sm:grid-cols-3 md:grid-cols-4"
+        className="grid min-h-64 flex-1 grid-cols-2 gap-2.5 overflow-y-auto sm:grid-cols-3 md:grid-cols-4"
       >
         {filtered.map((skill) => {
           const isSelected = selectedSkillIds.includes(skill.id);
@@ -275,7 +276,7 @@ export function SkillPicker({
       </div>
 
       {/* Bottom Selected Tray */}
-      <div className="border-border bg-card/90 sticky bottom-0 z-10 -mx-1 mt-2 rounded-xl border p-3 backdrop-blur">
+      <div className="border-border bg-card/90 sticky bottom-0 z-10 -mx-1 mt-auto shrink-0 rounded-xl border p-3 backdrop-blur">
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"
