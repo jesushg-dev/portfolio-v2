@@ -5,10 +5,6 @@ export interface FilterAndColumnVisibilityOptions {
   rows: Locator;
   filterTestId: string;
   toggleColumnTestId: string;
-  /** Cell index in the first row used to read an existing search term. */
-  searchCellIndex?: number;
-  /** Cell index of the column being hidden (verifies content disappears/reappears). */
-  hiddenColumnCellIndex?: number;
   noResultsTerm?: string;
 }
 
@@ -54,8 +50,6 @@ export async function assertFilterAndColumnVisibility(
     rows,
     filterTestId,
     toggleColumnTestId,
-    searchCellIndex = 0,
-    hiddenColumnCellIndex,
     noResultsTerm = "NonExistentFilterXYZ123",
   } = options;
 
@@ -72,7 +66,8 @@ export async function assertFilterAndColumnVisibility(
     })
     .toBeGreaterThan(2);
 
-  const searchCell = dataRows.first().locator("td").nth(searchCellIndex);
+  const searchColumnId = filterTestId.replace(/^filter-/, "");
+  const searchCell = dataRows.first().locator(`[data-column-id="${searchColumnId}"]`);
   let existingTerm = "";
   await expect
     .poll(
@@ -136,40 +131,22 @@ export async function assertFilterAndColumnVisibility(
   const initialCellsCount = await firstRowCells.count();
   expect(initialCellsCount).toBeGreaterThan(2);
 
-  let hiddenColumnPattern: RegExp | undefined;
-  if (hiddenColumnCellIndex !== undefined) {
-    const hiddenCellText = (
-      await dataRows
-        .first()
-        .locator("td")
-        .nth(hiddenColumnCellIndex)
-        .innerText()
-    ).trim();
-    expect(hiddenCellText.length).toBeGreaterThan(0);
-    hiddenColumnPattern = new RegExp(escapeRegex(hiddenCellText), "i");
-  }
-
-  const hiddenCell = () =>
-    dataRows
-      .first()
-      .locator("td")
-      .nth(hiddenColumnCellIndex ?? 0);
+  const hiddenColumnId = toggleColumnTestId.replace(/^toggle-column-/, "");
+  const hiddenCell = dataRows.first().locator(`[data-column-id="${hiddenColumnId}"]`);
+  const hiddenCellText = await hiddenCell.innerText();
+  expect(hiddenCellText.trim().length).toBeGreaterThan(0);
 
   await page.getByTestId("toggle-columns-btn").click();
   await page.getByTestId(toggleColumnTestId).click();
   await page.keyboard.press("Escape");
 
   await expect(firstRowCells).toHaveCount(initialCellsCount - 1);
-  if (hiddenColumnPattern) {
-    await expect(hiddenCell()).not.toHaveText(hiddenColumnPattern);
-  }
+  await expect(hiddenCell).toHaveCount(0);
 
   await page.getByTestId("toggle-columns-btn").click();
   await page.getByTestId(toggleColumnTestId).click();
   await page.keyboard.press("Escape");
 
   await expect(firstRowCells).toHaveCount(initialCellsCount);
-  if (hiddenColumnPattern) {
-    await expect(hiddenCell()).toHaveText(hiddenColumnPattern);
-  }
+  await expect(hiddenCell).toHaveText(hiddenCellText, { useInnerText: true });
 }
