@@ -46,8 +46,6 @@ test.describe("timeline pagination", () => {
       rows: page.locator("table tbody tr"),
       filterTestId: "filter-title",
       toggleColumnTestId: "toggle-column-category",
-      searchCellIndex: 0,
-      hiddenColumnCellIndex: 2,
       noResultsTerm: "NonExistentTimelineXYZ123",
     });
   });

@@ -74,6 +74,7 @@ export function DataTable<TData extends RowData>({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
+                      data-column-id={cell.column.id}
                       style={{
                         ...getColumnPinningStyle({ column: cell.column }),
                         width:
