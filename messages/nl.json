@@ -1928,8 +1928,8 @@
       }
     },
     "cv": {
-      "title": "Curriculum vitae",
-      "subtitle": "Kies een taal, bewerk elke sectie en open Voorbeeld om het publieke CV te zien.",
+      "title": "CV-editor",
+      "subtitle": "Formulieren voor elke sectie van je cv. De lijst van elke sectie is slechts een minimale toegang om ze te openen.",
       "edit": "Bewerken",
       "preview": "Voorbeeld",
       "import": "Importeren vanuit DOCX",
@@ -1937,6 +1937,9 @@
       "editingHint": "Klik op de bewerkknop van een sectie om deze bij te werken.",
       "editingBanner": "Bewerken — Klik op de bewerkknop van een sectie om deze bij te werken.",
       "previewLanguage": "Voorbeeldtaal",
+      "layoutVersion": "Opmaakstijl",
+      "layoutModern": "Modern (Openbaar CV)",
+      "layoutClassic": "Klassiek (Raster)",
       "viewTabsAria": "CV-editorweergaven",
       "sectionNavAria": "CV-secties",
       "clickToAdd": "Klik om toe te voegen",
@@ -1958,6 +1961,30 @@
         "personalSkills": "Persoonlijke vaardigheden",
         "additionalInformation": "Aanvullende informatie",
         "personalReferences": "Persoonlijke referenties"
+      },
+      "sectionsView": "Secties",
+      "visualSheet": "Visueel blad",
+      "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv.",
+      "singleEntryHint": "Eén enkel item per profiel.",
+      "actionTitles": {
+        "editHeader": "Koptekst bewerken",
+        "editAbout": "Over mij bewerken",
+        "editContact": "Contact bewerken",
+        "newContact": "Nieuw contact",
+        "editEducation": "Opleiding bewerken",
+        "newEducation": "Nieuwe opleiding",
+        "editLanguage": "Taal bewerken",
+        "newLanguage": "Nieuwe taal",
+        "editSkillGroup": "Vaardighedengroep bewerken",
+        "newSkillGroup": "Nieuwe vaardighedengroep",
+        "editExperience": "Ervaring bewerken",
+        "newExperience": "Nieuwe ervaring",
+        "editSoftSkill": "Sociale vaardigheid bewerken",
+        "newSoftSkill": "Nieuwe sociale vaardigheid",
+        "editAdditional": "Aanvullende info bewerken",
+        "newAdditional": "Nieuwe aanvullende info",
+        "editReference": "Referentie bewerken",
+        "newReference": "Nieuwe referentie"
       }
     },
     "settings": {
@@ -2226,7 +2253,11 @@
         "deleteSuccess": "Succesvol verwijderd",
         "edit": "Bewerken",
         "create": "Toevoegen",
-        "dragToReorder": "Sleep om te herordenen"
+        "dragToReorder": "Sleep om te herordenen",
+        "noEntries": "Nog geen contacten.",
+        "newEntry": "Nieuw contact",
+        "delete": "Verwijderen",
+        "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv."
       },
       "education": {
         "institution": "Instelling",
@@ -2247,7 +2278,15 @@
         "deleteSuccess": "Succesvol verwijderd",
         "edit": "Bewerken",
         "create": "Toevoegen",
-        "dragToReorder": "Sleep om te herordenen"
+        "dragToReorder": "Sleep om te herordenen",
+        "noEntries": "Nog geen opleidingen.",
+        "newEntry": "Nieuwe opleiding",
+        "sectionInstitutionDates": "Instelling en data",
+        "sectionLocalizedText": "Tekst per taal",
+        "datesHint": "Indien ingevuld, vervangt het de jaren op het cv.",
+        "previewDates": "Wordt weergegeven als:",
+        "delete": "Verwijderen",
+        "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv."
       },
       "language": {
         "name": "Taal",
@@ -2263,7 +2302,11 @@
         "deleteSuccess": "Succesvol verwijderd",
         "edit": "Bewerken",
         "create": "Toevoegen",
-        "dragToReorder": "Sleep om te herordenen"
+        "dragToReorder": "Sleep om te herordenen",
+        "noEntries": "Nog geen talen.",
+        "newEntry": "Nieuwe taal",
+        "delete": "Verwijderen",
+        "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv."
       },
       "skills": {
         "category": "Categorie",
@@ -2280,7 +2323,10 @@
         "deleteSuccess": "Succesvol verwijderd",
         "edit": "Bewerken",
         "create": "Toevoegen",
-        "dragToReorder": "Sleep om te herordenen"
+        "dragToReorder": "Sleep om te herordenen",
+        "delete": "Verwijderen",
+        "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv.",
+        "noEntries": "Nog geen vaardighedengroepen."
       },
       "experience": {
         "company": "Bedrijf",
@@ -2337,7 +2383,23 @@
         "companyBlurbDescription": "Korte feitelijke notitie over het bedrijf of waar je aan werkte. Voor ATS tailor — niet op het geprinte CV.",
         "companyBlurbPlaceholder": "bijv. Telecom B2C · digitale serviceaanvragen",
         "atsOnly": "Alleen ATS (verberg op CV)",
-        "atsOnlyDescription": "Verschijnt niet op het openbare/geprinte CV, wel bij het afstemmen op een vacature."
+        "atsOnlyDescription": "Verschijnt niet op het openbare/geprinte CV, wel bij het afstemmen op een vacature.",
+        "tabGeneral": "Algemeen",
+        "tabContent": "Inhoud",
+        "tabSkills": "Vaardigheden",
+        "sectionCompany": "Bedrijf",
+        "sectionDates": "Data",
+        "sectionVisibility": "Zichtbaarheid",
+        "companyLogo": "Bedrijfslogo",
+        "contentHint": "Deze gegevens zijn gelijk voor alle talen. Wat vertaald wordt staat onder Inhoud.",
+        "responsibilitiesHeading": "Verantwoordelijkheden · {count}",
+        "responsibilitiesHint": "Toevoegen, verplaatsen of verwijderen van een verantwoordelijkheid gebeurt in alle talen; de tekst wordt per taal geschreven. Als alleen ATS gemarkeerd verschijnen ze niet op het openbare of gedrukte cv.",
+        "skillsHeading": "Vaardigheden",
+        "skillsHint": "Vaardigheden uit je catalogus die je in deze ervaring hebt toegepast.",
+        "onCv": "op cv",
+        "onlyAts": "alleen ATS",
+        "delete": "Verwijderen",
+        "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv."
       },
       "softSkill": {
         "label": "Soft skill",
@@ -2352,7 +2414,11 @@
         "deleteSuccess": "Succesvol verwijderd",
         "edit": "Bewerken",
         "create": "Toevoegen",
-        "dragToReorder": "Sleep om te herordenen"
+        "dragToReorder": "Sleep om te herordenen",
+        "noEntries": "Nog geen soft skills.",
+        "newEntry": "Nieuwe soft skill",
+        "delete": "Verwijderen",
+        "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv."
       },
       "additional": {
         "label": "Extra informatie",
@@ -2367,7 +2433,11 @@
         "deleteSuccess": "Succesvol verwijderd",
         "edit": "Bewerken",
         "create": "Toevoegen",
-        "dragToReorder": "Sleep om te herordenen"
+        "dragToReorder": "Sleep om te herordenen",
+        "noEntries": "Nog geen aanvullende informatie.",
+        "newEntry": "Nieuw item",
+        "delete": "Verwijderen",
+        "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv."
       },
       "personalReference": {
         "details": "Referentiegegevens",
@@ -2389,7 +2459,11 @@
         "deleteSuccess": "Succesvol verwijderd",
         "edit": "Bewerken",
         "create": "Toevoegen",
-        "dragToReorder": "Sleep om te herordenen"
+        "dragToReorder": "Sleep om te herordenen",
+        "noEntries": "Nog geen persoonlijke referenties.",
+        "newEntry": "Nieuwe referentie",
+        "delete": "Verwijderen",
+        "entriesCount": "{count, plural, one {# item} other {# items}}. Worden in deze volgorde weergegeven op het cv."
       },
       "localized": {
         "requiredDefault": "Verplicht in standaardtaal",

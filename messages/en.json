@@ -1933,8 +1933,8 @@
       }
     },
     "cv": {
-      "title": "Curriculum vitae",
-      "subtitle": "Pick a language, edit each section, then open Preview to see the public CV.",
+      "title": "CV Editor",
+      "subtitle": "Forms for each section of your CV. The list in each section is just a minimal shortcut to open them.",
       "edit": "Edit",
       "preview": "Preview",
       "import": "Import from DOCX",
@@ -1942,6 +1942,9 @@
       "editingHint": "Click the edit button on any section to update it.",
       "editingBanner": "Editing — Click the edit button on any section to update it.",
       "previewLanguage": "Preview language",
+      "layoutVersion": "Layout style",
+      "layoutModern": "Modern (Public CV)",
+      "layoutClassic": "Classic (Grid)",
       "viewTabsAria": "CV editor views",
       "sectionNavAria": "CV sections",
       "clickToAdd": "Click to add",
@@ -1963,6 +1966,30 @@
         "personalSkills": "Soft Skills",
         "additionalInformation": "Additional Information",
         "personalReferences": "Personal References"
+      },
+      "sectionsView": "Sections",
+      "visualSheet": "Visual Sheet",
+      "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV.",
+      "singleEntryHint": "Single record per profile.",
+      "actionTitles": {
+        "editHeader": "Edit header",
+        "editAbout": "Edit about me",
+        "editContact": "Edit contact",
+        "newContact": "New contact",
+        "editEducation": "Edit education",
+        "newEducation": "New education",
+        "editLanguage": "Edit language",
+        "newLanguage": "New language",
+        "editSkillGroup": "Edit skill group",
+        "newSkillGroup": "New skill group",
+        "editExperience": "Edit experience",
+        "newExperience": "New experience",
+        "editSoftSkill": "Edit soft skill",
+        "newSoftSkill": "New soft skill",
+        "editAdditional": "Edit additional info",
+        "newAdditional": "New additional info",
+        "editReference": "Edit reference",
+        "newReference": "New reference"
       }
     },
     "settings": {
@@ -2231,7 +2258,11 @@
         "deleteSuccess": "Deleted successfully",
         "edit": "Edit",
         "create": "Add",
-        "dragToReorder": "Drag to reorder"
+        "dragToReorder": "Drag to reorder",
+        "noEntries": "No contacts yet.",
+        "newEntry": "New contact",
+        "delete": "Delete",
+        "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV."
       },
       "education": {
         "institution": "Institution",
@@ -2252,7 +2283,15 @@
         "deleteSuccess": "Deleted successfully",
         "edit": "Edit",
         "create": "Add",
-        "dragToReorder": "Drag to reorder"
+        "dragToReorder": "Drag to reorder",
+        "noEntries": "No education entries yet.",
+        "newEntry": "New education",
+        "sectionInstitutionDates": "Institution & Dates",
+        "sectionLocalizedText": "Text by language",
+        "datesHint": "If filled, replaces years on the CV.",
+        "previewDates": "Will be shown as:",
+        "delete": "Delete",
+        "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV."
       },
       "language": {
         "name": "Language name",
@@ -2268,7 +2307,11 @@
         "deleteSuccess": "Deleted successfully",
         "edit": "Edit",
         "create": "Add",
-        "dragToReorder": "Drag to reorder"
+        "dragToReorder": "Drag to reorder",
+        "noEntries": "No languages yet.",
+        "newEntry": "New language",
+        "delete": "Delete",
+        "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV."
       },
       "skills": {
         "category": "Category",
@@ -2285,7 +2328,10 @@
         "deleteSuccess": "Deleted successfully",
         "edit": "Edit",
         "create": "Add",
-        "dragToReorder": "Drag to reorder"
+        "dragToReorder": "Drag to reorder",
+        "delete": "Delete",
+        "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV.",
+        "noEntries": "No skill groups yet."
       },
       "experience": {
         "company": "Company",
@@ -2342,7 +2388,23 @@
         "companyBlurbDescription": "Short factual note about the company or what you worked on. Used by ATS tailor — not shown on the printed CV.",
         "companyBlurbPlaceholder": "e.g. Telecom B2C · digital service requests",
         "atsOnly": "ATS only (hide on CV)",
-        "atsOnlyDescription": "Keeps this bullet out of the public/printed CV but available when tailoring for a job."
+        "atsOnlyDescription": "Keeps this bullet out of the public/printed CV but available when tailoring for a job.",
+        "tabGeneral": "General",
+        "tabContent": "Content",
+        "tabSkills": "Skills",
+        "sectionCompany": "Company",
+        "sectionDates": "Dates",
+        "sectionVisibility": "Visibility",
+        "companyLogo": "Company logo",
+        "contentHint": "These fields are shared across all languages. Translated text is under Content.",
+        "responsibilitiesHeading": "Responsibilities · {count}",
+        "responsibilitiesHint": "Adding, reordering, or deleting a responsibility applies across all languages; text is written per language. Items marked ATS only will not show on the public or printed CV; they are used when tailoring.",
+        "skillsHeading": "Skills",
+        "skillsHint": "Skills from your catalog that you applied in this experience.",
+        "onCv": "on CV",
+        "onlyAts": "ATS only",
+        "delete": "Delete",
+        "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV."
       },
       "softSkill": {
         "label": "Soft skill",
@@ -2357,7 +2419,11 @@
         "deleteSuccess": "Deleted successfully",
         "edit": "Edit",
         "create": "Add",
-        "dragToReorder": "Drag to reorder"
+        "dragToReorder": "Drag to reorder",
+        "noEntries": "No soft skills yet.",
+        "newEntry": "New soft skill",
+        "delete": "Delete",
+        "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV."
       },
       "additional": {
         "label": "Additional info",
@@ -2372,7 +2438,11 @@
         "deleteSuccess": "Deleted successfully",
         "edit": "Edit",
         "create": "Add",
-        "dragToReorder": "Drag to reorder"
+        "dragToReorder": "Drag to reorder",
+        "noEntries": "No additional information yet.",
+        "newEntry": "New item",
+        "delete": "Delete",
+        "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV."
       },
       "personalReference": {
         "details": "Reference details",
@@ -2394,7 +2464,11 @@
         "deleteSuccess": "Deleted successfully",
         "edit": "Edit",
         "create": "Add",
-        "dragToReorder": "Drag to reorder"
+        "dragToReorder": "Drag to reorder",
+        "noEntries": "No personal references yet.",
+        "newEntry": "New reference",
+        "delete": "Delete",
+        "entriesCount": "{count, plural, one {# entry} other {# entries}}. Displayed in this order on your CV."
       },
       "localized": {
         "requiredDefault": "Required in default language",

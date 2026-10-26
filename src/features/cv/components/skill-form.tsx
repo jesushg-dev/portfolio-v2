@@ -152,3 +152,5 @@ export const SkillForm: FC<{
     </Form>
   );
 };
+
+export default SkillForm;

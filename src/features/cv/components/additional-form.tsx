@@ -1,17 +1,21 @@
 "use client";
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
 
-import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
+import {
+  AdminFormLanguageBar,
+  ReferenceSnippet,
+  type LanguageProgress,
+} from "@/components/admin/shared/admin-form-language-bar";
 import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   FormActions,
   FormContent,
@@ -51,6 +55,8 @@ export const AdditionalForm: FC<{
   const update = api.cv.updateAdditionalInfo.useMutation();
   const [isPending, startTransition] = useTransition();
 
+  const [showOriginal, setShowOriginal] = useState(true);
+
   const primaryLang = useMemo(
     () => resolvePrimaryLanguage(languages),
     [languages],
@@ -80,6 +86,36 @@ export const AdditionalForm: FC<{
     },
   });
 
+  const isNonPrimary = activeLangId !== primaryLang?.id;
+  const watchedText = useWatch({ control: form.control, name: "text" });
+
+  const languageProgressList: LanguageProgress[] = useMemo(() => {
+    return languages.map((lang) => {
+      const textVal = watchedText?.[lang.id]?.text?.trim();
+      const hasContent = Boolean(textVal);
+
+      return {
+        id: lang.id,
+        name: lang.name,
+        code: lang.code,
+        isBase: lang.id === primaryLang?.id,
+        hasContent,
+        completedCount: hasContent ? 1 : 0,
+        totalCount: 1,
+      };
+    });
+  }, [languages, watchedText, primaryLang?.id]);
+
+  const activeProgress = languageProgressList.find(
+    (l) => l.id === activeLangId,
+  );
+  const missingItems: string[] = [];
+  if (activeProgress && !watchedText?.[activeLangId]?.text?.trim()) {
+    missingItems.push(t("label"));
+  }
+
+  const primaryText = watchedText?.[primaryLang?.id ?? ""]?.text;
+
   const handleSubmit = useCallback(
     (input: AdditionalInfoInput) => {
       startTransition(async () => {
@@ -106,40 +142,51 @@ export const AdditionalForm: FC<{
         id="cv-additional-form"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <GlobalLanguageSelector
-          languages={languages}
-          activeLangId={activeLangId}
-          onLangChange={setActiveLangId}
-          buttonIdPrefix="cv-additional"
-        />
-
         <FormContent>
           <FormSection title={t("label")}>
-            {languages.map((lang) => {
-              const isActive = lang.id === activeLangId;
-              return (
-                <div
-                  key={lang.id}
-                  className={isActive ? "space-y-4" : "hidden"}
-                  aria-hidden={!isActive}
-                >
-                  <FormField
-                    control={form.control}
-                    name={`text.${lang.id}.text`}
-                    render={({ field }) => (
-                      <FormItem
-                        label={t("label")}
-                        inputId={`cv-additional-text-${lang.code}`}
-                      >
-                        <Input {...field} />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              );
-            })}
+            <AdminFormLanguageBar
+              languages={languageProgressList}
+              activeLangId={activeLangId}
+              onSelectLang={setActiveLangId}
+              missingItems={missingItems}
+              isNonPrimary={isNonPrimary}
+              showOriginal={showOriginal}
+              onToggleShowOriginal={setShowOriginal}
+            />
+
+            <div className="mt-4">
+              {isNonPrimary && showOriginal && primaryText ? (
+                <ReferenceSnippet
+                  content={primaryText}
+                  label={t("label")}
+                  onCopy={() =>
+                    form.setValue(`text.${activeLangId}.text`, primaryText, {
+                      shouldDirty: true,
+                    })
+                  }
+                />
+              ) : null}
+
+              <FormField
+                control={form.control}
+                name={`text.${activeLangId}.text`}
+                render={({ field }) => (
+                  <FormItem
+                    label={t("label")}
+                    inputId={`cv-additional-text-${activeLangId}`}
+                  >
+                    <Textarea
+                      {...field}
+                      rows={3}
+                      placeholder="e.g. Available to work remotely across US & EU time zones."
+                    />
+                  </FormItem>
+                )}
+              />
+            </div>
           </FormSection>
         </FormContent>
+
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save")}
@@ -153,3 +200,5 @@ export const AdditionalForm: FC<{
     </Form>
   );
 };
+
+export default AdditionalForm;

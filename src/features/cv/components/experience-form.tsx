@@ -12,16 +12,20 @@ import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { api } from "@/trpc/react";
+import { GripVertical, Plus, Trash2 } from "lucide-react";
 
-import { GlobalLanguageSelector } from "@/components/admin/shared/global-language-selector";
-import { SkillPicker } from "@/components/admin/skill-picker";
+import {
+  AdminFormLanguageBar,
+  ReferenceSnippet,
+  type LanguageProgress,
+} from "@/components/admin/shared/admin-form-language-bar";
+import { SkillPicker, type SkillOption } from "@/components/admin/skill-picker";
 import {
   Sortable,
   SortableContent,
   SortableItem,
   SortableItemHandle,
 } from "@/components/ui/sortable";
-import { GripVertical } from "lucide-react";
 import { Form, FormControl, FormField } from "@/components/ui/form";
 import {
   Select,
@@ -33,10 +37,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   FormActions,
-  FormCheckboxItem,
   FormContent,
   FormItem,
   FormRoot,
@@ -63,7 +67,8 @@ export function buildExperienceFormSchema(
   messages?: { role?: string; responsibility?: string },
 ) {
   return z.object({
-    company: z.string().min(1),
+    company: z.string().min(1, "Company is required"),
+    companyLogoUrl: z.string().url().or(z.literal("")).optional(),
     employmentType: CvEmploymentTypeSchema,
     role: textTranslationMapSchema(primaryLangId, messages?.role ?? "Role"),
     location: TextTranslationMapSchema.optional(),
@@ -93,6 +98,7 @@ export type ExperienceInput = z.infer<
 interface ExperienceInitial {
   id: string;
   company: string;
+  companyLogoUrl?: string | null;
   employmentType?: string | null;
   role?: unknown;
   location?: unknown;
@@ -162,8 +168,24 @@ export const ExperienceForm: FC<{
   const update = api.cv.updateExperience.useMutation();
   const [isPending, startTransition] = useTransition();
 
+  const [activeTab, setActiveTab] = useState<"general" | "content" | "skills">(
+    "general",
+  );
+  const [showOriginal, setShowOriginal] = useState(true);
+
   const { data: { data: availableSkills = [] } = {} } =
     api.skillsAdmin.getMine.useQuery({});
+
+  const skillOptions: SkillOption[] = useMemo(
+    () =>
+      availableSkills.map((s) => ({
+        id: s.id,
+        title: s.title,
+        image: s.image,
+        type: s.type,
+      })),
+    [availableSkills],
+  );
 
   const primaryLang = useMemo(
     () => resolvePrimaryLanguage(languages),
@@ -186,6 +208,7 @@ export const ExperienceForm: FC<{
     resolver: zodResolver(formSchema),
     defaultValues: {
       company: initial?.company ?? "",
+      companyLogoUrl: initial?.companyLogoUrl ?? "",
       employmentType: normalizeEmploymentType(initial?.employmentType),
       role: initial?.translations
         ? textTranslationMapFromRows(
@@ -228,10 +251,65 @@ export const ExperienceForm: FC<{
     },
   });
 
-  const { fields, append, remove, move } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "responsibilities",
   });
+
+  const selectedSkills = useWatch({ control: form.control, name: "skillIds" });
+  const watchedRoles = useWatch({ control: form.control, name: "role" });
+  const watchedLocations = useWatch({
+    control: form.control,
+    name: "location",
+  });
+  const watchedBlurbs = useWatch({
+    control: form.control,
+    name: "companyBlurb",
+  });
+  const watchedResponsibilities = useWatch({
+    control: form.control,
+    name: "responsibilities",
+  });
+
+  const isNonPrimary = activeLangId !== primaryLang?.id;
+
+  // Compute language progress for AdminFormLanguageBar
+  const languageProgressList: LanguageProgress[] = useMemo(() => {
+    return languages.map((lang) => {
+      const roleText = watchedRoles?.[lang.id]?.text?.trim();
+      const roleOk = Boolean(roleText);
+      const resps = watchedResponsibilities ?? [];
+      const respsOk =
+        resps.length === 0 ||
+        resps.every((r) => Boolean(r.text?.[lang.id]?.text?.trim()));
+
+      const completedCount = [roleOk, respsOk].filter(Boolean).length;
+
+      return {
+        id: lang.id,
+        name: lang.name,
+        code: lang.code,
+        isBase: lang.id === primaryLang?.id,
+        hasContent: completedCount > 0,
+        completedCount,
+        totalCount: 2,
+      };
+    });
+  }, [languages, watchedRoles, watchedResponsibilities, primaryLang?.id]);
+
+  const activeProgress = languageProgressList.find(
+    (l) => l.id === activeLangId,
+  );
+  const missingItems: string[] = [];
+  if (activeProgress) {
+    if (!watchedRoles?.[activeLangId]?.text?.trim()) {
+      missingItems.push(t("role"));
+    }
+  }
+
+  const primaryRole = watchedRoles?.[primaryLang?.id ?? ""]?.text;
+  const primaryLocation = watchedLocations?.[primaryLang?.id ?? ""]?.text;
+  const primaryBlurb = watchedBlurbs?.[primaryLang?.id ?? ""]?.text;
 
   const handleSubmit = useCallback(
     (input: ExperienceInput) => {
@@ -263,321 +341,454 @@ export const ExperienceForm: FC<{
         id="cv-experience-form"
         onSubmit={form.handleSubmit(handleSubmit)}
       >
-        <GlobalLanguageSelector
-          languages={languages}
-          activeLangId={activeLangId}
-          onLangChange={setActiveLangId}
-          buttonIdPrefix="cv-experience"
-        />
-
         <FormContent>
-          <FormSection title={t("company")}>
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="company"
-                render={({ field }) => (
-                  <FormItem label={t("company")} inputId="experience-company">
-                    <Input {...field} />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="employmentType"
-                render={({ field }) => (
-                  <FormItem
-                    label={t("employmentType")}
-                    inputId="experience-employment-type"
-                  >
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger
-                          id="experience-employment-type"
-                          className="w-full"
-                        >
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {CV_EMPLOYMENT_TYPES.map((type) => (
-                          <SelectItem
-                            key={type}
-                            value={type}
-                            id={`experience-employment-type-option-${type}`}
-                          >
-                            {t(`employmentTypes.${type}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-4">
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="startDate"
-                  render={({ field }) => (
-                    <FormItem
-                      label={t("startDate")}
-                      inputId="experience-start-date"
-                    >
-                      <Input
-                        type="month"
-                        value={
-                          field.value
-                            ? new Date(field.value).toISOString().slice(0, 7)
-                            : ""
-                        }
-                        onChange={(e) =>
-                          field.onChange(
-                            e.target.value
-                              ? new Date(e.target.value)
-                              : undefined,
-                          )
-                        }
-                      />
-                    </FormItem>
-                  )}
-                />
-                <EndDateInput control={form.control} label={t("endDate")} />
-              </div>
-              <FormField
-                control={form.control}
-                name="current"
-                render={({ field }) => (
-                  <div className="mt-2 flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="experience-current"
-                      checked={field.value}
-                      onChange={field.onChange}
-                      className="h-4 w-4"
-                    />
-                    <label
-                      htmlFor="experience-current"
-                      className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {t("current")}
-                    </label>
-                  </div>
-                )}
-              />
-            </div>
+          <Tabs
+            value={activeTab}
+            onValueChange={(v) =>
+              setActiveTab(v as "general" | "content" | "skills")
+            }
+            className="w-full"
+          >
+            <TabsList variant="line" className="mb-5 w-fit justify-start">
+              <TabsTrigger value="general" className="text-sm">
+                {t("tabGeneral")}
+              </TabsTrigger>
+              <TabsTrigger value="content" className="text-sm">
+                {t("tabContent")}
+              </TabsTrigger>
+              <TabsTrigger value="skills" className="text-sm">
+                {t("tabSkills")}{" "}
+                <span className="bg-primary/10 text-primary ml-1.5 rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums">
+                  {selectedSkills.length}
+                </span>
+              </TabsTrigger>
+            </TabsList>
 
-            {languages.map((lang) => {
-              const isActive = lang.id === activeLangId;
-              return (
-                <div
-                  key={lang.id}
-                  className={isActive ? "space-y-4" : "hidden"}
-                  aria-hidden={!isActive}
-                >
+            {/* TAB 1: GENERAL */}
+            <TabsContent value="general" className="mt-0 space-y-6">
+              <p className="text-muted-foreground -mt-2 text-xs">
+                {t("contentHint")}
+              </p>
+              <FormSection title={t("sectionCompany")} uppercase>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <FormField
                     control={form.control}
-                    name={`role.${lang.id}.text`}
+                    name="company"
                     render={({ field }) => (
                       <FormItem
-                        label={t("role")}
-                        inputId={`experience-role-${lang.code}`}
+                        label={t("company")}
+                        inputId="experience-company"
                       >
-                        <Input {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`location.${lang.id}.text`}
-                    render={({ field }) => (
-                      <FormItem
-                        label={t("location")}
-                        inputId={`experience-location-${lang.code}`}
-                      >
-                        <Input {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`companyBlurb.${lang.id}.text`}
-                    render={({ field }) => (
-                      <FormItem
-                        label={t("companyBlurb")}
-                        inputId={`experience-company-blurb-${lang.code}`}
-                        description={t("companyBlurbDescription")}
-                      >
-                        <Textarea
+                        <Input
                           {...field}
-                          rows={2}
-                          placeholder={t("companyBlurbPlaceholder")}
+                          placeholder={t("companyPlaceholder")}
                         />
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="employmentType"
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("employmentType")}
+                        inputId="experience-employment-type"
+                      >
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger
+                              id="experience-employment-type"
+                              className="w-full"
+                            >
+                              <SelectValue />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {CV_EMPLOYMENT_TYPES.map((type) => (
+                              <SelectItem
+                                key={type}
+                                value={type}
+                                id={`experience-employment-type-option-${type}`}
+                              >
+                                {t(`employmentTypes.${type}`)}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
                 </div>
-              );
-            })}
 
-            <FormField
-              control={form.control}
-              name="skillIds"
-              render={({ field }) => (
-                <FormItem label={t("skills")} inputId="experience-skill-picker">
-                  <div id="experience-skill-picker">
-                    <SkillPicker
-                      availableSkills={availableSkills.map((skill) => ({
-                        id: skill.id,
-                        title: skill.title,
-                        image: skill.image,
-                        type: skill.type,
-                      }))}
-                      selectedSkillIds={field.value}
-                      onChange={field.onChange}
-                    />
-                  </div>
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="companyLogoUrl"
+                  render={({ field }) => (
+                    <FormItem
+                      label={t("companyLogo")}
+                      inputId="experience-company-logo"
+                      className="mt-4"
+                    >
+                      <Input
+                        {...field}
+                        type="url"
+                        placeholder="https://.../logo.png"
+                      />
+                    </FormItem>
+                  )}
+                />
+              </FormSection>
 
-            <FormField
-              control={form.control}
-              name="current"
-              render={({ field }) => (
-                <FormCheckboxItem label={t("current")}>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={(checked) =>
-                      field.onChange(checked === true)
+              <FormSection title={t("sectionDates")} uppercase>
+                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="startDate"
+                    render={({ field }) => (
+                      <FormItem
+                        label={t("startDate")}
+                        inputId="experience-start-date"
+                      >
+                        <Input
+                          type="month"
+                          value={
+                            field.value
+                              ? new Date(field.value).toISOString().slice(0, 7)
+                              : ""
+                          }
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? new Date(e.target.value)
+                                : undefined,
+                            )
+                          }
+                        />
+                      </FormItem>
+                    )}
+                  />
+                  <EndDateInput control={form.control} label={t("endDate")} />
+                </div>
+              </FormSection>
+
+              <FormSection title={t("sectionVisibility")} uppercase>
+                <div className="border-border bg-card/60 flex flex-col gap-4 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <FormField
+                    control={form.control}
+                    name="current"
+                    render={({ field }) => (
+                      <div className="flex items-center gap-3">
+                        <Switch
+                          id="experience-current"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                        <label
+                          htmlFor="experience-current"
+                          className="text-foreground cursor-pointer text-sm font-medium"
+                        >
+                          {t("currentlyWorking")}
+                        </label>
+                      </div>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="featuredOnHome"
+                    render={({ field }) => (
+                      <div className="flex items-center gap-3">
+                        <Switch
+                          id="experience-featured-home"
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                        <label
+                          htmlFor="experience-featured-home"
+                          className="text-foreground cursor-pointer text-sm font-medium"
+                        >
+                          {t("featuredOnHome")}
+                        </label>
+                      </div>
+                    )}
+                  />
+                </div>
+              </FormSection>
+            </TabsContent>
+
+            {/* TAB 2: CONTENT */}
+            <TabsContent value="content" className="mt-0 space-y-6">
+              <AdminFormLanguageBar
+                languages={languageProgressList}
+                activeLangId={activeLangId}
+                onSelectLang={setActiveLangId}
+                missingItems={missingItems}
+                isNonPrimary={isNonPrimary}
+                showOriginal={showOriginal}
+                onToggleShowOriginal={setShowOriginal}
+              />
+
+              <FormSection title={t("tabContent")} uppercase>
+                {isNonPrimary && showOriginal && primaryRole ? (
+                  <ReferenceSnippet
+                    content={primaryRole}
+                    label={t("role")}
+                    onCopy={() =>
+                      form.setValue(`role.${activeLangId}.text`, primaryRole, {
+                        shouldDirty: true,
+                      })
                     }
                   />
-                </FormCheckboxItem>
-              )}
-            />
+                ) : null}
 
-            <FormField
-              control={form.control}
-              name="featuredOnHome"
-              render={({ field }) => (
-                <FormCheckboxItem
-                  label={t("featuredOnHome")}
-                  description={t("featuredOnHomeDescription")}
+                <FormField
+                  control={form.control}
+                  name={`role.${activeLangId}.text`}
+                  render={({ field }) => (
+                    <FormItem
+                      label={t("role")}
+                      inputId={`experience-role-${activeLangId}`}
+                    >
+                      <Input {...field} placeholder={t("rolePlaceholder")} />
+                    </FormItem>
+                  )}
+                />
+
+                {isNonPrimary && showOriginal && primaryLocation ? (
+                  <ReferenceSnippet
+                    content={primaryLocation}
+                    label={t("location")}
+                    onCopy={() =>
+                      form.setValue(
+                        `location.${activeLangId}.text`,
+                        primaryLocation,
+                        { shouldDirty: true },
+                      )
+                    }
+                  />
+                ) : null}
+
+                <FormField
+                  control={form.control}
+                  name={`location.${activeLangId}.text`}
+                  render={({ field }) => (
+                    <FormItem
+                      label={t("location")}
+                      inputId={`experience-location-${activeLangId}`}
+                    >
+                      <Input {...field} placeholder="e.g. Remote · San José" />
+                    </FormItem>
+                  )}
+                />
+
+                {isNonPrimary && showOriginal && primaryBlurb ? (
+                  <ReferenceSnippet
+                    content={primaryBlurb}
+                    label="Company Context (ATS only)"
+                    onCopy={() =>
+                      form.setValue(
+                        `companyBlurb.${activeLangId}.text`,
+                        primaryBlurb,
+                        { shouldDirty: true },
+                      )
+                    }
+                  />
+                ) : null}
+
+                <FormField
+                  control={form.control}
+                  name={`companyBlurb.${activeLangId}.text`}
+                  render={({ field }) => (
+                    <FormItem
+                      label="Company Context"
+                      description="Brief note for ATS vacancy tailoring; excluded from public CV."
+                      inputId={`experience-blurb-${activeLangId}`}
+                    >
+                      <Textarea {...field} rows={2} />
+                    </FormItem>
+                  )}
+                />
+              </FormSection>
+
+              {/* Responsibilities Section */}
+              <FormSection
+                title={t("responsibilitiesHeading", { count: fields.length })}
+                uppercase
+              >
+                <p className="text-muted-foreground -mt-2 text-xs">
+                  {t("responsibilitiesHint")}
+                </p>
+
+                <Sortable
+                  value={fields}
+                  onValueChange={(newItems) => {
+                    const currentValues = form.getValues("responsibilities");
+                    const reordered = newItems.map((item, index) => {
+                      const orig =
+                        currentValues.find((v) => v.order === item.order) ??
+                        item;
+                      return { ...orig, order: index };
+                    });
+                    form.setValue("responsibilities", reordered, {
+                      shouldDirty: true,
+                    });
+                  }}
+                  getItemValue={(item) => String(item.id)}
                 >
-                  <Checkbox
-                    id="experience-featured-on-home"
-                    checked={field.value}
-                    onCheckedChange={(checked) =>
-                      field.onChange(checked === true)
-                    }
-                  />
-                </FormCheckboxItem>
-              )}
-            />
-          </FormSection>
+                  <SortableContent asChild>
+                    <div className="mt-3 flex flex-col gap-3">
+                      {fields.map((fieldItem, idx) => {
+                        const baseRespText = primaryLang?.id
+                          ? watchedResponsibilities?.[idx]?.text?.[
+                              primaryLang.id
+                            ]?.text
+                          : undefined;
 
-          <FormSection
-            title={t("responsibilities")}
-            className="mt-4 border-t pt-4"
-          >
-            <Sortable
-              value={fields}
-              onMove={({ activeIndex, overIndex }) => {
-                move(activeIndex, overIndex);
-              }}
-              getItemValue={(item) => item.id}
-            >
-              <SortableContent asChild>
-                <div className="flex flex-col gap-0">
-                  {fields.map((field, idx) => (
-                    <SortableItem key={field.id} value={field.id} asChild>
-                      <div className="border-border/70 flex flex-col gap-3 border-t pt-4 first:border-t-0 first:pt-0">
-                        <div className="flex items-start gap-2">
-                          <SortableItemHandle
-                            aria-label={t("dragToReorder")}
-                            className="text-muted-foreground hover:text-foreground mt-8"
+                        return (
+                          <SortableItem
+                            key={fieldItem.id}
+                            value={String(fieldItem.id)}
+                            asChild
                           >
-                            <GripVertical className="size-4" />
-                          </SortableItemHandle>
-                          <div className="flex-1">
-                            {languages.map((lang) => {
-                              const isActive = lang.id === activeLangId;
-                              return (
-                                <div
-                                  key={lang.id}
-                                  className={isActive ? "block" : "hidden"}
-                                  aria-hidden={!isActive}
+                            <div className="border-border bg-card/60 rounded-xl border p-3.5 shadow-2xs">
+                              <div className="flex items-start gap-3">
+                                <SortableItemHandle
+                                  aria-label={t("dragToReorder")}
+                                  className="text-muted-foreground hover:text-foreground mt-2 shrink-0 cursor-grab"
                                 >
+                                  <GripVertical className="size-4" />
+                                </SortableItemHandle>
+
+                                <span className="bg-primary/10 text-primary mt-1.5 grid size-6 shrink-0 place-items-center rounded-md text-xs font-bold tabular-nums">
+                                  {idx + 1}
+                                </span>
+
+                                <div className="min-w-0 flex-1 space-y-2">
+                                  {isNonPrimary &&
+                                  showOriginal &&
+                                  baseRespText ? (
+                                    <ReferenceSnippet
+                                      content={baseRespText}
+                                      label={`Responsibility #${idx + 1}`}
+                                      onCopy={() =>
+                                        form.setValue(
+                                          `responsibilities.${idx}.text.${activeLangId}.text`,
+                                          baseRespText,
+                                          { shouldDirty: true },
+                                        )
+                                      }
+                                    />
+                                  ) : null}
+
                                   <FormField
                                     control={form.control}
-                                    name={`responsibilities.${idx}.text.${lang.id}.text`}
+                                    name={`responsibilities.${idx}.text.${activeLangId}.text`}
                                     render={({ field: textField }) => (
                                       <FormItem
                                         label={t("responsibility", {
                                           n: idx + 1,
                                         })}
-                                        inputId={`experience-responsibility-${idx}-${lang.code}`}
+                                        inputId={`experience-resp-${idx}-${activeLangId}`}
                                       >
-                                        <Textarea {...textField} rows={3} />
+                                        <Textarea
+                                          {...textField}
+                                          rows={2}
+                                          placeholder={t(
+                                            "responsibilityPlaceholder",
+                                          )}
+                                        />
                                       </FormItem>
                                     )}
                                   />
+
+                                  <div className="border-border/60 flex flex-wrap items-center justify-between gap-3 border-t pt-2">
+                                    <FormField
+                                      control={form.control}
+                                      name={`responsibilities.${idx}.atsOnly`}
+                                      render={({ field: atsField }) => (
+                                        <div className="flex items-center gap-2">
+                                          <Switch
+                                            id={`experience-resp-ats-${idx}`}
+                                            checked={atsField.value}
+                                            onCheckedChange={atsField.onChange}
+                                          />
+                                          <label
+                                            htmlFor={`experience-resp-ats-${idx}`}
+                                            className="text-muted-foreground cursor-pointer text-xs font-medium"
+                                          >
+                                            {t("onlyAts")}
+                                          </label>
+                                        </div>
+                                      )}
+                                    />
+
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => remove(idx)}
+                                      className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-7 text-xs"
+                                    >
+                                      <Trash2 className="mr-1 size-3.5" />
+                                      {t("remove")}
+                                    </Button>
+                                  </div>
                                 </div>
-                              );
-                            })}
-                            <FormField
-                              control={form.control}
-                              name={`responsibilities.${idx}.atsOnly`}
-                              render={({ field: atsField }) => (
-                                <FormCheckboxItem
-                                  label={t("atsOnly")}
-                                  description={t("atsOnlyDescription")}
-                                >
-                                  <Checkbox
-                                    id={`experience-responsibility-ats-${idx}`}
-                                    checked={atsField.value}
-                                    onCheckedChange={(checked) =>
-                                      atsField.onChange(checked === true)
-                                    }
-                                  />
-                                </FormCheckboxItem>
-                              )}
-                            />
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            type="button"
-                            onClick={() => remove(idx)}
-                            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive mt-8 h-8 text-xs"
-                          >
-                            {t("remove")}
-                          </Button>
-                        </div>
-                      </div>
-                    </SortableItem>
-                  ))}
-                </div>
-              </SortableContent>
-            </Sortable>
-            <Button
-              id="experience-add-responsibility"
-              variant="outline"
-              type="button"
-              onClick={() =>
-                append({
-                  text: buildEmptyTranslationMap(languages, { text: "" }),
-                  order: fields.length,
-                  atsOnly: false,
-                })
-              }
-              className="mt-4"
-            >
-              {t("addResponsibility")}
-            </Button>
-          </FormSection>
+                              </div>
+                            </div>
+                          </SortableItem>
+                        );
+                      })}
+                    </div>
+                  </SortableContent>
+                </Sortable>
+
+                <Button
+                  id="experience-add-responsibility"
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    append({
+                      text: buildEmptyTranslationMap(languages, { text: "" }),
+                      order: fields.length,
+                      atsOnly: false,
+                    })
+                  }
+                  className="mt-3 gap-1.5"
+                >
+                  <Plus className="size-4" />
+                  {t("addResponsibility")}
+                </Button>
+              </FormSection>
+            </TabsContent>
+
+            {/* TAB 3: SKILLS */}
+            <TabsContent value="skills" className="mt-0">
+              <FormSection title={t("skillsHeading")} uppercase>
+                <p className="text-muted-foreground -mt-2 mb-4 text-xs">
+                  {t("skillsHint")}
+                </p>
+
+                <FormField
+                  control={form.control}
+                  name="skillIds"
+                  render={({ field }) => (
+                    <SkillPicker
+                      availableSkills={skillOptions}
+                      selectedSkillIds={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </FormSection>
+            </TabsContent>
+          </Tabs>
         </FormContent>
+
         <FormActions
           isPending={form.formState.isSubmitting || isPending}
           title={t("save")}
@@ -591,3 +802,5 @@ export const ExperienceForm: FC<{
     </Form>
   );
 };
+
+export default ExperienceForm;

@@ -2,30 +2,31 @@
 
 import { useState, useOptimistic, useCallback, useTransition } from "react";
 import type { FC } from "react";
-
 import { useTranslations } from "next-intl";
+import { GripVertical, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
-import { Dialog } from "@/components/ui/dialog";
-import { FormDialogContent } from "@/components/shared/form-dialog-content";
-
-import CvLanguageTabs from "@/components/admin/shared/cv/cv-language-tabs";
+import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import FormStatus from "@/components/admin/shared/form-status";
 import CvAddButton from "@/components/admin/shared/cv-add-button";
-import CvListItemActions from "@/components/admin/shared/cv-list-item-actions";
 import {
   Sortable,
   SortableContent,
   SortableItem,
   SortableItemHandle,
 } from "@/components/ui/sortable";
-import { GripVertical } from "lucide-react";
-import { toast } from "sonner";
-
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import { CvReorderButtons } from "./cv-reorder-buttons";
 import { SkillForm } from "./skill-form";
 import { CvListSkeleton } from "./cv-list-skeleton";
 
-const SkillsList: FC = () => {
+export interface SkillsListProps {
+  onEditItem?: (id: string) => void;
+  onAddNew?: () => void;
+}
+
+export const SkillsList: FC<SkillsListProps> = ({ onEditItem, onAddNew }) => {
   const t = useTranslations("admin.forms.skills");
   const { data, isLoading } = api.cv.getMine.useQuery();
   const utils = api.useUtils();
@@ -35,13 +36,14 @@ const SkillsList: FC = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
   const [optimisticItems, setOptimisticItems] = useOptimistic(
     data?.technicalSkills ?? [],
     (state, newItems: NonNullable<typeof data>["technicalSkills"]) => newItems,
   );
 
   const [isPending, startTransition] = useTransition();
-  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleReorder = useCallback(
     (newItems: NonNullable<typeof data>["technicalSkills"]) => {
@@ -54,126 +56,202 @@ const SkillsList: FC = () => {
         try {
           await reorder.mutateAsync(payload);
           await utils.cv.getMine.invalidate();
+          toast.success(t("save") || "Saved");
         } catch {
-          toast.error(t("saveFailed"));
+          toast.error(t("saveFailed") || "Save failed");
         }
       });
     },
     [reorder, utils, t, setOptimisticItems],
   );
 
-  const handleDelete = useCallback(
-    (id: string) => {
-      setDeletingId(id);
-      startTransition(async () => {
-        setServerError(null);
-        try {
-          await remove.mutateAsync({ id });
-          toast.success(t("deleteSuccess") || "Deleted successfully");
-          await utils.cv.getMine.invalidate();
-        } catch {
-          toast.error(t("deleteFailed"));
-        } finally {
-          setDeletingId(null);
-        }
-      });
+  const handleMove = useCallback(
+    (index: number, delta: -1 | 1) => {
+      const targetIndex = index + delta;
+      if (targetIndex < 0 || targetIndex >= optimisticItems.length) return;
+      const copy = [...optimisticItems];
+      const temp = copy[index];
+      const target = copy[targetIndex];
+      if (!temp || !target) return;
+      copy[index] = target;
+      copy[targetIndex] = temp;
+      handleReorder(copy);
     },
-    [remove, utils, t],
+    [optimisticItems, handleReorder],
   );
+
+  const handleDelete = useCallback(() => {
+    if (!pendingDeleteId) return;
+    const idToDelete = pendingDeleteId;
+    startTransition(async () => {
+      setServerError(null);
+      try {
+        await remove.mutateAsync({ id: idToDelete });
+        await utils.cv.getMine.invalidate();
+        toast.success(t("deleteSuccess") || "Deleted successfully");
+        setPendingDeleteId(null);
+      } catch {
+        toast.error(t("deleteFailed") || "Delete failed");
+      }
+    });
+  }, [pendingDeleteId, remove, utils, t]);
+
+  const handleEditClick = (id: string) => {
+    if (onEditItem) {
+      onEditItem(id);
+    } else {
+      setEditingId(id);
+    }
+  };
+
+  const handleAddClick = () => {
+    if (onAddNew) {
+      onAddNew();
+    } else {
+      setCreating(true);
+    }
+  };
 
   if (isLoading || !data) return <CvListSkeleton lines={2} />;
 
+  // Standalone fallback: render inline form only if no external onEditItem handler
+  if (!onEditItem && (editingId ?? creating)) {
+    const editingSkill = editingId
+      ? data.technicalSkills.find((s) => s.id === editingId)
+      : undefined;
+
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-start pb-1">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setEditingId(null);
+              setCreating(false);
+            }}
+            className="text-xs"
+          >
+            ← {t("cancel")}
+          </Button>
+        </div>
+
+        <SkillForm
+          initial={editingSkill}
+          onSuccess={() => {
+            setEditingId(null);
+            setCreating(false);
+          }}
+          onCancel={() => {
+            setEditingId(null);
+            setCreating(false);
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-5">
-      <Sortable
-        value={optimisticItems}
-        onValueChange={handleReorder}
-        getItemValue={(item) => item.id}
-      >
-        <SortableContent asChild>
-          <ul className="flex flex-col gap-2">
-            {optimisticItems.map((section) => (
-              <SortableItem key={section.id} value={section.id} asChild>
-                <li className="bg-muted/40 flex items-start justify-between gap-3 rounded-lg px-4 py-3 shadow-sm">
-                  <div className="flex min-w-0 flex-1 items-start gap-3">
-                    <SortableItemHandle
-                      aria-label={t("dragToReorder")}
-                      className="text-muted-foreground hover:text-foreground mt-1 shrink-0"
-                    >
-                      <GripVertical className="size-4" />
-                    </SortableItemHandle>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-muted-foreground text-xs sm:text-sm">
+          {t("entriesCount", { count: optimisticItems.length })}
+        </p>
+        <CvAddButton id="cv-skills-add" onClick={handleAddClick}>
+          {t("add")}
+        </CvAddButton>
+      </div>
+
+      {optimisticItems.length === 0 ? (
+        <p className="border-border bg-card/50 text-muted-foreground rounded-xl border border-dashed py-8 text-center text-sm">
+          {t("noEntries")}
+        </p>
+      ) : (
+        <Sortable
+          value={optimisticItems}
+          onValueChange={handleReorder}
+          getItemValue={(item) => item.id}
+        >
+          <SortableContent asChild>
+            <ul className="flex flex-col gap-2.5">
+              {optimisticItems.map((section, index) => (
+                <SortableItem key={section.id} value={section.id} asChild>
+                  <li className="border-border/80 bg-card/60 hover:border-border hover:bg-card flex items-center justify-between gap-3 rounded-xl border p-3.5 shadow-2xs transition-colors sm:p-4">
+                    {/* Left: Reorder controls + Drag handle */}
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <CvReorderButtons
+                        index={index}
+                        total={optimisticItems.length}
+                        disabled={isPending}
+                        onMoveUp={() => handleMove(index, -1)}
+                        onMoveDown={() => handleMove(index, 1)}
+                      />
+                      <SortableItemHandle
+                        aria-label={t("dragToReorder")}
+                        className="text-muted-foreground/60 hover:text-foreground shrink-0 cursor-grab active:cursor-grabbing"
+                      >
+                        <GripVertical className="size-4" />
+                      </SortableItemHandle>
+                    </div>
+
+                    {/* Content */}
                     <div className="min-w-0 flex-1">
-                      <p className="text-muted-foreground text-[11px] font-medium tracking-wide uppercase">
-                        {section.category}
-                      </p>
-                      <p className="text-foreground text-sm">
+                      <div className="flex items-center gap-2">
+                        <span className="bg-primary/10 text-primary border-primary/20 rounded border px-2 py-0.5 text-[0.625rem] font-bold tracking-wider uppercase">
+                          {section.category}
+                        </span>
+                        <span className="text-muted-foreground text-xs">
+                          {section.items.length} items
+                        </span>
+                      </div>
+                      <p className="text-foreground mt-1 truncate text-sm font-medium">
                         {section.items.join(", ")}
                       </p>
                     </div>
-                  </div>
-                  <CvListItemActions
-                    isPending={isPending}
-                    isDeleting={deletingId === section.id}
-                    isEditing={editingId === section.id}
-                    onEditToggle={() =>
-                      setEditingId(editingId === section.id ? null : section.id)
-                    }
-                    onDelete={() => handleDelete(section.id)}
-                  />
-                </li>
-              </SortableItem>
-            ))}
-          </ul>
-        </SortableContent>
-      </Sortable>
 
-      <Dialog
-        open={!!(editingId ?? creating)}
-        onOpenChange={(open) => {
-          if (!open) {
-            setEditingId(null);
-            setCreating(false);
-          }
-        }}
-      >
-        <FormDialogContent
-          id="cv-item-modal"
-          closeButtonId="cv-item-modal-close"
-          title={
-            editingId
-              ? t("edit") || "Editar Habilidad"
-              : t("create") || "Añadir Habilidad"
-          }
-          headerExtra={<CvLanguageTabs />}
-          className="sm:max-w-4xl"
-        >
-          {(editingId ?? creating) && (
-            <SkillForm
-              initial={
-                editingId
-                  ? data.technicalSkills.find((s) => s.id === editingId)
-                  : undefined
-              }
-              onSuccess={() => {
-                setEditingId(null);
-                setCreating(false);
-              }}
-              onCancel={() => {
-                setEditingId(null);
-                setCreating(false);
-              }}
-            />
-          )}
-        </FormDialogContent>
-      </Dialog>
-
-      {!editingId && !creating ? (
-        <CvAddButton id="cv-skills-add" onClick={() => setCreating(true)}>
-          {t("add")}
-        </CvAddButton>
-      ) : null}
+                    {/* Right: Actions */}
+                    <div className="flex shrink-0 items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEditClick(section.id)}
+                        className="h-8 text-xs font-medium"
+                      >
+                        {t("edit")}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setPendingDeleteId(section.id)}
+                        aria-label={`${t("delete")} ${section.category}`}
+                        className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive size-8"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </Button>
+                    </div>
+                  </li>
+                </SortableItem>
+              ))}
+            </ul>
+          </SortableContent>
+        </Sortable>
+      )}
 
       <FormStatus error={serverError} />
+
+      <ConfirmDialog
+        open={pendingDeleteId !== null}
+        onOpenChange={(open) => !open && setPendingDeleteId(null)}
+        title={t("delete") || "Delete skill group"}
+        description="Are you sure you want to delete this skill group?"
+        confirmLabel={t("delete") || "Delete"}
+        cancelLabel={t("cancel") || "Cancel"}
+        isPending={isPending}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };
