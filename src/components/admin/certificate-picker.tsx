@@ -176,9 +176,9 @@ export function CertificatePicker({
   const selectedCount = selectedCertificateIds.length;
 
   return (
-    <div className="flex w-full max-w-full min-w-0 flex-col gap-4">
+    <div className="flex min-h-0 w-full max-w-full flex-1 flex-col gap-4">
       {/* Search Header */}
-      <div className="relative">
+      <div className="relative shrink-0">
         <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
         <Input
           id="cert-search-input"
@@ -192,7 +192,7 @@ export function CertificatePicker({
       </div>
 
       {/* Results List */}
-      <div className="min-h-48 min-w-0 space-y-2">
+      <div className="min-h-64 min-w-0 flex-1 space-y-2 overflow-y-auto">
         {isLoading && (
           <div className="space-y-2" aria-busy="true">
             <div className="bg-muted/40 h-14 animate-pulse rounded-xl" />
@@ -223,7 +223,7 @@ export function CertificatePicker({
       </div>
 
       {/* Bottom Selected Tray */}
-      <div className="border-border bg-card/90 sticky bottom-0 z-10 mt-2 w-full max-w-full min-w-0 rounded-xl border p-3 backdrop-blur">
+      <div className="border-border bg-card/90 sticky bottom-0 z-10 -mx-1 mt-auto w-full max-w-full min-w-0 shrink-0 rounded-xl border p-3 backdrop-blur">
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"

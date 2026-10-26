@@ -1,6 +1,6 @@
 export { generateMetadata } from "../../../certifications/new/metadata";
 import { getTranslations } from "next-intl/server";
-import { PageDialogWrapper } from "@/components/shared/page-container";
+import { PageSheetWrapper } from "@/components/shared/page-container";
 import { CertificationForm } from "@/features/certifications/components/certification-form";
 import { getCertificationCreatePageData } from "@/features/certifications/server/certification-queries";
 
@@ -11,8 +11,12 @@ export default async function NewCertificationModal() {
   ]);
 
   return (
-    <PageDialogWrapper title={t("create")} description={t("createDescription")}>
+    <PageSheetWrapper
+      title={t("create")}
+      description={t("createDescription")}
+      fallbackUrl="/admin/certifications"
+    >
       <CertificationForm initialData={initialData} languages={languages} />
-    </PageDialogWrapper>
+    </PageSheetWrapper>
   );
 }

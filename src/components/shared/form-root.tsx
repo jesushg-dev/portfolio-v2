@@ -64,7 +64,10 @@ export const FormContent = ({
 }: FormContentProps) => (
   <div className="min-h-0 flex-1 overflow-y-auto pt-[0.0625rem] pr-1">
     <div
-      className={cn("flex flex-col gap-4 px-1 pt-[0.0625rem] pb-4", className)}
+      className={cn(
+        "flex min-h-full flex-1 flex-col gap-4 px-1 pt-[0.0625rem] pb-4",
+        className,
+      )}
     >
       <FormError error={error} />
       {children}
@@ -86,6 +89,7 @@ interface FormSectionProps {
   title?: string;
   description?: string;
   className?: string;
+  uppercase?: boolean;
 }
 
 export const FormSection = ({
@@ -93,11 +97,23 @@ export const FormSection = ({
   title,
   description,
   className,
+  uppercase,
 }: FormSectionProps) => (
-  <fieldset className={cn("space-y-6", className)}>
-    {title && <legend className="text-lg font-semibold">{title}</legend>}
+  <fieldset className={cn("space-y-4", className)}>
+    {title && (
+      <legend
+        className={cn(
+          "font-semibold",
+          uppercase
+            ? "text-muted-foreground mb-3 text-xs tracking-wider uppercase"
+            : "text-foreground text-base",
+        )}
+      >
+        {title}
+      </legend>
+    )}
     {description && (
-      <p className="text-muted-foreground text-sm">{description}</p>
+      <p className="text-muted-foreground text-xs">{description}</p>
     )}
     <div className="space-y-4 p-[0.0625rem]">{children}</div>
   </fieldset>

@@ -345,7 +345,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
         >
           <TabsList
             variant="line"
-            className="mb-6 grid w-full shrink-0 grid-cols-4"
+            className="mb-6 flex w-fit shrink-0 justify-start"
           >
             <TabsTrigger value="general" className="text-xs">
               {t("tabs.general")}
@@ -374,8 +374,8 @@ export const ProjectForm: FC<ProjectFormProps> = ({
             </TabsTrigger>
           </TabsList>
 
-          <ScrollArea className="min-h-0 min-w-0 flex-1">
-            <div className="min-w-0 space-y-4 px-1 pt-1 pr-3 pb-4">
+          <ScrollArea className="h-full min-h-0 min-w-0 flex-1 [&>div>div]:!flex [&>div>div]:!h-full [&>div>div]:!min-h-full [&>div>div]:!flex-col">
+            <div className="flex h-full min-h-full min-w-0 flex-1 flex-col space-y-4 px-1 pt-1 pr-3 pb-4">
               <FormError error={anyError} />
               {/* ── TAB 1: GENERAL ─────────────────────────────────────────── */}
               <TabsContent value="general" className="mt-0 space-y-6">
@@ -405,30 +405,40 @@ export const ProjectForm: FC<ProjectFormProps> = ({
               </TabsContent>
 
               {/* ── TAB 3: SKILLS ──────────────────────────────────────────── */}
-              <TabsContent value="skills" className="mt-0">
+              <TabsContent
+                value="skills"
+                className="mt-0 flex h-full min-h-0 flex-1 flex-col"
+              >
                 <FormField
                   control={form.control}
                   name="skillIds"
                   render={({ field }) => (
-                    <SkillPicker
-                      availableSkills={availableSkills}
-                      selectedSkillIds={field.value}
-                      onChange={field.onChange}
-                    />
+                    <div className="flex h-full min-h-0 flex-1 flex-col">
+                      <SkillPicker
+                        availableSkills={availableSkills}
+                        selectedSkillIds={field.value}
+                        onChange={field.onChange}
+                      />
+                    </div>
                   )}
                 />
               </TabsContent>
 
               {/* ── TAB 4: CERTIFICATES ────────────────────────────────────── */}
-              <TabsContent value="certificates" className="mt-0 min-w-0">
+              <TabsContent
+                value="certificates"
+                className="mt-0 flex h-full min-h-0 min-w-0 flex-1 flex-col"
+              >
                 <FormField
                   control={form.control}
                   name="certificateIds"
                   render={({ field }) => (
-                    <CertificatePicker
-                      selectedCertificateIds={field.value}
-                      onChange={field.onChange}
-                    />
+                    <div className="flex h-full min-h-0 flex-1 flex-col">
+                      <CertificatePicker
+                        selectedCertificateIds={field.value}
+                        onChange={field.onChange}
+                      />
+                    </div>
                   )}
                 />
               </TabsContent>

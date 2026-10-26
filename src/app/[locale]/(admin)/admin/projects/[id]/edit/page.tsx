@@ -1,6 +1,7 @@
 export { generateMetadata } from "./metadata";
 import { getTranslations } from "next-intl/server";
 
+import { PageSheetWrapper } from "@/components/shared/page-container";
 import { ProjectForm } from "@/features/projects/components/project-form";
 import { getProjectEditPageData } from "@/features/projects/server/project-queries";
 
@@ -19,20 +20,16 @@ export default async function EditProjectPage({
   const { editorDto, languages } = pageData;
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("edit")}</h1>
-        <p className="text-muted-foreground mt-1 text-sm">
-          {t("editDescription")}
-        </p>
-      </div>
-      <div className="mx-auto h-[calc(100dvh-12rem)] min-h-96 w-full max-w-3xl">
-        <ProjectForm
-          key={editorDto.id}
-          initialData={editorDto}
-          languages={languages}
-        />
-      </div>
-    </div>
+    <PageSheetWrapper
+      title={t("edit")}
+      description={t("editDescription")}
+      fallbackUrl="/admin/projects"
+    >
+      <ProjectForm
+        key={editorDto.id}
+        initialData={editorDto}
+        languages={languages}
+      />
+    </PageSheetWrapper>
   );
 }
