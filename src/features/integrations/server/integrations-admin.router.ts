@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { getServerBaseUrl } from "@/lib/url/get-base-url";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -56,6 +57,8 @@ export const integrationsAdminRouter = createTRPCRouter({
         fromEmail: resendConfig?.fromEmail ?? "",
         emailSignatureHtml: resendConfig?.emailSignatureHtml ?? "",
         maskedApiKey: maskSecret(resendConfig?.apiKey),
+        webhookConfigured: Boolean(resendConfig?.webhookSecret),
+        webhookUrl: `${getServerBaseUrl()}/api/webhooks/resend/${userId}`,
         syncedTemplatesCount: Object.keys(resendConfig?.templates ?? {}).length,
         lastSyncedAt: resendIntegration?.lastSyncedAt ?? null,
         lastError: resendIntegration?.lastError ?? null,
@@ -114,6 +117,7 @@ export const integrationsAdminRouter = createTRPCRouter({
         emailDomain: z.string().trim().optional(),
         fromEmail: z.string().trim().optional(),
         emailSignatureHtml: z.string().optional(),
+        webhookSecret: z.string().trim().startsWith("whsec_").optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -140,6 +144,7 @@ export const integrationsAdminRouter = createTRPCRouter({
       const updatedConfig: ResendIntegrationConfig = {
         ...current,
         apiKey: nextApiKey,
+        webhookSecret: input.webhookSecret ?? (credentialsChanged ? undefined : current.webhookSecret),
         emailDomain: nextDomain,
         fromEmail: input.fromEmail?.trim() ?? current.fromEmail,
         emailSignatureHtml:

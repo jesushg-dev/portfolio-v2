@@ -26,6 +26,7 @@ const resendFormSchema = z.object({
   emailDomain: z.string(),
   fromEmail: z.string(),
   emailSignatureHtml: z.string(),
+  webhookSecret: z.string(),
 });
 
 type ResendFormValues = z.infer<typeof resendFormSchema>;
@@ -77,6 +78,7 @@ export function ResendIntegrationForm({
     resolver: zodResolver(schema),
     defaultValues: {
       apiKey: "",
+      webhookSecret: "",
       emailDomain: status.emailDomain,
       fromEmail: status.fromEmail,
       emailSignatureHtml: status.emailSignatureHtml,
@@ -86,6 +88,7 @@ export function ResendIntegrationForm({
   useEffect(() => {
     form.reset({
       apiKey: "",
+      webhookSecret: "",
       emailDomain: status.emailDomain,
       fromEmail: status.fromEmail,
       emailSignatureHtml: status.emailSignatureHtml,
@@ -98,6 +101,7 @@ export function ResendIntegrationForm({
         try {
           const res = await saveResend.mutateAsync({
             apiKey: values.apiKey.trim() || undefined,
+            webhookSecret: values.webhookSecret.trim() || undefined,
             emailDomain: values.emailDomain.trim() || undefined,
             fromEmail: values.fromEmail.trim() || undefined,
             emailSignatureHtml: values.emailSignatureHtml,
@@ -208,6 +212,14 @@ export function ResendIntegrationForm({
                 </FormItem>
               )}
             />
+          </FormSection>
+          <FormSection title={t("resend.webhookTitle")} description={t("resend.webhookHint")}>
+            <Input readOnly value={status.webhookUrl} aria-label={t("resend.webhookUrl")} />
+            <FormField control={form.control} name="webhookSecret" render={({ field }) => (
+              <FormItem label={t("resend.webhookSecret")} description={status.webhookConfigured ? t("resend.webhookSaved") : undefined}>
+                <Input {...field} type="password" autoComplete="new-password" placeholder="whsec_…" />
+              </FormItem>
+            )} />
           </FormSection>
         </FormContent>
 
