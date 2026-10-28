@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { Building2, Plus } from "lucide-react";
 
 import { JobTrackerTabs } from "@/features/job-tracker/components/job-tracker-tabs";
+import { StartJobSearchButton } from "@/features/job-tracker/components/start-job-search-button";
 import {
   getJobTrackerPageData,
   getCompaniesListData,
@@ -78,6 +79,13 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
           </div>
         </div>
       </div>
+
+      {!pageData.hasOpenSearch ? (
+        <div className="border-primary/20 bg-primary/5 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4">
+          <p className="text-sm">{t("search.noActive")}</p>
+          <StartJobSearchButton />
+        </div>
+      ) : null}
 
       <JobTrackerTabs
         initialApplications={pageData.applications.data}

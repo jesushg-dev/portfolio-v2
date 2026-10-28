@@ -26,6 +26,10 @@ jest.mock("@/lib/google-calendar/sync", () => ({
   pullLinkedUpcomingEventsFromGoogle: jest.fn(),
 }));
 
+jest.mock("@/features/job-tracker/server/active-job-search", () => ({
+  getOpenJobSearch: jest.fn().mockResolvedValue({ id: "search-1" }),
+}));
+
 jest.mock("@/server/db", () => ({
   db: {
     application: {
