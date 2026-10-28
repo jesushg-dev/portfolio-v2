@@ -1,4 +1,8 @@
-import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
+import {
+  selectFormLanguage,
+  selectFormTab,
+  translationField,
+} from "./admin-form";
 import { expect, type Page, type Response } from "@playwright/test";
 
 import {
@@ -165,8 +169,7 @@ export async function fillTimelineItemForm(
   for (const locale of TIMELINE_LOCALES) {
     await selectFormLanguage(page, locale);
     await translationField(page, "title").fill(item.title[locale]);
-    await translationField(page, "description")
-      .fill(item.description[locale]);
+    await translationField(page, "description").fill(item.description[locale]);
   }
 
   await selectFormTab(page, "General");

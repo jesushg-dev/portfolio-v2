@@ -1,5 +1,9 @@
 import { expect, test } from "./authenticated-test";
-import { selectFormLanguage, selectFormTab, translationField } from "./helpers/admin-form";
+import {
+  selectFormLanguage,
+  selectFormTab,
+  translationField,
+} from "./helpers/admin-form";
 
 import {
   gotoAdminPath,

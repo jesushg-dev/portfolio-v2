@@ -13,7 +13,7 @@ import { RiPhoneFill, RiWhatsappFill } from "react-icons/ri";
 import type { IconType } from "react-icons";
 
 import { Link } from "@/i18n/routing";
-import { LinkPreviewLazy } from "@/components/ui/link-preview-lazy";
+import { LinkPreview } from "@/components/ui/link-preview";
 import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
 import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
@@ -69,13 +69,9 @@ function FooterPreviewLink({
   }
 
   return (
-    <LinkPreviewLazy
-      url={href}
-      imageAlt={label}
-      className={footerLinkClassName}
-    >
+    <LinkPreview url={href} imageAlt={label} className={footerLinkClassName}>
       {label}
-    </LinkPreviewLazy>
+    </LinkPreview>
   );
 }
 
@@ -122,7 +118,7 @@ const Footer = async ({
               aria-label={t("homeLogo", {
                 brand: getBrandAccessibleLabel(siteBrand),
               })}
-              className="group text-primary-foreground inline-flex min-h-11 items-center text-2xl font-extrabold tracking-tight"
+              className="group text-primary-foreground inline-flex min-h-11 min-w-11 items-center text-2xl font-extrabold tracking-tight"
             >
               <SiteBrandMark
                 brand={siteBrand}
@@ -165,36 +161,46 @@ const Footer = async ({
               </h3>
               <ul className="space-y-2.5">
                 <li>
-                  <LinkPreviewLazy
+                  <LinkPreview
+                    url="/projects"
+                    imageSrc={FOOTER_LINK_PREVIEWS.projects}
+                    imageAlt={t("sections.portfolio.projects")}
+                    className={footerLinkClassName}
+                  >
+                    {t("sections.portfolio.projects")}
+                  </LinkPreview>
+                </li>
+                <li>
+                  <LinkPreview
                     url="/certificates"
                     imageSrc={FOOTER_LINK_PREVIEWS.certificates}
                     imageAlt={t("sections.portfolio.certificates")}
                     className={footerLinkClassName}
                   >
                     {t("sections.portfolio.certificates")}
-                  </LinkPreviewLazy>
+                  </LinkPreview>
                 </li>
                 {cvPublic ? (
                   <li>
-                    <LinkPreviewLazy
+                    <LinkPreview
                       url="/curriculum-vitae"
                       imageSrc={FOOTER_LINK_PREVIEWS.curriculum}
                       imageAlt={t("sections.portfolio.curriculum")}
                       className={footerLinkClassName}
                     >
                       {t("sections.portfolio.curriculum")}
-                    </LinkPreviewLazy>
+                    </LinkPreview>
                   </li>
                 ) : null}
                 <li>
-                  <LinkPreviewLazy
+                  <LinkPreview
                     url="/timeline"
                     imageSrc={FOOTER_LINK_PREVIEWS.timeline}
                     imageAlt={t("sections.portfolio.timeline")}
                     className={footerLinkClassName}
                   >
                     {t("sections.portfolio.timeline")}
-                  </LinkPreviewLazy>
+                  </LinkPreview>
                 </li>
               </ul>
             </nav>
@@ -205,14 +211,14 @@ const Footer = async ({
               </h3>
               <ul className="space-y-2.5">
                 <li className="flex items-center gap-2">
-                  <LinkPreviewLazy
+                  <LinkPreview
                     url="/register?next=/admin/cv"
                     imageSrc={FOOTER_LINK_PREVIEWS.cvGenerator}
                     imageAlt={t("sections.miscellaneous.cvGenerator")}
                     className={footerLinkClassName}
                   >
                     {t("sections.miscellaneous.cvGenerator")}
-                  </LinkPreviewLazy>
+                  </LinkPreview>
                   <span className="rounded-full bg-white/15 px-2.5 py-1 text-sm font-semibold text-white">
                     {t("beta")}
                   </span>
@@ -235,13 +241,13 @@ const Footer = async ({
             <ul className="space-y-2.5">
               {processNavPages.map((page) => (
                 <li key={page.id}>
-                  <LinkPreviewLazy
+                  <LinkPreview
                     url={`/process/${page.slug}`}
                     imageAlt={page.menuTitle.trim() || page.slug}
                     className={footerLinkClassName}
                   >
                     {page.menuTitle.trim() || page.slug}
-                  </LinkPreviewLazy>
+                  </LinkPreview>
                 </li>
               ))}
               <li>

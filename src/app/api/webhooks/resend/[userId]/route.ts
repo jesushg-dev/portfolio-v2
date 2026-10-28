@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { z } from "zod";
 import { db } from "@/server/db";
 import { getTenantIntegrationConfig } from "@/lib/integrations/tenant-integrations-service";
+import { RESEND_JOB_TRACKER_EVENTS } from "@/lib/integrations/resend-email-events";
 
 const schema = z.object({ type: z.string(), created_at: z.string().datetime({ offset: true }), data: z.object({ email_id: z.string(), to: z.array(z.string()), tags: z.record(z.string(), z.string()).optional() }) });
 const states: Record<string, { status: string; rank: number }> = {
@@ -30,7 +31,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ use
   const parsed = schema.safeParse(verified);
   if (!parsed.success) return new Response(null, { status: 200 });
   const event = parsed.data;
-  if (!states[event.type] && event.type !== "email.opened") return new Response(null, { status: 200 });
+  if (!RESEND_JOB_TRACKER_EVENTS.some((type) => type === event.type)) return new Response(null, { status: 200 });
   try {
     await db.$transaction(async (tx) => {
       if (await tx.applicationEmailEvent.findUnique({ where: { userId_providerEventId: { userId, providerEventId: id } } })) return;
@@ -50,9 +51,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ use
       if (event.type === "email.opened") await tx.applicationEmailOpen.create({ data: { emailId: email.id, openedAt: occurredAt } });
       await tx.applicationEmail.update({ where: { id: email.id }, data: {
         providerMessageId: event.data.email_id, trackingSource: "RESEND",
-        ...(delivery ? { deliveryStatus: states[delivery.type]!.status, deliveryUpdatedAt: delivery.occurredAt } : {}),
+        ...(delivery ? { deliveryStatus: states[delivery.type].status, deliveryUpdatedAt: delivery.occurredAt } : {}),
         ...(delivered ? { deliveredAt: delivered.occurredAt } : {}),
-        ...(opens.length ? { trackingEnabled: true, openCount: opens.length, firstOpenedAt: opens[0]!.occurredAt, lastOpenedAt: opens[opens.length - 1]!.occurredAt } : {}),
+        ...(opens.length ? { trackingEnabled: true, openCount: opens.length, firstOpenedAt: opens[0].occurredAt, lastOpenedAt: opens[opens.length - 1].occurredAt } : {}),
       } });
     });
     return new Response(null, { status: 200 });

@@ -206,7 +206,8 @@ export const CertificationForm: FC<CertificationFormProps> = ({
 
   const currentTranslation = watchedTranslations?.[activeLangId];
   const isCurrentTranslationEmpty =
-    !blankLanguages.includes(activeLangId) && !currentTranslation?.title?.trim();
+    !blankLanguages.includes(activeLangId) &&
+    !currentTranslation?.title?.trim();
 
   const primaryTranslation = primaryLang?.id
     ? watchedTranslations?.[primaryLang.id]

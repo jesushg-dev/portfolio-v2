@@ -194,7 +194,9 @@ async function ensureCvItemAddReady(
 
   const sectionModal = page.locator("#cv-section-sheet");
   if (await sectionModal.isVisible()) {
-    await sectionModal.getByRole("button", { name: "Close", exact: true }).click();
+    await sectionModal
+      .getByRole("button", { name: "Close", exact: true })
+      .click();
     await sectionModal.waitFor({ state: "hidden", timeout: 15_000 });
   }
 
@@ -232,11 +234,7 @@ export async function fillCvHeader(
     .waitFor({ state: "visible", timeout: 20_000 });
   await page.locator("#cv-header-full-name").fill(cv.header.fullName);
   await page.locator("#cv-header-photo-url").fill(portfolioProfile.photoUrl);
-  await fillLocalizedField(
-    page,
-    "cv-header-degree",
-    cv.header.degree,
-  );
+  await fillLocalizedField(page, "cv-header-degree", cv.header.degree);
   await fillLocalizedField(
     page,
     "cv-header-photo-alt",
@@ -271,11 +269,7 @@ export async function fillCvContact(
     `cv-contact-type-option-${contact.type}`,
   );
   await page.locator("#cv-contact-value").fill(contact.value);
-  await fillLocalizedField(
-    page,
-    "cv-contact-label",
-    contact.label,
-  );
+  await fillLocalizedField(page, "cv-contact-label", contact.label);
   await submitCvForm(page, "cv-contact-form", "createContact");
   await waitForCvItemSheetClosed(page);
 }
@@ -287,17 +281,9 @@ export async function fillCvEducation(
   await ensureCvItemAddReady(page, "education", "cv-education-add");
   await openCvItemSheet(page, "cv-education-add");
   await page.locator("#education-institution").fill(education.institution);
-  await fillLocalizedField(
-    page,
-    "education-degree",
-    education.degreeName,
-  );
+  await fillLocalizedField(page, "education-degree", education.degreeName);
   if (education.location) {
-    await fillLocalizedField(
-      page,
-      "education-location",
-      education.location,
-    );
+    await fillLocalizedField(page, "education-location", education.location);
   }
   if (education.dates) {
     await page.locator("#education-dates").fill(education.dates);
@@ -312,16 +298,8 @@ export async function fillCvLanguage(
 ): Promise<void> {
   await ensureCvItemAddReady(page, "languages", "cv-languages-add");
   await openCvItemSheet(page, "cv-languages-add");
-  await fillLocalizedField(
-    page,
-    "cv-language-name",
-    language.name,
-  );
-  await fillLocalizedField(
-    page,
-    "cv-language-level",
-    language.level,
-  );
+  await fillLocalizedField(page, "cv-language-name", language.name);
+  await fillLocalizedField(page, "cv-language-level", language.level);
   await submitCvForm(page, "cv-language-form", "createLanguage");
   await waitForCvItemSheetClosed(page);
 }
@@ -364,11 +342,7 @@ export async function fillCvExperience(
       .locator("#experience-end-date")
       .fill(formatMonth(experience.endDate));
   }
-  await fillLocalizedField(
-    page,
-    "experience-role",
-    experience.role,
-  );
+  await fillLocalizedField(page, "experience-role", experience.role);
 
   for (let index = 0; index < experience.responsibilities.length; index += 1) {
     await page.locator("#experience-add-responsibility").click();
@@ -393,11 +367,7 @@ export async function fillCvSoftSkill(
 ): Promise<void> {
   await ensureCvItemAddReady(page, "soft-skills", "cv-soft-skills-add");
   await openCvItemSheet(page, "cv-soft-skills-add");
-  await fillLocalizedField(
-    page,
-    "cv-soft-skill-text",
-    softSkill.name,
-  );
+  await fillLocalizedField(page, "cv-soft-skill-text", softSkill.name);
   await submitCvForm(page, "cv-soft-skill-form", "createSoftSkill");
   await waitForCvItemSheetClosed(page);
 }
@@ -408,11 +378,7 @@ export async function fillCvAdditionalInfo(
 ): Promise<void> {
   await ensureCvItemAddReady(page, "additional", "cv-additional-add");
   await openCvItemSheet(page, "cv-additional-add");
-  await fillLocalizedField(
-    page,
-    "cv-additional-text",
-    item.text,
-  );
+  await fillLocalizedField(page, "cv-additional-text", item.text);
   await submitCvForm(page, "cv-additional-form", "createAdditionalInfo");
   await waitForCvItemSheetClosed(page);
 }

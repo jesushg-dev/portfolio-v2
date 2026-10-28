@@ -51,4 +51,15 @@ describe("computeCvPdfContentHash", () => {
 
     expect(paginated).not.toBe(continuous);
   });
+
+  it("changes when design changes", () => {
+    const defaultDesign = computeCvPdfContentHash(
+      baseSnapshot,
+      false,
+      "default",
+    );
+    const atsDesign = computeCvPdfContentHash(baseSnapshot, false, "ats");
+
+    expect(atsDesign).not.toBe(defaultDesign);
+  });
 });

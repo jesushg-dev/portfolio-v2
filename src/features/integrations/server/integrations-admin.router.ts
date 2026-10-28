@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { getServerBaseUrl } from "@/lib/url/get-base-url";
+import { SITE_URL } from "@/lib/seo/site";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
@@ -22,6 +23,13 @@ function maskSecret(value?: string | null): string {
   if (!value) return "";
   if (value.length <= 8) return "••••••••";
   return `${value.slice(0, 4)}••••${value.slice(-4)}`;
+}
+
+function getResendWebhookUrl(userId: string): string {
+  const origin = new URL(getServerBaseUrl());
+  const local = origin.hostname === "localhost" || origin.hostname === "127.0.0.1" || origin.hostname === "[::1]" || origin.hostname.endsWith(".localhost");
+  const publicOrigin = origin.protocol === "https:" && !local ? origin.origin : new URL(SITE_URL).origin;
+  return new URL(`/api/webhooks/resend/${encodeURIComponent(userId)}`, publicOrigin).href;
 }
 
 export const integrationsAdminRouter = createTRPCRouter({
@@ -58,7 +66,7 @@ export const integrationsAdminRouter = createTRPCRouter({
         emailSignatureHtml: resendConfig?.emailSignatureHtml ?? "",
         maskedApiKey: maskSecret(resendConfig?.apiKey),
         webhookConfigured: Boolean(resendConfig?.webhookSecret),
-        webhookUrl: `${getServerBaseUrl()}/api/webhooks/resend/${userId}`,
+        webhookUrl: getResendWebhookUrl(userId),
         syncedTemplatesCount: Object.keys(resendConfig?.templates ?? {}).length,
         lastSyncedAt: resendIntegration?.lastSyncedAt ?? null,
         lastError: resendIntegration?.lastError ?? null,

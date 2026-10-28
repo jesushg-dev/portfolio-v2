@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import {
-  buildLocalizedSitemapEntry,
+  buildLocalizedSitemapEntries,
   INDEXABLE_SITEMAP_PATHS,
   PUBLIC_SITEMAP_CHANGE_FREQUENCY,
   PUBLIC_SITEMAP_PRIORITIES,
@@ -17,8 +17,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     select: { userId: true, updatedAt: true },
   });
 
-  const staticEntries = INDEXABLE_SITEMAP_PATHS.map((pathname) =>
-    buildLocalizedSitemapEntry(pathname, {
+  const staticEntries = INDEXABLE_SITEMAP_PATHS.flatMap((pathname) =>
+    buildLocalizedSitemapEntries(pathname, {
       priority: PUBLIC_SITEMAP_PRIORITIES[pathname],
       changeFrequency: PUBLIC_SITEMAP_CHANGE_FREQUENCY[pathname],
       lastModified: primaryProfile?.updatedAt,
@@ -59,8 +59,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .filter((project): project is typeof project & { slug: string } =>
       Boolean(project.slug?.trim()),
     )
-    .map((project) =>
-      buildLocalizedSitemapEntry(
+    .flatMap((project) =>
+      buildLocalizedSitemapEntries(
         {
           pathname: "/projects/[slug]",
           params: { slug: project.slug },
@@ -73,8 +73,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ),
     );
 
-  const skillEntries = skills.map((skill) =>
-    buildLocalizedSitemapEntry(
+  const skillEntries = skills.flatMap((skill) =>
+    buildLocalizedSitemapEntries(
       {
         pathname: "/skills/[slug]",
         params: { slug: skillSlugFromTitle(skill.title) },
@@ -87,8 +87,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ),
   );
 
-  const processPageEntries = processPages.map((page) =>
-    buildLocalizedSitemapEntry(
+  const processPageEntries = processPages.flatMap((page) =>
+    buildLocalizedSitemapEntries(
       {
         pathname: "/process/[slug]",
         params: { slug: page.slug },

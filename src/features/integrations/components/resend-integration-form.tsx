@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { AlertTriangle } from "lucide-react";
 
 import { api, type RouterOutputs } from "@/trpc/react";
+import { ResendWebhookSetup } from "./resend-webhook-setup";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -213,8 +214,8 @@ export function ResendIntegrationForm({
               )}
             />
           </FormSection>
-          <FormSection title={t("resend.webhookTitle")} description={t("resend.webhookHint")}>
-            <Input readOnly value={status.webhookUrl} aria-label={t("resend.webhookUrl")} />
+          <FormSection title={t("resend.webhookTitle")}>
+            <ResendWebhookSetup webhookUrl={status.webhookUrl} />
             <FormField control={form.control} name="webhookSecret" render={({ field }) => (
               <FormItem label={t("resend.webhookSecret")} description={status.webhookConfigured ? t("resend.webhookSaved") : undefined}>
                 <Input {...field} type="password" autoComplete="new-password" placeholder="whsec_…" />

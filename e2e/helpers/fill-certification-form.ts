@@ -1,4 +1,8 @@
-import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
+import {
+  selectFormLanguage,
+  selectFormTab,
+  translationField,
+} from "./admin-form";
 import type { Page, Response } from "@playwright/test";
 
 import {
@@ -133,8 +137,7 @@ export async function fillCertificationForm(
     if (!translation) continue;
 
     await selectFormLanguage(page, locale);
-    await translationField(page, "title")
-      .fill(translation.title);
+    await translationField(page, "title").fill(translation.title);
   }
 
   await selectFormTab(page, "General");

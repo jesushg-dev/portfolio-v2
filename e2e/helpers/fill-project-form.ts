@@ -1,4 +1,8 @@
-import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
+import {
+  selectFormLanguage,
+  selectFormTab,
+  translationField,
+} from "./admin-form";
 import type { Page, Response } from "@playwright/test";
 
 import {
@@ -157,8 +161,7 @@ export async function fillProjectForm(
     await translationField(page, "title").fill(translation.title);
 
     if (translation.description) {
-      await translationField(page, "description")
-        .fill(translation.description);
+      await translationField(page, "description").fill(translation.description);
     }
   }
 

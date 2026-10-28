@@ -112,7 +112,10 @@ async function selectProfileLocale(
 }
 
 async function submitProfileHeroForm(page: Page): Promise<void> {
-  const submit = page.getByRole("button", { name: "Save changes", exact: true });
+  const submit = page.getByRole("button", {
+    name: "Save changes",
+    exact: true,
+  });
   const savePromise = page.waitForResponse(
     (response) =>
       response.url().includes("/api/trpc/profileAdmin.upsertHero") &&
@@ -177,9 +180,7 @@ export async function fillProfileHeroFromFixture(
 ): Promise<void> {
   await goToProfileHero(page);
 
-  await page
-    .locator("#profile-full-name")
-    .fill(portfolioCv.header.fullName);
+  await page.locator("#profile-full-name").fill(portfolioCv.header.fullName);
   await page.locator("#profile-hero-photo-url").fill(portfolioProfile.photoUrl);
 
   for (const locale of PROFILE_LOCALES) {
@@ -192,9 +193,7 @@ export async function fillProfileHeroFromFixture(
     await page
       .locator("#profile-tr-subtitle")
       .fill(fixture.heroSubtitle[locale]);
-    await page
-      .locator("#profile-tr-tagline")
-      .fill(fixture.heroTagline[locale]);
+    await page.locator("#profile-tr-tagline").fill(fixture.heroTagline[locale]);
   }
 
   await submitProfileHeroForm(page);
@@ -273,9 +272,7 @@ export async function fillProfileHeroSmoke(
   await goToProfileHero(page);
 
   await selectProfileLocale(page, "en");
-  await page
-    .locator("#profile-full-name")
-    .fill(portfolioCv.header.fullName);
+  await page.locator("#profile-full-name").fill(portfolioCv.header.fullName);
   for (const locale of PROFILE_LOCALES) {
     await selectProfileLocale(page, locale);
     await page.locator("#profile-tr-subtitle").fill(title[locale]);

@@ -245,8 +245,7 @@ export async function fillSoftSkillItemForm(
   for (const locale of SOFT_SKILL_LOCALES) {
     await selectFormLanguage(page, locale);
     await translationField(page, "title").fill(item.title[locale]);
-    await translationField(page, "description")
-      .fill(item.description[locale]);
+    await translationField(page, "description").fill(item.description[locale]);
   }
 
   const createResponse = page.waitForResponse(

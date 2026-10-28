@@ -22,8 +22,13 @@ export async function generateCvDocxFromDb(
   });
   if (!draft) return null;
   const template = getResumeTemplate(DEFAULT_CV_TEMPLATE_VERSION);
+  const certifications =
+    typeof template.limits?.certifications === "number"
+      ? draft.certifications.slice(0, template.limits.certifications)
+      : draft.certifications;
   const document = TailoredResumeDocumentSchema.parse({
     ...draft,
+    certifications,
     schemaVersion: 1,
     locale,
     templateId: template.id,
@@ -40,8 +45,9 @@ export async function generateCvDocxFromDb(
     images.photo,
     images.companyLogos,
   );
+  const fileName = `CV_${draft.header.fullName.replace(/[^\w.-]+/g, "_")}_${locale}.docx`;
   return {
     buffer,
-    fileName: `CV_${draft.header.fullName.replace(/[^\w.-]+/g, "_")}_${locale}.docx`,
+    fileName,
   };
 }
