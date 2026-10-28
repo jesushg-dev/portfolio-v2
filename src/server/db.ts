@@ -19,6 +19,8 @@ if (
   globalForPrisma.prisma &&
   (!("portfolioTerminal" in globalForPrisma.prisma) ||
     !("processPage" in globalForPrisma.prisma) ||
+    !("jobSearch" in globalForPrisma.prisma) ||
+    !("applicationEmailEvent" in globalForPrisma.prisma) ||
     !("analyticsDailyStat" in globalForPrisma.prisma))
 ) {
   globalForPrisma.prisma = undefined;

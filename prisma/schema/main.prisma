@@ -67,6 +67,7 @@ model User {
 
   // Job Tracker
   Company               Company[]
+  JobSearch             JobSearch[]
   Application           Application[]
   ApplicationEvent      ApplicationEvent[]
   ApplicationEmail      ApplicationEmail[]
