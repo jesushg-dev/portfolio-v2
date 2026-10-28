@@ -32,7 +32,6 @@ const applicationEmailSchema = z.object({
   recipientName: z.string().trim().max(120).optional(),
   subject: z.string().trim().min(1).max(200),
   body: z.string().trim().min(1).max(8000),
-  trackOpens: z.boolean(),
   sendCopy: z.boolean(),
 });
 
@@ -54,6 +53,7 @@ interface ApplicationEmailDialogProps {
   hasCvFile: boolean;
   cvFileName?: string | null;
   locale: Locale;
+  viewerEmail?: string;
 }
 
 export function ApplicationEmailDialog({
@@ -63,6 +63,7 @@ export function ApplicationEmailDialog({
   hasCvFile,
   cvFileName,
   locale,
+  viewerEmail = "",
 }: ApplicationEmailDialogProps) {
   const t = useTranslations("admin.jobTracker.email");
 
@@ -80,6 +81,7 @@ export function ApplicationEmailDialog({
             hasCvFile={hasCvFile}
             cvFileName={cvFileName}
             locale={locale}
+            viewerEmail={viewerEmail}
             onClose={() => onOpenChange(false)}
           />
         ) : null}
@@ -94,6 +96,7 @@ interface ApplicationEmailFormProps {
   hasCvFile: boolean;
   cvFileName?: string | null;
   locale: Locale;
+  viewerEmail: string;
   onClose: () => void;
 }
 
@@ -103,6 +106,7 @@ export function ApplicationEmailForm({
   hasCvFile,
   cvFileName,
   locale,
+  viewerEmail,
   onClose,
 }: ApplicationEmailFormProps) {
   const utils = api.useUtils();
@@ -114,6 +118,10 @@ export function ApplicationEmailForm({
   const draftMutation = api.jobTrackerAdmin.draftApplicationEmail.useMutation();
   const sendMutation = api.jobTrackerAdmin.sendApplicationEmail.useMutation();
   const uploadFile = api.integrationsAdmin.uploadFile.useMutation();
+  const generatePdf = api.resumeEngineAdmin.generateTailoredPdf.useMutation();
+  const emailHistory = api.jobTrackerAdmin.getApplicationEmailHistory.useQuery({
+    applicationId,
+  });
 
   const [notes, setNotes] = useState<string | null>(null);
   const [drafted, setDrafted] = useState(true);
@@ -131,7 +139,6 @@ export function ApplicationEmailForm({
       recipientName: "",
       subject: "",
       body: "",
-      trackOpens: true,
       sendCopy: true,
     },
   });
@@ -147,7 +154,6 @@ export function ApplicationEmailForm({
               result.recipientName ?? form.getValues("recipientName") ?? "",
             subject: result.subject,
             body: result.body,
-            trackOpens: true,
             sendCopy: true,
           });
           setNotes(result.notes ?? null);
@@ -165,10 +171,7 @@ export function ApplicationEmailForm({
     async (file: File | undefined) => {
       if (!file) return;
       const lower = file.name.toLowerCase();
-      const isDoc =
-        lower.endsWith(".doc") ||
-        lower.endsWith(".docx") ||
-        lower.endsWith(".pdf");
+      const isDoc = lower.endsWith(".pdf");
       if (!isDoc) {
         toast.error(t("attachmentInvalidType"));
         return;
@@ -204,12 +207,37 @@ export function ApplicationEmailForm({
   );
 
   const handleSubmit = useCallback(
-    (values: ApplicationEmailFormValues) => {
+    async (values: ApplicationEmailFormValues) => {
       if (!hasAttachment) {
         toast.error(t("needCv"));
         return;
       }
 
+      let pdfAttachment = overrideAttachment;
+      if (!pdfAttachment && !cvFileName?.toLowerCase().endsWith(".pdf")) {
+        try {
+          const data = await utils.resumeEngineAdmin.getTailorPageData.fetch({
+            applicationId,
+          });
+          if (
+            !data.latestExport ||
+            data.latestExport.fileUrl !== data.application?.cvFile?.url
+          ) {
+            toast.error(t("pdfRequired"));
+            return;
+          }
+          const pdf = await generatePdf.mutateAsync({
+            exportId: data.latestExport.id,
+          });
+          pdfAttachment = { url: pdf.pdfDownloadUrl, name: pdf.pdfFileName };
+          setOverrideAttachment(pdfAttachment);
+        } catch (error) {
+          toast.error(t("pdfRequired"), {
+            description: error instanceof Error ? error.message : undefined,
+          });
+          return;
+        }
+      }
       const trimmedRecipientName = values.recipientName?.trim();
       sendMutation.mutate(
         {
@@ -221,13 +249,12 @@ export function ApplicationEmailForm({
             trimmedRecipientName && trimmedRecipientName.length > 0
               ? trimmedRecipientName
               : undefined,
-          trackOpens: values.trackOpens,
           sendCopy: values.sendCopy,
           locale,
-          ...(overrideAttachment
+          ...(pdfAttachment
             ? {
-                attachmentUrl: overrideAttachment.url,
-                attachmentName: overrideAttachment.name,
+                attachmentUrl: pdfAttachment.url,
+                attachmentName: pdfAttachment.name,
               }
             : {}),
         },
@@ -255,6 +282,8 @@ export function ApplicationEmailForm({
     },
     [
       applicationId,
+      cvFileName,
+      generatePdf,
       hasAttachment,
       locale,
       onClose,
@@ -267,13 +296,21 @@ export function ApplicationEmailForm({
   );
 
   const canDraft = capabilities.data?.hasAiProvider ?? false;
+  const lastCompanyEmail = emailHistory.data?.find(
+    (email) =>
+      email.sentAt &&
+      email.recipientEmail.trim().toLowerCase() !==
+        viewerEmail.trim().toLowerCase(),
+  )?.recipientEmail;
   const watchToEmail = useWatch({ control: form.control, name: "toEmail" });
   const canSend =
     hasAttachment &&
     (capabilities.data?.canSendEmail ?? false) &&
     drafted &&
     Boolean(watchToEmail?.trim()) &&
-    !uploadFile.isPending;
+    !uploadFile.isPending &&
+    !generatePdf.isPending &&
+    !sendMutation.isPending;
 
   return (
     <Form {...form}>
@@ -304,7 +341,7 @@ export function ApplicationEmailForm({
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".doc,.docx,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
+                accept=".pdf,application/pdf"
                 className="sr-only"
                 onChange={(e) => {
                   void handleReplaceAttachment(e.target.files?.[0]);
@@ -385,6 +422,21 @@ export function ApplicationEmailForm({
                   )}
                 />
               </div>
+              {lastCompanyEmail ? (
+                <Button
+                  type="button"
+                  variant="link"
+                  size="sm"
+                  className="h-auto p-0"
+                  onClick={() =>
+                    form.setValue("toEmail", lastCompanyEmail, {
+                      shouldValidate: true,
+                    })
+                  }
+                >
+                  {t("useLastCompanyRecipient", { email: lastCompanyEmail })}
+                </Button>
+              ) : null}
 
               <FormField
                 control={form.control}
@@ -439,25 +491,7 @@ export function ApplicationEmailForm({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="trackOpens"
-                render={({ field }) => (
-                  <FormCheckboxItem
-                    label={t("trackOpensLabel")}
-                    description={t("trackOpensHint")}
-                  >
-                    <Checkbox
-                      id="app-email-track-opens"
-                      aria-label={t("trackOpensLabel")}
-                      checked={field.value}
-                      onCheckedChange={(checked) =>
-                        field.onChange(checked === true)
-                      }
-                    />
-                  </FormCheckboxItem>
-                )}
-              />
+              <p className="text-sm text-muted-foreground">{t("providerTrackingHint")}</p>
             </div>
           ) : (
             <p className="text-muted-foreground text-sm">{t("draftHint")}</p>

@@ -1,5 +1,8 @@
 import { decode } from "@toon-format/toon";
-import { buildTailoredResumePrompt } from "./tailor-resume-prompt";
+import {
+  buildTailoredResumePrompt,
+  TAILORED_RESUME_PROMPT_VERSION,
+} from "./tailor-resume-prompt";
 import { resumeSelectionFixture } from "../tailored-resume.fixture";
 jest.mock("openai", () => ({ __esModule: true, default: jest.fn() }));
 jest.mock("@google/genai", () => ({ GoogleGenAI: jest.fn() }));
@@ -36,6 +39,31 @@ const response = {
   schemaVersion: 1,
   locale: "en",
   aiScore: 90,
+  matchAnalysis: {
+    scoreBreakdown: {
+      technologies: {
+        score: 18,
+        evidence: "Selected CMS evidence supports this dimension.",
+      },
+      experience: {
+        score: 18,
+        evidence: "Selected CMS evidence supports this dimension.",
+      },
+      operations: {
+        score: 18,
+        evidence: "Selected CMS evidence supports this dimension.",
+      },
+      collaboration: {
+        score: 18,
+        evidence: "Selected CMS evidence supports this dimension.",
+      },
+      prerequisites: {
+        score: 18,
+        evidence: "Selected CMS evidence supports this dimension.",
+      },
+    },
+    strengths: ["Relevant delivery supported by the selected experience."],
+  },
   selection: resumeSelectionFixture(context.drafts.en),
   fields: resumeTextFields(context.drafts.en, "v2").map(({ id, text }) => ({
     id,
@@ -98,7 +126,7 @@ describe("automatic and manual resume contract", () => {
     const sources = input.sources;
     expect(input.facts.experiences[0]).not.toHaveProperty("responsibilities");
     expect(sources.en).not.toHaveProperty("facts");
-    expect(input.promptVersion).toBe("tailored-cv/2026-10-23.2");
+    expect(input.promptVersion).toBe(TAILORED_RESUME_PROMPT_VERSION);
     expect(sources.en.fields).toContainEqual(
       expect.objectContaining({
         id: "experience.exp-0.bullet.resp-0-1",
@@ -112,6 +140,9 @@ describe("automatic and manual resume contract", () => {
     ).toBe(false);
     expect(prompt.systemPrompt).toContain(
       "Never equate general professional English proficiency with CEFR C1",
+    );
+    expect(prompt.systemPrompt).toContain(
+      "mirror the exact naming, casing, and phrasing used in the job description",
     );
   });
   it("produces exactly the document accepted by manual validation", async () => {

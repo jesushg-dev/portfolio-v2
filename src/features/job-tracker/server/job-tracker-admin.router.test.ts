@@ -23,6 +23,10 @@ jest.mock("@/lib/google-calendar/connection", () => ({
 jest.mock("@/features/job-tracker/lib/import-job-from-url", () => ({
   importJobFromUrl: jest.fn(),
 }));
+
+jest.mock("@/features/job-tracker/server/active-job-search", () => ({
+  getOpenJobSearch: jest.fn().mockResolvedValue({ id: "search-1" }),
+}));
 jest.mock("@/features/cv/lib/load-cv-structured-draft", () => ({
   loadCvStructuredDraft: jest.fn(),
 }));
@@ -211,6 +215,9 @@ describe("jobTrackerAdminRouter", () => {
         create: jest.fn().mockResolvedValue(event),
         findMany: jest.fn().mockResolvedValue([event]),
       },
+      application: {
+        findFirst: jest.fn().mockResolvedValue({ id: "app-1" }),
+      },
     };
     const caller = createRouterCaller(
       jobTrackerAdminRouter,
@@ -284,6 +291,10 @@ describe("jobTrackerAdminRouter", () => {
         recipientEmail: true,
         subject: true,
         attachmentName: true,
+        deliveryStatus: true,
+        deliveredAt: true,
+        trackingSource: true,
+        recipientKind: true,
         trackingEnabled: true,
         openCount: true,
         firstOpenedAt: true,
@@ -338,7 +349,11 @@ describe("jobTrackerAdminRouter", () => {
       typeof fetch | undefined;
     const fetchMock = jest.fn().mockResolvedValue({
       ok: true,
-      arrayBuffer: () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer),
+      arrayBuffer: () =>
+        Promise.resolve(
+          new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x34])
+            .buffer,
+        ),
     });
     Reflect.set(globalThis, "fetch", fetchMock);
     const previousBaseUrl = process.env.BETTER_AUTH_URL;
@@ -346,17 +361,16 @@ describe("jobTrackerAdminRouter", () => {
     const emailRecord = {
       id: "mail-1",
       trackingEnabled: true,
-      trackingTokenHash: "stored-hash",
       sentAt: null,
     };
     const applicationEmail = {
       upsert: jest
         .fn()
+        .mockResolvedValue(emailRecord)
         .mockResolvedValueOnce(emailRecord)
         .mockResolvedValueOnce({
           id: "mail-2",
           trackingEnabled: false,
-          trackingTokenHash: null,
           sentAt: null,
         }),
       update: jest.fn().mockResolvedValue(emailRecord),
@@ -385,23 +399,20 @@ describe("jobTrackerAdminRouter", () => {
         toEmail: "jobs@acme.com",
         subject: "Application",
         body: "Hello,\nthere.\n\nPlease find my CV attached.",
-        trackOpens: true,
         locale: "es",
       });
 
       expect(result.emailId).toBe("resend-1");
       expect(result.copySent).toBe(true);
-      expect(applicationEmail.upsert).toHaveBeenCalledTimes(1);
+      expect(applicationEmail.upsert).toHaveBeenCalledTimes(2);
       const sentMessage = send.mock.calls[0]?.[0];
       expect(sentMessage?.text).not.toContain("imagen de seguimiento");
       expect(sentMessage?.html).not.toContain("imagen de seguimiento");
       expect(sentMessage?.html).toContain("Hello,<br />there.");
       expect(sentMessage?.html).not.toContain("&nbsp;");
       const sentHtml = sentMessage?.html ?? "";
-      expect(sentHtml).toContain(
-        "https://portfolio.example/api/job-tracker/email-open?token=",
-      );
-      expect(applicationEmail.update).toHaveBeenCalledTimes(1);
+      expect(sentHtml).not.toContain("email-open?token=");
+      expect(applicationEmail.update).toHaveBeenCalledTimes(2);
 
       const copyMessage = send.mock.calls[1]?.[0];
       expect(copyMessage?.to).toBe("owner@example.com");
@@ -423,8 +434,8 @@ describe("jobTrackerAdminRouter", () => {
       expect(untrackedMessage?.html).not.toContain("email-open?token=");
       expect(untrackedMessage?.text).not.toContain("tracking image");
       expect(send.mock.calls).toHaveLength(3);
-      expect(applicationEmail.upsert).toHaveBeenCalledTimes(2);
-      expect(applicationEmail.update).toHaveBeenCalledTimes(2);
+      expect(applicationEmail.upsert).toHaveBeenCalledTimes(3);
+      expect(applicationEmail.update).toHaveBeenCalledTimes(3);
     } finally {
       if (previousFetch) {
         Reflect.set(globalThis, "fetch", previousFetch);

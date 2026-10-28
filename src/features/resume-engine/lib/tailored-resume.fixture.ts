@@ -149,6 +149,31 @@ export function resumeResponseFixture(
     locale: draft.detectedLocale,
     selection,
     aiScore: 85,
+    matchAnalysis: {
+      scoreBreakdown: {
+        technologies: {
+          score: 17,
+          evidence: "Selected CMS evidence supports this dimension.",
+        },
+        experience: {
+          score: 17,
+          evidence: "Selected CMS evidence supports this dimension.",
+        },
+        operations: {
+          score: 17,
+          evidence: "Selected CMS evidence supports this dimension.",
+        },
+        collaboration: {
+          score: 17,
+          evidence: "Selected CMS evidence supports this dimension.",
+        },
+        prerequisites: {
+          score: 17,
+          evidence: "Selected CMS evidence supports this dimension.",
+        },
+      },
+      strengths: ["Relevant delivery supported by the selected experience."],
+    },
     fields: resumeTextFields(selected, templateId).map(({ id, text }) => ({
       id,
       text,

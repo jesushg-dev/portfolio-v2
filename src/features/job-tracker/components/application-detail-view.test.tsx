@@ -5,10 +5,12 @@ import type { ApplicationDetail } from "@/features/job-tracker/types";
 
 const mockDeleteMutateAsync = jest.fn();
 const mockRouterPush = jest.fn();
+const mockRouterReplace = jest.fn();
 
 jest.mock("@/i18n/routing", () => ({
   useRouter: () => ({
     push: mockRouterPush,
+    replace: mockRouterReplace,
     refresh: jest.fn(),
   }),
   Link: ({
@@ -54,6 +56,18 @@ jest.mock("@/trpc/react", () => ({
           isPending: false,
         }),
       },
+      updateApplicationStatus: {
+        useMutation: () => ({ mutateAsync: jest.fn(), isPending: false }),
+      },
+      updateApplication: {
+        useMutation: () => ({ mutateAsync: jest.fn(), isPending: false }),
+      },
+      closeJobSearch: {
+        useMutation: () => ({ mutateAsync: jest.fn(), isPending: false }),
+      },
+      snoozeGhostNudge: {
+        useMutation: () => ({ mutateAsync: jest.fn(), isPending: false }),
+      },
     },
   },
 }));
@@ -63,6 +77,13 @@ jest.mock("@/features/job-tracker/components/application-timeline", () => ({
     <div data-testid="application-timeline-mock">Timeline View</div>
   ),
 }));
+
+jest.mock(
+  "@/features/job-tracker/components/application-event-result-dialog",
+  () => ({
+    ApplicationEventResultDialog: () => null,
+  }),
+);
 
 jest.mock("@/features/resume-engine/components/resume-tailor-workflow", () => ({
   ResumeTailorWorkflow: () => (
@@ -136,16 +157,16 @@ describe("ApplicationDetailView", () => {
     });
     const mobileNav = tabsNavs[0];
     expect(
-      within(mobileNav).getByRole("button", { name: "Details" }),
+      within(mobileNav).getByRole("tab", { name: "Details" }),
     ).toBeInTheDocument();
     expect(
-      within(mobileNav).getByRole("button", { name: "Timeline" }),
+      within(mobileNav).getByRole("tab", { name: "Timeline" }),
     ).toBeInTheDocument();
     expect(
-      within(mobileNav).getByRole("button", { name: "Tailor CV" }),
+      within(mobileNav).getByRole("tab", { name: "Tailor CV" }),
     ).toBeInTheDocument();
     expect(
-      within(mobileNav).getByRole("button", { name: "Emails" }),
+      within(mobileNav).getByRole("tab", { name: "Emails" }),
     ).toBeInTheDocument();
   });
 
@@ -167,17 +188,13 @@ describe("ApplicationDetailView", () => {
     expect(screen.getAllByText("Job description").length).toBeGreaterThan(0);
 
     // Click Timeline tab in mobile nav
-    fireEvent.click(
-      within(mobileNav).getByRole("button", { name: "Timeline" }),
-    );
+    fireEvent.click(within(mobileNav).getByRole("tab", { name: "Timeline" }));
     expect(
       screen.getAllByTestId("application-timeline-mock").length,
     ).toBeGreaterThan(0);
 
     // Click Tailor CV tab in mobile nav
-    fireEvent.click(
-      within(mobileNav).getByRole("button", { name: "Tailor CV" }),
-    );
+    fireEvent.click(within(mobileNav).getByRole("tab", { name: "Tailor CV" }));
     expect(
       screen.getAllByTestId("resume-tailor-workflow-mock").length,
     ).toBeGreaterThan(0);
@@ -192,7 +209,7 @@ describe("ApplicationDetailView", () => {
       />,
     );
 
-    fireEvent.click(screen.getAllByRole("button", { name: "Emails" })[0]);
-    expect(screen.getByText("Sent emails")).toBeInTheDocument();
+    fireEvent.click(screen.getAllByRole("tab", { name: "Emails" })[0]);
+    expect(screen.getAllByText("Sent emails").length).toBeGreaterThan(0);
   });
 });
