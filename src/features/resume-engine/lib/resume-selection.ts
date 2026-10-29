@@ -169,7 +169,7 @@ export function selectResumeSource(
       );
       return {
         ...skill,
-        items: skill.items.filter((item) => selected.items.includes(item)),
+        items: selected.items.filter((item) => skill.items.includes(item)),
       };
     });
   if (source.experiences.length && !experiences.length)

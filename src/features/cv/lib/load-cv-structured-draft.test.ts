@@ -161,7 +161,9 @@ describe("loadCvStructuredDraft", () => {
     expect(draft?.experiences[0]?.employmentType).toBe("FULL_TIME");
     expect(draft?.education[0]?.degreeName).toBe("BSc");
     expect(draft?.certifications[0]?.title).toBe("Solutions Architect");
-    expect(draft?.skills).toEqual([{ category: "FRONTEND", items: ["React"] }]);
+    expect(draft?.skills).toEqual([
+      { id: "group-1", category: "FRONTEND", items: ["React"] },
+    ]);
     const tailored = await loadCvStructuredDraft(db as never, "user-1", {
       locale: "en",
       evidenceScope: "all",
