@@ -1,14 +1,21 @@
 "use client";
 
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { motion, type Variants, useReducedMotion } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  type Variants,
+  useReducedMotion,
+} from "motion/react";
 import { MediaImage } from "@/components/shared/media-image";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
   Check,
+  ChevronDown,
   Code2,
   Database,
   Globe,
@@ -374,9 +381,12 @@ function getVisualContainerClasses(type: string): string {
   }
 }
 
+const INITIAL_VISIBLE_COUNT = 5;
+
 export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
   const t = useTranslations("main.services");
   const shouldReduceMotion = useReducedMotion();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -412,6 +422,11 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
     return null;
   }
 
+  const hasMore = dbServices.length > INITIAL_VISIBLE_COUNT;
+  const visibleServices = isExpanded
+    ? dbServices
+    : dbServices.slice(0, INITIAL_VISIBLE_COUNT);
+
   return (
     <motion.div
       variants={containerVariants}
@@ -420,71 +435,104 @@ export const ServicesBento: FC<ServicesBentoProps> = ({ dbServices = [] }) => {
       viewport={{ once: true, margin: "-80px" }}
       className="grid w-full gap-5 md:grid-cols-12"
     >
-      {dbServices.map((service, index) => {
-        const IconComponent = resolveIcon(service.icon, Code2);
-        const visualType = getVisualType(service);
-        const colSpanClass = getColSpan(index, dbServices.length);
+      <AnimatePresence initial={false}>
+        {visibleServices.map((service, index) => {
+          const IconComponent = resolveIcon(service.icon, Code2);
+          const visualType = getVisualType(service);
+          const colSpanClass = getColSpan(index, dbServices.length);
 
-        return (
-          <motion.article
-            key={service.id}
-            variants={itemVariants}
-            onPointerMove={handlePointerMove}
-            onPointerLeave={handlePointerLeave}
-            className={cn(
-              "b-card-glow group border-border bg-card hover:border-primary/50 relative flex flex-col justify-between overflow-hidden rounded-[2rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-xl",
-              colSpanClass,
-            )}
-          >
-            {/* Top Interactive Micro-Visual */}
-            <div className={getVisualContainerClasses(visualType)}>
-              {visualType === "frontend" && (
-                <FrontendVisual service={service} />
+          return (
+            <motion.article
+              key={service.id}
+              variants={itemVariants}
+              initial={shouldReduceMotion ? false : "hidden"}
+              animate={shouldReduceMotion ? undefined : "visible"}
+              exit={
+                shouldReduceMotion
+                  ? undefined
+                  : { opacity: 0, y: 16, transition: { duration: 0.25 } }
+              }
+              onPointerMove={handlePointerMove}
+              onPointerLeave={handlePointerLeave}
+              className={cn(
+                "b-card-glow group border-border bg-card hover:border-primary/50 relative flex flex-col justify-between overflow-hidden rounded-[2rem] border p-6 shadow-xs transition-all duration-300 hover:shadow-xl",
+                colSpanClass,
               )}
-              {visualType === "backend" && <BackendVisual service={service} />}
-              {visualType === "mobile" && <MobileVisual />}
-              {visualType === "devops" && <DevOpsVisual service={service} />}
-              {visualType === "architecture" && <ArchitectureVisual />}
-              {visualType === "security" && (
-                <SecurityVisual service={service} />
-              )}
-              {visualType === "default" && (
-                <DefaultVisual
-                  IconComponent={IconComponent}
-                  service={service}
-                />
-              )}
-            </div>
+            >
+              {/* Top Interactive Micro-Visual */}
+              <div className={getVisualContainerClasses(visualType)}>
+                {visualType === "frontend" && (
+                  <FrontendVisual service={service} />
+                )}
+                {visualType === "backend" && (
+                  <BackendVisual service={service} />
+                )}
+                {visualType === "mobile" && <MobileVisual />}
+                {visualType === "devops" && <DevOpsVisual service={service} />}
+                {visualType === "architecture" && <ArchitectureVisual />}
+                {visualType === "security" && (
+                  <SecurityVisual service={service} />
+                )}
+                {visualType === "default" && (
+                  <DefaultVisual
+                    IconComponent={IconComponent}
+                    service={service}
+                  />
+                )}
+              </div>
 
-            {/* Bottom Content Area */}
-            <div>
-              <div className="flex items-center gap-3">
-                <span className="border-primary/15 bg-primary/8 text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30 relative z-10 flex size-11 shrink-0 items-center justify-center rounded-2xl border shadow-xs transition-all duration-300 group-hover:shadow-md">
-                  <IconComponent className="size-5" aria-hidden={true} />
-                </span>
-                <h3 className="text-foreground group-hover:text-primary text-xl font-bold tracking-tight transition-colors">
-                  {service.title}
-                </h3>
+              {/* Bottom Content Area */}
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="border-primary/15 bg-primary/8 text-primary group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-primary/30 relative z-10 flex size-11 shrink-0 items-center justify-center rounded-2xl border shadow-xs transition-all duration-300 group-hover:shadow-md">
+                    <IconComponent className="size-5" aria-hidden={true} />
+                  </span>
+                  <h3 className="text-foreground group-hover:text-primary text-xl font-bold tracking-tight transition-colors">
+                    {service.title}
+                  </h3>
+                  {service.badge ? (
+                    <span className="bg-primary/10 text-primary ml-auto hidden shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:block">
+                      {service.badge}
+                    </span>
+                  ) : null}
+                </div>
+
+                <p className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
+                  {service.description}
+                </p>
+
                 {service.badge ? (
-                  <span className="bg-primary/10 text-primary ml-auto hidden shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:block">
+                  <span className="bg-primary/10 text-primary mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:hidden">
                     {service.badge}
                   </span>
                 ) : null}
               </div>
+            </motion.article>
+          );
+        })}
+      </AnimatePresence>
 
-              <p className="text-muted-foreground mt-3 text-sm leading-relaxed sm:text-base">
-                {service.description}
-              </p>
-
-              {service.badge ? (
-                <span className="bg-primary/10 text-primary mt-3 inline-block shrink-0 rounded-full px-3 py-1 text-xs font-bold sm:hidden">
-                  {service.badge}
-                </span>
-              ) : null}
-            </div>
-          </motion.article>
-        );
-      })}
+      {/* Show more / Show less toggle */}
+      {hasMore && (
+        <div className="flex justify-center py-2 md:col-span-12">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setIsExpanded((prev) => !prev)}
+            aria-expanded={isExpanded}
+            className="text-muted-foreground hover:text-foreground inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-sm font-semibold transition-colors"
+          >
+            <span>{isExpanded ? t("seeLess") : t("seeMore")}</span>
+            <ChevronDown
+              className={cn(
+                "size-4 transition-transform duration-300",
+                isExpanded && "rotate-180",
+              )}
+              aria-hidden="true"
+            />
+          </Button>
+        </div>
+      )}
 
       {/* Full-width CTA Banner */}
       <motion.div variants={itemVariants} className="md:col-span-12">
