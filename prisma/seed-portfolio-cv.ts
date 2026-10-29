@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { ensureCvSkillIds } from "../src/features/cv/lib/cv-skill-catalog";
 import type {
   CvContactType,
   CvEmploymentType,
@@ -208,11 +209,23 @@ export async function seedPortfolioCv(
   // 6. CvTechnicalSkill
   await prisma.cvTechnicalSkill.deleteMany({ where: { userId } });
   for (const section of data.technicalSkills) {
+    const skillIds = await ensureCvSkillIds(
+      prisma,
+      userId,
+      section.items,
+      section.category,
+    );
     await prisma.cvTechnicalSkill.create({
       data: {
         userId,
         category: section.category,
-        items: section.items,
+        selections: {
+          create: skillIds.map((skillId, order) => ({
+            skillId,
+            order,
+            visible: true,
+          })),
+        },
         order: section.order,
       },
     });

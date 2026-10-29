@@ -14,18 +14,23 @@ interface PortfolioNowSeed {
     timezone: string;
     githubUsername: string;
     statusEmoji: string;
+    statusSchedule: {
+      startMinute: number;
+      endMinute: number;
+      weekdays: number[];
+      emoji: string;
+      body: LocaleMap;
+    }[];
+    readingCoverUrl: string;
+    watchedCoverUrl: string;
     readingTitle: string;
     readingAuthors: string;
     readingProgress: number;
     watchedTitle: string;
     watchedRating: number;
-    githubRepo: string;
-    githubHref: string;
     photoUrls: string[];
     statusBody: LocaleMap;
     statusRelative: LocaleMap;
-    githubBody: LocaleMap;
-    githubRelative: LocaleMap;
   };
   focuses: NowFocusSeed[];
 }
@@ -53,13 +58,30 @@ export async function seedPortfolioNow(
       timezone: s.timezone,
       githubUsername: s.githubUsername,
       statusEmoji: s.statusEmoji,
+      statusSchedule: {
+        create: s.statusSchedule.map((slot) => ({
+          startMinute: slot.startMinute,
+          endMinute: slot.endMinute,
+          weekdays: slot.weekdays,
+          emoji: slot.emoji,
+          translations: {
+            create: languages.map((language) => ({
+              appLanguageId: language.id,
+              body:
+                slot.body[language.code as keyof LocaleMap] ??
+                slot.body.en ??
+                "",
+            })),
+          },
+        })),
+      },
+      readingCoverUrl: s.readingCoverUrl || null,
+      watchedCoverUrl: s.watchedCoverUrl || null,
       readingTitle: s.readingTitle,
       readingAuthors: s.readingAuthors,
       readingProgress: s.readingProgress,
       watchedTitle: s.watchedTitle,
       watchedRating: s.watchedRating,
-      githubRepo: s.githubRepo,
-      githubHref: s.githubHref,
       photoUrls: s.photoUrls,
       NowSettingsTranslation: {
         create: languages.map((lang) => {
@@ -68,8 +90,6 @@ export async function seedPortfolioNow(
             appLanguageId: lang.id,
             statusBody: s.statusBody[code] ?? s.statusBody.es ?? "",
             statusRelative: s.statusRelative[code] ?? s.statusRelative.es ?? "",
-            githubBody: s.githubBody[code] ?? s.githubBody.es ?? "",
-            githubRelative: s.githubRelative[code] ?? s.githubRelative.es ?? "",
           };
         }),
       },

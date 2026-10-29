@@ -20,6 +20,9 @@ if (
   (!("portfolioTerminal" in globalForPrisma.prisma) ||
     !("processPage" in globalForPrisma.prisma) ||
     !("jobSearch" in globalForPrisma.prisma) ||
+    !("portfolioHeader" in globalForPrisma.prisma) ||
+    !("cvTechnicalSkillSelection" in globalForPrisma.prisma) ||
+    !("nowStatusSlot" in globalForPrisma.prisma) ||
     !("applicationEmailEvent" in globalForPrisma.prisma) ||
     !("analyticsDailyStat" in globalForPrisma.prisma))
 ) {

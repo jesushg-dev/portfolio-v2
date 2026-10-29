@@ -11,9 +11,18 @@ try {
   ]);
   const directory = path.resolve("scratch/email-history-backups");
   await mkdir(directory, { recursive: true });
-  const backup = path.join(directory, `before-resend-${new Date().toISOString().replace(/[:.]/g, "-")}.json`);
-  await writeFile(backup, JSON.stringify({ capturedAt: new Date(), emails, opens }, null, 2), { flag: "wx" });
-  console.log(JSON.stringify({ backup, emails: emails.length, opens: opens.length }));
+  const backup = path.join(
+    directory,
+    `before-resend-${new Date().toISOString().replace(/[:.]/g, "-")}.json`,
+  );
+  await writeFile(
+    backup,
+    JSON.stringify({ capturedAt: new Date(), emails, opens }, null, 2),
+    { flag: "wx" },
+  );
+  console.log(
+    JSON.stringify({ backup, emails: emails.length, opens: opens.length }),
+  );
 } finally {
   await client.$disconnect();
 }

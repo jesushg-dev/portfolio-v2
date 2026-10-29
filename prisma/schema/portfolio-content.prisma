@@ -185,6 +185,7 @@ model Skill {
   CertificateSkill  CertificateSkill[]
   ServiceSkill      ServiceSkill[]
   CvExperienceSkill CvExperienceSkill[]
+  cvTechnicalSelections CvTechnicalSkillSelection[]
   TimelineItemSkill TimelineItemSkill[]
 
   @@unique([userId, title])
@@ -539,13 +540,14 @@ model NowSettings {
   timezone               String                   @default("America/Mexico_City")
   githubUsername         String?
   statusEmoji            String                   @default("🚀")
+  statusSchedule         NowStatusSlot[]
+  readingCoverUrl        String?
+  watchedCoverUrl        String?
   readingTitle           String?
   readingAuthors         String?
   readingProgress        Int                      @default(0)
   watchedTitle           String?
   watchedRating          Int                      @default(0)
-  githubRepo             String?
-  githubHref             String?
   photoUrls              String[]                 @default([])
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime                 @updatedAt
@@ -557,8 +559,6 @@ model NowSettingsTranslation {
   createdAt      DateTime     @default(now())
   statusBody     String
   statusRelative String
-  githubBody     String
-  githubRelative String
   language       AppLanguage  @relation(fields: [appLanguageId], references: [id])
   NowSettings    NowSettings? @relation(fields: [nowSettingsId], references: [id], onDelete: Cascade)
   nowSettingsId  String?      @db.ObjectId
@@ -724,4 +724,28 @@ model TenantIntegration {
   updatedAt      DateTime  @updatedAt
 
   @@unique([userId, provider])
+}
+
+model NowStatusSlot {
+  id            String                     @id @default(auto()) @map("_id") @db.ObjectId
+  nowSettingsId String                     @db.ObjectId
+  settings      NowSettings                @relation(fields: [nowSettingsId], references: [id], onDelete: Cascade)
+  startMinute   Int
+  endMinute     Int
+  weekdays      Int[]
+  emoji         String                     @default("💼")
+  translations  NowStatusSlotTranslation[]
+
+  @@index([nowSettingsId])
+}
+
+model NowStatusSlotTranslation {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  slotId        String        @db.ObjectId
+  slot          NowStatusSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  appLanguageId String        @db.ObjectId
+  language      AppLanguage   @relation(fields: [appLanguageId], references: [id])
+  body          String
+
+  @@unique([slotId, appLanguageId])
 }

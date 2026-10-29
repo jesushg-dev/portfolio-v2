@@ -15,6 +15,7 @@ generator client {
 // ============================================================================
 
 model User {
+  portfolioHeader PortfolioHeader?
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   name             String
   email            String   @unique
@@ -88,6 +89,7 @@ model User {
 // ============================================================================
 
 model AppLanguage {
+  portfolioHeaderTranslations PortfolioHeaderTranslation[]
   id                               String                             @id @default(auto()) @map("_id") @db.ObjectId
   code                             String                             @unique
   name                             String
@@ -114,6 +116,7 @@ model AppLanguage {
   UsesClarificationTranslation     UsesClarificationTranslation[]
   NowSettingsTranslation           NowSettingsTranslation[]
   NowFocusTranslation              NowFocusTranslation[]
+  NowStatusSlotTranslation         NowStatusSlotTranslation[]
   ProcessPageTranslation           ProcessPageTranslation[]
   SoftSkillsMetricTranslation      SoftSkillsMetricTranslation[]
 }

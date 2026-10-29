@@ -1,88 +1,144 @@
 {
   "settings": {
-    "timezone": "America/Mexico_City",
-    "githubUsername": "jesushg",
-    "statusEmoji": "🚀",
-    "readingTitle": "The Pragmatic Programmer",
-    "readingAuthors": "David Thomas & Andrew Hunt",
-    "readingProgress": 62,
-    "watchedTitle": "The Social Dilemma",
-    "watchedRating": 4,
-    "githubRepo": "jesushg/portfolio",
-    "githubHref": "https://github.com/jesushg",
+    "timezone": "America/Managua",
+    "githubUsername": "jesushg-dev",
+    "statusEmoji": "💻",
+    "readingTitle": "Hábitos atómicos",
+    "readingAuthors": "James Clear",
+    "readingProgress": 30,
+    "watchedTitle": "Resident Evil: Welcome to Raccoon City",
+    "watchedRating": 0,
     "photoUrls": [],
     "statusBody": {
-      "en": "Finally automated my CI/CD pipeline end-to-end — small win, big relief.",
-      "es": "Por fin automaticé mi pipeline de CI/CD de punta a punta — pequeña victoria, gran alivio.",
-      "nl": "Eindelijk mijn CI/CD-pipeline end-to-end geautomatiseerd — kleine win, grote opluchting."
+      "en": "Focused on new opportunities, my portfolio and learning languages.",
+      "es": "Enfocado en nuevas oportunidades, mi portafolio y el aprendizaje de idiomas.",
+      "nl": "Gericht op nieuwe kansen, mijn portfolio en het leren van talen."
     },
     "statusRelative": {
-      "en": "4 hours ago",
-      "es": "hace 4 horas",
-      "nl": "4 uur geleden"
+      "en": "",
+      "es": "",
+      "nl": ""
     },
-    "githubBody": {
-      "en": "Opened a pull request in",
-      "es": "Abrí un pull request en",
-      "nl": "Een pull request geopend in"
-    },
-    "githubRelative": {
-      "en": "2 days ago",
-      "es": "hace 2 días",
-      "nl": "2 dagen geleden"
-    }
+    "statusSchedule": [
+      {
+        "startMinute": 420,
+        "endMinute": 510,
+        "weekdays": [1, 2, 3, 4, 5],
+        "emoji": "📚",
+        "body": {
+          "en": "Studying languages",
+          "es": "Estudiando idiomas",
+          "nl": "Talen leren"
+        }
+      },
+      {
+        "startMinute": 510,
+        "endMinute": 720,
+        "weekdays": [1, 2, 3, 4, 5],
+        "emoji": "🔎",
+        "body": {
+          "en": "Job searching and preparing applications",
+          "es": "Buscando empleo y preparando postulaciones",
+          "nl": "Werk zoeken en sollicitaties voorbereiden"
+        }
+      },
+      {
+        "startMinute": 720,
+        "endMinute": 780,
+        "weekdays": [0, 1, 2, 3, 4, 5, 6],
+        "emoji": "🍽️",
+        "body": {
+          "en": "Lunch break",
+          "es": "Almorzando",
+          "nl": "Lunchpauze"
+        }
+      },
+      {
+        "startMinute": 780,
+        "endMinute": 1080,
+        "weekdays": [1, 2, 3, 4, 5],
+        "emoji": "💻",
+        "body": {
+          "en": "Improving my portfolio and CV tools",
+          "es": "Mejorando mi portafolio y las herramientas de CV",
+          "nl": "Mijn portfolio en cv-tools verbeteren"
+        }
+      },
+      {
+        "startMinute": 1080,
+        "endMinute": 1200,
+        "weekdays": [0, 1, 2, 3, 4, 5, 6],
+        "emoji": "🏡",
+        "body": {
+          "en": "Dinner and family time",
+          "es": "Cena y tiempo en familia",
+          "nl": "Avondeten en tijd met familie"
+        }
+      },
+      {
+        "startMinute": 1200,
+        "endMinute": 1320,
+        "weekdays": [0, 1, 2, 3, 4, 5, 6],
+        "emoji": "🎮",
+        "body": {
+          "en": "Recreation and relaxing",
+          "es": "Recreación y descanso",
+          "nl": "Ontspanning en recreatie"
+        }
+      },
+      {
+        "startMinute": 1320,
+        "endMinute": 420,
+        "weekdays": [0, 1, 2, 3, 4, 5, 6],
+        "emoji": "😴",
+        "body": {
+          "en": "Sleeping",
+          "es": "Durmiendo",
+          "nl": "Slapen"
+        }
+      }
+    ],
+    "readingCoverUrl": "",
+    "watchedCoverUrl": ""
   },
   "focuses": [
     {
       "order": 0,
       "label": {
-        "en": "Ideas",
-        "es": "Ideas",
-        "nl": "Ideeën"
+        "en": "Job search",
+        "es": "Búsqueda de empleo",
+        "nl": "Werk zoeken"
       },
       "body": {
-        "en": "Collecting ideas to make this site even better",
-        "es": "Reuniendo ideas para hacer este sitio aún mejor",
-        "nl": "Ideeën verzamelen om deze site nog beter te maken"
+        "en": "Finding opportunities and preparing focused applications with a tailored CV.",
+        "es": "Buscando oportunidades y preparando postulaciones con un CV adaptado a cada oferta.",
+        "nl": "Kansen zoeken en gerichte sollicitaties met een afgestemd cv voorbereiden."
       }
     },
     {
       "order": 1,
-      "label": {
-        "en": "Team",
-        "es": "Equipo",
-        "nl": "Team"
-      },
-      "body": {
-        "en": "Leading a small team and mentoring where I can",
-        "es": "Liderando un equipo pequeño y mentorando donde puedo",
-        "nl": "Een klein team leiden en mentoren waar ik kan"
-      }
-    },
-    {
-      "order": 2,
       "label": {
         "en": "Portfolio",
         "es": "Portafolio",
         "nl": "Portfolio"
       },
       "body": {
-        "en": "Automating the boring parts of this portfolio so it (mostly) stays up to date",
-        "es": "Automatizando las partes aburridas de este portafolio para que (casi) se mantenga al día",
-        "nl": "De saaie delen van dit portfolio automatiseren zodat het (grotendeels) up-to-date blijft"
+        "en": "Improving the portfolio, multilingual CV generation and Job Tracker.",
+        "es": "Mejorando el portafolio, la generación multilingüe de CV y Job Tracker.",
+        "nl": "Het portfolio, de meertalige cv-generator en Job Tracker verbeteren."
       }
     },
     {
-      "order": 3,
+      "order": 2,
       "label": {
-        "en": "Open source",
-        "es": "Open source",
-        "nl": "Open source"
+        "en": "Languages",
+        "es": "Idiomas",
+        "nl": "Talen"
       },
       "body": {
-        "en": "Tinkering with open-source projects when I find the time",
-        "es": "Jugando con proyectos open-source cuando encuentro tiempo",
-        "nl": "Knutselen aan open-sourceprojecten wanneer ik tijd heb"
+        "en": "Building a regular language study routine on weekday mornings.",
+        "es": "Manteniendo una rutina de estudio de idiomas por las mañanas, de lunes a viernes.",
+        "nl": "Op doordeweekse ochtenden regelmatig talen leren."
       }
     }
   ]

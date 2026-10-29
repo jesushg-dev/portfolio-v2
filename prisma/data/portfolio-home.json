@@ -34,18 +34,6 @@
       },
       {
         "command": {
-          "es": "echo $USER",
-          "en": "echo $USER",
-          "nl": "echo $USER"
-        },
-        "output": {
-          "es": "Jesús Enmanuel Hernández González",
-          "en": "Jesús Enmanuel Hernández González",
-          "nl": "Jesús Enmanuel Hernández González"
-        }
-      },
-      {
-        "command": {
           "es": "cat ~/profile.json",
           "en": "cat ~/profile.json",
           "nl": "cat ~/profile.json"
@@ -57,5 +45,10 @@
         }
       }
     ]
+  },
+  "about": {
+    "es": "Senior Software Engineer con +6 años de trayectoria y graduado como Ingeniero en Computación (UNI), especializándome en arquitecturas distribuidas (.NET Core, Node.js/Nest.js, React/Next.js y SQL/NoSQL) en entornos corporativos de alta demanda como Walmart y Claro. Mi enfoque combina rigor arquitectónico (Clean Architecture, DDD, principios SOLID) con impacto de negocio directo: he dirigido la descomposición de monolitos legacy a microservicios RESTful/GraphQL, **reducido el MTTR en incidentes críticos en un 40%** y guiado equipos de ingeniería mediante revisiones de código estructuradas, automatización CI/CD y prácticas de desarrollo seguro (DevSecOps).",
+    "en": "Senior Software Engineer with 6+ years designing distributed enterprise systems (.NET Core, Node.js/Nest.js, React/Next.js, SQL/NoSQL) and holding a degree in Computer Engineering. Experienced within high-compliance corporate ecosystems (Walmart, Claro), I combine architectural rigor (Clean Architecture, DDD, SOLID) with direct business outcomes: led legacy monolith migrations to resilient microservices, **reduced critical incident MTTR by 40%**, and elevated team capabilities through structured code reviews, CI/CD automation, and DevSecOps practices.",
+    "nl": "Senior Software Engineer met 6+ jaar ervaring in het ontwerpen van gedistribueerde enterprise-systemen (.NET Core, Node.js, React/Next.js, SQL/NoSQL) en een diploma in Computertechniek. Ik combineer architectonische precisie (Clean Architecture, DDD, SOLID) met directe bedrijfsresultaten: leiding gegeven aan migraties van legacy-monolieten naar microservices, **MTTR met 40% verlaagd** en engineeringteams begeleid."
   }
 }

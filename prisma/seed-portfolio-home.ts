@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import type { PrismaClient } from "@prisma/client";
+import { portfolioProfile } from "./seed-portfolio-user";
 
 type LocaleCode = "es" | "en" | "nl";
 type LocaleMap = Partial<Record<LocaleCode, string>>;
@@ -13,6 +14,7 @@ interface PortfolioHomeSeed {
   backgroundImageUrl: string;
   heroSubtitle: LocaleMap;
   heroTagline: LocaleMap;
+  about: LocaleMap;
   availabilityBadge?: LocaleMap;
   terminal: {
     username: string;
@@ -36,33 +38,38 @@ export async function seedPortfolioHome(
   const data = portfolioHome;
   console.log("[seed-portfolio-home] seeding hero, about terminal...");
 
-  await prisma.cvHeader.update({
+  await prisma.portfolioHeader.upsert({
     where: { userId },
-    data: {
+    create: {
+      userId,
+      fullName: portfolioProfile.name,
+      photoUrl: portfolioProfile.photoUrl,
       backgroundImageUrl: data.backgroundImageUrl,
     },
+    update: { backgroundImageUrl: data.backgroundImageUrl },
   });
 
-  const header = await prisma.cvHeader.findUnique({ where: { userId } });
+  const header = await prisma.portfolioHeader.findUnique({ where: { userId } });
   if (header) {
     for (const code of LOCALE_CODES) {
       const appLanguageId = langIds[code];
       if (appLanguageId) {
-        await prisma.cvHeaderTranslation.upsert({
+        await prisma.portfolioHeaderTranslation.upsert({
           where: {
-            cvHeaderId_appLanguageId: {
-              cvHeaderId: header.id,
+            portfolioHeaderId_appLanguageId: {
+              portfolioHeaderId: header.id,
               appLanguageId,
             },
           },
           create: {
-            cvHeaderId: header.id,
+            portfolioHeaderId: header.id,
             appLanguageId,
-            degree: "",
+
             heroSubtitle:
               data.heroSubtitle?.[code] ?? data.heroSubtitle?.es ?? "",
             heroTagline: data.heroTagline?.[code] ?? data.heroTagline?.es ?? "",
             heroSummary: null,
+            portfolioAbout: data.about[code] ?? "",
             availabilityBadge:
               data.availabilityBadge?.[code] ??
               data.availabilityBadge?.es ??
@@ -73,6 +80,7 @@ export async function seedPortfolioHome(
               data.heroSubtitle?.[code] ?? data.heroSubtitle?.es ?? "",
             heroTagline: data.heroTagline?.[code] ?? data.heroTagline?.es ?? "",
             heroSummary: null,
+            portfolioAbout: data.about[code] ?? "",
             availabilityBadge:
               data.availabilityBadge?.[code] ??
               data.availabilityBadge?.es ??

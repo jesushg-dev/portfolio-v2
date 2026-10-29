@@ -3,6 +3,36 @@
 // ============================================================================
 
 /// Configurable interactive terminal sequence for the portfolio About section.
+model PortfolioHeader {
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String @unique @db.ObjectId
+  user               User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName           String
+  photoUrl           String?
+  backgroundImageUrl String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  translations       PortfolioHeaderTranslation[]
+}
+
+model PortfolioHeaderTranslation {
+  id                String @id @default(auto()) @map("_id") @db.ObjectId
+  portfolioHeaderId String @db.ObjectId
+  header            PortfolioHeader @relation(fields: [portfolioHeaderId], references: [id], onDelete: Cascade)
+  appLanguageId     String @db.ObjectId
+  language          AppLanguage @relation(fields: [appLanguageId], references: [id])
+  heroSubtitle      String?
+  heroTagline       String?
+  heroSummary       String?
+  portfolioAbout    String?
+  availabilityBadge String?
+  clientImageAlt    String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([portfolioHeaderId, appLanguageId])
+}
+
 model PortfolioTerminal {
   id                   String                   @id @default(auto()) @map("_id") @db.ObjectId
   userId               String                   @unique @db.ObjectId
