@@ -70,27 +70,28 @@ export const ServicesList: FC<ServicesListProps> = ({
   totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.services");
+  const tSearch = useTranslations("admin.dataTable.searchDialog");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState("sort", getSortingStateParser<ServiceRow>());
 
-  const [titleFilter] = useQueryState("title");
+  const [searchFilter, setSearchFilter] = useQueryState("search");
   const [typeFilter, setTypeFilter] = useQueryState("type");
 
   const parsedFilters = useMemo((): FilterItemSchema[] => {
     const f: FilterItemSchema[] = [];
-    if (titleFilter) {
+    if (searchFilter) {
       f.push({
-        id: "title",
-        value: titleFilter,
+        id: "search",
+        value: searchFilter,
         variant: "text",
         operator: "iLike",
-        filterId: "title",
+        filterId: "search",
       });
     }
     if (typeFilter) {
@@ -103,7 +104,7 @@ export const ServicesList: FC<ServicesListProps> = ({
       });
     }
     return f;
-  }, [titleFilter, typeFilter]);
+  }, [searchFilter, typeFilter]);
 
   const {
     data: { data: services, totalCount: trpcTotalCount } = {
@@ -135,7 +136,7 @@ export const ServicesList: FC<ServicesListProps> = ({
         try {
           await deleteService.mutateAsync({ id });
           toast.success(t("deleteSuccess") || "Deleted successfully");
-          await utils.servicesAdmin.getMine.invalidate();
+          await utils.servicesAdmin.invalidate();
         } catch {
           toast.error(t("deleteError"));
         } finally {
@@ -154,37 +155,25 @@ export const ServicesList: FC<ServicesListProps> = ({
     return map;
   }, [rawSkills]);
 
-  const uniqueTypes = useMemo(() => {
-    return Array.from(new Set(services.map((s) => s.type))).filter(Boolean);
-  }, [services]);
+  const { data: categoryCounts = [] } =
+    api.servicesAdmin.getCategories.useQuery();
 
-  const typeCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: trpcTotalCount };
-    for (const s of services) {
-      if (s.type) {
-        counts[s.type] = (counts[s.type] ?? 0) + 1;
-      }
-    }
-    return counts;
-  }, [services, trpcTotalCount]);
-
-  const categories = useMemo(() => {
-    const items = [
+  const categories = useMemo(
+    () => [
       {
         value: "all",
-        label: t("categories.all") || "All",
-        count: typeCounts.all,
+        label: t("categories.all"),
+        count: categoryCounts.reduce(
+          (total, category) => total + category.count,
+          0,
+        ),
       },
-    ];
-    for (const type of uniqueTypes) {
-      items.push({
-        value: type,
-        label: type,
-        count: typeCounts[type] ?? 0,
-      });
-    }
-    return items;
-  }, [typeCounts, t, uniqueTypes]);
+      ...categoryCounts
+        .filter((category) => category.value)
+        .map((category) => ({ ...category, label: category.value })),
+    ],
+    [categoryCounts, t],
+  );
 
   const activeCategory = useMemo(() => {
     return typeFilter ?? "all";
@@ -192,13 +181,22 @@ export const ServicesList: FC<ServicesListProps> = ({
 
   const handleCategoryChange = useCallback(
     (val: string) => {
+      void setPage(1);
       if (val === "all") {
         void setTypeFilter(null);
       } else {
         void setTypeFilter(val);
       }
     },
-    [setTypeFilter],
+    [setPage, setTypeFilter],
+  );
+
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      void setPage(1);
+      void setSearchFilter(value || null);
+    },
+    [setPage, setSearchFilter],
   );
 
   const columns = useMemo<ColumnDef<AppTableFeatures, ServiceRow>[]>(() => {
@@ -285,12 +283,7 @@ export const ServicesList: FC<ServicesListProps> = ({
         header: ({ column }) => (
           <DataTableColumnHeader column={column} label={t("columnType")} />
         ),
-        meta: {
-          label: t("columnType"),
-          placeholder: "Search type...",
-          variant: "text",
-        },
-        enableColumnFilter: true,
+        enableColumnFilter: false,
         cell: ({ row }) => {
           const type = row.original.type;
           if (!type)
@@ -445,7 +438,7 @@ export const ServicesList: FC<ServicesListProps> = ({
         await deleteManyServices.mutateAsync({ ids });
         toast.success(t("bulk.deleteSuccess", { count: ids.length }));
         table.resetRowSelection();
-        await utils.servicesAdmin.getMine.invalidate();
+        await utils.servicesAdmin.invalidate();
       } catch {
         toast.error(t("bulk.deleteError"));
       } finally {
@@ -455,7 +448,7 @@ export const ServicesList: FC<ServicesListProps> = ({
   }, [deleteManyServices, t, table, utils]);
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="relative flex h-full w-full max-w-full min-w-0 flex-col">
       <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable
         table={table}
@@ -471,7 +464,14 @@ export const ServicesList: FC<ServicesListProps> = ({
           />
         }
       >
-        <DataTableToolbar table={table}>
+        <DataTableToolbar
+          table={table}
+          search={{
+            value: searchFilter ?? "",
+            onChange: handleSearchChange,
+            description: tSearch("servicesHint"),
+          }}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <ExportSeedJsonButton entity="services" />
             <Link href="/admin/services/new" className={buttonVariants()}>

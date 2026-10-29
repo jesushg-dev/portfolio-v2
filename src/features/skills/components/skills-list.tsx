@@ -66,15 +66,16 @@ export const SkillsList: FC<SkillsListProps> = ({
   languages: initialLanguages,
 }) => {
   const t = useTranslations("admin.skills");
+  const tSearch = useTranslations("admin.dataTable.searchDialog");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState("sort", getSortingStateParser<SkillRow>());
 
-  const [titleFilter] = useQueryState("title");
+  const [searchFilter, setSearchFilter] = useQueryState("search");
   const [typeFilter, setTypeFilter] = useQueryState(
     "type",
     parseAsArrayOf(parseAsString, ","),
@@ -88,15 +89,14 @@ export const SkillsList: FC<SkillsListProps> = ({
 
   const parsedFilters = useMemo((): FilterItemSchema[] => {
     const f: FilterItemSchema[] = [];
-    if (titleFilter) {
+    if (searchFilter)
       f.push({
-        id: "title",
-        value: titleFilter,
+        id: "search",
+        value: searchFilter,
         variant: "text",
         operator: "iLike",
-        filterId: "title",
+        filterId: "search",
       });
-    }
     if (Array.isArray(typeFilter) && typeFilter.length > 0) {
       f.push({
         id: "type",
@@ -107,7 +107,7 @@ export const SkillsList: FC<SkillsListProps> = ({
       });
     }
     return f;
-  }, [titleFilter, typeFilter]);
+  }, [searchFilter, typeFilter]);
 
   const {
     data: { data: skills, totalCount: trpcTotalCount } = {
@@ -137,7 +137,7 @@ export const SkillsList: FC<SkillsListProps> = ({
         try {
           await deleteSkill.mutateAsync({ id });
           toast.success(t("deleteSuccess") || "Deleted successfully");
-          await utils.skillsAdmin.getMine.invalidate();
+          await utils.skillsAdmin.invalidate();
         } catch {
           toast.error(t("deleteError"));
         } finally {
@@ -148,38 +148,25 @@ export const SkillsList: FC<SkillsListProps> = ({
     [deleteSkill, t, utils],
   );
 
-  const uniqueTypes = useMemo(
-    () => Array.from(new Set(skills.map((s) => s.type))).filter(Boolean),
-    [skills],
-  );
-
-  const typeCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: trpcTotalCount };
-    for (const skill of skills) {
-      if (skill.type) {
-        counts[skill.type] = (counts[skill.type] ?? 0) + 1;
-      }
-    }
-    return counts;
-  }, [skills, trpcTotalCount]);
-
-  const categories = useMemo(() => {
-    const items = [
+  const { data: categoryCounts = [] } =
+    api.skillsAdmin.getCategories.useQuery();
+  const categories = useMemo(
+    () => [
       {
         value: "all",
-        label: t("categories.all") || "All",
-        count: typeCounts.all,
+        label: t("categories.all"),
+        count: categoryCounts.reduce(
+          (sum, category) => sum + category.count,
+          0,
+        ),
       },
-    ];
-    for (const type of uniqueTypes) {
-      items.push({
-        value: type,
-        label: type,
-        count: typeCounts[type] ?? 0,
-      });
-    }
-    return items;
-  }, [t, typeCounts, uniqueTypes]);
+      ...categoryCounts.map((category) => ({
+        ...category,
+        label: category.value,
+      })),
+    ],
+    [categoryCounts, t],
+  );
 
   const activeCategory = useMemo(() => {
     if (!typeFilter || typeFilter.length === 0) return "all";
@@ -188,13 +175,14 @@ export const SkillsList: FC<SkillsListProps> = ({
 
   const handleCategoryChange = useCallback(
     (val: string) => {
+      void setPage(1);
       if (val === "all") {
         void setTypeFilter(null);
       } else {
         void setTypeFilter([val]);
       }
     },
-    [setTypeFilter],
+    [setPage, setTypeFilter],
   );
 
   const columns = useMemo<ColumnDef<AppTableFeatures, SkillRow>[]>(
@@ -285,15 +273,7 @@ export const SkillsList: FC<SkillsListProps> = ({
             </span>
           );
         },
-        meta: {
-          label: t("columnType"),
-          variant: "multiSelect",
-          options: uniqueTypes.map((type) => ({
-            label: type,
-            value: type,
-          })),
-        },
-        enableColumnFilter: true,
+        enableColumnFilter: false,
       },
       {
         id: "languages",
@@ -372,7 +352,7 @@ export const SkillsList: FC<SkillsListProps> = ({
         },
       },
     ],
-    [activeLanguages, deletingId, handleDelete, isPending, t, uniqueTypes],
+    [activeLanguages, deletingId, handleDelete, isPending, t],
   );
 
   const { table } = useDataTable({
@@ -405,7 +385,7 @@ export const SkillsList: FC<SkillsListProps> = ({
         await deleteManySkills.mutateAsync({ ids });
         toast.success(t("bulk.deleteSuccess", { count: ids.length }));
         table.resetRowSelection();
-        await utils.skillsAdmin.getMine.invalidate();
+        await utils.skillsAdmin.invalidate();
       } catch {
         toast.error(t("bulk.deleteError"));
       } finally {
@@ -431,7 +411,17 @@ export const SkillsList: FC<SkillsListProps> = ({
           />
         }
       >
-        <DataTableToolbar table={table}>
+        <DataTableToolbar
+          table={table}
+          search={{
+            value: searchFilter ?? "",
+            description: tSearch("skillsHint"),
+            onChange: (value) => {
+              void setPage(1);
+              void setSearchFilter(value || null);
+            },
+          }}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <ExportSeedJsonButton entity="skills" />
             <Link

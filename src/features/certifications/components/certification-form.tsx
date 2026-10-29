@@ -285,7 +285,7 @@ export const CertificationForm: FC<CertificationFormProps> = ({
             toast.success(t("createdSuccess"));
           }
 
-          await utils.certificationsAdmin.getMine.invalidate();
+          await utils.certificationsAdmin.invalidate();
           router.back();
         } catch {
           toast.error(isEditMode ? t("updateFailed") : t("createFailed"));

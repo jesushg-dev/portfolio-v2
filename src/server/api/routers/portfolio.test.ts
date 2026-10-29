@@ -224,7 +224,7 @@ describe("portfolioRouter", () => {
           startDate: new Date("2020-01-01"),
         }),
       },
-      cvHeader: {
+      portfolioHeader: {
         findUnique: jest.fn().mockResolvedValue({
           fullName: "Ada",
           photoUrl: null,
@@ -349,10 +349,10 @@ describe("portfolioRouter", () => {
           },
         ]),
       },
-      cvAboutMe: {
+      portfolioHeader: {
         findUnique: jest.fn().mockResolvedValue({
           translations: [
-            { appLanguageId: "lang-en", aboutMe: "Hello\n\nWorld" },
+            { appLanguageId: "lang-en", portfolioAbout: "Hello\n\nWorld" },
           ],
         }),
       },

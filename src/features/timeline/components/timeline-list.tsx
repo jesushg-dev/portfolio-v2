@@ -81,42 +81,32 @@ export const TimelineList: FC<TimelineListProps> = ({
   totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.timeline");
+  const tSearch = useTranslations("admin.dataTable.searchDialog");
 
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState(
     "sort",
     getSortingStateParser<TimelineItemRow>(),
   );
 
-  const [titleFilter] = useQueryState("title");
-  const [orgFilter] = useQueryState("organization");
+  const [searchFilter, setSearchFilter] = useQueryState("search");
   const [catFilter, setCatFilter] = useQueryState("category");
 
   const parsedFilters = useMemo((): FilterItemSchema[] => {
     const f: FilterItemSchema[] = [];
-    if (titleFilter) {
+    if (searchFilter)
       f.push({
-        id: "title",
-        value: titleFilter,
+        id: "search",
+        value: searchFilter,
         variant: "text",
         operator: "iLike",
-        filterId: "title",
+        filterId: "search",
       });
-    }
-    if (orgFilter) {
-      f.push({
-        id: "organization",
-        value: orgFilter,
-        variant: "text",
-        operator: "iLike",
-        filterId: "organization",
-      });
-    }
     if (catFilter) {
       f.push({
         id: "category",
@@ -127,7 +117,7 @@ export const TimelineList: FC<TimelineListProps> = ({
       });
     }
     return f;
-  }, [titleFilter, orgFilter, catFilter]);
+  }, [searchFilter, catFilter]);
 
   const {
     data: { data: items, totalCount: trpcTotalCount } = {
@@ -155,7 +145,7 @@ export const TimelineList: FC<TimelineListProps> = ({
         try {
           await deleteItem.mutateAsync({ id });
           toast.success(t("deleteSuccess"));
-          await utils.timelineAdmin.getMine.invalidate();
+          await utils.timelineAdmin.invalidate();
         } catch {
           toast.error(t("deleteError"));
         } finally {
@@ -204,20 +194,23 @@ export const TimelineList: FC<TimelineListProps> = ({
 
   const timelineItems = useMemo(() => items.filter(isTimelineItemRow), [items]);
 
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {
-      all: trpcTotalCount,
-      WORK: 0,
-      STUDY: 0,
-      COURSE: 0,
-    };
-    for (const item of timelineItems) {
-      if (item.category && item.category in counts) {
-        counts[item.category] = (counts[item.category] ?? 0) + 1;
-      }
-    }
-    return counts;
-  }, [timelineItems, trpcTotalCount]);
+  const { data: categoryTotals = [] } =
+    api.timelineAdmin.getCategories.useQuery();
+  const categoryCounts = useMemo(
+    () => ({
+      all: categoryTotals.reduce((sum, category) => sum + category.count, 0),
+      WORK:
+        categoryTotals.find((category) => category.value === "WORK")?.count ??
+        0,
+      STUDY:
+        categoryTotals.find((category) => category.value === "STUDY")?.count ??
+        0,
+      COURSE:
+        categoryTotals.find((category) => category.value === "COURSE")?.count ??
+        0,
+    }),
+    [categoryTotals],
+  );
 
   const categories = useMemo(
     () => [
@@ -517,7 +510,7 @@ export const TimelineList: FC<TimelineListProps> = ({
         );
         toast.success(t("bulk.deleteConfirmTitle"));
         table.resetRowSelection();
-        await utils.timelineAdmin.getMine.invalidate();
+        await utils.timelineAdmin.invalidate();
       } catch {
         toast.error(t("deleteError"));
       }
@@ -544,7 +537,17 @@ export const TimelineList: FC<TimelineListProps> = ({
       <DataTableFetchingIndicator isFetching={isFetching} />
 
       <div className="flex flex-col gap-2">
-        <DataTableToolbar table={table}>
+        <DataTableToolbar
+          table={table}
+          search={{
+            value: searchFilter ?? "",
+            description: tSearch("timelineHint"),
+            onChange: (value) => {
+              void setPage(1);
+              void setSearchFilter(value || null);
+            },
+          }}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <ExportSeedJsonButton entity="timeline" />
             <Link
@@ -563,6 +566,7 @@ export const TimelineList: FC<TimelineListProps> = ({
             chips={categories}
             value={catFilter ?? "all"}
             onChange={(val) => {
+              void setPage(1);
               void setCatFilter(val === "all" ? null : val);
             }}
           />

@@ -623,7 +623,7 @@ export const portfolioRouter = createTRPCRouter({
 
       const [languages, header, profile] = await Promise.all([
         ctx.db.appLanguage.findMany(),
-        ctx.db.cvHeader.findUnique({
+        ctx.db.portfolioHeader.findUnique({
           where: { userId: tenantUserId },
           include: { translations: true },
         }),
@@ -750,7 +750,7 @@ export const portfolioRouter = createTRPCRouter({
       const languages = await ctx.db.appLanguage.findMany();
 
       const [aboutMe, terminal] = await Promise.all([
-        ctx.db.cvAboutMe.findUnique({
+        ctx.db.portfolioHeader.findUnique({
           where: { userId: tenantUserId },
           include: { translations: true },
         }),
@@ -762,7 +762,7 @@ export const portfolioRouter = createTRPCRouter({
 
       const aboutText = createLocalizedFieldResolver(languages, input.locale)(
         aboutMe?.translations ?? [],
-        "aboutMe",
+        "portfolioAbout",
       );
 
       return {
@@ -1152,7 +1152,7 @@ export const portfolioRouter = createTRPCRouter({
       }
 
       const userIds = profiles.map((p) => p.userId);
-      const headers = await ctx.db.cvHeader.findMany({
+      const headers = await ctx.db.portfolioHeader.findMany({
         where: { userId: { in: userIds } },
         include: { translations: true },
       });
@@ -1170,12 +1170,12 @@ export const portfolioRouter = createTRPCRouter({
             : null;
 
           const subtitle = t?.("heroSubtitle")?.trim();
-          const degree = t?.("degree")?.trim();
+          const tagline = t?.("heroTagline")?.trim();
           const role =
             subtitle && subtitle.length > 0
               ? subtitle
-              : degree && degree.length > 0
-                ? degree
+              : tagline && tagline.length > 0
+                ? tagline
                 : null;
 
           const trimmedInitials = p.logoInitials?.trim();

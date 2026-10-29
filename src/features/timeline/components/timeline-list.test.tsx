@@ -43,9 +43,17 @@ jest.mock("@/lib/parsers", () => ({
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      timelineAdmin: { getMine: { invalidate: jest.fn() } },
+      timelineAdmin: { invalidate: jest.fn() },
     }),
     timelineAdmin: {
+      getCategories: {
+        useQuery: () => ({
+          data: [
+            { value: "WORK", count: 1 },
+            { value: "STUDY", count: 1 },
+          ],
+        }),
+      },
       getMine: {
         useQuery: () => ({
           data: {

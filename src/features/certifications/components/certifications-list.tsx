@@ -80,6 +80,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
   totalCount: initialTotalCount,
 }) => {
   const t = useTranslations("admin.certifications");
+  const tSearch = useTranslations("admin.dataTable.searchDialog");
   const utils = api.useUtils();
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [isBulkDeleting, setIsBulkDeleting] = useState(false);
@@ -92,26 +93,27 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     url?: string | null;
   } | null>(null);
 
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
   const [perPage] = useQueryState("perPage", parseAsInteger.withDefault(10));
   const [sort] = useQueryState(
     "sort",
     getSortingStateParser<CertificationRow>(),
   );
 
-  const [titleFilter] = useQueryState("title");
+  const [searchFilter, setSearchFilter] = useQueryState("search");
   const [companyFilter, setCompanyFilter] = useQueryState("company");
 
   const parsedFilters = useMemo((): FilterItemSchema[] => {
     const f: FilterItemSchema[] = [];
-    if (titleFilter)
+    if (searchFilter) {
       f.push({
-        id: "title",
-        value: titleFilter,
+        id: "search",
+        value: searchFilter,
         variant: "text",
         operator: "iLike",
-        filterId: "title",
+        filterId: "search",
       });
+    }
     if (companyFilter)
       f.push({
         id: "company",
@@ -121,7 +123,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
         filterId: "company",
       });
     return f;
-  }, [titleFilter, companyFilter]);
+  }, [searchFilter, companyFilter]);
 
   const {
     data: { data: certifications, totalCount: trpcTotalCount } = {
@@ -154,7 +156,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
         try {
           await deleteCertification.mutateAsync({ id });
           toast.success(t("deleteSuccess") || "Deleted successfully");
-          await utils.certificationsAdmin.getMine.invalidate();
+          await utils.certificationsAdmin.invalidate();
         } catch {
           toast.error(t("deleteError"));
         } finally {
@@ -173,39 +175,25 @@ export const CertificationsList: FC<CertificationsListProps> = ({
     return map;
   }, [rawSkills]);
 
-  const uniqueCompanies = useMemo(() => {
-    return Array.from(new Set(certifications.map((c) => c.company))).filter(
-      Boolean,
-    );
-  }, [certifications]);
+  const { data: categoryCounts = [] } =
+    api.certificationsAdmin.getCategories.useQuery();
 
-  const companyCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: trpcTotalCount };
-    for (const cert of certifications) {
-      if (cert.company) {
-        counts[cert.company] = (counts[cert.company] ?? 0) + 1;
-      }
-    }
-    return counts;
-  }, [certifications, trpcTotalCount]);
-
-  const categories = useMemo(() => {
-    const items = [
+  const categories = useMemo(
+    () => [
       {
         value: "all",
-        label: t("categories.all") || "All",
-        count: companyCounts.all,
+        label: t("categories.all"),
+        count: categoryCounts.reduce(
+          (total, category) => total + category.count,
+          0,
+        ),
       },
-    ];
-    for (const company of uniqueCompanies) {
-      items.push({
-        value: company,
-        label: company,
-        count: companyCounts[company] ?? 0,
-      });
-    }
-    return items;
-  }, [companyCounts, t, uniqueCompanies]);
+      ...categoryCounts
+        .filter((category) => category.value)
+        .map((category) => ({ ...category, label: category.value })),
+    ],
+    [categoryCounts, t],
+  );
 
   const activeCategory = useMemo(() => {
     return companyFilter ?? "all";
@@ -213,13 +201,22 @@ export const CertificationsList: FC<CertificationsListProps> = ({
 
   const handleCategoryChange = useCallback(
     (val: string) => {
+      void setPage(1);
       if (val === "all") {
         void setCompanyFilter(null);
       } else {
         void setCompanyFilter(val);
       }
     },
-    [setCompanyFilter],
+    [setPage, setCompanyFilter],
+  );
+
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      void setPage(1);
+      void setSearchFilter(value || null);
+    },
+    [setPage, setSearchFilter],
   );
 
   const columns = useMemo<
@@ -507,7 +504,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
         await deleteManyCertifications.mutateAsync({ ids });
         toast.success(t("bulk.deleteSuccess", { count: ids.length }));
         table.resetRowSelection();
-        await utils.certificationsAdmin.getMine.invalidate();
+        await utils.certificationsAdmin.invalidate();
       } catch {
         toast.error(t("bulk.deleteError"));
       } finally {
@@ -517,7 +514,7 @@ export const CertificationsList: FC<CertificationsListProps> = ({
   }, [deleteManyCertifications, t, table, utils]);
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="relative flex h-full w-full max-w-full min-w-0 flex-col">
       <DataTableFetchingIndicator isFetching={isFetching} />
       <DataTable
         table={table}
@@ -533,7 +530,14 @@ export const CertificationsList: FC<CertificationsListProps> = ({
           />
         }
       >
-        <DataTableToolbar table={table}>
+        <DataTableToolbar
+          table={table}
+          search={{
+            value: searchFilter ?? "",
+            onChange: handleSearchChange,
+            description: tSearch("certificationsHint"),
+          }}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <ExportSeedJsonButton entity="certifications" />
             <Link

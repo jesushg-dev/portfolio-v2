@@ -474,252 +474,260 @@ export const ProfileUnifiedEditor: FC<ProfileUnifiedEditorProps> = ({
       <Tabs
         value={activeTab}
         onValueChange={(val) => handleTabChange(val as "identity" | "about")}
-        className="w-full"
+        className="border-border bg-card w-full max-w-full min-w-0 gap-0 rounded-xl border shadow-sm"
       >
-        <TabsList
-          variant="line"
-          className="w-fit justify-start overflow-x-auto"
-        >
-          <TabsTrigger value="identity" className="min-h-12 gap-2 px-4 text-sm">
-            <User className="size-4" aria-hidden />
-            <span>{t("tabIdentity")}</span>
-          </TabsTrigger>
-          <TabsTrigger value="about" className="min-h-12 gap-2 px-4 text-sm">
-            <Code2 className="size-4" aria-hidden />
-            <span>{t("tabAbout")}</span>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-
-      {/* Reusable Admin Form Language Bar - Sticky below navbar on large screens */}
-      <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/80 sticky top-16 z-20 -mx-4 border-b px-4 pt-4 pb-3 backdrop-blur sm:-mx-6 sm:px-6">
-        <AdminFormLanguageBar
-          className="border-none bg-transparent p-0 shadow-none"
-          languages={languageProgress}
-          activeLangId={activeLangId}
-          onSelectLang={setActiveLangId}
-          missingItems={missingItems}
-          isNonPrimary={activeLangId !== baseLanguage.id}
-          showOriginal={showReference}
-          onToggleShowOriginal={setShowReference}
-          baseLabel={t("baseBadge")}
-          completeProgressText={(ok, total) =>
-            `${ok}/${total} ${t("completeStatus")}`
-          }
-          notTranslatedText={() => t("noTranslationBadge")}
-          allCompleteText={t("allComplete")}
-          missingFieldsText={(fields) => `${t("missingPrefix")}: ${fields}`}
-          showOriginalText={t("showReference")}
-        />
-      </div>
-
-      {/* Mobile Live Preview Accordion */}
-      <details className="border-border/80 bg-card/60 mb-6 rounded-2xl border lg:hidden">
-        <summary className="text-foreground cursor-pointer p-4 text-sm font-semibold">
-          {t("previewHeading")}
-        </summary>
-        <div className="p-4 pt-0">
-          {activeTab === "identity" ? (
-            <ProfileHeroLivePreview
-              fullName={state.shared.fullName}
-              photoUrl={state.shared.photoUrl}
-              currentTranslation={currentTranslation}
-              baseTranslation={baseTranslation}
-              isNonBase={activeLangId !== baseLanguage.id}
-              t={{
-                fallbackNotice: t("fallbackNotice", {
-                  baseLang: baseLanguage.name,
-                }),
-                defaultBadge: t("defaultBadge"),
-                previewHeading: t("previewHeading"),
-              }}
-            />
-          ) : (
-            <ProfileAboutLivePreview
-              username={state.shared.username}
-              typingSpeed={state.shared.typingSpeed}
-              delayBetweenCommands={state.shared.delayBetweenCommands}
-              steps={state.steps}
-              currentTranslation={currentTranslation}
-              baseTranslation={baseTranslation}
-              t={{
-                aboutTitle: t("aboutMeTitle"),
-                noAboutText: t("aboutPlaceholder"),
-                play: t("play"),
-                playing: t("playing"),
-                reset: t("reset"),
-              }}
-            />
-          )}
-        </div>
-      </details>
-
-      {/* Main 2-Column Responsive Layout */}
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
-        {/* Left Column: Active Tab Form */}
-        <div className="min-w-0">
-          {activeTab === "identity" ? (
-            <ProfileIdentityTab
-              shared={state.shared}
-              onUpdateShared={handleUpdateShared}
-              activeLanguage={activeLanguage}
-              baseLanguage={baseLanguage}
-              currentTranslation={currentTranslation}
-              baseTranslation={baseTranslation}
-              showReference={showReference}
-              onUpdateTranslation={handleUpdateTranslation}
-              onStartBlank={handleStartBlank}
-              onCopyAllFromBase={handleCopyAllFromBase}
-              onDeleteTranslation={handleDeleteTranslation}
-              t={{
-                sharedSectionTitle: t("heroSection"),
-                fullNameLabel: t("fullNameLabel"),
-                fullNameHint: t("aboutDescriptionHint"),
-                fullNamePlaceholder: t("fullNamePlaceholder"),
-                photoUrlLabel: t("photoUrlLabel"),
-                photoUrlPlaceholder: t("photoUrlPlaceholder"),
-                photoUrlHint: t("uploadHint"),
-                uploadButton: t("uploadButton"),
-                photoAndBadgeSection: t("photoAndBadgeSection"),
-                altLabel: t("altTextLabel"),
-                altHint: t("altTextHint"),
-                altPlaceholder: t("altTextPlaceholder"),
-                badgeLabel: t("heroBadgeLabel"),
-                badgeHint: t("heroBadgeHint"),
-                badgePlaceholder: t("heroBadgePlaceholder"),
-                subtitleSection: t("subtitleSection"),
-                subtitleLabel: t("heroSubtitleLabel"),
-                subtitleHint: t("heroSubtitleHint"),
-                subtitlePlaceholder: t("heroSubtitlePlaceholder"),
-                taglineSection: t("taglineSection"),
-                taglineLabel: t("heroTaglineLabel"),
-                taglineHint: t("heroTaglineHint"),
-                taglinePlaceholder: t("heroTaglinePlaceholder"),
-                summaryLabel: t("heroSummaryLabel"),
-                summaryHint: t("heroSummaryHint"),
-                summaryPlaceholder: t("heroSummaryPlaceholder"),
-                noTranslationTitle: t("noTranslationTitle", {
-                  lang: activeLanguage.name,
-                }),
-                noTranslationHint: t("noTranslationHint", {
-                  baseLang: baseLanguage.name,
-                }),
-                copyFromBase: t("copyFromBase", {
-                  baseLang: baseLanguage.name,
-                }),
-                startBlank: t("startBlank"),
-                deleteTranslation: t("deleteTranslation", {
-                  lang: activeLanguage.name,
-                }),
-                deleteTranslationConfirm: t("deleteTranslationConfirm", {
-                  lang: activeLanguage.name,
-                }),
-                copySnippet: t("copySnippet"),
-              }}
-            />
-          ) : (
-            <ProfileAboutTab
-              shared={state.shared}
-              onUpdateShared={handleUpdateShared}
-              steps={state.steps}
-              onAddStep={handleAddStep}
-              onRemoveStep={handleRemoveStep}
-              onMoveStep={handleMoveStep}
-              onUpdateStepCmd={handleUpdateStepCmd}
-              onUpdateStepOutput={handleUpdateStepOutput}
-              activeLanguage={activeLanguage}
-              baseLanguage={baseLanguage}
-              currentTranslation={currentTranslation}
-              baseTranslation={baseTranslation}
-              showReference={showReference}
-              onUpdateTranslation={handleUpdateTranslation}
-              onStartBlank={handleStartBlank}
-              onCopyAllFromBase={handleCopyAllFromBase}
-              onDeleteTranslation={handleDeleteTranslation}
-              t={{
-                aboutSectionTitle: t("aboutMeTitle"),
-                boldHelper: t("boldHelper"),
-                boldHint: t("boldHint"),
-                aboutLabel: t("aboutBioTitle"),
-                aboutHint: t("aboutBioSubtitle"),
-                aboutPlaceholder: t("aboutPlaceholder"),
-                terminalSettingsTitle: t("console.settingsTitle"),
-                terminalSettingsHint: t("console.settingsDescription"),
-                usernameLabel: t("console.usernameLabel"),
-                typingSpeedLabel: t("console.typingSpeedLabel"),
-                delayLabel: t("console.delayLabel"),
-                commandSequenceTitle: t("console.stepsTitle"),
-                commandSequenceHint: t("commandSequenceHint"),
-                stepNumber: t("stepNumber"),
-                commandLabel: t("console.commandLabel"),
-                commandSharedHint: t("commandSharedHint"),
-                outputLabel: t("console.outputLabel"),
-                outputPerLangHint: t("outputPerLangHint"),
-                deleteStepConfirm: t("deleteStepConfirm"),
-                addStep: t("addStep"),
-                noTranslationTitle: t("noTranslationTitle", {
-                  lang: activeLanguage.name,
-                }),
-                noTranslationHint: t("noTranslationHint", {
-                  baseLang: baseLanguage.name,
-                }),
-                copyFromBase: t("copyFromBase", {
-                  baseLang: baseLanguage.name,
-                }),
-                startBlank: t("startBlank"),
-                deleteTranslation: t("deleteTranslation", {
-                  lang: activeLanguage.name,
-                }),
-                deleteTranslationConfirm: t("deleteTranslationConfirm", {
-                  lang: activeLanguage.name,
-                }),
-                copySnippet: t("copySnippet"),
-              }}
-            />
-          )}
-        </div>
-
-        {/* Right Column: Sticky Live Preview */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-20 space-y-2">
-            <div className="text-muted-foreground px-1 text-xs font-semibold tracking-wider uppercase">
-              {t("previewHeading")}
-            </div>
-            {activeTab === "identity" ? (
-              <ProfileHeroLivePreview
-                fullName={state.shared.fullName}
-                photoUrl={state.shared.photoUrl}
-                currentTranslation={currentTranslation}
-                baseTranslation={baseTranslation}
-                isNonBase={activeLangId !== baseLanguage.id}
-                t={{
-                  fallbackNotice: t("fallbackNotice", {
-                    baseLang: baseLanguage.name,
-                  }),
-                  defaultBadge: t("defaultBadge"),
-                  previewHeading: t("previewHeading"),
-                }}
-              />
-            ) : (
-              <ProfileAboutLivePreview
-                username={state.shared.username}
-                typingSpeed={state.shared.typingSpeed}
-                delayBetweenCommands={state.shared.delayBetweenCommands}
-                steps={state.steps}
-                currentTranslation={currentTranslation}
-                baseTranslation={baseTranslation}
-                t={{
-                  aboutTitle: t("aboutMeTitle"),
-                  noAboutText: t("aboutPlaceholder"),
-                  play: t("play"),
-                  playing: t("playing"),
-                  reset: t("reset"),
-                }}
-              />
-            )}
+        <div className="border-border bg-muted/30 min-w-0 overflow-hidden rounded-t-xl border-b px-3">
+          <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain">
+            <TabsList variant="line" className="w-max min-w-full justify-start">
+              <TabsTrigger
+                value="identity"
+                className="min-h-12 gap-2 px-4 text-sm"
+              >
+                <User className="size-4" aria-hidden />
+                <span>{t("tabIdentity")}</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="about"
+                className="min-h-12 gap-2 px-4 text-sm"
+              >
+                <Code2 className="size-4" aria-hidden />
+                <span>{t("tabAbout")}</span>
+              </TabsTrigger>
+            </TabsList>
           </div>
-        </aside>
-      </div>
+        </div>
+        <div className="min-w-0 space-y-6 p-4 sm:p-6">
+          {/* Reusable Admin Form Language Bar - Sticky below navbar on large screens */}
+          <div className="border-border/40 bg-background/95 supports-backdrop-filter:bg-background/80 sticky top-0 z-20 -mx-4 border-b px-4 pt-4 pb-3 backdrop-blur sm:-mx-6 sm:px-6 md:top-16">
+            <AdminFormLanguageBar
+              className="border-none bg-transparent p-0 shadow-none"
+              languages={languageProgress}
+              activeLangId={activeLangId}
+              onSelectLang={setActiveLangId}
+              missingItems={missingItems}
+              isNonPrimary={activeLangId !== baseLanguage.id}
+              showOriginal={showReference}
+              onToggleShowOriginal={setShowReference}
+              baseLabel={t("baseBadge")}
+              completeProgressText={(ok, total) =>
+                `${ok}/${total} ${t("completeStatus")}`
+              }
+              notTranslatedText={() => t("noTranslationBadge")}
+              allCompleteText={t("allComplete")}
+              missingFieldsText={(fields) => `${t("missingPrefix")}: ${fields}`}
+              showOriginalText={t("showReference")}
+            />
+          </div>
+
+          {/* Mobile Live Preview Accordion */}
+          <details className="border-border/80 bg-card/60 mb-6 rounded-2xl border lg:hidden">
+            <summary className="text-foreground cursor-pointer p-4 text-sm font-semibold">
+              {t("previewHeading")}
+            </summary>
+            <div className="p-4 pt-0">
+              {activeTab === "identity" ? (
+                <ProfileHeroLivePreview
+                  fullName={state.shared.fullName}
+                  photoUrl={state.shared.photoUrl}
+                  currentTranslation={currentTranslation}
+                  baseTranslation={baseTranslation}
+                  isNonBase={activeLangId !== baseLanguage.id}
+                  t={{
+                    fallbackNotice: t("fallbackNotice", {
+                      baseLang: baseLanguage.name,
+                    }),
+                    defaultBadge: t("defaultBadge"),
+                    previewHeading: t("previewHeading"),
+                  }}
+                />
+              ) : (
+                <ProfileAboutLivePreview
+                  username={state.shared.username}
+                  typingSpeed={state.shared.typingSpeed}
+                  delayBetweenCommands={state.shared.delayBetweenCommands}
+                  steps={state.steps}
+                  currentTranslation={currentTranslation}
+                  baseTranslation={baseTranslation}
+                  t={{
+                    aboutTitle: t("aboutMeTitle"),
+                    noAboutText: t("aboutPlaceholder"),
+                    play: t("play"),
+                    playing: t("playing"),
+                    reset: t("reset"),
+                  }}
+                />
+              )}
+            </div>
+          </details>
+
+          {/* Main 2-Column Responsive Layout */}
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+            {/* Left Column: Active Tab Form */}
+            <div className="min-w-0">
+              {activeTab === "identity" ? (
+                <ProfileIdentityTab
+                  shared={state.shared}
+                  onUpdateShared={handleUpdateShared}
+                  activeLanguage={activeLanguage}
+                  baseLanguage={baseLanguage}
+                  currentTranslation={currentTranslation}
+                  baseTranslation={baseTranslation}
+                  showReference={showReference}
+                  onUpdateTranslation={handleUpdateTranslation}
+                  onStartBlank={handleStartBlank}
+                  onCopyAllFromBase={handleCopyAllFromBase}
+                  onDeleteTranslation={handleDeleteTranslation}
+                  t={{
+                    sharedSectionTitle: t("heroSection"),
+                    fullNameLabel: t("fullNameLabel"),
+                    fullNameHint: t("aboutDescriptionHint"),
+                    fullNamePlaceholder: t("fullNamePlaceholder"),
+                    photoUrlLabel: t("photoUrlLabel"),
+                    photoUrlPlaceholder: t("photoUrlPlaceholder"),
+                    photoUrlHint: t("uploadHint"),
+                    uploadButton: t("uploadButton"),
+                    photoAndBadgeSection: t("photoAndBadgeSection"),
+                    altLabel: t("altTextLabel"),
+                    altHint: t("altTextHint"),
+                    altPlaceholder: t("altTextPlaceholder"),
+                    badgeLabel: t("heroBadgeLabel"),
+                    badgeHint: t("heroBadgeHint"),
+                    badgePlaceholder: t("heroBadgePlaceholder"),
+                    subtitleSection: t("subtitleSection"),
+                    subtitleLabel: t("heroSubtitleLabel"),
+                    subtitleHint: t("heroSubtitleHint"),
+                    subtitlePlaceholder: t("heroSubtitlePlaceholder"),
+                    taglineSection: t("taglineSection"),
+                    taglineLabel: t("heroTaglineLabel"),
+                    taglineHint: t("heroTaglineHint"),
+                    taglinePlaceholder: t("heroTaglinePlaceholder"),
+                    summaryLabel: t("heroSummaryLabel"),
+                    summaryHint: t("heroSummaryHint"),
+                    summaryPlaceholder: t("heroSummaryPlaceholder"),
+                    noTranslationTitle: t("noTranslationTitle", {
+                      lang: activeLanguage.name,
+                    }),
+                    noTranslationHint: t("noTranslationHint", {
+                      baseLang: baseLanguage.name,
+                    }),
+                    copyFromBase: t("copyFromBase", {
+                      baseLang: baseLanguage.name,
+                    }),
+                    startBlank: t("startBlank"),
+                    deleteTranslation: t("deleteTranslation", {
+                      lang: activeLanguage.name,
+                    }),
+                    deleteTranslationConfirm: t("deleteTranslationConfirm", {
+                      lang: activeLanguage.name,
+                    }),
+                    copySnippet: t("copySnippet"),
+                  }}
+                />
+              ) : (
+                <ProfileAboutTab
+                  shared={state.shared}
+                  onUpdateShared={handleUpdateShared}
+                  steps={state.steps}
+                  onAddStep={handleAddStep}
+                  onRemoveStep={handleRemoveStep}
+                  onMoveStep={handleMoveStep}
+                  onUpdateStepCmd={handleUpdateStepCmd}
+                  onUpdateStepOutput={handleUpdateStepOutput}
+                  activeLanguage={activeLanguage}
+                  baseLanguage={baseLanguage}
+                  currentTranslation={currentTranslation}
+                  baseTranslation={baseTranslation}
+                  showReference={showReference}
+                  onUpdateTranslation={handleUpdateTranslation}
+                  onStartBlank={handleStartBlank}
+                  onCopyAllFromBase={handleCopyAllFromBase}
+                  onDeleteTranslation={handleDeleteTranslation}
+                  t={{
+                    aboutSectionTitle: t("aboutMeTitle"),
+                    boldHelper: t("boldHelper"),
+                    boldHint: t("boldHint"),
+                    aboutLabel: t("aboutBioTitle"),
+                    aboutHint: t("aboutBioSubtitle"),
+                    aboutPlaceholder: t("aboutPlaceholder"),
+                    terminalSettingsTitle: t("console.settingsTitle"),
+                    terminalSettingsHint: t("console.settingsDescription"),
+                    usernameLabel: t("console.usernameLabel"),
+                    typingSpeedLabel: t("console.typingSpeedLabel"),
+                    delayLabel: t("console.delayLabel"),
+                    commandSequenceTitle: t("console.stepsTitle"),
+                    commandSequenceHint: t("commandSequenceHint"),
+                    stepNumber: t("stepNumber"),
+                    commandLabel: t("console.commandLabel"),
+                    commandSharedHint: t("commandSharedHint"),
+                    outputLabel: t("console.outputLabel"),
+                    outputPerLangHint: t("outputPerLangHint"),
+                    deleteStepConfirm: t("deleteStepConfirm"),
+                    addStep: t("addStep"),
+                    noTranslationTitle: t("noTranslationTitle", {
+                      lang: activeLanguage.name,
+                    }),
+                    noTranslationHint: t("noTranslationHint", {
+                      baseLang: baseLanguage.name,
+                    }),
+                    copyFromBase: t("copyFromBase", {
+                      baseLang: baseLanguage.name,
+                    }),
+                    startBlank: t("startBlank"),
+                    deleteTranslation: t("deleteTranslation", {
+                      lang: activeLanguage.name,
+                    }),
+                    deleteTranslationConfirm: t("deleteTranslationConfirm", {
+                      lang: activeLanguage.name,
+                    }),
+                    copySnippet: t("copySnippet"),
+                  }}
+                />
+              )}
+            </div>
+
+            {/* Right Column: Sticky Live Preview */}
+            <aside className="hidden lg:block">
+              <div className="sticky top-20 space-y-2">
+                <div className="text-muted-foreground px-1 text-xs font-semibold tracking-wider uppercase">
+                  {t("previewHeading")}
+                </div>
+                {activeTab === "identity" ? (
+                  <ProfileHeroLivePreview
+                    fullName={state.shared.fullName}
+                    photoUrl={state.shared.photoUrl}
+                    currentTranslation={currentTranslation}
+                    baseTranslation={baseTranslation}
+                    isNonBase={activeLangId !== baseLanguage.id}
+                    t={{
+                      fallbackNotice: t("fallbackNotice", {
+                        baseLang: baseLanguage.name,
+                      }),
+                      defaultBadge: t("defaultBadge"),
+                      previewHeading: t("previewHeading"),
+                    }}
+                  />
+                ) : (
+                  <ProfileAboutLivePreview
+                    username={state.shared.username}
+                    typingSpeed={state.shared.typingSpeed}
+                    delayBetweenCommands={state.shared.delayBetweenCommands}
+                    steps={state.steps}
+                    currentTranslation={currentTranslation}
+                    baseTranslation={baseTranslation}
+                    t={{
+                      aboutTitle: t("aboutMeTitle"),
+                      noAboutText: t("aboutPlaceholder"),
+                      play: t("play"),
+                      playing: t("playing"),
+                      reset: t("reset"),
+                    }}
+                  />
+                )}
+              </div>
+            </aside>
+          </div>
+        </div>
+      </Tabs>
 
       {/* Floating Bottom Save Bar */}
       <ProfileSaveBar

@@ -1,3 +1,5 @@
+import { extractStringFilter } from "@/lib/admin/filter-utils";
+import { buildTimelineItemSearchConditions } from "../lib/timeline-list-search";
 import { notFound } from "next/navigation";
 
 import { db } from "@/server/db";
@@ -97,6 +99,9 @@ export async function getUserTimelineWithLanguages(params: DataTableParams) {
       where.category = categoryFilter.value as TimelineCategory;
     }
   }
+
+  const search = extractStringFilter(params.filters, "search");
+  if (search) where.AND = buildTimelineItemSearchConditions(search);
 
   const [items, totalCount] = await Promise.all([
     timelineItemDelegate.findMany({

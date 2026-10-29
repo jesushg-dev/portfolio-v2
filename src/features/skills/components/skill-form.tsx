@@ -241,7 +241,7 @@ export const SkillForm: FC<SkillFormProps> = ({ initialData, languages }) => {
             toast.success(t("createdSuccess"));
           }
 
-          await utils.skillsAdmin.getMine.invalidate();
+          await utils.skillsAdmin.invalidate();
           router.back();
         } catch {
           toast.error(isEditMode ? t("updateFailed") : t("createFailed"));

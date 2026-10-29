@@ -16,7 +16,10 @@ jest.mock("nuqs", () => {
     return parser;
   };
   return {
-    useQueryState: (key: string) => [key === "title" ? "Web" : null, jest.fn()],
+    useQueryState: (key: string) => [
+      key === "search" ? "Web" : null,
+      jest.fn(),
+    ],
     useQueryStates: () => [{}, jest.fn()],
     parseAsInteger: createParser(),
     parseAsString: createParser(),
@@ -34,7 +37,7 @@ jest.mock("@/lib/parsers", () => ({
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      servicesAdmin: { getMine: { invalidate: jest.fn() } },
+      servicesAdmin: { invalidate: jest.fn() },
     }),
     skillsAdmin: {
       getMine: {
@@ -42,6 +45,9 @@ jest.mock("@/trpc/react", () => ({
       },
     },
     servicesAdmin: {
+      getCategories: {
+        useQuery: () => ({ data: [{ value: "FRONTEND", count: 1 }] }),
+      },
       getMine: {
         useQuery: () => ({
           data: {

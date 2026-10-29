@@ -17,7 +17,7 @@ jest.mock("nuqs", () => {
   };
   return {
     useQueryState: (key: string) => [
-      key === "title" ? "AWS" : key === "company" ? "Amazon" : null,
+      key === "search" ? "AWS" : key === "company" ? "Amazon" : null,
       jest.fn(),
     ],
     useQueryStates: () => [{}, jest.fn()],
@@ -37,7 +37,7 @@ jest.mock("@/lib/parsers", () => ({
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      certificationsAdmin: { getMine: { invalidate: jest.fn() } },
+      certificationsAdmin: { invalidate: jest.fn() },
     }),
     skillsAdmin: {
       getMine: {
@@ -45,6 +45,14 @@ jest.mock("@/trpc/react", () => ({
       },
     },
     certificationsAdmin: {
+      getCategories: {
+        useQuery: () => ({
+          data: [
+            { value: "Amazon", count: 1 },
+            { value: "Google", count: 1 },
+          ],
+        }),
+      },
       getMine: {
         useQuery: () => ({
           data: {

@@ -45,6 +45,7 @@ function createDb(overrides: Record<string, unknown> = {}) {
           certificateSkill: { deleteMany: jest.fn() },
           serviceSkill: { deleteMany: jest.fn() },
           cvExperienceSkill: { deleteMany: jest.fn() },
+          cvTechnicalSkillSelection: { deleteMany: jest.fn() },
           skillTranslation: { deleteMany: jest.fn() },
           skill: {
             delete: jest.fn().mockResolvedValue(skillRow),

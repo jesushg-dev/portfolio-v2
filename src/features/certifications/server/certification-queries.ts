@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { buildCertificationListWhere } from "../lib/certification-list-filters";
 
 import { db } from "@/server/db";
 import { buildEmptyTranslationMap } from "@/lib/i18n/translation-map";
@@ -75,19 +76,7 @@ export async function getUserCertificationsWithLanguages(
       orderBy = { createdAt: sortField.desc ? "desc" : "asc" };
   }
 
-  const where: Prisma.CertificationWhereInput = { userId };
-  if (params.filters && params.filters.length > 0) {
-    const titleFilter = params.filters.find((f) => f.id === "title");
-    if (titleFilter && typeof titleFilter.value === "string") {
-      where.CertificationTranslation = {
-        some: { title: { contains: titleFilter.value, mode: "insensitive" } },
-      };
-    }
-    const companyFilter = params.filters.find((f) => f.id === "company");
-    if (companyFilter && typeof companyFilter.value === "string") {
-      where.company = { contains: companyFilter.value, mode: "insensitive" };
-    }
-  }
+  const where = buildCertificationListWhere(userId, params.filters);
 
   const [certifications, totalCount] = await Promise.all([
     db.certification.findMany({

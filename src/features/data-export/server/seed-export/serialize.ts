@@ -212,19 +212,24 @@ export interface NowSettingsExportRow {
   timezone: string;
   githubUsername: string | null;
   statusEmoji: string | null;
+  statusSchedule: {
+    startMinute: number;
+    endMinute: number;
+    weekdays: number[];
+    emoji: string;
+    translations: (TranslationRow & { body: string })[];
+  }[];
+  readingCoverUrl: string | null;
+  watchedCoverUrl: string | null;
   readingTitle: string | null;
   readingAuthors: string | null;
   readingProgress: number;
   watchedTitle: string | null;
   watchedRating: number;
-  githubRepo: string | null;
-  githubHref: string | null;
   photoUrls: string[];
   NowSettingsTranslation: (TranslationRow & {
     statusBody: string;
     statusRelative: string;
-    githubBody: string;
-    githubRelative: string;
   })[];
 }
 
@@ -795,13 +800,28 @@ export function serializeNow(
       timezone: settings?.timezone ?? "America/Mexico_City",
       githubUsername: emptyToBlank(settings?.githubUsername),
       statusEmoji: emptyToBlank(settings?.statusEmoji) || "🚀",
+      statusSchedule: [...(settings?.statusSchedule ?? [])]
+        .sort((left, right) => left.startMinute - right.startMinute)
+        .map((slot) => ({
+          startMinute: slot.startMinute,
+          endMinute: slot.endMinute,
+          weekdays: [...slot.weekdays],
+          emoji: slot.emoji,
+          body: localeMapFromRows(
+            slot.translations,
+            languages,
+            (row) => row.body,
+            undefined,
+            { includeEmpty: true },
+          ),
+        })),
+      readingCoverUrl: emptyToBlank(settings?.readingCoverUrl),
+      watchedCoverUrl: emptyToBlank(settings?.watchedCoverUrl),
       readingTitle: emptyToBlank(settings?.readingTitle),
       readingAuthors: emptyToBlank(settings?.readingAuthors),
       readingProgress: settings?.readingProgress ?? 0,
       watchedTitle: emptyToBlank(settings?.watchedTitle),
       watchedRating: settings?.watchedRating ?? 0,
-      githubRepo: emptyToBlank(settings?.githubRepo),
-      githubHref: emptyToBlank(settings?.githubHref),
       photoUrls: settings?.photoUrls ?? [],
       statusBody: localeMapFromRows(
         settings?.NowSettingsTranslation ?? [],
@@ -814,20 +834,6 @@ export function serializeNow(
         settings?.NowSettingsTranslation ?? [],
         languages,
         (row) => row.statusRelative,
-        undefined,
-        { includeEmpty: true },
-      ),
-      githubBody: localeMapFromRows(
-        settings?.NowSettingsTranslation ?? [],
-        languages,
-        (row) => row.githubBody,
-        undefined,
-        { includeEmpty: true },
-      ),
-      githubRelative: localeMapFromRows(
-        settings?.NowSettingsTranslation ?? [],
-        languages,
-        (row) => row.githubRelative,
         undefined,
         { includeEmpty: true },
       ),

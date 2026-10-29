@@ -36,23 +36,13 @@ const ProfileAboutUpsertSchema = z.object({
   aboutMeTranslations: HeroTitleTranslationMapSchema.optional().default({}),
 });
 
-const PortfolioHeaderUpsertSchema = z.object({
-  fullName: z.string().min(1),
-  photoUrl: z.string().url().nullable().optional(),
-  backgroundImageUrl: z.string().url().nullable().optional(),
-  heroSubtitle: HeroTitleTranslationMapSchema.nullable().optional(),
-  heroTagline: HeroTitleTranslationMapSchema.nullable().optional(),
-  heroSummary: HeroTitleTranslationMapSchema.nullable().optional(),
-  clientImageAlt: HeroTitleTranslationMapSchema.nullable().optional(),
-});
-
 export async function getProfileHeroEditorDto(
   db: DbLike,
   userId: string,
 ): Promise<ProfileHeroEditorDTO> {
   const [languages, header] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    db.cvHeader.findUnique({
+    db.portfolioHeader.findUnique({
       where: { userId },
       include: { translations: true },
     }),
@@ -110,7 +100,7 @@ export async function getProfileAboutEditorDto(
 ): Promise<{ aboutMeTranslations: Record<string, { text: string }> }> {
   const [languages, aboutMe] = await Promise.all([
     db.appLanguage.findMany({ orderBy: { code: "asc" } }),
-    db.cvAboutMe.findUnique({
+    db.portfolioHeader.findUnique({
       where: { userId },
       include: { translations: true },
     }),
@@ -119,7 +109,7 @@ export async function getProfileAboutEditorDto(
   const aboutMeTranslations = Object.fromEntries(
     languages.map((l) => {
       const trans = aboutMe?.translations.find((t) => t.appLanguageId === l.id);
-      return [l.id, { text: trans?.aboutMe ?? "" }];
+      return [l.id, { text: trans?.portfolioAbout ?? "" }];
     }),
   );
 
@@ -133,32 +123,28 @@ export async function upsertProfileAbout(
 ): Promise<{ aboutMeTranslations: Record<string, { text: string }> }> {
   const languages = await db.appLanguage.findMany({ orderBy: { code: "asc" } });
 
-  const about = await db.cvAboutMe.upsert({
+  const about = await db.portfolioHeader.upsert({
     where: { userId },
-    create: { userId },
+    create: { userId, fullName: "" },
     update: {},
   });
 
   for (const lang of languages) {
     const aboutMeText = input.aboutMeTranslations?.[lang.id]?.text ?? "";
-    const existingAboutTrans = await db.cvAboutMeTranslation.findFirst({
-      where: { cvAboutMeId: about.id, appLanguageId: lang.id },
-    });
-
-    if (existingAboutTrans) {
-      await db.cvAboutMeTranslation.update({
-        where: { id: existingAboutTrans.id },
-        data: { aboutMe: aboutMeText },
-      });
-    } else {
-      await db.cvAboutMeTranslation.create({
-        data: {
-          cvAboutMeId: about.id,
+    await db.portfolioHeaderTranslation.upsert({
+      where: {
+        portfolioHeaderId_appLanguageId: {
+          portfolioHeaderId: about.id,
           appLanguageId: lang.id,
-          aboutMe: aboutMeText,
         },
-      });
-    }
+      },
+      update: { portfolioAbout: aboutMeText },
+      create: {
+        portfolioHeaderId: about.id,
+        appLanguageId: lang.id,
+        portfolioAbout: aboutMeText,
+      },
+    });
   }
 
   return getProfileAboutEditorDto(db, userId);
@@ -174,7 +160,7 @@ export async function upsertProfileHeroFromMaps(
   const photoUrl = input.photoUrl ? input.photoUrl : null;
   const backgroundImageUrl = input.backgroundImageUrl ?? null;
 
-  const header = await db.cvHeader.upsert({
+  const header = await db.portfolioHeader.upsert({
     where: { userId },
     create: {
       userId,
@@ -199,12 +185,12 @@ export async function upsertProfileHeroFromMaps(
     const clientImageAltText =
       input.clientImageAltTranslations?.[lang.id]?.text ?? "";
     const badgeText = input.heroBadgeTranslations?.[lang.id]?.text ?? "";
-    const existingTrans = await db.cvHeaderTranslation.findFirst({
-      where: { cvHeaderId: header.id, appLanguageId: lang.id },
+    const existingTrans = await db.portfolioHeaderTranslation.findFirst({
+      where: { portfolioHeaderId: header.id, appLanguageId: lang.id },
     });
 
     if (existingTrans) {
-      await db.cvHeaderTranslation.update({
+      await db.portfolioHeaderTranslation.update({
         where: { id: existingTrans.id },
         data: {
           heroSubtitle: heroSubtitleText || null,
@@ -215,11 +201,11 @@ export async function upsertProfileHeroFromMaps(
         },
       });
     } else {
-      await db.cvHeaderTranslation.create({
+      await db.portfolioHeaderTranslation.create({
         data: {
-          cvHeaderId: header.id,
+          portfolioHeaderId: header.id,
           appLanguageId: lang.id,
-          degree: "",
+
           heroSubtitle: heroSubtitleText || null,
           heroTagline: heroTaglineText || null,
           heroSummary: heroSummaryText || null,
@@ -252,73 +238,6 @@ export const profileAdminRouter = createTRPCRouter({
     .input(ProfileAboutUpsertSchema)
     .mutation(async ({ ctx, input }) => {
       return upsertProfileAbout(ctx.db, ctx.user.id, input);
-    }),
-
-  upsertPortfolioHeader: protectedProcedure
-    .input(PortfolioHeaderUpsertSchema)
-    .mutation(async ({ ctx, input }) => {
-      const languages = await ctx.db.appLanguage.findMany({
-        orderBy: { code: "asc" },
-      });
-
-      const header = await ctx.db.cvHeader.upsert({
-        where: { userId: ctx.user.id },
-        create: {
-          userId: ctx.user.id,
-          fullName: input.fullName,
-          photoUrl: input.photoUrl ?? null,
-          backgroundImageUrl: input.backgroundImageUrl ?? null,
-        },
-        update: {
-          fullName: input.fullName,
-          photoUrl: input.photoUrl ?? null,
-          backgroundImageUrl: input.backgroundImageUrl ?? null,
-        },
-      });
-
-      for (const lang of languages) {
-        const heroSubtitleText = input.heroSubtitle?.[lang.id]?.text;
-        const heroTaglineText = input.heroTagline?.[lang.id]?.text;
-        const heroSummaryText = input.heroSummary?.[lang.id]?.text;
-        const clientImageAltText = input.clientImageAlt?.[lang.id]?.text;
-        const existingTrans = await ctx.db.cvHeaderTranslation.findFirst({
-          where: { cvHeaderId: header.id, appLanguageId: lang.id },
-        });
-
-        if (existingTrans) {
-          await ctx.db.cvHeaderTranslation.update({
-            where: { id: existingTrans.id },
-            data: {
-              ...(heroSubtitleText !== undefined
-                ? { heroSubtitle: heroSubtitleText || null }
-                : {}),
-              ...(heroTaglineText !== undefined
-                ? { heroTagline: heroTaglineText || null }
-                : {}),
-              ...(heroSummaryText !== undefined
-                ? { heroSummary: heroSummaryText || null }
-                : {}),
-              ...(clientImageAltText !== undefined
-                ? { clientImageAlt: clientImageAltText || null }
-                : {}),
-            },
-          });
-        } else {
-          await ctx.db.cvHeaderTranslation.create({
-            data: {
-              cvHeaderId: header.id,
-              appLanguageId: lang.id,
-              degree: "",
-              heroSubtitle: heroSubtitleText ?? null,
-              heroTagline: heroTaglineText ?? null,
-              heroSummary: heroSummaryText ?? null,
-              clientImageAlt: clientImageAltText ?? null,
-            },
-          });
-        }
-      }
-
-      return header;
     }),
 });
 

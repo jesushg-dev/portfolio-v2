@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { extractStringFilter } from "@/lib/admin/filter-utils";
+import { buildServiceListWhere } from "../lib/service-list-filters";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -13,7 +13,7 @@ import {
 } from "@/features/services/lib/service-editor-dto";
 import { translationMapEntries } from "@/lib/i18n/translation-map";
 import { dataTableParamsSchema } from "@/lib/admin/data-table-schemas";
-import type { Prisma, StackType } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 const ServiceTranslationMapSchema = z.record(
   z.string(),
@@ -38,6 +38,19 @@ const serviceUpsertInput = z.object({
 });
 
 export const servicesAdminRouter = createTRPCRouter({
+  getCategories: protectedProcedure.query(async ({ ctx }) => {
+    const groups = await ctx.db.service.groupBy({
+      by: ["type"],
+      where: { userId: ctx.user.id },
+      orderBy: { type: "asc" },
+      _count: { _all: true },
+    });
+
+    return groups.map((group) => ({
+      value: group.type,
+      count: group._count._all,
+    }));
+  }),
   getMine: protectedProcedure
     .input(dataTableParamsSchema)
     .query(async ({ ctx, input }) => {
@@ -58,20 +71,7 @@ export const servicesAdminRouter = createTRPCRouter({
           orderBy = { createdAt: sortField.desc ? "desc" : "asc" };
       }
 
-      const where: Prisma.ServiceWhereInput = { userId: ctx.user.id };
-      const titleVal = extractStringFilter(input.filters, "title");
-      if (titleVal) {
-        where.ServiceTranslation = {
-          some: {
-            title: { contains: titleVal, mode: "insensitive" },
-          },
-        };
-      }
-
-      const typeVal = extractStringFilter(input.filters, "type");
-      if (typeVal) {
-        where.type = typeVal as StackType;
-      }
+      const where = buildServiceListWhere(ctx.user.id, input.filters);
 
       const [services, totalCount, languages] = await Promise.all([
         ctx.db.service.findMany({

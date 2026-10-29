@@ -38,9 +38,17 @@ jest.mock("@/lib/parsers", () => ({
 jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
-      skillsAdmin: { getMine: { invalidate: jest.fn() } },
+      skillsAdmin: { invalidate: jest.fn() },
     }),
     skillsAdmin: {
+      getCategories: {
+        useQuery: () => ({
+          data: [
+            { value: "FRONTEND", count: 1 },
+            { value: "BACKEND", count: 1 },
+          ],
+        }),
+      },
       getMine: {
         useQuery: () => ({
           data: {

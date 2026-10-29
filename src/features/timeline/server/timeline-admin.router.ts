@@ -1,3 +1,4 @@
+import { buildTimelineItemSearchConditions } from "../lib/timeline-list-search";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -46,6 +47,18 @@ const timelineUpsertInput = z.object({
 });
 
 export const timelineAdminRouter = createTRPCRouter({
+  getCategories: protectedProcedure.query(async ({ ctx }) => {
+    const groups = await ctx.db.timelineItem.groupBy({
+      by: ["category"],
+      where: { userId: ctx.user.id },
+      orderBy: { category: "asc" },
+      _count: { _all: true },
+    });
+    return groups.map((group) => ({
+      value: group.category,
+      count: group._count._all,
+    }));
+  }),
   getMine: protectedProcedure
     .input(dataTableParamsSchema)
     .query(async ({ ctx, input }) => {
@@ -93,6 +106,9 @@ export const timelineAdminRouter = createTRPCRouter({
           },
         };
       }
+
+      const search = extractStringFilter(input.filters, "search");
+      if (search) where.AND = buildTimelineItemSearchConditions(search);
 
       const languages = await ctx.db.appLanguage.findMany({
         orderBy: { code: "asc" },

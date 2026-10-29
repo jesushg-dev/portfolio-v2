@@ -1,7 +1,7 @@
 export { generateMetadata } from "./metadata";
 import type { FC } from "react";
 import type { Locale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { ProcessPagesList } from "@/features/process-pages/components/admin/process-pages-list";
 import { getUserProcessPagesWithLanguages } from "@/features/process-pages/server/process-pages-queries";
@@ -12,10 +12,12 @@ interface Props {
 
 const ProcessPagesAdminPage: FC<Props> = async ({ params }) => {
   const { locale } = await params;
-  setRequestLocale(locale as Locale);
 
   const [t, list] = await Promise.all([
-    getTranslations("admin.processPages"),
+    getTranslations({
+      locale: locale as Locale,
+      namespace: "admin.processPages",
+    }),
     getUserProcessPagesWithLanguages({
       page: 1,
       perPage: 50,

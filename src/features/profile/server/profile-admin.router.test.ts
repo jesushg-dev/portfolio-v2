@@ -21,6 +21,7 @@ const header = {
       heroSubtitle: "First Programmer",
       heroTagline: "Writing the first computer algorithm in history.",
       heroSummary: "Builder",
+      portfolioAbout: "I build things.",
       availabilityBadge: "Available for hire",
       clientImageAlt: "Portrait of Ada",
     },
@@ -36,11 +37,12 @@ const aboutMe = {
 function createDb() {
   return {
     appLanguage: { findMany: jest.fn().mockResolvedValue(languages) },
-    cvHeader: {
+    portfolioHeader: {
       findUnique: jest.fn().mockResolvedValue(header),
       upsert: jest.fn().mockResolvedValue(header),
     },
-    cvHeaderTranslation: {
+    portfolioHeaderTranslation: {
+      upsert: jest.fn(),
       findFirst: jest.fn().mockResolvedValue(null),
       create: jest.fn(),
       update: jest.fn(),
@@ -100,7 +102,7 @@ describe("profileAdminRouter", () => {
       clientImageAltTranslations: { "lang-en": { text: "Portrait" } },
     });
     expect(result.fullName).toBe("Ada Lovelace");
-    expect(db.cvHeader.upsert).toHaveBeenCalled();
+    expect(db.portfolioHeader.upsert).toHaveBeenCalled();
   });
 
   it("returns about editor DTO with narrative copy", async () => {
@@ -126,25 +128,14 @@ describe("profileAdminRouter", () => {
         },
       },
     });
-    expect(db.cvAboutMe.upsert).toHaveBeenCalled();
-    expect(result.aboutMeTranslations).toBeDefined();
-  });
-
-  it("upserts the portfolio header translations", async () => {
-    const db = createDb();
-    const caller = createRouterCaller(
-      profileAdminRouter,
-      createTrpcTestContext({ db }),
+    expect(db.portfolioHeaderTranslation.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        update: {
+          portfolioAbout: "I architect high-performance distributed systems.",
+        },
+      }),
     );
-    const result = await caller.upsertPortfolioHeader({
-      fullName: "Ada Lovelace",
-      photoUrl: "https://cdn.example/ada.png",
-      heroSubtitle: { "lang-en": { text: "Mathematician" } },
-      heroTagline: { "lang-en": { text: "First programmer." } },
-      heroSummary: { "lang-en": { text: "Builder" } },
-      clientImageAlt: { "lang-en": { text: "Portrait" } },
-    });
-    expect(result.fullName).toBe("Ada Lovelace");
-    expect(db.cvHeaderTranslation.create).toHaveBeenCalled();
+    expect(db.cvAboutMe.upsert).not.toHaveBeenCalled();
+    expect(result.aboutMeTranslations).toBeDefined();
   });
 });

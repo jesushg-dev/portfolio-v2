@@ -20,9 +20,7 @@ jest.mock("@/trpc/react", () => ({
   api: {
     useUtils: () => ({
       skillsAdmin: {
-        getMine: {
-          invalidate: mockInvalidate,
-        },
+        invalidate: mockInvalidate,
       },
     }),
     skillsAdmin: {

@@ -285,7 +285,7 @@ export const ServiceForm: FC<ServiceFormProps> = ({
             toast.success(t("createdSuccess"));
           }
 
-          await utils.servicesAdmin.getMine.invalidate();
+          await utils.servicesAdmin.invalidate();
           router.back();
         } catch {
           toast.error(isEditMode ? t("updateFailed") : t("createFailed"));

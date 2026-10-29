@@ -1,3 +1,5 @@
+import { extractStringFilter } from "@/lib/admin/filter-utils";
+import { buildSkillSearchConditions } from "../lib/skill-list-search";
 import { notFound } from "next/navigation";
 
 import { db } from "@/server/db";
@@ -72,6 +74,9 @@ export async function getUserSkillsWithLanguages(params: DataTableParams) {
       where.type = typeFilter.value as StackType;
     }
   }
+
+  const search = extractStringFilter(params.filters, "search");
+  if (search) where.AND = buildSkillSearchConditions(search);
 
   const [skills, totalCount] = await Promise.all([
     db.skill.findMany({

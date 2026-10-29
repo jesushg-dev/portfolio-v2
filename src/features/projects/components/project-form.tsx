@@ -345,7 +345,7 @@ export const ProjectForm: FC<ProjectFormProps> = ({
         >
           <TabsList
             variant="line"
-            className="mb-6 flex w-fit shrink-0 justify-start"
+            className="mb-6 flex w-fit max-w-full shrink-0 justify-start overflow-x-auto overflow-y-hidden"
           >
             <TabsTrigger value="general" className="text-xs">
               {t("tabs.general")}

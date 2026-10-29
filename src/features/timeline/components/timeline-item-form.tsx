@@ -190,7 +190,7 @@ export const TimelineItemForm: FC<TimelineItemFormProps> = ({
             toast.success(t("createdSuccess"));
           }
 
-          await utils.timelineAdmin.getMine.invalidate();
+          await utils.timelineAdmin.invalidate();
           router.back();
         } catch {
           toast.error(isEditMode ? t("updateFailed") : t("createFailed"));

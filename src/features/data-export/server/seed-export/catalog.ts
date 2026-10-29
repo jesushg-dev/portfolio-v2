@@ -211,18 +211,23 @@ export interface NowSeedRecord {
     timezone: string;
     githubUsername: string;
     statusEmoji: string;
+    statusSchedule: {
+      startMinute: number;
+      endMinute: number;
+      weekdays: number[];
+      emoji: string;
+      body: LocaleMap;
+    }[];
+    readingCoverUrl: string;
+    watchedCoverUrl: string;
     readingTitle: string;
     readingAuthors: string;
     readingProgress: number;
     watchedTitle: string;
     watchedRating: number;
-    githubRepo: string;
-    githubHref: string;
     photoUrls: string[];
     statusBody: LocaleMap;
     statusRelative: LocaleMap;
-    githubBody: LocaleMap;
-    githubRelative: LocaleMap;
   };
   focuses: {
     order: number;

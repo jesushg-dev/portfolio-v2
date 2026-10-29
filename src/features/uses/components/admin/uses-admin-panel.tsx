@@ -60,7 +60,10 @@ export const UsesAdminPanel: FC<UsesAdminPanelProps> = ({
       }}
       className="flex min-h-0 flex-1 flex-col gap-6"
     >
-      <TabsList aria-label={t("tabsLabel")}>
+      <TabsList
+        aria-label={t("tabsLabel")}
+        className="max-w-full overflow-x-auto overflow-y-hidden"
+      >
         <TabsTrigger value="EVERYDAY" className="gap-1.5">
           <HiOutlineCollection className="size-4" />
           {t("tabs.everyday")}
