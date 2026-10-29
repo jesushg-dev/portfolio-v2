@@ -177,10 +177,24 @@ export async function signInOwner(
   try {
     await expectAdminDashboard(page, 30_000);
     return true;
-  } catch {
+  } catch (dashboardError) {
+    const sessionResponse = await page.context().request.get(
+      new URL("/api/auth/get-session", page.url()).href,
+    );
+    if (!sessionResponse.ok()) {
+      throw new Error(`Session verification failed with HTTP ${sessionResponse.status()} after sign-in`, { cause: dashboardError });
+    }
+    const session: unknown = await sessionResponse.json();
+    if (session && typeof session === "object" && "user" in session && session.user && "session" in session && session.session) {
+      throw new Error(
+        `Sign-in succeeded and the browser session is valid, but the admin dashboard did not render (${new URL(page.url()).pathname}). Check the server logs for a page/data error.`,
+        { cause: dashboardError },
+      );
+    }
     throw new Error(
-      "Sign-in API succeeded but the session cookie was not applied. " +
-        "Ensure the app origin matches E2E_BASE_URL (e.g. http://localhost:3000).",
+      "Sign-in API succeeded but no authenticated session was available. " +
+        "Check session cookies and BETTER_AUTH_URL versus E2E_BASE_URL.",
+      { cause: dashboardError },
     );
   }
 }
@@ -256,7 +270,7 @@ export async function ensureOwnerAccount(
   } catch (error) {
     if (
       error instanceof Error &&
-      /session cookie was not applied|rate limited/.test(error.message)
+      /session|dashboard did not render|rate limited/i.test(error.message)
     ) {
       throw error;
     }

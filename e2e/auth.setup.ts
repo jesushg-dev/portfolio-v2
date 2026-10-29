@@ -8,6 +8,7 @@ import {
 import {
   disconnectE2ePrisma,
   ensureAppLanguages,
+  ensureWorkerJobSearch,
   syncE2eWorkerPassword,
 } from "./helpers/ensure-app-languages";
 
@@ -25,6 +26,7 @@ setup("authenticate workers", async ({ browser }, testInfo) => {
     const page = await context.newPage();
 
     const input = buildRegisterOwnerInput(i);
+    await ensureWorkerJobSearch(input.email);
     await ensureOwnerAccount(page, input);
 
     await expectAdminDashboard(page);
