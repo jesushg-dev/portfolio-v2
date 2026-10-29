@@ -101,6 +101,9 @@
         "dashboardLink": "Open Resend API-sleutels",
         "domainsLink": "Open Resend Domeinen"
       },
+      "resendWebhook": {
+        "title": "Resend-gebeurtenissen instellen"
+      },
       "uploadthing": {
         "title": "Hoe je UploadThing-inloggegevens verkrijgt",
         "step1": "Log in op het UploadThing-dashboard op uploadthing.com.",
@@ -171,6 +174,8 @@
     "resend": {
       "title": "Resend E-mail inloggegevens",
       "description": "Configureer je Resend API-sleutel en domein om e-mails te verzenden en sjablonen automatisch te synchroniseren.",
+      "tabCredentials": "Inloggegevens",
+      "tabEvents": "Gebeurtenissen & Webhooks",
       "apiKeyLabel": "Resend API-sleutel",
       "apiKeyPlaceholder": "re_123456789...",
       "webhookTitle": "Resend-gebeurtenissen",
@@ -191,6 +196,9 @@
       "webhookTroubleshooting": "404: controleer de deployment, URL en het opgeslagen geheim voor deze gebruiker. 401: het geheim komt niet overeen. 503: controleer serverlogs en MongoDB. De URL moet publiek bereikbaar zijn zonder in te loggen.",
       "webhookSecret": "Webhook-ondertekeningsgeheim",
       "webhookSaved": "Er is al een geheim opgeslagen. Laat leeg om het te behouden.",
+      "webhookActiveNotice": "Ondertekeningsgeheim is geconfigureerd. Resend-gebeurtenissen worden actief geverifieerd.",
+      "webhookConnected": "Verbonden",
+      "webhookNotConnected": "Niet geconfigureerd",
       "domainLabel": "E-maildomein",
       "domainPlaceholder": "joudomein.nl",
       "fromLabel": "Afzender e-mail / naam (optioneel)",
@@ -2329,8 +2337,10 @@
       },
       "skills": {
         "category": "Categorie",
-        "items": "Vaardigheden (kommagescheiden)",
-        "itemsPlaceholder": "React, Next.js, Tailwind, Redux",
+        "items": "Vaardigheden uit de catalogus",
+        "catalogHint": "Selecteer de vaardigheden voor je cv. Sleep ze of gebruik de pijlen om de positie te bepalen; deselecteer om ze te verbergen zonder ze uit je portfolio te verwijderen.",
+        "moveSkill": "{name} verplaatsen",
+        "hideSkill": "{name} verbergen in cv",
         "add": "+ Groep toevoegen",
         "save": "Opslaan",
         "saving": "Bezig met opslaan...",

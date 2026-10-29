@@ -101,6 +101,9 @@
         "dashboardLink": "Open Resend API Keys",
         "domainsLink": "Open Resend Domains"
       },
+      "resendWebhook": {
+        "title": "How to set up Resend events"
+      },
       "uploadthing": {
         "title": "How to get UploadThing credentials",
         "step1": "Log in to your UploadThing dashboard at uploadthing.com.",
@@ -171,6 +174,8 @@
     "resend": {
       "title": "Resend Email Credentials",
       "description": "Configure your Resend API key and domain to send emails and auto-sync templates.",
+      "tabCredentials": "Credentials",
+      "tabEvents": "Events & Webhooks",
       "apiKeyLabel": "Resend API Key",
       "apiKeyPlaceholder": "re_123456789...",
       "webhookTitle": "Resend events",
@@ -191,6 +196,9 @@
       "webhookTroubleshooting": "404: check deployment, URL and whether the secret was saved for this user. 401: the signing secret does not match. 503: check server logs and the MongoDB connection. This URL must be public and accept requests without signing in.",
       "webhookSecret": "Webhook signing secret",
       "webhookSaved": "A secret is already saved. Leave blank to keep it.",
+      "webhookActiveNotice": "Signing secret is configured. Resend events are actively verified.",
+      "webhookConnected": "Connected",
+      "webhookNotConnected": "Not configured",
       "domainLabel": "Email Domain",
       "domainPlaceholder": "yourdomain.com",
       "fromLabel": "From Email / Name (Optional)",
@@ -2334,8 +2342,10 @@
       },
       "skills": {
         "category": "Category",
-        "items": "Skills (comma-separated)",
-        "itemsPlaceholder": "React, Next.js, Tailwind, Redux",
+        "items": "Catalogue skills",
+        "catalogHint": "Select the skills to show on your CV. Drag them or use the arrows to set their position; deselect to hide them without deleting them from the portfolio.",
+        "moveSkill": "Move {name}",
+        "hideSkill": "Hide {name} from CV",
         "add": "+ Add skill group",
         "save": "Save",
         "saving": "Saving...",

@@ -101,6 +101,9 @@
         "dashboardLink": "Abrir API Keys en Resend",
         "domainsLink": "Abrir Dominios en Resend"
       },
+      "resendWebhook": {
+        "title": "Cómo configurar eventos en Resend"
+      },
       "uploadthing": {
         "title": "Cómo obtener credenciales de UploadThing",
         "step1": "Inicia sesión en tu panel de UploadThing (uploadthing.com).",
@@ -171,6 +174,8 @@
     "resend": {
       "title": "Credenciales de Correo Resend",
       "description": "Configura tu API Key de Resend y tu dominio de correo para el envío automático y despliegue de plantillas.",
+      "tabCredentials": "Credenciales",
+      "tabEvents": "Eventos y Webhooks",
       "apiKeyLabel": "Resend API Key",
       "apiKeyPlaceholder": "re_123456789...",
       "webhookTitle": "Eventos de Resend",
@@ -191,6 +196,9 @@
       "webhookTroubleshooting": "404: revisa el despliegue, la URL y que el secreto esté guardado para este usuario. 401: el secreto no coincide. 503: revisa los logs del servidor y la conexión a MongoDB. Esta URL debe ser pública y recibir peticiones sin iniciar sesión.",
       "webhookSecret": "Secreto de firma del webhook",
       "webhookSaved": "Ya hay un secreto guardado. Deja el campo vacío para conservarlo.",
+      "webhookActiveNotice": "El secreto de firma está configurado. Los eventos de Resend se verifican activamente.",
+      "webhookConnected": "Conectado",
+      "webhookNotConnected": "Sin configurar",
       "domainLabel": "Dominio de correo",
       "domainPlaceholder": "tudominio.com",
       "fromLabel": "Nombre / Remitente (Opcional)",
@@ -2355,8 +2363,10 @@
       },
       "skills": {
         "category": "Categoría",
-        "items": "Habilidades (separadas por comas)",
-        "itemsPlaceholder": "React, Next.js, Tailwind, Redux",
+        "items": "Habilidades del catálogo",
+        "catalogHint": "Selecciona las habilidades que quieres mostrar en el CV. Arrástralas o usa las flechas para definir su posición; quita la selección para ocultarlas sin borrarlas del portafolio.",
+        "moveSkill": "Mover {name}",
+        "hideSkill": "Ocultar {name} del CV",
         "add": "+ Añadir grupo",
         "save": "Guardar",
         "saving": "Guardando...",

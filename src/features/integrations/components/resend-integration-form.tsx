@@ -1,19 +1,27 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { AlertTriangle } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Copy,
+  KeyRound,
+  Webhook,
+} from "lucide-react";
 
 import { api, type RouterOutputs } from "@/trpc/react";
-import { ResendWebhookSetup } from "./resend-webhook-setup";
+import { ResendIntegrationGuide } from "./resend-integration-guide";
+import { ResendWebhookGuide } from "./resend-webhook-guide";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   FormActions,
   FormContent,
@@ -67,6 +75,9 @@ export function ResendIntegrationForm({
 }: ResendIntegrationFormProps) {
   const t = useTranslations("adminCredentials");
   const utils = api.useUtils();
+  const [activeTab, setActiveTab] = useState<"credentials" | "events">(
+    "credentials",
+  );
   const [isPending, startTransition] = useTransition();
   const saveResend = api.integrationsAdmin.saveResend.useMutation();
 
@@ -95,6 +106,16 @@ export function ResendIntegrationForm({
       emailSignatureHtml: status.emailSignatureHtml,
     });
   }, [form, status]);
+
+  const copyWebhookUrl = useCallback(async () => {
+    if (!status.webhookUrl) return;
+    try {
+      await navigator.clipboard.writeText(status.webhookUrl);
+      toast.success(t("resend.webhookCopied"));
+    } catch {
+      toast.error(t("resend.webhookCopyFailed"));
+    }
+  }, [status.webhookUrl, t]);
 
   const handleSubmit = useCallback(
     (values: ResendFormValues) => {
@@ -125,9 +146,22 @@ export function ResendIntegrationForm({
     [saveResend, utils, t, onSuccess],
   );
 
+  const handleFormSubmit = form.handleSubmit(handleSubmit, (errors) => {
+    if (
+      errors.apiKey ||
+      errors.emailDomain ||
+      errors.fromEmail ||
+      errors.emailSignatureHtml
+    ) {
+      setActiveTab("credentials");
+    } else if (errors.webhookSecret) {
+      setActiveTab("events");
+    }
+  });
+
   return (
     <Form {...form}>
-      <FormRoot onSubmit={form.handleSubmit(handleSubmit)}>
+      <FormRoot onSubmit={handleFormSubmit}>
         <FormContent>
           {status.lastError && (
             <div className="border-destructive/30 bg-destructive/10 text-destructive mb-4 flex items-center gap-2 rounded-md border p-3 text-sm">
@@ -136,95 +170,196 @@ export function ResendIntegrationForm({
             </div>
           )}
 
-          <FormSection
-            title={t("resend.title")}
-            description={t("resend.description")}
+          <Tabs
+            value={activeTab}
+            onValueChange={(val) =>
+              setActiveTab(val as "credentials" | "events")
+            }
+            className="w-full"
           >
-            <FormField
-              control={form.control}
-              name="apiKey"
-              render={({ field }) => (
-                <FormItem
-                  label={t("resend.apiKeyLabel")}
-                  required={!status.isConfigured}
-                >
-                  <Input
-                    {...field}
-                    id="resend-api-key"
-                    type="password"
-                    placeholder={
-                      status.maskedApiKey !== ""
-                        ? status.maskedApiKey
-                        : t("resend.apiKeyPlaceholder")
-                    }
-                  />
-                </FormItem>
-              )}
-            />
+            <TabsList
+              variant="line"
+              className="border-border/60 mb-6 w-full justify-start border-b"
+            >
+              <TabsTrigger value="credentials" className="text-sm">
+                <KeyRound className="size-4" aria-hidden />
+                <span>{t("resend.tabCredentials")}</span>
+              </TabsTrigger>
+              <TabsTrigger value="events" className="text-sm">
+                <Webhook className="size-4" aria-hidden />
+                <span>{t("resend.tabEvents")}</span>
+                {status.webhookConfigured && (
+                  <span className="bg-success/15 text-success ml-1.5 rounded-full px-2 py-0.5 text-xs font-semibold">
+                    {t("resend.webhookConnected")}
+                  </span>
+                )}
+              </TabsTrigger>
+            </TabsList>
 
-            <FormField
-              control={form.control}
-              name="emailDomain"
-              render={({ field }) => (
-                <FormItem
-                  label={t("resend.domainLabel")}
-                  required={!status.isConfigured}
-                >
-                  <Input
-                    {...field}
-                    id="resend-domain"
-                    type="text"
-                    placeholder={t("resend.domainPlaceholder")}
-                  />
-                </FormItem>
-              )}
-            />
+            <TabsContent value="credentials" className="mt-0">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(17.5rem,22.5rem)] lg:items-start">
+                <div className="space-y-6">
+                  <FormSection
+                    title={t("resend.title")}
+                    description={t("resend.description")}
+                  >
+                    <FormField
+                      control={form.control}
+                      name="apiKey"
+                      render={({ field }) => (
+                        <FormItem
+                          label={t("resend.apiKeyLabel")}
+                          required={!status.isConfigured}
+                        >
+                          <Input
+                            {...field}
+                            id="resend-api-key"
+                            type="password"
+                            placeholder={
+                              status.maskedApiKey !== ""
+                                ? status.maskedApiKey
+                                : t("resend.apiKeyPlaceholder")
+                            }
+                          />
+                        </FormItem>
+                      )}
+                    />
 
-            <FormField
-              control={form.control}
-              name="fromEmail"
-              render={({ field }) => (
-                <FormItem label={t("resend.fromLabel")}>
-                  <Input
-                    {...field}
-                    id="resend-from"
-                    type="text"
-                    placeholder={t("resend.fromPlaceholder")}
-                  />
-                </FormItem>
-              )}
-            />
+                    <FormField
+                      control={form.control}
+                      name="emailDomain"
+                      render={({ field }) => (
+                        <FormItem
+                          label={t("resend.domainLabel")}
+                          required={!status.isConfigured}
+                        >
+                          <Input
+                            {...field}
+                            id="resend-domain"
+                            type="text"
+                            placeholder={t("resend.domainPlaceholder")}
+                          />
+                        </FormItem>
+                      )}
+                    />
 
-            <FormField
-              control={form.control}
-              name="emailSignatureHtml"
-              render={({ field }) => (
-                <FormItem
-                  label={t("resend.signatureLabel")}
-                  description={t("resend.signatureHint")}
-                >
-                  <Textarea
-                    {...field}
-                    id="resend-signature"
-                    rows={8}
-                    className="font-mono text-xs"
-                    placeholder={t("resend.signaturePlaceholder")}
-                  />
-                </FormItem>
-              )}
-            />
-          </FormSection>
-          <FormSection title={t("resend.webhookTitle")}>
-            <ResendWebhookSetup webhookUrl={status.webhookUrl} />
-            <FormField control={form.control} name="webhookSecret" render={({ field }) => (
-              <FormItem label={t("resend.webhookSecret")} description={status.webhookConfigured ? t("resend.webhookSaved") : undefined}>
-                <Input {...field} type="password" autoComplete="new-password" placeholder="whsec_…" />
-              </FormItem>
-            )} />
-          </FormSection>
+                    <FormField
+                      control={form.control}
+                      name="fromEmail"
+                      render={({ field }) => (
+                        <FormItem label={t("resend.fromLabel")}>
+                          <Input
+                            {...field}
+                            id="resend-from"
+                            type="text"
+                            placeholder={t("resend.fromPlaceholder")}
+                          />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="emailSignatureHtml"
+                      render={({ field }) => (
+                        <FormItem
+                          label={t("resend.signatureLabel")}
+                          description={t("resend.signatureHint")}
+                        >
+                          <Textarea
+                            {...field}
+                            id="resend-signature"
+                            rows={8}
+                            className="font-mono text-xs"
+                            placeholder={t("resend.signaturePlaceholder")}
+                          />
+                        </FormItem>
+                      )}
+                    />
+                  </FormSection>
+                </div>
+
+                <ResendIntegrationGuide />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="events" className="mt-0">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(17.5rem,22.5rem)] lg:items-start">
+                <div className="space-y-6">
+                  <FormSection
+                    title={t("resend.webhookTitle")}
+                    description={t("resend.webhookHint")}
+                  >
+                    <div className="space-y-1.5">
+                      <label
+                        htmlFor="resend-webhook-url"
+                        className="text-foreground text-xs font-medium"
+                      >
+                        {t("resend.webhookUrl")}
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          id="resend-webhook-url"
+                          readOnly
+                          value={status.webhookUrl}
+                          className="min-w-0 font-mono text-xs"
+                          onFocus={(event) => event.target.select()}
+                        />
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          disabled={!status.webhookUrl}
+                          onClick={() => void copyWebhookUrl()}
+                        >
+                          <Copy aria-hidden className="size-4" />
+                          {t("resend.webhookCopy")}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="webhookSecret"
+                      render={({ field }) => (
+                        <FormItem
+                          label={t("resend.webhookSecret")}
+                          description={
+                            status.webhookConfigured
+                              ? t("resend.webhookSaved")
+                              : undefined
+                          }
+                        >
+                          <Input
+                            {...field}
+                            id="resend-webhook-secret"
+                            type="password"
+                            autoComplete="new-password"
+                            placeholder="whsec_…"
+                          />
+                        </FormItem>
+                      )}
+                    />
+
+                    {status.webhookConfigured && (
+                      <div className="border-success/30 bg-success/10 text-success flex items-center gap-2 rounded-lg border p-3 text-xs font-medium">
+                        <CheckCircle2
+                          className="size-4 shrink-0"
+                          aria-hidden
+                        />
+                        <span>{t("resend.webhookActiveNotice")}</span>
+                      </div>
+                    )}
+                  </FormSection>
+                </div>
+
+                <ResendWebhookGuide />
+              </div>
+            </TabsContent>
+          </Tabs>
         </FormContent>
 
-        <div className="mt-4 flex w-full items-center justify-end gap-2">
+        <div className="border-border/60 mt-6 flex w-full items-center justify-end gap-2 border-t pt-4">
           <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
             {t("actions.cancel")}
           </Button>
