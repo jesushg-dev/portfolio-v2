@@ -1,8 +1,31 @@
 {
   "adminCredentials": {
+    "github": {
+      "token": "Personal access token",
+      "tokenHint": "Paste a new token. A saved token is never loaded into this field.",
+      "private": "Your credential is encrypted in the database for your account only. It is used on the server and is never exposed publicly.",
+      "connected": "Connected account: {login}",
+      "save": "Verify and save",
+      "cancel": "Cancel",
+      "saved": "GitHub connected.",
+      "failed": "Could not connect GitHub. Check the token and its permissions.",
+      "guideTitle": "Configure your GitHub calendar",
+      "step1": "Open GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens.",
+      "step2": "Create a token for your account with an expiration date. Public read access is sufficient for public contributions; write permissions are not needed.",
+      "step3": "Copy the token and paste it here. GitHub only shows it once.",
+      "step4": "Verify and save. The account and calendar access are checked, and the Now username is updated.",
+      "step5": "Renew the token here when it expires. Disconnecting removes the saved credential.",
+      "createToken": "Create a token in GitHub",
+      "fallback": "Without a token, or if GitHub is unavailable, the page stays usable and shows a profile link instead of invented statistics.",
+      "documentation": "GitHub authentication documentation"
+    },
     "title": "Credentials & Integrations",
     "subtitle": "Configure per-tenant API keys and integration settings for Resend, Spotify, Google Calendar, UploadThing, and AI Models.",
     "providers": {
+      "github": {
+        "name": "GitHub",
+        "description": "Your own GitHub contribution calendar, connected with a private, encrypted credential."
+      },
       "resend": {
         "name": "Resend (Email)",
         "description": "Transactional email delivery and automatic template deployment."
@@ -72,6 +95,7 @@
     "securityNotice": "Credentials and API keys are encrypted at rest with per-tenant isolation (AES-256).",
     "backToIntegrations": "Back to Integrations",
     "tags": {
+      "github": "Contribution Graph & Activity",
       "resend": "Transactional Emails & CV Delivery",
       "spotify": "Now Playing Widget & Top Tracks",
       "google-calendar": "Interviews & Calendar Sync",
@@ -812,6 +836,8 @@
       "title": "Engineering Expertise",
       "subtitle": "Services",
       "description": "Areas where I design, build, and lead production software.",
+      "seeMore": "See more",
+      "seeLess": "See less",
       "items": {
         "contact": {
           "title": "Let's build together",
@@ -1679,14 +1705,13 @@
       "metaTitle": "Now",
       "metaDescription": "A snapshot of what I'm focused on, reading, and shipping at the moment — updated whenever I remember to.",
       "hero": {
-        "eyebrow": "// now",
-        "title": "What am I doing",
-        "titleHighlight": "right now?",
-        "description": "A snapshot of what I'm focused on, reading, and shipping at the moment — updated whenever I remember to."
+        "eyebrow": "Now",
+        "title": "What I’m doing",
+        "titleHighlight": "right now.",
+        "description": "A snapshot of what I’m focused on, reading and shipping. Updated whenever I remember to."
       },
       "list": {
         "localTimeLabel": "Local time",
-        "readingLabel": "Currently reading",
         "reading": {
           "book": "The Pragmatic Programmer"
         },
@@ -1706,14 +1731,23 @@
         "oss": {
           "label": "Open source",
           "body": "Tinkering with open-source projects when I find the time"
-        }
+        },
+        "focusSummary": "Focused on {topics}."
       },
       "note": {
-        "before": "This is a now page — if you have your own site,",
-        "linkLabel": "you should make one too",
-        "after": "."
+        "description": "This is a now page. If you have your own site, make one too.",
+        "inspiredBy": "Inspired by",
+        "linkLabel": "Learn about now pages"
       },
       "activity": {
+        "githubUnavailable": "Contribution data is currently unavailable.",
+        "githubProfile": "View my GitHub profile",
+        "contributionDay": "{count} contributions · {date}",
+        "scheduledHours": "Usual routine (approx.) · {start}–{end} · {timezone}",
+        "statusUnavailable": "No current update.",
+        "noReading": "No current reading added.",
+        "noWatching": "No recent film added.",
+        "noPhotos": "No personal photos added.",
         "title": "Activity",
         "lastStatus": "Last Status",
         "lastPlayed": "Last Played",
@@ -1728,12 +1762,63 @@
         "more": "More",
         "statusBody": "Finally automated my CI/CD pipeline end-to-end — small win, big relief.",
         "statusRelative": "4 hours ago",
-        "githubBody": "Opened a pull request in <repo></repo>",
-        "githubRelative": "2 days ago",
+        "loadingVisualization": "Loading visualization…",
+        "rotateBlocks": "Rotate blocks",
+        "panBlocks": "Toggle panning",
+        "zoomInBlocks": "Zoom in",
+        "zoomOutBlocks": "Zoom out",
+        "resetBlocks": "Reset view",
+        "contributionViews": "Contribution views",
+        "blocks": "3D blocks",
+        "calendar": "Calendar",
+        "breakout": "Breakout",
+        "blocksDescription": "GitHub contributions as an isometric landscape of building blocks.",
+        "blocksHint": "Drag to rotate; enable Move or hold Shift to pan. Arrow keys rotate, +/− zoom, Home resets. Each block represents a day.",
+        "languageDistribution": "Languages in public repositories",
+        "otherLanguages": "Other",
+        "noLanguageData": "No language data is available.",
+        "activityCommits": "Commits",
+        "activityIssues": "Issues",
+        "activityPullRequests": "Pull requests",
+        "activityReviews": "Reviews",
+        "activityRepositories": "Repositories created",
+        "statsUnavailable": "Additional statistics are unavailable; the contribution calendar remains available.",
+        "githubStars": "{count} stars",
+        "githubForks": "{count} forks",
+        "repositorySample": "Languages, stars and forks cover {sampled} of {total} owned public repositories, excluding forks (up to 100, most recently updated). Language shares measure code bytes, not proficiency.",
         "contributionsTotal": "{total} contributions in the last year",
-        "photosAlt": "Latest photo placeholders",
+        "photosAlt": "A recent personal photo",
         "spotifyIdleTitle": "Nothing right now",
-        "spotifyIdleSubtitle": "Check back later"
+        "spotifyIdleSubtitle": "Check back later",
+        "routineNow": "Usually around this time: {activity}",
+        "githubNoActivity": "No recent public activity is available.",
+        "githubEvent": {
+          "push": "Pushed changes to",
+          "pullRequest": "Worked on a pull request in",
+          "issue": "Updated an issue in",
+          "star": "Starred",
+          "fork": "Forked",
+          "release": "Published a release in",
+          "create": "Created a branch, tag or repository in",
+          "activity": "Was active in"
+        },
+        "awayHeading": "Away from the keyboard.",
+        "shippingHeading": "Shipping, in public.",
+        "contributionCount": "Contributions",
+        "gameInstructions": "Move the paddle with your mouse, by dragging, or with ←/→ (A/D). Space starts or pauses; Esc pauses. Clear the contribution bricks without dropping the ball.",
+        "gameScore": "Score: {score}",
+        "gameLives": "Lives: {lives}",
+        "gamePlay": "Play",
+        "gamePause": "Pause",
+        "gameResume": "Resume",
+        "gameRestart": "Restart",
+        "gameLeft": "Move paddle left",
+        "gameRight": "Move paddle right",
+        "gameWon": "You cleared all contribution bricks!",
+        "gameLost": "Game over. Restart to try again.",
+        "gameReady": "Position your paddle, then press Play or Space to launch.",
+        "gamePaused": "Paused.",
+        "gameReduced": "No autoplay or decorative motion. The ball moves only when you choose to play."
       }
     },
     "colophon": {
@@ -2228,6 +2313,12 @@
       }
     },
     "forms": {
+      "languageBar": {
+        "base": "Base",
+        "complete": "All complete",
+        "progress": "{done}/{total} complete",
+        "missing": "Missing: {fields}"
+      },
       "saved": "Saved.",
       "order": "Order",
       "loading": "Loading...",
@@ -2343,7 +2434,14 @@
       "skills": {
         "category": "Category",
         "items": "Catalogue skills",
-        "catalogHint": "Select the skills to show on your CV. Drag them or use the arrows to set their position; deselect to hide them without deleting them from the portfolio.",
+        "tabSelect": "1. Select skills",
+        "tabOrder": "2. Order",
+        "catalogHint": "Select the skills from your portfolio catalogue that you want to include in this group.",
+        "orderHint": "Drag items or use the arrows to set their order on your CV. Click the eye icon to hide an item without removing it.",
+        "continueToOrder": "Continue to order ({count})",
+        "emptyOrderTitle": "No skills selected yet",
+        "emptyOrderDescription": "Choose skills from the catalogue in the first step to arrange their sequence here.",
+        "goToSelect": "Go to select skills",
         "moveSkill": "Move {name}",
         "hideSkill": "Hide {name} from CV",
         "add": "+ Add skill group",
@@ -3142,6 +3240,31 @@
         "updateFailed": "Could not save settings"
       },
       "nowSettings": {
+        "configureGithub": "Configure GitHub",
+        "scheduleTitle": "Usual routine",
+        "scheduleHint": "Approximate recurring ranges in your time zone. Displayed with your current focuses, independently of your latest status.",
+        "noSlots": "Your routine is empty. Add an activity to get started.",
+        "startTime": "From",
+        "endTime": "Until",
+        "weekdays": "Repeat on",
+        "day0": "Sunday",
+        "day1": "Monday",
+        "day2": "Tuesday",
+        "day3": "Wednesday",
+        "day4": "Thursday",
+        "day5": "Friday",
+        "day6": "Saturday",
+        "defaultStatusTitle": "Latest status",
+        "defaultStatusHint": "A personal update you publish manually. Your approximate routine appears separately beside your current focuses.",
+        "readingCardHint": "Your current book and reading progress.",
+        "watchedCardHint": "Your latest film or series. Leave 0 if you have not rated it.",
+        "addPhoto": "Add photo",
+        "removePhoto": "Remove photo",
+        "photoNumber": "Photo {number}",
+        "noPhotos": "No personal photos added.",
+        "contributionPreview": "GitHub contributions",
+        "loadingGithub": "Loading GitHub activity…",
+        "githubTokenHint": "Connect your own account in Integrations. Its credential is encrypted in the database. Without a connection, only the public profile link is shown.",
         "sectionGeneral": "General",
         "sectionReading": "Reading",
         "sectionWatched": "Last watched",
@@ -3158,19 +3281,54 @@
         "readingProgress": "Progress (%)",
         "watchedTitle": "Title",
         "watchedRating": "Rating (0–5)",
-        "githubRepo": "Repo label",
-        "githubHref": "Repo URL",
         "photoUrls": "Photo URLs",
         "photoUrlsHint": "One URL per line",
         "statusBody": "Status body",
         "statusBodyRequired": "Status body is required for the primary language",
         "statusRelative": "Status relative time",
-        "githubBody": "GitHub activity body",
-        "githubRelative": "GitHub relative time",
         "save": "Save",
         "saving": "Saving…",
         "updatedSuccess": "Now settings saved",
-        "updateFailed": "Could not save Now settings"
+        "updateFailed": "Could not save Now settings",
+        "readingCover": "Book cover",
+        "watchedCover": "Movie poster",
+        "coverHint": "Upload a JPG, PNG, WebP or AVIF image up to 4 MB, or paste an image URL. Save the form to keep the cover.",
+        "uploadCover": "Upload {label}",
+        "invalidCover": "Choose a JPG, PNG, WebP or AVIF image under 4 MB.",
+        "coverUploaded": "Cover uploaded. Save your changes to keep it.",
+        "coverUploadFailed": "Could not upload the cover. Check your storage integration.",
+        "uploadingCover": "Uploading cover",
+        "removeCover": "Remove cover",
+        "githubActivityHint": "Latest public activity is loaded automatically from your connected GitHub account. No manual activity text is required.",
+        "routineEditorHint": "Add your usual activities and choose when they repeat. This is an approximate routine, separate from your personal status.",
+        "routineAdd": "Add activity",
+        "routineEdit": "Edit activity",
+        "routineUntitled": "Activity without a description",
+        "routineEditNamed": "Edit {name}",
+        "routineRemoveNamed": "Remove {name}",
+        "routineDays": {
+          "daily": "Every day",
+          "weekdays": "Monday to Friday",
+          "weekends": "Weekends",
+          "custom": "Choose days"
+        },
+        "routineNextDay": "until the next day",
+        "routineFullDay": "all day",
+        "routineNeedsReview": "Review the days and times for this activity.",
+        "routineSaveHint": "Apply activity prepares the change. Use “Save this tab” in Snapshot to publish it.",
+        "routineDialogHint": "Describe what you usually do, choose approximate times and the days. You can complete translations for each language.",
+        "routineEmoji": "Emoji",
+        "routineActivity": "What do you usually do?",
+        "routineActivityPlaceholder": "For example: studying languages",
+        "routineDescriptionRequired": "Add a description in at least one language.",
+        "routineOverlap": "This time overlaps with “{name}” ({start}–{end}) on one of the selected days. Change the times or days.",
+        "routineOvernightHint": "This activity continues into the next day, such as sleeping overnight.",
+        "routineFullDayHint": "The same start and end time means a 24-hour activity.",
+        "routineCancel": "Cancel",
+        "routineApply": "Apply activity",
+        "saveTab": "Save this tab",
+        "tabSaved": "Changes in this tab saved.",
+        "tabSaveHint": "This button saves only the current tab. Changes in other tabs remain pending."
       },
       "nowFocus": {
         "sectionBasics": "Basics",
@@ -3543,6 +3701,9 @@
       }
     },
     "now": {
+      "focusOrderHint": "Drag a card to change its public position. Changes are saved automatically.",
+      "focusReorderFailed": "Could not save the order. The previous order was restored.",
+      "moveFocus": "Move {name}",
       "title": "Now",
       "subtitle": "Manage your Now page snapshot, activity, and focuses.",
       "tabsLabel": "Now sections",
@@ -3553,9 +3714,9 @@
         "focuses": "Focuses"
       },
       "sections": {
-        "snapshotHint": "Timezone, emoji, and the live status line on the page.",
+        "snapshotHint": "Time zone, usual routine and an independent personal status.",
         "activityHint": "Reading, last watched, and photo strip.",
-        "githubHint": "Contribution username and latest activity blurb.",
+        "githubHint": "Public activity and calendar from your connected GitHub account.",
         "focusesHint": "Cards shown in the “also in progress” mosaic."
       },
       "focusesTitle": "Focuses",
@@ -3821,6 +3982,20 @@
       }
     },
     "dataTable": {
+      "searchDialog": {
+        "skillsHint": "Search skill titles, categories and descriptions. Each word can match a different field.",
+        "timelineHint": "Search titles, descriptions, dates and technologies. Each word can match a different field.",
+        "open": "Search",
+        "active": "Search: {query}",
+        "title": "Search records",
+        "label": "Search text",
+        "placeholder": "e.g. React frontend",
+        "apply": "Search",
+        "clear": "Clear search",
+        "cancel": "Cancel",
+        "servicesHint": "Search titles, descriptions, types and skills. Each word can match a different field.",
+        "certificationsHint": "Search titles, issuers, credential IDs and skills. Each word can match a different field."
+      },
       "searchBy": "Search by",
       "allColumns": "All columns",
       "searchPlaceholder": "Search...",
@@ -4327,7 +4502,14 @@
         "historicalTracking": "Historical · custom pixel",
         "providerConnected": "Resend events connected",
         "providerNotConnected": "Webhook not configured",
-        "delivery": {"SENT":"Sent","DELIVERED":"Delivered","DELAYED":"Delivery delayed","FAILED":"Failed","BOUNCED":"Bounced","COMPLAINED":"Marked as spam"},
+        "delivery": {
+          "SENT": "Sent",
+          "DELIVERED": "Delivered",
+          "DELAYED": "Delivery delayed",
+          "FAILED": "Failed",
+          "BOUNCED": "Bounced",
+          "COMPLAINED": "Marked as spam"
+        },
         "replacementHint": "Your edits are saved for this application. PDF is recommended and required for email. The uploaded version is credited to you; the previous AI analysis does not assess your edits.",
         "replacementInvalid": "Choose a PDF or DOCX up to 8 MB.",
         "sendSuccess": "CV email sent",

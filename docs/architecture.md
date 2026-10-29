@@ -47,7 +47,7 @@ Code lives under `src/features/<name>/` (UI, lib, server routers). App Router pa
 | Skills, projects, certs, timeline, services, soft skills | matching routes                                    | `/admin/<resource>`                    |
 | CV                                                       | `/curriculum-vitae`, `/api/cv/pdf`, `/api/cv/docx` | `/admin/cv`                            |
 | Process pages                                            | `/process/...`                                     | `/admin/process-pages`                 |
-| Now / Uses / colophon / stats                            | gated by `PUBLIC_PAGE_LIVE`                        | `/admin/now`, `/admin/uses`            |
+| Now / Uses / colophon / stats                            |                                                    | `/admin/now`, `/admin/uses`            |
 | Job Tracker + Resume Engine                              | —                                                  | `/admin/job-tracker`, resume workflows |
 | Integrations                                             | Spotify widget, contact mail                       | `/admin/credentials`                   |
 | Analytics                                                | beacon + `/stats`                                  | dashboard cards                        |

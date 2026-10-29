@@ -46,7 +46,7 @@ Owners viewing their own site are skipped server-side (`session.user.id === tena
 
 | Surface         | Data                                                              |
 | --------------- | ----------------------------------------------------------------- |
-| Public `/stats` | Aggregates without referrer hosts, if `PUBLIC_PAGE_LIVE.stats`    |
+| Public `/stats` | Aggregates without referrer hosts                                 |
 | Admin dashboard | Full summary including referrers, session-scoped to `ctx.user.id` |
 
 tRPC: `analytics.getPublicSummary`, `analyticsAdmin.*`.

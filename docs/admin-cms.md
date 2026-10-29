@@ -13,7 +13,6 @@ Dashboard shell: `dashboard-shell.tsx` (sidebar). Intercepting routes under `adm
 | CV                                                            | `/admin/cv`                 | `cv`                           | Header, contacts, education, languages, skills, experience, soft skills, additional, **personal references** |
 | Skills / projects / certs / timeline / services / soft skills | `/admin/<name>`             | matching feature               | List + `#<resource>-add` IDs for e2e                                                                         |
 | Process pages                                                 | `/admin/process-pages`      | `process-pages`                | Templates WORKFLOW / QA                                                                                      |
-| Now / Uses                                                    | `/admin/now`, `/admin/uses` | `now`, `uses`                  | Public routes still gated by `PUBLIC_PAGE_LIVE`                                                              |
 | Job Tracker                                                   | `/admin/job-tracker`        | `job-tracker`                  | [`job-tracker.md`](./job-tracker.md)                                                                         |
 | Credentials                                                   | `/admin/credentials`        | `integrations`                 | [`tenant-credentials.md`](./tenant-credentials.md)                                                           |
 | Settings                                                      | `/admin/settings`           | auth + profile publish         | 2FA, passkeys, `isPublished`, site brand                                                                     |
@@ -24,7 +23,6 @@ Stable form IDs (`#skill-*`, `#cv-*`, `#timeline-*`, …) are required for Playw
 ## Publish vs live flags
 
 - **Profile `isPublished`:** non-primary tenants’ **CV** (page, `/api/cv/*`, `cv.getPublic`, email PDF). Primary owner CV is always public.
-- **`PUBLIC_PAGE_LIVE`:** Now / Uses / colophon / stats 404 when false — [`public-pages.md`](./public-pages.md).
 - **Process page `isPublished` / `showInNav`:** that page only.
 
 ## Seed export

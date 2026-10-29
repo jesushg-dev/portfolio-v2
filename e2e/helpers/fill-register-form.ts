@@ -178,14 +178,24 @@ export async function signInOwner(
     await expectAdminDashboard(page, 30_000);
     return true;
   } catch (dashboardError) {
-    const sessionResponse = await page.context().request.get(
-      new URL("/api/auth/get-session", page.url()).href,
-    );
+    const sessionResponse = await page
+      .context()
+      .request.get(new URL("/api/auth/get-session", page.url()).href);
     if (!sessionResponse.ok()) {
-      throw new Error(`Session verification failed with HTTP ${sessionResponse.status()} after sign-in`, { cause: dashboardError });
+      throw new Error(
+        `Session verification failed with HTTP ${sessionResponse.status()} after sign-in`,
+        { cause: dashboardError },
+      );
     }
     const session: unknown = await sessionResponse.json();
-    if (session && typeof session === "object" && "user" in session && session.user && "session" in session && session.session) {
+    if (
+      session &&
+      typeof session === "object" &&
+      "user" in session &&
+      session.user &&
+      "session" in session &&
+      session.session
+    ) {
       throw new Error(
         `Sign-in succeeded and the browser session is valid, but the admin dashboard did not render (${new URL(page.url()).pathname}). Check the server logs for a page/data error.`,
         { cause: dashboardError },

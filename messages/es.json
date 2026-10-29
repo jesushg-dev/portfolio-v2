@@ -1,8 +1,31 @@
 {
   "adminCredentials": {
+    "github": {
+      "token": "Token de acceso personal",
+      "tokenHint": "Pega un token nuevo. El token guardado nunca se carga en este campo.",
+      "private": "La credencial se guarda cifrada en la base de datos solo para tu cuenta. Se utiliza en el servidor y nunca se expone públicamente.",
+      "connected": "Cuenta conectada: {login}",
+      "save": "Verificar y guardar",
+      "cancel": "Cancelar",
+      "saved": "GitHub conectado.",
+      "failed": "No se pudo conectar GitHub. Revisa el token y sus permisos.",
+      "guideTitle": "Configura tu calendario de GitHub",
+      "step1": "Abre GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens.",
+      "step2": "Crea un token de tu cuenta con fecha de vencimiento. El acceso público de lectura basta para las contribuciones públicas; no se necesitan permisos de escritura.",
+      "step3": "Copia el token y pégalo aquí. GitHub solo lo muestra una vez.",
+      "step4": "Verifica y guarda. Se comprueban la cuenta y el acceso al calendario, y se actualiza el usuario en Now.",
+      "step5": "Renueva el token aquí cuando caduque. Desconectar elimina la credencial guardada.",
+      "createToken": "Crear un token en GitHub",
+      "fallback": "Sin token, o si GitHub no responde, la página sigue funcionando y muestra un enlace al perfil en lugar de estadísticas inventadas.",
+      "documentation": "Documentación de autenticación de GitHub"
+    },
     "title": "Credenciales e Integraciones",
     "subtitle": "Configura las llaves de API y opciones de integración independientes por usuario para Resend, Spotify, Google Calendar, UploadThing y Modelos de IA.",
     "providers": {
+      "github": {
+        "name": "GitHub",
+        "description": "Tu calendario de contribuciones de GitHub con una credencial privada y cifrada por usuario."
+      },
       "resend": {
         "name": "Resend (Correo)",
         "description": "Envío de correos transaccionales y despliegue automático de plantillas."
@@ -72,6 +95,7 @@
     "securityNotice": "Las credenciales y claves de API están cifradas en reposo con aislamiento por tenant (AES-256).",
     "backToIntegrations": "Volver a Integraciones",
     "tags": {
+      "github": "Gráfico de contribuciones y actividad",
       "resend": "Correos transaccionales y entrega de CV",
       "spotify": "Widget Now Playing y Top Canciones",
       "google-calendar": "Sincronización de entrevistas en calendario",
@@ -833,6 +857,8 @@
       "title": "Experiencia en Ingeniería",
       "subtitle": "Servicios",
       "description": "Áreas donde diseño, construyo y lidero software de producción.",
+      "seeMore": "Ver más",
+      "seeLess": "Ver menos",
       "items": {
         "contact": {
           "title": "Construyamos juntos",
@@ -1700,14 +1726,13 @@
       "metaTitle": "Now",
       "metaDescription": "Una captura de en qué estoy enfocado, leyendo y entregando en este momento — actualizada cuando me acuerdo.",
       "hero": {
-        "eyebrow": "// now",
-        "title": "¿Qué estoy haciendo",
-        "titleHighlight": "ahora mismo?",
-        "description": "Una captura de en qué estoy enfocado, leyendo y entregando en este momento — actualizada cuando me acuerdo."
+        "eyebrow": "Ahora",
+        "title": "Lo que estoy haciendo",
+        "titleHighlight": "ahora mismo.",
+        "description": "Un vistazo a lo que me ocupa, lo que leo y lo que construyo. Actualizado cuando me acuerdo."
       },
       "list": {
         "localTimeLabel": "Hora local",
-        "readingLabel": "Leyendo ahora",
         "reading": {
           "book": "The Pragmatic Programmer"
         },
@@ -1727,14 +1752,23 @@
         "oss": {
           "label": "Open source",
           "body": "Jugando con proyectos open-source cuando encuentro tiempo"
-        }
+        },
+        "focusSummary": "Enfocado en {topics}."
       },
       "note": {
-        "before": "Esta es una now page — si tienes tu propio sitio,",
-        "linkLabel": "tú también deberías hacer una",
-        "after": "."
+        "description": "Esta es una página «ahora». Si tienes tu propio sitio, crea una también.",
+        "inspiredBy": "Inspirado por",
+        "linkLabel": "Conoce las páginas «ahora»"
       },
       "activity": {
+        "githubUnavailable": "Las contribuciones no están disponibles en este momento.",
+        "githubProfile": "Ver mi perfil de GitHub",
+        "contributionDay": "{count} contribuciones · {date}",
+        "scheduledHours": "Rutina habitual (aprox.) · {start}–{end} · {timezone}",
+        "statusUnavailable": "Sin actualización actual.",
+        "noReading": "No hay una lectura actual agregada.",
+        "noWatching": "No hay una película reciente agregada.",
+        "noPhotos": "No hay fotos personales agregadas.",
         "title": "Actividad",
         "lastStatus": "Último estado",
         "lastPlayed": "Última reproducción",
@@ -1749,12 +1783,63 @@
         "more": "Más",
         "statusBody": "Por fin automaticé mi pipeline de CI/CD de punta a punta — pequeña victoria, gran alivio.",
         "statusRelative": "hace 4 horas",
-        "githubBody": "Abrí un pull request en <repo></repo>",
-        "githubRelative": "hace 2 días",
+        "loadingVisualization": "Cargando visualización…",
+        "rotateBlocks": "Girar bloques",
+        "panBlocks": "Activar o desactivar desplazamiento",
+        "zoomInBlocks": "Acercar",
+        "zoomOutBlocks": "Alejar",
+        "resetBlocks": "Restablecer vista",
+        "contributionViews": "Vistas de contribuciones",
+        "blocks": "Bloques 3D",
+        "calendar": "Calendario",
+        "breakout": "Breakout",
+        "blocksDescription": "Contribuciones de GitHub como un paisaje isométrico de bloques de construcción.",
+        "blocksHint": "Arrastra para girar; activa Mover o mantén Shift para desplazar. Las flechas giran, +/− ajustan el zoom e Inicio restablece. Cada bloque representa un día.",
+        "languageDistribution": "Lenguajes en repositorios públicos",
+        "otherLanguages": "Otros",
+        "noLanguageData": "No hay datos de lenguajes disponibles.",
+        "activityCommits": "Commits",
+        "activityIssues": "Issues",
+        "activityPullRequests": "Pull requests",
+        "activityReviews": "Revisiones",
+        "activityRepositories": "Repositorios creados",
+        "statsUnavailable": "Las estadísticas adicionales no están disponibles; el calendario de contribuciones sigue disponible.",
+        "githubStars": "{count} estrellas",
+        "githubForks": "{count} forks",
+        "repositorySample": "Lenguajes, estrellas y forks abarcan {sampled} de {total} repositorios públicos propios, excluyendo forks (hasta 100, los actualizados más recientemente). Los porcentajes miden bytes de código, no dominio del lenguaje.",
         "contributionsTotal": "{total} contribuciones en el último año",
-        "photosAlt": "Marcadores de fotos recientes",
+        "photosAlt": "Una foto personal reciente",
         "spotifyIdleTitle": "Nada por ahora",
-        "spotifyIdleSubtitle": "Vuelve más tarde"
+        "spotifyIdleSubtitle": "Vuelve más tarde",
+        "routineNow": "Por estas horas suelo estar en: {activity}",
+        "githubNoActivity": "No hay actividad pública reciente disponible.",
+        "githubEvent": {
+          "push": "Envió cambios a",
+          "pullRequest": "Trabajó en un pull request de",
+          "issue": "Actualizó una incidencia en",
+          "star": "Marcó con estrella",
+          "fork": "Creó un fork de",
+          "release": "Publicó una versión en",
+          "create": "Creó una rama, etiqueta o repositorio en",
+          "activity": "Tuvo actividad en"
+        },
+        "awayHeading": "Lejos del teclado.",
+        "shippingHeading": "Construyendo en público.",
+        "contributionCount": "Contribuciones",
+        "gameInstructions": "Mueve la pala con el ratón, arrastrando o con ←/→ (A/D). Espacio inicia o pausa; Esc pausa. Rompe los bloques de contribuciones sin dejar caer la pelota.",
+        "gameScore": "Puntos: {score}",
+        "gameLives": "Vidas: {lives}",
+        "gamePlay": "Jugar",
+        "gamePause": "Pausar",
+        "gameResume": "Continuar",
+        "gameRestart": "Reiniciar",
+        "gameLeft": "Mover pala a la izquierda",
+        "gameRight": "Mover pala a la derecha",
+        "gameWon": "¡Rompiste todos los bloques de contribuciones!",
+        "gameLost": "Fin de la partida. Reinicia para volver a intentarlo.",
+        "gameReady": "Coloca la pala y pulsa Jugar o Espacio para lanzar.",
+        "gamePaused": "Partida en pausa.",
+        "gameReduced": "Sin inicio automático ni movimiento decorativo. La pelota se mueve solo cuando eliges jugar."
       }
     },
     "colophon": {
@@ -2249,6 +2334,12 @@
       }
     },
     "forms": {
+      "languageBar": {
+        "base": "Base",
+        "complete": "Completado",
+        "progress": "{done}/{total} completado",
+        "missing": "Falta: {fields}"
+      },
       "saved": "Guardado.",
       "order": "Orden",
       "loading": "Cargando...",
@@ -2364,7 +2455,14 @@
       "skills": {
         "category": "Categoría",
         "items": "Habilidades del catálogo",
-        "catalogHint": "Selecciona las habilidades que quieres mostrar en el CV. Arrástralas o usa las flechas para definir su posición; quita la selección para ocultarlas sin borrarlas del portafolio.",
+        "tabSelect": "1. Seleccionar habilidades",
+        "tabOrder": "2. Ordenar",
+        "catalogHint": "Selecciona del catálogo las habilidades que deseas incluir en este grupo del CV.",
+        "orderHint": "Arrastra las tarjetas o usa las flechas para definir su orden en el CV. Haz clic en el ojo para ocultar un elemento sin borrarlo.",
+        "continueToOrder": "Continuar a ordenar ({count})",
+        "emptyOrderTitle": "Aún no hay habilidades seleccionadas",
+        "emptyOrderDescription": "Elige habilidades del catálogo en el primer paso para organizar su secuencia aquí.",
+        "goToSelect": "Ir a seleccionar habilidades",
         "moveSkill": "Mover {name}",
         "hideSkill": "Ocultar {name} del CV",
         "add": "+ Añadir grupo",
@@ -3205,6 +3303,31 @@
         "updateFailed": "No se pudieron guardar los ajustes"
       },
       "nowSettings": {
+        "configureGithub": "Configurar GitHub",
+        "scheduleTitle": "Rutina habitual",
+        "scheduleHint": "Franjas recurrentes aproximadas en tu zona horaria. Se muestran junto a tus actividades actuales, de forma independiente del último estado.",
+        "noSlots": "Tu rutina está vacía. Añade una actividad para empezar.",
+        "startTime": "Desde",
+        "endTime": "Hasta",
+        "weekdays": "Repetir los",
+        "day0": "Domingo",
+        "day1": "Lunes",
+        "day2": "Martes",
+        "day3": "Miércoles",
+        "day4": "Jueves",
+        "day5": "Viernes",
+        "day6": "Sábado",
+        "defaultStatusTitle": "Último estado",
+        "defaultStatusHint": "Una actualización personal que publicas manualmente. Tu rutina aproximada se muestra por separado junto a tus actividades actuales.",
+        "readingCardHint": "Tu libro actual y el avance de lectura.",
+        "watchedCardHint": "Tu última película o serie. Deja 0 si no la has valorado.",
+        "addPhoto": "Agregar foto",
+        "removePhoto": "Eliminar foto",
+        "photoNumber": "Foto {number}",
+        "noPhotos": "No hay fotos personales agregadas.",
+        "contributionPreview": "Contribuciones en GitHub",
+        "loadingGithub": "Cargando actividad de GitHub…",
+        "githubTokenHint": "Conecta tu propia cuenta en Integraciones. Su credencial se guarda cifrada en la base de datos. Sin conexión, solo se muestra el enlace al perfil público.",
         "sectionGeneral": "General",
         "sectionReading": "Lectura",
         "sectionWatched": "Último visto",
@@ -3221,19 +3344,54 @@
         "readingProgress": "Progreso (%)",
         "watchedTitle": "Título",
         "watchedRating": "Calificación (0–5)",
-        "githubRepo": "Etiqueta del repo",
-        "githubHref": "URL del repo",
         "photoUrls": "URLs de fotos",
         "photoUrlsHint": "Una URL por línea",
         "statusBody": "Texto de estado",
         "statusBodyRequired": "El texto de estado es obligatorio en el idioma principal",
         "statusRelative": "Tiempo relativo del estado",
-        "githubBody": "Texto de actividad de GitHub",
-        "githubRelative": "Tiempo relativo de GitHub",
         "save": "Guardar",
         "saving": "Guardando…",
         "updatedSuccess": "Ajustes de Now guardados",
-        "updateFailed": "No se pudieron guardar los ajustes de Now"
+        "updateFailed": "No se pudieron guardar los ajustes de Now",
+        "readingCover": "Portada del libro",
+        "watchedCover": "Póster de la película",
+        "coverHint": "Sube una imagen JPG, PNG, WebP o AVIF de hasta 4 MB, o pega su URL. Guarda el formulario para conservar la portada.",
+        "uploadCover": "Subir {label}",
+        "invalidCover": "Elige una imagen JPG, PNG, WebP o AVIF de menos de 4 MB.",
+        "coverUploaded": "Portada subida. Guarda los cambios para conservarla.",
+        "coverUploadFailed": "No se pudo subir la portada. Revisa la integración de almacenamiento.",
+        "uploadingCover": "Subiendo portada",
+        "removeCover": "Quitar portada",
+        "githubActivityHint": "La última actividad pública se obtiene automáticamente de tu cuenta de GitHub conectada. No necesitas escribirla manualmente.",
+        "routineEditorHint": "Añade tus actividades habituales y elige cuándo se repiten. Es una rutina aproximada, independiente de tu estado personal.",
+        "routineAdd": "Añadir actividad",
+        "routineEdit": "Editar actividad",
+        "routineUntitled": "Actividad sin descripción",
+        "routineEditNamed": "Editar {name}",
+        "routineRemoveNamed": "Quitar {name}",
+        "routineDays": {
+          "daily": "Todos los días",
+          "weekdays": "Lunes a viernes",
+          "weekends": "Fin de semana",
+          "custom": "Elegir días"
+        },
+        "routineNextDay": "hasta el día siguiente",
+        "routineFullDay": "todo el día",
+        "routineNeedsReview": "Revisa los días y el horario de esta actividad.",
+        "routineSaveHint": "Aplicar actividad prepara el cambio. Usa «Guardar esta pestaña» en Snapshot para publicarlo.",
+        "routineDialogHint": "Escribe qué sueles hacer, elige un horario aproximado y los días. Puedes completar las traducciones por idioma.",
+        "routineEmoji": "Emoji",
+        "routineActivity": "¿Qué sueles hacer?",
+        "routineActivityPlaceholder": "Por ejemplo: estudiar idiomas",
+        "routineDescriptionRequired": "Añade una descripción en al menos un idioma.",
+        "routineOverlap": "Este horario se cruza con «{name}» ({start}–{end}) en alguno de los días elegidos. Cambia la hora o los días.",
+        "routineOvernightHint": "Esta actividad continúa hasta el día siguiente, como al dormir por la noche.",
+        "routineFullDayHint": "La misma hora de inicio y fin significa una actividad de 24 horas.",
+        "routineCancel": "Cancelar",
+        "routineApply": "Aplicar actividad",
+        "saveTab": "Guardar esta pestaña",
+        "tabSaved": "Cambios de esta pestaña guardados.",
+        "tabSaveHint": "Este botón guarda únicamente la pestaña actual. Los cambios de las otras pestañas siguen pendientes."
       },
       "nowFocus": {
         "sectionBasics": "Básicos",
@@ -3759,6 +3917,20 @@
       }
     },
     "dataTable": {
+      "searchDialog": {
+        "skillsHint": "Busca en títulos de habilidades, categorías y descripciones. Cada palabra puede coincidir en un campo distinto.",
+        "timelineHint": "Busca en títulos, descripciones, fechas y tecnologías. Cada palabra puede coincidir en un campo distinto.",
+        "open": "Buscar",
+        "active": "Buscar: {query}",
+        "title": "Buscar registros",
+        "label": "Texto de búsqueda",
+        "placeholder": "p. ej. React frontend",
+        "apply": "Buscar",
+        "clear": "Limpiar búsqueda",
+        "cancel": "Cancelar",
+        "servicesHint": "Busca en títulos, descripciones, tipos y habilidades. Cada palabra puede coincidir en un campo distinto.",
+        "certificationsHint": "Busca en títulos, entidades, identificadores de credencial y habilidades. Cada palabra puede coincidir en un campo distinto."
+      },
       "searchBy": "Buscar por",
       "allColumns": "Todas las columnas",
       "searchPlaceholder": "Buscar...",
@@ -4265,7 +4437,14 @@
         "historicalTracking": "Histórico · píxel propio",
         "providerConnected": "Eventos de Resend conectados",
         "providerNotConnected": "Webhook pendiente",
-        "delivery": {"SENT":"Enviado","DELIVERED":"Entregado","DELAYED":"Entrega retrasada","FAILED":"Fallido","BOUNCED":"Rebotado","COMPLAINED":"Marcado como spam"},
+        "delivery": {
+          "SENT": "Enviado",
+          "DELIVERED": "Entregado",
+          "DELAYED": "Entrega retrasada",
+          "FAILED": "Fallido",
+          "BOUNCED": "Rebotado",
+          "COMPLAINED": "Marcado como spam"
+        },
         "replacementHint": "Tus correcciones se guardan en esta postulación. Recomendamos PDF y es obligatorio para el envío. Esta versión se atribuye a ti; el análisis anterior de IA no evalúa tus cambios.",
         "replacementInvalid": "Elige un PDF o DOCX de hasta 8 MB.",
         "sendSuccess": "Correo enviado",
@@ -4607,6 +4786,9 @@
       }
     },
     "now": {
+      "focusOrderHint": "Arrastra una tarjeta para cambiar su posición pública. El orden se guarda automáticamente.",
+      "focusReorderFailed": "No se pudo guardar el orden. Se restauró el anterior.",
+      "moveFocus": "Mover {name}",
       "title": "Now",
       "subtitle": "Gestiona el snapshot, la actividad y los focos de Now.",
       "tabsLabel": "Secciones Now",
@@ -4617,9 +4799,9 @@
         "focuses": "Focos"
       },
       "sections": {
-        "snapshotHint": "Zona horaria, emoji y la línea de estado en vivo.",
+        "snapshotHint": "Zona horaria, rutina habitual y un estado personal independiente.",
         "activityHint": "Lectura, última vista y franja de fotos.",
-        "githubHint": "Usuario de contribuciones y el blurb de actividad.",
+        "githubHint": "Actividad pública y calendario de la cuenta de GitHub conectada.",
         "focusesHint": "Tarjetas del mosaico “también en marcha”."
       },
       "focusesTitle": "Focos",

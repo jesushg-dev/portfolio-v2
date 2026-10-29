@@ -19,7 +19,7 @@ Start here if you are onboarding or looking for a topic. The [root README](../RE
 | Doc                                  | What it covers                                                |
 | ------------------------------------ | ------------------------------------------------------------- |
 | [admin-cms.md](./admin-cms.md)       | `/admin` resources, IDs, publish flags                        |
-| [public-pages.md](./public-pages.md) | Now, Uses, colophon, stats, process pages, `PUBLIC_PAGE_LIVE` |
+| [public-pages.md](./public-pages.md) | Now, Uses, colophon, stats, process pages                     |
 | [analytics.md](./analytics.md)       | Beacon, collect, `/stats`, admin overview                     |
 | [cv-pdf.md](./cv-pdf.md)             | Public CV PDF cache + Playwright generator                    |
 | [form.md](./form.md)                 | Shared admin form primitives                                  |

@@ -1,8 +1,31 @@
 {
   "adminCredentials": {
+    "github": {
+      "token": "Persoonlijk toegangstoken",
+      "tokenHint": "Plak een nieuw token. Een opgeslagen token wordt nooit in dit veld geladen.",
+      "private": "Je referentie wordt versleuteld opgeslagen, uitsluitend voor jouw account. Ze wordt alleen op de server gebruikt en nooit openbaar gemaakt.",
+      "connected": "Verbonden account: {login}",
+      "save": "Controleren en opslaan",
+      "cancel": "Annuleren",
+      "saved": "GitHub verbonden.",
+      "failed": "GitHub kon niet worden verbonden. Controleer het token en de rechten.",
+      "guideTitle": "Je GitHub-kalender instellen",
+      "step1": "Open GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens.",
+      "step2": "Maak een token voor je account met een vervaldatum. Openbare leestoegang volstaat voor openbare bijdragen; schrijfrechten zijn niet nodig.",
+      "step3": "Kopieer het token en plak het hier. GitHub toont het slechts eenmaal.",
+      "step4": "Controleer en sla op. Het account en de kalendertoegang worden gecontroleerd en de Now-gebruikersnaam wordt bijgewerkt.",
+      "step5": "Vernieuw het token hier wanneer het verloopt. Verbreken verwijdert de opgeslagen referentie.",
+      "createToken": "Een token maken in GitHub",
+      "fallback": "Zonder token of als GitHub niet beschikbaar is, blijft de pagina werken en verschijnt een profiellink in plaats van verzonnen statistieken.",
+      "documentation": "GitHub-authenticatiedocumentatie"
+    },
     "title": "Inloggegevens & Integraties",
     "subtitle": "Configureer API-sleutels en integratie-instellingen per gebruiker voor Resend, Spotify, Google Calendar, UploadThing en AI-modellen.",
     "providers": {
+      "github": {
+        "name": "GitHub",
+        "description": "Je eigen GitHub-bijdragenkalender met een privé, versleutelde gebruikersreferentie."
+      },
       "resend": {
         "name": "Resend (E-mail)",
         "description": "Transactionele e-mail en automatische sjabloonimplementatie."
@@ -72,6 +95,7 @@
     "securityNotice": "Inloggegevens en API-sleutels zijn versleuteld in rust met isolatie per tenant (AES-256).",
     "backToIntegrations": "Terug naar integraties",
     "tags": {
+      "github": "Bijdragegrafiek & activiteit",
       "resend": "Transactionele e-mails & CV-levering",
       "spotify": "Now Playing widget & topnummers",
       "google-calendar": "Gesprekken & agendasynchronisatie",
@@ -807,6 +831,8 @@
       "title": "Engineering Expertise",
       "subtitle": "Diensten",
       "description": "Gebieden waar ik productiesoftware ontwerp, bouw en leid.",
+      "seeMore": "Bekijk meer",
+      "seeLess": "Bekijk minder",
       "items": {
         "contact": {
           "title": "Laten we samen bouwen",
@@ -1674,14 +1700,13 @@
       "metaTitle": "Now",
       "metaDescription": "Een snapshot van waar ik me op focus, wat ik lees en wat ik ship — bijgewerkt wanneer ik eraan denk.",
       "hero": {
-        "eyebrow": "// now",
-        "title": "Wat doe ik",
-        "titleHighlight": "nu?",
-        "description": "Een snapshot van waar ik me op focus, wat ik lees en wat ik ship — bijgewerkt wanneer ik eraan denk."
+        "eyebrow": "Nu",
+        "title": "Wat ik",
+        "titleHighlight": "nu doe.",
+        "description": "Een kijkje in waar ik me op richt, wat ik lees en wat ik bouw. Bijgewerkt wanneer ik eraan denk."
       },
       "list": {
         "localTimeLabel": "Lokale tijd",
-        "readingLabel": "Nu aan het lezen",
         "reading": {
           "book": "The Pragmatic Programmer"
         },
@@ -1701,14 +1726,23 @@
         "oss": {
           "label": "Open source",
           "body": "Knutselen aan open-sourceprojecten wanneer ik tijd heb"
-        }
+        },
+        "focusSummary": "Gericht op {topics}."
       },
       "note": {
-        "before": "Dit is een now page — als je een eigen site hebt,",
-        "linkLabel": "moet je er ook een maken",
-        "after": "."
+        "description": "Dit is een nu-pagina. Heb je een eigen website? Maak er ook een.",
+        "inspiredBy": "Geïnspireerd door",
+        "linkLabel": "Meer over nu-pagina’s"
       },
       "activity": {
+        "githubUnavailable": "Bijdragen zijn momenteel niet beschikbaar.",
+        "githubProfile": "Mijn GitHub-profiel bekijken",
+        "contributionDay": "{count} bijdragen · {date}",
+        "scheduledHours": "Gebruikelijke routine (ongeveer) · {start}–{end} · {timezone}",
+        "statusUnavailable": "Geen actuele update.",
+        "noReading": "Geen huidig boek toegevoegd.",
+        "noWatching": "Geen recente film toegevoegd.",
+        "noPhotos": "Geen persoonlijke foto's toegevoegd.",
         "title": "Activiteit",
         "lastStatus": "Laatste status",
         "lastPlayed": "Laatst afgespeeld",
@@ -1723,12 +1757,63 @@
         "more": "Meer",
         "statusBody": "Eindelijk mijn CI/CD-pipeline end-to-end geautomatiseerd — kleine win, grote opluchting.",
         "statusRelative": "4 uur geleden",
-        "githubBody": "Een pull request geopend in <repo></repo>",
-        "githubRelative": "2 dagen geleden",
+        "loadingVisualization": "Visualisatie laden…",
+        "rotateBlocks": "Blokken draaien",
+        "panBlocks": "Verschuiven in- of uitschakelen",
+        "zoomInBlocks": "Inzoomen",
+        "zoomOutBlocks": "Uitzoomen",
+        "resetBlocks": "Weergave herstellen",
+        "contributionViews": "Bijdrageweergaven",
+        "blocks": "3D-blokken",
+        "calendar": "Kalender",
+        "breakout": "Breakout",
+        "blocksDescription": "GitHub-bijdragen als een isometrisch landschap van bouwblokken.",
+        "blocksHint": "Sleep om te draaien; schakel Verplaatsen in of houd Shift ingedrukt om te verschuiven. Pijltjes draaien, +/− zoomen, Home herstelt. Elk blok is een dag.",
+        "languageDistribution": "Talen in openbare repositories",
+        "otherLanguages": "Overige",
+        "noLanguageData": "Geen taalgegevens beschikbaar.",
+        "activityCommits": "Commits",
+        "activityIssues": "Issues",
+        "activityPullRequests": "Pull requests",
+        "activityReviews": "Reviews",
+        "activityRepositories": "Aangemaakte repositories",
+        "statsUnavailable": "Aanvullende statistieken zijn niet beschikbaar; de bijdragekalender blijft beschikbaar.",
+        "githubStars": "{count} sterren",
+        "githubForks": "{count} forks",
+        "repositorySample": "Talen, sterren en forks omvatten {sampled} van {total} eigen openbare repositories, zonder forks (maximaal 100, recentst bijgewerkt). Taalpercentages meten codebytes, geen vaardigheid.",
         "contributionsTotal": "{total} bijdragen in het afgelopen jaar",
-        "photosAlt": "Plaatsaanduidingen voor recente foto's",
+        "photosAlt": "Een recente persoonlijke foto",
         "spotifyIdleTitle": "Nu niets",
-        "spotifyIdleSubtitle": "Kom later terug"
+        "spotifyIdleSubtitle": "Kom later terug",
+        "routineNow": "Rond deze tijd meestal: {activity}",
+        "githubNoActivity": "Er is geen recente openbare activiteit beschikbaar.",
+        "githubEvent": {
+          "push": "Pushte wijzigingen naar",
+          "pullRequest": "Werkte aan een pull request in",
+          "issue": "Werkte aan een issue in",
+          "star": "Gaf een ster aan",
+          "fork": "Maakte een fork van",
+          "release": "Publiceerde een release in",
+          "create": "Maakte een branch, tag of repository in",
+          "activity": "Was actief in"
+        },
+        "awayHeading": "Weg van het toetsenbord.",
+        "shippingHeading": "Bouwen in het openbaar.",
+        "contributionCount": "Bijdragen",
+        "gameInstructions": "Beweeg de plank met de muis, door te slepen of met ←/→ (A/D). Spatie start of pauzeert; Esc pauzeert. Breek de bijdragestenen zonder de bal te laten vallen.",
+        "gameScore": "Score: {score}",
+        "gameLives": "Levens: {lives}",
+        "gamePlay": "Spelen",
+        "gamePause": "Pauzeren",
+        "gameResume": "Doorgaan",
+        "gameRestart": "Opnieuw",
+        "gameLeft": "Plank naar links",
+        "gameRight": "Plank naar rechts",
+        "gameWon": "Je hebt alle bijdragestenen gebroken!",
+        "gameLost": "Spel afgelopen. Start opnieuw om het nog eens te proberen.",
+        "gameReady": "Zet de plank klaar en druk op Spelen of Spatie.",
+        "gamePaused": "Gepauzeerd.",
+        "gameReduced": "Geen automatisch afspelen of decoratieve beweging. De bal beweegt alleen wanneer je zelf begint te spelen."
       }
     },
     "colophon": {
@@ -2223,6 +2308,12 @@
       }
     },
     "forms": {
+      "languageBar": {
+        "base": "Base",
+        "complete": "Alles voltooid",
+        "progress": "{done}/{total} voltooid",
+        "missing": "Ontbreekt: {fields}"
+      },
       "saved": "Opgeslagen.",
       "order": "Volgorde",
       "loading": "Laden...",
@@ -2338,7 +2429,14 @@
       "skills": {
         "category": "Categorie",
         "items": "Vaardigheden uit de catalogus",
-        "catalogHint": "Selecteer de vaardigheden voor je cv. Sleep ze of gebruik de pijlen om de positie te bepalen; deselecteer om ze te verbergen zonder ze uit je portfolio te verwijderen.",
+        "tabSelect": "1. Vaardigheden selecteren",
+        "tabOrder": "2. Ordenen",
+        "catalogHint": "Selecteer de vaardigheden uit je portfoliocatalogus die je in deze groep wilt opnemen.",
+        "orderHint": "Sleep items of gebruik de pijlen om de volgorde op je cv te bepalen. Klik op het oog om een item te verbergen zonder het te verwijderen.",
+        "continueToOrder": "Doorgaan naar ordenen ({count})",
+        "emptyOrderTitle": "Nog geen vaardigheden geselecteerd",
+        "emptyOrderDescription": "Kies vaardigheden uit de catalogus in de eerste stap om de volgorde hier te bepalen.",
+        "goToSelect": "Ga naar vaardigheden selecteren",
         "moveSkill": "{name} verplaatsen",
         "hideSkill": "{name} verbergen in cv",
         "add": "+ Groep toevoegen",
@@ -3179,6 +3277,31 @@
         "updateFailed": "Kon instellingen niet opslaan"
       },
       "nowSettings": {
+        "configureGithub": "GitHub instellen",
+        "scheduleTitle": "Gebruikelijke routine",
+        "scheduleHint": "Globale terugkerende tijdvakken in je tijdzone. Ze staan bij je huidige bezigheden, los van je laatste status.",
+        "noSlots": "Je routine is leeg. Voeg een activiteit toe om te beginnen.",
+        "startTime": "Van",
+        "endTime": "Tot",
+        "weekdays": "Herhalen op",
+        "day0": "Zondag",
+        "day1": "Maandag",
+        "day2": "Dinsdag",
+        "day3": "Woensdag",
+        "day4": "Donderdag",
+        "day5": "Vrijdag",
+        "day6": "Zaterdag",
+        "defaultStatusTitle": "Laatste status",
+        "defaultStatusHint": "Een persoonlijke update die je handmatig publiceert. Je gebruikelijke routine staat apart bij je huidige bezigheden.",
+        "readingCardHint": "Je huidige boek en leesvoortgang.",
+        "watchedCardHint": "Je laatste film of serie. Laat 0 staan als je geen beoordeling hebt gegeven.",
+        "addPhoto": "Foto toevoegen",
+        "removePhoto": "Foto verwijderen",
+        "photoNumber": "Foto {number}",
+        "noPhotos": "Geen persoonlijke foto's toegevoegd.",
+        "contributionPreview": "GitHub-bijdragen",
+        "loadingGithub": "GitHub-activiteit laden…",
+        "githubTokenHint": "Verbind je eigen account via Integraties. De referentie wordt versleuteld opgeslagen. Zonder verbinding wordt alleen de openbare profiellink getoond.",
         "sectionGeneral": "Algemeen",
         "sectionReading": "Lezen",
         "sectionWatched": "Laatst bekeken",
@@ -3195,19 +3318,54 @@
         "readingProgress": "Voortgang (%)",
         "watchedTitle": "Titel",
         "watchedRating": "Beoordeling (0–5)",
-        "githubRepo": "Repo-label",
-        "githubHref": "Repo-URL",
         "photoUrls": "Foto-URL's",
         "photoUrlsHint": "Eén URL per regel",
         "statusBody": "Statustekst",
         "statusBodyRequired": "Statustekst is verplicht voor de primaire taal",
         "statusRelative": "Relatieve status tijd",
-        "githubBody": "GitHub-activiteitstekst",
-        "githubRelative": "Relatieve GitHub-tijd",
         "save": "Opslaan",
         "saving": "Opslaan…",
         "updatedSuccess": "Now-instellingen opgeslagen",
-        "updateFailed": "Kon Now-instellingen niet opslaan"
+        "updateFailed": "Kon Now-instellingen niet opslaan",
+        "readingCover": "Boekomslag",
+        "watchedCover": "Filmposter",
+        "coverHint": "Upload een JPG-, PNG-, WebP- of AVIF-afbeelding van maximaal 4 MB, of plak een afbeeldings-URL. Sla het formulier op om de omslag te bewaren.",
+        "uploadCover": "{label} uploaden",
+        "invalidCover": "Kies een JPG-, PNG-, WebP- of AVIF-afbeelding van minder dan 4 MB.",
+        "coverUploaded": "Omslag geüpload. Sla je wijzigingen op om deze te bewaren.",
+        "coverUploadFailed": "De omslag kon niet worden geüpload. Controleer je opslagintegratie.",
+        "uploadingCover": "Omslag uploaden",
+        "removeCover": "Omslag verwijderen",
+        "githubActivityHint": "De nieuwste openbare activiteit wordt automatisch geladen van je gekoppelde GitHub-account. Handmatige tekst is niet nodig.",
+        "routineEditorHint": "Voeg je gebruikelijke activiteiten toe en kies wanneer ze terugkeren. Dit is een globale routine, los van je persoonlijke status.",
+        "routineAdd": "Activiteit toevoegen",
+        "routineEdit": "Activiteit bewerken",
+        "routineUntitled": "Activiteit zonder beschrijving",
+        "routineEditNamed": "{name} bewerken",
+        "routineRemoveNamed": "{name} verwijderen",
+        "routineDays": {
+          "daily": "Elke dag",
+          "weekdays": "Maandag tot vrijdag",
+          "weekends": "Weekend",
+          "custom": "Dagen kiezen"
+        },
+        "routineNextDay": "tot de volgende dag",
+        "routineFullDay": "de hele dag",
+        "routineNeedsReview": "Controleer de dagen en tijden van deze activiteit.",
+        "routineSaveHint": "Activiteit toepassen bereidt de wijziging voor. Gebruik ‘Dit tabblad opslaan’ in Snapshot om deze te publiceren.",
+        "routineDialogHint": "Beschrijf wat je meestal doet, kies globale tijden en de dagen. Je kunt vertalingen per taal invullen.",
+        "routineEmoji": "Emoji",
+        "routineActivity": "Wat doe je meestal?",
+        "routineActivityPlaceholder": "Bijvoorbeeld: talen studeren",
+        "routineDescriptionRequired": "Voeg een beschrijving toe in ten minste één taal.",
+        "routineOverlap": "Dit tijdvak overlapt met ‘{name}’ ({start}–{end}) op een gekozen dag. Wijzig de tijden of dagen.",
+        "routineOvernightHint": "Deze activiteit loopt door tot de volgende dag, zoals bij slapen.",
+        "routineFullDayHint": "Dezelfde begin- en eindtijd betekent een activiteit van 24 uur.",
+        "routineCancel": "Annuleren",
+        "routineApply": "Activiteit toepassen",
+        "saveTab": "Dit tabblad opslaan",
+        "tabSaved": "Wijzigingen in dit tabblad opgeslagen.",
+        "tabSaveHint": "Deze knop slaat alleen het huidige tabblad op. Wijzigingen in andere tabbladen blijven in behandeling."
       },
       "nowFocus": {
         "sectionBasics": "Basis",
@@ -3733,6 +3891,20 @@
       }
     },
     "dataTable": {
+      "searchDialog": {
+        "skillsHint": "Zoek in vaardigheidstitels, categorieën en beschrijvingen. Elk woord kan in een ander veld voorkomen.",
+        "timelineHint": "Zoek in titels, beschrijvingen, datums en technologieën. Elk woord kan in een ander veld voorkomen.",
+        "open": "Zoeken",
+        "active": "Zoeken: {query}",
+        "title": "Records zoeken",
+        "label": "Zoektekst",
+        "placeholder": "bijv. React frontend",
+        "apply": "Zoeken",
+        "clear": "Zoekopdracht wissen",
+        "cancel": "Annuleren",
+        "servicesHint": "Zoek in titels, beschrijvingen, typen en vaardigheden. Elk woord kan in een ander veld voorkomen.",
+        "certificationsHint": "Zoek in titels, uitgevende organisaties, certificaatnummers en vaardigheden. Elk woord kan in een ander veld voorkomen."
+      },
       "searchBy": "Zoeken op",
       "allColumns": "Alle kolommen",
       "searchPlaceholder": "Zoeken...",
@@ -4239,7 +4411,14 @@
         "historicalTracking": "Historisch · eigen pixel",
         "providerConnected": "Resend-gebeurtenissen gekoppeld",
         "providerNotConnected": "Webhook niet ingesteld",
-        "delivery": {"SENT":"Verzonden","DELIVERED":"Afgeleverd","DELAYED":"Vertraagd","FAILED":"Mislukt","BOUNCED":"Geweigerd","COMPLAINED":"Als spam gemarkeerd"},
+        "delivery": {
+          "SENT": "Verzonden",
+          "DELIVERED": "Afgeleverd",
+          "DELAYED": "Vertraagd",
+          "FAILED": "Mislukt",
+          "BOUNCED": "Geweigerd",
+          "COMPLAINED": "Als spam gemarkeerd"
+        },
         "replacementHint": "Je wijzigingen worden voor deze sollicitatie opgeslagen. PDF wordt aanbevolen en is verplicht voor e-mail. Deze versie wordt aan jou toegeschreven; de eerdere AI-analyse beoordeelt je wijzigingen niet.",
         "replacementInvalid": "Kies een PDF of DOCX van maximaal 8 MB.",
         "sendSuccess": "E-mail verzonden",
@@ -4581,6 +4760,9 @@
       }
     },
     "now": {
+      "focusOrderHint": "Versleep een kaart om de openbare volgorde te wijzigen. De volgorde wordt automatisch opgeslagen.",
+      "focusReorderFailed": "De volgorde kon niet worden opgeslagen. De vorige volgorde is hersteld.",
+      "moveFocus": "{name} verplaatsen",
       "title": "Now",
       "subtitle": "Beheer de Now-snapshot, activiteit en focuspunten.",
       "tabsLabel": "Now-secties",
@@ -4591,9 +4773,9 @@
         "focuses": "Focus"
       },
       "sections": {
-        "snapshotHint": "Tijdzone, emoji en de live statusregel.",
+        "snapshotHint": "Tijdzone, gebruikelijke routine en een aparte persoonlijke status.",
         "activityHint": "Lezen, laatst bekeken en fotostrook.",
-        "githubHint": "Contributiegebruikersnaam en activiteitstekst.",
+        "githubHint": "Openbare activiteit en kalender van je gekoppelde GitHub-account.",
         "focusesHint": "Kaarten in het “ook bezig”-mozaïek."
       },
       "focusesTitle": "Focuspunten",

@@ -50,22 +50,45 @@ export async function disconnectE2ePrisma(): Promise<void> {
 /** Prepare only the requested worker's persisted fixtures before visiting admin. */
 export async function ensureWorkerJobSearch(email: string): Promise<void> {
   if (!/-e2e-\d+@/.test(email)) {
-    throw new Error("JobSearch fixture preparation requires an E2E worker email");
+    throw new Error(
+      "JobSearch fixture preparation requires an E2E worker email",
+    );
   }
-  const user = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
   if (!user) return; // A new worker is registered through the UI afterwards.
   await prisma.$transaction(async (tx) => {
     const unassigned = {
       userId: user.id,
       OR: [{ jobSearchId: null }, { jobSearchId: { isSet: false } }],
     };
-    const first = await tx.application.findFirst({ where: unassigned, orderBy: { appliedDate: "asc" }, select: { appliedDate: true } });
+    const first = await tx.application.findFirst({
+      where: unassigned,
+      orderBy: { appliedDate: "asc" },
+      select: { appliedDate: true },
+    });
     if (!first) return;
-    const searches = await tx.jobSearch.findMany({ where: { userId: user.id, status: "OPEN" }, take: 2 });
-    if (searches.length > 1) throw new Error(`E2E worker ${email} has multiple open job searches`);
-    const search = searches[0] ?? await tx.jobSearch.create({ data: {
-      userId: user.id, name: "E2E job search", status: "OPEN", startedAt: first.appliedDate,
-    } });
-    await tx.application.updateMany({ where: unassigned, data: { jobSearchId: search.id } });
+    const searches = await tx.jobSearch.findMany({
+      where: { userId: user.id, status: "OPEN" },
+      take: 2,
+    });
+    if (searches.length > 1)
+      throw new Error(`E2E worker ${email} has multiple open job searches`);
+    const search =
+      searches[0] ??
+      (await tx.jobSearch.create({
+        data: {
+          userId: user.id,
+          name: "E2E job search",
+          status: "OPEN",
+          startedAt: first.appliedDate,
+        },
+      }));
+    await tx.application.updateMany({
+      where: unassigned,
+      data: { jobSearchId: search.id },
+    });
   });
 }
