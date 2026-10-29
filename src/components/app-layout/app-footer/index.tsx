@@ -52,7 +52,7 @@ function FooterPreviewLink({
   href: "/uses" | "/now" | "/colophon" | "/stats";
   label: string;
   soonLabel: string;
-  soon?: boolean
+  soon?: boolean;
 }) {
   if (!soon) {
     return (
@@ -117,7 +117,7 @@ const Footer = async ({
               aria-label={t("homeLogo", {
                 brand: getBrandAccessibleLabel(siteBrand),
               })}
-              className="group text-primary-foreground inline-flex min-h-11 items-center text-2xl font-extrabold tracking-tight"
+              className="group text-primary-foreground inline-flex min-h-11 min-w-11 items-center justify-center text-2xl font-extrabold tracking-tight"
             >
               <SiteBrandMark
                 brand={siteBrand}
