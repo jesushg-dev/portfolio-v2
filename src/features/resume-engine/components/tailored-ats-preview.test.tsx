@@ -4,9 +4,7 @@ import {
 } from "../lib/tailored-resume.fixture";
 import { render, screen } from "@testing-library/react";
 import { TailoredAtsPreview } from "./tailored-ats-preview";
-import {
-  validateTailoredResume,
-} from "../lib/tailored-resume-document";
+import { validateTailoredResume } from "../lib/tailored-resume-document";
 
 describe("persisted resume preview", () => {
   it.each(["en", "es", "nl"] as const)(

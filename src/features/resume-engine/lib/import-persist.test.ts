@@ -39,6 +39,13 @@ const draft: CvImportDraft = {
 
 function createDb() {
   return {
+    skill: {
+      findMany: jest
+        .fn()
+        .mockResolvedValue([
+          { id: "skill-react", title: "React", userId: "user-1" },
+        ]),
+    },
     appLanguage: {
       findMany: jest.fn().mockResolvedValue([{ id: "lang-en", code: "en" }]),
     },

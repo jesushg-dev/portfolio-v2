@@ -167,7 +167,10 @@ export function selectResumeSource(
         selected.items,
         skill.items,
       );
-      return { ...skill, items: [...selected.items] };
+      return {
+        ...skill,
+        items: skill.items.filter((item) => selected.items.includes(item)),
+      };
     });
   if (source.experiences.length && !experiences.length)
     issues.push(

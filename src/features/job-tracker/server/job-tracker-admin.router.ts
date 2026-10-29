@@ -1216,8 +1216,18 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         });
       }
 
-      if (!data?.id) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Resend did not return a message identifier" });
-      await ctx.db.applicationEmail.update({ where: { id: emailRecord.id }, data: { providerMessageId: data.id, sentAt: emailRecord.sentAt ?? new Date() } });
+      if (!data?.id)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Resend did not return a message identifier",
+        });
+      await ctx.db.applicationEmail.update({
+        where: { id: emailRecord.id },
+        data: {
+          providerMessageId: data.id,
+          sentAt: emailRecord.sentAt ?? new Date(),
+        },
+      });
 
       let copySent = false;
       if (
@@ -1230,10 +1240,21 @@ export const jobTrackerAdminRouter = createTRPCRouter({
           resendConfig?.emailSignatureHtml,
         );
         const copyIdempotencyKey = `copy/${idempotencyKey}`;
-        const copyRecord = await ctx.db.applicationEmail.upsert({ where: { idempotencyKey: copyIdempotencyKey }, create: {
-          applicationId: application.id, userId: ctx.user.id, recipientEmail: copyRecipientEmail, subject: input.subject,
-          attachmentName: filename, trackingSource: "RESEND", recipientKind: "COPY", trackingEnabled: Boolean(resendConfig?.webhookSecret), idempotencyKey: copyIdempotencyKey,
-        }, update: {} });
+        const copyRecord = await ctx.db.applicationEmail.upsert({
+          where: { idempotencyKey: copyIdempotencyKey },
+          create: {
+            applicationId: application.id,
+            userId: ctx.user.id,
+            recipientEmail: copyRecipientEmail,
+            subject: input.subject,
+            attachmentName: filename,
+            trackingSource: "RESEND",
+            recipientKind: "COPY",
+            trackingEnabled: Boolean(resendConfig?.webhookSecret),
+            idempotencyKey: copyIdempotencyKey,
+          },
+          update: {},
+        });
         try {
           const copyResult = await emailClient.resend.emails.send(
             {
@@ -1253,8 +1274,15 @@ export const jobTrackerAdminRouter = createTRPCRouter({
             },
             { idempotencyKey: copyIdempotencyKey },
           );
-          if (copyResult.error || !copyResult.data?.id) throw new Error(copyResult.error?.message ?? "Copy send failed");
-          await ctx.db.applicationEmail.update({ where: { id: copyRecord.id }, data: { providerMessageId: copyResult.data.id, sentAt: copyRecord.sentAt ?? new Date() } });
+          if (copyResult.error || !copyResult.data?.id)
+            throw new Error(copyResult.error?.message ?? "Copy send failed");
+          await ctx.db.applicationEmail.update({
+            where: { id: copyRecord.id },
+            data: {
+              providerMessageId: copyResult.data.id,
+              sentAt: copyRecord.sentAt ?? new Date(),
+            },
+          });
           copySent = true;
         } catch (copyError) {
           console.error("Failed to send applicant copy email:", copyError);
@@ -1347,7 +1375,11 @@ export const jobTrackerAdminRouter = createTRPCRouter({
         where: {
           userId,
           sentAt: { not: null },
-          OR: [{ recipientKind: "COMPANY" }, { recipientKind: null }, { recipientKind: { isSet: false } }],
+          OR: [
+            { recipientKind: "COMPANY" },
+            { recipientKind: null },
+            { recipientKind: { isSet: false } },
+          ],
         },
         select: {
           id: true,
@@ -1390,7 +1422,14 @@ export const jobTrackerAdminRouter = createTRPCRouter({
       }),
       ctx.db.applicationEmailOpen.count({
         where: {
-          email: { userId, OR: [{ recipientKind: "COMPANY" }, { recipientKind: null }, { recipientKind: { isSet: false } }] },
+          email: {
+            userId,
+            OR: [
+              { recipientKind: "COMPANY" },
+              { recipientKind: null },
+              { recipientKind: { isSet: false } },
+            ],
+          },
           openedAt: { gte: since24h },
         },
       }),

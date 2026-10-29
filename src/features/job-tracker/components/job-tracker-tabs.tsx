@@ -147,47 +147,49 @@ export const JobTrackerTabs: FC<JobTrackerTabsProps> = ({
       value={activeTab}
       onValueChange={(val) => setActiveTab(val as JobTrackerTab)}
       className={cn(
-        "border-border bg-card flex flex-col rounded-xl border shadow-sm",
+        "border-border bg-card flex w-full max-w-full min-w-0 flex-col rounded-xl border shadow-sm",
         activeTab === "applications"
           ? "sticky top-0 z-20 h-[calc(100dvh-3.5rem)] min-h-0 overflow-hidden md:top-16 md:h-[calc(100dvh-4rem)]"
           : "min-h-0",
       )}
     >
-      <div className="border-border bg-muted/30 border-b px-3">
-        <TabsList
-          variant="line"
-          aria-label={t("tabsNavAria")}
-          className="flex h-12 w-fit [scrollbar-width:none] justify-start gap-1 overflow-x-auto overflow-y-hidden p-0 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => (
-            <TabsTrigger
-              key={id}
-              value={id}
-              className="h-full flex-initial shrink-0 gap-2 px-4 text-sm font-medium"
-            >
-              <Icon className="size-4" aria-hidden />
-              <span>{t(labelKey)}</span>
-              <span
-                className={cn(
-                  "rounded-full px-2 py-0.5 text-xs font-medium tabular-nums",
-                  id === "today" && todayUrgentCount > 0
-                    ? "border-warning/30 bg-warning/10 text-warning border font-bold"
-                    : "bg-muted/80 text-foreground",
-                )}
+      <div className="border-border bg-muted/30 w-full min-w-0 overflow-hidden rounded-t-xl border-b px-3">
+        <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain">
+          <TabsList
+            variant="line"
+            aria-label={t("tabsNavAria")}
+            className="flex min-h-12 w-max min-w-full justify-start gap-1 p-0"
+          >
+            {TAB_CONFIG.map(({ id, icon: Icon, labelKey }) => (
+              <TabsTrigger
+                key={id}
+                value={id}
+                className="min-h-12 flex-initial shrink-0 gap-2 px-3 text-sm font-medium sm:px-4"
               >
-                {getCount(id)}
-              </span>
-              {id === "events" && weekEventsCount > 0 ? (
-                <Badge
-                  variant="secondary"
-                  className="border-primary/25 bg-primary/10 text-primary ml-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+                <Icon className="size-4" aria-hidden />
+                <span>{t(labelKey)}</span>
+                <span
+                  className={cn(
+                    "rounded-full px-2 py-0.5 text-xs font-medium tabular-nums",
+                    id === "today" && todayUrgentCount > 0
+                      ? "border-warning/30 bg-warning/10 text-warning border font-bold"
+                      : "bg-muted/80 text-foreground",
+                  )}
                 >
-                  {t("eventsThisWeekBadge", { count: weekEventsCount })}
-                </Badge>
-              ) : null}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+                  {getCount(id)}
+                </span>
+                {id === "events" && weekEventsCount > 0 ? (
+                  <Badge
+                    variant="secondary"
+                    className="border-primary/25 bg-primary/10 text-primary ml-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold"
+                  >
+                    {t("eventsThisWeekBadge", { count: weekEventsCount })}
+                  </Badge>
+                ) : null}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
       </div>
 
       <UpcomingEventsAlertBanner

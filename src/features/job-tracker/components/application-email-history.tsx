@@ -40,8 +40,12 @@ export function ApplicationEmailHistory({
   const isCopy = (recipient: string) =>
     Boolean(viewerEmail) &&
     recipient.trim().toLowerCase() === viewerEmail.trim().toLowerCase();
-  const companyEmails = emails.filter((email) => email.recipientKind !== "COPY" && !isCopy(email.recipientEmail));
-  const copyEmails = emails.filter((email) => email.recipientKind === "COPY" || isCopy(email.recipientEmail));
+  const companyEmails = emails.filter(
+    (email) => email.recipientKind !== "COPY" && !isCopy(email.recipientEmail),
+  );
+  const copyEmails = emails.filter(
+    (email) => email.recipientKind === "COPY" || isCopy(email.recipientEmail),
+  );
   const shownEmails =
     filter === "company"
       ? companyEmails
@@ -53,7 +57,10 @@ export function ApplicationEmailHistory({
       email.sentAt &&
       new Date(email.sentAt).toDateString() === new Date().toDateString(),
   ).length;
-  const opens = companyEmails.reduce((total, email) => total + email.openCount, 0);
+  const opens = companyEmails.reduce(
+    (total, email) => total + email.openCount,
+    0,
+  );
 
   return (
     <section
@@ -101,8 +108,20 @@ export function ApplicationEmailHistory({
             ["statCopies", copyEmails.length],
             ["statToday", sentToday],
             ["statOpens", opens],
-            ["delivery.DELIVERED", companyEmails.filter((email) => email.deliveryStatus === "DELIVERED").length],
-            ["delivery.BOUNCED", companyEmails.filter((email) => email.deliveryStatus === "BOUNCED" || email.deliveryStatus === "FAILED").length],
+            [
+              "delivery.DELIVERED",
+              companyEmails.filter(
+                (email) => email.deliveryStatus === "DELIVERED",
+              ).length,
+            ],
+            [
+              "delivery.BOUNCED",
+              companyEmails.filter(
+                (email) =>
+                  email.deliveryStatus === "BOUNCED" ||
+                  email.deliveryStatus === "FAILED",
+              ).length,
+            ],
           ] as const
         ).map(([label, value]) => (
           <div key={label} className="bg-muted/40 rounded-lg p-2.5">
@@ -137,19 +156,43 @@ export function ApplicationEmailHistory({
             >
               <div className="flex flex-wrap items-center gap-2">
                 <p className="text-foreground font-medium">{email.subject}</p>
-                {email.deliveryStatus ? <Badge variant={email.deliveryStatus === "BOUNCED" || email.deliveryStatus === "FAILED" ? "destructive" : "outline"}>{t(`delivery.${email.deliveryStatus as "SENT" | "DELIVERED" | "DELAYED" | "FAILED" | "BOUNCED" | "COMPLAINED"}`)}</Badge> : null}
-                <Badge variant="outline">{email.trackingSource === "RESEND" ? "Resend" : t("historicalTracking")}</Badge>
+                {email.deliveryStatus ? (
+                  <Badge
+                    variant={
+                      email.deliveryStatus === "BOUNCED" ||
+                      email.deliveryStatus === "FAILED"
+                        ? "destructive"
+                        : "outline"
+                    }
+                  >
+                    {t(
+                      `delivery.${email.deliveryStatus as "SENT" | "DELIVERED" | "DELAYED" | "FAILED" | "BOUNCED" | "COMPLAINED"}`,
+                    )}
+                  </Badge>
+                ) : null}
                 <Badge variant="outline">
-                  {email.recipientKind === "COPY" || isCopy(email.recipientEmail)
+                  {email.trackingSource === "RESEND"
+                    ? "Resend"
+                    : t("historicalTracking")}
+                </Badge>
+                <Badge variant="outline">
+                  {email.recipientKind === "COPY" ||
+                  isCopy(email.recipientEmail)
                     ? t("copyChip")
                     : t("companyChip")}
                 </Badge>
                 <Badge
                   variant={email.trackingEnabled ? "secondary" : "outline"}
                 >
-                  {email.trackingSource === "RESEND" ? t(email.trackingEnabled ? "providerConnected" : "providerNotConnected") : email.trackingEnabled
-                    ? t("trackingEnabledChip")
-                    : t("trackingDisabledChip")}
+                  {email.trackingSource === "RESEND"
+                    ? t(
+                        email.trackingEnabled
+                          ? "providerConnected"
+                          : "providerNotConnected",
+                      )
+                    : email.trackingEnabled
+                      ? t("trackingEnabledChip")
+                      : t("trackingDisabledChip")}
                 </Badge>
               </div>
               <p className="text-muted-foreground">
@@ -172,7 +215,11 @@ export function ApplicationEmailHistory({
                 </div>
               ) : (
                 <p className="text-muted-foreground">
-                  {t(email.trackingSource === "RESEND" ? "providerTrackingHint" : "trackingDisabledForEmail")}
+                  {t(
+                    email.trackingSource === "RESEND"
+                      ? "providerTrackingHint"
+                      : "trackingDisabledForEmail",
+                  )}
                 </p>
               )}
             </li>

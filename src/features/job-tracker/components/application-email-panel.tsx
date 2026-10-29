@@ -491,7 +491,9 @@ export function ApplicationEmailForm({
                 )}
               />
 
-              <p className="text-sm text-muted-foreground">{t("providerTrackingHint")}</p>
+              <p className="text-muted-foreground text-sm">
+                {t("providerTrackingHint")}
+              </p>
             </div>
           ) : (
             <p className="text-muted-foreground text-sm">{t("draftHint")}</p>

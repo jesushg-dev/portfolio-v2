@@ -60,18 +60,10 @@ export function businessDaysBetween(
 
   // Use UTC calendar dates so local timezone offsets (e.g., UTC-6) do not shift days
   const s = new Date(
-    Date.UTC(
-      start.getUTCFullYear(),
-      start.getUTCMonth(),
-      start.getUTCDate(),
-    ),
+    Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()),
   );
   const e = new Date(
-    Date.UTC(
-      end.getUTCFullYear(),
-      end.getUTCMonth(),
-      end.getUTCDate(),
-    ),
+    Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate()),
   );
 
   let count = 0;

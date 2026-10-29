@@ -50,7 +50,7 @@ const JobTrackerPage: FC<Props> = async ({ params, searchParams }) => {
   ]);
 
   return (
-    <div>
+    <div className="w-full max-w-full min-w-0">
       <div className="mb-4 flex flex-col gap-4">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>

@@ -17,7 +17,7 @@ jest.mock("@/features/resume-engine/lib/finalize-tailor-export", () => ({
   finalizeTailoredResume: jest.fn(),
 }));
 jest.mock("@/lib/uploadthing/tenant-uploadthing", () => ({
-  UploadThingNotConfiguredError: class UploadThingNotConfiguredError extends Error { },
+  UploadThingNotConfiguredError: class UploadThingNotConfiguredError extends Error {},
 }));
 jest.mock("@/features/resume-engine/lib/fetch-upload-docx", () => ({
   fetchUploadDocxSections: jest.fn(),
@@ -44,7 +44,7 @@ jest.mock("@/lib/ilovepdf/tenant-ilovepdf", () => ({
     .fn()
     .mockResolvedValue(Buffer.from("%PDF-mock")),
   isTenantILovePdfConfigured: jest.fn().mockResolvedValue(true),
-  ILovePdfNotConfiguredError: class ILovePdfNotConfiguredError extends Error { },
+  ILovePdfNotConfiguredError: class ILovePdfNotConfiguredError extends Error {},
 }));
 jest.mock("@/lib/uploadthing/upload-buffer", () => ({
   uploadBufferToUploadThing: jest.fn(),
@@ -52,7 +52,10 @@ jest.mock("@/lib/uploadthing/upload-buffer", () => ({
 
 import { persistCvImportDraft } from "@/features/resume-engine/lib/import-persist";
 import { finalizeTailoredResume } from "@/features/resume-engine/lib/finalize-tailor-export";
-import { resumeFixture, resumeResponseFixture } from "@/features/resume-engine/lib/tailored-resume.fixture";
+import {
+  resumeFixture,
+  resumeResponseFixture,
+} from "@/features/resume-engine/lib/tailored-resume.fixture";
 import { loadCvStructuredDraft } from "@/features/cv/lib/load-cv-structured-draft";
 import { fetchUploadDocxSections } from "@/features/resume-engine/lib/fetch-upload-docx";
 import { buildImportPromptPackage } from "@/features/resume-engine/lib/ai/prompt-package";

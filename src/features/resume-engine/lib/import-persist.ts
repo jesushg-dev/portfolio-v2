@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
+import { ensureCvSkillIds } from "@/features/cv/lib/cv-skill-catalog";
 
 import type { CvImportDraft } from "@/features/cv/lib/cv-import-draft";
 
@@ -86,7 +87,6 @@ export async function persistCvImportDraft(
         where: { id: existingHeaderTrans.id },
         data: {
           degree: draft.header.degree ?? "",
-          heroSummary: draft.header.summary ?? null,
         },
       });
     } else {
@@ -95,7 +95,6 @@ export async function persistCvImportDraft(
           cvHeaderId: header.id,
           appLanguageId: appLang.id,
           degree: draft.header.degree ?? "",
-          heroSummary: draft.header.summary ?? null,
         },
       });
     }
@@ -188,11 +187,23 @@ export async function persistCvImportDraft(
 
   const existingSkills = await db.cvTechnicalSkill.count({ where: { userId } });
   for (const [index, skillGroup] of draft.skills.entries()) {
+    const skillIds = await ensureCvSkillIds(
+      db,
+      userId,
+      skillGroup.items,
+      skillGroup.category,
+    );
     await db.cvTechnicalSkill.create({
       data: {
         userId,
         category: skillGroup.category,
-        items: skillGroup.items,
+        selections: {
+          create: skillIds.map((skillId, order) => ({
+            skillId,
+            order,
+            visible: true,
+          })),
+        },
         order: existingSkills + index,
       },
     });
