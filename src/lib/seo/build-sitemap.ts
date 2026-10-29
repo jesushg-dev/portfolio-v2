@@ -77,7 +77,9 @@ export const PUBLIC_SITEMAP_PATHS = [
 ] as const satisfies readonly StaticHref[];
 
 export const INDEXABLE_SITEMAP_PATHS = PUBLIC_SITEMAP_PATHS.filter(
-  (pathname): pathname is Exclude<(typeof PUBLIC_SITEMAP_PATHS)[number], "/uses"> =>
+  (
+    pathname,
+  ): pathname is Exclude<(typeof PUBLIC_SITEMAP_PATHS)[number], "/uses"> =>
     pathname !== "/uses",
 );
 

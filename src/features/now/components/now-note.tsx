@@ -22,7 +22,7 @@ export function NowNote({ description, linkLabel, inspiredBy }: NowNoteProps) {
                 href="https://sive.rs/now"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-foreground font-semibold underline underline-offset-4 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xs"
+                className="text-foreground hover:text-primary focus-visible:ring-ring rounded-xs font-semibold underline underline-offset-4 transition-colors focus-visible:ring-2 focus-visible:outline-none"
               >
                 Derek Sivers
               </a>

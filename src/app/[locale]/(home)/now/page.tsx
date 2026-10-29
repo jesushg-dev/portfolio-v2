@@ -9,8 +9,11 @@ import { getNowPageData } from "@/features/now/server/now-public";
 import { type Locale as AppLocale, locales } from "@/i18n/config";
 
 export { generateMetadata } from "./metadata";
-interface NowRouteProps { params: Promise<{ locale: AppLocale }>; }
-const isLocale = (value: string): value is AppLocale => (locales as readonly string[]).includes(value);
+interface NowRouteProps {
+  params: Promise<{ locale: AppLocale }>;
+}
+const isLocale = (value: string): value is AppLocale =>
+  (locales as readonly string[]).includes(value);
 
 export default async function NowPage({ params }: NowRouteProps) {
   const { locale } = await params;
@@ -20,14 +23,33 @@ export default async function NowPage({ params }: NowRouteProps) {
     getNowPageData(locale),
   ]);
   if (!data) notFound();
-  const topics = new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(data.focuses.map((focus) => focus.label));
+  const topics = new Intl.ListFormat(locale, {
+    style: "long",
+    type: "conjunction",
+  }).format(data.focuses.map((focus) => focus.label));
   return (
     <main className="bg-background text-foreground min-h-screen pb-8">
-      <NowHero eyebrow={t("hero.eyebrow")} title={t("hero.title")} titleHighlight={t("hero.titleHighlight")} description={t("hero.description")}>
-        <NowRoutine schedule={data.statusSchedule} timezone={data.timezone} initialNow={new Date().toISOString()} />
+      <NowHero
+        eyebrow={t("hero.eyebrow")}
+        title={t("hero.title")}
+        titleHighlight={t("hero.titleHighlight")}
+        description={t("hero.description")}
+      >
+        <NowRoutine
+          schedule={data.statusSchedule}
+          timezone={data.timezone}
+          initialNow={new Date().toISOString()}
+        />
       </NowHero>
-      <NowList heading={topics ? t("list.focusSummary", { topics }) : t("list.focusesLabel")}
-        focuses={data.focuses} statusBody={data.statusBody} statusEmoji={data.statusEmoji} statusRelative={data.statusRelative} />
+      <NowList
+        heading={
+          topics ? t("list.focusSummary", { topics }) : t("list.focusesLabel")
+        }
+        focuses={data.focuses}
+        statusBody={data.statusBody}
+        statusEmoji={data.statusEmoji}
+        statusRelative={data.statusRelative}
+      />
       <NowActivity data={data} locale={locale} />
       <NowNote
         description={t("note.description")}

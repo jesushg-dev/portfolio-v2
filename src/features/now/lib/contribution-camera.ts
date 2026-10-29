@@ -53,8 +53,7 @@ export function projectContributionScene(
       300 + (y - (minY + maxY) / 2) * scale + camera.panY,
     ];
   };
-  const polygon = (points: Point3[]) =>
-    points.map(project);
+  const polygon = (points: Point3[]) => points.map(project);
   return [...cells]
     .sort((a, b) => (a.week - b.week) * sin + (a.weekday - b.weekday) * cos)
     .map((day) => {
