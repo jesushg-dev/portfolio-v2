@@ -29,11 +29,15 @@ export function DataTableCategoryChips({
 
   return (
     <div
-      className={cn("no-scrollbar max-w-full overflow-x-auto", className)}
+      className={cn(
+        "w-full max-w-full min-w-0 overflow-x-auto overscroll-x-contain",
+        className,
+      )}
       role="region"
       aria-label={ariaLabel}
     >
       <Tabs
+        className="w-max min-w-full"
         value={value}
         onValueChange={(val) => {
           if (typeof val === "string") onChange(val);
@@ -41,7 +45,7 @@ export function DataTableCategoryChips({
       >
         <TabsList
           variant="pill"
-          className="h-auto w-full flex-wrap justify-start gap-1.5 border-0 bg-transparent p-0"
+          className="h-auto w-max min-w-full justify-start gap-1.5 border-0 bg-transparent p-0"
         >
           {chips.map((chip) => {
             const chipVal = chip.value ?? chip.id ?? "";

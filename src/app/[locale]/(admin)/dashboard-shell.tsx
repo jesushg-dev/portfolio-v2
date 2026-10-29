@@ -27,11 +27,13 @@ import { authClient } from "@/lib/auth-client";
 import ThemeSelectorLazy from "@/components/app-layout/app-header/theme-selector-lazy";
 import LocaleSelector from "@/components/app-layout/app-header/locale-selector";
 import ScrollToTop from "@/components/custom-ui/scroll-to-top";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sidebar,
   SidebarBody,
   SidebarLink,
   SidebarPinToggle,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 interface IDashboardShellProps {
@@ -131,9 +133,12 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const Logo = ({ userName, title }: { userName: string; title: string }) => {
+  const { setMobileOpen } = useSidebar();
+
   return (
     <CustomLink
       href="/admin"
+      onNavigate={() => setMobileOpen(false)}
       className="z-20 flex min-w-0 items-center gap-2 px-2 py-1 font-bold"
     >
       <div className="bg-primary text-primary-foreground flex size-6 shrink-0 items-center justify-center rounded-lg text-xs font-semibold">
@@ -168,6 +173,8 @@ const DashboardShell: FC<IDashboardShellProps> = ({
   const router = useRouter();
   const t = useTranslations("admin.shell");
   const [open, setOpen] = useState(true);
+  const isMobile = useIsMobile();
+  const showExpanded = isMobile || open;
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
 
@@ -249,7 +256,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
           }
         >
           <div className="flex h-12 shrink-0 items-center justify-between gap-1">
-            {open ? (
+            {showExpanded ? (
               <Logo userName={userName} title={t("title")} />
             ) : (
               <LogoIcon userName={userName} />
@@ -277,7 +284,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
 
             <div className="my-1">
               <div className="mb-1 flex h-6 items-end px-3">
-                {open && (
+                {showExpanded && (
                   <p className="text-muted-foreground text-[10px] font-semibold tracking-widest uppercase">
                     {t("nav.portfolioGroup")}
                   </p>
@@ -306,7 +313,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
 
             <div className="my-1">
               <div className="mb-1 flex h-6 items-end px-3">
-                {open && (
+                {showExpanded && (
                   <p className="text-muted-foreground text-[10px] font-semibold tracking-widest uppercase">
                     {t("nav.pagesGroup")}
                   </p>
@@ -354,7 +361,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
               <div className="flex h-5 w-5 shrink-0 items-center justify-center">
                 <LogOut className="h-5 w-5 shrink-0" />
               </div>
-              {open && (
+              {showExpanded && (
                 <span className="inline-block text-sm font-medium whitespace-pre transition duration-150 group-hover/sidebar:translate-x-1">
                   {t("signOut")}
                 </span>
@@ -417,7 +424,7 @@ const DashboardShell: FC<IDashboardShellProps> = ({
             onOpenChange={setThemeMenuOpen}
           />
 
-          <div className="flex w-full flex-1 flex-col p-4 pb-24 md:p-6 md:pb-24">
+          <div className="flex w-full min-w-0 flex-1 flex-col p-4 pb-24 md:p-6 md:pb-24">
             {children}
           </div>
         </main>

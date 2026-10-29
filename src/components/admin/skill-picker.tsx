@@ -132,8 +132,10 @@ export function SkillPicker({
   );
 
   const selectedSkills = useMemo(() => {
-    const set = new Set(selectedSkillIds);
-    return availableSkills.filter((s) => set.has(s.id));
+    return selectedSkillIds.flatMap((id) => {
+      const skill = availableSkills.find((item) => item.id === id);
+      return skill ? [skill] : [];
+    });
   }, [availableSkills, selectedSkillIds]);
 
   const filtered = useMemo(() => {
