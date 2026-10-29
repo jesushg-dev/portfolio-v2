@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { AlertTriangle } from "lucide-react";
 
 import { api, type RouterOutputs } from "@/trpc/react";
+import { ResendWebhookSetup } from "./resend-webhook-setup";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,6 +27,7 @@ const resendFormSchema = z.object({
   emailDomain: z.string(),
   fromEmail: z.string(),
   emailSignatureHtml: z.string(),
+  webhookSecret: z.string(),
 });
 
 type ResendFormValues = z.infer<typeof resendFormSchema>;
@@ -77,6 +79,7 @@ export function ResendIntegrationForm({
     resolver: zodResolver(schema),
     defaultValues: {
       apiKey: "",
+      webhookSecret: "",
       emailDomain: status.emailDomain,
       fromEmail: status.fromEmail,
       emailSignatureHtml: status.emailSignatureHtml,
@@ -86,6 +89,7 @@ export function ResendIntegrationForm({
   useEffect(() => {
     form.reset({
       apiKey: "",
+      webhookSecret: "",
       emailDomain: status.emailDomain,
       fromEmail: status.fromEmail,
       emailSignatureHtml: status.emailSignatureHtml,
@@ -98,6 +102,7 @@ export function ResendIntegrationForm({
         try {
           const res = await saveResend.mutateAsync({
             apiKey: values.apiKey.trim() || undefined,
+            webhookSecret: values.webhookSecret.trim() || undefined,
             emailDomain: values.emailDomain.trim() || undefined,
             fromEmail: values.fromEmail.trim() || undefined,
             emailSignatureHtml: values.emailSignatureHtml,
@@ -208,6 +213,14 @@ export function ResendIntegrationForm({
                 </FormItem>
               )}
             />
+          </FormSection>
+          <FormSection title={t("resend.webhookTitle")}>
+            <ResendWebhookSetup webhookUrl={status.webhookUrl} />
+            <FormField control={form.control} name="webhookSecret" render={({ field }) => (
+              <FormItem label={t("resend.webhookSecret")} description={status.webhookConfigured ? t("resend.webhookSaved") : undefined}>
+                <Input {...field} type="password" autoComplete="new-password" placeholder="whsec_…" />
+              </FormItem>
+            )} />
           </FormSection>
         </FormContent>
 

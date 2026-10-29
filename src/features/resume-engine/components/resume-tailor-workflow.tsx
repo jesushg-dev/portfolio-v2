@@ -28,10 +28,7 @@ import {
 } from "@/features/resume-engine/lib/template-registry";
 import { ResumeTailorErrorAlert } from "@/features/resume-engine/components/resume-tailor-error-alert";
 import { ResumeTailorProgress } from "@/features/resume-engine/components/resume-tailor-progress";
-import {
-  ResumeTailorExistingBanner,
-  type ExistingCvFile,
-} from "@/features/resume-engine/components/resume-tailor-existing-banner";
+import { type ExistingCvFile } from "@/features/resume-engine/components/resume-tailor-existing-banner";
 import { ResumeTailorResultView } from "@/features/resume-engine/components/resume-tailor-result-view";
 
 type Step = "configure" | "tailoring" | "done";
@@ -40,12 +37,14 @@ interface ResumeTailorWorkflowProps {
   applicationId?: string;
   embedded?: boolean;
   existingCvFile?: ExistingCvFile;
+  onSendCv?: () => void;
 }
 
 export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
   applicationId,
   embedded = false,
   existingCvFile,
+  onSendCv,
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [step, setStep] = useState<Step>("configure");
@@ -112,7 +111,18 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
     aiSettings.data && !hasAutoProviders ? "manual" : mode;
   const effectiveProvider = provider ?? defaultProvider;
 
-  if (!showTailorForm && latestExport && appliedExportId !== latestExport.id) {
+  const isManualReplacement = Boolean(
+    existingCvFile &&
+    latestExport &&
+    existingCvFile.url !== latestExport.fileUrl &&
+    existingCvFile.url !== latestExport.pdfFileUrl,
+  );
+  if (
+    !showTailorForm &&
+    !isManualReplacement &&
+    latestExport &&
+    appliedExportId !== latestExport.id
+  ) {
     const analysis = parseMatchAnalysis(latestExport.matchAnalysis);
     setAppliedExportId(latestExport.id);
     setExportId(latestExport.id);
@@ -307,16 +317,20 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               applicationId={applicationId}
               embedded
               onResetTailor={handleResetTailor}
+              onSendCv={onSendCv}
 
               onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />
           </div>
         ) : showExistingBanner && existingCvFile ? (
-          <ResumeTailorExistingBanner existingCvFile={existingCvFile}>
+          <div>
             <ResumeTailorResultView
               previewFileUrl={previewFileUrl}
-              fileName={latestExport?.fileName ?? existingCvFile.name}
-              mimeType={latestExport?.mimeType}
+              fileName={existingCvFile.name}
+              manuallyCorrected={isManualReplacement || !latestExport}
+              mimeType={
+                isManualReplacement ? undefined : latestExport?.mimeType
+              }
               structuredSnapshot={structuredSnapshot}
               downloadUrl={downloadUrl}
               pdfDownloadUrl={pdfDownloadUrl}
@@ -327,10 +341,11 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               applicationId={applicationId}
               embedded
               onResetTailor={handleResetTailor}
+              onSendCv={onSendCv}
 
               onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />
-          </ResumeTailorExistingBanner>
+          </div>
         ) : (
           <div className="flex flex-col gap-4">
             <p className="text-muted-foreground text-sm">
@@ -589,6 +604,7 @@ export const ResumeTailorWorkflow: FC<ResumeTailorWorkflowProps> = ({
               exportId={exportId}
               applicationId={applicationId}
               onResetTailor={handleResetTailor}
+              onSendCv={onSendCv}
 
               onPdfGenerated={(url) => setPdfDownloadUrl(url)}
             />

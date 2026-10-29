@@ -16,6 +16,9 @@ jest.mock("@/trpc/react", () => ({
       },
     }),
     jobTrackerAdmin: {
+      getApplicationEmailHistory: {
+        useQuery: () => ({ data: [] }),
+      },
       getApplicationEmailCapabilities: {
         useQuery: () => ({
           data: { canSendEmail: true, hasAiProvider: true },
@@ -33,11 +36,16 @@ jest.mock("@/trpc/react", () => ({
         useMutation: () => ({ mutateAsync: jest.fn(), isPending: false }),
       },
     },
+    resumeEngineAdmin: {
+      generateTailoredPdf: {
+        useMutation: () => ({ mutateAsync: jest.fn(), isPending: false }),
+      },
+    },
   },
 }));
 
 describe("ApplicationEmailDialog", () => {
-  it("keeps email tracking opt-in and explains the measurement", () => {
+  it("keeps send copy opt-in and explains email tracking", () => {
     renderWithIntl(
       <ApplicationEmailDialog
         open
@@ -52,20 +60,13 @@ describe("ApplicationEmailDialog", () => {
     const copyCheckbox = screen.getByRole("checkbox", {
       name: "Send a copy to my email",
     });
-    const trackCheckbox = screen.getByRole("checkbox", {
-      name: "Measure email loads",
-    });
 
     expect(copyCheckbox).toHaveAttribute("aria-checked", "true");
-    expect(trackCheckbox).toHaveAttribute("aria-checked", "true");
-    expect(screen.getByText("Measure email loads")).toBeInTheDocument();
     expect(
-      screen.getByText(/Loads are approximate and do not confirm/),
+      screen.getByText(/Sends a copy to your inbox for your records/),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /Sends an identical copy to your inbox without a tracking pixel/,
-      ),
+      screen.getByText(/Resend manages open tracking at domain level/),
     ).toBeInTheDocument();
   });
 });

@@ -2,7 +2,15 @@
 
 import { useCallback, useMemo, useState, useTransition, type FC } from "react";
 import { format } from "date-fns";
-import { CheckCircle, Circle, Clock, Edit, MapPin, Plus } from "lucide-react";
+import {
+  CheckCircle,
+  Circle,
+  Clock,
+  Edit,
+  Mail,
+  MapPin,
+  Plus,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
@@ -43,6 +51,13 @@ interface ApplicationTimelineProps {
   locale: Locale;
   variant?: "default" | "embedded";
   activityHint?: string;
+  onCompleteEvent?: (eventId: string) => void;
+  sentEmails?: {
+    id: string;
+    recipientEmail: string;
+    sentAt: Date | null;
+    subject: string;
+  }[];
 }
 
 export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
@@ -50,6 +65,8 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
   locale,
   variant = "default",
   activityHint,
+  onCompleteEvent,
+  sentEmails = [],
 }) => {
   const t = useTranslations("admin.jobTracker");
   const [editingEvent, setEditingEvent] = useState<string | null>(null);
@@ -76,6 +93,19 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
     (a, b) =>
       new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime(),
   );
+  const pendingEvents = sortedEvents.filter((event) => !event.completed);
+  const completedEvents = sortedEvents
+    .filter((event) => event.completed)
+    .reverse();
+  const oldestCompleted = completedEvents[completedEvents.length - 1];
+  const sortedSentEmails = [...sentEmails].sort(
+    (a, b) =>
+      new Date(b.sentAt ?? 0).getTime() - new Date(a.sentAt ?? 0).getTime(),
+  );
+  const displayedEvents =
+    variant === "embedded"
+      ? [...pendingEvents, ...completedEvents]
+      : sortedEvents;
 
   const handleCompleteEvent = useCallback(
     (eventId: string) => {
@@ -134,7 +164,7 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
   );
 
   const timelineBody =
-    sortedEvents.length === 0 ? (
+    displayedEvents.length === 0 && sentEmails.length === 0 ? (
       <div className="text-muted-foreground py-6 text-center text-sm">
         <Clock className="mx-auto mb-3 h-8 w-8 opacity-50" />
         <p>{t("timeline.empty")}</p>
@@ -143,242 +173,321 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
       <div
         className={variant === "embedded" ? "flex flex-col gap-3" : "space-y-6"}
       >
-        {sortedEvents.map((event, index) => (
-          <div key={event.id} className="relative">
-            {variant === "default" && index < sortedEvents.length - 1 ? (
-              <div className="bg-border absolute top-12 left-6 h-16 w-0.5" />
+        {displayedEvents.map((event, index) => (
+          <div key={event.id}>
+            {variant === "embedded" &&
+            index === 0 &&
+            pendingEvents.length > 0 ? (
+              <h3 className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
+                {t("timeline.upcoming")}
+              </h3>
             ) : null}
-
-            <div className="flex gap-2.5">
-              <div className="mt-0.5 shrink-0">
-                {event.completed ? (
-                  <CheckCircle
-                    className={
-                      variant === "embedded"
-                        ? "text-primary h-4 w-4"
-                        : "h-6 w-6 text-green-600"
-                    }
-                  />
-                ) : (
-                  <Circle
-                    className={
-                      variant === "embedded"
-                        ? "text-primary h-4 w-4"
-                        : "text-muted-foreground h-6 w-6"
-                    }
-                  />
-                )}
-              </div>
-
-              <div className="min-w-0 flex-1 space-y-2">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="space-y-0.5">
-                    <div
-                      className={
-                        variant === "embedded"
-                          ? "flex flex-col gap-0.5"
-                          : "flex items-center gap-2"
+            {variant === "embedded" &&
+            index === pendingEvents.length &&
+            completedEvents.length > 0 ? (
+              <h3 className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
+                {t("timeline.history")}
+              </h3>
+            ) : null}
+            {variant === "embedded" && event.completed
+              ? sortedSentEmails
+                  .filter((email) => {
+                    const timestamp = new Date(email.sentAt ?? 0).getTime();
+                    const previous =
+                      completedEvents[index - pendingEvents.length - 1];
+                    return (
+                      timestamp >= new Date(event.scheduledDate).getTime() &&
+                      (!previous ||
+                        timestamp < new Date(previous.scheduledDate).getTime())
+                    );
+                  })
+                  .map((email) => (
+                    <TimelineEmailItem
+                      key={email.id}
+                      recipient={email.recipientEmail}
+                      subject={email.subject}
+                      date={
+                        email.sentAt
+                          ? format(new Date(email.sentAt), "PPP", {
+                              locale: dateFnsLocale,
+                            })
+                          : ""
                       }
-                    >
-                      {variant === "default" ? (
-                        <EventTypeIcon
-                          type={event.type}
-                          className="text-muted-foreground size-4 shrink-0"
-                        />
-                      ) : null}
-                      <Link
-                        href={eventPrepHref(application.id, event.id)}
-                        className={
-                          variant === "embedded"
-                            ? "hover:text-primary text-[13px] font-medium hover:underline"
-                            : "hover:text-primary font-medium hover:underline"
-                        }
-                      >
-                        {event.title}
-                      </Link>
-                      {variant === "default" ? (
-                        <>
-                          <Badge variant="outline" className="text-xs">
-                            {t(`eventType.${event.type as EventType}`)}
-                          </Badge>
-                          {event.completed && event.outcome ? (
-                            <Badge
-                              variant="outline"
-                              className={`text-xs ${getOutcomeColor(event.outcome)}`}
-                            >
-                              {t(
-                                `timeline.outcome.${event.outcome as "POSITIVE" | "NEGATIVE" | "NEUTRAL"}`,
-                              )}
-                            </Badge>
-                          ) : null}
-                        </>
-                      ) : null}
-                    </div>
-                    <p
-                      className={
-                        variant === "embedded"
-                          ? "text-muted-foreground text-xs"
-                          : "text-muted-foreground text-sm"
-                      }
-                    >
-                      {format(
-                        new Date(event.scheduledDate),
-                        variant === "embedded" ? "MMM d" : "PPP HH:mm",
-                        { locale: dateFnsLocale },
-                      )}
-                      {variant === "default" && event.duration
-                        ? ` • ${t("calendar.duration", { minutes: event.duration })}`
-                        : null}
-                    </p>
-                    {variant === "default" && event.description ? (
-                      <p className="text-muted-foreground text-sm">
-                        {event.description}
-                      </p>
-                    ) : null}
-                    {variant === "default" &&
-                    event.location &&
-                    !event.isVirtual ? (
-                      <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
-                        <MapPin className="size-3.5 shrink-0" aria-hidden />
-                        {event.location}
-                      </p>
-                    ) : null}
-                    {variant === "default" &&
-                    event.isVirtual &&
-                    event.meetingLink ? (
-                      <a
-                        href={event.meetingLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary text-sm hover:underline"
-                      >
-                        {t("timeline.joinMeeting")}
-                      </a>
-                    ) : null}
-                  </div>
-
-                  <div className="flex shrink-0 items-center gap-1.5">
-                    {variant === "default" &&
-                    !event.completed &&
-                    new Date(event.scheduledDate) > new Date() ? (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          setEditingEvent(
-                            editingEvent === event.id ? null : event.id,
-                          )
-                        }
-                      >
-                        <Edit className="mr-2 h-4 w-4" />
-                        {t("timeline.complete")}
-                      </Button>
-                    ) : null}
-                    <EventDeleteControl
-                      applicationId={application.id}
-                      eventId={event.id}
+                      label={t("timeline.emailSent", {
+                        recipient: email.recipientEmail,
+                      })}
                     />
-                  </div>
+                  ))
+              : null}
+            <div className="relative">
+              {variant === "default" && index < displayedEvents.length - 1 ? (
+                <div className="bg-border absolute top-12 left-6 h-16 w-0.5" />
+              ) : null}
+
+              <div className="flex gap-2.5">
+                <div className="mt-0.5 shrink-0">
+                  {event.completed ? (
+                    <CheckCircle
+                      className={
+                        variant === "embedded"
+                          ? "text-primary h-4 w-4"
+                          : "h-6 w-6 text-green-600"
+                      }
+                    />
+                  ) : (
+                    <Circle
+                      className={
+                        variant === "embedded"
+                          ? "text-primary h-4 w-4"
+                          : "text-muted-foreground h-6 w-6"
+                      }
+                    />
+                  )}
                 </div>
 
-                {editingEvent === event.id ? (
-                  <div className="mt-4 space-y-4 rounded-lg border p-4">
-                    <div>
-                      <p className="text-sm font-medium">
-                        {t("timeline.outcomeLabel")}
-                      </p>
-                      <Select
-                        items={outcomeItems}
-                        value={eventOutcomes[event.id] ?? "NEUTRAL"}
-                        onValueChange={(value) => {
-                          if (
-                            value === "POSITIVE" ||
-                            value === "NEGATIVE" ||
-                            value === "NEUTRAL"
-                          ) {
-                            setEventOutcomes((prev) => ({
-                              ...prev,
-                              [event.id]: value,
-                            }));
-                          }
-                        }}
-                      >
-                        <SelectTrigger className="mt-1 w-full">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="POSITIVE">
-                            {t("timeline.outcome.POSITIVE")}
-                          </SelectItem>
-                          <SelectItem value="NEUTRAL">
-                            {t("timeline.outcome.NEUTRAL")}
-                          </SelectItem>
-                          <SelectItem value="NEGATIVE">
-                            {t("timeline.outcome.NEGATIVE")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">
-                        {t("timeline.notesLabel")}
-                      </p>
-                      <Textarea
-                        placeholder={t("timeline.notesPlaceholder")}
-                        value={eventNotes[event.id] ?? ""}
-                        onChange={(e) =>
-                          setEventNotes((prev) => ({
-                            ...prev,
-                            [event.id]: e.target.value,
-                          }))
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-0.5">
+                      <div
+                        className={
+                          variant === "embedded"
+                            ? "flex flex-col gap-0.5"
+                            : "flex items-center gap-2"
                         }
-                        className="mt-1"
+                      >
+                        {variant === "default" ? (
+                          <EventTypeIcon
+                            type={event.type}
+                            className="text-muted-foreground size-4 shrink-0"
+                          />
+                        ) : null}
+                        <Link
+                          href={eventPrepHref(application.id, event.id)}
+                          className={
+                            variant === "embedded"
+                              ? "hover:text-primary text-[13px] font-medium hover:underline"
+                              : "hover:text-primary font-medium hover:underline"
+                          }
+                        >
+                          {event.title}
+                        </Link>
+                        {variant === "default" ? (
+                          <>
+                            <Badge variant="outline" className="text-xs">
+                              {t(`eventType.${event.type as EventType}`)}
+                            </Badge>
+                            {event.completed && event.outcome ? (
+                              <Badge
+                                variant="outline"
+                                className={`text-xs ${getOutcomeColor(event.outcome)}`}
+                              >
+                                {t(
+                                  `timeline.outcome.${event.outcome as "POSITIVE" | "NEGATIVE" | "NEUTRAL"}`,
+                                )}
+                              </Badge>
+                            ) : null}
+                          </>
+                        ) : null}
+                      </div>
+                      <p
+                        className={
+                          variant === "embedded"
+                            ? "text-muted-foreground text-xs"
+                            : "text-muted-foreground text-sm"
+                        }
+                      >
+                        {format(
+                          new Date(event.scheduledDate),
+                          variant === "embedded" ? "MMM d" : "PPP HH:mm",
+                          { locale: dateFnsLocale },
+                        )}
+                        {variant === "default" && event.duration
+                          ? ` • ${t("calendar.duration", { minutes: event.duration })}`
+                          : null}
+                      </p>
+                      {variant === "default" && event.description ? (
+                        <p className="text-muted-foreground text-sm">
+                          {event.description}
+                        </p>
+                      ) : null}
+                      {variant === "default" &&
+                      event.location &&
+                      !event.isVirtual ? (
+                        <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
+                          <MapPin className="size-3.5 shrink-0" aria-hidden />
+                          {event.location}
+                        </p>
+                      ) : null}
+                      {variant === "default" &&
+                      event.isVirtual &&
+                      event.meetingLink ? (
+                        <a
+                          href={event.meetingLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary text-sm hover:underline"
+                        >
+                          {t("timeline.joinMeeting")}
+                        </a>
+                      ) : null}
+                    </div>
+
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {!event.completed ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            onCompleteEvent
+                              ? onCompleteEvent(event.id)
+                              : setEditingEvent(
+                                  editingEvent === event.id ? null : event.id,
+                                )
+                          }
+                        >
+                          <Edit className="mr-2 h-4 w-4" />
+                          {t("timeline.complete")}
+                        </Button>
+                      ) : null}
+                      <EventDeleteControl
+                        applicationId={application.id}
+                        eventId={event.id}
                       />
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        disabled={isPending}
-                        onClick={() => handleCompleteEvent(event.id)}
-                      >
-                        {t("timeline.markCompleted")}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setEditingEvent(null)}
-                      >
-                        {t("timeline.cancel")}
-                      </Button>
-                    </div>
                   </div>
-                ) : null}
 
-                {event.completed && event.notes ? (
-                  <div className="bg-muted/50 mt-2 rounded-lg p-3">
-                    <p className="text-sm font-medium">
-                      {t("timeline.notesLabel")}:
-                    </p>
-                    <p className="text-muted-foreground mt-1 text-sm">
-                      {event.notes}
-                    </p>
-                    {event.completedAt ? (
-                      <p className="text-muted-foreground mt-2 text-xs">
-                        {t("timeline.completedAt", {
-                          date: format(
-                            new Date(event.completedAt),
-                            "PPP HH:mm",
-                            { locale: dateFnsLocale },
-                          ),
-                        })}
+                  {editingEvent === event.id ? (
+                    <div className="mt-4 space-y-4 rounded-lg border p-4">
+                      <div>
+                        <p className="text-sm font-medium">
+                          {t("timeline.outcomeLabel")}
+                        </p>
+                        <Select
+                          items={outcomeItems}
+                          value={eventOutcomes[event.id] ?? "NEUTRAL"}
+                          onValueChange={(value) => {
+                            if (
+                              value === "POSITIVE" ||
+                              value === "NEGATIVE" ||
+                              value === "NEUTRAL"
+                            ) {
+                              setEventOutcomes((prev) => ({
+                                ...prev,
+                                [event.id]: value,
+                              }));
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="mt-1 w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="POSITIVE">
+                              {t("timeline.outcome.POSITIVE")}
+                            </SelectItem>
+                            <SelectItem value="NEUTRAL">
+                              {t("timeline.outcome.NEUTRAL")}
+                            </SelectItem>
+                            <SelectItem value="NEGATIVE">
+                              {t("timeline.outcome.NEGATIVE")}
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">
+                          {t("timeline.notesLabel")}
+                        </p>
+                        <Textarea
+                          placeholder={t("timeline.notesPlaceholder")}
+                          value={eventNotes[event.id] ?? ""}
+                          onChange={(e) =>
+                            setEventNotes((prev) => ({
+                              ...prev,
+                              [event.id]: e.target.value,
+                            }))
+                          }
+                          className="mt-1"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          disabled={isPending}
+                          onClick={() => handleCompleteEvent(event.id)}
+                        >
+                          {t("timeline.markCompleted")}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setEditingEvent(null)}
+                        >
+                          {t("timeline.cancel")}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {event.completed && event.notes ? (
+                    <div className="bg-muted/50 mt-2 rounded-lg p-3">
+                      <p className="text-sm font-medium">
+                        {t("timeline.notesLabel")}:
                       </p>
-                    ) : null}
-                  </div>
-                ) : null}
+                      <p className="text-muted-foreground mt-1 text-sm">
+                        {event.notes}
+                      </p>
+                      {event.completedAt ? (
+                        <p className="text-muted-foreground mt-2 text-xs">
+                          {t("timeline.completedAt", {
+                            date: format(
+                              new Date(event.completedAt),
+                              "PPP HH:mm",
+                              { locale: dateFnsLocale },
+                            ),
+                          })}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </div>
           </div>
         ))}
+        {variant === "embedded" && sortedSentEmails.length > 0 ? (
+          <div className="space-y-2">
+            {completedEvents.length === 0 ? (
+              <h3 className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                {t("timeline.history")}
+              </h3>
+            ) : null}
+            {sortedSentEmails
+              .filter(
+                (email) =>
+                  !oldestCompleted ||
+                  new Date(email.sentAt ?? 0).getTime() <
+                    new Date(oldestCompleted.scheduledDate).getTime(),
+              )
+              .map((email) => (
+                <TimelineEmailItem
+                  key={email.id}
+                  recipient={email.recipientEmail}
+                  subject={email.subject}
+                  date={
+                    email.sentAt
+                      ? format(new Date(email.sentAt), "PPP", {
+                          locale: dateFnsLocale,
+                        })
+                      : ""
+                  }
+                  label={t("timeline.emailSent", {
+                    recipient: email.recipientEmail,
+                  })}
+                />
+              ))}
+          </div>
+        ) : null}
       </div>
     );
 
@@ -412,3 +521,31 @@ export const ApplicationTimeline: FC<ApplicationTimelineProps> = ({
     </Card>
   );
 };
+
+function TimelineEmailItem({
+  recipient,
+  subject,
+  date,
+  label,
+}: {
+  recipient: string;
+  subject: string;
+  date: string;
+  label: string;
+}) {
+  return (
+    <div
+      className="border-border flex gap-2.5 border-t py-2 text-xs"
+      title={recipient}
+    >
+      <Mail className="text-primary size-4 shrink-0" aria-hidden />
+      <div>
+        <p className="font-medium">{label}</p>
+        <p className="text-muted-foreground">
+          {subject}
+          {date ? ` · ${date}` : ""}
+        </p>
+      </div>
+    </div>
+  );
+}

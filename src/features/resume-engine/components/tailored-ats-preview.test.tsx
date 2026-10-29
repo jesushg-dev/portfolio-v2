@@ -1,9 +1,10 @@
-import { resumeSelectionFixture } from "../lib/tailored-resume.fixture";
+import {
+  resumeFixture,
+  resumeResponseFixture,
+} from "../lib/tailored-resume.fixture";
 import { render, screen } from "@testing-library/react";
 import { TailoredAtsPreview } from "./tailored-ats-preview";
-import { resumeFixture } from "../lib/tailored-resume.fixture";
 import {
-  resumeTextFields,
   validateTailoredResume,
 } from "../lib/tailored-resume-document";
 
@@ -17,15 +18,7 @@ describe("persisted resume preview", () => {
         nl: resumeFixture("nl"),
       };
       const { document } = validateTailoredResume(
-        {
-          schemaVersion: 1,
-          locale,
-          aiScore: 80,
-          selection: resumeSelectionFixture(drafts[locale]),
-          fields: resumeTextFields(drafts[locale], "v2").map(
-            ({ id, text }) => ({ id, text }),
-          ),
-        },
+        resumeResponseFixture(drafts[locale], "v2"),
         {
           drafts,
           templateId: "v2",

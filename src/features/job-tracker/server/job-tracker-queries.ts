@@ -24,6 +24,11 @@ import {
   type CompanyEditorDTO,
 } from "@/features/job-tracker/lib/company-editor-dto";
 import { pullLinkedUpcomingEventsFromGoogle } from "@/lib/google-calendar/sync";
+import { parseMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
+import { readResumeSnapshot } from "@/features/resume-engine/lib/tailored-resume-document";
+import { getOpenJobSearch } from "@/features/job-tracker/server/active-job-search";
+import { addBusinessDays } from "@/features/job-tracker/lib/application-next-step";
+import type { EventType } from "@/features/job-tracker/types";
 
 const UPCOMING_EVENTS_LIMIT = 20;
 
@@ -137,13 +142,17 @@ function buildCompanyOrderBy(
 
 export async function getDashboardStatsData(): Promise<DashboardStatsDTO> {
   const userId = await requireAuthenticatedUserId();
+  const search = await getOpenJobSearch(db, userId);
+  const where = search
+    ? { userId, jobSearchId: search.id }
+    : { id: { in: [] } };
 
   const [totalApplications, totalCompanies, statusCounts] = await Promise.all([
-    db.application.count({ where: { userId } }),
+    db.application.count({ where }),
     db.company.count({ where: { userId } }),
     db.application.groupBy({
       by: ["status"],
-      where: { userId },
+      where,
       _count: true,
     }),
   ]);
@@ -167,10 +176,13 @@ export async function getUpcomingEventsData(
   limit = UPCOMING_EVENTS_LIMIT,
 ): Promise<UpcomingEventDTO[]> {
   const userId = await requireAuthenticatedUserId();
+  const search = await getOpenJobSearch(db, userId);
+  if (!search) return [];
 
   const events = await db.applicationEvent.findMany({
     where: {
       userId,
+      application: { is: { jobSearchId: search.id } },
       completed: false,
       scheduledDate: { gt: new Date() },
     },
@@ -222,6 +234,8 @@ export async function getUpcomingEventsData(
 
 export async function getApplicationsListData(params: DataTableParams) {
   const userId = await requireAuthenticatedUserId();
+  const search = await getOpenJobSearch(db, userId);
+  if (!search) return { data: [], pageCount: 1, totalCount: 0 };
   const skip =
     params.page && params.perPage
       ? (params.page - 1) * params.perPage
@@ -229,6 +243,7 @@ export async function getApplicationsListData(params: DataTableParams) {
   const take = params.perPage ?? undefined;
 
   const where = buildApplicationWhere(userId, params.filters);
+  where.jobSearchId = search.id;
   const orderBy = buildApplicationOrderBy(params.sort);
 
   const [applications, totalCount] = await Promise.all([
@@ -283,6 +298,8 @@ export async function getCompaniesListData(params: DataTableParams) {
 }
 
 export async function getJobTrackerPageData(params: DataTableParams) {
+  const userId = await requireAuthenticatedUserId();
+  const search = await getOpenJobSearch(db, userId);
   const [upcomingEvents, applications, companies] = await Promise.all([
     getUpcomingEventsData(),
     getApplicationsListData(params),
@@ -293,6 +310,7 @@ export async function getJobTrackerPageData(params: DataTableParams) {
     upcomingEvents,
     applications,
     companies,
+    hasOpenSearch: Boolean(search),
   };
 }
 
@@ -346,6 +364,42 @@ export async function getApplicationDetailPageData(id: string) {
   return mapApplicationToDetailDto(application);
 }
 
+export async function getApplicationDetailContextData(applicationId: string) {
+  const userId = await requireAuthenticatedUserId();
+  const search = await getOpenJobSearch(db, userId);
+  const [user, latestExport, application] = await Promise.all([
+    db.user.findUnique({ where: { id: userId }, select: { email: true } }),
+    db.resumeExport.findFirst({
+      where: { applicationId, userId },
+      orderBy: { createdAt: "desc" },
+      select: {
+        fileName: true,
+        tailoredFor: true,
+        matchAnalysis: true,
+        structuredSnapshot: true,
+      },
+    }),
+    db.application.findUnique({
+      where: { id: applicationId, userId },
+      select: { jobSearchId: true },
+    }),
+  ]);
+  const snapshot = latestExport
+    ? readResumeSnapshot(latestExport.structuredSnapshot)
+    : null;
+  return {
+    viewerId: userId,
+    viewerEmail: user?.email ?? "",
+    matchAnalysis: parseMatchAnalysis(latestExport?.matchAnalysis),
+    resumeTitle:
+      snapshot?.header.degree ??
+      latestExport?.tailoredFor ??
+      latestExport?.fileName ??
+      null,
+    canCloseSearch: Boolean(search && application?.jobSearchId === search.id),
+  };
+}
+
 export async function getEventPrepPageData(
   applicationId: string,
   eventId: string,
@@ -376,18 +430,28 @@ export async function getCompanyEditPageData(id: string) {
   };
 }
 
-export async function getEventCreatePageData(applicationId?: string) {
+export async function getEventCreatePageData(
+  applicationId?: string,
+  type?: EventType,
+) {
   const userId = await requireAuthenticatedUserId();
+  const search = await getOpenJobSearch(db, userId);
   const applications = await db.application.findMany({
-    where: { userId },
+    where: search ? { userId, jobSearchId: search.id } : { id: { in: [] } },
     include: applicationListInclude,
     orderBy: { appliedDate: "desc" },
   });
 
-  return {
-    initialData: buildEmptyEventCreateDto(applicationId),
-    applications: mapApplicationsToListDto(applications),
-  };
+  const initialData = buildEmptyEventCreateDto(applicationId);
+  if (type) initialData.type = type;
+  if (type === "FOLLOW_UP") {
+    const selected = applications.find(
+      (application) => application.id === applicationId,
+    );
+    if (selected)
+      initialData.scheduledDate = addBusinessDays(selected.appliedDate, 5);
+  }
+  return { initialData, applications: mapApplicationsToListDto(applications) };
 }
 
 export type CompanyOption = CompanyEditorDTO;

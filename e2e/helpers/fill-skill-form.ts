@@ -1,4 +1,8 @@
-import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
+import {
+  selectFormLanguage,
+  selectFormTab,
+  translationField,
+} from "./admin-form";
 import type { Page, Response } from "@playwright/test";
 
 import { clickSelectOption } from "./select-option";
@@ -125,8 +129,7 @@ export async function fillSkillForm(
     await switchSkillLanguage(page, locale);
 
     if (translation.description) {
-      await translationField(page, "description")
-        .fill(translation.description);
+      await translationField(page, "description").fill(translation.description);
     }
 
     if (translation.urlWiki) {

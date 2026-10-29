@@ -4,7 +4,10 @@ import {
   CvImportDraftSchema,
   type CvImportDraft,
 } from "@/features/cv/lib/cv-import-draft";
-import { CvMatchAnalysisSchema } from "./cv-match-analysis";
+import {
+  CvMatchAnalysisSchema,
+  CvScoreBreakdownSchema,
+} from "./cv-match-analysis";
 import { extractJobTools } from "./extract-job-tools";
 import { getResumeTemplate, type CvTemplateVersion } from "./template-registry";
 import { RESUME_LABELS } from "@/lib/cv/resume-labels";
@@ -102,9 +105,24 @@ export const TailoredResumeResponseSchema = z
     fields: z.array(z.object({ id: z.string(), text: z.string() }).strict()),
     aiScore: z.number().min(0).max(100),
     matchNotes: z.string().optional(),
-    matchAnalysis: CvMatchAnalysisSchema.optional(),
+    matchAnalysis: CvMatchAnalysisSchema.extend({
+      scoreBreakdown: CvScoreBreakdownSchema,
+      strengths: z.array(z.string().trim().min(1)).min(1),
+    }),
   })
-  .strict();
+  .strict()
+  .superRefine((response, ctx) => {
+    const total = Object.values(response.matchAnalysis.scoreBreakdown).reduce(
+      (sum, dimension) => sum + dimension.score,
+      0,
+    );
+    if (response.aiScore !== total)
+      ctx.addIssue({
+        code: "custom",
+        path: ["aiScore"],
+        message: `aiScore must equal the sum of the five scoreBreakdown scores (${total})`,
+      });
+  });
 export type TailoredResumeResponse = z.infer<
   typeof TailoredResumeResponseSchema
 >;

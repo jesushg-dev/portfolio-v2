@@ -19,6 +19,9 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-positive: var(--positive);
+  --color-warning: var(--warning);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -199,9 +202,20 @@
     --accent: var(--color-secondary-100);
     --accent-foreground: var(--color-primaryText-500);
     --destructive: #dc2626;
+    --success: #047857;
+    --positive: #4d7c0f;
+    --warning: #a16207;
     --border: var(--color-divider-50);
     --input: var(--color-divider-50);
     --ring: var(--color-primary-400);
+  }
+
+  [data-theme="main-dark"],
+  [data-theme="orange-dark"],
+  [data-theme="christmas-dark"] {
+    --success: #34d399;
+    --positive: #a3e635;
+    --warning: #fbbf24;
   }
 
   *,

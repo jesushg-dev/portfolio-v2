@@ -2,9 +2,9 @@
   "header": {
     "fullName": "Jesús Enmanuel Hernández González",
     "degree": {
-      "es": "Senior Fullstack Developer",
-      "en": "Senior Fullstack Developer",
-      "nl": "Senior Fullstack Developer"
+      "es": "Senior Software Engineer · Ingeniero en Computación",
+      "en": "Senior Software Engineer · Computer Engineer",
+      "nl": "Senior Software Engineer · Computertechnisch Ingenieur"
     },
     "clientImageAlt": {
       "es": "Foto de Jesús Hernández",
@@ -13,9 +13,9 @@
     }
   },
   "aboutMe": {
-    "es": "Ingeniero en Computación y Senior Fullstack Developer con 6+ años de experiencia construyendo aplicaciones web y móviles para productos empresariales y plataformas de alto volumen. Especializado en React, TypeScript, Next.js y .NET, con experiencia en APIs, integración de sistemas, arquitectura frontend, CI/CD y optimización de rendimiento. He trabajado en productos para Walmart Global Tech y Claro, liderando iniciativas técnicas, modernizando sistemas y resolviendo incidentes críticos en producción.",
-    "en": "Computer Engineer and Senior Fullstack Developer with 6+ years of experience building web and mobile applications for enterprise products and high-volume platforms. Specialized in React, TypeScript, Next.js, and .NET, with expertise in APIs, systems integration, frontend architecture, CI/CD, and performance optimization. Shipped high-impact products for Walmart Global Tech and Claro, leading technical initiatives, modernizing legacy systems, and resolving critical production incidents.",
-    "nl": "Computer Engineer en Senior Fullstack Developer met 6+ jaar ervaring in het bouwen van web- en mobiele applicaties voor enterprise producten en platformen met hoog volume. Gespecialiseerd in React, TypeScript, Next.js en .NET, met expertise in API's, systeemintegratie, frontend architectuur, CI/CD en prestatie-optimalisatie. Gewerkt aan producten voor Walmart Global Tech en Claro, technische initiatieven geleid, legacy systemen gemoderniseerd en kritieke productie-incidenten opgelost."
+    "es": "Senior Software Engineer con +6 años de trayectoria y graduado como Ingeniero en Computación (UNI), especializándome en arquitecturas distribuidas (.NET Core, Node.js/Nest.js, React/Next.js y SQL/NoSQL) en entornos corporativos de alta demanda como Walmart y Claro. Mi enfoque combina rigor arquitectónico (Clean Architecture, DDD, principios SOLID) con impacto de negocio directo: he dirigido la descomposición de monolitos legacy a microservicios RESTful/GraphQL, **reducido el MTTR en incidentes críticos en un 40%** y guiado equipos de ingeniería mediante revisiones de código estructuradas, automatización CI/CD y prácticas de desarrollo seguro (DevSecOps).",
+    "en": "Senior Software Engineer with 6+ years designing distributed enterprise systems (.NET Core, Node.js/Nest.js, React/Next.js, SQL/NoSQL) and holding a degree in Computer Engineering. Experienced within high-compliance corporate ecosystems (Walmart, Claro), I combine architectural rigor (Clean Architecture, DDD, SOLID) with direct business outcomes: led legacy monolith migrations to resilient microservices, **reduced critical incident MTTR by 40%**, and elevated team capabilities through structured code reviews, CI/CD automation, and DevSecOps practices.",
+    "nl": "Senior Software Engineer met 6+ jaar ervaring in het ontwerpen van gedistribueerde enterprise-systemen (.NET Core, Node.js, React/Next.js, SQL/NoSQL) en een diploma in Computertechniek. Ik combineer architectonische precisie (Clean Architecture, DDD, SOLID) met directe bedrijfsresultaten: leiding gegeven aan migraties van legacy-monolieten naar microservices, **MTTR met 40% verlaagd** en engineeringteams begeleid."
   },
   "contacts": [
     {

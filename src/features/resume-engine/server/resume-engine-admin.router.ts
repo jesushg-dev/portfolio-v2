@@ -448,6 +448,7 @@ export const resumeEngineAdminRouter = createTRPCRouter({
               location: application.location ?? "",
               salary: application.salary ?? "",
               notes: application.notes ?? "",
+              cvFile: application.cvFile,
             }
           : null,
         latestExport,

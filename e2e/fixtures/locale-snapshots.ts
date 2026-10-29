@@ -10,19 +10,17 @@ export const localeSnapshots: Record<
 > = {
   en: {
     navAbout: "About me",
-    aboutSnippet:
-      "Computer Engineer and Senior Fullstack Developer with 6+ years",
+    aboutSnippet: "Senior Software Engineer with 6+ years",
     skillsTabBackend: "Backend",
   },
   es: {
     navAbout: "Sobre mí",
-    aboutSnippet:
-      "Ingeniero en Computación y Senior Fullstack Developer con 6+ años",
+    aboutSnippet: "Senior Software Engineer con +6 años",
     skillsTabBackend: "Backend",
   },
   nl: {
     navAbout: "Over mij",
-    aboutSnippet: "Computer Engineer en Senior Fullstack Developer met 6+ jaar",
+    aboutSnippet: "Senior Software Engineer met 6+ jaar",
     skillsTabBackend: "Backend",
   },
 };

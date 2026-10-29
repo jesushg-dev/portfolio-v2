@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 
 import { EventForm } from "@/features/job-tracker/components/event-form";
 import { getEventCreatePageData } from "@/features/job-tracker/server/job-tracker-queries";
+import type { EventType } from "@/features/job-tracker/types";
 
 export default async function NewEventPage({
   params,
@@ -17,10 +18,14 @@ export default async function NewEventPage({
 
   const applicationId =
     typeof search.applicationId === "string" ? search.applicationId : undefined;
+  const eventType =
+    search.type === "FOLLOW_UP" || search.type === "INTERVIEW"
+      ? (search.type as EventType)
+      : undefined;
 
   const [t, { initialData, applications }] = await Promise.all([
     getTranslations("admin.jobTracker"),
-    getEventCreatePageData(applicationId),
+    getEventCreatePageData(applicationId, eventType),
   ]);
 
   const linkedApplication = applications.find(

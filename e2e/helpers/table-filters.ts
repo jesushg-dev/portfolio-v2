@@ -67,7 +67,9 @@ export async function assertFilterAndColumnVisibility(
     .toBeGreaterThan(2);
 
   const searchColumnId = filterTestId.replace(/^filter-/, "");
-  const searchCell = dataRows.first().locator(`[data-column-id="${searchColumnId}"]`);
+  const searchCell = dataRows
+    .first()
+    .locator(`[data-column-id="${searchColumnId}"]`);
   let existingTerm = "";
   await expect
     .poll(
@@ -132,7 +134,9 @@ export async function assertFilterAndColumnVisibility(
   expect(initialCellsCount).toBeGreaterThan(2);
 
   const hiddenColumnId = toggleColumnTestId.replace(/^toggle-column-/, "");
-  const hiddenCell = dataRows.first().locator(`[data-column-id="${hiddenColumnId}"]`);
+  const hiddenCell = dataRows
+    .first()
+    .locator(`[data-column-id="${hiddenColumnId}"]`);
   const hiddenCellText = await hiddenCell.innerText();
   expect(hiddenCellText.trim().length).toBeGreaterThan(0);
 

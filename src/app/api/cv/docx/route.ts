@@ -10,6 +10,7 @@ import { mapCvDataToLocalized } from "@/components/curriculum-vitae/types";
 import { resolveCvDisplayContacts } from "@/lib/cv/resolve-cv-display-contacts";
 import { mapLocalizedCvToDraft } from "@/features/cv/lib/map-localized-to-draft";
 import { generateDocxFromStructured } from "@/features/resume-engine/lib/docx/generate-from-structured";
+import { generateCvDocxFromDb } from "@/features/cv/lib/generate-cv-docx-from-db";
 import { resolveUserTechnicalSkills } from "@/features/cv/lib/resolve-user-technical-skills";
 
 export const runtime = "nodejs";
@@ -30,10 +31,36 @@ export async function GET(request: Request) {
   const locale: Locale = isLocale(localeParam)
     ? localeParam
     : tenant.defaultLocale;
+  const design = searchParams.get("design") ?? undefined;
 
   const userId = tenant.userId;
 
   try {
+    if (design !== "ats") {
+      try {
+        const styled = await generateCvDocxFromDb(
+          db,
+          userId,
+          locale,
+          tenant.defaultLocale,
+        );
+        if (styled?.buffer) {
+          return new NextResponse(new Uint8Array(styled.buffer), {
+            headers: {
+              "Content-Type":
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "Content-Disposition": `attachment; filename="${styled.fileName}"`,
+              "Cache-Control": "no-store",
+            },
+          });
+        }
+      } catch (err) {
+        console.error(
+          "[cv/docx] styled docx generation failed, falling back to structured docx",
+          err,
+        );
+      }
+    }
     const [
       appLanguages,
       profile,

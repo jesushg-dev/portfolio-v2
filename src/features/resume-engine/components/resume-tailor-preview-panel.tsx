@@ -18,7 +18,6 @@ import {
 } from "@/components/shared/office-document-preview";
 import { isPdfResumeFile } from "@/features/resume-engine/lib/parse-pdf-for-import";
 import { TailoredAtsPreview } from "@/features/resume-engine/components/tailored-ats-preview";
-import { ResumeMatchChecklist } from "@/features/resume-engine/components/resume-match-checklist";
 import { ResumeAtsCheckerSummary } from "@/features/resume-engine/components/resume-ats-checker-summary";
 import type { CvMatchAnalysis } from "@/features/resume-engine/lib/cv-match-analysis";
 import { api } from "@/trpc/react";
@@ -39,6 +38,7 @@ interface ResumeTailorPreviewPanelProps {
   onPdfGenerated?: (pdfUrl: string) => void;
   actions?: ReactNode;
   belowToolbar?: ReactNode;
+  onImprove?: () => void;
 }
 
 function firstNonEmpty(
@@ -81,6 +81,7 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
   onPdfGenerated,
   actions,
   belowToolbar,
+  onImprove,
 }) => {
   const t = useTranslations("admin.resumeStudio");
   const [localPdfUrl, setLocalPdfUrl] = useState<string | null>(null);
@@ -112,11 +113,6 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       },
     });
 
-  const noteItems =
-    matchNotes
-      ?.split(/\n+/)
-      .map((line) => line.replace(/^[-•*]\s*/, "").trim())
-      .filter(Boolean) ?? [];
   const hasMatch = Boolean(
     aiScore != null ||
     (matchNotes != null && matchNotes.length > 0) ||
@@ -372,8 +368,10 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
       {hasMatch ? (
         <ResumeAtsCheckerSummary
           aiScore={aiScore}
-          matchNotes={matchNotes}
+          key={mode === "match" ? "expanded" : "collapsed"}
+          expanded={mode === "match"}
           matchAnalysis={matchAnalysis}
+          onImprove={onImprove}
         />
       ) : null}
 
@@ -411,23 +409,6 @@ export const ResumeTailorPreviewPanel: FC<ResumeTailorPreviewPanelProps> = ({
 
       {mode === "ats" && hasAts ? (
         <TailoredAtsPreview snapshot={structuredSnapshot} />
-      ) : null}
-
-      {mode === "match" && hasMatch ? (
-        <div className="space-y-4">
-          {noteItems.length > 0 ? (
-            <ul className="text-muted-foreground list-disc space-y-1 pl-4 text-sm">
-              {noteItems.map((note) => (
-                <li key={note}>{note}</li>
-              ))}
-            </ul>
-          ) : matchNotes ? (
-            <p className="text-muted-foreground text-sm">{matchNotes}</p>
-          ) : null}
-          {matchAnalysis ? (
-            <ResumeMatchChecklist analysis={matchAnalysis} />
-          ) : null}
-        </div>
       ) : null}
     </div>
   );

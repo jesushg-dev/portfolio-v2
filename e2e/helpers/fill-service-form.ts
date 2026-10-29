@@ -1,4 +1,8 @@
-import { selectFormLanguage, selectFormTab, translationField } from "./admin-form";
+import {
+  selectFormLanguage,
+  selectFormTab,
+  translationField,
+} from "./admin-form";
 import type { Page } from "@playwright/test";
 
 export interface ServiceFixture {

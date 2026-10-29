@@ -277,10 +277,7 @@ export const HeaderForm: FC<{
                 control={form.control}
                 name="photoUrl"
                 render={({ field }) => (
-                  <FieldItem
-                    id="cv-header-photo-url"
-                    className="sm:col-span-2"
-                  >
+                  <FieldItem id="cv-header-photo-url" className="sm:col-span-2">
                     <FormLabel>{t("photoUrl")}</FormLabel>
                     <FormDescription>
                       Paste a URL or upload an image (max 4 MB)
@@ -333,10 +330,7 @@ export const HeaderForm: FC<{
                 control={form.control}
                 name="backgroundImageUrl"
                 render={({ field }) => (
-                  <FieldItem
-                    id="cv-header-bg-url"
-                    className="sm:col-span-2"
-                  >
+                  <FieldItem id="cv-header-bg-url" className="sm:col-span-2">
                     <FormLabel>Background image</FormLabel>
                     <FormDescription>
                       Hero background banner or texture (optional)

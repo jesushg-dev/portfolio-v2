@@ -40,19 +40,22 @@ interface SitemapEntryOptions {
   priority?: number;
 }
 
-export function buildLocalizedSitemapEntry(
+export function buildLocalizedSitemapEntries(
   href: StaticHref | DynamicHref,
   options: SitemapEntryOptions = {},
-): MetadataRoute.Sitemap[number] {
-  return {
-    url: absoluteUrl(getPathname({ locale: defaultLocale, href: href })),
+): MetadataRoute.Sitemap {
+  const languages = buildLanguageAlternates(href);
+  const urls = new Set(locales.map((locale) => languages[locale]));
+
+  return Array.from(urls, (url) => ({
+    url,
     lastModified: options.lastModified,
     changeFrequency: options.changeFrequency,
     priority: options.priority,
     alternates: {
-      languages: buildLanguageAlternates(href),
+      languages,
     },
-  };
+  }));
 }
 
 /** Indexable public routes (internal pathnames). Auth and admin are excluded. */
@@ -60,6 +63,7 @@ export const PUBLIC_SITEMAP_PATHS = [
   "/",
   "/schedule",
   "/curriculum-vitae",
+  "/projects",
   "/certificates",
   "/certificates/frontend",
   "/certificates/backend",
@@ -91,6 +95,7 @@ export const PUBLIC_SITEMAP_PRIORITIES: Partial<
 > = {
   "/": 1,
   "/curriculum-vitae": 0.9,
+  "/projects": 0.8,
   "/certificates": 0.8,
   "/timeline": 0.7,
   "/schedule": 0.6,
@@ -109,6 +114,7 @@ export const PUBLIC_SITEMAP_CHANGE_FREQUENCY: Partial<
 > = {
   "/": "weekly",
   "/curriculum-vitae": "monthly",
+  "/projects": "weekly",
   "/certificates": "monthly",
   "/timeline": "monthly",
   "/schedule": "monthly",
