@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { getServerBaseUrl } from "@/lib/url/get-base-url";
 import { SITE_URL } from "@/lib/seo/site";
 import { z } from "zod";
+import { verifyGitHubToken } from "@/features/now/server/github-contributions";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -27,9 +28,19 @@ function maskSecret(value?: string | null): string {
 
 function getResendWebhookUrl(userId: string): string {
   const origin = new URL(getServerBaseUrl());
-  const local = origin.hostname === "localhost" || origin.hostname === "127.0.0.1" || origin.hostname === "[::1]" || origin.hostname.endsWith(".localhost");
-  const publicOrigin = origin.protocol === "https:" && !local ? origin.origin : new URL(SITE_URL).origin;
-  return new URL(`/api/webhooks/resend/${encodeURIComponent(userId)}`, publicOrigin).href;
+  const local =
+    origin.hostname === "localhost" ||
+    origin.hostname === "127.0.0.1" ||
+    origin.hostname === "[::1]" ||
+    origin.hostname.endsWith(".localhost");
+  const publicOrigin =
+    origin.protocol === "https:" && !local
+      ? origin.origin
+      : new URL(SITE_URL).origin;
+  return new URL(
+    `/api/webhooks/resend/${encodeURIComponent(userId)}`,
+    publicOrigin,
+  ).href;
 }
 
 export const integrationsAdminRouter = createTRPCRouter({
@@ -43,12 +54,14 @@ export const integrationsAdminRouter = createTRPCRouter({
       uploadthingConfig,
       aiConfig,
       ilovepdfConfig,
+      githubConfig,
     ] = await Promise.all([
       getTenantIntegrationConfig(userId, "resend"),
       getTenantIntegrationConfig(userId, "spotify"),
       getTenantIntegrationConfig(userId, "uploadthing"),
       getTenantIntegrationConfig(userId, "ai"),
       getTenantIntegrationConfig(userId, "ilovepdf"),
+      getTenantIntegrationConfig(userId, "github"),
     ]);
 
     const resendIntegration = await ctx.db.tenantIntegration.findUnique({
@@ -57,6 +70,11 @@ export const integrationsAdminRouter = createTRPCRouter({
     });
 
     return {
+      github: {
+        isConfigured: Boolean(githubConfig?.accessToken),
+        login: githubConfig?.login ?? "",
+        maskedAccessToken: maskSecret(githubConfig?.accessToken),
+      },
       resend: {
         isConfigured: Boolean(
           resendConfig?.apiKey && resendConfig?.emailDomain,
@@ -117,6 +135,28 @@ export const integrationsAdminRouter = createTRPCRouter({
     };
   }),
 
+  saveGithub: protectedProcedure
+    .input(z.object({ accessToken: z.string().trim().min(20).max(300) }))
+    .mutation(async ({ ctx, input }) => {
+      const account = await verifyGitHubToken(input.accessToken);
+      if (!account)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "Could not verify the GitHub token. Check that it is valid and has not expired.",
+        });
+      await saveTenantIntegrationConfig(ctx.user.id, "github", {
+        accessToken: input.accessToken,
+        login: account.login,
+      });
+      await ctx.db.nowSettings.upsert({
+        where: { userId: ctx.user.id },
+        create: { userId: ctx.user.id, githubUsername: account.login },
+        update: { githubUsername: account.login },
+      });
+      return { ok: true as const, login: account.login };
+    }),
+
   /** Saves Resend credentials and triggers automatic Resend template deployment. */
   saveResend: protectedProcedure
     .input(
@@ -152,7 +192,9 @@ export const integrationsAdminRouter = createTRPCRouter({
       const updatedConfig: ResendIntegrationConfig = {
         ...current,
         apiKey: nextApiKey,
-        webhookSecret: input.webhookSecret ?? (credentialsChanged ? undefined : current.webhookSecret),
+        webhookSecret:
+          input.webhookSecret ??
+          (credentialsChanged ? undefined : current.webhookSecret),
         emailDomain: nextDomain,
         fromEmail: input.fromEmail?.trim() ?? current.fromEmail,
         emailSignatureHtml:
@@ -447,6 +489,7 @@ export const integrationsAdminRouter = createTRPCRouter({
           "uploadthing",
           "ai",
           "ilovepdf",
+          "github",
         ]),
       }),
     )

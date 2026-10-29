@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -343,10 +349,7 @@ export function ResendIntegrationForm({
 
                     {status.webhookConfigured && (
                       <div className="border-success/30 bg-success/10 text-success flex items-center gap-2 rounded-lg border p-3 text-xs font-medium">
-                        <CheckCircle2
-                          className="size-4 shrink-0"
-                          aria-hidden
-                        />
+                        <CheckCircle2 className="size-4 shrink-0" aria-hidden />
                         <span>{t("resend.webhookActiveNotice")}</span>
                       </div>
                     )}

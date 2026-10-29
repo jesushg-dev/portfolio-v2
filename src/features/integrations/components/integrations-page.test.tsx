@@ -53,6 +53,11 @@ const mockConfigs = {
     maskedPublicKey: "",
     maskedSecretKey: "",
   },
+  github: {
+    isConfigured: false,
+    login: "",
+    maskedAccessToken: "",
+  },
 };
 
 jest.mock("@/trpc/react", () => ({
@@ -133,7 +138,7 @@ describe("IntegrationsPage", () => {
         name: /credentials & integrations/i,
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText("3 / 6")).toBeInTheDocument();
+    expect(screen.getByText("3 / 7")).toBeInTheDocument();
     expect(screen.getByText("AES-256")).toBeInTheDocument();
   });
 
@@ -144,9 +149,9 @@ describe("IntegrationsPage", () => {
     const configuredBadges = screen.getAllByText("Configured");
     expect(configuredBadges).toHaveLength(3);
 
-    // Available: UploadThing, Google Calendar, iLovePDF (3)
+    // Available: UploadThing, Google Calendar, iLovePDF, GitHub (4)
     const notConfiguredBadges = screen.getAllByText("Not Configured");
-    expect(notConfiguredBadges).toHaveLength(3);
+    expect(notConfiguredBadges).toHaveLength(4);
 
     expect(screen.getByText("jesushg.com")).toBeInTheDocument();
     expect(screen.getByText("spot_client_123")).toBeInTheDocument();
@@ -167,8 +172,8 @@ describe("IntegrationsPage", () => {
     const availableTab = screen.getByRole("tab", { name: /available/i });
     fireEvent.click(availableTab);
 
-    // Only 3 available items should be visible
-    expect(screen.getAllByText("Not Configured")).toHaveLength(3);
+    // Only 4 available items should be visible
+    expect(screen.getAllByText("Not Configured")).toHaveLength(4);
     expect(screen.queryByText("Configured")).not.toBeInTheDocument();
   });
 

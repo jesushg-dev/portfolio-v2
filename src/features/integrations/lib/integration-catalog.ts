@@ -1,5 +1,6 @@
 import {
   Bot,
+  GitBranch,
   CalendarDays,
   FileText,
   HardDrive,
@@ -19,6 +20,13 @@ export interface IntegrationCatalogItem {
 }
 
 export const INTEGRATION_CATALOG: IntegrationCatalogItem[] = [
+  {
+    id: "github",
+    icon: GitBranch,
+    accentClass: "border-primary/25 bg-primary/10 text-primary ring-primary/20",
+    badgeClass: "border-primary/25 bg-primary/10 text-primary",
+    category: "media",
+  },
   {
     id: "spotify",
     icon: Music2,

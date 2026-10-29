@@ -125,7 +125,7 @@ export function IntegrationsPage() {
       >
         <TabsList
           variant="line"
-          className="w-fit justify-start overflow-x-auto"
+          className="w-fit max-w-full justify-start overflow-x-auto overflow-y-hidden"
         >
           <TabsTrigger value="all" className="gap-2 px-4 py-2.5 text-sm">
             <span>{t("filters.all")}</span>

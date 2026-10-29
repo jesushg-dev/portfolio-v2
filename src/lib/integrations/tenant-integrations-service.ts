@@ -42,7 +42,13 @@ export interface ILovePdfIntegrationConfig {
   secretKey: string;
 }
 
+export interface GitHubIntegrationConfig {
+  accessToken: string;
+  login: string;
+}
+
 export interface IntegrationConfigMap {
+  github: GitHubIntegrationConfig;
   resend: ResendIntegrationConfig;
   spotify: SpotifyIntegrationConfig;
   uploadthing: UploadThingIntegrationConfig;

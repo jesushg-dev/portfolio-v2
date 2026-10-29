@@ -2,6 +2,7 @@ import { pathnames, type Locale } from "@/i18n/config";
 import type { IntegrationProvider } from "@/lib/integrations/tenant-integrations-service";
 
 export const INTEGRATION_PROVIDERS = [
+  "github",
   "resend",
   "spotify",
   "uploadthing",

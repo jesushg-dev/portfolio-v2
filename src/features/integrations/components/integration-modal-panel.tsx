@@ -15,6 +15,7 @@ import SpotifyConnectForm from "@/features/spotify-connect/components/spotify-co
 import SpotifyConnectionStatus from "@/features/spotify-connect/components/spotify-connection-status";
 
 import { ResendIntegrationForm } from "./resend-integration-form";
+import { GithubIntegrationForm } from "./github-integration-form";
 import { UploadThingIntegrationForm } from "./uploadthing-integration-form";
 import { AiIntegrationForm } from "./ai-integration-form";
 import { ILovePdfIntegrationForm } from "./ilovepdf-integration-form";
@@ -205,6 +206,14 @@ function TenantIntegrationModalContent({
   }
 
   switch (provider) {
+    case "github":
+      return (
+        <GithubIntegrationForm
+          status={configs.github}
+          onSuccess={onClose}
+          onCancel={onClose}
+        />
+      );
     case "resend":
       return (
         <ResendIntegrationForm

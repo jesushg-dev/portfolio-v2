@@ -79,6 +79,7 @@ export function IntegrationCard({
             provider: provider,
           });
           await utils.integrationsAdmin.getConfigs.invalidate();
+          if (provider === "github") await utils.nowAdmin.invalidate();
         }
         setDisconnectDialogOpen(false);
         toast.success(t("actions.disconnectSuccess"));
@@ -280,6 +281,17 @@ function ConnectedInfoBox({
   t: ReturnType<typeof useTranslations<"adminCredentials">>;
 }) {
   switch (provider) {
+    case "github":
+      return (
+        <div className="space-y-1">
+          <p className="text-foreground text-sm font-medium">
+            {configs?.github.login}
+          </p>
+          <p className="text-muted-foreground font-mono text-xs">
+            {configs?.github.maskedAccessToken}
+          </p>
+        </div>
+      );
     case "resend": {
       const status = configs?.resend;
       const rows: [string, string][] = [];
