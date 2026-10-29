@@ -16,7 +16,6 @@ import { Link } from "@/i18n/routing";
 import { LinkPreview } from "@/components/ui/link-preview";
 import FooterSpotifySection from "./footer-spotify-section";
 import { api } from "@/trpc/server";
-import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 import type { ProcessNavPage } from "@/lib/process-pages/process-nav-page";
 import {
   getBrandAccessibleLabel,
@@ -48,14 +47,14 @@ function FooterPreviewLink({
   href,
   label,
   soonLabel,
-  live,
+  soon = false,
 }: {
   href: "/uses" | "/now" | "/colophon" | "/stats";
   label: string;
   soonLabel: string;
-  live: boolean;
+  soon?: boolean
 }) {
-  if (!live) {
+  if (!soon) {
     return (
       <span
         className={`${footerLinkClassName} cursor-default gap-2 opacity-85`}
@@ -118,7 +117,7 @@ const Footer = async ({
               aria-label={t("homeLogo", {
                 brand: getBrandAccessibleLabel(siteBrand),
               })}
-              className="group text-primary-foreground inline-flex min-h-11 min-w-11 items-center text-2xl font-extrabold tracking-tight"
+              className="group text-primary-foreground inline-flex min-h-11 items-center text-2xl font-extrabold tracking-tight"
             >
               <SiteBrandMark
                 brand={siteBrand}
@@ -255,7 +254,7 @@ const Footer = async ({
                   href="/uses"
                   label={t("sections.process.uses")}
                   soonLabel={t("soon")}
-                  live={PUBLIC_PAGE_LIVE.uses}
+                  soon={true}
                 />
               </li>
               <li>
@@ -263,7 +262,6 @@ const Footer = async ({
                   href="/now"
                   label={t("sections.process.now")}
                   soonLabel={t("soon")}
-                  live={PUBLIC_PAGE_LIVE.now}
                 />
               </li>
               <li>
@@ -271,7 +269,6 @@ const Footer = async ({
                   href="/stats"
                   label={t("sections.process.stats")}
                   soonLabel={t("soon")}
-                  live={PUBLIC_PAGE_LIVE.stats}
                 />
               </li>
               <li>
@@ -279,7 +276,6 @@ const Footer = async ({
                   href="/colophon"
                   label={t("sections.process.colophon")}
                   soonLabel={t("soon")}
-                  live={PUBLIC_PAGE_LIVE.colophon}
                 />
               </li>
             </ul>

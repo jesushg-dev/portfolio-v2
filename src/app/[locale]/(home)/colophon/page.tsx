@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import {
   ColophonPage,
@@ -9,7 +9,6 @@ import {
 import { COLOPHON_CARBON } from "@/features/colophon/data";
 import { ProcessPageShell } from "@/features/process-pages/components/process-section-header";
 import { type Locale as AppLocale, locales } from "@/i18n/config";
-import { isPublicPageLive } from "@/lib/public-preview-pages";
 import { ETheme } from "@/utils/constants/theme";
 
 export { generateMetadata } from "./metadata";
@@ -22,13 +21,10 @@ const isLocale = (value: string): value is AppLocale =>
   (locales as readonly string[]).includes(value);
 
 export default async function ColophonRoute({ params }: ColophonRouteProps) {
-  if (!isPublicPageLive("colophon")) notFound();
-
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  setRequestLocale(locale);
-  const t = await getTranslations("main.colophon");
+  const t = await getTranslations({ locale, namespace: "main.colophon" });
 
   const externalLink = (href: string, title: string) =>
     function ColophonExternalLink(chunks: ReactNode) {

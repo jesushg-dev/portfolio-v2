@@ -1,4 +1,3 @@
-import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 import { getPathname } from "@/i18n/routing";
 
 import {
@@ -87,23 +86,19 @@ describe("buildLocalizedSitemapEntries", () => {
 });
 
 describe("INDEXABLE_SITEMAP_PATHS", () => {
-  it("includes the main portfolio pages", () => {
+  it("includes main portfolio pages and excludes /uses", () => {
     expect(INDEXABLE_SITEMAP_PATHS).toEqual(
       expect.arrayContaining([
         "/projects",
         "/certificates",
         "/curriculum-vitae",
         "/timeline",
+        "/now",
+        "/colophon",
+        "/stats",
       ]),
     );
-  });
-
-  it("drops unpublished preview routes", () => {
-    expect(INDEXABLE_SITEMAP_PATHS.includes("/colophon")).toBe(true);
-    expect(INDEXABLE_SITEMAP_PATHS.includes("/stats")).toBe(true);
-    expect(INDEXABLE_SITEMAP_PATHS.includes("/uses")).toBe(
-      PUBLIC_PAGE_LIVE.uses,
-    );
+    expect(INDEXABLE_SITEMAP_PATHS).not.toContain("/uses");
     expect(PUBLIC_SITEMAP_PATHS).toContain("/uses");
   });
 });

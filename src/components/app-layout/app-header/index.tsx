@@ -121,7 +121,7 @@ const Header: FC<{ siteBrand: SiteBrand }> = ({ siteBrand }) => {
               aria-label={t("homeLogo", {
                 brand: getBrandAccessibleLabel(siteBrand),
               })}
-              className="group text-primary z-10 inline-flex h-11 min-h-11 min-w-11 shrink-0 items-center text-2xl leading-none font-bold tracking-tighter transition duration-600 ease-in-out"
+              className="group text-primary z-10 inline-flex h-11 min-h-11 shrink-0 items-center text-2xl leading-none font-bold tracking-tighter transition duration-600 ease-in-out"
             >
               <SiteBrandMark
                 brand={siteBrand}

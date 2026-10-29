@@ -2,7 +2,6 @@ import type { MetadataRoute } from "next";
 
 import { defaultLocale, locales } from "@/i18n/config";
 import { getPathname } from "@/i18n/routing";
-import { PUBLIC_PAGE_LIVE } from "@/lib/public-preview-pages";
 import { SITE_URL } from "@/lib/seo/site";
 
 type StaticHref = Parameters<typeof getPathname>[0]["href"];
@@ -77,17 +76,9 @@ export const PUBLIC_SITEMAP_PATHS = [
   "/stats",
 ] as const satisfies readonly StaticHref[];
 
-const SITEMAP_LIVE_FLAGS: Partial<
-  Record<(typeof PUBLIC_SITEMAP_PATHS)[number], boolean>
-> = {
-  "/uses": PUBLIC_PAGE_LIVE.uses,
-  "/now": PUBLIC_PAGE_LIVE.now,
-  "/colophon": PUBLIC_PAGE_LIVE.colophon,
-  "/stats": PUBLIC_PAGE_LIVE.stats,
-};
-
 export const INDEXABLE_SITEMAP_PATHS = PUBLIC_SITEMAP_PATHS.filter(
-  (pathname) => SITEMAP_LIVE_FLAGS[pathname] !== false,
+  (pathname): pathname is Exclude<(typeof PUBLIC_SITEMAP_PATHS)[number], "/uses"> =>
+    pathname !== "/uses",
 );
 
 export const PUBLIC_SITEMAP_PRIORITIES: Partial<
